@@ -1,15 +1,16 @@
 ﻿<!DOCTYPE html>
-<html>
-    <head>
-        <title>myDeals</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<html ng-app="MyDealsApp">
 
-        @Styles.Render("~/Content/css")
-        @Styles.Render("~/MyDeals/css")
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - MyDeals</title>
 
-        @Scripts.Render("~/bundles/scripts")
-        @Scripts.Render("~/MyDeals/scripts")
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/MyDeals/css")
 
+    @Scripts.Render("~/bundles/scripts")
+    @Scripts.Render("~/MyDeals/scripts")
 </head>
 
 <body>
@@ -22,3 +23,4 @@
 </body>
 
 </html>
+
