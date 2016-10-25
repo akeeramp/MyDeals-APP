@@ -34,9 +34,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Intel.MyDeals.Globalization">
-      <HintPath>..\Intel.MyDeals\Bin\Intel.MyDeals.Globalization.dll</HintPath>
-    </Reference>
     <Reference Include="Intel.Opaque">
       <HintPath>..\Shared Libraries\Intel.Opaque.dll</HintPath>
     </Reference>

@@ -42,7 +42,7 @@
             </div>
 
             <div class="fl">
-                <div id="viewResultsContainer" resizable ng-style="{ width: windowWidth, height: windowHeight; }">
+                <div id="viewResultsContainer">
                     <h5>Cache Contents <span style="font-size: 12px;" id="cName"></span></h5>
                     <div id="viewResults">{{currentCacheDetails}}</div>
                 </div>
@@ -56,54 +56,30 @@
 </div>
 
 
-<script type="text/x-kendo-tmpl" id="cache-status-template">
-    <div class="cacheList fl">
-        <h5>Cache Status</h5>
-        <table id="tblCache">
-            <tr>
-                <th style="text-align: left;">Cache Name</th>
-                <th style="text-align: right;">Count</th>
-                <th style="text-align: center;" colspan="3">Action</th>
-                <th style="width: 25px;">&nbsp;</th>
-            </tr>
-            # for (var i = 0; i < data.length; i++) { #
-            <tr>
-                <td>#= data[i].CacheName #</td>
-                <td style="text-align: right;">#= data[i].CacheCount #</td>
-                <td><a href="javascript:cache.LoadCacheByName('#= data[i].CacheName #')" title="Load Cache"><i class="fa fa-upload" aria-hidden="true"></i></a></td>
-                <td><a href="javascript:cache.ClearCacheByName('#= data[i].CacheName #')" title="Clear Cache"><i class="fa fa-trash-o" aria-hidden="true"></i></a></td>
-                <td><a href="javascript:cache.ViewCache('#= data[i].CacheName #')" title="View Cache"><i class="fa fa-code" aria-hidden="true"></i></a></td>
-                <td id="anim_#= data[i].CacheName #" style="display: none;"><i class="fa fa-spinner fa-pulse fa fa-fw"></i></td>
-            </tr>
-            # } #
-        </table>
-        <div style="margin-top: 15px; text-align: center;">
-            <button id="btnClearAll" class="k-primary">Clear All</button>
-            <button id="btnReload" class="k-primary">Reload All Cache</button>
-        </div>
-    </div>
-    
-    <div class="fl">
-        <div id="viewResultsContainer" style="display: none;">
-            <h5>Cache Contents <span style="font-size: 12px;" id="cName"></span></h5>
-            <div id="viewResults"></div>
-        </div>
-    </div>
-
-    <div class="clearBoth"></div>
-</script>
-
 <script>
     // Handle resize
-    //$(window).resize(function () {
-    //    cache.resizeContent();
-    //});
+    $(window).resize(function () {
+        resizeContent();
+    });
 
-    //$(document).ready(function () {
-    //    window.setTimeout(function () {
-    //        cache.resizeContent();
-    //        cache.LoadCacheStatus();
-    //    }, 100);
-    //});
+    $(document).ready(function () {
+        window.setTimeout(function () {
+            resizeContent();
+        }, 100);
+    });
+
+    function resizeContent() {
+        var offset = 200;
+        var widthOffset = 100;
+        var h = $(".cacheList").height() + 19;
+
+        var contentHeight = (h > offset) ? h : $(window).height() - offset;
+        var contentWidth = $(window).width() - widthOffset - $(".cacheList").width();
+
+        //cacheList
+        $("#viewResultsContainer").css("height", contentHeight);
+        $("#viewResultsContainer").css("width", contentWidth);
+
+    }
 </script>
 

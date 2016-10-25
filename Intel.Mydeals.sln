@@ -25,6 +25,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared Libraries", "Shared 
 		Shared Libraries\Intel.Opaque.pdb = Shared Libraries\Intel.Opaque.pdb
 		Shared Libraries\Intel.Opaque.Templating.dll = Shared Libraries\Intel.Opaque.Templating.dll
 		Shared Libraries\Intel.Opaque.Templating.pdb = Shared Libraries\Intel.Opaque.Templating.pdb
+		Shared Libraries\Kendo.Mvc.dll = Shared Libraries\Kendo.Mvc.dll
 		Shared Libraries\Telerik.Reporting.dll = Shared Libraries\Telerik.Reporting.dll
 		Shared Libraries\Telerik.Reporting.Service.dll = Shared Libraries\Telerik.Reporting.Service.dll
 	EndProjectSection

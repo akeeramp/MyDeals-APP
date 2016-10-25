@@ -1,10 +1,4 @@
 ﻿using System.Web.Mvc;
-using Intel.MyDeals.App;
-using Intel.MyDeals.BusinesssLogic;
-using Intel.MyDeals.Entities;
-using Intel.Opaque;
-using Kendo.Mvc.Extensions;
-using Kendo.Mvc.UI;
 
 namespace Intel.MyDeals.Areas.Admin.Controllers
 {

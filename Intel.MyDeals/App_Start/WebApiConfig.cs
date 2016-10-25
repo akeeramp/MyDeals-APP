@@ -1,5 +1,4 @@
 ﻿using System.Web.Http;
-using Newtonsoft.Json.Serialization;
 
 namespace Intel.MyDeals
 {
