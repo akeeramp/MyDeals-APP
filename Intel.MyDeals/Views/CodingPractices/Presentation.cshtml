@@ -1,0 +1,34 @@
+﻿
+@Html.Partial("TOC", new ViewDataDictionary
+{
+    { "categoryTitle", "Project setup and logic flow" },
+    { "categoryAction", "Project" },
+    { "sectionTitle", "Intel.MyDeals" },
+    { "sectionAction", "Presentation" },
+    { "pageTitle", "Introduction" }
+})
+
+<div id="mainBody" style="margin: 10px; padding: 0 20px 0 200px;">
+    <h1><img src="/Images/docs/icon-presentation.png" height="60" /> Intel.MyDeals</h1>
+    <p>
+        Layer to hold all database connection libraries. These are the tools used by the <a href="@Url.Action("DataLibrary", "CodingPractices", new {Area = ""})">Data Libraries</a> to access the Database via <a href="@Url.Action("DataAccessStoredProcedure", "CodingPractices", new {Area = ""})">Stored Procedures</a>.
+    </p>
+
+    <h3>Coding Practices</h3>
+    <p>
+        The following coding practices for the Data Access layer consist mainly of consuming Stored Procedures that will be used by the<a href="@Url.Action("DataLibrary", "CodingPractices", new {Area = ""})">Data Libraries</a>.
+    </p>
+
+    <h5><a href="@Url.Action("PresentationMvcController", "CodingPractices", new {Area = ""})">Create a MVC Controller</a></h5>
+    <p>
+        To include a newly created stored procedure into the MyDeals project, you simply need to have compile the <strong>SPClassGenerator.tt</strong> T4 Template.
+    </p>
+    MVC Controllers rely on routing from the URL to pick which controller to instanciate.
+    The controller is responsible for intercepting the HTTP request and communicating with the <b>Model</b> and the <b>View</b>.<br />
+    <img src="/Images/docs/mvc.png" style="margin: 10px 0 10px 25px;"/>
+    <p>For more info, see the <a href="@Url.Action("PresentationMvcController", "CodingPractices", new {Area = ""})">Create a MVC Controller</a> section</p>
+
+    <br /><br /><br />
+</div>
+
+

@@ -1,0 +1,88 @@
+﻿@using Intel.MyDeals.App
+@using Intel.Opaque
+@{
+    ApplicationViewModel avm = (ApplicationViewModel)ViewData.Model;
+}
+
+    <div class="ng-scope" id="view-container" ng-view="">
+        <div class="jumbotron ng-scope">
+            <div class="container">
+                <h1><strong>My</strong>Deals</h1>
+                <p class="lead">Intel - IT BOS - Deal Management Tool.</p>
+                <p>
+                    @*<a class="btn btn-primary btn-lg" role="button" href="@Url.Action("Index", "Contract")">Rebate Strategy</a>
+                    <a class="btn btn-default btn-lg" role="button" href="@Url.Action("Index", "CostTestManager")">Cost Test Manager</a>
+                    <a class="btn btn-default btn-lg" role="button" href="@Url.Action("Index", "DealManager")">Deal Manager</a>*@
+                    <a class="btn btn-default btn-lg" role="button" href="@Url.Action("Index", "Others")">Ping the Database</a>
+                    <a class="btn btn-default btn-lg" role="button" href="@Url.Action("Index", "POC")">Basic Form Submit</a>
+                </p>
+                <p><small>Version: <span class="ng-binding" data-ng-bind="vm.latestTag.name">@avm.AppVer</span></small>
+                </p>
+                <p>
+                    This is a temporary page to prove the MLAF-Intel theme is setup properly with Twitter Bootstrap and Kendo Controls.  This page will be replaced with a proper UX ready page at some future time.
+                </p>
+            </div>
+        </div>
+
+        @*<section class="call-to-action ng-scope">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h2 aria-hidden="true"><i class="intelicon-new-document-solid text-warning"></i></h2>
+                        <h3>Create Deals Faster</h3>
+                        <p class="lead">
+                            Deal Entry now starts with Pricing Tables. Deals are matched to Contracts for easier management.
+                        </p>
+                    </div>
+                    <div class="col-md-4">
+                        <h2 aria-hidden="true"><i class="text-primary intelicon-lab"></i></h2>
+                        <h3>Automated Cost Test</h3>
+                        <p class="lead">
+                            With Automated Deal Overlap matching, Cost Test can be quickly calculated.  Simply enter your deals and view the results.
+                        </p>
+                    </div>
+                    <div class="col-md-4">
+                        <h2 aria-hidden="true"><i class="text-success intelicon-tap"></i></h2>
+                        <h3>One Click Bulk Approvals</h3>
+                        <p class="lead">
+                            Since deals are matched to pricing tables, it only takes one click to approve all deals in a pricing table or contract.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="alternate ng-scope">
+            <div class="container">
+                <header class="page-header">
+                    <h4>Other Features</h4>
+                </header>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <ul class="list-unstyled list-links">
+                            <li>
+                                <p><a href="#">Customizable Dashboard</a></p>
+                                <p>Customize your MyDeals Dashboard to fits your needs.</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-4">
+                        <ul class="list-unstyled list-links">
+                            <li>
+                                <p><a href="#">Quick Search</a></p>
+                                <p>Simply type what you are looking for and let the Quick Search find it for you.</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-4">
+                        <ul class="list-unstyled list-links">
+                            <li>
+                                <p><a href="#">Reporting</a></p>
+                                <p>No need to leave the application, run your reports from here!</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>*@
+
+    </div>

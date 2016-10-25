@@ -1,0 +1,325 @@
+﻿
+<link href="~/css/_codingPractices.css" rel="stylesheet" />
+
+<div id="breadcrumbs">
+    <span><a href="@Url.Action("Index", "CodingPractices", new {Area = ""})">Coding practices</a></span>
+    <i class="intelicon-right-next"></i>
+    @if (ViewData["categoryAction"].ToString() != "")
+    {
+        <span><a href="@Url.Action(ViewData["categoryAction"].ToString(), "CodingPractices", new {Area = ""})">@ViewData["categoryTitle"].ToString()</a></span>
+        <i class="intelicon-right-next"></i>
+    }
+    @if (ViewData["sectionAction"].ToString() != "")
+    {
+        <span><a href="@Url.Action(ViewData["sectionAction"].ToString(), "CodingPractices", new {Area = ""})">@ViewData["sectionTitle"].ToString()</a></span>
+        <i class="intelicon-right-next"></i>
+    }
+    <span>@ViewData["pageTitle"].ToString()</span>
+</div>
+
+@helper RenderLink(string action, string linkTitle, string activeLinkTitle)
+{
+    if (linkTitle == activeLinkTitle)
+    {
+        <div class="tocItem selected">
+            <div>@linkTitle</div>
+        </div>
+    }
+    else
+    {
+        <a href="@Url.Action(action, "CodingPractices", new {Area = ""})">
+            <div class="tocItem">
+                <div>@linkTitle</div>
+            </div>
+        </a>
+    }
+}
+
+@helper RenderInlineLink(string linkTitle, bool isTopLevel)
+{
+    if (isTopLevel)
+    {
+        <a href="#@linkTitle">
+            <div class="tocItem">
+                <div>@linkTitle</div>
+            </div>
+        </a>
+    }
+    else
+    {
+        <a href="#@linkTitle">
+            <div class="tocItem" style="padding-left: 15px;">
+                <div>@linkTitle</div>
+            </div>
+        </a>
+    }
+}
+<div id="tocWrapper">
+
+    <div id="tocExpand" class="tocItem w100" style="text-align: left; display: none;">
+        <div class="rotate90" style="margin-left: 15px; margin-top: 0; cursor: pointer; height: 100px;" onClick="toc.expand()">
+            <i class="intelicon-up"></i>TOC
+        </div>
+    </div>
+
+    <div id="tocCollapse" class=" w100"  style="cursor: pointer; text-align: right; font-size: 10px;" onClick="toc.collapse()">
+        TOC <i class="intelicon-left-previous"></i>
+    </div>
+
+    <div id="tocContainer">
+        @if (ViewData["sectionTitle"].ToString() == "" && ViewData["categoryAction"].ToString() == "Project")
+        {
+            @RenderLink("Project", "Introduction", ViewData["pageTitle"].ToString())
+            @RenderLink("DataAccess", "Intel.MyDeals.DataAccess", ViewData["pageTitle"].ToString())
+            @RenderLink("Entities", "Intel.MyDeals.Entities", ViewData["pageTitle"].ToString())
+            @RenderLink("DataLibrary", "Intel.MyDeals.DataLibrary", ViewData["pageTitle"].ToString())
+            @RenderLink("BusinessLogic", "Intel.MyDeals.BusinessLogic", ViewData["pageTitle"].ToString())
+            @RenderLink("BusinessRules", "Intel.MyDeals.BusinessRules", ViewData["pageTitle"].ToString())
+            @RenderLink("Application", "Intel.MyDeals.App", ViewData["pageTitle"].ToString())
+            @RenderLink("Presentation", "Intel.MyDeals", ViewData["pageTitle"].ToString())
+            @RenderLink("Examples", "Examples", ViewData["pageTitle"].ToString())
+        }
+        else if (ViewData["sectionTitle"].ToString() == "" && ViewData["categoryAction"].ToString() == "BusinessDesign")
+        {
+            @RenderInlineLink("Introduction", true)
+            @RenderInlineLink("Scope in Business Process", true)
+            @RenderInlineLink("Business Process Injection Points", false)
+            @RenderInlineLink("Rebate Strategies", false)
+            @RenderInlineLink("Pricing Strategies", false)
+            @RenderInlineLink("Pricing Table Association", false)
+            @RenderInlineLink("Rebate Strategy Versions", false)
+            @RenderInlineLink("Rebate Strategy Approval", false)
+            @RenderInlineLink("Deal Validation", false)
+            @RenderInlineLink("Overlapping Deals", false)
+            @RenderInlineLink("Meet Comp Test", false)
+            @RenderInlineLink("Pricing Cost Test", false)
+            @RenderInlineLink("Term and Conditions", false)
+            @RenderInlineLink("Contract", false)
+            @RenderInlineLink("Customer Acceptance", false)
+            @RenderInlineLink("Deal Entry", false)
+            @RenderInlineLink("Deal Approval", false)
+            @RenderInlineLink("Data Model Object", true)
+            @RenderInlineLink("Other Features", true)
+        }
+        else if (ViewData["sectionTitle"].ToString() == "Intel.MyDeals.DataAccess")
+        {
+            @RenderLink("DataAccess", "Introduction", ViewData["pageTitle"].ToString())
+            @RenderLink("DataAccessStoredProcedure", "Consume a stored procedure", ViewData["pageTitle"].ToString())
+        }
+        else if (ViewData["sectionTitle"].ToString() == "Intel.MyDeals.DataLibrary")
+        {
+            @RenderLink("DataLibrary", "Introduction", ViewData["pageTitle"].ToString())
+            @RenderLink("CallProcedure", "Calling a stored procedure", ViewData["pageTitle"].ToString())
+            @RenderLink("Cache", "Creating a data cache", ViewData["pageTitle"].ToString())
+            @RenderLink("CacheManager", "Managing cached data", ViewData["pageTitle"].ToString())
+        }
+        else if (ViewData["sectionTitle"].ToString() == "Intel.MyDeals.Entities")
+        {
+            @RenderLink("Entities", "Introduction", ViewData["pageTitle"].ToString())
+            @RenderLink("SharedClasses", "Creating a shared class", ViewData["pageTitle"].ToString())
+            @RenderLink("ClassFromProcedure", "Creating a shared class from a procedure", ViewData["pageTitle"].ToString())
+        }
+        else if (ViewData["sectionTitle"].ToString() == "Intel.MyDeals.BusinessLogic")
+        {
+            @RenderLink("BusinessLogic", "Introduction", ViewData["pageTitle"].ToString())
+            @RenderLink("BusinessLogicLayout", "Business logic layout", ViewData["pageTitle"].ToString())
+            @RenderLink("BusinessLogicScope", "Business logic scope", ViewData["pageTitle"].ToString())
+            @RenderLink("BusinessLogicFunction", "Business logic function", ViewData["pageTitle"].ToString())
+            @RenderLink("BusinessLogicCallProcedure", "Call a stored procedure", ViewData["pageTitle"].ToString())
+            @RenderLink("BusinessLogicCallCache", "Call from data cache", ViewData["pageTitle"].ToString())
+            
+        }
+        else if (ViewData["sectionTitle"].ToString() == "Intel.MyDeals.BusinessRules")
+        {
+            @RenderLink("BusinessRules", "Introduction", ViewData["pageTitle"].ToString())
+        }
+        else if (ViewData["sectionTitle"].ToString() == "Intel.MyDeals.App")
+        {
+            @RenderLink("Application", "Introduction", ViewData["pageTitle"].ToString())
+        }
+        else if (ViewData["sectionTitle"].ToString() == "Intel.MyDeals")
+        {
+            @RenderLink("Presentation", "Introduction", ViewData["pageTitle"].ToString())
+            @RenderLink("PresentationMvcController", "Create a MVC Controller", ViewData["pageTitle"].ToString())
+            @RenderLink("PresentationWebApi", "Creating Web APIs", ViewData["pageTitle"].ToString())
+            @RenderLink("PresentationCallWebApi", "Calling Web APIs", ViewData["pageTitle"].ToString())
+        }
+        else if (ViewData["sectionTitle"].ToString() == "Examples")
+        {
+            @RenderLink("Examples", "Introduction", ViewData["pageTitle"].ToString())
+            @RenderLink("DataFromProcWithCache", "Managing data from a procedure with cache", ViewData["pageTitle"].ToString())
+        }
+        else if (ViewData["categoryAction"].ToString() == "Flows")
+        {
+            @RenderLink("Flows", "Introduction", ViewData["pageTitle"].ToString())
+        }
+        else if (ViewData["categoryAction"].ToString() == "Formulas")
+        {
+            @RenderLink("Formulas", "Introduction", ViewData["pageTitle"].ToString())
+        }
+        else if (ViewData["categoryAction"].ToString() == "CodingTools")
+        {
+            @RenderLink("CodingTools", "Introduction", ViewData["pageTitle"].ToString())
+            @RenderLink("ErrorHandling", "Error handling", ViewData["pageTitle"].ToString())
+            @RenderLink("Logging", "Logging", ViewData["pageTitle"].ToString())
+        }
+
+        
+    </div>
+
+
+
+</div>
+
+
+
+
+<script>
+    var categoryAction = "@ViewData["categoryAction"].ToString()";
+    function toc() {}
+
+    toc.collapse = function() {
+        $("#tocExpand").show();
+        $("#tocCollapse").hide();
+        $("#tocContainer").hide();
+        $("#mainBody").css("padding-left", "50px");
+    }
+
+    toc.expand = function() {
+        $("#tocExpand").hide();
+        $("#tocCollapse").show();
+        $("#tocContainer").show();
+        $("#mainBody").css("padding-left", "200px");
+    }
+
+    resizeToc = function () {
+        $("#tocWrapper").css("height", $(window).height() - 130);
+    }
+    $(window).resize(function () {
+        resizeToc();
+    });
+
+    $(document).ready(function () {
+        window.setTimeout(function () {
+            resizeToc();
+            if (categoryAction === "Flows" || categoryAction === "Formulas")
+            {
+                toc.collapse();
+            }
+        }, 50);
+    });
+</script>
+
+<style>
+    #tocWrapper {
+        position: fixed; 
+        top: 130px; left: 10px; 
+        padding: 5px; 
+        width: 180px;
+        overflow-y: auto;
+    }
+
+    #mainBody {
+        margin: 10px; 
+        padding: 0 20px 0 200px;
+    }
+
+    .selected {
+        background-color: #ebf8fe;
+    }
+
+    #breadcrumbs {
+        padding: 15px;
+        font-size: 11px;
+        font-weight: 200;
+    }
+
+    #mainBody p, #mainBody li {
+        color: #444444;
+        font-size: 13px;
+        font-weight: 200;
+    }
+
+    #mainBody p a, #mainBody li a {
+        font-weight: normal;
+    }
+    .tocWrapper {
+        font-weight: 200; 
+        font-size: 12px;
+    }
+
+    .tocItem {
+        border-left: 1px solid #bebebe; 
+        padding-left: 8px; 
+        color: #222222;
+        font-size: 11px;
+    }
+
+    a .tocItem:hover {
+        background-color: #ebf8fe;
+        border-left: 3px solid #0071C5;
+        padding-left: 6px;
+        cursor: pointer;
+    }
+
+    .tocItem > div {
+        padding: 4px 4px;
+    }
+     
+    .w100 {
+        width: 100%;
+    }
+
+    .rotate90 {
+        transform: rotate(90deg);
+	    transform-origin: left top 0;        
+    }
+
+    .note {
+        margin-top: 15px;
+        color: #000000;
+        font-weight: 200; 
+        font-size: 11px;
+        padding: 5px;
+        border: 1px solid #dddddd;
+        background-color: #eeeeee;
+    }
+
+    .note i {
+        font-size: 18px;
+        font-weight: normal;
+        color: #0071C5;
+    }
+
+    .noteBody {
+        font-weight: 200; 
+        font-size: 10px;
+        padding: 5px;
+        border-left: 1px solid #dddddd;
+        border-right: 1px solid #dddddd;
+        border-bottom: 1px solid #dddddd;
+        margin-bottom: 20px;
+    }
+
+    pre {
+        font-size: 10px;
+        font-family: arial;
+        background-color: transparent;
+        border: 0 solid transparent;
+    }
+
+    .stepByStep {
+        border-top: 1px solid #0071C5;
+        border-bottom: 1px solid #0071C5;
+        background-color: #ebf8fe;
+        padding: 5px 10px;
+        font-size: 14px;
+        margin: 15px 0;
+        color: #0071C5;
+    }
+    .stepByStep i {
+        font-size: 20px;
+        font-weight: normal;
+        margin-right: 6px;
+    }
+</style>

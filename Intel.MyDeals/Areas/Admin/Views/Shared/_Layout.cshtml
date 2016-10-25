@@ -1,0 +1,23 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>myDeals</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/MyDeals/css")
+
+    @Scripts.Render("~/bundles/scripts")
+    @Scripts.Render("~/MyDeals/scripts")
+
+</head>
+
+<body>
+    @Html.Partial("_Header")
+
+    <div id="modals"></div>
+    <div style="margin: 0 0 0 0; padding: 86px 0 0 0; height: 100%;">
+        @RenderBody()
+    </div>
+</body>
+</html>

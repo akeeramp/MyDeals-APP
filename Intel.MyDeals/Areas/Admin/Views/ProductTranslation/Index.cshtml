@@ -1,0 +1,59 @@
+﻿@using Intel.MyDeals.Entities
+@using Kendo.Mvc.UI
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<header class="title-bar intel-border-yellow">
+    <span class="title-bar-title">Manage Product Abbreviations to System Names</span>
+    <span class="title-bar-subtitle">This tool will allow you to change or delete User Defined Product Name Relations.</span>
+</header>
+
+<div style="padding: 0 15px 15px 15px;">
+    @(Html.Kendo().Grid<AdminProdUserTranslation>()
+        .Name("gridProdUserTranslation")
+        .Columns(columns =>
+        {
+            columns.Command(command => command.Destroy()).Width(80);
+            columns.Bound(d => d.PUT_SID).Width(100).Title("Id");
+            columns.Bound(d => d.PRD_NM_USER).Width(140).Title("User Defined Product Name");
+            columns.Bound(d => d.PRD_NM_REAL).Width(140).Title("Proper Product Name");
+        })
+        .ToolBar(toolbar =>
+        {
+            toolbar.Create();
+            toolbar.Save();
+        })
+        .Editable(editable => editable.Mode(GridEditMode.InCell))
+        .Resizable(resize => resize.Columns(true))
+        .Groupable()
+        .Filterable()
+        .Scrollable(s => s.Height(500))
+        .Sortable()
+        .Pageable()
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(100)
+            .ServerOperation(false)
+            .Events(events => events.Error("error_handler"))
+            .Model(model =>
+            {
+                model.Id(p => p.PUT_SID);
+                model.Field(p => p.PUT_SID).Editable(false);
+            })
+            .Create(create => create.Action("Create", "ProductTranslation", new {area = "Admin"}).Type(HttpVerbs.Post)) // So service address is "/Admin/ProductTranslation/Create"
+            .Read(read => read.Action("Read", "ProductTranslation", new {area = "Admin"}).Type(HttpVerbs.Get))
+            .Update(update => update.Action("Update", "ProductTranslation", new {area = "Admin"}).Type(HttpVerbs.Post))
+            .Destroy(destroy => destroy.Action("Delete", "ProductTranslation", new {area = "Admin"}).Type(HttpVerbs.Post))
+        ))
+</div>
+
+<script>
+
+    function error_handler(e) {
+        util.error(e, "Unable to perform CRUD operations in Filter Attributes");
+    }
+
+</script>
+

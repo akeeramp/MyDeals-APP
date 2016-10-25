@@ -1,0 +1,20 @@
+﻿    .item {
+        font-size: 11px;
+        font-family: "Intel Clear", "Arial";
+    }
+    .item:hover {
+        background-color: #efefef;
+    }
+    .item span {
+        color: #dddddd;
+        margin: 0 10px;
+    }
+    .item .delEmp {
+        cursor: pointer;
+        color: #00AEEF;
+        float: right;
+        margin-right: 10px;
+    }
+    .item .delEmp:hover {
+        color: #003C71;
+    }

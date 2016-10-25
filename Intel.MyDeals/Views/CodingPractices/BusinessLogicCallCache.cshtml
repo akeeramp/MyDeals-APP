@@ -1,0 +1,48 @@
+﻿
+@Html.Partial("TOC", new ViewDataDictionary
+{
+    { "categoryTitle", "Project setup and logic flow" },
+    { "categoryAction", "Project" },
+    { "sectionTitle", "Intel.MyDeals.BusinessLogic" },
+    { "sectionAction", "BusinessLogic" },
+    { "pageTitle", "Call from data cache" }
+})
+
+<div id="mainBody" style="margin: 10px; padding: 0 20px 0 200px;">
+    <h1><img src="/Images/docs/icon-bus-logic.png" height="60" />Call from data cache</h1>
+    <p>
+        Instead of calling a stored procedure every time, there are cases where caching the data is more efficient.
+        <img src="/Images/docs/buslogcache.png" style="margin: 10px 0 10px 25px;" />
+    </p>
+
+    <div class="stepByStep">
+        <i class="intelicon-task"></i>Step by Step
+    </div>
+
+    <ol>
+        <li>
+            Open the <i>Intel.MyDeals.BusinessLogic</i> project. Notice all the folders. These should match what is in the <i>Intel.MyDeals.DataLibrary</i> project.
+            If you need a new folder, make sure you add a matching folder in both projects.<br />
+            <img src="/Images/docs/businesslogiclayout.png" style="margin: 10px 0;" />
+        </li>
+        <li>
+            Add your business function here.  Keep in mind the code segments should be rather small and coded in a way it can efficiently be used by automated testing.<br />
+            <div class="note"><strong>Note:</strong> Here is an example of a business logic function calling the Data Library <b>cache</b> instead of the procedure. Notice the use of <b>DataCollections</b>.</div>
+            <div class="noteBody">
+                <pre>        
+        public List&lt;ToolConstants&gt; GetToolConstants()
+        {
+            //
+            // can put business logic here
+            //
+            return DataCollections.GetToolConstants();
+        }
+                </pre>
+            </div>
+        </li>
+    </ol>
+
+
+    <br /><br /><br />
+</div>
+

@@ -1,0 +1,146 @@
+﻿@model HandleErrorInfo
+@{
+    Layout = "~/Views/Shared/_LayoutBlank.cshtml";
+}
+
+<img src="/images/intelMyDeals.png" id="intelLogo" />
+
+<div class="outer">
+    <div class="middle">
+        <div class="inner">
+            <img src="/images/PageNotFound.png" />
+            <div class="innertxt">
+                <p>
+                    Sorry... could not find the page you are looking for. <br/>
+                    Please check the URL and try again.
+                </p>
+                <p style="font-size: 10px;">
+                    @if (Model != null)
+                    {
+                        @Html.Raw("<b>Details</b>:&nbsp;")
+                        @Model.Exception.Message
+                    }
+                </p>
+                <button id="btnHome">Take me back to the Homepage</button>
+            </div>
+
+            <div class="debugWin">
+                @if (Model != null)
+                {
+                    <div>
+                        <div>
+                            <pre>
+@Model.Exception.StackTrace
+                            </pre>
+                        </div>
+                    </div>
+
+                    if (Model.Exception.InnerException != null)
+                    {
+                        <div>
+                            <p>
+                                <b>Inner Exception:</b> @Model.Exception.InnerException.Message<br />
+                            </p>
+                            <div>
+                                <pre>
+@Model.Exception.InnerException.StackTrace
+                </pre>
+                            </div>
+                        </div>
+                    }
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script>
+    $("#btnHome").kendoButton({
+        click: function() {
+            document.location.href = "@Url.Action("Index", "Home")";
+        }
+    });
+</script>
+
+
+<style>
+    body {
+        height: 100%;
+        background-color: #000000;
+        color: #ffffff;
+        background-image: url(/images/city.png);
+        background-size: cover;
+    }
+
+    .outer {
+        display: table;
+        position: absolute;
+        height: 100%;
+        width: 100%;
+    }
+
+    .middle {
+        height: 100%;
+        display: table-cell;
+        vertical-align: bottom;
+    }
+
+    .innertxt {
+        width: 600px;
+        padding: 0 20px;
+    }
+
+    p {
+        font-family: "Intel Clear", "Arial";
+        font-size: 16px;
+    }
+
+    h1 {
+        font-family: "Intel Clear", "Arial";
+        font-size: 80px;
+        font-weight: bold;
+        font-weight: 700;
+        font-style: normal;
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+
+    pre {
+        margin: 10px;
+    }
+
+    .debugWin {
+        overflow: scroll;
+        background-color: #000000;
+        background-color: rgba(0, 0, 0, 0.7);
+        height: 120px;
+        width: 100%;
+        margin-top: 40px;
+        font-family: "Intel Clear", "Arial";
+        font-size: 10px;
+    }
+
+    .debugWin pre {
+        font-family: "Intel Clear", "Arial";
+        font-size: 10px;
+        border: 0 solid transparent;
+        background-color: transparent;
+        color: #0071C5;
+    }
+
+
+    #intelLogo {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+    }
+</style>
+
+
+
+

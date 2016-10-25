@@ -1,0 +1,241 @@
+﻿<script id="PricingStrategiesContainerTemplate" type="text/x-kendo-template">
+    <div style="height: 100%; width: 100%;">
+        <div id="sectionContainer" style="margin-left: 200px; height: 100%;">
+            <div id="sectionContainerWrapper" class="fl" style="width: 200px; margin-left: -200px;">
+                <div class="sectionHeader">
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-addon" id="section-selector-search"><span class="glyphicon glyphicon-search" style="font-size: 12px;"></span></span>
+                        <input type="text" class="form-control" placeholder="Search Pricing Strategy..."
+                               aria-describedby="section-selector-search"
+                               onkeyup="viewModel.rsVm.filterPricingStrategies(this.value)"
+                               oninput="viewModel.rsVm.filterPricingStrategies(this.value)">
+                    </div>
+                </div>
+                <div class="sectionContainer">
+                    <div id="sectionSelectorContainer">
+                        <div data-role="listview"
+                             class="section-container section-main"
+                             data-selectable="multiple"
+                             data-scrollable="true"
+                             data-template="section-template"
+                             data-bind="source: rsVm.RebateStrategies.sections, events: { change: rsVm.onSectionChange }"
+                             style="border: 0; overflow: auto;"></div>
+                    </div>
+                </div>
+                <div class="sectionFooter">
+                    <div class="fr fBtn" title="Delete this Pricing Strategy" onclick="viewModel.rsVm.deleteSection()">
+                        <i class="fa fa-trash-o"></i>
+                    </div>
+                    <div class="fr fBtn" title="Move Pricing Strategy Down">
+                        <i class="fa fa-chevron-down" onclick="viewModel.rsVm.moveSection('down')"></i>
+                    </div>
+                    <div class="fr fBtn" title="Move Pricing Strategy Up">
+                        <i class="fa fa-chevron-up" onclick="viewModel.rsVm.moveSection('up')"></i>
+                    </div>
+                    <div class="fr fBtn" title="Copy this Pricing Strategy">
+                        <i class="fa fa-clone"></i>
+                    </div>
+                    <div class="fr fBtn" title="Import Pricing Strategies" onclick="rsUtil.showNavMenu(); rsUtil.selectNavLink('RsImport')">
+                        <i class="fa fa-upload"></i>
+                    </div>
+                    <div class="fr fBtn" title="Add a Pricing Strategy" data-toggle="modal" data-target="#addSectionModal">
+                        <i class="fa fa-plus"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sectionBody" style="height: 100%; overflow: auto; background-color: white;">
+
+                <div id="curSectionContainer" style="height: 100%;">
+
+                    <div data-bind="visible: isCurSectionVisible" style="padding: 25px 15px 0 15px;">
+
+                        <div class="row">
+                            <div class="col-sm-12 col-md-8">
+                                <input data-bind="value: title" placeholder="<enter a title>" style="font-size: 24px;" class="opInput opInputWide" />
+                            </div>
+                        </div>
+
+
+                                <div style="margin: 4px 0;">
+                                    <div>
+                                        <input data-role="datepicker"
+                                               data-bind="value: startDate"
+                                               style="width: 110px">
+                                        -
+                                        <input data-role="datepicker"
+                                               data-bind="value: endDate"
+                                               style="width: 110px">
+                                    </div>
+
+                                </div>
+
+                                <textarea data-bind="value: description" placeholder="<enter a description>" style="height: 58px; padding: 4px 8px;" class="opInput opInputWide"></textarea>
+
+
+                                <h2 style="padding: 5px 8px 4px 8px;">Pricing Tables</h2>
+                                <div id="pricingNoTableContainer"></div>
+                                <div id="pricingTableContainer"></div>
+
+                                <div data-toggle="modal" data-target="\\#addPricingTableModal" style="margin-left: 10px;">
+                                    <button data-role="button">
+                                        <i class="fa fa-plus-square" style="margin-right: 5px;"></i>
+                                        Add Pricing Table
+                                    </button>
+                                </div>
+
+
+                                <h2 style="padding: 15px 8px 4px 8px;">Pricing Strategy Terms and Conditions</h2>
+
+                                <div>
+                                    <p>Please enter any additional Terms and Conditions specific to this section.</p>
+                                    <textarea data-role="editor"
+                                              data-bind="value: terms"
+                                              style="height: 300px;"></textarea>
+                                </div>
+
+                                <div style="margin-left: 10px; margin-top: 15px;">
+                                    <div class="fl" data-toggle="modal" data-target="\\#addTacModal" style="margin-right: 10px;">
+                                        <button data-role="button">
+                                            <i class="fa fa-plus-square" style="font-size: 14px; margin-right: 5px;"></i>Load T & Cs
+                                        </button>
+                                    </div>
+
+                                    <div class="fl" data-toggle="modal" data-target="\\#viewSectionTacModal">
+                                        <button data-role="button">
+                                            <i class="fa fa-binoculars" style="font-size: 14px; margin-right: 5px;"></i>Preview Section T & Cs
+                                        </button>
+                                    </div>
+
+                                    <div class="clearboth"></div>
+                                </div>
+
+                            </div>
+
+
+                    <div data-bind="invisible: isCurSectionVisible">
+                        <div style="height: 80px; padding: 0 6px;">
+
+                            <div class="fl hov" style="margin: 0 10px 15px 0; font-size: 9px; padding: 0 10px 10px 10px;">
+                                <h4>Workflow Progress</h4>
+                                <div class="workflowProgressBar">
+                                    <div class="fl active">
+                                        <div class="fl numberCircle">1</div>
+                                        <div class="fl status">CREATED</div>
+                                        <div class="fl divider">
+                                            <i class="fa fa-arrow-right"></i>
+                                        </div>
+                                        <div class="clearboth"></div>
+                                    </div>
+                                    <div class="fl active">
+                                        <div class="fl numberCircle">2</div>
+                                        <div class="fl status">FSE REQUESTED</div>
+                                        <div class="fl divider">
+                                            <i class="fa fa-arrow-right"></i>
+                                        </div>
+                                        <div class="clearboth"></div>
+                                    </div>
+                                    <div class="fl active">
+                                        <div class="fl numberCircle">3</div>
+                                        <div class="fl status">BMT SUBMITTED</div>
+                                        <div class="fl divider">
+                                            <i class="fa fa-arrow-right"></i>
+                                        </div>
+                                        <div class="clearboth"></div>
+                                    </div>
+                                    <div class="fl active">
+                                        <div class="fl numberCircle">4</div>
+                                        <div class="fl status">MMBP APPROVED</div>
+                                        <div class="fl divider">
+                                            <i class="fa fa-arrow-right"></i>
+                                        </div>
+                                        <div class="clearboth"></div>
+                                    </div>
+                                    <div class="fl current">
+                                        <div class="fl numberCircle">5</div>
+                                        <div class="fl status">FINAL APPROVAL</div>
+                                        <div class="fl divider">
+                                            <i class="fa fa-arrow-right"></i>
+                                        </div>
+                                        <div class="clearboth"></div>
+                                    </div>
+                                    <div class="fl">
+                                        <div class="fl numberCircle">6</div>
+                                        <div class="fl status">ACTIVE</div>
+                                        <div class="clearboth"></div>
+                                    </div>
+                                    <div class="clearboth"></div>
+                                </div>
+                            </div>
+                            <div class="clearboth"></div>
+                        </div>
+                        <div class="clearboth"></div>
+                        <div id="SectionIntroInternalContainer">
+                            
+                            <p>Place some dashboard specific items here.  Things that will help the user determine what to do next or summary of contract.</p>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="clearboth"></div>
+        </div>
+
+    </div>
+</script>
+
+<script id="section-template" type="text/x-kendo-template">
+    #
+    var colorLegal = "\\#cccccc";
+    if (isLegalApproved) {
+    colorLegal = "\\#69cd38";
+    }
+
+    var perc = percRealDeals;
+    var color = "\\#000000";
+    if (perc >= 100) {
+    color = "\\#4fc281";
+    } else if (perc >= 40) {
+    color = "\\#faba64";
+    } else  {
+    color = "\\#de6262";
+    }
+
+    #
+    <li>
+        <div class="sectionItem">
+            <div class="fr rIndicator">
+                <div class="badge" data-bind="text: numDeals"></div>
+                <div class="badgeLegal" style="color: #:colorLegal#">
+                    <i class="fa fa-gavel" style="font-size: 12px;"></i>
+                </div>
+            </div>
+            <div class="fl lIndicator">
+                <div class="progress progress-bar-vertical">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="#:perc#" aria-valuemin="0" aria-valuemax="100" style="height: #:perc#%; background-color: #:color#;">
+                        <span class="sr-only">#:perc#% Complete</span>
+                    </div>
+                </div>
+            </div>
+            <div class="fl content">
+                <div data-bind="text: title" class="secTitle"></div>
+                <div class="ellipsis">
+                    <div data-bind="text: description" class="secDesc"></div>
+                </div>
+            </div>
+            <div class="clearboth"></div>
+        </div>
+    </li>
+
+</script>
+
+<script id="no-pricing-table-template" type="text/x-kendo-template">
+    <div fl" data-toggle="modal" data-target="\\#addPricingTableModal" style="padding: 30px;">
+        <button data-role="button">
+            <i class="fa fa-plus-square" style="margin-right: 5px; padding: 10px;"></i>
+            Add Pricing Table
+        </button>
+    </div>
+</script>

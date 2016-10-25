@@ -1,0 +1,654 @@
+﻿<script src="~/Scripts/excelFormulaUtilities-1.1.0.min.js"></script>
+
+
+<div style="overflow: auto; height: 100%;" id="theBody">
+    <div style="margin: 10px;">
+        <h2 style="margin-top: 25px;">Pricing Cost Test Formulas</h2>
+        <p>
+            Tool to translate the Excel formulas into something more readable.
+        </p>
+
+    </div>
+
+    <div class="fl" style="margin: 10px; background-color: #fcfcfe; border: 1px solid #dadbdf; border-radius: 4px; padding: 5px; width: 250px;">
+        <h4 style="border-bottom: 1px solid #eeeeee; margin-top: 5px;">Column Names</h4>
+        <div data-role="listview"
+             data-bind="source: dataSource"
+             data-template="template-columns"
+             style="border: 1px solid transparent; background-color: #fcfcfe; height: 500px; overflow: auto;"></div>
+    </div>
+
+    <div class="fl" style="margin: 10px;">
+        <h4 style="border-bottom: 1px solid #eeeeee; margin-top: 5px;">Formulas</h4>
+
+        <input data-role="dropdownlist"
+               data-text-field="name"
+               data-value-field="key"
+               data-template="template-dropdown"
+               data-value-template="template-dropdown"
+               data-bind="value: selectedFormula, source: dataFilteredSource, events: { change: onChange}"
+               style="width: 200px;" />
+
+
+        <textarea rows="1" id="formula_input" style="display: none; width: 600px; height: 100px;"
+                  onclick="window.excelFormulaBeautifier.examples.beautifier.formulaAreaClicked()"
+                  onkeyup="window.excelFormulaBeautifier.examples.beautifier.update()"></textarea>
+
+        <select data-role="dropdownlist" id="mode" onchange="window.excelFormulaBeautifier.examples.beautifier.changeMode(this.value)">
+            <option value="beautify">Beautify</option>
+            <option value="minify">Minify</option>
+            <option value="js">Formula to JavaScript</option>
+        </select>
+
+        <input type="checkbox" id="isEu" style="vertical-align:middle" /><span style="vertical-align:middle"> Use ; list seperator</span>
+
+        <div class="clearboth"></div>
+        <div class="formula">
+            <div id="fomatFormula_2_out"></div>
+        </div>
+
+        @*<div data-role="listview"
+            data-bind="source: dataFilteredSource"
+            data-template="template-formulas"
+            style="border: 1px solid transparent; background-color: transparent; width: 900px; height: 520px; overflow: auto;"></div>*@
+    </div>
+
+    <div class="clearboth"></div>
+
+
+
+    <div data-role="grid"
+         data-sortable="true"
+         data-editable="true"
+         data-scrollable="false"
+         data-filterable="true"
+         data-groupable="false"
+         data-toolbar="['excel']"
+         data-autoSync="false"
+         data-columns="[
+                { field: 'key', title: 'Col', width: '50px' },
+                { field: 'name', title: 'Name', width: '300px' },
+                { field: 'formula', title: 'Formula' }
+            ]"
+         data-bind="source: dataSource"
+         style="margin: 10px;">
+    </div>
+
+
+
+    <div style="margin: 10px;">
+        <button data-role="button"
+                data-bind="events: { click: onClick }">
+            View Json
+        </button>
+        <textarea id="jsonTxt" class="k-textbox" style="font-size: 9px; height: 150px; width: 100%; margin: 5px;"></textarea>
+    </div>
+
+</div>
+
+<script type="text/x-kendo-tmpl" id="template-dropdown">
+    <div style="font-size: 10px;"><b>#:key#:</b> #:name#</div>
+</script>
+
+<script type="text/x-kendo-tmpl" id="template-columns">
+    #
+    var form = "";
+    var displ = "display: none;";
+    if (formula != "") {
+        form = "<i class='fa fa-file-excel-o' aria-hidden='true'></i>";
+        displ = "";
+    }
+    #
+    <div style="padding: 2px 5px; color: \\#4b98dc; font-size: 8px;">
+        <div class="fl" style="width: 25px;">#=key#</div>
+        <div class="fl" style="width: 150px;">#:name#</div>
+        <div class="fl" style="width: 20px; text-align: right;">#=form#</div>
+        <div class="clearboth"></div>
+    </div>
+
+</script>
+
+<script type="text/x-kendo-tmpl" id="template-formulas">
+    #
+    var form = "";
+    var formeng = "";
+    var displ = "display: none;";
+    if (formula != "") {
+    displ = "";
+    form = formula;
+    formeng = eng(formula);
+    }
+    #
+    <div style="#:displ# padding: 2px 5px; color: \\#000000; font-size: 10px; margin: 5px; background-color: \\#fcfcfe; border: 1px solid \\#dadbdf; border-radius: 4px;">
+        <div class="fl" style="width: 25px; font-weight: bold; margin-left: 4px;">#=key#</div>
+        <div class="fl" style="width: 150px;">#:name#</div>
+        <div class="clearboth"></div>
+        <div style="border: 1px dotted \\#666666; color: \\#666666; border-radius: 3px; background-color: \\#eeeeee; padding: 4px; margin: 2px;">
+            #:form#
+        </div>
+
+        <div style="margin: 10px;">
+            #=formeng#
+        </div>
+    </div>
+</script>
+
+
+
+
+
+<script>
+    function replaceAll(str, find, replace) {
+        return str.replace(new RegExp(find, 'g'), replace);
+    }
+
+    function eng(val) {
+        var dict = viewModel.get("dataDict");
+        var en = val;
+
+        //return val;
+
+        en = replaceAll(en, ",", "~,~");
+        en = replaceAll(en, "\\(", "(~");
+        en = replaceAll(en, "\\)", "~)");
+        en = replaceAll(en, "\\$", "$~");
+
+        var post = "<span class='func'><i class='fa fa-file-excel-o' aria-hidden='true'></i></span>";
+        post = "___";
+
+
+        for (var key in dict) {
+            if (dict.hasOwnProperty(key) && key[0] !== '_' && key !== 'parent' && key !== 'uid') {
+                var k = (dict[key] === undefined || dict[key] === "")
+                    ? '[[' + key + ']]'
+                    : (dict[key].formula === "") ? dict[key] : dict[key] + post;
+                en = replaceAll(en, '~' + key + '15', k);
+            }
+        }
+
+        en = en.replace(/~/g, '');
+        en = en.replace(/&nbsp;/g, '');
+        return en;
+    }
+
+
+
+    var dict = {};
+    var viewModel = null;
+    var dataItems = [
+        { "key": "A", "name": "", "formula": '' },
+        { "key": "B", "name": "ERROR", "formula": '' },
+        { "key": "C", "name": "REMARKS", "formula": '' },
+        { "key": "D", "name": "INSERT_DELETE", "formula": '' },
+        { "key": "E", "name": "PROD_NAME", "formula": '' },
+        { "key": "F", "name": "PROD_DESC", "formula": '' },
+        { "key": "G", "name": "DEAL_MM_MEDIA_CD", "formula": '' },
+        { "key": "H", "name": "SECONDARY_PRODUCT", "formula": '' },
+        { "key": "I", "name": "PLI_DTL_QSTN", "formula": '' },
+        { "key": "J", "name": "PLI_CAP_TYPE", "formula": '' },
+        { "key": "K", "name": "MRKT_SEG_COMBINED", "formula": '' },
+        { "key": "L", "name": "AGRMNT_NM", "formula": '' },
+        { "key": "M", "name": "PRD_STRT_DTM", "formula": '' },
+        { "key": "N", "name": "PRD_END_DTM", "formula": '' },
+        { "key": "O", "name": "START_DT", "formula": '' },
+        { "key": "P", "name": "END_DT", "formula": '' },
+        { "key": "Q", "name": "CAP", "formula": '' },
+        { "key": "R", "name": "YCS2_PRC_IRBT", "formula": '' },
+        { "key": "S", "name": "YCS2_START_DT", "formula": '' },
+        { "key": "T", "name": "YCS2_END_DT", "formula": '' },
+        { "key": "U", "name": "", "formula": '' },
+        { "key": "V", "name": "PLI_COST", "formula": '' },
+        { "key": "W", "name": "PLI_COST_TYPE_USED", "formula": '' },
+        { "key": "X", "name": "PLI_COMP_SKU", "formula": '' },
+        { "key": "Y", "name": "PLI_COMP_SKU_OTHR", "formula": '' },
+        { "key": "Z", "name": "PLI_COMP_PRICE", "formula": '' },
+        { "key": "AA", "name": "RETAIL_CYCLE", "formula": '' },
+        { "key": "AB", "name": "PLI_COMP_BENCH", "formula": '' },
+        { "key": "AC", "name": "PLI_CPU_BENCH", "formula": '' },
+        { "key": "AD", "name": "WW_ECAP_PRICE", "formula": '' },
+        { "key": "AE", "name": "WW_MAX_RPU", "formula": '' },
+        { "key": "AF", "name": "WW_AVG_RPU", "formula": '' },
+        { "key": "AG", "name": "WW_RPU_OVERRIDE_CMNT", "formula": '' },
+        { "key": "AH", "name": "ASMO", "formula": '' },
+        { "key": "AI", "name": "APAC", "formula": '' },
+        { "key": "AJ", "name": "IJKK", "formula": '' },
+        { "key": "AK", "name": "PRC", "formula": '' },
+        { "key": "AL", "name": "EMEA", "formula": '' },
+        { "key": "AM", "name": "WW_MCA_PRI_PROD", "formula": '=MIN(BE15,BV15,CM15,DD15,DU15,FP15)' },
+        { "key": "AN", "name": "WW_MCA_SEC_PROD", "formula": '=MIN(BF15,BW15,CN15,DE15,DV15,FQ15)' },
+        { "key": "AO", "name": "WW_MCAR_OVERRIDE", "formula": '' },
+        { "key": "AP", "name": "WW_MCAR_OVERRIDE_CMNT", "formula": '' },
+        { "key": "AQ", "name": "WW_PCA_PRI_PROD", "formula": '=MIN(BI15,BZ15,CQ15,DH15,DY15,FR15)' },
+        { "key": "AR", "name": "WW_PCA_SEC_PROD", "formula": '=MIN(BJ15,CA15,CR15,DI15,DZ15,FS15)' },
+        { "key": "AS", "name": "WW_PCAR_OVERRIDE", "formula": '' },
+        { "key": "AT", "name": "WW_PCAR_OVERRIDE_CMNT", "formula": '' },
+        { "key": "AU", "name": "", "formula": '' },
+        { "key": "AV", "name": "WW_RETAIL_PULL", "formula": '=MAX(BN15,CE15,CV15,DM15,ED15)' },
+        { "key": "AW", "name": "WW_RETAIL_PULL_USER_DEF", "formula": '= IF(OR(BO15<>"",CF15<>"",CW15<>"",DN15<>"",EE15<>""), MAX(BN15,CE15,CV15,DM15,ED15,BO15,CF15,CW15,DN15,EE15),"")' },
+        { "key": "AX", "name": "", "formula": '' },
+        { "key": "AY", "name": "ECAP_FLOOR", "formula": '' },
+        { "key": "AZ", "name": "", "formula": '' },
+        { "key": "BA", "name": "ASMO_ECAP_PRICE", "formula": '' },
+        { "key": "BB", "name": "ASMO_MAX_RPU", "formula": '' },
+        { "key": "BC", "name": "ASMO_AVG_RPU", "formula": '' },
+        { "key": "BD", "name": "ASMO_RPU_OVERRIDE_CMNT", "formula": '' },
+        { "key": "BE", "name": "ASMO_MCA_PRI_PROD", "formula": '=IF(FC15 <> "",(FC15-IF(AND(FC15>0,FC16>0,FC20>0,FC20<(FC15+FC16),$H15<>"",OR(JJ15="Y",EQ16="UPSD",AND(EQ16="NAND (SSD)",I16="This is Client SSD"))),(FC15+FC16-FC20)*(FC15/(FC15+FC16)),0) - SUM(BC21:BC22) - SUM($AF21:$AF22))*JE15,0)' },
+        { "key": "BF", "name": "ASMO_MCA_SEC_PROD", "formula": '=IF(FC16<>"",FC16-IF(AND(FC15>0,FC16>0,FC20>0,FC20<(FC15+FC16),$H15<>"",JJ15="Y"),(FC15+FC16-FC20)*(FC16/(FC15+FC16)),0),0)' },
+        { "key": "BG", "name": "ASMO_MCAR_OVERRIDE", "formula": '' },
+        { "key": "BH", "name": "ASMO_MCAR_OVERRIDE_CMNT", "formula": '' },
+        { "key": "BI", "name": "ASMO_PCA_PRI_PROD", "formula": '=IF(FC15 <> "",FC15-IF(AND(FC15>0,FC16>0,FC20>0,FC20<(FC15+FC16),$H15<>"",OR(JJ15="Y",EQ16="UPSD",AND(EQ16="NAND (SSD)",I16="This is Client SSD"))),(FC15+FC16-FC20),0) - SUM(BB21:BB22) - SUM($AE21:$AE22) - IF(FH15=0,0,IF(BO15="",BN15,BO15)),0)' },
+        { "key": "BJ", "name": "ASMO_PCA_SEC_PROD", "formula": '=IF(FC16<>"",FC16-IF(AND(FC15>0,FC16>0,FC20>0,FC20<(FC15+FC16),$H15<>"",JJ15="Y"),(FC15+FC16-FC20),0) - IF(FH15=0,0,IF(BO16="",BN16,BO16)),0)' },
+        { "key": "BK", "name": "ASMO_PCAR_OVERRIDE", "formula": '' },
+        { "key": "BL", "name": "ASMO_PCAR_OVERRIDE_CMNT", "formula": '' },
+        { "key": "BM", "name": "ASMO_RETAIL_CYCLE", "formula": '' },
+        { "key": "BN", "name": "ASMO_RETAIL_PULL", "formula": '' },
+        { "key": "BO", "name": "ASMO_RETAIL_PULL_USR_DEF", "formula": '' },
+        { "key": "BP", "name": "ASMO_RETAIL_PULL_USR_DEF_CMNT", "formula": '' },
+        { "key": "BQ", "name": "", "formula": '' },
+        { "key": "BR", "name": "APAC_ECAP_PRICE", "formula": '' },
+        { "key": "BS", "name": "APAC_MAX_RPU", "formula": '' },
+        { "key": "BT", "name": "APAC_AVG_RPU", "formula": '' },
+        { "key": "BU", "name": "APAC_RPU_OVERRIDE_CMNT", "formula": '' },
+        { "key": "BV", "name": "APAC_MCA_PRI_PROD", "formula": '=IF(FD15 <> "",(FD15-IF(AND(FD15>0,FD16>0,FD20>0,FD20<(FD15+FD16),$H15<>"",OR(JJ15="Y",EQ16="UPSD",AND(EQ16="NAND (SSD)",I16="This is Client SSD"))),(FD15+FD16-FD20)*(FD15/(FD15+FD16)),0)- SUM(BT21:BT22) - SUM($AF21:$AF22))*JE15,0)' },
+        { "key": "BW", "name": "APAC_MCA_SEC_PROD", "formula": '=IF(FD16<>"",FD16-IF(AND(FD15>0,FD16>0,FD20>0,FD20<(FD15+FD16),$H15<>"",JJ15="Y"),(FD15+FD16-FD20)*(FD16/(FD15+FD16)),0),0)' },
+        { "key": "BX", "name": "APAC_MCAR_OVERRIDE", "formula": '' },
+        { "key": "BY", "name": "APAC_MCAR_OVERRIDE_CMNT", "formula": '' },
+        { "key": "BZ", "name": "APAC_PCA_PRI_PROD", "formula": '=IF(FD15 <> "",FD15-IF(AND(FD15>0,FD16>0,FD20>0,FD20<(FD15+FD16),$H15<>"",OR(JJ15="Y",EQ16="UPSD",AND(EQ16="NAND (SSD)",I16="This is Client SSD"))),(FD15+FD16-FD20),0) -  SUM(BS21:BS22) - SUM($AE21:$AE22) -  IF(FH15=0,0,IF(CF15="",CE15,CF15)),0)' },
+        { "key": "CA", "name": "APAC_PCA_SEC_PROD", "formula": '=IF(FD16<>"",FD16-IF(AND(FD15>0,FD16>0,FD20>0,FD20<(FD15+FD16),$H15<>"",JJ15="Y"),(FD15+FD16-FD20),0) -  IF(FH15=0,0,IF(CF16="",CE16,CF16)),0)' },
+        { "key": "CB", "name": "APAC_PCAR_OVERRIDE", "formula": '' },
+        { "key": "CC", "name": "APAC_PCAR_OVERRIDE_CMNT", "formula": '' },
+        { "key": "CD", "name": "APAC_RETAIL_CYCLE", "formula": '' },
+        { "key": "CE", "name": "APAC_RETAIL_PULL", "formula": '' },
+        { "key": "CF", "name": "APAC_RETAIL_PULL_USR_DEF", "formula": '' },
+        { "key": "CG", "name": "APAC_RETAIL_PULL_USR_DEF_CMNT", "formula": '' },
+        { "key": "CH", "name": "", "formula": '' },
+        { "key": "CI", "name": "IJKK_ECAP_PRICE", "formula": '' },
+        { "key": "CJ", "name": "IJKK_MAX_RPU", "formula": '' },
+        { "key": "CK", "name": "IJKK_AVG_RPU", "formula": '' },
+        { "key": "CL", "name": "IJKK_RPU_OVERRIDE_CMNT", "formula": '' },
+        { "key": "CM", "name": "IJKK_MCA_PRI_PROD", "formula": '=IF(FE15 <> "",(FE15-IF(AND(FE15>0,FE16>0,FE20>0,FE20<(FE15+FE16),$H15<>"",OR(JJ15="Y",EQ16="UPSD",AND(EQ16="NAND (SSD)",I16="This is Client SSD"))),(FE15+FE16-FE20)*(FE15/(FE15+FE16)),0) - SUM(CK21:CK22) - SUM($AF21:$AF22))*JE15,0)' },
+        { "key": "CN", "name": "IJKK_MCA_SEC_PROD", "formula": '=IF(FE16<>"",FE16-IF(AND(FE15>0,FE16>0,FE20>0,FE20<(FE15+FE16),$H15<>"",JJ15="Y"),(FE15+FE16-FE20)*(FE16/(FE15+FE16)),0),0)' },
+        { "key": "CO", "name": "IJKK_MCAR_OVERRIDE", "formula": '' },
+        { "key": "CP", "name": "IJKK_MCAR_OVERRIDE_CMNT", "formula": '' },
+        { "key": "CQ", "name": "IJKK_PCA_PRI_PROD", "formula": '=IF(FE15 <> "",FE15-IF(AND(FE15>0,FE16>0,FE20>0,FE20<(FE15+FE16),$H15<>"",OR(JJ15="Y",EQ16="UPSD",AND(EQ16="NAND (SSD)",I16="This is Client SSD"))),(FE15+FE16-FE20),0) -  SUM(CJ21:CJ22) - SUM($AE21:$AE22) -   IF(FH15=0,0,IF(CW15="",CV15,CW15)),0)' },
+        { "key": "CR", "name": "IJKK_PCA_SEC_PROD", "formula": '=IF(FE16<>"",FE16-IF(AND(FE15>0,FE16>0,FE20>0,FE20<(FE15+FE16),$H15<>"",JJ15="Y"),(FE15+FE16-FE20),0)-   IF(FH15=0,0,IF(CW16="",CV16,CW16)),0)' },
+        { "key": "CS", "name": "IJKK_PCAR_OVERRIDE", "formula": '' },
+        { "key": "CT", "name": "IJKK_PCAR_OVERRIDE_CMNT", "formula": '' },
+        { "key": "CU", "name": "IJKK_RETAIL_CYCLE", "formula": '' },
+        { "key": "CV", "name": "IJKK_RETAIL_PULL", "formula": '' },
+        { "key": "CW", "name": "IJKK_RETAIL_PULL_USR_DEF", "formula": '' },
+        { "key": "CX", "name": "IJKK_RETAIL_PULL_USR_DEF_CMNT", "formula": '' },
+        { "key": "CY", "name": "", "formula": '' },
+        { "key": "CZ", "name": "PRC_ECAP_PRICE", "formula": '' },
+        { "key": "DA", "name": "PRC_MAX_RPU", "formula": '' },
+        { "key": "DB", "name": "PRC_AVG_RPU", "formula": '' },
+        { "key": "DC", "name": "PRC_RPU_OVERRIDE_CMNT", "formula": '' },
+        { "key": "DD", "name": "PRC_MCA_PRI_PROD", "formula": '=IF(FF15 <> "",(FF15-IF(AND(FF15>0,FF16>0,FF20>0,FF20<(FF15+FF16),$H15<>"",OR(JJ15="Y",EQ16="UPSD",AND(EQ16="NAND (SSD)",I16="This is Client SSD"))),(FF15+FF16-FF20)*(FF15/(FF15+FF16)),0) - SUM(DB21:DB22) - SUM($AF21:$AF22))*JE15,0)' },
+        { "key": "DE", "name": "PRC_MCA_SEC_PROD", "formula": '=IF(FF16<>"",FF16-IF(AND(FF15>0,FF16>0,FF20>0,FF20<(FF15+FF16),$H15<>"",JJ15="Y"),(FF15+FF16-FF20)*(FF16/(FF15+FF16)),0),0)' },
+        { "key": "DF", "name": "PRC_MCAR_OVERRIDE", "formula": '' },
+        { "key": "DG", "name": "PRC_MCAR_OVERRIDE_CMNT", "formula": '' },
+        { "key": "DH", "name": "PRC_PCA_PRI_PROD", "formula": '=IF(FF15 <> "",FF15-IF(AND(FF15>0,FF16>0,FF20>0,FF20<(FF15+FF16),$H15<>"",OR(JJ15="Y",EQ16="UPSD",AND(EQ16="NAND (SSD)",I16="This is Client SSD"))),(FF15+FF16-FF20),0) -  SUM(DA21:DA22) - SUM($AE21:$AE22) - IF(FH15=0,0,IF(DN15="",DM15,DN15)),0)' },
+        { "key": "DI", "name": "PRC_PCA_SEC_PROD", "formula": '=IF(FF16<>"",FF16-IF(AND(FF15>0,FF16>0,FF20>0,FF20<(FF15+FF16),$H15<>"",JJ15="Y"),(FF15+FF16-FF20),0)- IF(FH15=0,0,IF(DN16="",DM16,DN16)),0)' },
+        { "key": "DJ", "name": "PRC_PCAR_OVERRIDE", "formula": '' },
+        { "key": "DK", "name": "PRC_PCAR_OVERRIDE_CMNT", "formula": '' },
+        { "key": "DL", "name": "PRC_RETAIL_CYCLE", "formula": '' },
+        { "key": "DM", "name": "PRC_RETAIL_PULL", "formula": '' },
+        { "key": "DN", "name": "PRC_RETAIL_PULL_USR_DEF", "formula": '' },
+        { "key": "DO", "name": "PRC_RETAIL_PULL_USR_DEF_CMNT", "formula": '' },
+        { "key": "DP", "name": "", "formula": '' },
+        { "key": "DQ", "name": "EMEA_ECAP_PRICE", "formula": '' },
+        { "key": "DR", "name": "EMEA_MAX_RPU", "formula": '' },
+        { "key": "DS", "name": "EMEA_AVG_RPU", "formula": '' },
+        { "key": "DT", "name": "EMEA_RPU_OVERRIDE_CMNT", "formula": '' },
+        { "key": "DU", "name": "EMEA_MCA_PRI_PROD", "formula": '=IF(FG15 <> "",(FG15-IF(AND(FG15>0,FG16>0,FG20>0,FG20<(FG15+FG16),$H15<>"",OR(JJ15="Y",EQ16="UPSD",AND(EQ16="NAND (SSD)",I16="This is Client SSD"))),(FG15+FG16-FG20)*(FG15/(FG15+FG16)),0) - SUM(DS21:DS22) - SUM($AF21:$AF22))*JE15,0)' },
+        { "key": "DV", "name": "EMEA_MCA_SEC_PROD", "formula": '=IF(FG16<>"",FG16-IF(AND(FG15>0,FG16>0,FG20>0,FG20<(FG15+FG16),$H15<>"",JJ15="Y"),(FG15+FG16-FG20)*(FG16/(FG15+FG16)),0),0)' },
+        { "key": "DW", "name": "EMEA_MCAR_OVERRIDE", "formula": '' },
+        { "key": "DX", "name": "EMEA_MCAR_OVERRIDE_CMNT", "formula": '' },
+        { "key": "DY", "name": "EMEA_PCA_PRI_PROD", "formula": '=IF(FG15 <> "",FG15-IF(AND(FG15>0,FG16>0,FG20>0,FG20<(FG15+FG16),$H15<>"",OR(JJ15="Y",EQ16="UPSD",AND(EQ16="NAND (SSD)",I16="This is Client SSD"))),(FG15+FG16-FG20),0) -  SUM(DR21:DR22) - SUM($AE21:$AE22) - IF(FH15=0,0,IF(EE15="",ED15,EE15)),0)' },
+        { "key": "DZ", "name": "EMEA_PCA_SEC_PROD", "formula": '=IF(FG16<>"",FG16-IF(AND(FG15>0,FG16>0,FG20>0,FG20<(FG15+FG16),$H15<>"",JJ15="Y"),(FG15+FG16-FG20),0)- IF(FH15=0,0,IF(EE16="",ED16,EE16)),0)' },
+        { "key": "EA", "name": "EMEA_PCAR_OVERRIDE", "formula": '' },
+        { "key": "EB", "name": "EMEA_PCAR_OVERRIDE_CMNT", "formula": '' },
+        { "key": "EC", "name": "EMEA_RETAIL_CYCLE", "formula": '' },
+        { "key": "ED", "name": "EMEA_RETAIL_PULL", "formula": '' },
+        { "key": "EE", "name": "EMEA_RETAIL_PULL_USR_DEF", "formula": '' },
+        { "key": "EF", "name": "EMEA_RETAIL_PULL_USR_DEF_CMNT", "formula": '' },
+        { "key": "EG", "name": "", "formula": '' },
+        { "key": "EH", "name": "BLNDNG_GEO_SUMRY", "formula": '' },
+        { "key": "EI", "name": "REMARKS_BACKUP", "formula": '' },
+        { "key": "EJ", "name": "PROD_DESC", "formula": '' },
+        { "key": "EK", "name": "", "formula": '' },
+        { "key": "EL", "name": "GEO_NM", "formula": '' },
+        { "key": "EM", "name": "GEO_COMBINED", "formula": '' },
+        { "key": "EN", "name": "id", "formula": '' },
+        { "key": "EO", "name": "prdkey", "formula": '' },
+        { "key": "EP", "name": "fsku", "formula": '' },
+        { "key": "EQ", "name": "cscpu", "formula": '' },
+        { "key": "ER", "name": "IS_VALID_PRD", "formula": '' },
+        { "key": "ES", "name": "PROD_AREA_FLAG", "formula": '' },
+        { "key": "ET", "name": "AGR_AREA_FLAG", "formula": '' },
+        { "key": "EU", "name": "FLG_HIDEROW", "formula": '' },
+        { "key": "EV", "name": "CLEAR_RETAIL_PULL", "formula": '=IF((IF(COUNTIF($K2:$K23,"*Consumer Retail*")=0,COUNTIF($K2:$K23,"*ALL*"),COUNTIF($K2:$K23,"*Consumer Retail*")))=0,"Y","N")' },
+        { "key": "EW", "name": "APPLY_RULE", "formula": '' },
+        { "key": "EX", "name": "", "formula": '=IF(AND($Q15="",$R15="",ISBLANK(AD15)),0,MIN(IF($Q15="",$EY$1,$Q15),IF(R15="",$EY$1,$R15),IF(AD15="",$EY$1,AD15)))' },
+        { "key": "EY", "name": "SEC_PRD_COST", "formula": '=IF(ISBLANK(V16),"",V16)' },
+        { "key": "EZ", "name": "SEC_COMP_PRICE", "formula": '=IF(ISBLANK(Z16),"",Z16)' },
+        { "key": "FA", "name": "SEC_PRD_COST_COSTTEST", "formula": '=IF(ISBLANK(V16),"",V16)' },
+        { "key": "FB", "name": "SEC_COMP_PRICE_COSTTEST", "formula": '=IF(ISBLANK(Z16),"",Z16)' },
+        { "key": "FC", "name": "", "formula": '=IF(AND($Q15="",$R15="",ISBLANK(AD15),ISBLANK(BA15)),0,MIN(IF(ISBLANK($Q15),$EY$1,$Q15),IF(ISBLANK($R15),$EY$1,$R15),IF(ISBLANK(BA15),IF(ISBLANK(AD15),$EY$1,AD15),BA15)))' },
+        { "key": "FD", "name": "", "formula": '=IF(AND($Q15="",$R15="",ISBLANK(AD15),ISBLANK(BR15)),0,MIN(IF(ISBLANK($Q15),$EY$1,$Q15),IF(ISBLANK($R15),$EY$1,$R15),IF(ISBLANK(BR15),IF(ISBLANK(AD15),$EY$1,AD15),BR15)))' },
+        { "key": "FE", "name": "", "formula": '=IF(AND($Q15="",$R15="",ISBLANK(AD15),ISBLANK(CI15)),0,MIN(IF(ISBLANK($Q15),$EY$1,$Q15),IF(ISBLANK($R15),$EY$1,$R15),IF(ISBLANK(CI15),IF(ISBLANK(AD15),$EY$1,AD15),CI15)))' },
+        { "key": "FF", "name": "", "formula": '=IF(AND($Q15="",$R15="",ISBLANK(AD15),ISBLANK(CZ15)),0,MIN(IF(ISBLANK($Q15),$EY$1,$Q15),IF(ISBLANK($R15),$EY$1,$R15),IF(ISBLANK(CZ15),IF(ISBLANK(AD15),$EY$1,AD15),CZ15)))' },
+        { "key": "FG", "name": "", "formula": '=IF(AND($Q15="",$R15="",ISBLANK(AD15),ISBLANK(DQ15)),0,MIN(IF(ISBLANK($Q15),$EY$1,$Q15),IF(ISBLANK($R15),$EY$1,$R15),IF(ISBLANK(DQ15),IF(ISBLANK(AD15),$EY$1,AD15),DQ15)))' },
+        { "key": "FH", "name": "CONSIDER_RETAIL_PULL", "formula": '=IF(COUNTIF($K15:$K22,"*Consumer Retail*")=0,COUNTIF($K15:$K22,"*ALL*"),COUNTIF($K15:$K22,"*Consumer Retail*"))' },
+        { "key": "FI", "name": "EXTENDED_KIT", "formula": '=IF(OR(COUNTIF(H15,"*,*")>0,AND(AND(EQ15<>"DT",EQ15<>"Mb",EQ15<>"SvrWS",EQ15<>"CS",EQ15<>"EIA CPU",EQ15<>"EIA CS",EQ15<>"Cable Modem",EQ15<>"NIC",EQ15<>"LOM"),H15<>"")),IF(OR(AND(EQ15 = "NAND (SSD)",OR(EQ16="Cable Modem",EQ16="LOM",EQ16="NIC"),COUNTIF(H15,"*,*")=0),AND(JD16="Y",COUNTIF(H15,"*,*")=0)),"N","Y"),"N")' },
+        { "key": "FJ", "name": "WW_KIT_ECAP_FLG", "formula": '' },
+        { "key": "FK", "name": "ASMO_KIT_ECAP_FLG", "formula": '' },
+        { "key": "FL", "name": "APAC_KIT_ECAP_FLG", "formula": '' },
+        { "key": "FM", "name": "PRC_KIT_ECAP_FLG", "formula": '' },
+        { "key": "FN", "name": "IJKK_KIT_ECAP_FLG", "formula": '' },
+        { "key": "FO", "name": "EMEA_KIT_ECAP_FLG", "formula": '' },
+        { "key": "FP", "name": "WW_PRICE_COST", "formula": '=IF(EX15 <> "",(EX15-IF(AND(EX15>0,EX16>0,EX20>0,EX20<(EX15+EX16),$H15<>"",OR(JJ15="Y",EQ16="UPSD",AND(EQ16="NAND (SSD)",I16="This is Client SSD"))),(EX15+EX16-EX20)*(EX15/(EX15+EX16)),0)- SUM($AF21:$AF22))*JE15,0)' },
+        { "key": "FQ", "name": "", "formula": '=IF(EX16<>"",EX16-IF(AND(EX15>0,EX16>0,EX20>0,EX20<(EX15+EX16),$H15<>"",JJ15="Y"),(EX15+EX16-EX20)*(EX16/(EX15+EX16)),0),0)' },
+        { "key": "FR", "name": "", "formula": '=IF(EX15 <> "",EX15-IF(AND(EX15>0,EX16>0,EX20>0,EX20<(EX15+EX16),$H15<>"",OR(JJ15="Y",EQ16="UPSD",AND(EQ16="NAND (SSD)",I16="This is Client SSD"))),(EX15+EX16-EX20),0) - SUM($AE21:$AE22) - IF(FH15=0,0,MAX(AV15,AW15)),0)' },
+        { "key": "FS", "name": "", "formula": '=IF(EX16<>"",EX16-IF(AND(EX15>0,EX16>0,EX20>0,EX20<(EX15+EX16),$H15<>"",JJ15="Y"),(EX15+EX16-EX20),0)- IF(FH15=0,0,MAX(AV16,AW16)),0)' },
+        { "key": "FT", "name": "IS_ATOM_Z", "formula": '' },
+        { "key": "FU", "name": "PRI_PROD_ATRB", "formula": '' },
+        { "key": "FV", "name": "IS_NAND_SSD", "formula": '' },
+        { "key": "FW", "name": "PRODUCT_STATUS", "formula": '' },
+        { "key": "FX", "name": "PRD_CAP_VALUE", "formula": '=IF(ISBLANK(H15),IF(Q15 <> "",Q15,0),IF(Q20 <> "",Q20,0))' },
+        { "key": "FY", "name": "PRIMARY_PROD", "formula": '=IF(E15="","",E15)' },
+        { "key": "FZ", "name": "GUID1", "formula": '' },
+        { "key": "GA", "name": "GUID2", "formula": '' },
+        { "key": "GB", "name": "PLI_GUID", "formula": '' },
+        { "key": "GC", "name": "AGRMNT_GUID", "formula": '' },
+        { "key": "GD", "name": "PRD_BUCKT_SID", "formula": '' },
+        { "key": "GE", "name": "WW_COST_TEST_PASS", "formula": '' },
+        { "key": "GF", "name": "MEETCOMP_TEST_RESULT_CALC", "formula": '' },
+        { "key": "GG", "name": "COST_TEST_RESULT_CALC", "formula": '' },
+        { "key": "GH", "name": "MEETCOMP_TEST_RESULT", "formula": '' },
+        { "key": "GI", "name": "COST_TEST_RESULT", "formula": '' },
+        { "key": "GJ", "name": "PLI_NET_PRICE_CONCATE", "formula": '' },
+        { "key": "GK", "name": "COST_TEST_INCOMPLETE_REASON", "formula": '' },
+        { "key": "GL", "name": "COST_FORMULA", "formula": '' },
+        { "key": "GM", "name": "ROW_INDEX", "formula": '' },
+        { "key": "GN", "name": "SA_COST_TEST_RESULTS", "formula": '' },
+        { "key": "GO", "name": "OVERRIDE_CMT_VALID", "formula": '' },
+        { "key": "GP", "name": "DATE_CNG", "formula": '' },
+        { "key": "GQ", "name": "ECAP_CHG", "formula": '' },
+        { "key": "GR", "name": "PLI_LOCATOR", "formula": '' },
+        { "key": "GS", "name": "DEAL_TYPE_CD", "formula": '' },
+        { "key": "GT", "name": "DEAL_STG_CD", "formula": '' },
+        { "key": "GU", "name": "TRKR_NBR", "formula": '' },
+        { "key": "GV", "name": "PROGRAM_TYPE_DISPLAY", "formula": '' },
+        { "key": "GW", "name": "DEAL_NBR", "formula": '' },
+        { "key": "GX", "name": "WW_DEAL_STG_CD", "formula": '' },
+        { "key": "GY", "name": "WW_TRKR_NBR", "formula": '' },
+        { "key": "GZ", "name": "WW_DEAL_TYPE_CD", "formula": '' },
+        { "key": "HA", "name": "WW_PROGRAM_PAYMENT", "formula": '' },
+        { "key": "HB", "name": "WW_BLLG_DT", "formula": '' },
+        { "key": "HC", "name": "WW_DEAL_NBR", "formula": '' },
+        { "key": "HD", "name": "APAC_DEAL_STG_CD", "formula": '' },
+        { "key": "HE", "name": "APAC_TRKR_NBR", "formula": '' },
+        { "key": "HF", "name": "APAC_DEAL_TYPE_CD", "formula": '' },
+        { "key": "HG", "name": "APAC_PROGRAM_PAYMENT", "formula": '' },
+        { "key": "HH", "name": "APAC_BLLG_DT", "formula": '' },
+        { "key": "HI", "name": "APAC_DEAL_NBR", "formula": '' },
+        { "key": "HJ", "name": "EMEA_DEAL_STG_CD", "formula": '' },
+        { "key": "HK", "name": "EMEA_TRKR_NBR", "formula": '' },
+        { "key": "HL", "name": "EMEA_DEAL_TYPE_CD", "formula": '' },
+        { "key": "HM", "name": "EMEA_PROGRAM_PAYMENT", "formula": '' },
+        { "key": "HN", "name": "EMEA_BLLG_DT", "formula": '' },
+        { "key": "HO", "name": "EMEA_DEAL_NBR", "formula": '' },
+        { "key": "HP", "name": "IJKK_DEAL_STG_CD", "formula": '' },
+        { "key": "HQ", "name": "IJKK_TRKR_NBR", "formula": '' },
+        { "key": "HR", "name": "IJKK_DEAL_TYPE_CD", "formula": '' },
+        { "key": "HS", "name": "IJKK_PROGRAM_PAYMENT", "formula": '' },
+        { "key": "HT", "name": "IJKK_BLLG_DT", "formula": '' },
+        { "key": "HU", "name": "IJKK_DEAL_NBR", "formula": '' },
+        { "key": "HV", "name": "PRC_DEAL_STG_CD", "formula": '' },
+        { "key": "HW", "name": "PRC_TRKR_NBR", "formula": '' },
+        { "key": "HX", "name": "PRC_DEAL_TYPE_CD", "formula": '' },
+        { "key": "HY", "name": "PRC_PROGRAM_PAYMENT", "formula": '' },
+        { "key": "HZ", "name": "PRC_BLLG_DT", "formula": '' },
+        { "key": "IA", "name": "PRC_DEAL_NBR", "formula": '' },
+        { "key": "IB", "name": "ASMO_DEAL_STG_CD", "formula": '' },
+        { "key": "IC", "name": "ASMO_TRKR_NBR", "formula": '' },
+        { "key": "ID", "name": "ASMO_DEAL_TYPE_CD", "formula": '' },
+        { "key": "IE", "name": "ASMO_PROGRAM_PAYMENT", "formula": '' },
+        { "key": "IF", "name": "ASMO_BLLG_DT", "formula": '' },
+        { "key": "IG", "name": "ASMO_DEAL_NBR", "formula": '' },
+        { "key": "IH", "name": "WW_CREDIT_VOLUME", "formula": '' },
+        { "key": "II", "name": "WW_DEBIT_VOLUME", "formula": '' },
+        { "key": "IJ", "name": "ASMO_CREDIT_VOLUME", "formula": '' },
+        { "key": "IK", "name": "ASMO_DEBIT_VOLUME", "formula": '' },
+        { "key": "IL", "name": "APAC_CREDIT_VOLUME", "formula": '' },
+        { "key": "IM", "name": "APAC_DEBIT_VOLUME", "formula": '' },
+        { "key": "IN", "name": "IJKK_CREDIT_VOLUME", "formula": '' },
+        { "key": "IO", "name": "IJKK_DEBIT_VOLUME", "formula": '' },
+        { "key": "IP", "name": "PRC_CREDIT_VOLUME", "formula": '' },
+        { "key": "IQ", "name": "PRC_DEBIT_VOLUME", "formula": '' },
+        { "key": "IR", "name": "EMEA_CREDIT_VOLUME", "formula": '' },
+        { "key": "IS", "name": "EMEA_DEBIT_VOLUME", "formula": '' },
+        { "key": "IT", "name": "PAYOUT_BASED_ON", "formula": '' },
+        { "key": "IU", "name": "REBATE_BILLING_START", "formula": '' },
+        { "key": "IV", "name": "REBATE_BILLING_END", "formula": '' },
+        { "key": "IW", "name": "BACK_DATE_RSN", "formula": '' },
+        { "key": "IX", "name": "BACK_DATE_RSN_TXT", "formula": '' },
+        { "key": "IY", "name": "DEAL_DESC", "formula": '' },
+        { "key": "IZ", "name": "PRI_PROD", "formula": '' },
+        { "key": "JA", "name": "SEC_PROD", "formula": '' },
+        { "key": "JB", "name": "ERROR_DESC", "formula": '' },
+        { "key": "JC", "name": "MEDIA_LIST", "formula": '' },
+        { "key": "JD", "name": "IS_SEC_ATOMZ", "formula": '' },
+        { "key": "JE", "name": "", "formula": '=IF( $J$3 ="Price / Performance",IF(OR(ISBLANK(AB15),ISBLANK(AC15),AB15<=0,AC15<=0),1,AB15/AC15),1)' },
+        { "key": "JF", "name": "VALUE_CHANGED", "formula": '' },
+        { "key": "JG", "name": "APPLY_EDITABLE_RULE", "formula": '' },
+        { "key": "JH", "name": "ALLOW_PRODUCT_EDIT", "formula": '' },
+        { "key": "JI", "name": "RUN_COST_PRIMARY", "formula": '' },
+        { "key": "JJ", "name": "RUN_COST_SECONDARY", "formula": '' }
+    ];
+    var filteredItems = [];
+
+    function init() {
+        filteredItems = [];
+        for (var i = 0; i < dataItems.length; i++) {
+            if (dataItems[i].formula !== "") {
+                filteredItems.push(dataItems[i]);
+            }
+            dict[dataItems[i].key] = dataItems[i].name;
+        }
+
+        viewModel = kendo.observable({
+            dataDict: dict,
+            selectedFormula: {},
+            groupClass: {},
+            groupData: {},
+            dataSource: new kendo.data.DataSource({
+                data: dataItems
+            }),
+            dataFilteredSource: new kendo.data.DataSource({
+                data: filteredItems
+            }),
+            onChange: function() {
+                var item = this.get("selectedFormula");
+                var formula = eng(item.formula);
+                $("#formula_input").val(formula);
+                window.excelFormulaBeautifier.examples.beautifier.update();
+            },
+            onClick: function () {
+                $("#jsonTxt").val(JSON.stringify(viewModel.get("dataSource").data()));
+            }
+        });
+
+        kendo.bind($("#theBody"), viewModel);
+    }
+
+    $(document).ready(function () {
+        setTimeout(init, 500);
+    });
+
+
+
+
+
+
+
+
+    //Check and setup name spaces.
+    window.excelFormulaBeautifier = window.excelFormulaBeautifier || {};
+    window.excelFormulaBeautifier.examples = window.excelFormulaBeautifier.examples || {};
+
+    //Configuration
+    //-------------------------------
+    var config = {
+        //The ID for the formula Input input/textarea
+        INPUT_ID: 'formula_input',
+
+        //The ID for the formula title area. in this example it spits out the function call;
+        FORMULA_TITLE_ID: 'fomatFormula_2',
+
+        //THE ID for the area to contain the beautified excel formula.
+        FORMULA_BODY_ID: 'fomatFormula_2_out',
+
+        //Use this to set the inital textare/input text area.
+        DEFAULT_FORMULA: ''
+    },
+
+	timer = null,
+	lastMode = "beautify",
+
+    //Beautifier Page functionality
+    //-------------------------------
+	beautifier = window.excelFormulaBeautifier.examples.beautifier =
+		(function () {
+		    var oldFormula;
+
+		    return {
+		        formula: '=IF(SUM( IF(FOO = BAR, 10, 0), 10 ) = 20 , "FOO", "BAR")',
+		        input: null,
+		        formulaTitle: null,
+		        formulaBody: null,
+		        mode: "beautify",
+		        changeMode: function (mode) {
+		            lastMode = mode;
+		            window.excelFormulaBeautifier.examples.beautifier.mode = mode;
+		            window.excelFormulaBeautifier.examples.beautifier.update.call(window.excelFormulaBeautifier.examples.beautifier);
+		            if (typeof _gaq !== 'undefined' && _gaq !== null)
+		                _gaq.push(['_trackEvent', 'Change Mode', 'Select', mode]);
+		        },
+		        formulaAreaClicked: function () {
+		            if (typeof _gaq !== 'undefined' && _gaq !== null)
+		                _gaq.push(['_trackEvent', 'Formula Input', 'Clicked', lastMode]);
+		        },
+		        update: function () {
+		            this.formula = this.input.value;
+
+		            //Test to see if the formula has changed, if it hasn't don't do anything
+		            if (oldFormula === this.formula) {
+		                return;
+		            }
+
+		            // Check to see which mode we're in, render appropriately
+		            try {
+
+		                switch (this.mode) {
+		                    case "beautify":
+		                        this.formulaBody.innerHTML = window.excelFormulaUtilities.formatFormulaHTML(this.formula);
+		                        break;
+		                    case "minify":
+		                        this.formulaBody.innerHTML = this.formula.replace(/\s+/gi, ' ');
+		                        break;
+		                    case "js":
+		                        this.formulaBody.innerHTML = window.excelFormulaUtilities.formula2JavaScript(this.formula);
+		                        break;
+		                }
+
+		            } catch (exception) {
+		                //Do nothing, This should throw an error when the formula is improperly formed, which shouldn't blow things up.
+		            }
+
+		            clearTimeout(timer)
+		            timer = setTimeout(function () {
+		                if (typeof _gaq !== 'undefined' && _gaq !== null)
+		                    _gaq.push(['_trackEvent', 'Formula Input', 'Updated', lastMode]);
+		            },
+					1000);
+		        }
+		    };
+		}());
+
+    //On Page Load
+    //-------------------
+    window.onload = function () {
+        beautifier.input = document.getElementById(config.INPUT_ID);
+        //beautifier.formulaTitle = document.getElementById(config.FORMULA_TITLE_ID);
+        beautifier.formulaBody = document.getElementById(config.FORMULA_BODY_ID);
+
+        beautifier.input.value = beautifier.formula;
+        beautifier.update();
+        //add beautifier.update(); here if if you have set an inital DEFAULT_FORMULA and would like it to render on page load.
+    };
+
+</script>
+
+
+
+<style>
+    .glyphicon {
+        font-size: 12px;
+    }
+
+    .k-grid td {
+        font-size: 10px;
+        padding: 0 4px;
+    }
+
+    .k-grid .k-alt {
+        background-color: transparent;
+    }
+
+    .unknown {
+        color: red;
+    }
+
+    .func {
+        color: green;
+        font-weight: bold;
+        padding: 0 4px 4px 4px;
+    }
+</style>
+
+
+<style>
+    textarea {
+        border: solid 1px #e4e4e4;
+    }
+
+    /*-----------FORMULA INPUT-------------*/
+    #inputArea textarea {
+        height: 3.2em;
+    }
+
+    #inputArea select {
+        vertical-align: middle;
+    }
+
+    /*-----------FORMULA STYLES------------*/
+    .formula {
+        font-family: "Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace;
+        background-color: #f5fffa;
+        border: solid 1px #e4e4e4;
+        padding: 1.428em;
+        overflow: auto;
+        font-size: 11px;
+    }
+
+    #fomatFormula_2_out {
+        display: inline;
+        white-space: nowrap;
+    }
+
+    .tabbed {
+        border-left: dotted 1px #a0a0a0;
+    }
+</style>

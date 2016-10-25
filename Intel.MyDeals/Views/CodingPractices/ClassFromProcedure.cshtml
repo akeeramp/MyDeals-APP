@@ -1,0 +1,102 @@
+﻿
+@Html.Partial("TOC", new ViewDataDictionary
+{
+    { "categoryTitle", "Project setup and logic flow" },
+    { "categoryAction", "Project" },
+    { "sectionTitle", "Intel.MyDeals.Entities" },
+    { "sectionAction", "Entities" },
+    { "pageTitle", "Creating a shared class from a procedure" }
+})
+
+<div id="mainBody" style="margin: 10px; padding: 0 20px 0 200px;">
+    <h1><img src="/Images/docs/icon-entity.png" height="60" />Creating a shared class from a procedure</h1>
+    <p>
+        There are many times where a stored procedure is needed to transport data.
+        The best was to handle this is to create custom classes to match 1:1 the structured results.
+        MyDeals uses T4 templates to help automate this process.
+    </p>
+    <img src="/Images/docs/buildprocedurecode.png" style="margin: 10px 0 10px 25px;" />
+
+    <div class="stepByStep">
+        <i class="intelicon-task"></i>Step by Step
+    </div>
+
+    <p>
+        To use the T4 templates to auto generate shared classes from a procedure, follow these steps:
+    </p>
+    <ol>
+        <li>
+            Open the <strong>TableToClasses.tt</strong> file in the <i>Intel.MyDeals.Entities</i> project.<br />
+            <img src="/Images/docs/TableToClass.png" style="margin: 10px 0;" />
+        </li>
+        <li>
+            Enter a call to the stored procedure and declare the name of the class that will be generated.
+            The stored procedue must be executable, so if parameters are required to run the procedure, please apply them.
+
+            <div class="note"><strong>Note:</strong> It will actually execute the procedure, so try to make the return dataset minimal for better performance.</div>
+            <div class="noteBody">
+                In this example, the <i>db.PR_PING_DB</i> procedure is being called with no parameters. The results will create a class called <B>PingResults</B>.<br/>
+                <img src="/images/docs/samplecodesp.png" style="margin: 10px 0;"/><br/>
+            </div>
+        </li>
+        <li>
+            Sometimes there are errors generating the classes. This can be because the entered stored procedure call had some mistakes or the generation timed out.
+            Verify the generated code has no errors. To do this, expand the <strong>TableToClasses.tt</strong> file and open the <strong>TableToClasses.generated.cs</strong>.<br />
+            <img src="/Images/docs/TableToClassResults.png" style="margin: 10px 0;" /><br />
+
+            <div class="note"><strong>Note:</strong> Here is an example of what code is generated for a store procedure:</div>
+            <div class="noteBody">
+
+<pre>
+    	///&lt;summary&gt;
+	/// Class created via template - Do Not Modify!
+	/// To modify this code, re-execute the template, or extend as partial.
+	/// on PWECKENR-MOBL5
+	/// by pweckenr
+	/// at 10/7/2016 2:18:35 PM
+	///&lt;/summary&gt;
+	
+	[DataContract]
+	public partial class PingResults {
+	
+	[DataMember]
+	public System.String DbServer {set;get;}
+	
+	
+	[DataMember]
+	public System.String Source {set;get;}
+	
+	
+	[DataMember]
+	public Nullable&lt;System.DateTime&gt; TimeStamp {set;get;}
+	
+	
+	/*
+	    private static List&lt;PingResults&gt; PingResultsFromReader(SqlDataReader rdr){
+	    // This helper method is template generated.
+	    // Refer to that template for details to modify this code.
+	
+	    var ret = new List&lt;PingResults&gt;();
+	    int IDX_DbServer = DB.GetReaderOrdinal(rdr, "DbServer");
+	    int IDX_Source = DB.GetReaderOrdinal(rdr, "Source");
+	    int IDX_TimeStamp = DB.GetReaderOrdinal(rdr, "TimeStamp");
+	
+	    while (rdr.Read()){
+	        ret.Add(new PingResults {
+	            DbServer = (IDX_DbServer &lt; 0 || rdr.IsDBNull(IDX_DbServer)) ? String.Empty : rdr.GetFieldValue&lt;System.String&gt;(IDX_DbServer),
+	            Source = (IDX_Source &lt; 0 || rdr.IsDBNull(IDX_Source)) ? String.Empty : rdr.GetFieldValue&lt;System.String&gt;(IDX_Source),
+	            TimeStamp = (IDX_TimeStamp &lt; 0 || rdr.IsDBNull(IDX_TimeStamp)) ? default(Nullable&lt;System.DateTime&gt;) : rdr.GetFieldValue&lt;Nullable&lt;System.DateTime&gt;&gt;(IDX_TimeStamp)
+	            });
+	        } // while
+	        return ret;
+	    }
+	*/
+	} // End of class PingResults
+</pre>
+
+            </div>
+        </li>
+    </ol>
+
+</div>
+

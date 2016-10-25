@@ -1,0 +1,124 @@
+﻿<script id="AddContractTemplate" type="text/x-kendo-template">
+    
+
+    <header class="title-bar intel-border-yellow" style="border-left: 0px solid transparent; border-right: 0px solid transparent; border-top: 0px solid transparent;">
+        <span class="title-bar-title">New MyDeals Contract</span>
+        <span class="title-bar-subtitle">New Rebate Strategy</span>
+    </header>
+    
+    <div style="padding: 0 20px;">
+        
+        <h5>MyDeals Contract Information</h5>
+        <p>Create a new MyDeals Contract to mirror the Official Customer Contract.  This may be done from an existing contract already approved by the customer or prior to creating the Official Customer contract.</p>
+
+        <form class="ng-pristine ng-valid" id="frmNewContract">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="cboCustomer">Customer</label>
+                            <input data-role="dropdownlist"
+                                   data-auto-bind="false"
+                                   data-value-primitive="false"
+                                   data-text-field="CUST_DIV_NM"
+                                   data-value-field="CUST_MBR_SID"
+                                   data-bind="value: rsVm.newContract.customer, source: rsNavVm.customers, events: {change: rsVm.onNewContractCustChange}"
+                                   aria-describedby="cboCustomerStatus"
+                                   id="cboCustomer" 
+                                   style="width: 100%;" />
+                            <span id="cboCustomerStatus" aria-hidden="true" data-role="tooltip" data-position="top"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="contractName">Contract Name</label>
+                            <input class="form-control" id="contractName" aria-describedby="contractNameStatus" data-bind="value: rsVm.newContract.TITLE" type="text" placeholder="Enter the Contract Name">
+                            <span id="contractNameStatus" aria-hidden="true" data-role="tooltip" data-position="top"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="contractDescription">Contract Description</label>
+                            <input class="form-control" id="contractDescription" aria-describedby="contractDescriptionStatus" data-bind="value: rsVm.newContract.DESC" type="text" placeholder="Enter the Contract Description">
+                            <span id="contractDescriptionStatus" aria-hidden="true" data-role="tooltip" data-position="top"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="cboQtr">Customer Quarter <span class="labelDesc">Enter the date by Customer Quarter or by selecting a specific date range.</span></label>
+                            <input data-role="dropdownlist"
+                                   data-auto-bind="false"
+                                   data-value-primitive="false"
+                                   data-text-field="Display"
+                                   data-value-field="Display"
+                                   data-bind="value: rsVm.newContract.qtr, events: {change: rsVm.onNewContractQtrChange}"
+                                   aria-describedby="cboQtrStatus"
+                                   id="cboQtr" 
+                                   style="width: 100%;" />
+                            <span id="cboQtrStatus" aria-hidden="true" data-role="tooltip" data-position="top"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="contractStartDate">Start Date</label>
+                            <input class="form-control" id="contractStartDate" 
+                                   data-role="datepicker"
+                                   data-bind="value: rsVm.newContract.START_DT"
+                                   aria-describedby="contractStartDateStatus"
+                                   style="width: 100%">
+                            <span id="contractStartDateStatus" aria-hidden="true" data-role="tooltip" data-position="top"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="contractEndDate">End Date</label>
+                            <input class="form-control" id="contractEndDate"
+                                   data-role="datepicker"
+                                   data-bind="value: rsVm.newContract.END_DT"
+                                   aria-describedby="contractEndDateStatus"
+                                   style="width: 100%">
+                            <span id="contractEndDateStatus" aria-hidden="true" data-role="tooltip" data-position="top"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label>
+                            <input type="checkbox" data-bind="checked: rsVm.newContract.isCustApproved"> Customer already approved the Legaly Binding Contract.
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="rtnMsgContainer" class="alert" role="alert" style="display: none;">
+                            <span id="rtnMsg"></span>
+                        </div>
+
+                        <button class="btn btn-default k-primary" data-role="button" data-bind="events: { click: rsVm.createNewContract }">
+                            Create Contract
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+
+    </div>
+    
+</script>

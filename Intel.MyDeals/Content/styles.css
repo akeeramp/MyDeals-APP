@@ -1,0 +1,191 @@
+
+
+    .clearboth {
+        clear: both;
+    }
+
+    .fl {
+        float: left;
+    }
+    .fr {
+        float: right;
+    }
+
+    .dashboard-fg {
+        color: #c0116e;
+    }
+    .dashboard-bg {
+        background-color: #c0116e;
+    }
+    .rebate-strategy-fg {
+        color: #00AEEF;
+    }
+    .rebate-strategy-bg {
+        background-color: #00AEEF;
+    }
+    .costtest-manager-fg {
+        color: #9bad01;
+    }
+    .costtest-manager-bg {
+        background-color: #9bad01;
+    }
+    .deal-manager-fg {
+        color: #ff6d00;
+    }
+    .deal-manager-bg {
+        background-color: #ff6d00;
+    }
+
+    /*.p10 {
+        padding: 10px;
+    }
+
+    .p20 {
+        padding: 20px;
+    }
+
+    .p30 {
+        padding: 30px;
+    }
+
+    .h100 {
+        height: 100%;
+    }
+
+    .modalpad {
+        margin-top: 40px;
+    }
+        */
+    .tnavBtn {
+        border-left: 1px solid #d9dadf; 
+        height: 100%; 
+        font-size: 18px; 
+        cursor: pointer;
+        font-size: 12px; 
+        padding: 8px 10px; 
+        color: #666666;
+    }
+    .tnavBtn:hover {
+        background-color: #fcfcfe;
+    }
+
+    .easyPieInnerText {
+        position: relative; 
+        top: 75px; 
+        text-align: center; 
+        width: 115px; 
+        font-size: 28px; 
+        margin-top: -30px;
+    }
+
+    .smDealGrid.k-grid td, .smDealGrid.k-grid th {
+        font-size: 10px;
+        font-family: Arial;
+        line-height: 1.2em;
+    }
+
+    .smDealGrid.k-grid .smTable td {
+        line-height: 1.2em;
+        padding: 0;
+        border-width: 1px 0 0 0;
+        border-color: #dddddd;
+    }
+    .smDealGrid.k-grid .smTable td input.k-textbox {
+        height: 1.6em;
+        padding: 0;
+    }
+    .smDealGrid .k-alt {
+        background-color: #ffffff;
+    }
+
+
+    .k-filter-row th, .k-grid-header th.k-header
+    {
+        padding: 0 8px 0 4px;
+        font-size: 10px;
+        height: 10px;
+    }
+
+    .k-toolbar, .k-grouping-header {
+        background-color: #ffffff;
+        padding: 0 8px;
+    }
+
+    .k-grid .k-grouping-header {
+        color: #00AEEF;
+    }
+
+    .k-pager-numbers {
+        border: 1px solid #b1babf;
+        color: #0071c5;
+    }
+    .k-pager-numbers:hover {
+        background-color: #edeff0;
+    }
+    
+    
+    .k-pager-numbers .k-state-selected {
+        border: 1px solid #0071c5;
+        background-color: #0071c5;
+        color: #ffffff;
+    }
+    .k-pager-numbers .k-state-selected:hover {
+        background-color: #0071c5;
+    }
+
+
+
+
+    .waitingCenterDiv {
+        background: #ffffff;
+        background: rgba(255, 255, 255, .75);
+
+        position: absolute;
+        top:0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 2000;
+        margin: auto;
+        display: none;
+    }
+
+    .waitingCenterDiv #waitMsg {
+        width: 400px;
+        height: 200px;
+        text-align: center;
+        font-size: 24px; 
+        text-align: center;
+        color: #000000;
+
+        position: absolute;
+        top:0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 2000;
+        margin: auto;
+    }
+
+
+    h1 {
+        font-weight: 200;
+    }
+    h2 {
+        font-weight: 200;
+        color: #333333;
+    }
+    h3 {
+        font-weight: 200;
+        color: #666666;
+    }
+    h4 {
+        font-weight: 200;
+        color: #00AEEF;
+    }
+    h5 {
+        font-weight: 200;
+    }
+    h6 {
+        font-weight: 200;
+    }

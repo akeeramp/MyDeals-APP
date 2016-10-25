@@ -1,0 +1,91 @@
+﻿
+@Html.Partial("TOC", new ViewDataDictionary
+{
+    { "categoryTitle", "Project setup and logic flow" },
+    { "categoryAction", "Project" },
+    { "sectionTitle", "Intel.MyDeals" },
+    { "sectionAction", "Presentation" },
+    { "pageTitle", "Create a MVC Controller" }
+})
+
+<div id="mainBody" style="margin: 10px; padding: 0 20px 0 200px;">
+    <h1><img src="/Images/docs/icon-presentation.png" height="60" />Create a MVC Controller</h1>
+    <p>
+        MVC Controllers rely on routing from the URL to pick which controller to instanciate. 
+        The controller is responsible for intercepting the HTTP request and communicating with the <b>Model</b> and the <b>View</b>.<br/>
+        <img src="/Images/docs/mvc.png" style="margin: 10px 0;" />
+    </p>
+
+    <div class="stepByStep">
+        <i class="intelicon-task"></i>Step by Step
+    </div>
+
+    <ol>
+        <li>
+            Open the <i>Intel.MyDeals</i> project and find the <b>Controllers</b> folder. <br />
+            <img src="/Images/docs/projController.png" style="margin: 10px 0;" />
+        </li>
+        <li>
+            Add a new MVC Controller. To do this, right click on the <b>Controllers</b> folder and select <b>Add</b> -> <b>Controller</b>.<br />
+            <img src="/Images/docs/addController.png" style="margin: 10px 0;" />
+        </li>
+        <li>
+            Select the type of Controller. In the popup dialog, select <b>MVC Controller</b>.<br />
+            <img src="/Images/docs/addScaffold.png" style="margin: 10px 0;" />
+        </li>
+        <li>
+            After the controller is created, the appropriate Opaque calls and MyDeals calls need to be added.<br/>
+            <div class="note"><strong>Note:</strong> Here is an example of a controller for <b>Others</b>.
+            </div>
+            <div class="noteBody">
+                <pre>        
+    public class OthersController : Controller
+    {
+        OpCore op = OpAppConfig.Init();  // Initialize MyDeal's Opaque
+
+        // GET: Others
+        public ActionResult Index()
+        {
+            OpUserToken user = AppLib.InitAVM(op);    // Get user details from authentication
+            ViewBag.UserToken = user;                 // Apply User Token to viewbag for client use
+            ViewBag.AppToken = op.AppToken;           // Apply Application Token to viewbag for client use
+
+            return View();
+        }
+    }
+                </pre>
+            </div>
+        </li>
+        <li>
+            Create the client <b>Razor View</b>. Right click on the <b>View()</b> call in the controller and select <b>Add View...</b>.<br />
+            <img src="/Images/docs/addViewMenu.png" style="margin: 10px 0;" />
+        </li>
+        <li>
+            Select MVC View.<br />
+            <img src="/Images/docs/addScaffoldView.png" style="margin: 10px 0;" />
+        </li>
+        <li>
+            Apply view details including the view name.  Your setting should look similar to the below image.<br />
+            <img src="/Images/docs/addView.png" style="margin: 10px 0;" />
+        </li>
+        <li>
+            Start populating the <b>View</b> contents.<br />
+            <div class="note">
+                <strong>Note:</strong> Here is an example of a view created for <b>Constants</b>.
+            </div>
+            <div class="noteBody">
+                <pre>        
+&#64;{
+    ViewBag.Title = "Constants";
+}
+
+&lt;h2&gt;Constants&lt;/h2&gt;
+                </pre>
+            </div>
+        </li>
+        
+
+    </ol>
+    <br /><br /><br />
+</div>
+

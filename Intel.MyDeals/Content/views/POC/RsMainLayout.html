@@ -1,0 +1,212 @@
+﻿<script id="RsMainLayout" type="text/x-kendo-template">
+    <div id="jsonViewerWindow"><div id="jsonViewer"></div></div> <!--Debugger window for JSON-->
+
+    <div id="horizontal" style="height: 100%; margin-left: 200px;">
+        <div id="center-pane" class="fr" style="height: 100%;">
+            <div style="height: 100%;">
+                <div id="content"></div>
+            </div>
+        </div>
+
+        <div id="left-pane">
+
+            <div style="background-color: black;">
+                <div class="fr navIconLnk tooltipster" data-bind="click: rsNavVm.gotoLink" title="Show/Hide Menu" id="MaxMin">
+                    <i class="intelicon-expand"></i>
+                </div>
+                <div class="fl navIconLnk tooltipster" data-bind="click: rsNavVm.showPsLink" id="psLinkAdd" title="Add a Pricing Strategy">
+                    <i class="intelicon-plus-max"></i>
+                </div>
+                <div class="fl navIconLnk tooltipster" data-bind="click: rsNavVm.showPsLink" id="psLinkFind" title="Find a Pricing Strategy">
+                    <i class="intelicon-search"></i>
+                </div>
+                <div class="fl navIconLnk tooltipster" data-bind="click: rsNavVm.showPsLink" id="PricingStrategies" title="Pricing Strategies">
+                    <i class="intelicon-note"></i>
+                </div>
+                <div class="fl navIconLnk tooltipster" data-bind="click: rsVm.saveFullContract" id="SavePricingStrategy" title="Save Pricing Strategy">
+                    <i class="intelicon-save-outlined"></i>
+                </div>
+                <div class="clearboth"></div>
+            </div>
+            
+            <div class="psMenuContainer PricingStrategiesContainer">
+                <div data-role="listview"
+                     id="pricingTableList"
+                     class="section-container section-main"
+                     data-scrollable="true"
+                     data-template="pt-side-template"
+                     data-bind="source: rsVm.RebateStrategies.PricingStrategy,events: { dataBound: rsVm.onDataBound }"
+                     style="border: 0; overflow: auto; overflow-x: hidden;"></div>
+            </div>
+
+            <div class="psMenuContainer psLinkAddContainer" style="display: none; padding: 5px;">
+                
+                <div style="font-size: 14px; font-weight: 200; margin: 10px 0 10px 0">What would you like the add?</div>
+                
+                <div id="tabAddPricing">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#psContStrategies" aria-controls="psContStrategies" role="tab" data-toggle="tab" style="font-size: 11px; padding: 4px;">Pricing Strategy</a></li>
+                        <li role="presentation"><a href="#psContTables" aria-controls="psContTables" role="tab" data-toggle="tab" style="font-size: 11px; padding: 4px;">Pricing Table</a></li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content" style="padding: 5px;">
+
+                        <!-- Add Pricing Strategy Questions -->
+                        <div role="tabpanel" class="tab-pane active" id="psContStrategies">
+                            
+                            <div style="padding: 8px 0; font-size: 10px; color: #aaaaaa;">
+                                A Pricing Strategy is intended to mimic the customer contract section.  It should contain a Title, Addition Terms and all related Pricing Tables.
+                            </div>
+
+                            <div style="font-weight: 400; font-size: 12px;">Title:</div>
+                            <input data-bind="value: addNewSectionModel.TITLE" class="k-textbox" style="width: 100%; font-size: 10px;" />
+                            
+                            <div style="text-align: right;">
+                                <button data-bind="events: { click: addNewSection}" class="btn btn-xs btn-secondary" type="button" style="margin-top: 15px; font-size: 12px;">Add Strategy</button>
+                            </div>
+                        </div>
+
+                        <!-- Add Pricing Table Questions -->
+                        <div role="tabpanel" class="tab-pane" id="psContTables">
+
+                            <div style="padding: 8px 0; font-size: 10px; color: #aaaaaa;">
+                                Fill in the Deal Type and Deal Type Specific questions then click "Create Table".
+                            </div>
+                            
+                            <div>
+                                <div style="font-size: 12px;">Title:</div>
+                                <input data-bind="value: addNewPricingTableModel.TITLE" class="k-textbox" style="width: 100%; font-size: 10px;" />
+                            </div>
+
+                            <div style="margin-top: 5px;">
+                                <div style="font-size: 12px;">Type of deals to create:</div>
+                                <input data-role="dropdownlist"
+                                        data-auto-bind="false"
+                                        data-value-primitive="true"
+                                        data-text-field="tmpltName"
+                                        data-value-field="tmpltId"
+                                        data-bind="value: addNewPricingTableModel.template, source: templateSource, events: { change: onAddPtDtChange }"
+                                        style="width: 100%; font-size: 10px;" />
+                            </div>
+                            
+                            <div class="dealTypeQuestions VOL_TIER_QUESTION CAP_BAND_QUESTION" style="display: none; margin-top: 5px;">
+                                <div class="fl" style="font-size: 12px;">Num Tiers:</div>
+                                <div class="fr" style="width: 100px;">
+                                    <input data-role="dropdownlist"
+                                           data-auto-bind="false"
+                                           data-value-primitive="true"
+                                           data-text-field="text"
+                                           data-value-field="value"
+                                           data-bind="value: addNewPricingTableModel.NUM_TIERS, source: tiersSource"
+                                           style="width: 100%; font-size: 10px;" />
+                                </div>
+                                <div class="clearboth"></div>
+                            </div>
+
+                            <div style="text-align: right;">
+                                <button data-bind="events: { click: addNewPricingTableClick}" class="btn btn-xs btn-secondary" type="button" style="margin-top: 15px; font-size: 12px;">Add Pricing Table</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="psMenuContainer psLinkFindContainer" style="display: none;">
+                Find
+            </div>
+
+        </div>
+
+        <div class="clearboth"></div>
+    </div>
+  
+
+</script>
+
+<script id="section-contract-template" type="text/x-kendo-template">
+    <li style="overflow: hidden;">
+        <div style="margin-top: 5px;">
+            <b>Contract Id:</b> <div data-bind="text: DEAL_SID" style="padding-left: 10px;"></div>
+        </div>
+        <div style="margin-top: 5px;">
+            <b>Customer:</b> <div data-bind="text: Customer.CUST_DIV_NM" style="padding-left: 10px;"></div>
+        </div>
+        <div style="margin-top: 5px;">
+            <b>Name:</b> <div data-bind="text: TITLE" style="padding-left: 10px;"></div>
+        </div>
+        <div style="margin-top: 5px;">
+            <b>Description:</b> <div data-bind="text: DESC" style="padding-left: 10px;"></div>
+        </div>
+        <div style="margin-top: 5px;">
+            <b>Start Date:</b> <div data-bind="text: START_DT" data-format="MM/dd/yyyy" data-parser="date" style="padding-left: 10px;"></div>
+        </div>
+        <div style="margin-top: 5px;">
+            <b>End Date:</b> <div data-bind="text: END_DT" data-format="M/dd/yyyy" data-parser="date" style="padding-left: 10px;"></div>
+        </div>
+        <input type="checkbox" data-bind="checked: isCustApproved" disabled> Contract already signed.
+    </li>
+
+</script>
+
+<script id="pt-side-template" type="text/x-kendo-template">
+    #
+    var matchedStyle = "";
+    if (rs.viewModel.curSection !== null && data.dc_id === rs.viewModel.curSection.dc_id) {
+        matchedStyle = "background-color: \\#ffffff;";
+    }
+    #
+    <li style="box-sizing: border-box; #= matchedStyle #">
+        <div class="sectionItem expandedOnly">
+            <div class="content" style="width: 190px;">
+                <div class="fl" style="width: 15px; color: \\#0071C5; font-size: 14px;">
+                    #
+                    if (rs.viewModel.curSection !== null && data.dc_id === rs.viewModel.curSection.dc_id) {
+                    #
+                    <i class="intelicon-play" style="vertical-align: top;"></i>
+                    #
+                    } else {
+                    #
+                    <i class="intelicon-play" style="vertical-align: top; color: \\#f6f6f6;"></i>
+                    #
+                    }
+                    #
+                </div>
+                <div data-bind="text: TITLE" class="fl secTitle" style="width: 160px;"></div>
+                <div class="clearboth"></div>
+
+                #
+                var pts = rs.viewModel.RebateStrategies.PricingTable;
+                if (pts !== undefined) {
+                    for (var p=0; p < pts.length; p++) {
+                        var ptData = pts[p].data();
+                        for (var d=0; d< ptData.length; d++) {
+                            if (ptData[d].dc_parent_id === data.dc_id) {
+                                var name = ptData[d].TITLE;
+                                if (name === undefined) name = ptData[d].dc_id;
+                                var dt = pt.pricingTableTemplates[ptData[d].TMPLT_ID].tmpltDealType.charAt(0);
+                                #
+                                <div onClick="rs.viewModel.selectSection(#=data.dc_id#)" style="cursor: pointer; margin-bottom: 4px;"><span class='label label-primary' style="margin-left: 25px;">#=dt#</span> #=name#</div>
+                                #
+                            }
+                        }
+                    }
+                }
+                #
+
+                <div onClick="rs.viewModel.selectAndShowPsLink(#=data.dc_id#)" style="cursor: pointer; text-align: right">+ pricing table</div>
+
+            </div>
+        </div>
+        
+        
+        <div class="lnavSectionItem collapsedOnly">
+            <div class="fl navIconLnk tooltipster" onClick="rs.viewModel.selectSection(#=data.dc_id#)" data-bind="attr: { title: TITLE, dc_id: dc_id }">
+                <i class="intelicon-note"></i>
+            </div>
+        </div>
+    </li>
+
+</script>

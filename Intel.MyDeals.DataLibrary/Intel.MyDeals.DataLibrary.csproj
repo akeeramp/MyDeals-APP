@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B45850DC-1515-40D2-BFA5-15C8DFFC5AF2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Intel.MyDeals.DataLibrary</RootNamespace>
+    <AssemblyName>Intel.MyDeals.DataLibrary</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\Shared Libraries\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Intel.Opaque, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\My Files\Future Projects\Intel.MyDeals\Shared Libraries\Intel.Opaque.dll</HintPath>
+    </Reference>
+    <Reference Include="Intel.Opaque.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\My Files\Future Projects\Intel.MyDeals\Shared Libraries\Intel.Opaque.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Intel.Opaque.DBAccess, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\My Files\Future Projects\Intel.MyDeals\Shared Libraries\Intel.Opaque.DBAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Telerik.Reporting">
+      <HintPath>..\Shared Libraries\Telerik.Reporting.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Accounts\AccountDataLib.cs" />
+    <Compile Include="Admins\ConstantsAdminDataLib.cs" />
+    <Compile Include="Admins\MarketOpsAdminDataLib.cs" />
+    <Compile Include="AtrbMaps\AtrbMapDataLib.cs" />
+    <Compile Include="CapMsp\CapMspDataLib.cs" />
+    <Compile Include="Constants Lookups\ConstantLookupDataLib.cs" />
+    <Compile Include="Customers\CustomerDataLib.cs" />
+    <Compile Include="Data Collections\DataCollections.cs" />
+    <Compile Include="Data Collectors\DataCollectorDataLib.cs" />
+    <Compile Include="Data Collectors\DataCollectorDataLib_Get.cs" />
+    <Compile Include="DataLibrary.cs" />
+    <Compile Include="Deals\DealDataLib_Common.cs" />
+    <Compile Include="Deals\DealDataLib_Get.cs" />
+    <Compile Include="Deals\DealDataLib_Save.cs" />
+    <Compile Include="Employees\EmployeeDataLib.cs" />
+    <Compile Include="Geos\GeoDataLib.cs" />
+    <Compile Include="Helpers\OpUserTokenHelpers.cs" />
+    <Compile Include="JMS\JmsDataLib.cs" />
+    <Compile Include="Meta\MetaDataLib.cs" />
+    <Compile Include="Other\OtherDataLib.cs" />
+    <Compile Include="POC\PocDataLib.cs" />
+    <Compile Include="Products\ProductDataLib.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Quote Letter\QuoteDataLib.cs" />
+    <Compile Include="Security Attributes\SecurityAttributesDataLib.cs" />
+    <Compile Include="Workflow\WorkflowDataLib.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Intel.MyDeals.DataAccessLib\Intel.MyDeals.DataAccessLib.csproj">
+      <Project>{bd90141b-f4de-4fa3-b6d0-45bb04a3596f}</Project>
+      <Name>Intel.MyDeals.DataAccessLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Intel.MyDeals.Entities\Intel.MyDeals.Entities.csproj">
+      <Project>{ae1a3978-08ef-4a15-82cd-7ba6192a9b52}</Project>
+      <Name>Intel.MyDeals.Entities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

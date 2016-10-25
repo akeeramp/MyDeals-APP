@@ -1,0 +1,128 @@
+﻿<#@ template debug="true" hostSpecific="false" #>
+<#@ output extension=".generated.cs" #>
+<#@ Assembly Name="System.Core.dll" #>
+<#@ Assembly Name="System.Windows.Forms.dll" #>
+<#@ Assembly Name="System.Data" #>
+<#@ Assembly Name="System.XML" #>
+<#@ Assembly Name="$(SolutionDir)\Intel.MyDeals.DataAccessLib\bin\Debug\Intel.Opaque.Templating.dll" #>
+<#@ import namespace="Intel.Opaque.Templating" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.Collections" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Data" #>
+<#@ import namespace="System.Data.Common" #>
+<#@ import namespace="System.Data.SqlClient" #>
+<#@ import namespace="System.Text" #>
+<#
+	
+	// DEVELOPER: Change this to be the namespace to create the SP classes in 
+	const string outputNameSpace = "Intel.MyDeals.Entities";
+	const string TAB = "\t";
+	
+
+	var dbobjects = new DBObjects(
+			string.Format(@"Database=CDMS_MYDEALS;Server=VMIDMSDVDB01\CP1CIAS,3181;integrated security=SSPI;")
+		);
+
+	string[] TABLES_TO_PROCESS = 
+	{
+		"[tmeta].[ATRB_MSTR]",
+		"[tdeal].[WIP_ATRB]",
+		"[tdeal].[STG_WIP_ATRB]",
+		"[tdeal].[WIP_ACTN]"
+    };
+
+	WriteLine(dbobjects.BoilerPlateDetails);
+	WriteLine("");
+
+	WriteLine(@"
+using System;
+using System.Runtime.Serialization;
+using System.Collections.Generic;
+");
+	WriteLine("");
+	WriteLine("namespace {0} {{", outputNameSpace);
+	PushIndent(TAB);
+	
+	var tables = dbobjects.TablesAndViews
+		.Where(tbl => TABLES_TO_PROCESS.Contains(tbl.table_name_escaped))
+		.ToArray();
+
+	foreach(var schema in tables.Select(tbl=>tbl.table_schema.ToLower().Trim()).Distinct())
+	{
+		string schema_display_name = schema;
+		if(schema_display_name == "tdeal"){ schema_display_name = "deal";}
+		if(schema_display_name == "tmeta"){ schema_display_name = "meta";}
+
+		WriteLine("");
+		WriteLine("namespace {0} {{", schema_display_name);
+		PushIndent(TAB);
+
+		
+
+		foreach(var table in tables.Where(tbl=>tbl.table_schema.ToLower().Trim() == schema))
+		{
+			WriteLine("");
+			WriteLine("public struct {0} {{", table.table_name.ToUpper().Trim());
+			PushIndent(TAB);
+
+			foreach(var col in table.Columns)
+			{
+				WriteLine("");
+				WriteLine(@"///<summary>");
+				WriteLine(@"/// DataType: {0}, {1}", col.SQLDataType, col.DotNetDataType);
+				WriteLine(@"/// Max Length: {0}", col.max_length);
+				if(col.is_nullable)
+				{
+					WriteLine(@"/// Nullable");
+                }
+				if(col.is_primary_key)
+				{
+					WriteLine(@"/// Primary Key");
+                }
+				WriteLine(@"///</summary>");
+				WriteLine("public const string {0} = \"{0}\";", col.column_name);
+				WriteLine("");
+			}
+
+			PopIndent();
+			WriteLine("}"); // End Struct
+		}
+
+
+		PopIndent();
+		WriteLine("}"); // End NameSpace
+    }
+
+	var dt = dbobjects.ExecuteDataSet("EXEC [deal].[PR_GET_DEALS_BY_SIDS_NULL]").Tables[0];
+
+	WriteLine("");
+	WriteLine("namespace deal {");
+	PushIndent(TAB);
+
+		WriteLine("");
+		WriteLine("public struct DEAL {");
+		PushIndent(TAB);
+
+		foreach(DataColumn col in dt.Columns)
+		{
+			WriteLine("");
+			WriteLine(@"///<summary>");
+			WriteLine(@"/// DataType: {0}", col.DataType);
+			WriteLine(@"/// Max Length: {0}", col.MaxLength);
+			WriteLine(@"///</summary>");
+			WriteLine("public const string {0} = \"{0}\";", col.ColumnName);
+			WriteLine("");
+		}
+
+		PopIndent();
+		WriteLine("}"); // End Struct
+	
+	PopIndent();
+	WriteLine("}"); // End NameSpace
+
+	PopIndent();
+	WriteLine("}"); // End NameSpace
+
+#>

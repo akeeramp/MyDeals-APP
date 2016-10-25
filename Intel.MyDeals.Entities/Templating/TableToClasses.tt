@@ -1,0 +1,63 @@
+﻿<#@ template debug="true" hostSpecific="false" #>
+<#@ output extension=".generated.cs" #>
+<#@ Assembly Name="System.Core.dll" #>
+<#@ Assembly Name="System.Windows.Forms.dll" #>
+<#@ Assembly Name="System.Data" #>
+<#@ Assembly Name="System.XML" #>
+<#@ Assembly Name="$(SolutionDir)\Intel.MyDeals.DataAccessLib\bin\Debug\Intel.Opaque.Templating.dll" #>
+<#@ import namespace="Intel.Opaque.Templating" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.Collections" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Data" #>
+<#@ import namespace="System.Data.Common" #>
+<#@ import namespace="System.Data.SqlClient" #>
+<#@ import namespace="System.Text" #>
+<#
+	
+	// DEVELOPER: Change this to be the namespace to create the SP classes in 
+	const string outputNameSpace = "Intel.MyDeals.Entities";
+	const string TAB = "\t";
+	
+	var dbobjects = new DBObjects(@"Database=MyDeals;Server=EG1RDMDBDEV01\DEALSDEV,3181;integrated security=SSPI;");
+
+	WriteLine(dbobjects.BoilerPlateDetails);
+
+	WriteLine(@"
+using System;
+using System.Runtime.Serialization;
+using System.Collections.Generic;
+");
+	WriteLine("");
+	WriteLine("namespace {0} {{", outputNameSpace);
+	PushIndent(TAB);
+
+	var ds = dbobjects.ExecuteDataSet("dbo.PR_PING_DB");
+	ds.Tables[0].TableName = "PingResults";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], true));
+
+	// POC EMP
+	ds = dbobjects.ExecuteDataSet("dbo.PR_GET_POC_EMP");
+	ds.Tables[0].TableName = "PocEmp";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], true));
+
+
+	////ds = dbobjects.ExecuteDataSet("[app].[PR_GET_LOOKUPS]");
+	////ds.Tables[0].TableName = "LookupItem";
+	////WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
+	// Constants objects 
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_GET_CONSTANTS]");
+	ds.Tables[0].TableName = "ToolConstants";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
+	// Admin Constants object
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MANAGE_CONSTANT_VALUES] @idsid = 'PWECKENR', @mode = 'Select'");
+	ds.Tables[0].TableName = "AdminConstant";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
+	PopIndent();
+	WriteLine("}"); // End NameSpace
+
+#>

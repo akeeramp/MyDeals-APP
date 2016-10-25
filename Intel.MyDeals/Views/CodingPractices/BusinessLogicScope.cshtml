@@ -1,0 +1,61 @@
+﻿
+@Html.Partial("TOC", new ViewDataDictionary
+{
+    { "categoryTitle", "Project setup and logic flow" },
+    { "categoryAction", "Project" },
+    { "sectionTitle", "Intel.MyDeals.BusinessLogic" },
+    { "sectionAction", "BusinessLogic" },
+    { "pageTitle", "Business logic scope" }
+})
+
+<div id="mainBody" style="margin: 10px; padding: 0 20px 0 200px;">
+    <h1><img src="/Images/docs/icon-bus-logic.png" height="60" />Business logic scope</h1>
+    <p>
+        Want to know what belongs in this project?  Let's look at the scope of this project to understand what really goes here.
+        <img src="/Images/docs/buslogscope.png" style="margin: 10px 0 10px 25px;" />
+    </p>
+    <p>
+        
+    </p>
+
+    <div class="stepByStep">
+        <i class="intelicon-plus-solid" style="color: #C4D600;"></i>What is in scope
+    </div>
+
+    <ol>
+        <li>
+            Logic around object interaction.  For example, prior to a deal save, deal validation must occur.
+        </li>
+        <li>
+            Logic around object conversion.  For example converting deal dictionaries into data collectors.
+        </li>
+        <li>
+            <b>This page is still being updated!!!</b>
+        </li>
+        <li>
+            ...
+        </li>
+    </ol>
+
+    <div class="stepByStep">
+        <i class="intelicon-minus-solid" style="color: #ED1C24;"></i>What is out of scope
+    </div>
+
+    <ol>
+        <li>
+            Any metadata driven business rules.  Business rules belong in the <a href="@Url.Action("BusinessRules", "CodingPractices", new {Area = ""})">Intel.MyDeals.BusinessRules</a> project.
+        </li>
+        <li>
+            Any call to the database. Calls to the database belong in the <a href="@Url.Action("DataLibrary", "CodingPractices", new {Area = ""})">Intel.MyDeals.DataLibrary</a> project.
+        </li>
+        <li>
+            <b>This page is still being updated!!!</b>
+        </li>
+        <li>
+            ...
+        </li>
+    </ol>
+
+    <br /><br /><br />
+</div>
+

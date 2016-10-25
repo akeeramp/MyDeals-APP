@@ -1,0 +1,40 @@
+﻿
+@Html.Partial("TOC", new ViewDataDictionary
+{
+    { "categoryTitle", "Project setup and logic flow" },
+    { "categoryAction", "Project" },
+    { "sectionTitle", "Intel.MyDeals.Entities" },
+    { "sectionAction", "Entities" },
+    { "pageTitle", "Creating a shared class" }
+})
+
+<div id="mainBody" style="margin: 10px; padding: 0 20px 0 200px;">
+    <h1><img src="/Images/docs/icon-entity.png" height="60" />Creating a shared class</h1>
+    <p>
+        To create a class that can be consumed by all layers, the class needs to be created in the <i>Intel.MyDeals.Entities</i> project. This is the only project that is included in all layers of the project.
+    </p>
+    <img src="/Images/docs/buildcustomcode.png" style="margin: 10px 0 10px 25px;" />
+
+    <div class="stepByStep">
+        <i class="intelicon-task"></i>Step by Step
+    </div>
+
+    <p>
+        To create custom shard classes, follow these steps:
+    </p>
+    <ol>
+        <li>
+            Open the <i>Intel.MyDeals.Entities</i> project.<br />
+            <img src="/Images/docs/addnewclass.png" style="margin: 10px 0;" />
+        </li>
+        <li>
+            <i class="intelicon-mouse-outlined" style="font-size: 20px;"></i> <i>Right Click</i> and select <b>Add</b> > <b>Class</b>.<br/>
+        </li>
+        <li>
+            Define your class and save.  That's it.
+            <div class="note"><strong>Note:</strong> Don't forget to make the class Public.</div>
+        </li>
+    </ol>
+
+</div>
+

@@ -1,0 +1,106 @@
+﻿
+@Html.Partial("TOC", new ViewDataDictionary
+{
+    { "categoryTitle", "Project setup and logic flow" },
+    { "categoryAction", "Project" },
+    { "sectionTitle", "Intel.MyDeals.DataLibrary" },
+    { "sectionAction", "DataLibrary" },
+    { "pageTitle", "Creating a data cache" }
+})
+
+<div id="mainBody" style="margin: 10px; padding: 0 20px 0 200px;">
+    <h1><img src="/Images/docs/icon-data-library.png" height="60" />Creating a data cache</h1>
+    <p>
+        When dealing with common large data, it is prudent to cache the data from the database into the middle tier.
+        In the <i>Intel.MyDeals.DataLibrary</i> project, there are times calls to procedures should be cached. For these items, we will need to add them to the cache store.
+    <p>
+        <br/>
+        <img src="/Images/docs/cache_create_intro.png" style="margin: 10px 0 10px 25px;" />
+
+        <div class="stepByStep">
+            <i class="intelicon-task"></i>Step by Step
+        </div>
+
+        <ol>
+            <li>
+                <i class="intelicon-checklist-outlined" style="font-size: 20px;"></i>Ensure you have included the <strong>stored procedure</strong> into MyDeals. If you are unsure how to do this, please refer to the <a href="@Url.Action("DataAccessStoredProcedure", "CodingPractices", new {Area = ""})">Consume a stored procedure</a> section.
+            </li>
+            <li>
+                <i class="intelicon-checklist-outlined" style="font-size: 20px;"></i>Ensure you have included the <strong>shared class</strong> into MyDeals. If you are unsure how to do this, please refer to the <a href="@Url.Action("ClassFromProcedure", "CodingPractices", new {Area = ""})">Creating a shared class from a procedure</a> section.
+            </li>
+            <li>
+                <i class="intelicon-checklist-outlined" style="font-size: 20px;"></i>Ensure you have exposed the <strong>stored procedure</strong> into MyDeals. If you are unsure how to do this, please refer to the <a href="@Url.Action("CallProcedure", "CodingPractices", new {Area = ""})">Consume a stored procedure</a> section.
+            </li>
+            <li>
+                Locate the <b>Data Collections</b> folder in the <i>Intel.MyDeals.DataLibrary</i> project. 
+                Open the <b>DataCollections.cs</b> file.<br/>
+                <img src="/Images/docs/projDataCollections.png" style="margin: 10px 0;"/>
+            </li>
+            <li>
+                <div class="alert alert-info" role="alert">
+                    <strong>TODO</strong> - see if you can code the clear cache to dynamically clear cache instead of hard coding it.
+                </div>
+                <div class="alert alert-info" role="alert">
+                    <strong>Important!</strong>
+                    Determine the <i>BASE</i> for the cache. This will be the name of the class that needs to be cached. For example, if the class to be cached is <b>ToolConstants</b> then the <i>BASE</i> is <b>ToolConstants</b>.
+                    This is important as all the instructions will refer to replacing the <i>BASE</i>.
+                </div>
+
+                <div class="alert alert-info" role="alert">
+                    <strong>Important!</strong>
+                    Determine the <i>BASE_DATA_LIB</i> for the <i>BASE</i>. This will be the name of the DataLibrary object and method. 
+                    For example, if the class to be cached is <b>ToolConstants</b> then the <i>BASE_DATA_LIB</i> is <b>ConstantLookupDataLib().GetToolConstants()</b>.
+                    This is important as all the instructions will refer to replacing the <i>BASE_DATA_LIB</i>.
+                </div>
+            </li>
+            <li>
+                <p>
+                    Create the call to populate the cache <b>IF</b> the private version is not populates.
+                </p>
+                <p>
+                    To do this, you need to know some important information:
+                    <ul>
+                        <li><i>BASE</i>: Name of the class.</li>
+                        <li><i>BASE_DATA_LIB</i>: Name of the BASE data library call (where the stored procedure is exposed).</li>
+                    </ul>
+                </p>
+                <div class="note">
+                    <strong>Template:</strong> Here is a template to follow (remember to substitute <i style="font-size: 12px;">{BASE}</i> and <i style="font-size: 12px;">{BASE_DATA_LIB}</i>):
+                </div>
+                <div class="noteBody">
+                    <pre>
+        public static List&lt;{BASE}&gt; GetToolConstants()
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                return _get{BASE} ?? (_get{BASE} = new {BASE_DATA_LIB});
+            }
+        }
+        private static List&lt;{BASE}&gt; _get{BASE};
+                    </pre>
+                </div>
+
+                <div class="note">
+                    <strong>Note:</strong> Here is an example where the <i style="font-size: 12px;">BASE</i> is <b>ToolConstants</b>:
+                </div>
+                <div class="noteBody">
+                    <pre>
+        public static List&lt;ToolConstants&gt; GetToolConstants()
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                return _getToolConstants ?? (_getToolConstants = new ConstantLookupDataLib().GetToolConstants());
+            }
+        }
+        private static List&lt;ToolConstants&gt; _getToolConstants;
+                    </pre>
+                </div>
+
+            </li>
+        </ol>
+    </p>
+
+
+    <br /><br /><br />
+</div>
+

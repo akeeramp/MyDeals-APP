@@ -1,0 +1,140 @@
+﻿<script id="PricingStrategiesContainerTemplate" type="text/x-kendo-template">
+    <div style="height: 100%; width: 100%;">
+        <div id="sectionContainer" style="height: 100%;">
+            <div class="sectionBody" style="height: 100%; overflow: auto; background-color: white;">
+
+                <div id="curSectionContainer" style="height: 100%;">
+
+                    <div data-bind="visible: isCurSectionVisible" id="secContainerWrapper">
+                        <div id="secHeader">
+
+                            <span data-bind="text: TITLE" style="line-height: 1.1em; padding-bottom: 3px; padding-left: 15px;"></span>
+                            <span class="fBtn" title="Edit" data-toggle="modal" data-target="#editContractModal">
+                                <i class="intelicon-edit" style="margin: 0;line-height: 1.2em;"></i>
+                            </span>
+
+                            <!--<div class="fl" style="font-size: 11px; font-family: verdana; line-height: 1em; color: #00AEEF; margin-right: 10px;" data-bind="text: Customer.CUST_DIV_NM"></div>-->
+                            <!--<div class="fl" style="font-size: 9px; font-family: verdana; line-height: 1em; color: #999999;" data-bind="text: START_DT" data-format="MM/dd/yyyy" data-parser="date"></div>
+                            <div class="fl" style="font-size: 9px; font-family: verdana; line-height: 1em; color: #999999;"> - </div>
+                            <div class="fl" style="font-size: 9px; font-family: verdana; line-height: 1em; color: #999999;" data-bind="text: END_DT" data-format="MM/dd/yyyy" data-parser="date"></div>
+                            <div class="clearboth"></div>-->
+                        </div>
+
+                        <div id="secContainer">
+                            <h4 style="margin-bottom: 5px; margin-top: 0;">
+                                <span data-bind="text: TITLE"></span>
+                                <span class="fBtn" title="Edit a Pricing Strategy" data-toggle="modal" data-target="#editPricingStrategyModal">
+                                    <i class="intelicon-edit" style="margin: 0;line-height: 1em;"></i>
+                                </span>
+                            </h4>
+                            <p style="margin: 0; font-size: 10px; color: #999999;" data-bind="text: DESC"></p>
+
+                            <div id="pricing-table-container"></div>
+                        </div>
+
+                        <div id="secFooter">
+                            <div class="fl" style="font-size: 16px; font-weight: 200;">Additional Discount Requirements</div>
+                            <div class="fr fBtn" title="Show/Hide" onClick="rs.viewModel.showHideTerms()">
+                                <i class="intelicon-pin-solid" style="margin: 0; line-height: 1.2em;"></i>
+                            </div>
+                            <div class="fr fBtn" title="Edit" data-toggle="modal" data-target="#editTermsModal">
+                                <i class="intelicon-edit" style="margin: 0; line-height: 1.2em;"></i>
+                            </div>
+                            <div class="clearboth"></div>
+
+                            <div id="termsDisplay" data-bind="html: terms" style="height: 135px; overflow: auto; border: 1px solid #dbdbdb; padding: 5px; font-size: 11px;"></div>
+                        </div>
+
+                    </div>
+
+
+                    <div data-bind="invisible: isCurSectionVisible">
+                        <div id="SectionIntroInternalContainer">
+
+                            <div style="padding: 10px;">
+
+                                <span data-bind="text: rsVm.numSections"></span>
+                                <p>Place some dashboard specific items here.  Things that will help the user determine what to do next or summary of contract.</p>
+                                
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <div class="clearboth"></div>
+        </div>
+
+    </div>
+</script>
+
+<script id="section-template" type="text/x-kendo-template">
+    <li>
+        <div class="sectionItem">
+            <div class="fl content" style="width: 170px;">
+                <div data-bind="text: TITLE" class="secTitle"></div>
+                hello
+                #
+                var test = data;
+                debugger;
+                #
+                <div class="ellipsis">
+                    <div data-bind="text: DESC" class="secDesc"></div>
+                </div>
+            </div>
+            <div class="clearboth"></div>
+        </div>
+    </li>
+</script>
+
+<script id="no-pricing-table-template" type="text/x-kendo-template">
+    <div fl" data-toggle="modal" data-target="\\#addPricingTableModal" style="padding: 30px;">
+        <button data-role="button">
+            <i class="fa fa-plus-square" style="margin-right: 5px; padding: 10px;"></i>
+            Add Pricing Table
+        </button>
+    </div>
+</script>
+
+<!--Place templates here for now...-->
+
+<script id="ptTemplate_unknown" type="text/x-kendo-template">
+    <div class="emptyPtContainer">
+        <div class="alert alert-warning alert-dismissible" role="alert">
+            <button class="close" aria-label="Close" type="button" data-dismiss="alert"><span aria-hidden="true">×</span></button>
+            <strong>Oops!</strong> It looks like the Pricing Table you selected doesn't exist yet.
+        </div>
+    </div>
+</script>
+
+<script id="ptTemplate" type="text/x-kendo-template">
+    <div id="kss#=data['uid']#" style="width: 100%; height: 100%; margin: 0;"></div>
+    <div id="kgrid#=data['uid']#" style="width: 100%; height: 100%; margin: 0;"></div>
+    <div id="kssToolbar#=data['uid']#" class="ptFooter">
+
+        <div class="fr">
+            <button class="btn btn-primary btn-xs" type="button" style="margin: 4px -2px 0 0;" onClick="pt.validatePricingTable(#=data['uid']#, '#=data['id']#')">Validate Products</button>
+        </div>
+
+        <div class="fr">
+            <button class="btn btn-primary btn-xs" type="button" style="margin: 4px 4px 0 0;" onClick="pt.convertToDeals(#=data['uid']#, '#=data['id']#')">Create Deals</button>
+        </div>
+
+        <div class="fl" id="validationStatus#=data['uid']#">
+            <i class="fingerprint intelicon-fingerprint-authentication"></i>
+            <span>Needs to be validated</span>
+        </div>
+
+        <div class="clearboth"></div>
+
+        <div id="validationMsgContainer#=data['uid']#" class="alert alert-warning" role="alert" style="margin-top: 8px; color: \\#666666; display: none;"></div>
+    </div>
+
+    #
+    pt.execTemplate(data);
+    #
+</script>
+

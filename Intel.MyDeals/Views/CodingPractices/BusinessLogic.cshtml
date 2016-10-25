@@ -1,0 +1,41 @@
+﻿
+@Html.Partial("TOC", new ViewDataDictionary
+{
+    { "categoryTitle", "Project setup and logic flow" },
+    { "categoryAction", "Project" },
+    { "sectionTitle", "Intel.MyDeals.BusinessLogic" },
+    { "sectionAction", "BusinessLogic" },
+    { "pageTitle", "Introduction" }
+})
+
+<div id="mainBody" style="margin: 10px; padding: 0 20px 0 200px;">
+    <h1><img src="/Images/docs/icon-bus-logic.png" height="60" />Intel.MyDeals.BusinessLogic</h1>
+    <p>
+        Layer dedicated to hold the business logic for MyDeals.  Most of the logic for the application should reside in this layer.  There should be NO database access from this layer.
+    </p>
+
+    <h3>Coding Practices</h3>
+    <p>
+        The following coding practices for the Business Logic layer is intended to be where most of the business logic is located.  Except for database calls and metadata driven business logic, all other business logic belongs here.
+    </p>
+
+
+    <h5><a href="@Url.Action("BusinessLogicLayout", "CodingPractices", new {Area = ""})">Business logic layout</a></h5>
+    <p>
+        Since this layer will hold most of the code, we need to make sure we keep it structured in an easy to manage layout. This layout needs to match the <i>Intel.MyDeals.DataLibrary</i> folder structure.
+    </p>
+    <img src="/Images/docs/callproc.png" style="margin: 10px 0 10px 25px;" />
+    <p>For more info, see the <a href="@Url.Action("BusinessLogicLayout", "CodingPractices", new {Area = ""})">Business logic layout</a> section</p>
+
+
+    <h5><a href="@Url.Action("BusinessLogicScope", "CodingPractices", new {Area = ""})">Business logic scope</a></h5>
+    <p>
+        Want to know what belongs in this project?  Let's look at the scope of this project to understand what really goes here.
+    </p>
+    <img src="/Images/docs/cache_create_intro.png" style="margin: 10px 0 10px 25px;" />
+    <p>For more info, see the <a href="@Url.Action("BusinessLogicScope", "CodingPractices", new {Area = ""})">Business logic scope</a> section</p>
+
+
+    <br /><br /><br />
+</div>
+

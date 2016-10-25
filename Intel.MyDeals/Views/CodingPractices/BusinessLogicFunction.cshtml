@@ -1,0 +1,56 @@
+﻿
+@Html.Partial("TOC", new ViewDataDictionary
+{
+    { "categoryTitle", "Project setup and logic flow" },
+    { "categoryAction", "Project" },
+    { "sectionTitle", "Intel.MyDeals.BusinessLogic" },
+    { "sectionAction", "BusinessLogic" },
+    { "pageTitle", "Business logic function" }
+})
+
+<div id="mainBody" style="margin: 10px; padding: 0 20px 0 200px;">
+    <h1><img src="/Images/docs/icon-bus-logic.png" height="60" />Business logic function</h1>
+    <p>
+        The business layer will end up holding most of the code.  Business logic functions simply represent code blocks of business logic stored in the business layer.<br/>
+        <img src="/Images/docs/buslogfunc.png" style="margin: 10px 0 10px 25px;" />
+    </p>
+
+    <div class="stepByStep">
+        <i class="intelicon-task"></i>Step by Step
+    </div>
+
+    <ol>
+        <li>
+            Open the <i>Intel.MyDeals.BusinessLogic</i> project. Notice all the folders. These should match what is in the <i>Intel.MyDeals.DataLibrary</i> project.
+            If you need a new folder, make sure you add a matching folder in both projects.<br />
+            <img src="/Images/docs/businesslogiclayout.png" style="margin: 10px 0;" />
+        </li>
+        <li>
+            Add your business function here.  Keep in mind the code segments should be rather small and coded in a way it can efficiently be used by automated testing.<br />
+            <div class="note"><strong>Note:</strong> Here is an example of a business logic function:</div>
+            <div class="noteBody">
+                <pre>
+        public bool IsWwidInString(OpUserToken opUserToken, string strName)
+        {
+            string theList = new ConstantsLookupsLib().GetToolConstants()
+                .Where(c => c.CNST_NM == strName)
+                .Select(c => c.CNST_VAL_TXT)
+                .FirstOrDefault();
+            if (theList == null) return false;
+            foreach (string strWwid in theList.Replace(" ", "").Split(','))
+            {
+                int wwid;
+                if (!int.TryParse(strWwid, out wwid)) continue;
+                if (wwid == opUserToken.Usr.WWID) return true;
+            }
+            return false;
+        }
+                </pre>
+            </div>
+        </li>
+    </ol>
+
+
+    <br /><br /><br />
+</div>
+

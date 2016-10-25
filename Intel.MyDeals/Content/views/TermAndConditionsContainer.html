@@ -1,0 +1,48 @@
+﻿<script id="TermAndConditionsContainerTemplate" type="text/x-kendo-template">
+    <div style="height: 100%; width: 100%; padding-top: 15px;">
+        <form class="form-horizontal" style="margin:0; padding: 0;">
+            <div class="row">
+                <div class="col-md-12">
+                    <header class="title-bar intel-border-yellow">
+                        <span class="title-bar-title">Terms and Conditions</span>
+                    </header>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div>
+                        <div class="fl">
+                            <p style="font-size: 11px;">
+                                Select a legally approved Terms and Condition template
+                                <input data-role="dropdownlist"
+                                       data-auto-bind="false"
+                                       data-value-primitive="false"
+                                       data-text-field="title"
+                                       data-value-field="id"
+                                       data-bind="value: rsVm.RebateStrategies.initialTermsSelected,
+                                source: termsDataSource,
+                                events: {
+                                change: addTac
+                                }" id="lstRsTerm" />
+                                or enter your own.
+                            </p>
+                        </div>
+                        <div class="fr" data-bind="visible: rsVm.RebateStrategies.legalApproved">
+                            <i class="fa fa-gavel" style="font-size: 14px; color: green;"></i>
+                            <span style="font-family: 'Intel Clear'; font-size: 12px; margin-left: 5px;">Legal Approved</span>
+                        </div>
+                        <div class="fr" data-bind="invisible: rsVm.RebateStrategies.legalApproved">
+                            <i class="fa fa-gavel" style="font-size: 14px;"></i>
+                            <span style="font-family: 'Intel Clear'; font-size: 12px; margin-left: 5px;">Needs Legal Approved</span>
+                        </div>
+                        <div class="clearboth"></div>
+                    </div>
+                    <div>
+                        <textarea data-role="editor"
+                                  data-bind="value: rsVm.RebateStrategies.terms, events: {change: onTermsContentChange}"
+                                  style="height: 100%;"></textarea>
+                    </div>                </div>
+            </div>
+        </form>
+    </div>
+</script>

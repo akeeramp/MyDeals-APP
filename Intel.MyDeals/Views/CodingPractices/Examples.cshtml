@@ -1,0 +1,24 @@
+﻿
+@Html.Partial("TOC", new ViewDataDictionary
+{
+    { "categoryTitle", "Project setup and logic flow" },
+    { "categoryAction", "Project" },
+    { "sectionTitle", "Examples" },
+    { "sectionAction", "Examples" },
+    { "pageTitle", "Introduction" }
+})
+
+<div id="mainBody" style="margin: 10px; padding: 0 20px 0 200px;">
+    <h1><img src="/Images/docs/examples.png" height="60" />Examples</h1>
+    <p>
+        Here are some examples of some common tasks
+    </p>
+
+    <h5><a href="@Url.Action("DataFromProcWithCache", "CodingPractices", new {Area = ""})">Managing data from a procedure with cache</a></h5>
+    <p>
+        This example shows how to manage data returned from a procedure using the cache manager.
+    </p>
+
+    <br /><br /><br />
+</div>
+

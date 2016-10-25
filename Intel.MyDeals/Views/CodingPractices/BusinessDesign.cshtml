@@ -1,0 +1,618 @@
+﻿
+
+@*<div style="position: fixed; top: 100px; left: 10px; padding: 5px; width: 180px;">
+    <h5 style="border-bottom: 1px solid #eeeeee; margin-top: 5px;">Dependencies</h5>
+    <div>
+        <i class="fa fa-key" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin: 2px 6px;"></i>
+        Security
+    </div>
+    <div>
+        <i class="fa fa-briefcase" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin: 2px 6px;"></i>
+        Business Rules
+    </div>
+    <div>
+        <i class="glyphicon glyphicon-user" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin: 2px 6px;"></i>
+        Role Type
+    </div>
+    <div>
+        <i class="fa fa-file-excel-o" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin: 2px 6px;"></i>
+        External Excel
+    </div>
+    <div>
+        <i class="glyphicon glyphicon-envelope" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin: 2px 6px;"></i>
+        Email
+    </div>
+    <div>
+        <i class="glyphicon glyphicon-transfer" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin: 2px 6px;"></i>
+        Workflow
+    </div>
+    <div>
+        <i class="glyphicon glyphicon-cloud-download" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin: 2px 6px;"></i>
+        Master Data
+    </div>
+    <div>
+        <i class="glyphicon glyphicon-menu-hamburger" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin: 2px 6px;"></i>
+        Batch Operations
+    </div>
+</div>*@
+
+@Html.Partial("TOC", new ViewDataDictionary
+{
+    { "categoryTitle", "Business Process and Abstract Design" },
+    { "categoryAction", "BusinessDesign" },
+    { "sectionTitle", "" },
+    { "sectionAction", "" },
+    { "pageTitle", "Introduction" }
+})
+
+<div id="mainBody" style="margin: 10px; padding: 0 20px 0 200px;">
+
+    <a href="#" name="Introduction"></a>
+    <h1 style="margin-top: 20px !important; font-size: 36px;">Business Process and Abstract Design</h1>
+    <h3 style="margin-top: 20px !important;">High Level Business Process</h3>
+    <p>
+        At a high level, the purpose of MyDeals is to track and manage the negotiation of Intel rebates to external world-wide customers.
+        Negotiation with the customer starts at a product-by-product Pricing Strategy.
+        Once these Pricing Strategies pass Meet Comp, Pricing Cost Test and the proper approval channels, rebate deals are created under 1 of 4 different Deal Types: ECAP, Program, Volume Tier and CAP Band.
+        The rebate deals are then matched at the invoice level by Downstream Applications.
+    </p>
+    <div style="text-align: center;">
+        <img src="/images/docs/highlevelflow.png" />
+    </div>
+
+
+
+
+    <a href="#" name="Scope in Business Process"></a>
+    <h3 style="margin-top: 30px;">Scope in Business Process</h3>
+    <p>
+        Based on the <a href="#Introduction">High Level Business Process</a>, MyDeals needs to provide significant improvement to the current process based mainly on Data Integrity, Performance and User Experience.
+    </p>
+
+    <a href="#" name="Business Process Injection Points"></a>
+    <h4>Business Process Injection Points</h4>
+    <p>
+        There are different points in the Business Flow where there are opportunities for MyDeals to inject value to the process.
+    </p>
+
+    <div style="margin: 30px 0px; border: 0px solid transparent; border-image: none; background-color: transparent;">
+        <div class="fl" role="option" aria-selected="false" style="padding: 2px 5px; width: 70px; text-align: center; color: #0071c5;" data-uid="599d1a55-16cc-4e2a-964f-2215bca8960c">
+            <i class="fa fa-list-ol" aria-hidden="true" style="font-size: 30px;"></i>
+            <div>Rebate Strategies</div>
+        </div>
+        <div class="fl" role="option" aria-selected="false" style="padding: 2px 5px; width: 70px; text-align: center; color: #0071c5;" data-uid="599d1a55-16cc-4e2a-964f-2215bca8960c">
+            <i class="fa fa-money" aria-hidden="true" style="font-size: 30px;"></i>
+            <div>Pricing Strategies</div>
+        </div>
+        <div class="fl" role="option" aria-selected="false" style="padding: 2px 5px; width: 70px; text-align: center; color: #0071c5;" data-uid="22a76ea3-a271-4f2e-8406-2bcf8192ba35">
+            <i class="fa fa-table" aria-hidden="true" style="font-size: 30px;"></i>
+            <div>Pricing Table Association</div>
+        </div>
+        <div class="fl" role="option" aria-selected="false" style="padding: 2px 5px; width: 70px; text-align: center; color: #0071c5;" data-uid="53efc51a-9cf9-4c1a-b984-c54d65fa871c">
+            <i class="fa fa-sort-numeric-asc" aria-hidden="true" style="font-size: 30px;"></i>
+            <div>Rebate Strategy Versions</div>
+        </div>
+        <div class="fl" role="option" aria-selected="false" style="padding: 2px 5px; width: 70px; text-align: center; color: #0071c5;" data-uid="afd47c1c-ff79-497b-9fa2-9893034d745b">
+            <i class="fa fa-refresh" aria-hidden="true" style="font-size: 30px;"></i>
+            <div>Rebate Strategy Approval</div>
+        </div>
+        <div class="fl" role="option" aria-selected="false" style="padding: 2px 5px; width: 70px; text-align: center; color: #0071c5;" data-uid="1dbdca51-02b8-4a85-b9f7-1d3853d12941">
+            <i class="fa fa-check-square-o" aria-hidden="true" style="font-size: 30px;"></i>
+            <div>Deal Validation</div>
+        </div>
+        <div class="fl" role="option" aria-selected="false" style="padding: 2px 5px; width: 70px; text-align: center; color: #0071c5;" data-uid="9a8e6459-f909-4bc5-81d3-99e6dc14e2ae">
+            <i class="fa fa-exchange" aria-hidden="true" style="font-size: 30px;"></i>
+            <div>Overlapping Deals</div>
+        </div>
+        <div class="fl" role="option" aria-selected="false" style="padding: 2px 5px; width: 70px; text-align: center; color: #0071c5;" data-uid="2da8de6c-995e-4211-a976-ffba01b5f7fe">
+            <i class="fa fa-laptop" aria-hidden="true" style="font-size: 30px;"></i>
+            <div>Meet Comp Test</div>
+        </div>
+        <div class="fl" role="option" aria-selected="false" style="padding: 2px 5px; width: 70px; text-align: center; color: #0071c5;" data-uid="ec0aceff-e70a-4212-8b75-9d5c271c970f">
+            <i class="fa fa-usd" aria-hidden="true" style="font-size: 30px;"></i>
+            <div>Pricing Cost Test</div>
+        </div>
+        <div class="fl" role="option" aria-selected="false" style="padding: 2px 5px; width: 70px; text-align: center; color: #0071c5;" data-uid="9b9cecbe-2e88-4956-a97a-b3ff8485dd5a">
+            <i class="fa fa-legal" aria-hidden="true" style="font-size: 30px;"></i>
+            <div>Term and Conditions</div>
+        </div>
+        <div class="fl" role="option" aria-selected="false" style="padding: 2px 5px; width: 70px; text-align: center; color: #0071c5;" data-uid="eeaab109-eaa8-4b48-a5ec-27950dce81fe">
+            <i class="fa fa-certificate" aria-hidden="true" style="font-size: 30px;"></i>
+            <div>Contract</div>
+        </div>
+        <div class="fl" role="option" aria-selected="false" style="padding: 2px 5px; width: 70px; text-align: center; color: #0071c5;" data-uid="ae10b685-32e1-4a84-b566-99111797cbea">
+            <i class="fa fa-users" aria-hidden="true" style="font-size: 30px;"></i>
+            <div>Customer Acceptance (C2A)</div>
+        </div>
+        <div class="fl" role="option" aria-selected="false" style="padding: 2px 5px; width: 70px; text-align: center; color: #0071c5;" data-uid="0cb2d6e5-3d5c-4d75-aec9-38a155515280">
+            <i class="fa fa-file" aria-hidden="true" style="font-size: 30px;"></i>
+            <div>Deal Entry</div>
+        </div>
+        <div class="fl" role="option" aria-selected="false" style="padding: 2px 5px; width: 70px; text-align: center; color: #0071c5;" data-uid="67d0eac1-94f5-4e90-a73e-20457b6424b1">
+            <i class="fa fa-random" aria-hidden="true" style="font-size: 30px;"></i>
+            <div>Deal Approval</div>
+        </div>
+        <div class="clearboth"></div>
+    </div>
+
+
+
+    <a href="#" name="Rebate Strategies"></a>
+    <h4 style="margin-top: 25px;">Rebate Strategies</h4>
+    <div style="margin-bottom: 15px;">
+        <i class="fa fa-list-ol" aria-hidden="true" style="font-size: 30px; color: #0071c5;"></i>
+        <i class="glyphicon glyphicon-user" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px; ;"></i>
+        <i class="fa fa-file-excel-o" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px; ;"></i>
+        <i class="glyphicon glyphicon-envelope" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px; ;"></i>
+    </div>
+    <div class="scope out-of-scope">OUT OF SCOPE</div>
+    <p>
+        FSE, BMT and MMBP user roles negotiate Quarterly or Yearly Rebate Strategies in an offline Excel Spreadsheet.
+        Most negotiations take months to complete while others must be completed withing 24 hours.
+        The Rebate Strategies vary by customer and user with the potential of having hundreds of different Excel Formats.
+    </p>
+    <p>
+        Typical tasks include grouping products together, comparing potential rebates to the Floor Price and running analytics to help in the decicion making process.
+        All negotiations must both be coordinated with the customer as well as Intel's Geo and Division user base.
+    </p>
+    <div>
+        <img src="/images/docs/rebatestrategies.png" style="margin-top: 10px;" />
+    </div>
+
+
+    <a href="#" name="Pricing Strategies"></a>
+    <h4 style="margin-top: 25px;">Pricing Strategies</h4>
+    <div style="margin-bottom: 15px;">
+        <i class="fa fa-money" aria-hidden="true" style="font-size: 30px; color: #0071c5;"></i>
+        <i class="glyphicon glyphicon-user" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px; ;"></i>
+        <i class="fa fa-file-excel-o" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px; ;"></i>
+        <i class="glyphicon glyphicon-envelope" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px; ;"></i>
+    </div>
+    <div class="scope out-of-scope">OUT OF SCOPE</div>
+    <p>
+        The Rebate Strategy focuses on Products and Pricing. The next step is to convert these Rebate Strategies into Pricing Strategies.
+        The Pricing Strategy consists of Pricing Tables and Terms and Conditions about the Rebate Agreement.
+        Currently this is a manualy conversion as decisions based on how payments will be made and the way the rebate was structure can dictate which potential Deal Type will be generated from the Pricing Table.
+    </p>
+    <div>
+        <img src="/images/docs/pricingstrategy.png" style="margin-top: 10px;" />
+    </div>
+
+
+
+    <a href="#" name="Pricing Table Association"></a>
+    <h4 style="margin-top: 25px;">Pricing Table Association</h4>
+    <div style="margin-bottom: 15px;">
+        <i class="fa fa-table" aria-hidden="true" style="font-size: 30px; color: #0071c5;"></i>
+        <i class="fa fa-key" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px;"></i>
+        <i class="fa fa-briefcase" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px; ;"></i>
+        <i class="glyphicon glyphicon-user" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px; ;"></i>
+    </div>
+    <div class="scope in-scope">IN SCOPE</div>
+    <p>
+        The Pricing Tables should be created based on predefined Pricing Table Templates.
+        These templates should map each field from the Pricing Table to Rebate Deal Attributes.
+        The Pricing Table Template need to be managed in a secure admin tool.
+    </p>
+    <div>
+        <img src="/images/docs/pricingassoc.png" style="margin-top: 10px;" />
+    </div>
+
+
+
+
+    <a href="#" name="Rebate Strategy Versions"></a>
+    <h4 style="margin-top: 25px;">Rebate Strategy Versions</h4>
+    <div style="margin-bottom: 15px;">
+        <i class="fa fa-sort-numeric-asc" aria-hidden="true" style="font-size: 30px; color: #0071c5;"></i>
+        <i class="fa fa-briefcase" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px; ;"></i>
+        <i class="glyphicon glyphicon-user" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px; ;"></i>
+        <i class="fa fa-file-excel-o" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px; ;"></i>
+    </div>
+    <div class="scope out-of-scope">OUT OF SCOPE</div>
+    <p>
+        During the process of negotiating Rebate Stategies and creating Pricing Stratgies, back and forth communication with the Customer can result in many versions of the Rebate Strategy.
+        Each Rebate Strategy needs to be saved because the customer might end up choosing an older version of the Rebate Strategy and the associated Meet Comp and Pricing Cost Tests run against that version.
+    </p>
+    <div>
+        <img src="/images/docs/versions.png" style="margin-top: 10px;" />
+    </div>
+
+
+
+    <a href="#" name="Rebate Strategy Approval"></a>
+    <h4 style="margin-top: 25px;">Rebate Strategy Approval</h4>
+    <div style="margin-bottom: 15px;">
+        <i class="fa fa-refresh" aria-hidden="true" style="font-size: 30px; color: #0071c5;"></i>
+        <i class="fa fa-key" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px;"></i>
+        <i class="fa fa-briefcase" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px; ;"></i>
+        <i class="glyphicon glyphicon-user" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px; ;"></i>
+        <i class="glyphicon glyphicon-cloud-download" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px; ;"></i>
+    </div>
+    <div class="scope in-scope">IN SCOPE</div>
+    <p>
+        FSE, BMT and MMBP user roles negotiate the Rebate Strategy.
+        The system must track who and when the Rebate Strategy was approved for SOX compliance.
+    </p>
+    <div>
+        <img src="/images/docs/approval.png" style="margin-top: 10px;" />
+    </div>
+
+
+
+    <a href="#" name="Deal Validation"></a>
+    <h4 style="margin-top: 25px;">Deal Validation</h4>
+    <div style="margin-bottom: 15px;">
+        <i class="fa fa-check-square-o" aria-hidden="true" style="font-size: 30px; color: #0071c5;"></i>
+        <i class="fa fa-key" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px;"></i>
+        <i class="fa fa-briefcase" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px; ;"></i>
+        <i class="glyphicon glyphicon-user" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px; ;"></i>
+        <i class="glyphicon glyphicon-cloud-download" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px; ;"></i>
+    </div>
+    <div class="scope in-scope">IN SCOPE</div>
+    <p>
+        As the Rebate Strategy gets closer to completion, the resulting Draft Rebate Deals are Validated to ensure all necessary fields are populated.
+        Some fields might be needed for Cost Test or DownStream Applications.
+        The Deal Validation is managed by complex Business Logic that can "heal" common missing fields in the Deal.
+        The deals can be validated in Bulk and pass or fail messages are queued and returned back to the client.
+    </p>
+    <div>
+        <img src="/images/docs/validation.png" style="margin-top: 10px;" />
+    </div>
+
+
+
+    <a href="#" name="Overlapping Deals"></a>
+    <h4 style="margin-top: 25px;">Overlapping Deals</h4>
+    <div style="margin-bottom: 15px;">
+        <i class="fa fa-exchange" aria-hidden="true" style="font-size: 30px; color: #0071c5;"></i>
+        <i class="fa fa-key" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px;"></i>
+        <i class="fa fa-briefcase" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px; ;"></i>
+        <i class="glyphicon glyphicon-cloud-download" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px; ;"></i>
+    </div>
+    <div class="scope in-scope">IN SCOPE</div>
+    <p>
+        As the Draft Rebate Deals from the Pricing Strategies are prepared, the system needs to determine overlapping deals.
+        Overlapping deals are defined by deals that overlap in time with the same products in such a way that it is possible for the customers to get multiple rebates for the same product.
+        The overlapping rules should be managable from an admin screen.
+    </p>
+    <div>
+        <img src="/images/docs/overlapping.png" style="margin-top: 10px;" />
+    </div>
+
+
+
+    <a href="#" name="Meet Comp Test"></a>
+    <h4 style="margin-top: 25px;">Meet Comp Test</h4>
+    <div style="margin-bottom: 15px;">
+        <i class="fa fa-laptop" aria-hidden="true" style="font-size: 30px; color: #0071c5;"></i>
+        <i class="fa fa-key" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px;"></i>
+        <i class="fa fa-briefcase" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px; ;"></i>
+        <i class="glyphicon glyphicon-user" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px; ;"></i>
+        <i class="glyphicon glyphicon-cloud-download" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px; ;"></i>
+    </div>
+    <div class="scope in-scope">IN SCOPE</div>
+    <p>
+        For certain products, Intel is required to ensure the product is NOT being sold for less than our competitors.
+        Another reason for Meet Comp is to determine a reason for why a specific rate was requested.
+    </p>
+    <p>
+        Meet Comp Test results are displayed on the screen with color indicators.
+        <ul>
+            <li><b>Green:</b> Meet Comp Passes</li>
+            <li><b>Red:</b> Meet Comp Failes</li>
+            <li><b>Yellow:</b> Incomplete Meet Comp due to required fields not being populated</li>
+            <li><b>Grey:</b> Meet Comp is not needed</li>
+        </ul>
+    </p>
+    <div>
+        <img src="/images/docs/meetcomp.png" style="margin-top: 10px;" />
+    </div>
+
+
+
+    <a href="#" name="Pricing Cost Test"></a>
+    <h4 style="margin-top: 25px;">Pricing Cost Test</h4>
+    <div style="margin-bottom: 15px;">
+        <i class="fa fa-usd" aria-hidden="true" style="font-size: 30px; color: #0071c5;"></i>
+        <i class="fa fa-key" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px;"></i>
+        <i class="fa fa-briefcase" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px; ;"></i>
+        <i class="glyphicon glyphicon-user" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px; ;"></i>
+        <i class="glyphicon glyphicon-cloud-download" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px; ;"></i>
+    </div>
+    <div class="scope in-scope">IN SCOPE</div>
+    <p>
+        Pricing Cost Test is performed by MMBP against Product Cost data.
+        The Cost Test must run against all overlapping deals in the current Rebate Strategy as well as any deal that has a tracker number.
+        Based on the Product Group, Market Share and Standalone/Kit, various Cost Test formulas are computed against the Product Group to determine the Cost Test result.
+    </p>
+    <p>
+        Cost Test results are displayed on the screen with color indicators.
+        <ul>
+            <li><b>Green:</b> Cost Test Passes</li>
+            <li><b>Red:</b> Cost Test Failes</li>
+            <li><b>Yellow:</b> Incomplete Cost Test due to required fields not being populated</li>
+            <li><b>Grey:</b> Cost Test is not needed</li>
+        </ul>
+    </p>
+    <div>
+        <img src="/images/docs/costtest.png" style="margin-top: 10px;" />
+    </div>
+
+
+
+    <a href="#" name="Term and Conditions"></a>
+    <h4 style="margin-top: 25px;">Term and Conditions</h4>
+    <div style="margin-bottom: 15px;">
+        <i class="fa fa-legal" aria-hidden="true" style="font-size: 30px; color: #0071c5;"></i>
+        <i class="fa fa-key" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px;"></i>
+        <i class="fa fa-briefcase" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px; ;"></i>
+        <i class="glyphicon glyphicon-user" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px; ;"></i>
+    </div>
+    <div class="scope out-of-scope">OUT OF SCOPE</div>
+    <p>
+        In addition to Pricing Tables, Pricing Strategy can contain Terms and Conditions related to the Pricing Table.
+        These Terms and Conditions generally effect how the deals are created and/or effect the deals workflow.
+        Idealy, these Terms and Conditions can be user managed and created to map the changes to the deals automatically.
+        For the Term and Conditions that cannot be automated or simply haven't been created for the automated process, the user can manually fix the deals prior to approving them.
+    </p>
+    <div>
+        <img src="/images/docs/terms.png" style="margin-top: 10px;" />
+    </div>
+
+
+    <a href="#" name="Contract"></a>
+    <h4 style="margin-top: 25px;">Contract</h4>
+    <div style="margin-bottom: 15px;">
+        <i class="fa fa-certificate" aria-hidden="true" style="font-size: 30px; color: #0071c5;"></i>
+        <i class="fa fa-key" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px;"></i>
+        <i class="fa fa-briefcase" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px; ;"></i>
+        <i class="glyphicon glyphicon-user" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px; ;"></i>
+    </div>
+    <div class="scope out-of-scope">OUT OF SCOPE</div>
+    <p>
+        Pricing Strategies are directly used in the formal Contract created and presented to customers.
+        While the current process allows contracts to be created prior to entering deals in the MyDeals tool, the tool needs to have the capability to cut-n-paste or export
+        the pricing tables and Terms and Conditions in order to be added to the contract in an external tool.
+    </p>
+    <div>
+        <img src="/images/docs/contract.png" style="margin-top: 10px;" />
+    </div>
+
+
+
+    <a href="#" name="Customer Acceptance"></a>
+    <h4 style="margin-top: 25px;">Customer Acceptance</h4>
+    <div style="margin-bottom: 15px;">
+        <i class="fa fa-users" aria-hidden="true" style="font-size: 30px; color: #0071c5;"></i>
+        <i class="fa fa-key" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px;"></i>
+        <i class="fa fa-briefcase" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px; ;"></i>
+        <i class="glyphicon glyphicon-user" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px; ;"></i>
+        <i class="glyphicon glyphicon-transfer" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px; ;"></i>
+    </div>
+    <div class="scope out-of-scope">OUT OF SCOPE</div>
+    <p>
+        Customers formally agree to the Pricing Strategies in the form of a Contract created outside of MyDeals.
+        The Rebate Strategies are presented to the custer using C2a, DocuSign or SharePoint.
+        At this time, the expectation is to remain outside of MyDeals, but in the future, this should be integrated into the tool as an automated step.
+    </p>
+    <div>
+        <img src="/images/docs/chooses.png" style="margin-top: 10px;" />
+    </div>
+
+
+    <a href="#" name="Deal Entry"></a>
+    <h4 style="margin-top: 25px;">Deal Entry</h4>
+    <div style="margin-bottom: 15px;">
+        <i class="fa fa-file" aria-hidden="true" style="font-size: 30px; color: #0071c5;"></i>
+        <i class="fa fa-key" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px;"></i>
+        <i class="fa fa-briefcase" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px; ;"></i>
+        <i class="glyphicon glyphicon-user" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px; ;"></i>
+        <i class="fa fa-file-excel-o" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px; ;"></i>
+        <i class="glyphicon glyphicon-transfer" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px; ;"></i>
+        <i class="glyphicon glyphicon-cloud-download" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px; ;"></i>
+        <i class="glyphicon glyphicon-menu-hamburger" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px; ;"></i>
+    </div>
+    <div class="scope in-scope">IN SCOPE</div>
+    <p>
+        Deal entry should be started AFTER MMbp approves, passes Cost Test, passes MeetComp, passes Legal and the Customer accepted the Contract.
+        At this time, deals should be autocreated based on the Pricing Table Associations and Pricing Table Templates.
+        Since the deals have already been approved in the form of Pricing Tables, the deals can go directly to the HOLD_WAITING or ACTIVE stage depending on the type of deal.
+    </p>
+    <div>
+        <img src="/images/docs/dealentry.png" style="margin-top: 10px;" />
+    </div>
+
+
+
+    <a href="#" name="Deal Approval"></a>
+    <h4 style="margin-top: 25px;">Deal Approval</h4>
+    <div style="margin-bottom: 15px;">
+        <i class="fa fa-random" aria-hidden="true" style="font-size: 30px; color: #0071c5;"></i>
+        <i class="fa fa-key" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px;"></i>
+        <i class="fa fa-briefcase" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px; ;"></i>
+        <i class="glyphicon glyphicon-user" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px; ;"></i>
+        <i class="glyphicon glyphicon-transfer" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px; ;"></i>
+        <i class="glyphicon glyphicon-menu-hamburger" aria-hidden="true" style="font-size: 25px; color: #cccccc; margin-left: 5px; ;"></i>
+    </div>
+    <div class="scope in-scope">IN SCOPE</div>
+    <p>
+        Since Rebate Strategies are already approved and when deals are created they go to an accepted state, the Deal Approval is limited.
+        Deals can move through various stages such as HOLD_WAITING, ACTIVE, EXPIRED, CUSTOMER_DECLINED and CANCELLED.
+    </p>
+    <div>
+        <img src="/images/docs/dealapproval.png" style="margin-top: 10px;" />
+    </div>
+
+
+
+
+
+    <a href="#" name="Data Model Object"></a>
+    <h3 style="margin-top: 30px;">Data Model Object</h3>
+    <p>
+        At a high level, there are 3 major objects in MyDeals
+        <ul>
+            <li><b>Rebate Strategy:</b> The grouping of Pricing Strategies that will be approved together as one acceptance "Contract" to the customer.</li>
+            <li><b>Pricing Strategy:</b> Hold the Pricing Table as well as Term and Conditions around the Pricing Table.</li>
+            <li><b>Rebate Deal:</b> The collection of data that will be used to track and map paid invoices for credits and Rebate fulfillment.</li>
+        </ul>
+    </p>
+    <div>
+        <img src="/images/docs/dataobjects.png" style="margin-top: 10px;" />
+    </div>
+
+
+    <a href="#" name="Other Features"></a>
+    <h3 style="margin-top: 30px;">Other Features</h3>
+    <p>
+        MyDeals has other features that are common across the entire application.
+    </p>
+
+    <h4>Business Rules</h4>
+    <p>
+        MyDeals has trigger points in the code where custom business rules can be applied.
+        Some of these trigger points are PRE_SAVE, POST_SAVE, PRE_ACTION, POST_ACTION, etc...
+    </p>
+    <p>
+        These business rules come in 2 modes:
+        <ul>
+            <li><b>Validation:</b> These rules return a true/false and does NOT alter data. It is used for decisions.</li>
+            <li><b>Action:</b> These rules perform a validation step and the actions against the data depending on the true/false response.</li>
+        </ul>
+    </p>
+    <p>
+        An example of a business rule would be:
+        <ul>
+            During a Save and Approve Action, if the ECAP Price decreases... save the deal, redeal it, alter various attribute values, version Rebate Strategy, cancel the approval and notify the user the deal was redealed and not approved.
+        </ul>
+    </p>
+
+    <h4>Workflow</h4>
+    <p>
+        The Rebate Strategy and Deal Strategy Approvals follow a defined Workflow process.
+        These workflows can change based on Deal Type, Role, Stage, Action and the user entered deal attributes.
+    </p>
+
+    <h4>Redeal</h4>
+    <p>
+        After Rebate Deals are created, changes can be made to the deals. These changes can come in two modes:
+        <ul>
+            <li><b>Minor:</b> Changes that do not require a re-approval. These are changes that do not alter rebate payments or Pricing Cost Test.</li>
+            <li><b>Major:</b> Changes that do require a re-approval. These are changes that do alter rebate payments or Pricing Cost Test. Some examples are ECAP Price, Start Date, End Date, Total Volume, Ceiling, etc...</li>
+        </ul>
+    </p>
+    <p>
+        A Major change will initiate a redeal forcing the Rebate Strategy to change versions and allow changes to be made to the Rebate Strategy while not altering the current deal for downstream processing until the Rebate Strategy has been approved.
+        Some other things to think about are redeals can split deals or replace deals, snapshot table concept controlling global or tracker based attributes, cancelling redeal and reverting back to previous version, etc...
+    </p>
+
+    <h4>Deal Types</h4>
+    <p>
+        Currently, all Pricing Strategies resolve into Rebate Deals. These Rebate Deals will be consumed by only 4 Deal Types:
+        <ul>
+            <li>ECAP</li>
+            <li>Vol Tier</li>
+            <li>CAP Band</li>
+            <li>Program</li>
+        </ul>
+    </p>
+    <p>
+        Based on the Deal Type, the structure of the deal will be different. Some things that will be altered on the deal:
+        <ul>
+            <li><b>Attributes:</b> Different attributes and schedules above the standard deals will need to be managed.</li>
+            <li><b>Rules:</b> Different Rules (Validation and Action) will need to be fired based on Deal Type.</li>
+            <li><b>Workflow:</b> Approval Workflows can change based on Deal Type and Deal Sub Type (MCP, Tender, etc...).</li>
+        </ul>
+    </p>
+
+    <h4>Role Types</h4>
+    <p>
+        Each user is assigned to a single Role Type which controls Business Rules, Security and Account Assignments.
+        Currently, the Roles Types:
+        <ul>
+            <li>FSE</li>
+            <li>BMT</li>
+            <li>RA</li>
+            <li>GA</li>
+            <li>MMBP</li>
+            <li>FINANCE</li>
+            <li>CBA</li>
+            <li>LEGAL</li>
+        </ul>
+    </p>
+
+    <h4>Stages</h4>
+    <p>
+        Workflows approve and reject Rebate Strategies and Deals through stages.
+        Currently, the Stages:
+        <ul>
+            <li>Requested</li>
+            <li>Submitted</li>
+            <li>Final_Approval</li>
+            <li>Hold_Waiting</li>
+            <li>Active</li>
+            <li>Cancelled</li>
+            <li>Expired</li>
+            <li>Customer_Declined</li>
+        </ul>
+    </p>
+
+    <h4>Pricing Table Example</h4>
+    <p>
+        Here is an example of a pricing table.
+    </p>
+    <div>
+        <img src="/images/docs/pricingtable.png" style="margin-top: 10px;" />
+    </div>
+
+
+
+
+    </div>
+
+
+
+
+
+<style>
+    body {
+        font-size: 12px;
+    }
+
+    .glyphicon {
+        font-size: 12px;
+    }
+
+    P {
+        color: #000000;
+        line-height: 1.6em;
+    }
+
+    H1 {
+        margin-top: 80px !important;
+    }
+
+    H2 {
+        margin-top: 50px !important;
+    }
+
+    .scope {
+        padding: 0 4px;
+        border-radius: 3px;
+        font-size: 10px;
+        width: 100px;
+        text-align: center;
+        margin-bottom: 6px;
+    }
+
+    .in-scope {
+        background-color: #C4D600;
+        color: #000000;
+    }
+
+    .out-of-scope {
+        background-color: #ED1C24;
+        color: #ffffff;
+    }
+</style>

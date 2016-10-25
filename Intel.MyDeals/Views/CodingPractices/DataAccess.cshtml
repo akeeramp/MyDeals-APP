@@ -1,0 +1,31 @@
+﻿
+@Html.Partial("TOC", new ViewDataDictionary
+{
+    { "categoryTitle", "Project setup and logic flow" },
+    { "categoryAction", "Project" },
+    { "sectionTitle", "Intel.MyDeals.DataAccess" },
+    { "sectionAction", "DataAccess" },
+    { "pageTitle", "Introduction" }
+})
+
+<div id="mainBody" style="margin: 10px; padding: 0 20px 0 200px;">
+    <h1><img src="/Images/docs/icon-data-access.png" height="60" />Introduction</h1>
+    <p>
+        Layer to hold all database connection libraries. These are the tools used by the <a href="@Url.Action("DataLibrary", "CodingPractices", new {Area = ""})">Data Libraries</a> to access the Database via <a href="@Url.Action("DataAccessStoredProcedure", "CodingPractices", new {Area = ""})">Stored Procedures</a>.
+    </p>
+
+    <h3>Coding Practices</h3>
+    <p>
+        The following coding practices for the Data Access layer consist mainly of consuming Stored Procedures that will be used by the<a href="@Url.Action("DataLibrary", "CodingPractices", new {Area = ""})">Data Libraries</a>. 
+    </p>
+
+    <h5><a href="@Url.Action("DataAccessStoredProcedure", "CodingPractices", new {Area = ""})">Consume a stored procedure</a></h5>
+    <p>
+        To include a newly created stored procedure into the MyDeals project, you simply need to have compile the <strong>SPClassGenerator.tt</strong> T4 Template.
+    </p>
+    <img src="/Images/docs/db2c.png" style="margin: 10px 0 10px 25px;"/>
+    <p>For more info, see the <a href="@Url.Action("DataAccessStoredProcedure", "CodingPractices", new {Area = ""})">Consume a stored procedure</a> section</p>
+
+    <br /><br /><br />
+</div>
+

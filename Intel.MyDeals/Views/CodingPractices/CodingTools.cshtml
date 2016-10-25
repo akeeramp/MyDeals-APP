@@ -1,0 +1,34 @@
+﻿
+@Html.Partial("TOC", new ViewDataDictionary
+{
+    { "categoryTitle", "Coding tools" },
+    { "categoryAction", "CodingTools" },
+    { "sectionTitle", "" },
+    { "sectionAction", "" },
+    { "pageTitle", "Introduction" }
+})
+
+<div id="mainBody" style="margin: 10px; padding: 0 20px 0 200px;">
+    <h1><img src="/Images/docs/icon-code-tools.png" height="80" /> Coding tools</h1>
+    <p>
+        This is a growing collection of tools and practices used on MyDeals.  If you come up with a reusable component of BKM, put it here!
+    </p>
+
+
+    <h5><a href="@Url.Action("ErrorHandling", "CodingPractices", new {Area = ""})">Error handling</a></h5>
+    <p>
+        Error handling comes in various degrees... some of which are DB error handling, MT error handling, UI error handling, Application level error handling. 
+        What this does NOT cover is form validation or control validation.
+    </p>
+    <img src="/Images/docs/errorhandling.png" style="margin: 10px 0 10px 25px;" />
+
+    <h5><a href="@Url.Action("Logging", "CodingPractices", new {Area = ""})">Logging</a></h5>
+    <p>
+        Logging also comes in various dgrees... some of which are DB, MT and UI logging.  There is local storage logging, in-memory logging and longterm storage logging.
+    </p>
+    <img src="/Images/docs/logging.png" style="margin: 10px 0 10px 25px;" />
+
+    <br /><br /><br />
+</div>
+
+

@@ -1,0 +1,607 @@
+﻿
+@Html.Partial("TOC", new ViewDataDictionary
+{
+    { "categoryTitle", "Project setup and logic flow" },
+    { "categoryAction", "Project" },
+    { "sectionTitle", "Examples" },
+    { "sectionAction", "Examples" },
+    { "pageTitle", "Managing data from a procedure with cache" }
+})
+
+<div id="mainBody" style="margin: 10px; padding: 0 20px 0 200px;">
+    <h1><img src="/Images/docs/examples.png" height="60" />Managing data from a procedure with cache</h1>
+    <p>
+        This example show how to manage data returned from a procedure using the cache manager.
+    </p>
+    <p>
+        Take for instance we have a Constanst table in the database and a procedure called <b>[dbo].[PR_GET_CONSTANTS]</b> to retrieve the data. 
+        Our task is to make this data freely available in code without having to make many calls to the DB.  So, this means we need to cache to results.  Here is how that is done.
+    </p>
+
+    <div class="stepByStep">
+        <i class="intelicon-task"></i>Step by Step
+    </div>
+
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+        
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingOne">
+                <h4 class="panel-title" style="font-size: 14px;">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                        <i class="intelicon-right-next"></i>
+                        First we need to make sure the procedure is exposed to the project.
+                        <div class="fr">
+                            (<a href="@Url.Action("DataAccessStoredProcedure", "CodingPractices", new {Area = ""})">Consume a stored procedure</a>)
+                        </div>
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                <div class="panel-body">
+                    <ol>
+                        <li>
+                            Open the <strong>SPClassGenerator.tt</strong> file in the <i>Intel.MyDeals.DataAccessLib</i> project.<br/>
+                            <img src="/Images/docs/datalibproj.png" style="margin: 10px 0;"/>
+                        </li>
+                        <li>
+                            <strong>Do not change this file!!!</strong> All you need to do is save the file and it will compile the T4 template and generate the C# code.
+                        </li>
+                        <li>
+                            Verify your stored procedure is locate in the generated code. To do this, expand the <strong>SPClassGenerator.tt</strong> file and open the <strong>SPClassGenerator1.generated.cs</strong> and search for your stored procedure.<br/>
+                            <img src="/Images/docs/SPClassGeneratorResults.png" style="margin: 10px 0;"/><br/>
+
+                            <div class="note">
+                                <strong>Note:</strong> Here is an example of what code is generated for a store procedure:
+                            </div>
+                            <div class="noteBody">
+                                <img src="/Images/docs/ex_proc_results.png" style="margin: 10px 0;"/>
+                            </div>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingTwo">
+                <h4 class="panel-title" style="font-size: 14px;">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        <i class="intelicon-right-next"></i>
+                        Next we need to create a class to hold the returned data from the procedue.
+                        <div class="fr">
+                            (<a href="@Url.Action("ClassFromProcedure", "CodingPractices", new {Area = ""})">Creating a shared class from a procedure</a>)
+                        </div>
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                <div class="panel-body">
+                    <ol>
+                        <li>
+                            Open the <strong>TableToClasses.tt</strong> file in the <i>Intel.MyDeals.Entities</i> project.<br/>
+                            <img src="/Images/docs/TableToClass.png" style="margin: 10px 0;"/>
+                        </li>
+                        <li>
+                            Enter a call to the stored procedure and declare the name of the class that will be generated.
+                            The stored procedue must be executable, so if parameters are required to run the procedure, please apply them.
+
+                            <div class="note"><strong>Note:</strong> It will actually execute the procedure, so try to make the return dataset minimal for better performance.
+                            </div>
+                            <div class="noteBody">
+                                In this example, the <i>dbo.PR_GET_CONSTANTS</i> procedure is being called with no parameters. The results will create a class called <B>ToolConstants</B>.<br/>
+                                <img src="/images/docs/ex_code_class.png" style="margin: 10px 0;"/><br/>
+                            </div>
+                        </li>
+                        <li>
+                            Sometimes there are errors generating the classes. This can be because the entered stored procedure call had some mistakes or the generation timed out.
+                            Verify the generated code has no errors. To do this, expand the <strong>TableToClasses.tt</strong> file and open the <strong>TableToClasses.generated.cs</strong>.<br/>
+                            <img src="/Images/docs/TableToClassResults.png" style="margin: 10px 0;"/><br/>
+
+                            <div class="note"><strong>Note:</strong> Here is an example of what code is generated for a store procedure:
+                            </div>
+                            <div class="noteBody">
+
+                                <pre>
+    ///&lt;summary&gt;
+	/// Class created via template - Do Not Modify!
+	/// To modify this code, re-execute the template, or extend as partial.
+	/// on PWECKENR-MOBL5
+	/// by pweckenr
+	/// at 10/14/2016 11:24:27 AM
+	///&lt;/summary&gt;
+	
+	[DataContract]
+	public partial class ToolConstants {
+	
+	    [DataMember]
+	    public System.String CNST_DESC {set;get;}
+	
+	
+	    [DataMember]
+	    public System.String CNST_NM {set;get;}
+	
+	
+	    [DataMember]
+	    public System.String CNST_VAL_TXT {set;get;}
+	
+	
+	    /*
+	    private static List&lt;ToolConstants&gt; ToolConstantsFromReader(SqlDataReader rdr){
+	        // This helper method is template generated.
+	        // Refer to that template for details to modify this code.
+	
+	        var ret = new List&lt;ToolConstants&gt;();
+	        int IDX_CNST_DESC = DB.GetReaderOrdinal(rdr, "CNST_DESC");
+	        int IDX_CNST_NM = DB.GetReaderOrdinal(rdr, "CNST_NM");
+	        int IDX_CNST_VAL_TXT = DB.GetReaderOrdinal(rdr, "CNST_VAL_TXT");
+	
+	        while (rdr.Read()){
+	            ret.Add(new ToolConstants {
+	                CNST_DESC = (IDX_CNST_DESC &lt; 0 || rdr.IsDBNull(IDX_CNST_DESC)) ? String.Empty : rdr.GetFieldValue&lt;System.String&gt;(IDX_CNST_DESC),
+	                CNST_NM = (IDX_CNST_NM &lt; 0 || rdr.IsDBNull(IDX_CNST_NM)) ? String.Empty : rdr.GetFieldValue&lt;System.String&gt;(IDX_CNST_NM),
+	                CNST_VAL_TXT = (IDX_CNST_VAL_TXT &lt; 0 || rdr.IsDBNull(IDX_CNST_VAL_TXT)) ? String.Empty : rdr.GetFieldValue&lt;System.String&gt;(IDX_CNST_VAL_TXT)
+	            });
+	        } // while
+	        return ret;
+	    }
+	    */
+	
+	} // End of class ToolConstants
+</pre>
+
+                            </div>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingThree">
+                <h4 class="panel-title" style="font-size: 14px;">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        <i class="intelicon-right-next"></i>
+                        Next we need to call the stored procedure.
+                        <div class="fr">
+                            (<a href="@Url.Action("CallProcedure", "CodingPractices", new {Area = ""})">Calling a stored procedure</a>)
+                        </div>
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                <div class="panel-body">
+                    <ol>
+                        <li>
+                            Locate the <b>Constants Lookups</b> folder in the <i>Intel.MyDeals.DataLibrary</i> project.
+                            We want to open the <b>ConstantLookupDataLib.cs</b> file.<br />
+                            <img src="/Images/docs/datalibproj.png" style="margin: 10px 0;" />
+                        </li>
+                        <li>
+                            Now we need to add the procedure call.  Look at the generated output from the T4 Template for examples.<br />
+
+                            <div class="note">
+                                <strong>Note:</strong> Here is the <b>PR_GET_CONSTANTS</b> store procedure call:
+                            </div>
+                            <div class="noteBody">
+                                <pre>
+        public List&lt;ToolConstants&gt; GetToolConstants()
+        {
+            var cmd = new Procs.dbo.PR_GET_CONSTANTS
+            {
+                cnst_nm = null
+            };
+            List&lt;ToolConstants&gt; returnConstandsList = new List&lt;ToolConstants&gt;();
+            using (var rdr = DataAccess.ExecuteReader(cmd))
+            {
+                int ConstantNameIdx = DB.GetReaderOrdinal(rdr, "CNST_NM");
+                int ConstantDescIdx = DB.GetReaderOrdinal(rdr, "CNST_DESC");
+                int ConstantValueIdx = DB.GetReaderOrdinal(rdr, "CNST_VAL_TXT");
+                while (rdr.Read())
+                {
+                    returnConstandsList.Add(new ToolConstants
+                    {
+                        CNST_NM = rdr.IsDBNull(ConstantNameIdx) ? default(String) : rdr.GetFieldValue&lt;String&gt;(ConstantNameIdx),
+                        CNST_DESC = rdr.IsDBNull(ConstantDescIdx) ? default(String) : rdr.GetFieldValue&lt;String&gt;(ConstantDescIdx),
+                        CNST_VAL_TXT = rdr.IsDBNull(ConstantValueIdx) ? default(String) : rdr.GetFieldValue&lt;String&gt;(ConstantValueIdx),
+                    });
+                }
+            }
+            return returnConstandsList;
+        }
+                                </pre>
+                            </div>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingFour">
+                <h4 class="panel-title" style="font-size: 14px;">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                        <i class="intelicon-right-next"></i>
+                        Now we can creating a data cache.
+                        <div class="fr">
+                            (<a href="@Url.Action("Cache", "CodingPractices", new {Area = ""})">Creating a data cache</a>)
+                        </div>
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+                <div class="panel-body">
+                    <ol>
+                        <li>
+                            Locate the <b>Data Collections</b> folder in the <i>Intel.MyDeals.DataLibrary</i> project.
+                            Open the <b>DataCollections.cs</b> file.<br />
+                            <img src="/Images/docs/projDataCollections.png" style="margin: 10px 0;" />
+                        </li>
+                        <li>
+                            <p>
+                                Create the call to populate the cache <b>IF</b> the private version is not populates.
+                            </p>
+                            <p>
+                                To do this, you need to know some important information:
+                                <ul>
+                                    <li><i>BASE</i>: Name of the class. For us it is <b>ToolConstants</b></li>
+                                    <li><i>BASE_DATA_LIB</i>: Name of the BASE data library call (where the stored procedure is exposed).  For us it is <b>ConstantLookupDataLib().GetToolConstants()</b></li>
+                                </ul>
+                            </p>
+                            <div class="note">
+                                <strong>Code:</strong> Now we add the following code.
+                            </div>
+                            <div class="noteBody">
+                                <pre>
+        public static List&lt;ToolConstants&gt; GetToolConstants()
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                return _getToolConstants ?? (_getToolConstants = new ConstantLookupDataLib().GetToolConstants());
+            }
+        }
+        private static List&lt;ToolConstants&gt; _getToolConstants;
+                    </pre>
+                            </div>
+
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingFive">
+                <h4 class="panel-title" style="font-size: 14px;">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                        <i class="intelicon-right-next"></i>
+                        Create a business logic function to call the cache.
+                        <div class="fr">
+                            (<a href="@Url.Action("BusinessLogicCallCache", "CodingPractices", new {Area = ""})">Call from data cache</a>)
+                        </div>
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
+                <div class="panel-body">
+                    <ol>
+                        <li>
+                            Open the <b>ConstantsLookupsLib.cs</b> from the <b>Constants Lookups</b> folder in the <i>Intel.MyDeals.BusinessLogic</i> project.<br/>
+                            <img src="/Images/docs/constantDataLibProj.png" style="margin: 10px 0;" />
+                        </li>
+                        <li>
+                            Next we will create a business logic function that calls the <b>cached</b> function instead of calling the Constants DataLibary function directly.<br />
+                            <div class="note"><strong>Note:</strong> We need to call the <b>DataCollections.GetToolConstants</b> function which will return the cache version if applicable.</div>
+                            <div class="noteBody">
+                                <pre>        
+        public List&lt;ToolConstants&gt; GetToolConstants()
+        {
+            //
+            // can put business logic here
+            //
+            return DataCollections.GetToolConstants();
+        }
+                </pre>
+                            </div>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingSix">
+                <h4 class="panel-title" style="font-size: 14px;">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                        <i class="intelicon-right-next"></i>
+                        Create a Web API to call our cached business function.
+                        <div class="fr">
+                            (<a href="@Url.Action("PresentationWebApi", "CodingPractices", new {Area = ""})">Creating Web APIs</a>)
+                        </div>
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSix">
+                <div class="panel-body">
+                    <ol>
+                        <li>
+                            Open the <i>Intel.MyDeals</i> project and find the <b>Controllers</b> folder. Then locate the <b>API</b> folder<br />
+                            <img src="/Images/docs/projControllerAPI.png" style="margin: 10px 0;" />
+                        </li>
+                        <li>
+                            Add a new API Controller. To do this, right click on the <b>Controllers</b> folder and select <b>Add</b> -> <b>Controller</b>.<br />
+                            <img src="/Images/docs/addApiController.png" style="margin: 10px 0;" />
+                        </li>
+                        <li>
+                            Select the type of Controller. In the popup dialog, select <b>Web API 2 Controller - Empty</b>.<br />
+                            <img src="/Images/docs/addScaffoldAPI.png" style="margin: 10px 0;" />
+                        </li>
+                        <li>
+                            Enter the name of the Web API controller as <b>ConstantsController</b>.<br />
+                            <img src="/Images/docs/addApicontrollerDialog.png" style="margin: 10px 0;" />
+                        </li>
+                        <li>
+                            After the API controller is created, enter the following.<br />
+
+                            <div class="note">
+                                <strong>Code:</strong> Your code should look something like this.
+                            </div>
+                            <div class="noteBody">
+                                <pre>        
+namespace Intel.MyDeals.Controllers.API
+{
+    public class ConstantsController : ApiController
+    {
+        OpCore op = OpAppConfig.Init();
+
+        [Route("api/Constants/v1/GetConstants")]
+        public IEnumerable&lt;ToolConstants&gt; Get()
+        {
+            return new ConstantsLookupsLib().GetToolConstants();
+        }
+    }
+}
+                                </pre>
+                            </div>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingSeven">
+                <h4 class="panel-title" style="font-size: 14px;">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                        <i class="intelicon-right-next"></i>
+                        Next we need to create a MVC controller.
+                        <div class="fr">
+                            (<a href="@Url.Action("PresentationMvcController", "CodingPractices", new {Area = ""})">Create an MVC Controller</a>)
+                        </div>
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseSeven" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSeven">
+                <div class="panel-body">
+                    <ol>
+                        <li>
+                            Open the <i>Intel.MyDeals</i> project and find the <b>Controllers</b> folder. <br />
+                            <img src="/Images/docs/projController.png" style="margin: 10px 0;" />
+                        </li>
+                        <li>
+                            Add a new MVC Controller. To do this, right click on the <b>Controllers</b> folder and select <b>Add</b> -> <b>Controller</b>.<br />
+                            <img src="/Images/docs/addController.png" style="margin: 10px 0;" />
+                        </li>
+                        <li>
+                            Select the type of Controller. In the popup dialog, select <b>MVC Controller</b>.<br />
+                            <img src="/Images/docs/addScaffold.png" style="margin: 10px 0;" />
+                        </li>
+                        <li>
+                            After the controller is created, add the following code.<br />
+                            <div class="note">
+                                <strong>Note:</strong> Here is the code for the controller <b>Constants</b>.
+                            </div>
+                            <div class="noteBody">
+                                <pre>        
+namespace Intel.MyDeals.Controllers
+{
+    public class ConstantsController : Controller
+    {
+        OpCore op = OpAppConfig.Init();  // Initialize MyDeal's Opaque
+
+        public ActionResult Constants()
+        {
+            OpUserToken user = AppLib.InitAVM(op);    // Get user details from authentication
+            ViewBag.UserToken = user;                 // Apply User Token to viewbag for client use
+            ViewBag.AppToken = op.AppToken;           // Apply Application Token to viewbag for client use
+            return View();
+        }
+    }
+}
+</pre>
+                            </div>
+                        </li>
+                        <li>
+                            Create the client <b>Razor View</b>. Right click on the <b>View()</b> call in the controller and select <b>Add View...</b>.<br />
+                            <img src="/Images/docs/addViewMenu.png" style="margin: 10px 0;" />
+                        </li>
+                        <li>
+                            Select MVC View.<br />
+                            <img src="/Images/docs/addScaffoldView.png" style="margin: 10px 0;" />
+                        </li>
+                        <li>
+                            Apply view details including the view name of <b>Constants</b>.  Your setting should look similar to the below image.<br />
+                            <img src="/Images/docs/addView.png" style="margin: 10px 0;" />
+                        </li>
+                        <li>
+                            Now you should have a blank <b>View</b> with the below contents.<br />
+                            <div class="note">
+                                <strong>Note:</strong> Here is he default view created for <b>Constants</b>.
+                            </div>
+                            <div class="noteBody">
+                                <pre>        
+&#64;{
+    ViewBag.Title = "Constants";
+}
+&lt;h2&gt;Constants&lt;/h2&gt;
+</pre>
+                            </div>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingEight">
+                <h4 class="panel-title" style="font-size: 14px;">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
+                        <i class="intelicon-right-next"></i>
+                        Finally we can create a UI page to simply display our results.
+                        <div class="fr">
+                            (<a href="@Url.Action("PresentationCallWebApi", "CodingPractices", new {Area = ""})">Calling a Web API</a>)
+                        </div>
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseEight" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingEight">
+                <div class="panel-body">
+                    <ol>
+                        <li>
+                            Open the <b>Constants</b> view from the <b>Views</b> folder in the <i>Intel.MyDeals</i> project.
+                        </li>
+                        <li>
+                            <p>
+                                For this example, a Kendo Grid control is populated by a datasource referencing the <b>/api/Constants/v1/GetConstants</b> API.<br />
+                            </p>
+
+                            <div class="alert alert-info" role="alert">
+                                <strong>Note!</strong> In MyDeals, the web client can use many different design techniques to call a Web API service.
+                                This description is just one of many ways to call a Web API.
+                            </div>
+
+                            <div class="note">
+                                <strong>Note:</strong> Here is an example of what code is generated for a store procedure:
+                            </div>
+                            <div class="noteBody">
+                                <pre>
+&lt;div style="margin: 15px;"&gt;
+    &lt;h1&gt;Sample Constants Display&lt;/h1&gt;
+    &lt;div id="grid"&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;
+    $(document).ready(function() {
+        $("#grid").kendoGrid({
+            dataSource: {
+                type: "json",
+                transport: {
+                    read: "/api/Constants/v1/GetConstants"
+                },
+                schema: {
+                    model: {
+                        fields: {
+                            CNST_NM: { type: "string" },
+                            CNST_DESC: { type: "string" },
+                            CNST_VAL_TXT: { type: "string" }
+                        }
+                    }
+                },
+                pageSize: 20
+            },
+            height: 250,
+            filterable: true,
+            sortable: true,
+            pageable: true,
+            columns: [
+                {
+                    field: "CNST_NM",
+                    title: "Name"
+                },
+                {
+                    field: "CNST_DESC",
+                    title: "Description"
+                }, {
+                    field: "CNST_VAL_TXT",
+                    title: "Value"
+                }
+            ]
+        });
+    });
+&lt;/script&gt;
+                </pre>
+                            </div>
+
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingNine">
+                <h4 class="panel-title" style="font-size: 14px;">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
+                        <i class="intelicon-right-next"></i>
+                        That's it.  Now take a look at the results.
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseNine" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingNine">
+                <div class="panel-body">
+                    <div style="padding: 15px;">
+                        <h1>Sample Constants Display</h1>
+                        <div id="grid"></div>
+                        <br />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <br/><br/><br/>
+
+</div>
+</div>
+
+
+
+<script>
+    $(document).ready(function() {
+        $("#grid").kendoGrid({
+            dataSource: {
+                type: "json",
+                transport: {
+                    read: "/api/Constants/v1/GetConstants"
+                },
+                schema: {
+                    model: {
+                        fields: {
+                            CNST_NM: { type: "string" },
+                            CNST_DESC: { type: "string" },
+                            CNST_VAL_TXT: { type: "string" }
+                        }
+                    }
+                },
+                pageSize: 20
+            },
+            height: 250,
+            filterable: true,
+            sortable: true,
+            pageable: true,
+            columns: [
+                {
+                    field: "CNST_NM",
+                    title: "Name"
+                },
+                {
+                    field: "CNST_DESC",
+                    title: "Description"
+                }, {
+                    field: "CNST_VAL_TXT",
+                    title: "Value"
+                }
+            ]
+        });
+    });
+</script>

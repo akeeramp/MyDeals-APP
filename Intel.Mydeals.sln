@@ -1,0 +1,207 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Intel MyDeals 1 Data Access Layer", "Intel MyDeals 1 Data Access Layer", "{A18EE0E6-6970-447C-94BD-B363F7D2C433}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intel.MyDeals.DataAccessLib", "Intel.MyDeals.DataAccessLib\Intel.MyDeals.DataAccessLib.csproj", "{BD90141B-F4DE-4FA3-B6D0-45BB04A3596F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Intel MyDeals 2 Entities", "Intel MyDeals 2 Entities", "{826EA199-87EA-43E9-B23C-61C1A1B334E6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intel.MyDeals.Entities", "Intel.MyDeals.Entities\Intel.MyDeals.Entities.csproj", "{AE1A3978-08EF-4A15-82CD-7BA6192A9B52}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared Libraries", "Shared Libraries", "{D4550934-4B65-4F13-A51A-5873792838C1}"
+	ProjectSection(SolutionItems) = preProject
+		Shared Libraries\Antlr3.Runtime.dll = Shared Libraries\Antlr3.Runtime.dll
+		Shared Libraries\ICSharpCode.SharpZipLib.dll = Shared Libraries\ICSharpCode.SharpZipLib.dll
+		Shared Libraries\ICSharpCode.SharpZipLib.pdb = Shared Libraries\ICSharpCode.SharpZipLib.pdb
+		Shared Libraries\ICSharpCode.SharpZipLib.Silverlight.dll = Shared Libraries\ICSharpCode.SharpZipLib.Silverlight.dll
+		Shared Libraries\Intel.Opaque.Data.dll = Shared Libraries\Intel.Opaque.Data.dll
+		Shared Libraries\Intel.Opaque.Data.pdb = Shared Libraries\Intel.Opaque.Data.pdb
+		Shared Libraries\Intel.Opaque.DBAccess.dll = Shared Libraries\Intel.Opaque.DBAccess.dll
+		Shared Libraries\Intel.Opaque.DBAccess.pdb = Shared Libraries\Intel.Opaque.DBAccess.pdb
+		Shared Libraries\Intel.Opaque.dll = Shared Libraries\Intel.Opaque.dll
+		Shared Libraries\Intel.Opaque.pdb = Shared Libraries\Intel.Opaque.pdb
+		Shared Libraries\Intel.Opaque.Templating.dll = Shared Libraries\Intel.Opaque.Templating.dll
+		Shared Libraries\Intel.Opaque.Templating.pdb = Shared Libraries\Intel.Opaque.Templating.pdb
+		Shared Libraries\Telerik.Reporting.dll = Shared Libraries\Telerik.Reporting.dll
+		Shared Libraries\Telerik.Reporting.Service.dll = Shared Libraries\Telerik.Reporting.Service.dll
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Intel MyDeals 3 Data Libraries", "Intel MyDeals 3 Data Libraries", "{3EE27FFE-7643-4D8E-A0D2-09D306204105}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Intel MyDeals 5 Business Layer", "Intel MyDeals 5 Business Layer", "{DDE77E6E-C875-4373-AD6A-402E63A065EC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Intel MyDeals 6 Application Layer", "Intel MyDeals 6 Application Layer", "{17E4B7FF-BFC2-4A5A-9B8E-F7917803CA85}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intel.MyDeals.DataLibrary", "Intel.MyDeals.DataLibrary\Intel.MyDeals.DataLibrary.csproj", "{B45850DC-1515-40D2-BFA5-15C8DFFC5AF2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intel.MyDeals.BusinessLogic", "Intel.MyDeals.BusinessLogic\Intel.MyDeals.BusinessLogic.csproj", "{D49F802F-7F79-4F6E-9553-D26F40E7DB34}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intel.MyDeals.BusinessRules", "Intel.MyDeals.BusinessRules\Intel.MyDeals.BusinessRules.csproj", "{2F3217AD-E46B-4DAB-82C2-11E007B65A9C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Intel MyDeals 4 Business Rules", "Intel MyDeals 4 Business Rules", "{ED7EFC47-D39F-4FB2-9C7D-63C201F66D01}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intel.MyDeals.App", "Intel.MyDeals.App\Intel.MyDeals.App.csproj", "{4C8F8A09-1694-4E75-91F9-9E6CD9F697B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intel.MyDeals", "Intel.MyDeals\Intel.MyDeals.csproj", "{82000E27-2C54-48BC-8226-001857E1A45D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intel.MyDeals.Tests", "Intel.MyDeals.Tests\Intel.MyDeals.Tests.csproj", "{5603E7C3-D96C-4019-BD50-338943DC67EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intel.MyDeals.Entities.Test", "Intel.MyDeals.Entities.Test\Intel.MyDeals.Entities.Test.csproj", "{0ED9E783-D25D-4BFA-B2B1-1FB0655B5671}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intel.MyDeals.DataLibrary.Test", "Intel.MyDeals.DataLibrary.Test\Intel.MyDeals.DataLibrary.Test.csproj", "{BB4F6AF0-3519-4CF3-B0F1-7AEE380348FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intel.MyDeals.BusinessLogic.Test", "Intel.MyDeals.BusinessLogic.Test\Intel.MyDeals.BusinessLogic.Test.csproj", "{AA269DBF-402C-45EC-A065-83F3BFA4105F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intel.MyDeals.App.Test", "Intel.MyDeals.App.Test\Intel.MyDeals.App.Test.csproj", "{54108804-19D3-4EFD-BDB5-9F9AA02FDD05}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		dev|Any CPU = dev|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BD90141B-F4DE-4FA3-B6D0-45BB04A3596F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD90141B-F4DE-4FA3-B6D0-45BB04A3596F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD90141B-F4DE-4FA3-B6D0-45BB04A3596F}.dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD90141B-F4DE-4FA3-B6D0-45BB04A3596F}.dev|Any CPU.Build.0 = Debug|Any CPU
+		{BD90141B-F4DE-4FA3-B6D0-45BB04A3596F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD90141B-F4DE-4FA3-B6D0-45BB04A3596F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE1A3978-08EF-4A15-82CD-7BA6192A9B52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE1A3978-08EF-4A15-82CD-7BA6192A9B52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE1A3978-08EF-4A15-82CD-7BA6192A9B52}.dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE1A3978-08EF-4A15-82CD-7BA6192A9B52}.dev|Any CPU.Build.0 = Debug|Any CPU
+		{AE1A3978-08EF-4A15-82CD-7BA6192A9B52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE1A3978-08EF-4A15-82CD-7BA6192A9B52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B45850DC-1515-40D2-BFA5-15C8DFFC5AF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B45850DC-1515-40D2-BFA5-15C8DFFC5AF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B45850DC-1515-40D2-BFA5-15C8DFFC5AF2}.dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{B45850DC-1515-40D2-BFA5-15C8DFFC5AF2}.dev|Any CPU.Build.0 = Debug|Any CPU
+		{B45850DC-1515-40D2-BFA5-15C8DFFC5AF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B45850DC-1515-40D2-BFA5-15C8DFFC5AF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D49F802F-7F79-4F6E-9553-D26F40E7DB34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D49F802F-7F79-4F6E-9553-D26F40E7DB34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D49F802F-7F79-4F6E-9553-D26F40E7DB34}.dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{D49F802F-7F79-4F6E-9553-D26F40E7DB34}.dev|Any CPU.Build.0 = Debug|Any CPU
+		{D49F802F-7F79-4F6E-9553-D26F40E7DB34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D49F802F-7F79-4F6E-9553-D26F40E7DB34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F3217AD-E46B-4DAB-82C2-11E007B65A9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F3217AD-E46B-4DAB-82C2-11E007B65A9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F3217AD-E46B-4DAB-82C2-11E007B65A9C}.dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F3217AD-E46B-4DAB-82C2-11E007B65A9C}.dev|Any CPU.Build.0 = Debug|Any CPU
+		{2F3217AD-E46B-4DAB-82C2-11E007B65A9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F3217AD-E46B-4DAB-82C2-11E007B65A9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C8F8A09-1694-4E75-91F9-9E6CD9F697B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C8F8A09-1694-4E75-91F9-9E6CD9F697B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C8F8A09-1694-4E75-91F9-9E6CD9F697B3}.dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C8F8A09-1694-4E75-91F9-9E6CD9F697B3}.dev|Any CPU.Build.0 = Debug|Any CPU
+		{4C8F8A09-1694-4E75-91F9-9E6CD9F697B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C8F8A09-1694-4E75-91F9-9E6CD9F697B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82000E27-2C54-48BC-8226-001857E1A45D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82000E27-2C54-48BC-8226-001857E1A45D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82000E27-2C54-48BC-8226-001857E1A45D}.dev|Any CPU.ActiveCfg = dev|Any CPU
+		{82000E27-2C54-48BC-8226-001857E1A45D}.dev|Any CPU.Build.0 = dev|Any CPU
+		{82000E27-2C54-48BC-8226-001857E1A45D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82000E27-2C54-48BC-8226-001857E1A45D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5603E7C3-D96C-4019-BD50-338943DC67EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5603E7C3-D96C-4019-BD50-338943DC67EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5603E7C3-D96C-4019-BD50-338943DC67EC}.dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{5603E7C3-D96C-4019-BD50-338943DC67EC}.dev|Any CPU.Build.0 = Debug|Any CPU
+		{5603E7C3-D96C-4019-BD50-338943DC67EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5603E7C3-D96C-4019-BD50-338943DC67EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0ED9E783-D25D-4BFA-B2B1-1FB0655B5671}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0ED9E783-D25D-4BFA-B2B1-1FB0655B5671}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0ED9E783-D25D-4BFA-B2B1-1FB0655B5671}.dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{0ED9E783-D25D-4BFA-B2B1-1FB0655B5671}.dev|Any CPU.Build.0 = Debug|Any CPU
+		{0ED9E783-D25D-4BFA-B2B1-1FB0655B5671}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0ED9E783-D25D-4BFA-B2B1-1FB0655B5671}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB4F6AF0-3519-4CF3-B0F1-7AEE380348FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB4F6AF0-3519-4CF3-B0F1-7AEE380348FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB4F6AF0-3519-4CF3-B0F1-7AEE380348FF}.dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB4F6AF0-3519-4CF3-B0F1-7AEE380348FF}.dev|Any CPU.Build.0 = Debug|Any CPU
+		{BB4F6AF0-3519-4CF3-B0F1-7AEE380348FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB4F6AF0-3519-4CF3-B0F1-7AEE380348FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA269DBF-402C-45EC-A065-83F3BFA4105F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA269DBF-402C-45EC-A065-83F3BFA4105F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA269DBF-402C-45EC-A065-83F3BFA4105F}.dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA269DBF-402C-45EC-A065-83F3BFA4105F}.dev|Any CPU.Build.0 = Debug|Any CPU
+		{AA269DBF-402C-45EC-A065-83F3BFA4105F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA269DBF-402C-45EC-A065-83F3BFA4105F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54108804-19D3-4EFD-BDB5-9F9AA02FDD05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54108804-19D3-4EFD-BDB5-9F9AA02FDD05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54108804-19D3-4EFD-BDB5-9F9AA02FDD05}.dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{54108804-19D3-4EFD-BDB5-9F9AA02FDD05}.dev|Any CPU.Build.0 = Debug|Any CPU
+		{54108804-19D3-4EFD-BDB5-9F9AA02FDD05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54108804-19D3-4EFD-BDB5-9F9AA02FDD05}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BD90141B-F4DE-4FA3-B6D0-45BB04A3596F} = {A18EE0E6-6970-447C-94BD-B363F7D2C433}
+		{AE1A3978-08EF-4A15-82CD-7BA6192A9B52} = {826EA199-87EA-43E9-B23C-61C1A1B334E6}
+		{B45850DC-1515-40D2-BFA5-15C8DFFC5AF2} = {3EE27FFE-7643-4D8E-A0D2-09D306204105}
+		{D49F802F-7F79-4F6E-9553-D26F40E7DB34} = {DDE77E6E-C875-4373-AD6A-402E63A065EC}
+		{2F3217AD-E46B-4DAB-82C2-11E007B65A9C} = {ED7EFC47-D39F-4FB2-9C7D-63C201F66D01}
+		{4C8F8A09-1694-4E75-91F9-9E6CD9F697B3} = {17E4B7FF-BFC2-4A5A-9B8E-F7917803CA85}
+		{0ED9E783-D25D-4BFA-B2B1-1FB0655B5671} = {826EA199-87EA-43E9-B23C-61C1A1B334E6}
+		{BB4F6AF0-3519-4CF3-B0F1-7AEE380348FF} = {3EE27FFE-7643-4D8E-A0D2-09D306204105}
+		{AA269DBF-402C-45EC-A065-83F3BFA4105F} = {DDE77E6E-C875-4373-AD6A-402E63A065EC}
+		{54108804-19D3-4EFD-BDB5-9F9AA02FDD05} = {17E4B7FF-BFC2-4A5A-9B8E-F7917803CA85}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 13
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://source.intel.com:8080/tfs/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = Intel.MyDeals.DataAccessLib\\Intel.MyDeals.DataAccessLib.csproj
+		SccProjectTopLevelParentUniqueName1 = Intel.Mydeals.sln
+		SccProjectName1 = Intel.MyDeals.DataAccessLib
+		SccLocalPath1 = Intel.MyDeals.DataAccessLib
+		SccProjectUniqueName2 = Intel.MyDeals.Entities\\Intel.MyDeals.Entities.csproj
+		SccProjectTopLevelParentUniqueName2 = Intel.Mydeals.sln
+		SccProjectName2 = Intel.MyDeals.Entities
+		SccLocalPath2 = Intel.MyDeals.Entities
+		SccProjectUniqueName3 = Intel.MyDeals.DataLibrary\\Intel.MyDeals.DataLibrary.csproj
+		SccProjectTopLevelParentUniqueName3 = Intel.Mydeals.sln
+		SccProjectName3 = Intel.MyDeals.DataLibrary
+		SccLocalPath3 = Intel.MyDeals.DataLibrary
+		SccProjectUniqueName4 = Intel.MyDeals.BusinessLogic\\Intel.MyDeals.BusinessLogic.csproj
+		SccProjectTopLevelParentUniqueName4 = Intel.Mydeals.sln
+		SccProjectName4 = Intel.MyDeals.BusinessLogic
+		SccLocalPath4 = Intel.MyDeals.BusinessLogic
+		SccProjectUniqueName5 = Intel.MyDeals.BusinessRules\\Intel.MyDeals.BusinessRules.csproj
+		SccProjectTopLevelParentUniqueName5 = Intel.Mydeals.sln
+		SccProjectName5 = Intel.MyDeals.BusinessRules
+		SccLocalPath5 = Intel.MyDeals.BusinessRules
+		SccProjectUniqueName6 = Intel.MyDeals.App\\Intel.MyDeals.App.csproj
+		SccProjectTopLevelParentUniqueName6 = Intel.Mydeals.sln
+		SccProjectName6 = Intel.MyDeals.App
+		SccLocalPath6 = Intel.MyDeals.App
+		SccProjectUniqueName7 = Intel.MyDeals\\Intel.MyDeals.csproj
+		SccProjectName7 = Intel.MyDeals
+		SccLocalPath7 = Intel.MyDeals
+		SccProjectUniqueName8 = Intel.MyDeals.Tests\\Intel.MyDeals.Tests.csproj
+		SccProjectName8 = Intel.MyDeals.Tests
+		SccLocalPath8 = Intel.MyDeals.Tests
+		SccProjectUniqueName9 = Intel.MyDeals.Entities.Test\\Intel.MyDeals.Entities.Test.csproj
+		SccProjectTopLevelParentUniqueName9 = Intel.Mydeals.sln
+		SccProjectName9 = Intel.MyDeals.Entities.Test
+		SccLocalPath9 = Intel.MyDeals.Entities.Test
+		SccProjectUniqueName10 = Intel.MyDeals.DataLibrary.Test\\Intel.MyDeals.DataLibrary.Test.csproj
+		SccProjectTopLevelParentUniqueName10 = Intel.Mydeals.sln
+		SccProjectName10 = Intel.MyDeals.DataLibrary.Test
+		SccLocalPath10 = Intel.MyDeals.DataLibrary.Test
+		SccProjectUniqueName11 = Intel.MyDeals.BusinessLogic.Test\\Intel.MyDeals.BusinessLogic.Test.csproj
+		SccProjectTopLevelParentUniqueName11 = Intel.Mydeals.sln
+		SccProjectName11 = Intel.MyDeals.BusinessLogic.Test
+		SccLocalPath11 = Intel.MyDeals.BusinessLogic.Test
+		SccProjectUniqueName12 = Intel.MyDeals.App.Test\\Intel.MyDeals.App.Test.csproj
+		SccProjectTopLevelParentUniqueName12 = Intel.Mydeals.sln
+		SccProjectName12 = Intel.MyDeals.App.Test
+		SccLocalPath12 = Intel.MyDeals.App.Test
+	EndGlobalSection
+EndGlobal

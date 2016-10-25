@@ -1,0 +1,39 @@
+﻿<div class="modal fade modalpad" id="editPricingStrategyModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Pricing Strategy</h4>
+            </div>
+            <div class="modal-body" style="background-color: #f5f5f5;">
+
+                <div class="row">
+                    <div class="form-group">
+                        <label for="editSectionTitle">Title</label>
+                        <input class="form-control" id="editSectionTitle" aria-describedby="editSectionTitleStatus" data-bind="value: curSection.TITLE" type="text" placeholder="Enter the Title">
+                        <span id="editSectionTitleStatus" aria-hidden="true" data-role="tooltip" data-position="top"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label for="editSectionDesc">Description</label>
+                        <input class="form-control" id="editSectionDesc" aria-describedby="editSectionDescStatus" data-bind="value: curSection.DESC" type="text" placeholder="Enter the Description">
+                        <span id="editSectionDescStatus" aria-hidden="true" data-role="tooltip" data-position="top"></span>
+                    </div>
+                </div>
+
+                <div class="row" id="editSectionWarn" style="display: none;">
+                    <div class="alert alert-warning" role="alert">
+                        <strong>Oops</strong> Looks like we are missing some information to continue.
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bind="events:{ click: editSection}">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+

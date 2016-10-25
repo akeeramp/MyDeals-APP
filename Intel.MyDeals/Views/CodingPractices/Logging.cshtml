@@ -1,0 +1,93 @@
+﻿@Html.Partial("TOC", new ViewDataDictionary
+{
+    { "categoryTitle", "Coding tools" },
+    { "categoryAction", "CodingTools" },
+    { "sectionTitle", "Coding tools" },
+    { "sectionAction", "CodingTools" },
+    { "pageTitle", "Logging" }
+})
+
+<div id="mainBody" style="margin: 10px; padding: 0 20px 0 200px;">
+    <h1><img src="/Images/docs/icon-code-tools.png" height="80" /> Logging</h1>
+    <p>
+        Logging also comes in various dgrees... some of which are DB, MT and UI logging.  There is local storage logging, in-memory logging and longterm storage logging.
+    </p>
+    <img src="/Images/docs/logging.png" style="margin: 10px 0 10px 25px;" />
+
+    <h5>Logging in MyDeals</h5>
+    <p>
+        There are projects outside of MyDeals where commonly used features are being developed intended for all of BOS applications. We will consume some of these tools, one of which is logging.
+        So, in My deals, we will implement a rudamentary logging feature that can easily be swapped out for the new tool when it is ready. 
+        With that in mind, please make sure you follow the logging practices.
+    </p>
+
+    <div class="stepByStep">
+        Database Logging
+    </div>
+    <p>
+        This section needs to be defined by the Database developers.
+    </p>
+
+    <div class="stepByStep">
+        Middle Tier Logging
+    </div>
+    <p>
+        In the Middle Tier, the logging class <b>OpLog</b> in the <i>Intel.MyDeals.Entities</i> project will be used.
+                <b>LogEvent:</b> An overloaded function to log an event. Here are the various input parameter needed depending on which overloaded function used.
+                <ul>
+                    <li>
+                        <b>dLevel</b> (Debugging level): Some example are:
+                        <ul>
+                            <li>Debug: logs debugging messages that are ONLY logged in Debug Mode. These will not log in production which will help with performance.</li>
+                            <li>Application: logs for the application. These will always appear no matter what mode the application is set.</li>
+                            <li>Performance: logs dealing with performance numbers. These logs tend to also store times along with the messages.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <b>statusMsg</b> (Status Message): Short message to log. This might be used in an email subject line.
+                    </li>
+                    <li>
+                        <b>detailMsg</b> (Detailed Message): Message to log.
+                    </li>
+                    <li>
+                        <b>cat</b> (Category): Category of the log item, for example:
+                        <ul>
+                            <li>Error: Indicates a log message that causes the page to stop functioning.  An email will also be sent if this is triggered.</li>
+                            <li>Warning: Indicates a log message that does not stop the site. These messages are the most common "issue" driven logs that might need communication or input with the users.</li>
+                            <li>Information: Indicates a log message that is purely informational.  There is not impact to the application.</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <div class="note">
+                    <strong>Note:</strong> Here are some examples of calling <b>LogEvent</b>.
+                </div>
+                <div class="noteBody">
+                    <pre>        
+    OpLog.LogEvent("Page loaded");  // This will default to and informational message
+
+    OpLog.LogEvent("Stored Procedure Timed Out", LogCategory.Warning);
+
+    OpLog.LogEvent(DebugLevel.Debug, "Error occured in App Startup", "Unable to locate the controller", LogCategory.Error);
+                    </pre>
+                </div>
+        @*/*
+        /// <param name="dLevel">Debugging level... debug, application, performance,etc... </param>
+        /// <param name="statusMsg">Short message to log.  This might be used in an email subject line</param>
+        /// <param name="detailMsg">Message to log</param>
+        /// <param name="cat">Category of the log item... error, warning, information, etc...</param>
+
+        */*@
+    </p>
+
+    <div class="stepByStep">
+        Client UI Logging
+    </div>
+    <p>
+        As a developer team, we need to decide the strategy for logging in the Client UI.
+    </p>
+
+    <br /><br /><br />
+</div>
+
+

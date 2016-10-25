@@ -1,0 +1,182 @@
+﻿<#@ template debug="true" hostSpecific="false" #>
+<#@ output extension=".generated.cs" #>
+<#@ Assembly Name="System.Core.dll" #>
+<#@ Assembly Name="System.Windows.Forms.dll" #>
+<#@ Assembly Name="System.Data" #>
+<#@ Assembly Name="$(SolutionDir)\Intel.MyDeals.DataAccessLib\bin\Debug\Intel.Opaque.Templating.dll" #>
+<#@ import namespace="Intel.Opaque.Templating" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.Collections" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Data" #>
+<#@ import namespace="System.Data.Common" #>
+<#@ import namespace="System.Data.SqlClient" #>
+<#@ import namespace="System.Text" #>
+<# 
+	
+	// DEVELOPER: Change this to be the namespace to create the SP classes in 
+	const string outputNameSpace = "Intel.MyDeals.DataAccessLib.StoredProcedures";
+	const string targetServer = @"Database={0};Server=EG1RDMDBDEV01.amr.corp.intel.com\DEALSDEV,3181;integrated security=SSPI;"; // Note the {0} for database name....
+	const string default_database = "MyDeals";
+
+	string[] EXCLUDE_PROCS = new string[] 
+	{
+    };
+
+	string[] TargetDatabases = new string[]
+    {
+		"MyDeals"
+    };
+
+	bool first_pass = true;
+
+	foreach(string connection_db_name in TargetDatabases)
+	{
+	
+		var dbobjects = new DBObjects(String.Format(targetServer, connection_db_name));
+
+		if(first_pass)
+		{
+			first_pass = false;
+
+			WriteLine(dbobjects.BoilerPlateDetails);	
+			WriteLine(@"
+using System;
+using System.Data;
+using Intel.Opaque.DBAccess;
+using System.Data.SqlClient;
+");
+			WriteLine("");
+        }
+
+
+		// So we can work with stronly structured objects, cache the DB results here...
+		var ALL_PROCS = dbobjects.StoredProcedures
+			.Where(sp => {
+				string sp_un = sp.name.ToUpper().Trim();
+			
+				if(!sp_un.StartsWith("PR_")){ return false; }
+				if(sp_un.EndsWith("_BJ") || sp_un.EndsWith("_IL") || sp_un.EndsWith("_AXL") || sp_un.EndsWith("_SK") || sp_un.EndsWith("_RM") || sp_un.EndsWith("_DP")) { return false; }
+				if(EXCLUDE_PROCS.Contains(sp_un)) { return false; }
+
+				return true;
+			})
+			.OrderBy(sp => sp.FullName.ToLower())
+			.ToArray();
+
+	WriteLine("");
+	WriteLine("namespace {0}.{1} {{", outputNameSpace, connection_db_name);
+
+	foreach(string schema_name in ALL_PROCS.Select(p=>p.schema_name).Distinct())
+	{
+		PushIndent(TAB);
+		WriteLine("namespace {0} {{", schema_name);	
+
+		// ok, we iterated over stored procedures, now we need to generate classes and methods
+		foreach (SysProc ent in ALL_PROCS.Where(p=>p.schema_name == schema_name))
+		{
+			this.WriteStoredProcedure(ent, connection_db_name, default_database);
+		} // foreach SP
+
+		WriteLine("}");	// namespace for schema
+		PopIndent();
+		WriteLine("");
+	}
+
+	WriteLine("");
+	WriteLine("}"); // namespace for db
+
+    } // foreach DB
+#>
+
+<#+
+// End of file
+//--------------------------------------------------------------------------------------------------
+// Start helper classes/functions
+
+	public const string TAB = "\t";
+
+	// Write a SP class to the file.  Note that I chose the WriteLine() method over the in-line for two
+	// key reasons, 1) easier to manage tabs, and 2) easier to read
+	public void WriteStoredProcedure(SysProc ent, string ConnectionDBName, string default_DB_name)
+	{
+		PushIndent(TAB);
+
+		string escaped_sp_name = ent.name
+			.Trim()
+			.Replace(".","_")
+			.Replace(" ","_");
+		
+		WriteLine(""); 
+		WriteLine(@"///<summary>");	
+		WriteLine(@"/// ID: {0}", ent.object_id);
+		WriteLine(@"/// Modified: {0}", ent.modify_date);
+		WriteLine(@"/// Parameters: {0}", ent.Parameters.Count);
+		WriteLine(@"///</summary>");
+		WriteLine(@"public partial class {0} : SP {{", escaped_sp_name);
+		
+			PushIndent(TAB);
+			WriteLine(@"public {0}() {{", escaped_sp_name);
+				PushIndent(TAB);
+				WriteLine(@"DatabaseName = ""{0}"";", ((ConnectionDBName == default_DB_name) ? "" : ConnectionDBName));
+				WriteLine(@"StoredProdedureName = ""{0}"";", ent.FullName);
+				if(ent.HasOutputParameters){
+					WriteLine(@"OutputParameterCount = {0};", ent.OutputParameterCount);
+				}
+				PopIndent();
+			WriteLine(@"}");
+			
+			// Process parameters
+			foreach(SysParam p in ent.Parameters.OrderBy(itm=>itm.parameter_id)){
+				this.WriteParameter(p);
+			} // foreach param
+			PopIndent();
+		WriteLine(@"}");
+		
+		PopIndent();
+	}
+
+	// Process each property (SP parameter).
+	// Note that I removed the OnPropertyChanged stuff at this time since it is not needed at this time.
+	// Add back in as needed.
+	public void WriteParameter(SysParam p)
+	{
+		string dndt = p.DotNetDataType;
+
+		WriteLine("");
+		WriteLine(@"///<summary>");
+		WriteLine(@"/// DataType: {0}", p.DataTypeString);
+		WriteLine(@"/// Mode: {0}", p.parameter_mode);
+		if(p.max_length > 0 && dndt == "String")
+		{
+			WriteLine(@"/// Max Length: {0}", p.max_length);
+		}
+		WriteLine(@"///</summary>");
+		
+		/*
+		if(p.has_default_value == false)
+		{
+			WriteLine(@"[Required]");
+		}
+		if(p.max_length > 0 && dndt == "String"){
+			WriteLine(@"[StringLength({0})]", p.max_length);
+		}
+		*/
+
+		WriteLine(@"[SQLParameterAttribute({3}, ""{0}"", {1}, {2})]",
+			TemplateTools.StringToParameterDirectionText(p.parameter_mode),
+			p.max_length,
+			String.Format("{0}", p.HasDefaultValue).ToLower(),
+			p.parameter_id
+			);
+		
+		WriteLine(string.Format(@"public {0} {1} {{", dndt, p.parameter_name));
+		PushIndent(TAB);
+			WriteLine(string.Format(@"set {{ SetParmeter(""{0}"", value); }}", p.parameter_name));
+			WriteLine(string.Format(@"get {{ return ({1})GetParameter(""{0}""); }}", p.parameter_name, dndt));
+		PopIndent();
+		WriteLine(@"}");
+	}
+#>
+

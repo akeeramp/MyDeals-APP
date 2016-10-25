@@ -1,0 +1,38 @@
+﻿<script id="FindContractTemplate" type="text/x-kendo-template">
+
+    <header class="title-bar intel-border-yellow" style="border-left: 0px solid transparent; border-right: 0px solid transparent; border-top: 0px solid transparent;">
+        <span class="title-bar-title">Find a MyDeals Contract</span>
+        <span class="title-bar-subtitle">Quick Search</span>
+    </header>
+
+    <div style="padding: 0 20px;">
+
+        <h5>MyDeals Contract Information</h5>
+        <p>Find an existing MyDeals Contract.</p>
+
+        <form class="ng-pristine ng-valid" id="frmFindContract">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="contractID">Contract ID</label>
+                            <input class="form-control" id="contractID" aria-describedby="contractIDStatus" data-bind="value: rsNavVm.searchContract.ID" type="text" placeholder="Enter the Contract ID">
+                            <span id="contractIDStatus" aria-hidden="true" data-role="tooltip" data-position="top"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-12">
+                        <button class="btn btn-default" data-role="button" data-bind="events: { click: rsNavVm.findContract }">
+                            Find Contract
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+
+</script>

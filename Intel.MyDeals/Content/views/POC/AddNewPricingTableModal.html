@@ -1,0 +1,39 @@
+﻿<div class="modal fade modalpad" id="addPricingTableModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Add Pricing Table</h4>
+            </div>
+            <div class="modal-body" style="background-color: #f5f5f5;">
+
+                <div class="row">
+                    <div class="form-group">
+                        <label for="cboTemplate">Template</label>
+                        <input data-role="dropdownlist"
+                                data-auto-bind="false"
+                                data-value-primitive="false"
+                                data-text-field="TMPLT_NM"
+                                data-value-field="TMPLT_ID"
+                                data-bind="value: newPricingTable.TMPLT_ID, source: prcTemplates"
+                                aria-describedby="cboTemplateStatus"
+                                id="cboTemplate"
+                                style="width: 100%;" />
+                        <span id="cboTemplateStatus" aria-hidden="true" data-role="tooltip" data-position="top"></span>
+                    </div>
+                </div>
+
+                <div class="row" id="newPricingTableWarn" style="display: none;">
+                    <div class="alert alert-warning" role="alert">
+                        <strong>Oops</strong> Looks like we are missing some information to continue.
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" data-bind="events:{ click: addNewPricingTable}">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>

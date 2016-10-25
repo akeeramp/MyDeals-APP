@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewBag.Title = "SPA";
+    Layout = "~/Views/Shared/_LayoutAngular.cshtml";
+}
+
+<div ng-view class="view-animate">
+    Hello
+</div>
+
+<div id="bodyContainer">
+    <div ng-controller="TestCtrl" ng-init="init()">
+        <div>
+            <p>{{title}}</p>
+            <button ng-click="callApi()">{{btnName}}</button>
+        </div>
+        <div>
+            {{somedata}}
+        </div>
+        <div>
+            {{error}}
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/js/sampleSPA.js")
+

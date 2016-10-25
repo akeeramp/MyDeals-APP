@@ -1,0 +1,119 @@
+﻿
+@Html.Partial("TOC", new ViewDataDictionary
+{
+    { "categoryTitle", "Project setup and logic flow" },
+    { "categoryAction", "Project" },
+    { "sectionTitle", "Intel.MyDeals" },
+    { "sectionAction", "Presentation" },
+    { "pageTitle", "Creating Web APIs" }
+})
+
+<div id="mainBody" style="margin: 10px; padding: 0 20px 0 200px;">
+    <h1><img src="/Images/docs/icon-presentation.png" height="60" />Creating Web APIs</h1>
+    <p>
+        Web API is a framework that makes it easy to build HTTP services that reach a broad range of clients, including browsers and mobile devices.
+        Web API is an ideal platform for building RESTful applications on the .NET Framework.<br/>
+        <img src="/Images/docs/webapi.png" style="margin: 10px 0;"/>
+    </p>
+
+    <p>
+        In MyDeals, we will keep our Web APIs clean. This means the Web API should only have code to handle errors in the API calls.
+        Any other logic should exist in the <b>Business Logic</b> layer and be called from the Web API.
+        This will allow the business logic to be re-used by other API calls, MVC controllers or shared libraries.
+    </p>
+
+    <div class="stepByStep">
+        <i class="intelicon-task"></i>Step by Step
+    </div>
+
+    <ol>
+        <li>
+            Open the <i>Intel.MyDeals</i> project and find the <b>Controllers</b> folder. Then locate the <b>API</b> folder<br />
+            <img src="/Images/docs/projControllerAPI.png" style="margin: 10px 0;" />
+        </li>
+        <li>
+            Add a new API Controller. To do this, right click on the <b>Controllers</b> folder and select <b>Add</b> -> <b>Controller</b>.<br />
+            <img src="/Images/docs/addApiController.png" style="margin: 10px 0;" />
+        </li>
+        <li>
+            Select the type of Controller. In the popup dialog, select <b>Web API 2 Controller - Empty</b>.<br />
+            <img src="/Images/docs/addScaffoldAPI.png" style="margin: 10px 0;" />
+        </li>
+        <li>
+            Enter the name of the Web API controller. In the popup dialog, enter the controller name but make sure to leave <b>Controller</b> at the end of the name.<br />
+            <img src="/Images/docs/addApicontrollerDialog.png" style="margin: 10px 0;" />
+        </li>
+        <li>
+            After the API controller is created, the appropriate Opaque calls and MyDeals calls need to be added.<br />
+
+            <div class="alert alert-info" role="alert" style="margin-top: 10px;">
+                <strong>Route Tip!</strong> Web APIs will default to use the global router mapping defined for the application, but by proving a <b>[Route]</b> a specific URL address can be mapped to your Web API.
+            </div>
+
+            <div class="note">
+                <strong>Note:</strong> Here is an example of an API controller for <b>Others</b> called <i style="font-size: 12px;">GetDBTest</i>.
+            </div>
+            <div class="noteBody">
+                <pre>        
+    public class OthersController : ApiController
+    {
+        OpCore op = OpAppConfig.Init();                     // Get user details from authentication
+
+        [Route("api/Others/GetDBTest")]
+        public Dictionary&lt;string, string&gt; GetDBTest()
+        {
+            OpUserToken user = AppLib.InitAVM(op);          // Get User Token
+            return new OthersLib().PingDbDetails(user);     // Call logic from Business Logic layer
+        }
+
+    }
+                </pre>
+            </div>
+        </li>
+        <li>
+            Want to try it out? <button class="btn btn-primary" type="button" onclick="testApi()" style="margin-left: 25px;">Test API</button>
+            <div id="resultsTestApi"></div>
+        </li>
+    </ol>
+    <br /><br /><br />
+    <br /><br /><br />
+</div>
+
+
+<script>
+    function testApi() {
+        showMsg("Calling API <img src='/images/032.gif'/>");
+        op.ajaxGetAsync("/api/Others/GetDBTest", function (data) {
+            var msg = "";
+
+            if (data["ERROR"] !== undefined) {
+                msg = "<h6>Results</h6>";
+                msg += "<div class='results'>";
+                msg += "<div><span class='err'>" + data["ERROR"] + "</div>";
+                msg += "<div>";
+
+            } else {
+                msg = "<h6>Results</h6>";
+                msg += "<div class='results'>";
+                msg += "<div><span class='lbl'>DB Local Time:</span> " + data["DB Local Time"] + "</div>";
+                msg += "<div><span class='lbl'>DB Server:</span> " + data["DB Server"] + "</div>";
+                msg += "<div><span class='lbl'>DB UTC Time:</span> " + data["DB UTC Time"] + "</div>";
+                msg += "<div>";
+
+            }
+
+            showMsg(msg);
+
+        }, function (result) {
+            var msg = "<h6>Results</h6>";
+            msg += "<div class='results'>";
+            msg += "<div><span class='err'>Failed Test!!!</div>";
+            msg += "<div>";
+            showMsg(msg);
+        });        
+    }
+
+    function showMsg(msg) {
+        $("#resultsTestApi").html(msg);
+    }
+</script>

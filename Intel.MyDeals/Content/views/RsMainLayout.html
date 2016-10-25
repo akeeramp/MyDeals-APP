@@ -1,0 +1,147 @@
+﻿<script id="RsMainLayout" type="text/x-kendo-template">
+    <div id="jsonViewerWindow"><div id="jsonViewer"></div></div>
+
+    <div class="mainLayoutMenuBar">
+        <!--<div class="fl RsNavMenu RsNavMenuIcon rebate-strategy-bg">
+            <span class="glyphicon glyphicon-option-vertical" aria-hidden="true" style="width: 12px; font-size: 20px;"></span>
+            <span class="glyphicon glyphicon-certificate" aria-hidden="true"></span>
+        </div>-->
+        
+        <div class="fl RsNavMenu RsNavMenuIcon rebate-strategy-bg">
+            
+            <ul data-role="menu"
+                data-bind="events: { select: rsNavVm.onNavigationSelect }"
+                style="width: 100px; margin: -5px 0 0px -10px; font-size: 11px; line-height:1em; border: 0 solid transparent; background-color: #f3D54E;">
+                <li style="margin:0;padding:0;border: 0 solid transparent; line-height:1em;">
+                    
+                    <i class="intelicon-menu" style="font-size: 22px; margin: 0; padding:0 0 0 10px;"></i>
+                    <ul>
+                        <li>
+                            New Rebate Strategy
+                            <ul>
+                                <!-- moving the UL to the next line will cause an IE7 problem -->
+                                <li>From Blank</li>
+                                <li>From Template</li>
+                                <li>Copy From Another</li>
+                                <li>Import</li>
+                            </ul>
+                        </li>
+                        <li>Open</li>
+                        <li>Info</li>
+                        <li>Import Pricing Strategy</li>
+                        <li>Export</li>
+                        <li>Compare Versions</li>
+                        <li>Publish</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        
+
+        
+        
+
+        <div class="fl RsNavMenu RsNavMenuBox hidden-sm hidden-xs"></div>
+        <div class="fl">
+            <div class="fl" style="padding: 1px 5px 2px 10px; font-family: 'Intel Clear'; font-size: 14px; font-weight: 200; font-style: normal; line-height: 1.1em;">
+                <div>
+                    <span data-bind="text: rsVm.RebateStrategies.id" data-format="(0) - " class="rs-manager-fg"></span>
+                    <span data-bind="text: rsVm.RebateStrategies.title" style="color: \\#000000; font-weight: 400;"></span>
+                </div>
+                <div style="font-size: 10px; line-height: 1em; margin-top: 2px;">
+                    <div class="fl subtleTitle" data-bind="text: rsVm.RebateStrategies.customer.customerName"></div>
+                    <div class="fr subtleTitle">
+                        <span class="fl" data-bind="text: rsVm.RebateStrategies.startDate"></span> -
+                        <span data-bind="text: rsVm.RebateStrategies.endDate"></span>
+                    </div>
+                    <div class="clearboth"></div>
+                </div>
+            </div>
+            <div class="fl" style="padding: 2px 0;">
+                <sup style="font-size: 11px;">v<span data-bind="text: rsVm.RebateStrategies.version"></span></sup>
+            </div>
+            <div class="clearboth"></div>
+        </div>
+        <div class="fr rs-manager-fg tnavBtn">
+            <div class="fl glyphicon glyphicon-floppy-disk"></div>
+            <div class="fl hidden-xs" style="font-family: 'Intel Clear'; margin: -3px 3px;">Save Rebate Strategy</div>
+            <div class="clearboth"></div>
+        </div>
+        <div class="fr rs-manager-fg tnavBtn">
+            <div class="fl glyphicon glyphicon-flag"></div>
+            <div class="fl hidden-xs" style="font-family: 'Intel Clear'; margin: -3px 3px;">Active</div>
+            <div class="fl glyphicon glyphicon glyphicon-triangle-bottom" style="margin: 0px 0 0 4px; font-size: 10px;"></div>
+            <div class="clearboth"></div>
+        </div>
+        <div class="fr rs-manager-fg tnavBtn">
+            <a href="javascript:rs.viewJson()"><i class="fa fa-bug" aria-hidden="true"></i></a>
+        </div>
+        <div class="clearboth"></div>
+    </div>
+
+    <div id="horizontal" style="height: 100%; padding-top: 30px;">
+        <div id="center-pane" class="fr" style="height: 100%;">
+            <div style="height: 100%;">
+                <div id="content"></div>
+            </div>
+        </div>
+        <div id="left-pane" class="fl" style="height: 100%;">
+            <div class="lnavWrapper" id="lnavContainer" style="height: 100%;">
+
+                <div data-bind="click: rsNavVm.gotoLink" title="Rebate Strategy Details" class="navIcon navIconSm" id="RsDetails" glyphicon="glyphicon-info-sign">
+                    <div class="iconWrapper">
+                        <div class="glyphicon glyphicon-info-sign" aria-hidden="true"></div>
+                        <div class="iconTxt">CONTRACT DETAILS</div>
+                    </div>
+                </div>
+                <div data-bind="click: rsNavVm.gotoLink" title="Pricing Strategies" class="navIcon navIconSm" id="PricingStrategies" glyphicon="glyphicon-screenshot">
+                    <div class="iconWrapper">
+                        <div class="glyphicon glyphicon-screenshot" aria-hidden="true"></div>
+                        <div class="iconTxt">PRICING STRATEGIES</div>
+                    </div>
+                </div>
+                <div data-bind="click: rsNavVm.gotoLink" title="Terms and Conditions" class="navIcon navIconSm" id="TermAndConditions" glyphicon="glyphicon-list-alt">
+                    <div class="iconWrapper">
+                        <div class="glyphicon glyphicon-list-alt" aria-hidden="true"></div>
+                        <div class="iconTxt">TERMS AND CONDITIONS</div>
+                    </div>
+                </div>
+                <div data-bind="click: rsNavVm.gotoLink" title="Manage Groupings" class="navIcon navIconSm" id="ManageGroupings" glyphicon="glyphicon-tasks">
+                    <div class="iconWrapper">
+                        <div class="glyphicon glyphicon-tasks" aria-hidden="true"></div>
+                        <div class="iconTxt">MANAGE GROUPINGS</div>
+                    </div>
+                </div>
+                <div data-bind="click: rsNavVm.gotoLink" title="Cost Test / Meet Comp" class="navIcon navIconSm" id="CosttestMeetcomp" glyphicon="glyphicon-saved">
+                    <div class="iconWrapper">
+                        <div class="glyphicon glyphicon-saved" aria-hidden="true"></div>
+                        <div class="iconTxt">COST TEST MEET COMP</div>
+                    </div>
+                </div>
+                <div data-bind="click: rsNavVm.gotoLink" title="View Deals" class="navIcon navIconSm" id="ViewDeals" glyphicon="glyphicon-duplicate">
+                    <div class="iconWrapper">
+                        <div class="glyphicon glyphicon-duplicate" aria-hidden="true"></div>
+                        <div class="iconTxt">VIEW DEALS</div>
+                    </div>
+                </div>
+                <div data-bind="click: rsNavVm.gotoLink" title="Workflow History" class="navIcon navIconSm" id="WorkflowHistory" glyphicon="glyphicon-random">
+                    <div class="iconWrapper">
+                        <div class="glyphicon glyphicon-random" aria-hidden="true"></div>
+                        <div class="iconTxt">WORKFLOW HISTORY</div>
+                    </div>
+                </div>
+                <div data-bind="click: rsNavVm.gotoLink" title="Publish Rebate Stategy" class="navIcon navIconSm" id="PublishRs" glyphicon="glyphicon-new-window">
+                    <div class="iconWrapper">
+                        <div class="glyphicon glyphicon-new-window" aria-hidden="true"></div>
+                        <div class="iconTxt">PUBLISH CONTRACT</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="clearboth"></div>
+    </div>
+  
+
+</script>
+

@@ -1,0 +1,185 @@
+﻿@using Intel.MyDeals.App
+@using Intel.MyDeals.Entities
+@using Intel.Opaque
+@{
+    var usrName = "UNKNOWN";
+    var usrWwid = 0;
+    var usrRole = "UNKNOWN";
+    try
+    {
+        usrName = ViewBag.UserToken.Usr.FirstName + " " + ViewBag.UserToken.Usr.LastName;
+        usrWwid = ViewBag.UserToken.Usr.WWID;
+        usrRole = ViewBag.UserToken.Role.RoleTypeCd;
+    }
+    catch (Exception ex)
+    {
+        // do some error catching or 404 error redirect here
+    }
+
+    OpUserToken opUserToken = (OpUserToken)ViewBag.UserToken;
+
+    //  TODO HARD CODE AGAIN UNTIL MASTER DATA IS RETURNED
+    //bool isAdmin = AppLib.ChkDealRules(opUserToken, "C_CAN_VIEW_ADMINTOOL");
+    //bool isDeveloper = opUserToken.IsDeveloper();
+    bool isAdmin = true;
+    bool isDeveloper = true;
+
+}
+
+
+
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#myDeals-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="sr-only icon-bar"></span>
+                <span class="sr-only icon-bar"></span>
+                <span class="sr-only icon-bar"></span>
+            </button>
+            <img class="navbar-logo" alt="" src="/images/intel-logo-white-100.png">
+            <a class="navbar-brand" href="@Url.Action("Index", "Home")">MyDeals</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="myDeals-navbar-collapse">
+            <ul class="nav navbar-nav navbar-right">
+
+                <li style="text-align: center;">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" style="padding: 7px;">
+                        <div class="fl" id="divUsrImg"><img src="https://photos.intel.com/images/@(usrWwid).jpg" style="width: 35px; height: 35px; margin-right: 5px; border: 1px solid #ffffff;"/>
+                        </div>
+                        <div class="fl hidden-sm" style="margin-top: 7px; margin-right: 10px;">
+                            <div style="font-size: 12px; color: #ffffff; line-height: 1em;" id="divUsrName">@usrName</div>
+                            <div style="font-size: 9px; color: #ffffff; line-height: 1em;" id="divUsrRole">@usrRole</div>
+                        </div>
+                        <div class="fl">
+                            <i class="intelicon-down" style="color: #ffffff; margin-top: 5px;"></i>
+                        </div>
+                        <div class="clearboth"></div>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">User Preferences</a></li>
+                        <li><a href="#">Some other stuff</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container-fluid -->
+    <ul class="nav nav-tabs nav-tabs-intel-blocks" id="myTab" role="tablist">
+        @*<li class="dropdown">
+            <a class="btn btn-primary" id="dLabel" role="button" href="/" data-toggle="dropdown" data-target="#">Contracts <i class="intelicon-down"></i></a>
+            <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+                <li><a href="@Url.Action("New", "Contract")">New Contract</a></li>
+                <li><a href="@Url.Action("Find", "Contract")">Find a Contract</a></li>
+            </ul>
+        </li>*@
+
+        <li class="dropdown">
+            <a class="btn btn-primary" id="dLabel" role="button" href="/" data-toggle="dropdown" data-target="#">POC Pages <i class="intelicon-down"></i></a>
+            <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+                <li><a href="@Url.Action("Index", "Others", new { Area = "" })">Ping the Database</a></li>
+                <li><a href="@Url.Action("Index", "Poc", new { Area = "" })">Basic Form Submit</a></li>
+            </ul>
+        </li>
+
+
+        @if (isAdmin)
+        {
+            <li class="dropdown">
+                <a class="btn btn-primary" role="button" href="/" data-toggle="dropdown" data-target="#">Admin <i class="intelicon-down"></i></a>
+                <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+                    <li><a href="@Url.Action("Index", "Cache", new { Area = "Admin" })">Cache Manager</a></li>
+                    @*<li><a href="@Url.Action("Index", "DropDown", new { Area = "Admin" })">Basic Dropdowns</a></li>*@
+                    @*<li class="dropdown-submenu">
+                        <a tabindex="-1" href="#">Developer Tools</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="@Url.Action("Index", "ProductTranslation", new { Area = "Admin" })">Product Translation</a></li>
+                            <li><a href="@Url.Action("Index", "WorkFlow", new { Area = "Admin" })">Workflow Manager</a></li>
+                        </ul>
+                    </li>*@
+                </ul>
+            </li>
+        }
+
+        <li class="dropdown">
+            <a class="btn btn-primary" role="button" href="/" data-toggle="dropdown" data-target="#">Docs <i class="intelicon-down"></i></a>
+            <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+                <li><a href="@Url.Action("Index", "CodingPractices", new { Area = "" })">Coding Practices</a></li>
+            </ul>
+        </li>
+
+        @*<li class="dropdown">
+            <a class="btn btn-primary" role="button" href="/" data-toggle="dropdown" data-target="#">Debug <i class="intelicon-down"></i></a>
+            <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+                <li><div style="cursor: pointer; padding: 2px 4px;" onClick="rs.viewJson()">View Json Data</div></li>
+                <li><div style="cursor: pointer; padding: 2px 4px;" onClick="rs.viewLogs()">View Logs</div></li>
+            </ul>
+        </li>*@
+
+        @*<li class="dropdown">
+            <a class="btn btn-primary" id="dLabel" role="button" href="/page.html" data-toggle="dropdown" data-target="#">Dropdown <i class="intelicon-down"></i></a>
+            <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+                <li><a href="#">Some action</a></li>
+                <li><a href="#">Some other action</a></li>
+                <li class="divider"></li>
+                <li class="dropdown-submenu">
+                    <a tabindex="-1" href="#">Hover me for more options</a>
+                    <ul class="dropdown-menu">
+                        <li><a tabindex="-1">Second level</a></li>
+                        <li class="dropdown-submenu">
+                            <a href="#">Even More..</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">3rd level</a></li>
+                                <li><a href="#">3rd level</a></li>
+                            </ul>
+                        </li>
+                        <li><a>Second level</a></li>
+                        <li><a>Second level</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li><a href="@Url.Action("Index", "Dashboard")">Dashboard</a></li>
+        <li><a href="@Url.Action("Index", "Contract")">Contract</a></li>
+        <li><a href="@Url.Action("Index", "DealManager")">Deal Manager</a></li>*@
+        @Html.Partial("_Search")
+    </ul>
+
+</nav>
+
+<style>
+    nav .hdrIcon {
+        text-align: center;
+    }
+
+    nav .hdrIcon a {
+        padding: 6px;
+    }
+
+    nav .hdrIcon a i {
+        line-height: .9em;
+        font-size: 20px;
+    }
+
+    nav .hdrIcon a div {
+        font-size: 9px;
+        line-height: .9em;
+    }
+
+</style>
+
+<script>
+    topbar.config({
+        barColors: {
+            '0': 'rgba(243, 213, 78, 1)',
+            '1': 'rgba(255, 163, 0, 1)'
+        }
+    });
+</script>
+
+
+

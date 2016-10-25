@@ -1,0 +1,109 @@
+﻿<script id="RsDetailsContainerTemplate" type="text/x-kendo-template">
+    <div style="height: 100%; width: 100%; padding-top: 15px;">
+        <form class="form-horizontal" style="margin:0; padding: 0;">
+            <div class="row">
+                <div class="col-md-12">
+                    <header class="title-bar intel-border-yellow">
+                        <span class="title-bar-title">Rebate Strategy Information</span>
+                    </header>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 col-md-6">
+                    <div class="form-group">
+                        <label for="txtTitle" class="col-sm-2 control-label">Title</label>
+                        <div class="col-sm-10">
+                            <input id="txtTitle" type="text" data-bind="value: rsVm.RebateStrategies.title" class="k-textbox" style="width: 100%; max-width: 300px;" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="cboCustomer" class="col-sm-2 control-label">Customer</label>
+                        <div class="col-sm-10">
+                            <input data-role="dropdownlist"
+                                   data-auto-bind="false"
+                                   data-value-primitive="true"
+                                   data-text-field="CUST_DIV_NM"
+                                   data-value-field="CUST_MBR_SID"
+                                   data-bind="value: rsVm.RebateStrategies.customer.customerId, source: rsNavVm.customers"
+                                   id="cboCustomer"
+                                   style="width: 100%; max-width: 300px;" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Date Range</label>
+                        <div class="col-sm-10">
+                            <input data-role="datepicker"
+                                   data-bind="value: rsVm.RebateStrategies.startDate"
+                                   style="width: 110px">
+                            -
+                            <input data-role="datepicker"
+                                   data-bind="value: rsVm.RebateStrategies.endDate"
+                                   style="width: 110px">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Storage</label>
+                        <div class="col-sm-10" style="padding-top: 8px;">
+                            <input type="radio" name="docSignTool" id="docSignTool_C2A" class="k-radio" checked="checked" style="padding: 0 10px;" />
+                            <label class="k-radio-label" for="docSignTool_C2A" style="padding-top: 3px; padding-left: 23px !important; padding-right: 23px !important;"> C2A</label>
+
+                            <input type="radio" name="docSignTool" id="docSignTool_DocuSign" class="k-radio" />
+                            <label class="k-radio-label" for="docSignTool_DocuSign" style="padding-top: 3px; padding-left: 23px !important; padding-right: 23px !important;"> DocuSign</label>
+
+                            <input type="radio" name="docSignTool" id="docSignTool_SharePoint" class="k-radio" />
+                            <label class="k-radio-label" for="docSignTool_SharePoint" style="padding-top: 3px; padding-left: 23px !important; padding-right: 23px !important;"> SharePoint</label>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-6">
+                    <h5>Description</h5>
+
+                    <div>
+                        <textarea data-role="editor"
+                                  data-tools="[
+                        'bold',
+                        'italic',
+                        'underline',
+                        'strikethrough',
+                        'justifyLeft',
+                        'justifyCenter',
+                        'justifyRight',
+                        'justifyFull'
+                        ]"
+                                  data-bind="value: RebateStrategies.desc"
+                                  style="height: 100px;"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>
+                        Current Version:
+                        <span data-bind="text: RebateStrategies.version"></span>
+                    </h5>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div id="chart" style="width: 500px; height: 150px;"></div>
+                </div>
+                <div class="col-md-6">
+                    <h5>Other Versions</h5>
+                    <div data-role="grid"
+                         data-sortable="true"
+                         data-editable="false"
+                         data-columns='[
+                {field: "currentVersion", width: 50, title: "Current"},
+                {field: "version", width: 50, title: "Version"},
+                {field: "desc", title: "Description"},
+                {field: "modBy", width: 80},
+                {field: "modDt", width: 70}
+             ]'
+                         data-bind="source: Versions"
+                         class="gridSm"></div>
+                </div>
+            </div>
+        </form>
+    </div>
+</script>

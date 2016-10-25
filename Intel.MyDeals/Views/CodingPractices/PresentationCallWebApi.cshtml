@@ -1,0 +1,152 @@
+﻿
+@Html.Partial("TOC", new ViewDataDictionary
+{
+    { "categoryTitle", "Project setup and logic flow" },
+    { "categoryAction", "Project" },
+    { "sectionTitle", "Intel.MyDeals" },
+    { "sectionAction", "Presentation" },
+    { "pageTitle", "Calling a Web API" }
+})
+
+<div id="mainBody" style="margin: 10px; padding: 0 20px 0 200px;">
+    <h1><img src="/Images/docs/icon-presentation.png" height="60" />Calling a Web API</h1>
+    <p>
+        The beauty of Web APIs is they can be called many different ways. They can perform CRUD operations or custom actions.
+        They can be RESTful, They can be called from a console app, windows app, web site, mobile or any other platfor that supports HTTP.
+        <br/>
+        <img src="/Images/docs/webapi.png" style="margin: 10px 0;" />
+    </p>
+
+    <p>
+        In MyDeals, the web client can use many different design techniques to call a Web API service.
+        This description is just one of many ways to call a Web API.
+        Over time, as more common patterns form, feel free to document them here.
+    </p>
+
+    <div class="stepByStep">
+        <i class="intelicon-task"></i>Step by Step
+    </div>
+
+    <ol>
+        <li>
+            <i class="intelicon-checklist-outlined" style="font-size: 20px;"></i>Ensure you have created the <strong>MVC Controller</strong>. 
+            If you are unsure how to do this, please refer to the <a href="@Url.Action("PresentationMvcController", "CodingPractices", new {Area = ""})">Create an MVC Controller</a> section.
+        </li>
+        <li>
+            <i class="intelicon-checklist-outlined" style="font-size: 20px;"></i>Ensure you have created the <strong>Web API</strong>. 
+            If you are unsure how to do this, please refer to the <a href="@Url.Action("PresentationWebApi", "CodingPractices", new {Area = ""})">Creating Web APIs</a> section.
+        </li>
+        <li>
+            Open the appropriate <b>View</b> from the <b>Views</b> folder in the <i>Intel.MyDeals</i> project.
+        </li>
+        <li>
+            For this example, a Kendo Grid control is populated by a datasource referencing the <b>/api/Constants/v1/GetConstants</b> API.<br/>
+
+            <div class="note">
+                <strong>Note:</strong> Here is an example of what code is generated for a store procedure:
+            </div>
+            <div class="noteBody">
+                <pre>
+&lt;div style="margin: 15px;"&gt;
+    &lt;h1&gt;Sample Constants Display&lt;/h1&gt;
+    &lt;div id="grid"&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;
+    $(document).ready(function() {
+        $("#grid").kendoGrid({
+            dataSource: {
+                type: "json",
+                transport: {
+                    read: "/api/Constants/v1/GetConstants"
+                },
+                schema: {
+                    model: {
+                        fields: {
+                            CNST_NM: { type: "string" },
+                            CNST_DESC: { type: "string" },
+                            CNST_VAL_TXT: { type: "string" }
+                        }
+                    }
+                },
+                pageSize: 20
+            },
+            height: 250,
+            filterable: true,
+            sortable: true,
+            pageable: true,
+            columns: [
+                {
+                    field: "CNST_NM",
+                    title: "Name"
+                },
+                {
+                    field: "CNST_DESC",
+                    title: "Description"
+                }, {
+                    field: "CNST_VAL_TXT",
+                    title: "Value"
+                }
+            ]
+        });
+    });
+&lt;/script&gt;
+                </pre>
+            </div>
+
+        </li>
+        <li>
+            <p>
+                Here is real time result of the above code:
+            </p>
+            <div style="border: 1px solid #eeeeee; padding: 15px;">
+                <h1>Sample Constants Display</h1>
+                <div id="grid"></div>
+                <br/>
+            </div>
+        </li>
+    </ol>
+
+        <br />
+        <br />
+        <br />
+</div>
+
+<script>
+    $(document).ready(function() {
+        $("#grid").kendoGrid({
+            dataSource: {
+                type: "json",
+                transport: {
+                    read: "/api/Constants/v1/GetConstants"
+                },
+                schema: {
+                    model: {
+                        fields: {
+                            CNST_NM: { type: "string" },
+                            CNST_DESC: { type: "string" },
+                            CNST_VAL_TXT: { type: "string" }
+                        }
+                    }
+                },
+                pageSize: 20
+            },
+            height: 250,
+            filterable: true,
+            sortable: true,
+            pageable: true,
+            columns: [
+                {
+                    field: "CNST_NM",
+                    title: "Name"
+                },
+                {
+                    field: "CNST_DESC",
+                    title: "Description"
+                }, {
+                    field: "CNST_VAL_TXT",
+                    title: "Value"
+                }
+            ]
+        });
+    });
+</script>

@@ -1,0 +1,48 @@
+﻿
+@Html.Partial("TOC", new ViewDataDictionary
+{
+    { "categoryTitle", "Project setup and logic flow" },
+    { "categoryAction", "Project" },
+    { "sectionTitle", "Intel.MyDeals.DataLibrary" },
+    { "sectionAction", "DataLibrary" },
+    { "pageTitle", "Introduction" }
+})
+
+<div id="mainBody" style="margin: 10px; padding: 0 20px 0 200px;">
+    <h1><img src="/Images/docs/icon-data-library.png" height="60" />Intel.MyDeals.Library</h1>
+    <p>
+        Layer dedicated to making all database calls as well as data caching repository for performance.
+    </p>
+
+    <h3>Coding Practices</h3>
+    <p>
+        The following coding practices for the Data Library layer consist mainly of functions that gather data from the database or send requests to the database.
+    </p>
+
+
+    <h5><a href="@Url.Action("CallProcedure", "CodingPractices", new {Area = ""})">Calling a stored procedure</a></h5>
+    <p>
+        Since all communication to the database is handled though stored procedures, it is important to understand how to call a stored procedure from MyDeals.
+    </p>
+    <img src="/Images/docs/callproc.png" style="margin: 10px 0 10px 25px;" />
+    <p>For more info, see the <a href="@Url.Action("CallProcedure", "CodingPractices", new {Area = ""})">Calling a stored procedure</a> section</p>
+
+
+    <h5><a href="@Url.Action("Cache", "CodingPractices", new {Area = ""})">Creating a data cache</a></h5>
+    <p>
+        When dealing with common large data, it is prudent to cache the data from the database into the middle tier.
+    </p>
+    <img src="/Images/docs/cache_create_intro.png" style="margin: 10px 0 10px 25px;" />
+    <p>For more info, see the <a href="@Url.Action("Cache", "CodingPractices", new {Area = ""})">Creating a data cache</a> section</p>
+
+
+    <h5><a href="@Url.Action("CacheManager", "CodingPractices", new {Area = ""})">Managing cached data</a></h5>
+    <p>
+        When dealing with data caches, it is sometimes necessary to clear or repopulate the cache.  
+    </p>
+    <img src="/Images/docs/cache_manager.png" style="margin: 10px 0 10px 25px;" />
+    <p>For more info, see the <a href="@Url.Action("CacheManager", "CodingPractices", new {Area = ""})">Managing cached data</a> section</p>
+
+    <br /><br /><br />
+</div>
+

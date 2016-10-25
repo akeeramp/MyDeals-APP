@@ -1,0 +1,117 @@
+﻿
+@Html.Partial("TOC", new ViewDataDictionary
+{
+    { "categoryTitle", "Project setup and logic flow" },
+    { "categoryAction", "Project" },
+    { "sectionTitle", "Intel.MyDeals.DataLibrary" },
+    { "sectionAction", "DataLibrary" },
+    { "pageTitle", "Calling a stored procedure" }
+})
+
+<div id="mainBody" style="margin: 10px; padding: 0 20px 0 200px;">
+    <h1><img src="/Images/docs/icon-data-library.png" height="60" />Calling a stored procedure</h1>
+    <p>
+        Since all communication to the database is handled though stored procedures, it is important to understand how to call a stored procedure from MyDeals.<br/>
+        <img src="/Images/docs/callproc.png" style="margin: 10px 0 10px 25px;"/>
+
+        <div class="stepByStep">
+            <i class="intelicon-task"></i>Step by Step
+        </div>
+
+        <ol>
+            <li>
+                <i class="intelicon-checklist-outlined" style="font-size: 20px;"></i>Ensure you have included the <strong>stored procedure</strong> into MyDeals. If you are unsure how to do this, please refer to the <a href="@Url.Action("DataAccessStoredProcedure", "CodingPractices", new {Area = ""})">Consume a stored procedure</a> section.
+            </li>
+            <li>
+                <i class="intelicon-checklist-outlined" style="font-size: 20px;"></i>Ensure you have included the <strong>shared class</strong> into MyDeals. If you are unsure how to do this, please refer to the <a href="@Url.Action("ClassFromProcedure", "CodingPractices", new {Area = ""})">Creating a shared class from a procedure</a> section.
+            </li>
+            <li>
+                Locate the appropriate folder in the <i>Intel.MyDeals.DataLibrary</i> project. This project is grouped into appropriate folders. If there isn't a folder that matches your needs, create a new one.<br/>
+                <img src="/Images/docs/datalibproj.png" style="margin: 10px 0;"/>
+            </li>
+            <li>
+                Add a call to the stored procedure. Some procedures return data and others simply execute an action.<br/>
+
+                <div class="note"><strong>Note:</strong> Here is an example of a store procedure that returns data:</div>
+                <div class="noteBody">
+                    <pre>
+                                /// &lt;summary&gt;
+        /// Get POC Emp
+        /// &lt;/summary&gt;
+        /// &lt;returns&gt;collection of employee data&lt;/returns&gt;
+        public IEnumerable&lt;PocEmp&gt; GetPocEmp()
+        {
+            OpLogPerf.Log("GetPocEmp");
+            var ret = new List&lt;PocEmp&gt;();
+            var cmd = new PR_GET_POC_EMP();
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    int IDX_emp_sid = DB.GetReaderOrdinal(rdr, "emp_sid");
+                    int IDX_first_nm = DB.GetReaderOrdinal(rdr, "first_nm");
+                    int IDX_last_nm = DB.GetReaderOrdinal(rdr, "last_nm");
+                    while (rdr.Read())
+                    {
+                        ret.Add(new PocEmp
+                        {
+                            emp_sid = (IDX_emp_sid &lt; 0 || rdr.IsDBNull(IDX_emp_sid)) ? default(Nullable&lt;System.Int32&gt;) : rdr.GetFieldValue&lt;Nullable&lt;System.Int32&gt;&gt;(IDX_emp_sid),
+                            first_nm = (IDX_first_nm &lt; 0 || rdr.IsDBNull(IDX_first_nm)) ? String.Empty : rdr.GetFieldValue&lt;System.String&gt;(IDX_first_nm),
+                            last_nm = (IDX_last_nm &lt; 0 || rdr.IsDBNull(IDX_last_nm)) ? String.Empty : rdr.GetFieldValue&lt;System.String&gt;(IDX_last_nm)
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+            }
+            return ret;
+        }
+</pre>
+                </div>
+
+                <div class="alert alert-info" role="alert">
+                    <strong>Quick Tip!</strong> For procedures that return data, most of the code needed is already generated from the <strong>TableToClass.generated.cs</strong> file. Feel free to cut and paste from there... I do!
+                    For more info, see the <a href="@Url.Action("ClassFromProcedure", "CodingPractices", new {Area = ""})">Creating a shared class from a procedure</a> section.
+                </div>
+
+                <div class="note"><strong>Note:</strong> Here is an example of a store procedure that just performs an action:</div>
+                <div class="noteBody">
+                    <pre>
+            /// &lt;summary&gt;
+        /// Set POC Emp
+        /// &lt;/summary&gt;
+        /// &lt;returns&gt;INSERT / UPDATE employee data&lt;/returns&gt;
+        public void SetPocEmp(PocEmp pocEmp)
+        {
+            OpLogPerf.Log("SetPocEmp");
+            DataSet dsCheckConstraintErrors = null;
+            try
+            {
+                DataAccess.ExecuteDataSet(new PR_SET_POC_EMP
+                {
+                    emp_sid = (int) pocEmp.emp_sid,
+                    first_nm = pocEmp.first_nm,
+                    last_nm = pocEmp.last_nm
+                }, null, out dsCheckConstraintErrors);
+            }
+            catch (Exception ex)
+            {
+                if (dsCheckConstraintErrors != null && dsCheckConstraintErrors.Tables.Count &gt; 0)
+                {
+                    // DO SOME ERROR HANDLING
+                }
+                throw;
+            }
+        }
+</pre>
+                </div>
+            </li>
+        </ol>
+    </p>
+
+
+    <br /><br /><br />
+</div>
+

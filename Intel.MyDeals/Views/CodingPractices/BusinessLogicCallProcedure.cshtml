@@ -1,0 +1,48 @@
+﻿
+@Html.Partial("TOC", new ViewDataDictionary
+{
+    { "categoryTitle", "Project setup and logic flow" },
+    { "categoryAction", "Project" },
+    { "sectionTitle", "Intel.MyDeals.BusinessLogic" },
+    { "sectionAction", "BusinessLogic" },
+    { "pageTitle", "Call a stored procedure" }
+})
+
+<div id="mainBody" style="margin: 10px; padding: 0 20px 0 200px;">
+    <h1><img src="/Images/docs/icon-bus-logic.png" height="60" />Call a stored procedure</h1>
+    <p>
+        Actually... you <b>CANNOT</b> call a stored procedure from the Business Logic layer.  Instead, a Data Library function must be called which will in turn call the stored procedure.
+        <img src="/Images/docs/buslogproc.png" style="margin: 10px 0 10px 25px;"/>
+    </p>
+
+    <div class="stepByStep">
+        <i class="intelicon-task"></i>Step by Step
+    </div>
+
+    <ol>
+        <li>
+            Open the <i>Intel.MyDeals.BusinessLogic</i> project. Notice all the folders. These should match what is in the <i>Intel.MyDeals.DataLibrary</i> project.
+            If you need a new folder, make sure you add a matching folder in both projects.<br />
+            <img src="/Images/docs/businesslogiclayout.png" style="margin: 10px 0;" />
+        </li>
+        <li>
+            Add your business function here.  Keep in mind the code segments should be rather small and coded in a way it can efficiently be used by automated testing.<br />
+            <div class="note"><strong>Note:</strong> Here is an example of a business logic function calling the Data Library:</div>
+            <div class="noteBody">
+                <pre>        
+        public List&lt;ToolConstants&gt; GetToolConstants()
+        {
+            //
+            // can put business logic here
+            //
+            return new ConstantLookupDataLib().GetToolConstants();
+        }
+                </pre>
+            </div>
+        </li>
+    </ol>
+
+
+    <br /><br /><br />
+</div>
+

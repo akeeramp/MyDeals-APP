@@ -1,0 +1,37 @@
+﻿
+@Html.Partial("TOC", new ViewDataDictionary
+{
+    { "categoryTitle", "Project setup and logic flow" },
+    { "categoryAction", "Project" },
+    { "sectionTitle", "Intel.MyDeals.DataLibrary" },
+    { "sectionAction", "DataLibrary" },
+    { "pageTitle", "Managing cached data" }
+})
+
+<div id="mainBody" style="margin: 10px; padding: 0 20px 0 200px;">
+    <h1><img src="/Images/docs/icon-data-library.png" height="60" />Managing cached data</h1>
+    <p>
+        When dealing with data caches, it is sometimes necessary to clear or repopulate the cache.  To do this, use the Cache Manager.
+        <br />
+        <img src="/Images/docs/cache_manager.png" style="margin: 10px 0 10px 25px;" />
+
+        <div class="stepByStep">
+            <i class="intelicon-task"></i>Cache Manager
+        </div>
+
+        <ol>
+            <li>
+                Open the Cache Manager. At the time this was written, the url is <b>/Admin/Cache</b>.
+            </li>
+            <li>
+                In the <b>Cache Status</b> section, all the available data caches will be listed. 
+                Actions can be preformed on an individual data cache with the icons that appear next to the data cache name or actions can be performed on the entire data cache list using the buttons that appear below the list.<br/>
+                <img src="/Images/docs/cachestatus.png" style="margin-top: 15px;"/>.
+            </li>
+        </ol>
+    </p>
+
+
+    <br /><br /><br />
+</div>
+

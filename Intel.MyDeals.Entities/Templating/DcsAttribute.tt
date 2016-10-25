@@ -1,0 +1,141 @@
+﻿<#@ template debug="true" hostSpecific="false" #>
+<#@ output extension=".generated.cs" #>
+<#@ Assembly Name="System.Core.dll" #>
+<#@ Assembly Name="System.Windows.Forms.dll" #>
+<#@ Assembly Name="System.Data" #>
+<#@ Assembly Name="System.XML" #>
+<#@ Assembly Name="$(SolutionDir)\Intel.MyDeals.DataAccessLib\bin\Debug\Intel.Opaque.Templating.dll" #>
+<#@ import namespace="Intel.Opaque.Templating" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.Collections" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Data" #>
+<#@ import namespace="System.Data.Common" #>
+<#@ import namespace="System.Data.SqlClient" #>
+<#@ import namespace="System.Text" #>
+<#
+	
+	// DEVELOPER: Change this to be the namespace to create the SP classes in 
+	const string outputNameSpace = "Intel.MyDeals.Entities";
+	const string TAB = "\t";
+	
+
+	var dbobjects = new DBObjects(
+			string.Format(@"Database=CDMS_MYDEALS;Server=VMIDMSDVDB01\CP1CIAS,3181;integrated security=SSPI;")
+		);
+
+	var atrb_table = dbobjects.TablesAndViewsWhere("meta.VW_ATRB_MSTR").First();
+
+	var incldue_columns = new string[]
+    {
+		"DIM_SID",
+		"ATRB_SID",
+		"DIM_CD",
+		"ATRB_CD",
+		"DATA_TYPE_CD",
+		"UI_TYPE_CD",
+		"ATRB_DESC",
+		"ATRB_LBL",
+		"DOT_NET_DATA_TYPE",
+		"TGT_COL_TYPE",
+		"ATRB_SRT_ORD",
+		"ATRB_MAX_LEN",
+		"IS_FACT",
+		"PVT_MSK",
+		"ARTB_ACTV_IND",
+		"ACTV_IND",
+		"FMT_MSK"
+
+    };
+
+	/*
+	"DIM_NM",
+	"DIM_ACTV_IND",
+	"DATA_TYPE_ACTV_IND",
+	"DATA_TYPE_DESC",
+	"SQL_DATA_TYPE",
+	"SQL_DATA_TYPE_FQ",
+	"DATA_TYPE_SID",
+	"LKUP_ROOT_SID",
+	"PARNT_ATRB_SID",
+	"ATRB_FK_TBL_SCH",
+	"ATRB_FK_TBL_NM",
+	"ATRB_FK_TBL_PK_COL_NM",
+	"ATRB_FK_TBL_DSPLY_COL_NM",
+	*/
+
+
+
+	WriteLine(dbobjects.BoilerPlateDetails);
+	WriteLine("");
+
+	WriteLine(@"
+using System;
+using System.Runtime.Serialization;
+using System.Collections.Generic;
+using System.Xml.Serialization;
+");
+	WriteLine("");
+	WriteLine("namespace {0} {{", outputNameSpace);
+	PushIndent(TAB);
+	WriteLine("");
+	WriteLine("[DataContract]");
+	WriteLine("public partial class DcsAttribute {");
+	PushIndent(TAB);
+	WriteLine("");
+
+	var rows = dbobjects.ExecuteDataSet("SELECT MSK, REPLACE(REPLACE(REPLACE(FQ_TBL_NM,']',''),'[',''),'.','_') AS [FQ_TBL_NM] from [tmeta].[ATRB_PVT_TBL_MSK] (nolock) ORDER BY MSK")
+			.Tables[0]
+			.Rows
+			.Cast<DataRow>();
+
+	var dictionary_values = rows
+			.Select(dr => String.Format("{{PVT_MSK_CONST.{0},\"{0}\"}}", dr["FQ_TBL_NM"]))
+			.ToArray();
+
+	var consts = rows
+		.Select(dr => string.Format("public const int {0} = {1};", dr["FQ_TBL_NM"], dr["MSK"]))
+		.ToArray();
+
+	foreach(var col in atrb_table.Columns.Where(c => incldue_columns.Contains(c.column_name.ToUpper().Trim())))
+	{
+		WriteLine("");
+		WriteLine("[DataMember]");
+		WriteLine("public {0} {1} {{set;get;}}", 
+			col.is_nullable 
+				? col.DotNetDataTypeNullable 
+				: col.DotNetDataType, 
+			col.column_name
+		);
+    }
+
+	PopIndent();
+	WriteLine("}"); // End Class
+
+
+	
+    WriteLine("public class DcsAttributeHelper");
+    WriteLine("{");
+		PushIndent(TAB);
+		WriteLine("private struct PVT_MSK_CONST");
+		WriteLine("{");
+			PushIndent(TAB);
+			WriteLine(String.Join(Environment.NewLine, consts));
+			PopIndent();
+		WriteLine("};");
+
+	
+		WriteLine("public static readonly Dictionary<int, string> ATTRIBUTE_PIVOT_MASK_MAP = new Dictionary<int, string>");
+		WriteLine("{");
+			PushIndent(TAB);
+			WriteLine(String.Join("," + Environment.NewLine, dictionary_values));
+			PopIndent();
+		WriteLine("};");
+	PopIndent();
+    WriteLine("}");
+
+	PopIndent();
+	WriteLine("}"); // End NameSpace
+
+#>

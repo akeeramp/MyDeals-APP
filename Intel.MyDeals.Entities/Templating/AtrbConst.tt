@@ -1,0 +1,252 @@
+﻿<#@ template debug="true" hostSpecific="false" #>
+<#@ output extension=".generated.cs" #>
+<#@ Assembly Name="System.Core.dll" #>
+<#@ Assembly Name="System.Windows.Forms.dll" #>
+<#@ Assembly Name="System.Data" #>
+<#@ Assembly Name="System.XML" #>
+<#@ Assembly Name="$(SolutionDir)\Intel.MyDeals.DataAccessLib\bin\Debug\Intel.Opaque.Templating.dll" #>
+<#@ Assembly Name="$(SolutionDir)\Intel.MyDeals.DataAccessLib\bin\Debug\Intel.Opaque.Data.dll" #>
+<#@ Assembly Name="$(SolutionDir)\Intel.MyDeals.Entities\bin\Debug\Intel.MyDeals.Entities.dll" #>
+<#@ import namespace="Intel.Opaque.Templating" #>
+<#@ import namespace="Intel.Opaque.Data" #>
+<#@ import namespace="Intel.MyDeals.Entities" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.Collections" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Data" #>
+<#@ import namespace="System.Data.Common" #>
+<#@ import namespace="System.Data.SqlClient" #>
+<#@ import namespace="System.Text" #>
+<#
+	
+	// DEVELOPER: Change this to be the namespace to create the SP classes in 
+	const string outputNameSpace = "Intel.MyDeals.Entities";
+	const string TAB = "\t";
+	
+	// This connection string MUST point to production.  The whole reason we can support this file is
+	// becauase we know the const values are hard coded in produciton (so we don't have to worry about
+	// identity insert sequencing issues).
+	var dbobjects = new DBObjects(
+			string.Format(@"Database=CDMS;Server=CP1CIAS-PD\CP1CIAS,3180;integrated security=SSPI;")
+		);
+
+	var atrb_table = dbobjects.ExecuteDataSet(@"
+SELECT 
+	[ATRB_SID],
+	[LKUP_ROOT_SID],
+	[DIM_CD],
+	[ATRB_CD],
+	[DATA_TYPE_CD],
+	[UI_TYPE_CD],
+	[ATRB_DESC],
+	[ATRB_LBL],
+	[DOT_NET_DATA_TYPE],
+	[TGT_COL_TYPE],
+	[ATRB_TGT_COL],
+	[SQL_DATA_TYPE_FQ],
+	[FMT_MSK],
+	[ATRB_SRT_ORD],
+	[ATRB_MAX_LEN],
+	[IS_FACT],
+	[PVT_MSK],
+	[ATRB_ACTV_IND],
+	[ACTV_IND]
+/*
+	[DIM_SID],
+	[DATA_TYPE_SID],
+	[PARNT_ATRB_SID],
+	[LEGACY_NM],
+	[DIM_NM],
+	[DATA_TYPE_DESC],
+	[SQL_DATA_TYPE],
+	[ATRB_UNIQ_IND],
+	[IS_IDX],
+	[ATRB_UNIQ_LEVELS],
+	[ATRB_EXT_PRO],
+	[DIM_TBL_SCH],
+	[DIM_TBL_NM],
+	[DIM_MAT_VW_SCH],
+	[DIM_MAT_VW_NM],
+	[DIM_INTRFC_TBL_SCH],
+	[DIM_INTRFC_TBL_NM],
+	[DIM_DATA_COL_NM],
+	[DIM_ATRB_COL_NM],
+	[DIM_DFLT_ROOT_ATRB_NM],
+	[ATRB_TGT_TBL_SCH],
+	[ATRB_TGT_TBL_NM],
+	[ATRB_FK_TBL_SCH],
+	[ATRB_FK_TBL_NM],
+	[ATRB_FK_TBL_PK_COL_NM],
+	[ATRB_FK_TBL_DSPLY_COL_NM],
+	[DERIVED_FLG],
+	[USR_MAINT_IND],
+	[CRE_EMP_WWID],
+	[CRE_DTM],
+	[CHG_EMP_WWID],
+	[CHG_DTM],
+	[DIM_ACTV_IND],
+	[DATA_TYPE_ACTV_IND],
+*/
+FROM meta.VW_ATRB_MSTR (nolock)
+ORDER BY ATRB_CD
+").Tables[0];
+
+	var cols = atrb_table.Columns.OfType<DataColumn>().OrderBy(dc=>dc.ColumnName.ToUpper());
+
+	WriteLine(dbobjects.BoilerPlateDetails);
+	WriteLine("");
+
+	WriteLine(@"
+using System;
+");
+	WriteLine("");
+	WriteLine("namespace {0} {{", outputNameSpace);
+	PushIndent(TAB);
+	WriteLine("");
+
+
+	
+	var matched_columns = from rc in cols
+			join pn in typeof(DcsAttribute).GetProperties().Where(pi => pi.CanRead && pi.CanWrite)
+            on rc.ColumnName equals pn.Name.Trim().ToUpper()
+            select new 
+			{ 
+				col = rc, 
+                pifo = pn
+            };
+
+	Dictionary<string, string> ColumnNameMap = new Dictionary<string, string>();
+	foreach(var aty in matched_columns)
+	{
+		ColumnNameMap[aty.col.ColumnName] = aty.pifo.Name;
+    }
+
+	foreach(DataRow dr in atrb_table.Rows)
+	{
+		int max_len = (dr.IsNull("ATRB_MAX_LEN") ? 0 : (int)dr["ATRB_MAX_LEN"]);
+		
+		List<string> summary_messages = new List<string>();
+		summary_messages.Add(String.Format("ATRB_SID = {0}", dr["ATRB_SID"]));
+		summary_messages.Add(String.Format("{0}", dr["DOT_NET_DATA_TYPE"]));
+		if(max_len > 0)
+		{
+			summary_messages.Add(String.Format("Max Length = {0}", max_len));
+        }
+		
+		WriteSummary(summary_messages.ToArray());
+
+		WriteLine("public static class {0}", TemplateTools.CSharpIfyName(String.Format("{0}", dr["ATRB_CD"])));
+		WriteLine("{");
+		PushIndent(TAB);
+		WriteLine("");
+
+		Dictionary<string, string> ValueMap = new Dictionary<string, string>();
+
+		foreach(DataColumn col in cols)
+		{
+			string value = String.Format("{0}", dr[col]);
+			string data_type = TemplateTools.ToDataTypeString(col.DataType, false);
+
+			WriteSummary((String.IsNullOrEmpty(value) ? "(Null or Blank)" : value));
+
+			if(string.IsNullOrEmpty(value))
+			{
+				value = String.Format("default({0})", data_type);
+			} 
+			else if (col.ColumnName == "DOT_NET_DATA_TYPE")
+			{
+				ValueMap[col.ColumnName] = String.Format("\"{0}\"", value.Replace(@"""", @"\"""));
+
+				// Special Case
+				WriteLine("public static readonly System.Type {0} = System.Type.GetType(\"{1}\", false);", 
+					TemplateTools.CSharpIfyName(string.Format("{0}", col.ColumnName)),
+					value
+				);
+			
+				continue;
+			}
+			else if (col.DataType == typeof(string))
+			{
+				value = String.Format("\"{0}\"", value.Replace(@"""", @"\"""));
+			}
+			else if (col.DataType == typeof(bool))
+			{
+				value = value.ToLower();
+			}
+
+			ValueMap[col.ColumnName] = value;
+
+			WriteLine("public const {0} {1} = {2};", 
+				data_type, 
+				TemplateTools.CSharpIfyName(string.Format("{0}", col.ColumnName)),
+				value
+			);
+		}
+
+		
+		List<string> param_constructor_values = new List<string>();
+		foreach (var mc in matched_columns)
+        {
+            param_constructor_values.Add(String.Format("{0} = {1}",
+				mc.pifo.Name,
+				ValueMap[mc.col.ColumnName]
+			));
+			
+        }
+
+		WriteSummary("Get this type as a DcsAttribute instance class.");
+		
+		// Both of these work fine, the method just felt better than the static readonly...
+		//WriteLine("public static readonly DcsAttribute AsDcsAttribute = new DcsAttribute()");
+		WriteLine("public static DcsAttribute AsDcsAttribute()");
+		WriteLine("{");
+		PushIndent(TAB);
+			WriteLine("return new DcsAttribute(){");
+			Write("\t");
+			WriteLine(String.Join("," + Environment.NewLine + "\t", param_constructor_values));
+			WriteLine("};"); // DcsAttribute
+		PopIndent();
+		WriteLine("}"); // AsDcsAttribute
+		
+
+		WriteLine("");
+		PopIndent();
+		WriteLine("}"); // End Class
+
+    } // For each
+	
+	PopIndent();
+	WriteLine("}"); // End NameSpace
+
+#>
+
+<#+
+// End of file
+//--------------------------------------------------------------------------------------------------
+// Start helper classes/functions
+
+
+	// Write a SP class to the file.  Note that I chose the WriteLine() method over the in-line for two
+	// key reasons, 1) easier to manage tabs, and 2) easier to read
+	public void WriteSummary(params string[] lines)
+	{
+		WriteLine("");
+
+		if(lines ==null || !lines.Any()) { return; }
+
+		//WriteLine("#if DEBUG"); // Thought this might help keep the assembly smaller, nope.
+		
+		WriteLine("/// <summary>");
+		foreach(string line in lines)
+		{
+			WriteLine(String.Format("/// {0}", line));
+        }
+		WriteLine("/// </summary>");
+		
+		//WriteLine("#endif");
+	}
+
+#>
+

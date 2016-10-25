@@ -1,0 +1,45 @@
+﻿
+<div style="margin: 15px;">
+    <h1>Sample Constants Display</h1>
+    <div id="grid"></div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $("#grid").kendoGrid({
+            dataSource: {
+                type: "json",
+                transport: {
+                    read: "/api/Constants/v1/GetConstants"
+                },
+                schema: {
+                    model: {
+                        fields: {
+                            CNST_NM: { type: "string" },
+                            CNST_DESC: { type: "string" },
+                            CNST_VAL_TXT: { type: "string" }
+                        }
+                    }
+                },
+                pageSize: 20
+            },
+            height: 400,
+            filterable: true,
+            sortable: true,
+            pageable: true,
+            columns: [
+                {
+                    field: "CNST_NM",
+                    title: "Name"
+                },
+                {
+                    field: "CNST_DESC",
+                    title: "Description"
+                }, {
+                    field: "CNST_VAL_TXT",
+                    title: "Value"
+                }
+            ]
+        });
+    });
+</script>

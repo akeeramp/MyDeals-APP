@@ -1,0 +1,85 @@
+﻿<div class="modal fade modalpad" id="editContractModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Edit Contract</h4>
+            </div>
+            <div class="modal-body" style="background-color: #f5f5f5;">
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="contractName">Contract Name</label>
+                                <input class="form-control" id="contractName" aria-describedby="contractNameStatus" data-bind="value: curContract.TITLE" type="text" placeholder="Enter the Contract Name">
+                                <span id="contractNameStatus" aria-hidden="true" data-role="tooltip" data-position="top"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="contractDescription">Contract Description</label>
+                                <input class="form-control" id="contractDescription" aria-describedby="contractDescriptionStatus" data-bind="value: curContract.DESC" type="text" placeholder="Enter the Contract Description">
+                                <span id="contractDescriptionStatus" aria-hidden="true" data-role="tooltip" data-position="top"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="contractStartDate">Start Date</label>
+                                <input class="form-control" id="contractStartDate"
+                                       data-role="datepicker"
+                                       data-bind="value: curContract.START_DT"
+                                       aria-describedby="contractStartDateStatus"
+                                       style="width: 100%">
+                                <span id="contractStartDateStatus" aria-hidden="true" data-role="tooltip" data-position="top"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="contractEndDate">End Date</label>
+                                <input class="form-control" id="contractEndDate"
+                                       data-role="datepicker"
+                                       data-bind="value: curContract.END_DT"
+                                       aria-describedby="contractEndDateStatus"
+                                       style="width: 100%">
+                                <span id="contractEndDateStatus" aria-hidden="true" data-role="tooltip" data-position="top"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label>
+                                <input type="checkbox" data-bind="checked: curContract.isCustApproved"> Customer already approved the Legaly Binding Contract.
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="rtnMsgContainer" class="alert" role="alert" style="display: none;">
+                                <span id="rtnMsg"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
