@@ -16,7 +16,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared Libraries", "Shared 
 		Shared Libraries\Antlr3.Runtime.dll = Shared Libraries\Antlr3.Runtime.dll
 		Shared Libraries\ICSharpCode.SharpZipLib.dll = Shared Libraries\ICSharpCode.SharpZipLib.dll
 		Shared Libraries\ICSharpCode.SharpZipLib.pdb = Shared Libraries\ICSharpCode.SharpZipLib.pdb
-		Shared Libraries\ICSharpCode.SharpZipLib.Silverlight.dll = Shared Libraries\ICSharpCode.SharpZipLib.Silverlight.dll
 		Shared Libraries\Intel.Opaque.Data.dll = Shared Libraries\Intel.Opaque.Data.dll
 		Shared Libraries\Intel.Opaque.Data.pdb = Shared Libraries\Intel.Opaque.Data.pdb
 		Shared Libraries\Intel.Opaque.DBAccess.dll = Shared Libraries\Intel.Opaque.DBAccess.dll

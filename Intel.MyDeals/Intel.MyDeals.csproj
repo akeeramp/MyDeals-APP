@@ -491,6 +491,7 @@
     <Content Include="Images\docs\highlevelflow.png" />
     <Content Include="Images\docs\icon-app-layer.png" />
     <Content Include="Images\docs\icon-bus-logic.png" />
+    <Content Include="Images\docs\icon-code-tools.png" />
     <Content Include="Images\docs\icon-data-access.png" />
     <Content Include="Images\docs\icon-data-library.png" />
     <Content Include="Images\docs\icon-entity.png" />
@@ -518,6 +519,7 @@
     <Content Include="Images\docs\TableToClass.png" />
     <Content Include="Images\docs\TableToClassResults.png" />
     <Content Include="Images\docs\terms.png" />
+    <Content Include="Images\docs\ui_mt_architecture.png" />
     <Content Include="Images\docs\validation.png" />
     <Content Include="Images\docs\versions.png" />
     <Content Include="Images\docs\webapi.png" />
@@ -701,6 +703,7 @@
     <Content Include="Content\kendo\2016.Q3\kendo.uniform.min.css.map" />
     <Content Include="Content\kendo\2016.Q3\kendo.uniform.mobile.min.css.map" />
     <Content Include="Areas\Admin\Views\AdminConstants\Index.cshtml" />
+    <Content Include="Images\docs\MyDeal UI MT Architecture 50.pdf" />
     <None Include="Properties\PublishProfiles\Dev.pubxml" />
     <Content Include="Scripts\angular.min.js.map" />
     <None Include="Scripts\jquery-2.2.0.intellisense.js" />

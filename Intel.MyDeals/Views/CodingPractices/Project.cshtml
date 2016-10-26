@@ -13,13 +13,28 @@
         This document is a living document to help maintain coding practices to ensure the application is coded in a consistent manner.
         These are not coding standards. Instead, this is intended to provide project layout and intended usages for each project.
     </p>
-    <div style="padding: 20px 5px; text-align: center;">
+    <div style="padding: 20px 5px; text-align: left;">
         <img src="/Images/docs/MyDeals Project Logic.png" />
     </div>
     <p>
         The MyDeals project is a Visual Studio project backed by TFS source control.
         The technologies consist of MS SQL 2014, C# .NET, T4 Templating, MVC, Web API, JQuery, Kendo UI, Angular and HTML5.
         This document will demonstate how data will logically flow through the technology as well as common practices that can be re-used for quicker and more reliable coding.
+    </p>
+
+    <h2>UI and middle tier architecture</h2>
+
+    <p>
+        The UI and middle tier architecture consists of ASP.NET MVC to handle global routing and break the application up into managable sections.
+        This should help with memory and performance issues. The controller will spawn off Single Page Applications (SPA) or standalone pages (admin screens for example).
+    </p>
+    <p>
+        <a href="/Images/docs/MyDeal UI MT Architecture 50.pdf" target="_blank">
+            <div style="padding: 20px 5px 0 5px; text-align: left;">
+                <img src="/Images/docs/ui_mt_architecture.png" />
+            </div>
+            Click to view a larger version of the architecture.
+        </a>
     </p>
 
     <h2>Implementation guidance</h2>
