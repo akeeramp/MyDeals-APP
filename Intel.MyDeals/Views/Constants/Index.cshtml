@@ -1,0 +1,16 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_LayoutAngular.cshtml";
+}
+<script src="http://kendo.cdn.telerik.com/2016.3.914/js/angular.min.js"></script>
+<script src="http://kendo.cdn.telerik.com/2016.3.914/js/kendo.all.min.js"></script>
+<script src="~/js/constantsController.js"></script>
+
+<div class="container-fluid" ng-controller="constantsController">
+    <header class="title-bar intel-border-yellow">
+        <span class="title-bar-title">Constants</span>
+    </header>
+    <!-- Use grid directive with scope options -->
+    <kendo-grid class="col-md-8 text-center" options="gridOptions"></kendo-grid>
+</div>
+
