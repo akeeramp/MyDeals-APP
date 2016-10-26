@@ -11,11 +11,10 @@ function constantsController($scope) {
                 dataType: "json"
             }
         },
-        toolbar: ["create"],
         serverPaging: false,
         pageSize: 10,
         error: function (e) {
-            alert(e.xhr.responseText);
+            op.notifyError(e.xhr.responseText, "Unable to Load Constants");
         },
         editable: true
     });
@@ -25,6 +24,9 @@ function constantsController($scope) {
         dataSource: dataSource,
         sortable: true,
         pageable: true,
+        filterable: true,
+        editable: true,
+        toolbar: ["create", "cancel", "save"],
         columns: [
           { field: "CNST_NM", title: "Name" },
           { field: "CNST_VAL_TXT", title: "Value"},
