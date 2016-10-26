@@ -90,7 +90,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\..\POC\UI\Intel.MyDeals.POC\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -105,7 +105,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.Http">
-      <HintPath>..\..\..\POC\UI\Intel.MyDeals.POC\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
@@ -219,6 +219,7 @@
     <Compile Include="Controllers\API\SearchController.cs" />
     <Compile Include="Areas\Admin\Controllers\CacheController.cs" />
     <Compile Include="Controllers\CodingPracticesController.cs" />
+    <Compile Include="Controllers\ConstantsController.cs" />
     <Compile Include="Controllers\DocsController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -537,6 +538,7 @@
     <Content Include="Images\wires.png" />
     <Content Include="js\bootstrap.js" />
     <Content Include="js\bootstrap.min.js" />
+    <Content Include="js\constantsController.js" />
     <Content Include="js\jsoneditor.js" />
     <Content Include="js\sampleSPA.js" />
     <Content Include="js\_cache.js" />
@@ -1999,6 +2001,7 @@
     <Content Include="Views\CodingPractices\CodingTools.cshtml" />
     <Content Include="Views\Poc\SPA.cshtml" />
     <Content Include="Views\Shared\_LayoutAngular.cshtml" />
+    <Content Include="Views\Constants\Index.cshtml" />
     <None Include="Web.dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
