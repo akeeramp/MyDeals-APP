@@ -70,7 +70,7 @@ namespace Intel.MyDeals.DataLibrary
                     last_nm = pocEmp.last_nm
                 }, null, out dsCheckConstraintErrors);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 if (dsCheckConstraintErrors != null && dsCheckConstraintErrors.Tables.Count > 0)
                 {
@@ -97,7 +97,7 @@ namespace Intel.MyDeals.DataLibrary
                     emp_sid = empSid
                 }, null, out dsCheckConstraintErrors);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 if (dsCheckConstraintErrors != null && dsCheckConstraintErrors.Tables.Count > 0)
                 {

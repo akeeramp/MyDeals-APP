@@ -10,28 +10,28 @@ namespace Intel.MyDeals.BusinessLogic
         {
             // todo fix this
             return true;
-            return opUserToken.IsWwidInString(EN.OPUSERTOKEN.SUPER_LIST);
+            //return opUserToken.IsWwidInString(EN.OPUSERTOKEN.SUPER_LIST);
         }
 
         public static bool IsSuperSa(this OpUserToken opUserToken)
         {
             // todo fix this
             return true;
-            return opUserToken.IsSuper() && opUserToken.Role.RoleTypeCd == EN.EMPLOYEEROLE.SA;
+            //return opUserToken.IsSuper() && opUserToken.Role.RoleTypeCd == EN.EMPLOYEEROLE.SA;
         }
 
         public static bool IsDeveloper(this OpUserToken opUserToken)
         {
             // todo fix this
             return true;
-            return opUserToken.IsWwidInString(EN.OPUSERTOKEN.DEVELOPER_LIST);
+            //return opUserToken.IsWwidInString(EN.OPUSERTOKEN.DEVELOPER_LIST);
         }
 
         public static bool IsTester(this OpUserToken opUserToken)
         {
             // todo fix this
             return true;
-            return opUserToken.IsWwidInString(EN.OPUSERTOKEN.TESTER_LIST);
+            //return opUserToken.IsWwidInString(EN.OPUSERTOKEN.TESTER_LIST);
         }
 
     }

@@ -69,6 +69,7 @@
     <Compile Include="OpLog.cs" />
     <Compile Include="OpUserStack.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SecurityWrapper.cs" />
     <Compile Include="tempClasses\tempClass.cs" />
     <Compile Include="Templating\TableToClasses.generated.cs">
       <DependentUpon>TableToClasses.tt</DependentUpon>

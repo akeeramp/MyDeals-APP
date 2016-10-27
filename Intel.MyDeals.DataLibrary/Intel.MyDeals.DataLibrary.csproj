@@ -88,6 +88,7 @@
     <Compile Include="Products\ProductDataLib.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Quote Letter\QuoteDataLib.cs" />
+    <Compile Include="Security Attributes\OpSecurity.cs" />
     <Compile Include="Security Attributes\SecurityAttributesDataLib.cs" />
     <Compile Include="Workflow\WorkflowDataLib.cs" />
   </ItemGroup>

@@ -158,17 +158,6 @@ namespace Intel.MyDeals.App
             OpLog.SendEmail(title, body);
         }
 
-        public static bool ChkDealRules(OpUserToken opUserToken, string actionCd)
-        {
-            return true;
-            ////PE////return new SecurityAttributesLib().GetSecurityWrapper().ChkDealRules(null, opUserToken.Role.RoleTypeCd, null, actionCd);
-        }
-
-        public static bool ChkDealRules(OpUserToken opUserToken, string actionCd, string objSetTypeCd, string stageCd)
-        {
-            return true;
-            ////PE////return new SecurityAttributesLib().GetSecurityWrapper().ChkDealRules(objSetTypeCd, opUserToken.Role.RoleTypeCd, stageCd, actionCd);
-        }
 
     }
 }

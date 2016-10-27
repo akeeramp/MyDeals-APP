@@ -520,7 +520,196 @@ namespace Intel.MyDeals.Entities
 
 
 
+    [DataContract]
+    public partial class SecurityAction
+    {
+
+        [DataMember]
+        public System.Int64 ATRB_BIT { set; get; }
 
 
+        [DataMember]
+        public System.Int64 ATRB_MAGNITUDE { set; get; }
+
+
+        [DataMember]
+        public System.String FACT_ATRB_CD { set; get; }
+
+
+        [DataMember]
+        public System.Int32 FACT_ATRB_SID { set; get; }
+
+
+        /*
+        private static List<SecurityAction> SecurityActionFromReader(SqlDataReader rdr){
+        // This helper method is template generated.
+        // Refer to that template for details to modify this code.
+
+        var ret = new List<SecurityAction>();
+        int IDX_ATRB_BIT = DB.GetReaderOrdinal(rdr, "ATRB_BIT");
+        int IDX_ATRB_MAGNITUDE = DB.GetReaderOrdinal(rdr, "ATRB_MAGNITUDE");
+        int IDX_FACT_ATRB_CD = DB.GetReaderOrdinal(rdr, "FACT_ATRB_CD");
+        int IDX_FACT_ATRB_SID = DB.GetReaderOrdinal(rdr, "FACT_ATRB_SID");
+
+        while (rdr.Read()){
+        ret.Add(new SecurityAction {
+        ATRB_BIT = (IDX_ATRB_BIT < 0 || rdr.IsDBNull(IDX_ATRB_BIT)) ? default(System.Int64) : rdr.GetFieldValue<System.Int64>(IDX_ATRB_BIT),
+        ATRB_MAGNITUDE = (IDX_ATRB_MAGNITUDE < 0 || rdr.IsDBNull(IDX_ATRB_MAGNITUDE)) ? default(System.Int64) : rdr.GetFieldValue<System.Int64>(IDX_ATRB_MAGNITUDE),
+        FACT_ATRB_CD = (IDX_FACT_ATRB_CD < 0 || rdr.IsDBNull(IDX_FACT_ATRB_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_FACT_ATRB_CD),
+        FACT_ATRB_SID = (IDX_FACT_ATRB_SID < 0 || rdr.IsDBNull(IDX_FACT_ATRB_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_FACT_ATRB_SID)
+        });
+        } // while
+        return ret;
+        }
+        */
+
+    } // End of class SecurityAction
+
+
+    [DataContract]
+    public partial class AppRoleTier
+    {
+
+        [DataMember]
+        public System.Boolean ACTV_IND { set; get; }
+
+
+        [DataMember]
+        public System.Boolean APPL_ACTV_IND { set; get; }
+
+
+        [DataMember]
+        public System.String APPL_CD { set; get; }
+
+
+        [DataMember]
+        public System.String APPL_DESC { set; get; }
+
+
+        [DataMember]
+        public System.Byte APPL_SID { set; get; }
+
+
+        [DataMember]
+        public System.String APPL_SUITE { set; get; }
+
+
+        [DataMember]
+        public System.DateTime CHG_DTM { set; get; }
+
+
+        [DataMember]
+        public System.Boolean IS_SINGLE_SELECT { set; get; }
+
+
+        [DataMember]
+        public System.Boolean ROLE_ACTV_IND { set; get; }
+
+
+        [DataMember]
+        public System.String ROLE_TIER_CD { set; get; }
+
+
+        [DataMember]
+        public System.Int32 ROLE_TIER_SID { set; get; }
+
+
+        [DataMember]
+        public System.Int32 ROLE_TIER_SRT_ORD { set; get; }
+
+
+        [DataMember]
+        public System.String ROLE_TYPE_CD { set; get; }
+
+
+        [DataMember]
+        public System.String ROLE_TYPE_DESC { set; get; }
+
+
+        [DataMember]
+        public System.String ROLE_TYPE_DSPLY_CD { set; get; }
+
+
+        [DataMember]
+        public System.Int32 ROLE_TYPE_SID { set; get; }
+
+
+        /*
+        private static List<AppRoleTier> AppRoleTierFromReader(SqlDataReader rdr){
+        // This helper method is template generated.
+        // Refer to that template for details to modify this code.
+
+        var ret = new List<AppRoleTier>();
+        int IDX_ACTV_IND = DB.GetReaderOrdinal(rdr, "ACTV_IND");
+        int IDX_APPL_ACTV_IND = DB.GetReaderOrdinal(rdr, "APPL_ACTV_IND");
+        int IDX_APPL_CD = DB.GetReaderOrdinal(rdr, "APPL_CD");
+        int IDX_APPL_DESC = DB.GetReaderOrdinal(rdr, "APPL_DESC");
+        int IDX_APPL_SID = DB.GetReaderOrdinal(rdr, "APPL_SID");
+        int IDX_APPL_SUITE = DB.GetReaderOrdinal(rdr, "APPL_SUITE");
+        int IDX_CHG_DTM = DB.GetReaderOrdinal(rdr, "CHG_DTM");
+        int IDX_IS_SINGLE_SELECT = DB.GetReaderOrdinal(rdr, "IS_SINGLE_SELECT");
+        int IDX_ROLE_ACTV_IND = DB.GetReaderOrdinal(rdr, "ROLE_ACTV_IND");
+        int IDX_ROLE_TIER_CD = DB.GetReaderOrdinal(rdr, "ROLE_TIER_CD");
+        int IDX_ROLE_TIER_SID = DB.GetReaderOrdinal(rdr, "ROLE_TIER_SID");
+        int IDX_ROLE_TIER_SRT_ORD = DB.GetReaderOrdinal(rdr, "ROLE_TIER_SRT_ORD");
+        int IDX_ROLE_TYPE_CD = DB.GetReaderOrdinal(rdr, "ROLE_TYPE_CD");
+        int IDX_ROLE_TYPE_DESC = DB.GetReaderOrdinal(rdr, "ROLE_TYPE_DESC");
+        int IDX_ROLE_TYPE_DSPLY_CD = DB.GetReaderOrdinal(rdr, "ROLE_TYPE_DSPLY_CD");
+        int IDX_ROLE_TYPE_SID = DB.GetReaderOrdinal(rdr, "ROLE_TYPE_SID");
+
+        while (rdr.Read()){
+        ret.Add(new AppRoleTier {
+        ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(System.Boolean) : ((int)rdr[IDX_ACTV_IND] == 1),
+        APPL_ACTV_IND = (IDX_APPL_ACTV_IND < 0 || rdr.IsDBNull(IDX_APPL_ACTV_IND)) ? default(System.Boolean) : ((int)rdr[IDX_APPL_ACTV_IND] == 1),
+        APPL_CD = (IDX_APPL_CD < 0 || rdr.IsDBNull(IDX_APPL_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_APPL_CD),
+        APPL_DESC = (IDX_APPL_DESC < 0 || rdr.IsDBNull(IDX_APPL_DESC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_APPL_DESC),
+        APPL_SID = (IDX_APPL_SID < 0 || rdr.IsDBNull(IDX_APPL_SID)) ? default(System.Byte) : rdr.GetFieldValue<System.Byte>(IDX_APPL_SID),
+        APPL_SUITE = (IDX_APPL_SUITE < 0 || rdr.IsDBNull(IDX_APPL_SUITE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_APPL_SUITE),
+        CHG_DTM = (IDX_CHG_DTM < 0 || rdr.IsDBNull(IDX_CHG_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CHG_DTM),
+        IS_SINGLE_SELECT = (IDX_IS_SINGLE_SELECT < 0 || rdr.IsDBNull(IDX_IS_SINGLE_SELECT)) ? default(System.Boolean) : ((int)rdr[IDX_IS_SINGLE_SELECT] == 1),
+        ROLE_ACTV_IND = (IDX_ROLE_ACTV_IND < 0 || rdr.IsDBNull(IDX_ROLE_ACTV_IND)) ? default(System.Boolean) : ((int)rdr[IDX_ROLE_ACTV_IND] == 1),
+        ROLE_TIER_CD = (IDX_ROLE_TIER_CD < 0 || rdr.IsDBNull(IDX_ROLE_TIER_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ROLE_TIER_CD),
+        ROLE_TIER_SID = (IDX_ROLE_TIER_SID < 0 || rdr.IsDBNull(IDX_ROLE_TIER_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ROLE_TIER_SID),
+        ROLE_TIER_SRT_ORD = (IDX_ROLE_TIER_SRT_ORD < 0 || rdr.IsDBNull(IDX_ROLE_TIER_SRT_ORD)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ROLE_TIER_SRT_ORD),
+        ROLE_TYPE_CD = (IDX_ROLE_TYPE_CD < 0 || rdr.IsDBNull(IDX_ROLE_TYPE_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ROLE_TYPE_CD),
+        ROLE_TYPE_DESC = (IDX_ROLE_TYPE_DESC < 0 || rdr.IsDBNull(IDX_ROLE_TYPE_DESC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ROLE_TYPE_DESC),
+        ROLE_TYPE_DSPLY_CD = (IDX_ROLE_TYPE_DSPLY_CD < 0 || rdr.IsDBNull(IDX_ROLE_TYPE_DSPLY_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ROLE_TYPE_DSPLY_CD),
+        ROLE_TYPE_SID = (IDX_ROLE_TYPE_SID < 0 || rdr.IsDBNull(IDX_ROLE_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ROLE_TYPE_SID)
+        });
+        } // while
+        return ret;
+        }
+        */
+
+    } // End of class AppRoleTier
+
+
+
+
+
+    // TODO create T4 template to generate these
+    public enum ActionCodes
+    {
+        CanViewQuoteLetter,
+        CanCreateContract
+    };
+
+    // TODO create T4 template to generate these
+    public enum StageCodes
+    {
+        ALL,
+        Requested,
+        Submitted,
+        Active
+    };
+
+    // TODO create T4 template to generate these
+    public enum ObjSetTypeCodes
+    {
+        ALL,
+        ECAP,
+        VOL_TIER,
+        CONTRACT
+    };
 
 }

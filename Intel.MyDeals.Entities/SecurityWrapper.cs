@@ -20,23 +20,22 @@ namespace Intel.MyDeals.Entities
 
 
 
-        public string DefineBaseKey(string dealTypeCd, string roleTypeCd, string wfStage, string actionCd, string atrbCd)
+        public string DefineBaseKey(ObjSetTypeCodes objSetTypeCd, string roleTypeCd, StageCodes wfStage, string actionCd, string atrbCd)
         {
             const string delim = "_";
-            return string.Format("{1}{0}{2}{0}{3}{0}{4}{0}{5}", delim, dealTypeCd, roleTypeCd, wfStage, actionCd, atrbCd);
+            return string.Format("{1}{0}{2}{0}{3}{0}{4}{0}{5}", delim, objSetTypeCd, roleTypeCd, wfStage, actionCd, atrbCd);
         }
 
-        public bool ChkAtrbRules(string dealTypeCd, string roleTypeCd, string wfStage, string actionCd, string atrbCd, Dictionary<string, bool> securityActionCache = null)
+        public bool ChkAtrbRules(ObjSetTypeCodes objSetTypeCd, string roleTypeCd, StageCodes wfStage, string actionCd, string atrbCd, Dictionary<string, bool> securityActionCache = null)
         {
             if (string.IsNullOrEmpty(atrbCd)) return false;
 
             // Function returns the true or false value from the security mask - breakpoint here if you want to verify values in code.
-            if (wfStage == string.Empty) wfStage = "Created";
 
             if (securityActionCache == null) securityActionCache = new Dictionary<string, bool>();
 
             // Look for cache first
-            string secBaseKey = DefineBaseKey(dealTypeCd, roleTypeCd, wfStage, actionCd, atrbCd);
+            string secBaseKey = DefineBaseKey(objSetTypeCd, roleTypeCd, wfStage, actionCd, atrbCd);
             if (securityActionCache.ContainsKey(secBaseKey)) return securityActionCache[secBaseKey];
 
             SecurityAction sa = (from el in SecurityActions
@@ -53,9 +52,9 @@ namespace Intel.MyDeals.Entities
             IEnumerable<string> localSecurityMasks =
                 (from el in SecurityMasks
                  where (el.ACTN_CD == actionCd || el.ACTN_CD == null)
-                       && (el.DEAL_TYPE_CD == dealTypeCd || el.DEAL_TYPE_CD == null)
+                       && (el.DEAL_TYPE_CD == objSetTypeCd.ToString() || el.DEAL_TYPE_CD == null)
                        && (el.ROLE_TYPE_CD == roleTypeCd || el.ROLE_TYPE_CD == null)
-                       && (el.WFSTG_CD == wfStage || el.WFSTG_CD == null)
+                       && (el.WFSTG_CD == wfStage.ToString() || el.WFSTG_CD == null)
                  select el.PERMISSION_MASK);
 
             if (!localSecurityMasks.Any())
@@ -79,18 +78,16 @@ namespace Intel.MyDeals.Entities
             return result;
         }
 
-        public bool ChkDealRules(string dealTypeCd, string roleTypeCd, string wfStage, string actionCd, bool forceReadOnly = false)
+        public bool ChkDealRules(ObjSetTypeCodes objSetTypeCd, string roleTypeCd, StageCodes wfStage, ActionCodes actionCd, bool forceReadOnly = false)
         {
             // if doing a Read Only check and Active History window is open... it is ALWAYS read only
-            if (actionCd == "ATRB_READ_ONLY" && forceReadOnly) return true;
-
-            if (wfStage == string.Empty) wfStage = "Created";
+            if (actionCd.ToString() == "ATRB_READ_ONLY" && forceReadOnly) return true;
 
             return (from el in SecurityMasks
-                    where (el.ACTN_CD == null || el.ACTN_CD == "0" || el.ACTN_CD.Trim() == actionCd)
-                          && (el.DEAL_TYPE_CD == null || el.DEAL_TYPE_CD == "0" || el.DEAL_TYPE_CD == dealTypeCd)
+                    where (el.ACTN_CD == null || el.ACTN_CD == "0" || el.ACTN_CD.Trim() == actionCd.ToString())
+                          && (el.DEAL_TYPE_CD == null || el.DEAL_TYPE_CD == "0" || el.DEAL_TYPE_CD == objSetTypeCd.ToString())
                           && (el.ROLE_TYPE_CD == null || el.ROLE_TYPE_CD == "0" || el.ROLE_TYPE_CD == roleTypeCd)
-                          && (el.WFSTG_CD == wfStage || el.WFSTG_CD == null || el.WFSTG_CD == "0")
+                          && (el.WFSTG_CD == wfStage.ToString() || el.WFSTG_CD == null || el.WFSTG_CD == "0")
                     select el.PERMISSION_MASK).Any();
         }
     }

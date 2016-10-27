@@ -312,7 +312,7 @@ namespace Intel.MyDeals.Entities
                 {
                     client.Send(myMail);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     // Not sure how to handle this.  Throwing errors from a log is not critical, but would be nice to know if it fails
                 }

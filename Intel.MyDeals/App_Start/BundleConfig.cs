@@ -18,8 +18,8 @@ namespace Intel.MyDeals
 
             bundles.Add(new ScriptBundle("~/bundles/scripts").Include(
                 "~/Scripts/jquery-2.2.0.min.js",
-                "~/Scripts/kendo/2016.Q3/jszip.min.js",
-                "~/Scripts/kendo/2016.Q3/kendo.all.min.js",
+                "~/Scripts/kendo/2016.3.914/jszip.min.js",
+                "~/Scripts/kendo/2016.3.914/kendo.all.min.js",
                 "~/Scripts/kendo/kendo.aspnetmvc.min.js",
                 "~/Scripts/angular.min.js",
                 "~/Scripts/jquery.easypiechart.min.js",
@@ -46,13 +46,13 @@ namespace Intel.MyDeals
                 "~/css/jquery-ui.min.css",
                 "~/css/tooltipster.bundle.min.css",
                 "~/css/tooltipster-sideTip-light.min.css",
-                "~/Content/kendo/2016.Q3/kendo.common-bootstrap.min.css",
-                "~/Content/kendo/2016.Q3/kendo.metro.min.css",
+                "~/Content/kendo/2016.3.914/kendo.common-bootstrap.min.css",
+                "~/Content/kendo/2016.3.914/kendo.metro.min.css",
                 "~/css/it-mlaf.min.css",
                 "~/css/kendo.intel.css"
                 ));
 
-            //"~/Content/kendo/2016.Q3/kendo.office365.min.css",
+            //"~/Content/kendo/2016.3.914/kendo.office365.min.css",
 
             bundles.Add(new StyleBundle("~/MyDeals/css").Include(
                 "~/css/_dealUtil.css",

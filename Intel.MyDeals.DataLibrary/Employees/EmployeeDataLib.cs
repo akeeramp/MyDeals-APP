@@ -246,7 +246,7 @@ namespace Intel.MyDeals.DataLibrary
             OpUserToken opUserToken = OpUserStack.MyOpUserToken;
 
             UserSetting settings = new UserSetting();
-            string vitals;
+            ////string vitals;
 
             ////var cmd = new Procs.CDMS_MYDEALS.app.PR_GET_VITALS_USER_IDMS
             ////{
