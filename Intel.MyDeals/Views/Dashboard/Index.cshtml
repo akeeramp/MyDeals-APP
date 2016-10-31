@@ -1,0 +1,15 @@
+﻿@{
+    ViewBag.Title = "Dashboard";
+}
+
+<h2>Dashboard</h2>
+
+<div class="col-md-2">
+    <ul>
+        <li><a ui-sref="dashboard.view">Dashboard</a></li>
+        <li><a ui-sref="dashboard.configuration">Configuration</a></li>
+        <li><a ui-sref="dashboard.managelayouts">Manage Layouts</a></li>
+    </ul>
+</div>
+
+<div ui-view></div>

@@ -164,6 +164,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="app\admin\" />
+    <Folder Include="app\contract\" />
+    <Folder Include="app\dealManager\" />
+    <Folder Include="app\reporting\" />
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Helper Functions\" />
@@ -222,7 +226,10 @@
     <Compile Include="Areas\Admin\Controllers\CacheController.cs" />
     <Compile Include="Controllers\CodingPracticesController.cs" />
     <Compile Include="Controllers\ConstantsController.cs" />
+    <Compile Include="Controllers\DashboardController.cs" />
+    <Compile Include="Controllers\CostTestController.cs" />
     <Compile Include="Controllers\DocsController.cs" />
+    <Compile Include="Controllers\ContactController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OthersController.cs" />
@@ -236,6 +243,24 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\app.module.js" />
+    <Content Include="app\blocks\exception\exception-handler.provider.js" />
+    <Content Include="app\blocks\exception\exception.js" />
+    <Content Include="app\blocks\exception\exception.module.js" />
+    <Content Include="app\blocks\logger\logger.js" />
+    <Content Include="app\blocks\logger\logger.module.js" />
+    <Content Include="app\blocks\router\routehelper.js" />
+    <Content Include="app\blocks\router\router.module.js" />
+    <Content Include="app\core\config.js" />
+    <Content Include="app\core\constants.js" />
+    <Content Include="app\core\core.module.js" />
+    <Content Include="app\core\dataservice.js" />
+    <Content Include="app\costTest\costtest.meetcomp.html" />
+    <Content Include="app\costTest\costtest.module.js" />
+    <Content Include="app\costTest\costtest.route.js" />
+    <Content Include="app\dashboard\dashboard.manageLayouts.html" />
+    <Content Include="app\dashboard\dashboard.module.js" />
+    <Content Include="app\dashboard\dashboard.route.js" />
     <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -739,9 +764,12 @@
     <Content Include="js\_securityUtil.js" />
     <Content Include="js\_util.js" />
     <Content Include="js\_utils.js" />
-    <Content Include="Scripts\angular-mocks.js" />
-    <Content Include="Scripts\angular.js" />
-    <Content Include="Scripts\angular.min.js" />
+    <Content Include="Scripts\Angular\1.5.8\angular-animate.min.js" />
+    <Content Include="Scripts\Angular\1.5.8\angular-mocks.js" />
+    <Content Include="Scripts\Angular\1.5.8\angular-sanitize.min.js" />
+    <Content Include="Scripts\Angular\1.5.8\angular-ui-router.min.js" />
+    <Content Include="Scripts\Angular\1.5.8\angular.js" />
+    <Content Include="Scripts\Angular\1.5.8\angular.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Areas\HelpPage\Views\Web.config" />
@@ -893,7 +921,7 @@
     <Content Include="Content\kendo\2016.3.914\images\kendoui.ttf" />
     <Content Include="Content\kendo\2016.3.914\images\kendoui.woff" />
     <None Include="Properties\PublishProfiles\Dev.pubxml" />
-    <Content Include="Scripts\angular.min.js.map" />
+    <Content Include="Scripts\Angular\1.5.8\angular.min.js.map" />
     <None Include="Scripts\jquery-2.2.0.intellisense.js" />
     <Content Include="Scripts\jquery-2.2.0.js" />
     <Content Include="Scripts\jquery-2.2.0.min.js" />
@@ -1237,6 +1265,9 @@
     <Content Include="Scripts\kendo\2016.3.914\kendo.web.min.js.map" />
     <Content Include="Scripts\kendo\2016.3.914\kendo.webcomponents.min.js.map" />
     <Content Include="Scripts\kendo\2016.3.914\kendo.window.min.js.map" />
+    <Content Include="Views\Contract\Index.cshtml" />
+    <Content Include="Views\CostTest\Index.cshtml" />
+    <Content Include="Views\Dashboard\Index.cshtml" />
     <None Include="Web.dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

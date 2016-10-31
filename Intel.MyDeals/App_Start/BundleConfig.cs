@@ -21,7 +21,6 @@ namespace Intel.MyDeals
                 "~/Scripts/kendo/2016.3.914/jszip.min.js",
                 "~/Scripts/kendo/2016.3.914/kendo.all.min.js",
                 "~/Scripts/kendo/kendo.aspnetmvc.min.js",
-                "~/Scripts/angular.min.js",
                 "~/Scripts/jquery.easypiechart.min.js",
                 "~/Scripts/moment.js",
                 "~/Scripts/d3.min.js",
@@ -32,6 +31,35 @@ namespace Intel.MyDeals
                 "~/Scripts/jquery-ui.min.js",
                 "~/Scripts/tooltipster.bundle.min.js",
                 "~/js/bootstrap.min.js"
+                ));
+
+            bundles.Add(new ScriptBundle("~/bundles/angular").Include(
+                "~/Scripts/Angular/1.5.8/angular.min.js"
+                ,"~/Scripts/Angular/1.5.8/angular-ui-router.min.js"
+                , "~/Scripts/Angular/1.5.8/angular-animate.min.js"
+                , "~/Scripts/Angular/1.5.8/angular-sanitize.min.js"
+                ));
+
+            bundles.Add(new ScriptBundle("~/bundles/angularReusable").Include(
+                "~/app/blocks/exception/exception.module.js"
+                , "~/app/blocks/exception/exception-handler.provider.js"
+                , "~/app/blocks/exception/exception.js"
+                , "~/app/blocks/logger/logger.module.js"
+                , "~/app/blocks/logger/logger.js"
+                , "~/app/blocks/router/router.module.js"
+                , "~/app/blocks/router/routehelper.js"
+                , "~/app/core/core.module.js"
+                , "~/app/core/constants.js"
+                , "~/app/core/config.js"
+                , "~/app/core/dataservice.js"
+                , "~/app/app.module.js"
+                ));
+
+            bundles.Add(new ScriptBundle("~/bundles/angularModules").Include(
+                "~/app/costTest/costtest.module.js"
+                , "~/app/costTest/costtest.route.js"
+                , "~/app/dashboard/dashboard.module.js"
+                , "~/app/dashboard/dashboard.route.js"
                 ));
 
             bundles.Add(new ScriptBundle("~/MyDeals/scripts").Include(
