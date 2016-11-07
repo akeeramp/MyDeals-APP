@@ -37,17 +37,14 @@
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\Shared Libraries\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
-    <Reference Include="Intel.Opaque, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\My Files\Future Projects\Intel.MyDeals\Shared Libraries\Intel.Opaque.dll</HintPath>
+    <Reference Include="Intel.Opaque">
+      <HintPath>..\Shared Libraries\Intel.Opaque.dll</HintPath>
     </Reference>
-    <Reference Include="Intel.Opaque.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\My Files\Future Projects\Intel.MyDeals\Shared Libraries\Intel.Opaque.Data.dll</HintPath>
+    <Reference Include="Intel.Opaque.Data">
+      <HintPath>..\Shared Libraries\Intel.Opaque.Data.dll</HintPath>
     </Reference>
-    <Reference Include="Intel.Opaque.DBAccess, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\My Files\Future Projects\Intel.MyDeals\Shared Libraries\Intel.Opaque.DBAccess.dll</HintPath>
+    <Reference Include="Intel.Opaque.DBAccess">
+      <HintPath>..\Shared Libraries\Intel.Opaque.DBAccess.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
