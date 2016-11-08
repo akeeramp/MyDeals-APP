@@ -225,7 +225,9 @@
     <Compile Include="Controllers\API\SearchController.cs" />
     <Compile Include="Areas\Admin\Controllers\CacheController.cs" />
     <Compile Include="Controllers\CodingPracticesController.cs" />
+    <Compile Include="Controllers\API\SecurityAttributesAPIController.cs" />
     <Compile Include="Controllers\ConstantsController.cs" />
+    <Compile Include="Controllers\SecurityAttributesController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\CostTestController.cs" />
     <Compile Include="Controllers\DocsController.cs" />
@@ -261,6 +263,12 @@
     <Content Include="app\dashboard\dashboard.manageLayouts.html" />
     <Content Include="app\dashboard\dashboard.module.js" />
     <Content Include="app\dashboard\dashboard.route.js" />
+    <Content Include="app\securityAttributes\roleTypes\roleTypes.manage.html" />
+    <Content Include="app\securityAttributes\securityActions\securityActions.factory.js" />
+    <Content Include="app\securityAttributes\securityAttributes.controller.js" />
+    <Content Include="app\securityAttributes\securityAttributes.module.js" />
+    <Content Include="app\securityAttributes\securityAttributes.route.js" />
+    <Content Include="app\securityAttributes\securityActions\securityActions.manage.html" />
     <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -770,6 +778,7 @@
     <Content Include="Scripts\Angular\1.5.8\angular-ui-router.min.js" />
     <Content Include="Scripts\Angular\1.5.8\angular.js" />
     <Content Include="Scripts\Angular\1.5.8\angular.min.js" />
+    <Content Include="Scripts\Angular\ui-bootstrap-tpls-2.2.0.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Areas\HelpPage\Views\Web.config" />
@@ -1268,6 +1277,7 @@
     <Content Include="Views\Contract\Index.cshtml" />
     <Content Include="Views\CostTest\Index.cshtml" />
     <Content Include="Views\Dashboard\Index.cshtml" />
+    <Content Include="Views\SecurityAttributes\Index.cshtml" />
     <None Include="Web.dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

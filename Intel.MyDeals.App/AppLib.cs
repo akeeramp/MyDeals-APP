@@ -13,8 +13,8 @@ namespace Intel.MyDeals.App
     public static class AppLib
     {
         public static ApplicationViewModel AVM;
-
-        public static Dictionary<string, UserSetting> UserSettings
+		
+		public static Dictionary<string, UserSetting> UserSettings
         {
             get { return OpUserStack.UserSettings ?? (OpUserStack.UserSettings = new Dictionary<string, UserSetting>()); }
             set { OpUserStack.UserSettings = value; }
@@ -62,9 +62,9 @@ namespace Intel.MyDeals.App
         public static string GetEnvironment()
         {
             return BusinessLogic.BusinessLogic.GetEnvironment();
-        }
+		}
 
-        public static void SetEnvName()
+		public static void SetEnvName()
         {
             AVM.AppEnv = (OpLog.OpAppToken == null || OpLog.OpAppToken.OpEnvironment == null ||
                           OpLog.OpAppToken.OpEnvironment.EnvLoc == null)
@@ -126,12 +126,10 @@ namespace Intel.MyDeals.App
             UserSettings[opUserToken.Usr.Idsid.ToUpper()].AllMyCustomers = GetMyCustomers(opUserToken);
             UserSettings[opUserToken.Usr.Idsid.ToUpper()].UserPreferences = GetUserPreferences(opUserToken);
         }
+		
+		
 
-
-
-
-
-        public static void ClearCache()
+		public static void ClearCache()
         {
             OpAuthenticationExtensions.ClearCache();
             UserSettings?.Clear();

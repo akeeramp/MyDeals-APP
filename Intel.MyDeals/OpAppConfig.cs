@@ -1,5 +1,6 @@
 ﻿using System;
 using Intel.MyDeals.App;
+using Intel.MyDeals.BusinesssLogic;
 using Intel.MyDeals.Entities;
 using Intel.Opaque;
 
@@ -12,7 +13,6 @@ namespace Intel.MyDeals
         {
             try
             {
-
                 // Check if OpCore has already been created
                 if (OpCore.Instance != null) return OpCore.Instance;
 
@@ -31,19 +31,21 @@ namespace Intel.MyDeals
                 };
                 OpLog.OpAppToken = opCore.AppToken;
 
-                // Congfig Authentication
-                opCore.Authentication = new OpAuthentication
+				// Logging 
+				OpLog.LogConfig = new LogConfigLib().GetLogConfig();
+
+				// Congfig Authentication
+				opCore.Authentication = new OpAuthentication
                 {
                     Enabled = true,
                     OpAuthenticationType = OpAuthenticationType.Negotiate,
                     AppCustomAuthenticationFunc = CustomAuthentication
                 };
 
-                // Load Role Types
-                ////opCore.SetRoleType(new SecurityAttributesLib().GetOpRoleTypes());
+				// Load Role Types
+				////opCore.SetRoleType(new SecurityAttributesLib().GetOpRoleTypes());
 
-
-                return OpCore.Instance;
+				return OpCore.Instance;
             }
             catch (Exception ex)
             {

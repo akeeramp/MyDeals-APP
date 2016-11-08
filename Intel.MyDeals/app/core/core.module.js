@@ -1,14 +1,21 @@
 (function() {
     'use strict';
 
-    angular.module('app.core', [
+    var ngModule = angular.module('app.core', [
         /*
          * Angular modules
          */
-        'ngAnimate', 'ngSanitize', 'ui.router',
+        'ngAnimate'
+		,'ngSanitize'
+		,'ui.router'
+		, 'kendo.directives'
+		, 'ui.bootstrap'
         /*
          * Our reusable cross app code modules
          */
-        'blocks.exception', 'blocks.logger', 'blocks.router'        
+        ,'blocks.exception'
+		,'blocks.logger'
+		,'blocks.router'
+		
     ]);
 })();

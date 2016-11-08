@@ -1,0 +1,25 @@
+﻿@{
+    ViewBag.Title = "SecurityAttributes";
+}
+
+<style>
+	.btn.small {
+		font-size: 12px;
+	}
+	.k-grid td, .k-grid th{
+		font-size: 1em !important;
+	}
+
+</style>
+
+<div class="row">
+	<div class="col-md-2">
+		<h2>Security</h2>
+		<ul>
+			<li><a ui-sref="securityAttributes.securityActions">Manage ACTN</a></li>
+			<li><a ui-sref="securityAttributes.roleTypes">Manage Role Types</a></li>
+		</ul>
+	</div>
+
+	<div ui-view  class="col-md-10"></div>
+</div>

@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
 using Intel.Opaque;
+
 
 namespace Intel.MyDeals.BusinesssLogic
 {
@@ -33,6 +35,19 @@ namespace Intel.MyDeals.BusinesssLogic
             }).ToList();
         }
 
+		public List<SecurityActions> GetToolActions()
+		{
+			return new SecurityAttributesDataLib().GetToolAction();
+		}
+		public SecurityActions ManageToolAction(SecurityActions action, CrudModes state)
+		{
+			return new SecurityAttributesDataLib().ManageToolAction(action, state);
+		}
 
-    }
+		public bool DeleteToolAction(int id)
+		{
+			return new SecurityAttributesDataLib().DeleteToolAction(id);
+		}
+
+	}
 }

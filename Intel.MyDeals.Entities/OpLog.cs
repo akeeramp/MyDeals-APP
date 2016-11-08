@@ -11,13 +11,14 @@ namespace Intel.MyDeals.Entities
     {
         public static OpAppToken OpAppToken { get; set; }
 
+		public static LogConfig LogConfig { get; set; }
+
         private static DebugLevel DebugLevel = DebugLevel.Application;
-        private static bool IsDebugEnabled = true;
-        private static bool IsEmailErrorsEnabled = true;
+		private static bool IsEmailErrorsEnabled = true;
         private static string ToEmailList = "philip.w.eckenroth@intel.com"; // TODO this shoud be read from an env aware config setup
         private static string FromEmail = "MyDealsSupport@intel.com";
 
-        private static List<OpLogItem> _logStack = new List<OpLogItem>();
+        private static List<OpLogItem> _logStack = new List<OpLogItem>();		
 
         #region Constants
 
@@ -150,7 +151,7 @@ namespace Intel.MyDeals.Entities
 #endif
 
             // if logger is disabled, do not log
-            if (!IsDebugEnabled) return;
+            if (!LogConfig.IsActive) return;
 
             // if log item is debug level and the apps debug level is below debug, do not log
             if (dLevel == DebugLevel.Debug && DebugLevel != DebugLevel.Debug) return;

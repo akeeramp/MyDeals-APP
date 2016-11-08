@@ -76,6 +76,12 @@ using System.Collections.Generic;
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MANAGE_ACTIONS] @idsid = 'PWECKENR', @mode = 'Setup'");
 	ds.Tables[0].TableName = "SecurityActions";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+	
+	// Logging Config data
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_GET_LOG_CONFIG_DATA] @in_msg_src = 'UI_LOG'");
+	ds.Tables[0].TableName = "LogConfig";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
 
 	PopIndent();
 	WriteLine("}"); // End NameSpace

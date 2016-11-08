@@ -17,7 +17,8 @@ namespace Intel.MyDeals
                         "~/Scripts/modernizr-*"));
 
             bundles.Add(new ScriptBundle("~/bundles/scripts").Include(
-                "~/Scripts/jquery-2.2.0.min.js",
+                "~/Scripts/jquery-2.2.0.min.js",                
+				"~/Scripts/Angular/1.5.8/angular.min.js",
                 "~/Scripts/kendo/2016.3.914/jszip.min.js",
                 "~/Scripts/kendo/2016.3.914/kendo.all.min.js",
                 "~/Scripts/kendo/kendo.aspnetmvc.min.js",
@@ -34,11 +35,11 @@ namespace Intel.MyDeals
                 ));
 
             bundles.Add(new ScriptBundle("~/bundles/angular").Include(
-                "~/Scripts/Angular/1.5.8/angular.min.js"
-                ,"~/Scripts/Angular/1.5.8/angular-ui-router.min.js"
+                "~/Scripts/Angular/1.5.8/angular-ui-router.min.js"
                 , "~/Scripts/Angular/1.5.8/angular-animate.min.js"
                 , "~/Scripts/Angular/1.5.8/angular-sanitize.min.js"
-                ));
+				, "~/Scripts/Angular/ui-bootstrap-tpls-2.2.0.min.js"
+				));
 
             bundles.Add(new ScriptBundle("~/bundles/angularReusable").Include(
                 "~/app/blocks/exception/exception.module.js"
@@ -58,9 +59,13 @@ namespace Intel.MyDeals
             bundles.Add(new ScriptBundle("~/bundles/angularModules").Include(
                 "~/app/costTest/costtest.module.js"
                 , "~/app/costTest/costtest.route.js"
-                , "~/app/dashboard/dashboard.module.js"
-                , "~/app/dashboard/dashboard.route.js"
-                ));
+				, "~/app/dashboard/dashboard.module.js"
+				, "~/app/dashboard/dashboard.route.js"
+				, "~/app/securityAttributes/securityAttributes.module.js"
+				, "~/app/securityAttributes/securityAttributes.route.js"
+				, "~/app/securityAttributes/securityActions/securityActions.factory.js"
+				, "~/app/securityAttributes/securityAttributes.controller.js"
+				));
 
             bundles.Add(new ScriptBundle("~/MyDeals/scripts").Include(
                 "~/js/_util.js",
