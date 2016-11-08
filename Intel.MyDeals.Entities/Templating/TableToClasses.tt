@@ -59,22 +59,22 @@ using System.Collections.Generic;
 
 	// Application objects - Used by other classes to break data up per application, this is for admin screens only
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MANAGE_APPLICATIONS] @idsid = 'PWECKENR', @mode = 'Setup'");
-	ds.Tables[0].TableName = "ToolApplications";
+	ds.Tables[0].TableName = "AdminApplications";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	// Deal Type objects - system deal types like "ECAP" and "VOL TIER"
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MANAGE_DEAL_TYPES] @idsid = 'PWECKENR', @mode = 'Setup'");
-	ds.Tables[0].TableName = "ToolDealTypes";
+	ds.Tables[0].TableName = "AdminDealType";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	// Role Type objects - for basic roles information like "FSE" and "SA"
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MANAGE_ROLE_TYPES] @idsid = 'PWECKENR', @mode = 'Setup'");
-	ds.Tables[0].TableName = "ToolRoleTypes";
+	ds.Tables[0].TableName = "AdminRoleType";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	// Actions objects - For field security programming flags
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MANAGE_ACTIONS] @idsid = 'PWECKENR', @mode = 'Setup'");
-	ds.Tables[0].TableName = "ToolActions";
+	ds.Tables[0].TableName = "SecurityActions";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	PopIndent();
