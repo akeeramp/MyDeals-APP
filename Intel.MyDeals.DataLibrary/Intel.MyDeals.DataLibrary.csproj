@@ -79,6 +79,7 @@
     <Compile Include="Geos\GeoDataLib.cs" />
     <Compile Include="Helpers\OpUserTokenHelpers.cs" />
     <Compile Include="JMS\JmsDataLib.cs" />
+    <Compile Include="LogConfig\LogConfigDataLib.cs" />
     <Compile Include="Meta\MetaDataLib.cs" />
     <Compile Include="Other\OtherDataLib.cs" />
     <Compile Include="POC\PocDataLib.cs" />

@@ -75,6 +75,7 @@
     <Compile Include="Geos\GeosLib.cs" />
     <Compile Include="Helpers\OpUserTokenHelpers.cs" />
     <Compile Include="JMS\JmsLib.cs" />
+    <Compile Include="LogConfig\LogConfigLib.cs" />
     <Compile Include="MetaData\MetasLib.cs" />
     <Compile Include="ObjSet\ObjSetHelperFunctions.cs" />
     <Compile Include="Other\OthersLib.cs" />
@@ -101,6 +102,7 @@
       <Name>Intel.MyDeals.Entities</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
