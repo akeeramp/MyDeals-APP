@@ -1,0 +1,88 @@
+﻿
+@Html.Partial("TOC", new ViewDataDictionary
+{
+    { "categoryTitle", "Project setup and logic flow" },
+    { "categoryAction", "Project" },
+    { "sectionTitle", "Examples" },
+    { "sectionAction", "Examples" },
+    { "pageTitle", "Managing data from an api with cache output" }
+})
+
+<div id="mainBody" style="margin: 10px; padding: 0 20px 0 200px;">
+    <h1><img src="/Images/docs/examples.png" height="60" />Managing data from a procedure with cache</h1>
+    <p>
+        This example shows how to manage cache returned from an api.
+    </p>
+    <p>
+        When we want to cache any of the Api results, inform the client about the cached results and manage the cached data at api level, we can use the cache output.
+    </p>
+
+    <div class="stepByStep">
+        <i class="intelicon-task"></i>Step by Step
+    </div>
+
+    <ol>
+        <li>
+            Add CacheOutput attribute on the controller or action you want to cache the results.<br />
+            <div class="note"><strong>Note:</strong> Here is an example</div>
+            <div class="noteBody">
+                <pre>
+        //Cache for 1000 seconds on the server, inform the client that response is valid for 1000 seconds
+        [HttpGet]
+        [Route("api/AdminConstants/v1/GetConstants")]
+        [CacheOutput(ClientTimeSpan = 1000, ServerTimeSpan = 1000)]
+        public IQueryable<AdminConstant> GetConstants()
+        {
+            return new ConstantsLookupsLib().GetAdminConstants().AsQueryable();
+        }
+                </pre>
+            </div>
+        </li>
+        <li>
+            Invalidate the cache on at controller level or action level<br />
+            <p>  Decorating the controller with [AutoInvalidateCacheOutput] will automatically flush all cached GET data from this controller after a successfull POST/PUT/DELETE request.</p>
+            <div class="note"><strong>Note:</strong> Here is an example</div>
+            <div class="noteBody">
+                <pre>
+    [AutoInvalidateCacheOutput]
+    public class AdminConstantsController : ApiController
+    {
+        [Authorize]
+        [HttpGet]
+        [Route("api/AdminConstants/v1/GetConstants")]
+        [CacheOutput(ClientTimeSpan = 50000, ServerTimeSpan = 50000)]
+        public IQueryable<AdminConstant> GetConstants()
+        {
+            return new ConstantsLookupsLib().GetAdminConstants().AsQueryable();
+        }
+    }
+                </pre>
+            </div>
+            <p> Invalidation on action level is similar - done through attributes</p>
+            <div class="note"><strong>Note:</strong> Here is an example</div>
+            <div class="noteBody">
+                
+                <pre>
+        [HttpGet]
+        [Route("api/AdminConstants/v1/GetConstants")]
+        [CacheOutput(ClientTimeSpan = 50000, ServerTimeSpan = 50000)]
+        public IQueryable<AdminConstant> GetConstants()
+        {
+            return new ConstantsLookupsLib().GetAdminConstants().AsQueryable();
+        }
+        [HttpPost]
+        [InvalidateCacheOutput("api/AdminConstants/v1/GetConstants")]
+        [Route("api/AdminConstants/v1/CreateConstant")]
+        public AdminConstant CreateConstant(AdminConstant adminConstant)
+        {
+            return new ConstantsLookupsLib().CreateAdminConstant(adminConstant);
+        }
+                </pre>
+               
+            </div>
+        </li>
+    </ol>
+
+
+    <br /><br /><br />
+</div>

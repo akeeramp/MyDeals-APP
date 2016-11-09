@@ -14,9 +14,7 @@
     </p>
 
     <div id="cacheContainer">
- 
         <div ng-controller="CacheCtrl" ng-init="loadCache()">
-
             <div class="cacheList fl">
                 <h5>Cache Status</h5>
                 <table id="tblCache">
@@ -39,8 +37,27 @@
                     <button ng-click="clearAll()" class="k-primary">Clear All</button>
                     <button ng-click="reloadAll()" class="k-primary">Reload All Cache</button>
                 </div>
+                <hr />
+                <h5>Api Cache Status</h5>
+                <table id="tblCache">
+                    <tr>
+                        <th style="text-align: left;">Cache Name</th>
+                        <th style="text-align: right;">Count</th>
+                        <th style="text-align: center;" colspan="3">Action</th>
+                        <th style="width: 25px;">&nbsp;</th>
+                    </tr>
+                    <tr ng-repeat="data in apiCacheData">
+                        <td>{{data.CacheName}}</td>
+                        <td style="text-align: right;">{{data.CacheCount}}</td>
+                        <td><div class="iconLink" ng-click="clearApiCacheByName(data)" title="Clear Cache"><i class="fa fa-trash-o" aria-hidden="true"></i></div></td>
+                        <td><div class="iconLink" ng-disabeld="true" ng-click="viewApiCacheByName(data)" title="View Cache"><i class="fa fa-code" aria-hidden="true"></i></div></td>
+                        <td ng-show="data.loading"><i class="fa fa-spinner fa-pulse fa fa-fw"></i></td>
+                    </tr>
+                </table>
+                <div style="margin-top: 15px; text-align: left;">
+                    <button ng-click="clearAllApiCache()" class="k-primary">Clear All</button>
+                </div>
             </div>
-
             <div class="fl">
                 <div id="viewResultsContainer">
                     <h5>Cache Contents <span style="font-size: 12px;" id="cName"></span></h5>

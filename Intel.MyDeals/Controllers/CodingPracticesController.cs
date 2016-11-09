@@ -271,6 +271,14 @@ namespace Intel.MyDeals.Controllers
             return View();
         }
 
+        public ActionResult DataFromApiWithCache()
+        {
+            OpUserToken user = AppLib.InitAVM(op);
+            ViewBag.UserToken = user;
+            ViewBag.AppToken = op.AppToken;
+            return View();
+        }
+
         #endregion
 
         #region Coding Tools
