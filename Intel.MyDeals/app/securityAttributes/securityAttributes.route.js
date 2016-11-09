@@ -17,7 +17,6 @@
 					abstract: false
 					, template: '<div ui-view></div>'
 					, url: '/'
-					, controller: 'securityAttributesController as vm'
 				}
 			}
 			, {
@@ -25,15 +24,31 @@
 				config: {
 					templateUrl: 'app/securityAttributes/securityActions/securityActions.manage.html'
 					, url: 'SecurityActions'
-					, controller: 'securityAttributesController as vm'
+					, controller: 'securityActionsController as vm'
 				}
 			}
+            , {
+                state: 'securityAttributes.applications',
+                config: {
+                    templateUrl: 'app/securityAttributes/applications/applications.manage.html'
+					, url: 'Applications'
+					, controller: 'applicationsController as vm'
+                }
+            }
+            , {
+                state: 'securityAttributes.dealTypes',
+                config: {
+                    templateUrl: 'app/securityAttributes/dealTypes/dealTypes.manage.html'
+					, url: 'DealTypes'
+					, controller: 'dealTypesController as vm'
+                }
+            }
 			, {
 				state: 'securityAttributes.roleTypes',
 				config: {
 					templateUrl: 'app/securityAttributes/roleTypes/roleTypes.manage.html'
 					, url: 'RoleTypes'
-					, controller: 'securityAttributesController as vm'
+					, controller: 'roleTypesController as vm'
 				}
 			}
 		];

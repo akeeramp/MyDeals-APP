@@ -1,34 +1,34 @@
 ﻿(function () {
 	'use strict';
-	angular.module('app.securityAttributes').factory('SecurityActionsFactory', SecurityActionsFactory);
+	angular.module('app.securityAttributes').factory('RoleTypesFactory', RoleTypesFactory);
 
 	/* @ngInject */
-	function SecurityActionsFactory($cacheFactory, $q, $http) {
+	function RoleTypesFactory($cacheFactory, $q, $http) {
 		var URL = '/api/SecurityAttributesAPI/' // TODO: Maaybe put this in a nicer place to reference off of
-		var cache = $cacheFactory('SecurityAttributes');
-		var cacheName = 'SECURITYACTIONS';
+		var cache = $cacheFactory('RoleTypes');
+		var cacheName = 'ROLETYPES';
 		
 		return {
-			getActions: getActions
-			, insertAction: insertAction
-			, updateAction: updateAction
-			, deleteAction: deleteAction
+		    getRoleTypes: getRoleTypes
+			, insertRoleTypes: insertRoleTypes
+			, updateRoleTypes: updateRoleTypes
+			, deleteRoleTypes: deleteRoleTypes
 		}
 
-		function getActions() {
+		function getRoleTypes() {
 			var deferred = $q.defer();
 			var cacheResults = cache.get(cacheName);
 
 			//Check if we have the data already cached
 			if (angular.isUndefined(cacheResults) || cacheResults === null) {
-				op.ajaxGetWait(URL + 'GetSecurityActions', function (data) {
+			    op.ajaxGetWait(URL + 'GetRoleTypes', function (data) {
 					// Add data to cache
 					cache.put(cacheName, data);
 					deferred.resolve(data);
 				}, function (result) {
 					//TODO: log to our own db as well (not only opaque)?
-					op.notifyError('Server Error', 'Could not get Security Actions');
-					op.error(null, 'Get Security Actions Error - ' + result.responseText);
+				    op.notifyError('Server Error', 'Could not get Role Types');
+					op.error(null, 'Get Role Types Error - ' + result.responseText);
 					deferred.reject(result);
 				});
 			}
@@ -40,48 +40,48 @@
 		}
 
 
-		function insertAction(action) {
+		function insertRoleType(roleType) {
 			var deferred = $q.defer();
-			op.ajaxPostWait(URL + 'InsertAction', action, function (data) {
+			op.ajaxPostWait(URL + 'InsertRoleType', roleType, function (data) {
 				deferred.resolve(data);
-				op.notifySuccess('New action added');
+				op.notifySuccess('New role type added');
 			}, function (result) {
 				//TODO: log to our own db as well (not only opaque)?
-				op.notifyError('Server Error', 'Unable to insert Security Action');
-				op.error(null, 'Insert Security Action Error - ' + result.responseText);
+				op.notifyError('Server Error', 'Unable to insert Role Type');
+				op.error(null, 'Insert Role Type Error - ' + result.responseText);
 				deferred.reject(result);
 			});
 			return deferred.promise;
 		}
 
 
-		function updateAction(action) {			
+		function updateRoleType(roleType) {
 			var deferred = $q.defer();
-			op.ajaxPostWait(URL + 'UpdateAction', action, function (data) {
+			op.ajaxPostWait(URL + 'UpdateRoleType', roleType, function (data) {
 				deferred.resolve(data);
 				op.notifySuccess('Update successful');
 			}, function (result) {
 				//TODO: log to our own db as well (not only opaque)?
-				op.notifyError('Server Error', 'Unable to update Security Action');
-				op.error(null, 'Update Security Action Error - ' + result.responseText);
+				op.notifyError('Server Error', 'Unable to update Role Type');
+				op.error(null, 'Update Role Type Error - ' + result.responseText);
 				deferred.reject(result);
 			});
 			return deferred.promise;
 		}
 
 
-		function deleteAction(id) {
+		function deleteRoleType(id) {
 			var deferred = $q.defer();
 			// TODO: Replace the below with op functions if we can get that working...
-			$http.delete(URL + 'DeleteAction?id='+id).then(
+			$http.delete(URL + 'DeleteRoleType?id='+id).then(
 				function success(response) {
 					deferred.resolve(response.data);
 					op.notifySuccess('Delete successful');
 				},
 				function error(response) {
 					//TODO: log to our own db as well (not only opaque)?
-					op.notifyError('Server Error', 'Unable to update Security Action');
-					op.error(null, 'Delete Security Action Error - ' + result.responseText);
+					op.notifyError('Server Error', 'Unable to update Role Type');
+					op.error(null, 'Delete Role Type Error - ' + result.responseText);
 					deferred.reject(response);
 				}
 			);

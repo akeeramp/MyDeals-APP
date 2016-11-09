@@ -14,11 +14,12 @@ namespace Intel.MyDeals.DataLibrary
 	public class SecurityAttributesDataLib
 	{
 
-		/// <summary>
-		/// Delete a Security Action baed on id
-		/// </summary>
-		/// <returns>  </returns>
-		public bool DeleteToolAction(int id)
+        #region SecurityActions
+        /// <summary>
+        /// Delete a Security Action baed on id
+        /// </summary>
+        /// <returns>  </returns>
+        public bool DeleteSecurityAction(int id)
 		{
 			//OpLogPerf.Log("DeleteToolAction");
 			DataSet dsCheckConstraintErrors = null;
@@ -46,7 +47,7 @@ namespace Intel.MyDeals.DataLibrary
 		/// Get Security Action
 		/// </summary>
 		/// <returns> List of ToolActions</returns>
-		public List<SecurityActions> GetToolAction()
+		public List<SecurityActions> GetSecurityAction()
 		{
 			//OpLogPerf.Log("GetSecurityAction");
 			return CallManageActionsSP(null, CrudModes.Select);
@@ -56,7 +57,7 @@ namespace Intel.MyDeals.DataLibrary
 		/// Inserts  or Updates a ToolAction
 		/// </summary>
 		/// <returns> The inserted or updated ToolActions</returns>
-		public SecurityActions ManageToolAction(SecurityActions action, CrudModes state)
+		public SecurityActions ManageSecurityAction(SecurityActions action, CrudModes state)
 		{
 			//OpLogPerf.Log("ManageSecurityAction");
 			return CallManageActionsSP(action, state).FirstOrDefault();
@@ -108,12 +109,28 @@ namespace Intel.MyDeals.DataLibrary
 				}
 
 			}
-			catch
+			catch (Exception ex)
 			{
-				// TODO: ERROR LOGGING HERE
-
-			}
+                OpLogPerf.Log(ex);
+                OpLog.EmailError(ex);
+                Exception simpleEx = new Exception("Problem retrieving Security Attribute - Security Actions");
+                throw simpleEx;
+            }
 			return ret;
 		}
-	}
+
+        #endregion
+
+        #region Applications
+        //TODO: Copy Paste Edit
+        #endregion
+
+        #region DealTypes
+        //TODO: Copy Paste Edit
+        #endregion
+
+        #region RoleTypes
+        //TODO: Copy Paste Edit
+        #endregion
+    }
 }

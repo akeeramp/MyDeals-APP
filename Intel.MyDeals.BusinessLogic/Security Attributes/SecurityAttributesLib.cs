@@ -35,18 +35,18 @@ namespace Intel.MyDeals.BusinesssLogic
             }).ToList();
         }
 
-		public List<SecurityActions> GetToolActions()
+		public List<SecurityActions> GetSecurityActions()
 		{
-			return new SecurityAttributesDataLib().GetToolAction();
+			return new SecurityAttributesDataLib().GetSecurityAction();
 		}
-		public SecurityActions ManageToolAction(SecurityActions action, CrudModes state)
+		public SecurityActions ManageSecurityAction(SecurityActions action, CrudModes state)
 		{
-			return new SecurityAttributesDataLib().ManageToolAction(action, state);
+			return new SecurityAttributesDataLib().ManageSecurityAction(action, state);
 		}
 
-		public bool DeleteToolAction(int id)
+		public bool DeleteSecurityAction(int id)
 		{
-			return new SecurityAttributesDataLib().DeleteToolAction(id);
+			return new SecurityAttributesDataLib().DeleteSecurityAction(id);
 		}
 
 	}

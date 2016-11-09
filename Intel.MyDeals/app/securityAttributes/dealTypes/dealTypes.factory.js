@@ -27,8 +27,8 @@
 					deferred.resolve(data);
 				}, function (result) {
 					//TODO: log to our own db as well (not only opaque)?
-					op.notifyError('Server Error', 'Could not get Security Actions');
-					op.error(null, 'Get Security Actions Error - ' + result.responseText);
+					op.notifyError('500: Internal Server Error', 'Could not get Security Actions');
+					op.error(null, 'cSharpAPIExceptionExample - ' + result.responseText);
 					deferred.reject(result);
 				});
 			}
@@ -47,8 +47,8 @@
 				op.notifySuccess('New action added');
 			}, function (result) {
 				//TODO: log to our own db as well (not only opaque)?
-				op.notifyError('Server Error', 'Unable to insert Security Action');
-				op.error(null, 'Insert Security Action Error - ' + result.responseText);
+				op.notifyError('500: Internal Server Error', 'Unable to insert Security Action');
+				op.error(null, 'cSharpAPIExceptionExample - ' + result.responseText);
 				deferred.reject(result);
 			});
 			return deferred.promise;
@@ -62,8 +62,8 @@
 				op.notifySuccess('Update successful');
 			}, function (result) {
 				//TODO: log to our own db as well (not only opaque)?
-				op.notifyError('Server Error', 'Unable to update Security Action');
-				op.error(null, 'Update Security Action Error - ' + result.responseText);
+				op.notifyError('500: Internal Server Error', 'Unable to update Security Action');
+				op.error(null, 'cSharpAPIExceptionExample - ' + result.responseText);
 				deferred.reject(result);
 			});
 			return deferred.promise;
@@ -80,8 +80,8 @@
 				},
 				function error(response) {
 					//TODO: log to our own db as well (not only opaque)?
-					op.notifyError('Server Error', 'Unable to update Security Action');
-					op.error(null, 'Delete Security Action Error - ' + result.responseText);
+					op.notifyError('500: Internal Server Error', 'Unable to update Security Action');
+					op.error(null, 'cSharpAPIExceptionExample - ' + result.responseText);
 					deferred.reject(response);
 				}
 			);

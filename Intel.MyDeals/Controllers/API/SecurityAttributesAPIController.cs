@@ -41,27 +41,27 @@ namespace Intel.MyDeals.Controllers
 			logTest(2);
 			List<SecurityActions> data = new List<SecurityActions>();
 
-			return new SecurityAttributesLib().GetToolActions();
+			return new SecurityAttributesLib().GetSecurityActions();
 		}
 		
 		[HttpPost]
 		[Route("api/SecurityAttributesAPI/InsertAction")]
 		public SecurityActions InsertAction(SecurityActions action)
 		{
-			return new SecurityAttributesLib().ManageToolAction(action, CrudModes.Insert);
+			return new SecurityAttributesLib().ManageSecurityAction(action, CrudModes.Insert);
 		}
 
 		[HttpPost]
 		[Route("api/SecurityAttributesAPI/UpdateAction")]
 		public SecurityActions UpdateAction(SecurityActions action)
 		{
-			return new SecurityAttributesLib().ManageToolAction(action, CrudModes.Update);
+			return new SecurityAttributesLib().ManageSecurityAction(action, CrudModes.Update);
 		}
 		
 		[Route("api/SecurityAttributesAPI/DeleteAction")]
 		public bool DeleteAction(int id)
 		{
-			return new SecurityAttributesLib().DeleteToolAction(id);
+			return new SecurityAttributesLib().DeleteSecurityAction(id);
 		}
 	}
 }

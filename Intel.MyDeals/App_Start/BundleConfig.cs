@@ -64,8 +64,14 @@ namespace Intel.MyDeals
 				, "~/app/securityAttributes/securityAttributes.module.js"
 				, "~/app/securityAttributes/securityAttributes.route.js"
 				, "~/app/securityAttributes/securityActions/securityActions.factory.js"
-				, "~/app/securityAttributes/securityAttributes.controller.js"
-				));
+				, "~/app/securityAttributes/securityActions.controller.js"
+                , "~/app/securityAttributes/applications/applications.factory.js"
+                , "~/app/securityAttributes/applications.controller.js"
+                , "~/app/securityAttributes/dealTypes/dealTypes.factory.js"
+                , "~/app/securityAttributes/dealTypes.controller.js"
+                , "~/app/securityAttributes/roleTypes/roleTypes.factory.js"
+                , "~/app/securityAttributes/roleTypes.controller.js"
+                ));
 
             bundles.Add(new ScriptBundle("~/MyDeals/scripts").Include(
                 "~/js/_util.js",
