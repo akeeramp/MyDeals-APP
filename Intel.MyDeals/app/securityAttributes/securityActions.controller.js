@@ -49,8 +49,8 @@
 				fields: {
 					ACTN_SID: { editable: false, nullable: true },
 					ACTN_CD: { validation: { required: true } },
-					ACTN_DESC: { validation: { required: true, min: 1 } },
-					ACTN_CATGRY_CD: {},
+					ACTN_DESC: { validation: { required: true } },
+					ACTN_CATGRY_CD: { validation: { required: true } },
 					WFSTG_ACTN_CD: {}
 				}
 			}

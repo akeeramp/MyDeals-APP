@@ -51,10 +51,10 @@
 				    APPL_SID: { validation: { required: true } },
 				    ROLE_TYPE_CD: { validation: { required: true } },
 				    ROLE_TYPE_DSPLY_CD: { validation: { required: true } },
-				    ROLE_TYPE_DESC: { validation: { required: true, min: 1 } },
-					ROLE_TIER_CD: {},
-					IS_SINGLE_SELECT: {},
-				    ACTV_IND: {}
+				    ROLE_TYPE_DESC: { validation: { required: true } },
+				    ROLE_TIER_CD: { validation: { required: true } },
+				    IS_SINGLE_SELECT: { validation: { required: true } },
+				    ACTV_IND: { validation: { required: true } }
 				}
 			}
 		}

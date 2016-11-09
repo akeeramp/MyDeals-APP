@@ -1,114 +1,130 @@
 ﻿angular.module('app.securityAttributes')
-.controller('dealTypesController', function ($uibModal, SecurityActionsFactory, $scope) {
-	vm = this;
+.controller('dealTypesController', function ($uibModal, DealTypesFactory, $scope) {
+    vm = this;
 
-	// Functions
-	vm.addItem = addItem;
-	vm.updateItem = updateItem;
-	vm.deleteItem = deleteItem
-	vm.onChange = onChange;
+    // Functions
+    vm.addItem = addItem;
+    vm.updateItem = updateItem;
+    vm.deleteItem = deleteItem
+    vm.onChange = onChange;
 
-	// Variables
-	vm.selectedItem = null;
-	vm.isButtonDisabled = true;
-	vm.toolBarTemplate = $("#toolBarTemplate").html();
+    // Variables
+    vm.selectedItem = null;
+    vm.isButtonDisabled = true;
+    vm.toolBarTemplate = $("#toolBarTemplate").html();
 
-	vm.dataSource = new kendo.data.DataSource({
-		type: "json",
-		transport: {
-			read: function (e) {
-				SecurityActionsFactory.getActions()
+    vm.dataSource = new kendo.data.DataSource({
+        type: "json",
+        transport: {
+            read: function (e) {
+                DealTypesFactory.getDealTypes()
 					.then(function (data) {
-						e.success(data);
+					    e.success(data);
 					});
-			},
-			update: function (e) {
-				SecurityActionsFactory.updateAction(e.data.models[0])
+            },
+            update: function (e) {
+                DealTypesFactory.updateDealType(e.data.models[0])
 					.then(function (data) {
-						e.success(data);
+					    e.success(data);
 					});
-			},
-			destroy: function (e) {
-				SecurityActionsFactory.deleteAction(e.data.models[0].ACTN_SID)
+            },
+            destroy: function (e) {
+                DealTypesFactory.deleteDealType(e.data.models[0].DEAL_TYPE_SID)
 					.then(function (data) {
-						e.success(data);
+					    e.success(data);
 					});
-			},
-			create: function (e) {
-				SecurityActionsFactory.insertAction(e.data.models[0])
+            },
+            create: function (e) {
+                DealTypesFactory.insertDealType(e.data.models[0])
 					.then(function (data) {
-						e.success(data);
+					    e.success(data);
 					});
-			}
-		},
-		batch: true,
-		pageSize: 20,
-		schema: {
-			model: {
-				id: "ACTN_SID",
-				fields: {
-					ACTN_SID: { editable: false, nullable: true },
-					ACTN_CD: { validation: { required: true } },
-					ACTN_DESC: { validation: { required: true, min: 1 } },
-					ACTN_CATGRY_CD: {},
-					WFSTG_ACTN_CD: {}
-				}
-			}
-		}
-	});
+            }
+        },
+        batch: true,
+        pageSize: 20,
+        schema: {
+            model: {
+                id: "DEAL_TYPE_SID",
+                fields: {
+                    DEAL_TYPE_SID: { editable: false, nullable: true },
+                    DEAL_ATRB_SID: { validation: { required: true } },
+                    DEAL_TYPE_CD: { validation: { required: true } },
+                    DEAL_TYPE_DESC: { validation: { required: true } },
+                    TEMPLT_DEAL_SID: {},
+                    TEMPLT_DEAL_NBR: {},
+                    TRKR_NBR_DT_LTR: {},
+                    PERFORM_CTST: {},
+                    ACTV_IND: { validation: { required: true } }
+                }
+            }
+        }
+    });
 
-	vm.mainGridOptions = {
-		dataSource: vm.dataSource,
-		sortable: true,
-		selectable: true,
-		pageable: true,
-		editable: "popup",
-		change: vm.onChange,
-		toolbar: vm.toolBarTemplate,
-		//toolbar: [
-		//	"create",
-		//	{ name: "customEdit", text: "Edit", imageClass: "k-edit", className: "k-custom-edit btn btn-primary", iconClass: "k-icon" },
-		//	{ name: "customDelete", text: "Delete", imageClass: "k-delete", className: "k-custom-delete btn btn-default", iconClass: "k-icon" }
-		//],
-		columns: [
+    vm.mainGridOptions = {
+        dataSource: vm.dataSource,
+        sortable: true,
+        selectable: true,
+        pageable: true,
+        editable: "popup",
+        change: vm.onChange,
+        toolbar: vm.toolBarTemplate,
+        //toolbar: [
+        //	"create",
+        //	{ name: "customEdit", text: "Edit", imageClass: "k-edit", className: "k-custom-edit btn btn-primary", iconClass: "k-icon" },
+        //	{ name: "customDelete", text: "Delete", imageClass: "k-delete", className: "k-custom-delete btn btn-default", iconClass: "k-icon" }
+        //],
+        columns: [
 		{
-			field: "ACTN_SID",
-			title: "ID",
+		    field: "DEAL_TYPE_SID",
+		    title: "ID",
 		}, {
-			field: "ACTN_CD",
-			title: "Name"
+		    field: "DEAL_ATRB_SID",
+		    title: "Deal ATRB ID"
 		}, {
-			field: "ACTN_DESC",
-			title: "Description"
+		    field: "DEAL_TYPE_CD",
+		    title: "Name"
 		}, {
-			field: "ACTN_CATGRY_CD",
-			title: "Category"
+		    field: "DEAL_TYPE_DESC",
+		    title: "Description"
 		}, {
-			field: "WFSTG_ACTN_CD",
-			title: "Stage"
+		    field: "TEMPLT_DEAL_SID",
+		    title: "Template Deal ID"
+		}, {
+		    field: "TEMPLT_DEAL_NBR",
+		    title: "Template Deal Number"
+		}, {
+		    field: "TRKR_NBR_DT_LTR",
+		    title: "TRKR_NBR_DT_LTR"
+		}, {
+		    field: "PERFORM_CTST",
+		    title: "Perform CTST"
+		}, {
+		    field: "ACTV_IND",
+		    title: "Active"
 		}]
-	}
+    }
 
-	// Gets and sets the selected row
-	function onChange() {
-		vm.selectedItem = $scope.actionsGrid.select();
-		if (vm.selectedItem.length == 0) {
-			vm.isButtonDisabled = true;
-		} else {
-			vm.isButtonDisabled = false;
-		}
-		$scope.$apply();
-	}
+    // Gets and sets the selected row
+    function onChange() {
+        vm.selectedItem = $scope.dealTypesGrid.select();
+        if (vm.selectedItem.length == 0) {
+            vm.isButtonDisabled = true;
+        } else {
+            vm.isButtonDisabled = false;
+        }
+        $scope.$apply();
+    }
 
-	function addItem() {
-		vm.isButtonDisabled = true;
-		$scope.actionsGrid.addRow();
-	}
-	function updateItem() {
-		$scope.actionsGrid.editRow(vm.selectedItem);
-	}
-	function deleteItem() {
-		$scope.actionsGrid.removeRow(vm.selectedItem);
-	}
+    function addItem() {
+        vm.isButtonDisabled = true;
+        $scope.dealTypesGrid.addRow();
+    }
+    function updateItem() {
+        $scope.dealTypesGrid.editRow(vm.selectedItem);
+    }
+    function deleteItem() {
+        $scope.dealTypesGrid.removeRow(vm.selectedItem);
+    }
 
 });
