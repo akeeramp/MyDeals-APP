@@ -271,7 +271,7 @@
     <Content Include="app\securityAttributes\roleTypes\roleTypes.factory.js" />
     <Content Include="app\securityAttributes\dealTypes.controller.js" />
     <Content Include="app\securityAttributes\applications.controller.js" />
-    <Content Include="app\securityAttributes\roleTypes.contoller.js" />
+    <Content Include="app\securityAttributes\roleTypes.controller.js" />
     <Content Include="app\securityAttributes\securityActions\securityActions.factory.js" />
     <Content Include="app\securityAttributes\securityActions.controller.js" />
     <Content Include="app\securityAttributes\securityAttributes.module.js" />

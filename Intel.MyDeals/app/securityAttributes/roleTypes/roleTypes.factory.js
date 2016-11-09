@@ -10,9 +10,9 @@
 		
 		return {
 		    getRoleTypes: getRoleTypes
-			, insertRoleTypes: insertRoleTypes
-			, updateRoleTypes: updateRoleTypes
-			, deleteRoleTypes: deleteRoleTypes
+			, insertRoleType: insertRoleType
+			, updateRoleType: updateRoleType
+			, deleteRoleType: deleteRoleType
 		}
 
 		function getRoleTypes() {

@@ -1,5 +1,5 @@
 ﻿angular.module('app.securityAttributes')
-.controller('roleTypesController', function ($uibModal, roleTypesFactory, $scope) {
+.controller('roleTypesController', function ($uibModal, RoleTypesFactory, $scope) {
 	vm = this;
 
 	// Functions
