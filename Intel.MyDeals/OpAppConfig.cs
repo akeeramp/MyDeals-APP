@@ -8,8 +8,12 @@ namespace Intel.MyDeals
 {
     public static class OpAppConfig
     {
+		static OpAppConfig(){
+			// Logging 
+			OpLog.LogConfig = new LogConfigLib().GetLogConfig();
+		}
 
-        public static OpCore Init()
+		public static OpCore Init()
         {
             try
             {
@@ -30,9 +34,6 @@ namespace Intel.MyDeals
                     },
                 };
                 OpLog.OpAppToken = opCore.AppToken;
-
-				// Logging 
-				OpLog.LogConfig = new LogConfigLib().GetLogConfig();
 
 				// Congfig Authentication
 				opCore.Authentication = new OpAuthentication

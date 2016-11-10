@@ -18,9 +18,9 @@
         /*
          * Feature areas
          */
-		'app.securityAttributes',
         'app.costtest',
-        'app.dashboard'
+        'app.dashboard',
+		'app.securityAttributes'
     ]);
 
 })()

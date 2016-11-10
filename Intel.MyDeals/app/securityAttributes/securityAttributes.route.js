@@ -30,7 +30,7 @@
             , {
                 state: 'securityAttributes.applications',
                 config: {
-                    templateUrl: 'app/securityAttributes/applications/applications.manage.html'
+                    templateUrl: 'app/securityAttributes/adminApplications/adminApplications.manage.html'
 					, url: 'Applications'
 					, controller: 'applicationsController as vm'
                 }
@@ -38,7 +38,7 @@
             , {
                 state: 'securityAttributes.dealTypes',
                 config: {
-                    templateUrl: 'app/securityAttributes/dealTypes/dealTypes.manage.html'
+                	templateUrl: 'app/securityAttributes/adminDealTypes/adminDealTypes.manage.html'
 					, url: 'DealTypes'
 					, controller: 'dealTypesController as vm'
                 }
@@ -46,7 +46,7 @@
 			, {
 				state: 'securityAttributes.roleTypes',
 				config: {
-					templateUrl: 'app/securityAttributes/roleTypes/roleTypes.manage.html'
+					templateUrl: 'app/securityAttributes/adminRoleTypes/adminRoleTypes.manage.html'
 					, url: 'RoleTypes'
 					, controller: 'roleTypesController as vm'
 				}

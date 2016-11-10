@@ -21,7 +21,7 @@
 
 			//Check if we have the data already cached
 			if (angular.isUndefined(cacheResults) || cacheResults === null) {
-				op.ajaxGetWait(URL + 'GetDealTypes', function (data) {
+				op.ajaxGetWait(URL + 'GetAdminDealTypes', function (data) {
 					// Add data to cache
 					cache.put(cacheName, data);
 					deferred.resolve(data);
@@ -42,7 +42,7 @@
 
 		function insertDealType(dealType) {
 			var deferred = $q.defer();
-			op.ajaxPostWait(URL + 'InsertDealType', dealType, function (data) {
+			op.ajaxPostWait(URL + 'InsertAdminDealType', dealType, function (data) {
 				deferred.resolve(data);
 				op.notifySuccess('New dealType added');
 			}, function (result) {
@@ -57,7 +57,7 @@
 
 		function updateDealType(dealType) {
 			var deferred = $q.defer();
-			op.ajaxPostWait(URL + 'UpdateDealType', dealType, function (data) {
+			op.ajaxPostWait(URL + 'UpdateAdminDealType', dealType, function (data) {
 				deferred.resolve(data);
 				op.notifySuccess('Update successful');
 			}, function (result) {
@@ -73,7 +73,7 @@
 		function deleteDealType(id) {
 			var deferred = $q.defer();
 			// TODO: Replace the below with op functions if we can get that working...
-			$http.delete(URL + 'DeleteDealType?id='+id).then(
+			$http.delete(URL + 'DeleteAdminDealType?id=' + id).then(
 				function success(response) {
 					deferred.resolve(response.data);
 					op.notifySuccess('Delete successful');

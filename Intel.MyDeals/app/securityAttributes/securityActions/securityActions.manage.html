@@ -15,6 +15,23 @@
 </div>
 
 <div class="col-md-12" style="padding-top: 20px;">
-	<!-- TODO Stylize kendo grid to fit MLAF guidelines and just look better overall -->
 	<div kendo-grid="actionsGrid" class="table" options="vm.mainGridOptions"></div>
 </div>
+
+
+<!-- TODO Stylize kendo grid to fit MLAF guidelines and just look better overall.
+
+	Some stylizing ideas that may improve some usability:
+		- Add tooltip on disabled Edit/Delete buttons telling user to click a row on the grid to enable buttons
+		- Make cursor = pointer when hovering over the grid items
+		- Color the grid's headers differently to stand out from other rows
+		- Put icon on grid headers to indicate that you can sort on the grid headers on click
+		- Move action butons to top right of ng-view
+		- Make the sidebar prettier. It needs a lot of work
+		- Ask users how many items they want on each page of the screen, or if they even want pagination at all
+		- Position icons on buttons farther away from text (for example: increase the padding from the X icon and the "Delete" text on the Delete button)
+		- Remove the decimals on the number inputs in the validation pop-up
+		- Remove the ID in the validation pop-up
+		- Make the default yellow validation error messages not so in the way
+
+ -->

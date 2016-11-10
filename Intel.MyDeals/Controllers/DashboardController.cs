@@ -1,17 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using Intel.MyDeals.App;
+using Intel.Opaque;
 using System.Web.Mvc;
 
 namespace Intel.MyDeals.Controllers
 {
-    public class DashboardController : Controller
-    {
-        // GET: Dashboard
-        public ActionResult Index()
-        {
-            return View();
-        }
-    }
+	public class DashboardController : Controller
+	{
+		OpCore op = OpAppConfig.Init();
+		// GET: Dashboard
+		public ActionResult Index()
+		{
+			OpUserToken user = AppLib.InitAVM(op);
+			ViewBag.UserToken = user;
+			ViewBag.AppToken = op.AppToken;
+			return View();
+		}
+	}
 }

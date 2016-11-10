@@ -1,5 +1,5 @@
 ﻿angular.module('app.securityAttributes')
-.controller('applicationsController', function ($uibModal, ApplicationsFactory, $scope) {
+.controller('dealTypesController', function ($uibModal, DealTypesFactory, $scope) {
     vm = this;
 
     // Functions
@@ -17,25 +17,25 @@
         type: "json",
         transport: {
             read: function (e) {
-                ApplicationsFactory.getApplications()
+                DealTypesFactory.getDealTypes()
 					.then(function (data) {
 					    e.success(data);
 					});
             },
             update: function (e) {
-                ApplicationsFactory.updateApplication(e.data.models[0])
+                DealTypesFactory.updateDealType(e.data.models[0])
 					.then(function (data) {
 					    e.success(data);
 					});
             },
             destroy: function (e) {
-                ApplicationsFactory.deleteApplication(e.data.models[0].APPL_SID)
+                DealTypesFactory.deleteDealType(e.data.models[0].DEAL_TYPE_SID)
 					.then(function (data) {
 					    e.success(data);
 					});
             },
             create: function (e) {
-                ApplicationsFactory.insertApplication(e.data.models[0])
+                DealTypesFactory.insertDealType(e.data.models[0])
 					.then(function (data) {
 					    e.success(data);
 					});
@@ -45,13 +45,17 @@
         pageSize: 20,
         schema: {
             model: {
-                id: "APPL_SID",
+                id: "DEAL_TYPE_SID",
                 fields: {
-                    APPL_SID: { editable: false, nullable: true },
-                    APPL_CD: { validation: { required: true } },
-                    APPL_DESC: { validation: { required: true} },
-                    APPL_SUITE: { validation: { required: true } },
-                    ACTV_IND: { validation: { required: true } }
+                    DEAL_TYPE_SID: { editable: false, nullable: true },
+                    DEAL_ATRB_SID: { type: "number" , validation: { required: true } },
+                    DEAL_TYPE_CD: { validation: { required: true } },
+                    DEAL_TYPE_DESC: { validation: { required: true } },
+                    TEMPLT_DEAL_SID: {},
+                    TEMPLT_DEAL_NBR: { type: "number", validation: { format:"{0:n0}", decimals:0 } },
+                    TRKR_NBR_DT_LTR: {},
+                    PERFORM_CTST: { type: "boolean" },
+                    ACTV_IND: { type: "boolean" }
                 }
             }
         }
@@ -72,17 +76,29 @@
         //],
         columns: [
 		{
-		    field: "APPL_SID",
+		    field: "DEAL_TYPE_SID",
 		    title: "ID",
 		}, {
-		    field: "APPL_CD",
+		    field: "DEAL_ATRB_SID",
+		    title: "Deal ATRB ID"
+		}, {
+		    field: "DEAL_TYPE_CD",
 		    title: "Name"
 		}, {
-		    field: "APPL_DESC",
+		    field: "DEAL_TYPE_DESC",
 		    title: "Description"
 		}, {
-		    field: "APPL_SUITE",
-		    title: "Suite"
+		    field: "TEMPLT_DEAL_SID",
+		    title: "Template Deal ID"
+		}, {
+		    field: "TEMPLT_DEAL_NBR",
+		    title: "Template Deal Number"
+		}, {
+		    field: "TRKR_NBR_DT_LTR",
+		    title: "TRKR_NBR_DT_LTR"
+		}, {
+		    field: "PERFORM_CTST",
+		    title: "Perform CTST"
 		}, {
 		    field: "ACTV_IND",
 		    title: "Active"
@@ -91,7 +107,7 @@
 
     // Gets and sets the selected row
     function onChange() {
-        vm.selectedItem = $scope.applicationsGrid.select();
+        vm.selectedItem = $scope.dealTypesGrid.select();
         if (vm.selectedItem.length == 0) {
             vm.isButtonDisabled = true;
         } else {
@@ -102,13 +118,13 @@
 
     function addItem() {
         vm.isButtonDisabled = true;
-        $scope.applicationsGrid.addRow();
+        $scope.dealTypesGrid.addRow();
     }
     function updateItem() {
-        $scope.applicationsGrid.editRow(vm.selectedItem);
+        $scope.dealTypesGrid.editRow(vm.selectedItem);
     }
     function deleteItem() {
-        $scope.applicationsGrid.removeRow(vm.selectedItem);
+        $scope.dealTypesGrid.removeRow(vm.selectedItem);
     }
 
 });

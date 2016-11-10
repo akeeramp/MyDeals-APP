@@ -21,7 +21,7 @@
 
 			//Check if we have the data already cached
 			if (angular.isUndefined(cacheResults) || cacheResults === null) {
-			    op.ajaxGetWait(URL + 'GetRoleTypes', function (data) {
+				op.ajaxGetWait(URL + 'GetAdminRoleTypes', function (data) {
 					// Add data to cache
 					cache.put(cacheName, data);
 					deferred.resolve(data);
@@ -42,7 +42,7 @@
 
 		function insertRoleType(roleType) {
 			var deferred = $q.defer();
-			op.ajaxPostWait(URL + 'InsertRoleType', roleType, function (data) {
+			op.ajaxPostWait(URL + 'InsertAdminRoleType', roleType, function (data) {
 				deferred.resolve(data);
 				op.notifySuccess('New role type added');
 			}, function (result) {
@@ -57,7 +57,7 @@
 
 		function updateRoleType(roleType) {
 			var deferred = $q.defer();
-			op.ajaxPostWait(URL + 'UpdateRoleType', roleType, function (data) {
+			op.ajaxPostWait(URL + 'UpdateAdminRoleType', roleType, function (data) {
 				deferred.resolve(data);
 				op.notifySuccess('Update successful');
 			}, function (result) {
@@ -73,7 +73,7 @@
 		function deleteRoleType(id) {
 			var deferred = $q.defer();
 			// TODO: Replace the below with op functions if we can get that working...
-			$http.delete(URL + 'DeleteRoleType?id='+id).then(
+			$http.delete(URL + 'DeleteAdminRoleType?id=' + id).then(
 				function success(response) {
 					deferred.resolve(response.data);
 					op.notifySuccess('Delete successful');

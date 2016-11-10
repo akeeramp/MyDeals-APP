@@ -48,13 +48,13 @@
 			    id: "ROLE_TYPE_SID",
 				fields: {
 				    ROLE_TYPE_SID: { editable: false, nullable: true },
-				    APPL_SID: { validation: { required: true } },
+				    APPL_SID: { type: "number", validation: { format:"{0:n0}", decimals:0, required: true } },
 				    ROLE_TYPE_CD: { validation: { required: true } },
 				    ROLE_TYPE_DSPLY_CD: { validation: { required: true } },
 				    ROLE_TYPE_DESC: { validation: { required: true } },
 				    ROLE_TIER_CD: { validation: { required: true } },
-				    IS_SINGLE_SELECT: { validation: { required: true } },
-				    ACTV_IND: { validation: { required: true } }
+				    IS_SINGLE_SELECT: { type: "boolean" },
+				    ACTV_IND: { type: "boolean" }
 				}
 			}
 		}

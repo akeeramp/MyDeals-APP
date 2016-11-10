@@ -21,7 +21,7 @@
 
             //Check if we have the data already cached
             if (angular.isUndefined(cacheResults) || cacheResults === null) {
-                op.ajaxGetWait(URL + 'GetApplications', function (data) {
+            	op.ajaxGetWait(URL + 'GetAdminApplications', function (data) {
                     // Add data to cache
                     cache.put(cacheName, data);
                     deferred.resolve(data);
@@ -42,7 +42,7 @@
 
         function insertApplication(application) {
             var deferred = $q.defer();
-            op.ajaxPostWait(URL + 'InsertApplication', application, function (data) {
+            op.ajaxPostWait(URL + 'InsertAdminApplication', application, function (data) {
                 deferred.resolve(data);
                 op.notifySuccess('New application added');
             }, function (result) {
@@ -57,7 +57,7 @@
 
         function updateApplication(application) {
             var deferred = $q.defer();
-            op.ajaxPostWait(URL + 'UpdateApplication', application, function (data) {
+            op.ajaxPostWait(URL + 'UpdateAdminApplication', application, function (data) {
                 deferred.resolve(data);
                 op.notifySuccess('Update successful');
             }, function (result) {
@@ -73,7 +73,7 @@
         function deleteApplication(id) {
             var deferred = $q.defer();
             // TODO: Replace the below with op functions if we can get that working...
-            $http.delete(URL + 'DeleteApplication?id=' + id).then(
+            $http.delete(URL + 'DeleteAdminApplication?id=' + id).then(
 				function success(response) {
 				    deferred.resolve(response.data);
 				    op.notifySuccess('Delete successful');

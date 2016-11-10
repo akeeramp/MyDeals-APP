@@ -12,35 +12,13 @@ using Newtonsoft.Json;
 
 namespace Intel.MyDeals.Controllers
 {
-	public class ToolAPIController : ApiController
+	public class SecurityAttributesAPIController : ApiController
 	{
-		public void logTest(int msgCnt)
-		{
-			OpLog.ClearStack();
-			List<OpMsg> opMsgs = new List<OpMsg>();
-			for (var i = 0; i < msgCnt; i++)
-			{
-				opMsgs.Add(
-				new OpMsg
-				{
-					DebugMessage = "This is a debug message " + i,
-					Message = "This is a debug message " + i,
-					MsgType = OpMsg.MessageType.Info //isError ? OpMsg.MessageType.Error : isAlert ? OpMsg.MessageType.Warning : OpMsg.MessageType.Info
-				}
-				);
-			}
-			OpLog.LogEvent(opMsgs);
-		}
-
+		#region SecurityActions
 		[HttpGet]
 		[Route("api/SecurityAttributesAPI/GetSecurityActions")]
 		public IEnumerable<SecurityActions> GetSecurityActions()
 		{
-			// TODO rmeove thislogging test 
-			//OpLogUnitTests.AddOpMessages
-			logTest(2);
-			List<SecurityActions> data = new List<SecurityActions>();
-
 			return new SecurityAttributesLib().GetSecurityActions();
 		}
 		
@@ -63,5 +41,93 @@ namespace Intel.MyDeals.Controllers
 		{
 			return new SecurityAttributesLib().DeleteSecurityAction(id);
 		}
+		#endregion
+
+		#region Admin Application
+		[HttpGet]
+		[Route("api/SecurityAttributesAPI/GetAdminApplications")]
+		public IEnumerable<AdminApplications> GetAdminApplications()
+		{
+			return new SecurityAttributesLib().GetAdminApplications();
+		}
+
+		[HttpPost]
+		[Route("api/SecurityAttributesAPI/InsertAdminApplication")]
+		public AdminApplications InsertApplication(AdminApplications app)
+		{
+			return new SecurityAttributesLib().ManageAdminApplication(app, CrudModes.Insert);
+		}
+
+		[HttpPost]
+		[Route("api/SecurityAttributesAPI/UpdateAdminApplication")]
+		public AdminApplications UpdateAdminApplication(AdminApplications app)
+		{
+			return new SecurityAttributesLib().ManageAdminApplication(app, CrudModes.Update);
+		}
+
+		[Route("api/SecurityAttributesAPI/DeleteAdminApplication")]
+		public bool DeleteAdminApplication(int id)
+		{
+			return new SecurityAttributesLib().DeleteAdminApplication(id);
+		}
+		#endregion
+
+		#region Admin DealTypes
+		[HttpGet]
+		[Route("api/SecurityAttributesAPI/GetAdminDealTypes")]
+		public IEnumerable<AdminDealType> GetAdminDealTypes()
+		{
+			return new SecurityAttributesLib().GetAdminDealTypes();
+		}
+
+		[HttpPost]
+		[Route("api/SecurityAttributesAPI/InsertAdminDealType")]
+		public AdminDealType InsertAdminDealType(AdminDealType dealType)
+		{
+			return new SecurityAttributesLib().ManageAdminDealType(dealType, CrudModes.Insert);
+		}
+
+		[HttpPost]
+		[Route("api/SecurityAttributesAPI/UpdateAdminDealType")]
+		public AdminDealType UpdateDealType(AdminDealType dealType)
+		{
+			return new SecurityAttributesLib().ManageAdminDealType(dealType, CrudModes.Update);
+		}
+
+		[Route("api/SecurityAttributesAPI/DeleteAdminDealType")]
+		public bool DeleteAdminDealType(int id)
+		{
+			return new SecurityAttributesLib().DeleteAdminDealType(id);
+		}
+		#endregion
+
+		#region Admin RoleTypes
+		[HttpGet]
+		[Route("api/SecurityAttributesAPI/GetAdminRoleTypes")]
+		public IEnumerable<AdminRoleType> GetAdminRoleTypes()
+		{
+			return new SecurityAttributesLib().GetAdminRoleTypes();
+		}
+
+		[HttpPost]
+		[Route("api/SecurityAttributesAPI/InsertAdminRoleType")]
+		public AdminRoleType InsertAdminRoleType(AdminRoleType RoleType)
+		{
+			return new SecurityAttributesLib().ManageAdminRoleType(RoleType, CrudModes.Insert);
+		}
+
+		[HttpPost]
+		[Route("api/SecurityAttributesAPI/UpdateAdminRoleType")]
+		public AdminRoleType UpdateAdminRoleType(AdminRoleType RoleType)
+		{
+			return new SecurityAttributesLib().ManageAdminRoleType(RoleType, CrudModes.Update);
+		}
+
+		[Route("api/SecurityAttributesAPI/DeleteAdminRoleType")]
+		public bool DeleteAdminRoleType(int id)
+		{
+			return new SecurityAttributesLib().DeleteAdminRoleType(id);
+		}
+		#endregion
 	}
 }

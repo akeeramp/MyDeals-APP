@@ -22,7 +22,7 @@ namespace Intel.MyDeals.BusinesssLogic
             //return DataCollections.GetAppRoleTiers();
         }
 
-        public List<OpRoleType> GetOpRoleTypes()
+		public List<OpRoleType> GetOpRoleTypes()
         {
             // Load Role Types
             return GetAppRoleTiers().Where(r => r.APPL_CD == "IDMS").Select(appRoleTier => new OpRoleType
@@ -35,9 +35,10 @@ namespace Intel.MyDeals.BusinesssLogic
             }).ToList();
         }
 
+		#region SecurityActions
 		public List<SecurityActions> GetSecurityActions()
 		{
-			return new SecurityAttributesDataLib().GetSecurityAction();
+			return new SecurityAttributesDataLib().GetSecurityActions();
 		}
 		public SecurityActions ManageSecurityAction(SecurityActions action, CrudModes state)
 		{
@@ -48,6 +49,56 @@ namespace Intel.MyDeals.BusinesssLogic
 		{
 			return new SecurityAttributesDataLib().DeleteSecurityAction(id);
 		}
+		#endregion
+
+		#region Admin Applications
+		public List<AdminApplications> GetAdminApplications()
+		{
+			return new SecurityAttributesDataLib().GetAdminApplications();
+		}
+		public AdminApplications ManageAdminApplication(AdminApplications app, CrudModes state)
+		{
+			return new SecurityAttributesDataLib().ManageAdminApplication(app, state);
+		}
+
+		public bool DeleteAdminApplication(int id)
+		{
+			return new SecurityAttributesDataLib().DeleteAdminApplication(id);
+		}
+		#endregion
+
+		#region Admin DealTypes
+		public List<AdminDealType> GetAdminDealTypes()
+		{
+			return new SecurityAttributesDataLib().GetAdminDealTypes();
+		}
+		public AdminDealType ManageAdminDealType(AdminDealType dealType, CrudModes state)
+		{
+			return new SecurityAttributesDataLib().ManageAdminDealType(dealType, state);
+		}
+
+		public bool DeleteAdminDealType(int id)
+		{
+			return new SecurityAttributesDataLib().DeleteAdminDealType(id);
+		}
+		#endregion
+
+		#region Admin RoleTypes
+		public List<AdminRoleType> GetAdminRoleTypes()
+		{
+			return new SecurityAttributesDataLib().GetAdminRoleTypes();
+		}
+		public AdminRoleType ManageAdminRoleType(AdminRoleType roleType, CrudModes state)
+		{
+			return new SecurityAttributesDataLib().ManageAdminRoleType(roleType, state);
+		}
+
+		public bool DeleteAdminRoleType(int id)
+		{
+			return new SecurityAttributesDataLib().DeleteAdminRoleType(id);
+		}
+		#endregion
+
 
 	}
 }
