@@ -61,6 +61,9 @@
              *     throw { message: 'error message we added' };
              */
             logger.error(exception.message, errorData);
+
+            //TODO: figure out how to modify the angular exception handler to correctly call op.handleError or log it the way we want to
+            //op.handleException(exception, 'Angular has encountered a problem.')
         };
     }
 })();

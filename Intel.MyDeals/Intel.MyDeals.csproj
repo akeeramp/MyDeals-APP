@@ -176,6 +176,7 @@
     <Folder Include="app\admin\" />
     <Folder Include="app\contract\" />
     <Folder Include="app\dealManager\" />
+    <Folder Include="app\errorHandling\" />
     <Folder Include="app\reporting\" />
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Models\" />
@@ -722,6 +723,7 @@
     <Content Include="Images\docs\dealapproval.png" />
     <Content Include="Images\docs\dealentry.png" />
     <Content Include="Images\docs\errorhandling.png" />
+    <Content Include="Images\docs\errorhandlingdesign.png" />
     <Content Include="Images\docs\examples.png" />
     <Content Include="Images\docs\ex_code_class.png" />
     <Content Include="Images\docs\ex_proc_results.png" />
@@ -946,6 +948,7 @@
     <Content Include="Content\kendo\2016.3.914\fonts\glyphs\KendoUIGlyphs.woff" />
     <Content Include="Content\kendo\2016.3.914\images\kendoui.ttf" />
     <Content Include="Content\kendo\2016.3.914\images\kendoui.woff" />
+    <Content Include="Images\docs\MyDeals Error Handling Design Doc.pdf" />
     <None Include="Properties\PublishProfiles\Dev.pubxml" />
     <Content Include="Scripts\Angular\1.5.8\angular.min.js.map" />
     <None Include="Scripts\jquery-2.2.0.intellisense.js" />

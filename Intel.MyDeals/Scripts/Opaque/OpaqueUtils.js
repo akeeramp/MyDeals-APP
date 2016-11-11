@@ -192,3 +192,25 @@ op.error = function (ex, msg) {
 
     return;
 }
+
+
+/*
+ * EXCEPTIONS SECTION - Exception Handling
+ */
+
+op.handleError = function (data, simpleError) {
+
+    if (data instanceof Error) {
+        op.notifyError(simpleError, 'Something went wrong!');   //TODO: is 'something went wrong' what we want to show the user in each error toast?  Usability question.
+        op.error(data, simpleError);                 //TODO: change how we log the failure response once logging is finalized.  how will op.error consume different types of failure responses?
+        //TODO: log to our own db as well (not only opaque)?
+    } else {
+        if (typeof data !== 'string') {
+            data = data['statusText'] + ': ' + data['responseText'];
+        }
+        op.notifyError(simpleError, 'Something went wrong!');   
+        op.error(null, data);
+        //TODO: log to our own db as well (not only opaque)?
+    }
+        
+}

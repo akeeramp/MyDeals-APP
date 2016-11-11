@@ -165,7 +165,40 @@ namespace Intel.MyDeals.DataLibrary
             return txt;
         }
 
+        public string ExampleSQLException()
+        {
+            OpLogPerf.Log("ExampleSQLException");
 
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_CUSTOM_ERRMSG
+                {
+                    Msg = "Purposefully Calling PR_CUSTOM_ERRMSG",
+                    RaiseError = true,
+                    //SourceObjectID = null,
+                }))
+                {
+
+                    if (rdr.Read())
+                    {
+                        //ordinarily we would do read logic here, however I will instead purposefully throw an exception below rather than make a SP with the sole purpose of erroring out
+                        //tested when PR_CUSTOM_ERRMSG was pointing to non-existant tables and it worked as expected, however it has since been fixed and directly calling PR_CUSTOM_ERRMSG 
+                        //results in a severity that is not high enough to raise a halting exception (but it will still log it into DB_ERR table).
+                    }
+                }
+                Exception x1 = new Exception("Example Detailed Exception"); //normally this will come directly from db read
+                throw x1;
+            }
+            catch (Exception ex)
+            {
+                OpLog.HandleException(ex);
+                Exception x2 = new Exception("Example Simple Exception: Database Exception");
+                throw x2;
+            }
+
+            //exception will prevent this from ever returning
+            return "string";
+        }
         
     }
 }

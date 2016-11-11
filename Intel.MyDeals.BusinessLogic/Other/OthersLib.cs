@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Intel.MyDeals.DataLibrary;
 using Intel.Opaque;
+using Intel.MyDeals.Entities;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -9,6 +11,28 @@ namespace Intel.MyDeals.BusinessLogic
         public Dictionary<string, string> PingDbDetails(OpUserToken opUserToken)
         {
             return new OtherDataLib().PingDbDetails();
+        }
+
+        public string CSharpException()
+        {
+            try
+            {
+                Exception x1 = new Exception("Example Uncaught Detailed Exception");
+                throw x1;
+            }
+            catch (Exception ex)
+            {
+                OpLog.HandleException(ex);
+                Exception x2 = new Exception("Example Uncaught Detailed Exception");
+                throw x2;
+            }
+            //this will never get returned because of exception
+            return "string";
+        }
+
+        public string ExampleSQLException()
+        {
+            return new OtherDataLib().ExampleSQLException();
         }
     }
 }

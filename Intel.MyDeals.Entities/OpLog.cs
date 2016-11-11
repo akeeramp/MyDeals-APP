@@ -15,7 +15,7 @@ namespace Intel.MyDeals.Entities
 
         private static DebugLevel DebugLevel = DebugLevel.Application;
 		private static bool IsEmailErrorsEnabled = true;
-        private static string ToEmailList = "philip.w.eckenroth@intel.com"; // TODO this shoud be read from an env aware config setup
+        private static string ToEmailList = "jeffrey.j.yeh@intel.com; philip.w.eckenroth@intel.com"; // TODO this shoud be read from an env aware config setup
         private static string FromEmail = "MyDealsSupport@intel.com";
 
         private static List<OpLogItem> _logStack = new List<OpLogItem>();		
@@ -372,6 +372,21 @@ namespace Intel.MyDeals.Entities
         {
             string myWwid = OpUserStack.MyOpUserToken.Usr.WWID.ToString();
             return _logStack.Where(l => l.WWID == myWwid);
+        }
+
+        #endregion
+
+
+        #region Error Handling
+
+        /// <summary>
+        /// Handles exceptions we encounter by logging and emailing exception details
+        /// </summary>
+        /// <param name="ex">Exception thrown</param>
+        public static void HandleException(Exception ex)
+        {
+            LogEvent(ex);
+            EmailError(ex); //Note: LogEvent seems to already sends an email if the exception is critical enough. Consider revisiting what we consider "critical"?
         }
 
         #endregion

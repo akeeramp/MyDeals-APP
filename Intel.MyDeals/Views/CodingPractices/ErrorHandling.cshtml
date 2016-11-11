@@ -16,8 +16,211 @@
     </p>
     <img src="/Images/docs/errorhandling.png" style="margin: 10px 0 10px 25px;" />
 
+    <h3>Error Handling Examples</h3>
+    <p>
+        See Views\CodingPractices\ErrorHandling.cshtml, app\core\core.module.js, Global.asax.cs, and Controllers\API\OthersController.cs to follow example flows
+    </p>
+    <h4>Javascript Exceptions</h4>
+    <a class="btn btn-danger" ui-sref="UndefinedAngularRoute">
+        Undefined Angular Route
+        @*no route of this name exists*@
+    </a>
+    <a class="btn btn-danger" onclick="notAFunction()">
+        Undefined JS Function
+        @*function attached to button was never defined*@
+    </a>
+    <a class="btn btn-danger" onclick="noApiFunction()">
+        Unresponsive API Call
+        @*no api function of this name exists*@
+    </a>
+    <p>
+        Unhandled JS exceptions will be dealt with by the global js exception handler. 
+        <br />
+        Unhandled Angular exceptions will be dealt with by the global blocks.exception provider.
+        <br />
+        When developing ajax calls to the api, make sure to call op.handleError which will include an error toast and log the failure inside each ajax failure result promise.
+    </p>
+    <pre>
+        JS Ajax Call:
+        function sqlExceptionExample() {
+            op.ajaxGetAsync("/api/Others/GetSQLException", function (data) {
+                //success: manipulate your success case data here
+            }, function (result) {
+                //failure: manipulate your failure case data here
+                op.handleError(result, 'Could not get X data.');
+            });
+        }
+    </pre>
+
+    <h4>C# Exceptions</h4>
+    <a class="btn btn-danger" onclick="@("window.location.href='" + @Url.Action("PageDoesNotExist", "ControllerDoesNotExist") + "'");">
+        404 Page Not Found
+        @*page/controller does not exist*@
+    </a>
+    <a class="btn btn-danger" onclick="ExceptionExample405()">
+        405 Not Supported
+        @*c# function structured incorrectly*@
+    </a>
+    <a class="btn btn-danger" onclick="cSharpAPIExceptionExample()">
+        Exception in C# API Controller
+        @*exception thrown in the c# api controller*@
+    </a>
+    <a class="btn btn-danger" onclick="cSharpExceptionExample()">
+        Exception in C# BusinessLogic
+        @*exception thrown in c# in the business logic tier*@
+    </a>
+    <p>
+        Critical show-stopping errors will be handled by the ErrorController and the Global.asax.  This will generally redirect to an Error page.
+        <br />
+        Other exceptions encountered should be caught and handled with OpLog.HandleException(ex) before returning a less descriptive failure for the client side to consume. 
+        <br />
+        If the exception occurs in an API Controller, make sure you are returning HttpResponseException instead. 
+    </p>
+    <pre>
+        General C# Code:
+        public string CSharpException()
+        {
+            try
+            {
+                ...
+            }
+            catch (Exception ex)
+            {
+                OpLog.HandleException(ex);
+                Exception x = new Exception("Encountered Business Logic Exception");
+                throw x;
+            }
+            ...
+        }
+    </pre>
+    <pre>
+        API Controller C# Code:
+        [Route("api/Others/GetSQLException")]
+        public string GetSQLException()
+        {
+            try
+            {
+                ...
+            }
+            catch (Exception ex)
+            {
+                OpLog.HandleException(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+            }
+        }
+    </pre>
+    
+    <h4>SQL Exceptions</h4>
+    <a class="btn btn-danger" onclick="sqlExceptionExample()">
+        Exception in Stored Procedure
+        @*exception occurs inside a stored proc... sort of*@
+    </a>
+    <p>
+        Exceptions will generally be handled at the Data Access level where, once encountered, they are to be logged and propagated upwards.  
+        <br />
+        When catching exceptions in C#, make sure to call OpLog.HandleException(ex).  When catching exceptions in SQL, make sure to call PR_CUSTOM_ERR_MSG.
+        <br />
+        When creating SPs or Data Access code, make sure to catch and log potential exceptions.
+    </p>
+    <pre>
+        Data Library C#:
+        public string ExampleSQLException()
+        {
+            OpLogPerf.Log("ExampleSQLException");
+            ...
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_EXAMPLE
+                {
+                    ...
+                }))
+                {
+                    if (rdr.Read())
+                    {
+                        ...
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLog.HandleException(ex);
+                Exception x2 = new Exception("Encountered Database Exception");
+                throw x2;
+            }
+            ...
+        }
+    </pre>
+    <pre>
+        SQL Exception Handling:
+        BEGIN
+	        SET NOCOUNT ON 
+	        BEGIN TRY   
+		        ...
+	        END TRY 
+	        BEGIN CATCH 
+		        EXEC dbo.PR_CUSTOM_ERRMSG  
+	        END CATCH
+        END
+    </pre>
+
+    <br />
+
+    <h3>Error Handling Design Document</h3>
+    <p>
+        <a href="/Images/docs/MyDeals Error Handling Design Doc.pdf" target="_blank">
+            <div style="padding: 20px 5px 0 5px; text-align: left;">
+                <img src="/Images/docs/errorhandlingdesign.png" />
+            </div>
+            Click to view a larger version of the Error Handling Design.
+        </a>
+    </p>
 
     <br /><br /><br />
 </div>
+
+
+<script>
+
+    function noApiFunction() {
+        op.ajaxGetAsync("/api/Others/NonExistent", function (data) {
+            //empty function: success scenario should never happen
+        }, function (result) {
+            op.handleError(result, 'API Request Failure');
+        });
+    }
+
+    function ExceptionExample405() {
+        op.ajaxGetAsync("/api/Others/Exception405", function (data) {
+            //empty function: success scenario should never happen
+        }, function (result) {
+            op.handleError(result, '405: Method Not Supported (But dont tell users the error code, this is just an example)');
+        });
+    }
+
+    function cSharpAPIExceptionExample() {
+        op.ajaxGetAsync("/api/Others/GetCSharpAPIException", function (data) {
+            //empty function: success scenario should never happen
+        }, function (result) {
+            op.handleError(result, '500: Internal Server Error (But dont tell users the error code, this is just an example)');
+        });
+    }
+
+    function cSharpExceptionExample() {
+        op.ajaxGetAsync("/api/Others/GetCSharpException", function (data) {
+            //empty function: success scenario should never happen
+        }, function (result) {
+            op.handleError(result, '500: Internal Server Error (But dont tell users the error code, this is just an example)');
+        });
+    }
+
+    function sqlExceptionExample() {
+        op.ajaxGetAsync("/api/Others/GetSQLException", function (data) {
+            //empty function: success scenario should never happen
+        }, function (result) {
+            op.handleError(result, '500: Internal Server Error (But dont tell users the error code, this is just an example)');
+        });
+    }
+</script>
+
 
 

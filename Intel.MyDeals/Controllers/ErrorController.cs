@@ -21,6 +21,7 @@ namespace Intel.MyDeals.Controllers
 
         public ActionResult NotFound()
         {
+            Response.ContentType = "text/html";  //page was rendering as plaintext, this prevents it
             return View();
         }
 
