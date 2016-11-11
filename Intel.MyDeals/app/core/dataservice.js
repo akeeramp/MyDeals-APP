@@ -3,10 +3,10 @@
 
     angular
         .module('app.core')
-        .factory('dataservice', dataservice);
+        .factory('dataService', dataService);
 
     /* @ngInject */
-    function dataservice($http, $location, $q, exception, logger) {
+    function dataService($http, $location, $q, exception, logger) {
         var isPrimed = false;
         var primePromise;
 

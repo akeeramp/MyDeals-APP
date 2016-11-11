@@ -249,6 +249,14 @@ namespace Intel.MyDeals.Controllers
             return View();
         }
 
+        public ActionResult PresentationAngularViews()
+        {
+            OpUserToken user = AppLib.InitAVM(op);
+            ViewBag.UserToken = user;
+            ViewBag.AppToken = op.AppToken;
+            return View();
+        }
+
         #endregion
 
 

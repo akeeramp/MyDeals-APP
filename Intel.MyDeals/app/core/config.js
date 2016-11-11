@@ -3,12 +3,12 @@
 
     var core = angular.module('app.core');
 
-    core.config(toastrConfig);
+    core.config(Config);
 
-    /* @ngInject */
-    function toastrConfig(toastr) {
+    function Config(toastr, $httpProvider) {
         toastr.options.timeOut = 4000;
         toastr.options.positionClass = 'toast-bottom-right';
+        $httpProvider.interceptors.push('progressInterceptor');
     }
 
     var config = {

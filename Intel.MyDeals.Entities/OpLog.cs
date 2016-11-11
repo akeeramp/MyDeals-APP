@@ -151,7 +151,7 @@ namespace Intel.MyDeals.Entities
 #endif
 
             // if logger is disabled, do not log
-            if (!LogConfig.IsActive) return;
+            if (LogConfig!=null && !LogConfig.IsActive) return;
 
             // if log item is debug level and the apps debug level is below debug, do not log
             if (dLevel == DebugLevel.Debug && DebugLevel != DebugLevel.Debug) return;

@@ -85,32 +85,17 @@
                 <li><a href="@Url.Action("Index", "Poc", new { Area = "" })">Basic Form Submit</a></li>
             </ul>
         </li>
-
-
-        @if (isAdmin)
-        {
-            <li class="dropdown">
-                <a class="btn btn-primary" role="button" href="/" data-toggle="dropdown" data-target="#">Admin <i class="intelicon-down"></i></a>
-                <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
-                    <li><a href="@Url.Action("Index", "Cache", new { Area = "Admin" })">Cache Manager</a></li>
-                    @*<li><a href="@Url.Action("Index", "DropDown", new { Area = "Admin" })">Basic Dropdowns</a></li>*@
-                    @*<li class="dropdown-submenu">
-                        <a tabindex="-1" href="#">Developer Tools</a>
-                        <ul class="dropdown-menu">
-                            <li><a href="@Url.Action("Index", "ProductTranslation", new { Area = "Admin" })">Product Translation</a></li>
-                            <li><a href="@Url.Action("Index", "WorkFlow", new { Area = "Admin" })">Workflow Manager</a></li>
-                        </ul>
-                    </li>*@
-                </ul>
-            </li>
-        }
-
         <li class="dropdown">
             <a class="btn btn-primary" role="button" href="/" data-toggle="dropdown" data-target="#">Docs <i class="intelicon-down"></i></a>
             <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
                 <li><a href="@Url.Action("Index", "CodingPractices", new { Area = "" })">Coding Practices</a></li>
             </ul>
         </li>
+
+        @if (isAdmin)
+        {
+            <li><a href="@Url.Action("Index", "Admin", new { Area = "" })">Admin</a></li>
+        }
 
         <li><a href="@Url.Action("Index", "Contract", new { Area = "" })">Contracts</a></li>
         <li><a href="@Url.Action("Index", "CostTest", new { Area = "" })">Cost Test</a></li>
@@ -153,7 +138,6 @@
         <li><a href="@Url.Action("Index", "DealManager")">Deal Manager</a></li>*@
         @Html.Partial("_Search")
     </ul>
-
 </nav>
 
 <style>

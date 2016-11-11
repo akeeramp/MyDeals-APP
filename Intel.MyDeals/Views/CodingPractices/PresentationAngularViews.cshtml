@@ -1,0 +1,257 @@
+﻿
+@Html.Partial("TOC", new ViewDataDictionary
+{
+    { "categoryTitle", "Project setup and logic flow" },
+    { "categoryAction", "Project" },
+    { "sectionTitle", "Intel.MyDeals" },
+    { "sectionAction", "Presentation" },
+    { "pageTitle", "Creating Angular views" }
+})
+
+<div id="mainBody" style="margin: 10px; padding: 0 20px 0 200px;">
+    <h1><img style="height:70px" src="~/Images/docs/angular.png" />Creating Angular Views</h1>
+    <p>
+        The presentation layer of MyDeals will be a Multi SPA Angular JS + MVC, because a single SPA can become huge and tough to maintain. Refer the UI/MT architecture diagram below to understand the structuring of the SPA's across
+        <br />
+        <a href="/Images/docs/MyDeal UI MT Architecture 50.pdf" target="_blank">
+            <div style="padding: 20px 5px 0 5px; text-align: left;">
+                <img src="/Images/docs/ui_mt_architecture.png" />
+            </div>
+            Click to view a larger version of the architecture.
+        </a>
+    </p>
+    <p>
+        In MyDeals, the web client has different SPA modules. Each module resides inside a cshtml page for example Admin, Cost Test, Dashboard,
+        Reporting and Contract (these might change in future). As no compile time errors thrown from javascript its extremely important to follow the
+        standard guidelines while adding angular views for easy maintenance, debugging and re usability.
+    </p>
+    <h4>My Deals Angular app Structure</h4>
+    <p>
+        All the angular file will be added in a standard defined structure, javascript and html files
+        will be added to app folder instead of Scripts and Views folder of MVC. This structure enables to open
+        and work in all of the related files for a feature. Group files as per the feature not as per there type.
+    </p>
+    <img src="~/Images/docs/angularFolderStructure.png" />
+    <p>
+        This structure will follows the LIFT guidelines
+        <ol>
+            <li>Locating our code is easy</li>
+            <li>Identify code at a glance</li>
+            <li>Flat structure as long as we can</li>
+            <li>Try to stay DRY (Don't Repeat Yourself)</li>
+        </ol>
+    </p>
+    <p>
+        The application has a base module app, other modules will be bootstrapped with the base module.
+    </p>
+    <div class="note"><strong>Note:</strong> Here is an example</div>
+    <div class="noteBody">
+        <pre>
+                (function () {
+                'use strict';
+                    angular.module('app', [
+                        /*
+                         * Order is not important. Angular makes a
+                         * pass to register all of the modules listed
+                         * and then when app.dashboard tries to use app.data,
+                         * its components are available.
+                         */
+                        /*
+                         * Everybody has access to these.
+                         * We could place these under every feature area,
+                         * but this is easier to maintain.
+                         */
+                        'app.core',
+                        /*
+                         * Feature areas
+                         */
+                        'app.admin', //Admin module
+                        'app.costtest',
+                        'app.dashboard',
+		                'app.securityAttributes'
+                ]);
+                })()
+        </pre>
+    </div>
+    <p>
+        Core module consists of all the built in modules of angular(ngAnimate, ngSanitize)
+        and any other third party libraries(uibootstrap) reusable across the application. Blocks modules contain all reusable or helper methods. Building blocks
+        of the application logging, exception handling and routing wrapper methods are written here.
+    </p>
+    <div class="note"><strong>Note:</strong> Here is an example</div>
+    <div class="noteBody">
+        <pre>
+            (function() {
+                'use strict';
+                angular.module('app.core', [
+                /*
+                * Angular modules
+                */
+                'ngAnimate', 'ngSanitize', 'ui.router',
+                /*
+                * Our reusable cross app code modules
+                */
+                'blocks.exception', 'blocks.logger', 'blocks.router'
+                ]);
+            })();
+        </pre>
+    </div>
+    <p>Follow below steps to a register a new SPA and add angular views to it</p>
+    <div class="stepByStep">
+        <i class="intelicon-task"></i>Step by Step
+    </div>
+
+    <ol>
+        <li>
+            <i class="intelicon-checklist-outlined" style="font-size: 20px;"></i>Ensure you have created the <strong>MVC Controller</strong>.
+            If you are unsure how to do this, please refer to the <a href="@Url.Action("PresentationMvcController", "CodingPractices", new {Area = ""})">Create an MVC Controller</a> section. Add <strong>AdminController</strong>.
+        </li>
+        <li>
+            <i class="intelicon-checklist-outlined" style="font-size: 20px;"></i>Ensure you have created the <strong>Web API</strong>.
+            If you are unsure how to do this, please refer to the <a href="@Url.Action("PresentationWebApi", "CodingPractices", new {Area = ""})">Creating Web APIs</a> section.
+            Create corresponding api for the SPA.
+        </li>
+        <li>Open the Index.cshtml under Views/Admin folder. Add <strong>ui-view</strong> to the div. All the views under this SPA will be injected inside this div.</li>
+        <li>
+            Register the admin module, make sure that each file has only one component defined,
+            do not define controller and module in the same file.
+            <div class="note"><strong>Note:</strong> Here is an example</div>
+            <div class="noteBody">
+                <pre>
+                (function () {
+                    'use strict';
+                    angular.module('app.admin', []);
+                })();
+            </pre>
+            </div>
+        </li>
+        <li>
+            Register the routes for the module, inside admin module we have two features, cache manager and constants. Add the corresponding routes.</p>
+            <p><i><b>Note</b> We are using controller As syntax to avoid confusion with $scope variable, when we have nested controllers.</i></p>
+            <div class="note"><strong>Note:</strong> Here is an example</div>
+            <div class="noteBody">
+                <pre>
+                (function () {
+                    angular
+                        .module('app.admin')
+                        .run(appRun);
+                    function appRun(routerHelper) {
+                        routerHelper.configureStates(getStates());
+                    }
+                    function getStates() {
+                        return [
+                            {
+                                state: 'admin',
+                                config: {
+                                    abstract: false,
+                                    template: '&ltdiv ui-view&gt&lt/div&gt',
+                                    url: '/'
+                                }
+                            },
+                            {
+                                state: 'admin.cache',
+                                abstract: false,
+                                config: {
+                                    templateUrl: 'app/admin/cache/cache.html',
+                                    url: 'cache',                    
+                                    controller: 'CacheController as vm',                    
+                                }
+                            },
+                            {
+                                state: 'admin.constants',
+                                abstract: false,
+                                config: {
+                                    templateUrl: 'app/admin/constants/constants.html',
+                                    url: 'constants',
+                                    controller: 'ConstantsController as vm',
+                                }
+                            },
+                        ];
+                    }
+                })();
+            </pre>
+            </div>
+        </li>
+        <li>
+            Add a javascript file and declare a controller name it as <strong>admin.constants.controller.js</strong>, which will interact with the service and html.
+            Controller should not contain any DOM manipulation logic, however it can have the ng-if, ng-hide/show logic.
+            A logger service will be injected for logging and exception handling activities and corresponding constantsService is injected.
+            To know more about logging and error handling specifics refer to <a href="@Url.Action("ErrorHandling", "CodingPractices", new {Area = ""})">Error Handling</a>,
+            <a href="@Url.Action("Logging", "CodingPractices", new {Area = ""})">Logging</a> sections.
+            <div class="note"><strong>Note:</strong> Here is an example</div>
+            <div class="noteBody">
+                <pre>
+                    angular
+                    .module('app.admin')
+	                .controller('ConstantsController', ConstantsController);
+                    
+                    ConstantsController.$inject = ['$scope', 'dataService', 'constantsService', 'logger', '$uibModal'];
+                    function ConstantsController($scope, dataService, constantsService, logger, $uibModal) {
+                        //Add logic here
+                        function loadCache() {
+                            cacheService.getStaticCacheStatus().then(
+                                function (data) {
+                                    vm.cacheData = data;
+                                }, function (data) {
+                                    logger.error("Error in getting cache status.")
+                                });
+                        }
+                    }
+                </pre>
+            </div>
+        </li>
+        <li>
+            Create a new javascript file factory/service <strong>constants.service.js</strong>to the services folder under the SPA' so that these are reused across the module.
+            Only services will be grouped by there type rest all the files are grouped as per the feature.
+            <div class="note"><strong>Note:</strong> Here is an example</div>
+            <div class="noteBody">
+                <pre>
+                        angular
+                        .module('app.admin')
+                        .factory('constantsService', constantsService);
+                        // Minification safe dependency injection
+                        
+                        constantsService.$inject = ['$http', 'dataService', 'logger', '$q'];
+                        
+                        function constantsService($http, dataService, logger, $q) {
+                            var apiBaseUrl = "api/AdminConstants/v1/";
+                            var service = {
+                                getConstants: getConstants
+                            }
+                            return service;
+                            function getConstants() {
+                                var deferred = $q.defer();
+                                $http.get(apiBaseUrl + 'GetConstants').then(
+                                     function success(response) {
+                                         deferred.resolve(response.data);
+                                     },
+                                     function error(response) {
+                                         deferred.reject(response);
+                                     }
+                                );
+                                return deferred.promise;
+                            }
+                        }
+                </pre>
+            </div>
+        </li>
+        <li>
+            Create html view for this route under the feature folder <stong>admin.html</stong>. The html is binded to all the public variables inside controller.
+            <i><strong>Note:</strong> All public variable starts with "vm." as we are using <strong>controller As</strong> syntax in the routing</i>
+        </li>
+        <li>
+            Bootstrap all the javascript files and bundle them in App_Start/BundleConfig.cs
+        </li>
+        <li>
+            After following all the steps the folder structure should look like as below.
+            Similar folder structure should be followed for other modules and features
+        </li>
+    </ol>
+    <div style="padding: 20px 5px 0 5px; text-align: left;">
+        <img src="~/Images/docs/angularFeatureStructure.png" />
+    </div>
+    <br />
+    <br />
+    <br />
+</div>
+

@@ -11,14 +11,15 @@
 
     @Scripts.Render("~/bundles/scripts")
     @Scripts.Render("~/MyDeals/scripts")
-	<script src="@Url.Content("~/Scripts/kendo/2016.3.914/jszip.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo/2016.3.914/jszip.min.js")"></script>
 </head>
 
 <body>
     @Html.Partial("_Header")
-
     <div id="modals"></div>
     <div id="bodyContent" style="position: absolute; top: 86px; bottom: 0; left: 0; right: 0; overflow: auto;">
+
+        @Html.Partial("_Loading")
         @RenderBody()
     </div>
 
@@ -30,7 +31,6 @@
 
     @Scripts.Render("~/bundles/angularReusable")
     @Scripts.Render("~/bundles/angularModules")
-
 </body>
 
 </html>

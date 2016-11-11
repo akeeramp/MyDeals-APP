@@ -50,6 +50,7 @@ namespace Intel.MyDeals
                 , "~/app/blocks/router/router.module.js"
                 , "~/app/blocks/router/routehelper.js"
                 , "~/app/core/core.module.js"
+                , "~/app/core/progressInterceptor.js"
                 , "~/app/core/constants.js"
                 , "~/app/core/config.js"
                 , "~/app/core/dataservice.js"
@@ -57,7 +58,13 @@ namespace Intel.MyDeals
                 ));
 
             bundles.Add(new ScriptBundle("~/bundles/angularModules").Include(
-                "~/app/costTest/costtest.module.js"
+                  "~/app/admin/admin.module.js"
+                , "~/app/admin/admin.route.js"
+                , "~/app/admin/services/cache.service.js"
+                , "~/app/admin/services/constants.service.js"
+                , "~/app/admin/constants/admin.constants.controller.js"
+                , "~/app/admin/cache/admin.cache.controller.js"
+                , "~/app/costTest/costtest.module.js"
                 , "~/app/costTest/costtest.route.js"
 				, "~/app/dashboard/dashboard.module.js"
 				, "~/app/dashboard/dashboard.route.js"
