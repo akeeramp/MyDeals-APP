@@ -42,7 +42,8 @@ namespace Intel.MyDeals
 				));
 
             bundles.Add(new ScriptBundle("~/bundles/angularReusable").Include(
-                "~/app/blocks/exception/exception.module.js"
+                 "~/app/app.module.js"
+                , "~/app/blocks/exception/exception.module.js"
                 , "~/app/blocks/exception/exception-handler.provider.js"
                 , "~/app/blocks/exception/exception.js"
                 , "~/app/blocks/logger/logger.module.js"
@@ -54,7 +55,6 @@ namespace Intel.MyDeals
                 , "~/app/core/constants.js"
                 , "~/app/core/config.js"
                 , "~/app/core/dataservice.js"
-                , "~/app/app.module.js"
                 ));
 
             bundles.Add(new ScriptBundle("~/bundles/angularModules").Include(

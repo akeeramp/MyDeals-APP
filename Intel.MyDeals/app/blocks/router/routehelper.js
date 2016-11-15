@@ -1,39 +1,43 @@
-angular
-    .module('blocks.router')
-    .provider('routerHelper', routerHelperProvider);
+(function () {
+    'use strict';
 
-routerHelperProvider.$inject = ['$locationProvider', '$stateProvider', '$urlRouterProvider'];
-/* @ngInject */
-function routerHelperProvider($locationProvider, $stateProvider, $urlRouterProvider) {
-    /* jshint validthis:true */
-    this.$get = RouterHelper;
+    angular
+        .module('blocks.router')
+        .provider('routerHelper', routerHelperProvider);
 
-    //$locationProvider.html5Mode(true);
-
-    RouterHelper.$inject = ['$state'];
+    routerHelperProvider.$inject = ['$locationProvider', '$stateProvider', '$urlRouterProvider'];
     /* @ngInject */
-    function RouterHelper($state) {
-        var hasOtherwise = false;
+    function routerHelperProvider($locationProvider, $stateProvider, $urlRouterProvider) {
+        /* jshint validthis:true */
+        this.$get = RouterHelper;
 
-        var service = {
-            configureStates: configureStates,
-            getStates: getStates
-        };
+        //$locationProvider.html5Mode(true);
 
-        return service;
+        RouterHelper.$inject = ['$state'];
+        /* @ngInject */
+        function RouterHelper($state) {
+            var hasOtherwise = false;
 
-        ///////////////
+            var service = {
+                configureStates: configureStates,
+                getStates: getStates
+            };
 
-        function configureStates(states, otherwisePath) {
-            states.forEach(function(state) {
-                $stateProvider.state(state.state, state.config);
-            });
-            if (otherwisePath && !hasOtherwise) {
-                hasOtherwise = true;
-                $urlRouterProvider.otherwise(otherwisePath);
+            return service;
+
+            ///////////////
+
+            function configureStates(states, otherwisePath) {
+                states.forEach(function (state) {
+                    $stateProvider.state(state.state, state.config);
+                });
+                if (otherwisePath && !hasOtherwise) {
+                    hasOtherwise = true;
+                    $urlRouterProvider.otherwise(otherwisePath);
+                }
             }
-        }
 
-        function getStates() { return $state.get(); }
+            function getStates() { return $state.get(); }
+        }
     }
-}
+})();

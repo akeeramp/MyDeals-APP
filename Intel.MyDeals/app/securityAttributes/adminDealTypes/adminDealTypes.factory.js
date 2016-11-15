@@ -1,8 +1,11 @@
 ﻿(function () {
 	'use strict';
-	angular.module('app.securityAttributes').factory('DealTypesFactory', DealTypesFactory);
+	angular
+        .module('app.securityAttributes')
+        .factory('DealTypesFactory', DealTypesFactory);
 
-	/* @ngInject */
+	DealTypesFactory.$inject = ['$cacheFactory', '$q', '$http'];
+
 	function DealTypesFactory($cacheFactory, $q, $http) {
 		var URL = '/api/SecurityAttributesAPI/' // TODO: Maaybe put this in a nicer place to reference off of
 		var cache = $cacheFactory('DealTypes');

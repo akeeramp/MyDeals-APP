@@ -4,7 +4,9 @@
         .module('app.costtest')
         .run(appRun);
 
-    /* @ngInject */
+    
+    appRun.$inject = ['routerHelper'];
+
     function appRun(routerHelper) {
         routerHelper.configureStates(getStates());
     }

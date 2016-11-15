@@ -1,45 +1,49 @@
-﻿angular
-    .module('app.core')
-    .factory('progressInterceptor', progressInterceptor)
+﻿(function () {
+    'use strict';
 
-progressInterceptor.$inject = ['$q', '$rootScope'];
+    angular
+        .module('app.core')
+        .factory('progressInterceptor', progressInterceptor)
 
-function progressInterceptor($q, $rootScope) {
+    progressInterceptor.$inject = ['$q', '$rootScope'];
 
-    // This service will intercept all the https requests, shows the loading gif
-    //
+    function progressInterceptor($q, $rootScope) {
 
-    var xhrRequests = 0;
-    var xhrResponses = 0;
+        // This service will intercept all the https requests, shows the loading gif
+        //
 
-    function isLoading() {
-        return xhrResponses < xhrRequests;
-    }
+        var xhrRequests = 0;
+        var xhrResponses = 0;
 
-    function updateStatus() {
-        $rootScope.loading = isLoading();
-    }
+        function isLoading() {
+            return xhrResponses < xhrRequests;
+        }
 
-    return {
-        request: function (config) {
-            xhrRequests++;
-            updateStatus();
-            return config;
-        },
-        requestError: function (rejection) {
-            xhrResponses++;
-            updateStatus();
-            return $q.reject(rejection);
-        },
-        response: function (response) {
-            xhrResponses++;
-            updateStatus();
-            return response;
-        },
-        responseError: function (rejection) {
-            xhrResponses++;
-            updateStatus();
-            return $q.reject(rejection);
+        function updateStatus() {
+            $rootScope.loading = isLoading();
+        }
+
+        return {
+            request: function (config) {
+                xhrRequests++;
+                updateStatus();
+                return config;
+            },
+            requestError: function (rejection) {
+                xhrResponses++;
+                updateStatus();
+                return $q.reject(rejection);
+            },
+            response: function (response) {
+                xhrResponses++;
+                updateStatus();
+                return response;
+            },
+            responseError: function (rejection) {
+                xhrResponses++;
+                updateStatus();
+                return $q.reject(rejection);
+            }
         }
     }
-}
+})();

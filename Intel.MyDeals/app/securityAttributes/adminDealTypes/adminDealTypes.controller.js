@@ -1,130 +1,139 @@
-﻿angular.module('app.securityAttributes')
-.controller('dealTypesController', function ($uibModal, DealTypesFactory, $scope) {
-    vm = this;
+﻿(function() {
+    'use strict';
 
-    // Functions
-    vm.addItem = addItem;
-    vm.updateItem = updateItem;
-    vm.deleteItem = deleteItem
-    vm.onChange = onChange;
+    angular
+        .module('app.securityAttributes')
+        .controller('dealTypesController',dealTypesController)
 
-    // Variables
-    vm.selectedItem = null;
-    vm.isButtonDisabled = true;
-    vm.toolBarTemplate = $("#toolBarTemplate").html();
+    dealTypesController.$inject = ['$uibModal', 'DealTypesFactory', '$scope'];
 
-    vm.dataSource = new kendo.data.DataSource({
-        type: "json",
-        transport: {
-            read: function (e) {
-                DealTypesFactory.getDealTypes()
-					.then(function (data) {
-					    e.success(data);
-					});
+    function dealTypesController($uibModal, DealTypesFactory, $scope) {
+        var vm = this;
+
+        // Functions
+        vm.addItem = addItem;
+        vm.updateItem = updateItem;
+        vm.deleteItem = deleteItem
+        vm.onChange = onChange;
+
+        // Variables
+        vm.selectedItem = null;
+        vm.isButtonDisabled = true;
+        vm.toolBarTemplate = $("#toolBarTemplate").html();
+
+        vm.dataSource = new kendo.data.DataSource({
+            type: "json",
+            transport: {
+                read: function (e) {
+                    DealTypesFactory.getDealTypes()
+                        .then(function (data) {
+                            e.success(data);
+                        });
+                },
+                update: function (e) {
+                    DealTypesFactory.updateDealType(e.data.models[0])
+                        .then(function (data) {
+                            e.success(data);
+                        });
+                },
+                destroy: function (e) {
+                    DealTypesFactory.deleteDealType(e.data.models[0].DEAL_TYPE_SID)
+                        .then(function (data) {
+                            e.success(data);
+                        });
+                },
+                create: function (e) {
+                    DealTypesFactory.insertDealType(e.data.models[0])
+                        .then(function (data) {
+                            e.success(data);
+                        });
+                }
             },
-            update: function (e) {
-                DealTypesFactory.updateDealType(e.data.models[0])
-					.then(function (data) {
-					    e.success(data);
-					});
-            },
-            destroy: function (e) {
-                DealTypesFactory.deleteDealType(e.data.models[0].DEAL_TYPE_SID)
-					.then(function (data) {
-					    e.success(data);
-					});
-            },
-            create: function (e) {
-                DealTypesFactory.insertDealType(e.data.models[0])
-					.then(function (data) {
-					    e.success(data);
-					});
-            }
-        },
-        batch: true,
-        pageSize: 20,
-        schema: {
-            model: {
-                id: "DEAL_TYPE_SID",
-                fields: {
-                    DEAL_TYPE_SID: { editable: false, nullable: true },
-                    DEAL_ATRB_SID: { type: "number" , validation: { required: true } },
-                    DEAL_TYPE_CD: { validation: { required: true } },
-                    DEAL_TYPE_DESC: { validation: { required: true } },
-                    TEMPLT_DEAL_SID: {},
-                    TEMPLT_DEAL_NBR: { type: "number", validation: { format:"{0:n0}", decimals:0 } },
-                    TRKR_NBR_DT_LTR: {},
-                    PERFORM_CTST: { type: "boolean" },
-                    ACTV_IND: { type: "boolean" }
+            batch: true,
+            pageSize: 20,
+            schema: {
+                model: {
+                    id: "DEAL_TYPE_SID",
+                    fields: {
+                        DEAL_TYPE_SID: { editable: false, nullable: true },
+                        DEAL_ATRB_SID: { type: "number" , validation: { required: true } },
+                        DEAL_TYPE_CD: { validation: { required: true } },
+                        DEAL_TYPE_DESC: { validation: { required: true } },
+                        TEMPLT_DEAL_SID: {},
+                        TEMPLT_DEAL_NBR: { type: "number", validation: { format:"{0:n0}", decimals:0 } },
+                        TRKR_NBR_DT_LTR: {},
+                        PERFORM_CTST: { type: "boolean" },
+                        ACTV_IND: { type: "boolean" }
+                    }
                 }
             }
+        });
+
+        vm.mainGridOptions = {
+            dataSource: vm.dataSource,
+            sortable: true,
+            selectable: true,
+            pageable: true,
+            editable: "popup",
+            change: vm.onChange,
+            toolbar: vm.toolBarTemplate,
+            //toolbar: [
+            //	"create",
+            //	{ name: "customEdit", text: "Edit", imageClass: "k-edit", className: "k-custom-edit btn btn-primary", iconClass: "k-icon" },
+            //	{ name: "customDelete", text: "Delete", imageClass: "k-delete", className: "k-custom-delete btn btn-default", iconClass: "k-icon" }
+            //],
+            columns: [
+            {
+                field: "DEAL_TYPE_SID",
+                title: "ID",
+            }, {
+                field: "DEAL_ATRB_SID",
+                title: "Deal ATRB ID"
+            }, {
+                field: "DEAL_TYPE_CD",
+                title: "Name"
+            }, {
+                field: "DEAL_TYPE_DESC",
+                title: "Description"
+            }, {
+                field: "TEMPLT_DEAL_SID",
+                title: "Template Deal ID"
+            }, {
+                field: "TEMPLT_DEAL_NBR",
+                title: "Template Deal Number"
+            }, {
+                field: "TRKR_NBR_DT_LTR",
+                title: "TRKR_NBR_DT_LTR"
+            }, {
+                field: "PERFORM_CTST",
+                title: "Perform CTST"
+            }, {
+                field: "ACTV_IND",
+                title: "Active"
+            }]
         }
-    });
 
-    vm.mainGridOptions = {
-        dataSource: vm.dataSource,
-        sortable: true,
-        selectable: true,
-        pageable: true,
-        editable: "popup",
-        change: vm.onChange,
-        toolbar: vm.toolBarTemplate,
-        //toolbar: [
-        //	"create",
-        //	{ name: "customEdit", text: "Edit", imageClass: "k-edit", className: "k-custom-edit btn btn-primary", iconClass: "k-icon" },
-        //	{ name: "customDelete", text: "Delete", imageClass: "k-delete", className: "k-custom-delete btn btn-default", iconClass: "k-icon" }
-        //],
-        columns: [
-		{
-		    field: "DEAL_TYPE_SID",
-		    title: "ID",
-		}, {
-		    field: "DEAL_ATRB_SID",
-		    title: "Deal ATRB ID"
-		}, {
-		    field: "DEAL_TYPE_CD",
-		    title: "Name"
-		}, {
-		    field: "DEAL_TYPE_DESC",
-		    title: "Description"
-		}, {
-		    field: "TEMPLT_DEAL_SID",
-		    title: "Template Deal ID"
-		}, {
-		    field: "TEMPLT_DEAL_NBR",
-		    title: "Template Deal Number"
-		}, {
-		    field: "TRKR_NBR_DT_LTR",
-		    title: "TRKR_NBR_DT_LTR"
-		}, {
-		    field: "PERFORM_CTST",
-		    title: "Perform CTST"
-		}, {
-		    field: "ACTV_IND",
-		    title: "Active"
-		}]
-    }
+        // Gets and sets the selected row
+        function onChange() {
+            vm.selectedItem = $scope.dealTypesGrid.select();
+            if (vm.selectedItem.length == 0) {
+                vm.isButtonDisabled = true;
+            } else {
+                vm.isButtonDisabled = false;
+            }
+            $scope.$apply();
+        }
 
-    // Gets and sets the selected row
-    function onChange() {
-        vm.selectedItem = $scope.dealTypesGrid.select();
-        if (vm.selectedItem.length == 0) {
+        function addItem() {
             vm.isButtonDisabled = true;
-        } else {
-            vm.isButtonDisabled = false;
+            $scope.dealTypesGrid.addRow();
         }
-        $scope.$apply();
-    }
+        function updateItem() {
+            $scope.dealTypesGrid.editRow(vm.selectedItem);
+        }
+        function deleteItem() {
+            $scope.dealTypesGrid.removeRow(vm.selectedItem);
+        }
 
-    function addItem() {
-        vm.isButtonDisabled = true;
-        $scope.dealTypesGrid.addRow();
     }
-    function updateItem() {
-        $scope.dealTypesGrid.editRow(vm.selectedItem);
-    }
-    function deleteItem() {
-        $scope.dealTypesGrid.removeRow(vm.selectedItem);
-    }
-
-});
+})();

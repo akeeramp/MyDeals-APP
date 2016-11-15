@@ -4,9 +4,10 @@
     .module('app.securityAttributes')
     .run(appRun);
 
-	/* @ngInject */
+	appRun.$inject = ['routerHelper'];
+
 	function appRun(routerHelper) {
-		routerHelper.configureStates(getStates());
+	    routerHelper.configureStates(getStates());
 	}
 
 	function getStates() {
