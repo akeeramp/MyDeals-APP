@@ -7,7 +7,7 @@ using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
 
 namespace Intel.MyDeals.DataLibrary
 {
-    public class OtherDataLib
+    public class DevTestDataLib
     {
 
         /// <summary>

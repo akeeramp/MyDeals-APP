@@ -9,16 +9,16 @@ using System.Net;
 
 namespace Intel.MyDeals.Controllers.API
 {
-    public class OthersController : ApiController
+    public class DevTestsController : ApiController
     {
         OpCore op = OpAppConfig.Init();
 
         [Authorize]
-        [Route("api/Others/GetDBTest")]
+        [Route("api/DevTests/GetDBTest")]
         public Dictionary<string, string> GetDBTest()
         {
             OpUserToken user = AppLib.InitAVM(op);
-            return new OthersLib().PingDbDetails(user);
+            return new DevTestsLib().PingDbDetails(user);
         }
 
         public string Exception405()
@@ -28,7 +28,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("api/Others/GetCSharpAPIException")]
+        [Route("api/DevTests/GetCSharpAPIException")]
         public string GetCSharpAPIException()
         {
             try
@@ -44,12 +44,12 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("api/Others/GetCSharpException")]
+        [Route("api/DevTests/GetCSharpException")]
         public string GetCSharpException()
         {
             try
             {
-                return new OthersLib().CSharpException();
+                return new DevTestsLib().CSharpException();
             }
             catch (Exception ex)
             {
@@ -60,12 +60,12 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("api/Others/GetSQLException")]
+        [Route("api/DevTests/GetSQLException")]
         public string GetSQLException()
         {
             try
             {
-                return new OthersLib().ExampleSQLException();
+                return new DevTestsLib().ExampleSQLException();
             }
             catch (Exception ex)
             {

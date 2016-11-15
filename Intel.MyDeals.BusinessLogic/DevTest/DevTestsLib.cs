@@ -6,11 +6,11 @@ using Intel.MyDeals.Entities;
 
 namespace Intel.MyDeals.BusinessLogic
 {
-    public class OthersLib
+    public class DevTestsLib
     {
         public Dictionary<string, string> PingDbDetails(OpUserToken opUserToken)
         {
-            return new OtherDataLib().PingDbDetails();
+            return new DevTestDataLib().PingDbDetails();
         }
 
         public string CSharpException()
@@ -32,7 +32,7 @@ namespace Intel.MyDeals.BusinessLogic
 
         public string ExampleSQLException()
         {
-            return new OtherDataLib().ExampleSQLException();
+            return new DevTestDataLib().ExampleSQLException();
         }
     }
 }

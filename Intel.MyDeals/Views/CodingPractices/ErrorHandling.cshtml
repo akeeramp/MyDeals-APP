@@ -18,7 +18,7 @@
 
     <h3>Error Handling Examples</h3>
     <p>
-        See Views\CodingPractices\ErrorHandling.cshtml, app\core\core.module.js, Global.asax.cs, and Controllers\API\OthersController.cs to follow example flows
+        See Views\CodingPractices\ErrorHandling.cshtml, app\core\core.module.js, Global.asax.cs, and Controllers\API\DevTestsController.cs to follow example flows
     </p>
     <h4>Javascript Exceptions</h4>
     <a class="btn btn-danger" ui-sref="UndefinedAngularRoute">
@@ -43,7 +43,7 @@
     <pre>
         JS Ajax Call:
         function sqlExceptionExample() {
-            op.ajaxGetAsync("/api/Others/GetSQLException", function (data) {
+            op.ajaxGetAsync("/api/DevTests/GetSQLException", function (data) {
                 //success: manipulate your success case data here
             }, function (result) {
                 //failure: manipulate your failure case data here
@@ -95,7 +95,7 @@
     </pre>
     <pre>
         API Controller C# Code:
-        [Route("api/Others/GetSQLException")]
+        [Route("api/DevTests/GetSQLException")]
         public string GetSQLException()
         {
             try
@@ -182,7 +182,7 @@
 <script>
 
     function noApiFunction() {
-        op.ajaxGetAsync("/api/Others/NonExistent", function (data) {
+        op.ajaxGetAsync("/api/DevTests/NonExistent", function (data) {
             //empty function: success scenario should never happen
         }, function (result) {
             op.handleError(result, 'API Request Failure');
@@ -190,7 +190,7 @@
     }
 
     function ExceptionExample405() {
-        op.ajaxGetAsync("/api/Others/Exception405", function (data) {
+        op.ajaxGetAsync("/api/DevTests/Exception405", function (data) {
             //empty function: success scenario should never happen
         }, function (result) {
             op.handleError(result, '405: Method Not Supported (But dont tell users the error code, this is just an example)');
@@ -198,7 +198,7 @@
     }
 
     function cSharpAPIExceptionExample() {
-        op.ajaxGetAsync("/api/Others/GetCSharpAPIException", function (data) {
+        op.ajaxGetAsync("/api/DevTests/GetCSharpAPIException", function (data) {
             //empty function: success scenario should never happen
         }, function (result) {
             op.handleError(result, '500: Internal Server Error (But dont tell users the error code, this is just an example)');
@@ -206,7 +206,7 @@
     }
 
     function cSharpExceptionExample() {
-        op.ajaxGetAsync("/api/Others/GetCSharpException", function (data) {
+        op.ajaxGetAsync("/api/DevTests/GetCSharpException", function (data) {
             //empty function: success scenario should never happen
         }, function (result) {
             op.handleError(result, '500: Internal Server Error (But dont tell users the error code, this is just an example)');
@@ -214,7 +214,7 @@
     }
 
     function sqlExceptionExample() {
-        op.ajaxGetAsync("/api/Others/GetSQLException", function (data) {
+        op.ajaxGetAsync("/api/DevTests/GetSQLException", function (data) {
             //empty function: success scenario should never happen
         }, function (result) {
             op.handleError(result, '500: Internal Server Error (But dont tell users the error code, this is just an example)');

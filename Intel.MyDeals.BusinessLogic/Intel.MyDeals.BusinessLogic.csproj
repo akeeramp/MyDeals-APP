@@ -78,7 +78,7 @@
     <Compile Include="LogConfig\LogConfigLib.cs" />
     <Compile Include="MetaData\MetasLib.cs" />
     <Compile Include="ObjSet\ObjSetHelperFunctions.cs" />
-    <Compile Include="Other\OthersLib.cs" />
+    <Compile Include="DevTest\DevTestsLib.cs" />
     <Compile Include="POC\PocLib.cs" />
     <Compile Include="PricingStrategies\PricingStrategiesLib.cs" />
     <Compile Include="PricingTables\PricingTablesLib.cs" />
