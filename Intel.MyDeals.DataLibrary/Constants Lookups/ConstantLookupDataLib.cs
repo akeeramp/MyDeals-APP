@@ -97,21 +97,21 @@ namespace Intel.MyDeals.DataLibrary
             List<AdminConstant> returnConstantsList = new List<AdminConstant>();
             using (var rdr = DataAccess.ExecuteReader(cmd))
             {
-                int IDX_cnst_desc = DB.GetReaderOrdinal(rdr, "cnst_desc");
-                int IDX_cnst_nm = DB.GetReaderOrdinal(rdr, "cnst_nm");
-                int IDX_cnst_sid = DB.GetReaderOrdinal(rdr, "cnst_sid");
-                int IDX_cnst_val_txt = DB.GetReaderOrdinal(rdr, "cnst_val_txt");
-                int IDX_ui_updatable = DB.GetReaderOrdinal(rdr, "ui_updatable");
+                int IDX_CNST_DESC = DB.GetReaderOrdinal(rdr, "CNST_DESC");
+                int IDX_CNST_NM = DB.GetReaderOrdinal(rdr, "CNST_NM");
+                int IDX_CNST_SID = DB.GetReaderOrdinal(rdr, "CNST_SID");
+                int IDX_CNST_VAL_TXT = DB.GetReaderOrdinal(rdr, "CNST_VAL_TXT");
+                int IDX_UI_UPD_FLG = DB.GetReaderOrdinal(rdr, "UI_UPD_FLG");
 
                 while (rdr.Read())
                 {
                     returnConstantsList.Add(new AdminConstant
                     {
-                        cnst_desc = (IDX_cnst_desc < 0 || rdr.IsDBNull(IDX_cnst_desc)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_cnst_desc),
-                        cnst_nm = (IDX_cnst_nm < 0 || rdr.IsDBNull(IDX_cnst_nm)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_cnst_nm),
-                        cnst_sid = (IDX_cnst_sid < 0 || rdr.IsDBNull(IDX_cnst_sid)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_cnst_sid),
-                        cnst_val_txt = (IDX_cnst_val_txt < 0 || rdr.IsDBNull(IDX_cnst_val_txt)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_cnst_val_txt),
-                        ui_updatable = (IDX_ui_updatable < 0 || rdr.IsDBNull(IDX_ui_updatable)) ? default(System.Boolean) : (bool)rdr[IDX_ui_updatable]
+                        CNST_DESC = (IDX_CNST_DESC < 0 || rdr.IsDBNull(IDX_CNST_DESC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CNST_DESC),
+                        CNST_NM = (IDX_CNST_NM < 0 || rdr.IsDBNull(IDX_CNST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CNST_NM),
+                        CNST_SID = (IDX_CNST_SID < 0 || rdr.IsDBNull(IDX_CNST_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CNST_SID),
+                        CNST_VAL_TXT = (IDX_CNST_VAL_TXT < 0 || rdr.IsDBNull(IDX_CNST_VAL_TXT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CNST_VAL_TXT),
+                        UI_UPD_FLG = (IDX_UI_UPD_FLG < 0 || rdr.IsDBNull(IDX_UI_UPD_FLG)) ? default(System.Boolean) : ((int)rdr[IDX_UI_UPD_FLG] == 1)
                     });
                 }
             }
@@ -127,28 +127,28 @@ namespace Intel.MyDeals.DataLibrary
             {
                 idsid = Utils.ThreadUser,
                 mode = mode.ToString(),
-                cnst_nm = adminValues.cnst_nm,
-                cnst_sid = adminValues.cnst_sid,
-                cnst_desc = adminValues.cnst_desc,
-                cnst_val_txt = adminValues.cnst_val_txt,
-                ui_updatable = adminValues.ui_updatable,
+                cnst_nm = adminValues.CNST_NM,
+                cnst_sid = adminValues.CNST_SID,
+                cnst_desc = adminValues.CNST_DESC,
+                cnst_val_txt = adminValues.CNST_VAL_TXT,
+                ui_upd_flg = adminValues.UI_UPD_FLG,
             }))
             {
                 int IDX_cnst_desc = DB.GetReaderOrdinal(rdr, "cnst_desc");
                 int IDX_cnst_nm = DB.GetReaderOrdinal(rdr, "cnst_nm");
                 int IDX_cnst_sid = DB.GetReaderOrdinal(rdr, "cnst_sid");
                 int IDX_cnst_val_txt = DB.GetReaderOrdinal(rdr, "cnst_val_txt");
-                int IDX_ui_updatable = DB.GetReaderOrdinal(rdr, "ui_updatable");
+                int IDX_UI_UPD_FLG = DB.GetReaderOrdinal(rdr, "ui_updatable");
 
                 while (rdr.Read())
                 {
                     ret.Add(new AdminConstant
                     {
-                        cnst_desc = rdr.IsDBNull(IDX_cnst_desc) ? default(String) : rdr.GetFieldValue<String>(IDX_cnst_desc),
-                        cnst_nm = rdr.IsDBNull(IDX_cnst_nm) ? default(String) : rdr.GetFieldValue<String>(IDX_cnst_nm),
-                        cnst_sid = rdr.IsDBNull(IDX_cnst_sid) ? default(Int32) : rdr.GetFieldValue<Int32>(IDX_cnst_sid),
-                        cnst_val_txt = rdr.IsDBNull(IDX_cnst_val_txt) ? default(String) : rdr.GetFieldValue<String>(IDX_cnst_val_txt),
-                        ui_updatable = rdr.IsDBNull(IDX_ui_updatable) ? default(Boolean) : rdr.GetFieldValue<Boolean>(IDX_ui_updatable)
+                        CNST_DESC = rdr.IsDBNull(IDX_cnst_desc) ? default(String) : rdr.GetFieldValue<String>(IDX_cnst_desc),
+                        CNST_NM = rdr.IsDBNull(IDX_cnst_nm) ? default(String) : rdr.GetFieldValue<String>(IDX_cnst_nm),
+                        CNST_SID = rdr.IsDBNull(IDX_cnst_sid) ? default(Int32) : rdr.GetFieldValue<Int32>(IDX_cnst_sid),
+                        CNST_VAL_TXT = rdr.IsDBNull(IDX_cnst_val_txt) ? default(String) : rdr.GetFieldValue<String>(IDX_cnst_val_txt),
+                        UI_UPD_FLG = rdr.IsDBNull(IDX_UI_UPD_FLG) ? default(Boolean) : rdr.GetFieldValue<Boolean>(IDX_UI_UPD_FLG)
                     });
                 } // while
             }
