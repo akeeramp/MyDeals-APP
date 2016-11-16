@@ -10,7 +10,7 @@ namespace Intel.MyDeals.DataLibrary.Test
     {
         public static void SetDbConnection()
         {
-            DataLibrary.InitializeDataAccessLib("Server=EG1RDMDBDEV01.amr.corp.intel.com\\DEALSDEV,3181;Database=MyDeals;integrated security=SSPI;MultipleActiveResultSets=true;", "DEV");
+            DataLibrary.InitializeDataAccessLib("Server=EG1RDMDBDEV01.amr.corp.intel.com\\DEALSDEV,3180;Database=MyDeals;integrated security=SSPI;MultipleActiveResultSets=true;", "DEV");
         }
 
     }
