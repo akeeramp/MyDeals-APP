@@ -81,20 +81,20 @@ namespace Intel.MyDeals.DataLibrary
 
 				if (state.Equals(CrudModes.Insert) || state.Equals(CrudModes.Update))
 				{
-					cmd.ACTN_CATGRY_CD = action.ACTN_CATGRY_CD;
+					cmd.ACTN_CATGRY_CD = action.ACTN_CAT_CD;
 					cmd.ACTN_CD = action.ACTN_CD;
 					cmd.ACTN_DESC = action.ACTN_DESC;
 					cmd.ACTN_SID = action.ACTN_SID;
 					cmd.SRT_ORD = action.SRT_ORD;
 					cmd.WFSTG_ACTN_CD = action.WFSTG_ACTN_CD;
-				}
+                }
 
 				using (DataSet data = DataAccess.ExecuteDataSet(cmd))
 				{
 					ret = (from rw in data.Tables[0].AsEnumerable()
 								   select new SecurityActions
 								   {
-									   ACTN_CATGRY_CD = Convert.ToString(rw["ACTN_CATGRY_CD"]),
+                                       ACTN_CAT_CD = Convert.ToString(rw["ACTN_CATGRY_CD"]),
 									   ACTN_CD = Convert.ToString(rw["ACTN_CD"]),
 									   ACTN_DESC = Convert.ToString(rw["ACTN_DESC"]),
 									   ACTN_SID = Convert.ToInt32(rw["ACTN_SID"]),
@@ -136,7 +136,7 @@ namespace Intel.MyDeals.DataLibrary
 				{
 					idsid = OpUserStack.MyOpUserToken.Usr.Idsid,
 					mode = CrudModes.Delete.ToString(),
-					APPL_SID = id
+					APP_SID = id
 				}, null, out dsCheckConstraintErrors);
 			}
 			catch (Exception ex)
@@ -188,10 +188,10 @@ namespace Intel.MyDeals.DataLibrary
 
 				if (state.Equals(CrudModes.Insert) || state.Equals(CrudModes.Update))
 				{
-					cmd.APPL_CD = app.APPL_CD;
-					cmd.APPL_DESC = app.APPL_DESC;
-					cmd.APPL_SID = app.APPL_SID;
-					cmd.APPL_SUITE = app.APPL_SUITE;
+					cmd.APP_CD = app.APP_CD;
+					cmd.APP_DESC = app.APP_DESC;
+					cmd.APP_SID = app.APP_SID;
+					cmd.APP_SUITE = app.APP_SUITE;
 					cmd.ACTV_IND = app.ACTV_IND;
 				}
 
@@ -200,10 +200,10 @@ namespace Intel.MyDeals.DataLibrary
 					ret = (from rw in data.Tables[0].AsEnumerable()
 						   select new AdminApplications
 						   {
-							   APPL_CD = Convert.ToString(rw["APPL_CD"]),
-							   APPL_DESC = Convert.ToString(rw["APPL_DESC"]),
-							   APPL_SID = Convert.ToByte(rw["APPL_SID"]),
-							   APPL_SUITE = Convert.ToString(rw["APPL_SUITE"]),
+							   APP_CD = Convert.ToString(rw["APP_CD"]),
+							   APP_DESC = Convert.ToString(rw["APP_DESC"]),
+							   APP_SID = Convert.ToByte(rw["APP_SID"]),
+							   APP_SUITE = Convert.ToString(rw["APP_SUITE"]),
 							   ACTV_IND = Convert.ToBoolean(rw["ACTV_IND"]),
 							   CHG_DTM = Convert.ToDateTime(rw["CHG_DTM"]),
 							   CHG_EMP_WWID = Convert.ToInt32(rw["CHG_EMP_WWID"]),
@@ -404,13 +404,13 @@ namespace Intel.MyDeals.DataLibrary
 				if (state.Equals(CrudModes.Insert) || state.Equals(CrudModes.Update))
 				{
 					cmd.ACTV_IND = dealType.ACTV_IND;
-					cmd.APPL_SID = dealType.APPL_SID;
+					cmd.APP_SID = dealType.APP_SID;
 					cmd.ROLE_TYPE_SID = dealType.ROLE_TYPE_SID;
 					cmd.ROLE_TYPE_CD = dealType.ROLE_TYPE_CD;
 					cmd.ROLE_TYPE_DSPLY_CD = dealType.ROLE_TYPE_DSPLY_CD;
 					cmd.ROLE_TYPE_DESC = dealType.ROLE_TYPE_DESC;
 					cmd.ROLE_TIER_CD = dealType.ROLE_TIER_CD;
-					cmd.IS_SINGLE_SELECT = dealType.IS_SINGLE_SELECT;
+					cmd.IS_SNGL_SLCT = dealType.IS_SNGL_SLCT;
 				}
 
 				using (DataSet data = DataAccess.ExecuteDataSet(cmd))
@@ -418,13 +418,13 @@ namespace Intel.MyDeals.DataLibrary
 					ret = (from rw in data.Tables[0].AsEnumerable()
 						   select new AdminRoleType
 						   {
-							   APPL_SID = Convert.ToByte(rw["APPL_SID"]),
+							   APP_SID = Convert.ToByte(rw["APP_SID"]),
 							   ROLE_TYPE_SID = Convert.ToByte(rw["ROLE_TYPE_SID"]),
 							   ROLE_TYPE_CD = Convert.ToString(rw["ROLE_TYPE_CD"]),
 							   ROLE_TYPE_DSPLY_CD = Convert.ToString(rw["ROLE_TYPE_DSPLY_CD"]),
 							   ROLE_TYPE_DESC = Convert.ToString(rw["ROLE_TYPE_DESC"]),
 							   ROLE_TIER_CD = Convert.ToString(rw["ROLE_TIER_CD"]),
-							   IS_SINGLE_SELECT = Convert.ToBoolean(rw["IS_SINGLE_SELECT"]),
+                               IS_SNGL_SLCT = Convert.ToBoolean(rw["IS_SNGL_SLCT"]),
 							   ACTV_IND = Convert.ToBoolean(rw["ACTV_IND"]),
 							   CHG_DTM = Convert.ToDateTime(rw["CHG_DTM"]),
 							   CHG_EMP_WWID = Convert.ToInt32(rw["CHG_EMP_WWID"]),
