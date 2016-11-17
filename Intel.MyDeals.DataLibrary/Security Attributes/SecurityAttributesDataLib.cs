@@ -16,12 +16,12 @@ namespace Intel.MyDeals.DataLibrary
 
         #region SecurityActions
         /// <summary>
-        /// Delete a Security Action baed on id
+        /// Delete a Security Action based on id
         /// </summary>
-        /// <returns>  </returns>
+        /// <returns> void </returns>
         public bool DeleteSecurityAction(int id)
 		{
-			//OpLogPerf.Log("DeleteToolAction");
+			//OpLogPerf.Log("DeleteSecurityAction");
 			DataSet dsCheckConstraintErrors = null;
 			try
 			{
@@ -46,29 +46,29 @@ namespace Intel.MyDeals.DataLibrary
 		/// <summary>
 		/// Get Security Action
 		/// </summary>
-		/// <returns> List of ToolActions</returns>
+		/// <returns> List of Security Actions</returns>
 		public List<SecurityActions> GetSecurityActions()
 		{
 			//OpLogPerf.Log("GetSecurityAction");
 			return CallManageActionSP(null, CrudModes.Select);
 		}
 
-		/// <summary>
-		/// Inserts  or Updates a ToolAction
-		/// </summary>
-		/// <returns> The inserted or updated ToolActions</returns>
-		public SecurityActions ManageSecurityAction(SecurityActions action, CrudModes state)
+        /// <summary>
+        /// Inserts  or Updates a Security Action
+        /// </summary>
+        /// <returns> The inserted or updated Security Actions</returns>
+        public SecurityActions ManageSecurityAction(SecurityActions action, CrudModes state)
 		{
 			//OpLogPerf.Log("ManageSecurityAction");
 			return CallManageActionSP(action, state).FirstOrDefault();
 		}
 
 
-		/// <summary>
-		///  Calls the PR_MANAGE_ACTIONS SP which performs a CRUD operation depending on the state param
-		/// </summary>
-		/// <returns> List of ToolActions</returns>
-		public List<SecurityActions> CallManageActionSP(SecurityActions action, CrudModes state)
+        /// <summary>
+        ///  Calls the PR_MANAGE_ACTIONS SP which performs a CRUD operation depending on the state param
+        /// </summary>
+        /// <returns> List of Security Actions</returns>
+        public List<SecurityActions> CallManageActionSP(SecurityActions action, CrudModes state)
 		{
 			var ret = new List<SecurityActions>();
 			try
@@ -111,8 +111,7 @@ namespace Intel.MyDeals.DataLibrary
 			}
 			catch (Exception ex)
 			{
-                OpLogPerf.Log(ex);
-                OpLog.EmailError(ex);
+                OpLog.HandleException(ex);
                 Exception simpleEx = new Exception("Problem " + state.ToString() + " Security Attribute - Security Actions");
                 throw simpleEx;
             }
@@ -128,7 +127,7 @@ namespace Intel.MyDeals.DataLibrary
 		/// <returns> void </returns>
 		public bool DeleteAdminApplication(int id)
 		{
-			//OpLogPerf.Log("DeleteToolAction");
+			//OpLogPerf.Log("DeleteAdminApplication");
 			DataSet dsCheckConstraintErrors = null;
 			try
 			{
@@ -143,8 +142,8 @@ namespace Intel.MyDeals.DataLibrary
 			{
 				if (dsCheckConstraintErrors != null && dsCheckConstraintErrors.Tables.Count > 0)
 				{
-					// TODO: DO SOME ERROR HANDLING
-				}
+                    OpLog.HandleException(ex);
+                }
 				throw;
 			}
 			return true;
@@ -156,7 +155,7 @@ namespace Intel.MyDeals.DataLibrary
 		/// <returns> List of Admin Applications</returns>
 		public List<AdminApplications> GetAdminApplications()
 		{
-			//OpLogPerf.Log("GetSecurityAction");
+			//OpLogPerf.Log("GetAdminApplications");
 			return CallManageAdminApplicationSP(null, CrudModes.Select);
 		}
 
@@ -166,7 +165,7 @@ namespace Intel.MyDeals.DataLibrary
 		/// <returns> The inserted or updated Admin Application</returns>
 		public AdminApplications ManageAdminApplication(AdminApplications app, CrudModes state)
 		{
-			//OpLogPerf.Log("ManageSecurityAction");
+			//OpLogPerf.Log("ManageAdminApplications");
 			return CallManageAdminApplicationSP(app, state).FirstOrDefault();
 		}
 
@@ -216,9 +215,8 @@ namespace Intel.MyDeals.DataLibrary
 			}
 			catch (Exception ex)
 			{
-				OpLogPerf.Log(ex);
-				OpLog.EmailError(ex);
-				Exception simpleEx = new Exception("Problem " + state.ToString() + " Security Attribute - Admin Application");
+                OpLog.HandleException(ex);
+                Exception simpleEx = new Exception("Problem " + state.ToString() + " Security Attribute - Admin Application");
 				throw simpleEx;
 			}
 			return ret;
@@ -232,7 +230,7 @@ namespace Intel.MyDeals.DataLibrary
 		/// <returns> void </returns>
 		public bool DeleteAdminDealType(int id)
 		{
-			//OpLogPerf.Log("DeleteToolAction");
+			//OpLogPerf.Log("DeleteAdminDealType");
 			DataSet dsCheckConstraintErrors = null;
 			try
 			{
@@ -247,8 +245,8 @@ namespace Intel.MyDeals.DataLibrary
 			{
 				if (dsCheckConstraintErrors != null && dsCheckConstraintErrors.Tables.Count > 0)
 				{
-					// TODO: DO SOME ERROR HANDLING
-				}
+                    OpLog.HandleException(ex);
+                }
 				throw;
 			}
 			return true;
@@ -260,7 +258,7 @@ namespace Intel.MyDeals.DataLibrary
 		/// <returns> List of AdminDealTypes</returns>
 		public List<AdminDealType> GetAdminDealTypes()
 		{
-			//OpLogPerf.Log("GetSecurityAction");
+			//OpLogPerf.Log("GetAdminDealTypes");
 			return CallManageAdminDealTypeSP(null, CrudModes.Select);
 		}
 
@@ -270,7 +268,7 @@ namespace Intel.MyDeals.DataLibrary
 		/// <returns> The inserted or updated AdminDealType</returns>
 		public AdminDealType ManageAdminDealType(AdminDealType dealType, CrudModes state)
 		{
-			//OpLogPerf.Log("ManageSecurityAction");
+			//OpLogPerf.Log("ManageAdminDealType");
 			return CallManageAdminDealTypeSP(dealType, state).FirstOrDefault();
 		}
 
@@ -327,9 +325,8 @@ namespace Intel.MyDeals.DataLibrary
 			}
 			catch (Exception ex)
 			{
-				OpLogPerf.Log(ex);
-				OpLog.EmailError(ex);
-				Exception simpleEx = new Exception("Problem " + state.ToString() + "ing Security Attribute - Admin Deal Type");
+                OpLog.HandleException(ex);
+                Exception simpleEx = new Exception("Problem " + state.ToString() + "ing Security Attribute - Admin Deal Type");
 				throw simpleEx;
 			}
 			return ret;
@@ -343,7 +340,7 @@ namespace Intel.MyDeals.DataLibrary
 		/// <returns> void </returns>
 		public bool DeleteAdminRoleType(int id)
 		{
-			//OpLogPerf.Log("DeleteToolAction");
+			//OpLogPerf.Log("DeleteAdminRoleType");
 			DataSet dsCheckConstraintErrors = null;
 			try
 			{
@@ -358,8 +355,8 @@ namespace Intel.MyDeals.DataLibrary
 			{
 				if (dsCheckConstraintErrors != null && dsCheckConstraintErrors.Tables.Count > 0)
 				{
-					// TODO: DO SOME ERROR HANDLING
-				}
+                    OpLog.HandleException(ex);
+                }
 				throw;
 			}
 			return true;
@@ -371,7 +368,7 @@ namespace Intel.MyDeals.DataLibrary
 		/// <returns> List of RoleTypes</returns>
 		public List<AdminRoleType> GetAdminRoleTypes()
 		{
-			//OpLogPerf.Log("GetSecurityAction");
+			//OpLogPerf.Log("GetAdminRoleTypes");
 			return CallManageAdminRoleTypeSP(null, CrudModes.Select);
 		}
 
@@ -381,7 +378,7 @@ namespace Intel.MyDeals.DataLibrary
 		/// <returns> The inserted or updated RoleType</returns>
 		public AdminRoleType ManageAdminRoleType(AdminRoleType roleType, CrudModes state)
 		{
-			//OpLogPerf.Log("ManageSecurityAction");
+			//OpLogPerf.Log("ManageAdminRoleType");
 			return CallManageAdminRoleTypeSP(roleType, state).FirstOrDefault();
 		}
 
@@ -389,7 +386,7 @@ namespace Intel.MyDeals.DataLibrary
 		/// <summary>
 		///  Calls the PR_MANAGE_DEAL_TYPES SP which performs a CRUD operation depending on the state param
 		/// </summary>
-		/// <returns> List of AdminDealType</returns>
+		/// <returns> List of AdminRoleTypes</returns>
 		public List<AdminRoleType> CallManageAdminRoleTypeSP(AdminRoleType dealType, CrudModes state)
 		{
 			var ret = new List<AdminRoleType>();
@@ -437,9 +434,8 @@ namespace Intel.MyDeals.DataLibrary
 			}
 			catch (Exception ex)
 			{
-				OpLogPerf.Log(ex);
-				OpLog.EmailError(ex);
-				Exception simpleEx = new Exception("Problem " + state.ToString() + " Security Attribute - Admin Role Type");
+                OpLog.HandleException(ex);
+                Exception simpleEx = new Exception("Problem " + state.ToString() + " Security Attribute - Admin Role Type");
 				throw simpleEx;
 			}
 			return ret;
