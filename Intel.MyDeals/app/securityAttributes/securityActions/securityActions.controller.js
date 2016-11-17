@@ -4,9 +4,9 @@
         .module('app.securityAttributes')
         .controller('securityActionsController',securityActionsController)
 
-    securityActionsController.$inject = ['$uibModal', 'SecurityActionsFactory', '$scope'];
+    securityActionsController.$inject = ['$uibModal', 'SecurityActionsService', '$scope'];
 
-    function securityActionsController($uibModal, SecurityActionsFactory, $scope) {
+    function securityActionsController($uibModal, SecurityActionsService, $scope) {
         var vm = this;
 
         // Functions
@@ -24,25 +24,25 @@
             type: "json",
             transport: {
                 read: function (e) {
-                    SecurityActionsFactory.getActions()
+                    SecurityActionsService.getActions()
                         .then(function (data) {
                             e.success(data);
                         });
                 },
                 update: function (e) {
-                    SecurityActionsFactory.updateAction(e.data.models[0])
+                    SecurityActionsService.updateAction(e.data.models[0])
                         .then(function (data) {
                             e.success(data);
                         });
                 },
                 destroy: function (e) {
-                    SecurityActionsFactory.deleteAction(e.data.models[0].ACTN_SID)
+                    SecurityActionsService.deleteAction(e.data.models[0].ACTN_SID)
                         .then(function (data) {
                             e.success(data);
                         });
                 },
                 create: function (e) {
-                    SecurityActionsFactory.insertAction(e.data.models[0])
+                    SecurityActionsService.insertAction(e.data.models[0])
                         .then(function (data) {
                             e.success(data);
                         });

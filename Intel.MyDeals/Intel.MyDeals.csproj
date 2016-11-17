@@ -285,13 +285,13 @@
     <Content Include="app\securityAttributes\adminApplications\adminApplications.controller.js" />
     <Content Include="app\securityAttributes\adminDealTypes\adminDealTypes.controller.js" />
     <Content Include="app\securityAttributes\adminDealTypes\adminDealTypes.manage.html" />
-    <Content Include="app\securityAttributes\adminDealTypes\adminDealTypes.factory.js" />
+    <Content Include="app\securityAttributes\adminDealTypes\adminDealTypes.service.js" />
     <Content Include="app\securityAttributes\adminApplications\adminApplications.manage.html" />
-    <Content Include="app\securityAttributes\adminApplications\adminApplications.factory.js" />
+    <Content Include="app\securityAttributes\adminApplications\adminApplications.service.js" />
     <Content Include="app\securityAttributes\adminRoleTypes\adminRoleTypes.controller.js" />
     <Content Include="app\securityAttributes\adminRoleTypes\adminRoleTypes.manage.html" />
-    <Content Include="app\securityAttributes\adminRoleTypes\adminRoleTypes.factory.js" />
-    <Content Include="app\securityAttributes\securityActions\securityActions.factory.js" />
+    <Content Include="app\securityAttributes\adminRoleTypes\adminRoleTypes.service.js" />
+    <Content Include="app\securityAttributes\securityActions\securityActions.service.js" />
     <Content Include="app\securityAttributes\securityActions\securityActions.controller.js" />
     <Content Include="app\securityAttributes\securityAttributes.module.js" />
     <Content Include="app\securityAttributes\securityAttributes.route.js" />

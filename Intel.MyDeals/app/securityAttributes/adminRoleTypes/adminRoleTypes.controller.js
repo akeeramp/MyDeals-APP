@@ -4,9 +4,9 @@
         .module('app.securityAttributes')
         .controller('roleTypesController', roleTypesController)
 
-    roleTypesController.$inject = ['$uibModal', 'RoleTypesFactory', '$scope']
+    roleTypesController.$inject = ['$uibModal', 'RoleTypesService', '$scope']
 
-    function roleTypesController($uibModal, RoleTypesFactory, $scope) {
+    function roleTypesController($uibModal, RoleTypesService, $scope) {
         var vm = this;
 
         // Functions
@@ -24,25 +24,25 @@
             type: "json",
             transport: {
                 read: function (e) {
-                    RoleTypesFactory.getRoleTypes()
+                    RoleTypesService.getRoleTypes()
                         .then(function (data) {
                             e.success(data);
                         });
                 },
                 update: function (e) {
-                    RoleTypesFactory.updateRoleType(e.data.models[0])
+                    RoleTypesService.updateRoleType(e.data.models[0])
                         .then(function (data) {
                             e.success(data);
                         });
                 },
                 destroy: function (e) {
-                    RoleTypesFactory.deleteRoleType(e.data.models[0].ROLE_TYPE_SID)
+                    RoleTypesService.deleteRoleType(e.data.models[0].ROLE_TYPE_SID)
                         .then(function (data) {
                             e.success(data);
                         });
                 },
                 create: function (e) {
-                    RoleTypesFactory.insertRoleType(e.data.models[0])
+                    RoleTypesService.insertRoleType(e.data.models[0])
                         .then(function (data) {
                             e.success(data);
                         });

@@ -70,14 +70,14 @@ namespace Intel.MyDeals
 				, "~/app/dashboard/dashboard.route.js"
 				, "~/app/securityAttributes/securityAttributes.module.js"
 				, "~/app/securityAttributes/securityAttributes.route.js"
-				, "~/app/securityAttributes/securityActions/securityActions.factory.js"
+				, "~/app/securityAttributes/securityActions/securityActions.service.js"
 				, "~/app/securityAttributes/securityActions/securityActions.controller.js"
-				, "~/app/securityAttributes/adminApplications/adminApplications.factory.js"
-				, "~/app/securityAttributes/adminApplications/adminApplications.controller.js"
-				, "~/app/securityAttributes/adminDealTypes/adminDealTypes.factory.js"
-				, "~/app/securityAttributes/adminDealTypes/adminDealTypes.controller.js"
-				, "~/app/securityAttributes/adminRoleTypes/adminRoleTypes.factory.js"
-				, "~/app/securityAttributes/adminRoleTypes/adminRoleTypes.controller.js"
+				, "~/app/securityAttributes/adminApplications/adminApplications.service.js"
+                , "~/app/securityAttributes/adminApplications/adminApplications.controller.js"
+				, "~/app/securityAttributes/adminDealTypes/adminDealTypes.service.js"
+                , "~/app/securityAttributes/adminDealTypes/adminDealTypes.controller.js"
+				, "~/app/securityAttributes/adminRoleTypes/adminRoleTypes.service.js"
+                , "~/app/securityAttributes/adminRoleTypes/adminRoleTypes.controller.js"
 				));
 
             bundles.Add(new ScriptBundle("~/MyDeals/scripts").Include(

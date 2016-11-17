@@ -2,11 +2,11 @@
 	'use strict';
     angular
         .module('app.securityAttributes')
-        .factory('RoleTypesFactory', RoleTypesFactory);
+        .factory('RoleTypesService', RoleTypesService);
 
-    RoleTypesFactory.$inject = ['$cacheFactory', '$q', '$http'];
+    RoleTypesService.$inject = ['$cacheFactory', '$q', '$http'];
 
-	function RoleTypesFactory($cacheFactory, $q, $http) {
+    function RoleTypesService($cacheFactory, $q, $http) {
 		var URL = '/api/SecurityAttributesAPI/' // TODO: Maaybe put this in a nicer place to reference off of
 		var cache = $cacheFactory('RoleTypes');
 		var cacheName = 'ROLETYPES';

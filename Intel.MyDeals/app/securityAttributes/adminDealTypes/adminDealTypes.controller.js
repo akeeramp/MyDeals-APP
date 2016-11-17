@@ -5,9 +5,9 @@
         .module('app.securityAttributes')
         .controller('dealTypesController',dealTypesController)
 
-    dealTypesController.$inject = ['$uibModal', 'DealTypesFactory', '$scope'];
+    dealTypesController.$inject = ['$uibModal', 'DealTypesService', '$scope'];
 
-    function dealTypesController($uibModal, DealTypesFactory, $scope) {
+    function dealTypesController($uibModal, DealTypesService, $scope) {
         var vm = this;
 
         // Functions
@@ -25,25 +25,25 @@
             type: "json",
             transport: {
                 read: function (e) {
-                    DealTypesFactory.getDealTypes()
+                    DealTypesService.getDealTypes()
                         .then(function (data) {
                             e.success(data);
                         });
                 },
                 update: function (e) {
-                    DealTypesFactory.updateDealType(e.data.models[0])
+                    DealTypesService.updateDealType(e.data.models[0])
                         .then(function (data) {
                             e.success(data);
                         });
                 },
                 destroy: function (e) {
-                    DealTypesFactory.deleteDealType(e.data.models[0].DEAL_TYPE_SID)
+                    DealTypesService.deleteDealType(e.data.models[0].DEAL_TYPE_SID)
                         .then(function (data) {
                             e.success(data);
                         });
                 },
                 create: function (e) {
-                    DealTypesFactory.insertDealType(e.data.models[0])
+                    DealTypesService.insertDealType(e.data.models[0])
                         .then(function (data) {
                             e.success(data);
                         });

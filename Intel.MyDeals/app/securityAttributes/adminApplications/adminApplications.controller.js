@@ -4,9 +4,9 @@
         .module('app.securityAttributes')
         .controller('applicationsController', applicationsController)
 
-    applicationsController.$inject = ['$uibModal', 'ApplicationsFactory', '$scope']
+    applicationsController.$inject = ['$uibModal', 'ApplicationsService', '$scope']
 
-    function applicationsController($uibModal, ApplicationsFactory, $scope) {
+    function applicationsController($uibModal, ApplicationsService, $scope) {
         var vm = this;
 
         // Functions
@@ -24,25 +24,25 @@
             type: "json",
             transport: {
                 read: function (e) {
-                    ApplicationsFactory.getApplications()
+                    ApplicationsService.getApplications()
                         .then(function (data) {
                             e.success(data);
                         });
                 },
                 update: function (e) {
-                    ApplicationsFactory.updateApplication(e.data.models[0])
+                    ApplicationsService.updateApplication(e.data.models[0])
                         .then(function (data) {
                             e.success(data);
                         });
                 },
                 destroy: function (e) {
-                    ApplicationsFactory.deleteApplication(e.data.models[0].APPL_SID)
+                    ApplicationsService.deleteApplication(e.data.models[0].APPL_SID)
                         .then(function (data) {
                             e.success(data);
                         });
                 },
                 create: function (e) {
-                    ApplicationsFactory.insertApplication(e.data.models[0])
+                    ApplicationsService.insertApplication(e.data.models[0])
                         .then(function (data) {
                             e.success(data);
                         });
