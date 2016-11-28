@@ -82,6 +82,21 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "LogConfig";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
+	// Admin Customer Objects
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_CUST_DIV]");
+	ds.Tables[0].TableName = "CustomerDivision";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
+	// My Customer Objects
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_MY_CUST] @IN_IDSID = 'PWECKENR'");
+	ds.Tables[0].TableName = "MyCustomersInformation";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
+	ds.Tables[1].TableName = "MyCustomersSoldTo";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[1], false));
+
+	ds.Tables[2].TableName = "MyCustomersLineupAttributes";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[2], false));
 
 	PopIndent();
 	WriteLine("}"); // End NameSpace

@@ -311,25 +311,40 @@ namespace Intel.MyDeals.DataLibrary
         ////////private static List<CustomerCalendar> _getCalendarData;
         ////////private static List<DealType> _getDealTypeData;
 
-        ////////public static Dictionary<int, CustomerDivision> GetCustomerDivisions()
-        ////////{
-        ////////    lock (LOCK_OBJECT ?? new object())
-        ////////    {
-        ////////        if (_getCustomerDivisions == null || _getCustomerDivisions.Count == 0)
-        ////////        {
-        ////////            _getCustomerDivisions = new CustomerDataLib().GetCustomerDivisions();
-        ////////        }
+        public static List<CustomerDivision> GetCustomerDivisions()
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                if (_getCustomerDivisions == null || _getCustomerDivisions.Count == 0)
+                {
+                    _getCustomerDivisions = new CustomerDataLib().GetCustomerDivisions();
+                }
 
-        ////////        return _getCustomerDivisions;
-        ////////    }
-        ////////}
-        ////////private static Dictionary<int, CustomerDivision> _getCustomerDivisions;
+                return _getCustomerDivisions;
+            }
+        }
+        private static List<CustomerDivision> _getCustomerDivisions;
 
-        ////////public static CustomerDivision GetCustomerDivision(int id)
-        ////////{
-        ////////    CustomerDivision ret;
-        ////////    return GetCustomerDivisions().TryGetValue(id, out ret) ? ret : null;
-        ////////}
+        //public static CustomerDivision GetCustomerDivision(int id)
+        //{
+        //    CustomerDivision ret;
+        //    return GetCustomerDivisions().TryGetValue(id, out ret) ? ret : null;
+        //    //TODO: Do we need this function? TryGetValue is a C# Dictionary<> function, find List<> equivalent?
+        //}
+
+        public static MyCustomerDetailsWrapper GetMyCustomers()
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                if (_getMyCustomers == null)
+                {
+                    _getMyCustomers = new CustomerDataLib().GetMyCustomers();
+                }
+
+                return _getMyCustomers;
+            }
+        }
+        private static MyCustomerDetailsWrapper _getMyCustomers;
 
 
         ////////public static List<FilterAttribute> GetFilterAttributes()

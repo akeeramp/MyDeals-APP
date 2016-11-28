@@ -234,6 +234,7 @@
     <Compile Include="Controllers\API\PocController.cs" />
     <Compile Include="Controllers\API\SearchController.cs" />
     <Compile Include="Areas\Admin\Controllers\CacheController.cs" />
+    <Compile Include="Controllers\API\CustomersController.cs" />
     <Compile Include="Controllers\CodingPracticesController.cs" />
     <Compile Include="Controllers\API\SecurityAttributesAPIController.cs" />
     <Compile Include="Controllers\ConstantsController.cs" />

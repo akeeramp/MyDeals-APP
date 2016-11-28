@@ -1,0 +1,150 @@
+﻿using System.Collections.Generic;
+using System.Web.Http;
+using Intel.MyDeals.BusinesssLogic;
+using Intel.MyDeals.Entities;
+using Intel.Opaque;
+using System;
+
+namespace Intel.MyDeals.Controllers.API
+{
+    //TODO: Once security is implemented, we want to add it to these api controllers to ensure only the correct users are allowed to get customer information.
+    public class CustomersController : ApiController
+    {
+        OpCore op = OpAppConfig.Init();
+
+        [Authorize]
+        [Route("api/Customers/GetCustomers")]
+        public IEnumerable<CustomerDivision> GetCustomerDivisions()
+        {
+            try
+            {
+                return new CustomerLib().GetCustomerDivisions();
+            }
+            catch (Exception ex)
+            {
+                OpLog.HandleException(ex);
+                throw new Exception("Could not get Customer Division data");
+            }
+        }
+
+        [Authorize]
+        [Route("api/Customers/GetActiveCustomers")]
+        public IEnumerable<CustomerDivision> GetActiveCustomers()
+        {
+            try
+            {
+                return new CustomerLib().GetCustomerDivisionsActive();
+            }
+            catch (Exception ex)
+            {
+                OpLog.HandleException(ex);
+                throw new Exception("Could not get Customer data");
+            }
+        }
+
+        [Authorize]
+        [Route("api/Customers/GetCustomerByCategory")]
+        public IEnumerable<CustomerDivision> GetCustomerByCategory(string cat)
+        {
+            try
+            {
+                return new CustomerLib().GetCustomerDivisionsByCategory(cat);
+            }
+            catch (Exception ex)
+            {
+                OpLog.HandleException(ex);
+                throw new Exception("Could not get Customer data");
+            }
+        }
+
+        [Authorize]
+        [Route("api/Customers/GetCustomerByGeo")]
+        public IEnumerable<CustomerDivision> GetCustomerByGep(string geo)
+        {
+            try
+            {
+                return new CustomerLib().GetCustomerDivisionsByHostedGeo(geo);
+            }
+            catch (Exception ex)
+            {
+                OpLog.HandleException(ex);
+                throw new Exception("Could not get Customer data");
+            }
+        }
+
+        [Authorize]
+        [Route("api/Customers/GetCustomerByType")]
+        public IEnumerable<CustomerDivision> GetCustomerByType(string type)
+        {
+            try
+            {
+                return new CustomerLib().GetCustomerDivisionsByType(type);
+            }
+            catch (Exception ex)
+            {
+                OpLog.HandleException(ex);
+                throw new Exception("Could not get Customer data");
+            }
+        }
+
+        [Authorize]
+        [Route("api/Customers/GetMyCustomers")]
+        public MyCustomerDetailsWrapper GetMyCustomers()
+        {
+            try
+            {
+                return new CustomerLib().GetMyCustomers();
+            }
+            catch (Exception ex)
+            {
+                OpLog.HandleException(ex);
+                throw new Exception("Could not get Customer Division data");
+            }
+        }
+
+        [Authorize]
+        [Route("api/Customers/GetMyCustomersInfo")]
+        public List<MyCustomersInformation> GetMyCustomersInfo()
+        {
+            try
+            {
+                return new CustomerLib().GetMyCustomersInfo();
+            }
+            catch (Exception ex)
+            {
+                OpLog.HandleException(ex);
+                throw new Exception("Could not get Customer Division data");
+            }
+        }
+
+        [Authorize]
+        [Route("api/Customers/GetMyCustomersSoldTo")]
+        public List<MyCustomersSoldTo> GetMyCustomersSoldTo()
+        {
+            try
+            {
+                return new CustomerLib().GetMyCustomersSoldTo();
+            }
+            catch (Exception ex)
+            {
+                OpLog.HandleException(ex);
+                throw new Exception("Could not get Customer Division data");
+            }
+        }
+
+        [Authorize]
+        [Route("api/Customers/GetMyCustomersLineupAttributes")]
+        public List<MyCustomersLineupAttributes> GetMyCustomersLineupAttributes()
+        {
+            try
+            {
+                return new CustomerLib().GetMyCustomersLineupAttributes();
+            }
+            catch (Exception ex)
+            {
+                OpLog.HandleException(ex);
+                throw new Exception("Could not get Customer Division data");
+            }
+        }
+    }
+}
