@@ -29,138 +29,39 @@
         return service;
 
         function getStaticCacheStatus() {
-            var deferred = $q.defer();
-            $http.get(apiBaseUrl + 'GetCacheStatus').then(
-                 function success(response) {
-                     deferred.resolve(response.data);
-                 },
-                 function error(response) {
-                     //Handle error data which need not to be shown to user
-                     // any user messages will be handled in controller where they can be customised as per needs
-                     deferred.reject(response);
-                 }
-            );
-            return deferred.promise;
+            return dataService.get(apiBaseUrl + 'GetCacheStatus');
         }
 
         function clearStaticCache() {
-            var deferred = $q.defer();
-            $http.get(apiBaseUrl + 'GetCacheClear').then(
-                 function success(response) {
-                     deferred.resolve(response.data);
-                 },
-                 function error(response) {
-                     // Handle error data which need not to be shown to user
-                     // any user messages will be handled in controller where they can be customised as per needs
-                     deferred.reject(response);
-                 }
-            );
-            return deferred.promise;
+            return dataService.get(apiBaseUrl + 'GetCacheClear');
         }
 
         function reloadAllStaticCache() {
-            var deferred = $q.defer();
-            $http.get(apiBaseUrl + 'GetCacheReload').then(
-                 function success(response) {
-                     deferred.resolve(response.data);
-                 },
-                 function error(response) {
-                     // Handle error data which need not to be shown to user
-                     // any user messages will be handled  in controller where they can be customized as per needs
-                     deferred.reject(response);
-                 }
-            );
-            return deferred.promise;
+            return dataService.get(apiBaseUrl + 'GetCacheReload');
         }
 
         function loadStaticCacheByName(data) {
-            var deferred = $q.defer();
-            $http.get(apiBaseUrl + 'GetCacheLoad/' + data.CacheName).then(
-                 function success(response) {
-                     deferred.resolve(response.data);
-                 },
-                 function error(response) {
-                     // Handle error data which need not to be shown to user
-                     // any user messages will be handled  in controller where they can be customized as per needs
-                     deferred.reject(response);
-                 }
-            );
-            return deferred.promise;
+            return dataService.get(apiBaseUrl + 'GetCacheLoad/' + data.CacheName);
         }
 
         function clearStaticCacheByName(data) {
-            var deferred = $q.defer();
-            $http.get(apiBaseUrl + 'GetCacheClear/' + data.CacheName).then(
-                 function success(response) {
-                     deferred.resolve(response.data);
-                 },
-                 function error(response) {
-                     // Handle error data which need not to be shown to user
-                     // any user messages will be handled  in controller where they can be customized as per needs
-                     deferred.reject(response);
-                 }
-            );
-            return deferred.promise;
+            return dataService.get(apiBaseUrl + 'GetCacheClear/' + data.CacheName);
         }
 
         function viewStaticCacheByName(data) {
-            var deferred = $q.defer();
-            $http.get(apiBaseUrl + 'GetCacheView/' + data.CacheName).then(
-                 function success(response) {
-                     deferred.resolve(response.data);
-                 },
-                 function error(response) {
-                     // Handle error data which need not to be shown to user
-                     // any user messages will be handled  in controller where they can be customized as per needs
-                     deferred.reject(response);
-                 }
-            );
-            return deferred.promise;
+            return dataService.get(apiBaseUrl + 'GetCacheView/' + data.CacheName);
         }
 
         function getApiCacheStatus() {
-            var deferred = $q.defer();
-            $http.get(apiBaseUrl + 'GetApiCacheStatus').then(
-                 function success(response) {
-                     deferred.resolve(response.data);
-                 },
-                 function error(response) {
-                     //Handle error data which need not to be shown to user
-                     // any user messages will be handled in controller where they can be customised as per needs
-                     deferred.reject(response);
-                 }
-            );
-            return deferred.promise;
+            return dataService.get(apiBaseUrl + 'GetApiCacheStatus');
         }
 
         function clearApiCache() {
-            var deferred = $q.defer();
-            $http.get(apiBaseUrl + 'GetApiCacheClear').then(
-                 function success(response) {
-                     deferred.resolve(response.data);
-                 },
-                 function error(response) {
-                     // Handle error data which need not to be shown to user
-                     // any user messages will be handled in controller where they can be customised as per needs
-                     deferred.reject(response);
-                 }
-            );
-            return deferred.promise;
+            return dataService.get(apiBaseUrl + 'GetApiCacheClear');
         }
 
-        function clearApiCacheByName(data) {
-            var deferred = $q.defer();
-            $http.post(apiBaseUrl + 'ClearApiCache', data).then(
-                 function success(response) {
-                     deferred.resolve(response.data);
-                 },
-                 function error(response) {
-                     // Handle error data which need not to be shown to user
-                     // any user messages will be handled  in controller where they can be customized as per needs
-                     deferred.reject(response);
-                 }
-            );
-            return deferred.promise;
+        function clearApiCacheByName() {
+            return dataService.post(apiBaseUrl + 'ClearApiCache', data);
         }
     }
 })();

@@ -14,17 +14,21 @@
             error   : error,
             info    : info,
             success : success,
-            warning : warning,
+            warning: warning,
 
             // straight to console; bypass toastr
-            log     : $log.log
+            log: $log.log
+
+            //TODO: include the op.error in the logger
         };
 
         return service;
         /////////////////////
 
         function error(message, data, title) {
-            toastr.error(message, title);
+            // log it to the remote machine,
+            // async call will be initiated from here 
+            // TODO: replace console log to remote call
             $log.error('Error: ' + message, data);
         }
 

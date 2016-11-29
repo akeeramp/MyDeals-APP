@@ -230,6 +230,7 @@
     <Compile Include="Areas\Admin\Controllers\API\CacheController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\API\ConstantsController.cs" />
+    <Compile Include="Controllers\API\CustomerCalendarController.cs" />
     <Compile Include="Controllers\API\DevTestsController.cs" />
     <Compile Include="Controllers\API\PocController.cs" />
     <Compile Include="Controllers\API\SearchController.cs" />

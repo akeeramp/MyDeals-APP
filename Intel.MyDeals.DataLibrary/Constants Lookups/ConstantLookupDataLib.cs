@@ -111,7 +111,7 @@ namespace Intel.MyDeals.DataLibrary
                         CNST_NM = (IDX_CNST_NM < 0 || rdr.IsDBNull(IDX_CNST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CNST_NM),
                         CNST_SID = (IDX_CNST_SID < 0 || rdr.IsDBNull(IDX_CNST_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CNST_SID),
                         CNST_VAL_TXT = (IDX_CNST_VAL_TXT < 0 || rdr.IsDBNull(IDX_CNST_VAL_TXT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CNST_VAL_TXT),
-                        UI_UPD_FLG = (IDX_UI_UPD_FLG < 0 || rdr.IsDBNull(IDX_UI_UPD_FLG)) ? default(System.Boolean) : ((int)rdr[IDX_UI_UPD_FLG] == 1)
+                        UI_UPD_FLG = rdr.IsDBNull(IDX_UI_UPD_FLG) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_UI_UPD_FLG),
                     });
                 }
             }

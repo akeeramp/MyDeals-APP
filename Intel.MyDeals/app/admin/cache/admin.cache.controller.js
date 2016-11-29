@@ -5,13 +5,13 @@
         .module('app.admin')
         .controller('CacheController', CacheController);
 
-    // logger :Injected logger service to for loging to remote database or throwing error on the ui
+    // logger :Injected logger service to for logging to remote database or throwing error on the ui
     // dataService :Application level service, to be used for common api calls, eg: user token, department etc
     CacheController.$inject = ['dataService', 'cacheService', 'logger'];
 
     function CacheController(dataService, cacheService, logger) {
 
-        // Decalre public variables, function at top followed by private functions
+        // Declare public variables, function at top followed by private functions
         var vm = this;
         vm.title = "Cache Manager";
         vm.cacheData = [];
@@ -27,14 +27,17 @@
         vm.clearApiCacheByName = clearApiCacheByName
         vm.clearAllApiCache = clearAllApiCache;
 
+        //Initial load functions to be called at the end
+        vm.loadCache();
+        vm.loadApiCache();
+
         //Get the cache Status
         function loadCache() {
             cacheService.getStaticCacheStatus().then(
-                function (data) {
-                    vm.cacheData = data;
-                    // TODO: Create a http interceptor service to show the loading status
+                function (response) {
+                    vm.cacheData = response.data;
                 }, function (data) {
-                    logger.error("Error in getting cache staus.")
+                    logger.error("Error in getting cache status.")
                 });
         }
 
@@ -94,7 +97,7 @@
             data.loading = true;
             vm.currentCacheDetails = "";
             cacheService.viewStaticCacheByName(data).then(function (result) {
-                vm.currentCacheDetails = util.isNull(result) ? "<< no data found >>" : result;
+                vm.currentCacheDetails = util.isNull(result.data) ? "<< no data found >>" : result.data;
                 data.loading = false;
             }, function (e) {
                 op.notifyError(e.statusText, "Unable to retrieve cache details.");
@@ -105,8 +108,8 @@
         // Load the api cache details
         function loadApiCache() {
             vm.currentCacheDetails = "";
-            cacheService.getApiCacheStatus().then(function (data) {
-                vm.apiCacheData = data;
+            cacheService.getApiCacheStatus().then(function (response) {
+                vm.apiCacheData = response.data;
             }, function (e) {
                 op.notifyError(e.statusText, "Unable to Load Cache Status");
             });
@@ -149,9 +152,5 @@
             loadingStatus();
             vm.currentCacheDetails = "";
         }
-
-        //Initial load functions to be called at the end
-        vm.loadCache();
-        vm.loadApiCache();
     }
 })();

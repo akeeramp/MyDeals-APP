@@ -22,63 +22,19 @@
         return service;
 
         function getConstants() {
-            var deferred = $q.defer();
-            $http.get(apiBaseUrl + 'GetConstants').then(
-                 function success(response) {
-                     deferred.resolve(response.data);
-                 },
-                 function error(response) {
-                     //Handle error data which need not to be shown to user
-                     // any user messages will be handled in controller where they can be customised as per needs
-                     deferred.reject(response);
-                 }
-            );
-            return deferred.promise;
+            return dataService.get(apiBaseUrl + 'GetConstants');
         }
 
         function updateConstants(data) {
-            var deferred = $q.defer();
-            $http.post(apiBaseUrl + 'UpdateConstant', data).then(
-                 function success(response) {
-                     deferred.resolve(response.data);
-                 },
-                 function error(response) {
-                     // Handle error data which need not to be shown to user
-                     // any user messages will be handled in controller where they can be customised as per needs
-                     deferred.reject(response);
-                 }
-            );
-            return deferred.promise;
+            return dataService.post(apiBaseUrl + 'UpdateConstant', data);
         }
 
         function insertConstants(data) {
-            var deferred = $q.defer();
-            $http.post(apiBaseUrl + 'CreateConstant', data).then(
-                 function success(response) {
-                     deferred.resolve(response.data);
-                 },
-                 function error(response) {
-                     // Handle error data which need not to be shown to user
-                     // any user messages will be handled  in controller where they can be customized as per needs
-                     deferred.reject(response);
-                 }
-            );
-            return deferred.promise;
+            return dataService.post(apiBaseUrl + 'CreateConstant', data);
         }
 
         function deleteConstants(data) {
-            var deferred = $q.defer();
-            $http.post(apiBaseUrl + 'DeleteConstant', data).then(
-                 function success(response) {
-                     deferred.resolve(response.data);
-                 },
-                 function error(response) {
-                     // Handle error data which need not to be shown to user
-                     // any user messages will be handled  in controller where they can be customized as per needs
-                     deferred.reject(response);
-                 }
-            );
-            return deferred.promise;
-        }
+            return dataService.post(apiBaseUrl + 'DeleteConstant', data);
+        }        
     }
 })();

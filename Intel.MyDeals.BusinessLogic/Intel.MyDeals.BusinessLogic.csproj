@@ -62,6 +62,7 @@
     <Compile Include="Constants Lookups\ConstantsLookupsLib.cs" />
     <Compile Include="Constants Lookups\MetaDataExtensionMethods.cs" />
     <Compile Include="Contracts\ContractsLib.cs" />
+    <Compile Include="CustomerCalendar\CustomerCalendarLib.cs" />
     <Compile Include="Customer\CustCalFunctions.cs" />
     <Compile Include="Customer\CustomerLib.cs" />
     <Compile Include="DataCollectors\DataCollectorLib.cs" />

@@ -21,39 +21,39 @@
             transport: {
                 read: function (e) {
                     constantsService.getConstants()
-                        .then(function (data) {
-                            e.success(data);
+                        .then(function (response) {
+                            e.success(response.data);
                         });
                 },
                 update: function (e) {
                     constantsService.updateConstants(e.data)
-                        .then(function (data) {
-                            e.success(data);
+                        .then(function (response) {
+                            e.success(response.data);
                         });
                 },
                 destroy: function (e) {
                     constantsService.deleteConstants(e.data)
-                        .then(function (data) {
-                            e.success(data);
+                        .then(function (response) {
+                            e.success(response.data);
                         });
                 },
                 create: function (e) {
                     constantsService.insertConstants(e.data)
-                        .then(function (data) {
-                            e.success(data);
+                        .then(function (response) {
+                            e.success(response.data);
                         });
                 }
             },
             pageSize: 10,
             schema: {
                 model: {
-                    id: "cnst_sid",
+                    id: "CNST_SID",
                     fields: {
-                        cnst_sid: { editable: false, nullable: true },
-                        cnst_nm: { validation: { required: true } },
-                        cnst_desc: { validation: { required: true } },
-                        cnst_val_txt: { validation: { required: true } },
-                        ui_updatable: { validation: { required: true }, },
+                        CNST_SID: { editable: false, nullable: true },
+                        CNST_NM: { validation: { required: true } },
+                        CNST_DESC: { validation: { required: true } },
+                        CNST_VAL_TXT: { validation: { required: true } },
+                        UI_UPD_FLG: { validation: { required: true }, },
                     }
                 }
             },
@@ -67,11 +67,11 @@
             editable: "popup",
             change: vm.onChange,
             columns: [
-              { field: "cnst_sid", title: "Id" },
-              { field: "cnst_nm", title: "Name" },
-              { field: "cnst_desc", title: "Description" },
-              { field: "cnst_val_txt", title: "Value" },
-              { field: "ui_updatable", title: "UI Updatable" },
+              { field: "CNST_SID", title: "Id" },
+              { field: "CNST_NM", title: "Name" },
+              { field: "CNST_DESC", title: "Description" },
+              { field: "CNST_VAL_TXT", title: "Value" },
+              { field: "UI_UPD_FLG", title: "UI Updatable" },
             ]
         };
 
