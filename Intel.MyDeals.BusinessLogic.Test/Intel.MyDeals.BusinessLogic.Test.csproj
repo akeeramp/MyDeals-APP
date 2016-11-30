@@ -58,6 +58,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="CustomersLibTest.cs" />
+    <Compile Include="SecurityAttributesLibTest.cs" />
     <Compile Include="ConstantsLookups.cs" />
     <Compile Include="OpUserTokenHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

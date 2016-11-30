@@ -57,7 +57,7 @@
                         ACTN_SID: { editable: false, nullable: true },
                         ACTN_CD: { validation: { required: true } },
                         ACTN_DESC: { validation: { required: true } },
-                        ACTN_CATGRY_CD: { validation: { required: true } },
+                        ACTN_CAT_CD: { validation: { required: true } },
                         WFSTG_ACTN_CD: {}
                     }
                 }
@@ -88,7 +88,7 @@
                 field: "ACTN_DESC",
                 title: "Description"
             }, {
-                field: "ACTN_CATGRY_CD",
+                field: "ACTN_CAT_CD",
                 title: "Category"
             }, {
                 field: "WFSTG_ACTN_CD",

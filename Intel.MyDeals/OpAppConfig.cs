@@ -20,7 +20,7 @@ namespace Intel.MyDeals
                 // Check if OpCore has already been created
                 if (OpCore.Instance != null) return OpCore.Instance;
 
-                // Instanciate an Instance
+                // Instantiate an Instance
                 OpCore opCore = OpCore.Instance = new OpCore(false);
 
                 // Since we are NOT using OPAQUE for environment switching, we need to manually set the apptoken

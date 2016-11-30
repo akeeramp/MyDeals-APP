@@ -54,10 +54,10 @@
                 model: {
                     id: "APPL_SID",
                     fields: {
-                        APPL_SID: { editable: false, nullable: true },
-                        APPL_CD: { validation: { required: true } },
-                        APPL_DESC: { validation: { required: true } },
-                        APPL_SUITE: { validation: { required: true } },
+                        APP_SID: { editable: false, nullable: true },
+                        APP_CD: { validation: { required: true } },
+                        APP_DESC: { validation: { required: true } },
+                        APP_SUITE: { validation: { required: true } },
                         ACTV_IND: { type: "boolean" }
                     }
                 }
@@ -79,16 +79,16 @@
             //],
             columns: [
             {
-                field: "APPL_SID",
+                field: "APP_SID",
                 title: "ID",
             }, {
-                field: "APPL_CD",
+                field: "APP_CD",
                 title: "Name"
             }, {
-                field: "APPL_DESC",
+                field: "APP_DESC",
                 title: "Description"
             }, {
-                field: "APPL_SUITE",
+                field: "APP_SUITE",
                 title: "Suite"
             }, {
                 field: "ACTV_IND",

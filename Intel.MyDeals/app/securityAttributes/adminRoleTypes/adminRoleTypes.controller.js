@@ -55,12 +55,12 @@
                     id: "ROLE_TYPE_SID",
                     fields: {
                         ROLE_TYPE_SID: { editable: false, nullable: true },
-                        APPL_SID: { type: "number", validation: { format: "{0:n0}", decimals: 0, required: true } },
+                        APP_SID: { type: "number", validation: { format: "{0:n0}", decimals: 0, required: true } },
                         ROLE_TYPE_CD: { validation: { required: true } },
                         ROLE_TYPE_DSPLY_CD: { validation: { required: true } },
                         ROLE_TYPE_DESC: { validation: { required: true } },
                         ROLE_TIER_CD: { validation: { required: true } },
-                        IS_SINGLE_SELECT: { type: "boolean" },
+                        IS_SNGL_SLCT: { type: "boolean" },
                         ACTV_IND: { type: "boolean" }
                     }
                 }
@@ -85,7 +85,7 @@
                 field: "ROLE_TYPE_SID",
                 title: "ID",
             }, {
-                field: "APPL_SID",
+                field: "APP_SID",
                 title: "Application ID"
             }, {
                 field: "ROLE_TYPE_CD",
@@ -100,7 +100,7 @@
                 field: "ROLE_TIER_CD",
                 title: "Tier"
             }, {
-                field: "IS_SINGLE_SELECT",
+                field: "IS_SNGL_SLCT",
                 title: "Single Select"
             }, {
                 field: "ACTV_IND",

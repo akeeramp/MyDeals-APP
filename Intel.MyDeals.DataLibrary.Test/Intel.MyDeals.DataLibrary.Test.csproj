@@ -56,9 +56,11 @@
   </Choose>
   <ItemGroup>
     <Compile Include="ConstantLookupTests.cs" />
+    <Compile Include="CustomerDataLibTests.cs" />
     <Compile Include="OtherTests.cs" />
     <Compile Include="PocTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SecurityAttributesDataLibTests.cs" />
     <Compile Include="UnitTestHelpers.cs" />
   </ItemGroup>
   <ItemGroup>

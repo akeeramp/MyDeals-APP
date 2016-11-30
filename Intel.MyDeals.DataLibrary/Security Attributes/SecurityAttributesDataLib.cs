@@ -94,7 +94,7 @@ namespace Intel.MyDeals.DataLibrary
 					ret = (from rw in data.Tables[0].AsEnumerable()
 								   select new SecurityActions
 								   {
-                                       ACTN_CAT_CD = Convert.ToString(rw["ACTN_CATGRY_CD"]),
+                                       ACTN_CAT_CD = Convert.ToString(rw["ACTN_CAT_CD"]),
 									   ACTN_CD = Convert.ToString(rw["ACTN_CD"]),
 									   ACTN_DESC = Convert.ToString(rw["ACTN_DESC"]),
 									   ACTN_SID = Convert.ToInt32(rw["ACTN_SID"]),
@@ -306,7 +306,7 @@ namespace Intel.MyDeals.DataLibrary
 					ret = (from rw in data.Tables[0].AsEnumerable()
 						   select new AdminDealType
 						   {
-							   DEAL_TYPE_CD = Convert.ToString(rw["DEAL_TYPE_CD"]),
+                               DEAL_TYPE_CD = Convert.ToString(rw["DEAL_TYPE_CD"]),
 							   DEAL_TYPE_SID = Convert.ToByte(rw["DEAL_TYPE_SID"]),
 							   DEAL_ATRB_SID = Convert.ToByte(rw["DEAL_ATRB_SID"]),
 							   DEAL_TYPE_DESC = Convert.ToString(rw["DEAL_TYPE_DESC"]),

@@ -48,7 +48,7 @@ namespace Intel.MyDeals.Entities
         /// </summary>
         public static void EmulateUnitTester()
         {
-            string unitTestName = "UnitTestUser";
+            string unitTestName = "TestUser"; //idsid length limit 8, also need to make sure test user exists in db before using
 
             IList<Claim> claimCollection = new List<Claim>
             {
