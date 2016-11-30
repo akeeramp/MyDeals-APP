@@ -14,7 +14,10 @@ namespace Intel.MyDeals.DataLibrary
 {
     public class CustomerDataLib
     {
-
+        /// <summary>
+        /// Get All Customer Divisions
+        /// </summary>
+        /// <returns>list of customer division data</returns>
         public List<CustomerDivision> GetCustomerDivisions()
         {
             OpLogPerf.Log("GetCustomerDivision");
@@ -61,6 +64,10 @@ namespace Intel.MyDeals.DataLibrary
             return ret;
         }
 
+        /// <summary>
+        /// Get Customer Divisions information for user making the request
+        /// </summary>
+        /// <returns>lists of customer data</returns>
         public MyCustomerDetailsWrapper GetMyCustomers(bool fullAccess = false, bool allCustomers = false)
         {
             OpLogPerf.Log("GetMyCustomers");

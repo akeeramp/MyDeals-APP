@@ -4,6 +4,7 @@ using Intel.MyDeals.BusinesssLogic;
 using Intel.MyDeals.Entities;
 using Intel.Opaque;
 using System;
+using System.Net;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -23,7 +24,7 @@ namespace Intel.MyDeals.Controllers.API
             catch (Exception ex)
             {
                 OpLog.HandleException(ex);
-                throw new Exception("Could not get Customer Division data");
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
 
@@ -38,7 +39,7 @@ namespace Intel.MyDeals.Controllers.API
             catch (Exception ex)
             {
                 OpLog.HandleException(ex);
-                throw new Exception("Could not get Customer data");
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
 
@@ -53,7 +54,7 @@ namespace Intel.MyDeals.Controllers.API
             catch (Exception ex)
             {
                 OpLog.HandleException(ex);
-                throw new Exception("Could not get Customer data");
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
 
@@ -68,7 +69,7 @@ namespace Intel.MyDeals.Controllers.API
             catch (Exception ex)
             {
                 OpLog.HandleException(ex);
-                throw new Exception("Could not get Customer data");
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
 
@@ -83,7 +84,7 @@ namespace Intel.MyDeals.Controllers.API
             catch (Exception ex)
             {
                 OpLog.HandleException(ex);
-                throw new Exception("Could not get Customer data");
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
 
@@ -98,7 +99,7 @@ namespace Intel.MyDeals.Controllers.API
             catch (Exception ex)
             {
                 OpLog.HandleException(ex);
-                throw new Exception("Could not get Customer Division data");
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
 
@@ -113,7 +114,7 @@ namespace Intel.MyDeals.Controllers.API
             catch (Exception ex)
             {
                 OpLog.HandleException(ex);
-                throw new Exception("Could not get Customer Division data");
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
 
@@ -128,22 +129,7 @@ namespace Intel.MyDeals.Controllers.API
             catch (Exception ex)
             {
                 OpLog.HandleException(ex);
-                throw new Exception("Could not get Customer Division data");
-            }
-        }
-
-        [Authorize]
-        [Route("api/Customers/GetMyCustomersLineupAttributes")]
-        public List<MyCustomersLineupAttributes> GetMyCustomersLineupAttributes()
-        {
-            try
-            {
-                return new CustomerLib().GetMyCustomersLineupAttributes();
-            }
-            catch (Exception ex)
-            {
-                OpLog.HandleException(ex);
-                throw new Exception("Could not get Customer Division data");
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
     }
