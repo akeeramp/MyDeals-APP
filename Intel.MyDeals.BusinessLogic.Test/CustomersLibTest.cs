@@ -75,7 +75,6 @@ namespace Intel.MyDeals.BusinessLogic.Test
         {
             MyCustomerDetailsWrapper results = new CustomerLib().GetMyCustomers();
             Assert.IsTrue(results.CustomerInfo.Any());
-            Assert.IsTrue(results.CustomerLineupAttributes.Any());
             Assert.IsTrue(results.CustomerSoldTo.Any());
         }
 
@@ -83,13 +82,6 @@ namespace Intel.MyDeals.BusinessLogic.Test
         public void CustomersGetMyCustomerInfo()
         {
             IEnumerable<MyCustomersInformation> results = new CustomerLib().GetMyCustomersInfo();
-            Assert.IsTrue(results.Any());
-        }
-
-        [TestMethod]
-        public void CustomersGetMyLineupAttributes()
-        {
-            IEnumerable<MyCustomersLineupAttributes> results = new CustomerLib().GetMyCustomersLineupAttributes();
             Assert.IsTrue(results.Any());
         }
 

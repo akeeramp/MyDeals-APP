@@ -45,7 +45,7 @@ namespace Intel.MyDeals.BusinesssLogic
         #region MyCustomers
         public MyCustomerDetailsWrapper GetMyCustomers()
         {
-            return DataCollections.GetMyCustomers();
+            return new CustomerDataLib().GetMyCustomers();
         }
         public List<MyCustomersInformation> GetMyCustomersInfo()
         {
@@ -55,11 +55,6 @@ namespace Intel.MyDeals.BusinesssLogic
         public List<MyCustomersSoldTo> GetMyCustomersSoldTo()
         {
             return GetMyCustomers().CustomerSoldTo;
-        }
-
-        public List<MyCustomersLineupAttributes> GetMyCustomersLineupAttributes()
-        {
-            return GetMyCustomers().CustomerLineupAttributes;
         }
 
         #endregion

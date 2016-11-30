@@ -332,21 +332,6 @@ namespace Intel.MyDeals.DataLibrary
         //    //TODO: Do we need this function? TryGetValue is a C# Dictionary<> function, find List<> equivalent?
         //}
 
-        public static MyCustomerDetailsWrapper GetMyCustomers()
-        {
-            lock (LOCK_OBJECT ?? new object())
-            {
-                if (_getMyCustomers == null)
-                {
-                    _getMyCustomers = new CustomerDataLib().GetMyCustomers();
-                }
-
-                return _getMyCustomers;
-            }
-        }
-        private static MyCustomerDetailsWrapper _getMyCustomers;
-
-
         ////////public static List<FilterAttribute> GetFilterAttributes()
         ////////{
         ////////    lock (LOCK_OBJECT ?? new object())

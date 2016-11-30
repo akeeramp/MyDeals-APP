@@ -6,6 +6,5 @@ namespace Intel.MyDeals.Entities
     {
         public List<MyCustomersInformation> CustomerInfo { get; set; }
         public List<MyCustomersSoldTo> CustomerSoldTo { get; set; }
-        public List<MyCustomersLineupAttributes> CustomerLineupAttributes { get; set; }
     }
 }

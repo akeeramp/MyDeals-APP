@@ -26,7 +26,6 @@ namespace Intel.MyDeals.DataLibrary.Test
         {
             MyCustomerDetailsWrapper results = new CustomerDataLib().GetMyCustomers();
             Assert.IsTrue(results.CustomerInfo.Any());
-            Assert.IsTrue(results.CustomerLineupAttributes.Any());
             Assert.IsTrue(results.CustomerSoldTo.Any());
         }
     }

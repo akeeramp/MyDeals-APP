@@ -94,9 +94,6 @@ using System.Collections.Generic;
 
 	ds.Tables[1].TableName = "MyCustomersSoldTo";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[1], false));
-
-	ds.Tables[2].TableName = "MyCustomersLineupAttributes";
-	WriteLine(ScriptTools.DataTableToClass(ds.Tables[2], false));
 	
 	// Customer Calendar
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_CUST_CLNDR_QTR] @DTM = '1/10/2016'");

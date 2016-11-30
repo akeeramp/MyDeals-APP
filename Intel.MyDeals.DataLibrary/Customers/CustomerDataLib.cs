@@ -40,8 +40,7 @@ namespace Intel.MyDeals.DataLibrary
                     {
                         ret.Add(new CustomerDivision
                         {
-                            ACTV_IND = rdr.IsDBNull(IDX_ACTV_IND) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_ACTV_IND),
-                            //ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(System.Boolean) : ((int)rdr[IDX_ACTV_IND] == 1), //TODO: replace line above with this one once real tables are set up db side - templates do not play well with linked server
+                            ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_ACTV_IND),
                             CUST_CAT = (IDX_CUST_CAT < 0 || rdr.IsDBNull(IDX_CUST_CAT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_CAT),
                             CUST_DIV_NM = (IDX_CUST_DIV_NM < 0 || rdr.IsDBNull(IDX_CUST_DIV_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_DIV_NM),
                             CUST_DIV_NM_SID = (IDX_CUST_DIV_NM_SID < 0 || rdr.IsDBNull(IDX_CUST_DIV_NM_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_DIV_NM_SID),
@@ -68,9 +67,8 @@ namespace Intel.MyDeals.DataLibrary
 
             var ret = new MyCustomerDetailsWrapper();
 
-            var retA = new List<MyCustomersInformation>();
-            var retB = new List<MyCustomersSoldTo>();
-            var retC = new List<MyCustomersLineupAttributes>();
+            var retCustInfo = new List<MyCustomersInformation>();
+            var retCustSoldTo = new List<MyCustomersSoldTo>();
 
             var cmd = new Procs.dbo.PR_MYDL_GET_MY_CUST
             {
@@ -101,7 +99,7 @@ namespace Intel.MyDeals.DataLibrary
 
                     while (rdr.Read())
                     {
-                        retA.Add(new MyCustomersInformation
+                        retCustInfo.Add(new MyCustomersInformation
                         {
                             ACCS_TYPE = (IDX_ACCS_TYPE < 0 || rdr.IsDBNull(IDX_ACCS_TYPE)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ACCS_TYPE),
                             ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ACTV_IND),
@@ -120,7 +118,7 @@ namespace Intel.MyDeals.DataLibrary
                         });
                     }
 
-                    ret.CustomerInfo = retA;
+                    ret.CustomerInfo = retCustInfo;
                     rdr.NextResult();
 
                     //TABLE 2
@@ -132,7 +130,7 @@ namespace Intel.MyDeals.DataLibrary
 
                     while (rdr.Read())
                     {
-                        retB.Add(new MyCustomersSoldTo
+                        retCustSoldTo.Add(new MyCustomersSoldTo
                         {
                             cust_disp_nm = (IDX_cust_disp_nm < 0 || rdr.IsDBNull(IDX_cust_disp_nm)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_cust_disp_nm),
                             cust_div_nm_sid = (IDX_cust_div_nm_sid < 0 || rdr.IsDBNull(IDX_cust_div_nm_sid)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_cust_div_nm_sid),
@@ -142,35 +140,7 @@ namespace Intel.MyDeals.DataLibrary
                         });
                     }
 
-                    ret.CustomerSoldTo = retB;
-                    rdr.NextResult();
-
-                    //TABLE 3
-                    //int IDX_CUST_DIV_NM = DB.GetReaderOrdinal(rdr, "CUST_DIV_NM"); //Already defined in scope
-                    int IDX_CUST_MBR_SID = DB.GetReaderOrdinal(rdr, "CUST_MBR_SID");
-                    int IDX_DA_EMAIL_LIST = DB.GetReaderOrdinal(rdr, "DA_EMAIL_LIST");
-                    int IDX_DIV_APRV_FLG = DB.GetReaderOrdinal(rdr, "DIV_APRV_FLG");
-                    int IDX_GA_EMAIL_LIST = DB.GetReaderOrdinal(rdr, "GA_EMAIL_LIST");
-                    int IDX_LAR_CUST_FLG = DB.GetReaderOrdinal(rdr, "LAR_CUST_FLG");
-                    int IDX_ODM_CUST_FLG = DB.GetReaderOrdinal(rdr, "ODM_CUST_FLG");
-                    int IDX_TIER_LVL = DB.GetReaderOrdinal(rdr, "TIER_LVL");
-
-                    while (rdr.Read())
-                    {
-                        retC.Add(new MyCustomersLineupAttributes
-                        {
-                            CUST_DIV_NM = (IDX_CUST_DIV_NM < 0 || rdr.IsDBNull(IDX_CUST_DIV_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_DIV_NM),
-                            CUST_MBR_SID = (IDX_CUST_MBR_SID < 0 || rdr.IsDBNull(IDX_CUST_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_MBR_SID),
-                            DA_EMAIL_LIST = (IDX_DA_EMAIL_LIST < 0 || rdr.IsDBNull(IDX_DA_EMAIL_LIST)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DA_EMAIL_LIST),
-                            DIV_APRV_FLG = (IDX_DIV_APRV_FLG < 0 || rdr.IsDBNull(IDX_DIV_APRV_FLG)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DIV_APRV_FLG),
-                            GA_EMAIL_LIST = (IDX_GA_EMAIL_LIST < 0 || rdr.IsDBNull(IDX_GA_EMAIL_LIST)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_GA_EMAIL_LIST),
-                            LAR_CUST_FLG = (IDX_LAR_CUST_FLG < 0 || rdr.IsDBNull(IDX_LAR_CUST_FLG)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_LAR_CUST_FLG),
-                            ODM_CUST_FLG = (IDX_ODM_CUST_FLG < 0 || rdr.IsDBNull(IDX_ODM_CUST_FLG)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ODM_CUST_FLG),
-                            TIER_LVL = (IDX_TIER_LVL < 0 || rdr.IsDBNull(IDX_TIER_LVL)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_TIER_LVL)
-                        });
-                    }
-
-                    ret.CustomerLineupAttributes = retC;
+                    ret.CustomerSoldTo = retCustSoldTo;
                 }
             }
             catch (Exception ex)
