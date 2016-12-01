@@ -150,14 +150,15 @@ namespace Intel.MyDeals.DataLibrary
         ////////}
         ////////private static List<OpAtrbMap> _getOpAtrbMapItems;
 
-        ////////public static IEnumerable<GeoItem> GetGeoData()
-        ////////{
-        ////////    lock (LOCK_OBJECT ?? new object())
-        ////////    {
-        ////////        return _getGeoData ?? (_getGeoData = new GeoDataLib().GetGeos());
-        ////////    }
-        ////////}
-        ////////private static IEnumerable<GeoItem> _getGeoData;
+        public static List<GeoDimension> GetGeoDimensions()
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                return _getGeoData ?? (_getGeoData = new GeoDataLib().GetGeoDimensions());
+            }
+        }
+        private static List<GeoDimension> _getGeoData;
+        //JEFFTODO: confirm that GeoDimension is GeoItem, though looking at db it seems potentially different? -- what do we name it? does GeoItem make more sense than GeoDimension?
 
         ////////public static List<LookupItem> GetLookupData()
         ////////{

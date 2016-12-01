@@ -58,6 +58,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="GeosLibTest.cs" />
     <Compile Include="CustomersLibTest.cs" />
     <Compile Include="SecurityAttributesLibTest.cs" />
     <Compile Include="ConstantsLookups.cs" />

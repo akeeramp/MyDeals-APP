@@ -56,6 +56,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="ConstantLookupTests.cs" />
+    <Compile Include="GeoDataLibTests.cs" />
     <Compile Include="CustomerDataLibTests.cs" />
     <Compile Include="OtherTests.cs" />
     <Compile Include="PocTests.cs" />
