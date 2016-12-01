@@ -36,8 +36,8 @@
             cacheService.getStaticCacheStatus().then(
                 function (response) {
                     vm.cacheData = response.data;
-                }, function (data) {
-                    logger.error("Error in getting cache status.")
+                }, function (e) {
+                    logger.error("Error in getting cache status.", e, e.statusText)
                 });
         }
 
@@ -45,11 +45,10 @@
         function clearAll() {
             resetCache();
             cacheService.clearStaticCache().then(function () {
-                logger.success("Deleted successfully.")
+                logger.success("Deleted successfully.");
                 vm.loadCache();
             }, function (e) {
-                //  TODO: Wrap thse functions under logger service along with Opaque utilities
-                op.notifyError(e.statusText, "Unable to Clear Cache");
+                logger.error("Unable to Clear Cache.", e, e.statusText);
             });
         }
 
@@ -59,8 +58,7 @@
             cacheService.reloadAllStaticCache().then(function () {
                 vm.loadCache();
             }, function (e) {
-                // TODO: Wrap thse functions under logger service along with Opaque utilities
-                op.notifyError(e.statusText, "Unable to Load Cache Status");
+                logger.error("Unable to Load Cache Status", e, e.statusText);
                 vm.defaultStatus();
             });
         }
@@ -72,8 +70,7 @@
             cacheService.loadStaticCacheByName(data).then(function () {
                 vm.loadCache();
             }, function (e) {
-                // TODO: Wrap thse functions under logger service along with Opaque utilities along with Opaque utilities
-                op.notifyError(e.statusText, "Unable to load cache.");
+                logger.error("Unable to load cache.", e, e.statusText);
                 data.loading = false;
             });
         }
@@ -86,8 +83,7 @@
                 logger.success("Deleted successfully")
                 vm.loadCache();
             }, function (e) {
-                // TODO: Wrap thse functions under logger service along with Opaque utilities along with Opaque utilities
-                op.notifyError(e.statusText, "Unable to clear cache.");
+                logger.error("Unable to clear cache.", e, e.statusText);
                 data.loading = false;
             });
         }
@@ -111,7 +107,7 @@
             cacheService.getApiCacheStatus().then(function (response) {
                 vm.apiCacheData = response.data;
             }, function (e) {
-                op.notifyError(e.statusText, "Unable to Load Cache Status");
+                logger.error("Unable to Load Api Cache Status", e, e.statusText);
             });
         }
 
@@ -121,7 +117,7 @@
             cacheService.clearApiCacheByName(data).then(function () {
                 vm.loadApiCache();
             }, function (e) {
-                op.notifyError(e.statusText, "Unable to Load Cache Status");
+                logger.error("Unable to clear Api Cache Status", e, e.statusText);
             });
         }
 
@@ -132,7 +128,7 @@
                 logger.success("Api cache cleared successfully");
                 vm.loadApiCache();
             }, function (e) {
-                op.notifyError(e.statusText, "Unable to Load Cache Status");
+                logger.error("Unable to clear Cache Status.", e, e.statusText);
             });
         }
 

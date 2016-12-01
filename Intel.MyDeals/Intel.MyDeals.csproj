@@ -284,6 +284,7 @@
     <Content Include="app\dashboard\dashboard.manageLayouts.html" />
     <Content Include="app\dashboard\dashboard.module.js" />
     <Content Include="app\dashboard\dashboard.route.js" />
+    <Content Include="app\layout\gridToolbar.html" />
     <Content Include="app\securityAttributes\adminApplications\adminApplications.controller.js" />
     <Content Include="app\securityAttributes\adminDealTypes\adminDealTypes.controller.js" />
     <Content Include="app\securityAttributes\adminDealTypes\adminDealTypes.manage.html" />

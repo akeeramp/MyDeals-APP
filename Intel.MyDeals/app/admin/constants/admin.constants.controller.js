@@ -23,24 +23,35 @@
                     constantsService.getConstants()
                         .then(function (response) {
                             e.success(response.data);
+                        }, function (response) {
+                            logger.error("Unable to get constants.", response, response.statusText);
                         });
                 },
                 update: function (e) {
                     constantsService.updateConstants(e.data)
                         .then(function (response) {
                             e.success(response.data);
+                            logger.success("Constant updated.");
+                        }, function (response) {
+                            logger.error("Unable to update constant.", response, response.statusText);
                         });
                 },
                 destroy: function (e) {
                     constantsService.deleteConstants(e.data)
                         .then(function (response) {
                             e.success(response.data);
+                            logger.success("Constant added.");
+                        }, function (response) {
+                            logger.error("Unable to delete constant.", response, response.statusText);
                         });
                 },
                 create: function (e) {
                     constantsService.insertConstants(e.data)
                         .then(function (response) {
                             e.success(response.data);
+                            logger.success("New constant added.");
+                        }, function (response) {
+                            logger.error("Unable to insert get constant.", response, response.statusText);
                         });
                 }
             },
@@ -53,7 +64,7 @@
                         CNST_NM: { validation: { required: true } },
                         CNST_DESC: { validation: { required: true } },
                         CNST_VAL_TXT: { validation: { required: true } },
-                        UI_UPD_FLG: { validation: { required: true }, },
+                        UI_UPD_FLG: { type: "boolean"  },
                     }
                 }
             },
@@ -87,6 +98,12 @@
         }
 
         function updateItem() {
+            //Do not allow user to update the constants from UI where UI_UPD_FLG is false
+            var selectedDataItem = $scope.constantsGrid.dataItem(vm.selectedItem);
+            if (!selectedDataItem.UI_UPD_FLG) {
+                logger.warning(selectedDataItem.CNST_NM + " Cannot be updated from UI", null, "Not allowed")
+                return;
+            }
             $scope.constantsGrid.editRow(vm.selectedItem);
         }
 

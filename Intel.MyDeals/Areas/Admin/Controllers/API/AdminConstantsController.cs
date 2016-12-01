@@ -29,6 +29,7 @@ namespace Intel.MyDeals.Areas.Admin.Controllers.API
 
         [Authorize]
         [HttpPost]
+        [InvalidateCacheOutput("api/AdminConstants/v1/GetConstants")]
         [Route("api/AdminConstants/v1/UpdateConstant")]
         public AdminConstant UpdateConstant(AdminConstant adminConstant)
         {
@@ -37,6 +38,7 @@ namespace Intel.MyDeals.Areas.Admin.Controllers.API
 
         [Authorize]
         [HttpPost]
+        [InvalidateCacheOutput("api/AdminConstants/v1/GetConstants")]
         [Route("api/AdminConstants/v1/DeleteConstant")]
         public void DeleteConstant(AdminConstant adminConstant)
         {

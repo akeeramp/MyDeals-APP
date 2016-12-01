@@ -4,9 +4,9 @@
         .module('app.securityAttributes')
         .controller('roleTypesController', roleTypesController)
 
-    roleTypesController.$inject = ['$uibModal', 'RoleTypesService', '$scope']
+    roleTypesController.$inject = ['$uibModal', 'RoleTypesService', '$scope', 'logger']
 
-    function roleTypesController($uibModal, RoleTypesService, $scope) {
+    function roleTypesController($uibModal, RoleTypesService, $scope, logger) {
         var vm = this;
 
         // Functions
@@ -25,26 +25,37 @@
             transport: {
                 read: function (e) {
                     RoleTypesService.getRoleTypes()
-                        .then(function (data) {
-                            e.success(data);
+                        .then(function (response) {
+                            e.success(response.data);
+                        }, function (response) {
+                            logger.error("Unable to get role types.", response, response.statusText);
                         });
                 },
                 update: function (e) {
                     RoleTypesService.updateRoleType(e.data.models[0])
-                        .then(function (data) {
-                            e.success(data);
-                        });
+                         .then(function (data) {
+                             e.success(data);
+                             logger.success('Update successful.');
+                         }, function (response) {
+                             logger.error("Unable to update Role Type.", response, response.statusText);
+                         });
                 },
                 destroy: function (e) {
                     RoleTypesService.deleteRoleType(e.data.models[0].ROLE_TYPE_SID)
                         .then(function (data) {
                             e.success(data);
+                            logger.success('Delete successful.');
+                        }, function (response) {
+                            logger.error("Unable to delete Role Type", response, response.statusText);
                         });
                 },
                 create: function (e) {
                     RoleTypesService.insertRoleType(e.data.models[0])
                         .then(function (data) {
                             e.success(data);
+                            logger.success('New Role Type added');
+                        }, function (response) {
+                            logger.error("Unable to insert Role Type.", response, response.statusText);
                         });
                 }
             },

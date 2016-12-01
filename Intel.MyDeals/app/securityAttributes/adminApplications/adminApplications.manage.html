@@ -1,18 +1,7 @@
 ﻿<div class="col-md-12">
     <h1>Security Applications</h1>
 </div>
-
-<div class="col-md-12">
-    <button class="btn btn-primary small k-grid-add" ng-click="vm.addItem()">
-        <span class="intelicon-plus-outlined"></span> Add new record
-    </button>
-    <button class="btn btn-default small k-custom-edit k-grid-customEdit" ng-disabled="vm.isButtonDisabled" ng-click="vm.updateItem()">
-        <span class="intelicon-compose"></span>Edit
-    </button>
-    <button class="btn btn-danger small k-custom-delete k-grid-customDelete" ng-disabled="vm.isButtonDisabled" ng-click="vm.deleteItem()">
-        <span class="intelicon-close-max"></span>Delete
-    </button>
-</div>
+<div ng-include="'app/layout/gridToolbar.html'" />
 
 <div class="col-md-12" style="padding-top: 20px;">
     <!-- TODO Stylize kendo grid to fit MLAF guidelines and just look better overall -->

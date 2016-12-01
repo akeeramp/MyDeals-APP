@@ -4,9 +4,9 @@
         .module('app.securityAttributes')
         .controller('securityActionsController',securityActionsController)
 
-    securityActionsController.$inject = ['$uibModal', 'SecurityActionsService', '$scope'];
+    securityActionsController.$inject = ['$uibModal', 'SecurityActionsService', '$scope', 'logger'];
 
-    function securityActionsController($uibModal, SecurityActionsService, $scope) {
+    function securityActionsController($uibModal, SecurityActionsService, $scope, logger) {
         var vm = this;
 
         // Functions
@@ -25,26 +25,37 @@
             transport: {
                 read: function (e) {
                     SecurityActionsService.getActions()
-                        .then(function (data) {
-                            e.success(data);
-                        });
+                         .then(function (response) {
+                             e.success(response.data);
+                         }, function (response) {
+                             logger.error("Unable to get Security Actions.", response, response.statusText);
+                         });
                 },
                 update: function (e) {
                     SecurityActionsService.updateAction(e.data.models[0])
                         .then(function (data) {
                             e.success(data);
+                            logger.success('Update successful.');
+                        }, function (response) {
+                            logger.error("Unable to update Security Actions.", response, response.statusText);
                         });
                 },
                 destroy: function (e) {
                     SecurityActionsService.deleteAction(e.data.models[0].ACTN_SID)
                         .then(function (data) {
                             e.success(data);
+                            logger.success('Delete successful.');
+                        }, function (response) {
+                            logger.error("Unable to delete Security Actions.", response, response.statusText);
                         });
                 },
                 create: function (e) {
                     SecurityActionsService.insertAction(e.data.models[0])
                         .then(function (data) {
                             e.success(data);
+                            logger.success('New Security Actions added');
+                        }, function (response) {
+                            logger.error("Unable to insert Security Actions.", response, response.statusText);
                         });
                 }
             },

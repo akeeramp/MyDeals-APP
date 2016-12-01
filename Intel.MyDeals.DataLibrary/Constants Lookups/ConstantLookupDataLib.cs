@@ -134,11 +134,11 @@ namespace Intel.MyDeals.DataLibrary
                 ui_upd_flg = adminValues.UI_UPD_FLG,
             }))
             {
-                int IDX_cnst_desc = DB.GetReaderOrdinal(rdr, "cnst_desc");
-                int IDX_cnst_nm = DB.GetReaderOrdinal(rdr, "cnst_nm");
-                int IDX_cnst_sid = DB.GetReaderOrdinal(rdr, "cnst_sid");
-                int IDX_cnst_val_txt = DB.GetReaderOrdinal(rdr, "cnst_val_txt");
-                int IDX_UI_UPD_FLG = DB.GetReaderOrdinal(rdr, "ui_updatable");
+                int IDX_cnst_desc = DB.GetReaderOrdinal(rdr, "CNST_DESC");
+                int IDX_cnst_nm = DB.GetReaderOrdinal(rdr, "CNST_NM");
+                int IDX_cnst_sid = DB.GetReaderOrdinal(rdr, "CNST_SID");
+                int IDX_cnst_val_txt = DB.GetReaderOrdinal(rdr, "CNST_VAL_TXT");
+                int IDX_UI_UPD_FLG = DB.GetReaderOrdinal(rdr, "UI_UPD_FLG");
 
                 while (rdr.Read())
                 {

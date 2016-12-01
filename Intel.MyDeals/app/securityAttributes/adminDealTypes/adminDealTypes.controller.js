@@ -5,9 +5,9 @@
         .module('app.securityAttributes')
         .controller('dealTypesController',dealTypesController)
 
-    dealTypesController.$inject = ['$uibModal', 'DealTypesService', '$scope'];
+    dealTypesController.$inject = ['$uibModal', 'DealTypesService', '$scope', 'logger'];
 
-    function dealTypesController($uibModal, DealTypesService, $scope) {
+    function dealTypesController($uibModal, DealTypesService, $scope, logger) {
         var vm = this;
 
         // Functions
@@ -26,26 +26,37 @@
             transport: {
                 read: function (e) {
                     DealTypesService.getDealTypes()
-                        .then(function (data) {
-                            e.success(data);
+                        .then(function (response) {
+                            e.success(response.data);
+                        }, function (response) {
+                            logger.error("Unable to get deal types.", response, response.statusText);
                         });
                 },
                 update: function (e) {
                     DealTypesService.updateDealType(e.data.models[0])
                         .then(function (data) {
                             e.success(data);
+                            logger.success('Update successful.');
+                        }, function (response) {
+                            logger.error("Unable to update role type.", response, response.statusText);
                         });
                 },
                 destroy: function (e) {
                     DealTypesService.deleteDealType(e.data.models[0].DEAL_TYPE_SID)
                         .then(function (data) {
                             e.success(data);
+                            logger.success('Delete successful.');
+                        }, function (response) {
+                            logger.error("Unable to delete Application", response, response.statusText);
                         });
                 },
                 create: function (e) {
                     DealTypesService.insertDealType(e.data.models[0])
                         .then(function (data) {
                             e.success(data);
+                            logger.success('New Deal Type added');
+                        }, function (response) {
+                            logger.error("Unable to insert Application.", response, response.statusText);
                         });
                 }
             },

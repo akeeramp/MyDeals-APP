@@ -26,7 +26,9 @@
         /////////////////////
 
         function error(message, data, title) {
-            // log it to the remote machine,
+            toastr.error(message, title);
+
+            // log it to the remote machine, opaque or our own database
             // async call will be initiated from here 
             // TODO: replace console log to remote call
             $log.error('Error: ' + message, data);

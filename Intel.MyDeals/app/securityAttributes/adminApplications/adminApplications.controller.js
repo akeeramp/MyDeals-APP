@@ -4,9 +4,9 @@
         .module('app.securityAttributes')
         .controller('applicationsController', applicationsController)
 
-    applicationsController.$inject = ['$uibModal', 'ApplicationsService', '$scope']
+    applicationsController.$inject = ['$uibModal', 'ApplicationsService', '$scope','logger']
 
-    function applicationsController($uibModal, ApplicationsService, $scope) {
+    function applicationsController($uibModal, ApplicationsService, $scope, logger) {
         var vm = this;
 
         // Functions
@@ -25,26 +25,37 @@
             transport: {
                 read: function (e) {
                     ApplicationsService.getApplications()
-                        .then(function (data) {
-                            e.success(data);
+                        .then(function (response) {
+                            e.success(response.data);
+                        }, function (response) {
+                            logger.error("Unable to get applications.", response, response.statusText);
                         });
                 },
                 update: function (e) {
                     ApplicationsService.updateApplication(e.data.models[0])
                         .then(function (data) {
                             e.success(data);
+                            logger.success('Update successful.');
+                        }, function (response) {
+                            logger.error("Unable to update Application.", response, response.statusText);
                         });
                 },
                 destroy: function (e) {
                     ApplicationsService.deleteApplication(e.data.models[0].APPL_SID)
                         .then(function (data) {
                             e.success(data);
+                            logger.success('Delete successful.');
+                        }, function (response) {
+                            logger.error("Unable to delete Application", response, response.statusText);
                         });
                 },
                 create: function (e) {
                     ApplicationsService.insertApplication(e.data.models[0])
                         .then(function (data) {
                             e.success(data);
+                            logger.success('New application added');
+                        }, function (response) {
+                            logger.error("Unable to insert Application.", response, response.statusText);
                         });
                 }
             },
@@ -52,7 +63,7 @@
             pageSize: 20,
             schema: {
                 model: {
-                    id: "APPL_SID",
+                    id: "APP_SID",
                     fields: {
                         APP_SID: { editable: false, nullable: true },
                         APP_CD: { validation: { required: true } },
@@ -117,6 +128,5 @@
         function deleteItem() {
             $scope.applicationsGrid.removeRow(vm.selectedItem);
         }
-
     }
 })();
