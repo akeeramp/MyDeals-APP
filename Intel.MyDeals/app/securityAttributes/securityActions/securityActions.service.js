@@ -20,7 +20,7 @@
             return dataService.get(URL + 'GetSecurityActions');
         }
 
-        function getActionsinsertAction(action) {
+        function insertAction(action) {
             return dataService.post(URL + 'InsertAction', action);
         }
 
