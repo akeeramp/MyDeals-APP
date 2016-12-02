@@ -43,21 +43,20 @@ namespace Intel.MyDeals.Controllers.API
             }
         }
 
-        //TODO: once the final version of Geo Dimensions is crafted and more columns are added, we will be able to add more specific filters.
-        //[Authorize]
-        //[Route("api/Geos/GetActiveGeos")]
-        //public IEnumerable<GeoDimension> GetActiveGeos()
-        //{
-        //    try
-        //    {
-        //        return new GeosLib().GetGeoDimensionsActive();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        OpLog.HandleException(ex);
-        //        throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
-        //    }
-        //}
+        [Authorize]
+        [Route("api/Geos/GetActiveGeos")]
+        public IEnumerable<GeoDimension> GetActiveGeos()
+        {
+            try
+            {
+                return new GeosLib().GetGeoDimensionsActive();
+            }
+            catch (Exception ex)
+            {
+                OpLog.HandleException(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+            }
+        }
 
         [Authorize]
         [Route("api/Geos/GetGeoByGeoName")]
@@ -73,6 +72,81 @@ namespace Intel.MyDeals.Controllers.API
                 throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
-        
+
+        [Authorize]
+        [Route("api/Geos/GetGeoByGeoSid")]
+        public IEnumerable<GeoDimension> GetGeoByGeoSid(int sid)
+        {
+            try
+            {
+                return new GeosLib().GetGeoDimensionByGeoSid(sid);
+            }
+            catch (Exception ex)
+            {
+                OpLog.HandleException(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+            }
+        }
+
+        [Authorize]
+        [Route("api/Geos/GetGeoByRegionName")]
+        public IEnumerable<GeoDimension> GetGeoByRegionName(string name)
+        {
+            try
+            {
+                return new GeosLib().GetGeoDimensionByRegionName(name);
+            }
+            catch (Exception ex)
+            {
+                OpLog.HandleException(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+            }
+        }
+
+        [Authorize]
+        [Route("api/Geos/GetGeoByRegionSid")]
+        public IEnumerable<GeoDimension> GetGeoByRegionSid(int sid)
+        {
+            try
+            {
+                return new GeosLib().GetGeoDimensionByRegionSid(sid);
+            }
+            catch (Exception ex)
+            {
+                OpLog.HandleException(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+            }
+        }
+
+        [Authorize]
+        [Route("api/Geos/GetGeoByCountryName")]
+        public IEnumerable<GeoDimension> GetGeoByCountryName(string name)
+        {
+            try
+            {
+                return new GeosLib().GetGeoDimensionByCountryName(name);
+            }
+            catch (Exception ex)
+            {
+                OpLog.HandleException(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+            }
+        }
+
+        [Authorize]
+        [Route("api/Geos/GetGeoByCountrySid")]
+        public IEnumerable<GeoDimension> GetGeoByCountrySid(int sid)
+        {
+            try
+            {
+                return new GeosLib().GetGeoDimensionByCountrySid(sid);
+            }
+            catch (Exception ex)
+            {
+                OpLog.HandleException(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+            }
+        }
+
     }
 }
