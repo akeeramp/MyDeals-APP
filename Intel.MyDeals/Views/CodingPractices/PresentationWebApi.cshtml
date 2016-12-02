@@ -59,7 +59,7 @@
     {
         OpCore op = OpAppConfig.Init();                     // Get user details from authentication
 
-        [Route("api/Others/GetDBTest")]
+        [Route("api/DevTests/GetDBTest")]
         public Dictionary&lt;string, string&gt; GetDBTest()
         {
             OpUserToken user = AppLib.InitAVM(op);          // Get User Token
@@ -83,7 +83,7 @@
 <script>
     function testApi() {
         showMsg("Calling API <img src='/images/032.gif'/>");
-        op.ajaxGetAsync("/api/Others/GetDBTest", function (data) {
+        op.ajaxGetAsync("/api/DevTests/GetDBTest", function (data) {
             var msg = "";
 
             if (data["ERROR"] !== undefined) {
