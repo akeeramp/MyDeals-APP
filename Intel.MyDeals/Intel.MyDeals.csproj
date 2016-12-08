@@ -1322,6 +1322,9 @@
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
     </None>
+    <None Include="Web.itt.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Intel.MyDeals.App\Intel.MyDeals.App.csproj">
@@ -1352,6 +1355,11 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'dev|AnyCPU'">
     <OutputPath>bin\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'itt|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
@@ -1386,6 +1394,9 @@
     <!--Transform Dev config-->
     <MakeDir Directories="$(WebProjectOutputDir)\EnvConfig\Dev\" />
     <TransformXml Source="Web.config" Transform="Web.dev.config" Destination="$(WebProjectOutputDir)\EnvConfig\Dev\Web.config" />
+    <MakeDir Directories="$(WebProjectOutputDir)\EnvConfig\itt\" />
+    <TransformXml Source="Web.config" Transform="Web.itt.config" Destination="$(WebProjectOutputDir)\EnvConfig\itt\Web.config" />
+
     <Delete Files="@(DeleteAfterBuild)" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

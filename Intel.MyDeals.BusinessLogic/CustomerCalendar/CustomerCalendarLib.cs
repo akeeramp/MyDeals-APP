@@ -29,9 +29,9 @@ namespace Intel.MyDeals.BusinessLogic
                                                                 , short? quarterNo)
         {
 
-            if((dayInQuarter == null && dayInQuarter > OpaqueConst.SQL_MIN_DATE) || (year == null && quarterNo == null))
+            if((dayInQuarter == null || dayInQuarter > OpaqueConst.SQL_MIN_DATE) && (year == null || quarterNo == null))
             {
-                throw new ArgumentException("You must pass a valid dayInQuarter or a valid quarter and year to resolve quarter dates.");
+                throw new ArgumentException("You must pass a valid DayInQuarter or a valid QuarterNo and Year to resolve quarter dates.");
             }
 
             return new CustomerCalendarDataLib().GetCustomerQuarterDetails(customerMemberSid, dayInQuarter, year, quarterNo);
