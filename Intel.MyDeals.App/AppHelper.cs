@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Web;
 using System.Web.Routing;
@@ -120,7 +121,23 @@ namespace Intel.MyDeals.App
                 throw new MissingFieldException("WebConfig is missing the 'Environment' entry.");
             }
 
-            BusinessLogic.BusinessLogic.InitializeDataLibrary(connString.ConnectionString, env.Value);
+            // JmsQ Configuration Settings - because Phil likes it this way...
+            Dictionary<string, string> envConfigs = new Dictionary<string, string>();
+            List<string> jmsConfigItems = new List<string> { "jmsServer", "jmsQueue", "jmsUID", "jmsPWD", "jmsResponseDir" };
+
+            foreach (string jmsConfigItem in jmsConfigItems)
+            {
+                envConfigs.SetValue(rootWebConfig, jmsConfigItem);
+            }
+
+            BusinessLogic.BusinessLogic.InitializeDataLibrary(connString.ConnectionString, env.Value, envConfigs);
+        }
+
+        private static void SetValue(this Dictionary<string, string> envConfigs, Configuration rootWebConfig, string sKey)
+        {
+            var jms = rootWebConfig.AppSettings.Settings[sKey];
+            if (jms == null) throw new MissingFieldException("WebConfig is missing the " + sKey + " entry.");
+            envConfigs[sKey] = jms.Value;
         }
 
     }

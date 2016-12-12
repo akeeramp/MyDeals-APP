@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Intel.MyDeals.BusinessLogic
 {
     public static class BusinessLogic
     {
-        public static void InitializeDataLibrary(string connectionString, string environment)
+        public static void InitializeDataLibrary(string connectionString, string environment, Dictionary<string, string> envConfigs)
         {
-            DataLibrary.DataLibrary.InitializeDataAccessLib(connectionString, environment);
+            DataLibrary.DataLibrary.InitializeDataAccessLib(connectionString, environment, envConfigs);
         }
 
         public static string GetConnectionString()
@@ -22,5 +18,11 @@ namespace Intel.MyDeals.BusinessLogic
         {
             return DataLibrary.DataLibrary.GetEnvironment();
         }
+
+        public static Dictionary<string, string> GetEnvConfigs()
+        {
+            return DataLibrary.DataLibrary.GetEnvConfigs();
+        }
+
     }
 }

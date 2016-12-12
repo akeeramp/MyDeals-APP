@@ -24,9 +24,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared Libraries", "Shared 
 		Shared Libraries\Intel.Opaque.pdb = Shared Libraries\Intel.Opaque.pdb
 		Shared Libraries\Intel.Opaque.Templating.dll = Shared Libraries\Intel.Opaque.Templating.dll
 		Shared Libraries\Intel.Opaque.Templating.pdb = Shared Libraries\Intel.Opaque.Templating.pdb
+		Shared Libraries\JMSQueue.dll = Shared Libraries\JMSQueue.dll
 		Shared Libraries\Kendo.Mvc.dll = Shared Libraries\Kendo.Mvc.dll
+		Shared Libraries\Microsoft.ApplicationBlocks.ExceptionManagement.dll = Shared Libraries\Microsoft.ApplicationBlocks.ExceptionManagement.dll
 		Shared Libraries\Telerik.Reporting.dll = Shared Libraries\Telerik.Reporting.dll
 		Shared Libraries\Telerik.Reporting.Service.dll = Shared Libraries\Telerik.Reporting.Service.dll
+		Shared Libraries\TIBCO.EMS.dll = Shared Libraries\TIBCO.EMS.dll
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Intel MyDeals 3 Data Libraries", "Intel MyDeals 3 Data Libraries", "{3EE27FFE-7643-4D8E-A0D2-09D306204105}"
@@ -180,7 +183,7 @@ Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 13
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://tfs-fm-04.devtools.intel.com/tfs/defaultcollection
+		SccTeamFoundationServer = http://source.intel.com:8080/tfs/defaultcollection
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = Intel.MyDeals.DataAccessLib\\Intel.MyDeals.DataAccessLib.csproj
 		SccProjectTopLevelParentUniqueName1 = Intel.Mydeals.sln

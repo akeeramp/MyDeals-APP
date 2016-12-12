@@ -46,6 +46,12 @@
     <Reference Include="Intel.Opaque.DBAccess">
       <HintPath>..\Shared Libraries\Intel.Opaque.DBAccess.dll</HintPath>
     </Reference>
+    <Reference Include="JMSQueue">
+      <HintPath>..\Shared Libraries\JMSQueue.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationBlocks.ExceptionManagement">
+      <HintPath>..\Shared Libraries\Microsoft.ApplicationBlocks.ExceptionManagement.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -58,6 +64,9 @@
     <Reference Include="System.Xml" />
     <Reference Include="Telerik.Reporting">
       <HintPath>..\Shared Libraries\Telerik.Reporting.dll</HintPath>
+    </Reference>
+    <Reference Include="TIBCO.EMS">
+      <HintPath>..\Shared Libraries\TIBCO.EMS.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

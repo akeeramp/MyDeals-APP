@@ -1,6 +1,7 @@
 ﻿using Intel.Opaque.DBAccess;
 using Intel.Opaque.Tools;
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
@@ -17,7 +18,7 @@ namespace Intel.MyDeals.DataAccessLib
 
         public static string ConnectionString { get; set; }
         public static string Environment { get; set; }
-
+        public static Dictionary<string, string> EnvConfigs { get; set; }
 
         private static DB Instance => new DB(ConnectionString, CommandTimeout);
 
