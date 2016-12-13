@@ -82,11 +82,11 @@ namespace Intel.MyDeals.Controllers.API
         {
             try
             {
-	            string t7 = "";
+	            string t7 = "JTEST";
 
 				foreach (DbLogPerf perf in OpLogPerf.GetTypedWriters<DbLogPerf>())
 	            {
-		            t7 = "#"+perf+": "+perf.LogStack.Count;
+		            t7 += "#"+perf+": "+perf.LogStack.Count;
 	            }
 
 
