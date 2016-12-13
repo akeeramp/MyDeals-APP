@@ -9,8 +9,9 @@ namespace Intel.MyDeals.Controllers
         OpCore op = OpAppConfig.Init();
 
         public ActionResult Index()
-        {
-            OpUserToken user = AppLib.InitAVM(op);
+		{
+			OpLogPerf.Log("Call home controller test");
+			OpUserToken user = AppLib.InitAVM(op);
             ViewBag.UserToken = user;
             ViewBag.AppToken = op.AppToken;
 

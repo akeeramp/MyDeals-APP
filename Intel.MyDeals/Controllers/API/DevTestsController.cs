@@ -7,6 +7,7 @@ using Intel.MyDeals.Entities;
 using Intel.Opaque;
 using System.Net;
 using System.Web;
+using Intel.MyDeals.Entities.Logging;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -81,6 +82,14 @@ namespace Intel.MyDeals.Controllers.API
         {
             try
             {
+	            string t7 = "";
+
+				foreach (DbLogPerf perf in OpLogPerf.GetTypedWriters<DbLogPerf>())
+	            {
+		            t7 = "#"+perf+": "+perf.LogStack.Count;
+	            }
+
+
                 //t1-3 are HOST names for where we deploy the c# code
                 string t1 = System.Environment.MachineName;
                 string t2 = HttpContext.Current.Server.MachineName;
@@ -100,8 +109,9 @@ namespace Intel.MyDeals.Controllers.API
                 ret.Add("Environment.GetEnvironmentVariable('CLIENTNAME'): " + t4);
                 //ret.Add("OpUserStack.MyOpUserToken.Usr.WWID: " + t5);
                 ret.Add("OpCurrentConfig.CurrentURL: " + t6);
+				ret.Add("OpCurrentConfig.CurrentURL: " + t7);
 
-                return ret;
+				return ret;
             }
             catch (Exception ex)
             {

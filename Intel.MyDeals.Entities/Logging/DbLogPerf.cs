@@ -18,7 +18,7 @@ namespace Intel.MyDeals.Entities.Logging
 		private static object LOCK_OBJECT = new object();
 		private static object LOCK_THREAD_OBJECT = new object();
 
-		private List<DbLogPerfMessage> LogStack = new List<DbLogPerfMessage>();
+		public List<DbLogPerfMessage> LogStack = new List<DbLogPerfMessage>();
 		private delegate void UploadLogPrefLogsDelegate(IEnumerable<DbLogPerfMessage> messages);
 
 		public static string MachineName { set; get; }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using Intel.Opaque;
-using Newtonsoft.Json;
 
 namespace Intel.MyDeals.Entities.Logging
 {
@@ -95,11 +94,6 @@ namespace Intel.MyDeals.Entities.Logging
 		{
 			var onAsyncWait = MyDealsWebApiUrl.WebApi;
 			onAsyncWait.EnableLogging = false;
-			JsonSerializerSettings settings = new JsonSerializerSettings
-			{
-				TypeNameHandling = TypeNameHandling.All
-
-			};
 
 			// Send data to Presentation Layer's API Controller because we can't reference DataLayer on Entity layer (circular reference error)
 			var success = onAsyncWait.Post<bool>(
