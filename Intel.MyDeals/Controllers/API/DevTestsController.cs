@@ -85,13 +85,21 @@ namespace Intel.MyDeals.Controllers.API
 	            string t7 = "JTEST";
 
 				foreach (DbLogPerf perf in OpLogPerf.GetTypedWriters<DbLogPerf>())
-	            {
-		            t7 += "#"+perf+": "+perf.LogStack.Count;
-	            }
+				{
+					//var test = perf.GetLogStack();
+					t7 += "#" + perf + ": " + perf.LogStack.Count;
+					foreach (var l in perf.LogStack)
+					{
+						t7 += " ... " + l.MSG;
+					}
+				}
 
 
-                //t1-3 are HOST names for where we deploy the c# code
-                string t1 = System.Environment.MachineName;
+	            string t8 = " " + OpLog.LogConfig.IsActive;
+				string t9 = OpLog.LogConfig.MsgSrc;
+
+				//t1-3 are HOST names for where we deploy the c# code
+				string t1 = System.Environment.MachineName;
                 string t2 = HttpContext.Current.Server.MachineName;
                 string t3 = System.Net.Dns.GetHostName();
 
@@ -110,6 +118,8 @@ namespace Intel.MyDeals.Controllers.API
                 //ret.Add("OpUserStack.MyOpUserToken.Usr.WWID: " + t5);
                 ret.Add("OpCurrentConfig.CurrentURL: " + t6);
 				ret.Add("OpCurrentConfig.CurrentURL: " + t7);
+				ret.Add("Log config is active:  " + t8);
+				ret.Add("Log config src: " + t9);
 
 				return ret;
             }
