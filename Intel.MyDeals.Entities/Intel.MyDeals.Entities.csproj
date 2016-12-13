@@ -64,6 +64,9 @@
     <Compile Include="CrudModes.cs" />
     <Compile Include="AppRoleLookup.cs" />
     <Compile Include="CacheItem.cs" />
+    <Compile Include="Logging\t_db_log.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="MyCustomerDetailsWrapper.cs" />
     <Compile Include="EmployeeDetailData.cs" />
     <Compile Include="EN.cs" />
