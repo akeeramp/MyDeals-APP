@@ -10,7 +10,7 @@ namespace Intel.MyDeals
     {
 		static OpAppConfig(){
 			// Logging 
-			OpLog.LogConfig = new LogConfigLib().GetLogConfig();
+			OpLog.LogConfig = new LoggingLib().GetLogConfig();
 		}
 
 		public static OpCore Init()
@@ -22,9 +22,9 @@ namespace Intel.MyDeals
 
                 // Instantiate an Instance
                 OpCore opCore = OpCore.Instance = new OpCore(false);
-
-                // Since we are NOT using OPAQUE for environment switching, we need to manually set the apptoken
-                opCore.AppToken = new OpAppToken
+				
+				// Since we are NOT using OPAQUE for environment switching, we need to manually set the apptoken
+				opCore.AppToken = new OpAppToken
                 {
                     AppCd = "MyDeals",
                     OpEnvironment = new OpEnvironment
@@ -34,7 +34,7 @@ namespace Intel.MyDeals
                     },
                 };
                 OpLog.OpAppToken = opCore.AppToken;
-
+			
 				// Congfig Authentication
 				opCore.Authentication = new OpAuthentication
                 {
@@ -50,7 +50,7 @@ namespace Intel.MyDeals
             }
             catch (Exception ex)
             {
-                OpLog.LogEvent(ex);
+                OpLog.HandleException(ex);
                 throw;
             }
         }

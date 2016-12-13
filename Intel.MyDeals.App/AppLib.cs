@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Web;
 using Intel.MyDeals.BusinesssLogic;
 using Intel.MyDeals.Entities;
+using Intel.MyDeals.Entities.Logging;
 using Intel.Opaque;
 
 namespace Intel.MyDeals.App
@@ -33,8 +34,8 @@ namespace Intel.MyDeals.App
                 PopulateUserSettings(user);
                 return user;
             }
-
-            OpLogPerf.Log("Initializing AVM");
+			
+			OpLogPerf.Log("Initializing AVM");
 
             AVM = new ApplicationViewModel
             {

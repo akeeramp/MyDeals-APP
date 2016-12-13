@@ -6,6 +6,9 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using Intel.MyDeals.App;
 using Intel.MyDeals.Controllers;
+using Intel.MyDeals.Entities;
+using Intel.MyDeals.Entities.Logging;
+using Intel.Opaque;
 
 namespace Intel.MyDeals
 {
@@ -20,7 +23,19 @@ namespace Intel.MyDeals
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             AppHelper.SetupDataAccessLib();
-        }
+
+			MyDealsWebApiUrl.ROOT_URL = OpCurrentConfig.CurrentURL; 
+	        if (String.IsNullOrEmpty(MyDealsWebApiUrl.ROOT_URL))
+	        {
+				// Just to test out logging in localhost
+				//TODO jositodo remove when we don't care about logging in localhost
+				MyDealsWebApiUrl.ROOT_URL = "localhost:55490";
+	        }
+	        MyDealsWebApiUrl.ROOT_URL = "http://" + MyDealsWebApiUrl.ROOT_URL;
+
+			OpLogPerfHelper.InitWriters("DEBUG:DB");
+
+		}
 
 
         void Application_Error(Object sender, EventArgs e)

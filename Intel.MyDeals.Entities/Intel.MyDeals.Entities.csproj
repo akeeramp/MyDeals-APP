@@ -67,6 +67,10 @@
     <Compile Include="MyCustomerDetailsWrapper.cs" />
     <Compile Include="EmployeeDetailData.cs" />
     <Compile Include="EN.cs" />
+    <Compile Include="Logging\DbLogPerf.cs" />
+    <Compile Include="Logging\DbLogPerfMessage.cs" />
+    <Compile Include="Logging\LoggingClient.cs" />
+    <Compile Include="Logging\MyDealsWebApiUrl.cs" />
     <Compile Include="OpLog.cs" />
     <Compile Include="OpUserStack.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -94,7 +98,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Logging\" />
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
