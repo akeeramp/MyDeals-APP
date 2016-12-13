@@ -231,6 +231,7 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\API\ConstantsController.cs" />
     <Compile Include="Controllers\API\CustomerCalendarController.cs" />
+    <Compile Include="Controllers\API\ProductsController.cs" />
     <Compile Include="Controllers\API\GeosController.cs" />
     <Compile Include="Controllers\API\DevTestsController.cs" />
     <Compile Include="Controllers\API\PocController.cs" />
@@ -1396,7 +1397,6 @@
     <TransformXml Source="Web.config" Transform="Web.dev.config" Destination="$(WebProjectOutputDir)\EnvConfig\Dev\Web.config" />
     <MakeDir Directories="$(WebProjectOutputDir)\EnvConfig\itt\" />
     <TransformXml Source="Web.config" Transform="Web.itt.config" Destination="$(WebProjectOutputDir)\EnvConfig\itt\Web.config" />
-
     <Delete Files="@(DeleteAfterBuild)" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

@@ -158,7 +158,6 @@ namespace Intel.MyDeals.DataLibrary
             }
         }
         private static List<GeoDimension> _getGeoData;
-        //JEFFTODO: confirm that GeoDimension is GeoItem, though looking at db it seems potentially different? -- what do we name it? does GeoItem make more sense than GeoDimension?
 
         ////////public static List<LookupItem> GetLookupData()
         ////////{
@@ -369,6 +368,13 @@ namespace Intel.MyDeals.DataLibrary
         ////////}
         ////////private static List<UIType> _getUITypes;
 
-
+        public static List<Product> GetProducts()
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                return _getProductData ?? (_getProductData = new ProductDataLib().GetProducts());
+            }
+        }
+        private static List<Product> _getProductData;
     }
 }
