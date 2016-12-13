@@ -6,6 +6,7 @@ using Intel.MyDeals.BusinessLogic;
 using Intel.MyDeals.Entities;
 using Intel.Opaque;
 using System.Net;
+using System.Web;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -66,6 +67,30 @@ namespace Intel.MyDeals.Controllers.API
             try
             {
                 return new DevTestsLib().ExampleSQLException();
+            }
+            catch (Exception ex)
+            {
+                OpLog.HandleException(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+            }
+        }
+
+        [Authorize]
+        [Route("api/DevTests/GetClientHostTest")]
+        public IEnumerable<string> GetClientHostTest()
+        {
+            try
+            {
+                string t1 = System.Environment.MachineName;
+                string t2 = HttpContext.Current.Server.MachineName;
+                string t3 = System.Net.Dns.GetHostName();
+
+                List<string> ret = new List<string>();
+                ret.Add("System.Environment.MachineName: " + t1);
+                ret.Add("HttpContext.Current.Server.MachineName: " + t2);
+                ret.Add("System.Net.Dns.GetHostName(): " + t3);
+
+                return ret;
             }
             catch (Exception ex)
             {
