@@ -87,10 +87,10 @@ namespace Intel.MyDeals.Controllers.API
                 string t3 = System.Net.Dns.GetHostName();
 
                 //hopefully client name
-                string t4 = Environment.GetEnvironmentVariable("CLIENTNAME");
+                string t4 = System.Environment.GetEnvironmentVariable("CLIENTNAME");
 
                 //misc other checks
-                string t5 = "" + OpUserStack.MyOpUserToken.Usr.WWID;
+                //string t5 = "" + OpUserStack.MyOpUserToken.Usr.WWID;
                 string t6 = OpCurrentConfig.CurrentURL;
 
                 List<string> ret = new List<string>();
@@ -98,7 +98,7 @@ namespace Intel.MyDeals.Controllers.API
                 ret.Add("HttpContext.Current.Server.MachineName: " + t2);
                 ret.Add("System.Net.Dns.GetHostName(): " + t3);
                 ret.Add("Environment.GetEnvironmentVariable('CLIENTNAME'): " + t4);
-                ret.Add("OpUserStack.MyOpUserToken.Usr.WWID: " + t5);
+                //ret.Add("OpUserStack.MyOpUserToken.Usr.WWID: " + t5);
                 ret.Add("OpCurrentConfig.CurrentURL: " + t6);
 
                 return ret;
