@@ -21,8 +21,6 @@ namespace Intel.MyDeals.Entities
 
         private static List<OpLogItem> _logStack = new List<OpLogItem>();		
 
-		public static List<DbLogPerfMessage> testLogList = new List<DbLogPerfMessage>();
-
         #region Constants
 
         private static class LogConsts

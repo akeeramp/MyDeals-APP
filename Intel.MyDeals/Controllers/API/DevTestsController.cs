@@ -82,27 +82,6 @@ namespace Intel.MyDeals.Controllers.API
         {
             try
             {
-	            string t7 = "JTEST";
-
-				foreach (DbLogPerf perf in OpLogPerf.GetTypedWriters<DbLogPerf>())
-				{
-					//var test = perf.GetLogStack();
-					t7 += "#" + perf + ": " + perf.LogStack.Count;
-					foreach (var l in perf.LogStack)
-					{
-						t7 += " ... " + l.MSG;
-					}
-				}
-
-				string t10 = "OPLOG";
-				foreach (DbLogPerfMessage oplog in OpLog.testLogList)
-	            {
-					t10 += " ... " + oplog.MSG;
-				}
-
-
-	            string t8 = " " + OpLog.LogConfig.IsActive;
-				string t9 = OpLog.LogConfig.MsgSrc;
 
 				//t1-3 are HOST names for where we deploy the c# code
 				string t1 = System.Environment.MachineName;
@@ -115,6 +94,20 @@ namespace Intel.MyDeals.Controllers.API
                 //misc other checks
                 //string t5 = "" + OpUserStack.MyOpUserToken.Usr.WWID;
                 string t6 = OpCurrentConfig.CurrentURL;
+	            string t7 = "JTEST";
+
+				foreach (DbLogPerf perf in OpLogPerf.GetTypedWriters<DbLogPerf>())
+				{
+					//var test = perf.GetLogStack();
+					t7 += "#" + perf + ": " + perf.LogStack.Count;
+					foreach (var l in perf.LogStack)
+					{
+						t7 += " ... " + l.MSG;
+					}
+				}
+	            string t8 = " " + OpLog.LogConfig.IsActive;
+				string t9 = OpLog.LogConfig.MsgSrc;
+				string t10 = MyDealsWebApiUrl.ROOT_URL;
 
                 List<string> ret = new List<string>();
                 ret.Add("System.Environment.MachineName: " + t1);
@@ -126,7 +119,7 @@ namespace Intel.MyDeals.Controllers.API
 				ret.Add("OpCurrentConfig.CurrentURL: " + t7);
 				ret.Add("Log config is active:  " + t8);
 				ret.Add("Log config src: " + t9);
-				ret.Add("OPLog test: " + t10);
+				ret.Add("MyDealsWebApiUrl RootURL: " + t10);
 
 				return ret;
             }

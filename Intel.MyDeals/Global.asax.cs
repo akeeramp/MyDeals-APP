@@ -30,11 +30,10 @@ namespace Intel.MyDeals
 				// Just to test out logging in localhost
 				//TODO jositodo remove when we don't care about logging in localhost
 				MyDealsWebApiUrl.ROOT_URL = "localhost:55490";
-	        }
-	        MyDealsWebApiUrl.ROOT_URL = "http://" + MyDealsWebApiUrl.ROOT_URL;
+			}
+			//MyDealsWebApiUrl.ROOT_URL = "http://" + MyDealsWebApiUrl.ROOT_URL;
 
 			OpLogPerfHelper.InitWriters("DEBUG:DB");
-
 		}
 
 
