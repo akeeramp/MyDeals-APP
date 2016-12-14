@@ -101,13 +101,11 @@ namespace Intel.MyDeals.Entities.Logging
 				if (msg.Size <= MAX_MESSAGE_SIZE)
 				{
 					LogStack.Add(msg);
-					OpLog.testLogList.Add(msg);
 				}
 				else
 				{
 					var newMsg = msg.Clone(MAX_MESSAGE_SIZE);
 					LogStack.Add(newMsg);
-					OpLog.testLogList.Add(msg);
 				}
 			}
 			// If the Log Stack is full or the msg size is too large, then flush (upload to db and clear log stack)
