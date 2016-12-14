@@ -94,6 +94,12 @@ namespace Intel.MyDeals.Controllers.API
 					}
 				}
 
+				string t10 = "OPLOG";
+				foreach (DbLogPerfMessage oplog in OpLog.testLogList)
+	            {
+					t10 += " ... " + oplog.MSG;
+				}
+
 
 	            string t8 = " " + OpLog.LogConfig.IsActive;
 				string t9 = OpLog.LogConfig.MsgSrc;
@@ -120,6 +126,7 @@ namespace Intel.MyDeals.Controllers.API
 				ret.Add("OpCurrentConfig.CurrentURL: " + t7);
 				ret.Add("Log config is active:  " + t8);
 				ret.Add("Log config src: " + t9);
+				ret.Add("OPLog test: " + t10);
 
 				return ret;
             }

@@ -29,7 +29,7 @@ namespace Intel.MyDeals.Entities.Logging
 		{
 			FlushActions = new List<IAsyncResult>();
 		}
-
+		
 		public DbLogPerf(string machine_name) : this(machine_name, DEFAULT_MAX_LOGSTACK_SIZE) { }
 		
 		public DbLogPerf(string machine_name, int max_db_logstack)
@@ -79,6 +79,10 @@ namespace Intel.MyDeals.Entities.Logging
 
 		public void Log(OpLogPerfMessage msg)
 		{
+			if (!OpLog.LogConfig.IsActive)
+			{
+				return;
+			}
 			// Change the OPLogPerfMessage into a DbLogPerfMessage, which essentially renames columns and add new columns that the db expects
 			Log(new DbLogPerfMessage(msg));
 		}
@@ -97,11 +101,13 @@ namespace Intel.MyDeals.Entities.Logging
 				if (msg.Size <= MAX_MESSAGE_SIZE)
 				{
 					LogStack.Add(msg);
+					OpLog.testLogList.Add(msg);
 				}
 				else
 				{
 					var newMsg = msg.Clone(MAX_MESSAGE_SIZE);
 					LogStack.Add(newMsg);
+					OpLog.testLogList.Add(msg);
 				}
 			}
 			// If the Log Stack is full or the msg size is too large, then flush (upload to db and clear log stack)

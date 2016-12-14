@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Mail;
+using Intel.MyDeals.Entities.Logging;
 using Intel.Opaque;
 
 namespace Intel.MyDeals.Entities
@@ -19,6 +20,8 @@ namespace Intel.MyDeals.Entities
         private static string FromEmail = "MyDealsSupport@intel.com";
 
         private static List<OpLogItem> _logStack = new List<OpLogItem>();		
+
+		public static List<DbLogPerfMessage> testLogList = new List<DbLogPerfMessage>();
 
         #region Constants
 
