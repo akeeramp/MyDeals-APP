@@ -173,6 +173,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="app\admin\services\" />
     <Folder Include="app\contract\" />
     <Folder Include="app\dealManager\" />
     <Folder Include="app\errorHandling\" />
@@ -240,9 +241,8 @@
     <Compile Include="Areas\Admin\Controllers\CacheController.cs" />
     <Compile Include="Controllers\API\CustomersController.cs" />
     <Compile Include="Controllers\CodingPracticesController.cs" />
-    <Compile Include="Controllers\API\SecurityAttributesAPIController.cs" />
+    <Compile Include="Controllers\API\SecurityAttributesController.cs" />
     <Compile Include="Controllers\ConstantsController.cs" />
-    <Compile Include="Controllers\SecurityAttributesController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\CostTestController.cs" />
     <Compile Include="Controllers\DocsController.cs" />
@@ -266,8 +266,8 @@
     <Content Include="app\admin\cache\cache.html" />
     <Content Include="app\admin\constants\admin.constants.controller.js" />
     <Content Include="app\admin\constants\constants.html" />
-    <Content Include="app\admin\services\cache.service.js" />
-    <Content Include="app\admin\services\constants.service.js" />
+    <Content Include="app\admin\cache\cache.service.js" />
+    <Content Include="app\admin\constants\constants.service.js" />
     <Content Include="app\app.module.js" />
     <Content Include="app\blocks\exception\exception-handler.provider.js" />
     <Content Include="app\blocks\exception\exception.js" />
@@ -288,20 +288,18 @@
     <Content Include="app\dashboard\dashboard.module.js" />
     <Content Include="app\dashboard\dashboard.route.js" />
     <Content Include="app\layout\gridToolbar.html" />
-    <Content Include="app\securityAttributes\adminApplications\adminApplications.controller.js" />
-    <Content Include="app\securityAttributes\adminDealTypes\adminDealTypes.controller.js" />
-    <Content Include="app\securityAttributes\adminDealTypes\adminDealTypes.manage.html" />
-    <Content Include="app\securityAttributes\adminDealTypes\adminDealTypes.service.js" />
-    <Content Include="app\securityAttributes\adminApplications\adminApplications.manage.html" />
-    <Content Include="app\securityAttributes\adminApplications\adminApplications.service.js" />
-    <Content Include="app\securityAttributes\adminRoleTypes\adminRoleTypes.controller.js" />
-    <Content Include="app\securityAttributes\adminRoleTypes\adminRoleTypes.manage.html" />
-    <Content Include="app\securityAttributes\adminRoleTypes\adminRoleTypes.service.js" />
-    <Content Include="app\securityAttributes\securityActions\securityActions.service.js" />
-    <Content Include="app\securityAttributes\securityActions\securityActions.controller.js" />
-    <Content Include="app\securityAttributes\securityAttributes.module.js" />
-    <Content Include="app\securityAttributes\securityAttributes.route.js" />
-    <Content Include="app\securityAttributes\securityActions\securityActions.manage.html" />
+    <Content Include="app\admin\securityAttributes\adminApplications\adminApplications.controller.js" />
+    <Content Include="app\admin\securityAttributes\adminDealTypes\adminDealTypes.controller.js" />
+    <Content Include="app\admin\securityAttributes\adminDealTypes\adminDealTypes.manage.html" />
+    <Content Include="app\admin\securityAttributes\adminDealTypes\adminDealTypes.service.js" />
+    <Content Include="app\admin\securityAttributes\adminApplications\adminApplications.manage.html" />
+    <Content Include="app\admin\securityAttributes\adminApplications\adminApplications.service.js" />
+    <Content Include="app\admin\securityAttributes\adminRoleTypes\adminRoleTypes.controller.js" />
+    <Content Include="app\admin\securityAttributes\adminRoleTypes\adminRoleTypes.manage.html" />
+    <Content Include="app\admin\securityAttributes\adminRoleTypes\adminRoleTypes.service.js" />
+    <Content Include="app\admin\securityAttributes\securityActions\securityActions.service.js" />
+    <Content Include="app\admin\securityAttributes\securityActions\securityActions.controller.js" />
+    <Content Include="app\admin\securityAttributes\securityActions\securityActions.manage.html" />
     <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -1315,7 +1313,6 @@
     <Content Include="Views\Contract\Index.cshtml" />
     <Content Include="Views\CostTest\Index.cshtml" />
     <Content Include="Views\Dashboard\Index.cshtml" />
-    <Content Include="Views\SecurityAttributes\Index.cshtml" />
     <Content Include="Views\CodingPractices\DataFromApiWithCache.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\CodingPractices\PresentationAngularViews.cshtml" />

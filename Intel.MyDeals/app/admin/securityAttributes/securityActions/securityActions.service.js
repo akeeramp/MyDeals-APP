@@ -1,13 +1,13 @@
 ﻿(function () {
     'use strict';
     angular
-        .module('app.securityAttributes')
+        .module('app.admin')
         .factory('SecurityActionsService', SecurityActionsService);
 
     SecurityActionsService.$inject = ['$cacheFactory', '$q', '$http', 'dataService'];
 
     function SecurityActionsService($cacheFactory, $q, $http, dataService) {
-        var URL = '/api/SecurityAttributesAPI/' // TODO: Maaybe put this in a nicer place to reference off of
+        var URL = '/api/SecurityAttributes/' // TODO: Maaybe put this in a nicer place to reference off of
 
         return {
             getActions: getActions

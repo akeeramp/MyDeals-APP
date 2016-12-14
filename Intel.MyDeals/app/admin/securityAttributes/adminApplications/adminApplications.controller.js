@@ -1,12 +1,12 @@
-﻿(function() {
+﻿(function () {
     'use strict';
     angular
-        .module('app.securityAttributes')
-        .controller('securityActionsController',securityActionsController)
+        .module('app.admin')
+        .controller('applicationsController', applicationsController)
 
-    securityActionsController.$inject = ['$uibModal', 'SecurityActionsService', '$scope', 'logger'];
+    applicationsController.$inject = ['$uibModal', 'ApplicationsService', '$scope','logger']
 
-    function securityActionsController($uibModal, SecurityActionsService, $scope, logger) {
+    function applicationsController($uibModal, ApplicationsService, $scope, logger) {
         var vm = this;
 
         // Functions
@@ -24,38 +24,38 @@
             type: "json",
             transport: {
                 read: function (e) {
-                    SecurityActionsService.getActions()
-                         .then(function (response) {
-                             e.success(response.data);
-                         }, function (response) {
-                             logger.error("Unable to get Security Actions.", response, response.statusText);
-                         });
+                    ApplicationsService.getApplications()
+                        .then(function (response) {
+                            e.success(response.data);
+                        }, function (response) {
+                            logger.error("Unable to get applications.", response, response.statusText);
+                        });
                 },
                 update: function (e) {
-                    SecurityActionsService.updateAction(e.data.models[0])
+                    ApplicationsService.updateApplication(e.data.models[0])
                         .then(function (data) {
                             e.success(data);
                             logger.success('Update successful.');
                         }, function (response) {
-                            logger.error("Unable to update Security Actions.", response, response.statusText);
+                            logger.error("Unable to update Application.", response, response.statusText);
                         });
                 },
                 destroy: function (e) {
-                    SecurityActionsService.deleteAction(e.data.models[0].ACTN_SID)
+                    ApplicationsService.deleteApplication(e.data.models[0].APPL_SID)
                         .then(function (data) {
                             e.success(data);
                             logger.success('Delete successful.');
                         }, function (response) {
-                            logger.error("Unable to delete Security Actions.", response, response.statusText);
+                            logger.error("Unable to delete Application", response, response.statusText);
                         });
                 },
                 create: function (e) {
-                    SecurityActionsService.insertAction(e.data.models[0])
+                    ApplicationsService.insertApplication(e.data.models[0])
                         .then(function (data) {
                             e.success(data);
-                            logger.success('New Security Actions added');
+                            logger.success('New application added');
                         }, function (response) {
-                            logger.error("Unable to insert Security Actions.", response, response.statusText);
+                            logger.error("Unable to insert Application.", response, response.statusText);
                         });
                 }
             },
@@ -63,13 +63,13 @@
             pageSize: 20,
             schema: {
                 model: {
-                    id: "ACTN_SID",
+                    id: "APP_SID",
                     fields: {
-                        ACTN_SID: { editable: false, nullable: true },
-                        ACTN_CD: { validation: { required: true } },
-                        ACTN_DESC: { validation: { required: true } },
-                        ACTN_CAT_CD: { validation: { required: true } },
-                        WFSTG_ACTN_CD: {}
+                        APP_SID: { editable: false, nullable: true },
+                        APP_CD: { validation: { required: true } },
+                        APP_DESC: { validation: { required: true } },
+                        APP_SUITE: { validation: { required: true } },
+                        ACTV_IND: { type: "boolean" }
                     }
                 }
             }
@@ -90,26 +90,26 @@
             //],
             columns: [
             {
-                field: "ACTN_SID",
+                field: "APP_SID",
                 title: "ID",
             }, {
-                field: "ACTN_CD",
+                field: "APP_CD",
                 title: "Name"
             }, {
-                field: "ACTN_DESC",
+                field: "APP_DESC",
                 title: "Description"
             }, {
-                field: "ACTN_CAT_CD",
-                title: "Category"
+                field: "APP_SUITE",
+                title: "Suite"
             }, {
-                field: "WFSTG_ACTN_CD",
-                title: "Stage"
+                field: "ACTV_IND",
+                title: "Active"
             }]
         }
 
         // Gets and sets the selected row
         function onChange() {
-            vm.selectedItem = $scope.actionsGrid.select();
+            vm.selectedItem = $scope.applicationsGrid.select();
             if (vm.selectedItem.length == 0) {
                 vm.isButtonDisabled = true;
             } else {
@@ -120,14 +120,13 @@
 
         function addItem() {
             vm.isButtonDisabled = true;
-            $scope.actionsGrid.addRow();
+            $scope.applicationsGrid.addRow();
         }
         function updateItem() {
-            $scope.actionsGrid.editRow(vm.selectedItem);
+            $scope.applicationsGrid.editRow(vm.selectedItem);
         }
         function deleteItem() {
-            $scope.actionsGrid.removeRow(vm.selectedItem);
+            $scope.applicationsGrid.removeRow(vm.selectedItem);
         }
-
     }
 })();

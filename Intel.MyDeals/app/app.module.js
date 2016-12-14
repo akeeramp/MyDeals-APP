@@ -20,8 +20,7 @@
          */
         'app.admin',
         'app.costtest',
-        'app.dashboard',
-		'app.securityAttributes'
+        'app.dashboard'
     ]);
 
 })()

@@ -92,16 +92,33 @@
             </ul>
         </li>
 
+        @*Instead of using href can use the ui-sref to translate routes,
+        however as we want to retain the # routing to distinguish between MVC and angular routes hence using href*@
+
         @if (isAdmin)
         {
-            <li><a href="@Url.Action("Index", "Admin", new { Area = "" })">Admin</a></li>
+            <li class="dropdown">
+                <a class="btn btn-primary" id="dLabel" role="button" href="/page.html" data-toggle="dropdown" data-target="#">Admin <i class="intelicon-down"></i></a>
+                <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+                    <li><a href="Admin#/cache">Cache Manager</a></li>
+                    <li><a href="Admin#/constants">Constants</a></li>
+                    <li class="dropdown-submenu">
+                        <a tabindex="-1">Security Attributes</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="Admin#/SecurityAttributes/Actions">Actions</a></li>
+                            <li><a href="Admin#/SecurityAttributes/Applications">Applications</a></li>
+                            <li><a href="Admin#/SecurityAttributes/DealTypes">Deal Types</a></li>
+                            <li><a href="Admin#/SecurityAttributes/RoleTypes">Role Types</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
         }
 
         <li><a href="@Url.Action("Index", "Contract", new { Area = "" })">Contracts</a></li>
         <li><a href="@Url.Action("Index", "CostTest", new { Area = "" })">Cost Test</a></li>
 		<li><a href="@Url.Action("Index", "Dashboard", new { Area = "" })">Dashboard</a></li>
-		<li><a href="@Url.Action("Index", "SecurityAttributes", new { Area = "" })">Security</a></li>
-                                                                                                                                                                            
+
         @*<li class="dropdown">
             <a class="btn btn-primary" role="button" href="/" data-toggle="dropdown" data-target="#">Debug <i class="intelicon-down"></i></a>
             <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">

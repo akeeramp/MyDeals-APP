@@ -17,7 +17,7 @@ namespace Intel.MyDeals
                         "~/Scripts/modernizr-*"));
 
             bundles.Add(new ScriptBundle("~/bundles/scripts").Include(
-                "~/Scripts/jquery-2.2.0.min.js",                
+                "~/Scripts/jquery-2.2.0.min.js",
 				"~/Scripts/Angular/1.5.8/angular.min.js",
                 "~/Scripts/kendo/2016.3.914/jszip.min.js",
                 "~/Scripts/kendo/2016.3.914/kendo.all.min.js",
@@ -60,24 +60,22 @@ namespace Intel.MyDeals
             bundles.Add(new ScriptBundle("~/bundles/angularModules").Include(
                   "~/app/admin/admin.module.js"
                 , "~/app/admin/admin.route.js"
-                , "~/app/admin/services/cache.service.js"
-                , "~/app/admin/services/constants.service.js"
-                , "~/app/admin/constants/admin.constants.controller.js"
+                , "~/app/admin/cache/cache.service.js"
                 , "~/app/admin/cache/admin.cache.controller.js"
+                , "~/app/admin/constants/constants.service.js"
+                , "~/app/admin/constants/admin.constants.controller.js"
+                , "~/app/admin/securityAttributes/securityActions/securityActions.service.js"
+                , "~/app/admin/securityAttributes/securityActions/securityActions.controller.js"
+                , "~/app/admin/securityAttributes/adminApplications/adminApplications.service.js"
+                , "~/app/admin/securityAttributes/adminApplications/adminApplications.controller.js"
+                , "~/app/admin/securityAttributes/adminDealTypes/adminDealTypes.service.js"
+                , "~/app/admin/securityAttributes/adminDealTypes/adminDealTypes.controller.js"
+                , "~/app/admin/securityAttributes/adminRoleTypes/adminRoleTypes.service.js"
+                , "~/app/admin/securityAttributes/adminRoleTypes/adminRoleTypes.controller.js"
                 , "~/app/costTest/costtest.module.js"
                 , "~/app/costTest/costtest.route.js"
 				, "~/app/dashboard/dashboard.module.js"
 				, "~/app/dashboard/dashboard.route.js"
-				, "~/app/securityAttributes/securityAttributes.module.js"
-				, "~/app/securityAttributes/securityAttributes.route.js"
-				, "~/app/securityAttributes/securityActions/securityActions.service.js"
-				, "~/app/securityAttributes/securityActions/securityActions.controller.js"
-				, "~/app/securityAttributes/adminApplications/adminApplications.service.js"
-                , "~/app/securityAttributes/adminApplications/adminApplications.controller.js"
-				, "~/app/securityAttributes/adminDealTypes/adminDealTypes.service.js"
-                , "~/app/securityAttributes/adminDealTypes/adminDealTypes.controller.js"
-				, "~/app/securityAttributes/adminRoleTypes/adminRoleTypes.service.js"
-                , "~/app/securityAttributes/adminRoleTypes/adminRoleTypes.controller.js"
 				));
 
             bundles.Add(new ScriptBundle("~/MyDeals/scripts").Include(

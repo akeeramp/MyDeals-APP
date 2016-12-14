@@ -25,8 +25,8 @@
                 abstract: false,
                 config: {
                     templateUrl: 'app/admin/cache/cache.html',
-                    url: 'cache',                    
-                    controller: 'CacheController as vm',                    
+                    url: 'cache',
+                    controller: 'CacheController as vm',
                 }
             },
             {
@@ -38,6 +38,46 @@
                     controller: 'ConstantsController as vm',
                 }
             },
+            {
+                state: 'admin.securityAttributes',
+                config: {
+                    abstract: false
+                    , template: '<div ui-view></div>'
+					, url: 'SecurityAttributes'
+                }
+            },
+            {
+			    state: 'admin.securityAttributes.securityActions',
+			    config: {
+			        templateUrl: 'app/admin/securityAttributes/securityActions/securityActions.manage.html'
+					, url: '/Actions'
+					, controller: 'securityActionsController as vm'
+			    }
+			},
+            {
+                state: 'admin.securityAttributes.applications',
+                config: {
+                    templateUrl: 'app/admin/securityAttributes/adminApplications/adminApplications.manage.html'
+					, url: '/Applications'
+					, controller: 'applicationsController as vm'
+                }
+            },
+            {
+                state: 'admin.securityAttributes.dealTypes',
+                config: {
+                    templateUrl: 'app/admin/securityAttributes/adminDealTypes/adminDealTypes.manage.html'
+					, url: '/DealTypes'
+					, controller: 'dealTypesController as vm'
+                }
+            },
+			{
+			    state: 'admin.securityAttributes.roleTypes',
+			    config: {
+			        templateUrl: 'app/admin/securityAttributes/adminRoleTypes/adminRoleTypes.manage.html'
+					, url: '/RoleTypes'
+					, controller: 'roleTypesController as vm'
+			    }
+			}
         ];
     }
 })();

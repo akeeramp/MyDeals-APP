@@ -1,13 +1,12 @@
 ﻿(function() {
     'use strict';
-
     angular
-        .module('app.securityAttributes')
-        .controller('dealTypesController',dealTypesController)
+        .module('app.admin')
+        .controller('securityActionsController',securityActionsController)
 
-    dealTypesController.$inject = ['$uibModal', 'DealTypesService', '$scope', 'logger'];
+    securityActionsController.$inject = ['$uibModal', 'SecurityActionsService', '$scope', 'logger'];
 
-    function dealTypesController($uibModal, DealTypesService, $scope, logger) {
+    function securityActionsController($uibModal, SecurityActionsService, $scope, logger) {
         var vm = this;
 
         // Functions
@@ -25,38 +24,38 @@
             type: "json",
             transport: {
                 read: function (e) {
-                    DealTypesService.getDealTypes()
-                        .then(function (response) {
-                            e.success(response.data);
-                        }, function (response) {
-                            logger.error("Unable to get deal types.", response, response.statusText);
-                        });
+                    SecurityActionsService.getActions()
+                         .then(function (response) {
+                             e.success(response.data);
+                         }, function (response) {
+                             logger.error("Unable to get Security Actions.", response, response.statusText);
+                         });
                 },
                 update: function (e) {
-                    DealTypesService.updateDealType(e.data.models[0])
+                    SecurityActionsService.updateAction(e.data.models[0])
                         .then(function (data) {
                             e.success(data);
                             logger.success('Update successful.');
                         }, function (response) {
-                            logger.error("Unable to update role type.", response, response.statusText);
+                            logger.error("Unable to update Security Actions.", response, response.statusText);
                         });
                 },
                 destroy: function (e) {
-                    DealTypesService.deleteDealType(e.data.models[0].DEAL_TYPE_SID)
+                    SecurityActionsService.deleteAction(e.data.models[0].ACTN_SID)
                         .then(function (data) {
                             e.success(data);
                             logger.success('Delete successful.');
                         }, function (response) {
-                            logger.error("Unable to delete Application", response, response.statusText);
+                            logger.error("Unable to delete Security Actions.", response, response.statusText);
                         });
                 },
                 create: function (e) {
-                    DealTypesService.insertDealType(e.data.models[0])
+                    SecurityActionsService.insertAction(e.data.models[0])
                         .then(function (data) {
                             e.success(data);
-                            logger.success('New Deal Type added');
+                            logger.success('New Security Actions added');
                         }, function (response) {
-                            logger.error("Unable to insert Application.", response, response.statusText);
+                            logger.error("Unable to insert Security Actions.", response, response.statusText);
                         });
                 }
             },
@@ -64,17 +63,13 @@
             pageSize: 20,
             schema: {
                 model: {
-                    id: "DEAL_TYPE_SID",
+                    id: "ACTN_SID",
                     fields: {
-                        DEAL_TYPE_SID: { editable: false, nullable: true },
-                        DEAL_ATRB_SID: { type: "number" , validation: { required: true } },
-                        DEAL_TYPE_CD: { validation: { required: true } },
-                        DEAL_TYPE_DESC: { validation: { required: true } },
-                        TEMPLT_DEAL_SID: {},
-                        TEMPLT_DEAL_NBR: { type: "number", validation: { format:"{0:n0}", decimals:0 } },
-                        TRKR_NBR_DT_LTR: {},
-                        PERFORM_CTST: { type: "boolean" },
-                        ACTV_IND: { type: "boolean" }
+                        ACTN_SID: { editable: false, nullable: true },
+                        ACTN_CD: { validation: { required: true } },
+                        ACTN_DESC: { validation: { required: true } },
+                        ACTN_CAT_CD: { validation: { required: true } },
+                        WFSTG_ACTN_CD: {}
                     }
                 }
             }
@@ -95,38 +90,26 @@
             //],
             columns: [
             {
-                field: "DEAL_TYPE_SID",
+                field: "ACTN_SID",
                 title: "ID",
             }, {
-                field: "DEAL_ATRB_SID",
-                title: "Deal ATRB ID"
-            }, {
-                field: "DEAL_TYPE_CD",
+                field: "ACTN_CD",
                 title: "Name"
             }, {
-                field: "DEAL_TYPE_DESC",
+                field: "ACTN_DESC",
                 title: "Description"
             }, {
-                field: "TEMPLT_DEAL_SID",
-                title: "Template Deal ID"
+                field: "ACTN_CAT_CD",
+                title: "Category"
             }, {
-                field: "TEMPLT_DEAL_NBR",
-                title: "Template Deal Number"
-            }, {
-                field: "TRKR_NBR_DT_LTR",
-                title: "TRKR_NBR_DT_LTR"
-            }, {
-                field: "PERFORM_CTST",
-                title: "Perform CTST"
-            }, {
-                field: "ACTV_IND",
-                title: "Active"
+                field: "WFSTG_ACTN_CD",
+                title: "Stage"
             }]
         }
 
         // Gets and sets the selected row
         function onChange() {
-            vm.selectedItem = $scope.dealTypesGrid.select();
+            vm.selectedItem = $scope.actionsGrid.select();
             if (vm.selectedItem.length == 0) {
                 vm.isButtonDisabled = true;
             } else {
@@ -137,13 +120,13 @@
 
         function addItem() {
             vm.isButtonDisabled = true;
-            $scope.dealTypesGrid.addRow();
+            $scope.actionsGrid.addRow();
         }
         function updateItem() {
-            $scope.dealTypesGrid.editRow(vm.selectedItem);
+            $scope.actionsGrid.editRow(vm.selectedItem);
         }
         function deleteItem() {
-            $scope.dealTypesGrid.removeRow(vm.selectedItem);
+            $scope.actionsGrid.removeRow(vm.selectedItem);
         }
 
     }

@@ -1,12 +1,12 @@
 ﻿(function () {
     'use strict';
     angular
-        .module('app.securityAttributes')
-        .controller('applicationsController', applicationsController)
+        .module('app.admin')
+        .controller('roleTypesController', roleTypesController)
 
-    applicationsController.$inject = ['$uibModal', 'ApplicationsService', '$scope','logger']
+    roleTypesController.$inject = ['$uibModal', 'RoleTypesService', '$scope', 'logger']
 
-    function applicationsController($uibModal, ApplicationsService, $scope, logger) {
+    function roleTypesController($uibModal, RoleTypesService, $scope, logger) {
         var vm = this;
 
         // Functions
@@ -24,38 +24,38 @@
             type: "json",
             transport: {
                 read: function (e) {
-                    ApplicationsService.getApplications()
+                    RoleTypesService.getRoleTypes()
                         .then(function (response) {
                             e.success(response.data);
                         }, function (response) {
-                            logger.error("Unable to get applications.", response, response.statusText);
+                            logger.error("Unable to get role types.", response, response.statusText);
                         });
                 },
                 update: function (e) {
-                    ApplicationsService.updateApplication(e.data.models[0])
-                        .then(function (data) {
-                            e.success(data);
-                            logger.success('Update successful.');
-                        }, function (response) {
-                            logger.error("Unable to update Application.", response, response.statusText);
-                        });
+                    RoleTypesService.updateRoleType(e.data.models[0])
+                         .then(function (data) {
+                             e.success(data);
+                             logger.success('Update successful.');
+                         }, function (response) {
+                             logger.error("Unable to update Role Type.", response, response.statusText);
+                         });
                 },
                 destroy: function (e) {
-                    ApplicationsService.deleteApplication(e.data.models[0].APPL_SID)
+                    RoleTypesService.deleteRoleType(e.data.models[0].ROLE_TYPE_SID)
                         .then(function (data) {
                             e.success(data);
                             logger.success('Delete successful.');
                         }, function (response) {
-                            logger.error("Unable to delete Application", response, response.statusText);
+                            logger.error("Unable to delete Role Type", response, response.statusText);
                         });
                 },
                 create: function (e) {
-                    ApplicationsService.insertApplication(e.data.models[0])
+                    RoleTypesService.insertRoleType(e.data.models[0])
                         .then(function (data) {
                             e.success(data);
-                            logger.success('New application added');
+                            logger.success('New Role Type added');
                         }, function (response) {
-                            logger.error("Unable to insert Application.", response, response.statusText);
+                            logger.error("Unable to insert Role Type.", response, response.statusText);
                         });
                 }
             },
@@ -63,12 +63,15 @@
             pageSize: 20,
             schema: {
                 model: {
-                    id: "APP_SID",
+                    id: "ROLE_TYPE_SID",
                     fields: {
-                        APP_SID: { editable: false, nullable: true },
-                        APP_CD: { validation: { required: true } },
-                        APP_DESC: { validation: { required: true } },
-                        APP_SUITE: { validation: { required: true } },
+                        ROLE_TYPE_SID: { editable: false, nullable: true },
+                        APP_SID: { type: "number", validation: { format: "{0:n0}", decimals: 0, required: true } },
+                        ROLE_TYPE_CD: { validation: { required: true } },
+                        ROLE_TYPE_DSPLY_CD: { validation: { required: true } },
+                        ROLE_TYPE_DESC: { validation: { required: true } },
+                        ROLE_TIER_CD: { validation: { required: true } },
+                        IS_SNGL_SLCT: { type: "boolean" },
                         ACTV_IND: { type: "boolean" }
                     }
                 }
@@ -90,17 +93,26 @@
             //],
             columns: [
             {
-                field: "APP_SID",
+                field: "ROLE_TYPE_SID",
                 title: "ID",
             }, {
-                field: "APP_CD",
+                field: "APP_SID",
+                title: "Application ID"
+            }, {
+                field: "ROLE_TYPE_CD",
                 title: "Name"
             }, {
-                field: "APP_DESC",
+                field: "ROLE_TYPE_DSPLY_CD",
+                title: "Display Name"
+            }, {
+                field: "ROLE_TYPE_DESC",
                 title: "Description"
             }, {
-                field: "APP_SUITE",
-                title: "Suite"
+                field: "ROLE_TIER_CD",
+                title: "Tier"
+            }, {
+                field: "IS_SNGL_SLCT",
+                title: "Single Select"
             }, {
                 field: "ACTV_IND",
                 title: "Active"
@@ -109,7 +121,7 @@
 
         // Gets and sets the selected row
         function onChange() {
-            vm.selectedItem = $scope.applicationsGrid.select();
+            vm.selectedItem = $scope.roleTypesGrid.select();
             if (vm.selectedItem.length == 0) {
                 vm.isButtonDisabled = true;
             } else {
@@ -120,13 +132,14 @@
 
         function addItem() {
             vm.isButtonDisabled = true;
-            $scope.applicationsGrid.addRow();
+            $scope.roleTypesGrid.addRow();
         }
         function updateItem() {
-            $scope.applicationsGrid.editRow(vm.selectedItem);
+            $scope.roleTypesGrid.editRow(vm.selectedItem);
         }
         function deleteItem() {
-            $scope.applicationsGrid.removeRow(vm.selectedItem);
+            $scope.roleTypesGrid.removeRow(vm.selectedItem);
         }
+
     }
 })();

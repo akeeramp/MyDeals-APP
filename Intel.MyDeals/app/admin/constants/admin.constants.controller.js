@@ -40,7 +40,7 @@
                     constantsService.deleteConstants(e.data)
                         .then(function (response) {
                             e.success(response.data);
-                            logger.success("Constant added.");
+                            logger.success("Constant Deleted.");
                         }, function (response) {
                             logger.error("Unable to delete constant.", response, response.statusText);
                         });

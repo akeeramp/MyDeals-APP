@@ -1,12 +1,13 @@
-﻿(function () {
+﻿(function() {
     'use strict';
+
     angular
-        .module('app.securityAttributes')
-        .controller('roleTypesController', roleTypesController)
+        .module('app.admin')
+        .controller('dealTypesController',dealTypesController)
 
-    roleTypesController.$inject = ['$uibModal', 'RoleTypesService', '$scope', 'logger']
+    dealTypesController.$inject = ['$uibModal', 'DealTypesService', '$scope', 'logger'];
 
-    function roleTypesController($uibModal, RoleTypesService, $scope, logger) {
+    function dealTypesController($uibModal, DealTypesService, $scope, logger) {
         var vm = this;
 
         // Functions
@@ -24,38 +25,38 @@
             type: "json",
             transport: {
                 read: function (e) {
-                    RoleTypesService.getRoleTypes()
+                    DealTypesService.getDealTypes()
                         .then(function (response) {
                             e.success(response.data);
                         }, function (response) {
-                            logger.error("Unable to get role types.", response, response.statusText);
+                            logger.error("Unable to get deal types.", response, response.statusText);
                         });
                 },
                 update: function (e) {
-                    RoleTypesService.updateRoleType(e.data.models[0])
-                         .then(function (data) {
-                             e.success(data);
-                             logger.success('Update successful.');
-                         }, function (response) {
-                             logger.error("Unable to update Role Type.", response, response.statusText);
-                         });
+                    DealTypesService.updateDealType(e.data.models[0])
+                        .then(function (data) {
+                            e.success(data);
+                            logger.success('Update successful.');
+                        }, function (response) {
+                            logger.error("Unable to update role type.", response, response.statusText);
+                        });
                 },
                 destroy: function (e) {
-                    RoleTypesService.deleteRoleType(e.data.models[0].ROLE_TYPE_SID)
+                    DealTypesService.deleteDealType(e.data.models[0].DEAL_TYPE_SID)
                         .then(function (data) {
                             e.success(data);
                             logger.success('Delete successful.');
                         }, function (response) {
-                            logger.error("Unable to delete Role Type", response, response.statusText);
+                            logger.error("Unable to delete Application", response, response.statusText);
                         });
                 },
                 create: function (e) {
-                    RoleTypesService.insertRoleType(e.data.models[0])
+                    DealTypesService.insertDealType(e.data.models[0])
                         .then(function (data) {
                             e.success(data);
-                            logger.success('New Role Type added');
+                            logger.success('New Deal Type added');
                         }, function (response) {
-                            logger.error("Unable to insert Role Type.", response, response.statusText);
+                            logger.error("Unable to insert Application.", response, response.statusText);
                         });
                 }
             },
@@ -63,15 +64,16 @@
             pageSize: 20,
             schema: {
                 model: {
-                    id: "ROLE_TYPE_SID",
+                    id: "DEAL_TYPE_SID",
                     fields: {
-                        ROLE_TYPE_SID: { editable: false, nullable: true },
-                        APP_SID: { type: "number", validation: { format: "{0:n0}", decimals: 0, required: true } },
-                        ROLE_TYPE_CD: { validation: { required: true } },
-                        ROLE_TYPE_DSPLY_CD: { validation: { required: true } },
-                        ROLE_TYPE_DESC: { validation: { required: true } },
-                        ROLE_TIER_CD: { validation: { required: true } },
-                        IS_SNGL_SLCT: { type: "boolean" },
+                        DEAL_TYPE_SID: { editable: false, nullable: true },
+                        DEAL_ATRB_SID: { type: "number" , validation: { required: true } },
+                        DEAL_TYPE_CD: { validation: { required: true } },
+                        DEAL_TYPE_DESC: { validation: { required: true } },
+                        TEMPLT_DEAL_SID: {},
+                        TEMPLT_DEAL_NBR: { type: "number", validation: { format:"{0:n0}", decimals:0 } },
+                        TRKR_NBR_DT_LTR: {},
+                        PERFORM_CTST: { type: "boolean" },
                         ACTV_IND: { type: "boolean" }
                     }
                 }
@@ -93,26 +95,29 @@
             //],
             columns: [
             {
-                field: "ROLE_TYPE_SID",
+                field: "DEAL_TYPE_SID",
                 title: "ID",
             }, {
-                field: "APP_SID",
-                title: "Application ID"
+                field: "DEAL_ATRB_SID",
+                title: "Deal ATRB ID"
             }, {
-                field: "ROLE_TYPE_CD",
+                field: "DEAL_TYPE_CD",
                 title: "Name"
             }, {
-                field: "ROLE_TYPE_DSPLY_CD",
-                title: "Display Name"
-            }, {
-                field: "ROLE_TYPE_DESC",
+                field: "DEAL_TYPE_DESC",
                 title: "Description"
             }, {
-                field: "ROLE_TIER_CD",
-                title: "Tier"
+                field: "TEMPLT_DEAL_SID",
+                title: "Template Deal ID"
             }, {
-                field: "IS_SNGL_SLCT",
-                title: "Single Select"
+                field: "TEMPLT_DEAL_NBR",
+                title: "Template Deal Number"
+            }, {
+                field: "TRKR_NBR_DT_LTR",
+                title: "TRKR_NBR_DT_LTR"
+            }, {
+                field: "PERFORM_CTST",
+                title: "Perform CTST"
             }, {
                 field: "ACTV_IND",
                 title: "Active"
@@ -121,7 +126,7 @@
 
         // Gets and sets the selected row
         function onChange() {
-            vm.selectedItem = $scope.roleTypesGrid.select();
+            vm.selectedItem = $scope.dealTypesGrid.select();
             if (vm.selectedItem.length == 0) {
                 vm.isButtonDisabled = true;
             } else {
@@ -132,13 +137,13 @@
 
         function addItem() {
             vm.isButtonDisabled = true;
-            $scope.roleTypesGrid.addRow();
+            $scope.dealTypesGrid.addRow();
         }
         function updateItem() {
-            $scope.roleTypesGrid.editRow(vm.selectedItem);
+            $scope.dealTypesGrid.editRow(vm.selectedItem);
         }
         function deleteItem() {
-            $scope.roleTypesGrid.removeRow(vm.selectedItem);
+            $scope.dealTypesGrid.removeRow(vm.selectedItem);
         }
 
     }
