@@ -19,10 +19,7 @@ namespace Intel.MyDeals.Entities
         private static string ToEmailList = "philip.w.eckenroth@intel.com"; // TODO: this shoud be read from an environment aware constants config setup
         private static string FromEmail = "MyDealsSupport@intel.com";
 
-        private static List<OpLogItem> _logStack = new List<OpLogItem>();		
-
-		// TODO josiTODO: remove after dev srver testing is done
-	    public static int FlushCount = 0;
+        private static List<OpLogItem> _logStack = new List<OpLogItem>();	
 
         #region Constants
 

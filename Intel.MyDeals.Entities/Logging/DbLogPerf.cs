@@ -143,7 +143,6 @@ namespace Intel.MyDeals.Entities.Logging
 		{
 			try
 			{
-				OpLog.FlushCount += 1;
 				DbLogPerfMessage[] tb;
 				lock (LOCK_OBJECT)
 				{
@@ -225,7 +224,14 @@ namespace Intel.MyDeals.Entities.Logging
 		/// </summary>
 		public void OnShutdown()
 		{
-			OpLogPerf.Log("OnShutdown() log attempt");
+			// TODO: josiTODO: remove when onshutdown is confirmed working
+			if (LogStack.Count > 0)
+			{
+				DbLogPerfMessage test = LogStack.FirstOrDefault().Clone(255);
+				test.MSG = "OnShutdown TEST";
+				LogStack.Add(test);
+			}
+
 			Flush();
 
 			int max_flush_attempts = 10;

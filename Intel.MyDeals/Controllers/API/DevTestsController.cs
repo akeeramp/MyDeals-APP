@@ -108,7 +108,6 @@ namespace Intel.MyDeals.Controllers.API
 	            string t8 = " " + OpLog.LogConfig.IsActive;
 				string t9 = OpLog.LogConfig.MsgSrc;
 				string t10 = MyDealsWebApiUrl.ROOT_URL;
-				string t11 = OpLog.FlushCount.ToString();
 
 				List<string> ret = new List<string>();
                 ret.Add("System.Environment.MachineName: " + t1);
@@ -121,7 +120,6 @@ namespace Intel.MyDeals.Controllers.API
 				ret.Add("Log config is active:  " + t8);
 				ret.Add("Log config src: " + t9);
 				ret.Add("MyDealsWebApiUrl RootURL: " + t10);
-				ret.Add("# of flush attempts: " + t11);
 
 				return ret;
             }
