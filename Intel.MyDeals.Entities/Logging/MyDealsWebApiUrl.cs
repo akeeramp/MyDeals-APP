@@ -8,7 +8,6 @@ namespace Intel.MyDeals.Entities.Logging
 	/// </summary>
 	public static class MyDealsWebApiUrl
 	{
-
 		public static Func<string> RootURLResolver { set; get; }
 
 		public static string ROOT_URL
@@ -39,7 +38,7 @@ namespace Intel.MyDeals.Entities.Logging
 			}
 		}
 
-		private const string ROOT_SUB_PATH = "/api/";
+		private const string ROOT_SUB_PATH = "api/";
 		
 
 		// API paths

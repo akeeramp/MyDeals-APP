@@ -2,23 +2,42 @@
 using Intel.MyDeals.App;
 using Intel.MyDeals.BusinesssLogic;
 using Intel.MyDeals.Entities;
+using Intel.MyDeals.Entities.Logging;
 using Intel.Opaque;
 
 namespace Intel.MyDeals
 {
     public static class OpAppConfig
     {
-		static OpAppConfig(){
-			// Logging 
-			OpLog.LogConfig = new LoggingLib().GetLogConfig();
+		static OpAppConfig()
+		{
+			try
+			{
+				// Logging 
+				OpLog.LogConfig = new LoggingLib().GetLogConfig();
+
+				// Entities' web API
+				MyDealsWebApiUrl.ROOT_URL = OpCurrentConfig.CurrentURL;
+				// TODO joisTODO: remove after localhost test is done
+				if (MyDealsWebApiUrl.ROOT_URL == "localhost")
+				{
+					MyDealsWebApiUrl.ROOT_URL += ":55490";
+				}
+				MyDealsWebApiUrl.ROOT_URL = "http://" + MyDealsWebApiUrl.ROOT_URL;
+			}
+			catch (Exception ex)
+			{
+				OpLogPerf.Log(ex);
+				throw;
+			}
 		}
 
 		public static OpCore Init()
         {
             try
             {
-                // Check if OpCore has already been created
-                if (OpCore.Instance != null) return OpCore.Instance;
+				// Check if OpCore has already been created
+				if (OpCore.Instance != null) return OpCore.Instance;
 
                 // Instantiate an Instance
                 OpCore opCore = OpCore.Instance = new OpCore(false);
@@ -50,8 +69,8 @@ namespace Intel.MyDeals
             }
             catch (Exception ex)
             {
-                OpLog.HandleException(ex);
-                throw;
+				OpLogPerf.Log(ex);
+				throw;
             }
         }
 

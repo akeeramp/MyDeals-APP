@@ -21,6 +21,9 @@ namespace Intel.MyDeals.Entities
 
         private static List<OpLogItem> _logStack = new List<OpLogItem>();		
 
+		// TODO josiTODO: remove after dev srver testing is done
+	    public static int FlushCount = 0;
+
         #region Constants
 
         private static class LogConsts

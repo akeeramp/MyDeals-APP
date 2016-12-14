@@ -143,6 +143,7 @@ namespace Intel.MyDeals.Entities.Logging
 		{
 			try
 			{
+				OpLog.FlushCount += 1;
 				DbLogPerfMessage[] tb;
 				lock (LOCK_OBJECT)
 				{
@@ -224,6 +225,7 @@ namespace Intel.MyDeals.Entities.Logging
 		/// </summary>
 		public void OnShutdown()
 		{
+			OpLogPerf.Log("OnShutdown() log attempt");
 			Flush();
 
 			int max_flush_attempts = 10;

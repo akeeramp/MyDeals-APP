@@ -24,15 +24,7 @@ namespace Intel.MyDeals
 
             AppHelper.SetupDataAccessLib();
 
-			MyDealsWebApiUrl.ROOT_URL = OpCurrentConfig.CurrentURL; 
-	        if (String.IsNullOrEmpty(MyDealsWebApiUrl.ROOT_URL))
-	        {
-				// Just to test out logging in localhost
-				//TODO jositodo remove when we don't care about logging in localhost
-				MyDealsWebApiUrl.ROOT_URL = "localhost:55490";
-			}
-			//MyDealsWebApiUrl.ROOT_URL = "http://" + MyDealsWebApiUrl.ROOT_URL;
-
+			// Init log writers
 			OpLogPerfHelper.InitWriters("DEBUG:DB");
 		}
 
