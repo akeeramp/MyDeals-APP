@@ -11,6 +11,13 @@ namespace Intel.MyDeals.Controllers
         public ActionResult Index()
 		{
 			OpLogPerf.Log("Call home controller test");
+
+			for (int i=0; i<=30; i++)
+			{
+				OpLogPerf.Log("Call home controller test"+i);
+			}
+
+
 			OpUserToken user = AppLib.InitAVM(op);
             ViewBag.UserToken = user;
             ViewBag.AppToken = op.AppToken;
