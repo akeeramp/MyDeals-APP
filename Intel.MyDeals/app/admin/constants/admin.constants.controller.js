@@ -51,7 +51,7 @@
                             e.success(response.data);
                             logger.success("New constant added.");
                         }, function (response) {
-                            logger.error("Unable to insert get constant.", response, response.statusText);
+                            logger.error("Unable to insert constant.", response, response.statusText);
                         });
                 }
             },
