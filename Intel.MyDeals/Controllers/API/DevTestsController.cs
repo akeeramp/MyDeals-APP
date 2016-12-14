@@ -107,7 +107,13 @@ namespace Intel.MyDeals.Controllers.API
 				}
 	            string t8 = " " + OpLog.LogConfig.IsActive;
 				string t9 = OpLog.LogConfig.MsgSrc;
-				string t10 = MyDealsWebApiUrl.ROOT_URL;
+				string t10 = "OPLOG";
+				foreach (DbLogPerfMessage oplog in OpLog.testLogList)
+				{
+					t10 += " ... " + oplog.MSG;
+				}
+
+				string t11 = MyDealsWebApiUrl.ROOT_URL;
 
 				List<string> ret = new List<string>();
                 ret.Add("System.Environment.MachineName: " + t1);
@@ -119,7 +125,8 @@ namespace Intel.MyDeals.Controllers.API
 				ret.Add("OpCurrentConfig.CurrentURL: " + t7);
 				ret.Add("Log config is active:  " + t8);
 				ret.Add("Log config src: " + t9);
-				ret.Add("MyDealsWebApiUrl RootURL: " + t10);
+				ret.Add("OPLog: " + t10);
+				ret.Add("MyDealsWebApiUrl RootURL: " + t11);
 
 				return ret;
             }

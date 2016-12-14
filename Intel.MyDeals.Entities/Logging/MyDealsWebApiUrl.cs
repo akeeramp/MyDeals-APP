@@ -38,7 +38,7 @@ namespace Intel.MyDeals.Entities.Logging
 			}
 		}
 
-		private const string ROOT_SUB_PATH = "api/";
+		private const string ROOT_SUB_PATH = "/api/";
 		
 
 		// API paths
