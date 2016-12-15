@@ -40,6 +40,7 @@ namespace Intel.MyDeals.Entities.Logging
 				MachineName = machine_name;
 			}
 			MAX_LOGSTACK_SIZE = max_db_logstack;
+			OpLogPerfHelper.WireUpAppShutdown();
 		}
 
 		/// <summary>
