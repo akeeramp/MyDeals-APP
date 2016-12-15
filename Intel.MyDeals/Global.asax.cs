@@ -45,5 +45,10 @@ namespace Intel.MyDeals
             ((IController)controller).Execute(errCon.RequestContext);
         }
 
+
+	    protected void Application_End()
+	    {
+			OpLogPerf.OnShutdown();
+	    }
     }
 }
