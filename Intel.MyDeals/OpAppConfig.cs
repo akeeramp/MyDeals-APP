@@ -18,7 +18,7 @@ namespace Intel.MyDeals
 
 				// Entities' web API
 				MyDealsWebApiUrl.ROOT_URL = OpCurrentConfig.CurrentURL;
-				// TODO joisTODO: remove after localhost test is done
+				// TODO josiTODO: remove after localhost test is done
 				if (MyDealsWebApiUrl.ROOT_URL == "localhost")
 				{
 					MyDealsWebApiUrl.ROOT_URL += ":55490";
