@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using Intel.Opaque.DBAccess;
+using Microsoft.Win32;
 
 namespace Intel.MyDeals.Entities.Logging
 {
@@ -28,6 +29,7 @@ namespace Intel.MyDeals.Entities.Logging
 		public DbLogPerf()
 		{
 			FlushActions = new List<IAsyncResult>();
+			OpLogPerfHelper.WireUpAppShutdown();
 		}
 		
 		public DbLogPerf(string machine_name) : this(machine_name, DEFAULT_MAX_LOGSTACK_SIZE) { }
@@ -42,7 +44,7 @@ namespace Intel.MyDeals.Entities.Logging
 			MAX_LOGSTACK_SIZE = max_db_logstack;
 			OpLogPerfHelper.WireUpAppShutdown();
 		}
-
+		
 		/// <summary>
 		/// Determines if writer-specific (DB) logging is enabled and creates a DB writer if it is 
 		/// </summary>
@@ -225,14 +227,6 @@ namespace Intel.MyDeals.Entities.Logging
 		/// </summary>
 		public void OnShutdown()
 		{
-			// TODO: josiTODO: remove when onshutdown is confirmed working
-			if (LogStack.Count > 0)
-			{
-				DbLogPerfMessage test = LogStack.FirstOrDefault().Clone(255);
-				test.MSG = "OnShutdown TEST";
-				LogStack.Add(test);
-			}
-
 			Flush();
 
 			int max_flush_attempts = 10;
