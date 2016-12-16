@@ -46,6 +46,11 @@ namespace Intel.MyDeals
         }
 
 
+	    protected void Application_End()
+	    {
+			OpLogPerf.OnShutdown();
+	    }
+
 	    protected void Application_Disposed()
 	    {
 			OpLogPerf.OnShutdown();
