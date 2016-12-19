@@ -225,6 +225,8 @@ namespace Intel.MyDeals.Entities.Logging
 		/// <summary>
 		/// Attempts to flush data with timeout. See Flush function for more info.
 		/// </summary>
+		/// Note that the Web UI does not use this function due to its dependency on async calls to upload. 
+		/// The web UI instead uses the global.asx's Application_End function to upload files on Shutdown.
 		public void OnShutdown()
 		{
 			Flush();

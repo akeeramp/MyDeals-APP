@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using Intel.MyDeals.App;
+using Intel.MyDeals.BusinesssLogic;
 using Intel.MyDeals.Controllers;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.Entities.Logging;
@@ -45,15 +46,17 @@ namespace Intel.MyDeals
             ((IController)controller).Execute(errCon.RequestContext);
         }
 		
+
 	    protected void Application_End()
-	    {
-			OpLogPerf.OnShutdown();
-	    }
+		{
+			LoggingLib loglib = new LoggingLib();
 
-	    protected void Application_Disposed()
-	    {
-			OpLogPerf.OnShutdown();
+			// Upload db logs
+			foreach (DbLogPerf perf in OpLogPerf.GetTypedWriters<DbLogPerf>())
+			{
+				loglib.UploadDbLogPrefLogs(perf.LogStack);
+				perf.Clear();
+			}
 		}
-
 	}
 }
