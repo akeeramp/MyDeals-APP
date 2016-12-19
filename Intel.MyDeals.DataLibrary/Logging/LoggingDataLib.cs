@@ -105,8 +105,7 @@ namespace Intel.MyDeals.DataLibrary.Logging
 				Procs.dbo.PR_INS_DB_LOG_BULK cmd = new Procs.dbo.PR_INS_DB_LOG_BULK()
 				{
 					in_db_log = dt,
-					in_wwid = 11525392 //OpUserStack.MyOpUserToken.Usr.WWID 
-					// TODO josiTODO take out hard coded id... Ask about why default user has 123456 wwid :<
+					in_wwid = OpUserStack.MyOpUserToken.Usr.WWID 
 				};
 
 				DataAccess.ExecuteDataSet(cmd, null, out dsCheckConstraintErrors);
