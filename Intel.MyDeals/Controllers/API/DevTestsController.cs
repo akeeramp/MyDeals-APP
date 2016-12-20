@@ -107,8 +107,11 @@ namespace Intel.MyDeals.Controllers.API
 				}
 	            string t8 = " " + OpLog.LogConfig.IsActive;
 				string t9 = OpLog.LogConfig.MsgSrc;
+	            var t10 = OpLogPerf.WiredIntoAppShutdown;
 				string t11 = MyDealsWebApiUrl.ROOT_URL;
-
+	            var t12 = HttpContext.Current.Session;
+	            OpFileLogPerf test = new OpFileLogPerf();
+				var t13 = test.GetFullFilePath();
 				List<string> ret = new List<string>();
                 ret.Add("System.Environment.MachineName: " + t1);
                 ret.Add("HttpContext.Current.Server.MachineName: " + t2);
@@ -119,7 +122,9 @@ namespace Intel.MyDeals.Controllers.API
 				ret.Add("OpCurrentConfig.CurrentURL: " + t7);
 				ret.Add("Log config is active:  " + t8);
 				ret.Add("Log config src: " + t9);
+				ret.Add("WiredIntoAppShutdown: " + t10);
 				ret.Add("MyDealsWebApiUrl RootURL: " + t11);
+				ret.Add("FilePath: " + t13);
 
 				return ret;
             }
