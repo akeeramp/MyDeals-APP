@@ -119,6 +119,66 @@ namespace Intel.MyDeals.BusinesssLogic
             return GetProducts().Where(c => c.PRCSSR_NBR_SID == sid).ToList();
         }
 
+        /// <summary>
+        /// Get All Products By Specified Deal Product Type name
+        /// </summary>
+        /// <input>string name which is what will be filtered against (example: 'CPU')</input>
+        /// <returns>list of Product data containing specified Deal Product Type name</returns>
+        public List<Product> GetProductByDealProductTypeName(string name)
+        {
+            return GetProducts().Where(c => c.DEAL_PRD_TYPE.Contains(name)).ToList();
+        }
+
+        /// <summary>
+        /// Get All Products By Specified Deal Product Type SID
+        /// </summary>
+        /// <input>int sid which is what will be filtered against (example: 3)</input>
+        /// <returns>list of Product data matching specified Deal Product Type sid</returns>
+        public List<Product> GetProductByDealProductTypeSid(int sid)
+        {
+            return GetProducts().Where(c => c.DEAL_PRD_TYPE_SID == sid).ToList();
+        }
+
+        /// <summary>
+        /// Get All Products By Specified Deal Product Name Name
+        /// </summary>
+        /// <input>string name which is what will be filtered against (example: 'MKLWG')</input>
+        /// <returns>list of Product data containing specified Product family name</returns>
+        public List<Product> GetProductByDealProductName(string name)
+        {
+            return GetProducts().Where(c => c.DEAL_PRD_NM.Contains(name)).ToList();
+        }
+
+        /// <summary>
+        /// Get All Products By Specified Deal Product Name SID
+        /// </summary>
+        /// <input>int sid which is what will be filtered against (example: 46882)</input>
+        /// <returns>list of Product data matching specified Product family sid</returns>
+        public List<Product> GetProductByDealProductNameSid(int sid)
+        {
+            return GetProducts().Where(c => c.DEAL_PRD_NM_SID == sid).ToList();
+        }
+
+        /// <summary>
+        /// Get All Products By Specified Product Material Id Name
+        /// </summary>
+        /// <input>string name which is what will be filtered against (example: '892544')</input>
+        /// <returns>list of Product data containing specified Product Brand name</returns>
+        public List<Product> GetProductByMaterialIdName(string id)  //note: material "id" is a string? db pulling this as string instead of int?
+        {
+            return GetProducts().Where(c => c.MTRL_ID == id).ToList();
+        }
+
+        /// <summary>
+        /// Get All Products By Specified Product Material Id SID
+        /// </summary>
+        /// <input>int sid which is what will be filtered against (example: 4325)</input>
+        /// <returns>list of Product data matching specified Product Brand sid</returns>
+        public List<Product> GetProductByMaterialIdSid(int sid)
+        {
+            return GetProducts().Where(c => c.MTRL_ID_SID == sid).ToList();
+        }
+
         #endregion
     }
 }

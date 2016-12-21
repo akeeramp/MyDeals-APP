@@ -5,10 +5,11 @@ using Intel.MyDeals.Entities;
 
 namespace Intel.MyDeals.Controllers.API
 {
+    [RoutePrefix("api/Others")]
     public class PocController : ApiController
     {
         [Authorize]
-        [Route("api/Others/GetPocEmp")]
+        [Route("GetPocEmp")]
         public IEnumerable<PocEmp> GetPocEmp()
         {
             return new PocLib().GetPocEmp();
@@ -16,7 +17,7 @@ namespace Intel.MyDeals.Controllers.API
 
         [Authorize]
         [HttpPost]
-        [Route("api/Others/SetPocEmp")]
+        [Route("SetPocEmp")]
         public void SetPocEmp(PocEmp pocEmp)
         {
             new PocLib().SetPocEmp(pocEmp);
@@ -24,7 +25,7 @@ namespace Intel.MyDeals.Controllers.API
 
         [Authorize]
         [HttpGet]
-        [Route("api/Others/DelPocEmp/{empSid}")]
+        [Route("DelPocEmp/{empSid}")]
         public void DelPocEmp(int empSid)
         {
             new PocLib().DelPocEmp(empSid);

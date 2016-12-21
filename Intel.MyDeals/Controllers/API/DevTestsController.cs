@@ -11,12 +11,13 @@ using Intel.MyDeals.Entities.Logging;
 
 namespace Intel.MyDeals.Controllers.API
 {
+    [RoutePrefix("api/DevTests")]
     public class DevTestsController : ApiController
     {
         OpCore op = OpAppConfig.Init();
 
         [Authorize]
-        [Route("api/DevTests/GetDBTest")]
+        [Route("GetDBTest")]
         public Dictionary<string, string> GetDBTest()
         {
             OpUserToken user = AppLib.InitAVM(op);
@@ -30,7 +31,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("api/DevTests/GetCSharpAPIException")]
+        [Route("GetCSharpAPIException")]
         public string GetCSharpAPIException()
         {
             try
@@ -46,7 +47,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("api/DevTests/GetCSharpException")]
+        [Route("GetCSharpException")]
         public string GetCSharpException()
         {
             try
@@ -62,7 +63,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("api/DevTests/GetSQLException")]
+        [Route("GetSQLException")]
         public string GetSQLException()
         {
             try
@@ -77,7 +78,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("api/DevTests/GetClientHostTest")]
+        [Route("GetClientHostTest")]
         public IEnumerable<string> GetClientHostTest()
         {
             try

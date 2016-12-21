@@ -9,12 +9,13 @@ using System.Net;
 namespace Intel.MyDeals.Controllers.API
 {
     //TODO: Once security is implemented, we want to add it to these api controllers to ensure only the correct users are allowed to get customer information.
+    [RoutePrefix("api/Customers")]
     public class CustomersController : ApiController
     {
         OpCore op = OpAppConfig.Init();
 
         [Authorize]
-        [Route("api/Customers/GetCustomers")]
+        [Route("GetCustomers")]
         public IEnumerable<CustomerDivision> GetCustomerDivisions()
         {
             try
@@ -29,7 +30,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("api/Customers/GetActiveCustomers")]
+        [Route("GetActiveCustomers")]
         public IEnumerable<CustomerDivision> GetActiveCustomers()
         {
             try
@@ -44,7 +45,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("api/Customers/GetCustomerByCategory")]
+        [Route("GetCustomerByCategory")]
         public IEnumerable<CustomerDivision> GetCustomerByCategory(string cat)
         {
             try
@@ -59,7 +60,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("api/Customers/GetCustomerByGeo")]
+        [Route("GetCustomerByGeo")]
         public IEnumerable<CustomerDivision> GetCustomerByGep(string geo)
         {
             try
@@ -74,7 +75,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("api/Customers/GetCustomerByType")]
+        [Route("GetCustomerByType")]
         public IEnumerable<CustomerDivision> GetCustomerByType(string type)
         {
             try
@@ -89,7 +90,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("api/Customers/GetMyCustomers")]
+        [Route("GetMyCustomers")]
         public MyCustomerDetailsWrapper GetMyCustomers()
         {
             try
@@ -104,7 +105,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("api/Customers/GetMyCustomersInfo")]
+        [Route("GetMyCustomersInfo")]
         public List<MyCustomersInformation> GetMyCustomersInfo()
         {
             try
@@ -119,7 +120,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("api/Customers/GetMyCustomersSoldTo")]
+        [Route("GetMyCustomersSoldTo")]
         public List<MyCustomersSoldTo> GetMyCustomersSoldTo()
         {
             try

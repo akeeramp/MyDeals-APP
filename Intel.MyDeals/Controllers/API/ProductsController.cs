@@ -9,12 +9,13 @@ using System.Net;
 namespace Intel.MyDeals.Controllers.API
 {
     //TODO: Once security is implemented, we want to add it to these api controllers to ensure only the correct users are allowed to get Product information?
+    [RoutePrefix("api/Products")]
     public class ProductsController : ApiController
     {
         OpCore op = OpAppConfig.Init();
 
         [Authorize]
-        [Route("api/Products/GetProducts")]
+        [Route("GetProducts")]
         public IEnumerable<Product> GetProducts()
         {
             try
@@ -29,7 +30,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("api/Products/GetProduct")]
+        [Route("GetProduct")]
         public Product GetProduct(int sid)
         {
             try
@@ -44,7 +45,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("api/Products/GetActiveProducts")]
+        [Route("GetActiveProducts")]
         public IEnumerable<Product> GetActiveProducts()
         {
             try
@@ -59,7 +60,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("api/Products/GetProductByCategoryName")]
+        [Route("GetProductByCategoryName")]
         public IEnumerable<Product> GetProductByCategoryName(string name)   //searches for products with category that contains string 'name'
         {
             try
@@ -74,7 +75,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("api/Products/GetProductByCategorySid")]
+        [Route("GetProductByCategorySid")]
         public IEnumerable<Product> GetProductByCategorySid(int sid)   //searches for products with category that matches int 'sid'
         {
             try
@@ -89,7 +90,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("api/Products/GetProductByFamilyName")]
+        [Route("GetProductByFamilyName")]
         public IEnumerable<Product> GetProductByFamilyName(string name)   //searches for products with family that contains string 'name'
         {
             try
@@ -104,7 +105,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("api/Products/GetProductByFamilySid")]
+        [Route("GetProductByFamilySid")]
         public IEnumerable<Product> GetProductByFamilySid(int sid)   //searches for products with family that matches int 'sid'
         {
             try
@@ -119,7 +120,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("api/Products/GetProductByBrandName")]
+        [Route("GetProductByBrandName")]
         public IEnumerable<Product> GetProductByBrandName(string name)   //searches for products with Brand that contains string 'name'
         {
             try
@@ -134,7 +135,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("api/Products/GetProductByBrandSid")]
+        [Route("GetProductByBrandSid")]
         public IEnumerable<Product> GetProductByBrandSid(int sid)   //searches for products with Brand that matches int 'sid'
         {
             try
@@ -149,7 +150,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("api/Products/GetProductByProcessorNumberName")]
+        [Route("GetProductByProcessorNumberName")]
         public IEnumerable<Product> GetProductByProcessorNumberName(string name)   //searches for products with ProcessorNumber that contains string 'name'
         {
             try
@@ -164,12 +165,102 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("api/Products/GetProductByProcessorNumberSid")]
+        [Route("GetProductByProcessorNumberSid")]
         public IEnumerable<Product> GetProductByProcessorNumberSid(int sid)   //searches for products with ProcessorNumber that matches int 'sid'
         {
             try
             {
                 return new ProductsLib().GetProductByProcessorNumberSid(sid);
+            }
+            catch (Exception ex)
+            {
+                OpLog.HandleException(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+            }
+        }
+
+        [Authorize]
+        [Route("GetProductByDealProductName/{name}")]
+        public IEnumerable<Product> GetProductByDealProductName(string name)   //searches for products with DealProduct that contains string 'name'
+        {
+            try
+            {
+                return new ProductsLib().GetProductByDealProductName(name);
+            }
+            catch (Exception ex)
+            {
+                OpLog.HandleException(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+            }
+        }
+
+        [Authorize]
+        [Route("GetProductByDealProductSid/{sid}")]
+        public IEnumerable<Product> GetProductByDealProductSid(int sid)   //searches for products with DealProduct that matches int 'sid'
+        {
+            try
+            {
+                return new ProductsLib().GetProductByDealProductNameSid(sid);
+            }
+            catch (Exception ex)
+            {
+                OpLog.HandleException(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+            }
+        }
+
+        [Authorize]
+        [Route("GetProductByDealProductTypeName/{name}")]
+        public IEnumerable<Product> GetProductByDealProductTypeName(string name)   //searches for products with DealProductType that contains string 'name'
+        {
+            try
+            {
+                return new ProductsLib().GetProductByDealProductTypeName(name);
+            }
+            catch (Exception ex)
+            {
+                OpLog.HandleException(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+            }
+        }
+
+        [Authorize]
+        [Route("GetProductByDealProductTypeSid/{sid}")]
+        public IEnumerable<Product> GetProductByDealProductTypeSid(int sid)   //searches for products with DealProductType that matches int 'sid'
+        {
+            try
+            {
+                return new ProductsLib().GetProductByDealProductTypeSid(sid);
+            }
+            catch (Exception ex)
+            {
+                OpLog.HandleException(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+            }
+        }
+
+        [Authorize]
+        [Route("GetProductByMaterialIdName/{name}")]
+        public IEnumerable<Product> GetProductByMaterialIdName(string name)   //searches for products with MaterialId that matches string 'name'
+        {
+            try
+            {
+                return new ProductsLib().GetProductByMaterialIdName(name);
+            }
+            catch (Exception ex)
+            {
+                OpLog.HandleException(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+            }
+        }
+
+        [Authorize]
+        [Route("GetProductByMaterialIdSid/{sid}")]
+        public IEnumerable<Product> GetProductByMaterialIdSid(int sid)   //searches for products with MaterialId that matches int 'sid'
+        {
+            try
+            {
+                return new ProductsLib().GetProductByMaterialIdSid(sid);
             }
             catch (Exception ex)
             {

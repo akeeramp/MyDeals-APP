@@ -106,6 +106,54 @@ namespace Intel.MyDeals.BusinessLogic.Test
             Assert.IsTrue(results.Any() && results.Where(r => r.PRCSSR_NBR_SID == sid).Count() == results.Count());
         }
 
+        [TestMethod]
+        public void ProductsGetByDealProductTypeName()
+        {
+            string name = "CPU"; //TODO: replace with test data value
+            IEnumerable<Product> results = new ProductsLib().GetProductByDealProductTypeName(name);
+            Assert.IsTrue(results.Any() && results.Where(r => r.DEAL_PRD_TYPE.Contains(name)).Count() == results.Count());
+        }
+
+        [TestMethod]
+        public void ProductsGetByDealProductTypeSid()
+        {
+            int sid = 3; //TODO: replace with test data value
+            IEnumerable<Product> results = new ProductsLib().GetProductByDealProductTypeSid(sid);
+            Assert.IsTrue(results.Any() && results.Where(r => r.DEAL_PRD_TYPE_SID == sid).Count() == results.Count());
+        }
+
+        [TestMethod]
+        public void ProductsGetByDealProductName()
+        {
+            string name = "MKLWG"; //TODO: replace with test data value
+            IEnumerable<Product> results = new ProductsLib().GetProductByDealProductName(name);
+            Assert.IsTrue(results.Any() && results.Where(r => r.DEAL_PRD_NM.Contains(name)).Count() == results.Count());
+        }
+
+        [TestMethod]
+        public void ProductsGetByDealProductNameSid()
+        {
+            int sid = 46882; //TODO: replace with test data value
+            IEnumerable<Product> results = new ProductsLib().GetProductByDealProductNameSid(sid);
+            Assert.IsTrue(results.Any() && results.Where(r => r.DEAL_PRD_NM_SID == sid).Count() == results.Count());
+        }
+
+        [TestMethod]
+        public void ProductsGetByMaterialIdName()
+        {
+            string name = "892544"; //TODO: replace with test data value
+            IEnumerable<Product> results = new ProductsLib().GetProductByMaterialIdName(name);
+            Assert.IsTrue(results.Any() && results.Where(r => r.MTRL_ID.Contains(name)).Count() == results.Count());
+        }
+
+        [TestMethod]
+        public void ProductsGetByMaterialIdSid()
+        {
+            int sid = 4325; //TODO: replace with test data value
+            IEnumerable<Product> results = new ProductsLib().GetProductByMaterialIdSid(sid);
+            Assert.IsTrue(results.Any() && results.Where(r => r.MTRL_ID_SID == sid).Count() == results.Count());
+        }
+
         #endregion
 
     }

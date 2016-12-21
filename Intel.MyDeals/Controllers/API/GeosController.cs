@@ -9,12 +9,13 @@ using System.Net;
 namespace Intel.MyDeals.Controllers.API
 {
     //TODO: Once security is implemented, we want to add it to these api controllers to ensure only the correct users are allowed to get geo information?
+    [RoutePrefix("api/Geos")]
     public class GeosController : ApiController
     {
         OpCore op = OpAppConfig.Init();
 
         [Authorize]
-        [Route("api/Geos/GetGeos")]
+        [Route("GetGeos")]
         public IEnumerable<GeoDimension> GetGeoDimensions()
         {
             try
@@ -29,7 +30,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("api/Geos/GetGeo")]
+        [Route("GetGeo")]
         public GeoDimension GetGeoDimension(int sid)
         {
             try
@@ -44,7 +45,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("api/Geos/GetActiveGeos")]
+        [Route("GetActiveGeos")]
         public IEnumerable<GeoDimension> GetActiveGeos()
         {
             try
@@ -59,7 +60,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("api/Geos/GetGeoByGeoName")]
+        [Route("GetGeoByGeoName")]
         public IEnumerable<GeoDimension> GetGeoByGeoName(string name)
         {
             try
@@ -74,7 +75,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("api/Geos/GetGeoByGeoSid")]
+        [Route("GetGeoByGeoSid")]
         public IEnumerable<GeoDimension> GetGeoByGeoSid(int sid)
         {
             try
@@ -89,7 +90,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("api/Geos/GetGeoByRegionName")]
+        [Route("GetGeoByRegionName")]
         public IEnumerable<GeoDimension> GetGeoByRegionName(string name)
         {
             try
@@ -104,7 +105,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("api/Geos/GetGeoByRegionSid")]
+        [Route("GetGeoByRegionSid")]
         public IEnumerable<GeoDimension> GetGeoByRegionSid(int sid)
         {
             try
@@ -119,7 +120,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("api/Geos/GetGeoByCountryName")]
+        [Route("GetGeoByCountryName")]
         public IEnumerable<GeoDimension> GetGeoByCountryName(string name)
         {
             try
@@ -134,7 +135,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("api/Geos/GetGeoByCountrySid")]
+        [Route("GetGeoByCountrySid")]
         public IEnumerable<GeoDimension> GetGeoByCountrySid(int sid)
         {
             try
