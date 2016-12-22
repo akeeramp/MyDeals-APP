@@ -26,7 +26,7 @@ namespace Intel.MyDeals
             AppHelper.SetupDataAccessLib();
 
 			// Init log writers
-			OpLogPerfHelper.InitWriters("DEBUG:DB:EVENTLOG:FILE");
+			OpLogPerfHelper.InitWriters("DEBUG:DB:EVENTLOG:FILE:EMAILEX");
 		}
 
 

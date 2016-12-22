@@ -15,6 +15,7 @@ namespace Intel.MyDeals
 			{
 				// Logging 
 				OpLog.LogConfig = new LoggingLib().GetLogConfig();
+				OpLogPerf.Enabled = OpLog.LogConfig.IsActive;
 
 				// Entities' web API
 				MyDealsWebApiUrl.ROOT_URL = OpCurrentConfig.CurrentURL;
@@ -35,7 +36,7 @@ namespace Intel.MyDeals
 		public static OpCore Init()
         {
             try
-            {
+			{
 				// Check if OpCore has already been created
 				if (OpCore.Instance != null) return OpCore.Instance;
 

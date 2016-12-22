@@ -19,11 +19,17 @@ namespace Intel.MyDeals.Entities
         private static string ToEmailList = "philip.w.eckenroth@intel.com"; // TODO: this shoud be read from an environment aware constants config setup
         private static string FromEmail = "MyDealsSupport@intel.com";
 
-        private static List<OpLogItem> _logStack = new List<OpLogItem>();		
-		
-        #region Constants
+        private static List<OpLogItem> _logStack = new List<OpLogItem>();
 
-        private static class LogConsts
+		public static string GetEnv()
+		{
+			// Get the tools environment
+			return OpAppToken?.OpEnvironment?.EnvLoc == null ? "UNKNOWN" : OpAppToken.OpEnvironment.EnvLoc.Location;
+		}
+
+		#region Constants
+
+		private static class LogConsts
         {
             public const string DefaultStatusMsg = "UNKNOWN Logging Event";
             public const string DefaultDetailMsg = "UNKNOWN Detailed Status";
@@ -170,6 +176,8 @@ namespace Intel.MyDeals.Entities
                 WWID = opUserToken.Usr.WWID.ToString()
             };
 
+			OpLogPerf.Log(statusMsg + detailMsg);
+
             // Add log item to stack
             AddLogItem(logItem);
 
@@ -190,7 +198,7 @@ namespace Intel.MyDeals.Entities
         /// </summary>
         /// <param name="opUserToken"></param>
         /// <returns></returns>
-        private static OpUserToken EnsurePopulated(this OpUserToken opUserToken)
+        public static OpUserToken EnsurePopulated(this OpUserToken opUserToken)
         {
             if (opUserToken == null) opUserToken = new OpUserToken();
 

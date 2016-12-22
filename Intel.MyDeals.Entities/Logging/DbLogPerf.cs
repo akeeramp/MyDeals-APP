@@ -13,7 +13,7 @@ namespace Intel.MyDeals.Entities.Logging
 	public class DbLogPerf : IOpLogPerf
 	{
 		private const int MAX_MESSAGE_SIZE = 255;
-		private const int DEFAULT_MAX_LOGSTACK_SIZE = 30;
+		private const int DEFAULT_MAX_LOGSTACK_SIZE = 300;
 		private const int MAX_LOGSTACK_MESSAGE_SID = (1024 * 1024);
 		private int MAX_LOGSTACK_SIZE = DEFAULT_MAX_LOGSTACK_SIZE;
 		private static object LOCK_OBJECT = new object();
@@ -82,16 +82,13 @@ namespace Intel.MyDeals.Entities.Logging
 
 		public void Log(OpLogPerfMessage msg)
 		{
-			if (!OpLog.LogConfig.IsActive)
-			{
-				return;
-			}
 			// Change the OPLogPerfMessage into a DbLogPerfMessage, which essentially renames columns and add new columns that the db expects
 			Log(new DbLogPerfMessage(msg));
 		}
 
 		public void Log(DbLogPerfMessage msg)
 		{
+
 			lock (LOCK_OBJECT)
 			{
 				// Add more details to log
@@ -117,7 +114,7 @@ namespace Intel.MyDeals.Entities.Logging
 				Flush();
 			}
 		}
-
+		
 		/// <summary>
 		/// Clear the log stack
 		/// </summary>

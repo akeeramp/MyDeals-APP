@@ -23,9 +23,12 @@ namespace Intel.MyDeals.Entities.Logging
 			this.LOG_DTM = msg.MessageTime;
 			this.MTHD = msg.CallingMethod;
 			this.MSG = msg.Message;
-			this.STRT_DTM = msg.MessageTime.ToUniversalTime();
-			// HACK: We calcuate the previous time because we can't access the Opaque.OpLogPer's private prevousMessageTime. Maybe find a better way for this in the future. 
-			this.END_DTM = msg.MessageTime.AddMilliseconds(msg.DeltaMs);
+
+			// HACK: Note that the prev message time is essentially the previous log's end time. 
+			// Because of this, the calculated times are not foolproof. A user could go away and come back
+			// after grabbing a cup of coffee and the log's start time may be wrong.
+			this.STRT_DTM = msg.PreviousMessageTime; 
+			this.END_DTM = msg.MessageTime.ToUniversalTime();
 			this.THRD_ID = msg.ThreadID;
 			this.ERR_MSG = msg.IsError;
 			this.MTHD = msg.CallingMethod;
