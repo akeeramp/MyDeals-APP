@@ -12,7 +12,7 @@ namespace Intel.MyDeals.Areas.Admin.Controllers.API
         [Authorize]
         [HttpGet]
         [Route("api/AdminConstants/v1/GetConstants")]
-        [CacheOutput(ClientTimeSpan = 50000, ServerTimeSpan = 50000)]
+        [CacheOutput(ServerTimeSpan = 50000)]
         public IQueryable<AdminConstant> GetConstants()
         {
             return new ConstantsLookupsLib().GetAdminConstants().AsQueryable();

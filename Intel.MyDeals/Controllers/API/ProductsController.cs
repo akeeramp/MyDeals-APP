@@ -60,12 +60,12 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("GetProductByCategoryName")]
-        public IEnumerable<Product> GetProductByCategoryName(string name)   //searches for products with category that contains string 'name'
+        [Route("GetProductByCategoryName/{name}/{getCachedResult:bool?}")]
+        public IEnumerable<Product> GetProductByCategoryName(string name, bool getCachedResult = true)   //searches for products with category that contains string 'name'
         {
             try
             {
-                return new ProductsLib().GetProductByCategoryName(name);
+                return new ProductsLib().GetProductByCategoryName(name, getCachedResult);
             }
             catch (Exception ex)
             {
@@ -75,7 +75,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("GetProductByCategorySid")]
+        [Route("GetProductByCategorySid/{sid}")]
         public IEnumerable<Product> GetProductByCategorySid(int sid)   //searches for products with category that matches int 'sid'
         {
             try
@@ -90,7 +90,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("GetProductByFamilyName")]
+        [Route("GetProductByFamilyName/{name}")]
         public IEnumerable<Product> GetProductByFamilyName(string name)   //searches for products with family that contains string 'name'
         {
             try
@@ -105,7 +105,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("GetProductByFamilySid")]
+        [Route("GetProductByFamilySid/{sid}")]
         public IEnumerable<Product> GetProductByFamilySid(int sid)   //searches for products with family that matches int 'sid'
         {
             try
@@ -120,7 +120,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("GetProductByBrandName")]
+        [Route("GetProductByBrandName/{name}")]
         public IEnumerable<Product> GetProductByBrandName(string name)   //searches for products with Brand that contains string 'name'
         {
             try
@@ -135,7 +135,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("GetProductByBrandSid")]
+        [Route("GetProductByBrandSid/{sid}")]
         public IEnumerable<Product> GetProductByBrandSid(int sid)   //searches for products with Brand that matches int 'sid'
         {
             try
@@ -150,7 +150,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("GetProductByProcessorNumberName")]
+        [Route("GetProductByProcessorNumberName/{name}")]
         public IEnumerable<Product> GetProductByProcessorNumberName(string name)   //searches for products with ProcessorNumber that contains string 'name'
         {
             try
@@ -165,7 +165,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("GetProductByProcessorNumberSid")]
+        [Route("GetProductByProcessorNumberSid/{sid}")]
         public IEnumerable<Product> GetProductByProcessorNumberSid(int sid)   //searches for products with ProcessorNumber that matches int 'sid'
         {
             try

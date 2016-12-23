@@ -14,13 +14,18 @@ namespace Intel.MyDeals.Controllers.API
     {
         OpCore op = OpAppConfig.Init();
 
+        /// <summary>
+        /// Get All Customer Divisions
+        /// </summary>
+        /// <param name="getCachedResult">When set to false read request is coming from Admin screens</param>
+        /// <returns></returns>
         [Authorize]
-        [Route("GetCustomers")]
-        public IEnumerable<CustomerDivision> GetCustomerDivisions()
+        [Route("GetCustomers/{getCachedResult:bool?}")]
+        public IEnumerable<CustomerDivision> GetCustomerDivisions(bool getCachedResult = true)
         {
             try
             {
-                return new CustomerLib().GetCustomerDivisions();
+                return new CustomerLib().GetCustomerDivisions(getCachedResult);
             }
             catch (Exception ex)
             {
@@ -45,12 +50,12 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("GetCustomerByCategory")]
-        public IEnumerable<CustomerDivision> GetCustomerByCategory(string cat)
+        [Route("GetCustomerByCategory/{category}")]
+        public IEnumerable<CustomerDivision> GetCustomerByCategory(string category)
         {
             try
             {
-                return new CustomerLib().GetCustomerDivisionsByCategory(cat);
+                return new CustomerLib().GetCustomerDivisionsByCategory(category);
             }
             catch (Exception ex)
             {
@@ -60,7 +65,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("GetCustomerByGeo")]
+        [Route("GetCustomerByGeo/{geo}")]
         public IEnumerable<CustomerDivision> GetCustomerByGep(string geo)
         {
             try
@@ -75,7 +80,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("GetCustomerByType")]
+        [Route("GetCustomerByType/{type}")]
         public IEnumerable<CustomerDivision> GetCustomerByType(string type)
         {
             try

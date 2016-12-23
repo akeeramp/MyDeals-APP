@@ -150,7 +150,7 @@ namespace Intel.MyDeals.DataLibrary
         ////////}
         ////////private static List<OpAtrbMap> _getOpAtrbMapItems;
 
-        public static List<GeoDimension> GetGeoDimensions()
+        public static List<GeoDimension> GetGeoData()
         {
             lock (LOCK_OBJECT ?? new object())
             {
@@ -368,7 +368,7 @@ namespace Intel.MyDeals.DataLibrary
         ////////}
         ////////private static List<UIType> _getUITypes;
 
-        public static List<Product> GetProducts()
+        public static List<Product> GetProductData()
         {
             lock (LOCK_OBJECT ?? new object())
             {

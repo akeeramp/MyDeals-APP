@@ -10,13 +10,20 @@ namespace Intel.MyDeals.BusinesssLogic
     public class CustomerLib
     {
         #region Customer Divisions
-
         /// <summary>
         /// Get All Customer Divisions
         /// </summary>
-        /// <returns>list of customer division data</returns>
-        public List<CustomerDivision> GetCustomerDivisions()
+        /// <param name="getCachedResult">When set to false read
+        /// request is coming from Admin screens by pass cached data
+        /// </param>
+        /// <returns>list of customer division data<</returns>
+        public List<CustomerDivision> GetCustomerDivisions(bool getCachedResult = true)
         {
+            if (!getCachedResult)
+            {
+                return new CustomerDataLib().GetCustomerDivisions();
+            }
+
             return DataCollections.GetCustomerDivisions();
         }
 

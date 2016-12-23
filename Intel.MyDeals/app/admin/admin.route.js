@@ -39,6 +39,33 @@
                 }
             },
             {
+                state: 'admin.customers',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/customer/customer.html',
+                    url: 'customers',
+                    controller: 'CustomerController as vm',
+                }
+            },
+            {
+                state: 'admin.geo',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/geo/geo.html',
+                    url: 'geo',
+                    controller: 'GeoController as vm',
+                }
+            },
+            {
+                state: 'admin.products',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/products/products.html',
+                    url: 'products',
+                    controller: 'ProductController as vm',
+                }
+            },
+            {
                 state: 'admin.securityAttributes',
                 config: {
                     abstract: false

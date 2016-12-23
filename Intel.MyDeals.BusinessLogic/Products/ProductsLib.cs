@@ -15,9 +15,13 @@ namespace Intel.MyDeals.BusinesssLogic
         /// Get All Products
         /// </summary>
         /// <returns>list of Product data</returns>
-        public List<Product> GetProducts()
+        public List<Product> GetProducts(bool getCachedResult = true)
         {
-            return DataCollections.GetProducts();
+            if (!getCachedResult)
+            {
+                new ProductDataLib().GetProducts();
+            }
+            return DataCollections.GetProductData();
         }
 
         /// <summary>
@@ -44,8 +48,12 @@ namespace Intel.MyDeals.BusinesssLogic
         /// </summary>
         /// <input>string name which is what will be filtered against (example: 'NAND')</input>
         /// <returns>list of Product data containing specified Product category name</returns>
-        public List<Product> GetProductByCategoryName(string name)
+        public List<Product> GetProductByCategoryName(string name, bool getCachedResult = true)
         {
+            if (!getCachedResult)
+            {
+                return GetProducts(getCachedResult).Where(c => c.PRD_CATGRY_NM.Contains(name)).ToList();
+            }
             return GetProducts().Where(c => c.PRD_CATGRY_NM.Contains(name)).ToList();
         }
 

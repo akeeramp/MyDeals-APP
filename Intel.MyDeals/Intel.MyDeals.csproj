@@ -268,6 +268,15 @@
     <Content Include="app\admin\constants\constants.html" />
     <Content Include="app\admin\cache\cache.service.js" />
     <Content Include="app\admin\constants\constants.service.js" />
+    <Content Include="app\admin\customer\admin.customer.controller.js" />
+    <Content Include="app\admin\customer\customer.html" />
+    <Content Include="app\admin\customer\customer.service.js" />
+    <Content Include="app\admin\geo\admin.geo.controller.js" />
+    <Content Include="app\admin\geo\geo.html" />
+    <Content Include="app\admin\geo\geo.service.js" />
+    <Content Include="app\admin\products\admin.products.controller.js" />
+    <Content Include="app\admin\products\products.html" />
+    <Content Include="app\admin\products\products.service.js" />
     <Content Include="app\app.module.js" />
     <Content Include="app\blocks\exception\exception-handler.provider.js" />
     <Content Include="app\blocks\exception\exception.js" />

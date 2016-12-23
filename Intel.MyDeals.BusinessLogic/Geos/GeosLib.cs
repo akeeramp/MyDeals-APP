@@ -12,10 +12,17 @@ namespace Intel.MyDeals.BusinesssLogic
         /// <summary>
         /// Get All Geo Dimensions
         /// </summary>
+        /// <param name="getCachedResult">When set to false read
+        /// request is coming from Admin screens by pass cached data
+        /// </param>
         /// <returns>list of Geo Dimension data</returns>
-        public List<GeoDimension> GetGeoDimensions()
+        public List<GeoDimension> GetGeoDimensions(bool getCachedResult = true)
         {
-            return DataCollections.GetGeoDimensions();
+            if (!getCachedResult)
+            {
+                new GeoDataLib().GetGeoDimensions();
+            }
+            return DataCollections.GetGeoData();
         }
 
         /// <summary>
