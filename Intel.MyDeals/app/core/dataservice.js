@@ -30,10 +30,10 @@
             return $http.post(apiUrl, dto).then(successCallback, errorCallback);
         }
 
-        function Delete(apiUr, successCallback, errorCallbackl) {
-            return $http.delete(apiUrl).then(successCallback, errorCallback);            
+        function Delete(apiUrl, successCallback, errorCallbackl) {
+            return $http.delete(apiUrl).then(successCallback, errorCallback);
         }
 
-        return service;       
+        return service;
     }
 })();
