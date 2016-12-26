@@ -1,20 +1,13 @@
-﻿using Intel.MyDeals.App;
-using System.Web.Http;
-using Intel.Opaque;
+﻿using System.Web.Http;
 using Intel.MyDeals.Entities;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Net.Http;
 using Intel.MyDeals.BusinesssLogic;
-using Newtonsoft.Json;
 
-namespace Intel.MyDeals.Controllers
+namespace Intel.MyDeals.Controllers.API
 {
     [RoutePrefix("api/SecurityAttributes")]
-    public class SecurityAttributesAPIController : ApiController
-	{
+    public class SecurityAttributesAPIController : BaseApiController
+    {
 		#region SecurityActions
 		[HttpGet]
 		[Route("GetSecurityActions")]

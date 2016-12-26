@@ -6,6 +6,7 @@ using WebApi.OutputCache.V2;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net;
+using Intel.MyDeals.ActionFilters;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -25,6 +26,8 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Route("api/Cache/v1/GetCacheClear/{cacheName}")]
+        //This attribute usage makes delete cache enabled only for developers
+        [ApiAuthorize(AuthorizeDeveloper = true)]
         public bool GetCacheClear(string cacheName)
         {
             return new CacheLib().ClearCache(cacheName);

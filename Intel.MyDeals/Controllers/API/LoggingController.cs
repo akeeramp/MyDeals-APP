@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Web.Http;
-using System.Runtime.Serialization;
-using Intel.MyDeals.BusinessLogic;
 using Intel.MyDeals.BusinesssLogic;
-using Intel.MyDeals.Entities;
 using Intel.MyDeals.Entities.Logging;
 using Intel.Opaque;
 
 namespace Intel.MyDeals.Controllers.API
 {
-    public class LoggingController : ApiController 
+    public class LoggingController : BaseApiController
 	{
 		/// <summary>
 		///  Upload Logging data to database
@@ -18,7 +14,7 @@ namespace Intel.MyDeals.Controllers.API
 		/// <param name="data"> A Json object consisting of DbLogPerfMessages </param>
 		[HttpPost]
 		[Route("api/Logging/UploadLogPrefLogs")]
-		public void UploadLogPrefLogs([FromBody]dynamic data) 
+		public void UploadLogPrefLogs([FromBody]dynamic data)
 		{
 			try
 			{
@@ -41,7 +37,7 @@ namespace Intel.MyDeals.Controllers.API
 		/// <param name="message"> A string which will be logged </param>
 		[HttpPost]
 		[Route("api/Logging/UploadLogMessage")]
-		public void UploadLogMessage(String message) 
+		public void UploadLogMessage(String message)
 		{
 			OpLogPerf.Log(message);
 		}

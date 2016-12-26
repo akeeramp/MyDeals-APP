@@ -10,10 +10,8 @@ namespace Intel.MyDeals.Controllers.API
 {
     //TODO: Once security is implemented, we want to add it to these api controllers to ensure only the correct users are allowed to get Product information?
     [RoutePrefix("api/Products")]
-    public class ProductsController : ApiController
+    public class ProductsController : BaseApiController
     {
-        OpCore op = OpAppConfig.Init();
-
         [Authorize]
         [Route("GetProducts")]
         public IEnumerable<Product> GetProducts()

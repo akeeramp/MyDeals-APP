@@ -12,10 +12,8 @@ using Intel.MyDeals.Entities.Logging;
 namespace Intel.MyDeals.Controllers.API
 {
     [RoutePrefix("api/DevTests")]
-    public class DevTestsController : ApiController
+    public class DevTestsController : BaseApiController
     {
-        OpCore op = OpAppConfig.Init();
-
         [Authorize]
         [Route("GetDBTest")]
         public Dictionary<string, string> GetDBTest()
@@ -59,7 +57,7 @@ namespace Intel.MyDeals.Controllers.API
                 OpLog.HandleException(ex);
                 throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
-            
+
         }
 
         [Authorize]

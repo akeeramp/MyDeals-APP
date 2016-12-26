@@ -2,7 +2,7 @@
 
 namespace Intel.MyDeals.Controllers
 {
-    public class ErrorController : Controller
+    public class ErrorController : BaseController
     {
         public ActionResult Index()
         {

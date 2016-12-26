@@ -2,7 +2,6 @@
 using System.Web.Http;
 using Intel.MyDeals.BusinesssLogic;
 using Intel.MyDeals.Entities;
-using Intel.Opaque;
 using System;
 using System.Net;
 
@@ -10,10 +9,8 @@ namespace Intel.MyDeals.Controllers.API
 {
     //TODO: Once security is implemented, we want to add it to these api controllers to ensure only the correct users are allowed to get geo information?
     [RoutePrefix("api/Geos")]
-    public class GeosController : ApiController
+    public class GeosController : BaseApiController
     {
-        OpCore op = OpAppConfig.Init();
-
         /// <summary>
         ///
         /// </summary>

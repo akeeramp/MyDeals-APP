@@ -8,7 +8,7 @@ namespace Intel.MyDeals.Controllers.API
 {
 
     [RoutePrefix("api/CustomerCalendar")]
-    public class CustomerCalendarController : ApiController
+    public class CustomerCalendarController : BaseApiController
     {
         /// <summary>
         /// Get customer quarter start date and end date details

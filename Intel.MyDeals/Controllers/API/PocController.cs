@@ -6,7 +6,7 @@ using Intel.MyDeals.Entities;
 namespace Intel.MyDeals.Controllers.API
 {
     [RoutePrefix("api/Others")]
-    public class PocController : ApiController
+    public class PocController : BaseApiController
     {
         [Authorize]
         [Route("GetPocEmp")]

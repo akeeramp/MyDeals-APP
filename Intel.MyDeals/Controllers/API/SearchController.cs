@@ -1,12 +1,6 @@
-using System.Web.Http;
-using Intel.MyDeals.App;
-using Intel.MyDeals.BusinesssLogic;
-using Intel.MyDeals.Entities;
-using Intel.Opaque;
-
 namespace Intel.MyDeals.Controllers.API
 {
-    public class SearchController : ApiController
+    public class SearchController : BaseApiController
     {
         ////OpCore op = OpAppConfig.Init();
 
