@@ -119,7 +119,6 @@ namespace Intel.MyDeals.DataLibrary
                 {
                     {"ERROR", $"Error getting database details: {ex.Message}"}
                 };
-                OpLog.EmailError(ex);
             }
 
             return res;
@@ -191,8 +190,8 @@ namespace Intel.MyDeals.DataLibrary
             }
             catch (Exception ex)
             {
-                OpLog.HandleException(ex);
-                Exception x2 = new Exception("Example Simple Exception: Database Exception");
+				OpLogPerf.Log(ex);
+				Exception x2 = new Exception("Example Simple Exception: Database Exception");
                 throw x2;
             }
 

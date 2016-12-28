@@ -13,7 +13,7 @@ namespace Intel.MyDeals.Entities.Logging
 {
 	public class EmailExLogPerf : IOpLogPerf
 	{
-		private static string ToEmailList = "josephine.a.juang@intel.com"; // TODO: this shoud be read from an environment aware constants config setup
+		private static string ToEmailList = "josephine.a.juang@intel.com"; // TODO: this shoud be read from an environment aware constants config setup. The from email might also be from a config file or constant. Mike prefers constants
 		private static string FromEmail = "MyDealsSupport@intel.com";
 		public string EmailEmailSubject = "MyDeals Error [{0}] - {1}";
 		
@@ -43,7 +43,7 @@ namespace Intel.MyDeals.Entities.Logging
 			return new EmailExLogPerf();
 		}
 
-		
+
 		/// <summary>
 		/// Email an exception
 		/// </summary>

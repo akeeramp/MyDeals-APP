@@ -22,8 +22,8 @@ namespace Intel.MyDeals.BusinessLogic
             }
             catch (Exception ex)
             {
-                OpLog.HandleException(ex);
-                Exception x2 = new Exception("Example Uncaught Detailed Exception");
+				OpLogPerf.Log(ex);
+				Exception x2 = new Exception("Example Uncaught Detailed Exception");
                 throw x2;
             }
             //this will never get returned because of exception

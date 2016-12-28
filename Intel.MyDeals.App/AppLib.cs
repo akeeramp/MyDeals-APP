@@ -51,7 +51,7 @@ namespace Intel.MyDeals.App
             SetEnvName();
             SetVersion();
 
-            OpLog.LogDebugEvent("Found User" + user.Usr.FullName);
+            OpLogPerf.Log("Found User" + user.Usr.FullName);
             return user;
         }
 
@@ -153,8 +153,7 @@ namespace Intel.MyDeals.App
                              "Environment: " + env + "<br />" +
                              "Path: " + path + "</p>" +
                              "<p>" + ex + "</p></BODY></HTML>";
-
-            OpLog.SendEmail(title, body);
+			
         }
 
 

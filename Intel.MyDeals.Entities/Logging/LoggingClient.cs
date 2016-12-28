@@ -90,14 +90,14 @@ namespace Intel.MyDeals.Entities.Logging
 		}
 
 
-		public void UploadLogPrefLogs(IEnumerable<DbLogPerfMessage> messages)
+		public void UploadLogPerfLogs(IEnumerable<DbLogPerfMessage> messages)
 		{
 			var onAsyncWait = MyDealsWebApiUrl.WebApi;
 			onAsyncWait.EnableLogging = false;
 
 			// Send data to Presentation Layer's API Controller because we can't reference DataLayer on Entity layer (circular reference error)
 			var success = onAsyncWait.Post<bool>(
-					MyDealsWebApiUrl.UploadLogPrefLogs,
+					MyDealsWebApiUrl.UploadLogPerfLogs,
 					"",
 					new
 					{

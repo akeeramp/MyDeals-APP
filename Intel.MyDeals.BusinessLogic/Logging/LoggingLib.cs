@@ -14,9 +14,9 @@ namespace Intel.MyDeals.BusinesssLogic
 		{
 			return new LoggingDataLib().GetLogConfig();
 		}
-		public void UploadDbLogPrefLogs(IEnumerable<DbLogPerfMessage> messages)
+		public void UploadDbLogPerfLogs(IEnumerable<DbLogPerfMessage> messages)
 		{
-			new LoggingDataLib().UploadDbLogPrefLogs(messages);
+			new LoggingDataLib().UploadDbLogPerfLogs(messages);
 		}
 	}
 }

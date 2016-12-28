@@ -111,8 +111,8 @@ namespace Intel.MyDeals.DataLibrary
 			}
 			catch (Exception ex)
 			{
-                OpLog.HandleException(ex);
-                Exception simpleEx = new Exception("Problem " + state.ToString() + " Security Attribute - Security Actions");
+				OpLogPerf.Log(ex);
+				Exception simpleEx = new Exception("Problem " + state.ToString() + " Security Attribute - Security Actions");
                 throw simpleEx;
             }
 			return ret;
@@ -142,8 +142,8 @@ namespace Intel.MyDeals.DataLibrary
 			{
 				if (dsCheckConstraintErrors != null && dsCheckConstraintErrors.Tables.Count > 0)
 				{
-                    OpLog.HandleException(ex);
-                }
+					OpLogPerf.Log(ex);
+				}
 				throw;
 			}
 			return true;
@@ -215,8 +215,8 @@ namespace Intel.MyDeals.DataLibrary
 			}
 			catch (Exception ex)
 			{
-                OpLog.HandleException(ex);
-                Exception simpleEx = new Exception("Problem " + state.ToString() + " Security Attribute - Admin Application");
+				OpLogPerf.Log(ex);
+				Exception simpleEx = new Exception("Problem " + state.ToString() + " Security Attribute - Admin Application");
 				throw simpleEx;
 			}
 			return ret;
@@ -245,8 +245,8 @@ namespace Intel.MyDeals.DataLibrary
 			{
 				if (dsCheckConstraintErrors != null && dsCheckConstraintErrors.Tables.Count > 0)
 				{
-                    OpLog.HandleException(ex);
-                }
+					OpLogPerf.Log(ex);
+				}
 				throw;
 			}
 			return true;
@@ -325,8 +325,8 @@ namespace Intel.MyDeals.DataLibrary
 			}
 			catch (Exception ex)
 			{
-                OpLog.HandleException(ex);
-                Exception simpleEx = new Exception("Problem " + state.ToString() + "ing Security Attribute - Admin Deal Type");
+				OpLogPerf.Log(ex);
+				Exception simpleEx = new Exception("Problem " + state.ToString() + "ing Security Attribute - Admin Deal Type");
 				throw simpleEx;
 			}
 			return ret;
@@ -355,8 +355,8 @@ namespace Intel.MyDeals.DataLibrary
 			{
 				if (dsCheckConstraintErrors != null && dsCheckConstraintErrors.Tables.Count > 0)
 				{
-                    OpLog.HandleException(ex);
-                }
+					OpLogPerf.Log(ex);
+				}
 				throw;
 			}
 			return true;
@@ -434,8 +434,8 @@ namespace Intel.MyDeals.DataLibrary
 			}
 			catch (Exception ex)
 			{
-                OpLog.HandleException(ex);
-                Exception simpleEx = new Exception("Problem " + state.ToString() + " Security Attribute - Admin Role Type");
+				OpLogPerf.Log(ex);
+				Exception simpleEx = new Exception("Problem " + state.ToString() + " Security Attribute - Admin Role Type");
 				throw simpleEx;
 			}
 			return ret;

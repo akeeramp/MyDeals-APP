@@ -39,8 +39,8 @@ namespace Intel.MyDeals.Controllers.API
             }
             catch (Exception ex)
             {
-                OpLog.HandleException(ex);
-                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+				OpLogPerf.Log(ex);
+				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
 
@@ -54,8 +54,8 @@ namespace Intel.MyDeals.Controllers.API
             }
             catch (Exception ex)
             {
-                OpLog.HandleException(ex);
-                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+				OpLogPerf.Log(ex);
+				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
 
         }
@@ -70,8 +70,8 @@ namespace Intel.MyDeals.Controllers.API
             }
             catch (Exception ex)
             {
-                OpLog.HandleException(ex);
-                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+				OpLogPerf.Log(ex);
+				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
 
@@ -129,8 +129,8 @@ namespace Intel.MyDeals.Controllers.API
             }
             catch (Exception ex)
             {
-                OpLog.HandleException(ex);
-                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+				OpLogPerf.Log(ex);
+				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
     }

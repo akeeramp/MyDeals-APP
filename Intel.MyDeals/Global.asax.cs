@@ -26,7 +26,7 @@ namespace Intel.MyDeals
             AppHelper.SetupDataAccessLib();
 
 			// Init log writers
-			OpLogPerfHelper.InitWriters("DEBUG:DB:EVENTLOG:FILE:EMAILEX");
+			OpLogPerfHelper.InitWriters("DEBUG:DB:EVENTLOG:FILE:EMAILEX"); // TODO: Get this string of writers from db or config
 		}
 
 
@@ -54,7 +54,7 @@ namespace Intel.MyDeals
 			// Upload db logs
 			foreach (DbLogPerf perf in OpLogPerf.GetTypedWriters<DbLogPerf>())
 			{
-				loglib.UploadDbLogPrefLogs(perf.LogStack);
+				loglib.UploadDbLogPerfLogs(perf.LogStack);
 				perf.Clear();
 			}
 		}

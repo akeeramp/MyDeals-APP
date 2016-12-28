@@ -7,12 +7,12 @@
     securityActionsController.$inject = ['$uibModal', 'SecurityActionsService', '$scope', 'logger'];
 
     function securityActionsController($uibModal, SecurityActionsService, $scope, logger) {
-        var vm = this;
+    	var vm = this;
 
         // Functions
         vm.addItem = addItem;
         vm.updateItem = updateItem;
-        vm.deleteItem = deleteItem
+	    vm.deleteItem = deleteItem;
         vm.onChange = onChange;
 
         // Variables

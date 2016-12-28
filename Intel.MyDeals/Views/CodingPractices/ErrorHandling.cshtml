@@ -72,7 +72,7 @@
     <p>
         Critical show-stopping errors will be handled by the ErrorController and the Global.asax.  This will generally redirect to an Error page.
         <br />
-        Other exceptions encountered should be caught and handled with OpLog.HandleException(ex) before returning a less descriptive failure for the client side to consume. 
+        Other exceptions encountered should be caught and handled with OpLogPerf.Log(ex) before returning a less descriptive failure for the client side to consume. 
         <br />
         If the exception occurs in an API Controller, make sure you are returning HttpResponseException instead. 
     </p>
@@ -86,7 +86,7 @@
             }
             catch (Exception ex)
             {
-                OpLog.HandleException(ex);
+                OpLogPerf.Log(ex);
                 Exception x = new Exception("Encountered Business Logic Exception");
                 throw x;
             }
@@ -104,7 +104,7 @@
             }
             catch (Exception ex)
             {
-                OpLog.HandleException(ex);
+                OpLogPerf.Log(ex);
                 throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
@@ -118,7 +118,7 @@
     <p>
         Exceptions will generally be handled at the Data Access level where, once encountered, they are to be logged and propagated upwards.  
         <br />
-        When catching exceptions in C#, make sure to call OpLog.HandleException(ex).  When catching exceptions in SQL, make sure to call PR_CUSTOM_ERR_MSG.
+        When catching exceptions in C#, make sure to call OpLogPerf.Log(ex).  When catching exceptions in SQL, make sure to call PR_CUSTOM_ERR_MSG.
         <br />
         When creating SPs or Data Access code, make sure to catch and log potential exceptions.
     </p>
@@ -143,7 +143,7 @@
             }
             catch (Exception ex)
             {
-                OpLog.HandleException(ex);
+                OpLogPerf.Log(ex);
                 Exception x2 = new Exception("Encountered Database Exception");
                 throw x2;
             }

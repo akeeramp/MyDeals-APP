@@ -1,93 +1,77 @@
 ﻿@Html.Partial("TOC", new ViewDataDictionary
 {
-    { "categoryTitle", "Coding tools" },
-    { "categoryAction", "CodingTools" },
-    { "sectionTitle", "Coding tools" },
-    { "sectionAction", "CodingTools" },
-    { "pageTitle", "Logging" }
+	{ "categoryTitle", "Coding tools" },
+	{ "categoryAction", "CodingTools" },
+	{ "sectionTitle", "Coding tools" },
+	{ "sectionAction", "CodingTools" },
+	{ "pageTitle", "Logging" }
 })
 
 <div id="mainBody" style="margin: 10px; padding: 0 20px 0 200px;">
-    <h1><img src="/Images/docs/icon-code-tools.png" height="80" /> Logging</h1>
-    <p>
-        Logging also comes in various dgrees... some of which are DB, MT and UI logging.  There is local storage logging, in-memory logging and longterm storage logging.
-    </p>
-    <img src="/Images/docs/logging.png" style="margin: 10px 0 10px 25px;" />
+	<h1><img src="/Images/docs/icon-code-tools.png" height="80" /> Logging</h1>
+	<p>
+		Logging also comes in various dgrees... some of which are DB, MT and UI logging.  There is local storage logging, in-memory logging and longterm storage logging.
+	</p>
+	<img src="/Images/docs/logging.png" style="margin: 10px 0 10px 25px;" />
 
-    <h5>Logging in MyDeals</h5>
-    <p>
-        There are projects outside of MyDeals where commonly used features are being developed intended for all of BOS applications. We will consume some of these tools, one of which is logging.
-        So, in My deals, we will implement a rudamentary logging feature that can easily be swapped out for the new tool when it is ready. 
-        With that in mind, please make sure you follow the logging practices.
-    </p>
+	<h5>Logging in MyDeals</h5>
+	<p>
+		There are projects outside of MyDeals where commonly used features are being developed intended for all of BOS applications. We will consume some of these tools, one of which is logging.
+		So, in My deals, we will implement a rudamentary logging feature that can easily be swapped out for the new tool when it is ready.
+		With that in mind, please make sure you follow the logging practices.
+	</p>
 
-    <div class="stepByStep">
-        Database Logging
-    </div>
-    <p>
-        This section needs to be defined by the Database developers.
-    </p>
+	<div class="stepByStep">
+		Database Logging
+	</div>
+	<p>
+		This section needs to be defined by the Database developers.
+	</p>
 
-    <div class="stepByStep">
-        Middle Tier Logging
-    </div>
-    <p>
-        In the Middle Tier, the logging class <b>OpLog</b> in the <i>Intel.MyDeals.Entities</i> project will be used.
-                <b>LogEvent:</b> An overloaded function to log an event. Here are the various input parameter needed depending on which overloaded function used.
-                <ul>
-                    <li>
-                        <b>dLevel</b> (Debugging level): Some example are:
-                        <ul>
-                            <li>Debug: logs debugging messages that are ONLY logged in Debug Mode. These will not log in production which will help with performance.</li>
-                            <li>Application: logs for the application. These will always appear no matter what mode the application is set.</li>
-                            <li>Performance: logs dealing with performance numbers. These logs tend to also store times along with the messages.</li>
-                        </ul>
-                    </li>
-                    <li>
-                        <b>statusMsg</b> (Status Message): Short message to log. This might be used in an email subject line.
-                    </li>
-                    <li>
-                        <b>detailMsg</b> (Detailed Message): Message to log.
-                    </li>
-                    <li>
-                        <b>cat</b> (Category): Category of the log item, for example:
-                        <ul>
-                            <li>Error: Indicates a log message that causes the page to stop functioning.  An email will also be sent if this is triggered.</li>
-                            <li>Warning: Indicates a log message that does not stop the site. These messages are the most common "issue" driven logs that might need communication or input with the users.</li>
-                            <li>Information: Indicates a log message that is purely informational.  There is not impact to the application.</li>
-                        </ul>
-                    </li>
-                </ul>
+	<div class="stepByStep">
+		Middle Tier Logging
+	</div>
+	<p>
+		In the Middle Tier, we use the logging class <b>OpLogPerf</b> in the <i>Intel.MyDeals.Opaque</i> project. Call the <b>Log()</b> function to log an event. 
+		The middle tier will automatically log the SP name and paramters of successful calls to the database IF you use DataAccess.ExecuteDataSet() to call the db,
+		so there is no need to call the log again unless you have other information to log. Log writers are turned off and on via the string passed in the global.asx.
+	</p>
+	<p>The following are the types of log writers that can be turned on:</p>
+	<ul>
+		<li>
+			<b>FILE</b> - Logs to a txt file on the server. Default file location is under C:\Windows\TEMP\. File name will be prefixed with "FileLogPerf".  By default the db log writer will write 100 logs to a file at a time.*
+		</li>
+		<li>
+			<b>DB</b> - Logs on the db. By default the db log writer will send 30 logs up to the db at a time.*
+		</li>
+		<li>
+			<b>DEBUG</b> - Logs using System.Diagnostics.Debug.WriteLine()
+		</li>
+		<li>
+			<b>EVENTLOG</b>	- Logs to the server's Windows Event Log under the EventLog "Opaque".
+		</li>
+		<li>
+			<b>EMAIL</b> - Sends logs to a list of emails as a file attachment.*
+		</li>
+		<li>
+			<b>EMAILEX</b> - Emails exceptions and other logs categorized as LogCategory.Error to a list of emails. 
+		</li>
+	</ul>
+	<p style="font-size: 0.8em;">
+		* Note that log writers that queue logs and bulk write to their writers are not foolproof. If the server or application rudely crashes, then chances are the most recent x logs queued to be written to the db have been lost.
+	</p>
 
-                <div class="note">
-                    <strong>Note:</strong> Here are some examples of calling <b>LogEvent</b>.
-                </div>
-                <div class="noteBody">
-                    <pre>        
-    OpLog.LogEvent("Page loaded");  // This will default to and informational message
+	<div class="note">
+		<strong>Note:</strong> Here are some examples of calling <b>LogEvent</b>.
+	</div>
+	<div class="noteBody">
+		<pre>        
+				OpLogPerf.Log("Page loaded");  // This will default to a message with an information LogCategory.				
+				OpLog.LogEvent("Stored Procedure Timed Out", LogCategory.Warning); // Logging with specified LogCategory. LogCategories to choose from are Information, Warning, and Error 
+				OpLogPerf.Log(Ex); // Logging an exception
+        </pre>
+	</div>
 
-    OpLog.LogEvent("Stored Procedure Timed Out", LogCategory.Warning);
-
-    OpLog.LogEvent(DebugLevel.Debug, "Error occured in App Startup", "Unable to locate the controller", LogCategory.Error);
-                    </pre>
-                </div>
-        @*/*
-        /// <param name="dLevel">Debugging level... debug, application, performance,etc... </param>
-        /// <param name="statusMsg">Short message to log.  This might be used in an email subject line</param>
-        /// <param name="detailMsg">Message to log</param>
-        /// <param name="cat">Category of the log item... error, warning, information, etc...</param>
-
-        */*@
-    </p>
-
-    <div class="stepByStep">
-        Client UI Logging
-    </div>
-    <p>
-        As a developer team, we need to decide the strategy for logging in the Client UI.
-    </p>
-
-    <br /><br /><br />
 </div>
 
 

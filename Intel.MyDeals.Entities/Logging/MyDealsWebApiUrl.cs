@@ -42,7 +42,7 @@ namespace Intel.MyDeals.Entities.Logging
 		
 
 		// API paths
-		public const string UploadLogPrefLogs = ROOT_SUB_PATH + @"Logging/UploadLogPrefLogs";
+		public const string UploadLogPerfLogs = ROOT_SUB_PATH + @"Logging/UploadLogPerfLogs";
 
 
 

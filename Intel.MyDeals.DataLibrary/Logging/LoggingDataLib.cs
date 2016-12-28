@@ -50,7 +50,7 @@ namespace Intel.MyDeals.DataLibrary.Logging
 		/// <summary>
 		/// Saves a List of log data to db 
 		/// </summary>
-		public void UploadDbLogPrefLogs(IEnumerable<DbLogPerfMessage> messages)
+		public void UploadDbLogPerfLogs(IEnumerable<DbLogPerfMessage> messages)
 		{
 			if (messages == null || !messages.Any()) { return; }
 

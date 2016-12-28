@@ -81,8 +81,8 @@ namespace Intel.MyDeals.DataLibrary
             }
             catch (Exception ex)
             {
-                OpLog.HandleException(ex);
-                throw;
+				OpLogPerf.Log(ex);
+				throw;
             }
             return ret;
         }

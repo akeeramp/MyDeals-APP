@@ -20,7 +20,7 @@ namespace Intel.MyDeals.Entities.Logging
 		private static object LOCK_THREAD_OBJECT = new object();
 
 		public List<DbLogPerfMessage> LogStack = new List<DbLogPerfMessage>();
-		private delegate void UploadLogPrefLogsDelegate(IEnumerable<DbLogPerfMessage> messages);
+		private delegate void UploadLogPerfLogsDelegate(IEnumerable<DbLogPerfMessage> messages);
 
 		public static string MachineName { set; get; }
 
@@ -161,15 +161,15 @@ namespace Intel.MyDeals.Entities.Logging
 				// Create a delegate to fire off the upload request. Brad: (my hope in the dynamic delegate was 
 				// that .net would stay alive as long at the delegates were in memory.  Didn't work out to be
 				// the case, oh well.
-				var dlgt = new UploadLogPrefLogsDelegate((ll) =>
+				var dlgt = new UploadLogPerfLogsDelegate((ll) =>
 				{
-					LoggingClient.InstanceOptimal().UploadLogPrefLogs(ll);
+					LoggingClient.InstanceOptimal().UploadLogPerfLogs(ll);
 				});
 
 				// Lock FlushActions
 				lock (LOCK_THREAD_OBJECT)
 				{
-					// Call UploadLogPrefLogs asynchronously via dlgt
+					// Call UploadLogPerfLogs asynchronously via dlgt
 					var send_iar = dlgt.BeginInvoke(tb, new AsyncCallback(iar =>
 					{
 						try
