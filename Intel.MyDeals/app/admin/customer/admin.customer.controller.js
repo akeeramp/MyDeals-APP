@@ -56,11 +56,11 @@
             change: vm.onChange,
             toolbar: vm.toolBarTemplate,
             columns: [
-             {
+            {
                  field: "CUST_MBR_SID",
                  title: "Customer Name",
-                 hiddem: true,
-             },
+                 hidden: true,
+            },
             {
                 field: "CUST_NM",
                 title: "Customer Name",
@@ -68,13 +68,16 @@
             {
                 field: "CUST_DIV_NM",
                 title: "Division Name"
-            }, {
+            },
+            {
                 field: "CUST_TYPE",
                 title: "Type"
-            }, {
+            },
+            {
                 field: "HOSTED_GEO",
                 title: "Hosted Geo"
-            }, {
+            },
+            {
                 field: "ACTV_IND",
                 title: "Is Active"
             }]
@@ -83,7 +86,7 @@
         // Gets and sets the selected row
         function onChange() {
             vm.selectedItem = $scope.customerGrid.select();
-            //As we need read only grids., disabling the edit and delete buttons
+            // TODO: As we need read only grids, disabling the edit and delete buttons.
             if (vm.selectedItem.length == 0) {
                 vm.isButtonDisabled = true;
             } else {

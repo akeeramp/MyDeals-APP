@@ -48,10 +48,10 @@
             change: vm.onChange,
             toolbar: vm.toolBarTemplate,
             columns: [
-             {
-                 field: "PRD_MBR_SID",
-                 title: "Id",
-             },
+            {
+                field: "PRD_MBR_SID",
+                title: "Id",
+            },
             {
                 field: "DEAL_PRD_TYPE",
                 title: "Type"

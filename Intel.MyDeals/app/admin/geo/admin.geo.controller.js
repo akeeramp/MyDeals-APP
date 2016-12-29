@@ -56,10 +56,10 @@
             change: vm.onChange,
             toolbar: vm.toolBarTemplate,
             columns: [
-             {
-                 field: "GEO_MBR_SID",
-                 title: "Id",
-             },
+            {
+                field: "GEO_MBR_SID",
+                title: "Id",
+            },
             {
                 field: "GEO_NM",
                 title: "Name",
