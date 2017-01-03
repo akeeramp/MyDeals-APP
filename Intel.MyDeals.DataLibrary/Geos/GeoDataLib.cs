@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using Intel.MyDeals.DataAccessLib;
+﻿using Intel.MyDeals.DataAccessLib;
 using Intel.MyDeals.Entities;
+using Intel.MyDeals.IDataLibrary;
 using Intel.Opaque;
 using Intel.Opaque.DBAccess;
+using System;
+using System.Collections.Generic;
 using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
-
 
 namespace Intel.MyDeals.DataLibrary
 {
-    public class GeoDataLib
+    public class GeoDataLib : IGeoDataLib
     {
         /// <summary>
         /// Get All Geo Dimensions
@@ -55,8 +55,8 @@ namespace Intel.MyDeals.DataLibrary
             }
             catch (Exception ex)
             {
-				OpLogPerf.Log(ex);
-				throw;
+                OpLogPerf.Log(ex);
+                throw;
             }
             return ret;
         }

@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Web.Http;
-using Intel.MyDeals.BusinesssLogic;
-using Intel.MyDeals.Entities;
-using System;
-using System.Net;
+﻿using Intel.MyDeals.Entities;
+using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque;
+using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Web.Http;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -12,8 +12,15 @@ namespace Intel.MyDeals.Controllers.API
     [RoutePrefix("api/Geos")]
     public class GeosController : BaseApiController
     {
+        private readonly IGeosLib _geosLib;
+
+        public GeosController(IGeosLib _geosLib)
+        {
+            this._geosLib = _geosLib;
+        }
+
         /// <summary>
-        ///
+        /// Get Geo Dimensions
         /// </summary>
         /// <param name="getCachedResult">When set to false read request is coming from Admin screens</param>
         /// <returns></returns>
@@ -23,12 +30,12 @@ namespace Intel.MyDeals.Controllers.API
         {
             try
             {
-                return new GeosLib().GetGeoDimensions(getCachedResult);
+                return _geosLib.GetGeoDimensions(getCachedResult);
             }
             catch (Exception ex)
             {
-				OpLogPerf.Log(ex);
-				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+                OpLogPerf.Log(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
 
@@ -38,12 +45,12 @@ namespace Intel.MyDeals.Controllers.API
         {
             try
             {
-                return new GeosLib().GetGeoDimension(sid);
+                return _geosLib.GetGeoDimension(sid);
             }
             catch (Exception ex)
             {
-				OpLogPerf.Log(ex);
-				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+                OpLogPerf.Log(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
 
@@ -53,12 +60,12 @@ namespace Intel.MyDeals.Controllers.API
         {
             try
             {
-                return new GeosLib().GetGeoDimensionsActive();
+                return _geosLib.GetGeoDimensionsActive();
             }
             catch (Exception ex)
             {
-				OpLogPerf.Log(ex);
-				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+                OpLogPerf.Log(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
 
@@ -68,12 +75,12 @@ namespace Intel.MyDeals.Controllers.API
         {
             try
             {
-                return new GeosLib().GetGeoDimensionByGeoName(name);
+                return _geosLib.GetGeoDimensionByGeoName(name);
             }
             catch (Exception ex)
             {
-				OpLogPerf.Log(ex);
-				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+                OpLogPerf.Log(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
 
@@ -83,12 +90,12 @@ namespace Intel.MyDeals.Controllers.API
         {
             try
             {
-                return new GeosLib().GetGeoDimensionByGeoSid(sid);
+                return _geosLib.GetGeoDimensionByGeoSid(sid);
             }
             catch (Exception ex)
             {
-				OpLogPerf.Log(ex);
-				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+                OpLogPerf.Log(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
 
@@ -98,12 +105,12 @@ namespace Intel.MyDeals.Controllers.API
         {
             try
             {
-                return new GeosLib().GetGeoDimensionByRegionName(name);
+                return _geosLib.GetGeoDimensionByRegionName(name);
             }
             catch (Exception ex)
             {
-				OpLogPerf.Log(ex);
-				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+                OpLogPerf.Log(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
 
@@ -113,12 +120,12 @@ namespace Intel.MyDeals.Controllers.API
         {
             try
             {
-                return new GeosLib().GetGeoDimensionByRegionSid(sid);
+                return _geosLib.GetGeoDimensionByRegionSid(sid);
             }
             catch (Exception ex)
             {
-				OpLogPerf.Log(ex);
-				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+                OpLogPerf.Log(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
 
@@ -128,12 +135,12 @@ namespace Intel.MyDeals.Controllers.API
         {
             try
             {
-                return new GeosLib().GetGeoDimensionByCountryName(name);
+                return _geosLib.GetGeoDimensionByCountryName(name);
             }
             catch (Exception ex)
             {
-				OpLogPerf.Log(ex);
-				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+                OpLogPerf.Log(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
 
@@ -143,14 +150,13 @@ namespace Intel.MyDeals.Controllers.API
         {
             try
             {
-                return new GeosLib().GetGeoDimensionByCountrySid(sid);
+                return _geosLib.GetGeoDimensionByCountrySid(sid);
             }
             catch (Exception ex)
             {
-				OpLogPerf.Log(ex);
-				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+                OpLogPerf.Log(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
-
     }
 }

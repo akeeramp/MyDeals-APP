@@ -51,21 +51,25 @@
             </div>
 
             <div class="note">
-                <strong>Note:</strong> Here is an example of an API controller for <b>Others</b> called <i style="font-size: 12px;">GetDBTest</i>.
+                <strong>Note:</strong> Here is an example of an API controller for <b>Constants</b> called <i style="font-size: 12px;">GetConstants</i>.
             </div>
             <div class="noteBody">
-                <pre>        
-    public class OthersController : ApiController
+                <pre>
+    public class ConstantsController : BaseApiController
     {
-        OpCore op = OpAppConfig.Init();                     // Get user details from authentication
+        private readonly IConstantsLookupsLib _constantsLookupsLib;
 
-        [Route("api/DevTests/GetDBTest")]
-        public Dictionary&lt;string, string&gt; GetDBTest()
+        public ConstantsController(IConstantsLookupsLib _constantsLookupsLib)
         {
-            OpUserToken user = AppLib.InitAVM(op);          // Get User Token
-            return new OthersLib().PingDbDetails(user);     // Call logic from Business Logic layer
+            this._constantsLookupsLib = _constantsLookupsLib;
         }
 
+        [Authorize]
+        [Route("api/Constants/v1/GetConstants")]
+        public IEnumerable&lt;ToolConstants&gt; Get()
+        {
+            return _constantsLookupsLib.GetToolConstants();
+        }
     }
                 </pre>
             </div>
@@ -110,7 +114,7 @@
             msg += "<div><span class='err'>Failed Test!!!</div>";
             msg += "<div>";
             showMsg(msg);
-        });        
+        });
     }
 
     function showMsg(msg) {

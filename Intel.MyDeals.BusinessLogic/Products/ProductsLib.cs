@@ -1,14 +1,35 @@
-﻿using System.Collections.Generic;
+﻿using Intel.MyDeals.DataLibrary;
+using Intel.MyDeals.Entities;
+using Intel.MyDeals.IBusinessLogic;
+using Intel.MyDeals.IDataLibrary;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text.RegularExpressions;
-using Intel.MyDeals.DataLibrary;
-using Intel.MyDeals.Entities;
 
 namespace Intel.MyDeals.BusinesssLogic
 {
-    public class ProductsLib
+    public class ProductsLib : IProductsLib
     {
+        private readonly IProductDataLib _productDataLib;
+
+        private readonly IDataCollectionsDataLib _dataCollectionsDataLib;
+
+        public ProductsLib(IProductDataLib _productDataLib, IDataCollectionsDataLib _dataCollectionsDataLib)
+        {
+            this._productDataLib = _productDataLib;
+            this._dataCollectionsDataLib = _dataCollectionsDataLib;
+        }
+
+        /// <summary>
+        /// TODO: This parameterless constructor is left as a reminder,
+        /// once we fix our unit tests to use Moq remove this constructor, also remove direct reference to "Intel.MyDeals.DataLibrary"
+        /// </summary>
+        public ProductsLib()
+        {
+            this._productDataLib = new ProductDataLib();
+            this._dataCollectionsDataLib = new DataCollectionsDataLib();
+        }
+
         #region Products
 
         /// <summary>
@@ -19,9 +40,9 @@ namespace Intel.MyDeals.BusinesssLogic
         {
             if (!getCachedResult)
             {
-                new ProductDataLib().GetProducts();
+                _productDataLib.GetProducts();
             }
-            return DataCollections.GetProductData();
+            return _dataCollectionsDataLib.GetProductData();
         }
 
         /// <summary>
@@ -187,6 +208,6 @@ namespace Intel.MyDeals.BusinesssLogic
             return GetProducts().Where(c => c.MTRL_ID_SID == sid).ToList();
         }
 
-        #endregion
+        #endregion Products
     }
 }

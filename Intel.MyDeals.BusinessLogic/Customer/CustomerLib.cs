@@ -1,15 +1,39 @@
-﻿using System;
+﻿using Intel.MyDeals.DataLibrary;
+using Intel.MyDeals.Entities;
+using Intel.MyDeals.IBusinessLogic;
+using Intel.MyDeals.IDataLibrary;
 using System.Collections.Generic;
 using System.Linq;
-using Intel.MyDeals.DataLibrary;
-using Intel.MyDeals.Entities;
-using Intel.Opaque;
 
 namespace Intel.MyDeals.BusinesssLogic
 {
-    public class CustomerLib
+    public class CustomerLib : ICustomerLib
     {
+        private readonly ICustomerDataLib _customerDataLib;
+
+        private readonly IDataCollectionsDataLib _dataCollectionsDataLib;
+
+        /// <summary>
+        /// Customer Library
+        /// </summary>
+        public CustomerLib(ICustomerDataLib _customerDataLib, IDataCollectionsDataLib _dataCollectionsDataLib)
+        {
+            this._customerDataLib = _customerDataLib;
+            this._dataCollectionsDataLib = _dataCollectionsDataLib;
+        }
+
+        /// <summary>
+        /// TODO: This parameterless constructor is left as a reminder,
+        /// once we fix our unit tests to use Moq remove this constructor, also remove direct reference to "Intel.MyDeals.DataLibrary"
+        /// </summary>
+        public CustomerLib()
+        {
+            this._customerDataLib = new CustomerDataLib();
+            this._dataCollectionsDataLib = new DataCollectionsDataLib();
+        }
+
         #region Customer Divisions
+
         /// <summary>
         /// Get All Customer Divisions
         /// </summary>
@@ -21,10 +45,10 @@ namespace Intel.MyDeals.BusinesssLogic
         {
             if (!getCachedResult)
             {
-                return new CustomerDataLib().GetCustomerDivisions();
+                return _customerDataLib.GetCustomerDivisions();
             }
 
-            return DataCollections.GetCustomerDivisions();
+            return _dataCollectionsDataLib.GetCustomerDivisions();
         }
 
         /// <summary>
@@ -76,7 +100,7 @@ namespace Intel.MyDeals.BusinesssLogic
             return GetCustomerDivisions().Where(c => c.CUST_CAT == cat).ToList();
         }
 
-        #endregion
+        #endregion Customer Divisions
 
         #region MyCustomers
 
@@ -86,7 +110,7 @@ namespace Intel.MyDeals.BusinesssLogic
         /// <returns>lists of customer division data contained in wrapper</returns>
         public MyCustomerDetailsWrapper GetMyCustomers()
         {
-            return new CustomerDataLib().GetMyCustomers();
+            return _customerDataLib.GetMyCustomers();
         }
 
         /// <summary>
@@ -107,6 +131,6 @@ namespace Intel.MyDeals.BusinesssLogic
             return GetMyCustomers().CustomerSoldTo;
         }
 
-        #endregion
+        #endregion MyCustomers
     }
 }

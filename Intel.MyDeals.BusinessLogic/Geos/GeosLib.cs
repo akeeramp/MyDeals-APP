@@ -1,12 +1,34 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Intel.MyDeals.DataLibrary;
+﻿using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
+using Intel.MyDeals.IBusinessLogic;
+using Intel.MyDeals.IDataLibrary;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Intel.MyDeals.BusinesssLogic
 {
-    public class GeosLib
+    public class GeosLib : IGeosLib
     {
+        private readonly IGeoDataLib _geoDataLib;
+
+        private readonly IDataCollectionsDataLib _dataCollectionsDataLib;
+
+        public GeosLib(IGeoDataLib _geoDataLib, IDataCollectionsDataLib _dataCollectionsDataLib)
+        {
+            this._geoDataLib = _geoDataLib;
+            this._dataCollectionsDataLib = _dataCollectionsDataLib;
+        }
+
+        /// <summary>
+        /// TODO: This parameterless constructor is left as a reminder,
+        /// once we fix our unit tests to use Moq remove this constructor, also remove direct reference to "Intel.MyDeals.DataLibrary"
+        /// </summary>
+        public GeosLib()
+        {
+            this._geoDataLib = new GeoDataLib();
+            this._dataCollectionsDataLib = new DataCollectionsDataLib();
+        }
+
         #region Geo Dimension
 
         /// <summary>
@@ -20,9 +42,9 @@ namespace Intel.MyDeals.BusinesssLogic
         {
             if (!getCachedResult)
             {
-                new GeoDataLib().GetGeoDimensions();
+                _geoDataLib.GetGeoDimensions();
             }
-            return DataCollections.GetGeoData();
+            return _dataCollectionsDataLib.GetGeoData();
         }
 
         /// <summary>
@@ -104,6 +126,6 @@ namespace Intel.MyDeals.BusinesssLogic
             return GetGeoDimensions().Where(c => c.CTRY_NM_SID == sid).ToList();
         }
 
-        #endregion
+        #endregion Geo Dimension
     }
 }

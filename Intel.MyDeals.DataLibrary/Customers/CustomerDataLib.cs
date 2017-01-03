@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
 using Intel.MyDeals.DataAccessLib;
 using Intel.MyDeals.Entities;
 using Intel.Opaque;
-using Intel.Opaque.Data;
 using Intel.Opaque.DBAccess;
 using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
-
+using Intel.MyDeals.IDataLibrary;
 
 namespace Intel.MyDeals.DataLibrary
 {
-    public class CustomerDataLib
+    public class CustomerDataLib : ICustomerDataLib
     {
         /// <summary>
         /// Get All Customer Divisions

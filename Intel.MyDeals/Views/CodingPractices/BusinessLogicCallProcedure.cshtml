@@ -1,5 +1,4 @@
-﻿
-@Html.Partial("TOC", new ViewDataDictionary
+﻿@Html.Partial("TOC", new ViewDataDictionary
 {
     { "categoryTitle", "Project setup and logic flow" },
     { "categoryAction", "Project" },
@@ -12,7 +11,7 @@
     <h1><img src="/Images/docs/icon-bus-logic.png" height="60" />Call a stored procedure</h1>
     <p>
         Actually... you <b>CANNOT</b> call a stored procedure from the Business Logic layer.  Instead, a Data Library function must be called which will in turn call the stored procedure.
-        <img src="/Images/docs/buslogproc.png" style="margin: 10px 0 10px 25px;"/>
+        <img src="/Images/docs/buslogproc.png" style="margin: 10px 0 10px 25px;" />
     </p>
 
     <div class="stepByStep">
@@ -26,23 +25,67 @@
             <img src="/Images/docs/businesslogiclayout.png" style="margin: 10px 0;" />
         </li>
         <li>
-            Add your business function here.  Keep in mind the code segments should be rather small and coded in a way it can efficiently be used by automated testing.<br />
-            <div class="note"><strong>Note:</strong> Here is an example of a business logic function calling the Data Library:</div>
+            Add your business function here.  Keep in mind the code segments should be rather small and coded in a way it can efficiently be used by automated testing.
+            <p>To mock the DataLib during unit testing, inject dependency via constructor.</p>
+            <div class="note"><strong>Note:</strong> Here is an example of a business logic function:</div>
             <div class="noteBody">
-                <pre>        
+                <pre>
+    public class ConstantsLookupsLib : IConstantsLookupsLib
+    {
+        /// &lt;summary&gt;
+        /// Constants lookup data library
+        /// &lt;/summary&gt;
+        private readonly IConstantLookupDataLib _constantLookupDataLib;
+
+        /// &lt;summary&gt;
+        /// DataCollection Data Library, wrapper methods to access static cache
+        /// &lt;/summary&gt;
+        private readonly IDataCollectionsDataLib _dataCollectionsDataLib;
+
+        public ConstantsLookupsLib(IConstantLookupDataLib _constantLookupDataLib,
+            IDataCollectionsDataLib _dataCollectionsDataLib)
+        {
+            this._constantLookupDataLib = _constantLookupDataLib;
+            this._dataCollectionsDataLib = _dataCollectionsDataLib;
+        }
+
         public List&lt;ToolConstants&gt; GetToolConstants()
         {
-            //
-            // can put business logic here
-            //
-            return new ConstantLookupDataLib().GetToolConstants();
+            return _dataCollectionsDataLib.GetToolConstants();
         }
-                </pre>
+    }
+                                </pre>
+            </div>
+        </li>
+        <li>
+            Extract the public methods which you want to expose to Api Layer, create the appropriate folder in the <i>Intel.MyDeals.IBusinesssLogic</i>.
+            This layout needs to match the <i>Intel.MyDeals.BusinesssLogic.</i> folder structure.
+            <img src="~/Images/docs/libinterface.png" style="margin: 10px 0 10px 25px;" />
+            <div class="alert alert-info" role="alert">
+                <strong>Quick Tip!</strong> Keep the interface name same as class implementing it. Append it with prefix "I".
+            </div>
+        </li>
+        <li>
+            <p>
+                In the <i>Resolver.cs</i> file register the interface with implementing class in the container.
+            </p>
+            <img src="/Images/docs/libResolver.png" style="margin: 10px 0 10px 25px;" />
+            <div class="note">
+                <strong>Note:</strong> Here is an example, for registering ConstantLookupLib with IConstantLookupLib.
+            </div>
+            <div class="noteBody">
+                <pre>
+                      public class Resolver : IService
+                      {
+                        public void SetUp(IRegisterService registerService)
+                        {
+                           registerService.RegisterType&lt;IConstantLookupLib, ConstantLookupLib&gt;();
+                        }
+                      }
+                    </pre>
             </div>
         </li>
     </ol>
 
-
     <br /><br /><br />
 </div>
-

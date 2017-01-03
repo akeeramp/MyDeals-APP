@@ -1,28 +1,33 @@
 ﻿using System.Linq;
 using System.Web.Http;
-using Intel.MyDeals.BusinesssLogic;
 using Intel.MyDeals.Entities;
 using WebApi.OutputCache.V2;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Net;
 using Intel.MyDeals.ActionFilters;
+using Intel.MyDeals.IBusinessLogic;
 
 namespace Intel.MyDeals.Controllers.API
 {
     public class CacheController : ApiController
     {
+        private readonly ICacheLib _cacheLib;
+
+        public CacheController(ICacheLib _cacheLib)
+        {
+            this._cacheLib = _cacheLib;
+        }
 
         [Route("api/Cache/v1/GetCacheStatus")]
         public IQueryable<CacheItem> GetCacheStatus()
         {
-            return new CacheLib().CheckCache().AsQueryable();
+            return _cacheLib.CheckCache().AsQueryable();
         }
 
         [Route("api/Cache/v1/GetCacheClear")]
         public bool GetCacheClear()
         {
-            return new CacheLib().ClearCache();
+            return _cacheLib.ClearCache();
         }
 
         [Route("api/Cache/v1/GetCacheClear/{cacheName}")]
@@ -30,25 +35,25 @@ namespace Intel.MyDeals.Controllers.API
         [ApiAuthorize(AuthorizeDeveloper = true)]
         public bool GetCacheClear(string cacheName)
         {
-            return new CacheLib().ClearCache(cacheName);
+            return _cacheLib.ClearCache(cacheName);
         }
 
         [Route("api/Cache/v1/GetCacheReload")]
         public bool GetCacheReload()
         {
-            return new CacheLib().ClearCache() && new CacheLib().LoadCache();
+            return _cacheLib.ClearCache() && _cacheLib.LoadCache();
         }
 
         [Route("api/Cache/v1/GetCacheLoad/{cacheName}")]
         public bool GetCacheLoad(string cacheName)
         {
-            return new CacheLib().LoadCache(cacheName);
+            return _cacheLib.LoadCache(cacheName);
         }
 
         [Route("api/Cache/v1/GetCacheView/{cacheName}")]
         public object GetCacheView(string cacheName)
         {
-            return new CacheLib().ViewCache(cacheName);
+            return _cacheLib.ViewCache(cacheName);
         }
 
         /// <summary>

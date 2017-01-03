@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-using Intel.MyDeals.DataAccessLib;
+﻿using Intel.MyDeals.DataAccessLib;
 using Intel.MyDeals.Entities;
+using Intel.MyDeals.IDataLibrary;
 using Intel.Opaque;
 using Intel.Opaque.DBAccess;
+using System;
+using System.Collections.Generic;
 using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
 
 namespace Intel.MyDeals.DataLibrary
 {
-    public class ProductDataLib
+    public class ProductDataLib : IProductDataLib
     {
         /// <summary>
         /// Get All Products
@@ -81,8 +79,8 @@ namespace Intel.MyDeals.DataLibrary
             }
             catch (Exception ex)
             {
-				OpLogPerf.Log(ex);
-				throw;
+                OpLogPerf.Log(ex);
+                throw;
             }
             return ret;
         }

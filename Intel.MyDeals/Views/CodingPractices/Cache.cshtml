@@ -1,5 +1,4 @@
-﻿
-@Html.Partial("TOC", new ViewDataDictionary
+﻿@Html.Partial("TOC", new ViewDataDictionary
 {
     { "categoryTitle", "Project setup and logic flow" },
     { "categoryAction", "Project" },
@@ -14,7 +13,7 @@
         When dealing with common large data, it is prudent to cache the data from the database into the middle tier.
         In the <i>Intel.MyDeals.DataLibrary</i> project, there are times calls to procedures should be cached. For these items, we will need to add them to the cache store.
     <p>
-        <br/>
+        <br />
         <img src="/Images/docs/cache_create_intro.png" style="margin: 10px 0 10px 25px;" />
 
         <div class="stepByStep">
@@ -32,9 +31,9 @@
                 <i class="intelicon-checklist-outlined" style="font-size: 20px;"></i>Ensure you have exposed the <strong>stored procedure</strong> into MyDeals. If you are unsure how to do this, please refer to the <a href="@Url.Action("CallProcedure", "CodingPractices", new {Area = ""})">Consume a stored procedure</a> section.
             </li>
             <li>
-                Locate the <b>Data Collections</b> folder in the <i>Intel.MyDeals.DataLibrary</i> project. 
-                Open the <b>DataCollections.cs</b> file.<br/>
-                <img src="/Images/docs/projDataCollections.png" style="margin: 10px 0;"/>
+                Locate the <b>Data Collections</b> folder in the <i>Intel.MyDeals.DataLibrary</i> project.
+                Open the <b>DataCollections.cs</b> file.<br />
+                <img src="/Images/docs/projDataCollections.png" style="margin: 10px 0;" />
             </li>
             <li>
                 <div class="alert alert-info" role="alert">
@@ -48,59 +47,78 @@
 
                 <div class="alert alert-info" role="alert">
                     <strong>Important!</strong>
-                    Determine the <i>BASE_DATA_LIB</i> for the <i>BASE</i>. This will be the name of the DataLibrary object and method. 
+                    Determine the <i>BASE_DATA_LIB</i> for the <i>BASE</i>. This will be the name of the DataLibrary object and method.
                     For example, if the class to be cached is <b>ToolConstants</b> then the <i>BASE_DATA_LIB</i> is <b>ConstantLookupDataLib().GetToolConstants()</b>.
                     This is important as all the instructions will refer to replacing the <i>BASE_DATA_LIB</i>.
                 </div>
             </li>
             <li>
-                <p>
-                    Create the call to populate the cache <b>IF</b> the private version is not populates.
-                </p>
-                <p>
-                    To do this, you need to know some important information:
-                    <ul>
-                        <li><i>BASE</i>: Name of the class.</li>
-                        <li><i>BASE_DATA_LIB</i>: Name of the BASE data library call (where the stored procedure is exposed).</li>
-                    </ul>
-                </p>
-                <div class="note">
-                    <strong>Template:</strong> Here is a template to follow (remember to substitute <i style="font-size: 12px;">{BASE}</i> and <i style="font-size: 12px;">{BASE_DATA_LIB}</i>):
-                </div>
-                <div class="noteBody">
-                    <pre>
-        public static List&lt;{BASE}&gt; GetToolConstants()
-        {
-            lock (LOCK_OBJECT ?? new object())
-            {
-                return _get{BASE} ?? (_get{BASE} = new {BASE_DATA_LIB});
-            }
-        }
-        private static List&lt;{BASE}&gt; _get{BASE};
-                    </pre>
-                </div>
-
-                <div class="note">
-                    <strong>Note:</strong> Here is an example where the <i style="font-size: 12px;">BASE</i> is <b>ToolConstants</b>:
-                </div>
-                <div class="noteBody">
-                    <pre>
-        public static List&lt;ToolConstants&gt; GetToolConstants()
-        {
-            lock (LOCK_OBJECT ?? new object())
-            {
-                return _getToolConstants ?? (_getToolConstants = new ConstantLookupDataLib().GetToolConstants());
-            }
-        }
-        private static List&lt;ToolConstants&gt; _getToolConstants;
-                    </pre>
-                </div>
-
-            </li>
-        </ol>
+    <p>
+        Create the call to populate the cache <b>IF</b> the private version is not populates.
     </p>
+    <p>
+        To do this, you need to know some important information:
+        <ul>
+            <li><i>BASE</i>: Name of the class.</li>
+            <li><i>BASE_DATA_LIB</i>: Name of the BASE data library call (where the stored procedure is exposed).</li>
+        </ul>
+    </p>
+    <div class="note">
+        <strong>Template:</strong> Here is a template to follow (remember to substitute <i style="font-size: 12px;">{BASE}</i> and <i style="font-size: 12px;">{BASE_DATA_LIB}</i>):
+    </div>
+    <div class="noteBody">
+        <pre>
+                    public static List&lt;{BASE}&gt; GetToolConstants()
+                    {
+                        lock (LOCK_OBJECT ?? new object())
+                        {
+                            return _get{BASE} ?? (_get{BASE} = new {BASE_DATA_LIB});
+                        }
+                    }
+                    private static List&lt;{BASE}&gt; _get{BASE};
+                                </pre>
+    </div>
+    <div class="note">
+        <strong>Note:</strong> Here is an example where the <i style="font-size: 12px;">BASE</i> is <b>ToolConstants</b>:
+    </div>
+    <div class="noteBody">
+        <pre>
+                    public static List&lt;ToolConstants&gt; GetToolConstants()
+                    {
+                        lock (LOCK_OBJECT ?? new object())
+                        {
+                            return _getToolConstants ?? (_getToolConstants = new ConstantLookupDataLib().GetToolConstants());
+                        }
+                    }
+                    private static List&lt;ToolConstants&gt; _getToolConstants;
+                                </pre>
+    </div>
+    </li>
+    <li>
+        <div>
+            <p>
+                To expose the Datacollection static class methods to Business layer write a wrapper method inside <b>DataCollectionsDataLib</b>,
+                which will call the DataCollection static method. Extract the method signature into IDataCollectionsDataLib interface.
+            </p>
+            <i>IDataCollectionsDataLib is already registered with DataCollectionsDataLib type, thus no entry required in <b>Resolver.cs</b></i>
+        </div>
+        <div class="note">
+            <strong>Note:</strong> Here is an example!
+        </div>
+        <div class="noteBody">
+            <pre>
+                      public class DataCollectionsDataLib : IDataCollectionsDataLib
+                      {
+                        public List&lt;ToolConstants&gt; GetToolConstants()
+                        {
+                            return DataCollections.GetToolConstants();
+                        }
+                      }
+                    </pre>
+        </div>
+    </li>
+    </ol>
 
 
     <br /><br /><br />
 </div>
-

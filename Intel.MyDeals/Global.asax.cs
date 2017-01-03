@@ -7,7 +7,6 @@ using System.Web.Routing;
 using Intel.MyDeals.App;
 using Intel.MyDeals.BusinesssLogic;
 using Intel.MyDeals.Controllers;
-using Intel.MyDeals.Entities;
 using Intel.MyDeals.Entities.Logging;
 using Intel.Opaque;
 
@@ -22,15 +21,14 @@ namespace Intel.MyDeals
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-
+            UnityConfig.RegisterComponents();
             AppHelper.SetupDataAccessLib();
 
-			// Init log writers
-			OpLogPerfHelper.InitWriters("DEBUG:DB:EVENTLOG:FILE:EMAILEX"); // TODO: Get this string of writers from db or config
-		}
+            // Init log writers
+            OpLogPerfHelper.InitWriters("DEBUG:DB:EVENTLOG:FILE:EMAILEX"); // TODO: Get this string of writers from db or config
+        }
 
-
-        void Application_Error(Object sender, EventArgs e)
+        private void Application_Error(Object sender, EventArgs e)
         {
             Exception ex = Server.GetLastError();
             ErrorControllerContent errCon = AppHelper.GenerateErrorContext(ex, ((WebApiApplication)sender).Context);
@@ -45,18 +43,17 @@ namespace Intel.MyDeals
 
             ((IController)controller).Execute(errCon.RequestContext);
         }
-		
 
-	    protected void Application_End()
-		{
-			LoggingLib loglib = new LoggingLib();
+        protected void Application_End()
+        {
+            LoggingLib loglib = new LoggingLib();
 
-			// Upload db logs
-			foreach (DbLogPerf perf in OpLogPerf.GetTypedWriters<DbLogPerf>())
-			{
-				loglib.UploadDbLogPerfLogs(perf.LogStack);
-				perf.Clear();
-			}
-		}
-	}
+            // Upload db logs
+            foreach (DbLogPerf perf in OpLogPerf.GetTypedWriters<DbLogPerf>())
+            {
+                loglib.UploadDbLogPerfLogs(perf.LogStack);
+                perf.Clear();
+            }
+        }
+    }
 }

@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Web.Http;
-using Intel.MyDeals.BusinesssLogic;
-using Intel.MyDeals.Entities;
+﻿using Intel.MyDeals.Entities;
+using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque;
 using System;
+using System.Collections.Generic;
 using System.Net;
+using System.Web.Http;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -12,18 +12,25 @@ namespace Intel.MyDeals.Controllers.API
     [RoutePrefix("api/Products")]
     public class ProductsController : BaseApiController
     {
+        private readonly IProductsLib _productsLib;
+
+        public ProductsController(IProductsLib _productsLib)
+        {
+            this._productsLib = _productsLib;
+        }
+
         [Authorize]
         [Route("GetProducts")]
         public IEnumerable<Product> GetProducts()
         {
             try
             {
-                return new ProductsLib().GetProducts();
+                return _productsLib.GetProducts();
             }
             catch (Exception ex)
             {
-				OpLogPerf.Log(ex);
-				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+                OpLogPerf.Log(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
 
@@ -33,12 +40,12 @@ namespace Intel.MyDeals.Controllers.API
         {
             try
             {
-                return new ProductsLib().GetProduct(sid);
+                return _productsLib.GetProduct(sid);
             }
             catch (Exception ex)
             {
-				OpLogPerf.Log(ex);
-				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+                OpLogPerf.Log(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
 
@@ -48,12 +55,12 @@ namespace Intel.MyDeals.Controllers.API
         {
             try
             {
-                return new ProductsLib().GetProductsActive();
+                return _productsLib.GetProductsActive();
             }
             catch (Exception ex)
             {
-				OpLogPerf.Log(ex);
-				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+                OpLogPerf.Log(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
 
@@ -63,12 +70,12 @@ namespace Intel.MyDeals.Controllers.API
         {
             try
             {
-                return new ProductsLib().GetProductByCategoryName(name, getCachedResult);
+                return _productsLib.GetProductByCategoryName(name, getCachedResult);
             }
             catch (Exception ex)
             {
-				OpLogPerf.Log(ex);
-				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+                OpLogPerf.Log(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
 
@@ -78,12 +85,12 @@ namespace Intel.MyDeals.Controllers.API
         {
             try
             {
-                return new ProductsLib().GetProductByCategorySid(sid);
+                return _productsLib.GetProductByCategorySid(sid);
             }
             catch (Exception ex)
             {
-				OpLogPerf.Log(ex);
-				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+                OpLogPerf.Log(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
 
@@ -93,12 +100,12 @@ namespace Intel.MyDeals.Controllers.API
         {
             try
             {
-                return new ProductsLib().GetProductByFamilyName(name);
+                return _productsLib.GetProductByFamilyName(name);
             }
             catch (Exception ex)
             {
-				OpLogPerf.Log(ex);
-				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+                OpLogPerf.Log(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
 
@@ -108,12 +115,12 @@ namespace Intel.MyDeals.Controllers.API
         {
             try
             {
-                return new ProductsLib().GetProductByFamilySid(sid);
+                return _productsLib.GetProductByFamilySid(sid);
             }
             catch (Exception ex)
             {
-				OpLogPerf.Log(ex);
-				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+                OpLogPerf.Log(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
 
@@ -123,12 +130,12 @@ namespace Intel.MyDeals.Controllers.API
         {
             try
             {
-                return new ProductsLib().GetProductByBrandName(name);
+                return _productsLib.GetProductByBrandName(name);
             }
             catch (Exception ex)
             {
-				OpLogPerf.Log(ex);
-				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+                OpLogPerf.Log(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
 
@@ -138,12 +145,12 @@ namespace Intel.MyDeals.Controllers.API
         {
             try
             {
-                return new ProductsLib().GetProductByBrandSid(sid);
+                return _productsLib.GetProductByBrandSid(sid);
             }
             catch (Exception ex)
             {
-				OpLogPerf.Log(ex);
-				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+                OpLogPerf.Log(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
 
@@ -153,12 +160,12 @@ namespace Intel.MyDeals.Controllers.API
         {
             try
             {
-                return new ProductsLib().GetProductByProcessorNumberName(name);
+                return _productsLib.GetProductByProcessorNumberName(name);
             }
             catch (Exception ex)
             {
-				OpLogPerf.Log(ex);
-				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+                OpLogPerf.Log(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
 
@@ -168,12 +175,12 @@ namespace Intel.MyDeals.Controllers.API
         {
             try
             {
-                return new ProductsLib().GetProductByProcessorNumberSid(sid);
+                return _productsLib.GetProductByProcessorNumberSid(sid);
             }
             catch (Exception ex)
             {
-				OpLogPerf.Log(ex);
-				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+                OpLogPerf.Log(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
 
@@ -183,12 +190,12 @@ namespace Intel.MyDeals.Controllers.API
         {
             try
             {
-                return new ProductsLib().GetProductByDealProductName(name);
+                return _productsLib.GetProductByDealProductName(name);
             }
             catch (Exception ex)
             {
-				OpLogPerf.Log(ex);
-				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+                OpLogPerf.Log(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
 
@@ -198,12 +205,12 @@ namespace Intel.MyDeals.Controllers.API
         {
             try
             {
-                return new ProductsLib().GetProductByDealProductNameSid(sid);
+                return _productsLib.GetProductByDealProductNameSid(sid);
             }
             catch (Exception ex)
             {
-				OpLogPerf.Log(ex);
-				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+                OpLogPerf.Log(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
 
@@ -213,12 +220,12 @@ namespace Intel.MyDeals.Controllers.API
         {
             try
             {
-                return new ProductsLib().GetProductByDealProductTypeName(name);
+                return _productsLib.GetProductByDealProductTypeName(name);
             }
             catch (Exception ex)
             {
-				OpLogPerf.Log(ex);
-				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+                OpLogPerf.Log(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
 
@@ -228,12 +235,12 @@ namespace Intel.MyDeals.Controllers.API
         {
             try
             {
-                return new ProductsLib().GetProductByDealProductTypeSid(sid);
+                return _productsLib.GetProductByDealProductTypeSid(sid);
             }
             catch (Exception ex)
             {
-				OpLogPerf.Log(ex);
-				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+                OpLogPerf.Log(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
 
@@ -243,12 +250,12 @@ namespace Intel.MyDeals.Controllers.API
         {
             try
             {
-                return new ProductsLib().GetProductByMaterialIdName(name);
+                return _productsLib.GetProductByMaterialIdName(name);
             }
             catch (Exception ex)
             {
-				OpLogPerf.Log(ex);
-				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+                OpLogPerf.Log(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
 
@@ -258,12 +265,12 @@ namespace Intel.MyDeals.Controllers.API
         {
             try
             {
-                return new ProductsLib().GetProductByMaterialIdSid(sid);
+                return _productsLib.GetProductByMaterialIdSid(sid);
             }
             catch (Exception ex)
             {
-				OpLogPerf.Log(ex);
-				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+                OpLogPerf.Log(ex);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
     }

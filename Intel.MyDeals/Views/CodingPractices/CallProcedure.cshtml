@@ -1,5 +1,4 @@
-﻿
-@Html.Partial("TOC", new ViewDataDictionary
+﻿@Html.Partial("TOC", new ViewDataDictionary
 {
     { "categoryTitle", "Project setup and logic flow" },
     { "categoryAction", "Project" },
@@ -11,8 +10,8 @@
 <div id="mainBody" style="margin: 10px; padding: 0 20px 0 200px;">
     <h1><img src="/Images/docs/icon-data-library.png" height="60" />Calling a stored procedure</h1>
     <p>
-        Since all communication to the database is handled though stored procedures, it is important to understand how to call a stored procedure from MyDeals.<br/>
-        <img src="/Images/docs/callproc.png" style="margin: 10px 0 10px 25px;"/>
+        Since all communication to the database is handled though stored procedures, it is important to understand how to call a stored procedure from MyDeals.<br />
+        <img src="/Images/docs/callproc.png" style="margin: 10px 0 10px 25px;" />
 
         <div class="stepByStep">
             <i class="intelicon-task"></i>Step by Step
@@ -26,11 +25,11 @@
                 <i class="intelicon-checklist-outlined" style="font-size: 20px;"></i>Ensure you have included the <strong>shared class</strong> into MyDeals. If you are unsure how to do this, please refer to the <a href="@Url.Action("ClassFromProcedure", "CodingPractices", new {Area = ""})">Creating a shared class from a procedure</a> section.
             </li>
             <li>
-                Locate the appropriate folder in the <i>Intel.MyDeals.DataLibrary</i> project. This project is grouped into appropriate folders. If there isn't a folder that matches your needs, create a new one.<br/>
-                <img src="/Images/docs/datalibproj.png" style="margin: 10px 0;"/>
+                Locate the appropriate folder in the <i>Intel.MyDeals.DataLibrary</i> project. This project is grouped into appropriate folders. If there isn't a folder that matches your needs, create a new one.<br />
+                <img src="/Images/docs/datalibproj.png" style="margin: 10px 0;" />
             </li>
             <li>
-                Add a call to the stored procedure. Some procedures return data and others simply execute an action.<br/>
+                Add a call to the stored procedure. Some procedures return data and others simply execute an action.<br />
 
                 <div class="note"><strong>Note:</strong> Here is an example of a store procedure that returns data:</div>
                 <div class="noteBody">
@@ -108,10 +107,34 @@
 </pre>
                 </div>
             </li>
+            <li>
+                Extract the public methods which you want to expose to Business Layer, create the appropriate folder in the <i>Intel.MyDeals.IDataLibrary</i>.
+                This layout needs to match the <i>Intel.MyDeals.DataLibrary.</i> folder structure.
+                <img src="~/Images/docs/datalibInterfaceCreation.png" style="margin: 10px 0 10px 25px;" />
+                <div class="alert alert-info" role="alert">
+                    <strong>Quick Tip!</strong> Keep the interface name same as class implementing it. Append it with prefix "I".
+                </div>
+            </li>
+            <li>
+                In the <i>Resolver.cs</i> file register the interface with implementing class in the container.
+                <img src="/Images/docs/datalibResolver.png" style="margin: 10px 0 10px 25px;" />
+                <div class="note">
+                    <strong>Note:</strong> Here is an example, for registering ConstantLookupDataLib with IConstantLookupDataLib.
+                </div>
+                <div class="noteBody">
+                    <pre>
+                      public class Resolver : IService
+                      {
+                        public void SetUp(IRegisterService registerService)
+                        {
+                           registerService.RegisterType&lt;IConstantLookupDataLib, ConstantLookupDataLib&gt;();
+                        }
+                      }
+                    </pre>
+                </div>
+            </li>
         </ol>
     </p>
 
-
     <br /><br /><br />
 </div>
-

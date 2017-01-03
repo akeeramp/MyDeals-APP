@@ -1,18 +1,34 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Intel.MyDeals.DataLibrary;
+﻿using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
+using Intel.MyDeals.IBusinessLogic;
+using Intel.MyDeals.IDataLibrary;
 using Intel.Opaque;
-
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Intel.MyDeals.BusinesssLogic
 {
-    public class SecurityAttributesLib
+    public class SecurityAttributesLib : ISecurityAttributesLib
     {
+        private readonly ISecurityAttributesDataLib _securityAttributesDataLib;
+
+        public SecurityAttributesLib(ISecurityAttributesDataLib _securityAttributesDataLib)
+        {
+            this._securityAttributesDataLib = _securityAttributesDataLib;
+        }
+
+        /// <summary>
+        /// TODO: This parameterless constructor is left as a reminder,
+        /// once we fix our unit tests to use Moq remove this constructor, also remove direct reference to "Intel.MyDeals.DataLibrary"
+        /// </summary>
+        public SecurityAttributesLib()
+        {
+            this._securityAttributesDataLib = new SecurityAttributesDataLib();
+        }
 
         public SecurityWrapper GetSecurityMasks()
         {
-            return new SecurityWrapper(null,null,null);
+            return new SecurityWrapper(null, null, null);
             //return DataCollections.GetSecurityWrapper();
         }
 
@@ -22,7 +38,7 @@ namespace Intel.MyDeals.BusinesssLogic
             //return DataCollections.GetAppRoleTiers();
         }
 
-		public List<OpRoleType> GetOpRoleTypes()
+        public List<OpRoleType> GetOpRoleTypes()
         {
             // Load Role Types
             return GetAppRoleTiers().Where(r => r.APPL_CD == "IDMS").Select(appRoleTier => new OpRoleType
@@ -35,70 +51,80 @@ namespace Intel.MyDeals.BusinesssLogic
             }).ToList();
         }
 
-		#region SecurityActions
-		public List<SecurityActions> GetSecurityActions()
-		{
-			return new SecurityAttributesDataLib().GetSecurityActions();
-		}
-		public SecurityActions ManageSecurityAction(SecurityActions action, CrudModes state)
-		{
-			return new SecurityAttributesDataLib().ManageSecurityAction(action, state);
-		}
+        #region SecurityActions
 
-		public bool DeleteSecurityAction(int id)
-		{
-			return new SecurityAttributesDataLib().DeleteSecurityAction(id);
-		}
-		#endregion
+        public List<SecurityActions> GetSecurityActions()
+        {
+            return _securityAttributesDataLib.GetSecurityActions();
+        }
 
-		#region Admin Applications
-		public List<AdminApplications> GetAdminApplications()
-		{
-			return new SecurityAttributesDataLib().GetAdminApplications();
-		}
-		public AdminApplications ManageAdminApplication(AdminApplications app, CrudModes state)
-		{
-			return new SecurityAttributesDataLib().ManageAdminApplication(app, state);
-		}
+        public SecurityActions ManageSecurityAction(SecurityActions action, CrudModes state)
+        {
+            return _securityAttributesDataLib.ManageSecurityAction(action, state);
+        }
 
-		public bool DeleteAdminApplication(int id)
-		{
-			return new SecurityAttributesDataLib().DeleteAdminApplication(id);
-		}
-		#endregion
+        public bool DeleteSecurityAction(int id)
+        {
+            return _securityAttributesDataLib.DeleteSecurityAction(id);
+        }
 
-		#region Admin DealTypes
-		public List<AdminDealType> GetAdminDealTypes()
-		{
-			return new SecurityAttributesDataLib().GetAdminDealTypes();
-		}
-		public AdminDealType ManageAdminDealType(AdminDealType dealType, CrudModes state)
-		{
-			return new SecurityAttributesDataLib().ManageAdminDealType(dealType, state);
-		}
+        #endregion SecurityActions
 
-		public bool DeleteAdminDealType(int id)
-		{
-			return new SecurityAttributesDataLib().DeleteAdminDealType(id);
-		}
-		#endregion
+        #region Admin Applications
 
-		#region Admin RoleTypes
-		public List<AdminRoleType> GetAdminRoleTypes()
-		{
-			return new SecurityAttributesDataLib().GetAdminRoleTypes();
-		}
-		public AdminRoleType ManageAdminRoleType(AdminRoleType roleType, CrudModes state)
-		{
-			return new SecurityAttributesDataLib().ManageAdminRoleType(roleType, state);
-		}
+        public List<AdminApplications> GetAdminApplications()
+        {
+            return _securityAttributesDataLib.GetAdminApplications();
+        }
 
-		public bool DeleteAdminRoleType(int id)
-		{
-			return new SecurityAttributesDataLib().DeleteAdminRoleType(id);
-		}
-		#endregion
+        public AdminApplications ManageAdminApplication(AdminApplications app, CrudModes state)
+        {
+            return _securityAttributesDataLib.ManageAdminApplication(app, state);
+        }
 
+        public bool DeleteAdminApplication(int id)
+        {
+            return _securityAttributesDataLib.DeleteAdminApplication(id);
+        }
 
-	}
+        #endregion Admin Applications
+
+        #region Admin DealTypes
+
+        public List<AdminDealType> GetAdminDealTypes()
+        {
+            return _securityAttributesDataLib.GetAdminDealTypes();
+        }
+
+        public AdminDealType ManageAdminDealType(AdminDealType dealType, CrudModes state)
+        {
+            return _securityAttributesDataLib.ManageAdminDealType(dealType, state);
+        }
+
+        public bool DeleteAdminDealType(int id)
+        {
+            return _securityAttributesDataLib.DeleteAdminDealType(id);
+        }
+
+        #endregion Admin DealTypes
+
+        #region Admin RoleTypes
+
+        public List<AdminRoleType> GetAdminRoleTypes()
+        {
+            return _securityAttributesDataLib.GetAdminRoleTypes();
+        }
+
+        public AdminRoleType ManageAdminRoleType(AdminRoleType roleType, CrudModes state)
+        {
+            return _securityAttributesDataLib.ManageAdminRoleType(roleType, state);
+        }
+
+        public bool DeleteAdminRoleType(int id)
+        {
+            return _securityAttributesDataLib.DeleteAdminRoleType(id);
+        }
+
+        #endregion Admin RoleTypes
+    }
 }

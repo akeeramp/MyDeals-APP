@@ -27,17 +27,34 @@
         </li>
         <li>
             Add your business function here.  Keep in mind the code segments should be rather small and coded in a way it can efficiently be used by automated testing.<br />
-            <div class="note"><strong>Note:</strong> Here is an example of a business logic function calling the Data Library <b>cache</b> instead of the procedure. Notice the use of <b>DataCollections</b>.</div>
+            <div class="note"><strong>Note:</strong> Here is an example of a business logic function calling the DataCollectionsDataLib <b>cache</b> instead of the procedure(ConstantLookupDataLib). <b>DataCollectionsDataLib</b> calls <b>DataCollections</b> static methods.</div>
             <div class="noteBody">
-                <pre>        
+                <pre>
+    public class ConstantsLookupsLib : IConstantsLookupsLib
+    {
+        /// &lt;summary&gt;
+        /// Constants lookup data library
+        /// &lt;/summary&gt;
+        private readonly IConstantLookupDataLib _constantLookupDataLib;
+
+        /// &lt;summary&gt;
+        /// DataCollection Data Library, wrapper methods to access static cache
+        /// &lt;/summary&gt;
+        private readonly IDataCollectionsDataLib _dataCollectionsDataLib;
+
+        public ConstantsLookupsLib(IConstantLookupDataLib _constantLookupDataLib,
+            IDataCollectionsDataLib _dataCollectionsDataLib)
+        {
+            this._constantLookupDataLib = _constantLookupDataLib;
+            this._dataCollectionsDataLib = _dataCollectionsDataLib;
+        }
+
         public List&lt;ToolConstants&gt; GetToolConstants()
         {
-            //
-            // can put business logic here
-            //
-            return DataCollections.GetToolConstants();
+            return _dataCollectionsDataLib.GetToolConstants();
         }
-                </pre>
+    }
+                                </pre>
             </div>
         </li>
     </ol>

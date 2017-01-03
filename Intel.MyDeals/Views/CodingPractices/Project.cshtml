@@ -77,7 +77,7 @@
                     <div style="font-size: 10px;">Intel.MyDeals.DataLibrary</div>
                 </a>
             </td>
-            <td style="font-size: 12px; color: #333333; padding-right: 15px;">Layer dedicated to making all database calls as well as data caching repository for performance.</td>
+            <td style="font-size: 12px; color: #333333; padding-right: 15px;">Layer dedicated to making all database calls as well as data caching repository for performance. This layer implements contracts present in <i>Intel.MyDeals.IDataLibrary</i>. Loosely coupled with Business Layer.</td>
             <td style="font-size: 11px;">
                 <div><a href="@Url.Action("CallProcedure", "CodingPractices", new {Area = ""})">Calling a stored procedure</a></div>
                 <div><a href="@Url.Action("Cache", "CodingPractices", new {Area = ""})">Creating a data cache</a></div>
@@ -91,7 +91,7 @@
                     <div style="font-size: 10px;">Intel.MyDeals.BusinessLogic</div>
                 </a>
             </td>
-            <td style="font-size: 12px; color: #333333; padding-right: 15px;">Layer dedicated to hold the business logic for MyDeals.  Most of the logic for the application should reside in this layer.  There should be NO data access from this layer.</td>
+            <td style="font-size: 12px; color: #333333; padding-right: 15px;">Layer dedicated to hold the business logic for MyDeals.  Most of the logic for the application should reside in this layer.  There should be NO data access from this layer. This layer implements contracts present in <i>Intel.MyDeals.IBusinessLogic</i>. There is no direct dependency between Api and Business Layer. <a target="_blank" href="https://msdn.microsoft.com/en-us/library/ff921087.aspx">IoC</a> used for loosely coupled code.</td>
             <td style="font-size: 11px;">Recomended Links</td>
         </tr>
         <tr style="border-bottom: 1px solid #dddddd;">
