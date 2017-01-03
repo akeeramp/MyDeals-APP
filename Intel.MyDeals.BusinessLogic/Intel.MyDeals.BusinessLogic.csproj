@@ -53,6 +53,7 @@
       <HintPath>..\Shared Libraries\Intel.Opaque.DBAccess.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -94,11 +95,16 @@
     <Compile Include="PricingTables\PricingTablesLib.cs" />
     <Compile Include="Products\ProductsLib.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resolver.cs" />
     <Compile Include="Search\QuickSearchLib.cs" />
     <Compile Include="Security Attributes\SecurityAttributesLib.cs" />
     <Compile Include="Workflows\WorkflowsLib.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DependencyResolver\Intel.MyDeals.DependencyResolver.csproj">
+      <Project>{BBC3062A-64DD-4C91-BF41-24046A9F1009}</Project>
+      <Name>Intel.MyDeals.DependencyResolver</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Intel.MyDeals.BusinessRules\Intel.MyDeals.BusinessRules.csproj">
       <Project>{2F3217AD-E46B-4DAB-82C2-11E007B65A9C}</Project>
       <Name>Intel.MyDeals.BusinessRules</Name>
@@ -111,8 +117,18 @@
       <Project>{ae1a3978-08ef-4a15-82cd-7ba6192a9b52}</Project>
       <Name>Intel.MyDeals.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Intel.MyDeals.IBusinessLogic\Intel.MyDeals.IBusinessLogic.csproj">
+      <Project>{A9AF9B92-17BA-4050-B5A7-F5F652AECDF9}</Project>
+      <Name>Intel.MyDeals.IBusinessLogic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Intel.MyDeals.IDataLibraries\Intel.MyDeals.IDataLibrary.csproj">
+      <Project>{3e9b9f0a-9c92-404e-afdf-75ad67ac76d8}</Project>
+      <Name>Intel.MyDeals.IDataLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -1,5 +1,5 @@
-﻿using Intel.MyDeals.BusinessLogic;
-using Intel.MyDeals.Entities;
+﻿using Intel.MyDeals.Entities;
+using Intel.MyDeals.IBusinessLogic;
 using System;
 using System.Net.Http;
 using System.Web.Http;
@@ -10,6 +10,13 @@ namespace Intel.MyDeals.Controllers.API
     [RoutePrefix("api/CustomerCalendar")]
     public class CustomerCalendarController : BaseApiController
     {
+        private readonly ICustomerCalendarLib _customerCalendarLib;
+
+        public CustomerCalendarController(ICustomerCalendarLib _customerCalendarLib)
+        {
+            this._customerCalendarLib = _customerCalendarLib;
+        }
+
         /// <summary>
         /// Get customer quarter start date and end date details
         /// </summary>
@@ -19,7 +26,7 @@ namespace Intel.MyDeals.Controllers.API
         [HttpPost]
         public CustomerQuarterDetails GetCustomerQuarterDetails([FromBody]dynamic input)
         {
-            return new CustomerCalendarLib().GetCustomerQuarterDetails((int?)input.CustomerMemberSid
+            return this._customerCalendarLib.GetCustomerQuarterDetails((int?)input.CustomerMemberSid
                                                                       , (DateTime?)input.DayInQuarter
                                                                       , (short?)input.Year
                                                                       , (short?)input.QuarterNo);

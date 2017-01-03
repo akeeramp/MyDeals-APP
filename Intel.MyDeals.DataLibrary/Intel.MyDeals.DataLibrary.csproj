@@ -53,6 +53,7 @@
       <HintPath>..\Shared Libraries\Microsoft.ApplicationBlocks.ExceptionManagement.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.ServiceModel" />
@@ -78,6 +79,7 @@
     <Compile Include="Constants Lookups\ConstantLookupDataLib.cs" />
     <Compile Include="CustomerCalendar\CustomerCalendarDataLib.cs" />
     <Compile Include="Customers\CustomerDataLib.cs" />
+    <Compile Include="Data Collections\DataCollectionsDataLib.cs" />
     <Compile Include="Data Collections\DataCollections.cs" />
     <Compile Include="Data Collectors\DataCollectorDataLib.cs" />
     <Compile Include="Data Collectors\DataCollectorDataLib_Get.cs" />
@@ -85,6 +87,8 @@
     <Compile Include="Deals\DealDataLib_Common.cs" />
     <Compile Include="Deals\DealDataLib_Get.cs" />
     <Compile Include="Deals\DealDataLib_Save.cs" />
+    <Compile Include="Products\ProductDataLib.cs" />
+    <Compile Include="Resolver.cs" />
     <Compile Include="Employees\EmployeeDataLib.cs" />
     <Compile Include="Geos\GeoDataLib.cs" />
     <Compile Include="Helpers\OpUserTokenHelpers.cs" />
@@ -93,7 +97,6 @@
     <Compile Include="Meta\MetaDataLib.cs" />
     <Compile Include="DevTest\DevTestDataLib.cs" />
     <Compile Include="POC\PocDataLib.cs" />
-    <Compile Include="Products\ProductDataLib.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Quote Letter\QuoteDataLib.cs" />
     <Compile Include="Security Attributes\OpSecurity.cs" />
@@ -101,6 +104,10 @@
     <Compile Include="Workflow\WorkflowDataLib.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DependencyResolver\Intel.MyDeals.DependencyResolver.csproj">
+      <Project>{bbc3062a-64dd-4c91-bf41-24046a9f1009}</Project>
+      <Name>Intel.MyDeals.DependencyResolver</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Intel.MyDeals.DataAccessLib\Intel.MyDeals.DataAccessLib.csproj">
       <Project>{bd90141b-f4de-4fa3-b6d0-45bb04a3596f}</Project>
       <Name>Intel.MyDeals.DataAccessLib</Name>
@@ -109,6 +116,13 @@
       <Project>{ae1a3978-08ef-4a15-82cd-7ba6192a9b52}</Project>
       <Name>Intel.MyDeals.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Intel.MyDeals.IDataLibraries\Intel.MyDeals.IDataLibrary.csproj">
+      <Project>{3e9b9f0a-9c92-404e-afdf-75ad67ac76d8}</Project>
+      <Name>Intel.MyDeals.IDataLibrary</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

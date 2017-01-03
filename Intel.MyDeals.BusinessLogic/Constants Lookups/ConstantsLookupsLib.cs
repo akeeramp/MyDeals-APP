@@ -3,16 +3,35 @@ using System.Linq;
 using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
 using Intel.Opaque;
+using Intel.MyDeals.IDataLibrary;
+using Intel.MyDeals.IBusinessLogic;
 
 namespace Intel.MyDeals.BusinesssLogic
 {
-    public class ConstantsLookupsLib
+    public class ConstantsLookupsLib : IConstantsLookupsLib
     {
+        /// <summary>
+        /// Constants lookup Data library
+        /// </summary>
+        private readonly IConstantLookupDataLib _constantLookupDataLib;
+
+        /// <summary>
+        /// DataCollection Data Library, wrapper methods to access static cache
+        /// </summary>
+        private readonly IDataCollectionsDataLib _dataCollectionsDataLib;
+
+        public ConstantsLookupsLib(IConstantLookupDataLib _constantLookupDataLib,
+            IDataCollectionsDataLib _dataCollectionsDataLib)
+        {
+            this._constantLookupDataLib = _constantLookupDataLib;
+            this._dataCollectionsDataLib = _dataCollectionsDataLib;
+        }
+
         #region ToolConstants
 
         public List<ToolConstants> GetToolConstants()
         {
-            return DataCollections.GetToolConstants();
+            return _dataCollectionsDataLib.GetToolConstants();
         }
 
         public ToolConstants GetToolConstant(string constant)
@@ -28,11 +47,7 @@ namespace Intel.MyDeals.BusinesssLogic
                 .FirstOrDefault();
         }
 
-
-
         #endregion
-
-
 
         //public List<LookupItem> GetLookups()
         //{
@@ -54,32 +69,30 @@ namespace Intel.MyDeals.BusinesssLogic
         //        .OrderBy(l => l.DROP_DOWN).ToList();
         //}
 
-
         #region Constants Admin
 
         public List<AdminConstant> GetAdminConstants()
         {
-            return new ConstantLookupDataLib().GetAdminConstants();
+            return _constantLookupDataLib.GetAdminConstants();
         }
 
         public AdminConstant CreateAdminConstant(AdminConstant data)
         {
-            return data == null ? null : new ConstantLookupDataLib().SetAdminConstants(CrudModes.Insert, data);
+            return data == null ? null : _constantLookupDataLib.SetAdminConstants(CrudModes.Insert, data);
         }
 
         public AdminConstant UpdateAdminConstant(AdminConstant data)
         {
-            return data == null ? null : new ConstantLookupDataLib().SetAdminConstants(CrudModes.Update, data);
+            return data == null ? null : _constantLookupDataLib.SetAdminConstants(CrudModes.Update, data);
         }
 
         public void DeleteAdminConstant(AdminConstant data)
         {
             if (data == null) return;
 
-            new ConstantLookupDataLib().SetAdminConstants(CrudModes.Delete, data);
+            _constantLookupDataLib.SetAdminConstants(CrudModes.Delete, data);
         }
 
         #endregion
-
     }
 }

@@ -60,6 +60,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intel.MyDeals.BusinessLogic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intel.MyDeals.App.Test", "Intel.MyDeals.App.Test\Intel.MyDeals.App.Test.csproj", "{54108804-19D3-4EFD-BDB5-9F9AA02FDD05}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intel.MyDeals.IDataLibrary", "Intel.MyDeals.IDataLibraries\Intel.MyDeals.IDataLibrary.csproj", "{3E9B9F0A-9C92-404E-AFDF-75AD67AC76D8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intel.MyDeals.DependencyResolver", "DependencyResolver\Intel.MyDeals.DependencyResolver.csproj", "{BBC3062A-64DD-4C91-BF41-24046A9F1009}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intel.MyDeals.IBusinessLogic", "Intel.MyDeals.IBusinessLogic\Intel.MyDeals.IBusinessLogic.csproj", "{A9AF9B92-17BA-4050-B5A7-F5F652AECDF9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -164,6 +170,30 @@ Global
 		{54108804-19D3-4EFD-BDB5-9F9AA02FDD05}.itt|Any CPU.Build.0 = itt|Any CPU
 		{54108804-19D3-4EFD-BDB5-9F9AA02FDD05}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{54108804-19D3-4EFD-BDB5-9F9AA02FDD05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E9B9F0A-9C92-404E-AFDF-75AD67AC76D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E9B9F0A-9C92-404E-AFDF-75AD67AC76D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E9B9F0A-9C92-404E-AFDF-75AD67AC76D8}.dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E9B9F0A-9C92-404E-AFDF-75AD67AC76D8}.dev|Any CPU.Build.0 = Debug|Any CPU
+		{3E9B9F0A-9C92-404E-AFDF-75AD67AC76D8}.itt|Any CPU.ActiveCfg = Release|Any CPU
+		{3E9B9F0A-9C92-404E-AFDF-75AD67AC76D8}.itt|Any CPU.Build.0 = Release|Any CPU
+		{3E9B9F0A-9C92-404E-AFDF-75AD67AC76D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E9B9F0A-9C92-404E-AFDF-75AD67AC76D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBC3062A-64DD-4C91-BF41-24046A9F1009}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBC3062A-64DD-4C91-BF41-24046A9F1009}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBC3062A-64DD-4C91-BF41-24046A9F1009}.dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBC3062A-64DD-4C91-BF41-24046A9F1009}.dev|Any CPU.Build.0 = Debug|Any CPU
+		{BBC3062A-64DD-4C91-BF41-24046A9F1009}.itt|Any CPU.ActiveCfg = Release|Any CPU
+		{BBC3062A-64DD-4C91-BF41-24046A9F1009}.itt|Any CPU.Build.0 = Release|Any CPU
+		{BBC3062A-64DD-4C91-BF41-24046A9F1009}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBC3062A-64DD-4C91-BF41-24046A9F1009}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9AF9B92-17BA-4050-B5A7-F5F652AECDF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9AF9B92-17BA-4050-B5A7-F5F652AECDF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9AF9B92-17BA-4050-B5A7-F5F652AECDF9}.dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9AF9B92-17BA-4050-B5A7-F5F652AECDF9}.dev|Any CPU.Build.0 = Debug|Any CPU
+		{A9AF9B92-17BA-4050-B5A7-F5F652AECDF9}.itt|Any CPU.ActiveCfg = Release|Any CPU
+		{A9AF9B92-17BA-4050-B5A7-F5F652AECDF9}.itt|Any CPU.Build.0 = Release|Any CPU
+		{A9AF9B92-17BA-4050-B5A7-F5F652AECDF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9AF9B92-17BA-4050-B5A7-F5F652AECDF9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -179,11 +209,17 @@ Global
 		{BB4F6AF0-3519-4CF3-B0F1-7AEE380348FF} = {3EE27FFE-7643-4D8E-A0D2-09D306204105}
 		{AA269DBF-402C-45EC-A065-83F3BFA4105F} = {DDE77E6E-C875-4373-AD6A-402E63A065EC}
 		{54108804-19D3-4EFD-BDB5-9F9AA02FDD05} = {17E4B7FF-BFC2-4A5A-9B8E-F7917803CA85}
+		{3E9B9F0A-9C92-404E-AFDF-75AD67AC76D8} = {3EE27FFE-7643-4D8E-A0D2-09D306204105}
+		{BBC3062A-64DD-4C91-BF41-24046A9F1009} = {D4550934-4B65-4F13-A51A-5873792838C1}
+		{A9AF9B92-17BA-4050-B5A7-F5F652AECDF9} = {DDE77E6E-C875-4373-AD6A-402E63A065EC}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 13
+		SccNumberOfProjects = 16
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://source.intel.com:8080/tfs/defaultcollection
+		SccTeamFoundationServer = https://tfs-fm-04.devtools.intel.com/tfs/defaultcollection
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = Intel.MyDeals.DataAccessLib\\Intel.MyDeals.DataAccessLib.csproj
 		SccProjectTopLevelParentUniqueName1 = Intel.Mydeals.sln
@@ -231,5 +267,17 @@ Global
 		SccProjectTopLevelParentUniqueName12 = Intel.Mydeals.sln
 		SccProjectName12 = Intel.MyDeals.App.Test
 		SccLocalPath12 = Intel.MyDeals.App.Test
+		SccProjectUniqueName13 = Intel.MyDeals.IBusinessLogic\\Intel.MyDeals.IBusinessLogic.csproj
+		SccProjectTopLevelParentUniqueName13 = Intel.Mydeals.sln
+		SccProjectName13 = Intel.MyDeals.IBusinessLogic
+		SccLocalPath13 = Intel.MyDeals.IBusinessLogic
+		SccProjectUniqueName14 = DependencyResolver\\Intel.MyDeals.DependencyResolver.csproj
+		SccProjectTopLevelParentUniqueName14 = Intel.Mydeals.sln
+		SccProjectName14 = DependencyResolver
+		SccLocalPath14 = DependencyResolver
+		SccProjectUniqueName15 = Intel.MyDeals.IDataLibraries\\Intel.MyDeals.IDataLibrary.csproj
+		SccProjectTopLevelParentUniqueName15 = Intel.Mydeals.sln
+		SccProjectName15 = Intel.MyDeals.IDataLibraries
+		SccLocalPath15 = Intel.MyDeals.IDataLibraries
 	EndGlobalSection
 EndGlobal

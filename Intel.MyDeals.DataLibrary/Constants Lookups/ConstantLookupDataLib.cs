@@ -5,10 +5,11 @@ using Intel.MyDeals.DataAccessLib;
 using Intel.MyDeals.Entities;
 using Intel.Opaque.DBAccess;
 using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
+using Intel.MyDeals.IDataLibrary;
 
 namespace Intel.MyDeals.DataLibrary
 {
-    public class ConstantLookupDataLib
+    public class ConstantLookupDataLib : IConstantLookupDataLib
     {
 
         #region ToolConstants

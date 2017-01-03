@@ -4,6 +4,7 @@ using Intel.MyDeals.Entities;
 using Intel.Opaque.DBAccess;
 using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
 using Intel.Opaque.Tools;
+using Intel.MyDeals.IDataLibrary;
 
 namespace Intel.MyDeals.DataLibrary
 {
@@ -11,7 +12,7 @@ namespace Intel.MyDeals.DataLibrary
     /// Data library to fetch the customer calendar
     /// Customers like Dell, HPI and HPE follow different calendar.
     /// </summary>
-    public class CustomerCalendarDataLib
+    public class CustomerCalendarDataLib : ICustomerCalendarDataLib
     {
 
         /// <summary>
@@ -42,13 +43,13 @@ namespace Intel.MyDeals.DataLibrary
             {
                 cmd.YR_NBR = (short)year;
                 cmd.QTR_NBR = (short)quarterNo;
-            }           
+            }
 
             //This helper method is template generated.
             //Refer to that template for details to modify this code.
 
             using (var rdr = DataAccess.ExecuteReader(cmd))
-            {                
+            {
                 int IDX_CUST_MBR_SID = DB.GetReaderOrdinal(rdr, "CUST_MBR_SID");
                 int IDX_QTR_END = DB.GetReaderOrdinal(rdr, "QTR_END");
                 int IDX_QTR_NBR = DB.GetReaderOrdinal(rdr, "QTR_NBR");
