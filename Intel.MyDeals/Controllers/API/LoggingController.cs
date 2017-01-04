@@ -49,7 +49,6 @@ namespace Intel.MyDeals.Controllers.API
         [Route("PostLogMessage")]
         public bool PostLogMessage([FromBody] string message)
         {
-            bool givemebackmybreakpointswtfvs = true;
             try
             {
                 OpLogPerf.Log(message, LogCategory.Information);
