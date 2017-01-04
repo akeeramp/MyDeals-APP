@@ -46,6 +46,21 @@
     <Reference Include="Intel.Opaque">
       <HintPath>..\Shared Libraries\Intel.Opaque.dll</HintPath>
     </Reference>
+    <Reference Include="nunit.core">
+      <HintPath>..\packages\NUnitTestAdapter.WithFramework.2.0.0\lib\nunit.core.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.core.interfaces">
+      <HintPath>..\packages\NUnitTestAdapter.WithFramework.2.0.0\lib\nunit.core.interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\packages\NUnitTestAdapter.WithFramework.2.0.0\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.util">
+      <HintPath>..\packages\NUnitTestAdapter.WithFramework.2.0.0\lib\nunit.util.dll</HintPath>
+    </Reference>
+    <Reference Include="NUnit.VisualStudio.TestAdapter">
+      <HintPath>..\packages\NUnitTestAdapter.WithFramework.2.0.0\lib\NUnit.VisualStudio.TestAdapter.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <Choose>
@@ -61,6 +76,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="LoggingClientUnitTests.cs" />
+    <Compile Include="EmailExLogPerfUnitTests.cs" />
+    <Compile Include="DbLogPerfUnitTests.cs" />
     <Compile Include="OpLogUnitTests.cs" />
     <Compile Include="OpUserStackUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

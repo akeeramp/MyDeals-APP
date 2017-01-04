@@ -42,12 +42,13 @@ namespace Intel.MyDeals.DataLibrary
             return ret.FirstOrDefault();
         }
 
-        /// <summary>
-        /// Saves a List of log data to db
-        /// </summary>
-        public void UploadDbLogPerfLogs(IEnumerable<DbLogPerfMessage> messages)
-        {
-            if (messages == null || !messages.Any()) { return; }
+
+		/// <summary>
+		/// Saves a List of log data to db 
+		/// </summary>
+		public bool UploadDbLogPerfLogs(IEnumerable<DbLogPerfMessage> messages)
+		{
+			if (messages == null || !messages.Any()) { return false; }
 
             const int ZIP_CUTOFF_LENGTH = 3000; // Seemed roughly optimal in initial testing
             int msgCount = messages.Count();
@@ -102,16 +103,17 @@ namespace Intel.MyDeals.DataLibrary
                     in_wwid = OpUserStack.MyOpUserToken.Usr.WWID
                 };
 
-                DataAccess.ExecuteDataSet(cmd, null, out dsCheckConstraintErrors);
-            }
-            catch (Exception ex)
-            {
-                if (dsCheckConstraintErrors != null && dsCheckConstraintErrors.Tables.Count > 0)
-                {
-                    // DO SOME ERROR HANDLING
-                }
-                throw;
-            }
-        }
-    }
+				DataAccess.ExecuteDataSet(cmd, null, out dsCheckConstraintErrors);
+				return true;
+			}
+			catch (Exception ex)
+			{
+				if (dsCheckConstraintErrors != null && dsCheckConstraintErrors.Tables.Count > 0)
+				{
+					// DO SOME ERROR HANDLING
+				}
+				throw;
+			}
+		}		
+	}
 }

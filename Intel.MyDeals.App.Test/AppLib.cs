@@ -14,11 +14,7 @@ namespace Intel.MyDeals.App.Test
             OpUserStack.EmulateUnitTester();
             _opUserToken = OpUserStack.MyOpUserToken;
         }
-
-        [TestMethod]
-        public void Test()
-        {
-        }
+		
     }
 
 }

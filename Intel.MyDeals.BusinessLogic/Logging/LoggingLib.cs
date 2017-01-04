@@ -30,9 +30,9 @@ namespace Intel.MyDeals.BusinesssLogic
             return _loggingDataLib.GetLogConfig();
         }
 
-        public void UploadDbLogPerfLogs(IEnumerable<DbLogPerfMessage> messages)
+        public bool UploadDbLogPerfLogs(IEnumerable<DbLogPerfMessage> messages)
         {
-            _loggingDataLib.UploadDbLogPerfLogs(messages);
+            return _loggingDataLib.UploadDbLogPerfLogs(messages);
         }
     }
 }

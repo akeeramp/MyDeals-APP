@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Web;
 using System.Web.Routing;
+using Intel.Opaque;
 
 namespace Intel.MyDeals.App
 {
@@ -51,11 +52,10 @@ namespace Intel.MyDeals.App
                     currentAction = currentRouteData.Values["action"].ToString();
                 }
             }
+			
+			OpLogPerf.Log(ex);
 
-
-            AppLib.EmailError(ex, GetSiteRoot());
-
-            RouteData routeData = new RouteData();
+			RouteData routeData = new RouteData();
             var action = "Index";
 
             if (ex is HttpException)

@@ -48,6 +48,10 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Intel.Opaque, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Shared Libraries\Intel.Opaque.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.core, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnitTestAdapter.WithFramework.2.0.0\lib\nunit.core.dll</HintPath>
       <Private>False</Private>
@@ -88,6 +92,7 @@
     <Compile Include="CustomerCalendarDataLibTests.cs" />
     <Compile Include="GeoDataLibTests.cs" />
     <Compile Include="CustomerDataLibTests.cs" />
+    <Compile Include="LoggingDataLibTest.cs" />
     <Compile Include="OtherTests.cs" />
     <Compile Include="PocTests.cs" />
     <Compile Include="ProductDataLibTests.cs" />

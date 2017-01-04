@@ -23,11 +23,11 @@ namespace Intel.MyDeals.Controllers.API
         /// <param name="data"> A Json object consisting of DbLogPerfMessages </param>
         [HttpPost]
         [Route("UploadLogPerfLogs")]
-        public void UploadLogPerfLogs([FromBody]dynamic data)
+        public bool UploadLogPerfLogs([FromBody]dynamic data)
         {
             try
             {
-                (_loggingLib).UploadDbLogPerfLogs(
+                return (_loggingLib).UploadDbLogPerfLogs(
                     OpSerializeHelper.FromJsonString<DbLogPerfMessage[]>(
                         OpZipUtils.DecompressString((string)(data.Messages))
                     )
@@ -37,6 +37,7 @@ namespace Intel.MyDeals.Controllers.API
             {
                 // Don't use LogPerf here to avoid infinite loop
                 System.Diagnostics.Debug.WriteLine(ex);
+				return false;
             }
         }
 

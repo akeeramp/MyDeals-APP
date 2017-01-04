@@ -8,6 +8,6 @@ namespace Intel.MyDeals.IDataLibrary
     {
         LogConfig GetLogConfig();
 
-        void UploadDbLogPerfLogs(IEnumerable<DbLogPerfMessage> messages);
+        bool UploadDbLogPerfLogs(IEnumerable<DbLogPerfMessage> messages);
     }
 }

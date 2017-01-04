@@ -15,7 +15,7 @@
 			, updateAction: updateAction
 			, deleteAction: deleteAction
         }
-
+		
         function getActions() {
             return dataService.get(URL + 'GetSecurityActions');
         }
@@ -25,7 +25,7 @@
         }
 
         function updateAction(action) {
-            return dataService.post(URL + 'UpdateAction', action);
+            return dataService.put(URL + 'UpdateAction', action);
         }
 
         function deleteAction(id) {

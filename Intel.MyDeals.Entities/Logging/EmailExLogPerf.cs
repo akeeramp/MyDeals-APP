@@ -76,7 +76,7 @@ namespace Intel.MyDeals.Entities.Logging
 		/// </summary>
 		/// <param name="subject">Subject line in email</param>
 		/// <param name="body">HTML body of email</param>
-		public static void SendEmail(string subject, string body)
+		public static bool SendEmail(string subject, string body)
 		{
 			if (string.IsNullOrEmpty(subject))
 				subject = "Unknown Subject";
@@ -112,10 +112,12 @@ namespace Intel.MyDeals.Entities.Logging
 				try
 				{
 					client.Send(myMail);
+					return true;
 				}
 				catch (Exception)
 				{
 					// Not sure how to handle this.  Throwing errors from a log is not critical, but would be nice to know if it fails
+					return false;
 #if DEBUG
 					System.Diagnostics.Debug.WriteLine("SendEmail has failed.");
 #endif

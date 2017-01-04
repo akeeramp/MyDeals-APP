@@ -135,26 +135,7 @@ namespace Intel.MyDeals.App
             OpAuthenticationExtensions.ClearCache();
             UserSettings?.Clear();
         }
-
-
-
-        public static void EmailError(Exception ex, string path)
-        {
-            OpLogPerf.Log(ex);
-
-            string idsid = (HttpContext.Current?.User?.Identity == null) ? "unknown" : HttpContext.Current.User.Identity.Name;
-            string ver = AVM.AppVer;
-            string env = AVM.AppEnv;
-            string title = "MyDeals Crash [" + env + "] - " + ex.Message;
-            string body = "<HTML><HEAD><style>body {font-size: 11px; font-family: verdana;}</style></HEAD><BODY>" +
-                             "<p>" +
-                             "IDSID: " + idsid + "<br />" +
-                             "Version: " + ver + "<br />" +
-                             "Environment: " + env + "<br />" +
-                             "Path: " + path + "</p>" +
-                             "<p>" + ex + "</p></BODY></HTML>";
-			
-        }
+		
 
 
     }
