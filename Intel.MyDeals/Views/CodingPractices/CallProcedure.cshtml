@@ -110,6 +110,7 @@
             <li>
                 Extract the public methods which you want to expose to Business Layer, create the appropriate folder in the <i>Intel.MyDeals.IDataLibrary</i>.
                 This layout needs to match the <i>Intel.MyDeals.DataLibrary.</i> folder structure.
+                <br />
                 <img src="~/Images/docs/datalibInterfaceCreation.png" style="margin: 10px 0 10px 25px;" />
                 <div class="alert alert-info" role="alert">
                     <strong>Quick Tip!</strong> Keep the interface name same as class implementing it. Append it with prefix "I".
@@ -117,6 +118,7 @@
             </li>
             <li>
                 In the <i>Resolver.cs</i> file register the interface with implementing class in the container.
+                <br />
                 <img src="/Images/docs/datalibResolver.png" style="margin: 10px 0 10px 25px;" />
                 <div class="note">
                     <strong>Note:</strong> Here is an example, for registering ConstantLookupDataLib with IConstantLookupDataLib.
