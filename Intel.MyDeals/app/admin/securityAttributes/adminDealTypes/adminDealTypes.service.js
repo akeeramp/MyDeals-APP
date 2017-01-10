@@ -25,7 +25,7 @@
         }
 
         function updateDealType(dealType) {
-            return dataService.post(URL + 'UpdateAdminDealType', dealType);
+            return dataService.put(URL + 'UpdateAdminDealType', dealType);
         }
 
         function deleteDealType(id) {

@@ -57,13 +57,22 @@
                 }
             },
             {
-                state: 'admin.products',
-                abstract: false,
-                config: {
-                    templateUrl: 'app/admin/products/products.html',
-                    url: 'products',
-                    controller: 'ProductController as vm',
-                }
+            	state: 'admin.products',
+            	abstract: false,
+            	config: {
+            		templateUrl: 'app/admin/products/products.html',
+            		url: 'products',
+            		controller: 'ProductController as vm',
+            	}
+            },
+            {
+            	state: 'admin.productCategories',
+            	abstract: false,
+            	config: {
+            		templateUrl: 'app/admin/productCategories/productCategories.html',
+            		url: 'productCategories',
+            		controller: 'ProductCategoryController as vm',
+            	}
             },
             {
                 state: 'admin.securityAttributes',

@@ -248,6 +248,7 @@
     <Compile Include="Controllers\API\ApiBaseController.cs" />
     <Compile Include="Controllers\API\ConstantsController.cs" />
     <Compile Include="Controllers\API\CustomerCalendarController.cs" />
+    <Compile Include="Controllers\API\ProductsCategoriesController.cs" />
     <Compile Include="Controllers\API\ProductsController.cs" />
     <Compile Include="Controllers\API\GeosController.cs" />
     <Compile Include="Controllers\API\DevTestsController.cs" />
@@ -291,6 +292,9 @@
     <Content Include="app\admin\geo\admin.geo.controller.js" />
     <Content Include="app\admin\geo\geo.html" />
     <Content Include="app\admin\geo\geo.service.js" />
+    <Content Include="app\admin\productCategories\admin.productCategories.controller.js" />
+    <Content Include="app\admin\productCategories\productCategories.html" />
+    <Content Include="app\admin\productCategories\productCategories.service.js" />
     <Content Include="app\admin\products\admin.products.controller.js" />
     <Content Include="app\admin\products\products.html" />
     <Content Include="app\admin\products\products.service.js" />
@@ -302,6 +306,9 @@
     <Content Include="app\blocks\logger\logger.module.js" />
     <Content Include="app\blocks\router\routehelper.js" />
     <Content Include="app\blocks\router\router.module.js" />
+    <Content Include="app\blocks\confirmationModal\confirmationModal.module.js" />
+    <Content Include="app\blocks\confirmationModal\confirmationModal.html" />
+    <Content Include="app\blocks\confirmationModal\confirmationModal.service.js" />
     <Content Include="app\core\config.js" />
     <Content Include="app\core\constants.js" />
     <Content Include="app\core\core.module.js" />

@@ -25,7 +25,7 @@
         }
 
         function updateApplication(application) {
-            return dataService.post(URL + 'UpdateAdminApplication', application);
+            return dataService.put(URL + 'UpdateAdminApplication', application);
         }
 
         function deleteApplication(id) {

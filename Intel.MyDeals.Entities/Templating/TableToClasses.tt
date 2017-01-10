@@ -109,6 +109,11 @@ using System.Collections.Generic;
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_PRD_DTL]");
 	ds.Tables[0].TableName = "Product";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+	
+	// Product Category CPU
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_PRD_CAT_MAP]");
+	ds.Tables[0].TableName = "ProductCategory";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	PopIndent();
 	WriteLine("}"); // End NameSpace

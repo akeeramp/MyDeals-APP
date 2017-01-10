@@ -93,6 +93,7 @@
     <Compile Include="POC\PocLib.cs" />
     <Compile Include="PricingStrategies\PricingStrategiesLib.cs" />
     <Compile Include="PricingTables\PricingTablesLib.cs" />
+    <Compile Include="ProductCategories\ProductCategoriesLib.cs" />
     <Compile Include="Products\ProductsLib.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resolver.cs" />

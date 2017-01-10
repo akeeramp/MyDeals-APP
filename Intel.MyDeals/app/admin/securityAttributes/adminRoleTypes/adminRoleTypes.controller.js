@@ -18,7 +18,6 @@
         // Variables
         vm.selectedItem = null;
         vm.isButtonDisabled = true;
-        vm.toolBarTemplate = $("#toolBarTemplate").html();
 
         vm.dataSource = new kendo.data.DataSource({
             type: "json",
@@ -33,8 +32,8 @@
                 },
                 update: function (e) {
                     RoleTypesService.updateRoleType(e.data.models[0])
-                         .then(function (data) {
-                             e.success(data);
+                         .then(function (response) {
+                         	e.success(response.data);
                              logger.success('Update successful.');
                          }, function (response) {
                              logger.error("Unable to update Role Type.", response, response.statusText);
@@ -42,8 +41,8 @@
                 },
                 destroy: function (e) {
                     RoleTypesService.deleteRoleType(e.data.models[0].ROLE_TYPE_SID)
-                        .then(function (data) {
-                            e.success(data);
+                        .then(function (response) {
+                        	e.success(response.data);
                             logger.success('Delete successful.');
                         }, function (response) {
                             logger.error("Unable to delete Role Type", response, response.statusText);
@@ -51,8 +50,8 @@
                 },
                 create: function (e) {
                     RoleTypesService.insertRoleType(e.data.models[0])
-                        .then(function (data) {
-                            e.success(data);
+                        .then(function (response) {
+                        	e.success(response.data);
                             logger.success('New Role Type added');
                         }, function (response) {
                             logger.error("Unable to insert Role Type.", response, response.statusText);
@@ -85,7 +84,6 @@
             pageable: true,
             editable: "popup",
             change: vm.onChange,
-            toolbar: vm.toolBarTemplate,
             //toolbar: [
             //	"create",
             //	{ name: "customEdit", text: "Edit", imageClass: "k-edit", className: "k-custom-edit btn btn-primary", iconClass: "k-icon" },

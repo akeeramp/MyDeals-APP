@@ -1,0 +1,23 @@
+﻿<div class="col-md-12">
+	<h2>Product Categories</h2>
+</div>
+
+<!-- Grid toolbar -->
+<div class="col-md-12">
+	<!--<button class="btn btn-primary small k-grid-add" ng-click="vm.addItem()">
+		<span class="intelicon-plus-outlined"></span> Add new record
+	</button>-->
+	<button class="btn btn-primary small k-custom-edit k-grid-customEdit" ng-disabled="!vm.isEditMode" ng-click="vm.saveChanges()">
+		<span class="k-icon k-i-update"></span>Save changes
+	</button>
+	<button class="btn btn-default small k-custom-edit k-grid-customEdit" ng-if="!vm.isEditMode" ng-click="vm.updateItem()">
+		<span class="intelicon-compose"></span>Edit
+	</button>
+	<button class="btn btn-default small k-custom-edit k-grid-customEdit" ng-if="vm.isEditMode" ng-click="vm.cancelChanges()">
+		<span class="k-icon k-i-cancel"></span> Cancel changes
+	</button>
+</div>
+<br />
+<div class="col-md-12" style="padding-top: 20px;">
+	<div kendo-grid="grid" class="table table-bordered table-striped table-intel" k-height="500" options="vm.gridOptions"></div>
+</div>

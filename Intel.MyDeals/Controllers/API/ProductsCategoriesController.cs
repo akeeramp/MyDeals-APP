@@ -1,0 +1,80 @@
+﻿using System.Collections.Generic;
+using System.Web.Http;
+using Intel.MyDeals.BusinesssLogic;
+using Intel.MyDeals.Entities;
+using Intel.Opaque;
+using System;
+using System.Net;
+
+namespace Intel.MyDeals.Controllers.API
+{
+    [RoutePrefix("api/ProductCategories")]
+    public class ProductCategoriesController : BaseApiController
+    {
+
+		[Authorize]
+		[HttpGet]
+		[Route("GetProductCategories")]
+		public IEnumerable<ProductCategory> GetProductCategories()
+		{
+			try
+			{
+				return new ProductCategoriesLib().GetProductCategories();
+			}
+			catch (Exception ex)
+			{
+				OpLogPerf.Log(ex);
+				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
+			}
+		}
+
+		//[Authorize]
+		//[HttpPost]
+		//[Route("CreateProductCategory")]
+		//public ProductCategory CreateProductCategory(ProductCategory category)
+		//{			
+		//	try
+		//	{
+		//		return new ProductCategoriesLib().CreateProductCategory(category);
+		//	}
+		//	catch (Exception ex)
+		//	{
+		//		OpLogPerf.Log(ex);
+		//		throw new HttpResponseException(HttpStatusCode.InternalServerError);  // responds with a simple status code for ajax call to consume.
+		//	}
+		//}
+		
+		[Authorize]
+		[HttpPut]
+		[Route("UpdateProductCategory")]
+		public ProductCategory UpdateProductCategory(ProductCategory category)
+		{
+			List<ProductCategory> categoriesList = new List<ProductCategory>();
+			categoriesList.Add(category);
+
+			if (UpdateProductCategoryBulk(categoriesList))
+			{
+				return category;
+			}
+			else
+			{
+				throw new HttpResponseException(HttpStatusCode.InternalServerError);  // responds with a simple status code for ajax call to consume.
+			}
+		}
+				
+		[Authorize]
+		[HttpPut]
+		[Route("UpdateProductCategoryBulk")]
+		public bool UpdateProductCategoryBulk(List<ProductCategory> categoriesList)
+		{
+			try
+			{
+				return new ProductCategoriesLib().UpdateProductCategories(categoriesList);
+			}
+			catch (Exception ex)
+			{
+				throw new HttpResponseException(HttpStatusCode.InternalServerError);  // responds with a simple status code for ajax call to consume.
+			}
+		}
+	}
+}

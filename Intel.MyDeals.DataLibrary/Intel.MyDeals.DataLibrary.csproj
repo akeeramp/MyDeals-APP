@@ -87,6 +87,7 @@
     <Compile Include="Deals\DealDataLib_Common.cs" />
     <Compile Include="Deals\DealDataLib_Get.cs" />
     <Compile Include="Deals\DealDataLib_Save.cs" />
+    <Compile Include="ProductCategoriesLib\ProductCategoriesDataLib.cs" />
     <Compile Include="Products\ProductDataLib.cs" />
     <Compile Include="Resolver.cs" />
     <Compile Include="Employees\EmployeeDataLib.cs" />

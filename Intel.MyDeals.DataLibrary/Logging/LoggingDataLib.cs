@@ -49,49 +49,10 @@ namespace Intel.MyDeals.DataLibrary
 		public bool UploadDbLogPerfLogs(IEnumerable<DbLogPerfMessage> messages)
 		{
 			if (messages == null || !messages.Any()) { return false; }
+			
+            t_db_log dt = new t_db_log(3000);
 
-            const int ZIP_CUTOFF_LENGTH = 3000; // Seemed roughly optimal in initial testing
-            int msgCount = messages.Count();
-
-            t_db_log dt = new t_db_log();
-            int IX_STEP = dt.Columns.Add("STEP", typeof(int)).Ordinal;
-            int IX_LOG_DTM = dt.Columns.Add("LOG_DTM", typeof(DateTime)).Ordinal;
-            int IX_LGN_NM = dt.Columns.Add("LGN_NM", typeof(string)).Ordinal;
-            int IX_USR_NM = dt.Columns.Add("USR_NM", typeof(string)).Ordinal;
-            int IX_CLNT_MCHN_NM = dt.Columns.Add("CLNT_MCHN_NM", typeof(string)).Ordinal;
-            int IX_SRVR = dt.Columns.Add("SRVR", typeof(string)).Ordinal;
-            int IX_MSG_SRC = dt.Columns.Add("MSG_SRC", typeof(string)).Ordinal;
-            int IX_MTHD = dt.Columns.Add("MTHD", typeof(string)).Ordinal;
-            int IX_MSG = dt.Columns.Add("MSG", typeof(string)).Ordinal;
-            int IX_STRT_DTM = dt.Columns.Add("SRT_DTM", typeof(DateTime)).Ordinal;
-            int IX_END_DTM = dt.Columns.Add("END_DTM", typeof(DateTime)).Ordinal;
-            int IX_REC_CNT = dt.Columns.Add("REC_CNT", typeof(int)).Ordinal;
-            int IX_THRD_ID = dt.Columns.Add("THRD_ID", typeof(int)).Ordinal;
-            int IX_IS_ZIP = dt.Columns.Add("IS_ZIP", typeof(int)).Ordinal;
-            int IX_ERR_MSG = dt.Columns.Add("ERR_MSG", typeof(string)).Ordinal;
-
-            foreach (var msg in messages)
-            {
-                var r = dt.NewRow();
-                bool is_zip = (msg.Size >= ZIP_CUTOFF_LENGTH);
-
-                r[IX_STEP] = msg.STEP;
-                r[IX_LOG_DTM] = msg.LOG_DTM;
-                r[IX_LGN_NM] = msg.LGN_NM; // TODO: is the lgn_nm different than the usr_nm?
-                r[IX_USR_NM] = msg.USR_NM;
-                r[IX_CLNT_MCHN_NM] = msg.CLNT_MCHN_NM;
-                r[IX_SRVR] = msg.SRVR;
-                r[IX_MSG_SRC] = msg.MSG_SRC;
-                r[IX_MTHD] = msg.MTHD;
-                r[IX_MSG] = msg.MSG;
-                r[IX_STRT_DTM] = msg.STRT_DTM;
-                r[IX_END_DTM] = msg.END_DTM;
-                r[IX_REC_CNT] = msgCount;
-                r[IX_THRD_ID] = msg.THRD_ID;
-                r[IX_IS_ZIP] = is_zip;
-                r[IX_ERR_MSG] = msg.ERR_MSG;
-                dt.Rows.Add(r);
-            }
+			dt.AddRows(messages, messages.Count());
 
             DataSet dsCheckConstraintErrors = null;
             var ret = new List<AdminApplications>();

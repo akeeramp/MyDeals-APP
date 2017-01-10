@@ -16,6 +16,7 @@
         ,'blocks.exception'
 		,'blocks.logger'
 		,'blocks.router'
+		,'blocks.confirmationModal'
 		
     ]);
 

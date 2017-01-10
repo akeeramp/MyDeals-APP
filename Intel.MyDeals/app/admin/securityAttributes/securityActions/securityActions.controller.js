@@ -18,7 +18,6 @@
         // Variables
         vm.selectedItem = null;
         vm.isButtonDisabled = true;
-        vm.toolBarTemplate = $("#toolBarTemplate").html();
 
         vm.dataSource = new kendo.data.DataSource({
             type: "json",
@@ -33,8 +32,8 @@
                 },
                 update: function (e) {
                     SecurityActionsService.updateAction(e.data.models[0])
-                        .then(function (data) {
-                            e.success(data);
+                        .then(function (response) {
+                        	e.success(response.data);
                             logger.success('Update successful.');
                         }, function (response) {
                             logger.error("Unable to update Security Actions.", response, response.statusText);
@@ -42,8 +41,8 @@
                 },
                 destroy: function (e) {
                     SecurityActionsService.deleteAction(e.data.models[0].ACTN_SID)
-                        .then(function (data) {
-                            e.success(data);
+                        .then(function (response) {
+                        	e.success(response.data);
                             logger.success('Delete successful.');
                         }, function (response) {
                             logger.error("Unable to delete Security Actions.", response, response.statusText);
@@ -51,8 +50,8 @@
                 },
                 create: function (e) {
                     SecurityActionsService.insertAction(e.data.models[0])
-                        .then(function (data) {
-                            e.success(data);
+                        .then(function (response) {
+                        	e.success(response.data);
                             logger.success('New Security Actions added');
                         }, function (response) {
                             logger.error("Unable to insert Security Actions.", response, response.statusText);
@@ -82,7 +81,6 @@
             pageable: true,
             editable: "popup",
             change: vm.onChange,
-            toolbar: vm.toolBarTemplate,
             //toolbar: [
             //	"create",
             //	{ name: "customEdit", text: "Edit", imageClass: "k-edit", className: "k-custom-edit btn btn-primary", iconClass: "k-icon" },

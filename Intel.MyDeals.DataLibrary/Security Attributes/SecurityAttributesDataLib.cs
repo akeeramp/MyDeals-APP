@@ -20,7 +20,6 @@ namespace Intel.MyDeals.DataLibrary
         /// <returns> void </returns>
         public bool DeleteSecurityAction(int id)
         {
-            //OpLogPerf.Log("DeleteSecurityAction");
             DataSet dsCheckConstraintErrors = null;
             try
             {
@@ -48,7 +47,6 @@ namespace Intel.MyDeals.DataLibrary
         /// <returns> List of Security Actions</returns>
         public List<SecurityActions> GetSecurityActions()
         {
-            //OpLogPerf.Log("GetSecurityAction");
             return CallManageActionSP(null, CrudModes.Select);
         }
 
@@ -58,7 +56,6 @@ namespace Intel.MyDeals.DataLibrary
         /// <returns> The inserted or updated Security Actions</returns>
         public SecurityActions ManageSecurityAction(SecurityActions action, CrudModes state)
         {
-            //OpLogPerf.Log("ManageSecurityAction");
             return CallManageActionSP(action, state).FirstOrDefault();
         }
 
@@ -124,7 +121,6 @@ namespace Intel.MyDeals.DataLibrary
         /// <returns> void </returns>
         public bool DeleteAdminApplication(int id)
         {
-            //OpLogPerf.Log("DeleteAdminApplication");
             DataSet dsCheckConstraintErrors = null;
             try
             {
@@ -152,7 +148,6 @@ namespace Intel.MyDeals.DataLibrary
         /// <returns> List of Admin Applications</returns>
         public List<AdminApplications> GetAdminApplications()
         {
-            //OpLogPerf.Log("GetAdminApplications");
             return CallManageAdminApplicationSP(null, CrudModes.Select);
         }
 
@@ -162,7 +157,6 @@ namespace Intel.MyDeals.DataLibrary
         /// <returns> The inserted or updated Admin Application</returns>
         public AdminApplications ManageAdminApplication(AdminApplications app, CrudModes state)
         {
-            //OpLogPerf.Log("ManageAdminApplications");
             return CallManageAdminApplicationSP(app, state).FirstOrDefault();
         }
 
@@ -226,7 +220,6 @@ namespace Intel.MyDeals.DataLibrary
         /// <returns> void </returns>
         public bool DeleteAdminDealType(int id)
         {
-            //OpLogPerf.Log("DeleteAdminDealType");
             DataSet dsCheckConstraintErrors = null;
             try
             {
@@ -254,7 +247,6 @@ namespace Intel.MyDeals.DataLibrary
         /// <returns> List of AdminDealTypes</returns>
         public List<AdminDealType> GetAdminDealTypes()
         {
-            //OpLogPerf.Log("GetAdminDealTypes");
             return CallManageAdminDealTypeSP(null, CrudModes.Select);
         }
 
@@ -264,7 +256,6 @@ namespace Intel.MyDeals.DataLibrary
         /// <returns> The inserted or updated AdminDealType</returns>
         public AdminDealType ManageAdminDealType(AdminDealType dealType, CrudModes state)
         {
-            //OpLogPerf.Log("ManageAdminDealType");
             return CallManageAdminDealTypeSP(dealType, state).FirstOrDefault();
         }
 
@@ -336,7 +327,6 @@ namespace Intel.MyDeals.DataLibrary
         /// <returns> void </returns>
         public bool DeleteAdminRoleType(int id)
         {
-            //OpLogPerf.Log("DeleteAdminRoleType");
             DataSet dsCheckConstraintErrors = null;
             try
             {
@@ -364,7 +354,6 @@ namespace Intel.MyDeals.DataLibrary
         /// <returns> List of RoleTypes</returns>
         public List<AdminRoleType> GetAdminRoleTypes()
         {
-            //OpLogPerf.Log("GetAdminRoleTypes");
             return CallManageAdminRoleTypeSP(null, CrudModes.Select);
         }
 
@@ -374,7 +363,6 @@ namespace Intel.MyDeals.DataLibrary
         /// <returns> The inserted or updated RoleType</returns>
         public AdminRoleType ManageAdminRoleType(AdminRoleType roleType, CrudModes state)
         {
-            //OpLogPerf.Log("ManageAdminRoleType");
             return CallManageAdminRoleTypeSP(roleType, state).FirstOrDefault();
         }
 

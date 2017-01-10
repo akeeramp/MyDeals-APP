@@ -40,7 +40,6 @@
         /// &lt;returns&gt;collection of employee data&lt;/returns&gt;
         public IEnumerable&lt;PocEmp&gt; GetPocEmp()
         {
-            OpLogPerf.Log("GetPocEmp");
             var ret = new List&lt;PocEmp&gt;();
             var cmd = new PR_GET_POC_EMP();
             try

@@ -25,7 +25,7 @@
 		}
 
 		function updateRoleType(roleType) {
-		    return dataService.post(URL + 'UpdateAdminRoleType', roleType);
+		    return dataService.put(URL + 'UpdateAdminRoleType', roleType);
 		}
 
 		function deleteRoleType(id) {

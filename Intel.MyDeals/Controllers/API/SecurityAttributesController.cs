@@ -31,7 +31,7 @@ namespace Intel.MyDeals.Controllers.API
             return _securityAttributesLib.ManageSecurityAction(action, CrudModes.Insert);
         }
 
-        [HttpPost]
+        [HttpPut]
         [Route("UpdateAction")]
         public SecurityActions UpdateAction(SecurityActions action)
         {
@@ -62,11 +62,11 @@ namespace Intel.MyDeals.Controllers.API
             return _securityAttributesLib.ManageAdminApplication(app, CrudModes.Insert);
         }
 
-        [HttpPost]
+        [HttpPut]
         [Route("UpdateAdminApplication")]
         public AdminApplications UpdateAdminApplication(AdminApplications app)
         {
-            return _securityAttributesLib.ManageAdminApplication(app, CrudModes.Update);
+			return _securityAttributesLib.ManageAdminApplication(app, CrudModes.Update);
         }
 
         [Route("DeleteAdminApplication")]
@@ -93,7 +93,7 @@ namespace Intel.MyDeals.Controllers.API
             return _securityAttributesLib.ManageAdminDealType(dealType, CrudModes.Insert);
         }
 
-        [HttpPost]
+        [HttpPut]
         [Route("UpdateAdminDealType")]
         public AdminDealType UpdateDealType(AdminDealType dealType)
         {
@@ -124,7 +124,7 @@ namespace Intel.MyDeals.Controllers.API
             return _securityAttributesLib.ManageAdminRoleType(RoleType, CrudModes.Insert);
         }
 
-        [HttpPost]
+        [HttpPut]
         [Route("UpdateAdminRoleType")]
         public AdminRoleType UpdateAdminRoleType(AdminRoleType RoleType)
         {
