@@ -37,10 +37,6 @@
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\..\..\..\..\..\..\My Files\Future Projects\Intel.MyDeals\Shared Libraries\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
-    <Reference Include="Intel.MyDeals.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Intel.MyDeals.Entities\bin\Debug\Intel.MyDeals.Entities.dll</HintPath>
-    </Reference>
     <Reference Include="Intel.Opaque, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Shared Libraries\Intel.Opaque.dll</HintPath>
@@ -107,6 +103,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Intel.MyDeals.Entities\Intel.MyDeals.Entities.csproj">
+      <Project>{ae1a3978-08ef-4a15-82cd-7ba6192a9b52}</Project>
+      <Name>Intel.MyDeals.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
