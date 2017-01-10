@@ -1,10 +1,8 @@
-﻿/// <reference path="costtest.meetcomp.html" />
-(function() {
+﻿(function () {
     angular
         .module('app.costtest')
         .run(appRun);
 
-    
     appRun.$inject = ['routerHelper'];
 
     function appRun(routerHelper) {
@@ -18,38 +16,17 @@
                 config: {
                     abstract: false,
                     template: '<div ui-view></div>',
-                    url: ''
+                    url: '/'
                 }
             },
             {
-                state: 'costtest.meetcomp',
+                state: 'costtest.icostproducts',
                 config: {
-                    templateUrl: 'app/costtest/costtest.meetcomp.html',
-                    url: 'meetcomp'
+                    templateUrl: 'app/costtest/iCostProducts/iCostProducts.html',
+                    url: 'icostproducts',
+                    controller: 'iCostProductsController as vm'
                 }
-            },
-            {
-                state: 'costtest.group',
-                config: {
-                    template: '<h1>Manage Grouping</h1>',
-                    url: 'group'
-                }
-            },
-            {
-                state: 'costtest.pricing',
-                config: {
-                    template: '<h1>Pricing</h1>',
-                    url: 'pricing'
-                }
-            },
-            {
-                state: 'costtest.audit',
-                config: {
-                    template: '<h1>Audit</h1>',
-                    url: 'audit'
-                }
-            },
-
+            }
         ];
     }
 })();

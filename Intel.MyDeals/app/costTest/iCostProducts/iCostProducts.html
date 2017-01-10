@@ -1,0 +1,30 @@
+﻿<div class="form-inline">
+    <h2>iCost Products</h2>
+    <div class="row form-inline">
+        <div class="col-md-2" style="padding-top:30px">
+            <ui-select ng-model="vm.vertical.selected" theme="select2" style="min-width:100%" ng-disabled="vm.disabled" title="Choose a vertical">
+                <ui-select-match placeholder="Select a vertical..">{{$select.selected.name}}</ui-select-match>
+                <ui-select-choices repeat="vertical in vm.verticals | filter: $select.search">
+                    <div ng-bind-html="vertical.name | highlight: $select.search"></div>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+        <div class="col-md-1" style="padding-top:30px">
+            <ui-select ng-model="vm.level.selected" theme="select2" style="min-width:100%" ng-disabled="vm.disabled" title="Choose a level">
+                <ui-select-match placeholder="Select a level..">{{$select.selected.name}}</ui-select-match>
+                <ui-select-choices repeat="level in vm.levels | filter: $select.search">
+                    <div ng-bind-html="level.name | highlight: $select.search"></div>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+        <query-builder style="padding-left:30px" class="col-md-9" group="vm.filter.group"></query-builder>
+    </div>
+    <div class="alert alert-info">
+        <strong>Output</strong><br>
+        Vertical : {{vm.vertical.selected.name}}
+        <br />
+        Level : {{vm.level.selected.name}}
+        <br />
+        Where : <span ng-bind-html="vm.output"></span>
+    </div>
+</div>

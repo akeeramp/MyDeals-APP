@@ -1,16 +1,12 @@
-﻿
+﻿@Styles.Render("~/css/_cache.css")
+
 @{
     ViewBag.Title = "Cost Test";
 }
-
-<h2>Cost Test</h2>
-
-<div class="col-md-2">
-    <ul>
-        <li><a ui-sref="costtest.meetcomp">MeetComp</a></li>
-        <li><a ui-sref="costtest.group">Grouping</a></li>
-        <li><a ui-sref="costtest.pricing">Pricing Cost Test</a></li>
-        <li><a ui-sref="costtest.audit">Audit</a></li>
-    </ul>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div ui-view></div>
+        </div>
+    </div>
 </div>
-<div ui-view></div>

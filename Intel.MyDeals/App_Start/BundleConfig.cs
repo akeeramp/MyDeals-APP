@@ -18,7 +18,7 @@ namespace Intel.MyDeals
 
             bundles.Add(new ScriptBundle("~/bundles/scripts").Include(
                 "~/Scripts/jquery-2.2.0.min.js",
-				"~/Scripts/Angular/1.5.8/angular.min.js",
+                "~/Scripts/Angular/1.5.8/angular.min.js",
                 "~/Scripts/kendo/2016.3.914/jszip.min.js",
                 "~/Scripts/kendo/2016.3.914/kendo.all.min.js",
                 "~/Scripts/kendo/kendo.aspnetmvc.min.js",
@@ -31,15 +31,16 @@ namespace Intel.MyDeals
                 "~/Scripts/jquery.rainbowJSON.js",
                 "~/Scripts/jquery-ui.min.js",
                 "~/Scripts/tooltipster.bundle.min.js",
-                "~/js/bootstrap.min.js"
+                "~/js/bootstrap.min.js",
+                "~/Scripts/Angular/select.min.js"
                 ));
 
             bundles.Add(new ScriptBundle("~/bundles/angular").Include(
                 "~/Scripts/Angular/1.5.8/angular-ui-router.min.js"
                 , "~/Scripts/Angular/1.5.8/angular-animate.min.js"
                 , "~/Scripts/Angular/1.5.8/angular-sanitize.min.js"
-				, "~/Scripts/Angular/ui-bootstrap-tpls-2.2.0.min.js"
-				));
+                , "~/Scripts/Angular/ui-bootstrap-tpls-2.2.0.min.js"
+                ));
 
             bundles.Add(new ScriptBundle("~/bundles/angularReusable").Include(
                  "~/app/app.module.js"
@@ -57,6 +58,7 @@ namespace Intel.MyDeals
                 , "~/app/core/constants.js"
                 , "~/app/core/config.js"
                 , "~/app/core/dataservice.js"
+                , "~/app/core/directives/queryBuilder.directive.js"
                 ));
 
             bundles.Add(new ScriptBundle("~/bundles/angularModules").Include(
@@ -84,9 +86,11 @@ namespace Intel.MyDeals
                 , "~/app/admin/securityAttributes/adminRoleTypes/adminRoleTypes.controller.js"
                 , "~/app/costTest/costtest.module.js"
                 , "~/app/costTest/costtest.route.js"
-				, "~/app/dashboard/dashboard.module.js"
-				, "~/app/dashboard/dashboard.route.js"
-				));
+                , "~/app/costTest/iCostProducts/costTest.iCostProduct.service.js"
+                , "~/app/costTest/iCostProducts/costTest.iCostProducts.controller.js"
+                , "~/app/dashboard/dashboard.module.js"
+                , "~/app/dashboard/dashboard.route.js"
+                ));
 
             bundles.Add(new ScriptBundle("~/MyDeals/scripts").Include(
                 "~/js/_util.js",
@@ -103,7 +107,9 @@ namespace Intel.MyDeals
                 "~/Content/kendo/2016.3.914/kendo.common-bootstrap.min.css",
                 "~/Content/kendo/2016.3.914/kendo.metro.min.css",
                 "~/css/it-mlaf.min.css",
-                "~/css/kendo.intel.css"
+                "~/css/kendo.intel.css",
+                "~/css/select.min.css",
+                "~/css/select2.min.css"
                 ));
 
             //"~/Content/kendo/2016.3.914/kendo.office365.min.css",
@@ -112,7 +118,6 @@ namespace Intel.MyDeals
                 "~/css/_dealUtil.css",
                 "~/Content/styles.css"
                 ));
-
         }
     }
 }

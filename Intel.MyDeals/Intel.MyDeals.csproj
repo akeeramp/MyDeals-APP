@@ -313,10 +313,13 @@
     <Content Include="app\core\constants.js" />
     <Content Include="app\core\core.module.js" />
     <Content Include="app\core\dataservice.js" />
+    <Content Include="app\core\directives\queryBuilder.directive.html" />
+    <Content Include="app\core\directives\queryBuilder.directive.js" />
     <Content Include="app\core\progressInterceptor.js" />
     <Content Include="app\costTest\costtest.meetcomp.html" />
     <Content Include="app\costTest\costtest.module.js" />
     <Content Include="app\costTest\costtest.route.js" />
+    <Content Include="app\costTest\iCostProducts\iCostProducts.html" />
     <Content Include="app\dashboard\dashboard.manageLayouts.html" />
     <Content Include="app\dashboard\dashboard.module.js" />
     <Content Include="app\dashboard\dashboard.route.js" />
@@ -672,6 +675,8 @@
     <Content Include="Content\kendo\2016.3.914\Uniform\sprite_2x.png" />
     <Content Include="Content\kendo\2016.3.914\Uniform\sprite_kpi.png" />
     <Content Include="Content\kendo\2016.3.914\Uniform\sprite_kpi_2x.png" />
+    <Content Include="css\select.min.css" />
+    <Content Include="css\select2.min.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Content\styles.css" />
     <Content Include="Content\views\addSectionModal.html" />
@@ -850,6 +855,7 @@
     <Content Include="Scripts\Angular\1.5.8\angular-ui-router.min.js" />
     <Content Include="Scripts\Angular\1.5.8\angular.js" />
     <Content Include="Scripts\Angular\1.5.8\angular.min.js" />
+    <Content Include="Scripts\Angular\select.min.js" />
     <Content Include="Scripts\Angular\ui-bootstrap-tpls-2.2.0.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -1002,6 +1008,8 @@
     <Content Include="Content\kendo\2016.3.914\images\kendoui.ttf" />
     <Content Include="Content\kendo\2016.3.914\images\kendoui.woff" />
     <Content Include="Images\docs\MyDeals Error Handling Design Doc.pdf" />
+    <Content Include="app\costTest\iCostProducts\costtest.iCostProducts.controller.js" />
+    <Content Include="app\costTest\iCostProducts\costtest.iCostProduct.service.js" />
     <None Include="Properties\PublishProfiles\Dev.pubxml" />
     <Content Include="Scripts\Angular\1.5.8\angular.min.js.map" />
     <None Include="Scripts\jquery-2.2.0.intellisense.js" />

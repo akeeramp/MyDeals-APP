@@ -1,4 +1,4 @@
-(function() {
+(function () {
     'use strict';
 
     angular.module('app.core', [
@@ -6,10 +6,11 @@
          * Angular modules
          */
         'ngAnimate'
-		,'ngSanitize'
-		,'ui.router'
-		,'kendo.directives'
-		,'ui.bootstrap'
+		, 'ngSanitize'
+		, 'ui.router'
+		, 'kendo.directives'
+		, 'ui.bootstrap'
+        , 'ui.select'
         /*
          * Our reusable cross app code modules
          */
@@ -17,7 +18,7 @@
 		,'blocks.logger'
 		,'blocks.router'
 		,'blocks.confirmationModal'
-		
+
     ]);
 
     //TODO: Is there a better location to place the global js error handling?
@@ -38,5 +39,4 @@
         }
         return false;
     };
-
 })();
