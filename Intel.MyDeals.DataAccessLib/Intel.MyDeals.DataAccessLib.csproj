@@ -37,7 +37,8 @@
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\..\..\..\..\..\..\My Files\Future Projects\Intel.MyDeals\Shared Libraries\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
-    <Reference Include="Intel.MyDeals.Entities">
+    <Reference Include="Intel.MyDeals.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Intel.MyDeals.Entities\bin\Debug\Intel.MyDeals.Entities.dll</HintPath>
     </Reference>
     <Reference Include="Intel.Opaque, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
