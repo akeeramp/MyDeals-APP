@@ -55,6 +55,7 @@
     <Compile Include="DataCollections\ICacheLib.cs" />
     <Compile Include="Geos\IGeosLib.cs" />
     <Compile Include="Logging\ILoggingLib.cs" />
+    <Compile Include="ProductCategories\IProductsLib.cs" />
     <Compile Include="Products\IProductsLib.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SecurityAttributes\ISecurityAttributesLib.cs" />

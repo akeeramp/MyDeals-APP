@@ -14,8 +14,9 @@ namespace Intel.MyDeals.DataLibrary
             registerService.RegisterType<IDataCollectionsDataLib, DataCollectionsDataLib>();
             registerService.RegisterType<ICustomerDataLib, CustomerDataLib>();
             registerService.RegisterType<IGeoDataLib, GeoDataLib>();
-            registerService.RegisterType<IProductDataLib, ProductDataLib>();
-            registerService.RegisterType<ISecurityAttributesDataLib, SecurityAttributesDataLib>();
+			registerService.RegisterType<IProductDataLib, ProductDataLib>();
+			registerService.RegisterType<IProductCategoriesDataLib, ProductCategoriesDataLib>();
+			registerService.RegisterType<ISecurityAttributesDataLib, SecurityAttributesDataLib>();
             registerService.RegisterType<ILoggingDataLib, LoggingDataLib>();
         }
     }

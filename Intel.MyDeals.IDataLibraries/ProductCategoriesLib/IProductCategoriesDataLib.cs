@@ -6,13 +6,12 @@ using Intel.MyDeals.Entities;
 
 namespace Intel.MyDeals.IDataLibrary
 {
-	public interface IProductCategoriesLib
+	public interface IProductCategoriesDataLib
 	{
-		List<Product> GetProductCategories(bool getCachedResult = true);
-
-		Product GetProductCategory(int sid);
+		List<ProductCategory> GetProductCategories();
+		
 		//Product CreateProductCategory(Product category);
-		Product UpdateProductCategories(List<ProductCategory> categories);
+		bool UpdateProductCategories(List<ProductCategory> categories);
 
 	}
 }

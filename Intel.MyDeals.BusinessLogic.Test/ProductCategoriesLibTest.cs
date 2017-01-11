@@ -1,0 +1,92 @@
+﻿using Intel.MyDeals.BusinesssLogic;
+using Intel.MyDeals.DataLibrary.Test;
+using Intel.MyDeals.Entities;
+using System.Collections.Generic;
+using System.Linq;
+using Intel.MyDeals.IDataLibrary;
+using Moq;
+using NUnit.Framework;
+using System;
+
+namespace Intel.MyDeals.BusinessLogic.Test
+{
+    [TestFixture]
+    public class ProductCategoriesLibTest
+    {
+		[TestFixtureSetUp]
+		public void SetupUserAndDatabase()
+		{
+			Console.WriteLine("Started Product Catgeories Library Tests.");
+			OpUserStack.EmulateUnitTester();
+			UnitTestHelpers.SetDbConnection();
+		}
+
+		[TestFixtureTearDown]
+		public void AfterTheCurrentTextFixture()
+		{
+			Console.WriteLine("Completed Product Catgeories Library Tests.");
+		}
+		
+				
+		#region helper functions
+
+		private ProductCategory MakeNewProductCategory(int stepNumber = 0)
+		{
+			string testString = "UNIT TEST - UploadDbLogPerfLogs";
+			DateTime now = DateTime.UtcNow;
+			var user = OpUserStack.MyOpUserToken.Usr;
+			
+			return new ProductCategory {
+				ACTV_IND = true
+				, CHG_DTM = now
+				, CHG_EMP_NM = user.FullName
+				, DEAL_PRD_TYPE = testString
+				, DIV_NM = testString
+				, GDM_PRD_TYPE_NM = testString
+				, GDM_VRT_NM = testString
+				, OP_CD = testString
+				, PRD_CAT_MAP_SID = 1 // TODO: This is hard coded. Replace with new ids, once we have the AddProductCategories functionaility in a future sprint
+				, PRD_CAT_NM = testString
+			};
+		}
+
+
+		private List<ProductCategory> MakeMulitpleNewProductCategories(int count)
+		{
+			List<ProductCategory> list = new List<ProductCategory>();
+			for (var i=0; i < count; i++)
+			{
+				list.Add(MakeNewProductCategory(i));
+			}
+			return list;
+		}
+
+		#endregion
+
+		
+		[TestCase]
+        public void ProductCategoriesGetAll()
+		{
+			// Arrange, ACT
+			List<ProductCategory> results = new ProductCategoriesLib().GetProductCategories();
+			
+			// Assert
+			Assert.IsTrue(results.Any());
+		}
+
+		[TestCase(1)] 
+		//[TestCase(2)] // TODO: Test other counts once we are able to add new product categories and replace the hard cded Ids
+		public void ProductCategoriesUpdate(int count)
+		{
+			// ARRANGE
+			List<ProductCategory> pcList = MakeMulitpleNewProductCategories(count);
+			
+			// ACT
+			bool results = new ProductCategoriesLib().UpdateProductCategories(pcList);
+
+			// ASSERT
+			Assert.IsTrue(results);
+        }
+		
+    }
+}

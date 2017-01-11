@@ -5,12 +5,19 @@ using Intel.MyDeals.Entities;
 using Intel.Opaque;
 using System;
 using System.Net;
+using Intel.MyDeals.IBusinessLogic;
 
 namespace Intel.MyDeals.Controllers.API
 {
     [RoutePrefix("api/ProductCategories")]
     public class ProductCategoriesController : BaseApiController
-    {
+	{
+		private IProductCategoriesLib _productCategoriesLib;
+
+		public ProductCategoriesController(IProductCategoriesLib _productCategoriesLib)
+		{
+			this._productCategoriesLib = _productCategoriesLib;
+		}
 
 		[Authorize]
 		[HttpGet]
@@ -19,7 +26,7 @@ namespace Intel.MyDeals.Controllers.API
 		{
 			try
 			{
-				return new ProductCategoriesLib().GetProductCategories();
+				return _productCategoriesLib.GetProductCategories();
 			}
 			catch (Exception ex)
 			{
@@ -35,7 +42,7 @@ namespace Intel.MyDeals.Controllers.API
 		//{			
 		//	try
 		//	{
-		//		return new ProductCategoriesLib().CreateProductCategory(category);
+		//		return _productCategoriesLib.CreateProductCategory(category);
 		//	}
 		//	catch (Exception ex)
 		//	{
@@ -69,7 +76,7 @@ namespace Intel.MyDeals.Controllers.API
 		{
 			try
 			{
-				return new ProductCategoriesLib().UpdateProductCategories(categoriesList);
+				return _productCategoriesLib.UpdateProductCategories(categoriesList);
 			}
 			catch (Exception ex)
 			{

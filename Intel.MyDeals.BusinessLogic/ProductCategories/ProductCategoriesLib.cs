@@ -1,14 +1,29 @@
 ﻿using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text.RegularExpressions;
+using Intel.MyDeals.IBusinessLogic;
+using Intel.MyDeals.IDataLibrary;
 using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
 
 namespace Intel.MyDeals.BusinesssLogic
 {
-    public class ProductCategoriesLib
+    public class ProductCategoriesLib : IProductCategoriesLib
 	{
+		private readonly IProductCategoriesDataLib _productCategoriesDataLib;
+
+		/// <summary>
+		/// TODO: This parameterless constructor is left as a reminder,
+		/// once we fix our unit tests to use Moq remove this constructor, also remove direct reference to "Intel.MyDeals.DataLibrary"
+		/// </summary>
+		public ProductCategoriesLib()
+		{
+			this._productCategoriesDataLib = new ProductCategoriesDataLib();
+		}
+
+		public ProductCategoriesLib(IProductCategoriesDataLib _productCategoriesDataLib)
+		{
+			this._productCategoriesDataLib = _productCategoriesDataLib;
+		}
+
 
 		//public ProductCategory CreateProductCategory(ProductCategory category)
 		//{
@@ -21,7 +36,7 @@ namespace Intel.MyDeals.BusinesssLogic
 		/// <returns>list of Product Categories</returns>
 		public List<ProductCategory> GetProductCategories()
         {
-            return new ProductCategoriesDataLib().GetProductCategories();
+			return _productCategoriesDataLib.GetProductCategories();
 		}
 
 		/// <summary>
@@ -31,7 +46,7 @@ namespace Intel.MyDeals.BusinesssLogic
 		/// <returns>A boolean of whether the update successed or not</returns>
 		public bool UpdateProductCategories(List<ProductCategory> categories)
 		{
-			return new ProductCategoriesDataLib().UpdateProductCategories(categories);
+			return _productCategoriesDataLib.UpdateProductCategories(categories);
 		}
 
 	}

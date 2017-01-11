@@ -95,6 +95,7 @@
     <Compile Include="LoggingDataLibTest.cs" />
     <Compile Include="OtherTests.cs" />
     <Compile Include="PocTests.cs" />
+    <Compile Include="ProductCategoriesDataLibTest.cs" />
     <Compile Include="ProductDataLibTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SecurityAttributesDataLibTests.cs" />

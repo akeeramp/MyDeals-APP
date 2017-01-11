@@ -16,7 +16,8 @@ namespace Intel.MyDeals.BusinessLogic
             registerService.RegisterType<ICustomerLib, CustomerLib>();
             registerService.RegisterType<IGeosLib, GeosLib>();
             registerService.RegisterType<IProductsLib, ProductsLib>();
-            registerService.RegisterType<ISecurityAttributesLib, SecurityAttributesLib>();
+			registerService.RegisterType<IProductCategoriesLib, ProductCategoriesLib>();
+			registerService.RegisterType<ISecurityAttributesLib, SecurityAttributesLib>();
             registerService.RegisterType<ILoggingLib, LoggingLib>();
         }
     }

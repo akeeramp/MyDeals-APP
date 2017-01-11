@@ -5,14 +5,17 @@ using System.Data.SqlClient;
 using System.Linq;
 using Intel.MyDeals.DataAccessLib;
 using Intel.MyDeals.Entities;
+using Intel.MyDeals.IDataLibrary;
 using Intel.Opaque;
 using Intel.Opaque.DBAccess;
 using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
 
 namespace Intel.MyDeals.DataLibrary
 {
-	public class ProductCategoriesDataLib
+	public class ProductCategoriesDataLib : IProductCategoriesDataLib
 	{
+		public ProductCategoriesDataLib() { }
+
 		/// <summary>
 		/// Get All Product Categories
 		/// </summary>
