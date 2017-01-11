@@ -4,9 +4,9 @@
 		.module('app.costtest')
 		.controller('iCostProductsController', iCostProductsController)
 
-    iCostProductsController.$inject = ['$uibModal', 'iCostProductService', 'logger', '$scope']
+    iCostProductsController.$inject = ['iCostProductService', 'logger', '$scope']
 
-    function iCostProductsController($uibModal, iCostProductService, logger, $scope) {
+    function iCostProductsController(iCostProductService, logger, $scope) {
         var vm = this;
 
         vm.verticals = [
