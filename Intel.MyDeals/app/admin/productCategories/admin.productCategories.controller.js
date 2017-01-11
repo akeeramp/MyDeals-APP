@@ -4,9 +4,9 @@
         .module('app.admin')
         .controller('ProductCategoryController', ProductCategoryController)
 
-    ProductCategoryController.$inject = ['$uibModal', 'productCategoryService', '$scope', 'logger']
+    ProductCategoryController.$inject = ['$uibModal', 'productCategoryService', '$scope', 'logger', 'confirmationModal']
 
-    function ProductCategoryController($uibModal, productCategoryService, $scope, logger) {
+    function ProductCategoryController($uibModal, productCategoryService, $scope, logger, confirmationModal) {
         var vm = this;
 
         // Functions
@@ -171,19 +171,18 @@
         }
         function saveChanges() {
 			// Confirmation Dialog
-        	//var modalOptions = {
-        	//	closeButtonText: 'Cancel',
-        	//	actionButtonText: 'Save changes',
-        	//	headerText: 'Warning',
-        	//	bodyText: 'Product hierarchy identifiers may change and existing deals may have to be updated. Are you sure you would like to save your changes?'
-        	//};
+        	var modalOptions = {
+        		closeButtonText: 'Cancel',
+        		actionButtonText: 'Save changes',
+        		headerText: 'Warning',
+        		bodyText: 'Product hierarchy identifiers may change and existing deals may have to be updated. Are you sure you would like to save your changes?'
+        	};
 
-        	//confirmationModal.showModal({}, modalOptions)
-			//	.then(function (result) {
-			//		// Save changes
-			//		$scope.grid.saveChanges();
-        	//	});
-        	console.log("test confirmation modal removal");
+        	confirmationModal.showModal({}, modalOptions)
+				.then(function (result) {
+					// Save changes
+					$scope.grid.saveChanges();
+				});
         }
         function cancelChanges() {
         	$scope.grid.cancelChanges();
