@@ -12,29 +12,29 @@ namespace Intel.MyDeals.Entities
         public static readonly Dictionary<string, int> DEFAULT_ACTION_SORT_ORDER = new Dictionary<string, int>()
         {
             // Standard DEAL Save/Actions
-              {DealSaveActionCodes.LAYER, 10}
-            , {DealSaveActionCodes.SAVE, 20}
-            , {DealSaveActionCodes.PREP2DEAL, 30}
-            , {"SYNCDEAL", 30}
-            , {"ACTION", 90}
-            , {DealSaveActionCodes.DEAL_DELETE, 100}
-            , {DealSaveActionCodes.DEAL_ROLLBACK_TO_ACTIVE, 200}
-            , {DealSaveActionCodes.GEN_TRACKER, 300}
-            , {DealSaveActionCodes.SNAPSHOT, 400}
-            , {DealSaveActionCodes.QUEUE_QUOTE_LETTER, 500}
-            , {DealSaveActionCodes.CALC_MSP, 1000}
+            //  {DealSaveActionCodes.LAYER, 10}
+            //, {DealSaveActionCodes.SAVE, 20}
+            //, {DealSaveActionCodes.PREP2DEAL, 30}
+            //, {"SYNCDEAL", 30}
+            //, {"ACTION", 90}
+            //, {DealSaveActionCodes.DEAL_DELETE, 100}
+            //, {DealSaveActionCodes.DEAL_ROLLBACK_TO_ACTIVE, 200}
+            //, {DealSaveActionCodes.GEN_TRACKER, 300}
+            //, {DealSaveActionCodes.SNAPSHOT, 400}
+            //, {DealSaveActionCodes.QUEUE_QUOTE_LETTER, 500}
+            //, {DealSaveActionCodes.CALC_MSP, 1000}
 
-            // Copy WB Actions
-            , {DealSaveActionCodes.COPY_WB_FULL, 3100}
-            , {DealSaveActionCodes.COPY_WB_HEADER, 3200}
-            , {DealSaveActionCodes.COPY_WB_OVERLAP, 3300}
-            , {DealSaveActionCodes.COPY_WB_PROD, 3400}
+            //// Copy WB Actions
+            //, {DealSaveActionCodes.COPY_WB_FULL, 3100}
+            //, {DealSaveActionCodes.COPY_WB_HEADER, 3200}
+            //, {DealSaveActionCodes.COPY_WB_OVERLAP, 3300}
+            //, {DealSaveActionCodes.COPY_WB_PROD, 3400}
 
-            // Response Actions
-            , {DealSaveActionCodes.ID_CHANGE, 9100}
-            , {DealSaveActionCodes.ATRB_DELETED, 9200}
-            , {DealSaveActionCodes.DEAL_DELETED, 9300}
-            , {DealSaveActionCodes.MESSAGE, 9400}
+            //// Response Actions
+            //, {DealSaveActionCodes.ID_CHANGE, 9100}
+            //, {DealSaveActionCodes.ATRB_DELETED, 9200}
+            //, {DealSaveActionCodes.DEAL_DELETED, 9300}
+            //, {DealSaveActionCodes.MESSAGE, 9400}
 
             // TODO: Add more actions here...
             // TODO: Move this list to the DB and get it from there...

@@ -36,7 +36,7 @@ namespace Intel.MyDeals.Entities
             {
                 DcID = dc.DcID,
                 AtrbID = atrb.ATRB_SID,
-                AtrbCd = atrb.ATRB_CD,
+                AtrbCd = atrb.ATRB_COL_NM,
                 DataType = atrb.DOT_NET_DATA_TYPE,
                 AtrbValue = atrbVal
             };
@@ -165,7 +165,7 @@ namespace Intel.MyDeals.Entities
             {
                 dc.DataElements.Add(new OpDataElement
                 {
-                    AtrbCd = atrb.ATRB_CD,
+                    AtrbCd = atrb.ATRB_COL_NM,
                     AtrbID = atrb.ATRB_SID,
                     AtrbValue = dc.DcID,
                     DcID = dc.DcID,

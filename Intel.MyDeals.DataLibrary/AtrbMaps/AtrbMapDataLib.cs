@@ -13,8 +13,6 @@ namespace Intel.MyDeals.DataLibrary
     public class AtrbMapDataLib
     {
         private static readonly string[] GetOpAtrbMapItemsExclusions = {
-            AttributeCodes.PLI_LOCATOR,
-            AttributeCodes.PRD_MBR_SID
         };
 
         /// <summary>

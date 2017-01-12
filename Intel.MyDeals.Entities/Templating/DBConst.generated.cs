@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 1/12/2017 1:26:31 PM
-On: MHTIPPIN-MOBL
+File Updated: 1/12/2017 2:08:42 PM
+On: PWECKENR-MOBL5
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
 using System;
@@ -11,14 +11,26 @@ using System.Linq;
 namespace Intel.MyDeals.Entities {
 	public static class AttributeCodes {
 
-		///<summary>
-		/// DIM_SID: 2
-		/// DIM_CD: CUST
-		/// ATRB_SID: 2001
-		/// TGT_COL_TYPE: VARCHAR
-		/// DOT_NET_DATA_TYPE: System.Object
-		///</summary>
-		public const string ALL_CUST_NM = "ALL_CUST_NM";
+        public const string DEAL_TYPE_CD = "DEAL_TYPE_CD";
+        public const string DEAL_TYPE_CD_SID = "DEAL_TYPE_CD_SID";
+        public const string DEAL_SID = "DEAL_SID";
+        public const string CUST_MBR_SID = "CUST_MBR_SID";
+        public const string NUM_OF_TIERS = "NUM_OF_TIERS";
+        public const string TRKR_NBR = "TRKR_NBR";
+        public const string DEAL_STG_CD = "DEAL_STG_CD";
+        public const string START_DT = "START_DT";
+        public const string END_DT = "END_DT";
+
+
+
+        ///<summary>
+        /// DIM_SID: 2
+        /// DIM_CD: CUST
+        /// ATRB_SID: 2001
+        /// TGT_COL_TYPE: VARCHAR
+        /// DOT_NET_DATA_TYPE: System.Object
+        ///</summary>
+        public const string ALL_CUST_NM = "ALL_CUST_NM";
 
 		///<summary>
 		/// DIM_SID: 4

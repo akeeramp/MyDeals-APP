@@ -42,7 +42,7 @@ namespace Intel.MyDeals.Entities
                 {
                     if (_masterDataString == null)
                     {
-                        _masterDataString = MasterDataInt.ToDictionary(kvp => kvp.Value.ATRB_CD, kvp => kvp.Value);
+                        _masterDataString = MasterDataInt.ToDictionary(kvp => kvp.Value.ATRB_COL_NM, kvp => kvp.Value);
                     }
                 }
                 return _masterDataString;
@@ -105,7 +105,7 @@ namespace Intel.MyDeals.Entities
         {
             var a = Get(atrbSid);
             if (a == null) { return errorDefault; }
-            return a.ATRB_CD;
+            return a.ATRB_COL_NM;
         }
 
         public int GetSid(string atrbCd)
@@ -156,14 +156,14 @@ namespace Intel.MyDeals.Entities
             }
 
             return All
-                .Where(a => atrbCds.Contains(a.ATRB_CD))
+                .Where(a => atrbCds.Contains(a.ATRB_COL_NM))
                 .ToArray();
         }
 
         public string[] GetManyCode(params int[] atrbSids)
         {
             return GetMany(atrbSids)
-                .Select(a => a.ATRB_CD)
+                .Select(a => a.ATRB_COL_NM)
                 .ToArray();
         }
         public int[] GetManySid(params string[] atrbCds)
@@ -298,7 +298,7 @@ namespace Intel.MyDeals.Entities
             MyDealsAttribute atrb;
             if (MasterDataInt.TryGetValue(atrbSid, out atrb))
             {
-                atrbCd = atrb.ATRB_CD;
+                atrbCd = atrb.ATRB_COL_NM;
                 return true;
             }
 

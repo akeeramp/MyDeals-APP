@@ -93,7 +93,7 @@ namespace Intel.MyDeals.BusinessLogic
             // Back to normal operations, clear out the messages and all.
             newPacket.Actions.RemoveAll(r => r.ActionDirection == OpActionDirection.Inbound);
             newPacket.Messages.Messages.RemoveAll(r => true);
-            newPacket.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.SAVE, 20)); // Set action - save it.
+            //newPacket.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.SAVE, 20)); // Set action - save it.
             myDealsData[opDataElementType] = newPacket;
             // This is replacing the packet with the changes only.
         }
@@ -127,8 +127,8 @@ namespace Intel.MyDeals.BusinessLogic
             // Back to normal operations, clear out the messages and all.
             newPacket.Actions.RemoveAll(r => r.ActionDirection == OpActionDirection.Inbound);
             newPacket.Messages.Messages.RemoveAll(r => true);
-            newPacket.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.SAVE, 20)); // Set action to do for PLI data - save it.
-            newPacket.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.PREP2DEAL, prepIds, 30));
+            //newPacket.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.SAVE, 20)); // Set action to do for PLI data - save it.
+            //newPacket.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.PREP2DEAL, prepIds, 30));
             myDealsData[opDataElementType] = newPacket;
             // This is replacing the packet with the changes only.
         }
