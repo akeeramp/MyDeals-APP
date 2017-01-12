@@ -56,6 +56,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Shared Libraries\Intel.Opaque.dll</HintPath>
     </Reference>
+    <Reference Include="Intel.Opaque.Data">
+      <HintPath>..\Shared Libraries\Intel.Opaque.Data.dll</HintPath>
+    </Reference>
     <Reference Include="Moq, Version=4.5.29.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <HintPath>..\packages\Moq.4.5.29\lib\net45\Moq.dll</HintPath>
       <Private>True</Private>
@@ -79,10 +82,6 @@
     <Reference Include="NUnit.VisualStudio.TestAdapter, Version=2.0.0.0, Culture=neutral, PublicKeyToken=4cb40d35494691ac, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnitTestAdapter.WithFramework.2.0.0\lib\NUnit.VisualStudio.TestAdapter.dll</HintPath>
       <Private>False</Private>
-    </Reference>
-    <Reference Include="Intel.Opaque.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\My Files\Future Projects\Rules\RulesEngine\Intel.Opaque.Data.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />

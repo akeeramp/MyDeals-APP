@@ -2,7 +2,7 @@
 using System.Data.SqlClient;
 using System.Runtime.Serialization;
 
-namespace Intel.MyDeals.DataAccessLib
+namespace Intel.MyDeals.Entities
 {
 	public class in_t_prd_cat_map : SqlTableValueParameterBase
 	{
