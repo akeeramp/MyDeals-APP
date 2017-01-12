@@ -5,9 +5,9 @@
         .module('app.core')
         .factory('progressInterceptor', progressInterceptor)
 
-    progressInterceptor.$inject = ['$q', '$rootScope', 'logger'];
+    progressInterceptor.$inject = ['$q', '$rootScope'];
 
-    function progressInterceptor($q, $rootScope, logger) {
+    function progressInterceptor($q, $rootScope) {
 
         var xhrRequests = 0;
         var xhrResponses = 0;
@@ -29,7 +29,6 @@
             requestError: function (rejection) {
                 xhrResponses++;
                 updateStatus();
-                logger.error("Error in request", rejection, "Bad Request"); //Not full filled criteria, payload is missing
                 return $q.reject(rejection);
             },
             response: function (response) {
@@ -40,10 +39,6 @@
             responseError: function (rejection) {
                 xhrResponses++;
                 updateStatus();
-
-                //TODO: Usability will change this implementation
-                logger.error("Request resulted in error", rejection, "Internal Server Error", true); //Errors occurred on server.
-                
                 return $q.reject(rejection);
             }
         }

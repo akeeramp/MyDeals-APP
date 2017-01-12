@@ -5,9 +5,9 @@
         .module('app.core')
         .factory('dataService', dataService);
 
-    dataService.$inject = ['$http','$q', 'exception', 'logger'];
+    dataService.$inject = ['$http'];
 
-    function dataService($http, $q, exception, logger) {
+    function dataService($http) {
         var isPrimed = false;
         var primePromise;
 
