@@ -1,0 +1,14 @@
+﻿<div ng-class="{isHidden: opIsHidden, isErrorWrapper: opIsError, isSavedWrapper: opIsSaved, isDirtyWrapper: opIsDirty}">
+    <div class="opUiLabel" ng-class="{isRequired: opIsRequired}">{{opLabel}}</div>
+    <div kendo-tooltip k-content="opValidMsg" k-position="'top'" ng-show="opIsError" class="err-bit-el"></div>
+    <select kendo-drop-down-list class="fl opUiElement"
+            k-ng-model="value"
+            k-ng-readonly="opIsReadOnly"
+            k-data-source="values"
+            k-data-text-field="'text'"
+            k-data-value-field="'value'"
+            k-value-primitive="true"
+            ng-class="{isHidden: opIsHidden, isReadOnly: opIsReadOnly, isError: opIsError, isSaved: opIsSaved, isDirty: opIsDirty}">
+    </select>
+    <div class="clearboth"></div>
+</div>

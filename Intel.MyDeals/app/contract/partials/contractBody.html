@@ -1,0 +1,58 @@
+﻿<div id="secContainerWrapper">
+    <div id="secHeader">
+        <input ng-model="curPricingStrategy.TITLE" class="transparentInput fntXlg fntB noBottomBorder w100"/>
+    </div>
+
+    <div id="secContainer">
+
+        <div kendo-splitter
+             k-panes="[null, { collapsible: true, min: '235px', size: '235px' }]"
+             k-orientation="'vertical'"
+             id="k-splitter"
+             style="height: 100%; border: 0 solid transparent;">
+
+            <div>
+                <div ui-view="pricingTableView" class="fullHeight">
+                    <div class="jumbotron">
+                        <div class="container">
+                            <h1><strong>My</strong>Deals</h1>
+                            <p class="lead">Contract Manager.</p>
+                            <p>
+                                <small>{{ contractData.TITLE }}</small>
+                            </p>
+                            <p>
+                                Welcome, use the left navigation to manage pricing strategies and pricing tables.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="overflow: hidden;" class="wide noborder">
+                <div id="subContainerWrapper">
+                    <div id="subHeader">
+                        <div class="fl" style="padding: 4px 10px;">Additional Discounts & Requirements</div>
+                        <div class="fr" style="padding: 4px 10px;">
+                            <i class="intelicon-pin-solid ssmIconBtn" onclick="closeSplitter()"></i>
+                        </div>
+                        <div class="clearboth"></div>
+                    </div>
+                    <div id="subContainer">
+                        <textarea kendo-editor
+                                  k-ng-model="curPricingStrategy.TERMS"
+                                  k-tools="['fontSize','bold','italic','underline','strikeThrough','justifyLeft','justifyCenter','justifyRight','justifyFull', 'insertUnorderedList','insertOrderedList','indent','outdent']"
+                                  style="height: 100%;" class="noborderEditor"></textarea>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function closeSplitter() {
+        $("#k-splitter").data("kendoSplitter").collapse(".k-pane:last");
+    }
+</script>

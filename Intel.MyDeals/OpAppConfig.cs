@@ -1,6 +1,6 @@
 ﻿using System;
 using Intel.MyDeals.App;
-using Intel.MyDeals.BusinesssLogic;
+using Intel.MyDeals.BusinessLogic;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.Entities.Logging;
 using Intel.Opaque;

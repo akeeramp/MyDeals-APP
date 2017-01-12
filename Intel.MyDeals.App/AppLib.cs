@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Web;
-using Intel.MyDeals.BusinesssLogic;
+using Intel.MyDeals.BusinessLogic;
 using Intel.MyDeals.Entities;
-using Intel.MyDeals.Entities.Logging;
 using Intel.Opaque;
 
 namespace Intel.MyDeals.App
@@ -135,7 +131,7 @@ namespace Intel.MyDeals.App
             OpAuthenticationExtensions.ClearCache();
             UserSettings?.Clear();
         }
-		
+
 
 
     }

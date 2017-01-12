@@ -36,6 +36,26 @@ util.waitMsg = function (msg, iconClass) {
     }
 }
 
+util.isEmpty = function(map)
+{
+    for (var key in map) {
+        if (map.hasOwnProperty(key)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+util.findInArray = function (input, id) {
+    var len = input.length;
+    for (var i = 0; i < len; i++) {
+        if (+input[i].dc_id === +id) {
+            return input[i];
+        }
+    }
+    return null;
+}
+
 util.stripObject = function (obj) {
     var newObj = {};
     for (var key in obj) {
@@ -174,6 +194,14 @@ util.clone = function (obj) {
     return copy;
 }
 
+
+util.getFirstKey = function(data) {
+    for (var prop in data)
+        if (data.hasOwnProperty(prop))
+            if (data.propertyIsEnumerable(prop))
+                return prop;
+    return null;
+}
 
 util.markFormElPass = function (elName) {
     var obj = $(elName);

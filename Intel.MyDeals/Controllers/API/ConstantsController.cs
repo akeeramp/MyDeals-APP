@@ -1,25 +1,26 @@
 ﻿using System.Collections.Generic;
 using System.Web.Http;
-using Intel.MyDeals.BusinesssLogic;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 
 namespace Intel.MyDeals.Controllers.API
 {
+    [RoutePrefix("api/Constants/v1")]
     public class ConstantsController : BaseApiController
     {
         private readonly IConstantsLookupsLib _constantsLookupsLib;
-
-        public ConstantsController(IConstantsLookupsLib _constantsLookupsLib)
+        public ConstantsController(IConstantsLookupsLib constantsLookupsLib)
         {
-            this._constantsLookupsLib = _constantsLookupsLib;
+            _constantsLookupsLib = constantsLookupsLib;
         }
 
         [Authorize]
-        [Route("api/Constants/v1/GetConstants")]
+        [Route("GetConstants")]
         public IEnumerable<ToolConstants> Get()
         {
-            return _constantsLookupsLib.GetToolConstants();
+            return SafeExecutor(() => _constantsLookupsLib.GetToolConstants()
+                , "Unable to get Tool Constants"
+            );
         }
     }
 }

@@ -78,15 +78,19 @@
             </ul>
         </li>*@
 
+
+        <li><a href="@Url.Action("Index", "Home", new {Area = ""})" title="Home"><i class="intelicon-home-solid"></i><span class="hidden-xs"> Home</span></a></li>
+        <li><a href="@Url.Action("Index", "Home", new { Area = "" })" title="Settings"><i class="intelicon-settings-solid"></i><span class="hidden-xs"> Settings</span></a></li>
+
         <li class="dropdown">
-            <a class="btn btn-primary" id="dLabel" role="button" href="/" data-toggle="dropdown" data-target="#">POC Pages <i class="intelicon-down"></i></a>
+            <a class="btn btn-primary" id="dLabel" role="button" href="/" data-toggle="dropdown" data-target="#" title="POC Pages"><i class="intelicon-document-solid"></i><span class="hidden-xs"> POC Pages </span><i class="intelicon-down"></i></a>
             <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
                 <li><a href="@Url.Action("Index", "Others", new { Area = "" })">Ping the Database</a></li>
                 <li><a href="@Url.Action("Index", "Poc", new { Area = "" })">Basic Form Submit</a></li>
             </ul>
         </li>
         <li class="dropdown">
-            <a class="btn btn-primary" role="button" href="/" data-toggle="dropdown" data-target="#">Docs <i class="intelicon-down"></i></a>
+            <a class="btn btn-primary" role="button" href="/" data-toggle="dropdown" data-target="#" title="Docs"><i class="intelicon-attach-document-solid"></i><span class="hidden-xs"> Docs </span><i class="intelicon-down"></i></a>
             <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
                 <li><a href="@Url.Action("Index", "CodingPractices", new { Area = "" })">Coding Practices</a></li>
             </ul>
@@ -127,7 +131,7 @@
         </li>
         <li><a href="@Url.Action("Index", "Contract", new { Area = "" })">Contracts</a></li>
 		<li><a href="@Url.Action("Index", "Dashboard", new { Area = "" })">Dashboard</a></li>
-
+                                                                                                                                                                            
         @*<li class="dropdown">
             <a class="btn btn-primary" role="button" href="/" data-toggle="dropdown" data-target="#">Debug <i class="intelicon-down"></i></a>
             <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
@@ -190,8 +194,7 @@
 <script>
     topbar.config({
         barColors: {
-            '0': 'rgba(243, 213, 78, 1)',
-            '1': 'rgba(255, 163, 0, 1)'
+            '0': 'rgba(196, 214, 0, 1)'
         }
     });
 </script>

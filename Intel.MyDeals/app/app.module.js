@@ -19,8 +19,10 @@
          * Feature areas
          */
         'app.admin',
+        'app.contract',
         'app.costtest',
-        'app.dashboard'
+        'app.dashboard',
+        'app.testCases'
     ]);
 
 })()

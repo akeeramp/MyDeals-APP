@@ -13,9 +13,9 @@
         $scope.viewCacheByNameUrl = "/api/Cache/v1/GetCacheView/";
 
         $scope.apiCacheData = [];
-        $scope.getApiCacheStatusUrl = "/api/Cache/v1/GetApiCacheStatus"
-        $scope.getApiCacheClearUrl = "/api/Cache/v1/GetApiCacheClear"
-        $scope.clearApiCacheurl = "/api/Cache/v1/ClearApiCache"
+        $scope.getApiCacheStatusUrl = "/api/Cache/v1/GetApiCacheStatus";
+        $scope.getApiCacheClearUrl = "/api/Cache/v1/GetApiCacheClear";
+        $scope.clearApiCacheurl = "/api/Cache/v1/ClearApiCache";
         
         $scope.clearAll = function () {
             $scope.loadingStatus();

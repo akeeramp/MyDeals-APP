@@ -1,8 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using Intel.MyDeals.Entities;
+using Intel.Opaque;
+using Intel.Opaque.Data;
 
 namespace Intel.MyDeals.DataLibrary
 {
@@ -142,14 +145,23 @@ namespace Intel.MyDeals.DataLibrary
         //    return new OpCurrentConfig().GetConfigDetails(returnExceptions);
         //}
 
-        ////////public static List<OpAtrbMap> GetOpAtrbMapItems()
-        ////////{
-        ////////    lock (LOCK_OBJECT ?? new object())
-        ////////    {
-        ////////        return _getOpAtrbMapItems ?? (_getOpAtrbMapItems = new AtrbMapDataLib().GetOpAtrbMapItems());
-        ////////    }
-        ////////}
-        ////////private static List<OpAtrbMap> _getOpAtrbMapItems;
+        public static List<OpAtrbMap> GetOpAtrbMapItems()
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                return _getOpAtrbMapItems ?? (_getOpAtrbMapItems = new AtrbMapDataLib().GetOpAtrbMapItems());
+            }
+        }
+        private static List<OpAtrbMap> _getOpAtrbMapItems;
+
+        public static UiTemplates GetUiTemplates()
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                return _getUiTemplates ?? (_getUiTemplates = new UiTemplateDataLib().GetUiTemplates());
+            }
+        }
+        private static UiTemplates _getUiTemplates;
 
         public static List<GeoDimension> GetGeoData()
         {
@@ -160,157 +172,162 @@ namespace Intel.MyDeals.DataLibrary
         }
         private static List<GeoDimension> _getGeoData;
 
-        ////////public static List<LookupItem> GetLookupData()
-        ////////{
-        ////////    lock (LOCK_OBJECT ?? new object())
-        ////////    {
-        ////////        return _getLookupData ?? (_getLookupData = new ConstantLookupDataLib().GetLookups());
-        ////////    }
-        ////////}
-        ////////private static List<LookupItem> _getLookupData;
+        public static List<LookupItem> GetLookupData()
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                return _getLookupData ?? (_getLookupData = new ConstantLookupDataLib().GetLookups());
+            }
+        }
+        private static List<LookupItem> _getLookupData;
 
 
-        ////////public static SecurityWrapper GetSecurityWrapper()
-        ////////{
-        ////////    lock (LOCK_OBJECT ?? new object())
-        ////////    {
-        ////////        if (_getRoleTypes != null && _getSecurityActions != null && _getSecurityMasks != null)
-        ////////            return new SecurityWrapper(_getRoleTypes.ToList(), _getSecurityActions.ToList(), _getSecurityMasks.ToList());
+        public static SecurityWrapper GetSecurityWrapper()
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                if (_getRoleTypes != null && _getSecurityActions != null && _getSecurityMasks != null)
+                    return new SecurityWrapper(_getRoleTypes.ToList(), _getSecurityActions.ToList(), _getSecurityMasks.ToList());
 
-        ////////        SecurityWrapper wrapper = new SecurityAttributesDataLib().GetSecurityWrapper();
-        ////////        _getRoleTypes = wrapper.RoleTypes;
-        ////////        _getSecurityActions = wrapper.SecurityActions;
-        ////////        _getSecurityMasks = wrapper.SecurityMasks;
-        ////////        return wrapper;
-        ////////    }
-        ////////}
+                SecurityWrapper wrapper = new SecurityAttributesDataLib().GetSecurityWrapper();
+                _getRoleTypes = wrapper.RoleTypes;
+                _getSecurityActions = wrapper.SecurityActions;
+                _getSecurityMasks = wrapper.SecurityMasks;
+                return wrapper;
+            }
+        }
 
-        ////////public static SecurityWrapper GetRoleTypes()
-        ////////{
-        ////////    return GetSecurityWrapper();
-        ////////}
-        ////////public static SecurityWrapper GetSecurityActions()
-        ////////{
-        ////////    return GetSecurityWrapper();
-        ////////}
-        ////////public static SecurityWrapper GetSecurityMasks()
-        ////////{
-        ////////    return GetSecurityWrapper();
-        ////////}
-        ////////private static IEnumerable<OpRoleType> _getRoleTypes;
-        ////////private static IEnumerable<SecurityAction> _getSecurityActions;
-        ////////private static IEnumerable<SecurityMask> _getSecurityMasks;
-
-
-        ////////public static IEnumerable<DcsSoldTo> GetSoldToData()
-        ////////{
-        ////////    lock (LOCK_OBJECT ?? new object())
-        ////////    {
-        ////////        return _getSoldToData ?? (_getSoldToData = new GeoDataLib().GetSoldTos());
-        ////////    }
-        ////////}
-        ////////private static IEnumerable<DcsSoldTo> _getSoldToData;
-
-        ////////public static List<WorkFlowStage> GetWorkFlowStages()
-        ////////{
-        ////////    lock (LOCK_OBJECT ?? new object())
-        ////////    {
-        ////////        return _getWorkFlowStages ?? (_getWorkFlowStages = new WorkflowDataLib().GetWorkFlowStages());
-        ////////    }
-        ////////}
-        ////////private static List<WorkFlowStage> _getWorkFlowStages;
-
-        ////////public static List<WorkFlowItem> GetWorkFlowItems()
-        ////////{
-        ////////    lock (LOCK_OBJECT ?? new object())
-        ////////    {
-        ////////        return _getWorkFlowItems ?? (_getWorkFlowItems = new WorkflowDataLib().GetWorkFlowItems());
-        ////////    }
-        ////////}
-        ////////private static List<WorkFlowItem> _getWorkFlowItems;
-
-        ////////public static List<AppRoleTier> GetAppRoleTiers()
-        ////////{
-        ////////    lock (LOCK_OBJECT ?? new object())
-        ////////    {
-        ////////        return _getAppRoleTiers ?? (_getAppRoleTiers = new SecurityAttributesDataLib().GetAppRoleTiers());
-        ////////    }
-        ////////}
-        ////////private static List<AppRoleTier> _getAppRoleTiers;
+        public static SecurityWrapper GetRoleTypes()
+        {
+            return GetSecurityWrapper();
+        }
+        public static SecurityWrapper GetSecurityActions()
+        {
+            return GetSecurityWrapper();
+        }
+        public static SecurityWrapper GetSecurityMasks()
+        {
+            return GetSecurityWrapper();
+        }
+        private static IEnumerable<OpRoleType> _getRoleTypes;
+        private static IEnumerable<SecurityAction> _getSecurityActions;
+        private static IEnumerable<SecurityMask> _getSecurityMasks;
 
 
-        //public static Dictionary<int, MyDealsAttribute> GetAttributeMasterDataDictionary()
-        //{
-        //    lock (LOCK_OBJECT ?? new object())
-        //    {
-        //        return _getAttributeMasterDataDictionary ??
-        //               (_getAttributeMasterDataDictionary = new AtrbMapDataLib().GetAttributeMasterDataDictionary());
+        public static IEnumerable<DcsSoldTo> GetSoldToData()
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                return _getSoldToData ?? (_getSoldToData = new GeoDataLib().GetSoldTos());
+            }
+        }
+        private static IEnumerable<DcsSoldTo> _getSoldToData;
 
-        //    }
-        //}
-        //private static Dictionary<int, MyDealsAttribute> _getAttributeMasterDataDictionary;
+        public static List<WorkFlowStage> GetWorkFlowStages()
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                return _getWorkFlowStages ?? (_getWorkFlowStages = new WorkflowDataLib().GetWorkFlowStages());
+            }
+        }
+        private static List<WorkFlowStage> _getWorkFlowStages;
 
-        //public static AttributeCollection GetAttributeData()
-        //{
-        //    lock (LOCK_OBJECT ?? new object())
-        //    {
-        //        return new AttributeCollection(GetAttributeMasterDataDictionary(), GetOpAtrbMapItems());
-        //    }
-        //}
+        public static List<WorkFlowItem> GetWorkFlowItems()
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                return _getWorkFlowItems ?? (_getWorkFlowItems = new WorkflowDataLib().GetWorkFlowItems());
+            }
+        }
+        private static List<WorkFlowItem> _getWorkFlowItems;
+
+        public static List<AppRoleTier> GetAppRoleTiers()
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                return _getAppRoleTiers ?? (_getAppRoleTiers = new SecurityAttributesDataLib().GetAppRoleTiers());
+            }
+        }
+        private static List<AppRoleTier> _getAppRoleTiers;
 
 
-        ////////public static List<MyDealsActionItem> GetDealActions()
-        ////////{
-        ////////    lock (LOCK_OBJECT ?? new object())
-        ////////    {
-        ////////        return _getDealActions ?? (_getDealActions = new SecurityAttributesDataLib().GetDealActions());
-        ////////    }
-        ////////}
-        ////////private static List<MyDealsActionItem> _getDealActions;
+        public static Dictionary<int, MyDealsAttribute> GetAttributeMasterDataDictionary()
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                return _getAttributeMasterDataDictionary ??
+                       (_getAttributeMasterDataDictionary = new AtrbMapDataLib().GetAttributeMasterDataDictionary());
+
+            }
+        }
+        private static Dictionary<int, MyDealsAttribute> _getAttributeMasterDataDictionary;
+
+        public static AttributeCollection GetAttributeData()
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                return new AttributeCollection(GetAttributeMasterDataDictionary(), GetOpAtrbMapItems());
+            }
+        }
 
 
-        ////////public static TemplateWrapper GetTemplateData()
-        ////////{
-        ////////    return GetTemplateDataWithData(new DateTime(2000, 1, 1));
-        ////////}
+        public static List<MyDealsActionItem> GetDealActions()
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                return _getDealActions ?? (_getDealActions = new SecurityAttributesDataLib().GetDealActions());
+            }
+        }
+        private static List<MyDealsActionItem> _getDealActions;
 
-        ////////public static TemplateWrapper GetTemplateDataWithData(DateTime lastCacheDate)
-        ////////{
-        ////////    lock (LOCK_OBJECT ?? new object())
-        ////////    {
-        ////////        if (_getTemplateData != null && _getTemplateDict != null && _getCalendarData != null && _getDealTypeData != null)
-        ////////            return new TemplateWrapper {
-        ////////                TemplateData = _getTemplateData,
-        ////////                TemplateDict = _getTemplateDict,
-        ////////                CalendarData = _getCalendarData,
-        ////////                DealTypeData = _getDealTypeData
-        ////////            };
 
-        ////////        TemplateWrapper wrapper = new DataCollectorDataLib().GetTemplateData(lastCacheDate);
-        ////////        _getTemplateData = wrapper.TemplateData;
-        ////////        _getTemplateDict = wrapper.TemplateDict;
-        ////////        _getCalendarData = wrapper.CalendarData.ToList();
-        ////////        _getDealTypeData = wrapper.DealTypeData;
-        ////////        return wrapper;
-        ////////    }
-        ////////}
+        public static TemplateWrapper GetTemplateData()
+        {
+            return GetTemplateDataWithData(new DateTime(2000, 1, 1));
+        }
 
-        ////////public static TemplateWrapper GetTemplateDict()
-        ////////{
-        ////////    return GetTemplateData();
-        ////////}
-        ////////public static TemplateWrapper GetCalendarData()
-        ////////{
-        ////////    return GetTemplateData();
-        ////////}
-        ////////public static TemplateWrapper GetDealTypeData()
-        ////////{
-        ////////    return GetTemplateData();
-        ////////}
-        ////////private static List<DealTemplateDataGram> _getTemplateData;
-        ////////private static Dictionary<string, List<OpDataElementUI>> _getTemplateDict;
-        ////////private static List<CustomerCalendar> _getCalendarData;
-        ////////private static List<DealType> _getDealTypeData;
+        public static TemplateWrapper GetTemplateDataWithData(DateTime lastCacheDate)
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                if (_getTemplateData != null && _getTemplateDict != null && _getCalendarData != null && _getDealTypeData != null)
+                    return new TemplateWrapper
+                    {
+                        TemplateData = _getTemplateData,
+                        TemplateDict = _getTemplateDict,
+                        CalendarData = _getCalendarData,
+                        DealTypeData = _getDealTypeData
+                    };
+
+                TemplateWrapper wrapper = new DataCollectorDataLib().GetTemplateData(lastCacheDate);
+                _getTemplateData = wrapper.TemplateData;
+                _getTemplateDict = wrapper.TemplateDict;
+                _getCalendarData = wrapper.CalendarData.ToList();
+                _getDealTypeData = wrapper.DealTypeData;
+                return wrapper;
+            }
+        }
+
+        public static OpDataElementUITemplates GetOpDataElementUITemplates()
+        {
+            return GetTemplateDict().TemplateDict;
+        }
+        public static TemplateWrapper GetTemplateDict()
+        {
+            return GetTemplateData();
+        }
+        public static TemplateWrapper GetCalendarData()
+        {
+            return GetTemplateData();
+        }
+        public static TemplateWrapper GetDealTypeData()
+        {
+            return GetTemplateData();
+        }
+        private static List<DealTemplateDataGram> _getTemplateData;
+        private static OpDataElementUITemplates _getTemplateDict;
+        private static List<CustomerCalendar> _getCalendarData;
+        private static List<DealType> _getDealTypeData;
 
         public static List<CustomerDivision> GetCustomerDivisions()
         {
@@ -333,41 +350,41 @@ namespace Intel.MyDeals.DataLibrary
         //    //TODO: Do we need this function? TryGetValue is a C# Dictionary<> function, find List<> equivalent?
         //}
 
-        ////////public static List<FilterAttribute> GetFilterAttributes()
-        ////////{
-        ////////    lock (LOCK_OBJECT ?? new object())
-        ////////    {
-        ////////        return _getFilterAttributes ?? (_getFilterAttributes = new MetaDataLib().GetFilterAttributes());
-        ////////    }
-        ////////}
-        ////////private static List<FilterAttribute> _getFilterAttributes;
+        public static List<FilterAttribute> GetFilterAttributes()
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                return _getFilterAttributes ?? (_getFilterAttributes = new MetaDataLib().GetFilterAttributes());
+            }
+        }
+        private static List<FilterAttribute> _getFilterAttributes;
 
-        ////////public static List<GridType> GetGridTypes()
-        ////////{
-        ////////    lock (LOCK_OBJECT ?? new object())
-        ////////    {
-        ////////        return _getGridTypes ?? (_getGridTypes = new MetaDataLib().GetGridTypes());
-        ////////    }
-        ////////}
-        ////////private static List<GridType> _getGridTypes;
+        public static List<GridType> GetGridTypes()
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                return _getGridTypes ?? (_getGridTypes = new MetaDataLib().GetGridTypes());
+            }
+        }
+        private static List<GridType> _getGridTypes;
 
-        ////////public static List<Operator_class> GetOperators()
-        ////////{
-        ////////    lock (LOCK_OBJECT ?? new object())
-        ////////    {
-        ////////        return _getOperators ?? (_getOperators = new MetaDataLib().GetOperators());
-        ////////    }
-        ////////}
-        ////////private static List<Operator_class> _getOperators;
+        public static List<Operator_class> GetOperators()
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                return _getOperators ?? (_getOperators = new MetaDataLib().GetOperators());
+            }
+        }
+        private static List<Operator_class> _getOperators;
 
-        ////////public static List<UIType> GetUITypes()
-        ////////{
-        ////////    lock (LOCK_OBJECT ?? new object())
-        ////////    {
-        ////////        return _getUITypes ?? (_getUITypes = new MetaDataLib().GetUITypes());
-        ////////    }
-        ////////}
-        ////////private static List<UIType> _getUITypes;
+        public static List<UIType> GetUITypes()
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                return _getUITypes ?? (_getUITypes = new MetaDataLib().GetUITypes());
+            }
+        }
+        private static List<UIType> _getUITypes;
 
         public static List<Product> GetProductData()
         {

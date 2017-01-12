@@ -6,7 +6,7 @@ using Intel.MyDeals.Entities;
 using Intel.Opaque;
 using Intel.Opaque.Data;
 
-namespace Intel.MyDeals.BusinesssLogic
+namespace Intel.MyDeals.BusinessLogic
 {
     public class QuickSearchLib
     {

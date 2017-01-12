@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Intel.MyDeals.Entities;
 
-namespace Intel.MyDeals.BusinesssLogic
+namespace Intel.MyDeals.BusinessLogic
 {
     class DealLib_Search
     {

@@ -48,6 +48,7 @@
     <Compile Include="Constants Lookups\IConstantLookupDataLib.cs" />
     <Compile Include="CustomerCalendar\ICustomerCalendarDataLib.cs" />
     <Compile Include="Customer\ICustomerDataLib.cs" />
+    <Compile Include="Data Collectors\IDataCollectorDataLib.cs" />
     <Compile Include="DataCollections\IDataCollectionsDataLib.cs" />
     <Compile Include="Geos\IGeoDataLib.cs" />
     <Compile Include="Logging\ILoggingDataLib.cs" />
@@ -55,6 +56,7 @@
     <Compile Include="Products\IProductDataLib.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SecurityAttributes\ISecurityAttributesDataLib.cs" />
+    <Compile Include="UI Templates\IUiTemplateDataLib.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Intel.MyDeals.Entities\Intel.MyDeals.Entities.csproj">

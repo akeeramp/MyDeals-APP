@@ -18,7 +18,7 @@
 		,'blocks.logger'
 		,'blocks.router'
 		,'blocks.confirmationModal'
-
+		
     ]);
 
     //TODO: Is there a better location to place the global js error handling?

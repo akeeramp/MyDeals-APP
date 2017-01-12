@@ -18,7 +18,7 @@ namespace Intel.MyDeals
 
             bundles.Add(new ScriptBundle("~/bundles/scripts").Include(
                 "~/Scripts/jquery-2.2.0.min.js",
-                "~/Scripts/Angular/1.5.8/angular.min.js",
+				"~/Scripts/Angular/1.5.8/angular.min.js",
                 "~/Scripts/kendo/2016.3.914/jszip.min.js",
                 "~/Scripts/kendo/2016.3.914/kendo.all.min.js",
                 "~/Scripts/kendo/kendo.aspnetmvc.min.js",
@@ -39,8 +39,8 @@ namespace Intel.MyDeals
                 "~/Scripts/Angular/1.5.8/angular-ui-router.min.js"
                 , "~/Scripts/Angular/1.5.8/angular-animate.min.js"
                 , "~/Scripts/Angular/1.5.8/angular-sanitize.min.js"
-                , "~/Scripts/Angular/ui-bootstrap-tpls-2.2.0.min.js"
-                ));
+				, "~/Scripts/Angular/ui-bootstrap-tpls-2.2.0.min.js"
+				));
 
             bundles.Add(new ScriptBundle("~/bundles/angularReusable").Include(
                  "~/app/app.module.js"
@@ -50,10 +50,10 @@ namespace Intel.MyDeals
                 , "~/app/blocks/logger/logger.module.js"
                 , "~/app/blocks/logger/logger.js"
                 , "~/app/blocks/router/router.module.js"
-				, "~/app/blocks/router/routehelper.js"
+                , "~/app/blocks/router/routehelper.js"
 				, "~/app/blocks/confirmationModal/confirmationModal.module.js"
 				, "~/app/blocks/confirmationModal/confirmationModal.service.js"
-				, "~/app/core/core.module.js"
+                , "~/app/core/core.module.js"
                 , "~/app/core/progressInterceptor.js"
                 , "~/app/core/constants.js"
                 , "~/app/core/config.js"
@@ -68,14 +68,18 @@ namespace Intel.MyDeals
                 , "~/app/admin/cache/admin.cache.controller.js"
                 , "~/app/admin/constants/constants.service.js"
                 , "~/app/admin/constants/admin.constants.controller.js"
+                , "~/app/admin/customer/admin.customer.controller.js"
                 , "~/app/admin/customer/customer.service.js"
                 , "~/app/admin/geo/admin.geo.controller.js"
                 , "~/app/admin/geo/geo.service.js"
-				, "~/app/admin/products/admin.products.controller.js"
+                , "~/app/admin/products/admin.products.controller.js"
 				, "~/app/admin/productCategories/productCategories.service.js"
 				, "~/app/admin/productCategories/admin.productCategories.controller.js"
-				, "~/app/admin/products/products.service.js"
-				, "~/app/admin/customer/admin.customer.controller.js"
+                , "~/app/admin/products/products.service.js"
+                , "~/app/contract/contract.module.js"
+                , "~/app/contract/contract.route.js"
+                , "~/app/contract/controllers/contract.controller.js"
+                , "~/app/contract/controllers/pricingTable.controller.js"
                 , "~/app/admin/securityAttributes/securityActions/securityActions.service.js"
                 , "~/app/admin/securityAttributes/securityActions/securityActions.controller.js"
                 , "~/app/admin/securityAttributes/adminApplications/adminApplications.service.js"
@@ -88,12 +92,23 @@ namespace Intel.MyDeals
                 , "~/app/costTest/costtest.route.js"
                 , "~/app/costTest/iCostProducts/costTest.iCostProduct.service.js"
                 , "~/app/costTest/iCostProducts/costTest.iCostProducts.controller.js"
-                , "~/app/dashboard/dashboard.module.js"
-                , "~/app/dashboard/dashboard.route.js"
-                ));
+				, "~/app/dashboard/dashboard.module.js"
+				, "~/app/dashboard/dashboard.route.js"
+                , "~/app/shared/directives/focusOnShow.directive.js"
+                , "~/app/shared/directives/opcontrol.directive.js"
+                , "~/app/shared/directives/opcontrolFlat.directive.js"
+                , "~/app/shared/directives/opcontrolDataElement.directive.js"
+                , "~/app/shared/services/lookups.service.js"
+                , "~/app/shared/services/objset.service.js"
+                , "~/app/shared/services/templates.service.js"
+                , "~/app/testCases/testCases.module.js"
+                , "~/app/testCases/testCases.route.js"
+                , "~/app/testCases/uiControls/uiControls.controller.js"
+				));
 
             bundles.Add(new ScriptBundle("~/MyDeals/scripts").Include(
                 "~/js/_util.js",
+                "~/js/_gridUtil.js",
                 "~/js/_dealUtil.js"
                 ));
 
@@ -102,8 +117,6 @@ namespace Intel.MyDeals
                 "~/css/font-awesome.min.css",
                 "~/css/jquery.rainbowJSON.css",
                 "~/css/jquery-ui.min.css",
-                "~/css/tooltipster.bundle.min.css",
-                "~/css/tooltipster-sideTip-light.min.css",
                 "~/Content/kendo/2016.3.914/kendo.common-bootstrap.min.css",
                 "~/Content/kendo/2016.3.914/kendo.metro.min.css",
                 "~/css/it-mlaf.min.css",
@@ -116,7 +129,9 @@ namespace Intel.MyDeals
 
             bundles.Add(new StyleBundle("~/MyDeals/css").Include(
                 "~/css/_dealUtil.css",
-                "~/Content/styles.css"
+                "~/Content/styles.css",
+                "~/css/_controls.css",
+                "~/css/_contractManager.css"
                 ));
         }
     }

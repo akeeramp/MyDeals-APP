@@ -1,0 +1,30 @@
+﻿<div id="secContainerWrapper">
+    <div id="secHeader">
+        <input ng-model="curPricingStrategy.TITLE" class="transparentInput fntXlg fntW noBottomBorder w100" />
+    </div>
+
+    <div id="secContainer">
+
+        <div kendo-splitter
+             k-panes="[null, { collapsible: true, min: '235px', size: '235px' }]"
+             k-orientation="'vertical'"
+             style="height: 100%; border: 0 solid transparent;">
+
+            <div style="overflow: hidden;" class="wide noborder">
+                <div id="subContainerWrapper">
+                    <div id="subHeader">
+                        <div style="padding: 4px 10px;">Additional Discounts & Requirements</div>
+                    </div>
+                    <div id="subContainer">
+                        <textarea kendo-editor
+                                  k-ng-model="curPricingStrategy.TERMS"
+                                  k-tools="['fontSize','bold','italic','underline','strikeThrough','justifyLeft','justifyCenter','justifyRight','justifyFull', 'insertUnorderedList','insertOrderedList','indent','outdent']"
+                                  style="height: 100%;" class="noborderEditor"></textarea>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>

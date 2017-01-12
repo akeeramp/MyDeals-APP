@@ -5,7 +5,7 @@ using Intel.MyDeals.IDataLibrary;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Intel.MyDeals.BusinesssLogic
+namespace Intel.MyDeals.BusinessLogic
 {
     public class CustomerLib : ICustomerLib
     {

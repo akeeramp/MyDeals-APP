@@ -82,7 +82,6 @@
     <Compile Include="Data Collections\DataCollectionsDataLib.cs" />
     <Compile Include="Data Collections\DataCollections.cs" />
     <Compile Include="Data Collectors\DataCollectorDataLib.cs" />
-    <Compile Include="Data Collectors\DataCollectorDataLib_Get.cs" />
     <Compile Include="DataLibrary.cs" />
     <Compile Include="Deals\DealDataLib_Common.cs" />
     <Compile Include="Deals\DealDataLib_Get.cs" />
@@ -92,7 +91,6 @@
     <Compile Include="Resolver.cs" />
     <Compile Include="Employees\EmployeeDataLib.cs" />
     <Compile Include="Geos\GeoDataLib.cs" />
-    <Compile Include="Helpers\OpUserTokenHelpers.cs" />
     <Compile Include="JMS\JmsDataLib.cs" />
     <Compile Include="Logging\LoggingDataLib.cs" />
     <Compile Include="Meta\MetaDataLib.cs" />
@@ -102,7 +100,9 @@
     <Compile Include="Quote Letter\QuoteDataLib.cs" />
     <Compile Include="Security Attributes\OpSecurity.cs" />
     <Compile Include="Security Attributes\SecurityAttributesDataLib.cs" />
+    <Compile Include="UI Templates\UiTemplateDataLib.cs" />
     <Compile Include="Workflow\WorkflowDataLib.cs" />
+    <Compile Include="_data\PricingTableData.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DependencyResolver\Intel.MyDeals.DependencyResolver.csproj">
@@ -125,6 +125,7 @@
   <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

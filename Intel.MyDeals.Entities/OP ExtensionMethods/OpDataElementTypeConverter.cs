@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Intel.Opaque.Data;
 using Intel.Opaque.Tools;
@@ -13,7 +12,7 @@ namespace Intel.MyDeals.Entities
         // 1) Make it easier to keep the two lists in synch and 
         // 2) Provide a framework for other apps to do the same.
         // If needed, move to another namespace or assembly.
-        private static Dictionary<string, OpDataElementType> _data = new Dictionary<string, OpDataElementType>
+        private static readonly Dictionary<string, OpDataElementType> Data = new Dictionary<string, OpDataElementType>
         {
             { "DEAL", OpDataElementType.Deals},
             { "PREP", OpDataElementType.Secondary},
@@ -28,30 +27,25 @@ namespace Intel.MyDeals.Entities
             { "ARCH", OpDataElementType.Archive},
             { "HIST", OpDataElementType.History},
             { "SNAP", OpDataElementType.Snapshot},
-            { String.Empty, OpDataElementType.Unknown}
+            { string.Empty, OpDataElementType.Unknown}
         };
 
 
         /// <summary>
         /// Convert a value into a OpDataElementType
         /// </summary>
-        /// <param name="str_type">String representation of an OpDataElementType</param>
+        /// <param name="strType">String representation of an OpDataElementType</param>
         /// <returns>Valid OpDataElementType or Unknown if not found.</returns>
-        public static OpDataElementType FromString(object str_type)
+        public static OpDataElementType FromString(object strType)
         {
-            if (str_type != null && str_type is OpDataElementType)
+            if (strType is OpDataElementType)
             {
-                return (OpDataElementType)str_type;
+                return (OpDataElementType)strType;
             }
 
             OpDataElementType ret;
 
-            if (_data.TryGetValue(String.Format("{0}", str_type), out ret))
-            {
-                return ret;
-            }
-
-            return OpTypeConverter.ParseEnum<OpDataElementType>(str_type, OpDataElementType.Unknown);
+            return Data.TryGetValue($"{strType}", out ret) ? ret : OpTypeConverter.ParseEnum(strType, OpDataElementType.Unknown);
         }
 
         /// <summary>
@@ -61,12 +55,12 @@ namespace Intel.MyDeals.Entities
         /// <returns></returns>
         public static string ToString(OpDataElementType en)
         {
-            foreach (var itm in _data.Where(kvp => kvp.Value == en))
+            foreach (var itm in Data.Where(kvp => kvp.Value == en))
             {
                 return itm.Key;
             }
 
-            return String.Empty;
+            return string.Empty;
         }
     }
 }

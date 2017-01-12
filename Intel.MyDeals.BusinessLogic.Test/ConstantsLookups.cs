@@ -1,6 +1,6 @@
 ﻿//using System.Collections.Generic;
 //using System.Linq;
-//using Intel.MyDeals.BusinesssLogic;
+//using Intel.MyDeals.BusinessLogic;
 //using Intel.MyDeals.DataLibrary.Test;
 //using Intel.MyDeals.Entities;
 //using Microsoft.VisualStudio.TestTools.UnitTesting;

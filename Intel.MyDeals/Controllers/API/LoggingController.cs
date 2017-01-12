@@ -1,4 +1,4 @@
-﻿using Intel.MyDeals.BusinesssLogic;
+﻿using Intel.MyDeals.BusinessLogic;
 using Intel.MyDeals.Entities.Logging;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque;

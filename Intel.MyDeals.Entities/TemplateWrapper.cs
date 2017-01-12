@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
-using Intel.Opaque.Data;
 
 namespace Intel.MyDeals.Entities
 {
@@ -10,7 +9,7 @@ namespace Intel.MyDeals.Entities
         [DataMember]
         public List<DealTemplateDataGram> TemplateData { set; get; }
         [DataMember]
-        public Dictionary<string, List<OpDataElementUI>> TemplateDict { set; get; }
+        public OpDataElementUITemplates TemplateDict { set; get; }
         [DataMember]
         public IEnumerable<CustomerCalendar> CalendarData { set; get; }
         [DataMember]
@@ -19,7 +18,7 @@ namespace Intel.MyDeals.Entities
         public TemplateWrapper()
         {
             TemplateData = new List<DealTemplateDataGram>();
-            TemplateDict = new Dictionary<string, List<OpDataElementUI>>();
+            TemplateDict = new OpDataElementUITemplates();
             CalendarData = new List<CustomerCalendar>();
             DealTypeData = new List<DealType>();
         }

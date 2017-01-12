@@ -1,0 +1,69 @@
+﻿
+<div id="lnavSingleContainerWrapper">
+    <div id="lnavSingleHeader">
+        <div>
+            <a ui-sref="contract.manager({cid:123})"><div class="fl lnavBtn lnavBtn-Pri primary">Pricing Strategies</div></a>
+            <div class="fl lnavBtn lnavBtn-Pri">Submit for Approval</div>
+            <div class="clearboth"></div>
+        </div>
+    </div>
+    <div id="lnavContainer bg-grey">
+
+        <form novalidate class="lnav-form">
+
+            <h6>Contract Details</h6>
+            <div class="desc">
+                Update the contract information and click <b>Save</b> when complete.
+            </div>
+
+            <div class="labelBlock">
+                <label>Contract Title:</label>
+                <div>
+                    <input type="text" ng-model="data.TITLE" required class="k-textbox" />
+                </div>
+            </div>
+
+            <div class="labelBlock">
+                <label>Customer Name:</label>
+                <div>
+                    <input type="text" ng-model="data.CUST_NM" required class="k-textbox" />
+                </div>
+            </div>
+
+            <div class="labelBlock">
+                <label>Start Date:</label>
+                <div>
+                    <input type="text" ng-model="data.START_DT" required class="k-textbox" />
+                </div>
+            </div>
+
+            <div class="labelBlock">
+                <label>End Date:</label>
+                <div>
+                    <input type="text" ng-model="data.END_DT" required class="k-textbox" />
+                </div>
+            </div>
+
+            <div class="labelBlock">
+                <label>Customer Accepted:</label>
+                <div>
+                    <input type="text" ng-model="data.CUST_ACCEPTED" required class="k-textbox" />
+                </div>
+            </div>
+
+            <div class="labelBlock">
+                <label>C2A Reference:</label>
+                <div>
+                    <input type="text" ng-model="data.C2A_REF" required class="k-textbox" />
+                </div>
+            </div>
+
+            <div style="width: 100%; text-align: right; padding-top: 10px;">
+                <button class="btn btn-xs btn-primary" type="button">Save Contract Details</button>                
+            </div>
+
+        </form>
+
+    </div>
+</div>
+

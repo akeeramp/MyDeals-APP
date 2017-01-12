@@ -1,0 +1,18 @@
+﻿<div id="horizontal" ng-class="{'collapsed': isLnavHidden, 'expanded': !isLnavHidden}">
+    <div id="center-pane" class="fr">
+        <div id="contractContainerWrapper">
+            <div id="contractHeader">
+                <div ui-view="contractHeaderView"></div>
+            </div>
+            <div id="contractContainer" class="fullHeight">
+                <div ui-view="contractWrapperView" class="fullHeight"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="left-pane" ng-class="{'collapsed': isLnavHidden, 'expanded': !isLnavHidden}">
+        <div ui-view="lnavView" class="fullHeight"></div>
+    </div>
+
+    <div class="clearboth"></div>
+</div>

@@ -87,6 +87,11 @@ namespace Intel.MyDeals.DataLibrary
             return DataCollections.GetGeoData();
         }
 
+        public UiTemplates GetUiTemplates()
+        {
+            return DataCollections.GetUiTemplates();
+        }
+
         public List<Product> GetProductData()
         {
             return DataCollections.GetProductData();

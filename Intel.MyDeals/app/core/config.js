@@ -5,7 +5,7 @@
 
     core.config(Config);
 
-    Config.$inject = ['toastr', '$httpProvider']
+    Config.$inject = ['toastr', '$httpProvider'];
 
     function Config(toastr, $httpProvider) {
         toastr.options.timeOut = 4000;

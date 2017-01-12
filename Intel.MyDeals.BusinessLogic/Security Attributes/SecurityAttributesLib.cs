@@ -6,7 +6,7 @@ using Intel.Opaque;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Intel.MyDeals.BusinesssLogic
+namespace Intel.MyDeals.BusinessLogic
 {
     public class SecurityAttributesLib : ISecurityAttributesLib
     {

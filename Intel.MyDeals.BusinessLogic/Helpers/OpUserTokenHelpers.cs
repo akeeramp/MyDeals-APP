@@ -1,6 +1,4 @@
-﻿using Intel.MyDeals.DataLibrary.Helpers;
-using Intel.MyDeals.Entities;
-using Intel.Opaque;
+﻿using Intel.Opaque;
 
 namespace Intel.MyDeals.BusinessLogic
 {

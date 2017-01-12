@@ -2,11 +2,10 @@
 using System.Linq;
 using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
-using Intel.Opaque;
 using Intel.MyDeals.IDataLibrary;
 using Intel.MyDeals.IBusinessLogic;
 
-namespace Intel.MyDeals.BusinesssLogic
+namespace Intel.MyDeals.BusinessLogic
 {
     public class ConstantsLookupsLib : IConstantsLookupsLib
     {
@@ -49,25 +48,32 @@ namespace Intel.MyDeals.BusinesssLogic
 
         #endregion
 
-        //public List<LookupItem> GetLookups()
-        //{
-        //    return null;
-        //    //return DataCollections.GetLookupData();
-        //}
 
-        //public LookupItem GetLookup(string name)
-        //{
-        //    return GetLookups().FirstOrDefault(l => l.DROP_DOWN == name);
-        //}
 
-        //public List<LookupItem> GetLookups(string dealType, string atrbCd)
-        //{
-        //    dealType = dealType.ToUpper();
-        //    atrbCd = atrbCd.ToUpper();
-        //    return GetLookups()
-        //        .Where(l => l.ATRB_COL_NM.ToUpper() == atrbCd && ("ALL" == dealType || l.DEAL_TYPE_CD.ToUpper() == "ALL DEALS" || l.DEAL_TYPE_CD.ToUpper() == dealType))
-        //        .OrderBy(l => l.DROP_DOWN).ToList();
-        //}
+        public List<LookupItem> GetLookups()
+        {
+            return DataCollections.GetLookupData();
+        }
+
+        public IQueryable<LookupItem> GetLookups(string name)
+        {
+            return name.Replace(" ", "").IndexOf(",") <= 0
+                ? GetLookups()
+                    .Where(l => name.Split(',').Contains(l.ATRB_COL_NM))
+                    .OrderBy(l => l.ATRB_COL_NM).ThenBy(l => l.ORD).ThenBy(l => l.DROP_DOWN).AsQueryable()
+                : GetLookups()
+                    .Where(l => l.ATRB_COL_NM == name)
+                    .OrderBy(l => l.ORD).ThenBy(l => l.DROP_DOWN).AsQueryable();
+        }
+
+        public List<LookupItem> GetLookups(string dealType, string atrbCd)
+        {
+            dealType = dealType.ToUpper();
+            atrbCd = atrbCd.ToUpper();
+            return GetLookups()
+                .Where(l => l.ATRB_COL_NM.ToUpper() == atrbCd && ("ALL" == dealType || l.DEAL_TYPE_CD.ToUpper() == "ALL DEALS" || l.DEAL_TYPE_CD.ToUpper() == dealType))
+                .OrderBy(l => l.DROP_DOWN).ToList();
+        }
 
         #region Constants Admin
 

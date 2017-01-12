@@ -96,7 +96,9 @@ namespace Intel.MyDeals.Entities.Logging
 				msg.SRVR = System.Environment.MachineName;
 				msg.LGN_NM = (Utils.ThreadUser ?? "").Trim().ToUpper();
 				msg.USR_NM = (Utils.ThreadUser ?? "").Trim().ToUpper(); 
-				msg.MSG_SRC = OpLog.LogConfig.MsgSrc;
+
+                //  TODO: Sometimes We get here with OpLog.LogConfig undefined.  Need to track down why.  For now, I added a workaround
+				msg.MSG_SRC = OpLog.LogConfig == null ? "UNKNOWN MESSAGE": OpLog.LogConfig.MsgSrc;
 
 				if (msg.Size <= MAX_MESSAGE_SIZE)
 				{

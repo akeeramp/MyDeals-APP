@@ -12,8 +12,193 @@ namespace Intel.MyDeals.DataLibrary
 {
     public class SecurityAttributesDataLib : ISecurityAttributesDataLib
     {
-        #region SecurityActions
+        public List<AppRoleTier> GetAppRoleTiers( /*string app_nm, int? app_id*/)
+        {
+            return new List<AppRoleTier>();
+            ////var cmd = new Procs.CDMS_MYDEALS.meta.PR_GET_ROLE_TIER();
 
+            ////using (var rdr = DataAccess.ExecuteReader(cmd))
+            ////{
+            ////    // This helper method is template generated when CustomerCalendar is generated.
+            ////    // Refer to that template for details to modify this code.
+
+            ////    var ret = new List<AppRoleTier>();
+            ////    int IDX_ACTV_IND = DB.GetReaderOrdinal(rdr, "ACTV_IND");
+            ////    int IDX_APPL_ACTV_IND = DB.GetReaderOrdinal(rdr, "APPL_ACTV_IND");
+            ////    int IDX_APPL_CD = DB.GetReaderOrdinal(rdr, "APPL_CD");
+            ////    int IDX_APPL_DESC = DB.GetReaderOrdinal(rdr, "APPL_DESC");
+            ////    int IDX_APPL_SID = DB.GetReaderOrdinal(rdr, "APPL_SID");
+            ////    int IDX_APPL_SUITE = DB.GetReaderOrdinal(rdr, "APPL_SUITE");
+            ////    int IDX_CHG_DTM = DB.GetReaderOrdinal(rdr, "CHG_DTM");
+            ////    int IDX_IS_SINGLE_SELECT = DB.GetReaderOrdinal(rdr, "IS_SINGLE_SELECT");
+            ////    int IDX_ROLE_ACTV_IND = DB.GetReaderOrdinal(rdr, "ROLE_ACTV_IND");
+            ////    int IDX_ROLE_TIER_CD = DB.GetReaderOrdinal(rdr, "ROLE_TIER_CD");
+            ////    int IDX_ROLE_TIER_SID = DB.GetReaderOrdinal(rdr, "ROLE_TIER_SID");
+            ////    int IDX_ROLE_TIER_SRT_ORD = DB.GetReaderOrdinal(rdr, "ROLE_TIER_SRT_ORD");
+            ////    int IDX_ROLE_TYPE_CD = DB.GetReaderOrdinal(rdr, "ROLE_TYPE_CD");
+            ////    int IDX_ROLE_TYPE_DESC = DB.GetReaderOrdinal(rdr, "ROLE_TYPE_DESC");
+            ////    int IDX_ROLE_TYPE_DSPLY_CD = DB.GetReaderOrdinal(rdr, "ROLE_TYPE_DSPLY_CD");
+            ////    int IDX_ROLE_TYPE_SID = DB.GetReaderOrdinal(rdr, "ROLE_TYPE_SID");
+
+            ////    while (rdr.Read())
+            ////    {
+            ////        ret.Add(new AppRoleTier
+            ////        {
+            ////            ACTV_IND =
+            ////                rdr.IsDBNull(IDX_ACTV_IND)
+            ////                    ? default(System.Boolean)
+            ////                    : rdr.GetFieldValue<System.Boolean>(IDX_ACTV_IND),
+            ////            APPL_ACTV_IND =
+            ////                rdr.IsDBNull(IDX_APPL_ACTV_IND)
+            ////                    ? default(System.Boolean)
+            ////                    : rdr.GetFieldValue<System.Boolean>(IDX_APPL_ACTV_IND),
+            ////            APPL_CD =
+            ////                rdr.IsDBNull(IDX_APPL_CD)
+            ////                    ? default(System.String)
+            ////                    : rdr.GetFieldValue<System.String>(IDX_APPL_CD),
+            ////            APPL_DESC =
+            ////                rdr.IsDBNull(IDX_APPL_DESC)
+            ////                    ? default(System.String)
+            ////                    : rdr.GetFieldValue<System.String>(IDX_APPL_DESC),
+            ////            APPL_SID =
+            ////                rdr.IsDBNull(IDX_APPL_SID)
+            ////                    ? default(System.Byte)
+            ////                    : rdr.GetFieldValue<System.Byte>(IDX_APPL_SID),
+            ////            APPL_SUITE =
+            ////                rdr.IsDBNull(IDX_APPL_SUITE)
+            ////                    ? default(System.String)
+            ////                    : rdr.GetFieldValue<System.String>(IDX_APPL_SUITE),
+            ////            CHG_DTM =
+            ////                rdr.IsDBNull(IDX_CHG_DTM)
+            ////                    ? default(System.DateTime)
+            ////                    : rdr.GetFieldValue<System.DateTime>(IDX_CHG_DTM),
+            ////            IS_SINGLE_SELECT =
+            ////                rdr.IsDBNull(IDX_IS_SINGLE_SELECT)
+            ////                    ? default(System.Boolean)
+            ////                    : rdr.GetFieldValue<System.Boolean>(IDX_IS_SINGLE_SELECT),
+            ////            ROLE_ACTV_IND =
+            ////                rdr.IsDBNull(IDX_ROLE_ACTV_IND)
+            ////                    ? default(System.Boolean)
+            ////                    : rdr.GetFieldValue<System.Boolean>(IDX_ROLE_ACTV_IND),
+            ////            ROLE_TIER_CD =
+            ////                rdr.IsDBNull(IDX_ROLE_TIER_CD)
+            ////                    ? default(System.String)
+            ////                    : rdr.GetFieldValue<System.String>(IDX_ROLE_TIER_CD),
+            ////            ROLE_TIER_SID =
+            ////                rdr.IsDBNull(IDX_ROLE_TIER_SID)
+            ////                    ? default(System.Int32)
+            ////                    : rdr.GetFieldValue<System.Int32>(IDX_ROLE_TIER_SID),
+            ////            ROLE_TIER_SRT_ORD =
+            ////                rdr.IsDBNull(IDX_ROLE_TIER_SRT_ORD)
+            ////                    ? default(System.Int32)
+            ////                    : rdr.GetFieldValue<System.Int32>(IDX_ROLE_TIER_SRT_ORD),
+            ////            ROLE_TYPE_CD =
+            ////                rdr.IsDBNull(IDX_ROLE_TYPE_CD)
+            ////                    ? default(System.String)
+            ////                    : rdr.GetFieldValue<System.String>(IDX_ROLE_TYPE_CD),
+            ////            ROLE_TYPE_DESC =
+            ////                rdr.IsDBNull(IDX_ROLE_TYPE_DESC)
+            ////                    ? default(System.String)
+            ////                    : rdr.GetFieldValue<System.String>(IDX_ROLE_TYPE_DESC),
+            ////            ROLE_TYPE_DSPLY_CD =
+            ////                rdr.IsDBNull(IDX_ROLE_TYPE_DSPLY_CD)
+            ////                    ? default(System.String)
+            ////                    : rdr.GetFieldValue<System.String>(IDX_ROLE_TYPE_DSPLY_CD),
+            ////            ROLE_TYPE_SID =
+            ////                rdr.IsDBNull(IDX_ROLE_TYPE_SID)
+            ////                    ? default(System.Int32)
+            ////                    : rdr.GetFieldValue<System.Int32>(IDX_ROLE_TYPE_SID)
+            ////        });
+            ////    } // while
+
+            ////    return ret;
+            ////}
+        }
+
+        public SecurityWrapper GetSecurityWrapper()
+        {
+            return new SecurityWrapper(new List<OpRoleType>(), new List<SecurityAction>(), new List<SecurityMask>() );
+            ////var cmd = new Procs.CDMS_MYDEALS.core.PR_GET_SECURITY_MASK();
+
+            ////using (DataSet data = DataAccess.ExecuteDataSet(cmd))
+            ////{
+
+            ////    List<SecurityAction> securityActions = (from rw in data.Tables[0].AsEnumerable()
+            ////                                            select new SecurityAction
+            ////                                            {
+            ////                                                ATRB_BIT = Convert.ToInt64(rw["ATRB_BIT"]),
+            ////                                                ATRB_MAGNITUDE = Convert.ToInt64(rw["ATRB_MAGNITUDE"]),
+            ////                                                FACT_ATRB_CD = Convert.ToString(rw["FACT_ATRB_CD"]),
+            ////                                                FACT_ATRB_SID = Convert.ToInt32(rw["FACT_ATRB_SID"])
+
+            ////                                            }).ToList();
+
+            ////    List<SecurityMask> securityMasks = (from rw in data.Tables[1].AsEnumerable()
+            ////                                        select new SecurityMask
+            ////                                        {
+            ////                                            ACTN_CD = Convert.ToString(rw["ACTN_CD"]),
+            ////                                            ACTN_SID = Convert.ToInt32(rw["ACTN_SID"]),
+            ////                                            DEAL_MBR_SID = Convert.ToInt32(rw["DEAL_MBR_SID"]),
+            ////                                            DEAL_TYPE_CD = Convert.ToString(rw["DEAL_TYPE_CD"]),
+            ////                                            PERMISSION_MASK = Convert.ToString(rw["PERMISSION_MASK"]),
+            ////                                            ROLE_TYPE_CD = Convert.ToString(rw["ROLE_TYPE_CD"]),
+            ////                                            ROLE_TYPE_SID = Convert.ToInt32(rw["ROLE_TYPE_SID"]),
+            ////                                            WFSTG_CD = Convert.ToString(rw["WFSTG_CD"]),
+            ////                                            WFSTG_MBR_SID = Convert.ToInt32(rw["WFSTG_MBR_SID"])
+            ////                                        }).ToList();
+
+
+            ////    List<OpRoleType> tmpRoleType = DataCollections.GetAppRoleTiers().Where(r => r.APPL_CD.ToUpper() == "IDMS").Select(appRoleTier => new OpRoleType
+            ////    {
+            ////        RoleTypeId = appRoleTier.ROLE_TYPE_SID,
+            ////        RoleTypeCd = appRoleTier.ROLE_TYPE_CD,
+            ////        RoleTypeDescription = appRoleTier.ROLE_TYPE_DESC,
+            ////        RoleTypeDisplayName = appRoleTier.ROLE_TYPE_DSPLY_CD,
+            ////        RoleTier = appRoleTier.ROLE_TIER_CD
+            ////    }).ToList();
+
+            ////    return new SecurityWrapper(tmpRoleType, securityActions, securityMasks);
+            ////}
+        }
+
+        public List<MyDealsActionItem> GetDealActions()
+        {
+            return new List<MyDealsActionItem>();
+            ////OpLogPerf.Log("Loading Actions");
+
+            ////SecurityWrapper securityWrapper = DataCollections.GetSecurityWrapper();
+            ////List<string> stages = DataCollections.GetWorkFlowStages().Where(s => s.ACTV_IND).Select(s => s.WFSTG_CD).ToList();
+            ////string[] actions = { "C_APPROVE", "C_REJECT_DEAL", "C_CANCEL_DEAL" };
+            ////List<DealType> dealTypes = DataCollections.GetTemplateData().DealTypeData;
+
+            ////List<MyDealsActionItem> items = new List<MyDealsActionItem>();
+
+            ////foreach (OpRoleType opRoleType in securityWrapper.RoleTypes.Where(r => r.RoleTypeCd != "All Role Types"))
+            ////{
+            ////    items.AddRange(from dealType in dealTypes
+            ////                   from stage in stages
+            ////                   select new MyDealsActionItem
+            ////                   {
+            ////                       ObjsetType = dealType.DEAL_TYPE_CD,
+            ////                       Role = opRoleType.RoleTypeCd,
+            ////                       Stage = stage
+            ////                   });
+            ////}
+
+            ////// now populate the actions
+            ////foreach (MyDealsActionItem dealActionItem in items)
+            ////{
+            ////    foreach (string actn in actions)
+            ////    {
+            ////        dealActionItem.Actions[actn] = securityWrapper.ChkDealRules(dealActionItem.ObjsetType, dealActionItem.Role, dealActionItem.Stage, actn);
+            ////    }
+            ////}
+
+            ////return items;
+
+
+        }
+        #region SecurityActions
         /// <summary>
         /// Delete a Security Action based on id
         /// </summary>

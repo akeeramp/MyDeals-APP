@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Net.Mail;
-using System.Text;
-using System.Threading.Tasks;
 using Intel.Opaque;
 using Intel.Opaque.Tools;
 
@@ -13,7 +8,7 @@ namespace Intel.MyDeals.Entities.Logging
 {
 	public class EmailExLogPerf : IOpLogPerf
 	{
-		private static string ToEmailList = "josephine.a.juang@intel.com"; // TODO: this shoud be read from an environment aware constants config setup. The from email might also be from a config file or constant. Mike prefers constants
+		private static string ToEmailList = "josephine.a.juang@intel.com, philip.w.eckenroth@intel.com"; // TODO: this shoud be read from an environment aware constants config setup. The from email might also be from a config file or constant. Mike prefers constants
 		private static string FromEmail = "MyDealsSupport@intel.com";
 		public string EmailEmailSubject = "MyDeals Error [{0}] - {1}";
 		
@@ -117,12 +112,12 @@ namespace Intel.MyDeals.Entities.Logging
 				catch (Exception)
 				{
 					// Not sure how to handle this.  Throwing errors from a log is not critical, but would be nice to know if it fails
-					return false;
 #if DEBUG
 					System.Diagnostics.Debug.WriteLine("SendEmail has failed.");
 #endif
-				}
-			}
+                    return false;
+                }
+            }
 		}
 		#endregion
 

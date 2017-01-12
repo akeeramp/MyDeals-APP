@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Intel.Opaque.Data;
 
@@ -24,24 +23,24 @@ namespace Intel.MyDeals.Entities
         /// <summary>
         /// Add a simple data element.
         /// </summary>
-        /// <param name="wb"></param>
-        /// <param name="atrb_cd">ATBR_CD to add.</param>
+        /// <param name="dc"></param>
+        /// <param name="atrbCd">ATBR_CD to add.</param>
         /// <param name="atrbVal">Value.</param>
-        /// <param name="source_data">Master data list to lookup extended attribute details.</param>
+        /// <param name="sourceData">Master data list to lookup extended attribute details.</param>
         /// <returns>Newly added data element.</returns>
-        public static OpDataElement AddDataElement(this OpDataCollector wb, string atrb_cd, object atrbVal, AttributeCollection source_data)
+        public static OpDataElement AddDataElement(this OpDataCollector dc, string atrbCd, object atrbVal, AttributeCollection sourceData)
         {
-            var atrb = source_data.Get(atrb_cd);
+            var atrb = sourceData.Get(atrbCd);
 
             var de = new OpDataElement
             {
-                DcID = wb.DcID,
+                DcID = dc.DcID,
                 AtrbID = atrb.ATRB_SID,
                 AtrbCd = atrb.ATRB_CD,
                 DataType = atrb.DOT_NET_DATA_TYPE,
                 AtrbValue = atrbVal
             };
-            wb.DataElements.Add(de);
+            dc.DataElements.Add(de);
 
             return de;
         }
@@ -49,11 +48,9 @@ namespace Intel.MyDeals.Entities
         /// <summary>
         /// Get first matching attribute
         /// </summary>
-        public static OpDataElementAtrb GetAtrb(this OpDataCollector dc, string atrb_cd)
+        public static OpDataElementAtrb GetAtrb(this OpDataCollector dc, string atrbCd)
         {
-            if (dc == null || dc.DataElements == null) { return null; }
-
-            return dc.DataElements.FirstOrDefault(de => de.AtrbCd == atrb_cd);
+            return dc?.DataElements?.FirstOrDefault(de => de.AtrbCd == atrbCd);
         }
 
         /// <summary>
@@ -64,12 +61,18 @@ namespace Intel.MyDeals.Entities
             return dc?.DataElements?.FirstOrDefault(de => de.AtrbID == atrbId);
         }
 
+        /// <summary>
+        /// Get first matching attribute value
+        /// </summary>
         public static object GetAtrbValue(this OpDataCollector dc, string atrbCd)
         {
             var el = dc?.DataElements?.FirstOrDefault(de => de.AtrbCd == atrbCd);
             return el?.AtrbValue;
         }
 
+        /// <summary>
+        /// Get first matching attribute value
+        /// </summary>
         public static object GetAtrbValue(this OpDataCollector dc, int atrbId)
         {
             var el = dc?.DataElements?.FirstOrDefault(de => de.AtrbID == atrbId);
@@ -88,33 +91,10 @@ namespace Intel.MyDeals.Entities
         /// <summary>
         /// Get all matching attributes
         /// </summary>
-        public static IEnumerable<OpDataElementAtrb> GetAtrbs(this OpDataCollector dc, int atrb_id)
+        public static IEnumerable<OpDataElementAtrb> GetAtrbs(this OpDataCollector dc, int atrbId)
         {
-            if (dc == null || dc.DataElements == null) { return new OpDataElementAtrb[] { }; }
-
-            return dc.DataElements.Where(de => de.AtrbID == atrb_id);
-        }
-
-
-
-
-        public static DealType GetDealType(this OpDataCollector dc, List<DealType> dealTypeData)
-        {             
-            OpDataElement deDealType = dc.DataElements.FirstOrDefault(d => d.AtrbCd == AttributeCodes.DEAL_TYPE_CD_SID);
-            return deDealType == null ? null : dealTypeData.FirstOrDefault(d => d.DEAL_TYPE_SID.ToString() == deDealType.AtrbValue.ToString());
-        }
-
-        public static string GetDealTypeCd(this OpDataCollector dc, List<DealType> dealTypeData)
-        {
-            OpDataElement deDealType = dc.DataElements.FirstOrDefault(d => d.AtrbCd == AttributeCodes.DEAL_TYPE_CD_SID);
-            return deDealType == null ? null : dealTypeData.Where(d => d.DEAL_TYPE_SID.ToString() == deDealType.AtrbValue.ToString()).Select(d => d.DEAL_TYPE_CD).FirstOrDefault();
-        }
-
-        public static List<string> GetListOfVerticals(this OpDataCollector dc, List<OpAtrbMap> atrbMap)
-        {
-            if (dc == null) return new List<string>();
-            List<int> des = dc.DataElements.Where(d => d.AtrbCd == AttributeCodes.PRD_LEVEL).Select(d => d.DimKey.GetDistinctDimKeyValue(AttributeCodes.PRD_MBR_SID, 0)).ToList();
-            return atrbMap.Where(a => a.AtrbCd == AttributeCodes.PRD_CATGRY_NM && des.Contains(a.AtrbItemId)).Select(a => a.AtrbItemValue).Distinct().ToList();
+            if (dc?.DataElements == null) { return new OpDataElementAtrb[] { }; }
+            return dc.DataElements.Where(de => de.AtrbID == atrbId);
         }
 
 
@@ -122,11 +102,12 @@ namespace Intel.MyDeals.Entities
         /// <summary>
         /// Ensure each data collector has the DcAltId set when known, and has an OpDataElement for DEAL_SID.
         /// </summary>
-        public static void EnsureDcType(this OpDataCollector dc, AttributeCollection sourceData, string defDealType = null)
+        public static void EnsureDcType(this OpDataCollector dc, AttributeCollection sourceData, OpDataElementType opType)
         {
+            // TODO May not need this if decision is to store dealtype (objsettype) instead of the SID
             if (dc == null || !string.IsNullOrEmpty(dc.DcType)) { return; }
 
-            string dealType = defDealType;
+            string dealType = opType != OpDataElementType.Deals && opType != OpDataElementType.WipDeals ? opType.ToString() : null;
 
             if (dealType == null)
             {
@@ -143,6 +124,7 @@ namespace Intel.MyDeals.Entities
                     .Select(m => m.AtrbItemValue).FirstOrDefault();
             }
 
+            // TODO maybe sync names with database names
             if (dealType == OpDataElementType.Contract.ToString()) dealType = "CONTRACT";
             if (dealType == OpDataElementType.PricingStrategy.ToString()) dealType = "PRICING STRAT";
             if (dealType == OpDataElementType.PricingTable.ToString()) dealType = "PRICING TABLE";

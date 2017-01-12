@@ -57,32 +57,67 @@ namespace Intel.MyDeals.DataLibrary
 
 
 
-        //public List<LookupItem> GetLookups()
-        //{
-        //    var cmd = new Procs.CDMS_MYDEALS.app.PR_GET_LOOKUPS();
+        public List<LookupItem> GetLookups()
+        {
+            List<LookupItem> fake = new List<LookupItem>();
+            fake.Add(new LookupItem { ATRB_CD = "OPTION", ATRB_COL_NM = "OPTION", DEAL_TYPE_CD = "ALL DEALS", ORD = 1, DROP_DOWN = "OPTION 1" });
+            fake.Add(new LookupItem { ATRB_CD = "OPTION", ATRB_COL_NM = "OPTION", DEAL_TYPE_CD = "ALL DEALS", ORD = 1, DROP_DOWN = "OPTION 2" });
+            fake.Add(new LookupItem { ATRB_CD = "OPTION", ATRB_COL_NM = "OPTION", DEAL_TYPE_CD = "ALL DEALS", ORD = 1, DROP_DOWN = "OPTION 3" });
+            fake.Add(new LookupItem { ATRB_CD = "OPTION", ATRB_COL_NM = "OPTION", DEAL_TYPE_CD = "ALL DEALS", ORD = 1, DROP_DOWN = "OPTION 4" });
+            fake.Add(new LookupItem { ATRB_CD = "OPTION", ATRB_COL_NM = "OPTION", DEAL_TYPE_CD = "ALL DEALS", ORD = 1, DROP_DOWN = "OPTION 5" });
+            fake.Add(new LookupItem { ATRB_CD = "TEST", ATRB_COL_NM = "TEST", DEAL_TYPE_CD = "ALL DEALS", ORD = 1, DROP_DOWN = "TEST 1" });
+            fake.Add(new LookupItem { ATRB_CD = "TEST", ATRB_COL_NM = "TEST", DEAL_TYPE_CD = "ALL DEALS", ORD = 1, DROP_DOWN = "TEST 2" });
+            fake.Add(new LookupItem { ATRB_CD = "TEST", ATRB_COL_NM = "TEST", DEAL_TYPE_CD = "ALL DEALS", ORD = 1, DROP_DOWN = "TEST 3" });
+            fake.Add(new LookupItem { ATRB_CD = "TEST", ATRB_COL_NM = "TEST", DEAL_TYPE_CD = "ALL DEALS", ORD = 1, DROP_DOWN = "TEST 4" });
+            fake.Add(new LookupItem { ATRB_CD = "TEST", ATRB_COL_NM = "TEST", DEAL_TYPE_CD = "ALL DEALS", ORD = 1, DROP_DOWN = "TEST 5" });
 
-        //    List<LookupItem> returnLookupsList = new List<LookupItem>();
-        //    using (var rdr = DataAccess.ExecuteReader(cmd))
-        //    {
-        //        int IDX_ATRB_COL_NM = DB.GetReaderOrdinal(rdr, "ATRB_COL_NM");
-        //        int IDX_DEAL_TYPE_CD = DB.GetReaderOrdinal(rdr, "DEAL_TYPE_CD");
-        //        int IDX_DROP_DOWN = DB.GetReaderOrdinal(rdr, "DROP_DOWN");
-        //        int IDX_DROP_DOWN_DB = DB.GetReaderOrdinal(rdr, "DROP_DOWN_DB");
-        //        int IDX_ORD = DB.GetReaderOrdinal(rdr, "ORD");
-        //        while (rdr.Read())
-        //        {
-        //            returnLookupsList.Add(new LookupItem
-        //            {
-        //                ATRB_COL_NM = (IDX_ATRB_COL_NM < 0 || rdr.IsDBNull(IDX_ATRB_COL_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_COL_NM),
-        //                DEAL_TYPE_CD = (IDX_DEAL_TYPE_CD < 0 || rdr.IsDBNull(IDX_DEAL_TYPE_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_TYPE_CD),
-        //                DROP_DOWN = (IDX_DROP_DOWN < 0 || rdr.IsDBNull(IDX_DROP_DOWN)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DROP_DOWN),
-        //                DROP_DOWN_DB = (IDX_DROP_DOWN_DB < 0 || rdr.IsDBNull(IDX_DROP_DOWN_DB)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DROP_DOWN_DB),
-        //                ORD = (IDX_ORD < 0 || rdr.IsDBNull(IDX_ORD)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ORD)
-        //            });
-        //        }
-        //    }
-        //    return returnLookupsList;
-        //}
+            fake.Add(new LookupItem { ATRB_CD = "NUM_TIERS", ATRB_COL_NM = "NUM_TIERS", DEAL_TYPE_CD = "ALL DEALS", ORD = 1, DROP_DOWN = "1" });
+            fake.Add(new LookupItem { ATRB_CD = "NUM_TIERS", ATRB_COL_NM = "NUM_TIERS", DEAL_TYPE_CD = "ALL DEALS", ORD = 1, DROP_DOWN = "2" });
+            fake.Add(new LookupItem { ATRB_CD = "NUM_TIERS", ATRB_COL_NM = "NUM_TIERS", DEAL_TYPE_CD = "ALL DEALS", ORD = 1, DROP_DOWN = "3" });
+            fake.Add(new LookupItem { ATRB_CD = "NUM_TIERS", ATRB_COL_NM = "NUM_TIERS", DEAL_TYPE_CD = "ALL DEALS", ORD = 1, DROP_DOWN = "4" });
+            fake.Add(new LookupItem { ATRB_CD = "NUM_TIERS", ATRB_COL_NM = "NUM_TIERS", DEAL_TYPE_CD = "ALL DEALS", ORD = 1, DROP_DOWN = "5" });
+            fake.Add(new LookupItem { ATRB_CD = "NUM_TIERS", ATRB_COL_NM = "NUM_TIERS", DEAL_TYPE_CD = "ALL DEALS", ORD = 1, DROP_DOWN = "6" });
+            fake.Add(new LookupItem { ATRB_CD = "NUM_TIERS", ATRB_COL_NM = "NUM_TIERS", DEAL_TYPE_CD = "ALL DEALS", ORD = 1, DROP_DOWN = "7" });
+            fake.Add(new LookupItem { ATRB_CD = "NUM_TIERS", ATRB_COL_NM = "NUM_TIERS", DEAL_TYPE_CD = "ALL DEALS", ORD = 1, DROP_DOWN = "8" });
+            fake.Add(new LookupItem { ATRB_CD = "NUM_TIERS", ATRB_COL_NM = "NUM_TIERS", DEAL_TYPE_CD = "ALL DEALS", ORD = 1, DROP_DOWN = "9" });
+
+            fake.Add(new LookupItem { ATRB_CD = "DROPDOWN", ATRB_COL_NM = "DROPDOWN", DEAL_TYPE_CD = "ALL DEALS", ORD = 1, DROP_DOWN = "DROPDOWN 1" });
+            fake.Add(new LookupItem { ATRB_CD = "DROPDOWN", ATRB_COL_NM = "DROPDOWN", DEAL_TYPE_CD = "ALL DEALS", ORD = 1, DROP_DOWN = "DROPDOWN 2" });
+            fake.Add(new LookupItem { ATRB_CD = "DROPDOWN", ATRB_COL_NM = "DROPDOWN", DEAL_TYPE_CD = "ALL DEALS", ORD = 1, DROP_DOWN = "DROPDOWN 3" });
+            fake.Add(new LookupItem { ATRB_CD = "DROPDOWN", ATRB_COL_NM = "DROPDOWN", DEAL_TYPE_CD = "ALL DEALS", ORD = 1, DROP_DOWN = "DROPDOWN 4" });
+            fake.Add(new LookupItem { ATRB_CD = "DROPDOWN", ATRB_COL_NM = "DROPDOWN", DEAL_TYPE_CD = "ALL DEALS", ORD = 1, DROP_DOWN = "DROPDOWN 5" });
+
+            fake.Add(new LookupItem { ATRB_CD = "COMBOBOX", ATRB_COL_NM = "COMBOBOX", DEAL_TYPE_CD = "ALL DEALS", ORD = 1, DROP_DOWN = "COMBOBOX 1" });
+            fake.Add(new LookupItem { ATRB_CD = "COMBOBOX", ATRB_COL_NM = "COMBOBOX", DEAL_TYPE_CD = "ALL DEALS", ORD = 1, DROP_DOWN = "COMBOBOX 2" });
+            fake.Add(new LookupItem { ATRB_CD = "COMBOBOX", ATRB_COL_NM = "COMBOBOX", DEAL_TYPE_CD = "ALL DEALS", ORD = 1, DROP_DOWN = "COMBOBOX 3" });
+            fake.Add(new LookupItem { ATRB_CD = "COMBOBOX", ATRB_COL_NM = "COMBOBOX", DEAL_TYPE_CD = "ALL DEALS", ORD = 1, DROP_DOWN = "COMBOBOX 4" });
+            fake.Add(new LookupItem { ATRB_CD = "COMBOBOX", ATRB_COL_NM = "COMBOBOX", DEAL_TYPE_CD = "ALL DEALS", ORD = 1, DROP_DOWN = "COMBOBOX 5" });
+
+            return fake;
+            ////var cmd = new Procs.CDMS_MYDEALS.app.PR_GET_LOOKUPS();
+
+            ////List<LookupItem> returnLookupsList = new List<LookupItem>();
+            ////using (var rdr = DataAccess.ExecuteReader(cmd))
+            ////{
+            ////    int IDX_ATRB_COL_NM = DB.GetReaderOrdinal(rdr, "ATRB_COL_NM");
+            ////    int IDX_DEAL_TYPE_CD = DB.GetReaderOrdinal(rdr, "DEAL_TYPE_CD");
+            ////    int IDX_DROP_DOWN = DB.GetReaderOrdinal(rdr, "DROP_DOWN");
+            ////    int IDX_DROP_DOWN_DB = DB.GetReaderOrdinal(rdr, "DROP_DOWN_DB");
+            ////    int IDX_ORD = DB.GetReaderOrdinal(rdr, "ORD");
+            ////    while (rdr.Read())
+            ////    {
+            ////        returnLookupsList.Add(new LookupItem
+            ////        {
+            ////            ATRB_COL_NM = (IDX_ATRB_COL_NM < 0 || rdr.IsDBNull(IDX_ATRB_COL_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_COL_NM),
+            ////            DEAL_TYPE_CD = (IDX_DEAL_TYPE_CD < 0 || rdr.IsDBNull(IDX_DEAL_TYPE_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_TYPE_CD),
+            ////            DROP_DOWN = (IDX_DROP_DOWN < 0 || rdr.IsDBNull(IDX_DROP_DOWN)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DROP_DOWN),
+            ////            DROP_DOWN_DB = (IDX_DROP_DOWN_DB < 0 || rdr.IsDBNull(IDX_DROP_DOWN_DB)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DROP_DOWN_DB),
+            ////            ORD = (IDX_ORD < 0 || rdr.IsDBNull(IDX_ORD)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ORD)
+            ////        });
+            ////    }
+            ////}
+            ////return returnLookupsList;
+        }
 
 
 

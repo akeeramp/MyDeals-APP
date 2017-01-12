@@ -186,7 +186,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="app\admin\services\" />
-    <Folder Include="app\contract\" />
     <Folder Include="app\dealManager\" />
     <Folder Include="app\errorHandling\" />
     <Folder Include="app\reporting\" />
@@ -253,9 +252,14 @@
     <Compile Include="Controllers\API\GeosController.cs" />
     <Compile Include="Controllers\API\DevTestsController.cs" />
     <Compile Include="Controllers\API\LoggingController.cs" />
+    <Compile Include="Controllers\API\ContractsController.cs" />
+    <Compile Include="Controllers\API\LookupsController.cs" />
     <Compile Include="Controllers\API\PocController.cs" />
+    <Compile Include="Controllers\API\PricingTablesController.cs" />
+    <Compile Include="Controllers\API\PricingStrategiesController.cs" />
     <Compile Include="Controllers\API\SearchController.cs" />
     <Compile Include="Areas\Admin\Controllers\CacheController.cs" />
+    <Compile Include="Controllers\API\TemplatesController.cs" />
     <Compile Include="Controllers\API\CustomersController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CodingPracticesController.cs" />
@@ -269,6 +273,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OthersController.cs" />
     <Compile Include="Controllers\PocController.cs" />
+    <Compile Include="Controllers\TestCasesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -306,6 +311,48 @@
     <Content Include="app\blocks\logger\logger.module.js" />
     <Content Include="app\blocks\router\routehelper.js" />
     <Content Include="app\blocks\router\router.module.js" />
+    <Content Include="app\contract\controllers\contract.controller.js" />
+    <Content Include="app\contract\contract.module.js" />
+    <Content Include="app\contract\contract.route.js" />
+    <Content Include="app\contract\controllers\pricingTable.controller.js" />
+    <Content Include="app\contract\partials\contractDetail.html" />
+    <Content Include="app\contract\partials\otherwise.html" />
+    <Content Include="app\contract\partials\wipDeals.html" />
+    <Content Include="app\shared\directives\focusOnShow.directive.js" />
+    <Content Include="app\shared\directives\opControl.directive.js" />
+    <Content Include="app\shared\directives\opcontrolDataElement.directive.js" />
+    <Content Include="app\shared\directives\opControlFlat.directive.js" />
+    <Content Include="app\contract\partials\contract.html" />
+    <Content Include="app\contract\partials\contractBody.html" />
+    <Content Include="app\contract\partials\contractHeader.html" />
+    <Content Include="app\contract\partials\contractSummary.html" />
+    <Content Include="app\contract\partials\details.html" />
+    <Content Include="app\contract\partials\lnav.html" />
+    <Content Include="app\contract\partials\lnavAddPricingStrategy.html" />
+    <Content Include="app\contract\partials\lnavAddPricingTable.html" />
+    <Content Include="app\contract\partials\lnavButtons.html" />
+    <Content Include="app\contract\partials\lnavDetails.html" />
+    <Content Include="app\contract\partials\lnavMenu.html" />
+    <Content Include="app\contract\partials\lnavMenuMini.html" />
+    <Content Include="app\contract\partials\lnavSearch.html" />
+    <Content Include="app\contract\partials\lnavStrategyTree.html" />
+    <Content Include="app\contract\partials\pricingTable.html" />
+    <Content Include="app\shared\services\lookups.service.js" />
+    <Content Include="app\shared\services\objset.service.js" />
+    <Content Include="app\contract\partials\strategies.html" />
+    <Content Include="app\shared\services\templates.service.js" />
+    <Content Include="app\shared\uiControls\horizontalCheckBox.html" />
+    <Content Include="app\shared\uiControls\horizontalComboBox.html" />
+    <Content Include="app\shared\uiControls\verticalCheckBox.html" />
+    <Content Include="app\shared\uiControls\verticalComboBox.html" />
+    <Content Include="app\shared\uiControls\horizontalDatePicker.html" />
+    <Content Include="app\shared\uiControls\verticalDatePicker.html" />
+    <Content Include="app\shared\uiControls\horizontalDropDown.html" />
+    <Content Include="app\shared\uiControls\verticalDropDown.html" />
+    <Content Include="app\shared\uiControls\horizontalNumericTextBox.html" />
+    <Content Include="app\shared\uiControls\verticalNumericTextBox.html" />
+    <Content Include="app\shared\uiControls\horizontalTextBox.html" />
+    <Content Include="app\shared\uiControls\verticalTextBox.html" />
     <Content Include="app\blocks\confirmationModal\confirmationModal.module.js" />
     <Content Include="app\blocks\confirmationModal\confirmationModal.html" />
     <Content Include="app\blocks\confirmationModal\confirmationModal.service.js" />
@@ -335,6 +382,7 @@
     <Content Include="app\admin\securityAttributes\securityActions\securityActions.service.js" />
     <Content Include="app\admin\securityAttributes\securityActions\securityActions.controller.js" />
     <Content Include="app\admin\securityAttributes\securityActions\securityActions.manage.html" />
+    <Content Include="app\testCases\uiControls\uiControls.controller.js" />
     <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -722,6 +770,9 @@
     <Content Include="css\tooltipster-sideTip-light.min.css" />
     <Content Include="css\tooltipster.bundle.min.css" />
     <Content Include="css\_cache.css" />
+    <Content Include="css\_codingPractices.css" />
+    <Content Include="css\_contractManager.css" />
+    <Content Include="css\_controls.css" />
     <Content Include="css\_dealUtil.css" />
     <Content Include="css\_pocDataFlow.css" />
     <Content Include="css\_search.css" />
@@ -782,6 +833,7 @@
     <Content Include="Images\docs\examples.png" />
     <Content Include="Images\docs\ex_code_class.png" />
     <Content Include="Images\docs\ex_proc_results.png" />
+    <Content Include="Images\docs\fileunittest.png" />
     <Content Include="Images\docs\highlevelflow.png" />
     <Content Include="Images\docs\icon-app-layer.png" />
     <Content Include="Images\docs\icon-bus-logic.png" />
@@ -810,6 +862,7 @@
     <Content Include="Images\docs\projectSetup.png" />
     <Content Include="Images\docs\rebatestrategies.png" />
     <Content Include="Images\docs\samplecodesp.png" />
+    <Content Include="Images\docs\sampleunittests.png" />
     <Content Include="Images\docs\SPClassGenerator.png" />
     <Content Include="Images\docs\SPClassGeneratorResults.png" />
     <Content Include="Images\docs\SPClassGeneratorVerify.png" />
@@ -817,6 +870,7 @@
     <Content Include="Images\docs\TableToClassResults.png" />
     <Content Include="Images\docs\terms.png" />
     <Content Include="Images\docs\ui_mt_architecture.png" />
+    <Content Include="Images\docs\unittesting.png" />
     <Content Include="Images\docs\validation.png" />
     <Content Include="Images\docs\versions.png" />
     <Content Include="Images\docs\webapi.png" />
@@ -842,6 +896,7 @@
     <Content Include="js\sampleSPA.js" />
     <Content Include="js\_cache.js" />
     <Content Include="js\_dealUtil.js" />
+    <Content Include="js\_gridUtil.js" />
     <Content Include="js\_linkUtil.js" />
     <Content Include="js\_pocDataFlow.js" />
     <Content Include="js\_search.js" />
@@ -879,7 +934,6 @@
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
     <Content Include="Scripts\d3.min.js" />
     <Content Include="Scripts\excelFormulaUtilities-1.1.0.min.js" />
-    <Content Include="Scripts\gcspread.sheets.all.9.40.20153.0.min.js" />
     <Content Include="Scripts\go.js" />
     <Content Include="Scripts\html5shiv.js" />
     <Content Include="fonts\fontawesome-webfont.eot" />
@@ -1007,8 +1061,6 @@
     <Content Include="Content\kendo\2016.3.914\images\kendoui.ttf" />
     <Content Include="Content\kendo\2016.3.914\images\kendoui.woff" />
     <Content Include="Images\docs\MyDeals Error Handling Design Doc.pdf" />
-    <Content Include="app\costTest\iCostProducts\costtest.iCostProducts.controller.js" />
-    <Content Include="app\costTest\iCostProducts\costtest.iCostProduct.service.js" />
     <None Include="Properties\PublishProfiles\Dev.pubxml" />
     <Content Include="Scripts\Angular\1.5.8\angular.min.js.map" />
     <None Include="Scripts\jquery-2.2.0.intellisense.js" />
@@ -1165,7 +1217,9 @@
     <Content Include="Scripts\toastr.min.js" />
     <Content Include="Scripts\tooltipster.bundle.min.js" />
     <Content Include="Scripts\topbar.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -1361,6 +1415,8 @@
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\CodingPractices\PresentationAngularViews.cshtml" />
     <Content Include="Views\Shared\_Loading.cshtml" />
+    <Content Include="Views\Others\TestSaveContract.cshtml" />
+    <Content Include="Views\TestCases\Index.cshtml" />
     <None Include="Web.dev.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>

@@ -60,5 +60,36 @@ namespace Intel.MyDeals.DataLibrary
             }
             return ret;
         }
+        
+
+        public IEnumerable<DcsSoldTo> GetSoldTos()
+        {
+            return new List<DcsSoldTo>();
+            //var cmd = new Procs.CDMS_MYDEALS.app.PR_GET_SOLD_TO();
+
+            //List<DcsSoldTo> returnDcsSoldTosList = new List<DcsSoldTo>();
+            //using (var rdr = DataAccess.ExecuteReader(cmd))
+            //{
+            //    int IDX_CUST_DIV_NM = DB.GetReaderOrdinal(rdr, "CUST_DIV_NM");
+            //    int IDX_CUST_MBR_SID = DB.GetReaderOrdinal(rdr, "CUST_MBR_SID");
+            //    int IDX_CUST_NM = DB.GetReaderOrdinal(rdr, "CUST_NM");
+            //    int IDX_CUST_NM_SID = DB.GetReaderOrdinal(rdr, "CUST_NM_SID");
+            //    int IDX_GEO_NM = DB.GetReaderOrdinal(rdr, "GEO_NM");
+            //    int IDX_SOLD_TO_ID = DB.GetReaderOrdinal(rdr, "SOLD_TO_ID");
+            //    while (rdr.Read())
+            //    {
+            //        returnDcsSoldTosList.Add(new DcsSoldTo
+            //        {
+            //            CUST_DIV_NM = (IDX_CUST_DIV_NM < 0 || rdr.IsDBNull(IDX_CUST_DIV_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_DIV_NM),
+            //            CUST_MBR_SID = (IDX_CUST_MBR_SID < 0 || rdr.IsDBNull(IDX_CUST_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_MBR_SID),
+            //            CUST_NM = (IDX_CUST_NM < 0 || rdr.IsDBNull(IDX_CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_NM),
+            //            CUST_NM_SID = (IDX_CUST_NM_SID < 0 || rdr.IsDBNull(IDX_CUST_NM_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_NM_SID),
+            //            GEO_NM = (IDX_GEO_NM < 0 || rdr.IsDBNull(IDX_GEO_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_GEO_NM),
+            //            SOLD_TO_ID = (IDX_SOLD_TO_ID < 0 || rdr.IsDBNull(IDX_SOLD_TO_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_SOLD_TO_ID)
+            //        });
+            //    }
+            //}
+            //return returnDcsSoldTosList;
+        }
     }
 }

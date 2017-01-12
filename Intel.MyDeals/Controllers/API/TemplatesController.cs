@@ -1,0 +1,71 @@
+﻿using System.Web.Http;
+using Intel.MyDeals.BusinessLogic;
+using Intel.MyDeals.Entities;
+
+namespace Intel.MyDeals.Controllers.API
+{
+    [RoutePrefix("api/Templates/v1")]
+    public class TemplatesController : BaseApiController
+    {
+        private readonly IUiTemplateLib _uiTemplateLib;
+
+        public TemplatesController(IUiTemplateLib uiTemplateLib)
+        {
+            _uiTemplateLib = uiTemplateLib;
+        }
+
+        [Authorize]
+        [Route("GetTemplates")]
+        public OpDataElementUITemplates Get()
+        {
+            return SafeExecutor(OpDataElementUIExtensions.GetDataCollectorTemplates
+                , "Unable to get templates"
+            );
+        }
+
+        [Authorize]
+        [Route("GetTemplates/{cd}")]
+        public OpDataElementUITemplate Get(string cd)
+        {
+            return SafeExecutor(() => OpDataElementUIExtensions.GetDataCollectorTemplate(cd)
+                , "Unable to get templates"
+            );
+        }
+
+        [Authorize]
+        [Route("GetUiTemplates")]
+        public UiTemplates GetUiTemplates()
+        {
+            return SafeExecutor(_uiTemplateLib.GetUiTemplates
+                , "Unable to get templates"
+            );
+        }
+
+        [Authorize]
+        [Route("GetUiTemplates/{group}")]
+        public UiTemplates GetUiTemplates(string group)
+        {
+            return SafeExecutor(() => _uiTemplateLib.GetUiTemplates(group)
+                , "Unable to get templates"
+            );
+        }
+
+        [Authorize]
+        [Route("GetUiTemplates/{group}/{category}")]
+        public UiTemplates GetUiTemplates(string group, string category)
+        {
+            return SafeExecutor(() => _uiTemplateLib.GetUiTemplates(group, category)
+                , "Unable to get templates"
+            );
+        }
+
+        [Authorize]
+        [Route("GetUiTemplates/{group}/{category}/{subcategory}")]
+        public UiModelTemplate GetUiTemplates(string group, string category, string subcategory)
+        {
+            return SafeExecutor(() => _uiTemplateLib.GetUiTemplate(group, category, subcategory)
+                , "Unable to get template"
+            );
+        }
+    }
+}

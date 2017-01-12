@@ -13,7 +13,7 @@ namespace Intel.MyDeals.BusinessLogic.Test
         /// <summary>
         /// Runs before the current test fixture
         /// </summary>
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void SetupUserAndDatabase()
         {
             Console.WriteLine("Started Customer Calendar Library Tests.");
@@ -21,7 +21,7 @@ namespace Intel.MyDeals.BusinessLogic.Test
             UnitTestHelpers.SetDbConnection();
         }
 
-        [TestFixtureTearDown]
+        [OneTimeTearDown]
         public void AfterTheCurrentTextFixture()
         {
             Console.WriteLine("Completed Customer Calendar Library Tests.");

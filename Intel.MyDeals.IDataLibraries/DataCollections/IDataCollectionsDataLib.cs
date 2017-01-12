@@ -23,6 +23,8 @@ namespace Intel.MyDeals.IDataLibrary
 
         List<GeoDimension> GetGeoData();
 
+        UiTemplates GetUiTemplates();
+
         List<Product> GetProductData();
     }
 }

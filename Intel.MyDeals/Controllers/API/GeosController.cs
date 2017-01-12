@@ -14,9 +14,9 @@ namespace Intel.MyDeals.Controllers.API
     {
         private readonly IGeosLib _geosLib;
 
-        public GeosController(IGeosLib _geosLib)
+        public GeosController(IGeosLib geosLib)
         {
-            this._geosLib = _geosLib;
+            _geosLib = geosLib;
         }
 
         /// <summary>

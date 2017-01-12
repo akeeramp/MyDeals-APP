@@ -1,12 +1,11 @@
 ﻿using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
-using Intel.MyDeals.IBusinessLogic;
 using Intel.MyDeals.IDataLibrary;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
+using Intel.MyDeals.IBusinessLogic;
 
-namespace Intel.MyDeals.BusinesssLogic
+namespace Intel.MyDeals.BusinessLogic
 {
     public class ProductsLib : IProductsLib
     {

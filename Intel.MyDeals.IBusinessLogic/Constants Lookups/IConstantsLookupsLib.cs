@@ -1,5 +1,6 @@
 ﻿using Intel.MyDeals.Entities;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Intel.MyDeals.IBusinessLogic
 {
@@ -19,5 +20,8 @@ namespace Intel.MyDeals.IBusinessLogic
 
         string GetToolConstantValue(string constant);
 
+        List<LookupItem> GetLookups();
+
+        IQueryable<LookupItem> GetLookups(string cd);
     }
 }

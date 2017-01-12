@@ -77,5 +77,36 @@ namespace Intel.MyDeals.Entities
                 }
             };
         }
+
+        /// <summary>
+        /// Ensures the OpUserToken contains values.
+        /// </summary>
+        /// <param name="opUserToken"></param>
+        /// <returns></returns>
+        public static OpUserToken EnsurePopulated(this OpUserToken opUserToken)
+        {
+            if (opUserToken == null) opUserToken = new OpUserToken();
+
+            if (opUserToken.Usr == null)
+            {
+                opUserToken.Usr = new OpUser
+                {
+                    Idsid = "UNKNOWN",
+                    WWID = 00000000,
+                    FirstName = "UNKNOWN",
+                    LastName = "UNKNOWN"
+                };
+            }
+
+            if (opUserToken.Role == null)
+                opUserToken.Role = new OpRoleType
+                {
+                    RoleTypeCd = "UNKNOWN",
+                    RoleTypeDisplayName = "UNKNOWN"
+                };
+
+            return opUserToken;
+        }
+
     }
 }

@@ -1,0 +1,28 @@
+﻿@{
+    ViewBag.Title = "Test Cases";
+}
+
+<header class="title-bar intel-border-yellow">
+    <span class="title-bar-title">Test Cases</span>
+</header>
+
+<div class="container-fluid" style="margin-top: 15px;">
+    <div class="row">
+        <div class="col-sm-2">
+            <div class="panel sidenav">
+                <div class="panel-heading">Test Cases</div>
+                <div class="panel-body">
+                    <h3>UI Controls</h3>
+                    <ul>
+                        <li><a ui-sref="testCases.uiControls">UI Controls</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-10">
+            <div ui-view></div>
+        </div>
+    </div>
+</div>
+
+

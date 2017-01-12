@@ -1,5 +1,4 @@
-﻿using Intel.MyDeals.BusinesssLogic;
-using Intel.MyDeals.Entities;
+﻿using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using System.Linq;
 using System.Web.Http;
@@ -13,9 +12,9 @@ namespace Intel.MyDeals.Areas.Admin.Controllers.API
 
         private readonly IConstantsLookupsLib _constantsLookupsLib;
 
-        public AdminConstantsController(IConstantsLookupsLib _constantsLookupsLib)
+        public AdminConstantsController(IConstantsLookupsLib constantsLookupsLib)
         {
-            this._constantsLookupsLib = _constantsLookupsLib;
+            _constantsLookupsLib = constantsLookupsLib;
         }
 
         [Authorize]

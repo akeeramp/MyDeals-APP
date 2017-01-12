@@ -1,0 +1,680 @@
+﻿
+    #horizontal {
+        margin-top: 0; 
+        border: 0 solid transparent;
+        margin-left: 300px;
+        height: 100%;
+        font-size: 12px;
+    }
+    #horizontal.collapsed {
+        margin-left: 38px;
+    }
+    #horizontal.expanded {
+        margin-left: 300px;
+    }
+    #left-pane {
+        height: 100%;
+        float: left;
+        overflow: auto;
+        width: 300px;
+        margin-left: -300px;
+        padding: 0;
+        background-color: #f9f9f9;
+    }   
+    #left-pane.collapsed {
+        margin-left: -600px;
+    }
+    #left-pane.expanded {
+        margin-left: -300px; 
+    }
+    #center-pane {
+        height: 100%;
+        overflow: auto;
+        width: 100%;
+    }
+
+    #lnavContainerWrapper {
+        height: 100%;
+        padding: 65px 0 0 0;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+    #lnavHeader {
+        height: 65px;
+        margin-top: -65px;
+        padding: 0;
+        font-size: 14px;
+        font-family: "Intel Clear";
+        font-weight: 200;
+        font-style: normal;
+        background-color: #00AEEF;
+        color: #ffffff;
+    }
+    #lnavContainer {
+        height: 100%;
+        overflow: auto;
+        color: #ffffff;
+        background-color: #003C71;
+    }
+
+    #lnavSingleContainerWrapper {
+        height: 100%;
+        padding: 32px 0 0 0;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+    #lnavSingleHeader {
+        height: 32px;
+        margin-top: -32px;
+        padding: 0;
+        font-size: 14px;
+        font-family: "Intel Clear";
+        font-weight: 200;
+        font-style: normal;
+        background-color: #00AEEF;
+        color: #ffffff;
+    }
+
+
+    #contractContainerWrapper {
+        height: 100%;
+        padding: 32px 0 0 0;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+    #contractHeader {
+        height: 32px;
+        margin-top: -32px;
+        border-bottom: 1px solid #eeeeee;
+        padding: 4px;
+        font-size: 14px;
+        font-family: "Intel Clear";
+        font-weight: 200;
+        font-style: normal;
+        background-color: #fafafa;
+    }
+    #contractContainer {
+        height: 100%;
+        padding: 0;
+        overflow: auto;
+        width: 100%;
+    }
+
+
+    #secBasicContainerWrapper {
+        height: 100%;
+        padding: 2px 0 0 0;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+    #secContainerWrapper {
+        height: 100%;
+        padding: 33px 0 0 0;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+    #secHeader {
+        height: 33px;
+        margin-top: -33px;
+        font-size: 14px;
+        padding: 4px 16px;
+        font-family: "Intel Clear";
+        font-weight: 200;
+        font-style: normal;
+
+        color: #ffffff;
+        background-color: #c1c1c1;
+    }
+    #secContainer {
+        height: 100%;
+        overflow: auto;
+    }
+    #secFooter {
+        margin: 0 0 -150px 0;
+        height: 150px;
+        font-size: 14px;
+        padding-left: 15px;
+        padding-right: 20px;
+        background-color: #fafafa;
+    }
+
+
+    #subContainerWrapper {
+        height: 100%;
+        padding: 28px 0 0 0;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+    #subHeader {
+        height: 28px;
+        margin-top: -28px;
+        font-size: 14px;
+        font-family: "Intel Clear";
+        font-weight: 200;
+        font-style: normal;
+    }
+    #subContainer {
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .flip-horizontal {
+        -webkit-transform: scaleX(-1);
+        -moz-transform: scaleX(-1);
+        -ms-transform: scaleX(-1);
+        -o-transform: scaleX(-1);
+        transform: scaleX(-1);
+        -webkit-filter: fliph;
+        -moz-filter: fliph;
+        -o-filter: fliph;
+        filter: fliph;
+    }
+
+    .navIconLnk-small-wrapper {
+        position: absolute; 
+        top: 0;
+        left: 0;
+        background-color: #eeeeee;
+        color: #ffffff;
+        height: 100%
+    }
+    .navIconLnk {
+        font-size: 22px;
+        cursor: pointer;
+        padding: 0 8px;
+        background-color: #00AEEF;
+        color: #ffffff;
+    }
+    .navIconLnk.active {
+        background-color: #0071C5;
+    }
+    .navIconLnk:hover {
+        background-color: #0071C5;
+    }
+
+
+    .navIconLnk.lnavBtnDisabled, .navIconLnk.lnavBtnDisabled:hover {
+        color: #0071C5;
+        cursor: default;
+        background-color: #00AEEF;
+    }
+
+    .lnavBtn:hover, .lnavBtnDrp:hover {
+        color: #ffffff;
+    }
+
+    .lnavBtn {
+        font-size: 14px;
+        font-family: "Intel Clear";
+        font-weight: 200;
+        font-style: normal;
+        padding: 5px; 
+        text-align: center;
+        background-color: #939598;
+        cursor: pointer;
+        color: #ffffff;
+        height: 32px;
+    }
+    .lnavBtnDrp {
+        padding: 5px; 
+        width: 20px; 
+        text-align: center;
+        background-color: #939598;
+        cursor: pointer;
+        color: #ffffff;
+        height: 32px;
+        border-left: 1px solid #ffffff;
+    }
+    .lnavBtn-Pri {
+    }
+    .lnavBtn-Sec {
+        border-bottom: 1px solid #ffffff;
+    }
+    .lnavBtn:hover {
+        background-color: #53565a;
+    }
+
+    .lnavBtn.primary {
+        width: 149px; 
+        border-right: 1px solid #ffffff;
+        background-color: #00AEEF;
+    }
+    .lnavBtn.primary:hover {
+        background-color: #0071C5;
+    }
+    .lnavStrategyContainer {
+    }
+    .lnavSubTitle {
+        padding: 10px;
+        font-size: 16px;
+        font-family: "Intel Clear";
+        font-weight: 200;
+        font-style: normal;
+    }
+
+
+    #app, #app > div:first-of-type {
+        height: 100%;
+    }
+
+    #content, #content > div:first-of-type {
+        height: 100%;
+    }
+
+    #content .row {
+        margin-left: 1px;
+        margin-right: 1px;
+    }
+
+    .sidenav-link {
+        font-size: 12px; 
+        padding: 0 10px;
+        color: #0071c5;
+        cursor: pointer;
+    }
+    .sidenav-link:hover {
+        color: #003c71;
+        text-decoration: underline;
+    }
+
+    .fullHeight {
+        height: 100%;
+    }
+
+    .rotate90 {
+        transform: rotate(90deg);
+	    transform-origin: left top 0;        
+    }
+
+    .textCircle {
+        border-radius: 50%;
+        width: 15px;
+        height: 15px;   
+        padding: 2px;
+        color: #003C71;
+        text-align: center;
+        font: 10px Arial, sans-serif;
+        font-weight: bold;
+    }
+    .textName {
+        margin: 0 0 5px 5px;
+        font-weight: bold;
+    }
+    .circleWithText {
+        color: #ffffff;
+        margin: 0 0 2px 5px; 
+        width: 90px;
+        cursor: pointer;
+        border-radius: 10px;
+        padding: 3px;
+        height: 21px;
+    }
+    .circleWithText:hover {
+        color: #FFA300;
+    }
+    .circleWithText:hover .textCircle {
+        background-color: #FFA300;
+    }
+    .circleWithText.active {
+        background-color: #003C71;
+    }
+
+    .ptLnavTitle {
+        font-size: 16px; 
+        text-align: center; 
+        margin: 10px 10px 10px 10px;
+    }
+    .ptLnavtmpltContainer {
+        margin-bottom: 15px;
+    }
+
+    .blueBg {
+        color: #ffffff;
+        background: #00AEEF;
+    }
+    .pct_PASS {
+        background: #C4D600;
+    }
+    .pct_FAIL {
+        background: #ED1C24;
+    }
+    .pct_NA {
+        background: #939598;
+    }
+    .pct_INCOMPLETE {
+        background: #F3D54E;
+    }
+    .pct_ {
+        background: #F3D54E;
+    }
+
+    .psNav {
+        cursor: pointer;
+        font-family: 'Intel Clear'; 
+        font-weight: normal; 
+        font-style: normal;
+        padding: 2px 10px 0 10px;
+    }
+    .psNav:hover {
+        background-color: #003462;
+    }
+    .psNav i {
+        cursor: pointer;
+    }
+    .psNav .ptBtn, .ptNav .ptBtn {
+        display: none;
+        font-size: 14px;
+    }
+    .psNav:hover .ptBtn, .ptNav:hover .ptBtn {
+        display: inline;
+        font-size: 13px;
+    }
+    .psNav:hover .ptBtn:hover, .ptNav:hover .ptBtn:hover {
+        color: #F3D54E;
+    }
+
+    .ptNav .ptBtn {
+        display: none;
+        font-size: 14px;
+        color: #ffffff;
+        line-height: 1.3em;
+    }
+    .ptNav:hover .ptBtn {
+        display: inline;
+    }
+    .ptNav:hover .ptBtn:hover {
+        color: #F3D54E;
+    }
+
+    .ptNav, .ptNav a {
+        color: #00AEEF;
+    }
+    .ptNav {
+        cursor: pointer;
+        font-family: 'Intel Clear'; 
+        font-weight: 200; 
+        font-style: normal;
+        padding: 2px 10px 0 30px;
+    }
+    .ptNav:hover, .ptNav:hover a {
+        color: #00AEEF;
+    }
+    .ptNav:hover {
+        color: #00AEEF;
+        background-color: #003462;
+    }
+    
+    .ptNav.active {
+        color: #ffffff;
+        font-weight: bold;
+        background-color: #0071C5;
+    }
+
+    .flatWhiteInput {
+        width: 100%; 
+        padding: 0; 
+        margin: 0; 
+        line-height: 1em; 
+        background-color: #ffffff; 
+        border: 1px solid #bcbcbc;
+        color: #939598;
+    }
+
+    .transparentInput {
+        line-height: 1em; 
+        background-color: transparent; 
+        border: 0 solid transparent;
+        border-bottom: 1px solid #eeeeee;
+        color: #939598;
+    }
+    .fntLg {
+        font-family: 'Intel Clear'; 
+        font-weight: 200; 
+        font-style: normal;
+        font-size: 16px;
+    }
+    .fntXlg{
+        font-family: 'Intel Clear'; 
+        font-weight: 200; 
+        font-style: normal;
+        font-size: 18px;
+    } 
+    .fntB {
+        color: #0071C5;
+    }
+    .fntB {
+        color: #ffffff;
+    }
+    .noBottomBorder {
+        border-bottom: 0px solid transparent;
+    }
+
+    .w100 {
+        width: 100%;
+    }
+    .h100 {
+        width: 100%;
+    }
+
+    .bg-grey {
+        background-color: #b1babf;
+    }
+
+    .addPsBtn {
+        text-align: center; 
+        padding: 8px 4px 4px 4px; 
+        font-size: 14px; 
+        width: 100%; 
+        cursor: pointer;
+    }
+
+    .addPsBtn:hover {
+        background-color: #0071C5;
+    }
+
+    .lnav-form {
+        padding: 10px;
+        font-family: 'Intel Clear'; 
+        font-weight: 200; 
+        font-style: normal;
+        font-size: 10px;
+    }
+
+    .lnav-form h6 {
+        margin: 0 0 6px 0;
+    }
+
+    .lnav-form .desc {
+        color: #666666;
+        margin: 0 0 10px 0;
+    }
+
+    .lnav-form .labelBlock {
+        margin-bottom: 10px;
+    }
+
+    .lnav-form label {
+        font-family: 'Intel Clear'; 
+        font-weight: 600; 
+        font-style: normal;
+        font-size: 10px;
+        margin: 0px;
+    }
+
+    .lnav-form input, .lnav-form textarea {
+        color: #000000;
+        font-family: 'Intel Clear'; 
+        font-weight: 200; 
+        font-style: normal;
+        font-size: 10px;
+        width: 100%;
+    }
+
+    .intelLtBlue {
+        background-color: #00AEEF;
+        border-radius: 0;
+        color: #ffffff;
+        font-weight: bold;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    .intelLtBlue:hover {
+        background-color: #0071C5;
+        color: #ffffff;
+    }
+
+    #subContainer.table {
+        border-width: 0 !important;
+        overflow: hidden;
+    }
+    .k-splitter .k-scrollable {
+        overflow: hidden !important;        
+    }
+    .noborder.k-pane.k-scrollable {
+        overflow: hidden;
+    }
+    .noborderEditor {
+        border-width: 10px !important;
+    }
+
+    .noFormula .k-spreadsheet-action-bar {
+        visibility: hidden;
+    }
+
+    .ssIconBtn {
+        font-size: 18px;
+        cursor: pointer;
+        padding: 3px;
+    }
+    .ssIconBtn:hover {
+        background-color: #00AEEF;
+    }
+    .ssmIconBtn {
+        font-size: 14px;
+        cursor: pointer;
+        padding: 3px;
+        background-color: #00AEEF;
+        border-radius: 3px;
+        color: #ffffff;
+    }
+    .ssmIconBtn:hover {
+        background-color: #0071C5;
+    }
+
+    .k-context-menu.k-menu-vertical>.k-item>.k-link, .k-menu .k-menu-group .k-item>.k-link {
+        padding: .6em 1.8em .38em .9em;
+        font-family: 'Intel Clear'; 
+        font-weight: 200; 
+        font-style: normal;
+        font-size: 13px;
+    }
+
+    .k-context-menu.k-menu-vertical>.k-item>.k-link i, .k-menu .k-menu-group .k-item>.k-link i {
+        margin-right: 6px;
+    }
+
+    .k-confirm .k-window-titlebar::before {
+        content: 'Confirmation';
+    }
+
+    .k-confirm .k-window-titlebar .k-dialog-title {
+        visibility:collapse;
+    }
+
+    .opUiLabel {
+        width: 130px;
+        padding-top: 4px;
+    }
+
+    .contract-detail-form h3 {
+        border-bottom: 1px solid #dbdbdb;
+        margin-bottom: 30px;
+    }
+
+    .contract-detail-form {
+        padding: 0 20px 20px 20px;
+    }
+    .contract-detail-form .row {
+        margin-bottom: 20px;
+    }
+
+    .contract-detail-form .opUiLabel {
+        font-weight: bold;
+        font-size: 14px;
+        width: 160px;
+    }
+
+    .contract-detail-form .opUiElement {
+        width: 100%;
+    }
+    .contract-detail-form INPUT[type='checkbox'].opUiElement {
+        width: 20px;
+        margin-top: 8px;
+    }
+
+    .mr10 {
+        margin-right: 10px;
+    }
+    .ml10 {
+        margin-left: 10px;
+    }
+    .mt10 {
+        margin-top: 10px;
+    }
+    .mb10 {
+        margin-bottom: 10px;
+    }
+
+    .k-spreadsheet-view .k-spreadsheet-fixed-container .k-spreadsheet-pane .k-spreadsheet-column-header div {
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .k-spreadsheet-view .k-spreadsheet-fixed-container .k-spreadsheet-pane {
+        font-size: 10px;
+    }
+
+    .k-detail-row .k-hierarchy-cell {
+        background-color: #ecf8fb;
+    }
+
+    .k-detail-cell {
+        background-color: #ecf8fb;
+    }
+
+    .k-detail-row > .k-detail-cell > div:first-child {
+        margin: 10px 10px 10px 0; overflow: auto;
+    }
+
+    .rJustLabel {
+        margin-bottom: 20px;
+    }
+    
+    .rJustLabel div.opUiLabel {
+        text-align: right;
+        padding-right: 10px;
+    }
+
+    .rJustLabel div.opUiContainer {
+        margin-bottom: 4px;
+    }
+
+    .lnavSmTitle {
+        border-bottom: 1px solid #f3D54E; 
+        color: #f3D54E; 
+        font-weight: 600; 
+        width: 100%; 
+        margin-bottom: 10px; 
+        font-size: 10px; 
+        text-transform: uppercase;
+    }
+
+    .k-spreadsheet>.k-spreadsheet-view {
+        font-size: 10px;
+    }

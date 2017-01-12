@@ -1,6 +1,6 @@
 ﻿using Intel.MyDeals.DataLibrary;
 
-namespace Intel.MyDeals.BusinesssLogic
+namespace Intel.MyDeals.BusinessLogic
 {
     public class JmsLib
     {

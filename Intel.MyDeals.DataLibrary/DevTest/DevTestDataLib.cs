@@ -107,7 +107,7 @@ namespace Intel.MyDeals.DataLibrary
 
                 if (res.Count == 0)
                 {
-                    res = new Dictionary<string, string> {{"ERROR", "Unabled to get database details"}};
+                    res = new Dictionary<string, string> { { "ERROR", "Unabled to get database details" } };
                 }
 
 
@@ -190,14 +190,14 @@ namespace Intel.MyDeals.DataLibrary
             }
             catch (Exception ex)
             {
-				OpLogPerf.Log(ex);
-				Exception x2 = new Exception("Example Simple Exception: Database Exception");
+                OpLogPerf.Log(ex);
+                Exception x2 = new Exception("Example Simple Exception: Database Exception");
                 throw x2;
             }
 
             //exception will prevent this from ever returning
             return "string";
         }
-        
+
     }
 }

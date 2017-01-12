@@ -1,4 +1,5 @@
-﻿angular
+﻿(function () {
+angular
     .module('app.dashboard')
     .run(appRun);
 
@@ -41,3 +42,4 @@ function getStates() {
         }
     ];
 }
+})();

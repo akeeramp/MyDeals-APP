@@ -77,18 +77,25 @@
     <Compile Include="Customer\CustomerLib.cs" />
     <Compile Include="DataCollectors\DataCollectorLib.cs" />
     <Compile Include="BusinessLogic.cs" />
+    <Compile Include="DataCollectors\MyDealsDataExtensions.cs" />
+    <Compile Include="DataCollectors\OpDataCollectorExtensions.cs" />
+    <Compile Include="DataCollectors\OpDataCollectorFlattenedDictListExtensions.cs" />
+    <Compile Include="DataCollectors\OpDataCollectorFlattenedListExtensions.cs" />
+    <Compile Include="DataCollectors\OpDataCollectorFlattenedItemExtensions.cs" />
+    <Compile Include="DataCollectors\OpDataElementExtensions.cs" />
+    <Compile Include="DataCollectors\OpDataElementUITemplateExtensions.cs" />
     <Compile Include="Deals\DealHelperFunctions.cs" />
     <Compile Include="Deals\DealLib_Search.cs" />
     <Compile Include="Deals\DealsLib_Common.cs" />
     <Compile Include="Deals\DealsLib_Get.cs" />
     <Compile Include="Deals\DealsLib_Save.cs" />
+    <Compile Include="DataCollectors\OpDataElementUIExtensions.cs" />
     <Compile Include="Employees\EmployeesLib.cs" />
     <Compile Include="Geos\GeosLib.cs" />
     <Compile Include="Helpers\OpUserTokenHelpers.cs" />
     <Compile Include="JMS\JmsLib.cs" />
     <Compile Include="Logging\LoggingLib.cs" />
     <Compile Include="MetaData\MetasLib.cs" />
-    <Compile Include="ObjSet\ObjSetHelperFunctions.cs" />
     <Compile Include="DevTest\DevTestsLib.cs" />
     <Compile Include="POC\PocLib.cs" />
     <Compile Include="PricingStrategies\PricingStrategiesLib.cs" />
@@ -99,6 +106,7 @@
     <Compile Include="Resolver.cs" />
     <Compile Include="Search\QuickSearchLib.cs" />
     <Compile Include="Security Attributes\SecurityAttributesLib.cs" />
+    <Compile Include="UI Templates\UiTemplateLib.cs" />
     <Compile Include="Workflows\WorkflowsLib.cs" />
   </ItemGroup>
   <ItemGroup>

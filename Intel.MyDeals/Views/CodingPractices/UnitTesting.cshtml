@@ -1,0 +1,64 @@
+﻿@Html.Partial("TOC", new ViewDataDictionary
+{
+    { "categoryTitle", "Coding tools" },
+    { "categoryAction", "CodingTools" },
+    { "sectionTitle", "Coding tools" },
+    { "sectionAction", "CodingTools" },
+    { "pageTitle", "Unit Testing" }
+})
+
+<div id="mainBody" style="margin: 10px; padding: 0 20px 0 200px;">
+    <h1><img src="/Images/docs/icon-code-tools.png" height="80" /> Unit Testing</h1>
+    <p>
+        Unit testing can be done using many different tools and based on the application's infrastructure. 
+    </p>
+    <img src="/Images/docs/unittesting.png" style="margin: 10px 0 10px 25px;" />
+
+    <h5>Unit Testing in MyDeals</h5>
+    <p>
+        As part of the DevOps initiative, automated testing will be performed against unit test cases.
+        This will NOT cover unit testings. This section is outside the DevOps automated logging.
+        MyDeals will focus on writing unit test cases in the Middle Tier layers.
+    </p>
+
+    <div class="stepByStep">
+        Middle Tier Unit Testing
+    </div>
+    <p>
+        MyDeals will use the built in unit testing tools provided by Visual Studio. There are many on-line instructions and examples on how to write unit tests. I will documents a simple case as a starting point.
+    </p>
+
+    <ol>
+        <li>
+            Ensure there is a Unit Test Project that mirrors the project you are testing.
+            For example. if you are writing unit test cases against the <i>Intel.MyDeals.BusinessLogic</i> project, make sure there is a <i>Intel.MyDeals.BusinessLogic.Test</i> project.
+            If the project doesn't exist, go ahead and create one.<br/>
+            <img src="/Images/docs/fileunittest.png" style="margin: 10px 0;" />
+        </li>
+        <li>
+            Enter your Unit Test in organized classes. As the project gets bigger, more and more unit tests will be needed. Please break them out into seperate classes as needed.<br/>
+            <div class="note"><strong>Sample:</strong> Here is a sample unit test case written for the BusinessLogic project around OpUserTokens.
+            </div>
+            <div class="noteBody">
+                <img src="/Images/docs/sampleunittests.png" style="margin: 10px 0;"/>
+            </div>
+        </li>
+        <li>
+            <b>Please ensure all unit tests pass prior to checking in your code!</b>
+        </li>
+    </ol>
+
+
+    <div class="stepByStep">
+        Client Unit Testing
+    </div>
+    <p>
+        In the client layer, the DevOps automated testing uses a UI based recording tool. This tool might suffice the needs for unit testing. 
+        After we learn more about this process, we will make a decision on how to handle client-side unit testing.
+    </p>
+
+
+    <br /><br /><br />
+</div>
+
+

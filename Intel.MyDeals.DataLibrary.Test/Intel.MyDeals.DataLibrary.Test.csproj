@@ -52,6 +52,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Shared Libraries\Intel.Opaque.dll</HintPath>
     </Reference>
+    <Reference Include="Intel.Opaque.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Shared Libraries\Intel.Opaque.Data.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.core, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnitTestAdapter.WithFramework.2.0.0\lib\nunit.core.dll</HintPath>
       <Private>False</Private>
@@ -60,8 +64,8 @@
       <HintPath>..\packages\NUnitTestAdapter.WithFramework.2.0.0\lib\nunit.core.interfaces.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnitTestAdapter.WithFramework.2.0.0\lib\nunit.framework.dll</HintPath>
+    <Reference Include="nunit.framework, Version=3.5.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.3.5.0\lib\net45\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="nunit.util, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
@@ -90,6 +94,7 @@
   <ItemGroup>
     <Compile Include="ConstantLookupTests.cs" />
     <Compile Include="CustomerCalendarDataLibTests.cs" />
+    <Compile Include="DataCollectorsDataLibTests.cs" />
     <Compile Include="GeoDataLibTests.cs" />
     <Compile Include="CustomerDataLibTests.cs" />
     <Compile Include="LoggingDataLibTest.cs" />
@@ -110,10 +115,16 @@
       <Project>{AE1A3978-08EF-4A15-82CD-7BA6192A9B52}</Project>
       <Name>Intel.MyDeals.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Intel.MyDeals.IDataLibraries\Intel.MyDeals.IDataLibrary.csproj">
+      <Project>{3E9B9F0A-9C92-404E-AFDF-75AD67AC76D8}</Project>
+      <Name>Intel.MyDeals.IDataLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

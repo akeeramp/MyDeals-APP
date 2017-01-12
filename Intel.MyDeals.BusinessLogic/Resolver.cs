@@ -1,7 +1,7 @@
-﻿using Intel.MyDeals.BusinesssLogic;
-using Intel.MyDeals.DependencyResolver;
+﻿using Intel.MyDeals.DependencyResolver;
 using Intel.MyDeals.IBusinessLogic;
 using System.ComponentModel.Composition;
+using Intel.MyDeals.BusinesssLogic;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -19,6 +19,11 @@ namespace Intel.MyDeals.BusinessLogic
 			registerService.RegisterType<IProductCategoriesLib, ProductCategoriesLib>();
 			registerService.RegisterType<ISecurityAttributesLib, SecurityAttributesLib>();
             registerService.RegisterType<ILoggingLib, LoggingLib>();
+            registerService.RegisterType<IDataCollectorLib, DataCollectorLib>();
+            registerService.RegisterType<IContractsLib, ContractsLib>();
+            registerService.RegisterType<IPricingStrategiesLib, PricingStrategiesLib>();
+            registerService.RegisterType<IPricingTablesLib, PricingTablesLib>();
+            registerService.RegisterType<IUiTemplateLib, UiTemplateLib>();            
         }
     }
 }

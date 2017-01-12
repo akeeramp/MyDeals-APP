@@ -1,0 +1,18 @@
+﻿<div ui-view="wipDealView" class="fullHeight">
+    <div style="position: absolute; left: 60px; z-index: 9000;">
+        <table style="width: 100%; height: 37px;">
+            <tr>
+                <td style="padding-right: 10px;">
+                    <i class="ssIconBtn intelicon-find-an-expert"></i>
+                </td>
+                <td style="width: 100%;">
+                    <input type="text" ng-model="curPricingTable.TITLE" class="transparentInput fntLg noBottomBorder w100" />
+                </td>
+                <td style="padding: 1px 2px 0 10px;">
+                    <button class="btn btn-sm intelLtBlue" ng-click="validatePricingTable()">Validate</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div kendo-spreadsheet style="width: 100%; height: 100%;" k-options="ptSpreadOptions" k-scope-field="spreadsheet" class="noFormula"></div>
+</div>

@@ -1,0 +1,88 @@
+﻿
+
+<div style="padding: 15px;">
+    <div>
+        <button onclick="getContract(123)">Test Get Contract</button>
+        <button onclick="saveContract()">Test Save Contract</button>
+    </div>
+    <div>
+        <button onclick="getFullContract(123)">Test Get Full Contract</button>
+        <button onclick="saveFullContract()">Test Full Contract</button>
+    </div>
+</div>
+
+
+<script>
+
+    function getContract(id) {
+
+        op.ajaxGetAsync("/api/Contracts/v1/GetContract/" + id, function (data) {
+            debugger;
+        }, function (xhr) {
+            debugger;
+        });
+
+    }
+
+    function getFullContract(id) {
+
+        op.ajaxGetAsync("/api/Contracts/v1/GetFullContract/" + id, function (data) {
+            debugger;
+        }, function (xhr) {
+            debugger;
+        });
+
+    }
+
+    function saveContract() {
+
+        var data = [
+            {
+                dc_id: -101,
+                dc_parent_id: 0,
+                DEAL_TYPE_CD: "ECAP",
+                DEAL_STG_CD: "Requested"
+            }
+        ];
+
+        op.ajaxPostAsync("/api/Contracts/v1/SaveContract", data, function (data) {
+            debugger;
+        }, function (xhr) {
+            debugger;
+        });
+
+    }
+
+    function saveFullContract() {
+
+        var data = {
+            "Contract": [
+               {
+                   dc_id: -101,
+                   dc_parent_id: 0,
+                   DEAL_TYPE_CD: "ECAP",
+                   DEAL_STG_CD: "Requested"
+               }
+            ],
+            "PricingStrategy": [
+               {
+                   dc_id: -201,
+                   dc_parent_id: -101,
+                   TITLE: "Hello World"
+               },
+               {
+                   dc_id: -202,
+                   dc_parent_id: -101,
+                   TITLE: "Hello World Again"
+               }
+            ]
+        };
+
+        op.ajaxPostAsync("/api/Contracts/v1/SaveFullContract", data, function (data) {
+            debugger;
+        }, function (xhr) {
+            debugger;
+        });
+
+    }
+</script>

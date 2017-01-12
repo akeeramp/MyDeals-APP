@@ -1,0 +1,71 @@
+﻿<!-- Add Pricing Table -->
+<div style="padding: 6px; background-color: #0071C5;" ng-hide="isAddPricingTableHidden">
+    <!--<button class="close" aria-label="Close" type="button" style="color: #ffffff; margin-top: -6px;" title="close" ng-click="HideAddPricingTable()">×</button>-->
+    <form name="addNewPtForm" ng-submit="submitForm(CustomAddPtValidate())" novalidate>
+        <!-- novalidate prevents HTML5 validation since we will be validating ourselves -->
+
+        <div class="bgBlueContainer" ng-class="{isErrorWrapper: newPricingTable._behaviors.isError.TITLE}">
+            <div kendo-tooltip k-content="NewPricingTable._behaviors.validMsg.TITLE" k-position="'top'" ng-show="newPricingTable._behaviors.isError.TITLE" class="err-bit-el"></div>
+            <input type="text" class="k-textbox fl" placeholder="[Enter Pricing Table Name...]"
+                   style="width: 100%; color: #aaaaaa;"
+                   ng-model="newPricingTable.TITLE"
+                   ng-class="{isError: newPricingTable._behaviors.isError.TITLE}" />
+            <div class="clearboth"></div>
+            <div style="color: #F3D54E;">{{ newPricingTable._behaviors.validMsg.TITLE }}</div>
+        </div>
+
+        <div class="ptLnavTitle">
+            Select Pricing Table Deal Type
+        </div>
+
+        <!-- PRICING TABLE TEMPLATES -->
+        <div class="ptLnavtmpltContainer">
+            <div style="color: #F3D54E;">{{ newPricingTable._behaviors.validMsg.OBJSET_TYPE_CD }}</div>
+            <div ng-repeat="(key, value) in templates.ModelTemplates.PricingTable" class="fl circleWithText" ng-click="selectPtTemplateIcon(value)" ng-class="{active: value._custom._active}">
+                <div class="fl textCircle blueBg">{{ value._custom.ltr }}</div>
+                <div class="fl textName">{{ value.name }}</div>
+                <div class="clearboth"></div>
+            </div>
+            <div class="clearboth"></div>
+        </div>
+
+        <!-- ADDITIONAL ATTRIBUTES -->
+        <div ng-show="newPricingTableExtraLength()">
+            <div class="lnavSmTitle">Additional Attributes:</div>
+            <div class="rJustLabel">
+                <div ng-repeat="(key, value) in newPricingTable._extraAtrbs" class="elOnBlue">
+                    <div op-control-data-element
+                         ng-model="newPricingTable._extraAtrbs"
+                         op-cd="key"
+                         op-type="value.type"
+                         op-label="value.label"
+                         op-lookup-url="value.opLookupUrl"
+                         op-lookup-text="value.opLookupText"
+                         op-lookup-value="value.opLookupValue"
+                        op-ui-mode="'HORIZONTAL'"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DEFAULT ATTRIBUTES -->
+        <div ng-show="newPricingTableDefaultLength()">
+            <div class="lnavSmTitle">Default Values:</div>
+            <div class="rJustLabel">
+                <div ng-repeat="(key, value) in newPricingTable._defaultAtrbs" class="elOnBlue">
+                    <div op-control-data-element
+                            ng-model="newPricingTable._defaultAtrbs"
+                            op-cd="key"
+                            op-type="value.type"
+                            op-label="value.label"
+                            op-ui-mode="'HORIZONTAL'"></div>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center;">
+            <button class="btn btn-sm btn-primary" ng-click="hideAddPricingTable()">Close</button>
+            <button class="btn btn-sm btn-primary" ng-click="customAddPtValidate()">Add</button>
+        </div>
+
+    </form>
+</div>

@@ -30,7 +30,7 @@
             return $http.post(apiUrl, dto).then(successCallback, errorCallback);
         }
 
-        function Delete(apiUrl, successCallback, errorCallbackl) {
+        function Delete(apiUrl, successCallback, errorCallback) {
             return $http.delete(apiUrl).then(successCallback, errorCallback);
         }
 
