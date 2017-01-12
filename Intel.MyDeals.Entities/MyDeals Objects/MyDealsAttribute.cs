@@ -12,7 +12,7 @@ namespace Intel.MyDeals.Entities
 
         public override string ToString()
         {
-            return $"{DIM_CD}:{ATRB_CD} = {DIM_SID}:{ATRB_SID}";
+            return $"{DIM_CD}:{ATRB_COL_NM} = {DIM_SID}:{ATRB_SID}";
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace Intel.MyDeals.Entities
 
         public string[] GetPivotTables()
         {
-            return PVT_MSK <= 0 ? new string[] { } : null;
+            return PIVOT_MSK <= 0 ? new string[] { } : null;
 
             //return DcsAttributeHelper.ATTRIBUTE_PIVOT_MASK_MAP
             //    .Where(kvp => (kvp.Key & this.PVT_MSK) == kvp.Key)

@@ -4,9 +4,9 @@
 <#@ Assembly Name="System.Windows.Forms.dll" #>
 <#@ Assembly Name="System.Data" #>
 <#@ Assembly Name="System.XML" #>
-<#@ Assembly Name="$(SolutionDir)\Intel.MyDeals.DataAccessLib\bin\Debug\Intel.Opaque.Templating.dll" #>
-<#@ Assembly Name="$(SolutionDir)\Intel.MyDeals.DataAccessLib\bin\Debug\Intel.Opaque.Data.dll" #>
-<#@ Assembly Name="$(SolutionDir)\Intel.MyDeals.Entities\bin\Debug\Intel.MyDeals.Entities.dll" #>
+<#@ Assembly Name="$(SolutionDir)\Shared Libraries\Intel.Opaque.Templating.dll" #>
+<#@ Assembly Name="$(SolutionDir)\Shared Libraries\Intel.Opaque.Data.dll" #> 
+<#@ Assembly Name="$(SolutionDir)\Intel.MyDeals.Entities\bin\Debug\Intel.MyDeals.Entities.dll" #> // Used to be Assembly Name="$(SolutionDir)\Intel.MyDeals.Entities\bin\Debug\Intel.MyDeals.Entities.dll"
 <#@ import namespace="Intel.Opaque.Templating" #>
 <#@ import namespace="Intel.Opaque.Data" #>
 <#@ import namespace="Intel.MyDeals.Entities" #>
@@ -29,7 +29,8 @@
 	// becauase we know the const values are hard coded in produciton (so we don't have to worry about
 	// identity insert sequencing issues).
 	var dbobjects = new DBObjects(
-			string.Format(@"Database=CDMS;Server=CP1CIAS-PD\CP1CIAS,3180;integrated security=SSPI;")
+			//string.Format(@"Database=CDMS;Server=CP1CIAS-PD\CP1CIAS,3180;integrated security=SSPI;") // THIS SHOULD REALLY POINT TO PRODUCTION TO MINIMIZE THRASH
+			string.Format(@"Database=MYDEALS;Server=EG1RDMDBDEV01\DEALSDEV,3180;integrated security=SSPI;")
 		);
 
 	var atrb_table = dbobjects.ExecuteDataSet(@"
@@ -37,7 +38,7 @@ SELECT
 	[ATRB_SID],
 	[LKUP_ROOT_SID],
 	[DIM_CD],
-	[ATRB_CD],
+	[ATRB_COL_NM] as ATRB_CD,
 	[DATA_TYPE_CD],
 	[UI_TYPE_CD],
 	[ATRB_DESC],
@@ -50,7 +51,7 @@ SELECT
 	[ATRB_SRT_ORD],
 	[ATRB_MAX_LEN],
 	[IS_FACT],
-	[PVT_MSK],
+	[PIVOT_MSK],
 	[ATRB_ACTV_IND],
 	[ACTV_IND]
 /*
@@ -89,7 +90,7 @@ SELECT
 	[DIM_ACTV_IND],
 	[DATA_TYPE_ACTV_IND],
 */
-FROM meta.VW_ATRB_MSTR (nolock)
+FROM [dbo].[VW_ATRB_MSTR] (nolock)
 ORDER BY ATRB_CD
 ").Tables[0];
 
@@ -109,7 +110,7 @@ using System;
 
 	
 	var matched_columns = from rc in cols
-			join pn in typeof(DcsAttribute).GetProperties().Where(pi => pi.CanRead && pi.CanWrite)
+			join pn in typeof(MyDealsAttribute).GetProperties().Where(pi => pi.CanRead && pi.CanWrite)
             on rc.ColumnName equals pn.Name.Trim().ToUpper()
             select new 
 			{ 
@@ -196,19 +197,19 @@ using System;
 			
         }
 
-		WriteSummary("Get this type as a DcsAttribute instance class.");
+		WriteSummary("Get this type as a MyDealsAttribute instance class.");
 		
 		// Both of these work fine, the method just felt better than the static readonly...
-		//WriteLine("public static readonly DcsAttribute AsDcsAttribute = new DcsAttribute()");
-		WriteLine("public static DcsAttribute AsDcsAttribute()");
+		//WriteLine("public static readonly MyDealsAttribute AsMyDealsAttribute = new MyDealsAttribute()");
+		WriteLine("public static MyDealsAttribute AsMyDealsAttribute()");
 		WriteLine("{");
 		PushIndent(TAB);
-			WriteLine("return new DcsAttribute(){");
+			WriteLine("return new MyDealsAttribute(){");
 			Write("\t");
 			WriteLine(String.Join("," + Environment.NewLine + "\t", param_constructor_values));
-			WriteLine("};"); // DcsAttribute
+			WriteLine("};"); // MyDealsAttribute
 		PopIndent();
-		WriteLine("}"); // AsDcsAttribute
+		WriteLine("}"); // AsMyDealsAttribute
 		
 
 		WriteLine("");

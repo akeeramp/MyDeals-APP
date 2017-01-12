@@ -8,6 +8,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intel.MyDeals.DataAccessLib", "Intel.MyDeals.DataAccessLib\Intel.MyDeals.DataAccessLib.csproj", "{BD90141B-F4DE-4FA3-B6D0-45BB04A3596F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Intel MyDeals 2 Entities", "Intel MyDeals 2 Entities", "{826EA199-87EA-43E9-B23C-61C1A1B334E6}"
+	ProjectSection(SolutionItems) = preProject
+		Intel.MyDeals.Entities\MyDeals Objects\MyDealsAttribute.cs = Intel.MyDeals.Entities\MyDeals Objects\MyDealsAttribute.cs
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intel.MyDeals.Entities", "Intel.MyDeals.Entities\Intel.MyDeals.Entities.csproj", "{AE1A3978-08EF-4A15-82CD-7BA6192A9B52}"
 EndProject

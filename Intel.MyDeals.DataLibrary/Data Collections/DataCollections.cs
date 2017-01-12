@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using Intel.MyDeals.Entities;
@@ -238,24 +239,24 @@ namespace Intel.MyDeals.DataLibrary
         ////////private static List<AppRoleTier> _getAppRoleTiers;
 
 
-        ////////public static Dictionary<int, MyDealsAttribute> GetAttributeMasterDataDictionary()
-        ////////{
-        ////////    lock (LOCK_OBJECT ?? new object())
-        ////////    {
-        ////////        return _getAttributeMasterDataDictionary ??
-        ////////               (_getAttributeMasterDataDictionary = new AtrbMapDataLib().GetAttributeMasterDataDictionary());
+        //public static Dictionary<int, MyDealsAttribute> GetAttributeMasterDataDictionary()
+        //{
+        //    lock (LOCK_OBJECT ?? new object())
+        //    {
+        //        return _getAttributeMasterDataDictionary ??
+        //               (_getAttributeMasterDataDictionary = new AtrbMapDataLib().GetAttributeMasterDataDictionary());
 
-        ////////    }
-        ////////}
-        ////////private static Dictionary<int, MyDealsAttribute> _getAttributeMasterDataDictionary;
+        //    }
+        //}
+        //private static Dictionary<int, MyDealsAttribute> _getAttributeMasterDataDictionary;
 
-        ////////public static AttributeCollection GetAttributeData()
-        ////////{
-        ////////    lock (LOCK_OBJECT ?? new object())
-        ////////    {
-        ////////        return new AttributeCollection(GetAttributeMasterDataDictionary(), GetOpAtrbMapItems());
-        ////////    }
-        ////////}
+        //public static AttributeCollection GetAttributeData()
+        //{
+        //    lock (LOCK_OBJECT ?? new object())
+        //    {
+        //        return new AttributeCollection(GetAttributeMasterDataDictionary(), GetOpAtrbMapItems());
+        //    }
+        //}
 
 
         ////////public static List<MyDealsActionItem> GetDealActions()

@@ -24,7 +24,7 @@
 	SqlCommand cmd;
 
 	conn = new SqlConnection(
-		@"Database=CDMS_MYDEALS;Server=VMIDMSDVDB01\CP1CIAS,3181;integrated security=SSPI;"
+		@"Database=MYDEALS;Server=EG1RDMDBDEV01\DEALSDEV,3180;integrated security=SSPI;"
 		);
 
 	conn.Open();
@@ -44,15 +44,15 @@
 	WriteLine("");
 	
 	cmd = new SqlCommand(@"
-select 
-	DIM_SID,
-	ATRB_SID,
-	DIM_CD,
-	ATRB_CD,
-	TGT_COL_TYPE,
-	DOT_NET_DATA_TYPE
-from meta.VW_ATRB_MSTR (nolock)
-order by ATRB_CD
+		select 
+			DIM_SID,
+			ATRB_SID,
+			DIM_CD,
+			ATRB_COL_NM as ATRB_CD,
+			TGT_COL_TYPE,
+			DOT_NET_DATA_TYPE
+		from [dbo].[VW_ATRB_MSTR] (nolock)
+		order by ATRB_CD
 	", conn);
 
 	WriteLine("namespace {0} {{", outputNameSpace);
@@ -65,7 +65,6 @@ order by ATRB_CD
 	{
 		while(rdr.Read())
 		{
-	
 			WriteLine("");
 			WriteLine(@"///<summary>");
 			WriteLine(@"/// DIM_SID: {0}", rdr["DIM_SID"]);
@@ -75,26 +74,25 @@ order by ATRB_CD
 			WriteLine(@"/// DOT_NET_DATA_TYPE: {0}", rdr["DOT_NET_DATA_TYPE"]);
 			WriteLine(@"///</summary>");
 			WriteLine(@"public const string {0} = ""{0}"";", rdr["ATRB_CD"]);
-			WriteLine("");
 		} 
     }
 
 	PopIndent();
 	WriteLine("}"); // class
-
+	WriteLine("");
 
 	//----------------------------------------------------------------------------------------------------
 
 	cmd = new SqlCommand(@"
-select 
-	ACTN_SID,
-	REPLACE(LTRIM(RTRIM(UPPER(ACTN_CD))),' ','_') AS [ACTN_CD],
-	ACTN_DESC,
-	[SRT_ORD]
-from [tcore].[ACTN] (nolock)
-where [ACTN_CATGRY_CD] = 'WIP_ACTN'
-AND NULLIF(LTRIM(RTRIM(UPPER(ACTN_CD))),'') IS NOT NULL
-order by ACTN_CD
+		select 
+			ACTN_SID,
+			REPLACE(LTRIM(RTRIM(UPPER(ACTN_CD))),' ','_') AS [ACTN_CD],
+			ACTN_DESC,
+			[SRT_ORD]
+		from [dbo].[ACTN] (nolock)
+		where [ACTN_CAT_CD] = 'WIP_ACTN'
+		AND NULLIF(LTRIM(RTRIM(UPPER(ACTN_CD))),'') IS NOT NULL
+		order by ACTN_CD
 	", conn);
 
 	WriteLine("public static class DealSaveActionCodes {");
@@ -104,7 +102,6 @@ order by ACTN_CD
 	{
 		while(rdr.Read())
 		{
-	
 			WriteLine("");
 			WriteLine(@"///<summary>");
 			WriteLine(@"/// ACTN_SID: {0}", rdr["ACTN_SID"]);
@@ -118,12 +115,14 @@ order by ACTN_CD
 
 	PopIndent();
 	WriteLine("}"); // class
+	WriteLine("");
 
 	//----------------------------------------------------------------------------------------------------
 
 	cmd = new SqlCommand(@"
 SELECT distinct cnst_nm 
-FROM dbo.IDMS_CNST 
+FROM dbo.CNST 
+WHERE cnst_nm != ''
 ORDER BY cnst_nm
 	", conn);
 
@@ -146,127 +145,127 @@ ORDER BY cnst_nm
 
 	//----------------------------------------------------------------------------------------------------
 
-	cmd = new SqlCommand(@"[meta].[PR_GET_ATRB_MSTR_FK_DATA]", conn);
+	cmd = new SqlCommand(@"[dbo].[PR_GET_ATRB_MSTR_FK_DATA]", conn);
 	cmd.CommandType = CommandType.StoredProcedure;
 	cmd.Parameters.AddWithValue("include_inactive", 1);
 	cmd.Parameters.AddWithValue("exclude_atrb_cd", "PLI_LOCATOR,PRD_MBR_SID,TIER_NBR_SID,ADMIN_ACCESS_LEVEL,ATOM_Z_QSTN");
 
 	DataSet ds = new DataSet();
-	SqlDataAdapter da = new SqlDataAdapter(cmd);
-	da.Fill(ds);
+//	SqlDataAdapter da = new SqlDataAdapter(cmd);
+//	da.Fill(ds);
 
-	var dt_atrb = ds.Tables[0];
+//	var dt_atrb = ds.Tables[0];
 	
 	WriteLine("");
 	WriteLine("//-------------------------------------------------------------------------------------------");
 	WriteLine("");
 
-	WriteLine("namespace DCSAtrbLookup {");
+	WriteLine("namespace MyDealsAtrbLookup {");
 	PushIndent(TAB);
 
-	foreach(DataRow drg in dt_atrb.DefaultView.ToTable(true, "ATRB_CD","ATRB_SID").Rows)
-	{
-		
-		string SafeAtrbCd = TemplateTools.CSharpIfyName(String.Format("{0}", drg["ATRB_CD"]));
-		var atrb_rows = dt_atrb.Select(String.Format("[ATRB_CD] = '{0}' AND [ATRB_ITEM_VALUE] <> ''", drg["ATRB_CD"]));
-
-		/*
-		WriteLine("");
-		WriteLine(@"///<summary>");
-		WriteLine(@"/// ATRB_SID: {0}", drg["ATRB_SID"]);
-		WriteLine(@"///</summary>");
-		WriteLine("public static class {0}_ID", SafeAtrbCd);
-		WriteLine("{");
-		PushIndent(TAB);
-
-			foreach(var dra in atrb_rows)
-			{
-				WriteLine("public const int {0} = {1};", 
-					TemplateTools.CSharpIfyName(string.Format("{0}", dra["ATRB_ITEM_VALUE"])).ToUpper(),
-					dra["ATRB_ITEM_SID"]
-				);
-            }
-
-		PopIndent();
-		WriteLine("}"); // class
-		*/
-
-		if(atrb_rows.Any())
-		{
-		
-			WriteLine("");
-			WriteLine(@"///<summary>");
-			WriteLine(@"/// ATRB_SID: {0}", drg["ATRB_SID"]);
-			WriteLine(@"///</summary>");
-			WriteLine("public static class {0}_VAL", SafeAtrbCd);
-			WriteLine("{");
-			PushIndent(TAB);
-
-				foreach(var dra in atrb_rows)
-				{
-					WriteLine(@"///<summary>");
-					WriteLine(@"/// ID: {0}", dra["ATRB_ITEM_SID"]);
-					WriteLine(@"///</summary>");
-					WriteLine("public const string {0} = @\"{1}\";", 
-						TemplateTools.CSharpIfyName(string.Format("{0}", dra["ATRB_ITEM_VALUE"])).ToUpper(),
-						String.Format("{0}", dra["ATRB_ITEM_VALUE"]).Replace("\"","\"\"")
-					);
-				}
-
-				WriteLine("");
-				WriteLine(@"///<summary>");
-				WriteLine(@"/// All values associated with this lookup");
-				WriteLine(@"///</summary>");
-				WriteLine("public static readonly string[] Values = {{@\"{0}\"}};", 
-					String.Join("\",@\"", atrb_rows.Select(dra => String.Format("{0}", dra["ATRB_ITEM_VALUE"]).Replace("\"","\"\"")).OrderBy(s => s.ToLower()))
-				);
-
-				WriteLine("");
-				WriteLine(@"///<summary>");
-				WriteLine(@"/// Keyed values associated with the lookup");
-				WriteLine(@"///</summary>");
-				WriteLine("public static readonly Dictionary<int, string> Dict = new Dictionary<int, string>(){");
-					PushIndent(TAB);
-					WriteLine(String.Join(
-						"," + Environment.NewLine, 
-						atrb_rows.Select(dra => String.Format("{{{0}, @\"{1}\"}}", dra["ATRB_ITEM_SID"], String.Format("{0}", dra["ATRB_ITEM_VALUE"]).Replace("\"","\"\"")))
-					));
-					PopIndent();
-				WriteLine("};");
-
-				WriteLine(@"
-///<summary>
-/// Try to get named value from an ID, or String.Empty on error
-///</summary>
-public static string TryGetValue(int id)
-{
-    string ret;
-    if (Dict.TryGetValue(id, out ret))
-    {
-        return ret;
-    }
-    return String.Empty;
-}
-
-///<summary>
-/// Try to get and ID from a name (case insensitive), or null on error.
-///</summary>
-public static int? TryGetId(string value)
-{
-    var v = value.Trim().ToLower();
-    foreach (var kvp in Dict.Where(itm => itm.Value.Trim().ToLower() == v))
-    {
-        return kvp.Key;
-    }
-    return null;
-}
-				");
-
-			PopIndent();
-			WriteLine("}"); // class
-
-        } // if(atrb_rows.Any())
-    }
+//	foreach(DataRow drg in dt_atrb.DefaultView.ToTable(true, "ATRB_CD","ATRB_SID").Rows)
+//	{
+//		
+//		string SafeAtrbCd = TemplateTools.CSharpIfyName(String.Format("{0}", drg["ATRB_CD"]));
+//		var atrb_rows = dt_atrb.Select(String.Format("[ATRB_CD] = '{0}' AND [ATRB_ITEM_VALUE] <> ''", drg["ATRB_CD"]));
+//
+//		/*
+//		WriteLine("");
+//		WriteLine(@"///<summary>");
+//		WriteLine(@"/// ATRB_SID: {0}", drg["ATRB_SID"]);
+//		WriteLine(@"///</summary>");
+//		WriteLine("public static class {0}_ID", SafeAtrbCd);
+//		WriteLine("{");
+//		PushIndent(TAB);
+//
+//			foreach(var dra in atrb_rows)
+//			{
+//				WriteLine("public const int {0} = {1};", 
+//					TemplateTools.CSharpIfyName(string.Format("{0}", dra["ATRB_ITEM_VALUE"])).ToUpper(),
+//					dra["ATRB_ITEM_SID"]
+//				);
+//            }
+//
+//		PopIndent();
+//		WriteLine("}"); // class
+//		*/
+//
+//		if(atrb_rows.Any())
+//		{
+//		
+//			WriteLine("");
+//			WriteLine(@"///<summary>");
+//			WriteLine(@"/// ATRB_SID: {0}", drg["ATRB_SID"]);
+//			WriteLine(@"///</summary>");
+//			WriteLine("public static class {0}_VAL", SafeAtrbCd);
+//			WriteLine("{");
+//			PushIndent(TAB);
+//
+//				foreach(var dra in atrb_rows)
+//				{
+//					WriteLine(@"///<summary>");
+//					WriteLine(@"/// ID: {0}", dra["ATRB_ITEM_SID"]);
+//					WriteLine(@"///</summary>");
+//					WriteLine("public const string {0} = @\"{1}\";", 
+//						TemplateTools.CSharpIfyName(string.Format("{0}", dra["ATRB_ITEM_VALUE"])).ToUpper(),
+//						String.Format("{0}", dra["ATRB_ITEM_VALUE"]).Replace("\"","\"\"")
+//					);
+//				}
+//
+//				WriteLine("");
+//				WriteLine(@"///<summary>");
+//				WriteLine(@"/// All values associated with this lookup");
+//				WriteLine(@"///</summary>");
+//				WriteLine("public static readonly string[] Values = {{@\"{0}\"}};", 
+//					String.Join("\",@\"", atrb_rows.Select(dra => String.Format("{0}", dra["ATRB_ITEM_VALUE"]).Replace("\"","\"\"")).OrderBy(s => s.ToLower()))
+//				);
+//
+//				WriteLine("");
+//				WriteLine(@"///<summary>");
+//				WriteLine(@"/// Keyed values associated with the lookup");
+//				WriteLine(@"///</summary>");
+//				WriteLine("public static readonly Dictionary<int, string> Dict = new Dictionary<int, string>(){");
+//					PushIndent(TAB);
+//					WriteLine(String.Join(
+//						"," + Environment.NewLine, 
+//						atrb_rows.Select(dra => String.Format("{{{0}, @\"{1}\"}}", dra["ATRB_ITEM_SID"], String.Format("{0}", dra["ATRB_ITEM_VALUE"]).Replace("\"","\"\"")))
+//					));
+//					PopIndent();
+//				WriteLine("};");
+//
+//				WriteLine(@"
+/////<summary>
+///// Try to get named value from an ID, or String.Empty on error
+/////</summary>
+//public static string TryGetValue(int id)
+//{
+//    string ret;
+//    if (Dict.TryGetValue(id, out ret))
+//    {
+//        return ret;
+//    }
+//    return String.Empty;
+//}
+//
+/////<summary>
+///// Try to get and ID from a name (case insensitive), or null on error.
+/////</summary>
+//public static int? TryGetId(string value)
+//{
+//    var v = value.Trim().ToLower();
+//    foreach (var kvp in Dict.Where(itm => itm.Value.Trim().ToLower() == v))
+//    {
+//        return kvp.Key;
+//    }
+//    return null;
+//}
+//				");
+//
+//			PopIndent();
+//			WriteLine("}"); // class
+//
+//        } // if(atrb_rows.Any())
+//    }
 	
 	PopIndent();
 	WriteLine("}"); // namespace
@@ -281,4 +280,3 @@ public static int? TryGetId(string value)
 	WriteLine("}"); // namespace
 	
 #>
-

@@ -77,6 +77,26 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SecurityWrapper.cs" />
     <Compile Include="tempClasses\tempClass.cs" />
+    <Compile Include="Templating\ColumnNames.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ColumnNames.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Templating\DBConst.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DBConst.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Templating\DcsAttribute.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DcsAttribute.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Templating\DealPropertyWrapper.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DealPropertyWrapper.tt</DependentUpon>
+    </Compile>
     <Compile Include="Templating\TableToClasses.generated.cs">
       <DependentUpon>TableToClasses.tt</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -86,6 +106,22 @@
     <Compile Include="VerticalSecurityItem.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Templating\ColumnNames.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ColumnNames.generated.cs</LastGenOutput>
+    </Content>
+    <Content Include="Templating\DBConst.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>DBConst.generated.cs</LastGenOutput>
+    </Content>
+    <Content Include="Templating\DcsAttribute.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>DcsAttribute.generated.cs</LastGenOutput>
+    </Content>
+    <Content Include="Templating\DealPropertyWrapper.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>DealPropertyWrapper.generated.cs</LastGenOutput>
+    </Content>
     <Content Include="Templating\TableToClasses.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>TableToClasses.generated.cs</LastGenOutput>

@@ -22,17 +22,17 @@
 	
 
 	var dbobjects = new DBObjects(
-			string.Format(@"Database=CDMS_MYDEALS;Server=VMIDMSDVDB01\CP1CIAS,3181;integrated security=SSPI;")
+			string.Format(@"Database=MYDEALS;Server=EG1RDMDBDEV01\DEALSDEV,3180;integrated security=SSPI;")
 		);
 
-	var atrb_table = dbobjects.TablesAndViewsWhere("meta.VW_ATRB_MSTR").First();
+	var atrb_table = dbobjects.TablesAndViewsWhere("[dbo].[VW_ATRB_MSTR]").First();
 
 	var incldue_columns = new string[]
     {
 		"DIM_SID",
 		"ATRB_SID",
 		"DIM_CD",
-		"ATRB_CD",
+		"ATRB_COL_NM", //"ATRB_CD",
 		"DATA_TYPE_CD",
 		"UI_TYPE_CD",
 		"ATRB_DESC",
@@ -42,7 +42,7 @@
 		"ATRB_SRT_ORD",
 		"ATRB_MAX_LEN",
 		"IS_FACT",
-		"PVT_MSK",
+		"PIVOT_MSK", //"PVT_MSK",
 		"ARTB_ACTV_IND",
 		"ACTV_IND",
 		"FMT_MSK"
@@ -59,7 +59,7 @@
 	"DATA_TYPE_SID",
 	"LKUP_ROOT_SID",
 	"PARNT_ATRB_SID",
-	"ATRB_FK_TBL_SCH",
+	"ATRB_FK_TBL_SCHMA",
 	"ATRB_FK_TBL_NM",
 	"ATRB_FK_TBL_PK_COL_NM",
 	"ATRB_FK_TBL_DSPLY_COL_NM",
@@ -81,11 +81,11 @@ using System.Xml.Serialization;
 	PushIndent(TAB);
 	WriteLine("");
 	WriteLine("[DataContract]");
-	WriteLine("public partial class DcsAttribute {");
+	WriteLine("public partial class MyDealsAttribute {");
 	PushIndent(TAB);
 	WriteLine("");
 
-	var rows = dbobjects.ExecuteDataSet("SELECT MSK, REPLACE(REPLACE(REPLACE(FQ_TBL_NM,']',''),'[',''),'.','_') AS [FQ_TBL_NM] from [tmeta].[ATRB_PVT_TBL_MSK] (nolock) ORDER BY MSK")
+	var rows = dbobjects.ExecuteDataSet("SELECT MSK, REPLACE(REPLACE(REPLACE(FQ_TBL_NM,']',''),'[',''),'.','_') AS [FQ_TBL_NM] from [dbo].[ATRB_PIVOT_TBL_MSK] (nolock) ORDER BY MSK")
 			.Tables[0]
 			.Rows
 			.Cast<DataRow>();
@@ -115,7 +115,7 @@ using System.Xml.Serialization;
 
 
 	
-    WriteLine("public class DcsAttributeHelper");
+    WriteLine("public class MyDealsAttributeHelper");
     WriteLine("{");
 		PushIndent(TAB);
 		WriteLine("private struct PVT_MSK_CONST");
