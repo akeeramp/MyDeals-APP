@@ -303,9 +303,6 @@
     <Content Include="app\admin\products\admin.products.controller.js" />
     <Content Include="app\admin\products\products.html" />
     <Content Include="app\admin\products\products.service.js" />
-    <Content Include="app\admin\securityEngine\securityEngine.controller.js" />
-    <Content Include="app\admin\securityEngine\securityEngine.html" />
-    <Content Include="app\admin\securityEngine\securityEngine.service.js" />
     <Content Include="app\app.module.js" />
     <Content Include="app\blocks\exception\exception-handler.provider.js" />
     <Content Include="app\blocks\exception\exception.js" />
