@@ -64,11 +64,8 @@
 	font-size: 12px !important;
     }
 
-.k-grid td
- {
-    padding: 0 4px;
-    font-size: 10px !important;
-.k-grid-header .k-header, .k-grid-header .k-header > .k-link, .k-filter-row th, .k-grid-header th.k-header {
+.k-grid-header .k-header, .k-grid-header .k-header > .k-link
+, .k-filter-row th, .k-grid-header th.k-header {
 	font-weight: bold;
 	font-size: 12px;
 	color: #000000;

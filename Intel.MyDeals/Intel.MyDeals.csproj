@@ -303,6 +303,9 @@
     <Content Include="app\admin\products\admin.products.controller.js" />
     <Content Include="app\admin\products\products.html" />
     <Content Include="app\admin\products\products.service.js" />
+    <Content Include="app\admin\securityEngine\securityEngine.controller.js" />
+    <Content Include="app\admin\securityEngine\securityEngine.html" />
+    <Content Include="app\admin\securityEngine\securityEngine.service.js" />
     <Content Include="app\app.module.js" />
     <Content Include="app\blocks\exception\exception-handler.provider.js" />
     <Content Include="app\blocks\exception\exception.js" />
@@ -382,7 +385,10 @@
     <Content Include="app\admin\securityAttributes\securityActions\securityActions.service.js" />
     <Content Include="app\admin\securityAttributes\securityActions\securityActions.controller.js" />
     <Content Include="app\admin\securityAttributes\securityActions\securityActions.manage.html" />
+    <Content Include="app\testCases\testCases.module.js" />
+    <Content Include="app\testCases\testCases.route.js" />
     <Content Include="app\testCases\uiControls\uiControls.controller.js" />
+    <Content Include="app\testCases\uiControls\uiControls.manage.html" />
     <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
