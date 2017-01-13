@@ -212,7 +212,12 @@ namespace Intel.MyDeals.Controllers
             return View();
         }
 
-        #endregion
+		public ActionResult CodeReviews ()
+		{
+			return View();
+		}
+		
+		#endregion
 
-    }
+	}
 }

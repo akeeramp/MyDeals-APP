@@ -1,0 +1,126 @@
+﻿@Html.Partial("TOC", new ViewDataDictionary
+{
+	{ "categoryTitle", "Coding tools" },
+	{ "categoryAction", "CodingTools" },
+	{ "sectionTitle", "Coding tools" },
+	{ "sectionAction", "CodingTools" },
+	{ "pageTitle", "Code Reviews" }
+})
+
+<div id="mainBody" style="margin: 10px; padding: 0 20px 0 200px;">
+	<h1><img src="/Images/docs/icon-code-tools.png" height="80" /> Code Reviews</h1>
+
+	<h5>UI Code Reviews in MyDeals</h5>
+	<p>
+		You can request a code reviews within Visual Studio both before or after check-in.
+	</p>
+
+	<div class="stepByStep">
+		How to UI Request Code Review before check-in
+	</div>
+	<ol>
+		<li>
+			Open the Team Explorer pane in Visual Studio ( AKA the pane that appears right before you check in)
+		</li>
+		<li>
+			Click the "Actions" dropdown link next to the "Check In" button.
+		</li>
+		<li>
+			Click the "Request Review" item in the dropdown. This should take you to a new screen.
+		</li>
+		<img src="~/Images/docs/codeReviewTeamExplorer.png" />
+		<li>
+			Type the names of each reviewer by Last name, First Name and click Enter.
+		</li>
+		<li>
+			Don't forget to add a title for the review and a description of your changes!
+		</li>
+		<li>
+			Once finished, click the "Submit Request" button.
+		</li>
+		<img src="~/Images/docs/codeReviewNewRequest.png" />
+	</ol>
+
+
+	<div class="stepByStep">
+		How to create a UI Code Review for an old changeset
+	</div>
+	<p>
+		If you just checked in, then Visual Studio should should give you a link to the changeset id directly after checkin, which you can use to follow the same process as above to request review.
+		Else, if you would lie to request review of an older changeset, follow these steps:
+
+	</p>
+	<p>
+		<ol>
+			<li>
+				In your solution explorer, right click any file and select "Source Control" > "View History". This should take you to a new window
+			</li>
+			<li>
+				In this new window, replace the Source location with  C:\Users\[YOUR_USERNAME_HERE]\[YOUR_MYDEALS_PATH_HERE]. For example, C:\Users\jajaung\MyDeals\STG\MyDeals_Release\UI\main\Intel.MyDeals.
+				The screen should now show all the changsets made on the entire project
+			</li>
+			<li>
+				Find the changeset you want a review on. Right click that changeset and select "Request Review"
+			</li>
+			<img src="~/Images/docs/codeReviewHistory.png" />
+			<li>
+				Type the names of each reviewer by Last name, First Name and click Enter.
+			</li>
+			<li>
+				Don't forget to add a title for the review and a description of your changes!
+			</li>
+			<li>
+				Once finished, click the "Submit Request" button.
+			</li>
+			<img src="~/Images/docs/codeReviewNewRequest.png" />
+		</ol>
+	</p>
+
+
+	@*<div class="stepByStep">
+			Middle Tier Logging
+		</div>
+		<p>
+			In the Middle Tier, we use the logging class <b>OpLogPerf</b> in the <i>Intel.MyDeals.Opaque</i> project. Call the <b>Log()</b> function to log an event.
+			The middle tier will automatically log the SP name and paramters of successful calls to the database IF you use DataAccess.ExecuteDataSet() to call the db,
+			so there is no need to call the log again unless you have other information to log. Log writers are turned off and on via the string passed in the global.asx.
+		</p>
+		<p>The following are the types of log writers that can be turned on:</p>
+		<ul>
+			<li>
+				<b>FILE</b> - Logs to a txt file on the server. Default file location is under C:\Windows\TEMP\. File name will be prefixed with "FileLogPerf".  By default the db log writer will write 100 logs to a file at a time.*
+			</li>
+			<li>
+				<b>DB</b> - Logs on the db. By default the db log writer will send 30 logs up to the db at a time.*
+			</li>
+			<li>
+				<b>DEBUG</b> - Logs using System.Diagnostics.Debug.WriteLine()
+			</li>
+			<li>
+				<b>EVENTLOG</b>	- Logs to the server's Windows Event Log under the EventLog "Opaque".
+			</li>
+			<li>
+				<b>EMAIL</b> - Sends logs to a list of emails as a file attachment.*
+			</li>
+			<li>
+				<b>EMAILEX</b> - Emails exceptions and other logs categorized as LogCategory.Error to a list of emails.
+			</li>
+		</ul>
+		<p style="font-size: 0.8em;">
+			* Note that log writers that queue logs and bulk write to their writers are not foolproof. If the server or application rudely crashes, then chances are the most recent x logs queued to be written to the db have been lost.
+		</p>
+
+		<div class="note">
+			<strong>Note:</strong> Here are some examples of calling <b>LogEvent</b>.
+		</div>
+		<div class="noteBody">
+			<pre>
+					OpLogPerf.Log("Page loaded");  // This will default to a message with an information LogCategory.
+					OpLog.LogEvent("Stored Procedure Timed Out", LogCategory.Warning); // Logging with specified LogCategory. LogCategories to choose from are Information, Warning, and Error
+					OpLogPerf.Log(Ex); // Logging an exception
+			</pre>
+		</div>*@
+
+</div>
+
+

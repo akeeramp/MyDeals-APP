@@ -818,6 +818,9 @@
     <Content Include="Images\docs\cache_manager.png" />
     <Content Include="Images\docs\callproc.png" />
     <Content Include="Images\docs\chooses.png" />
+    <Content Include="Images\docs\codeReviewHistory.png" />
+    <Content Include="Images\docs\codeReviewNewRequest.png" />
+    <Content Include="Images\docs\codeReviewTeamExplorer.png" />
     <Content Include="Images\docs\constantDataLibProj.png" />
     <Content Include="Images\docs\contract.png" />
     <Content Include="Images\docs\costtest.png" />
@@ -1417,6 +1420,7 @@
     <Content Include="Views\Shared\_Loading.cshtml" />
     <Content Include="Views\Others\TestSaveContract.cshtml" />
     <Content Include="Views\TestCases\Index.cshtml" />
+    <Content Include="Views\CodingPractices\CodeReviews.cshtml" />
     <None Include="Web.dev.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
