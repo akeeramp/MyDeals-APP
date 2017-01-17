@@ -1,4 +1,4 @@
-﻿using Intel.MyDeals.BusinesssLogic;
+﻿using Intel.MyDeals.BusinessLogic;
 using Intel.MyDeals.DataLibrary.Test;
 using Intel.MyDeals.Entities;
 using System.Collections.Generic;

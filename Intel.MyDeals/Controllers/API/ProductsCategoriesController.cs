@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Web.Http;
-using Intel.MyDeals.BusinesssLogic;
 using Intel.MyDeals.Entities;
 using Intel.Opaque;
 using System;

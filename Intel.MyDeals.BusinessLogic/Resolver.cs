@@ -1,7 +1,6 @@
 ﻿using Intel.MyDeals.DependencyResolver;
 using Intel.MyDeals.IBusinessLogic;
 using System.ComponentModel.Composition;
-using Intel.MyDeals.BusinesssLogic;
 
 namespace Intel.MyDeals.BusinessLogic
 {

@@ -4,7 +4,7 @@ using Intel.MyDeals.IDataLibrary;
 using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
 
-namespace Intel.MyDeals.BusinesssLogic
+namespace Intel.MyDeals.BusinessLogic
 {
     public class ProductCategoriesLib : IProductCategoriesLib
 	{
