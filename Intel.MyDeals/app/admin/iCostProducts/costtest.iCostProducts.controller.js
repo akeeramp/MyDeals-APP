@@ -1,7 +1,7 @@
 ﻿(function () {
     'use strict';
     angular
-		.module('app.costtest')
+		.module('app.admin')
 		.controller('iCostProductsController', iCostProductsController)
 
     iCostProductsController.$inject = ['iCostProductService', 'logger', '$scope']
@@ -45,13 +45,39 @@
             { name: 'Exempt' }
         ];
 
-        var data = '{"group": {"operator": "AND","rules": []}}';
+        vm.operators = [
+            { name: 'AND' },
+            { name: 'OR' }
+        ];
+
+        vm.criterias = [
+            { name: 'Brand' },
+            { name: 'Family' },
+            { name: 'EPMProductFamily' },
+            { name: 'BrandGroup' },
+            { name: 'TardeMark' },
+            { name: 'Level4' }
+        ];
+
+        vm.conditions = [
+            { name: '=' },
+            { name: '<>' },
+            { name: '<' },
+            { name: '<=' },
+            { name: '>' },
+            { name: '>=' }
+        ];
+
+        var data = '{"group":{"operator":"AND","rules":[{"condition":"=","criteria":"TardeMark","data":"Test","$$hashKey":"object:115"},{"condition":"=","criteria":"Family","data":"Addtest","$$hashKey":"object:169"},{"group":{"operator":"AND","rules":[{"condition":"=","criteria":"EPMProductFamily","data":"Shpould not test","$$hashKey":"object:223"},{"group":{"operator":"AND","rules":[]}}]},"$$hashKey":"object:210"}]}}';
+        //'{"group": {"operator": "AND","rules": []}}';
 
         function htmlEntities(str) {
             return String(str).replace(/</g, '&lt;').replace(/>/g, '&gt;');
         }
 
         function computed(group) {
+            var test = JSON.stringify(group);
+
             if (!group) return "";
             for (var str = "(", i = 0; i < group.rules.length; i++) {
                 i > 0 && (str += " <strong>" + group.operator + "</strong> ");
@@ -67,6 +93,7 @@
 
         $scope.$watch('vm.filter', function (newValue) {
             vm.output = computed(newValue.group);
+            var test = JSON.stringify(newValue.group);
         }, true);
     }
 })();

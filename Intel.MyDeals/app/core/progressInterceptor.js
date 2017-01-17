@@ -39,14 +39,6 @@
             responseError: function (rejection) {
                 xhrResponses++;
                 updateStatus();
-
-                //TODO: Usability will change this implementation
-                if (typeof rejection.data === "string") {
-                    logger.error(rejection.data, rejection, "Unexpected Error", true); //Errors occurred on server.
-                } else {
-                    logger.error("Request resulted in error", rejection, "Internal Server Error", true); //Errors occurred on server.
-                }
-                
                 return $q.reject(rejection);
             }
         }

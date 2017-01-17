@@ -4,9 +4,9 @@
         .module('app.admin')
         .controller('CustomerController', CustomerController)
 
-    CustomerController.$inject = ['$uibModal', 'customerService', '$scope', 'logger']
+    CustomerController.$inject = ['customerService', '$scope', 'logger', 'gridConstants']
 
-    function CustomerController($uibModal, customerService, $scope, logger) {
+    function CustomerController(customerService, $scope, logger, gridConstants) {
         var vm = this;
 
         // Functions
@@ -32,7 +32,7 @@
                 },
             },
             batch: true,
-            pageSize: 20,
+            pageSize: 25,
             schema: {
                 model: {
                     id: "CUST_MBR_SID",
@@ -49,10 +49,16 @@
 
         vm.gridOptions = {
             dataSource: vm.dataSource,
+            filterable: gridConstants.filterable,
             sortable: true,
             selectable: true,
-            pageable: true,
+            resizable: true,
+            groupable: true,
             editable: "popup",
+            pageable: {
+                refresh: true,
+                pageSizes: gridConstants.pageSizes,
+            },
             change: vm.onChange,
             toolbar: vm.toolBarTemplate,
             columns: [
@@ -79,7 +85,9 @@
             },
             {
                 field: "ACTV_IND",
-                title: "Is Active"
+                title: "Is Active",
+                width:"10%",
+                template: "<div><span ng-if='! #= ACTV_IND # ' class='icon-md intelicon-empty-box'></span><span ng-if=' #= ACTV_IND # ' class='icon-md intelicon-filled-box'></span></div>"
             }]
         }
 

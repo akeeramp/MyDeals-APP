@@ -4,9 +4,9 @@
         .module('app.admin')
         .controller('ProductController', ProductController)
 
-    ProductController.$inject = ['$uibModal', 'productService', '$scope', 'logger']
+    ProductController.$inject = ['productService', '$scope', 'logger', 'gridConstants']
 
-    function ProductController($uibModal, productService, $scope, logger) {
+    function ProductController(productService, $scope, logger, gridConstants) {
         var vm = this;
 
         // Functions
@@ -32,7 +32,7 @@
                 },
             },
             batch: true,
-            pageSize: 20,
+            pageSize: 25,
             schema: {
                 model: {
                 }
@@ -41,12 +41,17 @@
 
         vm.gridOptions = {
             dataSource: vm.dataSource,
+            filterable: gridConstants.filterable,
             sortable: true,
             selectable: true,
-            pageable: true,
+            resizable: true,
+            groupable: true,
             editable: "popup",
+            pageable: {
+                refresh: true,
+                pageSizes: gridConstants.pageSizes,
+            },
             change: vm.onChange,
-            toolbar: vm.toolBarTemplate,
             columns: [
             {
                 field: "PRD_MBR_SID",
@@ -90,7 +95,9 @@
             },
             {
                 field: "ACTV_IND",
-                title: "Is Active"
+                title: "Is Active",
+                width: "10%",
+                template: "<div><span ng-if='! #= ACTV_IND # ' class='icon-md intelicon-empty-box'></span><span ng-if=' #= ACTV_IND # ' class='icon-md intelicon-filled-box'></span></div>"
             }]
         }
 

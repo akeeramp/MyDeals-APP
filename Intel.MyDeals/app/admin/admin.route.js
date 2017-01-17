@@ -57,22 +57,38 @@
                 }
             },
             {
-            	state: 'admin.products',
-            	abstract: false,
-            	config: {
-            		templateUrl: 'app/admin/products/products.html',
-            		url: 'products',
-            		controller: 'ProductController as vm',
-            	}
+                state: 'admin.products',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/products/products.html',
+                    url: 'products',
+                    controller: 'ProductController as vm',
+                }
             },
             {
-            	state: 'admin.productCategories',
-            	abstract: false,
-            	config: {
-            		templateUrl: 'app/admin/productCategories/productCategories.html',
-            		url: 'productCategories',
-            		controller: 'ProductCategoryController as vm',
-            	}
+                state: 'admin.productCategories',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/productCategories/productCategories.html',
+                    url: 'productCategories',
+                    controller: 'ProductCategoryController as vm',
+                }
+            },
+            {
+                state: 'admin.costtest',
+                config: {
+                    abstract: false
+                    , template: '<div ui-view></div>'
+					, url: 'CostTest'
+                }
+            },
+            {
+                state: 'admin.costtest.icostproducts',
+                config: {
+                    templateUrl: 'app/admin/iCostProducts/iCostProducts.html'
+					, url: '/icostproducts'
+					, controller: 'iCostProductsController as vm'
+                }
             },
             {
                 state: 'admin.securityAttributes',
@@ -83,13 +99,13 @@
                 }
             },
             {
-			    state: 'admin.securityAttributes.securityActions',
-			    config: {
-			        templateUrl: 'app/admin/securityAttributes/securityActions/securityActions.manage.html'
+                state: 'admin.securityAttributes.securityActions',
+                config: {
+                    templateUrl: 'app/admin/securityAttributes/securityActions/securityActions.manage.html'
 					, url: '/Actions'
 					, controller: 'securityActionsController as vm'
-			    }
-			},
+                }
+            },
             {
                 state: 'admin.securityAttributes.applications',
                 config: {

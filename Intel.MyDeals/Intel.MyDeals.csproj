@@ -318,6 +318,8 @@
     <Content Include="app\contract\partials\contractDetail.html" />
     <Content Include="app\contract\partials\otherwise.html" />
     <Content Include="app\contract\partials\wipDeals.html" />
+    <Content Include="app\admin\iCostProducts\costtest.iCostProduct.service.js" />
+    <Content Include="app\admin\iCostProducts\costtest.iCostProducts.controller.js" />
     <Content Include="app\shared\directives\focusOnShow.directive.js" />
     <Content Include="app\shared\directives\opControl.directive.js" />
     <Content Include="app\shared\directives\opcontrolDataElement.directive.js" />
@@ -365,7 +367,7 @@
     <Content Include="app\core\progressInterceptor.js" />
     <Content Include="app\costTest\costtest.module.js" />
     <Content Include="app\costTest\costtest.route.js" />
-    <Content Include="app\costTest\iCostProducts\iCostProducts.html" />
+    <Content Include="app\admin\iCostProducts\iCostProducts.html" />
     <Content Include="app\dashboard\dashboard.manageLayouts.html" />
     <Content Include="app\dashboard\dashboard.module.js" />
     <Content Include="app\dashboard\dashboard.route.js" />

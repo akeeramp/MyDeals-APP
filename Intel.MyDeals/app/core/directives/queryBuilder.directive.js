@@ -12,6 +12,9 @@
             restrict: 'E',
             scope: {
                 group: '=',
+                operators: '=',
+                conditions: '=',
+                criterias: '=',
             },
             templateUrl: '/app/core/directives/queryBuilder.directive.html',
             compile: function (element, attrs) {

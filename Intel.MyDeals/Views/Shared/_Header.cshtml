@@ -106,6 +106,12 @@
                 <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
                     <li><a href="Admin#/cache">Cache Manager</a></li>
                     <li><a href="Admin#/constants">Constants</a></li>
+                    <li class="dropdown-submenu">
+                        <a tabindex="-1">Cost Test</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="CostTest#/CostTest/icostproducts">iCost Products</a></li>
+                        </ul>
+                    </li>
                     <li><a href="Admin#/customers">Customer</a></li>
                     <li><a href="Admin#/geo">Geo</a></li>
 					<li><a href="Admin#/products">Products</a></li>
@@ -124,14 +130,11 @@
         }
 
         <li class="dropdown">
-            <a class="btn btn-primary" id="dLabel" role="button" href="/page.html" data-toggle="dropdown" data-target="#">Cost Test <i class="intelicon-down"></i></a>
-            <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
-                <li><a href="Costtest#/icostproducts">iCost Products</a></li>
-            </ul>
+            <a class="btn btn-primary" id="dLabel" role="button" href="/page.html" data-toggle="dropdown" data-target="#">Cost Test</a>
         </li>
         <li><a href="@Url.Action("Index", "Contract", new { Area = "" })">Contracts</a></li>
 		<li><a href="@Url.Action("Index", "Dashboard", new { Area = "" })">Dashboard</a></li>
-                                                                                                                                                                            
+
         @*<li class="dropdown">
             <a class="btn btn-primary" role="button" href="/" data-toggle="dropdown" data-target="#">Debug <i class="intelicon-down"></i></a>
             <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">

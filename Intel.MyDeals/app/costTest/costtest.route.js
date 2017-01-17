@@ -23,7 +23,7 @@
                 state: 'costtest.icostproducts',
                 config: {
                     templateUrl: 'app/costtest/iCostProducts/iCostProducts.html',
-                    url: 'icostproducts',
+                    url: '/icostproducts',
                     controller: 'iCostProductsController as vm'
                 }
             }

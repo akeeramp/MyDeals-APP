@@ -46,9 +46,7 @@ namespace Intel.MyDeals.BusinessLogic
                 .FirstOrDefault();
         }
 
-        #endregion
-
-
+        #endregion ToolConstants
 
         public List<LookupItem> GetLookups()
         {
@@ -96,9 +94,11 @@ namespace Intel.MyDeals.BusinessLogic
         {
             if (data == null) return;
 
-            _constantLookupDataLib.SetAdminConstants(CrudModes.Delete, data);
+            // In proc delete operation requires only SID, if we pass CNST_NM, operation fails
+            var adminConstant = new AdminConstant { CNST_SID = data.CNST_SID };
+            _constantLookupDataLib.SetAdminConstants(CrudModes.Delete, adminConstant);
         }
 
-        #endregion
+        #endregion Constants Admin
     }
 }

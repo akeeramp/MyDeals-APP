@@ -1,6 +1,12 @@
-﻿angular.module('app.testCases')
-    .controller('uiControlsController', function ($uibModal, $scope) {
+﻿(function () {
+    'use strict';
 
+    angular.module('app.testCases')
+        .controller('uiControlsController', uiControlsController)
+
+    uiControlsController.$inject = ['$uibModal', '$scope']
+
+    function uiControlsController($uibModal, $scope) {
         var gTools = new gridTools(
             {
                 "_pivot": { type: "object" },
@@ -63,7 +69,6 @@
                 }
             ]);
 
-
         // Functions
 
         $scope.init = function () {
@@ -77,7 +82,6 @@
         }
 
         $scope.clkIsBase = function ($event, field) {
-
             // des
             $scope.des._dirty = $event;
             angular.forEach($scope.des,
@@ -148,7 +152,6 @@
         $scope.isDirty = false;
 
         $scope.loadData = function () {
-
             $scope.des = {
                 "_dirty": false,
                 "TEXT": {
@@ -404,7 +407,6 @@
             };
 
             $scope.detailGridOptions = function (dataItem, pivotName) {
-
                 var gt = new gridTools(
                 {
                     "_behaviors": { type: "object" },
@@ -435,15 +437,15 @@
                         template: "#=gridUtils.uiIconWrapper(data, '_dirty')#"
                     }, {
                         field: "PIVOT", title: "PIVOT"
-                    },{
+                    }, {
                         field: "TITLE", title: "TITLE"
-                    },{
+                    }, {
                         field: "TEXT", title: "TEXT2",
                         template: "#=gridUtils.uiControlWrapper(data, 'TEXT')#"
-                    },{
+                    }, {
                         field: "INT", title: "INT",
                         template: "#=gridUtils.uiControlWrapper(data, 'INT')#"
-                    },{
+                    }, {
                         field: "DATE", title: "DATE",
                         template: "#=gridUtils.uiControlWrapper(data, 'DATE', \"date:'MM/dd/yyyy'\")#"
                     }, {
@@ -477,12 +479,8 @@
                     save: gTools.saveCell
                 };
             };
-
         };
 
         $scope.loadData();
-    });
-
-
-
-
+    }
+})();

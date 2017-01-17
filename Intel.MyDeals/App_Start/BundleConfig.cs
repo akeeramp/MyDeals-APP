@@ -18,7 +18,7 @@ namespace Intel.MyDeals
 
             bundles.Add(new ScriptBundle("~/bundles/scripts").Include(
                 "~/Scripts/jquery-2.2.0.min.js",
-				"~/Scripts/Angular/1.5.8/angular.min.js",
+                "~/Scripts/Angular/1.5.8/angular.min.js",
                 "~/Scripts/kendo/2016.3.914/jszip.min.js",
                 "~/Scripts/kendo/2016.3.914/kendo.all.min.js",
                 "~/Scripts/kendo/kendo.aspnetmvc.min.js",
@@ -39,8 +39,8 @@ namespace Intel.MyDeals
                 "~/Scripts/Angular/1.5.8/angular-ui-router.min.js"
                 , "~/Scripts/Angular/1.5.8/angular-animate.min.js"
                 , "~/Scripts/Angular/1.5.8/angular-sanitize.min.js"
-				, "~/Scripts/Angular/ui-bootstrap-tpls-2.2.0.min.js"
-				));
+                , "~/Scripts/Angular/ui-bootstrap-tpls-2.2.0.min.js"
+                ));
 
             bundles.Add(new ScriptBundle("~/bundles/angularReusable").Include(
                  "~/app/app.module.js"
@@ -51,8 +51,8 @@ namespace Intel.MyDeals
                 , "~/app/blocks/logger/logger.js"
                 , "~/app/blocks/router/router.module.js"
                 , "~/app/blocks/router/routehelper.js"
-				, "~/app/blocks/confirmationModal/confirmationModal.module.js"
-				, "~/app/blocks/confirmationModal/confirmationModal.service.js"
+                , "~/app/blocks/confirmationModal/confirmationModal.module.js"
+                , "~/app/blocks/confirmationModal/confirmationModal.service.js"
                 , "~/app/core/core.module.js"
                 , "~/app/core/progressInterceptor.js"
                 , "~/app/core/constants.js"
@@ -73,13 +73,15 @@ namespace Intel.MyDeals
                 , "~/app/admin/geo/admin.geo.controller.js"
                 , "~/app/admin/geo/geo.service.js"
                 , "~/app/admin/products/admin.products.controller.js"
-				, "~/app/admin/productCategories/productCategories.service.js"
-				, "~/app/admin/productCategories/admin.productCategories.controller.js"
+                , "~/app/admin/productCategories/productCategories.service.js"
+                , "~/app/admin/productCategories/admin.productCategories.controller.js"
                 , "~/app/admin/products/products.service.js"
                 , "~/app/contract/contract.module.js"
                 , "~/app/contract/contract.route.js"
                 , "~/app/contract/controllers/contract.controller.js"
                 , "~/app/contract/controllers/pricingTable.controller.js"
+                , "~/app/admin/iCostProducts/costTest.iCostProduct.service.js"
+                , "~/app/admin/iCostProducts/costTest.iCostProducts.controller.js"
                 , "~/app/admin/securityAttributes/securityActions/securityActions.service.js"
                 , "~/app/admin/securityAttributes/securityActions/securityActions.controller.js"
                 , "~/app/admin/securityAttributes/adminApplications/adminApplications.service.js"
@@ -90,10 +92,8 @@ namespace Intel.MyDeals
                 , "~/app/admin/securityAttributes/adminRoleTypes/adminRoleTypes.controller.js"
                 , "~/app/costTest/costtest.module.js"
                 , "~/app/costTest/costtest.route.js"
-                , "~/app/costTest/iCostProducts/costTest.iCostProduct.service.js"
-                , "~/app/costTest/iCostProducts/costTest.iCostProducts.controller.js"
-				, "~/app/dashboard/dashboard.module.js"
-				, "~/app/dashboard/dashboard.route.js"
+                , "~/app/dashboard/dashboard.module.js"
+                , "~/app/dashboard/dashboard.route.js"
                 , "~/app/shared/directives/focusOnShow.directive.js"
                 , "~/app/shared/directives/opcontrol.directive.js"
                 , "~/app/shared/directives/opcontrolFlat.directive.js"
@@ -104,7 +104,7 @@ namespace Intel.MyDeals
                 , "~/app/testCases/testCases.module.js"
                 , "~/app/testCases/testCases.route.js"
                 , "~/app/testCases/uiControls/uiControls.controller.js"
-				));
+                ));
 
             bundles.Add(new ScriptBundle("~/MyDeals/scripts").Include(
                 "~/js/_util.js",

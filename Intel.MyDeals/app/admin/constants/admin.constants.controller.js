@@ -5,9 +5,9 @@
         .module('app.admin')
         .controller('ConstantsController', ConstantsController);
 
-    ConstantsController.$inject = ['$scope', 'dataService', 'constantsService', 'logger', '$uibModal'];
+    ConstantsController.$inject = ['$scope', 'dataService', 'constantsService', 'logger', 'gridConstants'];
 
-    function ConstantsController($scope, dataService, constantsService, logger, $uibModal) {
+    function ConstantsController($scope, dataService, constantsService, logger, gridConstants) {
         var vm = this;
         vm.selectedItem = null;
         vm.isButtonDisabled = true;
@@ -55,13 +55,13 @@
                         });
                 }
             },
-            pageSize: 10,
+            pageSize: 25,
             schema: {
                 model: {
                     id: "CNST_SID",
                     fields: {
                         CNST_SID: { editable: false, nullable: true },
-                        CNST_NM: { validation: { required: true } },
+                        CNST_NM: { editable: false, validation: { required: true } },
                         CNST_DESC: { validation: { required: true } },
                         CNST_VAL_TXT: { validation: { required: true } },
                         UI_UPD_FLG: { type: "boolean"  },
@@ -72,17 +72,28 @@
 
         vm.gridOptions = {
             dataSource: vm.dataSource,
+            filterable: gridConstants.filterable,
             sortable: true,
             selectable: true,
-            pageable: true,
+            resizable: true,
+            groupable: true,
             editable: "popup",
+            pageable: {
+                refresh: true,
+                pageSizes: gridConstants.pageSizes,
+            },
             change: vm.onChange,
             columns: [
-              { field: "CNST_SID", title: "Id" },
-              { field: "CNST_NM", title: "Name" },
+              { field: "CNST_SID", title: "Id", width:"5%" },
+              { field: "CNST_NM", title: "Name", width:"15%" },
               { field: "CNST_DESC", title: "Description" },
               { field: "CNST_VAL_TXT", title: "Value" },
-              { field: "UI_UPD_FLG", title: "UI Updatable" },
+              {
+                  field: "UI_UPD_FLG",
+                  title: "UI Updatable",
+                  width: "10%",
+                  template: "<div><span ng-if='! #= UI_UPD_FLG # ' class='icon-md intelicon-empty-box'></span><span ng-if=' #= UI_UPD_FLG # ' class='icon-md intelicon-filled-box'></span></div>"
+              },
             ]
         };
 

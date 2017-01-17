@@ -9,7 +9,7 @@
         <div ng-repeat="rule in group.rules | orderBy:'index'" class="condition">
             <div ng-switch="rule.hasOwnProperty('group')">
                 <div ng-switch-when="true">
-                    <query-builder group="rule.group"></query-builder>
+                    <query-builder group="rule.group" operators="vm.operators" criterias="vm.criterias" conditions="vm.conditions"></query-builder>
                 </div>
                 <div ng-switch-default="ng-switch-default">
                     <div class="form-inline">
