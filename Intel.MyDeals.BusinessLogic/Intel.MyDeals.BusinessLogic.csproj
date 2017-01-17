@@ -52,6 +52,9 @@
     <Reference Include="Intel.Opaque.DBAccess">
       <HintPath>..\Shared Libraries\Intel.Opaque.DBAccess.dll</HintPath>
     </Reference>
+    <Reference Include="Intel.RulesEngine">
+      <HintPath>..\Shared Libraries\Intel.RulesEngine.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
@@ -104,6 +107,7 @@
     <Compile Include="Products\ProductsLib.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resolver.cs" />
+    <Compile Include="Rule Engine\RuleEngineLib.cs" />
     <Compile Include="Search\QuickSearchLib.cs" />
     <Compile Include="Security Attributes\SecurityAttributesLib.cs" />
     <Compile Include="UI Templates\UiTemplateLib.cs" />

@@ -1,4 +1,5 @@
 ﻿using Intel.MyDeals.Entities;
+using Intel.RulesEngine;
 using System.Collections.Generic;
 
 namespace Intel.MyDeals.IDataLibrary
@@ -26,5 +27,13 @@ namespace Intel.MyDeals.IDataLibrary
         UiTemplates GetUiTemplates();
 
         List<Product> GetProductData();
+
+        List<RuleSet> GetRuleSets();
+
+        List<RuleItem> GetRuleItems();
+
+        List<RuleCondition> GetRuleConditions();
+
+        List<RuleTask> GetRuleTasks();
     }
 }

@@ -7,6 +7,7 @@ using Intel.MyDeals.Entities;
 using Intel.Opaque;
 using Intel.Opaque.Data;
 using AttributeCollection = Intel.MyDeals.Entities.AttributeCollection;
+using Intel.RulesEngine;
 
 namespace Intel.MyDeals.DataLibrary
 {
@@ -395,5 +396,46 @@ namespace Intel.MyDeals.DataLibrary
             }
         }
         private static List<Product> _getProductData;
+
+        #region Rules Engine
+
+        public static List<RuleSet> GetRuleSets()
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                return _getRuleSetData ?? (_getRuleSetData = new RuleEngineDataLib().GetRuleSets());
+            }
+        }
+        private static List<RuleSet> _getRuleSetData;
+
+        public static List<RuleItem> GetRuleItems()
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                return _getRuleItemData ?? (_getRuleItemData = new RuleEngineDataLib().GetRuleItems());
+            }
+        }
+        private static List<RuleItem> _getRuleItemData;
+
+        public static List<RuleCondition> GetRuleConditions()
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                return _getRuleConditionData ?? (_getRuleConditionData = new RuleEngineDataLib().GetRuleConditions());
+            }
+        }
+        private static List<RuleCondition> _getRuleConditionData;
+
+        public static List<RuleTask> GetRuleTasks()
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                return _getRuleTaskData ?? (_getRuleTaskData = new RuleEngineDataLib().GetRuleTasks());
+            }
+        }
+        private static List<RuleTask> _getRuleTaskData;
+
+        #endregion
+
     }
 }

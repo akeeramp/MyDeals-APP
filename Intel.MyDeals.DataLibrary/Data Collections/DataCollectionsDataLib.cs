@@ -1,5 +1,6 @@
 ﻿using Intel.MyDeals.Entities;
 using Intel.MyDeals.IDataLibrary;
+using Intel.RulesEngine;
 using System;
 using System.Collections.Generic;
 
@@ -95,6 +96,26 @@ namespace Intel.MyDeals.DataLibrary
         public List<Product> GetProductData()
         {
             return DataCollections.GetProductData();
+        }
+
+        public List<RuleSet> GetRuleSets()
+        {
+            return DataCollections.GetRuleSets();
+        }
+
+        public List<RuleItem> GetRuleItems()
+        {
+            return DataCollections.GetRuleItems();
+        }
+
+        public List<RuleCondition> GetRuleConditions()
+        {
+            return DataCollections.GetRuleConditions();
+        }
+
+        public List<RuleTask> GetRuleTasks()
+        {
+            return DataCollections.GetRuleTasks();
         }
     }
 }

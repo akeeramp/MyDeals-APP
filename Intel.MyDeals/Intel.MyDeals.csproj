@@ -73,6 +73,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Shared Libraries\Intel.Opaque.Templating.dll</HintPath>
     </Reference>
+    <Reference Include="Intel.RulesEngine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Shared Libraries\Intel.RulesEngine.dll</HintPath>
+    </Reference>
     <Reference Include="Kendo.Mvc, Version=2016.3.914.545, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\KENDOUIMVC\2016.3.914.545\Kendo.Mvc.dll</HintPath>
@@ -248,6 +252,7 @@
     <Compile Include="Controllers\API\ConstantsController.cs" />
     <Compile Include="Controllers\API\CustomerCalendarController.cs" />
     <Compile Include="Controllers\API\ProductsCategoriesController.cs" />
+    <Compile Include="Controllers\API\RulesController.cs" />
     <Compile Include="Controllers\API\ProductsController.cs" />
     <Compile Include="Controllers\API\GeosController.cs" />
     <Compile Include="Controllers\API\DevTestsController.cs" />
@@ -303,6 +308,9 @@
     <Content Include="app\admin\products\admin.products.controller.js" />
     <Content Include="app\admin\products\products.html" />
     <Content Include="app\admin\products\products.service.js" />
+    <Content Include="app\admin\rules\admin.rules.controller.js" />
+    <Content Include="app\admin\rules\rules.html" />
+    <Content Include="app\admin\rules\rules.service.js" />
     <Content Include="app\app.module.js" />
     <Content Include="app\blocks\exception\exception-handler.provider.js" />
     <Content Include="app\blocks\exception\exception.js" />

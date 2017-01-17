@@ -91,6 +91,15 @@
                 }
             },
             {
+                state: 'admin.rules',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/rules/rules.html',
+                    url: 'rules',
+                    controller: 'RuleController as vm',
+                }
+            },
+            {
                 state: 'admin.securityAttributes',
                 config: {
                     abstract: false

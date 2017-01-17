@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Intel.RulesEngine">
+      <HintPath>..\Shared Libraries\Intel.RulesEngine.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -53,6 +56,7 @@
     <Compile Include="Geos\IGeoDataLib.cs" />
     <Compile Include="Logging\ILoggingDataLib.cs" />
     <Compile Include="ProductCategoriesLib\IProductCategoriesDataLib.cs" />
+    <Compile Include="Rule Engine\IRuleEngineDataLib.cs" />
     <Compile Include="Products\IProductDataLib.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SecurityAttributes\ISecurityAttributesDataLib.cs" />
