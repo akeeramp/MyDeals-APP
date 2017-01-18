@@ -77,35 +77,47 @@ namespace Intel.MyDeals.DataLibrary
 		/// Updates a Bulk List of Product Categories
 		/// </summary>
 		/// <returns>True or exception depending on whether the SP fails or not</returns>
-		public bool UpdateProductCategories(List<ProductCategory> categories)
+		public List<ProductCategory> UpdateProductCategories(List<ProductCategory> categories)
 		{
-			if (categories == null || categories.Count == 0) { return false; }
 
 			var ret = new List<ProductCategory>();
-			DataSet dsCheckConstraintErrors = null;
-
 			try
 			{
 				// Make datatable
 				in_t_prd_cat_map dt = new in_t_prd_cat_map();
 				dt.AddRows(categories);
 
-
 				// Call Proc
-				Procs.dbo.PR_MYDL_UPD_PRD_CAT_MAP cmd = new Procs.dbo.PR_MYDL_UPD_PRD_CAT_MAP()
+				Procs.dbo.PR_MYDL_UPD_PRD_CAT_MAP cmd = new Procs.dbo.PR_MYDL_UPD_PRD_CAT_MAP
 				{
 					in_t_prd_cat_map = dt,
 					in_wwid = OpUserStack.MyOpUserToken.Usr.WWID
 				};
-				DataAccess.ExecuteDataSet(cmd, null, out dsCheckConstraintErrors);
 
-				return true;
+				using (DataSet data = DataAccess.ExecuteDataSet(cmd))
+				{
+					ret = (from rw in data.Tables[0].AsEnumerable()
+						   select new ProductCategory
+						   {
+							   ACTV_IND = Convert.ToBoolean(rw["ACTV_IND"]),
+							   CHG_DTM = Convert.ToDateTime(rw["CHG_DTM"]),
+							   CHG_EMP_NM = Convert.ToString(rw["CHG_EMP_NM"]),
+							   DEAL_PRD_TYPE = Convert.ToString(rw["DEAL_PRD_TYPE"]),
+							   DIV_NM = Convert.ToString(rw["DIV_NM"]),
+							   GDM_PRD_TYPE_NM = Convert.ToString(rw["GDM_PRD_TYPE_NM"]),
+							   GDM_VRT_NM = Convert.ToString(rw["GDM_VRT_NM"]),
+							   OP_CD = Convert.ToString(rw["OP_CD"]),
+							   PRD_CAT_MAP_SID = Convert.ToInt32(rw["PRD_CAT_MAP_SID"]),
+							   PRD_CAT_NM = Convert.ToString(rw["PRD_CAT_NM"])
+						   }).ToList();
+				}
 			}
 			catch (Exception ex)
 			{
 				OpLogPerf.Log(ex);
 				throw;
 			}
+			return ret;
 		}
 	}
 }

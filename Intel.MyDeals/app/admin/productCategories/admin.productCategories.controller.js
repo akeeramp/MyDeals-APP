@@ -4,19 +4,22 @@
         .module('app.admin')
         .controller('ProductCategoryController', ProductCategoryController)
 
-    ProductCategoryController.$inject = ['$uibModal', 'productCategoryService', '$scope', 'logger', 'confirmationModal']
+    ProductCategoryController.$inject = ['$uibModal', 'productCategoryService', '$scope', 'logger', 'confirmationModal', 'gridConstants']
 
-    function ProductCategoryController($uibModal, productCategoryService, $scope, logger, confirmationModal) {
+    function ProductCategoryController($uibModal, productCategoryService, $scope, logger, confirmationModal, gridConstants) {
         var vm = this;
 
         // Functions
-        //vm.addItem = addItem;
-        vm.updateItem = updateItem;
+		vm.toggleCheckBoxValue = toggleCheckBoxValue
+        vm.clearFilters = clearFilters;
+        vm.hasFilters = hasFilters;
+    	//vm.addItem = addItem;
         vm.saveChanges = saveChanges;
         vm.cancelChanges = cancelChanges;
 
         // Variables
-        vm.isEditMode = false; // Flag to help show which grid fields are editable
+        vm.filters = {};
+
 
         vm.dataSource = new kendo.data.DataSource({
             type: "json",
@@ -24,7 +27,8 @@
                 read: function (e) {
                 	productCategoryService.getCategories()
                         .then(function (response) {
-                            e.success(response.data);
+                        	e.success(response.data);
+                        	stylizeEditableHeaders();
                         }, function (response) {
                         	logger.error("Unable to get Products.", response, response.statusText);
                         });
@@ -34,7 +38,6 @@
                         .then(function (response) {
                         	e.success(response.data);
                         	logger.success("Product Categories were successfully updated.");
-                        	vm.isEditMode = false;
                         }, function (response) {
                         	logger.error("Unable to update Product.", response, response.statusText);
                         });
@@ -44,14 +47,13 @@
                 //        .then(function (response) {
                 //        	e.success(response.data);
                 //        	logger.success("New Product added.");
-                //        	vm.isEditMode = false;
                 //        }, function (response) {
                 //        	logger.error("Unable to add new Product.", response, response.statusText);
                 //        });
                 //}
             },
             batch: true,
-            pageSize: 20,
+            pageSize: 25,
             schema: {
             	model: {
             		id: "PRD_CAT_MAP_SID",
@@ -74,33 +76,18 @@
 
         vm.gridOptions = {
             dataSource: vm.dataSource,
+            filterable: gridConstants.filterable,
             sortable: true,
-            sort : disableEditMode,
             selectable: true,
+            resizable: true,
+            groupable: true,
             pageable: {
-            	change: disableEditMode
+            	refresh: true,
+            	pageSizes: gridConstants.pageSizes,
             },
-            filterable: {
-            		extra: false,
-            		operators: {
-            			string: {
-            				contains: "Contains",
-            				doesnotcontain: "Does not contain",
-            				startswith: "Starts with",
-            				eq: "Is equal to",
-            				neq: "Is not equal to"
-            			},
-            			number: {
-            				gt: "Greater than",
-            				lt: "Less than",
-            				eq: "Is equal to",
-            				neq: "Is not equal to"
-            			}
-            		}
-            	},
+
             editable: true,
-            resizable : true,
-            //toolbar: ["create", "save", "cancel"], // We're not using toolbar because stylizing is not flexible enough
+
             columns: [
 			{
 				field: "PRD_CAT_MAP_SID",
@@ -125,19 +112,19 @@
             }
             ,{
             	field: "DEAL_PRD_TYPE",
-            	headerTemplate: "<div ng-class='{editableHeader: vm.isEditMode == true}'> Deal Product Type </div>",
-            	template: "<div ng-class='{editableKendoCell: vm.isEditMode == true}'>#= DEAL_PRD_TYPE # </div>"
+            	headerTemplate: "<div class='editableHeader'> Deal Product Type </div>",
+            	template: "<div class='editableKendoCell'>#= DEAL_PRD_TYPE # </div>"
             }
             ,{
             	field: "PRD_CAT_NM",
-            	headerTemplate: "<div ng-class='{editableHeader: vm.isEditMode == true}'> Product Category name </div>",
-            	template: "<div ng-class='{editableKendoCell: vm.isEditMode == true}'>#= PRD_CAT_NM # </div>",
+            	headerTemplate: "<div class='editableHeader'> Product Category name </div>",
+            	template: "<div class='editableKendoCell'>#= PRD_CAT_NM # </div>",
             }
             ,{
                 field: "ACTV_IND",
                 width: 80,
-                headerTemplate: "<div ng-class='{editableHeader: vm.isEditMode == true}'> Actv Ind </div>",
-                template: "<div ng-class='{editableKendoCell: vm.isEditMode == true}'><span ng-if='! #= ACTV_IND # ' class='icon-md intelicon-empty-box'></span><span ng-if=' #= ACTV_IND # ' class='icon-md intelicon-filled-box'></span></div>"
+                headerTemplate: "<div class='editableHeader'> Actv Ind </div>",
+                template: "<div class='editableKendoCell'><span ng-if='! #= ACTV_IND # ' ng-click='vm.toggleCheckBoxValue($event)' class='icon-md intelicon-empty-box'></span><span ng-if=' #= ACTV_IND # ' ng-click='vm.toggleCheckBoxValue($event)' class='icon-md intelicon-filled-box'></span></div>"
             }
             ,{
             	field: "CHG_EMP_NM",
@@ -155,25 +142,42 @@
             ]
         }
 
-        function disableEditMode() {
-        	// Changing the page or sorting makes automatically take away the dirty marker, so just kill user changes on UI to lessen user confusion
-        	// TODO: The better option would be to not let Kendo automatically take away the dirty marker. Maybe look for this solution later.
-        	cancelChanges();
+    	// Toggles the value of a batch-editable kendo-grid's checkbox on first click
+		// HACK: This is a workaround for kendo's default of making a user click 2x to change checkbox value
+        function toggleCheckBoxValue($event) {
+        	var currElem = angular.element($event.currentTarget);
+        	var dataItem = $scope.grid.dataItem(currElem.closest("tr"));
+			
+        	// Update value
+        	// NOTE: Unfortunately, the dataItem.set() method clears other dirty flags, so just update the column directly
+        	dataItem.ACTV_IND = !dataItem.ACTV_IND;
+
+			// Add the kendo dirty flag
+        	dataItem.dirty = true;
+        	var td = angular.element(currElem.closest("td"))
+        	td.addClass('k-dirty-cell');
+        	$('<span class="k-dirty"></span>').insertBefore($event.currentTarget.parentElement);
         }
-		
-		//// TODO: AddItem functionailty to be added in a future sprint
-        //function addItem() {
-        //    $scope.grid.addRow();
+
+        function hasFilters() {
+        	return (typeof $scope.grid.dataSource._filter !== 'undefined');
+        }
+
+        function clearFilters() {
+        	$scope.grid.dataSource.filter({});
+        }
+
+    	//// TODO: AddItem functionailty to be added in a future sprint
+    	//function addItem() {
+    	//    $scope.grid.addRow();
     	//}
 
-        function updateItem() {
-        	vm.isEditMode = true;
-        }
         function saveChanges() {
 			// Confirmation Dialog
         	var modalOptions = {
         		closeButtonText: 'Cancel',
         		actionButtonText: 'Save changes',
+				hasActionButton: true,
         		headerText: 'Warning',
         		bodyText: 'Product hierarchy identifiers may change and existing deals may have to be updated. Are you sure you would like to save your changes?'
         	};
@@ -184,9 +188,18 @@
 					$scope.grid.saveChanges();
 				});
         }
+
         function cancelChanges() {
         	$scope.grid.cancelChanges();
-        	vm.isEditMode = false;
+        }
+		
+        function stylizeEditableHeaders() {
+        	// NOTE: the event is emitted for every widget; if we have multiple widgets in this controller, 
+        	// we need to check that the event is for the one we're interested in.
+        	var editableCols = $('.editableHeader');
+        	for (var i = 0; i < editableCols.length; i++) {
+        		$(editableCols[i]).closest('th').addClass('editableColumnHeader');
+        	}
         }
     }
 })();

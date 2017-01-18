@@ -1529,7 +1529,7 @@ html .km-pane-wrapper .km-widget,
   border-color: #dbdbdb;
 }
 .k-grid-filter.k-state-active {
-  background-color: #cceef9;
+	background-color: #cceef9;
 }
 .k-grouping-row td,
 .k-group-footer td,
@@ -2266,8 +2266,6 @@ html .km-pane-wrapper .km-widget,
   }
 }
 
-
-
 .k-button:active .k-i-arrow-s, .k-button:not(.k-state-disabled):hover .k-i-arrow-s, .k-link:not(.k-state-disabled):hover>.k-i-arrow-s, .k-state-hover>*>.k-i-arrow-s, .k-state-hover>.k-i-arrow-s, .k-textbox:hover .k-i-arrow-s {
     background-position: 0 -32px;
 }
@@ -2279,20 +2277,15 @@ tr.k-detail-row:hover {
     background-color: #ffffff !important;
 }
 
-
-
-
-
-
 .nav-tabs-intel-blocks.nav {
 	background-color: #ffffff;
-    font-size: 12px;
+    font-size: 14px;
     border-bottom: 1px solid #00AEEF;
     margin: 0;
 }
 
 .nav-tabs-intel-blocks.nav .btn {
-    font-size: 12px;
+    font-size: 14px;
 }
 
 .nav-tabs-intel-blocks.nav i {

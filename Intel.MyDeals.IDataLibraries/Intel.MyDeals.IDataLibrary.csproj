@@ -55,7 +55,7 @@
     <Compile Include="DataCollections\IDataCollectionsDataLib.cs" />
     <Compile Include="Geos\IGeoDataLib.cs" />
     <Compile Include="Logging\ILoggingDataLib.cs" />
-    <Compile Include="ProductCategoriesLib\IProductCategoriesDataLib.cs" />
+    <Compile Include="ProductCategories\IProductCategoriesDataLib.cs" />
     <Compile Include="Rule Engine\IRuleEngineDataLib.cs" />
     <Compile Include="Products\IProductDataLib.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -68,7 +68,9 @@
       <Name>Intel.MyDeals.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="ProductCategoriesLib\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

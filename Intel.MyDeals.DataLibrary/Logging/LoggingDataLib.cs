@@ -57,11 +57,11 @@ namespace Intel.MyDeals.DataLibrary
             DataSet dsCheckConstraintErrors = null;
             var ret = new List<AdminApplications>();
             try
-            {
-                Procs.dbo.PR_INS_DB_LOG_BULK cmd = new Procs.dbo.PR_INS_DB_LOG_BULK()
+            {				
+				Procs.dbo.PR_INS_DB_LOG_BULK cmd = new Procs.dbo.PR_INS_DB_LOG_BULK()
                 {
                     in_db_log = dt,
-                    in_wwid = OpUserStack.MyOpUserToken.Usr.WWID
+                    in_wwid = OpUserStack.MyOpUserToken.EnsurePopulated().Usr.WWID
                 };
 
 				DataAccess.ExecuteDataSet(cmd, null, out dsCheckConstraintErrors);

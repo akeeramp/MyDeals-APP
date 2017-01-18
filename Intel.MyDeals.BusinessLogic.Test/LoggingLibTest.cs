@@ -4,7 +4,8 @@ using Intel.MyDeals.Entities.Logging;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-
+using Intel.MyDeals.IDataLibrary;
+using Moq;
 namespace Intel.MyDeals.BusinessLogic.Test
 {
     [TestFixture]
@@ -28,18 +29,42 @@ namespace Intel.MyDeals.BusinessLogic.Test
         }
 		
 		[TestCase]
-		public void GetLogConfig()
+		public void LoggingLibGetLogConfig()
 		{
-			// Arrange, Act
-			LogConfig logConfig = new LoggingLib().GetLogConfig();
+			// Arrange
+			var mockLoggingDataLib = new Mock<ILoggingDataLib>();
+
+			LogConfig result = new LogConfig();
+
+			// Set the mock repository
+			mockLoggingDataLib.Setup(
+				x => x.GetLogConfig()
+			).Returns(() => result);
+			
+			Console.WriteLine("---------------LoggingLibtest");
+			// Act
+			LogConfig logConfig = new LoggingLib(mockLoggingDataLib.Object).GetLogConfig();
+			//LogConfig testing = new LoggingLib().GetLogConfig();
+
+			Console.WriteLine("---------------LoggingLib: " + result.MsgSrc);
 
 			// Assert
 			Assert.IsNotNull(logConfig.MsgSrc);
 		}
 
 		[TestCase]
-		public void UploadDbLogPerfLogs()
+		public void LoggingLibUploadDbLogPerfLogs()
 		{
+			// Arrange
+			var mockLoggingDataLib = new Mock<ILoggingDataLib>();
+			
+			// Set the mock repository
+			mockLoggingDataLib.Setup(
+				x => x.UploadDbLogPerfLogs(
+					It.IsAny<List<DbLogPerfMessage>>()
+					)
+			).Returns(new bool());
+			
 			// Arrange
 			string testString = "UNIT TEST - UploadDbLogPerfLogs";
 			string testStringShort = "UI UNIT TEST";
@@ -67,10 +92,10 @@ namespace Intel.MyDeals.BusinessLogic.Test
 			};
 			List<DbLogPerfMessage> msgList = new List<DbLogPerfMessage>();
 			msgList.Add(msg);
-
-			// Act
-			bool insertResult = new LoggingLib().UploadDbLogPerfLogs(msgList);
-
+			
+			// ACT
+			bool insertResult = new LoggingLib(mockLoggingDataLib.Object).UploadDbLogPerfLogs(msgList);
+			
 			// Assert
 			Assert.IsTrue(
 				insertResult = true

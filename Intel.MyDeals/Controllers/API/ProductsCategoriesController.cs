@@ -5,6 +5,7 @@ using Intel.Opaque;
 using System;
 using System.Net;
 using Intel.MyDeals.IBusinessLogic;
+using Kendo.Mvc.UI;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -57,8 +58,8 @@ namespace Intel.MyDeals.Controllers.API
 		{
 			List<ProductCategory> categoriesList = new List<ProductCategory>();
 			categoriesList.Add(category);
-
-			if (UpdateProductCategoryBulk(categoriesList))
+			
+			if (UpdateProductCategoryBulk(categoriesList).Count > 0)
 			{
 				return category;
 			}
@@ -71,10 +72,10 @@ namespace Intel.MyDeals.Controllers.API
 		[Authorize]
 		[HttpPut]
 		[Route("UpdateProductCategoryBulk")]
-		public bool UpdateProductCategoryBulk(List<ProductCategory> categoriesList)
+		public List<ProductCategory> UpdateProductCategoryBulk(List<ProductCategory> categoriesList)
 		{
 			try
-			{
+			{ 
 				return _productCategoriesLib.UpdateProductCategories(categoriesList);
 			}
 			catch (Exception ex)

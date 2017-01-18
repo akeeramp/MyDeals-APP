@@ -44,7 +44,7 @@ namespace Intel.MyDeals.BusinessLogic
 		/// </summary>
 		/// <param name="categories">The list of changed products to be updated</param>
 		/// <returns>A boolean of whether the update successed or not</returns>
-		public bool UpdateProductCategories(List<ProductCategory> categories)
+		public List<ProductCategory> UpdateProductCategories(List<ProductCategory> categories)
 		{
 			return _productCategoriesDataLib.UpdateProductCategories(categories);
 		}

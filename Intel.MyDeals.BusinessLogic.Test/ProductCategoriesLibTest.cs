@@ -82,10 +82,10 @@ namespace Intel.MyDeals.BusinessLogic.Test
 			List<ProductCategory> pcList = MakeMulitpleNewProductCategories(count);
 			
 			// ACT
-			bool results = new ProductCategoriesLib().UpdateProductCategories(pcList);
+			List<ProductCategory> results = new ProductCategoriesLib().UpdateProductCategories(pcList);
 
 			// ASSERT
-			Assert.IsTrue(results);
+			Assert.IsTrue(results.Any());
         }
 		
     }

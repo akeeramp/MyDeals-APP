@@ -98,13 +98,26 @@
         background-color: #ffffff;
     }
 
-
+	
     .k-filter-row th, .k-grid-header th.k-header
     {
         padding: 0 8px 0 4px;
         font-size: 10px;
         height: 10px;
+		background-color: #e1e5e7;
     }
+    .k-filter-row th .editableColumn, .k-grid-header th.k-header .editableColumn
+    {
+        color: #ffffff;
+		background-color: #53565a;
+    }
+	
+	/* TODO: josiTODO: not all icons are intelicons yet. We'll need to replace all in near future as requested by Tristen */
+	/* Intel-icons on Kendo grid */
+	.k-icon:not(.k-loading), .k-icon:not(.k-i-loading), .k-grouping-dropclue, .k-drop-hint, .k-callout, .k-tool-icon, .k-state-hover .k-tool-icon, .k-state-active .k-tool-icon, .k-state-active.k-state-hover .k-tool-icon, .k-state-selected .k-tool-icon, .k-state-selected.k-state-hover .k-tool-icon, .k-column-menu .k-sprite, .k-mobile-list .k-check:checked, .k-mobile-list .k-edit-field [type=checkbox]:checked, .k-mobile-list .k-edit-field [type=radio]:checked{
+		background-image: url("/Images/kendo_icons_intel.png");
+	}
+
 
     .k-toolbar, .k-grouping-header {
         background-color: #ffffff;

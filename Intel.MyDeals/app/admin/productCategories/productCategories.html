@@ -7,14 +7,14 @@
 	<!--<button class="btn btn-primary small k-grid-add" ng-click="vm.addItem()">
 		<span class="intelicon-plus-outlined"></span> Add new record
 	</button>-->
-	<button class="btn btn-primary small k-custom-edit k-grid-customEdit" ng-disabled="!vm.isEditMode" ng-click="vm.saveChanges()">
-		<span class="k-icon k-i-update"></span>Save changes
+	<button class="btn btn-primary small k-custom-edit k-grid-customEdit" ng-disabled="!grid.dataSource.hasChanges()" ng-click="vm.saveChanges()">
+		<i class="intelicon-check"></i> Save changes
 	</button>
-	<button class="btn btn-default small k-custom-edit k-grid-customEdit" ng-if="!vm.isEditMode" ng-click="vm.updateItem()">
-		<span class="intelicon-compose"></span>Edit
+	<button class="btn btn-default small k-custom-edit k-grid-customEdit" ng-disabled="!grid.dataSource.hasChanges()" ng-click="vm.cancelChanges()">
+		<i class="intelicon-close-max"></i>  Cancel changes
 	</button>
-	<button class="btn btn-default small k-custom-edit k-grid-customEdit" ng-if="vm.isEditMode" ng-click="vm.cancelChanges()">
-		<span class="k-icon k-i-cancel"></span> Cancel changes
+	<button class="btn btn-default small k-custom-edit k-grid-customEdit" ng-disabled="!vm.hasFilters()" ng-click="vm.clearFilters()">
+		<i class="intelicon-cancel-filter-solid"></i> Clear all filters
 	</button>
 </div>
 <br />

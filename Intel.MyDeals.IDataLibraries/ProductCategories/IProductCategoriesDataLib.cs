@@ -9,9 +9,9 @@ namespace Intel.MyDeals.IDataLibrary
 	public interface IProductCategoriesDataLib
 	{
 		List<ProductCategory> GetProductCategories();
-		
+
 		//Product CreateProductCategory(Product category);
-		bool UpdateProductCategories(List<ProductCategory> categories);
+		List<ProductCategory> UpdateProductCategories(List<ProductCategory> categories);
 
 	}
 }

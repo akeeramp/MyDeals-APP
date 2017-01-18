@@ -71,10 +71,10 @@ namespace Intel.MyDeals.DataLibrary.Test
 			List<ProductCategory> pcList = MakeMulitpleNewProductCategories(count);
 
 			// ACT
-			bool results = new ProductCategoriesDataLib().UpdateProductCategories(pcList);
+			List<ProductCategory> results = new ProductCategoriesDataLib().UpdateProductCategories(pcList);
 
 			// ASSERT
-			Assert.IsTrue(results);
+			Assert.IsTrue(results.Any());
 		}
 
 	}

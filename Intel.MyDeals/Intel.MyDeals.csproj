@@ -903,6 +903,7 @@
     <Content Include="Images\radio-checked.png" />
     <Content Include="Images\radio.png" />
     <Content Include="Images\security.png" />
+    <Content Include="Images\kendo_icons_intel.png" />
     <Content Include="Images\Timeout.png" />
     <Content Include="Images\wires.png" />
     <Content Include="js\bootstrap.js" />
