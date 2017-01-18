@@ -85,8 +85,8 @@
             // des
             $scope.des._dirty = $event;
             angular.forEach($scope.des,
-                function (item) {
-                    item[field] = $event;
+                function (value, key) {
+                    if (key !== "_dirty") $scope.des[key][field] = $event;
                 });
 
             // flat
@@ -94,7 +94,7 @@
             angular.forEach($scope.flat,
                 function (value, key) {
                     if ($scope.flat._behaviors[field] === undefined) $scope.flat._behaviors[field] = {};
-                    $scope.flat._behaviors[field][key] = $event;
+                    if (key !== "_dirty") $scope.flat._behaviors[field][key] = $event;
                 });
 
             // flatGrid

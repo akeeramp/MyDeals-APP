@@ -47,10 +47,9 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
         return cols;
     }
 
-
     //data
     //
-    root.pricingTableData = root.pricingTableData || pricingTableData.data;
+    root.pricingTableData = root.pricingTableData || pricingTableData; //.data;  // temporary until we use the db returned set
 
     if (root.pricingTableData.PricingTable[0] === undefined) {
         root.pricingTableData.PricingTable[0] = { "_MultiDim": [] };
