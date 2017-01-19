@@ -4,9 +4,9 @@
         .module('app.admin')
         .controller('securityActionsController',securityActionsController)
 
-    securityActionsController.$inject = ['$uibModal', 'SecurityActionsService', '$scope', 'logger'];
+    securityActionsController.$inject = ['$uibModal', 'SecurityActionsService', '$scope', 'logger','gridConstants']
 
-    function securityActionsController($uibModal, SecurityActionsService, $scope, logger) {
+    function securityActionsController($uibModal, SecurityActionsService, $scope,  gridConstants) {
     	var vm = this;
 
         // Functions

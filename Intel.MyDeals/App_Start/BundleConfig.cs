@@ -59,6 +59,7 @@ namespace Intel.MyDeals
                 , "~/app/core/config.js"
                 , "~/app/core/dataservice.js"
                 , "~/app/core/directives/queryBuilder.directive.js"
+                , "~/app/core/directives/expandKendogrid.directive.js"
                 ));
 
             bundles.Add(new ScriptBundle("~/bundles/angularModules").Include(
@@ -74,7 +75,7 @@ namespace Intel.MyDeals
                 , "~/app/admin/geo/geo.service.js"
                 , "~/app/admin/products/admin.products.controller.js"
                 , "~/app/admin/products/products.service.js"
-				, "~/app/admin/productCategories/admin.productCategories.controller.js"
+                , "~/app/admin/productCategories/admin.productCategories.controller.js"
                 , "~/app/admin/productCategories/productCategories.service.js"
                 , "~/app/admin/rules/admin.rules.controller.js"
                 , "~/app/admin/rules/rules.service.js"

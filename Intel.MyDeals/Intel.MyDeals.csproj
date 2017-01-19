@@ -328,6 +328,7 @@
     <Content Include="app\contract\partials\wipDeals.html" />
     <Content Include="app\admin\iCostProducts\costtest.iCostProduct.service.js" />
     <Content Include="app\admin\iCostProducts\costtest.iCostProducts.controller.js" />
+    <Content Include="app\core\directives\expandKendogrid.directive.js" />
     <Content Include="app\shared\directives\focusOnShow.directive.js" />
     <Content Include="app\shared\directives\opControl.directive.js" />
     <Content Include="app\shared\directives\opcontrolDataElement.directive.js" />
