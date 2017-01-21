@@ -29,15 +29,9 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetRuleSets")]
         public IEnumerable<RuleSet> GetRuleSets()
         {
-            try
-            {
-                return _rulesLib.GetRuleSets();
-            }
-            catch (Exception ex)
-            {
-                OpLogPerf.Log(ex);
-                throw new HttpResponseException(HttpStatusCode.InternalServerError);
-            }
+            return SafeExecutor(() => _rulesLib.GetRuleSets()
+                , $"Unable to get Rule Sets"
+            );
         }
 
         /// <summary>
@@ -49,15 +43,9 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetRuleItems")]
         public IEnumerable<RuleItem> GetRuleItems()
         {
-            try
-            {
-                return _rulesLib.GetRuleItems();
-            }
-            catch (Exception ex)
-            {
-                OpLogPerf.Log(ex);
-                throw new HttpResponseException(HttpStatusCode.InternalServerError);
-            }
+            return SafeExecutor(() => _rulesLib.GetRuleItems()
+                , $"Unable to get Rule Items"
+            );
         }
 
         /// <summary>
@@ -69,15 +57,9 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetRuleItemById/{ruleId}")]
         public RuleItem GetRuleItemById(int ruleId)
         {
-            try
-            {
-                return _rulesLib.GetRuleItemById(ruleId);
-            }
-            catch (Exception ex)
-            {
-                OpLogPerf.Log(ex);
-                throw new HttpResponseException(HttpStatusCode.InternalServerError);
-            }
+            return SafeExecutor(() => _rulesLib.GetRuleItemById(ruleId)
+                , $"Unable to get Rule Item"
+            );
         }
 
         /// <summary>
@@ -89,15 +71,9 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetRuleConditions")]
         public IEnumerable<RuleCondition> GetRuleConditions()
         {
-            try
-            {
-                return _rulesLib.GetRuleConditions();
-            }
-            catch (Exception ex)
-            {
-                OpLogPerf.Log(ex);
-                throw new HttpResponseException(HttpStatusCode.InternalServerError);
-            }
+            return SafeExecutor(() => _rulesLib.GetRuleConditions()
+                , $"Unable to get Rule Conditions"
+            );
         }
 
         /// <summary>
@@ -109,15 +85,9 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetRuleConditionsByRuleId/{ruleId}")]
         public IEnumerable<RuleCondition> GetRuleConditionsByRuleId(int ruleId)
         {
-            try
-            {
-                return _rulesLib.GetRuleConditionsByRuleId(ruleId);
-            }
-            catch (Exception ex)
-            {
-                OpLogPerf.Log(ex);
-                throw new HttpResponseException(HttpStatusCode.InternalServerError);
-            }
+            return SafeExecutor(() => _rulesLib.GetRuleConditionsByRuleId(ruleId)
+                , $"Unable to get Rule Conditions"
+            );
         }
 
         /// <summary>
@@ -129,15 +99,9 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetRuleTasks")]
         public IEnumerable<RuleTask> GetRuleTasks()
         {
-            try
-            {
-                return _rulesLib.GetRuleTasks();
-            }
-            catch (Exception ex)
-            {
-                OpLogPerf.Log(ex);
-                throw new HttpResponseException(HttpStatusCode.InternalServerError);
-            }
+            return SafeExecutor(() => _rulesLib.GetRuleTasks()
+                , $"Unable to get Rule Tasks"
+            );
         }
 
         /// <summary>
@@ -149,15 +113,9 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetPassedRuleTasksByRuleId/{ruleId}")]
         public IEnumerable<RuleTask> GetPassedRuleTasksByRuleId(int ruleId)
         {
-            try
-            {
-                return _rulesLib.GetPassedRuleTasksByRuleId(ruleId);
-            }
-            catch (Exception ex)
-            {
-                OpLogPerf.Log(ex);
-                throw new HttpResponseException(HttpStatusCode.InternalServerError);
-            }
+            return SafeExecutor(() => _rulesLib.GetPassedRuleTasksByRuleId(ruleId)
+                , $"Unable to get Rule Tasks"
+            );
         }
 
         /// <summary>
@@ -169,15 +127,9 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetFailedRuleTasksByRuleId/{ruleId}")]
         public IEnumerable<RuleTask> GetFailedRuleTasksByRuleId(int ruleId)
         {
-            try
-            {
-                return _rulesLib.GetFailedRuleTasksByRuleId(ruleId);
-            }
-            catch (Exception ex)
-            {
-                OpLogPerf.Log(ex);
-                throw new HttpResponseException(HttpStatusCode.InternalServerError);
-            }
+            return SafeExecutor(() => _rulesLib.GetFailedRuleTasksByRuleId(ruleId)
+                , $"Unable to get Rule Tasks"
+            );
         }
     }
 }

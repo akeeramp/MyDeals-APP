@@ -72,7 +72,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns>list of rule conditions data</returns>
         public IEnumerable<RuleCondition> GetRuleConditionsByRuleId(int ruleId)
         {
-            return GetRuleConditions().Where(rc => rc.ParentRuleId == ruleId);
+            return GetRuleConditions().Where(rc => rc.RuleId == ruleId);
         }
 
         /// <summary>
@@ -90,8 +90,9 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns>list of rule task data</returns>
         public IEnumerable<RuleTask> GetPassedRuleTasksByRuleId(int ruleId)
         {
-            List<int> RulePassedTaskIds = GetRuleItemById(ruleId).RulePassedTaskIds.ToList();
-            return GetRuleTasks().Where(rt => rt.ParentRuleId == ruleId && RulePassedTaskIds.Contains(rt.Id));
+            //List<int> RulePassedTaskIds = GetRuleItemById(ruleId).RulePassedTaskIds.ToList();
+            //return GetRuleTasks().Where(rt => rt.RuleId == ruleId && RulePassedTaskIds.Contains(rt.Id));
+            return GetRuleTasks().Where(rt => rt.RuleId == ruleId && rt.SuccessType == true);
         }
 
         /// <summary>
@@ -100,8 +101,9 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns>list of rule task data</returns>
         public IEnumerable<RuleTask> GetFailedRuleTasksByRuleId(int ruleId)
         {
-            List<int> RuleFailedTaskIds = GetRuleItemById(ruleId).RuleFailedTaskIds.ToList();
-            return GetRuleTasks().Where(rt => rt.ParentRuleId == ruleId && RuleFailedTaskIds.Contains(rt.Id));
+            //List<int> RuleFailedTaskIds = GetRuleItemById(ruleId).RuleFailedTaskIds.ToList();
+            //return GetRuleTasks().Where(rt => rt.RuleId == ruleId && RuleFailedTaskIds.Contains(rt.Id));
+            return GetRuleTasks().Where(rt => rt.RuleId == ruleId && rt.SuccessType == false);
         }
     }
 }

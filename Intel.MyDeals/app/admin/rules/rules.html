@@ -3,199 +3,118 @@
     <div ng-include="'app/layout/gridToolbar.html'" />
 </div>
 
-<body>
+<div class="col-md-12">
 
-    <div class="col-md-12">
-
-        <div id="rulesetlist" class="col-md-2">
-            <div class="affix col-md-2">
-                <h5 class="mb-0">
-                    <span class="fa fa-book">  Rule Set List</span>
-                </h5>
-                <div id="rulesetlistsearch">
-                    <form>
-                        <input id="rulesearchbox" type="text" name="search" placeholder="Search Rules..">
-                    </form>
-                </div>
-                <div id="rulesetlistcontents">
-                    <!-- TODO Stylize kendo grid to fit MLAF guidelines and just look better overall -->
-                    <div kendo-grid="ruleSetsGrid" class="table" options="vm.rsGridOptions"></div>
-                </div>
+    <div id="rulesetlist" class="col-md-2">
+        <div class="affix col-md-2">
+            <h5>
+                <span class="intelicon-numbered-list">  Rule Set List</span>
+            </h5>
+            <div id="rulesetlistsearch">
+                <form>
+                    <input id="rulesearchbox" type="text" name="search" placeholder="Search Rules..">
+                </form>
             </div>
-        </div>
-
-        <div id="rulebundle" class="col-md-10" ng-show="(vm.selectedRuleSet['Id']!=0)">
-            <div id="accordion" role="tablist">
-                <div class="card">
-                    <div class="card-header" role="tab">
-                        <h5 class="mb-0">
-                            <a data-toggle="collapse" data-parent="#accordion" href="rules/#ruleItem">
-                                <span class="fa fa-minus-square-o" onclick="toggleExpand(this)">  Rule Set/Item</span>
-                            </a>
-                        </h5>
-                    </div>
-
-                    <div id="ruleItem" class="collapse in rulebundleitem" role="tabpanel">
-                        <div class="card-block">
-                            <div class="alert alert-warning alert-group">
-                                <!--TODO:betterformattingthanalertwarning-->
-                                <!--TODO:Triggers,Category,SubCategory,etc. need to be drawn from constants table or something-->
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div>
-                                            Name:<input type="text" ng-model="vm.selectedRuleSet.Name" class="form-control input-sm rule-engine-textbox" />
-                                        </div>
-                                        <div>
-                                            Description:<input type="text" ng-model="vm.selectedRuleSet.Description" class="form-control input-sm rule-engine-textbox" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div>
-                                            <!--TODO: this needs to be a multiselect -->
-                                            Trigger: <input type="text" ng-model="vm.selectedRuleSet.Trigger" class="form-control input-sm rule-engine-textbox" />
-                                        </div>
-                                        <div>
-                                            <!--TODO: this needs to be a multiselect -->
-                                            Category: <input type="text" ng-model="vm.selectedRuleSet.Category" class="form-control input-sm rule-engine-textbox" />
-                                        </div>
-                                        <div>
-                                            <!--TODO: this needs to be a multiselect -->
-                                            SubCategory: <input type="text" ng-model="vm.selectedRuleSet.SubCategory" class="form-control input-sm rule-engine-textbox" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div>
-                                            Tier:
-                                            <select class="custom-select form-control input-sm rule-engine-textbox" ng-model="vm.riDataSource.Tier">
-                                                <option value="C#">C#</option>
-                                                <option value="HTML/JS">HTML/JS</option>
-                                            </select>
-                                        </div>
-                                        <div>
-                                            Order:<input type="text" ng-model="vm.selectedRuleSet.Order" class="form-control input-sm rule-engine-textbox" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-header" role="tab">
-                        <h5 class="mb-0">
-                            <a data-toggle="collapse" data-parent="#accordion" href="rules/#ruleConditions">
-                                <span class="fa fa-minus-square-o" onclick="toggleExpand(this)">  Rule Conditions</span>
-                            </a>
-                        </h5>
-                    </div>
-
-                    <div id="ruleConditions" class="collapse in rulebundleitem" role="tabpanel">
-                        <div class="card-block">
-                            <!--<div kendo-grid="ruleConditionsGrid" class="table" options="vm.rcGridOptions"></div>-->
-                            <query-builder style="padding-left:30px" class="" group="vm.conditionData.group" operators="vm.operators" criterias="vm.criterias" conditions="vm.conditions">
-                            </query-builder>
-                        </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-header" role="tab">
-                        <h5 class="mb-0">
-                            <a data-toggle="collapse" data-parent="#accordion" href="rules/#rulePassedTasks">
-                                <span class="fa fa-minus-square-o" onclick="toggleExpand(this)">  Rule Passed Tasks</span>
-                            </a>
-                        </h5>
-                    </div>
-
-                    <div id="rulePassedTasks" class="collapse in rulebundleitem" role="tabpanel">
-                        <div class="card-block">
-                            <div ng-repeat="task in vm.rtPassedDataSource">
-                                <div class="alert alert-warning alert-group">
-                                    <!--TODO:betterformattingthanalertwarning-->
-                                    TaskId: {{task.Id}} <br />
-                                    Action: <input type="text" ng-model="task.Function" class="form-control input-sm rule-engine-textbox" />
-                                    Params: <input type="text" ng-model="task.Params" class="form-control input-sm rule-engine-textbox" />
-                                    Order: <input type="text" ng-model="task.Order" class="form-control input-sm rule-engine-textbox" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-header" role="tab">
-                        <h5 class="mb-0">
-                            <a data-toggle="collapse" data-parent="#accordion" href="rules/#ruleFailedTasks">
-                                <span class="fa fa-minus-square-o" onclick="toggleExpand(this)">  Rule Failed Tasks</span>
-                            </a>
-                        </h5>
-                    </div>
-
-                    <div id="ruleFailedTasks" class="collapse in rulebundleitem" role="tabpanel">
-                        <div class="card-block">
-                            <div ng-repeat="task in vm.rtFailedDataSource">
-                                <div class="alert alert-warning alert-group"> 
-                                    <!--TODO:betterformattingthanalertwarning-->
-                                    TaskId: {{task.Id}} <br />
-                                    Action: <input type="text" ng-model="task.Function" class="form-control input-sm rule-engine-textbox" />
-                                    Params: <input type="text" ng-model="task.Params" class="form-control input-sm rule-engine-textbox" />
-                                    Order: <input type="text" ng-model="task.Order" class="form-control input-sm rule-engine-textbox" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div id="rulesetlistcontents">
+                <!-- TODO we do not need a kendo grid for something as simple as a list like this right? -->
+                <!-- TODO Stylize kendo grid to fit MLAF guidelines and just look better overall -->
+                <div kendo-grid="ruleSetsGrid" class="table" options="vm.rsGridOptions"></div>
             </div>
         </div>
     </div>
 
-</body>
+    <div id="rulebundle" class="col-md-10" ng-show="(vm.selectedRuleSet['Id']!=0)">
+        <uib-accordion close-others=false>
+            <div uib-accordion-group class="panel-default card-header" is-open=true>
+                <uib-accordion-heading>
+                    <span class="intelicon-minus-outlined" onclick="toggleExpand(this)"></span> Rule Set/Item
+                </uib-accordion-heading>
+                <!--TODO:Triggers,Category,SubCategory,etc. need to be drawn from constants table or something-->
+                <div class="row">
+                    <div class="col-md-4">
+                        <div>
+                            Name:<input type="text" ng-model="vm.selectedRuleSet.Name" class="form-control input-sm rule-engine-textbox" />
+                        </div>
+                        <div>
+                            Description:<input type="text" ng-model="vm.selectedRuleSet.Description" class="form-control input-sm rule-engine-textbox" />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div>
+                            Trigger: <input type="text" ng-model="vm.selectedRuleSet.Trigger" class="form-control input-sm rule-engine-textbox" />
+                        </div>
+                        <div>
+                            Category: <input type="text" ng-model="vm.selectedRuleSet.Category" class="form-control input-sm rule-engine-textbox" />
+                        </div>
+                        <div>
+                            SubCategory: <input type="text" ng-model="vm.selectedRuleSet.SubCategory" class="form-control input-sm rule-engine-textbox" />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div>
+                            Tier:
+                            <select class="custom-select form-control input-sm rule-engine-textbox" ng-model="vm.riDataSource.Tier">
+                                <option value="C#">C#</option>
+                                <option value="HTML/JS">HTML/JS</option>
+                            </select>
+                        </div>
+                        <div>
+                            Order:<input type="text" ng-model="vm.selectedRuleSet.Order" class="form-control input-sm rule-engine-textbox" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div uib-accordion-group class="panel-default card-header" is-open=true>
+                <uib-accordion-heading>
+                    <span class="intelicon-minus-outlined" onclick="toggleExpand(this)"></span> Rule Conditions
+                </uib-accordion-heading>
+                <query-builder style="padding-left:30px" class="" group="vm.conditionData.group" operators="vm.operators" criterias="vm.criterias" conditions="vm.conditions">
+                </query-builder>
+            </div>
+
+            <div uib-accordion-group class="panel-default card-header" is-open=true>
+                <uib-accordion-heading>
+                    <span class="intelicon-minus-outlined" onclick="toggleExpand(this)"></span> Rule Passed Tasks
+                </uib-accordion-heading>
+                <div ng-repeat="task in vm.rtPassedDataSource">
+                    <div class="alert alert-warning alert-group">
+                        <!--TODO:betterformattingthanalertwarning-->
+                        TaskId: {{task.Id}} <br />
+                        Action: <input type="text" ng-model="task.Function" class="form-control input-sm rule-engine-textbox" />
+                        Params: <input type="text" ng-model="task.Params" class="form-control input-sm rule-engine-textbox" />
+                        Order: <input type="text" ng-model="task.Order" class="form-control input-sm rule-engine-textbox" />
+                    </div>
+                </div>
+            </div>
+
+            <div uib-accordion-group class="panel-default card-header" is-open=true>
+                <uib-accordion-heading>
+                    <span class="intelicon-minus-outlined" onclick="toggleExpand(this)"></span> Rule Failed Tasks
+                </uib-accordion-heading>
+                <div ng-repeat="task in vm.rtFailedDataSource">
+                    <div class="alert alert-warning alert-group">
+                        <!--TODO:betterformattingthanalertwarning-->
+                        TaskId: {{task.Id}} <br />
+                        Action: <input type="text" ng-model="task.Function" class="form-control input-sm rule-engine-textbox" />
+                        Params: <input type="text" ng-model="task.Params" class="form-control input-sm rule-engine-textbox" />
+                        Order: <input type="text" ng-model="task.Order" class="form-control input-sm rule-engine-textbox" />
+                    </div>
+                </div>
+            </div>
+        </uib-accordion>
+        
+    </div>
+</div>
+
+<script>
+    var toggleExpand = function (obj) {
+        $(obj).toggleClass("intelicon-minus-outlined intelicon-plus-outlined")
+    }
+</script>
 
 <style>
     /*TODO: delete <style>.  ignore this style block in this checkin, leaving in for now because I may use this in the future but am not certain enough to delete it*/
-    .rulebundleitem {
-        /*border:2px solid black;*/
-        /*padding: 0em 0em 0em 1em;*/
-        padding-left: 1em;
-    }
-
-    /*#ruleFailedTasks {
-        background-color: pink;
-    }
-
-    #rulePassedTasks {
-        background-color: lightgreen;
-    }
-
-    #ruleConditions {
-        background-color: lightskyblue;
-    }
-
-    #ruleItem {
-        background-color: navajowhite;
-    }*/
-
-    #rulesetlist {
-        /*padding-right: 2em;*/
-    }
-
-    /*#rulesetlistcontents {
-        height: 500px;  
-        overflow: auto;
-    }*/
-
-    #rulesearchbox {
-        width: 100%;
-        box-sizing: border-box;
-        border: 2px solid #ccc;
-        font-size: 14px;
-        padding: 5px;
-    }
-
-    .rule-engine-textbox {
-        margin-left: 5px;
-    }
-
-    .card-header {
-        margin-left: 1em;
-    }
+    
 
 </style>

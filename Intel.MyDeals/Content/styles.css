@@ -221,8 +221,29 @@
     margin-bottom: 10px;
 }
 
-.condition, .group{
+/* Rules Engine */
+
+.condition, .group {
     margin-top: 15px;
     margin-bottom: 15px;
 }
 
+.rulebundleitem {
+    padding-left: 1em;
+}
+
+#rulesearchbox {
+    width: 100%;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    font-size: 14px;
+    padding: 5px;
+}
+
+.rule-engine-textbox {
+    margin-left: 5px;
+}
+
+.card-header {
+    margin-left: 1em;
+}

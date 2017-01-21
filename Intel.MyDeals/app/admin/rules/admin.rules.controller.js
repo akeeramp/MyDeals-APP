@@ -48,7 +48,7 @@
         });
 
         //promise for GET ruleitem data
-        let getRIDataSource = function() {
+        function getRIDataSource() {
             return new Promise(function(resolve, reject) {
                 ruleService.getRuleItemById(vm.selectedRuleSet["Id"])
                         .then(function (response) {
@@ -62,7 +62,7 @@
         };
 
         //promise for GET rulecondition data
-        let getRCDataSource = function() {
+        function getRCDataSource() {
             return new Promise(function(resolve, reject) {
                 ruleService.getRuleConditionsByRuleId(vm.selectedRuleSet["Id"])
                         .then(function (response) {
@@ -149,9 +149,9 @@
                     }
                 }
             } else {
-                retJson.criteria = condition.Attribute;
+                retJson.criteria = condition.LeftExpressionValue;
                 retJson.condition = condition.Operator;
-                retJson.data = condition.TargetParams;
+                retJson.data = condition.RightExpressionValue;
             }
             return retJson;
         }
@@ -166,9 +166,7 @@
             }
         }
 
-        var toggleExpand = function (obj) {
-                $(obj).toggleClass("fa-minus-square-o fa-plus-square-o")
-        }
+        
 
         ////TODO: save update delete
         //function addItem() {

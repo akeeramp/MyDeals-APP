@@ -18,8 +18,6 @@ namespace Intel.MyDeals.DataLibrary
         /// <returns>list of all rule set data</returns>
         public List<RuleSet> GetRuleSets()
         {
-            OpLogPerf.Log("GetRuleSets");
-
             var ret = new List<RuleSet>();
             //var cmd = new Procs.dbo.PR_MYDL_GET_PRD_DTL { };
 
@@ -53,8 +51,8 @@ namespace Intel.MyDeals.DataLibrary
                 rs.Name = "RuleSet " + i;
                 rs.Description = "This is one of many test rule sets";
                 rs.Trigger = "SAVE";
-                rs.Category = new List<string>() { "DEAL" };
-                rs.SubCategory = new List<string>() { "ECAP", "RPU", "TEST" };
+                rs.Category = "DEAL";
+                rs.SubCategory = "ECAP";
                 rs.RuleId = i;
                 rs.Order = i;
 
@@ -71,8 +69,6 @@ namespace Intel.MyDeals.DataLibrary
         /// <returns>list of rule item data</returns>
         public List<RuleItem> GetRuleItems()
         {
-            OpLogPerf.Log("GetRuleItems");
-
             var ret = new List<RuleItem>();
             //var cmd = new Procs.dbo.PR_MYDL_GET_PRD_DTL { };
 
@@ -124,8 +120,6 @@ namespace Intel.MyDeals.DataLibrary
         /// <returns>list of rule condition data</returns>
         public List<RuleCondition> GetRuleConditions()
         {
-            OpLogPerf.Log("GetRuleConditions");
-
             var ret = new List<RuleCondition>();
             //var cmd = new Procs.dbo.PR_MYDL_GET_PRD_DTL { };
 
@@ -159,41 +153,51 @@ namespace Intel.MyDeals.DataLibrary
                 ri.Id = i;
                 ri.ConditionType = "AND";
                 ri.Operator = "";
-                ri.Attribute = "";
-                ri.TargetParams = "";
-                ri.ParentRuleId = i;
+                ri.LeftExpressionType = "";
+                ri.LeftExpressionValue = "";
+                ri.RightExpressionType = "";
+                ri.RightExpressionValue = "";
+                ri.RuleId = i;
 
                 RuleCondition ri2 = new RuleCondition();
                 ri2.Id = ri.Id + j;
                 ri2.ConditionType = "CONDITION";
                 ri2.Operator = "<>";
-                ri2.Attribute = "Brand";
-                ri2.TargetParams = i + " " + i + " " + i + " " + i;
-                ri2.ParentRuleId = i;
+                ri2.LeftExpressionType = "";
+                ri2.LeftExpressionValue = "Brand";
+                ri2.RightExpressionType = "";
+                ri2.RightExpressionValue = i + " " + i + " " + i + " " + i;
+                ri2.RuleId = i;
 
                 RuleCondition ri3 = new RuleCondition();
                 ri3.Id = ri2.Id + j;
                 ri3.ConditionType = "OR";
                 ri3.Operator = "";
-                ri3.Attribute = "";
-                ri3.TargetParams = "";
-                ri3.ParentRuleId = i;
+                ri3.LeftExpressionType = "";
+                ri3.LeftExpressionValue = "";
+                ri3.RightExpressionType = "";
+                ri3.RightExpressionValue = "";
+                ri3.RuleId = i;
 
                 RuleCondition ri4 = new RuleCondition();
                 ri4.Id = ri3.Id + j;
                 ri4.ConditionType = "CONDITION";
                 ri4.Operator = "=";
-                ri4.Attribute = "Family";
-                ri4.TargetParams = "true";
-                ri4.ParentRuleId = i;
+                ri4.LeftExpressionType = "";
+                ri4.LeftExpressionValue = "Family";
+                ri4.RightExpressionType = "";
+                ri4.RightExpressionValue = "true";
+                ri4.RuleId = i;
 
                 RuleCondition ri5 = new RuleCondition();
                 ri5.Id = ri4.Id + j;
                 ri5.ConditionType = "CONDITION";
                 ri5.Operator = "<=";
-                ri5.Attribute = "Level4";
-                ri5.TargetParams = "ABCDEFG" + i;
-                ri5.ParentRuleId = i;
+                ri5.LeftExpressionType = "";
+                ri5.LeftExpressionValue = "Level4";
+                ri5.RightExpressionType = "";
+                ri5.RightExpressionValue = "ABCDEFG" + i;
+                ri5.RuleId = i;
 
                 //different versions of hardcoded condition tree hierarchy for demo/testing
                 if (i%3 == 0)
@@ -270,8 +274,6 @@ namespace Intel.MyDeals.DataLibrary
         /// <returns>list of rule condition data</returns>
         public List<RuleTask> GetRuleTasks()
         {
-            OpLogPerf.Log("GetRuleTasks");
-
             var ret = new List<RuleTask>();
             //var cmd = new Procs.dbo.PR_MYDL_GET_PRD_DTL { };
 
@@ -305,29 +307,32 @@ namespace Intel.MyDeals.DataLibrary
                 RuleTask rt = new RuleTask();
                 rt.Id = i;
                 rt.Function = "SetValue";
-                rt.Params = "TEST" + rand.Next(100);
-                rt.ParentRuleId = i;
+                rt.Params = "TEST " + i;
+                rt.RuleId = i;
                 rt.Order = 1;
+                rt.SuccessType = true;
 
                 ret.Add(rt);
 
-                RuleTask ri2 = new RuleTask();
-                ri2.Id = i+20;
-                ri2.Function = "ComplexFunction";
-                ri2.Params = "TEST" + rand.Next(100);
-                ri2.ParentRuleId = i;
-                ri2.Order = 2;
+                RuleTask rt2 = new RuleTask();
+                rt2.Id = i+20;
+                rt2.Function = "ComplexFunction";
+                rt2.Params = "TEST" + i;
+                rt2.RuleId = i;
+                rt2.Order = 2;
+                rt2.SuccessType = true;
 
-                ret.Add(ri2);
+                ret.Add(rt2);
 
-                RuleTask ri3 = new RuleTask();
-                ri3.Id = i + 40;
-                ri3.Function = "DoNothing";
-                ri3.Params = "TEST" + rand.Next(100);
-                ri3.ParentRuleId = i;
-                ri3.Order = 1;
+                RuleTask rt3 = new RuleTask();
+                rt3.Id = i + 40;
+                rt3.Function = "DoNothing";
+                rt3.Params = "TEST" + i;
+                rt3.RuleId = i;
+                rt3.Order = 1;
+                rt3.SuccessType = false;
 
-                ret.Add(ri3);
+                ret.Add(rt3);
 
                 i--;
             }
