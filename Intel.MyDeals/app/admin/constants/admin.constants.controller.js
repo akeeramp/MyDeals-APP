@@ -61,7 +61,7 @@
                     id: "CNST_SID",
                     fields: {
                         CNST_SID: { editable: false, nullable: true },
-                        CNST_NM: { editable: false, validation: { required: true } },
+                        CNST_NM: { validation: { required: true } },
                         CNST_DESC: { validation: { required: true } },
                         CNST_VAL_TXT: { validation: { required: true } },
                         UI_UPD_FLG: { type: "boolean"  },
