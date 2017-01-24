@@ -14,7 +14,10 @@
                 group: '=',
                 operators: '=',
                 conditions: '=',
-                criterias: '=',
+                lefttypes: '=',
+                leftvalues: '=',
+                righttypes: '=',
+                rightvalues: '=',
             },
             templateUrl: '/app/core/directives/queryBuilder.directive.html',
             compile: function (element, attrs) {
@@ -26,12 +29,35 @@
                         { name: 'OR' }
                     ];
 
-                    scope.criterias = [
+                    scope.lefttypes = [
+                        { name: 'Attribute', editor: 'dropdown' },
+                        { name: 'Product', editor: 'textbox' },
+                        { name: 'Defined', editor: 'dropdown' },
+                        { name: 'User Defined', editor: 'textbox' }
+                    ];
+
+                    scope.leftvalues = [
                         { name: 'Brand' },
                         { name: 'Family' },
                         { name: 'EPMProductFamily' },
                         { name: 'BrandGroup' },
-                        { name: 'TardeMark' },
+                        { name: 'TradeMark' },
+                        { name: 'Level4' }
+                    ];
+
+                    scope.righttypes = [
+                        { name: 'Attribute', editor: 'dropdown' },
+                        { name: 'Product', editor: 'textbox' },
+                        { name: 'Defined', editor: 'dropdown' },
+                        { name: 'User Defined', editor: 'textbox' }
+                    ];
+
+                    scope.rightvalues = [
+                        { name: 'Brand' },
+                        { name: 'Family' },
+                        { name: 'EPMProductFamily' },
+                        { name: 'BrandGroup' },
+                        { name: 'TradeMark' },
                         { name: 'Level4' }
                     ];
 
@@ -41,14 +67,17 @@
                         { name: '<' },
                         { name: '<=' },
                         { name: '>' },
-                        { name: '>=' }
+                        { name: '>=' },
+                        { name: 'LIKE' }
                     ];
 
                     scope.addCondition = function () {
                         scope.group.rules.push({
                             condition: '=',
-                            criteria: '',
-                            data: ''
+                            leftvalue: '',
+                            rightvalue: '',
+                            lefttype: '',
+                            righttype: '',
                         });
                     };
 
@@ -67,6 +96,25 @@
 
                     scope.removeGroup = function () {
                         "group" in scope.$parent && scope.$parent.group.rules.splice(scope.$parent.$index, 1);
+                    };
+
+                    scope.getEditorType = function (selectedType, side) {
+                        var types
+                        if (side == 'left') {
+                            types = scope.lefttypes;
+                        } else {
+                            types = scope.righttypes;
+                        }
+
+                        if (typeof selectedType == "undefined" || selectedType == "") {
+                            return "disabled";
+                        } else {
+                            for (var i = 0; i <= types.length; i++) {
+                                if (types[i].name == selectedType) {
+                                    return types[i].editor;
+                                }
+                            }
+                        }
                     };
 
                     directive || (directive = $compile(content));

@@ -149,9 +149,11 @@
                     }
                 }
             } else {
-                retJson.criteria = condition.LeftExpressionValue;
+                retJson.lefttype = condition.LeftExpressionType;
+                retJson.leftvalue = condition.LeftExpressionValue;
                 retJson.condition = condition.Operator;
-                retJson.data = condition.RightExpressionValue;
+                retJson.righttype = condition.RightExpressionType;
+                retJson.rightvalue = condition.RightExpressionValue;
             }
             return retJson;
         }

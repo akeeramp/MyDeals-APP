@@ -163,9 +163,9 @@ namespace Intel.MyDeals.DataLibrary
                 ri2.Id = ri.Id + j;
                 ri2.ConditionType = "CONDITION";
                 ri2.Operator = "<>";
-                ri2.LeftExpressionType = "";
+                ri2.LeftExpressionType = "Attribute";
                 ri2.LeftExpressionValue = "Brand";
-                ri2.RightExpressionType = "";
+                ri2.RightExpressionType = "User Defined";
                 ri2.RightExpressionValue = i + " " + i + " " + i + " " + i;
                 ri2.RuleId = i;
 
@@ -183,19 +183,19 @@ namespace Intel.MyDeals.DataLibrary
                 ri4.Id = ri3.Id + j;
                 ri4.ConditionType = "CONDITION";
                 ri4.Operator = "=";
-                ri4.LeftExpressionType = "";
+                ri4.LeftExpressionType = "Defined";
                 ri4.LeftExpressionValue = "Family";
-                ri4.RightExpressionType = "";
-                ri4.RightExpressionValue = "true";
+                ri4.RightExpressionType = "Attribute";
+                ri4.RightExpressionValue = "Level4";
                 ri4.RuleId = i;
 
                 RuleCondition ri5 = new RuleCondition();
                 ri5.Id = ri4.Id + j;
                 ri5.ConditionType = "CONDITION";
                 ri5.Operator = "<=";
-                ri5.LeftExpressionType = "";
-                ri5.LeftExpressionValue = "Level4";
-                ri5.RightExpressionType = "";
+                ri5.LeftExpressionType = "Product";
+                ri5.LeftExpressionValue = "i7 7700k";
+                ri5.RightExpressionType = "User Defined";
                 ri5.RightExpressionValue = "ABCDEFG" + i;
                 ri5.RuleId = i;
 

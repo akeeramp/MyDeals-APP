@@ -247,3 +247,12 @@
 .card-header {
     margin-left: 1em;
 }
+
+.qb-field {
+    margin-left: 5px;
+}
+
+.qb-field-core {
+    width: 15%;
+    margin-left: 5px;
+}
