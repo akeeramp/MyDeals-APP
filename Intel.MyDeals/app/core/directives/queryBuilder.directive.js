@@ -42,6 +42,10 @@
                         { name: 'EPMProductFamily' },
                         { name: 'BrandGroup' },
                         { name: 'TradeMark' },
+                        { name: 'Deal Type' },
+                        { name: 'Start Date' },
+                        { name: 'End Date' },
+                        { name: 'Stage' },
                         { name: 'Level4' }
                     ];
 
@@ -53,12 +57,15 @@
                     ];
 
                     scope.rightvalues = [
-                        { name: 'Brand' },
-                        { name: 'Family' },
-                        { name: 'EPMProductFamily' },
-                        { name: 'BrandGroup' },
-                        { name: 'TradeMark' },
-                        { name: 'Level4' }
+                        { name: 'ECAP' },
+                        { name: 'PROGRAM' },
+                        { name: 'VOLTIER' },
+                        { name: 'True' },
+                        { name: 'False' },
+                        { name: 'Submitted' },
+                        { name: 'Active' },
+                        { name: 'Hold Waiting' },
+                        { name: 'Previous QTR Start Date' }
                     ];
 
                     scope.conditions = [
