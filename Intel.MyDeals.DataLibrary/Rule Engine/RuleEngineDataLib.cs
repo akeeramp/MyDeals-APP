@@ -48,13 +48,37 @@ namespace Intel.MyDeals.DataLibrary
             {
                 RuleSet rs = new RuleSet();
                 rs.Id = i;
-                rs.Name = "RuleSet " + i;
-                rs.Description = "This is one of many test rule sets";
-                rs.Trigger = "SAVE";
+                rs.Name = "RuleSet " + i + ": ";
+                rs.Description = "This is one of many hardcoded example rule sets";
                 rs.Category = "DEAL";
-                rs.SubCategory = "ECAP";
+                
                 rs.RuleId = i;
                 rs.Order = i;
+
+                if (i % 2 == 0)
+                {
+                    rs.SubCategory = "ECAP";
+                    rs.Name += "ECAP ";
+                }
+                else
+                {
+                    rs.SubCategory = "VOLTIER";
+                    rs.Name += "VOLTIER ";
+                }
+
+                if (i % 3 == 0)
+                {
+                    rs.Trigger = "SAVE";
+                    rs.Name += "SAVE ";
+                } else if (i %3 == 1)
+                {
+                    rs.Trigger = "DELETE";
+                    rs.Name += "DEL ";
+                } else
+                {
+                    rs.Trigger = "LOAD";
+                    rs.Name += "LOAD ";
+                }
 
                 ret.Add(rs);
                 i--;
@@ -162,11 +186,11 @@ namespace Intel.MyDeals.DataLibrary
                 RuleCondition ri2 = new RuleCondition();
                 ri2.Id = ri.Id + j;
                 ri2.ConditionType = "CONDITION";
-                ri2.Operator = "<>";
-                ri2.LeftExpressionType = "Attribute";
-                ri2.LeftExpressionValue = "Brand";
+                ri2.Operator = ">";
+                ri2.LeftExpressionType = "Product";
+                ri2.LeftExpressionValue = "Start Date";
                 ri2.RightExpressionType = "User Defined";
-                ri2.RightExpressionValue = i + " " + i + " " + i + " " + i;
+                ri2.RightExpressionValue = "January " + i + " 1999";
                 ri2.RuleId = i;
 
                 RuleCondition ri3 = new RuleCondition();
@@ -184,19 +208,19 @@ namespace Intel.MyDeals.DataLibrary
                 ri4.ConditionType = "CONDITION";
                 ri4.Operator = "=";
                 ri4.LeftExpressionType = "Defined";
-                ri4.LeftExpressionValue = "Family";
-                ri4.RightExpressionType = "Attribute";
-                ri4.RightExpressionValue = "Level4";
+                ri4.LeftExpressionValue = "TradeMark";
+                ri4.RightExpressionType = "User Defined";
+                ri4.RightExpressionValue = "PineApple Inc.";
                 ri4.RuleId = i;
 
                 RuleCondition ri5 = new RuleCondition();
                 ri5.Id = ri4.Id + j;
                 ri5.ConditionType = "CONDITION";
-                ri5.Operator = "<=";
+                ri5.Operator = "LIKE";
                 ri5.LeftExpressionType = "Product";
-                ri5.LeftExpressionValue = "i7 7700k";
+                ri5.LeftExpressionValue = "Intel Super Secret Item";
                 ri5.RightExpressionType = "User Defined";
-                ri5.RightExpressionValue = "ABCDEFG" + i;
+                ri5.RightExpressionValue = "i13 1234k";
                 ri5.RuleId = i;
 
                 //different versions of hardcoded condition tree hierarchy for demo/testing

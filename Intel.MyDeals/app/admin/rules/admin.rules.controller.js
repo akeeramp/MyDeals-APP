@@ -13,39 +13,33 @@
         //vm.addItem = addItem;
         //vm.updateItem = updateItem;
         //vm.deleteItem = deleteItem
-        vm.rsOnChange = rsOnChange;
+        
+        //vm.rsOnChange = rsOnChange; //relic of kendo grid, DELETE ME
 
         // Variables
         vm.selectedItem = null;
         vm.selectedRuleSet = {Id: 0};
         //vm.isButtonDisabled = true;
 
-        vm.riDataSource = {};
-        vm.rcDataSource = {};
-        vm.rtPassedDataSource = {};
-        vm.rtFailedDataSource = {};
+        vm.rsDataSource = [];
+        vm.riDataSource = [];
+        vm.rcDataSource = [];
+        vm.rtPassedDataSource = [];
+        vm.rtFailedDataSource = [];
 
-        vm.conditionData = {};
+        vm.conditionData = [];
+
+        getRSDataSource(); //TODO: put this call in an init section?
 
         //GET ruleset data
-        vm.rsDataSource = new kendo.data.DataSource({
-            type: "json",
-            transport: {
-                read: function (e) {
-                    ruleService.getRuleSets()
+        function getRSDataSource() {
+            ruleService.getRuleSets()
                         .then(function (response) {
-                            e.success(response.data);
+                            vm.rsDataSource = response.data;
                         }, function (response) {
                             logger.error("Unable to get RuleSets.", response, response.statusText);
                         });
-                },
-            },
-            batch: true,
-            schema: {
-                model: {
-                }
-            }
-        });
+        }
 
         //promise for GET ruleitem data
         function getRIDataSource() {
@@ -95,27 +89,10 @@
                         });
         }
 
-        //grid options for ruleset sidebar - TODO: replace kendo grid? something with drag&drop could be nice
-        vm.rsGridOptions = {
-            dataSource: vm.rsDataSource,
-            selectable: true,
-            pageable: false,
-            editable: "popup",
-            change: vm.rsOnChange,
-            columns: [
-            {
-                field: "Name",
-                title: "Rule Set Name"
-            }
-            ]
-        }
 
         //triggered when user selects a ruleset
-        function rsOnChange() {
-            var rsGrid = $scope.ruleSetsGrid;
-            vm.selectedItem = rsGrid.select();
-            vm.selectedRuleSet = rsGrid.dataItem(vm.selectedItem);
-
+        vm.selectRuleSet = function(ruleset) {
+            vm.selectedRuleSet = ruleset;
             getPassedRTDataSource();
             getFailedRTDataSource();
 
@@ -168,6 +145,35 @@
             }
         }
 
+        vm.removeTask = function(task, successtype) {
+            var reference = getTaskByType(successtype);
+            var index = reference.indexOf(task);
+            if (index > -1) {
+                reference.splice(index, 1);
+            }
+        }
+
+        vm.addTask = function(successtype) {
+            var reference = getTaskByType(successtype);
+            console.log(reference);
+            reference.push({
+                Id: -1,
+                Function: '',
+                Params: '',
+                RuleId: vm.riDataSource.Id,
+                Order: 0,
+                SuccessType : successtype
+            })
+        }
+
+        var getTaskByType = function(successtype) {
+            console.log(successtype)
+            if (successtype == true) {
+                return vm.rtPassedDataSource;
+            } else {
+                return vm.rtFailedDataSource;
+            }
+        }
         
 
         ////TODO: save update delete

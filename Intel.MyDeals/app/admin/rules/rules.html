@@ -1,24 +1,27 @@
 ﻿<div class="col-md-12">
     <h2>Rule Engine Rule Definitions</h2>
-    <div ng-include="'app/layout/gridToolbar.html'" />
+    <!--<div ng-include="'app/layout/gridToolbar.html'" />-->
 </div>
 
-<div class="col-md-12">
+<div class="col-md-12 fixed-height">
 
-    <div id="rulesetlist" class="col-md-2">
-        <div class="affix col-md-2">
+    <div id="rulesetlist" class="col-md-2 fixed-height">
+        <div class="affix col-md-2 fixed-height">
             <h5>
                 <span class="intelicon-numbered-list">  Rule Set List</span>
             </h5>
             <div id="rulesetlistsearch">
                 <form>
-                    <input id="rulesearchbox" type="text" name="search" placeholder="Search Rules..">
+                    <input id="rulesearchbox" ng-model="searchText" placeholder="Search Rules..">
                 </form>
             </div>
             <div id="rulesetlistcontents">
-                <!-- TODO we do not need a kendo grid for something as simple as a list like this right? -->
-                <!-- TODO Stylize kendo grid to fit MLAF guidelines and just look better overall -->
-                <div kendo-grid="ruleSetsGrid" class="table" options="vm.rsGridOptions"></div>
+                <div ng-repeat="ruleset in vm.rsDataSource | filter:searchText">
+                    <div class="ruleset alert alert-info alert-group" ng-click="vm.selectRuleSet(ruleset)" ng-class="{selectedrule: ruleset.Id === vm.selectedRuleSet.Id}">
+                        <!--TODO:betterformattingthanalertinfo-->
+                        {{ruleset.Name}}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -78,14 +81,16 @@
                     <span class="intelicon-minus-outlined" onclick="toggleExpand(this)"></span> Rule Passed Tasks
                 </uib-accordion-heading>
                 <div ng-repeat="task in vm.rtPassedDataSource">
-                    <div class="alert alert-warning alert-group">
-                        <!--TODO:betterformattingthanalertwarning-->
+                    <div class="alert alert-info alert-group">
+                        <!--TODO:betterformattingthanalertinfo-->
+                        <button ng-click="vm.removeTask(task,true)" class="qb-field btn btn-sm btn-danger pull-right"><span class="glyphicon glyphicon-minus-sign"></span></button>
                         TaskId: {{task.Id}} <br />
                         Action: <input type="text" ng-model="task.Function" class="form-control input-sm rule-engine-textbox" />
                         Params: <input type="text" ng-model="task.Params" class="form-control input-sm rule-engine-textbox" />
                         Order: <input type="text" ng-model="task.Order" class="form-control input-sm rule-engine-textbox" />
                     </div>
                 </div>
+                <button ng-click="vm.addTask(true)" class="pull-right qb-field btn btn-sm btn-success"><span class="glyphicon glyphicon-plus-sign"></span> Add Passed Task</button>
             </div>
 
             <div uib-accordion-group class="panel-default card-header" is-open=true>
@@ -93,17 +98,19 @@
                     <span class="intelicon-minus-outlined" onclick="toggleExpand(this)"></span> Rule Failed Tasks
                 </uib-accordion-heading>
                 <div ng-repeat="task in vm.rtFailedDataSource">
-                    <div class="alert alert-warning alert-group">
-                        <!--TODO:betterformattingthanalertwarning-->
+                    <div class="alert alert-info alert-group">
+                        <!--TODO:betterformattingthanalertinfo-->
+                        <button ng-click="vm.removeTask(task,false)" class="qb-field btn btn-sm btn-danger pull-right"><span class="glyphicon glyphicon-minus-sign"></span></button>
                         TaskId: {{task.Id}} <br />
                         Action: <input type="text" ng-model="task.Function" class="form-control input-sm rule-engine-textbox" />
                         Params: <input type="text" ng-model="task.Params" class="form-control input-sm rule-engine-textbox" />
                         Order: <input type="text" ng-model="task.Order" class="form-control input-sm rule-engine-textbox" />
                     </div>
                 </div>
+                <button ng-click="vm.addTask(false)" class="pull-right qb-field btn btn-sm btn-success"><span class="glyphicon glyphicon-plus-sign"></span> Add Failed Task</button>
             </div>
         </uib-accordion>
-        
+
     </div>
 </div>
 
@@ -115,6 +122,23 @@
 
 <style>
     /*TODO: delete <style>.  ignore this style block in this checkin, leaving in for now because I may use this in the future but am not certain enough to delete it*/
-    
+    /*TODO::after delete thead below, it is duplicated in style.css but phil currently has that locked down*/ 
+    #rulesetlistcontents {
+    width: 100%;
+    height: 65%;
+    overflow: auto;
+}
+
+.fixed-height {
+    height: 100%;
+}
+
+.selectedrule {
+    background-color: cornflowerblue;
+}
+
+.ruleset:hover {
+    background-color: lightskyblue;
+}
 
 </style>
