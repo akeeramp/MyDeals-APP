@@ -6033,20 +6033,23 @@ div.k-scheduler-marquee:after {
     color: #00AEEF;
 }
 
-.k-header.k-grid-toolbar {
+.mydeals-grid .k-header.k-grid-toolbar {
     background-color: transparent;
     border-color: transparent;
 }
 
 
 /* icons */
+.k-grid-update .k-i-check {
+    margin-right: 6px;
+}
 .k-i-edit:before {
     font-family: 'intelicon';
     content:"\e919"
 }
 .k-i-close:before {
     font-family: 'intelicon';
-    content:"\e911"
+    content:"\e937"
 }
 .k-i-plus:before {
     font-family: 'intelicon';

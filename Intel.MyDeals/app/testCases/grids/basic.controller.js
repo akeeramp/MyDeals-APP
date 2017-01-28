@@ -92,7 +92,11 @@
                     command: [
                         {
                             name: "edit",
-                            template: "<a class='k-grid-edit' href='\\#'><span class='k-icon k-i-edit'></span></a>"
+                            template: "<a class='k-grid-edit' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-edit'></span></a>"
+                        },
+                        {
+                            name: "delete",
+                            template: "<a class='k-grid-delete' href='\\#'><span class='k-icon k-i-close'></span></a>"
                         }
                     ],
                     title: " ",
@@ -122,15 +126,6 @@
                     filterable: { multi: true, search: true },
                     uiType: "ComboBox",
                     editor: gridUtils.lookupEditor
-                }, {
-                    command: [
-                        {
-                            name: "delete",
-                            template: "<a class='k-grid-delete' href='\\#'><span class='k-icon k-i-close'></span></a>"
-                        }
-                    ],
-                    title: " ",
-                    width: "50px"
                 }
             ]);
 
