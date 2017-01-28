@@ -155,7 +155,9 @@
         border-radius: 4px;
     }*/
 
-    .k-callout-s {
+
+    /* PE implementing style sheets */
+    /*.k-callout-s {
          border-top-color: #0071C5;
     }
     .k-tooltip {
@@ -236,4 +238,4 @@
     .k-grid-header th.k-header>.k-link {
         margin: 0;
         padding: 0;    
-    }
+    }*/

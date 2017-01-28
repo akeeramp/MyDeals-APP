@@ -18,7 +18,7 @@
             link: function (scope, element, attrs) {
                 var gridElement = $(element);
                 var gridTopOffset = (!!scope.gridTopOffset) ? parseInt(scope.gridTopOffset) : 250;
-                var footerOffset = (!!scope.footerOffset) ? parseInt(scope.footerOffset) : 70;
+                var footerOffset = (!!scope.footerOffset) ? parseInt(scope.footerOffset) : 120;
                 var minHeight = 200;
                 var defHeight = 500;
                 $($window).resize(function () {

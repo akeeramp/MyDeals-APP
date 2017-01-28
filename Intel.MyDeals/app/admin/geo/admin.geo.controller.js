@@ -2,9 +2,9 @@
     'use strict';
     angular
         .module('app.admin')
-        .controller('GeoController', GeoController)
+        .controller('GeoController', GeoController);
 
-    GeoController.$inject = ['$uibModal', 'geoService', '$scope', 'logger', 'gridConstants']
+    GeoController.$inject = ['$uibModal', 'geoService', '$scope', 'logger', 'gridConstants'];
 
     function GeoController($uibModal, geoService, $scope, logger, gridConstants) {
         var vm = this;

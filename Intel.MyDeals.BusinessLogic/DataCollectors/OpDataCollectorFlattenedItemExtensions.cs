@@ -71,6 +71,22 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
         {
             string dimName = "_MultiDim";
             string pivotName = "PIVOT";
+            string pivotKeyName = "_pivot";
+            string titleKeyName = "TITLE";
+
+
+            // setup _pivot
+            if (!objsetItem.ContainsKey(pivotKeyName))
+            {
+                objsetItem[pivotKeyName] = new Dictionary<string, OpDataCollectorFlattenedItem>
+                {
+                    [dimName] = new OpDataCollectorFlattenedItem()
+                };
+            }
+            if (de.AtrbCd == titleKeyName)
+            {
+                ((Dictionary<string, OpDataCollectorFlattenedItem>)objsetItem[pivotKeyName])[dimName][de.AtrbValue.ToString()] = dimKey;
+            }
 
             switch (pivotMode)
             {

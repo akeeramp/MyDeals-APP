@@ -15,5 +15,6 @@ namespace Intel.MyDeals.Controllers
             ViewBag.AppToken = op.AppToken;
             return View();
         }
+
     }
 }

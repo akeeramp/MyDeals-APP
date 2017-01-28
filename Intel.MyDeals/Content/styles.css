@@ -1,5 +1,3 @@
-
-
     .clearboth {
         clear: both;
     }
@@ -11,52 +9,7 @@
         float: right;
     }
 
-    .dashboard-fg {
-        color: #c0116e;
-    }
-    .dashboard-bg {
-        background-color: #c0116e;
-    }
-    .rebate-strategy-fg {
-        color: #00AEEF;
-    }
-    .rebate-strategy-bg {
-        background-color: #00AEEF;
-    }
-    .costtest-manager-fg {
-        color: #9bad01;
-    }
-    .costtest-manager-bg {
-        background-color: #9bad01;
-    }
-    .deal-manager-fg {
-        color: #ff6d00;
-    }
-    .deal-manager-bg {
-        background-color: #ff6d00;
-    }
-
-    /*.p10 {
-        padding: 10px;
-    }
-
-    .p20 {
-        padding: 20px;
-    }
-
-    .p30 {
-        padding: 30px;
-    }
-
-    .h100 {
-        height: 100%;
-    }
-
-    .modalpad {
-        margin-top: 40px;
-    }
-        */
-    .tnavBtn {
+    /*.tnavBtn {
         border-left: 1px solid #d9dadf;
         height: 100%;
         font-size: 18px;
@@ -96,10 +49,10 @@
     }
     .smDealGrid .k-alt {
         background-color: #ffffff;
-    }
+    }*/
 
 	
-    .k-filter-row th, .k-grid-header th.k-header
+    /*.k-filter-row th, .k-grid-header th.k-header
     {
         padding: 0 8px 0 4px;
         font-size: 10px;
@@ -111,13 +64,15 @@
         color: #ffffff;
 		background-color: #53565a;
     }
-	
+*/
+    	
 	/* TODO: josiTODO: not all icons are intelicons yet. We'll need to replace all in near future as requested by Tristen */
 	/* Intel-icons on Kendo grid */
-	.k-icon:not(.k-loading), .k-icon:not(.k-i-loading), .k-grouping-dropclue, .k-drop-hint, .k-callout, .k-tool-icon, .k-state-hover .k-tool-icon, .k-state-active .k-tool-icon, .k-state-active.k-state-hover .k-tool-icon, .k-state-selected .k-tool-icon, .k-state-selected.k-state-hover .k-tool-icon, .k-column-menu .k-sprite, .k-mobile-list .k-check:checked, .k-mobile-list .k-edit-field [type=checkbox]:checked, .k-mobile-list .k-edit-field [type=radio]:checked{
+	/*.k-icon:not(.k-loading), .k-icon:not(.k-i-loading), .k-grouping-dropclue, .k-drop-hint, .k-callout, .k-tool-icon, .k-state-hover .k-tool-icon, .k-state-active .k-tool-icon, .k-state-active.k-state-hover .k-tool-icon, .k-state-selected .k-tool-icon, .k-state-selected.k-state-hover .k-tool-icon, .k-column-menu .k-sprite, .k-mobile-list .k-check:checked, .k-mobile-list .k-edit-field [type=checkbox]:checked, .k-mobile-list .k-edit-field [type=radio]:checked{
 		background-image: url("/Images/kendo_icons_intel.png");
-	}
+	}*/
 
+    /*
 
     .k-toolbar, .k-grouping-header {
         background-color: #ffffff;
@@ -145,6 +100,7 @@
     .k-pager-numbers .k-state-selected:hover {
         background-color: #0071c5;
     }
+    */
 
 
 
@@ -181,32 +137,10 @@
     }
 
 
-    h1 {
-        font-weight: 200;
-    }
-    h2 {
-        font-weight: 200;
-        color: #333333;
-    }
-    h3 {
-        font-weight: 200;
-        color: #666666;
-    }
-    h4 {
-        font-weight: 200;
-        color: #00AEEF;
-    }
-    h5 {
-        font-weight: 200;
-    }
-    h6 {
-        font-weight: 200;
-    }
 
-.select2 > .select2-choice.ui-select-match {
-        /* Because of the inclusion of Bootstrap */
-        height: 31px;
-    }
+
+
+
 
 .group{
     padding: 15px;

@@ -74,7 +74,7 @@ function objsetService($http, dataService, logger, $q) {
     }
     function readPricingTable(id) {
         // TODO finallize service call.  this is still in progress so for now still using the hard codded structure
-        //return dataService.get(apiBasePricingTableUrl + 'GetFullNestedPricingTable/' + id);
+        return dataService.get(apiBasePricingTableUrl + 'GetFullNestedPricingTable/' + id);
 
         // TODO won't need this after real call to DB return neg to pos ids
         // fake a new table        

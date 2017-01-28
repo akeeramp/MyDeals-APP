@@ -72,7 +72,9 @@ namespace Intel.MyDeals.BusinessLogic.Test
         [TestCase]
         public void PeTest()
         {
-            OpDataCollectorFlattenedDictList data = PricingTableData.GetData(123).BuildObjSetContainers(ObjSetPivotMode.Pivoted);
+            MyDealsData myDealsData = PricingTableData.GetData(123);
+            OpDataCollectorFlattenedDictList data = myDealsData.BuildObjSetContainers(ObjSetPivotMode.Pivoted);
+            MyDealsData myDealsData2 = data.ToMyDealsData(OpDataElementType.Contract, new List<int> { 123 });
 
             var y = 1;
         }

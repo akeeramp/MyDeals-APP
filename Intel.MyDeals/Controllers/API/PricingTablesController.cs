@@ -54,7 +54,6 @@ namespace Intel.MyDeals.Controllers.API
         [HttpPost]
         public MyDealsData SavePricingTable(OpDataCollectorFlattenedList pricingTables)
         {
-            // TODO replace with a true delete
             return SafeExecutor(() => _pricingTablesLib
                 .SavePricingTable(pricingTables)
                 , "Unable to save the Pricing Table"
@@ -66,7 +65,6 @@ namespace Intel.MyDeals.Controllers.API
         [HttpPost]
         public MyDealsData SaveFullPricingTable(OpDataCollectorFlattenedDictList fullpricingTables)
         {
-            // TODO replace with a true delete
             return SafeExecutor(() => _pricingTablesLib.SavePricingTable(
                 fullpricingTables.ContainsKey(OpDataElementType.PricingTable) ? fullpricingTables[OpDataElementType.PricingTable] : new OpDataCollectorFlattenedList(),
                 fullpricingTables.ContainsKey(OpDataElementType.WipDeals) ? fullpricingTables[OpDataElementType.WipDeals] : new OpDataCollectorFlattenedList())

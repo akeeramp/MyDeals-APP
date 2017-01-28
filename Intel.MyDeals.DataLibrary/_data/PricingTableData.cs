@@ -126,7 +126,7 @@ namespace Intel.MyDeals.DataLibrary
                                     {
                                         AtrbID = 125,
                                         AtrbCd = "TITLE",
-                                        AtrbValue = "Kit",
+                                        AtrbValue = "Primary",
                                         DcID = -300,
                                         DcAltID = 1,
                                         DimID = 2
@@ -171,7 +171,7 @@ namespace Intel.MyDeals.DataLibrary
                                     {
                                         AtrbID = 125,
                                         AtrbCd = "TITLE",
-                                        AtrbValue = "Kit",
+                                        AtrbValue = "Secondary 1",
                                         DcID = -300,
                                         DcAltID = 1,
                                         DimID = 3
@@ -266,7 +266,64 @@ namespace Intel.MyDeals.DataLibrary
                                         AtrbValue = "COMBOBOX 2",
                                         DcID = -300,
                                         DcAltID = 1
+                                    },
+
+
+                                    new OpDataElement
+                                    {
+                                        AtrbID = 1250,
+                                        AtrbCd = "TITLE",
+                                        AtrbValue = "Kit",
+                                        DcID = -300,
+                                        DcAltID = 1,
+                                        DimID = 1
+                                    },
+                                    new OpDataElement
+                                    {
+                                        AtrbID = 126,
+                                        AtrbCd = "TEXT",
+                                        AtrbValue = "Hello World 1",
+                                        DcID = -300,
+                                        DcAltID = 1,
+                                        DimID = 1
+                                    },
+                                    new OpDataElement
+                                    {
+                                        AtrbID = 127,
+                                        AtrbCd = "INT",
+                                        AtrbValue = 1231,
+                                        DcID = -300,
+                                        DcAltID = 1,
+                                        DimID = 1
+                                    },
+                                    new OpDataElement
+                                    {
+                                        AtrbID = 128,
+                                        AtrbCd = "DATE",
+                                        AtrbValue = "2/1/2017",
+                                        DcID = -300,
+                                        DcAltID = 1,
+                                        DimID = 1
+                                    },
+                                    new OpDataElement
+                                    {
+                                        AtrbID = 129,
+                                        AtrbCd = "DROPDOWN",
+                                        AtrbValue = "DROPDOWN 3",
+                                        DcID = -300,
+                                        DcAltID = 1,
+                                        DimID = 1
+                                    },
+                                    new OpDataElement
+                                    {
+                                        AtrbID = 125,
+                                        AtrbCd = "COMBOBOX",
+                                        AtrbValue = "COMBOBOX 2",
+                                        DcID = -300,
+                                        DcAltID = 1,
+                                        DimID = 1
                                     }
+
                                 }
                             }
                         }

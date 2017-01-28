@@ -49,7 +49,8 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
 
     //data
     //
-    root.pricingTableData = root.pricingTableData || pricingTableData; //.data;  // temporary until we use the db returned set
+    root.pricingTableData = root.pricingTableData || pricingTableData.data;  // temporary until we use the db returned set
+    //debugger;
 
     if (root.pricingTableData.PricingTable[0] === undefined) {
         root.pricingTableData.PricingTable[0] = { "_MultiDim": [] };
@@ -76,7 +77,7 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
         }
     });
 
-    debugger;
+    //debugger;
     // sample reload data source call
     //root.spreadDs.read().then(function () {
     //    var view = root.spreadDs.view();
@@ -142,7 +143,6 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
     }
 
     var gTools = new gridTools(wipTemplate.model, wipTemplate.columns);
-
     gTools.assignColSettings();
 
     root.gridDs = gTools.createDataSource($scope.dataGrid);
@@ -171,6 +171,7 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
     $scope.detailGridOptions = function (dataItem, pivotName) {
 
         var gt = new gridTools(wipTemplate.detailsModel, wipTemplate.detailsColumns);
+        gt.assignColSettings();
 
         var idIndx = $scope.dataGrid.indexOfField("dc_id", dataItem["dc_id"]);
         var src = $scope.dataGrid[idIndx][pivotName];

@@ -19,8 +19,8 @@ namespace Intel.MyDeals
             bundles.Add(new ScriptBundle("~/bundles/scripts").Include(
                 "~/Scripts/jquery-2.2.0.min.js",
                 "~/Scripts/Angular/1.5.8/angular.min.js",
-                "~/Scripts/kendo/2016.3.914/jszip.min.js",
-                "~/Scripts/kendo/2016.3.914/kendo.all.min.js",
+                "~/Scripts/kendo/2017.R1/jszip.min.js",
+                "~/Scripts/kendo/2017.R1/kendo.all.min.js",
                 "~/Scripts/kendo/kendo.aspnetmvc.min.js",
                 "~/Scripts/jquery.easypiechart.min.js",
                 "~/Scripts/moment.js",
@@ -106,6 +106,7 @@ namespace Intel.MyDeals
                 , "~/app/shared/services/templates.service.js"
                 , "~/app/testCases/testCases.module.js"
                 , "~/app/testCases/testCases.route.js"
+                , "~/app/testCases/grids/basic.controller.js"
                 , "~/app/testCases/uiControls/uiControls.controller.js"
                 ));
 
@@ -120,8 +121,7 @@ namespace Intel.MyDeals
                 "~/css/font-awesome.min.css",
                 "~/css/jquery.rainbowJSON.css",
                 "~/css/jquery-ui.min.css",
-                "~/Content/kendo/2016.3.914/kendo.common-bootstrap.min.css",
-                "~/Content/kendo/2016.3.914/kendo.metro.min.css",
+                "~/Content/kendo/2017.R1/kendo.common-material.min.css",
                 "~/css/it-mlaf.min.css",
                 "~/css/kendo.intel.css",
                 "~/css/select.min.css",

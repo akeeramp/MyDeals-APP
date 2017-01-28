@@ -273,7 +273,7 @@ namespace Intel.MyDeals.DataLibrary
                                 {
                                     field = "_dirty",
                                     title = "<i class='intelicon-upload-solid gridHeaderIcon' title='Something changed on this row'></i>",
-                                    width = 30,
+                                    width = 45,
                                     template = "#=gridUtils.uiIconWrapper(data, '_dirty')#"
                                 },
                                 new UiColumn
@@ -350,7 +350,7 @@ namespace Intel.MyDeals.DataLibrary
                                 {
                                     field = "_dirty",
                                     title = "<i class='intelicon-upload-solid gridHeaderIcon' title='Something changed on this row'></i>",
-                                    width = 30,
+                                    width = 45,
                                     template = "#=gridUtils.uiIconWrapper(data, '_dirty')#"
                                 },
                                 new UiColumn
@@ -441,7 +441,7 @@ namespace Intel.MyDeals.DataLibrary
                                 {
                                     field = "_dirty",
                                     title = "<i class='intelicon-upload-solid gridHeaderIcon' title='Something changed on this row'></i>",
-                                    width = 30,
+                                    width = 45,
                                     template = "#=gridUtils.uiIconWrapper(data, '_dirty')#"
                                 },
                                 new UiColumn
@@ -517,7 +517,7 @@ namespace Intel.MyDeals.DataLibrary
                                 {
                                     field = "_dirty",
                                     title = "<i class='intelicon-upload-solid gridHeaderIcon' title='Something changed on this row'></i>",
-                                    width = 30,
+                                    width = 45,
                                     template = "#=gridUtils.uiIconWrapper(data, '_dirty')#"
                                 },
                                 new UiColumn
@@ -610,7 +610,7 @@ namespace Intel.MyDeals.DataLibrary
                                 {
                                     field = "_dirty",
                                     title = "<i class='intelicon-upload-solid gridHeaderIcon' title='Something changed on this row'></i>",
-                                    width = 30,
+                                    width = 45,
                                     template = "#=gridUtils.uiIconWrapper(data, '_dirty')#"
                                 },
                                 new UiColumn
@@ -686,7 +686,7 @@ namespace Intel.MyDeals.DataLibrary
                                 {
                                     field = "_dirty",
                                     title = "<i class='intelicon-upload-solid gridHeaderIcon' title='Something changed on this row'></i>",
-                                    width = 30,
+                                    width = 45,
                                     template = "#=gridUtils.uiIconWrapper(data, '_dirty')#"
                                 },
                                 new UiColumn
@@ -779,7 +779,7 @@ namespace Intel.MyDeals.DataLibrary
                                 {
                                     field = "_dirty",
                                     title = "<i class='intelicon-upload-solid gridHeaderIcon' title='Something changed on this row'></i>",
-                                    width = 30,
+                                    width = 45,
                                     template = "#=gridUtils.uiIconWrapper(data, '_dirty')#"
                                 },
                                 new UiColumn
@@ -855,7 +855,7 @@ namespace Intel.MyDeals.DataLibrary
                                 {
                                     field = "_dirty",
                                     title = "<i class='intelicon-upload-solid gridHeaderIcon' title='Something changed on this row'></i>",
-                                    width = 30,
+                                    width = 45,
                                     template = "#=gridUtils.uiIconWrapper(data, '_dirty')#"
                                 },
                                 new UiColumn

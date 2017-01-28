@@ -40,7 +40,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <param name="getCachedResult">When set to false read
         /// request is coming from Admin screens by pass cached data
         /// </param>
-        /// <returns>list of customer division data<</returns>
+        /// <returns>list of customer division data</returns>
         public List<CustomerDivision> GetCustomerDivisions(bool getCachedResult = true)
         {
             if (!getCachedResult)

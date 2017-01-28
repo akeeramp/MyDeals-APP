@@ -31,7 +31,12 @@
             toastr.error(message, title);
             $log.error('Error: ' + message, data);
             if (typeof data !== 'string') {
-                data = 'message: '+ message +' statusText: '+ data['statusText'] + ' responnseText : ' + data['responseText'] + ' ErrorStack: ' + data['data'];
+                if (data['statusText'] !== undefined) {
+                    data = 'message: ' + message + ' statusText: ' + data['statusText'] + ' responseText : ' + data['responseText'] + ' ErrorStack: ' + data['data'];
+                }
+                if (data['exception'] !== undefined) {
+                    data = 'message: ' + message + ' statusText: ' + data['exception'].message + ' ErrorStack: ' + data['exception'].stack;
+                }
             }
             op.ajaxPostAsync(URL + "LogError", data);
         }

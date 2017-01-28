@@ -45,12 +45,13 @@ gridUtils.lookupEditor = function (container, options) {
     var field = $(container).closest("[data-role=grid]").data("kendoGrid").dataSource.options.schema.model.fields[options.field];
     var cols = $(container).closest("[data-role=grid]").data("kendoGrid").columns;
     var col = { field: options.field };
+
     for (var c = 0; c < cols.length; c++) {
         if (cols[c].field === options.field) col = cols[c];
     }
 
     if (col.uiType === "ComboBox") {
-        debugger;
+        //debugger;
         $('<input required name="' + options.field + '"/>')
             .appendTo(container)
             .kendoComboBox({
@@ -154,7 +155,7 @@ gridTools.prototype.getLookupData = function (lookupType) {
 
     op.ajaxGetWait(this.model.fields[lookupType].values,
         function (data) {
-            debugger;
+            //debugger;
             var items = [];
             items.push({ text: " ", value: "" });
             for (var i = 0; i < data.length; i++) {
@@ -227,7 +228,6 @@ gridTools.prototype.stripBlanks = function (data) {
 }
 
 gridTools.prototype.assignColSettings = function () {
-
     var cols = this.cols;
     for (var c = 0; c < cols.length; c++) {
 
@@ -245,8 +245,9 @@ gridTools.prototype.dropdownsLoaded = function () {
     this.init();
 }
 
-gridTools.prototype.createDataSource = function (parentSource) {
+gridTools.prototype.createDataSource = function (parentSource, pageSize) {
     var gTools = this;
+    var pSize = (pageSize === undefined) ? 1000 : pageSize;
 
     return new kendo.data.DataSource({
         transport: {
@@ -258,7 +259,6 @@ gridTools.prototype.createDataSource = function (parentSource) {
                 //e.error("XHR response", "status code", "error message");
             },
             create: function (e) {
-                debugger;
                 var source = parentSource;
                 for (var i = 0; i < e.data.models.length; i++) {
                     var item = e.data.models[i];
@@ -275,7 +275,6 @@ gridTools.prototype.createDataSource = function (parentSource) {
                 }
             },
             update: function (e) {
-                debugger;
                 var source = parentSource;
 
                 // locate item in original datasource and update it
@@ -307,7 +306,8 @@ gridTools.prototype.createDataSource = function (parentSource) {
         batch: true,
         schema: {
             model: gTools.model
-        }
+        },
+        pageSize: pSize
     });
 };
 

@@ -11,9 +11,9 @@ namespace Intel.MyDeals.Controllers.API
     {
         private readonly IConstantsLookupsLib _constantsLookupsLib;
 
-        public LookupsController(IConstantsLookupsLib _constantsLookupsLib)
+        public LookupsController(IConstantsLookupsLib constantsLookupsLib)
         {
-            this._constantsLookupsLib = _constantsLookupsLib;
+            _constantsLookupsLib = constantsLookupsLib;
         }
 
         [Authorize]

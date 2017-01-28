@@ -2,35 +2,38 @@
     'use strict';
 
     angular.module('app.testCases')
-        .controller('uiControlsController', uiControlsController)
+        .controller('uiControlsController', uiControlsController);
 
-    uiControlsController.$inject = ['$uibModal', '$scope']
+    uiControlsController.$inject = ['$uibModal', '$scope'];
 
     function uiControlsController($uibModal, $scope) {
         var gTools = new gridTools(
             {
-                "_pivot": { type: "object" },
-                "_behaviors": { type: "object" },
-                "_MultiDim": { type: "object" },
+                "id": "",
+                "fields": {
+                    "_pivot": { type: "object" },
+                    "_behaviors": { type: "object" },
+                    "_MultiDim": { type: "object" },
 
-                "dc_id": {
-                    editable: false,
-                    nullable: true
-                },
-                "TEXT": { type: "string" },
-                "INT": { type: "number" },
-                "DATE": { type: "date" },
-                "DROPDOWN": {
-                    type: "string",
-                    values: "/api/Lookups/v1/GetLookups/DROPDOWN",
-                    valuesText: "DROP_DOWN",
-                    valuesValue: "DROP_DOWN"
-                },
-                "COMBOBOX": {
-                    type: "string",
-                    values: "/api/Lookups/v1/GetLookups/COMBOBOX",
-                    valuesText: "DROP_DOWN",
-                    valuesValue: "DROP_DOWN"
+                    "dc_id": {
+                        editable: false,
+                        nullable: true
+                    },
+                    "TEXT": { type: "string" },
+                    "INT": { type: "number" },
+                    "DATE": { type: "date" },
+                    "DROPDOWN": {
+                        type: "string",
+                        values: "/api/Lookups/v1/GetLookups/DROPDOWN",
+                        valuesText: "DROP_DOWN",
+                        valuesValue: "DROP_DOWN"
+                    },
+                    "COMBOBOX": {
+                        type: "string",
+                        values: "/api/Lookups/v1/GetLookups/COMBOBOX",
+                        valuesText: "DROP_DOWN",
+                        valuesValue: "DROP_DOWN"
+                    }
                 }
             },
             [
