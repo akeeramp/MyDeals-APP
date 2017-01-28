@@ -2308,7 +2308,6 @@ tr.k-detail-row:hover {
 	color: #0071C5;
 }
 
-*/
 
 
 /* Kendo skin */
@@ -5982,19 +5981,16 @@ div.k-scheduler-marquee:after {
     background-color: #E7E7E8;
 }
 .k-grid-header .k-header > .k-link {
-    font-weight: normal; 
-    text-transform:capitalize;
+    font-weight: normal;
+    font-size: 14px;
+    text-transform: capitalize;
     color: #727578;     
 }
 .k-header, .k-grid-header-wrap, .k-grid .k-grouping-header, .k-grid-header, .k-pager-wrap, .k-pager-wrap .k-textbox, .k-pager-wrap .k-link, .k-gantt-toolbar .k-state-default, .k-grouping-row td, .k-group-footer td, .k-grid-footer td {
-    border-right-color: #B1BABF;
-    border-left-color: #B1BABF;
+    border-right-color: #c4cfd4;
+    border-left-color: #c4cfd4;
 }
 
-.k-header, .k-grid-header-wrap, .k-grid .k-grouping-header, .k-grid-header, .k-pager-wrap, .k-pager-wrap .k-textbox, .k-pager-wrap .k-link, .k-gantt-toolbar .k-state-default, .k-grouping-row td, .k-group-footer td, .k-grid-footer td {
-     border-right-color: transparent; 
-     border-left-color: transparent; 
-}
 .k-pager-wrap .k-link {
     border-color: transparent;
 }
@@ -6006,6 +6002,7 @@ div.k-scheduler-marquee:after {
 
 .k-menu .k-item .k-item label, ul.k-menu-vertical>.k-item label, .k-list-optionlabel label, .k-popup .k-item label {
     font-weight: 200;
+    font-size: 14px;
 }
 
 .k-grid .k-header .k-button-icontext .k-icon {
@@ -6033,9 +6030,44 @@ div.k-scheduler-marquee:after {
     color: #00AEEF;
 }
 
+.k-textbox.k-space-right input {
+    font-size: 14px;
+}
+.k-splitbar {
+  background-color: #F4F4F4;
+  border-color: #F4F4F4;
+}
+.k-splitbar.k-state-focused {
+  background-color: #00AEEF;
+  border-color: #00AEEF;
+}
+
+.k-menu .k-link {
+    font-size: 14px;
+}
+.k-filter-menu .k-button {
+    font-size: 14px;
+}
+
 .mydeals-grid .k-header.k-grid-toolbar {
     background-color: transparent;
     border-color: transparent;
+}
+
+.k-filter-menu, .k-filter-help-text, .k-dropdown-wrap, .k-filter-menu.k-popup input {
+    font-size: 14px;
+}
+
+.k-dropdown .k-icon.k-i-arrow-60-down, .k-combobox .k-icon.k-i-arrow-60-down, .k-datepicker  .k-icon.k-i-calendar {
+    color: #727578;
+}
+
+.k-filter-menu.k-popup label {
+    font-weight: 200;
+    padding-left: 10px;
+}
+.k-filter-menu.k-popup label input {
+    margin-right: 5px;
 }
 
 
@@ -6047,7 +6079,7 @@ div.k-scheduler-marquee:after {
     font-family: 'intelicon';
     content:"\e919"
 }
-.k-i-close:before {
+.k-grid-delete .k-i-close:before {
     font-family: 'intelicon';
     content:"\e937"
 }

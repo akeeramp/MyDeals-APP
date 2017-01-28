@@ -157,7 +157,7 @@
 
 
     /* PE implementing style sheets */
-    /*.k-callout-s {
+    .k-callout-s {
          border-top-color: #0071C5;
     }
     .k-tooltip {
@@ -176,7 +176,7 @@
         color: #000000; 
         border: 1px solid #b1babf; 
         border-radius: 4px;
-        padding: 4px;
+        padding: 8px;
         margin: 10px 0;
     }
     .uiControlDiv {
@@ -185,6 +185,7 @@
         min-height: 16px;
     }
 
+    /*
     .mydeals-grid.k-grid {
         border: 0 solid transparent;
     }
