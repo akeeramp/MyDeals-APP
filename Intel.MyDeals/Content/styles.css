@@ -174,6 +174,16 @@
     padding: 5px;
 }
 
+#rulesetlistcontents {
+    width: 100%;
+    height: 65%;
+    overflow: auto;
+}
+
+.fixed-height {
+    height: 100%;
+}
+
 .rule-engine-textbox {
     margin-left: 5px;
 }
@@ -189,4 +199,12 @@
 .qb-field-core {
     width: 15%;
     margin-left: 5px;
+}
+
+.selectedrule {
+    background-color: cornflowerblue;
+}
+
+.ruleset:hover {
+    background-color: lightskyblue;
 }

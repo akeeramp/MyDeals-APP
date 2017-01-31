@@ -22,7 +22,7 @@
         //vm.isButtonDisabled = true;
 
         vm.rsDataSource = [];
-        vm.riDataSource = [];
+        vm.riDataSource = {};
         vm.rcDataSource = [];
         vm.rtPassedDataSource = [];
         vm.rtFailedDataSource = [];
@@ -103,10 +103,32 @@
 
         //used when RuleItem/RuleCondition GET promises are resolved, populates conditionData which is used by the queryBuilder directive
         function createConditionStructure() {
-
-            var rootConditionId = vm.riDataSource.RuleConditionId;
-            var rootConditionObject = getCondition(rootConditionId)
-            
+            var rootConditionObject;
+            if (vm.riDataSource == null) {
+                //TODO: do this on c# side so we do not hard code the structure into js file
+                vm.riDataSource = {
+                    Id: -1,
+                    RuleConditionId: -1,
+                    RulePassedTaskIds: [],
+                    RuleFailedTaskIds: [],
+                    Tier: "C#"
+                }
+                //TODO: do this on c# side so we do not hard code the structure into js file
+                rootConditionObject = {
+                    Id: -1,
+                    ConditionType: "AND",
+                    Operator: "",
+                    LeftExpressionType: "",
+                    LeftExpressionValue: "",
+                    RightExpressionType: "",
+                    RightExpressionValue: "",
+                    RuleId: -1,
+                    ParentConditionId: 0,
+                    ChildConditionIds: []
+                };
+            } else {
+                rootConditionObject = getCondition(vm.riDataSource.RuleConditionId);
+            }
             vm.conditionData = conditionToJson(rootConditionObject);
         }
 
@@ -155,7 +177,7 @@
 
         vm.addTask = function(successtype) {
             var reference = getTaskByType(successtype);
-            console.log(reference);
+            //TODO: do this on c# side so we do not hard code the structure into js file
             reference.push({
                 Id: -1,
                 Function: '',
@@ -166,8 +188,42 @@
             })
         }
 
+        vm.addRule = function () {
+            resetData();
+            //TODO: do this on c# side so we do not hard code the structure into js file
+            vm.rsDataSource.push({
+                Id: -1,
+                Name: 'New Rule',
+                Description: 'Add Description',
+                Trigger: '',
+                Category: '',
+                SubCategory: '',
+                RuleId: -1,
+                Order: 0
+            })
+
+            vm.selectRuleSet(vm.rsDataSource[vm.rsDataSource.length -1]);
+        }
+
+        vm.removeRule = function () {
+            var index = vm.rsDataSource.indexOf(vm.selectedRuleSet);
+            if (index > -1) {
+                vm.rsDataSource.splice(index, 1);
+            }
+            vm.selectedRuleSet = { Id: 0 };
+
+            resetData();
+            //TODO: need to properly DELETE relevant rule item/condition/tasks as well
+        }
+
+        var resetData = function () {
+            vm.riDataSource = {};
+            vm.rcDataSource = [];
+            vm.rtPassedDataSource = [];
+            vm.rtFailedDataSource = [];
+        }
+
         var getTaskByType = function(successtype) {
-            console.log(successtype)
             if (successtype == true) {
                 return vm.rtPassedDataSource;
             } else {
