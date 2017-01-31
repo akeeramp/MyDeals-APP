@@ -2,22 +2,13 @@
 	<h2>Product Categories</h2>
 </div>
 
-<!-- Grid toolbar -->
-<div class="col-md-12">
-	<!--<button class="btn btn-primary small k-grid-add" ng-click="vm.addItem()">
-		<span class="intelicon-plus-outlined"></span> Add new record
-	</button>-->
-	<button class="btn btn-primary small k-custom-edit k-grid-customEdit" ng-disabled="!grid.dataSource.hasChanges()" ng-click="vm.saveChanges()">
-		<i class="intelicon-check"></i> Save changes
-	</button>
-	<button class="btn btn-default small k-custom-edit k-grid-customEdit" ng-disabled="!grid.dataSource.hasChanges()" ng-click="vm.cancelChanges()">
-		<i class="intelicon-close-max"></i>  Cancel changes
-	</button>
-	<button class="btn btn-default small k-custom-edit k-grid-customEdit" ng-disabled="!vm.hasFilters()" ng-click="vm.clearFilters()">
-		<i class="intelicon-cancel-filter-solid"></i> Clear all filters
-	</button>
-</div>
+<script type="text/x-kendo-template" id="template">
+	<div class="toolbar">
+		<label class="category-label" for="category">Show products by category:</label>
+	</div>
+</script>
+
 <br />
 <div class="col-md-12" style="padding-top: 20px;">
-	<div kendo-grid="grid" class="table table-bordered table-striped table-intel" expand-k-grid options="vm.gridOptions"></div>
+	<div id="grid" kendo-grid="grid" class="table table-bordered table-striped table-intel" expand-k-grid options="vm.gridOptions"></div>
 </div>

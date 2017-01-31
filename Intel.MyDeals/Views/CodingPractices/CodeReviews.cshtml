@@ -12,57 +12,26 @@
 
 	<h5>UI Code Reviews in MyDeals</h5>
 	<p>
-		You can request a code reviews within Visual Studio both before or after check-in.
+		You can request a code reviews within Visual Studio both before or after check-in. The following documentation is for Visual Studio 2015.
 	</p>
 
 	<div class="stepByStep">
 		How to UI Request Code Review before check-in
 	</div>
-	<ol>
-		<li>
-			Open the Team Explorer pane in Visual Studio ( AKA the pane that appears right before you check in)
-		</li>
-		<li>
-			Click the "Actions" dropdown link next to the "Check In" button.
-		</li>
-		<li>
-			Click the "Request Review" item in the dropdown. This should take you to a new screen.
-		</li>
-		<img src="~/Images/docs/codeReviewTeamExplorer.png" />
-		<li>
-			Type the names of each reviewer by Last name, First Name and click Enter.
-		</li>
-		<li>
-			Don't forget to add a title for the review and a description of your changes!
-		</li>
-		<li>
-			Once finished, click the "Submit Request" button.
-		</li>
-		<img src="~/Images/docs/codeReviewNewRequest.png" />
-	</ol>
-
-
-	<div class="stepByStep">
-		How to create a UI Code Review for an old changeset
-	</div>
 	<p>
-		If you just checked in, then Visual Studio should should give you a link to the changeset id directly after checkin, which you can use to follow the same process as above to request review.
-		Else, if you would lie to request review of an older changeset, follow these steps:
-
+		Please see Microsoft's <a href="https://www.visualstudio.com/en-us/docs/tfvc/get-code-reviewed-vs"> Visual Studio code review tutorial</a>
 	</p>
-	<p>
-		<ol>
+	@*<ol>
 			<li>
-				In your solution explorer, right click any file and select "Source Control" > "View History". This should take you to a new window
+				Open the Team Explorer pane in Visual Studio ( AKA the pane that appears right before you check in)
 			</li>
 			<li>
-				In this new window, replace the Source location with  C:\Users\[YOUR_USERNAME_HERE]\[YOUR_MYDEALS_PATH_HERE]. For example, C:\Users\jajaung\MyDeals\STG\MyDeals_Release\UI\main\Intel.MyDeals.
-				The screen should now show all the changsets made on the entire project
+				Click the "Actions" dropdown link next to the "Check In" button.
 			</li>
 			<li>
-				Find the changeset you want a review on. Right click that changeset and select "Request Review"
+				Click the "Request Review" item in the dropdown. This should take you to a new screen.
 			</li>
-			<img src="~/Images/docs/codeReviewHistory.png" />
+			<img src="~/Images/docs/codeReviewTeamExplorer.png" />
 			<li>
 				Type the names of each reviewer by Last name, First Name and click Enter.
 			</li>
@@ -73,6 +42,46 @@
 				Once finished, click the "Submit Request" button.
 			</li>
 			<img src="~/Images/docs/codeReviewNewRequest.png" />
+		</ol>*@
+
+
+	<div class="stepByStep">
+		How to create a UI Code Review for an old changeset
+	</div>
+	<p>
+		If you just checked in, then Visual Studio should should give you a link to the changeset id directly after check-in
+		, which you can use to follow the same process as above to request review.
+		Else, if you would like to request review of an older changeset, follow these steps:
+
+	</p>
+	<p>
+		<ol>
+			<li>
+				In your solution explorer, right click any file and select "Source Control" > "View History". This should take you to a new window
+			</li>
+			<li>
+				In this new window, replace the Source location with  C:\Users\[YOUR_USERNAME_HERE]\[YOUR_MYDEALS_PATH_HERE].
+				For example, C:\Users\jajaung\MyDeals\STG\MyDeals_Release\UI\main\Intel.MyDeals.
+				The screen should now show all the changsets made on the entire project
+			</li>
+			<li>
+				Find the changeset you want a review on. Right click that changeset and select "Request Review"
+			</li>
+			<img src="~/Images/docs/codeReviewHistory.png" />
+			<li>
+				Follow Microsoft's <a href="https://www.visualstudio.com/en-us/docs/tfvc/get-code-reviewed-vs"> Visual Studio code review tutorial </a>
+				for steps on how to submit your code review
+			</li>
+			@*<li>
+				Type the names of each reviewer by Last name, First Name and click Enter.
+			</li>
+			<li>
+				Don't forget to add a title for the review and a description of your changes!
+			</li>
+			<li>
+				Once finished, click the "Submit Request" button.
+			</li>
+			<img src="~/Images/docs/codeReviewNewRequest.png" />*@
 		</ol>
 	</p>
 

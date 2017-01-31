@@ -271,6 +271,7 @@ textarea.k-textbox:hover,
 }
 .k-widget.k-tooltip {
   background-image: none;
+  white-space: normal;
 }
 .k-block,
 .k-header,

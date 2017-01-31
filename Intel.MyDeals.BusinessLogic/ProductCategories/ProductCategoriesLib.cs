@@ -10,6 +10,8 @@ namespace Intel.MyDeals.BusinessLogic
 	{
 		private readonly IProductCategoriesDataLib _productCategoriesDataLib;
 
+		private readonly IDataCollectionsDataLib _dataCollectionsDataLib;
+
 		/// <summary>
 		/// TODO: This parameterless constructor is left as a reminder,
 		/// once we fix our unit tests to use Moq remove this constructor, also remove direct reference to "Intel.MyDeals.DataLibrary"
@@ -19,9 +21,10 @@ namespace Intel.MyDeals.BusinessLogic
 			this._productCategoriesDataLib = new ProductCategoriesDataLib();
 		}
 
-		public ProductCategoriesLib(IProductCategoriesDataLib _productCategoriesDataLib)
+		public ProductCategoriesLib(IProductCategoriesDataLib _productCategoriesDataLib, IDataCollectionsDataLib _dataCollectionsDataLib)
 		{
 			this._productCategoriesDataLib = _productCategoriesDataLib;
+			this._dataCollectionsDataLib = _dataCollectionsDataLib;
 		}
 
 
@@ -35,8 +38,8 @@ namespace Intel.MyDeals.BusinessLogic
 		/// </summary>
 		/// <returns>list of Product Categories</returns>
 		public List<ProductCategory> GetProductCategories()
-        {
-			return _productCategoriesDataLib.GetProductCategories();
+		{
+			return _dataCollectionsDataLib.GetProductCategories();
 		}
 
 		/// <summary>

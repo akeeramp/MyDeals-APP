@@ -70,6 +70,9 @@ namespace Intel.MyDeals.DataLibrary
 		//{
 		//	if (category == null) { return null; }
 		//	// TODO: Hookup and replace Product.cs references with newly generated ProductCategoes.cs (in future sprint)
+		//	// Update Cache
+		//	DataCollections.ClearCache("_getProductCategories");
+		//		DataCollections.LoadCache("_getProductCategories");
 		//	return new ProductCategory();
 		//}
 
@@ -111,6 +114,10 @@ namespace Intel.MyDeals.DataLibrary
 							   PRD_CAT_NM = Convert.ToString(rw["PRD_CAT_NM"])
 						   }).ToList();
 				}
+
+				// Update Cache
+				DataCollections.ClearCache("_getProductCategories");
+				DataCollections.LoadCache("_getProductCategories");
 			}
 			catch (Exception ex)
 			{

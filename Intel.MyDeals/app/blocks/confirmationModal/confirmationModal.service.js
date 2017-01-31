@@ -18,6 +18,7 @@
         var modalOptions = {
             closeButtonText: 'Cancel',
             actionButtonText: 'OK',
+            hasActionButton: true,
             headerText: 'Proceed?',
             bodyText: 'Perform this action?'
         };

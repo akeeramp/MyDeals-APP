@@ -435,7 +435,18 @@ namespace Intel.MyDeals.DataLibrary
         }
         private static List<RuleTask> _getRuleTaskData;
 
-        #endregion
+		#endregion
 
-    }
+		#region Product Categories
+		public static List<ProductCategory> GetProductCategories()
+		{
+			lock (LOCK_OBJECT ?? new object())
+			{
+				return _getProductCategories ?? (_getProductCategories = new ProductCategoriesDataLib().GetProductCategories());
+			}
+		}
+		private static List<ProductCategory> _getProductCategories;
+		#endregion
+
+	}
 }

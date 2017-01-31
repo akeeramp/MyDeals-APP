@@ -113,9 +113,13 @@ namespace Intel.MyDeals.DataLibrary
             return DataCollections.GetRuleConditions();
         }
 
-        public List<RuleTask> GetRuleTasks()
-        {
-            return DataCollections.GetRuleTasks();
-        }
-    }
+		public List<RuleTask> GetRuleTasks()
+		{
+			return DataCollections.GetRuleTasks();
+		}
+		public List<ProductCategory> GetProductCategories()
+		{
+			return DataCollections.GetProductCategories();
+		}
+	}
 }

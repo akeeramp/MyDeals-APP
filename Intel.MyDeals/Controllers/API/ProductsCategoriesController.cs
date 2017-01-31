@@ -3,9 +3,9 @@ using System.Web.Http;
 using Intel.MyDeals.Entities;
 using Intel.Opaque;
 using System;
+using System.Linq;
 using System.Net;
 using Intel.MyDeals.IBusinessLogic;
-using Kendo.Mvc.UI;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -56,14 +56,19 @@ namespace Intel.MyDeals.Controllers.API
 		[Route("UpdateProductCategory")]
 		public ProductCategory UpdateProductCategory(ProductCategory category)
 		{
+			if (category.ACTV_IND && (String.IsNullOrEmpty(category.DEAL_PRD_TYPE) || String.IsNullOrEmpty(category.PRD_CAT_NM)))
+			{
+				throw new HttpResponseException(HttpStatusCode.InternalServerError);  // responds with a simple status code for ajax call to consume.
+			}
+
 			List<ProductCategory> categoriesList = new List<ProductCategory>();
 			categoriesList.Add(category);
 			
-			if (UpdateProductCategoryBulk(categoriesList).Count > 0)
+			try
 			{
-				return category;
+				return UpdateProductCategoryBulk(categoriesList).FirstOrDefault();
 			}
-			else
+			catch
 			{
 				throw new HttpResponseException(HttpStatusCode.InternalServerError);  // responds with a simple status code for ajax call to consume.
 			}
@@ -74,6 +79,13 @@ namespace Intel.MyDeals.Controllers.API
 		[Route("UpdateProductCategoryBulk")]
 		public List<ProductCategory> UpdateProductCategoryBulk(List<ProductCategory> categoriesList)
 		{
+			foreach(ProductCategory category in categoriesList)
+			{
+				if (category.ACTV_IND && (String.IsNullOrEmpty(category.DEAL_PRD_TYPE) || String.IsNullOrEmpty(category.PRD_CAT_NM)))
+				{
+					throw new HttpResponseException(HttpStatusCode.InternalServerError);  // responds with a simple status code for ajax call to consume.
+				}
+			}
 			try
 			{ 
 				return _productCategoriesLib.UpdateProductCategories(categoriesList);
