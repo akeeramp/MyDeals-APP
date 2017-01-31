@@ -6,7 +6,7 @@
     appRun.$inject = ['routerHelper'];
 
     function appRun(routerHelper) {
-        routerHelper.configureStates(getStates(), '*path');
+        routerHelper.configureStates(getStates());
     }
 
     function getStates() {
@@ -14,7 +14,7 @@
             {
                 state: 'contract',
                 config: {
-                    url: '/:cid',
+                    url: 'manager/{cid:int}',
                     abstract: true,
                     views: {
                         'bodyView': {
@@ -22,14 +22,14 @@
                             controller: 'ContractController',
                             controllerAs: 'contract',
                             resolve: {
-                                contractData: function ($stateParams, objsetService) {
+                                contractData: ['$stateParams', 'objsetService', function ($stateParams, objsetService) {
                                     if ($stateParams.cid <= 0) return null;
                                     topbar.show();
                                     return objsetService.readContract($stateParams.cid);
-                                },
-                                templateData: function ($stateParams, templatesService) {
+                                }],
+                                templateData: ['$stateParams', 'templatesService', function ($stateParams, templatesService) {
                                     return templatesService.readTemplates();
-                                }
+                                }]
                             }
                         }
                     }
@@ -69,7 +69,7 @@
             }, {
                 state: 'contract.manager',
                 config: {
-                    url: '/manager',
+                    url: '',
                     views: {
                         'lnavView': {
                             templateUrl: '/app/contract/partials/lnav.html'
@@ -85,38 +85,28 @@
             }, {
                 state: 'contract.manager.strategy',
                 config: {
-                    url: '/:sid/:pid',
+                    url: '/{sid:int}/{pid:int}',
                     views: {
                         'pricingTableView': {
                             templateUrl: '/app/contract/partials/pricingTable.html',
                             controller: 'PricingTableController',
                             resolve: {
-                                pricingTableData: function ($stateParams, objsetService) {
+                                pricingTableData: ['$stateParams', 'objsetService',function ($stateParams, objsetService) {
                                     if ($stateParams.pid <= 0) return null;
                                     topbar.show();
                                     return objsetService.readPricingTable($stateParams.pid);
-                                }
+                                }]
                             }
                         }
                     }
                 }
             }, {
-            state: 'contract.manager.strategy.wip',
+                state: 'contract.manager.strategy.wip',
                 config: {
                     url: '/wip',
                     views: {
                         'wipDealView': {
                             templateUrl: '/app/contract/partials/wipDeals.html'
-                        }
-                    }
-                }
-            }, {
-                state: 'otherwise',
-                config: {
-                    url: '*path',
-                    views: {
-                        'bodyView': {
-                            templateUrl: '/app/contract/partials/otherwise.html'
                         }
                     }
                 }

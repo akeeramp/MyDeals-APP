@@ -1,7 +1,7 @@
 ﻿<div class="opUiContainer" ng-class="{isHidden: opIsHidden, isErrorWrapper: opIsError, isSavedWrapper: opIsSaved, isDirtyWrapper: opIsDirty}">
     <div class="fl opUiLabel" ng-class="{isRequired: opIsRequired}">{{opLabel}}</div>
     <div style="overflow: hidden;">
-        <div kendo-tooltip k-content="opValidMsg" k-position="'top'" ng-show="opIsError" class="err-bit-el"></div>
+        <div kendo-tooltip k-content="tooltipMsg" k-position="'top'" ng-show="opIsError" class="err-bit-el"></div>
         <input type="text" class="k-textbox fl opUiElement"
                ng-model="value"
                ng-readonly="opIsReadOnly"

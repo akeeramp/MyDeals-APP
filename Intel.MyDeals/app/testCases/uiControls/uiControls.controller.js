@@ -412,24 +412,27 @@
             $scope.detailGridOptions = function (dataItem, pivotName) {
                 var gt = new gridTools(
                 {
-                    "_behaviors": { type: "object" },
-                    "dc_id": { editable: false, nullable: true },
-                    "PIVOT": { type: "object" },
-                    "TITLE": { type: "string" },
-                    "TEXT": { type: "string" },
-                    "INT": { type: "number" },
-                    "DATE": { type: "date" },
-                    "DROPDOWN": {
-                        type: "string",
-                        values: "/api/Lookups/v1/GetLookups/DROPDOWN",
-                        valuesText: "DROP_DOWN",
-                        valuesValue: "DROP_DOWN"
-                    },
-                    "COMBOBOX": {
-                        type: "string",
-                        values: "/api/Lookups/v1/GetLookups/COMBOBOX",
-                        valuesText: "DROP_DOWN",
-                        valuesValue: "DROP_DOWN"
+                    "id": "",
+                    "fields": {
+                        "_behaviors": { type: "object" },
+                        "dc_id": { editable: false, nullable: true },
+                        "PIVOT": { type: "object" },
+                        "TITLE": { type: "string" },
+                        "TEXT": { type: "string" },
+                        "INT": { type: "number" },
+                        "DATE": { type: "date" },
+                        "DROPDOWN": {
+                            type: "string",
+                            values: "/api/Lookups/v1/GetLookups/DROPDOWN",
+                            valuesText: "DROP_DOWN",
+                            valuesValue: "DROP_DOWN"
+                        },
+                        "COMBOBOX": {
+                            type: "string",
+                            values: "/api/Lookups/v1/GetLookups/COMBOBOX",
+                            valuesText: "DROP_DOWN",
+                            valuesValue: "DROP_DOWN"
+                        }
                     }
                 },
                 [

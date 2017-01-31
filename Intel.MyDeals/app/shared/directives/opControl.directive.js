@@ -6,7 +6,7 @@
 opControl.$inject = ['$http', 'lookupsService', '$compile', '$templateCache', 'logger', '$q'];
 
 function opControl($http, lookupsService, $compile, $templateCache, logger, $q) {
-    var getTemplate = function(controlType) {
+    var getTemplate = function (controlType) {
         var baseUrl = 'app/shared/uiControls/';
         var templateMap = {
             'VERTICAL_TEXTBOX': 'verticalTextBox.html',
@@ -65,9 +65,9 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q) 
         }
 
         var loader = getTemplate(scope.opUiMode + '_' + scope.opType);
-        var promise = loader.success(function(html) {
+        var promise = loader.success(function (html) {
             element.html(html);
-            })
+        })
             .then(function (response) {
                 element.replaceWith($compile(element.html())(scope));
             });
@@ -82,10 +82,13 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q) 
                 //alert("value changed");
                 //debugger;
             });
+
+        // Kendo tooltip content doesn't observe binding data changes, work around it to observe changes.
+        scope.tooltipMsg = "{{opValidMsg}}";
     }
 
     return {
-        restrict: 'AE', //E = element, A = attribute, C = class, M = comment    
+        restrict: 'AE', //E = element, A = attribute, C = class, M = comment
 
         scope: {
             value: '=ngModel',
@@ -106,5 +109,4 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q) 
         },
         link: linker
     }
-
 }
