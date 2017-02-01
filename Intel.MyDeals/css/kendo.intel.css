@@ -6124,5 +6124,26 @@ div.k-scheduler-marquee:after {
     font-family: 'intelicon';
     content:"\e92b"
 }
+.k-i-check:before {
+    font-family: 'intelicon';
+    content: "\e914";
+}
+.k-i-cancel:before {
+    font-family: 'intelicon';
+    content: "\e94d";
+}
+.k-i-arrow-e:before {	
+    font-family: 'intelicon';
+    content: "\e9e2";
+}
+.k-i-arrow-w:before {	
+    font-family: 'intelicon';
+    content: "\e9e2";
+	/* Flip image */
+    -moz-transform: scale(-1, -1);
+    -o-transform: scale(-1, -1);
+    -webkit-transform: scale(-1, -1);
+    transform: scale(-1, -1);
+}
 
 
