@@ -56,10 +56,11 @@
                 		var modalOptions = {
                 			closeButtonText: 'Okay',
                 			hasActionButton: false,
-                			headerText: 'Warning',
+                			headerText: 'Error',
                 			bodyText: 'Product Category Name and Deal Product Type are required when the Active Indicator is checked. Please check your input and try again.'
                 		};
-                		confirmationModal.showModal({}, modalOptions);;
+                		confirmationModal.showModal({}, modalOptions);
+
                 	}
 
                 }
@@ -170,7 +171,7 @@
 			},
 			{
             	field: "OP_CD",
-            	width: 90,
+            	width: 120,
             	title: "Op Code"
 			},
 			{
@@ -185,7 +186,7 @@
 			},
 			{
                 field: "ACTV_IND",
-                width: 80,
+                width: 120,
                 headerTemplate: "<div class='editableHeader'> Actv Ind </div>",
                 template: "<span ng-if='! #= ACTV_IND # ' class='icon-md intelicon-empty-box'></span><span ng-if=' #= ACTV_IND # ' class='icon-md intelicon-filled-box'></span>"
 			},
