@@ -266,7 +266,6 @@
     <Compile Include="Areas\Admin\Controllers\CacheController.cs" />
     <Compile Include="Controllers\API\TemplatesController.cs" />
     <Compile Include="Controllers\API\CustomersController.cs" />
-    <Compile Include="Controllers\API\WorkFlowController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CodingPracticesController.cs" />
     <Compile Include="Controllers\API\SecurityAttributesController.cs" />

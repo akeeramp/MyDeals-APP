@@ -91,7 +91,7 @@
                             templateUrl: '/app/contract/partials/pricingTable.html',
                             controller: 'PricingTableController',
                             resolve: {
-                                pricingTableData: ['$stateParams', 'objsetService',function ($stateParams, objsetService) {
+                                pricingTableData: ['$stateParams', 'objsetService', function ($stateParams, objsetService) {
                                     if ($stateParams.pid <= 0) return null;
                                     topbar.show();
                                     return objsetService.readPricingTable($stateParams.pid);
