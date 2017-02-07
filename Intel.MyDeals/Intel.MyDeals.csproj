@@ -311,6 +311,9 @@
     <Content Include="app\admin\rules\admin.rules.controller.js" />
     <Content Include="app\admin\rules\rules.html" />
     <Content Include="app\admin\rules\rules.service.js" />
+    <Content Include="app\admin\workflow\admin.workflow.controller.js" />
+    <Content Include="app\admin\workflow\workflow.html" />
+    <Content Include="app\admin\workflow\workflow.service.js" />
     <Content Include="app\app.module.js" />
     <Content Include="app\blocks\exception\exception-handler.provider.js" />
     <Content Include="app\blocks\exception\exception.js" />
