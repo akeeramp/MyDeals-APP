@@ -68,7 +68,6 @@
     <Compile Include="RuleEngine\IRuleEngineLib.cs" />
     <Compile Include="SecurityAttributes\ISecurityAttributesLib.cs" />
     <Compile Include="UI Templates\IUiTemplateLib.cs" />
-    <Compile Include="Workflow\IWorkFlowLib.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Intel.MyDeals.Entities\Intel.MyDeals.Entities.csproj">

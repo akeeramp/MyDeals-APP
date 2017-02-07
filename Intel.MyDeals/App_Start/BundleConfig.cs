@@ -73,8 +73,6 @@ namespace Intel.MyDeals
                 , "~/app/admin/customer/customer.service.js"
                 , "~/app/admin/geo/admin.geo.controller.js"
                 , "~/app/admin/geo/geo.service.js"
-                , "~/app/admin/workflow/admin.workflow.controller.js"
-                , "~/app/admin/workflow/workflow.service.js"
                 , "~/app/admin/products/admin.products.controller.js"
                 , "~/app/admin/products/products.service.js"
                 , "~/app/admin/productCategories/admin.productCategories.controller.js"

@@ -23,8 +23,7 @@ namespace Intel.MyDeals.BusinessLogic
             registerService.RegisterType<IContractsLib, ContractsLib>();
             registerService.RegisterType<IPricingStrategiesLib, PricingStrategiesLib>();
             registerService.RegisterType<IPricingTablesLib, PricingTablesLib>();
-            registerService.RegisterType<IUiTemplateLib, UiTemplateLib>();
-            registerService.RegisterType<IWorkFlowLib, WorkFlowLib>();
+            registerService.RegisterType<IUiTemplateLib, UiTemplateLib>();            
         }
     }
 }

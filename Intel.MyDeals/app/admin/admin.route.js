@@ -39,15 +39,6 @@
                 }
             },
             {
-                state: 'admin.workflow',
-                abstract: false,
-                config: {
-                    templateUrl: 'app/admin/workflow/workflow.html',
-                    url: 'workflow',
-                    controller: 'WorkflowController as vm',
-                }
-            },
-            {
                 state: 'admin.customers',
                 abstract: false,
                 config: {
