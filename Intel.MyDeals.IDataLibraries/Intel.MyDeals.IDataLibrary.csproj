@@ -61,6 +61,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SecurityAttributes\ISecurityAttributesDataLib.cs" />
     <Compile Include="UI Templates\IUiTemplateDataLib.cs" />
+    <Compile Include="Workflow\IWorkFlowDataLib.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Intel.MyDeals.Entities\Intel.MyDeals.Entities.csproj">
