@@ -111,7 +111,7 @@ namespace Intel.MyDeals.Entities
 
             if (dealType == null)
             {
-                string deDealTypeSid = dc.GetAtrbValue(AttributeCodes.DEAL_TYPE_CD_SID).ToString();
+                string deDealTypeSid = dc.GetAtrbValue("OBJ_TYPE").ToString();
 
                 if (string.IsNullOrEmpty(deDealTypeSid))
                 {
@@ -131,18 +131,19 @@ namespace Intel.MyDeals.Entities
 
             dc.DcType = dealType ?? string.Empty;
 
-            IOpDataElement deDealTypeCd = (IOpDataElement) dc.GetAtrb(AttributeCodes.DEAL_TYPE_CD);
+            IOpDataElement deDealTypeCd = (IOpDataElement) dc.GetAtrb("OBJ_TYPE");
             if (deDealTypeCd == null)
             {
                 dc.DataElements.Add(new OpDataElement
                 {
                     DcID = dc.DcID,
-                    DcAltID = dc.DcAltID,
+                    DcParentSID = dc.DcParentSID,
+                    DcSID = dc.DcSID,
                     AtrbID = 5,
                     AtrbValue = dc.DcType,
                     OrigAtrbValue = dc.DcType,
                     PrevAtrbValue = dc.DcType,
-                    AtrbCd = AttributeCodes.DEAL_TYPE_CD,
+                    AtrbCd = "OBJ_TYPE",
                     State = OpDataElementState.Unchanged
                 });
             }
@@ -169,7 +170,8 @@ namespace Intel.MyDeals.Entities
                     AtrbID = atrb.ATRB_SID,
                     AtrbValue = dc.DcID,
                     DcID = dc.DcID,
-                    DcAltID = dc.DcAltID,
+                    DcParentSID = dc.DcParentSID,
+                    DcSID = dc.DcSID,
                     State = OpDataElementState.Unchanged
                 });
             }

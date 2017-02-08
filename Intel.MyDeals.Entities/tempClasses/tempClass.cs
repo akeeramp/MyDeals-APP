@@ -296,7 +296,7 @@ namespace Intel.MyDeals.Entities
 
 
         [DataMember]
-        public System.String DEAL_TYPE_CD { set; get; }
+        public System.String OBJ_TYPE { set; get; }
 
 
         [DataMember]

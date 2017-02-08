@@ -19,9 +19,13 @@ namespace Intel.MyDeals.Entities
             { "PLI", OpDataElementType.Tertiary },
             { "GRP", OpDataElementType.Group},
 
+            //{ "1", OpDataElementType.Contract},
+            //{ "2", OpDataElementType.PricingStrategy},
+            //{ "3", OpDataElementType.PricingTable},
             { "CNTRCT", OpDataElementType.Contract},
             { "PRC_ST", OpDataElementType.PricingStrategy},
             { "PRCNG", OpDataElementType.PricingTable},
+
             { "DRFT", OpDataElementType.WipDeals},
 
             { "ARCH", OpDataElementType.Archive},
@@ -62,5 +66,65 @@ namespace Intel.MyDeals.Entities
 
             return string.Empty;
         }
+
+        // TODO - This is a total hack job because some calls in DB need to have packet type as an ID, not a string.  Go figure.
+        /// <summary>
+        /// Convert a OpDataElementType to an integer of a known structure.
+        /// </summary>
+        /// <param name="en"></param>
+        /// <returns></returns>
+        public static int ToId(this OpDataElementType en)
+        {
+            int packetId = 0; // Default error case if not found
+
+            switch (en)
+            {
+                case OpDataElementType.Contract:
+                    packetId = 1;
+                    break;
+                case OpDataElementType.PricingStrategy:
+                    packetId = 2;
+                    break;
+                case OpDataElementType.PricingTable:
+                    packetId = 3;
+                    break;
+                case OpDataElementType.WipDeals:
+                    packetId = 4;
+                    break;
+                case OpDataElementType.Deals:
+                    packetId = 5;
+                    break;
+            }
+
+            return packetId;
+        }
+
+        public static OpDataElementType IdToString(this int packetId)
+        {
+            OpDataElementType opType = OpDataElementType.Unknown; // Default error case if not found
+
+            switch (packetId)
+            {
+                case 1:
+                    opType = OpDataElementType.Contract;
+                    break;
+                case 2:
+                    opType = OpDataElementType.PricingStrategy;
+                    break;
+                case 3:
+                    opType = OpDataElementType.PricingTable;
+                    break;
+                case 4:
+                    opType = OpDataElementType.WipDeals;
+                    break;
+                case 5:
+                    opType = OpDataElementType.Deals;
+                    break;
+            }
+
+            return opType;
+        }
+
+
     }
 }

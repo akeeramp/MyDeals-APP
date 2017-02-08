@@ -55,9 +55,8 @@ namespace Intel.MyDeals.Controllers.API
         [HttpPost]
         public MyDealsData SavePricingStrategy(OpDataCollectorFlattenedList pricingStrategies)
         {
-            // TODO replace when DB is ready
-            return SafeExecutor(() => new MyDealsData()
-                , "Unable to save the Pricing Strategy"
+            return SafeExecutor(() => _pricingStrategiesLib.SavePricingStrategy(pricingStrategies), 
+                "Unable to save the Pricing Strategy"
             );
         }
 

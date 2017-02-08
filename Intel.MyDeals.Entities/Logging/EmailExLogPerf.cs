@@ -8,7 +8,7 @@ namespace Intel.MyDeals.Entities.Logging
 {
 	public class EmailExLogPerf : IOpLogPerf
 	{
-		private static string ToEmailList = "josephine.a.juang@intel.com, philip.w.eckenroth@intel.com"; // TODO: this shoud be read from an environment aware constants config setup. The from email might also be from a config file or constant. Mike prefers constants
+		private static string ToEmailList = "josephine.a.juang@intel.com, philip.w.eckenroth@intel.com, michael.h.tipping@intel.com"; // TODO: this shoud be read from an environment aware constants config setup. The from email might also be from a config file or constant. Mike prefers constants
 		private static string FromEmail = "MyDealsSupport@intel.com";
 		public string EmailEmailSubject = "MyDeals Error [{0}] - {1}";
 		
@@ -39,11 +39,11 @@ namespace Intel.MyDeals.Entities.Logging
 		}
 
 
-		/// <summary>
-		/// Email an exception
-		/// </summary>
-		/// <param name="ex"></param>
-		public void Log(OpLogPerfMessage msg)
+        /// <summary>
+        /// Email an exception
+        /// </summary>
+        /// <param name="ex"></param>
+        public void Log(OpLogPerfMessage msg)
 		{
 			// Only email errors
 			if (!msg.IsError) { return; }
@@ -55,8 +55,8 @@ namespace Intel.MyDeals.Entities.Logging
 			string env = OpLog.GetEnv();
 
 			// construct message
-			string shortMsg = msg.Message.Truncate(50) + "...";
-			string title = string.Format(EmailEmailSubject, env, shortMsg);
+			string shortMsg = msg.Message.Truncate(50) + "...";  // Was string shortMsg = msg.Message.Truncate(50) + "...";
+            string title = string.Format(EmailEmailSubject, env, shortMsg);
 			string body = OpLogPerfHelper.MachineDetails;
 			body += msg.Message;
 

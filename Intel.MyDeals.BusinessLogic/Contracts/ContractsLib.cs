@@ -43,6 +43,7 @@ namespace Intel.MyDeals.BusinessLogic
 
         public MyDealsData SaveContract(OpDataCollectorFlattenedList data)
         {
+            // Save Data Cycle: Point 1
             return _dataCollectorLib.SavePackets(new OpDataCollectorFlattenedDictList
             {
                 [OpDataElementType.Contract] = data

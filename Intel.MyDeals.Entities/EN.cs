@@ -72,8 +72,8 @@
 
             public const string DEAL_NBR = "DEAL_NBR";
             public const string DEAL_ID = "DEAL_SID";
-            public const string DEAL_TYPE_CD = "DEAL_TYPE_CD";
-            public const string DEAL_TYPE_CD_SID = "DEAL_TYPE_CD_SID";
+            public const string OBJ_TYPE_CD = "OBJ_TYPE";
+            public const string OBJ_TYPE_CD_SID = "OBJ_TYPE_SID";
             public const string ATRB_SID = "ATRB_SID";
             public const string ATRB_VAL = "ATRB_VAL";
             public const string ATRB_CHAR = "ATRB_CHAR";

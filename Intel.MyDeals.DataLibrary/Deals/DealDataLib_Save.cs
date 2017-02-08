@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using Intel.MyDeals.Entities;
 using Intel.Opaque;
+using Intel.Opaque.DataElement;
 using Intel.Opaque.Tools;
 using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
 
@@ -16,5 +17,687 @@ namespace Intel.MyDeals.DataLibrary
 {
     public partial class DealDataLib
     {
+
+
+        /// <summary>
+        /// Save deals and process all actions in the Action Queue
+        /// </summary>
+        /// <param name="packets">Packets to save.</param>
+        /// <param name="opUserToken"></param>
+        /// <returns>Changed deals</returns>
+        public MyDealsData SaveDeals(MyDealsData packets, OpUserToken opUserToken)
+        {
+            return SaveDeals(packets, opUserToken, true);
+        }
+
+        private MyDealsData SaveDeals(MyDealsData packets, OpUserToken opUserToken, bool batchMode)
+        {
+            // Save Data Cycle: Point 15
+            try
+            {
+                OpLogPerf.Log("DealDataLib.Save:SaveDeals - Start.");
+
+                if (packets == null)
+                {
+                    throw new ArgumentException("packets parameter cannot be null");
+                }
+
+                IEnumerable<KeyValuePair<Guid, int>> groupCheck = null;
+
+                try
+                {
+                    // Ensure Batch to PacketType is 1:1
+                    groupCheck =
+                    (
+                        from p in packets.Values
+                        group p by p.BatchID into g
+                        select new KeyValuePair<Guid, int>
+                        (
+                            g.Key,
+                            g.Select(itm => itm?.PacketType ?? OpDataElementType.Unknown).Distinct().Count()
+                        )
+                    )
+                    .Where(grp => grp.Value > 1);
+                }
+                catch (Exception ex)
+                {
+                    OpLogPerf.Log(ex);
+                }
+
+
+                if (groupCheck != null && groupCheck.Any())
+                {
+                    throw new ArgumentException(string.Format(
+                        "Error in passed saved deal packets.  Each Batch ID should correspond 1:1 with a Packet Type.  Batch \"{0}\" had {1} Packet Types associated with it, which is illegal.",
+                        groupCheck.First().Key, groupCheck.First().Value));
+                }
+
+                // Process the packets in order
+                var orderedPackets = GetPacketsInOrder(packets.Values);
+
+                // Write them to tdeal.WIP_ATRB
+                ImportOpDataPackets(orderedPackets, opUserToken.Usr.WWID);
+
+                //DebugLog("DcsDealLib.SaveDeals - Exit ImportOpDataPackets.");
+
+                // Get all the actions and process them in order
+                MyDealsData ret = batchMode ? ActionDealsBatch(orderedPackets, opUserToken.Usr.WWID) : ActionDeals(orderedPackets);
+
+                //DebugLog("DcsDealLib.SaveDeals - Exit ActionDeals.");
+
+#if DEBUG
+                // Dump random debugging log messsage into the first returned packet.
+                if (ret != null && ret.Count > 0 && LogMessages.Count > 0)
+                {
+                    var firstPacket = ret.First().Value;
+                    firstPacket?.Messages.Merge(LogMessages);
+                }
+#endif
+
+                return ret;
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+
+                // TODO: Take rollback actions here...
+                // Or, wrap the above in a ADO transaction (see BulkLoadDealDataSetToWipTablesInTransaction)?
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Write data packets and actions to tdeal.WIP_ATRB and tdeal.WIP_ACTN
+        /// </summary>
+        /// <param name="packets">Valid data packets.</param>
+        /// <param name="wwid">User WWID to tag to operation.</param>
+        private void ImportOpDataPackets(IEnumerable<OpDataPacket<OpDataElementType>> packets, int wwid)
+        {
+            // Save Data Cycle: Point 16
+
+            if (packets == null) { return; }
+
+            OpLogPerf.Log("DealDataLib.Save:ImportOpDataPackets - Start.");
+
+            Guid group_batch_id = Guid.Empty;
+
+            DataSet dsImport = new DataSet();
+
+            // TODO - Fix hact to get Cust ID for these functions
+            int cust_id = 3;
+            // Create shell tables with proper schema...
+            var dtData = OpDataPacketToImportDataTable(new OpDataPacket<OpDataElementType>(), cust_id);
+            var dtAction = OpDataPacketToImportActionTable(new OpDataPacket<OpDataElementType>(), group_batch_id, wwid);
+
+            foreach (var odp in packets.Where(p => p.PacketType == OpDataElementType.Group && OpTypeConverter.IsValidGuid(p.BatchID)))
+            {
+                if (group_batch_id != Guid.Empty && group_batch_id != odp.BatchID)
+                {
+                    throw new ArgumentException("Multiple non-distinct groups (workbooks) were passed to the save routine.  It is expected that each save call contains only one workbook of data.");
+                }
+                group_batch_id = odp.BatchID;
+            }
+
+            if (!OpTypeConverter.IsValidGuid(group_batch_id))
+            {
+                // So we can make sure all packets are always married together, if no valid group is in the set,
+                // create a batch ID to tie them together.
+                group_batch_id = Guid.NewGuid();
+            }
+
+            OpLogPerf.Log("DealDataLib.Save:ImportOpDataPackets - Begin DataTable Transformation.");
+
+            // Convert each set of packets to data tables so we can bulk upload them.
+            OpParallelWait.ForEach<OpDataPacket<OpDataElementType>>(packets, odp =>
+            {
+                // Insert Data First...
+                using (var dt = OpDataPacketToImportDataTable(odp, cust_id))
+                {
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        lock (dtData)
+                        {
+                            dtData.Merge(dt, true);
+                        }
+                    }
+                }
+
+                // Then Actions...
+                using (var dta = OpDataPacketToImportActionTable(odp, group_batch_id, wwid))
+                {
+                    if (dta != null && dta.Rows.Count > 0)
+                    {
+                        lock (dtAction)
+                        {
+                            dtAction.Merge(dta);
+                        }
+                    }
+                }
+            });
+
+            dsImport.Tables.Add(dtData); // Add the attributes table to the import data set
+            dsImport.Tables.Add(dtAction); // Add the actions table to the import data set
+
+#if DEBUG
+            OpLogPerf.Log("DealDataLib.Save:ImportOpDataPackets - Begin BulkImportDataSet.");
+            OpLogPerf.Log("DealDataLib.Save:ImportOpDataPackets - dtData.Rows: {0}.", dtData.Rows.Count);
+            OpLogPerf.Log("DealDataLib.Save:ImportOpDataPackets - dtData.Rows: {0}.", dtAction.Rows.Count);
+#endif
+
+            // Bulk import all the data to DB...  This is the call that pushes all of the actions and attributes into the DB stage tables.
+            (new DSDealToDatabase(DataAccess.ConnectionString)).BulkImportDataSet(dsImport);
+
+            OpLogPerf.Log("DealDataLib.Save:ImportOpDataPackets - Begin PR_OBJ_STG_TO_WIP.");
+
+            DataSet dsCheckConstraintErrors = null;
+            try
+            {
+                // Move the data from dbo.STG_WIP_ATRB to dbo.WIP_ATRB
+                DataAccess.ExecuteDataSet(new Procs.dbo.PR_OBJ_STG_TO_WIP()
+                {
+                    EMP_WWID = wwid,
+                    CSL_BTCH_IDS = String.Join(",", packets
+                        .Where(p => p.HasData(false))
+                        .Select(op => String.Format("{0}", op.BatchID))
+                        )
+                }, null, out dsCheckConstraintErrors);
+            }
+            catch (Exception ex)
+            {
+                if (dsCheckConstraintErrors != null && dsCheckConstraintErrors.Tables.Count > 0)
+                {
+                    if (dsCheckConstraintErrors.Tables[0].Rows.Count > 0)
+                    {
+                        string data = String.Empty;
+                        try
+                        {
+                            data = OpDbUtils.DataTableToString(dsCheckConstraintErrors.Tables[0]);
+                        }
+                        catch (Exception ex1)
+                        {
+                            OpLogPerf.Log(ex1);
+                        }
+
+                        if (!String.IsNullOrEmpty(data))
+                        {
+                            throw new AggregateException
+                                (
+                                new DataException
+                                    (
+                                    "\n\nConflict on merge.  This can be triggered by values being sent of an invalid data type (i.e. an integer passed as \"Hello World\") or no value passed (ATRB_VAL is missing) with an MDX_CD of Modified.\n\n"
+                                    + data
+                                    ),
+                                ex
+                                );
+                        }
+                    }
+                }
+
+                throw;
+            }
+
+
+            OpLogPerf.Log("DealDataLib.Save:ImportOpDataPackets - Done: deal.PR_DEAL_STG_TO_WIP.");
+        }
+
+
+        private MyDealsData ActionDealsBatch(IEnumerable<OpDataPacket<OpDataElementType>> packets, int wwid)
+        {
+            // Save Data Cycle: Point 20
+#if DEBUG
+            OpLogPerf.Log("DealDataLib.Save:ActionDealsBatch - Start: {0} Packets, {1} Elements, {2} Actions.",
+                packets.Count(),
+                packets.Select(p => p.AllDataElements.Count()).Sum(),
+                packets.Select(p => p.Actions.Count()).Sum()
+                );
+#endif
+
+            var guid_list = new type_guid_list(packets.Select(p => p.BatchID));
+            var ret = new MyDealsData();
+            int? group_id = null;
+
+            if (guid_list.Rows.Count == 0)
+            {
+                return ret;
+            }
+
+            using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_MANAGE_WIP_ACTNS
+            {
+                BTCH_IDS = guid_list,
+                EMP_WWID = wwid
+            }))
+            {
+                OpLogPerf.Log("DealDataLib.Save:ActionDealsBatch - SP Complete, begin post processing.");
+
+                ret = ReaderToDataCollectors(rdr, false);
+
+                foreach (var src_pkt in packets)
+                {
+                    OpDataPacket<OpDataElementType> tgt_pkt;
+                    if (ret.TryGetValue(src_pkt.PacketType, out tgt_pkt))
+                    {
+                        if (tgt_pkt.BatchID == default(Guid) || tgt_pkt.BatchID == Guid.Empty)
+                        {
+                            tgt_pkt.BatchID = src_pkt.BatchID;
+                        }
+                    }
+                }
+
+                rdr.NextResult();
+
+                ret.InitAllPacketTypes();
+
+                while (rdr.Read())
+                {
+                    string ACTN_CD = String.Format("{0}", rdr[Entities.deal.WIP_ACTN.ACTN_CD]).ToUpper();
+                    //var obj_set = OpDataElementTypeConverter.FromString(String.Format("{0}", rdr[Entities.deal.WIP_ACTN.OBJ_TYPE_SID]));
+                    OpDataElementType obj_set = int.Parse(rdr[Entities.deal.WIP_ACTN.OBJ_TYPE_SID].ToString()).IdToString();
+
+                    if (obj_set == OpDataElementType.Unknown || String.IsNullOrEmpty(ACTN_CD)) { continue; }
+
+                    switch (ACTN_CD)
+                    {
+                        case DealSaveActionCodes.MESSAGE:
+                            WriteMessage(ret[obj_set], rdr);
+                            break;
+                        case DealSaveActionCodes.ID_CHANGE:
+                            {
+                                int new_id = WriteIdChangeAction(ret[obj_set], rdr);
+
+                                if (group_id == null && obj_set == OpDataElementType.Group && new_id > 0) // WARNING: This is predicated on having only one group per processing!!!
+                                {
+                                    group_id = new_id;
+                                }
+
+                                break;
+                            }
+                        case DealSaveActionCodes.ATRB_DELETED:
+                        case DealSaveActionCodes.DEAL_DELETED:
+                            {
+                                WriteIDListAction(ret[obj_set], rdr, OpMsg.MessageType.Info, ACTN_CD);
+                                break;
+                            }
+                    }
+                }
+
+            }
+
+            ret.RemoveEmptyPackets();
+
+            if (group_id != null)
+            {
+                foreach (var gp in packets)
+                {
+                    gp.GroupID = (int)group_id;
+                }
+                foreach (var kvp in ret)
+                {
+                    kvp.Value.GroupID = (int)group_id;
+                }
+            }
+
+            return ret;
+        }
+
+
+        /// <summary>
+        /// Perform the requested actions for a deal
+        /// </summary>
+        /// <param name="packets">Packets with Actions</param>
+        /// <returns>Changed deals, Actions and Messages</returns>
+        private MyDealsData ActionDeals(IEnumerable<OpDataPacket<OpDataElementType>> packets)
+        {
+            // To reduce the liklihood of infinite loops, track what we have procssed
+            List<int> processed_actions = new List<int>();
+            var ret = new MyDealsData();
+            int? group_id = null;
+            var util = new OpDataElementUtils();
+
+            foreach (var op in packets) // -- comes in sorted -- GetPacketsInOrder(packets))
+            {
+                OpLogPerf.Log("DealDataLib.Save:ActionDeals - Start: {0} '{1}'.", op.PacketType, op.BatchID);
+
+                int? sort = null;
+                DataTable dt_action_results;
+                MyDealsData changes;
+                bool is_group = (op.PacketType == OpDataElementType.Group);
+
+                while (TryNextAction(op.BatchID, ref processed_actions, ref sort, out dt_action_results, out changes))
+                {
+                    OpLogPerf.Log("DealDataLib.Save:ActionDeals - Post Processing: {0} '{1}'.", op.PacketType, op.BatchID);
+
+                    OpDataPacket<OpDataElementType> ret_pack;
+                    if (!ret.TryGetValue(op.PacketType, out ret_pack))
+                    {
+                        ret[op.PacketType] = ret_pack = new OpDataPacket<OpDataElementType>
+                        {
+                            PacketType = op.PacketType,
+                            BatchID = op.BatchID,
+                            GroupID = op.GroupID
+                        };
+                    }
+
+                    if (changes != null && changes.Count() > 0)
+                    {
+                        foreach (var kvp in changes)
+                        {
+                            if (!ret.TryGetValue(kvp.Key, out ret_pack))
+                            {
+                                ret[kvp.Key] = ret_pack = new OpDataPacket<OpDataElementType>
+                                {
+                                    PacketType = kvp.Key,
+                                    BatchID = op.BatchID,
+                                    GroupID = op.GroupID
+                                };
+                            }
+
+                            ret_pack.Data.MergeRange(kvp.Value.AllDataCollectors);
+                        }
+                    }
+
+                    if (dt_action_results == null || dt_action_results.Rows.Count <= 0)
+                    {
+                        continue;
+                    }
+
+                    // TODO: Make plug-in-able action handlers...
+                    #region MESSAGE
+
+                    OpLogPerf.Log("DealDataLib.Save:ActionDeals - Post Processing MESSAGE: {0} '{1}'.", op.PacketType, op.BatchID);
+
+                    foreach (DataRow dr in dt_action_results.Select(String.Format("{0} = '{1}'", Entities.deal.WIP_ACTN.ACTN_CD, DealSaveActionCodes.MESSAGE)))
+                    {
+                        processed_actions.Add((int)dr[Entities.deal.WIP_ACTN.WIP_ACTN_SID]);
+                        WriteMessage(ret_pack, new DataRowRecordAdapter(dr));
+                    }
+                    #endregion
+
+                    #region ID_CHANGE
+
+                    OpLogPerf.Log("DealDataLib.Save:ActionDeals - Post Processing ID_CHANGE: {0} '{1}'.", op.PacketType, op.BatchID);
+
+                    foreach (DataRow dr in dt_action_results.Select(String.Format("{0} = '{1}'", Entities.deal.WIP_ACTN.ACTN_CD, DealSaveActionCodes.ID_CHANGE)))
+                    {
+                        processed_actions.Add((int)dr[Entities.deal.WIP_ACTN.WIP_ACTN_SID]);
+
+                        int new_id = WriteIdChangeAction(ret_pack, new DataRowRecordAdapter(dr));
+
+                        if (new_id > 0 && is_group && group_id == null) // WARNING: This is predicated on having only one group per processing!!!
+                        {
+                            group_id = new_id;
+                        }
+                    }
+
+                    #endregion
+
+                    #region ATRB_DELETED
+
+                    OpLogPerf.Log("DealDataLib.Save:ActionDeals - Post Processing ATRB_DELETED: {0} '{1}'.", op.PacketType, op.BatchID);
+
+                    foreach (DataRow dr in dt_action_results.Select(String.Format("{0} IN ('{1}','{2}')",
+                        Entities.deal.WIP_ACTN.ACTN_CD,
+                        DealSaveActionCodes.ATRB_DELETED,
+                        DealSaveActionCodes.DEAL_DELETED
+                    )))
+                    {
+                        processed_actions.Add((int)dr[Entities.deal.WIP_ACTN.WIP_ACTN_SID]);
+                        WriteIDListAction(ret_pack, new DataRowRecordAdapter(dr), OpMsg.MessageType.Info, (string)dr[Entities.deal.WIP_ACTN.ACTN_CD]);
+                    }
+
+                    #endregion
+                }
+
+                OpLogPerf.Log("DealDataLib.Save:ActionDeals - Done: {0} '{1}'.", op.PacketType, op.BatchID);
+            }
+
+            if (group_id != null)
+            {
+                foreach (var gp in packets)
+                {
+                    gp.GroupID = (int)group_id;
+                }
+                foreach (var kvp in ret)
+                {
+                    kvp.Value.GroupID = (int)group_id;
+                }
+            }
+
+            return ret;
+        }
+
+        /// <summary>
+        /// Perform a single action
+        /// </summary>
+        /// <param name="BatchID">Batch to get action for</param>
+        /// <param name="processed_actions">Actions already processed to not do again</param>
+        /// <param name="sort">Current sort index of sorted action order.</param>
+        /// <param name="action_results">Data Table wiht actions to perform</param>
+        /// <returns>True when actions were performed, else false.</returns>
+        private bool TryNextAction(Guid BatchID, ref List<int> processed_actions, ref int? sort, out DataTable action_results, out MyDealsData changed_data)
+        {
+            action_results = null;
+            changed_data = null;
+
+            if (processed_actions == null) { processed_actions = new List<int>(); }
+
+            OpLogPerf.Log("DcsDealLib.TryNextAction - deal.PR_GET_WIP_ACTN '{0}'.", BatchID);
+
+            // Get the list of actions...
+            var get_action_cmd = new Procs.dbo.PR_GET_WIP_ACTN
+            {
+                BTCH_ID = BatchID,
+                CSL_DELETE_ACTN_SID = String.Join(",", processed_actions),
+                OMIT_ACTN_CD = String.Empty
+            };
+
+            //... after the last performed action
+            if (sort != null)
+            {
+                get_action_cmd.AFTER_SRT_ORD = (int)sort;
+            }
+
+            var dtact = DataAccess.ExecuteDataTable(get_action_cmd);
+
+            processed_actions.Clear(); // The exec of PR_GET_WIP_ACTN would have deleted these actions from the DB...
+
+            // No actions, move to next packet.
+            if (dtact == null || dtact.Rows.Count == 0)
+            {
+                return false;
+            }
+
+            int? ActionID = null;
+            string ActionCode = String.Empty;
+
+            foreach (DataRow dr in dtact.Rows)
+            {
+                if (dr.IsNull(Entities.deal.WIP_ACTN.WIP_ACTN_SID)) { continue; }
+
+                ActionID = (int)dr[Entities.deal.WIP_ACTN.WIP_ACTN_SID];
+
+                // If we have already processed this action, skip it (infinite loop management)
+                if (processed_actions.Contains((int)ActionID))
+                {
+                    ActionID = null;
+                    continue;
+                }
+
+                sort = dr.IsNull(Entities.deal.WIP_ACTN.WIP_ACTN_SID)
+                    ? null
+                    : (int?)dr[Entities.deal.WIP_ACTN.SRT_ORD];
+
+#if DEBUG
+                ActionCode = String.Format("{0}", dr[Entities.deal.WIP_ACTN.ACTN_CD]);
+#endif
+                break;
+            }
+
+            if (ActionID != null)
+            {
+
+                OpLogPerf.Log(
+                    "Processing Action. {0} for {1} @ {2}",
+                    ActionCode,
+                    BatchID,
+                    sort
+                    );
+
+                OpLogPerf.Log("DcsDealLib.TryNextAction - deal.PR_MANAGE_WIP_ACTN '{0}', {1}.", BatchID, ActionID);
+
+                // Actually do the action
+                // TODO - Bring this back in...
+                //var do_action_cmd = new Procs.dbo.PR_MANAGE_WIP_ACTN
+                //{
+                //    BTCH_ID = BatchID,
+                //    WIP_ACTN_SID = (int)ActionID
+                //};
+
+                //using (var rdr = DataAccess.ExecuteReader(do_action_cmd))
+                //{
+                //    changed_data = this.ReaderToDataCollectors(rdr, false);
+
+                //    rdr.NextResult();
+
+                //    action_results = (new DataReaderHelper()).ToDataTable(rdr);
+                //}
+
+                //processed_actions.Add((int)ActionID);
+
+                return true;
+            }
+
+            return false;
+        }
+
+        private void WriteMessage(OpDataPacket<OpDataElementType> odp, IDataRecord record)
+        {
+            var m = new OpMsg
+            {
+                LogTime = (DateTime)record[Entities.deal.WIP_ACTN.CHG_DTM],
+                MsgType = OpMsg.ParseMessageType(record[Entities.deal.WIP_ACTN.MSG_CD]),
+                Message = String.Format("{0}", record[Entities.deal.WIP_ACTN.ACTN_VAL])
+            };
+
+            List<int> msg_ids = new List<int>();
+            if (!record.IsDBNull(record.GetOrdinal(Entities.deal.WIP_ACTN.OBJ_SID)))
+            {
+                msg_ids.Add((int)record[Entities.deal.WIP_ACTN.OBJ_SID]);
+            }
+            else if (!record.IsDBNull(record.GetOrdinal(Entities.deal.WIP_ACTN.OLD_OBJ_SID)))
+            {
+                msg_ids.Add((int)record[Entities.deal.WIP_ACTN.OLD_OBJ_SID]);
+            }
+            m.KeyIdentifiers = msg_ids.ToArray();
+
+            // For Ecap Validation, we expect a result set back that contains some details, look for it...
+            // but to make this fairly generic, just look for the value having something that looks like XML...
+            // Example clause to include on query to return results
+            // FOR XML PATH('MY_DATA_TABLE_NAME'), TYPE
+
+            string xml_data_set = String.Format("{0}", record[Entities.deal.WIP_ACTN.XML_DATA]);
+
+            if (!String.IsNullOrEmpty(xml_data_set) && xml_data_set.IndexOf('<') < xml_data_set.LastIndexOf('>'))
+            {
+                try
+                {
+                    DataSet ds = new DataSet();
+                    using (StringReader sr = new StringReader(String.Format("<{0}>{1}</{0}>", OpMsg.EXTRA_DETAILS_DATA_SET_NAME, xml_data_set)))
+                    {
+                        ds.ReadXml(sr);
+                    }
+
+                    if (ds != null && ds.Tables.Count > 0)
+                    {
+                        m.ExtraDetails = ds;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    m.DebugMessage = String.Format("{0}\n\n{1}", ex, xml_data_set);
+                }
+            }
+
+
+            odp.Messages.Write(m);
+        }
+
+        private int WriteIdChangeAction(OpDataPacket<OpDataElementType> odp, IDataRecord record)
+        {
+            object ooid = record[Entities.deal.WIP_ACTN.OLD_OBJ_SID];
+            object noid = record[Entities.deal.WIP_ACTN.OBJ_SID];
+
+            int old_id = (ooid == null || ooid == DBNull.Value) ? 0 : (int)ooid;
+            int new_id = (noid == null || noid == DBNull.Value) ? 0 : (int)noid;
+
+            if (new_id != 0 && old_id != new_id)
+            {
+                odp.Actions.Add(new OpDataAction
+                {
+                    Action = DealSaveActionCodes.ID_CHANGE,
+                    DcID = old_id,
+                    AltID = new_id,
+                    Value = String.Format("{0}", record[Entities.deal.WIP_ACTN.OBJ_TYPE_SID]),
+                    MessageCode = OpMsg.MessageType.Info
+                });
+            }
+
+            return new_id;
+        }
+
+        private void WriteIDListAction(OpDataPacket<OpDataElementType> odp, IDataRecord record, OpMsg.MessageType msgType, string ACTN_CD)
+        {
+            var int_ids = OpTypeConverter.StringToIntList(String.Format("{0}", record[Entities.deal.WIP_ACTN.ACTN_VAL_LIST]));
+            if (int_ids.Count() == 0) { return; }
+
+            var oda = new OpDataAction
+            {
+                Action = ACTN_CD,
+                MessageCode = msgType,
+                TargetDcIDs = int_ids.ToList()
+            };
+
+            int idx = record.GetOrdinal(Entities.deal.WIP_ACTN.OBJ_SID);
+            if (idx > -1 && !record.IsDBNull(idx))
+            {
+                oda.DcID = record.GetInt32(idx);
+            }
+            idx = record.GetOrdinal(Entities.deal.WIP_ACTN.OLD_OBJ_SID);
+            if (idx > -1 && !record.IsDBNull(idx))
+            {
+                oda.AltID = record.GetInt32(idx);
+            }
+            idx = record.GetOrdinal(Entities.deal.WIP_ACTN.ACTN_VAL);
+            if (idx > -1 && !record.IsDBNull(idx))
+            {
+                oda.Value = record.GetString(idx);
+            }
+
+            odp.Actions.Add(oda);
+        }
+
+        //        public static int SaveSecurityAdminInfo(int securityFactID, string operatioType, int mbrSID, int saIDSID, int empIDSID)
+        //        {
+        //            int result = 0;
+        //            result = DataAccess.ExecuteNonQuery(new Procs.admin.PR_SAVE_SECURITY_INFO_ADMIN
+        //            {
+        //                SECURITYFACTID = securityFactID,
+        //                OPERATIONTYPE = operatioType,
+        //                LKUPMBRSID = mbrSID,
+        //                SAWWID = saIDSID,
+        //                EMPWWID = empIDSID
+        //            });
+        //            {
+        //                return result;
+        //            }
+        //        }
+
+        //        public int SaveSecurityAdmin(int securityFactID, string operatioType, int mbrSID, int saIDSID, int empIDSID)
+        //        {
+        //            int result = 0;
+        //            result = SaveSecurityAdminInfo(securityFactID, operatioType, mbrSID, saIDSID, empIDSID);
+        //            return result;
+        //        }
+
+
     }
 }

@@ -25,13 +25,11 @@
 			string.Format(@"Database=MYDEALS;Server=EG1RDMDBDEV01\DEALSDEV,3180;integrated security=SSPI;")
 		);
 
-	string[] TABLES_TO_PROCESS = 
-	{
-		"[dbo].[ATRB_MSTR]"
-		//"[tdeal].[WIP_ATRB]",
-		//"[tdeal].[STG_WIP_ATRB]",
-		//"[tdeal].[WIP_ACTN]"
-    };
+	var TablesToProcess = new List<KeyValuePair<string, string>>();
+	TablesToProcess.Add(new KeyValuePair<string, string>("meta", "[dbo].[ATRB_MSTR]"));
+	TablesToProcess.Add(new KeyValuePair<string, string>("deal", "[dbo].[WIP_ATRB]"));
+	TablesToProcess.Add(new KeyValuePair<string, string>("deal", "[dbo].[STG_WIP_ATRB]"));
+	TablesToProcess.Add(new KeyValuePair<string, string>("deal", "[dbo].[WIP_ACTN]"));
 
 	WriteLine(dbobjects.BoilerPlateDetails);
 	WriteLine("");
@@ -45,24 +43,23 @@ using System.Collections.Generic;
 	WriteLine("namespace {0} {{", outputNameSpace);
 	PushIndent(TAB);
 	
+	List<string> allVals = (from kvp in TablesToProcess select kvp.Value).Distinct().ToList();
 	var tables = dbobjects.TablesAndViews
-		.Where(tbl => TABLES_TO_PROCESS.Contains(tbl.table_name_escaped))
+		.Where(tbl => allVals.Contains(tbl.table_name_escaped))
 		.ToArray();
 
-	foreach(var schema in tables.Select(tbl=>tbl.table_schema.ToLower().Trim()).Distinct())
+
+	foreach (string schema in (from kvp in TablesToProcess select kvp.Key).Distinct().ToList())
 	{
 		string schema_display_name = schema;
-		//if(schema_display_name == "tdeal"){ schema_display_name = "deal";}
-		//if(schema_display_name == "tmeta"){ schema_display_name = "meta";}
 
 		WriteLine("");
 		WriteLine("namespace {0} {{", schema_display_name);
 		PushIndent(TAB);
 
-		
-
-		foreach(var table in tables.Where(tbl=>tbl.table_schema.ToLower().Trim() == schema))
+		foreach (string tableName in (from kvp in TablesToProcess where kvp.Key == schema select kvp.Value).ToList())
 		{
+			var table = tables.Where(tbl=>tbl.table_name_escaped == tableName).First();
 			WriteLine("");
 			WriteLine("public struct {0} {{", table.table_name.ToUpper().Trim());
 			PushIndent(TAB);

@@ -916,20 +916,21 @@ namespace Intel.MyDeals.DataLibrary
                         {
                             ["dc_id"] = 0,
                             ["dc_parent_id"] = 0,
+                            ["dc_sid"] = 0,
                             ["OBJSET_TYPE"] = "",
                             ["TITLE"] = "",
                             ["CUST_NM"] = "",
                             ["START_DT"] = "",
                             ["END_DT"] = "",
-                            ["CUST_ACCEPTED"] = "",
-                            ["C2A_REF"] = "",
+                            ["CUST_ACCPT"] = "",
+                            ["C2A_DATA_C2A_ID"] = "", 
                             ["DEAL_STG_CD"] = "",
                             ["PricingStrategy"] = new List<string>(),
                             ["_behaviors"] = new Dictionary<string, Dictionary<string, dynamic>>
                             {
                                 ["isRequired"] = new Dictionary<string, dynamic>
                                 {
-                                    ["TITLE"] = true,
+                                    ["TITLE"] = true, 
                                     ["CUST_NM"] = true,
                                     ["CUST_NM"] = true,
                                     ["END_DT"] = true
@@ -945,8 +946,9 @@ namespace Intel.MyDeals.DataLibrary
                         {
                             ["dc_id"] = 0,
                             ["dc_parent_id"] = 0,
+                            ["dc_sid"] = 0,
                             ["OBJSET_TYPE"] = "",
-                            ["TITLE"] = "",
+                            ["TITLE"] = "", 
                             ["TERMS"] = "",
                             ["PricingTable"] = new List<string>(),
                             ["_behaviors"] = new Dictionary<string, Dictionary<string, dynamic>>
@@ -966,6 +968,7 @@ namespace Intel.MyDeals.DataLibrary
                         {
                             ["dc_id"] = 0,
                             ["dc_parent_id"] = 0,
+                            ["dc_sid"] = 0,
                             ["OBJSET_TYPE"] = "",
                             ["TITLE"] = "",
                             ["_behaviors"] = new Dictionary<string, Dictionary<string, dynamic>>

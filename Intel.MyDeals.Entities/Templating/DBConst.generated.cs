@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 1/12/2017 2:08:42 PM
-On: PWECKENR-MOBL5
+File Updated: 2/7/2017 3:15:39 PM
+On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
 using System;
@@ -11,26 +11,14 @@ using System.Linq;
 namespace Intel.MyDeals.Entities {
 	public static class AttributeCodes {
 
-        public const string DEAL_TYPE_CD = "DEAL_TYPE_CD";
-        public const string DEAL_TYPE_CD_SID = "DEAL_TYPE_CD_SID";
-        public const string DEAL_SID = "DEAL_SID";
-        public const string CUST_MBR_SID = "CUST_MBR_SID";
-        public const string NUM_OF_TIERS = "NUM_OF_TIERS";
-        public const string TRKR_NBR = "TRKR_NBR";
-        public const string DEAL_STG_CD = "DEAL_STG_CD";
-        public const string START_DT = "START_DT";
-        public const string END_DT = "END_DT";
-
-
-
-        ///<summary>
-        /// DIM_SID: 2
-        /// DIM_CD: CUST
-        /// ATRB_SID: 2001
-        /// TGT_COL_TYPE: VARCHAR
-        /// DOT_NET_DATA_TYPE: System.Object
-        ///</summary>
-        public const string ALL_CUST_NM = "ALL_CUST_NM";
+		///<summary>
+		/// DIM_SID: 2
+		/// DIM_CD: CUST
+		/// ATRB_SID: 2001
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.Object
+		///</summary>
+		public const string ALL_CUST_NM = "ALL_CUST_NM";
 
 		///<summary>
 		/// DIM_SID: 4
@@ -94,6 +82,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Object
 		///</summary>
 		public const string BRND_UNIQ_NM = "BRND_UNIQ_NM";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: TIME
+		/// ATRB_SID: 3576
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string C2A_DATA_C2A_ID = "C2A_DATA_C2A_ID";
 
 		///<summary>
 		/// DIM_SID: 7
@@ -168,6 +165,15 @@ namespace Intel.MyDeals.Entities {
 		public const string CTRY_NM = "CTRY_NM";
 
 		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: TIME
+		/// ATRB_SID: 3653
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Int32
+		///</summary>
+		public const string CUST_ACCPT = "CUST_ACCPT";
+
+		///<summary>
 		/// DIM_SID: 2
 		/// DIM_CD: CUST
 		/// ATRB_SID: 2010
@@ -184,6 +190,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Object
 		///</summary>
 		public const string CUST_DIV_NM = "CUST_DIV_NM";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: TIME
+		/// ATRB_SID: 3011
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Int32
+		///</summary>
+		public const string CUST_MBR_SID = "CUST_MBR_SID";
 
 		///<summary>
 		/// DIM_SID: 2
@@ -213,6 +228,15 @@ namespace Intel.MyDeals.Entities {
 		public const string DB_LD_ATRB_SID = "DB_LD_ATRB_SID";
 
 		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: TIME
+		/// ATRB_SID: 3372
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string DEAL_CUST_NM = "DEAL_CUST_NM";
+
+		///<summary>
 		/// DIM_SID: 7
 		/// DIM_CD: PRD
 		/// ATRB_SID: 7007
@@ -229,6 +253,42 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Object
 		///</summary>
 		public const string DEAL_PRD_TYPE = "DEAL_PRD_TYPE";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: TIME
+		/// ATRB_SID: 3616
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Int32
+		///</summary>
+		public const string DEAL_SID = "DEAL_SID";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: TIME
+		/// ATRB_SID: 3327
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string DEAL_STG_CD = "DEAL_STG_CD";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: TIME
+		/// ATRB_SID: 3002
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string DEAL_TYPE_CD = "DEAL_TYPE_CD";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: TIME
+		/// ATRB_SID: 3004
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Int32
+		///</summary>
+		public const string DEAL_TYPE_CD_SID = "DEAL_TYPE_CD_SID";
 
 		///<summary>
 		/// DIM_SID: 7
@@ -256,6 +316,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Object
 		///</summary>
 		public const string DIV_NM = "DIV_NM";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: TIME
+		/// ATRB_SID: 3320
+		/// TGT_COL_TYPE: DATETIME
+		/// DOT_NET_DATA_TYPE: System.DateTime
+		///</summary>
+		public const string END_DT = "END_DT";
 
 		///<summary>
 		/// DIM_SID: 7
@@ -501,6 +570,15 @@ namespace Intel.MyDeals.Entities {
 		public const string NAND_INTERFACE = "NAND_INTERFACE";
 
 		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: TIME
+		/// ATRB_SID: 3490
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Int32
+		///</summary>
+		public const string NUM_OF_TIERS = "NUM_OF_TIERS";
+
+		///<summary>
 		/// DIM_SID: 7
 		/// DIM_CD: PRD
 		/// ATRB_SID: 7041
@@ -591,6 +669,15 @@ namespace Intel.MyDeals.Entities {
 		public const string PRD_STRT_DTM = "PRD_STRT_DTM";
 
 		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: TIME
+		/// ATRB_SID: 75
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string PRD_VERTICAL = "PRD_VERTICAL";
+
+		///<summary>
 		/// DIM_SID: 7
 		/// DIM_CD: PRD
 		/// ATRB_SID: 7073
@@ -672,6 +759,15 @@ namespace Intel.MyDeals.Entities {
 		public const string SPEC_CD = "SPEC_CD";
 
 		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: TIME
+		/// ATRB_SID: 3319
+		/// TGT_COL_TYPE: DATETIME
+		/// DOT_NET_DATA_TYPE: System.DateTime
+		///</summary>
+		public const string START_DT = "START_DT";
+
+		///<summary>
 		/// DIM_SID: 7
 		/// DIM_CD: PRD
 		/// ATRB_SID: 7028
@@ -690,6 +786,24 @@ namespace Intel.MyDeals.Entities {
 		public const string SUPER_GRP_NM = "SUPER_GRP_NM";
 
 		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: TIME
+		/// ATRB_SID: 3569
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string TERMS = "TERMS";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: TIME
+		/// ATRB_SID: 33
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string TITLE = "TITLE";
+
+		///<summary>
 		/// DIM_SID: 7
 		/// DIM_CD: PRD
 		/// ATRB_SID: 7080
@@ -697,6 +811,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Object
 		///</summary>
 		public const string TRDMRK_NM = "TRDMRK_NM";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: TIME
+		/// ATRB_SID: 24
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string TRKR_NBR = "TRKR_NBR";
 
 		///<summary>
 		/// DIM_SID: 4
@@ -736,27 +859,293 @@ namespace Intel.MyDeals.Entities {
 	}
 
 	public static class DealSaveActionCodes {
+
+		///<summary>
+		/// ACTN_SID: 195
+		/// SRT_ORD: 3300
+		/// Message back to WIP Action Queue with ATRB_DELETED and ATRB_SID in OBJ_SID for a specific OBJ_SET.
+		///</summary>
+		public const string ATRB_DELETED = "ATRB_DELETED";
+
+
+		///<summary>
+		/// ACTN_SID: 196
+		/// SRT_ORD: 1600
+		/// Calculate CAP MSP.
+		///</summary>
+		public const string CALC_MSP = "CALC_MSP";
+
+
+		///<summary>
+		/// ACTN_SID: 197
+		/// SRT_ORD: 2200
+		/// Used in snapshot, check the revision level of a deal.
+		///</summary>
+		public const string CK_REV_LEVEL = "CK_REV_LEVEL";
+
+
+		///<summary>
+		/// ACTN_SID: 198
+		/// SRT_ORD: 100
+		/// Execute items common to the deal save process for all deal types.
+		///</summary>
+		public const string COMMON_DEAL_SAVE = "COMMON_DEAL_SAVE";
+
+
+		///<summary>
+		/// ACTN_SID: 199
+		/// SRT_ORD: 200
+		/// Prevent multiple users are actioning same item at once.
+		///</summary>
+		public const string CONCURRENCY_CHECK = "CONCURRENCY_CHECK";
+
+
+		///<summary>
+		/// ACTN_SID: 200
+		/// SRT_ORD: 2800
+		/// Copy Full workbook with deals if customer same.
+		///</summary>
+		public const string COPY_WB_FULL = "COPY_WB_FULL";
+
+
+		///<summary>
+		/// ACTN_SID: 201
+		/// SRT_ORD: 2500
+		/// Copy any additional attributes that exist in source workbook to target.
+		///</summary>
+		public const string COPY_WB_HEADER = "COPY_WB_HEADER";
+
+
+		///<summary>
+		/// ACTN_SID: 202
+		/// SRT_ORD: 2600
+		/// Copy overlapping deals if customer the same.
+		///</summary>
+		public const string COPY_WB_OVERLAP = "COPY_WB_OVERLAP";
+
+
+		///<summary>
+		/// ACTN_SID: 203
+		/// SRT_ORD: 2700
+		/// Copy PRODUCTS - PLI data even if customer different.
+		///</summary>
+		public const string COPY_WB_PROD = "COPY_WB_PROD";
+
+
+		///<summary>
+		/// ACTN_SID: 204
+		/// SRT_ORD: 700
+		/// Action deal to approve.
+		///</summary>
+		public const string DEAL_APPROVE = "DEAL_APPROVE";
+
+
+		///<summary>
+		/// ACTN_SID: 205
+		/// SRT_ORD: 900
+		/// Action deal to cancel.
+		///</summary>
+		public const string DEAL_CANCEL = "DEAL_CANCEL";
+
+
+		///<summary>
+		/// ACTN_SID: 206
+		/// SRT_ORD: 3100
+		/// Message back to WIP Action Queue with new deal_sids change.
+		///</summary>
+		public const string DEAL_CREATED = "DEAL_CREATED";
+
+
+		///<summary>
+		/// ACTN_SID: 207
+		/// SRT_ORD: 1000
+		/// Action a deal like approve, reject, delete.
+		///</summary>
+		public const string DEAL_DELETE = "DEAL_DELETE";
+
+
+		///<summary>
+		/// ACTN_SID: 208
+		/// SRT_ORD: 1100
+		/// Action flag to indicate a deal, prep, PLI and/or group has been deleted.
+		///</summary>
+		public const string DEAL_DELETED = "DEAL_DELETED";
+
+
+		///<summary>
+		/// ACTN_SID: 209
+		/// SRT_ORD: 800
+		/// Action deal to reject.
+		///</summary>
+		public const string DEAL_REJECT = "DEAL_REJECT";
+
+
+		///<summary>
+		/// ACTN_SID: 210
+		/// SRT_ORD: 1200
+		/// Functionally "delete a deal with an active tracker number". Roll the deal details back to the last valid active tracker state.
+		///</summary>
+		public const string DEAL_ROLLBACK_TO_ACTIVE = "DEAL_ROLLBACK_TO_ACTIVE";
+
+
+		///<summary>
+		/// ACTN_SID: 211
+		/// SRT_ORD: 1900
+		/// Validate ECAP deals.
+		///</summary>
+		public const string ECAP_VALIDATION = "ECAP_VALIDATION";
+
+
+		///<summary>
+		/// ACTN_SID: 212
+		/// SRT_ORD: 1400
+		/// Generate a tracker number.
+		///</summary>
+		public const string GEN_TRACKER = "GEN_TRACKER";
+
+
+		///<summary>
+		/// ACTN_SID: 213
+		/// SRT_ORD: 3200
+		/// Message back to WIP Action Queue with deal_prep ID change.
+		///</summary>
+		public const string ID_CHANGE = "ID_CHANGE";
+
+
+		///<summary>
+		/// ACTN_SID: 214
+		/// SRT_ORD: 300
+		/// Merge existing deal details into WIP scheme.
+		///</summary>
+		public const string LAYER = "LAYER";
+
+
+		///<summary>
+		/// ACTN_SID: 215
+		/// SRT_ORD: 3400
+		/// Write a message to or from the WIP Action Queue.
+		///</summary>
+		public const string MESSAGE = "MESSAGE";
+
+
+		///<summary>
+		/// ACTN_SID: 216
+		/// SRT_ORD: 1800
+		/// Write a deal from DEAL_PREP.
+		///</summary>
+		public const string PREP2DEAL = "PREP2DEAL";
+
+
+		///<summary>
+		/// ACTN_SID: 217
+		/// SRT_ORD: 2000
+		/// Execute steps to process a quote letter.
+		///</summary>
+		public const string PROCESS_QUOTE_LETTER = "PROCESS_QUOTE_LETTER";
+
+
+		///<summary>
+		/// ACTN_SID: 218
+		/// SRT_ORD: 2400
+		/// Remove all deal details from WIP_ATRB and or WIP_ACTN.
+		///</summary>
+		public const string PURGE_WIP = "PURGE_WIP";
+
+
+		///<summary>
+		/// ACTN_SID: 219
+		/// SRT_ORD: 3000
+		/// Add quote letter to queue to be processed by batch job.
+		///</summary>
+		public const string QUEUE_QUOTE_LETTER = "QUEUE_QUOTE_LETTER";
+
+
+		///<summary>
+		/// ACTN_SID: 220
+		/// SRT_ORD: 1700
+		/// Execute code to support redeal action with sub-actions of ecap_split and non_ecap_split distinctions.
+		///</summary>
+		public const string REDEAL = "REDEAL";
+
+
+		///<summary>
+		/// ACTN_SID: 221
+		/// SRT_ORD: 600
+		/// Write a deal from WIP_ATRB to proper scheme.
+		///</summary>
+		public const string SAVE = "SAVE";
+
+
+		///<summary>
+		/// ACTN_SID: 222
+		/// SRT_ORD: 2900
+		/// Try to send the current quote letter immediately.
+		///</summary>
+		public const string SEND_QUOTE_LETTER = "SEND_QUOTE_LETTER";
+
+
+		///<summary>
+		/// ACTN_SID: 223
+		/// SRT_ORD: 2100
+		/// Either push to or pull from snapshot as needed; push to snapshot on deal save.
+		///</summary>
+		public const string SNAPSHOT = "SNAPSHOT";
+
+
+		///<summary>
+		/// ACTN_SID: 224
+		/// SRT_ORD: 1300
+		/// Update FSE, DIV, GEO approvers (by, date time, price, etc) for ECAP, Program, Vol Tier.
+		///</summary>
+		public const string UPDATE_APPROVERS = "UPDATE_APPROVERS";
+
+
+		///<summary>
+		/// ACTN_SID: 225
+		/// SRT_ORD: 400
+		/// See if the workbook is currently checked out. Result will be written to WIP_ACTN as a MESSAGE.
+		///</summary>
+		public const string WB_CHECK = "WB_CHECK";
+
+
+		///<summary>
+		/// ACTN_SID: 226
+		/// SRT_ORD: 500
+		/// Attempt to check out a workbook. Result will be written to WIP_ACTN as a MESSAGE.
+		///</summary>
+		public const string WB_LOCK = "WB_LOCK";
+
+
+		///<summary>
+		/// ACTN_SID: 227
+		/// SRT_ORD: 2300
+		/// Attempt to check in a workbook. Result will be written to WIP_ACTN as a MESSAGE.
+		///</summary>
+		public const string WB_UNLOCK = "WB_UNLOCK";
+
+
+		///<summary>
+		/// ACTN_SID: 228
+		/// SRT_ORD: 1500
+		/// Do a YCS2 overlap check.
+		///</summary>
+		public const string YCS2_OVERLAP = "YCS2_OVERLAP";
+
 	}
 
 	public static class ToolConstantName {
-		public const string abhi = "abhi";
-		public const string Abhinav = "Abhinav";
 		public const string akash = "akash";
-		public const string assasdsd = "assasdsd";
 		public const string BATCH_LOG = "BATCH_LOG";
-		public const string da = "da";
+		public const string COST_TEST_TYPES = "COST_TEST_TYPES";
 		public const string DB_ERROR_CONTACT_EMAIL = "DB_ERROR_CONTACT_EMAIL";
 		public const string DB_LOGGING = "DB_LOGGING";
-		public const string DEPLOY_DT = "DEPLOY_DT";
+		public const string EIA_DIV_NM = "EIA_DIV_NM";
 		public const string ENV = "ENV";
+		public const string gfgf = "gfgf";
 		public const string ICOST_ERROR_CONTACTS_MYDL = "ICOST_ERROR_CONTACTS_MYDL";
 		public const string ICOST_ERROR_LOG_DAYS = "ICOST_ERROR_LOG_DAYS";
-		public const string ICOST_HIST_LOG_DAYS = "ICOST_HIST_LOG_DAYS";
-		public const string iCOST_PRODUCTS = "iCOST_PRODUCTS";
-		public const string MISC_MM_LIST = "MISC_MM_LIST";
-		public const string qweqwef = "qweqwef";
-		public const string sa = "sa";
 		public const string santhoshi = "santhoshi";
+		public const string Test = "Test";
 	}
 
 	//-------------------------------------------------------------------------------------------

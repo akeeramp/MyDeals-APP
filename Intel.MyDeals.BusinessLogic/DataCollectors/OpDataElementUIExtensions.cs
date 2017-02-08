@@ -6,24 +6,24 @@ namespace Intel.MyDeals.BusinessLogic
 {
     public static class OpDataElementUIExtensions
     {
-        public static OpDataCollector GetDataCollectorFromTemplate(OpDataElementType opDataElementType, int id, int parentId)
-        {
-            return GetOpDataElementUITemplate(opDataElementType).CopyToOpDataCollector(id, parentId);
-        }
+        //public static OpDataCollector GetDataCollectorFromTemplate(OpDataElementType opDataElementType, int id, int parentId)
+        //{
+        //    return GetOpDataElementUITemplate(opDataElementType).CopyToOpDataCollector(id, parentId);
+        //}
 
-        public static OpDataElementUITemplate GetOpDataElementUITemplate(OpDataElementType opDataElementType)
-        {
-            OpDataElementUITemplates ourTemplates = DataCollections.GetOpDataElementUITemplates();
-            string key = opDataElementType.ToString();
+        //public static OpDataElementUITemplate GetOpDataElementUITemplate(OpDataElementType opDataElementType)
+        //{
+        //    OpDataElementUITemplates ourTemplates = DataCollections.GetOpDataElementUITemplates();
+        //    string key = opDataElementType.ToString();
 
-            // TODO need to be consistent on naming these !!!
-            if (opDataElementType == OpDataElementType.PricingTable) key = "PRICING TABLE";
-            if (opDataElementType == OpDataElementType.PricingStrategy) key = "PRICING STRAT";
+        //    // TODO need to be consistent on naming these !!!
+        //    if (opDataElementType == OpDataElementType.PricingTable) key = "PRICING TABLE";
+        //    if (opDataElementType == OpDataElementType.PricingStrategy) key = "PRICING STRAT";
 
-            return ourTemplates.ContainsKey(key.ToUpper())
-                ? ourTemplates[key.ToUpper()]
-                : new OpDataElementUITemplate();
-        }
+        //    return ourTemplates.ContainsKey(key.ToUpper())
+        //        ? ourTemplates[key.ToUpper()]
+        //        : new OpDataElementUITemplate();
+        //}
 
         public static OpDataElementUITemplates GetDataCollectorTemplates()
         {

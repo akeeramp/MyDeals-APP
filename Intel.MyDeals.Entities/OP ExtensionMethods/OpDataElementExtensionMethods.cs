@@ -37,7 +37,7 @@ namespace Intel.MyDeals.Entities
             // If we have DC IDs, check them, else use alt ID.
             if(src.DcID <= 0 && other.DcID <= 0)
             {
-                return (src.DcAltID == other.DcAltID);
+                return (src.DcParentSID == other.DcParentSID); // Was return (src.DcAltID == other.DcAltID);
             } 
 
             return (src.DcID == other.DcID);
@@ -417,7 +417,7 @@ namespace Intel.MyDeals.Entities
             if (ode == null) { return false; }
 
 #if DEBUG
-            string debugDetails = $"DcID: {ode.DcID}, DcAltID: {ode.DcAltID}, AtrbID: {ode.AtrbID}, DimID: {ode.DimID}, DimKeyString: {ode.DimKeyString}, ElementID: {ode.ElementID}, ExtraDimKeyString: {ode.ExtraDimKeyString}, State: {ode.State}\nValue: \"{ode.AtrbValue}\"";
+            string debugDetails = $"DcID: {ode.DcID}, DcParentSID: {ode.DcParentSID}, DcSID: {ode.DcSID}, AtrbID: {ode.AtrbID}, DimID: {ode.DimID}, DimKeyString: {ode.DimKeyString}, ElementID: {ode.ElementID}, ExtraDimKeyString: {ode.ExtraDimKeyString}, State: {ode.State}\nValue: \"{ode.AtrbValue}\"";
                 
 #endif
 
@@ -472,7 +472,7 @@ namespace Intel.MyDeals.Entities
             OpDataCollector odc = new OpDataCollector
             {
                 DcID = id,
-                DcAltID = parentId,
+                DcParentSID = parentId,
                 DataElements = new List<OpDataElement>()
             };
 

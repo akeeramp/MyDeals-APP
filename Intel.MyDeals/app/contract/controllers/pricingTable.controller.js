@@ -87,7 +87,7 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
 
     $scope.ptSpreadOptions = {
         sheetsbar: false,
-        columns: columns.length+1,  // need to show one extra column for a bug in the spreadsheet... will remove it during render event
+        columns: columns.length + 1,  // need to show one extra column for a bug in the spreadsheet... will remove it during render event
         toolbar: {
             home: false,
             insert: false,
@@ -100,7 +100,7 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
         }],
         change: function (e) {
             //debugger;
-            $scope.$apply(function() {
+            $scope.$apply(function () {
                 root._dirty = true;
             });
         },
@@ -124,7 +124,7 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
 
                 // now disable and remove the extra column we added for the spreadsheet bug
                 // TODO find a better fix for this
-                sheet.hideColumn(c - 1);  
+                sheet.hideColumn(c - 1);
                 var range = sheet.range(String.fromCharCode(intA + c) + "1:" + String.fromCharCode(intA + c) + "100");
                 range.enable(false);
                 // done with bug workaround
@@ -138,7 +138,7 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
 
     // Define Kendo Main Grid options
     //
-    gridUtils.onDataValueChange = function(e) {
+    gridUtils.onDataValueChange = function (e) {
         root._dirty = true;
     }
 
@@ -164,7 +164,7 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
             e.sender.thead.find("[data-index=0]>.k-header-column-menu").remove();
         }
     };
-    
+
     // Define Kendo Details Grid options
     //
     root.gridDetailsDs = {};

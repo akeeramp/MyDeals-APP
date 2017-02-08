@@ -85,7 +85,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
 
             foreach (OpDataCollectorFlattenedItem item in data)
             {
-                int key = int.Parse(item["dc_id"].ToString());
+                int key = int.Parse(item["dc_sid"].ToString());
                 Dictionary<int, OpDataCollectorFlattenedList> dictItems = decoderDict[opDataElementType];
                 if (dictItems.Count > 0 && dictItems.ContainsKey(key))
                 {

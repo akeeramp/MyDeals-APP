@@ -61,6 +61,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataAccess.cs" />
+    <Compile Include="DSDeal\DataColumnConverter.cs" />
+    <Compile Include="DSDeal\DSDeal.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DSDeal\DSDealBase1.generated.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DSDeal\DSDealToDatabase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TableValueParameterTypes\type_dictionary.cs">
       <SubType>Component</SubType>

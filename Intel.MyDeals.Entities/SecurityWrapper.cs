@@ -52,7 +52,7 @@ namespace Intel.MyDeals.Entities
             IEnumerable<string> localSecurityMasks =
                 (from el in SecurityMasks
                  where (el.ACTN_CD == actionCd || el.ACTN_CD == null)
-                       && (el.DEAL_TYPE_CD == objSetTypeCd.ToString() || el.DEAL_TYPE_CD == null)
+                       && (el.OBJ_TYPE == objSetTypeCd.ToString() || el.OBJ_TYPE == null)
                        && (el.ROLE_TYPE_CD == roleTypeCd || el.ROLE_TYPE_CD == null)
                        && (el.WFSTG_CD == wfStage.ToString() || el.WFSTG_CD == null)
                  select el.PERMISSION_MASK);
@@ -85,7 +85,7 @@ namespace Intel.MyDeals.Entities
 
             return (from el in SecurityMasks
                     where (el.ACTN_CD == null || el.ACTN_CD == "0" || el.ACTN_CD.Trim() == actionCd.ToString())
-                          && (el.DEAL_TYPE_CD == null || el.DEAL_TYPE_CD == "0" || el.DEAL_TYPE_CD == objSetTypeCd.ToString())
+                          && (el.OBJ_TYPE == null || el.OBJ_TYPE == "0" || el.OBJ_TYPE == objSetTypeCd.ToString())
                           && (el.ROLE_TYPE_CD == null || el.ROLE_TYPE_CD == "0" || el.ROLE_TYPE_CD == roleTypeCd)
                           && (el.WFSTG_CD == wfStage.ToString() || el.WFSTG_CD == null || el.WFSTG_CD == "0")
                     select el.PERMISSION_MASK).Any();

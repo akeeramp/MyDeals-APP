@@ -343,7 +343,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         // Check required
         angular.forEach($scope.contractData,
             function (value, key) {
-                if (key[0] !== '_' && !Array.isArray(value) && (!isNaN(value) || value.trim() === "") && ct._behaviors.isRequired[key] === true) {
+                if (key[0] !== '_' && !Array.isArray(value) && typeof(value) !== "object" && (!isNaN(value) || value.trim() === "") && ct._behaviors.isRequired[key] === true) {
                     ct._behaviors.validMsg[key] = "* field is required";
                     ct._behaviors.isError[key] = true;
                     isValid = false;
@@ -361,10 +361,13 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
     $scope.newStrategy = util.clone($scope.templates.ObjectTemplates.PricingStrategy.Generic);
     $scope.addPricingStrategy = function () {
         topbar.show();
+        var ct = $scope.contractData;
 
         // Clone base model and populate changes
         var ps = util.clone($scope.templates.ObjectTemplates.PricingStrategy.Generic);
         ps.dc_id = $scope.uid--;
+        ps.dc_parent_id = ct.dc_sid;
+        ps.dc_sid = 0;
         ps.PricingTable = [];
         ps.TITLE = $scope.newStrategy.TITLE;
 
@@ -424,6 +427,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         var pt = util.clone($scope.templates.ObjectTemplates.PricingTable.Generic);
         pt.dc_id = $scope.uid--;
         pt.dc_parent_id = $scope.curPricingStrategy.dc_id;
+        pt.dc_sid = $scope.curPricingStrategy.dc_sid;
         pt.OBJSET_TYPE_CD = $scope.newPricingTable.OBJSET_TYPE_CD;
         pt.TITLE = $scope.newPricingTable.TITLE;
         pt._defaultAtrbs = $scope.newPricingTable._defaultAtrbs;

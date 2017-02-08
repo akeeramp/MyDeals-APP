@@ -82,7 +82,7 @@ namespace Intel.MyDeals
 
             // ALL MASTER DATA WAS REMOVED AND WE CAN NOT AUTHENTICATE UNNTIL IT IS RETURNED... HARD CODE FOR NOW
             opUserToken.Usr.Idsid = idsid;
-            opUserToken.Usr.WWID = 123456;
+            opUserToken.Usr.WWID = 10548414;
             opUserToken.Usr.FirstName = idsid;
             opUserToken.Usr.LastName = idsid;
             opUserToken.Usr.UserID = 123;

@@ -71,7 +71,7 @@ namespace Intel.MyDeals.Entities
                     {
                         FirstName = "Unit",
                         LastName = "Tester",
-                        WWID = 123456,
+                        WWID = 10548414,
                         Idsid = unitTestName                        
                     }
                 }

@@ -117,6 +117,8 @@ namespace Intel.MyDeals.BusinessLogic
 
         public static void FillInHolesFromTemplate(this OpDataCollector dc, bool applyDefaults = false)
         {
+            // Load Data Cycle: Point 2
+            // Save Data Cycle: Point 7
             OpDataElementUITemplates templateSource = DataCollections.GetOpDataElementUITemplates();
             if (!templateSource.ContainsKey(dc.DcType))
             {
@@ -130,6 +132,8 @@ namespace Intel.MyDeals.BusinessLogic
 
         public static void FillInHolesFromTemplate(this OpDataCollector dc, OpDataElementUITemplate templateSource, bool applyDefaults = false)
         {
+            // Load Data Cycle: Point 4
+            // Save Data Cycle: Point 8
             List<string> foundItems = dc.DataElements.Select(d => d.GetFullKeyWithRegNoExtras(new Regex(@"5000:[0-9]*/"), "5000:-99999/")).ToList();
             IEnumerable<OpDataElementUI> missingItems = templateSource.Where(d => !foundItems.Contains(new Regex("5000:[0-9]*/").Replace(d.GetFullKeyNoExtras(), "5000:-99999/")));
 
@@ -138,7 +142,8 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 OpDataElement newDe = deUi.Clone();
                 newDe.DcID = dc.DcID;
-                newDe.DcAltID = dc.DcAltID;
+                newDe.DcParentSID = dc.DcParentSID;
+                newDe.DcSID = dc.DcSID;
 
                 // if the template has a value... then it is a default value.  Apply it if necessary
                 if (applyDefaults && deUi.AtrbValue != null && deUi.AtrbValue.ToString() != "")
@@ -165,6 +170,9 @@ namespace Intel.MyDeals.BusinessLogic
 
         public static OpMsgQueue MergeDictionary(this OpDataCollector dc, OpDataCollectorFlattenedItem items)
         {
+            // Save Data Cycle: Point 4
+            // Save Data Cycle: Point 12
+
             OpMsgQueue opMsgQueue = new OpMsgQueue();
 
             foreach (OpDataElement de in dc.DataElements)
@@ -248,7 +256,8 @@ namespace Intel.MyDeals.BusinessLogic
                 objsetItem["_MultiDim"] = ((Dictionary<int, OpDataCollectorFlattenedItem>)objsetItem["_MultiDim"]).Values.ToList();
 
             objsetItem["dc_id"] = dc.DcID;
-            objsetItem["dc_parent_id"] = dc.DcAltID;
+            objsetItem["dc_parent_id"] = dc.DcParentSID;
+            objsetItem["dc_sid"] = dc.DcSID; // TODO - Does this work???
 
             // TODO Inject Rule Trigger here
 
@@ -349,7 +358,7 @@ namespace Intel.MyDeals.BusinessLogic
 
         public static string DisplayDealId(this OpDataCollector dc)
         {
-            return DealHelperFunctions.DisplayDealId(dc.DcAltID, dc.DcID);
+            return DealHelperFunctions.DisplayDealId(dc.DcParentSID, dc.DcID);
         }
     }
 }
