@@ -1,5 +1,5 @@
 ﻿angular
-    .module('app.contract')
+    .module('blocks.uiControls')
     .directive('opControl', opControl);
 
 // Minification safe dependency injection
@@ -7,7 +7,7 @@ opControl.$inject = ['$http', 'lookupsService', '$compile', '$templateCache', 'l
 
 function opControl($http, lookupsService, $compile, $templateCache, logger, $q) {
     var getTemplate = function (controlType) {
-        var baseUrl = 'app/shared/uiControls/';
+        var baseUrl = 'app/blocks/uiControls/partials/';
         var templateMap = {
             'VERTICAL_TEXTBOX': 'verticalTextBox.html',
             'VERTICAL_DATEPICKER': 'verticalDatePicker.html',

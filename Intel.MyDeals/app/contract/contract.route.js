@@ -14,7 +14,7 @@
             {
                 state: 'contract',
                 config: {
-                    url: 'manager/{cid:int}',
+                    url: '/manager/{cid:int}',
                     abstract: true,
                     views: {
                         'bodyView': {

@@ -1,14 +1,12 @@
 ﻿angular
-    .module('app.contract')
+    .module('blocks.uiControls')
     .directive('opControlFlat', opControlFlat);
 
 // Minification safe dependency injection
 opControlFlat.$inject = ['$http', 'lookupsService', '$compile', '$templateCache', 'logger', '$q'];
 
 function opControlFlat($http, lookupsService, $compile, $templateCache, logger, $q) {
-
     var linker = function (scope, element, attrs) {
-
         var el = "";
         el += '<div op-control';
         el += ' ng-model="value.' + scope.opCd + '"';
@@ -34,7 +32,7 @@ function opControlFlat($http, lookupsService, $compile, $templateCache, logger, 
     }
 
     return {
-        restrict: 'AE', //E = element, A = attribute, C = class, M = comment    
+        restrict: 'AE', //E = element, A = attribute, C = class, M = comment
 
         // add binding to ng-model
         scope: {

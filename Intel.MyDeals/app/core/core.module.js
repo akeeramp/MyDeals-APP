@@ -14,11 +14,12 @@
         /*
          * Our reusable cross app code modules
          */
-        ,'blocks.exception'
-		,'blocks.logger'
-		,'blocks.router'
-		,'blocks.confirmationModal'
-		
+        , 'blocks.exception'
+		, 'blocks.logger'
+		, 'blocks.router'
+		, 'blocks.confirmationModal'
+        , 'blocks.uiControls'
+
     ]);
 
     //TODO: Is there a better location to place the global js error handling?

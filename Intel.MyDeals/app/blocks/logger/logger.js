@@ -38,7 +38,7 @@
                     data = 'message: ' + message + ' statusText: ' + data['exception'].message + ' ErrorStack: ' + data['exception'].stack;
                 }
             }
-            op.ajaxPostAsync(URL + "LogError", data);
+            //op.ajaxPostAsync(URL + "LogError", data);
         }
 
         function info(message, data, title) {

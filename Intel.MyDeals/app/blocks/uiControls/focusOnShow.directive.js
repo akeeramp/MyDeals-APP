@@ -1,12 +1,11 @@
 ﻿angular
-    .module('app.contract')
+    .module('blocks.uiControls')
     .directive('focusOnShow', focusOnShow);
 
 // Minification safe dependency injection
 focusOnShow.$inject = ['$timeout'];
 
 function focusOnShow($timeout) {
-
     return {
         restrict: 'A',
         link: function ($scope, $element, $attr) {
@@ -32,5 +31,4 @@ function focusOnShow($timeout) {
             }
         }
     }
-
 }

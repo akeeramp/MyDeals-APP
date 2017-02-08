@@ -1,14 +1,12 @@
 ﻿angular
-    .module('app.contract')
+    .module('blocks.uiControls')
     .directive('opControlDataElement', opControlDataElement);
 
 // Minification safe dependency injection
 opControlDataElement.$inject = ['$http', 'lookupsService', '$compile', '$templateCache', 'logger', '$q'];
 
 function opControlDataElement($http, lookupsService, $compile, $templateCache, logger, $q) {
-
     var linker = function (scope, element, attrs) {
-
         var el = "";
         el += '<div op-control';
         el += ' ng-model="opValue.' + scope.opCd + '.value"';
@@ -34,7 +32,7 @@ function opControlDataElement($http, lookupsService, $compile, $templateCache, l
     }
 
     return {
-        restrict: 'AE', //E = element, A = attribute, C = class, M = comment    
+        restrict: 'AE', //E = element, A = attribute, C = class, M = comment
 
         // add binding to ng-model
         scope: {
