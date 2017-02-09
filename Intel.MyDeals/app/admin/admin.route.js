@@ -39,6 +39,24 @@
                 }
             },
             {
+                state: 'admin.workflow',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/workflow/workflow.html',
+                    url: 'workflow',
+                    controller: 'WorkflowController as vm',
+                }
+            },
+            {
+                state: 'admin.workflowStaging',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/workflowStaging/workflowStages.html',
+                    url: 'workflowStages',
+                    controller: 'WorkflowStagesController as vm',
+                }
+            },
+            {
                 state: 'admin.customers',
                 abstract: false,
                 config: {
@@ -65,6 +83,15 @@
                     controller: 'ProductController as vm',
                 }
             },
+            {
+                state: 'admin.productSelector',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/productSelector/productSelector.html',
+                    url: 'productSelector',
+                    controller: 'ProductSelectorController as vm',
+                }
+            },            
             {
                 state: 'admin.productCategories',
                 abstract: false,

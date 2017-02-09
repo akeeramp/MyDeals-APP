@@ -225,23 +225,23 @@ namespace Intel.MyDeals.DataLibrary
         }
         private static IEnumerable<DcsSoldTo> _getSoldToData;
 
-        public static List<WorkFlowStage> GetWorkFlowStages()
+        public static List<WorkFlowStg> GetWorkFlowStages()
         {
             lock (LOCK_OBJECT ?? new object())
             {
                 return _getWorkFlowStages ?? (_getWorkFlowStages = new WorkflowDataLib().GetWorkFlowStages());
             }
         }
-        private static List<WorkFlowStage> _getWorkFlowStages;
+        private static List<WorkFlowStg> _getWorkFlowStages;
 
-        public static List<WorkFlowItem> GetWorkFlowItems()
+        public static List<WorkFlows> GetWorkFlowItems()
         {
             lock (LOCK_OBJECT ?? new object())
             {
                 return _getWorkFlowItems ?? (_getWorkFlowItems = new WorkflowDataLib().GetWorkFlowItems());
             }
         }
-        private static List<WorkFlowItem> _getWorkFlowItems;
+        private static List<WorkFlows> _getWorkFlowItems;
 
         public static List<AppRoleTier> GetAppRoleTiers()
         {

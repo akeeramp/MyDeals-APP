@@ -2501,4 +2501,19 @@ namespace Intel.MyDeals.Entities
     } // End of class Operator
 
 
+    [DataContract]
+    public partial class WorkFlowAttribute
+    {
+        [DataMember]
+        public System.String ColumnName { set; get; }
+
+
+        [DataMember]
+        public System.String Key { set; get; }
+
+
+        [DataMember]
+        public System.String Value { set; get; }
+    }
+
 }

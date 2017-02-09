@@ -1,285 +1,259 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Intel.MyDeals.DataAccessLib;
 using Intel.MyDeals.Entities;
 using Intel.Opaque.DBAccess;
 using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
-
+using Intel.MyDeals.IDataLibrary;
 
 namespace Intel.MyDeals.DataLibrary
 {
-    public class WorkflowDataLib
+    public class WorkflowDataLib : IWorkFlowDataLib
     {
 
         #region WorkFlowStages
-        public List<WorkFlowStage> GetWorkFlowStages()
+        /// <summary>
+        /// Get All Work Flow Stage
+        /// </summary>
+        /// <returns>List of all work flow stage</returns>
+        public List<WorkFlowStg> GetWorkFlowStages()
         {
-            return new List<WorkFlowStage>();
-            ////var ret = new List<WorkFlowStage>();
+            var cmd = new Procs.dbo.PR_MYDL_UPD_WFSTG_MSTR
+            {
+                IDSID = Utils.ThreadUser,
+                MODE = CrudModes.Select.ToString()
+            };
 
-            ////using (var rdr = DataAccess.ExecuteReader(new Procs.CDMS_MYDEALS.admin.PR_MANAGE_STAGES { mode = "Select" }))
-            ////{
-            ////    int IDX_ACTV_IND = DB.GetReaderOrdinal(rdr, "ACTV_IND");
-            ////    int IDX_ALL_WF_STG = DB.GetReaderOrdinal(rdr, "ALL_WF_STG");
-            ////    int IDX_ALLOW_REDEAL = DB.GetReaderOrdinal(rdr, "ALLOW_REDEAL");
-            ////    int IDX_DIM_SID = DB.GetReaderOrdinal(rdr, "DIM_SID");
-            ////    int IDX_WFSTG_ATRB_SID = DB.GetReaderOrdinal(rdr, "WFSTG_ATRB_SID");
-            ////    int IDX_WFSTG_CD = DB.GetReaderOrdinal(rdr, "WFSTG_CD");
-            ////    int IDX_WFSTG_DESC = DB.GetReaderOrdinal(rdr, "WFSTG_DESC");
-            ////    int IDX_WFSTG_LOC = DB.GetReaderOrdinal(rdr, "WFSTG_LOC");
-            ////    int IDX_WFSTG_MBR_SID = DB.GetReaderOrdinal(rdr, "WFSTG_MBR_SID");
-            ////    int IDX_WFSTG_ORD = DB.GetReaderOrdinal(rdr, "WFSTG_ORD");
-            ////    int IDX_WFSTG_STS = DB.GetReaderOrdinal(rdr, "WFSTG_STS");
-            ////    int IDX_WFSTG_TIER = DB.GetReaderOrdinal(rdr, "WFSTG_TIER");
+            var ret = new List<WorkFlowStg>();
 
-            ////    while (rdr.Read())
-            ////    {
-            ////        ret.Add(new WorkFlowStage
-            ////        {
-            ////            ACTV_IND = rdr.IsDBNull(IDX_ACTV_IND) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_ACTV_IND),
-            ////            ALL_WF_STG = rdr.IsDBNull(IDX_ALL_WF_STG) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_ALL_WF_STG),
-            ////            ALLOW_REDEAL = rdr.IsDBNull(IDX_ALLOW_REDEAL) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_ALLOW_REDEAL),
-            ////            DIM_SID = rdr.IsDBNull(IDX_DIM_SID) ? default(System.Int16) : rdr.GetFieldValue<System.Int16>(IDX_DIM_SID),
-            ////            WFSTG_ATRB_SID = rdr.IsDBNull(IDX_WFSTG_ATRB_SID) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WFSTG_ATRB_SID),
-            ////            WFSTG_CD = rdr.IsDBNull(IDX_WFSTG_CD) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_CD),
-            ////            WFSTG_DESC = rdr.IsDBNull(IDX_WFSTG_DESC) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_DESC),
-            ////            WFSTG_LOC = rdr.IsDBNull(IDX_WFSTG_LOC) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_LOC),
-            ////            WFSTG_MBR_SID = rdr.IsDBNull(IDX_WFSTG_MBR_SID) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WFSTG_MBR_SID),
-            ////            WFSTG_ORD = rdr.IsDBNull(IDX_WFSTG_ORD) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_ORD),
-            ////            WFSTG_STS = rdr.IsDBNull(IDX_WFSTG_STS) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_STS),
-            ////            WFSTG_TIER = rdr.IsDBNull(IDX_WFSTG_TIER) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_TIER)
-            ////        });
-            ////    } // while
-            ////}
+            using (var rdr = DataAccess.ExecuteReader(cmd))
+            {
+                int IDX_WFSTG_MBR_SID = DB.GetReaderOrdinal(rdr, "WFSTG_MBR_SID");
+                int IDX_WFSTG_ATRB_SID = DB.GetReaderOrdinal(rdr, "WFSTG_ATRB_SID");
+                int IDX_WFSTG_CD = DB.GetReaderOrdinal(rdr, "WFSTG_CD");
+                int IDX_WFSTG_DESC = DB.GetReaderOrdinal(rdr, "WFSTG_DESC");
+                int IDX_ROLE_TIER_CD = DB.GetReaderOrdinal(rdr, "ROLE_TIER_CD");
+                int IDX_WFSTG_LOC = DB.GetReaderOrdinal(rdr, "WFSTG_LOC");
+                int IDX_WFSTG_STS = DB.GetReaderOrdinal(rdr, "WFSTG_STS");
+                int IDX_WFSTG_ORD = DB.GetReaderOrdinal(rdr, "WFSTG_ORD");
+                int IDX_ALLOW_REDEAL = DB.GetReaderOrdinal(rdr, "ALLOW_REDEAL");
+                int IDX_CRE_EMP_WWID = DB.GetReaderOrdinal(rdr, "CRE_EMP_WWID");
+                int IDX_CRE_DTM = DB.GetReaderOrdinal(rdr, "CRE_DTM");
+                int IDX_CHG_EMP_WWID = DB.GetReaderOrdinal(rdr, "CHG_EMP_WWID");
+                int IDX_CHG_DTM = DB.GetReaderOrdinal(rdr, "CHG_DTM");
 
-            ////return ret;
+                while (rdr.Read())
+                {
+                    ret.Add(new WorkFlowStg
+                    {
+                        WFSTG_MBR_SID = rdr.IsDBNull(IDX_WFSTG_MBR_SID) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WFSTG_MBR_SID),
+                        WFSTG_ATRB_SID = rdr.IsDBNull(IDX_WFSTG_ATRB_SID) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WFSTG_ATRB_SID),
+                        WFSTG_CD = rdr.IsDBNull(IDX_WFSTG_CD) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_CD),
+                        WFSTG_DESC = rdr.IsDBNull(IDX_WFSTG_DESC) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_DESC),
+                        ROLE_TIER_CD = rdr.IsDBNull(IDX_ROLE_TIER_CD) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_ROLE_TIER_CD),
+                        WFSTG_LOC = rdr.IsDBNull(IDX_WFSTG_LOC) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_LOC),
+                        WFSTG_STS = rdr.IsDBNull(IDX_WFSTG_STS) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_STS),
+                        WFSTG_ORD = rdr.IsDBNull(IDX_WFSTG_ORD) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_ORD),
+                        ALLOW_REDEAL = rdr.IsDBNull(IDX_ALLOW_REDEAL) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_ALLOW_REDEAL),
+                        CRE_EMP_WWID = rdr.IsDBNull(IDX_CRE_EMP_WWID) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CRE_EMP_WWID),
+                        CRE_DTM = rdr.IsDBNull(IDX_CRE_DTM) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CRE_DTM),
+                        CHG_EMP_WWID = rdr.IsDBNull(IDX_CHG_EMP_WWID) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CHG_EMP_WWID),
+                        CHG_DTM = rdr.IsDBNull(IDX_CHG_DTM) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CHG_DTM)
+
+                    });
+                }
+            }
+
+            return ret;
         }
 
-        public WorkFlowStage SetWorkFlowStages(string mode, WorkFlowStage data)
+        /// <summary>
+        /// This method will be used to Insert,Update and Delete the workflow stage
+        /// </summary>
+        /// <param name="mode" type="string">Mode of the operation like Insert,Update or Delete</param>
+        /// <param name="data" type="WorkFlowStg">Requested values of Workflow stage </param>
+        /// <returns>List of affected rows</returns>
+        public List<WorkFlowStg> SetWorkFlowStages(CrudModes mode, WorkFlowStg data)
         {
-            return new WorkFlowStage();
-            ////var ret = new List<WorkFlowStage>();
+            var ret = new List<WorkFlowStg>();
 
-            ////using (var rdr = DataAccess.ExecuteReader(new Procs.CDMS_MYDEALS.admin.PR_MANAGE_STAGES()
-            ////{
-            ////    idsid = Utils.ThreadUser,
-            ////    mode = mode,
-            ////    WFSTG_MBR_SID = data.WFSTG_MBR_SID,
-            ////    DIM_SID = data.DIM_SID,
-            ////    WFSTG_ATRB_SID = data.WFSTG_ATRB_SID,
-            ////    ALL_WF_STG = data.ALL_WF_STG,
-            ////    WFSTG_CD = data.WFSTG_CD,
-            ////    WFSTG_DESC = data.WFSTG_DESC,
-            ////    WFSTG_TIER = data.WFSTG_TIER,
-            ////    WFSTG_LOC = data.WFSTG_LOC,
-            ////    WFSTG_STS = data.WFSTG_STS,
-            ////    WFSTG_ORD = int.Parse(data.WFSTG_ORD),
-            ////    ALLOW_REDEAL = data.ALLOW_REDEAL == "1",
-            ////    ACTV_IND = data.ACTV_IND
-            ////}))
-            ////{
-            ////    int IDX_ACTV_IND = DB.GetReaderOrdinal(rdr, "ACTV_IND");
-            ////    int IDX_ALL_WF_STG = DB.GetReaderOrdinal(rdr, "ALL_WF_STG");
-            ////    int IDX_ALLOW_REDEAL = DB.GetReaderOrdinal(rdr, "ALLOW_REDEAL");
-            ////    int IDX_DIM_SID = DB.GetReaderOrdinal(rdr, "DIM_SID");
-            ////    int IDX_WFSTG_ATRB_SID = DB.GetReaderOrdinal(rdr, "WFSTG_ATRB_SID");
-            ////    int IDX_WFSTG_CD = DB.GetReaderOrdinal(rdr, "WFSTG_CD");
-            ////    int IDX_WFSTG_DESC = DB.GetReaderOrdinal(rdr, "WFSTG_DESC");
-            ////    int IDX_WFSTG_LOC = DB.GetReaderOrdinal(rdr, "WFSTG_LOC");
-            ////    int IDX_WFSTG_MBR_SID = DB.GetReaderOrdinal(rdr, "WFSTG_MBR_SID");
-            ////    int IDX_WFSTG_ORD = DB.GetReaderOrdinal(rdr, "WFSTG_ORD");
-            ////    int IDX_WFSTG_STS = DB.GetReaderOrdinal(rdr, "WFSTG_STS");
-            ////    int IDX_WFSTG_TIER = DB.GetReaderOrdinal(rdr, "WFSTG_TIER");
+            using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_MYDL_UPD_WFSTG_MSTR()
+            {
+                IDSID = Utils.ThreadUser,
+                MODE = mode.ToString().ToUpper(),
+                WFSTG_MBR_SID = data.WFSTG_MBR_SID,
+                WFSTG_ATRB_SID = data.WFSTG_ATRB_SID,
+                WFSTG_CD = data.WFSTG_CD,
+                WFSTG_DESC = data.WFSTG_DESC,
+                ROLE_TIER_CD = data.ROLE_TIER_CD,
+                WFSTG_LOC = data.WFSTG_LOC,
+                WFSTG_STS = data.WFSTG_STS,
+                WFSTG_ORD = data.WFSTG_ORD,
+                ALLOW_REDEAL = data.ALLOW_REDEAL
 
-            ////    while (rdr.Read())
-            ////    {
-            ////        ret.Add(new WorkFlowStage
-            ////        {
-            ////            ACTV_IND = rdr.IsDBNull(IDX_ACTV_IND) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_ACTV_IND),
-            ////            ALL_WF_STG = rdr.IsDBNull(IDX_ALL_WF_STG) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_ALL_WF_STG),
-            ////            ALLOW_REDEAL = rdr.IsDBNull(IDX_ALLOW_REDEAL) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_ALLOW_REDEAL),
-            ////            DIM_SID = rdr.IsDBNull(IDX_DIM_SID) ? default(System.Int16) : rdr.GetFieldValue<System.Int16>(IDX_DIM_SID),
-            ////            WFSTG_ATRB_SID = rdr.IsDBNull(IDX_WFSTG_ATRB_SID) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WFSTG_ATRB_SID),
-            ////            WFSTG_CD = rdr.IsDBNull(IDX_WFSTG_CD) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_CD),
-            ////            WFSTG_DESC = rdr.IsDBNull(IDX_WFSTG_DESC) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_DESC),
-            ////            WFSTG_LOC = rdr.IsDBNull(IDX_WFSTG_LOC) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_LOC),
-            ////            WFSTG_MBR_SID = rdr.IsDBNull(IDX_WFSTG_MBR_SID) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WFSTG_MBR_SID),
-            ////            WFSTG_ORD = rdr.IsDBNull(IDX_WFSTG_ORD) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_ORD),
-            ////            WFSTG_STS = rdr.IsDBNull(IDX_WFSTG_STS) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_STS),
-            ////            WFSTG_TIER = rdr.IsDBNull(IDX_WFSTG_TIER) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_TIER)
-            ////        });
-            ////    } // while
-            ////}
+            }))
+            {
+                int IDX_WFSTG_MBR_SID = DB.GetReaderOrdinal(rdr, "WFSTG_MBR_SID");
+                int IDX_WFSTG_ATRB_SID = DB.GetReaderOrdinal(rdr, "WFSTG_ATRB_SID");
+                int IDX_WFSTG_CD = DB.GetReaderOrdinal(rdr, "WFSTG_CD");
+                int IDX_WFSTG_DESC = DB.GetReaderOrdinal(rdr, "WFSTG_DESC");
+                int IDX_ROLE_TIER_CD = DB.GetReaderOrdinal(rdr, "ROLE_TIER_CD");
+                int IDX_WFSTG_LOC = DB.GetReaderOrdinal(rdr, "WFSTG_LOC");
+                int IDX_WFSTG_STS = DB.GetReaderOrdinal(rdr, "WFSTG_STS");
+                int IDX_WFSTG_ORD = DB.GetReaderOrdinal(rdr, "WFSTG_ORD");
+                int IDX_ALLOW_REDEAL = DB.GetReaderOrdinal(rdr, "ALLOW_REDEAL");
+                int IDX_CRE_EMP_WWID = DB.GetReaderOrdinal(rdr, "CRE_EMP_WWID");
+                int IDX_CRE_DTM = DB.GetReaderOrdinal(rdr, "CRE_DTM");
+                int IDX_CHG_EMP_WWID = DB.GetReaderOrdinal(rdr, "CHG_EMP_WWID");
+                int IDX_CHG_DTM = DB.GetReaderOrdinal(rdr, "CHG_DTM");
 
-            ////return ret.FirstOrDefault();
+                while (rdr.Read())
+                {
+                    ret.Add(new WorkFlowStg
+                    {
+                        WFSTG_MBR_SID = rdr.IsDBNull(IDX_WFSTG_MBR_SID) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WFSTG_MBR_SID),
+                        WFSTG_ATRB_SID = rdr.IsDBNull(IDX_WFSTG_ATRB_SID) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WFSTG_ATRB_SID),
+                        WFSTG_CD = rdr.IsDBNull(IDX_WFSTG_CD) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_CD),
+                        WFSTG_DESC = rdr.IsDBNull(IDX_WFSTG_DESC) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_DESC),
+                        ROLE_TIER_CD = rdr.IsDBNull(IDX_ROLE_TIER_CD) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_ROLE_TIER_CD),
+                        WFSTG_LOC = rdr.IsDBNull(IDX_WFSTG_LOC) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_LOC),
+                        WFSTG_STS = rdr.IsDBNull(IDX_WFSTG_STS) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_STS),
+                        WFSTG_ORD = rdr.IsDBNull(IDX_WFSTG_ORD) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_ORD),
+                        ALLOW_REDEAL = rdr.IsDBNull(IDX_ALLOW_REDEAL) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_ALLOW_REDEAL),
+                        CRE_EMP_WWID = rdr.IsDBNull(IDX_CRE_EMP_WWID) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CRE_EMP_WWID),
+                        CRE_DTM = rdr.IsDBNull(IDX_CRE_DTM) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CRE_DTM),
+                        CHG_EMP_WWID = rdr.IsDBNull(IDX_CHG_EMP_WWID) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CHG_EMP_WWID),
+                        CHG_DTM = rdr.IsDBNull(IDX_CHG_DTM) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CHG_DTM)
+                    });
+                }
+            }
+
+            return ret;
         }
         #endregion
 
         #region WorkFlowItem
-        public List<WorkFlowItem> GetWorkFlowItems()
-        {
-            return new List<WorkFlowItem>();
-
-            ////using (var rdr = DataAccess.ExecuteReader(new Procs.CDMS_MYDEALS.deal.PR_USER_DEAL_WF()))
-            ////{
-            ////    int IDX_ACT_ACTV_IND = DB.GetReaderOrdinal(rdr, "ACT_ACTV_IND");
-            ////    int IDX_ACTV_IND = DB.GetReaderOrdinal(rdr, "ACTV_IND");
-            ////    int IDX_ALLOW_REDEAL = DB.GetReaderOrdinal(rdr, "ALLOW_REDEAL");
-            ////    int IDX_DEAL_MBR_SID = DB.GetReaderOrdinal(rdr, "DEAL_MBR_SID");
-            ////    int IDX_DEAL_TYPE_CD = DB.GetReaderOrdinal(rdr, "DEAL_TYPE_CD");
-            ////    int IDX_DEAL_TYPE_SID = DB.GetReaderOrdinal(rdr, "DEAL_TYPE_SID");
-            ////    int IDX_ROLE_TIER_CD = DB.GetReaderOrdinal(rdr, "ROLE_TIER_CD");
-            ////    int IDX_TRKR_NBR_UPD = DB.GetReaderOrdinal(rdr, "TRKR_NBR_UPD");
-            ////    int IDX_WF_NAME = DB.GetReaderOrdinal(rdr, "WF_NAME");
-            ////    int IDX_WF_SID = DB.GetReaderOrdinal(rdr, "WF_SID");
-            ////    int IDX_WFSTG_ACTN_CD = DB.GetReaderOrdinal(rdr, "WFSTG_ACTN_CD");
-            ////    int IDX_WFSTG_ACTV_IND = DB.GetReaderOrdinal(rdr, "WFSTG_ACTV_IND");
-            ////    int IDX_WFSTG_CD = DB.GetReaderOrdinal(rdr, "WFSTG_CD");
-            ////    int IDX_WFSTG_DEST_ACTV_IND = DB.GetReaderOrdinal(rdr, "WFSTG_DEST_ACTV_IND");
-            ////    int IDX_WFSTG_DEST_ALLOW_REDEAL = DB.GetReaderOrdinal(rdr, "WFSTG_DEST_ALLOW_REDEAL");
-            ////    int IDX_WFSTG_DEST_CD = DB.GetReaderOrdinal(rdr, "WFSTG_DEST_CD");
-            ////    int IDX_WFSTG_DEST_MBR_SID = DB.GetReaderOrdinal(rdr, "WFSTG_DEST_MBR_SID");
-            ////    int IDX_WFSTG_DEST_WFSTG_LOC = DB.GetReaderOrdinal(rdr, "WFSTG_DEST_WFSTG_LOC");
-            ////    int IDX_WFSTG_DEST_WFSTG_ORD = DB.GetReaderOrdinal(rdr, "WFSTG_DEST_WFSTG_ORD");
-            ////    int IDX_WFSTG_DEST_WFSTG_STS = DB.GetReaderOrdinal(rdr, "WFSTG_DEST_WFSTG_STS");
-            ////    int IDX_WFSTG_LOC = DB.GetReaderOrdinal(rdr, "WFSTG_LOC");
-            ////    int IDX_WFSTG_MBR_SID = DB.GetReaderOrdinal(rdr, "WFSTG_MBR_SID");
-            ////    int IDX_WFSTG_ORD = DB.GetReaderOrdinal(rdr, "WFSTG_ORD");
-            ////    int IDX_WFSTG_STS = DB.GetReaderOrdinal(rdr, "WFSTG_STS");
-            ////    int IDX_WFSTG_TIER = DB.GetReaderOrdinal(rdr, "WFSTG_TIER");
-            ////    int IDX_WORK_FLOW_ACTV_IND = DB.GetReaderOrdinal(rdr, "WORK_FLOW_ACTV_IND");
-
-            ////    while (rdr.Read())
-            ////    {
-            ////        ret.Add(new WorkFlowItem
-            ////        {
-            ////            ACT_ACTV_IND = rdr.IsDBNull(IDX_ACT_ACTV_IND) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_ACT_ACTV_IND),
-            ////            ACTV_IND = rdr.IsDBNull(IDX_ACTV_IND) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_ACTV_IND),
-            ////            ALLOW_REDEAL = rdr.IsDBNull(IDX_ALLOW_REDEAL) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_ALLOW_REDEAL),
-            ////            DEAL_MBR_SID = rdr.IsDBNull(IDX_DEAL_MBR_SID) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_MBR_SID),
-            ////            DEAL_TYPE_CD = rdr.IsDBNull(IDX_DEAL_TYPE_CD) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_DEAL_TYPE_CD),
-            ////            DEAL_TYPE_SID = rdr.IsDBNull(IDX_DEAL_TYPE_SID) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_TYPE_SID),
-            ////            ROLE_TIER_CD = rdr.IsDBNull(IDX_ROLE_TIER_CD) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_ROLE_TIER_CD),
-            ////            TRKR_NBR_UPD = rdr.IsDBNull(IDX_TRKR_NBR_UPD) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_TRKR_NBR_UPD),
-            ////            WF_NAME = rdr.IsDBNull(IDX_WF_NAME) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WF_NAME),
-            ////            WF_SID = rdr.IsDBNull(IDX_WF_SID) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WF_SID),
-            ////            WFSTG_ACTN_CD = rdr.IsDBNull(IDX_WFSTG_ACTN_CD) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_ACTN_CD),
-            ////            WFSTG_ACTV_IND = rdr.IsDBNull(IDX_WFSTG_ACTV_IND) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_WFSTG_ACTV_IND),
-            ////            WFSTG_CD = rdr.IsDBNull(IDX_WFSTG_CD) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_CD),
-            ////            WFSTG_DEST_ACTV_IND = rdr.IsDBNull(IDX_WFSTG_DEST_ACTV_IND) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_WFSTG_DEST_ACTV_IND),
-            ////            WFSTG_DEST_ALLOW_REDEAL = rdr.IsDBNull(IDX_WFSTG_DEST_ALLOW_REDEAL) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_DEST_ALLOW_REDEAL),
-            ////            WFSTG_DEST_CD = rdr.IsDBNull(IDX_WFSTG_DEST_CD) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_DEST_CD),
-            ////            WFSTG_DEST_MBR_SID = rdr.IsDBNull(IDX_WFSTG_DEST_MBR_SID) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WFSTG_DEST_MBR_SID),
-            ////            WFSTG_DEST_WFSTG_LOC = rdr.IsDBNull(IDX_WFSTG_DEST_WFSTG_LOC) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_DEST_WFSTG_LOC),
-            ////            WFSTG_DEST_WFSTG_ORD = rdr.IsDBNull(IDX_WFSTG_DEST_WFSTG_ORD) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_DEST_WFSTG_ORD),
-            ////            WFSTG_DEST_WFSTG_STS = rdr.IsDBNull(IDX_WFSTG_DEST_WFSTG_STS) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_DEST_WFSTG_STS),
-            ////            WFSTG_LOC = rdr.IsDBNull(IDX_WFSTG_LOC) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_LOC),
-            ////            WFSTG_MBR_SID = rdr.IsDBNull(IDX_WFSTG_MBR_SID) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WFSTG_MBR_SID),
-            ////            WFSTG_ORD = rdr.IsDBNull(IDX_WFSTG_ORD) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_ORD),
-            ////            WFSTG_STS = rdr.IsDBNull(IDX_WFSTG_STS) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_STS),
-            ////            WFSTG_TIER = rdr.IsDBNull(IDX_WFSTG_TIER) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_TIER),
-            ////            WORK_FLOW_ACTV_IND = rdr.IsDBNull(IDX_WORK_FLOW_ACTV_IND) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_WORK_FLOW_ACTV_IND)
-            ////        });
-            ////    } // while
-            ////}
-
-            ////return ret;
-        }
         #endregion
 
         #region WorkFlow
-        public List<WorkFlow> GetWorkFlows()
+        /// <summary>
+        /// This will return all the Workflow item
+        /// </summary>
+        /// <returns></returns>
+        public List<WorkFlows> GetWorkFlowItems()
         {
-            return new List<WorkFlow>();
-            ////var ret = new List<WorkFlow>();
+            var cmd = new Procs.dbo.PR_MYDL_UPD_WORKFL_MSTR
+            {
+                IDSID = Utils.ThreadUser,
+                MODE = CrudModes.Select.ToString().ToUpper()
+            };
+            List<WorkFlows> ret = new List<WorkFlows>();
 
-            ////using (var rdr = DataAccess.ExecuteReader(new Procs.CDMS_MYDEALS.admin.PR_MANAGE_WORK_FLOW { mode = "Select" }))
-            ////{
-            ////    int IDX_ACTV_IND = DB.GetReaderOrdinal(rdr, "ACTV_IND");
-            ////    int IDX_DEAL_MBR_SID = DB.GetReaderOrdinal(rdr, "DEAL_MBR_SID");
-            ////    int IDX_PRD_MBR_SID = DB.GetReaderOrdinal(rdr, "PRD_MBR_SID");
-            ////    int IDX_ROLE_TIER_CD = DB.GetReaderOrdinal(rdr, "ROLE_TIER_CD");
-            ////    int IDX_TRKR_NBR_UPD = DB.GetReaderOrdinal(rdr, "TRKR_NBR_UPD");
-            ////    int IDX_WF_NAME = DB.GetReaderOrdinal(rdr, "WF_NAME");
-            ////    int IDX_WF_SID = DB.GetReaderOrdinal(rdr, "WF_SID");
-            ////    int IDX_WFSTG_ACTN_CD = DB.GetReaderOrdinal(rdr, "WFSTG_ACTN_CD");
-            ////    int IDX_WFSTG_DEST_MBR_SID = DB.GetReaderOrdinal(rdr, "WFSTG_DEST_MBR_SID");
-            ////    int IDX_WFSTG_MBR_SID = DB.GetReaderOrdinal(rdr, "WFSTG_MBR_SID");
+            using (var rdr = DataAccess.ExecuteReader(cmd))
+            {
+                int IDX_DEAL_TYPE_CD = DB.GetReaderOrdinal(rdr, "DEAL_TYPE_CD");
+                int IDX_ROLE_TIER_CD = DB.GetReaderOrdinal(rdr, "ROLE_TIER_CD");
+                int IDX_TRKR_NBR_UPD = DB.GetReaderOrdinal(rdr, "TRKR_NBR_UPD");
+                int IDX_WF_NAME = DB.GetReaderOrdinal(rdr, "WF_NAME");
+                int IDX_WF_SID = DB.GetReaderOrdinal(rdr, "WF_SID");
+                int IDX_WFSTG_ACTN_CD = DB.GetReaderOrdinal(rdr, "WFSTG_ACTN_CD");
+                int IDX_WFSTG_CD_DEST = DB.GetReaderOrdinal(rdr, "WFSTG_CD_DEST");
+                int IDX_WFSTG_CD_SRC = DB.GetReaderOrdinal(rdr, "WFSTG_CD_SRC");
 
-            ////    while (rdr.Read())
-            ////    {
-            ////        ret.Add(new WorkFlow
-            ////        {
-            ////            ACTV_IND = rdr.IsDBNull(IDX_ACTV_IND) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_ACTV_IND),
-            ////            DEAL_MBR_SID = rdr.IsDBNull(IDX_DEAL_MBR_SID) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_MBR_SID),
-            ////            PRD_MBR_SID = rdr.IsDBNull(IDX_PRD_MBR_SID) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRD_MBR_SID),
-            ////            ROLE_TIER_CD = rdr.IsDBNull(IDX_ROLE_TIER_CD) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_ROLE_TIER_CD),
-            ////            TRKR_NBR_UPD = rdr.IsDBNull(IDX_TRKR_NBR_UPD) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_TRKR_NBR_UPD),
-            ////            WF_NAME = rdr.IsDBNull(IDX_WF_NAME) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WF_NAME),
-            ////            WF_SID = rdr.IsDBNull(IDX_WF_SID) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WF_SID),
-            ////            WFSTG_ACTN_CD = rdr.IsDBNull(IDX_WFSTG_ACTN_CD) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_ACTN_CD),
-            ////            WFSTG_DEST_MBR_SID = rdr.IsDBNull(IDX_WFSTG_DEST_MBR_SID) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WFSTG_DEST_MBR_SID),
-            ////            WFSTG_MBR_SID = rdr.IsDBNull(IDX_WFSTG_MBR_SID) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WFSTG_MBR_SID)
-            ////        });
-            ////    } // while
-            ////}
+                while (rdr.Read())
+                {
+                    ret.Add(new WorkFlows
+                    {
+                        DEAL_TYPE_CD = (IDX_DEAL_TYPE_CD < 0 || rdr.IsDBNull(IDX_DEAL_TYPE_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_TYPE_CD),
+                        ROLE_TIER_CD = (IDX_ROLE_TIER_CD < 0 || rdr.IsDBNull(IDX_ROLE_TIER_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ROLE_TIER_CD),
+                        TRKR_NBR_UPD = (IDX_TRKR_NBR_UPD < 0 || rdr.IsDBNull(IDX_TRKR_NBR_UPD)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_TRKR_NBR_UPD),
+                        WF_NAME = (IDX_WF_NAME < 0 || rdr.IsDBNull(IDX_WF_NAME)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_WF_NAME),
+                        WF_SID = (IDX_WF_SID < 0 || rdr.IsDBNull(IDX_WF_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WF_SID),
+                        WFSTG_ACTN_CD = (IDX_WFSTG_ACTN_CD < 0 || rdr.IsDBNull(IDX_WFSTG_ACTN_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_WFSTG_ACTN_CD),
+                        WFSTG_CD_DEST = (IDX_WFSTG_CD_DEST < 0 || rdr.IsDBNull(IDX_WFSTG_CD_DEST)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_WFSTG_CD_DEST),
+                        WFSTG_CD_SRC = (IDX_WFSTG_CD_SRC < 0 || rdr.IsDBNull(IDX_WFSTG_CD_SRC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_WFSTG_CD_SRC)
+                    });
+                } // while
+            }
 
-            ////return ret;
+            return ret;
         }
 
-        public WorkFlow SetWorkFlows(string mode, WorkFlow data)
+        /// <summary>
+        /// This will help to INSERT, UPDATE, DELETE from WorkFlow table
+        /// </summary>
+        /// <param name="mode"></param> // CrudModes - Insert / Update / Delete
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public List<WorkFlows> SetWorkFlows(CrudModes mode, WorkFlows data)
         {
-            return new WorkFlow();
-            ////var ret = new List<WorkFlow>();
+            var retWorkflow = new List<WorkFlows>();
 
-            ////using (var rdr = DataAccess.ExecuteReader(new Procs.CDMS_MYDEALS.admin.PR_MANAGE_WORK_FLOW
-            ////{
-            ////    idsid = Utils.ThreadUser,
-            ////    mode = mode,
-            ////    WF_SID = data.WF_SID,
-            ////    WF_NAME = data.WF_NAME,
-            ////    ROLE_TIER_CD = data.ROLE_TIER_CD,
-            ////    WFSTG_MBR_SID = data.WFSTG_MBR_SID,
-            ////    WFSTG_ACTN_CD = data.WFSTG_ACTN_CD,
-            ////    DEAL_MBR_SID = data.DEAL_MBR_SID,
-            ////    PRD_MBR_SID = data.PRD_MBR_SID,
-            ////    WFSTG_DEST_MBR_SID = data.WFSTG_DEST_MBR_SID,
-            ////    TRKR_NBR_UPD = data.TRKR_NBR_UPD.ToString() == "true" ? 1 : 0,
-            ////    ACTV_IND = data.ACTV_IND,
-            ////}))
-            ////{
-            ////    int IDX_ACTV_IND = DB.GetReaderOrdinal(rdr, "ACTV_IND");
-            ////    int IDX_DEAL_MBR_SID = DB.GetReaderOrdinal(rdr, "DEAL_MBR_SID");
-            ////    int IDX_PRD_MBR_SID = DB.GetReaderOrdinal(rdr, "PRD_MBR_SID");
-            ////    int IDX_ROLE_TIER_CD = DB.GetReaderOrdinal(rdr, "ROLE_TIER_CD");
-            ////    int IDX_TRKR_NBR_UPD = DB.GetReaderOrdinal(rdr, "TRKR_NBR_UPD");
-            ////    int IDX_WF_NAME = DB.GetReaderOrdinal(rdr, "WF_NAME");
-            ////    int IDX_WF_SID = DB.GetReaderOrdinal(rdr, "WF_SID");
-            ////    int IDX_WFSTG_ACTN_CD = DB.GetReaderOrdinal(rdr, "WFSTG_ACTN_CD");
-            ////    int IDX_WFSTG_DEST_MBR_SID = DB.GetReaderOrdinal(rdr, "WFSTG_DEST_MBR_SID");
-            ////    int IDX_WFSTG_MBR_SID = DB.GetReaderOrdinal(rdr, "WFSTG_MBR_SID");
+            using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_MYDL_UPD_WORKFL_MSTR
+            {
+                IDSID = Utils.ThreadUser,
+                MODE = mode.ToString().ToUpper(),
+                WF_SID = data.WF_SID,
+                WF_NAME = data.WF_NAME,
+                ROLE_TIER_CD = data.ROLE_TIER_CD,
+                WFSTG_ACTN_CD = data.WFSTG_ACTN_CD,
+                DEAL_TYPE_CD = data.DEAL_TYPE_CD,
+                WFSTG_CD_SRC = data.WFSTG_CD_SRC,
+                WFSTG_CD_DEST = data.WFSTG_CD_DEST,
+                TRKR_NBR_UPD = data.TRKR_NBR_UPD
+               
+            }))
+            {
+                int IDX_DEAL_TYPE_CD = DB.GetReaderOrdinal(rdr, "DEAL_TYPE_CD");
+                int IDX_ROLE_TIER_CD = DB.GetReaderOrdinal(rdr, "ROLE_TIER_CD");
+                int IDX_TRKR_NBR_UPD = DB.GetReaderOrdinal(rdr, "TRKR_NBR_UPD");
+                int IDX_WF_NAME = DB.GetReaderOrdinal(rdr, "WF_NAME");
+                int IDX_WF_SID = DB.GetReaderOrdinal(rdr, "WF_SID");
+                int IDX_WFSTG_ACTN_CD = DB.GetReaderOrdinal(rdr, "WFSTG_ACTN_CD");
+                int IDX_WFSTG_CD_DEST = DB.GetReaderOrdinal(rdr, "WFSTG_CD_DEST");
+                int IDX_WFSTG_CD_SRC = DB.GetReaderOrdinal(rdr, "WFSTG_CD_SRC");
 
-            ////    while (rdr.Read())
-            ////    {
-            ////        ret.Add(new WorkFlow
-            ////        {
-            ////            ACTV_IND = rdr.IsDBNull(IDX_ACTV_IND) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_ACTV_IND),
-            ////            DEAL_MBR_SID = rdr.IsDBNull(IDX_DEAL_MBR_SID) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_MBR_SID),
-            ////            PRD_MBR_SID = rdr.IsDBNull(IDX_PRD_MBR_SID) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRD_MBR_SID),
-            ////            ROLE_TIER_CD = rdr.IsDBNull(IDX_ROLE_TIER_CD) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_ROLE_TIER_CD),
-            ////            TRKR_NBR_UPD = rdr.IsDBNull(IDX_TRKR_NBR_UPD) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_TRKR_NBR_UPD),
-            ////            WF_NAME = rdr.IsDBNull(IDX_WF_NAME) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WF_NAME),
-            ////            WF_SID = rdr.IsDBNull(IDX_WF_SID) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WF_SID),
-            ////            WFSTG_ACTN_CD = rdr.IsDBNull(IDX_WFSTG_ACTN_CD) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_ACTN_CD),
-            ////            WFSTG_DEST_MBR_SID = rdr.IsDBNull(IDX_WFSTG_DEST_MBR_SID) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WFSTG_DEST_MBR_SID),
-            ////            WFSTG_MBR_SID = rdr.IsDBNull(IDX_WFSTG_MBR_SID) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WFSTG_MBR_SID)
-            ////        });
-            ////    } // while
-            ////}
+                while (rdr.Read())
+                {
+                    retWorkflow.Add(new WorkFlows
+                    {
+                        DEAL_TYPE_CD = (IDX_DEAL_TYPE_CD < 0 || rdr.IsDBNull(IDX_DEAL_TYPE_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_TYPE_CD),
+                        ROLE_TIER_CD = (IDX_ROLE_TIER_CD < 0 || rdr.IsDBNull(IDX_ROLE_TIER_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ROLE_TIER_CD),
+                        TRKR_NBR_UPD = (IDX_TRKR_NBR_UPD < 0 || rdr.IsDBNull(IDX_TRKR_NBR_UPD)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_TRKR_NBR_UPD),
+                        WF_NAME = (IDX_WF_NAME < 0 || rdr.IsDBNull(IDX_WF_NAME)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_WF_NAME),
+                        WF_SID = (IDX_WF_SID < 0 || rdr.IsDBNull(IDX_WF_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WF_SID),
+                        WFSTG_ACTN_CD = (IDX_WFSTG_ACTN_CD < 0 || rdr.IsDBNull(IDX_WFSTG_ACTN_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_WFSTG_ACTN_CD),
+                        WFSTG_CD_DEST = (IDX_WFSTG_CD_DEST < 0 || rdr.IsDBNull(IDX_WFSTG_CD_DEST)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_WFSTG_CD_DEST),
+                        WFSTG_CD_SRC = (IDX_WFSTG_CD_SRC < 0 || rdr.IsDBNull(IDX_WFSTG_CD_SRC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_WFSTG_CD_SRC)
+                    });
+                } // while
+            }
 
-            ////return ret.FirstOrDefault();
+            return retWorkflow;
         }
         #endregion
+        
+        public List<WorkFlowAttribute> GetDropDownValues()
+        {
+            List<WorkFlowAttribute> fake = new List<WorkFlowAttribute>();
+            fake.Add(new WorkFlowAttribute { ColumnName = "ROLE_TIER_CD", Key = "Tier_1", Value = "Tier_1" });
+            fake.Add(new WorkFlowAttribute { ColumnName = "ROLE_TIER_CD", Key = "Tier_2", Value = "Tier_2" });
+            fake.Add(new WorkFlowAttribute { ColumnName = "ROLE_TIER_CD", Key = "Tier_3", Value = "Tier_3" });
+            fake.Add(new WorkFlowAttribute { ColumnName = "ROLE_TIER_CD", Key = "Tier_4", Value = "Tier_4" });
+            fake.Add(new WorkFlowAttribute { ColumnName = "ROLE_TIER_CD", Key = "Tier_5", Value = "Tier_5" });
+            fake.Add(new WorkFlowAttribute { ColumnName = "DEAL_TYPE_CD", Key = "Program Type", Value = "Program Type" });
+            fake.Add(new WorkFlowAttribute { ColumnName = "DEAL_TYPE_CD", Key = "ECAP_Deal", Value = "ECAP Deal" });
+            fake.Add(new WorkFlowAttribute { ColumnName = "DEAL_TYPE_CD", Key = "Volume_Tier", Value = "Volume Tie" });
+            fake.Add(new WorkFlowAttribute { ColumnName = "WFSTG_ACTN_CD", Key = "Approved", Value = "Approved" });
+            fake.Add(new WorkFlowAttribute { ColumnName = "WFSTG_ACTN_CD", Key = "Rejected", Value = "Rejected" });
+            fake.Add(new WorkFlowAttribute { ColumnName = "WFSTG_CD_SRC_DEST", Key = "Created", Value = "Created" });
+            fake.Add(new WorkFlowAttribute { ColumnName = "WFSTG_CD_SRC_DEST", Key = "Requested", Value = "Requested" });
+
+            return fake;
+        }
+
+
 
     }
 }
