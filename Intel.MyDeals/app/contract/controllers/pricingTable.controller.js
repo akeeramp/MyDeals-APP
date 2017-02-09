@@ -7,7 +7,6 @@
 PricingTableController.$inject = ['$scope', '$state', '$stateParams', 'pricingTableData', 'dataService', 'logger'];
 
 function PricingTableController($scope, $state, $stateParams, pricingTableData, dataService, logger) {
-
     // Access to parent scope
     //
     var root = $scope.$parent.$parent;
@@ -23,7 +22,6 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
         $state.go('contract.manager', { cid: root.contractData.dc_id });
     }
 
-
     // Set Pricing Table ID and Object
     //
     if (root.curPricingTableId !== $stateParams.pid) {
@@ -35,8 +33,7 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
         $state.go('contract.manager', { cid: root.contractData.dc_id });
     }
 
-
-    $scope.spreadNeedsInitialization = true;
+    $scope.$parent.$parent.spreadNeedsInitialization = true;
     $scope.getColumns = function (ptTemplate) {
         var cols = [];
         angular.forEach(ptTemplate.columns, function (value, key) {
@@ -83,8 +80,6 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
     //    var view = root.spreadDs.view();
     //});
 
-
-
     $scope.ptSpreadOptions = {
         sheetsbar: false,
         columns: columns.length + 1,  // need to show one extra column for a bug in the spreadsheet... will remove it during render event
@@ -95,7 +90,6 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
         },
         sheets: [
         {
-            dataSource: root.spreadDs,
             columns: columns
         }],
         change: function (e) {
@@ -105,14 +99,19 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
             });
         },
         render: function (e) {
-            if ($scope.spreadNeedsInitialization) {
-                $scope.spreadNeedsInitialization = false;
+            if ($scope.$parent.$parent.spreadNeedsInitialization) {
+                $scope.$parent.$parent.spreadNeedsInitialization = false;
 
                 var intA = "A".charCodeAt(0);
 
                 //debugger;
                 var c = 1;
                 var sheet = e.sender.activeSheet();
+
+                // With initial configuration of datasource spreadsheet displays all the fields as columns,
+                // thus setting up datasource in  reneder event where selective columns from datasource can be displayed.
+                sheet.setDataSource(root.spreadDs, ptTemplate.columns);
+
                 angular.forEach(ptTemplate.columns, function (value, key) {
                     $(".k-spreadsheet-view .k-spreadsheet-fixed-container .k-spreadsheet-pane .k-spreadsheet-column-header div:nth-of-type(" + c + ") div").html(value.title);
                     $scope.colToLetter[value.title] = String.fromCharCode(intA + c);
@@ -128,11 +127,9 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
                 var range = sheet.range(String.fromCharCode(intA + c) + "1:" + String.fromCharCode(intA + c) + "100");
                 range.enable(false);
                 // done with bug workaround
-
             }
         }
     };
-
 
     var wipTemplate = root.templates.ModelTemplates.WipDeals[root.curPricingTable.OBJSET_TYPE_CD];
 
@@ -169,7 +166,6 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
     //
     root.gridDetailsDs = {};
     $scope.detailGridOptions = function (dataItem, pivotName) {
-
         var gt = new gridTools(wipTemplate.detailsModel, wipTemplate.detailsColumns);
         gt.assignColSettings();
 
@@ -191,7 +187,6 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
             }
         };
     };
-
 
     // Reset relative dirty bits
     //
@@ -227,7 +222,6 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
         }
     }
 
-
     // Watch for any changes to contract data to set a dirty bit
     //
     $scope.$watch('$parent.$parent._dirty', function (newValue, oldValue, el) {
@@ -235,7 +229,6 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
             $scope.resetDirty();
         }
     }, true);
-
 
     // force a resize event to format page
     $scope.resizeEvent();

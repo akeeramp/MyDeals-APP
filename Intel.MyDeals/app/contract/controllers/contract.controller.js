@@ -42,6 +42,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
     $scope.curPricingStrategy = {};
     $scope.curPricingTable = {};
     $scope.curPricingTableId = 0;
+    $scope.spreadNeedsInitialization = true;
 
     // other variable definitions
     //
@@ -168,7 +169,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         $scope.newPricingTable["_extraAtrbs"] = ptTmplt.extraAtrbs;
         $scope.newPricingTable["_defaultAtrbs"] = ptTmplt.defaultAtrbs;
 
-        // Maybe don't do this... 
+        // Maybe don't do this...
         //if (util.isEmpty(ptTmplt.extraAtrbs)) {
         //    $scope.customAddPtValidate();
         //}
@@ -415,7 +416,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         }
     }
 
-    
+
     // **** NEW PRICING TABLE Methods ****
     //
     $scope.newPricingTable = util.clone($scope.templates.ObjectTemplates.PricingTable.Generic);
