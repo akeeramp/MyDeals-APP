@@ -29,37 +29,35 @@ namespace Intel.MyDeals.DataLibrary
 
             using (var rdr = DataAccess.ExecuteReader(cmd))
             {
-                int IDX_WFSTG_MBR_SID = DB.GetReaderOrdinal(rdr, "WFSTG_MBR_SID");
+                int IDX_ALLOW_REDEAL = DB.GetReaderOrdinal(rdr, "ALLOW_REDEAL");
+                int IDX_CHG_DTM = DB.GetReaderOrdinal(rdr, "CHG_DTM");
+                int IDX_CHG_EMP_WWID = DB.GetReaderOrdinal(rdr, "CHG_EMP_WWID");
+                int IDX_CRE_DTM = DB.GetReaderOrdinal(rdr, "CRE_DTM");
+                int IDX_CRE_EMP_WWID = DB.GetReaderOrdinal(rdr, "CRE_EMP_WWID");
+                int IDX_ROLE_TIER_CD = DB.GetReaderOrdinal(rdr, "ROLE_TIER_CD");
                 int IDX_WFSTG_ATRB_SID = DB.GetReaderOrdinal(rdr, "WFSTG_ATRB_SID");
                 int IDX_WFSTG_CD = DB.GetReaderOrdinal(rdr, "WFSTG_CD");
                 int IDX_WFSTG_DESC = DB.GetReaderOrdinal(rdr, "WFSTG_DESC");
-                int IDX_ROLE_TIER_CD = DB.GetReaderOrdinal(rdr, "ROLE_TIER_CD");
                 int IDX_WFSTG_LOC = DB.GetReaderOrdinal(rdr, "WFSTG_LOC");
-                int IDX_WFSTG_STS = DB.GetReaderOrdinal(rdr, "WFSTG_STS");
+                int IDX_WFSTG_MBR_SID = DB.GetReaderOrdinal(rdr, "WFSTG_MBR_SID");
                 int IDX_WFSTG_ORD = DB.GetReaderOrdinal(rdr, "WFSTG_ORD");
-                int IDX_ALLOW_REDEAL = DB.GetReaderOrdinal(rdr, "ALLOW_REDEAL");
-                int IDX_CRE_EMP_WWID = DB.GetReaderOrdinal(rdr, "CRE_EMP_WWID");
-                int IDX_CRE_DTM = DB.GetReaderOrdinal(rdr, "CRE_DTM");
-                int IDX_CHG_EMP_WWID = DB.GetReaderOrdinal(rdr, "CHG_EMP_WWID");
-                int IDX_CHG_DTM = DB.GetReaderOrdinal(rdr, "CHG_DTM");
 
                 while (rdr.Read())
                 {
                     ret.Add(new WorkFlowStg
                     {
-                        WFSTG_MBR_SID = rdr.IsDBNull(IDX_WFSTG_MBR_SID) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WFSTG_MBR_SID),
-                        WFSTG_ATRB_SID = rdr.IsDBNull(IDX_WFSTG_ATRB_SID) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WFSTG_ATRB_SID),
-                        WFSTG_CD = rdr.IsDBNull(IDX_WFSTG_CD) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_CD),
-                        WFSTG_DESC = rdr.IsDBNull(IDX_WFSTG_DESC) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_DESC),
-                        ROLE_TIER_CD = rdr.IsDBNull(IDX_ROLE_TIER_CD) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_ROLE_TIER_CD),
-                        WFSTG_LOC = rdr.IsDBNull(IDX_WFSTG_LOC) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_LOC),
-                        WFSTG_STS = rdr.IsDBNull(IDX_WFSTG_STS) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_STS),
-                        WFSTG_ORD = rdr.IsDBNull(IDX_WFSTG_ORD) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_ORD),
-                        ALLOW_REDEAL = rdr.IsDBNull(IDX_ALLOW_REDEAL) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_ALLOW_REDEAL),
-                        CRE_EMP_WWID = rdr.IsDBNull(IDX_CRE_EMP_WWID) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CRE_EMP_WWID),
-                        CRE_DTM = rdr.IsDBNull(IDX_CRE_DTM) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CRE_DTM),
-                        CHG_EMP_WWID = rdr.IsDBNull(IDX_CHG_EMP_WWID) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CHG_EMP_WWID),
-                        CHG_DTM = rdr.IsDBNull(IDX_CHG_DTM) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CHG_DTM)
+                        ALLOW_REDEAL = (IDX_ALLOW_REDEAL < 0 || rdr.IsDBNull(IDX_ALLOW_REDEAL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ALLOW_REDEAL),
+                        CHG_DTM = (IDX_CHG_DTM < 0 || rdr.IsDBNull(IDX_CHG_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CHG_DTM),
+                        CHG_EMP_WWID = (IDX_CHG_EMP_WWID < 0 || rdr.IsDBNull(IDX_CHG_EMP_WWID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CHG_EMP_WWID),
+                        CRE_DTM = (IDX_CRE_DTM < 0 || rdr.IsDBNull(IDX_CRE_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CRE_DTM),
+                        CRE_EMP_WWID = (IDX_CRE_EMP_WWID < 0 || rdr.IsDBNull(IDX_CRE_EMP_WWID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CRE_EMP_WWID),
+                        ROLE_TIER_CD = (IDX_ROLE_TIER_CD < 0 || rdr.IsDBNull(IDX_ROLE_TIER_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ROLE_TIER_CD),
+                        WFSTG_ATRB_SID = (IDX_WFSTG_ATRB_SID < 0 || rdr.IsDBNull(IDX_WFSTG_ATRB_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WFSTG_ATRB_SID),
+                        WFSTG_CD = (IDX_WFSTG_CD < 0 || rdr.IsDBNull(IDX_WFSTG_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_WFSTG_CD),
+                        WFSTG_DESC = (IDX_WFSTG_DESC < 0 || rdr.IsDBNull(IDX_WFSTG_DESC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_WFSTG_DESC),
+                        WFSTG_LOC = (IDX_WFSTG_LOC < 0 || rdr.IsDBNull(IDX_WFSTG_LOC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_WFSTG_LOC),
+                        WFSTG_MBR_SID = (IDX_WFSTG_MBR_SID < 0 || rdr.IsDBNull(IDX_WFSTG_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WFSTG_MBR_SID),
+                        WFSTG_ORD = (IDX_WFSTG_ORD < 0 || rdr.IsDBNull(IDX_WFSTG_ORD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_WFSTG_ORD)
 
                     });
                 }
@@ -88,7 +86,6 @@ namespace Intel.MyDeals.DataLibrary
                 WFSTG_DESC = data.WFSTG_DESC,
                 ROLE_TIER_CD = data.ROLE_TIER_CD,
                 WFSTG_LOC = data.WFSTG_LOC,
-                WFSTG_STS = data.WFSTG_STS,
                 WFSTG_ORD = data.WFSTG_ORD,
                 ALLOW_REDEAL = data.ALLOW_REDEAL
 
@@ -112,19 +109,18 @@ namespace Intel.MyDeals.DataLibrary
                 {
                     ret.Add(new WorkFlowStg
                     {
-                        WFSTG_MBR_SID = rdr.IsDBNull(IDX_WFSTG_MBR_SID) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WFSTG_MBR_SID),
-                        WFSTG_ATRB_SID = rdr.IsDBNull(IDX_WFSTG_ATRB_SID) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WFSTG_ATRB_SID),
-                        WFSTG_CD = rdr.IsDBNull(IDX_WFSTG_CD) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_CD),
-                        WFSTG_DESC = rdr.IsDBNull(IDX_WFSTG_DESC) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_DESC),
-                        ROLE_TIER_CD = rdr.IsDBNull(IDX_ROLE_TIER_CD) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_ROLE_TIER_CD),
-                        WFSTG_LOC = rdr.IsDBNull(IDX_WFSTG_LOC) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_LOC),
-                        WFSTG_STS = rdr.IsDBNull(IDX_WFSTG_STS) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_STS),
-                        WFSTG_ORD = rdr.IsDBNull(IDX_WFSTG_ORD) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_WFSTG_ORD),
-                        ALLOW_REDEAL = rdr.IsDBNull(IDX_ALLOW_REDEAL) ? default(System.String) : rdr.GetFieldValue<System.String>(IDX_ALLOW_REDEAL),
-                        CRE_EMP_WWID = rdr.IsDBNull(IDX_CRE_EMP_WWID) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CRE_EMP_WWID),
-                        CRE_DTM = rdr.IsDBNull(IDX_CRE_DTM) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CRE_DTM),
-                        CHG_EMP_WWID = rdr.IsDBNull(IDX_CHG_EMP_WWID) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CHG_EMP_WWID),
-                        CHG_DTM = rdr.IsDBNull(IDX_CHG_DTM) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CHG_DTM)
+                        ALLOW_REDEAL = (IDX_ALLOW_REDEAL < 0 || rdr.IsDBNull(IDX_ALLOW_REDEAL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ALLOW_REDEAL),
+                        CHG_DTM = (IDX_CHG_DTM < 0 || rdr.IsDBNull(IDX_CHG_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CHG_DTM),
+                        CHG_EMP_WWID = (IDX_CHG_EMP_WWID < 0 || rdr.IsDBNull(IDX_CHG_EMP_WWID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CHG_EMP_WWID),
+                        CRE_DTM = (IDX_CRE_DTM < 0 || rdr.IsDBNull(IDX_CRE_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CRE_DTM),
+                        CRE_EMP_WWID = (IDX_CRE_EMP_WWID < 0 || rdr.IsDBNull(IDX_CRE_EMP_WWID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CRE_EMP_WWID),
+                        ROLE_TIER_CD = (IDX_ROLE_TIER_CD < 0 || rdr.IsDBNull(IDX_ROLE_TIER_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ROLE_TIER_CD),
+                        WFSTG_ATRB_SID = (IDX_WFSTG_ATRB_SID < 0 || rdr.IsDBNull(IDX_WFSTG_ATRB_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WFSTG_ATRB_SID),
+                        WFSTG_CD = (IDX_WFSTG_CD < 0 || rdr.IsDBNull(IDX_WFSTG_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_WFSTG_CD),
+                        WFSTG_DESC = (IDX_WFSTG_DESC < 0 || rdr.IsDBNull(IDX_WFSTG_DESC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_WFSTG_DESC),
+                        WFSTG_LOC = (IDX_WFSTG_LOC < 0 || rdr.IsDBNull(IDX_WFSTG_LOC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_WFSTG_LOC),
+                        WFSTG_MBR_SID = (IDX_WFSTG_MBR_SID < 0 || rdr.IsDBNull(IDX_WFSTG_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WFSTG_MBR_SID),
+                        WFSTG_ORD = (IDX_WFSTG_ORD < 0 || rdr.IsDBNull(IDX_WFSTG_ORD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_WFSTG_ORD)
                     });
                 }
             }
