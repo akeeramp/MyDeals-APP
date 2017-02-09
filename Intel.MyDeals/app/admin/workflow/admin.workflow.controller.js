@@ -117,10 +117,6 @@
 		    filterable: true,
 		    scrollable: true,
 		    sortable: true,
-		    pageable: {
-		        refresh: true,
-		        pageSizes: gridConstants.pageSizes
-		    },
 		    navigatable: true,
 		    resizable: true,
 		    reorderable: true,
@@ -129,7 +125,7 @@
 		    editable: {mode: "inline", confirmation:false },
 		    pageable: {
 		        refresh: true,
-		        pageSizes: gridConstants.pageSizes,
+		        pageSizes: gridConstants.pageSizes
 		    },
 		    edit: function (e) {
 		        var commandCell = e.container.find("td:first");
