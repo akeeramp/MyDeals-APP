@@ -84,22 +84,7 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetDropDownValues")]
         public List<WorkFlowAttribute> GetDropDownValues()
         {
-            //string jsonObject = @"{ ""ROLE_TIER_CD"":            
-            //        [
-            //            { ""ROLE_TIER_CD"": ""Tier_1"", ""ROLE_TIER_CD_VAL"": ""Tier 1"" },
-            //            { ""ROLE_TIER_CD"": ""Tier_2"", ""ROLE_TIER_CD_VAL"": ""Tier 2"" }
-
-            //        ],                    
-            // ""DEAL_TYPE_CD"":
-            //        [
-            //   { ""DEAL_TYPE_CD"": ""Program Type"", ""DEAL_TYPE_CD_VAL"": ""Program Type"" },
-            //   { ""DEAL_TYPE_CD"": ""Volume Tier"", ""DEAL_TYPE_CD_VAL"": ""Volume Tier"" }
-
-            //        ]
-            //    }
-            //    ";
-            
-            return SafeExecutor(() => _workFlowLib.GetDropDownValues()
+           return SafeExecutor(() => _workFlowLib.GetDropDownValues()
                 , $"Unable to get {"Workflow"}"
             );
         }

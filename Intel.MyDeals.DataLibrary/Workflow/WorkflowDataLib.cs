@@ -224,6 +224,7 @@ namespace Intel.MyDeals.DataLibrary
 
         public List<WorkFlowAttribute> GetDropDownValues()
         {
+            // TODO: This Repository will be replaced by a Master view Created in the DB
             List<WorkFlowAttribute> fake = new List<WorkFlowAttribute>();
             fake.Add(new WorkFlowAttribute { ColumnName = "ROLE_TIER_CD", Key = "Tier_1", Value = "Tier_1" });
             fake.Add(new WorkFlowAttribute { ColumnName = "ROLE_TIER_CD", Key = "Tier_2", Value = "Tier_2" });

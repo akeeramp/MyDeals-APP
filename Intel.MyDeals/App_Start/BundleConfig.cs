@@ -80,8 +80,6 @@ namespace Intel.MyDeals
                 , "~/app/admin/productCategories/productCategories.service.js"
                 , "~/app/admin/products/admin.products.controller.js"
                 , "~/app/admin/products/products.service.js"
-                , "~/app/admin/productSelector/admin.productSelector.controller.js"
-                , "~/app/admin/productSelector/productSelector.service.js"
                 , "~/app/admin/rules/admin.rules.controller.js"
                 , "~/app/admin/rules/rules.service.js"
                 , "~/app/admin/securityAttributes/adminApplications/adminApplications.controller.js"
