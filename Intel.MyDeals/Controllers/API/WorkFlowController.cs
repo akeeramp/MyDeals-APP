@@ -25,7 +25,7 @@ namespace Intel.MyDeals.Controllers.API
         public IEnumerable<WorkFlowStg> GetWorkFlowStages()
         {
             return SafeExecutor(() => _workFlowLib.GetWorkFlowStages()
-                , $"Unable to get {"Workflow"}"
+                , $"Unable to get {"Workflow Stages"}"
             );            
         }
 
@@ -35,7 +35,7 @@ namespace Intel.MyDeals.Controllers.API
         public IEnumerable<WorkFlowStg> SetWorkFlowStages(WorkFlowStg data)
         {
             return SafeExecutor(() => _workFlowLib.SetWorkFlowStages(CrudModes.Insert, data)
-                , $"Unable to get {"Workflow"}"
+                , $"Unable to get {"Workflow Stages"}"
             );       
             
         }
@@ -46,7 +46,7 @@ namespace Intel.MyDeals.Controllers.API
         public IEnumerable<WorkFlowStg> UpdateWorkFlowStages(WorkFlowStg data)
         {
             return SafeExecutor(() => _workFlowLib.SetWorkFlowStages(CrudModes.Update, data)
-                , $"Unable to get {"Workflow"}"
+                , $"Unable to get {"Workflow Stages"}"
             );            
             
         }
@@ -57,9 +57,19 @@ namespace Intel.MyDeals.Controllers.API
         public IEnumerable<WorkFlowStg> DeleteWorkFlowStages(WorkFlowStg data)
         {
             return SafeExecutor(() => _workFlowLib.SetWorkFlowStages(CrudModes.Delete, data)
-                , $"Unable to get {"Workflow"}"
+                , $"Unable to get {"Workflow Stages"}"
             );          
             
+        }
+
+        [Authorize]
+        [Route("GetWFStgDDLValues")]
+        public IEnumerable<WorkFlowAttribute> GetWFStgDDLValues()
+        {
+            return SafeExecutor(() => _workFlowLib.GetDropDownValues()
+                , $"Unable to get {"Workflow Stage Dropdown Values"}"
+            );
+
         }
 
         [Authorize]
@@ -121,6 +131,5 @@ namespace Intel.MyDeals.Controllers.API
                 , $"Unable to get {"Workflow"}"
             );
         }
-
     }
 }

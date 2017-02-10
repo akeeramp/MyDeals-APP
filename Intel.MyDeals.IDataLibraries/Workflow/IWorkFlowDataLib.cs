@@ -9,7 +9,6 @@ namespace Intel.MyDeals.IDataLibrary
 
         List<WorkFlows> SetWorkFlows(CrudModes mode, WorkFlows data);
 
-
         List<WorkFlowStg> SetWorkFlowStages(CrudModes mode, WorkFlowStg data);
 
         List<WorkFlowStg> GetWorkFlowStages();

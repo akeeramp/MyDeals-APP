@@ -11,7 +11,6 @@ namespace Intel.MyDeals.DataLibrary
 {
     public class WorkflowDataLib : IWorkFlowDataLib
     {
-
         #region WorkFlowStages
         /// <summary>
         /// Get All Work Flow Stage
@@ -24,7 +23,6 @@ namespace Intel.MyDeals.DataLibrary
                 IDSID = Utils.ThreadUser,
                 MODE = CrudModes.Select.ToString()
             };
-
             var ret = new List<WorkFlowStg>();
 
             using (var rdr = DataAccess.ExecuteReader(cmd))
@@ -58,24 +56,23 @@ namespace Intel.MyDeals.DataLibrary
                         WFSTG_LOC = (IDX_WFSTG_LOC < 0 || rdr.IsDBNull(IDX_WFSTG_LOC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_WFSTG_LOC),
                         WFSTG_MBR_SID = (IDX_WFSTG_MBR_SID < 0 || rdr.IsDBNull(IDX_WFSTG_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WFSTG_MBR_SID),
                         WFSTG_ORD = (IDX_WFSTG_ORD < 0 || rdr.IsDBNull(IDX_WFSTG_ORD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_WFSTG_ORD)
-
                     });
                 }
             }
-
             return ret;
         }
 
         /// <summary>
         /// This method will be used to Insert,Update and Delete the workflow stage
         /// </summary>
-        /// <param name="mode" type="string">Mode of the operation like Insert,Update or Delete</param>
+        /// <param name="mode" type="CrudModes">Mode of the operation like Insert,Update or Delete</param>
         /// <param name="data" type="WorkFlowStg">Requested values of Workflow stage </param>
         /// <returns>List of affected rows</returns>
         public List<WorkFlowStg> SetWorkFlowStages(CrudModes mode, WorkFlowStg data)
         {
             var ret = new List<WorkFlowStg>();
-
+            // TODO: As per analysis CDMS table's this column has constant value 16003. Still it is part of clarification this column has relevant in MyDeals or not.
+            data.WFSTG_ATRB_SID = 16003;
             using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_MYDL_UPD_WFSTG_MSTR()
             {
                 IDSID = Utils.ThreadUser,
@@ -97,7 +94,6 @@ namespace Intel.MyDeals.DataLibrary
                 int IDX_WFSTG_DESC = DB.GetReaderOrdinal(rdr, "WFSTG_DESC");
                 int IDX_ROLE_TIER_CD = DB.GetReaderOrdinal(rdr, "ROLE_TIER_CD");
                 int IDX_WFSTG_LOC = DB.GetReaderOrdinal(rdr, "WFSTG_LOC");
-                int IDX_WFSTG_STS = DB.GetReaderOrdinal(rdr, "WFSTG_STS");
                 int IDX_WFSTG_ORD = DB.GetReaderOrdinal(rdr, "WFSTG_ORD");
                 int IDX_ALLOW_REDEAL = DB.GetReaderOrdinal(rdr, "ALLOW_REDEAL");
                 int IDX_CRE_EMP_WWID = DB.GetReaderOrdinal(rdr, "CRE_EMP_WWID");
@@ -124,12 +120,8 @@ namespace Intel.MyDeals.DataLibrary
                     });
                 }
             }
-
             return ret;
         }
-        #endregion
-
-        #region WorkFlowItem
         #endregion
 
         #region WorkFlow
@@ -198,7 +190,7 @@ namespace Intel.MyDeals.DataLibrary
                 WFSTG_CD_SRC = data.WFSTG_CD_SRC,
                 WFSTG_CD_DEST = data.WFSTG_CD_DEST,
                 TRKR_NBR_UPD = data.TRKR_NBR_UPD
-               
+
             }))
             {
                 int IDX_DEAL_TYPE_CD = DB.GetReaderOrdinal(rdr, "DEAL_TYPE_CD");
@@ -229,7 +221,7 @@ namespace Intel.MyDeals.DataLibrary
             return retWorkflow;
         }
         #endregion
-        
+
         public List<WorkFlowAttribute> GetDropDownValues()
         {
             List<WorkFlowAttribute> fake = new List<WorkFlowAttribute>();
@@ -245,11 +237,10 @@ namespace Intel.MyDeals.DataLibrary
             fake.Add(new WorkFlowAttribute { ColumnName = "WFSTG_ACTN_CD", Key = "Rejected", Value = "Rejected" });
             fake.Add(new WorkFlowAttribute { ColumnName = "WFSTG_CD_SRC_DEST", Key = "Created", Value = "Created" });
             fake.Add(new WorkFlowAttribute { ColumnName = "WFSTG_CD_SRC_DEST", Key = "Requested", Value = "Requested" });
-
+            fake.Add(new WorkFlowAttribute { ColumnName = "WFSTG_LOC", Key = "Left", Value = "Left" });
+            fake.Add(new WorkFlowAttribute { ColumnName = "WFSTG_LOC", Key = "Right", Value = "Right" });
+            fake.Add(new WorkFlowAttribute { ColumnName = "WFSTG_LOC", Key = "Top", Value = "Top" });
             return fake;
         }
-
-
-
     }
 }

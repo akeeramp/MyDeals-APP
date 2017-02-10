@@ -26,35 +26,35 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns>List of all work flow stage</returns>
         public List<WorkFlowStg> GetWorkFlowStages()
         {
+            // TODO :Later need to decide caching will be apply or not
             return _WorkFlowCollectorLib.GetWorkFlowStages();
-            // Later need to decide caching will be apply or not
         }
 
         /// <summary>
         /// This method will be used to Insert,Update and Delete the workflow stage
         /// </summary>
-        /// <param name="mode" type="string">Mode of the operation like Insert,Update or Delete</param>
+        /// <param name="mode" type="CrudModes">Mode of the operation like Insert,Update or Delete</param>
         /// <param name="data" type="WorkFlowStg">Requested values of Workflow stage </param>
         /// <returns>List of affected rows</returns>
         public List<WorkFlowStg> SetWorkFlowStages(CrudModes mode, WorkFlowStg data)
         {
             return _WorkFlowCollectorLib.SetWorkFlowStages(mode, data);
-        }    
+        }
 
         public List<WorkFlows> SetWorkFlows(CrudModes mode, WorkFlows data)
         {
             return _WorkFlowCollectorLib.SetWorkFlows(mode, data);                       
         }
+
         public List<WorkFlowAttribute> GetDropDownValues()
         {
             return _WorkFlowCollectorLib.GetDropDownValues();
         }
-        
+
         public List<WorkFlows> GetWorkFlowItems()
         {
             return _WorkFlowCollectorLib.GetWorkFlowItems();            
-        }  
-        
+        }     
               
     }
 }
