@@ -11,12 +11,23 @@
 	function WorkflowStageController($scope, dataService, workflowStagesService, logger, confirmationModal, gridConstants) {
 	    var vm = this;
 	    var WorkFlowStageAttribute = '';
-	    vm.selectedItem = null;
-		vm.isButtonDisabled = true;
-		vm.onChange = onChange;
-		vm.deleteItem = deleteItem;
-		vm.updateItem = updateItem;
-		vm.addItem = addItem;
+	    vm.selectedItem = null;	    
+
+	    // Master DropDown List populate method
+	    var loadDDLValues = function (e) {
+	        workflowStagesService.GetWFStgDDLValues()
+                .then(
+                    function (response) {
+                        if (response.statusText == "OK") {
+                            WorkFlowStageAttribute = response.data;
+                        }
+                    },
+                    function (response) {
+                        logger.error("Unable to get Workflow stages", response, response.statusText);
+                    }
+                );
+	    };
+
         // declare dataSource bound to backend
 		vm.dataSource = new kendo.data.DataSource({
 			transport: {
@@ -26,13 +37,6 @@
                         	e.success(response.data);
                         }, function (response) {
                         	logger.error("Unable to get Workflow Stages.", response, response.statusText);
-                        });
-
-				    workflowStagesService.GetWFStgDDLValues()
-                        .then(function (response) {
-                            e.success(WorkFlowStageAttribute = response.data);
-                        }, function (response) {
-                            logger.error("Unable to get Workflow Stage Dropdown Values.", response, response.statusText);
                         });
 				},
 				update: function (e) {
@@ -45,13 +49,27 @@
                         });
 				},
 				destroy: function (e) {
-				    workflowStagesService.DeleteWorkflowStages(e.data)
+				    var modalOptions = {
+				        closeButtonText: 'Cancel',
+				        actionButtonText: 'Delete WorkFlow',
+				        hasActionButton: true,
+				        headerText: 'Delete confirmation',
+				        bodyText: 'Are you sure you would like to Delete this WorkFlow Stage?'
+				    };
+
+				    confirmationModal.showModal({}, modalOptions)
+                        .then(function (result) {
+                            $scope.workflowGrid.removeRow(vm.selectedItem);
+                            workflowStagesService.DeleteWorkflowStages(e.data)
                         .then(function (response) {
-                        	e.success(response.data);
-                        	logger.success("Workflow Stage was successfully.");
+                            e.success(response.data);
+                            logger.success("Workflow Deleted.");
                         }, function (response) {
-                            logger.error("Unable to delete Workflow Stage.", response, response.statusText);
+                            $scope.workflowGrid.cancelChanges();
                         });
+                        }, function (response) {
+                            $scope.workflowGrid.cancelChanges();
+                        });				    
 				},
 				create: function (e) {
 				    workflowStagesService.SetWorkflowStages(e.data)
@@ -89,7 +107,7 @@
 			resizable: true,
 			groupable: true,
 			toolbar: ["create"],
-			editable: { mode: "inline", confirmation: true },
+			editable: { mode: "inline", confirmation: false },
 			edit: function (e) {
 			    var commandCell = e.container.find("td:first");
 			    commandCell.html('<a class="k-grid-update" href="#"><span class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span class="k-icon k-i-cancel"></span></a>');
@@ -109,7 +127,7 @@
                         { name: "destroy", template: "<a class='k-grid-delete' ng-click='vm.deleteItem()' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-close'></span></a>" }
                     ],
                     title: "Action",
-                    width: "13%"
+                    width: "5%"
                 },
               { field: "WFSTG_MBR_SID", title: "Id", width: "7%"},
               { field: "WFSTG_CD", title: "Stage Code", width: "10%" },
@@ -193,5 +211,8 @@
 		function cancelChanges() {
 		    $scope.workflowGrid.cancelChanges();
 		}
+
+	    // Fetching all the Master Dropdown Values
+		loadDDLValues();
     }
 })();

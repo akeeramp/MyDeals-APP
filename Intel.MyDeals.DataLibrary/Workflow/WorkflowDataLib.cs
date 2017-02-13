@@ -232,8 +232,8 @@ namespace Intel.MyDeals.DataLibrary
             fake.Add(new WorkFlowAttribute { ColumnName = "ROLE_TIER_CD", Key = "Tier_4", Value = "Tier_4" });
             fake.Add(new WorkFlowAttribute { ColumnName = "ROLE_TIER_CD", Key = "Tier_5", Value = "Tier_5" });
             fake.Add(new WorkFlowAttribute { ColumnName = "DEAL_TYPE_CD", Key = "Program Type", Value = "Program Type" });
-            fake.Add(new WorkFlowAttribute { ColumnName = "DEAL_TYPE_CD", Key = "ECAP_Deal", Value = "ECAP Deal" });
-            fake.Add(new WorkFlowAttribute { ColumnName = "DEAL_TYPE_CD", Key = "Volume_Tier", Value = "Volume Tie" });
+            fake.Add(new WorkFlowAttribute { ColumnName = "DEAL_TYPE_CD", Key = "ECAP Deal", Value = "ECAP Deal" });
+            fake.Add(new WorkFlowAttribute { ColumnName = "DEAL_TYPE_CD", Key = "VOL TIER", Value = "VOL TIER" });
             fake.Add(new WorkFlowAttribute { ColumnName = "WFSTG_ACTN_CD", Key = "Approved", Value = "Approved" });
             fake.Add(new WorkFlowAttribute { ColumnName = "WFSTG_ACTN_CD", Key = "Rejected", Value = "Rejected" });
             fake.Add(new WorkFlowAttribute { ColumnName = "WFSTG_CD_SRC_DEST", Key = "Created", Value = "Created" });

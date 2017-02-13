@@ -12,9 +12,23 @@
 	    var wrokFlowAttibutes = '';
 	    var vm = this;
 	    vm.selectedItem = null;
-	    vm.isButtonDisabled = true;
-	    vm.onChange = onChange;
-	    
+	    vm.filters = {};
+
+	    // Master DropDown List populate method
+	    var loadDDLValues = function (e) {
+	        workflowService.GetDropDownValues()
+                .then(
+                    function (response) {
+                        if (response.statusText == "OK") {
+                            wrokFlowAttibutes = response.data;
+                        }
+                    },
+                    function (response) {
+                        logger.error("Unable to get Workflow.", response, response.statusText);
+                    }
+                );
+	    };
+
 	    // declare dataSource bound to backend
 	    vm.dataSource = new kendo.data.DataSource({
 	        transport: {
@@ -24,14 +38,8 @@
                             e.success(response.data);
                         }, function (response) {
                             logger.error("Unable to get Workflow.", response, response.statusText);
-                        });
-	                workflowService.GetDropDownValues()
-                                    .then(function (response) {
-                                        e.success(wrokFlowAttibutes = response.data);
-                                    }, function (response) {
-                                        logger.error("Unable to get Workflow.", response, response.statusText);
-                                    });
-
+                        });      
+	                
 	            },
 	            update: function (e) {
 	                // HACK: Do actual validation here rather than in kendo's custom validation because of the many
@@ -64,11 +72,7 @@
 	                        bodyText: 'Product Category Name and Deal Product Type are required when the Active Indicator is checked. Please check your input and try again.'
 	                    };
 	                    confirmationModal.showModal({}, modalOptions);
-
 	                }
-
-
-
 	            },
 	            destroy: function (e) {
 	                var modalOptions = {
@@ -80,16 +84,20 @@
 	                };
 
 	                confirmationModal.showModal({}, modalOptions)
-                        .then(function (result) {
+                        .then(
+                        function (result) {
                             $scope.workflowGrid.removeRow(vm.selectedItem);
                             workflowService.DeleteWorkflow(e.data)
-                        .then(function (response) {
-                            e.success(response.data);
-                            logger.success("Workflow Deleted.");
-                        }, function (response) {
-                            $scope.workflowGrid.cancelChanges();
-                        });
-                        }, function (response) {
+                            .then(
+                                function (response) {
+                                    e.success(response.data);
+                                    logger.success("Workflow Deleted.");
+                                },
+                                function (response) {
+                                    $scope.workflowGrid.cancelChanges();
+                                });
+                        },
+                        function (response) {
                             $scope.workflowGrid.cancelChanges();
                         });
 
@@ -120,6 +128,7 @@
 	                    WFSTG_CD_SRC: { validation: { required: true } },
 	                    WFSTG_CD_DEST: { validation: { required: true } },
 	                    TRKR_NBR_UPD: { type: "boolean" },
+	                    "_behaviors": { type: "object" }
 	                }
 	            }
 	        },
@@ -156,7 +165,7 @@
 
                   ],
                   title: " ",
-                  width: "90px"
+                  width: "5%"
               },
               { field: "WF_SID", title: "Id", width: "5%" },
               { field: "WF_NAME", title: "WF Name", width: "15%" },
@@ -182,8 +191,7 @@
 
 	        return isValid;
 	    }
-
-
+        
 	    // Updates the model with the correct _behavior flag
 	    function flagBehavior(dataItem, $event, field, isTrue) {
 	        if (dataItem._behaviors === undefined) {
@@ -194,7 +202,8 @@
 	        }
 	        dataItem._behaviors["isError"][field] = isTrue;
 	    }
-
+	    
+        // Populate Role Tier DropDown
 	    function roleTierCDDropDownEditor(container, options) {
 	        $('<input required name="' + options.field + '"/>')
                 .appendTo(container)
@@ -216,6 +225,8 @@
 
                 });
 	    }
+
+	    // Populate Deal Type DropDown
 	    function dealTypeCDDropDownEditor(container, options) {
 	        $('<input required name="' + options.field + '"/>')
                 .appendTo(container)
@@ -233,6 +244,8 @@
                         }
                 });
 	    }
+
+	    // Populate Action Type DropDown
 	    function actionCDDropDownEditor(container, options) {
 	        $('<input required name="' + options.field + '"/>')
                 .appendTo(container)
@@ -249,6 +262,8 @@
                     }
                 });
 	    }
+
+	    // Populate SRC DropDown
 	    function srcCDDropDownEditor(container, options) {
 	        $('<input required name="' + options.field + '"/>')
                 .appendTo(container)
@@ -265,6 +280,8 @@
                     }
                 });
 	    }
+
+	    // Populate DEST DropDown
 	    function destCDDropDownEditor(container, options) {
 	        $('<input required name="' + options.field + '"/>')
                 .appendTo(container)
@@ -281,10 +298,14 @@
                     }
                 });
 	    }
+
 	    function onChange() {
 	        vm.selectedItem = $scope.workflowGrid.select();
 	        vm.isButtonDisabled = (vm.selectedItem.length == 0) ? true : false;
 	        $scope.$apply();
 	    }
+
+	    // Fetching all the Master Dropdown Values
+	    loadDDLValues();
 	}
 })();

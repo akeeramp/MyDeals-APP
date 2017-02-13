@@ -307,6 +307,9 @@
     <Content Include="app\admin\productCategories\admin.productCategories.controller.js" />
     <Content Include="app\admin\productCategories\productCategories.html" />
     <Content Include="app\admin\productCategories\productCategories.service.js" />
+    <Content Include="app\admin\productSelector\admin.productSelector.controller.js" />
+    <Content Include="app\admin\productSelector\productSelector.html" />
+    <Content Include="app\admin\productSelector\productSelector.service.js" />
     <Content Include="app\admin\products\admin.products.controller.js" />
     <Content Include="app\admin\products\products.html" />
     <Content Include="app\admin\products\products.service.js" />

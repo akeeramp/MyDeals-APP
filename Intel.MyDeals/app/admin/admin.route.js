@@ -48,11 +48,11 @@
                 }
             },
             {
-                state: 'admin.workflowStage',
+                state: 'admin.workflowstage',
                 abstract: false,
                 config: {
                     templateUrl: 'app/admin/workflowStage/workflowStages.html',
-                    url: 'workflowStage',
+                    url: 'workflowstage',
                     controller: 'WorkflowStageController as vm',
                 }
             },
