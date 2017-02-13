@@ -126,8 +126,8 @@
                         {name: "edit",template: "<a class='k-grid-edit' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-edit'></span></a>"},
                         { name: "destroy", template: "<a class='k-grid-delete' ng-click='vm.deleteItem()' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-close'></span></a>" }
                     ],
-                    title: "Action",
-                    width: "5%"
+                    title: " ",
+                    width: "6%"
                 },
               { field: "WFSTG_MBR_SID", title: "Id", width: "7%"},
               { field: "WFSTG_CD", title: "Stage Code", width: "10%" },
