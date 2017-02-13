@@ -8,6 +8,7 @@ using Intel.Opaque;
 using System.Net;
 using System.Web;
 using Intel.MyDeals.Entities.Logging;
+using Intel.RulesEngine;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -132,6 +133,136 @@ namespace Intel.MyDeals.Controllers.API
 				OpLogPerf.Log(ex);
 				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
+        }
+
+        [Authorize]
+        [Route("GetRulesEngineTests")]
+        public List<bool> GetRulesEngineTests()
+        {
+            List<bool> ret = new List<bool>();
+
+            RuleBundle rb = new RuleBundle();
+            ProductCategory pc = new ProductCategory();
+
+            pc.DIV_NM = "TEST";
+            pc.PRD_CAT_NM = "TEST2";
+
+            RuleSet rs = new RuleSet();
+            RuleItem ri = new RuleItem();
+            List<RuleCondition> rcs = new List<RuleCondition>();
+            RuleCondition rc1 = new RuleCondition();
+            RuleCondition rc2 = new RuleCondition();
+            RuleCondition rc3 = new RuleCondition();
+            RuleCondition rc4 = new RuleCondition();
+            RuleCondition rc5 = new RuleCondition();
+            RuleCondition rc6 = new RuleCondition();
+
+
+            rs.Category = "TEST";
+            rs.Description = "TEST";
+            rs.Id = 1;
+            rs.Name = "TEST";
+            rs.Order = 1;
+            rs.RuleId = 1;
+            rs.SubCategory = "TEST";
+            rs.Trigger = "onTest";
+
+            ri.Id = 1;
+            ri.RuleConditionId = 1;
+            ri.Tier = "C#";
+
+            rc1.Id = 1;
+            rc1.ConditionType = "AND";
+            rc1.LeftExpressionType = "";
+            rc1.LeftExpressionValue = "";
+            rc1.Operator = "";
+            rc1.RightExpressionType = "";
+            rc1.RightExpressionValue = "";
+            rc1.Order = 1;
+            rc1.RuleId = 1;
+
+            rc2.Id = 2;
+            rc2.ConditionType = "CONDITION";
+            rc2.LeftExpressionType = "Attribute";
+            rc2.LeftExpressionValue = "DIV_NM";
+            rc2.Operator = "=";
+            rc2.RightExpressionType = "User Defined";
+            rc2.RightExpressionValue = "TEST";
+            rc2.Order = 2;
+            rc2.RuleId = 1;
+
+            rc3.Id = 3;
+            rc3.ConditionType = "CONDITION";
+            rc3.LeftExpressionType = "User Defined";
+            rc3.LeftExpressionValue = "123";
+            rc3.Operator = "<=";
+            rc3.RightExpressionType = "User Defined";
+            rc3.RightExpressionValue = "456";
+            rc3.Order = 3;
+            rc3.RuleId = 1;
+
+            rc4.Id = 4;
+            rc4.ConditionType = "OR";
+            rc4.LeftExpressionType = "";
+            rc4.LeftExpressionValue = "";
+            rc4.Operator = "";
+            rc4.RightExpressionType = "";
+            rc4.RightExpressionValue = "";
+            rc4.Order = 4;
+            rc4.RuleId = 1;
+
+            rc5.Id = 5;
+            rc5.ConditionType = "CONDITION";
+            rc5.LeftExpressionType = "User Defined";
+            rc5.LeftExpressionValue = "TST B";
+            rc5.Operator = "==";
+            rc5.RightExpressionType = "User Defined";
+            rc5.RightExpressionValue = "TST";
+            rc5.Order = 5;
+            rc5.RuleId = 1;
+
+            rc6.Id = 6;
+            rc6.ConditionType = "CONDITION";
+            rc6.LeftExpressionType = "User Defined";
+            rc6.LeftExpressionValue = "TEST2";
+            rc6.Operator = "==";
+            rc6.RightExpressionType = "Attribute";
+            rc6.RightExpressionValue = "PRD_CAT_NM";
+            rc6.Order = 6;
+            rc6.RuleId = 1;
+
+            List<int> rc1children = new List<int>();
+            List<int> rc4children = new List<int>();
+            rc1children.Add(2);
+            rc1children.Add(3);
+            rc1children.Add(4);
+            rc1.ChildConditionIds = rc1children;
+            rc4children.Add(5);
+            rc4children.Add(6);
+            rc4.ChildConditionIds = rc4children;
+            rc2.ParentConditionId = 1;
+            rc3.ParentConditionId = 1;
+            rc4.ParentConditionId = 1;
+            rc5.ParentConditionId = 4;
+            rc6.ParentConditionId = 4;
+
+            rcs.Add(rc1);
+            rcs.Add(rc2);
+            rcs.Add(rc3);
+            rcs.Add(rc4);
+            rcs.Add(rc5);
+            rcs.Add(rc6);
+
+            rb.RuleSet = rs;
+            rb.RuleItem = ri;
+            rb.RuleConditions = rcs;
+
+            RulesEngine.RulesEngine re = new RulesEngine.RulesEngine();
+            bool engineResult = re.RunRuleBundleWithValidation(rb, pc);
+
+            ret.Add(engineResult);
+
+            return ret;
         }
     }
 }
