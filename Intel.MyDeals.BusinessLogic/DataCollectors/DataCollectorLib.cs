@@ -34,7 +34,7 @@ namespace Intel.MyDeals.BusinessLogic
                 .BuildDealContainer(ids);
         }
 
-        public MyDealsData SavePackets(OpDataCollectorFlattenedDictList data)
+        public MyDealsData SavePackets(OpDataCollectorFlattenedDictList data, int custId)
         {
             // Save Data Cycle: Point 9
 
@@ -73,7 +73,7 @@ namespace Intel.MyDeals.BusinessLogic
                 }
             }
 
-            return PerformTasks(OpActionType.Save, myDealsData);  // execute all save perform task items now
+            return PerformTasks(OpActionType.Save, myDealsData, custId);  // execute all save perform task items now
         }
 
         public void SavePacketByDictionary(OpDataCollectorFlattenedList data, MyDealsData myDealsData, OpDataElementType opDataElementType, Guid myWbBatchId)
@@ -144,7 +144,7 @@ namespace Intel.MyDeals.BusinessLogic
             // This is replacing the packet with the changes only.
         }
         
-        private MyDealsData PerformTasks(OpActionType? actionToRun, MyDealsData myDealsData)
+        private MyDealsData PerformTasks(OpActionType? actionToRun, MyDealsData myDealsData, int custId)
         {
             // Save Data Cycle: Point 14
 
@@ -155,7 +155,7 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 case OpActionType.Save:
                     myDealsData.VerifyBatchIDs();
-                    saveResponseSet = new DealDataLib().SaveDeals(myDealsData, OpUserStack.MyOpUserToken);
+                    saveResponseSet = new DealDataLib().SaveDeals(myDealsData, OpUserStack.MyOpUserToken, custId);
                     // Save Data Cycle: Point 21 (END)
                     break;
                 case OpActionType.SyncDeal:

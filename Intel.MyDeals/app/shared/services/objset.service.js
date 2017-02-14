@@ -330,7 +330,8 @@ function objsetService($http, dataService, logger, $q) {
             "Contract": ct,
             "PricingTable": pt,
             "WipDeals": gData === undefined ? [] : gData,
-            "EventSource": source
+            "EventSource": source,
+            "CustId": 914
         }
 
         return dataService.post(apiBaseContractUrl + "SaveContractAndStrategy", data);

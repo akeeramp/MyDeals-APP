@@ -25,12 +25,12 @@ namespace Intel.MyDeals.DataLibrary
         /// <param name="packets">Packets to save.</param>
         /// <param name="opUserToken"></param>
         /// <returns>Changed deals</returns>
-        public MyDealsData SaveDeals(MyDealsData packets, OpUserToken opUserToken)
+        public MyDealsData SaveDeals(MyDealsData packets, OpUserToken opUserToken, int custId)
         {
-            return SaveDeals(packets, opUserToken, true);
+            return SaveDeals(packets, opUserToken, custId, true);
         }
 
-        private MyDealsData SaveDeals(MyDealsData packets, OpUserToken opUserToken, bool batchMode)
+        private MyDealsData SaveDeals(MyDealsData packets, OpUserToken opUserToken, int custId, bool batchMode)
         {
             // Save Data Cycle: Point 15
             try
@@ -76,7 +76,7 @@ namespace Intel.MyDeals.DataLibrary
                 var orderedPackets = GetPacketsInOrder(packets.Values);
 
                 // Write them to tdeal.WIP_ATRB
-                ImportOpDataPackets(orderedPackets, opUserToken.Usr.WWID);
+                ImportOpDataPackets(orderedPackets, opUserToken.Usr.WWID, custId);
 
                 //DebugLog("DcsDealLib.SaveDeals - Exit ImportOpDataPackets.");
 
@@ -111,7 +111,7 @@ namespace Intel.MyDeals.DataLibrary
         /// </summary>
         /// <param name="packets">Valid data packets.</param>
         /// <param name="wwid">User WWID to tag to operation.</param>
-        private void ImportOpDataPackets(IEnumerable<OpDataPacket<OpDataElementType>> packets, int wwid)
+        private void ImportOpDataPackets(IEnumerable<OpDataPacket<OpDataElementType>> packets, int wwid, int custId)
         {
             // Save Data Cycle: Point 16
 
@@ -124,9 +124,9 @@ namespace Intel.MyDeals.DataLibrary
             DataSet dsImport = new DataSet();
 
             // TODO - Fix hact to get Cust ID for these functions
-            int cust_id = 3;
+            //int cust_id = 3;
             // Create shell tables with proper schema...
-            var dtData = OpDataPacketToImportDataTable(new OpDataPacket<OpDataElementType>(), cust_id);
+            var dtData = OpDataPacketToImportDataTable(new OpDataPacket<OpDataElementType>(), custId);
             var dtAction = OpDataPacketToImportActionTable(new OpDataPacket<OpDataElementType>(), group_batch_id, wwid);
 
             foreach (var odp in packets.Where(p => p.PacketType == OpDataElementType.Group && OpTypeConverter.IsValidGuid(p.BatchID)))
@@ -151,7 +151,7 @@ namespace Intel.MyDeals.DataLibrary
             OpParallelWait.ForEach<OpDataPacket<OpDataElementType>>(packets, odp =>
             {
                 // Insert Data First...
-                using (var dt = OpDataPacketToImportDataTable(odp, cust_id))
+                using (var dt = OpDataPacketToImportDataTable(odp, custId))
                 {
                     if (dt != null && dt.Rows.Count > 0)
                     {

@@ -125,6 +125,17 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "WorkFlowStg";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false)); 
 
+	// Object Templates
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_GET_NEW_DEAL]");
+	ds.Tables[0].TableName = "ObjectTypeTemplate"; // ObjectTypeTemplate
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
+	ds.Tables[1].TableName = "CustomerCal"; // CustCal
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[1], false));
+
+	ds.Tables[2].TableName = "ObjectTypes"; // ObjTypes
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[2], false)); 
+
 	PopIndent();
 	WriteLine("}"); // End NameSpace
 

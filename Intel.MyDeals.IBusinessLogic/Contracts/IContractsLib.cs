@@ -8,7 +8,7 @@ namespace Intel.MyDeals.IBusinessLogic
     {
         MyDealsData GetContract(int id, List<OpDataElementType> opDataElementTypes);
         MyDealsData GetContract(int id, bool inclusive = false);
-        MyDealsData SaveContract(OpDataCollectorFlattenedList data);
-        MyDealsData SaveContract(OpDataCollectorFlattenedList contracts, OpDataCollectorFlattenedList pricingStrategies, OpDataCollectorFlattenedList pricingTables, OpDataCollectorFlattenedList wipDeals);
+        MyDealsData SaveContract(OpDataCollectorFlattenedList data, int custId);
+        MyDealsData SaveContract(OpDataCollectorFlattenedList contracts, OpDataCollectorFlattenedList pricingStrategies, OpDataCollectorFlattenedList pricingTables, OpDataCollectorFlattenedList wipDeals, int custId);
     }
 }

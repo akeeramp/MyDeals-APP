@@ -10,6 +10,6 @@ namespace Intel.MyDeals.IBusinessLogic
         OpDataCollectorFlattenedList GetDealsbyIDs(List<int> ids);
         void SaveDealsbyDictionary(OpDataCollectorFlattenedList data, MyDealsData myDealsData, Guid myWbBatchId);
         void SavePacketByDictionary(OpDataCollectorFlattenedList data, MyDealsData myDealsData, OpDataElementType opDataElementType, Guid myWbBatchId);
-        MyDealsData SavePackets(OpDataCollectorFlattenedDictList data);
+        MyDealsData SavePackets(OpDataCollectorFlattenedDictList data, int custId);
     }
 }

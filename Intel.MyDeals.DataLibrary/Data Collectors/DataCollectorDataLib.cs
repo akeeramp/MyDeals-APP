@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using Intel.MyDeals.DataAccessLib;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IDataLibrary;
+using Intel.Opaque;
 using Intel.Opaque.Data;
+using Intel.Opaque.DBAccess;
+using Intel.Opaque.Tools;
 using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
 
 namespace Intel.MyDeals.DataLibrary
@@ -25,331 +29,6 @@ namespace Intel.MyDeals.DataLibrary
         public MyDealsData GetByIDs(OpDataElementType opDataElementType, IEnumerable<int> ids, List<OpDataElementType> includeTypes, IEnumerable<string> atrbs)
         {
             // Load Data Cycle: Point 3
-            // TODO replace this with stored procedure when DB is ready
-
-            // TODO need ability to control returnset attributes (like one dim attributes from Pricing Tables for UpperContract calls
-            //if (ids.Contains(123))
-            //{
-            //MyDealsData data = new MyDealsData
-            //{
-            //    [OpDataElementType.Contract] = new OpDataPacket<OpDataElementType>
-            //    {
-            //        PacketType = OpDataElementType.Contract,
-            //        Data =
-            //        {
-            //            [-100] = new OpDataCollector
-            //            {
-            //                DcID = -100,
-            //                DcAltID = 0,
-            //                DcType = OpDataElementType.Contract.ToString(),
-            //                DataElements = new List<OpDataElement>
-            //                {
-            //                    new OpDataElement
-            //                    {
-            //                        AtrbID = 125,
-            //                        AtrbCd = "CUST_NM",
-            //                        AtrbValue = "Acer",
-            //                        DcID = -100,
-            //                        DcAltID = 0
-            //                    },
-            //                    new OpDataElement
-            //                    {
-            //                        AtrbID = 3011,
-            //                        AtrbCd = "CUST_MBR_SID",
-            //                        AtrbValue = "3",
-            //                        DcID = -100,
-            //                        DcAltID = 0
-            //                    },
-            //                    new OpDataElement
-            //                    {
-            //                        AtrbID = 24,
-            //                        AtrbCd = "TITLE",
-            //                        AtrbValue = "Intel-HP Worldwide Commercial DT and NB Agreement FQ2’16 to FQ1’17",
-            //                        DcID = -100,
-            //                        DcAltID = 0
-            //                    },
-            //                    new OpDataElement
-            //                    {
-            //                        AtrbID = 3319,
-            //                        AtrbCd = "START_DT",
-            //                        AtrbValue = "1/2/2016",
-            //                        DcID = -100,
-            //                        DcAltID = 0
-            //                    },
-            //                    new OpDataElement
-            //                    {
-            //                        AtrbID = 3320,
-            //                        AtrbCd = "END_DT",
-            //                        AtrbValue = "12/2/2016",
-            //                        DcID = -100,
-            //                        DcAltID = 0
-            //                    },
-            //                    new OpDataElement
-            //                    {
-            //                        AtrbID = 144,
-            //                        AtrbCd = "CUST_ACCEPTED",
-            //                        AtrbValue = true,
-            //                        DcID = -100,
-            //                        DcAltID = 0
-            //                    },
-            //                    new OpDataElement
-            //                    {
-            //                        AtrbID = 33,
-            //                        AtrbCd = "C2A_REF",
-            //                        AtrbValue = "14237564",
-            //                        DcID = -100,
-            //                        DcAltID = 0
-            //                    },
-            //                    new OpDataElement
-            //                    {
-            //                        AtrbID = 143,
-            //                        AtrbCd = "DEAL_STG_CD",
-            //                        AtrbValue = "Requested",
-            //                        DcID = -100,
-            //                        DcAltID = 0
-            //                    },
-            //                    new OpDataElement
-            //                    {
-            //                        AtrbID = 3490,
-            //                        AtrbCd = "NUM_TIERS",
-            //                        AtrbValue = 3,
-            //                        DcID = -100,
-            //                        DcAltID = 0
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    },
-
-            //    // Pricing Strategies
-            //    [OpDataElementType.PricingStrategy] = new OpDataPacket<OpDataElementType>
-            //    {
-            //        PacketType = OpDataElementType.PricingStrategy,
-            //        Data =
-            //        {
-            //            [-201] = new OpDataCollector
-            //            {
-            //                DcID = -201,
-            //                DcAltID = -100,
-            //                DcType = OpDataElementType.PricingStrategy.ToString(),
-            //                DataElements = new List<OpDataElement>
-            //                {
-            //                    new OpDataElement
-            //                    {
-            //                        AtrbID = 3327,
-            //                        AtrbCd = "TITLE",
-            //                        AtrbValue = "Worldwide Notebook MMCP Tiers – FQ2’16 to FQ1’17",
-            //                        DcID = -201,
-            //                        DcAltID = -100
-            //                    },
-            //                    new OpDataElement
-            //                    {
-            //                        AtrbID = 33,
-            //                        AtrbCd = "TERMS",
-            //                        AtrbValue =
-            //                            "<ol><li>Price Effective Dates: February 1st, 2016 through January 31st, 2017</li><li>Volume rebates eligible for Spectre AN00, B(600), P(800), W(Z), M(900), 700, and 1000 Series vPro enabled Platforms only – reported by HP</li><li>vPro Eligible Systems must be configured w vPro eligible CPU, Chipset, WLAN component and the appropriate Intel AMT FM enabled</li><li>Table 1 rebates not eligible for X4 5Y71, Quad Core CPUs(xxxxMX / MQ / HQ), and Transactional Core M5, M7, i3, i5, i7</li><li>Intel agrees to adjust geo / segment tiers for FQ4’16 / FQ1’17 to account for changes greater or less than a +/ -3pt change in IDC’s current YoY market growth forecast.Intel will use the same tier setting methodology for the mid-year reset process as the initial framework</li></ul>",
-            //                        DcID = -201,
-            //                        DcAltID = -100
-            //                    }
-            //                }
-            //            },
-            //            [-202] = new OpDataCollector
-            //            {
-            //                DcID = -202,
-            //                DcAltID = -100,
-            //                DcType = OpDataElementType.PricingStrategy.ToString(),
-            //                DataElements = new List<OpDataElement>
-            //                {
-            //                    new OpDataElement
-            //                    {
-            //                        AtrbID = 3327,
-            //                        AtrbCd = "TITLE",
-            //                        AtrbValue = "HPA Desktop CPU ECAPs",
-            //                        DcID = -202,
-            //                        DcAltID = -100
-            //                    },
-            //                    new OpDataElement
-            //                    {
-            //                        AtrbID = 33,
-            //                        AtrbCd = "TERMS",
-            //                        AtrbValue =
-            //                            "<b>Additional Discount Requirements:</b><ol><li>Price Effective Dates: February 1st, 2016 through January 31st, 2017</li><li>CPU ECAP rebates are not eligible for Workstations</li></ol><b>Discount Requirements</b><ol><li>Price Effective Dates: February 1st, 2016 through January 31st, 2017</li><li>Eligible platforms: BPC, RPOS, WGBU(Z230 / Z240, Z1 Gen 2 / 3), and Thin Clients</li><li>In addition to the HPA CPU ECAP pricing, Intel agrees to offer an additional $7 per unit for Haswell / Skylake i5 / i7 Desktop processors excluding i5 - 44xx, i5 - 64xx",
-            //                        DcID = -202,
-            //                        DcAltID = -100
-            //                    }
-            //                }
-            //            },
-            //            [-203] = new OpDataCollector
-            //            {
-            //                DcID = -203,
-            //                DcAltID = -100,
-            //                DcType = OpDataElementType.PricingStrategy.ToString(),
-            //                DataElements = new List<OpDataElement>
-            //                {
-            //                    new OpDataElement
-            //                    {
-            //                        AtrbID = 3327,
-            //                        AtrbCd = "TITLE",
-            //                        AtrbValue = "Pippin HP 260 G1 Pricing",
-            //                        DcID = -203,
-            //                        DcAltID = -100
-            //                    },
-            //                    new OpDataElement
-            //                    {
-            //                        AtrbID = 33,
-            //                        AtrbCd = "TERMS",
-            //                        AtrbValue =
-            //                            "<ul><li>Eligible discounts for the Pippin HP 260 G1/G2 platform only</li><li>Volume not eligible for any other discounts</li><li>For this agreement rebates on Qualifying Intel Products are eligible when integrated into the desktop form factor(Pippin HP 260 G1 / G2 product only)</li><li>Mobile Market Segment T & Cs apply - See Terms and Conditions for additional details</li><li>Qualifying Intel Products are not eligible for ECAP pricing when shipped into Large Enterprise customers</li></ul>",
-            //                        DcID = -203,
-            //                        DcAltID = -100
-            //                    }
-            //                }
-            //            }
-            //        }
-            //        //},
-            //        //[OpDataElementType.PricingTable] = new OpDataPacket<OpDataElementType>
-            //        //{
-            //        //    PacketType = OpDataElementType.PricingTable,
-            //        //    Data =
-            //        //    {
-            //        //        [301] = new OpDataCollector
-            //        //        {
-            //        //            DcID = 301,
-            //        //            DcAltID = 201,
-            //        //            DcType = OpDataElementType.PricingTable.ToString(),
-            //        //            DataElements = new List<OpDataElement>
-            //        //            {
-            //        //                new OpDataElement
-            //        //                {
-            //        //                    AtrbID = 123,
-            //        //                    AtrbCd = "TITLE",
-            //        //                    AtrbValue = "MMCP Tiers Table 1",
-            //        //                    DcID = 201,
-            //        //                    DcAltID = 201
-            //        //                },
-            //        //                new OpDataElement
-            //        //                {
-            //        //                    AtrbID = 123,
-            //        //                    AtrbCd = "OBJSET_TYPE_CD",
-            //        //                    AtrbValue = "VOLTIER",
-            //        //                    DcID = 201,
-            //        //                    DcAltID = 201
-            //        //                },
-            //        //                new OpDataElement
-            //        //                {
-            //        //                    AtrbID = 123,
-            //        //                    AtrbCd = "PCT_RESULT",
-            //        //                    AtrbValue = "INCOMPLETE",
-            //        //                    DcID = 202,
-            //        //                    DcAltID = 202
-            //        //                }
-            //        //            }
-            //        //        },
-            //        //        [302] = new OpDataCollector
-            //        //        {
-            //        //            DcID = 302,
-            //        //            DcAltID = 201,
-            //        //            DcType = OpDataElementType.PricingTable.ToString(),
-            //        //            DataElements = new List<OpDataElement>
-            //        //            {
-            //        //                new OpDataElement
-            //        //                {
-            //        //                    AtrbID = 123,
-            //        //                    AtrbCd = "TITLE",
-            //        //                    AtrbValue = "MMCP Tiers Table 2",
-            //        //                    DcID = 202,
-            //        //                    DcAltID = 202
-            //        //                },
-            //        //                new OpDataElement
-            //        //                {
-            //        //                    AtrbID = 123,
-            //        //                    AtrbCd = "OBJSET_TYPE_CD",
-            //        //                    AtrbValue = "VOLTIER",
-            //        //                    DcID = 202,
-            //        //                    DcAltID = 202
-            //        //                },
-            //        //                new OpDataElement
-            //        //                {
-            //        //                    AtrbID = 123,
-            //        //                    AtrbCd = "PCT_RESULT",
-            //        //                    AtrbValue = "NA",
-            //        //                    DcID = 202,
-            //        //                    DcAltID = 202
-            //        //                }
-            //        //            }
-            //        //        },
-            //        //        [3021] = new OpDataCollector
-            //        //        {
-            //        //            DcID = 3021,
-            //        //            DcAltID = 202,
-            //        //            DcType = OpDataElementType.PricingTable.ToString(),
-            //        //            DataElements = new List<OpDataElement>
-            //        //            {
-            //        //                new OpDataElement
-            //        //                {
-            //        //                    AtrbID = 123,
-            //        //                    AtrbCd = "TITLE",
-            //        //                    AtrbValue = "HPA Desktop CPU ECAPs",
-            //        //                    DcID = 202,
-            //        //                    DcAltID = 202
-            //        //                },
-            //        //                new OpDataElement
-            //        //                {
-            //        //                    AtrbID = 123,
-            //        //                    AtrbCd = "OBJSET_TYPE_CD",
-            //        //                    AtrbValue = "ECAP",
-            //        //                    DcID = 202,
-            //        //                    DcAltID = 202
-            //        //                },
-            //        //                new OpDataElement
-            //        //                {
-            //        //                    AtrbID = 123,
-            //        //                    AtrbCd = "PCT_RESULT",
-            //        //                    AtrbValue = "PASS",
-            //        //                    DcID = 202,
-            //        //                    DcAltID = 202
-            //        //                }
-            //        //            }
-            //        //        },
-            //        //        [303] = new OpDataCollector
-            //        //        {
-            //        //            DcID = 303,
-            //        //            DcAltID = 203,
-            //        //            DcType = OpDataElementType.PricingTable.ToString(),
-            //        //            DataElements = new List<OpDataElement>
-            //        //            {
-            //        //                new OpDataElement
-            //        //                {
-            //        //                    AtrbID = 123,
-            //        //                    AtrbCd = "TITLE",
-            //        //                    AtrbValue = "Pippin HP 260 G1 Pricing",
-            //        //                    DcID = 203,
-            //        //                    DcAltID = 203
-            //        //                },
-            //        //                new OpDataElement
-            //        //                {
-            //        //                    AtrbID = 123,
-            //        //                    AtrbCd = "OBJSET_TYPE_CD",
-            //        //                    AtrbValue = "ECAP",
-            //        //                    DcID = 203,
-            //        //                    DcAltID = 203
-            //        //                },
-            //        //                new OpDataElement
-            //        //                {
-            //        //                    AtrbID = 123,
-            //        //                    AtrbCd = "PCT_RESULT",
-            //        //                    AtrbValue = "FAIL",
-            //        //                    DcID = 202,
-            //        //                    DcAltID = 202
-            //        //                }
-            //        //            }
-            //        //    }
-            //        //}
-            //    }
-            //};
-
-            //return data;
-            //}
 
             string strInc = "*";
             //string searchGroup = opDataElementType.ToString();
@@ -402,8 +81,7 @@ namespace Intel.MyDeals.DataLibrary
                 odcs = new DealDataLib().ReaderToDataCollectors(rdr, true);
             }
 
-            ////// Add in the negative IDs now
-
+            // Add in the negative IDs now
             if (odcs == null) odcs = new MyDealsData(); // We might have to initialize other things in odcs
 
             foreach (int id in ids.Where(c => c < 0))
@@ -429,48 +107,162 @@ namespace Intel.MyDeals.DataLibrary
 
         public TemplateWrapper GetTemplateData(DateTime lastCacheDate)
         {
-            return new TemplateWrapper
+            ////return new TemplateWrapper
+            ////{
+            ////    TemplateDict = ConvertDealTemplateDataGramsToOpDataElementUIs(null)
+            ////};
+            //lock (LOCK_OBJECT)
+            //{
+            //    if (_getTemplateData != null) { return _getTemplateData; }
+            //}
+
+            if (lastCacheDate < OpaqueConst.SQL_MIN_DATE)
             {
-                TemplateDict = ConvertDealTemplateDataGramsToOpDataElementUIs(null)
-            };
-            ////lock (LOCK_OBJECT)
-            ////{
-            ////    if (_getTemplateData != null) { return _getTemplateData; }
-            ////}
+                lastCacheDate = OpaqueConst.SQL_MIN_DATE;
+            }
 
-            ////if (lastCacheDate < OpaqueConst.SQL_MIN_DATE)
-            ////{
-            ////    lastCacheDate = OpaqueConst.SQL_MIN_DATE;
-            ////}
+            var ret = new TemplateWrapper();
 
-            ////var ret = new TemplateWrapper();
+            using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_GET_NEW_DEAL { CACHE_DATE = lastCacheDate }))
+            {
+                if (rdr.HasRows) // Will be false if cache condition is met...
+                {
+                    // Result 1 = Tempates
+                    ret.TemplateData = DealTemplateDataGramFromReader(rdr);
+                    rdr.NextResult();
 
-            ////using (var rdr = DataAccess.ExecuteReader(new Procs.app.PR_GET_NEW_DEAL { CACHE_DATE = lastCacheDate }))
-            ////{
-            ////    if (rdr.HasRows) // Will be false if cache condition is met...
-            ////    {
-            ////        // Result 1 = Tempates
-            ////        ret.TemplateData = DealTemplateDataGramFromReader(rdr);
-            ////        rdr.NextResult();
+                    // Result 2 = Customer Calendars
+                    ret.CalendarData = CustomerCalFromReader(rdr);
+                    rdr.NextResult();
 
-            ////        // Result 2 = Customer Calendars
-            ////        ret.CalendarData = CustomerCalendarFromReader(rdr);
-            ////        rdr.NextResult();
+                    // Result 3 = Deal Types
+                    ret.DealTypeData = ObjectTypesFromReader(rdr);
+                }
+            }
 
-            ////        // Result 3 = Deal Types
-            ////        ret.DealTypeData = DealTypeFromReader(rdr);
-            ////    }
-            ////}
+            ret.TemplateDict = ConvertDealTemplateDataGramsToOpDataElementUIs(ret.TemplateData);
 
-            ////ret.TemplateDict = ConvertDealTemplateDataGramsToOpDataElementUIs(ret.TemplateData);
-
-            ////lock (LOCK_OBJECT)
-            ////{
-            ////    _getTemplateData = ret;
-            ////    return ret;
-            ////}
-
+            //lock (LOCK_OBJECT)
+            //{
+            //    _getTemplateData = ret;
+            //    return ret;
+            //}
+            return ret;
         }
+
+        public static List<ObjectTypeTemplate> DealTemplateDataGramFromReader(SqlDataReader rdr)
+            {
+            // This helper method is template generated.
+            // Refer to that template for details to modify this code.
+
+            var ret = new List<ObjectTypeTemplate>();
+            int IDX_ATRB_ORDER = DB.GetReaderOrdinal(rdr, "ATRB_ORDER");
+            int IDX_ATRB_SCTN_CD = DB.GetReaderOrdinal(rdr, "ATRB_SCTN_CD");
+            int IDX_ATRB_SCTN_DESC = DB.GetReaderOrdinal(rdr, "ATRB_SCTN_DESC");
+            int IDX_ATRB_SCTN_ORDER = DB.GetReaderOrdinal(rdr, "ATRB_SCTN_ORDER");
+            int IDX_ATRB_SID = DB.GetReaderOrdinal(rdr, "ATRB_SID");
+            int IDX_ATRB_VAL = DB.GetReaderOrdinal(rdr, "ATRB_VAL");
+            int IDX_ATRB_VAL_CHAR = DB.GetReaderOrdinal(rdr, "ATRB_VAL_CHAR");
+            int IDX_ATRB_VAL_CHAR_MAX = DB.GetReaderOrdinal(rdr, "ATRB_VAL_CHAR_MAX");
+            int IDX_ATRB_VAL_DTM = DB.GetReaderOrdinal(rdr, "ATRB_VAL_DTM");
+            int IDX_ATRB_VAL_INT = DB.GetReaderOrdinal(rdr, "ATRB_VAL_INT");
+            int IDX_ATRB_VAL_MONEY = DB.GetReaderOrdinal(rdr, "ATRB_VAL_MONEY");
+            int IDX_DEAL_ID = DB.GetReaderOrdinal(rdr, "DEAL_ID");
+            int IDX_DEAL_NBR = DB.GetReaderOrdinal(rdr, "DEAL_NBR");
+            int IDX_OBJ_ATRB_MTX_HASH = DB.GetReaderOrdinal(rdr, "OBJ_ATRB_MTX_HASH");
+            int IDX_OBJ_TYPE = DB.GetReaderOrdinal(rdr, "OBJ_TYPE");
+
+            while (rdr.Read())
+            {
+                ret.Add(new ObjectTypeTemplate
+                {
+                    ATRB_ORDER = (IDX_ATRB_ORDER < 0 || rdr.IsDBNull(IDX_ATRB_ORDER)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ATRB_ORDER),
+                    ATRB_SCTN_CD = (IDX_ATRB_SCTN_CD < 0 || rdr.IsDBNull(IDX_ATRB_SCTN_CD)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ATRB_SCTN_CD),
+                    ATRB_SCTN_DESC = (IDX_ATRB_SCTN_DESC < 0 || rdr.IsDBNull(IDX_ATRB_SCTN_DESC)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ATRB_SCTN_DESC),
+                    ATRB_SCTN_ORDER = (IDX_ATRB_SCTN_ORDER < 0 || rdr.IsDBNull(IDX_ATRB_SCTN_ORDER)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ATRB_SCTN_ORDER),
+                    ATRB_SID = (IDX_ATRB_SID < 0 || rdr.IsDBNull(IDX_ATRB_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ATRB_SID),
+                    ATRB_VAL = (IDX_ATRB_VAL < 0 || rdr.IsDBNull(IDX_ATRB_VAL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_VAL),
+                    ATRB_VAL_CHAR = (IDX_ATRB_VAL_CHAR < 0 || rdr.IsDBNull(IDX_ATRB_VAL_CHAR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_VAL_CHAR),
+                    ATRB_VAL_CHAR_MAX = (IDX_ATRB_VAL_CHAR_MAX < 0 || rdr.IsDBNull(IDX_ATRB_VAL_CHAR_MAX)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_VAL_CHAR_MAX),
+                    ATRB_VAL_DTM = (IDX_ATRB_VAL_DTM < 0 || rdr.IsDBNull(IDX_ATRB_VAL_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_ATRB_VAL_DTM),
+                    ATRB_VAL_INT = (IDX_ATRB_VAL_INT < 0 || rdr.IsDBNull(IDX_ATRB_VAL_INT)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ATRB_VAL_INT),
+                    ATRB_VAL_MONEY = (IDX_ATRB_VAL_MONEY < 0 || rdr.IsDBNull(IDX_ATRB_VAL_MONEY)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_ATRB_VAL_MONEY),
+                    DEAL_ID = (IDX_DEAL_ID < 0 || rdr.IsDBNull(IDX_DEAL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_ID),
+                    DEAL_NBR = (IDX_DEAL_NBR < 0 || rdr.IsDBNull(IDX_DEAL_NBR)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_NBR),
+                    OBJ_ATRB_MTX_HASH = (IDX_OBJ_ATRB_MTX_HASH < 0 || rdr.IsDBNull(IDX_OBJ_ATRB_MTX_HASH)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_ATRB_MTX_HASH),
+                    OBJ_TYPE = (IDX_OBJ_TYPE < 0 || rdr.IsDBNull(IDX_OBJ_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_TYPE)
+                });
+            } // while
+            return ret;
+        }
+
+        private static List<ObjectTypes> ObjectTypesFromReader(SqlDataReader rdr)
+        {
+            // This helper method is template generated.
+            // Refer to that template for details to modify this code.
+
+            var ret = new List<ObjectTypes>();
+            int IDX_OBJ_DESC = DB.GetReaderOrdinal(rdr, "OBJ_DESC");
+            int IDX_OBJ_TYPE = DB.GetReaderOrdinal(rdr, "OBJ_TYPE");
+            int IDX_OBJ_TYPE_SID = DB.GetReaderOrdinal(rdr, "OBJ_TYPE_SID");
+            int IDX_OBJ_TYPE_SID1 = DB.GetReaderOrdinal(rdr, "OBJ_TYPE_SID1");
+            int IDX_OBJ_TYPE_SID2 = DB.GetReaderOrdinal(rdr, "OBJ_TYPE_SID2");
+            int IDX_PERFORM_CTST = DB.GetReaderOrdinal(rdr, "PERFORM_CTST");
+            int IDX_TRKR_NBR_DT_LTR = DB.GetReaderOrdinal(rdr, "TRKR_NBR_DT_LTR");
+
+            while (rdr.Read())
+            {
+                ret.Add(new ObjectTypes
+                {
+                    OBJ_DESC = (IDX_OBJ_DESC < 0 || rdr.IsDBNull(IDX_OBJ_DESC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_DESC),
+                    OBJ_TYPE = (IDX_OBJ_TYPE < 0 || rdr.IsDBNull(IDX_OBJ_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_TYPE),
+                    OBJ_TYPE_SID = (IDX_OBJ_TYPE_SID < 0 || rdr.IsDBNull(IDX_OBJ_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_TYPE_SID),
+                    OBJ_TYPE_SID1 = (IDX_OBJ_TYPE_SID1 < 0 || rdr.IsDBNull(IDX_OBJ_TYPE_SID1)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_TYPE_SID1),
+                    OBJ_TYPE_SID2 = (IDX_OBJ_TYPE_SID2 < 0 || rdr.IsDBNull(IDX_OBJ_TYPE_SID2)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_TYPE_SID2),
+                    PERFORM_CTST = (IDX_PERFORM_CTST < 0 || rdr.IsDBNull(IDX_PERFORM_CTST)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PERFORM_CTST),
+                    TRKR_NBR_DT_LTR = (IDX_TRKR_NBR_DT_LTR < 0 || rdr.IsDBNull(IDX_TRKR_NBR_DT_LTR)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_TRKR_NBR_DT_LTR)
+                });
+            } // while
+            return ret;
+        }
+
+        private static List<CustomerCal> CustomerCalFromReader(SqlDataReader rdr)
+        {
+            // This helper method is template generated.
+            // Refer to that template for details to modify this code.
+
+            var ret = new List<CustomerCal>();
+            int IDX_CUST_MBR_SID = DB.GetReaderOrdinal(rdr, "CUST_MBR_SID");
+            int IDX_CUST_NM = DB.GetReaderOrdinal(rdr, "CUST_NM");
+            int IDX_END_DT = DB.GetReaderOrdinal(rdr, "END_DT");
+            int IDX_PREV_END_DT = DB.GetReaderOrdinal(rdr, "PREV_END_DT");
+            int IDX_PREV_QTR_NBR = DB.GetReaderOrdinal(rdr, "PREV_QTR_NBR");
+            int IDX_PREV_START_DT = DB.GetReaderOrdinal(rdr, "PREV_START_DT");
+            int IDX_PREV_YR_NBR = DB.GetReaderOrdinal(rdr, "PREV_YR_NBR");
+            int IDX_QTR_NBR = DB.GetReaderOrdinal(rdr, "QTR_NBR");
+            int IDX_START_DT = DB.GetReaderOrdinal(rdr, "START_DT");
+            int IDX_YR_NBR = DB.GetReaderOrdinal(rdr, "YR_NBR");
+
+            while (rdr.Read())
+            {
+                ret.Add(new CustomerCal
+                {
+                    CUST_MBR_SID = (IDX_CUST_MBR_SID < 0 || rdr.IsDBNull(IDX_CUST_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_MBR_SID),
+                    CUST_NM = (IDX_CUST_NM < 0 || rdr.IsDBNull(IDX_CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_NM),
+                    END_DT = (IDX_END_DT < 0 || rdr.IsDBNull(IDX_END_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_END_DT),
+                    PREV_END_DT = (IDX_PREV_END_DT < 0 || rdr.IsDBNull(IDX_PREV_END_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_PREV_END_DT),
+                    PREV_QTR_NBR = (IDX_PREV_QTR_NBR < 0 || rdr.IsDBNull(IDX_PREV_QTR_NBR)) ? default(System.Int16) : rdr.GetFieldValue<System.Int16>(IDX_PREV_QTR_NBR),
+                    PREV_START_DT = (IDX_PREV_START_DT < 0 || rdr.IsDBNull(IDX_PREV_START_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_PREV_START_DT),
+                    PREV_YR_NBR = (IDX_PREV_YR_NBR < 0 || rdr.IsDBNull(IDX_PREV_YR_NBR)) ? default(System.Int16) : rdr.GetFieldValue<System.Int16>(IDX_PREV_YR_NBR),
+                    QTR_NBR = (IDX_QTR_NBR < 0 || rdr.IsDBNull(IDX_QTR_NBR)) ? default(System.Int16) : rdr.GetFieldValue<System.Int16>(IDX_QTR_NBR),
+                    START_DT = (IDX_START_DT < 0 || rdr.IsDBNull(IDX_START_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_START_DT),
+                    YR_NBR = (IDX_YR_NBR < 0 || rdr.IsDBNull(IDX_YR_NBR)) ? default(System.Int16) : rdr.GetFieldValue<System.Int16>(IDX_YR_NBR)
+                });
+            } // while
+            return ret;
+        }
+
+
         private static TemplateWrapper _getTemplateData;
 
         public static OpDataCollector GetDataCollectorFromTemplate(OpDataElementType opDataElementType, int id, int parentId)
@@ -492,311 +284,234 @@ namespace Intel.MyDeals.DataLibrary
                 : new OpDataElementUITemplate();
         }
 
-        private OpDataElementUITemplates ConvertDealTemplateDataGramsToOpDataElementUIs(List<DealTemplateDataGram> templateData)
+        private OpDataElementUITemplates ConvertDealTemplateDataGramsToOpDataElementUIs(List<ObjectTypeTemplate> templateData)
         {
-            //// Bring in existing items for ConvertDealTemplateDataGramsToOpDataElementUIs
+            // Bring in existing items for ConvertDealTemplateDataGramsToOpDataElementUIs
 
             Dictionary<string, List<OpDataElementUI>> ret = new Dictionary<string, List<OpDataElementUI>>();
 
-            AttributeCollection atrb_mstr = DataCollections.GetAttributeData();
+            AttributeCollection atrbMstr = DataCollections.GetAttributeData();
 
-            //foreach (var dd in templateData)
-            //{
-                ////                MyDealsAttribute atrb = null;
-                ////                if (!atrb_mstr.TryGetValue(dd.ATRB_SID ?? -1, out atrb))
-                ////                {
-                ////#if DEBUG
-                ////                    System.Diagnostics.Debug.WriteLine(string.Format("DcsDealLibClient.GetTemplates: Error resolving Attribute ID: {0}", dd.ATRB_SID));
-                ////#endif
-                ////                    continue;
-                ////                }
-
-
-                ////                List<OpDataElementUI> coll;
-                ////                if (!ret.TryGetValue(dd.DEAL_TYPE_CD, out coll))
-                ////                {
-                ////                    ret[dd.DEAL_TYPE_CD] = coll = new List<OpDataElementUI>();
-                ////                }
-
-
-                ////                // Get the value from the database...
-                ////                var value = OpUtilities.Coalesce
-                ////                    (
-                ////                        dd.ATRB_VAL_INT,
-                ////                        dd.ATRB_VAL_CHAR,
-                ////                        dd.ATRB_VAL_MONEY,
-                ////                        dd.ATRB_VAL_DTM,
-                ////                        dd.ATRB_VAL_CHAR_MAX
-                ////                    );
-
-                ////                if (value != null)
-                ////                {
-                ////                    // A Bit hackish, but this was the only way I could think to do this.
-                ////                    // conver to switch as needed if we add more types.
-                ////                    if (atrb.DOT_NET_DATA_TYPE == "System.Boolean")
-                ////                    {
-                ////                        value = OpTypeConverter.StringToNullableBool(value) ?? false;
-                ////                    }
-                ////                }
-
-                ////                // TODO: Fully resolve dim Key.
-
-                ////                // Create the data element from the db values...
-                ////                var ode = new OpDataElementUI(false)
-                ////                {
-                ////                    AtrbID = atrb.ATRB_SID,
-                ////                    AtrbValue = value,
-                ////                    DcID = dd.DEAL_ID ?? 0,
-                ////                    DimKey = dd.DEAL_ATRB_MTX_HASH,
-                ////                    OrigAtrbValue = value,
-                ////                    PrevAtrbValue = value,
-                ////                    DefaultValue = string.Format("{0}", value),
-                ////                    DataType = atrb.DOT_NET_DATA_TYPE,
-                ////                    AtrbCd = atrb.ATRB_CD,
-                ////                    Description = atrb.ATRB_DESC,
-                ////                    Label = atrb.ATRB_LBL,
-                ////                    Order = dd.ATRB_ORDER ?? 0,
-                ////                    SectionCD = dd.ATRB_SCTN_CD,
-                ////                    SectionDesc = dd.ATRB_SCTN_DESC,
-                ////                    SectionOrder = dd.ATRB_SCTN_ORDER ?? 0,
-                ////                    State = OpDataElementState.Unchanged,
-                ////                    UITypeCD = atrb.UI_TYPE_CD,
-                ////                    Source = OpSourceLocation.Template,
-                ////                    StringFormatMask = atrb.FMT_MSK
-                ////                };
-
-                ////                if (dd.PLI_GUID != null)
-                ////                {
-                ////                    ode.ExtraDimKey.Add(
-                ////                        AttributeCodes.PLI_GUID,
-                ////                        OpAtrbMap.NOT_SET_TAG
-                ////                        );
-                ////                }
-
-                ////                if (dd.AGRMNT_GUID != null)
-                ////                {
-                ////                    ode.ExtraDimKey.Add(
-                ////                        AttributeCodes.AGRMNT_GUID,
-                ////                        OpAtrbMap.NOT_SET_TAG
-                ////                        );
-                ////                }
-
-                ////                // Try to fully resolve the dim key
-                ////                if (ode.DimKey != null && ode.DimKey.Count > 0)
-                ////                {
-                ////                    foreach (var di in ode.DimKey)
-                ////                    {
-                ////                        // See if we have master data for it...
-                ////                        var mstr_item = atrb_mstr.LookupGet(di.AtrbID, di.AtrbItemId);
-                ////                        if (mstr_item == null)
-                ////                        {
-                ////                            // If not, just try to get the ATRB_CD
-                ////                            MyDealsAttribute odk_atrb;
-                ////                            if (atrb_mstr.TryGetValue(di.AtrbID, out odk_atrb))
-                ////                            {
-                ////                                di.AtrbCd = odk_atrb.ATRB_CD;
-                ////                            }
-                ////                            continue;
-                ////                        }
-
-                ////                        // Else set values
-                ////                        di.AtrbCd = mstr_item.AtrbCd;
-                ////                        di.AtrbItemValue = mstr_item.AtrbItemValue;
-                ////                    }
-                ////                }
-
-                ////                coll.Add(ode);
-            //}
-
-            ////            return ret;
-
-            // TODO replace with proper DB call
-
-            return new OpDataElementUITemplates
+            foreach (var dd in templateData)
             {
-                [OpDataElementType.Contract.ToString()] = new OpDataElementUITemplate
+                MyDealsAttribute atrb = null;
+                if (!atrbMstr.TryGetValue(dd.ATRB_SID != null ? dd.ATRB_SID : -1, out atrb))
                 {
-                    new OpDataElementUI
-                    {
-                        AtrbID = 11,
-                        AtrbCd = "dc_id",
-                        AtrbValue = "",
-                        DcID = 0,
-                        DcParentSID = 0,
-                        DcSID = 0
-                    },
-                    new OpDataElementUI
-                    {
-                        AtrbID = 12,
-                        AtrbCd = "dc_parent_id",
-                        AtrbValue = "",
-                        DcID = 0,
-                        DcParentSID = 0,
-                        DcSID = 0
-                    },
-                    new OpDataElementUI
-                    {
-                        AtrbID = 3319,
-                        AtrbCd = "START_DT",
-                        AtrbValue = "",
-                        DcID = 0,
-                        DcParentSID = 0,
-                        DcSID = 0
-                    },
-                    new OpDataElementUI
-                    {
-                        AtrbID = 3320,
-                        AtrbCd = "END_DT",
-                        AtrbValue = "",
-                        DcID = 0,
-                        DcParentSID = 0,
-                        DcSID = 0
-                    },
-                    new OpDataElementUI
-                    {
-                        AtrbID = 143,
-                        AtrbCd = "DEAL_STG_CD",
-                        AtrbValue = "",
-                        DcID = 0,
-                        DcParentSID = 0,
-                        DcSID = 0
-                    },
-                    new OpDataElementUI
-                    {
-                        AtrbID = 5,
-                        AtrbCd = "OBJSET_TYPE_CD",
-                        AtrbValue = "",
-                        DcID = 0,
-                        DcParentSID = 0,
-                        DcSID = 0
-                    },
-                    new OpDataElementUI
-                    {
-                        AtrbID = 125,
-                        AtrbCd = "CUST_NM",
-                        AtrbValue = "",
-                        DcID = 0,
-                        DcParentSID = 0,
-                        DcSID = 0
-                    },
-                    new OpDataElementUI
-                    {
-                        AtrbID = 3011,
-                        AtrbCd = "CUST_MBR_SID",
-                        AtrbValue = "",
-                        DcID = 0,
-                        DcParentSID = 0,
-                        DcSID = 0
-                    },
-                    new OpDataElementUI
-                    {
-                        AtrbID = 33,
-                        AtrbCd = "TITLE",
-                        AtrbValue = "",
-                        DcID = 0,
-                        DcParentSID = 0,
-                        DcSID = 0
-                    },
-                    new OpDataElementUI
-                    {
-                        AtrbID = 3653,
-                        AtrbCd = "CUST_ACCPT",
-                        AtrbValue = "",
-                        DcID = 0,
-                        DcParentSID = 0,
-                        DcSID = 0
-                    },
-                    new OpDataElementUI
-                    {
-                        AtrbID = 3576,
-                        AtrbCd = "C2A_DATA_C2A_ID",
-                        AtrbValue = "",
-                        DcID = 0,
-                        DcParentSID = 0,
-                        DcSID = 0
-                    },
-                    new OpDataElementUI
-                    {
-                        AtrbID = 3490,
-                        AtrbCd = "NUM_TIERS",
-                        AtrbValue = 1,
-                        DcID = 0,
-                        DcParentSID = 0,
-                        DcSID = 0
-                    }
-                },
+#if DEBUG
+                    System.Diagnostics.Debug.WriteLine(string.Format("DcsDealLibClient.GetTemplates: Error resolving Attribute ID: {0}", dd.ATRB_SID));
+#endif
+                    continue;
+                }
 
-                [OpDataElementType.PricingStrategy.ToString()] = new OpDataElementUITemplate
+                List<OpDataElementUI> coll;
+                if (!ret.TryGetValue(dd.OBJ_TYPE, out coll))
                 {
-                    new OpDataElementUI
+                    ret[dd.OBJ_TYPE] = coll = new List<OpDataElementUI>();
+                }
+
+                // TODO - THIS IS MUFFED UP RIGHT NOW DUE TO NON-NULLABLE READS
+                // Get the value from the database...
+                //var value = OpUtilities.Coalesce
+                //    (
+                //        dd.ATRB_VAL_INT,
+                //        dd.ATRB_VAL_CHAR,
+                //        dd.ATRB_VAL_MONEY,
+                //        dd.ATRB_VAL_DTM,
+                //        dd.ATRB_VAL_CHAR_MAX // if they go to one column, must go to dd.ATRB_VAL here
+                //    );
+                var value = dd.ATRB_VAL;
+
+                //if (value != null)
+                //{
+                    // A Bit hackish, but this was the only way I could think to do this.
+                    // conver to switch as needed if we add more types.
+                    //if (atrb.DOT_NET_DATA_TYPE == "System.Boolean")
+                    //{
+                    //    value = OpTypeConverter.StringToNullableBool(value.ToString()) ?? false;
+                    //}
+                //}
+
+                // TODO: Fully resolve dim Key.
+                // TODO: Complete the section since we are just hard coding attribute items in some cases
+
+                // Create the data element from the db values...
+                var ode = new OpDataElementUI(false)
+                {
+                    AtrbID = atrb.ATRB_SID,
+                    AtrbValue = value,
+                    DcID = dd.DEAL_ID != null ? dd.DEAL_ID : 0,
+                    DimKey = dd.OBJ_ATRB_MTX_HASH,
+                    OrigAtrbValue = value,
+                    PrevAtrbValue = value,
+                    DefaultValue = string.Format("{0}", value),
+                    DataType = atrb.DOT_NET_DATA_TYPE,
+                    AtrbCd = atrb.ATRB_COL_NM,
+                    Description = atrb.ATRB_DESC,
+                    Label = atrb.ATRB_LBL,
+                    Order = dd.ATRB_ORDER != null ? dd.ATRB_ORDER : 0,
+                    SectionCD = "", //dd.ATRB_SCTN_CD,
+                    SectionDesc = "", //dd.ATRB_SCTN_DESC,
+                    SectionOrder = dd.ATRB_SCTN_ORDER != null ? dd.ATRB_SCTN_ORDER : 0,
+                    State = OpDataElementState.Unchanged,
+                    UITypeCD = atrb.UI_TYPE_CD,
+                    Source = OpSourceLocation.Template  //,
+                    //StringFormatMask = atrb.FMT_MSK
+                };
+
+                // Try to fully resolve the dim key
+                if (ode.DimKey != null && ode.DimKey.Count > 0)
+                {
+                    foreach (var di in ode.DimKey)
                     {
-                        AtrbID = 11,
-                        AtrbCd = "dc_id",
-                        AtrbValue = "",
-                        DcID = 0,
-                        DcParentSID = 0,
-                        DcSID = 0
-                    },
-                    new OpDataElementUI
-                    {
-                        AtrbID = 12,
-                        AtrbCd = "dc_parent_id",
-                        AtrbValue = "",
-                        DcID = 0,
-                        DcParentSID = 0,
-                        DcSID = 0
-                    },
-                    new OpDataElementUI
-                    {
-                        AtrbID = 3319,
-                        AtrbCd = "START_DT",
-                        AtrbValue = "",
-                        DcID = 0,
-                        DcParentSID = 0,
-                        DcSID = 0
-                    },
-                    new OpDataElementUI
-                    {
-                        AtrbID = 3320,
-                        AtrbCd = "END_DT",
-                        AtrbValue = "",
-                        DcID = 0,
-                        DcParentSID = 0,
-                        DcSID = 0
-                    },
-                    new OpDataElementUI
-                    {
-                        AtrbID = 24,
-                        AtrbCd = "TITLE",
-                        AtrbValue = "",
-                        DcID = 0,
-                        DcParentSID = 0,
-                        DcSID = 0
-                    },
-                    new OpDataElementUI
-                    {
-                        AtrbID = 33,
-                        AtrbCd = "DEAL_DESC", // Was TERMS
-                        AtrbValue = "",
-                        DcID = 0,
-                        DcParentSID = 0,
-                        DcSID = 0
-                    },
-                    new OpDataElementUI
-                    {
-                        AtrbID = 17,
-                        AtrbCd = "OBJSET_TYPE",
-                        AtrbValue = "",
-                        DcID = 0,
-                        DcParentSID = 0,
-                        DcSID = 0
+                        // See if we have master data for it...
+                        var mstrItem = atrbMstr.LookupGet(di.AtrbID, di.AtrbItemId);
+                        if (mstrItem == null)
+                        {
+                            // If not, just try to get the ATRB_CD
+                            MyDealsAttribute odkAtrb;
+                            if (atrbMstr.TryGetValue(di.AtrbID, out odkAtrb))
+                            {
+                                di.AtrbCd = odkAtrb.ATRB_COL_NM;
+                            }
+                            continue;
+                        }
+
+                        // Else set values
+                        di.AtrbCd = mstrItem.AtrbCd;
+                        di.AtrbItemValue = mstrItem.AtrbItemValue;
                     }
                 }
-            };
 
+                coll.Add(ode);
+            }
+
+            // Transform what we loaded from templates into Philip-consumable format.
+            OpDataElementUITemplates retSet = new OpDataElementUITemplates();
+            foreach (KeyValuePair<string, List<OpDataElementUI>> keyValuePair in ret)
+            {
+                string key = OpDataElementTypeConverter.FromString(keyValuePair.Key).ToString();
+                if (!retSet.ContainsKey(key)) // This shuld just be keyValuePair.Key
+                {
+                    retSet[key] = new OpDataElementUITemplate();
+                }
+                foreach (OpDataElementUI dataElementUi in keyValuePair.Value)
+                {
+                    OpDataElementUI blah = new OpDataElementUI
+                    {
+                        AtrbID = dataElementUi.AtrbID,
+                        AtrbCd = dataElementUi.AtrbCd,
+                        AtrbValue = dataElementUi.AtrbValue,
+                        DataType = dataElementUi.DataType,
+                        Description = dataElementUi.Description,
+                        DimID = dataElementUi.DimID,
+                        DimKey = dataElementUi.DimKey,
+                        SectionCD = dataElementUi.SectionCD,
+                        SectionDesc = dataElementUi.SectionDesc,
+                        SectionOrder = dataElementUi.SectionOrder,
+                        Label = dataElementUi.Label,
+                        DcID = 0,
+                        DcSID = 0,
+                        DcParentSID = 0
+                    };
+
+                    retSet[key].Add(blah);
+                }
+            }
+
+            // TODO - Place some hard coded items for now just so that Phil doesn't break much more then he has to...
+            retSet[OpDataElementType.Contract.ToString()].Add(new OpDataElementUI
+            {
+                AtrbID = 11,
+                AtrbCd = "dc_id",
+                AtrbValue = "",
+                DcID = 0,
+                DcParentSID = 0,
+                DcSID = 0
+            });
+
+            retSet[OpDataElementType.Contract.ToString()].Add(new OpDataElementUI
+            {
+                AtrbID = 12,
+                AtrbCd = "dc_parent_id",
+                AtrbValue = "",
+                DcID = 0,
+                DcParentSID = 0,
+                DcSID = 0
+            });
+
+            retSet[OpDataElementType.Contract.ToString()].Add(new OpDataElementUI
+            {
+                AtrbID = 143,
+                AtrbCd = "DEAL_STG_CD",
+                AtrbValue = "",
+                DcID = 0,
+                DcParentSID = 0,
+                DcSID = 0
+            });
+
+            // TODO - Place some hard coded items for now just so that Phil doesn't break much more then he has to...
+            retSet[OpDataElementType.PricingStrategy.ToString()].Add(new OpDataElementUI
+            {
+                AtrbID = 11,
+                AtrbCd = "dc_id",
+                AtrbValue = "",
+                DcID = 0,
+                DcParentSID = 0,
+                DcSID = 0
+            });
+
+            retSet[OpDataElementType.PricingStrategy.ToString()].Add(new OpDataElementUI
+            {
+                AtrbID = 12,
+                AtrbCd = "dc_parent_id",
+                AtrbValue = "",
+                DcID = 0,
+                DcParentSID = 0,
+                DcSID = 0
+            });
+
+            retSet[OpDataElementType.PricingStrategy.ToString()].Add(new OpDataElementUI
+            {
+                AtrbID = 3319,
+                AtrbCd = "START_DT",
+                AtrbValue = "",
+                DcID = 0,
+                DcParentSID = 0,
+                DcSID = 0
+            });
+
+            retSet[OpDataElementType.PricingStrategy.ToString()].Add(new OpDataElementUI
+            {
+                AtrbID = 3320,
+                AtrbCd = "END_DT",
+                AtrbValue = "",
+                DcID = 0,
+                DcParentSID = 0,
+                DcSID = 0
+            });
+
+            retSet[OpDataElementType.PricingTable.ToString()].Add(new OpDataElementUI
+            {
+                AtrbID = 11,
+                AtrbCd = "dc_id",
+                AtrbValue = "",
+                DcID = 0,
+                DcParentSID = 0,
+                DcSID = 0
+            });
+
+            retSet[OpDataElementType.PricingTable.ToString()].Add(new OpDataElementUI
+            {
+                AtrbID = 12,
+                AtrbCd = "dc_parent_id",
+                AtrbValue = "",
+                DcID = 0,
+                DcParentSID = 0,
+                DcSID = 0
+            });
+
+            return retSet;
         }
-
-
     }
 
 }

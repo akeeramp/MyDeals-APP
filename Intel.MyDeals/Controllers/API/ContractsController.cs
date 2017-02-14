@@ -48,7 +48,8 @@ namespace Intel.MyDeals.Controllers.API
                 .GetContract(id, new List<OpDataElementType>
                 {
                     OpDataElementType.Contract,
-                    OpDataElementType.PricingStrategy
+                    OpDataElementType.PricingStrategy,
+                    OpDataElementType.PricingTable
                 })
                 .BuildObjSetContainers(ObjSetPivotMode.Pivoted)
                 .ToHierarchialList(OpDataElementType.Contract)
@@ -74,8 +75,10 @@ namespace Intel.MyDeals.Controllers.API
         [HttpPost]
         public MyDealsData SaveContract(OpDataCollectorFlattenedList contracts)
         {
+            //todo BECAUSE DB MADE US DO THIS
+            int custId = 914;
             return SafeExecutor(() => _contractsLib
-                .SaveContract(contracts)
+                .SaveContract(contracts, custId)
                 , "Unable to save the Contract"
             );
         }
@@ -86,11 +89,14 @@ namespace Intel.MyDeals.Controllers.API
         [HttpPost]
         public MyDealsData SaveFullContract(OpDataCollectorFlattenedDictList fullContracts)
         {
+            //todo BECAUSE DB MADE US DO THIS
+            int custId = 914;
             return SafeExecutor(() => _contractsLib.SaveContract(
                 fullContracts.ContainsKey(OpDataElementType.Contract) ? fullContracts[OpDataElementType.Contract] : new OpDataCollectorFlattenedList(),
                 fullContracts.ContainsKey(OpDataElementType.PricingStrategy) ? fullContracts[OpDataElementType.PricingStrategy] : new OpDataCollectorFlattenedList(),
                 fullContracts.ContainsKey(OpDataElementType.PricingTable) ? fullContracts[OpDataElementType.PricingTable] : new OpDataCollectorFlattenedList(),
-                fullContracts.ContainsKey(OpDataElementType.WipDeals) ? fullContracts[OpDataElementType.WipDeals] : new OpDataCollectorFlattenedList())
+                fullContracts.ContainsKey(OpDataElementType.WipDeals) ? fullContracts[OpDataElementType.WipDeals] : new OpDataCollectorFlattenedList(),
+                custId)
                 , "Unable to save the Contract"
             );
         }

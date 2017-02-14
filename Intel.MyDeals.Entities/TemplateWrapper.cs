@@ -7,20 +7,20 @@ namespace Intel.MyDeals.Entities
     public class TemplateWrapper // Result Set From: app.PR_GET_NEW_DEAL
     {
         [DataMember]
-        public List<DealTemplateDataGram> TemplateData { set; get; }
+        public List<ObjectTypeTemplate> TemplateData { set; get; }
         [DataMember]
         public OpDataElementUITemplates TemplateDict { set; get; }
         [DataMember]
-        public IEnumerable<CustomerCalendar> CalendarData { set; get; }
+        public IEnumerable<CustomerCal> CalendarData { set; get; }
         [DataMember]
-        public List<DealType> DealTypeData { set; get; }
+        public List<ObjectTypes> DealTypeData { set; get; }
 
         public TemplateWrapper()
         {
-            TemplateData = new List<DealTemplateDataGram>();
+            TemplateData = new List<ObjectTypeTemplate>();
             TemplateDict = new OpDataElementUITemplates();
-            CalendarData = new List<CustomerCalendar>();
-            DealTypeData = new List<DealType>();
+            CalendarData = new List<CustomerCal>();
+            DealTypeData = new List<ObjectTypes>();
         }
 
     }

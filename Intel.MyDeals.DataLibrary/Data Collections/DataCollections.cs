@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using Intel.MyDeals.Entities;
@@ -326,10 +325,10 @@ namespace Intel.MyDeals.DataLibrary
         {
             return GetTemplateData();
         }
-        private static List<DealTemplateDataGram> _getTemplateData;
+        private static List<ObjectTypeTemplate> _getTemplateData;
         private static OpDataElementUITemplates _getTemplateDict;
-        private static List<CustomerCalendar> _getCalendarData;
-        private static List<DealType> _getDealTypeData;
+        private static List<CustomerCal> _getCalendarData;
+        private static List<ObjectTypes> _getDealTypeData;
 
         public static List<CustomerDivision> GetCustomerDivisions()
         {

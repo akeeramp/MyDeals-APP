@@ -35,18 +35,19 @@ namespace Intel.MyDeals.BusinessLogic
                 .FillInHolesFromTemplate();
         }
 
-        public MyDealsData SavePricingStrategy(OpDataCollectorFlattenedList data)
+        public MyDealsData SavePricingStrategy(OpDataCollectorFlattenedList data, int custId)
         {
             return _dataCollectorLib.SavePackets(new OpDataCollectorFlattenedDictList
             {
                 [OpDataElementType.PricingStrategy] = data
-            });
+            }, custId);
         }
 
         public MyDealsData SavePricingStrategy(
             OpDataCollectorFlattenedList pricingStrategies,
             OpDataCollectorFlattenedList pricingTables,
-            OpDataCollectorFlattenedList wipDeals)
+            OpDataCollectorFlattenedList wipDeals,
+            int custId)
         {
             OpDataCollectorFlattenedDictList data = new OpDataCollectorFlattenedDictList();
 
@@ -54,7 +55,7 @@ namespace Intel.MyDeals.BusinessLogic
             if (pricingTables != null && pricingTables.Any()) data[OpDataElementType.PricingTable] = pricingTables;
             if (wipDeals != null && wipDeals.Any()) data[OpDataElementType.WipDeals] = wipDeals;
 
-            return _dataCollectorLib.SavePackets(data);
+            return _dataCollectorLib.SavePackets(data, custId);
         }
 
     }

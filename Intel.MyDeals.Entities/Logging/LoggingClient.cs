@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 using Intel.Opaque;
 
 namespace Intel.MyDeals.Entities.Logging

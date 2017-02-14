@@ -55,7 +55,9 @@ namespace Intel.MyDeals.Controllers.API
         [HttpPost]
         public MyDealsData SavePricingStrategy(OpDataCollectorFlattenedList pricingStrategies)
         {
-            return SafeExecutor(() => _pricingStrategiesLib.SavePricingStrategy(pricingStrategies), 
+            //todo BECAUSE DB MADE US DO THIS
+            int custId = 914;
+            return SafeExecutor(() => _pricingStrategiesLib.SavePricingStrategy(pricingStrategies, custId), 
                 "Unable to save the Pricing Strategy"
             );
         }
@@ -66,11 +68,13 @@ namespace Intel.MyDeals.Controllers.API
         [HttpPost]
         public MyDealsData SaveFullPricingStrategy(OpDataCollectorFlattenedDictList fullpricingStrategies)
         {
-            // TODO replace when DB is ready
+            //todo BECAUSE DB MADE US DO THIS
+            int custId = 914;
             return SafeExecutor(() => _pricingStrategiesLib.SavePricingStrategy(
                 fullpricingStrategies.ContainsKey(OpDataElementType.PricingStrategy) ? fullpricingStrategies[OpDataElementType.PricingStrategy] : new OpDataCollectorFlattenedList(),
                 fullpricingStrategies.ContainsKey(OpDataElementType.PricingTable) ? fullpricingStrategies[OpDataElementType.PricingTable] : new OpDataCollectorFlattenedList(),
-                fullpricingStrategies.ContainsKey(OpDataElementType.WipDeals) ? fullpricingStrategies[OpDataElementType.WipDeals] : new OpDataCollectorFlattenedList())
+                fullpricingStrategies.ContainsKey(OpDataElementType.WipDeals) ? fullpricingStrategies[OpDataElementType.WipDeals] : new OpDataCollectorFlattenedList(),
+                custId)
                 , "Unable to save the Pricing Strategy"
             );
         }

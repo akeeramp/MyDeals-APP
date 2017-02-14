@@ -54,8 +54,10 @@ namespace Intel.MyDeals.Controllers.API
         [HttpPost]
         public MyDealsData SavePricingTable(OpDataCollectorFlattenedList pricingTables)
         {
+            //todo BECAUSE DB MADE US DO THIS
+            int custId = 914;
             return SafeExecutor(() => _pricingTablesLib
-                .SavePricingTable(pricingTables)
+                .SavePricingTable(pricingTables, custId)
                 , "Unable to save the Pricing Table"
             );
         }
@@ -65,9 +67,12 @@ namespace Intel.MyDeals.Controllers.API
         [HttpPost]
         public MyDealsData SaveFullPricingTable(OpDataCollectorFlattenedDictList fullpricingTables)
         {
+            //todo BECAUSE DB MADE US DO THIS
+            int custId = 914;
             return SafeExecutor(() => _pricingTablesLib.SavePricingTable(
                 fullpricingTables.ContainsKey(OpDataElementType.PricingTable) ? fullpricingTables[OpDataElementType.PricingTable] : new OpDataCollectorFlattenedList(),
-                fullpricingTables.ContainsKey(OpDataElementType.WipDeals) ? fullpricingTables[OpDataElementType.WipDeals] : new OpDataCollectorFlattenedList())
+                fullpricingTables.ContainsKey(OpDataElementType.WipDeals) ? fullpricingTables[OpDataElementType.WipDeals] : new OpDataCollectorFlattenedList(),
+                custId)
                 , "Unable to save the Pricing Table"
             );
         }

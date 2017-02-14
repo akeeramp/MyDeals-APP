@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using Intel.Opaque.DBAccess;
 
 namespace Intel.MyDeals.Entities
 {
@@ -721,122 +723,100 @@ namespace Intel.MyDeals.Entities
     /// at 9/19/2016 4:27:47 PM
     ///</summary>
 
+        /*
     [DataContract]
     public partial class DealTemplateDataGram
     {
-
-        [DataMember]
-        public Nullable<System.Guid> AGRMNT_GUID { set; get; }
-
-
         [DataMember]
         public Nullable<System.Int32> ATRB_ORDER { set; get; }
-
 
         [DataMember]
         public System.String ATRB_SCTN_CD { set; get; }
 
-
         [DataMember]
         public System.String ATRB_SCTN_DESC { set; get; }
-
 
         [DataMember]
         public Nullable<System.Int32> ATRB_SCTN_ORDER { set; get; }
 
-
         [DataMember]
         public Nullable<System.Int32> ATRB_SID { set; get; }
-
 
         [DataMember]
         public System.String ATRB_VAL_CHAR { set; get; }
 
-
         [DataMember]
         public System.String ATRB_VAL_CHAR_MAX { set; get; }
-
 
         [DataMember]
         public Nullable<System.DateTime> ATRB_VAL_DTM { set; get; }
 
-
         [DataMember]
         public Nullable<System.Int32> ATRB_VAL_INT { set; get; }
-
 
         [DataMember]
         public Nullable<System.Decimal> ATRB_VAL_MONEY { set; get; }
 
+        [DataMember]
+        public string ATRB_VAL { set; get; }
 
         [DataMember]
-        public System.String DEAL_ATRB_MTX_HASH { set; get; }
-
+        public System.String OBJ_ATRB_MTX_HASH { set; get; }
 
         [DataMember]
         public Nullable<System.Int32> DEAL_ID { set; get; }
 
-
         [DataMember]
         public Nullable<System.Int32> DEAL_NBR { set; get; }
 
-
         [DataMember]
-        public System.String DEAL_TYPE_CD { set; get; }
+        public System.String OJB_TYPE { set; get; }
 
+        public static List<DealTemplateDataGram> DealTemplateDataGramFromReader(SqlDataReader rdr){
+            // This helper method is template generated.
+            // Refer to that template for details to modify this code.
 
-        [DataMember]
-        public Nullable<System.Guid> PLI_GUID { set; get; }
+            var ret = new List<DealTemplateDataGram>();
+            int IDX_ATRB_ORDER = DB.GetReaderOrdinal(rdr, "ATRB_ORDER");
+            int IDX_ATRB_SCTN_CD = DB.GetReaderOrdinal(rdr, "ATRB_SCTN_CD");
+            int IDX_ATRB_SCTN_DESC = DB.GetReaderOrdinal(rdr, "ATRB_SCTN_DESC");
+            int IDX_ATRB_SCTN_ORDER = DB.GetReaderOrdinal(rdr, "ATRB_SCTN_ORDER");
+            int IDX_ATRB_SID = DB.GetReaderOrdinal(rdr, "ATRB_SID");
+            int IDX_ATRB_VAL_CHAR = DB.GetReaderOrdinal(rdr, "ATRB_VAL_CHAR");
+            int IDX_ATRB_VAL_CHAR_MAX = DB.GetReaderOrdinal(rdr, "ATRB_VAL_CHAR_MAX");
+            int IDX_ATRB_VAL_DTM = DB.GetReaderOrdinal(rdr, "ATRB_VAL_DTM");
+            int IDX_ATRB_VAL_INT = DB.GetReaderOrdinal(rdr, "ATRB_VAL_INT");
+            int IDX_ATRB_VAL_MONEY = DB.GetReaderOrdinal(rdr, "ATRB_VAL_MONEY");
+            int IDX_ATRB_VAL = DB.GetReaderOrdinal(rdr, "ATRB_VAL");
+            int IDX_OBJ_ATRB_MTX_HASH = DB.GetReaderOrdinal(rdr, "OBJ_ATRB_MTX_HASH");
+            int IDX_DEAL_ID = DB.GetReaderOrdinal(rdr, "DEAL_ID");
+            int IDX_DEAL_NBR = DB.GetReaderOrdinal(rdr, "DEAL_NBR");
+            int IDX_OBJ_TYPE = DB.GetReaderOrdinal(rdr, "OBJ_TYPE");
 
-
-        /*
-        private static List<DealTemplateDataGram> DealTemplateDataGramFromReader(SqlDataReader rdr){
-        // This helper method is template generated.
-        // Refer to that template for details to modify this code.
-
-        var ret = new List<DealTemplateDataGram>();
-        int IDX_AGRMNT_GUID = DB.GetReaderOrdinal(rdr, "AGRMNT_GUID");
-        int IDX_ATRB_ORDER = DB.GetReaderOrdinal(rdr, "ATRB_ORDER");
-        int IDX_ATRB_SCTN_CD = DB.GetReaderOrdinal(rdr, "ATRB_SCTN_CD");
-        int IDX_ATRB_SCTN_DESC = DB.GetReaderOrdinal(rdr, "ATRB_SCTN_DESC");
-        int IDX_ATRB_SCTN_ORDER = DB.GetReaderOrdinal(rdr, "ATRB_SCTN_ORDER");
-        int IDX_ATRB_SID = DB.GetReaderOrdinal(rdr, "ATRB_SID");
-        int IDX_ATRB_VAL_CHAR = DB.GetReaderOrdinal(rdr, "ATRB_VAL_CHAR");
-        int IDX_ATRB_VAL_CHAR_MAX = DB.GetReaderOrdinal(rdr, "ATRB_VAL_CHAR_MAX");
-        int IDX_ATRB_VAL_DTM = DB.GetReaderOrdinal(rdr, "ATRB_VAL_DTM");
-        int IDX_ATRB_VAL_INT = DB.GetReaderOrdinal(rdr, "ATRB_VAL_INT");
-        int IDX_ATRB_VAL_MONEY = DB.GetReaderOrdinal(rdr, "ATRB_VAL_MONEY");
-        int IDX_DEAL_ATRB_MTX_HASH = DB.GetReaderOrdinal(rdr, "DEAL_ATRB_MTX_HASH");
-        int IDX_DEAL_ID = DB.GetReaderOrdinal(rdr, "DEAL_ID");
-        int IDX_DEAL_NBR = DB.GetReaderOrdinal(rdr, "DEAL_NBR");
-        int IDX_DEAL_TYPE_CD = DB.GetReaderOrdinal(rdr, "DEAL_TYPE_CD");
-        int IDX_PLI_GUID = DB.GetReaderOrdinal(rdr, "PLI_GUID");
-
-        while (rdr.Read()){
-        ret.Add(new DealTemplateDataGram {
-        AGRMNT_GUID = (IDX_AGRMNT_GUID < 0 || rdr.IsDBNull(IDX_AGRMNT_GUID)) ? default(Nullable<System.Guid>) : rdr.GetFieldValue<Nullable<System.Guid>>(IDX_AGRMNT_GUID),
-        ATRB_ORDER = (IDX_ATRB_ORDER < 0 || rdr.IsDBNull(IDX_ATRB_ORDER)) ? default(Nullable<System.Int32>) : rdr.GetFieldValue<Nullable<System.Int32>>(IDX_ATRB_ORDER),
-        ATRB_SCTN_CD = (IDX_ATRB_SCTN_CD < 0 || rdr.IsDBNull(IDX_ATRB_SCTN_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_SCTN_CD),
-        ATRB_SCTN_DESC = (IDX_ATRB_SCTN_DESC < 0 || rdr.IsDBNull(IDX_ATRB_SCTN_DESC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_SCTN_DESC),
-        ATRB_SCTN_ORDER = (IDX_ATRB_SCTN_ORDER < 0 || rdr.IsDBNull(IDX_ATRB_SCTN_ORDER)) ? default(Nullable<System.Int32>) : rdr.GetFieldValue<Nullable<System.Int32>>(IDX_ATRB_SCTN_ORDER),
-        ATRB_SID = (IDX_ATRB_SID < 0 || rdr.IsDBNull(IDX_ATRB_SID)) ? default(Nullable<System.Int32>) : rdr.GetFieldValue<Nullable<System.Int32>>(IDX_ATRB_SID),
-        ATRB_VAL_CHAR = (IDX_ATRB_VAL_CHAR < 0 || rdr.IsDBNull(IDX_ATRB_VAL_CHAR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_VAL_CHAR),
-        ATRB_VAL_CHAR_MAX = (IDX_ATRB_VAL_CHAR_MAX < 0 || rdr.IsDBNull(IDX_ATRB_VAL_CHAR_MAX)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_VAL_CHAR_MAX),
-        ATRB_VAL_DTM = (IDX_ATRB_VAL_DTM < 0 || rdr.IsDBNull(IDX_ATRB_VAL_DTM)) ? default(Nullable<System.DateTime>) : rdr.GetFieldValue<Nullable<System.DateTime>>(IDX_ATRB_VAL_DTM),
-        ATRB_VAL_INT = (IDX_ATRB_VAL_INT < 0 || rdr.IsDBNull(IDX_ATRB_VAL_INT)) ? default(Nullable<System.Int32>) : rdr.GetFieldValue<Nullable<System.Int32>>(IDX_ATRB_VAL_INT),
-        ATRB_VAL_MONEY = (IDX_ATRB_VAL_MONEY < 0 || rdr.IsDBNull(IDX_ATRB_VAL_MONEY)) ? default(Nullable<System.Decimal>) : rdr.GetFieldValue<Nullable<System.Decimal>>(IDX_ATRB_VAL_MONEY),
-        DEAL_ATRB_MTX_HASH = (IDX_DEAL_ATRB_MTX_HASH < 0 || rdr.IsDBNull(IDX_DEAL_ATRB_MTX_HASH)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_ATRB_MTX_HASH),
-        DEAL_ID = (IDX_DEAL_ID < 0 || rdr.IsDBNull(IDX_DEAL_ID)) ? default(Nullable<System.Int32>) : rdr.GetFieldValue<Nullable<System.Int32>>(IDX_DEAL_ID),
-        DEAL_NBR = (IDX_DEAL_NBR < 0 || rdr.IsDBNull(IDX_DEAL_NBR)) ? default(Nullable<System.Int32>) : rdr.GetFieldValue<Nullable<System.Int32>>(IDX_DEAL_NBR),
-        DEAL_TYPE_CD = (IDX_DEAL_TYPE_CD < 0 || rdr.IsDBNull(IDX_DEAL_TYPE_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_TYPE_CD),
-        PLI_GUID = (IDX_PLI_GUID < 0 || rdr.IsDBNull(IDX_PLI_GUID)) ? default(Nullable<System.Guid>) : rdr.GetFieldValue<Nullable<System.Guid>>(IDX_PLI_GUID)
-        });
-        } // while
-        return ret;
+            while (rdr.Read()){
+                ret.Add(new DealTemplateDataGram {
+                ATRB_ORDER = (IDX_ATRB_ORDER < 0 || rdr.IsDBNull(IDX_ATRB_ORDER)) ? default(Nullable<System.Int32>) : rdr.GetFieldValue<Nullable<System.Int32>>(IDX_ATRB_ORDER),
+                ATRB_SCTN_CD = (IDX_ATRB_SCTN_CD < 0 || rdr.IsDBNull(IDX_ATRB_SCTN_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_SCTN_CD),
+                ATRB_SCTN_DESC = (IDX_ATRB_SCTN_DESC < 0 || rdr.IsDBNull(IDX_ATRB_SCTN_DESC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_SCTN_DESC),
+                ATRB_SCTN_ORDER = (IDX_ATRB_SCTN_ORDER < 0 || rdr.IsDBNull(IDX_ATRB_SCTN_ORDER)) ? default(Nullable<System.Int32>) : rdr.GetFieldValue<Nullable<System.Int32>>(IDX_ATRB_SCTN_ORDER),
+                ATRB_SID = (IDX_ATRB_SID < 0 || rdr.IsDBNull(IDX_ATRB_SID)) ? default(Nullable<System.Int32>) : rdr.GetFieldValue<Nullable<System.Int32>>(IDX_ATRB_SID),
+                ATRB_VAL_CHAR = (IDX_ATRB_VAL_CHAR < 0 || rdr.IsDBNull(IDX_ATRB_VAL_CHAR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_VAL_CHAR),
+                ATRB_VAL_CHAR_MAX = (IDX_ATRB_VAL_CHAR_MAX < 0 || rdr.IsDBNull(IDX_ATRB_VAL_CHAR_MAX)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_VAL_CHAR_MAX),
+                ATRB_VAL_DTM = (IDX_ATRB_VAL_DTM < 0 || rdr.IsDBNull(IDX_ATRB_VAL_DTM)) ? default(Nullable<System.DateTime>) : rdr.GetFieldValue<Nullable<System.DateTime>>(IDX_ATRB_VAL_DTM),
+                ATRB_VAL_INT = (IDX_ATRB_VAL_INT < 0 || rdr.IsDBNull(IDX_ATRB_VAL_INT)) ? default(Nullable<System.Int32>) : rdr.GetFieldValue<Nullable<System.Int32>>(IDX_ATRB_VAL_INT),
+                ATRB_VAL_MONEY = (IDX_ATRB_VAL_MONEY < 0 || rdr.IsDBNull(IDX_ATRB_VAL_MONEY)) ? default(Nullable<System.Decimal>) : rdr.GetFieldValue<Nullable<System.Decimal>>(IDX_ATRB_VAL_MONEY),
+                ATRB_VAL = (IDX_ATRB_VAL < 0 || rdr.IsDBNull(IDX_ATRB_VAL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_VAL),
+                OBJ_ATRB_MTX_HASH = (IDX_OBJ_ATRB_MTX_HASH < 0 || rdr.IsDBNull(IDX_OBJ_ATRB_MTX_HASH)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_ATRB_MTX_HASH),
+                DEAL_ID = (IDX_DEAL_ID < 0 || rdr.IsDBNull(IDX_DEAL_ID)) ? default(Nullable<System.Int32>) : rdr.GetFieldValue<Nullable<System.Int32>>(IDX_DEAL_ID),
+                DEAL_NBR = (IDX_DEAL_NBR < 0 || rdr.IsDBNull(IDX_DEAL_NBR)) ? default(Nullable<System.Int32>) : rdr.GetFieldValue<Nullable<System.Int32>>(IDX_DEAL_NBR),
+                OJB_TYPE = (IDX_OBJ_TYPE < 0 || rdr.IsDBNull(IDX_OBJ_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_TYPE)
+                });
+            } // while
+            return ret;
         }
-        */
 
     } // End of class DealTemplateDataGram
+    */
 
     ///<summary>
     /// Class created via template - Do Not Modify!
@@ -890,40 +870,38 @@ namespace Intel.MyDeals.Entities
         public System.Int16 YR_NBR { set; get; }
 
 
-        /*
-        private static List<CustomerCalendar> CustomerCalendarFromReader(SqlDataReader rdr){
-        // This helper method is template generated.
-        // Refer to that template for details to modify this code.
+        public static List<CustomerCalendar> CustomerCalendarFromReader(SqlDataReader rdr){
+            // This helper method is template generated.
+            // Refer to that template for details to modify this code.
 
-        var ret = new List<CustomerCalendar>();
-        int IDX_CUST_MBR_SID = DB.GetReaderOrdinal(rdr, "CUST_MBR_SID");
-        int IDX_CUST_NM = DB.GetReaderOrdinal(rdr, "CUST_NM");
-        int IDX_END_DT = DB.GetReaderOrdinal(rdr, "END_DT");
-        int IDX_PREV_END_DT = DB.GetReaderOrdinal(rdr, "PREV_END_DT");
-        int IDX_PREV_QTR_NBR = DB.GetReaderOrdinal(rdr, "PREV_QTR_NBR");
-        int IDX_PREV_START_DT = DB.GetReaderOrdinal(rdr, "PREV_START_DT");
-        int IDX_PREV_YR_NBR = DB.GetReaderOrdinal(rdr, "PREV_YR_NBR");
-        int IDX_QTR_NBR = DB.GetReaderOrdinal(rdr, "QTR_NBR");
-        int IDX_START_DT = DB.GetReaderOrdinal(rdr, "START_DT");
-        int IDX_YR_NBR = DB.GetReaderOrdinal(rdr, "YR_NBR");
+            var ret = new List<CustomerCalendar>();
+            int IDX_CUST_MBR_SID = DB.GetReaderOrdinal(rdr, "CUST_MBR_SID");
+            int IDX_CUST_NM = DB.GetReaderOrdinal(rdr, "CUST_NM");
+            int IDX_END_DT = DB.GetReaderOrdinal(rdr, "END_DT");
+            int IDX_PREV_END_DT = DB.GetReaderOrdinal(rdr, "PREV_END_DT");
+            int IDX_PREV_QTR_NBR = DB.GetReaderOrdinal(rdr, "PREV_QTR_NBR");
+            int IDX_PREV_START_DT = DB.GetReaderOrdinal(rdr, "PREV_START_DT");
+            int IDX_PREV_YR_NBR = DB.GetReaderOrdinal(rdr, "PREV_YR_NBR");
+            int IDX_QTR_NBR = DB.GetReaderOrdinal(rdr, "QTR_NBR");
+            int IDX_START_DT = DB.GetReaderOrdinal(rdr, "START_DT");
+            int IDX_YR_NBR = DB.GetReaderOrdinal(rdr, "YR_NBR");
 
-        while (rdr.Read()){
-        ret.Add(new CustomerCalendar {
-        CUST_MBR_SID = (IDX_CUST_MBR_SID < 0 || rdr.IsDBNull(IDX_CUST_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_MBR_SID),
-        CUST_NM = (IDX_CUST_NM < 0 || rdr.IsDBNull(IDX_CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_NM),
-        END_DT = (IDX_END_DT < 0 || rdr.IsDBNull(IDX_END_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_END_DT),
-        PREV_END_DT = (IDX_PREV_END_DT < 0 || rdr.IsDBNull(IDX_PREV_END_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_PREV_END_DT),
-        PREV_QTR_NBR = (IDX_PREV_QTR_NBR < 0 || rdr.IsDBNull(IDX_PREV_QTR_NBR)) ? default(System.Int16) : rdr.GetFieldValue<System.Int16>(IDX_PREV_QTR_NBR),
-        PREV_START_DT = (IDX_PREV_START_DT < 0 || rdr.IsDBNull(IDX_PREV_START_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_PREV_START_DT),
-        PREV_YR_NBR = (IDX_PREV_YR_NBR < 0 || rdr.IsDBNull(IDX_PREV_YR_NBR)) ? default(System.Int16) : rdr.GetFieldValue<System.Int16>(IDX_PREV_YR_NBR),
-        QTR_NBR = (IDX_QTR_NBR < 0 || rdr.IsDBNull(IDX_QTR_NBR)) ? default(System.Int16) : rdr.GetFieldValue<System.Int16>(IDX_QTR_NBR),
-        START_DT = (IDX_START_DT < 0 || rdr.IsDBNull(IDX_START_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_START_DT),
-        YR_NBR = (IDX_YR_NBR < 0 || rdr.IsDBNull(IDX_YR_NBR)) ? default(System.Int16) : rdr.GetFieldValue<System.Int16>(IDX_YR_NBR)
-        });
-        } // while
-        return ret;
+            while (rdr.Read()){
+                ret.Add(new CustomerCalendar {
+                CUST_MBR_SID = (IDX_CUST_MBR_SID < 0 || rdr.IsDBNull(IDX_CUST_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_MBR_SID),
+                CUST_NM = (IDX_CUST_NM < 0 || rdr.IsDBNull(IDX_CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_NM),
+                END_DT = (IDX_END_DT < 0 || rdr.IsDBNull(IDX_END_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_END_DT),
+                PREV_END_DT = (IDX_PREV_END_DT < 0 || rdr.IsDBNull(IDX_PREV_END_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_PREV_END_DT),
+                PREV_QTR_NBR = (IDX_PREV_QTR_NBR < 0 || rdr.IsDBNull(IDX_PREV_QTR_NBR)) ? default(System.Int16) : rdr.GetFieldValue<System.Int16>(IDX_PREV_QTR_NBR),
+                PREV_START_DT = (IDX_PREV_START_DT < 0 || rdr.IsDBNull(IDX_PREV_START_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_PREV_START_DT),
+                PREV_YR_NBR = (IDX_PREV_YR_NBR < 0 || rdr.IsDBNull(IDX_PREV_YR_NBR)) ? default(System.Int16) : rdr.GetFieldValue<System.Int16>(IDX_PREV_YR_NBR),
+                QTR_NBR = (IDX_QTR_NBR < 0 || rdr.IsDBNull(IDX_QTR_NBR)) ? default(System.Int16) : rdr.GetFieldValue<System.Int16>(IDX_QTR_NBR),
+                START_DT = (IDX_START_DT < 0 || rdr.IsDBNull(IDX_START_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_START_DT),
+                YR_NBR = (IDX_YR_NBR < 0 || rdr.IsDBNull(IDX_YR_NBR)) ? default(System.Int16) : rdr.GetFieldValue<System.Int16>(IDX_YR_NBR)
+                });
+            } // while
+            return ret;
         }
-        */
 
     } // End of class CustomerCalendar
 

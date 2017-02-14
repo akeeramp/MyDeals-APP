@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Intel.MyDeals.DataAccessLib;
+using Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals.dbo;
 using Intel.MyDeals.Entities;
 using Intel.Opaque;
 using Intel.Opaque.Data;
@@ -204,53 +205,53 @@ namespace Intel.MyDeals.DataLibrary
         /// <returns>Subset of master data.</returns>
         public Dictionary<int, MyDealsAttribute> GetAttributeMasterDataDictionary(IEnumerable<int> atrbSids)
         {
-            return new Dictionary<int, MyDealsAttribute>();
-////            var ret = new Dictionary<int, MyDealsAttribute>();
-////#if DEBUG
-////            OpLogPerf.Log("MetaDataLib.GetAttributeMasterDataDictionary: ExecuteReader");
-////#endif
-////            using (var rdr = DataAccess.ExecuteReader(new Procs.CDMS_MYDEALS.meta.PR_GET_ATRB_MSTR()))
-////            {
-////                var readerColumns = new Dictionary<int, string>();
-////                var ty = typeof(MyDealsAttribute);
+            //return new Dictionary<int, MyDealsAttribute>(); // Remove hard coded return of attributes.  This might break alot of things...
+            var ret = new Dictionary<int, MyDealsAttribute>();
+#if DEBUG
+            OpLogPerf.Log("MetaDataLib.GetAttributeMasterDataDictionary: ExecuteReader");
+#endif
+            using (var rdr = DataAccess.ExecuteReader(new PR_GET_ATRB_MSTR()))
+            {
+                var readerColumns = new Dictionary<int, string>();
+                var ty = typeof(MyDealsAttribute);
 
-////                OpLogPerf.Log("Getting Columns");
-////                for (int i = rdr.VisibleFieldCount - 1; i >= 0; --i)
-////                {
-////                    readerColumns[i] = (rdr.GetName(i).Trim().ToUpper());
-////                }
+                OpLogPerf.Log("Getting Columns");
+                for (int i = rdr.VisibleFieldCount - 1; i >= 0; --i)
+                {
+                    readerColumns[i] = (rdr.GetName(i).Trim().ToUpper());
+                }
 
-////                // Since DcsAttribute is primarily created dynamically based on meta.VW_ATRB_MSTR, synch properties based on names.
-////                var matchedColumns = (from rc in readerColumns
-////                                      join pn in ty.GetProperties().Where(pi => pi.CanRead && pi.CanWrite)
-////                                      on rc.Value equals pn.Name.Trim().ToUpper()
-////                                      select new
-////                                      {
-////                                          col_idx = rc.Key,
-////                                          prop_info = pn
-////                                      }).ToArray();
+                // Since DcsAttribute is primarily created dynamically based on meta.VW_ATRB_MSTR, synch properties based on names.
+                var matchedColumns = (from rc in readerColumns
+                                      join pn in ty.GetProperties().Where(pi => pi.CanRead && pi.CanWrite)
+                                      on rc.Value equals pn.Name.Trim().ToUpper()
+                                      select new
+                                      {
+                                          col_idx = rc.Key,
+                                          prop_info = pn
+                                      }).ToArray();
 
-////                OpLogPerf.Log("Getting Data");
-////                while (rdr.Read())
-////                {
-////                    var item = new MyDealsAttribute();
-////                    foreach (var mc in matchedColumns)
-////                    {
-////                        if (!rdr.IsDBNull(mc.col_idx))
-////                        {
-////                            mc.prop_info.SetValue(item, rdr[mc.col_idx]);
-////                        }
-////                    }
+                OpLogPerf.Log("Getting Data");
+                while (rdr.Read())
+                {
+                    var item = new MyDealsAttribute();
+                    foreach (var mc in matchedColumns)
+                    {
+                        if (!rdr.IsDBNull(mc.col_idx))
+                        {
+                            mc.prop_info.SetValue(item, rdr[mc.col_idx]);
+                        }
+                    }
 
-////                    ret[item.ATRB_SID] = item;
-////                }
+                    ret[item.ATRB_SID] = item;
+                }
 
-////#if DEBUG
-////                OpLogPerf.Log("End Getting Data");
-////#endif
-////            }
+#if DEBUG
+                OpLogPerf.Log("End Getting Data");
+#endif
+            }
 
-////            return ret;
+            return ret;
         }
 
         #region MasterAttribute
