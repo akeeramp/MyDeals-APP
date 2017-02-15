@@ -122,11 +122,17 @@
 	                        editable: false, nullable: true
 	                    },
 	                    WF_NAME: { validation: { required: true } },
-	                    ROLE_TIER_CD: { validation: { required: true } },
-	                    DEAL_TYPE_CD: { validation: { required: true } },
-	                    WFSTG_ACTN_CD: { validation: { required: true } },
+	                    ROLE_TIER_NM: { validation: { required: true } },
+	                    OBJ_TYPE: { validation: { required: true } },
+	                    OBJ_TYPE_SID: { validation: { required: false } },
+	                    DEAL_TYPE_CD: { validation: { required: false } },
+	                    DEAL_TYPE_SID: { validation: { required: false } },
+	                    WFSTG_ACTN_NM: { validation: { required: true } },
+	                    WFSTG_ACTN_SID: { validation: { required: true } },
 	                    WFSTG_CD_SRC: { validation: { required: true } },
+	                    WFSTG_MBR_SID: { validation: { required: true } },
 	                    WFSTG_CD_DEST: { validation: { required: true } },
+	                    WFSTG_DEST_MBR_SID: { validation: { required: true } },
 	                    TRKR_NBR_UPD: { type: "boolean" },
 	                    "_behaviors": { type: "object" }
 	                }
@@ -165,16 +171,17 @@
 
                   ],
                   title: " ",
-                  width: "5%"
+                  width: "7%"
               },
-              { field: "WF_SID", title: "Id", width: "5%" },
-              { field: "WF_NAME", title: "WF Name", width: "15%" },
-              { field: "ROLE_TIER_CD", title: "Role Tier", width: "10%", editor: roleTierCDDropDownEditor },
-              { field: "DEAL_TYPE_CD", title: "Deal Type", width: "10%", editor: dealTypeCDDropDownEditor },
-              { field: "WFSTG_ACTN_CD", title: "Action", width: "15%", editor: actionCDDropDownEditor },
-              { field: "WFSTG_CD_SRC", title: "Begin Stage", width: "15%", editor: srcCDDropDownEditor },
-              { field: "WFSTG_CD_DEST", title: "End Stage", width: "15%", editor: destCDDropDownEditor },
-              { field: "TRKR_NBR_UPD", title: "Update Tracker", width: "15%", template: "<div><span ng-if='! #= TRKR_NBR_UPD # ' class='icon-md intelicon-empty-box'></span><span ng-if=' #= TRKR_NBR_UPD # ' class='icon-md intelicon-filled-box'></span></div>" },
+              { field: "WF_SID", title: "Id", width: "8%" },
+              { field: "WF_NAME", title: "WF Name", width: "10%" },
+              { field: "ROLE_TIER_NM", title: "Role Tier", width: "12%", editor: roleTierCDDropDownEditor },
+              { field: "OBJ_TYPE_SID", template: " #= OBJ_TYPE # ", title: "Obj Type", width: "10%", editor: objTypeCDDropDownEditor },
+              { field: "DEAL_TYPE_SID", template: " #= DEAL_TYPE_CD # ", title: "Deal Type", width: "10%", editor: dealTypeCDDropDownEditor },
+              { field: "WFSTG_ACTN_SID", template: " #= WFSTG_ACTN_NM # ", title: "Action", width: "10%", editor: actionCDDropDownEditor },
+              { field: "WFSTG_MBR_SID", template: " #= WFSTG_CD_SRC # ", title: "Begin Stage", width: "10%", editor: srcCDDropDownEditor },              
+              { field: "WFSTG_DEST_MBR_SID", template: " #= WFSTG_CD_DEST # ", title: "End Stage", width: "10%", editor: destCDDropDownEditor },
+              { field: "TRKR_NBR_UPD", title: "Update Tracker", width: "12%", template: "<div><span ng-if='! #= TRKR_NBR_UPD # ' class='icon-md intelicon-empty-box'></span><span ng-if=' #= TRKR_NBR_UPD # ' class='icon-md intelicon-filled-box'></span></div>" },
 	        ]
 	    };
 
@@ -210,38 +217,86 @@
                 .kendoDropDownList({
                     optionLabel: "Select Role Tier",
                     autoBind: true,
-                    dataTextField: "Key",
-                    dataValueField: "Value",
+                    dataTextField: "Value",
+                    dataValueField: "Key",
                     dataSource:
                         {
                             data: wrokFlowAttibutes,
                             filter: [
-                                    { field: "ColumnName", operator: "eq", value: "ROLE_TIER_CD" }
+                                    { field: "COL_NM", operator: "eq", value: "ROLE_TIER_NM" }
 
                             ]
                         }
-
-
-
                 });
 	    }
 
-	    // Populate Deal Type DropDown
-	    function dealTypeCDDropDownEditor(container, options) {
-	        $('<input required name="' + options.field + '"/>')
+	    // Populate Obj Type DropDown
+	    function objTypeCDDropDownEditor(container, options) {
+	        $('<input id ="objTypeCDDropDownEditor" required name="' + options.field + '" />')
                 .appendTo(container)
                 .kendoDropDownList({
-                    optionLabel: "Select Deal Type",
+                    optionLabel: "Select Obj Type",
                     autoBind: true,
-                    dataTextField: "Key",
-                    dataValueField: "Value",
+                    valuePrimitive: true,
+                    dataTextField: "Value",
+                    dataValueField: "Key",
                     dataSource:
                         {
                             data: wrokFlowAttibutes,
                             filter: [
-                                    { field: "ColumnName", operator: "eq", value: "DEAL_TYPE_CD" }
+                                    { field: "COL_NM", operator: "eq", value: "OBJ_TYPE" }
+                            ]
+                        },
+                    change: function (e) {
+                        var valueText = this.text();                        
+                        if (valueText.toUpperCase() == 'CONTRACT' || valueText.toUpperCase() == 'PRICING STRATEGY' || valueText.toUpperCase() == 'PRICING TABLES')
+                        {
+                            $("#dealTypeCDDropDownEditor").kendoDropDownList({
+                                enable: false,
+
+                            });
+                            var dealTypeCDDropDownEditor = $("#dealTypeCDDropDownEditor").data("kendoDropDownList");
+                            dealTypeCDDropDownEditor.select(1);
+                        }
+                        else
+                        {
+                            var dealTypeCDDropDownEditor = $("#dealTypeCDDropDownEditor").data("kendoDropDownList");
+                            dealTypeCDDropDownEditor.enable(true);
+
+                            $("#dealTypeCDDropDownEditor").kendoDropDownList({
+                                dataSource: {data: wrokFlowAttibutes,
+                                    filter: [
+                                            { field: "ColumnName", operator: "eq", value: "DEAL_TYPE_CD" }
+                                    ]}
+                                    ,
+                                dataTextField: "Value",
+                                dataValueField: "Key",
+                                optionLabel: "Select Deal Type"
+                            });
+                            var dropdownlist = $("#dropdownlist").data("kendoDropDownList");
+                        }         
+                        // Use the value of the widget
+                    }
+                });
+	    }
+        
+	    // Populate Deal Type DropDown
+	    function dealTypeCDDropDownEditor(container, options) {
+	        $('<input id="dealTypeCDDropDownEditor" required name="' + options.field + '" />')
+                .appendTo(container)
+                .kendoDropDownList({
+                    optionLabel: "Select Deal Type",                    
+                    autoBind: true,
+                    dataTextField: "Value",
+                    dataValueField: "Key",
+                    dataSource:
+                        {
+                            data: wrokFlowAttibutes,
+                            filter: [
+                                    { field: "COL_NM", operator: "eq", value: "DEAL_TYPE_CD" }
                             ]
                         }
+
                 });
 	    }
 
@@ -252,12 +307,12 @@
                 .kendoDropDownList({
                     optionLabel: "Select Action",
                     autoBind: true,
-                    dataTextField: "Key",
-                    dataValueField: "Value",
+                    dataTextField: "Value",
+                    dataValueField: "Key",
                     dataSource: {
                         data: wrokFlowAttibutes,
                         filter: [
-                                { field: "ColumnName", operator: "eq", value: "WFSTG_ACTN_CD" }
+                                { field: "COL_NM", operator: "eq", value: "WFSTG_ACTN_NM" }
                         ]
                     }
                 });
@@ -270,30 +325,30 @@
                 .kendoDropDownList({
                     optionLabel: "Select Source",
                     autoBind: true,
-                    dataTextField: "Key",
-                    dataValueField: "Value",
+                    dataTextField: "Value",
+                    dataValueField: "Key",
                     dataSource: {
                         data: wrokFlowAttibutes,
                         filter: [
-                                { field: "ColumnName", operator: "eq", value: "WFSTG_CD_SRC_DEST" }
+                                { field: "COL_NM", operator: "eq", value: "WFSTG_CD_SRC_DEST" }
                         ]
-                    }
+                    }             
                 });
 	    }
 
 	    // Populate DEST DropDown
 	    function destCDDropDownEditor(container, options) {
-	        $('<input required name="' + options.field + '"/>')
+	        $('<input id="destCDDropDownEditor" required name="' + options.field + '"/>')
                 .appendTo(container)
                 .kendoDropDownList({
                     optionLabel: "Select Destination",
                     autoBind: true,
-                    dataTextField: "Key",
-                    dataValueField: "Value",
+                    dataTextField: "Value",
+                    dataValueField: "Key",
                     dataSource: {
                         data: wrokFlowAttibutes,
                         filter: [
-                                { field: "ColumnName", operator: "eq", value: "WFSTG_CD_SRC_DEST" }
+                                { field: "COL_NM", operator: "eq", value: "WFSTG_CD_SRC_DEST" }
                         ]
                     }
                 });
