@@ -125,6 +125,12 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "WorkFlowStg";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false)); 
 
+	// WorkFlow and WorkFlowStages Drop Down Values
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_WORKFL_DDL]");
+	ds.Tables[0].TableName = "WorkFlowAttribute";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+	
+
 	// Object Templates
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_GET_NEW_DEAL]");
 	ds.Tables[0].TableName = "ObjectTypeTemplate"; // ObjectTypeTemplate

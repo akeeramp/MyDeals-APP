@@ -111,7 +111,7 @@
     <Compile Include="Search\QuickSearchLib.cs" />
     <Compile Include="Security Attributes\SecurityAttributesLib.cs" />
     <Compile Include="UI Templates\UiTemplateLib.cs" />
-    <Compile Include="Workflows\WorkFlowLib.cs" />
+    <Compile Include="WorkFlow\WorkFlowLib.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DependencyResolver\Intel.MyDeals.DependencyResolver.csproj">

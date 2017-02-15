@@ -74,7 +74,8 @@
 				create: function (e) {
 				    workflowStagesService.SetWorkflowStages(e.data)
                         .then(function (response) {
-                        	e.success(response.data);
+                            e.success(response.data);
+                            $(".k-i-reload").trigger('click'); // Refresh the grid to get the Auto Increment ID from DB
                         	logger.success("New Workflow Stage successfully added.");
                         }, function (response) {
                             logger.error("Unable to insert Workflow Stage.", response, response.statusText);
@@ -88,25 +89,27 @@
 					fields: {
 					    WFSTG_MBR_SID: { editable: false, nullable: true },
 					    WFSTG_ATRB_SID: { validation: { required: true } },
-					    WFSTG_CD: { validation: { required: true } },
+					    WFSTG_NM: { validation: { required: true } },
 						WFSTG_DESC: { validation: { required: true } },
-						ROLE_TIER_CD: { validation: { required: true } },
+						ROLE_TIER_NM: { validation: { required: true } },
 						WFSTG_LOC: { validation: { required: true } },
 						WFSTG_ORD: { validation: { required: true } },
-						ALLOW_REDEAL: { validation: { required: true } },
+						ALLW_REDEAL: { validation: { required: true } },
 					}
 				}
 			},
 		});
 
 		vm.gridOptions = {
-			dataSource: vm.dataSource,
-			filterable: gridConstants.filterable,
-			sortable: true,
-			selectable: true,
-			resizable: true,
-			groupable: true,
-			toolbar: ["create"],
+		    dataSource: vm.dataSource,
+		    filterable: true,
+		    scrollable: true,
+		    sortable: true,
+		    navigatable: true,
+		    resizable: true,
+		    reorderable: true,
+		    columnMenu: true,
+		    toolbar: ["create"],
 			editable: { mode: "inline", confirmation: false },
 			edit: function (e) {
 			    var commandCell = e.container.find("td:first");
@@ -130,12 +133,12 @@
                     width: "6%"
                 },
               { field: "WFSTG_MBR_SID", title: "Id", width: "7%"},
-              { field: "WFSTG_CD", title: "Stage Code", width: "10%" },
+              { field: "WFSTG_NM", title: "Stage Code", width: "10%" },
               { field: "WFSTG_DESC", title: "Stage Description", width: "20%" },
-              { field: "ROLE_TIER_CD", title: "Stage Tier", width: "15%" , editor: roleTierCDDropDownEditor },
+              { field: "ROLE_TIER_NM", title: "Stage Tier", width: "15%", editor: roleTierCDDropDownEditor },
               { field: "WFSTG_LOC", title: "Location", width: "10%", editor: locationDropDownEditor },
               { field: "WFSTG_ORD", title: "Order By", width: "10%" },
-              { field: "ALLOW_REDEAL", title: "Allow Redeal", width: "10%" },
+              { field: "ALLW_REDEAL", title: "Allow Redeal", width: "10%" },
          
 			]
 		};
@@ -150,7 +153,7 @@
                     dataValueField: "Value",
                     dataSource:{
                                    data: WorkFlowStageAttribute,
-                                   filter: [{ field: "ColumnName", operator: "eq", value: "ROLE_TIER_CD" }]
+                                   filter: [{ field: "COL_NM", operator: "eq", value: "ROLE_TIER_NM" }]
                                }
                 });
 		}
@@ -167,7 +170,7 @@
                         {
                             data: WorkFlowStageAttribute,
                             filter: [
-                                    { field: "ColumnName", operator: "eq", value: "WFSTG_LOC" }
+                                    { field: "COL_NM", operator: "eq", value: "WFSTG_LOC" }
                             ]
                         }
                 });

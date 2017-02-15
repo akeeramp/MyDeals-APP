@@ -105,7 +105,7 @@
     <Compile Include="Security Attributes\OpSecurity.cs" />
     <Compile Include="Security Attributes\SecurityAttributesDataLib.cs" />
     <Compile Include="UI Templates\UiTemplateDataLib.cs" />
-    <Compile Include="Workflow\WorkflowDataLib.cs" />
+    <Compile Include="WorkFlow\WorkFlowDataLib.cs" />
     <Compile Include="_data\PricingTableData.cs" />
   </ItemGroup>
   <ItemGroup>

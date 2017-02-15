@@ -228,7 +228,7 @@ namespace Intel.MyDeals.DataLibrary
         {
             lock (LOCK_OBJECT ?? new object())
             {
-                return _getWorkFlowStages ?? (_getWorkFlowStages = new WorkflowDataLib().GetWorkFlowStages());
+                return _getWorkFlowStages ?? (_getWorkFlowStages = new WorkFlowDataLib().GetWorkFlowStages());
             }
         }
         private static List<WorkFlowStg> _getWorkFlowStages;
@@ -237,7 +237,7 @@ namespace Intel.MyDeals.DataLibrary
         {
             lock (LOCK_OBJECT ?? new object())
             {
-                return _getWorkFlowItems ?? (_getWorkFlowItems = new WorkflowDataLib().GetWorkFlowItems());
+                return _getWorkFlowItems ?? (_getWorkFlowItems = new WorkFlowDataLib().GetWorkFlowItems());
             }
         }
         private static List<WorkFlows> _getWorkFlowItems;
