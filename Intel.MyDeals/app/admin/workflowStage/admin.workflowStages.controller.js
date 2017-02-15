@@ -43,7 +43,7 @@
 				    workflowStagesService.UpdateWorkflowStages(e.data)
                         .then(function (response) {
                         	e.success(response.data);
-                        	logger.success("Workflow Stage was successfully updated.");
+                        	logger.success("Workflow Stage successfully updated.");
                         }, function (response) {
                             logger.error("Unable to update Workflow Stage.", response, response.statusText);
                         });

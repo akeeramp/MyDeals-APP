@@ -156,6 +156,13 @@
 	            pageSizes: gridConstants.pageSizes
 	        },
 	        edit: function (e) {
+	            var OBJ_TYPE = e.model["OBJ_TYPE"];
+	            if (OBJ_TYPE.toUpperCase() == 'CONTRACT' || OBJ_TYPE.toUpperCase() == 'PRICING STRATEGY' || OBJ_TYPE.toUpperCase() == 'PRICING TABLES') {
+	                $("#dealTypeCDDropDownEditor").kendoDropDownList({
+	                    enable: false,
+
+	                });
+	            }
 	            var commandCell = e.container.find("td:first");
 	            commandCell.html('<a class="k-grid-update" href="#"><span class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span class="k-icon k-i-cancel"></span></a>');
 	        },
@@ -175,8 +182,8 @@
               },
               { field: "WF_SID", title: "Id", width: "8%" },
               { field: "WF_NAME", title: "WF Name", width: "10%" },
-              { field: "ROLE_TIER_NM", title: "Role Tier", width: "12%", editor: roleTierCDDropDownEditor },
-              { field: "OBJ_TYPE_SID", template: " #= OBJ_TYPE # ", title: "Obj Type", width: "10%", editor: objTypeCDDropDownEditor },
+              { field: "ROLE_TIER_NM", title: "Role Tier", width: "10%", editor: roleTierCDDropDownEditor },
+              { field: "OBJ_TYPE_SID", template: " #= OBJ_TYPE # ", title: "Obj Type", width: "12%", editor: objTypeCDDropDownEditor },
               { field: "DEAL_TYPE_SID", template: " #= DEAL_TYPE_CD # ", title: "Deal Type", width: "10%", editor: dealTypeCDDropDownEditor },
               { field: "WFSTG_ACTN_SID", template: " #= WFSTG_ACTN_NM # ", title: "Action", width: "10%", editor: actionCDDropDownEditor },
               { field: "WFSTG_MBR_SID", template: " #= WFSTG_CD_SRC # ", title: "Begin Stage", width: "10%", editor: srcCDDropDownEditor },              
@@ -224,7 +231,6 @@
                             data: wrokFlowAttibutes,
                             filter: [
                                     { field: "COL_NM", operator: "eq", value: "ROLE_TIER_NM" }
-
                             ]
                         }
                 });
@@ -253,7 +259,6 @@
                         {
                             $("#dealTypeCDDropDownEditor").kendoDropDownList({
                                 enable: false,
-
                             });
                             var dealTypeCDDropDownEditor = $("#dealTypeCDDropDownEditor").data("kendoDropDownList");
                             dealTypeCDDropDownEditor.select(1);
@@ -266,7 +271,7 @@
                             $("#dealTypeCDDropDownEditor").kendoDropDownList({
                                 dataSource: {data: wrokFlowAttibutes,
                                     filter: [
-                                            { field: "ColumnName", operator: "eq", value: "DEAL_TYPE_CD" }
+                                            { field: "COL_NM", operator: "eq", value: "DEAL_TYPE_CD" }
                                     ]}
                                     ,
                                 dataTextField: "Value",
