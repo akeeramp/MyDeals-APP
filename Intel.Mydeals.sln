@@ -71,6 +71,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intel.MyDeals.DependencyRes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intel.MyDeals.IBusinessLogic", "Intel.MyDeals.IBusinessLogic\Intel.MyDeals.IBusinessLogic.csproj", "{A9AF9B92-17BA-4050-B5A7-F5F652AECDF9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intel.Mydeals.BusinessRules.Test", "Intel.Mydeals.BusinessRules.Test\Intel.Mydeals.BusinessRules.Test.csproj", "{8DEEFBA7-4CAF-481E-91CA-7EF7EDA69FB4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -199,6 +201,14 @@ Global
 		{A9AF9B92-17BA-4050-B5A7-F5F652AECDF9}.itt|Any CPU.Build.0 = Release|Any CPU
 		{A9AF9B92-17BA-4050-B5A7-F5F652AECDF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A9AF9B92-17BA-4050-B5A7-F5F652AECDF9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8DEEFBA7-4CAF-481E-91CA-7EF7EDA69FB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DEEFBA7-4CAF-481E-91CA-7EF7EDA69FB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DEEFBA7-4CAF-481E-91CA-7EF7EDA69FB4}.dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DEEFBA7-4CAF-481E-91CA-7EF7EDA69FB4}.dev|Any CPU.Build.0 = Debug|Any CPU
+		{8DEEFBA7-4CAF-481E-91CA-7EF7EDA69FB4}.itt|Any CPU.ActiveCfg = Release|Any CPU
+		{8DEEFBA7-4CAF-481E-91CA-7EF7EDA69FB4}.itt|Any CPU.Build.0 = Release|Any CPU
+		{8DEEFBA7-4CAF-481E-91CA-7EF7EDA69FB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DEEFBA7-4CAF-481E-91CA-7EF7EDA69FB4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -217,14 +227,15 @@ Global
 		{3E9B9F0A-9C92-404E-AFDF-75AD67AC76D8} = {3EE27FFE-7643-4D8E-A0D2-09D306204105}
 		{BBC3062A-64DD-4C91-BF41-24046A9F1009} = {D4550934-4B65-4F13-A51A-5873792838C1}
 		{A9AF9B92-17BA-4050-B5A7-F5F652AECDF9} = {DDE77E6E-C875-4373-AD6A-402E63A065EC}
+		{8DEEFBA7-4CAF-481E-91CA-7EF7EDA69FB4} = {ED7EFC47-D39F-4FB2-9C7D-63C201F66D01}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 16
+		SccNumberOfProjects = 17
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://tfs-fm-04.devtools.intel.com/tfs/defaultcollection
+		SccTeamFoundationServer = http://source.intel.com:8080/tfs/defaultcollection
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = Intel.MyDeals.DataAccessLib\\Intel.MyDeals.DataAccessLib.csproj
 		SccProjectTopLevelParentUniqueName1 = Intel.Mydeals.sln
@@ -284,5 +295,9 @@ Global
 		SccProjectTopLevelParentUniqueName15 = Intel.Mydeals.sln
 		SccProjectName15 = Intel.MyDeals.IDataLibraries
 		SccLocalPath15 = Intel.MyDeals.IDataLibraries
+		SccProjectUniqueName16 = Intel.Mydeals.BusinessRules.Test\\Intel.Mydeals.BusinessRules.Test.csproj
+		SccProjectTopLevelParentUniqueName16 = Intel.Mydeals.sln
+		SccProjectName16 = Intel.Mydeals.BusinessRules.Test
+		SccLocalPath16 = Intel.Mydeals.BusinessRules.Test
 	EndGlobalSection
 EndGlobal

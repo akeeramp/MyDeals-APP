@@ -919,7 +919,7 @@ namespace Intel.MyDeals.DataLibrary
                             ["dc_sid"] = 0,
                             ["OBJSET_TYPE"] = "",
                             ["TITLE"] = "",
-                            ["CUST_NM"] = "",
+                            ["CUST_MBR_SID"] = "",
                             ["START_DT"] = "",
                             ["END_DT"] = "",
                             ["CUST_ACCPT"] = "",
@@ -931,8 +931,8 @@ namespace Intel.MyDeals.DataLibrary
                                 ["isRequired"] = new Dictionary<string, dynamic>
                                 {
                                     ["TITLE"] = true, 
-                                    ["CUST_NM"] = true,
-                                    ["CUST_NM"] = true,
+                                    ["CUST_MBR_SID"] = true,
+                                    ["START_DT"] = true,
                                     ["END_DT"] = true
                                 },
                                 ["isError"] = new Dictionary<string, dynamic>(),

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Intel.Opaque;
+using Intel.Opaque.Data;
 
 namespace Intel.MyDeals.Entities
 {
@@ -20,13 +21,13 @@ namespace Intel.MyDeals.Entities
 
 
 
-        public string DefineBaseKey(ObjSetTypeCodes objSetTypeCd, string roleTypeCd, StageCodes wfStage, string actionCd, string atrbCd)
+        public string DefineBaseKey(OpDataElementType opDataElementType, OpRoleType opRoleType, string wfStage, string actionCd, string atrbCd)
         {
             const string delim = "_";
-            return string.Format("{1}{0}{2}{0}{3}{0}{4}{0}{5}", delim, objSetTypeCd, roleTypeCd, wfStage, actionCd, atrbCd);
+            return string.Format("{1}{0}{2}{0}{3}{0}{4}{0}{5}", delim, opDataElementType, opRoleType.RoleTypeCd, wfStage, actionCd, atrbCd);
         }
 
-        public bool ChkAtrbRules(ObjSetTypeCodes objSetTypeCd, string roleTypeCd, StageCodes wfStage, string actionCd, string atrbCd, Dictionary<string, bool> securityActionCache = null)
+        public bool ChkAtrbRules(OpDataElementType opDataElementType, OpRoleType opRoleType, string wfStage, string actionCd, string atrbCd, Dictionary<string, bool> securityActionCache = null)
         {
             if (string.IsNullOrEmpty(atrbCd)) return false;
 
@@ -35,7 +36,7 @@ namespace Intel.MyDeals.Entities
             if (securityActionCache == null) securityActionCache = new Dictionary<string, bool>();
 
             // Look for cache first
-            string secBaseKey = DefineBaseKey(objSetTypeCd, roleTypeCd, wfStage, actionCd, atrbCd);
+            string secBaseKey = DefineBaseKey(opDataElementType, opRoleType, wfStage, actionCd, atrbCd);
             if (securityActionCache.ContainsKey(secBaseKey)) return securityActionCache[secBaseKey];
 
             SecurityAction sa = (from el in SecurityActions
@@ -52,8 +53,8 @@ namespace Intel.MyDeals.Entities
             IEnumerable<string> localSecurityMasks =
                 (from el in SecurityMasks
                  where (el.ACTN_CD == actionCd || el.ACTN_CD == null)
-                       && (el.OBJ_TYPE == objSetTypeCd.ToString() || el.OBJ_TYPE == null)
-                       && (el.ROLE_TYPE_CD == roleTypeCd || el.ROLE_TYPE_CD == null)
+                       && (el.OBJ_TYPE == opDataElementType.ToString() || el.OBJ_TYPE == null)
+                       && (el.ROLE_TYPE_CD == opRoleType.RoleTypeCd || el.ROLE_TYPE_CD == null)
                        && (el.WFSTG_CD == wfStage.ToString() || el.WFSTG_CD == null)
                  select el.PERMISSION_MASK);
 

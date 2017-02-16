@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Intel.Opaque.Data;
 
@@ -176,6 +177,35 @@ namespace Intel.MyDeals.Entities
                 });
             }
 
+        }
+
+        public static bool HasTracker(this OpDataCollector dc)
+        {
+            var trackers = dc.GetDataElementsWhere(EN.ATRB.TRKR_NBR, d => d.AtrbValue.ToString() != string.Empty);
+            return trackers != null && trackers.Any();
+        }
+
+        public static void ApplySecurityAttributes(this OpDataCollector dc, 
+            string atrbAction, 
+            SecurityWrapper securityWrapper, 
+            string[] excludeList = null, 
+            Dictionary<string, bool> securityActionCache = null)
+        {
+            OpDataElementType dcType = (OpDataElementType)Enum.Parse(typeof(OpDataElementType), dc.DcType);
+            string stg = dc.GetDataElementValue("DEAL_STG_CD");
+            if (excludeList == null) excludeList = new string[] { };
+
+            // For each element, apply metadata rules
+            foreach (OpDataElement de in dc.DataElements)
+            {
+                de.IsReadOnly = !excludeList.Contains(de.AtrbCd) && securityWrapper.ChkAtrbRules(
+                    dcType,
+                    OpUserStack.MyOpUserToken.Role,
+                    stg,
+                    atrbAction,
+                    de.AtrbCd,
+                    securityActionCache);
+            }
         }
     }
 }

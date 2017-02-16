@@ -44,6 +44,7 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetUpperContract/{id}")]
         public OpDataCollectorFlattenedList GetUpperContract(int id)
         {
+            // TODO make this only pull single dim Pricing Tables.  For now we will pull the entire table and take the performance hit
             return SafeExecutor(() => _contractsLib
                 .GetContract(id, new List<OpDataElementType>
                 {
@@ -71,12 +72,10 @@ namespace Intel.MyDeals.Controllers.API
 
 
         [Authorize]
-        [Route("SaveContract")]
+        [Route("SaveContract/{custId}")]
         [HttpPost]
-        public MyDealsData SaveContract(OpDataCollectorFlattenedList contracts)
+        public MyDealsData SaveContract(int custId, OpDataCollectorFlattenedList contracts)
         {
-            //todo BECAUSE DB MADE US DO THIS
-            int custId = 914;
             return SafeExecutor(() => _contractsLib
                 .SaveContract(contracts, custId)
                 , "Unable to save the Contract"
@@ -85,12 +84,10 @@ namespace Intel.MyDeals.Controllers.API
 
 
         [Authorize]
-        [Route("SaveFullContract")]
+        [Route("SaveFullContract/{custId}")]
         [HttpPost]
-        public MyDealsData SaveFullContract(OpDataCollectorFlattenedDictList fullContracts)
+        public MyDealsData SaveFullContract(int custId, OpDataCollectorFlattenedDictList fullContracts)
         {
-            //todo BECAUSE DB MADE US DO THIS
-            int custId = 914;
             return SafeExecutor(() => _contractsLib.SaveContract(
                 fullContracts.ContainsKey(OpDataElementType.Contract) ? fullContracts[OpDataElementType.Contract] : new OpDataCollectorFlattenedList(),
                 fullContracts.ContainsKey(OpDataElementType.PricingStrategy) ? fullContracts[OpDataElementType.PricingStrategy] : new OpDataCollectorFlattenedList(),
@@ -103,12 +100,16 @@ namespace Intel.MyDeals.Controllers.API
 
 
         [Authorize]
-        [Route("SaveContractAndStrategy")]
+        [Route("SaveContractAndStrategy/{custId}")]
         [HttpPost]
-        public MyDealsData SaveContractAndStrategy(ContractTransferPacket contractAndStrategy)
+        public MyDealsData SaveContractAndStrategy(int custId, ContractTransferPacket contractAndStrategy)
         {
-            // TODO save the data
-            return SafeExecutor(() => new MyDealsData()
+            return SafeExecutor(() => _contractsLib.SaveContract(
+                contractAndStrategy.Contract,
+                contractAndStrategy.PricingStrategy,
+                contractAndStrategy.PricingTable,
+                contractAndStrategy.WipDeals,
+                custId)
                 , "Unable to save the Contract"
             );
         }

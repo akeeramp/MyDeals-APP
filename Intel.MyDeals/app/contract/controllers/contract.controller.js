@@ -6,7 +6,6 @@ ContractController.$inject = ['$scope', '$state', 'contractData', 'templateData'
 
 function ContractController($scope, $state, contractData, templateData, objsetService, templatesService, logger, $uibModal, $timeout, $window, $location, $rootScope) {
 
-
     // store template information
     //
     $scope.templates = $scope.templates || templateData.data;
@@ -282,7 +281,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         var contractData = $scope._dirtyContractOnly ? [$scope.contractData] : [];
         var curPricingTableData = $scope.curPricingTable.dc_id === undefined ? [] : [$scope.curPricingTable];
 
-        objsetService.updateContractAndCurStrategy(contractData, curPricingTableData, sData, gData, source).then(
+        objsetService.updateContractAndCurStrategy($scope.getCustId(), contractData, curPricingTableData, sData, gData, source).then(
             function (data) {
                 $scope.resetDirty();
                 logger.success("Saved the contract", $scope.contractData, "Save Sucessful");
@@ -290,7 +289,6 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
                 if (toState !== undefined) $state.go(toState.name, toParams);
             },
             function (result) {
-                debugger;
                 logger.error("Could not save the contract.", response, response.statusText);
                 topbar.hide();
             }
@@ -299,6 +297,9 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
     $scope.saveEntireContract = function () {
         if (!$scope._dirty) return;
         $scope.saveEntireContractBase($state.current.name);
+    }
+    $scope.getCustId = function () {
+        return $scope.contractData['CUST_MBR_SID'];
     }
     $scope.saveContract = function () {
         topbar.show();
@@ -310,17 +311,24 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         if (ct.dc_id <= 0) ct.dc_id = $scope.uid--;
 
         // Add to DB first... then add to screen
-        objsetService.createContract(ct).then(
+        objsetService.createContract($scope.getCustId(), ct).then(
             function (data) {
-
                 // TODO need to handle exception/error here... right now we do not read response for pass/fail
                 // let's fake getting a real deal # if it is a new contract
-                if (ct.dc_id <= 0) ct.dc_id = -ct.dc_id;
+                if (ct.dc_id <= 0) {
+                    for (var a = 0; a < data.data.Contract.Actions.length; a++) {
+                        var action = data.data.Contract.Actions[a];
+                        if (action.Action === "ID_CHANGE" && action.dc_id === ct.cd_id) {
+                            ct.dc_id = action.AltID;
+                        }
+                    }
+                }
 
                 logger.success("Saved the contract", ct, "Save Sucessful");
                 topbar.hide();
 
                 // load the screen
+                $scope._dirty = false; // don't want to kick of listeners
                 $state.go('contract.manager', { cid: ct.dc_id });
             },
             function (result) {
@@ -344,7 +352,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         // Check required
         angular.forEach($scope.contractData,
             function (value, key) {
-                if (key[0] !== '_' && !Array.isArray(value) && typeof(value) !== "object" && (!isNaN(value) || value.trim() === "") && ct._behaviors.isRequired[key] === true) {
+                if (key[0] !== '_' && value !== undefined && value !== null && !Array.isArray(value) && typeof (value) !== "object" && (typeof(value) === "string" && value.trim() === "") && ct._behaviors.isRequired[key] === true) {
                     ct._behaviors.validMsg[key] = "* field is required";
                     ct._behaviors.isError[key] = true;
                     isValid = false;
@@ -373,8 +381,9 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         ps.TITLE = $scope.newStrategy.TITLE;
 
         // Add to DB first... then add to screen
-        objsetService.createPricingStrategy(ps).then(
+        objsetService.createPricingStrategy($scope.getCustId(), ps).then(
             function (data) {
+                debugger;
                 // TODO need to handle exception/error here... right now we do not read response for pass/fail
                 // let's fake getting a real deal #
                 ps.dc_id = -ps.dc_id;
@@ -434,9 +443,10 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         pt._defaultAtrbs = $scope.newPricingTable._defaultAtrbs;
 
         // Add to DB first... then add to screen
-        objsetService.createPricingTable(pt).then(
+        objsetService.createPricingTable($scope.getCustId(), pt).then(
             function (data) {
 
+                debugger;
                 // TODO need to handle exception/error here... right now we do not read response for pass/fail
                 // let's fake getting a real deal #
                 pt.dc_id = -pt.dc_id;

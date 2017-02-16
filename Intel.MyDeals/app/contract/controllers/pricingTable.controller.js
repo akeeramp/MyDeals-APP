@@ -26,7 +26,8 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
     //
     if (root.curPricingTableId !== $stateParams.pid) {
         root.curPricingTableId = $stateParams.pid;
-        root.curPricingTable = util.findInArray(root.curPricingStrategy.PricingTable, root.curPricingTableId);
+        if (root.curPricingStrategy.PricingTable !== undefined)
+            root.curPricingTable = util.findInArray(root.curPricingStrategy.PricingTable, root.curPricingTableId);
     }
     if (root.curPricingTable === null) {
         logger.error("Unable to locate Pricing Table " + $stateParams.pid);
@@ -36,11 +37,13 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
     $scope.$parent.$parent.spreadNeedsInitialization = true;
     $scope.getColumns = function (ptTemplate) {
         var cols = [];
-        angular.forEach(ptTemplate.columns, function (value, key) {
-            var col = {};
-            if (ptTemplate.columns[key].width) col.width = ptTemplate.columns[key].width;
-            cols.push(col);
-        });
+        if (ptTemplate !== undefined && ptTemplate !== null) {
+            angular.forEach(ptTemplate.columns, function (value, key) {
+                var col = {};
+                if (ptTemplate.columns[key].width) col.width = ptTemplate.columns[key].width;
+                cols.push(col);
+            });
+        }
         return cols;
     }
 

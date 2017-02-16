@@ -96,6 +96,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_CUST_LVL_SID = DB.GetReaderOrdinal(rdr, "CUST_LVL_SID");
                     int IDX_CUST_NM = DB.GetReaderOrdinal(rdr, "CUST_NM");
                     int IDX_CUST_NM_SID = DB.GetReaderOrdinal(rdr, "CUST_NM_SID");
+                    int IDX_CUST_MBR_SID = DB.GetReaderOrdinal(rdr, "CUST_MBR_SID");
                     int IDX_CUST_TYPE = DB.GetReaderOrdinal(rdr, "CUST_TYPE");
                     int IDX_DEAL_FLG = DB.GetReaderOrdinal(rdr, "DEAL_FLG");
                     int IDX_HOSTED_GEO = DB.GetReaderOrdinal(rdr, "HOSTED_GEO");
@@ -115,6 +116,7 @@ namespace Intel.MyDeals.DataLibrary
                             CUST_LVL_SID = (IDX_CUST_LVL_SID < 0 || rdr.IsDBNull(IDX_CUST_LVL_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_LVL_SID),
                             CUST_NM = (IDX_CUST_NM < 0 || rdr.IsDBNull(IDX_CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_NM),
                             CUST_NM_SID = (IDX_CUST_NM_SID < 0 || rdr.IsDBNull(IDX_CUST_NM_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_NM_SID),
+                            CUST_MBR_SID = (IDX_CUST_MBR_SID < 0 || rdr.IsDBNull(IDX_CUST_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_MBR_SID),
                             CUST_TYPE = (IDX_CUST_TYPE < 0 || rdr.IsDBNull(IDX_CUST_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_TYPE),
                             DEAL_FLG = (IDX_DEAL_FLG < 0 || rdr.IsDBNull(IDX_DEAL_FLG)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_FLG),
                             HOSTED_GEO = (IDX_HOSTED_GEO < 0 || rdr.IsDBNull(IDX_HOSTED_GEO)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_HOSTED_GEO),

@@ -37,14 +37,14 @@ function objsetService($http, dataService, logger, $q) {
 
     // #### CONTRACT CRUD ####
 
-    function createContract(ct) {
-        return dataService.post(apiBaseContractUrl + 'SaveContract/', [ct]);
+    function createContract(custId, ct) {
+        return dataService.post(apiBaseContractUrl + 'SaveContract/' + custId, [ct]);
     }
     function readContract(id) {
         return dataService.get(apiBaseContractUrl + 'GetUpperContract/' + id);
     }
-    function updateContract(ct) {
-        return dataService.post(apiBaseContractUrl + 'UpdateContract/', ct);
+    function updateContract(custId, ct) {
+        return dataService.post(apiBaseContractUrl + 'UpdateContract/' + custId, ct);
     }
     function deleteContract(id) {
         return dataService.get(apiBaseContractUrl + 'DeleteContract/' + id);
@@ -53,14 +53,14 @@ function objsetService($http, dataService, logger, $q) {
 
     // #### PRICING STRATEGY CRUD ####
 
-    function createPricingStrategy(ps) {
-        return dataService.post(apiBasePricingStrategyUrl + 'SavePricingStrategy/', [ps]);
+    function createPricingStrategy(custId, ps) {
+        return dataService.post(apiBasePricingStrategyUrl + 'SavePricingStrategy/' + custId, [ps]);
     }
     function readPricingStrategy(id) {
         return dataService.get(apiBasePricingStrategyUrl + 'GetContract/' + id);
     }
-    function updatePricingStrategy(ps) {
-        return dataService.post(apiBasePricingStrategyUrl + 'UpdateContract/', [ps]);
+    function updatePricingStrategy(custId, ps) {
+        return dataService.post(apiBasePricingStrategyUrl + 'UpdateContract/' + custId, [ps]);
     }
     function deletePricingStrategy(id) {
         return dataService.get(apiBasePricingStrategyUrl + 'DeleteContract/' + id);
@@ -69,8 +69,8 @@ function objsetService($http, dataService, logger, $q) {
 
     // #### PRICING TABLE CRUD ####
 
-    function createPricingTable(ps) {
-        return dataService.post(apiBasePricingTableUrl + 'SavePricingTable/', [ps]);
+    function createPricingTable(custId, ps) {
+        return dataService.post(apiBasePricingTableUrl + 'SavePricingTable/' + custId, [ps]);
     }
     function readPricingTable(id) {
         // TODO finallize service call.  this is still in progress so for now still using the hard codded structure
@@ -308,8 +308,8 @@ function objsetService($http, dataService, logger, $q) {
             ]
         };
     }
-    function updatePricingTable(ps) {
-        return dataService.post(apiBasePricingTableUrl + 'UpdateContract/', [ps]);
+    function updatePricingTable(custId, ps) {
+        return dataService.post(apiBasePricingTableUrl + 'UpdateContract/' + custId, [ps]);
     }
     function deletePricingTable(id) {
         return dataService.get(apiBasePricingTableUrl + 'DeletePricingTable/' + id);
@@ -318,7 +318,7 @@ function objsetService($http, dataService, logger, $q) {
 
     // #### CONTRACT CRUD ####
 
-    function updateContractAndCurStrategy(ct, pt, sData, gData, source) {
+    function updateContractAndCurStrategy(custId, ct, pt, sData, gData, source) {
         // Contract is Contract + Pricing Strategies + Pricing Tables (Single dim only) in heierarchial format
         // sData is the raw spreadsheet data
         // gData is the raw grid data
@@ -326,15 +326,35 @@ function objsetService($http, dataService, logger, $q) {
         // combine single dim current pt (pricing table) with 2 dim (sData) data
         if (pt.length > 0) pt["_MultiDim"] = sData;
 
-        var data = {
-            "Contract": ct,
-            "PricingTable": pt,
-            "WipDeals": gData === undefined ? [] : gData,
-            "EventSource": source,
-            "CustId": 914
+        var modCt = [];
+        var modPs = [];
+
+        for (var c = 0; c < ct.length; c++) {
+            var mCt = {};
+            Object.keys(ct[c]).forEach(function (key, index) {
+                if (key[0] !== '_' && key !== "Customer" && key !== "PricingStrategy") mCt[key] = this[key];
+            }, ct[c]);
+            modCt.push(mCt);
+
+            var item = ct[c]["PricingStrategy"];
+            for (var p = 0; p < item.length; p++) {
+                var mPs = {};
+                Object.keys(item[p]).forEach(function (key, index) {
+                    if (key[0] !== '_' && key !== "PricingTable") mPs[key] = this[key];
+                }, item[p]);
+                modPs.push(mPs);
+            }
         }
 
-        return dataService.post(apiBaseContractUrl + "SaveContractAndStrategy", data);
+        var data = {
+            "Contract": modCt,
+            "PricingStrategy": modPs,
+            "PricingTable": pt,
+            "WipDeals": gData === undefined ? [] : gData,
+            "EventSource": source
+        }
+
+        return dataService.post(apiBaseContractUrl + "SaveContractAndStrategy/" + custId, data);
     }
 
 }
