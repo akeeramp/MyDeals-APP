@@ -13,7 +13,6 @@ namespace Intel.MyDeals.BusinessLogic
 {
     public static class OpDataCollectorExtensions
     {
-
         public static MyDealsActionItem GetObjsetActions(this OpDataCollector dc)
         {
             return new MyDealsActionItem();
@@ -31,7 +30,6 @@ namespace Intel.MyDeals.BusinessLogic
 
             ////string stage = dc.GetDataElementValue(AttributeCodes.DEAL_STG_CD);
             ////string dealTypeSid = dc.GetDataElementValue(AttributeCodes.DEAL_TYPE_CD_SID);
-
 
             ////string dealType = DataCollections.GetAttributeData().MasterDataLookups
             ////    .Where(m => m.AtrbCd == AttributeCodes.DEAL_TYPE_CD_SID && m.AtrbItemId.ToString() == dealTypeSid)
@@ -122,8 +120,19 @@ namespace Intel.MyDeals.BusinessLogic
             OpDataElementUITemplates templateSource = DataCollections.GetOpDataElementUITemplates();
             if (!templateSource.ContainsKey(dc.DcType))
             {
+                OpMsg opMsg = new OpMsg()
+                {
+                    Message = "Missing Deal Type",
+                    MsgType = OpMsg.MessageType.Warning, //Not sure about this warning or error ?
+                    KeyIdentifiers = new[] { dc.DcID, dc.DcParentSID }
+                };
+
                 // no deal type ... might be an orphan deal
-                dc.Message = "Missing Deal Type";
+                var opMsgQueue = new OpMsgQueue { Messages = new List<OpMsg>() };
+                opMsgQueue.Messages.Add(opMsg);
+
+                dc.Message = opMsgQueue;
+
                 return;
             }
 
@@ -165,7 +174,6 @@ namespace Intel.MyDeals.BusinessLogic
             // remove items from the source that do not exist in the template -> need to prevent bringing in unsupported items
             IEnumerable<string> allTemplateCds = templateSource.Select(t => t.AtrbCd).Distinct();
             dc.DataElements.RemoveAll(d => !allTemplateCds.Contains(d.AtrbCd));
-
         }
 
         public static OpMsgQueue MergeDictionary(this OpDataCollector dc, OpDataCollectorFlattenedItem items)
@@ -225,7 +233,6 @@ namespace Intel.MyDeals.BusinessLogic
             Dictionary<int, string> prdMaps,
             MyDealsData myDealsData)
         {
-
             dc.EnsureDcType(attrCol, opType);
 
             // TODO see if we can get rid of this
@@ -354,7 +361,6 @@ namespace Intel.MyDeals.BusinessLogic
 
             return dealItem;
         }
-
 
         public static string DisplayDealId(this OpDataCollector dc)
         {
