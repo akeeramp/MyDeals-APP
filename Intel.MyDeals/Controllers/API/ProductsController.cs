@@ -273,5 +273,44 @@ namespace Intel.MyDeals.Controllers.API
                 throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
             }
         }
+
+        [Authorize]
+        [Route("GetProductsFromAlias")]
+        public IEnumerable<ProductAlias> GetProductsFromAlias()     //Get all Product with Alias from ProductAlias
+        {
+            return SafeExecutor(() => _productsLib.GetProductsFromAlias()
+                , $"Unable to get {"Product Alias"}"
+             );
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("SetProductAlias")]
+        public IEnumerable<ProductAlias> CreateProductAlias(ProductAlias data)   // Insert the record in ProductAlias
+        {
+            return SafeExecutor(() => _productsLib.SetProductAlias(CrudModes.Insert, data)
+                  , $"Unable to Create {"Product Alias"}"
+           );
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("UpdateProductAlias")]
+        public IEnumerable<ProductAlias> UpdateProductAlias(ProductAlias data)  // Update the record from ProductAlias
+        {
+            return SafeExecutor(() => _productsLib.SetProductAlias(CrudModes.Update, data)
+            , $"Unable to Update {"Product Alias"}"
+         );
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("DeleteProductAlias")]
+        public IEnumerable<ProductAlias> DeleteProductAlias(ProductAlias data)  //Delete the record from ProductAlias
+        {
+            return SafeExecutor(() => _productsLib.SetProductAlias(CrudModes.Delete, data)
+                , $"Unable to Delete {"Product Alias"}"
+             );
+        }
     }
 }

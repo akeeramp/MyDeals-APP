@@ -84,5 +84,90 @@ namespace Intel.MyDeals.DataLibrary
             }
             return ret;
         }
+
+        /// <summary>
+        /// To Insert, Update, Delete the Products and Alias in ProductAlias
+        /// </summary>
+        /// <input type="CrudModes">To pass the command like Select,Insert, Update, Delete</input>
+        /// <input Type="ProductAlias">Product alias data</input>
+        /// <returns type="List<ProductAlias>">List of affected rows</returns>
+        public List<ProductAlias> SetProductAlias(CrudModes mode, ProductAlias data)
+        {
+            var ret = new List<ProductAlias>();
+            using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_MYDL_UPD_PRD_ALIAS()
+            {
+                IDSID = Utils.ThreadUser,
+                MODE = mode.ToString().ToUpper(),
+                PRD_ALS_NM = data.PRD_ALS_NM,
+                PRD_ALS_SID = data.PRD_ALS_SID,
+                PRD_NM = data.PRD_NM
+
+            }))
+            {
+                int IDX_CHG_DTM = DB.GetReaderOrdinal(rdr, "CHG_DTM");
+                int IDX_CHG_EMP_WWID = DB.GetReaderOrdinal(rdr, "CHG_EMP_WWID");
+                int IDX_CRE_DTM = DB.GetReaderOrdinal(rdr, "CRE_DTM");
+                int IDX_CRE_EMP_WWID = DB.GetReaderOrdinal(rdr, "CRE_EMP_WWID");
+                int IDX_PRD_ALS_NM = DB.GetReaderOrdinal(rdr, "PRD_ALS_NM");
+                int IDX_PRD_ALS_SID = DB.GetReaderOrdinal(rdr, "PRD_ALS_SID");
+                int IDX_PRD_NM = DB.GetReaderOrdinal(rdr, "PRD_NM");
+
+                while (rdr.Read())
+                {
+                    ret.Add(new ProductAlias
+                    {
+                        CHG_DTM = (IDX_CHG_DTM < 0 || rdr.IsDBNull(IDX_CHG_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CHG_DTM),
+                        CHG_EMP_WWID = (IDX_CHG_EMP_WWID < 0 || rdr.IsDBNull(IDX_CHG_EMP_WWID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CHG_EMP_WWID),
+                        CRE_DTM = (IDX_CRE_DTM < 0 || rdr.IsDBNull(IDX_CRE_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CRE_DTM),
+                        CRE_EMP_WWID = (IDX_CRE_EMP_WWID < 0 || rdr.IsDBNull(IDX_CRE_EMP_WWID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CRE_EMP_WWID),
+                        PRD_ALS_NM = (IDX_PRD_ALS_NM < 0 || rdr.IsDBNull(IDX_PRD_ALS_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_ALS_NM),
+                        PRD_ALS_SID = (IDX_PRD_ALS_SID < 0 || rdr.IsDBNull(IDX_PRD_ALS_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRD_ALS_SID),
+                        PRD_NM = (IDX_PRD_NM < 0 || rdr.IsDBNull(IDX_PRD_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_NM)
+                    });
+                }
+                return ret;
+
+            }
+        }
+
+        /// <summary>
+        /// Get All products and alias from ProductAlias 
+        /// </summary>
+        /// <returns type="List<ProductAlias>">List of All Products and Alias</returns>
+        public List<ProductAlias> GetProductsFromAlias()
+        {
+            var cmd = new Procs.dbo.PR_MYDL_UPD_PRD_ALIAS
+            {
+                IDSID = Utils.ThreadUser,
+                MODE = CrudModes.Select.ToString()
+            };
+            var ret = new List<ProductAlias>();
+
+            using (var rdr = DataAccess.ExecuteReader(cmd))
+            {
+                int IDX_CHG_DTM = DB.GetReaderOrdinal(rdr, "CHG_DTM");
+                int IDX_CHG_EMP_WWID = DB.GetReaderOrdinal(rdr, "CHG_EMP_WWID");
+                int IDX_CRE_DTM = DB.GetReaderOrdinal(rdr, "CRE_DTM");
+                int IDX_CRE_EMP_WWID = DB.GetReaderOrdinal(rdr, "CRE_EMP_WWID");
+                int IDX_PRD_ALS_NM = DB.GetReaderOrdinal(rdr, "PRD_ALS_NM");
+                int IDX_PRD_ALS_SID = DB.GetReaderOrdinal(rdr, "PRD_ALS_SID");
+                int IDX_PRD_NM = DB.GetReaderOrdinal(rdr, "PRD_NM");
+
+                while (rdr.Read())
+                {
+                    ret.Add(new ProductAlias
+                    {
+                        CHG_DTM = (IDX_CHG_DTM < 0 || rdr.IsDBNull(IDX_CHG_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CHG_DTM),
+                        CHG_EMP_WWID = (IDX_CHG_EMP_WWID < 0 || rdr.IsDBNull(IDX_CHG_EMP_WWID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CHG_EMP_WWID),
+                        CRE_DTM = (IDX_CRE_DTM < 0 || rdr.IsDBNull(IDX_CRE_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CRE_DTM),
+                        CRE_EMP_WWID = (IDX_CRE_EMP_WWID < 0 || rdr.IsDBNull(IDX_CRE_EMP_WWID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CRE_EMP_WWID),
+                        PRD_ALS_NM = (IDX_PRD_ALS_NM < 0 || rdr.IsDBNull(IDX_PRD_ALS_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_ALS_NM),
+                        PRD_ALS_SID = (IDX_PRD_ALS_SID < 0 || rdr.IsDBNull(IDX_PRD_ALS_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRD_ALS_SID),
+                        PRD_NM = (IDX_PRD_NM < 0 || rdr.IsDBNull(IDX_PRD_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_NM)
+                    });
+                }
+                return ret;
+            }
+        }
     }
 }

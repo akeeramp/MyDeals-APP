@@ -38,5 +38,9 @@ namespace Intel.MyDeals.IBusinessLogic
         List<Product> GetProducts(bool getCachedResult = true);
 
         List<Product> GetProductsActive();
+
+        List<ProductAlias> SetProductAlias(CrudModes mode, ProductAlias data);
+
+        List<ProductAlias> GetProductsFromAlias();
     }
 }

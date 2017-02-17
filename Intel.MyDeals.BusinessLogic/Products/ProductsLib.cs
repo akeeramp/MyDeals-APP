@@ -208,5 +208,28 @@ namespace Intel.MyDeals.BusinessLogic
         }
 
         #endregion Products
+
+        #region ProductAlias
+
+        /// <summary>
+        /// To Insert, Update, Delete the Products and Alias in ProductAlias
+        /// </summary>
+        /// <input type="CrudModes">To pass the command like Select,Insert, Update, Delete</input>
+        /// <input Type="ProductAlias">Product alias data</input>
+        /// <returns type="List<ProductAlias>">List of affected rows</returns>
+        public List<ProductAlias> SetProductAlias(CrudModes mode, ProductAlias data)
+        {
+            return _productDataLib.SetProductAlias(mode, data);
+        }
+
+        /// <summary>
+        /// Get All products and alias from ProductAlias 
+        /// </summary>
+        /// <returns type="List<ProductAlias>">List of All Products and Alias</returns>
+        public List<ProductAlias> GetProductsFromAlias()
+        {
+            return _productDataLib.GetProductsFromAlias();
+        }
+        #endregion ProductAlias
     }
 }

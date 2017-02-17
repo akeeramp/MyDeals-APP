@@ -130,6 +130,10 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "WorkFlowAttribute";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 	
+	// Prooduct Alias
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_UPD_PRD_ALIAS] @IDSID='99999', @MODE = 'SELECT'");
+	ds.Tables[0].TableName = "ProductAlias";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false)); 
 
 	// Object Templates
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_GET_NEW_DEAL]");

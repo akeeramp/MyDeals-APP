@@ -6,5 +6,9 @@ namespace Intel.MyDeals.IDataLibrary
     public interface IProductDataLib
     {
         List<Product> GetProducts();
+
+        List<ProductAlias> SetProductAlias(CrudModes mode, ProductAlias data);
+
+        List<ProductAlias> GetProductsFromAlias();
     }
 }
