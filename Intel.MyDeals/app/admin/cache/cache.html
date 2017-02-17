@@ -7,62 +7,83 @@
 
     <div id="cacheContainer">
         <div>
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="cacheList fl">
-                        <h5>Cache Status</h5>
+            <div id="cacheList" class="fl">
+                <h5>Cache Status</h5>
                         
-                        <table id="tblCache" ui-auto="tblCache">
-                            <tr>
-                                <th class="text-left">Cache Name</th>
-                                <th class="text-right">Count</th>
-                                <th class="text-center" colspan="3">Action</th>
-                                <th style="width: 25px;">&nbsp;</th>
-                            </tr>
-                            <tr ng-repeat="data in vm.cacheData">
-                                <td ui-auto="lbl{{data.CacheName}}">{{data.CacheName}}</td>
-                                <td ui-auto="lbl{{data.CacheCount}}" class="text-right">{{data.CacheCount}}</td>
-                                <td><div class="iconLink" ng-click="vm.loadCacheByName(data)" ui-auto="btnLoadCache{{data.CacheName}}" title="Load Cache"><i class="fa fa-upload" aria-hidden="true"></i></div></td>
-                                <td><div class="iconLink" ng-click="vm.clearCacheByName(data)" ui-auto="btnClear{{data.CacheName}}" title="Clear Cache"><i class="fa fa-trash-o" aria-hidden="true"></i></div></td>
-                                <td><div class="iconLink" ng-click="vm.viewCacheByName(data)" ui-auto="btnView{{data.CacheName}}" title="View Cache"><i class="fa fa-code" aria-hidden="true"></i></div></td>
-                                <td ng-show="data.loading"><i class="fa fa-spinner fa-pulse fa fa-fw"></i></td>
-                            </tr>
-                        </table>
-                        <div style="margin-top: 15px; text-align: center;">
-                            <button ng-click="vm.clearAll()" ui-auto="btnClearAll" class="k-primary">Clear All</button>
-                            <button ng-click="vm.reloadAll()" ui-auto="btnReloadAllCache" class="k-primary">Reload All Cache</button>
-                        </div>
-                        <hr />
-                        <h5>Api Cache Status</h5>
-                        <table id="tblCache">
-                            <tr>
-                                <th class="text-left">Cache Name</th>
-                                <th class="text-right">Count</th>
-                                <th class="text-center" colspan="3">Action</th>
-                                <th style="width: 25px;">&nbsp;</th>
-                            </tr>
-                            <tr ng-repeat="data in vm.apiCacheData">
-                                <td>{{data.CacheName}}</td>
-                                <td style="text-align: right;">{{data.CacheCount}}</td>
-                                <td><div class="iconLink" ng-click="vm.clearApiCacheByName(data)" ui-auto="btnClearApiCacheByName" title="Clear Cache"><i class="fa fa-trash-o" aria-hidden="true"></i></div></td>
-                                <td><div class="iconLink" ng-disabeld="true" ng-click="vm.viewApiCacheByName(data)" title="View Cache"><i class="fa fa-code" aria-hidden="true"></i></div></td>
-                                <td ng-show="data.loading"><i class="fa fa-spinner fa-pulse fa fa-fw"></i></td>
-                            </tr>
-                        </table>
-                        <div style="margin-top: 15px; text-align: left;">
-                            <button ng-click="vm.clearAllApiCache()" ui-auto="btnClearApiCache" class="k-primary">Clear All</button>
-                        </div>
-                    </div>
+                <table class="tblCache" ui-auto="tblCache">
+                    <tr>
+                        <th class="text-left">Cache Name</th>
+                        <th class="text-right">Count</th>
+                        <th class="text-center" colspan="3">Action</th>
+                        <th style="width: 25px;">&nbsp;</th>
+                    </tr>
+                    <tr ng-repeat="data in vm.cacheData">
+                        <td ui-auto="lbl{{data.CacheName}}">{{data.CacheName}}</td>
+                        <td ui-auto="lbl{{data.CacheCount}}" class="text-right">{{data.CacheCount}}</td>
+                        <td><div class="iconLink" ng-click="vm.loadCacheByName(data)" ui-auto="btnLoadCache{{data.CacheName}}" title="Load Cache"><i class="fa fa-upload" aria-hidden="true"></i></div></td>
+                        <td><div class="iconLink" ng-click="vm.clearCacheByName(data)" ui-auto="btnClear{{data.CacheName}}" title="Clear Cache"><i class="fa fa-trash-o" aria-hidden="true"></i></div></td>
+                        <td><div class="iconLink" ng-click="vm.viewCacheByName(data)" ui-auto="btnView{{data.CacheName}}" title="View Cache"><i class="fa fa-code" aria-hidden="true"></i></div></td>
+                        <td ng-show="data.loading"><i class="fa fa-spinner fa-pulse fa fa-fw"></i></td>
+                    </tr>
+                </table>
+                <div style="margin-top: 15px; text-align: center;">
+                    <button ng-click="vm.clearAll()" ui-auto="btnClearAll" class="k-primary">Clear All</button>
+                    <button ng-click="vm.reloadAll()" ui-auto="btnReloadAllCache" class="k-primary">Reload All Cache</button>
                 </div>
-                <div class="col-md-9">
-                    <div class="fl">
-                        <div id="viewResultsContainer">
-                            <h5>Cache Contents <span style="font-size: 12px;" id="cName"></span></h5>
-                            <div id="viewResults" ui-auto="divResults">{{vm.currentCacheDetails}}</div>
-                        </div>
-                    </div>
+                <hr />
+                <h5>Api Cache Status</h5>
+                <table class="tblCache">
+                    <tr>
+                        <th class="text-left">Cache Name</th>
+                        <th class="text-right">Count</th>
+                        <th class="text-center" colspan="3">Action</th>
+                        <th style="width: 25px;">&nbsp;</th>
+                    </tr>
+                    <tr ng-repeat="data in vm.apiCacheData">
+                        <td>{{data.CacheName}}</td>
+                        <td style="text-align: right;">{{data.CacheCount}}</td>
+                        <td><div class="iconLink" ng-click="vm.clearApiCacheByName(data)" ui-auto="btnClearApiCacheByName" title="Clear Cache"><i class="fa fa-trash-o" aria-hidden="true"></i></div></td>
+                        <td><div class="iconLink" ng-disabeld="true" ng-click="vm.viewApiCacheByName(data)" title="View Cache"><i class="fa fa-code" aria-hidden="true"></i></div></td>
+                        <td ng-show="data.loading"><i class="fa fa-spinner fa-pulse fa fa-fw"></i></td>
+                    </tr>
+                </table>
+                <div style="margin-top: 15px; text-align: left;">
+                    <button ng-click="vm.clearAllApiCache()" ui-auto="btnClearApiCache" class="k-primary">Clear All</button>
+                </div>
+            </div>
+            <div class="fl">
+                <div id="viewResultsContainer">
+                    <h5>Cache Contents <span style="font-size: 12px;" id="cName"></span></h5>
+                    <div id="viewResults" ui-auto="divResults">{{vm.currentCacheDetails}}</div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
+<script>
+    // Handle resize
+    $(window).resize(function () {
+        resizeContent();
+    });
+
+    $(document).ready(function () {
+        window.setTimeout(function () {
+            resizeContent();
+        }, 100);
+    });
+
+    function resizeContent() {
+        var offset = 200;
+        var widthOffset = 110;
+
+        var contentHeight = $(window).height() - offset;
+        var contentWidth = $(window).width() - widthOffset - $("#cacheList").width();
+
+        $("#cacheList").css("height", contentHeight);
+        $("#viewResultsContainer").css("height", contentHeight);
+        $("#viewResultsContainer").css("width", contentWidth);
+
+    }
+</script>
