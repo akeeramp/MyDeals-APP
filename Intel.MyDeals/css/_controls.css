@@ -170,6 +170,16 @@
         border-radius: 4px;
     }
 
+
+	.k-widget.k-tooltip.k-tooltip-validation.k-invalid-msg{
+		background-color: #ED1C24 !important;
+		color: #ffffff;
+	}
+		
+	.k-tooltip-validation.k-invalid .k-callout-n {
+		border-bottom-color: #ED1C24;
+	}
+
     .fieldcontainer {
         font-size: 10px; 
         font-family: 'Intel Clear', 'Arial'; 

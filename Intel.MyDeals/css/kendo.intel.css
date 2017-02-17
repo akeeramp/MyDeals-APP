@@ -6145,20 +6145,3 @@ div.k-scheduler-marquee:after {
     -webkit-transform: scale(-1, -1);
     transform: scale(-1, -1);
 }
-
-.icon-lg{
-	font-size: 1.2em;
-}
-
-/* Top overhead warning */
-.messageBox {
-	padding: 15px;
-}
-.messageBox.mb-error {
-	background-color: #ED1C24;
-	color: #ffffff;
-}
-.messageBox.mb-warning {
-	background-color: #F3D54E;
-	/*color: #ffffff;*/
-}

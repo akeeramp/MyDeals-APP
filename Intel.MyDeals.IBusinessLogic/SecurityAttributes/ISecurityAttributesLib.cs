@@ -27,6 +27,7 @@ namespace Intel.MyDeals.IBusinessLogic
         List<SecurityActions> GetSecurityActions();
 
         SecurityWrapper GetSecurityMasks();
+		Dictionary<string, List<string>> GetDealTypeAtrbs();
 
         AdminApplications ManageAdminApplication(AdminApplications app, CrudModes state);
 
@@ -35,5 +36,6 @@ namespace Intel.MyDeals.IBusinessLogic
         AdminRoleType ManageAdminRoleType(AdminRoleType roleType, CrudModes state);
 
         SecurityActions ManageSecurityAction(SecurityActions action, CrudModes state);
-    }
+
+	}
 }

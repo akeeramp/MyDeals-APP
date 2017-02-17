@@ -14,11 +14,12 @@
         /*
          * Our reusable cross app code modules
          */
+		, 'blocks.confirmationModal'
         , 'blocks.exception'
 		, 'blocks.logger'
 		, 'blocks.router'
-		, 'blocks.confirmationModal'
         , 'blocks.uiControls'
+		, 'blocks.secUtil'
 
     ]);
 

@@ -16,6 +16,11 @@
 			</i> Note:</b> When updating rows, Product hierarchy identifiers may change and existing deals may have to be updated.
 	</div>
 </div>
+<div class="col-md-12" ng-if="vm.showErrorMsg">
+	<div class="messageBox mb-error col-md-12">
+		<b> <i class="intelicon-alert-solid icon-lg"></i> Error:</b> Product Category Name and Deal Product Type are required when the Active Indicator is checked. Please check your input and try again.
+	</div>
+</div>
 
 <div class="col-md-12">
 	<div id="grid" kendo-grid="grid" class="table table-bordered table-striped table-intel" expand-k-grid options="vm.gridOptions"></div>

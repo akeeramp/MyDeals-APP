@@ -105,6 +105,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Net" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Formatting">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
@@ -306,13 +307,17 @@
     <Content Include="app\admin\geo\geo.service.js" />
     <Content Include="app\admin\productCategories\admin.productCategories.controller.js" />
     <Content Include="app\admin\productCategories\productCategories.html" />
-    <Content Include="app\admin\productCategories\productCategories.service.js" />    
+    <Content Include="app\admin\productCategories\productCategories.service.js" />
     <Content Include="app\admin\products\admin.products.controller.js" />
     <Content Include="app\admin\products\products.html" />
     <Content Include="app\admin\products\products.service.js" />
     <Content Include="app\admin\rules\admin.rules.controller.js" />
     <Content Include="app\admin\rules\rules.html" />
     <Content Include="app\admin\rules\rules.service.js" />
+    <Content Include="app\admin\securityEngine\securityEngineDrawDeals.directive.js" />
+    <Content Include="app\admin\securityEngine\securityEngine.controller.js" />
+    <Content Include="app\admin\securityEngine\securityEngine.html" />
+    <Content Include="app\admin\securityEngine\securityEngine.service.js" />
     <Content Include="app\admin\workflowStage\admin.workflowStages.controller.js" />
     <Content Include="app\admin\workflowStage\workflowStages.html" />
     <Content Include="app\admin\workflowStage\workflowStages.service.js" />
@@ -327,7 +332,10 @@
     <Content Include="app\blocks\logger\logger.module.js" />
     <Content Include="app\blocks\router\routehelper.js" />
     <Content Include="app\blocks\router\router.module.js" />
+    <Content Include="app\blocks\secUtil\secUtil.module.js" />
+    <Content Include="app\blocks\secUtil\secUtil.service.js" />
     <Content Include="app\blocks\uiControls\uiControls.module.js" />
+    <Content Include="app\blocks\util.js" />
     <Content Include="app\contract\controllers\contract.controller.js" />
     <Content Include="app\contract\contract.module.js" />
     <Content Include="app\contract\contract.route.js" />
@@ -1138,6 +1146,7 @@
     <Content Include="css\_dealUtil.css" />
     <Content Include="css\_pocDataFlow.css" />
     <Content Include="css\_search.css" />
+    <Content Include="css\_secEngine.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -2223,6 +2232,11 @@
     <MakeDir Directories="$(WebProjectOutputDir)\EnvConfig\utt\" />
     <TransformXml Source="Web.config" Transform="Web.utt.config" Destination="$(WebProjectOutputDir)\EnvConfig\utt\Web.config" />
     <Delete Files="@(DeleteAfterBuild)" />
+  </Target>
+  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
+  <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
+    <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
+    <Error Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.

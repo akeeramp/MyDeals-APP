@@ -1,0 +1,152 @@
+﻿<!--<div class="col-md-12">
+	<h2>Security Engine</h2>
+</div>-->
+
+<div class="col-md-12" style="padding-top: 20px;">
+	<div class="row">
+		<!-- SIDE BAR -->
+		<div class="col-md-3 testClass">
+			<div class="row">
+				<div class="col-md-12">
+					<h4>
+						Security Attributes Properties
+						<!-- Help button -->
+						<button class="btn btn-default" style="float: right" ng-click="vm.clickHelpButton()">
+							<i class="intelicon-help-outlined"></i> Help
+						</button>
+					</h4>
+				</div>
+
+				<div class="col-md-2">Roles: </div>
+				<div class="col-md-10">
+					<select kendo-multi-select k-options="vm.dropDownOptions.roleType" k-ng-model="vm.selected.roles"  k-ng-delay="vm.isDropdownsLoaded"></select>
+				</div>
+				<div class="col-md-2">Stages: </div>
+				<div class="col-md-10">
+					<select kendo-multi-select k-options="vm.dropDownOptions.wfStage" k-ng-model="vm.selected.stages"  k-ng-delay="vm.isDropdownsLoaded"></select>
+				</div>
+				<div class="col-md-2">Deal Types: </div>
+				<div class="col-md-10">
+					<select kendo-multi-select k-options="vm.dropDownOptions.dealType" k-ng-model="vm.selected.dealTypes"  k-ng-delay="vm.isDropdownsLoaded"></select>
+
+					<!-- Deal Type Color key -->
+					<div class="col-md-12" style="font-size: 8px; line-height: 1em;">
+						<div class="atrbbasecolorECAP fl atrbContainer secEngine_key">&nbsp;</div>
+						<div class="fl secEngine_keyBlock"> = ECAP</div>
+
+						<div class="atrbbasecolorPROGRAM fl atrbContainer secEngine_key">&nbsp;</div>
+						<div class="fl secEngine_keyBlock"> = PROGRAM</div>
+
+						<div class="atrbbasecolorVOLTIER fl atrbContainer secEngine_key">&nbsp;</div>
+						<div class="fl secEngine_keyBlock"> = VOL TIER</div>
+
+						<div class="atrbbasecolorCAPBAND fl atrbContainer secEngine_key">&nbsp;</div>
+						<div class="fl secEngine_keyBlock"> = CAP BAND</div>
+					</div>
+
+				</div>
+
+
+				<!-- Tabs -->
+				<div class="col-md-12 secEngine_tabs">
+					<uib-tabset active="">
+						<uib-tab index="0" heading="Attribute Security" select="vm.selectMode(vm.modeEnum.AtrbSecurity)" >
+							<div class="col-md-12">
+								<!-- Attribute Security -->
+								<div class="col-md-3">Attribute Action: </div>
+								<div class="col-md-9">
+									<select kendo-drop-down-list k-options="vm.dropDownOptions.attrAction" k-ng-model="vm.selected.action" k-ng-delay="vm.isDropdownsLoaded"></select>
+								</div>
+								<div class="col-md-12">
+									<!-- TODO: magic wand -->
+									<i class="intelicon-edit-solid"></i>
+								</div>
+								<div class="col-md-12">Attributes: </div>
+								<div class="col-md-12">
+									<select kendo-multi-select k-options="vm.dropDownOptions.attributes" k-ng-model="vm.selected.attributes" k-ng-delay="vm.isDropdownsLoaded"></select>
+								</div>
+
+							</div>
+							<div class="clearboth"></div>
+						</uib-tab>
+						<uib-tab index="1" heading="Deal Security" select="vm.selectMode(vm.modeEnum.DealSecurity)" >
+							<div class="col-md-12">
+								<!-- Deal Security -->
+								Deal Action:
+								<select kendo-multi-select k-options="vm.dropDownOptions.dealAction" k-ng-model="vm.selected.dealSecurity" k-ng-delay="vm.isDropdownsLoaded"></select>
+								test
+							</div>
+							<div class="clearboth"></div>
+						</uib-tab>
+
+						<uib-tab index="2" heading="...">
+							<div class="col-md-12">
+								<i class='intelicon-more'> </i>
+								TODO: put a popover here with the other attribute types to choose from.
+							</div>
+							<div class="clearboth"></div>
+						</uib-tab>
+					</uib-tabset>
+				</div>
+
+			</div>
+		</div>
+
+
+		<!-- Make Grid Button -->
+		<div class="col-md-1 testClass">
+			<button class="btn btn-primary col-md-12" ng-click="vm.getGridData()">View <i class="intelicon-arrow-forward-right"></i></button>
+		</div>
+
+		<!-- Main block -->
+		<div class="col-md-8">
+			<div class="col-md-12">
+				<div class="row">
+
+					<h4 class="col-md-6" style="margin-top:0">Action: {{ vm.filtered.action.Second }}</h4>
+
+					<!-- Deal Type Color Key -->
+					<div class="col-md-6">
+						<div class="fr" style="font-size: 8px; line-height: 1em;">
+							<div class="atrbbasecolorECAP fl atrbContainer secEngine_key">&nbsp;</div>
+							<div class="fl secEngine_keyBlock"> = ECAP</div>
+
+							<div class="atrbbasecolorPROGRAM fl atrbContainer secEngine_key">&nbsp;</div>
+							<div class="fl secEngine_keyBlock"> = PROGRAM</div>
+
+							<div class="atrbbasecolorVOLTIER fl atrbContainer secEngine_key">&nbsp;</div>
+							<div class="fl secEngine_keyBlock"> = VOL TIER</div>
+
+							<div class="atrbbasecolorCAPBAND fl atrbContainer secEngine_key">&nbsp;</div>
+							<div class="fl secEngine_keyBlock"> = CAP BAND</div>
+						</div>
+					</div>
+				</div>
+			</div>
+						
+			<!-- Grid -->
+			<div class="row">
+				<div class="col-md-12">
+					<div id="secEngineGrid" kendo-grid="vm.securityEngineGrid" expand-k-grid class="table" options="vm.mainGridOptions" k-rebind="vm.mainGridOptions"></div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+
+<script type="text/x-kendo-template" id="toolBarTemplate">
+	<!-- custom toolbar with custom save -->
+	<button class="btn btn-primary" ng-click="vm.save()">Save</button>
+	<button class="btn btn-primary" ng-click="vm.reset()">Reset</button>
+</script>
+
+
+<style>
+	/* TODO: Remove when stylizing is done */
+	.testClass {
+		background-color: #efefef;
+		/*border: 1px solid #000;*/
+	}
+</style>

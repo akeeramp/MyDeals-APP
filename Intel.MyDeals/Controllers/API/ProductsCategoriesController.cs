@@ -24,15 +24,10 @@ namespace Intel.MyDeals.Controllers.API
 		[Route("GetProductCategories")]
 		public IEnumerable<ProductCategory> GetProductCategories()
 		{
-			try
-			{
-				return _productCategoriesLib.GetProductCategories();
-			}
-			catch (Exception ex)
-			{
-				OpLogPerf.Log(ex);
-				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
-			}
+			return SafeExecutor(() => _productCategoriesLib
+				.GetProductCategories()
+				, $"Unable to get Product Categories"
+			);
 		}
 
 		//[Authorize]
@@ -63,15 +58,10 @@ namespace Intel.MyDeals.Controllers.API
 
 			List<ProductCategory> categoriesList = new List<ProductCategory>();
 			categoriesList.Add(category);
-			
-			try
-			{
-				return UpdateProductCategoryBulk(categoriesList).FirstOrDefault();
-			}
-			catch
-			{
-				throw new HttpResponseException(HttpStatusCode.InternalServerError);  // responds with a simple status code for ajax call to consume.
-			}
+
+			return SafeExecutor(() => UpdateProductCategoryBulk(categoriesList).FirstOrDefault()
+				, $"Unable to get Product Categories"
+			);			
 		}
 				
 		[Authorize]
@@ -86,14 +76,11 @@ namespace Intel.MyDeals.Controllers.API
 					throw new HttpResponseException(HttpStatusCode.InternalServerError);  // responds with a simple status code for ajax call to consume.
 				}
 			}
-			try
-			{ 
-				return _productCategoriesLib.UpdateProductCategories(categoriesList);
-			}
-			catch (Exception ex)
-			{
-				throw new HttpResponseException(HttpStatusCode.InternalServerError);  // responds with a simple status code for ajax call to consume.
-			}
+			
+			return SafeExecutor(() => _productCategoriesLib
+				.UpdateProductCategories(categoriesList)
+				, $"Unable to get Product Categories"
+			);
 		}
 	}
 }

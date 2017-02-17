@@ -208,3 +208,38 @@
 .ruleset:hover {
     background-color: lightskyblue;
 }
+
+.clickable {
+	cursor: pointer;
+}
+/* Top overhead warning */
+.messageBox {
+	padding: 15px;
+}
+.messageBox.mb-error {
+	background-color: #ED1C24;
+	color: #ffffff;
+}
+.messageBox.mb-warning {
+	background-color: #ffffff;
+	color: #db704d; /* #cc3300; opacity: .7; */    
+    font-size: 17px;
+}
+
+/* Tooltip */
+.tooltip-error .tooltip-inner{
+	background-color: #ED1C24;
+	color: #ffffff;
+	/*font-weight: bold;*/
+}
+.tooltip-error.tooltip.bottom .tooltip-arrow {
+	border-bottom-color: #ED1C24;
+}
+
+/* Icon sizes */
+.icon-md {
+	font-size: 1.2em
+}
+.icon-lg{
+	font-size: 1.2em;
+}

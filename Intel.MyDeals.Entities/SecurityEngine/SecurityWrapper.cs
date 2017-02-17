@@ -8,17 +8,22 @@ namespace Intel.MyDeals.Entities
 {
     public class SecurityWrapper
     {
-        public SecurityWrapper(List<OpRoleType> opRoleTypes, List<SecurityAction> securityActions, List<SecurityMask> securityMasks)
+        public SecurityWrapper(List<OpRoleType> opRoleTypes, List<SecurityAttribute> securityAttributes, List<SecurityMask> securityMasks, List<AdminDealType> adminDealType = null, List<AdminRoleType> adminRoleType = null)
         {
             RoleTypes = opRoleTypes;
-            SecurityActions = securityActions;
-            SecurityMasks = securityMasks;
-        }
+            SecurityAttributes = securityAttributes;
+			SecurityMasks = securityMasks;
+			AdminDealType = adminDealType;
+			AdminRoleType = adminRoleType;
+		}
 
         public List<OpRoleType> RoleTypes { get; set; }
-        public List<SecurityAction> SecurityActions { get; set; }
+        public List<SecurityAttribute> SecurityAttributes { get; set; }
         public List<SecurityMask> SecurityMasks { get; set; }
 
+		public List<AdminDealType> AdminDealType { get; set; }
+		public List<AdminRoleType> AdminRoleType { get; set; }
+		//public List<AdminStages> AdminStages { get; set; }
 
 
         public string DefineBaseKey(OpDataElementType opDataElementType, OpRoleType opRoleType, string wfStage, string actionCd, string atrbCd)
@@ -39,7 +44,7 @@ namespace Intel.MyDeals.Entities
             string secBaseKey = DefineBaseKey(opDataElementType, opRoleType, wfStage, actionCd, atrbCd);
             if (securityActionCache.ContainsKey(secBaseKey)) return securityActionCache[secBaseKey];
 
-            SecurityAction sa = (from el in SecurityActions
+            SecurityAttribute sa = (from el in SecurityAttributes
                                  where el.FACT_ATRB_CD.Trim() == atrbCd.Trim()
                                  select el).FirstOrDefault();
 

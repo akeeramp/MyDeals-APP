@@ -117,7 +117,7 @@ namespace Intel.MyDeals.DataLibrary
 
         public SecurityWrapper GetSecurityWrapper()
         {
-            return new SecurityWrapper(new List<OpRoleType>(), new List<SecurityAction>(), new List<SecurityMask>() );
+            return new SecurityWrapper(new List<OpRoleType>(), new List<SecurityAttribute>(), new List<SecurityMask>() );
             ////var cmd = new Procs.CDMS_MYDEALS.core.PR_GET_SECURITY_MASK();
 
             ////using (DataSet data = DataAccess.ExecuteDataSet(cmd))

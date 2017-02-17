@@ -165,6 +165,15 @@
 					, url: '/RoleTypes'
 					, controller: 'roleTypesController as vm'
 			    }
+			},
+			{
+				state: 'admin.securityEngine',
+				abstract: false,
+				config: {
+					templateUrl: 'app/admin/securityEngine/securityEngine.html'
+					, url: 'SecurityEngine'
+					, controller: 'securityEngineController as vm'
+				}
 			}
         ];
     }

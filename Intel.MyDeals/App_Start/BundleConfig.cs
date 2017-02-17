@@ -44,6 +44,7 @@ namespace Intel.MyDeals
 
             bundles.Add(new ScriptBundle("~/bundles/angularReusable").Include(
                  "~/app/app.module.js"
+                , "~/app/blocks/confirmationModal/confirmationModal.module.js"
                 , "~/app/blocks/exception/exception.module.js"
                 , "~/app/blocks/exception/exception-handler.provider.js"
                 , "~/app/blocks/exception/exception.js"
@@ -51,8 +52,9 @@ namespace Intel.MyDeals
                 , "~/app/blocks/logger/logger.js"
                 , "~/app/blocks/router/router.module.js"
                 , "~/app/blocks/router/routehelper.js"
-                , "~/app/blocks/confirmationModal/confirmationModal.module.js"
-                , "~/app/blocks/uiControls/uiControls.module.js"
+				, "~/app/blocks/secUtil/secUtil.module.js"
+				, "~/app/blocks/secUtil/secUtil.service.js"
+				, "~/app/blocks/uiControls/uiControls.module.js"
                 , "~/app/blocks/confirmationModal/confirmationModal.service.js"
                 , "~/app/core/core.module.js"
                 , "~/app/core/progressInterceptor.js"
@@ -61,7 +63,8 @@ namespace Intel.MyDeals
                 , "~/app/core/dataservice.js"
                 , "~/app/core/directives/queryBuilder.directive.js"
                 , "~/app/core/directives/expandKendogrid.directive.js"
-                ));
+				, "~/app/blocks/util.js"
+				));
 
             bundles.Add(new ScriptBundle("~/bundles/angularModules").Include(
                  "~/app/admin/admin.module.js"
@@ -90,6 +93,10 @@ namespace Intel.MyDeals
                 , "~/app/admin/securityAttributes/adminRoleTypes/adminRoleTypes.service.js"
                 , "~/app/admin/securityAttributes/securityActions/securityActions.controller.js"
                 , "~/app/admin/securityAttributes/securityActions/securityActions.service.js"
+				, "~/app/admin/securityEngine/securityEngineUtils.js"
+				, "~/app/admin/securityEngine/securityEngineDrawDeals.directive.js"
+				, "~/app/admin/securityEngine/securityEngine.service.js"
+				, "~/app/admin/securityEngine/securityEngine.controller.js"
                 , "~/app/admin/workflow/admin.workflow.controller.js"
                 , "~/app/admin/workflow/workflow.service.js"
                 , "~/app/admin/workflowStage/admin.workflowStages.controller.js"
@@ -98,11 +105,11 @@ namespace Intel.MyDeals
                 , "~/app/contract/contract.route.js"
                 , "~/app/contract/controllers/contract.controller.js"
                 , "~/app/contract/controllers/pricingTable.controller.js"
-                , "~/app/costTest/costtest.module.js"
+				, "~/app/costTest/costtest.module.js"
                 , "~/app/costTest/costtest.route.js"
                 , "~/app/dashboard/dashboard.module.js"
                 , "~/app/dashboard/dashboard.route.js"
-                , "~/app/blocks/uiControls/focusOnShow.directive.js"
+				, "~/app/blocks/uiControls/focusOnShow.directive.js"
                 , "~/app/blocks/uiControls/opcontrol.directive.js"
                 , "~/app/blocks/uiControls/opcontrolFlat.directive.js"
                 , "~/app/blocks/uiControls/opcontrolDataElement.directive.js"
@@ -128,16 +135,17 @@ namespace Intel.MyDeals
                 "~/css/jquery-ui.min.css",
                 "~/Content/kendo/2017.R1/kendo.common-material.min.css",
                 "~/css/it-mlaf.min.css",
-                "~/css/kendo.intel.css",
-                "~/css/select.min.css",
+				"~/css/kendo.intel.css",
+				"~/css/select.min.css",
                 "~/css/select2.min.css"
                 ));
 
             //"~/Content/kendo/2016.3.914/kendo.office365.min.css",
 
             bundles.Add(new StyleBundle("~/MyDeals/css").Include(
-                "~/css/_dealUtil.css",
-                "~/Content/styles.css",
+				"~/css/_dealUtil.css",
+				"~/css/_secEngine.css",
+				"~/Content/styles.css",
                 "~/css/_controls.css",
                 "~/css/_contractManager.css"
                 ));

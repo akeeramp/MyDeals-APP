@@ -2,6 +2,8 @@
 using Intel.MyDeals.IBusinessLogic;
 using System.Collections.Generic;
 using System.Web.Http;
+using System.Linq;
+using Intel.Opaque.Tools;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -15,9 +17,75 @@ namespace Intel.MyDeals.Controllers.API
             this._securityAttributesLib = _securityAttributesLib;
         }
 
-        #region SecurityActions
+		#region Mappings
 
-        [HttpGet]
+		[HttpGet]
+		[Route("GetSecurityWrapper")]
+		public SecurityWrapper GetSecurityWrapper()
+		{
+			return _securityAttributesLib.GetSecurityMasks();
+		}
+
+		[HttpGet]
+		[Route("GetSecurityDropdownData")]
+		public SecurityDropdownData GetSecurityDropdownData()
+		{
+			List<OpPair<int, string>> securityActions = GetSecurityActions().OrderBy(x => x.ACTN_CD).Select(x => new OpPair<int, string>(x.ACTN_SID, x.ACTN_CD )).ToList();
+			List<OpPair<int, string>> dealTypes = GetAdminDealTypes().OrderBy(x => x.DEAL_TYPE_CD).Select(x => new OpPair<int, string>(x.DEAL_TYPE_SID, x.DEAL_TYPE_CD)).ToList();
+			// TODO: Replace Hard-coded appID=1 (for IDMS) with something more dynamic or just get this from db already filtered
+			List<OpPair<int, string>> roleTypes = GetAdminRoleTypes().OrderBy(x => x.ROLE_TYPE_CD).Where(x => x.APP_SID == 1).Select(x => new OpPair<int, string>(x.ROLE_TYPE_SID, x.ROLE_TYPE_CD)).ToList(); 
+
+			// TODO: Get Stages from db
+			List<OpPair<int, string>> workflowStages = new List<OpPair<int, string>> {
+				new OpPair<int, string>(0, "Requested"),
+				new OpPair<int, string>(0, "Submitted"),
+				new OpPair<int, string>(0, "Hold_Waiting"),
+				new OpPair<int, string>(0, "Final_Approval"),
+				new OpPair<int, string>(0, "Active"),
+				new OpPair<int, string>(0, "Customer_Declined"),
+				new OpPair<int, string>(0, "Cancelled"),
+				new OpPair<int, string>(0, "Expired")
+			}; 
+
+			SecurityDropdownData result = new SecurityDropdownData(securityActions, dealTypes, roleTypes, workflowStages);
+
+			return result;
+		}
+
+		[HttpGet]
+		[Route("GetDealTypeAtrbs")]
+		public Dictionary<string, List<string>> GetDealTypeAtrbs()
+		{
+			return _securityAttributesLib.GetDealTypeAtrbs();
+		}
+		
+		 // TODO
+		//[HttpPost]
+		//[Route("InsertMapping")]
+		//public SecurityMapping InsertMapping(SecurityMapping Engine)
+		//{
+		//    return _securityEngineLib.ManageSecurityMapping(Engine, CrudModes.Insert);
+		//}
+
+		//[HttpPut]
+		//[Route("UpdateMapping")]
+		//public SecurityMapping UpdateMapping(SecurityMapping Engine)
+		//{
+		//    return _securityEngineLib.ManageSecurityMapping(Engine, CrudModes.Update);
+		//}
+
+		//[Route("DeleteMapping")]
+		//public bool DeleteMapping(int id)
+		//{
+		//    return _securityEngineLib.DeleteSecurityMapping(id);
+		//}
+
+
+		#endregion
+
+		#region SecurityActions
+
+		[HttpGet]
         [Route("GetSecurityActions")]
         public IEnumerable<SecurityActions> GetSecurityActions()
         {

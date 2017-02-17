@@ -523,7 +523,7 @@ namespace Intel.MyDeals.Entities
 
 
     [DataContract]
-    public partial class SecurityAction
+    public partial class SecurityAttribute
     {
 
         [DataMember]
@@ -2477,7 +2477,7 @@ namespace Intel.MyDeals.Entities
         */
 
     } // End of class Operator
-
+	
 
     //[DataContract]
     //public partial class WorkFlowAttribute

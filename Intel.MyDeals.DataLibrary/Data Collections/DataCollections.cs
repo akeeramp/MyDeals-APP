@@ -192,7 +192,7 @@ namespace Intel.MyDeals.DataLibrary
 
                 SecurityWrapper wrapper = new SecurityAttributesDataLib().GetSecurityWrapper();
                 _getRoleTypes = wrapper.RoleTypes;
-                _getSecurityActions = wrapper.SecurityActions;
+                _getSecurityActions = wrapper.SecurityAttributes;
                 _getSecurityMasks = wrapper.SecurityMasks;
                 return wrapper;
             }
@@ -211,7 +211,7 @@ namespace Intel.MyDeals.DataLibrary
             return GetSecurityWrapper();
         }
         private static IEnumerable<OpRoleType> _getRoleTypes;
-        private static IEnumerable<SecurityAction> _getSecurityActions;
+        private static IEnumerable<SecurityAttribute> _getSecurityActions;
         private static IEnumerable<SecurityMask> _getSecurityMasks;
 
 

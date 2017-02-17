@@ -1,0 +1,134 @@
+﻿/* Security Engine Colored Boxes */
+.atrbContainer {
+    min-height: 12px;
+	width: 16px;
+	margin: 1px;
+	line-height: 1.2em;
+	font-size: 10px;
+	padding: 0 !important;
+	text-align: center;
+}
+
+.atrbSubTitle {
+	margin: 1px;
+	line-height: 1.2em;
+	font-size: 10px;
+	padding: 1px;
+}
+
+.rolebasecolor {
+	color: #000000;
+	padding-left: 3px;
+	padding-right: 5px;
+	background-color: #ffffff;
+	border-left: 1px solid #eeeeee;
+	border-bottom: 1px solid #eeeeee;
+	border-right: 1px solid #eeeeee;
+	border-top: 1px solid #eeeeee;
+}
+
+.atrbbasecolorECAP {
+	color: #0071c5;
+	padding-left: 3px;
+	padding-right: 5px;
+	background-color: #0071c5;
+	border-left: 1px solid #0071c5;
+	border-bottom: 1px solid #0071c5;
+	border-right: 1px solid #0071c5;
+	border-top: 1px solid #0071c5;
+}
+
+.atrbbasecolorPROGRAM {
+	color: #00c571;
+	padding-left: 3px;
+	padding-right: 5px;
+	background-color: #00c571;
+	border-left: 1px solid #00c571;
+	border-bottom: 1px solid #00c571;
+	border-right: 1px solid #00c571;
+	border-top: 1px solid #00c571;
+}
+
+.atrbbasecolorVOLTIER {
+	color: #ffda00;
+	padding-left: 3px;
+	padding-right: 5px;
+	background-color: #ffda00;
+	border-left: 1px solid #ffda00;
+	border-bottom: 1px solid #ffda00;
+	border-right: 1px solid #ffda00;
+	border-top: 1px solid #ffda00;
+}
+
+.atrbbasecolorCAPBAND {
+	color: #aa00bb;
+	padding-left: 3px;
+	padding-right: 5px;
+	background-color: #aa00bb;
+	border-left: 1px solid #aa00bb;
+	border-bottom: 1px solid #aa00bb;
+	border-right: 1px solid #aa00bb;
+	border-top: 1px solid #aa00bb;
+}
+
+.atrbbasecolorNotInDealType {
+	background-image: url(/images/disabledBack.png);
+	background-color: #eeeeee;
+	border-left: 1px solid #eeeeee;
+	border-bottom: 1px solid #eeeeee;
+	border-right: 1px solid #eeeeee;
+	border-top: 1px solid #eeeeee;
+}
+
+.atrbbasecolorDealReadOnly {
+	color: #ffffff;
+}
+
+.atrbbasedisabled {
+	background-color: #ffffff;
+	border-left-width: 1px;
+}
+
+
+/* Security Engine Grid */
+#secEngineGrid.k-grid td{
+	padding: 0 !important;
+}
+
+
+/* Security Engine Color Key */
+.secEngine_key {
+	font-size: 8px;
+	line-height: 1em;
+	width: 10px;
+}
+
+.secEngine_keyBlock {
+	margin: 3px 8px 2px 2px;
+	line-height: 1em;
+}
+
+.secEngine_tabs{
+	margin: 20px 0px;
+}
+
+.secEngine_tabs .tab-pane{
+	background-color: #ffffff;
+	border: 1px solid #c4cfd4;
+	border-top: none;
+	padding: 20px 0px;
+}
+
+.secEngine_tabs .nav-tabs>li.active>a, .secEngine_tabs .nav-tabs>li.active>a:hover, .secEngine_tabs .nav-tabs>li.active>a:focus {
+    color: #fff;
+    background-color: #00AEEF;
+    border: 1px solid #00AEEF;
+    border-bottom-color: transparent;
+    cursor: default;
+}
+
+.secEngine_tabs .nav-tabs li a{
+	border: 1px solid #c4cfd4;
+	border-bottom:0px;
+	margin-right: 0px;
+}

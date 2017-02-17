@@ -117,6 +117,7 @@ namespace Intel.MyDeals.DataLibrary
 		{
 			return DataCollections.GetRuleTasks();
 		}
+
 		public List<ProductCategory> GetProductCategories()
 		{
 			return DataCollections.GetProductCategories();

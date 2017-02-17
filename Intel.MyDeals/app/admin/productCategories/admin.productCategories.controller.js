@@ -4,9 +4,9 @@
         .module('app.admin')
         .controller('ProductCategoryController', ProductCategoryController)
 
-    ProductCategoryController.$inject = ['$uibModal', 'productCategoryService', '$scope', 'logger', 'confirmationModal', 'gridConstants']
+    ProductCategoryController.$inject = ['productCategoryService', '$scope', 'logger', 'confirmationModal', 'gridConstants']
 
-    function ProductCategoryController($uibModal, productCategoryService, $scope, logger, confirmationModal, gridConstants) {
+    function ProductCategoryController(productCategoryService, $scope, logger, confirmationModal, gridConstants) {
         var vm = this;
 
         // Functions
@@ -17,6 +17,7 @@
 
         // Variables
         vm.filters = {};
+        vm.showErrorMsg = false;
 
         vm.dataSource = new kendo.data.DataSource({
             type: "json",
@@ -61,6 +62,10 @@
                 		};
                 		confirmationModal.showModal({}, modalOptions);
 
+						//// TODO: Finds out why UI is not redrawing or scope is not binding
+                		//vm.showErrorMsg = true;
+                		//$scope.$apply;
+                		//$scope.grid.refresh();
                 	}
 
                 }
@@ -141,7 +146,6 @@
             	var commandCell = e.container.find("td:first");
             	commandCell.html('<a class="k-grid-update" href="#"><span class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span class="k-icon k-i-cancel"></span></a>');
             },
-
             columns: [
 			{
 				command: [
@@ -230,7 +234,7 @@
         	// Inline editor element 
         	// TODO: For whatever reason, the ng-class does not update unless the input is hovered over or after save. Fix this if needed by business.
         	var tmplt = '<input name="' + options.field + '" class="k-input k-textbox" ';
-        	tmplt += '	uib-tooltip="' + options.model._behaviors.validMsg[options.field] + '" tooltip-placement="bottom" tooltip-enable="(dataItem._behaviors.isError.' + options.field + ')" tooltip-is-open="true"';
+        	tmplt += '	uib-tooltip="' + options.model._behaviors.validMsg[options.field] + '" tooltip-placement="bottom" tooltip-enable="(dataItem._behaviors.isError.' + options.field + ')" tooltip-is-open="true" tooltip-class="tooltip-error"';
         	tmplt += '	ng-class="{isError: (dataItem._behaviors.isError.' + options.field + ') }"';
         	tmplt += '/>';
         	$(tmplt).appendTo(container)
