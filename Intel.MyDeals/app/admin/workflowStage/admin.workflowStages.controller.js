@@ -61,12 +61,15 @@
                         .then(function (result) {
                             $scope.workflowGrid.removeRow(vm.selectedItem);
                             workflowStagesService.DeleteWorkflowStages(e.data)
-                        .then(function (response) {
-                            e.success(response.data);
-                            logger.success("Workflow Deleted.");
-                        }, function (response) {
-                            $scope.workflowGrid.cancelChanges();
-                        });
+                            .then(
+                                function (response) {
+                                    e.success(response.data);
+                                    logger.success("Workflow Deleted.");
+                                },
+                                function (response) {
+                                    $scope.workflowGrid.cancelChanges();
+                                }
+                            );
                         }, function (response) {
                             $scope.workflowGrid.cancelChanges();
                         });
@@ -93,7 +96,7 @@
                         WFSTG_DESC: { validation: { required: true } },
                         ROLE_TIER_NM: { validation: { required: true } },
                         WFSTG_LOC: { validation: { required: true } },
-                        WFSTG_ORD: { validation: { required: true } },
+                        WFSTG_ORD: { type: "number", validation: { required: true, min: 1 } },
                         ALLW_REDEAL: { type: "boolean" },
                     }
                 }
@@ -143,6 +146,7 @@
             ]
         };
 
+        // Populate Role Tier
         function roleTierCDDropDownEditor(container, options) {
             $('<input required name="' + options.field + '"/>')
                 .appendTo(container)
@@ -158,6 +162,7 @@
                 });
         }
 
+        // Populate Location
         function locationDropDownEditor(container, options) {
             $('<input required name="' + options.field + '"/>')
                 .appendTo(container)
@@ -174,45 +179,6 @@
                             ]
                         }
                 });
-        }
-
-        function onChange() {
-            vm.selectedItem = $scope.workflowGrid.select();
-            vm.isButtonDisabled = (vm.selectedItem.length == 0) ? true : false;
-            $scope.$apply();
-        }
-
-        function addItem() {
-            vm.isButtonDisabled = true;
-            $scope.workflowGrid.addRow();
-        }
-
-        function updateItem() {
-            var selectedDataItem = $scope.workflowGrid.dataItem(vm.selectedItem);
-            if (!selectedDataItem.WFSTG_MBR_SID) {
-                logger.warning(selectedDataItem.CNST_NM + " Cannot be updated from UI", null, "Not allowed")
-                return;
-            }
-            $scope.workflowGrid.editRow(vm.selectedItem);
-        }
-
-        function deleteItem() {
-            var modalOptions = {
-                closeButtonText: 'Cancel',
-                actionButtonText: 'Delete WorkFlow',
-                hasActionButton: true,
-                headerText: 'Delete confirmation',
-                bodyText: 'Are you sure you would like to Delete this WorkFlow Stage?'
-            };
-
-            confirmationModal.showModal({}, modalOptions)
-				.then(function (result) {
-				    $scope.workflowGrid.removeRow(vm.selectedItem);
-				});
-        }
-
-        function cancelChanges() {
-            $scope.workflowGrid.cancelChanges();
         }
 
         // Fetching all the Master Dropdown Values
