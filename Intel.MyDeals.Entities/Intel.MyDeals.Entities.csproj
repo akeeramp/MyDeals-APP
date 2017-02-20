@@ -104,6 +104,7 @@
     <Compile Include="Logging\MyDealsWebApiUrl.cs" />
     <Compile Include="OpLog.cs" />
     <Compile Include="OpUserStack.cs" />
+    <Compile Include="ProductLookup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SecurityEngine\SecurityDropdownData.cs" />
     <Compile Include="SecurityEngine\SecurityWrapper.cs" />

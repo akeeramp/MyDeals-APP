@@ -127,8 +127,7 @@ namespace Intel.MyDeals.DataLibrary
             }
         }
 
-        #endregion
-
+        #endregion Cache Functions
 
         public static List<ToolConstants> GetToolConstants()
         {
@@ -137,9 +136,8 @@ namespace Intel.MyDeals.DataLibrary
                 return _getToolConstants ?? (_getToolConstants = new ConstantLookupDataLib().GetToolConstants());
             }
         }
+
         private static List<ToolConstants> _getToolConstants;
-
-
 
         //public static Dictionary<string, string> OpDetails(bool returnExceptions = true)
         //{
@@ -153,6 +151,7 @@ namespace Intel.MyDeals.DataLibrary
                 return _getOpAtrbMapItems ?? (_getOpAtrbMapItems = new AtrbMapDataLib().GetOpAtrbMapItems());
             }
         }
+
         private static List<OpAtrbMap> _getOpAtrbMapItems;
 
         public static UiTemplates GetUiTemplates()
@@ -162,6 +161,7 @@ namespace Intel.MyDeals.DataLibrary
                 return _getUiTemplates ?? (_getUiTemplates = new UiTemplateDataLib().GetUiTemplates());
             }
         }
+
         private static UiTemplates _getUiTemplates;
 
         public static List<GeoDimension> GetGeoData()
@@ -171,6 +171,7 @@ namespace Intel.MyDeals.DataLibrary
                 return _getGeoData ?? (_getGeoData = new GeoDataLib().GetGeoDimensions());
             }
         }
+
         private static List<GeoDimension> _getGeoData;
 
         public static List<LookupItem> GetLookupData()
@@ -180,8 +181,8 @@ namespace Intel.MyDeals.DataLibrary
                 return _getLookupData ?? (_getLookupData = new ConstantLookupDataLib().GetLookups());
             }
         }
-        private static List<LookupItem> _getLookupData;
 
+        private static List<LookupItem> _getLookupData;
 
         public static SecurityWrapper GetSecurityWrapper()
         {
@@ -202,18 +203,20 @@ namespace Intel.MyDeals.DataLibrary
         {
             return GetSecurityWrapper();
         }
+
         public static SecurityWrapper GetSecurityActions()
         {
             return GetSecurityWrapper();
         }
+
         public static SecurityWrapper GetSecurityMasks()
         {
             return GetSecurityWrapper();
         }
+
         private static IEnumerable<OpRoleType> _getRoleTypes;
         private static IEnumerable<SecurityAttribute> _getSecurityActions;
         private static IEnumerable<SecurityMask> _getSecurityMasks;
-
 
         public static IEnumerable<DcsSoldTo> GetSoldToData()
         {
@@ -222,6 +225,7 @@ namespace Intel.MyDeals.DataLibrary
                 return _getSoldToData ?? (_getSoldToData = new GeoDataLib().GetSoldTos());
             }
         }
+
         private static IEnumerable<DcsSoldTo> _getSoldToData;
 
         public static List<WorkFlowStg> GetWorkFlowStages()
@@ -231,6 +235,7 @@ namespace Intel.MyDeals.DataLibrary
                 return _getWorkFlowStages ?? (_getWorkFlowStages = new WorkFlowDataLib().GetWorkFlowStages());
             }
         }
+
         private static List<WorkFlowStg> _getWorkFlowStages;
 
         public static List<WorkFlows> GetWorkFlowItems()
@@ -240,6 +245,7 @@ namespace Intel.MyDeals.DataLibrary
                 return _getWorkFlowItems ?? (_getWorkFlowItems = new WorkFlowDataLib().GetWorkFlowItems());
             }
         }
+
         private static List<WorkFlows> _getWorkFlowItems;
 
         public static List<AppRoleTier> GetAppRoleTiers()
@@ -249,8 +255,8 @@ namespace Intel.MyDeals.DataLibrary
                 return _getAppRoleTiers ?? (_getAppRoleTiers = new SecurityAttributesDataLib().GetAppRoleTiers());
             }
         }
-        private static List<AppRoleTier> _getAppRoleTiers;
 
+        private static List<AppRoleTier> _getAppRoleTiers;
 
         public static Dictionary<int, MyDealsAttribute> GetAttributeMasterDataDictionary()
         {
@@ -258,9 +264,9 @@ namespace Intel.MyDeals.DataLibrary
             {
                 return _getAttributeMasterDataDictionary ??
                        (_getAttributeMasterDataDictionary = new AtrbMapDataLib().GetAttributeMasterDataDictionary());
-
             }
         }
+
         private static Dictionary<int, MyDealsAttribute> _getAttributeMasterDataDictionary;
 
         public static AttributeCollection GetAttributeData()
@@ -271,7 +277,6 @@ namespace Intel.MyDeals.DataLibrary
             }
         }
 
-
         public static List<MyDealsActionItem> GetDealActions()
         {
             lock (LOCK_OBJECT ?? new object())
@@ -279,8 +284,8 @@ namespace Intel.MyDeals.DataLibrary
                 return _getDealActions ?? (_getDealActions = new SecurityAttributesDataLib().GetDealActions());
             }
         }
-        private static List<MyDealsActionItem> _getDealActions;
 
+        private static List<MyDealsActionItem> _getDealActions;
 
         public static TemplateWrapper GetTemplateData()
         {
@@ -313,18 +318,22 @@ namespace Intel.MyDeals.DataLibrary
         {
             return GetTemplateDict().TemplateDict;
         }
+
         public static TemplateWrapper GetTemplateDict()
         {
             return GetTemplateData();
         }
+
         public static TemplateWrapper GetCalendarData()
         {
             return GetTemplateData();
         }
+
         public static TemplateWrapper GetDealTypeData()
         {
             return GetTemplateData();
         }
+
         private static List<ObjectTypeTemplate> _getTemplateData;
         private static OpDataElementUITemplates _getTemplateDict;
         private static List<CustomerCal> _getCalendarData;
@@ -342,6 +351,7 @@ namespace Intel.MyDeals.DataLibrary
                 return _getCustomerDivisions;
             }
         }
+
         private static List<CustomerDivision> _getCustomerDivisions;
 
         //public static CustomerDivision GetCustomerDivision(int id)
@@ -358,6 +368,7 @@ namespace Intel.MyDeals.DataLibrary
                 return _getFilterAttributes ?? (_getFilterAttributes = new MetaDataLib().GetFilterAttributes());
             }
         }
+
         private static List<FilterAttribute> _getFilterAttributes;
 
         public static List<GridType> GetGridTypes()
@@ -367,6 +378,7 @@ namespace Intel.MyDeals.DataLibrary
                 return _getGridTypes ?? (_getGridTypes = new MetaDataLib().GetGridTypes());
             }
         }
+
         private static List<GridType> _getGridTypes;
 
         public static List<Operator_class> GetOperators()
@@ -376,6 +388,7 @@ namespace Intel.MyDeals.DataLibrary
                 return _getOperators ?? (_getOperators = new MetaDataLib().GetOperators());
             }
         }
+
         private static List<Operator_class> _getOperators;
 
         public static List<UIType> GetUITypes()
@@ -385,6 +398,7 @@ namespace Intel.MyDeals.DataLibrary
                 return _getUITypes ?? (_getUITypes = new MetaDataLib().GetUITypes());
             }
         }
+
         private static List<UIType> _getUITypes;
 
         public static List<Product> GetProductData()
@@ -394,7 +408,18 @@ namespace Intel.MyDeals.DataLibrary
                 return _getProductData ?? (_getProductData = new ProductDataLib().GetProducts());
             }
         }
+
         private static List<Product> _getProductData;
+
+        public static List<ProductAlias> GetProductsFromAlias()
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                return _getProductsFromAlias ?? (_getProductsFromAlias = new ProductDataLib().GetProductsFromAlias());
+            }
+        }
+
+        private static List<ProductAlias> _getProductsFromAlias;
 
         #region Rules Engine
 
@@ -405,6 +430,7 @@ namespace Intel.MyDeals.DataLibrary
                 return _getRuleSetData ?? (_getRuleSetData = new RuleEngineDataLib().GetRuleSets());
             }
         }
+
         private static List<RuleSet> _getRuleSetData;
 
         public static List<RuleItem> GetRuleItems()
@@ -414,6 +440,7 @@ namespace Intel.MyDeals.DataLibrary
                 return _getRuleItemData ?? (_getRuleItemData = new RuleEngineDataLib().GetRuleItems());
             }
         }
+
         private static List<RuleItem> _getRuleItemData;
 
         public static List<RuleCondition> GetRuleConditions()
@@ -423,6 +450,7 @@ namespace Intel.MyDeals.DataLibrary
                 return _getRuleConditionData ?? (_getRuleConditionData = new RuleEngineDataLib().GetRuleConditions());
             }
         }
+
         private static List<RuleCondition> _getRuleConditionData;
 
         public static List<RuleTask> GetRuleTasks()
@@ -432,20 +460,23 @@ namespace Intel.MyDeals.DataLibrary
                 return _getRuleTaskData ?? (_getRuleTaskData = new RuleEngineDataLib().GetRuleTasks());
             }
         }
+
         private static List<RuleTask> _getRuleTaskData;
 
-		#endregion
+        #endregion Rules Engine
 
-		#region Product Categories
-		public static List<ProductCategory> GetProductCategories()
-		{
-			lock (LOCK_OBJECT ?? new object())
-			{
-				return _getProductCategories ?? (_getProductCategories = new ProductCategoriesDataLib().GetProductCategories());
-			}
-		}
-		private static List<ProductCategory> _getProductCategories;
-		#endregion
+        #region Product Categories
 
-	}
+        public static List<ProductCategory> GetProductCategories()
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                return _getProductCategories ?? (_getProductCategories = new ProductCategoriesDataLib().GetProductCategories());
+            }
+        }
+
+        private static List<ProductCategory> _getProductCategories;
+
+        #endregion Product Categories
+    }
 }

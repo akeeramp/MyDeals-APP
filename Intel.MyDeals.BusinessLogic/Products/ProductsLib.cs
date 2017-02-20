@@ -4,6 +4,8 @@ using Intel.MyDeals.IDataLibrary;
 using System.Collections.Generic;
 using System.Linq;
 using Intel.MyDeals.IBusinessLogic;
+using System.Text.RegularExpressions;
+using System;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -207,6 +209,153 @@ namespace Intel.MyDeals.BusinessLogic
             return GetProducts().Where(c => c.MTRL_ID_SID == sid).ToList();
         }
 
+        /// <summary>
+        /// Translate user entered products into valid products
+        /// ex: i5-2400(s) --> i5-2400, i5-2400s
+        /// </summary>
+        /// <param name="products"></param>
+        /// <returns></returns>
+        public ProductLookup TranslateProducts(List<string> userProducts)
+        {
+            var productsTodb = new List<string>();
+            var productLookup = new ProductLookup
+            {
+                ProdctTransformResults = new Dictionary<string, List<string>>(),
+                DuplicateProducts = new Dictionary<string, Dictionary<string, List<PRD_LOOKUP_RESULTS>>>(),
+                ValidProducts = new Dictionary<string, List<PRD_LOOKUP_RESULTS>>(),
+                InValidProducts = new Dictionary<string, List<string>>()
+            };
+
+            //  Check if any product has alias mapping, this will call cache
+            var aliasMapping = GetProductsFromAlias();
+
+            foreach (var userProduct in userProducts)
+            {
+                var products = TransformProducts(userProduct);
+                var productAliases = (from p in products
+                                      join a in aliasMapping
+                                      on p equals a.PRD_ALS_NM into pa
+                                      from t in pa.DefaultIfEmpty()
+                                      select t == null ? p : t.PRD_NM).Distinct();// In single row users might have entered duplicate names
+
+                productsTodb.AddRange(productAliases);
+                productLookup.ProdctTransformResults[userProduct] = productAliases.ToList();
+            }
+
+            //  Product match master list
+            var productMatchResults = FindProductMatch(productsTodb);
+
+            // Get duplicate and Valid Products
+            ExtractValidandDuplicateProducts(productLookup, productMatchResults);
+
+            return productLookup;
+        }
+
+        /// <summary>
+        /// Extract the Duplicate, BValid and Invalid Products
+        /// Step 1: Get matching products for a particular row from master match list
+        /// Step 2: Find duplicate match products,
+        /// Step 3: Find Valid Products
+        /// Step 4: Products which exists in Step 1 and does not exists in Step 2, 3 are invalid products
+        /// </summary>
+        /// <param name="productLookup">Result object</param>
+        /// <param name="productMatchResults">Master Product match list</param>
+        private static void ExtractValidandDuplicateProducts(ProductLookup productLookup, List<PRD_LOOKUP_RESULTS> productMatchResults)
+        {
+            foreach (var userProduct in productLookup.ProdctTransformResults)
+            {
+                // Step 1: Get matching products for a particular row from master match list
+                var tranlatedProducts = productLookup.ProdctTransformResults[userProduct.Key];
+
+                // Step 2: Find duplicate match products
+                var duplicateProds = from p in productMatchResults
+                                     join t in tranlatedProducts
+                                     on p.HIER_VAL_NM equals t
+                                     group p by p.HIER_VAL_NM into d
+                                     where d.Count() > 1
+                                     select d.Key;
+
+                // If any duplicates found extract them
+                if (duplicateProds.Any())
+                {
+                    var duplicateRecords = productMatchResults.FindAll(p => duplicateProds.Contains(p.HIER_VAL_NM));
+
+                    var records = new Dictionary<string, List<PRD_LOOKUP_RESULTS>>();
+
+                    duplicateProds.ToList().ForEach(d => records[d] = new List<PRD_LOOKUP_RESULTS>());
+
+                    duplicateRecords.ForEach(r => records[r.HIER_VAL_NM].Add(r));
+
+                    productLookup.DuplicateProducts[userProduct.Key] = records;
+                }
+
+                // Step 3: Find the Valid products
+                productLookup.ValidProducts[userProduct.Key] = new List<PRD_LOOKUP_RESULTS>();
+
+                var validProducts = productMatchResults.Where(p => !duplicateProds.Contains(p.HIER_VAL_NM)
+                                                            && tranlatedProducts.Any(t => t.Equals(p.HIER_VAL_NM, StringComparison.InvariantCultureIgnoreCase)));
+
+                productLookup.ValidProducts[userProduct.Key] = validProducts.ToList();
+
+                productLookup.InValidProducts[userProduct.Key] = new List<string>();
+
+                // Step 4: Find InValid products, products which are present in master match result and not present in duplicate products and valid products
+                productLookup.InValidProducts[userProduct.Key] = tranlatedProducts.Where(t => !duplicateProds.Contains(t) &&
+                                        !validProducts.Any(v => v.HIER_VAL_NM.Equals(t, StringComparison.InvariantCultureIgnoreCase))).ToList();
+            }
+        }
+
+        /// <summary>
+        /// Get the product match results
+        /// </summary>
+        /// <param name="productsToMatch"></param>
+        /// <returns></returns>
+        public List<PRD_LOOKUP_RESULTS> FindProductMatch(List<string> productsToMatch)
+        {
+            return _productDataLib.FindProductMatch(productsToMatch);
+        }
+
+        /// <summary>
+        /// Transform the single row user inputted products to Mydeals products
+        /// </summary>
+        /// <param name="userProduct">e.g: i5 2400(S,T),H61</param>
+        /// <returns></returns>
+        private List<string> TransformProducts(string userProduct)
+        {
+            var singleProducts = new List<string>();
+
+            // Replace all the comma(",") inside parenthesis with a "/", so that individual products can be split by comma.
+            userProduct = Regex.Replace(userProduct, @"(?<=\([^()]*),", "/"); // i5 2400(S/T), H61
+
+            var products = userProduct.Split(',');
+            foreach (var p in products.Where(p => !string.IsNullOrEmpty(p)))
+            {
+                //Replace all the blanks with '-'
+                var item = Regex.Replace(p.Trim(), @"\s+", "-"); // i5-2400(S/T)
+                if (item.Contains('(') && item.Contains(')'))
+                {
+                    var productNames = item.Split('(', ')');
+
+                    // Add i5-2400
+                    singleProducts.Add(productNames[0]); //productNames[0] = i5-2400
+
+                    var innerItems = productNames[1].Split('/'); //productNames[1] = S/T
+
+                    // Add i5-2400S, i5-2400T
+                    foreach (var character in innerItems.Where(i => !string.IsNullOrEmpty(i)))
+                    {
+                        singleProducts.Add(productNames[0] + character.Trim());
+                    }
+                }
+                else
+                {
+                    singleProducts.Add(item.Trim());
+                }
+            }
+
+            return singleProducts;
+        }
+
         #endregion Products
 
         #region ProductAlias
@@ -219,17 +368,34 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns type="List<ProductAlias>">List of affected rows</returns>
         public List<ProductAlias> SetProductAlias(CrudModes mode, ProductAlias data)
         {
+            // Before adding a Alias mapping for a product check if Mydeals has the product
+            var product = new List<string>();
+            product.Add(data.PRD_NM);
+            if (mode == CrudModes.Insert || mode == CrudModes.Update)
+            {
+                var isValidProduct = FindProductMatch(product).Any();
+                if (!isValidProduct)
+                {
+                    throw new Exception($"Aw Snap! The product name \"{data.PRD_NM}\" you are trying to map does not exists in Mydeals.");
+                }
+            }
+
             return _productDataLib.SetProductAlias(mode, data);
         }
 
         /// <summary>
-        /// Get All products and alias from ProductAlias 
+        /// Get All products and alias from ProductAlias
         /// </summary>
         /// <returns type="List<ProductAlias>">List of All Products and Alias</returns>
-        public List<ProductAlias> GetProductsFromAlias()
+        public List<ProductAlias> GetProductsFromAlias(bool getCachedResult = true)
         {
-            return _productDataLib.GetProductsFromAlias();
+            if (!getCachedResult)
+            {
+                return _productDataLib.GetProductsFromAlias();
+            }
+            return _dataCollectionsDataLib.GetProductsFromAlias();
         }
+
         #endregion ProductAlias
     }
 }

@@ -10,5 +10,7 @@ namespace Intel.MyDeals.IDataLibrary
         List<ProductAlias> SetProductAlias(CrudModes mode, ProductAlias data);
 
         List<ProductAlias> GetProductsFromAlias();
+
+        List<PRD_LOOKUP_RESULTS> FindProductMatch(List<string> productsToMatch);
     }
 }

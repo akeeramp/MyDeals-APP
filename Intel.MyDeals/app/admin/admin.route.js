@@ -91,7 +91,16 @@
                     url: 'productSelector',
                     controller: 'ProductSelectorController as vm',
                 }
-            },            
+            },
+            {
+                state: 'admin.productAlias',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/productAlias/productAlias.html',
+                    url: 'productAlias',
+                    controller: 'ProductAliasController as vm',
+                }
+            },
             {
                 state: 'admin.productCategories',
                 abstract: false,

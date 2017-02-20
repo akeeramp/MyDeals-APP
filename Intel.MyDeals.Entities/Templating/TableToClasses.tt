@@ -15,11 +15,11 @@
 <#@ import namespace="System.Data.SqlClient" #>
 <#@ import namespace="System.Text" #>
 <#
-	
-	// DEVELOPER: Change this to be the namespace to create the SP classes in 
+
+	// DEVELOPER: Change this to be the namespace to create the SP classes in
 	const string outputNameSpace = "Intel.MyDeals.Entities";
 	const string TAB = "\t";
-	
+
 	var dbobjects = new DBObjects(@"Database=MyDeals;Server=EG1RDMDBDEV01\DEALSDEV,3180;integrated security=SSPI;");
 
 	WriteLine(dbobjects.BoilerPlateDetails);
@@ -47,7 +47,7 @@ using System.Collections.Generic;
 	////ds.Tables[0].TableName = "LookupItem";
 	////WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
-	// Constants objects 
+	// Constants objects
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_GET_CONSTANTS]");
 	ds.Tables[0].TableName = "ToolConstants";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
@@ -76,7 +76,7 @@ using System.Collections.Generic;
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MANAGE_ACTIONS] @idsid = 'PWECKENR', @mode = 'Setup'");
 	ds.Tables[0].TableName = "SecurityActions";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
-	
+
 	// Logging Config data
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_GET_LOG_CONFIG_DATA] @in_msg_src = 'UI_LOG'");
 	ds.Tables[0].TableName = "LogConfig";
@@ -94,7 +94,7 @@ using System.Collections.Generic;
 
 	ds.Tables[1].TableName = "MyCustomersSoldTo";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[1], false));
-	
+
 	// Customer Calendar
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_CUST_CLNDR_QTR] @DTM = '1/10/2016'");
 	ds.Tables[0].TableName = "CustomerQuarterDetails";
@@ -109,31 +109,31 @@ using System.Collections.Generic;
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_PRD_DTL]");
 	ds.Tables[0].TableName = "Product";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
-	
+
 	// Product Category CPU
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_PRD_CAT_MAP]");
 	ds.Tables[0].TableName = "ProductCategory";
-	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));	
-	
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
 	//WorkFlow
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_UPD_WORKFL_MSTR] @IDSID='99999', @MODE = 'SELECT'");
 	ds.Tables[0].TableName = "WorkFlows";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
-		
+
 	// Work Flow Stage
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_UPD_WFSTG_MSTR] @IDSID='99999', @MODE = 'SELECT'");
 	ds.Tables[0].TableName = "WorkFlowStg";
-	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false)); 
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	// WorkFlow and WorkFlowStages Drop Down Values
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_WORKFL_DDL]");
 	ds.Tables[0].TableName = "WorkFlowAttribute";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
-	
+
 	// Prooduct Alias
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_UPD_PRD_ALIAS] @IDSID='99999', @MODE = 'SELECT'");
 	ds.Tables[0].TableName = "ProductAlias";
-	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false)); 
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	// Object Templates
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_GET_NEW_DEAL]");
@@ -144,7 +144,12 @@ using System.Collections.Generic;
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[1], false));
 
 	ds.Tables[2].TableName = "ObjectTypes"; // ObjTypes
-	WriteLine(ScriptTools.DataTableToClass(ds.Tables[2], false)); 
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[2], false));
+
+	// Product Selector(Lookup)
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_PRD_BY_HIER_VAL_NM]");
+	ds.Tables[0].TableName = "PRD_LOOKUP_RESULTS";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	PopIndent();
 	WriteLine("}"); // End NameSpace

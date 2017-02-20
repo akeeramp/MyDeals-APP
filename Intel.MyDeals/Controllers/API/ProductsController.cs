@@ -4,6 +4,7 @@ using Intel.Opaque;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
 using System.Web.Http;
 
 namespace Intel.MyDeals.Controllers.API
@@ -275,22 +276,32 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("GetProductsFromAlias")]
-        public IEnumerable<ProductAlias> GetProductsFromAlias()     //Get all Product with Alias from ProductAlias
+        [Route("GetProductsFromAlias/{getCachedResult:bool?}")]
+        public IEnumerable<ProductAlias> GetProductsFromAlias(bool getCachedResult = true)     //Get all Product with Alias from ProductAlias
         {
-            return SafeExecutor(() => _productsLib.GetProductsFromAlias()
+            return SafeExecutor(() => _productsLib.GetProductsFromAlias(getCachedResult)
                 , $"Unable to get {"Product Alias"}"
              );
         }
 
         [Authorize]
         [HttpPost]
-        [Route("SetProductAlias")]
+        [Route("CreateProductAlias")]
         public IEnumerable<ProductAlias> CreateProductAlias(ProductAlias data)   // Insert the record in ProductAlias
         {
-            return SafeExecutor(() => _productsLib.SetProductAlias(CrudModes.Insert, data)
-                  , $"Unable to Create {"Product Alias"}"
-           );
+            var productAlias = new List<ProductAlias>();
+            try
+            {
+                productAlias = _productsLib.SetProductAlias(CrudModes.Insert, data);
+            }
+            catch (Exception ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent(ex.Message)
+                });
+            }
+            return productAlias;
         }
 
         [Authorize]
@@ -298,9 +309,19 @@ namespace Intel.MyDeals.Controllers.API
         [Route("UpdateProductAlias")]
         public IEnumerable<ProductAlias> UpdateProductAlias(ProductAlias data)  // Update the record from ProductAlias
         {
-            return SafeExecutor(() => _productsLib.SetProductAlias(CrudModes.Update, data)
-            , $"Unable to Update {"Product Alias"}"
-         );
+            var productAlias = new List<ProductAlias>();
+            try
+            {
+                productAlias = _productsLib.SetProductAlias(CrudModes.Insert, data);
+            }
+            catch (Exception ex)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new StringContent(ex.Message)
+                });
+            }
+            return productAlias;
         }
 
         [Authorize]
@@ -311,6 +332,15 @@ namespace Intel.MyDeals.Controllers.API
             return SafeExecutor(() => _productsLib.SetProductAlias(CrudModes.Delete, data)
                 , $"Unable to Delete {"Product Alias"}"
              );
+        }
+
+        [Route("TranslateProducts")]
+        [HttpPost]
+        public ProductLookup TranslateProducts(List<string> userInput)
+        {
+            return SafeExecutor(() => _productsLib.TranslateProducts(userInput)
+                , $"Unable to get product mappings for {"userInput"}"
+            );
         }
     }
 }

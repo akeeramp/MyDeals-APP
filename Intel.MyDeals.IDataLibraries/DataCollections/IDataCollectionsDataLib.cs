@@ -34,8 +34,10 @@ namespace Intel.MyDeals.IDataLibrary
 
         List<RuleCondition> GetRuleConditions();
 
-		List<RuleTask> GetRuleTasks();
+        List<RuleTask> GetRuleTasks();
 
-		List<ProductCategory> GetProductCategories();
-	}
+        List<ProductCategory> GetProductCategories();
+
+        List<ProductAlias> GetProductsFromAlias();
+    }
 }

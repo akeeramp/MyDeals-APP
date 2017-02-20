@@ -304,9 +304,15 @@
     <Content Include="app\admin\geo\admin.geo.controller.js" />
     <Content Include="app\admin\geo\geo.html" />
     <Content Include="app\admin\geo\geo.service.js" />
+    <Content Include="app\admin\productAlias\admin.productAlias.controller.js" />
+    <Content Include="app\admin\productAlias\productAlias.html" />
+    <Content Include="app\admin\productAlias\productAlias.service.js" />
     <Content Include="app\admin\productCategories\admin.productCategories.controller.js" />
     <Content Include="app\admin\productCategories\productCategories.html" />
     <Content Include="app\admin\productCategories\productCategories.service.js" />
+    <Content Include="app\admin\productSelector\admin.productSelector.controller.js" />
+    <Content Include="app\admin\productSelector\productSelector.html" />
+    <Content Include="app\admin\productSelector\productSelector.service.js" />
     <Content Include="app\admin\products\admin.products.controller.js" />
     <Content Include="app\admin\products\products.html" />
     <Content Include="app\admin\products\products.service.js" />
@@ -1283,6 +1289,7 @@
     <Content Include="Scripts\Angular\1.5.8\angular-ui-router.min.js" />
     <Content Include="Scripts\Angular\1.5.8\angular.js" />
     <Content Include="Scripts\Angular\1.5.8\angular.min.js" />
+    <Content Include="Scripts\Angular\angular-linq.min.js" />
     <Content Include="Scripts\Angular\select.min.js" />
     <Content Include="Scripts\Angular\ui-bootstrap-tpls-2.2.0.min.js" />
     <Content Include="Scripts\bootstrap.js" />

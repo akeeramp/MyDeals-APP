@@ -13,14 +13,14 @@
 <#@ import namespace="System.Data.Common" #>
 <#@ import namespace="System.Data.SqlClient" #>
 <#@ import namespace="System.Text" #>
-<# 
-	
-	// DEVELOPER: Change this to be the namespace to create the SP classes in 
+<#
+
+	// DEVELOPER: Change this to be the namespace to create the SP classes in
 	const string outputNameSpace = "Intel.MyDeals.DataAccessLib.StoredProcedures";
 	const string targetServer = @"Database={0};Server=EG1RDMDBDEV01.amr.corp.intel.com\DEALSDEV,3180;integrated security=SSPI;"; // Note the {0} for database name....
 	const string default_database = "MyDeals";
 
-	string[] EXCLUDE_PROCS = new string[] 
+	string[] EXCLUDE_PROCS = new string[]
 	{
     };
 
@@ -33,14 +33,14 @@
 
 	foreach(string connection_db_name in TargetDatabases)
 	{
-	
+
 		var dbobjects = new DBObjects(String.Format(targetServer, connection_db_name));
 
 		if(first_pass)
 		{
 			first_pass = false;
 
-			WriteLine(dbobjects.BoilerPlateDetails);	
+			WriteLine(dbobjects.BoilerPlateDetails);
 			WriteLine(@"
 using System;
 using System.Data;
@@ -55,7 +55,7 @@ using System.Data.SqlClient;
 		var ALL_PROCS = dbobjects.StoredProcedures
 			.Where(sp => {
 				string sp_un = sp.name.ToUpper().Trim();
-			
+
 				if(!sp_un.StartsWith("PR_")){ return false; }
 				if(sp_un.EndsWith("_BJ") || sp_un.EndsWith("_IL") || sp_un.EndsWith("_AXL") || sp_un.EndsWith("_SK") || sp_un.EndsWith("_RM") || sp_un.EndsWith("_DP")) { return false; }
 				if(EXCLUDE_PROCS.Contains(sp_un)) { return false; }
@@ -71,7 +71,7 @@ using System.Data.SqlClient;
 	foreach(string schema_name in ALL_PROCS.Select(p=>p.schema_name).Distinct())
 	{
 		PushIndent(TAB);
-		WriteLine("namespace {0} {{", schema_name);	
+		WriteLine("namespace {0} {{", schema_name);
 
 		// ok, we iterated over stored procedures, now we need to generate classes and methods
 		foreach (SysProc ent in ALL_PROCS.Where(p=>p.schema_name == schema_name))
@@ -107,15 +107,15 @@ using System.Data.SqlClient;
 			.Trim()
 			.Replace(".","_")
 			.Replace(" ","_");
-		
-		WriteLine(""); 
-		WriteLine(@"///<summary>");	
+
+		WriteLine("");
+		WriteLine(@"///<summary>");
 		WriteLine(@"/// ID: {0}", ent.object_id);
 		WriteLine(@"/// Modified: {0}", ent.modify_date);
 		WriteLine(@"/// Parameters: {0}", ent.Parameters.Count);
 		WriteLine(@"///</summary>");
 		WriteLine(@"public partial class {0} : SP {{", escaped_sp_name);
-		
+
 			PushIndent(TAB);
 			WriteLine(@"public {0}() {{", escaped_sp_name);
 				PushIndent(TAB);
@@ -126,14 +126,14 @@ using System.Data.SqlClient;
 				}
 				PopIndent();
 			WriteLine(@"}");
-			
+
 			// Process parameters
 			foreach(SysParam p in ent.Parameters.OrderBy(itm=>itm.parameter_id)){
 				this.WriteParameter(p);
 			} // foreach param
 			PopIndent();
 		WriteLine(@"}");
-		
+
 		PopIndent();
 	}
 
@@ -153,7 +153,7 @@ using System.Data.SqlClient;
 			WriteLine(@"/// Max Length: {0}", p.max_length);
 		}
 		WriteLine(@"///</summary>");
-		
+
 		/*
 		if(p.has_default_value == false)
 		{
@@ -170,7 +170,7 @@ using System.Data.SqlClient;
 			String.Format("{0}", p.HasDefaultValue).ToLower(),
 			p.parameter_id
 			);
-		
+
 		WriteLine(string.Format(@"public {0} {1} {{", dndt, p.parameter_name));
 		PushIndent(TAB);
 			WriteLine(string.Format(@"set {{ SetParmeter(""{0}"", value); }}", p.parameter_name));
