@@ -25,6 +25,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared Libraries", "Shared 
 		Shared Libraries\Intel.Opaque.DBAccess.pdb = Shared Libraries\Intel.Opaque.DBAccess.pdb
 		Shared Libraries\Intel.Opaque.dll = Shared Libraries\Intel.Opaque.dll
 		Shared Libraries\Intel.Opaque.pdb = Shared Libraries\Intel.Opaque.pdb
+		Shared Libraries\Intel.Opaque.Rules.dll = Shared Libraries\Intel.Opaque.Rules.dll
+		Shared Libraries\Intel.Opaque.Rules.pdb = Shared Libraries\Intel.Opaque.Rules.pdb
 		Shared Libraries\Intel.Opaque.Templating.dll = Shared Libraries\Intel.Opaque.Templating.dll
 		Shared Libraries\Intel.Opaque.Templating.pdb = Shared Libraries\Intel.Opaque.Templating.pdb
 		Shared Libraries\Intel.RulesEngine.dll = Shared Libraries\Intel.RulesEngine.dll
@@ -224,7 +226,7 @@ Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 16
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://tfs-fm-04.devtools.intel.com/tfs/defaultcollection
+		SccTeamFoundationServer = http://source.intel.com:8080/tfs/defaultcollection
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = Intel.MyDeals.DataAccessLib\\Intel.MyDeals.DataAccessLib.csproj
 		SccProjectTopLevelParentUniqueName1 = Intel.Mydeals.sln
