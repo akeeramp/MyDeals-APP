@@ -417,6 +417,8 @@
     <Content Include="app\admin\securityAttributes\securityActions\securityActions.manage.html" />
     <Content Include="app\testCases\grids\basic.controller.js" />
     <Content Include="app\testCases\grids\basic.manage.html" />
+    <Content Include="app\testCases\rules\businessRules.controller.js" />
+    <Content Include="app\testCases\rules\businessRules.manage.html" />
     <Content Include="app\testCases\testCases.module.js" />
     <Content Include="app\testCases\testCases.route.js" />
     <Content Include="app\testCases\uiControls\uiControls.controller.js" />
@@ -2161,6 +2163,10 @@
     <ProjectReference Include="..\Intel.MyDeals.BusinessLogic\Intel.MyDeals.BusinessLogic.csproj">
       <Project>{d49f802f-7f79-4f6e-9553-d26f40e7db34}</Project>
       <Name>Intel.MyDeals.BusinessLogic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Intel.MyDeals.BusinessRules\Intel.MyDeals.BusinessRules.csproj">
+      <Project>{2F3217AD-E46B-4DAB-82C2-11E007B65A9C}</Project>
+      <Name>Intel.MyDeals.BusinessRules</Name>
     </ProjectReference>
     <ProjectReference Include="..\Intel.MyDeals.Entities\Intel.MyDeals.Entities.csproj">
       <Project>{e6218877-d89e-4135-8032-057878799ac4}</Project>

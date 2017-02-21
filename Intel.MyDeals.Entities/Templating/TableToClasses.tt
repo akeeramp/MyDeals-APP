@@ -42,6 +42,10 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "PocEmp";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], true));
 
+	//Attribute Master
+	ds = dbobjects.ExecuteDataSet("dbo.PR_GET_ATRB_MSTR");
+	ds.Tables[0].TableName = "AtrbMstr";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], true));
 
 	////ds = dbobjects.ExecuteDataSet("[app].[PR_GET_LOOKUPS]");
 	////ds.Tables[0].TableName = "LookupItem";

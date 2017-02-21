@@ -254,6 +254,7 @@ gridTools.prototype.createDataSource = function (parentSource, pageSize) {
             read: function (e) {
                 var source = parentSource;
                 // on success
+
                 e.success(source);
                 // on failure
                 //e.error("XHR response", "status code", "error message");

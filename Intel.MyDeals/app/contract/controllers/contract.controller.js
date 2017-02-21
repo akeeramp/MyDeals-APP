@@ -216,7 +216,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
                         topbar.hide();
                     },
                     function (result) {
-                        logger.error("Could not delete the Pricing Strategy.", response, response.statusText);
+                        logger.error("Could not delete the Pricing Strategy.", result, result.statusText);
                         topbar.hide();
                     }
                 );
@@ -313,16 +313,16 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         // Add to DB first... then add to screen
         objsetService.createContract($scope.getCustId(), ct).then(
             function (data) {
-                // TODO need to handle exception/error here... right now we do not read response for pass/fail
-                // let's fake getting a real deal # if it is a new contract
-                if (ct.dc_id <= 0) {
-                    for (var a = 0; a < data.data.Contract.Actions.length; a++) {
-                        var action = data.data.Contract.Actions[a];
-                        if (action.Action === "ID_CHANGE" && action.dc_id === ct.cd_id) {
-                            ct.dc_id = action.AltID;
-                        }
-                    }
-                }
+                $scope.updateNegativeIds(ct, "Contract", data);
+
+                //if (ct.dc_id <= 0) {
+                //    for (var a = 0; a < data.data.Contract.Actions.length; a++) {
+                //        var action = data.data.Contract.Actions[a];
+                //        if (action.Action === "ID_CHANGE" && action.dc_id === ct.dc_id) {
+                //            ct.dc_id = action.AltID;
+                //        }
+                //    }
+                //}
 
                 logger.success("Saved the contract", ct, "Save Sucessful");
                 topbar.hide();
@@ -364,6 +364,16 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         }
     }
 
+    $scope.updateNegativeIds = function(collection, key, data) {
+        if (collection.dc_id <= 0) {
+            for (var a = 0; a < data.data[key].Actions.length; a++) {
+                var action = data.data[key].Actions[a];
+                if (action.Action === "ID_CHANGE" && action.DcID === collection.dc_id) {
+                    collection.dc_id = action.AltID;
+                }
+            }
+        }
+    }
 
     // **** NEW PRICING STRATEGY Methods ****
     //
@@ -375,19 +385,18 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         // Clone base model and populate changes
         var ps = util.clone($scope.templates.ObjectTemplates.PricingStrategy.Generic);
         ps.dc_id = $scope.uid--;
-        ps.dc_parent_id = ct.dc_sid;
         ps.dc_sid = 0;
+        ps.dc_parent_id = ct.dc_id;
+        ps.dc_parent_sid = ct.dc_sid;
         ps.PricingTable = [];
         ps.TITLE = $scope.newStrategy.TITLE;
 
         // Add to DB first... then add to screen
         objsetService.createPricingStrategy($scope.getCustId(), ps).then(
             function (data) {
-                debugger;
-                // TODO need to handle exception/error here... right now we do not read response for pass/fail
-                // let's fake getting a real deal #
-                ps.dc_id = -ps.dc_id;
+                $scope.updateNegativeIds(ps, "PricingStrategy", data);
 
+                if ($scope.contractData.PricingStrategy === undefined) $scope.contractData.PricingStrategy = [];
                 $scope.contractData.PricingStrategy.push(ps);
                 $scope.showAddPricingTable(ps);
                 logger.success("Added Pricing Strategy", ps, "Save Sucessful");
@@ -432,25 +441,25 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
     $scope.addPricingTable = function () {
         topbar.show();
 
-        //debugger;
         // Clone base model and populate changes
+        // TODO generic shoud be replaced with the correct OBJSET_TYPE
         var pt = util.clone($scope.templates.ObjectTemplates.PricingTable.Generic);
         pt.dc_id = $scope.uid--;
+        pt.dc_sid = $scope.uid--;
         pt.dc_parent_id = $scope.curPricingStrategy.dc_id;
-        pt.dc_sid = $scope.curPricingStrategy.dc_sid;
+        pt.dc_parent_sid = $scope.curPricingStrategy.dc_sid;
         pt.OBJSET_TYPE_CD = $scope.newPricingTable.OBJSET_TYPE_CD;
         pt.TITLE = $scope.newPricingTable.TITLE;
         pt._defaultAtrbs = $scope.newPricingTable._defaultAtrbs;
+
 
         // Add to DB first... then add to screen
         objsetService.createPricingTable($scope.getCustId(), pt).then(
             function (data) {
 
-                debugger;
-                // TODO need to handle exception/error here... right now we do not read response for pass/fail
-                // let's fake getting a real deal #
-                pt.dc_id = -pt.dc_id;
+                $scope.updateNegativeIds(pt, "PricingTable", data);
 
+                if ($scope.curPricingStrategy.PricingTable === undefined) $scope.curPricingStrategy.PricingTable = [];
                 $scope.curPricingStrategy.PricingTable.push(pt);
                 $scope.hideAddPricingTable();
 

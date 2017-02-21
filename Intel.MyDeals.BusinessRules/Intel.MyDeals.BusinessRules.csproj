@@ -40,6 +40,12 @@
     <Reference Include="Intel.Opaque.Data">
       <HintPath>..\Shared Libraries\Intel.Opaque.Data.dll</HintPath>
     </Reference>
+    <Reference Include="Intel.Opaque.Rules">
+      <HintPath>..\Shared Libraries\Intel.Opaque.Rules.dll</HintPath>
+    </Reference>
+    <Reference Include="Kendo.Mvc">
+      <HintPath>..\Shared Libraries\Kendo.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -50,8 +56,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MyDcConditionLib.cs" />
+    <Compile Include="MyDcActions.cs" />
+    <Compile Include="MyDcRules\AutomatedTestingRules.cs" />
+    <Compile Include="MyDcRules\BasicValidationRules.cs" />
+    <Compile Include="MyDeActions.cs" />
+    <Compile Include="MyDeConditionLib.cs" />
+    <Compile Include="MyOpRule.cs" />
+    <Compile Include="MyOpRulesLib.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RuleTriggerPoint.cs" />
+    <Compile Include="MyRulesConfiguration.cs" />
+    <Compile Include="MyDcRules\ReadOnlyRules.cs" />
+    <Compile Include="MyRulesTrigger.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Intel.MyDeals.DataLibrary\Intel.MyDeals.DataLibrary.csproj">

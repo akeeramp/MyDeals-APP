@@ -136,6 +136,340 @@ namespace Intel.MyDeals.Entities {
 	///<summary>
 	/// Class created via template - Do Not Modify!
 	/// To modify this code, re-execute the template, or extend as partial.
+	/// on PWECKENR-MOBL
+	/// by pweckenr
+	/// at 2/18/2017 11:01:19 AM
+	///</summary>
+	
+	[DataContract]
+	public partial class AtrbMstr {
+	
+	[DataMember]
+	public Nullable<System.Int32> ACTV_IND {set;get;}
+	
+	
+	[DataMember]
+	public Nullable<System.Boolean> ATRB_ACTV_IND {set;get;}
+	
+	
+	[DataMember]
+	public System.String ATRB_COL_NM {set;get;}
+	
+	
+	[DataMember]
+	public System.String ATRB_DESC {set;get;}
+	
+	
+	[DataMember]
+	public System.String ATRB_EXT_PRO {set;get;}
+	
+	
+	[DataMember]
+	public System.String ATRB_FK_TBL_DSPLY_COL_NM {set;get;}
+	
+	
+	[DataMember]
+	public System.String ATRB_FK_TBL_NM {set;get;}
+	
+	
+	[DataMember]
+	public System.String ATRB_FK_TBL_PK_COL_NM {set;get;}
+	
+	
+	[DataMember]
+	public System.String ATRB_FK_TBL_SCHMA {set;get;}
+	
+	
+	[DataMember]
+	public System.String ATRB_LBL {set;get;}
+	
+	
+	[DataMember]
+	public Nullable<System.Int32> ATRB_MAX_LEN {set;get;}
+	
+	
+	[DataMember]
+	public Nullable<System.Int32> ATRB_SID {set;get;}
+	
+	
+	[DataMember]
+	public System.String ATRB_SRC_TBL_NM {set;get;}
+	
+	
+	[DataMember]
+	public System.String ATRB_SRC_TBL_SCHMA {set;get;}
+	
+	
+	[DataMember]
+	public Nullable<System.Int32> ATRB_SRT_ORD {set;get;}
+	
+	
+	[DataMember]
+	public System.String ATRB_TGT_COL {set;get;}
+	
+	
+	[DataMember]
+	public Nullable<System.Boolean> ATRB_UNIQ_IND {set;get;}
+	
+	
+	[DataMember]
+	public System.String ATRB_UNIQ_LEVELS {set;get;}
+	
+	
+	[DataMember]
+	public Nullable<System.DateTime> CHG_DTM {set;get;}
+	
+	
+	[DataMember]
+	public Nullable<System.Int32> CHG_EMP_WWID {set;get;}
+	
+	
+	[DataMember]
+	public Nullable<System.DateTime> CRE_DTM {set;get;}
+	
+	
+	[DataMember]
+	public Nullable<System.Int32> CRE_EMP_WWID {set;get;}
+	
+	
+	[DataMember]
+	public Nullable<System.Boolean> DATA_TYPE_ACTV_IND {set;get;}
+	
+	
+	[DataMember]
+	public System.String DATA_TYPE_CD {set;get;}
+	
+	
+	[DataMember]
+	public System.String DATA_TYPE_DESC {set;get;}
+	
+	
+	[DataMember]
+	public Nullable<System.Int32> DATA_TYPE_SID {set;get;}
+	
+	
+	[DataMember]
+	public Nullable<System.Boolean> DIM_ACTV_IND {set;get;}
+	
+	
+	[DataMember]
+	public System.String DIM_ATRB_COL_NM {set;get;}
+	
+	
+	[DataMember]
+	public System.String DIM_CD {set;get;}
+	
+	
+	[DataMember]
+	public System.String DIM_DATA_COL_NM {set;get;}
+	
+	
+	[DataMember]
+	public System.String DIM_DFLT_ROOT_ATRB_NM {set;get;}
+	
+	
+	[DataMember]
+	public System.String DIM_INTRFC_TBL_NM {set;get;}
+	
+	
+	[DataMember]
+	public System.String DIM_INTRFC_TBL_SCHMA {set;get;}
+	
+	
+	[DataMember]
+	public System.String DIM_MAT_VW_NM {set;get;}
+	
+	
+	[DataMember]
+	public System.String DIM_MAT_VW_SCHMA {set;get;}
+	
+	
+	[DataMember]
+	public System.String DIM_NM {set;get;}
+	
+	
+	[DataMember]
+	public Nullable<System.Int16> DIM_SID {set;get;}
+	
+	
+	[DataMember]
+	public System.String DIM_TBL_NM {set;get;}
+	
+	
+	[DataMember]
+	public System.String DIM_TBL_SCHMA {set;get;}
+	
+	
+	[DataMember]
+	public System.String DOT_NET_DATA_TYPE {set;get;}
+	
+	
+	[DataMember]
+	public System.String FRMT_MSK {set;get;}
+	
+	
+	[DataMember]
+	public Nullable<System.Boolean> IS_FACT {set;get;}
+	
+	
+	[DataMember]
+	public Nullable<System.Boolean> IS_IDX {set;get;}
+	
+	
+	[DataMember]
+	public Nullable<System.Int32> KEY_AT_ATRB_SID {set;get;}
+	
+	
+	[DataMember]
+	public System.String LEGACY_NM {set;get;}
+	
+	
+	[DataMember]
+	public Nullable<System.Int32> LKUP_ROOT_SID {set;get;}
+	
+	
+	[DataMember]
+	public Nullable<System.Int32> PIVOT_MSK {set;get;}
+	
+	
+	[DataMember]
+	public System.String SQL_DATA_TYPE {set;get;}
+	
+	
+	[DataMember]
+	public System.String SQL_DATA_TYPE_FQ {set;get;}
+	
+	
+	[DataMember]
+	public System.String TGT_COL_TYPE {set;get;}
+	
+	
+	[DataMember]
+	public System.String UI_TYPE_CD {set;get;}
+	
+	
+	/*
+	private static List<AtrbMstr> AtrbMstrFromReader(SqlDataReader rdr){
+	// This helper method is template generated.
+	// Refer to that template for details to modify this code.
+	
+	var ret = new List<AtrbMstr>();
+	int IDX_ACTV_IND = DB.GetReaderOrdinal(rdr, "ACTV_IND");
+	int IDX_ATRB_ACTV_IND = DB.GetReaderOrdinal(rdr, "ATRB_ACTV_IND");
+	int IDX_ATRB_COL_NM = DB.GetReaderOrdinal(rdr, "ATRB_COL_NM");
+	int IDX_ATRB_DESC = DB.GetReaderOrdinal(rdr, "ATRB_DESC");
+	int IDX_ATRB_EXT_PRO = DB.GetReaderOrdinal(rdr, "ATRB_EXT_PRO");
+	int IDX_ATRB_FK_TBL_DSPLY_COL_NM = DB.GetReaderOrdinal(rdr, "ATRB_FK_TBL_DSPLY_COL_NM");
+	int IDX_ATRB_FK_TBL_NM = DB.GetReaderOrdinal(rdr, "ATRB_FK_TBL_NM");
+	int IDX_ATRB_FK_TBL_PK_COL_NM = DB.GetReaderOrdinal(rdr, "ATRB_FK_TBL_PK_COL_NM");
+	int IDX_ATRB_FK_TBL_SCHMA = DB.GetReaderOrdinal(rdr, "ATRB_FK_TBL_SCHMA");
+	int IDX_ATRB_LBL = DB.GetReaderOrdinal(rdr, "ATRB_LBL");
+	int IDX_ATRB_MAX_LEN = DB.GetReaderOrdinal(rdr, "ATRB_MAX_LEN");
+	int IDX_ATRB_SID = DB.GetReaderOrdinal(rdr, "ATRB_SID");
+	int IDX_ATRB_SRC_TBL_NM = DB.GetReaderOrdinal(rdr, "ATRB_SRC_TBL_NM");
+	int IDX_ATRB_SRC_TBL_SCHMA = DB.GetReaderOrdinal(rdr, "ATRB_SRC_TBL_SCHMA");
+	int IDX_ATRB_SRT_ORD = DB.GetReaderOrdinal(rdr, "ATRB_SRT_ORD");
+	int IDX_ATRB_TGT_COL = DB.GetReaderOrdinal(rdr, "ATRB_TGT_COL");
+	int IDX_ATRB_UNIQ_IND = DB.GetReaderOrdinal(rdr, "ATRB_UNIQ_IND");
+	int IDX_ATRB_UNIQ_LEVELS = DB.GetReaderOrdinal(rdr, "ATRB_UNIQ_LEVELS");
+	int IDX_CHG_DTM = DB.GetReaderOrdinal(rdr, "CHG_DTM");
+	int IDX_CHG_EMP_WWID = DB.GetReaderOrdinal(rdr, "CHG_EMP_WWID");
+	int IDX_CRE_DTM = DB.GetReaderOrdinal(rdr, "CRE_DTM");
+	int IDX_CRE_EMP_WWID = DB.GetReaderOrdinal(rdr, "CRE_EMP_WWID");
+	int IDX_DATA_TYPE_ACTV_IND = DB.GetReaderOrdinal(rdr, "DATA_TYPE_ACTV_IND");
+	int IDX_DATA_TYPE_CD = DB.GetReaderOrdinal(rdr, "DATA_TYPE_CD");
+	int IDX_DATA_TYPE_DESC = DB.GetReaderOrdinal(rdr, "DATA_TYPE_DESC");
+	int IDX_DATA_TYPE_SID = DB.GetReaderOrdinal(rdr, "DATA_TYPE_SID");
+	int IDX_DIM_ACTV_IND = DB.GetReaderOrdinal(rdr, "DIM_ACTV_IND");
+	int IDX_DIM_ATRB_COL_NM = DB.GetReaderOrdinal(rdr, "DIM_ATRB_COL_NM");
+	int IDX_DIM_CD = DB.GetReaderOrdinal(rdr, "DIM_CD");
+	int IDX_DIM_DATA_COL_NM = DB.GetReaderOrdinal(rdr, "DIM_DATA_COL_NM");
+	int IDX_DIM_DFLT_ROOT_ATRB_NM = DB.GetReaderOrdinal(rdr, "DIM_DFLT_ROOT_ATRB_NM");
+	int IDX_DIM_INTRFC_TBL_NM = DB.GetReaderOrdinal(rdr, "DIM_INTRFC_TBL_NM");
+	int IDX_DIM_INTRFC_TBL_SCHMA = DB.GetReaderOrdinal(rdr, "DIM_INTRFC_TBL_SCHMA");
+	int IDX_DIM_MAT_VW_NM = DB.GetReaderOrdinal(rdr, "DIM_MAT_VW_NM");
+	int IDX_DIM_MAT_VW_SCHMA = DB.GetReaderOrdinal(rdr, "DIM_MAT_VW_SCHMA");
+	int IDX_DIM_NM = DB.GetReaderOrdinal(rdr, "DIM_NM");
+	int IDX_DIM_SID = DB.GetReaderOrdinal(rdr, "DIM_SID");
+	int IDX_DIM_TBL_NM = DB.GetReaderOrdinal(rdr, "DIM_TBL_NM");
+	int IDX_DIM_TBL_SCHMA = DB.GetReaderOrdinal(rdr, "DIM_TBL_SCHMA");
+	int IDX_DOT_NET_DATA_TYPE = DB.GetReaderOrdinal(rdr, "DOT_NET_DATA_TYPE");
+	int IDX_FRMT_MSK = DB.GetReaderOrdinal(rdr, "FRMT_MSK");
+	int IDX_IS_FACT = DB.GetReaderOrdinal(rdr, "IS_FACT");
+	int IDX_IS_IDX = DB.GetReaderOrdinal(rdr, "IS_IDX");
+	int IDX_KEY_AT_ATRB_SID = DB.GetReaderOrdinal(rdr, "KEY_AT_ATRB_SID");
+	int IDX_LEGACY_NM = DB.GetReaderOrdinal(rdr, "LEGACY_NM");
+	int IDX_LKUP_ROOT_SID = DB.GetReaderOrdinal(rdr, "LKUP_ROOT_SID");
+	int IDX_PIVOT_MSK = DB.GetReaderOrdinal(rdr, "PIVOT_MSK");
+	int IDX_SQL_DATA_TYPE = DB.GetReaderOrdinal(rdr, "SQL_DATA_TYPE");
+	int IDX_SQL_DATA_TYPE_FQ = DB.GetReaderOrdinal(rdr, "SQL_DATA_TYPE_FQ");
+	int IDX_TGT_COL_TYPE = DB.GetReaderOrdinal(rdr, "TGT_COL_TYPE");
+	int IDX_UI_TYPE_CD = DB.GetReaderOrdinal(rdr, "UI_TYPE_CD");
+	
+	while (rdr.Read()){
+	ret.Add(new AtrbMstr {
+	ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(Nullable<System.Int32>) : rdr.GetFieldValue<Nullable<System.Int32>>(IDX_ACTV_IND),
+	ATRB_ACTV_IND = (IDX_ATRB_ACTV_IND < 0 || rdr.IsDBNull(IDX_ATRB_ACTV_IND)) ? default(Nullable<System.Boolean>) : rdr.GetFieldValue<Nullable<System.Boolean>>(IDX_ATRB_ACTV_IND),
+	ATRB_COL_NM = (IDX_ATRB_COL_NM < 0 || rdr.IsDBNull(IDX_ATRB_COL_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_COL_NM),
+	ATRB_DESC = (IDX_ATRB_DESC < 0 || rdr.IsDBNull(IDX_ATRB_DESC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_DESC),
+	ATRB_EXT_PRO = (IDX_ATRB_EXT_PRO < 0 || rdr.IsDBNull(IDX_ATRB_EXT_PRO)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_EXT_PRO),
+	ATRB_FK_TBL_DSPLY_COL_NM = (IDX_ATRB_FK_TBL_DSPLY_COL_NM < 0 || rdr.IsDBNull(IDX_ATRB_FK_TBL_DSPLY_COL_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_FK_TBL_DSPLY_COL_NM),
+	ATRB_FK_TBL_NM = (IDX_ATRB_FK_TBL_NM < 0 || rdr.IsDBNull(IDX_ATRB_FK_TBL_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_FK_TBL_NM),
+	ATRB_FK_TBL_PK_COL_NM = (IDX_ATRB_FK_TBL_PK_COL_NM < 0 || rdr.IsDBNull(IDX_ATRB_FK_TBL_PK_COL_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_FK_TBL_PK_COL_NM),
+	ATRB_FK_TBL_SCHMA = (IDX_ATRB_FK_TBL_SCHMA < 0 || rdr.IsDBNull(IDX_ATRB_FK_TBL_SCHMA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_FK_TBL_SCHMA),
+	ATRB_LBL = (IDX_ATRB_LBL < 0 || rdr.IsDBNull(IDX_ATRB_LBL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_LBL),
+	ATRB_MAX_LEN = (IDX_ATRB_MAX_LEN < 0 || rdr.IsDBNull(IDX_ATRB_MAX_LEN)) ? default(Nullable<System.Int32>) : rdr.GetFieldValue<Nullable<System.Int32>>(IDX_ATRB_MAX_LEN),
+	ATRB_SID = (IDX_ATRB_SID < 0 || rdr.IsDBNull(IDX_ATRB_SID)) ? default(Nullable<System.Int32>) : rdr.GetFieldValue<Nullable<System.Int32>>(IDX_ATRB_SID),
+	ATRB_SRC_TBL_NM = (IDX_ATRB_SRC_TBL_NM < 0 || rdr.IsDBNull(IDX_ATRB_SRC_TBL_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_SRC_TBL_NM),
+	ATRB_SRC_TBL_SCHMA = (IDX_ATRB_SRC_TBL_SCHMA < 0 || rdr.IsDBNull(IDX_ATRB_SRC_TBL_SCHMA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_SRC_TBL_SCHMA),
+	ATRB_SRT_ORD = (IDX_ATRB_SRT_ORD < 0 || rdr.IsDBNull(IDX_ATRB_SRT_ORD)) ? default(Nullable<System.Int32>) : rdr.GetFieldValue<Nullable<System.Int32>>(IDX_ATRB_SRT_ORD),
+	ATRB_TGT_COL = (IDX_ATRB_TGT_COL < 0 || rdr.IsDBNull(IDX_ATRB_TGT_COL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_TGT_COL),
+	ATRB_UNIQ_IND = (IDX_ATRB_UNIQ_IND < 0 || rdr.IsDBNull(IDX_ATRB_UNIQ_IND)) ? default(Nullable<System.Boolean>) : rdr.GetFieldValue<Nullable<System.Boolean>>(IDX_ATRB_UNIQ_IND),
+	ATRB_UNIQ_LEVELS = (IDX_ATRB_UNIQ_LEVELS < 0 || rdr.IsDBNull(IDX_ATRB_UNIQ_LEVELS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_UNIQ_LEVELS),
+	CHG_DTM = (IDX_CHG_DTM < 0 || rdr.IsDBNull(IDX_CHG_DTM)) ? default(Nullable<System.DateTime>) : rdr.GetFieldValue<Nullable<System.DateTime>>(IDX_CHG_DTM),
+	CHG_EMP_WWID = (IDX_CHG_EMP_WWID < 0 || rdr.IsDBNull(IDX_CHG_EMP_WWID)) ? default(Nullable<System.Int32>) : rdr.GetFieldValue<Nullable<System.Int32>>(IDX_CHG_EMP_WWID),
+	CRE_DTM = (IDX_CRE_DTM < 0 || rdr.IsDBNull(IDX_CRE_DTM)) ? default(Nullable<System.DateTime>) : rdr.GetFieldValue<Nullable<System.DateTime>>(IDX_CRE_DTM),
+	CRE_EMP_WWID = (IDX_CRE_EMP_WWID < 0 || rdr.IsDBNull(IDX_CRE_EMP_WWID)) ? default(Nullable<System.Int32>) : rdr.GetFieldValue<Nullable<System.Int32>>(IDX_CRE_EMP_WWID),
+	DATA_TYPE_ACTV_IND = (IDX_DATA_TYPE_ACTV_IND < 0 || rdr.IsDBNull(IDX_DATA_TYPE_ACTV_IND)) ? default(Nullable<System.Boolean>) : rdr.GetFieldValue<Nullable<System.Boolean>>(IDX_DATA_TYPE_ACTV_IND),
+	DATA_TYPE_CD = (IDX_DATA_TYPE_CD < 0 || rdr.IsDBNull(IDX_DATA_TYPE_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DATA_TYPE_CD),
+	DATA_TYPE_DESC = (IDX_DATA_TYPE_DESC < 0 || rdr.IsDBNull(IDX_DATA_TYPE_DESC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DATA_TYPE_DESC),
+	DATA_TYPE_SID = (IDX_DATA_TYPE_SID < 0 || rdr.IsDBNull(IDX_DATA_TYPE_SID)) ? default(Nullable<System.Int32>) : rdr.GetFieldValue<Nullable<System.Int32>>(IDX_DATA_TYPE_SID),
+	DIM_ACTV_IND = (IDX_DIM_ACTV_IND < 0 || rdr.IsDBNull(IDX_DIM_ACTV_IND)) ? default(Nullable<System.Boolean>) : rdr.GetFieldValue<Nullable<System.Boolean>>(IDX_DIM_ACTV_IND),
+	DIM_ATRB_COL_NM = (IDX_DIM_ATRB_COL_NM < 0 || rdr.IsDBNull(IDX_DIM_ATRB_COL_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DIM_ATRB_COL_NM),
+	DIM_CD = (IDX_DIM_CD < 0 || rdr.IsDBNull(IDX_DIM_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DIM_CD),
+	DIM_DATA_COL_NM = (IDX_DIM_DATA_COL_NM < 0 || rdr.IsDBNull(IDX_DIM_DATA_COL_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DIM_DATA_COL_NM),
+	DIM_DFLT_ROOT_ATRB_NM = (IDX_DIM_DFLT_ROOT_ATRB_NM < 0 || rdr.IsDBNull(IDX_DIM_DFLT_ROOT_ATRB_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DIM_DFLT_ROOT_ATRB_NM),
+	DIM_INTRFC_TBL_NM = (IDX_DIM_INTRFC_TBL_NM < 0 || rdr.IsDBNull(IDX_DIM_INTRFC_TBL_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DIM_INTRFC_TBL_NM),
+	DIM_INTRFC_TBL_SCHMA = (IDX_DIM_INTRFC_TBL_SCHMA < 0 || rdr.IsDBNull(IDX_DIM_INTRFC_TBL_SCHMA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DIM_INTRFC_TBL_SCHMA),
+	DIM_MAT_VW_NM = (IDX_DIM_MAT_VW_NM < 0 || rdr.IsDBNull(IDX_DIM_MAT_VW_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DIM_MAT_VW_NM),
+	DIM_MAT_VW_SCHMA = (IDX_DIM_MAT_VW_SCHMA < 0 || rdr.IsDBNull(IDX_DIM_MAT_VW_SCHMA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DIM_MAT_VW_SCHMA),
+	DIM_NM = (IDX_DIM_NM < 0 || rdr.IsDBNull(IDX_DIM_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DIM_NM),
+	DIM_SID = (IDX_DIM_SID < 0 || rdr.IsDBNull(IDX_DIM_SID)) ? default(Nullable<System.Int16>) : rdr.GetFieldValue<Nullable<System.Int16>>(IDX_DIM_SID),
+	DIM_TBL_NM = (IDX_DIM_TBL_NM < 0 || rdr.IsDBNull(IDX_DIM_TBL_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DIM_TBL_NM),
+	DIM_TBL_SCHMA = (IDX_DIM_TBL_SCHMA < 0 || rdr.IsDBNull(IDX_DIM_TBL_SCHMA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DIM_TBL_SCHMA),
+	DOT_NET_DATA_TYPE = (IDX_DOT_NET_DATA_TYPE < 0 || rdr.IsDBNull(IDX_DOT_NET_DATA_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DOT_NET_DATA_TYPE),
+	FRMT_MSK = (IDX_FRMT_MSK < 0 || rdr.IsDBNull(IDX_FRMT_MSK)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_FRMT_MSK),
+	IS_FACT = (IDX_IS_FACT < 0 || rdr.IsDBNull(IDX_IS_FACT)) ? default(Nullable<System.Boolean>) : rdr.GetFieldValue<Nullable<System.Boolean>>(IDX_IS_FACT),
+	IS_IDX = (IDX_IS_IDX < 0 || rdr.IsDBNull(IDX_IS_IDX)) ? default(Nullable<System.Boolean>) : rdr.GetFieldValue<Nullable<System.Boolean>>(IDX_IS_IDX),
+	KEY_AT_ATRB_SID = (IDX_KEY_AT_ATRB_SID < 0 || rdr.IsDBNull(IDX_KEY_AT_ATRB_SID)) ? default(Nullable<System.Int32>) : rdr.GetFieldValue<Nullable<System.Int32>>(IDX_KEY_AT_ATRB_SID),
+	LEGACY_NM = (IDX_LEGACY_NM < 0 || rdr.IsDBNull(IDX_LEGACY_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_LEGACY_NM),
+	LKUP_ROOT_SID = (IDX_LKUP_ROOT_SID < 0 || rdr.IsDBNull(IDX_LKUP_ROOT_SID)) ? default(Nullable<System.Int32>) : rdr.GetFieldValue<Nullable<System.Int32>>(IDX_LKUP_ROOT_SID),
+	PIVOT_MSK = (IDX_PIVOT_MSK < 0 || rdr.IsDBNull(IDX_PIVOT_MSK)) ? default(Nullable<System.Int32>) : rdr.GetFieldValue<Nullable<System.Int32>>(IDX_PIVOT_MSK),
+	SQL_DATA_TYPE = (IDX_SQL_DATA_TYPE < 0 || rdr.IsDBNull(IDX_SQL_DATA_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_SQL_DATA_TYPE),
+	SQL_DATA_TYPE_FQ = (IDX_SQL_DATA_TYPE_FQ < 0 || rdr.IsDBNull(IDX_SQL_DATA_TYPE_FQ)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_SQL_DATA_TYPE_FQ),
+	TGT_COL_TYPE = (IDX_TGT_COL_TYPE < 0 || rdr.IsDBNull(IDX_TGT_COL_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_TGT_COL_TYPE),
+	UI_TYPE_CD = (IDX_UI_TYPE_CD < 0 || rdr.IsDBNull(IDX_UI_TYPE_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_UI_TYPE_CD)
+	});
+	} // while
+	return ret;
+	}
+	*/
+	
+	} // End of class AtrbMstr
+
+	///<summary>
+	/// Class created via template - Do Not Modify!
+	/// To modify this code, re-execute the template, or extend as partial.
 	/// on MBIRADAR-MOBL1
 	/// by mbiradar
 	/// at 2/20/2017 2:07:51 PM
@@ -228,7 +562,7 @@ namespace Intel.MyDeals.Entities {
 	CNST_NM = (IDX_CNST_NM < 0 || rdr.IsDBNull(IDX_CNST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CNST_NM),
 	CNST_SID = (IDX_CNST_SID < 0 || rdr.IsDBNull(IDX_CNST_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CNST_SID),
 	CNST_VAL_TXT = (IDX_CNST_VAL_TXT < 0 || rdr.IsDBNull(IDX_CNST_VAL_TXT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CNST_VAL_TXT),
-	UI_UPD_FLG = (IDX_UI_UPD_FLG < 0 || rdr.IsDBNull(IDX_UI_UPD_FLG)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_UI_UPD_FLG)
+	UI_UPD_FLG = (IDX_UI_UPD_FLG < 0 || rdr.IsDBNull(IDX_UI_UPD_FLG)) ? default(System.Boolean) : ((int)rdr[IDX_UI_UPD_FLG] == 1)
 	});
 	} // while
 	return ret;
@@ -302,7 +636,7 @@ namespace Intel.MyDeals.Entities {
 	
 	while (rdr.Read()){
 	ret.Add(new AdminApplications {
-	ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_ACTV_IND),
+	ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(System.Boolean) : ((int)rdr[IDX_ACTV_IND] == 1),
 	APP_CD = (IDX_APP_CD < 0 || rdr.IsDBNull(IDX_APP_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_APP_CD),
 	APP_DESC = (IDX_APP_DESC < 0 || rdr.IsDBNull(IDX_APP_DESC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_APP_DESC),
 	APP_SID = (IDX_APP_SID < 0 || rdr.IsDBNull(IDX_APP_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_APP_SID),
@@ -404,7 +738,7 @@ namespace Intel.MyDeals.Entities {
 	
 	while (rdr.Read()){
 	ret.Add(new AdminDealType {
-	ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_ACTV_IND),
+	ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(System.Boolean) : ((int)rdr[IDX_ACTV_IND] == 1),
 	CHG_DTM = (IDX_CHG_DTM < 0 || rdr.IsDBNull(IDX_CHG_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CHG_DTM),
 	CHG_EMP_WWID = (IDX_CHG_EMP_WWID < 0 || rdr.IsDBNull(IDX_CHG_EMP_WWID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CHG_EMP_WWID),
 	CRE_DTM = (IDX_CRE_DTM < 0 || rdr.IsDBNull(IDX_CRE_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CRE_DTM),
@@ -413,7 +747,7 @@ namespace Intel.MyDeals.Entities {
 	DEAL_TYPE_CD = (IDX_DEAL_TYPE_CD < 0 || rdr.IsDBNull(IDX_DEAL_TYPE_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_TYPE_CD),
 	DEAL_TYPE_DESC = (IDX_DEAL_TYPE_DESC < 0 || rdr.IsDBNull(IDX_DEAL_TYPE_DESC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_TYPE_DESC),
 	DEAL_TYPE_SID = (IDX_DEAL_TYPE_SID < 0 || rdr.IsDBNull(IDX_DEAL_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_TYPE_SID),
-	PERFORM_CTST = (IDX_PERFORM_CTST < 0 || rdr.IsDBNull(IDX_PERFORM_CTST)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_PERFORM_CTST),
+	PERFORM_CTST = (IDX_PERFORM_CTST < 0 || rdr.IsDBNull(IDX_PERFORM_CTST)) ? default(System.Boolean) : ((int)rdr[IDX_PERFORM_CTST] == 1),
 	TEMPLT_DEAL_NBR = (IDX_TEMPLT_DEAL_NBR < 0 || rdr.IsDBNull(IDX_TEMPLT_DEAL_NBR)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_TEMPLT_DEAL_NBR),
 	TEMPLT_DEAL_SID = (IDX_TEMPLT_DEAL_SID < 0 || rdr.IsDBNull(IDX_TEMPLT_DEAL_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_TEMPLT_DEAL_SID),
 	TRKR_NBR_DT_LTR = (IDX_TRKR_NBR_DT_LTR < 0 || rdr.IsDBNull(IDX_TRKR_NBR_DT_LTR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_TRKR_NBR_DT_LTR)
@@ -505,13 +839,13 @@ namespace Intel.MyDeals.Entities {
 	
 	while (rdr.Read()){
 	ret.Add(new AdminRoleType {
-	ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_ACTV_IND),
+	ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(System.Boolean) : ((int)rdr[IDX_ACTV_IND] == 1),
 	APP_SID = (IDX_APP_SID < 0 || rdr.IsDBNull(IDX_APP_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_APP_SID),
 	CHG_DTM = (IDX_CHG_DTM < 0 || rdr.IsDBNull(IDX_CHG_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CHG_DTM),
 	CHG_EMP_WWID = (IDX_CHG_EMP_WWID < 0 || rdr.IsDBNull(IDX_CHG_EMP_WWID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CHG_EMP_WWID),
 	CRE_DTM = (IDX_CRE_DTM < 0 || rdr.IsDBNull(IDX_CRE_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CRE_DTM),
 	CRE_EMP_WWID = (IDX_CRE_EMP_WWID < 0 || rdr.IsDBNull(IDX_CRE_EMP_WWID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CRE_EMP_WWID),
-	IS_SNGL_SLCT = (IDX_IS_SNGL_SLCT < 0 || rdr.IsDBNull(IDX_IS_SNGL_SLCT)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_IS_SNGL_SLCT),
+	IS_SNGL_SLCT = (IDX_IS_SNGL_SLCT < 0 || rdr.IsDBNull(IDX_IS_SNGL_SLCT)) ? default(System.Boolean) : ((int)rdr[IDX_IS_SNGL_SLCT] == 1),
 	ROLE_TIER_CD = (IDX_ROLE_TIER_CD < 0 || rdr.IsDBNull(IDX_ROLE_TIER_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ROLE_TIER_CD),
 	ROLE_TYPE_CD = (IDX_ROLE_TYPE_CD < 0 || rdr.IsDBNull(IDX_ROLE_TYPE_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ROLE_TYPE_CD),
 	ROLE_TYPE_DESC = (IDX_ROLE_TYPE_DESC < 0 || rdr.IsDBNull(IDX_ROLE_TYPE_DESC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ROLE_TYPE_DESC),
@@ -643,7 +977,7 @@ namespace Intel.MyDeals.Entities {
 	
 	while (rdr.Read()){
 	ret.Add(new LogConfig {
-	IsActive = (IDX_IsActive < 0 || rdr.IsDBNull(IDX_IsActive)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_IsActive),
+	IsActive = (IDX_IsActive < 0 || rdr.IsDBNull(IDX_IsActive)) ? default(System.Boolean) : ((int)rdr[IDX_IsActive] == 1),
 	MsgSrc = (IDX_MsgSrc < 0 || rdr.IsDBNull(IDX_MsgSrc)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MsgSrc)
 	});
 	} // while
@@ -718,7 +1052,7 @@ namespace Intel.MyDeals.Entities {
 	
 	while (rdr.Read()){
 	ret.Add(new CustomerDivision {
-	ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_ACTV_IND),
+	ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(System.Boolean) : ((int)rdr[IDX_ACTV_IND] == 1),
 	CUST_CAT = (IDX_CUST_CAT < 0 || rdr.IsDBNull(IDX_CUST_CAT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_CAT),
 	CUST_DIV_NM = (IDX_CUST_DIV_NM < 0 || rdr.IsDBNull(IDX_CUST_DIV_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_DIV_NM),
 	CUST_DIV_NM_SID = (IDX_CUST_DIV_NM_SID < 0 || rdr.IsDBNull(IDX_CUST_DIV_NM_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_DIV_NM_SID),
@@ -1040,7 +1374,7 @@ namespace Intel.MyDeals.Entities {
 	
 	while (rdr.Read()){
 	ret.Add(new GeoDimension {
-	ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_ACTV_IND),
+	ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(System.Boolean) : ((int)rdr[IDX_ACTV_IND] == 1),
 	CTRY_NM = (IDX_CTRY_NM < 0 || rdr.IsDBNull(IDX_CTRY_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CTRY_NM),
 	CTRY_NM_SID = (IDX_CTRY_NM_SID < 0 || rdr.IsDBNull(IDX_CTRY_NM_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CTRY_NM_SID),
 	GEO_ATRB_SID = (IDX_GEO_ATRB_SID < 0 || rdr.IsDBNull(IDX_GEO_ATRB_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_GEO_ATRB_SID),
@@ -1182,7 +1516,7 @@ namespace Intel.MyDeals.Entities {
 	
 	while (rdr.Read()){
 	ret.Add(new Product {
-	ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_ACTV_IND),
+	ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(System.Boolean) : ((int)rdr[IDX_ACTV_IND] == 1),
 	ALL_PRD_NM = (IDX_ALL_PRD_NM < 0 || rdr.IsDBNull(IDX_ALL_PRD_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ALL_PRD_NM),
 	ALL_PRD_NM_SID = (IDX_ALL_PRD_NM_SID < 0 || rdr.IsDBNull(IDX_ALL_PRD_NM_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ALL_PRD_NM_SID),
 	BRND_NM = (IDX_BRND_NM < 0 || rdr.IsDBNull(IDX_BRND_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_BRND_NM),
@@ -1281,7 +1615,7 @@ namespace Intel.MyDeals.Entities {
 	
 	while (rdr.Read()){
 	ret.Add(new ProductCategory {
-	ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_ACTV_IND),
+	ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(System.Boolean) : ((int)rdr[IDX_ACTV_IND] == 1),
 	CHG_DTM = (IDX_CHG_DTM < 0 || rdr.IsDBNull(IDX_CHG_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CHG_DTM),
 	CHG_EMP_NM = (IDX_CHG_EMP_NM < 0 || rdr.IsDBNull(IDX_CHG_EMP_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CHG_EMP_NM),
 	DEAL_PRD_TYPE = (IDX_DEAL_PRD_TYPE < 0 || rdr.IsDBNull(IDX_DEAL_PRD_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_PRD_TYPE),
@@ -1394,7 +1728,7 @@ namespace Intel.MyDeals.Entities {
 	OBJ_TYPE = (IDX_OBJ_TYPE < 0 || rdr.IsDBNull(IDX_OBJ_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_TYPE),
 	OBJ_TYPE_SID = (IDX_OBJ_TYPE_SID < 0 || rdr.IsDBNull(IDX_OBJ_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_TYPE_SID),
 	ROLE_TIER_NM = (IDX_ROLE_TIER_NM < 0 || rdr.IsDBNull(IDX_ROLE_TIER_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ROLE_TIER_NM),
-	TRKR_NBR_UPD = (IDX_TRKR_NBR_UPD < 0 || rdr.IsDBNull(IDX_TRKR_NBR_UPD)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_TRKR_NBR_UPD),
+	TRKR_NBR_UPD = (IDX_TRKR_NBR_UPD < 0 || rdr.IsDBNull(IDX_TRKR_NBR_UPD)) ? default(System.Boolean) : ((int)rdr[IDX_TRKR_NBR_UPD] == 1),
 	WF_NAME = (IDX_WF_NAME < 0 || rdr.IsDBNull(IDX_WF_NAME)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_WF_NAME),
 	WF_SID = (IDX_WF_SID < 0 || rdr.IsDBNull(IDX_WF_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WF_SID),
 	WFSTG_ACTN_NM = (IDX_WFSTG_ACTN_NM < 0 || rdr.IsDBNull(IDX_WFSTG_ACTN_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_WFSTG_ACTN_NM),
@@ -1486,7 +1820,7 @@ namespace Intel.MyDeals.Entities {
 	
 	while (rdr.Read()){
 	ret.Add(new WorkFlowStg {
-	ALLW_REDEAL = (IDX_ALLW_REDEAL < 0 || rdr.IsDBNull(IDX_ALLW_REDEAL)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_ALLW_REDEAL),
+	ALLW_REDEAL = (IDX_ALLW_REDEAL < 0 || rdr.IsDBNull(IDX_ALLW_REDEAL)) ? default(System.Boolean) : ((int)rdr[IDX_ALLW_REDEAL] == 1),
 	CHG_DTM = (IDX_CHG_DTM < 0 || rdr.IsDBNull(IDX_CHG_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CHG_DTM),
 	CHG_EMP_WWID = (IDX_CHG_EMP_WWID < 0 || rdr.IsDBNull(IDX_CHG_EMP_WWID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CHG_EMP_WWID),
 	CRE_DTM = (IDX_CRE_DTM < 0 || rdr.IsDBNull(IDX_CRE_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CRE_DTM),

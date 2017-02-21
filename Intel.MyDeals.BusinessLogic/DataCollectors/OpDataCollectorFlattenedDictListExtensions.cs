@@ -107,7 +107,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
 
             foreach (OpDataCollectorFlattenedItem opDataCollectorFlattenedItem in data[opDataElementType])
             {
-                int key = int.Parse(opDataCollectorFlattenedItem["dc_parent_id"].ToString());
+                int key = int.Parse(opDataCollectorFlattenedItem["dc_parent_sid"].ToString());
                 if (!rtn.ContainsKey(key)) rtn[key] = new OpDataCollectorFlattenedList();
                 rtn[key].Add(opDataCollectorFlattenedItem);
             }

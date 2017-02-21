@@ -4,6 +4,7 @@ using Intel.MyDeals.IDataLibrary;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using Intel.MyDeals.BusinessRules;
 using Intel.RulesEngine;
 
 namespace Intel.MyDeals.BusinessLogic
@@ -104,6 +105,12 @@ namespace Intel.MyDeals.BusinessLogic
             //List<int> RuleFailedTaskIds = GetRuleItemById(ruleId).RuleFailedTaskIds.ToList();
             //return GetRuleTasks().Where(rt => rt.RuleId == ruleId && RuleFailedTaskIds.Contains(rt.Id));
             return GetRuleTasks().Where(rt => rt.RuleId == ruleId && rt.SuccessType == false);
+        }
+
+        public List<MyOpRule> GetBusinessRules()
+        {
+            //List<MyOpRule> AttrbRules
+            return MyRulesConfiguration.AttrbRules;
         }
     }
 }

@@ -57,13 +57,13 @@ function objsetService($http, dataService, logger, $q) {
         return dataService.post(apiBasePricingStrategyUrl + 'SavePricingStrategy/' + custId, [ps]);
     }
     function readPricingStrategy(id) {
-        return dataService.get(apiBasePricingStrategyUrl + 'GetContract/' + id);
+        return dataService.get(apiBasePricingStrategyUrl + 'GetPricingStrategy/' + id);
     }
     function updatePricingStrategy(custId, ps) {
-        return dataService.post(apiBasePricingStrategyUrl + 'UpdateContract/' + custId, [ps]);
+        return dataService.post(apiBasePricingStrategyUrl + 'UpdatePricingStrategy/' + custId, [ps]);
     }
     function deletePricingStrategy(id) {
-        return dataService.get(apiBasePricingStrategyUrl + 'DeleteContract/' + id);
+        return dataService.get(apiBasePricingStrategyUrl + 'DeletePricingStrategy/' + id);
     }
 
 
@@ -309,7 +309,7 @@ function objsetService($http, dataService, logger, $q) {
         };
     }
     function updatePricingTable(custId, ps) {
-        return dataService.post(apiBasePricingTableUrl + 'UpdateContract/' + custId, [ps]);
+        return dataService.post(apiBasePricingTableUrl + 'UpdatePricingTable/' + custId, [ps]);
     }
     function deletePricingTable(id) {
         return dataService.get(apiBasePricingTableUrl + 'DeletePricingTable/' + id);

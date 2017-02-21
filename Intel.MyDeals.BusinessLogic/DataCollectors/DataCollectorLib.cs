@@ -155,7 +155,7 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 case OpActionType.Save:
                     myDealsData.VerifyBatchIDs();
-                    saveResponseSet = new DealDataLib().SaveDeals(myDealsData, OpUserStack.MyOpUserToken, custId);
+                    saveResponseSet = new DataCollectorDataLib().SaveDeals(myDealsData, OpUserStack.MyOpUserToken, custId);
                     // Save Data Cycle: Point 21 (END)
                     break;
                 case OpActionType.SyncDeal:

@@ -38,11 +38,12 @@ namespace Intel.MyDeals.BusinessLogic
             foreach (OpDataCollectorFlattenedItem items in data)
             {
                 int id = !items.ContainsKey("dc_id") ? 0 : Convert.ToInt32(items["dc_id"].ToString()); // TODO ADD OTHERS HERE XXX
-                int parentid = !items.ContainsKey("dc_parent_id") ? 0 : Convert.ToInt32(items["dc_parent_id"].ToString()); // TODO ADD OTHERS HERE XXX
                 int sid = !items.ContainsKey("dc_sid") ? 0 : Convert.ToInt32(items["dc_sid"].ToString()); // TODO ADD OTHERS HERE XXX
+                int parentid = !items.ContainsKey("dc_parent_id") ? 0 : Convert.ToInt32(items["dc_parent_id"].ToString()); // TODO ADD OTHERS HERE XXX
+                int parentsid = !items.ContainsKey("dc_parent_sid") ? 0 : Convert.ToInt32(items["dc_parent_sid"].ToString()); // TODO ADD OTHERS HERE XXX
 
                 // Get existing DC or spawn a new one
-                OpDataCollector dc = myDealsData.CreateDCFromData(id, parentid, sid, opType, items);
+                OpDataCollector dc = myDealsData.CreateDCFromData(id, sid, parentid, parentsid, opType, items);
 
                 // Layer the passed items on top of the newly filled MyDealsData
                 dpDeals.Messages = dc.MergeDictionary(items);
@@ -185,7 +186,7 @@ namespace Intel.MyDeals.BusinessLogic
 
         #endregion
 
-        public static OpDataCollector CreateDCFromData(this MyDealsData myDealsData, int id, int parentId, int sid, OpDataElementType opDataElementType, OpDataCollectorFlattenedItem item)
+        public static OpDataCollector CreateDCFromData(this MyDealsData myDealsData, int id, int sid, int parentId, int parentSid, OpDataElementType opDataElementType, OpDataCollectorFlattenedItem item)
         {
             // Save Data Cycle: Point 3
             // Save Data Cycle: Point 11
@@ -196,7 +197,7 @@ namespace Intel.MyDeals.BusinessLogic
             OpDataCollector dc;
             if (id < 0 || !dpDeals.Data.ContainsKey(id)) // missing
             {
-                dc = new OpDataCollector { DcID = id, DcParentSID = parentId, DcSID = sid, DcType = opDataElementType.ToString() };
+                dc = new OpDataCollector { DcID = id, DcParentSID = parentSid, DcSID = sid, DcType = opDataElementType.ToString() };
                 if (id < 0) dc.FillInHolesFromTemplate();
                 myDealsData[opDataElementType].Data[id] = dc;
             }
@@ -207,14 +208,15 @@ namespace Intel.MyDeals.BusinessLogic
 
             // Ensure DC type and parent/child ids
             dc.DcType = opDataElementType.ToString();
-            dc.DcParentSID = item["dc_parent_id"] == null ? 0 : Convert.ToInt32(item["dc_parent_id"].ToString());
             dc.DcSID = item["dc_sid"] == null ? 0 : Convert.ToInt32(item["dc_sid"].ToString());
+            dc.DcParentID = item["dc_parent_id"] == null ? 0 : Convert.ToInt32(item["dc_parent_id"].ToString());
+            dc.DcParentSID = item["dc_parent_sid"] == null ? 0 : Convert.ToInt32(item["dc_parent_sid"].ToString());
 
             return dc;
         }
 
 
-        public static MyDealsData ApplyRules(this MyDealsData myDealsData, RuleTriggerPoint ruleTriggerPoint)
+        public static MyDealsData ApplyRules(this MyDealsData myDealsData, MyRulesTrigger ruleTriggerPoint)
         {
             foreach (OpDataElementType opDataElementType in myDealsData.Keys)
             {

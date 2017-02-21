@@ -125,6 +125,7 @@ namespace Intel.MyDeals
                 , "~/app/testCases/testCases.module.js"
                 , "~/app/testCases/testCases.route.js"
                 , "~/app/testCases/grids/basic.controller.js"
+                , "~/app/testCases/rules/businessRules.controller.js"
                 , "~/app/testCases/uiControls/uiControls.controller.js"
                 ));
 

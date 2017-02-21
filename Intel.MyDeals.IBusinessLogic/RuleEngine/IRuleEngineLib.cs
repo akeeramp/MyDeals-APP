@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Intel.MyDeals.BusinessRules;
 using Intel.RulesEngine;
 
 namespace Intel.MyDeals.IBusinessLogic
@@ -20,5 +21,7 @@ namespace Intel.MyDeals.IBusinessLogic
         IEnumerable<RuleTask> GetPassedRuleTasksByRuleId(int ruleId);
 
         IEnumerable<RuleTask> GetFailedRuleTasksByRuleId(int ruleId);
+
+        List<MyOpRule> GetBusinessRules();
     }
 }

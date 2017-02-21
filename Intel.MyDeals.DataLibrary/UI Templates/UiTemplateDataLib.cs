@@ -1,993 +1,235 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IDataLibrary;
+using Intel.Opaque.Data;
 
 namespace Intel.MyDeals.DataLibrary
 {
     class UiTemplateDataLib : IUiTemplateDataLib
     {
 
-        public UiTemplates GetUiTemplates()
+        private UiModelTemplate BuildUiModelTemplate(OpDataElementType opDataElementType, string objSetType, List<UiTemplateContainerItem> items)
+        {
+            List<UiTemplateContainerItem> filteredItems = items.Where(t => (!t.ObjType.Any() || t.ObjType.Contains(opDataElementType)) && (!t.ObjSetType.Any() || t.ObjSetType.Contains(objSetType))).ToList();
+
+            Dictionary<string, UiFieldItem> fields = new Dictionary<string, UiFieldItem>();
+            Dictionary<string, UiFieldItem> detailsFields = new Dictionary<string, UiFieldItem>();
+            List<UiColumn> columns = new List<UiColumn>();
+            List<UiColumn> detailsColumns = new List<UiColumn>();
+
+            string pId = filteredItems.Where(i => i.IsKey && !i.IsDetail).Select(i => i.AtrbCd).FirstOrDefault();
+            string pDetailsId = filteredItems.Where(i => i.IsKey && i.IsDetail).Select(i => i.AtrbCd).FirstOrDefault();
+
+            foreach (UiTemplateContainerItem item in filteredItems.OrderBy(i => i.AtrbOrder).ThenBy(i => i.Order))
+            {
+                if (!item.IsDetail)
+                {
+                    fields[item.AtrbCd] = new UiFieldItem
+                    {
+                        type = item.DataType,
+                        editable = !item.IsReadonly,
+                        nullable = !item.IsRequired,
+                        values = item.LookupValue,
+                        valuesText = item.LookupText,
+                        valuesValue = item.LookupValue
+                    };
+
+                    columns.Add(new UiColumn
+                    {
+                        field = item.AtrbCd,
+                        title = item.Label,
+                        width = item.Width,
+                        editor = item.Editor,
+                        template = item.Template,
+                        uiType = item.UiType
+                    });
+                }
+                else
+                {
+                    detailsFields[item.AtrbCd] = new UiFieldItem
+                    {
+                        type = item.DataType,
+                        editable = !item.IsReadonly,
+                        nullable = !item.IsRequired,
+                        values = item.LookupValue,
+                        valuesText = item.LookupText,
+                        valuesValue = item.LookupValue
+                    };
+
+                    detailsColumns.Add(new UiColumn
+                    {
+                        field = item.AtrbCd,
+                        title = item.Label,
+                        width = item.Width,
+                        editor = item.Editor,
+                        template = item.Template,
+                        uiType = item.UiType
+                    });
+                }
+            }
+
+            UiModelTemplate model = new UiModelTemplate
+            {
+                name = objSetType,
+                model = new UiModel {fields = fields},
+                columns = columns,
+                detailsModel = new UiModel { fields = detailsFields },
+                detailsColumns = detailsColumns
+            };
+            if (!string.IsNullOrEmpty(pId)) model.model.id = pId;
+            if (!string.IsNullOrEmpty(pDetailsId)) model.detailsModel.id = pDetailsId;
+
+            model.extraAtrbs = new Dictionary<string, UiAtrbs>();
+            model.defaultAtrbs = new Dictionary<string, UiAtrbs>();
+
+            return model;
+        }
+
+
+        private UiObjectTemplate BuildUiObjectTemplate(OpDataElementType objType)
+        {
+            OpDataElementUITemplates templates = DataCollections.GetTemplateDict();
+            UiObjectTemplate template = new UiObjectTemplate();
+            foreach (OpDataElementUI opDataElementUi in templates[objType.ToString()])
+            {
+                template[opDataElementUi.AtrbCd] = opDataElementUi.AtrbValue;
+            }
+
+            // TODO replace whith proper data once DB is ready
+            template["dc_id"] = 0;
+            template["dc_sid"] = 0;
+            template["dc_parent_id"] = 0;
+            template["dc_parent_sid"] = 0;
+            template["_behaviors"] = new Dictionary<string, Dictionary<string, dynamic>>
+            {
+                ["isRequired"] = new Dictionary<string, dynamic>(),
+                ["isError"] = new Dictionary<string, dynamic>(),
+                ["validMsg"] = new Dictionary<string, dynamic>()
+            };
+
+            if (objType == OpDataElementType.Contract)
+            {
+                template["PricingStrategy"] = new List<string>();
+                template["OBJSET_TYPE_CD"] = template["OBJSET_TYPE"] = "CONTRACT";
+                template["_behaviors"]["isRequired"] = new Dictionary<string, dynamic>
+                {
+                    ["TITLE"] = true,
+                    ["CUST_MBR_SID"] = true,
+                    ["START_DT"] = true,
+                    ["END_DT"] = true
+                };
+            }
+
+            if (objType == OpDataElementType.PricingStrategy)
+            {
+                template["PricingTable"] = new List<string>();
+                template["OBJSET_TYPE_CD"] = template["OBJSET_TYPE"] = "PRICING STRATEGY";
+                template["_behaviors"]["isRequired"] = new Dictionary<string, dynamic>
+                {
+                    ["TITLE"] = true
+                };
+            }
+
+            if (objType == OpDataElementType.PricingTable)
+            {
+                template["OBJSET_TYPE_CD"] = template["OBJSET_TYPE"] = "PRICING TABLE";
+                template["_behaviors"]["isRequired"] = new Dictionary<string, dynamic>
+                {
+                    ["TITLE"] = true
+                };
+            }
+
+            // TODO need attribute security
+
+            return template;
+        }
+
+        private List<UiTemplateContainerItem> GetData()
         {
             // TODO replace with DB call
+            List<UiTemplateContainerItem> items = new List<UiTemplateContainerItem>();
+            items.Add(new UiTemplateContainerItem { Id = 1, AtrbCd = "dc_id", IsKey = true, DataType = "number", Label = "Id", Width = 50 });
+            items.Add(new UiTemplateContainerItem { Id = 2, AtrbCd = "PIVOT", ObjType = new List<OpDataElementType> { OpDataElementType.PricingTable }, DataType = "string", Label = "Pivot", Width = 50 });
+            items.Add(new UiTemplateContainerItem { Id = 3, AtrbCd = "TITLE", ObjType = new List<OpDataElementType> { OpDataElementType.PricingTable }, DataType = "string", Label = "Title", Width = 150 });
+            items.Add(new UiTemplateContainerItem { Id = 4, AtrbCd = "INT", DataType = "number", Label = "Int", Width = 100, Template = "#=gridUtils.uiIconWrapper(data, 'INT')#" });
+            items.Add(new UiTemplateContainerItem { Id = 5, AtrbCd = "TEXT", DataType = "string", Label = "Text", Width = 100, Template = "#=gridUtils.uiIconWrapper(data, 'TEXT')#" });
+            items.Add(new UiTemplateContainerItem { Id = 6, AtrbCd = "DATE", DataType = "string", Label = "Date", Width = 100, Template = "#=gridUtils.uiIconWrapper(data, 'DATE')#" });
+            items.Add(new UiTemplateContainerItem { Id = 7, AtrbCd = "ECAP", ObjSetType = new List<string> { "ECAP" }, DataType = "string", Label = "Ecap", Width = 150 });
+            items.Add(new UiTemplateContainerItem { Id = 8, AtrbCd = "PROGRAM", ObjSetType = new List<string> { "PROGRAM" }, DataType = "string", Label = "Program", Width = 150 });
+            items.Add(new UiTemplateContainerItem { Id = 9, AtrbCd = "VOLTIER", ObjSetType = new List<string> { "VOLTIER" }, DataType = "string", Label = "Vol Tier", Width = 150 });
+            items.Add(new UiTemplateContainerItem { Id = 10, AtrbCd = "CAPBAND", ObjSetType = new List<string> { "CAPBAND" }, DataType = "string", Label = "Cap Band", Width = 150 });
 
-            return new UiTemplates
+            items.Add(new UiTemplateContainerItem { Id = 11, AtrbCd = "_pivot", ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, DataType = "object", IsReadonly = true });
+            items.Add(new UiTemplateContainerItem { Id = 12, AtrbCd = "_behaviors", ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, DataType = "object" });
+            items.Add(new UiTemplateContainerItem { Id = 13, AtrbCd = "_MultiDim", ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, DataType = "object" });
+            items.Add(new UiTemplateContainerItem { Id = 14, AtrbCd = "DROPDOWM", ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, DataType = "string", LookupUrl = "/api/Lookups/v1/GetLookups/DROPDOWN", LookupText = "DROP_DOWN", LookupValue = "DROP_DOWN", Template = "#=gridUtils.uiIconWrapper(data, 'DROPDOWN')#" });
+            items.Add(new UiTemplateContainerItem { Id = 15, AtrbCd = "COMBOBOX", ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, DataType = "string", LookupUrl = "/api/Lookups/v1/GetLookups/COMBOBOX", LookupText = "DROP_DOWN", LookupValue = "DROP_DOWN", Template = "#=gridUtils.uiIconWrapper(data, 'COMBOBOX')#" });
+
+            items.Add(new UiTemplateContainerItem { Id = 16, AtrbCd = "_dirty", ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, DataType = "string", Label = "<i class='intelicon-upload-solid gridHeaderIcon' title='Something changed on this row'></i>", Width = 45, Template = "#=gridUtils.uiIconWrapper(data, '_dirty')#" });
+            items.Add(new UiTemplateContainerItem { Id = 17, AtrbCd = "", ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, DataType = "string", Label = "&nbsp;" });
+
+
+            items.Add(new UiTemplateContainerItem { Id = 18, AtrbCd = "_pivot", ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, IsDetail = true, DataType = "object", IsReadonly = true });
+            items.Add(new UiTemplateContainerItem { Id = 19, AtrbCd = "_behaviors", ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, IsDetail = true, DataType = "object" });
+            items.Add(new UiTemplateContainerItem { Id = 20, AtrbCd = "dc_id", IsKey = true, ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, IsDetail = true, DataType = "number", Label = "Id", Width = 50 });
+            items.Add(new UiTemplateContainerItem { Id = 21, AtrbCd = "PIVOT", ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, IsDetail = true, DataType = "string", Label = "Pivot", Width = 50 });
+            items.Add(new UiTemplateContainerItem { Id = 22, AtrbCd = "TITLE", ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, IsDetail = true, DataType = "string", Label = "Title", Width = 150 });
+            items.Add(new UiTemplateContainerItem { Id = 23, AtrbCd = "INT", ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, IsDetail = true, DataType = "number", Label = "Int", Width = 100, Template = "#=gridUtils.uiIconWrapper(data, 'INT')#" });
+            items.Add(new UiTemplateContainerItem { Id = 24, AtrbCd = "TEXT", ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, IsDetail = true, DataType = "string", Label = "Text", Width = 100, Template = "#=gridUtils.uiIconWrapper(data, 'TEXT')#" });
+            items.Add(new UiTemplateContainerItem { Id = 25, AtrbCd = "DATE", ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, IsDetail = true, DataType = "string", Label = "Date", Width = 100, Template = "#=gridUtils.uiIconWrapper(data, 'DATE')#" });
+            items.Add(new UiTemplateContainerItem { Id = 26, AtrbCd = "DROPDOWM", ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, IsDetail = true, DataType = "string", LookupUrl = "/api/Lookups/v1/GetLookups/DROPDOWN", LookupText = "DROP_DOWN", LookupValue = "DROP_DOWN", Template = "#=gridUtils.uiIconWrapper(data, 'DROPDOWN')#" });
+            items.Add(new UiTemplateContainerItem { Id = 27, AtrbCd = "COMBOBOX", ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, IsDetail = true, DataType = "string", LookupUrl = "/api/Lookups/v1/GetLookups/COMBOBOX", LookupText = "DROP_DOWN", LookupValue = "DROP_DOWN", Template = "#=gridUtils.uiIconWrapper(data, 'COMBOBOX')#" });
+            items.Add(new UiTemplateContainerItem { Id = 28, AtrbCd = "_dirty", ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, IsDetail = true, DataType = "string", Label = "<i class='intelicon-upload-solid gridHeaderIcon' title='Something changed on this row'></i>", Width = 45, Template = "#=gridUtils.uiIconWrapper(data, '_dirty')#" });
+
+            items.Add(new UiTemplateContainerItem { Id = 30, AtrbCd = "START_DT", ObjType = new List<OpDataElementType> { OpDataElementType.PricingTable }, DataType = "string", Label = "Start Date", Width = 100, Template = "#=gridUtils.uiIconWrapper(data, 'START_DT')#" });
+            items.Add(new UiTemplateContainerItem { Id = 31, AtrbCd = "END_DT", ObjType = new List<OpDataElementType> { OpDataElementType.PricingTable }, DataType = "string", Label = "End Date", Width = 100, Template = "#=gridUtils.uiIconWrapper(data, 'END_DT')#" });
+            return items;
+        }
+
+        public UiTemplates GetUiTemplates()
+        {
+            // TODO - replace with correct logic once DB has Obj_Type and Obj_Set_Type
+
+            List<UiTemplateContainerItem> items = GetData();
+
+            UiTemplates ret = new UiTemplates
             {
                 ModelTemplates = new Dictionary<string, Dictionary<string, UiModelTemplate>>
                 {
                     ["PricingTable"] = new Dictionary<string, UiModelTemplate>
                     {
-                        ["ECAP"] = new UiModelTemplate
-                        {
-                            name = "ECAP",
-                            model = new UiModel
-                            {
-                                id = "dc_id",
-                                fields = new Dictionary<string, UiFieldItem>
-                                {
-                                    ["dc_id"] = new UiFieldItem { type = FieldTypes.Number, editable = true, nullable = true },
-                                    ["PIVOT"] = new UiFieldItem { type = FieldTypes.String, editable = true, nullable = true },
-                                    ["TITLE"] = new UiFieldItem { type = FieldTypes.String, editable = true, nullable = true },
-                                    ["INT"] = new UiFieldItem { type = FieldTypes.Number, editable = true, nullable = true },
-                                    ["TEXT"] = new UiFieldItem { type = FieldTypes.String, editable = true, nullable = true },
-                                    ["DATE"] = new UiFieldItem { type = FieldTypes.String, editable = true, nullable = true },
-                                    ["ECAP"] = new UiFieldItem { type = FieldTypes.String, editable = true, nullable = true }
-                                }
-                            },
-                            columns = new List<UiColumn>
-                            {
-                                new UiColumn { field = "dc_id", title = "Id", width = 50 },
-                                new UiColumn { field = "PIVOT", title = "Pivot", width = 50 },
-                                new UiColumn { field = "TITLE", title = "Title", width = 150 },
-                                new UiColumn { field = "TEXT", title = "Text", width = 100 },
-                                new UiColumn { field = "INT", title = "Int", width = 100 },
-                                new UiColumn { field = "DATE", title = "Date", width = 100 },
-                                new UiColumn { field = "ECAP", title = "ECAP", width = 150 }
-                            },
-                            extraAtrbs = new Dictionary<string, UiAtrbs>(),
-                            defaultAtrbs = new Dictionary<string, UiAtrbs>
-                            {
-                                ["TEXT"] = new UiAtrbs
-                                {
-                                    value = "We are the World",
-                                    label = "TEXT: ",
-                                    type = "TEXTBOX",
-                                    isRequired = true
-                                },
-                                ["INT"] = new UiAtrbs
-                                {
-                                    value = 2001,
-                                    label = "INT: ",
-                                    type = "NUMERIC",
-                                    isRequired = false
-                                }
-                            }
-                        },
-                        ["PROGRAM"] = new UiModelTemplate
-                        {
-                            name = "PROGRAM",
-                            model = new UiModel
-                            {
-                                id = "dc_id",
-                                fields = new Dictionary<string, UiFieldItem>
-                                {
-                                    ["dc_id"] = new UiFieldItem { type = FieldTypes.Number, editable = true, nullable = true },
-                                    ["PIVOT"] = new UiFieldItem { type = FieldTypes.String, editable = true, nullable = true },
-                                    ["TITLE"] = new UiFieldItem { type = FieldTypes.String, editable = true, nullable = true },
-                                    ["INT"] = new UiFieldItem { type = FieldTypes.Number, editable = true, nullable = true },
-                                    ["TEXT"] = new UiFieldItem { type = FieldTypes.String, editable = true, nullable = true },
-                                    ["DATE"] = new UiFieldItem { type = FieldTypes.String, editable = true, nullable = true },
-                                    ["PROGRAM"] = new UiFieldItem { type = FieldTypes.String, editable = true, nullable = true }
-                                }
-                            },
-                            columns = new List<UiColumn>
-                            {
-                                new UiColumn { field = "dc_id", title = "Id", width = 50 },
-                                new UiColumn { field = "PIVOT", title = "Pivot", width = 50 },
-                                new UiColumn { field = "TITLE", title = "Title", width = 150 },
-                                new UiColumn { field = "TEXT", title = "Text", width = 100 },
-                                new UiColumn { field = "INT", title = "Int", width = 100 },
-                                new UiColumn { field = "DATE", title = "Date", width = 100 },
-                                new UiColumn { field = "PROGRAM", title = "PROGRAM", width = 150 }
-                            },
-                            extraAtrbs = new Dictionary<string, UiAtrbs>(),
-                            defaultAtrbs = new Dictionary<string, UiAtrbs>
-                            {
-                                ["TEXT"] = new UiAtrbs
-                                {
-                                    value = "Program it!!!!",
-                                    label = "TEXT: ",
-                                    type = "TEXTBOX",
-                                    isRequired = true
-                                },
-                                ["INT"] = new UiAtrbs
-                                {
-                                    value = 2010,
-                                    label = "INT: ",
-                                    type = "NUMERIC",
-                                    isRequired = false
-                                }
-                            }
-                        },
-                        ["VOLTIER"] = new UiModelTemplate
-                        {
-                            name = "VOLTIER",
-                            model = new UiModel
-                            {
-                                id = "dc_id",
-                                fields = new Dictionary<string, UiFieldItem>
-                                {
-                                    ["dc_id"] = new UiFieldItem { type = FieldTypes.Number, editable = true, nullable = true },
-                                    ["PIVOT"] = new UiFieldItem { type = FieldTypes.String, editable = true, nullable = true },
-                                    ["TITLE"] = new UiFieldItem { type = FieldTypes.String, editable = true, nullable = true },
-                                    ["INT"] = new UiFieldItem { type = FieldTypes.Number, editable = true, nullable = true },
-                                    ["TEXT"] = new UiFieldItem { type = FieldTypes.String, editable = true, nullable = true },
-                                    ["DATE"] = new UiFieldItem { type = FieldTypes.String, editable = true, nullable = true },
-                                    ["VOLTIER"] = new UiFieldItem { type = FieldTypes.String, editable = true, nullable = true }
-                                }
-                            },
-                            columns = new List<UiColumn>
-                            {
-                                new UiColumn { field = "dc_id", title = "Id", width = 50 },
-                                new UiColumn { field = "PIVOT", title = "Pivot", width = 50 },
-                                new UiColumn { field = "TITLE", title = "Title", width = 150 },
-                                new UiColumn { field = "TEXT", title = "Text", width = 100 },
-                                new UiColumn { field = "INT", title = "Int", width = 100 },
-                                new UiColumn { field = "DATE", title = "Date", width = 100 },
-                                new UiColumn { field = "VOLTIER", title = "VOLTIER", width = 150 }
-                            },
-                            extraAtrbs = new Dictionary<string, UiAtrbs>
-                            {
-                                ["NUM_TIERS"] = new UiAtrbs
-                                {
-                                    value = "",
-                                    label = "Number of Tiers: ",
-                                    type = "DROPDOWN",
-                                    isRequired = true,
-                                    isError = false,
-                                    opLookupUrl = "/api/Lookups/v1/GetLookups/NUM_TIERS",
-                                    opLookupText = "DROP_DOWN",
-                                    opLookupValue = "DROP_DOWN",
-                                    validMsg = "Please enter the number of tiers."
-                                }
-                            },
-                            defaultAtrbs = new Dictionary<string, UiAtrbs>
-                            {
-                                ["TEXT"] = new UiAtrbs
-                                {
-                                    value = "More",
-                                    label = "TEXT: ",
-                                    type = "TEXTBOX",
-                                    isRequired = true
-                                },
-                                ["INT"] = new UiAtrbs
-                                {
-                                    value = 2016,
-                                    label = "INT: ",
-                                    type = "NUMERIC",
-                                    isRequired = false
-                                }
-                            }
-                        },
-                        ["CAPBAND"] = new UiModelTemplate
-                        {
-                            name = "CAPBAND",
-                            model = new UiModel
-                            {
-                                id = "dc_id",
-                                fields = new Dictionary<string, UiFieldItem>
-                                {
-                                    ["dc_id"] = new UiFieldItem { type = FieldTypes.Number, editable = true, nullable = true },
-                                    ["PIVOT"] = new UiFieldItem { type = FieldTypes.String, editable = true, nullable = true },
-                                    ["TITLE"] = new UiFieldItem { type = FieldTypes.String, editable = true, nullable = true },
-                                    ["INT"] = new UiFieldItem { type = FieldTypes.Number, editable = true, nullable = true },
-                                    ["TEXT"] = new UiFieldItem { type = FieldTypes.String, editable = true, nullable = true },
-                                    ["DATE"] = new UiFieldItem { type = FieldTypes.String, editable = true, nullable = true },
-                                    ["CAPBAND"] = new UiFieldItem { type = FieldTypes.String, editable = true, nullable = true }
-                                }
-                            },
-                            columns = new List<UiColumn>
-                            {
-                                new UiColumn { field = "dc_id", title = "Id", width = 50 },
-                                new UiColumn { field = "PIVOT", title = "Pivot", width = 50 },
-                                new UiColumn { field = "TITLE", title = "Title", width = 150 },
-                                new UiColumn { field = "TEXT", title = "Text", width = 100 },
-                                new UiColumn { field = "INT", title = "Int", width = 100 },
-                                new UiColumn { field = "DATE", title = "Date", width = 100 },
-                                new UiColumn { field = "CAPBAND", title = "CAPBAND", width = 150 }
-                            },
-                            extraAtrbs = new Dictionary<string, UiAtrbs>
-                            {
-                                ["NUM_TIERS"] = new UiAtrbs
-                                {
-                                    value = "",
-                                    label = "Number of Tiers: ",
-                                    type = "DROPDOWN",
-                                    isRequired = true,
-                                    isError = false,
-                                    opLookupUrl = "/api/Lookups/v1/GetLookups/NUM_TIERS",
-                                    opLookupText = "DROP_DOWN",
-                                    opLookupValue = "DROP_DOWN",
-                                    validMsg = "Please enter the number of tiers."
-                                }
-                            },
-                            defaultAtrbs = new Dictionary<string, UiAtrbs>
-                            {
-                                ["TEXT"] = new UiAtrbs
-                                {
-                                    value = "Show me the money!!!",
-                                    label = "TEXT: ",
-                                    type = "TEXTBOX",
-                                    isRequired = true
-                                },
-                                ["INT"] = new UiAtrbs
-                                {
-                                    value = 1000000,
-                                    label = "INT: ",
-                                    type = "NUMERIC",
-                                    isRequired = false
-                                }
-                            }
-                        }
+                        ["ECAP"] = BuildUiModelTemplate(OpDataElementType.PricingTable, "ECAP", items),
+                        ["PROGRAM"] = BuildUiModelTemplate(OpDataElementType.PricingTable, "PROGRAM", items),
+                        ["VOLTIER"] = BuildUiModelTemplate(OpDataElementType.PricingTable, "VOLTIER", items),
+                        ["CAPBAND"] = BuildUiModelTemplate(OpDataElementType.PricingTable, "CAPBAND", items)
                     },
                     ["WipDeals"] = new Dictionary<string, UiModelTemplate>
                     {
-                        ["ECAP"] = new UiModelTemplate
-                        {
-                            name = "ECAP",
-                            model = new UiModel
-                            {
-                                id = "dc_id",
-                                fields = new Dictionary<string, UiFieldItem>
-                                {
-                                    ["_pivot"] = new UiFieldItem { type = FieldTypes.Object, editable = false, nullable = true },
-                                    ["_behaviors"] = new UiFieldItem { type = FieldTypes.Object, editable = true, nullable = true },
-                                    ["_MultiDim"] = new UiFieldItem { type = FieldTypes.Object, editable = true, nullable = true },
-                                    ["dc_id"] = new UiFieldItem { type = FieldTypes.Number, editable = false, nullable = true },
-                                    ["TEXT"] = new UiFieldItem { type = FieldTypes.String, editable = true, nullable = true },
-                                    ["INT"] = new UiFieldItem { type = FieldTypes.Number, editable = true, nullable = true },
-                                    ["DATE"] = new UiFieldItem { type = FieldTypes.Date, editable = true, nullable = true },
-                                    ["DROPDOWN"] = new UiFieldItem
-                                    {
-                                        type = FieldTypes.String,
-                                        values = "/api/Lookups/v1/GetLookups/DROPDOWN",
-                                        valuesText = "DROP_DOWN",
-                                        valuesValue = "DROP_DOWN",
-                                        editable = true,
-                                        nullable = true
-                                    },
-                                    ["COMBOBOX"] = new UiFieldItem
-                                    {
-                                        type = FieldTypes.String,
-                                        values = "/api/Lookups/v1/GetLookups/COMBOBOX",
-                                        valuesText = "DROP_DOWN",
-                                        valuesValue = "DROP_DOWN",
-                                        editable = true,
-                                        nullable = true
-                                    }
-                                }
-                            },
-                            columns = new List<UiColumn>
-                            {
-                                new UiColumn
-                                {
-                                    field = "_dirty",
-                                    title = "<i class='intelicon-upload-solid gridHeaderIcon' title='Something changed on this row'></i>",
-                                    width = 45,
-                                    template = "#=gridUtils.uiIconWrapper(data, '_dirty')#"
-                                },
-                                new UiColumn
-                                {
-                                    field = "TEXT",
-                                    title = "Text",
-                                    template = "#=gridUtils.uiControlWrapper(data, 'TEXT')#"
-                                },
-                                new UiColumn
-                                {
-                                    field = "INT",
-                                    title = "Int",
-                                    template = "#=gridUtils.uiControlWrapper(data, 'INT')#"
-                                },
-                                new UiColumn
-                                {
-                                    field = "DATE",
-                                    title = "Date",
-                                    template = "#=gridUtils.uiControlWrapper(data, 'DATE', \"date:'MM/dd/yyyy'\")#"
-                                },
-                                new UiColumn
-                                {
-                                    field = "DROPDOWN",
-                                    title = "Dropdown",
-                                    uiType = "DropDown",
-                                    template = "#=gridUtils.uiControlWrapper(data, 'DROPDOWN')#",
-                                    editor = "gridUtils.lookupEditor"
-                                },
-                                new UiColumn
-                                {
-                                    field = "COMBOBOX",
-                                    title = "Combobox",
-                                    uiType = "ComboBox",
-                                    template = "#=gridUtils.uiControlWrapper(data, 'COMBOBOX')#",
-                                    editor = "gridUtils.lookupEditor"
-                                },
-                                new UiColumn { field = "", title = "&nbsp;" }
-                            },
-                            detailsModel = new UiModel
-                            {
-                                id = "dc_id",
-                                fields = new Dictionary<string, UiFieldItem>
-                                {
-                                    ["_pivot"] = new UiFieldItem { type = FieldTypes.Object, editable = true, nullable = true },
-                                    ["_behaviors"] = new UiFieldItem { type = FieldTypes.Object, editable = true, nullable = true },
-                                    ["dc_id"] = new UiFieldItem { type = FieldTypes.Number, editable = false, nullable = true },
-                                    ["PIVOT"] = new UiFieldItem { type = FieldTypes.Object, editable = false, nullable = true },
-                                    ["TEXT"] = new UiFieldItem { type = FieldTypes.String, editable = true, nullable = true },
-                                    ["INT"] = new UiFieldItem { type = FieldTypes.Number, editable = true, nullable = true },
-                                    ["DATE"] = new UiFieldItem { type = FieldTypes.Date, editable = true, nullable = true },
-                                    ["DROPDOWN"] = new UiFieldItem
-                                    {
-                                        type = FieldTypes.String,
-                                        values = "/api/Lookups/v1/GetLookups/DROPDOWN",
-                                        valuesText = "DROP_DOWN",
-                                        valuesValue = "DROP_DOWN",
-                                        editable = true,
-                                        nullable = true
-                                    },
-                                    ["COMBOBOX"] = new UiFieldItem
-                                    {
-                                        type = FieldTypes.String,
-                                        values = "/api/Lookups/v1/GetLookups/COMBOBOX",
-                                        valuesText = "DROP_DOWN",
-                                        valuesValue = "DROP_DOWN",
-                                        editable = true,
-                                        nullable = true
-                                    }
-                                }
-                            },
-                            detailsColumns = new List<UiColumn>
-                            {
-                                new UiColumn
-                                {
-                                    field = "_dirty",
-                                    title = "<i class='intelicon-upload-solid gridHeaderIcon' title='Something changed on this row'></i>",
-                                    width = 45,
-                                    template = "#=gridUtils.uiIconWrapper(data, '_dirty')#"
-                                },
-                                new UiColumn
-                                {
-                                    field = "PIVOT",
-                                    title = "PIVOT"
-                                },
-                                new UiColumn
-                                {
-                                    field = "TITLE",
-                                    title = "TITLE"
-                                },
-                                new UiColumn
-                                {
-                                    field = "TEXT",
-                                    title = "Text",
-                                    template = "#=gridUtils.uiControlWrapper(data, 'TEXT')#"
-                                },
-                                new UiColumn
-                                {
-                                    field = "INT",
-                                    title = "Int",
-                                    template = "#=gridUtils.uiControlWrapper(data, 'INT')#"
-                                },
-                                new UiColumn
-                                {
-                                    field = "DATE",
-                                    title = "Date",
-                                    template = "#=gridUtils.uiControlWrapper(data, 'DATE', \"date:'MM/dd/yyyy'\")#"
-                                },
-                                new UiColumn
-                                {
-                                    field = "DROPDOWN",
-                                    title = "Dropdown",
-                                    uiType = "DropDown",
-                                    template = "#=gridUtils.uiControlWrapper(data, 'DROPDOWN')#",
-                                    editor = "gridUtils.lookupEditor"
-                                },
-                                new UiColumn
-                                {
-                                    field = "COMBOBOX",
-                                    title = "Combobox",
-                                    uiType = "ComboBox",
-                                    template = "#=gridUtils.uiControlWrapper(data, 'COMBOBOX')#",
-                                    editor = "gridUtils.lookupEditor"
-                                },
-                                new UiColumn { field = "", title = "&nbsp;" }
-                            },
-                            extraAtrbs = new Dictionary<string, UiAtrbs>()
-                        },
-                        ["PROGRAM"] = new UiModelTemplate
-                        {
-                            name = "ECAP",
-                            model = new UiModel
-                            {
-                                id = "dc_id",
-                                fields = new Dictionary<string, UiFieldItem>
-                                {
-                                    ["_pivot"] = new UiFieldItem { type = FieldTypes.Object, editable = true, nullable = true },
-                                    ["_behaviors"] = new UiFieldItem { type = FieldTypes.Object, editable = true, nullable = true },
-                                    ["dc_id"] = new UiFieldItem { type = FieldTypes.Number, editable = false, nullable = true },
-                                    ["TEXT"] = new UiFieldItem { type = FieldTypes.String, editable = true, nullable = true },
-                                    ["INT"] = new UiFieldItem { type = FieldTypes.Number, editable = true, nullable = true },
-                                    ["DATE"] = new UiFieldItem { type = FieldTypes.Date, editable = true, nullable = true },
-                                    ["DROPDOWN"] = new UiFieldItem
-                                    {
-                                        type = FieldTypes.String,
-                                        values = "/api/Lookups/v1/GetLookups/DROPDOWN",
-                                        valuesText = "DROP_DOWN",
-                                        valuesValue = "DROP_DOWN",
-                                        editable = true,
-                                        nullable = true
-                                    },
-                                    ["COMBOBOX"] = new UiFieldItem
-                                    {
-                                        type = FieldTypes.String,
-                                        values = "/api/Lookups/v1/GetLookups/COMBOBOX",
-                                        valuesText = "DROP_DOWN",
-                                        valuesValue = "DROP_DOWN",
-                                        editable = true,
-                                        nullable = true
-                                    }
-                                }
-                            },
-                            columns = new List<UiColumn>
-                            {
-                                new UiColumn
-                                {
-                                    field = "_dirty",
-                                    title = "<i class='intelicon-upload-solid gridHeaderIcon' title='Something changed on this row'></i>",
-                                    width = 45,
-                                    template = "#=gridUtils.uiIconWrapper(data, '_dirty')#"
-                                },
-                                new UiColumn
-                                {
-                                    field = "TEXT",
-                                    title = "Text",
-                                    template = "#=gridUtils.uiControlWrapper(data, 'TEXT')#"
-                                },
-                                new UiColumn
-                                {
-                                    field = "INT",
-                                    title = "Int",
-                                    template = "#=gridUtils.uiControlWrapper(data, 'INT')#"
-                                },
-                                new UiColumn
-                                {
-                                    field = "DATE",
-                                    title = "Date",
-                                    template = "#=gridUtils.uiControlWrapper(data, 'DATE', \"date:'MM/dd/yyyy'\")#"
-                                },
-                                new UiColumn
-                                {
-                                    field = "DROPDOWN",
-                                    title = "Dropdown",
-                                    uiType = "DropDown",
-                                    template = "#=gridUtils.uiControlWrapper(data, 'DROPDOWN')#",
-                                    editor = "gridUtils.lookupEditor"
-                                },
-                                new UiColumn
-                                {
-                                    field = "COMBOBOX",
-                                    title = "Combobox",
-                                    uiType = "ComboBox",
-                                    template = "#=gridUtils.uiControlWrapper(data, 'COMBOBOX')#",
-                                    editor = "gridUtils.lookupEditor"
-                                },
-                                new UiColumn { field = "", title = "&nbsp;" }
-                            },
-                            detailsModel = new UiModel
-                            {
-                                id = "dc_id",
-                                fields = new Dictionary<string, UiFieldItem>
-                                {
-                                    ["_behaviors"] = new UiFieldItem { type = FieldTypes.Object, editable = true, nullable = true },
-                                    ["dc_id"] = new UiFieldItem { type = FieldTypes.Number, editable = false, nullable = true },
-                                    ["PIVOT"] = new UiFieldItem { type = FieldTypes.Object, editable = false, nullable = true },
-                                    ["TEXT"] = new UiFieldItem { type = FieldTypes.String, editable = true, nullable = true },
-                                    ["INT"] = new UiFieldItem { type = FieldTypes.Number, editable = true, nullable = true },
-                                    ["DATE"] = new UiFieldItem { type = FieldTypes.Date, editable = true, nullable = true },
-                                    ["DROPDOWN"] = new UiFieldItem
-                                    {
-                                        type = FieldTypes.String,
-                                        values = "/api/Lookups/v1/GetLookups/DROPDOWN",
-                                        valuesText = "DROP_DOWN",
-                                        valuesValue = "DROP_DOWN",
-                                        editable = true,
-                                        nullable = true
-                                    },
-                                    ["COMBOBOX"] = new UiFieldItem
-                                    {
-                                        type = FieldTypes.String,
-                                        values = "/api/Lookups/v1/GetLookups/COMBOBOX",
-                                        valuesText = "DROP_DOWN",
-                                        valuesValue = "DROP_DOWN",
-                                        editable = true,
-                                        nullable = true
-                                    }
-                                }
-                            },
-                            detailsColumns = new List<UiColumn>
-                            {
-                                new UiColumn
-                                {
-                                    field = "_dirty",
-                                    title = "<i class='intelicon-upload-solid gridHeaderIcon' title='Something changed on this row'></i>",
-                                    width = 45,
-                                    template = "#=gridUtils.uiIconWrapper(data, '_dirty')#"
-                                },
-                                new UiColumn
-                                {
-                                    field = "PIVOT",
-                                    title = "PIVOT"
-                                },
-                                new UiColumn
-                                {
-                                    field = "TITLE",
-                                    title = "TITLE"
-                                },
-                                new UiColumn
-                                {
-                                    field = "TEXT",
-                                    title = "Text",
-                                    template = "#=gridUtils.uiControlWrapper(data, 'TEXT')#"
-                                },
-                                new UiColumn
-                                {
-                                    field = "INT",
-                                    title = "Int",
-                                    template = "#=gridUtils.uiControlWrapper(data, 'INT')#"
-                                },
-                                new UiColumn
-                                {
-                                    field = "DATE",
-                                    title = "Date",
-                                    template = "#=gridUtils.uiControlWrapper(data, 'DATE', \"date:'MM/dd/yyyy'\")#"
-                                },
-                                new UiColumn
-                                {
-                                    field = "DROPDOWN",
-                                    title = "Dropdown",
-                                    uiType = "DropDown",
-                                    template = "#=gridUtils.uiControlWrapper(data, 'DROPDOWN')#",
-                                    editor = "gridUtils.lookupEditor"
-                                },
-                                new UiColumn
-                                {
-                                    field = "COMBOBOX",
-                                    title = "Combobox",
-                                    uiType = "ComboBox",
-                                    template = "#=gridUtils.uiControlWrapper(data, 'COMBOBOX')#",
-                                    editor = "gridUtils.lookupEditor"
-                                },
-                                new UiColumn { field = "", title = "&nbsp;" }
-                            },
-                            extraAtrbs = new Dictionary<string, UiAtrbs>()
-                        },
-                        ["VOLTIER"] = new UiModelTemplate
-                        {
-                            name = "ECAP",
-                            model = new UiModel
-                            {
-                                id = "ID",
-                                fields = new Dictionary<string, UiFieldItem>
-                                {
-                                    ["_pivot"] = new UiFieldItem { type = FieldTypes.Object, editable = true, nullable = true },
-                                    ["_behaviors"] = new UiFieldItem { type = FieldTypes.Object, editable = true, nullable = true },
-                                    ["_MultiDim"] = new UiFieldItem { type = FieldTypes.Object, editable = true, nullable = true },
-                                    ["ID"] = new UiFieldItem { type = FieldTypes.Number, editable = false, nullable = true },
-                                    ["PIVOT"] = new UiFieldItem { type = FieldTypes.Object, editable = false, nullable = true },
-                                    ["TEXT"] = new UiFieldItem { type = FieldTypes.String, editable = true, nullable = true },
-                                    ["INT"] = new UiFieldItem { type = FieldTypes.Number, editable = true, nullable = true },
-                                    ["DATE"] = new UiFieldItem { type = FieldTypes.Date, editable = true, nullable = true },
-                                    ["DROPDOWN"] = new UiFieldItem
-                                    {
-                                        type = FieldTypes.String,
-                                        values = "/api/Lookups/v1/GetLookups/DROPDOWN",
-                                        valuesText = "DROP_DOWN",
-                                        valuesValue = "DROP_DOWN",
-                                        editable = true,
-                                        nullable = true
-                                    },
-                                    ["COMBOBOX"] = new UiFieldItem
-                                    {
-                                        type = FieldTypes.String,
-                                        values = "/api/Lookups/v1/GetLookups/COMBOBOX",
-                                        valuesText = "DROP_DOWN",
-                                        valuesValue = "DROP_DOWN",
-                                        editable = true,
-                                        nullable = true
-                                    }
-                                }
-                            },
-                            columns = new List<UiColumn>
-                            {
-                                new UiColumn
-                                {
-                                    field = "_dirty",
-                                    title = "<i class='intelicon-upload-solid gridHeaderIcon' title='Something changed on this row'></i>",
-                                    width = 45,
-                                    template = "#=gridUtils.uiIconWrapper(data, '_dirty')#"
-                                },
-                                new UiColumn
-                                {
-                                    field = "TEXT",
-                                    title = "Text",
-                                    template = "#=gridUtils.uiControlWrapper(data, 'TEXT')#"
-                                },
-                                new UiColumn
-                                {
-                                    field = "INT",
-                                    title = "Int",
-                                    template = "#=gridUtils.uiControlWrapper(data, 'INT')#"
-                                },
-                                new UiColumn
-                                {
-                                    field = "DATE",
-                                    title = "Date",
-                                    template = "#=gridUtils.uiControlWrapper(data, 'DATE', \"date:'MM/dd/yyyy'\")#"
-                                },
-                                new UiColumn
-                                {
-                                    field = "DROPDOWN",
-                                    title = "Dropdown",
-                                    uiType = "DropDown",
-                                    template = "#=gridUtils.uiControlWrapper(data, 'DROPDOWN')#",
-                                    editor = "gridUtils.lookupEditor"
-                                },
-                                new UiColumn
-                                {
-                                    field = "COMBOBOX",
-                                    title = "Combobox",
-                                    uiType = "ComboBox",
-                                    template = "#=gridUtils.uiControlWrapper(data, 'COMBOBOX')#",
-                                    editor = "gridUtils.lookupEditor"
-                                },
-                                new UiColumn { field = "", title = "&nbsp;" }
-                            },
-                            detailsModel = new UiModel
-                            {
-                                id = "dc_id",
-                                fields = new Dictionary<string, UiFieldItem>
-                                {
-                                    ["_behaviors"] = new UiFieldItem { type = FieldTypes.Object, editable = true, nullable = true },
-                                    ["dc_id"] = new UiFieldItem { type = FieldTypes.Number, editable = false, nullable = true },
-                                    ["PIVOT"] = new UiFieldItem { type = FieldTypes.Object, editable = false, nullable = true },
-                                    ["TEXT"] = new UiFieldItem { type = FieldTypes.String, editable = true, nullable = true },
-                                    ["INT"] = new UiFieldItem { type = FieldTypes.Number, editable = true, nullable = true },
-                                    ["DATE"] = new UiFieldItem { type = FieldTypes.Date, editable = true, nullable = true },
-                                    ["DROPDOWN"] = new UiFieldItem
-                                    {
-                                        type = FieldTypes.String,
-                                        values = "/api/Lookups/v1/GetLookups/DROPDOWN",
-                                        valuesText = "DROP_DOWN",
-                                        valuesValue = "DROP_DOWN",
-                                        editable = true,
-                                        nullable = true
-                                    },
-                                    ["COMBOBOX"] = new UiFieldItem
-                                    {
-                                        type = FieldTypes.String,
-                                        values = "/api/Lookups/v1/GetLookups/COMBOBOX",
-                                        valuesText = "DROP_DOWN",
-                                        valuesValue = "DROP_DOWN",
-                                        editable = true,
-                                        nullable = true
-                                    }
-                                }
-                            },
-                            detailsColumns = new List<UiColumn>
-                            {
-                                new UiColumn
-                                {
-                                    field = "_dirty",
-                                    title = "<i class='intelicon-upload-solid gridHeaderIcon' title='Something changed on this row'></i>",
-                                    width = 45,
-                                    template = "#=gridUtils.uiIconWrapper(data, '_dirty')#"
-                                },
-                                new UiColumn
-                                {
-                                    field = "PIVOT",
-                                    title = "PIVOT"
-                                },
-                                new UiColumn
-                                {
-                                    field = "TITLE",
-                                    title = "TITLE"
-                                },
-                                new UiColumn
-                                {
-                                    field = "TEXT",
-                                    title = "Text",
-                                    template = "#=gridUtils.uiControlWrapper(data, 'TEXT')#"
-                                },
-                                new UiColumn
-                                {
-                                    field = "INT",
-                                    title = "Int",
-                                    template = "#=gridUtils.uiControlWrapper(data, 'INT')#"
-                                },
-                                new UiColumn
-                                {
-                                    field = "DATE",
-                                    title = "Date",
-                                    template = "#=gridUtils.uiControlWrapper(data, 'DATE', \"date:'MM/dd/yyyy'\")#"
-                                },
-                                new UiColumn
-                                {
-                                    field = "DROPDOWN",
-                                    title = "Dropdown",
-                                    uiType = "DropDown",
-                                    template = "#=gridUtils.uiControlWrapper(data, 'DROPDOWN')#",
-                                    editor = "gridUtils.lookupEditor"
-                                },
-                                new UiColumn
-                                {
-                                    field = "COMBOBOX",
-                                    title = "Combobox",
-                                    uiType = "ComboBox",
-                                    template = "#=gridUtils.uiControlWrapper(data, 'COMBOBOX')#",
-                                    editor = "gridUtils.lookupEditor"
-                                },
-                                new UiColumn { field = "", title = "&nbsp;" }
-                            },
-                            extraAtrbs = new Dictionary<string, UiAtrbs>()
-                        },
-                        ["CAPBAND"] = new UiModelTemplate
-                        {
-                            name = "ECAP",
-                            model = new UiModel
-                            {
-                                id = "dc_id",
-                                fields = new Dictionary<string, UiFieldItem>
-                                {
-                                    ["_pivot"] = new UiFieldItem { type = FieldTypes.Object, editable = true, nullable = true },
-                                    ["_behaviors"] = new UiFieldItem { type = FieldTypes.Object, editable = true, nullable = true },
-                                    ["_MultiDim"] = new UiFieldItem { type = FieldTypes.Object, editable = true, nullable = true },
-                                    ["dc_id"] = new UiFieldItem { type = FieldTypes.Number, editable = false, nullable = true },
-                                    ["PIVOT"] = new UiFieldItem { type = FieldTypes.Object, editable = false, nullable = true },
-                                    ["TEXT"] = new UiFieldItem { type = FieldTypes.String, editable = true, nullable = true },
-                                    ["INT"] = new UiFieldItem { type = FieldTypes.Number, editable = true, nullable = true },
-                                    ["DATE"] = new UiFieldItem { type = FieldTypes.Date, editable = true, nullable = true },
-                                    ["DROPDOWN"] = new UiFieldItem
-                                    {
-                                        type = FieldTypes.String,
-                                        values = "/api/Lookups/v1/GetLookups/DROPDOWN",
-                                        valuesText = "DROP_DOWN",
-                                        valuesValue = "DROP_DOWN",
-                                        editable = true,
-                                        nullable = true
-                                    },
-                                    ["COMBOBOX"] = new UiFieldItem
-                                    {
-                                        type = FieldTypes.String,
-                                        values = "/api/Lookups/v1/GetLookups/COMBOBOX",
-                                        valuesText = "DROP_DOWN",
-                                        valuesValue = "DROP_DOWN",
-                                        editable = true,
-                                        nullable = true
-                                    }
-                                }
-                            },
-                            columns = new List<UiColumn>
-                            {
-                                new UiColumn
-                                {
-                                    field = "_dirty",
-                                    title = "<i class='intelicon-upload-solid gridHeaderIcon' title='Something changed on this row'></i>",
-                                    width = 45,
-                                    template = "#=gridUtils.uiIconWrapper(data, '_dirty')#"
-                                },
-                                new UiColumn
-                                {
-                                    field = "TEXT",
-                                    title = "Text",
-                                    template = "#=gridUtils.uiControlWrapper(data, 'TEXT')#"
-                                },
-                                new UiColumn
-                                {
-                                    field = "INT",
-                                    title = "Int",
-                                    template = "#=gridUtils.uiControlWrapper(data, 'INT')#"
-                                },
-                                new UiColumn
-                                {
-                                    field = "DATE",
-                                    title = "Date",
-                                    template = "#=gridUtils.uiControlWrapper(data, 'DATE', \"date:'MM/dd/yyyy'\")#"
-                                },
-                                new UiColumn
-                                {
-                                    field = "DROPDOWN",
-                                    title = "Dropdown",
-                                    uiType = "DropDown",
-                                    template = "#=gridUtils.uiControlWrapper(data, 'DROPDOWN')#",
-                                    editor = "gridUtils.lookupEditor"
-                                },
-                                new UiColumn
-                                {
-                                    field = "COMBOBOX",
-                                    title = "Combobox",
-                                    uiType = "ComboBox",
-                                    template = "#=gridUtils.uiControlWrapper(data, 'COMBOBOX')#",
-                                    editor = "gridUtils.lookupEditor"
-                                },
-                                new UiColumn { field = "", title = "&nbsp;" }
-                            },
-                            detailsModel = new UiModel
-                            {
-                                id = "dc_id",
-                                fields = new Dictionary<string, UiFieldItem>
-                                {
-                                    ["_behaviors"] = new UiFieldItem { type = FieldTypes.Object, editable = true, nullable = true },
-                                    ["dc_id"] = new UiFieldItem { type = FieldTypes.Number, editable = false, nullable = true },
-                                    ["PIVOT"] = new UiFieldItem { type = FieldTypes.Object, editable = false, nullable = true },
-                                    ["TEXT"] = new UiFieldItem { type = FieldTypes.String, editable = true, nullable = true },
-                                    ["INT"] = new UiFieldItem { type = FieldTypes.Number, editable = true, nullable = true },
-                                    ["DATE"] = new UiFieldItem { type = FieldTypes.Date, editable = true, nullable = true },
-                                    ["DROPDOWN"] = new UiFieldItem
-                                    {
-                                        type = FieldTypes.String,
-                                        values = "/api/Lookups/v1/GetLookups/DROPDOWN",
-                                        valuesText = "DROP_DOWN",
-                                        valuesValue = "DROP_DOWN",
-                                        editable = true,
-                                        nullable = true
-                                    },
-                                    ["COMBOBOX"] = new UiFieldItem
-                                    {
-                                        type = FieldTypes.String,
-                                        values = "/api/Lookups/v1/GetLookups/COMBOBOX",
-                                        valuesText = "DROP_DOWN",
-                                        valuesValue = "DROP_DOWN",
-                                        editable = true,
-                                        nullable = true
-                                    }
-                                }
-                            },
-                            detailsColumns = new List<UiColumn>
-                            {
-                                new UiColumn
-                                {
-                                    field = "_dirty",
-                                    title = "<i class='intelicon-upload-solid gridHeaderIcon' title='Something changed on this row'></i>",
-                                    width = 45,
-                                    template = "#=gridUtils.uiIconWrapper(data, '_dirty')#"
-                                },
-                                new UiColumn
-                                {
-                                    field = "PIVOT",
-                                    title = "PIVOT"
-                                },
-                                new UiColumn
-                                {
-                                    field = "TITLE",
-                                    title = "TITLE"
-                                },
-                                new UiColumn
-                                {
-                                    field = "TEXT",
-                                    title = "Text",
-                                    template = "#=gridUtils.uiControlWrapper(data, 'TEXT')#"
-                                },
-                                new UiColumn
-                                {
-                                    field = "INT",
-                                    title = "Int",
-                                    template = "#=gridUtils.uiControlWrapper(data, 'INT')#"
-                                },
-                                new UiColumn
-                                {
-                                    field = "DATE",
-                                    title = "Date",
-                                    template = "#=gridUtils.uiControlWrapper(data, 'DATE', \"date:'MM/dd/yyyy'\")#"
-                                },
-                                new UiColumn
-                                {
-                                    field = "DROPDOWN",
-                                    title = "Dropdown",
-                                    uiType = "DropDown",
-                                    template = "#=gridUtils.uiControlWrapper(data, 'DROPDOWN')#",
-                                    editor = "gridUtils.lookupEditor"
-                                },
-                                new UiColumn
-                                {
-                                    field = "COMBOBOX",
-                                    title = "Combobox",
-                                    uiType = "ComboBox",
-                                    template = "#=gridUtils.uiControlWrapper(data, 'COMBOBOX')#",
-                                    editor = "gridUtils.lookupEditor"
-                                },
-                                new UiColumn { field = "", title = "&nbsp;" }
-                            },
-                            extraAtrbs = new Dictionary<string, UiAtrbs>()
-                        }
+                        ["ECAP"] = BuildUiModelTemplate(OpDataElementType.WipDeals, "ECAP", items),
+                        ["PROGRAM"] = BuildUiModelTemplate(OpDataElementType.WipDeals, "PROGRAM", items),
+                        ["VOLTIER"] = BuildUiModelTemplate(OpDataElementType.WipDeals, "VOLTIER", items),
+                        ["CAPBAND"] = BuildUiModelTemplate(OpDataElementType.WipDeals, "CAPBAND", items)
                     }
                 },
                 ObjectTemplates = new Dictionary<string, Dictionary<string, UiObjectTemplate>>
                 {
                     ["Contract"] = new Dictionary<string, UiObjectTemplate>
                     {
-                        ["Generic"] = new UiObjectTemplate
-                        {
-                            ["dc_id"] = 0,
-                            ["dc_parent_id"] = 0,
-                            ["dc_sid"] = 0,
-                            ["OBJSET_TYPE"] = "",
-                            ["TITLE"] = "",
-                            ["CUST_MBR_SID"] = "",
-                            ["START_DT"] = "",
-                            ["END_DT"] = "",
-                            ["CUST_ACCPT"] = "",
-                            ["C2A_DATA_C2A_ID"] = "", 
-                            ["DEAL_STG_CD"] = "",
-                            ["PricingStrategy"] = new List<string>(),
-                            ["_behaviors"] = new Dictionary<string, Dictionary<string, dynamic>>
-                            {
-                                ["isRequired"] = new Dictionary<string, dynamic>
-                                {
-                                    ["TITLE"] = true, 
-                                    ["CUST_MBR_SID"] = true,
-                                    ["START_DT"] = true,
-                                    ["END_DT"] = true
-                                },
-                                ["isError"] = new Dictionary<string, dynamic>(),
-                                ["validMsg"] = new Dictionary<string, dynamic>()
-                            }
-                        }
+                        ["Generic"] = BuildUiObjectTemplate(OpDataElementType.Contract)
                     },
                     ["PricingStrategy"] = new Dictionary<string, UiObjectTemplate>
                     {
-                        ["Generic"] = new UiObjectTemplate
-                        {
-                            ["dc_id"] = 0,
-                            ["dc_parent_id"] = 0,
-                            ["dc_sid"] = 0,
-                            ["OBJSET_TYPE"] = "",
-                            ["TITLE"] = "", 
-                            ["TERMS"] = "",
-                            ["PricingTable"] = new List<string>(),
-                            ["_behaviors"] = new Dictionary<string, Dictionary<string, dynamic>>
-                            {
-                                ["isRequired"] = new Dictionary<string, dynamic>
-                                {
-                                    ["TITLE"] = true
-                                },
-                                ["isError"] = new Dictionary<string, dynamic>(),
-                                ["validMsg"] = new Dictionary<string, dynamic>()
-                            }
-                        }
+                        ["Generic"] = BuildUiObjectTemplate(OpDataElementType.PricingStrategy)
                     },
                     ["PricingTable"] = new Dictionary<string, UiObjectTemplate>
                     {
-                        ["Generic"] = new UiObjectTemplate
-                        {
-                            ["dc_id"] = 0,
-                            ["dc_parent_id"] = 0,
-                            ["dc_sid"] = 0,
-                            ["OBJSET_TYPE"] = "",
-                            ["TITLE"] = "",
-                            ["_behaviors"] = new Dictionary<string, Dictionary<string, dynamic>>
-                            {
-                                ["isRequired"] = new Dictionary<string, dynamic>
-                                {
-                                    ["TITLE"] = true
-                                },
-                                ["isError"] = new Dictionary<string, dynamic>(),
-                                ["validMsg"] = new Dictionary<string, dynamic>()
-                            }
-                        }
+                        ["Generic"] = BuildUiObjectTemplate(OpDataElementType.PricingTable)
                     }
                 }
-
             };
 
-
-
+            return ret;
         }
     }
 }

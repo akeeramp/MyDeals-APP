@@ -35,6 +35,14 @@
                     url: 'basicGrid',
                     controller: 'basicController'
                 }
+            },
+            {
+                state: 'testCases.businessRules',
+                config: {
+                    templateUrl: 'app/testCases/rules/businessRules.manage.html',
+                    url: 'businessRules',
+                    controller: 'businessRulesController'
+                }
             }
 		];
 	}

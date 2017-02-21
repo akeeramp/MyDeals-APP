@@ -85,10 +85,9 @@
     <Compile Include="Data Collections\DataCollectionsDataLib.cs" />
     <Compile Include="Data Collections\DataCollections.cs" />
     <Compile Include="Data Collectors\DataCollectorDataLib.cs" />
+    <Compile Include="Data Collectors\DataCollectorDataLib_Get.cs" />
     <Compile Include="DataLibrary.cs" />
-    <Compile Include="Deals\DealDataLib_Common.cs" />
-    <Compile Include="Deals\DealDataLib_Get.cs" />
-    <Compile Include="Deals\DealDataLib_Save.cs" />
+    <Compile Include="Data Collectors\DataCollectorDataLib_Save.cs" />
     <Compile Include="ProductCategoriesLib\ProductCategoriesDataLib.cs" />
     <Compile Include="Products\ProductDataLib.cs" />
     <Compile Include="Resolver.cs" />
@@ -129,7 +128,9 @@
   <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Deals\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

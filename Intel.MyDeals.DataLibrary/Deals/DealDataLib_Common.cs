@@ -15,7 +15,7 @@ namespace Intel.MyDeals.DataLibrary
     {
         #region Consts and Structs
 
-        private struct TableName
+        internal struct TableName
         {
             // TODO - These are hard coded table names in our code.  WTH??
             public const string STG_WIP_ATRB = "[dbo].[STG_WIP_ATRB]";
@@ -395,8 +395,7 @@ namespace Intel.MyDeals.DataLibrary
         /// </summary>
         /// <param name="packets"></param>
         /// <returns></returns>
-        private List<OpDataPacket<OpDataElementType>> GetPacketsInOrder(
-            IEnumerable<OpDataPacket<OpDataElementType>> packets)
+        private List<OpDataPacket<OpDataElementType>> GetPacketsInOrder(IEnumerable<OpDataPacket<OpDataElementType>> packets)
         {
             if (packets == null)
             {

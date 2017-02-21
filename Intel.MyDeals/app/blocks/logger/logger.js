@@ -31,14 +31,18 @@
             toastr.error(message, title);
             $log.error('Error: ' + message, data);
             if (typeof data !== 'string') {
-                if (data['statusText'] !== undefined) {
-                    data = 'message: ' + message + ' statusText: ' + data['statusText'] + ' responseText : ' + data['responseText'] + ' ErrorStack: ' + data['data'];
-                }
-                if (data['exception'] !== undefined) {
-                    data = 'message: ' + message + ' statusText: ' + data['exception'].message + ' ErrorStack: ' + data['exception'].stack;
+                if (data === undefined) {
+                    data = 'message: ' + message + ' statusText: NA responseText : NA ErrorStack: NA';
+                } else {
+                    if (data['statusText'] !== undefined) {
+                        data = 'message: ' + message + ' statusText: ' + data['statusText'] + ' responseText : ' + data['responseText'] + ' ErrorStack: ' + data['data'];
+                    }
+                    if (data['exception'] !== undefined) {
+                        data = 'message: ' + message + ' statusText: ' + data['exception'].message + ' ErrorStack: ' + data['exception'].stack;
+                    }
                 }
             }
-            //op.ajaxPostAsync(URL + "LogError", data);
+            op.ajaxPostAsync(URL + "LogError", data);
         }
 
         function info(message, data, title) {

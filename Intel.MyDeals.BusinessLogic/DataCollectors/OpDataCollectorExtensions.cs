@@ -98,7 +98,7 @@ namespace Intel.MyDeals.BusinessLogic
         public static CustomerDivision GetCustomerDivision(this OpDataCollector dc)
         {
             string val = dc.GetDataElementValue(AttributeCodes.CUST_MBR_SID);
-            if (String.IsNullOrEmpty(val))
+            if (string.IsNullOrEmpty(val))
             {
                 // TODO throw an error
                 val = "0";
@@ -106,7 +106,7 @@ namespace Intel.MyDeals.BusinessLogic
             return new CustomerLib().GetCustomerDivision(Convert.ToInt32(val));
         }
 
-        public static OpDataCollector ApplyRules(this OpDataCollector dc, RuleTriggerPoint ruleTriggerPoint, Dictionary<string, bool> securityActionCache = null)
+        public static OpDataCollector ApplyRules(this OpDataCollector dc, MyRulesTrigger ruleTriggerPoint, Dictionary<string, bool> securityActionCache = null)
         {
             // TODO add calls to rules here
 
@@ -246,7 +246,7 @@ namespace Intel.MyDeals.BusinessLogic
             MyDealsActionItem objsetActionItem = dc.GetObjsetActions();
 
             // Call all load triggered rules
-            dc.ApplyRules(RuleTriggerPoint.OnLoad);
+            dc.ApplyRules(MyRulesTrigger.OnLoad);
 
             OpDataCollectorFlattenedItem objsetItem = new OpDataCollectorFlattenedItem();
 
@@ -263,8 +263,9 @@ namespace Intel.MyDeals.BusinessLogic
                 objsetItem["_MultiDim"] = ((Dictionary<int, OpDataCollectorFlattenedItem>)objsetItem["_MultiDim"]).Values.ToList();
 
             objsetItem["dc_id"] = dc.DcID;
-            objsetItem["dc_parent_id"] = dc.DcParentSID;
             objsetItem["dc_sid"] = dc.DcSID; // TODO - Does this work???
+            objsetItem["dc_parent_id"] = dc.DcParentID;
+            objsetItem["dc_parent_sid"] = dc.DcParentSID;
 
             // TODO Inject Rule Trigger here
 

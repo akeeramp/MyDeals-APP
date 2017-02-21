@@ -71,6 +71,10 @@
     <Compile Include="Workflow\IWorkFlowLib.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Intel.MyDeals.BusinessRules\Intel.MyDeals.BusinessRules.csproj">
+      <Project>{2F3217AD-E46B-4DAB-82C2-11E007B65A9C}</Project>
+      <Name>Intel.MyDeals.BusinessRules</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Intel.MyDeals.Entities\Intel.MyDeals.Entities.csproj">
       <Project>{AE1A3978-08EF-4A15-82CD-7BA6192A9B52}</Project>
       <Name>Intel.MyDeals.Entities</Name>

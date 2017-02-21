@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Web.Http;
+using Intel.MyDeals.BusinessRules;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -129,6 +130,16 @@ namespace Intel.MyDeals.Controllers.API
         {
             return SafeExecutor(() => _rulesLib.GetFailedRuleTasksByRuleId(ruleId)
                 , $"Unable to get Rule Tasks"
+            );
+        }
+
+
+        [Authorize]
+        [Route("GetBusinessRules")]
+        public List<MyOpRule> GetBusinessRules()
+        {
+            return SafeExecutor(() => _rulesLib.GetBusinessRules()
+                , $"Unable to get Business Rules"
             );
         }
     }

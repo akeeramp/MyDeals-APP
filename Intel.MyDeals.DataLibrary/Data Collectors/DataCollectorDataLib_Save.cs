@@ -7,6 +7,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using Intel.MyDeals.Entities;
+using Intel.MyDeals.IDataLibrary;
 using Intel.Opaque;
 using Intel.Opaque.DataElement;
 using Intel.Opaque.Tools;
@@ -15,7 +16,7 @@ using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
 
 namespace Intel.MyDeals.DataLibrary
 {
-    public partial class DealDataLib
+    public partial class DataCollectorDataLib : IDataCollectorDataLib
     {
 
 
@@ -185,7 +186,7 @@ namespace Intel.MyDeals.DataLibrary
 #endif
 
             // Bulk import all the data to DB...  This is the call that pushes all of the actions and attributes into the DB stage tables.
-            (new DSDealToDatabase(DataAccess.ConnectionString)).BulkImportDataSet(dsImport);
+            (new DSOpDataPacketsToDatabase(DataAccess.ConnectionString)).BulkImportDataSet(dsImport);
 
             OpLogPerf.Log("DealDataLib.Save:ImportOpDataPackets - Begin PR_OBJ_STG_TO_WIP.");
 

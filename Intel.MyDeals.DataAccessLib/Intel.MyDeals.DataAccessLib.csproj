@@ -49,6 +49,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Shared Libraries\Intel.Opaque.Templating.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.SqlServer.ConnectionInfo, Version=13.100.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.SqlServer.Smo, Version=13.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -68,7 +70,7 @@
     <Compile Include="DSDeal\DSDealBase1.generated.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DSDeal\DSDealToDatabase.cs" />
+    <Compile Include="DSDeal\DSOpDataPacketsToDatabase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TableValueParameterTypes\type_dictionary.cs">
       <SubType>Component</SubType>

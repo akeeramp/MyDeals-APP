@@ -78,6 +78,11 @@ namespace Intel.MyDeals.DataLibrary
             return DataCollections.GetToolConstants();
         }
 
+        public List<AtrbMstr> GetAtrbMstrs()
+        {
+            return DataCollections.GetAtrbMstrs();
+        }
+
         public List<CustomerDivision> GetCustomerDivisions()
         {
             return DataCollections.GetCustomerDivisions();

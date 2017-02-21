@@ -10,13 +10,13 @@ using Intel.Opaque.Tools;
 
 namespace Intel.MyDeals.DataAccessLib
 {
-    public class DSDealToDatabase
+    public class DSOpDataPacketsToDatabase
     {
         #region Constructors
 
         private string ConnectionString { set; get; }
 
-        public DSDealToDatabase(string connectionString) : this(new OpMsgQueue())
+        public DSOpDataPacketsToDatabase(string connectionString) : this(new OpMsgQueue())
         {
             if (String.IsNullOrEmpty(connectionString))
             {
@@ -26,7 +26,7 @@ namespace Intel.MyDeals.DataAccessLib
             ConnectionString = connectionString;
         }
 
-        public DSDealToDatabase(OpMsgQueue messageQueue)
+        public DSOpDataPacketsToDatabase(OpMsgQueue messageQueue)
         {
             Messages = messageQueue;
             MessageWriter = Messages.GetMessageWriter();
@@ -61,7 +61,7 @@ namespace Intel.MyDeals.DataAccessLib
                 WriteMessage(OpMsg.MessageType.Error, "Error rolling back the transaction, invalid batch id.");
                 return;
             }
-            if (String.IsNullOrEmpty(ConnectionString))
+            if (string.IsNullOrEmpty(ConnectionString))
             {
                 WriteMessage(OpMsg.MessageType.Error, "Error rolling back the transaction, invalid connection string.");
                 return;

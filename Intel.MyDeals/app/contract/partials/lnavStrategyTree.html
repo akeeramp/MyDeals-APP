@@ -7,7 +7,7 @@
             <div class="fl" ng-click="isCollapsed = !isCollapsed">
                 <i class="glyphicon" style="margin-right: 5px; margin-top: 3px;" ng-class="{'glyphicon-chevron-down': !isCollapsed, 'glyphicon-chevron-right': isCollapsed}"></i>
             </div>
-            <div class="fl" style="width: 245px; font-size: 14px;" ng-init="isEditable=false">
+            <div class="fl" style="width: 225px; font-size: 14px;" ng-init="isEditable=false">
                 <input ng-blur="isEditable=false" ng-show="isEditable" focus-on-show ng-model="ps.TITLE" class="flatWhiteInput" />
                 <div ng-click="isCollapsed = !isCollapsed" ng-dblclick="isEditable=true" ng-hide="isEditable" class="w100">{{ ps.TITLE }}</div>
             </div>
@@ -29,7 +29,7 @@
                     <div class="fl textCircle pct_{{ pt.PCT_RESULT }}">{{ pt.OBJSET_TYPE_CD | limitTo:1 }}</div>
                     <div class="fl" style="margin: 0 6px;" ng-init="isEditable=false">
                         <input ng-blur="isEditable=false" ng-show="isEditable" focus-on-show ng-model="pt.TITLE" class="flatWhiteInput" />
-                        <div ng-dblclick="isEditable=true" ng-hide="isEditable" style="width: 215px;" ui-sref="contract.manager.strategy({cid:contractData.dc_id,sid:ps.dc_id,pid:pt.dc_id})">
+                        <div ng-dblclick="isEditable=true" ng-hide="isEditable" style="width: 195px;" ui-sref="contract.manager.strategy({cid:contractData.dc_id,sid:ps.dc_id,pid:pt.dc_id})">
                             {{ pt.TITLE }}
                         </div>
                     </div>

@@ -154,6 +154,7 @@
     <Compile Include="UI Templates\UiModelTemplate.cs" />
     <Compile Include="UI Templates\UiObjectTemplate.cs" />
     <Compile Include="UI Templates\UiTemplates.cs" />
+    <Compile Include="UiTemplateContainerItem.cs" />
     <Compile Include="UserSetting.cs" />
     <Compile Include="VerticalSecurityItem.cs" />
     <Compile Include="WorkFlowQueueItem.cs" />

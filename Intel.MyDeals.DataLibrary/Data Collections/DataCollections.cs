@@ -150,6 +150,16 @@ namespace Intel.MyDeals.DataLibrary
 
         private static List<ToolConstants> _getToolConstants;
 
+        public static List<AtrbMstr> GetAtrbMstrs()
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                return _getAtrbMstrs ?? (_getAtrbMstrs = new AtrbMapDataLib().GetAtrbMstrs());
+            }
+        }
+        private static List<AtrbMstr> _getAtrbMstrs;
+
+
         //public static Dictionary<string, string> OpDetails(bool returnExceptions = true)
         //{
         //    return new OpCurrentConfig().GetConfigDetails(returnExceptions);
@@ -298,10 +308,7 @@ namespace Intel.MyDeals.DataLibrary
 
         private static List<MyDealsActionItem> _getDealActions;
 
-        public static TemplateWrapper GetTemplateData()
-        {
-            return GetTemplateDataWithData(new DateTime(2000, 1, 1));
-        }
+
 
         public static TemplateWrapper GetTemplateDataWithData(DateTime lastCacheDate)
         {
@@ -327,22 +334,27 @@ namespace Intel.MyDeals.DataLibrary
 
         public static OpDataElementUITemplates GetOpDataElementUITemplates()
         {
-            return GetTemplateDict().TemplateDict;
+            return GetTemplateWrapper().TemplateDict;
         }
-
-        public static TemplateWrapper GetTemplateDict()
+        public static TemplateWrapper GetTemplateWrapper()
         {
-            return GetTemplateData();
+            return GetTemplateDataWithData(new DateTime(2000, 1, 1));
         }
-
-        public static TemplateWrapper GetCalendarData()
+        public static List<ObjectTypeTemplate> GetTemplateData()
         {
-            return GetTemplateData();
+            return GetTemplateWrapper().TemplateData;
         }
-
-        public static TemplateWrapper GetDealTypeData()
+        public static OpDataElementUITemplates GetTemplateDict()
         {
-            return GetTemplateData();
+            return GetTemplateWrapper().TemplateDict;
+        }
+        public static IEnumerable<CustomerCal> GetCalendarData()
+        {
+            return GetTemplateWrapper().CalendarData;
+        }
+        public static List<ObjectTypes> GetDealTypeData()
+        {
+            return GetTemplateWrapper().DealTypeData;
         }
 
         private static List<ObjectTypeTemplate> _getTemplateData;
