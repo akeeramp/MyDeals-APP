@@ -138,7 +138,7 @@
               { field: "WFSTG_MBR_SID", title: "Id", width: "7%" },
               { field: "WFSTG_NM", title: "Stage Code", width: "10%" },
               { field: "WFSTG_DESC", title: "Stage Description", width: "20%" },
-              { field: "ROLE_TIER_NM", title: "Stage Tier", width: "15%", editor: roleTierCDDropDownEditor },
+              { field: "ROLE_TIER_NM", title: "Role Tier", width: "15%", editor: roleTierCDDropDownEditor },
               { field: "WFSTG_LOC", title: "Location", width: "10%", editor: locationDropDownEditor },
               { field: "WFSTG_ORD", title: "Order By", width: "10%" },
               { field: "ALLW_REDEAL", title: "Allow Redeal", width: "10%", template: "<div><span ng-if='! #= ALLW_REDEAL # ' class='icon-md intelicon-empty-box'></span><span ng-if=' #= ALLW_REDEAL # ' class='icon-md intelicon-filled-box'></span></div>" },
