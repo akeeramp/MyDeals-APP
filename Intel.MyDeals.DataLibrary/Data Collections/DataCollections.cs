@@ -98,6 +98,17 @@ namespace Intel.MyDeals.DataLibrary
             }
         }
 
+        public static bool RecycleCache(string fieldName)
+        {
+            if (string.IsNullOrEmpty(fieldName)) return false;
+
+            if (ClearCache(fieldName))
+            {
+                return LoadCache(fieldName);
+            }
+            return false;
+        }
+
         private static bool LoadCacheFile(string fieldName)
         {
             FieldInfo field = typeof(DataCollections).GetField(fieldName, BindingFlags.Static | BindingFlags.NonPublic);

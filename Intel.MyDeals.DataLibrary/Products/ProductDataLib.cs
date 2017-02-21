@@ -128,8 +128,7 @@ namespace Intel.MyDeals.DataLibrary
                         });
                     }
                 }
-                DataCollections.ClearCache("_getProductsFromAlias");
-                DataCollections.LoadCache("_getProductsFromAlias");
+                DataCollections.RecycleCache("_getProductsFromAlias");
             }
             catch (Exception ex)
             {

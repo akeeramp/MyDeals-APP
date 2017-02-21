@@ -72,7 +72,7 @@
                                         .Where(function (x) {
                                             return x.PRD_ALS_NM == e.data.PRD_ALS_NM;
                                         })
-                                        .ToArray().length > 0;
+                                        .ToArray().length > 1;
                     if (aliasExists) {
                         e.error();
                         $scope.$apply(function () {

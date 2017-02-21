@@ -11,7 +11,7 @@
         var vm = this;
         vm.showGrid = false;
 
-        vm.userInpput = [];
+        vm.userInput = [];
         vm.products = "";// e.g. i7-4770(S/T), 430, 123, 111
         vm.invalidProducts = "";
         vm.multipleMatchProducts = "";
@@ -20,9 +20,9 @@
         vm.addToMydealProducts = addToMydealProducts;
 
         function translateProducts() {
-            vm.userInpput.length = 0;
-            vm.userInpput.push(vm.products);
-            ProductSelectorService.TranslateProducts(vm.userInpput).then(function (response) {
+            vm.userInput.length = 0;
+            vm.userInput.push(vm.products);
+            ProductSelectorService.TranslateProducts(vm.userInput).then(function (response) {
                 vm.showGrid = true;
                 cookProducts(response.data);
             }, function (response) {
@@ -34,7 +34,10 @@
         vm.dataSource = new kendo.data.ObservableArray([]);
 
         vm.gridOptions = {
-            dataSource: vm.dataSource,
+            dataSource: {
+                data: vm.dataSource,
+                pageSize: 25,
+            },
             sortable: true,
             selectable: true,
             resizable: true,
