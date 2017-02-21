@@ -72,6 +72,7 @@ namespace Intel.MyDeals
                 , "~/app/admin/admin.route.js"
                 , "~/app/admin/cache/admin.cache.controller.js"
                 , "~/app/admin/cache/cache.service.js"
+                , "~/app/admin/cache/cache.manager.resize.directive.js"
                 , "~/app/admin/constants/admin.constants.controller.js"
                 , "~/app/admin/constants/constants.service.js"
                 , "~/app/admin/customer/admin.customer.controller.js"

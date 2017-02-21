@@ -1539,6 +1539,7 @@
     <Content Include="Content\kendo\2017.R1\kendo.silver.mobile.min.css.map" />
     <Content Include="Content\kendo\2017.R1\kendo.uniform.min.css.map" />
     <Content Include="Content\kendo\2017.R1\kendo.uniform.mobile.min.css.map" />
+    <Content Include="app\admin\cache\cache.manager.resize.directive.js" />
     <None Include="Properties\PublishProfiles\Dev.pubxml" />
     <Content Include="Scripts\Angular\1.5.8\angular.min.js.map" />
     <None Include="Scripts\jquery-2.2.0.intellisense.js" />

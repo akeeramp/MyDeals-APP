@@ -5,11 +5,11 @@
         You can clear the cache, reload the cache or even view the cache contents.
     </p>
 
-    <div id="cacheContainer">
+    <div id="cacheContainer" resize-containers>
         <div>
             <div id="cacheList" class="fl">
                 <h5>Cache Status</h5>
-                        
+
                 <table class="tblCache" ui-auto="tblCache">
                     <tr>
                         <th class="text-left">Cache Name</th>
@@ -51,39 +51,10 @@
                     <button ng-click="vm.clearAllApiCache()" ui-auto="btnClearApiCache" class="k-primary">Clear All</button>
                 </div>
             </div>
-            <div class="fl">
-                <div id="viewResultsContainer">
-                    <h5>Cache Contents <span style="font-size: 12px;" id="cName"></span></h5>
-                    <div id="viewResults" ui-auto="divResults">{{vm.currentCacheDetails}}</div>
-                </div>
+            <div id="viewResultsContainer" class="fl">
+                <h5>Cache Contents <span style="font-size: 12px;" id="cName"></span></h5>
+                <div id="viewResults" ui-auto="divResults">{{vm.currentCacheDetails}}</div>
             </div>
         </div>
     </div>
 </div>
-
-
-<script>
-    // Handle resize
-    $(window).resize(function () {
-        resizeContent();
-    });
-
-    $(document).ready(function () {
-        window.setTimeout(function () {
-            resizeContent();
-        }, 100);
-    });
-
-    function resizeContent() {
-        var offset = 200;
-        var widthOffset = 110;
-
-        var contentHeight = $(window).height() - offset;
-        var contentWidth = $(window).width() - widthOffset - $("#cacheList").width();
-
-        $("#cacheList").css("height", contentHeight);
-        $("#viewResultsContainer").css("height", contentHeight);
-        $("#viewResultsContainer").css("width", contentWidth);
-
-    }
-</script>
