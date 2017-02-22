@@ -32,8 +32,8 @@ namespace Intel.MyDeals.DataLibrary
                                 [id] = new OpDataCollector
                                 {
                                     DcID = id,
-                                    DcParentSID = 0,
-                                    DcSID = 0,
+                                    DcParentID = 0,
+                                    DcParentType = OpDataElementType.Contract.ToString(),
                                     DcType = OpDataElementType.PricingTable.ToString(),
                                     DataElements = new List<OpDataElement>()
                                 }
@@ -46,8 +46,8 @@ namespace Intel.MyDeals.DataLibrary
                                 [id] = new OpDataCollector
                                 {
                                     DcID = id,
-                                    DcParentSID = 0,
-                                    DcSID = 0,
+                                    DcParentID = 0,
+                                    DcParentType = OpDataElementType.PricingTable.ToString(),
                                     DcType = OpDataElementType.WipDeals.ToString(),
                                     DataElements = new List<OpDataElement>()
                                 }
@@ -67,8 +67,8 @@ namespace Intel.MyDeals.DataLibrary
                             [1] = new OpDataCollector
                             {
                                 DcID = 1,
-                                DcParentSID = 0,
-                                DcSID = 0,
+                                DcParentID = 0,
+                                DcParentType = OpDataElementType.PricingStrategy.ToString(),
                                 DcType = OpDataElementType.PricingTable.ToString(),
                                 DataElements = new List<OpDataElement>
                                 {
@@ -78,8 +78,9 @@ namespace Intel.MyDeals.DataLibrary
                                         AtrbCd = "TEXT",
                                         AtrbValue = "Hello World",
                                         DcID = -300,
-                                        DcParentSID = 1,
-                                        DcSID = 1
+                                        DcType = OpDataElementType.PricingTable.ToId(),
+                                        DcParentID = 1,
+                                        DcParentType = OpDataElementType.PricingStrategy.ToId()
                                     },
                                     new OpDataElement
                                     {
@@ -87,8 +88,9 @@ namespace Intel.MyDeals.DataLibrary
                                         AtrbCd = "TITLE",
                                         AtrbValue = "Kit",
                                         DcID = -300,
-                                        DcParentSID = 1,
-                                        DcSID = 1,
+                                        DcType = OpDataElementType.PricingTable.ToId(),
+                                        DcParentID = 1,
+                                        DcParentType = OpDataElementType.PricingStrategy.ToId(),
                                         DimID = 1
                                     },
                                     new OpDataElement
@@ -97,8 +99,9 @@ namespace Intel.MyDeals.DataLibrary
                                         AtrbCd = "TEXT",
                                         AtrbValue = "Hello World 1",
                                         DcID = -300,
-                                        DcParentSID = 1,
-                                        DcSID = 1,
+                                        DcType = OpDataElementType.PricingTable.ToId(),
+                                        DcParentID = 1,
+                                        DcParentType = OpDataElementType.PricingStrategy.ToId(),
                                         DimID = 1
                                     },
                                     new OpDataElement
@@ -107,8 +110,9 @@ namespace Intel.MyDeals.DataLibrary
                                         AtrbCd = "INT",
                                         AtrbValue = 1231,
                                         DcID = -300,
-                                        DcParentSID = 1,
-                                        DcSID = 1,
+                                        DcType = OpDataElementType.PricingTable.ToId(),
+                                        DcParentID = 1,
+                                        DcParentType = OpDataElementType.PricingStrategy.ToId(),
                                         DimID = 1
                                     },
                                     new OpDataElement
@@ -117,8 +121,9 @@ namespace Intel.MyDeals.DataLibrary
                                         AtrbCd = "DATE",
                                         AtrbValue = "2/1/2017",
                                         DcID = -300,
-                                        DcParentSID = 1,
-                                        DcSID = 1,
+                                        DcType = OpDataElementType.PricingTable.ToId(),
+                                        DcParentID = 1,
+                                        DcParentType = OpDataElementType.PricingStrategy.ToId(),
                                         DimID = 1
                                     },
                                     new OpDataElement
@@ -127,8 +132,9 @@ namespace Intel.MyDeals.DataLibrary
                                         AtrbCd = "data",
                                         AtrbValue = "Deal Type",
                                         DcID = -300,
-                                        DcParentSID = 1,
-                                        DcSID = 1,
+                                        DcType = OpDataElementType.PricingTable.ToId(),
+                                        DcParentID = 1,
+                                        DcParentType = OpDataElementType.PricingStrategy.ToId(),
                                         DimID = 1
                                     },
                                     new OpDataElement
@@ -137,8 +143,9 @@ namespace Intel.MyDeals.DataLibrary
                                         AtrbCd = "TITLE",
                                         AtrbValue = "Primary",
                                         DcID = -300,
-                                        DcParentSID = 1,
-                                        DcSID = 1,
+                                        DcType = OpDataElementType.PricingTable.ToId(),
+                                        DcParentID = 1,
+                                        DcParentType = OpDataElementType.PricingStrategy.ToId(),
                                         DimID = 2
                                     },
                                     new OpDataElement
@@ -147,8 +154,9 @@ namespace Intel.MyDeals.DataLibrary
                                         AtrbCd = "TEXT",
                                         AtrbValue = "Hello World 2",
                                         DcID = -300,
-                                        DcParentSID = 1,
-                                        DcSID = 11,
+                                        DcType = OpDataElementType.PricingTable.ToId(),
+                                        DcParentID = 1,
+                                        DcParentType = OpDataElementType.PricingStrategy.ToId(),
                                         DimID = 2
                                     },
                                     new OpDataElement
@@ -157,8 +165,9 @@ namespace Intel.MyDeals.DataLibrary
                                         AtrbCd = "INT",
                                         AtrbValue = 1232,
                                         DcID = -300,
-                                        DcParentSID = 1,
-                                        DcSID = 1,
+                                        DcType = OpDataElementType.PricingTable.ToId(),
+                                        DcParentID = 1,
+                                        DcParentType = OpDataElementType.PricingStrategy.ToId(),
                                         DimID = 2
                                     },
                                     new OpDataElement
@@ -167,8 +176,9 @@ namespace Intel.MyDeals.DataLibrary
                                         AtrbCd = "DATE",
                                         AtrbValue = "2/2/2017",
                                         DcID = -300,
-                                        DcParentSID = 1,
-                                        DcSID = 11,
+                                        DcType = OpDataElementType.PricingTable.ToId(),
+                                        DcParentID = 1,
+                                        DcParentType = OpDataElementType.PricingStrategy.ToId(),
                                         DimID = 2
                                     },
                                     new OpDataElement
@@ -177,8 +187,9 @@ namespace Intel.MyDeals.DataLibrary
                                         AtrbCd = "data",
                                         AtrbValue = "Deal Type",
                                         DcID = -300,
-                                        DcParentSID = 1,
-                                        DcSID = 11,
+                                        DcType = OpDataElementType.PricingTable.ToId(),
+                                        DcParentID = 1,
+                                        DcParentType = OpDataElementType.PricingStrategy.ToId(),
                                         DimID = 2
                                     },
                                     new OpDataElement
@@ -187,8 +198,9 @@ namespace Intel.MyDeals.DataLibrary
                                         AtrbCd = "TITLE",
                                         AtrbValue = "Secondary 1",
                                         DcID = -300,
-                                        DcParentSID = 1,
-                                        DcSID = 11,
+                                        DcType = OpDataElementType.PricingTable.ToId(),
+                                        DcParentID = 1,
+                                        DcParentType = OpDataElementType.PricingStrategy.ToId(),
                                         DimID = 3
                                     },
                                     new OpDataElement
@@ -197,8 +209,9 @@ namespace Intel.MyDeals.DataLibrary
                                         AtrbCd = "TEXT",
                                         AtrbValue = "Hello World 3",
                                         DcID = -300,
-                                        DcParentSID = 1,
-                                        DcSID = 11,
+                                        DcType = OpDataElementType.PricingTable.ToId(),
+                                        DcParentID = 1,
+                                        DcParentType = OpDataElementType.PricingStrategy.ToId(),
                                         DimID = 3
                                     },
                                     new OpDataElement
@@ -207,8 +220,9 @@ namespace Intel.MyDeals.DataLibrary
                                         AtrbCd = "INT",
                                         AtrbValue = 1233,
                                         DcID = -300,
-                                        DcParentSID = 1,
-                                        DcSID = 1,
+                                        DcType = OpDataElementType.PricingTable.ToId(),
+                                        DcParentID = 1,
+                                        DcParentType = OpDataElementType.PricingStrategy.ToId(),
                                         DimID = 3
                                     },
                                     new OpDataElement
@@ -217,8 +231,9 @@ namespace Intel.MyDeals.DataLibrary
                                         AtrbCd = "DATE",
                                         AtrbValue = "2/3/2017",
                                         DcID = -300,
-                                        DcParentSID = 1,
-                                        DcSID = 1,
+                                        DcType = OpDataElementType.PricingTable.ToId(),
+                                        DcParentID = 1,
+                                        DcParentType = OpDataElementType.PricingStrategy.ToId(),
                                         DimID = 3
                                     },
                                     new OpDataElement
@@ -227,8 +242,9 @@ namespace Intel.MyDeals.DataLibrary
                                         AtrbCd = "data",
                                         AtrbValue = "Deal Type",
                                         DcID = -300,
-                                        DcParentSID = 1,
-                                        DcSID = 1,
+                                        DcType = OpDataElementType.PricingTable.ToId(),
+                                        DcParentID = 1,
+                                        DcParentType = OpDataElementType.PricingStrategy.ToId(),
                                         DimID = 3
                                     }
                                 }
@@ -242,8 +258,8 @@ namespace Intel.MyDeals.DataLibrary
                             [1] = new OpDataCollector
                             {
                                 DcID = 1,
-                                DcParentSID = 1,
-                                DcSID = 1,
+                                DcParentID = 1,
+                                DcParentType = OpDataElementType.PricingTable.ToString(),
                                 DcType = OpDataElementType.WipDeals.ToString(),
                                 DataElements = new List<OpDataElement>
                                 {
@@ -253,8 +269,9 @@ namespace Intel.MyDeals.DataLibrary
                                         AtrbCd = "TEXT",
                                         AtrbValue = "Hello World 1",
                                         DcID = -300,
-                                        DcParentSID = 1,
-                                        DcSID = 1
+                                        DcParentID = 1,
+                                        DcParentType = OpDataElementType.PricingTable.ToId(),
+                                        DcType = OpDataElementType.WipDeals.ToId()
                                     },
                                     new OpDataElement
                                     {
@@ -262,8 +279,9 @@ namespace Intel.MyDeals.DataLibrary
                                         AtrbCd = "INT",
                                         AtrbValue = 1231,
                                         DcID = -300,
-                                        DcParentSID = 1,
-                                        DcSID = 1
+                                        DcParentID = 1,
+                                        DcParentType = OpDataElementType.PricingTable.ToId(),
+                                        DcType = OpDataElementType.WipDeals.ToId()
                                     },
                                     new OpDataElement
                                     {
@@ -271,8 +289,9 @@ namespace Intel.MyDeals.DataLibrary
                                         AtrbCd = "DATE",
                                         AtrbValue = "2/1/2017",
                                         DcID = -300,
-                                        DcParentSID = 1,
-                                        DcSID = 1
+                                        DcParentID = 1,
+                                        DcParentType = OpDataElementType.PricingTable.ToId(),
+                                        DcType = OpDataElementType.WipDeals.ToId()
                                     },
                                     new OpDataElement
                                     {
@@ -280,8 +299,9 @@ namespace Intel.MyDeals.DataLibrary
                                         AtrbCd = "DROPDOWN",
                                         AtrbValue = "DROPDOWN 3",
                                         DcID = -300,
-                                        DcParentSID = 1,
-                                        DcSID = 1
+                                        DcParentID = 1,
+                                        DcParentType = OpDataElementType.PricingTable.ToId(),
+                                        DcType = OpDataElementType.WipDeals.ToId()
                                     },
                                     new OpDataElement
                                     {
@@ -289,8 +309,9 @@ namespace Intel.MyDeals.DataLibrary
                                         AtrbCd = "COMBOBOX",
                                         AtrbValue = "COMBOBOX 2",
                                         DcID = -300,
-                                        DcParentSID = 1,
-                                        DcSID = 1
+                                        DcParentID = 1,
+                                        DcParentType = OpDataElementType.PricingTable.ToId(),
+                                        DcType = OpDataElementType.WipDeals.ToId()
                                     },
 
 
@@ -300,8 +321,9 @@ namespace Intel.MyDeals.DataLibrary
                                         AtrbCd = "TITLE",
                                         AtrbValue = "Kit",
                                         DcID = -300,
-                                        DcParentSID = 1,
-                                        DcSID = 1,
+                                        DcParentID = 1,
+                                        DcParentType = OpDataElementType.PricingTable.ToId(),
+                                        DcType = OpDataElementType.WipDeals.ToId(),
                                         DimID = 1
                                     },
                                     new OpDataElement
@@ -310,8 +332,9 @@ namespace Intel.MyDeals.DataLibrary
                                         AtrbCd = "TEXT",
                                         AtrbValue = "Hello World 1",
                                         DcID = -300,
-                                        DcParentSID = 1,
-                                        DcSID = 1,
+                                        DcParentID = 1,
+                                        DcParentType = OpDataElementType.PricingTable.ToId(),
+                                        DcType = OpDataElementType.WipDeals.ToId(),
                                         DimID = 1
                                     },
                                     new OpDataElement
@@ -320,8 +343,9 @@ namespace Intel.MyDeals.DataLibrary
                                         AtrbCd = "INT",
                                         AtrbValue = 1231,
                                         DcID = -300,
-                                        DcParentSID = 1,
-                                        DcSID = 1,
+                                        DcParentID = 1,
+                                        DcParentType = OpDataElementType.PricingTable.ToId(),
+                                        DcType = OpDataElementType.WipDeals.ToId(),
                                         DimID = 1
                                     },
                                     new OpDataElement
@@ -330,8 +354,9 @@ namespace Intel.MyDeals.DataLibrary
                                         AtrbCd = "DATE",
                                         AtrbValue = "2/1/2017",
                                         DcID = -300,
-                                        DcParentSID = 1,
-                                        DcSID = 1,
+                                        DcParentID = 1,
+                                        DcParentType = OpDataElementType.PricingTable.ToId(),
+                                        DcType = OpDataElementType.WipDeals.ToId(),
                                         DimID = 1
                                     },
                                     new OpDataElement
@@ -340,8 +365,9 @@ namespace Intel.MyDeals.DataLibrary
                                         AtrbCd = "DROPDOWN",
                                         AtrbValue = "DROPDOWN 3",
                                         DcID = -300,
-                                        DcParentSID = 1,
-                                        DcSID = 1,
+                                        DcParentID = 1,
+                                        DcParentType = OpDataElementType.PricingTable.ToId(),
+                                        DcType = OpDataElementType.WipDeals.ToId(),
                                         DimID = 1
                                     },
                                     new OpDataElement
@@ -350,8 +376,9 @@ namespace Intel.MyDeals.DataLibrary
                                         AtrbCd = "COMBOBOX",
                                         AtrbValue = "COMBOBOX 2",
                                         DcID = -300,
-                                        DcParentSID = 1,
-                                        DcSID = 1,
+                                        DcParentID = 1,
+                                        DcParentType = OpDataElementType.PricingTable.ToId(),
+                                        DcType = OpDataElementType.WipDeals.ToId(),
                                         DimID = 1
                                     }
 

@@ -38,12 +38,17 @@ namespace Intel.MyDeals.BusinessLogic
             foreach (OpDataCollectorFlattenedItem items in data)
             {
                 int id = !items.ContainsKey("dc_id") ? 0 : Convert.ToInt32(items["dc_id"].ToString()); // TODO ADD OTHERS HERE XXX
-                int sid = !items.ContainsKey("dc_sid") ? 0 : Convert.ToInt32(items["dc_sid"].ToString()); // TODO ADD OTHERS HERE XXX
+                int idtype = !items.ContainsKey("dc_type") // What total crap needing to go from "CONTRACT" to object to ID...  Go figure..
+                    ? 0
+                    : OpDataElementTypeConverter.StringToId(
+                        OpDataElementTypeConverter.FromString(items["dc_type"]).ToString()); // TODO ADD OTHERS HERE XXX //int idtype = !items.ContainsKey("dc_type") ? 0 : Convert.ToInt32(items["dc_type"].ToString());
                 int parentid = !items.ContainsKey("dc_parent_id") ? 0 : Convert.ToInt32(items["dc_parent_id"].ToString()); // TODO ADD OTHERS HERE XXX
-                int parentsid = !items.ContainsKey("dc_parent_sid") ? 0 : Convert.ToInt32(items["dc_parent_sid"].ToString()); // TODO ADD OTHERS HERE XXX
+                int parentidtype = !items.ContainsKey("dc_parent_type") ? 0 
+                    : OpDataElementTypeConverter.StringToId(
+                        OpDataElementTypeConverter.FromString(items["dc_parent_type"]).ToString()); // TODO ADD OTHERS HERE XXX //int parentidtype = !items.ContainsKey("dc_parent_type") ? 0 : Convert.ToInt32(items["dc_parent_type"].ToString());
 
                 // Get existing DC or spawn a new one
-                OpDataCollector dc = myDealsData.CreateDCFromData(id, sid, parentid, parentsid, opType, items);
+                OpDataCollector dc = myDealsData.CreateDCFromData(id, idtype, parentid, parentidtype, opType, items);
 
                 // Layer the passed items on top of the newly filled MyDealsData
                 dpDeals.Messages = dc.MergeDictionary(items);
@@ -177,16 +182,17 @@ namespace Intel.MyDeals.BusinessLogic
                     AtrbCd = "HAS_FILE_ATTACHMENTS",
                     AtrbValue = 1,
                     AtrbID = 0,
-                    DcParentSID = de.DcParentSID,
+                    DcParentID = de.DcParentID,
                     DcID = de.DcID,
-                    DcSID = de.DcSID
+                    DcType = de.DcType,
+                    DcParentType = de.DcParentType
                 });
             }
         }
 
         #endregion
 
-        public static OpDataCollector CreateDCFromData(this MyDealsData myDealsData, int id, int sid, int parentId, int parentSid, OpDataElementType opDataElementType, OpDataCollectorFlattenedItem item)
+        public static OpDataCollector CreateDCFromData(this MyDealsData myDealsData, int id, int idtype, int parentId, int parentidtype, OpDataElementType opDataElementType, OpDataCollectorFlattenedItem item)
         {
             // Save Data Cycle: Point 3
             // Save Data Cycle: Point 11
@@ -197,7 +203,7 @@ namespace Intel.MyDeals.BusinessLogic
             OpDataCollector dc;
             if (id < 0 || !dpDeals.Data.ContainsKey(id)) // missing
             {
-                dc = new OpDataCollector { DcID = id, DcParentSID = parentSid, DcSID = sid, DcType = opDataElementType.ToString() };
+                dc = new OpDataCollector { DcID = id, DcParentID = parentId, DcType = opDataElementType.ToString(), DcParentType = OpDataElementTypeConverter.IdToString(parentidtype).ToString()};
                 if (id < 0) dc.FillInHolesFromTemplate();
                 myDealsData[opDataElementType].Data[id] = dc;
             }
@@ -208,9 +214,9 @@ namespace Intel.MyDeals.BusinessLogic
 
             // Ensure DC type and parent/child ids
             dc.DcType = opDataElementType.ToString();
-            dc.DcSID = item["dc_sid"] == null ? 0 : Convert.ToInt32(item["dc_sid"].ToString());
+            dc.DcID = item["dc_id"] == null ? 0 : Convert.ToInt32(item["dc_id"].ToString());
             dc.DcParentID = item["dc_parent_id"] == null ? 0 : Convert.ToInt32(item["dc_parent_id"].ToString());
-            dc.DcParentSID = item["dc_parent_sid"] == null ? 0 : Convert.ToInt32(item["dc_parent_sid"].ToString());
+            dc.DcParentType = OpDataElementTypeConverter.IdToString(parentidtype).ToString(); //item["dc_parent_sid"] == null ? 0 : Convert.ToInt32(item["dc_parent_sid"].ToString());
 
             return dc;
         }
@@ -278,7 +284,7 @@ namespace Intel.MyDeals.BusinessLogic
                             Message = de.ValidationMessage,
                             MsgType = OpMsg.MessageType.Warning,
                             ExtraDetails = de.AtrbCd,
-                            KeyIdentifiers = new[] { de.DcID, de.DcParentSID }  // Put the real deal ID in message // TODO This might need to shift to internal SID
+                            KeyIdentifiers = new[] { de.DcID, de.DcParentID }  // Put the real deal ID in message // TODO This might need to shift to internal SID
                         };
                         opMsgQueue.Messages.Add(addMessage);
                     }
@@ -315,7 +321,7 @@ namespace Intel.MyDeals.BusinessLogic
             // loop through deals
             if (dealIds == null) dealIds = new List<int>();
             deals.AddRange(dpDeals.AllDataCollectors
-                .Where(d => !dealIds.Any() || dealIds.Contains(d.DcParentSID)) // TODO - Likely rip out parent since this is walking through deal numbers and we don't have alt anymore.
+                .Where(d => !dealIds.Any() || dealIds.Contains(d.DcParentID)) // TODO - Likely rip out parent since this is walking through deal numbers and we don't have alt anymore.
                 .Select(dc => dc.BuildDealForContainer(attrCol, prdMaps, myDealsData, securityActionCache)));
 
             securityActionCache.Clear();

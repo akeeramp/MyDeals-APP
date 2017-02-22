@@ -124,7 +124,7 @@ namespace Intel.MyDeals.BusinessLogic
                 {
                     Message = "Missing Deal Type",
                     MsgType = OpMsg.MessageType.Warning, //Not sure about this warning or error ?
-                    KeyIdentifiers = new[] { dc.DcID, dc.DcParentSID }
+                    KeyIdentifiers = new[] { dc.DcID, dc.DcParentID }
                 };
 
                 // no deal type ... might be an orphan deal
@@ -151,8 +151,9 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 OpDataElement newDe = deUi.Clone();
                 newDe.DcID = dc.DcID;
-                newDe.DcParentSID = dc.DcParentSID;
-                newDe.DcSID = dc.DcSID;
+                newDe.DcParentID = dc.DcParentID;
+                newDe.DcType = OpDataElementTypeConverter.StringToId(dc.DcType);
+                newDe.DcParentType = OpDataElementTypeConverter.StringToId(dc.DcParentType);
 
                 // if the template has a value... then it is a default value.  Apply it if necessary
                 if (applyDefaults && deUi.AtrbValue != null && deUi.AtrbValue.ToString() != "")
@@ -263,9 +264,9 @@ namespace Intel.MyDeals.BusinessLogic
                 objsetItem["_MultiDim"] = ((Dictionary<int, OpDataCollectorFlattenedItem>)objsetItem["_MultiDim"]).Values.ToList();
 
             objsetItem["dc_id"] = dc.DcID;
-            objsetItem["dc_sid"] = dc.DcSID; // TODO - Does this work???
+            objsetItem["dc_type"] = dc.DcType; // TODO - Does this work???
             objsetItem["dc_parent_id"] = dc.DcParentID;
-            objsetItem["dc_parent_sid"] = dc.DcParentSID;
+            objsetItem["dc_parent_type"] = dc.DcParentType;
 
             // TODO Inject Rule Trigger here
 
@@ -365,7 +366,7 @@ namespace Intel.MyDeals.BusinessLogic
 
         public static string DisplayDealId(this OpDataCollector dc)
         {
-            return DealHelperFunctions.DisplayDealId(dc.DcParentSID, dc.DcID);
+            return DealHelperFunctions.DisplayDealId(dc.DcParentID, dc.DcID);
         }
     }
 }

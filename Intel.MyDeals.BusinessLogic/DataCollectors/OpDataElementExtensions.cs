@@ -39,7 +39,7 @@ namespace Intel.MyDeals.BusinessLogic
 
         public static string DisplayDealId(this OpDataElement de)
         {
-            return DealHelperFunctions.DisplayDealId(de.DcParentSID, de.DcID); // TODO Revisit this
+            return DealHelperFunctions.DisplayDealId(de.DcParentID, de.DcID); // TODO Revisit this
         }
 
     }

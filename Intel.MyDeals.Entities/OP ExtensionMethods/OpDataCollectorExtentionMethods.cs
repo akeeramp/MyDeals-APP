@@ -138,8 +138,9 @@ namespace Intel.MyDeals.Entities
                 dc.DataElements.Add(new OpDataElement
                 {
                     DcID = dc.DcID,
-                    DcParentSID = dc.DcParentSID,
-                    DcSID = dc.DcSID,
+                    DcType = OpDataElementTypeConverter.StringToId(dc.DcType),
+                    DcParentType = OpDataElementTypeConverter.StringToId(dc.DcParentType),
+                    DcParentID = dc.DcParentID,
                     AtrbID = 5,
                     AtrbValue = dc.DcType,
                     OrigAtrbValue = dc.DcType,
@@ -171,8 +172,9 @@ namespace Intel.MyDeals.Entities
                     AtrbID = atrb.ATRB_SID,
                     AtrbValue = dc.DcID,
                     DcID = dc.DcID,
-                    DcParentSID = dc.DcParentSID,
-                    DcSID = dc.DcSID,
+                    DcParentType = OpDataElementTypeConverter.StringToId(dc.DcParentType),
+                    DcType = OpDataElementTypeConverter.StringToId(dc.DcType),
+                    DcParentID = dc.DcParentID,
                     State = OpDataElementState.Unchanged
                 });
             }

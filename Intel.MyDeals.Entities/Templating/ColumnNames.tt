@@ -31,6 +31,10 @@
 	TablesToProcess.Add(new KeyValuePair<string, string>("deal", "[dbo].[STG_WIP_ATRB]"));
 	TablesToProcess.Add(new KeyValuePair<string, string>("deal", "[dbo].[WIP_ACTN]"));
 
+	TablesToProcess.Add(new KeyValuePair<string, string>("deal", "[dbo].[MYDL_CL_WIP_ATRB_TMP]"));
+	TablesToProcess.Add(new KeyValuePair<string, string>("deal", "[dbo].[MYDL_CL_WIP_ACTN]"));
+	TablesToProcess.Add(new KeyValuePair<string, string>("deal", "[dbo].[MYDL_CL_WIP_ATRB]"));
+
 	WriteLine(dbobjects.BoilerPlateDetails);
 	WriteLine("");
 

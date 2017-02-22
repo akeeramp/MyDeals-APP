@@ -107,6 +107,7 @@ namespace Intel.MyDeals.DataLibrary
                     OBJ_TYPE = (IDX_OBJ_TYPE < 0 || rdr.IsDBNull(IDX_OBJ_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_TYPE)
                 });
             } // while
+
             return ret;
         }
 
@@ -309,8 +310,9 @@ namespace Intel.MyDeals.DataLibrary
                         SectionOrder = dataElementUi.SectionOrder,
                         Label = dataElementUi.Label,
                         DcID = 0,
-                        DcSID = 0,
-                        DcParentSID = 0
+                        DcParentType = 0,
+                        DcParentID = 0,
+                        DcType = 0
                     };
 
                     retSet[key].Add(blah);
@@ -324,8 +326,9 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = "dc_id",
                 AtrbValue = "",
                 DcID = 0,
-                DcParentSID = 0,
-                DcSID = 0
+                DcParentType = 0,
+                DcParentID = 0,
+                DcType = 0
             });
 
             retSet[OpDataElementType.Contract.ToString()].Add(new OpDataElementUI
@@ -334,8 +337,9 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = "dc_parent_id",
                 AtrbValue = "",
                 DcID = 0,
-                DcParentSID = 0,
-                DcSID = 0
+                DcParentType = 0,
+                DcParentID = 0,
+                DcType = 0
             });
 
             retSet[OpDataElementType.Contract.ToString()].Add(new OpDataElementUI
@@ -344,8 +348,9 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = "DEAL_STG_CD",
                 AtrbValue = "",
                 DcID = 0,
-                DcParentSID = 0,
-                DcSID = 0
+                DcParentType = 0,
+                DcParentID = 0,
+                DcType = 0
             });
 
             // TODO - Place some hard coded items for now just so that Phil doesn't break much more then he has to...
@@ -355,8 +360,9 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = "dc_id",
                 AtrbValue = "",
                 DcID = 0,
-                DcParentSID = 0,
-                DcSID = 0
+                DcParentType = 0,
+                DcParentID = 0,
+                DcType = 0
             });
 
             retSet[OpDataElementType.PricingStrategy.ToString()].Add(new OpDataElementUI
@@ -365,8 +371,9 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = "dc_parent_id",
                 AtrbValue = "",
                 DcID = 0,
-                DcParentSID = 0,
-                DcSID = 0
+                DcParentType = 0,
+                DcParentID = 0,
+                DcType = 0
             });
 
             retSet[OpDataElementType.PricingStrategy.ToString()].Add(new OpDataElementUI
@@ -375,8 +382,9 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = "START_DT",
                 AtrbValue = "",
                 DcID = 0,
-                DcParentSID = 0,
-                DcSID = 0
+                DcParentType = 0,
+                DcParentID = 0,
+                DcType = 0
             });
 
             retSet[OpDataElementType.PricingStrategy.ToString()].Add(new OpDataElementUI
@@ -385,8 +393,9 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = "END_DT",
                 AtrbValue = "",
                 DcID = 0,
-                DcParentSID = 0,
-                DcSID = 0
+                DcParentType = 0,
+                DcParentID = 0,
+                DcType = 0
             });
 
             retSet[OpDataElementType.PricingTable.ToString()].Add(new OpDataElementUI
@@ -395,8 +404,9 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = "dc_id",
                 AtrbValue = "",
                 DcID = 0,
-                DcParentSID = 0,
-                DcSID = 0
+                DcParentType = 0,
+                DcParentID = 0,
+                DcType = 0
             });
 
             retSet[OpDataElementType.PricingTable.ToString()].Add(new OpDataElementUI
@@ -405,8 +415,9 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = "dc_parent_id",
                 AtrbValue = "",
                 DcID = 0,
-                DcParentSID = 0,
-                DcSID = 0
+                DcParentType = 0,
+                DcParentID = 0,
+                DcType = 0
             });
 
             return retSet;
@@ -424,6 +435,8 @@ namespace Intel.MyDeals.DataLibrary
             // TODO - These are hard coded table names in our code.  WTH??
             public const string STG_WIP_ATRB = "[dbo].[STG_WIP_ATRB]";
             public const string WIP_ACTN = "[dbo].[WIP_ACTN]";
+            public const string MYDL_CL_WIP_ATRB_TMP = "[dbo].[MYDL_CL_WIP_ATRB_TMP]"; // New version of [dbo].[STG_WIP_ATRB]
+            public const string MYDL_CL_WIP_ACTN = "[dbo].[MYDL_CL_WIP_ACTN]"; // New version of [dbo].[WIP_ACTN]
         }
 
         #endregion
@@ -500,26 +513,32 @@ namespace Intel.MyDeals.DataLibrary
             #region Resolve Column Indexes
 
             // TODO - change all of these to Entities.deal.DEAL.ATRB_SID format later
-            int IDX_DEAL_OBJ_TYPE = DB.GetReaderOrdinal(rdr, "OBJ_TYPE"); // Was OBJ_SET, this is cntrct or object type
-            int IDX_DEAL_OBJ_TYPE_SID = DB.GetReaderOrdinal(rdr, "OBJ_TYPE_SID"); // Object_type_id or Object_set_id // Change to OBJ_TYPE_SID from Entities.deal.DEAL.OBJ_SET
+            // Parent Node Data
+            int IDX_PARNT_OBJ_TYPE_SID = DB.GetReaderOrdinal(rdr, "PARNT_OBJ_TYPE_SID"); // Read identity key for object ID (PARENT_OBJ_KEY)
+            int IDX_PARNT_OBJ_SID = DB.GetReaderOrdinal(rdr, "PARNT_OBJ_SID"); // Read identity key for object ID (PARENT_OBJ_KEY)
+
+            // Current Node Data
+            int IDX_OBJ_TYPE = DB.GetReaderOrdinal(rdr, "OBJ_TYPE"); // Was OBJ_SET, this is cntrct or object type
+            int IDX_OBJ_TYPE_SID = DB.GetReaderOrdinal(rdr, "OBJ_TYPE_SID"); // Object_type_id or Object_set_id // Change to OBJ_TYPE_SID from Entities.deal.DEAL.OBJ_SET
+            int IDX_OBJ_SID = DB.GetReaderOrdinal(rdr, "OBJ_SID"); // Real identity key for object ID - the true single table identity col
 
             int IDX_ATRB_SID = DB.GetReaderOrdinal(rdr, "ATRB_SID"); // Attribute SID
-            int IDX_DEAL_ATRB_SID = DB.GetReaderOrdinal(rdr, "ATRB_SID"); // Missing, was Entities.deal.DEAL.ATRB_SID
+            //int IDX_DEAL_ATRB_SID = DB.GetReaderOrdinal(rdr, "ATRB_SID"); // Missing, was Entities.deal.DEAL.ATRB_SID
             int IDX_ATRB_COL_NM = DB.GetReaderOrdinal(rdr, "ATRB_COL_NM"); // Attribute Code Name
             int IDX_DOT_NET_DATA_TYPE = DB.GetReaderOrdinal(rdr, "DOT_NET_DATA_TYPE"); // Attribute .NET data type
 
-            int IDX_DEAL_ATRB_MTX_SID = DB.GetReaderOrdinal(rdr, "ATRB_MTX_SID"); // Attribute Matrix SID // Need to bring these back in - obj_atrb_mtx_sid/hash
-            int IDX_DEAL_ATRB_MTX_HASH = DB.GetReaderOrdinal(rdr, "OBJ_ATRB_MTX_HASH"); // Attribute Matrix Hash, ex. "5000:32272/5003:1"
+            int IDX_ATRB_MTX_SID = DB.GetReaderOrdinal(rdr, "ATRB_MTX_SID"); // Attribute Matrix SID // Need to bring these back in - obj_atrb_mtx_sid/hash
+            int IDX_ATRB_MTX_HASH = DB.GetReaderOrdinal(rdr, "ATRB_MTX_HASH"); // Attribute Matrix Hash, ex. "5000:32272/5003:1"
 
             int IDX_ATRB_VAL_INT = DB.GetReaderOrdinal(rdr, "ATRB_VAL_INT"); // Atrb val INT
             int IDX_ATRB_VAL_MONEY = DB.GetReaderOrdinal(rdr, "ATRB_VAL_MONEY"); // Atrb val MONEY
             int IDX_ATRB_VAL_DTM = DB.GetReaderOrdinal(rdr, "ATRB_VAL_DTM"); // Atrb val DATETIME
             int IDX_ATRB_VAL_CHAR = DB.GetReaderOrdinal(rdr, "ATRB_VAL_CHAR"); // Atrb val CHAR
             int IDX_ATRB_VAL_CHAR_MAX = DB.GetReaderOrdinal(rdr, "ATRB_VAL_CHAR_MAX"); // Atrb val CHAR_MAX
+            int IDX_ATRB_VAL = DB.GetReaderOrdinal(rdr, "ATRB_VAL"); // Atrb val combined
 
-            int IDX_OBJ_KEY = DB.GetReaderOrdinal(rdr, "OBJ_KEY"); // Real identity key for object ID - the true single table identity col
-            int IDX_PARENT_OBJ_KEY = DB.GetReaderOrdinal(rdr, "PARENT_OBJ_KEY"); // Read identity key for object ID
-            int IDX_DEAL_ALT_SID = DB.GetReaderOrdinal(rdr, "OBJ_SID"); // OBJ SID is the user visable ID - referrs to table specific identity col
+            int IDX_ATRB_RVS_NBR = DB.GetReaderOrdinal(rdr, "ATRB_RVS_NBR"); // Revision number
+            //int IDX_DEAL_ALT_SID = DB.GetReaderOrdinal(rdr, "OBJ_SID"); // OBJ SID is the user visable ID - referrs to table specific identity col
 
             // Unique to deal save returned results
             int IDX_BTCH_ID = DB.GetReaderOrdinal(rdr, "BTCH_ID");
@@ -538,14 +557,11 @@ namespace Intel.MyDeals.DataLibrary
 
             #endregion
 
-            if (IDX_DEAL_OBJ_TYPE_SID < 0 || IDX_OBJ_KEY < 0 || IDX_DEAL_ATRB_SID < 0 || IDX_ATRB_SID < 0)
+            if (IDX_OBJ_TYPE_SID < 0 || IDX_OBJ_SID < 0 || IDX_ATRB_SID < 0)
             {
                 throw new InvalidOperationException(
                     "DcsDealLib.ReaderToDataCollectors. Expected columns are missing from a deal result set.  This is often the case when an extra recordset is returned out of sequence, like when a debugging result set is returned before the actual expected data is returned.  Run the calling routine manually to confirm the proper data is being returned in the proper order.  If the problem persists, ensure proper columns are available in the expected result set.");
             }
-
-            //bool IS_PRD_GUID = (IDX_PRD_GUID > -1);
-            //bool IS_AGRMNT_GUID = (IDX_AGRMNT_GUID > -1);
 
             // So we don't need to "IF" within the BIG loop, just make sure all our packets exist.
             odps.InitAllPacketTypes();
@@ -559,15 +575,17 @@ namespace Intel.MyDeals.DataLibrary
                 cells++;
 #endif
                 // Since we key by this, get it first.
-                var detype = OpDataElementTypeConverter.FromString(rdr[IDX_DEAL_OBJ_TYPE]); // CNTRCT
-                int detypeid = rdr.GetTypedValue<int>(IDX_DEAL_OBJ_TYPE_SID, 0); // 1
+                var obj_type = OpDataElementTypeConverter.FromString(rdr[IDX_OBJ_TYPE]); // CNTRCT
+                int obj_type_sid = rdr.GetTypedValue<int>(IDX_OBJ_TYPE_SID, 0); // 1
 
-                int obj_key = rdr.GetTypedValue<int>(IDX_OBJ_KEY, 0); // Object Key
-                int parent_obj_key = rdr.GetTypedValue<int>(IDX_PARENT_OBJ_KEY, 0); // Parent ID Key
-                int obj_display_sid = rdr.GetTypedValue<int>(IDX_DEAL_ALT_SID, 0); // Object display ID
+                int obj_sid = rdr.GetTypedValue<int>(IDX_OBJ_SID, 0); // Object Key
+                int parnt_obj_sid = rdr.GetTypedValue<int>(IDX_PARNT_OBJ_SID, 0); // Parent ID Key
+                int parnt_obj_key_type_sid = rdr.GetTypedValue<int>(IDX_PARNT_OBJ_TYPE_SID, 0); // Parent ID Key Type SID -- IE Contract (1)
+                var parnt_obj_key_type = OpDataElementTypeConverter.IdToString(parnt_obj_key_type_sid); // CNTRCT
+                //int obj_display_sid = rdr.GetTypedValue<int>(IDX_DEAL_ALT_SID, 0); // Object display ID
 
                 OpDataCollector odc;
-                if (!odps[detype].Data.TryGetValue(obj_key, out odc)) // See if this belongs to an existing DataCollector or if we need to make a new one
+                if (!odps[obj_type].Data.TryGetValue(obj_sid, out odc)) // See if this belongs to an existing DataCollector or if we need to make a new one
                 {
 #if DEBUG
                     deals++;
@@ -576,49 +594,51 @@ namespace Intel.MyDeals.DataLibrary
                     if (IDX_BTCH_ID > -1 && !odps.Any())
                     {
                         // First deal of an obj_set, set the packet details.
-                        odps[detype].BatchID = rdr.GetTypedValue<Guid>(IDX_BTCH_ID, Guid.Empty);
+                        odps[obj_type].BatchID = rdr.GetTypedValue<Guid>(IDX_BTCH_ID, Guid.Empty);
                     }
 
-                    odps[detype].Data[obj_key] = odc = new OpDataCollector
+                    odps[obj_type].Data[obj_sid] = odc = new OpDataCollector
                     {
-                        DcID = obj_display_sid,
-                        DcParentSID = parent_obj_key,
-                        DcSID = obj_key,
-                        DcType = detype.ToString()
+                        DcID = obj_sid,
+                        DcType = obj_type.ToString(),
+                        DcParentType = parnt_obj_key_type.ToString(), // parnt_obj_key_type_sid.ToString(),
+                        DcParentID = parnt_obj_sid
                     };
                 }
 
                 // Get the value from the database...
-                var value = OpServerUtil.Coalesce
-                    (
-                        rdr[IDX_ATRB_VAL_INT],
-                        rdr[IDX_ATRB_VAL_CHAR],
-                        rdr[IDX_ATRB_VAL_MONEY],
-                        rdr[IDX_ATRB_VAL_DTM],
-                        rdr[IDX_ATRB_VAL_CHAR_MAX]
-                    );
+                //var value = OpServerUtil.Coalesce
+                //    (
+                //        rdr[IDX_ATRB_VAL_INT],
+                //        rdr[IDX_ATRB_VAL_CHAR],
+                //        rdr[IDX_ATRB_VAL_MONEY],
+                //        rdr[IDX_ATRB_VAL_DTM],
+                //        rdr[IDX_ATRB_VAL_CHAR_MAX]
+                //    );
+                var value = rdr.GetTypedValue<string>(IDX_ATRB_VAL);
 
                 string dndt = rdr.GetTypedValue<string>(IDX_DOT_NET_DATA_TYPE);
 
-                if (value != null)
-                {
-                    // A Bit hackish, but this was the only way I could think to do this.
-                    // conver to switch as needed if we add more types.
-                    if (dndt == "System.Boolean")
-                    {
-                        value = OpTypeConverter.StringToNullableBool(value) ?? false;
-                    }
-                }
+                //if (value != null) // Removed 
+                //{
+                //    // A Bit hackish, but this was the only way I could think to do this.
+                //    // conver to switch as needed if we add more types.
+                //    //if (dndt == "System.Boolean")
+                //    //{
+                //    //    value = OpTypeConverter.StringToNullableBool(value) ?? false;
+                //    //}
+                //}
 
                 var ode = OpDataElement.Create
                     (
-                        rdr.GetTypedValue<int>(IDX_DEAL_ATRB_SID), // element id - need to be unique???
+                        rdr.GetTypedValue<int>(IDX_ATRB_SID), // element id - need to be unique???
                         rdr.GetTypedValue<int>(IDX_ATRB_SID),
                         rdr.GetTypedValue<string>(IDX_ATRB_COL_NM),
                         value,
-                        obj_key, // DcSID
-                        obj_display_sid, // DcId
-                        parent_obj_key, // AltDcId
+                        obj_type_sid, // dc type - contract
+                        obj_sid, // DcId 
+                        parnt_obj_sid, // parent id
+                        parnt_obj_key_type_sid, // Parent Type
                         0, // Dim
                         null, // StringDim
                         dndt, // DotNetType
@@ -659,13 +679,13 @@ namespace Intel.MyDeals.DataLibrary
 
             if (processDataCollectorLevelData && rdr.NextResult())
             {
-                IDX_OBJ_KEY = -1; // Real identity key for object ID - the true single table identity col
-                IDX_PARENT_OBJ_KEY = -1; // Read identity key for object ID
-                IDX_DEAL_ALT_SID = -1; // OBJ SID is the user visable ID - referrs to table specific identity col
+                IDX_OBJ_SID = -1; // Real identity key for object ID - the true single table identity col
+                IDX_PARNT_OBJ_TYPE_SID = -1; // Read identity key for object ID
+                //IDX_DEAL_ALT_SID = -1; // OBJ SID is the user visable ID - referrs to table specific identity col
 
-                IDX_OBJ_KEY = DB.GetReaderOrdinal(rdr, "OBJ_KEY"); // Real identity key for object ID - the true single table identity col
-                IDX_PARENT_OBJ_KEY = DB.GetReaderOrdinal(rdr, "PARENT_OBJ_KEY"); // Read identity key for object ID
-                IDX_DEAL_ALT_SID = DB.GetReaderOrdinal(rdr, "OBJ_SID"); // OBJ SID is the user visable ID - referrs to table specific identity col
+                IDX_OBJ_SID = DB.GetReaderOrdinal(rdr, "OBJ_SID"); // Real identity key for object ID - the true single table identity col
+                IDX_PARNT_OBJ_TYPE_SID = DB.GetReaderOrdinal(rdr, "PARNT_OBJ_TYPE_SID"); // Read identity key for object ID
+                //IDX_DEAL_ALT_SID = DB.GetReaderOrdinal(rdr, "OBJ_SID"); // OBJ SID is the user visable ID - referrs to table specific identity col
 
                 // TODO: Use constants here...
                 int IDX_DEAL_CRE_EMP_WWID = DB.GetReaderOrdinal(rdr, "CRE_EMP_WWID");
@@ -675,8 +695,8 @@ namespace Intel.MyDeals.DataLibrary
 
                 // Ensure all data fields are in the result set...
                 if (
-                    IDX_OBJ_KEY >= 0
-                    && IDX_DEAL_ALT_SID >= 0
+                    IDX_OBJ_SID >= 0
+                    //&& IDX_DEAL_ALT_SID >= 0
                     && IDX_DEAL_CRE_EMP_WWID >= 0
                     && IDX_DEAL_CRE_DTM >= 0
                     && IDX_DEAL_CHG_EMP_WWID >= 0
@@ -687,21 +707,21 @@ namespace Intel.MyDeals.DataLibrary
                     while (rdr.Read())
                     {
                         // Records are already keyed at PREP_SID, so get that.
-                        int deal_prep_sid = rdr.GetTypedValue<int>(IDX_DEAL_ALT_SID, 0);
+                        //int deal_prep_sid = rdr.GetTypedValue<int>(IDX_DEAL_ALT_SID, 0);
 
                         OpDataCollector dc = null;
                         // See if it exists in Primary...
-                        if (odps.ContainsKey(OpDataElementType.Deals) &&
-                            odps[OpDataElementType.Deals].Data.TryGetValue(deal_prep_sid, out dc))
-                        {
-                        }
+                        //if (odps.ContainsKey(OpDataElementType.Deals) &&
+                        //    odps[OpDataElementType.Deals].Data.TryGetValue(deal_prep_sid, out dc))
+                        //{
+                        //}
                         if (dc == null)
                         {
                             // If not, check secondary...
-                            if (odps.ContainsKey(OpDataElementType.Secondary) &&
-                                odps[OpDataElementType.Secondary].Data.TryGetValue(deal_prep_sid, out dc))
-                            {
-                            }
+                            //if (odps.ContainsKey(OpDataElementType.Secondary) &&
+                            //    odps[OpDataElementType.Secondary].Data.TryGetValue(deal_prep_sid, out dc))
+                            //{
+                            //}
 
                             // We have no collector to store the data, skip it.
                             if (dc == null)
@@ -710,7 +730,7 @@ namespace Intel.MyDeals.DataLibrary
                             }
                         }
 
-                        int deal_sid = rdr.GetTypedValue<int>(IDX_OBJ_KEY, 0);
+                        int deal_sid = rdr.GetTypedValue<int>(IDX_OBJ_SID, 0);
 
                         // Write the 4 elements to the collection
                         int value1 = rdr.GetTypedValue<int>(IDX_DEAL_CRE_EMP_WWID); // REQ_BY
@@ -862,8 +882,8 @@ namespace Intel.MyDeals.DataLibrary
                     // Create new data row to set the values on...
                     var r = dt.NewRow();
                     int dcId = (de.DcID == 0 ? dc.Key : de.DcID); // This one makes sense because DC Key is DcId
-                    int dcSid = (de.DcSID == 0 ? 0 : de.DcSID); //(de.DcSID == 0 ? dc.Key : de.DcSID);
-                    int dcParentSid = (de.DcParentSID == 0 ? 0 : de.DcParentSID); //(de.DcParentSID == 0 ? dc.Key : de.DcParentSID);
+                    //int dcSid = (de.DcSID == 0 ? 0 : de.DcSID); //(de.DcSID == 0 ? dc.Key : de.DcSID);
+                    int dcParentSid = (de.DcParentID == 0 ? 0 : de.DcParentID); //(de.DcParentSID == 0 ? dc.Key : de.DcParentSID);
 
                     r[IDX_BTCH_ID] = odp.BatchID;
                     r[IDX_DEAL_OBJ_TYPE_SID] = odp.PacketType.ToId(); // Set packet type
@@ -873,7 +893,7 @@ namespace Intel.MyDeals.DataLibrary
                     {
                         r[IDX_PARENT_OBJ_KEY] = dcParentSid;
                         r[IDX_DEAL_ALT_SID] = dcId;
-                        r[IDX_OBJ_KEY] = dcSid;
+                        //r[IDX_OBJ_KEY] = dcSid;
                     }
 
                     if (de.ElementID != 0)
@@ -1036,6 +1056,249 @@ namespace Intel.MyDeals.DataLibrary
             }
             return dt;
         }
-    }
 
+
+
+
+
+        /// <summary>
+        /// A data packet to a data table
+        /// </summary>
+        /// <param name="odp">A valid data packet</param>
+        /// <param name="custSid">Customer ID to pass to DB</param>
+        /// <returns>A valid DataTable or null if input is invalid.</returns>
+        private DataTable OpDataPacketToImportDataTableNew(OpDataPacket<OpDataElementType> odp, int custSid)
+        {
+            // Save Data Cycle: Point 17
+
+            if (odp?.Data == null) // If no odp or odp has no actions, bail out
+            {
+                return null;
+            }
+
+            DataTable dt = new DataTable();
+
+            // The table name must match 1:1 to the import table name...
+            dt.TableName = TableName.MYDL_CL_WIP_ATRB_TMP;
+
+            #region Get Ordinal Indexes
+            int IDX_BTCH_ID = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ATRB_TMP.BTCH_ID, typeof(Guid)).Ordinal; //Entities.deal.STG_WIP_ATRB.BTCH_ID
+            int IDX_CUST_MBR_SID = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ATRB_TMP.CUST_MBR_SID, typeof(int)).Ordinal;
+
+            int IDX_OBJ_TYPE_SID = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ATRB_TMP.OBJ_TYPE_SID, typeof(int)).Ordinal; // Table Type ID for this item - Contract
+            int IDX_OBJ_SID = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ATRB_TMP.OBJ_SID, typeof(int)).Ordinal; // DB table ID for this item
+
+            int IDX_PARNT_OBJ_TYPE_SID = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ATRB_TMP.PARNT_OBJ_TYPE_SID, typeof(int)).Ordinal;
+            int IDX_PARNT_OBJ_SID = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ATRB_TMP.PARNT_OBJ_SID, typeof(object)).Ordinal;
+
+            int IDX_ATRB_SID = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ATRB_TMP.ATRB_SID, typeof(int)).Ordinal;
+            int IDX_ATRB_VAL = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ATRB_TMP.ATRB_VAL, typeof(object)).Ordinal;
+
+            int IDX_DEAL_ATRB_MTX_SID = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ATRB_TMP.ATRB_MTX_SID, typeof(int)).Ordinal;
+            int IDX_DEAL_ATRB_MTX_HASH = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ATRB_TMP.ATRB_MTX_HASH, typeof(string)).Ordinal;
+            int IDX_ATRB_RVS_NBR = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ATRB_TMP.ATRB_RVS_NBR, typeof(int)).Ordinal;
+
+            //int IDX_PARENT_OBJ_KEY = dt.Columns.Add(Entities.deal.STG_WIP_ATRB.PARENT_OBJ_KEY, typeof(int)).Ordinal;
+            //int IDX_DEAL_ALT_SID = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ATRB_TMP.OBJ_SID, typeof(int)).Ordinal;
+            int IDX_CHG_EMP_WWID = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ATRB_TMP.CHG_EMP_WWID, typeof(int)).Ordinal;
+            int IDX_CHG_DTM = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ATRB_TMP.CHG_DTM, typeof(int)).Ordinal;
+
+            int IDX_MDX_CD = dt.Columns.Add(Entities.deal.STG_WIP_ATRB.MDX_CD, typeof(string)).Ordinal; // M,D,X (Modify (I,U), Delete, No Action (X)), used to be DATA_TEXT vc(100) 
+            #endregion
+
+            if (!odp.Data.Any())
+            {
+                return dt;
+            }
+
+            foreach (var dc in odp.Data) // Good ParallelWait opportunity?
+            {
+                foreach (var de in dc.Value.DataElements)
+                {
+                    // Create new data row to set the values on...
+                    var r = dt.NewRow();
+                    int dcId = (de.DcID == 0 ? dc.Key : de.DcID); // This one makes sense because DC Key is DcId
+                    //int dcSid = (de.DcSID == 0 ? 0 : de.DcSID); //(de.DcSID == 0 ? dc.Key : de.DcSID);
+                    //int dcParentSid = (de.DcParentSID == 0 ? 0 : de.DcParentSID); //(de.DcParentSID == 0 ? dc.Key : de.DcParentSID);
+
+                    r[IDX_BTCH_ID] = odp.BatchID;
+                    r[IDX_OBJ_TYPE_SID] = odp.PacketType.ToId(); // Set packet type
+                    //r[IDX_PARNT_OBJ_TYPE_SID] = odp.PacketType.ToId(); // Set parent packet type
+                    r[IDX_CUST_MBR_SID] = custSid; // Set customer
+
+                    if (dcId != 0)
+                    {
+                        //r[IDX_PARNT_OBJ_SID] = dcParentSid;
+                        r[IDX_OBJ_SID] = dcId; // Table ID for this item
+                        //r[IDX_OBJ_SID] = dcSid;
+                    }
+
+                    if (de.ElementID != 0)
+                    {
+                        r[IDX_OBJ_TYPE_SID] = de.ElementID;
+                    }
+
+                    r[IDX_ATRB_SID] = de.AtrbID;
+                    if (de.DimID > 0)
+                    {
+                        r[IDX_DEAL_ATRB_MTX_SID] = de.DimID;
+                    }
+                    else if (de.DimKey.Count > 0) // If we have the DIM ID (above, then don't send the hash)
+                    {
+                        r[IDX_DEAL_ATRB_MTX_HASH] = de.DimKey.HashPairs;
+                    }
+                    r[IDX_ATRB_VAL] = de.AtrbValue;
+                    r[IDX_MDX_CD] = OpDataElementStateConverter.ToString(de.State);
+
+                    // What about de.DcAltID
+
+                    if (de.ExtraDimKey != null && de.ExtraDimKey.Count > 0)
+                    { // Must see what happend to extra dim items - might drop...  Commented out for now.
+                        // TODO - DealDataLib_Common.cs - Check to see if extra dim goes away
+                        //Guid pg;
+                        //if (de.ExtraDimKey.TryGet<Guid>(AttributeCodes.PLI_GUID, out pg))
+                        //{
+                        //    r[IDX_PLI_GUID] = pg;
+                        //}
+
+                        //Guid ag;
+                        //if (de.ExtraDimKey.TryGet<Guid>(AttributeCodes.AGRMNT_GUID, out ag))
+                        //{
+                        //    r[IDX_AGRMNT_GUID] = ag;
+                        //}
+                    }
+
+                    // If executing in parallel, lock around this....
+                    dt.Rows.Add(r);
+                }
+            }
+
+            return dt;
+        }
+
+        /// <summary>
+        /// An action packet to a data table
+        /// </summary>
+        /// <param name="odp">Data packet wiht valid actions</param>
+        /// <param name="groupBatchId">Group batch with which these packets are associated.</param>
+        /// <param name="wwid">WWID of user making the changes.</param>
+        /// <returns></returns>
+        private DataTable OpDataPacketToImportActionTableNew(OpDataPacket<OpDataElementType> odp, Guid groupBatchId, int wwid)
+        {
+            // Save Data Cycle: Point 18
+
+            if (odp?.Actions == null) // If no odp or odp has no actions, bail out
+            {
+                return null;
+            }
+
+            DataTable dt = new DataTable();
+
+            // The table name must match 1:1 to the import table name...
+            dt.TableName = TableName.MYDL_CL_WIP_ACTN; // Bulk load the actions table
+
+            #region Get Ordinal Column Indexes
+            int IDX_BTCH_ID = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ACTN.BTCH_ID, typeof(Guid)).Ordinal;
+
+            int IDX_OBJ_TYPE_SID = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ACTN.OBJ_TYPE_SID, typeof(string)).Ordinal; 
+            int IDX_DEAL_ALT_SID = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ACTN.OBJ_SID, typeof(int)).Ordinal;
+            int IDX_OLD_OBJ_SID = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ACTN.OLD_OBJ_SID, typeof(int)).Ordinal;
+
+            int IDX_SRT_ORD = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ACTN.SRT_ORD, typeof(int)).Ordinal;
+            int IDX_ACTN_NM = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ACTN.ACTN_NM, typeof(string)).Ordinal; // Max Len = 50
+            int IDX_MSG_CD = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ACTN.MSG_CD, typeof(string)).Ordinal; // Max Len = 10
+            int IDX_ACTN_VAL_LIST = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ACTN.ACTN_VAL_LIST, typeof(string)).Ordinal; // Max Len = 8000
+
+            int IDX_CHG_EMP_WWID = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ACTN.CHG_EMP_WWID, typeof(int)).Ordinal;
+            int IDX_CHG_DTM = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ACTN.CHG_DTM, typeof(int)).Ordinal;
+
+            //int IDX_ACTN_VAL = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ACTN.ACTN_VAL, typeof(string)).Ordinal; // Max Len = 8000
+            ////int IDX_DEAL_GRP_SID = dt.Columns.Add(Entities.deal.WIP_ACTN.DEAL_GRP_SID, typeof(int)).Ordinal;
+
+            // Unique to deal save returned results
+            //int IDX_DEAL_GRP_BTCH_ID = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ACTN.DEAL_GRP_BTCH_ID, typeof(Guid)).Ordinal;
+
+            // Don't know if we'll need these at some point.
+            //int IDX_OBJ_KEY = dt.Columns.Add(Entities.deal.STG_WIP_ATRB.OBJ_KEY, typeof(int)).Ordinal; // Internal DB ID for this item
+            //int IDX_PARENT_OBJ_KEY = dt.Columns.Add(Entities.deal.STG_WIP_ATRB.PARENT_OBJ_KEY, typeof(int)).Ordinal;
+            #endregion
+
+            if (odp.Actions.Count == 0)
+            {
+                return dt;
+            }
+
+            int chgWwid = wwid;
+            bool hasGroupBatch = OpTypeConverter.IsValidGuid(groupBatchId);
+
+            if (odp.Actions.Any(a => a.Sort == MyDealsDataAction.DEFAULT_SORT))
+            {
+                // Any unsorted actions should come BEFORE all the sorted actions (Mike's request)
+                const int maxSort = -1000000000;
+
+                foreach (var kvpAct in MyDealsDataAction.DEFAULT_ACTION_SORT_ORDER)
+                {
+                    foreach (
+                        var act in
+                            odp.Actions.Where(a => a.Action == kvpAct.Key && a.Sort == MyDealsDataAction.DEFAULT_SORT))
+                    {
+                        act.Sort = maxSort + kvpAct.Value;
+
+                        OpLogPerf.Log("WARNING! Unset Action Sort Order! Action: {0}; Value: {1};  Targets: {2}",
+                            act.Action,
+                            act.Value,
+                            (act.TargetDcIDs == null ? "" : string.Join(", ", act.TargetDcIDs))
+                            );
+                    }
+                }
+            }
+
+            foreach (var oa in odp.Actions.Where(a => a.ActionDirection != OpActionDirection.Outbound))
+            // Good ParallelWait opportunity?
+            {
+                var r = dt.NewRow();
+                r[IDX_BTCH_ID] = odp.BatchID;
+                r[IDX_CHG_EMP_WWID] = chgWwid;
+
+                if (oa.DcID != null && oa.DcID != 0)
+                {
+                    r[IDX_DEAL_ALT_SID] = oa.DcID;
+                    r[IDX_OLD_OBJ_SID] = oa.DcID;
+                }
+
+                r[IDX_OBJ_TYPE_SID] = odp.PacketType.ToId(); // Set the object packet type
+                r[IDX_ACTN_NM] = oa.Action;
+                //r[IDX_ACTN_VAL] = oa.Value; // Do we need this??
+                r[IDX_SRT_ORD] = oa.Sort;
+
+                if (oa.TargetDcIDs != null && oa.TargetDcIDs.Count > 0)
+                {
+                    r[IDX_ACTN_VAL_LIST] = String.Join(",", oa.TargetDcIDs);
+                }
+
+                //if (hasGroupBatch)
+                //{
+                //    r[IDX_DEAL_GRP_BTCH_ID] = groupBatchId;
+                //}
+
+                //if (odp.GroupID != null && odp.GroupID > 0)
+                //{
+                //    r[IDX_DEAL_GRP_BTCH_ID] = odp.GroupID;
+                //}
+
+                if (oa.MessageCode != OpMsg.MessageType.Debug)
+                // This is the default, and I couldn't see a reason to write it to the DB...
+                {
+                    r[IDX_MSG_CD] = Enum.GetName(typeof(OpMsg.MessageType), oa.MessageCode);
+                }
+
+                // If executing in parallel, lock around this....
+                dt.Rows.Add(r);
+            }
+            return dt;
+        }
+
+
+
+    }
 }

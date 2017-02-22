@@ -125,6 +125,32 @@ namespace Intel.MyDeals.Entities
             return opType;
         }
 
+        public static int StringToId(string packetName)
+        {
+            int opType = 0; // Default error case if not found
+
+            switch (packetName)
+            {
+                case "Contract":
+                    opType = 1;
+                    break;
+                case "PricingStrategy":
+                    opType = 2;
+                    break;
+                case "PricingTable":
+                    opType = 3;
+                    break;
+                case "WipDeals":
+                    opType = 4;
+                    break;
+                case "Deals":
+                    opType = 5;
+                    break;
+            }
+
+            return opType;
+        }
+
 
     }
 }

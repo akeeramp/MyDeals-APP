@@ -59,14 +59,14 @@ namespace Intel.MyDeals.DataLibrary
             //searchGroup = searchGroup.Replace(OpDataElementType.Deals.ToString(), "DEAL");
 
 
-            var cmd = new PR_GET_OBJS_BY_SIDS() // PR_GET_OBJS_BY_KEYS in original case
+            var cmd = new PR_MYDL_GET_OBJS_BY_SIDS() // PR_GET_OBJS_BY_KEYS in original case, new PR_GET_OBJS_BY_SIDS()
             {
-                //EMP_WWID = applySecurity ? OpUserStack.MyOpUserToken.Usr.WWID : 0,
+                in_emp_wwid = 10548414, //applySecurity ? OpUserStack.MyOpUserToken.Usr.WWID : 0,
                 //APPLY_SECURITY = applySecurity,
-                OBJ_TYPE = "CNTRCT",
-                INCLUDE_GROUPS = strInc,
+                in_obj_type = "CNTRCT",
+                in_include_groups = strInc,
                 //SRCH_GRP = searchGroup,
-                OBJ_SIDS = new type_int_list(ids.ToArray())
+                in_obj_sids = new type_int_list(ids.ToArray())
             };
 
             //////string[] aAtrbs = atrbs as string[] ?? atrbs.ToArray();
@@ -100,9 +100,9 @@ namespace Intel.MyDeals.DataLibrary
                         GroupID = id
                     };
                 }
-                odcs[opDataElementType].Data[id] = GetDataCollectorFromTemplate(opDataElementType, id, 0);
-                // Populate this according to the template
 
+                // Populate this according to the template
+                odcs[opDataElementType].Data[id] = GetDataCollectorFromTemplate(opDataElementType, id, 0);
             }
 
             return odcs;
