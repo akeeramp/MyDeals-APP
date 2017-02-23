@@ -120,12 +120,12 @@ using System.Collections.Generic;
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	//WorkFlow
-	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_UPD_WORKFL_MSTR] @WWID='10548414', @MODE = 'SELECT'");
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_UPD_WORKFL_MSTR] @WWID=10548414, @MODE = 'SELECT'");
 	ds.Tables[0].TableName = "WorkFlows";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	// Work Flow Stage
-	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_UPD_WFSTG_MSTR] @WWID='10548414', @MODE = 'SELECT'");
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_UPD_WFSTG_MSTR] @WWID=10548414, @MODE = 'SELECT'");
 	ds.Tables[0].TableName = "WorkFlowStg";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
@@ -135,7 +135,7 @@ using System.Collections.Generic;
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	// Prooduct Alias
-	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_UPD_PRD_ALIAS] @IDSID='99999', @MODE = 'SELECT'");
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_UPD_PRD_ALIAS] @WWID=99999, @MODE = 'SELECT'");
 	ds.Tables[0].TableName = "ProductAlias";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 

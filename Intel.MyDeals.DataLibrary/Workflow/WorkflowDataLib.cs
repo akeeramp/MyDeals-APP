@@ -20,7 +20,7 @@ namespace Intel.MyDeals.DataLibrary
         {
             var cmd = new Procs.dbo.PR_MYDL_UPD_WFSTG_MSTR
             {
-                IDSID = Utils.ThreadUser,
+                WWID = OpUserStack.MyOpUserToken.Usr.WWID,
                 MODE = CrudModes.Select.ToString()
             };
             var ret = new List<WorkFlowStg>();
@@ -73,7 +73,7 @@ namespace Intel.MyDeals.DataLibrary
             //data.WFSTG_ATRB_SID = 16003;
             using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_MYDL_UPD_WFSTG_MSTR()
             {
-                IDSID = Utils.ThreadUser,
+                WWID = OpUserStack.MyOpUserToken.Usr.WWID,
                 MODE = mode.ToString().ToUpper(),
                 WFSTG_MBR_SID = data.WFSTG_MBR_SID,
                 WFSTG_NM = data.WFSTG_NM,
@@ -128,15 +128,15 @@ namespace Intel.MyDeals.DataLibrary
         {
             var cmd = new Procs.dbo.PR_MYDL_UPD_WORKFL_MSTR
             {
-                IDSID = Utils.ThreadUser,
+                WWID = OpUserStack.MyOpUserToken.Usr.WWID,
                 MODE = CrudModes.Select.ToString().ToUpper()
             };
             List<WorkFlows> ret = new List<WorkFlows>();
 
             using (var rdr = DataAccess.ExecuteReader(cmd))
             {
-                int IDX_DEAL_TYPE_CD = DB.GetReaderOrdinal(rdr, "DEAL_TYPE_CD");
-                int IDX_DEAL_TYPE_SID = DB.GetReaderOrdinal(rdr, "DEAL_TYPE_SID");
+                int IDX_OBJ_SET_TYPE_CD = DB.GetReaderOrdinal(rdr, "OBJ_SET_TYPE_CD");
+                int IDX_OBJ_SET_TYPE_SID = DB.GetReaderOrdinal(rdr, "OBJ_SET_TYPE_SID");
                 int IDX_OBJ_TYPE = DB.GetReaderOrdinal(rdr, "OBJ_TYPE");
                 int IDX_OBJ_TYPE_SID = DB.GetReaderOrdinal(rdr, "OBJ_TYPE_SID");
                 int IDX_ROLE_TIER_NM = DB.GetReaderOrdinal(rdr, "ROLE_TIER_NM");
@@ -154,8 +154,8 @@ namespace Intel.MyDeals.DataLibrary
                 {
                     ret.Add(new WorkFlows
                     {
-                        OBJ_SET_TYPE_CD = (IDX_DEAL_TYPE_CD < 0 || rdr.IsDBNull(IDX_DEAL_TYPE_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_TYPE_CD),
-                        OBJ_SET_TYPE_SID = (IDX_DEAL_TYPE_SID < 0 || rdr.IsDBNull(IDX_DEAL_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_TYPE_SID),
+                        OBJ_SET_TYPE_CD = (IDX_OBJ_SET_TYPE_CD < 0 || rdr.IsDBNull(IDX_OBJ_SET_TYPE_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_SET_TYPE_CD),
+                        OBJ_SET_TYPE_SID = (IDX_OBJ_SET_TYPE_SID < 0 || rdr.IsDBNull(IDX_OBJ_SET_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_SET_TYPE_SID),
                         OBJ_TYPE = (IDX_OBJ_TYPE < 0 || rdr.IsDBNull(IDX_OBJ_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_TYPE),
                         OBJ_TYPE_SID = (IDX_OBJ_TYPE_SID < 0 || rdr.IsDBNull(IDX_OBJ_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_TYPE_SID),
                         ROLE_TIER_NM = (IDX_ROLE_TIER_NM < 0 || rdr.IsDBNull(IDX_ROLE_TIER_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ROLE_TIER_NM),
@@ -187,22 +187,22 @@ namespace Intel.MyDeals.DataLibrary
 
             using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_MYDL_UPD_WORKFL_MSTR
             {
-                IDSID = Utils.ThreadUser,
+                WWID = OpUserStack.MyOpUserToken.Usr.WWID,
                 MODE = mode.ToString().ToUpper(),
                 WF_SID = data.WF_SID,
                 WF_NAME = data.WF_NAME,
                 ROLE_TIER_CD = data.ROLE_TIER_NM,
                 WFSTG_ACTN_SID = data.WFSTG_ACTN_SID,
                 OBJ_TYPE_SID =  data.OBJ_TYPE_SID,
-                DEAL_TYPE_SID = data.OBJ_SET_TYPE_SID,
+                OBJ_SET_TYPE_SID = data.OBJ_SET_TYPE_SID,
                 WFSTG_SID_SRC = data.WFSTG_MBR_SID,
                 WFSTG_SID_DEST = data.WFSTG_DEST_MBR_SID,
                 TRKR_NBR_UPD = data.TRKR_NBR_UPD
 
             }))
             {
-                int IDX_DEAL_TYPE_CD = DB.GetReaderOrdinal(rdr, "DEAL_TYPE_CD");
-                int IDX_DEAL_TYPE_SID = DB.GetReaderOrdinal(rdr, "DEAL_TYPE_SID");
+                int IDX_OBJ_SET_TYPE_CD = DB.GetReaderOrdinal(rdr, "OBJ_SET_TYPE_CD");
+                int IDX_OBJ_SET_TYPE_SID = DB.GetReaderOrdinal(rdr, "OBJ_SET_TYPE_SID");
                 int IDX_OBJ_TYPE = DB.GetReaderOrdinal(rdr, "OBJ_TYPE");
                 int IDX_OBJ_TYPE_SID = DB.GetReaderOrdinal(rdr, "OBJ_TYPE_SID");
                 int IDX_ROLE_TIER_NM = DB.GetReaderOrdinal(rdr, "ROLE_TIER_NM");
@@ -220,8 +220,8 @@ namespace Intel.MyDeals.DataLibrary
                 {
                     retWorkflow.Add(new WorkFlows
                     {
-                        OBJ_SET_TYPE_CD = (IDX_DEAL_TYPE_CD < 0 || rdr.IsDBNull(IDX_DEAL_TYPE_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_TYPE_CD),
-                        OBJ_SET_TYPE_SID = (IDX_DEAL_TYPE_SID < 0 || rdr.IsDBNull(IDX_DEAL_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_TYPE_SID),
+                        OBJ_SET_TYPE_CD = (IDX_OBJ_SET_TYPE_CD < 0 || rdr.IsDBNull(IDX_OBJ_SET_TYPE_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_SET_TYPE_CD),
+                        OBJ_SET_TYPE_SID = (IDX_OBJ_SET_TYPE_SID < 0 || rdr.IsDBNull(IDX_OBJ_SET_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_SET_TYPE_SID),
                         OBJ_TYPE = (IDX_OBJ_TYPE < 0 || rdr.IsDBNull(IDX_OBJ_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_TYPE),
                         OBJ_TYPE_SID = (IDX_OBJ_TYPE_SID < 0 || rdr.IsDBNull(IDX_OBJ_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_TYPE_SID),
                         ROLE_TIER_NM = (IDX_ROLE_TIER_NM < 0 || rdr.IsDBNull(IDX_ROLE_TIER_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ROLE_TIER_NM),

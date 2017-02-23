@@ -99,7 +99,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_MYDL_UPD_PRD_ALIAS()
                 {
-                    IDSID = Utils.ThreadUser,
+                    WWID = OpUserStack.MyOpUserToken.Usr.WWID,
                     MODE = mode.ToString().ToUpper(),
                     PRD_ALS_NM = data.PRD_ALS_NM,
                     PRD_ALS_SID = data.PRD_ALS_SID,
@@ -146,7 +146,7 @@ namespace Intel.MyDeals.DataLibrary
         {
             var cmd = new Procs.dbo.PR_MYDL_UPD_PRD_ALIAS
             {
-                IDSID = Utils.ThreadUser,
+                WWID = OpUserStack.MyOpUserToken.Usr.WWID,
                 MODE = CrudModes.Select.ToString()
             };
 

@@ -42,31 +42,13 @@
 
                 },
                 update: function (e) {
-                    var isValid = true;
-
-                    for (var i = 0; i < e.data.length; i++) {
-                        if (!isModelValid(e.data[i])) {
-                            isValid = false;
-                        }
-                    }
-                    if (isValid) {
-                        workflowService.UpdateWorkflow(e.data)
-                        .then(function (response) {
-                            e.success(response.data);
-                            logger.success("Workflow updated.");
-                        }, function (response) {
-                            logger.error("Unable to update Workflow.", response, response.statusText);
-                        });
-                    }
-                    else {
-                        var modalOptions = {
-                            closeButtonText: 'Okay',
-                            hasActionButton: false,
-                            headerText: 'Error',
-                            bodyText: 'Unable to update Workflow. Please check your input and try again.'
-                        };
-                        confirmationModal.showModal({}, modalOptions);
-                    }
+                    workflowService.UpdateWorkflow(e.data)
+                    .then(function (response) {
+                        e.success(response.data);
+                        logger.success("Workflow updated.");
+                    }, function (response) {
+                        logger.error("Unable to update Workflow.", response, response.statusText);
+                    });
                 },
                 destroy: function (e) {
                     var modalOptions = {
@@ -118,8 +100,8 @@
                         ROLE_TIER_NM: { validation: { required: true } },
                         OBJ_TYPE: { validation: { required: true } },
                         OBJ_TYPE_SID: { validation: { required: false } },
-                        DEAL_TYPE_CD: { validation: { required: false } },
-                        DEAL_TYPE_SID: { validation: { required: false } },
+                        OBJ_SET_TYPE_CD: { validation: { required: false } },
+                        OBJ_SET_TYPE_SID: { validation: { required: false } },
                         WFSTG_ACTN_NM: { validation: { required: true } },
                         WFSTG_ACTN_SID: { validation: { required: true } },
                         WFSTG_CD_SRC: { validation: { required: true } },
@@ -176,36 +158,13 @@
               { field: "WF_NAME", title: "WF Name", width: "10%" },
               { field: "ROLE_TIER_NM", title: "Role Tier", width: "10%", editor: roleTierCDDropDownEditor },
               { field: "OBJ_TYPE_SID", template: " #= OBJ_TYPE # ", title: "Obj Type", width: "12%", editor: objTypeCDDropDownEditor },
-              { field: "DEAL_TYPE_SID", template: " #= DEAL_TYPE_CD # ", title: "Deal Type", width: "10%", editor: dealTypeCDDropDownEditor },
+              { field: "OBJ_SET_TYPE_SID", template: " #= OBJ_SET_TYPE_CD # ", title: "Deal Type", width: "10%", editor: dealTypeCDDropDownEditor },
               { field: "WFSTG_ACTN_SID", template: " #= WFSTG_ACTN_NM # ", title: "Action", width: "10%", editor: actionCDDropDownEditor },
               { field: "WFSTG_MBR_SID", template: " #= WFSTG_CD_SRC # ", title: "Begin Stage", width: "10%", editor: srcCDDropDownEditor },
               { field: "WFSTG_DEST_MBR_SID", template: " #= WFSTG_CD_DEST # ", title: "End Stage", width: "10%", editor: destCDDropDownEditor },
               { field: "TRKR_NBR_UPD", title: "Update Tracker", width: "12%", template: "<div><span ng-if='! #= TRKR_NBR_UPD # ' class='icon-md intelicon-empty-box'></span><span ng-if=' #= TRKR_NBR_UPD # ' class='icon-md intelicon-filled-box'></span></div>" },
             ]
         };
-
-        function isModelValid(dataItem) {
-            var isValid = true;
-            if (dataItem['WF_NAME'] == "") {
-                flagBehavior(dataItem, "isError", "WF_NAME", true);
-                isValid = false;
-            } else {
-                flagBehavior(dataItem, "isError", "WF_NAME", false);
-            }
-
-            return isValid;
-        }
-
-        // Updates the model with the correct _behavior flag
-        function flagBehavior(dataItem, $event, field, isTrue) {
-            if (dataItem._behaviors === undefined) {
-                dataItem._behaviors = {};
-            }
-            if (dataItem._behaviors['isError'] === undefined) {
-                dataItem._behaviors['isError'] = {};
-            }
-            dataItem._behaviors["isError"][field] = isTrue;
-        }
 
         // Populate Role Tier DropDown
         function roleTierCDDropDownEditor(container, options) {
@@ -260,7 +219,7 @@
                                 dataSource: {
                                     data: wrokFlowAttibutes,
                                     filter: [
-                                            { field: "COL_NM", operator: "eq", value: "DEAL_TYPE_CD" }
+                                            { field: "COL_NM", operator: "eq", value: "OBJ_SET_TYPE_CD" }
                                     ]
                                 },
                                 dataTextField: "Value",
@@ -286,7 +245,7 @@
                         {
                             data: wrokFlowAttibutes,
                             filter: [
-                                    { field: "COL_NM", operator: "eq", value: "DEAL_TYPE_CD" }
+                                    { field: "COL_NM", operator: "eq", value: "OBJ_SET_TYPE_CD" }
                             ]
                         }
 
