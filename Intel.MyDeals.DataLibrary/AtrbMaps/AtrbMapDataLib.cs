@@ -227,7 +227,7 @@ namespace Intel.MyDeals.DataLibrary
                     ATRB_SID = atrbMstr.ATRB_SID ?? 0,
                     ATRB_SRT_ORD = atrbMstr.ATRB_SRT_ORD ?? 0,
                     DIM_SID = atrbMstr.DIM_SID ?? short.MinValue,
-                    IS_FACT = atrbMstr.IS_FACT ?? false,
+                    //IS_FACT = atrbMstr.IS_FACT ?? false,
                     PIVOT_MSK = atrbMstr.PIVOT_MSK ?? 0
                 };
             }
@@ -347,7 +347,7 @@ namespace Intel.MyDeals.DataLibrary
                     DIM_TBL_SCHMA = (IDX_DIM_TBL_SCHMA < 0 || rdr.IsDBNull(IDX_DIM_TBL_SCHMA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DIM_TBL_SCHMA),
                     DOT_NET_DATA_TYPE = (IDX_DOT_NET_DATA_TYPE < 0 || rdr.IsDBNull(IDX_DOT_NET_DATA_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DOT_NET_DATA_TYPE),
                     FRMT_MSK = (IDX_FRMT_MSK < 0 || rdr.IsDBNull(IDX_FRMT_MSK)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_FRMT_MSK),
-                    IS_FACT = (IDX_IS_FACT < 0 || rdr.IsDBNull(IDX_IS_FACT)) ? default(Nullable<System.Boolean>) : rdr.GetFieldValue<Nullable<System.Boolean>>(IDX_IS_FACT),
+                    //IS_FACT = (IDX_IS_FACT < 0 || rdr.IsDBNull(IDX_IS_FACT)) ? default(Nullable<System.Boolean>) : rdr.GetFieldValue<Nullable<System.Boolean>>(IDX_IS_FACT),
                     IS_IDX = (IDX_IS_IDX < 0 || rdr.IsDBNull(IDX_IS_IDX)) ? default(Nullable<System.Boolean>) : rdr.GetFieldValue<Nullable<System.Boolean>>(IDX_IS_IDX),
                     KEY_AT_ATRB_SID = (IDX_KEY_AT_ATRB_SID < 0 || rdr.IsDBNull(IDX_KEY_AT_ATRB_SID)) ? default(Nullable<System.Int32>) : rdr.GetFieldValue<Nullable<System.Int32>>(IDX_KEY_AT_ATRB_SID),
                     LEGACY_NM = (IDX_LEGACY_NM < 0 || rdr.IsDBNull(IDX_LEGACY_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_LEGACY_NM),

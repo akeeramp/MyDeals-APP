@@ -1067,7 +1067,7 @@ namespace Intel.MyDeals.DataLibrary
         /// <param name="odp">A valid data packet</param>
         /// <param name="custSid">Customer ID to pass to DB</param>
         /// <returns>A valid DataTable or null if input is invalid.</returns>
-        private DataTable OpDataPacketToImportDataTableNew(OpDataPacket<OpDataElementType> odp, int custSid)
+        private DataTable OpDataPacketToImportDataTableNew(OpDataPacket<OpDataElementType> odp, int custSid, int wwid)
         {
             // Save Data Cycle: Point 17
 
@@ -1101,7 +1101,7 @@ namespace Intel.MyDeals.DataLibrary
             //int IDX_PARENT_OBJ_KEY = dt.Columns.Add(Entities.deal.STG_WIP_ATRB.PARENT_OBJ_KEY, typeof(int)).Ordinal;
             //int IDX_DEAL_ALT_SID = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ATRB_TMP.OBJ_SID, typeof(int)).Ordinal;
             int IDX_CHG_EMP_WWID = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ATRB_TMP.CHG_EMP_WWID, typeof(int)).Ordinal;
-            int IDX_CHG_DTM = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ATRB_TMP.CHG_DTM, typeof(int)).Ordinal;
+            //int IDX_CHG_DTM = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ATRB_TMP.CHG_DTM, typeof(int)).Ordinal;
 
             int IDX_MDX_CD = dt.Columns.Add(Entities.deal.STG_WIP_ATRB.MDX_CD, typeof(string)).Ordinal; // M,D,X (Modify (I,U), Delete, No Action (X)), used to be DATA_TEXT vc(100) 
             #endregion
@@ -1118,6 +1118,7 @@ namespace Intel.MyDeals.DataLibrary
                     // Create new data row to set the values on...
                     var r = dt.NewRow();
                     int dcId = (de.DcID == 0 ? dc.Key : de.DcID); // This one makes sense because DC Key is DcId
+                    int chgWwid = wwid;
                     //int dcSid = (de.DcSID == 0 ? 0 : de.DcSID); //(de.DcSID == 0 ? dc.Key : de.DcSID);
                     //int dcParentSid = (de.DcParentSID == 0 ? 0 : de.DcParentSID); //(de.DcParentSID == 0 ? dc.Key : de.DcParentSID);
 
@@ -1133,10 +1134,10 @@ namespace Intel.MyDeals.DataLibrary
                         //r[IDX_OBJ_SID] = dcSid;
                     }
 
-                    if (de.ElementID != 0)
-                    {
-                        r[IDX_OBJ_TYPE_SID] = de.ElementID;
-                    }
+                    //if (de.ElementID != 0)
+                    //{
+                    //    r[IDX_OBJ_TYPE_SID] = de.ElementID;
+                    //}
 
                     r[IDX_ATRB_SID] = de.AtrbID;
                     if (de.DimID > 0)
@@ -1149,6 +1150,8 @@ namespace Intel.MyDeals.DataLibrary
                     }
                     r[IDX_ATRB_VAL] = de.AtrbValue;
                     r[IDX_MDX_CD] = OpDataElementStateConverter.ToString(de.State);
+                    r[IDX_CHG_EMP_WWID] = chgWwid;
+                    //r[IDX_CHG_DTM] = typeof(int)).Ordinal;
 
                     // What about de.DcAltID
 
@@ -1210,7 +1213,7 @@ namespace Intel.MyDeals.DataLibrary
             int IDX_ACTN_VAL_LIST = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ACTN.ACTN_VAL_LIST, typeof(string)).Ordinal; // Max Len = 8000
 
             int IDX_CHG_EMP_WWID = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ACTN.CHG_EMP_WWID, typeof(int)).Ordinal;
-            int IDX_CHG_DTM = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ACTN.CHG_DTM, typeof(int)).Ordinal;
+            //int IDX_CHG_DTM = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ACTN.CHG_DTM, typeof(int)).Ordinal; // defaults in DB to getdate()
 
             //int IDX_ACTN_VAL = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ACTN.ACTN_VAL, typeof(string)).Ordinal; // Max Len = 8000
             ////int IDX_DEAL_GRP_SID = dt.Columns.Add(Entities.deal.WIP_ACTN.DEAL_GRP_SID, typeof(int)).Ordinal;

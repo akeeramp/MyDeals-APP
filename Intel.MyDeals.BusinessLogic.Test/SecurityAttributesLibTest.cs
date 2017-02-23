@@ -153,7 +153,7 @@ namespace Intel.MyDeals.BusinessLogic.Test
                 TEMPLT_DEAL_SID = 0,
                 TEMPLT_DEAL_NBR = 0,
                 TRKR_NBR_DT_LTR = testStringShort,
-                PERFORM_CTST = false,
+                //PERFORM_CTST = false,
                 ACTV_IND = false
             };
             AdminDealType insertResult = new SecurityAttributesLib().ManageAdminDealType(dealType, CrudModes.Insert);
@@ -166,7 +166,7 @@ namespace Intel.MyDeals.BusinessLogic.Test
                 && insertResult.TEMPLT_DEAL_SID == dealType.TEMPLT_DEAL_SID
                 && insertResult.TEMPLT_DEAL_NBR == dealType.TEMPLT_DEAL_NBR
                 && insertResult.TRKR_NBR_DT_LTR == dealType.TRKR_NBR_DT_LTR
-                && insertResult.PERFORM_CTST == dealType.PERFORM_CTST
+                //&& insertResult.PERFORM_CTST == dealType.PERFORM_CTST
                 && insertResult.ACTV_IND == dealType.ACTV_IND
                 );
 
@@ -184,7 +184,7 @@ namespace Intel.MyDeals.BusinessLogic.Test
                 && updateResult.TEMPLT_DEAL_SID == insertResult.TEMPLT_DEAL_SID
                 && updateResult.TEMPLT_DEAL_NBR == insertResult.TEMPLT_DEAL_NBR
                 && updateResult.TRKR_NBR_DT_LTR == insertResult.TRKR_NBR_DT_LTR
-                && updateResult.PERFORM_CTST == insertResult.PERFORM_CTST
+                //&& updateResult.PERFORM_CTST == insertResult.PERFORM_CTST
                 && updateResult.ACTV_IND == insertResult.ACTV_IND
                 );
 

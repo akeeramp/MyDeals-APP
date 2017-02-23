@@ -127,9 +127,9 @@ namespace Intel.MyDeals.DataLibrary
             // TODO - Fix hact to get Cust ID for these functions
             //int cust_id = 3;
             // Create shell tables with proper schema...
-            var dtData = OpDataPacketToImportDataTable(new OpDataPacket<OpDataElementType>(), custId);
-            var dtData2 = OpDataPacketToImportDataTable(new OpDataPacket<OpDataElementType>(), custId);
-            var dtAction = OpDataPacketToImportActionTable(new OpDataPacket<OpDataElementType>(), group_batch_id, wwid);
+      //var dtData = OpDataPacketToImportDataTable(new OpDataPacket<OpDataElementType>(), custId);
+            var dtData = OpDataPacketToImportDataTableNew(new OpDataPacket<OpDataElementType>(), custId, wwid);
+            var dtAction = OpDataPacketToImportActionTableNew(new OpDataPacket<OpDataElementType>(), group_batch_id, wwid);
 
             foreach (var odp in packets.Where(p => p.PacketType == OpDataElementType.Group && OpTypeConverter.IsValidGuid(p.BatchID)))
             {
@@ -153,7 +153,18 @@ namespace Intel.MyDeals.DataLibrary
             OpParallelWait.ForEach<OpDataPacket<OpDataElementType>>(packets, odp =>
             {
                 // Insert Data First...
-                using (var dt = OpDataPacketToImportDataTable(odp, custId))
+                //using (var dt = OpDataPacketToImportDataTable(odp, custId))
+                //{
+                //    if (dt != null && dt.Rows.Count > 0)
+                //    {
+                //        lock (dtData)
+                //        {
+                //            dtData.Merge(dt, true);
+                //        }
+                //    }
+                //}
+
+                using (var dt = OpDataPacketToImportDataTableNew(odp, custId, wwid))
                 {
                     if (dt != null && dt.Rows.Count > 0)
                     {
@@ -164,19 +175,8 @@ namespace Intel.MyDeals.DataLibrary
                     }
                 }
 
-                using (var dt = OpDataPacketToImportDataTableNew(odp, custId))
-                {
-                    if (dt != null && dt.Rows.Count > 0)
-                    {
-                        lock (dtData2)
-                        {
-                            dtData2.Merge(dt, true);
-                        }
-                    }
-                }
-
                 // Then Actions...
-                using (var dta = OpDataPacketToImportActionTable(odp, group_batch_id, wwid))
+                using (var dta = OpDataPacketToImportActionTableNew(odp, group_batch_id, wwid))
                 {
                     if (dta != null && dta.Rows.Count > 0)
                     {
@@ -188,8 +188,7 @@ namespace Intel.MyDeals.DataLibrary
                 }
             });
 
-            //dsImport.Tables.Add(dtData); // Add the attributes table to the import data set
-            dsImport.Tables.Add(dtData2); // Add the attributes table to the import data set
+            dsImport.Tables.Add(dtData); // Add the attributes table to the import data set
             dsImport.Tables.Add(dtAction); // Add the actions table to the import data set
 
 #if DEBUG

@@ -468,7 +468,7 @@ namespace Intel.MyDeals.DataLibrary
                     cmd.TEMPLT_DEAL_SID = dealType.TEMPLT_DEAL_SID;
                     cmd.TEMPLT_DEAL_NBR = dealType.TEMPLT_DEAL_NBR;
                     cmd.TRKR_NBR_DT_LTR = dealType.TRKR_NBR_DT_LTR;
-                    cmd.PERFORM_CTST = dealType.PERFORM_CTST;
+                    //cmd.PERFORM_CTST = dealType.PERFORM_CTST;
                     cmd.ACTV_IND = dealType.ACTV_IND;
                 }
 
@@ -484,7 +484,7 @@ namespace Intel.MyDeals.DataLibrary
                                TEMPLT_DEAL_SID = (rw.IsNull("TEMPLT_DEAL_SID") ? default(System.Int32) : Convert.ToInt32(rw["TEMPLT_DEAL_SID"])),
                                TEMPLT_DEAL_NBR = (rw.IsNull("TEMPLT_DEAL_NBR") ? default(System.Int32) : Convert.ToInt32(rw["TEMPLT_DEAL_NBR"])),
                                TRKR_NBR_DT_LTR = Convert.ToString(rw["TRKR_NBR_DT_LTR"]),
-                               PERFORM_CTST = (rw.IsNull("PERFORM_CTST") ? default(System.Boolean) : Convert.ToBoolean(rw["PERFORM_CTST"])),
+                               //PERFORM_CTST = (rw.IsNull("PERFORM_CTST") ? default(System.Boolean) : Convert.ToBoolean(rw["PERFORM_CTST"])),
                                ACTV_IND = Convert.ToBoolean(rw["ACTV_IND"]),
                                CHG_DTM = Convert.ToDateTime(rw["CHG_DTM"]),
                                CHG_EMP_WWID = Convert.ToInt32(rw["CHG_EMP_WWID"]),

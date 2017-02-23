@@ -154,8 +154,8 @@ namespace Intel.MyDeals.DataLibrary
                 {
                     ret.Add(new WorkFlows
                     {
-                        DEAL_TYPE_CD = (IDX_DEAL_TYPE_CD < 0 || rdr.IsDBNull(IDX_DEAL_TYPE_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_TYPE_CD),
-                        DEAL_TYPE_SID = (IDX_DEAL_TYPE_SID < 0 || rdr.IsDBNull(IDX_DEAL_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_TYPE_SID),
+                        OBJ_SET_TYPE_CD = (IDX_DEAL_TYPE_CD < 0 || rdr.IsDBNull(IDX_DEAL_TYPE_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_TYPE_CD),
+                        OBJ_SET_TYPE_SID = (IDX_DEAL_TYPE_SID < 0 || rdr.IsDBNull(IDX_DEAL_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_TYPE_SID),
                         OBJ_TYPE = (IDX_OBJ_TYPE < 0 || rdr.IsDBNull(IDX_OBJ_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_TYPE),
                         OBJ_TYPE_SID = (IDX_OBJ_TYPE_SID < 0 || rdr.IsDBNull(IDX_OBJ_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_TYPE_SID),
                         ROLE_TIER_NM = (IDX_ROLE_TIER_NM < 0 || rdr.IsDBNull(IDX_ROLE_TIER_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ROLE_TIER_NM),
@@ -194,7 +194,7 @@ namespace Intel.MyDeals.DataLibrary
                 ROLE_TIER_CD = data.ROLE_TIER_NM,
                 WFSTG_ACTN_SID = data.WFSTG_ACTN_SID,
                 OBJ_TYPE_SID =  data.OBJ_TYPE_SID,
-                DEAL_TYPE_SID = data.DEAL_TYPE_SID,
+                DEAL_TYPE_SID = data.OBJ_SET_TYPE_SID,
                 WFSTG_SID_SRC = data.WFSTG_MBR_SID,
                 WFSTG_SID_DEST = data.WFSTG_DEST_MBR_SID,
                 TRKR_NBR_UPD = data.TRKR_NBR_UPD
@@ -220,8 +220,8 @@ namespace Intel.MyDeals.DataLibrary
                 {
                     retWorkflow.Add(new WorkFlows
                     {
-                        DEAL_TYPE_CD = (IDX_DEAL_TYPE_CD < 0 || rdr.IsDBNull(IDX_DEAL_TYPE_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_TYPE_CD),
-                        DEAL_TYPE_SID = (IDX_DEAL_TYPE_SID < 0 || rdr.IsDBNull(IDX_DEAL_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_TYPE_SID),
+                        OBJ_SET_TYPE_CD = (IDX_DEAL_TYPE_CD < 0 || rdr.IsDBNull(IDX_DEAL_TYPE_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_TYPE_CD),
+                        OBJ_SET_TYPE_SID = (IDX_DEAL_TYPE_SID < 0 || rdr.IsDBNull(IDX_DEAL_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_TYPE_SID),
                         OBJ_TYPE = (IDX_OBJ_TYPE < 0 || rdr.IsDBNull(IDX_OBJ_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_TYPE),
                         OBJ_TYPE_SID = (IDX_OBJ_TYPE_SID < 0 || rdr.IsDBNull(IDX_OBJ_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_TYPE_SID),
                         ROLE_TIER_NM = (IDX_ROLE_TIER_NM < 0 || rdr.IsDBNull(IDX_ROLE_TIER_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ROLE_TIER_NM),
