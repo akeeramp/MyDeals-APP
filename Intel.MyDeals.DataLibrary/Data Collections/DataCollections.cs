@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -310,7 +309,7 @@ namespace Intel.MyDeals.DataLibrary
 
 
 
-        public static TemplateWrapper GetTemplateDataWithData(DateTime lastCacheDate)
+        public static TemplateWrapper GetTemplateWrapper()
         {
             lock (LOCK_OBJECT ?? new object())
             {
@@ -323,7 +322,7 @@ namespace Intel.MyDeals.DataLibrary
                         DealTypeData = _getDealTypeData
                     };
 
-                TemplateWrapper wrapper = new DataCollectorDataLib().GetTemplateData(lastCacheDate);
+                TemplateWrapper wrapper = new DataCollectorDataLib().GetTemplateData();
                 _getTemplateData = wrapper.TemplateData;
                 _getTemplateDict = wrapper.TemplateDict;
                 _getCalendarData = wrapper.CalendarData.ToList();
@@ -335,10 +334,6 @@ namespace Intel.MyDeals.DataLibrary
         public static OpDataElementUITemplates GetOpDataElementUITemplates()
         {
             return GetTemplateWrapper().TemplateDict;
-        }
-        public static TemplateWrapper GetTemplateWrapper()
-        {
-            return GetTemplateDataWithData(new DateTime(2000, 1, 1));
         }
         public static List<ObjectTypeTemplate> GetTemplateData()
         {

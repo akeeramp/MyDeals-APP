@@ -68,7 +68,6 @@
 //	[SQL_DATA_TYPE_FQ],
 //	[FMT_MSK],
 //	[ATRB_MAX_LEN],
-//	[IS_FACT]
 //FROM meta.VW_ATRB_MSTR (nolock)
 //ORDER BY ATRB_CD
 //").Tables[0];

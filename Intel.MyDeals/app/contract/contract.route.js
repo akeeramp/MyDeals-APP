@@ -110,6 +110,16 @@
                         }
                     }
                 }
+            }, {
+                state: 'nocontract',
+                config: {
+                    url: '/nocontract',
+                    views: {
+                        'bodyView': {
+                            templateUrl: '/app/contract/partials/otherwise.html'
+                        }
+                    }
+                }
             }
         ];
     }

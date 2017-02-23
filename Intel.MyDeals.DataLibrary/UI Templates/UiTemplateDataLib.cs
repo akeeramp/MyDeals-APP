@@ -86,6 +86,32 @@ namespace Intel.MyDeals.DataLibrary
             return model;
         }
 
+        private Dictionary<OpDataElementType, OpDataElementType> opDataElementTypeHeirarchy { get; set; }
+        private void BuildOpDataElementTypeHeirarchy()
+        {
+            // TODO Need to replace with metadata
+            // Key = Parent
+            // Value = Child
+            opDataElementTypeHeirarchy = new Dictionary<OpDataElementType, OpDataElementType>
+            {
+                [OpDataElementType.Contract] = OpDataElementType.PricingStrategy,
+                [OpDataElementType.PricingStrategy] = OpDataElementType.PricingTable,
+                [OpDataElementType.PricingTable] = OpDataElementType.WipDeals,
+                [OpDataElementType.WipDeals] = OpDataElementType.Unknown,
+                [OpDataElementType.Deals] = OpDataElementType.Unknown
+            };
+        }
+
+        private OpDataElementType GetOpDataElementTypeParent(OpDataElementType opDataElementType)
+        {
+            if (opDataElementTypeHeirarchy == null) BuildOpDataElementTypeHeirarchy();
+            return opDataElementTypeHeirarchy.Where(o => o.Value == opDataElementType).Select(o => o.Key).FirstOrDefault();
+        }
+        private OpDataElementType GetOpDataElementTypeChild(OpDataElementType opDataElementType)
+        {
+            if (opDataElementTypeHeirarchy == null) BuildOpDataElementTypeHeirarchy();
+            return opDataElementTypeHeirarchy.Where(o => o.Key == opDataElementType).Select(o => o.Value).FirstOrDefault();
+        }
 
         private UiObjectTemplate BuildUiObjectTemplate(OpDataElementType objType)
         {
@@ -96,11 +122,12 @@ namespace Intel.MyDeals.DataLibrary
                 template[opDataElementUi.AtrbCd] = opDataElementUi.AtrbValue;
             }
 
+
             // TODO replace whith proper data once DB is ready
             template["dc_id"] = 0;
-            template["dc_sid"] = 0;
+            template["dc_type"] = objType.ToId();
             template["dc_parent_id"] = 0;
-            template["dc_parent_sid"] = 0;
+            template["dc_parent_type"] = objType.GetParent().ToId();
             template["_behaviors"] = new Dictionary<string, Dictionary<string, dynamic>>
             {
                 ["isRequired"] = new Dictionary<string, dynamic>(),
@@ -108,9 +135,13 @@ namespace Intel.MyDeals.DataLibrary
                 ["validMsg"] = new Dictionary<string, dynamic>()
             };
 
+            foreach (OpDataElementType opDataElementType in objType.GetChildren())
+            {
+                template[opDataElementType.ToString()] = new List<string>();
+            }
+
             if (objType == OpDataElementType.Contract)
             {
-                template["PricingStrategy"] = new List<string>();
                 template["OBJSET_TYPE_CD"] = template["OBJSET_TYPE"] = "CONTRACT";
                 template["_behaviors"]["isRequired"] = new Dictionary<string, dynamic>
                 {
@@ -123,7 +154,6 @@ namespace Intel.MyDeals.DataLibrary
 
             if (objType == OpDataElementType.PricingStrategy)
             {
-                template["PricingTable"] = new List<string>();
                 template["OBJSET_TYPE_CD"] = template["OBJSET_TYPE"] = "PRICING STRATEGY";
                 template["_behaviors"]["isRequired"] = new Dictionary<string, dynamic>
                 {

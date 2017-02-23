@@ -41,7 +41,6 @@
 		"TGT_COL_TYPE",
 		"ATRB_SRT_ORD",
 		"ATRB_MAX_LEN",
-		"IS_FACT",
 		"PIVOT_MSK", //"PVT_MSK",
 		"ARTB_ACTV_IND",
 		"ACTV_IND",

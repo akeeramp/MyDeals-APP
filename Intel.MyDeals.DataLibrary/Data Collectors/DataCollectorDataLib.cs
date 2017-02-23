@@ -17,21 +17,14 @@ namespace Intel.MyDeals.DataLibrary
     public partial class DataCollectorDataLib : IDataCollectorDataLib
     {
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="lastCacheDate">Date of the current cache</param>
-        /// <returns></returns>
-        public TemplateWrapper GetTemplateData(DateTime lastCacheDate)
+        
+
+        public TemplateWrapper GetTemplateData()
         {
-            if (lastCacheDate < OpaqueConst.SQL_MIN_DATE)
-            {
-                lastCacheDate = OpaqueConst.SQL_MIN_DATE;
-            }
 
             var ret = new TemplateWrapper();
 
-            using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_GET_NEW_DEAL { CACHE_DATE = lastCacheDate }))
+            using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_GET_NEW_DEAL {  }))
             {
                 if (rdr.HasRows) // Will be false if cache condition is met...
                 {
@@ -184,10 +177,11 @@ namespace Intel.MyDeals.DataLibrary
             foreach (var dd in templateData)
             {
                 MyDealsAttribute atrb = null;
-                if (!atrbMstr.TryGetValue(dd.ATRB_SID != null ? dd.ATRB_SID : -1, out atrb))
+                if (!atrbMstr.TryGetValue(dd.ATRB_SID, out atrb))
                 {
 #if DEBUG
-                    System.Diagnostics.Debug.WriteLine(string.Format("DcsDealLibClient.GetTemplates: Error resolving Attribute ID: {0}", dd.ATRB_SID));
+                    System.Diagnostics.Debug.WriteLine(
+                        $"DcsDealLibClient.GetTemplates: Error resolving Attribute ID: {dd.ATRB_SID}");
 #endif
                     continue;
                 }
@@ -198,30 +192,7 @@ namespace Intel.MyDeals.DataLibrary
                     ret[dd.OBJ_TYPE] = coll = new List<OpDataElementUI>();
                 }
 
-                // TODO - THIS IS MUFFED UP RIGHT NOW DUE TO NON-NULLABLE READS
-                // Get the value from the database...
-                //var value = OpUtilities.Coalesce
-                //    (
-                //        dd.ATRB_VAL_INT,
-                //        dd.ATRB_VAL_CHAR,
-                //        dd.ATRB_VAL_MONEY,
-                //        dd.ATRB_VAL_DTM,
-                //        dd.ATRB_VAL_CHAR_MAX // if they go to one column, must go to dd.ATRB_VAL here
-                //    );
                 var value = dd.ATRB_VAL;
-
-                //if (value != null)
-                //{
-                    // A Bit hackish, but this was the only way I could think to do this.
-                    // conver to switch as needed if we add more types.
-                    //if (atrb.DOT_NET_DATA_TYPE == "System.Boolean")
-                    //{
-                    //    value = OpTypeConverter.StringToNullableBool(value.ToString()) ?? false;
-                    //}
-                //}
-
-                // TODO: Fully resolve dim Key.
-                // TODO: Complete the section since we are just hard coding attribute items in some cases
 
                 // Create the data element from the db values...
                 var ode = new OpDataElementUI(false)
@@ -243,8 +214,7 @@ namespace Intel.MyDeals.DataLibrary
                     SectionOrder = dd.ATRB_SCTN_ORDER,
                     State = OpDataElementState.Unchanged,
                     UITypeCD = atrb.UI_TYPE_CD,
-                    Source = OpSourceLocation.Template  //,
-                    //StringFormatMask = atrb.FMT_MSK
+                    Source = OpSourceLocation.Template
                 };
 
                 // Try to fully resolve the dim key
@@ -278,14 +248,15 @@ namespace Intel.MyDeals.DataLibrary
             OpDataElementUITemplates retSet = new OpDataElementUITemplates();
             foreach (KeyValuePair<string, List<OpDataElementUI>> keyValuePair in ret)
             {
-                string key = OpDataElementTypeConverter.FromString(keyValuePair.Key).ToString();
+                OpDataElementType opDataElementType = OpDataElementTypeConverter.FromString(keyValuePair.Key);
+                string key = opDataElementType.ToString();
                 if (!retSet.ContainsKey(key)) // This shuld just be keyValuePair.Key
                 {
                     retSet[key] = new OpDataElementUITemplate();
                 }
                 foreach (OpDataElementUI dataElementUi in keyValuePair.Value)
                 {
-                    OpDataElementUI blah = new OpDataElementUI
+                    retSet[key].Add(new OpDataElementUI
                     {
                         AtrbID = dataElementUi.AtrbID,
                         AtrbCd = dataElementUi.AtrbCd,
@@ -299,120 +270,145 @@ namespace Intel.MyDeals.DataLibrary
                         SectionOrder = dataElementUi.SectionOrder,
                         Label = dataElementUi.Label,
                         DcID = 0,
+                        DcType = opDataElementType.ToId(),
                         DcParentType = 0,
-                        DcParentID = 0,
-                        DcType = 0
-                    };
-
-                    retSet[key].Add(blah);
+                        DcParentID = opDataElementType.GetParent().ToId()
+                    });
                 }
             }
 
-            // TODO - Place some hard coded items for now just so that Phil doesn't break much more then he has to...
-            retSet[OpDataElementType.Contract.ToString()].Add(new OpDataElementUI
-            {
-                AtrbID = 11,
-                AtrbCd = "dc_id",
-                AtrbValue = "",
-                DcID = 0,
-                DcParentType = 0,
-                DcParentID = 0,
-                DcType = 0
-            });
+            AddDcBasics(retSet, OpDataElementType.Contract);
+            AddDcBasics(retSet, OpDataElementType.PricingStrategy);
+            AddDcBasics(retSet, OpDataElementType.PricingTable);
+            
+            //// TODO - Place some hard coded items for now just so that Phil doesn't break much more then he has to...
+            //retSet[OpDataElementType.Contract.ToString()].Add(new OpDataElementUI
+            //{
+            //    AtrbID = 11,
+            //    AtrbCd = "dc_id",
+            //    AtrbValue = "",
+            //    DcID = 0,
+            //    DcParentType = 0,
+            //    DcParentID = 0,
+            //    DcType = 0
+            //});
 
-            retSet[OpDataElementType.Contract.ToString()].Add(new OpDataElementUI
-            {
-                AtrbID = 12,
-                AtrbCd = "dc_parent_id",
-                AtrbValue = "",
-                DcID = 0,
-                DcParentType = 0,
-                DcParentID = 0,
-                DcType = 0
-            });
+            //retSet[OpDataElementType.Contract.ToString()].Add(new OpDataElementUI
+            //{
+            //    AtrbID = 12,
+            //    AtrbCd = "dc_parent_id",
+            //    AtrbValue = "",
+            //    DcID = 0,
+            //    DcParentType = 0,
+            //    DcParentID = 0,
+            //    DcType = 0
+            //});
 
-            retSet[OpDataElementType.Contract.ToString()].Add(new OpDataElementUI
-            {
-                AtrbID = 143,
-                AtrbCd = "DEAL_STG_CD",
-                AtrbValue = "",
-                DcID = 0,
-                DcParentType = 0,
-                DcParentID = 0,
-                DcType = 0
-            });
+            ////retSet[OpDataElementType.Contract.ToString()].Add(new OpDataElementUI
+            ////{
+            ////    AtrbID = 143,
+            ////    AtrbCd = "DEAL_STG_CD",
+            ////    AtrbValue = "",
+            ////    DcID = 0,
+            ////    DcParentType = 0,
+            ////    DcParentID = 0,
+            ////    DcType = 0
+            ////});
 
-            // TODO - Place some hard coded items for now just so that Phil doesn't break much more then he has to...
-            retSet[OpDataElementType.PricingStrategy.ToString()].Add(new OpDataElementUI
-            {
-                AtrbID = 11,
-                AtrbCd = "dc_id",
-                AtrbValue = "",
-                DcID = 0,
-                DcParentType = 0,
-                DcParentID = 0,
-                DcType = 0
-            });
+            //// TODO - Place some hard coded items for now just so that Phil doesn't break much more then he has to...
+            //retSet[OpDataElementType.PricingStrategy.ToString()].Add(new OpDataElementUI
+            //{
+            //    AtrbID = 11,
+            //    AtrbCd = "dc_id",
+            //    AtrbValue = "",
+            //    DcID = 0,
+            //    DcParentType = 0,
+            //    DcParentID = 0,
+            //    DcType = 0
+            //});
 
-            retSet[OpDataElementType.PricingStrategy.ToString()].Add(new OpDataElementUI
-            {
-                AtrbID = 12,
-                AtrbCd = "dc_parent_id",
-                AtrbValue = "",
-                DcID = 0,
-                DcParentType = 0,
-                DcParentID = 0,
-                DcType = 0
-            });
+            //retSet[OpDataElementType.PricingStrategy.ToString()].Add(new OpDataElementUI
+            //{
+            //    AtrbID = 12,
+            //    AtrbCd = "dc_parent_id",
+            //    AtrbValue = "",
+            //    DcID = 0,
+            //    DcParentType = 0,
+            //    DcParentID = 0,
+            //    DcType = 0
+            //});
 
-            retSet[OpDataElementType.PricingStrategy.ToString()].Add(new OpDataElementUI
-            {
-                AtrbID = 3319,
-                AtrbCd = "START_DT",
-                AtrbValue = "",
-                DcID = 0,
-                DcParentType = 0,
-                DcParentID = 0,
-                DcType = 0
-            });
+            ////retSet[OpDataElementType.PricingStrategy.ToString()].Add(new OpDataElementUI
+            ////{
+            ////    AtrbID = 3319,
+            ////    AtrbCd = "START_DT",
+            ////    AtrbValue = "",
+            ////    DcID = 0,
+            ////    DcParentType = 0,
+            ////    DcParentID = 0,
+            ////    DcType = 0
+            ////});
 
-            retSet[OpDataElementType.PricingStrategy.ToString()].Add(new OpDataElementUI
-            {
-                AtrbID = 3320,
-                AtrbCd = "END_DT",
-                AtrbValue = "",
-                DcID = 0,
-                DcParentType = 0,
-                DcParentID = 0,
-                DcType = 0
-            });
+            ////retSet[OpDataElementType.PricingStrategy.ToString()].Add(new OpDataElementUI
+            ////{
+            ////    AtrbID = 3320,
+            ////    AtrbCd = "END_DT",
+            ////    AtrbValue = "",
+            ////    DcID = 0,
+            ////    DcParentType = 0,
+            ////    DcParentID = 0,
+            ////    DcType = 0
+            ////});
 
-            retSet[OpDataElementType.PricingTable.ToString()].Add(new OpDataElementUI
-            {
-                AtrbID = 11,
-                AtrbCd = "dc_id",
-                AtrbValue = "",
-                DcID = 0,
-                DcParentType = 0,
-                DcParentID = 0,
-                DcType = 0
-            });
+            //retSet[OpDataElementType.PricingTable.ToString()].Add(new OpDataElementUI
+            //{
+            //    AtrbID = 11,
+            //    AtrbCd = "dc_id",
+            //    AtrbValue = "",
+            //    DcID = 0,
+            //    DcParentType = 0,
+            //    DcParentID = 0,
+            //    DcType = 0
+            //});
 
-            retSet[OpDataElementType.PricingTable.ToString()].Add(new OpDataElementUI
-            {
-                AtrbID = 12,
-                AtrbCd = "dc_parent_id",
-                AtrbValue = "",
-                DcID = 0,
-                DcParentType = 0,
-                DcParentID = 0,
-                DcType = 0
-            });
+            //retSet[OpDataElementType.PricingTable.ToString()].Add(new OpDataElementUI
+            //{
+            //    AtrbID = 12,
+            //    AtrbCd = "dc_parent_id",
+            //    AtrbValue = "",
+            //    DcID = 0,
+            //    DcParentType = 0,
+            //    DcParentID = 0,
+            //    DcType = 0
+            //});
 
             return retSet;
         }
 
+        private void AddDcBasics(OpDataElementUITemplates retSet, OpDataElementType opDataElementType)
+        {
+            retSet[opDataElementType.ToString()].Add(new OpDataElementUI
+            {
+                AtrbID = 11,
+                AtrbCd = "dc_id",
+                AtrbValue = "",
+                DcID = 0,
+                DcType = opDataElementType.ToId(),
+                DcParentType = opDataElementType.GetParent().ToId(),
+                DcParentID = 0
+            });
 
+            retSet[opDataElementType.ToString()].Add(new OpDataElementUI
+            {
+                AtrbID = 12,
+                AtrbCd = "dc_parent_id",
+                AtrbValue = "",
+                DcID = 0,
+                DcType = opDataElementType.ToId(),
+                DcParentType = opDataElementType.GetParent().ToId(),
+                DcParentID = 0
+            });
+        }
 
 
 
@@ -487,7 +483,7 @@ namespace Intel.MyDeals.DataLibrary
             // Load Data Cycle: Point 1
             // Save Data Cycle: Point 2
             // Save Data Cycle: Point 19
-            const bool mergeDealAndPrep = false; // Used to be a passed parameter....
+            //const bool mergeDealAndPrep = false; // Used to be a passed parameter....
 
 #if DEBUG
             DateTime start = DateTime.Now;

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Intel.Opaque.Data;
-using Intel.Opaque.Tools;
 
 namespace Intel.MyDeals.Entities
 {
@@ -12,28 +11,47 @@ namespace Intel.MyDeals.Entities
         // 1) Make it easier to keep the two lists in synch and 
         // 2) Provide a framework for other apps to do the same.
         // If needed, move to another namespace or assembly.
-        private static readonly Dictionary<string, OpDataElementType> Data = new Dictionary<string, OpDataElementType>
-        {
-            { "DEAL", OpDataElementType.Deals},
-            { "PREP", OpDataElementType.Secondary},
-            { "PLI", OpDataElementType.Tertiary },
-            { "GRP", OpDataElementType.Group},
+        //private static readonly Dictionary<string, OpDataElementType> Data = new Dictionary<string, OpDataElementType>
+        //{
+        //    { "DEAL", OpDataElementType.Deals},
+        //    { "PREP", OpDataElementType.Secondary},
+        //    { "PLI", OpDataElementType.Tertiary },
+        //    { "GRP", OpDataElementType.Group},
 
-            //{ "1", OpDataElementType.Contract},
-            //{ "2", OpDataElementType.PricingStrategy},
-            //{ "3", OpDataElementType.PricingTable},
-            { "CNTRCT", OpDataElementType.Contract},
-            { "PRC_ST", OpDataElementType.PricingStrategy},
-            { "PRCNG", OpDataElementType.PricingTable},
+        //    //{ "1", OpDataElementType.Contract},
+        //    //{ "2", OpDataElementType.PricingStrategy},
+        //    //{ "3", OpDataElementType.PricingTable},
+        //    { "CNTRCT", OpDataElementType.Contract},
+        //    { "PRC_ST", OpDataElementType.PricingStrategy},
+        //    { "PRCNG", OpDataElementType.PricingTable},
 
-            { "DRFT", OpDataElementType.WipDeals},
+        //    { "DRFT", OpDataElementType.WipDeals},
 
-            { "ARCH", OpDataElementType.Archive},
-            { "HIST", OpDataElementType.History},
-            { "SNAP", OpDataElementType.Snapshot},
-            { string.Empty, OpDataElementType.Unknown}
-        };
+        //    { "ARCH", OpDataElementType.Archive},
+        //    { "HIST", OpDataElementType.History},
+        //    { "SNAP", OpDataElementType.Snapshot},
+        //    { string.Empty, OpDataElementType.Unknown}
+        //};
 
+
+        private static readonly OpDataElementTypeCollection OpDetCollection = new OpDataElementTypeCollection(
+            new List<OpDataElementTypeItem>
+            {
+                new OpDataElementTypeItem { Id = 1, OpDeType = OpDataElementType.Contract, Alias = "CNTRCT", Order = 10 },
+                new OpDataElementTypeItem { Id = 2, OpDeType = OpDataElementType.PricingStrategy, Alias = "PRC_ST", Order = 20 },
+                new OpDataElementTypeItem { Id = 3, OpDeType = OpDataElementType.PricingTable, Alias = "PRCNG", Order = 30 },
+                new OpDataElementTypeItem { Id = 4, OpDeType = OpDataElementType.WipDeals, Alias = "DRFT", Order = 40 },
+                new OpDataElementTypeItem { Id = 5, OpDeType = OpDataElementType.Deals, Alias = "DEAL", Order = 50 }
+            },
+            new Dictionary<OpDataElementType, OpDataElementType>
+            {
+                [OpDataElementType.Contract] = OpDataElementType.PricingStrategy,
+                [OpDataElementType.PricingStrategy] = OpDataElementType.PricingTable,
+                [OpDataElementType.PricingTable] = OpDataElementType.WipDeals,
+                [OpDataElementType.WipDeals] = OpDataElementType.Unknown,
+                [OpDataElementType.Deals] = OpDataElementType.Unknown,
+            }
+        );
 
         /// <summary>
         /// Convert a value into a OpDataElementType
@@ -47,110 +65,43 @@ namespace Intel.MyDeals.Entities
                 return (OpDataElementType)strType;
             }
 
-            OpDataElementType ret;
-
-            return Data.TryGetValue($"{strType}", out ret) ? ret : OpTypeConverter.ParseEnum(strType, OpDataElementType.Unknown);
+            return OpDetCollection.Items.FirstOrDefault(o => o.OpDeType.ToString() == $"{strType}" || o.Alias == $"{strType}")?.OpDeType ?? OpDataElementType.Unknown;
         }
 
-        /// <summary>
-        /// Convert a OpDataElementType to a string of a known structure.
-        /// </summary>
-        /// <param name="en"></param>
-        /// <returns></returns>
-        public static string ToString(OpDataElementType en)
-        {
-            foreach (var itm in Data.Where(kvp => kvp.Value == en))
-            {
-                return itm.Key;
-            }
 
-            return string.Empty;
+        public static int ToId(this OpDataElementType opDataElementType)
+        {
+            return OpDetCollection.Items.FirstOrDefault(o => o.OpDeType == opDataElementType)?.Id ?? 0;
         }
 
-        // TODO - This is a total hack job because some calls in DB need to have packet type as an ID, not a string.  Go figure.
-        /// <summary>
-        /// Convert a OpDataElementType to an integer of a known structure.
-        /// </summary>
-        /// <param name="en"></param>
-        /// <returns></returns>
-        public static int ToId(this OpDataElementType en)
+        public static string ToAlias(this OpDataElementType opDataElementType)
         {
-            int packetId = 0; // Default error case if not found
-
-            switch (en)
-            {
-                case OpDataElementType.Contract:
-                    packetId = 1;
-                    break;
-                case OpDataElementType.PricingStrategy:
-                    packetId = 2;
-                    break;
-                case OpDataElementType.PricingTable:
-                    packetId = 3;
-                    break;
-                case OpDataElementType.WipDeals:
-                    packetId = 4;
-                    break;
-                case OpDataElementType.Deals:
-                    packetId = 5;
-                    break;
-            }
-
-            return packetId;
+            return OpDetCollection.Items.FirstOrDefault(o => o.OpDeType == opDataElementType)?.Alias ?? "";
         }
 
         public static OpDataElementType IdToString(this int packetId)
         {
-            OpDataElementType opType = OpDataElementType.Unknown; // Default error case if not found
-
-            switch (packetId)
-            {
-                case 1:
-                    opType = OpDataElementType.Contract;
-                    break;
-                case 2:
-                    opType = OpDataElementType.PricingStrategy;
-                    break;
-                case 3:
-                    opType = OpDataElementType.PricingTable;
-                    break;
-                case 4:
-                    opType = OpDataElementType.WipDeals;
-                    break;
-                case 5:
-                    opType = OpDataElementType.Deals;
-                    break;
-            }
-
-            return opType;
+            return OpDetCollection.Items.FirstOrDefault(o => o.Id == packetId)?.OpDeType ?? OpDataElementType.Unknown;
         }
 
         public static int StringToId(string packetName)
         {
-            int opType = 0; // Default error case if not found
-
-            switch (packetName)
-            {
-                case "Contract":
-                    opType = 1;
-                    break;
-                case "PricingStrategy":
-                    opType = 2;
-                    break;
-                case "PricingTable":
-                    opType = 3;
-                    break;
-                case "WipDeals":
-                    opType = 4;
-                    break;
-                case "Deals":
-                    opType = 5;
-                    break;
-            }
-
-            return opType;
+            return OpDetCollection.Items.FirstOrDefault(o => o.OpDeType.ToString() == packetName)?.Id ?? 0;
         }
 
+        public static OpDataElementType GetParent(this OpDataElementType opDataElementType)
+        {
+            return OpDetCollection.Heirarchy.Where(o => o.Value == opDataElementType).Select(o => o.Key).FirstOrDefault();
+        }
 
+        public static IEnumerable<OpDataElementType> GetChildren(this OpDataElementType opDataElementType)
+        {
+            return OpDetCollection.Heirarchy.Where(o => o.Key == opDataElementType).Select(o => o.Value);
+        }
+
+        public static OpDataElementType GetFirstChild(this OpDataElementType opDataElementType)
+        {
+            return opDataElementType.GetChildren().FirstOrDefault();
+        }
     }
 }

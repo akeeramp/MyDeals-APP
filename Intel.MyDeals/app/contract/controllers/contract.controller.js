@@ -14,7 +14,12 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
     //
     $scope.initContract = function (contractData) {
         // contract exists
-        if (contractData !== null && contractData !== undefined) return contractData.data[0];
+        if (contractData !== null && contractData !== undefined) {
+            if (contractData.data[0] !== undefined) return contractData.data[0];
+
+            // Could not find the contract
+            $state.go('nocontract');
+        }
 
         // new contract
         var c = util.clone($scope.templates.ObjectTemplates.Contract.Generic);
@@ -390,6 +395,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         ps.dc_parent_sid = ct.dc_sid;
         ps.PricingTable = [];
         ps.TITLE = $scope.newStrategy.TITLE;
+        debugger;
 
         // Add to DB first... then add to screen
         objsetService.createPricingStrategy($scope.getCustId(), ps).then(
@@ -451,7 +457,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         pt.OBJSET_TYPE_CD = $scope.newPricingTable.OBJSET_TYPE_CD;
         pt.TITLE = $scope.newPricingTable.TITLE;
         pt._defaultAtrbs = $scope.newPricingTable._defaultAtrbs;
-
+        debugger;
 
         // Add to DB first... then add to screen
         objsetService.createPricingTable($scope.getCustId(), pt).then(

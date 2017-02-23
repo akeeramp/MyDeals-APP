@@ -56,6 +56,8 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
 
         public static OpDataCollectorFlattenedList ToHierarchialList(this OpDataCollectorFlattenedDictList data, OpDataElementType opDataElementType)
         {
+            if (data.Count == 0) return new OpDataCollectorFlattenedList();
+
             Dictionary<OpDataElementType, OpDataElementType> decoder =
                 new Dictionary<OpDataElementType, OpDataElementType>
                 {

@@ -41,22 +41,16 @@ namespace Intel.MyDeals.DataLibrary
 
             if (includeTypes != null && includeTypes.Any())
             {
-                strInc = String.Join(",", includeTypes.Select(OpDataElementTypeConverter.ToString).Distinct());
+                strInc = string.Join(",", includeTypes.Select(OpDataElementTypeConverter.ToAlias).Distinct());
             }
 
             //// TODO change SP to match naming conventions
             //// --'CNTRCT, PRC_ST, PRCNG, WIP_DEAL, DEAL'
-            strInc = strInc.Replace(OpDataElementType.Contract.ToString(), "CNTRCT");
-            strInc = strInc.Replace(OpDataElementType.PricingStrategy.ToString(), "PRC_ST");
-            strInc = strInc.Replace(OpDataElementType.PricingTable.ToString(), "PRCNG");
-            strInc = strInc.Replace(OpDataElementType.WipDeals.ToString(), "WIP_DEAL");
-            strInc = strInc.Replace(OpDataElementType.Deals.ToString(), "DEAL");
-
-            //searchGroup = searchGroup.Replace(OpDataElementType.Contract.ToString(), "CNTRCT");
-            //searchGroup = searchGroup.Replace(OpDataElementType.PricingStrategy.ToString(), "PRC_ST");
-            //searchGroup = searchGroup.Replace(OpDataElementType.PricingTable.ToString(), "PRCNG");
-            //searchGroup = searchGroup.Replace(OpDataElementType.WipDeals.ToString(), "WIP_DEAL");
-            //searchGroup = searchGroup.Replace(OpDataElementType.Deals.ToString(), "DEAL");
+            strInc = strInc.Replace(OpDataElementType.Contract.ToString(), OpDataElementType.Contract.ToAlias());
+            strInc = strInc.Replace(OpDataElementType.PricingStrategy.ToString(), OpDataElementType.PricingStrategy.ToAlias());
+            strInc = strInc.Replace(OpDataElementType.PricingTable.ToString(), OpDataElementType.PricingTable.ToAlias());
+            strInc = strInc.Replace(OpDataElementType.WipDeals.ToString(), OpDataElementType.WipDeals.ToAlias());
+            strInc = strInc.Replace(OpDataElementType.Deals.ToString(), OpDataElementType.Deals.ToAlias());
 
 
             var cmd = new PR_MYDL_GET_OBJS_BY_SIDS() // PR_GET_OBJS_BY_KEYS in original case, new PR_GET_OBJS_BY_SIDS()

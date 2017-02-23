@@ -196,7 +196,7 @@ namespace Intel.MyDeals.DataLibrary
             }
 
             //exception will prevent this from ever returning
-            return "string";
+            //return "string";
         }
 
     }
