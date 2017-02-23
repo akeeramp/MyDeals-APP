@@ -234,7 +234,7 @@
 
         // Populate Deal Type DropDown
         function dealTypeCDDropDownEditor(container, options) {
-            $('<input id="dealTypeCDDropDownEditor" required name="' + options.field + '" />')
+            $('<input id="dealTypeCDDropDownEditor" name="' + options.field + '" />')
                 .appendTo(container)
                 .kendoDropDownList({
                     optionLabel: "Select Deal Type",
