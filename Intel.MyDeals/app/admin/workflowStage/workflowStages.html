@@ -4,3 +4,13 @@
 <div class="col-md-12" style="padding-top: 20px;">
     <div kendo-grid="workflowGrid" class="table" expand-k-grid options="vm.gridOptions"></div>
 </div>
+<style>
+    /*TODO: If all pages need this we have to paste it in Global CSS and have to check the effect in all the pages*/
+    .k-tooltip {
+        position: fixed;
+    }
+
+    .k-widget.k-tooltip.k-tooltip-validation.k-invalid-msg {
+        color: #ffffff !important;
+    }
+</style>
