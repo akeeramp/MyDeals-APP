@@ -152,17 +152,17 @@
 
                   ],
                   title: " ",
-                  width: "7%"
+                  width: "6%"
               },
-              { field: "WF_SID", title: "Id", width: "8%" },
+              { field: "WF_SID", title: "Id", width: "6%" },
               { field: "WF_NAME", title: "WF Name", width: "10%" },
               { field: "ROLE_TIER_NM", title: "Role Tier", width: "10%", editor: roleTierCDDropDownEditor },
-              { field: "OBJ_TYPE_SID", template: " #= OBJ_TYPE # ", title: "Obj Type", width: "12%", editor: objTypeCDDropDownEditor },
+              { field: "OBJ_TYPE_SID", template: " #= OBJ_TYPE # ", title: "Obj Type", width: "13%", editor: objTypeCDDropDownEditor },
               { field: "OBJ_SET_TYPE_SID", template: " #= OBJ_SET_TYPE_CD # ", title: "Deal Type", width: "10%", editor: dealTypeCDDropDownEditor },
               { field: "WFSTG_ACTN_SID", template: " #= WFSTG_ACTN_NM # ", title: "Action", width: "10%", editor: actionCDDropDownEditor },
-              { field: "WFSTG_MBR_SID", template: " #= WFSTG_CD_SRC # ", title: "Begin Stage", width: "10%", editor: srcCDDropDownEditor },
-              { field: "WFSTG_DEST_MBR_SID", template: " #= WFSTG_CD_DEST # ", title: "End Stage", width: "10%", editor: destCDDropDownEditor },
-              { field: "TRKR_NBR_UPD", title: "Update Tracker", width: "12%", template: "<div><span ng-if='! #= TRKR_NBR_UPD # ' class='icon-md intelicon-empty-box'></span><span ng-if=' #= TRKR_NBR_UPD # ' class='icon-md intelicon-filled-box'></span></div>" },
+              { field: "WFSTG_MBR_SID", template: " #= WFSTG_CD_SRC # ", title: "Begin Stage", width: "11%", editor: srcCDDropDownEditor },
+              { field: "WFSTG_DEST_MBR_SID", template: " #= WFSTG_CD_DEST # ", title: "End Stage", width: "11%", editor: destCDDropDownEditor },
+              { field: "TRKR_NBR_UPD", title: "Update Tracker", width: "11%", template: "<div><span ng-if='! #= TRKR_NBR_UPD # ' class='icon-md intelicon-empty-box'></span><span ng-if=' #= TRKR_NBR_UPD # ' class='icon-md intelicon-filled-box'></span></div>" },
             ]
         };
 

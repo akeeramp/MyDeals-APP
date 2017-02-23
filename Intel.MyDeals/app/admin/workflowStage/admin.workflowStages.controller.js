@@ -64,7 +64,7 @@
                             .then(
                                 function (response) {
                                     e.success(response.data);
-                                    logger.success("Workflow Deleted.");
+                                    logger.success("Workflow Stage Deleted.");
                                 },
                                 function (response) {
                                     $scope.workflowGrid.cancelChanges();
@@ -96,7 +96,7 @@
                         WFSTG_DESC: { validation: { required: true } },
                         ROLE_TIER_NM: { validation: { required: true } },
                         WFSTG_LOC: { validation: { required: true } },
-                        WFSTG_ORD: { type: "number", validation: { required: true, min: 1 } },
+                        WFSTG_ORD: { type: "number", format: "#", decimals: 0, validation: { required: true, min: 1 } },
                         ALLW_REDEAL: { type: "boolean" },
                     }
                 }
