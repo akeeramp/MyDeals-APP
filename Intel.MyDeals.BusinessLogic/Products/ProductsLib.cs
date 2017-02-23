@@ -270,21 +270,21 @@ namespace Intel.MyDeals.BusinessLogic
                 // Step 2: Find duplicate match products
                 var duplicateProds = from p in productMatchResults
                                      join t in tranlatedProducts
-                                     on p.HIER_VAL_NM equals t
-                                     group p by p.HIER_VAL_NM into d
+                                     on p.USR_INPUT equals t
+                                     group p by p.USR_INPUT into d
                                      where d.Count() > 1
                                      select d.Key;
 
                 // If any duplicates found extract them
                 if (duplicateProds.Any())
                 {
-                    var duplicateRecords = productMatchResults.FindAll(p => duplicateProds.Contains(p.HIER_VAL_NM));
+                    var duplicateRecords = productMatchResults.FindAll(p => duplicateProds.Contains(p.USR_INPUT));
 
                     var records = new Dictionary<string, List<PRD_LOOKUP_RESULTS>>();
 
                     duplicateProds.ToList().ForEach(d => records[d] = new List<PRD_LOOKUP_RESULTS>());
 
-                    duplicateRecords.ForEach(r => records[r.HIER_VAL_NM].Add(r));
+                    duplicateRecords.ForEach(r => records[r.USR_INPUT].Add(r));
 
                     productLookup.DuplicateProducts[userProduct.Key] = records;
                 }
@@ -292,8 +292,8 @@ namespace Intel.MyDeals.BusinessLogic
                 // Step 3: Find the Valid products
                 productLookup.ValidProducts[userProduct.Key] = new List<PRD_LOOKUP_RESULTS>();
 
-                var validProducts = productMatchResults.Where(p => !duplicateProds.Contains(p.HIER_VAL_NM)
-                                                            && tranlatedProducts.Any(t => t.Equals(p.HIER_VAL_NM, StringComparison.InvariantCultureIgnoreCase)));
+                var validProducts = productMatchResults.Where(p => !duplicateProds.Contains(p.USR_INPUT)
+                                                            && tranlatedProducts.Any(t => t.Equals(p.USR_INPUT, StringComparison.InvariantCultureIgnoreCase)));
 
                 productLookup.ValidProducts[userProduct.Key] = validProducts.ToList();
 
@@ -301,7 +301,7 @@ namespace Intel.MyDeals.BusinessLogic
 
                 // Step 4: Find InValid products, products which are present in master match result and not present in duplicate products and valid products
                 productLookup.InValidProducts[userProduct.Key] = tranlatedProducts.Where(t => !duplicateProds.Contains(t) &&
-                                        !validProducts.Any(v => v.HIER_VAL_NM.Equals(t, StringComparison.InvariantCultureIgnoreCase))).ToList();
+                                        !validProducts.Any(v => v.USR_INPUT.Equals(t, StringComparison.InvariantCultureIgnoreCase))).ToList();
             }
         }
 
