@@ -17,19 +17,13 @@ namespace Intel.MyDeals.DataLibrary
     public partial class DataCollectorDataLib : IDataCollectorDataLib
     {
 
-        
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lastCacheDate">Date of the current cache</param>
+        /// <returns></returns>
         public TemplateWrapper GetTemplateData(DateTime lastCacheDate)
         {
-            ////return new TemplateWrapper
-            ////{
-            ////    TemplateDict = ConvertDealTemplateDataGramsToOpDataElementUIs(null)
-            ////};
-            //lock (LOCK_OBJECT)
-            //{
-            //    if (_getTemplateData != null) { return _getTemplateData; }
-            //}
-
             if (lastCacheDate < OpaqueConst.SQL_MIN_DATE)
             {
                 lastCacheDate = OpaqueConst.SQL_MIN_DATE;
@@ -56,11 +50,6 @@ namespace Intel.MyDeals.DataLibrary
 
             ret.TemplateDict = ConvertDealTemplateDataGramsToOpDataElementUIs(ret.TemplateData);
 
-            //lock (LOCK_OBJECT)
-            //{
-            //    _getTemplateData = ret;
-            //    return ret;
-            //}
             return ret;
         }
 
@@ -832,242 +821,242 @@ namespace Intel.MyDeals.DataLibrary
                 .ToList();
         }
 
+        ///// <summary>
+        ///// A data packet to a data table
+        ///// </summary>
+        ///// <param name="odp">A valid data packet</param>
+        ///// <param name="custSid">Customer ID to pass to DB</param>
+        ///// <returns>A valid DataTable or null if input is invalid.</returns>
+        //private DataTable OpDataPacketToImportDataTable(OpDataPacket<OpDataElementType> odp, int custSid)
+        //{
+        //    // Save Data Cycle: Point 17
+
+        //    if (odp?.Data == null) // If no odp or odp has no actions, bail out
+        //    {
+        //        return null;
+        //    }
+
+        //    DataTable dt = new DataTable();
+
+        //    // The table name must match 1:1 to the import table name...
+        //    dt.TableName = TableName.STG_WIP_ATRB;
+
+        //    #region Get Ordinal Indexes
+        //    int IDX_DEAL_OBJ_TYPE_SID = dt.Columns.Add(Entities.deal.STG_WIP_ATRB.OBJ_TYPE_SID, typeof(int)).Ordinal; // Entities.deal.STG_WIP_ATRB.OBJ_ATRB_SID in old system
+
+        //    int IDX_ATRB_SID = dt.Columns.Add(Entities.deal.STG_WIP_ATRB.ATRB_SID, typeof(int)).Ordinal;
+        //    int IDX_ATRB_VAL = dt.Columns.Add(Entities.deal.STG_WIP_ATRB.ATRB_VAL, typeof(object)).Ordinal;
+
+        //    int IDX_DEAL_ATRB_MTX_SID = dt.Columns.Add(Entities.deal.STG_WIP_ATRB.ATRB_MTX_SID, typeof(int)).Ordinal;
+        //    int IDX_DEAL_ATRB_MTX_HASH = dt.Columns.Add(Entities.deal.STG_WIP_ATRB.ATRB_MTX_HASH, typeof(string)).Ordinal;
+
+        //    int IDX_OBJ_KEY = dt.Columns.Add(Entities.deal.STG_WIP_ATRB.OBJ_KEY, typeof(int)).Ordinal; // Internal DB ID for this item
+        //    int IDX_PARENT_OBJ_KEY = dt.Columns.Add(Entities.deal.STG_WIP_ATRB.PARENT_OBJ_KEY, typeof(int)).Ordinal;
+        //    int IDX_DEAL_ALT_SID = dt.Columns.Add(Entities.deal.STG_WIP_ATRB.OBJ_SID, typeof(int)).Ordinal;
+
+        //    int IDX_CUST_MBR_SID = dt.Columns.Add(Entities.deal.STG_WIP_ATRB.CUST_MBR_SID, typeof(int)).Ordinal;
+        //    int IDX_MDX_CD = dt.Columns.Add(Entities.deal.STG_WIP_ATRB.MDX_CD, typeof(string)).Ordinal; // M,D,X (Modify (I,U), Delete, No Action (X)), used to be DATA_TEXT vc(100) 
+        //    int IDX_BTCH_ID = dt.Columns.Add(Entities.deal.STG_WIP_ATRB.BTCH_ID, typeof(Guid)).Ordinal;
+        //    #endregion
+
+        //    if (!odp.Data.Any())
+        //    {
+        //        return dt;
+        //    }
+
+        //    foreach (var dc in odp.Data) // Good ParallelWait opportunity?
+        //    {
+        //        foreach (var de in dc.Value.DataElements)
+        //        {
+        //            // Create new data row to set the values on...
+        //            var r = dt.NewRow();
+        //            int dcId = (de.DcID == 0 ? dc.Key : de.DcID); // This one makes sense because DC Key is DcId
+        //            //int dcSid = (de.DcSID == 0 ? 0 : de.DcSID); //(de.DcSID == 0 ? dc.Key : de.DcSID);
+        //            int dcParentSid = (de.DcParentID == 0 ? 0 : de.DcParentID); //(de.DcParentSID == 0 ? dc.Key : de.DcParentSID);
+
+        //            r[IDX_BTCH_ID] = odp.BatchID;
+        //            r[IDX_DEAL_OBJ_TYPE_SID] = odp.PacketType.ToId(); // Set packet type
+        //            r[IDX_CUST_MBR_SID] = custSid; // Set customer
+
+        //            if (dcId != 0)
+        //            {
+        //                r[IDX_PARENT_OBJ_KEY] = dcParentSid;
+        //                r[IDX_DEAL_ALT_SID] = dcId;
+        //                //r[IDX_OBJ_KEY] = dcSid;
+        //            }
+
+        //            if (de.ElementID != 0)
+        //            {
+        //                r[IDX_DEAL_OBJ_TYPE_SID] = de.ElementID;
+        //            }
+
+        //            r[IDX_ATRB_SID] = de.AtrbID;
+        //            if (de.DimID > 0)
+        //            {
+        //                r[IDX_DEAL_ATRB_MTX_SID] = de.DimID;
+        //            }
+        //            else if (de.DimKey.Count > 0) // If we have the DIM ID (above, then don't send the hash)
+        //            {
+        //                r[IDX_DEAL_ATRB_MTX_HASH] = de.DimKey.HashPairs;
+        //            }
+        //            r[IDX_ATRB_VAL] = de.AtrbValue;
+        //            r[IDX_MDX_CD] = OpDataElementStateConverter.ToString(de.State);
+
+        //            // What about de.DcAltID
+
+        //            if (de.ExtraDimKey != null && de.ExtraDimKey.Count > 0)
+        //            { // Must see what happend to extra dim items - might drop...  Commented out for now.
+        //                // TODO - DealDataLib_Common.cs - Check to see if extra dim goes away
+        //                //Guid pg;
+        //                //if (de.ExtraDimKey.TryGet<Guid>(AttributeCodes.PLI_GUID, out pg))
+        //                //{
+        //                //    r[IDX_PLI_GUID] = pg;
+        //                //}
+
+        //                //Guid ag;
+        //                //if (de.ExtraDimKey.TryGet<Guid>(AttributeCodes.AGRMNT_GUID, out ag))
+        //                //{
+        //                //    r[IDX_AGRMNT_GUID] = ag;
+        //                //}
+        //            }
+
+        //            // If executing in parallel, lock around this....
+        //            dt.Rows.Add(r);
+        //        }
+        //    }
+
+        //    return dt;
+        //}
+
+        ///// <summary>
+        ///// An action packet to a data table
+        ///// </summary>
+        ///// <param name="odp">Data packet wiht valid actions</param>
+        ///// <param name="groupBatchId">Group batch with which these packets are associated.</param>
+        ///// <param name="wwid">WWID of user making the changes.</param>
+        ///// <returns></returns>
+        //private DataTable OpDataPacketToImportActionTable(OpDataPacket<OpDataElementType> odp, Guid groupBatchId, int wwid)
+        //{
+        //    // Save Data Cycle: Point 18
+
+        //    if (odp?.Actions == null) // If no odp or odp has no actions, bail out
+        //    {
+        //        return null;
+        //    }
+
+        //    DataTable dt = new DataTable();
+
+        //    // The table name must match 1:1 to the import table name...
+        //    dt.TableName = TableName.WIP_ACTN; // Work with Rick to make sure this is correct.
+
+        //    #region Get Ordinal Column Indexes
+        //    int IDX_DEAL_OBJ_TYPE_SID = dt.Columns.Add(Entities.deal.WIP_ACTN.OBJ_TYPE_SID, typeof(string)).Ordinal; // Used to be Entities.deal.WIP_ACTN.OBJ_SET in old system
+        //    int IDX_DEAL_ALT_SID = dt.Columns.Add(Entities.deal.WIP_ACTN.OBJ_SID, typeof(int)).Ordinal;
+
+        //    int IDX_OLD_OBJ_SID = dt.Columns.Add(Entities.deal.WIP_ACTN.OLD_OBJ_SID, typeof(int)).Ordinal;
+        //    int IDX_ACTN_CD = dt.Columns.Add(Entities.deal.WIP_ACTN.ACTN_CD, typeof(string)).Ordinal; // Max Len = 50
+        //    int IDX_MSG_CD = dt.Columns.Add(Entities.deal.WIP_ACTN.MSG_CD, typeof(string)).Ordinal; // Max Len = 10
+        //    int IDX_ACTN_VAL = dt.Columns.Add(Entities.deal.WIP_ACTN.ACTN_VAL, typeof(string)).Ordinal; // Max Len = 8000
+        //    int IDX_ACTN_VAL_LIST = dt.Columns.Add(Entities.deal.WIP_ACTN.ACTN_VAL_LIST, typeof(string)).Ordinal; // Max Len = 8000
+        //    int IDX_SRT_ORD = dt.Columns.Add(Entities.deal.WIP_ACTN.SRT_ORD, typeof(int)).Ordinal;
+        //    ////int IDX_DEAL_GRP_SID = dt.Columns.Add(Entities.deal.WIP_ACTN.DEAL_GRP_SID, typeof(int)).Ordinal;
+
+        //    // Unique to deal save returned results
+        //    int IDX_BTCH_ID = dt.Columns.Add(Entities.deal.WIP_ACTN.BTCH_ID, typeof(Guid)).Ordinal;
+        //    int IDX_DEAL_GRP_BTCH_ID = dt.Columns.Add(Entities.deal.WIP_ACTN.DEAL_GRP_BTCH_ID, typeof(Guid)).Ordinal;
+        //    int IDX_CHG_EMP_WWID = dt.Columns.Add(Entities.deal.WIP_ACTN.CHG_EMP_WWID, typeof(int)).Ordinal;
+
+        //    // Don't know if we'll need these at some point.
+        //    //int IDX_OBJ_KEY = dt.Columns.Add(Entities.deal.STG_WIP_ATRB.OBJ_KEY, typeof(int)).Ordinal; // Internal DB ID for this item
+        //    //int IDX_PARENT_OBJ_KEY = dt.Columns.Add(Entities.deal.STG_WIP_ATRB.PARENT_OBJ_KEY, typeof(int)).Ordinal;
+        //    #endregion
+
+        //    if (odp.Actions.Count == 0)
+        //    {
+        //        return dt;
+        //    }
+
+        //    int chgWwid = wwid;
+        //    bool hasGroupBatch = OpTypeConverter.IsValidGuid(groupBatchId);
+
+        //    if (odp.Actions.Any(a => a.Sort == MyDealsDataAction.DEFAULT_SORT))
+        //    {
+        //        // Any unsorted actions should come BEFORE all the sorted actions (Mike's request)
+        //        const int maxSort = -1000000000;
+
+        //        foreach (var kvpAct in MyDealsDataAction.DEFAULT_ACTION_SORT_ORDER)
+        //        {
+        //            foreach (
+        //                var act in
+        //                    odp.Actions.Where(a => a.Action == kvpAct.Key && a.Sort == MyDealsDataAction.DEFAULT_SORT))
+        //            {
+        //                act.Sort = maxSort + kvpAct.Value;
+
+        //                OpLogPerf.Log("WARNING! Unset Action Sort Order! Action: {0}; Value: {1};  Targets: {2}",
+        //                    act.Action,
+        //                    act.Value,
+        //                    (act.TargetDcIDs == null ? "" : string.Join(", ", act.TargetDcIDs))
+        //                    );
+        //            }
+        //        }
+        //    }
+
+        //    foreach (var oa in odp.Actions.Where(a => a.ActionDirection != OpActionDirection.Outbound))
+        //    // Good ParallelWait opportunity?
+        //    {
+        //        var r = dt.NewRow();
+        //        r[IDX_BTCH_ID] = odp.BatchID;
+        //        r[IDX_CHG_EMP_WWID] = chgWwid;
+
+        //        if (oa.DcID != null && oa.DcID != 0)
+        //        {
+        //            r[IDX_DEAL_ALT_SID] = oa.DcID;
+        //            r[IDX_OLD_OBJ_SID] = oa.DcID;
+        //        }
+
+        //        r[IDX_DEAL_OBJ_TYPE_SID] = odp.PacketType.ToId(); // Set packet type
+        //        r[IDX_ACTN_CD] = oa.Action;
+        //        r[IDX_ACTN_VAL] = oa.Value;
+        //        r[IDX_SRT_ORD] = oa.Sort;
+
+        //        if (oa.TargetDcIDs != null && oa.TargetDcIDs.Count > 0)
+        //        {
+        //            r[IDX_ACTN_VAL_LIST] = String.Join(",", oa.TargetDcIDs);
+        //        }
+
+        //        if (hasGroupBatch)
+        //        {
+        //            r[IDX_DEAL_GRP_BTCH_ID] = groupBatchId;
+        //        }
+
+        //        //if (odp.GroupID != null && odp.GroupID > 0)
+        //        //{
+        //        //    r[IDX_DEAL_GRP_BTCH_ID] = odp.GroupID;
+        //        //}
+
+        //        if (oa.MessageCode != OpMsg.MessageType.Debug)
+        //        // This is the default, and I couldn't see a reason to write it to the DB...
+        //        {
+        //            r[IDX_MSG_CD] = Enum.GetName(typeof(OpMsg.MessageType), oa.MessageCode);
+        //        }
+
+        //        // If executing in parallel, lock around this....
+        //        dt.Rows.Add(r);
+        //    }
+        //    return dt;
+        //}
+
+
+
+
+
         /// <summary>
         /// A data packet to a data table
         /// </summary>
         /// <param name="odp">A valid data packet</param>
         /// <param name="custSid">Customer ID to pass to DB</param>
         /// <returns>A valid DataTable or null if input is invalid.</returns>
-        private DataTable OpDataPacketToImportDataTable(OpDataPacket<OpDataElementType> odp, int custSid)
-        {
-            // Save Data Cycle: Point 17
-
-            if (odp?.Data == null) // If no odp or odp has no actions, bail out
-            {
-                return null;
-            }
-
-            DataTable dt = new DataTable();
-
-            // The table name must match 1:1 to the import table name...
-            dt.TableName = TableName.STG_WIP_ATRB;
-
-            #region Get Ordinal Indexes
-            int IDX_DEAL_OBJ_TYPE_SID = dt.Columns.Add(Entities.deal.STG_WIP_ATRB.OBJ_TYPE_SID, typeof(int)).Ordinal; // Entities.deal.STG_WIP_ATRB.OBJ_ATRB_SID in old system
-
-            int IDX_ATRB_SID = dt.Columns.Add(Entities.deal.STG_WIP_ATRB.ATRB_SID, typeof(int)).Ordinal;
-            int IDX_ATRB_VAL = dt.Columns.Add(Entities.deal.STG_WIP_ATRB.ATRB_VAL, typeof(object)).Ordinal;
-
-            int IDX_DEAL_ATRB_MTX_SID = dt.Columns.Add(Entities.deal.STG_WIP_ATRB.ATRB_MTX_SID, typeof(int)).Ordinal;
-            int IDX_DEAL_ATRB_MTX_HASH = dt.Columns.Add(Entities.deal.STG_WIP_ATRB.ATRB_MTX_HASH, typeof(string)).Ordinal;
-
-            int IDX_OBJ_KEY = dt.Columns.Add(Entities.deal.STG_WIP_ATRB.OBJ_KEY, typeof(int)).Ordinal; // Internal DB ID for this item
-            int IDX_PARENT_OBJ_KEY = dt.Columns.Add(Entities.deal.STG_WIP_ATRB.PARENT_OBJ_KEY, typeof(int)).Ordinal;
-            int IDX_DEAL_ALT_SID = dt.Columns.Add(Entities.deal.STG_WIP_ATRB.OBJ_SID, typeof(int)).Ordinal;
-
-            int IDX_CUST_MBR_SID = dt.Columns.Add(Entities.deal.STG_WIP_ATRB.CUST_MBR_SID, typeof(int)).Ordinal;
-            int IDX_MDX_CD = dt.Columns.Add(Entities.deal.STG_WIP_ATRB.MDX_CD, typeof(string)).Ordinal; // M,D,X (Modify (I,U), Delete, No Action (X)), used to be DATA_TEXT vc(100) 
-            int IDX_BTCH_ID = dt.Columns.Add(Entities.deal.STG_WIP_ATRB.BTCH_ID, typeof(Guid)).Ordinal;
-            #endregion
-
-            if (!odp.Data.Any())
-            {
-                return dt;
-            }
-
-            foreach (var dc in odp.Data) // Good ParallelWait opportunity?
-            {
-                foreach (var de in dc.Value.DataElements)
-                {
-                    // Create new data row to set the values on...
-                    var r = dt.NewRow();
-                    int dcId = (de.DcID == 0 ? dc.Key : de.DcID); // This one makes sense because DC Key is DcId
-                    //int dcSid = (de.DcSID == 0 ? 0 : de.DcSID); //(de.DcSID == 0 ? dc.Key : de.DcSID);
-                    int dcParentSid = (de.DcParentID == 0 ? 0 : de.DcParentID); //(de.DcParentSID == 0 ? dc.Key : de.DcParentSID);
-
-                    r[IDX_BTCH_ID] = odp.BatchID;
-                    r[IDX_DEAL_OBJ_TYPE_SID] = odp.PacketType.ToId(); // Set packet type
-                    r[IDX_CUST_MBR_SID] = custSid; // Set customer
-
-                    if (dcId != 0)
-                    {
-                        r[IDX_PARENT_OBJ_KEY] = dcParentSid;
-                        r[IDX_DEAL_ALT_SID] = dcId;
-                        //r[IDX_OBJ_KEY] = dcSid;
-                    }
-
-                    if (de.ElementID != 0)
-                    {
-                        r[IDX_DEAL_OBJ_TYPE_SID] = de.ElementID;
-                    }
-
-                    r[IDX_ATRB_SID] = de.AtrbID;
-                    if (de.DimID > 0)
-                    {
-                        r[IDX_DEAL_ATRB_MTX_SID] = de.DimID;
-                    }
-                    else if (de.DimKey.Count > 0) // If we have the DIM ID (above, then don't send the hash)
-                    {
-                        r[IDX_DEAL_ATRB_MTX_HASH] = de.DimKey.HashPairs;
-                    }
-                    r[IDX_ATRB_VAL] = de.AtrbValue;
-                    r[IDX_MDX_CD] = OpDataElementStateConverter.ToString(de.State);
-
-                    // What about de.DcAltID
-
-                    if (de.ExtraDimKey != null && de.ExtraDimKey.Count > 0)
-                    { // Must see what happend to extra dim items - might drop...  Commented out for now.
-                        // TODO - DealDataLib_Common.cs - Check to see if extra dim goes away
-                        //Guid pg;
-                        //if (de.ExtraDimKey.TryGet<Guid>(AttributeCodes.PLI_GUID, out pg))
-                        //{
-                        //    r[IDX_PLI_GUID] = pg;
-                        //}
-
-                        //Guid ag;
-                        //if (de.ExtraDimKey.TryGet<Guid>(AttributeCodes.AGRMNT_GUID, out ag))
-                        //{
-                        //    r[IDX_AGRMNT_GUID] = ag;
-                        //}
-                    }
-
-                    // If executing in parallel, lock around this....
-                    dt.Rows.Add(r);
-                }
-            }
-
-            return dt;
-        }
-
-        /// <summary>
-        /// An action packet to a data table
-        /// </summary>
-        /// <param name="odp">Data packet wiht valid actions</param>
-        /// <param name="groupBatchId">Group batch with which these packets are associated.</param>
-        /// <param name="wwid">WWID of user making the changes.</param>
-        /// <returns></returns>
-        private DataTable OpDataPacketToImportActionTable(OpDataPacket<OpDataElementType> odp, Guid groupBatchId, int wwid)
-        {
-            // Save Data Cycle: Point 18
-
-            if (odp?.Actions == null) // If no odp or odp has no actions, bail out
-            {
-                return null;
-            }
-
-            DataTable dt = new DataTable();
-
-            // The table name must match 1:1 to the import table name...
-            dt.TableName = TableName.WIP_ACTN; // Work with Rick to make sure this is correct.
-
-            #region Get Ordinal Column Indexes
-            int IDX_DEAL_OBJ_TYPE_SID = dt.Columns.Add(Entities.deal.WIP_ACTN.OBJ_TYPE_SID, typeof(string)).Ordinal; // Used to be Entities.deal.WIP_ACTN.OBJ_SET in old system
-            int IDX_DEAL_ALT_SID = dt.Columns.Add(Entities.deal.WIP_ACTN.OBJ_SID, typeof(int)).Ordinal;
-
-            int IDX_OLD_OBJ_SID = dt.Columns.Add(Entities.deal.WIP_ACTN.OLD_OBJ_SID, typeof(int)).Ordinal;
-            int IDX_ACTN_CD = dt.Columns.Add(Entities.deal.WIP_ACTN.ACTN_CD, typeof(string)).Ordinal; // Max Len = 50
-            int IDX_MSG_CD = dt.Columns.Add(Entities.deal.WIP_ACTN.MSG_CD, typeof(string)).Ordinal; // Max Len = 10
-            int IDX_ACTN_VAL = dt.Columns.Add(Entities.deal.WIP_ACTN.ACTN_VAL, typeof(string)).Ordinal; // Max Len = 8000
-            int IDX_ACTN_VAL_LIST = dt.Columns.Add(Entities.deal.WIP_ACTN.ACTN_VAL_LIST, typeof(string)).Ordinal; // Max Len = 8000
-            int IDX_SRT_ORD = dt.Columns.Add(Entities.deal.WIP_ACTN.SRT_ORD, typeof(int)).Ordinal;
-            ////int IDX_DEAL_GRP_SID = dt.Columns.Add(Entities.deal.WIP_ACTN.DEAL_GRP_SID, typeof(int)).Ordinal;
-
-            // Unique to deal save returned results
-            int IDX_BTCH_ID = dt.Columns.Add(Entities.deal.WIP_ACTN.BTCH_ID, typeof(Guid)).Ordinal;
-            int IDX_DEAL_GRP_BTCH_ID = dt.Columns.Add(Entities.deal.WIP_ACTN.DEAL_GRP_BTCH_ID, typeof(Guid)).Ordinal;
-            int IDX_CHG_EMP_WWID = dt.Columns.Add(Entities.deal.WIP_ACTN.CHG_EMP_WWID, typeof(int)).Ordinal;
-
-            // Don't know if we'll need these at some point.
-            //int IDX_OBJ_KEY = dt.Columns.Add(Entities.deal.STG_WIP_ATRB.OBJ_KEY, typeof(int)).Ordinal; // Internal DB ID for this item
-            //int IDX_PARENT_OBJ_KEY = dt.Columns.Add(Entities.deal.STG_WIP_ATRB.PARENT_OBJ_KEY, typeof(int)).Ordinal;
-            #endregion
-
-            if (odp.Actions.Count == 0)
-            {
-                return dt;
-            }
-
-            int chgWwid = wwid;
-            bool hasGroupBatch = OpTypeConverter.IsValidGuid(groupBatchId);
-
-            if (odp.Actions.Any(a => a.Sort == MyDealsDataAction.DEFAULT_SORT))
-            {
-                // Any unsorted actions should come BEFORE all the sorted actions (Mike's request)
-                const int maxSort = -1000000000;
-
-                foreach (var kvpAct in MyDealsDataAction.DEFAULT_ACTION_SORT_ORDER)
-                {
-                    foreach (
-                        var act in
-                            odp.Actions.Where(a => a.Action == kvpAct.Key && a.Sort == MyDealsDataAction.DEFAULT_SORT))
-                    {
-                        act.Sort = maxSort + kvpAct.Value;
-
-                        OpLogPerf.Log("WARNING! Unset Action Sort Order! Action: {0}; Value: {1};  Targets: {2}",
-                            act.Action,
-                            act.Value,
-                            (act.TargetDcIDs == null ? "" : string.Join(", ", act.TargetDcIDs))
-                            );
-                    }
-                }
-            }
-
-            foreach (var oa in odp.Actions.Where(a => a.ActionDirection != OpActionDirection.Outbound))
-            // Good ParallelWait opportunity?
-            {
-                var r = dt.NewRow();
-                r[IDX_BTCH_ID] = odp.BatchID;
-                r[IDX_CHG_EMP_WWID] = chgWwid;
-
-                if (oa.DcID != null && oa.DcID != 0)
-                {
-                    r[IDX_DEAL_ALT_SID] = oa.DcID;
-                    r[IDX_OLD_OBJ_SID] = oa.DcID;
-                }
-
-                r[IDX_DEAL_OBJ_TYPE_SID] = odp.PacketType.ToId(); // Set packet type
-                r[IDX_ACTN_CD] = oa.Action;
-                r[IDX_ACTN_VAL] = oa.Value;
-                r[IDX_SRT_ORD] = oa.Sort;
-
-                if (oa.TargetDcIDs != null && oa.TargetDcIDs.Count > 0)
-                {
-                    r[IDX_ACTN_VAL_LIST] = String.Join(",", oa.TargetDcIDs);
-                }
-
-                if (hasGroupBatch)
-                {
-                    r[IDX_DEAL_GRP_BTCH_ID] = groupBatchId;
-                }
-
-                //if (odp.GroupID != null && odp.GroupID > 0)
-                //{
-                //    r[IDX_DEAL_GRP_BTCH_ID] = odp.GroupID;
-                //}
-
-                if (oa.MessageCode != OpMsg.MessageType.Debug)
-                // This is the default, and I couldn't see a reason to write it to the DB...
-                {
-                    r[IDX_MSG_CD] = Enum.GetName(typeof(OpMsg.MessageType), oa.MessageCode);
-                }
-
-                // If executing in parallel, lock around this....
-                dt.Rows.Add(r);
-            }
-            return dt;
-        }
-
-
-
-
-
-        /// <summary>
-        /// A data packet to a data table
-        /// </summary>
-        /// <param name="odp">A valid data packet</param>
-        /// <param name="custSid">Customer ID to pass to DB</param>
-        /// <returns>A valid DataTable or null if input is invalid.</returns>
-        private DataTable OpDataPacketToImportDataTableNew(OpDataPacket<OpDataElementType> odp, int custSid, int wwid)
+        private DataTable OpDataPacketToImportDataTable(OpDataPacket<OpDataElementType> odp, int custSid, int wwid)
         {
             // Save Data Cycle: Point 17
 
@@ -1186,7 +1175,7 @@ namespace Intel.MyDeals.DataLibrary
         /// <param name="groupBatchId">Group batch with which these packets are associated.</param>
         /// <param name="wwid">WWID of user making the changes.</param>
         /// <returns></returns>
-        private DataTable OpDataPacketToImportActionTableNew(OpDataPacket<OpDataElementType> odp, Guid groupBatchId, int wwid)
+        private DataTable OpDataPacketToImportActionTable(OpDataPacket<OpDataElementType> odp, Guid groupBatchId, int wwid)
         {
             // Save Data Cycle: Point 18
 
