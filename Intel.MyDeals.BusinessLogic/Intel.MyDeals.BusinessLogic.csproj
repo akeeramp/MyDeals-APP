@@ -93,6 +93,7 @@
     <Compile Include="Deals\DealsLib_Get.cs" />
     <Compile Include="Deals\DealsLib_Save.cs" />
     <Compile Include="DataCollectors\OpDataElementUIExtensions.cs" />
+    <Compile Include="Dropdowns\DropdownLib.cs" />
     <Compile Include="Employees\EmployeesLib.cs" />
     <Compile Include="Geos\GeosLib.cs" />
     <Compile Include="Helpers\OpUserTokenHelpers.cs" />

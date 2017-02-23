@@ -183,7 +183,16 @@
 					, url: 'SecurityEngine'
 					, controller: 'securityEngineController as vm'
 				}
-			}
+			},
+            {
+                state: 'admin.dropdowns',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/dropdowns/dropdowns.html'
+                    , url: 'dropdowns'
+					, controller: 'DropdownsController as vm'
+                }
+            }
         ];
     }
 })();

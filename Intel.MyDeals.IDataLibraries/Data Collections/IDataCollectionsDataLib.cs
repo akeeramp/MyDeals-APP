@@ -39,5 +39,9 @@ namespace Intel.MyDeals.IDataLibrary
         List<ProductCategory> GetProductCategories();
 
         List<ProductAlias> GetProductsFromAlias();
+
+        List<BasicDropdown> GetBasicDropdowns();
+
+        List<Dropdown> GetDropdowns();
     }
 }

@@ -252,6 +252,7 @@
     <Compile Include="Controllers\API\ApiBaseController.cs" />
     <Compile Include="Controllers\API\ConstantsController.cs" />
     <Compile Include="Controllers\API\CustomerCalendarController.cs" />
+    <Compile Include="Controllers\API\DropdownController.cs" />
     <Compile Include="Controllers\API\ProductsCategoriesController.cs" />
     <Compile Include="Controllers\API\RulesController.cs" />
     <Compile Include="Controllers\API\ProductsController.cs" />
@@ -301,6 +302,9 @@
     <Content Include="app\admin\customer\admin.customer.controller.js" />
     <Content Include="app\admin\customer\customer.html" />
     <Content Include="app\admin\customer\customer.service.js" />
+    <Content Include="app\admin\dropdowns\admin.dropdowns.controller.js" />
+    <Content Include="app\admin\dropdowns\dropdowns.html" />
+    <Content Include="app\admin\dropdowns\dropdowns.service.js" />
     <Content Include="app\admin\geo\admin.geo.controller.js" />
     <Content Include="app\admin\geo\geo.html" />
     <Content Include="app\admin\geo\geo.service.js" />

@@ -9,20 +9,21 @@ namespace Intel.MyDeals.BusinessLogic
     {
         public void SetUp(IRegisterService registerService)
         {
+            registerService.RegisterType<ICacheLib, CacheLib>();
+            registerService.RegisterType<IContractsLib, ContractsLib>();
             registerService.RegisterType<IConstantsLookupsLib, ConstantsLookupsLib>();
             registerService.RegisterType<ICustomerCalendarLib, CustomerCalendarLib>();
-            registerService.RegisterType<ICacheLib, CacheLib>();
             registerService.RegisterType<ICustomerLib, CustomerLib>();
-            registerService.RegisterType<IGeosLib, GeosLib>();
-            registerService.RegisterType<IProductsLib, ProductsLib>();
-			registerService.RegisterType<IProductCategoriesLib, ProductCategoriesLib>();
-			registerService.RegisterType<ISecurityAttributesLib, SecurityAttributesLib>();
-            registerService.RegisterType<IRuleEngineLib, RuleEngineLib>();
-            registerService.RegisterType<ILoggingLib, LoggingLib>();
             registerService.RegisterType<IDataCollectorLib, DataCollectorLib>();
-            registerService.RegisterType<IContractsLib, ContractsLib>();
+            registerService.RegisterType<IDropdownLib, DropdownLib>();
+            registerService.RegisterType<IGeosLib, GeosLib>();
+            registerService.RegisterType<ILoggingLib, LoggingLib>();
             registerService.RegisterType<IPricingStrategiesLib, PricingStrategiesLib>();
             registerService.RegisterType<IPricingTablesLib, PricingTablesLib>();
+            registerService.RegisterType<IProductsLib, ProductsLib>();
+			registerService.RegisterType<IProductCategoriesLib, ProductCategoriesLib>();
+            registerService.RegisterType<IRuleEngineLib, RuleEngineLib>();
+            registerService.RegisterType<ISecurityAttributesLib, SecurityAttributesLib>();
             registerService.RegisterType<IUiTemplateLib, UiTemplateLib>();
             registerService.RegisterType<IWorkFlowLib, WorkFlowLib>();
         }

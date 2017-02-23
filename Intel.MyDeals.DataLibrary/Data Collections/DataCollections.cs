@@ -495,6 +495,28 @@ namespace Intel.MyDeals.DataLibrary
 
         private static List<ProductCategory> _getProductCategories;
 
-        #endregion Product Categories
+        #endregion
+
+        #region Dropdowns
+
+        public static List<BasicDropdown> GetBasicDropdowns()
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                return _getBasicDropdowns ?? (_getBasicDropdowns = new DropdownDataLib().GetBasicDropdowns());
+            }
+        }
+        private static List<BasicDropdown> _getBasicDropdowns;
+
+        public static List<Dropdown> GetDropdowns()
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                return _getDropdowns ?? (_getDropdowns = new DropdownDataLib().GetDropdowns());
+            }
+        }
+        private static List<Dropdown> _getDropdowns;
+
+        #endregion
     }
 }

@@ -51,8 +51,9 @@
     <Compile Include="Constants Lookups\IConstantLookupDataLib.cs" />
     <Compile Include="CustomerCalendar\ICustomerCalendarDataLib.cs" />
     <Compile Include="Customer\ICustomerDataLib.cs" />
-    <Compile Include="Data Collectors\IDataCollectorDataLib.cs" />
     <Compile Include="Data Collections\IDataCollectionsDataLib.cs" />
+    <Compile Include="Data Collectors\IDataCollectorDataLib.cs" />
+    <Compile Include="Dropdowns\IDropdownDataLib.cs" />
     <Compile Include="Geos\IGeoDataLib.cs" />
     <Compile Include="Logging\ILoggingDataLib.cs" />
     <Compile Include="ProductCategories\IProductCategoriesDataLib.cs" />
@@ -70,6 +71,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="DataCollections\" />
     <Folder Include="ProductCategoriesLib\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

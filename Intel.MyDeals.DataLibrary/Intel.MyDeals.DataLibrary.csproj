@@ -88,6 +88,7 @@
     <Compile Include="Data Collectors\DataCollectorDataLib_Get.cs" />
     <Compile Include="DataLibrary.cs" />
     <Compile Include="Data Collectors\DataCollectorDataLib_Save.cs" />
+    <Compile Include="Dropdowns\DropdownDataLib.cs" />
     <Compile Include="ProductCategoriesLib\ProductCategoriesDataLib.cs" />
     <Compile Include="Products\ProductDataLib.cs" />
     <Compile Include="Resolver.cs" />

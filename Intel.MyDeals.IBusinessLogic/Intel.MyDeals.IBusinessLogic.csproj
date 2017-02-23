@@ -58,6 +58,7 @@
     <Compile Include="Customer\ICustomerLib.cs" />
     <Compile Include="DataCollections\ICacheLib.cs" />
     <Compile Include="DataCollectors\IDataCollectorLib.cs" />
+    <Compile Include="Dropdowns\IDropdownLib.cs" />
     <Compile Include="Geos\IGeosLib.cs" />
     <Compile Include="Logging\ILoggingLib.cs" />
     <Compile Include="PricingStrategies\IPricingStrategiesLib.cs" />
