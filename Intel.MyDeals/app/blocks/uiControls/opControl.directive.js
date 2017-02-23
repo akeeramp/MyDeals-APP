@@ -3,9 +3,9 @@
     .directive('opControl', opControl);
 
 // Minification safe dependency injection
-opControl.$inject = ['$http', 'lookupsService', '$compile', '$templateCache', 'logger', '$q'];
+opControl.$inject = ['$http', 'lookupsService', '$compile', '$templateCache', 'logger', '$q', '$linq'];
 
-function opControl($http, lookupsService, $compile, $templateCache, logger, $q) {
+function opControl($http, lookupsService, $compile, $templateCache, logger, $q, $linq) {
     var getTemplate = function (controlType) {
         var baseUrl = 'app/blocks/uiControls/partials/';
         var templateMap = {
@@ -44,6 +44,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q) 
         if (scope.opIsSaved === undefined) scope.opIsSaved = false;
         if (scope.opValidMsg === undefined) scope.opValidMsg = "";
 
+        var serviceData = []; // data from the service will be pushed into this.
         if (scope.opLookupUrl !== undefined && scope.opLookupUrl !== "undefined") {
             scope.values = {
                 transport: {
@@ -54,11 +55,8 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q) 
                 },
                 schema: {
                     parse: function (data) {
-                        var newData = [];
-                        $.each(data, function (idx, elem) {
-                            newData.push({ 'text': elem[scope.opLookupText], 'value': elem[scope.opLookupValue] });
-                        });
-                        return newData;
+                        serviceData = data; // data from the service will be pushed into this.
+                        return serviceData;
                     }
                 }
             }
@@ -74,17 +72,35 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q) 
 
         scope.$watch('value',
             function (newValue, oldValue, el) {
-                //debugger;
                 if (oldValue === newValue) return;
                 el.opIsDirty = true;
-                if (el.$parent.opValue !== undefined) el.$parent.opValue._dirty = true;
-                if (el.$parent.value !== undefined) el.$parent.value._dirty = true;
-                //alert("value changed");
-                //debugger;
+
+                if (el.$parent.opValue !== undefined) {
+                    el.$parent.opValue._dirty = true;
+                    el.$parent.opValue[scope.opSelectedObject] = updateSeletedObject();
+                }
+
+                if (el.$parent.value !== undefined) {
+                    el.$parent.value._dirty = true;
+                    el.$parent.value[scope.opSelectedObject] = updateSeletedObject();
+                }
             });
 
         // Kendo tooltip content doesn't observe binding data changes, work around it to observe changes.
         scope.tooltipMsg = "{{opValidMsg}}";
+
+        function updateSeletedObject() {
+            if (!!scope.opSelectedObject && (scope.opType === 'DROPDOWN' || scope.opType === 'COMBOBOX')) {
+                var selected = [];
+                $.each(serviceData, function (idx, elem) {
+                    if (elem[scope.opLookupValue] == scope.value) {
+                        selected = elem;
+                        return false;
+                    }
+                });
+                return selected;
+            }
+        }
     }
 
     return {
@@ -102,6 +118,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q) 
             opLookupUrl: '=',
             opLookupText: '=',
             opLookupValue: '=',
+            opSelectedObject : '=',
             opUiMode: '=',
             opCd: '=',
             opType: '=',

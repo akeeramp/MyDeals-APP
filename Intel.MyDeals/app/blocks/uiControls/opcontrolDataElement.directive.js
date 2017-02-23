@@ -17,6 +17,7 @@ function opControlDataElement($http, lookupsService, $compile, $templateCache, l
         el += ' op-lookup-url="\'' + scope.opLookupUrl + '\'"';
         el += ' op-lookup-text="\'' + scope.opLookupText + '\'"';
         el += ' op-lookup-value="\'' + scope.opLookupValue + '\'"';
+        el += ' op-lookup-value="\'' + scope.opSelectedObject + '\'"';
         el += ' op-valid-msg="opValue.' + scope.opCd + '.validMsg"';
         el += ' op-is-error="opValue.' + scope.opCd + '.isError"';
         el += ' op-is-saved="opValue.' + scope.opCd + '.isSaved"';
@@ -43,7 +44,8 @@ function opControlDataElement($http, lookupsService, $compile, $templateCache, l
             opCd: '=',
             opLookupUrl: '=',
             opLookupText: '=',
-            opLookupValue: '='
+            opLookupValue: '=',
+            opSelectedObject: '='
         },
         link: linker
     }

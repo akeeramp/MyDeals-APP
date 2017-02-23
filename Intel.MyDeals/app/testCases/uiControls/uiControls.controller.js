@@ -210,7 +210,9 @@
                 "INT": 123,
                 "DATE": "2/4/2016",
                 "DROPDOWN": "DROPDOWN 2",
+                "DropdownSelected": [],
                 "COMBOBOX": "COMBOBOX 3",
+                "ComboboxSelected": [],
                 "_MultiDim": [
                     {
                         "PIVOT": -1,
