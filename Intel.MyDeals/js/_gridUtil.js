@@ -37,8 +37,15 @@ gridUtils.getFormat = function (lType, lFormat) {
     return lFormat === undefined ? "" : "| " + lFormat;
 }
 
-gridUtils.onDataValueChange = function(e) {
+gridUtils.onDataValueChange = function (e) {
     return null;
+}
+
+gridUtils.boolViewer = function (field) {
+    return "<toggle size='btn-sm' ng-model='dataItem." + field + "' ng-disabled='true'></toggle>";
+}
+gridUtils.boolEditor = function (container, options) {
+    $("<toggle size='btn-sm' field='" + options.field + "' ng-model='dataItem." + options.field + "' ></toggle>").appendTo(container);
 }
 
 gridUtils.lookupEditor = function (container, options) {

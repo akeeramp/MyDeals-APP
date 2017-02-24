@@ -6070,6 +6070,53 @@ div.k-scheduler-marquee:after {
 .k-filter-menu.k-popup label input {
     margin-right: 5px;
 }
+.k-filter-menu div label {
+    margin-right: 10px;
+    margin-top: 5px;
+}
+.k-filter-menu div label input {
+    margin-right: 5px;
+}
+
+.k-widget.k-tooltip.k-tooltip-validation.k-invalid-msg {
+    background-color: #ED1C24 !important;
+    color: #ffffff !important;
+    padding: 5px 10px;
+}
+.k-widget.k-tooltip.k-tooltip-validation.k-invalid-msg .k-icon {
+    color: #ffffff !important;
+    margin-right: 10px;
+    opacity: 1;
+    font-size: 16px;
+}
+
+.k-tooltip-validation .k-callout-n {
+    border-bottom-color: #ED1C24 !important;    
+}
+
+
+/* toggle */
+.toggle {
+    height: 20px !important;
+    width: 25px !important;
+}
+
+.toggle .btn-primary {
+    background-color: #00AEEF;
+}
+.toggle .btn[disabled].btn-primary {
+    color: #ffffff !important;
+}
+.toggle .btn[disabled].btn-primary:hover {
+    background-color: #00AEEF;
+}
+.toggle .btn-default {
+    background-color: #eeeeee;
+}
+.k-grid-content .toggle.btn {
+    min-width: 10px !important; 
+    min-height: 10px !important; 
+}
 
 
 /* icons */

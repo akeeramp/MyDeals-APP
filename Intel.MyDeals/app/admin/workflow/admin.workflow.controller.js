@@ -162,7 +162,7 @@
               { field: "WFSTG_ACTN_SID", template: " #= WFSTG_ACTN_NM # ", title: "Action", width: "10%", editor: actionCDDropDownEditor },
               { field: "WFSTG_MBR_SID", template: " #= WFSTG_CD_SRC # ", title: "Begin Stage", width: "11%", editor: srcCDDropDownEditor },
               { field: "WFSTG_DEST_MBR_SID", template: " #= WFSTG_CD_DEST # ", title: "End Stage", width: "11%", editor: destCDDropDownEditor },
-              { field: "TRKR_NBR_UPD", title: "Update Tracker", width: "11%", template: "<div><span ng-if='! #= TRKR_NBR_UPD # ' class='icon-md intelicon-empty-box'></span><span ng-if=' #= TRKR_NBR_UPD # ' class='icon-md intelicon-filled-box'></span></div>" },
+              { field: "TRKR_NBR_UPD", title: "Update Tracker", width: "11%", template: gridUtils.boolViewer('TRKR_NBR_UPD'), editor: gridUtils.boolEditor }
             ]
         };
 

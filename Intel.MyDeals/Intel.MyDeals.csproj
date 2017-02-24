@@ -1103,6 +1103,7 @@
     <Content Include="Content\kendo\2017.R1\Uniform\sprite_2x.png" />
     <Content Include="Content\kendo\2017.R1\Uniform\sprite_kpi.png" />
     <Content Include="Content\kendo\2017.R1\Uniform\sprite_kpi_2x.png" />
+    <Content Include="css\angular-bootstrap-toggle.min.css" />
     <Content Include="css\select.min.css" />
     <Content Include="css\select2.min.css" />
     <Content Include="Content\Site.css" />
@@ -1289,6 +1290,7 @@
     <Content Include="js\_securityUtil.js" />
     <Content Include="js\_util.js" />
     <Content Include="js\_utils.js" />
+    <Content Include="Scripts\angular-bootstrap-toggle.js" />
     <Content Include="Scripts\Angular\1.5.8\angular-animate.min.js" />
     <Content Include="Scripts\Angular\1.5.8\angular-mocks.js" />
     <Content Include="Scripts\Angular\1.5.8\angular-sanitize.min.js" />

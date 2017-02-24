@@ -32,6 +32,7 @@ namespace Intel.MyDeals
                 "~/Scripts/jquery-ui.min.js",
                 "~/Scripts/tooltipster.bundle.min.js",
                 "~/js/bootstrap.min.js",
+                "~/Scripts/angular-bootstrap-toggle.js",
                 "~/Scripts/Angular/select.min.js",
                 "~/Scripts/Angular/angular-linq.min.js"
                 ));
@@ -145,6 +146,7 @@ namespace Intel.MyDeals
                 "~/Content/kendo/2017.R1/kendo.common-material.min.css",
                 "~/css/it-mlaf.min.css",
                 "~/css/kendo.intel.css",
+                "~/css/angular-bootstrap-toggle.min.css",
                 "~/css/select.min.css",
                 "~/css/select2.min.css"
                 ));

@@ -11,6 +11,7 @@
 		, 'kendo.directives'
 		, 'ui.bootstrap'
         , 'ui.select'
+        , 'ui.toggle'
         , 'angular-linq'
         /*
          * Our reusable cross app code modules
