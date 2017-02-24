@@ -142,7 +142,7 @@ namespace Intel.MyDeals.DataLibrary
 
             if (objType == OpDataElementType.Contract)
             {
-                template["OBJSET_TYPE_CD"] = template["OBJSET_TYPE"] = "CONTRACT";
+                template["OBJ_SET_TYPE_CD"] = "CONTRACT";
                 template["_behaviors"]["isRequired"] = new Dictionary<string, dynamic>
                 {
                     ["TITLE"] = true,
@@ -154,7 +154,7 @@ namespace Intel.MyDeals.DataLibrary
 
             if (objType == OpDataElementType.PricingStrategy)
             {
-                template["OBJSET_TYPE_CD"] = template["OBJSET_TYPE"] = "PRICING STRATEGY";
+                template["OBJ_SET_TYPE_CD"] = "PRICING STRATEGY";
                 template["_behaviors"]["isRequired"] = new Dictionary<string, dynamic>
                 {
                     ["TITLE"] = true
@@ -163,7 +163,7 @@ namespace Intel.MyDeals.DataLibrary
 
             if (objType == OpDataElementType.PricingTable)
             {
-                template["OBJSET_TYPE_CD"] = template["OBJSET_TYPE"] = "PRICING TABLE";
+                template["OBJ_SET_TYPE_CD"] = "PRICING TABLE";
                 template["_behaviors"]["isRequired"] = new Dictionary<string, dynamic>
                 {
                     ["TITLE"] = true

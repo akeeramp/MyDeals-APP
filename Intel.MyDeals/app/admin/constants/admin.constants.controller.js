@@ -77,6 +77,7 @@
             selectable: true,
             resizable: true,
             groupable: true,
+            toolbar: gridUtils.clearAllFiltersToolbar(),
             editable: "popup",
             pageable: {
                 refresh: true,
@@ -93,7 +94,8 @@
                   title: "UI Updatable",
                   width: "10%",
                   template: gridUtils.boolViewer('UI_UPD_FLG'),
-                  editor: gridUtils.boolEditor
+                  editor: gridUtils.boolEditor,
+                  attributes: { style: "text-align: center;" }
               }
             ]
         };

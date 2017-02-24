@@ -115,7 +115,7 @@
             resizable: true,
             reorderable: true,
             columnMenu: true,
-            toolbar: ["create"],
+            toolbar: gridUtils.inLineClearAllFiltersToolbar(),
             editable: { mode: "inline", confirmation: false },
             edit: function (e) {
                 var commandCell = e.container.find("td:first");

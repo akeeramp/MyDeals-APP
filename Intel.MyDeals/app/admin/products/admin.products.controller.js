@@ -50,6 +50,7 @@
             selectable: true,
             resizable: true,
             groupable: true,
+            toolbar: gridUtils.clearAllFiltersToolbar(),
             editable: "popup",
             pageable: {
                 refresh: true,
@@ -104,7 +105,8 @@
                 field: "ACTV_IND",
                 title: "Is Active",
                 width: "10%",
-                template: gridUtils.boolViewer('ACTV_IND')
+                template: gridUtils.boolViewer('ACTV_IND'),
+                attributes: { style: "text-align: center;" }
             }]
         }
 

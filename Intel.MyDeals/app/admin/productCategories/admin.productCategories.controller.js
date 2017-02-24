@@ -141,6 +141,7 @@
             resizable: true,
             reorderable: true,
             columnMenu: true,
+            toolbar: gridUtils.clearAllFiltersToolbar(),
             editable: "inline",
             edit: function (e) {
             	var commandCell = e.container.find("td:first");
@@ -163,6 +164,7 @@
 			    headerTemplate: "<div class='editableHeader'> Actv Ind </div>",
 			    template: gridUtils.boolViewer('ACTV_IND'),
 			    editor: gridUtils.boolEditor,
+			    attributes: { style: "text-align: center;" },
 			    filterable: { multi: true, search: true }
 			},
 			{

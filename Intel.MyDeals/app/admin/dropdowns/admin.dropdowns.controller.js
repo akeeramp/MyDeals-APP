@@ -146,7 +146,7 @@
                 pageSizes: gridConstants.pageSizes,
             },
             change: vm.onChange,
-            toolbar: ["create"],
+            toolbar: gridUtils.inLineClearAllFiltersToolbar(),
             columns: [
                 {
                     command: [
@@ -218,7 +218,8 @@
                     title: "Is Active",
                     width: "10%",
                     template: gridUtils.boolViewer('ACTV_IND'),
-                    editor: gridUtils.boolEditor
+                    editor: gridUtils.boolEditor,
+                    attributes: { style: "text-align: center;" }
                 }]
         }
 

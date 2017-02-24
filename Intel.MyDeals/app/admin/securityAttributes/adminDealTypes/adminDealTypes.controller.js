@@ -116,7 +116,8 @@
                 field: "ACTV_IND",
                 title: "Active",
                 template: gridUtils.boolViewer('ACTV_IND'),
-                editor: gridUtils.boolEditor
+                editor: gridUtils.boolEditor,
+                attributes: { style: "text-align: center;" }
             }]
         }
 

@@ -57,10 +57,10 @@
             editable: "popup",
             pageable: {
                 refresh: true,
-                pageSizes: gridConstants.pageSizes,
+                pageSizes: gridConstants.pageSizes
             },
             change: vm.onChange,
-            toolbar: vm.toolBarTemplate,
+            toolbar: gridUtils.clearAllFiltersToolbar(),
             columns: [
             {
                  field: "CUST_MBR_SID",
@@ -87,7 +87,8 @@
                 field: "ACTV_IND",
                 title: "Is Active",
                 width: "10%",
-                template: gridUtils.boolViewer('ACTV_IND')
+                template: gridUtils.boolViewer('ACTV_IND'),
+                attributes: { style: "text-align: center;" }
             }]
         }
 

@@ -112,12 +112,14 @@
                 field: "IS_SNGL_SLCT",
                 title: "Single Select",
                 template: gridUtils.boolViewer('IS_SNGL_SLCT'),
-                editor: gridUtils.boolEditor
+                editor: gridUtils.boolEditor,
+                attributes: { style: "text-align: center;" }
             }, {
                 field: "ACTV_IND",
                 title: "Active",
                 template: gridUtils.boolViewer('ACTV_IND'),
-                editor: gridUtils.boolEditor
+                editor: gridUtils.boolEditor,
+                attributes: { style: "text-align: center;" }
             }]
         }
 

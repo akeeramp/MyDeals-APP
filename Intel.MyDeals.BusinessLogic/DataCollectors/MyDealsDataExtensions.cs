@@ -229,7 +229,13 @@ namespace Intel.MyDeals.BusinessLogic
             OpDataCollector dc;
             if (id < 0 || !dpDeals.Data.ContainsKey(id)) // missing
             {
-                dc = new OpDataCollector { DcID = id, DcParentID = parentId, DcType = opDataElementType.ToString(), DcParentType = OpDataElementTypeConverter.IdToString(parentidtype).ToString()};
+                dc = new OpDataCollector
+                {
+                    DcID = id,
+                    DcParentID = parentId,
+                    DcType = opDataElementType.ToString(),
+                    DcParentType = parentidtype.IdToString().ToString()
+                };
                 if (id < 0) dc.FillInHolesFromTemplate();
                 myDealsData[opDataElementType].Data[id] = dc;
             }
@@ -242,7 +248,7 @@ namespace Intel.MyDeals.BusinessLogic
             dc.DcType = opDataElementType.ToString();
             dc.DcID = item["DC_ID"] == null ? 0 : Convert.ToInt32(item["DC_ID"].ToString());
             dc.DcParentID = item["DC_PARENT_ID"] == null ? 0 : Convert.ToInt32(item["DC_PARENT_ID"].ToString());
-            dc.DcParentType = OpDataElementTypeConverter.IdToString(parentidtype).ToString(); //item["dc_parent_sid"] == null ? 0 : Convert.ToInt32(item["dc_parent_sid"].ToString());
+            dc.DcParentType = parentidtype.IdToString().ToString();
 
             return dc;
         }

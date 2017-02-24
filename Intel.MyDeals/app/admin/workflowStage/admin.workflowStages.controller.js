@@ -112,7 +112,7 @@
             resizable: true,
             reorderable: true,
             columnMenu: true,
-            toolbar: ["create"],
+            toolbar: gridUtils.inLineClearAllFiltersToolbar(),
             editable: { mode: "inline", confirmation: false },
             edit: function (e) {
                 var commandCell = e.container.find("td:first");
@@ -141,7 +141,7 @@
               { field: "ROLE_TIER_NM", title: "Role Tier", width: "15%", editor: roleTierCDDropDownEditor },
               { field: "WFSTG_LOC", title: "Location", width: "10%", editor: locationDropDownEditor },
               { field: "WFSTG_ORD", title: "Order By", width: "10%" },
-              { field: "ALLW_REDEAL", title: "Allow Redeal", width: "10%", template: gridUtils.boolViewer('ALLW_REDEAL'), editor: gridUtils.boolEditor }
+              { field: "ALLW_REDEAL", title: "Allow Redeal", width: "10%", template: gridUtils.boolViewer('ALLW_REDEAL'), editor: gridUtils.boolEditor, attributes: { style: "text-align: center;" } }
             ]
         };
 

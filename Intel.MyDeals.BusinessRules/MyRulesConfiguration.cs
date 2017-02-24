@@ -42,7 +42,7 @@ namespace Intel.MyDeals.BusinessRules
         public static OpMsgQueue ApplyRules(this OpDataCollector dc, MyRulesTrigger ruleTriggerPoint, Dictionary<string, bool> securityActionCache = null)
         {
             OpDataElementType dcType = (OpDataElementType)Enum.Parse(typeof(OpDataElementType), dc.DcType);
-            string objsetType = dc.GetDataElementValue("OBJSET_TYPE_CD");
+            string objsetType = dc.GetDataElementValue("OBJ_SET_TYPE_CD");
 
             IEnumerable<MyOpRule> attrbRules = AttrbRules;
             attrbRules = attrbRules.Where(a => !a.InObjType.Any() || a.InObjType.Contains(dcType));

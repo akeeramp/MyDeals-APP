@@ -926,27 +926,18 @@ namespace Intel.MyDeals.DataLibrary
                 {
                     // Create new data row to set the values on...
                     var r = dt.NewRow();
-                    int dcId = (de.DcID == 0 ? dc.Key : de.DcID); // This one makes sense because DC Key is DcId
                     int chgWwid = wwid;
                     //int dcSid = (de.DcSID == 0 ? 0 : de.DcSID); //(de.DcSID == 0 ? dc.Key : de.DcSID);
                     int dcParentSid = (de.DcParentID == 0 ? 0 : de.DcParentID); //(de.DcParentSID == 0 ? dc.Key : de.DcParentSID);
 
                     r[IDX_BTCH_ID] = odp.BatchID;
                     r[IDX_OBJ_TYPE_SID] = odp.PacketType.ToId(); // Set packet type
-                    //r[IDX_PARNT_OBJ_TYPE_SID] = odp.PacketType.ToId(); // Set parent packet type
+                    r[IDX_PARNT_OBJ_TYPE_SID] = odp.PacketType.GetParent().ToId(); // Set parent packet type
+
                     r[IDX_CUST_MBR_SID] = custSid; // Set customer
 
-                    if (dcId != 0)
-                    {
-                        //r[IDX_PARNT_OBJ_SID] = dcParentSid;
-                        r[IDX_OBJ_SID] = dcId; // Table ID for this item
-                        //r[IDX_OBJ_SID] = dcSid;
-                    }
-
-                    //if (de.ElementID != 0)
-                    //{
-                    //    r[IDX_OBJ_TYPE_SID] = de.ElementID;
-                    //}
+                    r[IDX_OBJ_SID] = de.DcID; // Table ID for this item
+                    r[IDX_PARNT_OBJ_SID] = de.DcParentID; // Table ID for this item
 
                     r[IDX_ATRB_SID] = de.AtrbID;
                     if (de.DimID > 0)
