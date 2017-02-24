@@ -61,41 +61,35 @@ namespace Intel.MyDeals.DataLibrary
             // Refer to that template for details to modify this code.
 
             var ret = new List<ObjectTypeTemplate>();
+            int IDX_ATRB_COL_NM = DB.GetReaderOrdinal(rdr, "ATRB_COL_NM");
             int IDX_ATRB_ORDER = DB.GetReaderOrdinal(rdr, "ATRB_ORDER");
             int IDX_ATRB_SCTN_CD = DB.GetReaderOrdinal(rdr, "ATRB_SCTN_CD");
             int IDX_ATRB_SCTN_DESC = DB.GetReaderOrdinal(rdr, "ATRB_SCTN_DESC");
             int IDX_ATRB_SCTN_ORDER = DB.GetReaderOrdinal(rdr, "ATRB_SCTN_ORDER");
             int IDX_ATRB_SID = DB.GetReaderOrdinal(rdr, "ATRB_SID");
             int IDX_ATRB_VAL = DB.GetReaderOrdinal(rdr, "ATRB_VAL");
-            int IDX_ATRB_VAL_CHAR = DB.GetReaderOrdinal(rdr, "ATRB_VAL_CHAR");
-            int IDX_ATRB_VAL_CHAR_MAX = DB.GetReaderOrdinal(rdr, "ATRB_VAL_CHAR_MAX");
-            int IDX_ATRB_VAL_DTM = DB.GetReaderOrdinal(rdr, "ATRB_VAL_DTM");
-            int IDX_ATRB_VAL_INT = DB.GetReaderOrdinal(rdr, "ATRB_VAL_INT");
-            int IDX_ATRB_VAL_MONEY = DB.GetReaderOrdinal(rdr, "ATRB_VAL_MONEY");
-            int IDX_DEAL_ID = DB.GetReaderOrdinal(rdr, "DEAL_ID");
-            int IDX_DEAL_NBR = DB.GetReaderOrdinal(rdr, "DEAL_NBR");
             int IDX_OBJ_ATRB_MTX_HASH = DB.GetReaderOrdinal(rdr, "OBJ_ATRB_MTX_HASH");
+            int IDX_OBJ_SET_TYPE = DB.GetReaderOrdinal(rdr, "OBJ_SET_TYPE");
+            int IDX_OBJ_SET_TYPE_SID = DB.GetReaderOrdinal(rdr, "OBJ_SET_TYPE_SID");
             int IDX_OBJ_TYPE = DB.GetReaderOrdinal(rdr, "OBJ_TYPE");
+            int IDX_OBJ_TYPE_SID = DB.GetReaderOrdinal(rdr, "OBJ_TYPE_SID");
 
             while (rdr.Read())
             {
                 ret.Add(new ObjectTypeTemplate
                 {
+                    ATRB_COL_NM = (IDX_ATRB_COL_NM < 0 || rdr.IsDBNull(IDX_ATRB_COL_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_COL_NM),
                     ATRB_ORDER = (IDX_ATRB_ORDER < 0 || rdr.IsDBNull(IDX_ATRB_ORDER)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ATRB_ORDER),
                     ATRB_SCTN_CD = (IDX_ATRB_SCTN_CD < 0 || rdr.IsDBNull(IDX_ATRB_SCTN_CD)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ATRB_SCTN_CD),
                     ATRB_SCTN_DESC = (IDX_ATRB_SCTN_DESC < 0 || rdr.IsDBNull(IDX_ATRB_SCTN_DESC)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ATRB_SCTN_DESC),
                     ATRB_SCTN_ORDER = (IDX_ATRB_SCTN_ORDER < 0 || rdr.IsDBNull(IDX_ATRB_SCTN_ORDER)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ATRB_SCTN_ORDER),
                     ATRB_SID = (IDX_ATRB_SID < 0 || rdr.IsDBNull(IDX_ATRB_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ATRB_SID),
                     ATRB_VAL = (IDX_ATRB_VAL < 0 || rdr.IsDBNull(IDX_ATRB_VAL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_VAL),
-                    ATRB_VAL_CHAR = (IDX_ATRB_VAL_CHAR < 0 || rdr.IsDBNull(IDX_ATRB_VAL_CHAR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_VAL_CHAR),
-                    ATRB_VAL_CHAR_MAX = (IDX_ATRB_VAL_CHAR_MAX < 0 || rdr.IsDBNull(IDX_ATRB_VAL_CHAR_MAX)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_VAL_CHAR_MAX),
-                    ATRB_VAL_DTM = (IDX_ATRB_VAL_DTM < 0 || rdr.IsDBNull(IDX_ATRB_VAL_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_ATRB_VAL_DTM),
-                    ATRB_VAL_INT = (IDX_ATRB_VAL_INT < 0 || rdr.IsDBNull(IDX_ATRB_VAL_INT)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ATRB_VAL_INT),
-                    ATRB_VAL_MONEY = (IDX_ATRB_VAL_MONEY < 0 || rdr.IsDBNull(IDX_ATRB_VAL_MONEY)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_ATRB_VAL_MONEY),
-                    DEAL_ID = (IDX_DEAL_ID < 0 || rdr.IsDBNull(IDX_DEAL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_ID),
-                    DEAL_NBR = (IDX_DEAL_NBR < 0 || rdr.IsDBNull(IDX_DEAL_NBR)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_NBR),
                     OBJ_ATRB_MTX_HASH = (IDX_OBJ_ATRB_MTX_HASH < 0 || rdr.IsDBNull(IDX_OBJ_ATRB_MTX_HASH)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_ATRB_MTX_HASH),
-                    OBJ_TYPE = (IDX_OBJ_TYPE < 0 || rdr.IsDBNull(IDX_OBJ_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_TYPE)
+                    OBJ_SET_TYPE = (IDX_OBJ_SET_TYPE < 0 || rdr.IsDBNull(IDX_OBJ_SET_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_SET_TYPE),
+                    OBJ_SET_TYPE_SID = (IDX_OBJ_SET_TYPE_SID < 0 || rdr.IsDBNull(IDX_OBJ_SET_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_SET_TYPE_SID),
+                    OBJ_TYPE = (IDX_OBJ_TYPE < 0 || rdr.IsDBNull(IDX_OBJ_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_TYPE),
+                    OBJ_TYPE_SID = (IDX_OBJ_TYPE_SID < 0 || rdr.IsDBNull(IDX_OBJ_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_TYPE_SID)
                 });
             } // while
 
@@ -210,7 +204,9 @@ namespace Intel.MyDeals.DataLibrary
                 {
                     AtrbID = dd.ATRB_SID,
                     AtrbValue = value,
-                    DcID = dd.DEAL_ID,
+                    DcID = 0,
+                    DcType = dd.OBJ_TYPE_SID,
+                    DcParentID = 0,
                     DimKey = dd.OBJ_ATRB_MTX_HASH,
                     OrigAtrbValue = value,
                     PrevAtrbValue = value,
@@ -288,9 +284,9 @@ namespace Intel.MyDeals.DataLibrary
                 }
             }
 
-            //AddDcBasics(retSet, OpDataElementType.Contract);
-            //AddDcBasics(retSet, OpDataElementType.PricingStrategy);
-            //AddDcBasics(retSet, OpDataElementType.PricingTable);
+            AddDcBasics(retSet, OpDataElementType.Contract);
+            AddDcBasics(retSet, OpDataElementType.PricingStrategy);
+            AddDcBasics(retSet, OpDataElementType.PricingTable);
             //// TODO: Add in other object levels template info here
 
             return retSet;
@@ -303,8 +299,8 @@ namespace Intel.MyDeals.DataLibrary
             retSet[opDataElementType.ToString()].Add(new OpDataElementUI
             {
                 AtrbID = 11,
-                AtrbCd = "dc_id",
-                AtrbValue = "",
+                AtrbCd = "DC_ID",
+                AtrbValue = 0,
                 DcID = 0,
                 DcType = opDataElementType.ToId(),
                 DcParentType = opDataElementType.GetParent().ToId(),
@@ -314,8 +310,8 @@ namespace Intel.MyDeals.DataLibrary
             retSet[opDataElementType.ToString()].Add(new OpDataElementUI
             {
                 AtrbID = 12,
-                AtrbCd = "dc_parent_id",
-                AtrbValue = "",
+                AtrbCd = "DC_PARENT_ID",
+                AtrbValue = 0,
                 DcID = 0,
                 DcType = opDataElementType.ToId(),
                 DcParentType = opDataElementType.GetParent().ToId(),
@@ -933,7 +929,7 @@ namespace Intel.MyDeals.DataLibrary
                     int dcId = (de.DcID == 0 ? dc.Key : de.DcID); // This one makes sense because DC Key is DcId
                     int chgWwid = wwid;
                     //int dcSid = (de.DcSID == 0 ? 0 : de.DcSID); //(de.DcSID == 0 ? dc.Key : de.DcSID);
-                    //int dcParentSid = (de.DcParentSID == 0 ? 0 : de.DcParentSID); //(de.DcParentSID == 0 ? dc.Key : de.DcParentSID);
+                    int dcParentSid = (de.DcParentID == 0 ? 0 : de.DcParentID); //(de.DcParentSID == 0 ? dc.Key : de.DcParentSID);
 
                     r[IDX_BTCH_ID] = odp.BatchID;
                     r[IDX_OBJ_TYPE_SID] = odp.PacketType.ToId(); // Set packet type

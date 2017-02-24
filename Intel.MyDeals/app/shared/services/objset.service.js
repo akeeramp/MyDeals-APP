@@ -324,6 +324,7 @@ function objsetService($http, dataService, logger, $q) {
         // gData is the raw grid data
 
         // combine single dim current pt (pricing table) with 2 dim (sData) data
+        //debugger;
         if (pt.length > 0) pt["_MultiDim"] = sData;
 
         var modCt = [];
@@ -336,6 +337,7 @@ function objsetService($http, dataService, logger, $q) {
             }, ct[c]);
             modCt.push(mCt);
 
+            if (ct[c]["PricingStrategy"] === undefined) ct[c]["PricingStrategy"] = [];
             var item = ct[c]["PricingStrategy"];
             for (var p = 0; p < item.length; p++) {
                 var mPs = {};

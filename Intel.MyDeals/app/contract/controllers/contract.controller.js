@@ -68,6 +68,8 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
     }
     $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
         // if Pricing Strategy or Pricing Table was being edited, save it
+        //debugger;
+
         var saveStates = ["contract.manager.strategy", "contract.manager.strategy.wip", "contract.details"];
         if ((saveStates.indexOf(fromState.name) >= 0) && $scope._dirty) {
 
@@ -263,6 +265,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
     $scope.saveEntireContractBase = function (stateName, toState, toParams) {
         // async save data
         topbar.show();
+        //debugger;
 
         var source = "";
         if (stateName === "contract.manager.strategy") source = "pricingTable";
@@ -320,19 +323,11 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
             function (data) {
                 $scope.updateNegativeIds(ct, "Contract", data);
 
-                //if (ct.DC_ID <= 0) {
-                //    for (var a = 0; a < data.data.Contract.Actions.length; a++) {
-                //        var action = data.data.Contract.Actions[a];
-                //        if (action.Action === "ID_CHANGE" && action.DC_ID === ct.DC_ID) {
-                //            ct.DC_ID = action.AltID;
-                //        }
-                //    }
-                //}
-
                 logger.success("Saved the contract", ct, "Save Sucessful");
                 topbar.hide();
 
                 // load the screen
+                //debugger;
                 $scope._dirty = false; // don't want to kick of listeners
                 $state.go('contract.manager', { cid: ct.DC_ID });
             },
@@ -393,7 +388,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         ps.DC_PARENT_ID = ct.DC_ID;
         ps.PricingTable = [];
         ps.TITLE = $scope.newStrategy.TITLE;
-        debugger;
+        //debugger;
 
         // Add to DB first... then add to screen
         objsetService.createPricingStrategy($scope.getCustId(), ps).then(

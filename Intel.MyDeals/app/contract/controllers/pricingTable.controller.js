@@ -68,7 +68,7 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
 
     $scope.colToLetter = {};
 
-    debugger;
+    //debugger;
     // Define Kendo Spreadsheet options
     //
     root.spreadDs = new kendo.data.DataSource({
