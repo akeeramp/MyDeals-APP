@@ -84,12 +84,12 @@
                 }
             },
             {
-                state: 'admin.productSelector',
+                state: 'admin.productEntry',
                 abstract: false,
                 config: {
-                    templateUrl: 'app/admin/productSelector/productSelector.html',
-                    url: 'productSelector',
-                    controller: 'ProductSelectorController as vm',
+                    templateUrl: 'app/admin/productEntry/productEntry.html',
+                    url: 'productEntry',
+                    controller: 'ProductEntryController as vm',
                 }
             },
             {

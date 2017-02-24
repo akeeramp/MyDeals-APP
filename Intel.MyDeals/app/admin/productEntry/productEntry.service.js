@@ -3,12 +3,12 @@
 
     angular
         .module('app.admin')
-        .factory('ProductSelectorService', ProductSelectorService);
+        .factory('productEntryService', productEntryService);
 
     // Minification safe dependency injection
-    ProductSelectorService.$inject = ['$http', 'dataService', 'logger', '$q'];
+    productEntryService.$inject = ['$http', 'dataService', 'logger', '$q'];
 
-    function ProductSelectorService($http, dataService, logger, $q) {
+    function productEntryService($http, dataService, logger, $q) {
         //var apiBaseUrl = "api/WorkFlow/";
         var apiBaseUrl = "api/Products/";
         var service = {

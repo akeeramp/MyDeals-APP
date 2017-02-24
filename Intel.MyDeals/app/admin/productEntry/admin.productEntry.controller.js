@@ -3,11 +3,11 @@
 
     angular
         .module('app.admin')
-        .controller('ProductSelectorController', ProductSelectorController);
+        .controller('ProductEntryController', ProductEntryController);
 
-    ProductSelectorController.$inject = ['$scope', 'dataService', 'ProductSelectorService', 'logger', 'confirmationModal', 'gridConstants', '$linq', '$state'];
+    ProductEntryController.$inject = ['$scope', 'dataService', 'productEntryService', 'logger', 'confirmationModal', 'gridConstants', '$linq', '$state'];
 
-    function ProductSelectorController($scope, dataService, ProductSelectorService, logger, confirmationModal, gridConstants, $linq, $state) {
+    function ProductEntryController($scope, dataService, productEntryService, logger, confirmationModal, gridConstants, $linq, $state) {
         var vm = this;
         vm.showGrid = false;
 
@@ -28,7 +28,7 @@
                 vm.userInput.push(line);
             });
 
-            ProductSelectorService.TranslateProducts(vm.userInput).then(function (response) {
+            productEntryService.TranslateProducts(vm.userInput).then(function (response) {
                 vm.showGrid = true;
                 cookProducts(response.data);
             }, function (response) {
