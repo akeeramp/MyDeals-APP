@@ -18,7 +18,10 @@ namespace Intel.MyDeals.DataLibrary
     {
 
         
-
+        /// <summary>
+        /// Pull down the initial object templates for all system objects.  Also pulls down customers and calendar information and object level data.
+        /// </summary>
+        /// <returns></returns>
         public TemplateWrapper GetTemplateData()
         {
 
@@ -46,6 +49,12 @@ namespace Intel.MyDeals.DataLibrary
             return ret;
         }
 
+
+        /// <summary>
+        /// Read the tempalte datagram into template objects.
+        /// </summary>
+        /// <param name="rdr"></param>
+        /// <returns></returns>
         public static List<ObjectTypeTemplate> DealTemplateDataGramFromReader(SqlDataReader rdr)
             {
             // This helper method is template generated.
@@ -93,8 +102,10 @@ namespace Intel.MyDeals.DataLibrary
             return ret;
         }
 
+
         private static List<ObjectTypes> ObjectTypesFromReader(SqlDataReader rdr)
         {
+            // Read the objects types table and store into ObjectTypes data type -- table 3 from template data
             // This helper method is template generated.
             // Refer to that template for details to modify this code.
 
@@ -123,8 +134,10 @@ namespace Intel.MyDeals.DataLibrary
             return ret;
         }
 
+
         private static List<CustomerCal> CustomerCalFromReader(SqlDataReader rdr)
         {
+            // Read the customer and calendar data table and store into CustomerCal data type -- table 2 from templates data
             // This helper method is template generated.
             // Refer to that template for details to modify this code.
 
@@ -163,11 +176,9 @@ namespace Intel.MyDeals.DataLibrary
         private static TemplateWrapper _getTemplateData;
 
 
-
-
-
         private OpDataElementUITemplates ConvertDealTemplateDataGramsToOpDataElementUIs(List<ObjectTypeTemplate> templateData)
         {
+            // Read the object type templates table and store into OpDataElementUITemplates data type -- table 1 from templates data
             // Bring in existing items for ConvertDealTemplateDataGramsToOpDataElementUIs
 
             Dictionary<string, List<OpDataElementUI>> ret = new Dictionary<string, List<OpDataElementUI>>();
@@ -277,116 +288,18 @@ namespace Intel.MyDeals.DataLibrary
                 }
             }
 
-            AddDcBasics(retSet, OpDataElementType.Contract);
-            AddDcBasics(retSet, OpDataElementType.PricingStrategy);
-            AddDcBasics(retSet, OpDataElementType.PricingTable);
-            
-            //// TODO - Place some hard coded items for now just so that Phil doesn't break much more then he has to...
-            //retSet[OpDataElementType.Contract.ToString()].Add(new OpDataElementUI
-            //{
-            //    AtrbID = 11,
-            //    AtrbCd = "dc_id",
-            //    AtrbValue = "",
-            //    DcID = 0,
-            //    DcParentType = 0,
-            //    DcParentID = 0,
-            //    DcType = 0
-            //});
-
-            //retSet[OpDataElementType.Contract.ToString()].Add(new OpDataElementUI
-            //{
-            //    AtrbID = 12,
-            //    AtrbCd = "dc_parent_id",
-            //    AtrbValue = "",
-            //    DcID = 0,
-            //    DcParentType = 0,
-            //    DcParentID = 0,
-            //    DcType = 0
-            //});
-
-            ////retSet[OpDataElementType.Contract.ToString()].Add(new OpDataElementUI
-            ////{
-            ////    AtrbID = 143,
-            ////    AtrbCd = "DEAL_STG_CD",
-            ////    AtrbValue = "",
-            ////    DcID = 0,
-            ////    DcParentType = 0,
-            ////    DcParentID = 0,
-            ////    DcType = 0
-            ////});
-
-            //// TODO - Place some hard coded items for now just so that Phil doesn't break much more then he has to...
-            //retSet[OpDataElementType.PricingStrategy.ToString()].Add(new OpDataElementUI
-            //{
-            //    AtrbID = 11,
-            //    AtrbCd = "dc_id",
-            //    AtrbValue = "",
-            //    DcID = 0,
-            //    DcParentType = 0,
-            //    DcParentID = 0,
-            //    DcType = 0
-            //});
-
-            //retSet[OpDataElementType.PricingStrategy.ToString()].Add(new OpDataElementUI
-            //{
-            //    AtrbID = 12,
-            //    AtrbCd = "dc_parent_id",
-            //    AtrbValue = "",
-            //    DcID = 0,
-            //    DcParentType = 0,
-            //    DcParentID = 0,
-            //    DcType = 0
-            //});
-
-            ////retSet[OpDataElementType.PricingStrategy.ToString()].Add(new OpDataElementUI
-            ////{
-            ////    AtrbID = 3319,
-            ////    AtrbCd = "START_DT",
-            ////    AtrbValue = "",
-            ////    DcID = 0,
-            ////    DcParentType = 0,
-            ////    DcParentID = 0,
-            ////    DcType = 0
-            ////});
-
-            ////retSet[OpDataElementType.PricingStrategy.ToString()].Add(new OpDataElementUI
-            ////{
-            ////    AtrbID = 3320,
-            ////    AtrbCd = "END_DT",
-            ////    AtrbValue = "",
-            ////    DcID = 0,
-            ////    DcParentType = 0,
-            ////    DcParentID = 0,
-            ////    DcType = 0
-            ////});
-
-            //retSet[OpDataElementType.PricingTable.ToString()].Add(new OpDataElementUI
-            //{
-            //    AtrbID = 11,
-            //    AtrbCd = "dc_id",
-            //    AtrbValue = "",
-            //    DcID = 0,
-            //    DcParentType = 0,
-            //    DcParentID = 0,
-            //    DcType = 0
-            //});
-
-            //retSet[OpDataElementType.PricingTable.ToString()].Add(new OpDataElementUI
-            //{
-            //    AtrbID = 12,
-            //    AtrbCd = "dc_parent_id",
-            //    AtrbValue = "",
-            //    DcID = 0,
-            //    DcParentType = 0,
-            //    DcParentID = 0,
-            //    DcType = 0
-            //});
+            //AddDcBasics(retSet, OpDataElementType.Contract);
+            //AddDcBasics(retSet, OpDataElementType.PricingStrategy);
+            //AddDcBasics(retSet, OpDataElementType.PricingTable);
+            //// TODO: Add in other object levels template info here
 
             return retSet;
         }
 
+
         private void AddDcBasics(OpDataElementUITemplates retSet, OpDataElementType opDataElementType)
         {
+            // Hard coded attributes placed into templates for Phil internal usage
             retSet[opDataElementType.ToString()].Add(new OpDataElementUI
             {
                 AtrbID = 11,
@@ -417,59 +330,17 @@ namespace Intel.MyDeals.DataLibrary
 
         private struct TableName
         {
-            // TODO - These are hard coded table names in our code.  WTH??
-            public const string STG_WIP_ATRB = "[dbo].[STG_WIP_ATRB]";
-            public const string WIP_ACTN = "[dbo].[WIP_ACTN]";
+            // These are hard coded table definations used by the bulk data loader to generate an internal code table to transfer into the DB - much faster then row by row entry.
             public const string MYDL_CL_WIP_ATRB_TMP = "[dbo].[MYDL_CL_WIP_ATRB_TMP]"; // New version of [dbo].[STG_WIP_ATRB]
             public const string MYDL_CL_WIP_ACTN = "[dbo].[MYDL_CL_WIP_ACTN]"; // New version of [dbo].[WIP_ACTN]
         }
 
         #endregion
 
-        //////        private AttributeCollection AttributeMasterData => GetAttributeCollection();
-
-        //////        public int GetAttribId(string atrbCd)
-        //////        {
-        //////            return GetAttributeCollection()[atrbCd];
-        //////        }
-
-        //////        public AttributeCollection GetAttributeCollection()
-        //////        {
-        //////            return new AttributeCollection(DataCollections.GetAttributeMasterDataDictionary(), DataCollections.GetOpAtrbMapItems());
-        //////        }
-
-
 #if DEBUG
         private OpMsgQueue LogMessages = new OpMsgQueue();
         private DateTime LastLogTime = DateTime.Now;
 #endif
-
-        //////        private void DebugLog(string message, params object[] args)
-        //////        {
-        //////#if DEBUG
-        //////            if (string.IsNullOrEmpty(message))
-        //////            {
-        //////                return;
-        //////            }
-
-        //////            if (args.Length > 0)
-        //////            {
-        //////                message = string.Format(message, args);
-        //////            }
-
-        //////            message += string.Format(" - Logging Delta: {0}ms.", (DateTime.Now - LastLogTime).TotalMilliseconds);
-
-        //////            LogMessages.WriteMessage
-        //////                (
-        //////                    OpMsg.MessageType.Debug,
-        //////                    message
-        //////                );
-
-        //////            OpLogPerf.Log(message);
-
-        //////            LastLogTime = DateTime.Now;
-        //////#endif
-        //////        }
 
 
         /// <summary>
@@ -477,13 +348,13 @@ namespace Intel.MyDeals.DataLibrary
         /// The input reader must conform to the view signature for [deal].[VW_DEAL_SRCH_*] views
         /// </summary>
         /// <param name="rdr">Data reader with an appropraite set of columns.</param>
+        /// <param name="processDataCollectorLevelData">Process all data at the collector level or not.</param>
         /// <returns>Valid deal objects.</returns>
         public MyDealsData ReaderToDataCollectors(SqlDataReader rdr, bool processDataCollectorLevelData)
         {
             // Load Data Cycle: Point 1
             // Save Data Cycle: Point 2
             // Save Data Cycle: Point 19
-            //const bool mergeDealAndPrep = false; // Used to be a passed parameter....
 
 #if DEBUG
             DateTime start = DateTime.Now;
@@ -492,27 +363,21 @@ namespace Intel.MyDeals.DataLibrary
 #endif
             var odps = new MyDealsData();
 
-            // TODO - Save call returns this as table 2, initial read does it as one...
-            //rdr.NextResult(); // added this because they are passing back additional tables - we want the atrbs table...
-
             #region Resolve Column Indexes
-
-            // TODO - change all of these to Entities.deal.DEAL.ATRB_SID format later
             // Parent Node Data
             int IDX_PARNT_OBJ_TYPE_SID = DB.GetReaderOrdinal(rdr, "PARNT_OBJ_TYPE_SID"); // Read identity key for object ID (PARENT_OBJ_KEY)
             int IDX_PARNT_OBJ_SID = DB.GetReaderOrdinal(rdr, "PARNT_OBJ_SID"); // Read identity key for object ID (PARENT_OBJ_KEY)
 
             // Current Node Data
             int IDX_OBJ_TYPE = DB.GetReaderOrdinal(rdr, "OBJ_TYPE"); // Was OBJ_SET, this is cntrct or object type
-            int IDX_OBJ_TYPE_SID = DB.GetReaderOrdinal(rdr, "OBJ_TYPE_SID"); // Object_type_id or Object_set_id // Change to OBJ_TYPE_SID from Entities.deal.DEAL.OBJ_SET
+            int IDX_OBJ_TYPE_SID = DB.GetReaderOrdinal(rdr, "OBJ_TYPE_SID"); // Object_type_id or Object_set_id 
             int IDX_OBJ_SID = DB.GetReaderOrdinal(rdr, "OBJ_SID"); // Real identity key for object ID - the true single table identity col
 
             int IDX_ATRB_SID = DB.GetReaderOrdinal(rdr, "ATRB_SID"); // Attribute SID
-            //int IDX_DEAL_ATRB_SID = DB.GetReaderOrdinal(rdr, "ATRB_SID"); // Missing, was Entities.deal.DEAL.ATRB_SID
             int IDX_ATRB_COL_NM = DB.GetReaderOrdinal(rdr, "ATRB_COL_NM"); // Attribute Code Name
             int IDX_DOT_NET_DATA_TYPE = DB.GetReaderOrdinal(rdr, "DOT_NET_DATA_TYPE"); // Attribute .NET data type
 
-            int IDX_ATRB_MTX_SID = DB.GetReaderOrdinal(rdr, "ATRB_MTX_SID"); // Attribute Matrix SID // Need to bring these back in - obj_atrb_mtx_sid/hash
+            int IDX_ATRB_MTX_SID = DB.GetReaderOrdinal(rdr, "ATRB_MTX_SID"); // Attribute Matrix SID 
             int IDX_ATRB_MTX_HASH = DB.GetReaderOrdinal(rdr, "ATRB_MTX_HASH"); // Attribute Matrix Hash, ex. "5000:32272/5003:1"
 
             int IDX_ATRB_VAL_INT = DB.GetReaderOrdinal(rdr, "ATRB_VAL_INT"); // Atrb val INT
@@ -523,23 +388,9 @@ namespace Intel.MyDeals.DataLibrary
             int IDX_ATRB_VAL = DB.GetReaderOrdinal(rdr, "ATRB_VAL"); // Atrb val combined
 
             int IDX_ATRB_RVS_NBR = DB.GetReaderOrdinal(rdr, "ATRB_RVS_NBR"); // Revision number
-            //int IDX_DEAL_ALT_SID = DB.GetReaderOrdinal(rdr, "OBJ_SID"); // OBJ SID is the user visable ID - referrs to table specific identity col
 
             // Unique to deal save returned results
             int IDX_BTCH_ID = DB.GetReaderOrdinal(rdr, "BTCH_ID");
-
-
-            /*
-            int IDX_DEAL_CRE_EMP_WWID = DB.GetReaderOrdinal(rdr, ColumnName.DEAL_CRE_EMP_WWID);
-            int IDX_DEAL_CRE_DTM = DB.GetReaderOrdinal(rdr, ColumnName.DEAL_CRE_DTM);
-            int IDX_DEAL_CHG_EMP_WWID = DB.GetReaderOrdinal(rdr, ColumnName.DEAL_CHG_EMP_WWID);
-            int IDX_DEAL_CHG_DTM = DB.GetReaderOrdinal(rdr, ColumnName.DEAL_CHG_DTM);
-            int IDX_ATRB_CRE_EMP_WWID = DB.GetReaderOrdinal(rdr, ColumnName.ATRB_CRE_EMP_WWID);
-            int IDX_ATRB_CRE_DTM = DB.GetReaderOrdinal(rdr, ColumnName.ATRB_CRE_DTM);
-            int IDX_ATRB_CHG_EMP_WWID = DB.GetReaderOrdinal(rdr, ColumnName.ATRB_CHG_EMP_WWID);
-            int IDX_ATRB_CHG_DTM = DB.GetReaderOrdinal(rdr, ColumnName.ATRB_CHG_DTM);
-            */
-
             #endregion
 
             if (IDX_OBJ_TYPE_SID < 0 || IDX_OBJ_SID < 0 || IDX_ATRB_SID < 0)
@@ -560,17 +411,16 @@ namespace Intel.MyDeals.DataLibrary
                 cells++;
 #endif
                 // Since we key by this, get it first.
-                var obj_type = OpDataElementTypeConverter.FromString(rdr[IDX_OBJ_TYPE]); // CNTRCT
-                int obj_type_sid = rdr.GetTypedValue<int>(IDX_OBJ_TYPE_SID, 0); // 1
+                var objType = OpDataElementTypeConverter.FromString(rdr[IDX_OBJ_TYPE]); // CNTRCT
+                int objTypeSid = rdr.GetTypedValue<int>(IDX_OBJ_TYPE_SID, 0); // 1
 
-                int obj_sid = rdr.GetTypedValue<int>(IDX_OBJ_SID, 0); // Object Key
-                int parnt_obj_sid = rdr.GetTypedValue<int>(IDX_PARNT_OBJ_SID, 0); // Parent ID Key
-                int parnt_obj_key_type_sid = rdr.GetTypedValue<int>(IDX_PARNT_OBJ_TYPE_SID, 0); // Parent ID Key Type SID -- IE Contract (1)
-                var parnt_obj_key_type = OpDataElementTypeConverter.IdToString(parnt_obj_key_type_sid); // CNTRCT
-                //int obj_display_sid = rdr.GetTypedValue<int>(IDX_DEAL_ALT_SID, 0); // Object display ID
+                int objSid = rdr.GetTypedValue<int>(IDX_OBJ_SID, 0); // Object Key
+                int parntObjSid = rdr.GetTypedValue<int>(IDX_PARNT_OBJ_SID, 0); // Parent ID Key
+                int parntObjKeyTypeSid = rdr.GetTypedValue<int>(IDX_PARNT_OBJ_TYPE_SID, 0); // Parent ID Key Type SID -- IE Contract (1)
+                var parntObjKeyType = OpDataElementTypeConverter.IdToString(parntObjKeyTypeSid); // CNTRCT
 
                 OpDataCollector odc;
-                if (!odps[obj_type].Data.TryGetValue(obj_sid, out odc)) // See if this belongs to an existing DataCollector or if we need to make a new one
+                if (!odps[objType].Data.TryGetValue(objSid, out odc)) // See if this belongs to an existing DataCollector or if we need to make a new one
                 {
 #if DEBUG
                     deals++;
@@ -579,40 +429,21 @@ namespace Intel.MyDeals.DataLibrary
                     if (IDX_BTCH_ID > -1 && !odps.Any())
                     {
                         // First deal of an obj_set, set the packet details.
-                        odps[obj_type].BatchID = rdr.GetTypedValue<Guid>(IDX_BTCH_ID, Guid.Empty);
+                        odps[objType].BatchID = rdr.GetTypedValue<Guid>(IDX_BTCH_ID, Guid.Empty);
                     }
 
-                    odps[obj_type].Data[obj_sid] = odc = new OpDataCollector
+                    odps[objType].Data[objSid] = odc = new OpDataCollector
                     {
-                        DcID = obj_sid,
-                        DcType = obj_type.ToString(),
-                        DcParentType = parnt_obj_key_type.ToString(), // parnt_obj_key_type_sid.ToString(),
-                        DcParentID = parnt_obj_sid
+                        DcID = objSid,
+                        DcType = objType.ToString(),
+                        DcParentType = parntObjKeyType.ToString(), // parnt_obj_key_type_sid.ToString(),
+                        DcParentID = parntObjSid
                     };
                 }
 
-                // Get the value from the database...
-                //var value = OpServerUtil.Coalesce
-                //    (
-                //        rdr[IDX_ATRB_VAL_INT],
-                //        rdr[IDX_ATRB_VAL_CHAR],
-                //        rdr[IDX_ATRB_VAL_MONEY],
-                //        rdr[IDX_ATRB_VAL_DTM],
-                //        rdr[IDX_ATRB_VAL_CHAR_MAX]
-                //    );
                 var value = rdr.GetTypedValue<string>(IDX_ATRB_VAL);
 
                 string dndt = rdr.GetTypedValue<string>(IDX_DOT_NET_DATA_TYPE);
-
-                //if (value != null) // Removed 
-                //{
-                //    // A Bit hackish, but this was the only way I could think to do this.
-                //    // conver to switch as needed if we add more types.
-                //    //if (dndt == "System.Boolean")
-                //    //{
-                //    //    value = OpTypeConverter.StringToNullableBool(value) ?? false;
-                //    //}
-                //}
 
                 var ode = OpDataElement.Create
                     (
@@ -620,10 +451,10 @@ namespace Intel.MyDeals.DataLibrary
                         rdr.GetTypedValue<int>(IDX_ATRB_SID),
                         rdr.GetTypedValue<string>(IDX_ATRB_COL_NM),
                         value,
-                        obj_type_sid, // dc type - contract
-                        obj_sid, // DcId 
-                        parnt_obj_sid, // parent id
-                        parnt_obj_key_type_sid, // Parent Type
+                        objTypeSid, // dc type - contract
+                        objSid, // DcId 
+                        parntObjSid, // parent id
+                        parntObjKeyTypeSid, // Parent Type
                         0, // Dim
                         null, // StringDim
                         dndt, // DotNetType
@@ -642,18 +473,18 @@ namespace Intel.MyDeals.DataLibrary
             OpDataPacket<OpDataElementType> grp;
             if (odps.TryGetValue(OpDataElementType.Group, out grp))
             {
-                int grp_id = 0;
+                int grpId = 0;
                 foreach (var de in grp.AllDataElements.Where(de => de.DcID > 0))
                 {
-                    grp_id = de.DcID;
+                    grpId = de.DcID;
                     break;
                 }
 
-                if (grp_id > 0)
+                if (grpId > 0)
                 {
                     foreach (var op in odps)
                     {
-                        op.Value.GroupID = grp_id;
+                        op.Value.GroupID = grpId;
                     }
                 }
             }
@@ -666,7 +497,6 @@ namespace Intel.MyDeals.DataLibrary
             {
                 IDX_OBJ_SID = -1; // Real identity key for object ID - the true single table identity col
                 IDX_PARNT_OBJ_TYPE_SID = -1; // Read identity key for object ID
-                //IDX_DEAL_ALT_SID = -1; // OBJ SID is the user visable ID - referrs to table specific identity col
 
                 IDX_OBJ_SID = DB.GetReaderOrdinal(rdr, "OBJ_SID"); // Real identity key for object ID - the true single table identity col
                 IDX_PARNT_OBJ_TYPE_SID = DB.GetReaderOrdinal(rdr, "PARNT_OBJ_TYPE_SID"); // Read identity key for object ID
@@ -681,7 +511,6 @@ namespace Intel.MyDeals.DataLibrary
                 // Ensure all data fields are in the result set...
                 if (
                     IDX_OBJ_SID >= 0
-                    //&& IDX_DEAL_ALT_SID >= 0
                     && IDX_DEAL_CRE_EMP_WWID >= 0
                     && IDX_DEAL_CRE_DTM >= 0
                     && IDX_DEAL_CHG_EMP_WWID >= 0
@@ -816,6 +645,7 @@ namespace Intel.MyDeals.DataLibrary
                 .OrderBy(odp => (int)odp.PacketType)
                 .ToList();
         }
+
 
         ///// <summary>
         ///// A data packet to a data table
@@ -1043,14 +873,12 @@ namespace Intel.MyDeals.DataLibrary
         //}
 
 
-
-
-
         /// <summary>
         /// A data packet to a data table
         /// </summary>
         /// <param name="odp">A valid data packet</param>
         /// <param name="custSid">Customer ID to pass to DB</param>
+        /// <param name="wwid">Employee wwid to pass to DB</param>
         /// <returns>A valid DataTable or null if input is invalid.</returns>
         private DataTable OpDataPacketToImportDataTable(OpDataPacket<OpDataElementType> odp, int custSid, int wwid)
         {
@@ -1067,7 +895,7 @@ namespace Intel.MyDeals.DataLibrary
             dt.TableName = TableName.MYDL_CL_WIP_ATRB_TMP;
 
             #region Get Ordinal Indexes
-            int IDX_BTCH_ID = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ATRB_TMP.BTCH_ID, typeof(Guid)).Ordinal; //Entities.deal.STG_WIP_ATRB.BTCH_ID
+            int IDX_BTCH_ID = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ATRB_TMP.BTCH_ID, typeof(Guid)).Ordinal;
             int IDX_CUST_MBR_SID = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ATRB_TMP.CUST_MBR_SID, typeof(int)).Ordinal;
 
             int IDX_OBJ_TYPE_SID = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ATRB_TMP.OBJ_TYPE_SID, typeof(int)).Ordinal; // Table Type ID for this item - Contract
@@ -1083,12 +911,12 @@ namespace Intel.MyDeals.DataLibrary
             int IDX_DEAL_ATRB_MTX_HASH = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ATRB_TMP.ATRB_MTX_HASH, typeof(string)).Ordinal;
             int IDX_ATRB_RVS_NBR = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ATRB_TMP.ATRB_RVS_NBR, typeof(int)).Ordinal;
 
-            //int IDX_PARENT_OBJ_KEY = dt.Columns.Add(Entities.deal.STG_WIP_ATRB.PARENT_OBJ_KEY, typeof(int)).Ordinal;
-            //int IDX_DEAL_ALT_SID = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ATRB_TMP.OBJ_SID, typeof(int)).Ordinal;
             int IDX_CHG_EMP_WWID = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ATRB_TMP.CHG_EMP_WWID, typeof(int)).Ordinal;
+
+            // LEAVE IDX_CHG_DTM COMMENTED OUT SO THAT IT DOESN'T OVERRIDE DB COLUMN DEFAULT VALUE
             //int IDX_CHG_DTM = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ATRB_TMP.CHG_DTM, typeof(int)).Ordinal;
 
-            int IDX_MDX_CD = dt.Columns.Add(Entities.deal.STG_WIP_ATRB.MDX_CD, typeof(string)).Ordinal; // M,D,X (Modify (I,U), Delete, No Action (X)), used to be DATA_TEXT vc(100) 
+            int IDX_MDX_CD = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ATRB_TMP.MDX_CD, typeof(string)).Ordinal; // M,D,X (Modify (I,U), Delete, No Action (X)), used to be DATA_TEXT vc(100) 
             #endregion
 
             if (!odp.Data.Any())
@@ -1198,17 +1026,9 @@ namespace Intel.MyDeals.DataLibrary
             int IDX_ACTN_VAL_LIST = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ACTN.ACTN_VAL_LIST, typeof(string)).Ordinal; // Max Len = 8000
 
             int IDX_CHG_EMP_WWID = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ACTN.CHG_EMP_WWID, typeof(int)).Ordinal;
-            //int IDX_CHG_DTM = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ACTN.CHG_DTM, typeof(int)).Ordinal; // defaults in DB to getdate()
 
-            //int IDX_ACTN_VAL = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ACTN.ACTN_VAL, typeof(string)).Ordinal; // Max Len = 8000
-            ////int IDX_DEAL_GRP_SID = dt.Columns.Add(Entities.deal.WIP_ACTN.DEAL_GRP_SID, typeof(int)).Ordinal;
-
-            // Unique to deal save returned results
-            //int IDX_DEAL_GRP_BTCH_ID = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ACTN.DEAL_GRP_BTCH_ID, typeof(Guid)).Ordinal;
-
-            // Don't know if we'll need these at some point.
-            //int IDX_OBJ_KEY = dt.Columns.Add(Entities.deal.STG_WIP_ATRB.OBJ_KEY, typeof(int)).Ordinal; // Internal DB ID for this item
-            //int IDX_PARENT_OBJ_KEY = dt.Columns.Add(Entities.deal.STG_WIP_ATRB.PARENT_OBJ_KEY, typeof(int)).Ordinal;
+            // LEAVE IDX_CHG_DTM COMMENTED OUT SO THAT IT DOESN'T OVERRIDE DB COLUMN DEFAULT VALUE
+            //int IDX_CHG_DTM = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ACTN.CHG_DTM, typeof(int)).Ordinal;
             #endregion
 
             if (odp.Actions.Count == 0)

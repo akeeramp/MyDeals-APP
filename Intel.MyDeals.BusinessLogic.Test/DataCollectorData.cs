@@ -19,27 +19,27 @@ namespace Intel.MyDeals.BusinessLogic.Test
                     {
                         new OpDataCollectorFlattenedItem
                         {
-                            ["dc_id"] = 1123,
+                            ["DC_ID"] = 1123,
                             ["dc_sid"] = null,
-                            ["dc_parent_id"] = null,
+                            ["DC_PARENT_ID"] = null,
                             ["dc_parent_sid"] = null,
                             ["START_DT"] = new DateTime(2016,6,6),
                             ["OBJSET_TYPE"] = "Contract 1"
                         },
                         new OpDataCollectorFlattenedItem
                         {
-                            ["dc_id"] = 4156,
+                            ["DC_ID"] = 4156,
                             ["dc_sid"] = null,
-                            ["dc_parent_id"] = null,
+                            ["DC_PARENT_ID"] = null,
                             ["dc_parent_sid"] = null,
                             ["START_DT"] = new DateTime(2016,6,6),
                             ["OBJSET_TYPE"] = "Contract 2"
                         },
                         new OpDataCollectorFlattenedItem
                         {
-                            ["dc_id"] = -101,
+                            ["DC_ID"] = -101,
                             ["dc_sid"] = null,
-                            ["dc_parent_id"] = null,
+                            ["DC_PARENT_ID"] = null,
                             ["dc_parent_sid"] = null,
                             ["START_DT"] = new DateTime(2016,6,6),
                             ["OBJSET_TYPE"] = "Contract 2"
@@ -49,25 +49,25 @@ namespace Intel.MyDeals.BusinessLogic.Test
                     {
                         new OpDataCollectorFlattenedItem
                         {
-                            ["dc_id"] = 789,
+                            ["DC_ID"] = 789,
                             ["dc_sid"] = 1123,
-                            ["dc_parent_id"] = null,
+                            ["DC_PARENT_ID"] = null,
                             ["dc_parent_sid"] = null,
                             ["TITLE"] = "Strategy 1"
                         },
                         new OpDataCollectorFlattenedItem
                         {
-                            ["dc_id"] = 1011,
+                            ["DC_ID"] = 1011,
                             ["dc_sid"] = 4156,
-                            ["dc_parent_id"] = null,
+                            ["DC_PARENT_ID"] = null,
                             ["dc_parent_sid"] = null,
                             ["TITLE"] = "Strategy 2"
                         },
                         new OpDataCollectorFlattenedItem
                         {
-                            ["dc_id"] = -201,
+                            ["DC_ID"] = -201,
                             ["dc_sid"] = -101,
-                            ["dc_parent_id"] = null,
+                            ["DC_PARENT_ID"] = null,
                             ["dc_parent_sid"] = null,
                             ["TITLE"] = "Strategy 2"
                         }

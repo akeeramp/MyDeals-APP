@@ -4,7 +4,6 @@ using Intel.Opaque.DBAccess;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.IO;
 using System.Linq;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IDataLibrary;
@@ -16,6 +15,7 @@ namespace Intel.MyDeals.DataLibrary
 {
     public partial class DataCollectorDataLib : IDataCollectorDataLib
     {
+
         /// <summary>
         /// Save deals and process all actions in the Action Queue
         /// </summary>
@@ -590,7 +590,7 @@ namespace Intel.MyDeals.DataLibrary
             // Example clause to include on query to return results
             // FOR XML PATH('MY_DATA_TABLE_NAME'), TYPE
 
-            string xmlDataSet = String.Format("{0}", record[Entities.deal.WIP_ACTN.XML_DATA]);
+            //string xmlDataSet = String.Format("{0}", record[Entities.deal.WIP_ACTN.XML_DATA]);
 
             // TODO: See if XMLData changed into something like MSG_CD
             //if (!String.IsNullOrEmpty(xmlDataSet) && xmlDataSet.IndexOf('<') < xmlDataSet.LastIndexOf('>'))
@@ -645,7 +645,7 @@ namespace Intel.MyDeals.DataLibrary
 
         private void WriteIDListAction(OpDataPacket<OpDataElementType> odp, IDataRecord record, OpMsg.MessageType msgType, string actnNm)
         {
-            var intIds = OpTypeConverter.StringToIntList(String.Format("{0}", record[Entities.deal.WIP_ACTN.ACTN_VAL_LIST]));
+            var intIds = OpTypeConverter.StringToIntList(String.Format("{0}", record[Entities.deal.MYDL_CL_WIP_ACTN.ACTN_VAL_LIST]));
             if (intIds.Count() == 0) { return; }
 
             var oda = new OpDataAction

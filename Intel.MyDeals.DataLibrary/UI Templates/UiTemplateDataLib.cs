@@ -124,9 +124,9 @@ namespace Intel.MyDeals.DataLibrary
 
 
             // TODO replace whith proper data once DB is ready
-            template["dc_id"] = 0;
+            //template["dc_id"] = 0;
             template["dc_type"] = objType.ToId();
-            template["dc_parent_id"] = 0;
+            //template["dc_parent_id"] = 0;
             template["dc_parent_type"] = objType.GetParent().ToId();
             template["_behaviors"] = new Dictionary<string, Dictionary<string, dynamic>>
             {
@@ -179,7 +179,7 @@ namespace Intel.MyDeals.DataLibrary
         {
             // TODO replace with DB call
             List<UiTemplateContainerItem> items = new List<UiTemplateContainerItem>();
-            items.Add(new UiTemplateContainerItem { Id = 1, AtrbCd = "dc_id", IsKey = true, DataType = "number", Label = "Id", Width = 50 });
+            items.Add(new UiTemplateContainerItem { Id = 1, AtrbCd = "DC_ID", IsKey = true, DataType = "number", Label = "Id", Width = 50 });
             items.Add(new UiTemplateContainerItem { Id = 2, AtrbCd = "PIVOT", ObjType = new List<OpDataElementType> { OpDataElementType.PricingTable }, DataType = "string", Label = "Pivot", Width = 50 });
             items.Add(new UiTemplateContainerItem { Id = 3, AtrbCd = "TITLE", ObjType = new List<OpDataElementType> { OpDataElementType.PricingTable }, DataType = "string", Label = "Title", Width = 150 });
             items.Add(new UiTemplateContainerItem { Id = 4, AtrbCd = "INT", DataType = "number", Label = "Int", Width = 100, Template = "#=gridUtils.uiIconWrapper(data, 'INT')#" });
@@ -202,7 +202,7 @@ namespace Intel.MyDeals.DataLibrary
 
             items.Add(new UiTemplateContainerItem { Id = 18, AtrbCd = "_pivot", ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, IsDetail = true, DataType = "object", IsReadonly = true });
             items.Add(new UiTemplateContainerItem { Id = 19, AtrbCd = "_behaviors", ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, IsDetail = true, DataType = "object" });
-            items.Add(new UiTemplateContainerItem { Id = 20, AtrbCd = "dc_id", IsKey = true, ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, IsDetail = true, DataType = "number", Label = "Id", Width = 50 });
+            items.Add(new UiTemplateContainerItem { Id = 20, AtrbCd = "DC_ID", IsKey = true, ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, IsDetail = true, DataType = "number", Label = "Id", Width = 50 });
             items.Add(new UiTemplateContainerItem { Id = 21, AtrbCd = "PIVOT", ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, IsDetail = true, DataType = "string", Label = "Pivot", Width = 50 });
             items.Add(new UiTemplateContainerItem { Id = 22, AtrbCd = "TITLE", ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, IsDetail = true, DataType = "string", Label = "Title", Width = 150 });
             items.Add(new UiTemplateContainerItem { Id = 23, AtrbCd = "INT", ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, IsDetail = true, DataType = "number", Label = "Int", Width = 100, Template = "#=gridUtils.uiIconWrapper(data, 'INT')#" });

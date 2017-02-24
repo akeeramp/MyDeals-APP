@@ -64,7 +64,7 @@ namespace Intel.MyDeals.BusinessLogic.Test
 
             OpDataCollectorFlattenedList data = myDealsData.BuildObjSetContainers(ObjSetPivotMode.Pivoted).ToHierarchialList(OpDataElementType.Contract);
 
-            var dcId = ((OpDataCollectorFlattenedList)data[0][OpDataElementType.PricingStrategy.ToString()])[0]["dc_id"];
+            var dcId = ((OpDataCollectorFlattenedList)data[0][OpDataElementType.PricingStrategy.ToString()])[0]["DC_ID"];
 
             Assert.IsTrue(dcId.ToString() == "201");
         }

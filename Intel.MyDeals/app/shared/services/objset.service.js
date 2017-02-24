@@ -88,11 +88,11 @@ function objsetService($http, dataService, logger, $q) {
         return {
             "PricingTable": [
                 {
-                    "dc_id": 1,
+                    "DC_ID": 1,
                     "TEXT": "Hello World 1",
                     "_MultiDim": [
                         {
-                            "dc_id": -300,
+                            "DC_ID": -300,
                             "PIVOT": -1,
                             "TITLE": "Kit",
                             "TEXT": "Hello World 1",
@@ -109,7 +109,7 @@ function objsetService($http, dataService, logger, $q) {
                             }
                         },
                         {
-                            "dc_id": -301,
+                            "DC_ID": -301,
                             "PIVOT": 0,
                             "TITLE": "Primary",
                             "TEXT": "Hello World 2",
@@ -126,7 +126,7 @@ function objsetService($http, dataService, logger, $q) {
                             }
                         },
                         {
-                            "dc_id": -302,
+                            "DC_ID": -302,
                             "PIVOT": 1,
                             "TITLE": "Secondary 1",
                             "TEXT": "Hello World 3",
@@ -180,7 +180,7 @@ function objsetService($http, dataService, logger, $q) {
             ],
             "WipDeals": [
                 {
-                    "dc_id": 1,
+                    "DC_ID": 1,
                     "TEXT": "Hello World 1",
                     "INT": 123,
                     "DATE": "2/4/2016",
@@ -188,7 +188,7 @@ function objsetService($http, dataService, logger, $q) {
                     "COMBOBOX": "COMBOBOX 5",
                     "_MultiDim": [
                         {
-                            "dc_id": -300,
+                            "DC_ID": -300,
                             "PIVOT": -1,
                             "TITLE": "Kit",
                             "TEXT": "Hello World 1",
@@ -208,7 +208,7 @@ function objsetService($http, dataService, logger, $q) {
                             }
                         },
                         {
-                            "dc_id": -301,
+                            "DC_ID": -301,
                             "PIVOT": 0,
                             "TITLE": "Primary",
                             "TEXT": "Hello World 2",
@@ -218,7 +218,7 @@ function objsetService($http, dataService, logger, $q) {
                             "COMBOBOX": "COMBOBOX 2"
                         },
                         {
-                            "dc_id": -302,
+                            "DC_ID": -302,
                             "PIVOT": 1,
                             "TITLE": "Secondary 1",
                             "TEXT": "Hello World 3",
@@ -248,7 +248,7 @@ function objsetService($http, dataService, logger, $q) {
                     }
                 },
                 {
-                    "dc_id": 2,
+                    "DC_ID": 2,
                     "TEXT": "Hello World 2",
                     "INT": 124,
                     "DATE": "2/4/2016",
@@ -256,7 +256,7 @@ function objsetService($http, dataService, logger, $q) {
                     "COMBOBOX": "COMBOBOX 3",
                     "_MultiDim": [
                         {
-                            "dc_id": -304,
+                            "DC_ID": -304,
                             "PIVOT": -1,
                             "TITLE": "Kit",
                             "TEXT": "Hello World 1",
@@ -266,7 +266,7 @@ function objsetService($http, dataService, logger, $q) {
                             "COMBOBOX": "COMBOBOX 3"
                         },
                         {
-                            "dc_id": -305,
+                            "DC_ID": -305,
                             "PIVOT": 0,
                             "TITLE": "Primary",
                             "TEXT": "Hello World 2",
@@ -276,7 +276,7 @@ function objsetService($http, dataService, logger, $q) {
                             "COMBOBOX": "COMBOBOX 3"
                         },
                         {
-                            "dc_id": -306,
+                            "DC_ID": -306,
                             "PIVOT": 1,
                             "TITLE": "Secondary 1",
                             "TEXT": "Hello World 3",

@@ -43,8 +43,8 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
 
                 if (!ids.Any())
                 {
-                    ids = data[opDataElementType].Where(items => items.ContainsKey("dc_id"))
-                        .Select(items => int.Parse(items["dc_id"].ToString()))
+                    ids = data[opDataElementType].Where(items => items.ContainsKey("DC_ID"))
+                        .Select(items => int.Parse(items["DC_ID"].ToString()))
                         .ToList();
 
                     opTypeGrp = opDataElementType;
@@ -87,7 +87,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
 
             foreach (OpDataCollectorFlattenedItem item in data)
             {
-                int key = int.Parse(item["dc_id"].ToString());
+                int key = int.Parse(item["DC_ID"].ToString());
                 Dictionary<int, OpDataCollectorFlattenedList> dictItems = decoderDict[opDataElementType];
                 if (dictItems.Count > 0 && dictItems.ContainsKey(key))
                 {
@@ -109,7 +109,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
 
             foreach (OpDataCollectorFlattenedItem opDataCollectorFlattenedItem in data[opDataElementType])
             {
-                int key = int.Parse(opDataCollectorFlattenedItem["dc_parent_id"].ToString());
+                int key = int.Parse(opDataCollectorFlattenedItem["DC_PARENT_ID"].ToString());
                 if (!rtn.ContainsKey(key)) rtn[key] = new OpDataCollectorFlattenedList();
                 rtn[key].Add(opDataCollectorFlattenedItem);
             }

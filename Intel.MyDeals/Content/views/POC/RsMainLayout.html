@@ -154,7 +154,7 @@
 <script id="pt-side-template" type="text/x-kendo-template">
     #
     var matchedStyle = "";
-    if (rs.viewModel.curSection !== null && data.dc_id === rs.viewModel.curSection.dc_id) {
+    if (rs.viewModel.curSection !== null && data.DC_ID === rs.viewModel.curSection.DC_ID) {
         matchedStyle = "background-color: \\#ffffff;";
     }
     #
@@ -163,7 +163,7 @@
             <div class="content" style="width: 190px;">
                 <div class="fl" style="width: 15px; color: \\#0071C5; font-size: 14px;">
                     #
-                    if (rs.viewModel.curSection !== null && data.dc_id === rs.viewModel.curSection.dc_id) {
+                    if (rs.viewModel.curSection !== null && data.DC_ID === rs.viewModel.curSection.DC_ID) {
                     #
                     <i class="intelicon-play" style="vertical-align: top;"></i>
                     #
@@ -183,12 +183,12 @@
                     for (var p=0; p < pts.length; p++) {
                         var ptData = pts[p].data();
                         for (var d=0; d< ptData.length; d++) {
-                            if (ptData[d].dc_parent_id === data.dc_id) {
+                            if (ptData[d].DC_PARENT_ID === data.DC_ID) {
                                 var name = ptData[d].TITLE;
-                                if (name === undefined) name = ptData[d].dc_id;
+                                if (name === undefined) name = ptData[d].DC_ID;
                                 var dt = pt.pricingTableTemplates[ptData[d].TMPLT_ID].tmpltDealType.charAt(0);
                                 #
-                                <div onClick="rs.viewModel.selectSection(#=data.dc_id#)" style="cursor: pointer; margin-bottom: 4px;"><span class='label label-primary' style="margin-left: 25px;">#=dt#</span> #=name#</div>
+                                <div onClick="rs.viewModel.selectSection(#=data.DC_ID#)" style="cursor: pointer; margin-bottom: 4px;"><span class='label label-primary' style="margin-left: 25px;">#=dt#</span> #=name#</div>
                                 #
                             }
                         }
@@ -196,14 +196,14 @@
                 }
                 #
 
-                <div onClick="rs.viewModel.selectAndShowPsLink(#=data.dc_id#)" style="cursor: pointer; text-align: right">+ pricing table</div>
+                <div onClick="rs.viewModel.selectAndShowPsLink(#=data.DC_ID#)" style="cursor: pointer; text-align: right">+ pricing table</div>
 
             </div>
         </div>
         
         
         <div class="lnavSectionItem collapsedOnly">
-            <div class="fl navIconLnk tooltipster" onClick="rs.viewModel.selectSection(#=data.dc_id#)" data-bind="attr: { title: TITLE, dc_id: dc_id }">
+            <div class="fl navIconLnk tooltipster" onClick="rs.viewModel.selectSection(#=data.DC_ID#)" data-bind="attr: { title: TITLE, DC_ID: DC_ID }">
                 <i class="intelicon-note"></i>
             </div>
         </div>

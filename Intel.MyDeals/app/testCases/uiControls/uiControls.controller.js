@@ -15,7 +15,7 @@
                     "_behaviors": { type: "object" },
                     "_MultiDim": { type: "object" },
 
-                    "dc_id": {
+                    "DC_ID": {
                         editable: false,
                         nullable: true
                     },
@@ -205,7 +205,7 @@
             }
             $scope.flat = {
                 "_dirty": false,
-                "dc_id": 1,
+                "DC_ID": 1,
                 "TEXT": "Hello World",
                 "INT": 123,
                 "DATE": "2/4/2016",
@@ -265,7 +265,7 @@
             $scope.flatGrid = [
                 {
                     "_dirty": false,
-                    "dc_id": 1,
+                    "DC_ID": 1,
                     "TEXT": "Hello World 1",
                     "INT": 123,
                     "DATE": "2/4/2016",
@@ -273,7 +273,7 @@
                     "COMBOBOX": "COMBOBOX 5",
                     "_MultiDim": [
                         {
-                            "dc_id": -300,
+                            "DC_ID": -300,
                             "PIVOT": -1,
                             "TITLE": "Kit",
                             "TEXT": "Hello World 1",
@@ -294,7 +294,7 @@
                             }
                         },
                         {
-                            "dc_id": -301,
+                            "DC_ID": -301,
                             "PIVOT": 0,
                             "TITLE": "Primary",
                             "TEXT": "Hello World 2",
@@ -304,7 +304,7 @@
                             "COMBOBOX": "COMBOBOX 2"
                         },
                         {
-                            "dc_id": -302,
+                            "DC_ID": -302,
                             "PIVOT": 1,
                             "TITLE": "Secondary 1",
                             "TEXT": "Hello World 3",
@@ -336,7 +336,7 @@
                 },
                 {
                     "_dirty": false,
-                    "dc_id": 2,
+                    "DC_ID": 2,
                     "TEXT": "Hello World 2",
                     "INT": 124,
                     "DATE": "2/4/2016",
@@ -344,7 +344,7 @@
                     "COMBOBOX": "COMBOBOX 3",
                     "_MultiDim": [
                         {
-                            "dc_id": -304,
+                            "DC_ID": -304,
                             "PIVOT": -1,
                             "TITLE": "Kit",
                             "TEXT": "Hello World 1",
@@ -354,7 +354,7 @@
                             "COMBOBOX": "COMBOBOX 4"
                         },
                         {
-                            "dc_id": -305,
+                            "DC_ID": -305,
                             "PIVOT": 0,
                             "TITLE": "Primary",
                             "TEXT": "Hello World 2",
@@ -364,7 +364,7 @@
                             "COMBOBOX": "COMBOBOX 5"
                         },
                         {
-                            "dc_id": -306,
+                            "DC_ID": -306,
                             "PIVOT": 1,
                             "TITLE": "Secondary 1",
                             "TEXT": "Hello World 3",
@@ -417,7 +417,7 @@
                     "id": "",
                     "fields": {
                         "_behaviors": { type: "object" },
-                        "dc_id": { editable: false, nullable: true },
+                        "DC_ID": { editable: false, nullable: true },
                         "PIVOT": { type: "object" },
                         "TITLE": { type: "string" },
                         "TEXT": { type: "string" },
@@ -474,7 +474,7 @@
                     }
                 ]);
 
-                var idIndx = $scope.flatGrid.indexOfField("dc_id", dataItem["dc_id"]);
+                var idIndx = $scope.flatGrid.indexOfField("DC_ID", dataItem["DC_ID"]);
                 var src = $scope.flatGrid[idIndx][pivotName];
 
                 return {

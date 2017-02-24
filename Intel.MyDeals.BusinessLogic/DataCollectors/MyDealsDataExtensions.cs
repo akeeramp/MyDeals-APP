@@ -14,6 +14,12 @@ namespace Intel.MyDeals.BusinessLogic
 
         #region Merge
 
+        /// <summary>
+        /// Merge flattened data back into OpData Deals collections
+        /// </summary>
+        /// <param name="myDealsData">The unflattened deals collection to pass up to DB.</param>
+        /// <param name="data">The flattened UI data format.</param>
+        /// <returns></returns>
         public static MyDealsData Merge(this MyDealsData myDealsData, OpDataCollectorFlattenedDictList data)
         {
             // Save Data Cycle: Point 6
@@ -27,6 +33,14 @@ namespace Intel.MyDeals.BusinessLogic
             return myDealsData;
         }
 
+
+        /// <summary>
+        /// Merge flattened data back into OpData Deals collections for a specific collector type
+        /// </summary>
+        /// <param name="myDealsData">The unflattened deals collection to pass up to DB.</param>
+        /// <param name="opType">Which colelctor type to process.</param>
+        /// <param name="data">The flattened UI data format.</param>
+        /// <returns></returns>
         public static MyDealsData Merge(this MyDealsData myDealsData, OpDataElementType opType, OpDataCollectorFlattenedList data)
         {
             // Save Data Cycle: Point 5
@@ -37,12 +51,12 @@ namespace Intel.MyDeals.BusinessLogic
 
             foreach (OpDataCollectorFlattenedItem items in data)
             {
-                int id = !items.ContainsKey("dc_id") ? 0 : Convert.ToInt32(items["dc_id"].ToString()); // TODO ADD OTHERS HERE XXX
+                int id = !items.ContainsKey("DC_ID") ? 0 : Convert.ToInt32(items["DC_ID"].ToString()); // TODO ADD OTHERS HERE XXX
                 int idtype = !items.ContainsKey("dc_type") // What total crap needing to go from "CONTRACT" to object to ID...  Go figure..
                     ? 0
                     : OpDataElementTypeConverter.StringToId(
                         OpDataElementTypeConverter.FromString(items["dc_type"]).ToString()); // TODO ADD OTHERS HERE XXX //int idtype = !items.ContainsKey("dc_type") ? 0 : Convert.ToInt32(items["dc_type"].ToString());
-                int parentid = !items.ContainsKey("dc_parent_id") ? 0 : Convert.ToInt32(items["dc_parent_id"].ToString()); // TODO ADD OTHERS HERE XXX
+                int parentid = !items.ContainsKey("DC_PARENT_ID") ? 0 : Convert.ToInt32(items["DC_PARENT_ID"].ToString()); // TODO ADD OTHERS HERE XXX
                 int parentidtype = !items.ContainsKey("dc_parent_type") ? 0 
                     : OpDataElementTypeConverter.StringToId(
                         OpDataElementTypeConverter.FromString(items["dc_parent_type"]).ToString()); // TODO ADD OTHERS HERE XXX //int parentidtype = !items.ContainsKey("dc_parent_type") ? 0 : Convert.ToInt32(items["dc_parent_type"].ToString());
@@ -61,11 +75,23 @@ namespace Intel.MyDeals.BusinessLogic
 
         #region FillInHolesFromTemplate
 
+        /// <summary>
+        /// Fill in missing data slots based upon existance in the object template
+        /// </summary>
+        /// <param name="myDealsData">OpData Deals collection.</param>
+        /// <returns></returns>
         public static MyDealsData FillInHolesFromTemplate(this MyDealsData myDealsData)
         {
             return myDealsData.FillInHolesFromTemplate(myDealsData.Keys);
         }
 
+
+        /// <summary>
+        /// Fill in missing data slots based upon existance in the object template
+        /// </summary>
+        /// <param name="myDealsData">OpData Deals collection.</param>
+        /// <param name="opDataElementTypes">Specific object collection.</param>
+        /// <returns></returns>
         public static MyDealsData FillInHolesFromTemplate(this MyDealsData myDealsData, IEnumerable<OpDataElementType> opDataElementTypes)
         {
             foreach (OpDataElementType opDataElementType in opDataElementTypes)
@@ -214,8 +240,8 @@ namespace Intel.MyDeals.BusinessLogic
 
             // Ensure DC type and parent/child ids
             dc.DcType = opDataElementType.ToString();
-            dc.DcID = item["dc_id"] == null ? 0 : Convert.ToInt32(item["dc_id"].ToString());
-            dc.DcParentID = item["dc_parent_id"] == null ? 0 : Convert.ToInt32(item["dc_parent_id"].ToString());
+            dc.DcID = item["DC_ID"] == null ? 0 : Convert.ToInt32(item["DC_ID"].ToString());
+            dc.DcParentID = item["DC_PARENT_ID"] == null ? 0 : Convert.ToInt32(item["DC_PARENT_ID"].ToString());
             dc.DcParentType = OpDataElementTypeConverter.IdToString(parentidtype).ToString(); //item["dc_parent_sid"] == null ? 0 : Convert.ToInt32(item["dc_parent_sid"].ToString());
 
             return dc;

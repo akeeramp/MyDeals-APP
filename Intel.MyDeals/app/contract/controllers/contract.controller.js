@@ -53,7 +53,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
     $scope.uid = -100;
     $scope.isPricingStrategiesHidden = false;
     $scope.isExistingContract = function () {
-        return $scope.contractData.dc_id > 0;
+        return $scope.contractData.DC_ID > 0;
     }
 
 
@@ -190,7 +190,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         }
     }
     $scope.unmarkCurPricingTableIf = function (id) {
-        if ($scope.curPricingTableId > 0 && $scope.curPricingTable !== null && $scope.curPricingTable.dc_parent_id === id) {
+        if ($scope.curPricingTableId > 0 && $scope.curPricingTable !== null && $scope.curPricingTable.DC_PARENT_ID === id) {
             $scope.curPricingTable = {};
             $scope.curPricingTableId = 0;
         }
@@ -205,14 +205,14 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
                 topbar.show();
 
                 // Remove from DB first... then remove from screen
-                objsetService.deletePricingStrategy(ps.dc_id).then(
+                objsetService.deletePricingStrategy(ps.DC_ID).then(
                     function(data) {
 
                         // TODO need to handle exception/error here... right now we do not read response for pass/fail
 
                         // might need to unmark the current selected item
-                        $scope.unmarkCurPricingStrategyIf(ps.dc_id);
-                        $scope.unmarkCurPricingTableIf(ps.dc_id);
+                        $scope.unmarkCurPricingStrategyIf(ps.DC_ID);
+                        $scope.unmarkCurPricingTableIf(ps.DC_ID);
 
                         // delete item
                         $scope.contractData.PricingStrategy.splice($scope.contractData.PricingStrategy.indexOf(ps), 1);
@@ -234,13 +234,13 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
                 topbar.show();
 
                 // Remove from DB first... then remove from screen
-                objsetService.deletePricingTable(pt.dc_id).then(
+                objsetService.deletePricingTable(pt.DC_ID).then(
                     function(data) {
 
                         // TODO need to handle exception/error here... right now we do not read response for pass/fail
 
                         // might need to unmark the current selected item
-                        $scope.unmarkCurPricingTableIf(ps.dc_id);
+                        $scope.unmarkCurPricingTableIf(ps.DC_ID);
 
                         // delete item
                         ps.PricingTable.splice(ps.PricingTable.indexOf(pt), 1);
@@ -284,7 +284,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
 
         // validate that we have access to spreadDs, gridDs and GridDetailsDs
         var contractData = $scope._dirtyContractOnly ? [$scope.contractData] : [];
-        var curPricingTableData = $scope.curPricingTable.dc_id === undefined ? [] : [$scope.curPricingTable];
+        var curPricingTableData = $scope.curPricingTable.DC_ID === undefined ? [] : [$scope.curPricingTable];
 
         objsetService.updateContractAndCurStrategy($scope.getCustId(), contractData, curPricingTableData, sData, gData, source).then(
             function (data) {
@@ -313,18 +313,18 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         var ct = $scope.contractData;
 
         // check for NEW contract
-        if (ct.dc_id <= 0) ct.dc_id = $scope.uid--;
+        if (ct.DC_ID <= 0) ct.DC_ID = $scope.uid--;
 
         // Add to DB first... then add to screen
         objsetService.createContract($scope.getCustId(), ct).then(
             function (data) {
                 $scope.updateNegativeIds(ct, "Contract", data);
 
-                //if (ct.dc_id <= 0) {
+                //if (ct.DC_ID <= 0) {
                 //    for (var a = 0; a < data.data.Contract.Actions.length; a++) {
                 //        var action = data.data.Contract.Actions[a];
-                //        if (action.Action === "ID_CHANGE" && action.dc_id === ct.dc_id) {
-                //            ct.dc_id = action.AltID;
+                //        if (action.Action === "ID_CHANGE" && action.DC_ID === ct.DC_ID) {
+                //            ct.DC_ID = action.AltID;
                 //        }
                 //    }
                 //}
@@ -334,7 +334,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
 
                 // load the screen
                 $scope._dirty = false; // don't want to kick of listeners
-                $state.go('contract.manager', { cid: ct.dc_id });
+                $state.go('contract.manager', { cid: ct.DC_ID });
             },
             function (result) {
                 logger.error("Could not create the contract.", response, response.statusText);
@@ -370,11 +370,11 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
     }
 
     $scope.updateNegativeIds = function(collection, key, data) {
-        if (collection.dc_id <= 0) {
+        if (collection.DC_ID <= 0) {
             for (var a = 0; a < data.data[key].Actions.length; a++) {
                 var action = data.data[key].Actions[a];
-                if (action.Action === "ID_CHANGE" && action.DcID === collection.dc_id) {
-                    collection.dc_id = action.AltID;
+                if (action.Action === "ID_CHANGE" && action.DcID === collection.DC_ID) {
+                    collection.DC_ID = action.AltID;
                 }
             }
         }
@@ -389,9 +389,9 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
 
         // Clone base model and populate changes
         var ps = util.clone($scope.templates.ObjectTemplates.PricingStrategy.Generic);
-        ps.dc_id = $scope.uid--;
+        ps.DC_ID = $scope.uid--;
         ps.dc_sid = 0;
-        ps.dc_parent_id = ct.dc_id;
+        ps.DC_PARENT_ID = ct.DC_ID;
         ps.dc_parent_sid = ct.dc_sid;
         ps.PricingTable = [];
         ps.TITLE = $scope.newStrategy.TITLE;
@@ -450,9 +450,9 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         // Clone base model and populate changes
         // TODO generic shoud be replaced with the correct OBJSET_TYPE
         var pt = util.clone($scope.templates.ObjectTemplates.PricingTable.Generic);
-        pt.dc_id = $scope.uid--;
+        pt.DC_ID = $scope.uid--;
         pt.dc_sid = $scope.uid--;
-        pt.dc_parent_id = $scope.curPricingStrategy.dc_id;
+        pt.DC_PARENT_ID = $scope.curPricingStrategy.DC_ID;
         pt.dc_parent_sid = $scope.curPricingStrategy.dc_sid;
         pt.OBJSET_TYPE_CD = $scope.newPricingTable.OBJSET_TYPE_CD;
         pt.TITLE = $scope.newPricingTable.TITLE;
@@ -473,7 +473,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
                 topbar.hide();
 
                 // load the screen
-                $state.go('contract.manager.strategy', { cid: $scope.contractData.dc_id, sid: pt.dc_parent_id, pid: pt.dc_id });
+                $state.go('contract.manager.strategy', { cid: $scope.contractData.DC_ID, sid: pt.DC_PARENT_ID, pid: pt.DC_ID });
             },
             function (result) {
                 logger.error("Could not create the pricing table.", response, response.statusText);
@@ -534,11 +534,11 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
 
 
     $scope.showWipDeals = function () {
-        $state.go('contract.manager.strategy.wip', { cid: $scope.contractData.dc_id, sid: $scope.curPricingStrategyId, pid: $scope.curPricingTableId });
+        $state.go('contract.manager.strategy.wip', { cid: $scope.contractData.DC_ID, sid: $scope.curPricingStrategyId, pid: $scope.curPricingTableId });
     }
     $scope.backToPricingTable = function () {
         $scope.spreadNeedsInitialization = true;
-        $state.go('contract.manager.strategy', { cid: $scope.contractData.dc_id, sid: $scope.curPricingStrategyId, pid: $scope.curPricingTableId });
+        $state.go('contract.manager.strategy', { cid: $scope.contractData.DC_ID, sid: $scope.curPricingStrategyId, pid: $scope.curPricingTableId });
     }
 
     $scope.validateWipDeals = function () {

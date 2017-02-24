@@ -99,7 +99,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
 
                     if (!collection[intDimKey].ContainsKey(pivotName))
                     {
-                        collection[intDimKey]["dc_id"] = de.DcID;
+                        collection[intDimKey]["DC_ID"] = de.DcID;
                         collection[intDimKey][pivotName] = dimKey;
                     }
 

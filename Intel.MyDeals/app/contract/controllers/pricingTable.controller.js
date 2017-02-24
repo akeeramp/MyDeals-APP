@@ -19,7 +19,7 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
     }
     if (root.curPricingStrategy === null) {
         logger.error("Unable to locate Pricing Strategy " + $stateParams.sid);
-        $state.go('contract.manager', { cid: root.contractData.dc_id });
+        $state.go('contract.manager', { cid: root.contractData.DC_ID });
     }
 
     // Set Pricing Table ID and Object
@@ -31,7 +31,7 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
     }
     if (root.curPricingTable === null) {
         logger.error("Unable to locate Pricing Table " + $stateParams.pid);
-        $state.go('contract.manager', { cid: root.contractData.dc_id });
+        $state.go('contract.manager', { cid: root.contractData.DC_ID });
     }
 
     $scope.$parent.$parent.spreadNeedsInitialization = true;
@@ -172,13 +172,13 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
         var gt = new gridTools(wipTemplate.detailsModel, wipTemplate.detailsColumns);
         gt.assignColSettings();
 
-        var idIndx = $scope.dataGrid.indexOfField("dc_id", dataItem["dc_id"]);
+        var idIndx = $scope.dataGrid.indexOfField("DC_ID", dataItem["DC_ID"]);
         var src = $scope.dataGrid[idIndx][pivotName];
 
         // define datasource not inline so we can reference it
-        if (root.gridDetailsDs[dataItem["dc_id"]] === undefined) root.gridDetailsDs[dataItem["dc_id"]] = gt.createDataSource(src);
+        if (root.gridDetailsDs[dataItem["DC_ID"]] === undefined) root.gridDetailsDs[dataItem["DC_ID"]] = gt.createDataSource(src);
         return {
-            dataSource: root.gridDetailsDs[dataItem["dc_id"]],
+            dataSource: root.gridDetailsDs[dataItem["DC_ID"]],
             columns: gt.cols,
             sortable: true,
             editable: true,
@@ -207,8 +207,8 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
                         item._behaviors[field][key] = false;
 
                         //_MultiDim
-                        if (!util.isNull(root.gridDetailsDs[item["dc_id"]])) {
-                            var detailData = root.gridDetailsDs[item["dc_id"]].data();
+                        if (!util.isNull(root.gridDetailsDs[item["DC_ID"]])) {
+                            var detailData = root.gridDetailsDs[item["DC_ID"]].data();
                             for (var ii = 0; ii < item._MultiDim.length; ii++) {
                                 detailData[ii]._dirty = false;
                                 angular.forEach(detailData[ii],

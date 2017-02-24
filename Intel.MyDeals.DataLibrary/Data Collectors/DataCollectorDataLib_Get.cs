@@ -1,19 +1,9 @@
 ﻿using Intel.MyDeals.DataAccessLib;
 using Intel.Opaque.Data;
-using Intel.Opaque.DBAccess;
-using System;
 using System.Collections.Generic;
-using System.Data;
-using System.IO;
 using System.Linq;
 using Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals.dbo;
 using Intel.MyDeals.Entities;
-using Intel.MyDeals.IDataLibrary;
-using Intel.Opaque;
-using Intel.Opaque.DataElement;
-using Intel.Opaque.Tools;
-using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
-
 
 namespace Intel.MyDeals.DataLibrary
 {
@@ -22,16 +12,39 @@ namespace Intel.MyDeals.DataLibrary
 
         #region Get By Ids
 
+        /// <summary>
+        /// Get an object tree from its user displayed ID
+        /// </summary>
+        /// <param name="opDataElementType">Top level of object tree that you expect to get.</param>
+        /// <param name="ids">List of IDs to pull.</param>
+        /// <returns></returns>
         public MyDealsData GetByIDs(OpDataElementType opDataElementType, IEnumerable<int> ids)
         {
             return GetByIDs(opDataElementType, ids, new List<OpDataElementType> { opDataElementType }, new List<string>());
         }
 
+
+        /// <summary>
+        /// Get an object tree from its user displayed ID
+        /// </summary>
+        /// <param name="opDataElementType">Top level of object tree that you expect to get.</param>
+        /// <param name="ids">List of IDs to pull.</param>
+        /// <param name="includeTypes">Which object types to include in the request.</param>
+        /// <returns></returns>
         public MyDealsData GetByIDs(OpDataElementType opDataElementType, IEnumerable<int> ids, List<OpDataElementType> includeTypes)
         {
             return GetByIDs(opDataElementType, ids, includeTypes, new List<string>());
         }
 
+
+        /// <summary>
+        /// Get an object tree from its user displayed ID
+        /// </summary>
+        /// <param name="opDataElementType">Top level of object tree that you expect to get.</param>
+        /// <param name="ids">List of IDs to pull.</param>
+        /// <param name="includeTypes">Which object types to include in the request.</param>
+        /// <param name="atrbs">Attributes that need to be brought in as well.</param>
+        /// <returns></returns>
         public MyDealsData GetByIDs(OpDataElementType opDataElementType, IEnumerable<int> ids, List<OpDataElementType> includeTypes, IEnumerable<string> atrbs)
         {
             // Load Data Cycle: Point 3
@@ -44,14 +57,13 @@ namespace Intel.MyDeals.DataLibrary
                 strInc = string.Join(",", includeTypes.Select(OpDataElementTypeConverter.ToAlias).Distinct());
             }
 
-            //// TODO change SP to match naming conventions
+            //// TODO change SP to match naming conventions - Change this over to objects imported definations
             //// --'CNTRCT, PRC_ST, PRCNG, WIP_DEAL, DEAL'
             strInc = strInc.Replace(OpDataElementType.Contract.ToString(), OpDataElementType.Contract.ToAlias());
             strInc = strInc.Replace(OpDataElementType.PricingStrategy.ToString(), OpDataElementType.PricingStrategy.ToAlias());
             strInc = strInc.Replace(OpDataElementType.PricingTable.ToString(), OpDataElementType.PricingTable.ToAlias());
             strInc = strInc.Replace(OpDataElementType.WipDeals.ToString(), OpDataElementType.WipDeals.ToAlias());
             strInc = strInc.Replace(OpDataElementType.Deals.ToString(), OpDataElementType.Deals.ToAlias());
-
 
             var cmd = new PR_MYDL_GET_OBJS_BY_SIDS() // PR_GET_OBJS_BY_KEYS in original case, new PR_GET_OBJS_BY_SIDS()
             {
@@ -104,11 +116,25 @@ namespace Intel.MyDeals.DataLibrary
 
         #endregion
 
+
+        /// <summary>
+        /// Pull out a specific template from the templates collection and build a collector out of it.
+        /// </summary>
+        /// <param name="opDataElementType">Which object template do you need to pull.</param>
+        /// <param name="id">The ID to tag to it.</param>
+        /// <param name="parentId">The ParentId to tag to it as well.</param>
+        /// <returns></returns>
         public static OpDataCollector GetDataCollectorFromTemplate(OpDataElementType opDataElementType, int id, int parentId)
         {
             return GetOpDataElementUITemplate(opDataElementType).CopyToOpDataCollector(id, parentId);
         }
 
+
+        /// <summary>
+        /// Pull out a specific template from the templates collection and build a UI template object out of it.
+        /// </summary>
+        /// <param name="opDataElementType">Which object template do you need to pull.</param>
+        /// <returns></returns>
         public static OpDataElementUITemplate GetOpDataElementUITemplate(OpDataElementType opDataElementType)
         {
             OpDataElementUITemplates ourTemplates = DataCollections.GetOpDataElementUITemplates();
@@ -122,5 +148,6 @@ namespace Intel.MyDeals.DataLibrary
                 ? ourTemplates[key.ToUpper()]
                 : new OpDataElementUITemplate();
         }
+
     }
 }

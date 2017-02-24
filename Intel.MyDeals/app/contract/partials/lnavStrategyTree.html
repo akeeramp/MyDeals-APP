@@ -13,8 +13,8 @@
             </div>
 
             <div class="fr">
-                <span class="hasMenuPs{{ ps.dc_id }} ptBtn" title="View more options"><i class="intelicon-vertical-menu"></i></span>
-                <ul kendo-context-menu k-filter="'.hasMenuPs{{ ps.dc_id }}'" k-show-on="'click'">
+                <span class="hasMenuPs{{ ps.DC_ID }} ptBtn" title="View more options"><i class="intelicon-vertical-menu"></i></span>
+                <ul kendo-context-menu k-filter="'.hasMenuPs{{ ps.DC_ID }}'" k-show-on="'click'">
                     <li role="presentation"><a tabindex="-1" role="menuitem" ng-click="showAddPricingTable(ps)"><i class="intelicon-plus-max"></i> Add Pricing Table</a></li>
                     <li role="presentation"><a tabindex="-1" role="menuitem" ng-click="deletePricingStrategy(ps)"><i class="intelicon-trash-outlined"></i> Delete Pricing Strategy</a></li>
                 </ul>
@@ -25,18 +25,18 @@
 
         <div uib-collapse="isCollapsed" style="margin-bottom: 10px;">
             <div ng-repeat="pt in ps.PricingTable | filter:query" class="lnavPricingTableContainer">
-                <div class="ptNav" ng-class="{active: curPricingTable.dc_id == pt.dc_id}">
+                <div class="ptNav" ng-class="{active: curPricingTable.DC_ID == pt.DC_ID}">
                     <div class="fl textCircle pct_{{ pt.PCT_RESULT }}">{{ pt.OBJSET_TYPE_CD | limitTo:1 }}</div>
                     <div class="fl" style="margin: 0 6px;" ng-init="isEditable=false">
                         <input ng-blur="isEditable=false" ng-show="isEditable" focus-on-show ng-model="pt.TITLE" class="flatWhiteInput" />
-                        <div ng-dblclick="isEditable=true" ng-hide="isEditable" style="width: 195px;" ui-sref="contract.manager.strategy({cid:contractData.dc_id,sid:ps.dc_id,pid:pt.dc_id})">
+                        <div ng-dblclick="isEditable=true" ng-hide="isEditable" style="width: 195px;" ui-sref="contract.manager.strategy({cid:contractData.DC_ID,sid:ps.DC_ID,pid:pt.DC_ID})">
                             {{ pt.TITLE }}
                         </div>
                     </div>
 
                     <div class="fr">
-                        <span class="hasMenuPt{{ pt.dc_id }} ptBtn" title="View more options"><i class="intelicon-vertical-menu"></i></span>
-                        <ul kendo-context-menu k-filter="'.hasMenuPt{{ pt.dc_id }}'" k-show-on="'click'">
+                        <span class="hasMenuPt{{ pt.DC_ID }} ptBtn" title="View more options"><i class="intelicon-vertical-menu"></i></span>
+                        <ul kendo-context-menu k-filter="'.hasMenuPt{{ pt.DC_ID }}'" k-show-on="'click'">
                             <li role="presentation"><a tabindex="-1" role="menuitem" ng-click="deletePricingTable(ps, pt)"><i class="intelicon-trash-outlined"></i> Delete Pricing Table</a></li>
                         </ul>
                     </div>
@@ -67,7 +67,7 @@
 
 <div op-control-flat
      ng-model="contractData"
-     op-cd="'dc_id'"
+     op-cd="'DC_ID'"
      op-type="'NUMERIC'"
      op-label="'Test Label:'"
      op-ui-mode="'VERTICAL'"></div>

@@ -27,13 +27,13 @@
 
 	var TablesToProcess = new List<KeyValuePair<string, string>>();
 	TablesToProcess.Add(new KeyValuePair<string, string>("meta", "[dbo].[ATRB_MSTR]"));
-	TablesToProcess.Add(new KeyValuePair<string, string>("deal", "[dbo].[WIP_ATRB]"));
-	TablesToProcess.Add(new KeyValuePair<string, string>("deal", "[dbo].[STG_WIP_ATRB]"));
-	TablesToProcess.Add(new KeyValuePair<string, string>("deal", "[dbo].[WIP_ACTN]"));
+	//TablesToProcess.Add(new KeyValuePair<string, string>("deal", "[dbo].[WIP_ATRB]"));
+	//TablesToProcess.Add(new KeyValuePair<string, string>("deal", "[dbo].[STG_WIP_ATRB]"));
+	//TablesToProcess.Add(new KeyValuePair<string, string>("deal", "[dbo].[WIP_ACTN]"));
 
-	TablesToProcess.Add(new KeyValuePair<string, string>("deal", "[dbo].[MYDL_CL_WIP_ATRB_TMP]"));
-	TablesToProcess.Add(new KeyValuePair<string, string>("deal", "[dbo].[MYDL_CL_WIP_ACTN]"));
-	TablesToProcess.Add(new KeyValuePair<string, string>("deal", "[dbo].[MYDL_CL_WIP_ATRB]"));
+	TablesToProcess.Add(new KeyValuePair<string, string>("deal", "[dbo].[MYDL_CL_WIP_ATRB_TMP]"));  // Used to be [dbo].[STG_WIP_ATRB]
+	TablesToProcess.Add(new KeyValuePair<string, string>("deal", "[dbo].[MYDL_CL_WIP_ACTN]"));  // Used to be [dbo].[WIP_ACTN]
+	TablesToProcess.Add(new KeyValuePair<string, string>("deal", "[dbo].[MYDL_CL_WIP_ATRB]"));  // Used to be [dbo].[WIP_ATRB]
 
 	WriteLine(dbobjects.BoilerPlateDetails);
 	WriteLine("");

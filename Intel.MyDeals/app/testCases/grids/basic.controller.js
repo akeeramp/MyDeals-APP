@@ -10,9 +10,9 @@
 
         var gTools = new gridTools(
             {
-                "id": "dc_id",
+                "id": "DC_ID",
                 "fields": {
-                    "dc_id": {
+                    "DC_ID": {
                         editable: false,
                         nullable: true
                     },
@@ -64,9 +64,9 @@
 
         var gTools2 = new gridTools(
             {
-                "id": "dc_id",
+                "id": "DC_ID",
                 "fields": {
-                    "dc_id": {
+                    "DC_ID": {
                         editable: false,
                         nullable: true
                     },
@@ -134,7 +134,7 @@
 
             for (var i = 0; i < 100; i++) {
                 $scope.flatGrid.push({
-                    "dc_id": i,
+                    "DC_ID": i,
                     "TEXT": "Hello World " + i,
                     "INT": 123 + (i * 1000),
                     "DATE": "2/4/2016",

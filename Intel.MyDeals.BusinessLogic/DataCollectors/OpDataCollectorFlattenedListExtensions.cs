@@ -11,7 +11,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
         public static MyDealsData ToMyDealsData(this OpDataCollectorFlattenedList data)
         {
             OpDataElementType opDataElementType = OpDataElementType.Deals;
-            string idCode = "dc_id";
+            string idCode = "DC_ID";
 
             List<int> dealIds = data.Select(items => int.Parse(items[idCode].ToString())).ToList();
 

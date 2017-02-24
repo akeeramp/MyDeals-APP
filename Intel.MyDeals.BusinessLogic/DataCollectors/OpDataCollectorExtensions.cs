@@ -263,9 +263,9 @@ namespace Intel.MyDeals.BusinessLogic
             if (objsetItem.ContainsKey("_MultiDim"))
                 objsetItem["_MultiDim"] = ((Dictionary<int, OpDataCollectorFlattenedItem>)objsetItem["_MultiDim"]).Values.ToList();
 
-            objsetItem["dc_id"] = dc.DcID;
+            objsetItem["DC_ID"] = dc.DcID;
             objsetItem["dc_type"] = dc.DcType; // TODO - Does this work???
-            objsetItem["dc_parent_id"] = dc.DcParentID;
+            objsetItem["DC_PARENT_ID"] = dc.DcParentID;
             objsetItem["dc_parent_type"] = dc.DcParentType;
 
             // TODO Inject Rule Trigger here

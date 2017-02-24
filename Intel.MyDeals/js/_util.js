@@ -49,7 +49,7 @@ util.isEmpty = function(map)
 util.findInArray = function (input, id) {
     var len = input.length;
     for (var i = 0; i < len; i++) {
-        if (+input[i].dc_id === +id) {
+        if (+input[i].DC_ID === +id) {
             return input[i];
         }
     }
