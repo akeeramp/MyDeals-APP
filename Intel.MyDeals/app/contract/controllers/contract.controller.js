@@ -169,7 +169,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
     $scope.selectPtTemplateIcon = function (ptTmplt) {
         $scope.clearPtTemplateIcons();
         ptTmplt._custom._active = true;
-        $scope.newPricingTable["OBJSET_TYPE_CD"] = ptTmplt.name;
+        $scope.newPricingTable["OBJ_SET_TYPE_CD"] = ptTmplt.name;
         $scope.newPricingTable["_extraAtrbs"] = ptTmplt.extraAtrbs;
         $scope.newPricingTable["_defaultAtrbs"] = ptTmplt.defaultAtrbs;
 
@@ -390,9 +390,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         // Clone base model and populate changes
         var ps = util.clone($scope.templates.ObjectTemplates.PricingStrategy.Generic);
         ps.DC_ID = $scope.uid--;
-        ps.dc_sid = 0;
         ps.DC_PARENT_ID = ct.DC_ID;
-        ps.dc_parent_sid = ct.dc_sid;
         ps.PricingTable = [];
         ps.TITLE = $scope.newStrategy.TITLE;
         debugger;
@@ -448,16 +446,13 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         topbar.show();
 
         // Clone base model and populate changes
-        // TODO generic shoud be replaced with the correct OBJSET_TYPE
+        // TODO generic shoud be replaced with the correct OBJ_SET_TYPE
         var pt = util.clone($scope.templates.ObjectTemplates.PricingTable.Generic);
         pt.DC_ID = $scope.uid--;
-        pt.dc_sid = $scope.uid--;
         pt.DC_PARENT_ID = $scope.curPricingStrategy.DC_ID;
-        pt.dc_parent_sid = $scope.curPricingStrategy.dc_sid;
-        pt.OBJSET_TYPE_CD = $scope.newPricingTable.OBJSET_TYPE_CD;
+        pt.OBJ_SET_TYPE_CD = $scope.newPricingTable.OBJ_SET_TYPE_CD;
         pt.TITLE = $scope.newPricingTable.TITLE;
         pt._defaultAtrbs = $scope.newPricingTable._defaultAtrbs;
-        debugger;
 
         // Add to DB first... then add to screen
         objsetService.createPricingTable($scope.getCustId(), pt).then(

@@ -63,11 +63,12 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
     $scope.dataSpreadSheet = root.pricingTableData.PricingTable[0]._MultiDim;
     $scope.dataGrid = root.pricingTableData.WipDeals;
 
-    var ptTemplate = root.templates.ModelTemplates.PricingTable[root.curPricingTable.OBJSET_TYPE_CD];
+    var ptTemplate = root.templates.ModelTemplates.PricingTable[root.curPricingTable.OBJ_SET_TYPE_CD];
     var columns = $scope.getColumns(ptTemplate);
 
     $scope.colToLetter = {};
 
+    debugger;
     // Define Kendo Spreadsheet options
     //
     root.spreadDs = new kendo.data.DataSource({
@@ -134,7 +135,7 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
         }
     };
 
-    var wipTemplate = root.templates.ModelTemplates.WipDeals[root.curPricingTable.OBJSET_TYPE_CD];
+    var wipTemplate = root.templates.ModelTemplates.WipDeals[root.curPricingTable.OBJ_SET_TYPE_CD];
 
     // Define Kendo Main Grid options
     //
