@@ -13,15 +13,21 @@
 
         vm.userInput = [];
         vm.products = "";// e.g. i7-4770(S/T), 430, 123, 111
-        vm.invalidProducts = "";
-        vm.multipleMatchProducts = "";
+        vm.invalidProducts = [];
+        vm.multipleMatchProducts = [];
         vm.makeHierarchy = makeHierarchy;
         vm.translateProducts = translateProducts;
         vm.addToMydealProducts = addToMydealProducts;
+        vm.reset = reset;
 
         function translateProducts() {
             vm.userInput.length = 0;
-            vm.userInput.push(vm.products);
+            var multipleLine = vm.products.split("\n");
+
+            $.each(multipleLine, function (i, line) {
+                vm.userInput.push(line);
+            });
+
             ProductSelectorService.TranslateProducts(vm.userInput).then(function (response) {
                 vm.showGrid = true;
                 cookProducts(response.data);
@@ -48,50 +54,70 @@
                 pageSize: 25
             },
             columns: [
-            {
-                field: "PRD_MBR_SID",
-                title: "Id",
-            },
-            {
-                field: "HIER_VAL_NM",
-                title: "Name",
-            },
-            {
-                field: "PRD_CAT_NM",
-                title: "Category",
-            },
-            {
-                field: "BRND_NM",
-                title: "Brand",
-            },
-            {
-                field: "FMLY_NM",
-                title: "Family",
-            },
-            {
-                field: "PCSR_NBR",
-                title: "Processor #",
-            },
-            {
-                field: "DEAL_PRD_NM",
-                title: "Deal Product",
-            },
-            {
-                field: "SKU_NM",
-                title: "SKU Name",
-            }]
+        {
+            field: "PRD_MBR_SID",
+            title: "Id",
+        },
+        {
+            field: "HIER_VAL_NM",
+            title: "Name",
+        },
+        {
+            field: "PRD_CAT_NM",
+            title: "Category",
+        },
+        {
+            field: "BRND_NM",
+            title: "Brand",
+        },
+        {
+            field: "FMLY_NM",
+            title: "Family",
+        },
+        {
+            field: "PCSR_NBR",
+            title: "Processor #",
+        },
+        {
+            field: "DEAL_PRD_NM",
+            title: "Deal Product",
+        },
+        {
+            field: "SKU_NM",
+            title: "SKU Name",
+        }]
         }
 
         function cookProducts(data) {
+            reset();
             for (var key in data.ProdctTransformResults) {
-                // Make observable array empty
-                vm.dataSource.splice(0, vm.dataSource.length);
-                for (var i = 0; i < data.ValidProducts[key].length ; i++) {
+                for (var i = 0; i < data.ValidProducts[key].length; i++) {
                     vm.dataSource.push(data.ValidProducts[key][i]);
                 }
-                vm.invalidProducts = data.InValidProducts[key].join(", ")
-                vm.multipleMatchProducts = !!data.DuplicateProducts[key] ? data.DuplicateProducts[key] : "";
+
+                // Process invalid products to make html to display
+                if (data.InValidProducts[key].length > 0) {
+                    var object = { "Row": "", "Items": [] };
+                    object.Row = key;
+                    object.Items = data.InValidProducts[key].join(", ")
+                    vm.invalidProducts.push(object);
+                }
+
+                // Process multiple match products to make html to display
+                if (!!data.DuplicateProducts[key]) {
+                    var object = { "Row": "", "Items": [] };
+                    object.Row = key;
+                    object.Items = !!data.DuplicateProducts[key] ? data.DuplicateProducts[key] : "";
+                    vm.multipleMatchProducts.push(object);
+                }
             }
+        }
+
+        var reset = function reset() {
+            // Make observable array empty
+            vm.dataSource.splice(0, vm.dataSource.length);
+            vm.multipleMatchProducts = [];
+            vm.invalidProducts = [];
         }
 
         // Build the Hierarchy
