@@ -146,10 +146,10 @@ namespace Intel.MyDeals.BusinessLogic.Test
 
             AdminDealType dealType = new AdminDealType
             {
-                DEAL_TYPE_CD = testStringShort,
-                DEAL_TYPE_DESC = testString,
-                DEAL_TYPE_SID = 0,
-                DEAL_ATRB_SID = 0,
+                OBJ_SET_TYPE_CD = testStringShort,
+                OBJ_SET_TYPE_DESC = testString,
+                OBJ_SET_TYPE_SID = 0,
+                OBJ_ATRB_SID = 0,
                 TEMPLT_DEAL_SID = 0,
                 TEMPLT_DEAL_NBR = 0,
                 TRKR_NBR_DT_LTR = testStringShort,
@@ -159,10 +159,10 @@ namespace Intel.MyDeals.BusinessLogic.Test
             AdminDealType insertResult = new SecurityAttributesLib().ManageAdminDealType(dealType, CrudModes.Insert);
 
             Assert.IsTrue(
-                insertResult.DEAL_TYPE_CD == dealType.DEAL_TYPE_CD
-                && insertResult.DEAL_TYPE_DESC == dealType.DEAL_TYPE_DESC
-                && insertResult.DEAL_TYPE_SID != 0
-                && insertResult.DEAL_ATRB_SID == dealType.DEAL_ATRB_SID
+                insertResult.OBJ_SET_TYPE_CD == dealType.OBJ_SET_TYPE_CD
+                && insertResult.OBJ_SET_TYPE_DESC == dealType.OBJ_SET_TYPE_DESC
+                && insertResult.OBJ_SET_TYPE_SID != 0
+                && insertResult.OBJ_ATRB_SID == dealType.OBJ_ATRB_SID
                 && insertResult.TEMPLT_DEAL_SID == dealType.TEMPLT_DEAL_SID
                 && insertResult.TEMPLT_DEAL_NBR == dealType.TEMPLT_DEAL_NBR
                 && insertResult.TRKR_NBR_DT_LTR == dealType.TRKR_NBR_DT_LTR
@@ -172,15 +172,15 @@ namespace Intel.MyDeals.BusinessLogic.Test
 
             //UPDATE
             testString = "UNIT TEST - UpdateAdminDealTypes";
-            insertResult.DEAL_TYPE_DESC = testString;
+            insertResult.OBJ_SET_TYPE_DESC = testString;
 
             AdminDealType updateResult = new SecurityAttributesLib().ManageAdminDealType(insertResult, CrudModes.Update);
 
             Assert.IsTrue(
-                updateResult.DEAL_TYPE_CD == insertResult.DEAL_TYPE_CD
-                && updateResult.DEAL_TYPE_DESC == insertResult.DEAL_TYPE_DESC
-                && updateResult.DEAL_TYPE_SID == insertResult.DEAL_TYPE_SID
-                && updateResult.DEAL_ATRB_SID == insertResult.DEAL_ATRB_SID
+                updateResult.OBJ_SET_TYPE_CD == insertResult.OBJ_SET_TYPE_CD
+                && updateResult.OBJ_SET_TYPE_DESC == insertResult.OBJ_SET_TYPE_DESC
+                && updateResult.OBJ_SET_TYPE_SID == insertResult.OBJ_SET_TYPE_SID
+                && updateResult.OBJ_ATRB_SID == insertResult.OBJ_ATRB_SID
                 && updateResult.TEMPLT_DEAL_SID == insertResult.TEMPLT_DEAL_SID
                 && updateResult.TEMPLT_DEAL_NBR == insertResult.TEMPLT_DEAL_NBR
                 && updateResult.TRKR_NBR_DT_LTR == insertResult.TRKR_NBR_DT_LTR
@@ -189,7 +189,7 @@ namespace Intel.MyDeals.BusinessLogic.Test
                 );
 
             //DELETE
-            bool deleteResult = new SecurityAttributesLib().DeleteAdminDealType(updateResult.DEAL_TYPE_SID);
+            bool deleteResult = new SecurityAttributesLib().DeleteAdminDealType(updateResult.OBJ_SET_TYPE_SID);
             Assert.IsTrue(deleteResult);
         }
 
