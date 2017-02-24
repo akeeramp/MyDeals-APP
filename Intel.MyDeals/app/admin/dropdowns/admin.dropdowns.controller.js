@@ -4,9 +4,9 @@
         .module('app.admin')
         .controller('DropdownsController', DropdownsController)
 
-    DropdownsController.$inject = ['dropdownsService', '$scope', 'logger', 'gridConstants']
+    DropdownsController.$inject = ['dropdownsService', '$scope', 'logger', 'confirmationModal', 'gridConstants']
 
-    function DropdownsController(dropdownsService, $scope, logger, gridConstants) {
+    function DropdownsController(dropdownsService, $scope, logger, confirmationModal, gridConstants) {
         var vm = this;
 
         // Functions
@@ -18,6 +18,11 @@
         // Variables
         vm.selectedItem = null;
         vm.isButtonDisabled = true;
+
+        vm.dealtypeDataSource = [];
+        vm.dealtypes = [];
+        vm.onlyAllDeal = [];
+        vm.groupsDataSource = [];
 
         vm.dataSource = new kendo.data.DataSource({
             type: "json",
@@ -40,13 +45,27 @@
                         });
                 },
                 destroy: function (e) {
-                    dropdownsService.deleteBasicDropdowns(e.data.models[0].ATRB_LKUP_SID)
+                    var modalOptions = {
+                        closeButtonText: 'Cancel',
+                        actionButtonText: 'Delete Dropdown',
+                        hasActionButton: true,
+                        headerText: 'Delete Confirmation',
+                        bodyText: 'Are you sure you would like to Delete this Dropdown Item?'
+                    };
+
+                    confirmationModal.showModal({}, modalOptions).then(function (result) {
+                        dropdownsService.deleteBasicDropdowns(e.data.models[0].ATRB_LKUP_SID)
                         .then(function (response) {
                             e.success(response.data);
                             logger.success("Dropdown Deleted.");
                         }, function (response) {
                             logger.error("Unable to delete Dropdown.", response, response.statusText);
+                            cancelChanges();
                         });
+                    }, function (response) {
+                        cancelChanges();
+                    });
+                    
                 },
                 create: function (e) {
                     dropdownsService.insertBasicDropdowns(e.data.models[0])
@@ -79,18 +98,18 @@
             }
         });
 
-        vm.dealtypeDataSource = [];
         function getDealtypeDataSource() {
             dropdownsService.getDealTypesDropdowns()
                         .then(function (response) {
                             vm.dealtypeDataSource = response.data;
+                            vm.dealtypes = response.data;
+                            vm.onlyAllDeal = [response.data[0]] //this assumes that "All Deals" will always be at the top of the "All Deal Types" category
                         }, function (response) {
                             logger.error("Unable to get Deal Type Dropdowns.", response, response.statusText);
                         });
         }
         getDealtypeDataSource();
 
-        vm.groupsDataSource = [];
         function getGroupsDataSource() {
             dropdownsService.getDropdownGroups()
                         .then(function (response) {
@@ -108,14 +127,35 @@
             selectable: true,
             resizable: true,
             groupable: true,
-            editable: "popup",
+            editable: { mode: "inline", confirmation: false },
+            edit: function (e) {
+                var commandCell = e.container.find("td:first");
+                commandCell.html('<a class="k-grid-update" href="#"><span class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span class="k-icon k-i-cancel"></span></a>');
+                if (e.model.isNew() == false) { //prevent edit of these fields except during creation
+                    $('input[name=DROP_DOWN]').parent().html(e.model.DROP_DOWN);
+                    $('input[name=OBJ_SET_TYPE_SID]').parent().html(e.model.OBJ_SET_TYPE_CD);
+                    $('input[name=ATRB_SID]').parent().html(e.model.ATRB_CD);
+                }
+            },
+            destroy: function (e) {
+                var commandCell = e.container.find("td:first");
+                commandCell.html('<a class="k-grid-update" href="#"><span class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span class="k-icon k-i-cancel"></span></a>');
+            },
             pageable: {
                 refresh: true,
                 pageSizes: gridConstants.pageSizes,
             },
             change: vm.onChange,
-            toolbar: vm.toolBarTemplate,
+            toolbar: ["create"],
             columns: [
+                {
+                    command: [
+                        { name: "edit", template: "<a class='k-grid-edit' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-edit'></span></a>" },
+                        { name: "destroy", template: "<a class='k-grid-delete' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-close'></span></a>" }
+                    ],
+                    title: "Commands",
+                    width: "8%"
+                },
                 {
                     field: "ATRB_LKUP_SID",
                     title: "ID",
@@ -139,10 +179,10 @@
                         input.kendoDropDownList({
                             dataTextField: "dropdownName",
                             dataValueField: "dropdownID",
-                            dataSource: vm.dealtypeDataSource // bind it to the dealtype datasource
+                            dataSource: vm.dealtypeDataSource, // bind it to the dealtype datasource
+                            select: onDealTypeChange
                         }).appendTo(container);
                     },
-                    //template: dealtypeName("#= ATRB_SID #")
                     template: "#= OBJ_SET_TYPE_CD #"
                 },
                 //{
@@ -163,10 +203,10 @@
                         input.kendoDropDownList({
                             dataTextField: "dropdownName",
                             dataValueField: "dropdownID",
-                            dataSource: vm.groupsDataSource // bind it to the group datasource
+                            dataSource: vm.groupsDataSource, // bind it to the group datasource
+                            select: onGroupChange
                         }).appendTo(container);
                     },
-                    //template: groupName("#= ATRB_SID #")
                     template: "#= ATRB_CD #"
                 },
                 {
@@ -184,13 +224,28 @@
         // Gets and sets the selected row
         function onChange() {
             vm.selectedItem = $scope.dropdownGrid.select();
-            console.log(vm.selectedItem)
             if (vm.selectedItem.length == 0) {
                 vm.isButtonDisabled = true;
             } else {
                 vm.isButtonDisabled = false;
             }
             $scope.$apply();
+        }
+
+        function onDealTypeChange(e) {
+            //TODO: notify user that if they select "All Deals", it may set other dropdowns to inactive? need to clarify with Doug. would also need to potentially refresh the entire grid?
+            //TODO: why is this kendo select event being called twice? change event only happens once. 2nd select occurs when deselecting...
+        }
+
+        function onGroupChange(e) {
+            //TODO: if user selects a group marked as subsegment, deal type dropdown must be set to "All Deals"
+            //TODO: why is this kendo select event being called twice? change event only happens once. 2nd select occurs when deselecting...
+            //TODO: logic below works except the dealtype dropdownlist does not refresh as I initially expected.  need to figure out why
+            if (e.dataItem.isSubSegment == 0) {
+                vm.dealtypeDataSource = vm.dealtypes;
+            } else {
+                vm.dealtypeDataSource = vm.onlyAllDeal;
+            }
         }
 
         function addItem() {
@@ -202,6 +257,9 @@
         }
         function deleteItem() {
             $scope.dropdownGrid.removeRow(vm.selectedItem);
+        }
+        function cancelChanges() {
+            $scope.dropdownGrid.cancelChanges();
         }
 
     }
