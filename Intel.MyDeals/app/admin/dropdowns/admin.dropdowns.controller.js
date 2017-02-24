@@ -217,7 +217,8 @@
                     field: "ACTV_IND",
                     title: "Is Active",
                     width: "10%",
-                    template: "<div><span ng-if='! #= ACTV_IND # ' class='icon-md intelicon-empty-box'></span><span ng-if=' #= ACTV_IND # ' class='icon-md intelicon-filled-box'></span></div>"
+                    template: gridUtils.boolViewer('ACTV_IND'),
+                    editor: gridUtils.boolEditor
                 }]
         }
 

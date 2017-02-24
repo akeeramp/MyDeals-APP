@@ -158,45 +158,55 @@
 				width: "80px"
 			},
 			{
+			    field: "ACTV_IND",
+			    width: 120,
+			    headerTemplate: "<div class='editableHeader'> Actv Ind </div>",
+			    template: gridUtils.boolViewer('ACTV_IND'),
+			    editor: gridUtils.boolEditor,
+			    filterable: { multi: true, search: true }
+			},
+			{
 				field: "PRD_CAT_MAP_SID",
-				hidden: true
+				hidden: true,
+				filterable: { multi: true, search: true }
 			},
             {
             	field: "GDM_PRD_TYPE_NM",
-            	title: "Gdm Product Type"
+            	title: "Gdm Product Type",
+            	filterable: { multi: true, search: true }
             },
             {
             	field: "GDM_VRT_NM",
-            	title: "GDM Vertical Name"
+            	title: "GDM Vertical Name",
+            	filterable: { multi: true, search: true }
             },
 			{
             	field: "DIV_NM",
-            	title: "Division Short Name"
+            	title: "Division Short Name",
+            	filterable: { multi: true, search: true }
 			},
 			{
             	field: "OP_CD",
             	width: 120,
-            	title: "Op Code"
+            	title: "Op Code",
+            	filterable: { multi: true, search: true }
 			},
 			{
             	field: "DEAL_PRD_TYPE",
             	headerTemplate: "<div class='editableHeader'> Deal Product Type </div>",
-            	editor: customInlineEditor
+            	editor: customInlineEditor,
+            	filterable: { multi: true, search: true }
 			},
 			{
             	field: "PRD_CAT_NM",
             	headerTemplate: "<div class='editableHeader'> Product Category Name </div>",
-            	editor: customInlineEditor
-			},
-			{
-                field: "ACTV_IND",
-                width: 120,
-                headerTemplate: "<div class='editableHeader'> Actv Ind </div>",
-                template: "<span ng-if='! #= ACTV_IND # ' class='icon-md intelicon-empty-box'></span><span ng-if=' #= ACTV_IND # ' class='icon-md intelicon-filled-box'></span>"
+            	editor: customInlineEditor,
+            	filterable: { multi: true, search: true }
 			},
 			{
             	field: "CHG_EMP_NM",
-            	title: "Last Updated By"
+            	title: "Last Updated By",
+            	filterable: { multi: true, search: true }
 			},
 			{
 				field: "filterable_CHG_DTM",

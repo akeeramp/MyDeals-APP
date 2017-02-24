@@ -101,7 +101,9 @@
                 title: "Suite"
             }, {
                 field: "ACTV_IND",
-                title: "Active"
+                title: "Active",
+                template: gridUtils.boolViewer('ACTV_IND'),
+                editor: gridUtils.boolEditor
             }]
         }
 

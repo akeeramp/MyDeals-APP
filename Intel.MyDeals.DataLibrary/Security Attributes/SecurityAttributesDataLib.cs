@@ -410,9 +410,9 @@ namespace Intel.MyDeals.DataLibrary
             {
                 DataAccess.ExecuteDataSet(new Procs.dbo.PR_MANAGE_DEAL_TYPES()
                 {
-                    idsid = OpUserStack.MyOpUserToken.Usr.Idsid,
-                    mode = CrudModes.Delete.ToString(),
-                    DEAL_TYPE_SID = id
+                    WWID = OpUserStack.MyOpUserToken.Usr.WWID,
+                    MODE = CrudModes.Delete.ToString(),
+                    OBJ_SET_TYPE_SID = id
                 }, null, out dsCheckConstraintErrors);
             }
             catch (Exception ex)
@@ -455,16 +455,16 @@ namespace Intel.MyDeals.DataLibrary
             {
                 Procs.dbo.PR_MANAGE_DEAL_TYPES cmd = new Procs.dbo.PR_MANAGE_DEAL_TYPES
                 {
-                    idsid = OpUserStack.MyOpUserToken.Usr.Idsid,
-                    mode = state.ToString()
+                    WWID = OpUserStack.MyOpUserToken.Usr.WWID,
+                    MODE = state.ToString()
                 };
 
                 if (state.Equals(CrudModes.Insert) || state.Equals(CrudModes.Update))
                 {
-                    cmd.DEAL_TYPE_CD = dealType.DEAL_TYPE_CD;
-                    cmd.DEAL_TYPE_SID = dealType.DEAL_TYPE_SID;
-                    cmd.DEAL_ATRB_SID = dealType.DEAL_ATRB_SID;
-                    cmd.DEAL_TYPE_DESC = dealType.DEAL_TYPE_DESC;
+                    cmd.OBJ_SET_TYPE_CD = dealType.OBJ_SET_TYPE_CD;
+                    cmd.OBJ_SET_TYPE_SID = dealType.OBJ_SET_TYPE_SID;
+                    cmd.OBJ_ATRB_SID = dealType.OBJ_ATRB_SID;
+                    cmd.OBJ_SET_TYPE_DESC = dealType.OBJ_SET_TYPE_DESC;
                     cmd.TEMPLT_DEAL_SID = dealType.TEMPLT_DEAL_SID;
                     cmd.TEMPLT_DEAL_NBR = dealType.TEMPLT_DEAL_NBR;
                     cmd.TRKR_NBR_DT_LTR = dealType.TRKR_NBR_DT_LTR;
@@ -477,10 +477,10 @@ namespace Intel.MyDeals.DataLibrary
                     ret = (from rw in data.Tables[0].AsEnumerable()
                            select new AdminDealType
                            {
-                               DEAL_TYPE_CD = Convert.ToString(rw["DEAL_TYPE_CD"]),
-                               DEAL_TYPE_SID = Convert.ToByte(rw["DEAL_TYPE_SID"]),
-                               DEAL_ATRB_SID = Convert.ToByte(rw["DEAL_ATRB_SID"]),
-                               DEAL_TYPE_DESC = Convert.ToString(rw["DEAL_TYPE_DESC"]),
+                               OBJ_SET_TYPE_CD = Convert.ToString(rw["OBJ_SET_TYPE_CD"]),
+                               OBJ_SET_TYPE_SID = Convert.ToByte(rw["OBJ_SET_TYPE_SID"]),
+                               OBJ_ATRB_SID = Convert.ToInt32(rw["OBJ_ATRB_SID"]),
+                               OBJ_SET_TYPE_DESC = Convert.ToString(rw["OBJ_SET_TYPE_DESC"]),
                                TEMPLT_DEAL_SID = (rw.IsNull("TEMPLT_DEAL_SID") ? default(System.Int32) : Convert.ToInt32(rw["TEMPLT_DEAL_SID"])),
                                TEMPLT_DEAL_NBR = (rw.IsNull("TEMPLT_DEAL_NBR") ? default(System.Int32) : Convert.ToInt32(rw["TEMPLT_DEAL_NBR"])),
                                TRKR_NBR_DT_LTR = Convert.ToString(rw["TRKR_NBR_DT_LTR"]),

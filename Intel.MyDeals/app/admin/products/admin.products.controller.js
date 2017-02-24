@@ -12,7 +12,7 @@
         // Functions
         vm.addItem = addItem;
         vm.updateItem = updateItem;
-        vm.deleteItem = deleteItem
+        vm.deleteItem = deleteItem;
         vm.onChange = onChange;
 
         // Variables
@@ -27,14 +27,18 @@
                         .then(function (response) {
                             e.success(response.data);
                         }, function (response) {
-                            logger.error("Unable to get Geos.", response, response.statusText);
+                            logger.error("Unable to get Products.", response, response.statusText);
                         });
-                },
+                }
             },
             batch: true,
             pageSize: 25,
             schema: {
                 model: {
+                    fields: {
+                        PRD_STRT_DTM: { type: "date" },
+                        PRD_END_DTM: { type: "date" }
+                    }
                 }
             }
         });
@@ -49,13 +53,13 @@
             editable: "popup",
             pageable: {
                 refresh: true,
-                pageSizes: gridConstants.pageSizes,
+                pageSizes: gridConstants.pageSizes
             },
             change: vm.onChange,
             columns: [
             {
                 field: "PRD_MBR_SID",
-                title: "Id",
+                title: "Id"
             },
             {
                 field: "DEAL_PRD_TYPE",
@@ -67,7 +71,7 @@
             },
             {
                 field: "BRND_NM",
-                title: "Brand",
+                title: "Brand"
             },
             {
                 field: "FMLY_NM",
@@ -87,17 +91,20 @@
             },
             {
                 field: "PRD_STRT_DTM",
-                title: "Start Date"
+                title: "Start Date",
+                type: "date",
+                format: "{0:MM-dd-yyyy}"
             },
             {
                 field: "PRD_END_DTM",
-                title: "End Date"
+                title: "End Date",
+                format: "{0:MM-dd-yyyy}"
             },
             {
                 field: "ACTV_IND",
                 title: "Is Active",
                 width: "10%",
-                template: "<div><span ng-if='! #= ACTV_IND # ' class='icon-md intelicon-empty-box'></span><span ng-if=' #= ACTV_IND # ' class='icon-md intelicon-filled-box'></span></div>"
+                template: gridUtils.boolViewer('ACTV_IND')
             }]
         }
 

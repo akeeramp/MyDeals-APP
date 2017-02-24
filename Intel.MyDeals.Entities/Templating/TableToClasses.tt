@@ -67,7 +67,7 @@ using System.Collections.Generic;
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	// Deal Type objects - system deal types like "ECAP" and "VOL TIER"
-	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MANAGE_DEAL_TYPES] @idsid = 'PWECKENR', @mode = 'Setup'");
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MANAGE_DEAL_TYPES] @WWID = '10505693', @MODE = 'Setup'");
 	ds.Tables[0].TableName = "AdminDealType";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 

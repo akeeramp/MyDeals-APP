@@ -92,8 +92,9 @@
                   field: "UI_UPD_FLG",
                   title: "UI Updatable",
                   width: "10%",
-                  template: "<div><span ng-if='! #= UI_UPD_FLG # ' class='icon-md intelicon-empty-box'></span><span ng-if=' #= UI_UPD_FLG # ' class='icon-md intelicon-filled-box'></span></div>"
-              },
+                  template: gridUtils.boolViewer('UI_UPD_FLG'),
+                  editor: gridUtils.boolEditor
+              }
             ]
         };
 

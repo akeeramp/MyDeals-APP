@@ -31,7 +31,7 @@ namespace Intel.MyDeals.Controllers.API
 		public SecurityDropdownData GetSecurityDropdownData()
 		{
 			List<OpPair<int, string>> securityActions = GetSecurityActions().OrderBy(x => x.ACTN_CD).Select(x => new OpPair<int, string>(x.ACTN_SID, x.ACTN_CD )).ToList();
-			List<OpPair<int, string>> dealTypes = GetAdminDealTypes().OrderBy(x => x.DEAL_TYPE_CD).Select(x => new OpPair<int, string>(x.DEAL_TYPE_SID, x.DEAL_TYPE_CD)).ToList();
+			List<OpPair<int, string>> dealTypes = GetAdminDealTypes().OrderBy(x => x.OBJ_SET_TYPE_CD).Select(x => new OpPair<int, string>(x.OBJ_SET_TYPE_SID, x.OBJ_SET_TYPE_CD)).ToList();
 			// TODO: Replace Hard-coded appID=1 (for IDMS) with something more dynamic or just get this from db already filtered
 			List<OpPair<int, string>> roleTypes = GetAdminRoleTypes().OrderBy(x => x.ROLE_TYPE_CD).Where(x => x.APP_SID == 1).Select(x => new OpPair<int, string>(x.ROLE_TYPE_SID, x.ROLE_TYPE_CD)).ToList(); 
 

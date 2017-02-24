@@ -3,7 +3,7 @@
 
     angular
         .module('app.admin')
-        .controller('dealTypesController',dealTypesController)
+        .controller('dealTypesController', dealTypesController);
 
     dealTypesController.$inject = ['$uibModal', 'DealTypesService', '$scope', 'logger'];
 
@@ -13,7 +13,7 @@
         // Functions
         vm.addItem = addItem;
         vm.updateItem = updateItem;
-        vm.deleteItem = deleteItem
+        vm.deleteItem = deleteItem;
         vm.onChange = onChange;
 
         // Variables
@@ -72,7 +72,6 @@
                         TEMPLT_DEAL_SID: {},
                         TEMPLT_DEAL_NBR: { type: "number", validation: { format:"{0:n0}", decimals:0 } },
                         TRKR_NBR_DT_LTR: {},
-                        PERFORM_CTST: { type: "boolean" },
                         ACTV_IND: { type: "boolean" }
                     }
                 }
@@ -93,16 +92,16 @@
             //],
             columns: [
             {
-                field: "DEAL_TYPE_SID",
-                title: "ID",
+                field: "OBJ_SET_TYPE_SID",
+                title: "ID"
             }, {
-                field: "DEAL_ATRB_SID",
-                title: "Deal ATRB ID"
+                field: "OBJ_ATRB_SID",
+                title: "Obj ATRB ID"
             }, {
-                field: "DEAL_TYPE_CD",
+                field: "OBJ_SET_TYPE_CD",
                 title: "Name"
             }, {
-                field: "DEAL_TYPE_DESC",
+                field: "OBJ_SET_TYPE_DESC",
                 title: "Description"
             }, {
                 field: "TEMPLT_DEAL_SID",
@@ -114,11 +113,10 @@
                 field: "TRKR_NBR_DT_LTR",
                 title: "TRKR_NBR_DT_LTR"
             }, {
-                field: "PERFORM_CTST",
-                title: "Perform CTST"
-            }, {
                 field: "ACTV_IND",
-                title: "Active"
+                title: "Active",
+                template: gridUtils.boolViewer('ACTV_IND'),
+                editor: gridUtils.boolEditor
             }]
         }
 

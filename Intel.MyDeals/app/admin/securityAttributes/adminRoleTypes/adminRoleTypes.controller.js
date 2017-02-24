@@ -12,7 +12,7 @@
         // Functions
         vm.addItem = addItem;
         vm.updateItem = updateItem;
-        vm.deleteItem = deleteItem
+        vm.deleteItem = deleteItem;
         vm.onChange = onChange;
 
         // Variables
@@ -110,10 +110,14 @@
                 title: "Tier"
             }, {
                 field: "IS_SNGL_SLCT",
-                title: "Single Select"
+                title: "Single Select",
+                template: gridUtils.boolViewer('IS_SNGL_SLCT'),
+                editor: gridUtils.boolEditor
             }, {
                 field: "ACTV_IND",
-                title: "Active"
+                title: "Active",
+                template: gridUtils.boolViewer('ACTV_IND'),
+                editor: gridUtils.boolEditor
             }]
         }
 

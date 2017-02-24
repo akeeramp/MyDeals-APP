@@ -127,7 +127,6 @@ namespace Intel.MyDeals.BusinessLogic
 				, "DEAL_TYPE_CD_SID"
 				, "TRKR_NBR_DT_LTR"
 				, "CUST_MBR_SID"
-				, "PERFORM_CTST"
 				, "BAND_TYPE"
 			};
 			List<string> dealGrpList = new List<string> {
@@ -302,7 +301,6 @@ namespace Intel.MyDeals.BusinessLogic
 				,  "TRKR_NBR_DT_LTR"
 				,  "CUST_MBR_SID"
 				,  "CS_SPLIT"
-				,  "PERFORM_CTST"
 			};
 			List<string> pliList = new List<string> {
 				 "PLI_NET_PRICE_CONCATE"
@@ -464,7 +462,6 @@ namespace Intel.MyDeals.BusinessLogic
 				, "TRKR_NBR_DT_LTR"
 				, "CUST_MBR_SID"
 				, "SA_COST_TEST_RESULTS"
-				, "PERFORM_CTST"
 			};
 			List<string> volTierList = new List<string> {
 				"DIV_APPROVED_BY"
@@ -562,7 +559,6 @@ namespace Intel.MyDeals.BusinessLogic
 				, "DEAL_TYPE_CD_SID"
 				, "TRKR_NBR_DT_LTR"
 				, "CUST_MBR_SID"
-				, "PERFORM_CTST"
 				, "BAND_TYPE"
 			};
 			#endregion

@@ -129,7 +129,11 @@
 
           $scope.onSwitch = function (evt) {
               if (!$scope.disabled) {
-                  if ($scope.field !== undefined) this.$parent.dataItem.set($scope.field, !ngModelCtrl.$viewValue);
+                  if ($scope.field !== undefined) {
+                      // faster then a SET and bypasses undefined dataItems
+                      this.$parent.dataItem[$scope.field] = !ngModelCtrl.$viewValue;
+                      this.$parent.dataItem["dirty"] = true;
+                  }
                   ngModelCtrl.$setViewValue(!ngModelCtrl.$viewValue);
                   ngModelCtrl.$render();
               }

@@ -65,11 +65,11 @@
             {
                  field: "CUST_MBR_SID",
                  title: "Customer Name",
-                 hidden: true,
+                 hidden: true
             },
             {
                 field: "CUST_NM",
-                title: "Customer Name",
+                title: "Customer Name"
             },
             {
                 field: "CUST_DIV_NM",
@@ -86,8 +86,8 @@
             {
                 field: "ACTV_IND",
                 title: "Is Active",
-                width:"10%",
-                template: "<div><span ng-if='! #= ACTV_IND # ' class='icon-md intelicon-empty-box'></span><span ng-if=' #= ACTV_IND # ' class='icon-md intelicon-filled-box'></span></div>"
+                width: "10%",
+                template: gridUtils.boolViewer('ACTV_IND')
             }]
         }
 
