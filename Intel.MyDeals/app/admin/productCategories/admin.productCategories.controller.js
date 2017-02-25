@@ -164,8 +164,7 @@
 			    headerTemplate: "<div class='editableHeader'> Actv Ind </div>",
 			    template: gridUtils.boolViewer('ACTV_IND'),
 			    editor: gridUtils.boolEditor,
-			    attributes: { style: "text-align: center;" },
-			    filterable: { multi: true, search: true }
+			    attributes: { style: "text-align: center;" }
 			},
 			{
 				field: "PRD_CAT_MAP_SID",

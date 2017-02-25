@@ -6192,3 +6192,9 @@ div.k-scheduler-marquee:after {
     -webkit-transform: scale(-1, -1);
     transform: scale(-1, -1);
 }
+
+
+
+UL.k-multicheck-wrap LI LABEL INPUT, UL.k-menu-group LI SPAN.k-link INPUT {
+    margin-right: 5px;
+}
