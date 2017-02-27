@@ -5,20 +5,10 @@
         .module('app.admin')
         .controller('dealTypesController', dealTypesController);
 
-    dealTypesController.$inject = ['$uibModal', 'DealTypesService', '$scope', 'logger'];
+    dealTypesController.$inject = ['$uibModal', 'DealTypesService', '$scope', 'logger', 'gridConstants', 'confirmationModal']
 
-    function dealTypesController($uibModal, DealTypesService, $scope, logger) {
+    function dealTypesController($uibModal, DealTypesService, $scope, logger, gridConstants, confirmationModal) {
         var vm = this;
-
-        // Functions
-        vm.addItem = addItem;
-        vm.updateItem = updateItem;
-        vm.deleteItem = deleteItem;
-        vm.onChange = onChange;
-
-        // Variables
-        vm.selectedItem = null;
-        vm.isButtonDisabled = true;
 
         vm.dataSource = new kendo.data.DataSource({
             type: "json",
@@ -41,13 +31,25 @@
                         });
                 },
                 destroy: function (e) {
-                    DealTypesService.deleteDealType(e.data.models[0].DEAL_TYPE_SID)
-                        .then(function (response) {
-                        	e.success(response.data);
-                            logger.success('Delete successful.');
+                    var modalOptions = {
+                        closeButtonText: 'Cancel',
+                        actionButtonText: 'Delete',
+                        hasActionButton: true,
+                        headerText: 'Delete confirmation',
+                        bodyText: 'Are you sure you would like to Delete this Deal Type ?'
+                    };
+
+                    confirmationModal.showModal({}, modalOptions).then(function (result) {
+                        DealTypesService.deleteDealType(e.data.models[0].DEAL_TYPE_SID).then(function (response) {
+                            $scope.grid.removeRow();
+                            e.success(response.data);
+                            logger.success("Delete successful.");
                         }, function (response) {
-                            logger.error("Unable to delete Application", response, response.statusText);
+                            logger.error("Unable to delete Deal Type.", response, response.statusText);
                         });
+                    }, function (response) {
+                        cancelChanges();
+                    });
                 },
                 create: function (e) {
                     DealTypesService.insertDealType(e.data.models[0])
@@ -80,17 +82,36 @@
 
         vm.mainGridOptions = {
             dataSource: vm.dataSource,
+            filterable: true,
+            scrollable: true,
             sortable: true,
-            selectable: true,
-            pageable: true,
-            editable: "popup",
-            change: vm.onChange,
-            //toolbar: [
-            //	"create",
-            //	{ name: "customEdit", text: "Edit", imageClass: "k-edit", className: "k-custom-edit btn btn-primary", iconClass: "k-icon" },
-            //	{ name: "customDelete", text: "Delete", imageClass: "k-delete", className: "k-custom-delete btn btn-default", iconClass: "k-icon" }
-            //],
+            navigatable: true,
+            resizable: true,
+            reorderable: true,
+            columnMenu: true,
+            toolbar: gridUtils.inLineClearAllFiltersToolbar(),
+            editable: { mode: "inline", confirmation: false },
+            edit: function (e) {
+                var commandCell = e.container.find("td:first");
+                commandCell.html('<a class="k-grid-update" href="#"><span class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span class="k-icon k-i-cancel"></span></a>');
+            },
+            destroy: function (e) {
+                var commandCell = e.container.find("td:first");
+                commandCell.html('<a class="k-grid-update" href="#"><span class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span class="k-icon k-i-cancel"></span></a>');
+            },
+            pageable: {
+                refresh: true,
+                pageSizes: gridConstants.pageSizes,
+            },
             columns: [
+                {
+                    command: [
+                        { name: "edit", template: "<a class='k-grid-edit' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-edit'></span></a>" },
+                        { name: "destroy", template: "<a class='k-grid-delete' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-close'></span></a>" }
+                    ],
+                    title: " ",
+                    width: "6%"
+                },
             {
                 field: "OBJ_SET_TYPE_SID",
                 title: "ID"
@@ -121,27 +142,8 @@
             }]
         }
 
-        // Gets and sets the selected row
-        function onChange() {
-            vm.selectedItem = $scope.dealTypesGrid.select();
-            if (vm.selectedItem.length == 0) {
-                vm.isButtonDisabled = true;
-            } else {
-                vm.isButtonDisabled = false;
-            }
-            $scope.$apply();
+        function cancelChanges() {
+            $scope.dealTypesGrid.cancelChanges();
         }
-
-        function addItem() {
-            vm.isButtonDisabled = true;
-            $scope.dealTypesGrid.addRow();
-        }
-        function updateItem() {
-            $scope.dealTypesGrid.editRow(vm.selectedItem);
-        }
-        function deleteItem() {
-            $scope.dealTypesGrid.removeRow(vm.selectedItem);
-        }
-
     }
 })();

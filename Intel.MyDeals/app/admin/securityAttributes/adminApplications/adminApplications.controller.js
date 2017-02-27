@@ -4,20 +4,10 @@
         .module('app.admin')
         .controller('applicationsController', applicationsController)
 
-    applicationsController.$inject = ['$uibModal', 'ApplicationsService', '$scope','logger']
+    applicationsController.$inject = ['$uibModal', 'ApplicationsService', '$scope', 'logger', 'gridConstants', 'confirmationModal']
 
-    function applicationsController($uibModal, ApplicationsService, $scope, logger) {
+    function applicationsController($uibModal, ApplicationsService, $scope, logger, gridConstants, confirmationModal) {
         var vm = this;
-
-        // Functions
-        vm.addItem = addItem;
-        vm.updateItem = updateItem;
-        vm.deleteItem = deleteItem
-        vm.onChange = onChange;
-
-        // Variables
-        vm.selectedItem = null;
-        vm.isButtonDisabled = true;
 
         vm.dataSource = new kendo.data.DataSource({
             type: "json",
@@ -27,7 +17,7 @@
                         .then(function (response) {
                             e.success(response.data);
                         }, function (response) {
-                            logger.error("Unable to get applications.", response, response.statusText);
+                            logger.error("Unable to get Applications Suites", response, response.statusText);
                         });
                 },
                 update: function (e) {
@@ -36,17 +26,29 @@
                         	e.success(response.data);
                             logger.success('Update successful.');
                         }, function (response) {
-                            logger.error("Unable to update Application.", response, response.statusText);
+                            logger.error("Unable to update Application Suite.", response, response.statusText);
                         });
                 },
                 destroy: function (e) {
-                    ApplicationsService.deleteApplication(e.data.models[0].APPL_SID)
-                        .then(function (response) {
-                        	e.success(response.data);
-                            logger.success('Delete successful.');
+                    var modalOptions = {
+                        closeButtonText: 'Cancel',
+                        actionButtonText: 'Delete Application',
+                        hasActionButton: true,
+                        headerText: 'Delete confirmation',
+                        bodyText: 'Are you sure you would like to Delete this Application Suite ?'
+                    };
+
+                    confirmationModal.showModal({}, modalOptions).then(function (result) {
+                        ApplicationsService.deleteApplication(e.data.models[0].APPL_SID).then(function (response) {
+                            $scope.grid.removeRow();
+                            e.success(response.data);
+                            logger.success("Delete successful.");
                         }, function (response) {
-                            logger.error("Unable to delete Application", response, response.statusText);
+                            logger.error("Unable to delete Application Suite", response, response.statusText);
                         });
+                    }, function (response) {
+                        cancelChanges();
+                    });
                 },
                 create: function (e) {
                     ApplicationsService.insertApplication(e.data.models[0])
@@ -54,7 +56,7 @@
                         	e.success(response.data);
                             logger.success('New application added');
                         }, function (response) {
-                            logger.error("Unable to insert Application.", response, response.statusText);
+                            logger.error("Unable to insert Application Suite.", response, response.statusText);
                         });
                 }
             },
@@ -76,17 +78,39 @@
 
         vm.mainGridOptions = {
             dataSource: vm.dataSource,
+            filterable: true,
+            scrollable: true,
             sortable: true,
-            selectable: true,
-            pageable: true,
-            editable: "popup",
-            change: vm.onChange,
-            //toolbar: [
-            //	"create",
-            //	{ name: "customEdit", text: "Edit", imageClass: "k-edit", className: "k-custom-edit btn btn-primary", iconClass: "k-icon" },
-            //	{ name: "customDelete", text: "Delete", imageClass: "k-delete", className: "k-custom-delete btn btn-default", iconClass: "k-icon" }
-            //],
+            navigatable: true,
+            resizable: true,
+            reorderable: true,
+            columnMenu: true,
+            toolbar: gridUtils.inLineClearAllFiltersToolbar(),
+            editable: { mode: "inline", confirmation: false },
+            edit: function (e) {
+                var commandCell = e.container.find("td:first");
+                commandCell.html('<a class="k-grid-update" href="#"><span class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span class="k-icon k-i-cancel"></span></a>');
+            },
+            destroy: function (e) {
+                var commandCell = e.container.find("td:first");
+                commandCell.html('<a class="k-grid-update" href="#"><span class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span class="k-icon k-i-cancel"></span></a>');
+            },
+            cancel: function (e) {
+                vm.validationMessage = '';
+            },
+            pageable: {
+                refresh: true,
+                pageSizes: gridConstants.pageSizes,
+            },
             columns: [
+                {
+                    command: [
+                        { name: "edit", template: "<a class='k-grid-edit' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-edit'></span></a>" },
+                        { name: "destroy", template: "<a class='k-grid-delete' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-close'></span></a>" }
+                    ],
+                    title: " ",
+                    width: "6%"
+                },
             {
                 field: "APP_SID",
                 title: "ID",
@@ -108,26 +132,8 @@
             }]
         }
 
-        // Gets and sets the selected row
-        function onChange() {
-            vm.selectedItem = $scope.applicationsGrid.select();
-            if (vm.selectedItem.length == 0) {
-                vm.isButtonDisabled = true;
-            } else {
-                vm.isButtonDisabled = false;
-            }
-            $scope.$apply();
-        }
-
-        function addItem() {
-            vm.isButtonDisabled = true;
-            $scope.applicationsGrid.addRow();
-        }
-        function updateItem() {
-            $scope.applicationsGrid.editRow(vm.selectedItem);
-        }
-        function deleteItem() {
-            $scope.applicationsGrid.removeRow(vm.selectedItem);
+        function cancelChanges() {
+            $scope.applicationsGrid.cancelChanges();
         }
     }
 })();

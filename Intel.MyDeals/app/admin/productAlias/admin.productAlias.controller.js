@@ -82,8 +82,7 @@
                         productAliasService.CreateProductAlias(e.data)
                             .then(function (response) {
                                 vm.validationMessage = '';
-                                e.success(response.data);
-                                $(".k-i-reload").trigger('click'); // Refresh the grid to get the Auto Increment ID from DB
+                                e.success(response.data[0]);
                                 logger.success("Product Alias Mapping successfully added.");
                             }, function (response) {
                                 var errorMessage = typeof response.data === 'string' ? response.data : "Unable to insert Product Alias Mappings";
@@ -125,7 +124,7 @@
                 var commandCell = e.container.find("td:first");
                 commandCell.html('<a class="k-grid-update" href="#"><span class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span class="k-icon k-i-cancel"></span></a>');
             },
-            cancel: function(e){
+            cancel: function (e) {
                 vm.validationMessage = '';
             },
             pageable: {

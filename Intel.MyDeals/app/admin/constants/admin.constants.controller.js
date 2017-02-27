@@ -5,16 +5,10 @@
         .module('app.admin')
         .controller('ConstantsController', ConstantsController);
 
-    ConstantsController.$inject = ['$scope', 'dataService', 'constantsService', 'logger', 'gridConstants'];
+    ConstantsController.$inject = ['$scope', 'dataService', 'constantsService', 'logger', 'gridConstants', 'confirmationModal'];
 
-    function ConstantsController($scope, dataService, constantsService, logger, gridConstants) {
+    function ConstantsController($scope, dataService, constantsService, logger, gridConstants, confirmationModal) {
         var vm = this;
-        vm.selectedItem = null;
-        vm.isButtonDisabled = true;
-        vm.onChange = onChange;
-        vm.deleteItem = deleteItem;
-        vm.updateItem = updateItem;
-        vm.addItem = addItem;
 
         // declare dataSource bound to backend
         vm.dataSource = new kendo.data.DataSource({
@@ -37,13 +31,25 @@
                         });
                 },
                 destroy: function (e) {
-                    constantsService.deleteConstants(e.data)
-                        .then(function (response) {
+                    var modalOptions = {
+                        closeButtonText: 'Cancel',
+                        actionButtonText: 'Delete Constant',
+                        hasActionButton: true,
+                        headerText: 'Delete confirmation',
+                        bodyText: 'Are you sure you would like to Delete this Constant ?'
+                    };
+
+                    confirmationModal.showModal({}, modalOptions).then(function (result) {
+                        constantsService.deleteConstants(e.data).then(function (response) {
+                            $scope.grid.removeRow();
                             e.success(response.data);
                             logger.success("Constant Deleted.");
                         }, function (response) {
                             logger.error("Unable to delete constant.", response, response.statusText);
                         });
+                    }, function (response) {
+                        cancelChanges();
+                    });
                 },
                 create: function (e) {
                     constantsService.insertConstants(e.data)
@@ -64,7 +70,7 @@
                         CNST_NM: { validation: { required: true } },
                         CNST_DESC: { validation: { required: true } },
                         CNST_VAL_TXT: { validation: { required: true } },
-                        UI_UPD_FLG: { type: "boolean"  },
+                        UI_UPD_FLG: { type: "boolean" },
                     }
                 }
             },
@@ -72,21 +78,42 @@
 
         vm.gridOptions = {
             dataSource: vm.dataSource,
-            filterable: gridConstants.filterable,
+            filterable: true,
             sortable: true,
             selectable: true,
             resizable: true,
             groupable: true,
-            toolbar: gridUtils.clearAllFiltersToolbar(),
-            editable: "popup",
+            columnMenu: true,
+            toolbar: gridUtils.inLineClearAllFiltersToolbar(),
+            editable: { mode: "inline", confirmation: false },
+            dataBound: dataBound,
+            edit: function (e) {
+                if (e.model.isNew() == false) {
+                    // Don't even show the input field, put the parent html values
+                    $(e.container).find('input[name="CNST_NM"]').parent().html(e.model.CNST_NM)
+                }
+                var commandCell = e.container.find("td:first");
+                commandCell.html('<a class="k-grid-update" href="#"><span class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span class="k-icon k-i-cancel"></span></a>');
+            },
+            destroy: function (e) {
+                var commandCell = e.container.find("td:first");
+                commandCell.html('<a class="k-grid-update" href="#"><span class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span class="k-icon k-i-cancel"></span></a>');
+            },
             pageable: {
                 refresh: true,
                 pageSizes: gridConstants.pageSizes,
             },
-            change: vm.onChange,
             columns: [
-              { field: "CNST_SID", title: "Id", width:"5%" },
-              { field: "CNST_NM", title: "Name", width:"15%" },
+                {
+                    command: [
+                        { name: "edit", template: "<a class='k-grid-edit' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-edit'></span></a>" },
+                        { name: "destroy", template: "<a class='k-grid-delete' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-close'></span></a>" }
+                    ],
+                    title: " ",
+                    width: "7%"
+                },
+              { field: "CNST_SID", title: "Id", width: "5%" },
+              { field: "CNST_NM", title: "Name", width: "15%" },
               { field: "CNST_DESC", title: "Description" },
               { field: "CNST_VAL_TXT", title: "Value" },
               {
@@ -100,29 +127,22 @@
             ]
         };
 
-        function onChange() {
-            vm.selectedItem = $scope.constantsGrid.select();
-            vm.isButtonDisabled = (vm.selectedItem.length == 0) ? true : false;
-            $scope.$apply();
+        function cancelChanges() {
+            $scope.grid.cancelChanges();
         }
 
-        function addItem() {
-            vm.isButtonDisabled = true;
-            $scope.constantsGrid.addRow();
-        }
+        function dataBound() {
+            var grid = this;
+            var model;
 
-        function updateItem() {
-            //Do not allow user to update the constants from UI where UI_UPD_FLG is false
-            var selectedDataItem = $scope.constantsGrid.dataItem(vm.selectedItem);
-            if (!selectedDataItem.UI_UPD_FLG) {
-                logger.warning(selectedDataItem.CNST_NM + " Cannot be updated from UI", null, "Not allowed")
-                return;
-            }
-            $scope.constantsGrid.editRow(vm.selectedItem);
-        }
-
-        function deleteItem() {
-            $scope.constantsGrid.removeRow(vm.selectedItem);
+            // Do not show edit/delete button for the rows where UI_UPD_FLG is false
+            grid.tbody.find("tr[role='row']").each(function () {
+                model = grid.dataItem(this);
+                if (model.UI_UPD_FLG !== true) {
+                    $(this).find(".k-grid-edit").remove();
+                    $(this).find(".k-grid-delete").remove();
+                }
+            });
         }
     }
 })();
