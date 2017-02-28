@@ -15,6 +15,14 @@
             
         }
 
+        public static class OBJDIM
+        {
+            public const string _MULTIDIM = "_MultiDim";
+            public const string _PIVOTKEY = "_pivot";
+            public const string PIVOT = "PIVOT";
+            public const string TITLE = "TITLE";
+        }
+
         public static class DEALTYPE
         {
             public const string VOL_TIER = "VOL TIER";

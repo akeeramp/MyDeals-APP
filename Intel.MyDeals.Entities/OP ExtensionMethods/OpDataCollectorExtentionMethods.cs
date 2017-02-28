@@ -129,6 +129,7 @@ namespace Intel.MyDeals.Entities
             if (dealType == OpDataElementType.Contract.ToString()) dealType = "CONTRACT";
             if (dealType == OpDataElementType.PricingStrategy.ToString()) dealType = "PRICING STRAT";
             if (dealType == OpDataElementType.PricingTable.ToString()) dealType = "PRICING TABLE";
+            if (dealType == OpDataElementType.PricingTableRow.ToString()) dealType = "PRICING TABLE ROW";
 
             dc.DcType = dealType ?? string.Empty;
 

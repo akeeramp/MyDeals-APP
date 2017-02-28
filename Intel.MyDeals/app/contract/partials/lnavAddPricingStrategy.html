@@ -1,19 +1,19 @@
 ﻿<!-- Add Pricing Strategy -->
 <div ng-show="isExistingContract()">
-    <div class="addPsBtn" ng-hide="isAddStrategyBtnHidden" ng-click="toggleAddStrategy()">
+    <button class="addPsBtn btn btn-sm btn-primary" ng-hide="isAddStrategyBtnHidden" ng-click="toggleAddStrategy()">
         <i class="intelicon-plus-max"></i> New Pricing Strategies
-    </div>
-    <div style="padding: 6px; background-color: #0071C5;" ng-hide="isAddStrategyHidden">
+    </button>
+    <div style="padding: 10px; background-color: #0071C5;" ng-hide="isAddStrategyHidden">
         <form name="addNewPsForm" ng-submit="submitForm(CustomAddPsValidate())" novalidate>
             <!-- novalidate prevents HTML5 validation since we will be validating ourselves -->
 
             <div class="bgBlueContainer" ng-class="{isErrorWrapper: newStrategy._behaviors.isError.TITLE}">
                 <div kendo-tooltip k-content="newStrategy._behaviors.validMsg.TITLE" k-position="'top'" ng-show="newStrategy._behaviors.isError.TITLE" class="err-bit-el"></div>
                 <input type="text" class="k-textbox fl" placeholder="[Enter Pricing Strategy Name...]"
-                       style="width: 239px; color: #aaaaaa;"
+                       style="width: 228px; color: #aaaaaa;"
                        ng-model="newStrategy.TITLE"
-                       ng-class="{isError: newStrategy._behaviors.isError.TITLE}" />
-                <button class="btn btn-sm btn-primary" style="font-size: 12px; margin-left: 4px;" ng-click="customAddPsValidate()">Add</button>
+                       ng-class="{isError: newStrategy._behaviors.isError.TITLE}"/>
+                <button class="btn btn-sm btn-primary" style="font-size: 12px; margin-left: 6px;" ng-click="customAddPsValidate()">Add</button>
                 <div class="clearboth"></div>
                 <div style="color: #F3D54E;">{{ newStrategy._behaviors.validMsg.TITLE }}</div>
             </div>

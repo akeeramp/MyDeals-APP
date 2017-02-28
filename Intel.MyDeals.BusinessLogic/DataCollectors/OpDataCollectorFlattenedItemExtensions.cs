@@ -69,10 +69,10 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
 
         private static void PivotData(this OpDataCollectorFlattenedItem objsetItem, OpDataElement de, OpDataCollector dc, ObjSetPivotMode pivotMode, object dimKey)
         {
-            string dimName = "_MultiDim";
-            string pivotName = "PIVOT";
-            string pivotKeyName = "_pivot";
-            string titleKeyName = "TITLE";
+            string dimName = EN.OBJDIM._MULTIDIM;
+            string pivotName = EN.OBJDIM.PIVOT;
+            string pivotKeyName = EN.OBJDIM._PIVOTKEY;
+            string titleKeyName = EN.OBJDIM.TITLE;
 
 
             // setup _pivot

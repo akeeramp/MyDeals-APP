@@ -22,11 +22,13 @@ namespace Intel.MyDeals.BusinessLogic
                 ? new List<OpDataElementType>
                 {
                     OpDataElementType.PricingTable,
+                    OpDataElementType.PricingTableRow,
                     OpDataElementType.WipDeals
                 }
                 : new List<OpDataElementType>
                 {
-                    OpDataElementType.PricingTable
+                    OpDataElementType.PricingTable,
+                    OpDataElementType.PricingTableRow
                 };
 
 
@@ -49,12 +51,14 @@ namespace Intel.MyDeals.BusinessLogic
 
         public MyDealsData SavePricingTable(
             OpDataCollectorFlattenedList pricingTables,
+            OpDataCollectorFlattenedList pricingTableRows,
             OpDataCollectorFlattenedList wipDeals,
             int custId)
         {
             OpDataCollectorFlattenedDictList data = new OpDataCollectorFlattenedDictList();
 
             if (pricingTables != null && pricingTables.Any()) data[OpDataElementType.PricingTable] = pricingTables;
+            if (pricingTableRows != null && pricingTableRows.Any()) data[OpDataElementType.PricingTableRow] = pricingTableRows;
             if (wipDeals != null && wipDeals.Any()) data[OpDataElementType.WipDeals] = wipDeals;
 
             return _dataCollectorLib.SavePackets(data, custId);

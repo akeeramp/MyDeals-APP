@@ -32,6 +32,11 @@ namespace Intel.Opaque.Data
         PricingTable = 17,
 
         /// <summary>
+        /// Grouping of items (Pricing Table Row) (Order 18)
+        /// </summary>
+        PricingTableRow = 18,
+
+        /// <summary>
         /// Grouping of items (Draft Deals) (Order 19)
         /// </summary>
         WipDeals = 19,

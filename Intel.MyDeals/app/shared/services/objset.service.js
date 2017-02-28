@@ -325,7 +325,7 @@ function objsetService($http, dataService, logger, $q) {
 
         // combine single dim current pt (pricing table) with 2 dim (sData) data
         //debugger;
-        if (pt.length > 0) pt["_MultiDim"] = sData;
+        if (pt.length > 0) pt[0]["_MultiDim"] = sData;
 
         var modCt = [];
         var modPs = [];
@@ -355,6 +355,7 @@ function objsetService($http, dataService, logger, $q) {
             "WipDeals": gData === undefined ? [] : gData,
             "EventSource": source
         }
+        //debugger;
 
         return dataService.post(apiBaseContractUrl + "SaveContractAndStrategy/" + custId, data);
     }

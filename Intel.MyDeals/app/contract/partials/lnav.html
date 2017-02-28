@@ -5,10 +5,12 @@
     <div id="lnavHeader">
         <div ng-include="'app/contract/partials/lnavMenu.html'"></div>
     </div>
-    <div id="lnavContainer">
+    <div id="lnavMenuContainer">
         <div ng-include="'app/contract/partials/lnavSearch.html'"></div>
         <div ng-include="'app/contract/partials/lnavAddPricingStrategy.html'"></div>
         <div ng-include="'app/contract/partials/lnavAddPricingTable.html'"></div>
+    </div>
+    <div id="lnavContainer" bind-to-height="[65, '#lnavMenuContainer', 'padding-top','#lnavContainerWrapper', 'margin-top','#lnavHeader']">
         <div ng-include="'app/contract/partials/lnavStrategyTree.html'"></div>
     </div>
 </div>

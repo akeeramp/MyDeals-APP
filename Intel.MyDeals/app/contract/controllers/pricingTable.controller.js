@@ -78,7 +78,6 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
         }
     });
 
-    //debugger;
     // sample reload data source call
     //root.spreadDs.read().then(function () {
     //    var view = root.spreadDs.view();

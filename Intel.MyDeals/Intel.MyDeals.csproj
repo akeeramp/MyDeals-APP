@@ -374,6 +374,7 @@
     <Content Include="app\contract\partials\lnavSearch.html" />
     <Content Include="app\contract\partials\lnavStrategyTree.html" />
     <Content Include="app\contract\partials\pricingTable.html" />
+    <Content Include="app\core\directives\bindToHeight.directive.js" />
     <Content Include="app\shared\services\lookups.service.js" />
     <Content Include="app\shared\services\objset.service.js" />
     <Content Include="app\contract\partials\strategies.html" />

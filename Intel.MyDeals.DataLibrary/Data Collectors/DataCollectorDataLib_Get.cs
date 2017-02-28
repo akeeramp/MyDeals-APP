@@ -62,6 +62,7 @@ namespace Intel.MyDeals.DataLibrary
             strInc = strInc.Replace(OpDataElementType.Contract.ToString(), OpDataElementType.Contract.ToAlias());
             strInc = strInc.Replace(OpDataElementType.PricingStrategy.ToString(), OpDataElementType.PricingStrategy.ToAlias());
             strInc = strInc.Replace(OpDataElementType.PricingTable.ToString(), OpDataElementType.PricingTable.ToAlias());
+            strInc = strInc.Replace(OpDataElementType.PricingTableRow.ToString(), OpDataElementType.PricingTableRow.ToAlias());
             strInc = strInc.Replace(OpDataElementType.WipDeals.ToString(), OpDataElementType.WipDeals.ToAlias());
             strInc = strInc.Replace(OpDataElementType.Deals.ToString(), OpDataElementType.Deals.ToAlias());
 
@@ -142,6 +143,7 @@ namespace Intel.MyDeals.DataLibrary
 
             // TODO need to be consistent on naming these !!!
             if (opDataElementType == OpDataElementType.PricingTable) key = "PRICING TABLE";
+            if (opDataElementType == OpDataElementType.PricingTableRow) key = "PRICING TABLE ROW";
             if (opDataElementType == OpDataElementType.PricingStrategy) key = "PRICING STRAT";
 
             return ourTemplates.ContainsKey(key.ToUpper())

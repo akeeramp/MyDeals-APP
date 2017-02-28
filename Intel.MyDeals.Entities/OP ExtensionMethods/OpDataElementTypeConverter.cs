@@ -40,6 +40,7 @@ namespace Intel.MyDeals.Entities
                 new OpDataElementTypeItem { Id = 1, OpDeType = OpDataElementType.Contract, Alias = "CNTRCT", Order = 10 },
                 new OpDataElementTypeItem { Id = 2, OpDeType = OpDataElementType.PricingStrategy, Alias = "PRC_ST", Order = 20 },
                 new OpDataElementTypeItem { Id = 3, OpDeType = OpDataElementType.PricingTable, Alias = "PRCNG", Order = 30 },
+                new OpDataElementTypeItem { Id = 6, OpDeType = OpDataElementType.PricingTableRow, Alias = "PRCNG_ROW", Order = 35 },
                 new OpDataElementTypeItem { Id = 4, OpDeType = OpDataElementType.WipDeals, Alias = "DRFT", Order = 40 },
                 new OpDataElementTypeItem { Id = 5, OpDeType = OpDataElementType.Deals, Alias = "DEAL", Order = 50 }
             },
@@ -47,7 +48,8 @@ namespace Intel.MyDeals.Entities
             {
                 [OpDataElementType.Contract] = OpDataElementType.PricingStrategy,
                 [OpDataElementType.PricingStrategy] = OpDataElementType.PricingTable,
-                [OpDataElementType.PricingTable] = OpDataElementType.WipDeals,
+                [OpDataElementType.PricingTable] = OpDataElementType.PricingTableRow,
+                [OpDataElementType.PricingTableRow] = OpDataElementType.WipDeals,
                 [OpDataElementType.WipDeals] = OpDataElementType.Unknown,
                 [OpDataElementType.Deals] = OpDataElementType.Unknown,
             }

@@ -92,6 +92,7 @@ namespace Intel.MyDeals.Controllers.API
                 fullContracts.ContainsKey(OpDataElementType.Contract) ? fullContracts[OpDataElementType.Contract] : new OpDataCollectorFlattenedList(),
                 fullContracts.ContainsKey(OpDataElementType.PricingStrategy) ? fullContracts[OpDataElementType.PricingStrategy] : new OpDataCollectorFlattenedList(),
                 fullContracts.ContainsKey(OpDataElementType.PricingTable) ? fullContracts[OpDataElementType.PricingTable] : new OpDataCollectorFlattenedList(),
+                fullContracts.ContainsKey(OpDataElementType.PricingTableRow) ? fullContracts[OpDataElementType.PricingTableRow] : new OpDataCollectorFlattenedList(),
                 fullContracts.ContainsKey(OpDataElementType.WipDeals) ? fullContracts[OpDataElementType.WipDeals] : new OpDataCollectorFlattenedList(),
                 custId)
                 , "Unable to save the Contract"
@@ -108,6 +109,7 @@ namespace Intel.MyDeals.Controllers.API
                 contractAndStrategy.Contract,
                 contractAndStrategy.PricingStrategy,
                 contractAndStrategy.PricingTable,
+                contractAndStrategy.PricingTableRow,
                 contractAndStrategy.WipDeals,
                 custId)
                 , "Unable to save the Contract"

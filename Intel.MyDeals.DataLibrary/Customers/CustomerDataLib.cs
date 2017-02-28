@@ -107,7 +107,7 @@ namespace Intel.MyDeals.DataLibrary
                         retCustInfo.Add(new MyCustomersInformation
                         {
                             ACCS_TYPE = (IDX_ACCS_TYPE < 0 || rdr.IsDBNull(IDX_ACCS_TYPE)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ACCS_TYPE),
-                            ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ACTV_IND),
+                            ACTV_IND = (IDX_ACTV_IND >= 0 && !rdr.IsDBNull(IDX_ACTV_IND)) && rdr.GetFieldValue<System.Boolean>(IDX_ACTV_IND),
                             CUST_CAT = (IDX_CUST_CAT < 0 || rdr.IsDBNull(IDX_CUST_CAT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_CAT),
                             CUST_CHNL = (IDX_CUST_CHNL < 0 || rdr.IsDBNull(IDX_CUST_CHNL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_CHNL),
                             CUST_DISP_NM = (IDX_CUST_DISP_NM < 0 || rdr.IsDBNull(IDX_CUST_DISP_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_DISP_NM),

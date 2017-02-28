@@ -69,6 +69,7 @@ namespace Intel.MyDeals.Controllers.API
             return SafeExecutor(() => _pricingStrategiesLib.SavePricingStrategy(
                 fullpricingStrategies.ContainsKey(OpDataElementType.PricingStrategy) ? fullpricingStrategies[OpDataElementType.PricingStrategy] : new OpDataCollectorFlattenedList(),
                 fullpricingStrategies.ContainsKey(OpDataElementType.PricingTable) ? fullpricingStrategies[OpDataElementType.PricingTable] : new OpDataCollectorFlattenedList(),
+                fullpricingStrategies.ContainsKey(OpDataElementType.PricingTableRow) ? fullpricingStrategies[OpDataElementType.PricingTableRow] : new OpDataCollectorFlattenedList(),
                 fullpricingStrategies.ContainsKey(OpDataElementType.WipDeals) ? fullpricingStrategies[OpDataElementType.WipDeals] : new OpDataCollectorFlattenedList(),
                 custId)
                 , "Unable to save the Pricing Strategy"

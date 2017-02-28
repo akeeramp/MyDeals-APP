@@ -65,6 +65,7 @@ namespace Intel.MyDeals
                 , "~/app/core/dataservice.js"
                 , "~/app/core/directives/queryBuilder.directive.js"
                 , "~/app/core/directives/expandKendogrid.directive.js"
+                , "~/app/core/directives/bindToHeight.directive.js"
                 , "~/app/blocks/util.js"
                 ));
 

@@ -287,6 +287,7 @@ namespace Intel.MyDeals.DataLibrary
             AddDcBasics(retSet, OpDataElementType.Contract);
             AddDcBasics(retSet, OpDataElementType.PricingStrategy);
             AddDcBasics(retSet, OpDataElementType.PricingTable);
+            AddDcBasics(retSet, OpDataElementType.PricingTableRow);
             //// TODO: Add in other object levels template info here
 
             return retSet;
@@ -295,6 +296,7 @@ namespace Intel.MyDeals.DataLibrary
 
         private void AddDcBasics(OpDataElementUITemplates retSet, OpDataElementType opDataElementType)
         {
+            if (!retSet.ContainsKey(opDataElementType.ToString())) retSet[opDataElementType.ToString()] = new OpDataElementUITemplate();
             // Hard coded attributes placed into templates for Phil internal usage
             retSet[opDataElementType.ToString()].Add(new OpDataElementUI
             {

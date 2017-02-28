@@ -6,6 +6,6 @@ namespace Intel.MyDeals.IBusinessLogic
     {
         MyDealsData GetPricingTable(int id, bool inclusive = false);
         MyDealsData SavePricingTable(OpDataCollectorFlattenedList data, int custId);
-        MyDealsData SavePricingTable(OpDataCollectorFlattenedList pricingTables, OpDataCollectorFlattenedList wipDeals, int custId);
+        MyDealsData SavePricingTable(OpDataCollectorFlattenedList pricingTables, OpDataCollectorFlattenedList pricingTableRows, OpDataCollectorFlattenedList wipDeals, int custId);
     }
 }

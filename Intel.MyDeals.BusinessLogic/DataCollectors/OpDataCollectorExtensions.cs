@@ -260,8 +260,8 @@ namespace Intel.MyDeals.BusinessLogic
                 objsetItem.ApplySingleAndMultiDim(cust, de, dc, pivotMode);
             }
 
-            if (objsetItem.ContainsKey("_MultiDim"))
-                objsetItem["_MultiDim"] = ((Dictionary<int, OpDataCollectorFlattenedItem>)objsetItem["_MultiDim"]).Values.ToList();
+            if (objsetItem.ContainsKey(EN.OBJDIM._MULTIDIM))
+                objsetItem[EN.OBJDIM._MULTIDIM] = ((Dictionary<int, OpDataCollectorFlattenedItem>)objsetItem["_MultiDim"]).Values.ToList();
 
             objsetItem["DC_ID"] = dc.DcID;
             objsetItem["dc_type"] = dc.DcType; // TODO - Does this work???

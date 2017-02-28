@@ -86,32 +86,7 @@ namespace Intel.MyDeals.DataLibrary
             return model;
         }
 
-        private Dictionary<OpDataElementType, OpDataElementType> opDataElementTypeHeirarchy { get; set; }
-        private void BuildOpDataElementTypeHeirarchy()
-        {
-            // TODO Need to replace with metadata
-            // Key = Parent
-            // Value = Child
-            opDataElementTypeHeirarchy = new Dictionary<OpDataElementType, OpDataElementType>
-            {
-                [OpDataElementType.Contract] = OpDataElementType.PricingStrategy,
-                [OpDataElementType.PricingStrategy] = OpDataElementType.PricingTable,
-                [OpDataElementType.PricingTable] = OpDataElementType.WipDeals,
-                [OpDataElementType.WipDeals] = OpDataElementType.Unknown,
-                [OpDataElementType.Deals] = OpDataElementType.Unknown
-            };
-        }
-
-        private OpDataElementType GetOpDataElementTypeParent(OpDataElementType opDataElementType)
-        {
-            if (opDataElementTypeHeirarchy == null) BuildOpDataElementTypeHeirarchy();
-            return opDataElementTypeHeirarchy.Where(o => o.Value == opDataElementType).Select(o => o.Key).FirstOrDefault();
-        }
-        private OpDataElementType GetOpDataElementTypeChild(OpDataElementType opDataElementType)
-        {
-            if (opDataElementTypeHeirarchy == null) BuildOpDataElementTypeHeirarchy();
-            return opDataElementTypeHeirarchy.Where(o => o.Key == opDataElementType).Select(o => o.Value).FirstOrDefault();
-        }
+        
 
         private UiObjectTemplate BuildUiObjectTemplate(OpDataElementType objType)
         {
@@ -180,19 +155,19 @@ namespace Intel.MyDeals.DataLibrary
             // TODO replace with DB call
             List<UiTemplateContainerItem> items = new List<UiTemplateContainerItem>();
             items.Add(new UiTemplateContainerItem { Id = 1, AtrbCd = "DC_ID", IsKey = true, DataType = "number", Label = "Id", Width = 50 });
-            items.Add(new UiTemplateContainerItem { Id = 2, AtrbCd = "PIVOT", ObjType = new List<OpDataElementType> { OpDataElementType.PricingTable }, DataType = "string", Label = "Pivot", Width = 50 });
-            items.Add(new UiTemplateContainerItem { Id = 3, AtrbCd = "TITLE", ObjType = new List<OpDataElementType> { OpDataElementType.PricingTable }, DataType = "string", Label = "Title", Width = 150 });
-            items.Add(new UiTemplateContainerItem { Id = 4, AtrbCd = "INT", DataType = "number", Label = "Int", Width = 100, Template = "#=gridUtils.uiIconWrapper(data, 'INT')#" });
-            items.Add(new UiTemplateContainerItem { Id = 5, AtrbCd = "TEXT", DataType = "string", Label = "Text", Width = 100, Template = "#=gridUtils.uiIconWrapper(data, 'TEXT')#" });
-            items.Add(new UiTemplateContainerItem { Id = 6, AtrbCd = "DATE", DataType = "string", Label = "Date", Width = 100, Template = "#=gridUtils.uiIconWrapper(data, 'DATE')#" });
+            items.Add(new UiTemplateContainerItem { Id = 2, AtrbCd = "ROW_NUM", ObjType = new List<OpDataElementType> { OpDataElementType.PricingTableRow }, DataType = "string", Label = "Row Num", Width = 50 });
+            items.Add(new UiTemplateContainerItem { Id = 3, AtrbCd = "TITLE", ObjType = new List<OpDataElementType> { OpDataElementType.PricingTableRow }, DataType = "string", Label = "Title", Width = 150 });
+            //items.Add(new UiTemplateContainerItem { Id = 4, AtrbCd = "INT", DataType = "number", Label = "Int", Width = 100, Template = "#=gridUtils.uiIconWrapper(data, 'INT')#" });
+            //items.Add(new UiTemplateContainerItem { Id = 5, AtrbCd = "TEXT", DataType = "string", Label = "Text", Width = 100, Template = "#=gridUtils.uiIconWrapper(data, 'TEXT')#" });
+            //items.Add(new UiTemplateContainerItem { Id = 6, AtrbCd = "DATE", DataType = "string", Label = "Date", Width = 100, Template = "#=gridUtils.uiIconWrapper(data, 'DATE')#" });
             items.Add(new UiTemplateContainerItem { Id = 7, AtrbCd = "ECAP", ObjSetType = new List<string> { "ECAP" }, DataType = "string", Label = "Ecap", Width = 150 });
             items.Add(new UiTemplateContainerItem { Id = 8, AtrbCd = "PROGRAM", ObjSetType = new List<string> { "PROGRAM" }, DataType = "string", Label = "Program", Width = 150 });
             items.Add(new UiTemplateContainerItem { Id = 9, AtrbCd = "VOLTIER", ObjSetType = new List<string> { "VOLTIER" }, DataType = "string", Label = "Vol Tier", Width = 150 });
             items.Add(new UiTemplateContainerItem { Id = 10, AtrbCd = "CAPBAND", ObjSetType = new List<string> { "CAPBAND" }, DataType = "string", Label = "Cap Band", Width = 150 });
 
-            items.Add(new UiTemplateContainerItem { Id = 11, AtrbCd = "_pivot", ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, DataType = "object", IsReadonly = true });
+            items.Add(new UiTemplateContainerItem { Id = 11, AtrbCd = EN.OBJDIM._PIVOTKEY, ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, DataType = "object", IsReadonly = true });
             items.Add(new UiTemplateContainerItem { Id = 12, AtrbCd = "_behaviors", ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, DataType = "object" });
-            items.Add(new UiTemplateContainerItem { Id = 13, AtrbCd = "_MultiDim", ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, DataType = "object" });
+            items.Add(new UiTemplateContainerItem { Id = 13, AtrbCd = EN.OBJDIM._MULTIDIM, ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, DataType = "object" });
             items.Add(new UiTemplateContainerItem { Id = 14, AtrbCd = "DROPDOWM", ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, DataType = "string", LookupUrl = "/api/Lookups/v1/GetLookups/DROPDOWN", LookupText = "DROP_DOWN", LookupValue = "DROP_DOWN", Template = "#=gridUtils.uiIconWrapper(data, 'DROPDOWN')#" });
             items.Add(new UiTemplateContainerItem { Id = 15, AtrbCd = "COMBOBOX", ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, DataType = "string", LookupUrl = "/api/Lookups/v1/GetLookups/COMBOBOX", LookupText = "DROP_DOWN", LookupValue = "DROP_DOWN", Template = "#=gridUtils.uiIconWrapper(data, 'COMBOBOX')#" });
 
@@ -200,10 +175,10 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem { Id = 17, AtrbCd = "", ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, DataType = "string", Label = "&nbsp;" });
 
 
-            items.Add(new UiTemplateContainerItem { Id = 18, AtrbCd = "_pivot", ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, IsDetail = true, DataType = "object", IsReadonly = true });
+            items.Add(new UiTemplateContainerItem { Id = 18, AtrbCd = EN.OBJDIM._PIVOTKEY, ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, IsDetail = true, DataType = "object", IsReadonly = true });
             items.Add(new UiTemplateContainerItem { Id = 19, AtrbCd = "_behaviors", ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, IsDetail = true, DataType = "object" });
             items.Add(new UiTemplateContainerItem { Id = 20, AtrbCd = "DC_ID", IsKey = true, ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, IsDetail = true, DataType = "number", Label = "Id", Width = 50 });
-            items.Add(new UiTemplateContainerItem { Id = 21, AtrbCd = "PIVOT", ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, IsDetail = true, DataType = "string", Label = "Pivot", Width = 50 });
+            items.Add(new UiTemplateContainerItem { Id = 21, AtrbCd = EN.OBJDIM.PIVOT, ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, IsDetail = true, DataType = "string", Label = "Pivot", Width = 50 });
             items.Add(new UiTemplateContainerItem { Id = 22, AtrbCd = "TITLE", ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, IsDetail = true, DataType = "string", Label = "Title", Width = 150 });
             items.Add(new UiTemplateContainerItem { Id = 23, AtrbCd = "INT", ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, IsDetail = true, DataType = "number", Label = "Int", Width = 100, Template = "#=gridUtils.uiIconWrapper(data, 'INT')#" });
             items.Add(new UiTemplateContainerItem { Id = 24, AtrbCd = "TEXT", ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, IsDetail = true, DataType = "string", Label = "Text", Width = 100, Template = "#=gridUtils.uiIconWrapper(data, 'TEXT')#" });
@@ -212,8 +187,10 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem { Id = 27, AtrbCd = "COMBOBOX", ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, IsDetail = true, DataType = "string", LookupUrl = "/api/Lookups/v1/GetLookups/COMBOBOX", LookupText = "DROP_DOWN", LookupValue = "DROP_DOWN", Template = "#=gridUtils.uiIconWrapper(data, 'COMBOBOX')#" });
             items.Add(new UiTemplateContainerItem { Id = 28, AtrbCd = "_dirty", ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, IsDetail = true, DataType = "string", Label = "<i class='intelicon-upload-solid gridHeaderIcon' title='Something changed on this row'></i>", Width = 45, Template = "#=gridUtils.uiIconWrapper(data, '_dirty')#" });
 
-            items.Add(new UiTemplateContainerItem { Id = 30, AtrbCd = "START_DT", ObjType = new List<OpDataElementType> { OpDataElementType.PricingTable }, DataType = "string", Label = "Start Date", Width = 100, Template = "#=gridUtils.uiIconWrapper(data, 'START_DT')#" });
-            items.Add(new UiTemplateContainerItem { Id = 31, AtrbCd = "END_DT", ObjType = new List<OpDataElementType> { OpDataElementType.PricingTable }, DataType = "string", Label = "End Date", Width = 100, Template = "#=gridUtils.uiIconWrapper(data, 'END_DT')#" });
+            items.Add(new UiTemplateContainerItem { Id = 29, AtrbCd = "PRODUCTS", ObjType = new List<OpDataElementType> { OpDataElementType.PricingTableRow }, DataType = "string", Label = "Products", Width = 200, Template = "#=gridUtils.uiIconWrapper(data, 'PRODUCTS')#" });
+            items.Add(new UiTemplateContainerItem { Id = 30, AtrbCd = "START_DT", ObjType = new List<OpDataElementType> { OpDataElementType.PricingTableRow }, DataType = "string", Label = "Start Date", Width = 100, Template = "#=gridUtils.uiIconWrapper(data, 'START_DT')#" });
+            items.Add(new UiTemplateContainerItem { Id = 31, AtrbCd = "END_DT", ObjType = new List<OpDataElementType> { OpDataElementType.PricingTableRow }, DataType = "string", Label = "End Date", Width = 100, Template = "#=gridUtils.uiIconWrapper(data, 'END_DT')#" });
+            items.Add(new UiTemplateContainerItem { Id = 32, AtrbCd = "RPU", ObjType = new List<OpDataElementType> { OpDataElementType.PricingTableRow }, DataType = "number", Label = "RPU", Width = 100, Template = "#=gridUtils.uiIconWrapper(data, 'RPU')#" });
             return items;
         }
 
@@ -229,10 +206,17 @@ namespace Intel.MyDeals.DataLibrary
                 {
                     ["PricingTable"] = new Dictionary<string, UiModelTemplate>
                     {
-                        ["ECAP"] = BuildUiModelTemplate(OpDataElementType.PricingTable, "ECAP", items),
-                        ["PROGRAM"] = BuildUiModelTemplate(OpDataElementType.PricingTable, "PROGRAM", items),
-                        ["VOLTIER"] = BuildUiModelTemplate(OpDataElementType.PricingTable, "VOLTIER", items),
-                        ["CAPBAND"] = BuildUiModelTemplate(OpDataElementType.PricingTable, "CAPBAND", items)
+                        ["ECAP"] = BuildUiModelTemplate(OpDataElementType.PricingTableRow, "ECAP", items),
+                        ["PROGRAM"] = BuildUiModelTemplate(OpDataElementType.PricingTableRow, "PROGRAM", items),
+                        ["VOLTIER"] = BuildUiModelTemplate(OpDataElementType.PricingTableRow, "VOLTIER", items),
+                        ["CAPBAND"] = BuildUiModelTemplate(OpDataElementType.PricingTableRow, "CAPBAND", items)
+                    },
+                    ["PricingTableRow"] = new Dictionary<string, UiModelTemplate>
+                    {
+                        ["ECAP"] = BuildUiModelTemplate(OpDataElementType.PricingTableRow, "ECAP", items),
+                        ["PROGRAM"] = BuildUiModelTemplate(OpDataElementType.PricingTableRow, "PROGRAM", items),
+                        ["VOLTIER"] = BuildUiModelTemplate(OpDataElementType.PricingTableRow, "VOLTIER", items),
+                        ["CAPBAND"] = BuildUiModelTemplate(OpDataElementType.PricingTableRow, "CAPBAND", items)
                     },
                     ["WipDeals"] = new Dictionary<string, UiModelTemplate>
                     {
@@ -244,21 +228,58 @@ namespace Intel.MyDeals.DataLibrary
                 },
                 ObjectTemplates = new Dictionary<string, Dictionary<string, UiObjectTemplate>>
                 {
-                    ["Contract"] = new Dictionary<string, UiObjectTemplate>
+                    [OpDataElementType.Contract.ToString()] = new Dictionary<string, UiObjectTemplate>
                     {
                         ["Generic"] = BuildUiObjectTemplate(OpDataElementType.Contract)
                     },
-                    ["PricingStrategy"] = new Dictionary<string, UiObjectTemplate>
+                    [OpDataElementType.PricingStrategy.ToString()] = new Dictionary<string, UiObjectTemplate>
                     {
                         ["Generic"] = BuildUiObjectTemplate(OpDataElementType.PricingStrategy)
                     },
-                    ["PricingTable"] = new Dictionary<string, UiObjectTemplate>
+                    [OpDataElementType.PricingTable.ToString()] = new Dictionary<string, UiObjectTemplate>
                     {
                         ["Generic"] = BuildUiObjectTemplate(OpDataElementType.PricingTable)
+                    },
+                    [OpDataElementType.PricingTableRow.ToString()] = new Dictionary<string, UiObjectTemplate>
+                    {
+                        ["Generic"] = BuildUiObjectTemplate(OpDataElementType.PricingTableRow)
                     }
                 }
             };
 
+            var ex = ret.ModelTemplates[OpDataElementType.PricingTable.ToString()]["VOLTIER"];
+            ex.extraAtrbs = new Dictionary<string, UiAtrbs>
+            {
+                ["NUM_TIERS"] = new UiAtrbs
+                {
+                    value = "",
+                    label = "Number of Tiers: ",
+                    type = "DROPDOWN",
+                    isRequired = true,
+                    isError = false,
+                    opLookupUrl = "/api/Lookups/v1/GetLookups/NUM_TIERS",
+                    opLookupText = "DROP_DOWN",
+                    opLookupValue = "DROP_DOWN",
+                    validMsg = "Please enter the number of tiers."
+                }
+            };
+            ex.defaultAtrbs = new Dictionary<string, UiAtrbs>
+            {
+                ["TEXT"] = new UiAtrbs
+                {
+                    value = "More",
+                    label = "TEXT: ",
+                    type = "TEXTBOX",
+                    isRequired = true
+                },
+                ["INT"] = new UiAtrbs
+                {
+                    value = 2016,
+                    label = "INT: ",
+                    type = "NUMERIC",
+                    isRequired = false
+                }
+            };
             return ret;
         }
     }

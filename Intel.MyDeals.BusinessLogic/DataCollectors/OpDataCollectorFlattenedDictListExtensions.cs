@@ -58,29 +58,16 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
         {
             if (data.Count == 0) return new OpDataCollectorFlattenedList();
 
-            Dictionary<OpDataElementType, OpDataElementType> decoder =
-                new Dictionary<OpDataElementType, OpDataElementType>
-                {
-                    [OpDataElementType.Contract] = OpDataElementType.PricingStrategy,
-                    [OpDataElementType.PricingStrategy] = OpDataElementType.PricingTable,
-                    [OpDataElementType.PricingTable] = OpDataElementType.WipDeals
-                };
+            var decoderDict = new Dictionary<OpDataElementType, Dictionary<int, OpDataCollectorFlattenedList>>();
+            foreach (OpDataElementType odt in Enum.GetValues(typeof(OpDataElementType)))
+            {
+                decoderDict[odt] = data.ToDictionaryByDcParentId(odt);
+            }
 
-            Dictionary<OpDataElementType, Dictionary<int, OpDataCollectorFlattenedList>> decoderDict =
-                new Dictionary<OpDataElementType, Dictionary<int, OpDataCollectorFlattenedList>>
-                {
-                    [OpDataElementType.Contract] = data.ToDictionaryByDcParentId(OpDataElementType.Contract, decoder),
-                    [OpDataElementType.PricingStrategy] = data.ToDictionaryByDcParentId(OpDataElementType.PricingStrategy, decoder),
-                    [OpDataElementType.PricingTable] = data.ToDictionaryByDcParentId(OpDataElementType.PricingTable, decoder),
-                    [OpDataElementType.WipDeals] = data.ToDictionaryByDcParentId(OpDataElementType.WipDeals, decoder)
-                };
-
-            OpDataCollectorFlattenedList rtn = data[opDataElementType].RecurFlattenedItems(opDataElementType, decoder, decoderDict);
-            return rtn;
+            return data[opDataElementType].RecurFlattenedItems(opDataElementType, decoderDict);
         }
 
         private static OpDataCollectorFlattenedList RecurFlattenedItems(this OpDataCollectorFlattenedList data, OpDataElementType opDataElementType,
-            Dictionary<OpDataElementType, OpDataElementType> decoder,
             Dictionary<OpDataElementType, Dictionary<int, OpDataCollectorFlattenedList>> decoderDict)
         {
             OpDataCollectorFlattenedList rtn = new OpDataCollectorFlattenedList();
@@ -90,8 +77,8 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                 int key = int.Parse(item["DC_ID"].ToString());
                 Dictionary<int, OpDataCollectorFlattenedList> dictItems = decoderDict[opDataElementType];
                 if (dictItems.Count > 0 && dictItems.ContainsKey(key))
-                {
-                    item[decoder[opDataElementType].ToString()] = dictItems[key].RecurFlattenedItems(decoder[opDataElementType], decoder, decoderDict);
+                {                    
+                    item[opDataElementType.GetFirstChild().ToString()] = dictItems[key].RecurFlattenedItems(opDataElementType.GetFirstChild(), decoderDict);
                 }
                 rtn.Add(item);
             }
@@ -99,13 +86,11 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
             return rtn;
         }
 
-        private static Dictionary<int, OpDataCollectorFlattenedList> ToDictionaryByDcParentId(this OpDataCollectorFlattenedDictList data, OpDataElementType parentOpDataElementType, Dictionary<OpDataElementType, OpDataElementType> decoder)
+        private static Dictionary<int, OpDataCollectorFlattenedList> ToDictionaryByDcParentId(this OpDataCollectorFlattenedDictList data, OpDataElementType parentOpDataElementType)
         {
             Dictionary<int, OpDataCollectorFlattenedList> rtn = new Dictionary<int, OpDataCollectorFlattenedList>();
-            if (!decoder.ContainsKey(parentOpDataElementType)) return rtn;
-
-            OpDataElementType opDataElementType = decoder[parentOpDataElementType];
-            if (!data.ContainsKey(opDataElementType)) return rtn;
+            OpDataElementType opDataElementType = parentOpDataElementType.GetFirstChild();
+            if (opDataElementType == OpDataElementType.Unknown || !data.ContainsKey(opDataElementType)) return rtn;
 
             foreach (OpDataCollectorFlattenedItem opDataCollectorFlattenedItem in data[opDataElementType])
             {

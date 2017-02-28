@@ -6106,6 +6106,7 @@ div.k-scheduler-marquee:after {
 }
 .toggle .btn[disabled].btn-primary {
     color: #ffffff !important;
+    opacity: .6;
 }
 .toggle .btn[disabled].btn-primary:hover {
     background-color: #00AEEF;
@@ -6116,6 +6117,20 @@ div.k-scheduler-marquee:after {
 .k-grid-content .toggle.btn {
     min-width: 10px !important; 
     min-height: 10px !important; 
+}
+
+
+.k-grid .k-icon:hover {
+    color: #00aeef !important;
+}
+.k-grid .k-state-active, .k-grid .k-state-active:hover, .k-grid .k-active-filter {
+    color: #00aeef !important;
+}
+.k-grid .k-state-active .k-i-more-vertical, .k-grid .k-state-active:hover .k-i-more-vertical, .k-grid .k-active-filter .k-i-more-vertical {
+    color: #00aeef !important;
+}
+.k-grid .k-state-active .k-i-more-vertical:hover, .k-grid .k-state-active:hover .k-i-more-vertical:hover, .k-grid .k-active-filter .k-i-more-vertical:hover {
+    color: #0099ff !important;
 }
 
 
@@ -6197,4 +6212,8 @@ div.k-scheduler-marquee:after {
 
 UL.k-multicheck-wrap LI LABEL INPUT, UL.k-menu-group LI SPAN.k-link INPUT {
     margin-right: 5px;
+}
+
+.k-menu .k-item>.k-link>.k-i-arrow-60-right {
+    right: .3rem;
 }

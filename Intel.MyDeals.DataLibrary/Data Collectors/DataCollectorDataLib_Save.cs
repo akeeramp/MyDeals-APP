@@ -23,13 +23,13 @@ namespace Intel.MyDeals.DataLibrary
         /// <param name="opUserToken">User information for this save cycle</param>
         /// <param name="custId">Customer ID for this save cycle</param>
         /// <returns>Changed deals</returns>
-        public MyDealsData SaveDeals(MyDealsData packets, OpUserToken opUserToken, int custId)
+        public MyDealsData SaveDeals(MyDealsData packets, int custId)
         {
-            return SaveDeals(packets, opUserToken, custId, true);
+            return SaveDeals(packets, custId, true);
         }
 
 
-        private MyDealsData SaveDeals(MyDealsData packets, OpUserToken opUserToken, int custId, bool batchMode)
+        private MyDealsData SaveDeals(MyDealsData packets, int custId, bool batchMode)
         {
             // Save Data Cycle: Point 15
             try
@@ -75,12 +75,12 @@ namespace Intel.MyDeals.DataLibrary
                 var orderedPackets = GetPacketsInOrder(packets.Values);
 
                 // Write them to dbo.MYDL_CL_WIP_ATRB
-                ImportOpDataPackets(orderedPackets, opUserToken.Usr.WWID, custId);
+                ImportOpDataPackets(orderedPackets, OpUserStack.MyOpUserToken.Usr.WWID, custId);
 
                 OpLogPerf.Log("DcsDealLib.SaveDeals - Exit ImportOpDataPackets.");
 
                 // Get all the actions and process them in order
-                MyDealsData ret = batchMode ? ActionDealsBatch(orderedPackets, opUserToken.Usr.WWID) : ActionDeals(orderedPackets);
+                MyDealsData ret = batchMode ? ActionDealsBatch(orderedPackets, OpUserStack.MyOpUserToken.Usr.WWID) : ActionDeals(orderedPackets);
 
                 OpLogPerf.Log("DcsDealLib.SaveDeals - Exit ActionDeals.");
 

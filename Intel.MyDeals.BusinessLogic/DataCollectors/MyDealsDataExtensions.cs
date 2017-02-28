@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Intel.MyDeals.BusinessRules;
@@ -6,6 +7,8 @@ using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
 using Intel.Opaque;
 using Intel.Opaque.Data;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -38,7 +41,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// Merge flattened data back into OpData Deals collections for a specific collector type
         /// </summary>
         /// <param name="myDealsData">The unflattened deals collection to pass up to DB.</param>
-        /// <param name="opType">Which colelctor type to process.</param>
+        /// <param name="opType">Which collector type to process.</param>
         /// <param name="data">The flattened UI data format.</param>
         /// <returns></returns>
         public static MyDealsData Merge(this MyDealsData myDealsData, OpDataElementType opType, OpDataCollectorFlattenedList data)
@@ -49,17 +52,30 @@ namespace Intel.MyDeals.BusinessLogic
             if (data == null) return myDealsData;
             OpDataPacket<OpDataElementType> dpDeals = myDealsData.GetOpType(opType);
 
+            //List<OpDataCollectorFlattenedItem> newItems = new List<OpDataCollectorFlattenedItem>();
             foreach (OpDataCollectorFlattenedItem items in data)
             {
-                int id = !items.ContainsKey("DC_ID") ? 0 : Convert.ToInt32(items["DC_ID"].ToString()); // TODO ADD OTHERS HERE XXX
-                int idtype = !items.ContainsKey("dc_type") // What total crap needing to go from "CONTRACT" to object to ID...  Go figure..
-                    ? 0
-                    : OpDataElementTypeConverter.StringToId(
-                        OpDataElementTypeConverter.FromString(items["dc_type"]).ToString()); // TODO ADD OTHERS HERE XXX //int idtype = !items.ContainsKey("dc_type") ? 0 : Convert.ToInt32(items["dc_type"].ToString());
-                int parentid = !items.ContainsKey("DC_PARENT_ID") ? 0 : Convert.ToInt32(items["DC_PARENT_ID"].ToString()); // TODO ADD OTHERS HERE XXX
-                int parentidtype = !items.ContainsKey("dc_parent_type") ? 0 
-                    : OpDataElementTypeConverter.StringToId(
-                        OpDataElementTypeConverter.FromString(items["dc_parent_type"]).ToString()); // TODO ADD OTHERS HERE XXX //int parentidtype = !items.ContainsKey("dc_parent_type") ? 0 : Convert.ToInt32(items["dc_parent_type"].ToString());
+                int id = !items.ContainsKey("DC_ID") ? 0 : Convert.ToInt32(items["DC_ID"].ToString());
+                int idtype = !items.ContainsKey("dc_type") ? 0 : OpDataElementTypeConverter.FromString(items["dc_type"]).ToId();
+                int parentid = !items.ContainsKey("DC_PARENT_ID") ? 0 : Convert.ToInt32(items["DC_PARENT_ID"].ToString());
+                int parentidtype = !items.ContainsKey("dc_parent_type") ? 0 : OpDataElementTypeConverter.FromString(items["dc_parent_type"]).ToId();
+
+                if (items.ContainsKey(EN.OBJDIM._MULTIDIM))
+                {
+                    foreach (JObject item in (IEnumerable)items[EN.OBJDIM._MULTIDIM])
+                    {
+                        var values = item.ToObject<OpDataCollectorFlattenedItem>();
+                        var pivot = values.ContainsKey(EN.OBJDIM.PIVOT) ? values[EN.OBJDIM.PIVOT] : "0";
+
+                        foreach (KeyValuePair<string, object> kvp in values)
+                        {
+                            if (kvp.Key != EN.OBJDIM.PIVOT && kvp.Key != "DC_ID")
+                            {
+                                items[kvp.Key + "|" + pivot] = kvp.Value;
+                            }
+                        }
+                    }
+                }
 
                 // Get existing DC or spawn a new one
                 OpDataCollector dc = myDealsData.CreateDCFromData(id, idtype, parentid, parentidtype, opType, items);

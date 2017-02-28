@@ -51,7 +51,6 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
     // other variable definitions
     //
     $scope.uid = -100;
-    $scope.isPricingStrategiesHidden = false;
     $scope.isExistingContract = function () {
         return $scope.contractData.DC_ID > 0;
     }
@@ -119,14 +118,12 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         $scope.isAddStrategyHidden = true;
         $scope.isAddStrategyBtnHidden = false;
         $scope.isAddPricingTableHidden = true;
-        $scope.isPricingStrategiesHidden = false;
     }
     $scope.showAddPricingTable = function (ps) {
         $scope.isAddPricingTableHidden = false;
         $scope.isAddStrategyHidden = true;
         $scope.isAddStrategyBtnHidden = true;
         $scope.isSearchHidden = true;
-        $scope.isPricingStrategiesHidden = true;
         $scope.curPricingStrategy = ps;
     }
     $scope.hideAddPricingTable = function () {
@@ -134,7 +131,6 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         $scope.isAddStrategyHidden = true;
         $scope.isAddStrategyBtnHidden = false;
         $scope.isSearchHidden = true;
-        $scope.isPricingStrategiesHidden = false;
         $scope.newPricingTable = util.clone($scope.templates.ObjectTemplates.PricingTable.Generic);
         $scope.clearPtTemplateIcons();
     }
@@ -149,7 +145,6 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         $scope.isAddStrategyBtnHidden = !$scope.isAddStrategyHidden;
         $scope.isSearchHidden = true;
         $scope.isAddPricingTableHidden = true;
-        $scope.isPricingStrategiesHidden = false;
     }
 
 
@@ -284,7 +279,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
                 }
             }
         }
-
+        
         // validate that we have access to spreadDs, gridDs and GridDetailsDs
         var contractData = $scope._dirtyContractOnly ? [$scope.contractData] : [];
         var curPricingTableData = $scope.curPricingTable.DC_ID === undefined ? [] : [$scope.curPricingTable];

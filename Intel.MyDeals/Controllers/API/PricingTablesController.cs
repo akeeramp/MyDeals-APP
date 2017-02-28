@@ -1,6 +1,5 @@
 ﻿using System.Web.Http;
 using Intel.MyDeals.BusinessLogic;
-using Intel.MyDeals.BusinessLogic.DataCollectors;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque;
@@ -67,6 +66,7 @@ namespace Intel.MyDeals.Controllers.API
         {
             return SafeExecutor(() => _pricingTablesLib.SavePricingTable(
                 fullpricingTables.ContainsKey(OpDataElementType.PricingTable) ? fullpricingTables[OpDataElementType.PricingTable] : new OpDataCollectorFlattenedList(),
+                fullpricingTables.ContainsKey(OpDataElementType.PricingTableRow) ? fullpricingTables[OpDataElementType.PricingTableRow] : new OpDataCollectorFlattenedList(),
                 fullpricingTables.ContainsKey(OpDataElementType.WipDeals) ? fullpricingTables[OpDataElementType.WipDeals] : new OpDataCollectorFlattenedList(),
                 custId)
                 , "Unable to save the Pricing Table"

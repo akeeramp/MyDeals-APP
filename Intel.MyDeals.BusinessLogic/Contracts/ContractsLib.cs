@@ -24,6 +24,7 @@ namespace Intel.MyDeals.BusinessLogic
                     OpDataElementType.Contract,
                     OpDataElementType.PricingStrategy,
                     OpDataElementType.PricingTable,
+                    OpDataElementType.PricingTableRow,
                     OpDataElementType.WipDeals
                 }
                 : new List<OpDataElementType>
@@ -54,6 +55,7 @@ namespace Intel.MyDeals.BusinessLogic
             OpDataCollectorFlattenedList contracts,
             OpDataCollectorFlattenedList pricingStrategies,
             OpDataCollectorFlattenedList pricingTables,
+            OpDataCollectorFlattenedList pricingTableRows,
             OpDataCollectorFlattenedList wipDeals,
             int custId)
         {
@@ -62,6 +64,7 @@ namespace Intel.MyDeals.BusinessLogic
             if (contracts != null && contracts.Any()) data[OpDataElementType.Contract] = contracts;
             if (pricingStrategies != null && pricingStrategies.Any()) data[OpDataElementType.PricingStrategy] = pricingStrategies;
             if (pricingTables != null && pricingTables.Any()) data[OpDataElementType.PricingTable] = pricingTables;
+            if (pricingTableRows != null && pricingTableRows.Any()) data[OpDataElementType.PricingTableRow] = pricingTableRows;
             if (wipDeals != null && wipDeals.Any()) data[OpDataElementType.WipDeals] = wipDeals;
 
             return _dataCollectorLib.SavePackets(data, custId);

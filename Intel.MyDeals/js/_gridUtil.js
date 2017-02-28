@@ -45,10 +45,13 @@ gridUtils.clearAllFilters = function () {
     $("form.k-filter-menu button[type='reset']").trigger("click");
 }
 gridUtils.clearAllFiltersToolbar = function () {
-    return '<button class="btn btn-primary" style="font-size: 18px;" onClick="gridUtils.clearAllFilters()"><i class="intelicon-cancel-filter-solid" style="margin-right: 7px;"></i>CLEAR FILTERS</button>';
+    return '<a role="button" class="k-button k-button-icontext" href="\\#" onClick="gridUtils.clearAllFilters()"><span class="k-icon intelicon-cancel-filter-solid"></span>CLEAR FILTERS</a>';
 }
 gridUtils.inLineClearAllFiltersToolbar = function () {
-    return '<a role="button" class="k-button k-button-icontext k-grid-add" href="\\#"><span class="k-icon k-i-plus"></span>Add new record</a> <button class="btn btn-primary" style="font-size: 18px;" onClick="gridUtils.clearAllFilters()"><i class="intelicon-cancel-filter-solid" style="margin-right: 7px;"></i>CLEAR FILTERS</button>';
+    var rtn = '';
+    rtn += '<a role="button" class="k-button k-button-icontext k-grid-add" href="\\#"><span class="k-icon k-i-plus"></span>Add new record</a> ';
+    rtn += '<a role="button" class="k-button k-button-icontext" href="\\#" onClick="gridUtils.clearAllFilters()"><span class="k-icon intelicon-cancel-filter-solid"></span>CLEAR FILTERS</a>';
+    return rtn;
 }
 
 gridUtils.boolViewer = function (field) {
