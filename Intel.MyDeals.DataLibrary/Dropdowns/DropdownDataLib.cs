@@ -32,7 +32,7 @@ namespace Intel.MyDeals.DataLibrary
         public List<Dropdown> GetDropdowns()
         {
             var ret = new List<Dropdown>();
-            Procs.dbo.PR_GET_DROPDOWNS cmd = new Procs.dbo.PR_GET_DROPDOWNS();
+            Procs.dbo.PR_MYDL_GET_DROPDOWNS cmd = new Procs.dbo.PR_MYDL_GET_DROPDOWNS();
 
             try
             {
@@ -43,6 +43,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_dropdownID = DB.GetReaderOrdinal(rdr, "dropdownID");
                     int IDX_dropdownName = DB.GetReaderOrdinal(rdr, "dropdownName");
                     int IDX_isSubSegment = DB.GetReaderOrdinal(rdr, "isSubSegment");
+                    int IDX_parntAtrbCd = DB.GetReaderOrdinal(rdr, "parntAtrbCd");
 
                     while (rdr.Read())
                     {
@@ -52,7 +53,8 @@ namespace Intel.MyDeals.DataLibrary
                             dropdownCategory = (IDX_dropdownCategory < 0 || rdr.IsDBNull(IDX_dropdownCategory)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_dropdownCategory),
                             dropdownID = (IDX_dropdownID < 0 || rdr.IsDBNull(IDX_dropdownID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_dropdownID),
                             dropdownName = (IDX_dropdownName < 0 || rdr.IsDBNull(IDX_dropdownName)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_dropdownName),
-                            isSubSegment = (IDX_isSubSegment < 0 || rdr.IsDBNull(IDX_isSubSegment)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_isSubSegment)
+                            isSubSegment = (IDX_isSubSegment < 0 || rdr.IsDBNull(IDX_isSubSegment)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_isSubSegment),
+                            parntAtrbCd = (IDX_parntAtrbCd < 0 || rdr.IsDBNull(IDX_parntAtrbCd)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_parntAtrbCd)
                         });
                     }
                 }
@@ -78,10 +80,10 @@ namespace Intel.MyDeals.DataLibrary
         public List<BasicDropdown> ExecuteManageBasicDropdownSP(BasicDropdown dropdown, CrudModes type)
         {
             var ret = new List<BasicDropdown>();
-            Procs.dbo.PR_MANAGE_BASIC_DROPDOWNS cmd = new Procs.dbo.PR_MANAGE_BASIC_DROPDOWNS();
+            Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS();
             if (type.Equals(CrudModes.Select))
             {
-                cmd = new Procs.dbo.PR_MANAGE_BASIC_DROPDOWNS()
+                cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS()
                 {
                     MODE = type.ToString(),
                     ATRB_SID = 0,
@@ -92,7 +94,7 @@ namespace Intel.MyDeals.DataLibrary
             }
             else
             {
-                cmd = new Procs.dbo.PR_MANAGE_BASIC_DROPDOWNS()
+                cmd = new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS()
                 {
                     LK_UP_SID = dropdown.ATRB_LKUP_SID,
                     MODE = type.ToString(),
@@ -161,7 +163,7 @@ namespace Intel.MyDeals.DataLibrary
             DataSet dsCheckConstraintErrors = null;
             try
             {
-                DataAccess.ExecuteDataSet(new Procs.dbo.PR_MANAGE_BASIC_DROPDOWNS()
+                DataAccess.ExecuteDataSet(new Procs.dbo.PR_MYDL_MANAGE_BASIC_DROPDOWNS()
                 {
                     LK_UP_SID = id,
                     MODE = CrudModes.Delete.ToString(),

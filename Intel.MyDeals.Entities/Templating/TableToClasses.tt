@@ -120,12 +120,12 @@ using System.Collections.Generic;
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	// Dropdowns
-	ds = dbobjects.ExecuteDataSet("[dbo].[PR_GET_DROPDOWNS]");
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_DROPDOWNS]");
 	ds.Tables[0].TableName = "Dropdown";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	// Basic Dropdowns
-	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MANAGE_BASIC_DROPDOWNS] @MODE = 'SELECT', @ATRB_SID = 0, @OBJ_SET_TYPE_SID = 0, @ATRB_VAL_TXT = ''");
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_MANAGE_BASIC_DROPDOWNS] @MODE = 'SELECT', @ATRB_SID = 0, @OBJ_SET_TYPE_SID = 0, @ATRB_VAL_TXT = ''");
 	ds.Tables[0].TableName = "BasicDropdown";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
