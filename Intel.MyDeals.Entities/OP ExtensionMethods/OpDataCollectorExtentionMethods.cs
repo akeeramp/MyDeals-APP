@@ -121,7 +121,7 @@ namespace Intel.MyDeals.Entities
                 }
 
                 dealType = sourceData.MasterDataLookups
-                    .Where(m => m.AtrbCd == AttributeCodes.DEAL_TYPE_CD_SID && m.AtrbItemId.ToString() == deDealTypeSid)
+                    .Where(m => m.AtrbCd == AttributeCodes.OBJ_SET_TYPE_SID && m.AtrbItemId.ToString() == deDealTypeSid)
                     .Select(m => m.AtrbItemValue).FirstOrDefault();
             }
 

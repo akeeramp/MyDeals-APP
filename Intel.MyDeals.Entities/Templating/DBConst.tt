@@ -48,7 +48,7 @@
 			DIM_SID,
 			ATRB_SID,
 			DIM_CD,
-			ATRB_COL_NM as ATRB_CD,
+			ATRB_CD,
 			TGT_COL_TYPE,
 			DOT_NET_DATA_TYPE
 		from [dbo].[VW_ATRB_MSTR] (nolock)
@@ -140,6 +140,28 @@ ORDER BY cnst_nm
 		} 
     }
 
+	PopIndent();
+	WriteLine("}"); // class
+
+	//-- Build Objects Data -------------------------------------------------------------------------------
+
+	cmd = new SqlCommand(@"[dbo].[PR_MYDL_GET_OBJ]", conn);
+	cmd.CommandType = CommandType.StoredProcedure;
+
+	DataSet ds_pr_mydl_get_obj = new DataSet();
+	SqlDataAdapter da_pr_mydl_get_obj = new SqlDataAdapter(cmd);
+	da_pr_mydl_get_obj.Fill(ds_pr_mydl_get_obj);
+
+	//var dt_objs = da_pr_mydl_get_obj.Tables[0];
+
+	WriteLine("");
+	WriteLine("//-- Build Objects Data -------------------------------------------------------------------------------");
+	WriteLine("");
+
+	WriteLine("namespace MyDealsAtrbLookup2 {");
+	PushIndent(TAB);
+
+	// DI BUILDS HERE
 	PopIndent();
 	WriteLine("}"); // class
 

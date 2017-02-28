@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 2/7/2017 3:15:39 PM
+File Updated: 2/27/2017 5:15:00 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -85,7 +85,7 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// DIM_SID: 3
-		/// DIM_CD: TIME
+		/// DIM_CD: DEAL
 		/// ATRB_SID: 3576
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.String
@@ -165,15 +165,6 @@ namespace Intel.MyDeals.Entities {
 		public const string CTRY_NM = "CTRY_NM";
 
 		///<summary>
-		/// DIM_SID: 3
-		/// DIM_CD: TIME
-		/// ATRB_SID: 3653
-		/// TGT_COL_TYPE: INT
-		/// DOT_NET_DATA_TYPE: System.Int32
-		///</summary>
-		public const string CUST_ACCPT = "CUST_ACCPT";
-
-		///<summary>
 		/// DIM_SID: 2
 		/// DIM_CD: CUST
 		/// ATRB_SID: 2010
@@ -193,7 +184,7 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// DIM_SID: 3
-		/// DIM_CD: TIME
+		/// DIM_CD: DEAL
 		/// ATRB_SID: 3011
 		/// TGT_COL_TYPE: INT
 		/// DOT_NET_DATA_TYPE: System.Int32
@@ -229,7 +220,7 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// DIM_SID: 3
-		/// DIM_CD: TIME
+		/// DIM_CD: DEAL
 		/// ATRB_SID: 3372
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.String
@@ -256,7 +247,7 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// DIM_SID: 3
-		/// DIM_CD: TIME
+		/// DIM_CD: DEAL
 		/// ATRB_SID: 3616
 		/// TGT_COL_TYPE: INT
 		/// DOT_NET_DATA_TYPE: System.Int32
@@ -265,30 +256,12 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// DIM_SID: 3
-		/// DIM_CD: TIME
+		/// DIM_CD: DEAL
 		/// ATRB_SID: 3327
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.String
 		///</summary>
 		public const string DEAL_STG_CD = "DEAL_STG_CD";
-
-		///<summary>
-		/// DIM_SID: 3
-		/// DIM_CD: TIME
-		/// ATRB_SID: 3002
-		/// TGT_COL_TYPE: VARCHAR
-		/// DOT_NET_DATA_TYPE: System.String
-		///</summary>
-		public const string DEAL_TYPE_CD = "DEAL_TYPE_CD";
-
-		///<summary>
-		/// DIM_SID: 3
-		/// DIM_CD: TIME
-		/// ATRB_SID: 3004
-		/// TGT_COL_TYPE: INT
-		/// DOT_NET_DATA_TYPE: System.Int32
-		///</summary>
-		public const string DEAL_TYPE_CD_SID = "DEAL_TYPE_CD_SID";
 
 		///<summary>
 		/// DIM_SID: 7
@@ -319,7 +292,16 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// DIM_SID: 3
-		/// DIM_CD: TIME
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3331
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string ECAP_TYPE = "ECAP_TYPE";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
 		/// ATRB_SID: 3320
 		/// TGT_COL_TYPE: DATETIME
 		/// DOT_NET_DATA_TYPE: System.DateTime
@@ -471,6 +453,15 @@ namespace Intel.MyDeals.Entities {
 		public const string GEO_NM = "GEO_NM";
 
 		///<summary>
+		/// DIM_SID: 7
+		/// DIM_CD: PRD
+		/// ATRB_SID: 7090
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.Object
+		///</summary>
+		public const string HIER_VAL_NM = "HIER_VAL_NM";
+
+		///<summary>
 		/// DIM_SID: 2
 		/// DIM_CD: CUST
 		/// ATRB_SID: 2012
@@ -525,6 +516,33 @@ namespace Intel.MyDeals.Entities {
 		public const string MM_MEDIA_CD = "MM_MEDIA_CD";
 
 		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3474
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string MRKT_SEG_COMBINED = "MRKT_SEG_COMBINED";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3654
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string MRKT_SEG_NON_CORP = "MRKT_SEG_NON_CORP";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3653
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string MRKT_SUB_SEGMENT = "MRKT_SUB_SEGMENT";
+
+		///<summary>
 		/// DIM_SID: 7
 		/// DIM_CD: PRD
 		/// ATRB_SID: 7008
@@ -571,12 +589,30 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// DIM_SID: 3
-		/// DIM_CD: TIME
+		/// DIM_CD: DEAL
 		/// ATRB_SID: 3490
 		/// TGT_COL_TYPE: INT
 		/// DOT_NET_DATA_TYPE: System.Int32
 		///</summary>
 		public const string NUM_OF_TIERS = "NUM_OF_TIERS";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3002
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string OBJ_SET_TYPE_CD = "OBJ_SET_TYPE_CD";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3004
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Int32
+		///</summary>
+		public const string OBJ_SET_TYPE_SID = "OBJ_SET_TYPE_SID";
 
 		///<summary>
 		/// DIM_SID: 7
@@ -670,7 +706,7 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// DIM_SID: 3
-		/// DIM_CD: TIME
+		/// DIM_CD: DEAL
 		/// ATRB_SID: 75
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.String
@@ -685,6 +721,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Object
 		///</summary>
 		public const string PRICE_SEGMENT = "PRICE_SEGMENT";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 18
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string PROGRAM_ECAP_TYPE = "PROGRAM_ECAP_TYPE";
 
 		///<summary>
 		/// DIM_SID: 7
@@ -760,7 +805,7 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// DIM_SID: 3
-		/// DIM_CD: TIME
+		/// DIM_CD: DEAL
 		/// ATRB_SID: 3319
 		/// TGT_COL_TYPE: DATETIME
 		/// DOT_NET_DATA_TYPE: System.DateTime
@@ -787,7 +832,7 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// DIM_SID: 3
-		/// DIM_CD: TIME
+		/// DIM_CD: DEAL
 		/// ATRB_SID: 3569
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.String
@@ -796,7 +841,7 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// DIM_SID: 3
-		/// DIM_CD: TIME
+		/// DIM_CD: DEAL
 		/// ATRB_SID: 33
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.String
@@ -814,7 +859,7 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// DIM_SID: 3
-		/// DIM_CD: TIME
+		/// DIM_CD: DEAL
 		/// ATRB_SID: 24
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.String
@@ -1145,7 +1190,11 @@ namespace Intel.MyDeals.Entities {
 		public const string ICOST_ERROR_CONTACTS_MYDL = "ICOST_ERROR_CONTACTS_MYDL";
 		public const string ICOST_ERROR_LOG_DAYS = "ICOST_ERROR_LOG_DAYS";
 		public const string santhoshi = "santhoshi";
-		public const string Test = "Test";
+	}
+
+	//-- Build Objects Data -------------------------------------------------------------------------------
+
+	namespace MyDealsAtrbLookup2 {
 	}
 
 	//-------------------------------------------------------------------------------------------

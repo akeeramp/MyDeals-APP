@@ -308,7 +308,7 @@ namespace Intel.MyDeals.BusinessLogic
         {
             return String.Format("{0} / {1} / {2} / {3} / {4} / {5}",
                 displayDeal,
-                dc.GetDataElementValue(AttributeCodes.DEAL_TYPE_CD),
+                dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD),
                 dc.GetDataElementValue(AttributeCodes.DEAL_STG_CD),
                 dc.GetDataElementValue(AttributeCodes.START_DT),
                 dc.GetDataElementValue(AttributeCodes.END_DT),
