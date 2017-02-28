@@ -6217,3 +6217,31 @@ UL.k-multicheck-wrap LI LABEL INPUT, UL.k-menu-group LI SPAN.k-link INPUT {
 .k-menu .k-item>.k-link>.k-i-arrow-60-right {
     right: .3rem;
 }
+
+
+
+
+
+
+/* Chrome Scrollbar */
+::-webkit-scrollbar  { width: 7px; height: 7px;}
+::-webkit-scrollbar-button  {  background-color: transparent; }
+::-webkit-scrollbar-track  {  background-color: transparent;}
+::-webkit-scrollbar-track-piece  { background-color: transparent;}
+::-webkit-scrollbar-thumb  { height: 50px; background-color: #0071c5; border-radius: 3px;}
+::-webkit-scrollbar-corner  { background-color: #999;}
+::-webkit-resizer  { background-color: transparent;}
+
+/* IE Scrollbar*/
+div#lnavContainer {
+  scrollbar-base-color: #003c71;
+  scrollbar-3dlight-color: transparent;
+  scrollbar-highlight-color: transparent;
+  scrollbar-track-color: #003c71;
+  scrollbar-face-color : #0071c5;
+  scrollbar-arrow-color: #0071c5;
+  scrollbar-shadow-color: #003c71;
+ 
+
+
+}
