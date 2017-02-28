@@ -77,8 +77,7 @@
                 create: function (e) {
                     workflowStagesService.SetWorkflowStages(e.data)
                         .then(function (response) {
-                            e.success(response.data);
-                            $(".k-i-reload").trigger('click'); // Refresh the grid to get the Auto Increment ID from DB
+                            e.success(response.data[0]);                            
                             logger.success("New Workflow Stage successfully added.");
                         }, function (response) {
                             logger.error("Unable to insert Workflow Stage.", response, response.statusText);

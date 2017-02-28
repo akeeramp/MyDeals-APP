@@ -79,9 +79,8 @@
                 },
                 create: function (e) {
                     workflowService.SetWorkFlows(e.data)
-                        .then(function (response) {
-                            e.success(response.data);
-                            $(".k-i-reload").trigger('click'); // Refresh the grid to get the Auto Increment ID from DB
+                        .then(function (response) {                            
+                            e.success(response.data[0]);                            
                             logger.success("New Workflow added.");
                         }, function (response) {
                             logger.error("Unable to insert Workflow.", response, response.statusText);
@@ -158,7 +157,7 @@
               { field: "WF_NAME", title: "WF Name", width: "10%" },
               { field: "ROLE_TIER_NM", title: "Role Tier", width: "10%", editor: roleTierCDDropDownEditor },
               { field: "OBJ_TYPE_SID", template: " #= OBJ_TYPE # ", title: "Obj Type", width: "13%", editor: objTypeCDDropDownEditor },
-              { field: "OBJ_SET_TYPE_SID", template: " #= OBJ_SET_TYPE_CD # ", title: "Deal Type", width: "10%", editor: dealTypeCDDropDownEditor },
+              { field: "OBJ_SET_TYPE_SID", template: " #= OBJ_SET_TYPE_CD # ", title: "Object Set Type", width: "10%", editor: dealTypeCDDropDownEditor },
               { field: "WFSTG_ACTN_SID", template: " #= WFSTG_ACTN_NM # ", title: "Action", width: "10%", editor: actionCDDropDownEditor },
               { field: "WFSTG_MBR_SID", template: " #= WFSTG_CD_SRC # ", title: "Begin Stage", width: "11%", editor: srcCDDropDownEditor },
               { field: "WFSTG_DEST_MBR_SID", template: " #= WFSTG_CD_DEST # ", title: "End Stage", width: "11%", editor: destCDDropDownEditor },
