@@ -58,7 +58,7 @@ namespace Intel.MyDeals.DataLibrary
             }
 
             //// TODO change SP to match naming conventions - Change this over to objects imported definations
-            //// --'CNTRCT, PRC_ST, PRCNG, WIP_DEAL, DEAL'
+            //// --'CNTRCT, PRC_ST, PRC_TBL, PRC_TBL_ROW, WIP_DEAL, DEAL'
             strInc = strInc.Replace(OpDataElementType.Contract.ToString(), OpDataElementType.Contract.ToAlias());
             strInc = strInc.Replace(OpDataElementType.PricingStrategy.ToString(), OpDataElementType.PricingStrategy.ToAlias());
             strInc = strInc.Replace(OpDataElementType.PricingTable.ToString(), OpDataElementType.PricingTable.ToAlias());
