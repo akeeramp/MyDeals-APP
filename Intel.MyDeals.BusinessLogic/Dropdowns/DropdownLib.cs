@@ -55,7 +55,7 @@ namespace Intel.MyDeals.BusinessLogic
 		/// <returns>list of Deal Types Dropdowns</returns>
 		public List<Dropdown> GetDealTypesDropdowns()
         {
-            return GetDropdowns().Where(dd => dd.dropdownCategory == "All Deal Types").ToList();
+            return GetDropdowns().Where(dd => dd.dropdownCategory == "All Deal Types" && dd.active == 1).ToList();
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Intel.MyDeals.BusinessLogic
 		/// <returns>list of Dropdown Groups</returns>
 		public List<Dropdown> GetDropdownGroups()
         {
-            return GetDropdowns().Where(dd => dd.dropdownCategory == "Basic Dropdowns").ToList();
+            return GetDropdowns().Where(dd => dd.dropdownCategory == "Basic Dropdowns" && dd.active == 1).ToList();
         }
 
         /// <summary>

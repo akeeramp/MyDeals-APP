@@ -41,10 +41,10 @@ namespace Intel.MyDeals.DataLibrary
                 using (var rdr = DataAccess.ExecuteReader(cmd))
                 {
                     int IDX_active = DB.GetReaderOrdinal(rdr, "active");
+                    int IDX_allDealFlag = DB.GetReaderOrdinal(rdr, "allDealFlag");
                     int IDX_dropdownCategory = DB.GetReaderOrdinal(rdr, "dropdownCategory");
                     int IDX_dropdownID = DB.GetReaderOrdinal(rdr, "dropdownID");
                     int IDX_dropdownName = DB.GetReaderOrdinal(rdr, "dropdownName");
-                    int IDX_isSubSegment = DB.GetReaderOrdinal(rdr, "isSubSegment");
                     int IDX_parntAtrbCd = DB.GetReaderOrdinal(rdr, "parntAtrbCd");
 
                     while (rdr.Read())
@@ -52,10 +52,10 @@ namespace Intel.MyDeals.DataLibrary
                         ret.Add(new Dropdown
                         {
                             active = (IDX_active < 0 || rdr.IsDBNull(IDX_active)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_active),
+                            allDealFlag = (IDX_allDealFlag < 0 || rdr.IsDBNull(IDX_allDealFlag)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_allDealFlag),
                             dropdownCategory = (IDX_dropdownCategory < 0 || rdr.IsDBNull(IDX_dropdownCategory)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_dropdownCategory),
                             dropdownID = (IDX_dropdownID < 0 || rdr.IsDBNull(IDX_dropdownID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_dropdownID),
                             dropdownName = (IDX_dropdownName < 0 || rdr.IsDBNull(IDX_dropdownName)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_dropdownName),
-                            isSubSegment = (IDX_isSubSegment < 0 || rdr.IsDBNull(IDX_isSubSegment)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_isSubSegment),
                             parntAtrbCd = (IDX_parntAtrbCd < 0 || rdr.IsDBNull(IDX_parntAtrbCd)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_parntAtrbCd)
                         });
                     }
