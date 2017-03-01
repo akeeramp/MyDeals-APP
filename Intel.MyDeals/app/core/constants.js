@@ -1,5 +1,5 @@
 /* global toastr:false, moment:false */
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -25,5 +25,9 @@
                     }
                 }
             }
+        })
+        .constant('pctRulesDrpDownValues', {
+            costTestProductType: [{'name':'L1'},{'name':'L2'}],
+            conditionCriteria: [{ 'name': 'Include' }, { 'name': 'Exclude' }],
         });
 })();

@@ -24,6 +24,7 @@ namespace Intel.MyDeals.DataLibrary
             registerService.RegisterType<IUiTemplateDataLib, UiTemplateDataLib>();
             registerService.RegisterType<IWorkFlowDataLib, WorkFlowDataLib>();
 
+            registerService.RegisterType<IProductCostTestDataLib, ProductCostTestDataLib>();
         }
     }
 }

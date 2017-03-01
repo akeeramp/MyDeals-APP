@@ -165,6 +165,21 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "PRD_LOOKUP_RESULTS";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
+    // Product Cost Test Rules
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_PCT_RULE_UI_FETCH]");
+	ds.Tables[0].TableName = "ProductCostTestRules";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
+	// Product category to vertical Mapping
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_PRD_CAT_PCT]");
+	ds.Tables[0].TableName = "ProductTypeMappings";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
+	// PCT Product Attribute Values
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_ATRB_VAL_PCT] @vrt_mbr_sid = 9 ");
+	ds.Tables[0].TableName = "ProductAttributeValues";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
 	PopIndent();
 	WriteLine("}"); // End NameSpace
 

@@ -127,6 +127,17 @@
                 }
             },
             {
+                state: 'admin.costtest.icostproducts.manage',
+                config: {
+					url: ''
+                    , views: {
+                        'addNewRules': {
+                            templateUrl: 'app/admin/iCostProducts/iCostProducts.manage.html'
+                        }
+                    }
+                }
+            },
+            {
                 state: 'admin.rules',
                 abstract: false,
                 config: {

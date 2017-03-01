@@ -1,0 +1,59 @@
+﻿<div class="row form-inline">
+    <div class="col-md-3" style="padding-top:30px">
+        <label class="control-label">Product Type:</label>
+        <ui-select ng-model="vm.selectedProductType" theme="select2" style="min-width:100%" title="Select a Product Type">
+            <ui-select-match placeholder="Select..">{{$select.selected.PRD_TYPE}}</ui-select-match>
+            <ui-select-choices repeat="product in vm.ProductType | unique:'PRD_TYPE'| orderBy:'PRD_TYPE'|  filter: $select.search">
+                <div title="{{product.PRD_TYPE}}" ng-bind-html="product.PRD_TYPE | highlight: $select.search"></div>
+            </ui-select-choices>
+        </ui-select>
+    </div>
+    <div class="col-md-2" style="padding-top:30px">
+        <label class="control-label">Vertical:</label>
+        <ui-select ng-model="vm.selectedProductVertical" theme="select2" style="min-width:100%" ng-disabled="vm.disableVertical" title="Select a Vertical">
+            <ui-select-match placeholder="Select....">{{$select.selected.VERTICAL}}</ui-select-match>
+            <ui-select-choices repeat="product in vm.ProductType | unique:'VERTICAL'| orderBy:'VERTICAL'|  filter: $select.search |  filter: vm.selectedProductType.PRD_TYPE">
+                <div title="{{product.VERTICAL}}" ng-bind-html="product.VERTICAL | highlight: $select.search"></div>
+            </ui-select-choices>
+        </ui-select>
+    </div>
+    <div class="col-md-2" style="padding-top:30px">
+        <label class="control-label">Level:</label>
+        <ui-select ng-model="vm.selectedCostTestType" theme="select2" style="min-width:100%" title="Select a Level">
+            <ui-select-match placeholder="Select....">{{$select.selected.name}}</ui-select-match>
+            <ui-select-choices repeat="type in vm.costTestProductType | filter: $select.search">
+                <div title="{{type.name}}" ng-bind-html="type.name | highlight: $select.search"></div>
+            </ui-select-choices>
+        </ui-select>
+    </div>
+    <div class="col-md-2" style="padding-top:30px">
+        <label class="control-label">Criteria:</label>
+        <ui-select ng-model="vm.selectedConditionCriteria" theme="select2" style="min-width:100%" title="Select a Criteria">
+            <ui-select-match placeholder="Select....">{{$select.selected.name}}</ui-select-match>
+            <ui-select-choices repeat="criteria in vm.conditionCriteria | filter: $select.search">
+                <div title="{{criteria.name}}" ng-bind-html="criteria.name | highlight: $select.search"></div>
+            </ui-select-choices>
+        </ui-select>
+    </div>
+    <!--TODO: Make this div sticky-->
+    <div class="col-md-2">
+        <div class="panel panel-primary">
+            <div class="panel-heading text-center">Actions</div>
+            <div class="panel-body text-center">
+                <div class="col-sm-12">
+                    <button class="small btn btn-default" ng-click="vm.cancel()" title="Cancel Changes">Cancel</button>
+                    <button class="small btn btn-primary" ng-click="vm.savePCTRules()" title="Save Changes">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="clearboth"></div>
+<div class="col-md-9" style="padding-top:20px;" ng-if="vm.showQueryBuilder">
+    <pct-query-builder group="vm.filter.group" operators="vm.operators" left-values="vm.leftValues">
+    </pct-query-builder>
+</div>
+<br />
+<br />
+<div class="clearboth" />
+<pre>{{vm.output}}</pre>

@@ -80,6 +80,7 @@
     <Compile Include="AtrbMaps\AtrbMapDataLib.cs" />
     <Compile Include="CapMsp\CapMspDataLib.cs" />
     <Compile Include="Constants Lookups\ConstantLookupDataLib.cs" />
+    <Compile Include="ProductCostTest\ProductCostTestDataLib.cs" />
     <Compile Include="CustomerCalendar\CustomerCalendarDataLib.cs" />
     <Compile Include="Customers\CustomerDataLib.cs" />
     <Compile Include="Data Collections\DataCollectionsDataLib.cs" />

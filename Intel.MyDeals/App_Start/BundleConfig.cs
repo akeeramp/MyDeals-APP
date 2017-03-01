@@ -42,6 +42,8 @@ namespace Intel.MyDeals
                 , "~/Scripts/Angular/1.5.8/angular-animate.min.js"
                 , "~/Scripts/Angular/1.5.8/angular-sanitize.min.js"
                 , "~/Scripts/Angular/ui-bootstrap-tpls-2.2.0.min.js"
+                , "~/Scripts/Angular/angular-linq.min.js"
+                , "~/Scripts/Angular/angular-filter.min.js"
                 ));
 
             bundles.Add(new ScriptBundle("~/bundles/angularReusable").Include(
@@ -83,8 +85,9 @@ namespace Intel.MyDeals
                 , "~/app/admin/dropdowns/dropdowns.service.js"
                 , "~/app/admin/geo/admin.geo.controller.js"
                 , "~/app/admin/geo/geo.service.js"
-                , "~/app/admin/iCostProducts/costTest.iCostProduct.service.js"
-                , "~/app/admin/iCostProducts/costTest.iCostProducts.controller.js"
+                , "~/app/admin/iCostProducts/directive/pct.queryBuilder.directive.js"
+                , "~/app/admin/iCostProducts/admin.iCostProduct.service.js"
+                , "~/app/admin/iCostProducts/admin.iCostProducts.controller.js"
                 , "~/app/admin/productCategories/admin.productCategories.controller.js"
                 , "~/app/admin/productCategories/productCategories.service.js"
                 , "~/app/admin/products/admin.products.controller.js"

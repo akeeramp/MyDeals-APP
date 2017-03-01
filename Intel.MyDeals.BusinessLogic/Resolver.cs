@@ -21,7 +21,8 @@ namespace Intel.MyDeals.BusinessLogic
             registerService.RegisterType<IPricingStrategiesLib, PricingStrategiesLib>();
             registerService.RegisterType<IPricingTablesLib, PricingTablesLib>();
             registerService.RegisterType<IProductsLib, ProductsLib>();
-			registerService.RegisterType<IProductCategoriesLib, ProductCategoriesLib>();
+            registerService.RegisterType<IProductCategoriesLib, ProductCategoriesLib>();
+            registerService.RegisterType<IProductCostTestLib, ProductCostTestLib>();
             registerService.RegisterType<IRuleEngineLib, RuleEngineLib>();
             registerService.RegisterType<ISecurityAttributesLib, SecurityAttributesLib>();
             registerService.RegisterType<IUiTemplateLib, UiTemplateLib>();

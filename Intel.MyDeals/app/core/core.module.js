@@ -13,6 +13,7 @@
         , 'ui.select'
         , 'ui.toggle'
         , 'angular-linq'
+        , 'angular.filter'
         /*
          * Our reusable cross app code modules
          */

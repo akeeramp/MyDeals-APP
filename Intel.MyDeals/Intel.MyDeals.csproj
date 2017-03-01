@@ -253,6 +253,7 @@
     <Compile Include="Controllers\API\ConstantsController.cs" />
     <Compile Include="Controllers\API\CustomerCalendarController.cs" />
     <Compile Include="Controllers\API\DropdownController.cs" />
+    <Compile Include="Controllers\API\ProductCostTestController.cs" />
     <Compile Include="Controllers\API\ProductsCategoriesController.cs" />
     <Compile Include="Controllers\API\RulesController.cs" />
     <Compile Include="Controllers\API\ProductsController.cs" />
@@ -308,9 +309,12 @@
     <Content Include="app\admin\geo\admin.geo.controller.js" />
     <Content Include="app\admin\geo\geo.html" />
     <Content Include="app\admin\geo\geo.service.js" />
+    <Content Include="app\admin\iCostProducts\directive\pct.queryBuilder.directive.html" />
+    <Content Include="app\admin\iCostProducts\directive\pct.queryBuilder.directive.js" />
     <Content Include="app\admin\productAlias\admin.productAlias.controller.js" />
     <Content Include="app\admin\productAlias\productAlias.html" />
     <Content Include="app\admin\productAlias\productAlias.service.js" />
+    <Content Include="app\admin\iCostProducts\iCostProducts.manage.html" />
     <Content Include="app\admin\productCategories\admin.productCategories.controller.js" />
     <Content Include="app\admin\productCategories\productCategories.html" />
     <Content Include="app\admin\productCategories\productCategories.service.js" />
@@ -352,8 +356,8 @@
     <Content Include="app\contract\partials\contractDetail.html" />
     <Content Include="app\contract\partials\otherwise.html" />
     <Content Include="app\contract\partials\wipDeals.html" />
-    <Content Include="app\admin\iCostProducts\costtest.iCostProduct.service.js" />
-    <Content Include="app\admin\iCostProducts\costtest.iCostProducts.controller.js" />
+    <Content Include="app\admin\iCostProducts\admin.iCostProduct.service.js" />
+    <Content Include="app\admin\iCostProducts\admin.iCostProducts.controller.js" />
     <Content Include="app\core\directives\expandKendogrid.directive.js" />
     <Content Include="app\blocks\uiControls\focusOnShow.directive.js" />
     <Content Include="app\blocks\uiControls\opControl.directive.js" />
@@ -1298,6 +1302,7 @@
     <Content Include="Scripts\Angular\1.5.8\angular-ui-router.min.js" />
     <Content Include="Scripts\Angular\1.5.8\angular.js" />
     <Content Include="Scripts\Angular\1.5.8\angular.min.js" />
+    <Content Include="Scripts\Angular\angular-filter.min.js" />
     <Content Include="Scripts\Angular\angular-linq.min.js" />
     <Content Include="Scripts\Angular\select.min.js" />
     <Content Include="Scripts\Angular\ui-bootstrap-tpls-2.2.0.min.js" />

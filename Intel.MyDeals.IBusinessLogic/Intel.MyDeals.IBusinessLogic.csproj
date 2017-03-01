@@ -61,6 +61,7 @@
     <Compile Include="Dropdowns\IDropdownLib.cs" />
     <Compile Include="Geos\IGeosLib.cs" />
     <Compile Include="Logging\ILoggingLib.cs" />
+    <Compile Include="ProductCostTest\IProductCostTestLib.cs" />
     <Compile Include="PricingStrategies\IPricingStrategiesLib.cs" />
     <Compile Include="PricingTables\IPricingTablesLib.cs" />
     <Compile Include="ProductCategories\IProductsLib.cs" />

@@ -106,6 +106,7 @@
     <Compile Include="MetaData\MetasLib.cs" />
     <Compile Include="DevTest\DevTestsLib.cs" />
     <Compile Include="POC\PocLib.cs" />
+    <Compile Include="ProductCostTest\ProductCostTestLib.cs" />
     <Compile Include="PricingStrategies\PricingStrategiesLib.cs" />
     <Compile Include="PricingTables\PricingTablesLib.cs" />
     <Compile Include="ProductCategories\ProductCategoriesLib.cs" />

@@ -11,19 +11,21 @@ using System.Data;
 
 namespace Intel.MyDeals.DataLibrary
 {
-	public class DropdownDataLib : IDropdownDataLib
-	{
-		public DropdownDataLib() { }
+    public class DropdownDataLib : IDropdownDataLib
+    {
+        public DropdownDataLib()
+        {
+        }
 
-		/// <summary>
-		/// Get All Basic Dropdowns
-		/// </summary>
-		/// <returns>list of basic dropdown data</returns>
-		public List<BasicDropdown> GetBasicDropdowns()
-		{
+        /// <summary>
+        /// Get All Basic Dropdowns
+        /// </summary>
+        /// <returns>list of basic dropdown data</returns>
+        public List<BasicDropdown> GetBasicDropdowns()
+        {
             List<BasicDropdown> ret = ExecuteManageBasicDropdownSP(null, CrudModes.Select);
             return ret;
-		}
+        }
 
         /// <summary>
 		/// Get All Generic Dropdowns (ex: Deal Types)
@@ -49,7 +51,7 @@ namespace Intel.MyDeals.DataLibrary
                     {
                         ret.Add(new Dropdown
                         {
-                            active = (IDX_active < 0 || rdr.IsDBNull(IDX_active)) ? default(System.Boolean) : (Convert.ToInt32(rdr[IDX_active]) == 1),
+                            active = (IDX_active < 0 || rdr.IsDBNull(IDX_active)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_active),
                             dropdownCategory = (IDX_dropdownCategory < 0 || rdr.IsDBNull(IDX_dropdownCategory)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_dropdownCategory),
                             dropdownID = (IDX_dropdownID < 0 || rdr.IsDBNull(IDX_dropdownID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_dropdownID),
                             dropdownName = (IDX_dropdownName < 0 || rdr.IsDBNull(IDX_dropdownName)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_dropdownName),
@@ -72,10 +74,10 @@ namespace Intel.MyDeals.DataLibrary
         /// </summary>
         /// <returns>updated dropdown or exception depending on whether the SP fails or not</returns>
         public BasicDropdown ManageBasicDropdowns(BasicDropdown dropdown, CrudModes type)
-		{
+        {
             List<BasicDropdown> ret = ExecuteManageBasicDropdownSP(dropdown, type);
             return ret.FirstOrDefault();
-		}
+        }
 
         public List<BasicDropdown> ExecuteManageBasicDropdownSP(BasicDropdown dropdown, CrudModes type)
         {
@@ -105,7 +107,6 @@ namespace Intel.MyDeals.DataLibrary
                     EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID
                 };
             }
-            
 
             try
             {

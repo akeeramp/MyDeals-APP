@@ -56,6 +56,7 @@
     <Compile Include="Dropdowns\IDropdownDataLib.cs" />
     <Compile Include="Geos\IGeoDataLib.cs" />
     <Compile Include="Logging\ILoggingDataLib.cs" />
+    <Compile Include="ProductCostTest\IProductCostTestDataLib.cs" />
     <Compile Include="ProductCategories\IProductCategoriesDataLib.cs" />
     <Compile Include="Rule Engine\IRuleEngineDataLib.cs" />
     <Compile Include="Products\IProductDataLib.cs" />
