@@ -24,7 +24,7 @@ gridUtils.uiControlWrapper = function (passedData, field, format) {
 }
 gridUtils.uiIconWrapper = function (passedData, field, format) {
     var tmplt = '<div class="isDirtyIconGridContainer">';
-    tmplt += '<i class="intelicon-upload-solid" ng-class="{isDirtyIcon: dataItem.#=field#}"></i>';
+    tmplt += '<i class="intelicon-upload-solid" style="font-size: 20px; margin-left: 10px;" ng-class="{isDirtyIcon: dataItem.#=field#}"></i>';
     tmplt += '</div>';
 
     return kendo.template(tmplt)({

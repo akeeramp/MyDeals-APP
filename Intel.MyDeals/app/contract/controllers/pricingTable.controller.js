@@ -53,14 +53,14 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
     //debugger;
 
     if (root.pricingTableData.PricingTable[0] === undefined) {
-        root.pricingTableData.PricingTable[0] = { "_MultiDim": [] };
+        root.pricingTableData.PricingTable[0] = {};
     }
 
     if (root.pricingTableData.WipDeals === undefined) {
         root.pricingTableData.WipDeals = [];
     }
 
-    $scope.dataSpreadSheet = root.pricingTableData.PricingTable[0]._MultiDim;
+    $scope.dataSpreadSheet = root.pricingTableData.PricingTableRow;
     $scope.dataGrid = root.pricingTableData.WipDeals;
 
     var ptTemplate = root.templates.ModelTemplates.PricingTable[root.curPricingTable.OBJ_SET_TYPE_CD];

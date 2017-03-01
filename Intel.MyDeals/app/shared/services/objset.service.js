@@ -325,10 +325,11 @@ function objsetService($http, dataService, logger, $q) {
 
         // combine single dim current pt (pricing table) with 2 dim (sData) data
         //debugger;
-        if (pt.length > 0) pt[0]["_MultiDim"] = sData;
+        //if (pt.length > 0) pt[0]["_MultiDim"] = sData;
 
         var modCt = [];
         var modPs = [];
+        var cnt = -1000;
 
         for (var c = 0; c < ct.length; c++) {
             var mCt = {};
@@ -348,15 +349,25 @@ function objsetService($http, dataService, logger, $q) {
             }
         }
 
+        if (pt.length > 0) {
+            for (var s = 0; s < sData.length; s++) {
+                sData[s].DC_ID = cnt--;
+                sData[s].DC_PARENT_ID = pt[0].DC_ID;
+                sData[s].dc_type = "PricingTableRow";
+                sData[s].dc_parent_type = pt[0].dc_type;
+            }
+        }
+
         var data = {
             "Contract": modCt,
             "PricingStrategy": modPs,
             "PricingTable": pt,
+            "PricingTableRow": sData === undefined ? [] : sData,
             "WipDeals": gData === undefined ? [] : gData,
             "EventSource": source
         }
-        //debugger;
 
+        //debugger;
         return dataService.post(apiBaseContractUrl + "SaveContractAndStrategy/" + custId, data);
     }
 

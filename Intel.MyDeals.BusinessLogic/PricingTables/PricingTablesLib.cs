@@ -33,7 +33,7 @@ namespace Intel.MyDeals.BusinessLogic
 
 
             // TODO replace with DB call
-            return PricingTableData.GetData(id);
+            //return PricingTableData.GetData(id);
 
 
             return new DataCollectorDataLib()

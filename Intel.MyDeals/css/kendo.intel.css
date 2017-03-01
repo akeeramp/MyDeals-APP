@@ -5964,6 +5964,10 @@ div.k-scheduler-marquee:after {
 
 /* CUSTOM GRID CSS */
 
+.k-dirty {
+    display: none;
+}
+
 .k-grid .k-alt {
     background-color: #F4F4F4;
 }
@@ -5971,11 +5975,15 @@ div.k-scheduler-marquee:after {
     background-color: #ecf8fb;
 }
 .k-grid td {
-    padding: .7em 1.1em;
+    padding: 0;
+    height: 40px;
     color: #53565A;
     font-family: 'Intel Clear', 'Arial';
     font-weight: 200;
     font-size: 14px;
+}
+.k-grid td:first-child span:first-child {
+    padding-left: 12px;
 }
 
 .k-grid-header, .k-grid-header .k-header, .k-pager-wrap, .k-pager-numbers .k-state-selected, .k-grid-footer, .k-grid-footer td, .k-scheduler-header, .km-pane-wrapper .k-grid-header .k-header {

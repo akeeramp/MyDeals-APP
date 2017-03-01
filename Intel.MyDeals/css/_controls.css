@@ -72,7 +72,7 @@
         padding-left: 1px !important;
     }
     .err-bit {
-        margin: 0 0 0 .1em;
+        margin: -6px 0 0 0;
         position: absolute;
         border-style: solid;
         border-color: #ED1C24 transparent transparent #ED1C24;
@@ -181,7 +181,6 @@
 	}
 
     .fieldcontainer {
-        font-size: 10px; 
         font-family: 'Intel Clear', 'Arial'; 
         color: #000000; 
         border: 1px solid #b1babf; 
@@ -193,6 +192,10 @@
         padding: 2px 4px;
         border: 1px solid transparent;
         min-height: 16px;
+    }
+
+    .isDirtyIcon {
+        color: #00AEEF;
     }
 
     /*
@@ -237,7 +240,7 @@
     }
 
     .isDirtyIconGridContainer {
-        font-size: 16px; 
+        font-size: 20px; 
         color: #dbdbdb;
         margin-left: 4px;
     }

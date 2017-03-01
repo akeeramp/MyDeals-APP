@@ -441,7 +441,7 @@
                     {
                         field: "_dirty",
                         title: "<i class='intelicon-upload-solid gridHeaderIcon' title='Something changed on this row'></i>",
-                        width: "30px",
+                        width: "40px",
                         template: "#=gridUtils.uiIconWrapper(data, '_dirty')#"
                     }, {
                         field: "PIVOT", title: "PIVOT"

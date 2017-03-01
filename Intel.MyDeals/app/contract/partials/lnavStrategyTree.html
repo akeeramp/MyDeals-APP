@@ -7,7 +7,7 @@
             <div class="fl" ng-click="isCollapsed = !isCollapsed">
                 <i class="glyphicon" style="margin-right: 5px; margin-top: 3px;" ng-class="{'glyphicon-chevron-down': !isCollapsed, 'glyphicon-chevron-right': isCollapsed}"></i>
             </div>
-            <div class="fl" style="width: 225px; font-size: 14px;" ng-init="isEditable=false">
+            <div class="fl" style="width: 225px; font-size: 12px;" ng-init="isEditable=false">
                 <input ng-blur="isEditable=false" ng-show="isEditable" focus-on-show ng-model="ps.TITLE" class="flatWhiteInput" />
                 <div ng-click="isCollapsed = !isCollapsed" ng-dblclick="isEditable=true" ng-hide="isEditable" class="w100">{{ ps.TITLE }}</div>
             </div>

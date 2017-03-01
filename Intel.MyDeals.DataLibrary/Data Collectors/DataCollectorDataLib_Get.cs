@@ -57,35 +57,16 @@ namespace Intel.MyDeals.DataLibrary
                 strInc = string.Join(",", includeTypes.Select(OpDataElementTypeConverter.ToAlias).Distinct());
             }
 
-            //// TODO change SP to match naming conventions - Change this over to objects imported definations
-            //// --'CNTRCT, PRC_ST, PRC_TBL, PRC_TBL_ROW, WIP_DEAL, DEAL'
-            strInc = strInc.Replace(OpDataElementType.Contract.ToString(), OpDataElementType.Contract.ToAlias());
-            strInc = strInc.Replace(OpDataElementType.PricingStrategy.ToString(), OpDataElementType.PricingStrategy.ToAlias());
-            strInc = strInc.Replace(OpDataElementType.PricingTable.ToString(), OpDataElementType.PricingTable.ToAlias());
-            strInc = strInc.Replace(OpDataElementType.PricingTableRow.ToString(), OpDataElementType.PricingTableRow.ToAlias());
-            strInc = strInc.Replace(OpDataElementType.WipDeals.ToString(), OpDataElementType.WipDeals.ToAlias());
-            strInc = strInc.Replace(OpDataElementType.Deals.ToString(), OpDataElementType.Deals.ToAlias());
-
             var cmd = new PR_MYDL_GET_OBJS_BY_SIDS() // PR_GET_OBJS_BY_KEYS in original case, new PR_GET_OBJS_BY_SIDS()
             {
                 in_emp_wwid = 10548414, //applySecurity ? OpUserStack.MyOpUserToken.Usr.WWID : 0,
                 //APPLY_SECURITY = applySecurity,
-                in_obj_type = "CNTRCT",
+                in_obj_type = opDataElementType.ToAlias(),
                 in_include_groups = strInc,
                 //SRCH_GRP = searchGroup,
                 in_obj_sids = new type_int_list(ids.ToArray())
             };
 
-            //////string[] aAtrbs = atrbs as string[] ?? atrbs.ToArray();
-            //////if (atrbs != null && aAtrbs.Any())
-            //////{
-            //////    cmd.DEAL_SIDS = new type_list(aAtrbs.ToArray());
-            //////}
-            //////cmd.CONTRACT_SIDS = new type_int_list(ids.ContainsKey(OpDataElementType.Contract.ToString()) ? ids[OpDataElementType.Contract.ToString()].ToArray() : new int[] { });
-            //////cmd.STRATEGY_SIDS = new type_int_list(ids.ContainsKey(OpDataElementType.PricingStrategy.ToString()) ? ids[OpDataElementType.PricingStrategy.ToString()].ToArray() : new int[] { });
-            //////cmd.PRICETABLE_SIDS = new type_int_list(ids.ContainsKey(OpDataElementType.PricingTable.ToString()) ? ids[OpDataElementType.PricingTable.ToString()].ToArray() : new int[] { });
-            //////cmd.WIP_DEAL_SIDS = new type_int_list(ids.ContainsKey(OpDataElementType.WipDeals.ToString()) ? ids[OpDataElementType.WipDeals.ToString()].ToArray() : new int[] { });
-            //////cmd.DEAL_SIDS = new type_int_list(ids.ContainsKey(OpDataElementType.Deals.ToString()) ? ids[OpDataElementType.Deals.ToString()].ToArray() : new int[] { });
 
             MyDealsData odcs;
             using (var rdr = DataAccess.ExecuteReader(cmd))

@@ -188,8 +188,8 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem { Id = 28, AtrbCd = "_dirty", ObjType = new List<OpDataElementType> { OpDataElementType.WipDeals }, IsDetail = true, DataType = "string", Label = "<i class='intelicon-upload-solid gridHeaderIcon' title='Something changed on this row'></i>", Width = 45, Template = "#=gridUtils.uiIconWrapper(data, '_dirty')#" });
 
             items.Add(new UiTemplateContainerItem { Id = 29, AtrbCd = "PRODUCTS", ObjType = new List<OpDataElementType> { OpDataElementType.PricingTableRow }, DataType = "string", Label = "Products", Width = 200, Template = "#=gridUtils.uiIconWrapper(data, 'PRODUCTS')#" });
-            items.Add(new UiTemplateContainerItem { Id = 30, AtrbCd = "START_DT", ObjType = new List<OpDataElementType> { OpDataElementType.PricingTableRow }, DataType = "string", Label = "Start Date", Width = 100, Template = "#=gridUtils.uiIconWrapper(data, 'START_DT')#" });
-            items.Add(new UiTemplateContainerItem { Id = 31, AtrbCd = "END_DT", ObjType = new List<OpDataElementType> { OpDataElementType.PricingTableRow }, DataType = "string", Label = "End Date", Width = 100, Template = "#=gridUtils.uiIconWrapper(data, 'END_DT')#" });
+            items.Add(new UiTemplateContainerItem { Id = 30, AtrbCd = "START_DT", ObjType = new List<OpDataElementType> { OpDataElementType.PricingTableRow }, DataType = "date", Label = "Start Date", Width = 100, Template = "#=gridUtils.uiIconWrapper(data, 'START_DT')#" });
+            items.Add(new UiTemplateContainerItem { Id = 31, AtrbCd = "END_DT", ObjType = new List<OpDataElementType> { OpDataElementType.PricingTableRow }, DataType = "date", Label = "End Date", Width = 100, Template = "#=gridUtils.uiIconWrapper(data, 'END_DT')#" });
             items.Add(new UiTemplateContainerItem { Id = 32, AtrbCd = "RPU", ObjType = new List<OpDataElementType> { OpDataElementType.PricingTableRow }, DataType = "number", Label = "RPU", Width = 100, Template = "#=gridUtils.uiIconWrapper(data, 'RPU')#" });
             return items;
         }

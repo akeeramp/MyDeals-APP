@@ -55,10 +55,13 @@ namespace Intel.MyDeals.BusinessLogic
             //List<OpDataCollectorFlattenedItem> newItems = new List<OpDataCollectorFlattenedItem>();
             foreach (OpDataCollectorFlattenedItem items in data)
             {
-                int id = !items.ContainsKey("DC_ID") ? 0 : Convert.ToInt32(items["DC_ID"].ToString());
-                int idtype = !items.ContainsKey("dc_type") ? 0 : OpDataElementTypeConverter.FromString(items["dc_type"]).ToId();
-                int parentid = !items.ContainsKey("DC_PARENT_ID") ? 0 : Convert.ToInt32(items["DC_PARENT_ID"].ToString());
-                int parentidtype = !items.ContainsKey("dc_parent_type") ? 0 : OpDataElementTypeConverter.FromString(items["dc_parent_type"]).ToId();
+                //if (!myDealsData[opType].Data.Any()) continue;
+
+                //OpDataCollector defDc = myDealsData[opType].Data.First().Value;
+                int id = !items.ContainsKey("DC_ID") || items["DC_ID"] == null ? 0 : Convert.ToInt32(items["DC_ID"].ToString());
+                int idtype = !items.ContainsKey("dc_type") || items["dc_type"] == null ? 0 : OpDataElementTypeConverter.FromString(items["dc_type"]).ToId();
+                int parentid = !items.ContainsKey("DC_PARENT_ID") || items["DC_PARENT_ID"] == null ? 0 : Convert.ToInt32(items["DC_PARENT_ID"].ToString());
+                int parentidtype = !items.ContainsKey("dc_parent_type") || items["dc_parent_type"] == null ? 0 : OpDataElementTypeConverter.FromString(items["dc_parent_type"]).ToId();
 
                 if (items.ContainsKey(EN.OBJDIM._MULTIDIM))
                 {

@@ -19,22 +19,14 @@
             IsError
         </label>
         <label>
-            <input type="checkbox" ng-model="isSaved" ng-click="clkIsSaved(isSaved)">
-            IsSaved
-        </label>
-        <label>
             <input type="checkbox" ng-model="isDirty" ng-click="clkIsDirty(isDirty)">
             IsDirty
         </label>
     </div>
 
     <div class="fieldcontainer">
-        <div>DataElement Structure</div>
+        <div><i class="intelicon-upload-solid" ng-class="{isDirtyIcon: des._dirty}"></i>DataElement Structure</div>
         <div class="clearboth"></div>
-
-        <div class="isDirtyIconContainer">
-            <i class="intelicon-upload-solid" ng-class="{isDirtyIcon: des._dirty}"></i>
-        </div>
 
         <div class="myDealsControl"
              op-control-data-element
@@ -85,12 +77,9 @@
     </div>
 
     <div class="fieldcontainer">
-        <div>Flattened Structure</div>
-        <div class="clearboth"></div>
+        <div><i class="intelicon-upload-solid" ng-class="{isDirtyIcon: flat._dirty}"></i>Flattened Structure</div>
 
-        <div class="isDirtyIconContainer">
-            <i class="intelicon-upload-solid" ng-class="{isDirtyIcon: flat._dirty}"></i>
-        </div>
+        <div class="clearboth"></div>
 
         <div class="myDealsControl"
              op-control-flat

@@ -73,16 +73,18 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
         scope.$watch('value',
             function (newValue, oldValue, el) {
                 if (oldValue === newValue) return;
+
                 el.opIsDirty = true;
+                el.$parent.$parent.opIsDirty = true;
 
                 if (el.$parent.opValue !== undefined) {
                     el.$parent.opValue._dirty = true;
-                    el.$parent.opValue[scope.opSelectedObject] = updateSeletedObject();
+                    if (!!scope.opSelectedObject) el.$parent.opValue[scope.opSelectedObject] = updateSeletedObject();
                 }
 
                 if (el.$parent.value !== undefined) {
                     el.$parent.value._dirty = true;
-                    el.$parent.value[scope.opSelectedObject] = updateSeletedObject();
+                    if (!!scope.opSelectedObject) el.$parent.value[scope.opSelectedObject] = updateSeletedObject();
                 }
             });
 
