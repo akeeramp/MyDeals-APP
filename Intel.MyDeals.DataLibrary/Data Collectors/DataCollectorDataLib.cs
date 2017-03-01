@@ -163,11 +163,12 @@ namespace Intel.MyDeals.DataLibrary
                     YR_NBR = (IDX_YR_NBR < 0 || rdr.IsDBNull(IDX_YR_NBR)) ? default(System.Int16) : rdr.GetFieldValue<System.Int16>(IDX_YR_NBR)
                 });
             } // while
+
             return ret;
         }
 
 
-        private static TemplateWrapper _getTemplateData;
+        //private static TemplateWrapper _getTemplateData;
 
 
         private OpDataElementUITemplates ConvertDealTemplateDataGramsToOpDataElementUIs(List<ObjectTypeTemplate> templateData)
@@ -468,24 +469,24 @@ namespace Intel.MyDeals.DataLibrary
 
             #region Set Group ID and Batch ID
 
-            OpDataPacket<OpDataElementType> grp;
-            if (odps.TryGetValue(OpDataElementType.Group, out grp))
-            {
-                int grpId = 0;
-                foreach (var de in grp.AllDataElements.Where(de => de.DcID > 0))
-                {
-                    grpId = de.DcID;
-                    break;
-                }
+            //OpDataPacket<OpDataElementType> grp;
+            //if (odps.TryGetValue(OpDataElementType.Group, out grp))
+            //{
+            //    int grpId = 0;
+            //    foreach (var de in grp.AllDataElements.Where(de => de.DcID > 0))
+            //    {
+            //        grpId = de.DcID;
+            //        break;
+            //    }
 
-                if (grpId > 0)
-                {
-                    foreach (var op in odps)
-                    {
-                        op.Value.GroupID = grpId;
-                    }
-                }
-            }
+            //    if (grpId > 0)
+            //    {
+            //        foreach (var op in odps)
+            //        {
+            //            op.Value.GroupID = grpId;
+            //        }
+            //    }
+            //}
 
             #endregion
 

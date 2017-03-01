@@ -128,14 +128,14 @@ namespace Intel.MyDeals.DataLibrary
             var dtData = OpDataPacketToImportDataTable(new OpDataPacket<OpDataElementType>(), custId, wwid);
             var dtAction = OpDataPacketToImportActionTable(new OpDataPacket<OpDataElementType>(), groupBatchId, wwid);
 
-            foreach (var odp in packets.Where(p => p.PacketType == OpDataElementType.Group && OpTypeConverter.IsValidGuid(p.BatchID)))
-            {
-                if (groupBatchId != Guid.Empty && groupBatchId != odp.BatchID)
-                {
-                    throw new ArgumentException("Multiple non-distinct groups (workbooks) were passed to the save routine.  It is expected that each save call contains only one workbook of data.");
-                }
-                groupBatchId = odp.BatchID;
-            }
+            //foreach (var odp in packets.Where(p => p.PacketType == OpDataElementType.Group && OpTypeConverter.IsValidGuid(p.BatchID)))
+            //{
+            //    if (groupBatchId != Guid.Empty && groupBatchId != odp.BatchID)
+            //    {
+            //        throw new ArgumentException("Multiple non-distinct groups (workbooks) were passed to the save routine.  It is expected that each save call contains only one workbook of data.");
+            //    }
+            //    groupBatchId = odp.BatchID;
+            //}
 
             if (!OpTypeConverter.IsValidGuid(groupBatchId))
             {
@@ -298,10 +298,10 @@ namespace Intel.MyDeals.DataLibrary
                             {
                                 int newId = WriteIdChangeAction(ret[objSet], rdr);
 
-                                if (groupId == null && objSet == OpDataElementType.Group && newId > 0) // WARNING: This is predicated on having only one group per processing!!!
-                                {
-                                    groupId = newId;
-                                }
+                                //if (groupId == null && objSet == OpDataElementType.Group && newId > 0) // WARNING: This is predicated on having only one group per processing!!!
+                                //{
+                                //    groupId = newId;
+                                //}
 
                                 break;
                             }
@@ -353,7 +353,7 @@ namespace Intel.MyDeals.DataLibrary
                 int? sort = null;
                 DataTable dtActionResults;
                 MyDealsData changes;
-                bool isGroup = (op.PacketType == OpDataElementType.Group);
+                //bool isGroup = (op.PacketType == OpDataElementType.Group);
 
                 while (TryNextAction(op.BatchID, ref processedActions, ref sort, out dtActionResults, out changes))
                 {
@@ -415,10 +415,10 @@ namespace Intel.MyDeals.DataLibrary
 
                         int newId = WriteIdChangeAction(retPack, new DataRowRecordAdapter(dr));
 
-                        if (newId > 0 && isGroup && groupId == null) // WARNING: This is predicated on having only one group per processing!!!
-                        {
-                            groupId = newId;
-                        }
+                        //if (newId > 0 && isGroup && groupId == null) // WARNING: This is predicated on having only one group per processing!!!
+                        //{
+                        //    groupId = newId;
+                        //}
                     }
 
                     #endregion

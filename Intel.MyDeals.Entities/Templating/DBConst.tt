@@ -41,6 +41,8 @@
 	WriteLine("using System;");
 	WriteLine("using System.Collections.Generic;");
 	WriteLine("using System.Linq;");
+	WriteLine("using Intel.Opaque.Data;");
+	WriteLine("using Intel.MyDeals.Entities;");
 	WriteLine("");
 	
 	cmd = new SqlCommand(@"
@@ -143,28 +145,123 @@ ORDER BY cnst_nm
 	PopIndent();
 	WriteLine("}"); // class
 
+
+
+
+	WriteLine("");
 	//-- Build Objects Data -------------------------------------------------------------------------------
+    WriteLine("//-- Build Objects Data -------------------------------------------------------------------------------");
+    WriteLine("");
 
-	cmd = new SqlCommand(@"[dbo].[PR_MYDL_GET_OBJ]", conn);
-	cmd.CommandType = CommandType.StoredProcedure;
+    cmd = new SqlCommand(@"[dbo].[PR_MYDL_GET_OBJ]", conn);
+    cmd.CommandType = CommandType.StoredProcedure;
 
-	DataSet ds_pr_mydl_get_obj = new DataSet();
-	SqlDataAdapter da_pr_mydl_get_obj = new SqlDataAdapter(cmd);
-	da_pr_mydl_get_obj.Fill(ds_pr_mydl_get_obj);
+    DataSet ds_pr_mydl_get_obj = new DataSet();
+    SqlDataAdapter da_pr_mydl_get_obj = new SqlDataAdapter(cmd);
+    da_pr_mydl_get_obj.Fill(ds_pr_mydl_get_obj);
 
-	//var dt_objs = da_pr_mydl_get_obj.Tables[0];
+    var dt_objs = ds_pr_mydl_get_obj.Tables[0];
 
-	WriteLine("");
-	WriteLine("//-- Build Objects Data -------------------------------------------------------------------------------");
-	WriteLine("");
+	//-- Build Objects - OpDataElementType ----------------------------------------------------------------
 
-	WriteLine("namespace MyDealsAtrbLookup2 {");
+    WriteLine("public enum OpDataElementType {");
 	PushIndent(TAB);
 
-	// DI BUILDS HERE
+    foreach (DataRow drg in dt_objs.Rows)
+    {
+		WriteLine(drg["OBJ_DESC"] + " = " + drg["OBJ_PRCSS_ORD"] + ",");
+    }
+	WriteLine("Unknown = 0");
+
+    PopIndent();
+	WriteLine("}"); // class
+	WriteLine("");
+
+
+	//-- Build Objects Data - OpDataElementTypeRepository -------------------------------------------------
+
+	Dictionary<string, string> parentObjectDictionary = new Dictionary<string, string>();
+
+	WriteLine("public static class OpDataElementTypeRepository"); // class
+	WriteLine("{"); // class
+
+	PushIndent(TAB);
+	WriteLine("public static readonly OpDataElementTypeCollection OpDetCollection = new OpDataElementTypeCollection("); //OpDetCollection
+
+	PushIndent(TAB);
+    WriteLine("new List<OpDataElementTypeItem>");
+    WriteLine("{");
+
+	PushIndent(TAB);
+	foreach (DataRow drg in dt_objs.Rows)
+    {
+		//Format is: new OpDataElementTypeItem { Id = 1, OpDeType = OpDataElementType.Contract, Alias = "CNTRCT", Order = 10 },
+		WriteLine("new OpDataElementTypeItem {Id = " + drg["OBJ_TYPE_SID"] + ", OpDeType = OpDataElementType." + drg["OBJ_DESC"] + ", Alias = \"" + drg["OBJ_TYPE"] + "\", Order = " + drg["OBJ_PRCSS_ORD"] + " },");
+	}
+	PopIndent();
+
+    WriteLine("},");
+	WriteLine("");
+
+	//-- Build Objects Data - Object Hierarchy ------------------------------------------------------------
+
+    WriteLine("new Dictionary<OpDataElementType, OpDataElementType>");
+    WriteLine("{");
+
+	PushIndent(TAB);
+	foreach (DataRow drg in dt_objs.Rows)
+    {
+		parentObjectDictionary[drg["OBJ_TYPE_SID"].ToString()] = drg["OBJ_DESC"].ToString();
+		if (parentObjectDictionary.ContainsKey(drg["PARNT_OBJ_TYPE_SID"].ToString()))
+		{
+			//Format is: [OpDataElementType.Contract] = OpDataElementType.PricingStrategy,
+			WriteLine("[OpDataElementType." + parentObjectDictionary[drg["PARNT_OBJ_TYPE_SID"].ToString()] + "] = OpDataElementType." + drg["OBJ_DESC"] + ",");
+		}
+	}
+	PopIndent();
+
+	//-- Build Objects Data - ObjSet Items ----------------------------------------------------------------
+
+// WE LEFT OFF HERE
+//    WriteLine("},");
+
+
+
+//	WriteLine("new List<OpDataElementTypeItem>");
+//    WriteLine("{");
+//	foreach (DataRow drg in dt_objs.Rows)
+//    {
+	//new OpDataElementTypeItem { Id = 1, OpDeType = OpDataElementType.Contract, Alias = "CNTRCT", Order = 10 },
+//	WriteLine("new OpDataElementTypeItem {Id = " + drg["OBJ_TYPE_SID"] + ", OpDeType = OpDataElementType." + drg["OBJ_DESC"] + ", Alias = \"" + drg["OBJ_TYPE"] + "\", Order = " + drg["OBJ_PRCSS_ORD"] + " },");
+
+//	}
+// ENDING HERE
+
+//-- Build Objects Data - ObjSet Hierarchy ------------------------------------------------------------
+
+
+    WriteLine("}");
+
+
+
+	PopIndent();
+    WriteLine(");"); // OpDetCollection
+
 	PopIndent();
 	WriteLine("}"); // class
 
+	var dt_objsDeals = ds_pr_mydl_get_obj.Tables[1];
+
+
+
+
+
+
+
+
+
+
+	//        WriteLine("new OpDataElementTypeItem { Id = " + drg["OBJ_TYPE_SID"] + ", OpDeType = OpDataElementType.Contract, Alias = " + drg["OBJ_TYPE"] + ", Order = " + drg["OBJ_PRCSS_ORD"] + " },");
 	//----------------------------------------------------------------------------------------------------
 
 	cmd = new SqlCommand(@"[dbo].[PR_GET_ATRB_MSTR_FK_DATA]", conn);
@@ -173,17 +270,18 @@ ORDER BY cnst_nm
 	cmd.Parameters.AddWithValue("exclude_atrb_cd", "PLI_LOCATOR,PRD_MBR_SID,TIER_NBR_SID,ADMIN_ACCESS_LEVEL,ATOM_Z_QSTN");
 
 	DataSet ds = new DataSet();
-//	SqlDataAdapter da = new SqlDataAdapter(cmd);
-//	da.Fill(ds);
+	SqlDataAdapter da = new SqlDataAdapter(cmd);
+	//da.Fill(ds);
 
-//	var dt_atrb = ds.Tables[0];
+	//var dt_atrb = da.Tables[0];
+
 	
 	WriteLine("");
 	WriteLine("//-------------------------------------------------------------------------------------------");
 	WriteLine("");
 
-	WriteLine("namespace MyDealsAtrbLookup {");
-	PushIndent(TAB);
+	//WriteLine("namespace MyDealsAtrbLookup {");
+	//PushIndent(TAB);
 
 //	foreach(DataRow drg in dt_atrb.DefaultView.ToTable(true, "ATRB_CD","ATRB_SID").Rows)
 //	{
@@ -289,12 +387,12 @@ ORDER BY cnst_nm
 //        } // if(atrb_rows.Any())
 //    }
 	
-	PopIndent();
-	WriteLine("}"); // namespace
+//	PopIndent();
+//	WriteLine("}"); // namespace
 
-	WriteLine("");
-	WriteLine("//-------------------------------------------------------------------------------------------");
-	WriteLine("");
+//	WriteLine("");
+//	WriteLine("//-------------------------------------------------------------------------------------------");
+//	WriteLine("");
 
 	//----------------------------------------------------------------------------------------------------
 

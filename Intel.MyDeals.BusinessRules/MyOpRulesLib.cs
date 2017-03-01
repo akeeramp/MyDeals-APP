@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Intel.MyDeals.Entities;
 using Intel.Opaque;
 using Intel.Opaque.Data;
 using Intel.Opaque.Rules;

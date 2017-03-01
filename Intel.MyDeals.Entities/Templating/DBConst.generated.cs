@@ -1,12 +1,14 @@
 ﻿
 /*
-File Updated: 2/27/2017 5:15:00 PM
+File Updated: 2/28/2017 10:21:42 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Intel.Opaque.Data;
+using Intel.MyDeals.Entities;
 
 namespace Intel.MyDeals.Entities {
 	public static class AttributeCodes {
@@ -1194,12 +1196,38 @@ namespace Intel.MyDeals.Entities {
 
 	//-- Build Objects Data -------------------------------------------------------------------------------
 
-	namespace MyDealsAtrbLookup2 {
+	public enum OpDataElementType {
+		Contract = 10,
+		PricingStrategy = 20,
+		PricingTable = 30,
+		PricingTableRow = 40,
+		WipDeals = 50,
+		Deals = 60,
+		Unknown = 0
 	}
 
-	//-------------------------------------------------------------------------------------------
+	public static class OpDataElementTypeRepository
+	{
+		public static readonly OpDataElementTypeCollection OpDetCollection = new OpDataElementTypeCollection(
+			new List<OpDataElementTypeItem>
+			{
+				new OpDataElementTypeItem {Id = 1, OpDeType = OpDataElementType.Contract, Alias = "CNTRCT", Order = 10 },
+				new OpDataElementTypeItem {Id = 2, OpDeType = OpDataElementType.PricingStrategy, Alias = "PRC_ST", Order = 20 },
+				new OpDataElementTypeItem {Id = 3, OpDeType = OpDataElementType.PricingTable, Alias = "PRC_TBL", Order = 30 },
+				new OpDataElementTypeItem {Id = 4, OpDeType = OpDataElementType.PricingTableRow, Alias = "PRC_TBL_ROW", Order = 40 },
+				new OpDataElementTypeItem {Id = 5, OpDeType = OpDataElementType.WipDeals, Alias = "WIP_DEAL", Order = 50 },
+				new OpDataElementTypeItem {Id = 6, OpDeType = OpDataElementType.Deals, Alias = "DEAL", Order = 60 },
+			},
 
-	namespace MyDealsAtrbLookup {
+			new Dictionary<OpDataElementType, OpDataElementType>
+			{
+				[OpDataElementType.Contract] = OpDataElementType.PricingStrategy,
+				[OpDataElementType.PricingStrategy] = OpDataElementType.PricingTable,
+				[OpDataElementType.PricingTable] = OpDataElementType.PricingTableRow,
+				[OpDataElementType.PricingTableRow] = OpDataElementType.WipDeals,
+				[OpDataElementType.WipDeals] = OpDataElementType.Deals,
+			}
+		);
 	}
 
 	//-------------------------------------------------------------------------------------------

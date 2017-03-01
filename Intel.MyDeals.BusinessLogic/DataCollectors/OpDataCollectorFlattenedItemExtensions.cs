@@ -13,7 +13,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
         {
             List<string> infoMsgs = new List<string>();
             List<string> warnMsgs = new List<string>();
-            List<OpDataElementType> dataElementTypes = new List<OpDataElementType> { OpDataElementType.Deals, OpDataElementType.Secondary };
+            List<OpDataElementType> dataElementTypes = new List<OpDataElementType> { OpDataElementType.Deals };
 
             if (!data.ContainsKey("DealId")) return;
 

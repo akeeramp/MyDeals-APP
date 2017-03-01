@@ -1,4 +1,5 @@
-﻿using Intel.Opaque.Data;
+﻿using Intel.MyDeals.Entities;
+using Intel.Opaque.Data;
 using Intel.Opaque.Rules;
 
 namespace Intel.MyDeals.BusinessRules
