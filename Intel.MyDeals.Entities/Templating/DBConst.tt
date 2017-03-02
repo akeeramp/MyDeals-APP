@@ -312,7 +312,7 @@
 	foreach (DataRow drg in dt_objsObjToDeals.Rows)
     {
 		//Format is: [OpDataElementType.Contract] = OpDataElementSetType.ECAP
-		WriteLine("[OpDataElementType." + drg["OBJ_DESC"].ToString() + "] = OpDataElementSetType." + drg["OBJ_SET_TYPE_CD"].ToString() + ",");
+		WriteLine("[OpDataElementType." + drg["OBJ_DESC"].ToString() + "] = OpDataElementSetType." + drg["OBJ_SET_TYPE"].ToString() + ",");
 	}
 	PopIndent();
 	WriteLine("}");
