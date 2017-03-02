@@ -76,10 +76,10 @@
     <Compile Include="Helpers\OpUserTokenHelpers.cs" />
     <Compile Include="MasterAttributes.cs" />
     <Compile Include="MyDeals Objects\MyDealsActionItem.cs" />
-    <Compile Include="MyDeals Objects\MyDealsAttribute.cs" />
     <Compile Include="MyDeals Objects\MyDealsData.cs" />
     <Compile Include="MyDeals Objects\MyDealsDataAction.cs" />
     <Compile Include="MyDeals Objects\MyDealsTools.cs" />
+    <Compile Include="MyDealsAttribute.cs" />
     <Compile Include="ObjSetPivotMode.cs" />
     <Compile Include="OP ExtensionMethods\OpActionType.cs" />
     <Compile Include="OP ExtensionMethods\OpDataCollectorExtentionMethods.cs" />
@@ -87,10 +87,14 @@
     <Compile Include="OP ExtensionMethods\OpDataCollectorFlattenedItem.cs" />
     <Compile Include="OP ExtensionMethods\OpDataElementExtensionMethods.cs" />
     <Compile Include="OP ExtensionMethods\OpDataCollectorFlattenedList.cs" />
+    <Compile Include="OP ExtensionMethods\OpDataElementSetTypeConverter.cs" />
+    <Compile Include="OP ExtensionMethods\OpDataElementSetTypeItem.cs" />
     <Compile Include="OP ExtensionMethods\OpDataElementTemplate.cs" />
     <Compile Include="OP ExtensionMethods\OpDataElementTemplates.cs" />
-    <Compile Include="OP ExtensionMethods\OpDataElementType.cs" />
+    <Compile Include="OP ExtensionMethods\OpDataElementSetTypeCollection.cs" />
+    <Compile Include="OP ExtensionMethods\OpDataElementTypeCollection.cs" />
     <Compile Include="OP ExtensionMethods\OpDataElementTypeConverter.cs" />
+    <Compile Include="OP ExtensionMethods\OpDataElementTypeItem.cs" />
     <Compile Include="OP ExtensionMethods\OpDataElementUITemplates.cs" />
     <Compile Include="OP ExtensionMethods\OpDataElementUtils.cs" />
     <Compile Include="OP ExtensionMethods\OpDataPacketExtensionMethods.cs" />
@@ -154,6 +158,7 @@
     <Compile Include="UI Templates\UiModelTemplate.cs" />
     <Compile Include="UI Templates\UiObjectTemplate.cs" />
     <Compile Include="UI Templates\UiTemplates.cs" />
+    <Compile Include="UI Templates\UiTemplatesExtensionMethods.cs" />
     <Compile Include="UiTemplateContainerItem.cs" />
     <Compile Include="UserSetting.cs" />
     <Compile Include="VerticalSecurityItem.cs" />

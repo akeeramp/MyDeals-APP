@@ -8,7 +8,7 @@ namespace Intel.MyDeals.Entities
         public UiTemplateContainerItem()
         {
             ObjType = new List<OpDataElementType>();
-            ObjSetType = new List<string>();
+            ObjSetType = new List<OpDataElementSetType>();
         }
 
         public int Id { get; set; }
@@ -16,7 +16,7 @@ namespace Intel.MyDeals.Entities
         public string ContainerType { get; set; }
         public string AtrbCd { get; set; }
         public List<OpDataElementType> ObjType { get; set; }
-        public List<string> ObjSetType { get; set; }
+        public List<OpDataElementSetType> ObjSetType { get; set; }
         public string Label { get; set; }
         public string DefValue { get; set; }
         public string HelpText { get; set; }

@@ -5,7 +5,7 @@
 ContractController.$inject = ['$scope', '$state', 'contractData', 'templateData', 'objsetService', 'templatesService', 'logger', '$uibModal', '$timeout', '$window', '$location', '$rootScope'];
 
 function ContractController($scope, $state, contractData, templateData, objsetService, templatesService, logger, $uibModal, $timeout, $window, $location, $rootScope) {
-
+    
     // store template information
     //
     $scope.templates = $scope.templates || templateData.data;
@@ -22,7 +22,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         }
 
         // new contract
-        var c = util.clone($scope.templates.ObjectTemplates.Contract.Generic);
+        var c = util.clone($scope.templates.ObjectTemplates.Contract.GENERAL);
 
         // check URL and see if any parameters were passed.
         var s = $location.search();
@@ -131,7 +131,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         $scope.isAddStrategyHidden = true;
         $scope.isAddStrategyBtnHidden = false;
         $scope.isSearchHidden = true;
-        $scope.newPricingTable = util.clone($scope.templates.ObjectTemplates.PricingTable.Generic);
+        $scope.newPricingTable = util.clone($scope.templates.ObjectTemplates.PricingTable.GENERAL);
         $scope.clearPtTemplateIcons();
     }
 
@@ -372,13 +372,13 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
 
     // **** NEW PRICING STRATEGY Methods ****
     //
-    $scope.newStrategy = util.clone($scope.templates.ObjectTemplates.PricingStrategy.Generic);
+    $scope.newStrategy = util.clone($scope.templates.ObjectTemplates.PricingStrategy.GENERAL);
     $scope.addPricingStrategy = function () {
         topbar.show();
         var ct = $scope.contractData;
 
         // Clone base model and populate changes
-        var ps = util.clone($scope.templates.ObjectTemplates.PricingStrategy.Generic);
+        var ps = util.clone($scope.templates.ObjectTemplates.PricingStrategy.GENERAL);
         ps.DC_ID = $scope.uid--;
         ps.DC_PARENT_ID = ct.DC_ID;
         ps.PricingTable = [];
@@ -431,13 +431,13 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
 
     // **** NEW PRICING TABLE Methods ****
     //
-    $scope.newPricingTable = util.clone($scope.templates.ObjectTemplates.PricingTable.Generic);
+    $scope.newPricingTable = util.clone($scope.templates.ObjectTemplates.PricingTable.CAP_BAND);
     $scope.addPricingTable = function () {
         topbar.show();
 
         // Clone base model and populate changes
         // TODO generic shoud be replaced with the correct OBJ_SET_TYPE
-        var pt = util.clone($scope.templates.ObjectTemplates.PricingTable.Generic);
+        var pt = util.clone($scope.templates.ObjectTemplates.PricingTable.CAP_BAND);
         pt.DC_ID = $scope.uid--;
         pt.DC_PARENT_ID = $scope.curPricingStrategy.DC_ID;
         pt.OBJ_SET_TYPE_CD = $scope.newPricingTable.OBJ_SET_TYPE_CD;
@@ -503,11 +503,11 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         }
     }
     $scope.newPricingTableExtraLength = function () {
-        if ($scope.newPricingTable._extraAtrbs === undefined) return 0;
+        if ($scope.newPricingTable === undefined || $scope.newPricingTable._extraAtrbs === undefined) return 0;
         return Object.keys($scope.newPricingTable._extraAtrbs).length;
     }
     $scope.newPricingTableDefaultLength = function () {
-        if ($scope.newPricingTable._defaultAtrbs === undefined) return 0;
+        if ($scope.newPricingTable === undefined || $scope.newPricingTable._defaultAtrbs === undefined) return 0;
         return Object.keys($scope.newPricingTable._defaultAtrbs).length;
     }
 

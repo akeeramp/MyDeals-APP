@@ -4,6 +4,11 @@ namespace Intel.MyDeals.Entities
 {
     public class UiModelTemplate
     {
+        public UiModelTemplate()
+        {
+            extraAtrbs = new Dictionary<string, UiAtrbs>();
+            defaultAtrbs = new Dictionary<string, UiAtrbs>();
+        }
         public string name { get; set; }
         public UiModel model { get; set; }
         public IEnumerable<UiColumn> columns { get; set; }

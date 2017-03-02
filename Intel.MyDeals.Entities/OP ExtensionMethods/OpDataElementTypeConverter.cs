@@ -32,7 +32,7 @@ namespace Intel.MyDeals.Entities
             return OpDataElementTypeRepository.OpDetCollection.Items.FirstOrDefault(o => o.OpDeType == opDataElementType)?.Alias ?? "";
         }
 
-        public static OpDataElementType IdToString(this int packetId)
+        public static OpDataElementType IdToOpDataElementTypeString(this int packetId)
         {
             return OpDataElementTypeRepository.OpDetCollection.Items.FirstOrDefault(o => o.Id == packetId)?.OpDeType ?? OpDataElementType.Unknown;
         }

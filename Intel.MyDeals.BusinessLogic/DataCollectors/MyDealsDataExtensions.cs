@@ -253,7 +253,7 @@ namespace Intel.MyDeals.BusinessLogic
                     DcID = id,
                     DcParentID = parentId,
                     DcType = opDataElementType.ToString(),
-                    DcParentType = parentidtype.IdToString().ToString()
+                    DcParentType = parentidtype.IdToOpDataElementTypeString().ToString()
                 };
                 if (id < 0) dc.FillInHolesFromTemplate();
                 myDealsData[opDataElementType].Data[id] = dc;
@@ -267,7 +267,7 @@ namespace Intel.MyDeals.BusinessLogic
             dc.DcType = opDataElementType.ToString();
             dc.DcID = item["DC_ID"] == null ? 0 : Convert.ToInt32(item["DC_ID"].ToString());
             dc.DcParentID = item["DC_PARENT_ID"] == null ? 0 : Convert.ToInt32(item["DC_PARENT_ID"].ToString());
-            dc.DcParentType = parentidtype.IdToString().ToString();
+            dc.DcParentType = parentidtype.IdToOpDataElementTypeString().ToString();
 
             return dc;
         }

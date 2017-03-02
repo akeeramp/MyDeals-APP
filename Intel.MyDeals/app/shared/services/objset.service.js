@@ -351,7 +351,7 @@ function objsetService($http, dataService, logger, $q) {
 
         if (pt.length > 0) {
             for (var s = 0; s < sData.length; s++) {
-                sData[s].DC_ID = cnt--;
+                if (sData[s].DC_ID === null) sData[s].DC_ID = cnt--;
                 sData[s].DC_PARENT_ID = pt[0].DC_ID;
                 sData[s].dc_type = "PricingTableRow";
                 sData[s].dc_parent_type = pt[0].dc_type;

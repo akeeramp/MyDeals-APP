@@ -284,8 +284,8 @@ namespace Intel.MyDeals.DataLibrary
 
                 while (rdr.Read())
                 {
-                    string ACTN_NM = String.Format("{0}", rdr[Entities.deal.MYDL_CL_WIP_ACTN.ACTN_NM]).ToUpper();
-                    OpDataElementType objSet = int.Parse(rdr[Entities.deal.MYDL_CL_WIP_ACTN.OBJ_TYPE_SID].ToString()).IdToString();
+                    string ACTN_NM = string.Format("{0}", rdr[Entities.deal.MYDL_CL_WIP_ACTN.ACTN_NM]).ToUpper();
+                    OpDataElementType objSet = int.Parse(rdr[Entities.deal.MYDL_CL_WIP_ACTN.OBJ_TYPE_SID].ToString()).IdToOpDataElementTypeString();
 
                     if (objSet == OpDataElementType.Unknown || String.IsNullOrEmpty(ACTN_NM)) { continue; }
 

@@ -234,7 +234,7 @@ namespace Intel.MyDeals.BusinessLogic
             Dictionary<int, string> prdMaps,
             MyDealsData myDealsData)
         {
-            dc.EnsureDcType(attrCol, opType);
+            //dc.EnsureDcType(attrCol, opType);
 
             // TODO see if we can get rid of this
             ////dc.EnsureObjSetIdAtrb(attrCol);
@@ -264,7 +264,7 @@ namespace Intel.MyDeals.BusinessLogic
                 objsetItem[EN.OBJDIM._MULTIDIM] = ((Dictionary<int, OpDataCollectorFlattenedItem>)objsetItem["_MultiDim"]).Values.ToList();
 
             objsetItem["DC_ID"] = dc.DcID;
-            objsetItem["dc_type"] = dc.DcType; // TODO - Does this work???
+            objsetItem["dc_type"] = dc.DcType;
             objsetItem["DC_PARENT_ID"] = dc.DcParentID;
             objsetItem["dc_parent_type"] = dc.DcParentType;
 

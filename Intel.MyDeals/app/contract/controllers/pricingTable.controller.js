@@ -49,8 +49,7 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
 
     //data
     //
-    root.pricingTableData = root.pricingTableData || pricingTableData.data;  // temporary until we use the db returned set
-    //debugger;
+    root.pricingTableData = pricingTableData.data;
 
     if (root.pricingTableData.PricingTable[0] === undefined) {
         root.pricingTableData.PricingTable[0] = {};
@@ -63,7 +62,7 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
     $scope.dataSpreadSheet = root.pricingTableData.PricingTableRow;
     $scope.dataGrid = root.pricingTableData.WipDeals;
 
-    var ptTemplate = root.templates.ModelTemplates.PricingTable[root.curPricingTable.OBJ_SET_TYPE_CD];
+    var ptTemplate = root.templates.ModelTemplates.PricingTableRow[root.curPricingTable.OBJ_SET_TYPE_CD];
     var columns = $scope.getColumns(ptTemplate);
 
     $scope.colToLetter = {};
