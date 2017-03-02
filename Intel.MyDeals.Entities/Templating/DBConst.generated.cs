@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 2/28/2017 10:21:42 PM
+File Updated: 3/2/2017 9:47:43 AM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -11,6 +11,9 @@ using Intel.Opaque.Data;
 using Intel.MyDeals.Entities;
 
 namespace Intel.MyDeals.Entities {
+
+	//-- AttributeCodes -----------------------------------------------------------------------------------
+
 	public static class AttributeCodes {
 
 		///<summary>
@@ -905,6 +908,9 @@ namespace Intel.MyDeals.Entities {
 		public const string VRTCL_SEG_CD = "VRTCL_SEG_CD";
 	}
 
+
+	//-- DealSaveActionCodes ------------------------------------------------------------------------------
+
 	public static class DealSaveActionCodes {
 
 		///<summary>
@@ -1180,21 +1186,22 @@ namespace Intel.MyDeals.Entities {
 
 	}
 
+
+	//-- ToolConstantName ---------------------------------------------------------------------------------
+
 	public static class ToolConstantName {
 		public const string akash = "akash";
-		public const string BATCH_LOG = "BATCH_LOG";
 		public const string COST_TEST_TYPES = "COST_TEST_TYPES";
 		public const string DB_ERROR_CONTACT_EMAIL = "DB_ERROR_CONTACT_EMAIL";
 		public const string DB_LOGGING = "DB_LOGGING";
 		public const string EIA_DIV_NM = "EIA_DIV_NM";
 		public const string ENV = "ENV";
 		public const string gfgf = "gfgf";
-		public const string ICOST_ERROR_CONTACTS_MYDL = "ICOST_ERROR_CONTACTS_MYDL";
-		public const string ICOST_ERROR_LOG_DAYS = "ICOST_ERROR_LOG_DAYS";
 		public const string santhoshi = "santhoshi";
 	}
 
-	//-- Build Objects Data -------------------------------------------------------------------------------
+
+	//-- Build Object Data --------------------------------------------------------------------------------
 
 	public enum OpDataElementType {
 		Contract = 10,
@@ -1230,6 +1237,50 @@ namespace Intel.MyDeals.Entities {
 		);
 	}
 
-	//-------------------------------------------------------------------------------------------
+
+	//-- Build ObjectSet Data -----------------------------------------------------------------------------
+
+	public enum OpDataElementSetType {
+		ECAP = 3,
+		PROGRAM = 4,
+		VOL_TIER = 5,
+		CAP_BAND = 7,
+		ALL_TYPES = 9,
+		Unknown = 0
+	}
+
+	public static class OpDataElementSetTypeRepository
+	{
+		public static readonly OpDataElementSetTypeCollection  OpDestCollection  = new OpDataElementSetTypeCollection(
+			new List<OpDataElementSetTypeItem>
+			{
+				new OpDataElementSetTypeItem {Id = 3, OpDeSetType = OpDataElementSetType.ECAP, Alias = "ECAP", Description = "ECAP Deal Types", TemplateDealNumber = -1, TrackerDtLetter = "E", Order = 3 },
+				new OpDataElementSetTypeItem {Id = 4, OpDeSetType = OpDataElementSetType.PROGRAM, Alias = "PROGRAM", Description = "PROGRAM Deal Type", TemplateDealNumber = -3, TrackerDtLetter = "L", Order = 4 },
+				new OpDataElementSetTypeItem {Id = 5, OpDeSetType = OpDataElementSetType.VOL_TIER, Alias = "VOL_TIER", Description = "VOL TIER Deal Type", TemplateDealNumber = -2, TrackerDtLetter = "T", Order = 5 },
+				new OpDataElementSetTypeItem {Id = 7, OpDeSetType = OpDataElementSetType.CAP_BAND, Alias = "CAP_BAND", Description = "CAP BAND Deal Type", TemplateDealNumber = -4, TrackerDtLetter = "C", Order = 7 },
+				new OpDataElementSetTypeItem {Id = 9, OpDeSetType = OpDataElementSetType.ALL_TYPES, Alias = "ALL_TYPES", Description = "ALL Object set types", TemplateDealNumber = 0, TrackerDtLetter = "", Order = 9 },
+			},
+
+			new Dictionary<OpDataElementType, OpDataElementSetType>
+			{
+				[OpDataElementType.Contract] = OpDataElementSetType.ALL_TYPES,
+				[OpDataElementType.PricingStrategy] = OpDataElementSetType.ALL_TYPES,
+				[OpDataElementType.PricingTable] = OpDataElementSetType.ECAP,
+				[OpDataElementType.PricingTable] = OpDataElementSetType.PROGRAM,
+				[OpDataElementType.PricingTable] = OpDataElementSetType.VOL_TIER,
+				[OpDataElementType.PricingTable] = OpDataElementSetType.CAP_BAND,
+				[OpDataElementType.PricingTableRow] = OpDataElementSetType.ECAP,
+				[OpDataElementType.PricingTableRow] = OpDataElementSetType.PROGRAM,
+				[OpDataElementType.PricingTableRow] = OpDataElementSetType.VOL_TIER,
+				[OpDataElementType.PricingTableRow] = OpDataElementSetType.CAP_BAND,
+				[OpDataElementType.WipDeals] = OpDataElementSetType.ECAP,
+				[OpDataElementType.WipDeals] = OpDataElementSetType.PROGRAM,
+				[OpDataElementType.WipDeals] = OpDataElementSetType.VOL_TIER,
+				[OpDataElementType.WipDeals] = OpDataElementSetType.CAP_BAND,
+			}
+		);
+	}
+
+	//-- MyDealsAtrbLookup ----------------------------------------------------------------------
 
 }

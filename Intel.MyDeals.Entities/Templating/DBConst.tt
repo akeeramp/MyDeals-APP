@@ -60,6 +60,14 @@
 	WriteLine("namespace {0} {{", outputNameSpace);
 	PushIndent(TAB);
 
+
+
+
+	WriteLine("");
+	//-- AttributeCodes -----------------------------------------------------------------------------------
+    WriteLine("//-- AttributeCodes -----------------------------------------------------------------------------------");
+	WriteLine("");
+
 	WriteLine("public static class AttributeCodes {");
 	PushIndent(TAB);
 
@@ -81,9 +89,15 @@
 
 	PopIndent();
 	WriteLine("}"); // class
-	WriteLine("");
 
-	//----------------------------------------------------------------------------------------------------
+
+
+
+	WriteLine("");
+	WriteLine("");
+	//-- DealSaveActionCodes ------------------------------------------------------------------------------
+    WriteLine("//-- DealSaveActionCodes ------------------------------------------------------------------------------");
+	WriteLine("");
 
 	cmd = new SqlCommand(@"
 		select 
@@ -117,15 +131,21 @@
 
 	PopIndent();
 	WriteLine("}"); // class
+
+
+
+
+	WriteLine("");
+	WriteLine("");
+	//-- ToolConstantName ---------------------------------------------------------------------------------
+    WriteLine("//-- ToolConstantName ---------------------------------------------------------------------------------");
 	WriteLine("");
 
-	//----------------------------------------------------------------------------------------------------
-
 	cmd = new SqlCommand(@"
-SELECT distinct cnst_nm 
-FROM dbo.CNST 
-WHERE cnst_nm != ''
-ORDER BY cnst_nm
+		SELECT distinct cnst_nm 
+		FROM dbo.CNST 
+		WHERE cnst_nm != ''
+		ORDER BY cnst_nm
 	", conn);
 
 	WriteLine("public static class ToolConstantName {");
@@ -149,8 +169,9 @@ ORDER BY cnst_nm
 
 
 	WriteLine("");
-	//-- Build Objects Data -------------------------------------------------------------------------------
-    WriteLine("//-- Build Objects Data -------------------------------------------------------------------------------");
+	WriteLine("");
+	//-- Build Object Data --------------------------------------------------------------------------------
+    WriteLine("//-- Build Object Data --------------------------------------------------------------------------------");
     WriteLine("");
 
     cmd = new SqlCommand(@"[dbo].[PR_MYDL_GET_OBJ]", conn);
@@ -162,7 +183,8 @@ ORDER BY cnst_nm
 
     var dt_objs = ds_pr_mydl_get_obj.Tables[0];
 
-	//-- Build Objects - OpDataElementType ----------------------------------------------------------------
+
+	//-- Build Object - OpDataElementType -----------------------------------------------------------------
 
     WriteLine("public enum OpDataElementType {");
 	PushIndent(TAB);
@@ -178,7 +200,7 @@ ORDER BY cnst_nm
 	WriteLine("");
 
 
-	//-- Build Objects Data - OpDataElementTypeRepository -------------------------------------------------
+	//-- Build Object Data - OpDataElementTypeRepository --------------------------------------------------
 
 	Dictionary<string, string> parentObjectDictionary = new Dictionary<string, string>();
 
@@ -203,7 +225,8 @@ ORDER BY cnst_nm
     WriteLine("},");
 	WriteLine("");
 
-	//-- Build Objects Data - Object Hierarchy ------------------------------------------------------------
+
+	//-- Build Object Data - Object Hierarchy -------------------------------------------------------------
 
     WriteLine("new Dictionary<OpDataElementType, OpDataElementType>");
     WriteLine("{");
@@ -219,30 +242,7 @@ ORDER BY cnst_nm
 		}
 	}
 	PopIndent();
-
-	//-- Build Objects Data - ObjSet Items ----------------------------------------------------------------
-
-// WE LEFT OFF HERE
-//    WriteLine("},");
-
-
-
-//	WriteLine("new List<OpDataElementTypeItem>");
-//    WriteLine("{");
-//	foreach (DataRow drg in dt_objs.Rows)
-//    {
-	//new OpDataElementTypeItem { Id = 1, OpDeType = OpDataElementType.Contract, Alias = "CNTRCT", Order = 10 },
-//	WriteLine("new OpDataElementTypeItem {Id = " + drg["OBJ_TYPE_SID"] + ", OpDeType = OpDataElementType." + drg["OBJ_DESC"] + ", Alias = \"" + drg["OBJ_TYPE"] + "\", Order = " + drg["OBJ_PRCSS_ORD"] + " },");
-
-//	}
-// ENDING HERE
-
-//-- Build Objects Data - ObjSet Hierarchy ------------------------------------------------------------
-
-
-    WriteLine("}");
-
-
+	WriteLine("}");
 
 	PopIndent();
     WriteLine(");"); // OpDetCollection
@@ -250,7 +250,78 @@ ORDER BY cnst_nm
 	PopIndent();
 	WriteLine("}"); // class
 
-	var dt_objsDeals = ds_pr_mydl_get_obj.Tables[1];
+
+
+
+	WriteLine("");
+	WriteLine("");
+	//-- Build ObjectSet Data -----------------------------------------------------------------------------
+    WriteLine("//-- Build ObjectSet Data -----------------------------------------------------------------------------");
+    WriteLine("");
+
+    var dt_objsDeals = ds_pr_mydl_get_obj.Tables[1];
+
+	//-- Build ObjectSet Data - OpDataElementSetType ------------------------------------------------------
+
+    WriteLine("public enum OpDataElementSetType {");
+	PushIndent(TAB);
+
+    foreach (DataRow drg in dt_objsDeals.Rows)
+    {
+		WriteLine(drg["OBJ_SET_TYPE_CD"] + " = " + drg["OBJ_SET_TYPE_SID"] + ",");
+    }
+	WriteLine("Unknown = 0");
+
+    PopIndent();
+	WriteLine("}"); // class
+	WriteLine("");
+
+
+	//-- Build Object Data - OpDataElementTypeRepository --------------------------------------------------
+
+	WriteLine("public static class OpDataElementSetTypeRepository"); // class
+	WriteLine("{"); // class
+
+	PushIndent(TAB);
+	WriteLine("public static readonly OpDataElementSetTypeCollection  OpDestCollection  = new OpDataElementSetTypeCollection(");
+
+	PushIndent(TAB);
+    WriteLine("new List<OpDataElementSetTypeItem>");
+    WriteLine("{");
+
+	PushIndent(TAB);
+	foreach (DataRow drg in dt_objsDeals.Rows)
+    {
+		//Format is: new OpDataElementSetTypeItem {Id = 1, OpDeSetType = OpDataElementSetType.ECAP, Alias = "ECAP", Description = "", TemplateDealNumber = -1, TrackerDtLetter = "E", Order = 10 },
+		WriteLine("new OpDataElementSetTypeItem {Id = " + drg["OBJ_SET_TYPE_SID"] + ", OpDeSetType = OpDataElementSetType." + drg["OBJ_SET_TYPE_CD"] + ", Alias = \"" + drg["OBJ_SET_TYPE_CD"] + "\", Description = \"" + drg["OBJ_SET_TYPE_DESC"] + "\", TemplateDealNumber = " + drg["TEMPLT_DEAL_NBR"] + ", TrackerDtLetter = \"" + drg["TRKR_NBR_DT_LTR"] + "\", Order = " + drg["OBJ_SET_TYPE_SID"] + " },");
+	}
+	PopIndent();
+
+    WriteLine("},");
+	WriteLine("");
+
+
+	//-- Build Object Data - Object Hierarchy -------------------------------------------------------------
+
+	var dt_objsObjToDeals = ds_pr_mydl_get_obj.Tables[2];
+
+    WriteLine("new Dictionary<OpDataElementType, OpDataElementSetType>");
+    WriteLine("{");
+
+	PushIndent(TAB);
+	foreach (DataRow drg in dt_objsObjToDeals.Rows)
+    {
+		//Format is: [OpDataElementType.Contract] = OpDataElementSetType.ECAP
+		WriteLine("[OpDataElementType." + drg["OBJ_DESC"].ToString() + "] = OpDataElementSetType." + drg["OBJ_SET_TYPE_CD"].ToString() + ",");
+	}
+	PopIndent();
+	WriteLine("}");
+
+	PopIndent();
+    WriteLine(");"); // OpDetCollection
+
+	PopIndent();
+	WriteLine("}"); // class
 
 
 
@@ -260,6 +331,12 @@ ORDER BY cnst_nm
 
 
 
+
+
+
+	WriteLine("");
+	WriteLine("//-- MyDealsAtrbLookup ----------------------------------------------------------------------");
+	WriteLine("");
 
 	//        WriteLine("new OpDataElementTypeItem { Id = " + drg["OBJ_TYPE_SID"] + ", OpDeType = OpDataElementType.Contract, Alias = " + drg["OBJ_TYPE"] + ", Order = " + drg["OBJ_PRCSS_ORD"] + " },");
 	//----------------------------------------------------------------------------------------------------
@@ -275,13 +352,9 @@ ORDER BY cnst_nm
 
 	//var dt_atrb = da.Tables[0];
 
-	
-	WriteLine("");
-	WriteLine("//-------------------------------------------------------------------------------------------");
-	WriteLine("");
-
 	//WriteLine("namespace MyDealsAtrbLookup {");
 	//PushIndent(TAB);
+
 
 //	foreach(DataRow drg in dt_atrb.DefaultView.ToTable(true, "ATRB_CD","ATRB_SID").Rows)
 //	{
