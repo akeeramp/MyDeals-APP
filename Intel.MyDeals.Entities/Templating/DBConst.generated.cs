@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 3/2/2017 11:12:07 AM
+File Updated: 3/2/2017 11:59:14 AM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -1245,7 +1245,7 @@ namespace Intel.MyDeals.Entities {
 		PROGRAM = 4,
 		VOL_TIER = 5,
 		CAP_BAND = 7,
-		ALL_TYPES = 9,
+		GENERAL = 9,
 		Unknown = 0
 	}
 
@@ -1258,13 +1258,13 @@ namespace Intel.MyDeals.Entities {
 				new OpDataElementSetTypeItem {Id = 4, OpDeSetType = OpDataElementSetType.PROGRAM, Alias = "PROGRAM", Description = "PROGRAM Deal Type", TemplateDealNumber = -3, TrackerDtLetter = "L", Order = 4 },
 				new OpDataElementSetTypeItem {Id = 5, OpDeSetType = OpDataElementSetType.VOL_TIER, Alias = "VOL_TIER", Description = "VOL TIER Deal Type", TemplateDealNumber = -2, TrackerDtLetter = "T", Order = 5 },
 				new OpDataElementSetTypeItem {Id = 7, OpDeSetType = OpDataElementSetType.CAP_BAND, Alias = "CAP_BAND", Description = "CAP BAND Deal Type", TemplateDealNumber = -4, TrackerDtLetter = "C", Order = 7 },
-				new OpDataElementSetTypeItem {Id = 9, OpDeSetType = OpDataElementSetType.ALL_TYPES, Alias = "ALL_TYPES", Description = "ALL Object set types", TemplateDealNumber = 0, TrackerDtLetter = "", Order = 9 },
+				new OpDataElementSetTypeItem {Id = 9, OpDeSetType = OpDataElementSetType.GENERAL, Alias = "GENERAL", Description = "General Basic Type", TemplateDealNumber = 0, TrackerDtLetter = "", Order = 9 },
 			},
 
 			new Dictionary<OpDataElementType, OpDataElementSetType>
 			{
-				[OpDataElementType.Contract] = OpDataElementSetType.ALL_TYPES,
-				[OpDataElementType.PricingStrategy] = OpDataElementSetType.ALL_TYPES,
+				[OpDataElementType.Contract] = OpDataElementSetType.GENERAL,
+				[OpDataElementType.PricingStrategy] = OpDataElementSetType.GENERAL,
 				[OpDataElementType.PricingTable] = OpDataElementSetType.ECAP,
 				[OpDataElementType.PricingTable] = OpDataElementSetType.PROGRAM,
 				[OpDataElementType.PricingTable] = OpDataElementSetType.VOL_TIER,
