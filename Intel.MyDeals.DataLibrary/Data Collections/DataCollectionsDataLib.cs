@@ -1,7 +1,6 @@
 ﻿using Intel.MyDeals.Entities;
 using Intel.MyDeals.IDataLibrary;
 using Intel.RulesEngine;
-using System;
 using System.Collections.Generic;
 
 namespace Intel.MyDeals.DataLibrary

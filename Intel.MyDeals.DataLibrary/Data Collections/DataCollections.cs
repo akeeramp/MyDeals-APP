@@ -307,26 +307,24 @@ namespace Intel.MyDeals.DataLibrary
 
         private static List<MyDealsActionItem> _getDealActions;
 
-
-
         public static TemplateWrapper GetTemplateWrapper()
         {
             lock (LOCK_OBJECT ?? new object())
             {
-                if (_getTemplateData != null && _getTemplateDict != null && _getCalendarData != null && _getDealTypeData != null)
+                if (_getTemplateData != null && _getTemplateDict != null && _getCalendarData != null)
                     return new TemplateWrapper
                     {
                         TemplateData = _getTemplateData,
                         TemplateDict = _getTemplateDict,
                         CalendarData = _getCalendarData,
-                        DealTypeData = _getDealTypeData
+                        //DealTypeData = _getDealTypeData
                     };
 
                 TemplateWrapper wrapper = new DataCollectorDataLib().GetTemplateData();
                 _getTemplateData = wrapper.TemplateData;
                 _getTemplateDict = wrapper.TemplateDict;
                 _getCalendarData = wrapper.CalendarData.ToList();
-                _getDealTypeData = wrapper.DealTypeData;
+                //_getDealTypeData = wrapper.DealTypeData;
                 return wrapper;
             }
         }
@@ -335,27 +333,31 @@ namespace Intel.MyDeals.DataLibrary
         {
             return GetTemplateWrapper().TemplateDict;
         }
+
         public static List<ObjectTypeTemplate> GetTemplateData()
         {
             return GetTemplateWrapper().TemplateData;
         }
+
         public static OpDataElementUITemplates GetTemplateDict()
         {
             return GetTemplateWrapper().TemplateDict;
         }
+
         public static IEnumerable<CustomerCal> GetCalendarData()
         {
             return GetTemplateWrapper().CalendarData;
         }
-        public static List<ObjectTypes> GetDealTypeData()
-        {
-            return GetTemplateWrapper().DealTypeData;
-        }
+
+        //public static List<ObjectTypes> GetDealTypeData()
+        //{
+        //    return GetTemplateWrapper().DealTypeData;
+        //}
 
         private static List<ObjectTypeTemplate> _getTemplateData;
         private static OpDataElementUITemplates _getTemplateDict;
         private static List<CustomerCal> _getCalendarData;
-        private static List<ObjectTypes> _getDealTypeData;
+        //private static List<ObjectTypes> _getDealTypeData;
 
         public static List<CustomerDivision> GetCustomerDivisions()
         {
