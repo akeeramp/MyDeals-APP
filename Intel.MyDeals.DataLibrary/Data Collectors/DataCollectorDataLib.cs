@@ -37,10 +37,6 @@ namespace Intel.MyDeals.DataLibrary
 
                     // Result 2 = Customer Calendars
                     ret.CalendarData = CustomerCalFromReader(rdr);
-                    //rdr.NextResult();
-
-                    // Result 3 = Deal Types
-                    //ret.DealTypeData = ObjectTypesFromReader(rdr);
                 }
             }
 
@@ -62,10 +58,6 @@ namespace Intel.MyDeals.DataLibrary
 
             var ret = new List<ObjectTypeTemplate>();
             int IDX_ATRB_COL_NM = DB.GetReaderOrdinal(rdr, "ATRB_COL_NM");
-            int IDX_ATRB_ORDER = DB.GetReaderOrdinal(rdr, "ATRB_ORDER");
-            int IDX_ATRB_SCTN_CD = DB.GetReaderOrdinal(rdr, "ATRB_SCTN_CD");
-            int IDX_ATRB_SCTN_DESC = DB.GetReaderOrdinal(rdr, "ATRB_SCTN_DESC");
-            int IDX_ATRB_SCTN_ORDER = DB.GetReaderOrdinal(rdr, "ATRB_SCTN_ORDER");
             int IDX_ATRB_SID = DB.GetReaderOrdinal(rdr, "ATRB_SID");
             int IDX_ATRB_VAL = DB.GetReaderOrdinal(rdr, "ATRB_VAL");
             int IDX_ATRB_MTX_HASH = DB.GetReaderOrdinal(rdr, "ATRB_MTX_HASH");
@@ -79,10 +71,6 @@ namespace Intel.MyDeals.DataLibrary
                 ret.Add(new ObjectTypeTemplate
                 {
                     ATRB_COL_NM = (IDX_ATRB_COL_NM < 0 || rdr.IsDBNull(IDX_ATRB_COL_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_COL_NM),
-                    //ATRB_ORDER = (IDX_ATRB_ORDER < 0 || rdr.IsDBNull(IDX_ATRB_ORDER)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ATRB_ORDER),
-                    //ATRB_SCTN_CD = (IDX_ATRB_SCTN_CD < 0 || rdr.IsDBNull(IDX_ATRB_SCTN_CD)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ATRB_SCTN_CD),
-                    //ATRB_SCTN_DESC = (IDX_ATRB_SCTN_DESC < 0 || rdr.IsDBNull(IDX_ATRB_SCTN_DESC)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ATRB_SCTN_DESC),
-                    //ATRB_SCTN_ORDER = (IDX_ATRB_SCTN_ORDER < 0 || rdr.IsDBNull(IDX_ATRB_SCTN_ORDER)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ATRB_SCTN_ORDER),
                     ATRB_SID = (IDX_ATRB_SID < 0 || rdr.IsDBNull(IDX_ATRB_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ATRB_SID),
                     ATRB_VAL = (IDX_ATRB_VAL < 0 || rdr.IsDBNull(IDX_ATRB_VAL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_VAL),
                     ATRB_MTX_HASH = (IDX_ATRB_MTX_HASH < 0 || rdr.IsDBNull(IDX_ATRB_MTX_HASH)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_MTX_HASH),
@@ -95,38 +83,6 @@ namespace Intel.MyDeals.DataLibrary
 
             return ret;
         }
-
-
-        //private static List<ObjectTypes> ObjectTypesFromReader(SqlDataReader rdr)
-        //{
-        //    // Read the objects types table and store into ObjectTypes data type -- table 3 from template data
-        //    // This helper method is template generated.
-        //    // Refer to that template for details to modify this code.
-
-        //    var ret = new List<ObjectTypes>();
-        //    int IDX_OBJ_DESC = DB.GetReaderOrdinal(rdr, "OBJ_DESC");
-        //    int IDX_OBJ_TYPE = DB.GetReaderOrdinal(rdr, "OBJ_TYPE");
-        //    int IDX_OBJ_TYPE_SID = DB.GetReaderOrdinal(rdr, "OBJ_TYPE_SID");
-        //    int IDX_OBJ_TYPE_SID1 = DB.GetReaderOrdinal(rdr, "OBJ_TYPE_SID1");
-        //    int IDX_OBJ_TYPE_SID2 = DB.GetReaderOrdinal(rdr, "OBJ_TYPE_SID2");
-        //    int IDX_PERFORM_CTST = DB.GetReaderOrdinal(rdr, "PERFORM_CTST");
-        //    int IDX_TRKR_NBR_DT_LTR = DB.GetReaderOrdinal(rdr, "TRKR_NBR_DT_LTR");
-
-        //    while (rdr.Read())
-        //    {
-        //        ret.Add(new ObjectTypes
-        //        {
-        //            OBJ_DESC = (IDX_OBJ_DESC < 0 || rdr.IsDBNull(IDX_OBJ_DESC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_DESC),
-        //            OBJ_TYPE = (IDX_OBJ_TYPE < 0 || rdr.IsDBNull(IDX_OBJ_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_TYPE),
-        //            OBJ_TYPE_SID = (IDX_OBJ_TYPE_SID < 0 || rdr.IsDBNull(IDX_OBJ_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_TYPE_SID),
-        //            OBJ_TYPE_SID1 = (IDX_OBJ_TYPE_SID1 < 0 || rdr.IsDBNull(IDX_OBJ_TYPE_SID1)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_TYPE_SID1),
-        //            OBJ_TYPE_SID2 = (IDX_OBJ_TYPE_SID2 < 0 || rdr.IsDBNull(IDX_OBJ_TYPE_SID2)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_TYPE_SID2),
-        //            PERFORM_CTST = (IDX_PERFORM_CTST < 0 || rdr.IsDBNull(IDX_PERFORM_CTST)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PERFORM_CTST),
-        //            TRKR_NBR_DT_LTR = (IDX_TRKR_NBR_DT_LTR < 0 || rdr.IsDBNull(IDX_TRKR_NBR_DT_LTR)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_TRKR_NBR_DT_LTR)
-        //        });
-        //    } // while
-        //    return ret;
-        //}
 
 
         private static List<CustomerCal> CustomerCalFromReader(SqlDataReader rdr)
@@ -216,10 +172,6 @@ namespace Intel.MyDeals.DataLibrary
                     AtrbCd = atrb.ATRB_COL_NM,
                     Description = atrb.ATRB_DESC,
                     Label = atrb.ATRB_LBL,
-                    //Order = dd.ATRB_ORDER,
-                    SectionCD = "", //dd.ATRB_SCTN_CD,
-                    SectionDesc = "", //dd.ATRB_SCTN_DESC,
-                    //SectionOrder = dd.ATRB_SCTN_ORDER,
                     State = OpDataElementState.Unchanged,
                     UITypeCD = atrb.UI_TYPE_CD,
                     Source = OpSourceLocation.Template
@@ -273,9 +225,6 @@ namespace Intel.MyDeals.DataLibrary
                         Description = dataElementUi.Description,
                         DimID = dataElementUi.DimID,
                         DimKey = dataElementUi.DimKey,
-                        SectionCD = dataElementUi.SectionCD,
-                        SectionDesc = dataElementUi.SectionDesc,
-                        SectionOrder = dataElementUi.SectionOrder,
                         Label = dataElementUi.Label,
                         DcID = 0,
                         DcType = opDataElementType.ToId(),

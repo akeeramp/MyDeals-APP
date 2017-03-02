@@ -12,15 +12,12 @@ namespace Intel.MyDeals.Entities
         public OpDataElementUITemplates TemplateDict { set; get; }
         [DataMember]
         public IEnumerable<CustomerCal> CalendarData { set; get; }
-        //[DataMember]
-        //public List<ObjectTypes> DealTypeData { set; get; }
 
         public TemplateWrapper()
         {
             TemplateData = new List<ObjectTypeTemplate>();
             TemplateDict = new OpDataElementUITemplates();
             CalendarData = new List<CustomerCal>();
-            //DealTypeData = new List<ObjectTypes>();
         }
 
     }

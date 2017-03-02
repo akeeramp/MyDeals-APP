@@ -158,12 +158,6 @@ namespace Intel.MyDeals.DataLibrary
         }
         private static List<AtrbMstr> _getAtrbMstrs;
 
-
-        //public static Dictionary<string, string> OpDetails(bool returnExceptions = true)
-        //{
-        //    return new OpCurrentConfig().GetConfigDetails(returnExceptions);
-        //}
-
         public static List<OpAtrbMap> GetOpAtrbMapItems()
         {
             lock (LOCK_OBJECT ?? new object())
@@ -317,14 +311,12 @@ namespace Intel.MyDeals.DataLibrary
                         TemplateData = _getTemplateData,
                         TemplateDict = _getTemplateDict,
                         CalendarData = _getCalendarData,
-                        //DealTypeData = _getDealTypeData
                     };
 
                 TemplateWrapper wrapper = new DataCollectorDataLib().GetTemplateData();
                 _getTemplateData = wrapper.TemplateData;
                 _getTemplateDict = wrapper.TemplateDict;
                 _getCalendarData = wrapper.CalendarData.ToList();
-                //_getDealTypeData = wrapper.DealTypeData;
                 return wrapper;
             }
         }
@@ -349,15 +341,9 @@ namespace Intel.MyDeals.DataLibrary
             return GetTemplateWrapper().CalendarData;
         }
 
-        //public static List<ObjectTypes> GetDealTypeData()
-        //{
-        //    return GetTemplateWrapper().DealTypeData;
-        //}
-
         private static List<ObjectTypeTemplate> _getTemplateData;
         private static OpDataElementUITemplates _getTemplateDict;
         private static List<CustomerCal> _getCalendarData;
-        //private static List<ObjectTypes> _getDealTypeData;
 
         public static List<CustomerDivision> GetCustomerDivisions()
         {
