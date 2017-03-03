@@ -360,13 +360,6 @@ namespace Intel.MyDeals.DataLibrary
 
         private static List<CustomerDivision> _getCustomerDivisions;
 
-        //public static CustomerDivision GetCustomerDivision(int id)
-        //{
-        //    CustomerDivision ret;
-        //    return GetCustomerDivisions().TryGetValue(id, out ret) ? ret : null;
-        //    //TODO: Do we need this function? TryGetValue is a C# Dictionary<> function, find List<> equivalent?
-        //}
-
         public static List<FilterAttribute> GetFilterAttributes()
         {
             lock (LOCK_OBJECT ?? new object())

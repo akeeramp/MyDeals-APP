@@ -131,7 +131,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         $scope.isAddStrategyHidden = true;
         $scope.isAddStrategyBtnHidden = false;
         $scope.isSearchHidden = true;
-        $scope.newPricingTable = util.clone($scope.templates.ObjectTemplates.PricingTable.GENERAL);
+        $scope.newPricingTable = util.clone($scope.templates.ObjectTemplates.PricingTable.CAP_BAND);
         $scope.clearPtTemplateIcons();
     }
 
@@ -166,6 +166,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
     $scope.selectPtTemplateIcon = function (ptTmplt) {
         $scope.clearPtTemplateIcons();
         ptTmplt._custom._active = true;
+        debugger;
         $scope.newPricingTable["OBJ_SET_TYPE_CD"] = ptTmplt.name;
         $scope.newPricingTable["_extraAtrbs"] = ptTmplt.extraAtrbs;
         $scope.newPricingTable["_defaultAtrbs"] = ptTmplt.defaultAtrbs;
@@ -437,7 +438,8 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
 
         // Clone base model and populate changes
         // TODO generic shoud be replaced with the correct OBJ_SET_TYPE
-        var pt = util.clone($scope.templates.ObjectTemplates.PricingTable.CAP_BAND);
+        debugger;
+        var pt = util.clone($scope.templates.ObjectTemplates.PricingTable[$scope.newPricingTable.OBJ_SET_TYPE_CD]);
         pt.DC_ID = $scope.uid--;
         pt.DC_PARENT_ID = $scope.curPricingStrategy.DC_ID;
         pt.OBJ_SET_TYPE_CD = $scope.newPricingTable.OBJ_SET_TYPE_CD;
@@ -468,6 +470,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
     }
     $scope.customAddPtValidate = function () {
         var isValid = true;
+        debugger;
 
         // Clear all values
         angular.forEach($scope.newPricingTable,

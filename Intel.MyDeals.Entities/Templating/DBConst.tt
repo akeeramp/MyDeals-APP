@@ -305,15 +305,25 @@
 
 	var dt_objsObjToDeals = ds_pr_mydl_get_obj.Tables[2];
 
-    WriteLine("new Dictionary<OpDataElementType, OpDataElementSetType>");
+    WriteLine("new Dictionary<OpDataElementType, List<OpDataElementSetType>>");
     WriteLine("{");
 
 	PushIndent(TAB);
+	Dictionary<string, List<string>> ops = new Dictionary<string, List<string>>();
 	foreach (DataRow drg in dt_objsObjToDeals.Rows)
     {
-		//Format is: [OpDataElementType.Contract] = OpDataElementSetType.ECAP
-		WriteLine("[OpDataElementType." + drg["OBJ_DESC"].ToString() + "] = OpDataElementSetType." + drg["OBJ_SET_TYPE"].ToString() + ",");
+		if (!ops.ContainsKey(drg["OBJ_DESC"].ToString())) 
+		{
+			ops[drg["OBJ_DESC"].ToString()] = new List<string>();
+		}
+		ops[drg["OBJ_DESC"].ToString()].Add("OpDataElementSetType." + drg["OBJ_SET_TYPE"].ToString());
 	}
+	
+	foreach (var op in ops)
+	{
+		WriteLine("[OpDataElementType." + op.Key + "] = new List<OpDataElementSetType> { " + string.Join(",", op.Value) + " },");
+	}
+	
 	PopIndent();
 	WriteLine("}");
 
@@ -322,9 +332,6 @@
 
 	PopIndent();
 	WriteLine("}"); // class
-
-
-
 
 
 

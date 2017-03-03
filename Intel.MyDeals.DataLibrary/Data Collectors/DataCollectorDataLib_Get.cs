@@ -108,7 +108,7 @@ namespace Intel.MyDeals.DataLibrary
         /// <returns></returns>
         public static OpDataCollector GetDataCollectorFromTemplate(OpDataElementType opDataElementType, int id, int parentId)
         {
-            return GetOpDataElementUITemplate(opDataElementType).CopyToOpDataCollector(id, parentId);
+            return GetOpDataElementUiTemplate(opDataElementType).CopyToOpDataCollector(id, parentId);
         }
 
 
@@ -117,18 +117,13 @@ namespace Intel.MyDeals.DataLibrary
         /// </summary>
         /// <param name="opDataElementType">Which object template do you need to pull.</param>
         /// <returns></returns>
-        public static OpDataElementUITemplate GetOpDataElementUITemplate(OpDataElementType opDataElementType)
+        public static OpDataElementUITemplate GetOpDataElementUiTemplate(OpDataElementType opDataElementType)
         {
             OpDataElementUITemplates ourTemplates = DataCollections.GetOpDataElementUITemplates();
             string key = opDataElementType.ToString();
 
-            // TODO need to be consistent on naming these !!!
-            if (opDataElementType == OpDataElementType.PricingTable) key = "PRICING TABLE";
-            if (opDataElementType == OpDataElementType.PricingTableRow) key = "PRICING TABLE ROW";
-            if (opDataElementType == OpDataElementType.PricingStrategy) key = "PRICING STRAT";
-
-            return ourTemplates.ContainsKey(key.ToUpper())
-                ? ourTemplates[key.ToUpper()]
+            return ourTemplates.ContainsKey(key)
+                ? ourTemplates[key]
                 : new OpDataElementUITemplate();
         }
 

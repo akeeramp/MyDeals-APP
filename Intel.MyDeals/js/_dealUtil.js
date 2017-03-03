@@ -43,13 +43,13 @@ dealUtil.grid = function () {
 }
 
 dealUtil.init = function () {
-    dealUtil.schedCols["VOLTIER"] = [
+    dealUtil.schedCols["VOL_TIER"] = [
         { mode: "Tier", field: "TIER_NBR", title: "Tier" },
         { mode: "Start", field: "STRT_VOL", title: "Start Vol" },
         { mode: "End", field: "END_VOL", title: "End Vol" },
         { mode: "Rate", field: "RATE", title: "Rate" }
     ];
-    dealUtil.schedCols["CAPBAND"] = [
+    dealUtil.schedCols["CAP_BAND"] = [
         { mode: "Tier", field: "TIER_NBR", title: "Tier" },
         { mode: "Start", field: "STRT_CAP", title: "Start Cap" },
         { mode: "End", field: "END_CAP", title: "End Cap" },
@@ -880,7 +880,7 @@ dealUtil.setDataSource = function () {
 }
 
 dealUtil.setDealTypeColors = function () {
-    var aDealType = ["ECAP", "PROGRAM", "VOLTIER", "CAPBAND"];
+    var aDealType = ["ECAP", "PROGRAM", "VOL_TIER", "CAP_BAND"];
     for (var d = 0; d < aDealType.length; d++) {
         $(".k-grid-content-locked>table>tbody>tr>td>div>div.dealcolor" + aDealType[d]).each(function () {
             $(this).parent().parent().removeClass("readonly");

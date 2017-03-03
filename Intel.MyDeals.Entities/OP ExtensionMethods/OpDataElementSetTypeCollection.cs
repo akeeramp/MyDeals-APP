@@ -7,7 +7,7 @@ namespace Intel.Opaque.Data
     public class OpDataElementSetTypeCollection
     {
 
-        public OpDataElementSetTypeCollection(IEnumerable<OpDataElementSetTypeItem> collection, Dictionary<OpDataElementType, OpDataElementSetType> heirarchy)
+        public OpDataElementSetTypeCollection(IEnumerable<OpDataElementSetTypeItem> collection, Dictionary<OpDataElementType, List<OpDataElementSetType>> heirarchy)
         {
             Items = collection.ToList();
             Heirarchy = heirarchy;
@@ -15,7 +15,7 @@ namespace Intel.Opaque.Data
 
         public List<OpDataElementSetTypeItem> Items { get; set; }
 
-        public Dictionary<OpDataElementType, OpDataElementSetType> Heirarchy { get; set; }
+        public Dictionary<OpDataElementType, List<OpDataElementSetType>> Heirarchy { get; set; }
     }
 
 }

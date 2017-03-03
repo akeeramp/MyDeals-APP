@@ -234,11 +234,11 @@ namespace Intel.MyDeals.DataLibrary
                 }
             }
 
-            AddDcBasics(retSet, OpDataElementType.Contract);
-            AddDcBasics(retSet, OpDataElementType.PricingStrategy);
-            AddDcBasics(retSet, OpDataElementType.PricingTable);
-            AddDcBasics(retSet, OpDataElementType.PricingTableRow);
-            //// TODO: Add in other object levels template info here
+            // Add basic Data Collector info
+            foreach (OpDataElementType odt in Enum.GetValues(typeof(OpDataElementType)))
+            {
+                AddDcBasics(retSet, odt);
+            }
 
             return retSet;
         }

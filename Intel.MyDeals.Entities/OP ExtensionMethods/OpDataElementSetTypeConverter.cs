@@ -44,12 +44,12 @@ namespace Intel.MyDeals.Entities
 
         public static OpDataElementType GetParent(this OpDataElementSetType opDataElementSetType)
         {
-            return OpDataElementSetTypeRepository.OpDestCollection.Heirarchy.Where(o => o.Value == opDataElementSetType).Select(o => o.Key).FirstOrDefault();
+            return OpDataElementSetTypeRepository.OpDestCollection.Heirarchy.Where(o => o.Value.Contains(opDataElementSetType)).Select(o => o.Key).FirstOrDefault();
         }
 
         public static IEnumerable<OpDataElementSetType> GetChildrenSetTypes(this OpDataElementType opDataElementType)
         {
-            return OpDataElementSetTypeRepository.OpDestCollection.Heirarchy.Where(o => o.Key == opDataElementType).Select(o => o.Value);
+            return OpDataElementSetTypeRepository.OpDestCollection.Heirarchy.Where(o => o.Key == opDataElementType).Select(o => o.Value).FirstOrDefault();
         }
 
         public static OpDataElementSetType GetFirstChildSetType(this OpDataElementType opDataElementType)

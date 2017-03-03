@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 3/2/2017 11:59:14 AM
-On: MHTIPPIN-MOBL
+File Updated: 3/2/2017 2:30:08 PM
+On: PWECKENR-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
 using System;
@@ -1261,22 +1261,13 @@ namespace Intel.MyDeals.Entities {
 				new OpDataElementSetTypeItem {Id = 9, OpDeSetType = OpDataElementSetType.GENERAL, Alias = "GENERAL", Description = "General Basic Type", TemplateDealNumber = 0, TrackerDtLetter = "", Order = 9 },
 			},
 
-			new Dictionary<OpDataElementType, OpDataElementSetType>
+			new Dictionary<OpDataElementType, List<OpDataElementSetType>>
 			{
-				[OpDataElementType.Contract] = OpDataElementSetType.GENERAL,
-				[OpDataElementType.PricingStrategy] = OpDataElementSetType.GENERAL,
-				[OpDataElementType.PricingTable] = OpDataElementSetType.ECAP,
-				[OpDataElementType.PricingTable] = OpDataElementSetType.PROGRAM,
-				[OpDataElementType.PricingTable] = OpDataElementSetType.VOL_TIER,
-				[OpDataElementType.PricingTable] = OpDataElementSetType.CAP_BAND,
-				[OpDataElementType.PricingTableRow] = OpDataElementSetType.ECAP,
-				[OpDataElementType.PricingTableRow] = OpDataElementSetType.PROGRAM,
-				[OpDataElementType.PricingTableRow] = OpDataElementSetType.VOL_TIER,
-				[OpDataElementType.PricingTableRow] = OpDataElementSetType.CAP_BAND,
-				[OpDataElementType.WipDeals] = OpDataElementSetType.ECAP,
-				[OpDataElementType.WipDeals] = OpDataElementSetType.PROGRAM,
-				[OpDataElementType.WipDeals] = OpDataElementSetType.VOL_TIER,
-				[OpDataElementType.WipDeals] = OpDataElementSetType.CAP_BAND,
+				[OpDataElementType.Contract] = new List<OpDataElementSetType> { OpDataElementSetType.GENERAL },
+				[OpDataElementType.PricingStrategy] = new List<OpDataElementSetType> { OpDataElementSetType.GENERAL },
+				[OpDataElementType.PricingTable] = new List<OpDataElementSetType> { OpDataElementSetType.ECAP,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER,OpDataElementSetType.CAP_BAND },
+				[OpDataElementType.PricingTableRow] = new List<OpDataElementSetType> { OpDataElementSetType.ECAP,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER,OpDataElementSetType.CAP_BAND },
+				[OpDataElementType.WipDeals] = new List<OpDataElementSetType> { OpDataElementSetType.ECAP,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER,OpDataElementSetType.CAP_BAND },
 			}
 		);
 	}

@@ -195,7 +195,7 @@ namespace Intel.MyDeals.Entities
             Dictionary<string, bool> securityActionCache = null)
         {
             OpDataElementType dcType = (OpDataElementType)Enum.Parse(typeof(OpDataElementType), dc.DcType);
-            string stg = dc.GetDataElementValue("DEAL_STG_CD");
+            string stg = dc.GetDataElementValue(AttributeCodes.DEAL_STG_CD);
             if (excludeList == null) excludeList = new string[] { };
 
             // For each element, apply metadata rules

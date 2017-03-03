@@ -12,8 +12,12 @@ namespace Intel.MyDeals.Entities.UI_Templates
             // Ensure we clean this out before assigning values
             uiTemplates.ModelTemplates = new Dictionary<string, Dictionary<string, UiModelTemplate>>();
 
-            foreach (OpDataElementType opDataElementType in Enum.GetValues(typeof(OpDataElementType))) {
-                foreach (OpDataElementSetType opDataElementSetType in opDataElementType.GetChildrenSetTypes())
+            foreach (OpDataElementType opDataElementType in Enum.GetValues(typeof(OpDataElementType)))
+            {
+                var data  = opDataElementType.GetChildrenSetTypes();
+                if (data == null) continue;
+
+                foreach (OpDataElementSetType opDataElementSetType in data)
                 {
                     uiTemplates.BuildUiModelTemplate(opDataElementType, opDataElementSetType, items);
                 }
@@ -114,7 +118,10 @@ namespace Intel.MyDeals.Entities.UI_Templates
 
             foreach (OpDataElementType opDataElementType in Enum.GetValues(typeof(OpDataElementType)))
             {
-                foreach (OpDataElementSetType opDataElementSetType in opDataElementType.GetChildrenSetTypes())
+                var data = opDataElementType.GetChildrenSetTypes();
+                if (data == null) continue;
+
+                foreach (OpDataElementSetType opDataElementSetType in data)
                 {
                     uiTemplates.BuildUiObjectTemplate(opDataElementType, opDataElementSetType, templates);
                 }
@@ -160,31 +167,31 @@ namespace Intel.MyDeals.Entities.UI_Templates
 
             if (opDataElementType == OpDataElementType.Contract)
             {
-                template["OBJ_SET_TYPE_CD"] = "CONTRACT";
+                template[AttributeCodes.OBJ_SET_TYPE_CD] = OpDataElementType.Contract.ToString();
                 template["_behaviors"]["isRequired"] = new Dictionary<string, dynamic>
                 {
-                    ["TITLE"] = true,
-                    ["CUST_MBR_SID"] = true,
-                    ["START_DT"] = true,
-                    ["END_DT"] = true
+                    [AttributeCodes.TITLE] = true,
+                    [AttributeCodes.CUST_MBR_SID] = true,
+                    [AttributeCodes.START_DT] = true,
+                    [AttributeCodes.END_DT] = true
                 };
             }
 
             if (opDataElementType == OpDataElementType.PricingStrategy)
             {
-                template["OBJ_SET_TYPE_CD"] = "PRICING STRATEGY";
+                template[AttributeCodes.OBJ_SET_TYPE_CD] = OpDataElementType.PricingStrategy.ToString();
                 template["_behaviors"]["isRequired"] = new Dictionary<string, dynamic>
                 {
-                    ["TITLE"] = true
+                    [AttributeCodes.TITLE] = true
                 };
             }
 
             if (opDataElementType == OpDataElementType.PricingTable)
             {
-                template["OBJ_SET_TYPE_CD"] = "PRICING TABLE";
+                template[AttributeCodes.OBJ_SET_TYPE_CD] = OpDataElementType.PricingTable.ToString();
                 template["_behaviors"]["isRequired"] = new Dictionary<string, dynamic>
                 {
-                    ["TITLE"] = true
+                    [AttributeCodes.TITLE] = true
                 };
             }
 
@@ -196,7 +203,10 @@ namespace Intel.MyDeals.Entities.UI_Templates
         {
             foreach (OpDataElementType opDataElementType in Enum.GetValues(typeof(OpDataElementType)))
             {
-                foreach (OpDataElementSetType opDataElementSetType in opDataElementType.GetChildrenSetTypes())
+                var data = opDataElementType.GetChildrenSetTypes();
+                if (data == null) continue;
+
+                foreach (OpDataElementSetType opDataElementSetType in data)
                 {
                     uiTemplates.BuildExtrasTemplate(opDataElementType, opDataElementSetType, items);
                 }
@@ -238,7 +248,10 @@ namespace Intel.MyDeals.Entities.UI_Templates
         {
             foreach (OpDataElementType opDataElementType in Enum.GetValues(typeof(OpDataElementType)))
             {
-                foreach (OpDataElementSetType opDataElementSetType in opDataElementType.GetChildrenSetTypes())
+                var data = opDataElementType.GetChildrenSetTypes();
+                if (data == null) continue;
+
+                foreach (OpDataElementSetType opDataElementSetType in data)
                 {
                     uiTemplates.BuildDefaultsTemplate(opDataElementType, opDataElementSetType, items);
                 }
