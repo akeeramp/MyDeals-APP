@@ -9,13 +9,6 @@
     function DropdownsController(dropdownsService, $scope, logger, confirmationModal, gridConstants) {
         var vm = this;
 
-        // Functions
-        vm.onChange = onChange;
-
-        // Variables
-        vm.selectedItem = null;
-        vm.isButtonDisabled = true;
-
         vm.dealtypeDataSource = [];
         vm.dealtypes = [];
         vm.onlyAllDeal = [];
@@ -176,7 +169,6 @@
                 refresh: true,
                 pageSizes: gridConstants.pageSizes,
             },
-            change: vm.onChange,
             toolbar: gridUtils.inLineClearAllFiltersToolbar(),
             columns: [
                 {
@@ -271,17 +263,6 @@
             }
         }
 
-        // Gets and sets the selected row
-        function onChange() {
-            vm.selectedItem = $scope.dropdownGrid.select();
-            if (vm.selectedItem.length == 0) {
-                vm.isButtonDisabled = true;
-            } else {
-                vm.isButtonDisabled = false;
-            }
-            $scope.$apply();
-        }
-
         function onDealTypeChange(e) {
             //TODO: notify user that their choice may set other dropdowns to inactive if there is overlap - should we just refresh the entire grid?
             //Note: why is this kendo select event being called twice? once on click and once on deselect
@@ -306,10 +287,6 @@
             } else {
                 vm.selectedInheritanceGroup = "";
             }
-        }
-
-        function clearFilters() {
-            $scope.dropdownGrid.dataSource.filter([]);
         }
 
         function cancelChanges() {
