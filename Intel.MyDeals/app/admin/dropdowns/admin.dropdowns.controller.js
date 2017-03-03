@@ -10,9 +10,6 @@
         var vm = this;
 
         // Functions
-        vm.addItem = addItem;
-        vm.updateItem = updateItem;
-        vm.deleteItem = deleteItem;
         vm.onChange = onChange;
 
         // Variables
@@ -23,6 +20,8 @@
         vm.dealtypes = [];
         vm.onlyAllDeal = [];
         vm.groupsDataSource = [];
+        vm.nonCorpInheritableValues = [];
+        vm.selectedInheritanceGroup = "";
 
         vm.dataSource = new kendo.data.DataSource({
             type: "json",
@@ -30,6 +29,7 @@
                 read: function (e) {
                     dropdownsService.getBasicDropdowns()
                         .then(function (response) {
+                            setNonCorpInheritableValues(response.data);
                             e.success(response.data);
                         }, function (response) {
                             logger.error("Unable to get Dropdowns.", response, response.statusText);
@@ -52,11 +52,16 @@
                         headerText: 'Delete Confirmation',
                         bodyText: 'Are you sure you would like to Delete this Dropdown Item?'
                     };
-
                     confirmationModal.showModal({}, modalOptions).then(function (result) {
                         dropdownsService.deleteBasicDropdowns(e.data.models[0].ATRB_LKUP_SID)
                         .then(function (response) {
                             e.success(response.data);
+                            if (e.data.models[0].ATRB_CD == "MRKT_SEG_COMBINED") {
+                                var indx = vm.nonCorpInheritableValues.indexOf(e.data.models[0].DROP_DOWN);
+                                if (indx > -1) {
+                                    vm.nonCorpInheritableValues.splice(indx, 1);
+                                }
+                            }
                             logger.success("Dropdown Deleted.");
                         }, function (response) {
                             logger.error("Unable to delete Dropdown.", response, response.statusText);
@@ -71,6 +76,10 @@
                     dropdownsService.insertBasicDropdowns(e.data.models[0])
                         .then(function (response) {
                             e.success(response.data);
+                            vm.selectedInheritanceGroup = "";
+                            if (response.data.ATRB_CD == "MRKT_SEG_COMBINED") {
+                                vm.nonCorpInheritableValues.push(response.data.DROP_DOWN);
+                            }
                             logger.success("New Dropdown Added.");
                         }, function (response) {
                             logger.error("Unable to insert Dropdown.", response, response.statusText);
@@ -90,7 +99,20 @@
                         ATRB_SID: { validation: { required: true } },
                         ATRB_CD: { validation: { required: true } },
                         ORD: { validation: { required: true } },
-                        DROP_DOWN: { validation: { required: true } },
+                        DROP_DOWN: {
+                            validation: {
+                                required: true,
+                                inheritancevalidation: function (input) {
+                                    if (input.is("[name='DROP_DOWN']") && input.val() != "") {
+                                        input.attr("data-inheritancevalidation-msg", "MRKT_SEG_NON_CORP values must match an existing MRKT_SEG_COMBINED value.");
+                                        if (vm.selectedInheritanceGroup == "MRKT_SEG_NON_CORP") {
+                                            return (vm.nonCorpInheritableValues.indexOf(input.val()) > -1);
+                                        }
+                                    }
+                                    return true;
+                                }
+                            }
+                        },
                         ACTV_IND: { type: "boolean" },
                         DROP_DOWN_DB: { validation: { required: true } }
                     }
@@ -103,7 +125,7 @@
                         .then(function (response) {
                             vm.dealtypeDataSource = response.data;
                             vm.dealtypes = response.data;
-                            vm.onlyAllDeal = [response.data[0]] //this assumes that "All Deals" will always be at the top of the "All Deal Types" category
+                            vm.onlyAllDeal = [response.data[0]] //Note: this assumes that "All Deals" will always be at the top of the "All Deal Types" category
                         }, function (response) {
                             logger.error("Unable to get Deal Type Dropdowns.", response, response.statusText);
                         });
@@ -122,10 +144,14 @@
 
         vm.gridOptions = {
             dataSource: vm.dataSource,
-            filterable: gridConstants.filterable,
+            filterable: true,
+            scrollable: true,
             sortable: true,
-            selectable: true,
+            navigatable: true,
             resizable: true,
+            reorderable: true,
+            columnMenu: true,
+            selectable: true,
             groupable: true,
             editable: { mode: "inline", confirmation: false },
             edit: function (e) {
@@ -135,6 +161,11 @@
                     $('input[name=DROP_DOWN]').parent().html(e.model.DROP_DOWN);
                     $('input[name=OBJ_SET_TYPE_SID]').parent().html(e.model.OBJ_SET_TYPE_CD);
                     $('input[name=ATRB_SID]').parent().html(e.model.ATRB_CD);
+                } else {
+                    $("#OBJ_SET_TYPE_SID").data("kendoDropDownList").select(0);
+                    $("#OBJ_SET_TYPE_SID").data("kendoDropDownList").trigger("change");
+                    $("#ATRB_SID").data("kendoDropDownList").select(0);
+                    $("#ATRB_SID").data("kendoDropDownList").trigger("change");
                 }
             },
             destroy: function (e) {
@@ -157,17 +188,16 @@
                     width: "8%"
                 },
                 {
-                    field: "ATRB_LKUP_SID",
-                    title: "ID",
+                    field: "ACTV_IND",
+                    title: "Is Active",
                     width: "10%",
+                    filterable: { multi: true, search: false },
+                    template: gridUtils.boolViewer('ACTV_IND'),
+                    editor: gridUtils.boolEditor,
+                    attributes: { style: "text-align: center;" }
                 },
-                //{
-                //    field: "OBJ_SET_TYPE_SID",
-                //    title: "Deal Type SID",
-                //    hidden: true,
-                //},
                 {
-                    field: "OBJ_SET_TYPE_SID", //OBJ_SET_TYPE_CD
+                    field: "OBJ_SET_TYPE_SID", //Deal Type
                     title: "Deal Type",
                     editor: function (container) { // use a dropdownlist as an editor
                         // create an input element with id and name set as the bound field (OBJ_SET_TYPE_SID)
@@ -183,15 +213,11 @@
                             select: onDealTypeChange
                         }).appendTo(container);
                     },
-                    template: "#= OBJ_SET_TYPE_CD #"
+                    template: "#= OBJ_SET_TYPE_CD #",
+                    filterable: { ui: dealtypeFilter }
                 },
-                //{
-                //    field: "ATRB_SID",
-                //    title: "Dropdown Group SID",
-                //    hidden: true,
-                //},
                 {
-                    field: "ATRB_SID", //ATRB_CD
+                    field: "ATRB_SID", //Dropdown Group
                     title: "Dropdown",
                     editor: function (container) { // use a dropdownlist as an editor
                         // create an input element with id and name set as the bound field (ATRB_SID)
@@ -207,20 +233,42 @@
                             select: onGroupChange
                         }).appendTo(container);
                     },
-                    template: "#= ATRB_CD #"
+                    template: "#= ATRB_CD #",
+                    filterable: { ui: groupFilter }
                 },
                 {
                     field: "DROP_DOWN",
-                    title: "Value"
-                },
-                {
-                    field: "ACTV_IND",
-                    title: "Is Active",
-                    width: "10%",
-                    template: gridUtils.boolViewer('ACTV_IND'),
-                    editor: gridUtils.boolEditor,
-                    attributes: { style: "text-align: center;" }
+                    title: "Value",
+                    filterable: { multi: true, search: true }
+                    //TODO: if user selects noncorp, make this a dropdownlist? allowable values are pre-set anyways... can improve user quality of life
                 }]
+        }
+
+        function dealtypeFilter(element) {
+            element.kendoComboBox({
+                dataTextField: "dropdownName",
+                dataValueField: "dropdownID",
+                dataSource: vm.dealtypeDataSource,
+                optionLabel: "-- Select Value --"
+            });
+        }
+
+        function groupFilter(element) {
+            element.kendoComboBox({
+                dataTextField: "dropdownName",
+                dataValueField: "dropdownID",
+                dataSource: vm.groupsDataSource,
+                optionLabel: "-- Select Value --"
+            });
+        }
+
+        function setNonCorpInheritableValues(data) {
+            //list of basic dropdown objects
+            for (var i = 0; i <= data.length; i++) {
+                if (data[i] != null && data[i].ATRB_CD == "MRKT_SEG_COMBINED") {
+                    vm.nonCorpInheritableValues.push(data[i].DROP_DOWN);
+                }
+            }
         }
 
         // Gets and sets the selected row
@@ -235,31 +283,35 @@
         }
 
         function onDealTypeChange(e) {
-            //TODO: notify user that if they select "All Deals", it may set other dropdowns to inactive? need to clarify with Doug. would also need to potentially refresh the entire grid?
-            //TODO: why is this kendo select event being called twice? change event only happens once. 2nd select occurs when deselecting...
+            //TODO: notify user that their choice may set other dropdowns to inactive if there is overlap - should we just refresh the entire grid?
+            //Note: why is this kendo select event being called twice? once on click and once on deselect
         }
 
         function onGroupChange(e) {
-            //TODO: if user selects a group marked as subsegment, deal type dropdown must be set to "All Deals"
-            //TODO: why is this kendo select event being called twice? change event only happens once. 2nd select occurs when deselecting...
-            //TODO: logic below works except the dealtype dropdownlist does not refresh as I initially expected.  need to figure out why
-            if (e.dataItem.isSubSegment == 0) {
-                vm.dealtypeDataSource = vm.dealtypes;
+            //Note: why is this kendo select event being called twice? once on click and once on deselect
+            if (e.dataItem.allDealFlag == 0) {
+                $("#OBJ_SET_TYPE_SID").data("kendoDropDownList").setDataSource(vm.dealtypes);
+                $("#OBJ_SET_TYPE_SID").data("kendoDropDownList").refresh();
             } else {
-                vm.dealtypeDataSource = vm.onlyAllDeal;
+                //if true, deal type only has the option of being "All Deals"
+                $("#OBJ_SET_TYPE_SID").data("kendoDropDownList").setDataSource(vm.onlyAllDeal);
+                $("#OBJ_SET_TYPE_SID").data("kendoDropDownList").refresh();
+                $("#OBJ_SET_TYPE_SID").data("kendoDropDownList").text(vm.onlyAllDeal[0].dropdownName);
+                $("#OBJ_SET_TYPE_SID").data("kendoDropDownList").value(vm.onlyAllDeal[0].dropdownId);
+                $("#OBJ_SET_TYPE_SID").data("kendoDropDownList").trigger("change");
+            }
+
+            if (e.dataItem.parntAtrbCd != null && e.dataItem.parntAtrbCd != "") {
+                vm.selectedInheritanceGroup = e.dataItem.dropdownName;
+            } else {
+                vm.selectedInheritanceGroup = "";
             }
         }
 
-        function addItem() {
-            vm.isButtonDisabled = true;
-            $scope.dropdownGrid.addRow();
+        function clearFilters() {
+            $scope.dropdownGrid.dataSource.filter([]);
         }
-        function updateItem() {
-            $scope.dropdownGrid.editRow(vm.selectedItem);
-        }
-        function deleteItem() {
-            $scope.dropdownGrid.removeRow(vm.selectedItem);
-        }
+
         function cancelChanges() {
             $scope.dropdownGrid.cancelChanges();
         }
