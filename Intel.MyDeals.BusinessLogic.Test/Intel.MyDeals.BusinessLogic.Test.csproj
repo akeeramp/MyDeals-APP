@@ -101,6 +101,7 @@
   <ItemGroup>
     <Compile Include="CustomerCalendarLibTests.cs" />
     <Compile Include="LoggingLibTest.cs" />
+    <Compile Include="DropdownLibTest.cs" />
     <Compile Include="ProductCategoriesLibTest.cs" />
     <Compile Include="ProductsLibTest.cs" />
     <Compile Include="GeosLibTest.cs" />
