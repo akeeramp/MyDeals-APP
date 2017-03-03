@@ -106,23 +106,29 @@
                         { name: "destroy", template: "<a class='k-grid-delete' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-close'></span></a>" }
                     ],
                     title: " ",
-                    width: "6%"
+                    width: "6%",
+                    attributes: { style: "text-align: center;" }
                 },
             {
                 field: "ACTN_SID",
                 title: "ID",
+                hidden: true
             }, {
                 field: "ACTN_CD",
-                title: "Name"
+                title: "Name",
+                filterable: { multi: true, search: true }
             }, {
                 field: "ACTN_DESC",
-                title: "Description"
+                title: "Description",
+                filterable: { multi: true, search: true }
             }, {
                 field: "ACTN_CAT_CD",
-                title: "Category"
+                title: "Category",
+                filterable: { multi: true, search: true }
             }, {
                 field: "WFSTG_ACTN_CD",
-                title: "Stage"
+                title: "Stage",
+                filterable: { multi: true, search: true }
             }]
         }
 

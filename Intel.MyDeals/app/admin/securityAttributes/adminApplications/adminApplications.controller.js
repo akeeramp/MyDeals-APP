@@ -109,26 +109,32 @@
                         { name: "destroy", template: "<a class='k-grid-delete' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-close'></span></a>" }
                     ],
                     title: " ",
-                    width: "6%"
+                    width: "6%",
+                    attributes: { style: "text-align: center;" }
                 },
             {
                 field: "APP_SID",
                 title: "ID",
-            }, {
-                field: "APP_CD",
-                title: "Name"
-            }, {
-                field: "APP_DESC",
-                title: "Description"
-            }, {
-                field: "APP_SUITE",
-                title: "Suite"
+                hidden: true
             }, {
                 field: "ACTV_IND",
                 title: "Active",
+                width: 120,
                 template: gridUtils.boolViewer('ACTV_IND'),
                 editor: gridUtils.boolEditor,
                 attributes: { style: "text-align: center;" }
+            }, {
+                field: "APP_CD",
+                title: "Name",
+                filterable: { multi: true, search: true }
+            }, {
+                field: "APP_DESC",
+                title: "Description",
+                filterable: { multi: true, search: true }
+            }, {
+                field: "APP_SUITE",
+                title: "Suite",
+                filterable: { multi: true, search: true }
             }]
         }
 

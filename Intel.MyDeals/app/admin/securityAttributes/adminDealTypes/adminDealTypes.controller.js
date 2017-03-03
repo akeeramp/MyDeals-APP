@@ -110,35 +110,44 @@
                         { name: "destroy", template: "<a class='k-grid-delete' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-close'></span></a>" }
                     ],
                     title: " ",
-                    width: "6%"
+                    width: "6%",
+                    attributes: { style: "text-align: center;" }
                 },
             {
                 field: "OBJ_SET_TYPE_SID",
-                title: "ID"
-            }, {
-                field: "OBJ_ATRB_SID",
-                title: "Obj ATRB ID"
-            }, {
-                field: "OBJ_SET_TYPE_CD",
-                title: "Name"
-            }, {
-                field: "OBJ_SET_TYPE_DESC",
-                title: "Description"
-            }, {
-                field: "TEMPLT_DEAL_SID",
-                title: "Template Deal ID"
-            }, {
-                field: "TEMPLT_DEAL_NBR",
-                title: "Template Deal Number"
-            }, {
-                field: "TRKR_NBR_DT_LTR",
-                title: "TRKR_NBR_DT_LTR"
+                title: "ID",
+                hidden: true
             }, {
                 field: "ACTV_IND",
                 title: "Active",
+                width: 120,
                 template: gridUtils.boolViewer('ACTV_IND'),
                 editor: gridUtils.boolEditor,
                 attributes: { style: "text-align: center;" }
+            }, {
+                field: "OBJ_ATRB_SID",
+                title: "Obj ATRB ID",
+                filterable: { multi: true, search: true }
+            }, {
+                field: "OBJ_SET_TYPE_CD",
+                title: "Name",
+                filterable: { multi: true, search: true }
+            }, {
+                field: "OBJ_SET_TYPE_DESC",
+                title: "Description",
+                filterable: { multi: true, search: true }
+            }, {
+                field: "TEMPLT_DEAL_SID",
+                title: "Template Deal ID",
+                filterable: { multi: true, search: true }
+            }, {
+                field: "TEMPLT_DEAL_NBR",
+                title: "Template Deal Number",
+                filterable: { multi: true, search: true }
+            }, {
+                field: "TRKR_NBR_DT_LTR",
+                title: "TRKR_NBR_DT_LTR",
+                filterable: { multi: true, search: true }
             }]
         }
 

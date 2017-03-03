@@ -109,38 +109,47 @@
                         { name: "destroy", template: "<a class='k-grid-delete' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-close'></span></a>" }
                     ],
                     title: " ",
-                    width: "6%"
+                    width: "6%",
+                    attributes: { style: "text-align: center;" }
                 },
             {
                 field: "ROLE_TYPE_SID",
                 title: "ID",
+                hidden: true
             }, {
-                field: "APP_SID",
-                title: "Application ID"
-            }, {
-                field: "ROLE_TYPE_CD",
-                title: "Name"
-            }, {
-                field: "ROLE_TYPE_DSPLY_CD",
-                title: "Display Name"
-            }, {
-                field: "ROLE_TYPE_DESC",
-                title: "Description"
-            }, {
-                field: "ROLE_TIER_CD",
-                title: "Tier"
+                field: "ACTV_IND",
+                title: "Active",
+                width: 120,
+                template: gridUtils.boolViewer('ACTV_IND'),
+                editor: gridUtils.boolEditor,
+                attributes: { style: "text-align: center;" }
             }, {
                 field: "IS_SNGL_SLCT",
                 title: "Single Select",
+                width: 150,
                 template: gridUtils.boolViewer('IS_SNGL_SLCT'),
                 editor: gridUtils.boolEditor,
                 attributes: { style: "text-align: center;" }
             }, {
-                field: "ACTV_IND",
-                title: "Active",
-                template: gridUtils.boolViewer('ACTV_IND'),
-                editor: gridUtils.boolEditor,
-                attributes: { style: "text-align: center;" }
+                field: "APP_SID",
+                title: "Application ID",
+                filterable: { multi: true, search: true }
+            }, {
+                field: "ROLE_TYPE_CD",
+                title: "Name",
+                filterable: { multi: true, search: true }
+            }, {
+                field: "ROLE_TYPE_DSPLY_CD",
+                title: "Display Name",
+                filterable: { multi: true, search: true }
+            }, {
+                field: "ROLE_TYPE_DESC",
+                title: "Description",
+                filterable: { multi: true, search: true }
+            }, {
+                field: "ROLE_TIER_CD",
+                title: "Tier",
+                filterable: { multi: true, search: true }
             }]
         }
 

@@ -82,7 +82,6 @@
             sortable: true,
             selectable: true,
             resizable: true,
-            groupable: true,
             columnMenu: true,
             toolbar: gridUtils.inLineClearAllFiltersToolbar(),
             editable: { mode: "inline", confirmation: false },
@@ -112,10 +111,10 @@
                     title: " ",
                     width: "7%"
                 },
-              { field: "CNST_SID", title: "Id", width: "5%" },
-              { field: "CNST_NM", title: "Name", width: "15%" },
-              { field: "CNST_DESC", title: "Description" },
-              { field: "CNST_VAL_TXT", title: "Value" },
+              { field: "CNST_SID", title: "Id", width: "5%", hidden: true },
+              { field: "CNST_NM", title: "Name", width: "15%", filterable: { multi: true, search: true } },
+              { field: "CNST_DESC", title: "Description", filterable: { multi: true, search: true } },
+              { field: "CNST_VAL_TXT", title: "Value", filterable: { multi: true, search: true } },
               {
                   field: "UI_UPD_FLG",
                   title: "UI Updatable",
