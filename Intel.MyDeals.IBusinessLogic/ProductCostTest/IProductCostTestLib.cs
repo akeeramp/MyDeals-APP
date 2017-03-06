@@ -10,5 +10,11 @@ namespace Intel.MyDeals.IBusinessLogic
         List<ProductTypeMappings> GetPCTProductTypeMappings();
 
         List<ProductAttributeValues> GetProductAttributeValues(int verticalId);
+
+        List<ProductCostTestRules> CreatePCTRule(ProductCostTestRules pctRules);
+
+        List<ProductCostTestRules> UpdatePCTRule(ProductCostTestRules pctRules);
+
+        List<ProductCostTestRules> DeletePCTRule(ProductCostTestRules pctRules);
     }
 }

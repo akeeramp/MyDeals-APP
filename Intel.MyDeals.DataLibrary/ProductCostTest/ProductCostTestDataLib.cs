@@ -27,8 +27,10 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_COST_TEST_TYPE = DB.GetReaderOrdinal(rdr, "COST_TEST_TYPE");
                     int IDX_CRITERIA = DB.GetReaderOrdinal(rdr, "CRITERIA");
                     int IDX_DEAL_PRD_TYPE = DB.GetReaderOrdinal(rdr, "DEAL_PRD_TYPE");
+                    int IDX_DEAL_PRD_TYPE_SID = DB.GetReaderOrdinal(rdr, "DEAL_PRD_TYPE_SID");
                     int IDX_JSON_TXT = DB.GetReaderOrdinal(rdr, "JSON_TXT");
                     int IDX_PRD_CAT_NM = DB.GetReaderOrdinal(rdr, "PRD_CAT_NM");
+                    int IDX_PRD_CAT_NM_SID = DB.GetReaderOrdinal(rdr, "PRD_CAT_NM_SID");
 
                     while (rdr.Read())
                     {
@@ -38,8 +40,66 @@ namespace Intel.MyDeals.DataLibrary
                             COST_TEST_TYPE = (IDX_COST_TEST_TYPE < 0 || rdr.IsDBNull(IDX_COST_TEST_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_COST_TEST_TYPE),
                             CRITERIA = (IDX_CRITERIA < 0 || rdr.IsDBNull(IDX_CRITERIA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CRITERIA),
                             DEAL_PRD_TYPE = (IDX_DEAL_PRD_TYPE < 0 || rdr.IsDBNull(IDX_DEAL_PRD_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_PRD_TYPE),
+                            DEAL_PRD_TYPE_SID = (IDX_DEAL_PRD_TYPE_SID < 0 || rdr.IsDBNull(IDX_DEAL_PRD_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_PRD_TYPE_SID),
                             JSON_TXT = (IDX_JSON_TXT < 0 || rdr.IsDBNull(IDX_JSON_TXT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_JSON_TXT),
-                            PRD_CAT_NM = (IDX_PRD_CAT_NM < 0 || rdr.IsDBNull(IDX_PRD_CAT_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_CAT_NM)
+                            PRD_CAT_NM = (IDX_PRD_CAT_NM < 0 || rdr.IsDBNull(IDX_PRD_CAT_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_CAT_NM),
+                            PRD_CAT_NM_SID = (IDX_PRD_CAT_NM_SID < 0 || rdr.IsDBNull(IDX_PRD_CAT_NM_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRD_CAT_NM_SID)
+                        });
+                    } // while
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+            return ret;
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="mode"></param>
+        /// <param name="pctRules"></param>
+        /// <returns></returns>
+        public List<ProductCostTestRules> SetPCTRules(CrudModes mode, ProductCostTestRules pctRules)
+        {
+            var ret = new List<ProductCostTestRules>();
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_MYDL_SAVE_RULES_PCT
+                {
+                    emp_wwid = OpUserStack.MyOpUserToken.Usr.WWID,
+                    prd_type_sid = pctRules.DEAL_PRD_TYPE_SID,
+                    vertical_sid = pctRules.PRD_CAT_NM_SID,
+                    cost_test = pctRules.COST_TEST_TYPE,
+                    criteria = pctRules.CRITERIA,
+                    condition = pctRules.CONDITION,
+                    json_txt = pctRules.JSON_TXT,
+                    mode = mode.ToString()
+                }))
+                {
+                    int IDX_CONDITION = DB.GetReaderOrdinal(rdr, "CONDITION");
+                    int IDX_COST_TEST_TYPE = DB.GetReaderOrdinal(rdr, "COST_TEST_TYPE");
+                    int IDX_CRITERIA = DB.GetReaderOrdinal(rdr, "CRITERIA");
+                    int IDX_DEAL_PRD_TYPE = DB.GetReaderOrdinal(rdr, "DEAL_PRD_TYPE");
+                    int IDX_DEAL_PRD_TYPE_SID = DB.GetReaderOrdinal(rdr, "DEAL_PRD_TYPE_SID");
+                    int IDX_JSON_TXT = DB.GetReaderOrdinal(rdr, "JSON_TXT");
+                    int IDX_PRD_CAT_NM = DB.GetReaderOrdinal(rdr, "PRD_CAT_NM");
+                    int IDX_PRD_CAT_NM_SID = DB.GetReaderOrdinal(rdr, "PRD_CAT_NM_SID");
+
+                    while (rdr.Read())
+                    {
+                        ret.Add(new ProductCostTestRules
+                        {
+                            CONDITION = (IDX_CONDITION < 0 || rdr.IsDBNull(IDX_CONDITION)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CONDITION),
+                            COST_TEST_TYPE = (IDX_COST_TEST_TYPE < 0 || rdr.IsDBNull(IDX_COST_TEST_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_COST_TEST_TYPE),
+                            CRITERIA = (IDX_CRITERIA < 0 || rdr.IsDBNull(IDX_CRITERIA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CRITERIA),
+                            DEAL_PRD_TYPE = (IDX_DEAL_PRD_TYPE < 0 || rdr.IsDBNull(IDX_DEAL_PRD_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_PRD_TYPE),
+                            DEAL_PRD_TYPE_SID = (IDX_DEAL_PRD_TYPE_SID < 0 || rdr.IsDBNull(IDX_DEAL_PRD_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_PRD_TYPE_SID),
+                            JSON_TXT = (IDX_JSON_TXT < 0 || rdr.IsDBNull(IDX_JSON_TXT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_JSON_TXT),
+                            PRD_CAT_NM = (IDX_PRD_CAT_NM < 0 || rdr.IsDBNull(IDX_PRD_CAT_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_CAT_NM),
+                            PRD_CAT_NM_SID = (IDX_PRD_CAT_NM_SID < 0 || rdr.IsDBNull(IDX_PRD_CAT_NM_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRD_CAT_NM_SID)
                         });
                     } // while
                 }

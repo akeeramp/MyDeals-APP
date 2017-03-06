@@ -1,47 +1,47 @@
-﻿<div class="alert alert-warning alert-group">
-    <div class="form-inline">
-        <select ng-options="o.name as o.name for o in operators" ng-model="group.operator" class="form-control input-sm"></select>
-        <button style="margin-left: 5px" ng-click="addCondition()" class="btn btn-sm btn-default"><span class="intelicon-plus-outlined"></span> Add Condition</button>
-        <button style="margin-left: 5px" ng-click="addGroup()" class="btn btn-sm btn-default"><span class="intelicon-plus-outlined"></span> Add Group</button>
-        <button style="margin-left: 5px" ng-click="removeGroup()" class="btn btn-sm btn-danger"><span class="intelicon-minus-outlined"></span> Remove Group</button>
-    </div>
-    <div class="group-conditions">
-        <div ng-repeat="rule in group.rules | orderBy:'index'" class="condition">
-            <div ng-switch="rule.hasOwnProperty('group')">
-                <div ng-switch-when="true">
-                    <pct-query-builder group="rule.group" operators="operators" left-values="leftValues">
-                    </pct-query-builder>
-                </div>
-                <div ng-switch-default="ng-switch-default">
-                    <div class="form-inline">
-                        <div class="col-md-2" style="margin-left: 5px">
-                            <ui-select ng-model="rule.criteria" theme="select2" ng-change="resetRightValues(rule)" style="width:100%" title="Choose a attribute">
-                                <ui-select-match placeholder="Select a attribute">{{$select.selected.DISPLAYNAME}}</ui-select-match>
-                                <ui-select-choices repeat="t.ATRB_COL_NM as t in leftValues | unique:'ATRB_COL_NM' | orderBy:'ATRB_COL_NM' | filter: $select.search">
-                                    <div ng-bind-html="t.DISPLAYNAME | highlight: $select.search"></div>
-                                </ui-select-choices>
-                            </ui-select>
-                        </div>
-                        <div ng-switch="rule.condition == 'LIKE'">
-                            <div class="col-md-1">
-                                <select style="margin-left: 5px" ng-options="c.name as c.name for c in conditions" ng-model="rule.condition" class="form-control input-sm"></select>
-                            </div>
-                            <div class="col-md-2" ng-switch-when="true">
-                                <input ng-model="rule.data" placeholder="Enter the values" class="form-control input-sm" />
-                            </div>
-                            <div class="col-md-2"  ng-switch-default="ng-switch-default">
-                                <ui-select ng-model="rule.data" theme="select2" style="width:100%" title="Choose a value">
-                                    <ui-select-match placeholder="Select a value">{{$select.selected.VALUE}}</ui-select-match>
-                                    <ui-select-choices repeat="t.VALUE as t in leftValues | filter: rule.criteria | orderBy:'VALUE'| limitTo: 100 | filter: $select.search">
-                                        <div ng-bind-html="t.VALUE | highlight: $select.search"></div>
+﻿<div class="alert alert-info alert-group">
+    <form name="qb.form" novalidate>
+        <div class="form-inline">
+            <select ng-options="o.name as o.name for o in operators" ng-model="group.operator" class="form-control input-sm"></select>
+            <button style="margin-left: 5px" ng-click="addCondition()" class="btn btn-sm btn-default"><span class="intelicon-plus-outlined"></span> Add Condition</button>
+            <button style="margin-left: 5px" ng-click="addGroup()" class="btn btn-sm btn-default"><span class="intelicon-plus-outlined"></span> Add Group</button>
+            <button style="margin-left: 5px" ng-click="removeGroup()" class="btn btn-sm btn-danger"><span class="intelicon-minus-outlined"></span> Remove Group</button>
+        </div>
+        <div class="group-conditions">
+            <div ng-repeat="rule in group.rules | orderBy:'index'" class="condition">
+                <div ng-switch="rule.hasOwnProperty('group')">
+                    <div ng-switch-when="true">
+                        <pct-query-builder group="rule.group" operators="operators" left-values="leftValues" form="form">
+                        </pct-query-builder>
+                    </div>
+                    <div ng-switch-default="ng-switch-default">
+                        <div class="form-inline">
+                            <div>
+                                <ui-select name="attribute" ng-model="rule.criteria" ng-required="true" theme="select2" class="qb-field-core" ng-change="resetRightValues(rule)" title="Choose a attribute">
+                                    <ui-select-match placeholder="Select a attribute">{{$select.selected.DISPLAYNAME}}</ui-select-match>
+                                    <ui-select-choices repeat="t.ATRB_COL_NM as t in leftValues | unique:'ATRB_COL_NM' | orderBy:'ATRB_COL_NM' | filter: $select.search">
+                                        <div ng-bind-html="t.DISPLAYNAME | highlight: $select.search"></div>
                                     </ui-select-choices>
                                 </ui-select>
+                                <select ng-options="c.name as c.name for c in conditions" ng-model="rule.condition" class="qb-field form-control input-sm"></select>
+                                <span ng-switch="rule.condition == 'LIKE'">
+                                    <span ng-switch-when="true">
+                                        <input name="value" type="text" ng-model="rule.data" ng-required="true" placeholder="Enter the values" class="qb-field-core form-control input-sm" />
+                                    </span>
+                                    <span ng-switch-default="ng-switch-default">
+                                        <ui-select name="value" ng-model="rule.data" ng-required="true" class="qb-field-core" theme="select2" title="Choose a value">
+                                            <ui-select-match placeholder="Select a value">{{$select.selected.VALUE}}</ui-select-match>
+                                            <ui-select-choices repeat="t.VALUE as t in leftValues | filter: rule.criteria | orderBy:'VALUE'| limitTo: 100 | filter: $select.search">
+                                                <span ng-bind-html="t.VALUE | highlight: $select.search"></span>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </span>
+                                </span>
+                                <button ng-click="removeCondition($index)" class="btn btn-sm btn-danger"><span class="intelicon-minus-outlined"></span></button>
                             </div>
                         </div>
-                        <button style="margin-left: 5px" ng-click="removeCondition($index)" class="btn btn-sm btn-danger"><span class="intelicon-minus-outlined"></span></button>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </form>
 </div>

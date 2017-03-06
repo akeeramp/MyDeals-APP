@@ -13,7 +13,8 @@
             scope: {
                 group: '=',
                 leftValues: '=',
-                rightValue: '='
+                rightValue: '=',
+                form: '='
             },
             templateUrl: '/app/admin/iCostProducts/directive/pct.queryBuilder.directive.html',
             compile: function (element, attrs) {
@@ -25,6 +26,8 @@
                         { name: 'AND' },
                         { name: 'OR' }
                     ];
+
+                    scope.qb = {};
 
                     // TODO: move this to a constant
                     scope.conditions = [
@@ -62,6 +65,12 @@
                         function (newValue, oldValue, el) {
                             if (oldValue === newValue) return;
                             rule.data = '';
+                        }, true
+                    );
+
+                    scope.$watch('qb.form.$invalid',
+                        function (newValue, oldValue, el) {
+                            scope.form.isValid = !newValue;
                         }, true
                     );
 

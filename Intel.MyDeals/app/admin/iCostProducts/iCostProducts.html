@@ -1,15 +1,14 @@
 ﻿<div class="form-inline">
-    <h2>iCost Products</h2>
+    <h2 class="col-md-12">iCost Products</h2>
+    <div class="col-md-12">
+        <div class="alert alert-danger" ng-if="vm.validationMessage != ''">
+            {{vm.validationMessage}}
+        </div>
+    </div>
     <div ui-view="addNewRules" />
     <div ng-hide="vm.manageRules">
-        <div class="col-md-12">
-            <button class="btn btn-primary small k-grid-add" ng-click="vm.addItem()">
-                <span class="intelicon-plus-outlined"></span> Add New Rule
-            </button>
-            <button class="btn btn-default small k-custom-edit k-grid-customEdit" ng-disabled="vm.isButtonDisabled" ng-click="vm.updateItem()">
-                <span class="intelicon-compose"></span>Edit
-            </button>
-        </div>
+        <div ng-include="'app/layout/gridToolbar.html'" />
+        <br />
         <div class="col-md-12" style="padding-top: 20px;">
             <div kendo-grid="rulesGrid" class="table table-bordered table-striped table-intel" expand-k-grid options="vm.gridOptions"></div>
         </div>

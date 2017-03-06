@@ -15,7 +15,9 @@
             getProductCostTestRules: getProductCostTestRules,
             getProductTypeMappings: getProductTypeMappings,
             getProductAttributeValues: getProductAttributeValues,
-            savePCTRules: savePCTRules
+            createPCTRules: createPCTRules,
+            updatePCTRule: updatePCTRule,
+            deletePCTRule: deletePCTRule
         }
 
         function getProductCostTestRules() {
@@ -30,8 +32,16 @@
             return dataService.get(apiBaseUrl + 'GetProductAttributeValues/' + verticalId);
         }
 
-        function savePCTRules(dto) {
-            return dataService.post(apiBaseUrl + 'SavePCTRules', dto);
+        function createPCTRules(dto) {
+            return dataService.post(apiBaseUrl + 'CreatePCTRule', dto);
+        }
+
+        function updatePCTRule(dto) {
+            return dataService.post(apiBaseUrl + 'UpdatePCTRule', dto);
+        }
+
+        function deletePCTRule(dto) {
+            return dataService.post(apiBaseUrl + 'DeletePCTRule', dto);
         }
 
         return service;

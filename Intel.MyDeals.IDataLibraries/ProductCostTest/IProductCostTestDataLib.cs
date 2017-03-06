@@ -10,5 +10,7 @@ namespace Intel.MyDeals.IDataLibrary
         List<ProductTypeMappings> GetPCTProductTypeMappings();
 
         List<ProductAttributeValues> GetProductAttributeValues(int verticalId);
+
+        List<ProductCostTestRules> SetPCTRules(CrudModes mode, ProductCostTestRules pctRules);
     }
 }

@@ -59,15 +59,42 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         /// <summary>
-        /// Get Price Cost Test Rules
+        /// Create Product Cost Test Rules
         /// </summary>
         /// <returns></returns>
-        [Route("SavePCTRules")]
+        [Route("CreatePCTRule")]
         [HttpPost]
-        public List<ProductAttributeValues> SavePCTRules([FromBody]dynamic input)
+        public List<ProductCostTestRules> CreatePCTRule([FromBody]ProductCostTestRules input)
         {
-            // TODO: When the proc is ready integrate with it
-            return null;
+            return SafeExecutor(() => _productCostTestLib.CreatePCTRule(input)
+              , $"Unable to create product cost test rule"
+          );
+        }
+
+        /// <summary>
+        /// Update Product Cost Test Rules
+        /// </summary>
+        /// <returns></returns>
+        [Route("UpdatePCTRule")]
+        [HttpPost]
+        public List<ProductCostTestRules> UpdatePCTRule([FromBody]ProductCostTestRules input)
+        {
+            return SafeExecutor(() => _productCostTestLib.UpdatePCTRule(input)
+              , $"Unable to create product cost test rule"
+          );
+        }
+
+        /// <summary>
+        /// Delete Product Cost Test Rules
+        /// </summary>
+        /// <returns></returns>
+        [Route("DeletePCTRule")]
+        [HttpPost]
+        public List<ProductCostTestRules> DeletePCTRule([FromBody]ProductCostTestRules input)
+        {
+            return SafeExecutor(() => _productCostTestLib.DeletePCTRule(input)
+              , $"Unable to create product cost test rule"
+          );
         }
     }
 }
