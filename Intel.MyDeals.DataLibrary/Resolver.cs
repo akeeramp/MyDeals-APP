@@ -13,7 +13,7 @@ namespace Intel.MyDeals.DataLibrary
             registerService.RegisterType<ICustomerCalendarDataLib, CustomerCalendarDataLib>();
             registerService.RegisterType<ICustomerDataLib, CustomerDataLib>();
             registerService.RegisterType<IDataCollectionsDataLib, DataCollectionsDataLib>();
-            registerService.RegisterType<IDataCollectorDataLib, DataCollectorDataLib>();
+            registerService.RegisterType<IOpDataCollectorDataLib, OpDataCollectorDataLib>();
             registerService.RegisterType<IDropdownDataLib, DropdownDataLib>();
             registerService.RegisterType<IGeoDataLib, GeoDataLib>();
             registerService.RegisterType<ILoggingDataLib, LoggingDataLib>();

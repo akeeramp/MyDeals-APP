@@ -15,19 +15,19 @@ namespace Intel.MyDeals.Entities
 
         public static bool IsSuper(this OpUserToken opUserToken)
         {
-            return ObjToBool(opUserToken.Properties[EN.OPUSERTOKEN.IS_SUPER]);
+            return ObjToBool(opUserToken.Properties[EN.OPUSERTOKEN.IS_SUPER] ?? false);
         }
         public static bool IsSuperSa(this OpUserToken opUserToken)
         {
-            return ObjToBool(opUserToken.Properties[EN.OPUSERTOKEN.IS_SUPER_SA]);
+            return ObjToBool(opUserToken.Properties[EN.OPUSERTOKEN.IS_SUPER_SA] ?? false);
         }
         public static bool IsDeveloper(this OpUserToken opUserToken)
         {
-            return ObjToBool(opUserToken.Properties[EN.OPUSERTOKEN.IS_DEVELOPER]);
+            return ObjToBool(opUserToken.Properties[EN.OPUSERTOKEN.IS_DEVELOPER] ?? false);
         }
         public static bool IsTester(this OpUserToken opUserToken)
         {
-            return ObjToBool(opUserToken.Properties[EN.OPUSERTOKEN.IS_TESTER]);
+            return ObjToBool(opUserToken.Properties[EN.OPUSERTOKEN.IS_TESTER] ?? false);
         }
 
         public static bool IsInvalidUser(this OpUserToken opUserToken)

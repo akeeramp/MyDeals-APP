@@ -25,22 +25,22 @@ namespace Intel.MyDeals.Entities.Helpers
             return false;
         }
 
-        public static bool IsSuper(this OpUserToken opUserToken, List<ToolConstants> toolConstants)
+        public static bool IsSuper(OpUserToken opUserToken, List<ToolConstants> toolConstants)
         {
             return IsWwidInString(opUserToken, EN.OPUSERTOKEN.SUPER_LIST, toolConstants);
         }
 
-        public static bool IsSuperSa(this OpUserToken opUserToken, List<ToolConstants> toolConstants)
+        public static bool IsSuperSa(OpUserToken opUserToken, List<ToolConstants> toolConstants)
         {
-            return IsSuper(opUserToken, toolConstants) && opUserToken.Role.RoleTypeCd == EN.EMPLOYEEROLE.SA;
+            return IsSuper(opUserToken, toolConstants) && opUserToken.Role.RoleTypeCd == RoleTypes.SA;
         }
 
-        public static bool IsDeveloper(this OpUserToken opUserToken, List<ToolConstants> toolConstants)
+        public static bool IsDeveloper(OpUserToken opUserToken, List<ToolConstants> toolConstants)
         {
             return IsWwidInString(opUserToken, EN.OPUSERTOKEN.DEVELOPER_LIST, toolConstants);
         }
 
-        public static bool IsTester(this OpUserToken opUserToken, List<ToolConstants> toolConstants)
+        public static bool IsTester(OpUserToken opUserToken, List<ToolConstants> toolConstants)
         {
             return IsWwidInString(opUserToken, EN.OPUSERTOKEN.TESTER_LIST, toolConstants);
         }

@@ -18,7 +18,7 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetTemplates")]
         public OpDataElementUITemplates Get()
         {
-            return SafeExecutor(OpDataElementUIExtensions.GetDataCollectorTemplates
+            return SafeExecutor(OpDataElementUiExtensions.GetDataCollectorTemplates
                 , "Unable to get templates"
             );
         }
@@ -27,7 +27,7 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetTemplates/{cd}")]
         public OpDataElementUITemplate Get(string cd)
         {
-            return SafeExecutor(() => OpDataElementUIExtensions.GetDataCollectorTemplate(cd)
+            return SafeExecutor(() => OpDataElementUiExtensions.GetDataCollectorTemplate(cd)
                 , "Unable to get templates"
             );
         }
@@ -59,13 +59,5 @@ namespace Intel.MyDeals.Controllers.API
             );
         }
 
-        [Authorize]
-        [Route("GetUiTemplates/{group}/{category}/{subcategory}")]
-        public UiModelTemplate GetUiTemplates(string group, string category, string subcategory)
-        {
-            return SafeExecutor(() => _uiTemplateLib.GetUiTemplate(group, category, subcategory)
-                , "Unable to get template"
-            );
-        }
     }
 }

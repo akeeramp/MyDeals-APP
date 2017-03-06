@@ -476,11 +476,11 @@ namespace Intel.MyDeals.Entities
                 DataElements = new List<OpDataElement>()
             };
 
-
-            foreach (OpDataElementUI opDataElementUI in sourceData)
+            foreach (OpDataElementUI opDataElementUi in sourceData)
             {
-                odc.DataElements.Add(opDataElementUI.CopyDataElement(id));
+                odc.DataElements.Add(opDataElementUi.CopyDataElement(id));
             }
+
             return odc;
         }
 

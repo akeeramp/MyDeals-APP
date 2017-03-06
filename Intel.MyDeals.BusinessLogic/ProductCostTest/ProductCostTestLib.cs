@@ -10,9 +10,9 @@ namespace Intel.MyDeals.BusinessLogic
     {
         private readonly IProductCostTestDataLib _productCostTestDataLib;
 
-        public ProductCostTestLib(IProductCostTestDataLib _productCostTestDataLib)
+        public ProductCostTestLib(IProductCostTestDataLib productCostTestDataLib)
         {
-            this._productCostTestDataLib = _productCostTestDataLib;
+            _productCostTestDataLib = productCostTestDataLib;
         }
 
         /// <summary>

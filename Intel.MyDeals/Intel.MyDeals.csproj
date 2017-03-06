@@ -262,7 +262,6 @@
     <Compile Include="Controllers\API\LoggingController.cs" />
     <Compile Include="Controllers\API\ContractsController.cs" />
     <Compile Include="Controllers\API\LookupsController.cs" />
-    <Compile Include="Controllers\API\PocController.cs" />
     <Compile Include="Controllers\API\PricingTablesController.cs" />
     <Compile Include="Controllers\API\PricingStrategiesController.cs" />
     <Compile Include="Controllers\API\SearchController.cs" />
@@ -281,7 +280,6 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OthersController.cs" />
-    <Compile Include="Controllers\PocController.cs" />
     <Compile Include="Controllers\TestCasesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -1290,7 +1288,6 @@
     <Content Include="js\_dealUtil.js" />
     <Content Include="js\_gridUtil.js" />
     <Content Include="js\_linkUtil.js" />
-    <Content Include="js\_pocDataFlow.js" />
     <Content Include="js\_search.js" />
     <Content Include="js\_securityUtil.js" />
     <Content Include="js\_util.js" />
@@ -1857,8 +1854,6 @@
     <Content Include="Views\Error\Timeout.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
     <Content Include="Views\Error\Security.cshtml" />
-    <Content Include="Views\Poc\Index.cshtml" />
-    <Content Include="Views\Others\Index.cshtml" />
     <Content Include="Views\Docs\Flows.cshtml" />
     <Content Include="Views\Docs\Formulas.cshtml" />
     <Content Include="Views\CodingPractices\Index.cshtml" />
@@ -1896,7 +1891,6 @@
     <Content Include="Views\CodingPractices\Logging.cshtml" />
     <Content Include="Views\CodingPractices\ErrorHandling.cshtml" />
     <Content Include="Views\CodingPractices\CodingTools.cshtml" />
-    <Content Include="Views\Poc\SPA.cshtml" />
     <Content Include="Views\Shared\_LayoutAngular.cshtml" />
     <Content Include="Views\Constants\Index.cshtml" />
     <Content Include="Scripts\kendo\2016.3.914\jquery.min.map" />

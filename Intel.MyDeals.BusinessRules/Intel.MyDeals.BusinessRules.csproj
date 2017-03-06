@@ -56,9 +56,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MyOpDataCollectorFlattenedItemActions.cs" />
     <Compile Include="MyDcConditionLib.cs" />
     <Compile Include="MyDcActions.cs" />
     <Compile Include="MyDcRules\AutomatedTestingRules.cs" />
+    <Compile Include="MyDcRules\OpCollectorToDictRules.cs" />
     <Compile Include="MyDcRules\BasicValidationRules.cs" />
     <Compile Include="MyDeActions.cs" />
     <Compile Include="MyDeConditionLib.cs" />

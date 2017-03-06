@@ -7,6 +7,23 @@ namespace Intel.MyDeals.Entities.UI_Templates
 {
     public static class UiTemplatesExtensionMethods
     {
+
+        public static UiTemplates Populate(this UiTemplates uiTemplates, OpDataElementUITemplates templates, List<UiTemplateContainerItem> items)
+        {
+            uiTemplates.BuildUiModelTemplates(items);
+            uiTemplates.BuildUiObjectTemplates(templates);
+            uiTemplates.BuildExtrasTemplates(items);
+            uiTemplates.BuildDefaultsTemplates(items);
+
+            return uiTemplates;
+        }
+
+        /// <summary>
+        /// Build the UI Model Templates
+        /// </summary>
+        /// <param name="uiTemplates"></param>
+        /// <param name="items"></param>
+        /// <returns></returns>
         public static UiTemplates BuildUiModelTemplates(this UiTemplates uiTemplates, List<UiTemplateContainerItem> items)
         {
             // Ensure we clean this out before assigning values
@@ -25,6 +42,15 @@ namespace Intel.MyDeals.Entities.UI_Templates
 
             return uiTemplates;
         }
+
+        /// <summary>
+        /// Build a single UI Model Template
+        /// </summary>
+        /// <param name="uiTemplates"></param>
+        /// <param name="opDataElementType"></param>
+        /// <param name="objSetType"></param>
+        /// <param name="items"></param>
+        /// <returns></returns>
         public static UiTemplates BuildUiModelTemplate(this UiTemplates uiTemplates, OpDataElementType opDataElementType, OpDataElementSetType objSetType, List<UiTemplateContainerItem> items)
         {
             if (!uiTemplates.ModelTemplates.ContainsKey(opDataElementType.ToString()))
@@ -33,6 +59,14 @@ namespace Intel.MyDeals.Entities.UI_Templates
             uiTemplates.ModelTemplates[opDataElementType.ToString()][objSetType.ToString()] = BuildUiModelTemplateItem(opDataElementType, objSetType, items);
             return uiTemplates;
         }
+
+        /// <summary>
+        /// Build a single item in a Model Template
+        /// </summary>
+        /// <param name="opDataElementType"></param>
+        /// <param name="objSetType"></param>
+        /// <param name="items"></param>
+        /// <returns></returns>
         private static UiModelTemplate BuildUiModelTemplateItem(OpDataElementType opDataElementType, OpDataElementSetType objSetType, List<UiTemplateContainerItem> items)
         {
             List<UiTemplateContainerItem> filteredItems = items.Where(t => (!t.ObjType.Any() || t.ObjType.Contains(opDataElementType)) && (!t.ObjSetType.Any() || t.ObjSetType.Contains(objSetType))).ToList();
@@ -111,6 +145,14 @@ namespace Intel.MyDeals.Entities.UI_Templates
         }
 
 
+
+
+        /// <summary>
+        /// Build the UI Object Templates
+        /// </summary>
+        /// <param name="uiTemplates"></param>
+        /// <param name="templates"></param>
+        /// <returns></returns>
         public static UiTemplates BuildUiObjectTemplates(this UiTemplates uiTemplates, OpDataElementUITemplates templates)
         {
             // Ensure we clean this out before assigning values
@@ -129,6 +171,15 @@ namespace Intel.MyDeals.Entities.UI_Templates
 
             return uiTemplates;
         }
+
+        /// <summary>
+        /// Build a single UI Object Template
+        /// </summary>
+        /// <param name="uiTemplates"></param>
+        /// <param name="opDataElementType"></param>
+        /// <param name="objSetType"></param>
+        /// <param name="templates"></param>
+        /// <returns></returns>
         private static UiTemplates BuildUiObjectTemplate(this UiTemplates uiTemplates, OpDataElementType opDataElementType, OpDataElementSetType objSetType, OpDataElementUITemplates templates)
         {
             if (!uiTemplates.ObjectTemplates.ContainsKey(opDataElementType.ToString()))
@@ -137,6 +188,13 @@ namespace Intel.MyDeals.Entities.UI_Templates
             uiTemplates.ObjectTemplates[opDataElementType.ToString()][objSetType.ToString()] = BuildUiObjectTemplateItem(opDataElementType, templates);
             return uiTemplates;
         }
+
+        /// <summary>
+        /// Build a single item in an Object Template
+        /// </summary>
+        /// <param name="opDataElementType"></param>
+        /// <param name="templates"></param>
+        /// <returns></returns>
         private static UiObjectTemplate BuildUiObjectTemplateItem(OpDataElementType opDataElementType, OpDataElementUITemplates templates)
         {
             UiObjectTemplate template = new UiObjectTemplate();
@@ -199,6 +257,14 @@ namespace Intel.MyDeals.Entities.UI_Templates
         }
 
 
+
+
+        /// <summary>
+        /// Build the Extras Templates
+        /// </summary>
+        /// <param name="uiTemplates"></param>
+        /// <param name="items"></param>
+        /// <returns></returns>
         public static UiTemplates BuildExtrasTemplates(this UiTemplates uiTemplates, List<UiTemplateContainerItem> items)
         {
             foreach (OpDataElementType opDataElementType in Enum.GetValues(typeof(OpDataElementType)))
@@ -214,6 +280,15 @@ namespace Intel.MyDeals.Entities.UI_Templates
 
             return uiTemplates;
         }
+
+        /// <summary>
+        /// Build a single Extra Template
+        /// </summary>
+        /// <param name="uiTemplates"></param>
+        /// <param name="opDataElementType"></param>
+        /// <param name="objSetType"></param>
+        /// <param name="items"></param>
+        /// <returns></returns>
         public static UiTemplates BuildExtrasTemplate(this UiTemplates uiTemplates, OpDataElementType opDataElementType, OpDataElementSetType objSetType, List<UiTemplateContainerItem> items)
         {
             if (!uiTemplates.ModelTemplates.ContainsKey(opDataElementType.ToString()))
@@ -244,6 +319,15 @@ namespace Intel.MyDeals.Entities.UI_Templates
             return uiTemplates;
         }
 
+
+
+
+        /// <summary>
+        /// Build the Defaults Templates
+        /// </summary>
+        /// <param name="uiTemplates"></param>
+        /// <param name="items"></param>
+        /// <returns></returns>
         public static UiTemplates BuildDefaultsTemplates(this UiTemplates uiTemplates, List<UiTemplateContainerItem> items)
         {
             foreach (OpDataElementType opDataElementType in Enum.GetValues(typeof(OpDataElementType)))
@@ -259,6 +343,15 @@ namespace Intel.MyDeals.Entities.UI_Templates
 
             return uiTemplates;
         }
+
+        /// <summary>
+        /// Build a single item in a Defaults Template
+        /// </summary>
+        /// <param name="uiTemplates"></param>
+        /// <param name="opDataElementType"></param>
+        /// <param name="objSetType"></param>
+        /// <param name="items"></param>
+        /// <returns></returns>
         public static UiTemplates BuildDefaultsTemplate(this UiTemplates uiTemplates, OpDataElementType opDataElementType, OpDataElementSetType objSetType, List<UiTemplateContainerItem> items)
         {
             if (!uiTemplates.ModelTemplates.ContainsKey(opDataElementType.ToString()))

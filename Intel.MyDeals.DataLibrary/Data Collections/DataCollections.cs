@@ -11,7 +11,7 @@ namespace Intel.MyDeals.DataLibrary
 {
     public static class DataCollections
     {
-        private static object LOCK_OBJECT = new object();
+        private static readonly object LOCK_OBJECT = new object();
 
         public static bool ClearCache()
         {
@@ -50,9 +50,6 @@ namespace Intel.MyDeals.DataLibrary
                         case "List`1":
                         case "Dictionary`2":
                             ret.Add(new CacheItem { CacheName = field.Name, CacheCount = (int)values.GetType().GetProperty("Count").GetValue(values, null) });
-                            break;
-
-                        default:
                             break;
                     }
             }
@@ -313,7 +310,7 @@ namespace Intel.MyDeals.DataLibrary
                         CalendarData = _getCalendarData,
                     };
 
-                TemplateWrapper wrapper = new DataCollectorDataLib().GetTemplateData();
+                TemplateWrapper wrapper = new OpDataCollectorDataLib().GetTemplateData();
                 _getTemplateData = wrapper.TemplateData;
                 _getTemplateDict = wrapper.TemplateDict;
                 _getCalendarData = wrapper.CalendarData.ToList();
@@ -321,7 +318,7 @@ namespace Intel.MyDeals.DataLibrary
             }
         }
 
-        public static OpDataElementUITemplates GetOpDataElementUITemplates()
+        public static OpDataElementUITemplates GetOpDataElementUiTemplates()
         {
             return GetTemplateWrapper().TemplateDict;
         }
@@ -359,46 +356,6 @@ namespace Intel.MyDeals.DataLibrary
         }
 
         private static List<CustomerDivision> _getCustomerDivisions;
-
-        public static List<FilterAttribute> GetFilterAttributes()
-        {
-            lock (LOCK_OBJECT ?? new object())
-            {
-                return _getFilterAttributes ?? (_getFilterAttributes = new MetaDataLib().GetFilterAttributes());
-            }
-        }
-
-        private static List<FilterAttribute> _getFilterAttributes;
-
-        public static List<GridType> GetGridTypes()
-        {
-            lock (LOCK_OBJECT ?? new object())
-            {
-                return _getGridTypes ?? (_getGridTypes = new MetaDataLib().GetGridTypes());
-            }
-        }
-
-        private static List<GridType> _getGridTypes;
-
-        public static List<Operator_class> GetOperators()
-        {
-            lock (LOCK_OBJECT ?? new object())
-            {
-                return _getOperators ?? (_getOperators = new MetaDataLib().GetOperators());
-            }
-        }
-
-        private static List<Operator_class> _getOperators;
-
-        public static List<UIType> GetUITypes()
-        {
-            lock (LOCK_OBJECT ?? new object())
-            {
-                return _getUITypes ?? (_getUITypes = new MetaDataLib().GetUITypes());
-            }
-        }
-
-        private static List<UIType> _getUITypes;
 
         public static List<Product> GetProductData()
         {

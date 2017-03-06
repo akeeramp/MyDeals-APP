@@ -1,11 +1,11 @@
 ﻿using Intel.MyDeals.App;
-using Intel.MyDeals.BusinessLogic;
 using Intel.Opaque;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http.Controllers;
+using Intel.MyDeals.Entities;
 
 namespace Intel.MyDeals.ActionFilters
 {

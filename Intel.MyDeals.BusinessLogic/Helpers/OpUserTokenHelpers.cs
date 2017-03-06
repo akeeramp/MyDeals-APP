@@ -1,4 +1,5 @@
-﻿using Intel.Opaque;
+﻿using Intel.MyDeals.Entities;
+using Intel.Opaque;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -15,7 +16,7 @@ namespace Intel.MyDeals.BusinessLogic
         {
             // todo fix this
             return true;
-            //return opUserToken.IsSuper() && opUserToken.Role.RoleTypeCd == EN.EMPLOYEEROLE.SA;
+            //return opUserToken.IsSuper() && opUserToken.Role.RoleTypeCd == RoleTypes.SA;
         }
 
         public static bool IsDeveloper(this OpUserToken opUserToken)

@@ -60,7 +60,7 @@ namespace Intel.MyDeals.Entities
                  where (el.ACTN_CD == actionCd || el.ACTN_CD == null)
                        && (el.OBJ_TYPE == opDataElementType.ToString() || el.OBJ_TYPE == null)
                        && (el.ROLE_TYPE_CD == opRoleType.RoleTypeCd || el.ROLE_TYPE_CD == null)
-                       && (el.WFSTG_CD == wfStage.ToString() || el.WFSTG_CD == null)
+                       && (el.WFSTG_CD == wfStage || el.WFSTG_CD == null)
                  select el.PERMISSION_MASK);
 
             if (!localSecurityMasks.Any())
@@ -77,23 +77,22 @@ namespace Intel.MyDeals.Entities
                            select Convert.ToString(Convert.ToInt32(hexVal, 16), 2)
                 into binVal
                            let revBinVal = binVal.ToCharArray().Reverse().ToArray()
-                           where revBinVal.Count() > sa.ATRB_BIT
+                           where revBinVal.Length > sa.ATRB_BIT
                            select binVal).Any(binVal => binVal.ToCharArray().Reverse().ElementAt((int)sa.ATRB_BIT) == '1');
 
             securityActionCache[secBaseKey] = result;
             return result;
         }
 
-        public bool ChkDealRules(ObjSetTypeCodes objSetTypeCd, string roleTypeCd, StageCodes wfStage, ActionCodes actionCd, bool forceReadOnly = false)
+        public bool ChkDealRules(OpDataElementType opDataElementType, OpDataElementSetType opDataElementSetType, string roleTypeCd, string wfStage, string actionCd)
         {
-            // if doing a Read Only check and Active History window is open... it is ALWAYS read only
-            if (actionCd.ToString() == "ATRB_READ_ONLY" && forceReadOnly) return true;
-
+            // TODO add obj type nad obj set type to collection
             return (from el in SecurityMasks
-                    where (el.ACTN_CD == null || el.ACTN_CD == "0" || el.ACTN_CD.Trim() == actionCd.ToString())
-                          && (el.OBJ_TYPE == null || el.OBJ_TYPE == "0" || el.OBJ_TYPE == objSetTypeCd.ToString())
+                    where (el.ACTN_CD == null || el.ACTN_CD == "0" || el.ACTN_CD.Trim() == actionCd)
+                          && (el.OBJ_TYPE == null || el.OBJ_TYPE == "0" || el.OBJ_TYPE == opDataElementType.ToString())
+                          && (el.OBJ_TYPE == null || el.OBJ_TYPE == "0" || el.OBJ_TYPE == opDataElementSetType.ToString())
                           && (el.ROLE_TYPE_CD == null || el.ROLE_TYPE_CD == "0" || el.ROLE_TYPE_CD == roleTypeCd)
-                          && (el.WFSTG_CD == wfStage.ToString() || el.WFSTG_CD == null || el.WFSTG_CD == "0")
+                          && (el.WFSTG_CD == wfStage || el.WFSTG_CD == null || el.WFSTG_CD == "0")
                     select el.PERMISSION_MASK).Any();
         }
     }

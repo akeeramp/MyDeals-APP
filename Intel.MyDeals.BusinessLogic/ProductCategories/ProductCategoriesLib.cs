@@ -18,13 +18,13 @@ namespace Intel.MyDeals.BusinessLogic
 		/// </summary>
 		public ProductCategoriesLib()
 		{
-			this._productCategoriesDataLib = new ProductCategoriesDataLib();
+			_productCategoriesDataLib = new ProductCategoriesDataLib();
 		}
 
-		public ProductCategoriesLib(IProductCategoriesDataLib _productCategoriesDataLib, IDataCollectionsDataLib _dataCollectionsDataLib)
+		public ProductCategoriesLib(IProductCategoriesDataLib productCategoriesDataLib, IDataCollectionsDataLib dataCollectionsDataLib)
 		{
-			this._productCategoriesDataLib = _productCategoriesDataLib;
-			this._dataCollectionsDataLib = _dataCollectionsDataLib;
+			_productCategoriesDataLib = productCategoriesDataLib;
+			_dataCollectionsDataLib = dataCollectionsDataLib;
 		}
 
 

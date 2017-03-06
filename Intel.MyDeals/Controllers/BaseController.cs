@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 using Intel.MyDeals.App;
-using Intel.MyDeals.BusinessLogic;
+using Intel.MyDeals.Entities;
 using Intel.Opaque;
 
 namespace Intel.MyDeals.Controllers

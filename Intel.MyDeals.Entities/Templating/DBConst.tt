@@ -71,6 +71,9 @@
 	WriteLine("public static class AttributeCodes {");
 	PushIndent(TAB);
 
+	WriteLine(@"public const string {0} = ""{0}"";", "DC_ID");
+	WriteLine(@"public const string {0} = ""{0}"";", "DC_PARENT_ID");
+
 	using(var rdr = cmd.ExecuteReader())
 	{
 		while(rdr.Read())
@@ -165,6 +168,108 @@
 	PopIndent();
 	WriteLine("}"); // class
 
+
+
+
+	WriteLine("");
+	WriteLine("");
+	//-- Roles ---------------------------------------------------------------------------------
+    WriteLine("//-- Roles ---------------------------------------------------------------------------------");
+	WriteLine("");
+
+	cmd = new SqlCommand(@"SELECT ROLE_TYPE_CD from [dbo].[ROLE_TYPE] WHERE app_sid = 1", conn);
+
+	WriteLine("public static class RoleTypes {");
+	PushIndent(TAB);
+
+	using(var rdr = cmd.ExecuteReader())
+	{
+		while(rdr.Read())
+		{
+			WriteLine(@"public const string {0} = ""{1}"";", rdr["ROLE_TYPE_CD"].ToString().Replace(" ","_"), rdr["ROLE_TYPE_CD"]);
+		} 
+    }
+
+	PopIndent();
+	WriteLine("}"); // class
+
+
+
+
+	WriteLine("");
+	WriteLine("");
+	//-- WorkFlow Stages ---------------------------------------------------------------------------------
+    WriteLine("//-- WorkFlow Stages ---------------------------------------------------------------------------------");
+	WriteLine("");
+
+	cmd = new SqlCommand(@"SELECT WFSTG_NM FROM [dbo].[WFSTG_MSTR]", conn);
+
+	WriteLine("public static class WorkFlowStages {");
+	PushIndent(TAB);
+
+	using(var rdr = cmd.ExecuteReader())
+	{
+		while(rdr.Read())
+		{
+			WriteLine(@"public const string {0} = ""{1}"";", rdr["WFSTG_NM"].ToString().Replace(" ","_"), rdr["WFSTG_NM"]);
+		} 
+    }
+
+	PopIndent();
+	WriteLine("}"); // class
+
+
+
+
+	WriteLine("");
+	WriteLine("");
+	//-- Workflow Actions ---------------------------------------------------------------------------------
+    WriteLine("//-- Workflow Actions ---------------------------------------------------------------------------------");
+	WriteLine("");
+
+	cmd = new SqlCommand(@"SELECT WFSTG_ACTN_NM FROM [dbo].[WFSTG_ACTN_MSTR]", conn);
+
+	WriteLine("public static class WorkFlowActions {");
+	PushIndent(TAB);
+
+	using(var rdr = cmd.ExecuteReader())
+	{
+		while(rdr.Read())
+		{
+			WriteLine(@"public const string {0} = ""{1}"";", rdr["WFSTG_ACTN_NM"].ToString().Replace(" ","_"), rdr["WFSTG_ACTN_NM"]);
+		} 
+    }
+
+	PopIndent();
+	WriteLine("}"); // class
+
+	
+
+
+
+	WriteLine("");
+	WriteLine("");
+	//-- Security Actions ---------------------------------------------------------------------------------
+    WriteLine("//-- Security Actions ---------------------------------------------------------------------------------");
+	WriteLine("");
+
+	cmd = new SqlCommand(@"SELECT ACTN_NM FROM [dbo].[SECUR_ACTN_MSTR]", conn);
+
+	WriteLine("public static class SecurityActns {");
+	PushIndent(TAB);
+
+	using(var rdr = cmd.ExecuteReader())
+	{
+		while(rdr.Read())
+		{
+			WriteLine(@"public const string {0} = ""{1}"";", rdr["ACTN_NM"].ToString().Replace(" ","_"), rdr["ACTN_NM"]);
+		} 
+    }
+
+	PopIndent();
+	WriteLine("}"); // class
+
+	
 
 
 

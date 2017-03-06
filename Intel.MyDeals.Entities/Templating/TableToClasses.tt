@@ -33,17 +33,9 @@ using System.Collections.Generic;
 	WriteLine("namespace {0} {{", outputNameSpace);
 	PushIndent(TAB);
 
-	var ds = dbobjects.ExecuteDataSet("dbo.PR_PING_DB");
-	ds.Tables[0].TableName = "PingResults";
-	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], true));
-
-	// POC EMP
-	ds = dbobjects.ExecuteDataSet("dbo.PR_GET_POC_EMP");
-	ds.Tables[0].TableName = "PocEmp";
-	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], true));
 
 	//Attribute Master
-	ds = dbobjects.ExecuteDataSet("dbo.PR_GET_ATRB_MSTR");
+	var ds = dbobjects.ExecuteDataSet("dbo.PR_GET_ATRB_MSTR");
 	ds.Tables[0].TableName = "AtrbMstr";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], true));
 

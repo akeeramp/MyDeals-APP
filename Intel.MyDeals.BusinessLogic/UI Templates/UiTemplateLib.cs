@@ -6,12 +6,10 @@ namespace Intel.MyDeals.BusinessLogic
 {
     public class UiTemplateLib : IUiTemplateLib
     {
-        private readonly IUiTemplateDataLib _uiTemplateDataLib;
         private readonly IDataCollectionsDataLib _dataCollectionsDataLib;
 
-        public UiTemplateLib(IUiTemplateDataLib uiTemplateDataLib, DataCollectionsDataLib dataCollectionsDataLib)
+        public UiTemplateLib(DataCollectionsDataLib dataCollectionsDataLib)
         {
-            _uiTemplateDataLib = uiTemplateDataLib;
             _dataCollectionsDataLib = dataCollectionsDataLib;
         }
 
@@ -28,15 +26,5 @@ namespace Intel.MyDeals.BusinessLogic
             return _dataCollectionsDataLib.GetUiTemplates();
         }
 
-        public UiModelTemplate GetUiTemplate(string group, string category, string subcategory)
-        {
-            return new UiModelTemplate();
-            //UiTemplates templates = GetUiTemplates();
-            //templates.
-            //if (!templates.ContainsKey(group)) return new UiModelTemplate();
-            //if (!templates[group].ContainsKey(category)) return new UiModelTemplate();
-            //if (!templates.ContainsKey(subcategory)) return new UiModelTemplate();
-            //return templates[group][category][subcategory];
-        }
     }
 }

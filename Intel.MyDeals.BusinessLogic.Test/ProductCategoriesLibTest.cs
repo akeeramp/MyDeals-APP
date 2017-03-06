@@ -13,7 +13,7 @@ namespace Intel.MyDeals.BusinessLogic.Test
     [TestFixture]
     public class ProductCategoriesLibTest
     {
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public void SetupUserAndDatabase()
 		{
 			Console.WriteLine("Started Product Catgeories Library Tests.");
@@ -21,7 +21,7 @@ namespace Intel.MyDeals.BusinessLogic.Test
 			UnitTestHelpers.SetDbConnection();
 		}
 
-		[TestFixtureTearDown]
+		[OneTimeTearDown]
 		public void AfterTheCurrentTextFixture()
 		{
 			Console.WriteLine("Completed Product Catgeories Library Tests.");

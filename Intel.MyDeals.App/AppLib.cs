@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Intel.MyDeals.BusinessLogic;
 using Intel.MyDeals.Entities;
+using Intel.MyDeals.Entities.Helpers;
 using Intel.Opaque;
 
 namespace Intel.MyDeals.App
@@ -24,6 +25,7 @@ namespace Intel.MyDeals.App
         public static OpUserToken InitAVM(OpCore op, bool forceLoad = false)
         {
             OpUserToken user = op.Authenticate("MyDeals", GetEnvironment());
+            new AccountsLib().SetUserAccessLevel(user);
 
             if (AVM != null && !forceLoad)
             {
@@ -101,6 +103,8 @@ namespace Intel.MyDeals.App
             }
             return (UserSettings[idsid].UserPreferences).ToList();
         }
+
+
 
         public static UserSetting GetUserSetting(OpUserToken opUserToken)
         {

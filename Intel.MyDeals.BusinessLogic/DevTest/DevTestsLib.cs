@@ -26,8 +26,6 @@ namespace Intel.MyDeals.BusinessLogic
 				Exception x2 = new Exception("Example Uncaught Detailed Exception");
                 throw x2;
             }
-            //this will never get returned because of exception
-            return "string";
         }
 
         public string ExampleSQLException()

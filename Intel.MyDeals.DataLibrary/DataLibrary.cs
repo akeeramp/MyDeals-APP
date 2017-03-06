@@ -8,12 +8,14 @@ namespace Intel.MyDeals.DataLibrary
         {
             DataAccessLib.DataAccess.ConnectionString = connectionString;
             DataAccessLib.DataAccess.Environment = environment;
-            DataAccessLib.DataAccess.EnvConfigs = new Dictionary<string, string>();
-            DataAccessLib.DataAccess.EnvConfigs["jmsServer"] = envConfigs.ContainsKey("jmsServer") ? envConfigs["jmsServer"] : "";
-            DataAccessLib.DataAccess.EnvConfigs["jmsQueue"] = envConfigs.ContainsKey("jmsQueue") ? envConfigs["jmsQueue"] : "";
-            DataAccessLib.DataAccess.EnvConfigs["jmsUID"] = envConfigs.ContainsKey("jmsUID") ? envConfigs["jmsUID"] : "";
-            DataAccessLib.DataAccess.EnvConfigs["jmsPWD"] = envConfigs.ContainsKey("jmsPWD") ? envConfigs["jmsPWD"] : "";
-            DataAccessLib.DataAccess.EnvConfigs["jmsResponseDir"] = envConfigs.ContainsKey("jmsResponseDir") ? envConfigs["jmsResponseDir"] : "";
+            DataAccessLib.DataAccess.EnvConfigs = new Dictionary<string, string>
+            {
+                ["jmsServer"] = envConfigs.ContainsKey("jmsServer") ? envConfigs["jmsServer"] : "",
+                ["jmsQueue"] = envConfigs.ContainsKey("jmsQueue") ? envConfigs["jmsQueue"] : "",
+                ["jmsUID"] = envConfigs.ContainsKey("jmsUID") ? envConfigs["jmsUID"] : "",
+                ["jmsPWD"] = envConfigs.ContainsKey("jmsPWD") ? envConfigs["jmsPWD"] : "",
+                ["jmsResponseDir"] = envConfigs.ContainsKey("jmsResponseDir") ? envConfigs["jmsResponseDir"] : ""
+            };
         }
 
         public static string GetConnectionString()

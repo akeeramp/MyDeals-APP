@@ -1,17 +1,17 @@
 using System.Collections.Generic;
 using System.Linq;
-using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
+using Intel.Opaque;
 using Intel.Opaque.Data;
 
 namespace Intel.MyDeals.BusinessLogic
 {
     public class PricingTablesLib : IPricingTablesLib
     {
-        private readonly IDataCollectorLib _dataCollectorLib;
+        private readonly IOpDataCollectorLib _dataCollectorLib;
 
-        public PricingTablesLib(IDataCollectorLib dataCollectorLib)
+        public PricingTablesLib(IOpDataCollectorLib dataCollectorLib)
         {
             _dataCollectorLib = dataCollectorLib;
         }
@@ -31,15 +31,19 @@ namespace Intel.MyDeals.BusinessLogic
                     OpDataElementType.PricingTableRow
                 };
 
-
-            // TODO replace with DB call
-            //return PricingTableData.GetData(id);
-
-
-            return new DataCollectorDataLib()
-                .GetByIDs(OpDataElementType.PricingTable, new List<int> { id }, opDataElementTypes)
-                .FillInHolesFromTemplate();
+            return OpDataElementType.PricingTable.GetByIDs(new List<int> {id}, opDataElementTypes);
         }
+
+        public OpDataCollectorFlattenedDictList GetFullNestedPricingTable(int id)
+        {
+            return GetPricingTable(id, true).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
+        }
+
+        public OpDataCollectorFlattenedDictList GetFullPricingTable(int id)
+        {
+            return GetPricingTable(id, true).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
+        }
+
 
         public MyDealsData SavePricingTable(OpDataCollectorFlattenedList data, int custId)
         {
@@ -64,5 +68,27 @@ namespace Intel.MyDeals.BusinessLogic
             return _dataCollectorLib.SavePackets(data, custId);
         }
 
+        public MyDealsData SaveFullPricingTable(OpDataCollectorFlattenedDictList fullpricingTables, int custId)
+        {
+            return SavePricingTable(
+                fullpricingTables.ContainsKey(OpDataElementType.PricingTable) ? fullpricingTables[OpDataElementType.PricingTable] : new OpDataCollectorFlattenedList(),
+                fullpricingTables.ContainsKey(OpDataElementType.PricingTableRow) ? fullpricingTables[OpDataElementType.PricingTableRow] : new OpDataCollectorFlattenedList(),
+                fullpricingTables.ContainsKey(OpDataElementType.WipDeals) ? fullpricingTables[OpDataElementType.WipDeals] : new OpDataCollectorFlattenedList(),
+                custId);
+        }
+
+        public OpMsg DeletePricingTable(int id)
+        {
+            // TODO replace with Delete call
+            return new OpMsg();
+        }
+
+        public OpMsg DeletePricingTableRow(int id)
+        {
+            // TODO replace with Delete call
+            return new OpMsg();
+        }
+
     }
+
 }

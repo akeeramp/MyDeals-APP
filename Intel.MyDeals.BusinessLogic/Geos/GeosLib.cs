@@ -13,10 +13,10 @@ namespace Intel.MyDeals.BusinessLogic
 
         private readonly IDataCollectionsDataLib _dataCollectionsDataLib;
 
-        public GeosLib(IGeoDataLib _geoDataLib, IDataCollectionsDataLib _dataCollectionsDataLib)
+        public GeosLib(IGeoDataLib geoDataLib, IDataCollectionsDataLib dataCollectionsDataLib)
         {
-            this._geoDataLib = _geoDataLib;
-            this._dataCollectionsDataLib = _dataCollectionsDataLib;
+            _geoDataLib = geoDataLib;
+            _dataCollectionsDataLib = dataCollectionsDataLib;
         }
 
         /// <summary>
@@ -25,8 +25,8 @@ namespace Intel.MyDeals.BusinessLogic
         /// </summary>
         public GeosLib()
         {
-            this._geoDataLib = new GeoDataLib();
-            this._dataCollectionsDataLib = new DataCollectionsDataLib();
+            _geoDataLib = new GeoDataLib();
+            _dataCollectionsDataLib = new DataCollectionsDataLib();
         }
 
         #region Geo Dimension
@@ -63,7 +63,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns>list of Geo Dimension data flagged as active</returns>
         public List<GeoDimension> GetGeoDimensionsActive()
         {
-            return GetGeoDimensions().Where(c => c.ACTV_IND == true).ToList();
+            return GetGeoDimensions().Where(c => c.ACTV_IND).ToList();
         }
 
         /// <summary>

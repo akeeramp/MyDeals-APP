@@ -1,9 +1,7 @@
 ﻿using System.Web.Http;
-using Intel.MyDeals.BusinessLogic;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque;
-using Intel.Opaque.Data;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -20,8 +18,7 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetPricingStrategy/{id}")]
         public MyDealsData GetPricingStrategy(int id)
         {
-            return SafeExecutor(() => _pricingStrategiesLib
-                .GetPricingStrategy(id)
+            return SafeExecutor(() => _pricingStrategiesLib.GetPricingStrategy(id)
                 , $"Unable to get Pricing Strategy {id}"
             );
         }
@@ -31,8 +28,7 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetFullNestedPricingStrategy/{id}")]
         public MyDealsData GetFullNestedPricingStrategy(int id)
         {
-            return SafeExecutor(() => _pricingStrategiesLib
-                .GetPricingStrategy(id, true)
+            return SafeExecutor(() => _pricingStrategiesLib.GetPricingStrategy(id, true)
                 , $"Unable to get Pricing Strategy {id}"
             );
         }
@@ -42,9 +38,7 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetFullPricingStrategy/{id}")]
         public OpDataCollectorFlattenedDictList GetFullPricingStrategy(int id)
         {
-            return SafeExecutor(() => _pricingStrategiesLib
-                .GetPricingStrategy(id, true)
-                .BuildObjSetContainers(ObjSetPivotMode.Pivoted)
+            return SafeExecutor(() => _pricingStrategiesLib.GetFullPricingStrategy(id)
                 , $"Unable to get Pricing Strategy {id}"
             );
         }
@@ -66,13 +60,8 @@ namespace Intel.MyDeals.Controllers.API
         [HttpPost]
         public MyDealsData SaveFullPricingStrategy(int custId, OpDataCollectorFlattenedDictList fullpricingStrategies)
         {
-            return SafeExecutor(() => _pricingStrategiesLib.SavePricingStrategy(
-                fullpricingStrategies.ContainsKey(OpDataElementType.PricingStrategy) ? fullpricingStrategies[OpDataElementType.PricingStrategy] : new OpDataCollectorFlattenedList(),
-                fullpricingStrategies.ContainsKey(OpDataElementType.PricingTable) ? fullpricingStrategies[OpDataElementType.PricingTable] : new OpDataCollectorFlattenedList(),
-                fullpricingStrategies.ContainsKey(OpDataElementType.PricingTableRow) ? fullpricingStrategies[OpDataElementType.PricingTableRow] : new OpDataCollectorFlattenedList(),
-                fullpricingStrategies.ContainsKey(OpDataElementType.WipDeals) ? fullpricingStrategies[OpDataElementType.WipDeals] : new OpDataCollectorFlattenedList(),
-                custId)
-                , "Unable to save the Pricing Strategy"
+            return SafeExecutor(() => _pricingStrategiesLib.SaveFullPricingStrategy(custId, fullpricingStrategies),
+                "Unable to save the Pricing Strategy"
             );
         }
 
@@ -82,9 +71,8 @@ namespace Intel.MyDeals.Controllers.API
         [HttpGet]
         public OpMsg DeletePricingStrategy(int id)
         {
-            // TODO replace with a true delete
-            return SafeExecutor(() => new OpMsg("Deleted Successfully")
-                , $"Unable to delete Pricing Strategy {id}"
+            return SafeExecutor(() => _pricingStrategiesLib.DeletePricingStrategy(id)
+                , "Unable to delete the Pricing Strategy {id}"
             );
         }
     }

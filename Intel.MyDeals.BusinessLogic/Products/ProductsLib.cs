@@ -15,10 +15,10 @@ namespace Intel.MyDeals.BusinessLogic
 
         private readonly IDataCollectionsDataLib _dataCollectionsDataLib;
 
-        public ProductsLib(IProductDataLib _productDataLib, IDataCollectionsDataLib _dataCollectionsDataLib)
+        public ProductsLib(IProductDataLib productDataLib, IDataCollectionsDataLib dataCollectionsDataLib)
         {
-            this._productDataLib = _productDataLib;
-            this._dataCollectionsDataLib = _dataCollectionsDataLib;
+            _productDataLib = productDataLib;
+            _dataCollectionsDataLib = dataCollectionsDataLib;
         }
 
         /// <summary>
@@ -27,8 +27,8 @@ namespace Intel.MyDeals.BusinessLogic
         /// </summary>
         public ProductsLib()
         {
-            this._productDataLib = new ProductDataLib();
-            this._dataCollectionsDataLib = new DataCollectionsDataLib();
+            _productDataLib = new ProductDataLib();
+            _dataCollectionsDataLib = new DataCollectionsDataLib();
         }
 
         #region Products
@@ -62,7 +62,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns>list of Product data flagged as active</returns>
         public List<Product> GetProductsActive()
         {
-            return GetProducts().Where(c => c.ACTV_IND == true).ToList();
+            return GetProducts().Where(c => c.ACTV_IND).ToList();
         }
 
         /// <summary>

@@ -184,7 +184,7 @@ namespace Intel.MyDeals.Entities
 
         public static bool HasTracker(this OpDataCollector dc)
         {
-            var trackers = dc.GetDataElementsWhere(EN.ATRB.TRKR_NBR, d => d.AtrbValue.ToString() != string.Empty);
+            var trackers = dc.GetDataElementsWhere(AttributeCodes.TRKR_NBR, d => d.AtrbValue.ToString() != string.Empty);
             return trackers != null && trackers.Any();
         }
 

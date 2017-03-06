@@ -1,9 +1,7 @@
 ﻿using System.Web.Http;
-using Intel.MyDeals.BusinessLogic;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque;
-using Intel.Opaque.Data;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -20,8 +18,7 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetPricingTable/{id}")]
         public MyDealsData GetPricingTable(int id)
         {
-            return SafeExecutor(() => _pricingTablesLib
-                .GetPricingTable(id)
+            return SafeExecutor(() => _pricingTablesLib.GetPricingTable(id)
                 , $"Unable to get Pricing Table {id}"
             );
         }
@@ -30,9 +27,7 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetFullNestedPricingTable/{id}")]
         public OpDataCollectorFlattenedDictList GetFullNestedPricingTable(int id)
         {
-            return SafeExecutor(() => _pricingTablesLib
-                .GetPricingTable(id, true)
-                .BuildObjSetContainers(ObjSetPivotMode.Pivoted)
+            return SafeExecutor(() => _pricingTablesLib.GetFullNestedPricingTable(id)
                 , $"Unable to get Pricing Table {id}"
             );
         }
@@ -41,9 +36,7 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetFullPricingTable/{id}")]
         public OpDataCollectorFlattenedDictList GetFullPricingTable(int id)
         {
-            return SafeExecutor(() => _pricingTablesLib
-                .GetPricingTable(id, true)
-                .BuildObjSetContainers(ObjSetPivotMode.Pivoted)
+            return SafeExecutor(() => _pricingTablesLib.GetFullPricingTable(id)
                 , $"Unable to get Pricing Table {id}"
             );
         }
@@ -53,8 +46,7 @@ namespace Intel.MyDeals.Controllers.API
         [HttpPost]
         public MyDealsData SavePricingTable(int custId, OpDataCollectorFlattenedList pricingTables)
         {
-            return SafeExecutor(() => _pricingTablesLib
-                .SavePricingTable(pricingTables, custId)
+            return SafeExecutor(() => _pricingTablesLib.SavePricingTable(pricingTables, custId)
                 , "Unable to save the Pricing Table"
             );
         }
@@ -64,11 +56,7 @@ namespace Intel.MyDeals.Controllers.API
         [HttpPost]
         public MyDealsData SaveFullPricingTable(int custId, OpDataCollectorFlattenedDictList fullpricingTables)
         {
-            return SafeExecutor(() => _pricingTablesLib.SavePricingTable(
-                fullpricingTables.ContainsKey(OpDataElementType.PricingTable) ? fullpricingTables[OpDataElementType.PricingTable] : new OpDataCollectorFlattenedList(),
-                fullpricingTables.ContainsKey(OpDataElementType.PricingTableRow) ? fullpricingTables[OpDataElementType.PricingTableRow] : new OpDataCollectorFlattenedList(),
-                fullpricingTables.ContainsKey(OpDataElementType.WipDeals) ? fullpricingTables[OpDataElementType.WipDeals] : new OpDataCollectorFlattenedList(),
-                custId)
+            return SafeExecutor(() => _pricingTablesLib.SaveFullPricingTable(fullpricingTables, custId)
                 , "Unable to save the Pricing Table"
             );
         }
@@ -78,9 +66,8 @@ namespace Intel.MyDeals.Controllers.API
         [HttpGet]
         public OpMsg DeletePricingTable(int id)
         {
-            // TODO replace with a true delete
-            return SafeExecutor(() => new OpMsg("Deleted Successfully")
-                , $"Unable to delete the Pricing Table {id}"
+            return SafeExecutor(() => _pricingTablesLib.DeletePricingTable(id)
+                , "Unable to delete the Pricing Table {id}"
             );
         }
     }

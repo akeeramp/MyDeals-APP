@@ -9,6 +9,7 @@
         OnSave,
         OnValidate,
         OnAction,
+        OnOpCollectorConvert,
         OnReadonly,
         OnHidden,
         OnRequired,

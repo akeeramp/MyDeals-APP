@@ -27,6 +27,7 @@ namespace Intel.MyDeals.BusinessRules
                 _attrbRules.AddRange(AllRules.GetReadOnlyRules());
                 _attrbRules.AddRange(AllRules.GetBasicValidationRules());
                 _attrbRules.AddRange(AllRules.GetAutomatedTestingRules());
+                _attrbRules.AddRange(AllRules.GetOpCollectorToDictRules());
 
                 return _attrbRules;
             }
@@ -39,17 +40,18 @@ namespace Intel.MyDeals.BusinessRules
         /// <param name="dc">OpDataCollector</param>
         /// <param name="ruleTriggerPoint">Rules Trigger used to find the correct rules to fire</param>
         /// <param name="securityActionCache">Used for performance optimization when dealing with security attributes.</param>
+        /// <param name="args">Any extra arguments to pass</param>
         /// <returns></returns>
-        public static OpMsgQueue ApplyRules(this OpDataCollector dc, MyRulesTrigger ruleTriggerPoint, Dictionary<string, bool> securityActionCache = null)
+        public static OpMsgQueue ApplyRules(this OpDataCollector dc, MyRulesTrigger ruleTriggerPoint, Dictionary<string, bool> securityActionCache = null, params object[] args)
         {
             OpDataElementType dcType = (OpDataElementType)Enum.Parse(typeof(OpDataElementType), dc.DcType);
-            string objsetType = dc.GetDataElementValue("OBJ_SET_TYPE_CD");
+            string objsetType = dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
 
             IEnumerable<MyOpRule> attrbRules = AttrbRules;
             attrbRules = attrbRules.Where(a => !a.InObjType.Any() || a.InObjType.Contains(dcType));
             attrbRules = attrbRules.Where(a => !a.InObjSetType.Any() || a.InObjSetType.Contains(objsetType));
 
-            return MyOpRulesLib.ApplyRules(dc, ruleTriggerPoint, attrbRules.ToList(), securityActionCache);
+            return MyOpRulesLib.ApplyRules(dc, ruleTriggerPoint, attrbRules.ToList(), securityActionCache, args);
         }
 
         

@@ -1,23 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Intel.MyDeals.DataLibrary;
+﻿using System.Collections.Generic;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
-using Intel.Opaque;
-using Intel.Opaque.Data;
-using System.Net;
 using Intel.MyDeals.IDataLibrary;
 
 namespace Intel.MyDeals.BusinessLogic
 {
     public class WorkFlowLib : IWorkFlowLib
     {
-        private readonly IWorkFlowDataLib _WorkFlowCollectorLib;
+        private readonly IWorkFlowDataLib _workFlowCollectorLib;
 
         public WorkFlowLib(IWorkFlowDataLib workflowCollectorLib)
         {
-            _WorkFlowCollectorLib = workflowCollectorLib;
+            _workFlowCollectorLib = workflowCollectorLib;
         }
 
         /// <summary>
@@ -27,7 +21,7 @@ namespace Intel.MyDeals.BusinessLogic
         public List<WorkFlowStg> GetWorkFlowStages()
         {
             // TODO :Later need to decide caching will be apply or not
-            return _WorkFlowCollectorLib.GetWorkFlowStages();
+            return _workFlowCollectorLib.GetWorkFlowStages();
         }
 
         /// <summary>
@@ -38,22 +32,22 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns>List of affected rows</returns>
         public List<WorkFlowStg> SetWorkFlowStages(CrudModes mode, WorkFlowStg data)
         {
-            return _WorkFlowCollectorLib.SetWorkFlowStages(mode, data);
+            return _workFlowCollectorLib.SetWorkFlowStages(mode, data);
         }
 
         public List<WorkFlows> SetWorkFlows(CrudModes mode, WorkFlows data)
         {
-            return _WorkFlowCollectorLib.SetWorkFlows(mode, data);                       
+            return _workFlowCollectorLib.SetWorkFlows(mode, data);                       
         }
 
         public List<WorkFlowAttribute> GetDropDownValues()
         {
-            return _WorkFlowCollectorLib.GetDropDownValues();
+            return _workFlowCollectorLib.GetDropDownValues();
         }
 
         public List<WorkFlows> GetWorkFlowItems()
         {
-            return _WorkFlowCollectorLib.GetWorkFlowItems();            
+            return _workFlowCollectorLib.GetWorkFlowItems();            
         }     
               
     }

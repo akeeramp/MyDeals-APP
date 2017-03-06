@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Web.Http;
+﻿using System.Web.Http;
 using Intel.MyDeals.BusinessLogic;
-using Intel.MyDeals.BusinessLogic.DataCollectors;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque;
@@ -44,16 +41,7 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetUpperContract/{id}")]
         public OpDataCollectorFlattenedList GetUpperContract(int id)
         {
-            // TODO make this only pull single dim Pricing Tables.  For now we will pull the entire table and take the performance hit
-            return SafeExecutor(() => _contractsLib
-                .GetContract(id, new List<OpDataElementType>
-                {
-                    OpDataElementType.Contract,
-                    OpDataElementType.PricingStrategy,
-                    OpDataElementType.PricingTable
-                })
-                .BuildObjSetContainers(ObjSetPivotMode.Pivoted)
-                .ToHierarchialList(OpDataElementType.Contract)
+            return SafeExecutor(() => _contractsLib.GetUpperContract(id)
                 , $"Unable to get Contract {id}"
             );
         }
@@ -63,9 +51,7 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetFullContract/{id}")]
         public OpDataCollectorFlattenedDictList GetFullContract(int id)
         {
-            return SafeExecutor(() => _contractsLib
-                .GetContract(id, true)
-                .BuildObjSetContainers(ObjSetPivotMode.Pivoted)
+            return SafeExecutor(() => _contractsLib.GetFullContract(id)
                 , $"Unable to get Contract {id}"
             );
         }
@@ -76,8 +62,7 @@ namespace Intel.MyDeals.Controllers.API
         [HttpPost]
         public MyDealsData SaveContract(int custId, OpDataCollectorFlattenedList contracts)
         {
-            return SafeExecutor(() => _contractsLib
-                .SaveContract(contracts, custId)
+            return SafeExecutor(() => _contractsLib.SaveContract(contracts, custId)
                 , "Unable to save the Contract"
             );
         }
@@ -88,13 +73,7 @@ namespace Intel.MyDeals.Controllers.API
         [HttpPost]
         public MyDealsData SaveFullContract(int custId, OpDataCollectorFlattenedDictList fullContracts)
         {
-            return SafeExecutor(() => _contractsLib.SaveContract(
-                fullContracts.ContainsKey(OpDataElementType.Contract) ? fullContracts[OpDataElementType.Contract] : new OpDataCollectorFlattenedList(),
-                fullContracts.ContainsKey(OpDataElementType.PricingStrategy) ? fullContracts[OpDataElementType.PricingStrategy] : new OpDataCollectorFlattenedList(),
-                fullContracts.ContainsKey(OpDataElementType.PricingTable) ? fullContracts[OpDataElementType.PricingTable] : new OpDataCollectorFlattenedList(),
-                fullContracts.ContainsKey(OpDataElementType.PricingTableRow) ? fullContracts[OpDataElementType.PricingTableRow] : new OpDataCollectorFlattenedList(),
-                fullContracts.ContainsKey(OpDataElementType.WipDeals) ? fullContracts[OpDataElementType.WipDeals] : new OpDataCollectorFlattenedList(),
-                custId)
+            return SafeExecutor(() => _contractsLib.SaveFullContract(custId, fullContracts)
                 , "Unable to save the Contract"
             );
         }
@@ -105,13 +84,7 @@ namespace Intel.MyDeals.Controllers.API
         [HttpPost]
         public MyDealsData SaveContractAndStrategy(int custId, ContractTransferPacket contractAndStrategy)
         {
-            return SafeExecutor(() => _contractsLib.SaveContract(
-                contractAndStrategy.Contract,
-                contractAndStrategy.PricingStrategy,
-                contractAndStrategy.PricingTable,
-                contractAndStrategy.PricingTableRow,
-                contractAndStrategy.WipDeals,
-                custId)
+            return SafeExecutor(() => _contractsLib.SaveContractAndStrategy(custId, contractAndStrategy)
                 , "Unable to save the Contract"
             );
         }
@@ -123,9 +96,8 @@ namespace Intel.MyDeals.Controllers.API
         [HttpGet]
         public OpMsg DeleteContract(int id)
         {
-            // TODO delete the data
-            return SafeExecutor(() => new OpMsg("Deleted Successfully")
-                , "Unable to delete the Contract"
+            return SafeExecutor(() => _contractsLib.DeleteContract(id)
+                , "Unable to delete the Contract {id}"
             );
         }
 

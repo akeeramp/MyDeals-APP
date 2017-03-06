@@ -7,6 +7,5 @@ namespace Intel.MyDeals.BusinessLogic
         UiTemplates GetUiTemplates();
         UiTemplates GetUiTemplates(string group);
         UiTemplates GetUiTemplates(string group, string category);
-        UiModelTemplate GetUiTemplate(string group, string category, string subcategory);
     }
 }

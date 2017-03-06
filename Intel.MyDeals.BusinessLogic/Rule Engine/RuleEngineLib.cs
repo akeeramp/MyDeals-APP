@@ -2,7 +2,6 @@
 using Intel.MyDeals.IBusinessLogic;
 using Intel.MyDeals.IDataLibrary;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using Intel.MyDeals.BusinessRules;
 using Intel.RulesEngine;
@@ -15,10 +14,10 @@ namespace Intel.MyDeals.BusinessLogic
 
         private readonly IDataCollectionsDataLib _dataCollectionsDataLib;
 
-        public RuleEngineLib(IRuleEngineDataLib _ruleEngineDataLib, IDataCollectionsDataLib _dataCollectionsDataLib)
+        public RuleEngineLib(IRuleEngineDataLib ruleEngineDataLib, IDataCollectionsDataLib dataCollectionsDataLib)
         {
-            this._ruleEngineDataLib = _ruleEngineDataLib;
-            this._dataCollectionsDataLib = _dataCollectionsDataLib;
+            _ruleEngineDataLib = ruleEngineDataLib;
+            _dataCollectionsDataLib = dataCollectionsDataLib;
         }
 
         /// <summary>
@@ -27,8 +26,8 @@ namespace Intel.MyDeals.BusinessLogic
         /// </summary>
         public RuleEngineLib()
         {
-            this._ruleEngineDataLib = new RuleEngineDataLib();
-            this._dataCollectionsDataLib = new DataCollectionsDataLib();
+            _ruleEngineDataLib = new RuleEngineDataLib();
+            _dataCollectionsDataLib = new DataCollectionsDataLib();
         }
 
         /// <summary>
@@ -93,7 +92,7 @@ namespace Intel.MyDeals.BusinessLogic
         {
             //List<int> RulePassedTaskIds = GetRuleItemById(ruleId).RulePassedTaskIds.ToList();
             //return GetRuleTasks().Where(rt => rt.RuleId == ruleId && RulePassedTaskIds.Contains(rt.Id));
-            return GetRuleTasks().Where(rt => rt.RuleId == ruleId && rt.SuccessType == true);
+            return GetRuleTasks().Where(rt => rt.RuleId == ruleId && rt.SuccessType);
         }
 
         /// <summary>

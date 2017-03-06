@@ -67,7 +67,7 @@ namespace Intel.MyDeals.DataLibrary
 				DataAccess.ExecuteDataSet(cmd, null, out dsCheckConstraintErrors);
 				return true;
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				if (dsCheckConstraintErrors != null && dsCheckConstraintErrors.Tables.Count > 0)
 				{

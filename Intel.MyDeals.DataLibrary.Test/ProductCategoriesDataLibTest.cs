@@ -9,7 +9,7 @@ namespace Intel.MyDeals.DataLibrary.Test
     [TestFixture]
     public class ProductCategoriesDataLibTest
 	{
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public void SetupUserAndDatabase()
 		{
 			Console.WriteLine("Started Customer Calendar Data Library tests");

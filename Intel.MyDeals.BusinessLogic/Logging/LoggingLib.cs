@@ -11,9 +11,9 @@ namespace Intel.MyDeals.BusinessLogic
     {
         private readonly ILoggingDataLib _loggingDataLib;
 
-        public LoggingLib(ILoggingDataLib _loggingDataLib)
+        public LoggingLib(ILoggingDataLib loggingDataLib)
         {
-            this._loggingDataLib = _loggingDataLib;
+            _loggingDataLib = loggingDataLib;
         }
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// </summary>
         public LoggingLib()
         {
-            this._loggingDataLib = new LoggingDataLib();
+            _loggingDataLib = new LoggingDataLib();
         }
 
         public LogConfig GetLogConfig()

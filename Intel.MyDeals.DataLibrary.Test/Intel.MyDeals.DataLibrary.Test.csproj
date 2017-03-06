@@ -99,7 +99,6 @@
     <Compile Include="CustomerDataLibTests.cs" />
     <Compile Include="LoggingDataLibTest.cs" />
     <Compile Include="OtherTests.cs" />
-    <Compile Include="PocTests.cs" />
     <Compile Include="DropdownDataLibTest.cs" />
     <Compile Include="ProductCategoriesDataLibTest.cs" />
     <Compile Include="ProductDataLibTests.cs" />
@@ -108,6 +107,10 @@
     <Compile Include="UnitTestHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Intel.MyDeals.BusinessLogic\Intel.MyDeals.BusinessLogic.csproj">
+      <Project>{D49F802F-7F79-4F6E-9553-D26F40E7DB34}</Project>
+      <Name>Intel.MyDeals.BusinessLogic</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Intel.MyDeals.DataLibrary\Intel.MyDeals.DataLibrary.csproj">
       <Project>{b45850dc-1515-40d2-bfa5-15c8dffc5af2}</Project>
       <Name>Intel.MyDeals.DataLibrary</Name>

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Intel.MyDeals.Entities;
-using Intel.Opaque.Data;
 
 namespace Intel.MyDeals.BusinessLogic.Test
 {
@@ -19,45 +18,45 @@ namespace Intel.MyDeals.BusinessLogic.Test
                     {
                         new OpDataCollectorFlattenedItem
                         {
-                            ["DC_ID"] = 1123,
-                            ["DC_PARENT_ID"] = null,
-                            ["START_DT"] = new DateTime(2016,6,6),
-                            ["OBJ_SET_TYPE_CD"] = "All"
+                            [AttributeCodes.DC_ID] = 1123,
+                            [AttributeCodes.DC_PARENT_ID] = null,
+                            [AttributeCodes.START_DT] = new DateTime(2016,6,6),
+                            [AttributeCodes.OBJ_SET_TYPE_CD] = "All"
                         },
                         new OpDataCollectorFlattenedItem
                         {
-                            ["DC_ID"] = 4156,
-                            ["DC_PARENT_ID"] = null,
-                            ["START_DT"] = new DateTime(2016,6,6),
-                            ["OBJ_SET_TYPE_CD"] = "All"
+                            [AttributeCodes.DC_ID] = 4156,
+                            [AttributeCodes.DC_PARENT_ID] = null,
+                            [AttributeCodes.START_DT] = new DateTime(2016,6,6),
+                            [AttributeCodes.OBJ_SET_TYPE_CD] = "All"
                         },
                         new OpDataCollectorFlattenedItem
                         {
-                            ["DC_ID"] = -101,
-                            ["DC_PARENT_ID"] = null,
-                            ["START_DT"] = new DateTime(2016,6,6),
-                            ["OBJ_SET_TYPE_CD"] = "All"
+                            [AttributeCodes.DC_ID] = -101,
+                            [AttributeCodes.DC_PARENT_ID] = null,
+                            [AttributeCodes.START_DT] = new DateTime(2016,6,6),
+                            [AttributeCodes.OBJ_SET_TYPE_CD] = "All"
                         }
                     },
                     [OpDataElementType.PricingStrategy] = new OpDataCollectorFlattenedList
                     {
                         new OpDataCollectorFlattenedItem
                         {
-                            ["DC_ID"] = 789,
-                            ["DC_PARENT_ID"] = null,
-                            ["TITLE"] = "Strategy 1"
+                            [AttributeCodes.DC_ID] = 789,
+                            [AttributeCodes.DC_PARENT_ID] = null,
+                            [AttributeCodes.TITLE] = "Strategy 1"
                         },
                         new OpDataCollectorFlattenedItem
                         {
-                            ["DC_ID"] = 1011,
-                            ["DC_PARENT_ID"] = null,
-                            ["TITLE"] = "Strategy 2"
+                            [AttributeCodes.DC_ID] = 1011,
+                            [AttributeCodes.DC_PARENT_ID] = null,
+                            [AttributeCodes.TITLE] = "Strategy 2"
                         },
                         new OpDataCollectorFlattenedItem
                         {
-                            ["DC_ID"] = -201,
-                            ["DC_PARENT_ID"] = null,
-                            ["TITLE"] = "Strategy 2"
+                            [AttributeCodes.DC_ID] = -201,
+                            [AttributeCodes.DC_PARENT_ID] = null,
+                            [AttributeCodes.TITLE] = "Strategy 2"
                         }
                     }
                 }

@@ -17,10 +17,10 @@ namespace Intel.MyDeals.BusinessRules
             return OpRulesLib<OpDataCollector, IOpDataElement, MyRulesTrigger, OpDataElementType>.RunAction(target, ar, securityActionCache);
         }
 
-        public static OpMsgQueue ApplyRules(OpDataCollector dc, MyRulesTrigger trigger, List<MyOpRule> ars, Dictionary<string, bool> securityActionCache = null)
+        public static OpMsgQueue ApplyRules(OpDataCollector dc, MyRulesTrigger trigger, List<MyOpRule> ars, Dictionary<string, bool> securityActionCache = null, params object[] args)
         {
             var newArs = new List<OpRule<OpDataCollector, IOpDataElement, MyRulesTrigger, OpDataElementType>>(ars);
-            return OpRulesLib<OpDataCollector, IOpDataElement, MyRulesTrigger, OpDataElementType>.ApplyRules(dc, trigger, newArs, securityActionCache);
+            return OpRulesLib<OpDataCollector, IOpDataElement, MyRulesTrigger, OpDataElementType>.ApplyRules(dc, trigger, newArs, securityActionCache, args);
         }
     }
 }

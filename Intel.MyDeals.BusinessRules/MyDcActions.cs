@@ -52,7 +52,7 @@ namespace Intel.MyDeals.BusinessRules
         /// <param name="args">OpDataCollector, MyOpRule and SecurityActionCache</param>
         public static void SyncReadOnlyItems(params object[] args)
         {
-            SyncAtrbPropertyItems("ATRB_READ_ONLY", MyRulesTrigger.OnReadonly, args);
+            SyncAtrbPropertyItems(SecurityActns.ATRB_READ_ONLY, MyRulesTrigger.OnReadonly, args);
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace Intel.MyDeals.BusinessRules
         /// <param name="args">OpDataCollector, MyOpRule and SecurityActionCache</param>
         public static void SyncRequiredItems(params object[] args)
         {
-            SyncAtrbPropertyItems("ATRB_REQUIRED", MyRulesTrigger.OnRequired, args);
+            SyncAtrbPropertyItems(SecurityActns.ATRB_REQUIRED, MyRulesTrigger.OnRequired, args);
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace Intel.MyDeals.BusinessRules
         /// <param name="args">OpDataCollector, MyOpRule and SecurityActionCache</param>
         public static void SyncHiddenItems(params object[] args)
         {
-            SyncAtrbPropertyItems("ATRB_HIDDEN", MyRulesTrigger.OnHidden, args);
+            SyncAtrbPropertyItems(SecurityActns.ATRB_HIDDEN, MyRulesTrigger.OnHidden, args);
         }
 
 

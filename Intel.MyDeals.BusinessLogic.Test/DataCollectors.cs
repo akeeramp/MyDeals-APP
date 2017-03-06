@@ -38,8 +38,8 @@ namespace Intel.MyDeals.BusinessLogic.Test
             MyDealsData myDealsData = DataCollectorData.OpDcFlatDictData["test1"].ToMyDealsData(OpDataElementType.Contract, new List<int> { 123 });
 
             Assert.IsTrue(myDealsData[OpDataElementType.Contract].AllDataCollectors.Any());
-            Assert.IsTrue(myDealsData[OpDataElementType.Contract].Data[123].GetDataElement("OBJSET_TYPE") == null);
-            Assert.IsTrue(myDealsData[OpDataElementType.Contract].Data[123].GetDataElementValue("DEAL_STG_CD") == "Requested");
+            Assert.IsTrue(myDealsData[OpDataElementType.Contract].Data[123].GetDataElement(AttributeCodes.OBJ_SET_TYPE_CD) == null);
+            Assert.IsTrue(myDealsData[OpDataElementType.Contract].Data[123].GetDataElementValue(AttributeCodes.DEAL_STG_CD) == StageCodes.Requested.ToString());
             //Assert.IsTrue(myDealsData[OpDataElementType.Contract].Data[123].GetDataElementValue("START_DT") == "6/6/2016 12:00:00 AM");
         }
 
@@ -48,11 +48,11 @@ namespace Intel.MyDeals.BusinessLogic.Test
         {
             MyDealsData myDealsData = DataCollectorData.OpDcFlatDictData["test1"].ToMyDealsData(OpDataElementType.Contract, new List<int> { 123 });
 
-            OpDataCollectorFlattenedDictList data = myDealsData.BuildObjSetContainers(ObjSetPivotMode.Pivoted);
+            OpDataCollectorFlattenedDictList data = myDealsData.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
 
-            Assert.IsTrue(data[OpDataElementType.Contract][0]["DEAL_STG_CD"].ToString() == "Requested");
+            Assert.IsTrue(data[OpDataElementType.Contract][0][AttributeCodes.DEAL_STG_CD].ToString() == "Requested");
 
-            data[OpDataElementType.Contract][0]["DEAL_STG_CD"] = "Submitted";
+            data[OpDataElementType.Contract][0][AttributeCodes.DEAL_STG_CD] = StageCodes.Submitted.ToString();
 
             Assert.IsTrue(data[OpDataElementType.Contract][0]["DEAL_STG_CD"].ToString() == "Submitted");
         }
@@ -62,9 +62,9 @@ namespace Intel.MyDeals.BusinessLogic.Test
         {
             MyDealsData myDealsData = DataCollectorData.OpDcFlatDictData["test1"].ToMyDealsData(OpDataElementType.Contract, new List<int> { 123 });
 
-            OpDataCollectorFlattenedList data = myDealsData.BuildObjSetContainers(ObjSetPivotMode.Pivoted).ToHierarchialList(OpDataElementType.Contract);
+            OpDataCollectorFlattenedList data = myDealsData.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted).ToHierarchialList(OpDataElementType.Contract);
 
-            var dcId = ((OpDataCollectorFlattenedList)data[0][OpDataElementType.PricingStrategy.ToString()])[0]["DC_ID"];
+            var dcId = ((OpDataCollectorFlattenedList)data[0][OpDataElementType.PricingStrategy.ToString()])[0][AttributeCodes.DC_ID];
 
             Assert.IsTrue(dcId.ToString() == "201");
         }
@@ -73,10 +73,9 @@ namespace Intel.MyDeals.BusinessLogic.Test
         public void PeTest()
         {
             MyDealsData myDealsData = PricingTableData.GetData(123);
-            OpDataCollectorFlattenedDictList data = myDealsData.BuildObjSetContainers(ObjSetPivotMode.Pivoted);
+            OpDataCollectorFlattenedDictList data = myDealsData.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
             MyDealsData myDealsData2 = data.ToMyDealsData(OpDataElementType.Contract, new List<int> { 123 });
-
-            var y = 1;
+            
         }
     }
 

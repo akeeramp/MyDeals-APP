@@ -19,11 +19,11 @@ namespace Intel.MyDeals.BusinessLogic
         /// </summary>
         private readonly IDataCollectionsDataLib _dataCollectionsDataLib;
 
-        public ConstantsLookupsLib(IConstantLookupDataLib _constantLookupDataLib,
-            IDataCollectionsDataLib _dataCollectionsDataLib)
+        public ConstantsLookupsLib(IConstantLookupDataLib constantLookupDataLib,
+            IDataCollectionsDataLib dataCollectionsDataLib)
         {
-            this._constantLookupDataLib = _constantLookupDataLib;
-            this._dataCollectionsDataLib = _dataCollectionsDataLib;
+            _constantLookupDataLib = constantLookupDataLib;
+            _dataCollectionsDataLib = dataCollectionsDataLib;
         }
 
         #region ToolConstants

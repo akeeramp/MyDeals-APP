@@ -292,7 +292,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
                 topbar.hide();
                 if (toState !== undefined) $state.go(toState.name, toParams);
             },
-            function (result) {
+            function (response) {
                 logger.error("Could not save the contract.", response, response.statusText);
                 topbar.hide();
             }

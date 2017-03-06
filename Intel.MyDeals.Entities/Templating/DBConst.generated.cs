@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 3/2/2017 2:30:08 PM
+File Updated: 3/3/2017 11:42:39 PM
 On: PWECKENR-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -15,6 +15,8 @@ namespace Intel.MyDeals.Entities {
 	//-- AttributeCodes -----------------------------------------------------------------------------------
 
 	public static class AttributeCodes {
+		public const string DC_ID = "DC_ID";
+		public const string DC_PARENT_ID = "DC_PARENT_ID";
 
 		///<summary>
 		/// DIM_SID: 2
@@ -1190,7 +1192,6 @@ namespace Intel.MyDeals.Entities {
 	//-- ToolConstantName ---------------------------------------------------------------------------------
 
 	public static class ToolConstantName {
-		public const string akash = "akash";
 		public const string COST_TEST_TYPES = "COST_TEST_TYPES";
 		public const string DB_ERROR_CONTACT_EMAIL = "DB_ERROR_CONTACT_EMAIL";
 		public const string DB_LOGGING = "DB_LOGGING";
@@ -1198,6 +1199,141 @@ namespace Intel.MyDeals.Entities {
 		public const string ENV = "ENV";
 		public const string gfgf = "gfgf";
 		public const string santhoshi = "santhoshi";
+	}
+
+
+	//-- Roles ---------------------------------------------------------------------------------
+
+	public static class RoleTypes {
+		public const string CBA = "CBA";
+		public const string DA = "DA";
+		public const string Finance = "Finance";
+		public const string FSE = "FSE";
+		public const string GA = "GA";
+		public const string Legal = "Legal";
+		public const string RA = "RA";
+		public const string SA = "SA";
+	}
+
+
+	//-- WorkFlow Stages ---------------------------------------------------------------------------------
+
+	public static class WorkFlowStages {
+		public const string Requested = "Requested";
+		public const string Cancelled = "Cancelled";
+		public const string Expired = "Expired";
+		public const string GA_Approved = "GA_Approved";
+		public const string Created = "Created";
+		public const string SA_Approved = "SA_Approved";
+		public const string Test_WF = "Test WF";
+	}
+
+
+	//-- Workflow Actions ---------------------------------------------------------------------------------
+
+	public static class WorkFlowActions {
+		public const string Approve = "Approve";
+		public const string Cancel = "Cancel";
+		public const string Reject = "Reject";
+		public const string Redeal = "Redeal";
+		public const string Fast_Track = "Fast Track";
+		public const string DeleteLineup = "DeleteLineup";
+	}
+
+
+	//-- Security Actions ---------------------------------------------------------------------------------
+
+	public static class SecurityActns {
+		public const string WRAP_SECURITY = "WRAP_SECURITY";
+		public const string C_ACCOUNT_BASED = "C_ACCOUNT_BASED";
+		public const string C_GEO_BASED = "C_GEO_BASED";
+		public const string C_GLOBAL_BASED = "C_GLOBAL_BASED";
+		public const string ADMIN_GOD_MODE = "ADMIN_GOD_MODE";
+		public const string CAN_ADMIN_SYS_LOCK = "CAN_ADMIN_SYS_LOCK";
+		public const string CAN_LOCK_SYSTEM = "CAN_LOCK_SYSTEM";
+		public const string C_ADD_ATTACHMENTS = "C_ADD_ATTACHMENTS";
+		public const string C_APPROVE_ = "C_APPROVE ";
+		public const string C_CANCEL_DEAL = "C_CANCEL_DEAL";
+		public const string C_COPY_DEAL = "C_COPY_DEAL";
+		public const string C_CREATE_DEAL = "C_CREATE_DEAL";
+		public const string C_DELETE_DEAL = "C_DELETE_DEAL";
+		public const string C_REJECT_DEAL = "C_REJECT_DEAL";
+		public const string C_UPDATE_DEAL = "C_UPDATE_DEAL";
+		public const string C_VIEW = "C_VIEW";
+		public const string C_VIEW_ATTACHMENTS = "C_VIEW_ATTACHMENTS";
+		public const string C_VIEW_BMT_ACCEPTED_ECAP = "C_VIEW_BMT_ACCEPTED_ECAP";
+		public const string C_VIEW_DEAL = "C_VIEW_DEAL";
+		public const string C_VIEW_HISTORY = "C_VIEW_HISTORY";
+		public const string C_VIEW_MMBP_ACCEPTED_ECAP = "C_VIEW_MMBP_ACCEPTED_ECAP";
+		public const string DEAL_HIDDEN = "DEAL_HIDDEN";
+		public const string DEAL_READ_ONLY = "DEAL_READ_ONLY";
+		public const string ATRB_HIDDEN = "ATRB_HIDDEN";
+		public const string ATRB_READ_ONLY = "ATRB_READ_ONLY";
+		public const string ATRB_REQUIRED = "ATRB_REQUIRED";
+		public const string CAN_DEVELOPER_ONLY = "CAN_DEVELOPER_ONLY";
+		public const string C_REDEAL_DEAL = "C_REDEAL_DEAL";
+		public const string C_SAVE_DATA_PRICE_APPROVE = "C_SAVE_DATA_PRICE_APPROVE";
+		public const string C_RUN_COST_TEST_APPROVE = "C_RUN_COST_TEST_APPROVE";
+		public const string C_SAVE_DATA_DT_APPROVE = "C_SAVE_DATA_DT_APPROVE";
+		public const string C_SAVE_DATA_BY_APPROVE = "C_SAVE_DATA_BY_APPROVE";
+		public const string C_FAST_TRACK = "C_FAST_TRACK";
+		public const string CAN_CREATE_RETRO_DEALS = "CAN_CREATE_RETRO_DEALS";
+		public const string C_INCREASE_DATE = "C_INCREASE_DATE";
+		public const string C_DECREASE_PRICE = "C_DECREASE_PRICE";
+		public const string C_APPROVE_FASTTRACK = "C_APPROVE_FASTTRACK";
+		public const string C_REQ_COMPONENTS = "C_REQ_COMPONENTS";
+		public const string C_IDMS_READ_ONLY_ = "C_IDMS_READ_ONLY ";
+		public const string C_IDMS_ACTION_DISABLED_ = "C_IDMS_ACTION_DISABLED ";
+		public const string C_TARGET_REGIONS_DISABLED = "C_TARGET_REGIONS_DISABLED";
+		public const string C_VIEW_QUOTE_LETTER = "C_VIEW_QUOTE_LETTER";
+		public const string CAN_CREATE_QTR_RETRO_DEALS = "CAN_CREATE_QTR_RETRO_DEALS";
+		public const string CAN_CREATE_DEAL_PRIOR_TO_QTR = "CAN_CREATE_DEAL_PRIOR_TO_QTR";
+		public const string CAN_VIEW_LEGAL_COMMENTS = "CAN_VIEW_LEGAL_COMMENTS";
+		public const string C_CAN_VIEW_ADMINTOOL = "C_CAN_VIEW_ADMINTOOL";
+		public const string C_DECREASE_DATE = "C_DECREASE_DATE";
+		public const string CAN_MANAGE_EMAIL = "CAN_MANAGE_EMAIL";
+		public const string CAN_MANAGE_CHIPSET_SPLITOUT = "CAN_MANAGE_CHIPSET_SPLITOUT";
+		public const string CAN_MANAGE_COMPETITIVE_PRODUCTS = "CAN_MANAGE_COMPETITIVE_PRODUCTS";
+		public const string C_CAN_VIEW_C2A_INTERFACE = "C_CAN_VIEW_C2A_INTERFACE";
+		public const string C_INCREASE_PRICE = "C_INCREASE_PRICE";
+		public const string C_DELETE_DEAL_LINEUP = "C_DELETE_DEAL_LINEUP";
+		public const string ATRB_DELETED = "ATRB_DELETED";
+		public const string CALC_MSP = "CALC_MSP";
+		public const string CK_REV_LEVEL = "CK_REV_LEVEL";
+		public const string COMMON_DEAL_SAVE = "COMMON_DEAL_SAVE";
+		public const string CONCURRENCY_CHECK = "CONCURRENCY_CHECK";
+		public const string COPY_WB_FULL = "COPY_WB_FULL";
+		public const string COPY_WB_HEADER = "COPY_WB_HEADER";
+		public const string COPY_WB_OVERLAP = "COPY_WB_OVERLAP";
+		public const string COPY_WB_PROD = "COPY_WB_PROD";
+		public const string DEAL_APPROVE = "DEAL_APPROVE";
+		public const string DEAL_CANCEL = "DEAL_CANCEL";
+		public const string DEAL_CREATED = "DEAL_CREATED";
+		public const string DEAL_DELETE = "DEAL_DELETE";
+		public const string DEAL_DELETED = "DEAL_DELETED";
+		public const string DEAL_REJECT = "DEAL_REJECT";
+		public const string DEAL_ROLLBACK_TO_ACTIVE = "DEAL_ROLLBACK_TO_ACTIVE";
+		public const string ECAP_VALIDATION = "ECAP_VALIDATION";
+		public const string GEN_TRACKER = "GEN_TRACKER";
+		public const string ID_CHANGE = "ID_CHANGE";
+		public const string LAYER = "LAYER";
+		public const string MESSAGE = "MESSAGE";
+		public const string PREP2DEAL = "PREP2DEAL";
+		public const string PROCESS_QUOTE_LETTER = "PROCESS_QUOTE_LETTER";
+		public const string PURGE_WIP = "PURGE_WIP";
+		public const string QUEUE_QUOTE_LETTER = "QUEUE_QUOTE_LETTER";
+		public const string REDEAL = "REDEAL";
+		public const string SAVE = "SAVE";
+		public const string SEND_QUOTE_LETTER = "SEND_QUOTE_LETTER";
+		public const string SNAPSHOT = "SNAPSHOT";
+		public const string UPDATE_APPROVERS = "UPDATE_APPROVERS";
+		public const string WB_CHECK = "WB_CHECK";
+		public const string WB_LOCK = "WB_LOCK";
+		public const string WB_UNLOCK = "WB_UNLOCK";
+		public const string YCS2_OVERLAP = "YCS2_OVERLAP";
+		public const string CAN_REMOVE_WB_LOCK = "CAN_REMOVE_WB_LOCK";
+		public const string CAN_VIEW_COST_TEST = "CAN_VIEW_COST_TEST";
+		public const string CAN_VIEW_MEET_COMP = "CAN_VIEW_MEET_COMP";
 	}
 
 

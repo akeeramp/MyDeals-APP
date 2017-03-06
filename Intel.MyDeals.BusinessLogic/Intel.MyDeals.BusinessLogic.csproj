@@ -71,41 +71,30 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Accounts\AccountsLib.cs" />
-    <Compile Include="Admins\ConstantsAdminLib.cs" />
-    <Compile Include="Admins\MarketOpsAdminLib.cs" />
-    <Compile Include="Atrb Maps\AtrbMapsLib.cs" />
     <Compile Include="Cache\CacheLib.cs" />
     <Compile Include="CapMsp\CapMspLib.cs" />
     <Compile Include="Constants Lookups\ConstantsLookupsLib.cs" />
-    <Compile Include="Constants Lookups\MetaDataExtensionMethods.cs" />
     <Compile Include="Contracts\ContractsLib.cs" />
     <Compile Include="CustomerCalendar\CustomerCalendarLib.cs" />
-    <Compile Include="Customer\CustCalFunctions.cs" />
     <Compile Include="Customer\CustomerLib.cs" />
-    <Compile Include="DataCollectors\DataCollectorLib.cs" />
+    <Compile Include="OpDataCollectors\OpDataCollectorLib.cs" />
     <Compile Include="BusinessLogic.cs" />
-    <Compile Include="DataCollectors\MyDealsDataExtensions.cs" />
-    <Compile Include="DataCollectors\OpDataCollectorExtensions.cs" />
-    <Compile Include="DataCollectors\OpDataCollectorFlattenedDictListExtensions.cs" />
-    <Compile Include="DataCollectors\OpDataCollectorFlattenedListExtensions.cs" />
-    <Compile Include="DataCollectors\OpDataCollectorFlattenedItemExtensions.cs" />
-    <Compile Include="DataCollectors\OpDataElementExtensions.cs" />
-    <Compile Include="DataCollectors\OpDataElementUITemplateExtensions.cs" />
-    <Compile Include="Deals\DealHelperFunctions.cs" />
-    <Compile Include="Deals\DealLib_Search.cs" />
-    <Compile Include="Deals\DealsLib_Common.cs" />
-    <Compile Include="Deals\DealsLib_Get.cs" />
-    <Compile Include="Deals\DealsLib_Save.cs" />
-    <Compile Include="DataCollectors\OpDataElementUIExtensions.cs" />
+    <Compile Include="OpDataCollectors\MyDealsDataExtensions.cs" />
+    <Compile Include="OpDataCollectors\OpDataCollectorExtensions.cs" />
+    <Compile Include="OpDataCollectors\OpDataCollectorFlattenedDictListExtensions.cs" />
+    <Compile Include="OpDataCollectors\OpDataCollectorFlattenedListExtensions.cs" />
+    <Compile Include="OpDataCollectors\OpDataCollectorFlattenedItemExtensions.cs" />
+    <Compile Include="OpDataCollectors\OpDataElementExtensions.cs" />
+    <Compile Include="OpDataCollectors\OpDataElementTypeExtensions.cs" />
+    <Compile Include="OpDataCollectors\OpDataElementUITemplateExtensions.cs" />
+    <Compile Include="OpDataCollectors\OpDataPacketExtensions.cs" />
+    <Compile Include="OpDataCollectors\OpDataElementUIExtensions.cs" />
     <Compile Include="Dropdowns\DropdownLib.cs" />
     <Compile Include="Employees\EmployeesLib.cs" />
     <Compile Include="Geos\GeosLib.cs" />
-    <Compile Include="Helpers\OpUserTokenHelpers.cs" />
     <Compile Include="JMS\JmsLib.cs" />
     <Compile Include="Logging\LoggingLib.cs" />
-    <Compile Include="MetaData\MetasLib.cs" />
     <Compile Include="DevTest\DevTestsLib.cs" />
-    <Compile Include="POC\PocLib.cs" />
     <Compile Include="ProductCostTest\ProductCostTestLib.cs" />
     <Compile Include="PricingStrategies\PricingStrategiesLib.cs" />
     <Compile Include="PricingTables\PricingTablesLib.cs" />
@@ -149,7 +138,9 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Deals\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

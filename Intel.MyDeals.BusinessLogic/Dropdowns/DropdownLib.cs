@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.MyDeals.IDataLibrary;
@@ -40,7 +39,7 @@ namespace Intel.MyDeals.BusinessLogic
 			return _dataCollectionsDataLib.GetBasicDropdowns();
 		}
 
-        /// <summary
+        /// <summary>
         /// Get All Simple Dropdowns
 		/// </summary>
         /// <returns>list of dropdowns</returns>

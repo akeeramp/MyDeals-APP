@@ -16,10 +16,10 @@ namespace Intel.MyDeals.BusinessLogic
         /// <summary>
         /// Customer Library
         /// </summary>
-        public CustomerLib(ICustomerDataLib _customerDataLib, IDataCollectionsDataLib _dataCollectionsDataLib)
+        public CustomerLib(ICustomerDataLib customerDataLib, IDataCollectionsDataLib dataCollectionsDataLib)
         {
-            this._customerDataLib = _customerDataLib;
-            this._dataCollectionsDataLib = _dataCollectionsDataLib;
+            _customerDataLib = customerDataLib;
+            _dataCollectionsDataLib = dataCollectionsDataLib;
         }
 
         /// <summary>
@@ -28,8 +28,8 @@ namespace Intel.MyDeals.BusinessLogic
         /// </summary>
         public CustomerLib()
         {
-            this._customerDataLib = new CustomerDataLib();
-            this._dataCollectionsDataLib = new DataCollectionsDataLib();
+            _customerDataLib = new CustomerDataLib();
+            _dataCollectionsDataLib = new DataCollectionsDataLib();
         }
 
         #region Customer Divisions
@@ -43,12 +43,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns>list of customer division data</returns>
         public List<CustomerDivision> GetCustomerDivisions(bool getCachedResult = true)
         {
-            if (!getCachedResult)
-            {
-                return _customerDataLib.GetCustomerDivisions();
-            }
-
-            return _dataCollectionsDataLib.GetCustomerDivisions();
+            return !getCachedResult ? _customerDataLib.GetCustomerDivisions() : _dataCollectionsDataLib.GetCustomerDivisions();
         }
 
         /// <summary>
@@ -67,7 +62,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns>list of customer division data flagged as active</returns>
         public List<CustomerDivision> GetCustomerDivisionsActive()
         {
-            return GetCustomerDivisions().Where(c => c.ACTV_IND == true).ToList();
+            return GetCustomerDivisions().Where(c => c.ACTV_IND).ToList();
         }
 
         /// <summary>

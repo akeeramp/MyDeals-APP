@@ -9,7 +9,7 @@ namespace Intel.MyDeals.BusinessLogic
 
         public void JmsTest()
         {
-            string m_idsid = "mhtippin";
+            //string m_idsid = "mhtippin";
 
             JmsDataLib jmsConnection = new JmsDataLib();
 

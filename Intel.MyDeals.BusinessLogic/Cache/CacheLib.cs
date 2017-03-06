@@ -9,39 +9,66 @@ namespace Intel.MyDeals.BusinessLogic
     {
         private readonly IDataCollectionsDataLib _dataCollectionsDataLib;
 
-        public CacheLib(IDataCollectionsDataLib _dataCollectionsDataLib)
+        public CacheLib(IDataCollectionsDataLib dataCollectionsDataLib)
         {
-            this._dataCollectionsDataLib = _dataCollectionsDataLib;
+            _dataCollectionsDataLib = dataCollectionsDataLib;
         }
 
+        /// <summary>
+        /// Check the Cache Sotores for status
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<CacheItem> CheckCache()
         {
-            return this._dataCollectionsDataLib.CheckCache();
+            return _dataCollectionsDataLib.CheckCache();
         }
 
+        /// <summary>
+        /// Vlear all cache stores
+        /// </summary>
+        /// <returns></returns>
         public bool ClearCache()
         {
-            return this._dataCollectionsDataLib.ClearCache();
+            return _dataCollectionsDataLib.ClearCache();
         }
 
+        /// <summary>
+        /// Clear a specific cache store
+        /// </summary>
+        /// <param name="cacheName">Name of the cache store</param>
+        /// <returns></returns>
         public bool ClearCache(string cacheName)
         {
-            return this._dataCollectionsDataLib.ClearCache(cacheName);
+            return _dataCollectionsDataLib.ClearCache(cacheName);
         }
 
+        /// <summary>
+        /// Load all cache stores with content
+        /// </summary>
+        /// <returns></returns>
         public bool LoadCache()
         {
-            return this._dataCollectionsDataLib.LoadCache();
+            return _dataCollectionsDataLib.LoadCache();
         }
 
+        /// <summary>
+        /// Load a specific cache store with content
+        /// </summary>
+        /// <param name="cacheName">Name of the cache store</param>
+        /// <returns></returns>
         public bool LoadCache(string cacheName)
         {
-            return this._dataCollectionsDataLib.LoadCache(cacheName);
+            return _dataCollectionsDataLib.LoadCache(cacheName);
         }
 
+        /// <summary>
+        /// View the raw contents of a cache store
+        /// </summary>
+        /// <param name="cacheName">Name of the cache store</param>
+        /// <returns></returns>
         public object ViewCache(string cacheName)
         {
-            return this._dataCollectionsDataLib.ViewCache(cacheName);
+            return _dataCollectionsDataLib.ViewCache(cacheName);
         }
 
     }

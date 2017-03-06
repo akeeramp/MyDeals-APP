@@ -31,7 +31,7 @@ namespace Intel.MyDeals.BusinessRules
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = BusinessLogicDeActions.SetReadOnly,
-                            Target = new[] {"TRGT_RGN_CHK", "TRGT_RGN", "RETAIL_CYCLE"}
+                            Target = new[] {AttributeCodes.TRKR_NBR, AttributeCodes.SOLD_TO_ID}
                         }
                     }
                 },
@@ -45,7 +45,7 @@ namespace Intel.MyDeals.BusinessRules
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = BusinessLogicDeActions.SetReadOnly,
-                            Target = new[] {"PROGRAM_TYPE"}
+                            Target = new[] {AttributeCodes.PROGRAM_ECAP_TYPE}
                         }
                     }
                 },
@@ -61,7 +61,7 @@ namespace Intel.MyDeals.BusinessRules
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = BusinessLogicDeActions.SetReadOnly,
-                            Target = new[] {"PRODUCT_TITLE", "START_DT", "END_VOL", "STRT_VOL", "RATE"}
+                            Target = new[] {AttributeCodes.START_DT, AttributeCodes.END_DT}
                         }
                     }
 
@@ -71,13 +71,13 @@ namespace Intel.MyDeals.BusinessRules
                     Title="Readonly if in past",
                     ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnReadonly},
-                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs("START_DT") && de.IsDateInPast() && de.HasValue()).Any(),
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.START_DT) && de.IsDateInPast() && de.HasValue()).Any(),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = BusinessLogicDeActions.SetReadOnly,
-                            Target = new[] {"CUST_MBR_SID"}
+                            Target = new[] { AttributeCodes.CUST_MBR_SID }
                         }
                     },
                     OpRuleElseActions = new List<OpRuleAction<IOpDataElement>>
@@ -85,7 +85,7 @@ namespace Intel.MyDeals.BusinessRules
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = BusinessLogicDeActions.SetNotReadOnly,
-                            Target = new[] {"CUST_MBR_SID"}
+                            Target = new[] { AttributeCodes.CUST_MBR_SID }
                         }
                     }
                 },
@@ -100,7 +100,7 @@ namespace Intel.MyDeals.BusinessRules
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = BusinessLogicDeActions.SetNotRequired,
-                            Target = new[] {"CUST_MBR_SID"}
+                            Target = new[] { AttributeCodes.CUST_MBR_SID }
                         }
                     },
                     OpRuleElseActions = new List<OpRuleAction<IOpDataElement>>
@@ -108,7 +108,7 @@ namespace Intel.MyDeals.BusinessRules
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = BusinessLogicDeActions.SetRequired,
-                            Target = new[] {"CUST_MBR_SID"}
+                            Target = new[] { AttributeCodes.CUST_MBR_SID }
                         }
                     }
                 }

@@ -52,7 +52,7 @@
     <Compile Include="CustomerCalendar\ICustomerCalendarDataLib.cs" />
     <Compile Include="Customer\ICustomerDataLib.cs" />
     <Compile Include="Data Collections\IDataCollectionsDataLib.cs" />
-    <Compile Include="Data Collectors\IDataCollectorDataLib.cs" />
+    <Compile Include="OpDataCollectors\IOpDataCollectorDataLib.cs" />
     <Compile Include="Dropdowns\IDropdownDataLib.cs" />
     <Compile Include="Geos\IGeoDataLib.cs" />
     <Compile Include="Logging\ILoggingDataLib.cs" />
@@ -72,7 +72,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DataCollections\" />
     <Folder Include="ProductCategoriesLib\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

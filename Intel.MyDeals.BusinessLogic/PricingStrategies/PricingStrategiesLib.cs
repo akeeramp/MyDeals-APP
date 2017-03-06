@@ -1,17 +1,17 @@
 using System.Collections.Generic;
 using System.Linq;
-using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
+using Intel.Opaque;
 using Intel.Opaque.Data;
 
 namespace Intel.MyDeals.BusinessLogic
 {
     public class PricingStrategiesLib : IPricingStrategiesLib
     {
-        private readonly IDataCollectorLib _dataCollectorLib;
+        private readonly IOpDataCollectorLib _dataCollectorLib;
 
-        public PricingStrategiesLib(IDataCollectorLib dataCollectorLib)
+        public PricingStrategiesLib(IOpDataCollectorLib dataCollectorLib)
         {
             _dataCollectorLib = dataCollectorLib;
         }
@@ -31,9 +31,12 @@ namespace Intel.MyDeals.BusinessLogic
                     OpDataElementType.PricingStrategy
                 };
 
-            return new DataCollectorDataLib()
-                .GetByIDs(OpDataElementType.PricingStrategy, new List<int> { id }, opDataElementTypes)
-                .FillInHolesFromTemplate();
+            return OpDataElementType.PricingStrategy.GetByIDs(new List<int> {id}, opDataElementTypes);
+        }
+
+        public OpDataCollectorFlattenedDictList GetFullPricingStrategy(int id)
+        {
+            return GetPricingStrategy(id, true).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
         }
 
         public MyDealsData SavePricingStrategy(OpDataCollectorFlattenedList data, int custId)
@@ -61,5 +64,21 @@ namespace Intel.MyDeals.BusinessLogic
             return _dataCollectorLib.SavePackets(data, custId);
         }
 
+        public MyDealsData SaveFullPricingStrategy(int custId, OpDataCollectorFlattenedDictList fullpricingStrategies)
+        {
+            return SavePricingStrategy(
+                fullpricingStrategies.ContainsKey(OpDataElementType.PricingStrategy) ? fullpricingStrategies[OpDataElementType.PricingStrategy] : new OpDataCollectorFlattenedList(),
+                fullpricingStrategies.ContainsKey(OpDataElementType.PricingTable) ? fullpricingStrategies[OpDataElementType.PricingTable] : new OpDataCollectorFlattenedList(),
+                fullpricingStrategies.ContainsKey(OpDataElementType.PricingTableRow) ? fullpricingStrategies[OpDataElementType.PricingTableRow] : new OpDataCollectorFlattenedList(),
+                fullpricingStrategies.ContainsKey(OpDataElementType.WipDeals) ? fullpricingStrategies[OpDataElementType.WipDeals] : new OpDataCollectorFlattenedList(),
+                custId);
+        }
+
+
+        public OpMsg DeletePricingStrategy(int id)
+        {
+            // TODO replace with Delete call
+            return new OpMsg();
+        }
     }
 }

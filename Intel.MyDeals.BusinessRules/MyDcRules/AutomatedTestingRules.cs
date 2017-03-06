@@ -23,7 +23,7 @@ namespace Intel.MyDeals.BusinessRules
                         {
                             Action = BusinessLogicDeActions.AddValidationMessage,
                             Args = new object[] {"{0} must be positive"},
-                            Where = de => de.AtrbCdIn(new List<string> {"NUM_OF_TIERS"}) && de.IsNegativeOrZero()
+                            Where = de => de.AtrbCdIn(new List<string> {AttributeCodes.NUM_OF_TIERS}) && de.IsNegativeOrZero()
                         }
                     }
                 },
@@ -38,7 +38,7 @@ namespace Intel.MyDeals.BusinessRules
                         {
                             Action = BusinessLogicDeActions.AddValidationMessage,
                             Args = new object[] {"{0} must be no more than 20 characters."},
-                            Where = de => de.AtrbCdIn(new List<string> {"TITLE"}) && de.ExceedsMaxLength(20)
+                            Where = de => de.AtrbCdIn(new List<string> {AttributeCodes.TITLE}) && de.ExceedsMaxLength(20)
                         }
                     }
                 },
@@ -54,7 +54,7 @@ namespace Intel.MyDeals.BusinessRules
                         {
                             Action = BusinessLogicDeActions.SetAtrbValue,
                             Args = new object[] {"New Title"},
-                            Target = new[] {"TITLE"},
+                            Target = new[] {AttributeCodes.TITLE}
                         }
                     }
 

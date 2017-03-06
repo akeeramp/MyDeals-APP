@@ -85,10 +85,10 @@
     <Compile Include="Customers\CustomerDataLib.cs" />
     <Compile Include="Data Collections\DataCollectionsDataLib.cs" />
     <Compile Include="Data Collections\DataCollections.cs" />
-    <Compile Include="Data Collectors\DataCollectorDataLib.cs" />
-    <Compile Include="Data Collectors\DataCollectorDataLib_Get.cs" />
+    <Compile Include="OpDataCollectors\OpDataCollectorDataLib.cs" />
+    <Compile Include="OpDataCollectors\OpDataCollectorDataLib_Get.cs" />
     <Compile Include="DataLibrary.cs" />
-    <Compile Include="Data Collectors\DataCollectorDataLib_Save.cs" />
+    <Compile Include="OpDataCollectors\OpDataCollectorDataLib_Save.cs" />
     <Compile Include="Dropdowns\DropdownDataLib.cs" />
     <Compile Include="ProductCategoriesLib\ProductCategoriesDataLib.cs" />
     <Compile Include="Products\ProductDataLib.cs" />
@@ -97,9 +97,7 @@
     <Compile Include="Geos\GeoDataLib.cs" />
     <Compile Include="JMS\JmsDataLib.cs" />
     <Compile Include="Logging\LoggingDataLib.cs" />
-    <Compile Include="Meta\MetaDataLib.cs" />
     <Compile Include="DevTest\DevTestDataLib.cs" />
-    <Compile Include="POC\PocDataLib.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Quote Letter\QuoteDataLib.cs" />
     <Compile Include="Rule Engine\RuleEngineDataLib.cs" />

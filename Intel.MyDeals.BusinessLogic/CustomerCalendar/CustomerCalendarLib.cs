@@ -13,9 +13,9 @@ namespace Intel.MyDeals.BusinessLogic
     {
         private readonly ICustomerCalendarDataLib _customerCalendarDataLib;
 
-        public CustomerCalendarLib(ICustomerCalendarDataLib _customerCalendarDataLib)
+        public CustomerCalendarLib(ICustomerCalendarDataLib customerCalendarDataLib)
         {
-            this._customerCalendarDataLib = _customerCalendarDataLib;
+            _customerCalendarDataLib = customerCalendarDataLib;
         }
 
         /// <summary>

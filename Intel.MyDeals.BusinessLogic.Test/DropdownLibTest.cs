@@ -13,7 +13,7 @@ namespace Intel.MyDeals.BusinessLogic.Test
     [TestFixture]
     public class DropdownLibTest
     {
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public void SetupUserAndDatabase()
 		{
 			Console.WriteLine("Started Dropdown Library Tests.");
@@ -21,7 +21,7 @@ namespace Intel.MyDeals.BusinessLogic.Test
 			UnitTestHelpers.SetDbConnection();
 		}
 
-		[TestFixtureTearDown]
+		[OneTimeTearDown]
 		public void AfterTheCurrentTestFixture()
 		{
 			Console.WriteLine("Completed Dropdown Library Tests.");

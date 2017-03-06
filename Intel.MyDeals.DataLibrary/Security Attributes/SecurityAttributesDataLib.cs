@@ -215,7 +215,7 @@ namespace Intel.MyDeals.DataLibrary
                     ACTN_SID = id
                 }, null, out dsCheckConstraintErrors);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 if (dsCheckConstraintErrors != null && dsCheckConstraintErrors.Tables.Count > 0)
                 {

@@ -9,7 +9,7 @@ namespace Intel.MyDeals.DataLibrary.Test
     [TestFixture]
     public class DropdownDataLibTest
 	{
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public void SetupUserAndDatabase()
 		{
 			Console.WriteLine("Started Dropdown Data Library tests");
