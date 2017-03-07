@@ -29,7 +29,7 @@
 
 	conn.Open();
 
-	//----------------------------------------------------------------------------------------------------
+	//-- Write File Header Here --------------------------------------------------------------------------
 
 	WriteLine("/*");
 	WriteLine("File Updated: {0}", DateTime.Now);
@@ -44,7 +44,17 @@
 	WriteLine("using Intel.Opaque.Data;");
 	WriteLine("using Intel.MyDeals.Entities;");
 	WriteLine("");
-	
+
+	WriteLine("namespace {0} {{", outputNameSpace);
+
+
+
+	WriteLine("");
+	PushIndent(TAB);
+	//-- AttributeCodes -----------------------------------------------------------------------------------
+    WriteLine("//-- AttributeCodes -----------------------------------------------------------------------------------");
+	WriteLine("");
+
 	cmd = new SqlCommand(@"
 		select 
 			DIM_SID,
@@ -56,17 +66,6 @@
 		from [dbo].[VW_ATRB_MSTR] (nolock)
 		order by ATRB_CD
 	", conn);
-
-	WriteLine("namespace {0} {{", outputNameSpace);
-	PushIndent(TAB);
-
-
-
-
-	WriteLine("");
-	//-- AttributeCodes -----------------------------------------------------------------------------------
-    WriteLine("//-- AttributeCodes -----------------------------------------------------------------------------------");
-	WriteLine("");
 
 	WriteLine("public static class AttributeCodes {");
 	PushIndent(TAB);
@@ -177,7 +176,7 @@
     WriteLine("//-- Roles ---------------------------------------------------------------------------------");
 	WriteLine("");
 
-	cmd = new SqlCommand(@"SELECT ROLE_TYPE_CD from [dbo].[ROLE_TYPE] WHERE app_sid = 1", conn);
+	cmd = new SqlCommand(@"SELECT ROLE_NM from [dbo].[ROLE_MSTR] WHERE app_sid = 1 and ROLE_NM != 'All Role Types'", conn);
 
 	WriteLine("public static class RoleTypes {");
 	PushIndent(TAB);
@@ -186,7 +185,7 @@
 	{
 		while(rdr.Read())
 		{
-			WriteLine(@"public const string {0} = ""{1}"";", rdr["ROLE_TYPE_CD"].ToString().Replace(" ","_"), rdr["ROLE_TYPE_CD"]);
+			WriteLine(@"public const string {0} = ""{1}"";", rdr["ROLE_NM"].ToString().Replace(" ","_"), rdr["ROLE_NM"]);
 		} 
     }
 
