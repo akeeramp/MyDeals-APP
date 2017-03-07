@@ -1,5 +1,5 @@
 ﻿<div class="col-md-12">
-    <form name="rules" ng-submit="vm.savePCTRules()" novalidate>
+    <form name="rules" novalidate>
         <div class="row form-inline">
             <div class="col-md-3" style="padding-top:30px">
                 <label class="control-label">Product Type:</label>
@@ -44,7 +44,7 @@
                     <div class="panel-body text-center">
                         <div class="col-sm-12">
                             <button class="small btn btn-default" ng-click="vm.cancel()" title="Cancel Changes">Cancel</button>
-                            <button class="small btn btn-primary" type="submit" ng-disabled="!vm.form.isValid" title="Save Changes">Save</button>
+                            <button class="small btn btn-primary" ng-click="vm.savePCTRules()" type="submit" ng-disabled="!vm.form.isValid" title="Save Changes">Save</button>
                         </div>
                     </div>
                 </div>
