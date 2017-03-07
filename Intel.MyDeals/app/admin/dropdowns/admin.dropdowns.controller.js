@@ -142,10 +142,10 @@
             sortable: true,
             navigatable: true,
             resizable: true,
-            reorderable: true,
-            columnMenu: true,
+            //reorderable: true,
+            //columnMenu: true,
             selectable: true,
-            groupable: true,
+            //groupable: true,
             editable: { mode: "inline", confirmation: false },
             edit: function (e) {
                 var commandCell = e.container.find("td:first");
@@ -206,7 +206,21 @@
                         }).appendTo(container);
                     },
                     template: "#= OBJ_SET_TYPE_CD #",
-                    filterable: { ui: dealtypeFilter }
+                    filterable: {
+                        ui: dealtypeFilter,
+                        extra: false,
+                        operators: {
+                            string: {
+                                eq: "Is equal to",
+                                neq: "Not equal to",
+                                startswith: "Starts with",
+                                endswith: "Ends with",
+                                contains: "Contains",
+                                doesnotcontain: "Does not contain",
+                                isempty: "Is empty"
+                            }
+                        }
+                    }
                 },
                 {
                     field: "ATRB_SID", //Dropdown Group
@@ -217,6 +231,9 @@
                         // append to the editor container
                         input.appendTo(container);
 
+                        //new editor, so refresh inheritance group var used for value validation
+                        vm.selectedInheritanceGroup = "";
+
                         // initialize a dropdownlist
                         input.kendoDropDownList({
                             dataTextField: "dropdownName",
@@ -226,7 +243,21 @@
                         }).appendTo(container);
                     },
                     template: "#= ATRB_CD #",
-                    filterable: { ui: groupFilter }
+                    filterable: {
+                        ui: groupFilter,
+                        extra: false,
+                        operators: {
+                            string: {
+                                eq: "Is equal to",
+                                neq: "Not equal to",
+                                startswith: "Starts with",
+                                endswith: "Ends with",
+                                contains: "Contains",
+                                doesnotcontain: "Does not contain",
+                                isempty: "Is empty"
+                            }
+                        }
+                    }
                 },
                 {
                     field: "DROP_DOWN",
@@ -241,7 +272,7 @@
                 dataTextField: "dropdownName",
                 dataValueField: "dropdownID",
                 dataSource: vm.dealtypeDataSource,
-                optionLabel: "-- Select Value --"
+                //optionLabel: "-- Select Value --"
             });
         }
 
@@ -250,7 +281,7 @@
                 dataTextField: "dropdownName",
                 dataValueField: "dropdownID",
                 dataSource: vm.groupsDataSource,
-                optionLabel: "-- Select Value --"
+                //optionLabel: "-- Select Value --"
             });
         }
 
@@ -265,11 +296,11 @@
 
         function onDealTypeChange(e) {
             //TODO: notify user that their choice may set other dropdowns to inactive if there is overlap - should we just refresh the entire grid?
-            //Note: why is this kendo select event being called twice? once on click and once on deselect
+            //Note: kendo select event being called twice? once on click and once on deselect
         }
 
         function onGroupChange(e) {
-            //Note: why is this kendo select event being called twice? once on click and once on deselect
+            //Note: kendo select event being called twice? once on click and once on deselect
             if (e.dataItem.allDealFlag == 0) {
                 $("#OBJ_SET_TYPE_SID").data("kendoDropDownList").setDataSource(vm.dealtypes);
                 $("#OBJ_SET_TYPE_SID").data("kendoDropDownList").refresh();
@@ -287,6 +318,9 @@
             } else {
                 vm.selectedInheritanceGroup = "";
             }
+
+            //re-trigger validation as a different dropdown group may have different validation rules
+            $("[name=DROP_DOWN]").val($("[name=DROP_DOWN]").val()).change();
         }
 
         function cancelChanges() {
