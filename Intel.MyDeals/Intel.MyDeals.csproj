@@ -360,6 +360,7 @@
     <Content Include="app\contract\partials\wipDeals.html" />
     <Content Include="app\admin\iCostProducts\admin.iCostProduct.service.js" />
     <Content Include="app\admin\iCostProducts\admin.iCostProducts.controller.js" />
+    <Content Include="app\core\directives\dirtyTracking.directive.js" />
     <Content Include="app\core\directives\expandKendogrid.directive.js" />
     <Content Include="app\blocks\uiControls\focusOnShow.directive.js" />
     <Content Include="app\blocks\uiControls\opControl.directive.js" />
