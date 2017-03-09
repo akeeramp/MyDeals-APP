@@ -3,7 +3,7 @@
         float: left;
     }
 
-    .isHidden 
+    .isHidden
     {
         display: none;
     }
@@ -12,13 +12,13 @@
         display: none;
     }
 
-    .isReadOnly, 
-    .isReadOnly .k-numeric-wrap input, 
-    .isReadOnly .k-date-picker input, 
-    .isReadOnly .k-dropdown input, 
-    .isReadOnly .k-picker-wrap, 
-    .isReadOnly .k-numeric-wrap, 
-    .isReadOnly .k-dropdown-wrap 
+    .isReadOnly,
+    .isReadOnly .k-numeric-wrap input,
+    .isReadOnly .k-date-picker input,
+    .isReadOnly .k-dropdown input,
+    .isReadOnly .k-picker-wrap,
+    .isReadOnly .k-numeric-wrap,
+    .isReadOnly .k-dropdown-wrap
     {
         color: #999999 !important;
         background-color: #eeeeee !important;
@@ -29,15 +29,17 @@
         background-color: rgba(240, 240, 240, 0.9) !important;
     }
 
-    .isRequired, 
-    .isRequired .k-numeric-wrap input, 
-    .isRequired .k-date-picker input, 
+    .isRequired,
+    .isRequired .k-numeric-wrap input,
+    .isRequired .k-date-picker input,
     .isRequired .k-dropdown-wrap,
-    .isRequired .k-dropdown-wrap .k-input 
+    .isRequired .k-dropdown-wrap .k-input
     {
         font-weight: bold !important;
         color: #000000 !important;
     }
+
+    .isRequired:before { content:"*"; color: #e32; margin-left: -5px;}
 
     .isRequiredCell {
         border-left: 2px solid #F3D54E !important;
@@ -47,13 +49,13 @@
         color: #ffffff !important;
     }
 
-    .isError, 
-    .isError .k-numeric-wrap input, 
-    .k-datepicker .isError, 
+    .isError,
+    .isError .k-numeric-wrap input,
+    .k-datepicker .isError,
     .isError .k-dropdown input,
-    .isError .k-picker-wrap, 
-    .isError .k-numeric-wrap, 
-    .isError .k-dropdown-wrap 
+    .isError .k-picker-wrap,
+    .isError .k-numeric-wrap,
+    .isError .k-dropdown-wrap
     {
     }
     .isErrorCell {
@@ -79,12 +81,12 @@
         border-width: 3px;
     }
     .err-bit-el {
-        border-style: solid; 
-        border-color: #ED1C24 transparent transparent #ED1C24; 
-        top: 6px; 
-        width: 6px; 
-        position: relative; 
-        z-index: 100; 
+        border-style: solid;
+        border-color: #ED1C24 transparent transparent #ED1C24;
+        top: 6px;
+        width: 6px;
+        position: relative;
+        z-index: 100;
         margin-top: -6px;
     }
 
@@ -93,8 +95,8 @@
         border: 1px solid #F3D54E;
     }
     .elOnBlue .err-bit {
-        border-style: solid; 
-        border-color: #F3D54E transparent transparent #F3D54E; 
+        border-style: solid;
+        border-color: #F3D54E transparent transparent #F3D54E;
     }
     .elOnBlue .err-bit-el {
         border-color: #F3D54E transparent transparent #F3D54E;
@@ -139,7 +141,7 @@
 
     #toolBarChk label {
         font-weight: 200;
-        font-size: 12px; 
+        font-size: 12px;
         font-family: 'Intel Clear', 'Arial';
         margin-right: 20px;
     }
@@ -149,8 +151,8 @@
     }
     .k-tooltip {
         background: black !important;
-        border-color: black !important;    
-        font-size: 12px; 
+        border-color: black !important;
+        font-size: 12px;
         font-family: 'Intel Clear', 'Arial';
         border-radius: 4px;
     }*/
@@ -164,10 +166,13 @@
         background: #ffffff !important;
         border: 1px solid #0071C5 !important;
         color: #0071C5 !important;
-        font-size: 12px; 
+        font-size: 12px;
         font-family: 'Intel Clear', 'Arial';
         -ms-border-radius: 4px;
         border-radius: 4px;
+    }
+    .k-slider {
+        width:100% !important;
     }
 
 
@@ -175,15 +180,15 @@
 		background-color: #ED1C24 !important;
 		color: #ffffff;
 	}
-		
+
 	.k-tooltip-validation.k-invalid .k-callout-n {
 		border-bottom-color: #ED1C24;
 	}
 
     .fieldcontainer {
-        font-family: 'Intel Clear', 'Arial'; 
-        color: #000000; 
-        border: 1px solid #b1babf; 
+        font-family: 'Intel Clear', 'Arial';
+        color: #000000;
+        border: 1px solid #b1babf;
         border-radius: 4px;
         padding: 8px;
         margin: 10px 0;
@@ -232,24 +237,24 @@
 
     .isDirtyIconContainer {
         float: left;
-        font-size: 18px; 
-        padding-top: 20px; 
-        margin-right: 10px; 
-        margin-left: 5px; 
+        font-size: 18px;
+        padding-top: 20px;
+        margin-right: 10px;
+        margin-left: 5px;
         color: #dbdbdb;
     }
 
     .isDirtyIconGridContainer {
-        font-size: 20px; 
+        font-size: 20px;
         color: #dbdbdb;
         margin-left: 4px;
     }
     .gridHeaderIcon {
-        font-size: 16px; 
+        font-size: 16px;
         color: #c1c1c1;
     }
 
     .k-grid-header th.k-header>.k-link {
         margin: 0;
-        padding: 0;    
+        padding: 0;
     }*/

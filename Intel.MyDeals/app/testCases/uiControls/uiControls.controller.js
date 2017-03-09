@@ -212,6 +212,9 @@
                 "DROPDOWN": "DROPDOWN 2",
                 "DropdownSelected": [],
                 "COMBOBOX": "COMBOBOX 3",
+                "RADIOBUTTON": "",
+                "TEXTAREA": "Multi-line TextBox",
+                "SliderInt":1,
                 "ComboboxSelected": [],
                 "_MultiDim": [
                     {

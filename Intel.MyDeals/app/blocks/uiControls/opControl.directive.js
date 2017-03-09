@@ -3,24 +3,28 @@
     .directive('opControl', opControl);
 
 // Minification safe dependency injection
-opControl.$inject = ['$http', 'lookupsService', '$compile', '$templateCache', 'logger', '$q', '$linq'];
+opControl.$inject = ['$http', 'lookupsService', '$compile', '$templateCache', 'logger', '$q', 'dataService', '$filter'];
 
-function opControl($http, lookupsService, $compile, $templateCache, logger, $q, $linq) {
+function opControl($http, lookupsService, $compile, $templateCache, logger, $q, dataService, $filter) {
     var getTemplate = function (controlType) {
         var baseUrl = 'app/blocks/uiControls/partials/';
         var templateMap = {
             'VERTICAL_TEXTBOX': 'verticalTextBox.html',
+            'VERTICAL_TEXTAREA': 'verticalTextArea.html',
             'VERTICAL_DATEPICKER': 'verticalDatePicker.html',
             'VERTICAL_NUMERIC': 'verticalNumericTextBox.html',
             'VERTICAL_DROPDOWN': 'verticalDropDown.html',
             'VERTICAL_COMBOBOX': 'verticalComboBox.html',
             'VERTICAL_CHECKBOX': 'verticalCheckBox.html',
+            'VERTICAL_RADIOBUTTONGROUP': 'verticalRadioButtonGroup.html',
             'HORIZONTAL_TEXTBOX': 'horizontalTextBox.html',
+            'HORIZONTAL_TEXTAREA': 'horizontalTextArea.html',
             'HORIZONTAL_DATEPICKER': 'horizontalDatePicker.html',
             'HORIZONTAL_NUMERIC': 'horizontalNumericTextBox.html',
             'HORIZONTAL_DROPDOWN': 'horizontalDropDown.html',
             'HORIZONTAL_COMBOBOX': 'horizontalComboBox.html',
-            'HORIZONTAL_CHECKBOX': 'horizontalCheckBox.html'
+            'HORIZONTAL_CHECKBOX': 'horizontalCheckBox.html',
+            'HORIZONTAL_SLIDER': 'horizontalSlider.html'
         };
 
         var templateUrl = baseUrl + templateMap[controlType.toUpperCase()];
@@ -43,32 +47,43 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
         if (scope.opIsError === undefined) scope.opIsError = false;
         if (scope.opIsSaved === undefined) scope.opIsSaved = false;
         if (scope.opValidMsg === undefined) scope.opValidMsg = "";
+        if (scope.opCascadeFrom === undefined) scope.opCascadeFrom = "";
+        if (scope.opCascadeField === undefined) scope.opCascadeField = "";
 
         var serviceData = []; // data from the service will be pushed into this.
-        if (scope.opLookupUrl !== undefined && scope.opLookupUrl !== "undefined") {
+        if ((scope.opType == 'COMBOBOX' || scope.opType == 'DROPDOWN') &&
+            (scope.opLookupUrl !== undefined && scope.opLookupUrl !== "undefined")) {
             scope.values = {
                 transport: {
                     read: {
                         url: scope.opLookupUrl,
                         dataType: "json"
-                    }
+                    },
                 },
                 schema: {
                     parse: function (data) {
-                        serviceData = data; // data from the service will be pushed into this.
+                        // Values in the list should be unique
+                        serviceData = $filter('unique')(data, scope.opLookupValue); // data from the service will be pushed into this.
                         return serviceData;
                     }
                 }
             }
         }
 
+        if (scope.opType == 'RADIOBUTTONGROUP' && scope.opLookupUrl !== undefined && scope.opLookupUrl !== "undefined") {
+            dataService.get(scope.opLookupUrl).then(function (response) {
+                scope.values = response.data;
+            }, function (response) {
+                logger.error("Unable to get lookup values.", response, response.statusText);
+            });
+        }
+
         var loader = getTemplate(scope.opUiMode + '_' + scope.opType);
         var promise = loader.success(function (html) {
             element.html(html);
-        })
-            .then(function (response) {
-                element.replaceWith($compile(element.html())(scope));
-            });
+        }).then(function (response) {
+            element.replaceWith($compile(element.html())(scope));
+        });
 
         scope.$watch('value',
             function (newValue, oldValue, el) {
@@ -120,11 +135,14 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
             opLookupUrl: '=',
             opLookupText: '=',
             opLookupValue: '=',
-            opSelectedObject : '=',
+            opSelectedObject: '=',
+            opMaxValue: '=',
             opUiMode: '=',
             opCd: '=',
             opType: '=',
-            opValidMsg: '='
+            opValidMsg: '=',
+            opCascadeField: '=',
+            opCascadeFrom: '='
         },
         link: linker
     }

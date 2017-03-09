@@ -3,88 +3,143 @@
 
     <form novalidate class="contract-detail-form">
 
-        <h3>Contract Details</h3>
+        <h4>Contract Details</h4>
 
         <div class="row">
-            <div class="col-md-10"
-                 op-control-flat
-                 ng-model="contractData"
-                 op-cd="'CUST_MBR_SID'"
-                 op-type="'COMBOBOX'"
-                 op-label="'Customer:'"
-                 op-lookup-url="'/api/Customers/GetMyCustomersInfo'"
-                 op-lookup-text="'CUST_DIV_NM'"
-                 op-lookup-value="'CUST_MBR_SID'"
-                 op-selected-object="'Customer'"
-                 op-ui-mode="'HORIZONTAL'"></div>
-        </div>
-        <div class="row">
-            <div class="col-md-10"
-                 op-control-flat
-                 ng-model="contractData"
-                 op-cd="'TITLE'"
-                 op-type="'TEXTBOX'"
-                 op-label="'Contract Name:'"
-                 op-ui-mode="'HORIZONTAL'"></div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-5">
-                <div class="opUiContainer" style="margin-bottom: 20px;">
-                    <div class="fl opUiLabel">Contract Quarter:</div>
-                    <div style="overflow: hidden;">
-                        <div class="fl">
-                            <button class="fl btn btn-default mr10 mb10" type="button">Q1</button>
-                            <button class="fl btn btn-default mr10 mb10" type="button">Q2</button>
-                            <button class="fl btn btn-default mr10 mb10" type="button">Q3</button>
-                            <button class="fl btn btn-default mr10 mb10" type="button">Q4</button>
-                            <div class="clearboth"></div>
-                        </div>
-                    </div>
-                    <div class="clearboth"></div>
+            <div class="col-md-6">
+                <div class="col-md-11">
+                    <h6>Customer Information</h6>
                 </div>
-            </div>
 
-            <div class="col-md-5">
-                <div op-control-flat
+                <div class="col-md-10"
+                     op-control-flat
                      ng-model="contractData"
-                     op-cd="'START_DT'"
-                     op-type="'DATEPICKER'"
-                     op-label="'Contract Start Date:'"
-                     op-ui-mode="'HORIZONTAL'"
-                     style="margin-bottom: 20px;"></div>
-                <div op-control-flat
+                     op-cd="'CUST_NM_SID'"
+                     op-type="'COMBOBOX'"
+                     op-label="'Customer:'"
+                     op-lookup-url="'/api/Customers/GetMyCustomersInfo'"
+                     op-lookup-text="'CUST_NM'"
+                     op-lookup-value="'CUST_NM_SID'"
+                     op-selected-object="'Customer'"
+                     op-ui-mode="'VERTICAL'"></div>
+
+                <div class="col-md-10"
+                     op-control-flat
                      ng-model="contractData"
-                     op-cd="'END_DT'"
-                     op-type="'DATEPICKER'"
-                     op-label="'Contract End Date:'"
+                     op-cd="'CUST_MBR_SID'"
+                     op-type="'COMBOBOX'"
+                     op-label="'Division:'"
+                     op-lookup-url="'/api/Customers/GetMyCustomersInfo'"
+                     op-lookup-text="'CUST_DIV_NM'"
+                     op-lookup-value="'CUST_MBR_SID'"
+                     op-selected-object="'Customer'"
+                     op-cascade-field="'CUST_NM_SID'"
+                     op-cascade-from="'CUST_NM_SID'"
+                     op-ui-mode="'VERTICAL'"></div>
+            </div>
+            <div class="col-md-6">
+                <div class="col-md-11">
+                    <h6>Customer Acceptance of Contract is...</h6>
+                </div>
+
+                <div class="col-md-10"
+                     op-control-flat
+                     ng-model="contractData"
+                     op-cd="'CUST_ACCPT'"
+                     op-type="'RADIOBUTTONGROUP'"
+                     op-label="''"
+                     op-lookup-url="'/api/Lookups/v1/GetLookups/DROPDOWN'"
+                     op-lookup-text="'DROP_DOWN'"
+                     op-lookup-value="'DROP_DOWN'"
+                     op-ui-mode="'VERTICAL'"></div>
+
+                <div class="col-md-10"
+                     op-control-flat
+                     ng-model="contractData"
+                     op-cd="'CUST_ACCPT'"
+                     op-type="'CHECKBOX'"
+                     op-label="'Pending:'"
+                     op-ui-mode="'HORIZONTAL'"></div>
+
+                <div class="col-md-10"
+                     op-control-flat
+                     ng-model="contractData"
+                     op-cd="'CUST_ACCPT'"
+                     op-type="'CHECKBOX'"
+                     op-label="'Accepted:'"
+                     op-ui-mode="'HORIZONTAL'"></div>
+
+                <div class="col-md-10"
+                     op-control-flat
+                     ng-model="contractData"
+                     op-cd="'CUST_ACCPT'"
+                     op-type="'CHECKBOX'"
+                     op-label="'Acceptance Not Reqired:'"
                      op-ui-mode="'HORIZONTAL'"></div>
             </div>
         </div>
 
         <div class="row">
-            <div class="col-md-10"
-                 op-control-flat
-                 ng-model="contractData"
-                 op-cd="'CUST_ACCPT'"
-                 op-type="'CHECKBOX'"
-                 op-label="'Customer Accepted:'"
-                 op-ui-mode="'HORIZONTAL'"></div>
+            <div class="col-md-6">
+                <div class="col-md-11">
+                    <h6>Dates</h6>
+                </div>
+
+                <div class="col-md-10">
+                    <div op-control-flat
+                         ng-model="contractData"
+                         op-cd="'START_DT'"
+                         op-type="'DATEPICKER'"
+                         op-label="'Contract Start Date:'"
+                         op-ui-mode="'HORIZONTAL'"
+                         style="margin-bottom: 20px;"></div>
+                </div>
+                <div class="col-md-10">
+                    <div op-control-flat
+                         ng-model="contractData"
+                         op-cd="'END_DT'"
+                         op-type="'DATEPICKER'"
+                         op-label="'Contract End Date:'"
+                         op-ui-mode="'HORIZONTAL'"></div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="col-md-11">
+                    <h6>Information</h6>
+                </div>
+
+                <div class="col-md-10"
+                     op-control-flat
+                     ng-model="contractData"
+                     op-cd="'TITLE'"
+                     op-type="'TEXTBOX'"
+                     op-label="'Contract Name:'"
+                     op-ui-mode="'VERTICAL'"></div>
+            </div>
         </div>
 
         <div class="row">
-            <div class="col-md-10"
-                 op-control-flat
-                 ng-model="contractData"
-                 op-cd="'C2A_DATA_C2A_ID'"
-                 op-type="'TEXTBOX'"
-                 op-label="'C2A# or link:'"
-                 op-ui-mode="'HORIZONTAL'"></div>
+            <div class="col-md-6">
+                <div class="col-md-11">
+                    <h6>Timeline</h6>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="col-md-11">
+                    <h6>Notes</h6>
+                </div>
+                <div class="col-md-10"
+                     op-control-flat
+                     ng-model="contractData"
+                     op-cd="'TITLE'"
+                     op-type="'TEXTAREA'"
+                     op-label="''"
+                     op-ui-mode="'VERTICAL'"></div>
+            </div>
         </div>
-
-        <div class="row" style="margin-left: 145px;">
-            <div class="col-md-10">
-                <button class="btn btn-primary" type="button" ng-click="customContractValidate()" style="width: 100px;">Save</button>
+        <div class="row">
+            <div class="col-md-offset-6">
+                <button class="btn btn-primary" style="margin-left:30px;" type="button" ng-click="customContractValidate()" style="width: 100px;">Save</button>
             </div>
         </div>
 

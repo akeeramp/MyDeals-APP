@@ -69,7 +69,6 @@
              op-lookup-text="'DROP_DOWN'"
              op-lookup-value="'DROP_DOWN'"
              op-ui-mode="'VERTICAL'"></div>
-
         <div class="clearboth"></div>
 
         <!--<pre style="font-size: 9px; font-family: arial;">{{des | json}}</pre>-->
@@ -124,8 +123,31 @@
              op-lookup-value="'DROP_DOWN'"
              op-selected-object="'ComboboxSelected'"
              op-ui-mode="'VERTICAL'"></div>
-
+        <div class="myDealsControl"
+             op-control-flat
+             ng-model="flat"
+             op-cd="'TEXTAREA'"
+             op-type="'TEXTAREA'"
+             op-label="'TEXTAREA'"
+             op-ui-mode="'VERTICAL'"></div>
+        <div class="myDealsControl"
+             op-control-flat
+             ng-model="flat"
+             op-cd="'RADIOBUTTON'"
+             op-type="'RADIOBUTTONGROUP'"
+             op-label="''"
+             op-lookup-url="'/api/Lookups/v1/GetLookups/DROPDOWN'"
+             op-lookup-text="'DROP_DOWN'"
+             op-lookup-value="'DROP_DOWN'"
+             op-ui-mode="'VERTICAL'"></div>
         <div class="clearboth"></div>
+        <div op-control-flat
+             ng-model="flat"
+             op-cd="'SliderInt'"
+             op-type="'SLIDER'"
+             op-label="'Slider'"
+             op-max-value="'4'"
+             op-ui-mode="'HORIZONTAL'"></div>
 
         <!--<pre style="font-size: 9px; font-family: arial;">{{flat | json}}</pre>-->
 

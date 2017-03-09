@@ -1,13 +1,16 @@
 ﻿<div ng-class="{isHidden: opIsHidden, isErrorWrapper: opIsError, isSavedWrapper: opIsSaved, isDirtyWrapper: opIsDirty}">
     <div class="opUiLabel" ng-class="{isRequired: opIsRequired}">{{opLabel}}</div>
     <div kendo-tooltip k-content="tooltipMsg" k-position="'top'" ng-show="opIsError" class="err-bit-el"></div>
-    <select kendo-combo-box class="fl opUiElement"
+    <input  id="opLookupValue"
+            k-cascade-from-field="opCascadeField"
+		    k-cascade-from="opCascadeFrom"
+            kendo-combo-box class="fl opUiElement"
             k-ng-model="value"
             k-ng-readonly="opIsReadOnly"
             k-data-source="values"
             k-data-text-field="opLookupText"
             k-data-value-field="opLookupValue"
             k-value-primitive="true"
-            ng-class="{isHidden: opIsHidden, isReadOnly: opIsReadOnly, isError: opIsError, isSaved: opIsSaved, isDirty: opIsDirty}"></select>
+            ng-class="{isHidden: opIsHidden, isReadOnly: opIsReadOnly, isError: opIsError, isSaved: opIsSaved, isDirty: opIsDirty}"></input>
     <div class="clearboth"></div>
 </div>
