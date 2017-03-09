@@ -17,8 +17,8 @@ namespace Intel.MyDeals.DataLibrary.Test
         [TestMethod]
         public void GeosDealsAll()
         {
-            MyDealsData results = OpDataElementType.Contract.GetByIDs(new List<int> {123});
-            Assert.IsTrue(results.ContainsKey(OpDataElementType.PricingStrategy));
+            MyDealsData results = OpDataElementType.CNTRCT.GetByIDs(new List<int> {123});
+            Assert.IsTrue(results.ContainsKey(OpDataElementType.PRC_ST));
         }
 
     }

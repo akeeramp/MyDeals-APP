@@ -16,7 +16,7 @@ namespace Intel.MyDeals.Controllers.API
 
         [Authorize]
         [Route("GetTemplates")]
-        public OpDataElementUITemplates Get()
+        public OpDataElementAtrbTemplates Get()
         {
             return SafeExecutor(OpDataElementUiExtensions.GetDataCollectorTemplates
                 , "Unable to get templates"
@@ -25,7 +25,7 @@ namespace Intel.MyDeals.Controllers.API
 
         [Authorize]
         [Route("GetTemplates/{cd}")]
-        public OpDataElementUITemplate Get(string cd)
+        public OpDataElementAtrbTemplate Get(string cd)
         {
             return SafeExecutor(() => OpDataElementUiExtensions.GetDataCollectorTemplate(cd)
                 , "Unable to get templates"

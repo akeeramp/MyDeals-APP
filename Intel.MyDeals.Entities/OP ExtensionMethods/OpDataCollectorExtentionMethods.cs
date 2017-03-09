@@ -108,7 +108,7 @@ namespace Intel.MyDeals.Entities
             // TODO May not need this if decision is to store dealtype (objsettype) instead of the SID
             if (dc == null || !string.IsNullOrEmpty(dc.DcType)) { return; }
 
-            string dealType = opType != OpDataElementType.Deals && opType != OpDataElementType.WipDeals ? opType.ToString() : null;
+            string dealType = opType != OpDataElementType.DEAL && opType != OpDataElementType.WIP_DEAL ? opType.ToString() : null;
 
             if (dealType == null)
             {
@@ -126,10 +126,10 @@ namespace Intel.MyDeals.Entities
             }
 
             // TODO maybe sync names with database names
-            if (dealType == OpDataElementType.Contract.ToString()) dealType = "CONTRACT";
-            if (dealType == OpDataElementType.PricingStrategy.ToString()) dealType = "PRICING STRAT";
-            if (dealType == OpDataElementType.PricingTable.ToString()) dealType = "PRICING TABLE";
-            if (dealType == OpDataElementType.PricingTableRow.ToString()) dealType = "PRICING TABLE ROW";
+            if (dealType == OpDataElementType.CNTRCT.ToString()) dealType = "CONTRACT";
+            if (dealType == OpDataElementType.PRC_ST.ToString()) dealType = "PRICING STRAT";
+            if (dealType == OpDataElementType.PRC_TBL.ToString()) dealType = "PRICING TABLE";
+            if (dealType == OpDataElementType.PRC_TBL_ROW.ToString()) dealType = "PRICING TABLE ROW";
 
             dc.DcType = dealType ?? string.Empty;
 

@@ -7,6 +7,7 @@
 PricingTableController.$inject = ['$scope', '$state', '$stateParams', 'pricingTableData', 'dataService', 'logger'];
 
 function PricingTableController($scope, $state, $stateParams, pricingTableData, dataService, logger) {
+    //debugger;
     // Access to parent scope
     //
     var root = $scope.$parent.$parent;
@@ -15,7 +16,7 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
     //
     if (root.curPricingStrategyId !== $stateParams.sid) {
         root.curPricingStrategyId = $stateParams.sid;
-        root.curPricingStrategy = util.findInArray(root.contractData.PricingStrategy, root.curPricingStrategyId);
+        root.curPricingStrategy = util.findInArray(root.contractData.PRC_ST, root.curPricingStrategyId);
     }
     if (root.curPricingStrategy === null) {
         logger.error("Unable to locate Pricing Strategy " + $stateParams.sid);
@@ -26,8 +27,8 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
     //
     if (root.curPricingTableId !== $stateParams.pid) {
         root.curPricingTableId = $stateParams.pid;
-        if (root.curPricingStrategy.PricingTable !== undefined)
-            root.curPricingTable = util.findInArray(root.curPricingStrategy.PricingTable, root.curPricingTableId);
+        if (root.curPricingStrategy.PRC_TBL !== undefined)
+            root.curPricingTable = util.findInArray(root.curPricingStrategy.PRC_TBL, root.curPricingTableId);
     }
     if (root.curPricingTable === null) {
         logger.error("Unable to locate Pricing Table " + $stateParams.pid);
@@ -51,18 +52,18 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
     //
     root.pricingTableData = pricingTableData.data;
 
-    if (root.pricingTableData.PricingTable[0] === undefined) {
-        root.pricingTableData.PricingTable[0] = {};
+    if (root.pricingTableData.PRC_TBL[0] === undefined) {
+        root.pricingTableData.PRC_TBL[0] = {};
     }
 
-    if (root.pricingTableData.WipDeals === undefined) {
-        root.pricingTableData.WipDeals = [];
+    if (root.pricingTableData.WIP_DEAL === undefined) {
+        root.pricingTableData.WIP_DEAL = [];
     }
 
-    $scope.dataSpreadSheet = root.pricingTableData.PricingTableRow;
-    $scope.dataGrid = root.pricingTableData.WipDeals;
+    $scope.dataSpreadSheet = root.pricingTableData.PRC_TBL_ROW;
+    $scope.dataGrid = root.pricingTableData.WIP_DEAL;
 
-    var ptTemplate = root.templates.ModelTemplates.PricingTableRow[root.curPricingTable.OBJ_SET_TYPE_CD];
+    var ptTemplate = root.templates.ModelTemplates.PRC_TBL_ROW[root.curPricingTable.OBJ_SET_TYPE_CD];
     var columns = $scope.getColumns(ptTemplate);
 
     $scope.colToLetter = {};
@@ -133,7 +134,7 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
         }
     };
 
-    var wipTemplate = root.templates.ModelTemplates.WipDeals[root.curPricingTable.OBJ_SET_TYPE_CD];
+    var wipTemplate = root.templates.ModelTemplates.WIP_DEAL[root.curPricingTable.OBJ_SET_TYPE_CD];
 
     // Define Kendo Main Grid options
     //

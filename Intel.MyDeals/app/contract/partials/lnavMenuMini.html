@@ -2,6 +2,9 @@
     <div class="navIconLnk" title="Show/Hide Menu" ng-click="toggleLnav()">
         <i class="intelicon-expand"></i>
     </div>
+    <div class="fl navIconLnk" title="Add Pricing Strategy" ng-click="toggleLnav();toggleAddStrategy()" ng-class="{'active': !isAddStrategyHidden}" ng-show="isExistingContract()">
+        <i class="intelicon-plus-max"></i>
+    </div>
     <div class="navIconLnk" title="Save Entire Contract" ng-click="saveEntireContract()" ng-show="isExistingContract()">
         <i class="intelicon-save-outlined"></i>
     </div>
@@ -13,7 +16,4 @@
             <i class="intelicon-show-results-outlined"></i>
         </div>
     </a>
-    <div class="navIconLnk" title="Help Information" ng-show="isExistingContract()">
-        <i class="intelicon-information-outlined"></i>
-    </div>
 </div>

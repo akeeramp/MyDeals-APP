@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
@@ -17,37 +16,34 @@ namespace Intel.MyDeals.BusinessRules
     {
         public static void ApplyActionsAndSettings(params object[] args)
         {
-            if (args.Length < 4) return;
-            OpDataCollector dc = args[0] as OpDataCollector;
-            MyOpRule ar = args[1] as MyOpRule;
-            object[] extraArgs = args[3] as object[];
-            OpDataCollectorFlattenedItem objsetItem = null;
-            if (extraArgs != null) objsetItem = extraArgs[0] as OpDataCollectorFlattenedItem;
-            if (dc == null || ar == null || !dc.MeetsRuleCriteria(ar) || objsetItem == null) return;
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid || !r.HasExtraArgs) return;
+            OpDataCollectorFlattenedItem objsetItem = r.ExtraArgs[0] as OpDataCollectorFlattenedItem ?? new OpDataCollectorFlattenedItem();
 
             //return new MyDealsActionItem();
             OpUserToken opUserToken = OpUserStack.MyOpUserToken;
             List<string> settings = new List<string>();
             List<string> actions = new List<string>();
 
-            if (dc.DcType == OpDataElementType.WipDeals.ToString() || dc.DcType == OpDataElementType.Deals.ToString())
+            // TODO revisit these setting when security and actions are ready
+            if (r.Dc.DcType == OpDataElementType.WIP_DEAL.ToString() || r.Dc.DcType == OpDataElementType.DEAL.ToString())
             {
-                settings = new List<string> { "C_UPDATE_DEAL", "C_VIEW_QUOTE_LETTER", "C_ADD_ATTACHMENTS", "C_VIEW_ATTACHMENTS", "CAN_VIEW_COST_TEST", "CAN_VIEW_MEET_COMP" };
-                actions = new List<string> { "C_APPROVE", "C_CANCEL_DEAL", "C_REJECT_DEAL" };
+                settings = new List<string> { SecurityActns.C_UPDATE_DEAL, SecurityActns.C_VIEW_QUOTE_LETTER, SecurityActns.C_ADD_ATTACHMENTS, SecurityActns.C_VIEW_ATTACHMENTS, SecurityActns.CAN_VIEW_COST_TEST, SecurityActns.CAN_VIEW_MEET_COMP };
+                actions = new List<string> { SecurityActns.C_APPROVE_, SecurityActns.C_CANCEL_DEAL, SecurityActns.C_REJECT_DEAL };
             }
-            else if (dc.DcType == OpDataElementType.Contract.ToString() || dc.DcType == OpDataElementType.PricingStrategy.ToString() || dc.DcType == OpDataElementType.PricingTable.ToString())
+            else if (r.Dc.DcType == OpDataElementType.CNTRCT.ToString() || r.Dc.DcType == OpDataElementType.PRC_ST.ToString() || r.Dc.DcType == OpDataElementType.PRC_TBL.ToString())
             {
-                settings = new List<string> { "C_UPDATE_DEAL" };
-                actions = new List<string> { "C_APPROVE", "C_CANCEL_DEAL", "C_REJECT_DEAL" };
+                settings = new List<string> { SecurityActns.C_UPDATE_DEAL };
+                actions = new List<string> { SecurityActns.C_APPROVE_, SecurityActns.C_CANCEL_DEAL, SecurityActns.C_REJECT_DEAL };
             }
 
             bool isSuperSa = opUserToken.IsSuperSa();
             bool isSuper = opUserToken.IsSuper();
 
-            string stage = dc.GetDataElementValue(AttributeCodes.DEAL_STG_CD);
-            string objSetType = dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
-            OpDataElementType opDataElementType = OpDataElementTypeConverter.FromString(dc.DcType);
-            OpDataElementSetType opDataElementSetType = OpDataElementSetTypeConverter.FromString(dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD));
+            string stage = r.Dc.GetDataElementValue(AttributeCodes.DEAL_STG_CD);
+            string objSetType = r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
+            OpDataElementType opDataElementType = OpDataElementTypeConverter.FromString(r.Dc.DcType);
+            OpDataElementSetType opDataElementSetType = OpDataElementSetTypeConverter.FromString(r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD));
 
             MyDealsActionItem objsetActionItem = new MyDealsActionItem
             {
@@ -80,32 +76,34 @@ namespace Intel.MyDeals.BusinessRules
 
         }
 
+
         public static void ApplyHasTracker(params object[] args)
         {
-            if (args.Length < 4) return;
-            OpDataCollector dc = args[0] as OpDataCollector;
-            MyOpRule ar = args[1] as MyOpRule;
-            object[] extraArgs = args[3] as object[];
-            OpDataCollectorFlattenedItem objsetItem = null;
-            if (extraArgs != null) objsetItem = extraArgs[0] as OpDataCollectorFlattenedItem;
-            if (dc == null || ar == null || !dc.MeetsRuleCriteria(ar) || objsetItem == null) return;
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid || !r.HasExtraArgs) return;
+            OpDataCollectorFlattenedItem objsetItem = r.ExtraArgs[0] as OpDataCollectorFlattenedItem ?? new OpDataCollectorFlattenedItem();
 
-            objsetItem["HasTracker"] = dc.GetDataElementsWhere(AttributeCodes.TRKR_NBR, d => !string.IsNullOrEmpty(d.AtrbValue.ToString())).Any();
+            objsetItem["HasTracker"] = r.Dc.GetDataElementsWhere(AttributeCodes.TRKR_NBR, d => !string.IsNullOrEmpty(d.AtrbValue.ToString())).Any();
         }
 
         public static void ApplyHasFileAttachments(params object[] args)
         {
-            if (args.Length < 4) return;
-            OpDataCollector dc = args[0] as OpDataCollector;
-            MyOpRule ar = args[1] as MyOpRule;
-            object[] extraArgs = args[3] as object[];
-            OpDataCollectorFlattenedItem objsetItem = null;
-            if (extraArgs != null) objsetItem = extraArgs[0] as OpDataCollectorFlattenedItem;
-            if (dc == null || ar == null || !dc.MeetsRuleCriteria(ar) || objsetItem == null) return;
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid || !r.HasExtraArgs) return;
+            OpDataCollectorFlattenedItem objsetItem = r.ExtraArgs[0] as OpDataCollectorFlattenedItem ?? new OpDataCollectorFlattenedItem();
 
-            objsetItem["HasFiles"] = dc.GetDataElementsWhere("HAS_FILE_ATTACHMENTS", d => !string.IsNullOrEmpty(d.AtrbValue.ToString())).Any();
+            objsetItem["HasFiles"] = r.Dc.GetDataElementsWhere("HAS_FILE_ATTACHMENTS", d => !string.IsNullOrEmpty(d.AtrbValue.ToString())).Any();
         }
 
+        public static void ApplyCustomerDivision(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid || !r.HasExtraArgs) return;
+            OpDataCollectorFlattenedItem objsetItem = r.ExtraArgs[0] as OpDataCollectorFlattenedItem ?? new OpDataCollectorFlattenedItem();
+            CustomerDivision cust = r.ExtraArgs[1] as CustomerDivision;
+
+            if (cust != null) objsetItem["Customer"] = cust;
+        }
 
     }
 }

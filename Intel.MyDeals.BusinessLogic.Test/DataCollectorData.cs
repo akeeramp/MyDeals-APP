@@ -14,7 +14,7 @@ namespace Intel.MyDeals.BusinessLogic.Test
             {
                 ["test1"] = new OpDataCollectorFlattenedDictList
                 {
-                    [OpDataElementType.Contract] = new OpDataCollectorFlattenedList
+                    [OpDataElementType.CNTRCT] = new OpDataCollectorFlattenedList
                     {
                         new OpDataCollectorFlattenedItem
                         {
@@ -38,7 +38,7 @@ namespace Intel.MyDeals.BusinessLogic.Test
                             [AttributeCodes.OBJ_SET_TYPE_CD] = "All"
                         }
                     },
-                    [OpDataElementType.PricingStrategy] = new OpDataCollectorFlattenedList
+                    [OpDataElementType.PRC_ST] = new OpDataCollectorFlattenedList
                     {
                         new OpDataCollectorFlattenedItem
                         {

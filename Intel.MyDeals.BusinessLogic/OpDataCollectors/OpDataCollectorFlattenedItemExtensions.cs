@@ -13,26 +13,24 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
         {
             List<string> infoMsgs = new List<string>();
             List<string> warnMsgs = new List<string>();
-            List<OpDataElementType> dataElementTypes = new List<OpDataElementType> { OpDataElementType.Deals };
 
-            if (!data.ContainsKey("DealId")) return;
+            if (!data.ContainsKey(AttributeCodes.DC_ID)) return;
+            OpDataElementType opDataElementType = OpDataElementTypeConverter.FromString(data["dc_type"]);
 
-            foreach (OpDataElementType opDataElementType in dataElementTypes.Where(myDealsData.ContainsKey))
+            foreach (OpMsg msg in myDealsData[opDataElementType].Messages.Messages
+                .Where(m => (m.MsgType == OpMsg.MessageType.Warning || m.MsgType == OpMsg.MessageType.Info) && m.KeyIdentifiers.Contains(Int32.Parse(data[AttributeCodes.DC_ID].ToString()))))
             {
-                foreach (OpMsg msg in myDealsData[opDataElementType].Messages.Messages
-                    .Where(m => (m.MsgType == OpMsg.MessageType.Warning || m.MsgType == OpMsg.MessageType.Info) && m.KeyIdentifiers.Contains(Int32.Parse(data[AttributeCodes.DC_ID].ToString()))))
+                switch (msg.MsgType)
                 {
-                    switch (msg.MsgType)
-                    {
-                        case OpMsg.MessageType.Info:
-                            infoMsgs.Add(msg.Message.Replace("\r\n", ""));
-                            break;
-                        case OpMsg.MessageType.Warning:
-                            warnMsgs.Add(msg.Message.Replace("\r\n", ""));
-                            break;
-                    }
+                    case OpMsg.MessageType.Info:
+                        infoMsgs.Add(msg.Message.Replace("\r\n", ""));
+                        break;
+                    case OpMsg.MessageType.Warning:
+                        warnMsgs.Add(msg.Message.Replace("\r\n", ""));
+                        break;
                 }
             }
+
             data["infoMessages"] = infoMsgs;
             data["warningMessages"] = warnMsgs;
         }
@@ -43,6 +41,12 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
             item["dc_type"] = dcType;
             item[AttributeCodes.DC_PARENT_ID] = dcParentId;
             item["dc_parent_type"] = dcParentType;
+        }
+
+        public static void MapMultiDim(this OpDataCollectorFlattenedItem item)
+        {
+            if (item.ContainsKey(EN.OBJDIM._MULTIDIM))
+                item[EN.OBJDIM._MULTIDIM] = ((Dictionary<int, OpDataCollectorFlattenedItem>)item[EN.OBJDIM._MULTIDIM]).Values.ToList();
         }
 
         public static void ApplySingleAndMultiDim(this OpDataCollectorFlattenedItem objsetItem, OpDataElement de, OpDataCollector dc, ObjSetPivotMode pivotMode)

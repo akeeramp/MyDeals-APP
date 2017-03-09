@@ -1,5 +1,20 @@
 ﻿<div>
-    <a ui-sref="contract.manager.details({cid:123})"><div class="fl lnavBtn primary">Contract Details</div></a>
-    <div class="fl lnavBtn">Submit for Approval</div>
+    <a ui-sref="contract.details({cid:contractData.DC_ID})"><div class="fl lnavBtn lnavBtn-Sec primary" style="width: 130px;">Contract Details</div></a>
+    <!--<div class="fl lnavBtn lnavBtn-Sec">Submit for Approval</div>-->
+
+    <div class="btn-group">
+        <button class="btn lnavBtn lnavBtn-Sec btn-xs" type="button" style="width: 150px;">Submit for Approval</button>
+        <button class="btn lnavBtnDrp lnavBtn-Sec btn-xs dropdown-toggle" aria-expanded="false" type="button" data-toggle="dropdown">
+            <span class="caret"></span>
+            <span class="sr-only">Toggle Dropdown</span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+            <li><a href="#"><i class="intelicon-right-next"></i> Approve</a></li>
+            <li><a href="#"><i class="intelicon-left-previous"></i> Reject</a></li>
+            <li class="divider"></li>
+            <li><a href="#"><i class="intelicon-trash-outlined"></i> Cancel</a></li>
+        </ul>
+    </div>
+
     <div class="clearboth"></div>
 </div>

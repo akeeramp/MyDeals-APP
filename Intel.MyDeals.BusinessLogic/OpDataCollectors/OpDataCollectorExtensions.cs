@@ -13,68 +13,12 @@ namespace Intel.MyDeals.BusinessLogic
 {
     public static class OpDataCollectorExtensions
     {
-        //public static MyDealsActionItem GetObjsetActions(this OpDataCollector dc)
-        //{
-        //    //return new MyDealsActionItem();
-        //    OpUserToken opUserToken = OpUserStack.MyOpUserToken;
-        //    List<string> settings = new List<string>();
-        //    List<string> actions = new List<string>();
 
-        //    if (dc.DcType == OpDataElementType.WipDeals.ToString() || dc.DcType == OpDataElementType.Deals.ToString())
-        //    {
-        //        settings = new List<string> { "C_UPDATE_DEAL", "C_VIEW_QUOTE_LETTER", "C_ADD_ATTACHMENTS", "C_VIEW_ATTACHMENTS", "CAN_VIEW_COST_TEST", "CAN_VIEW_MEET_COMP" };
-        //        actions = new List<string> { "C_APPROVE", "C_CANCEL_DEAL", "C_REJECT_DEAL" };
-        //    }
-        //    else if (dc.DcType == OpDataElementType.Contract.ToString() || dc.DcType == OpDataElementType.PricingStrategy.ToString() || dc.DcType == OpDataElementType.PricingTable.ToString())
-        //    {
-        //        settings = new List<string> { "C_UPDATE_DEAL" };
-        //        actions = new List<string> { "C_APPROVE", "C_CANCEL_DEAL", "C_REJECT_DEAL" };
-        //    }
-
-        //    bool isSuperSa = opUserToken.IsSuperSa();
-        //    bool isSuper = opUserToken.IsSuper();
-
-        //    CustomerDivision cust = dc.GetCustomerDivision();
-
-        //    string stage = dc.GetDataElementValue(AttributeCodes.DEAL_STG_CD);
-        //    string objSetType = dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
-        //    OpDataElementType opDataElementType = OpDataElementTypeConverter.FromString(dc.DcType);
-        //    OpDataElementSetType opDataElementSetType = OpDataElementSetTypeConverter.FromString(dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD));
-
-        //    MyDealsActionItem dealActionItem = new MyDealsActionItem
-        //    {
-        //        ObjsetType = objSetType,
-        //        Stage = stage,
-        //        Role = opUserToken.Role.RoleTypeCd
-        //    };
-
-        //    // load actions
-        //    if (opUserToken.Role.RoleTypeCd != RoleTypes.SA || isSuperSa)
-        //    {
-        //        foreach (string action in actions)
-        //        {
-        //            if (cust != null && !cust.ACTV_IND)
-        //                dealActionItem.Actions[action] = false;
-        //            else
-        //            {
-        //                dealActionItem.Actions[action] = DataCollections.GetDealActions()
-        //                    .Where(d => d.ObjsetType == objSetType && d.Stage == stage && d.Role == opUserToken.Role.RoleTypeCd)
-        //                    .Select(d => d.Actions[action])
-        //                    .FirstOrDefault();
-        //            }
-        //        }
-        //    }
-
-        //    // load settings
-        //    foreach (string setting in settings)
-        //    {
-        //        dealActionItem.Settings[setting] = DataCollections.GetSecurityWrapper()
-        //            .ChkDealRules(opDataElementType, opDataElementSetType, opUserToken.Role.RoleTypeCd, stage, setting);
-        //    }
-
-        //    return dealActionItem;
-        //}
-
+        /// <summary>
+        /// Get the customer division based on the customer defined in the data collector
+        /// </summary>
+        /// <param name="dc">OpDataCollector</param>
+        /// <returns></returns>
         public static CustomerDivision GetCustomerDivision(this OpDataCollector dc)
         {
             string val = dc.GetDataElementValue(AttributeCodes.CUST_MBR_SID);
@@ -86,12 +30,25 @@ namespace Intel.MyDeals.BusinessLogic
             return new CustomerLib().GetCustomerDivision(Convert.ToInt32(val));
         }
 
-        public static void FillInHolesFromAtrbTemplate(this OpDataCollector dc, bool applyDefaults = false)
+        /// <summary>
+        /// Fill in the holes from the attribute template
+        /// </summary>
+        /// <param name="dc">OpDataCollector</param>
+        /// <param name="opDataElementSetType"></param>
+        /// <param name="applyDefaults">When adding the missing apptribute, should we assign the default values?</param>
+        public static void FillInHolesFromAtrbTemplate(this OpDataCollector dc, OpDataElementSetType opDataElementSetType, bool applyDefaults = false)
         {
             // Load Data Cycle: Point 2
             // Save Data Cycle: Point 7
-            OpDataElementUITemplates templateSource = DataCollections.GetOpDataElementUiTemplates();
-            if (!templateSource.ContainsKey(dc.DcType))
+            OpDataElementAtrbTemplates templateSource = DataCollections.GetOpDataElementUiTemplates();
+
+            string objSetType = opDataElementSetType == OpDataElementSetType.Unknown
+                ? dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD)
+                : opDataElementSetType.ToString();
+            // templates are not just deal type anymore
+
+            string key = $"{dc.DcType}:{objSetType}";
+            if (!templateSource.ContainsKey(key))
             {
                 OpMsg opMsg = new OpMsg
                 {
@@ -109,18 +66,24 @@ namespace Intel.MyDeals.BusinessLogic
                 return;
             }
 
-            dc.FillInHolesFromAtrbTemplate(templateSource[dc.DcType], applyDefaults);
+            dc.FillInHolesFromAtrbTemplate(templateSource[key], applyDefaults);
         }
 
-        public static void FillInHolesFromAtrbTemplate(this OpDataCollector dc, OpDataElementUITemplate templateSource, bool applyDefaults = false)
+        /// <summary>
+        /// Fill in the holes from the attribute template
+        /// </summary>
+        /// <param name="dc">OpDataCollector</param>
+        /// <param name="templateSource">Attribute template collection</param>
+        /// <param name="applyDefaults">When adding the missing apptribute, should we assign the default values?</param>
+        public static void FillInHolesFromAtrbTemplate(this OpDataCollector dc, OpDataElementAtrbTemplate templateSource, bool applyDefaults = false)
         {
             // Load Data Cycle: Point 4
             // Save Data Cycle: Point 8
             List<string> foundItems = dc.DataElements.Select(d => d.GetFullKeyWithRegNoExtras(new Regex(@"5000:[0-9]*/"), "5000:-99999/")).ToList();
-            IEnumerable<OpDataElementUI> missingItems = templateSource.Where(d => !foundItems.Contains(new Regex("5000:[0-9]*/").Replace(d.GetFullKeyNoExtras(), "5000:-99999/")));
+            IEnumerable<OpDataElement> missingItems = templateSource.Where(d => !foundItems.Contains(new Regex("5000:[0-9]*/").Replace(d.GetFullKeyNoExtras(), "5000:-99999/")));
 
             // items in the template that are missing
-            foreach (OpDataElementUI deUi in missingItems)
+            foreach (OpDataElement deUi in missingItems)
             {
                 OpDataElement newDe = deUi.Clone();
                 newDe.DcID = dc.DcID;
@@ -139,8 +102,8 @@ namespace Intel.MyDeals.BusinessLogic
                     newDe.AtrbValue = "";
                     newDe.State = OpDataElementState.Unchanged;
                 }
-                newDe.OrigAtrbValue = String.Empty;
-                newDe.PrevAtrbValue = String.Empty;
+                newDe.OrigAtrbValue = string.Empty;
+                newDe.PrevAtrbValue = string.Empty;
 
                 dc.DataElements.Add(newDe);
             }
@@ -150,6 +113,12 @@ namespace Intel.MyDeals.BusinessLogic
             dc.DataElements.RemoveAll(d => !allTemplateCds.Contains(d.AtrbCd));
         }
 
+        /// <summary>
+        /// Merge OpDataCollector Flattened Items into the OpDataCollector dictionary
+        /// </summary>
+        /// <param name="dc">OpDataCollector</param>
+        /// <param name="items">Flattened Items to merge into dictionary</param>
+        /// <returns></returns>
         public static OpMsgQueue MergeDictionary(this OpDataCollector dc, OpDataCollectorFlattenedItem items)
         {
             // Save Data Cycle: Point 4
@@ -211,6 +180,15 @@ namespace Intel.MyDeals.BusinessLogic
             return opMsgQueue;
         }
 
+        /// <summary>
+        /// Convert the OpDataCollector into a Flattened structure
+        /// </summary>
+        /// <param name="dc">OpDataCollector</param>
+        /// <param name="opType">OpDataElementType</param>
+        /// <param name="pivotMode">Mode to pivote data: ex. Pivoted, Nested</param>
+        /// <param name="prdMaps">Product Mapping collection</param>
+        /// <param name="myDealsData">MyDealsData source</param>
+        /// <returns></returns>
         public static OpDataCollectorFlattenedItem ToOpDataCollectorFlattenedItem(this OpDataCollector dc,
             OpDataElementType opType,
             ObjSetPivotMode pivotMode,
@@ -218,15 +196,11 @@ namespace Intel.MyDeals.BusinessLogic
             MyDealsData myDealsData)
         {
 
-            // Create the collection to return
-            OpDataCollectorFlattenedItem objsetItem = new OpDataCollectorFlattenedItem();
-
             // Call all load triggered rules
             dc.ApplyRules(MyRulesTrigger.OnLoad);
 
-            // Customer
-            CustomerDivision cust = dc.GetCustomerDivision();
-            if (cust != null) objsetItem["Customer"] = cust;
+            // Create the collection to return
+            OpDataCollectorFlattenedItem objsetItem = new OpDataCollectorFlattenedItem();
 
             // Add DataElements to the Dictionary
             dc.DataElements.ForEach(de => objsetItem.ApplySingleAndMultiDim(de, dc, pivotMode));
@@ -235,29 +209,22 @@ namespace Intel.MyDeals.BusinessLogic
             objsetItem.EnsureBasicIds(dc.DcID, dc.DcType, dc.DcParentID, dc.DcParentType);
 
             // Don't forget about multi dimensional items
-            if (objsetItem.ContainsKey(EN.OBJDIM._MULTIDIM))
-                objsetItem[EN.OBJDIM._MULTIDIM] = ((Dictionary<int, OpDataCollectorFlattenedItem>)objsetItem["_MultiDim"]).Values.ToList();
+            objsetItem.MapMultiDim();
 
             // Apply rules directly to dictionary
-            dc.ApplyRules(MyRulesTrigger.OnOpCollectorConvert, null, objsetItem);
+            dc.ApplyRules(MyRulesTrigger.OnOpCollectorConvert, null, objsetItem, dc.GetCustomerDivision());
 
+            // assign all messages
             objsetItem.ApplyMessages(myDealsData);
 
             return objsetItem;
         }
 
-        public static string GetDealDetailOneLine(this OpDataCollector dc, string displayDeal, CustomerDivision cust)
-        {
-            return string.Format("{0} / {1} / {2} / {3} / {4} / {5}",
-                displayDeal,
-                dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD),
-                dc.GetDataElementValue(AttributeCodes.DEAL_STG_CD),
-                dc.GetDataElementValue(AttributeCodes.START_DT),
-                dc.GetDataElementValue(AttributeCodes.END_DT),
-                cust.CUST_DIV_NM
-                );
-        }
-
+        /// <summary>
+        /// UI safe way of displaying the DataCollector Number
+        /// </summary>
+        /// <param name="dc">OpDataCollector</param>
+        /// <returns></returns>
         public static string DisplayDealId(this OpDataCollector dc)
         {
             return dc.DcID.ToString();

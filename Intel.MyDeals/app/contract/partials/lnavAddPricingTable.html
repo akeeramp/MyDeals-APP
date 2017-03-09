@@ -21,7 +21,7 @@
         <!-- PRICING TABLE TEMPLATES -->
         <div class="ptLnavtmpltContainer">
             <div style="color: #F3D54E;">{{ newPricingTable._behaviors.validMsg.OBJ_SET_TYPE_CD }}</div>
-            <div ng-repeat="(key, value) in templates.ModelTemplates.PricingTable" class="fl circleWithText" ng-click="selectPtTemplateIcon(value)" ng-class="{active: value._custom._active}">
+            <div ng-repeat="(key, value) in templates.ModelTemplates.PRC_TBL" class="fl circleWithText" ng-click="selectPtTemplateIcon(value)" ng-class="{active: value._custom._active}">
                 <div class="fl textCircle blueBg">{{ value._custom.ltr }}</div>
                 <div class="fl textName">{{ value.name }}</div>
                 <div class="clearboth"></div>

@@ -1,9 +1,7 @@
 ﻿using System.Web.Http;
-using Intel.MyDeals.BusinessLogic;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque;
-using Intel.Opaque.Data;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -80,11 +78,11 @@ namespace Intel.MyDeals.Controllers.API
 
 
         [Authorize]
-        [Route("SaveContractAndStrategy/{custId}")]
+        [Route("SaveContractAndPricingTable/{custId}")]
         [HttpPost]
-        public MyDealsData SaveContractAndStrategy(int custId, ContractTransferPacket contractAndStrategy)
+        public MyDealsData SaveContractAndPricingTable(int custId, ContractTransferPacket contractAndPricingTable)
         {
-            return SafeExecutor(() => _contractsLib.SaveContractAndStrategy(custId, contractAndStrategy)
+            return SafeExecutor(() => _contractsLib.SaveContractAndPricingTable(custId, contractAndPricingTable)
                 , "Unable to save the Contract"
             );
         }

@@ -1,7 +1,7 @@
 ﻿<!-- Pricing Strategies -->
 <div ng-hide="isPricingStrategiesHidden" style="margin-top: 10px; ">
 
-    <div ng-repeat="ps in contractData.PricingStrategy | filter:query" class="lnavStrategyContainer">
+    <div ng-repeat="ps in contractData.PRC_ST | filter:query" class="lnavStrategyContainer">
 
         <div class="psNav">
             <div class="fl" ng-click="isCollapsed = !isCollapsed">
@@ -24,7 +24,7 @@
         </div>
 
         <div uib-collapse="isCollapsed" style="margin-bottom: 10px;">
-            <div ng-repeat="pt in ps.PricingTable | filter:query" class="lnavPricingTableContainer">
+            <div ng-repeat="pt in ps.PRC_TBL | filter:query" class="lnavPricingTableContainer">
                 <div class="ptNav" ng-class="{active: curPricingTable.DC_ID == pt.DC_ID}">
                     <div class="fl textCircle pct_{{ pt.PCT_RESULT }}">{{ pt.OBJ_SET_TYPE_CD | limitTo:1 }}</div>
                     <div class="fl" style="margin: 0 6px;" ng-init="isEditable=false">

@@ -18,12 +18,10 @@ namespace Intel.MyDeals.BusinessRules
         /// <param name="args"></param>
         public static void ExecuteActions(params object[] args)
         {
-            if (args.Length < 2) return;
-            OpDataCollector dc = args[0] as OpDataCollector;
-            MyOpRule ar = args[1] as MyOpRule;
-            if (dc == null || ar == null || !dc.MeetsRuleCriteria(ar)) return;
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
 
-            dc.ApplyActions(dc.MeetsRuleCondition(ar) ? ar.OpRuleActions : ar.OpRuleElseActions);
+            r.Dc.ApplyActions(r.Dc.MeetsRuleCondition(r.Rule) ? r.Rule.OpRuleActions : r.Rule.OpRuleElseActions);
         }
 
         /// <summary>
@@ -34,16 +32,13 @@ namespace Intel.MyDeals.BusinessRules
         /// <param name="args">OpDataCollector, MyOpRule and SecurityActionCache</param>
         private static void SyncAtrbPropertyItems(string actionCode, MyRulesTrigger myRulesTrigger, params object[] args)
         {
-            if (args.Length < 3) return;
-            OpDataCollector dc = args[0] as OpDataCollector;
-            MyOpRule ar = args[1] as MyOpRule;
-            Dictionary<string, bool> securityActionCache = args[2] as Dictionary<string, bool>;
-            if (dc == null || ar == null || !dc.MeetsRuleCriteria(ar)) return;
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
 
-            dc.ApplySecurityAttributes(actionCode, DataCollections.GetSecurityWrapper(), new string[] { }, securityActionCache);
+            r.Dc.ApplySecurityAttributes(actionCode, DataCollections.GetSecurityWrapper(), new string[] { }, r.Security);
 
             // Now apply all rules
-            dc.ApplyRules(myRulesTrigger, securityActionCache);
+            r.Dc.ApplyRules(myRulesTrigger, r.Security);
         }
 
         /// <summary>

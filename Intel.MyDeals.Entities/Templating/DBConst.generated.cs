@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 3/7/2017 2:35:54 PM
-On: MHTIPPIN-MOBL
+File Updated: 3/8/2017 9:24:37 AM
+On: PWECKENR-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
 using System;
@@ -1340,12 +1340,12 @@ namespace Intel.MyDeals.Entities {
 	//-- Build Object Data --------------------------------------------------------------------------------
 
 	public enum OpDataElementType {
-		Contract = 10,
-		PricingStrategy = 20,
-		PricingTable = 30,
-		PricingTableRow = 40,
-		WipDeals = 50,
-		Deals = 60,
+		CNTRCT = 1,
+		PRC_ST = 2,
+		PRC_TBL = 3,
+		PRC_TBL_ROW = 4,
+		WIP_DEAL = 5,
+		DEAL = 6,
 		Unknown = 0
 	}
 
@@ -1354,21 +1354,21 @@ namespace Intel.MyDeals.Entities {
 		public static readonly OpDataElementTypeCollection OpDetCollection = new OpDataElementTypeCollection(
 			new List<OpDataElementTypeItem>
 			{
-				new OpDataElementTypeItem {Id = 1, OpDeType = OpDataElementType.Contract, Alias = "CNTRCT", Order = 10 },
-				new OpDataElementTypeItem {Id = 2, OpDeType = OpDataElementType.PricingStrategy, Alias = "PRC_ST", Order = 20 },
-				new OpDataElementTypeItem {Id = 3, OpDeType = OpDataElementType.PricingTable, Alias = "PRC_TBL", Order = 30 },
-				new OpDataElementTypeItem {Id = 4, OpDeType = OpDataElementType.PricingTableRow, Alias = "PRC_TBL_ROW", Order = 40 },
-				new OpDataElementTypeItem {Id = 5, OpDeType = OpDataElementType.WipDeals, Alias = "WIP_DEAL", Order = 50 },
-				new OpDataElementTypeItem {Id = 6, OpDeType = OpDataElementType.Deals, Alias = "DEAL", Order = 60 },
+				new OpDataElementTypeItem {Id = 1, OpDeType = OpDataElementType.CNTRCT, Alias = "CNTRCT", Order = 10 },
+				new OpDataElementTypeItem {Id = 2, OpDeType = OpDataElementType.PRC_ST, Alias = "PRC_ST", Order = 20 },
+				new OpDataElementTypeItem {Id = 3, OpDeType = OpDataElementType.PRC_TBL, Alias = "PRC_TBL", Order = 30 },
+				new OpDataElementTypeItem {Id = 4, OpDeType = OpDataElementType.PRC_TBL_ROW, Alias = "PRC_TBL_ROW", Order = 40 },
+				new OpDataElementTypeItem {Id = 5, OpDeType = OpDataElementType.WIP_DEAL, Alias = "WIP_DEAL", Order = 50 },
+				new OpDataElementTypeItem {Id = 6, OpDeType = OpDataElementType.DEAL, Alias = "DEAL", Order = 60 },
 			},
 
 			new Dictionary<OpDataElementType, OpDataElementType>
 			{
-				[OpDataElementType.Contract] = OpDataElementType.PricingStrategy,
-				[OpDataElementType.PricingStrategy] = OpDataElementType.PricingTable,
-				[OpDataElementType.PricingTable] = OpDataElementType.PricingTableRow,
-				[OpDataElementType.PricingTableRow] = OpDataElementType.WipDeals,
-				[OpDataElementType.WipDeals] = OpDataElementType.Deals,
+				[OpDataElementType.CNTRCT] = OpDataElementType.PRC_ST,
+				[OpDataElementType.PRC_ST] = OpDataElementType.PRC_TBL,
+				[OpDataElementType.PRC_TBL] = OpDataElementType.PRC_TBL_ROW,
+				[OpDataElementType.PRC_TBL_ROW] = OpDataElementType.WIP_DEAL,
+				[OpDataElementType.WIP_DEAL] = OpDataElementType.DEAL,
 			}
 		);
 	}
@@ -1381,7 +1381,7 @@ namespace Intel.MyDeals.Entities {
 		PROGRAM = 4,
 		VOL_TIER = 5,
 		CAP_BAND = 7,
-		GENERAL = 9,
+		ALL_TYPES = 9,
 		Unknown = 0
 	}
 
@@ -1390,20 +1390,20 @@ namespace Intel.MyDeals.Entities {
 		public static readonly OpDataElementSetTypeCollection  OpDestCollection  = new OpDataElementSetTypeCollection(
 			new List<OpDataElementSetTypeItem>
 			{
-				new OpDataElementSetTypeItem {Id = 3, OpDeSetType = OpDataElementSetType.ECAP, Alias = "ECAP", Description = "ECAP Deal Types", TemplateDealNumber = -1, TrackerDtLetter = "E", Order = 3 },
+				new OpDataElementSetTypeItem {Id = 3, OpDeSetType = OpDataElementSetType.ECAP, Alias = "ECAP", Description = "ECAP Deal Type", TemplateDealNumber = -1, TrackerDtLetter = "E", Order = 3 },
 				new OpDataElementSetTypeItem {Id = 4, OpDeSetType = OpDataElementSetType.PROGRAM, Alias = "PROGRAM", Description = "PROGRAM Deal Type", TemplateDealNumber = -3, TrackerDtLetter = "L", Order = 4 },
 				new OpDataElementSetTypeItem {Id = 5, OpDeSetType = OpDataElementSetType.VOL_TIER, Alias = "VOL_TIER", Description = "VOL TIER Deal Type", TemplateDealNumber = -2, TrackerDtLetter = "T", Order = 5 },
 				new OpDataElementSetTypeItem {Id = 7, OpDeSetType = OpDataElementSetType.CAP_BAND, Alias = "CAP_BAND", Description = "CAP BAND Deal Type", TemplateDealNumber = -4, TrackerDtLetter = "C", Order = 7 },
-				new OpDataElementSetTypeItem {Id = 9, OpDeSetType = OpDataElementSetType.GENERAL, Alias = "GENERAL", Description = "General Basic Type", TemplateDealNumber = 0, TrackerDtLetter = "", Order = 9 },
+				new OpDataElementSetTypeItem {Id = 9, OpDeSetType = OpDataElementSetType.ALL_TYPES, Alias = "ALL_TYPES", Description = "ALL Object set types", TemplateDealNumber = 0, TrackerDtLetter = "", Order = 9 },
 			},
 
 			new Dictionary<OpDataElementType, List<OpDataElementSetType>>
 			{
-				[OpDataElementType.Contract] = new List<OpDataElementSetType> { OpDataElementSetType.GENERAL },
-				[OpDataElementType.PricingStrategy] = new List<OpDataElementSetType> { OpDataElementSetType.GENERAL },
-				[OpDataElementType.PricingTable] = new List<OpDataElementSetType> { OpDataElementSetType.ECAP,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER,OpDataElementSetType.CAP_BAND },
-				[OpDataElementType.PricingTableRow] = new List<OpDataElementSetType> { OpDataElementSetType.ECAP,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER,OpDataElementSetType.CAP_BAND },
-				[OpDataElementType.WipDeals] = new List<OpDataElementSetType> { OpDataElementSetType.ECAP,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER,OpDataElementSetType.CAP_BAND },
+				[OpDataElementType.CNTRCT] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES },
+				[OpDataElementType.PRC_ST] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES },
+				[OpDataElementType.PRC_TBL] = new List<OpDataElementSetType> { OpDataElementSetType.ECAP,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER,OpDataElementSetType.CAP_BAND },
+				[OpDataElementType.PRC_TBL_ROW] = new List<OpDataElementSetType> { OpDataElementSetType.ECAP,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER,OpDataElementSetType.CAP_BAND },
+				[OpDataElementType.WIP_DEAL] = new List<OpDataElementSetType> { OpDataElementSetType.ECAP,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER,OpDataElementSetType.CAP_BAND },
 			}
 		);
 	}

@@ -28,15 +28,15 @@ namespace Intel.MyDeals.BusinessLogic
             List<OpDataElementType> opDataElementTypes = inclusive
                 ? new List<OpDataElementType>
                     {
-                        OpDataElementType.Contract,
-                        OpDataElementType.PricingStrategy,
-                        OpDataElementType.PricingTable,
-                        OpDataElementType.PricingTableRow,
-                        OpDataElementType.WipDeals
+                        OpDataElementType.CNTRCT,
+                        OpDataElementType.PRC_ST,
+                        OpDataElementType.PRC_TBL,
+                        OpDataElementType.PRC_TBL_ROW,
+                        OpDataElementType.WIP_DEAL
                     }
                 : new List<OpDataElementType>
                     {
-                        OpDataElementType.Contract
+                        OpDataElementType.CNTRCT
                     };
 
             return GetContract(id, opDataElementTypes);
@@ -50,19 +50,19 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns>MyDealsData</returns>
         public MyDealsData GetContract(int id, List<OpDataElementType> opDataElementTypes = null)
         {
-            return OpDataElementType.Contract.GetByIDs(new List<int> {id}, opDataElementTypes ?? new List<OpDataElementType> { OpDataElementType.Contract });
+            return OpDataElementType.CNTRCT.GetByIDs(new List<int> {id}, opDataElementTypes ?? new List<OpDataElementType> { OpDataElementType.CNTRCT });
         }
 
         public OpDataCollectorFlattenedList GetUpperContract(int id)
         {
             return GetContract(id, new List<OpDataElementType>
                 {
-                    OpDataElementType.Contract,
-                    OpDataElementType.PricingStrategy,
-                    OpDataElementType.PricingTable
+                    OpDataElementType.CNTRCT,
+                    OpDataElementType.PRC_ST,
+                    OpDataElementType.PRC_TBL
                 })
                 .ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted)
-                .ToHierarchialList(OpDataElementType.Contract);
+                .ToHierarchialList(OpDataElementType.CNTRCT);
         }
 
         public OpDataCollectorFlattenedDictList GetFullContract(int id)
@@ -82,7 +82,7 @@ namespace Intel.MyDeals.BusinessLogic
             // Save Data Cycle: Point 1
             return _dataCollectorLib.SavePackets(new OpDataCollectorFlattenedDictList
             {
-                [OpDataElementType.Contract] = data
+                [OpDataElementType.CNTRCT] = data
             }, custId);
         }
 
@@ -106,11 +106,11 @@ namespace Intel.MyDeals.BusinessLogic
         {
             OpDataCollectorFlattenedDictList data = new OpDataCollectorFlattenedDictList();
 
-            if (contracts != null && contracts.Any()) data[OpDataElementType.Contract] = contracts;
-            if (pricingStrategies != null && pricingStrategies.Any()) data[OpDataElementType.PricingStrategy] = pricingStrategies;
-            if (pricingTables != null && pricingTables.Any()) data[OpDataElementType.PricingTable] = pricingTables;
-            if (pricingTableRows != null && pricingTableRows.Any()) data[OpDataElementType.PricingTableRow] = pricingTableRows;
-            if (wipDeals != null && wipDeals.Any()) data[OpDataElementType.WipDeals] = wipDeals;
+            if (contracts != null && contracts.Any()) data[OpDataElementType.CNTRCT] = contracts;
+            if (pricingStrategies != null && pricingStrategies.Any()) data[OpDataElementType.PRC_ST] = pricingStrategies;
+            if (pricingTables != null && pricingTables.Any()) data[OpDataElementType.PRC_TBL] = pricingTables;
+            if (pricingTableRows != null && pricingTableRows.Any()) data[OpDataElementType.PRC_TBL_ROW] = pricingTableRows;
+            if (wipDeals != null && wipDeals.Any()) data[OpDataElementType.WIP_DEAL] = wipDeals;
 
             return _dataCollectorLib.SavePackets(data, custId);
         }
@@ -118,15 +118,15 @@ namespace Intel.MyDeals.BusinessLogic
         public MyDealsData SaveFullContract(int custId, OpDataCollectorFlattenedDictList fullContracts)
         {
             return SaveContract(
-                fullContracts.ContainsKey(OpDataElementType.Contract) ? fullContracts[OpDataElementType.Contract] : new OpDataCollectorFlattenedList(),
-                fullContracts.ContainsKey(OpDataElementType.PricingStrategy) ? fullContracts[OpDataElementType.PricingStrategy] : new OpDataCollectorFlattenedList(),
-                fullContracts.ContainsKey(OpDataElementType.PricingTable) ? fullContracts[OpDataElementType.PricingTable] : new OpDataCollectorFlattenedList(),
-                fullContracts.ContainsKey(OpDataElementType.PricingTableRow) ? fullContracts[OpDataElementType.PricingTableRow] : new OpDataCollectorFlattenedList(),
-                fullContracts.ContainsKey(OpDataElementType.WipDeals) ? fullContracts[OpDataElementType.WipDeals] : new OpDataCollectorFlattenedList(),
+                fullContracts.ContainsKey(OpDataElementType.CNTRCT) ? fullContracts[OpDataElementType.CNTRCT] : new OpDataCollectorFlattenedList(),
+                fullContracts.ContainsKey(OpDataElementType.PRC_ST) ? fullContracts[OpDataElementType.PRC_ST] : new OpDataCollectorFlattenedList(),
+                fullContracts.ContainsKey(OpDataElementType.PRC_TBL) ? fullContracts[OpDataElementType.PRC_TBL] : new OpDataCollectorFlattenedList(),
+                fullContracts.ContainsKey(OpDataElementType.PRC_TBL_ROW) ? fullContracts[OpDataElementType.PRC_TBL_ROW] : new OpDataCollectorFlattenedList(),
+                fullContracts.ContainsKey(OpDataElementType.WIP_DEAL) ? fullContracts[OpDataElementType.WIP_DEAL] : new OpDataCollectorFlattenedList(),
                 custId);
         }
 
-        public MyDealsData SaveContractAndStrategy(int custId, ContractTransferPacket contractAndStrategy)
+        public MyDealsData SaveContractAndPricingTable(int custId, ContractTransferPacket contractAndStrategy)
         {
             return SaveContract(
                 contractAndStrategy.Contract,

@@ -302,23 +302,21 @@ namespace Intel.MyDeals.DataLibrary
         {
             lock (LOCK_OBJECT ?? new object())
             {
-                if (_getTemplateData != null && _getTemplateDict != null && _getCalendarData != null)
+                if (_getTemplateData != null && _getTemplateDict != null)
                     return new TemplateWrapper
                     {
                         TemplateData = _getTemplateData,
                         TemplateDict = _getTemplateDict,
-                        CalendarData = _getCalendarData,
                     };
 
                 TemplateWrapper wrapper = new OpDataCollectorDataLib().GetTemplateData();
                 _getTemplateData = wrapper.TemplateData;
                 _getTemplateDict = wrapper.TemplateDict;
-                _getCalendarData = wrapper.CalendarData.ToList();
                 return wrapper;
             }
         }
 
-        public static OpDataElementUITemplates GetOpDataElementUiTemplates()
+        public static OpDataElementAtrbTemplates GetOpDataElementUiTemplates()
         {
             return GetTemplateWrapper().TemplateDict;
         }
@@ -328,19 +326,14 @@ namespace Intel.MyDeals.DataLibrary
             return GetTemplateWrapper().TemplateData;
         }
 
-        public static OpDataElementUITemplates GetTemplateDict()
+        public static OpDataElementAtrbTemplates GetTemplateDict()
         {
             return GetTemplateWrapper().TemplateDict;
         }
 
-        public static IEnumerable<CustomerCal> GetCalendarData()
-        {
-            return GetTemplateWrapper().CalendarData;
-        }
 
         private static List<ObjectTypeTemplate> _getTemplateData;
-        private static OpDataElementUITemplates _getTemplateDict;
-        private static List<CustomerCal> _getCalendarData;
+        private static OpDataElementAtrbTemplates _getTemplateDict;
 
         public static List<CustomerDivision> GetCustomerDivisions()
         {

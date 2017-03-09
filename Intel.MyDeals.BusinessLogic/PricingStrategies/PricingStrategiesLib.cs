@@ -21,17 +21,17 @@ namespace Intel.MyDeals.BusinessLogic
             List<OpDataElementType> opDataElementTypes = inclusive
                 ? new List<OpDataElementType>
                 {
-                    OpDataElementType.PricingStrategy,
-                    OpDataElementType.PricingTable,
-                    OpDataElementType.PricingTableRow,
-                    OpDataElementType.WipDeals
+                    OpDataElementType.PRC_ST,
+                    OpDataElementType.PRC_TBL,
+                    OpDataElementType.PRC_TBL_ROW,
+                    OpDataElementType.WIP_DEAL
                 }
                 : new List<OpDataElementType>
                 {
-                    OpDataElementType.PricingStrategy
+                    OpDataElementType.PRC_ST
                 };
 
-            return OpDataElementType.PricingStrategy.GetByIDs(new List<int> {id}, opDataElementTypes);
+            return OpDataElementType.PRC_ST.GetByIDs(new List<int> {id}, opDataElementTypes);
         }
 
         public OpDataCollectorFlattenedDictList GetFullPricingStrategy(int id)
@@ -43,7 +43,7 @@ namespace Intel.MyDeals.BusinessLogic
         {
             return _dataCollectorLib.SavePackets(new OpDataCollectorFlattenedDictList
             {
-                [OpDataElementType.PricingStrategy] = data
+                [OpDataElementType.PRC_ST] = data
             }, custId);
         }
 
@@ -56,10 +56,10 @@ namespace Intel.MyDeals.BusinessLogic
         {
             OpDataCollectorFlattenedDictList data = new OpDataCollectorFlattenedDictList();
 
-            if (pricingStrategies != null && pricingStrategies.Any()) data[OpDataElementType.PricingStrategy] = pricingStrategies;
-            if (pricingTables != null && pricingTables.Any()) data[OpDataElementType.PricingTable] = pricingTables;
-            if (pricingTableRows != null && pricingTableRows.Any()) data[OpDataElementType.PricingTableRow] = pricingTableRows;
-            if (wipDeals != null && wipDeals.Any()) data[OpDataElementType.WipDeals] = wipDeals;
+            if (pricingStrategies != null && pricingStrategies.Any()) data[OpDataElementType.PRC_ST] = pricingStrategies;
+            if (pricingTables != null && pricingTables.Any()) data[OpDataElementType.PRC_TBL] = pricingTables;
+            if (pricingTableRows != null && pricingTableRows.Any()) data[OpDataElementType.PRC_TBL_ROW] = pricingTableRows;
+            if (wipDeals != null && wipDeals.Any()) data[OpDataElementType.WIP_DEAL] = wipDeals;
 
             return _dataCollectorLib.SavePackets(data, custId);
         }
@@ -67,10 +67,10 @@ namespace Intel.MyDeals.BusinessLogic
         public MyDealsData SaveFullPricingStrategy(int custId, OpDataCollectorFlattenedDictList fullpricingStrategies)
         {
             return SavePricingStrategy(
-                fullpricingStrategies.ContainsKey(OpDataElementType.PricingStrategy) ? fullpricingStrategies[OpDataElementType.PricingStrategy] : new OpDataCollectorFlattenedList(),
-                fullpricingStrategies.ContainsKey(OpDataElementType.PricingTable) ? fullpricingStrategies[OpDataElementType.PricingTable] : new OpDataCollectorFlattenedList(),
-                fullpricingStrategies.ContainsKey(OpDataElementType.PricingTableRow) ? fullpricingStrategies[OpDataElementType.PricingTableRow] : new OpDataCollectorFlattenedList(),
-                fullpricingStrategies.ContainsKey(OpDataElementType.WipDeals) ? fullpricingStrategies[OpDataElementType.WipDeals] : new OpDataCollectorFlattenedList(),
+                fullpricingStrategies.ContainsKey(OpDataElementType.PRC_ST) ? fullpricingStrategies[OpDataElementType.PRC_ST] : new OpDataCollectorFlattenedList(),
+                fullpricingStrategies.ContainsKey(OpDataElementType.PRC_TBL) ? fullpricingStrategies[OpDataElementType.PRC_TBL] : new OpDataCollectorFlattenedList(),
+                fullpricingStrategies.ContainsKey(OpDataElementType.PRC_TBL_ROW) ? fullpricingStrategies[OpDataElementType.PRC_TBL_ROW] : new OpDataCollectorFlattenedList(),
+                fullpricingStrategies.ContainsKey(OpDataElementType.WIP_DEAL) ? fullpricingStrategies[OpDataElementType.WIP_DEAL] : new OpDataCollectorFlattenedList(),
                 custId);
         }
 

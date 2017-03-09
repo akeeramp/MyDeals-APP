@@ -467,7 +467,7 @@ namespace Intel.MyDeals.Entities
 
 
 
-        public static OpDataCollector CopyToOpDataCollector(this List<OpDataElementUI> sourceData, int id, int parentId)
+        public static OpDataCollector CopyToOpDataCollector(this List<OpDataElement> sourceData, int id, int parentId)
         {
             OpDataCollector odc = new OpDataCollector
             {
@@ -476,9 +476,9 @@ namespace Intel.MyDeals.Entities
                 DataElements = new List<OpDataElement>()
             };
 
-            foreach (OpDataElementUI opDataElementUi in sourceData)
+            foreach (OpDataElement opDataElement in sourceData)
             {
-                odc.DataElements.Add(opDataElementUi.CopyDataElement(id));
+                odc.DataElements.Add(opDataElement.CopyDataElement(id));
             }
 
             return odc;

@@ -29,7 +29,7 @@ function objsetService($http, dataService, logger, $q) {
         updatePricingTable: updatePricingTable,
         deletePricingTable: deletePricingTable,
 
-        updateContractAndCurStrategy: updateContractAndCurStrategy
+        updateContractAndCurPricingTable: updateContractAndCurPricingTable
     }
 
     return service;
@@ -73,240 +73,7 @@ function objsetService($http, dataService, logger, $q) {
         return dataService.post(apiBasePricingTableUrl + 'SavePricingTable/' + custId, [ps]);
     }
     function readPricingTable(id) {
-        // TODO finallize service call.  this is still in progress so for now still using the hard codded structure
         return dataService.get(apiBasePricingTableUrl + 'GetFullNestedPricingTable/' + id);
-
-        // TODO won't need this after real call to DB return neg to pos ids
-        // fake a new table        
-        if (id < 110) {
-            return {
-                "PricingTable": [],
-                "WipDeals": []
-            };
-        }
-
-        return {
-            "PricingTable": [
-                {
-                    "DC_ID": 1,
-                    "TEXT": "Hello World 1",
-                    "_MultiDim": [
-                        {
-                            "DC_ID": -300,
-                            "PIVOT": -1,
-                            "TITLE": "Kit",
-                            "TEXT": "Hello World 1",
-                            "DATE": "2/1/2016",
-                            "INT": 1231,
-                            "data": "Deal Type",
-                            "_behaviors": {
-                                "isRequired": {},
-                                "isReadOnly": {},
-                                "isHidden": {},
-                                "isSaved": {},
-                                "isError": {},
-                                "validMsg": {}
-                            }
-                        },
-                        {
-                            "DC_ID": -301,
-                            "PIVOT": 0,
-                            "TITLE": "Primary",
-                            "TEXT": "Hello World 2",
-                            "INT": 1232,
-                            "DATE": "2/2/2016",
-                            "data": "Deal Type",
-                            "_behaviors": {
-                                "isRequired": {},
-                                "isReadOnly": {},
-                                "isHidden": {},
-                                "isSaved": {},
-                                "isError": {},
-                                "validMsg": {}
-                            }
-                        },
-                        {
-                            "DC_ID": -302,
-                            "PIVOT": 1,
-                            "TITLE": "Secondary 1",
-                            "TEXT": "Hello World 3",
-                            "INT": 1233,
-                            "DATE": "2/3/2016",
-                            "data": "Deal Type",
-                            "_behaviors": {
-                                "isRequired": {},
-                                "isReadOnly": {},
-                                "isHidden": {},
-                                "isSaved": {},
-                                "isError": {},
-                                "validMsg": {}
-                            }
-                        }
-                    ],
-                    "_pivot": {
-                        "_MultiDim": {
-                            "Kit": "-1",
-                            "Primary": "0",
-                            "Secondary 1": "1",
-                            "Secondary 2": "2"
-                        }
-                    },
-                    "_behaviors": {
-                        "isRequired": {},
-                        "isReadOnly": {},
-                        "isHidden": {},
-                        "isSaved": {},
-                        "isError": {},
-                        "validMsg": {
-                            "TEXT": "That did not work"
-                        }
-                    },
-                    "_defaultAtrbs": {
-                        "TEXT": {
-                            "value": "We are the World",
-                            "label": "TEXT: ",
-                            "type": "TEXTBOX",
-                            "isRequired": false
-                        },
-                        "INT": {
-                            "value": 2001,
-                            "label": "INT: ",
-                            "type": "NUMERIC",
-                            "isRequired": false
-                        }
-                    }
-
-                }
-            ],
-            "WipDeals": [
-                {
-                    "DC_ID": 1,
-                    "TEXT": "Hello World 1",
-                    "INT": 123,
-                    "DATE": "2/4/2016",
-                    "DROPDOWN": "DROPDOWN 3",
-                    "COMBOBOX": "COMBOBOX 5",
-                    "_MultiDim": [
-                        {
-                            "DC_ID": -300,
-                            "PIVOT": -1,
-                            "TITLE": "Kit",
-                            "TEXT": "Hello World 1",
-                            "INT": 1231,
-                            "DATE": "2/1/2016",
-                            "DROPDOWN": "DROPDOWN 3",
-                            "COMBOBOX": "COMBOBOX 5",
-                            "_behaviors": {
-                                "isRequired": {},
-                                "isReadOnly": {},
-                                "isHidden": {},
-                                "isSaved": {},
-                                "isError": {},
-                                "validMsg": {
-                                    "TEXT": "That did not work"
-                                }
-                            }
-                        },
-                        {
-                            "DC_ID": -301,
-                            "PIVOT": 0,
-                            "TITLE": "Primary",
-                            "TEXT": "Hello World 2",
-                            "INT": 1232,
-                            "DATE": "2/2/2016",
-                            "DROPDOWN": "OPTION2",
-                            "COMBOBOX": "COMBOBOX 2"
-                        },
-                        {
-                            "DC_ID": -302,
-                            "PIVOT": 1,
-                            "TITLE": "Secondary 1",
-                            "TEXT": "Hello World 3",
-                            "INT": 1233,
-                            "DATE": "2/3/2016",
-                            "DROPDOWN": "OPTION3",
-                            "COMBOBOX": "COMBOBOX 3"
-                        }
-                    ],
-                    "_pivot": {
-                        "_MultiDim": {
-                            "Kit": "-1",
-                            "Primary": "0",
-                            "Secondary 1": "1",
-                            "Secondary 2": "2"
-                        }
-                    },
-                    "_behaviors": {
-                        "isRequired": {},
-                        "isReadOnly": {},
-                        "isHidden": {},
-                        "isSaved": {},
-                        "isError": {},
-                        "validMsg": {
-                            "TEXT": "That did not work"
-                        }
-                    }
-                },
-                {
-                    "DC_ID": 2,
-                    "TEXT": "Hello World 2",
-                    "INT": 124,
-                    "DATE": "2/4/2016",
-                    "DROPDOWN": "DROPDOWN 2",
-                    "COMBOBOX": "COMBOBOX 3",
-                    "_MultiDim": [
-                        {
-                            "DC_ID": -304,
-                            "PIVOT": -1,
-                            "TITLE": "Kit",
-                            "TEXT": "Hello World 1",
-                            "INT": 1231,
-                            "DATE": "2/1/2016",
-                            "DROPDOWN": "DROPDOWN 2",
-                            "COMBOBOX": "COMBOBOX 3"
-                        },
-                        {
-                            "DC_ID": -305,
-                            "PIVOT": 0,
-                            "TITLE": "Primary",
-                            "TEXT": "Hello World 2",
-                            "INT": 1232,
-                            "DATE": "2/2/2016",
-                            "DROPDOWN": "DROPDOWN 2",
-                            "COMBOBOX": "COMBOBOX 3"
-                        },
-                        {
-                            "DC_ID": -306,
-                            "PIVOT": 1,
-                            "TITLE": "Secondary 1",
-                            "TEXT": "Hello World 3",
-                            "INT": 1233,
-                            "DATE": "2/3/2016",
-                            "DROPDOWN": "DROPDOWN 2",
-                            "COMBOBOX": "COMBOBOX 3"
-                        }
-                    ],
-                    "_pivot": {
-                        "_MultiDim": {
-                            "Kit": "-1",
-                            "Primary": "0",
-                            "Secondary 1": "1",
-                            "Secondary 2": "2"
-                        }
-                    },
-                    "_behaviors": {
-                        "isRequired": {},
-                        "isReadOnly": {},
-                        "isHidden": {},
-                        "isSaved": {},
-                        "isError": {},
-                        "validMsg": {
-                            "TEXT": "That did not work"
-                        }
-                    }
-                }
-            ]
-        };
     }
     function updatePricingTable(custId, ps) {
         return dataService.post(apiBasePricingTableUrl + 'UpdatePricingTable/' + custId, [ps]);
@@ -318,14 +85,10 @@ function objsetService($http, dataService, logger, $q) {
 
     // #### CONTRACT CRUD ####
 
-    function updateContractAndCurStrategy(custId, ct, pt, sData, gData, source) {
-        // Contract is Contract + Pricing Strategies + Pricing Tables (Single dim only) in heierarchial format
+    function updateContractAndCurPricingTable(custId, ct, pt, sData, gData, source) {
+        // Contract is Contract + Pricing Strategies + Pricing Tables in heierarchial format
         // sData is the raw spreadsheet data
         // gData is the raw grid data
-
-        // combine single dim current pt (pricing table) with 2 dim (sData) data
-        //debugger;
-        //if (pt.length > 0) pt[0]["_MultiDim"] = sData;
 
         var modCt = [];
         var modPs = [];
@@ -355,6 +118,7 @@ function objsetService($http, dataService, logger, $q) {
                 sData[s].DC_PARENT_ID = pt[0].DC_ID;
                 sData[s].dc_type = "PricingTableRow";
                 sData[s].dc_parent_type = pt[0].dc_type;
+                sData[s].OBJ_SET_TYPE_CD = pt[0].OBJ_SET_TYPE_CD;
             }
         }
 
@@ -368,7 +132,7 @@ function objsetService($http, dataService, logger, $q) {
         }
 
         //debugger;
-        return dataService.post(apiBaseContractUrl + "SaveContractAndStrategy/" + custId, data);
+        return dataService.post(apiBaseContractUrl + "SaveContractAndPricingTable/" + custId, data);
     }
 
 }

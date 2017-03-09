@@ -88,14 +88,14 @@ namespace Intel.MyDeals.DataLibrary
         /// </summary>
         /// <param name="opDataElementType">Which object template do you need to pull.</param>
         /// <returns></returns>
-        public static OpDataElementUITemplate GetOpDataElementUiTemplate(OpDataElementType opDataElementType)
+        public static OpDataElementAtrbTemplate GetOpDataElementUiTemplate(OpDataElementType opDataElementType)
         {
-            OpDataElementUITemplates ourTemplates = DataCollections.GetOpDataElementUiTemplates();
+            OpDataElementAtrbTemplates ourTemplates = DataCollections.GetOpDataElementUiTemplates();
             string key = opDataElementType.ToString();
 
             return ourTemplates.ContainsKey(key)
                 ? ourTemplates[key]
-                : new OpDataElementUITemplate();
+                : new OpDataElementAtrbTemplate();
         }
 
     }

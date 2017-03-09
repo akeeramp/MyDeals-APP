@@ -78,7 +78,8 @@ namespace Intel.MyDeals.BusinessLogic
                 }
 
                 // Get existing DC or spawn a new one
-                OpDataCollector dc = myDealsData.ToOpDataCollector(id, idtype, parentid, parentidtype, opType, items);
+                OpDataElementSetType opDataElementSetType = OpDataElementSetTypeConverter.FromString(items[AttributeCodes.OBJ_SET_TYPE_CD]);
+                OpDataCollector dc = myDealsData.ToOpDataCollector(id, idtype, parentid, parentidtype, opType, opDataElementSetType);
 
                 // Layer the passed items on top of the newly filled MyDealsData
                 dpDeals.Messages = dc.MergeDictionary(items);
@@ -97,10 +98,11 @@ namespace Intel.MyDeals.BusinessLogic
         /// Fill in missing data slots based upon existance in the object template
         /// </summary>
         /// <param name="myDealsData">OpData Deals collection.</param>
+        /// <param name="opDataElementSetType"></param>
         /// <returns></returns>
-        public static MyDealsData FillInHolesFromAtrbTemplate(this MyDealsData myDealsData)
+        public static MyDealsData FillInHolesFromAtrbTemplate(this MyDealsData myDealsData, OpDataElementSetType opDataElementSetType)
         {
-            return myDealsData.FillInHolesFromAtrbTemplate(myDealsData.Keys);
+            return myDealsData.FillInHolesFromAtrbTemplate(myDealsData.Keys, opDataElementSetType);
         }
 
 
@@ -109,12 +111,13 @@ namespace Intel.MyDeals.BusinessLogic
         /// </summary>
         /// <param name="myDealsData">OpData Deals collection.</param>
         /// <param name="opDataElementTypes">Specific object collection.</param>
+        /// <param name="opDataElementSetType"></param>
         /// <returns></returns>
-        public static MyDealsData FillInHolesFromAtrbTemplate(this MyDealsData myDealsData, IEnumerable<OpDataElementType> opDataElementTypes)
+        public static MyDealsData FillInHolesFromAtrbTemplate(this MyDealsData myDealsData, IEnumerable<OpDataElementType> opDataElementTypes, OpDataElementSetType opDataElementSetType)
         {
             foreach (OpDataElementType opDataElementType in opDataElementTypes)
             {
-                myDealsData.FillInHolesFromAtrbTemplate(opDataElementType);
+                myDealsData.FillInHolesFromAtrbTemplate(opDataElementType, opDataElementSetType);
             }
             return myDealsData;
         }
@@ -124,14 +127,15 @@ namespace Intel.MyDeals.BusinessLogic
         /// </summary>
         /// <param name="myDealsData">OpData Deals collection.</param>
         /// <param name="opDataElementType">Specific object.</param>
+        /// <param name="opDataElementSetType"></param>
         /// <returns></returns>
-        public static MyDealsData FillInHolesFromAtrbTemplate(this MyDealsData myDealsData, OpDataElementType opDataElementType)
+        public static MyDealsData FillInHolesFromAtrbTemplate(this MyDealsData myDealsData, OpDataElementType opDataElementType, OpDataElementSetType opDataElementSetType)
         {
             if (!myDealsData.ContainsKey(opDataElementType)) return myDealsData;
 
             foreach (OpDataCollector allDataCollector in myDealsData[opDataElementType].AllDataCollectors)
             {
-                allDataCollector.FillInHolesFromAtrbTemplate();
+                allDataCollector.FillInHolesFromAtrbTemplate(opDataElementSetType);
             }
 
             return myDealsData;
@@ -190,7 +194,7 @@ namespace Intel.MyDeals.BusinessLogic
             // TODO make this a rule
             // This is a call accross the entire OpDataPacket to get products
             // Since this is a DB call, we don't want to do this for EVERY data collector individually
-            if (opType == OpDataElementType.Deals || opType == OpDataElementType.WipDeals)
+            if (opType == OpDataElementType.DEAL || opType == OpDataElementType.WIP_DEAL)
                 prdMaps = dpObjSet.GetProductMapping();
 
             // loop through deals and flatten each Data Collector
@@ -247,14 +251,27 @@ namespace Intel.MyDeals.BusinessLogic
 
         #region Save
 
-        public static MyDealsData Save(this MyDealsData packets, int custId)
+        /// <summary>
+        /// Save MyDealsData to the Database
+        /// </summary>
+        /// <param name="myDealsData">MyDealsData</param>
+        /// <param name="custId">Customer Id</param>
+        /// <returns></returns>
+        public static MyDealsData Save(this MyDealsData myDealsData, int custId)
         {
-            return Save(packets, custId, true);
+            return Save(myDealsData, custId, true);
         }
 
-        public static MyDealsData Save(this MyDealsData packets, int custId, bool batchMode)
+        /// <summary>
+        /// Save MyDealsData to the Database
+        /// </summary>
+        /// <param name="myDealsData">MyDealsData</param>
+        /// <param name="custId">Customer Id</param>
+        /// <param name="batchMode">Run in batch mode?</param>
+        /// <returns></returns>
+        public static MyDealsData Save(this MyDealsData myDealsData, int custId, bool batchMode)
         {
-            return new OpDataCollectorDataLib().SaveMyDealsData(packets, custId, batchMode);
+            return new OpDataCollectorDataLib().SaveMyDealsData(myDealsData, custId, batchMode);
         }
 
         #endregion
@@ -263,7 +280,17 @@ namespace Intel.MyDeals.BusinessLogic
 
         #region ToOpDataCollector
 
-        public static OpDataCollector ToOpDataCollector(this MyDealsData myDealsData, int id, int idtype, int parentId, int parentidtype, OpDataElementType opDataElementType, OpDataCollectorFlattenedItem item)
+        /// <summary>
+        /// Convert MyDealsData specific OpDataElementType to OpDataCollector
+        /// </summary>
+        /// <param name="myDealsData"></param>
+        /// <param name="dcId">Data Collector Id</param>
+        /// <param name="dcIdType">Data Collector Type</param>
+        /// <param name="dcParentId">Data Collector Parent Id</param>
+        /// <param name="dcParentIdType">Data Collector Parent type</param>
+        /// <param name="opDataElementType">Data Element Type</param>
+        /// <returns></returns>
+        public static OpDataCollector ToOpDataCollector(this MyDealsData myDealsData, int dcId, int dcIdType, int dcParentId, int dcParentIdType, OpDataElementType opDataElementType, OpDataElementSetType opDataElementSetType)
         {
             // Save Data Cycle: Point 3
             // Save Data Cycle: Point 11
@@ -272,28 +299,28 @@ namespace Intel.MyDeals.BusinessLogic
 
             // Get existing DC or spawn a new one
             OpDataCollector dc;
-            if (id < 0 || !dpDeals.Data.ContainsKey(id)) // missing
+            if (dcId < 0 || !dpDeals.Data.ContainsKey(dcId)) // missing
             {
                 dc = new OpDataCollector
                 {
-                    DcID = id,
-                    DcParentID = parentId,
+                    DcID = dcId,
+                    DcParentID = dcParentId,
                     DcType = opDataElementType.ToString(),
-                    DcParentType = parentidtype.IdToOpDataElementTypeString().ToString()
+                    DcParentType = dcParentIdType.IdToOpDataElementTypeString().ToString()
                 };
-                if (id < 0) dc.FillInHolesFromAtrbTemplate();
-                myDealsData[opDataElementType].Data[id] = dc;
+                if (dcId < 0) dc.FillInHolesFromAtrbTemplate(opDataElementSetType);
+                myDealsData[opDataElementType].Data[dcId] = dc;
             }
             else // exists
             {
-                dc = dpDeals.Data[id];
+                dc = dpDeals.Data[dcId];
             }
 
             // Ensure DC type and parent/child ids
             dc.DcType = opDataElementType.ToString();
-            dc.DcID = item[AttributeCodes.DC_ID] == null ? 0 : Convert.ToInt32(item[AttributeCodes.DC_ID].ToString());
-            dc.DcParentID = item[AttributeCodes.DC_PARENT_ID] == null ? 0 : Convert.ToInt32(item[AttributeCodes.DC_PARENT_ID].ToString());
-            dc.DcParentType = parentidtype.IdToOpDataElementTypeString().ToString();
+            dc.DcID = dcId;
+            dc.DcParentID = dcParentId;
+            dc.DcParentType = dcParentIdType.IdToOpDataElementTypeString().ToString();
 
             return dc;
         }
@@ -328,7 +355,7 @@ namespace Intel.MyDeals.BusinessLogic
         {
             if (!opDataElementTypes.Any())
             {
-                opDataElementTypes.Add(OpDataElementType.Deals);
+                opDataElementTypes.Add(OpDataElementType.DEAL);
             }
 
             var attrCollection = DataCollections.GetAttributeData();

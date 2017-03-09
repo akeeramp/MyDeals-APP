@@ -16,13 +16,13 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         // contract exists
         if (contractData !== null && contractData !== undefined) {
             if (contractData.data[0] !== undefined) return contractData.data[0];
-
             // Could not find the contract
             $state.go('nocontract');
         }
 
         // new contract
-        var c = util.clone($scope.templates.ObjectTemplates.Contract.GENERAL);
+        debugger;
+        var c = util.clone($scope.templates.ObjectTemplates.CNTRCT.ALL_TYPES);
 
         // check URL and see if any parameters were passed.
         var s = $location.search();
@@ -57,7 +57,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
 
 
 
-    // Don't let the user leave unless the data is saved
+    // Don't let the user leave unless the data is savedte
     //
     $scope._dirty = false;
     $scope._dirtyContractOnly = false;
@@ -131,7 +131,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         $scope.isAddStrategyHidden = true;
         $scope.isAddStrategyBtnHidden = false;
         $scope.isSearchHidden = true;
-        $scope.newPricingTable = util.clone($scope.templates.ObjectTemplates.PricingTable.CAP_BAND);
+        $scope.newPricingTable = util.clone($scope.templates.ObjectTemplates.PRC_TBL.CAP_BAND);
         $scope.clearPtTemplateIcons();
     }
 
@@ -151,7 +151,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
     // **** PRICING TABLE Methods ****
     //
     $scope.addCustomToTemplates = function() {
-        angular.forEach($scope.templates.ModelTemplates.PricingTable, function (value, key) {
+        angular.forEach($scope.templates.ModelTemplates.PRC_TBL, function (value, key) {
             value._custom = {
                 "ltr": value.name[0],
                 "_active": false
@@ -159,14 +159,13 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         });
     }
     $scope.clearPtTemplateIcons = function () {
-        angular.forEach($scope.templates.ModelTemplates.PricingTable, function (value, key) {
+        angular.forEach($scope.templates.ModelTemplates.PRC_TBL, function (value, key) {
             value._custom._active = false;
         });
     }
     $scope.selectPtTemplateIcon = function (ptTmplt) {
         $scope.clearPtTemplateIcons();
         ptTmplt._custom._active = true;
-        debugger;
         $scope.newPricingTable["OBJ_SET_TYPE_CD"] = ptTmplt.name;
         $scope.newPricingTable["_extraAtrbs"] = ptTmplt.extraAtrbs;
         $scope.newPricingTable["_defaultAtrbs"] = ptTmplt.defaultAtrbs;
@@ -213,7 +212,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
                         $scope.unmarkCurPricingTableIf(ps.DC_ID);
 
                         // delete item
-                        $scope.contractData.PricingStrategy.splice($scope.contractData.PricingStrategy.indexOf(ps), 1);
+                        $scope.contractData.PRC_ST.splice($scope.contractData.PRC_ST.indexOf(ps), 1);
 
                         logger.success("Deleted the Pricing Strategy", ps, "Save Sucessful");
                         topbar.hide();
@@ -241,7 +240,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
                         $scope.unmarkCurPricingTableIf(ps.DC_ID);
 
                         // delete item
-                        ps.PricingTable.splice(ps.PricingTable.indexOf(pt), 1);
+                        ps.PRC_TBL.splice(ps.PRC_TBL.indexOf(pt), 1);
 
                         logger.success("Deleted the Pricing Table", pt, "Save Sucessful");
                         topbar.hide();
@@ -285,7 +284,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         var contractData = $scope._dirtyContractOnly ? [$scope.contractData] : [];
         var curPricingTableData = $scope.curPricingTable.DC_ID === undefined ? [] : [$scope.curPricingTable];
 
-        objsetService.updateContractAndCurStrategy($scope.getCustId(), contractData, curPricingTableData, sData, gData, source).then(
+        objsetService.updateContractAndCurPricingTable($scope.getCustId(), contractData, curPricingTableData, sData, gData, source).then(
             function (data) {
                 $scope.resetDirty();
                 logger.success("Saved the contract", $scope.contractData, "Save Sucessful");
@@ -318,7 +317,6 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         objsetService.createContract($scope.getCustId(), ct).then(
             function (data) {
                 $scope.updateNegativeIds(ct, "Contract", data);
-
                 logger.success("Saved the contract", ct, "Save Sucessful");
                 topbar.hide();
 
@@ -373,26 +371,27 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
 
     // **** NEW PRICING STRATEGY Methods ****
     //
-    $scope.newStrategy = util.clone($scope.templates.ObjectTemplates.PricingStrategy.GENERAL);
+    //debugger;
+    $scope.newStrategy = util.clone($scope.templates.ObjectTemplates.PRC_ST.ALL_TYPES);
     $scope.addPricingStrategy = function () {
         topbar.show();
         var ct = $scope.contractData;
 
-        // Clone base model and populate changes
-        var ps = util.clone($scope.templates.ObjectTemplates.PricingStrategy.GENERAL);
+        // Clone base model and populate changesmod
+        var ps = util.clone($scope.templates.ObjectTemplates.PRC_ST.ALL_TYPES);
         ps.DC_ID = $scope.uid--;
         ps.DC_PARENT_ID = ct.DC_ID;
-        ps.PricingTable = [];
+        ps.PRC_TBL = [];
         ps.TITLE = $scope.newStrategy.TITLE;
         //debugger;
 
         // Add to DB first... then add to screen
         objsetService.createPricingStrategy($scope.getCustId(), ps).then(
             function (data) {
-                $scope.updateNegativeIds(ps, "PricingStrategy", data);
+                $scope.updateNegativeIds(ps, "PRC_ST", data);
 
-                if ($scope.contractData.PricingStrategy === undefined) $scope.contractData.PricingStrategy = [];
-                $scope.contractData.PricingStrategy.push(ps);
+                if ($scope.contractData.PRC_ST === undefined) $scope.contractData.PRC_ST = [];
+                $scope.contractData.PRC_ST.push(ps);
                 $scope.showAddPricingTable(ps);
                 logger.success("Added Pricing Strategy", ps, "Save Sucessful");
                 topbar.hide();
@@ -432,37 +431,39 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
 
     // **** NEW PRICING TABLE Methods ****
     //
-    $scope.newPricingTable = util.clone($scope.templates.ObjectTemplates.PricingTable.CAP_BAND);
+    $scope.newPricingTable = util.clone($scope.templates.ObjectTemplates.PRC_TBL.CAP_BAND);
     $scope.addPricingTable = function () {
         topbar.show();
 
         // Clone base model and populate changes
-        // TODO generic shoud be replaced with the correct OBJ_SET_TYPE
-        debugger;
-        var pt = util.clone($scope.templates.ObjectTemplates.PricingTable[$scope.newPricingTable.OBJ_SET_TYPE_CD]);
+        //debugger;
+        var pt = util.clone($scope.templates.ObjectTemplates.PRC_TBL[$scope.newPricingTable.OBJ_SET_TYPE_CD]);
         pt.DC_ID = $scope.uid--;
         pt.DC_PARENT_ID = $scope.curPricingStrategy.DC_ID;
         pt.OBJ_SET_TYPE_CD = $scope.newPricingTable.OBJ_SET_TYPE_CD;
         pt.TITLE = $scope.newPricingTable.TITLE;
         pt._defaultAtrbs = $scope.newPricingTable._defaultAtrbs;
 
+        //debugger;
         // Add to DB first... then add to screen
         objsetService.createPricingTable($scope.getCustId(), pt).then(
             function (data) {
+                //debugger;
 
-                $scope.updateNegativeIds(pt, "PricingTable", data);
+                $scope.updateNegativeIds(pt, "PRC_TBL", data);
 
-                if ($scope.curPricingStrategy.PricingTable === undefined) $scope.curPricingStrategy.PricingTable = [];
-                $scope.curPricingStrategy.PricingTable.push(pt);
+                if ($scope.curPricingStrategy.PRC_TBL === undefined) $scope.curPricingStrategy.PRC_TBL = [];
+                $scope.curPricingStrategy.PRC_TBL.push(pt);
                 $scope.hideAddPricingTable();
 
                 logger.success("Added Pricing Table", pt, "Save Sucessful");
                 topbar.hide();
 
                 // load the screen
+                //debugger;
                 $state.go('contract.manager.strategy', { cid: $scope.contractData.DC_ID, sid: pt.DC_PARENT_ID, pid: pt.DC_ID });
             },
-            function (result) {
+            function (response) {
                 logger.error("Could not create the pricing table.", response, response.statusText);
                 topbar.hide();
             }
@@ -470,7 +471,6 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
     }
     $scope.customAddPtValidate = function () {
         var isValid = true;
-        debugger;
 
         // Clear all values
         angular.forEach($scope.newPricingTable,

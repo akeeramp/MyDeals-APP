@@ -95,12 +95,12 @@
     <Compile Include="OP ExtensionMethods\OpDataElementTypeCollection.cs" />
     <Compile Include="OP ExtensionMethods\OpDataElementTypeConverter.cs" />
     <Compile Include="OP ExtensionMethods\OpDataElementTypeItem.cs" />
-    <Compile Include="OP ExtensionMethods\OpDataElementUITemplates.cs" />
+    <Compile Include="OP ExtensionMethods\OpDataElementAtrbTemplates.cs" />
     <Compile Include="OP ExtensionMethods\OpDataElementUtils.cs" />
     <Compile Include="OP ExtensionMethods\OpDataPacketExtensionMethods.cs" />
     <Compile Include="OP ExtensionMethods\OpTaskLocation.cs" />
     <Compile Include="OP ExtensionMethods\OpTaskPhase.cs" />
-    <Compile Include="OP ExtensionMethods\OpDataElementUITemplate.cs" />
+    <Compile Include="OP ExtensionMethods\OpDataElementAtrbTemplate.cs" />
     <Compile Include="OP ExtensionMethods\OpUserTokenExtensionMethods.cs" />
     <Compile Include="Logging\DbLogPerf.cs" />
     <Compile Include="Logging\DbLogPerfMessage.cs" />

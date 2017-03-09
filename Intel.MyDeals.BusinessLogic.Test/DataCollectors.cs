@@ -35,36 +35,36 @@ namespace Intel.MyDeals.BusinessLogic.Test
         [TestCase]
         public void GetContractTest()
         {
-            MyDealsData myDealsData = DataCollectorData.OpDcFlatDictData["test1"].ToMyDealsData(OpDataElementType.Contract, new List<int> { 123 });
+            MyDealsData myDealsData = DataCollectorData.OpDcFlatDictData["test1"].ToMyDealsData(OpDataElementType.CNTRCT, new List<int> { 123 });
 
-            Assert.IsTrue(myDealsData[OpDataElementType.Contract].AllDataCollectors.Any());
-            Assert.IsTrue(myDealsData[OpDataElementType.Contract].Data[123].GetDataElement(AttributeCodes.OBJ_SET_TYPE_CD) == null);
-            Assert.IsTrue(myDealsData[OpDataElementType.Contract].Data[123].GetDataElementValue(AttributeCodes.DEAL_STG_CD) == StageCodes.Requested.ToString());
+            Assert.IsTrue(myDealsData[OpDataElementType.CNTRCT].AllDataCollectors.Any());
+            Assert.IsTrue(myDealsData[OpDataElementType.CNTRCT].Data[123].GetDataElement(AttributeCodes.OBJ_SET_TYPE_CD) == null);
+            Assert.IsTrue(myDealsData[OpDataElementType.CNTRCT].Data[123].GetDataElementValue(AttributeCodes.DEAL_STG_CD) == StageCodes.Requested.ToString());
             //Assert.IsTrue(myDealsData[OpDataElementType.Contract].Data[123].GetDataElementValue("START_DT") == "6/6/2016 12:00:00 AM");
         }
 
         [TestCase]
         public void FlattenedTest()
         {
-            MyDealsData myDealsData = DataCollectorData.OpDcFlatDictData["test1"].ToMyDealsData(OpDataElementType.Contract, new List<int> { 123 });
+            MyDealsData myDealsData = DataCollectorData.OpDcFlatDictData["test1"].ToMyDealsData(OpDataElementType.CNTRCT, new List<int> { 123 });
 
             OpDataCollectorFlattenedDictList data = myDealsData.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
 
-            Assert.IsTrue(data[OpDataElementType.Contract][0][AttributeCodes.DEAL_STG_CD].ToString() == "Requested");
+            Assert.IsTrue(data[OpDataElementType.CNTRCT][0][AttributeCodes.DEAL_STG_CD].ToString() == "Requested");
 
-            data[OpDataElementType.Contract][0][AttributeCodes.DEAL_STG_CD] = StageCodes.Submitted.ToString();
+            data[OpDataElementType.CNTRCT][0][AttributeCodes.DEAL_STG_CD] = StageCodes.Submitted.ToString();
 
-            Assert.IsTrue(data[OpDataElementType.Contract][0]["DEAL_STG_CD"].ToString() == "Submitted");
+            Assert.IsTrue(data[OpDataElementType.CNTRCT][0]["DEAL_STG_CD"].ToString() == "Submitted");
         }
 
         [TestCase]
         public void HierarchialTest()
         {
-            MyDealsData myDealsData = DataCollectorData.OpDcFlatDictData["test1"].ToMyDealsData(OpDataElementType.Contract, new List<int> { 123 });
+            MyDealsData myDealsData = DataCollectorData.OpDcFlatDictData["test1"].ToMyDealsData(OpDataElementType.CNTRCT, new List<int> { 123 });
 
-            OpDataCollectorFlattenedList data = myDealsData.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted).ToHierarchialList(OpDataElementType.Contract);
+            OpDataCollectorFlattenedList data = myDealsData.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted).ToHierarchialList(OpDataElementType.CNTRCT);
 
-            var dcId = ((OpDataCollectorFlattenedList)data[0][OpDataElementType.PricingStrategy.ToString()])[0][AttributeCodes.DC_ID];
+            var dcId = ((OpDataCollectorFlattenedList)data[0][OpDataElementType.PRC_ST.ToString()])[0][AttributeCodes.DC_ID];
 
             Assert.IsTrue(dcId.ToString() == "201");
         }
@@ -74,7 +74,7 @@ namespace Intel.MyDeals.BusinessLogic.Test
         {
             MyDealsData myDealsData = PricingTableData.GetData(123);
             OpDataCollectorFlattenedDictList data = myDealsData.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
-            MyDealsData myDealsData2 = data.ToMyDealsData(OpDataElementType.Contract, new List<int> { 123 });
+            MyDealsData myDealsData2 = data.ToMyDealsData(OpDataElementType.CNTRCT, new List<int> { 123 });
             
         }
     }

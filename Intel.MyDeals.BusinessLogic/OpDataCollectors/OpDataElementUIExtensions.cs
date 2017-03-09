@@ -5,15 +5,15 @@ namespace Intel.MyDeals.BusinessLogic
 {
     public static class OpDataElementUiExtensions
     {
-        public static OpDataElementUITemplates GetDataCollectorTemplates()
+        public static OpDataElementAtrbTemplates GetDataCollectorTemplates()
         {
             return DataCollections.GetOpDataElementUiTemplates();
         }
 
-        public static OpDataElementUITemplate GetDataCollectorTemplate(string templateName)
+        public static OpDataElementAtrbTemplate GetDataCollectorTemplate(string templateName)
         {
-            OpDataElementUITemplates templates = DataCollections.GetOpDataElementUiTemplates();
-            return templates.ContainsKey(templateName) ? templates[templateName] : new OpDataElementUITemplate();
+            OpDataElementAtrbTemplates templates = DataCollections.GetOpDataElementUiTemplates();
+            return templates.ContainsKey(templateName) ? templates[templateName] : new OpDataElementAtrbTemplate();
         }
 
     }

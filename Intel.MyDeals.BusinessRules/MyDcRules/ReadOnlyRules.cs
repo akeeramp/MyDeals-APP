@@ -16,14 +16,14 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     Title="Sync Read Only",
                     ActionRule = MyDcActions.SyncReadOnlyItems,
-                    InObjType = new List<OpDataElementType> {OpDataElementType.WipDeals, OpDataElementType.Deals},
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL, OpDataElementType.DEAL},
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnSave, MyRulesTrigger.OnLoad}
                 },
                 new MyOpRule
                 {
                     Title="Readonly if Tracker Exists",
                     ActionRule = MyDcActions.ExecuteActions,
-                    InObjType = new List<OpDataElementType> {OpDataElementType.WipDeals, OpDataElementType.Deals},
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL, OpDataElementType.DEAL},
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnReadonly},
                     WithTracker = true,
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>

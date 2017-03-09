@@ -29,16 +29,11 @@ namespace Intel.MyDeals.DataLibrary
             {
                 if (rdr.HasRows) // Will be false if cache condition is met...
                 {
-                    // Result 1 = Tempates
                     ret.TemplateData = DealTemplateDataGramFromReader(rdr);
-                    rdr.NextResult();
-
-                    // Result 2 = Customer Calendars
-                    ret.CalendarData = CustomerCalFromReader(rdr);
                 }
             }
 
-            ret.TemplateDict = ConvertDealTemplateDataGramsToOpDataElementUIs(ret.TemplateData);
+            ret.TemplateDict = ConvertDealTemplateDataGramsToOpDataElements(ret.TemplateData);
 
             return ret;
         }
@@ -83,54 +78,17 @@ namespace Intel.MyDeals.DataLibrary
         }
 
 
-        private static List<CustomerCal> CustomerCalFromReader(SqlDataReader rdr)
+        private string GetKey(ObjectTypeTemplate template)
         {
-            // Read the customer and calendar data table and store into CustomerCal data type -- table 2 from templates data
-            // This helper method is template generated.
-            // Refer to that template for details to modify this code.
-
-            var ret = new List<CustomerCal>();
-            int IDX_CUST_MBR_SID = DB.GetReaderOrdinal(rdr, "CUST_MBR_SID");
-            int IDX_CUST_NM = DB.GetReaderOrdinal(rdr, "CUST_NM");
-            int IDX_END_DT = DB.GetReaderOrdinal(rdr, "END_DT");
-            int IDX_PREV_END_DT = DB.GetReaderOrdinal(rdr, "PREV_END_DT");
-            int IDX_PREV_QTR_NBR = DB.GetReaderOrdinal(rdr, "PREV_QTR_NBR");
-            int IDX_PREV_START_DT = DB.GetReaderOrdinal(rdr, "PREV_START_DT");
-            int IDX_PREV_YR_NBR = DB.GetReaderOrdinal(rdr, "PREV_YR_NBR");
-            int IDX_QTR_NBR = DB.GetReaderOrdinal(rdr, "QTR_NBR");
-            int IDX_START_DT = DB.GetReaderOrdinal(rdr, "START_DT");
-            int IDX_YR_NBR = DB.GetReaderOrdinal(rdr, "YR_NBR");
-
-            while (rdr.Read())
-            {
-                ret.Add(new CustomerCal
-                {
-                    CUST_MBR_SID = (IDX_CUST_MBR_SID < 0 || rdr.IsDBNull(IDX_CUST_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_MBR_SID),
-                    CUST_NM = (IDX_CUST_NM < 0 || rdr.IsDBNull(IDX_CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_NM),
-                    END_DT = (IDX_END_DT < 0 || rdr.IsDBNull(IDX_END_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_END_DT),
-                    PREV_END_DT = (IDX_PREV_END_DT < 0 || rdr.IsDBNull(IDX_PREV_END_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_PREV_END_DT),
-                    PREV_QTR_NBR = (IDX_PREV_QTR_NBR < 0 || rdr.IsDBNull(IDX_PREV_QTR_NBR)) ? default(System.Int16) : rdr.GetFieldValue<System.Int16>(IDX_PREV_QTR_NBR),
-                    PREV_START_DT = (IDX_PREV_START_DT < 0 || rdr.IsDBNull(IDX_PREV_START_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_PREV_START_DT),
-                    PREV_YR_NBR = (IDX_PREV_YR_NBR < 0 || rdr.IsDBNull(IDX_PREV_YR_NBR)) ? default(System.Int16) : rdr.GetFieldValue<System.Int16>(IDX_PREV_YR_NBR),
-                    QTR_NBR = (IDX_QTR_NBR < 0 || rdr.IsDBNull(IDX_QTR_NBR)) ? default(System.Int16) : rdr.GetFieldValue<System.Int16>(IDX_QTR_NBR),
-                    START_DT = (IDX_START_DT < 0 || rdr.IsDBNull(IDX_START_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_START_DT),
-                    YR_NBR = (IDX_YR_NBR < 0 || rdr.IsDBNull(IDX_YR_NBR)) ? default(System.Int16) : rdr.GetFieldValue<System.Int16>(IDX_YR_NBR)
-                });
-            } // while
-
-            return ret;
+            return template.OBJ_TYPE + ":" + template.OBJ_SET_TYPE;
         }
 
-
-        //private static TemplateWrapper _getTemplateData;
-
-
-        private OpDataElementUITemplates ConvertDealTemplateDataGramsToOpDataElementUIs(List<ObjectTypeTemplate> templateData)
+        private OpDataElementAtrbTemplates ConvertDealTemplateDataGramsToOpDataElements(List<ObjectTypeTemplate> templateData)
         {
             // Read the object type templates table and store into OpDataElementUITemplates data type -- table 1 from templates data
             // Bring in existing items for ConvertDealTemplateDataGramsToOpDataElementUIs
 
-            Dictionary<string, List<OpDataElementUI>> ret = new Dictionary<string, List<OpDataElementUI>>();
+            Dictionary<string, OpDataElementAtrbTemplates> ret = new Dictionary<string, OpDataElementAtrbTemplates>();
 
             AttributeCollection atrbMstr = DataCollections.GetAttributeData();
 
@@ -146,32 +104,28 @@ namespace Intel.MyDeals.DataLibrary
                     continue;
                 }
 
-                List<OpDataElementUI> coll;
-                if (!ret.TryGetValue(dd.OBJ_TYPE, out coll))
-                {
-                    ret[dd.OBJ_TYPE] = coll = new List<OpDataElementUI>();
-                }
+                string strOt = dd.OBJ_TYPE == "ALL_TYPES" ? "ALL" : OpDataElementTypeConverter.FromString(dd.OBJ_TYPE).ToString();
+                string strOst = dd.OBJ_SET_TYPE == "ALL_TYPES" ? "ALL" : OpDataElementSetTypeConverter.FromString(dd.OBJ_SET_TYPE).ToString();
+
+                if (!ret.ContainsKey(strOt)) ret[strOt] = new OpDataElementAtrbTemplates();
+                if (!ret[strOt].ContainsKey(strOst)) ret[strOt][strOst] = new OpDataElementAtrbTemplate();
 
                 var value = dd.ATRB_VAL;
 
                 // Create the data element from the db values...
-                var ode = new OpDataElementUI(false)
+                var ode = new OpDataElement(false)
                 {
                     AtrbID = dd.ATRB_SID,
-                    AtrbValue = value,
+                    AtrbValue = $"{value}",
                     DcID = 0,
                     DcType = dd.OBJ_TYPE_SID,
                     DcParentID = 0,
                     DimKey = dd.ATRB_MTX_HASH,
                     OrigAtrbValue = value,
                     PrevAtrbValue = value,
-                    DefaultValue = $"{value}",
                     DataType = atrb.DOT_NET_DATA_TYPE,
                     AtrbCd = atrb.ATRB_COL_NM,
-                    Description = atrb.ATRB_DESC,
-                    Label = atrb.ATRB_LBL,
                     State = OpDataElementState.Unchanged,
-                    UITypeCD = atrb.UI_TYPE_CD,
                     Source = OpSourceLocation.Template
                 };
 
@@ -199,54 +153,71 @@ namespace Intel.MyDeals.DataLibrary
                     }
                 }
 
-                coll.Add(ode);
+                ret[strOt][strOst].Add(ode);
             }
+
+
 
             // Transform what we loaded from templates into Philip-consumable format.
-            OpDataElementUITemplates retSet = new OpDataElementUITemplates();
-            foreach (KeyValuePair<string, List<OpDataElementUI>> keyValuePair in ret)
-            {
-                OpDataElementType opDataElementType = OpDataElementTypeConverter.FromString(keyValuePair.Key);
-                string key = opDataElementType.ToString();
-                if (!retSet.ContainsKey(key)) // This shuld just be keyValuePair.Key
-                {
-                    retSet[key] = new OpDataElementUITemplate();
-                }
-                foreach (OpDataElementUI dataElementUi in keyValuePair.Value)
-                {
-                    retSet[key].Add(new OpDataElementUI
-                    {
-                        AtrbID = dataElementUi.AtrbID,
-                        AtrbCd = dataElementUi.AtrbCd,
-                        AtrbValue = dataElementUi.AtrbValue,
-                        DataType = dataElementUi.DataType,
-                        Description = dataElementUi.Description,
-                        DimID = dataElementUi.DimID,
-                        DimKey = dataElementUi.DimKey,
-                        Label = dataElementUi.Label,
-                        DcID = 0,
-                        DcType = opDataElementType.ToId(),
-                        DcParentType = 0,
-                        DcParentID = opDataElementType.GetParent().ToId()
-                    });
-                }
-            }
+            OpDataElementAtrbTemplates retSet = new OpDataElementAtrbTemplates();
 
-            // Add basic Data Collector info
-            foreach (OpDataElementType odt in Enum.GetValues(typeof(OpDataElementType)))
+            foreach (KeyValuePair<OpDataElementType, List<OpDataElementSetType>> kvp in OpDataElementSetTypeRepository.OpDestCollection.Heirarchy)
             {
-                AddDcBasics(retSet, odt);
+                OpDataElementType opDataElementType = kvp.Key;
+                foreach (OpDataElementSetType opDataElementSetType in kvp.Value)
+                {
+                    List<OpDataElement> elements = GetElementList(ret, opDataElementType, opDataElementSetType);
+                    string key = $"{opDataElementType}:{opDataElementSetType}";
+                    if (!retSet.ContainsKey(key)) retSet[key] = new OpDataElementAtrbTemplate();
+
+                    foreach (OpDataElement dataElement in elements)
+                    {
+                        retSet[key].Add(new OpDataElementUI
+                        {
+                            AtrbID = dataElement.AtrbID,
+                            AtrbCd = dataElement.AtrbCd,
+                            AtrbValue = dataElement.AtrbCd == AttributeCodes.OBJ_SET_TYPE_CD ? opDataElementSetType.ToString() : dataElement.AtrbValue,
+                            DataType = dataElement.DataType,
+                            DimID = dataElement.DimID,
+                            DimKey = dataElement.DimKey,
+                            DcID = 0,
+                            DcType = opDataElementType.ToId(),
+                            DcParentType = 0,
+                            DcParentID = opDataElementType.GetParent().ToId()
+                        });
+                    }
+
+                    AddDcBasics(retSet[key], opDataElementType);
+                }
+
             }
 
             return retSet;
         }
 
-
-        private void AddDcBasics(OpDataElementUITemplates retSet, OpDataElementType opDataElementType)
+        private OpDataElementAtrbTemplate GetElementList(Dictionary<string, OpDataElementAtrbTemplates> ret, OpDataElementType opDataElementType, OpDataElementSetType opDataElementSetType)
         {
-            if (!retSet.ContainsKey(opDataElementType.ToString())) retSet[opDataElementType.ToString()] = new OpDataElementUITemplate();
-            // Hard coded attributes placed into templates for Phil internal usage
-            retSet[opDataElementType.ToString()].Add(new OpDataElementUI
+            OpDataElementAtrbTemplate list = new OpDataElementAtrbTemplate();
+            string strOpDataElementType = opDataElementType.ToString();
+            string strOpDataElementSetType = opDataElementSetType.ToString();
+
+            if (ret.ContainsKey(strOpDataElementType))
+            {
+                if (ret[strOpDataElementType].ContainsKey(strOpDataElementSetType))
+                {
+                    list.AddRange(ret[strOpDataElementType][strOpDataElementSetType]);
+                }
+                if (ret[strOpDataElementType].ContainsKey("ALL")) {
+                    list.AddRange(ret[strOpDataElementType]["ALL"]);
+                }
+            }
+
+            return list;
+        }
+
+        private void AddDcBasics(OpDataElementAtrbTemplate retSet, OpDataElementType opDataElementType)
+        {
+            retSet.Add(new OpDataElementUI
             {
                 AtrbID = 11,
                 AtrbCd = AttributeCodes.DC_ID,
@@ -257,7 +228,7 @@ namespace Intel.MyDeals.DataLibrary
                 DcParentID = 0
             });
 
-            retSet[opDataElementType.ToString()].Add(new OpDataElementUI
+            retSet.Add(new OpDataElementUI
             {
                 AtrbID = 12,
                 AtrbCd = AttributeCodes.DC_PARENT_ID,

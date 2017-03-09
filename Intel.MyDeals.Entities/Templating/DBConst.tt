@@ -295,7 +295,7 @@
 
     foreach (DataRow drg in dt_objs.Rows)
     {
-		WriteLine(drg["OBJ_DESC"] + " = " + drg["OBJ_PRCSS_ORD"] + ",");
+		WriteLine(drg["OBJ_TYPE"] + " = " + drg["OBJ_TYPE_SID"] + ",");
     }
 	WriteLine("Unknown = 0");
 
@@ -322,7 +322,7 @@
 	foreach (DataRow drg in dt_objs.Rows)
     {
 		//Format is: new OpDataElementTypeItem { Id = 1, OpDeType = OpDataElementType.Contract, Alias = "CNTRCT", Order = 10 },
-		WriteLine("new OpDataElementTypeItem {Id = " + drg["OBJ_TYPE_SID"] + ", OpDeType = OpDataElementType." + drg["OBJ_DESC"] + ", Alias = \"" + drg["OBJ_TYPE"] + "\", Order = " + drg["OBJ_PRCSS_ORD"] + " },");
+		WriteLine("new OpDataElementTypeItem {Id = " + drg["OBJ_TYPE_SID"] + ", OpDeType = OpDataElementType." + drg["OBJ_TYPE"] + ", Alias = \"" + drg["OBJ_TYPE"] + "\", Order = " + drg["OBJ_PRCSS_ORD"] + " },");
 	}
 	PopIndent();
 
@@ -338,11 +338,11 @@
 	PushIndent(TAB);
 	foreach (DataRow drg in dt_objs.Rows)
     {
-		parentObjectDictionary[drg["OBJ_TYPE_SID"].ToString()] = drg["OBJ_DESC"].ToString();
+		parentObjectDictionary[drg["OBJ_TYPE_SID"].ToString()] = drg["OBJ_TYPE"].ToString();
 		if (parentObjectDictionary.ContainsKey(drg["PARNT_OBJ_TYPE_SID"].ToString()))
 		{
 			//Format is: [OpDataElementType.Contract] = OpDataElementType.PricingStrategy,
-			WriteLine("[OpDataElementType." + parentObjectDictionary[drg["PARNT_OBJ_TYPE_SID"].ToString()] + "] = OpDataElementType." + drg["OBJ_DESC"] + ",");
+			WriteLine("[OpDataElementType." + parentObjectDictionary[drg["PARNT_OBJ_TYPE_SID"].ToString()] + "] = OpDataElementType." + drg["OBJ_TYPE"] + ",");
 		}
 	}
 	PopIndent();
@@ -416,11 +416,11 @@
 	Dictionary<string, List<string>> ops = new Dictionary<string, List<string>>();
 	foreach (DataRow drg in dt_objsObjToDeals.Rows)
     {
-		if (!ops.ContainsKey(drg["OBJ_DESC"].ToString())) 
+		if (!ops.ContainsKey(drg["OBJ_TYPE"].ToString())) 
 		{
-			ops[drg["OBJ_DESC"].ToString()] = new List<string>();
+			ops[drg["OBJ_TYPE"].ToString()] = new List<string>();
 		}
-		ops[drg["OBJ_DESC"].ToString()].Add("OpDataElementSetType." + drg["OBJ_SET_TYPE"].ToString());
+		ops[drg["OBJ_TYPE"].ToString()].Add("OpDataElementSetType." + drg["OBJ_SET_TYPE"].ToString());
 	}
 	
 	foreach (var op in ops)

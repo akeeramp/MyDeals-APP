@@ -1,6 +1,5 @@
-﻿<div>
+﻿<!--<div>
     <a ui-sref="contract.details({cid:contractData.DC_ID})"><div class="fl lnavBtn lnavBtn-Sec primary" style="width: 130px;">Contract Details</div></a>
-    <!--<div class="fl lnavBtn lnavBtn-Sec">Submit for Approval</div>-->
 
     <div class="btn-group">
         <button class="btn lnavBtn lnavBtn-Sec btn-xs" type="button" style="width: 150px;">Submit for Approval</button>
@@ -17,7 +16,7 @@
     </div>
 
     <div class="clearboth"></div>
-</div>
+</div>-->
 <div>
     <div class="fr navIconLnk" title="Show/Hide Menu" ng-click="toggleLnav()">
         <i class="intelicon-shrink flip-horizontal"></i>
@@ -25,16 +24,20 @@
     <div class="fl navIconLnk" title="Save Entire Contract" ng-click="saveEntireContract()" ng-show="isExistingContract()" ng-class="{'lnavBtnDisabled': !_dirty}">
         <i class="intelicon-save-outlined"></i>
     </div>
+    <div class="fl navIconLnk" title="Add Pricing Strategy" ng-click="toggleAddStrategy()" ng-class="{'active': !isAddStrategyHidden}" ng-show="isExistingContract()">
+        <i class="intelicon-plus-max"></i>
+    </div>
     <div class="fl navIconLnk" title="Filter contract" ng-click="toggleSearch()" ng-class="{'active': !isSearchHidden}" ng-show="isExistingContract()">
         <i class="intelicon-search"></i>
     </div>
+    <div class="fl navIconLnk" title="Expand/Collapse All" ng-show="isExistingContract()">
+        <i class="intelicon-fast-forward"></i>
+    </div>
+    
     <a ui-sref="contract.summary({cid:contractData.DC_ID})">
         <div class="fl navIconLnk" title="Contract Summary" ng-show="isExistingContract()">
             <i class="intelicon-show-results-outlined"></i>
         </div>
     </a>
-    <div class="fl navIconLnk" title="Help Information" ng-show="isExistingContract()">
-        <i class="intelicon-information-outlined"></i>
-    </div>
     <div class="clearboth"></div>
 </div>

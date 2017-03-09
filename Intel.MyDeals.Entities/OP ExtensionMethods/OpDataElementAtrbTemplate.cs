@@ -3,9 +3,9 @@ using Intel.Opaque.Data;
 
 namespace Intel.MyDeals.Entities
 {
-    public class OpDataElementUITemplate : List<OpDataElementUI>
+    public class OpDataElementAtrbTemplate : List<OpDataElement>
     {
-        public OpDataElementUITemplate()
+        public OpDataElementAtrbTemplate()
         {
         }
 

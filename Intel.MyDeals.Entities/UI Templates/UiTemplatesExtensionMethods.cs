@@ -8,7 +8,7 @@ namespace Intel.MyDeals.Entities.UI_Templates
     public static class UiTemplatesExtensionMethods
     {
 
-        public static UiTemplates Populate(this UiTemplates uiTemplates, OpDataElementUITemplates templates, List<UiTemplateContainerItem> items)
+        public static UiTemplates Populate(this UiTemplates uiTemplates, OpDataElementAtrbTemplates templates, List<UiTemplateContainerItem> items)
         {
             uiTemplates.BuildUiModelTemplates(items);
             uiTemplates.BuildUiObjectTemplates(templates);
@@ -153,7 +153,7 @@ namespace Intel.MyDeals.Entities.UI_Templates
         /// <param name="uiTemplates"></param>
         /// <param name="templates"></param>
         /// <returns></returns>
-        public static UiTemplates BuildUiObjectTemplates(this UiTemplates uiTemplates, OpDataElementUITemplates templates)
+        public static UiTemplates BuildUiObjectTemplates(this UiTemplates uiTemplates, OpDataElementAtrbTemplates templates)
         {
             // Ensure we clean this out before assigning values
             uiTemplates.ObjectTemplates = new Dictionary<string, Dictionary<string, UiObjectTemplate>>();
@@ -180,12 +180,12 @@ namespace Intel.MyDeals.Entities.UI_Templates
         /// <param name="objSetType"></param>
         /// <param name="templates"></param>
         /// <returns></returns>
-        private static UiTemplates BuildUiObjectTemplate(this UiTemplates uiTemplates, OpDataElementType opDataElementType, OpDataElementSetType objSetType, OpDataElementUITemplates templates)
+        private static UiTemplates BuildUiObjectTemplate(this UiTemplates uiTemplates, OpDataElementType opDataElementType, OpDataElementSetType objSetType, OpDataElementAtrbTemplates templates)
         {
             if (!uiTemplates.ObjectTemplates.ContainsKey(opDataElementType.ToString()))
                 uiTemplates.ObjectTemplates[opDataElementType.ToString()] = new Dictionary<string, UiObjectTemplate>();
 
-            uiTemplates.ObjectTemplates[opDataElementType.ToString()][objSetType.ToString()] = BuildUiObjectTemplateItem(opDataElementType, templates);
+            uiTemplates.ObjectTemplates[opDataElementType.ToString()][objSetType.ToString()] = BuildUiObjectTemplateItem(opDataElementType, objSetType, templates);
             return uiTemplates;
         }
 
@@ -195,18 +195,20 @@ namespace Intel.MyDeals.Entities.UI_Templates
         /// <param name="opDataElementType"></param>
         /// <param name="templates"></param>
         /// <returns></returns>
-        private static UiObjectTemplate BuildUiObjectTemplateItem(OpDataElementType opDataElementType, OpDataElementUITemplates templates)
+        private static UiObjectTemplate BuildUiObjectTemplateItem(OpDataElementType opDataElementType, OpDataElementSetType objSetType, OpDataElementAtrbTemplates templates)
         {
             UiObjectTemplate template = new UiObjectTemplate();
-            if (!templates.ContainsKey(opDataElementType.ToString())) return template;
+            string key = $"{opDataElementType}:{objSetType}";
+            if (!templates.ContainsKey(key)) return template;
 
-            foreach (OpDataElementUI opDataElementUi in templates[opDataElementType.ToString()])
+            foreach (OpDataElement opDataElement in templates[key])
             {
-                template[opDataElementUi.AtrbCd] = opDataElementUi.AtrbValue;
+                template[opDataElement.AtrbCd] = opDataElement.AtrbValue;
             }
 
             template["dc_type"] = opDataElementType.ToId();
             template["dc_parent_type"] = opDataElementType.GetParent().ToId();
+            template[AttributeCodes.OBJ_SET_TYPE_CD] = objSetType.ToString();
             template["_behaviors"] = new Dictionary<string, Dictionary<string, dynamic>>
             {
                 ["isRequired"] = new Dictionary<string, dynamic>(),
@@ -223,9 +225,8 @@ namespace Intel.MyDeals.Entities.UI_Templates
 
             // TODO replace with security attributes reference for required attributes
 
-            if (opDataElementType == OpDataElementType.Contract)
+            if (opDataElementType == OpDataElementType.CNTRCT)
             {
-                template[AttributeCodes.OBJ_SET_TYPE_CD] = OpDataElementType.Contract.ToString();
                 template["_behaviors"]["isRequired"] = new Dictionary<string, dynamic>
                 {
                     [AttributeCodes.TITLE] = true,
@@ -235,18 +236,16 @@ namespace Intel.MyDeals.Entities.UI_Templates
                 };
             }
 
-            if (opDataElementType == OpDataElementType.PricingStrategy)
+            if (opDataElementType == OpDataElementType.PRC_ST)
             {
-                template[AttributeCodes.OBJ_SET_TYPE_CD] = OpDataElementType.PricingStrategy.ToString();
                 template["_behaviors"]["isRequired"] = new Dictionary<string, dynamic>
                 {
                     [AttributeCodes.TITLE] = true
                 };
             }
 
-            if (opDataElementType == OpDataElementType.PricingTable)
+            if (opDataElementType == OpDataElementType.PRC_TBL)
             {
-                template[AttributeCodes.OBJ_SET_TYPE_CD] = OpDataElementType.PricingTable.ToString();
                 template["_behaviors"]["isRequired"] = new Dictionary<string, dynamic>
                 {
                     [AttributeCodes.TITLE] = true

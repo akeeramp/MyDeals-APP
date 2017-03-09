@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Intel.MyDeals.Entities;
 
 namespace Intel.MyDeals.BusinessRules
@@ -12,24 +11,31 @@ namespace Intel.MyDeals.BusinessRules
             {
                 new MyOpRule
                 {
-                    Title="Apply Actions and Settings",
+                    Title="Apply Actions [Customer]",
+                    ActionRule = MyOpDataCollectorFlattenedItemActions.ApplyCustomerDivision,
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnOpCollectorConvert },
+                    InObjType = new List<OpDataElementType> { OpDataElementType.CNTRCT, OpDataElementType.PRC_ST }
+                },
+                new MyOpRule
+                {
+                    Title="Apply Actions [_actions] and Settings [_settings]",
                     ActionRule = MyOpDataCollectorFlattenedItemActions.ApplyActionsAndSettings,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnOpCollectorConvert },
-                    InObjType = new List<OpDataElementType> { OpDataElementType.Contract, OpDataElementType.PricingStrategy }
+                    InObjType = new List<OpDataElementType> { OpDataElementType.CNTRCT, OpDataElementType.PRC_ST }
                 },
                 new MyOpRule
                 {
-                    Title="Add key/value for having file attachments",
+                    Title="Add key/value [HasFiles] for having file attachments",
                     ActionRule = MyOpDataCollectorFlattenedItemActions.ApplyHasFileAttachments,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnOpCollectorConvert },
-                    InObjType = new List<OpDataElementType> { OpDataElementType.Contract, OpDataElementType.PricingTable, OpDataElementType.WipDeals, OpDataElementType.Deals }
+                    InObjType = new List<OpDataElementType> { OpDataElementType.CNTRCT, OpDataElementType.PRC_TBL, OpDataElementType.WIP_DEAL, OpDataElementType.DEAL }
                 },
                 new MyOpRule
                 {
-                    Title="Add key/value for having a tracker number",
+                    Title="Add key/value [HasTracker] for having a tracker number",
                     ActionRule = MyOpDataCollectorFlattenedItemActions.ApplyHasTracker,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnOpCollectorConvert },
-                    InObjType = new List<OpDataElementType> { OpDataElementType.Contract, OpDataElementType.PricingTable, OpDataElementType.WipDeals, OpDataElementType.Deals }
+                    InObjType = new List<OpDataElementType> { OpDataElementType.CNTRCT, OpDataElementType.PRC_TBL, OpDataElementType.WIP_DEAL, OpDataElementType.DEAL }
                 }
 
             };

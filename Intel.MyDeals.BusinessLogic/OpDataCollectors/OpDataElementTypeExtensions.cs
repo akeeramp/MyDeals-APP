@@ -29,12 +29,16 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns></returns>
         public static MyDealsData GetByIDs(this OpDataElementType opDataElementType, IEnumerable<int> ids, List<OpDataElementType> includeTypes, OpDataCollectorFlattenedDictList flattenedDictList = null)
         {
+            OpDataElementSetType opDataElementSetType = flattenedDictList == null
+                ? OpDataElementSetType.Unknown
+                : OpDataElementSetTypeConverter.FromString(flattenedDictList[opDataElementType][0][AttributeCodes.OBJ_SET_TYPE_CD]);
+
             return flattenedDictList == null 
                 ? GetByIDs(opDataElementType, ids, includeTypes, new List<string>())
-                    .FillInHolesFromAtrbTemplate() 
+                    .FillInHolesFromAtrbTemplate(opDataElementSetType) 
                 : GetByIDs(opDataElementType, ids, includeTypes, new List<string>())
                     .Merge(flattenedDictList)
-                    .FillInHolesFromAtrbTemplate();
+                    .FillInHolesFromAtrbTemplate(opDataElementSetType);
         }
 
 

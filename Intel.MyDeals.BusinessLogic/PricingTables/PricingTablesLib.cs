@@ -21,17 +21,17 @@ namespace Intel.MyDeals.BusinessLogic
             List<OpDataElementType> opDataElementTypes = inclusive
                 ? new List<OpDataElementType>
                 {
-                    OpDataElementType.PricingTable,
-                    OpDataElementType.PricingTableRow,
-                    OpDataElementType.WipDeals
+                    OpDataElementType.PRC_TBL,
+                    OpDataElementType.PRC_TBL_ROW,
+                    OpDataElementType.WIP_DEAL
                 }
                 : new List<OpDataElementType>
                 {
-                    OpDataElementType.PricingTable,
-                    OpDataElementType.PricingTableRow
+                    OpDataElementType.PRC_TBL,
+                    OpDataElementType.PRC_TBL_ROW
                 };
 
-            return OpDataElementType.PricingTable.GetByIDs(new List<int> {id}, opDataElementTypes);
+            return OpDataElementType.PRC_TBL.GetByIDs(new List<int> {id}, opDataElementTypes);
         }
 
         public OpDataCollectorFlattenedDictList GetFullNestedPricingTable(int id)
@@ -49,7 +49,7 @@ namespace Intel.MyDeals.BusinessLogic
         {
             return _dataCollectorLib.SavePackets(new OpDataCollectorFlattenedDictList
             {
-                [OpDataElementType.PricingTable] = data
+                [OpDataElementType.PRC_TBL] = data
             }, custId);
         }
 
@@ -61,9 +61,9 @@ namespace Intel.MyDeals.BusinessLogic
         {
             OpDataCollectorFlattenedDictList data = new OpDataCollectorFlattenedDictList();
 
-            if (pricingTables != null && pricingTables.Any()) data[OpDataElementType.PricingTable] = pricingTables;
-            if (pricingTableRows != null && pricingTableRows.Any()) data[OpDataElementType.PricingTableRow] = pricingTableRows;
-            if (wipDeals != null && wipDeals.Any()) data[OpDataElementType.WipDeals] = wipDeals;
+            if (pricingTables != null && pricingTables.Any()) data[OpDataElementType.PRC_TBL] = pricingTables;
+            if (pricingTableRows != null && pricingTableRows.Any()) data[OpDataElementType.PRC_TBL_ROW] = pricingTableRows;
+            if (wipDeals != null && wipDeals.Any()) data[OpDataElementType.WIP_DEAL] = wipDeals;
 
             return _dataCollectorLib.SavePackets(data, custId);
         }
@@ -71,9 +71,9 @@ namespace Intel.MyDeals.BusinessLogic
         public MyDealsData SaveFullPricingTable(OpDataCollectorFlattenedDictList fullpricingTables, int custId)
         {
             return SavePricingTable(
-                fullpricingTables.ContainsKey(OpDataElementType.PricingTable) ? fullpricingTables[OpDataElementType.PricingTable] : new OpDataCollectorFlattenedList(),
-                fullpricingTables.ContainsKey(OpDataElementType.PricingTableRow) ? fullpricingTables[OpDataElementType.PricingTableRow] : new OpDataCollectorFlattenedList(),
-                fullpricingTables.ContainsKey(OpDataElementType.WipDeals) ? fullpricingTables[OpDataElementType.WipDeals] : new OpDataCollectorFlattenedList(),
+                fullpricingTables.ContainsKey(OpDataElementType.PRC_TBL) ? fullpricingTables[OpDataElementType.PRC_TBL] : new OpDataCollectorFlattenedList(),
+                fullpricingTables.ContainsKey(OpDataElementType.PRC_TBL_ROW) ? fullpricingTables[OpDataElementType.PRC_TBL_ROW] : new OpDataCollectorFlattenedList(),
+                fullpricingTables.ContainsKey(OpDataElementType.WIP_DEAL) ? fullpricingTables[OpDataElementType.WIP_DEAL] : new OpDataCollectorFlattenedList(),
                 custId);
         }
 

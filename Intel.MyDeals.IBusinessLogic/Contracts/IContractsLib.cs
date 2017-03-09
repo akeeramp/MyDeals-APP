@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Intel.MyDeals.Entities;
 using Intel.Opaque;
-using Intel.Opaque.Data;
 
 namespace Intel.MyDeals.IBusinessLogic
 {
@@ -15,6 +14,6 @@ namespace Intel.MyDeals.IBusinessLogic
         OpDataCollectorFlattenedList GetUpperContract(int id);
         OpDataCollectorFlattenedDictList GetFullContract(int id);
         MyDealsData SaveFullContract(int custId, OpDataCollectorFlattenedDictList fullContracts);
-        MyDealsData SaveContractAndStrategy(int custId, ContractTransferPacket contractAndStrategy);
+        MyDealsData SaveContractAndPricingTable(int custId, ContractTransferPacket contractAndStrategy);
     }
 }

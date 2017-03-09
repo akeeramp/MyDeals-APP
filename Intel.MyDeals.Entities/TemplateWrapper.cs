@@ -8,17 +8,17 @@ namespace Intel.MyDeals.Entities
     {
         [DataMember]
         public List<ObjectTypeTemplate> TemplateData { set; get; }
+
         [DataMember]
-        public OpDataElementUITemplates TemplateDict { set; get; }
-        [DataMember]
-        public IEnumerable<CustomerCal> CalendarData { set; get; }
+        public OpDataElementAtrbTemplates TemplateDict { set; get; }
 
         public TemplateWrapper()
         {
             TemplateData = new List<ObjectTypeTemplate>();
-            TemplateDict = new OpDataElementUITemplates();
-            CalendarData = new List<CustomerCal>();
+            TemplateDict = new OpDataElementAtrbTemplates();
         }
 
     }
+
 }
+
