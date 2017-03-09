@@ -103,14 +103,14 @@
 
 	cmd = new SqlCommand(@"
 		select 
-			ACTN_SID,
-			REPLACE(LTRIM(RTRIM(UPPER(ACTN_CD))),' ','_') AS [ACTN_CD],
+			SECUR_ACTN_SID,
+			REPLACE(LTRIM(RTRIM(UPPER(ACTN_NM))),' ','_') AS [ACTN_NM],
 			ACTN_DESC,
 			[SRT_ORD]
-		from [dbo].[ACTN] (nolock)
+		from [dbo].[SECUR_ACTN_MSTR] (nolock)
 		where [ACTN_CAT_CD] = 'WIP_ACTN'
-		AND NULLIF(LTRIM(RTRIM(UPPER(ACTN_CD))),'') IS NOT NULL
-		order by ACTN_CD
+		AND NULLIF(LTRIM(RTRIM(UPPER(ACTN_NM))),'') IS NOT NULL
+		order by ACTN_NM
 	", conn);
 
 	WriteLine("public static class DealSaveActionCodes {");
@@ -122,11 +122,11 @@
 		{
 			WriteLine("");
 			WriteLine(@"///<summary>");
-			WriteLine(@"/// ACTN_SID: {0}", rdr["ACTN_SID"]);
+			WriteLine(@"/// ACTN_SID: {0}", rdr["SECUR_ACTN_SID"]);
 			WriteLine(@"/// SRT_ORD: {0}", rdr["SRT_ORD"]);
 			WriteLine(@"/// {0}", rdr["ACTN_DESC"]);
 			WriteLine(@"///</summary>");
-			WriteLine(@"public const string {0} = ""{0}"";", rdr["ACTN_CD"]);
+			WriteLine(@"public const string {0} = ""{0}"";", rdr["ACTN_NM"]);
 			WriteLine("");
 		} 
     }
