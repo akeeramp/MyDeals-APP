@@ -1,10 +1,9 @@
 ﻿<div ng-class="{isHidden: opIsHidden, isErrorWrapper: opIsError, isSavedWrapper: opIsSaved, isDirtyWrapper: opIsDirty}">
     <div class="opUiLabel" ng-class="{isRequired: opIsRequired}">{{opLabel}}</div>
     <div kendo-tooltip k-content="tooltipMsg" k-position="'top'" ng-show="opIsError" class="err-bit-el"></div>
-    <textarea type="text" class="fl opUiElement k-input"
+    <input kendo-slider k-min="opMinValue" k-max="opMaxValue" large-step="1"
            ng-model="value"
            ng-readonly="opIsReadOnly"
-           ng-class="{isHidden: opIsHidden, isReadOnly: opIsReadOnly, isError: opIsError, isSaved: opIsSaved, isDirty: opIsDirty}" ></textarea>
-
+           ng-class="{isHidden: opIsHidden, isReadOnly: opIsReadOnly, isError: opIsError, isSaved: opIsSaved, isDirty: opIsDirty}" />
     <div class="clearboth"></div>
 </div>

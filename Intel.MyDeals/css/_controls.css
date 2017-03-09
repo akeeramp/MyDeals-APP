@@ -193,6 +193,9 @@
         padding: 8px;
         margin: 10px 0;
     }
+    .fieldcontainer .myDealsControl {
+        margin: 10px;
+    }
     .uiControlDiv {
         padding: 2px 4px;
         border: 1px solid transparent;

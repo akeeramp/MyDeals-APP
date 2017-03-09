@@ -16,6 +16,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
             'VERTICAL_DROPDOWN': 'verticalDropDown.html',
             'VERTICAL_COMBOBOX': 'verticalComboBox.html',
             'VERTICAL_CHECKBOX': 'verticalCheckBox.html',
+            'VERTICAL_SLIDER': 'verticalSlider.html',
             'VERTICAL_RADIOBUTTONGROUP': 'verticalRadioButtonGroup.html',
             'HORIZONTAL_TEXTBOX': 'horizontalTextBox.html',
             'HORIZONTAL_TEXTAREA': 'horizontalTextArea.html',
@@ -51,7 +52,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
         if (scope.opCascadeField === undefined) scope.opCascadeField = "";
 
         var serviceData = []; // data from the service will be pushed into this.
-        if ((scope.opType == 'COMBOBOX' || scope.opType == 'DROPDOWN') &&
+        if ((scope.opType === 'COMBOBOX' || scope.opType === 'DROPDOWN') &&
             (scope.opLookupUrl !== undefined && scope.opLookupUrl !== "undefined")) {
             scope.values = {
                 transport: {
@@ -70,7 +71,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
             }
         }
 
-        if (scope.opType == 'RADIOBUTTONGROUP' && scope.opLookupUrl !== undefined && scope.opLookupUrl !== "undefined") {
+        if (scope.opType === 'RADIOBUTTONGROUP' && scope.opLookupUrl !== undefined && scope.opLookupUrl !== "undefined") {
             dataService.get(scope.opLookupUrl).then(function (response) {
                 scope.values = response.data;
             }, function (response) {
@@ -79,10 +80,15 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
         }
 
         var loader = getTemplate(scope.opUiMode + '_' + scope.opType);
-        var promise = loader.success(function (html) {
-            element.html(html);
-        }).then(function (response) {
-            element.replaceWith($compile(element.html())(scope));
+        //var promise = loader.success(function (html) {
+        //    element.html(html);
+        //}).then(function (response) {
+        //    element.replaceWith($compile(element.html())(scope));
+        //});
+        loader.success(function (html) {
+            var x = angular.element(html);
+            element.append(x);
+            $compile(x)(scope);
         });
 
         scope.$watch('value',
@@ -110,7 +116,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
             if (!!scope.opSelectedObject && (scope.opType === 'DROPDOWN' || scope.opType === 'COMBOBOX')) {
                 var selected = [];
                 $.each(serviceData, function (idx, elem) {
-                    if (elem[scope.opLookupValue] == scope.value) {
+                    if (elem[scope.opLookupValue] === scope.value) {
                         selected = elem;
                         return false;
                     }
@@ -136,6 +142,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
             opLookupText: '=',
             opLookupValue: '=',
             opSelectedObject: '=',
+            opMinValue: '=',
             opMaxValue: '=',
             opUiMode: '=',
             opCd: '=',

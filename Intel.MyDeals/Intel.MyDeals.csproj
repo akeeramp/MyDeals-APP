@@ -349,6 +349,7 @@
     <Content Include="app\blocks\uiControls\partials\horizontalTextArea.html" />
     <Content Include="app\blocks\uiControls\partials\verticalRadioButtonGroup.html" />
     <Content Include="app\blocks\uiControls\partials\verticalTextArea.html" />
+    <Content Include="app\blocks\uiControls\partials\verticalSlider.html" />
     <Content Include="app\blocks\uiControls\uiControls.module.js" />
     <Content Include="app\blocks\util.js" />
     <Content Include="app\contract\controllers\contract.controller.js" />

@@ -128,27 +128,31 @@
              ng-model="flat"
              op-cd="'TEXTAREA'"
              op-type="'TEXTAREA'"
-             op-label="'TEXTAREA'"
+             op-label="'Textarea'"
              op-ui-mode="'VERTICAL'"></div>
         <div class="myDealsControl"
              op-control-flat
              ng-model="flat"
              op-cd="'RADIOBUTTON'"
              op-type="'RADIOBUTTONGROUP'"
-             op-label="''"
+             op-label="'Radio Group Sample:'"
              op-lookup-url="'/api/Lookups/v1/GetLookups/DROPDOWN'"
              op-lookup-text="'DROP_DOWN'"
              op-lookup-value="'DROP_DOWN'"
              op-ui-mode="'VERTICAL'"></div>
-        <div class="clearboth"></div>
-        <div op-control-flat
+        <div class="myDealsControl"
+             style="width: 200px;"
+             op-control-flat
              ng-model="flat"
              op-cd="'SliderInt'"
              op-type="'SLIDER'"
-             op-label="'Slider'"
-             op-max-value="'4'"
-             op-ui-mode="'HORIZONTAL'"></div>
+             op-label="'Slider Sample:'"
+             op-min-value="1"
+             op-max-value="4"
+             op-ui-mode="'VERTICAL'"></div>
 
+        <div class="clearboth"></div>
+        
         <!--<pre style="font-size: 9px; font-family: arial;">{{flat | json}}</pre>-->
 
     </div>

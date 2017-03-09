@@ -1,4 +1,5 @@
 ﻿<div ng-class="{isHidden: opIsHidden, isErrorWrapper: opIsError, isSavedWrapper: opIsSaved, isDirtyWrapper: opIsDirty}">
+    <div class="opUiLabel" ng-class="{isRequired: opIsRequired}">{{opLabel}}</div>
     <div ng-repeat="item in values">
         <div class="radio">
             <label>

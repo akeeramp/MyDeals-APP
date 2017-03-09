@@ -18,7 +18,8 @@ function opControlFlat($http, lookupsService, $compile, $templateCache, logger, 
         el += ' op-lookup-text="\'' + scope.opLookupText + '\'"';
         el += ' op-lookup-value="\'' + scope.opLookupValue + '\'"';
         el += ' op-selected-object="\'' + scope.opSelectedObject + '\'"';
-        el += ' op-max-value="\'' + scope.opMaxValue + '\'"';
+        el += ' op-min-value="' + scope.opMinValue + '"';
+        el += ' op-max-value="' + scope.opMaxValue + '"';
         el += ' op-cascade-field="\'' + scope.opCascadeField + '\'"';
         el += ' op-cascade-from="\'' + scope.opCascadeFrom + '\'"';
         el += ' op-valid-msg="value._behaviors.validMsg.' + scope.opCd + '"';
@@ -49,6 +50,7 @@ function opControlFlat($http, lookupsService, $compile, $templateCache, logger, 
             opLookupText: '=',
             opLookupValue: '=',
             opSelectedObject: '=',
+            opMinValue: '=',
             opMaxValue: '=',
             opCascadeField: '=',
             opCascadeFrom: '='
@@ -56,3 +58,4 @@ function opControlFlat($http, lookupsService, $compile, $templateCache, logger, 
         link: linker
     }
 }
+
