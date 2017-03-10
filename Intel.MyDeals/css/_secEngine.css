@@ -6,7 +6,9 @@
 	line-height: 1.2em;
 	font-size: 10px;
 	padding: 0 !important;
-	text-align: center;
+	text-align: center;	
+    background-color: #ED1C24;
+	border: 1px solid #cccccc;
 }
 
 .atrbSubTitle {
@@ -21,10 +23,7 @@
 	padding-left: 3px;
 	padding-right: 5px;
 	background-color: #ffffff;
-	border-left: 1px solid #eeeeee;
-	border-bottom: 1px solid #eeeeee;
-	border-right: 1px solid #eeeeee;
-	border-top: 1px solid #eeeeee;
+	border-color: #eeeeee;
 }
 
 .atrbbasecolorECAP {
@@ -32,10 +31,15 @@
 	padding-left: 3px;
 	padding-right: 5px;
 	background-color: #0071c5;
-	border-left: 1px solid #0071c5;
-	border-bottom: 1px solid #0071c5;
-	border-right: 1px solid #0071c5;
-	border-top: 1px solid #0071c5;
+	border-color: #0071c5;
+}
+
+.atrbbasecolorCAP_BAND {
+	color: #aa00bb;
+	padding-left: 3px;
+	padding-right: 5px;
+	background-color: #aa00bb;
+	border-color: #aa00bb;
 }
 
 .atrbbasecolorPROGRAM {
@@ -43,52 +47,63 @@
 	padding-left: 3px;
 	padding-right: 5px;
 	background-color: #00c571;
-	border-left: 1px solid #00c571;
-	border-bottom: 1px solid #00c571;
-	border-right: 1px solid #00c571;
-	border-top: 1px solid #00c571;
+	border-color: #00c571;
 }
 
-.atrbbasecolorVOLTIER {
+.atrbbasecolorVOL_TIER {
 	color: #ffda00;
 	padding-left: 3px;
 	padding-right: 5px;
 	background-color: #ffda00;
-	border-left: 1px solid #ffda00;
-	border-bottom: 1px solid #ffda00;
-	border-right: 1px solid #ffda00;
-	border-top: 1px solid #ffda00;
-}
-
-.atrbbasecolorCAPBAND {
-	color: #aa00bb;
-	padding-left: 3px;
-	padding-right: 5px;
-	background-color: #aa00bb;
-	border-left: 1px solid #aa00bb;
-	border-bottom: 1px solid #aa00bb;
-	border-right: 1px solid #aa00bb;
-	border-top: 1px solid #aa00bb;
+	border-color: #ffda00;
 }
 
 .atrbbasecolorNotInDealType {
 	background-image: url(/images/disabledBack.png);
 	background-color: #eeeeee;
-	border-left: 1px solid #eeeeee;
-	border-bottom: 1px solid #eeeeee;
-	border-right: 1px solid #eeeeee;
-	border-top: 1px solid #eeeeee;
+	border-color: #eeeeee;
 }
 
 .atrbbasecolorDealReadOnly {
 	color: #ffffff;
 }
 
-.atrbbasedisabled {
-	background-color: #ffffff;
-	border-left-width: 1px;
+
+
+/* Changed classes */
+/*.attrbChanged.atrbbasecolorECAP{
+	background-color: #003C71;
+	border-color: #003C71;
+	color: #003C71;
+}
+.attrbChanged.atrbbasecolorCAPBAND{
+	background-color: #61006b;
+	border-color: #61006b;
+	color: #61006b;
+}
+.attrbChanged.atrbbasecolorPROGRAM{
+	background-color: #007c47;
+	border-color: #007c47;
+	color: #007c47;
+}
+.attrbChanged.atrbbasecolorVOLTIER{
+	background-color: #FFA300;
+	border-color: #FFA300;
+	color: #FFA300;
+}*/
+.attrbChanged.atrbbasedisabled {
+	border-color: red;
+	border-style: solid;
+}
+.attrbChanged {
+	border-color: red;
 }
 
+.atrbbasedisabled {
+	background-color: #ffffff !important;
+	border-left-width: 1px;
+	opacity: 0.4;
+}
 
 /* Security Engine Grid */
 #secEngineGrid.k-grid td{
@@ -131,4 +146,24 @@
 	border: 1px solid #c4cfd4;
 	border-bottom:0px;
 	margin-right: 0px;
+}
+
+
+/* Sidebar */
+.secEngine_sidebar {
+	overflow-y: auto;
+	background-color: #efefef;
+	border-radius: 4px;
+	width: 410px;
+}
+
+.secEngine_viewButton{
+	/*margin: auto;*/
+	border-top: 1px dashed #b1babf;
+	padding: 20px 12px;
+}
+
+#secEngine_filters
+{	
+    overflow-x: scroll;
 }

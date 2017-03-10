@@ -281,81 +281,6 @@ namespace Intel.MyDeals.Entities
     } // End of class ApplicationRoleLookup
 
 
-    [DataContract]
-    public partial class SecurityMask
-    {
-
-        [DataMember]
-        public System.String ACTN_CD { set; get; }
-
-
-        [DataMember]
-        public System.Int32 ACTN_SID { set; get; }
-
-
-        [DataMember]
-        public System.Int32 DEAL_MBR_SID { set; get; }
-
-
-        [DataMember]
-        public System.String OBJ_TYPE { set; get; }
-
-
-        [DataMember]
-        public System.String PERMISSION_MASK { set; get; }
-
-
-        [DataMember]
-        public System.String ROLE_TYPE_CD { set; get; }
-
-
-        [DataMember]
-        public System.Int32 ROLE_TYPE_SID { set; get; }
-
-
-        [DataMember]
-        public System.String WFSTG_CD { set; get; }
-
-
-        [DataMember]
-        public System.Int32 WFSTG_MBR_SID { set; get; }
-
-
-        /*
-        private static List<SecurityMask> SecurityMaskFromReader(SqlDataReader rdr){
-        // This helper method is template generated.
-        // Refer to that template for details to modify this code.
-
-        var ret = new List<SecurityMask>();
-        int IDX_ACTN_CD = DB.GetReaderOrdinal(rdr, "ACTN_CD");
-        int IDX_ACTN_SID = DB.GetReaderOrdinal(rdr, "ACTN_SID");
-        int IDX_DEAL_MBR_SID = DB.GetReaderOrdinal(rdr, "DEAL_MBR_SID");
-        int IDX_DEAL_TYPE_CD = DB.GetReaderOrdinal(rdr, "DEAL_TYPE_CD");
-        int IDX_PERMISSION_MASK = DB.GetReaderOrdinal(rdr, "PERMISSION_MASK");
-        int IDX_ROLE_TYPE_CD = DB.GetReaderOrdinal(rdr, "ROLE_TYPE_CD");
-        int IDX_ROLE_TYPE_SID = DB.GetReaderOrdinal(rdr, "ROLE_TYPE_SID");
-        int IDX_WFSTG_CD = DB.GetReaderOrdinal(rdr, "WFSTG_CD");
-        int IDX_WFSTG_MBR_SID = DB.GetReaderOrdinal(rdr, "WFSTG_MBR_SID");
-
-        while (rdr.Read()){
-        ret.Add(new SecurityMask {
-        ACTN_CD = (IDX_ACTN_CD < 0 || rdr.IsDBNull(IDX_ACTN_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ACTN_CD),
-        ACTN_SID = (IDX_ACTN_SID < 0 || rdr.IsDBNull(IDX_ACTN_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ACTN_SID),
-        DEAL_MBR_SID = (IDX_DEAL_MBR_SID < 0 || rdr.IsDBNull(IDX_DEAL_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_MBR_SID),
-        DEAL_TYPE_CD = (IDX_DEAL_TYPE_CD < 0 || rdr.IsDBNull(IDX_DEAL_TYPE_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_TYPE_CD),
-        PERMISSION_MASK = (IDX_PERMISSION_MASK < 0 || rdr.IsDBNull(IDX_PERMISSION_MASK)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PERMISSION_MASK),
-        ROLE_TYPE_CD = (IDX_ROLE_TYPE_CD < 0 || rdr.IsDBNull(IDX_ROLE_TYPE_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ROLE_TYPE_CD),
-        ROLE_TYPE_SID = (IDX_ROLE_TYPE_SID < 0 || rdr.IsDBNull(IDX_ROLE_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ROLE_TYPE_SID),
-        WFSTG_CD = (IDX_WFSTG_CD < 0 || rdr.IsDBNull(IDX_WFSTG_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_WFSTG_CD),
-        WFSTG_MBR_SID = (IDX_WFSTG_MBR_SID < 0 || rdr.IsDBNull(IDX_WFSTG_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WFSTG_MBR_SID)
-        });
-        } // while
-        return ret;
-        }
-        */
-
-    } // End of class SecurityMask
-
 
     [DataContract]
     public partial class CustomerItem
@@ -520,54 +445,7 @@ namespace Intel.MyDeals.Entities
 
     } // End of class UserPreference
 
-
-
-    [DataContract]
-    public partial class SecurityAttribute
-    {
-
-        [DataMember]
-        public System.Int64 ATRB_BIT { set; get; }
-
-
-        [DataMember]
-        public System.Int64 ATRB_MAGNITUDE { set; get; }
-
-
-        [DataMember]
-        public System.String FACT_ATRB_CD { set; get; }
-
-
-        [DataMember]
-        public System.Int32 FACT_ATRB_SID { set; get; }
-
-
-        /*
-        private static List<SecurityAction> SecurityActionFromReader(SqlDataReader rdr){
-        // This helper method is template generated.
-        // Refer to that template for details to modify this code.
-
-        var ret = new List<SecurityAction>();
-        int IDX_ATRB_BIT = DB.GetReaderOrdinal(rdr, "ATRB_BIT");
-        int IDX_ATRB_MAGNITUDE = DB.GetReaderOrdinal(rdr, "ATRB_MAGNITUDE");
-        int IDX_FACT_ATRB_CD = DB.GetReaderOrdinal(rdr, "FACT_ATRB_CD");
-        int IDX_FACT_ATRB_SID = DB.GetReaderOrdinal(rdr, "FACT_ATRB_SID");
-
-        while (rdr.Read()){
-        ret.Add(new SecurityAction {
-        ATRB_BIT = (IDX_ATRB_BIT < 0 || rdr.IsDBNull(IDX_ATRB_BIT)) ? default(System.Int64) : rdr.GetFieldValue<System.Int64>(IDX_ATRB_BIT),
-        ATRB_MAGNITUDE = (IDX_ATRB_MAGNITUDE < 0 || rdr.IsDBNull(IDX_ATRB_MAGNITUDE)) ? default(System.Int64) : rdr.GetFieldValue<System.Int64>(IDX_ATRB_MAGNITUDE),
-        FACT_ATRB_CD = (IDX_FACT_ATRB_CD < 0 || rdr.IsDBNull(IDX_FACT_ATRB_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_FACT_ATRB_CD),
-        FACT_ATRB_SID = (IDX_FACT_ATRB_SID < 0 || rdr.IsDBNull(IDX_FACT_ATRB_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_FACT_ATRB_SID)
-        });
-        } // while
-        return ret;
-        }
-        */
-
-    } // End of class SecurityAction
-
-
+	
     [DataContract]
     public partial class AppRoleTier
     {

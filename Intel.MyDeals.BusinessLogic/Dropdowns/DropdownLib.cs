@@ -52,12 +52,30 @@ namespace Intel.MyDeals.BusinessLogic
 		/// Get All Deal Types Dropdowns
 		/// </summary>
 		/// <returns>list of Deal Types Dropdowns</returns>
-		public List<Dropdown> GetDealTypesDropdowns()
+		public List<Dropdown> GetDealTypesDropdown()
         {
             return GetDropdowns().Where(dd => dd.dropdownCategory == "All Deal Types" && dd.active == 1).ToList();
         }
 
-        /// <summary>
+		/// <summary>
+		/// Get All Role Types Dropdown
+		/// </summary>
+		/// <returns>list of Role Types Dropdowns</returns>
+		public List<Dropdown> GetRoleTypesDropdown()
+		{
+			return GetDropdowns().Where(dd => dd.dropdownCategory == "Application Role" && dd.subCategory == "IDMS" && dd.active == 1).ToList();
+		}
+		
+		/// <summary>
+		/// Get All Deal Types Dropdown
+		/// </summary>
+		/// <returns>list of Deal Types Dropdowns</returns>
+		public List<Dropdown> GetSecurityActionsDropdown()
+		{
+			return GetDropdowns().Where(dd => dd.dropdownCategory == "Action Security" && dd.active == 1).ToList();
+		}
+		
+		/// <summary>
 		/// Get All Dropdown Groups
 		/// </summary>
 		/// <returns>list of Dropdown Groups</returns>

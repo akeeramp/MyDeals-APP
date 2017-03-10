@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Web.Http;
 using System.Linq;
 using Intel.Opaque.Tools;
+using Intel.Opaque.Data;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -11,13 +12,17 @@ namespace Intel.MyDeals.Controllers.API
     public class SecurityAttributesController : BaseApiController
     {
         private readonly ISecurityAttributesLib _securityAttributesLib;
+		private readonly IWorkFlowLib _workFlowLib;
+		private IDropdownLib _dropdownLib;
 
-        public SecurityAttributesController(ISecurityAttributesLib _securityAttributesLib)
-        {
+		public SecurityAttributesController(ISecurityAttributesLib _securityAttributesLib, IWorkFlowLib workflowLib, IDropdownLib _dropdownLib)
+		{
+			this._workFlowLib = workflowLib;
             this._securityAttributesLib = _securityAttributesLib;
-        }
+			this._dropdownLib = _dropdownLib;
+		}
 
-		#region Mappings
+		#region SecurityEngine Mappings
 
 		[HttpGet]
 		[Route("GetSecurityWrapper")]
@@ -30,57 +35,39 @@ namespace Intel.MyDeals.Controllers.API
 		[Route("GetSecurityDropdownData")]
 		public SecurityDropdownData GetSecurityDropdownData()
 		{
-			List<OpPair<int, string>> securityActions = GetSecurityActions().OrderBy(x => x.ACTN_CD).Select(x => new OpPair<int, string>(x.ACTN_SID, x.ACTN_CD )).ToList();
-			List<OpPair<int, string>> dealTypes = GetAdminDealTypes().OrderBy(x => x.OBJ_SET_TYPE_CD).Select(x => new OpPair<int, string>(x.OBJ_SET_TYPE_SID, x.OBJ_SET_TYPE_CD)).ToList();
-			// TODO: Replace Hard-coded appID=1 (for IDMS) with something more dynamic or just get this from db already filtered
-			List<OpPair<int, string>> roleTypes = GetAdminRoleTypes().OrderBy(x => x.ROLE_TYPE_CD).Where(x => x.APP_SID == 1).Select(x => new OpPair<int, string>(x.ROLE_TYPE_SID, x.ROLE_TYPE_CD)).ToList(); 
+			List<Dropdown> securityActions = SafeExecutor(() => _dropdownLib.GetSecurityActionsDropdown().OrderBy(x => x.dropdownName).ToList()
+				, $"Unable to get Security Actions"
+			);
+			
+			List<OpDataElementSetTypeItem> dealTypes = OpDataElementSetTypeRepository.OpDestCollection.Items;
 
-			// TODO: Get Stages from db
-			List<OpPair<int, string>> workflowStages = new List<OpPair<int, string>> {
-				new OpPair<int, string>(0, "Requested"),
-				new OpPair<int, string>(0, "Submitted"),
-				new OpPair<int, string>(0, "Hold_Waiting"),
-				new OpPair<int, string>(0, "Final_Approval"),
-				new OpPair<int, string>(0, "Active"),
-				new OpPair<int, string>(0, "Customer_Declined"),
-				new OpPair<int, string>(0, "Cancelled"),
-				new OpPair<int, string>(0, "Expired")
-			}; 
+			// TODO: This might need to be replaced when role types are in the db
+			List<Dropdown> roleTypes = SafeExecutor(() => _dropdownLib.GetRoleTypesDropdown().OrderBy(x => x.dropdownName).ToList()
+				, $"Unable to get Role Types"
+			);
 
-			SecurityDropdownData result = new SecurityDropdownData(securityActions, dealTypes, roleTypes, workflowStages);
+			List<OpPair<int, string>> workflowStages = SafeExecutor(() => _workFlowLib.GetWorkFlowStages().Select(x => new OpPair<int, string>(x.WFSTG_MBR_SID, x.WFSTG_NM)).OrderBy(x => x.Second).ToList()
+				, $"Unable to get Workflow Stages"
+			);
+			
+			List<OpDataElementTypeItem> objTypes = OpDataElementTypeRepository.OpDetCollection.Items;
 
-			return result;
+			return ( new SecurityDropdownData(securityActions, dealTypes, roleTypes, workflowStages, objTypes));
 		}
 
 		[HttpGet]
-		[Route("GetDealTypeAtrbs")]
-		public Dictionary<string, List<string>> GetDealTypeAtrbs()
+		[Route("GetObjAtrbs")]
+		public Dictionary<string, Dictionary<string, List<string>>> GetObjAtrbs()
 		{
-			return _securityAttributesLib.GetDealTypeAtrbs();
+			return _securityAttributesLib.GetObjAtrbs();
 		}
 		
-		 // TODO
-		//[HttpPost]
-		//[Route("InsertMapping")]
-		//public SecurityMapping InsertMapping(SecurityMapping Engine)
-		//{
-		//    return _securityEngineLib.ManageSecurityMapping(Engine, CrudModes.Insert);
-		//}
-
-		//[HttpPut]
-		//[Route("UpdateMapping")]
-		//public SecurityMapping UpdateMapping(SecurityMapping Engine)
-		//{
-		//    return _securityEngineLib.ManageSecurityMapping(Engine, CrudModes.Update);
-		//}
-
-		//[Route("DeleteMapping")]
-		//public bool DeleteMapping(int id)
-		//{
-		//    return _securityEngineLib.DeleteSecurityMapping(id);
-		//}
-
-
+		[HttpPost]
+		[Route("SaveSecurityMapping")]
+		public bool SaveSecurityMappings(List<SecurityMapSave> saveMappings)
+		{
+			return _securityAttributesLib.SaveSecurityMappings(saveMappings);
+		}
 		#endregion
 
 		#region SecurityActions

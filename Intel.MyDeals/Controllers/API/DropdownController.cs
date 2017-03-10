@@ -32,7 +32,7 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetDealTypesDropdowns")]
         public IEnumerable<Dropdown> GetDealTypesDropdowns()
         {
-            return SafeExecutor(() => _dropdownLib.GetDealTypesDropdowns()
+            return SafeExecutor(() => _dropdownLib.GetDealTypesDropdown()
                 , $"Unable to get DealTypes Dropdowns"
             );
         }

@@ -41,7 +41,7 @@ namespace Intel.MyDeals.BusinessLogic.Test
         public void DropdownsGetDealTypes()
         {
             // Arrange, ACT
-            IEnumerable<Dropdown> results = new DropdownLib().GetDealTypesDropdowns();
+            IEnumerable<Dropdown> results = new DropdownLib().GetDealTypesDropdown();
 
             // Assert
             Assert.IsTrue(results.Any());

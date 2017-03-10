@@ -9,7 +9,6 @@ namespace Intel.MyDeals.BusinessLogic
     public class ProductCategoriesLib : IProductCategoriesLib
 	{
 		private readonly IProductCategoriesDataLib _productCategoriesDataLib;
-
 		private readonly IDataCollectionsDataLib _dataCollectionsDataLib;
 
 		/// <summary>

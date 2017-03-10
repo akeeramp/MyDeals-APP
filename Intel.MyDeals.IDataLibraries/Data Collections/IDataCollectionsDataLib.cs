@@ -43,5 +43,19 @@ namespace Intel.MyDeals.IDataLibrary
         List<BasicDropdown> GetBasicDropdowns();
 
         List<Dropdown> GetDropdowns();
-    }
+
+		#region Security Attributes
+
+		List<AdminApplications> GetAdminApplications();
+
+		List<AdminDealType> GetAdminDealTypes();
+
+		List<AdminRoleType> GetAdminRoleTypes();
+
+		List<SecurityActions> GetSecurityActions();
+
+		#endregion
+		List<SecurityAttributesDropDown> GetObjAtrbs();
+
+	}
 }

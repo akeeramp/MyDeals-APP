@@ -187,6 +187,19 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "ProductAttributeValues";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
+	// SecurityAttribute and Security Mask
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_GET_SECUR_MSK]");
+	ds.Tables[0].TableName = "SecurityAttribute";
+	ds.Tables[1].TableName = "SecurityMask";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[1], false));	
+		
+	// SecurityAttributes DropDown
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_SECUR_DROPDOWNS]");
+	ds.Tables[0].TableName = "SecurityAttributesDropDown";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));	
+	
+
 	PopIndent();
 	WriteLine("}"); // End NameSpace
 

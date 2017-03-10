@@ -62,7 +62,7 @@
                 		};
                 		confirmationModal.showModal({}, modalOptions);
 
-						//// TODO: Finds out why UI is not redrawing or scope is not binding
+						//// TODO: Find out why UI is not redrawing or scope is not binding without modal pop-up
                 		//vm.showErrorMsg = true;
                 		//$scope.$apply;
                 		//$scope.grid.refresh();
@@ -116,7 +116,7 @@
             	},
             	parse: function (d) {
             		// HACK: Create a new attribute (filterable_CHG_DTM) in the model for the UI to consume as a 
-					// workaorund to allow for filtering that ignores time in the datepicker
+					// work-around to allow for filtering that ignores time in the datepicker
             		var date = null;
             		$.each(d, function (idx, elem) {
             			date = new Date(elem.CHG_DTM);
@@ -218,7 +218,6 @@
 					ui: "datepicker"
 				}
 			}
-			//,{ command: ["edit"], title: "&nbsp;", width: "200px" }
             ]
         }
 
@@ -250,25 +249,6 @@
         	tmplt += '/>';
         	$(tmplt).appendTo(container)
         }
-
-
-    	//// Toggles the value of a batch-editable kendo-grid's checkbox on first click
-		//// HACK: This is a workaround for kendo's default of making a user click 2x to change checkbox value
-        //function toggleCheckBoxValue($event) {
-        //	var currElem = angular.element($event.currentTarget);
-        //	var dataItem = $scope.grid.dataItem(currElem.closest("tr"));
-			
-        //	// Update value
-        //	// NOTE: Unfortunately, the dataItem.set() method clears other dirty flags, so just update the column directly
-        //	dataItem.ACTV_IND = !dataItem.ACTV_IND;
-
-		//	// Add the kendo dirty flag
-        //	dataItem.dirty = true;
-        //	var td = angular.element(currElem.closest("td"))
-        //	td.addClass('k-dirty-cell');
-        //	$('<span class="k-dirty"></span>').insertBefore($event.currentTarget.parentElement);
-        //}
-
         function hasFilters() {
         	return (typeof $scope.grid.dataSource._filter !== 'undefined');
         }
@@ -282,8 +262,10 @@
     	//    $scope.grid.addRow();
     	//}
 
-    	// Custom kendo validation where cells are dependant on one another. Actually valiates model.
-		// Assumes we are using Kendo's inline editing (update one row at a time)
+    	// HACK: Custom kendo validation where cells are dependant on one another. This function 
+    	// is used in place of Kendo's custom or uilt-in validation because of the many bugs when using 
+        // kendo custom validation with dependant columns. This function will actually validate the model.
+		// It assumes we are using Kendo's inline editing (update one row at a time).
         function isModelValid(dataItem) {
         	var isValid = true;
 			
@@ -309,7 +291,7 @@
         }
 
 
-		// Updates the model with the correct _behavior flag
+		// HACK: Updates the model with the correct _behavior flag for depandant cell validation hack
         function flagBehavior(dataItem, $event, field, isTrue) {
         	if (dataItem._behaviors === undefined) {
         		dataItem._behaviors = {};

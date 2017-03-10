@@ -11,12 +11,20 @@ function lookupsService(dataService) {
     var apiBaseLookupUrl = "/api/Lookups/v1/";
 
     var service = {
-        getLookup: getLookup
+    	getLookup: getLookup,
+    	asyncRenderHack: asyncRenderHack
     }
 
     return service;
 
     function getLookup(cd) {
         return dataService.post(apiBaseLookupUrl + 'GetLookups/' + cd);
+    }
+
+    // HACK: Use this function if you cannot batch your loading with the js setTimeOut hack
+    // and you need to render the browser (for displaying loading icons, ect) before 
+    // performing a UI-heavy task that would normally lock the browser a few seconds. 
+    function asyncRenderHack() {
+    	return dataService.get(apiBaseLookupUrl + 'AsyncRenderHack/');
     }
 }

@@ -27,7 +27,7 @@
 
 				if (revBinVal.length < secActionObj[a].ATRB_BIT) return allowedActions;
 
-				if (revBinVal[secActionObj[a].ATRB_BIT] === '1') allowedActions.push(secActionObj[a].FACT_ATRB_CD);
+				if (revBinVal[secActionObj[a].ATRB_BIT] === '1') allowedActions.push(secActionObj[a].ATRB_CD);
 			}
 			return allowedActions;
 		}

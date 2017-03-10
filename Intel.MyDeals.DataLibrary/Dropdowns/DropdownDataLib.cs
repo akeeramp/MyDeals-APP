@@ -45,9 +45,10 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_dropdownCategory = DB.GetReaderOrdinal(rdr, "dropdownCategory");
                     int IDX_dropdownID = DB.GetReaderOrdinal(rdr, "dropdownID");
                     int IDX_dropdownName = DB.GetReaderOrdinal(rdr, "dropdownName");
-                    int IDX_parntAtrbCd = DB.GetReaderOrdinal(rdr, "parntAtrbCd");
+					int IDX_parntAtrbCd = DB.GetReaderOrdinal(rdr, "parntAtrbCd");
+					int IDX_subCategory = DB.GetReaderOrdinal(rdr, "subCategory");
 
-                    while (rdr.Read())
+					while (rdr.Read())
                     {
                         ret.Add(new Dropdown
                         {
@@ -56,8 +57,9 @@ namespace Intel.MyDeals.DataLibrary
                             dropdownCategory = (IDX_dropdownCategory < 0 || rdr.IsDBNull(IDX_dropdownCategory)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_dropdownCategory),
                             dropdownID = (IDX_dropdownID < 0 || rdr.IsDBNull(IDX_dropdownID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_dropdownID),
                             dropdownName = (IDX_dropdownName < 0 || rdr.IsDBNull(IDX_dropdownName)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_dropdownName),
-                            parntAtrbCd = (IDX_parntAtrbCd < 0 || rdr.IsDBNull(IDX_parntAtrbCd)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_parntAtrbCd)
-                        });
+                            parntAtrbCd = (IDX_parntAtrbCd < 0 || rdr.IsDBNull(IDX_parntAtrbCd)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_parntAtrbCd),
+							subCategory = (IDX_subCategory < 0 || rdr.IsDBNull(IDX_subCategory)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_subCategory)
+						});
                     }
                 }
             }

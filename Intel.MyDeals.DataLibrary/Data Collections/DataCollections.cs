@@ -195,41 +195,96 @@ namespace Intel.MyDeals.DataLibrary
 
         private static List<LookupItem> _getLookupData;
 
-        public static SecurityWrapper GetSecurityWrapper()
+		#region Security Mapping
+
+		public static SecurityWrapper GetSecurityWrapper()
         {
             lock (LOCK_OBJECT ?? new object())
             {
-                if (_getRoleTypes != null && _getSecurityActions != null && _getSecurityMasks != null)
-                    return new SecurityWrapper(_getRoleTypes.ToList(), _getSecurityActions.ToList(), _getSecurityMasks.ToList());
-
-                SecurityWrapper wrapper = new SecurityAttributesDataLib().GetSecurityWrapper();
-                _getRoleTypes = wrapper.RoleTypes;
-                _getSecurityActions = wrapper.SecurityAttributes;
-                _getSecurityMasks = wrapper.SecurityMasks;
-                return wrapper;
+				if (_getRoleTypes != null && _getSecurityAttributes != null && _getSecurityMasks != null)
+				{
+					_getSecurityWrapper = new SecurityWrapper(_getRoleTypes.ToList(), _getSecurityAttributes.ToList(), _getSecurityMasks.ToList());
+					return _getSecurityWrapper; 
+				}
+				else
+				{
+					SecurityWrapper wrapper = new SecurityAttributesDataLib().GetSecurityWrapper();
+					_getRoleTypes = wrapper.RoleTypes;
+					_getSecurityAttributes = wrapper.SecurityAttributes.OrderBy(x => x.ATRB_CD);
+					_getSecurityMasks = wrapper.SecurityMasks;
+					return wrapper;
+				}
             }
         }
+		// TODO: Implement when roles are in db
+		//public static SecurityWrapper GetRoleTypes()
+		//{
+		//	return GetSecurityWrapper();
+		//}
 
-        public static SecurityWrapper GetRoleTypes()
-        {
-            return GetSecurityWrapper();
-        }
+		public static IEnumerable<SecurityAttribute> GetSecurityAttributes()
+		{
+			return GetSecurityWrapper().SecurityAttributes;
+		}
 
-        public static SecurityWrapper GetSecurityActions()
-        {
-            return GetSecurityWrapper();
-        }
-
-        public static SecurityWrapper GetSecurityMasks()
-        {
-            return GetSecurityWrapper();
-        }
-
-        private static IEnumerable<OpRoleType> _getRoleTypes;
-        private static IEnumerable<SecurityAttribute> _getSecurityActions;
+		public static IEnumerable<SecurityMask> GetSecurityMasks()
+		{
+			return GetSecurityWrapper().SecurityMasks;
+		}
+		
+		private static SecurityWrapper _getSecurityWrapper;
+		private static IEnumerable<OpRoleType> _getRoleTypes;
+		private static IEnumerable<SecurityAttribute> _getSecurityAttributes;
         private static IEnumerable<SecurityMask> _getSecurityMasks;
+		
+		public static List<SecurityAttributesDropDown> GetObjAtrbs()
+		{
+			lock (LOCK_OBJECT ?? new object())
+			{
+				return _getObjAtrbs ?? (_getObjAtrbs = new SecurityAttributesDataLib().GetObjAtrbs());
+			}
+		}
+		private static List<SecurityAttributesDropDown> _getObjAtrbs;
 
-        public static IEnumerable<DcsSoldTo> GetSoldToData()
+		#endregion
+
+		#region Security Attributes
+		public static List<AdminApplications> GetAdminApplications()
+		{
+			lock (LOCK_OBJECT ?? new object())
+			{
+				return _getAdminApplications ?? (_getAdminApplications = new SecurityAttributesDataLib().GetAdminApplications());
+			}
+		}
+		private static List<AdminApplications> _getAdminApplications;
+		public static List<AdminDealType> GetAdminDealTypes()
+		{
+			lock (LOCK_OBJECT ?? new object())
+			{
+				return _getAdminDealTypes ?? (_getAdminDealTypes = new SecurityAttributesDataLib().GetAdminDealTypes());
+			}
+		}
+		private static List<AdminDealType> _getAdminDealTypes;
+		public static List<AdminRoleType> GetAdminRoleTypes()
+		{
+			lock (LOCK_OBJECT ?? new object())
+			{
+				return _getAdminRoleTypes ?? (_getAdminRoleTypes = new SecurityAttributesDataLib().GetAdminRoleTypes());
+			}
+		}
+		private static List<AdminRoleType> _getAdminRoleTypes;
+
+		public static List<SecurityActions> GetSecurityActions()
+		{
+			lock (LOCK_OBJECT ?? new object())
+			{
+				return _getSecurityActions ?? (_getSecurityActions = new SecurityAttributesDataLib().GetSecurityActions());
+			}
+		}
+		private static List<SecurityActions> _getSecurityActions;
+		#endregion
+
+		public static IEnumerable<DcsSoldTo> GetSoldToData()
         {
             lock (LOCK_OBJECT ?? new object())
             {
@@ -286,19 +341,19 @@ namespace Intel.MyDeals.DataLibrary
             {
                 return new AttributeCollection(GetAttributeMasterDataDictionary(), GetOpAtrbMapItems());
             }
-        }
+		}
 
-        public static List<MyDealsActionItem> GetDealActions()
-        {
-            lock (LOCK_OBJECT ?? new object())
-            {
-                return _getDealActions ?? (_getDealActions = new SecurityAttributesDataLib().GetDealActions());
-            }
-        }
+		public static List<MyDealsActionItem> GetDealActions()
+		{
+			lock (LOCK_OBJECT ?? new object())
+			{
+				return _getDealActions ?? (_getDealActions = new SecurityAttributesDataLib().GetDealActions());
+			}
+		}
 
-        private static List<MyDealsActionItem> _getDealActions;
+		private static List<MyDealsActionItem> _getDealActions;
 
-        public static TemplateWrapper GetTemplateWrapper()
+		public static TemplateWrapper GetTemplateWrapper()
         {
             lock (LOCK_OBJECT ?? new object())
             {
@@ -349,7 +404,7 @@ namespace Intel.MyDeals.DataLibrary
         }
 
         private static List<CustomerDivision> _getCustomerDivisions;
-
+		
         public static List<Product> GetProductData()
         {
             lock (LOCK_OBJECT ?? new object())

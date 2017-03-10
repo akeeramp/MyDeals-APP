@@ -8,22 +8,16 @@ namespace Intel.MyDeals.Entities
 {
     public class SecurityWrapper
     {
-        public SecurityWrapper(List<OpRoleType> opRoleTypes, List<SecurityAttribute> securityAttributes, List<SecurityMask> securityMasks, List<AdminDealType> adminDealType = null, List<AdminRoleType> adminRoleType = null)
+        public SecurityWrapper(List<OpRoleType> opRoleTypes, List<SecurityAttribute> securityAttributes, List<SecurityMask> securityMasks)
         {
             RoleTypes = opRoleTypes;
             SecurityAttributes = securityAttributes;
 			SecurityMasks = securityMasks;
-			AdminDealType = adminDealType;
-			AdminRoleType = adminRoleType;
 		}
 
         public List<OpRoleType> RoleTypes { get; set; }
         public List<SecurityAttribute> SecurityAttributes { get; set; }
         public List<SecurityMask> SecurityMasks { get; set; }
-
-		public List<AdminDealType> AdminDealType { get; set; }
-		public List<AdminRoleType> AdminRoleType { get; set; }
-		//public List<AdminStages> AdminStages { get; set; }
 
 
         public string DefineBaseKey(OpDataElementType opDataElementType, OpRoleType opRoleType, string wfStage, string actionCd, string atrbCd)
@@ -45,7 +39,7 @@ namespace Intel.MyDeals.Entities
             if (securityActionCache.ContainsKey(secBaseKey)) return securityActionCache[secBaseKey];
 
             SecurityAttribute sa = (from el in SecurityAttributes
-                                 where el.FACT_ATRB_CD.Trim() == atrbCd.Trim()
+                                 where el.ATRB_CD.Trim() == atrbCd.Trim()
                                  select el).FirstOrDefault();
 
             if (sa == null)
@@ -57,10 +51,10 @@ namespace Intel.MyDeals.Entities
 
             IEnumerable<string> localSecurityMasks =
                 (from el in SecurityMasks
-                 where (el.ACTN_CD == actionCd || el.ACTN_CD == null)
-                       && (el.OBJ_TYPE == opDataElementType.ToString() || el.OBJ_TYPE == null)
-                       && (el.ROLE_TYPE_CD == opRoleType.RoleTypeCd || el.ROLE_TYPE_CD == null)
-                       && (el.WFSTG_CD == wfStage || el.WFSTG_CD == null)
+                 where (el.ACTN_NM == actionCd || el.ACTN_NM == null)
+                       && (el.OBJ_SET_TYPE_CD == opDataElementType.ToString() || el.OBJ_SET_TYPE_CD == null)
+                       && (el.ROLE_NM == opRoleType.RoleTypeCd || el.ROLE_NM == null)
+                       && (el.WFSTG_NM == wfStage || el.WFSTG_NM == null)
                  select el.PERMISSION_MASK);
 
             if (!localSecurityMasks.Any())
@@ -88,11 +82,12 @@ namespace Intel.MyDeals.Entities
         {
             // TODO add obj type nad obj set type to collection
             return (from el in SecurityMasks
-                    where (el.ACTN_CD == null || el.ACTN_CD == "0" || el.ACTN_CD.Trim() == actionCd)
-                          && (el.OBJ_TYPE == null || el.OBJ_TYPE == "0" || el.OBJ_TYPE == opDataElementType.ToString())
-                          && (el.OBJ_TYPE == null || el.OBJ_TYPE == "0" || el.OBJ_TYPE == opDataElementSetType.ToString())
-                          && (el.ROLE_TYPE_CD == null || el.ROLE_TYPE_CD == "0" || el.ROLE_TYPE_CD == roleTypeCd)
-                          && (el.WFSTG_CD == wfStage || el.WFSTG_CD == null || el.WFSTG_CD == "0")
+                    where (el.ACTN_NM == null || el.ACTN_NM == "0" || el.ACTN_NM.Trim() == actionCd)
+                        // TODO: Ask db guys to add OBJ_TYPE_CD into the PR_GET_SECUR_MASK SP. I think Andrew was having trouble with this the other day.   
+						//&& (el.OBJ_TYPE_CD == null || el.OBJ_TYPE_CD == "0" || el.OBJ_TYPE_CD == opDataElementType.ToString())
+                          && (el.OBJ_SET_TYPE_CD == null || el.OBJ_SET_TYPE_CD == "0" || el.OBJ_SET_TYPE_CD == opDataElementSetType.ToString())
+                          && (el.ROLE_NM == null || el.ROLE_NM == "0" || el.ROLE_NM == roleTypeCd)
+                          && (el.WFSTG_NM == wfStage || el.WFSTG_NM == null || el.WFSTG_NM == "0")
                     select el.PERMISSION_MASK).Any();
         }
     }

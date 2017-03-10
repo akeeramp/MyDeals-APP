@@ -1,5 +1,6 @@
 ﻿using Intel.MyDeals.Entities;
 using Intel.Opaque;
+using System;
 using System.Collections.Generic;
 
 namespace Intel.MyDeals.IBusinessLogic
@@ -27,7 +28,8 @@ namespace Intel.MyDeals.IBusinessLogic
         List<SecurityActions> GetSecurityActions();
 
         SecurityWrapper GetSecurityMasks();
-		Dictionary<string, List<string>> GetDealTypeAtrbs();
+
+		Dictionary<string, Dictionary<string, List<string>>> GetObjAtrbs();
 
         AdminApplications ManageAdminApplication(AdminApplications app, CrudModes state);
 
@@ -36,6 +38,8 @@ namespace Intel.MyDeals.IBusinessLogic
         AdminRoleType ManageAdminRoleType(AdminRoleType roleType, CrudModes state);
 
         SecurityActions ManageSecurityAction(SecurityActions action, CrudModes state);
+
+		bool SaveSecurityMappings(List<SecurityMapSave> saveMappings);
 
 	}
 }

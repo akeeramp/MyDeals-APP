@@ -4,289 +4,331 @@
         .module('app.admin')
         .controller('securityEngineController', securityEngineController)
 
-    securityEngineController.$inject = ['$scope', 'logger', 'SecurityEngineService', 'confirmationModal', 'gridConstants', 'SecUtil']
+    securityEngineController.$inject = ['$scope', 'logger', 'SecurityEngineService', 'lookupsService', 'confirmationModal', 'gridConstants', 'SecUtil','$filter', '$q']
 
-    function securityEngineController($scope, logger, SecurityEngineService, confirmationModal, gridConstants, SecUtil) {
+    function securityEngineController($scope, logger, SecurityEngineService, lookupsService, confirmationModal, gridConstants, SecUtil, $filter, $q) {
     	var vm = this;
 				
     	// Functions
     	vm.clickHelpButton = clickHelpButton;
     	vm.getGridData = getGridData;
-    	vm.drawDealTypes = drawDealTypes;
     	vm.drawRoles = drawRoles;
-    	vm.selectMode = selectMode;
+    	vm.selectTabMode = selectTabMode;
     	vm.clickBox = clickBox;
     	vm.save = save;
     	vm.reset = reset;
     	vm.magicWandSelect = magicWandSelect;
-
+    	vm.onGroupChange = onGroupChange;
 
     	// Variables     
-    	vm.modeEnum = {
+    	vm.tabModeEnum = {
     		AtrbSecurity: 'Attribute Security',
     		DealSecurity: 'Deal Security'
     	};
-    	vm.currentTabMode = vm.modeEnum.AtrbSecurity;
+    	vm.currentTabMode = vm.tabModeEnum.AtrbSecurity;
+    	vm.pendingSaveArray = []; 
+
+    	var bestGuessAttributes = ["BACK_DATE_RSN", "BACK_DATE_RSN_TXT", "BLLG_DT", "BOM_SYSTEM_CONFIG", "CA_DATA_CA_ID", "CAP", "COMMENT_HISTORY", "COMMENTS", "COMP_PRICE_CPU", "COMP_PRICE_CS", "COMP_PRODUCT_CPU_OTHER", "COMP_PRODUCT_CS_OTHER", "COMP_TARGET_SYSTEM_PRICE", "COMPETITIVE_NAME", "COMPETITIVE_PRICE", "COMPETITIVE_PRODUCT", "COMPETITIVE_PRODUCT_CPU", "COMPETITIVE_PRODUCT_CS", "CONSUMPTION_REASON", "CONSUMPTION_REASON_CMNT", "DEAL_CORP_ACCNT_DIV", "COST_TEST_OVERRIDE", "COST_TEST_RESULT", "CPU_SPLIT", "CREDIT_AMT", "CREDIT_VOLUME", "CS_SHIP_AHEAD_DT", "CS_SHIP_AHEAD_END_DT", "CS_SHIP_AHEAD_STRT_DT", "CS_SPLIT", "CUST_MBR_SID", "DEAL_CORP_ACCNT_DIV", "DEAL_CUST_DIV_NM", "DEAL_CUST_NM", "DEAL_DESC", "DEAL_MSP_PRC", "DEAL_NBR", "DEAL_PGM_TYPE", "DEAL_PRC_CONFLICT", "DEAL_SOLD_TO_ID", "DEAL_STG_CD", "OBJ_SET_TYPE_CD", "DEBIT_AMT", "DEBIT_VOLUME", "DIVISION_APPROVAL_PRICE", "DIVISION_APPROVED_LIMIT", "ECAP_PRICE", "ECAP_TYPE", "END_CAP", "END_CUSTOMER_RETAIL", "END_DT", "END_VOL", "EXPIRE_YCS", "IDMS_SHEET_COMMENT", "LAST_MOD_BY", "LAST_MOD_DT", "LEGAL_COMMENTS", "LINE_NBR", "MARKET_SEGMENT", "MEETCOMP_TEST_RESULT", "MRKT_SEG", "MRKT_SEG_COMBINED", "NORTHBRIDGE_SPLIT", "NUM_OF_TIERS", "ON_ADD_DT", "ORIG_ECAP_TRKR_NBR", "PAYOUT_BASED_ON", "PROGRAM_PAYMENT", "PNL_SPLIT", "PnL_Split_for_KITS", "PORTFOLIO", "PRD_NM_COMBINED", "PRODUCT_FILTER", "PRODUCT_TITLE", "PROG_VOLTIER_NM", "PROGRAM_GEO", "PROGRAM_GEO_COMBINED", "PGM_PAYMENT", "PROGRAM_TYPE", "PROGRAM_TYPE_VOL_TIER", "QLTR_PROJECT", "QLTR_TERMS", "RATE", "RATE_BASED_ON", "REBATE_BILLING_END", "REBATE_BILLING_START", "REBATE_DEAL_ID", "REQ_BY", "REQ_DT", "RETAIL_CYCLE", "RETAIL_PULL", "RETAIL_SHP_AHEAD_DT", "SA_COST_TEST_RESULTS", "SERVER_DEAL_TYPE", "SOUTHBRIDGE_SPLIT", "START_DT", "STRT_CAP", "STRT_VOL", "TENDER_PRICE", "TIER_NBR", "TOTAL_DOLLAR_AMOUNT", "TRGT_RGN", "TRKR_END_DT", "TRKR_NBR", "TRKR_START_DT", "VOLUME", "YCS_OVERLAP_OVERRIDE"];
+    	var bestGuessActions = ["CAN_CREATE_QTR_RETRO_DEALS", "CAN_CREATE_RETRO_DEALS", "CAN_MANAGE_CHIPSET_SPLITOUT", "CAN_MANAGE_COMPETITIVE_PRODUCTS", "CAN_MANAGE_EMAIL", "CAN_REMOVE_WB_LOCK", "CAN_VIEW_COST_TEST", "CAN_VIEW_LEGAL_COMMENTS", "CAN_VIEW_MEET_COMP", "C_ADD_ATTACHMENTS", "C_APPROVE ", "C_CAN_VIEW_ADMINTOOL", "C_CAN_VIEW_C2A_INTERFACE", "C_COPY_DEAL", "C_CREATE_DEAL", "C_FAST_TRACK", "C_IDMS_ACTION_DISABLED ", "C_IDMS_READ_ONLY ", "C_REJECT_DEAL", "C_REQ_COMPONENTS", "C_UPDATE_DEAL", "C_VIEW_ATTACHMENTS", "C_VIEW_QUOTE_LETTER", "DEAL_READ_ONLY"];
 
     	vm.dropDownDatasource = {};
     	vm.dropDownDatasource.actions = [];
     	vm.dropDownDatasource.attributes = [];
+    	vm.dropDownDatasource.dealActions = [];
     	vm.dropDownDatasource.dealTypes = [];
     	vm.dropDownDatasource.roleTypes = [];
     	vm.dropDownDatasource.stages = [];
+    	vm.dropDownDatasource.objTypes = [];
+
+    	vm.drilledDownDealTypes = [];
 		
+    	vm.currentDisplayAction = ""; // Text of current action to show in UI
+
     	vm.selected = {}; // holds the user input of dropdown values
-    	vm.selected.action = null;
-    	vm.selected.actionDefaultName = "ATRB_REQUIRED";
+    	vm.selected.attrAction = null;
     	vm.selected.attributes = [];
     	vm.selected.dealTypes = [];
     	vm.selected.roles = [];
     	vm.selected.stages = [];
+    	vm.selected.objType = null;
+
+    	vm.default = {};
+    	vm.default.attrActionName = "ATRB_REQUIRED";
+    	vm.default.objTypeName = "CNTRCT";
 
     	vm.filtered = {}; // A copy of vm.selected's values to create the grid
     	vm.filtered.attributes = {};
 		
-		vm.isDropdownsLoaded = false; // Determines load for k-ng-delay on dropdowns
-
-    	vm.dealTypeAtrbs = []; // TODO: How do we get this from db? Find out.
-
-    	var secAtrbUtil = {};
-    	secAtrbUtil.maskMappings = {};
-    	secAtrbUtil.securityMappings = {};
-
-		// DROPDOWN VALUES
-        vm.dropDownOptions = [];
-        vm.dropDownOptions.dealType = {
-        	placeholder: "All Deal Types",
-        	valuePrimitive: true,
-        	autoBind: false,
-        	dataTextField: "Second",
-        	dataSource: {
-        		type: "json",
-        		serverFiltering: true,
-        		transport: {
-        			read: function (e) {
-        				e.success(vm.dropDownDatasource.dealTypes);
-        			}
-        		}
-        	}
-        };
-        vm.dropDownOptions.roleType = {
-        	placeholder: "All Roles",
-        	valuePrimitive: true,
-        	autoBind: false,
-        	dataTextField: "Second",
-        	dataSource: {
-        		type: "json",
-        		serverFiltering: true,
-        		transport: {
-        			read: function (e) {
-        				e.success(vm.dropDownDatasource.roleTypes);
-        			}
-        		}
-        	}
-        };
-        vm.dropDownOptions.wfStage = {
-        	placeholder: "All Stages",
-        	valuePrimitive: true,
-        	autoBind: false,
-        	dataTextField: "Second",
-        	dataSource: {
-        		type: "json",
-        		serverFiltering: true,
-        		transport: {
-        			read: function (e) {
-        				e.success(vm.dropDownDatasource.stages);
-        			}
-        		}
-        	}
-        };
-        vm.dropDownOptions.attrAction = {
-        	valuePrimitive: true,
-        	autoBind: false,
-        	dataTextField: "Second",
-        	//dataValueField: "Second",
-        	dataSource: {
-        		type: "json",
-        		serverFiltering: true,
-        		transport: {
-        			read: function (e) {
-        				e.success(vm.dropDownDatasource.actions);
-        			}
-        		}
-        	}
-        };
-        vm.dropDownOptions.attributes = {
-        	placeholder: "All Attributes",
-        	dataTextField: "FACT_ATRB_CD",
-        	valuePrimitive: true,
-        	autoBind: false,
-        	dataSource:  {
-        		type: "json",
-        		serverFiltering: true,
-        		transport: {
-        			read: function (e) {
-        				e.success(vm.dropDownDatasource.attributes);
-        			}
-        		}
-        	}
-        }
+    	vm.isDropdownsLoaded = false; // Determines load for k-ng-delay on dropdowns
+    	vm.isShowMainContent = false;
+    	vm.isGridLoading = false; // Determines if the grid's loading message shows
+    	vm.dealTypeAtrbs = []; 
 		
+    	vm.secAtrbUtil = {};
+    	vm.secAtrbUtil.maskMappings = {};
+    	vm.secAtrbUtil.securityMappings = {};
 
+    	// DROPDOWN VALUES
+    	vm.dropDownOptions = [];
+    	vm.dropDownOptions.dealType = {
+    		placeholder: "All Deal Types",
+    		autoBind: false,
+    		dataTextField: "Alias",
+    		dataSource: {
+    			type: "json",
+    			serverFiltering: true,
+    			transport: {
+    				read: function (e) {
+    					e.success(vm.drilledDownDealTypes);
+    				}
+    			}
+    		}
+    	};
+    	vm.dropDownOptions.roleType = {
+    		placeholder: "All Roles",
+    		autoBind: false,
+    		dataTextField: "dropdownName",
+    		dataSource: {
+    			type: "json",
+    			serverFiltering: true,
+    			transport: {
+    				read: function (e) {
+    					e.success(vm.dropDownDatasource.roleTypes);
+    				}
+    			}
+    		}
+    	};
+    	vm.dropDownOptions.wfStage = {
+    		placeholder: "All Stages",
+    		autoBind: false,
+    		dataTextField: "Second",
+    		dataSource: {
+    			type: "json",
+    			serverFiltering: true,
+    			transport: {
+    				read: function (e) {
+    					e.success(vm.dropDownDatasource.stages);
+    				}
+    			}
+    		}
+    	};
+    	vm.dropDownOptions.attrAction = {
+    		optionLabel: "Default (ATRB_REQUIRED)",
+    		autoBind: false,
+    		dataTextField: "dropdownName",
+    		//dataValueField: "dropdownID",
+    		dataSource: {
+    			type: "json",
+    			serverFiltering: true,
+    			transport: {
+    				read: function (e) {
+    					var filteredData = $filter('filter')(vm.dropDownDatasource.actions, { subCategory: 'Attribute' }, true);
+    					e.success(filteredData);
+    				}
+    			}
+    		}
+    	};
+    	vm.dropDownOptions.attributes = {
+    		placeholder: "All Attributes",
+    		dataTextField: "ATRB_CD",
+    		dataValueField: "ATRB_SID",
+    		valuePrimitive: false,
+    		autoBind: false,
+    		dataSource: {
+    			type: "json",
+    			serverFiltering: true,
+    			transport: {
+    				read: function (e) {
+    					e.success(vm.dropDownDatasource.attributes);
+    				},
+    				create: function (e) {
+    					e.preventDefault();
 
-        function init() {
-        	// Get dropdown data and security mask data
-        	Promise.all([
-				// Dropdown data
-				getSecurityDropdownData()
-        	])
-			.then(function () {
-				Promise.all([
-					// Security mask data (secAtrbUtil)
-					getSecurityMask(),
-					getDealTypeAtrbs()
-				])
-				.then(function () {
-					vm.isDropdownsLoaded = true;
-				});
-			});
-        }
+    				},
+    			}
+    		}
+    	};
+    	vm.dropDownOptions.dealAction = {
+    		autoBind: false,
+    		dataTextField: "dropdownName",
+    		dataSource: {
+    			type: "json",
+    			serverFiltering: true,
+    			transport: {
+    				read: function (e) {
+    					var filteredData = $filter('filter')(vm.dropDownDatasource.actions, { subCategory: 'Deal' }, true);
+    					e.success(filteredData);
+    				}
+    			}
+    		}
+    	};
+    	vm.dropDownOptions.objType = {
+    		optionLabel: "Default (CNTRACT)",
+    		autoBind: false,
+    		select: vm.onGroupChange,
+    		dataTextField: "Alias",
+    		dataSource: {
+    			type: "json",
+    			serverFiltering: true,
+    			transport: {
+    				read: function (e) {
+    					e.success(vm.dropDownDatasource.objTypes);
+    				}
+    			}
+    		}
+    	};
+
+    	function init() {
+    		getSecurityDropdownData().then(function () {
+    			getObjAtrbs().then(function () {
+    				getSecurityMask().then(function () {
+    					vm.isDropdownsLoaded = true;
+    				});
+    			});
+    		});
+    	}
 				
-        function getSecurityMask() {
-        	return new Promise(function(resolve, reject) {
-        		SecurityEngineService.getMasks()
+    	function getSecurityMask() {
+    		var deferred = $q.defer();
+    			SecurityEngineService.getMasks()
 					.then(function (response) {
 						vm.dropDownDatasource.attributes = response.data.SecurityAttributes;
 						processMaskData(response.data);
-						resolve();
+						deferred.resolve(response);
 					}, function (error) {
 						logger.error("Unable to get Security Masks.", error, error.statusText);
-						reject();        			
+						deferred.reject();	
 					});
-        	})
-        }
+    		return deferred.promise;
+    	}
 
-        function getDealTypeAtrbs() {
-        	return new Promise(function (resolve, reject) {
-				SecurityEngineService.getDealTypeAtrbs()
+    	function getObjAtrbs() {
+    		var deferred = $q.defer();
+    			SecurityEngineService.getObjAtrbs()
 					.then(function (response) {
 						vm.dealTypeAtrbs = response.data;
-						resolve(response.data);
+						var defaultObjType = $filter('filter')(vm.dropDownDatasource.objTypes, { Alias: vm.default.objTypeName }, true)[0];
+						vm.drilledDownDealTypes = filterObjType(defaultObjType.Alias);
+						deferred.resolve(response);
 					}, function (error) {
 						logger.error("Unable to get Deal Type Attributes.", error, error.statusText);
-						reject();
+						deferred.reject();
 					});
-			})
-        }
+    		return deferred.promise;
+    	}
 		
-        function getSecurityDropdownData() {
-        	return new Promise(function (resolve, reject) {
-        		SecurityEngineService.getSecurityDropdownData()
+    	function getSecurityDropdownData() {
+    		var deferred = $q.defer();
+    			SecurityEngineService.getSecurityDropdownData()
 					.then(function (response) {
 						vm.dropDownDatasource.actions = response.data.SecurityActions;
 						vm.dropDownDatasource.dealTypes = response.data.AdminDealTypes;
 						vm.dropDownDatasource.roleTypes = response.data.AdminRoleTypes;
 						vm.dropDownDatasource.stages = response.data.WorkFlowStages;
-						resolve();
+						vm.dropDownDatasource.objTypes = response.data.ObjTypes;
+						deferred.resolve(response);
 					}, function (error) {
 						logger.error("Unable to get dropdown data.", error, error.statusText);
-						reject();
+						deferred.reject();
 					});
-        	})
-        }
+    		return deferred.promise;
+    	}
 
-        function processMaskData(data) {
-        	////TODO: Re-evaluate if we need this depending on whether or not we can just get attrib list  from db directly
-        	//// Get the attributes list from the mask data
-        	//for (var key in data.SecurityAttributes) {
-        	//	if (data.SecurityAttributes.hasOwnProperty(key)) {
-        	//		secAtrbUtil.attributes.push({
-        	//			Attribute: data.SecurityAttributes[key].FACT_ATRB_CD
-        	//		});
-        	//	}
-        	//}
+    	function processMaskData(data) {			
+
+    		// Security Mask 
+    		for (var i = 0; i < data.SecurityMasks.length; i++) {
+    			var mData = data.SecurityMasks[i];
+								
+    			// Does security mask have a things that are not just "0"?
+    			if (mData.PERMISSION_MASK.replace(/0/g, "").replace(/\./g, "") !== "") {
+
+    				// Determine accesses from mask's hex values
+    				if (vm.secAtrbUtil.maskMappings[mData.PERMISSION_MASK] === undefined) {
+    					vm.secAtrbUtil.maskMappings[mData.PERMISSION_MASK] = SecUtil.ChkAtrbRulesBase(mData.PERMISSION_MASK, data.SecurityAttributes);
+    				}
+
+    				// Select current filters / all filter data
+    				var curAction = mData.ACTN_NM;
+    				var curDealType = (mData.OBJ_SET_TYPE_CD === null || mData.OBJ_SET_TYPE_CD === "null" || mData.OBJ_SET_TYPE_CD === "") ? vm.dropDownDatasource.dealTypes.map(function (x) { return x.Alias; }) : [mData.OBJ_SET_TYPE_CD];
+    				var curStage = (mData.WFSTG_NM === null || mData.WFSTG_NM === "null" || mData.WFSTG_NM === "") ? vm.dropDownDatasource.stages.map(function (x) { return x.Second; }) : [mData.WFSTG_NM];
+    				var curRole = (mData.ROLE_NM === null || mData.ROLE_NM === "null" || mData.ROLE_NM === "") ? vm.dropDownDatasource.roleTypes.map(function (x) { return x.dropdownName; }) : [mData.ROLE_NM];
+
+    				// If not already in the mappings list, then create it
+    				if (vm.secAtrbUtil.securityMappings[curAction] === undefined) vm.secAtrbUtil.securityMappings[curAction] = {};
+
+    				// Update/create the mapping with the current role, deal type, and stage ... for every role, deal type, and stage
+    				for (var d = 0; d < curDealType.length; d++) {
+    					for (var r = 0; r < curRole.length; r++) {
+    						for (var s = 0; s < curStage.length; s++) {
+    							for (var v = 0; v < vm.secAtrbUtil.maskMappings[mData.PERMISSION_MASK].length; v++) {
+    								// Create security mapping, which we will use to color-in or not color-in blocks
+    								var secKey = vm.secAtrbUtil.maskMappings[mData.PERMISSION_MASK][v] + "/" + curDealType[d] + "/" + curRole[r] + "/" + curStage[s];
+    								vm.secAtrbUtil.securityMappings[curAction][secKey] = 1;
+    							}
+    						}
+    					}
+    				}
+    			}
+    		}
+    	}
+
+    	function getGridData() {
+    		vm.isShowMainContent = true;
+    		vm.isGridLoading = true;
+    		$scope.$apply;
+    		// clear pending save array
+    		vm.pendingSaveArray = [];
 			
-
-        	// Security Mask 
-        	for (var i = 0; i < data.SecurityMasks.length; i++) {
-        		var mData = data.SecurityMasks[i];
-				
-        		//// TODO: Re-evaluate if we need this depending on whether or not we can just get/filter the data from db directly
-				//// Create lists for the Security Attributes tab or the Deal Security tab's action dropdowns
-        		//if (secAtrbUtil.atrbActionCds.contains(mData.ACTN_CD)) {
-        		//	// atrbAcAttribute Security Tab's Attribute Action dropdown
-        		//	secAtrbUtil.atrbActions.pushIfNotExist({ ACTN_CD: mData.ACTN_CD }, function (e) {
-        		//		return e.ACTN_CD === mData.ACTN_CD;
-        		//	});
-        		//} else {
-        		//	// Deal Security Tab' Attributes Attribute Action dropdown
-        		//	secAtrbUtil.actions.pushIfNotExist({ ACTN_CD: mData.ACTN_CD }, function (e) {
-        		//		return e.ACTN_CD === mData.ACTN_CD;
-        		//	});
-        		//}
-				
-        		// Does security mask have a things that are not just "0"?
-        		if (mData.PERMISSION_MASK.replace(/0/g, "").replace(/\./g, "") !== "") {
-
-					// Determine accesses from mask's hex values
-        			if (secAtrbUtil.maskMappings[mData.PERMISSION_MASK] === undefined) {
-        				secAtrbUtil.maskMappings[mData.PERMISSION_MASK] = SecUtil.ChkAtrbRulesBase(mData.PERMISSION_MASK, data.SecurityAttributes);
-        			}
-
-        			// Select current filters / all filter data
-        			var curAction = mData.ACTN_CD;
-        			var curDealType = (mData.OBJ_TYPE === null || mData.OBJ_TYPE === "null") ? vm.dropDownDatasource.dealTypes.map(function (x) { return x.Second; }) : [mData.OBJ_TYPE];
-        			var curStage = (mData.WFSTG_CD === null || mData.WFSTG_CD === "null") ? vm.dropDownDatasource.stages.map(function (x) { return x.Second; }) : [mData.WFSTG_CD];
-        			var curRole = (mData.ROLE_TYPE_CD === null || mData.ROLE_TYPE_CD === "null") ? vm.dropDownDatasource.roleTypes.map(function (x) { return x.Second; }) : [mData.ROLE_TYPE_CD];
-
-        			// If not already in the mappings list, then create it
-        			if (secAtrbUtil.securityMappings[curAction] === undefined) secAtrbUtil.securityMappings[curAction] = {};
-
-        			// Update/create the mapping with the current role, deal type, and stage ... for every role, deal type, and stage
-        			// TODO: this is a lot of data... (>200 * 4? * Y * Y * Y) Maybe find a better way to do this?
-        			for (var d = 0; d < curDealType.length; d++) {
-        				for (var r = 0; r < curRole.length; r++) {
-        					for (var s = 0; s < curStage.length; s++) {
-        						for (var v = 0; v < secAtrbUtil.maskMappings[mData.PERMISSION_MASK].length; v++) {
-									// Create security mapping, which we will use to color-in or not color-in blocks
-        							var secKey = secAtrbUtil.maskMappings[mData.PERMISSION_MASK][v] + "/" + curDealType[d] + "/" + curRole[r] + "/" + curStage[s];
-        							secAtrbUtil.securityMappings[curAction][secKey] = 1;
-        						}
-        					}
-        				}
-        			}
-        		}
-        	}
-        }
-
-        function getGridData() {
-        	var actionDefault = null;
-
-			// Copy selected dropdown values
-        	vm.filtered = angular.copy(vm.selected);
-
-			// Get default selected action
-        	for (var i = 0; i < vm.dropDownDatasource.actions.length; i++){
-        		if (vm.dropDownDatasource.actions[i].Second == vm.selected.actionDefaultName) {
-        			actionDefault = angular.copy(vm.dropDownDatasource.actions[i]);
-        		}
-        	}
-
-        	// If no items are selected in each dropdown, then select default of all items
-        	if (vm.filtered.action == null || typeof vm.filtered.action === 'undefined') { vm.filtered.action = actionDefault; }
-        	if (vm.filtered.attributes.length == 0) { vm.filtered.attributes = angular.copy(vm.dropDownDatasource.attributes); }
-        	if (vm.filtered.dealTypes.length == 0) { vm.filtered.dealTypes = angular.copy(vm.dropDownDatasource.dealTypes); }
-        	if (vm.filtered.roles.length == 0) { vm.filtered.roles = angular.copy(vm.dropDownDatasource.roleTypes); }
-        	if (vm.filtered.stages.length == 0) { vm.filtered.stages = angular.copy(vm.dropDownDatasource.stages); }
+    		// Copy selected dropdown values
+    		vm.filtered = angular.copy(vm.selected);
 			
-        	generateGrid();
-        }		
+    		// If no items are selected in each dropdown, then select default of all items
+    		if (vm.filtered.dealTypes.length == 0) { vm.filtered.dealTypes = angular.copy(vm.drilledDownDealTypes); }
+    		if (vm.filtered.roles.length == 0) { vm.filtered.roles = angular.copy(vm.dropDownDatasource.roleTypes); }
+    		if (vm.filtered.stages.length == 0) { vm.filtered.stages = angular.copy(vm.dropDownDatasource.stages); }
+    		if (vm.filtered.objType == null || typeof vm.filtered.objType === 'undefined' || vm.filtered.objType.Id == null || typeof vm.filtered.objType.Id == 'undefined') {
+    			// Get the action object that corresponds to the attrActionName string
+    			vm.filtered.objType = $filter('filter')(vm.dropDownDatasource.objTypes, { Alias: vm.default.objTypeName }, true)[0];
+    		}
 
-        function generateGrid() {
-			// Make the Roles column
-        	var columns = [
+    		var objType = vm.filtered.objType
+
+			// Tab-specific logic
+    		if (vm.currentTabMode === vm.tabModeEnum.AtrbSecurity){ // Atrribute Security Tab
+    			if (vm.filtered.attributes.length == 0) { vm.filtered.attributes = angular.copy(vm.dropDownDatasource.attributes); }
+
+    			// Get default selected action if no selected action
+    			if (vm.filtered.attrAction == null || typeof vm.filtered.attrAction === 'undefined') {
+    				// Get the action object that corresponds to the attrActionName string
+    				vm.filtered.attrAction = $filter('filter')(vm.dropDownDatasource.actions, { dropdownName: vm.default.attrActionName }, true)[0];
+    			}
+    			vm.currentDisplayAction = vm.filtered.attrAction.dropdownName;
+    		} else if (vm.currentTabMode === vm.tabModeEnum.DealSecurity) { // Deal Security Tab
+    			vm.filtered.attributes = [];
+    			// Create attribute list out of the Deal Security's actions dropdown
+    			for(var i=0; i<vm.filtered.dealActions.length; i++){
+    				// TODO: perform saves on Deal Security via -1 bits
+    				vm.filtered.attributes.push({
+    					ATRB_BIT: -1,
+    					ATRB_MAGNITUDE: -1,
+    					ATRB_CD: angular.copy(vm.filtered.dealActions[i].dropdownName),
+    					ATRB_SID:  angular.copy(vm.filtered.dealActions[i].dropdownID) // Note: for deal security only, atrb ID is actually action ID, whcih will be used during saving
+    				});
+    			}
+    			vm.currentDisplayAction = "Deal Security";
+    		}
+    		lookupsService.asyncRenderHack().then(function () {
+    			generateGrid();
+    			vm.isGridLoading = false;
+    		});
+    	}		
+
+    	function generateGrid() {
+    		// Make the Roles column
+    		var columns = [
 				{
-					field: "FACT_ATRB_CD",
+					field: "ATRB_CD",
 					title: "Attribute/Action",
 					width: 140
 				},
@@ -296,219 +338,232 @@
 					width: 70,
 					template: "<span ng-bind-html='::vm.drawRoles()'></span>"
 				}
-        	];
+    		];
 
-        	// Push the stages as column (headers) of the grid
-        	for (var r = 0; r < vm.filtered.stages.length; r++) {
-        		var stgID = vm.filtered.stages[r].First;
-        		var stgName = vm.filtered.stages[r].Second;
-        		columns.push({
-        			title: stgName,
-        			encoded: false,
-        			width: 95,
-					// template is a directive work-around
-        			template: "<security-engine-draw-deals attr-id=\"#= data.ATRB_BIT #\" atrb-cd=\"#= data.FACT_ATRB_CD #\" stg-Id=\"" + stgID + "\" stg-name=\"" + stgName + "\"></security-engine-draw-deals>"
-        		});
-        	}
+    		var stageColWidth = (vm.filtered.dealTypes.length * 24);
+    		stageColWidth = (stageColWidth < 95) ? 95 : stageColWidth;
 
-        	vm.mainGridOptions = {
-        		dataSource: {
-        			type: "json",
-        			transport: {
-        				read: function (e) {
-        					e.success(vm.filtered.attributes);
-        				}
-        			},
-        			schema: {
-        				model: {
-        					fields: {
-        						Second: { type: "string" }
-        					}
-        				}
-        			}
-        		},
-        		toolbar: kendo.template($("#toolBarTemplate").html()),
-        		//filterable: gridConstants.filterable,
-        		sortable: true,
-        		selectable: true,
-        		resizable: true,
-        		scrollable: true,
-        		//pageable: {
-        		//	refresh: true,
-        		//	pageSizes: gridConstants.pageSizes,
-        		//},
-        		columns: columns
-        	}
+    		// Push the stages as column (headers) of the grid
+    		for (var r = 0; r < vm.filtered.stages.length; r++) {
+    			var stgID = vm.filtered.stages[r].First;
+    			var stgName = vm.filtered.stages[r].Second;
+    			columns.push({
+    				title: stgName,
+    				encoded: false,
+    				width: stageColWidth, 
+    				// HACK: template has a directive work-around to bind and compile html with angular
+    				template: "<security-engine-draw-deals attr-id=\"#= data.ATRB_SID #\" atrb-cd=\"#= data.ATRB_CD #\" stg-Id=\"" + stgID + "\" stg-name=\"" + stgName + "\"></security-engine-draw-deals>"
+    			});
+    		}
 
-        };
+    		vm.mainGridOptions = {
+    			dataSource: {
+    				type: "json",
+    				transport: {
+    					read: function (e) {
+    						e.success(vm.filtered.attributes);
+    					}
+    				},
+    				schema: {
+    					model: {
+    						fields: {
+    							ATRB_CD: { type: "string" }
+    						}
+    					}
+    				},
+    				selectable: "none"
+    			},
+    			toolbar: kendo.template($("#toolBarTemplate").html()),
+    			//filterable: gridConstants.filterable,
+    			sortable: true,
+    			selectable: true,
+    			resizable: true,
+    			scrollable: true,
+    			//pageable: {
+    			//	refresh: true,
+    			//	pageSizes: gridConstants.pageSizes,
+    			//},
+    			columns: columns
+    		}
 
-        function drawRoles() {
-        	var div = "<div class='atrbSubTitle rolebasecolor'>";
-        	return div + vm.filtered.roles.map(function(role){
-        		return role.Second; // role name
-        	}).join("</div>" + div) + "</div>";
-		};
+    	};
 
-
-    	/* 
-		 * This function will be called by the secDrawDeals directive 
-		 * RETURNS: Html of multiple deal boxes for each attribute, dealtype, role, and stage
-		 */
-        function drawDealTypes (atrbId, atrbCd, stgId, stgName) {        	
-        	var buf = "";
-        	var divStart = "<div style='margin: 1px;'>";
-        	var divEnd = "<div class='clearboth'></div></div>";
-			
-        	var clickableHtml = "";
-
-        	for (var r = 0; r < vm.filtered.roles.length; r++) {
-        		var role = vm.filtered.roles[r];
-        		buf += divStart;
-        		for (var d = 0; d < vm.filtered.dealTypes.length; d++) {        			
-					var dealType = vm.filtered.dealTypes[d];
-        			clickableHtml = "<div class='fl helloworld' ng-click='$parent.vm.clickBox(\"" + vm.filtered.action.First + "\", \"" + atrbId + "\", \"" + dealType.First + "\", " + role.First + ", \"" + stgId + "\")'>"
-
-        			// NOTE: Because this drawDealTypes() function is called in a directive, the $parent var must 
-        			// be defined to refer to this controller's scope. 
-        			// Essentially think $parent.vm.clickBox() = vm.clickBox()
-        			buf += drawDealType(atrbCd, dealType.Second, role.Second, stgName, clickableHtml);
-        		}
-        		buf += divEnd;
-        	}
-        	return buf;
-        };
+    	function drawRoles() {
+    		var div = "<div class='atrbSubTitle rolebasecolor'>";
+    		return div + vm.filtered.roles.map(function(role){
+    			return role.dropdownName; // role name
+    		}).join("</div>" + div) + "</div>";
+    	};
 
 
-    	/* RETURNS: Html of individual deal boxes */
-        function drawDealType(atrbCd, dealType, role, stgName, clickableHtml) {
-			// Variables that will help make the resulting html
-        	var extraClasses = [];
-        	var innerIcon = "";
-        	var isClickable = false;
-			
-        	// Get the current tab (Attribute Security or Deal Secuirty)
-        	var mappingKey = "";
-        	if (vm.currentTabMode === vm.modeEnum.AtrbSecurity) { // Attribute Security
-        		mappingKey = vm.filtered.action.Second;
-        	} else { // Deal Security
-        		mappingKey = atrbCd;
-        		atrbCd = "ACTIVE";
-        	}
-
-        	var actionCollection = secAtrbUtil.securityMappings[mappingKey];
-        	var title = "Deal Type: " + dealType + "\nRole: " + role + "\nStage: " + stgName + "\n";
-        	var atrbKey = atrbCd + "/" + dealType + "/" + role + "/" + stgName;
-			
-			/* Get classes and innerIcons */
-        	// Deal Read Only
-        	if (mappingKey === "ATRB_READ_ONLY" && secAtrbUtil.securityMappings["C_UPDATE_DEAL"][atrbKey.replace(atrbCd, 'ACTIVE')] === undefined) {
-        		isClickable = true;
-        		title += "Deal is Read Only\n";
-        		extraClasses.push("atrbbasecolorDealReadOnly"); 
-        		innerIcon += "<i class='fa fa-lock'></i>";
-        		//return "<div class='atrbbasecolor" + dealType.replace(/ /g, "") + " atrbContainer atrbbasecolorDealReadOnly' title='" + title + "'><i class='fa fa-lock'></i></div>";
-        	}
-        	// Not in Deal Type
-        	else if (vm.currentTabMode === vm.modeEnum.AtrbSecurity && atrbCd !== "ACTIVE" && vm.dealTypeAtrbs[dealType] !== undefined && !vm.dealTypeAtrbs[dealType].contains(atrbCd)) {
-        		extraClasses.push("atrbbasecolorNotInDealType");
-        		innerIcon += "&nbsp;";
-        		//return "<div class='atrbbasecolor" + dealType.replace(/ /g, "") + " atrbContainer atrbbasecolorNotInDealType' title='" + title + "'>&nbsp;</div>";
-        	}
-        	else if (actionCollection !== undefined) {
-        		//var rules = secAtrbUtil.ruleMappings[atrbKey]; // TODO: Implement Rules
-        		var val = actionCollection[atrbKey];
-        		if (val !== undefined) { // Normal MetaData
-        			isClickable = true;
-        			innerIcon += "&nbsp;";
-        			//return "<div class='atrbbasecolor" + dealType.replace(/ /g, "") + " atrbContainer ' title='" + title + "'>&nbsp;</div>";
-        		}
-        		//// TODO: Implement Rules
-        		//// Custom Rules
-        		//else if (rules !== undefined && rules !== null && rules.length > 0) {
-        		//    var ruleIcon = "<i class='fa fa-code'></i>";
-        		//    var ruleCnt = 0;
-        		//    for (var rl = 0; rl < rules.length; rl++) {
-        		//        ruleCnt++;
-        		//        if (ruleCnt > 1) {
-        		//            ruleIcon = "<i class='fa fa-calculator'></i>";
-        		//        } else {
-        		//            if (rules[rl].title.indexOf("NOTRACKER") === 0) ruleIcon = "<i class='fa'>!</i><i class='fa fa-paw'></i>";
-        		//            if (rules[rl].title.indexOf("TRACKER") === 0) ruleIcon = "<i class='fa fa-paw'></i>";
-        		//            if (rules[rl].title.indexOf("HISTORY") === 0) ruleIcon = "<i class='fa fa-history'></i>";
-        		//        }
-        		//        title += rules[rl].title + "\n";
-        		//    }
-        		//    extraClasses.push( " atrbbasedisabled ";
-        		//    innerIcon += ruleIcon;
-        		//    //return "<div class='atrbbasecolor" + dealType.replace(/ /g, "") + " fl atrbContainer atrbbasedisabled' title='" + title + "'>" + ruleIcon + "</div>";
-        		//}
-        		else {
-        			isClickable = true;
-        			innerIcon += "&nbsp;";
-        			extraClasses.push("atrbbasedisabled");
-        		}
-        	}
-        	//atrbbasedisabled
-        	else {
-        		isClickable = true;
-        		innerIcon += "&nbsp;";
-        		extraClasses.push("atrbbasedisabled");
-        		//return "<div class='atrbbasecolor" + dealType.replace(/ /g, "") + " atrbContainer atrbbasedisabled' title='" + title + "'>&nbsp;</div>";
-        	}
-
-			// Create element
-        	var el = "<div class='fl'>";
-        	el += ((isClickable) ? clickableHtml : "");
-        	el += "<div class='atrbbasecolor" + dealType.replace(/ /g, "") + " atrbContainer " + extraClasses.join(" ") + " " + ((isClickable) ? "clickable" : "") + "' ";
-        	el += "title='" + title + "'>";
-        	el += innerIcon;
-        	el += "</div>";
-        	el += ((isClickable) ? "</div>" : "");
-        	el += "</div>";
-
-        	return el;
-        };
-
-        function clickHelpButton() {
-        	// Confirmation Dialog
-        	var modalOptions = {
-        		closeButtonText: 'Close',
-        		hasActionButton: false,
-        		headerText: 'Help Text',
-        		bodyText: 'Start by selecting the role, stage and deal types to view.'
+    	function clickHelpButton() {
+    		// Confirmation Dialog
+    		var modalOptions = {
+    			closeButtonText: 'Close',
+    			hasActionButton: false,
+    			headerText: 'Help Text',
+    			bodyText: 'Start by selecting the role, stage and deal types to view.'
 					 + ' Leaving the select blank will default to ALL.'
 					 + ' Then, select either Attribute Security or Deal Security and enter remaining details.'
 					 + ' When done, click the View Security Attributes button.'
-        	};
-        	confirmationModal.showModal({}, modalOptions);
-        }
+    		};
+    		confirmationModal.showModal({}, modalOptions);
+    	}
 
-        function selectMode(modeName) {
-        	vm.currentTabMode = modeName;
-        }
 
-		/* When user clicks on an interactable box, then call this function to add the deal information to the array of pending-save security attributes */
-        function clickBox(actnId, attrId, dealId, roleId, stgId) {
-			// TODO: Write this
-        	console.log("TODO");
-        }
+    	function selectTabMode(modeName) {
+			// Select Mode
+    		vm.currentTabMode = modeName;
 
-        function save() {
-        	// TODO
-        	console.log("TODO");
+			// TODO: Clear previous tab's actions
+    	}
+		
+    	/* When user clicks on an interactable box, then call this function to add the deal information to the array of pending-save security attributes */
+    	function clickBox($event, actnId, actnCd, attrId, attrCd, dealId, dealCd, roleId, roleCd, stgId, stgCd) {
+    		var elem = angular.element($event.currentTarget);
+    		var child = elem.children("div:first");
+    		var isCurrChecked = !child.hasClass("atrbbasedisabled"); // Check if the box is currently checked on or off
+
+			// Note that the only the SIDS are saved, but the CDs are used to update the UI's grid data
+    		var objToSave = {
+    			ACTN_NM: actnCd,
+    			SECUR_ACTN_SID: actnId,
+    			ATRB_CD: attrCd,
+    			ATRB_SID: attrId,
+    			OBJ_TYPE: vm.filtered.objType.Alias,
+    			OBJ_TYPE_SID: vm.filtered.objType.Id,
+    			OBJ_SET_TYPE_CD: dealCd,
+    			OBJ_SET_TYPE_SID: dealId,
+				ROLE_NM: roleCd,
+				ROLE_SID: roleId,
+				WFSTG_NM: stgCd,
+				WFSTG_MBR_SID: stgId
+    			//isNowChecked: true, 
+    			//originallyChecked: false, // this is used to compare against isNowChecked to check if the value was modified
+				//isModified: true
+    		};
+
+    		// Is this the clickable colored-box element?
+    		if (!child.hasClass("atrbContainer")) {
+    			return;
+    		}
+
+    		child.addClass("attrbChanged");
+    		// Change checkBox css
+    		if (isCurrChecked) {	// It was checked orignally, so we're unchecking the box    
+    			// Change Box color to unchecked
+    			child.addClass("atrbbasedisabled");
+    		} else {	// It was unchecked orignally, so we're checking the box        	
+    			// Change Box color to checked
+    			child.removeClass("atrbbasedisabled");
+    		}
+
+    		var index = JSON.stringify(objToSave); // Make sure to make the index before flagging the obj or it won't be consistent!
+    		
+    		// Flag whether we are adding or deleting this map
+    		objToSave.isNowChecked = !isCurrChecked;
+
+    		if (vm.pendingSaveArray[index] != null) {
+    			// store orignallyChecked in case of another click on the colored box
+    			objToSave.originallyChecked = vm.pendingSaveArray[index].originallyChecked
+				// Check if the object was modified
+    			objToSave.isModified = (objToSave.originallyChecked != objToSave.isNowChecked);
+    		} else {
+    			objToSave.originallyChecked = !objToSave.isNowChecked;
+    			objToSave.isModified = true;
+    		}
+
+    		// Update Array
+    		vm.pendingSaveArray[index] = objToSave;
+        }
+				
+    	function save() {
+    		var saveArray = [];
+
+    		// Turn the js "Dictionary" into an array
+    		for (var key in vm.pendingSaveArray) {
+    			if (typeof vm.pendingSaveArray[key] === 'object') {
+    				var value = vm.pendingSaveArray[key];
+    				saveArray.push(value);
+    			}
+    		}
+
+    		var mappingList = $filter('filter')(saveArray, { isModified: true }, true);
+			
+    		SecurityEngineService.saveMapping(mappingList)
+				.then(function (response) {
+					logger.success('Update successful.');
+
+					for (var key in vm.pendingSaveArray) {
+						if (typeof vm.pendingSaveArray[key] === 'object') {
+							var value = vm.pendingSaveArray[key];
+							var secKey = value.ATRB_CD + "/" + value.OBJ_SET_TYPE_CD + "/" + value.ROLE_NM + "/" + value.WFSTG_NM;
+
+							if (value.isNowChecked) {
+								// Add new values to the security mask
+								vm.secAtrbUtil.securityMappings[value.ACTN_NM][secKey] = 1;
+							} else {
+								// Remove old values that were deleted from security mask
+								if (vm.secAtrbUtil.securityMappings[value.ACTN_NM][secKey] != null) {
+									delete vm.secAtrbUtil.securityMappings[value.ACTN_NM][secKey];// = 0;
+								}
+							}
+						}
+					}
+
+					// Clear attrbChanged classes
+					$('.attrbChanged').removeClass('attrbChanged');
+
+					// Clear pending array
+					vm.pendingSaveArray = [];
+
+				}, function (error) {
+					logger.error("Unable save Security Engine Mappings.", error, error.statusText);
+				});
         }
 
         function reset() {
-        	// TODO
-        	console.log("TODO");
+			// clear pending save array
+        	vm.pendingSaveArray = [];
+
+        	// Redraw the grid UI
+        	if (typeof $("#secEngineGrid").data('kendoGrid') != 'undefined') { // Is the grid initialized yet?
+        		vm.securityEngineGrid.dataSource.read(); // $("#secEngineGrid").data('kendoGrid').refresh(); 
+        	}
         }
 
         function magicWandSelect() {
-        	// TODO
-        	console.log("TODO");
+			// Reset
+        	vm.selected.attributes = [];
+
+        	for (var i = 0; i < bestGuessAttributes.length; i++) {
+        		var found = $filter('filter')(vm.dropDownDatasource.attributes, { ATRB_CD: bestGuessAttributes[i] }, true)[0];
+        		if (found != null) {
+        			vm.selected.attributes.push(found);
+        		}
+        	}
+
+        	$("#dropDownAttributes").data("kendoMultiSelect").value(vm.selected.attributes);
+        	vm.dropDown.dealSecurity;
         }
 
+        function onGroupChange(e) {
+        	// Note: kendo select event being called twice: once on click and once on deselect 
+        	vm.drilledDownDealTypes = filterObjType(e.dataItem.Alias);
 
+			// Update ObjSetType dropdown Datasource
+        	vm.dropDown.objSetType.setDataSource(vm.drilledDownDealTypes)
+        }
+
+        function filterObjType(objTypeName) {
+        	var filteredDeals = [];
+        	for (var key in vm.dealTypeAtrbs[objTypeName]) {
+        		if (typeof vm.dealTypeAtrbs[objTypeName][key] === 'object') {
+        			filteredDeals.push($filter('filter')(vm.dropDownDatasource.dealTypes, { Alias: key }, true)[0]);
+        		}
+        	}
+        	return filteredDeals;
+        }
 
         init();
     }

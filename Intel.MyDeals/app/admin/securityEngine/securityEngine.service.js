@@ -11,20 +11,25 @@
 		
         return {
         	getMasks: getMasks
-			, getDealTypeAtrbs: getDealTypeAtrbs
+			, getObjAtrbs: getObjAtrbs
 			, getSecurityDropdownData: getSecurityDropdownData
+			, saveMapping: saveMapping
         }
 
         function getMasks() {
         	return dataService.get(URL + 'GetSecurityWrapper');
         }
 				
-        function getDealTypeAtrbs() {
-        	return dataService.get(URL + 'GetDealTypeAtrbs');
+        function getObjAtrbs() {
+        	return dataService.get(URL + 'GetObjAtrbs');
         }
 
         function getSecurityDropdownData() {
         	return dataService.get(URL + 'GetSecurityDropdownData');
+        }
+
+        function saveMapping(mappingList) {
+        	return dataService.post(URL + 'SaveSecurityMapping', mappingList);
         }
     }
 })();

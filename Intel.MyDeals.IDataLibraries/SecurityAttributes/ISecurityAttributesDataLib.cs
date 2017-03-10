@@ -1,4 +1,5 @@
 ﻿using Intel.MyDeals.Entities;
+using System;
 using System.Collections.Generic;
 
 namespace Intel.MyDeals.IDataLibrary
@@ -36,5 +37,9 @@ namespace Intel.MyDeals.IDataLibrary
         AdminRoleType ManageAdminRoleType(AdminRoleType roleType, CrudModes state);
 
         SecurityActions ManageSecurityAction(SecurityActions action, CrudModes state);
-    }
+		
+		SecurityWrapper GetSecurityWrapper();
+
+		bool SaveSecurityMappings(List<SecurityMapSave> saveMappings);
+	}
 }

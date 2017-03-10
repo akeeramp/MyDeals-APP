@@ -7,9 +7,13 @@ namespace Intel.MyDeals.IBusinessLogic
 	{
         List<BasicDropdown> GetBasicDropdowns();
 
-        List<Dropdown> GetDealTypesDropdowns();
+        List<Dropdown> GetDealTypesDropdown();
 
-        List<Dropdown> GetDropdownGroups();
+		List<Dropdown> GetRoleTypesDropdown();
+		
+		List<Dropdown> GetSecurityActionsDropdown();
+
+		List<Dropdown> GetDropdownGroups();
 
         BasicDropdown ManageBasicDropdowns(BasicDropdown dropdown, CrudModes type);
 

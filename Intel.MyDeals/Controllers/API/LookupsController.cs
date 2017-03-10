@@ -33,6 +33,17 @@ namespace Intel.MyDeals.Controllers.API
             return SafeExecutor(() => _constantsLookupsLib.GetLookups(cd).AsQueryable()
                 , $"Unable to get lookup value for {cd}"
             );
-        }
-    }
+		}
+
+		[HttpGet]
+		[Authorize]
+		[Route("AsyncRenderHack")]
+		public bool AsyncRenderHack()
+		{
+			// Wait 0.05 seconds
+			System.Threading.Thread.Sleep(50); 
+			return true;
+		}
+
+	}
 }

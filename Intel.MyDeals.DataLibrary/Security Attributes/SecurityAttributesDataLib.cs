@@ -115,95 +115,205 @@ namespace Intel.MyDeals.DataLibrary
             ////}
         }
 
-        public SecurityWrapper GetSecurityWrapper()
-        {
-            return new SecurityWrapper(new List<OpRoleType>(), new List<SecurityAttribute>(), new List<SecurityMask>() );
-            ////var cmd = new Procs.CDMS_MYDEALS.core.PR_GET_SECURITY_MASK();
 
-            ////using (DataSet data = DataAccess.ExecuteDataSet(cmd))
-            ////{
+		#region SecurityEngine Mappings
 
-            ////    List<SecurityAction> securityActions = (from rw in data.Tables[0].AsEnumerable()
-            ////                                            select new SecurityAction
-            ////                                            {
-            ////                                                ATRB_BIT = Convert.ToInt64(rw["ATRB_BIT"]),
-            ////                                                ATRB_MAGNITUDE = Convert.ToInt64(rw["ATRB_MAGNITUDE"]),
-            ////                                                FACT_ATRB_CD = Convert.ToString(rw["FACT_ATRB_CD"]),
-            ////                                                FACT_ATRB_SID = Convert.ToInt32(rw["FACT_ATRB_SID"])
+		/// <summary>
+		/// Gets the Security Actions, Security Masks, and RoleTypes(TODO), then wraps them in a SecurityWrapper obj
+		/// </summary>
+		/// <returns> Security Wrapper containing the  Security Actions, Security Masks, and RoleTypes(TODO) </returns>
+		public SecurityWrapper GetSecurityWrapper()
+		{
+			try
+			{
+				Procs.dbo.PR_GET_SECUR_MSK cmd = new Procs.dbo.PR_GET_SECUR_MSK(); //PR_MYDL_GET_SECUR_MSK
 
-            ////                                            }).ToList();
+				using (DataSet data = DataAccess.ExecuteDataSet(cmd))
+				{
+					List<SecurityAttribute> securityActions = (from rw in data.Tables[0].AsEnumerable()
+															   select new SecurityAttribute
+															   {
+																   ATRB_BIT = Convert.ToInt64(rw["ATRB_BIT"]),
+																   ATRB_MAGNITUDE = Convert.ToInt64(rw["ATRB_MAGNITUDE"]),
+																   ATRB_CD = Convert.ToString(rw["ATRB_CD"]), // todo
+																   ATRB_SID = Convert.ToInt32(rw["ATRB_SID"]) // todo
 
-            ////    List<SecurityMask> securityMasks = (from rw in data.Tables[1].AsEnumerable()
-            ////                                        select new SecurityMask
-            ////                                        {
-            ////                                            ACTN_CD = Convert.ToString(rw["ACTN_CD"]),
-            ////                                            ACTN_SID = Convert.ToInt32(rw["ACTN_SID"]),
-            ////                                            DEAL_MBR_SID = Convert.ToInt32(rw["DEAL_MBR_SID"]),
-            ////                                            DEAL_TYPE_CD = Convert.ToString(rw["DEAL_TYPE_CD"]),
-            ////                                            PERMISSION_MASK = Convert.ToString(rw["PERMISSION_MASK"]),
-            ////                                            ROLE_TYPE_CD = Convert.ToString(rw["ROLE_TYPE_CD"]),
-            ////                                            ROLE_TYPE_SID = Convert.ToInt32(rw["ROLE_TYPE_SID"]),
-            ////                                            WFSTG_CD = Convert.ToString(rw["WFSTG_CD"]),
-            ////                                            WFSTG_MBR_SID = Convert.ToInt32(rw["WFSTG_MBR_SID"])
-            ////                                        }).ToList();
+															   }).ToList();
 
+					List<SecurityMask> securityMasks = (from rw in data.Tables[1].AsEnumerable()
+														select new SecurityMask
+														{
+															ACTN_NM = Convert.ToString(rw["ACTN_NM"]), // TODO: Rename when db column gets renamed
+															SECUR_ACTN_SID = Convert.ToInt32(rw["SECUR_ACTN_SID"]), // TODO: Rename when db column gets renamed
+															OBJ_TYPE_SID = Convert.ToInt32(rw["OBJ_TYPE_SID"]), // TODO: Rename when db column gets renamed
+															//OBJ_TYPE_CD = Convert.ToString(rw["OBJ_SET_TYPE_NM"]), // TODO: Rename when db column gets renamed
+															OBJ_SET_TYPE_CD = Convert.ToString(rw["OBJ_SET_TYPE_CD"]), // TODO: Rename when db column gets renamed
+															PERMISSION_MASK = Convert.ToString(rw["PERMISSION_MASK"]),
+															ROLE_NM = Convert.ToString(rw["ROLE_NM"]), // TODO: Rename when db column gets renamed
+															ROLE_SID = Convert.ToInt32(rw["ROLE_SID"]), // TODO: Rename when db column gets renamed
+															WFSTG_NM = Convert.ToString(rw["WFSTG_NM"]),
+															WFSTG_MBR_SID = Convert.ToInt32(rw["WFSTG_MBR_SID"])
+														}).ToList();
 
-            ////    List<OpRoleType> tmpRoleType = DataCollections.GetAppRoleTiers().Where(r => r.APPL_CD.ToUpper() == "IDMS").Select(appRoleTier => new OpRoleType
-            ////    {
-            ////        RoleTypeId = appRoleTier.ROLE_TYPE_SID,
-            ////        RoleTypeCd = appRoleTier.ROLE_TYPE_CD,
-            ////        RoleTypeDescription = appRoleTier.ROLE_TYPE_DESC,
-            ////        RoleTypeDisplayName = appRoleTier.ROLE_TYPE_DSPLY_CD,
-            ////        RoleTier = appRoleTier.ROLE_TIER_CD
-            ////    }).ToList();
+					// TODO: Hook this up when we get roles hooked up on db side 
+					// TODO: re-evaluate if we need the roletypes in here vs getting role types via pr_get_dropdowns?				
+					List<OpRoleType> tmpRoleType = null;
+					//List<OpRoleType> tmpRoleType = DataCollections.GetAppRoleTiers().Where(r => r.APPL_CD.ToUpper() == "IDMS").Select(appRoleTier => new OpRoleType
+					//{
+					//	RoleTypeId = appRoleTier.ROLE_TYPE_SID,
+					//	RoleTypeCd = appRoleTier.ROLE_TYPE_CD,
+					//	RoleTypeDescription = appRoleTier.ROLE_TYPE_DESC,
+					//	RoleTypeDisplayName = appRoleTier.ROLE_TYPE_DSPLY_CD,
+					//	RoleTier = appRoleTier.ROLE_TIER_CD
+					//}).ToList();
 
-            ////    return new SecurityWrapper(tmpRoleType, securityActions, securityMasks);
-            ////}
-        }
-
-        public List<MyDealsActionItem> GetDealActions()
-        {
-            return new List<MyDealsActionItem>();
-            ////OpLogPerf.Log("Loading Actions");
-
-            ////SecurityWrapper securityWrapper = DataCollections.GetSecurityWrapper();
-            ////List<string> stages = DataCollections.GetWorkFlowStages().Where(s => s.ACTV_IND).Select(s => s.WFSTG_CD).ToList();
-            ////string[] actions = { "C_APPROVE", "C_REJECT_DEAL", "C_CANCEL_DEAL" };
-            ////List<DealType> dealTypes = DataCollections.GetTemplateData().DealTypeData;
-
-            ////List<MyDealsActionItem> items = new List<MyDealsActionItem>();
-
-            ////foreach (OpRoleType opRoleType in securityWrapper.RoleTypes.Where(r => r.RoleTypeCd != "All Role Types"))
-            ////{
-            ////    items.AddRange(from dealType in dealTypes
-            ////                   from stage in stages
-            ////                   select new MyDealsActionItem
-            ////                   {
-            ////                       ObjsetType = dealType.DEAL_TYPE_CD,
-            ////                       Role = opRoleType.RoleTypeCd,
-            ////                       Stage = stage
-            ////                   });
-            ////}
-
-            ////// now populate the actions
-            ////foreach (MyDealsActionItem dealActionItem in items)
-            ////{
-            ////    foreach (string actn in actions)
-            ////    {
-            ////        dealActionItem.Actions[actn] = securityWrapper.ChkDealRules(dealActionItem.ObjsetType, dealActionItem.Role, dealActionItem.Stage, actn);
-            ////    }
-            ////}
-
-            ////return items;
+					return new SecurityWrapper(tmpRoleType, securityActions, securityMasks);
+				}
+			}
+			catch (Exception ex)
+			{
+				OpLogPerf.Log(ex);
+				Exception simpleEx = new Exception("Problem Security Attribute - GetSecurityWrapper");
+				throw simpleEx;
+			}
+		}
 
 
-        }
-        #region SecurityActions
-        /// <summary>
-        /// Delete a Security Action based on id
-        /// </summary>
-        /// <returns> void </returns>
-        public bool DeleteSecurityAction(int id)
+		public List<MyDealsActionItem> GetDealActions()
+		{
+			return new List<MyDealsActionItem>();
+			////OpLogPerf.Log("Loading Actions");
+
+			////SecurityWrapper securityWrapper = DataCollections.GetSecurityWrapper();
+			////List<string> stages = DataCollections.GetWorkFlowStages().Where(s => s.ACTV_IND).Select(s => s.WFSTG_CD).ToList();
+			////string[] actions = { "C_APPROVE", "C_REJECT_DEAL", "C_CANCEL_DEAL" };
+			////List<DealType> dealTypes = DataCollections.GetTemplateData().DealTypeData;
+
+			////List<MyDealsActionItem> items = new List<MyDealsActionItem>();
+
+			////foreach (OpRoleType opRoleType in securityWrapper.RoleTypes.Where(r => r.RoleTypeCd != "All Role Types"))
+			////{
+			////    items.AddRange(from dealType in dealTypes
+			////                   from stage in stages
+			////                   select new MyDealsActionItem
+			////                   {
+			////                       ObjsetType = dealType.DEAL_TYPE_CD,
+			////                       Role = opRoleType.RoleTypeCd,
+			////                       Stage = stage
+			////                   });
+			////}
+
+			////// now populate the actions
+			////foreach (MyDealsActionItem dealActionItem in items)
+			////{
+			////    foreach (string actn in actions)
+			////    {
+			////        dealActionItem.Actions[actn] = securityWrapper.ChkDealRules(dealActionItem.ObjsetType, dealActionItem.Role, dealActionItem.Stage, actn);
+			////    }
+			////}
+
+			////return items;
+
+
+		}
+
+		/// <summary>
+		/// Gets a list of Attributes used for the Secruity Engine
+		/// </summary>
+		/// <returns> A list of Attributes </returns>
+		public List<SecurityAttributesDropDown> GetObjAtrbs()
+		{
+			var ret = new List<SecurityAttributesDropDown>();
+			try
+			{
+				Procs.dbo.PR_MYDL_GET_SECUR_DROPDOWNS cmd = new Procs.dbo.PR_MYDL_GET_SECUR_DROPDOWNS { };
+				
+				using (DataSet data = DataAccess.ExecuteDataSet(cmd))
+				{
+					ret = (from rw in data.Tables[0].AsEnumerable()
+						   select new SecurityAttributesDropDown
+						   {
+							   ATRB_COL_NM = Convert.ToString(rw["ATRB_COL_NM"]),
+							   ATRB_SID = Convert.ToInt32(rw["ATRB_SID"]),
+							   OBJ_SET_TYPE = Convert.ToString(rw["OBJ_SET_TYPE"]),
+							   OBJ_SET_TYPE_SID = Convert.ToInt32(rw["OBJ_SET_TYPE_SID"]),
+							   OBJ_TYPE = Convert.ToString(rw["OBJ_TYPE"]),
+							   OBJ_TYPE_SID = Convert.ToInt32(rw["OBJ_TYPE_SID"])
+						   }).ToList();
+				}
+			}
+			catch (Exception ex)
+			{
+				OpLogPerf.Log(ex);
+				Exception simpleEx = new Exception("Problem Security Attribute - GetObjAtrbs");
+				throw simpleEx;
+			}
+			return ret;
+		}
+
+		/// <summary>
+		/// Sends a list of security mappings which will be inserted or deleted in the db.
+		/// Rows that are already in the db are deleted. Rows not in the db already are inserted.
+		/// Note that the logic for if whether a row is inserted or deleted is in the SP.
+		/// </summary>
+		/// <returns> boolean depending on if the SP failed or not </returns>
+		public bool SaveSecurityMappings(List<SecurityMapSave> saveMappings)
+		{
+			try
+			{
+				// Make datatable
+				t_secur_info dt = new t_secur_info();
+				dt.AddRows(saveMappings);
+
+				// Call Proc
+				Procs.dbo.PR_MYDL_SAVE_SECURITY_INFO cmd = new Procs.dbo.PR_MYDL_SAVE_SECURITY_INFO
+				{
+					SecurInfo = dt,
+					wwid = OpUserStack.MyOpUserToken.Usr.WWID
+				};
+
+				DataAccess.ExecuteDataSet(cmd);
+				
+				// Update db cook table
+				UpdateDbSecurityMask();
+
+				// Update Cache
+				DataCollections.RecycleCache("_getSecurityWrapper");
+
+				return true;
+			}
+			catch (Exception ex)
+			{
+				OpLogPerf.Log(ex);
+				throw;
+			}
+		}
+
+		/// <summary>
+		/// Calls a SP which will update the Cook table for Security Masks
+		/// </summary>
+		/// <returns> void </returns>
+		public void UpdateDbSecurityMask()
+		{
+			try
+			{
+				Procs.dbo.PR_UPD_CK_SECUR_MSK cmd = new Procs.dbo.PR_UPD_CK_SECUR_MSK { };
+				DataAccess.ExecuteDataSet(cmd);
+			}
+			catch (Exception ex)
+			{
+				OpLogPerf.Log(ex);
+				throw;
+			}
+		}
+		#endregion
+
+		#region SecurityActions
+		/// <summary>
+		/// Delete a Security Action based on id
+		/// </summary>
+		/// <returns> void </returns>
+		public bool DeleteSecurityAction(int id)
         {
             DataSet dsCheckConstraintErrors = null;
             try
@@ -223,7 +333,11 @@ namespace Intel.MyDeals.DataLibrary
                 }
                 throw;
             }
-            return true;
+
+			// Update Cache
+			DataCollections.ClearCache("_getSecurityActions");
+			DataCollections.LoadCache("_getSecurityActions");
+			return true;
         }
 
         /// <summary>
@@ -241,7 +355,13 @@ namespace Intel.MyDeals.DataLibrary
         /// <returns> The inserted or updated Security Actions</returns>
         public SecurityActions ManageSecurityAction(SecurityActions action, CrudModes state)
         {
-            return CallManageActionSP(action, state).FirstOrDefault();
+            SecurityActions result = CallManageActionSP(action, state).FirstOrDefault();
+
+			// Update Cache
+			DataCollections.ClearCache("_getSecurityActions");
+			DataCollections.LoadCache("_getSecurityActions");
+
+			return result;
         }
 
         /// <summary>
@@ -253,7 +373,7 @@ namespace Intel.MyDeals.DataLibrary
             var ret = new List<SecurityActions>();
             try
             {
-                Procs.dbo.PR_MANAGE_ACTIONS cmd = new Procs.dbo.PR_MANAGE_ACTIONS
+                Procs.dbo.PR_MANAGE_ACTIONS cmd = new Procs.dbo.PR_MANAGE_ACTIONS 
                 {
                     idsid = OpUserStack.MyOpUserToken.Usr.Idsid,
                     mode = state.ToString()
@@ -266,8 +386,9 @@ namespace Intel.MyDeals.DataLibrary
                     cmd.ACTN_DESC = action.ACTN_DESC;
                     cmd.ACTN_SID = action.ACTN_SID;
                     cmd.SRT_ORD = action.SRT_ORD;
-                    cmd.WFSTG_ACTN_CD = action.WFSTG_ACTN_CD;
-                }
+					cmd.WFSTG_ACTN_CD = action.WFSTG_ACTN_CD;
+					//cmd.ACTV_IND = action.ACTV_IND;
+				}
 
                 using (DataSet data = DataAccess.ExecuteDataSet(cmd))
                 {
@@ -284,7 +405,8 @@ namespace Intel.MyDeals.DataLibrary
                                CRE_EMP_WWID = Convert.ToInt32(rw["CRE_EMP_WWID"]),
                                SRT_ORD = Convert.ToInt32(rw["SRT_ORD"]),
                                WFSTG_ACTN_CD = Convert.ToString(rw["WFSTG_ACTN_CD"])
-                           }).ToList();
+							  //, ACTV_IND = Convert.ToString(rw["ACTV_IND"])
+						   }).ToList();
                 }
             }
             catch (Exception ex)
@@ -324,7 +446,11 @@ namespace Intel.MyDeals.DataLibrary
                 }
                 throw;
             }
-            return true;
+
+			// Update Cache
+			DataCollections.ClearCache("_getAdminApplications");
+			DataCollections.LoadCache("_getAdminApplications");
+			return true;
         }
 
         /// <summary>
@@ -342,7 +468,13 @@ namespace Intel.MyDeals.DataLibrary
         /// <returns> The inserted or updated Admin Application</returns>
         public AdminApplications ManageAdminApplication(AdminApplications app, CrudModes state)
         {
-            return CallManageAdminApplicationSP(app, state).FirstOrDefault();
+			AdminApplications result = CallManageAdminApplicationSP(app, state).FirstOrDefault();
+
+			// Update Cache
+			DataCollections.ClearCache("_getAdminApplications");
+			DataCollections.LoadCache("_getAdminApplications");
+
+			return result;
         }
 
         /// <summary>
@@ -422,8 +554,11 @@ namespace Intel.MyDeals.DataLibrary
                     OpLogPerf.Log(ex);
                 }
                 throw;
-            }
-            return true;
+			}
+			// Update Cache
+			DataCollections.ClearCache("_getAdminDealTypes");
+			DataCollections.LoadCache("_getAdminDealTypes");
+			return true;
         }
 
         /// <summary>
@@ -441,8 +576,14 @@ namespace Intel.MyDeals.DataLibrary
         /// <returns> The inserted or updated AdminDealType</returns>
         public AdminDealType ManageAdminDealType(AdminDealType dealType, CrudModes state)
         {
-            return CallManageAdminDealTypeSP(dealType, state).FirstOrDefault();
-        }
+            AdminDealType result = CallManageAdminDealTypeSP(dealType, state).FirstOrDefault();
+			
+			// Update Cache
+			DataCollections.ClearCache("_getAdminDealTypes");
+			DataCollections.LoadCache("_getAdminDealTypes");
+
+			return result;
+		}
 
         /// <summary>
         ///  Calls the PR_MANAGE_DEAL_TYPES SP which performs a CRUD operation depending on the state param
@@ -529,8 +670,11 @@ namespace Intel.MyDeals.DataLibrary
                     OpLogPerf.Log(ex);
                 }
                 throw;
-            }
-            return true;
+			}
+			// Update Cache
+			DataCollections.ClearCache("_getAdminRoleTypes");
+			DataCollections.LoadCache("_getAdminRoleTypes");
+			return true;
         }
 
         /// <summary>
@@ -548,8 +692,14 @@ namespace Intel.MyDeals.DataLibrary
         /// <returns> The inserted or updated RoleType</returns>
         public AdminRoleType ManageAdminRoleType(AdminRoleType roleType, CrudModes state)
         {
-            return CallManageAdminRoleTypeSP(roleType, state).FirstOrDefault();
-        }
+            AdminRoleType result = CallManageAdminRoleTypeSP(roleType, state).FirstOrDefault();
+			
+			// Update Cache
+			DataCollections.ClearCache("_getAdminRoleTypes");
+			DataCollections.LoadCache("_getAdminRoleTypes");
+
+			return result;
+		}
 
         /// <summary>
         ///  Calls the PR_MANAGE_DEAL_TYPES SP which performs a CRUD operation depending on the state param
