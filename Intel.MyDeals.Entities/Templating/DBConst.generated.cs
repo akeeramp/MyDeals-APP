@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 3/9/2017 4:48:45 PM
+File Updated: 3/10/2017 4:18:33 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -64,6 +64,24 @@ namespace Intel.MyDeals.Entities {
 		public const string AVG_RPU = "AVG_RPU";
 
 		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3596
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string BACK_DATE_RSN = "BACK_DATE_RSN";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3597
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string BACK_DATE_RSN_TXT = "BACK_DATE_RSN_TXT";
+
+		///<summary>
 		/// DIM_SID: 7
 		/// DIM_CD: PRD
 		/// ATRB_SID: 7039
@@ -107,6 +125,33 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.String
 		///</summary>
 		public const string C2A_DATA_C2A_ID = "C2A_DATA_C2A_ID";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 101
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string C2A_STATUS = "C2A_STATUS";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3351
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string COMMENTS = "COMMENTS";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 34
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string CONTRACT_STATUS = "CONTRACT_STATUS";
 
 		///<summary>
 		/// DIM_SID: 7
@@ -179,6 +224,24 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Object
 		///</summary>
 		public const string CTRY_NM = "CTRY_NM";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3591
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string CUST_ACCNT_DIV = "CUST_ACCNT_DIV";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3660
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string CUST_ACCPT = "CUST_ACCPT";
 
 		///<summary>
 		/// DIM_SID: 2
@@ -595,6 +658,15 @@ namespace Intel.MyDeals.Entities {
 		public const string MTRL_TYPE_CD = "MTRL_TYPE_CD";
 
 		///<summary>
+		/// DIM_SID: 999
+		/// DIM_CD: SYS
+		/// ATRB_SID: 90001
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string NA = "NA";
+
+		///<summary>
 		/// DIM_SID: 7
 		/// DIM_CD: PRD
 		/// ATRB_SID: 7077
@@ -620,6 +692,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Object
 		///</summary>
 		public const string NAND_INTERFACE = "NAND_INTERFACE";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3661
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string NOTES = "NOTES";
 
 		///<summary>
 		/// DIM_SID: 3
