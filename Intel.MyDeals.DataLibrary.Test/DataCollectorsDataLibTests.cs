@@ -21,5 +21,12 @@ namespace Intel.MyDeals.DataLibrary.Test
             Assert.IsTrue(results.ContainsKey(OpDataElementType.PRC_ST));
         }
 
+        [TestMethod]
+        public void GetAtrbMstrs()
+        {
+            List<AtrbMstr> y = new AtrbMapDataLib().GetAtrbMstrs();
+//            Assert.IsTrue(results.ContainsKey(OpDataElementType.PRC_ST));\
+            int i = 0;
+        }
     }
 }

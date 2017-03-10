@@ -305,7 +305,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 ret.Add(new AtrbMstr
                 {
-                    ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(Nullable<System.Boolean>) : rdr.GetFieldValue<Nullable<System.Boolean>>(IDX_ACTV_IND),
+                    ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(Nullable<System.Boolean>) : rdr.GetFieldValue<Nullable<System.Int32>>(IDX_ACTV_IND) == 1,
                     ATRB_ACTV_IND = (IDX_ATRB_ACTV_IND < 0 || rdr.IsDBNull(IDX_ATRB_ACTV_IND)) ? default(Nullable<System.Boolean>) : rdr.GetFieldValue<Nullable<System.Boolean>>(IDX_ATRB_ACTV_IND),
                     ATRB_CD = (IDX_ATRB_CD < 0 || rdr.IsDBNull(IDX_ATRB_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_CD),
                     ATRB_DESC = (IDX_ATRB_DESC < 0 || rdr.IsDBNull(IDX_ATRB_DESC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_DESC),
