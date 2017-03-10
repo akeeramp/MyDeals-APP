@@ -594,6 +594,11 @@
         visibility:collapse;
     }
 
+    .opElementHelpIcon {
+        font-size: 18px;
+        color: #979797;
+    }
+
     .opUiLabel {
         width: 130px;
         padding-top: 4px;

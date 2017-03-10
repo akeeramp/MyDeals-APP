@@ -5,11 +5,10 @@
             {{vm.validationMessage}}
         </div>
     </div>
-    <div ui-view="addNewRules" />
+    <div ui-view="addNewRules"></div>
     <div ng-hide="vm.manageRules">
-        <div ng-include="'app/layout/gridToolbar.html'" />
-        <br />
-        <div class="col-md-12" style="padding-top: 20px;">
+        <div class="col-md-12">
+            <div ng-include="'app/layout/gridToolbar.html'"></div>
             <div kendo-grid="rulesGrid" class="table table-bordered table-striped table-intel" expand-k-grid options="vm.gridOptions"></div>
         </div>
     </div>

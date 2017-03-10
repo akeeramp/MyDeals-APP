@@ -6151,6 +6151,17 @@ div.k-scheduler-marquee:after {
     color: #0099ff !important;
 }
 
+.k-grid-add {
+    font-size: 18px;
+}
+.k-custom-edit {
+    font-size: 18px;
+}
+.k-custom-delete {
+    font-size: 18px;
+}
+
+
 
 /* icons */
 .k-grid-update .k-i-check {

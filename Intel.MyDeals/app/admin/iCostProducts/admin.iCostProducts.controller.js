@@ -54,11 +54,12 @@
             },
             pageSize: 25
         });
-
+        vm.dataSource.group([{ field: "DEAL_PRD_TYPE" }, { field: "PRD_CAT_NM" }]);
+        vm.dataSource.sort({ field: "COST_TEST_TYPE", dir: "asc" });
         vm.gridOptions = {
             dataSource: vm.dataSource,
             filterable: true,
-            sortable: true,
+            sortable: false,
             selectable: true,
             resizable: true,
             reorderable: true,
