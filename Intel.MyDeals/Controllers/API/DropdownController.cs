@@ -1,10 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Web.Http;
 using Intel.MyDeals.Entities;
-using Intel.Opaque;
-using System;
-using System.Linq;
-using System.Net;
 using Intel.MyDeals.IBusinessLogic;
 
 namespace Intel.MyDeals.Controllers.API
@@ -12,11 +8,11 @@ namespace Intel.MyDeals.Controllers.API
     [RoutePrefix("api/Dropdown")]
     public class DropdownController : BaseApiController
 	{
-		private IDropdownLib _dropdownLib;
+		private readonly IDropdownLib _dropdownLib;
 
-		public DropdownController(IDropdownLib _dropdownLib)
+		public DropdownController(IDropdownLib dropdownLib)
 		{
-			this._dropdownLib = _dropdownLib;
+			_dropdownLib = dropdownLib;
 		}
 
         [Authorize]
@@ -25,6 +21,15 @@ namespace Intel.MyDeals.Controllers.API
         {
             return SafeExecutor(() => _dropdownLib.GetBasicDropdowns()
                 , $"Unable to get Basic Dropdowns"
+            );
+        }
+
+        [Authorize]
+        [Route("GetDropdowns/{atrbCd}")]
+        public IEnumerable<BasicDropdown> GetDropdowns(string atrbCd)
+        {
+            return SafeExecutor(() => _dropdownLib.GetDropdowns(atrbCd)
+                , $"Unable to get Dropdowns for {atrbCd}"
             );
         }
 

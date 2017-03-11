@@ -24,13 +24,13 @@
                     "DATE": { type: "date" },
                     "DROPDOWN": {
                         type: "string",
-                        values: "/api/Lookups/v1/GetLookups/DROPDOWN",
+                        values: "/api/Dropdown/GetDropdowns/MRKT_SEG_NON_CORP",
                         valuesText: "DROP_DOWN",
                         valuesValue: "DROP_DOWN"
                     },
                     "COMBOBOX": {
                         type: "string",
-                        values: "/api/Lookups/v1/GetLookups/COMBOBOX",
+                        values: "/api/Dropdown/GetDropdowns/MRKT_SEG_NON_CORP",
                         valuesText: "DROP_DOWN",
                         valuesValue: "DROP_DOWN"
                     }
@@ -58,13 +58,13 @@
                     field: "DROPDOWN",
                     title: "Dropdown",
                     uiType: "DropDown",
-                    template: "#=gridUtils.uiControlWrapper(data, 'DROPDOWN')#",
+                    template: "#=gridUtils.uiControlWrapper(data, 'MRKT_SEG_NON_CORP')#",
                     editor: gridUtils.lookupEditor
                 }, {
                     field: "COMBOBOX",
                     title: "Combobox",
                     uiType: "ComboBox",
-                    template: "#=gridUtils.uiControlWrapper(data, 'COMBOBOX')#",
+                    template: "#=gridUtils.uiControlWrapper(data, 'MRKT_SEG_NON_CORP')#",
                     editor: gridUtils.lookupEditor
                 }, {
                     field: "",
@@ -164,7 +164,8 @@
                     isHidden: false,
                     isError: false,
                     isDirty: false,
-                    validMsg: "Please enter a valid value."
+                    validMsg: "Please enter a valid value.",
+                    helpMsg: "Look, here are some helpful instructions"
                 },
                 "INT": {
                     "value": 123,
@@ -173,7 +174,8 @@
                     isHidden: false,
                     isError: false,
                     isDirty: false,
-                    validMsg: "Please enter a valid value."
+                    validMsg: "Please enter a valid value.",
+                    helpMsg: "Look, here are some helpful instructions"
                 },
                 "DATE": {
                     "value": "2/4/2016",
@@ -182,26 +184,59 @@
                     isHidden: false,
                     isError: false,
                     isDirty: false,
-                    validMsg: "Please enter a valid value."
+                    validMsg: "Please enter a valid value.",
+                    helpMsg: "Look, here are some helpful instructions"
                 },
                 "DROPDOWN": {
-                    "value": "DROPDOWN 3",
+                    "value": "SMB",
                     isReadOnly: false,
                     isRequired: false,
                     isHidden: false,
                     isError: false,
                     isDirty: false,
-                    validMsg: "Please enter a valid value."
+                    validMsg: "Please enter a valid value.",
+                    helpMsg: "Look, here are some helpful instructions"
                 },
                 "COMBOBOX": {
-                    "value": "COMBOBOX 4",
+                    "value": "Gaming",
                     isReadOnly: false,
                     isRequired: false,
                     isHidden: false,
                     isError: false,
                     isDirty: false,
-                    validMsg: "Please enter a valid value."
-                }
+                    validMsg: "Please enter a valid value.",
+                    helpMsg: "Look, here are some helpful instructions"
+                },
+                "TEXTAREA": {
+                    "value": "Multi-line TextBox",
+                    isReadOnly: false,
+                    isRequired: false,
+                    isHidden: false,
+                    isError: false,
+                    isDirty: false,
+                    validMsg: "Please enter a valid value.",
+                    helpMsg: "Look, here are some helpful instructions"
+                },
+                "SliderInt": {
+                    "value": 1,
+                    isReadOnly: false,
+                    isRequired: false,
+                    isHidden: false,
+                    isError: false,
+                    isDirty: false,
+                    validMsg: "Please enter a valid value.",
+                    helpMsg: "Look, here are some helpful instructions"
+                },
+                "RADIOBUTTON": {
+                    "value": "",
+                    isReadOnly: false,
+                    isRequired: false,
+                    isHidden: false,
+                    isError: false,
+                    isDirty: false,
+                    validMsg: "Please enter a valid value.",
+                    helpMsg: "Look, here are some helpful instructions"
+                },
             }
             $scope.flat = {
                 "_dirty": false,
@@ -209,9 +244,9 @@
                 "TEXT": "Hello World",
                 "INT": 123,
                 "DATE": "2/4/2016",
-                "DROPDOWN": "DROPDOWN 2",
+                "DROPDOWN": "SMB",
                 "DropdownSelected": [],
-                "COMBOBOX": "COMBOBOX 3",
+                "COMBOBOX": "Gaming",
                 "RADIOBUTTON": "",
                 "TEXTAREA": "Multi-line TextBox",
                 "SliderInt":1,
@@ -223,8 +258,8 @@
                         "TEXT": "Hello World 1",
                         "INT": 1231,
                         "DATE": "2/1/2016",
-                        "DROPDOWN": "DROPDOWN 3",
-                        "COMBOBOX": "COMBOBOX 5"
+                        "DROPDOWN": "SMB",
+                        "COMBOBOX": "Gaming"
                     },
                     {
                         "PIVOT": 0,
@@ -232,8 +267,8 @@
                         "TEXT": "Hello World 2",
                         "INT": 1232,
                         "DATE": "2/2/2016",
-                        "DROPDOWN": "DROPDOWN 3",
-                        "COMBOBOX": "COMBOBOX 5"
+                        "DROPDOWN": "SMB",
+                        "COMBOBOX": "Gaming"
                     },
                     {
                         "PIVOT": 1,
@@ -241,8 +276,8 @@
                         "TEXT": "Hello World 3",
                         "INT": 1233,
                         "DATE": "2/3/2016",
-                        "DROPDOWN": "DROPDOWN 3",
-                        "COMBOBOX": "COMBOBOX 5"
+                        "DROPDOWN": "SMB",
+                        "COMBOBOX": "Gaming"
                     }
                 ],
                 "_pivot": {
@@ -261,7 +296,12 @@
                     "isError": {},
                     "isDirty": {},
                     "validMsg": {
-                        "TEXT": "That did not work"
+                        "TEXT": "That did not work",
+                        "DATE": "That did not work"
+                    },
+                    "helpMsg": {
+                        "TEXT": "Look, here are some helpful instructions",
+                        "DATE": "Look, here are some helpful instructions"
                     }
                 }
             };
@@ -272,8 +312,8 @@
                     "TEXT": "Hello World 1",
                     "INT": 123,
                     "DATE": "2/4/2016",
-                    "DROPDOWN": "DROPDOWN 3",
-                    "COMBOBOX": "COMBOBOX 5",
+                    "DROPDOWN": "SMB",
+                    "COMBOBOX": "Gaming",
                     "_MultiDim": [
                         {
                             "DC_ID": -300,
@@ -282,8 +322,8 @@
                             "TEXT": "Hello World 1",
                             "INT": 1231,
                             "DATE": "2/1/2016",
-                            "DROPDOWN": "DROPDOWN 3",
-                            "COMBOBOX": "COMBOBOX 5",
+                            "DROPDOWN": "SMB",
+                            "COMBOBOX": "Gaming",
                             "_behaviors": {
                                 "isRequired": {},
                                 "isReadOnly": {},
@@ -293,6 +333,9 @@
                                 "isDirty": {},
                                 "validMsg": {
                                     "TEXT": "That did not work"
+                                },
+                                "helpMsg": {
+                                    "TEXT": "Look, here are some helpful instructions"
                                 }
                             }
                         },
@@ -303,8 +346,8 @@
                             "TEXT": "Hello World 2",
                             "INT": 1232,
                             "DATE": "2/2/2016",
-                            "DROPDOWN": "DROPDOWN 2",
-                            "COMBOBOX": "COMBOBOX 2"
+                            "DROPDOWN": "SMB",
+                            "COMBOBOX": "Gaming"
                         },
                         {
                             "DC_ID": -302,
@@ -313,8 +356,8 @@
                             "TEXT": "Hello World 3",
                             "INT": 1233,
                             "DATE": "2/3/2016",
-                            "DROPDOWN": "DROPDOWN 2",
-                            "COMBOBOX": "COMBOBOX 3"
+                            "DROPDOWN": "SMB",
+                            "COMBOBOX": "Gaming"
                         }
                     ],
                     "_pivot": {
@@ -334,6 +377,9 @@
                         "isDirty": {},
                         "validMsg": {
                             "TEXT": "That did not work"
+                        },
+                        "helpMsg": {
+                            "TEXT": "Look, here are some helpful instructions"
                         }
                     }
                 },
@@ -343,8 +389,8 @@
                     "TEXT": "Hello World 2",
                     "INT": 124,
                     "DATE": "2/4/2016",
-                    "DROPDOWN": "DROPDOWN 3",
-                    "COMBOBOX": "COMBOBOX 3",
+                    "DROPDOWN": "SMB",
+                    "COMBOBOX": "Gaming",
                     "_MultiDim": [
                         {
                             "DC_ID": -304,
@@ -353,8 +399,8 @@
                             "TEXT": "Hello World 1",
                             "INT": 1231,
                             "DATE": "2/1/2016",
-                            "DROPDOWN": "DROPDOWN 3",
-                            "COMBOBOX": "COMBOBOX 4"
+                            "DROPDOWN": "SMB",
+                            "COMBOBOX": "Gaming"
                         },
                         {
                             "DC_ID": -305,
@@ -363,8 +409,8 @@
                             "TEXT": "Hello World 2",
                             "INT": 1232,
                             "DATE": "2/2/2016",
-                            "DROPDOWN": "DROPDOWN 1",
-                            "COMBOBOX": "COMBOBOX 5"
+                            "DROPDOWN": "SMB",
+                            "COMBOBOX": "Gaming"
                         },
                         {
                             "DC_ID": -306,
@@ -373,8 +419,8 @@
                             "TEXT": "Hello World 3",
                             "INT": 1233,
                             "DATE": "2/3/2016",
-                            "DROPDOWN": "DROPDOWN 2",
-                            "COMBOBOX": "COMBOBOX 2"
+                            "DROPDOWN": "SMB",
+                            "COMBOBOX": "Gaming"
                         }
                     ],
                     "_pivot": {
@@ -394,6 +440,9 @@
                         "isDirty": {},
                         "validMsg": {
                             "TEXT": "That did not work"
+                        },
+                        "helpMsg": {
+                            "TEXT": "Look, here are some helpful instructions"
                         }
                     }
                 }
@@ -428,13 +477,13 @@
                         "DATE": { type: "date" },
                         "DROPDOWN": {
                             type: "string",
-                            values: "/api/Lookups/v1/GetLookups/DROPDOWN",
+                            values: "/api/Dropdown/GetDropdowns/MRKT_SEG_NON_CORP",
                             valuesText: "DROP_DOWN",
                             valuesValue: "DROP_DOWN"
                         },
                         "COMBOBOX": {
                             type: "string",
-                            values: "/api/Lookups/v1/GetLookups/COMBOBOX",
+                            values: "/api/Dropdown/GetDropdowns/MRKT_SEG_NON_CORP",
                             valuesText: "DROP_DOWN",
                             valuesValue: "DROP_DOWN"
                         }

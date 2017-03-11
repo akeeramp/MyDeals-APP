@@ -1,9 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Web.Http;
 using Intel.MyDeals.Entities;
-using System;
-using System.Net;
-using Intel.Opaque;
 using Intel.MyDeals.IBusinessLogic;
 
 namespace Intel.MyDeals.Controllers.API
@@ -12,11 +9,11 @@ namespace Intel.MyDeals.Controllers.API
 	[RoutePrefix("api/Customers")]
 	public class CustomersController : BaseApiController
 	{
-		private ICustomerLib _customerLib;
+		private readonly ICustomerLib _customerLib;
 
-		public CustomersController(ICustomerLib _customerLib)
+		public CustomersController(ICustomerLib customerLib)
 		{
-			this._customerLib = _customerLib;
+			_customerLib = customerLib;
 		}
 
 		/// <summary>
@@ -28,120 +25,99 @@ namespace Intel.MyDeals.Controllers.API
 		[Route("GetCustomers/{getCachedResult:bool?}")]
 		public IEnumerable<CustomerDivision> GetCustomerDivisions(bool getCachedResult = true)
 		{
-			try
-			{
-				return _customerLib.GetCustomerDivisions(getCachedResult);
-			}
-			catch (Exception ex)
-			{
-				OpLogPerf.Log(ex);
-				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
-			}
+            return SafeExecutor(() => _customerLib.GetCustomerDivisions()
+                , "Unable to get Customers"
+            );
 		}
 
 		[Authorize]
 		[Route("GetActiveCustomers")]
 		public IEnumerable<CustomerDivision> GetActiveCustomers()
 		{
-			try
-			{
-				return _customerLib.GetCustomerDivisionsActive();
-			}
-			catch (Exception ex)
-			{
-				OpLogPerf.Log(ex);
-				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
-			}
+            return SafeExecutor(() => _customerLib.GetCustomerDivisionsActive()
+                , "Unable to get Customers"
+            );
 		}
 
-		[Authorize]
+        [Authorize]
+        [Route("GetCustomerDivisionsByCustNmSid/{custNmSid}")]
+        public IEnumerable<CustomerDivision> GetCustomerDivisionsByCustNmSid(int custNmSid)
+        {
+            return SafeExecutor(() => _customerLib.GetCustomerDivisionsByCustNmSid(custNmSid)
+                , "Unable to get Customers"
+            );
+        }
+
+        [Authorize]
 		[Route("GetCustomerByCategory/{category}")]
 		public IEnumerable<CustomerDivision> GetCustomerByCategory(string category)
 		{
-			try
-			{
-				return _customerLib.GetCustomerDivisionsByCategory(category);
-			}
-			catch (Exception ex)
-			{
-				OpLogPerf.Log(ex);
-				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
-			}
+            return SafeExecutor(() => _customerLib.GetCustomerDivisionsByCategory(category)
+                , "Unable to get Customers"
+            );
 		}
 
 		[Authorize]
 		[Route("GetCustomerByGeo/{geo}")]
 		public IEnumerable<CustomerDivision> GetCustomerByGep(string geo)
 		{
-			try
-			{
-				return _customerLib.GetCustomerDivisionsByHostedGeo(geo);
-			}
-			catch (Exception ex)
-			{
-				OpLogPerf.Log(ex);
-				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
-			}
+            return SafeExecutor(() => _customerLib.GetCustomerDivisionsByHostedGeo(geo)
+                , "Unable to get Customers"
+            );
 		}
 
 		[Authorize]
 		[Route("GetCustomerByType/{type}")]
 		public IEnumerable<CustomerDivision> GetCustomerByType(string type)
 		{
-			try
-			{
-				return _customerLib.GetCustomerDivisionsByType(type);
-			}
-			catch (Exception ex)
-			{
-				OpLogPerf.Log(ex);
-				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
-			}
+            return SafeExecutor(() => _customerLib.GetCustomerDivisionsByType(type)
+                , "Unable to get Customers"
+            );
 		}
 
-		[Authorize]
-		[Route("GetMyCustomers")]
-		public MyCustomerDetailsWrapper GetMyCustomers()
-		{
-			try
-			{
-				return _customerLib.GetMyCustomers();
-			}
-			catch (Exception ex)
-			{
-				OpLogPerf.Log(ex);
-				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
-			}
-		}
+        [Authorize]
+        [Route("GetMyCustomers")]
+        public MyCustomerDetailsWrapper GetMyCustomers()
+        {
+            return SafeExecutor(() => _customerLib.GetMyCustomers()
+                , "Unable to get My Customers"
+            );
+        }
 
-		[Authorize]
+        [Authorize]
+        [Route("GetMyCustomerNames")]
+        public IEnumerable<MyCustomersInformation> GetMyCustomerNames()
+        {
+            return SafeExecutor(() => _customerLib.GetMyCustomerNames()
+                , "Unable to get My Customers"
+            );
+        }
+
+        [Authorize]
+        [Route("GetMyCustomerDivsByCustNmSid/{custNmSid}")]
+        public IEnumerable<MyCustomersInformation> GetMyCustomerDivsByCustNmSid(int custNmSid)
+        {
+            return SafeExecutor(() => _customerLib.GetMyCustomerDivsByCustNmSid(custNmSid)
+                , "Unable to get My Customers"
+            );
+        }
+
+        [Authorize]
 		[Route("GetMyCustomersInfo")]
 		public List<MyCustomersInformation> GetMyCustomersInfo()
 		{
-			try
-			{
-				return _customerLib.GetMyCustomersInfo();
-			}
-			catch (Exception ex)
-			{
-				OpLogPerf.Log(ex);
-				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
-			}
+            return SafeExecutor(() => _customerLib.GetMyCustomersInfo()
+                , "Unable to get Customers"
+            );
 		}
 
 		[Authorize]
 		[Route("GetMyCustomersSoldTo")]
 		public List<MyCustomersSoldTo> GetMyCustomersSoldTo()
 		{
-			try
-			{
-				return _customerLib.GetMyCustomersSoldTo();
-			}
-			catch (Exception ex)
-			{
-				OpLogPerf.Log(ex);
-				throw new HttpResponseException(HttpStatusCode.InternalServerError);  //responds with a simple status code for ajax call to consume.
-			}
+            return SafeExecutor(() => _customerLib.GetMyCustomersSoldTo()
+                , "Unable to get Customers"
+            );
 		}
 	}
 }

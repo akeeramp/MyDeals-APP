@@ -75,6 +75,11 @@ namespace Intel.MyDeals.BusinessLogic
             return GetCustomerDivisions().Where(c => c.CUST_TYPE == type).ToList();
         }
 
+        public List<CustomerDivision> GetCustomerDivisionsByCustNmSid(int custNmSid)
+        {
+            return GetCustomerDivisions().Where(c => c.CUST_NM_SID == custNmSid).ToList();
+        }
+
         /// <summary>
         /// Get All Customer Divisions By Specified Geo
         /// </summary>
@@ -107,6 +112,18 @@ namespace Intel.MyDeals.BusinessLogic
         {
             return _customerDataLib.GetMyCustomers();
         }
+
+
+        public List<MyCustomersInformation> GetMyCustomerNames()
+        {
+            return _customerDataLib.GetMyCustomers().CustomerInfo.Where(c => c.CUST_LVL_SID == 2002).ToList();
+        }
+
+        public List<MyCustomersInformation> GetMyCustomerDivsByCustNmSid(int custNmSid)
+        {
+            return _customerDataLib.GetMyCustomers().CustomerInfo.Where(c => c.CUST_LVL_SID == 2003 && c.CUST_NM_SID == custNmSid).ToList();
+        }
+
 
         /// <summary>
         /// Get Customer Information that belongs to requesting user

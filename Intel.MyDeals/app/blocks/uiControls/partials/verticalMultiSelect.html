@@ -3,9 +3,17 @@
     <div kendo-tooltip k-content="helptipMsg" k-position="'top'" ng-show="opHelpMsg" class="fr opElementHelpIcon intelicon-information-outlined"></div>
     <div class="clearboth"></div>
     <div kendo-tooltip k-content="tooltipMsg" k-position="'top'" ng-show="opIsError" class="err-bit-el"></div>
-    <input type="text" class="k-textbox fl opUiElement"
-           ng-model="value"
-           ng-readonly="opIsReadOnly"
-           ng-class="{isHidden: opIsHidden, isReadOnly: opIsReadOnly, isError: opIsError, isSaved: opIsSaved, isDirty: opIsDirty}"/>
+
+    <select id="{{opCd}}"
+            kendo-multi-select class="fl opUiElement"
+            k-ng-bind="value"
+            k-rebind="value"
+            k-data-source="values"
+            k-data-text-field="opLookupText"
+            k-data-value-field="opLookupValue"
+            k-value-primitive="true"
+            k-auto-close="false"
+            style="width: 100%;"
+            ng-class="{isHidden: opIsHidden, isReadOnly: opIsReadOnly, isError: opIsError, isSaved: opIsSaved, isDirty: opIsDirty}"></select>
     <div class="clearboth"></div>
 </div>

@@ -14,27 +14,25 @@
                 <div class="col-md-10"
                      op-control-flat
                      ng-model="contractData"
-                     op-cd="'CUST_NM_SID'"
+                     op-cd="'CUST_MBR_SID'"
                      op-type="'COMBOBOX'"
                      op-label="'Customer:'"
-                     op-lookup-url="'/api/Customers/GetMyCustomersInfo'"
+                     op-lookup-url="'/api/Customers/GetMyCustomerNames'"
                      op-lookup-text="'CUST_NM'"
-                     op-lookup-value="'CUST_NM_SID'"
+                     op-lookup-value="'CUST_MBR_SID'"
                      op-selected-object="'Customer'"
                      op-ui-mode="'VERTICAL'"></div>
 
                 <div class="col-md-10"
                      op-control-flat
                      ng-model="contractData"
-                     op-cd="'CUST_MBR_SID'"
-                     op-type="'COMBOBOX'"
+                     op-cd="'CUST_ACCNT_DIV'"
+                     op-type="'MULTISELECT'"
                      op-label="'Division:'"
-                     op-lookup-url="'/api/Customers/GetMyCustomersInfo'"
+                     op-lookup-values="[]"
                      op-lookup-text="'CUST_DIV_NM'"
                      op-lookup-value="'CUST_MBR_SID'"
                      op-selected-object="'Customer'"
-                     op-cascade-field="'CUST_NM_SID'"
-                     op-cascade-from="'CUST_NM_SID'"
                      op-ui-mode="'VERTICAL'"></div>
             </div>
             <div class="col-md-6">
@@ -48,7 +46,7 @@
                      op-cd="'CUST_ACCPT'"
                      op-type="'RADIOBUTTONGROUP'"
                      op-label="''"
-                     op-lookup-url="'/api/Lookups/v1/GetLookups/DROPDOWN'"
+                     op-lookup-url="'/api/Dropdown/GetDropdowns/MRKT_SEG_NON_CORP'"
                      op-lookup-text="'DROP_DOWN'"
                      op-lookup-value="'DROP_DOWN'"
                      op-ui-mode="'VERTICAL'"></div>

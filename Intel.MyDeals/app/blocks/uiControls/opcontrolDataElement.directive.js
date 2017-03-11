@@ -17,12 +17,12 @@ function opControlDataElement($http, lookupsService, $compile, $templateCache, l
         el += ' op-lookup-url="\'' + scope.opLookupUrl + '\'"';
         el += ' op-lookup-text="\'' + scope.opLookupText + '\'"';
         el += ' op-lookup-value="\'' + scope.opLookupValue + '\'"';
-        el += ' op-selected-object="\'' + scope.opSelectedObject + '\'"'; 
+        el += ' op-lookup-values="\'' + scope.opLookupValues + '\'"';
+        el += ' op-selected-object="\'' + scope.opSelectedObject + '\'"';
         el += ' op-min-value="' + scope.opMinValue + '"';
         el += ' op-max-value="' + scope.opMaxValue + '"';
-        el += ' op-cascade-field="\'' + scope.opCascadeField + '\'"';
-        el += ' op-cascade-from="\'' + scope.opCascadeFrom + '\'"';
         el += ' op-valid-msg="opValue.' + scope.opCd + '.validMsg"';
+        el += ' op-help-msg="opValue.' + scope.opCd + '.helpMsg"';
         el += ' op-is-error="opValue.' + scope.opCd + '.isError"';
         el += ' op-is-saved="opValue.' + scope.opCd + '.isSaved"';
         el += ' op-is-dirty="opValue.' + scope.opCd + '.isDirty"';
@@ -49,11 +49,10 @@ function opControlDataElement($http, lookupsService, $compile, $templateCache, l
             opLookupUrl: '=',
             opLookupText: '=',
             opLookupValue: '=',
+            opLookupValues: '=',
             opSelectedObject: '=',
             opMinValue: '=',
-            opMaxValue: '=',
-            opCascadeField: '=',
-            opCascadeFrom: '='
+            opMaxValue: '='
         },
         link: linker
     }

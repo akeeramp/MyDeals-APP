@@ -21,13 +21,13 @@
                     "DATE": { type: "date" },
                     "DROPDOWN": {
                         type: "string",
-                        values: "/api/Lookups/v1/GetLookups/DROPDOWN",
+                        values: "/api/Dropdown/GetDropdowns/MRKT_SEG_NON_CORP",
                         valuesText: "DROP_DOWN",
                         valuesValue: "DROP_DOWN"
                     },
                     "COMBOBOX": {
                         type: "string",
-                        values: "/api/Lookups/v1/GetLookups/COMBOBOX",
+                        values: "/api/Dropdown/GetDropdowns/MRKT_SEG_NON_CORP",
                         valuesText: "DROP_DOWN",
                         valuesValue: "DROP_DOWN"
                     }
@@ -75,13 +75,13 @@
                     "DATE": { type: "date" },
                     "DROPDOWN": {
                         type: "string",
-                        values: "/api/Lookups/v1/GetLookups/DROPDOWN",
+                        values: "/api/Dropdown/GetDropdowns/MRKT_SEG_NON_CORP",
                         valuesText: "DROP_DOWN",
                         valuesValue: "DROP_DOWN"
                     },
                     "COMBOBOX": {
                         type: "string",
-                        values: "/api/Lookups/v1/GetLookups/COMBOBOX",
+                        values: "/api/Dropdown/GetDropdowns/MRKT_SEG_NON_CORP",
                         valuesText: "DROP_DOWN",
                         valuesValue: "DROP_DOWN"
                     }

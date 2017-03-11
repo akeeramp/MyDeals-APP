@@ -345,10 +345,10 @@
     <Content Include="app\blocks\router\router.module.js" />
     <Content Include="app\blocks\secUtil\secUtil.module.js" />
     <Content Include="app\blocks\secUtil\secUtil.service.js" />
-    <Content Include="app\blocks\uiControls\partials\horizontalComboBoxCascade.html" />
+    <Content Include="app\blocks\uiControls\partials\horizontalMultiSelect.html" />
     <Content Include="app\blocks\uiControls\partials\horizontalSlider.html" />
     <Content Include="app\blocks\uiControls\partials\horizontalTextArea.html" />
-    <Content Include="app\blocks\uiControls\partials\verticalComboBoxCascade.html" />
+    <Content Include="app\blocks\uiControls\partials\verticalMultiSelect.html" />
     <Content Include="app\blocks\uiControls\partials\verticalRadioButtonGroup.html" />
     <Content Include="app\blocks\uiControls\partials\verticalTextArea.html" />
     <Content Include="app\blocks\uiControls\partials\verticalSlider.html" />

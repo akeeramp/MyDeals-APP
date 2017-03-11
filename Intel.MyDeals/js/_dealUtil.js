@@ -728,7 +728,7 @@ dealUtil.lookupEditor = function (container, options) {
     var dealtype = options.model.DEAL_TYPE_CD;
     if (dealtype === undefined || dealtype === null) dealtype = "ALL";
 
-    var url = kendo.format("api/Lookups/v1/GetLookups/{0}/{1}", dealtype, options.field);
+    var url = kendo.format("api/Dropdown/GetDropdowns/{0}/{1}", dealtype, options.field);
     $('<input data-text-field="DROP_DOWN" data-value-field="DROP_DOWN" name="' + options.field + '" data-bind="value:' + options.field + '"/>')
         .appendTo(container)
         .kendoDropDownList({

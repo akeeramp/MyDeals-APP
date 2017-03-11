@@ -8,10 +8,13 @@ namespace Intel.MyDeals.IBusinessLogic
         CustomerDivision GetCustomerDivision(int sid);
         List<CustomerDivision> GetCustomerDivisions(bool getCachedResult = true);
         List<CustomerDivision> GetCustomerDivisionsActive();
+        List<CustomerDivision> GetCustomerDivisionsByCustNmSid(int custNmSid);
         List<CustomerDivision> GetCustomerDivisionsByCategory(string cat);
         List<CustomerDivision> GetCustomerDivisionsByHostedGeo(string geo);
         List<CustomerDivision> GetCustomerDivisionsByType(string type);
         MyCustomerDetailsWrapper GetMyCustomers();
+        List<MyCustomersInformation> GetMyCustomerNames();
+        List<MyCustomersInformation> GetMyCustomerDivsByCustNmSid(int custNmSid);
         List<MyCustomersInformation> GetMyCustomersInfo();
         List<MyCustomersSoldTo> GetMyCustomersSoldTo();
     }

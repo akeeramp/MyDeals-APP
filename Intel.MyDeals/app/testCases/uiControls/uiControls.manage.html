@@ -55,7 +55,7 @@
              op-cd="'DROPDOWN'"
              op-type="'DROPDOWN'"
              op-label="'Dropdown Sample:'"
-             op-lookup-url="'/api/Lookups/v1/GetLookups/DROPDOWN'"
+             op-lookup-url="'/api/Dropdown/GetDropdowns/MRKT_SEG_NON_CORP'"
              op-lookup-text="'DROP_DOWN'"
              op-lookup-value="'DROP_DOWN'"
              op-ui-mode="'VERTICAL'"></div>
@@ -65,7 +65,34 @@
              op-cd="'COMBOBOX'"
              op-type="'COMBOBOX'"
              op-label="'Combobox Sample:'"
-             op-lookup-url="'/api/Lookups/v1/GetLookups/COMBOBOX'"
+             op-lookup-url="'/api/Dropdown/GetDropdowns/MRKT_SEG_NON_CORP'"
+             op-lookup-text="'DROP_DOWN'"
+             op-lookup-value="'DROP_DOWN'"
+             op-ui-mode="'VERTICAL'"></div>
+        <div class="myDealsControl"
+             op-control-data-element
+             ng-model="des"
+             op-cd="'TEXTAREA'"
+             op-type="'TEXTAREA'"
+             op-label="'Textarea'"
+             op-ui-mode="'VERTICAL'"></div>
+        <div class="myDealsControl"
+             style="width: 200px;"
+             op-control-data-element
+             ng-model="des"
+             op-cd="'SliderInt'"
+             op-type="'SLIDER'"
+             op-label="'Slider Sample:'"
+             op-min-value="1"
+             op-max-value="4"
+             op-ui-mode="'VERTICAL'"></div>
+        <div class="myDealsControl"
+             op-control-data-element
+             ng-model="des"
+             op-cd="'RADIOBUTTON'"
+             op-type="'RADIOBUTTONGROUP'"
+             op-label="'Radio Group Sample:'"
+             op-lookup-url="'/api/Dropdown/GetDropdowns/MRKT_SEG_NON_CORP'"
              op-lookup-text="'DROP_DOWN'"
              op-lookup-value="'DROP_DOWN'"
              op-ui-mode="'VERTICAL'"></div>
@@ -104,10 +131,10 @@
         <div class="myDealsControl"
              op-control-flat
              ng-model="flat"
-             op-cd="'DROPDOWN'"
+             op-cd="'DROPDOWN1'"
              op-type="'DROPDOWN'"
              op-label="'Dropdown Sample:'"
-             op-lookup-url="'/api/Lookups/v1/GetLookups/DROPDOWN'"
+             op-lookup-url="'/api/Dropdown/GetDropdowns/MRKT_SEG_NON_CORP'"
              op-lookup-text="'DROP_DOWN'"
              op-lookup-value="'DROP_DOWN'"
              op-selected-object="'DropdownSelected'"
@@ -115,10 +142,10 @@
         <div class="myDealsControl"
              op-control-flat
              ng-model="flat"
-             op-cd="'COMBOBOX'"
+             op-cd="'COMBOBOX1'"
              op-type="'COMBOBOX'"
              op-label="'Combobox Sample:'"
-             op-lookup-url="'/api/Lookups/v1/GetLookups/COMBOBOX'"
+             op-lookup-url="'/api/Dropdown/GetDropdowns/MRKT_SEG_NON_CORP'"
              op-lookup-text="'DROP_DOWN'"
              op-lookup-value="'DROP_DOWN'"
              op-selected-object="'ComboboxSelected'"
@@ -126,19 +153,21 @@
         <div class="myDealsControl"
              op-control-flat
              ng-model="flat"
-             op-cd="'TEXTAREA'"
-             op-type="'TEXTAREA'"
-             op-label="'Textarea'"
-             op-ui-mode="'VERTICAL'"></div>
+             op-cd="'MULTISELECT'"
+             op-type="'MULTISELECT'"
+             op-label="'Multiselect Sample:'"
+             op-lookup-url="'/api/Dropdown/GetDropdowns/MRKT_SEG_NON_CORP'"
+             op-lookup-text="'DROP_DOWN'"
+             op-lookup-value="'DROP_DOWN'"
+             op-selected-object="'ComboboxSelected'"
+             op-ui-mode="'VERTICAL'"
+             style="width: 250px;"></div>
         <div class="myDealsControl"
              op-control-flat
              ng-model="flat"
-             op-cd="'RADIOBUTTON'"
-             op-type="'RADIOBUTTONGROUP'"
-             op-label="'Radio Group Sample:'"
-             op-lookup-url="'/api/Lookups/v1/GetLookups/DROPDOWN'"
-             op-lookup-text="'DROP_DOWN'"
-             op-lookup-value="'DROP_DOWN'"
+             op-cd="'TEXTAREA'"
+             op-type="'TEXTAREA'"
+             op-label="'Textarea'"
              op-ui-mode="'VERTICAL'"></div>
         <div class="myDealsControl"
              style="width: 200px;"
@@ -149,6 +178,16 @@
              op-label="'Slider Sample:'"
              op-min-value="1"
              op-max-value="4"
+             op-ui-mode="'VERTICAL'"></div>
+        <div class="myDealsControl"
+             op-control-flat
+             ng-model="flat"
+             op-cd="'RADIOBUTTON'"
+             op-type="'RADIOBUTTONGROUP'"
+             op-label="'Radio Group Sample:'"
+             op-lookup-url="'/api/Dropdown/GetDropdowns/MRKT_SEG_NON_CORP'"
+             op-lookup-text="'DROP_DOWN'"
+             op-lookup-value="'DROP_DOWN'"
              op-ui-mode="'VERTICAL'"></div>
 
         <div class="clearboth"></div>

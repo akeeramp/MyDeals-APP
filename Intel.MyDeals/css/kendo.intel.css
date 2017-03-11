@@ -6146,7 +6146,14 @@ div.k-scheduler-marquee:after {
     font-size: 18px;
 }
 
+.k-multiselect-wrap li span {
+    margin-right: 0;
+}
 
+.k-list-scroller .k-item.ng-scope.k-state-selected {
+    background-color: #00aeef;
+    color: #ffffff;
+}
 
 /* icons */
 .k-grid-update .k-i-check {

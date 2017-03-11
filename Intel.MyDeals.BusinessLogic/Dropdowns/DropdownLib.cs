@@ -10,7 +10,7 @@ namespace Intel.MyDeals.BusinessLogic
 {
     public class DropdownLib : IDropdownLib
 	{
-		private readonly IDropdownDataLib _DropdownDataLib;
+		private readonly IDropdownDataLib _dropdownDataLib;
 
 		private readonly IDataCollectionsDataLib _dataCollectionsDataLib;
 
@@ -20,13 +20,13 @@ namespace Intel.MyDeals.BusinessLogic
 		/// </summary>
 		public DropdownLib()
 		{
-			this._DropdownDataLib = new DropdownDataLib();
+			_dropdownDataLib = new DropdownDataLib();
 		}
 
-		public DropdownLib(IDropdownDataLib _DropdownDataLib, IDataCollectionsDataLib _dataCollectionsDataLib)
+		public DropdownLib(IDropdownDataLib dropdownDataLib, IDataCollectionsDataLib dataCollectionsDataLib)
 		{
-			this._DropdownDataLib = _DropdownDataLib;
-			this._dataCollectionsDataLib = _dataCollectionsDataLib;
+			_dropdownDataLib = dropdownDataLib;
+			_dataCollectionsDataLib = dataCollectionsDataLib;
 		}
 
 
@@ -46,6 +46,16 @@ namespace Intel.MyDeals.BusinessLogic
         public IEnumerable<Dropdown> GetDropdowns()
         {
             return _dataCollectionsDataLib.GetDropdowns();
+        }
+
+        /// <summary>
+        /// Get All Simple Dropdowns
+        /// </summary>
+        /// <returns>list of dropdowns</returns>
+        public IEnumerable<BasicDropdown> GetDropdowns(string atrbCd)
+        {
+            atrbCd = atrbCd.ToUpper();
+            return _dataCollectionsDataLib.GetBasicDropdowns().Where(d => d.ATRB_CD.ToUpper() == atrbCd);
         }
 
         /// <summary>
@@ -92,7 +102,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns>updated dropdown</returns>
         public BasicDropdown ManageBasicDropdowns(BasicDropdown dropdown, CrudModes type)
         {
-            return _DropdownDataLib.ManageBasicDropdowns(dropdown, type);
+            return _dropdownDataLib.ManageBasicDropdowns(dropdown, type);
         }
 
         /// <summary>
@@ -102,7 +112,9 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns>success/failure boolean</returns>
         public bool DeleteBasicDropdowns(int id)
         {
-            return _DropdownDataLib.DeleteBasicDropdown(id);
+            return _dropdownDataLib.DeleteBasicDropdown(id);
         }
-    }
+
+
+	}
 }

@@ -2,9 +2,9 @@
     .module('app.contract')
     .controller('ContractController', ContractController);
 
-ContractController.$inject = ['$scope', '$state', 'contractData', 'templateData', 'objsetService', 'templatesService', 'logger', '$uibModal', '$timeout', '$window', '$location', '$rootScope'];
+ContractController.$inject = ['$scope', '$state', 'contractData', 'templateData', 'objsetService', 'dataService', 'templatesService', 'logger', '$uibModal', '$timeout', '$window', '$location', '$rootScope'];
 
-function ContractController($scope, $state, contractData, templateData, objsetService, templatesService, logger, $uibModal, $timeout, $window, $location, $rootScope) {
+function ContractController($scope, $state, contractData, templateData, objsetService, dataService, templatesService, logger, $uibModal, $timeout, $window, $location, $rootScope) {
     
     // store template information
     //
@@ -21,7 +21,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         }
 
         // new contract
-        debugger;
+        //debugger;
         var c = util.clone($scope.templates.ObjectTemplates.CNTRCT.ALL_TYPES);
 
         // check URL and see if any parameters were passed.
@@ -54,10 +54,10 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
     $scope.isExistingContract = function () {
         return $scope.contractData.DC_ID > 0;
     }
+    $scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV"] = $scope.contractData["CUST_ACCNT_DIV"] === undefined || $scope.contractData["CUST_ACCNT_DIV"] === "";
 
 
-
-    // Don't let the user leave unless the data is savedte
+    // Don't let the user leave unless the data is saved
     //
     $scope._dirty = false;
     $scope._dirtyContractOnly = false;
@@ -87,10 +87,27 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
     $scope.$watch('contractData',
         function (newValue, oldValue, el) {
             if (oldValue === newValue) return;
+
+            if (oldValue["CUST_MBR_SID"] !== newValue["CUST_MBR_SID"]) {
+                $scope.updateCorpDivision(newValue);
+            }
+
             el._dirty = true;
             el._dirtyContractOnly = true;
         }, true);
 
+    $scope.updateCorpDivision = function (dataItem) {
+        var custId = dataItem["CUST_MBR_SID"];
+        dataService.get("/api/Customers/GetMyCustomerDivsByCustNmSid/" + custId).then(function (response) {
+            // only show if more than 1 result
+            $scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV"] = response.data.length <= 1;
+            //debugger;
+            $("#CUST_ACCNT_DIV").data("kendoMultiSelect").dataSource.data(response.data);
+            //debugger;
+        }, function (response) {
+            logger.error("Unable to get Customer Divisions.", response, response.statusText);
+        });
+    }
 
     // **** LEFT NAVIGATION Methods ****
     //
