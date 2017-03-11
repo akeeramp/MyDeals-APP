@@ -6043,6 +6043,10 @@ div.k-scheduler-marquee:after {
 .k-grouping-header .k-link, .k-grouping-header .k-link:link {
     color: #00AEEF;
 }
+.k-grid .k-grouping-row td {
+    padding: 0;
+    height: 30px;
+}
 
 .k-grid tr td, .k-pivot-layout .k-grid tr td {
     /*border-bottom-width: 0;*/
