@@ -150,6 +150,7 @@
     	};
     	vm.dropDownOptions.dealAction = {
     		autoBind: false,
+    		placeholder: "All Deal Actions",
     		dataTextField: "dropdownName",
     		dataSource: {
     			type: "json",
@@ -307,14 +308,28 @@
     		} else if (vm.currentTabMode === vm.tabModeEnum.DealSecurity) { // Deal Security Tab
     			vm.filtered.attributes = [];
     			// Create attribute list out of the Deal Security's actions dropdown
-    			for(var i=0; i<vm.filtered.dealActions.length; i++){
-    				// TODO: perform saves on Deal Security via -1 bits
-    				vm.filtered.attributes.push({
-    					ATRB_BIT: -1,
-    					ATRB_MAGNITUDE: -1,
-    					ATRB_CD: angular.copy(vm.filtered.dealActions[i].dropdownName),
-    					ATRB_SID:  angular.copy(vm.filtered.dealActions[i].dropdownID) // Note: for deal security only, atrb ID is actually action ID, whcih will be used during saving
-    				});
+    			if (typeof vm.filtered.dealActions !== "undefined" && vm.filtered.dealActions.length > 0) {
+					// filtered deal secruity actions
+    				for(var i=0; i<vm.filtered.dealActions.length; i++){
+    					// TODO: perform saves on Deal Security via -1 bits
+    					vm.filtered.attributes.push({
+    						ATRB_BIT: -1,
+    						ATRB_MAGNITUDE: -1,
+    						ATRB_CD: angular.copy(vm.filtered.dealActions[i].dropdownName),
+    						ATRB_SID:  angular.copy(vm.filtered.dealActions[i].dropdownID) // Note: for deal security only, atrb ID is actually action ID, whcih will be used during saving
+    					});
+    				}
+    			} else {
+    				var allDealActions = $filter('filter')(vm.dropDownDatasource.actions, { subCategory: 'Deal' }, true);
+    				for (var i = 0; i < allDealActions.length; i++) {
+    					// TODO: perform saves on Deal Security via -1 bits
+    					vm.filtered.attributes.push({
+    						ATRB_BIT: -1, // TODO
+    						ATRB_MAGNITUDE: -1,
+    						ATRB_CD: angular.copy(allDealActions[i].dropdownName),
+    						ATRB_SID: angular.copy(allDealActions[i].dropdownID) // Note: for deal security only, atrb ID is actually action ID, whcih will be used during saving
+    					});
+    				}
     			}
     			vm.currentDisplayAction = "Deal Security";
     		}
@@ -435,7 +450,7 @@
     			OBJ_SET_TYPE_CD: dealCd,
     			OBJ_SET_TYPE_SID: dealId,
 				ROLE_NM: roleCd,
-				ROLE_SID: roleId,
+				ROLE_TYPE_SID: roleId,
 				WFSTG_NM: stgCd,
 				WFSTG_MBR_SID: stgId
     			//isNowChecked: true, 
@@ -553,6 +568,9 @@
 
 			// Update ObjSetType dropdown Datasource
         	vm.dropDown.objSetType.setDataSource(vm.drilledDownDealTypes)
+
+        	// Clear selected
+        	vm.selected.dealTypes = [];
         }
 
         function filterObjType(objTypeName) {

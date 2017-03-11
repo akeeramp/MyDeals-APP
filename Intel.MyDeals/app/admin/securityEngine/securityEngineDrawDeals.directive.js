@@ -11,6 +11,8 @@ securityEngineDrawDeals.$inject = ['$http', 'lookupsService', '$compile', '$temp
 
 function securityEngineDrawDeals($http, lookupsService, $compile, $templateCache, logger, $q, $filter) {
 
+	var dummyAttrName = "NA"; // This is used for deal Security and others that do not tie to an attribute
+
 	var linker = function (scope, element, attr) {
 		var vm = scope.$parent.vm;
 		// Get HTML for each deal box 
@@ -56,9 +58,9 @@ function securityEngineDrawDeals($http, lookupsService, $compile, $templateCache
 					var myActnCd = $filter('filter')(vm.dropDownDatasource.actions, { dropdownID: parseInt(atrbId) }, true)[0];
 					actnCd = (myActnCd ? myActnCd.dropdownName : -1);
 					mappingKey = atrbCd;
-					var myDealActn = $filter('filter')(vm.dropDownDatasource.dealActions, { FACT_ATRB_CD: "ACTIVE" }, true)[0];
-					newAtrbId = (myDealActn ? myDealActn.FACT_ATRB_SID : -1);
-					newAtrbCd = "ACTIVE";
+					var dummyAttr = $filter('filter')(vm.dropDownDatasource.attributes, { ATRB_CD: dummyAttrName }, true)[0]
+					newAtrbId = dummyAttr.ATRB_SID;
+					newAtrbCd = dummyAttrName;
 				}
 
 				clickableHtml = "<div class='fl' ng-click='$parent.vm.clickBox($event, " + actionId + ", \"" + actnCd + "\", " + newAtrbId + ", \"" + newAtrbCd + "\", " + dealType.Id + ", \"" + dealType.Alias + "\", " + role.dropdownID + ", \"" + role.dropdownName + "\", " + stgId + ", \"" + stgName + "\")'>"
@@ -83,7 +85,7 @@ function securityEngineDrawDeals($http, lookupsService, $compile, $templateCache
 
 		/* Get classes and innerIcons */
 		// Deal Read Only
-		if (mappingKey === "ATRB_READ_ONLY" && vm.secAtrbUtil.securityMappings["C_UPDATE_DEAL"][atrbKey.replace(atrbCd, 'ACTIVE')] === undefined) {
+		if (mappingKey === "ATRB_READ_ONLY" && vm.secAtrbUtil.securityMappings["C_UPDATE_DEAL"][atrbKey.replace(atrbCd, dummyAttrName)] === undefined) {
 			isClickable = true;
 			title += "Deal is Read Only\n";
 			extraClasses.push("atrbbasecolorDealReadOnly");
@@ -91,7 +93,7 @@ function securityEngineDrawDeals($http, lookupsService, $compile, $templateCache
 			//innerIcon += "<i class='fa fa-lock'></i>";
 		}
 		// Not in Deal Type
-		else if (vm.currentTabMode === vm.tabModeEnum.AtrbSecurity && atrbCd !== "ACTIVE" && vm.dealTypeAtrbs[vm.filtered.objType.Alias][dealType] !== undefined && !vm.dealTypeAtrbs[vm.filtered.objType.Alias][dealType].contains(atrbCd)) {
+		else if (vm.currentTabMode === vm.tabModeEnum.AtrbSecurity && atrbCd !== dummyAttrName && vm.dealTypeAtrbs[vm.filtered.objType.Alias][dealType] !== undefined && !vm.dealTypeAtrbs[vm.filtered.objType.Alias][dealType].contains(atrbCd)) {
 			extraClasses.push("atrbbasecolorNotInDealType");
 			innerIcon += "&nbsp;";
 		}

@@ -126,11 +126,11 @@ namespace Intel.MyDeals.DataLibrary
 		{
 			try
 			{
-				Procs.dbo.PR_GET_SECUR_MSK cmd = new Procs.dbo.PR_GET_SECUR_MSK(); //PR_MYDL_GET_SECUR_MSK
+				Procs.dbo.PR_MYDL_GET_SECUR_MSK cmd = new Procs.dbo.PR_MYDL_GET_SECUR_MSK(); //PR_MYDL_GET_SECUR_MSK
 
 				using (DataSet data = DataAccess.ExecuteDataSet(cmd))
 				{
-					List<SecurityAttribute> securityActions = (from rw in data.Tables[0].AsEnumerable()
+					List<SecurityAttribute> securityAttributes = (from rw in data.Tables[0].AsEnumerable()
 															   select new SecurityAttribute
 															   {
 																   ATRB_BIT = Convert.ToInt64(rw["ATRB_BIT"]),
@@ -167,7 +167,7 @@ namespace Intel.MyDeals.DataLibrary
 					//	RoleTier = appRoleTier.ROLE_TIER_CD
 					//}).ToList();
 
-					return new SecurityWrapper(tmpRoleType, securityActions, securityMasks);
+					return new SecurityWrapper(tmpRoleType, securityAttributes, securityMasks);
 				}
 			}
 			catch (Exception ex)
@@ -247,7 +247,7 @@ namespace Intel.MyDeals.DataLibrary
 				OpLogPerf.Log(ex);
 				Exception simpleEx = new Exception("Problem Security Attribute - GetObjAtrbs");
 				throw simpleEx;
-			}
+			}			
 			return ret;
 		}
 
@@ -297,7 +297,7 @@ namespace Intel.MyDeals.DataLibrary
 		{
 			try
 			{
-				Procs.dbo.PR_UPD_CK_SECUR_MSK cmd = new Procs.dbo.PR_UPD_CK_SECUR_MSK { };
+				Procs.dbo.PR_MYDL_UPD_CK_SECUR_MSK cmd = new Procs.dbo.PR_MYDL_UPD_CK_SECUR_MSK { };
 				DataAccess.ExecuteDataSet(cmd);
 			}
 			catch (Exception ex)
