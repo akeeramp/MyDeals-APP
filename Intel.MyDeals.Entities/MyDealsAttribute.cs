@@ -235,5 +235,6 @@ namespace Intel.MyDeals.Entities
                 }
             }
         }
+
     }
 }

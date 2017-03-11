@@ -54,7 +54,7 @@ using System.Collections.Generic;
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	// Application objects - Used by other classes to break data up per application, this is for admin screens only
-	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MANAGE_APPLICATIONS] @idsid = 'PWECKENR', @mode = 'Setup'");
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MANAGE_APPLICATIONS] @emp_wwid = '10505693', @mode = 'Setup'");
 	ds.Tables[0].TableName = "AdminApplications";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
@@ -64,12 +64,12 @@ using System.Collections.Generic;
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	// Role Type objects - for basic roles information like "FSE" and "SA"
-	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MANAGE_ROLE_TYPES] @idsid = 'PWECKENR', @mode = 'Setup'");
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_MANAGE_ROLE_MSTR] @emp_wwid = '10505693', @mode = 'Setup'");
 	ds.Tables[0].TableName = "AdminRoleType";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	// Actions objects - For field security programming flags
-	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MANAGE_ACTIONS] @idsid = 'PWECKENR', @mode = 'Setup'");
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_MANAGE_ACTIONS] @emp_wwid = '10505693', @mode = 'Setup'");
 	ds.Tables[0].TableName = "SecurityActions";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
@@ -137,21 +137,9 @@ using System.Collections.Generic;
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	// Prooduct Alias
-	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_UPD_PRD_ALIAS] @WWID=99999, @MODE = 'SELECT'");
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_UPD_PRD_ALIAS] @WWID=10548414, @MODE = 'SELECT'");
 	ds.Tables[0].TableName = "ProductAlias";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
-
-
-	// Object Templates
-	//ds = dbobjects.ExecuteDataSet("[dbo].[PR_GET_NEW_DEAL]");
-	//ds.Tables[0].TableName = "ObjectTypeTemplate"; // ObjectTypeTemplate
-	//WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
-
-	//ds.Tables[1].TableName = "CustomerCal"; // CustCal
-	//WriteLine(ScriptTools.DataTableToClass(ds.Tables[1], false));
-
-	//ds.Tables[2].TableName = "ObjectTypes"; // ObjTypes
-	//WriteLine(ScriptTools.DataTableToClass(ds.Tables[2], false));
 
 
 	// Object Templates
@@ -161,9 +149,6 @@ using System.Collections.Generic;
 
 	ds.Tables[1].TableName = "CustomerCal"; // CustCal
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[1], false));
-
-	//ds.Tables[2].TableName = "ObjectTypes"; // ObjTypes
-	//WriteLine(ScriptTools.DataTableToClass(ds.Tables[2], false));
 
 
 
@@ -183,7 +168,7 @@ using System.Collections.Generic;
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	// PCT Product Attribute Values
-	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_ATRB_VAL_PCT] @vrt_mbr_sid = 9 ");
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_ATRB_VAL_PCT] @vrt_mbr_sid = 9");
 	ds.Tables[0].TableName = "ProductAttributeValues";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 

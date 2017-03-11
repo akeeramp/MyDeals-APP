@@ -34,39 +34,39 @@ namespace Intel.MyDeals.BusinessLogic.Test
             SecurityActions action = new SecurityActions
             {
                 ACTN_CAT_CD = testString,
-                ACTN_CD = testString,
+                ACTN_NM = testString,
                 ACTN_DESC = testString,
                 SRT_ORD = 0,
-                WFSTG_ACTN_CD = testStringShort
+                //WFSTG_ACTN_CD = testStringShort
             };
             SecurityActions insertResult = new SecurityAttributesLib().ManageSecurityAction(action, CrudModes.Insert);
 
             Assert.IsTrue(
                 insertResult.ACTN_CAT_CD == action.ACTN_CAT_CD
-                && insertResult.ACTN_CD == action.ACTN_CD
+                && insertResult.ACTN_NM == action.ACTN_NM
                 && insertResult.ACTN_DESC == action.ACTN_DESC
                 && insertResult.SRT_ORD == action.SRT_ORD
-                && insertResult.WFSTG_ACTN_CD == action.WFSTG_ACTN_CD
+                //&& insertResult.WFSTG_ACTN_CD == action.WFSTG_ACTN_CD
                 );
 
             //UPDATE
             testString = "UNIT TEST - UpdateSecurityActions";
             insertResult.ACTN_CAT_CD = testString;
-            insertResult.ACTN_CD = testString;
+            insertResult.ACTN_NM = testString;
             insertResult.ACTN_DESC = testString;
 
             SecurityActions updateResult = new SecurityAttributesLib().ManageSecurityAction(insertResult, CrudModes.Update);
 
             Assert.IsTrue(
                 updateResult.ACTN_CAT_CD == insertResult.ACTN_CAT_CD
-                && updateResult.ACTN_CD == insertResult.ACTN_CD
+                && updateResult.ACTN_NM == insertResult.ACTN_NM
                 && updateResult.ACTN_DESC == insertResult.ACTN_DESC
                 && updateResult.SRT_ORD == insertResult.SRT_ORD
-                && updateResult.WFSTG_ACTN_CD == insertResult.WFSTG_ACTN_CD
+                //&& updateResult.WFSTG_ACTN_CD == insertResult.WFSTG_ACTN_CD
                 );
 
             //DELETE
-            bool deleteResult = new SecurityAttributesLib().DeleteSecurityAction(updateResult.ACTN_SID);
+            bool deleteResult = new SecurityAttributesLib().DeleteSecurityAction(updateResult.SECUR_ACTN_SID);
             Assert.IsTrue(deleteResult);
         }
 
@@ -91,7 +91,7 @@ namespace Intel.MyDeals.BusinessLogic.Test
 
             AdminApplications app = new AdminApplications
             {
-                APP_CD = testStringShort,
+                APP_NM = testStringShort,
                 APP_DESC = testString,
                 APP_SID = 0,
                 APP_SUITE = testString,
@@ -100,7 +100,7 @@ namespace Intel.MyDeals.BusinessLogic.Test
             AdminApplications insertResult = new SecurityAttributesLib().ManageAdminApplication(app, CrudModes.Insert);
 
             Assert.IsTrue(
-                insertResult.APP_CD == app.APP_CD
+                insertResult.APP_NM == app.APP_NM
                 && insertResult.APP_DESC == app.APP_DESC
                 && insertResult.APP_SID != 0
                 && insertResult.APP_SUITE == app.APP_SUITE
@@ -114,7 +114,7 @@ namespace Intel.MyDeals.BusinessLogic.Test
             AdminApplications updateResult = new SecurityAttributesLib().ManageAdminApplication(insertResult, CrudModes.Update);
 
             Assert.IsTrue(
-                updateResult.APP_CD == insertResult.APP_CD
+                updateResult.APP_NM == insertResult.APP_NM
                 && updateResult.APP_DESC == insertResult.APP_DESC
                 && updateResult.APP_SID == insertResult.APP_SID
                 && updateResult.APP_SUITE == insertResult.APP_SUITE
@@ -213,11 +213,11 @@ namespace Intel.MyDeals.BusinessLogic.Test
 
             AdminRoleType roleType = new AdminRoleType
             {
-                ROLE_TYPE_SID = 0,
-                ROLE_TYPE_CD = testStringShort,
-                ROLE_TYPE_DSPLY_CD = testStringShort,
-                ROLE_TYPE_DESC = testString,
-                ROLE_TIER_CD = testStringShort,
+                ROLE_SID = 0,
+                ROLE_NM = testStringShort,
+                ROLE_DSPLY_NM = testStringShort,
+                ROLE_DESC = testString,
+                ROLE_TIER_NM = testStringShort,
                 IS_SNGL_SLCT = false,
                 ACTV_IND = false,
                 APP_SID = 1
@@ -226,11 +226,11 @@ namespace Intel.MyDeals.BusinessLogic.Test
             AdminRoleType insertResult = new SecurityAttributesLib().ManageAdminRoleType(roleType, CrudModes.Insert);
 
             Assert.IsTrue(
-                insertResult.ROLE_TYPE_CD == roleType.ROLE_TYPE_CD
-                && insertResult.ROLE_TYPE_DSPLY_CD == roleType.ROLE_TYPE_DSPLY_CD
-                && insertResult.ROLE_TYPE_SID != 0
-                && insertResult.ROLE_TYPE_DESC == roleType.ROLE_TYPE_DESC
-                && insertResult.ROLE_TIER_CD == roleType.ROLE_TIER_CD
+                insertResult.ROLE_NM == roleType.ROLE_NM
+                && insertResult.ROLE_DSPLY_NM == roleType.ROLE_DSPLY_NM
+                && insertResult.ROLE_SID != 0
+                && insertResult.ROLE_DESC == roleType.ROLE_DESC
+                && insertResult.ROLE_TIER_NM == roleType.ROLE_TIER_NM
                 && insertResult.IS_SNGL_SLCT == roleType.IS_SNGL_SLCT
                 && insertResult.ACTV_IND == roleType.ACTV_IND
                 && insertResult.APP_SID == roleType.APP_SID
@@ -238,23 +238,23 @@ namespace Intel.MyDeals.BusinessLogic.Test
 
             //UPDATE
             testString = "UNIT TEST - UpdateAdminRoleTypes";
-            insertResult.ROLE_TYPE_DESC = testString;
+            insertResult.ROLE_DESC = testString;
 
             AdminRoleType updateResult = new SecurityAttributesLib().ManageAdminRoleType(insertResult, CrudModes.Update);
 
             Assert.IsTrue(
-                updateResult.ROLE_TYPE_CD == insertResult.ROLE_TYPE_CD
-                && updateResult.ROLE_TYPE_DSPLY_CD == insertResult.ROLE_TYPE_DSPLY_CD
-                && updateResult.ROLE_TYPE_SID == insertResult.ROLE_TYPE_SID
-                && updateResult.ROLE_TYPE_DESC == insertResult.ROLE_TYPE_DESC
-                && updateResult.ROLE_TIER_CD == insertResult.ROLE_TIER_CD
+                updateResult.ROLE_NM == insertResult.ROLE_NM
+                && updateResult.ROLE_DSPLY_NM == insertResult.ROLE_DSPLY_NM
+                && updateResult.ROLE_SID == insertResult.ROLE_SID
+                && updateResult.ROLE_DESC == insertResult.ROLE_DESC
+                && updateResult.ROLE_TIER_NM == insertResult.ROLE_TIER_NM
                 && updateResult.IS_SNGL_SLCT == insertResult.IS_SNGL_SLCT
                 && updateResult.ACTV_IND == insertResult.ACTV_IND
                 && updateResult.APP_SID == insertResult.APP_SID
                 );
 
             //DELETE
-            bool deleteResult = new SecurityAttributesLib().DeleteAdminRoleType(updateResult.ROLE_TYPE_SID);
+            bool deleteResult = new SecurityAttributesLib().DeleteAdminRoleType(updateResult.ROLE_SID);
             Assert.IsTrue(deleteResult);
         }
 

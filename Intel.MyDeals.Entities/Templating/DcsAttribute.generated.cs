@@ -64,7 +64,7 @@ namespace Intel.MyDeals.Entities {
 		public Int32 PIVOT_MSK {set;get;}
 
 		[DataMember]
-		public bool ACTV_IND {set;get;}
+		public int ACTV_IND {set;get;}
 	}
 	public class MyDealsAttributeHelper
 	{

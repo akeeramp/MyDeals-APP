@@ -382,11 +382,11 @@ namespace Intel.MyDeals.DataLibrary
                 if (state.Equals(CrudModes.Insert) || state.Equals(CrudModes.Update))
                 {
                     cmd.ACTN_CATGRY_CD = action.ACTN_CAT_CD;
-                    cmd.ACTN_CD = action.ACTN_CD;
+                    cmd.ACTN_CD = action.ACTN_NM;
                     cmd.ACTN_DESC = action.ACTN_DESC;
-                    cmd.ACTN_SID = action.ACTN_SID;
+                    cmd.ACTN_SID = action.SECUR_ACTN_SID;
                     cmd.SRT_ORD = action.SRT_ORD;
-					cmd.WFSTG_ACTN_CD = action.WFSTG_ACTN_CD;
+					//cmd.WFSTG_ACTN_CD = action.WFSTG_ACTN_CD;
 					//cmd.ACTV_IND = action.ACTV_IND;
 				}
 
@@ -396,15 +396,15 @@ namespace Intel.MyDeals.DataLibrary
                            select new SecurityActions
                            {
                                ACTN_CAT_CD = Convert.ToString(rw["ACTN_CAT_CD"]),
-                               ACTN_CD = Convert.ToString(rw["ACTN_CD"]),
+                               ACTN_NM = Convert.ToString(rw["ACTN_NM"]),
                                ACTN_DESC = Convert.ToString(rw["ACTN_DESC"]),
-                               ACTN_SID = Convert.ToInt32(rw["ACTN_SID"]),
+                               SECUR_ACTN_SID = Convert.ToInt32(rw["SECUR_ACTN_SID"]),
                                CHG_DTM = Convert.ToDateTime(rw["CHG_DTM"]),
                                CHG_EMP_WWID = Convert.ToInt32(rw["CHG_EMP_WWID"]),
                                CRE_DTM = Convert.ToDateTime(rw["CRE_DTM"]),
                                CRE_EMP_WWID = Convert.ToInt32(rw["CRE_EMP_WWID"]),
                                SRT_ORD = Convert.ToInt32(rw["SRT_ORD"]),
-                               WFSTG_ACTN_CD = Convert.ToString(rw["WFSTG_ACTN_CD"])
+                               //WFSTG_ACTN_CD = Convert.ToString(rw["WFSTG_ACTN_CD"])
 							  //, ACTV_IND = Convert.ToString(rw["ACTV_IND"])
 						   }).ToList();
                 }
@@ -433,8 +433,8 @@ namespace Intel.MyDeals.DataLibrary
             {
                 DataAccess.ExecuteDataSet(new Procs.dbo.PR_MANAGE_APPLICATIONS()
                 {
-                    idsid = OpUserStack.MyOpUserToken.Usr.Idsid,
-                    mode = CrudModes.Delete.ToString(),
+                    EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID.ToString(),
+                    MODE = CrudModes.Delete.ToString(),
                     APP_SID = id
                 }, null, out dsCheckConstraintErrors);
             }
@@ -488,13 +488,13 @@ namespace Intel.MyDeals.DataLibrary
             {
                 Procs.dbo.PR_MANAGE_APPLICATIONS cmd = new Procs.dbo.PR_MANAGE_APPLICATIONS
                 {
-                    idsid = OpUserStack.MyOpUserToken.Usr.Idsid,
-                    mode = state.ToString()
+                    EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID.ToString(),
+                    MODE = state.ToString()
                 };
 
                 if (state.Equals(CrudModes.Insert) || state.Equals(CrudModes.Update))
                 {
-                    cmd.APP_CD = app.APP_CD;
+                    cmd.APP_NM = app.APP_NM;
                     cmd.APP_DESC = app.APP_DESC;
                     cmd.APP_SID = app.APP_SID;
                     cmd.APP_SUITE = app.APP_SUITE;
@@ -506,7 +506,7 @@ namespace Intel.MyDeals.DataLibrary
                     ret = (from rw in data.Tables[0].AsEnumerable()
                            select new AdminApplications
                            {
-                               APP_CD = Convert.ToString(rw["APP_CD"]),
+                               APP_NM = Convert.ToString(rw["APP_NM"]),
                                APP_DESC = Convert.ToString(rw["APP_DESC"]),
                                APP_SID = Convert.ToByte(rw["APP_SID"]),
                                APP_SUITE = Convert.ToString(rw["APP_SUITE"]),
@@ -720,11 +720,11 @@ namespace Intel.MyDeals.DataLibrary
                 {
                     cmd.ACTV_IND = dealType.ACTV_IND;
                     cmd.APP_SID = dealType.APP_SID;
-                    cmd.ROLE_TYPE_SID = dealType.ROLE_TYPE_SID;
-                    cmd.ROLE_TYPE_CD = dealType.ROLE_TYPE_CD;
-                    cmd.ROLE_TYPE_DSPLY_CD = dealType.ROLE_TYPE_DSPLY_CD;
-                    cmd.ROLE_TYPE_DESC = dealType.ROLE_TYPE_DESC;
-                    cmd.ROLE_TIER_CD = dealType.ROLE_TIER_CD;
+                    cmd.ROLE_TYPE_SID = dealType.ROLE_SID;
+                    cmd.ROLE_TYPE_CD = dealType.ROLE_NM;
+                    cmd.ROLE_TYPE_DSPLY_CD = dealType.ROLE_DSPLY_NM;
+                    cmd.ROLE_TYPE_DESC = dealType.ROLE_DESC;
+                    cmd.ROLE_TIER_CD = dealType.ROLE_TIER_NM;
                     cmd.IS_SNGL_SLCT = dealType.IS_SNGL_SLCT;
                 }
 
@@ -734,11 +734,11 @@ namespace Intel.MyDeals.DataLibrary
                            select new AdminRoleType
                            {
                                APP_SID = Convert.ToByte(rw["APP_SID"]),
-                               ROLE_TYPE_SID = Convert.ToByte(rw["ROLE_TYPE_SID"]),
-                               ROLE_TYPE_CD = Convert.ToString(rw["ROLE_TYPE_CD"]),
-                               ROLE_TYPE_DSPLY_CD = Convert.ToString(rw["ROLE_TYPE_DSPLY_CD"]),
-                               ROLE_TYPE_DESC = Convert.ToString(rw["ROLE_TYPE_DESC"]),
-                               ROLE_TIER_CD = Convert.ToString(rw["ROLE_TIER_CD"]),
+                               ROLE_SID = Convert.ToByte(rw["ROLE_SID"]),
+                               ROLE_NM = Convert.ToString(rw["ROLE_NM"]),
+                               ROLE_DSPLY_NM = Convert.ToString(rw["ROLE_DSPLY_NM"]),
+                               ROLE_DESC = Convert.ToString(rw["ROLE_DESC"]),
+                               ROLE_TIER_NM = Convert.ToString(rw["ROLE_TIER_NM"]),
                                IS_SNGL_SLCT = Convert.ToBoolean(rw["IS_SNGL_SLCT"]),
                                ACTV_IND = Convert.ToBoolean(rw["ACTV_IND"]),
                                CHG_DTM = Convert.ToDateTime(rw["CHG_DTM"]),
