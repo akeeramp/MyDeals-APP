@@ -2,18 +2,18 @@
     <form name="rules" novalidate>
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <button class="btn btn-primary small k-grid-add" ng-click="vm.cancel()">
-                    <span class="intelicon-close-max"></span> Cancel
-                </button>
                 <button class="btn btn-primary small k-grid-add" ng-click="vm.savePCTRules()" type="submit" ng-disabled="!vm.form.isValid">
-                    <span class="intelicon-plus-outlined"></span> Save
+                    <span class="intelicon-check"></span> Save Changes
+                </button>
+                <button class="btn btn-primary small k-grid-add" ng-click="vm.cancel()">
+                    <span class="fa fa-ban"></span> Cancel Changes
                 </button>
             </div>
-            <div class="panel-body text-center" style="padding-bottom: 40px;">
+            <div class="panel-body" style="padding-bottom: 40px;">
                 <div class="col-sm-12">
                     <div class="row form-inline">
-                        <div class="col-md-3" style="padding-top: 30px">
-                            <label class="control-label">Product Type:</label>
+                        <div class="col-md-3">
+                            <label class="control-label">Select Product Type:</label>
                             <ui-select ng-model="vm.pctRule.DEAL_PRD_TYPE_SID" theme="select2" style="min-width: 100%" title="Select a Product Type">
                                 <ui-select-match placeholder="Select..">{{$select.selected.PRD_TYPE}}</ui-select-match>
                                 <ui-select-choices repeat="product.PRD_TYPE_SID as product in vm.ProductType | unique:'PRD_TYPE'| orderBy:'PRD_TYPE'|  filter: $select.search">
@@ -21,8 +21,8 @@
                                 </ui-select-choices>
                             </ui-select>
                         </div>
-                        <div class="col-md-2" style="padding-top: 30px">
-                            <label class="control-label">Vertical:</label>
+                        <div class="col-md-2">
+                            <label class="control-label">Select Vertical:</label>
                             <ui-select ng-model="vm.pctRule.PRD_CAT_NM_SID" theme="select2" style="min-width: 100%" ng-disabled="!vm.pctRule.DEAL_PRD_TYPE_SID > 0" title="Select a Vertical">
                                 <ui-select-match placeholder="Select....">{{$select.selected.VERTICAL}}</ui-select-match>
                                 <ui-select-choices repeat="product.VERTICAL_SID as product in vm.ProductType | unique:'VERTICAL'| orderBy:'VERTICAL'|  filter: $select.search | where:{'PRD_TYPE_SID': vm.pctRule.DEAL_PRD_TYPE_SID}">
@@ -30,8 +30,8 @@
                                 </ui-select-choices>
                             </ui-select>
                         </div>
-                        <div class="col-md-2" style="padding-top: 30px">
-                            <label class="control-label">Level:</label>
+                        <div class="col-md-2">
+                            <label class="control-label">Select Level:</label>
                             <ui-select ng-model="vm.pctRule.COST_TEST_TYPE" theme="select2" style="min-width: 100%" title="Select a Level">
                                 <ui-select-match placeholder="Select...">{{$select.selected.name}}</ui-select-match>
                                 <ui-select-choices repeat="type.name as type in vm.costTestProductType | filter: $select.search">
@@ -39,20 +39,25 @@
                                 </ui-select-choices>
                             </ui-select>
                         </div>
-                        <div class="col-md-2" style="padding-top: 30px">
-                            <label class="control-label">Criteria:</label>
-                            <ui-select ng-model="vm.pctRule.CRITERIA" theme="select2" style="min-width: 100%" title="Select a Criteria">
-                                <ui-select-match placeholder="Select...">{{$select.selected.name}}</ui-select-match>
-                                <ui-select-choices repeat="criteria.name as criteria in vm.conditionCriteria | filter: $select.search">
-                                    <div title="{{criteria.name}}" ng-bind-html="criteria.name | highlight: $select.search"></div>
-                                </ui-select-choices>
-                            </ui-select>
+                        <div class="col-md-5 commentbar" ng-show="vm.showCommentbar">
+                            You have assigned <span ng-bind="vm.dealPrdTypeNm()"></span> <span ng-bind="vm.dealPrdVerticalNm()"></span> to <span ng-bind="vm.pctRule.COST_TEST_TYPE"></span> for Cost Test
                         </div>
-                    </div>
-                    <div class="clearboth"></div>
-                    <div class="col-md-9" style="padding-top: 20px;" ng-if="vm.showQueryBuilder">
-                        <pct-query-builder group="vm.filter.group" form="vm.form" operators="vm.operators" left-values="vm.leftValues">
-                        </pct-query-builder>
+                        <div class="clearboth"></div>
+                        <div class="col-md-12" style="padding-top: 20px;" ng-if="vm.showQueryBuilder">
+                            <p>
+                                <div class="fl">Add more</div>
+                                <ui-select ng-model="vm.pctRule.CRITERIA" theme="select2" title="Select a Criteria" class="fl" style="margin: 0 10px;">
+                                    <ui-select-match placeholder="Select...">{{$select.selected.name}}</ui-select-match>
+                                    <ui-select-choices repeat="criteria.name as criteria in vm.conditionCriteria | filter: $select.search">
+                                        <div title="{{criteria.name}}" ng-bind-html="criteria.name | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <div class="fl">conditions below if required:</div>
+                                <div class="clearboth"></div>
+                            </p>
+                            <pct-query-builder group="vm.filter.group" form="vm.form" operators="vm.operators" left-values="vm.leftValues">
+                            </pct-query-builder>
+                        </div>
                     </div>
                 </div>
             </div>

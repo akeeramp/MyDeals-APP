@@ -5966,23 +5966,33 @@ div.k-scheduler-marquee:after {
 .k-grid td {
     padding: 0;
     height: 50px;
-    color: #53565A;
+    color: #1a3e6f;
     font-family: 'Intel Clear', 'Arial';
-    font-weight: 200;
+    font-weight: 500;
     font-size: 14px;
 }
-.k-grid td > span:first-child {
-    padding-left: 16px;
+.k-grid td {
+    padding-left: 10px;
+    padding-right: 10px;
 }
+.k-grid td .k-grid-edit {
+    margin-left: 10px;
+}
+
 
 .k-grid-header, .k-grid-header .k-header, .k-pager-wrap, .k-pager-numbers .k-state-selected, .k-grid-footer, .k-grid-footer td, .k-scheduler-header, .km-pane-wrapper .k-grid-header .k-header {
     background-color: #E7E7E8;
 }
+.k-grid-header .k-header .k-link, .k-grid-header .k-header, .k-grid-header .k-link, .k-grid-header .k-link:link, .k-pager-info, .k-scheduler-header, .k-scheduler-agendaview .k-scheduler-datecolumn {
+    color: #1a3e6f;
+}
+
 .k-grid-header .k-header > .k-link {
     font-weight: normal;
     font-size: 14px;
+    font-weight: 600;
     text-transform: capitalize;
-    color: #727578;     
+    color: #1a3e6f;     
 }
 .k-header, .k-grid-header-wrap, .k-grid .k-grouping-header, .k-grid-header, .k-pager-wrap, .k-pager-wrap .k-textbox, .k-pager-wrap .k-link, .k-gantt-toolbar .k-state-default, .k-grouping-row td, .k-group-footer td, .k-grid-footer td {
     border-right-color: #c4cfd4;
@@ -6032,6 +6042,48 @@ div.k-scheduler-marquee:after {
 
 .k-grouping-header .k-link, .k-grouping-header .k-link:link {
     color: #00AEEF;
+}
+
+.k-grid tr td, .k-pivot-layout .k-grid tr td {
+    /*border-bottom-width: 0;*/
+    border-style: solid;
+}
+
+.k-grid .k-grouping-row {
+    background-color: red;
+}
+
+.nav-tabs-intel-blocks.nav {
+    background-color: #fff;
+    font-size: 14px;
+    border-bottom: 1px solid #b1babf;
+    margin: 0;
+}
+
+.nav-tabs-intel-blocks.nav {
+    background-color: #fff;
+    font-size: 14px;
+    border-bottom: 1px solid #b1babf;
+    margin: 0;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+h2, .h2 {
+    font-size: 26px;
+}
+
+h1, .h1, h2, .h2, h3, .h3 {
+    margin-top: 30px;
+    margin-bottom: 0px;
+}
+
+.k-header.k-grid-toolbar 
+
+
+.k-header.k-grid-toolbar .btn-primary.disabled, .btn-primary.disabled:hover, .btn-primary.disabled:focus, .btn-primary.disabled.focus, .btn-primary.disabled:active, .btn-primary.disabled.active, .btn-primary[disabled], .btn-primary[disabled]:hover, .btn-primary[disabled]:focus, .btn-primary[disabled].focus, .btn-primary[disabled]:active, .btn-primary[disabled].active, fieldset[disabled] .btn-primary, fieldset[disabled] .btn-primary:hover, fieldset[disabled] .btn-primary:focus, fieldset[disabled] .btn-primary.focus, fieldset[disabled] .btn-primary:active, fieldset[disabled] .btn-primary.active {
+    background-color: #0071c5;
+    border: 1px solid #0071c5;
 }
 
 .k-textbox.k-space-right input {
@@ -6097,6 +6149,17 @@ div.k-scheduler-marquee:after {
     border-bottom-color: #ED1C24 !important;    
 }
 
+
+.commentbar {
+    margin-top: 15px; 
+    background-color: #f2f2f2; 
+    color: #322122; 
+    padding: 8px 16px;
+    font-weight: 600;
+}
+.commentbar span {
+    color: #a9bc2b; 
+}
 
 /* toggle */
 .toggle {

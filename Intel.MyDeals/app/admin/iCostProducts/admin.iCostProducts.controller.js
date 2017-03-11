@@ -1,12 +1,12 @@
 ﻿(function () {
     'use strict';
     angular
-		.module('app.admin')
-		.controller('iCostProductsController', iCostProductsController)
+        .module('app.admin')
+        .controller('iCostProductsController', iCostProductsController);
 
-    iCostProductsController.$inject = ['iCostProductService', 'logger', '$scope', 'gridConstants', '$state', '$linq', 'pctRulesDrpDownValues', 'confirmationModal']
+    iCostProductsController.$inject = ['iCostProductService', 'logger', '$scope', 'gridConstants', '$state', '$linq', 'pctRulesDrpDownValues', 'confirmationModal', '$filter'];
 
-    function iCostProductsController(iCostProductService, logger, $scope, gridConstants, $state, $linq, pctRulesDrpDownValues, confirmationModal) {
+    function iCostProductsController(iCostProductService, logger, $scope, gridConstants, $state, $linq, pctRulesDrpDownValues, confirmationModal, $filter) {
         var vm = this;
 
         vm.updateItem = updateItem;
@@ -30,6 +30,25 @@
             'DEAL_PRD_TYPE_SID': '',
             'PRD_CAT_NM_SID': '',
             'JSON_TXT': ''
+        }
+
+        vm.showCommentbar = false;
+        vm.dealPrdTypeNm = function () {
+            vm.showCommentbar = (vm.pctRule.DEAL_PRD_TYPE_SID !== "" && vm.pctRule.PRD_CAT_NM_SID !== "");
+            var found = $filter('filter')(vm.ProductType, { PRD_TYPE_SID: vm.pctRule.DEAL_PRD_TYPE_SID }, true);
+            if (found.length) {
+                return found[0].PRD_TYPE;
+            }
+            return "unknown";
+        }
+
+        vm.dealPrdVerticalNm = function () {
+            vm.showCommentbar = (vm.pctRule.DEAL_PRD_TYPE_SID !== "" && vm.pctRule.PRD_CAT_NM_SID !== "");
+            var found = $filter('filter')(vm.ProductType, { VERTICAL_SID: vm.pctRule.PRD_CAT_NM_SID }, true);
+            if (found.length) {
+                return found[0].VERTICAL;
+            }
+            return "unknown";
         }
 
         vm.pctRule.COST_TEST_TYPE = vm.costTestProductType[0].name;
