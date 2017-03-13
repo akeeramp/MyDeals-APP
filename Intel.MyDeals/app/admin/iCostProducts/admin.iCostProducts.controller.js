@@ -157,7 +157,12 @@
             function (newValue, oldValue, el) {
                 if (oldValue === newValue) return;
                 if (!isEditLoading) {
-                    vm.pctRule.PRD_CAT_NM_SID = '';
+                    if (newValue > 0) {
+                        var verticals = $filter('where')(vm.ProductType, { 'PRD_TYPE_SID': newValue });
+                        vm.pctRule.PRD_CAT_NM_SID = verticals.length == 1 ? verticals[0].VERTICAL_SID : '';
+                    } else {
+                        vm.pctRule.PRD_CAT_NM_SID = '';
+                    }
                     vm.form.isValid = false;
                     initQueryBuilder(false);
                 }
@@ -217,7 +222,6 @@
         }
 
         function isRuleExistForVertical() {
-
             var isInvalid = false;
             var rules = $scope.rulesGrid._data;
             var existingRule = $linq.Enumerable().From(rules)
@@ -236,7 +240,6 @@
         }
 
         function savePCTRules() {
-
             if (isRuleExistForVertical()) return;
 
             vm.pctRule.JSON_TXT = JSON.stringify(vm.filter);
