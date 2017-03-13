@@ -333,7 +333,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         // Add to DB first... then add to screen
         objsetService.createContract($scope.getCustId(), ct).then(
             function (data) {
-                $scope.updateNegativeIds(ct, "Contract", data);
+                $scope.updateNegativeIds(ct, "CNTRCT", data);
                 logger.success("Saved the contract", ct, "Save Sucessful");
                 topbar.hide();
 
@@ -375,7 +375,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         }
     }
 
-    $scope.updateNegativeIds = function(collection, key, data) {
+    $scope.updateNegativeIds = function (collection, key, data) {
         if (collection.DC_ID <= 0) {
             for (var a = 0; a < data.data[key].Actions.length; a++) {
                 var action = data.data[key].Actions[a];
@@ -412,6 +412,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
                 $scope.showAddPricingTable(ps);
                 logger.success("Added Pricing Strategy", ps, "Save Sucessful");
                 topbar.hide();
+                $scope.newStrategy.TITLE = "";
             },
             function (result) {
                 logger.error("Could not create the pricing strategy.", response, response.statusText);

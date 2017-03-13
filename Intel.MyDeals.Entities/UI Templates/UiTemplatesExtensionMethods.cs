@@ -97,6 +97,7 @@ namespace Intel.MyDeals.Entities.UI_Templates
                     {
                         field = item.AtrbCd,
                         title = item.Label,
+                        hidden = item.IsHidden,
                         width = item.Width,
                         editor = item.Editor,
                         template = item.Template,
@@ -119,6 +120,7 @@ namespace Intel.MyDeals.Entities.UI_Templates
                     {
                         field = item.AtrbCd,
                         title = item.Label,
+                        hidden = item.IsHidden,
                         width = item.Width,
                         editor = item.Editor,
                         template = item.Template,

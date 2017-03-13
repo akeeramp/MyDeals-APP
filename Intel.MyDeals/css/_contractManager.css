@@ -94,7 +94,7 @@
         height: 33px;
         margin-top: -33px;
         border-bottom: 1px solid #eeeeee;
-        padding: 2spx;
+        padding: 2px;
         font-size: 14px;
         font-family: "Intel Clear";
         font-weight: 200;
@@ -306,6 +306,19 @@
         font: 10px Arial, sans-serif;
         font-weight: bold;
     }
+    .textCircleMd {
+        border-radius: 50%;
+        width: 15px;
+        height: 15px;
+        padding: 4px;
+        color: #003C71;
+        text-align: center;
+        font: 12px Arial, sans-serif;
+        font-weight: bold;
+        margin-right: 8px;
+        margin-top: -5px;
+    }
+
     .textName {
         margin: 0 0 5px 5px;
         font-weight: bold;

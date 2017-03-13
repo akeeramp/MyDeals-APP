@@ -15,6 +15,9 @@ namespace Intel.MyDeals.Entities
         public string template { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public bool hidden { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string uiType { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

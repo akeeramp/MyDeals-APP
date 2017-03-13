@@ -722,7 +722,6 @@ div.k-filebrowser-dropzone em,
   background-position: 50% 50%;
 }
 .k-tool-icon {
-  background-image: url('http://kendo.cdn.telerik.com/2016.2.714/styles/Metro/sprite.png');
 }
 .k-state-hover > .k-link,
 .k-other-month.k-state-hover .k-link,
@@ -920,8 +919,6 @@ div.k-filebrowser-dropzone em {
 .k-filebrowser .k-tile .k-file,
 .k-filebrowser .k-tile .k-i-folder,
 .k-filebrowser .k-tile .k-i-file {
-  background-image: url('http://kendo.cdn.telerik.com/2016.2.714/styles/Metro/imagebrowser.png');
-  background-size: auto auto;
 }
 /* TreeMap */
 .k-leaf,
@@ -1099,7 +1096,6 @@ div.k-filebrowser-dropzone em {
 .k-i-kpi-hold,
 .k-i-kpi-increase,
 .k-i-kpi-open {
-  background-image: url('http://kendo.cdn.telerik.com/2016.2.714/styles/Metro/sprite_kpi.png');
 }
 /* Border radius */
 .k-block,
@@ -1752,7 +1748,6 @@ html .km-pane-wrapper .km-widget,
   .k-mobile-list .k-check:checked,
   .k-mobile-list .k-edit-field [type=checkbox]:checked,
   .k-mobile-list .k-edit-field [type=radio]:checked {
-    background-image: url('http://kendo.cdn.telerik.com/2016.2.714/styles/Metro/sprite_2x.png');
     background-size: 340px 336px;
   }
   .k-dropdown-wrap .k-input,
@@ -1991,11 +1986,9 @@ html .km-pane-wrapper .km-widget,
 }
 /* Map */
 .k-map .k-marker {
-  background-image: url("http://kendo.cdn.telerik.com/2016.2.714/styles/Metro/markers.png");
 }
 @media only screen and (-webkit-min-device-pixel-ratio: 1.2), only screen and (min-device-pixel-ratio: 1.2) {
   .k-map .k-marker {
-    background-image: url("http://kendo.cdn.telerik.com/2016.2.714/styles/Metro/markers_2x.png");
   }
 }
 .k-calendar .k-link:not(.k-state-disabled):hover > .k-i-arrow-w {
@@ -3226,8 +3219,6 @@ div.k-filebrowser-dropzone em {
 .k-filebrowser .k-tile .k-file,
 .k-filebrowser .k-tile .k-i-folder,
 .k-filebrowser .k-tile .k-i-file {
-  background-image: url('none/imagebrowser.png');
-  background-size: auto auto;
 }
 /* TreeMap */
 .k-leaf,
@@ -3411,7 +3402,6 @@ div.k-filebrowser-dropzone em {
 .k-i-kpi-hold,
 .k-i-kpi-increase,
 .k-i-kpi-open {
-  background-image: url('none/sprite_kpi.png');
 }
 /* Border radius */
 .k-block,
@@ -4072,8 +4062,6 @@ html .km-pane-wrapper .km-widget,
   .k-mobile-list .k-check:checked,
   .k-mobile-list .k-edit-field [type=checkbox]:checked,
   .k-mobile-list .k-edit-field [type=radio]:checked {
-    background-image: url('none/sprite_2x.png');
-    background-size: 340px 336px;
   }
   .k-dropdown-wrap .k-input,
   .k-picker-wrap .k-input,
@@ -4086,8 +4074,6 @@ html .km-pane-wrapper .km-widget,
   .k-i-kpi-hold,
   .k-i-kpi-increase,
   .k-i-kpi-open {
-    background-image: url('none/sprite_kpi_2x.png');
-    background-size: 96px 16px;
   }
 }
 @media screen and (-ms-high-contrast: active) {
@@ -5500,11 +5486,9 @@ div.k-scheduler-marquee:after {
 }
 /* Map */
 .k-map .k-marker {
-  background-image: url("none/markers.png");
 }
 @media only screen and (-webkit-min-device-pixel-ratio: 1.2), only screen and (min-device-pixel-ratio: 1.2) {
   .k-map .k-marker {
-    background-image: url("none/markers_2x.png");
   }
 }
 .k-map .k-attribution {
@@ -6069,8 +6053,6 @@ div.k-scheduler-marquee:after {
     font-size: 14px;
     border-bottom: 1px solid #b1babf;
     margin: 0;
-    padding-top: 5px;
-    padding-bottom: 5px;
 }
 
 h2, .h2 {
@@ -6084,6 +6066,9 @@ h1, .h1, h2, .h2, h3, .h3 {
 
 .k-header.k-grid-toolbar 
 
+.k-tool-icon {
+    background-image: none !important;
+}
 
 .k-header.k-grid-toolbar .btn-primary.disabled, .btn-primary.disabled:hover, .btn-primary.disabled:focus, .btn-primary.disabled.focus, .btn-primary.disabled:active, .btn-primary.disabled.active, .btn-primary[disabled], .btn-primary[disabled]:hover, .btn-primary[disabled]:focus, .btn-primary[disabled].focus, .btn-primary[disabled]:active, .btn-primary[disabled].active, fieldset[disabled] .btn-primary, fieldset[disabled] .btn-primary:hover, fieldset[disabled] .btn-primary:focus, fieldset[disabled] .btn-primary.focus, fieldset[disabled] .btn-primary:active, fieldset[disabled] .btn-primary.active {
     background-color: #0071c5;
@@ -6189,6 +6174,9 @@ h1, .h1, h2, .h2, h3, .h3 {
     min-height: 10px !important; 
 }
 
+.mydeals-grid .k-grid-header {
+    margin-top: 8px;   
+}
 
 .k-grid .k-icon:hover, .k-state-focused .k-icon {
     color: #00aeef !important;
@@ -6223,6 +6211,14 @@ h1, .h1, h2, .h2, h3, .h3 {
 }
 
 /* icons */
+
+.noFormula .k-i-undo {
+    color: #00aeef;
+}
+.noFormula .k-i-redo {
+    color: #00aeef;
+}
+
 .k-grid-update .k-i-check {
     margin-right: 6px;
 }

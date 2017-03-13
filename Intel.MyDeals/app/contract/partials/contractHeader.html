@@ -4,18 +4,8 @@
     </div>-->
     <div class="fr" ng-include="'app/contract/partials/lnavButtons.html'"></div>
     <div class="fl" style="font-size: 20px; padding-top: 4px;">
-        <div style="margin: 0 10px; line-height: 0.9em;">
+        <div style="margin: 0 10px; line-height: 1.2em;">
             {{ contractData.TITLE }}
-        </div>
-        <div style="font-size: 10px; line-height: 0.9em; margin-left: 10px; color: #aaaaaa; font-family: verdana;">
-            <div class="fl">
-                {{ contractData.Customer.CUST_NM }}
-                <i class="intelicon-right-next" style="color: #FFA300;"></i>
-                {{ contractData.START_DT | date:'MM/dd/yyyy' }} - {{ contractData.END_DT | date:'MM/dd/yyyy' }}
-            </div>
-            <div class="fr" style="margin-right: 10px;">
-                {{ contractData.DEAL_STG_CD }}
-            </div>
         </div>
     </div>
 
