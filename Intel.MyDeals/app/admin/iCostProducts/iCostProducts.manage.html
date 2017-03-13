@@ -32,18 +32,28 @@
                         </div>
                         <div class="col-md-2">
                             <label class="control-label">Select Level:</label>
-                            <ui-select ng-model="vm.pctRule.COST_TEST_TYPE" theme="select2" style="min-width: 100%" title="Select a Level">
-                                <ui-select-match placeholder="Select...">{{$select.selected.name}}</ui-select-match>
-                                <ui-select-choices repeat="type.name as type in vm.costTestProductType | filter: $select.search">
-                                    <div title="{{type.name}}" ng-bind-html="type.name | highlight: $select.search"></div>
-                                </ui-select-choices>
-                            </ui-select>
+                            <div>
+                                <label class="radio-inline" ng-repeat="type in vm.costTestProductType">
+                                    <input type="radio" value="{{type.name}}" ng-model="vm.pctRule.COST_TEST_TYPE" name="optradio">{{type.name}}
+                                </label>
+                            </div>
                         </div>
                         <div class="col-md-5 commentbar" ng-show="vm.showCommentbar">
                             You have assigned <span ng-bind="vm.dealPrdTypeNm()"></span> <span ng-bind="vm.dealPrdVerticalNm()"></span> to <span ng-bind="vm.pctRule.COST_TEST_TYPE"></span> for Cost Test
                         </div>
                         <div class="clearboth"></div>
                         <div class="col-md-12" style="padding-top: 20px;" ng-if="vm.showQueryBuilder">
+                            <!--TODO: If include exclude criteria as also a radio button uncomment this section and delete the p tag below this section-->
+                            <!--<p>
+                                <div class="fl">Add more&nbsp;</div>
+                                <div class="fl">
+                                    <label class="radio-inline" ng-repeat="criteria in vm.conditionCriteria">
+                                        <input type="radio" value="{{criteria.name}}" ng-model="vm.pctRule.CRITERIA" name="optradio">{{criteria.name}}
+                                    </label>
+                                </div>
+                                <div class="fl">&nbsp;conditions below if required:</div>
+                                <div class="clearboth"></div>
+                            </p>-->
                             <p>
                                 <div class="fl">Add more</div>
                                 <ui-select ng-model="vm.pctRule.CRITERIA" theme="select2" title="Select a Criteria" class="fl" style="margin: 0 10px;">
