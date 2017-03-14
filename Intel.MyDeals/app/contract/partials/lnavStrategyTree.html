@@ -1,7 +1,7 @@
 ﻿<!-- Pricing Strategies -->
 <div ng-hide="isPricingStrategiesHidden" style="margin-top: 10px; ">
 
-    <div ng-repeat="ps in contractData.PRC_ST | filter:query" class="lnavStrategyContainer">
+    <div ng-repeat="ps in contractData.PRC_ST | filter:query" ng-class="{'lnav-highlight-strategy-container': (curPricingStrategy.DC_ID == ps.DC_ID)}" class="lnavStrategyContainer">
 
         <div class="psNav">
             <div class="fl" ng-click="isCollapsed = !isCollapsed">
@@ -15,7 +15,7 @@
             <div class="fr">
                 <span class="hasMenuPs{{ ps.DC_ID }} ptBtn" title="View more options"><i class="intelicon-vertical-menu"></i></span>
                 <ul kendo-context-menu k-filter="'.hasMenuPs{{ ps.DC_ID }}'" k-show-on="'click'">
-                    <li role="presentation"><a tabindex="-1" role="menuitem" ng-click="showAddPricingTable(ps)"><i class="intelicon-plus-max"></i> Add Pricing Table</a></li>
+                    <li role="presentation"><a tabindex="-1" role="menuitem" ng-click="showAddPricingTable(ps); isCollapsed = false"><i class="intelicon-plus-max"></i> Add Pricing Table</a></li>
                     <li role="presentation"><a tabindex="-1" role="menuitem" ng-click="deletePricingStrategy(ps)"><i class="intelicon-trash-outlined"></i> Delete Pricing Strategy</a></li>
                 </ul>
             </div>

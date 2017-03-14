@@ -92,22 +92,22 @@
 
     .elOnBlue .k-textbox.isError
     {
-        border: 1px solid #F3D54E;
+        border: 1px solid #ED1C24;
     }
     .elOnBlue .err-bit {
-        border-style: solid;
-        border-color: #F3D54E transparent transparent #F3D54E;
+        border-style: solid; 
+        border-color: #ED1C24 transparent transparent #ED1C24; 
     }
     .elOnBlue .err-bit-el {
-        border-color: #F3D54E transparent transparent #F3D54E;
+        border-color: #ED1C24 transparent transparent #ED1C24;
     }
 
     .bgBlueContainer .k-textbox.isError
     {
-        border: 1px solid #F3D54E;
+        border: 1px solid #ED1C24;
     }
     .bgBlueContainer .err-bit, .bgBlueContainer .err-bit-el {
-        border-color: #F3D54E transparent transparent #F3D54E;
+        border-color: #ED1C24 transparent transparent #ED1C24;
     }
 
 
@@ -204,6 +204,12 @@
 
     .isDirtyIcon {
         color: #00AEEF;
+    }
+
+    .rotate-90 {
+        -ms-transform: rotate(90deg);
+        -webkit-transform: rotate(90deg);
+        transform: rotate(90deg);
     }
 
     /*

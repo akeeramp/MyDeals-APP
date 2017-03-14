@@ -6,7 +6,7 @@
 
         <div class="bgBlueContainer" ng-class="{isErrorWrapper: newPricingTable._behaviors.isError.TITLE}">
             <div kendo-tooltip k-content="NewPricingTable._behaviors.validMsg.TITLE" k-position="'top'" ng-show="newPricingTable._behaviors.isError.TITLE" class="err-bit-el"></div>
-            <input type="text" class="k-textbox fl" placeholder="[Enter Pricing Table Name...]"
+            <input type="text" class="k-textbox fl" placeholder=""
                    style="width: 100%; color: #aaaaaa;"
                    ng-model="newPricingTable.TITLE"
                    ng-class="{isError: newPricingTable._behaviors.isError.TITLE}" />
@@ -43,7 +43,7 @@
                          op-lookup-text="value.opLookupText"
                          op-lookup-value="value.opLookupValue"
                          op-lookup-values="value.opLookupValues"
-                        op-ui-mode="'HORIZONTAL'"></div>
+                         op-ui-mode="'HORIZONTAL'"></div>
                 </div>
             </div>
         </div>

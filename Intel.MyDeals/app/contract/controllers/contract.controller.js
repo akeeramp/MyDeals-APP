@@ -124,6 +124,16 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
             window.dispatchEvent(evt);
         });
     }
+    $scope.strategyTreeCollapseAll = true;
+    $scope.toggleStrategyTree = function () {
+        var container = angular.element(".lnavStrategyContainer");
+        while (container.length != 0) {
+            //isCollapsed is only defined in the ng-repeat's local scope, so we need to iterate through them here
+            container.scope().isCollapsed = $scope.strategyTreeCollapseAll;
+            container = container.next();
+        }
+        $scope.strategyTreeCollapseAll = !$scope.strategyTreeCollapseAll;
+    }
 
 
     // **** MINI NAV ICON Methods ****
@@ -149,7 +159,9 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         $scope.isAddStrategyBtnHidden = false;
         $scope.isSearchHidden = true;
         $scope.newPricingTable = util.clone($scope.templates.ObjectTemplates.PRC_TBL.CAP_BAND);
+        $scope.newPricingTable.OBJ_SET_TYPE_CD = ""; //reset new PT deal type
         $scope.clearPtTemplateIcons();
+        $scope.curPricingStrategy = {}; //clears curPricingStrategy
     }
 
 
@@ -441,6 +453,21 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
                 }
             });
 
+        // Check unique name
+        angular.forEach($scope.newStrategy,
+                    function (value, key) {
+                        if (key === "TITLE") {
+                            for (var i = 0; i < $scope.contractData.PRC_ST.length; i++) {
+                                if (value.toLowerCase() == $scope.contractData.PRC_ST[i].TITLE.toLowerCase()) {
+                                    $scope.newStrategy._behaviors.validMsg[key] = "* must have unique name within contract";
+                                    $scope.newStrategy._behaviors.isError[key] = true;
+                                    isValid = false;
+                                    break;
+                                }
+                            }
+                        }
+                    });
+
         if (isValid) {
             $scope.addPricingStrategy();
         }
@@ -450,6 +477,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
     // **** NEW PRICING TABLE Methods ****
     //
     $scope.newPricingTable = util.clone($scope.templates.ObjectTemplates.PRC_TBL.CAP_BAND);
+    $scope.newPricingTable.OBJ_SET_TYPE_CD = ""; //reset new PT deal type so it does not inherit from clone
     $scope.addPricingTable = function () {
         topbar.show();
 
@@ -518,6 +546,18 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
                 value.isError = false;
             }
         });
+
+        // Check if selected deal type
+        angular.forEach($scope.newPricingTable,
+            function (value, key) {
+                if (key === "OBJ_SET_TYPE_CD") {
+                    if ($scope.newPricingTable.OBJ_SET_TYPE_CD == "") {
+                        $scope.newPricingTable._behaviors.validMsg[key] = "* please select a deal type";
+                        $scope.newPricingTable._behaviors.isError[key] = true;
+                        isValid = false;
+                    }
+                }
+            });
 
         if (isValid) {
             $scope.addPricingTable();

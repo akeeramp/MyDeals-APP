@@ -18,7 +18,7 @@
     <div class="clearboth"></div>
 </div>-->
 <div>
-    <div class="fr navIconLnk" title="Show/Hide Menu" ng-click="toggleLnav()">
+    <div class="fr navIconLnk" title="Hide Panel" ng-click="toggleLnav()">
         <i class="intelicon-shrink flip-horizontal"></i>
     </div>
     <div class="fl navIconLnk" title="Save Entire Contract" ng-click="saveEntireContract()" ng-show="isExistingContract()" ng-class="{'lnavBtnDisabled': !_dirty}">
@@ -30,8 +30,10 @@
     <div class="fl navIconLnk" title="Filter contract" ng-click="toggleSearch()" ng-class="{'active': !isSearchHidden}" ng-show="isExistingContract()">
         <i class="intelicon-search"></i>
     </div>
-    <div class="fl navIconLnk" title="Expand/Collapse All" ng-show="isExistingContract()">
-        <i class="intelicon-fast-forward"></i>
+    <div class="fl navIconLnk" title="{{ strategyTreeCollapseAll ? 'Collapse All' : 'Expand All' }}" ng-click="toggleStrategyTree()" ng-show="isExistingContract()" >
+        <div ng-class="{'rotate-90': !strategyTreeCollapseAll}">
+            <i class="intelicon-fast-forward"></i>
+        </div>
     </div>
     
     <a ui-sref="contract.summary({cid:contractData.DC_ID})">

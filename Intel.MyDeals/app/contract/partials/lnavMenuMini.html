@@ -1,5 +1,5 @@
 ﻿<div class="navIconLnk-small-wrapper" ng-show="isLnavHidden">
-    <div class="navIconLnk" title="Show/Hide Menu" ng-click="toggleLnav()">
+    <div class="navIconLnk" title="Show Panel" ng-click="toggleLnav()">
         <i class="intelicon-expand"></i>
     </div>
     <div class="fl navIconLnk" title="Add Pricing Strategy" ng-click="toggleLnav();toggleAddStrategy()" ng-class="{'active': !isAddStrategyHidden}" ng-show="isExistingContract()">
@@ -8,7 +8,7 @@
     <div class="navIconLnk" title="Save Entire Contract" ng-click="saveEntireContract()" ng-show="isExistingContract()">
         <i class="intelicon-save-outlined"></i>
     </div>
-    <div class="navIconLnk" title="Filter current contract" ng-show="isExistingContract()" ng-click="toggleLnav();toggleSearch()" ng-class="{'active': !isSearchHidden}">
+    <div class="navIconLnk" title="Filter Current Contract" ng-show="isExistingContract()" ng-click="toggleLnav();toggleSearch()" ng-class="{'active': !isSearchHidden}">
         <i class="intelicon-search"></i>
     </div>
     <a ui-sref="contract.summary({cid:contractData.DC_ID})">
