@@ -292,8 +292,8 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         //debugger;
 
         var source = "";
-        if (stateName === "contract.manager.strategy") source = "pricingTable";
-        if (stateName === "contract.manager.strategy.wip") source = "wipDeal";
+        if (stateName === "contract.manager.strategy") source = "PRC_TBL";
+        if (stateName === "contract.manager.strategy.wip") source = "WIP_DEAL";
 
         // sync all detail data sources into main grid datasource for a single save
         var sData = $scope.spreadDs === undefined ? undefined : $scope.spreadDs.data();

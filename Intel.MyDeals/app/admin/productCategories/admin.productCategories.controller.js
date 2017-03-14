@@ -2,9 +2,9 @@
     'use strict';
     angular
         .module('app.admin')
-        .controller('ProductCategoryController', ProductCategoryController)
+        .controller('ProductCategoryController', ProductCategoryController);
 
-    ProductCategoryController.$inject = ['productCategoryService', '$scope', 'logger', 'confirmationModal', 'gridConstants']
+    ProductCategoryController.$inject = ['productCategoryService', '$scope', 'logger', 'confirmationModal', 'gridConstants'];
 
     function ProductCategoryController(productCategoryService, $scope, logger, confirmationModal, gridConstants) {
         var vm = this;
@@ -200,7 +200,7 @@
 			},
 			{
             	field: "PRD_CAT_NM",
-            	headerTemplate: "<div class='editableHeader'> Product Category Name </div>",
+            	headerTemplate: "<div class='editableHeader'> Product Vertical </div>",
             	editor: customInlineEditor,
             	filterable: { multi: true, search: true }
 			},

@@ -5932,7 +5932,9 @@ div.k-scheduler-marquee:after {
 
 
 
-
+.dropdown-menu {
+    min-width: 200px;
+}
 
 
 /* CUSTOM GRID CSS */

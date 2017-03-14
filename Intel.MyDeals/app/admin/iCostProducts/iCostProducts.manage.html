@@ -22,7 +22,7 @@
                             </ui-select>
                         </div>
                         <div class="col-md-2">
-                            <label class="control-label">Select Vertical:</label>
+                            <label class="control-label">Select Product Vertical:</label>
                             <ui-select ng-model="vm.pctRule.PRD_CAT_NM_SID" theme="select2" style="min-width: 100%" ng-disabled="!vm.pctRule.DEAL_PRD_TYPE_SID > 0" title="Select a Vertical">
                                 <ui-select-match placeholder="Select....">{{$select.selected.VERTICAL}}</ui-select-match>
                                 <ui-select-choices repeat="product.VERTICAL_SID as product in vm.ProductType | unique:'VERTICAL'| orderBy:'VERTICAL'|  filter: $select.search | where:{'PRD_TYPE_SID': vm.pctRule.DEAL_PRD_TYPE_SID}">

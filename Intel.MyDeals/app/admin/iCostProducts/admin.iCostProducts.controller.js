@@ -90,10 +90,10 @@
             change: onChange,
             columns: [
               { field: "DEAL_PRD_TYPE", title: "Product Type", width: "15%", filterable: { multi: true, search: true } },
-              { field: "PRD_CAT_NM", title: "Vertical", width: "10%", filterable: { multi: true, search: true } },
-              { field: "COST_TEST_TYPE", title: "Cost Test Type", width: "10%", filterable: { multi: true, search: true } },
+              { field: "PRD_CAT_NM", title: "Product Vertical", width: "15%", filterable: { multi: true, search: true } },
+              { field: "COST_TEST_TYPE", title: "Legal Classification", width: "15%", filterable: { multi: true, search: true } },
               { field: "CRITERIA", title: "Criteria", width: "10%", filterable: { multi: true, search: true } },
-              { field: "CONDITION", title: "Condition" },
+              { field: "CONDITION", title: "Condition" }
             ]
         };
 
@@ -101,7 +101,7 @@
 
         function onChange() {
             vm.selectedItem = $scope.rulesGrid.select();
-            vm.isButtonDisabled = (vm.selectedItem.length == 0) ? true : false;
+            vm.isButtonDisabled = (vm.selectedItem.length === 0) ? true : false;
             $scope.$apply();
         }
 
@@ -110,7 +110,7 @@
             isEditLoading = isEditMode = true;
             vm.selectedItem = $scope.rulesGrid.select();
             vm.pctRule = $scope.rulesGrid.dataItem(vm.selectedItem);
-            vm.filter = vm.pctRule.JSON_TXT == "" ? vm.filter : JSON.parse(vm.pctRule.JSON_TXT);
+            vm.filter = vm.pctRule.JSON_TXT === "" ? vm.filter : JSON.parse(vm.pctRule.JSON_TXT);
             getProductTypeMapping();
         }
 
