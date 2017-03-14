@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Xml.Linq;
-using Intel.MyDeals.DataAccessLib;
+using Intel.MyDeals.DataLibrary.JMS;
 using Intel.MyDeals.Entities;
-using Intel.Opaque;
-using JMSQueue;
-using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
-
 
 namespace Intel.MyDeals.DataLibrary
 {
@@ -20,7 +15,7 @@ namespace Intel.MyDeals.DataLibrary
         private string jmsUID;
         private string jmsPWD;
 
-        private JMSQueueRequest _objJmsQueueRequest;
+        private JmsQueue _objJmsQueueRequest;
 
         // This is all communications to our DB as well as SAP
         public JmsDataLib()
@@ -39,7 +34,7 @@ namespace Intel.MyDeals.DataLibrary
             string strError = "";
             try
             {
-                _objJmsQueueRequest = new JMSQueueRequest(jmsServer, jmsUID, jmsPWD, jmsQueue);
+                _objJmsQueueRequest = new JmsQueue(jmsServer, jmsUID, jmsPWD, jmsQueue);
 
                 //clsUtility.LogSQL(m_Idsid, "JMSQueue - Opening connection", false);
                 _objJmsQueueRequest.OpenQueueConnection();
@@ -55,7 +50,21 @@ namespace Intel.MyDeals.DataLibrary
             return strError;
         }
 
-        public string SendDataToJmsQueue(string strData)
+        public string ReadMessages()
+        {
+            string strError = "";
+            try
+            {
+                return _objJmsQueueRequest.GetAllMessgae();
+            }
+            catch (Exception eX)
+            {
+                strError = eX.Message;
+            }
+            return strError;
+        }
+
+        string SendDataToJmsQueue(string strData)
         {
             string strError = "";
             try

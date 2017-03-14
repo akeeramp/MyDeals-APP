@@ -140,7 +140,7 @@ namespace Intel.MyDeals.DataLibrary
                 int IDX_OBJ_TYPE_SID = DB.GetReaderOrdinal(rdr, "OBJ_TYPE_SID");
                 int IDX_ROLE_TIER_NM = DB.GetReaderOrdinal(rdr, "ROLE_TIER_NM");
                 int IDX_TRKR_NBR_UPD = DB.GetReaderOrdinal(rdr, "TRKR_NBR_UPD");
-                int IDX_WF_NAME = DB.GetReaderOrdinal(rdr, "WF_NAME");
+                int IDX_WF_NM = DB.GetReaderOrdinal(rdr, "WF_NM");
                 int IDX_WF_SID = DB.GetReaderOrdinal(rdr, "WF_SID");
                 int IDX_WFSTG_ACTN_NM = DB.GetReaderOrdinal(rdr, "WFSTG_ACTN_NM");
                 int IDX_WFSTG_ACTN_SID = DB.GetReaderOrdinal(rdr, "WFSTG_ACTN_SID");
@@ -159,7 +159,7 @@ namespace Intel.MyDeals.DataLibrary
                         OBJ_TYPE_SID = (IDX_OBJ_TYPE_SID < 0 || rdr.IsDBNull(IDX_OBJ_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_TYPE_SID),
                         ROLE_TIER_NM = (IDX_ROLE_TIER_NM < 0 || rdr.IsDBNull(IDX_ROLE_TIER_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ROLE_TIER_NM),
                         TRKR_NBR_UPD = (IDX_TRKR_NBR_UPD >= 0 && !rdr.IsDBNull(IDX_TRKR_NBR_UPD)) && ((bool)rdr[IDX_TRKR_NBR_UPD]),
-                        WF_NAME = (IDX_WF_NAME < 0 || rdr.IsDBNull(IDX_WF_NAME)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_WF_NAME),
+                        WF_NM = (IDX_WF_NM < 0 || rdr.IsDBNull(IDX_WF_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_WF_NM),
                         WF_SID = (IDX_WF_SID < 0 || rdr.IsDBNull(IDX_WF_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WF_SID),
                         WFSTG_ACTN_NM = (IDX_WFSTG_ACTN_NM < 0 || rdr.IsDBNull(IDX_WFSTG_ACTN_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_WFSTG_ACTN_NM),
                         WFSTG_ACTN_SID = (IDX_WFSTG_ACTN_SID < 0 || rdr.IsDBNull(IDX_WFSTG_ACTN_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WFSTG_ACTN_SID),
@@ -189,8 +189,8 @@ namespace Intel.MyDeals.DataLibrary
                 WWID = OpUserStack.MyOpUserToken.Usr.WWID,
                 MODE = mode.ToString().ToUpper(),
                 WF_SID = data.WF_SID,
-                WF_NAME = data.WF_NAME,
-                ROLE_TIER_CD = data.ROLE_TIER_NM,
+                WF_NM = data.WF_NM,
+                ROLE_TIER_NM = data.ROLE_TIER_NM,
                 WFSTG_ACTN_SID = data.WFSTG_ACTN_SID,
                 OBJ_TYPE_SID =  data.OBJ_TYPE_SID,
                 OBJ_SET_TYPE_SID = data.OBJ_SET_TYPE_SID,
@@ -206,7 +206,7 @@ namespace Intel.MyDeals.DataLibrary
                 int IDX_OBJ_TYPE_SID = DB.GetReaderOrdinal(rdr, "OBJ_TYPE_SID");
                 int IDX_ROLE_TIER_NM = DB.GetReaderOrdinal(rdr, "ROLE_TIER_NM");
                 int IDX_TRKR_NBR_UPD = DB.GetReaderOrdinal(rdr, "TRKR_NBR_UPD");
-                int IDX_WF_NAME = DB.GetReaderOrdinal(rdr, "WF_NAME");
+                int IDX_WF_NM = DB.GetReaderOrdinal(rdr, "WF_NAME");
                 int IDX_WF_SID = DB.GetReaderOrdinal(rdr, "WF_SID");
                 int IDX_WFSTG_ACTN_NM = DB.GetReaderOrdinal(rdr, "WFSTG_ACTN_NM");
                 int IDX_WFSTG_ACTN_SID = DB.GetReaderOrdinal(rdr, "WFSTG_ACTN_SID");
@@ -225,7 +225,7 @@ namespace Intel.MyDeals.DataLibrary
                         OBJ_TYPE_SID = (IDX_OBJ_TYPE_SID < 0 || rdr.IsDBNull(IDX_OBJ_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_TYPE_SID),
                         ROLE_TIER_NM = (IDX_ROLE_TIER_NM < 0 || rdr.IsDBNull(IDX_ROLE_TIER_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ROLE_TIER_NM),
                         TRKR_NBR_UPD = (IDX_TRKR_NBR_UPD >= 0 && !rdr.IsDBNull(IDX_TRKR_NBR_UPD)) && rdr.GetFieldValue<System.Boolean>(IDX_TRKR_NBR_UPD),
-                        WF_NAME = (IDX_WF_NAME < 0 || rdr.IsDBNull(IDX_WF_NAME)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_WF_NAME),
+                        WF_NM = (IDX_WF_NM < 0 || rdr.IsDBNull(IDX_WF_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_WF_NM),
                         WF_SID = (IDX_WF_SID < 0 || rdr.IsDBNull(IDX_WF_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WF_SID),
                         WFSTG_ACTN_NM = (IDX_WFSTG_ACTN_NM < 0 || rdr.IsDBNull(IDX_WFSTG_ACTN_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_WFSTG_ACTN_NM),
                         WFSTG_ACTN_SID = (IDX_WFSTG_ACTN_SID < 0 || rdr.IsDBNull(IDX_WFSTG_ACTN_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WFSTG_ACTN_SID),

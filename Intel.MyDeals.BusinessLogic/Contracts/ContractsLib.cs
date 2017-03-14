@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Intel.MyDeals.BusinessLogic.DataCollectors;
+using Intel.MyDeals.DataLibrary.OpDataCollectors;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque;
@@ -142,6 +143,12 @@ namespace Intel.MyDeals.BusinessLogic
             // TODO replace with Delete call
             return new OpMsg();
         }
+
+        public bool IsDuplicateContractTitle(int dcId, string title)
+        {
+            return new OpDataCollectorValidationDataLib().IsDuplicateTitle(OpDataElementType.CNTRCT, dcId, 0, title);
+        }
+
 
     }
 }

@@ -433,7 +433,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 DataAccess.ExecuteDataSet(new Procs.dbo.PR_MANAGE_APPLICATIONS()
                 {
-                    EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID.ToString(),
+                    EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID,
                     MODE = CrudModes.Delete.ToString(),
                     APP_SID = id
                 }, null, out dsCheckConstraintErrors);
@@ -488,7 +488,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 Procs.dbo.PR_MANAGE_APPLICATIONS cmd = new Procs.dbo.PR_MANAGE_APPLICATIONS
                 {
-                    EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID.ToString(),
+                    EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID,
                     MODE = state.ToString()
                 };
 

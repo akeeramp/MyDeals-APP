@@ -49,9 +49,6 @@
     <Reference Include="Intel.RulesEngine">
       <HintPath>..\Shared Libraries\Intel.RulesEngine.dll</HintPath>
     </Reference>
-    <Reference Include="JMSQueue">
-      <HintPath>..\Shared Libraries\JMSQueue.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.ExceptionManagement">
       <HintPath>..\Shared Libraries\Microsoft.ApplicationBlocks.ExceptionManagement.dll</HintPath>
     </Reference>
@@ -80,6 +77,8 @@
     <Compile Include="AtrbMaps\AtrbMapDataLib.cs" />
     <Compile Include="CapMsp\CapMspDataLib.cs" />
     <Compile Include="Constants Lookups\ConstantLookupDataLib.cs" />
+    <Compile Include="JMS\JmsQueue.cs" />
+    <Compile Include="OpDataCollectors\OpDataCollectorValidationDataLib.cs" />
     <Compile Include="ProductCostTest\ProductCostTestDataLib.cs" />
     <Compile Include="CustomerCalendar\CustomerCalendarDataLib.cs" />
     <Compile Include="Customers\CustomerDataLib.cs" />

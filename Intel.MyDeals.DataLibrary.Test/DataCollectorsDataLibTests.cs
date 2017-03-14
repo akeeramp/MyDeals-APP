@@ -1,32 +1,40 @@
 ﻿using Intel.MyDeals.Entities;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using Intel.MyDeals.BusinessLogic;
+using Intel.MyDeals.DataLibrary.OpDataCollectors;
+using NUnit.Framework;
+using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace Intel.MyDeals.DataLibrary.Test
 {
-    [TestClass]
+    [TestFixture]
     public class DataCollectorsDataLibTests
     {
-        public DataCollectorsDataLibTests()
+        [OneTimeSetUp]
+        public void DataCollectorsDataLibTestsInit()
         {
             OpUserStack.EmulateUnitTester();
             UnitTestHelpers.SetDbConnection();
         }
-        
-        [TestMethod]
+
+        [TestCase]
         public void GeosDealsAll()
         {
             MyDealsData results = OpDataElementType.CNTRCT.GetByIDs(new List<int> {123});
             Assert.IsTrue(results.ContainsKey(OpDataElementType.PRC_ST));
         }
 
-        [TestMethod]
-        public void GetAtrbMstrs()
+        [TestCase]
+        public void DuplicateTitleTest()
         {
-            List<AtrbMstr> y = new AtrbMapDataLib().GetAtrbMstrs();
-//            Assert.IsTrue(results.ContainsKey(OpDataElementType.PRC_ST));\
-            int i = 0;
+            //IsDuplicateContractTitle
+            bool testResults = new OpDataCollectorValidationDataLib().IsDuplicateTitle(OpDataElementType.CNTRCT, 86, 0, "Some Nonexistant Title");
+            Assert.IsFalse(testResults); // The title doesn't exist in DB already
+
+            testResults = new OpDataCollectorValidationDataLib().IsDuplicateTitle(OpDataElementType.CNTRCT, 86, 0, "Intel-HP Worldwide Commercial DT and NB Agreement FQ2’16 to FQ1’17");
+            Assert.IsTrue(testResults); // The title doesn't exist in DB already
         }
+
+
     }
 }

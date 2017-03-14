@@ -42,18 +42,37 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }
                 },
+                // Removed since it was a dummy test for date in past check.  Will bring back when real rule is needed.
+                //new MyOpRule
+                //{
+                //    Title="Change title if in the past",
+                //    ActionRule = MyDcActions.ExecuteActions,
+                //    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnSave},
+                //    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.START_DT) && de.IsDateInPast() && de.HasValue()).Any(),
+                //    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                //    {
+                //        new OpRuleAction<IOpDataElement>
+                //        {
+                //            Action = BusinessLogicDeActions.SetAtrbValue,
+                //            Args = new object[] {"New Title"},
+                //            Target = new[] {AttributeCodes.TITLE}
+                //        }
+                //    }
+
+                //},
                 new MyOpRule
                 {
-                    Title="Change title if in the past",
+                    Title="Contract title does not already exist",
                     ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnSave},
-                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.START_DT) && de.IsDateInPast() && de.HasValue()).Any(),
+                    InObjType = new List<OpDataElementType> {OpDataElementType.CNTRCT}, 
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.TITLE) && de.HasValueChanged && de.HasValue()).Any(),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
                         new OpRuleAction<IOpDataElement>
                         {
-                            Action = BusinessLogicDeActions.SetAtrbValue,
-                            Args = new object[] {"New Title"},
+                            Action = MyDeActions.CheckDuplicateContractTitle,
+                            Args = new object[] {"This title already exists in another Contract"},
                             Target = new[] {AttributeCodes.TITLE}
                         }
                     }
@@ -79,7 +98,3 @@ namespace Intel.MyDeals.BusinessRules
         }
     }
 }
-/*
-
-
- */

@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Intel.MyDeals.BusinessLogic.DataCollectors;
+using Intel.MyDeals.BusinessRules;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.MyDeals.IDataLibrary;
+using Intel.Opaque;
 using Intel.Opaque.Data;
 
 namespace Intel.MyDeals.BusinessLogic
@@ -33,11 +36,31 @@ namespace Intel.MyDeals.BusinessLogic
             List<int> ids;
             List<OpDataElementType> opDataElementTypes;
             OpDataElementType opTypeGrp;
+            bool dataHasValidationErrors = false;
 
             data.PredictIdsAndLevels(out ids, out opDataElementTypes, out opTypeGrp);
 
             // Get the data from the DB, data is the data passed from the UI, it is then merged together down below.
             MyDealsData myDealsData = opTypeGrp.GetByIDs(ids, opDataElementTypes, data);
+
+            // Apply rules to save packets here.  If validations are hit, append them to the DC and packet message lists.
+            foreach (OpDataElementType opDataElementType in Enum.GetValues(typeof(OpDataElementType)))
+            {
+                if (!myDealsData.ContainsKey(opDataElementType)) continue;
+                foreach (OpDataCollector dc in myDealsData[opDataElementType].AllDataCollectors)
+                {
+                    dc.ApplyRules(MyRulesTrigger.OnSave);
+                    foreach (IOpDataElement de in dc.GetDataElementsWithValidationIssues())
+                    {
+                        dataHasValidationErrors = true;
+                        dc.Message.WriteMessage(OpMsg.MessageType.Warning, de.ValidationMessage);
+                        myDealsData[opDataElementType].Messages.WriteMessage(OpMsg.MessageType.Warning, $"{dc.DcType} - {dc.DcID} : {de.ValidationMessage}");
+                    }
+                }
+            }
+
+            // If there are validation errors, just return to the user, otherwise, continue with the save process.
+            if (dataHasValidationErrors) return myDealsData;
 
             // Note to self..  This does take order values into account.
             foreach (OpDataElementType opDataElementType in Enum.GetValues(typeof(OpDataElementType)))

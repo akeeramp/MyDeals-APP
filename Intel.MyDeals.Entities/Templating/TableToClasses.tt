@@ -117,7 +117,7 @@ using System.Collections.Generic;
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	// Basic Dropdowns
-	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_MANAGE_BASIC_DROPDOWNS] @MODE = 'SELECT', @ATRB_SID = 0, @OBJ_SET_TYPE_SID = 0, @ATRB_VAL_TXT = ''");
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_MANAGE_BASIC_DROPDOWNS] @MODE = 'SELECT', @ATRB_SID = 0, @OBJ_SET_TYPE_SID = 0, @ATRB_VAL_TXT = '', @ATRB_LKUP_DESC = '', @ATRB_LKUP_TTIP = ''");
 	ds.Tables[0].TableName = "BasicDropdown";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
@@ -173,7 +173,7 @@ using System.Collections.Generic;
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	// SecurityAttribute and Security Mask
-	ds = dbobjects.ExecuteDataSet("[dbo].[PR_GET_SECUR_MSK]");
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_SECUR_MSK]");
 	ds.Tables[0].TableName = "SecurityAttribute";
 	ds.Tables[1].TableName = "SecurityMask";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
@@ -184,6 +184,10 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "SecurityAttributesDropDown";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));	
 	
+	// Title Validation - PR_MYDL_OBJ_DATA_VLD
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_OBJ_DATA_VLD]  1, 86, 'Intel-HP Worldwide Commercial DT and NB Agreement FQ2’16 to FQ1’17', 0, 0");
+	ds.Tables[0].TableName = "DuplicateTitlesCheck";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	PopIndent();
 	WriteLine("}"); // End NameSpace

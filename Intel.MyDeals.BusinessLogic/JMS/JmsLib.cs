@@ -15,6 +15,14 @@ namespace Intel.MyDeals.BusinessLogic
 
             jmsConnection.OpenConnectionToJmsQueue();
 
+            //JMSQueue jmsQueue = new JMSQueue(m_strUrl, m_strUserId, m_strPassword, m_strQueueName);
+            //jmsQueue.OpenQueueConnection();
+
+            var blah2 = jmsConnection.ReadMessages();
+            var blah = jmsConnection.GetData();
+            int j = 0;
+            //string blah = jmsQueue.GetAllMessgae();
+
             //Send Data
             //DataTable dt = GetData();
             //string data = MakeXml(dt);

@@ -1,8 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Intel.MyDeals.DataLibrary.OpDataCollectors;
+using Intel.MyDeals.Entities;
 using Intel.Opaque.Data;
-using Intel.Opaque.Tools;
 
 namespace Intel.MyDeals.BusinessRules
 {
@@ -12,12 +10,14 @@ namespace Intel.MyDeals.BusinessRules
     /// </summary>
     public static partial class MyDeActions
     {
-        // SAMPLE action
-        //public static void SetNotRequired(this IOpDataElement de, params object[] args)
-        //{
-        //    if (de == null) return;
-        //    de.IsRequired = false;
-        //}
+
+        public static void CheckDuplicateContractTitle(this IOpDataElement de, params object[] args)
+        {
+            if (de == null) return;
+            bool result = new OpDataCollectorValidationDataLib().IsDuplicateTitle(OpDataElementType.CNTRCT, de.DcID, de.DcParentID, de.AtrbValue.ToString());
+            if (result)
+                BusinessLogicDeActions.AddValidationMessage(de, args[0]);
+        }
 
     }
 }
