@@ -49,27 +49,27 @@ using System.Collections.Generic;
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	// Admin Constants object
-	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MANAGE_CONSTANT_VALUES] @idsid = 'PWECKENR', @mode = 'Select'");
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MANAGE_CONSTANT_VALUES] @emp_wwid = 10505693, @mode = 'Select'");
 	ds.Tables[0].TableName = "AdminConstant";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	// Application objects - Used by other classes to break data up per application, this is for admin screens only
-	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MANAGE_APPLICATIONS] @emp_wwid = '10505693', @mode = 'Setup'");
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MANAGE_APPLICATIONS] @emp_wwid = 10505693, @mode = 'Setup'");
 	ds.Tables[0].TableName = "AdminApplications";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	// Deal Type objects - system deal types like "ECAP" and "VOL TIER"
-	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_MANAGE_OBJ_SET_TYPES] @WWID = '10505693', @MODE = 'Setup'");
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_MANAGE_OBJ_SET_TYPES] @WWID = 10505693, @MODE = 'Setup'");
 	ds.Tables[0].TableName = "AdminDealType";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	// Role Type objects - for basic roles information like "FSE" and "SA"
-	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_MANAGE_ROLE_MSTR] @emp_wwid = '10505693', @mode = 'Setup'");
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_MANAGE_ROLE_MSTR] @emp_wwid = 10505693, @mode = 'Setup'");
 	ds.Tables[0].TableName = "AdminRoleType";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	// Actions objects - For field security programming flags
-	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_MANAGE_ACTIONS] @emp_wwid = '10505693', @mode = 'Setup'");
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_MANAGE_ACTIONS] @emp_wwid = 10505693, @mode = 'Setup'");
 	ds.Tables[0].TableName = "SecurityActions";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
@@ -84,7 +84,7 @@ using System.Collections.Generic;
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	// My Customer Objects
-	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_MY_CUST] @IN_IDSID = 'PWECKENR'");
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_MY_CUST] @in_emp_wwid = 10505693");
 	ds.Tables[0].TableName = "MyCustomersInformation";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 

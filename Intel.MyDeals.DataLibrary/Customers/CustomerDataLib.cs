@@ -76,7 +76,7 @@ namespace Intel.MyDeals.DataLibrary
 
             var cmd = new Procs.dbo.PR_MYDL_GET_MY_CUST
             {
-                IN_IDSID = OpUserStack.MyOpUserToken.Usr.Idsid,
+                IN_EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID,
                 IN_FULL_ACCS_FLG = fullAccess,
                 IN_ALL_CUST_FLG = allCustomers
             };

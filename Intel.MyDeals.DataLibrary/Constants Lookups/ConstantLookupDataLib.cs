@@ -127,6 +127,7 @@ namespace Intel.MyDeals.DataLibrary
         {
             var cmd = new Procs.dbo.PR_MANAGE_CONSTANT_VALUES
             {
+                emp_wwid = OpUserStack.MyOpUserToken.Usr.WWID,
                 mode = CrudModes.Select.ToString()
             };
 
@@ -161,7 +162,7 @@ namespace Intel.MyDeals.DataLibrary
 
             using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_MANAGE_CONSTANT_VALUES
             {
-                idsid = Utils.ThreadUser,
+                emp_wwid = OpUserStack.MyOpUserToken.Usr.WWID,
                 mode = mode.ToString(),
                 cnst_nm = adminValues.CNST_NM,
                 cnst_sid = adminValues.CNST_SID,
