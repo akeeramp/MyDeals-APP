@@ -8,8 +8,8 @@ namespace Intel.MyDeals.Controllers.API
     [RoutePrefix("api/Contracts/v1")]
     public class ContractsController : BaseApiController
     {
-
         private readonly IContractsLib _contractsLib;
+
         public ContractsController(IContractsLib contractsLib)
         {
             _contractsLib = contractsLib;
@@ -24,7 +24,6 @@ namespace Intel.MyDeals.Controllers.API
             );
         }
 
-
         [Authorize]
         [Route("GetFullNestedContract/{id}")]
         public MyDealsData GetFullNestedContract(int id)
@@ -33,7 +32,6 @@ namespace Intel.MyDeals.Controllers.API
                 , $"Unable to get Contract {id}"
             );
         }
-
 
         [Authorize]
         [Route("GetUpperContract/{id}")]
@@ -44,7 +42,6 @@ namespace Intel.MyDeals.Controllers.API
             );
         }
 
-
         [Authorize]
         [Route("GetFullContract/{id}")]
         public OpDataCollectorFlattenedDictList GetFullContract(int id)
@@ -53,7 +50,6 @@ namespace Intel.MyDeals.Controllers.API
                 , $"Unable to get Contract {id}"
             );
         }
-
 
         [Authorize]
         [Route("SaveContract/{custId}")]
@@ -65,7 +61,6 @@ namespace Intel.MyDeals.Controllers.API
             );
         }
 
-
         [Authorize]
         [Route("SaveFullContract/{custId}")]
         [HttpPost]
@@ -75,7 +70,6 @@ namespace Intel.MyDeals.Controllers.API
                 , "Unable to save the Contract"
             );
         }
-
 
         [Authorize]
         [Route("SaveContractAndPricingTable/{custId}")]
@@ -87,8 +81,6 @@ namespace Intel.MyDeals.Controllers.API
             );
         }
 
-
-
         [Authorize]
         [Route("DeleteContract/{id}")]
         [HttpGet]
@@ -99,5 +91,14 @@ namespace Intel.MyDeals.Controllers.API
             );
         }
 
+        [Authorize]
+        [Route("IsDuplicateContractTitle/{dcId}/{title}")]
+        [HttpGet]
+        public bool IsDuplicateContractTitle(int dcId, string title)
+        {
+            return SafeExecutor(() => _contractsLib.IsDuplicateContractTitle(dcId, title)
+                , "Unable to validate contract name {title}"
+            );
+        }
     }
 }

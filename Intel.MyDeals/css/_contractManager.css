@@ -627,11 +627,46 @@
         font-weight:bold;
     }
 
+    .infospan{
+        margin-top: 20px;
+        background-color: #f2f2f2;
+        color: #322122;
+        padding: 8px 16px;
+    }
+
+    .infospan span{
+        color:red;
+        font-weight:bolder;
+    }
+
+    .dateRangeLabel{
+        font-size: 14px;
+        margin-top:10px;
+    }
+
+    .orLabel {
+        margin-left:15px;
+         font-size: 14px;
+         font-style:italic;
+    }
+
     .contract-detail-form h6 {
         border-bottom: 1px solid #b1babf;
         color:#0071c5;
         font-weight:bold;
-        margin-bottom: 20px;
+        margin-bottom: 0px !important;
+        margin-top: 0px !important;
+        padding-bottom:5px;
+    }
+
+    .contract-detail-form h6.noBottemBorder {
+        border-bottom:none;
+        margin-bottom: 0px;
+        padding-bottom:0px;
+    }
+
+    .contract-detail-form .accordion-panel .panel-body {
+       padding:0px !important;
     }
 
     .contract-detail-form textarea {

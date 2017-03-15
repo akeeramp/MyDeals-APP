@@ -6,9 +6,8 @@
 objsetService.$inject = ['$http', 'dataService', 'logger', '$q'];
 
 function objsetService($http, dataService, logger, $q) {
-
-    // defining the base url on top, subsequent calls in the service 
-    // will be action methods under this controller    
+    // defining the base url on top, subsequent calls in the service
+    // will be action methods under this controller
     var apiBaseContractUrl = "/api/Contracts/v1/";
     var apiBasePricingStrategyUrl = "/api/PricingStrategies/v1/";
     var apiBasePricingTableUrl = "/api/PricingTables/v1/";
@@ -18,6 +17,7 @@ function objsetService($http, dataService, logger, $q) {
         readContract: readContract,
         updateContract: updateContract,
         deleteContract: deleteContract,
+        isDuplicateContractTitle: isDuplicateContractTitle,
 
         createPricingStrategy: createPricingStrategy,
         readPricingStrategy: readPricingStrategy,
@@ -34,7 +34,6 @@ function objsetService($http, dataService, logger, $q) {
 
     return service;
 
-
     // #### CONTRACT CRUD ####
 
     function createContract(custId, ct) {
@@ -49,8 +48,9 @@ function objsetService($http, dataService, logger, $q) {
     function deleteContract(id) {
         return dataService.get(apiBaseContractUrl + 'DeleteContract/' + id);
     }
-
-
+    function isDuplicateContractTitle(dcId, title) {
+        return dataService.get(apiBaseContractUrl + 'IsDuplicateContractTitle/' + dcId + '/' + title);
+    }
     // #### PRICING STRATEGY CRUD ####
 
     function createPricingStrategy(custId, ps) {
@@ -66,7 +66,6 @@ function objsetService($http, dataService, logger, $q) {
         return dataService.get(apiBasePricingStrategyUrl + 'DeletePricingStrategy/' + id);
     }
 
-
     // #### PRICING TABLE CRUD ####
 
     function createPricingTable(custId, ps) {
@@ -81,7 +80,6 @@ function objsetService($http, dataService, logger, $q) {
     function deletePricingTable(id) {
         return dataService.get(apiBasePricingTableUrl + 'DeletePricingTable/' + id);
     }
-
 
     // #### CONTRACT CRUD ####
 
@@ -134,5 +132,4 @@ function objsetService($http, dataService, logger, $q) {
         //debugger;
         return dataService.post(apiBaseContractUrl + "SaveContractAndPricingTable/" + custId, data);
     }
-
 }

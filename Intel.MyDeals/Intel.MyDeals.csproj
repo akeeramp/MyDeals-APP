@@ -1155,6 +1155,7 @@
     <Content Include="Content\fonts\glyphs\WebComponentsIcons.eot" />
     <Content Include="Content\fonts\glyphs\WebComponentsIcons.ttf" />
     <Content Include="Content\fonts\glyphs\WebComponentsIcons.woff" />
+    <Content Include="app\shared\services\customer.service.js" />
     <None Include="Properties\PublishProfiles\Dev.pubxml" />
     <Content Include="Scripts\Angular\1.5.8\angular.min.js.map" />
     <None Include="Scripts\jquery-2.2.0.intellisense.js" />

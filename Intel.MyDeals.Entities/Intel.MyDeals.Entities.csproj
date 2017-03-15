@@ -168,6 +168,7 @@
     <Compile Include="VerticalSecurityItem.cs" />
     <Compile Include="WorkFlowQueueItem.cs" />
     <Compile Include="WorkFlowQueueStatus.cs" />
+    <Compile Include="Year.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Templating\ColumnNames.tt">

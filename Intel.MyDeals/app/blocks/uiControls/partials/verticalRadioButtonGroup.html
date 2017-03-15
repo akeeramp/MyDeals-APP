@@ -1,10 +1,9 @@
 ﻿<div ng-class="{isHidden: opIsHidden, isErrorWrapper: opIsError, isSavedWrapper: opIsSaved, isDirtyWrapper: opIsDirty}">
     <div class="fl opUiLabel" ng-class="{isRequired: opIsRequired}">{{opLabel}}</div>
-    <div kendo-tooltip k-content="helptipMsg" k-position="'top'" ng-show="opHelpMsg" class="fr opElementHelpIcon intelicon-information-outlined"></div>
     <div class="clearboth"></div>
     <div ng-repeat="item in values">
         <div class="radio">
-            <label>
+            <label class="radioControl">
                 <input type="radio" name="item[opLookupText]" value="{{item[opLookupValue]}}"
                        ng-model="$parent.value"
                        ng-value="true"
@@ -12,6 +11,8 @@
                        ng-class="{isHidden: opIsHidden, isReadOnly: opIsReadOnly, isError: opIsError, isSaved: opIsSaved, isDirty: opIsDirty}" />
                 {{item[opLookupText]}}
             </label>
+            <span kendo-tooltip k-content="item['ATRB_LKUP_TTIP']" k-position="'top'" class="opElementHelpIcon intelicon-information-outlined"></span>
         </div>
+        <span class="lookupDesc" ng-if="$parent.value == item[opLookupValue]">{{item['ATRB_LKUP_DESC']}}</span>
     </div>
 </div>

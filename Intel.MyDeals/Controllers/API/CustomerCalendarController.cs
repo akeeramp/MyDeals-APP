@@ -1,12 +1,13 @@
 ﻿using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
+using Intel.Opaque.Tools;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Web.Http;
 
 namespace Intel.MyDeals.Controllers.API
 {
-
     [RoutePrefix("api/CustomerCalendar")]
     public class CustomerCalendarController : BaseApiController
     {
@@ -32,7 +33,6 @@ namespace Intel.MyDeals.Controllers.API
                                                                       , (short?)input.QuarterNo);
         }
 
-
         /// <summary>
         /// Get the customer quarters, (CurrentQuarter - 1) to (CurrentQuarter + 6) i.e., 8 quarters
         /// Ex. CurrentQuarter = 2016Q2 then quarters displayed are 2016Q1, 2016Q2, 2016Q3, 2016Q4, 2017Q1, 2017Q2, 2017Q3, 2017Q4
@@ -46,5 +46,21 @@ namespace Intel.MyDeals.Controllers.API
             throw new NotImplementedException("Will be implemented as part of deal creation");
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetMyCustomerYears")]
+        public List<Year> GetMyCustomerYears()
+        {
+            // TODO, as we dont want user to restrict on quarter ranges, whats the check on Year ??
+            var year = DateTime.Now.Year;
+            var years = new List<Year>();
+            years.Add(new Year { YearNumber = year - 1 });
+            years.Add(new Year { YearNumber = year });
+            years.Add(new Year { YearNumber = year + 1 });
+
+            return years;
+        }
     }
 }

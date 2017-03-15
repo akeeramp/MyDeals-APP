@@ -33,8 +33,7 @@ namespace Intel.MyDeals.BusinessLogic
                                                                 , short? year
                                                                 , short? quarterNo)
         {
-
-            if((dayInQuarter == null || dayInQuarter > OpaqueConst.SQL_MIN_DATE) && (year == null || quarterNo == null))
+            if ((dayInQuarter == null || dayInQuarter <= OpaqueConst.SQL_MIN_DATE) && (year == null || quarterNo == null))
             {
                 throw new ArgumentException("You must pass a valid DayInQuarter or a valid QuarterNo and Year to resolve quarter dates.");
             }

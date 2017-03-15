@@ -251,6 +251,7 @@
                 "TEXTAREA": "Multi-line TextBox",
                 "SliderInt":1,
                 "ComboboxSelected": [],
+                "MULTISELECT": "",
                 "_MultiDim": [
                     {
                         "PIVOT": -1,

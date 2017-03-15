@@ -4,6 +4,7 @@
         <div kendo-tooltip k-content="tooltipMsg" k-position="'top'" ng-show="opIsError" class="err-bit-el"></div>
         <input type="text" class="k-textbox fl opUiElement"
                ng-model="value"
+               ng-model-options= "{ debounce: 1000 }"
                ng-readonly="opIsReadOnly"
                ng-class="{isHidden: opIsHidden, isReadOnly: opIsReadOnly, isError: opIsError, isSaved: opIsSaved, isDirty: opIsDirty}"/>
         <div kendo-tooltip k-content="helptipMsg" k-position="'top'" ng-show="opHelpMsg" class="fl opElementHelpIcon intelicon-information-outlined"></div>

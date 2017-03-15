@@ -45,10 +45,10 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_dropdownCategory = DB.GetReaderOrdinal(rdr, "dropdownCategory");
                     int IDX_dropdownID = DB.GetReaderOrdinal(rdr, "dropdownID");
                     int IDX_dropdownName = DB.GetReaderOrdinal(rdr, "dropdownName");
-					int IDX_parntAtrbCd = DB.GetReaderOrdinal(rdr, "parntAtrbCd");
-					int IDX_subCategory = DB.GetReaderOrdinal(rdr, "subCategory");
+                    int IDX_parntAtrbCd = DB.GetReaderOrdinal(rdr, "parntAtrbCd");
+                    int IDX_subCategory = DB.GetReaderOrdinal(rdr, "subCategory");
 
-					while (rdr.Read())
+                    while (rdr.Read())
                     {
                         ret.Add(new Dropdown
                         {
@@ -58,8 +58,8 @@ namespace Intel.MyDeals.DataLibrary
                             dropdownID = (IDX_dropdownID < 0 || rdr.IsDBNull(IDX_dropdownID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_dropdownID),
                             dropdownName = (IDX_dropdownName < 0 || rdr.IsDBNull(IDX_dropdownName)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_dropdownName),
                             parntAtrbCd = (IDX_parntAtrbCd < 0 || rdr.IsDBNull(IDX_parntAtrbCd)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_parntAtrbCd),
-							subCategory = (IDX_subCategory < 0 || rdr.IsDBNull(IDX_subCategory)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_subCategory)
-						});
+                            subCategory = (IDX_subCategory < 0 || rdr.IsDBNull(IDX_subCategory)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_subCategory)
+                        });
                     }
                 }
             }
@@ -93,6 +93,8 @@ namespace Intel.MyDeals.DataLibrary
                     ATRB_SID = 0,
                     OBJ_SET_TYPE_SID = 0,
                     ATRB_VAL_TXT = "",
+                    ATRB_LKUP_DESC = "",
+                    ATRB_LKUP_TTIP = "",
                     EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID
                 };
             }

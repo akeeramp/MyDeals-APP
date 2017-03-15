@@ -7,13 +7,23 @@ namespace Intel.MyDeals.IBusinessLogic
     public interface IContractsLib
     {
         MyDealsData GetContract(int id, List<OpDataElementType> opDataElementTypes);
+
         MyDealsData GetContract(int id, bool inclusive = false);
+
         MyDealsData SaveContract(OpDataCollectorFlattenedList data, int custId);
+
         MyDealsData SaveContract(OpDataCollectorFlattenedList contracts, OpDataCollectorFlattenedList pricingStrategies, OpDataCollectorFlattenedList pricingTables, OpDataCollectorFlattenedList pricingTableRows, OpDataCollectorFlattenedList wipDeals, int custId);
+
         OpMsg DeleteContract(int id);
+
         OpDataCollectorFlattenedList GetUpperContract(int id);
+
         OpDataCollectorFlattenedDictList GetFullContract(int id);
+
         MyDealsData SaveFullContract(int custId, OpDataCollectorFlattenedDictList fullContracts);
+
         MyDealsData SaveContractAndPricingTable(int custId, ContractTransferPacket contractAndStrategy);
+
+        bool IsDuplicateContractTitle(int dcId, string title);
     }
 }

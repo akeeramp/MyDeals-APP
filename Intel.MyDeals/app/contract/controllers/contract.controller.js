@@ -2,10 +2,9 @@
     .module('app.contract')
     .controller('ContractController', ContractController);
 
-ContractController.$inject = ['$scope', '$state', 'contractData', 'templateData', 'objsetService', 'dataService', 'templatesService', 'logger', '$uibModal', '$timeout', '$window', '$location', '$rootScope'];
+ContractController.$inject = ['$scope', '$state', 'contractData', 'templateData', 'objsetService', 'templatesService', 'logger', '$uibModal', '$timeout', '$window', '$location', '$rootScope', 'confirmationModal', 'dataService', 'customerService'];
 
-function ContractController($scope, $state, contractData, templateData, objsetService, dataService, templatesService, logger, $uibModal, $timeout, $window, $location, $rootScope) {
-    
+function ContractController($scope, $state, contractData, templateData, objsetService, templatesService, logger, $uibModal, $timeout, $window, $location, $rootScope, confirmationModal, dataService, customerService) {
     // store template information
     //
     $scope.templates = $scope.templates || templateData.data;
@@ -13,18 +12,21 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
     // determine if the contract is existing or new... if new, look for pre-population attributes from the URL parameters
     //
     $scope.initContract = function (contractData) {
-        // contract exists
-        if (contractData !== null && contractData !== undefined) {
-            if (contractData.data[0] !== undefined) return contractData.data[0];
-            // Could not find the contract
-            $state.go('nocontract');
-        }
-
-        // new contract
-        //debugger;
+        // New contract template
         var c = util.clone($scope.templates.ObjectTemplates.CNTRCT.ALL_TYPES);
 
+        // contract exists
+        if (contractData !== null && contractData !== undefined) {
+            if (contractData.data[0] !== undefined) {
+                contractData.data[0]._behaviors = c._behaviors;
+                return contractData.data[0];
+            }
+            // Could not find the contract
+            $state.go('nocontract'); de
+        }
+
         // check URL and see if any parameters were passed.
+        // TODO check the purpose of this code
         var s = $location.search();
         angular.forEach(s,
             function (value, key) {
@@ -54,8 +56,80 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
     $scope.isExistingContract = function () {
         return $scope.contractData.DC_ID > 0;
     }
-    $scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV"] = $scope.contractData["CUST_ACCNT_DIV"] === undefined || $scope.contractData["CUST_ACCNT_DIV"] === "";
 
+    // Contract custom initializations and functions
+    $scope.contractData.CUST_ACCNT_DIV = ""; //TODO remove this once the Template has this attribute
+    $scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV"] = $scope.contractData["CUST_ACCNT_DIV"] === undefined || $scope.contractData["CUST_ACCNT_DIV"] === "";
+    $scope.contractData.START_YR = (new Date).getFullYear();
+    $scope.contractData.END_YR = (new Date).getFullYear();
+    $scope.contractData.START_QTR = 1;
+    $scope.contractData.END_QTR = 1;
+
+    // File save methods and variable
+    $scope.fileUploadOptions = { saveUrl: 'save', removeUrl: 'remove', autoUpload: false };
+
+    var dataSource = new kendo.data.DataSource({
+        transport: {
+            read: function (e) {
+                //fileService.getFileAttachments()
+                //    .then(function (response) {
+                //        e.success(response.data);
+                //    }, function (response) {
+                //        logger.error("Unable to get constants.", response, response.statusText);
+                //    });
+            },
+            destroy: function (e) {
+                var modalOptions = {
+                    closeButtonText: 'Cancel',
+                    actionButtonText: 'Delete Attachment',
+                    hasActionButton: true,
+                    headerText: 'Delete confirmation',
+                    bodyText: 'Are you sure you would like to Delete this Attachment ?'
+                };
+
+                confirmationModal.showModal({}, modalOptions).then(function (result) {
+                    //fileService.deleteFileAttachments(e.data).then(function (response) {
+                    //    e.success(response.data);
+                    //    logger.success("Attachment Deleted.");
+                    //}, function (response) {
+                    //    logger.error("Unable to delete Attachment.", response, response.statusText);
+                    //});
+                });
+            },
+        },
+        pageSize: 25,
+        schema: {
+            model: {
+                id: "ATTCH_SID"
+            }
+        },
+    });
+
+    $scope.fileAttachmentGridOptions = {
+        dataSource: dataSource,
+        filterable: false,
+        sortable: true,
+        selectable: true,
+        resizable: true,
+        columnMenu: false,
+        destroy: function (e) {
+            var commandCell = e.container.find("td:first");
+            commandCell.html('<a class="k-grid-update" href="#"><span class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span class="k-icon k-i-cancel"></span></a>');
+        },
+        columns: [
+           {
+               command: [
+                   { name: "edit", template: "<a class='k-grid-edit' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-edit'></span></a>" },
+                   { name: "destroy", template: "<a class='k-grid-delete' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-close'></span></a>" }
+               ],
+               title: " ",
+               width: "7%"
+           },
+          { "field": "FILE_NM", "title": "File Name", "template": "<a href='/api/FileAttachments/OpenAttachment/#: OBJ_SID #/#: ATTCH_SID #'>#: FILE_NM #</a>" },
+          { "field": "CHG_EMP_WWID", "title": "Added By", width: "25%" },
+          { "field": "CHG_DTM", "title": "Date Added", width: "25%" }
+        ]
+    };
 
     // Don't let the user leave unless the data is saved
     //
@@ -71,16 +145,60 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
 
         var saveStates = ["contract.manager.strategy", "contract.manager.strategy.wip", "contract.details"];
         if ((saveStates.indexOf(fromState.name) >= 0) && $scope._dirty) {
-
             // stop the state change... need to save
             event.preventDefault();
 
             // async save data
             $scope.saveEntireContractBase(fromState.name, toState, toParams);
         }
-
     });
 
+    // Update start date and end date based on the quarter selection
+    var updateDateByQuarter = function (qtrType, qtrValue, yearValue) {
+        var dto = { 'CustomerMemberSid': null, "DayInQuarter": null, "QuarterNo": qtrValue, "Year": yearValue };
+        dto.CustomerMemberSid = $scope.contractData.CUST_MBR_SID == "" ? null : $scope.contractData.CUST_MBR_SID;
+
+        var quarterDetails = customerService.getCustomerCalendar(dto).then(function (response) {
+            if (qtrType == 'START_DATE') {
+                $scope.contractData.START_DT = response.data.QTR_STRT;
+                unWatchStartDate = true;
+            } else {
+                $scope.contractData.END_DT = response.data.QTR_END;
+                unWatchEndDate = true;
+            }
+        });
+    }
+
+    var updateQuarterByDates = function (dateType, value) {
+        var dto = { 'CustomerMemberSid': null, "DayInQuarter": value, "QuarterNo": null, "Year": null };
+        dto.CustomerMemberSid = $scope.contractData.CUST_MBR_SID == "" ? null : $scope.contractData.CUST_MBR_SID;
+
+        var quarterDetails = customerService.getCustomerCalendar(dto).then(function (response) {
+            if (dateType == 'START_DT') {
+                $scope.contractData.START_QTR = response.data.QTR_NBR;
+                $scope.contractData.START_YR = response.data.YR_NBR;;
+                unWatchStartQuarter = true;
+            } else {
+                $scope.contractData.END_QTR = response.data.QTR_NBR;
+                $scope.contractData.END_YR = response.data.YR_NBR;
+                unWatchEndQuarter = true;
+            }
+        });
+    }
+
+    var unWatchStartQuarter, unWatchEndQuarter, unWatchStartDate, unWatchEndDate = false;
+
+    var validateDates = function (newDate) {
+        var isValid = true;
+        if (Date.parse(newDate) < Date.parse(new Date)) {
+            kendo.confirm("You have Selected a date in the past which means the dates you will enter will be considered backdated").then(function () {
+                // TODO Capture back dated date
+            }, function () {
+                $scope.contractData.START_DT = "";
+            });
+        }
+        return false;
+    }
 
     // Watch for any changes to contract data to set a dirty bit
     //
@@ -89,25 +207,88 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
             if (oldValue === newValue) return;
 
             if (oldValue["CUST_MBR_SID"] !== newValue["CUST_MBR_SID"]) {
-                $scope.updateCorpDivision(newValue);
+                $scope.contractData.CUST_ACCNT_DIV = "";
+                $scope.updateCorpDivision(newValue["CUST_MBR_SID"]);
+            }
+
+            if (oldValue["START_QTR"] !== newValue["START_QTR"]
+                || oldValue["START_YR"] !== newValue["START_YR"]) {
+                if (!unWatchStartQuarter) {
+                    updateDateByQuarter('START_DATE', newValue["START_QTR"], newValue["START_YR"]);
+                }
+                unWatchStartQuarter = false;
+            }
+
+            if (oldValue["END_QTR"] !== newValue["END_QTR"]
+                            || oldValue["END_YR"] !== newValue["END_YR"]) {
+                if (!unWatchEndQuarter) {
+                    updateDateByQuarter('END_DATE', newValue["END_QTR"], newValue["END_YR"]);
+                }
+            }
+
+            if (oldValue["START_DT"] !== newValue["START_DT"]) {
+                if (!validateDates(newValue["START_DT"])) return;
+                if (!unWatchStartDate) {
+                    updateQuarterByDates('START_DT', newValue["START_DT"]);
+                }
+                unWatchStartDate = false;
+            }
+
+            if (oldValue["END_DT"] !== newValue["END_DT"]) {
+                if (!unWatchEndDate) {
+                    updateQuarterByDates('END_DT', newValue["END_DT"]);
+                }
+                unWatchEndDate = false;
+            }
+
+            if (oldValue["TITLE"] !== newValue["TITLE"]) {
+                isDuplicateContractTitle(newValue["TITLE"]);
             }
 
             el._dirty = true;
             el._dirtyContractOnly = true;
         }, true);
 
-    $scope.updateCorpDivision = function (dataItem) {
-        var custId = dataItem["CUST_MBR_SID"];
+    // Customer and Customer Div functions
+    var initiateCustDivCombobox = function () {
+        if ($scope.contractData.CUST_ACCNT_DIV !== "") {
+            $scope.updateCorpDivision($scope.contractData.CUST_MBR_SID);
+        }
+    }
+
+    // Contract name validation
+    var isDuplicateContractTitle = function (title) {
+        if (title == "") return;
+        objsetService.isDuplicateContractTitle($scope.contractData.DC_ID, title).then(function (response) {
+            $scope.contractData._behaviors.isError['TITLE'] = response.data;
+            $scope.contractData._behaviors.validMsg['TITLE'] = "";
+            if (response.data) {
+                $scope.contractData._behaviors.validMsg['TITLE'] = "This contract name already exists in another contract.";
+            }
+        });
+    }
+
+    $scope.updateCorpDivision = function (custId) {
         dataService.get("/api/Customers/GetMyCustomerDivsByCustNmSid/" + custId).then(function (response) {
             // only show if more than 1 result
-            $scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV"] = response.data.length <= 1;
-            //debugger;
+            if (response.data.length <= 1) {
+                $scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV"] = false;
+                $scope.contractData._behaviors.isRequired["CUST_ACCNT_DIV"] = false;
+                $scope.contractData._behaviors.isReadOnly["CUST_ACCNT_DIV"] = true;
+                $scope.contractData.CUST_ACCNT_DIV = response.data[0].CUST_MBR_SID.toString();
+            } else {
+                $scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV"] = false;
+                $scope.contractData._behaviors.isReadOnly["CUST_ACCNT_DIV"] = false;
+                $scope.contractData._behaviors.isRequired["CUST_ACCNT_DIV"] = true;
+            }
             $("#CUST_ACCNT_DIV").data("kendoMultiSelect").dataSource.data(response.data);
-            //debugger;
+            $("#CUST_ACCNT_DIV").data("kendoMultiSelect").value($scope.contractData.CUST_ACCNT_DIV.split(","));
         }, function (response) {
             logger.error("Unable to get Customer Divisions.", response, response.statusText);
         });
     }
+
+    initiateCustDivCombobox();
 
     // **** LEFT NAVIGATION Methods ****
     //
@@ -117,7 +298,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         $(window).trigger('resize');
         $scope.resizeEvent();
     }
-    $scope.resizeEvent = function() {
+    $scope.resizeEvent = function () {
         $timeout(function () {
             var evt = $window.document.createEvent('UIEvents');
             evt.initUIEvent('resize', true, false, window, 200);
@@ -135,8 +316,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         $scope.strategyTreeCollapseAll = !$scope.strategyTreeCollapseAll;
     }
 
-
-    // **** MINI NAV ICON Methods ****
+    // **** MINI NAV ICON Methods ****ex
     //
     $scope.isSearchHidden = true;
     $scope.isAddPricingTableHidden = true;
@@ -164,7 +344,6 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         $scope.curPricingStrategy = {}; //clears curPricingStrategy
     }
 
-
     // **** PRICING STRATEGY Methods ****
     //
     $scope.isAddStrategyHidden = true;
@@ -176,10 +355,9 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         $scope.isAddPricingTableHidden = true;
     }
 
-
     // **** PRICING TABLE Methods ****
     //
-    $scope.addCustomToTemplates = function() {
+    $scope.addCustomToTemplates = function () {
         angular.forEach($scope.templates.ModelTemplates.PRC_TBL, function (value, key) {
             value._custom = {
                 "ltr": value.name[0],
@@ -206,7 +384,6 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
     }
     $scope.addCustomToTemplates();
 
-
     // **** UNMARK CURRENT Methods ****
     //
     $scope.unmarkCurPricingStrategyIf = function (id) {
@@ -222,7 +399,6 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         }
     }
 
-
     // **** DELETE Methods ****
     //
     $scope.deletePricingStrategy = function (ps) {
@@ -232,8 +408,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
 
                 // Remove from DB first... then remove from screen
                 objsetService.deletePricingStrategy(ps.DC_ID).then(
-                    function(data) {
-
+                    function (data) {
                         // TODO need to handle exception/error here... right now we do not read response for pass/fail
 
                         // might need to unmark the current selected item
@@ -261,8 +436,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
 
                 // Remove from DB first... then remove from screen
                 objsetService.deletePricingTable(pt.DC_ID).then(
-                    function(data) {
-
+                    function (data) {
                         // TODO need to handle exception/error here... right now we do not read response for pass/fail
 
                         // might need to unmark the current selected item
@@ -282,7 +456,6 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
             });
         });
     }
-
 
     // **** SAVE CONTRACT Methods ****
     //
@@ -308,7 +481,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
                 }
             }
         }
-        
+
         // validate that we have access to spreadDs, gridDs and GridDetailsDs
         var contractData = $scope._dirtyContractOnly ? [$scope.contractData] : [];
         var curPricingTableData = $scope.curPricingTable.DC_ID === undefined ? [] : [$scope.curPricingTable];
@@ -338,6 +511,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
 
         // Contract Data
         var ct = $scope.contractData;
+        ct.CUST_ACCNT_DIV = $scope.contractData.CUST_ACCNT_DIV.toString();
 
         // check for NEW contract
         if (ct.DC_ID <= 0) ct.DC_ID = $scope.uid--;
@@ -359,7 +533,6 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
                 topbar.hide();
             }
         );
-
     }
     $scope.customContractValidate = function () {
         var isValid = true;
@@ -375,7 +548,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         // Check required
         angular.forEach($scope.contractData,
             function (value, key) {
-                if (key[0] !== '_' && value !== undefined && value !== null && !Array.isArray(value) && typeof (value) !== "object" && (typeof(value) === "string" && value.trim() === "") && ct._behaviors.isRequired[key] === true) {
+                if (key[0] !== '_' && value !== undefined && value !== null && !Array.isArray(value) && typeof (value) !== "object" && (typeof (value) === "string" && value.trim() === "") && ct._behaviors.isRequired[key] === true) {
                     ct._behaviors.validMsg[key] = "* field is required";
                     ct._behaviors.isError[key] = true;
                     isValid = false;
@@ -431,7 +604,6 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
                 topbar.hide();
             }
         );
-
     }
     $scope.customAddPsValidate = function () {
         var isValid = true;
@@ -472,7 +644,6 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
             $scope.addPricingStrategy();
         }
     }
-
 
     // **** NEW PRICING TABLE Methods ****
     //
@@ -574,10 +745,9 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
 
     // **** VALIDATE PRICING TABLE Methods ****
     //
-    $scope.validatePricingTable = function() {
+    $scope.validatePricingTable = function () {
         $scope.showWipDeals();
     }
-
 
     $scope.showWipDeals = function () {
         $state.go('contract.manager.strategy.wip', { cid: $scope.contractData.DC_ID, sid: $scope.curPricingStrategyId, pid: $scope.curPricingTableId });
@@ -590,8 +760,6 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
     $scope.validateWipDeals = function () {
         debugger;
     }
-
-
 
     topbar.hide();
 }

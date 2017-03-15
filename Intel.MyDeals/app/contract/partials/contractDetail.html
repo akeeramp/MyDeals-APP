@@ -2,16 +2,18 @@
 <div id="secBasicContainerWrapper">
 
     <form novalidate dirty-tracking obj-type="contractData" class="contract-detail-form">
-
-        <h4>Contract Details</h4>
+        <div class="row">
+            <h4 class="col-md-3">Contract Details</h4>
+            <span class="col-md-2 infospan"><span> * </span>Indicates Required filed</span>
+        </div>
 
         <div class="row">
             <div class="col-md-6">
-                <div class="col-md-11">
+                <div class="col-md-12 row">
                     <h6>Customer Information</h6>
                 </div>
 
-                <div class="col-md-10"
+                <div class="col-md-11 row row"
                      op-control-flat
                      ng-model="contractData"
                      op-cd="'CUST_MBR_SID'"
@@ -23,7 +25,7 @@
                      op-selected-object="'Customer'"
                      op-ui-mode="'VERTICAL'"></div>
 
-                <div class="col-md-10"
+                <div class="col-md-11 row"
                      op-control-flat
                      ng-model="contractData"
                      op-cd="'CUST_ACCNT_DIV'"
@@ -32,101 +34,159 @@
                      op-lookup-values="[]"
                      op-lookup-text="'CUST_DIV_NM'"
                      op-lookup-value="'CUST_MBR_SID'"
-                     op-selected-object="'Customer'"
                      op-ui-mode="'VERTICAL'"></div>
             </div>
             <div class="col-md-6">
-                <div class="col-md-11">
-                    <h6>Customer Acceptance of Contract is...</h6>
+                <div class="col-md-12 row">
+                    <h6>Customer Acceptance of Contract is...<span kendo-tooltip k-content="helptipMsg" k-position="'top'" class="opElementHelpIcon intelicon-information-outlined"></span></h6>
                 </div>
 
-                <div class="col-md-10"
+                <div class="col-md-11 row"
                      op-control-flat
                      ng-model="contractData"
                      op-cd="'CUST_ACCPT'"
                      op-type="'RADIOBUTTONGROUP'"
                      op-label="''"
-                     op-lookup-url="'/api/Dropdown/GetDropdowns/MRKT_SEG_NON_CORP'"
+                     op-lookup-url="'api/Dropdown/GetDropdowns/CUST_ACCPT'"
                      op-lookup-text="'DROP_DOWN'"
-                     op-lookup-value="'DROP_DOWN'"
+                     op-lookup-value="'ATRB_LKUP_SID'"
                      op-ui-mode="'VERTICAL'"></div>
-
-                <div class="col-md-10"
-                     op-control-flat
-                     ng-model="contractData"
-                     op-cd="'CUST_ACCPT'"
-                     op-type="'CHECKBOX'"
-                     op-label="'Pending:'"
-                     op-ui-mode="'HORIZONTAL'"></div>
-
-                <div class="col-md-10"
-                     op-control-flat
-                     ng-model="contractData"
-                     op-cd="'CUST_ACCPT'"
-                     op-type="'CHECKBOX'"
-                     op-label="'Accepted:'"
-                     op-ui-mode="'HORIZONTAL'"></div>
-
-                <div class="col-md-10"
-                     op-control-flat
-                     ng-model="contractData"
-                     op-cd="'CUST_ACCPT'"
-                     op-type="'CHECKBOX'"
-                     op-label="'Acceptance Not Reqired:'"
-                     op-ui-mode="'HORIZONTAL'"></div>
             </div>
         </div>
 
         <div class="row">
             <div class="col-md-6">
-                <div class="col-md-11">
+                <div class="col-md-12 row">
                     <h6>Dates</h6>
                 </div>
 
-                <div class="col-md-10">
+                <div class="col-md-11 row">
                     <div op-control-flat
                          ng-model="contractData"
                          op-cd="'START_DT'"
                          op-type="'DATEPICKER'"
-                         op-label="'Contract Start Date:'"
-                         op-ui-mode="'HORIZONTAL'"
-                         style="margin-bottom: 20px;"></div>
+                         op-label="'Select start date:'"
+                         op-ui-mode="'HORIZONTAL'"></div>
                 </div>
-                <div class="col-md-10">
+                <div class="clearboth orLabel">OR</div>
+                <div class="row">
+                    <div class="col-md-3 dateRangeLabel">
+                        Select range
+                    </div>
+                    <div class="col-md-4">
+                        <div class="col-md-11 row"
+                             style="width: 200px;"
+                             op-control-flat
+                             ng-model="contractData"
+                             op-cd="'START_QTR'"
+                             op-type="'SLIDER'"
+                             op-label="''"
+                             op-min-value="1"
+                             op-max-value="4"
+                             op-ui-mode="'VERTICAL'"></div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="col-md-11 row"
+                             op-control-flat
+                             ng-model="contractData"
+                             op-cd="'START_YR'"
+                             op-type="'DROPDOWN'"
+                             op-label="''"
+                             op-lookup-url="'api/CustomerCalendar/GetMyCustomerYears'"
+                             op-lookup-text="'YearNumber'"
+                             op-lookup-value="'YearNumber'"
+                             op-ui-mode="'VERTICAL'"></div>
+                    </div>
+                </div>
+                <div class="col-md-11 row">
                     <div op-control-flat
                          ng-model="contractData"
                          op-cd="'END_DT'"
                          op-type="'DATEPICKER'"
-                         op-label="'Contract End Date:'"
-                         op-ui-mode="'HORIZONTAL'"></div>
+                         op-label="'Select end date:'"
+                         op-ui-mode="'HORIZONTAL'"  ></div>
+                </div>
+                <div class="clearboth orLabel">OR</div>
+                <div class="row">
+                    <div class="col-md-3 dateRangeLabel">
+                        Select range
+                    </div>
+                    <div class="col-md-4">
+                        <div class="col-md-11 row"
+                             style="width: 200px;"
+                             op-control-flat
+                             ng-model="contractData"
+                             op-cd="'END_QTR'"
+                             op-type="'SLIDER'"
+                             op-label="''"
+                             op-min-value="1"
+                             op-max-value="4"
+                             op-ui-mode="'VERTICAL'"></div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="col-md-11 row"
+                             op-control-flat
+                             ng-model="contractData"
+                             op-cd="'END_YR'"
+                             op-type="'DROPDOWN'"
+                             op-label="''"
+                             op-lookup-url="'api/CustomerCalendar/GetMyCustomerYears'"
+                             op-lookup-text="'YearNumber'"
+                             op-lookup-value="'YearNumber'"
+                             op-ui-mode="'VERTICAL'"></div>
+                    </div>
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="col-md-11">
+                <div class="col-md-12 row">
                     <h6>Information</h6>
                 </div>
 
-                <div class="col-md-10"
+                <div class="col-md-11 row"
                      op-control-flat
                      ng-model="contractData"
                      op-cd="'TITLE'"
                      op-type="'TEXTBOX'"
                      op-label="'Contract Name:'"
                      op-ui-mode="'VERTICAL'"></div>
+
+                <div class="col-md-11 row"
+                     op-control-flat
+                     ng-model="contractData"
+                     op-cd="'C2A_DATA_C2A_ID'"
+                     op-type="'TEXTBOX'"
+                     op-label="'C2A# or link to contract:'"
+                     op-ui-mode="'VERTICAL'"></div>
+
+                <!--TODO Move these to FileUploaddirective-->
+                <div class="col-md-11 row">
+                    <div class="f1 opUiLabel">Attachment(s):&nbsp;<span kendo-tooltip k-content="helptipMsg" k-position="'top'" class="opElementHelpIcon intelicon-information-outlined"></span></div>
+                    <input name="files"
+                           type="file"
+                           kendo-upload
+                           k-async="fileUploadOptions" />
+                </div>
+                <div class="col-md-11 row">
+                    <uib-accordion close-others="oneAtATime">
+                        <div uib-accordion-group class="panel-default accordion-panel" heading="File Details" is-open="status.isFirstOpen">
+                            <div kendo-grid="fileAttachmentGrid" style="height:150px;" footer-offset="500" options="fileAttachmentGridOptions"></div>
+                        </div>
+                </div>
+
             </div>
         </div>
 
         <div class="row">
             <div class="col-md-6">
-                <div class="col-md-11">
+                <div class="col-md-12 row row">
                     <h6>Timeline</h6>
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="col-md-11">
-                    <h6>Notes</h6>
+                <div class="col-md-12">
+                    <h6 class="noBottemBorder">Notes</h6>
                 </div>
-                <div class="col-md-10"
+                <div class="col-md-11"
                      op-control-flat
                      ng-model="contractData"
                      op-cd="'NOTES'"

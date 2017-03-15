@@ -63,18 +63,16 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
                         }
                     },
                     schema: {
-                        parse: function(data) {
+                        parse: function (data) {
                             // Values in the list should be unique
                             serviceData = $filter('unique')(data, scope.opLookupValue);
-// data from the service will be pushed into this.
+                            // data from the service will be pushed into this.
                             return serviceData;
                         }
                     }
                 }
             } else if (scope.opLookupValues !== undefined) {
                 scope.values = scope.opLookupValues;
-                //[{ "DROP_DOWN": "hi" }]
-                //debugger;
             }
         }
 
@@ -95,7 +93,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
         //    element.replaceWith($compile(element.html())(scope));
         //});
         loader.success(function (html) {
-            html = html.replace(/id="{{opCd}}"/g,'id="' + scope.opCd + '"');
+            html = html.replace(/id="{{opCd}}"/g, 'id="' + scope.opCd + '"');
             var x = angular.element(html);
             element.append(x);
             $compile(x)(scope);

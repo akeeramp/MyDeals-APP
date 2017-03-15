@@ -22,8 +22,8 @@ function lookupsService(dataService) {
     }
 
     // HACK: Use this function if you cannot batch your loading with the js setTimeOut hack
-    // and you need to render the browser (for displaying loading icons, ect) before 
-    // performing a UI-heavy task that would normally lock the browser a few seconds. 
+    // and you need to render the browser (for displaying loading icons, ect) before
+    // performing a UI-heavy task that would normally lock the browser a few seconds.
     function asyncRenderHack() {
     	return dataService.get(apiBaseLookupUrl + 'AsyncRenderHack/');
     }

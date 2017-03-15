@@ -128,6 +128,7 @@ namespace Intel.MyDeals
                 , "~/app/blocks/uiControls/opcontrolFlat.directive.js"
                 , "~/app/blocks/uiControls/opcontrolDataElement.directive.js"
                 , "~/app/shared/services/lookups.service.js"
+                , "~/app/shared/services/customer.service.js"
                 , "~/app/shared/services/objset.service.js"
                 , "~/app/shared/services/templates.service.js"
                 , "~/app/testCases/testCases.module.js"

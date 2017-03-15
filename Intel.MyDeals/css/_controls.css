@@ -89,14 +89,21 @@
         z-index: 100;
         margin-top: -6px;
     }
+    .err-Control {
+        background-color: #FFFFFF;
+        color: #ED1C24;
+        font-size: 12px !important;
+        padding-left: 1px !important;
+        padding-top: 2px !important;
+    }
 
     .elOnBlue .k-textbox.isError
     {
         border: 1px solid #ED1C24;
     }
     .elOnBlue .err-bit {
-        border-style: solid; 
-        border-color: #ED1C24 transparent transparent #ED1C24; 
+        border-style: solid;
+        border-color: #ED1C24 transparent transparent #ED1C24;
     }
     .elOnBlue .err-bit-el {
         border-color: #ED1C24 transparent transparent #ED1C24;
@@ -210,6 +217,19 @@
         -ms-transform: rotate(90deg);
         -webkit-transform: rotate(90deg);
         transform: rotate(90deg);
+    }
+
+    .lookupDesc{
+        font-size:11px;
+        color:orange;
+        font-style:italic;
+        margin-left:2px;
+        font-weight:bold;
+    }
+
+    .radioControl{
+        font-size:14px;
+        font-weight:bold!important;
     }
 
     /*
