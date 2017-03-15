@@ -16,6 +16,9 @@
         vm.nonCorpInheritableValues = [];
         vm.selectedInheritanceGroup = "";
 
+        vm.selectedATRB_SID = 0;
+        vm.selectedOBJ_SET_TYPE_SID = 0;
+
         vm.dataSource = new kendo.data.DataSource({
             type: "json",
             transport: {
@@ -103,11 +106,19 @@
                                         }
                                     }
                                     return true;
+                                },
+                                uniquenessvalidation: function (input) {
+                                    if (input.is("[name='DROP_DOWN']") && input.val() != "") {
+                                        input.attr("data-uniquenessvalidation-msg", "Values must be unique for any given deal type and grouping combination.");
+                                        return checkUnique(input.val());
+                                    }
+                                    return true;
                                 }
                             }
                         },
+                        ATRB_LKUP_DESC: { validation: { required: false } },
+                        ATRB_LKUP_TTIP: { validation: { required: false } },
                         ACTV_IND: { type: "boolean" },
-                        DROP_DOWN_DB: { validation: { required: true } }
                     }
                 }
             }
@@ -118,7 +129,7 @@
                         .then(function (response) {
                             vm.dealtypeDataSource = response.data;
                             vm.dealtypes = response.data;
-                            vm.onlyAllDeal = [response.data[0]] //Note: this assumes that "All Deals" will always be at the top of the "All Deal Types" category
+                            vm.onlyAllDeal = response.data.filter(isAllDeals);
                         }, function (response) {
                             logger.error("Unable to get Deal Type Dropdowns.", response, response.statusText);
                         });
@@ -150,15 +161,17 @@
             edit: function (e) {
                 var commandCell = e.container.find("td:first");
                 commandCell.html('<a class="k-grid-update" href="#"><span class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span class="k-icon k-i-cancel"></span></a>');
-                if (e.model.isNew() == false) { //prevent edit of these fields except during creation
+                if (e.model.isNew() == false) { //edit case: prevent edit of these fields except during creation
                     $('input[name=DROP_DOWN]').parent().html(e.model.DROP_DOWN);
                     $('input[name=OBJ_SET_TYPE_SID]').parent().html(e.model.OBJ_SET_TYPE_CD);
                     $('input[name=ATRB_SID]').parent().html(e.model.ATRB_CD);
-                } else {
+                } else {    //new entry case: all fields are editable
                     $("#OBJ_SET_TYPE_SID").data("kendoDropDownList").select(0);
                     $("#OBJ_SET_TYPE_SID").data("kendoDropDownList").trigger("change");
+                    vm.selectedOBJ_SET_TYPE_SID = $("#OBJ_SET_TYPE_SID").data("kendoDropDownList").dataSource.data()[0].dropdownID;
                     $("#ATRB_SID").data("kendoDropDownList").select(0);
                     $("#ATRB_SID").data("kendoDropDownList").trigger("change");
+                    vm.selectedATRB_SID = $("#ATRB_SID").data("kendoDropDownList").dataSource.data()[0].dropdownID
                 }
             },
             destroy: function (e) {
@@ -264,6 +277,16 @@
                     title: "Value",
                     filterable: { multi: true, search: true }
                     //TODO: if user selects noncorp, make this a dropdownlist? allowable values are pre-set anyways... can improve user quality of life
+                },
+                {
+                    field: "ATRB_LKUP_DESC",
+                    title: "Description",
+                    filterable: { multi: true, search: true }
+                },
+                {
+                    field: "ATRB_LKUP_TTIP",
+                    title: "Tooltip",
+                    filterable: { multi: true, search: true }
                 }]
         }
 
@@ -271,8 +294,7 @@
             element.kendoComboBox({
                 dataTextField: "dropdownName",
                 dataValueField: "dropdownID",
-                dataSource: vm.dealtypeDataSource,
-                //optionLabel: "-- Select Value --"
+                dataSource: vm.dealtypeDataSource
             });
         }
 
@@ -280,8 +302,7 @@
             element.kendoComboBox({
                 dataTextField: "dropdownName",
                 dataValueField: "dropdownID",
-                dataSource: vm.groupsDataSource,
-                //optionLabel: "-- Select Value --"
+                dataSource: vm.groupsDataSource
             });
         }
 
@@ -294,9 +315,36 @@
             }
         }
 
+        function checkUnique(val) {
+            var gridData = $scope.dropdownGrid.dataSource.data()
+            for (var i = 0; i <= gridData.length; i++) {
+                if (gridData[i] == null || gridData[i]["ATRB_LKUP_SID"] == null || gridData[i]["ATRB_LKUP_SID"] == "") {
+                    //do not compare against objects that have not been created, i.e. have no sid - this includes itself
+                    continue;
+                } else {
+                    if (gridData[i]["OBJ_SET_TYPE_SID"] == vm.selectedOBJ_SET_TYPE_SID &&
+                        gridData[i]["ATRB_SID"] == vm.selectedATRB_SID &&
+                        gridData[i]["DROP_DOWN"] == val) {
+                        //if there is an existing basic dropdown with identical deal type, grouping, and value, return false
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        function isAllDeals(val) {
+            if (val.dropdownName == "All Deals") {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
         function onDealTypeChange(e) {
             //TODO: notify user that their choice may set other dropdowns to inactive if there is overlap - should we just refresh the entire grid?
             //Note: kendo select event being called twice? once on click and once on deselect
+            vm.selectedOBJ_SET_TYPE_SID = e.dataItem.dropdownID;
         }
 
         function onGroupChange(e) {
@@ -305,13 +353,16 @@
                 $("#OBJ_SET_TYPE_SID").data("kendoDropDownList").setDataSource(vm.dealtypes);
                 $("#OBJ_SET_TYPE_SID").data("kendoDropDownList").refresh();
             } else {
-                //if true, deal type only has the option of being "All Deals"
+                //if this case, deal type only has the option of being "All Deals"
                 $("#OBJ_SET_TYPE_SID").data("kendoDropDownList").setDataSource(vm.onlyAllDeal);
                 $("#OBJ_SET_TYPE_SID").data("kendoDropDownList").refresh();
                 $("#OBJ_SET_TYPE_SID").data("kendoDropDownList").text(vm.onlyAllDeal[0].dropdownName);
-                $("#OBJ_SET_TYPE_SID").data("kendoDropDownList").value(vm.onlyAllDeal[0].dropdownId);
+                $("#OBJ_SET_TYPE_SID").data("kendoDropDownList").value(vm.onlyAllDeal[0].dropdownID);
                 $("#OBJ_SET_TYPE_SID").data("kendoDropDownList").trigger("change");
+                vm.selectedOBJ_SET_TYPE_SID = vm.onlyAllDeal[0].dropdownID
             }
+
+            vm.selectedATRB_SID = e.dataItem.dropdownID;
 
             if (e.dataItem.parntAtrbCd != null && e.dataItem.parntAtrbCd != "") {
                 vm.selectedInheritanceGroup = e.dataItem.dropdownName;

@@ -107,6 +107,8 @@ namespace Intel.MyDeals.DataLibrary
                     ATRB_SID = dropdown.ATRB_SID,
                     OBJ_SET_TYPE_SID = dropdown.OBJ_SET_TYPE_SID,
                     ATRB_VAL_TXT = dropdown.DROP_DOWN,
+                    ATRB_LKUP_DESC = dropdown.ATRB_LKUP_DESC,
+                    ATRB_LKUP_TTIP = dropdown.ATRB_LKUP_TTIP,
                     ACTV_IND = dropdown.ACTV_IND,
                     EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID
                 };
@@ -177,6 +179,8 @@ namespace Intel.MyDeals.DataLibrary
                     ATRB_SID = 0,
                     OBJ_SET_TYPE_SID = 0,
                     ATRB_VAL_TXT = "",
+                    ATRB_LKUP_DESC = "",
+                    ATRB_LKUP_TTIP = "",
                     EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID
                 }, null, out dsCheckConstraintErrors);
 
