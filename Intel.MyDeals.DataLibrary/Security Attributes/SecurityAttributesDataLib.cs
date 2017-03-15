@@ -540,7 +540,7 @@ namespace Intel.MyDeals.DataLibrary
             DataSet dsCheckConstraintErrors = null;
             try
             {
-                DataAccess.ExecuteDataSet(new Procs.dbo.PR_MANAGE_DEAL_TYPES()
+                DataAccess.ExecuteDataSet(new Procs.dbo.PR_MYDL_MANAGE_OBJ_SET_TYPES()
                 {
                     WWID = OpUserStack.MyOpUserToken.Usr.WWID,
                     MODE = CrudModes.Delete.ToString(),
@@ -586,7 +586,7 @@ namespace Intel.MyDeals.DataLibrary
 		}
 
         /// <summary>
-        ///  Calls the PR_MANAGE_DEAL_TYPES SP which performs a CRUD operation depending on the state param
+        ///  Calls the PR_MYDL_MANAGE_OBJ_SET_TYPES which performs a CRUD operation depending on the state param
         /// </summary>
         /// <returns> List of AdminDealType</returns>
         public List<AdminDealType> CallManageAdminDealTypeSP(AdminDealType dealType, CrudModes state)
@@ -594,7 +594,7 @@ namespace Intel.MyDeals.DataLibrary
             var ret = new List<AdminDealType>();
             try
             {
-                Procs.dbo.PR_MANAGE_DEAL_TYPES cmd = new Procs.dbo.PR_MANAGE_DEAL_TYPES
+                Procs.dbo.PR_MYDL_MANAGE_OBJ_SET_TYPES cmd = new Procs.dbo.PR_MYDL_MANAGE_OBJ_SET_TYPES
                 {
                     WWID = OpUserStack.MyOpUserToken.Usr.WWID,
                     MODE = state.ToString()
@@ -702,7 +702,7 @@ namespace Intel.MyDeals.DataLibrary
 		}
 
         /// <summary>
-        ///  Calls the PR_MANAGE_DEAL_TYPES SP which performs a CRUD operation depending on the state param
+        ///  Calls the PR_MANAGE_ROLE_TYPES SP which performs a CRUD operation depending on the state param
         /// </summary>
         /// <returns> List of AdminRoleTypes</returns>
         public List<AdminRoleType> CallManageAdminRoleTypeSP(AdminRoleType dealType, CrudModes state)
