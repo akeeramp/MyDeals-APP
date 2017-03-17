@@ -54,10 +54,19 @@ namespace Intel.MyDeals.BusinessLogic
 
             foreach (OpDataCollectorFlattenedItem items in data)
             {
+                if (!items.Any()) continue;
+
                 int id = items.GetIntAtrb(AttributeCodes.DC_ID);
-                int idtype = items.GetIntAtrbFromOpDataElementType("dc_type");
+                int idtype = items.GetIntAtrbFromOpDataElementType(AttributeCodes.dc_type);
                 int parentid = items.GetIntAtrb(AttributeCodes.DC_PARENT_ID);
-                int parentidtype = items.GetIntAtrbFromOpDataElementType("dc_parent_type");
+                int parentidtype = items.GetIntAtrbFromOpDataElementType(AttributeCodes.dc_parent_type);
+
+
+                if (opType == OpDataElementType.WIP_DEAL && id == 0)
+                {
+                    id = myDealsData[OpDataElementType.PRC_TBL_ROW].AllDataCollectors.Where(d => d.DcID == parentid).Select(d => d.DcID).FirstOrDefault();
+                }
+
 
                 // Handle multi dim items
                 if (items.ContainsKey(EN.OBJDIM._MULTIDIM))
@@ -182,9 +191,12 @@ namespace Intel.MyDeals.BusinessLogic
 
             // Get DataPacket
             OpDataPacket<OpDataElementType> dpObjSet = myDealsData[opType];
-            
+
+            if (dpObjSet.Actions.Any()) data.Add(new OpDataCollectorFlattenedItem {["_actions"] = dpObjSet.Actions });
+
             // Tag Attachments
             // TODO Inject a Rule Trigger here and the below commands should be a rules for this trigger
+
 
             // TODO make this a rule
             // Since this is a DB call, we don't want to do this for EVERY data collector individually
@@ -453,6 +465,19 @@ namespace Intel.MyDeals.BusinessLogic
         {
             myDealsData.EnsureOpTypeExists(opType);
             return myDealsData[opType];
+        }
+
+        public static void EnsureRowAndWipDcIds(this MyDealsData myDealsData)
+        {
+            if (!myDealsData.ContainsKey(OpDataElementType.PRC_TBL_ROW) || !myDealsData.ContainsKey(OpDataElementType.WIP_DEAL)) return;
+
+            Dictionary<int, int> rowToWip = new Dictionary<int, int>();
+            Dictionary<int, int> wipToRow = new Dictionary<int, int>();
+
+            foreach (OpDataCollector dc in myDealsData[OpDataElementType.PRC_TBL_ROW].AllDataCollectors)
+            {
+                    
+            }
         }
 
         #endregion

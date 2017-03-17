@@ -309,7 +309,6 @@ gridTools.prototype.createDataSource = function (parentSource, pageSize) {
                 //e.error("XHR response", "status code", "error message");
             },
             destroy: function (e) {
-                debugger;
                 var source = parentSource;
 
                 // locate item in original datasource and remove it

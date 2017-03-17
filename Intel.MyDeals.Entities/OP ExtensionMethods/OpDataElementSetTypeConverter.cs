@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Intel.Opaque.Data;
 
 namespace Intel.MyDeals.Entities
 {
@@ -20,6 +21,16 @@ namespace Intel.MyDeals.Entities
 
             return OpDataElementSetTypeRepository.OpDestCollection.Items.FirstOrDefault(o => o.OpDeSetType.ToString() == $"{strType}" || o.Alias == $"{strType}")?.OpDeSetType ?? OpDataElementSetType.Unknown;
         }
+
+
+
+        // TODO need this in DB from T4 templates
+        public static OpDataElementTypeMapping OpDataElementTypeChildMapping(this OpDataElementSetType opDataElementSetType, OpDataElementType opDataElementType)
+        {
+            return OpDataElementSetTypeRepository.OpDestCollection.OpDataElementTypeMappings.FirstOrDefault(
+                m => m.ParentOpDataElementType == opDataElementType && m.ParentOpDataElementSetType == opDataElementSetType);
+        }
+
 
 
         public static int ToId(this OpDataElementSetType opDataElementSetType)

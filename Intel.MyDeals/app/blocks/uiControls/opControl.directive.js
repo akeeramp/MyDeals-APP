@@ -131,6 +131,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
             if (!!scope.opSelectedObject && (scope.opType === 'DROPDOWN' || scope.opType === 'COMBOBOX' || scope.opType === 'MULTISELECT')) {
                 var selected = [];
                 $.each(serviceData, function (idx, elem) {
+
                     if (elem[scope.opLookupValue] === scope.value) {
                         selected = elem;
                         return false;

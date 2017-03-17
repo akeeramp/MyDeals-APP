@@ -43,6 +43,8 @@ namespace Intel.MyDeals.BusinessLogic
             // Get the data from the DB, data is the data passed from the UI, it is then merged together down below.
             MyDealsData myDealsData = opTypeGrp.GetByIDs(ids, opDataElementTypes, data);
 
+            myDealsData.EnsureRowAndWipDcIds();
+            
             // RUN RULES HERE - If there are validation errors, just return to the user, otherwise, continue with the save process.
             if (myDealsData.ValidationApplyRules()) return myDealsData;
 
@@ -133,6 +135,7 @@ namespace Intel.MyDeals.BusinessLogic
                 case OpActionType.Save:
                     saveResponseSet = myDealsData.Save(custId);
                     // Save Data Cycle: Point 21 (END)
+                    OpDataCollectorFlattenedDictList test = saveResponseSet.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
                     break;
                 case OpActionType.SyncDeal:
         ////        LimitRecords(myDealsData, new List<string> { "PREP2DEAL" }); // SYNCDEAL

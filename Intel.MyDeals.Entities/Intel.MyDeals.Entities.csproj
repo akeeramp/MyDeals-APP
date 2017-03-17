@@ -96,6 +96,7 @@
     <Compile Include="OP ExtensionMethods\OpDataElementTypeConverter.cs" />
     <Compile Include="OP ExtensionMethods\OpDataElementTypeItem.cs" />
     <Compile Include="OP ExtensionMethods\OpDataElementAtrbTemplates.cs" />
+    <Compile Include="OP ExtensionMethods\OpDataElementTypeMapping.cs" />
     <Compile Include="OP ExtensionMethods\OpDataElementUtils.cs" />
     <Compile Include="OP ExtensionMethods\OpDataPacketExtensionMethods.cs" />
     <Compile Include="OP ExtensionMethods\OpTaskLocation.cs" />

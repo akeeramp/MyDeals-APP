@@ -129,12 +129,25 @@ namespace Intel.MyDeals.BusinessLogic
 
         public MyDealsData SaveContractAndPricingTable(int custId, ContractTransferPacket contractAndStrategy)
         {
+            OpDataCollectorFlattenedList translatedFlattenedList = new OpDataCollectorFlattenedList();
+
+            // Check to see if a translation from PTR to WIP or WIP to PTR is needed
+            bool isPrcTblSource = contractAndStrategy.EventSource == OpDataElementType.PRC_TBL.ToString();
+            bool isWipDealSource = contractAndStrategy.EventSource == OpDataElementType.WIP_DEAL.ToString();
+
+            if (isPrcTblSource)
+            {
+                translatedFlattenedList = contractAndStrategy.PricingTableRow.TranslateToWip();
+            } else if (isWipDealSource) {
+                translatedFlattenedList = contractAndStrategy.WipDeals.TranslateToPrcTbl();
+            }
+
             return SaveContract(
                 contractAndStrategy.Contract,
                 contractAndStrategy.PricingStrategy,
                 contractAndStrategy.PricingTable,
-                contractAndStrategy.PricingTableRow,
-                contractAndStrategy.WipDeals,
+                isWipDealSource ? translatedFlattenedList : contractAndStrategy.PricingTableRow,
+                isPrcTblSource ? translatedFlattenedList : contractAndStrategy.WipDeals,
                 custId);
         }
 

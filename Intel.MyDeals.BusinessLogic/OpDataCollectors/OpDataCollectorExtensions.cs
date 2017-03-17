@@ -40,19 +40,16 @@ namespace Intel.MyDeals.BusinessLogic
         {
             // Load Data Cycle: Point 2
             // Save Data Cycle: Point 7
-            OpDataElementAtrbTemplates templateSource = DataCollections.GetOpDataElementUiTemplates();
+            OpDataElementType opDataElementType = OpDataElementTypeConverter.FromString(dc.DcType);
+            if (opDataElementSetType == OpDataElementSetType.Unknown) opDataElementSetType = OpDataElementSetTypeConverter.FromString(dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD));
 
-            string objSetType = opDataElementSetType == OpDataElementSetType.Unknown
-                ? dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD)
-                : opDataElementSetType.ToString();
-            // templates are not just deal type anymore
+            OpDataElementAtrbTemplate template = OpDataElementUiExtensions.GetAtrbTemplate(opDataElementType, opDataElementSetType);
 
-            string key = $"{dc.DcType}:{objSetType}";
-            if (!templateSource.ContainsKey(key))
+            if (!template.Any())
             {
                 OpMsg opMsg = new OpMsg
                 {
-                    Message = "Missing Deal Type",
+                    Message = $"Missing ObjSet ({opDataElementType}) or ObjSetType ({opDataElementSetType})",
                     MsgType = OpMsg.MessageType.Warning, //Not sure about this warning or error ?
                     KeyIdentifiers = new[] { dc.DcID, dc.DcParentID }
                 };
@@ -66,8 +63,9 @@ namespace Intel.MyDeals.BusinessLogic
                 return;
             }
 
-            dc.FillInHolesFromAtrbTemplate(templateSource[key], applyDefaults);
+            dc.FillInHolesFromAtrbTemplate(template, applyDefaults);
         }
+
 
         /// <summary>
         /// Fill in the holes from the attribute template

@@ -12,21 +12,21 @@ namespace Intel.MyDeals.DataLibrary
             // TODO replace with DB call and admin screen
 
             List<UiTemplateContainerItem> items = new List<UiTemplateContainerItem>();
-            items.Add(new UiTemplateContainerItem { Id = 1, AtrbCd = AttributeCodes.DC_ID, IsKey = true, ObjType = new List<OpDataElementType> { OpDataElementType.CNTRCT, OpDataElementType.PRC_ST, OpDataElementType.PRC_TBL }, DataType = "number", Label = "Id", Width = 50 });
+            items.Add(new UiTemplateContainerItem { Id = 1, AtrbCd = AttributeCodes.DC_ID, IsKey = true, ObjType = new List<OpDataElementType> { OpDataElementType.CNTRCT, OpDataElementType.PRC_ST, OpDataElementType.PRC_TBL, OpDataElementType.WIP_DEAL }, DataType = "number", Label = "Id", Width = 50, IsReadOnly = true});
             items.Add(new UiTemplateContainerItem { Id = 2, AtrbCd = AttributeCodes.OBJ_SET_TYPE_CD, ObjType = new List<OpDataElementType> { OpDataElementType.CNTRCT, OpDataElementType.PRC_ST, OpDataElementType.PRC_TBL }, DataType = "string" });
             items.Add(new UiTemplateContainerItem { Id = 3, AtrbCd = AttributeCodes.TITLE, ObjType = new List<OpDataElementType> { OpDataElementType.CNTRCT, OpDataElementType.PRC_ST, OpDataElementType.PRC_TBL }, DataType = "string", Label = "Title", Width = 150 });
 
             items.Add(new UiTemplateContainerItem { Id = 16, AtrbCd = "_dirty", ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL }, IsHidden = true, DataType = "string", Label = "<i class='intelicon-upload-solid gridHeaderIcon' title='Something changed on this row'></i>", Width = 45, Template = "#=gridUtils.uiIconWrapper(data, '_dirty')#" });
             items.Add(new UiTemplateContainerItem { Id = 12, AtrbCd = "_behaviors", ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL }, IsHidden = true, DataType = "object" });
             items.Add(new UiTemplateContainerItem { Id = 13, AtrbCd = EN.OBJDIM._MULTIDIM, ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL }, IsHidden = true, DataType = "object" });
-            items.Add(new UiTemplateContainerItem { Id = 20, AtrbCd = AttributeCodes.DC_ID, IsKey = true, ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL }, DataType = "number", Label = "Id", Width = 50 });
+            items.Add(new UiTemplateContainerItem { Id = 20, AtrbCd = AttributeCodes.DC_ID, IsKey = true, ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW }, DataType = "number", Label = "Id", Width = 50, IsHidden = true, IsReadOnly = true});
             items.Add(new UiTemplateContainerItem { Id = 20, AtrbCd = AttributeCodes.OBJ_SET_TYPE_CD, ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL }, DataType = "number", Label = "Deal Type", Width = 150 });
             items.Add(new UiTemplateContainerItem { Id = 20, AtrbCd = AttributeCodes.START_DT, ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL }, DataType = "date", Label = "Start Date", Width = 150 });
             items.Add(new UiTemplateContainerItem { Id = 20, AtrbCd = AttributeCodes.END_DT, ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL }, DataType = "date", Label = "End Date", Width = 150 });
 
             items.Add(new UiTemplateContainerItem { Id = 28, AtrbCd = "_dirty", ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL }, IsDetail = true, IsHidden = true, DataType = "string", Label = "<i class='intelicon-upload-solid gridHeaderIcon' title='Something changed on this row'></i>", Width = 45, Template = "#=gridUtils.uiIconWrapper(data, '_dirty')#" });
             items.Add(new UiTemplateContainerItem { Id = 19, AtrbCd = "_behaviors", ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL }, IsDetail = true, IsHidden = true, DataType = "object" });
-            items.Add(new UiTemplateContainerItem { Id = 18, AtrbCd = EN.OBJDIM._PIVOTKEY, ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL }, IsDetail = true, DataType = "object", IsReadOnly = true });
+            items.Add(new UiTemplateContainerItem { Id = 18, AtrbCd = EN.OBJDIM._PIVOTKEY, ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL }, IsDetail = true, DataType = "object", IsReadOnly = true});
             items.Add(new UiTemplateContainerItem { Id = 21, AtrbCd = EN.OBJDIM.PIVOT, ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL }, IsDetail = true, DataType = "string", Label = "Pivot", Width = 50 });
 
             items.Add(new UiTemplateContainerItem { Id = 29, AtrbCd = "PTR_USER_PRD", ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW }, DataType = "string", Label = "Products", Width = 200, Template = "#=gridUtils.uiIconWrapper(data, 'PRODUCTS')#" });

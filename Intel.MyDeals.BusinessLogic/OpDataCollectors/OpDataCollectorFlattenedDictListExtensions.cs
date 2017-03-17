@@ -61,13 +61,20 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
 
             foreach (OpDataCollectorFlattenedItem item in data)
             {
-                int key = int.Parse(item[AttributeCodes.DC_ID].ToString());
-                Dictionary<int, OpDataCollectorFlattenedList> dictItems = decoderDict[opDataElementType];
-                if (dictItems.Count > 0 && dictItems.ContainsKey(key))
-                {                    
-                    item[opDataElementType.GetFirstChild().ToString()] = dictItems[key].RecurFlattenedItems(opDataElementType.GetFirstChild(), decoderDict);
+                if (item.ContainsKey(AttributeCodes.DC_ID))
+                {
+                    int key = int.Parse(item[AttributeCodes.DC_ID].ToString());
+                    Dictionary<int, OpDataCollectorFlattenedList> dictItems = decoderDict[opDataElementType];
+                    if (dictItems.Count > 0 && dictItems.ContainsKey(key))
+                    {
+                        item[opDataElementType.GetFirstChild().ToString()] = dictItems[key].RecurFlattenedItems(opDataElementType.GetFirstChild(), decoderDict);
+                    }
+                    rtn.Add(item);
                 }
-                rtn.Add(item);
+                else if (item.ContainsKey("_actions"))
+                {
+                    rtn.Add(item);
+                }
             }
 
             return rtn;
@@ -81,9 +88,20 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
 
             foreach (OpDataCollectorFlattenedItem opDataCollectorFlattenedItem in data[opDataElementType])
             {
-                int key = int.Parse(opDataCollectorFlattenedItem["DC_PARENT_ID"].ToString());
-                if (!rtn.ContainsKey(key)) rtn[key] = new OpDataCollectorFlattenedList();
-                rtn[key].Add(opDataCollectorFlattenedItem);
+                if (opDataCollectorFlattenedItem.ContainsKey(AttributeCodes.DC_PARENT_ID))
+                {
+                    int key = int.Parse(opDataCollectorFlattenedItem[AttributeCodes.DC_PARENT_ID].ToString());
+                    if (!rtn.ContainsKey(key)) rtn[key] = new OpDataCollectorFlattenedList();
+                    rtn[key].Add(opDataCollectorFlattenedItem);
+                }
+                else
+                {
+                    if (opDataCollectorFlattenedItem.ContainsKey("_actions"))
+                    {
+                        if (!rtn.ContainsKey(0)) rtn[0] = new OpDataCollectorFlattenedList();
+                        rtn[0].Add(new OpDataCollectorFlattenedItem {["_actions"] = opDataCollectorFlattenedItem["_actions"]});
+                    }
+                }
             }
             return rtn;
         }

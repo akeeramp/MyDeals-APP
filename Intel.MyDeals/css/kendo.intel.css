@@ -3082,6 +3082,8 @@ div.k-filebrowser-dropzone em {
   border-color: rgba(100, 100, 100, 0.9);
   background-color: rgba(100, 100, 100, 0.9);
   color: #ffffff;
+    max-width: 250px;
+    text-align: left;
 }
 .k-widget.k-tooltip-validation {
   border-color: #f3d54e;
@@ -5935,7 +5937,9 @@ div.k-scheduler-marquee:after {
 .dropdown-menu {
     min-width: 200px;
 }
-
+#navBtns .dropdown-menu {
+    min-width: 170px;
+}
 
 /* CUSTOM GRID CSS */
 
@@ -6139,7 +6143,6 @@ h1, .h1, h2, .h2, h3, .h3 {
 .k-tooltip-validation .k-callout-n {
     border-bottom-color: #ED1C24 !important;    
 }
-
 
 .commentbar {
     margin-top: 15px; 

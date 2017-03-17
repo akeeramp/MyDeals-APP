@@ -72,6 +72,8 @@
 
 	WriteLine(@"public const string {0} = ""{0}"";", "DC_ID");
 	WriteLine(@"public const string {0} = ""{0}"";", "DC_PARENT_ID");
+	WriteLine(@"public const string {0} = ""{0}"";", "dc_type");
+	WriteLine(@"public const string {0} = ""{0}"";", "dc_parent_type");
 
 	using(var rdr = cmd.ExecuteReader())
 	{

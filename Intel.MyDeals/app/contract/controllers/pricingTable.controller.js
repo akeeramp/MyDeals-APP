@@ -52,8 +52,8 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
     //
     root.pricingTableData = pricingTableData.data;
 
-    if (root.pricingTableData.PRC_TBL[0] === undefined) {
-        root.pricingTableData.PRC_TBL[0] = {};
+    if (root.pricingTableData.PRC_TBL_ROW[0] === undefined) {
+        root.pricingTableData.PRC_TBL_ROW[0] = {};
     }
 
     if (root.pricingTableData.WIP_DEAL === undefined) {
@@ -71,13 +71,17 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
     //debugger;
     // Define Kendo Spreadsheet options
     //
-    root.spreadDs = new kendo.data.DataSource({
-        data: $scope.dataSpreadSheet,
-        schema: {
-            model: ptTemplate.model
-        }
-    });
+    //root.spreadDs = new kendo.data.DataSource({
+    //    data: $scope.dataSpreadSheet,
+    //    schema: {
+    //        model: ptTemplate.model
+    //    }
+    //});
 
+    var ssTools = new gridTools(ptTemplate.model, ptTemplate.columns);
+    root.spreadDs = ssTools.createDataSource(root.pricingTableData.PRC_TBL_ROW);
+
+    //debugger;
     // sample reload data source call
     //root.spreadDs.read().then(function () {
     //    var view = root.spreadDs.view();
@@ -85,7 +89,7 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
 
     $scope.ptSpreadOptions = {
         sheetsbar: false,
-        columns: columns.length + 1,  // need to show one extra column for a bug in the spreadsheet... will remove it during render event
+        columns: columns.length,
         toolbar: {
             home: false,
             insert: false,
@@ -112,24 +116,49 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
                 var sheet = e.sender.activeSheet();
 
                 // With initial configuration of datasource spreadsheet displays all the fields as columns,
-                // thus setting up datasource in  reneder event where selective columns from datasource can be displayed.
+                // thus setting up datasource in reneder event where selective columns from datasource can be displayed.
                 sheet.setDataSource(root.spreadDs, ptTemplate.columns);
 
-                angular.forEach(ptTemplate.columns, function (value, key) {
-                    $(".k-spreadsheet-view .k-spreadsheet-fixed-container .k-spreadsheet-pane .k-spreadsheet-column-header div:nth-of-type(" + c + ") div").html(value.title);
-                    $scope.colToLetter[value.title] = String.fromCharCode(intA + c);
-                    c++;
-                });
+
+                // This is nice, but has some flaws... sometime refresh breaks and sometime hidden rows don't hide properly.  Also, this requires hiding the first row which strops resize
+                // If we don't do this... we need to make row 1 readonly as the title row
+                //angular.forEach(ptTemplate.columns, function (value, key) {
+                //    $(".k-spreadsheet-view .k-spreadsheet-fixed-container .k-spreadsheet-pane .k-spreadsheet-column-header div:nth-of-type(" + c + ") div").html(value.title);
+                //    $scope.colToLetter[value.title] = String.fromCharCode(intA + c);
+                //    c++;
+                //});
 
                 // hide default binding name (first row)
-                sheet.hideRow(0);
+                // This has an unfortunate side effect... can't resize rows
+                //sheet.hideRow(0);
 
-                // now disable and remove the extra column we added for the spreadsheet bug
-                // TODO find a better fix for this
-                sheet.hideColumn(c - 1);
-                var range = sheet.range(String.fromCharCode(intA + c) + "1:" + String.fromCharCode(intA + c) + "100");
-                range.enable(false);
-                // done with bug workaround
+                // get all readonly columns
+                var readonly = [];
+                for (var key in ptTemplate.model.fields) {
+                    if (ptTemplate.model.fields.hasOwnProperty(key) && ptTemplate.model.fields[key].editable !== true)
+                        readonly.push(key);
+                }
+
+                // hide all columns based on templating
+                c = 0;
+                for (var i = 0; i < ptTemplate.columns.length; i++) {
+                    if (readonly.indexOf(ptTemplate.columns[i].field) >= 0) {
+                        sheet.range(String.fromCharCode(intA + c) + "1:" + String.fromCharCode(intA + c) + "200").enable(false);
+                    }
+                    if (ptTemplate.columns[i].hidden === true) {
+                        sheet.hideColumn(i);
+                    } else {
+                        c++;
+                    }
+                }
+
+                // disable first row
+                sheet.range("A0:ZZ0").enable(false);
+
+                // Things TODO:
+                // Freeze first row
+                // Change first row style to look like titles and not disabled
+
             }
         }
     };

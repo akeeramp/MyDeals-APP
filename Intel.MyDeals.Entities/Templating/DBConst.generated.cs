@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 3/10/2017 5:18:49 PM
-On: MHTIPPIN-MOBL
+File Updated: 3/13/2017 10:37:13 AM
+On: PWECKENR-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
 using System;
@@ -17,6 +17,8 @@ namespace Intel.MyDeals.Entities {
 	public static class AttributeCodes {
 		public const string DC_ID = "DC_ID";
 		public const string DC_PARENT_ID = "DC_PARENT_ID";
+		public const string dc_type = "dc_type";
+		public const string dc_parent_type = "dc_parent_type";
 
 		///<summary>
 		/// DIM_SID: 2

@@ -556,12 +556,33 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         if (stateName === "contract.manager.strategy.wip") source = "WIP_DEAL";
 
         // sync all detail data sources into main grid datasource for a single save
-        var sData = $scope.spreadDs === undefined ? undefined : $scope.spreadDs.data();
-        var gData = $scope.gridDs === undefined ? undefined : $scope.gridDs.data();
+        if ($scope.spreadDs !== undefined) $scope.spreadDs.sync();
+        if ($scope.gridDs !== undefined) $scope.gridDs.sync();
 
-        // if there is grid data... merge details with primary datasource for full picture
+        var sData = $scope.spreadDs === undefined ? undefined : $scope.pricingTableData.PRC_TBL_ROW;
+        var gData = $scope.gridDs === undefined ? undefined : $scope.gridDs.data(); // TODO after multi dim... need to see if we can read the variable instead of the source
+
+        debugger;
+
+        var contractData = $scope._dirtyContractOnly ? [$scope.contractData] : [];
+        var curPricingTableData = $scope.curPricingTable.DC_ID === undefined ? [] : [$scope.curPricingTable];
+
+
+        // Pricing Table Row
+        if (curPricingTableData.length > 0) {
+            for (var s = 0; s < sData.length; s++) {
+                if (sData[s].DC_ID === null) sData[s].DC_ID = $scope.uid--;
+                sData[s].DC_PARENT_ID = curPricingTableData[0].DC_ID;
+                sData[s].dc_type = "PRC_TBL_ROW";
+                sData[s].dc_parent_type = curPricingTableData[0].dc_type;
+                sData[s].OBJ_SET_TYPE_CD = curPricingTableData[0].OBJ_SET_TYPE_CD;
+            }
+        }
+
+        // Wip Deal
         if (gData !== undefined && gData !== null) {
             for (var i = 0; i < gData.length; i++) {
+                if (gData[i].DC_ID === null) gData[i].DC_ID = $scope.uid--;
                 var id = gData[i].ID;
                 if ($scope.gridDetailsDs[id] !== undefined) {
                     gData[i]._MultiDim = $scope.gridDetailsDs[id].data();
@@ -569,11 +590,46 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
             }
         }
 
-        // validate that we have access to spreadDs, gridDs and GridDetailsDs
-        var contractData = $scope._dirtyContractOnly ? [$scope.contractData] : [];
-        var curPricingTableData = $scope.curPricingTable.DC_ID === undefined ? [] : [$scope.curPricingTable];
 
-        objsetService.updateContractAndCurPricingTable($scope.getCustId(), contractData, curPricingTableData, sData, gData, source).then(
+
+        // Contract is Contract + Pricing Strategies + Pricing Tables in heierarchial format
+        // sData is the raw spreadsheet data
+        // gData is the raw grid data
+
+        var modCt = [];
+        var modPs = [];
+
+        for (var c = 0; c < contractData.length; c++) {
+            var mCt = {};
+            Object.keys(contractData[c]).forEach(function (key, index) {
+                if (key[0] !== '_' && key !== "Customer" && key !== "PRC_ST") mCt[key] = this[key];
+            }, contractData[c]);
+            modCt.push(mCt);
+
+            if (contractData[c]["PRC_ST"] === undefined) contractData[c]["PRC_ST"] = [];
+            var item = contractData[c]["PRC_ST"];
+            for (var p = 0; p < item.length; p++) {
+                var mPs = {};
+                Object.keys(item[p]).forEach(function (key, index) {
+                    if (key[0] !== '_' && key !== "PRC_TBL") mPs[key] = this[key];
+                }, item[p]);
+                modPs.push(mPs);
+            }
+        }
+
+
+        var data = {
+            "Contract": modCt,
+            "PricingStrategy": modPs,
+            "PricingTable": curPricingTableData,
+            "PricingTableRow": sData === undefined ? [] : sData,
+            "WipDeals": gData === undefined ? [] : gData,
+            "EventSource": source
+        }
+
+        debugger;
+
+        objsetService.updateContractAndCurPricingTable($scope.getCustId(), data).then(
             function (data) {
                 $scope.resetDirty();
                 logger.success("Saved the contract", $scope.contractData, "Save Sucessful");
@@ -717,6 +773,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         angular.forEach($scope.newStrategy,
                     function (value, key) {
                         if (key === "TITLE") {
+                            if ($scope.contractData.PRC_ST === undefined) $scope.contractData.PRC_ST = [];
                             for (var i = 0; i < $scope.contractData.PRC_ST.length; i++) {
                                 if (value.toLowerCase() == $scope.contractData.PRC_ST[i].TITLE.toLowerCase()) {
                                     $scope.newStrategy._behaviors.validMsg[key] = "* must have unique name within contract";

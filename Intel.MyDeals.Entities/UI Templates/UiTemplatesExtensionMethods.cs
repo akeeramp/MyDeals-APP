@@ -191,6 +191,7 @@ namespace Intel.MyDeals.Entities.UI_Templates
         /// Build a single item in an Object Template
         /// </summary>
         /// <param name="opDataElementType"></param>
+        /// <param name="objSetType"></param>
         /// <param name="templates"></param>
         /// <returns></returns>
         private static UiObjectTemplate BuildUiObjectTemplateItem(OpDataElementType opDataElementType, OpDataElementSetType objSetType, OpDataElementAtrbTemplates templates)
@@ -204,8 +205,8 @@ namespace Intel.MyDeals.Entities.UI_Templates
                 template[opDataElement.AtrbCd] = opDataElement.AtrbValue;
             }
 
-            template["dc_type"] = opDataElementType.ToId();
-            template["dc_parent_type"] = opDataElementType.GetParent().ToId();
+            template[AttributeCodes.dc_type] = opDataElementType.ToId();
+            template[AttributeCodes.dc_parent_type] = opDataElementType.GetParent().ToId();
             template[AttributeCodes.OBJ_SET_TYPE_CD] = objSetType.ToString();
             template["_behaviors"] = new Dictionary<string, Dictionary<string, dynamic>>
             {
