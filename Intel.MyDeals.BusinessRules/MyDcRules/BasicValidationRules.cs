@@ -62,17 +62,17 @@ namespace Intel.MyDeals.BusinessRules
                 //},
                 new MyOpRule
                 {
-                    Title="Contract title does not already exist",
+                    Title="Title already exists check",
                     ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnSave},
-                    InObjType = new List<OpDataElementType> {OpDataElementType.CNTRCT}, 
+                    InObjType = new List<OpDataElementType> {OpDataElementType.CNTRCT, OpDataElementType.PRC_ST}, 
                     AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.TITLE) && de.HasValueChanged && de.HasValue()).Any(),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
                         new OpRuleAction<IOpDataElement>
                         {
-                            Action = MyDeActions.CheckDuplicateContractTitle,
-                            Args = new object[] {"This title already exists in another Contract"},
+                            Action = MyDeActions.CheckDuplicateObjectTitle,
+                            Args = new object[] {"Title already exists in system"},
                             Target = new[] {AttributeCodes.TITLE}
                         }
                     }

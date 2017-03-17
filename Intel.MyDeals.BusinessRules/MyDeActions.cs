@@ -11,10 +11,10 @@ namespace Intel.MyDeals.BusinessRules
     public static partial class MyDeActions
     {
 
-        public static void CheckDuplicateContractTitle(this IOpDataElement de, params object[] args)
+        public static void CheckDuplicateObjectTitle(this IOpDataElement de, params object[] args)
         {
             if (de == null) return;
-            bool result = new OpDataCollectorValidationDataLib().IsDuplicateTitle(OpDataElementType.CNTRCT, de.DcID, de.DcParentID, de.AtrbValue.ToString());
+            bool result = new OpDataCollectorValidationDataLib().IsDuplicateTitle(OpDataElementTypeConverter.IdToOpDataElementTypeString(de.DcType), de.DcID, de.DcParentID, de.AtrbValue.ToString());
             if (result)
                 BusinessLogicDeActions.AddValidationMessage(de, args[0]);
         }

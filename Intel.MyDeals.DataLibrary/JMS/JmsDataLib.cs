@@ -57,9 +57,9 @@ namespace Intel.MyDeals.DataLibrary
             {
                 return _objJmsQueueRequest.GetAllMessgae();
             }
-            catch (Exception eX)
+            catch (Exception ex)
             {
-                strError = eX.Message;
+                strError = ex.Message;
             }
             return strError;
         }
@@ -73,9 +73,9 @@ namespace Intel.MyDeals.DataLibrary
                 _objJmsQueueRequest.SendData(strData);
                 //clsUtility.LogSQL(m_Idsid, "JMSQueue - Completed sending data to SAP", false);
             }
-            catch (Exception eX)
+            catch (Exception ex)
             {
-                strError = eX.Message;
+                strError = ex.Message;
                 //clsUtility.LogSQL(m_Idsid, "JMSQueue Error Sending Data : " + strError, false);
             }
             return strError;
@@ -89,9 +89,9 @@ namespace Intel.MyDeals.DataLibrary
                 //clsUtility.LogSQL(m_Idsid, "JMSQueue - Closing connection", false);
                 _objJmsQueueRequest.CloseQueueConnection();
             }
-            catch (Exception eX)
+            catch (Exception ex)
             {
-                strError = eX.Message;
+                strError = ex.Message;
                 //clsUtility.LogSQL(m_Idsid, "JMSQueue Error Closing connection : " + strError, false);
             }
             return strError;

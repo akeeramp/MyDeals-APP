@@ -43,24 +43,8 @@ namespace Intel.MyDeals.BusinessLogic
             // Get the data from the DB, data is the data passed from the UI, it is then merged together down below.
             MyDealsData myDealsData = opTypeGrp.GetByIDs(ids, opDataElementTypes, data);
 
-            // Apply rules to save packets here.  If validations are hit, append them to the DC and packet message lists.
-            foreach (OpDataElementType opDataElementType in Enum.GetValues(typeof(OpDataElementType)))
-            {
-                if (!myDealsData.ContainsKey(opDataElementType)) continue;
-                foreach (OpDataCollector dc in myDealsData[opDataElementType].AllDataCollectors)
-                {
-                    dc.ApplyRules(MyRulesTrigger.OnSave);
-                    foreach (IOpDataElement de in dc.GetDataElementsWithValidationIssues())
-                    {
-                        dataHasValidationErrors = true;
-                        dc.Message.WriteMessage(OpMsg.MessageType.Warning, de.ValidationMessage);
-                        myDealsData[opDataElementType].Messages.WriteMessage(OpMsg.MessageType.Warning, $"{dc.DcType} - {dc.DcID} : {de.ValidationMessage}");
-                    }
-                }
-            }
-
-            // If there are validation errors, just return to the user, otherwise, continue with the save process.
-            if (dataHasValidationErrors) return myDealsData;
+            // RUN RULES HERE - If there are validation errors, just return to the user, otherwise, continue with the save process.
+            if (myDealsData.ValidationApplyRules()) return myDealsData;
 
             // Note to self..  This does take order values into account.
             foreach (OpDataElementType opDataElementType in Enum.GetValues(typeof(OpDataElementType)))

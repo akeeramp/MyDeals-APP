@@ -348,7 +348,6 @@ namespace Intel.MyDeals.BusinessLogic
         #endregion
 
 
-
         #region Validation
 
         public static OpMsgQueue Validate(this MyDealsData myDealsData, OpUserToken opUserToken, List<OpDataElementType> opDataElementTypes)
@@ -404,6 +403,29 @@ namespace Intel.MyDeals.BusinessLogic
             }
 
             return opMsgQueue;
+        }
+
+        public static bool ValidationApplyRules(this MyDealsData myDealsData)
+        {
+            // Apply rules to save packets here.  If validations are hit, append them to the DC and packet message lists.
+            bool dataHasValidationErrors = false;
+
+            foreach (OpDataElementType opDataElementType in Enum.GetValues(typeof(OpDataElementType)))
+            {
+                if (!myDealsData.ContainsKey(opDataElementType)) continue;
+                foreach (OpDataCollector dc in myDealsData[opDataElementType].AllDataCollectors)
+                {
+                    dc.ApplyRules(MyRulesTrigger.OnSave);
+                    foreach (IOpDataElement de in dc.GetDataElementsWithValidationIssues())
+                    {
+                        dataHasValidationErrors = true;
+                        dc.Message.WriteMessage(OpMsg.MessageType.Warning, de.ValidationMessage);
+                        myDealsData[opDataElementType].Messages.WriteMessage(OpMsg.MessageType.Warning, $"{dc.DcType} - {dc.DcID} : {de.ValidationMessage}");
+                    }
+                }
+            }
+
+            return dataHasValidationErrors;
         }
 
         #endregion

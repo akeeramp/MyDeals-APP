@@ -106,6 +106,7 @@
     <Compile Include="Logging\DbLogPerfMessage.cs" />
     <Compile Include="Logging\LoggingClient.cs" />
     <Compile Include="Logging\MyDealsWebApiUrl.cs" />
+    <Compile Include="Op Future Items\OpCommonTools.cs" />
     <Compile Include="OpLog.cs" />
     <Compile Include="OpUserStack.cs" />
     <Compile Include="ProductLookup.cs" />

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Intel.MyDeals.DataAccessLib;
+﻿using Intel.MyDeals.DataAccessLib;
 using Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals.dbo;
 using Intel.MyDeals.Entities;
 
