@@ -26,7 +26,7 @@ namespace Intel.MyDeals.Entities
         public bool IsDetail { get; set; }
         public bool IsExtra { get; set; }
         public bool IsHidden { get; set; }
-        public bool IsReadonly { get; set; }
+        public bool IsReadOnly { get; set; }
         public bool IsRequired { get; set; }
         public bool IsEncoded { get; set; }
         public bool IsFilterable { get; set; }

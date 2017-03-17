@@ -7,6 +7,6 @@
            ng-model="value"
            ng-readonly="opIsReadOnly"
            ng-class="{isHidden: opIsHidden, isReadOnly: opIsReadOnly, isError: opIsError, isSaved: opIsSaved, isDirty: opIsDirty}" ></textarea>
-
     <div class="clearboth"></div>
+    <div ng-if="opIsError" class="err-Control">{{opValidMsg}}</div>
 </div>

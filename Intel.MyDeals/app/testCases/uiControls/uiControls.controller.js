@@ -251,7 +251,7 @@
                 "TEXTAREA": "Multi-line TextBox",
                 "SliderInt":1,
                 "ComboboxSelected": [],
-                "MULTISELECT": "",
+                "MULTISELECT": ["SMB"],
                 "_MultiDim": [
                     {
                         "PIVOT": -1,

@@ -33,14 +33,13 @@
                      op-label="'Division:'"
                      op-lookup-values="[]"
                      op-lookup-text="'CUST_DIV_NM'"
-                     op-lookup-value="'CUST_MBR_SID'"
+                     op-lookup-value="'CUST_DIV_NM'"
                      op-ui-mode="'VERTICAL'"></div>
             </div>
             <div class="col-md-6">
                 <div class="col-md-12 row">
-                    <h6>Customer Acceptance of Contract is...<span kendo-tooltip k-content="helptipMsg" k-position="'top'" class="opElementHelpIcon intelicon-information-outlined"></span></h6>
+                    <h6>Customer Acceptance of Contract is...<span kendo-tooltip k-content="constants.helptipMsgCustAccpt" k-position="'top'" class="opElementHelpIcon intelicon-information-outlined"></span></h6>
                 </div>
-
                 <div class="col-md-11 row"
                      op-control-flat
                      ng-model="contractData"
@@ -90,11 +89,10 @@
                              op-control-flat
                              ng-model="contractData"
                              op-cd="'START_YR'"
-                             op-type="'DROPDOWN'"
+                             op-type="'NUMERIC'"
                              op-label="''"
-                             op-lookup-url="'api/CustomerCalendar/GetMyCustomerYears'"
-                             op-lookup-text="'YearNumber'"
-                             op-lookup-value="'YearNumber'"
+                             op-min-value="contractData.MinYear"
+                             op-max-value="contractData.MaxYear"
                              op-ui-mode="'VERTICAL'"></div>
                     </div>
                 </div>
@@ -104,7 +102,7 @@
                          op-cd="'END_DT'"
                          op-type="'DATEPICKER'"
                          op-label="'Select end date:'"
-                         op-ui-mode="'HORIZONTAL'"  ></div>
+                         op-ui-mode="'HORIZONTAL'"></div>
                 </div>
                 <div class="clearboth orLabel">OR</div>
                 <div class="row">
@@ -128,14 +126,33 @@
                              op-control-flat
                              ng-model="contractData"
                              op-cd="'END_YR'"
-                             op-type="'DROPDOWN'"
+                             op-type="'NUMERIC'"
                              op-label="''"
-                             op-lookup-url="'api/CustomerCalendar/GetMyCustomerYears'"
-                             op-lookup-text="'YearNumber'"
-                             op-lookup-value="'YearNumber'"
+                             op-min-value="contractData.MinYear"
+                             op-max-value="contractData.MaxYear"
                              op-ui-mode="'VERTICAL'"></div>
                     </div>
                 </div>
+                <div>
+                    <div class="col-md-11 row"
+                         op-control-flat
+                         ng-model="contractData"
+                         op-cd="'BACK_DATE_RSN'"
+                         op-type="'DROPDOWN'"
+                         op-label="'Back Date Reason:'"
+                         op-lookup-url="'api/Dropdown/GetDropdowns/BACK_DATE_RSN'"
+                         op-lookup-text="'DROP_DOWN'"
+                         op-lookup-value="'ATRB_LKUP_SID'"
+                         op-ui-mode="'VERTICAL'"></div>
+                    <div class="col-md-11 row"
+                         op-control-flat
+                         ng-model="contractData"
+                         op-cd="'BACK_DATE_RSN_TXT'"
+                         op-type="'TEXTAREA'"
+                         op-label="'Back date reason text'"
+                         op-ui-mode="'VERTICAL'"></div>
+                </div>
+
             </div>
             <div class="col-md-6">
                 <div class="col-md-12 row">
@@ -160,7 +177,7 @@
 
                 <!--TODO Move these to FileUploaddirective-->
                 <div class="col-md-11 row">
-                    <div class="f1 opUiLabel">Attachment(s):&nbsp;<span kendo-tooltip k-content="helptipMsg" k-position="'top'" class="opElementHelpIcon intelicon-information-outlined"></span></div>
+                    <div class="f1 opUiLabel">Attachment(s):&nbsp;<span kendo-tooltip k-content="constants.helptipMsgAttachment" k-position="'top'" class="opElementHelpIcon intelicon-information-outlined"></span></div>
                     <input name="files"
                            type="file"
                            kendo-upload
@@ -197,7 +214,7 @@
         </div>
         <div class="row">
             <div class="col-md-offset-6">
-                <button class="btn btn-primary" style="margin-left:30px;" type="button" ng-click="customContractValidate()">Save</button>
+                <button class="btn btn-primary" style="margin-left:30px;" ng-disabled="!isValid" type="button" ng-click="customContractValidate()">Save</button>
             </div>
         </div>
 

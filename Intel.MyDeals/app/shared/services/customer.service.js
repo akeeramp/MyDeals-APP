@@ -16,7 +16,8 @@ function customerService(dataService) {
 
     return service;
 
-    function getCustomerCalendar(dto) {
+    function getCustomerCalendar(custMbrSid, dayInQuarter, quater, year) {
+        var dto = { 'CustomerMemberSid': custMbrSid, "DayInQuarter": dayInQuarter, "QuarterNo": quater, "Year": year };
         return dataService.post(apiBaseLookupUrl + 'GetCustomerQuarterDetails', dto);
     }
 }

@@ -13,6 +13,6 @@
             k-value-primitive="true"
             ng-class="{isHidden: opIsHidden, isReadOnly: opIsReadOnly, isError: opIsError, isSaved: opIsSaved, isDirty: opIsDirty}"
             k-filter="'contains'"></select>
-
     <div class="clearboth"></div>
+    <div ng-if="opIsError" class="err-Control">{{opValidMsg}}</div>
 </div>

@@ -27,7 +27,12 @@
             }
         })
         .constant('pctRulesDrpDownValues', {
-            costTestProductType: [{'name':'L1'},{'name':'L2'}],
+            costTestProductType: [{ 'name': 'L1' }, { 'name': 'L2' }],
             conditionCriteria: [{ 'name': 'Include' }, { 'name': 'Exclude' }],
+        })
+        .constant('contractManagerConstants', {
+            "helptipMsgCustAccpt": "Deals are defaulted to pending until a acceptance selection is made. If kept in the pending status, any deals sent for approval will be kept in pending status until marked into a accepted state below.",
+            "helptipMsgAttachment": "***Will need to have the guideline for what type of attachment, maximum size etc.",
+            "pastDateConfirmText": "You have Selected a date in the past which means the dates you will enter will be considered backdated"
         });
 })();

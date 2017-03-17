@@ -52,6 +52,12 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
         if (scope.opValidMsg === undefined) scope.opValidMsg = "";
         if (scope.opHelpMsg === undefined) scope.opHelpMsg = "";
 
+        // TODO make changes to propagate from directive bindings, used for numeric text box formating
+        scope.opOptions = {
+            format: "#",
+            decimals: 0
+        }
+
         var serviceData = []; // data from the service will be pushed into this.
         if ((scope.opType === 'COMBOBOX' || scope.opType === 'DROPDOWN' || scope.opType === 'MULTISELECT')) {
             if ((scope.opLookupUrl !== undefined && scope.opLookupUrl !== "undefined")) {

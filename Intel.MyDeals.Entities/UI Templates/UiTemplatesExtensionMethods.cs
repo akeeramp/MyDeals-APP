@@ -7,7 +7,6 @@ namespace Intel.MyDeals.Entities.UI_Templates
 {
     public static class UiTemplatesExtensionMethods
     {
-
         public static UiTemplates Populate(this UiTemplates uiTemplates, OpDataElementAtrbTemplates templates, List<UiTemplateContainerItem> items)
         {
             uiTemplates.BuildUiModelTemplates(items);
@@ -31,7 +30,7 @@ namespace Intel.MyDeals.Entities.UI_Templates
 
             foreach (OpDataElementType opDataElementType in Enum.GetValues(typeof(OpDataElementType)))
             {
-                var data  = opDataElementType.GetChildrenSetTypes();
+                var data = opDataElementType.GetChildrenSetTypes();
                 if (data == null) continue;
 
                 foreach (OpDataElementSetType opDataElementSetType in data)
@@ -86,7 +85,7 @@ namespace Intel.MyDeals.Entities.UI_Templates
                     fields[item.AtrbCd] = new UiFieldItem
                     {
                         type = item.DataType,
-                        editable = !item.IsReadonly,
+                        editable = !item.IsReadOnly,
                         nullable = !item.IsRequired,
                         values = item.LookupValue,
                         valuesText = item.LookupText,
@@ -109,7 +108,7 @@ namespace Intel.MyDeals.Entities.UI_Templates
                     detailsFields[item.AtrbCd] = new UiFieldItem
                     {
                         type = item.DataType,
-                        editable = !item.IsReadonly,
+                        editable = !item.IsReadOnly,
                         nullable = !item.IsRequired,
                         values = item.LookupValue,
                         valuesText = item.LookupText,
@@ -145,9 +144,6 @@ namespace Intel.MyDeals.Entities.UI_Templates
 
             return model;
         }
-
-
-
 
         /// <summary>
         /// Build the UI Object Templates
@@ -214,7 +210,7 @@ namespace Intel.MyDeals.Entities.UI_Templates
             template["_behaviors"] = new Dictionary<string, Dictionary<string, dynamic>>
             {
                 ["isRequired"] = new Dictionary<string, dynamic>(),
-                ["isReadonly"] = new Dictionary<string, dynamic>(),
+                ["isReadOnly"] = new Dictionary<string, dynamic>(),
                 ["isHidden"] = new Dictionary<string, dynamic>(),
                 ["isError"] = new Dictionary<string, dynamic>(),
                 ["validMsg"] = new Dictionary<string, dynamic>()
@@ -257,9 +253,6 @@ namespace Intel.MyDeals.Entities.UI_Templates
             return template;
         }
 
-
-
-
         /// <summary>
         /// Build the Extras Templates
         /// </summary>
@@ -298,8 +291,8 @@ namespace Intel.MyDeals.Entities.UI_Templates
             var ex = uiTemplates.ModelTemplates[opDataElementType.ToString()][objSetType.ToString()];
 
             List<UiTemplateContainerItem> filteredItems = items
-                .Where(t => t.IsExtra 
-                && (!t.ObjType.Any() || t.ObjType.Contains(opDataElementType)) 
+                .Where(t => t.IsExtra
+                && (!t.ObjType.Any() || t.ObjType.Contains(opDataElementType))
                 && (!t.ObjSetType.Any() || t.ObjSetType.Contains(objSetType))).ToList();
 
             foreach (UiTemplateContainerItem item in filteredItems)
@@ -319,9 +312,6 @@ namespace Intel.MyDeals.Entities.UI_Templates
             }
             return uiTemplates;
         }
-
-
-
 
         /// <summary>
         /// Build the Defaults Templates
@@ -361,8 +351,8 @@ namespace Intel.MyDeals.Entities.UI_Templates
             var ex = uiTemplates.ModelTemplates[opDataElementType.ToString()][objSetType.ToString()];
 
             List<UiTemplateContainerItem> filteredItems = items
-                .Where(t => t.IsDefaultable 
-                && (!t.ObjType.Any() || t.ObjType.Contains(opDataElementType)) 
+                .Where(t => t.IsDefaultable
+                && (!t.ObjType.Any() || t.ObjType.Contains(opDataElementType))
                 && (!t.ObjSetType.Any() || t.ObjSetType.Contains(objSetType))).ToList();
 
             foreach (UiTemplateContainerItem item in filteredItems)
@@ -377,6 +367,5 @@ namespace Intel.MyDeals.Entities.UI_Templates
             }
             return uiTemplates;
         }
-
     }
 }
