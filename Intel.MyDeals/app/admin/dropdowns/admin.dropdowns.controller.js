@@ -190,12 +190,12 @@
                         { name: "destroy", template: "<a class='k-grid-delete' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-close'></span></a>" }
                     ],
                     title: "Commands",
-                    width: "8%"
+                    width: "10%"
                 },
                 {
                     field: "ACTV_IND",
                     title: "Is Active",
-                    width: "10%",
+                    width: "8%",
                     filterable: { multi: true, search: false },
                     template: gridUtils.boolViewer('ACTV_IND'),
                     editor: gridUtils.boolEditor,
@@ -237,7 +237,7 @@
                 },
                 {
                     field: "ATRB_SID", //Dropdown Group
-                    title: "Dropdown",
+                    title: "Group",
                     editor: function (container) { // use a dropdownlist as an editor
                         // create an input element with id and name set as the bound field (ATRB_SID)
                         var input = $('<input id="ATRB_SID" name="ATRB_SID">');
