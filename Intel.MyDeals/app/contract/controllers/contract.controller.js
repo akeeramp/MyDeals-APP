@@ -67,10 +67,10 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
     $scope.contractData._behaviors.isReadOnly["CUST_MBR_SID"] = $scope.contractData.DC_ID > 0;
 
     // In case of existing contract back date reason and text is captured display them
-    $scope.contractData._behaviors.isRequired["BACK_DATE_RSN"] = $scope.contractData.BACK_DATE_RSN !== undefined || $scope.contractData.BACK_DATE_RSN !== "";
-    $scope.contractData._behaviors.isHidden["BACK_DATE_RSN"] = $scope.contractData.BACK_DATE_RSN === undefined || $scope.contractData.BACK_DATE_RSN === "";
-    $scope.contractData._behaviors.isRequired["BACK_DATE_RSN_TXT"] = $scope.contractData.BACK_DATE_RSN_TXT !== undefined || $scope.contractData.BACK_DATE_RSN_TXT !== "";
-    $scope.contractData._behaviors.isHidden["BACK_DATE_RSN_TXT"] = $scope.contractData.BACK_DATE_RSN_TXT === undefined || $scope.contractData.BACK_DATE_RSN_TXT === "";
+    $scope.contractData._behaviors.isRequired["BACK_DATE_RSN"] = $scope.contractData.BACK_DATE_RSN !== "";
+    $scope.contractData._behaviors.isHidden["BACK_DATE_RSN"] = $scope.contractData.BACK_DATE_RSN === "";
+    $scope.contractData._behaviors.isRequired["BACK_DATE_RSN_TXT"] = $scope.contractData.BACK_DATE_RSN_TXT !== "";
+    $scope.contractData._behaviors.isHidden["BACK_DATE_RSN_TXT"] = $scope.contractData.BACK_DATE_RSN_TXT === "";
 
     // By default set the CUST_ACCPT to pending(99) if new contract
     $scope.contractData.CUST_ACCPT = $scope.contractData.CUST_ACCPT == "" ? 99 : $scope.contractData.CUST_ACCPT;
@@ -366,8 +366,10 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
                 $scope.contractData._behaviors.isReadOnly["CUST_ACCNT_DIV"] = false;
                 $scope.contractData._behaviors.isRequired["CUST_ACCNT_DIV"] = true;
             }
-            $("#CUST_ACCNT_DIV").data("kendoMultiSelect").dataSource.data(response.data);
-            $("#CUST_ACCNT_DIV").data("kendoMultiSelect").value($scope.contractData.CUST_ACCNT_DIV.split("/"));
+            if (!!$("#CUST_ACCNT_DIV").data("kendoMultiSelect")) {
+                $("#CUST_ACCNT_DIV").data("kendoMultiSelect").dataSource.data(response.data);
+                $("#CUST_ACCNT_DIV").data("kendoMultiSelect").value($scope.contractData.CUST_ACCNT_DIV.split("/"));
+            }
         }, function (response) {
             logger.error("Unable to get Customer Divisions.", response, response.statusText);
         });
@@ -596,7 +598,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
 
         // Contract Data
         var ct = $scope.contractData;
-        ct.CUST_ACCNT_DIV = $scope.contractData.CUST_ACCNT_DIV.toString.replace(",", "/");
+        ct.CUST_ACCNT_DIV = $scope.contractData.CUST_ACCNT_DIV.toString().replace(",", "/");
 
         // check for NEW contract
         if (ct.DC_ID <= 0) ct.DC_ID = $scope.uid--;
