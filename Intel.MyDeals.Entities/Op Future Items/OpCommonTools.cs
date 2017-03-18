@@ -1,4 +1,6 @@
-﻿namespace Intel.MyDeals.Entities
+﻿using System.Web;
+
+namespace Intel.MyDeals.Entities
 {
     public static class OpCommonTools
     {
@@ -20,6 +22,12 @@
                 .Replace("\t", "_");
 
             return input;
+        }
+
+        public static string HtmlSafeString(string input)
+        {
+            //string blah = HttpUtility.HtmlEncode(input);
+            return HttpUtility.HtmlEncode(input);
         }
 
     }
