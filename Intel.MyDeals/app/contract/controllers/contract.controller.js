@@ -851,6 +851,22 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
                 }
             });
 
+        // Check unique name within ps
+        angular.forEach($scope.newPricingTable,
+                    function (value, key) {
+                        if (key === "TITLE") {
+                            if ($scope.curPricingStrategy.PRC_TBL === undefined) $scope.curPricingStrategy.PRC_TBL = [];
+                            for (var i = 0; i < $scope.curPricingStrategy.PRC_TBL.length; i++) {
+                                if (value.toLowerCase() == $scope.curPricingStrategy.PRC_TBL[i].TITLE.toLowerCase()) {
+                                    $scope.newPricingTable._behaviors.validMsg[key] = "* must have unique name within strategy";
+                                    $scope.newPricingTable._behaviors.isError[key] = true;
+                                    isValid = false;
+                                    break;
+                                }
+                            }
+                        }
+                    });
+
         // Check Extra atribs
         angular.forEach($scope.newPricingTable["_extraAtrbs"],
         function (value, key) {

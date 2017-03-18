@@ -5,9 +5,13 @@
         <!-- novalidate prevents HTML5 validation since we will be validating ourselves -->
 
         <div class="bgBlueContainer" ng-class="{isErrorWrapper: newPricingTable._behaviors.isError.TITLE}">
+            <div class="ptLnavTitle">
+                Enter Pricing Table Name
+            </div>
             <div kendo-tooltip k-content="NewPricingTable._behaviors.validMsg.TITLE" k-position="'top'" ng-show="newPricingTable._behaviors.isError.TITLE" class="err-bit-el"></div>
             <input type="text" class="k-textbox fl" placeholder=""
-                   style="width: 100%; color: #aaaaaa;"
+                   style="width: 100%; color: black;"
+                   maxlength="250"
                    ng-model="newPricingTable.TITLE"
                    ng-class="{isError: newPricingTable._behaviors.isError.TITLE}" />
             <div class="clearboth"></div>
@@ -63,7 +67,7 @@
             </div>
         </div>
 
-        <div style="text-align: center;">
+        <div style="text-align: right;">
             <button class="btn btn-sm btn-primary" ng-click="hideAddPricingTable()">Close</button>
             <button class="btn btn-sm btn-primary" ng-click="customAddPtValidate()">Add</button>
         </div>
