@@ -46,7 +46,7 @@ namespace Intel.MyDeals.Controllers.API
 				, $"Unable to get Role Types"
 			);
 
-			List<OpPair<int, string>> workflowStages = SafeExecutor(() => _workFlowLib.GetWorkFlowStages().Select(x => new OpPair<int, string>(x.WFSTG_MBR_SID, x.WFSTG_NM)).OrderBy(x => x.Second).ToList()
+			List<OpPair<int, string>> workflowStages = SafeExecutor(() => _workFlowLib.GetWorkFlowStages().Select(x => new OpPair<int, string>(x.WFSTG_MBR_SID, x.WFSTG_NM)).ToList()
 				, $"Unable to get Workflow Stages"
 			);
 			

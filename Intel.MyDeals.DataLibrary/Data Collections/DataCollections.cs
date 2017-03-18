@@ -313,17 +313,7 @@ namespace Intel.MyDeals.DataLibrary
         }
 
         private static List<WorkFlows> _getWorkFlowItems;
-
-        public static List<AppRoleTier> GetAppRoleTiers()
-        {
-            lock (LOCK_OBJECT ?? new object())
-            {
-                return _getAppRoleTiers ?? (_getAppRoleTiers = new SecurityAttributesDataLib().GetAppRoleTiers());
-            }
-        }
-
-        private static List<AppRoleTier> _getAppRoleTiers;
-
+		
         public static Dictionary<int, MyDealsAttribute> GetAttributeMasterDataDictionary()
         {
             lock (LOCK_OBJECT ?? new object())

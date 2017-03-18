@@ -195,7 +195,8 @@ namespace Intel.MyDeals.Entities
             Dictionary<string, bool> securityActionCache = null)
         {
             OpDataElementType dcType = (OpDataElementType)Enum.Parse(typeof(OpDataElementType), dc.DcType);
-            string stg = dc.GetDataElementValue(AttributeCodes.DEAL_STG_CD);
+			OpDataElementSetType objSetType = (OpDataElementSetType)Enum.Parse(typeof(OpDataElementSetType), dc.DataElementDict["OBJ_SET_TYPE_CD"].AtrbCd);
+			string stg = dc.GetDataElementValue(AttributeCodes.DEAL_STG_CD);
             if (excludeList == null) excludeList = new string[] { };
 
             // For each element, apply metadata rules
@@ -203,7 +204,8 @@ namespace Intel.MyDeals.Entities
             {
                 de.IsReadOnly = !excludeList.Contains(de.AtrbCd) && securityWrapper.ChkAtrbRules(
                     dcType,
-                    OpUserStack.MyOpUserToken.Role,
+					objSetType,
+					OpUserStack.MyOpUserToken.Role,
                     stg,
                     atrbAction,
                     de.AtrbCd,

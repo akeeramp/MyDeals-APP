@@ -21,10 +21,6 @@ namespace Intel.MyDeals.IBusinessLogic
 
         List<AdminRoleType> GetAdminRoleTypes();
 
-        List<AppRoleTier> GetAppRoleTiers();
-
-        List<OpRoleType> GetOpRoleTypes();
-
         List<SecurityActions> GetSecurityActions();
 
         SecurityWrapper GetSecurityMasks();

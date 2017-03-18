@@ -72,27 +72,7 @@ namespace Intel.MyDeals.BusinessLogic
 			return DataCollections.GetSecurityWrapper();
 		}		
 		#endregion
-
-		// TODO: Do we need this? What is this for?
-		public List<AppRoleTier> GetAppRoleTiers()
-		{
-			return new List<AppRoleTier>();
-			//return DataCollections.GetAppRoleTiers();
-		}
-
-		public List<OpRoleType> GetOpRoleTypes()
-		{
-			// Load Role Types
-			return GetAppRoleTiers().Where(r => r.APPL_CD == "IDMS").Select(appRoleTier => new OpRoleType
-			{
-				RoleTypeId = appRoleTier.ROLE_TYPE_SID,
-				RoleTypeCd = appRoleTier.ROLE_TYPE_CD,
-				RoleTier = appRoleTier.ROLE_TIER_CD,
-				RoleTypeDescription = appRoleTier.ROLE_TYPE_DESC,
-				RoleTypeDisplayName = appRoleTier.ROLE_TYPE_DSPLY_CD
-			}).ToList();
-		}
-
+		
 		#region SecurityActions
 
 		public List<SecurityActions> GetSecurityActions()

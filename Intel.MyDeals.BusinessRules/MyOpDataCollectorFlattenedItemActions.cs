@@ -68,7 +68,7 @@ namespace Intel.MyDeals.BusinessRules
             foreach (string setting in settings)
             {
                 objsetActionItem.Settings[setting] = DataCollections.GetSecurityWrapper()
-                    .ChkDealRules(opDataElementType, opDataElementSetType, opUserToken.Role.RoleTypeCd, stage, setting);
+                    .ChkDealRules(opDataElementType, opDataElementSetType, stage, setting);
             }
 
             objsetItem["_actions"] = objsetActionItem.Actions;

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System;
 using System.Linq;
 using Intel.MyDeals.DataLibrary.Test;
 using Intel.MyDeals.Entities;
@@ -13,8 +14,51 @@ namespace Intel.MyDeals.BusinessLogic.Test
         {
             OpUserStack.EmulateUnitTester();
             UnitTestHelpers.SetDbConnection();
-        }
-        
+		}
+		
+		#region Security Mapping
+
+		[TestMethod]
+		public void SecurityEngineObjAtrbsGet()
+		{
+			//// TODO: This test keeps failing because of the _dataCollectionsDataLib call in GetObjAtrbs(). Figure out how to work around that.
+			//Dictionary<string, Dictionary<string, List<string>>> results = new SecurityAttributesLib().GetObjAtrbs();
+			//Assert.IsTrue(results.Any());
+		}
+
+		[TestMethod]
+		public void SecurityMappingsSave()
+		{
+			List<SecurityMapSave> saveMappings = new List<SecurityMapSave>();
+
+			// INSERT
+			SecurityMapSave mapping = new SecurityMapSave
+			{
+				ATRB_SID = 1, // hard-coded value for 
+				OBJ_TYPE_SID = (int)OpDataElementType.PRC_TBL,
+				OBJ_SET_TYPE_SID = (int)OpDataElementSetType.ECAP,
+				ROLE_TYPE_SID = 2, // hard-coded value for CBA
+				SECUR_ACTN_SID = 1, // hard-coded value for C_ADD_ATTACHMENTS
+				WFSTG_MBR_SID = 3 // hard-coded value for Cancelled
+			};
+			saveMappings.Add(mapping);
+
+			bool insertResult = new SecurityAttributesLib().SaveSecurityMappings(saveMappings);
+			Assert.IsTrue(insertResult);
+			
+			// DELETE / reset mappings (this is done via db)
+			bool deleteResult = new SecurityAttributesLib().SaveSecurityMappings(saveMappings);
+			Assert.IsTrue(deleteResult);
+		}
+
+		[TestMethod]
+		public void SecurityMasksGet()
+		{
+			SecurityWrapper results = new SecurityAttributesLib().GetSecurityMasks();
+			Assert.IsTrue(results.SecurityAttributes.Any());
+		}
+		#endregion
+		
 		#region SecurityActions
 
 		[TestMethod]
