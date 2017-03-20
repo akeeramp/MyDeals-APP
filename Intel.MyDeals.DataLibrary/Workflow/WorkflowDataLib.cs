@@ -206,7 +206,7 @@ namespace Intel.MyDeals.DataLibrary
                 int IDX_OBJ_TYPE_SID = DB.GetReaderOrdinal(rdr, "OBJ_TYPE_SID");
                 int IDX_ROLE_TIER_NM = DB.GetReaderOrdinal(rdr, "ROLE_TIER_NM");
                 int IDX_TRKR_NBR_UPD = DB.GetReaderOrdinal(rdr, "TRKR_NBR_UPD");
-                int IDX_WF_NM = DB.GetReaderOrdinal(rdr, "WF_NAME");
+                int IDX_WF_NM = DB.GetReaderOrdinal(rdr, "WF_NM");
                 int IDX_WF_SID = DB.GetReaderOrdinal(rdr, "WF_SID");
                 int IDX_WFSTG_ACTN_NM = DB.GetReaderOrdinal(rdr, "WFSTG_ACTN_NM");
                 int IDX_WFSTG_ACTN_SID = DB.GetReaderOrdinal(rdr, "WFSTG_ACTN_SID");
