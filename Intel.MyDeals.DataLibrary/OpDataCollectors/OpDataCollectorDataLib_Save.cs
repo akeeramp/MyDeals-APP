@@ -504,10 +504,13 @@ namespace Intel.MyDeals.DataLibrary
 
                 // Actually do the action
                 // TODO - Bring this back in...
-                var doActionCmd = new Procs.dbo.PR_MANAGE_WIP_ACTN
+                // See if passing the single batch ID we got is good enough or if we need antire guild list from somewhere (packets)
+                var guidList = new type_guid_list(batchId);
+
+                var doActionCmd = new Procs.dbo.PR_MYDL_MNG_WIP_ACTN()
                 {
-                    BTCH_ID = batchId,
-                    WIP_ACTN_SID = (int)actionId
+                    in_btch_ids = guidList,
+                    in_wip_actn_sid = (int)actionId
                 };
 
                 using (var rdr = DataAccess.ExecuteReader(doActionCmd))
