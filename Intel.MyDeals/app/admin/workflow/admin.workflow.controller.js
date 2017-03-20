@@ -95,7 +95,7 @@
                         WF_SID: {
                             editable: false, nullable: true
                         },
-                        WF_NAME: { validation: { required: true } },
+                        WF_NM: { validation: { required: true } },
                         ROLE_TIER_NM: { validation: { required: true } },
                         OBJ_TYPE: { validation: { required: true } },
                         OBJ_TYPE_SID: { validation: { required: false } },
@@ -139,10 +139,7 @@
                 }
                 var commandCell = e.container.find("td:first");
                 commandCell.html('<a class="k-grid-update" href="#"><span class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span class="k-icon k-i-cancel"></span></a>');
-            },
-            destroy: function (e) {
-                deleteItem();
-            },
+            },            
             columns: [
               {
                   command: [
@@ -154,7 +151,7 @@
                   width: "6%"
               },
               { field: "WF_SID", title: "Id", width: "6%" },
-              { field: "WF_NAME", title: "WF Name", width: "10%" },
+              { field: "WF_NM", title: "WF Name", width: "10%" },
               { field: "ROLE_TIER_NM", title: "Role Tier", width: "10%", editor: roleTierCDDropDownEditor },
               { field: "OBJ_TYPE_SID", template: " #= OBJ_TYPE # ", title: "Obj Type", width: "13%", editor: objTypeCDDropDownEditor },
               { field: "OBJ_SET_TYPE_SID", template: " #= OBJ_SET_TYPE_CD # ", title: "Object Set Type", width: "10%", editor: dealTypeCDDropDownEditor },
