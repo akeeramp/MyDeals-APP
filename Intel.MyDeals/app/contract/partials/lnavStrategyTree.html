@@ -1,9 +1,9 @@
 ﻿<!-- Pricing Strategies -->
 <div ng-hide="isPricingStrategiesHidden" style="margin-top: 10px; ">
 
-    <div ng-repeat="ps in contractData.PRC_ST | filter:query" ng-class="{'lnav-highlight-strategy-container': (curPricingStrategy.DC_ID == ps.DC_ID)}" class="lnavStrategyContainer">
+    <div ng-repeat="ps in contractData.PRC_ST | filter:query" class="lnavStrategyContainer">
 
-        <div class="psNav">
+        <div class="psNav" ng-class="{active: (curPricingStrategy.DC_ID == ps.DC_ID && isAddStrategyHidden == true && isAddPricingTableHidden == false)}">
             <div class="fl" ng-click="isCollapsed = !isCollapsed">
                 <i class="glyphicon" style="margin-right: 5px; margin-top: 3px;" ng-class="{'glyphicon-chevron-down': !isCollapsed, 'glyphicon-chevron-right': isCollapsed}"></i>
             </div>
@@ -25,7 +25,7 @@
 
         <div uib-collapse="isCollapsed" style="margin-bottom: 10px;">
             <div ng-repeat="pt in ps.PRC_TBL | filter:query" class="lnavPricingTableContainer">
-                <div class="ptNav" ng-class="{active: curPricingTable.DC_ID == pt.DC_ID}">
+                <div class="ptNav" ng-class="{active: (curPricingTable.DC_ID == pt.DC_ID && isAddStrategyHidden == true && isAddPricingTableHidden == true)}">
                     <div class="fl textCircle pct_{{ pt.PCT_RESULT }}">{{ pt.OBJ_SET_TYPE_CD | limitTo:1 }}</div>
                     <div class="fl" style="margin: 0 6px;" ng-init="isEditable=false">
                         <input ng-blur="isEditable=false" ng-show="isEditable" focus-on-show ng-model="pt.TITLE" class="flatWhiteInput" />

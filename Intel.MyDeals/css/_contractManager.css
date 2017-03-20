@@ -371,10 +371,6 @@
         background: #F3D54E;
     }
 
-    .lnav-highlight-strategy-container {
-        background-color: #005299;  /* TODO: Let Trisin pick a highlight color? */
-    }
-
     .psNav {
         cursor: pointer;
         font-family: 'Intel Clear';
@@ -384,6 +380,11 @@
     }
     .psNav:hover {
         background-color: #003462;
+    }
+    .psNav.active {
+        color: #ffffff;
+        font-weight: bold;
+        background-color: #0071C5;
     }
     .psNav i {
         cursor: pointer;
