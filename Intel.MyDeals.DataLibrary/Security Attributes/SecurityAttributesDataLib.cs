@@ -119,10 +119,10 @@ namespace Intel.MyDeals.DataLibrary
 		/// <returns> A list of Attributes </returns>
 		public List<SecurityAttributesDropDown> GetObjAtrbs()
 		{
-			var ret = new List<SecurityAttributesDropDown>();
+			List<SecurityAttributesDropDown> ret;
 			try
 			{
-				Procs.dbo.PR_MYDL_GET_SECUR_DROPDOWNS cmd = new Procs.dbo.PR_MYDL_GET_SECUR_DROPDOWNS { };
+				Procs.dbo.PR_MYDL_GET_SECUR_DROPDOWNS cmd = new Procs.dbo.PR_MYDL_GET_SECUR_DROPDOWNS();
 				
 				using (DataSet data = DataAccess.ExecuteDataSet(cmd))
 				{
@@ -193,7 +193,7 @@ namespace Intel.MyDeals.DataLibrary
 		{
 			try
 			{
-				Procs.dbo.PR_MYDL_UPD_CK_SECUR_MSK cmd = new Procs.dbo.PR_MYDL_UPD_CK_SECUR_MSK { };
+				Procs.dbo.PR_MYDL_UPD_CK_SECUR_MSK cmd = new Procs.dbo.PR_MYDL_UPD_CK_SECUR_MSK();
 				DataAccess.ExecuteDataSet(cmd);
 			}
 			catch (Exception ex)
@@ -266,7 +266,7 @@ namespace Intel.MyDeals.DataLibrary
         /// <returns> List of Security Actions</returns>
         public List<SecurityActions> CallManageActionSP(SecurityActions action, CrudModes state)
         {
-            var ret = new List<SecurityActions>();
+            List<SecurityActions> ret;
             try
             {
                 Procs.dbo.PR_MANAGE_ACTIONS cmd = new Procs.dbo.PR_MANAGE_ACTIONS 
@@ -379,7 +379,7 @@ namespace Intel.MyDeals.DataLibrary
         /// <returns> List of Admin Applications</returns>
         public List<AdminApplications> CallManageAdminApplicationSP(AdminApplications app, CrudModes state)
         {
-            var ret = new List<AdminApplications>();
+            List<AdminApplications> ret;
             try
             {
                 Procs.dbo.PR_MANAGE_APPLICATIONS cmd = new Procs.dbo.PR_MANAGE_APPLICATIONS
@@ -487,7 +487,7 @@ namespace Intel.MyDeals.DataLibrary
         /// <returns> List of AdminDealType</returns>
         public List<AdminDealType> CallManageAdminDealTypeSP(AdminDealType dealType, CrudModes state)
         {
-            var ret = new List<AdminDealType>();
+            List<AdminDealType> ret;
             try
             {
                 Procs.dbo.PR_MYDL_MANAGE_OBJ_SET_TYPES cmd = new Procs.dbo.PR_MYDL_MANAGE_OBJ_SET_TYPES
@@ -518,8 +518,8 @@ namespace Intel.MyDeals.DataLibrary
                                OBJ_SET_TYPE_SID = Convert.ToByte(rw["OBJ_SET_TYPE_SID"]),
                                OBJ_ATRB_SID = Convert.ToInt32(rw["OBJ_ATRB_SID"]),
                                OBJ_SET_TYPE_DESC = Convert.ToString(rw["OBJ_SET_TYPE_DESC"]),
-                               TEMPLT_DEAL_SID = (rw.IsNull("TEMPLT_DEAL_SID") ? default(System.Int32) : Convert.ToInt32(rw["TEMPLT_DEAL_SID"])),
-                               TEMPLT_DEAL_NBR = (rw.IsNull("TEMPLT_DEAL_NBR") ? default(System.Int32) : Convert.ToInt32(rw["TEMPLT_DEAL_NBR"])),
+                               TEMPLT_DEAL_SID = (rw.IsNull("TEMPLT_DEAL_SID") ? default(int) : Convert.ToInt32(rw["TEMPLT_DEAL_SID"])),
+                               TEMPLT_DEAL_NBR = (rw.IsNull("TEMPLT_DEAL_NBR") ? default(int) : Convert.ToInt32(rw["TEMPLT_DEAL_NBR"])),
                                TRKR_NBR_DT_LTR = Convert.ToString(rw["TRKR_NBR_DT_LTR"]),
                                //PERFORM_CTST = (rw.IsNull("PERFORM_CTST") ? default(System.Boolean) : Convert.ToBoolean(rw["PERFORM_CTST"])),
                                ACTV_IND = Convert.ToBoolean(rw["ACTV_IND"]),
@@ -552,11 +552,11 @@ namespace Intel.MyDeals.DataLibrary
             DataSet dsCheckConstraintErrors = null;
             try
             {
-                DataAccess.ExecuteDataSet(new Procs.dbo.PR_MANAGE_ROLE_TYPES()
+                DataAccess.ExecuteDataSet(new Procs.dbo.PR_MYDL_MANAGE_ROLE_MSTR()
                 {
-                    idsid = OpUserStack.MyOpUserToken.Usr.Idsid,
-                    mode = CrudModes.Delete.ToString(),
-                    ROLE_TYPE_SID = id
+                    EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID,
+                    MODE = CrudModes.Delete.ToString(),
+                    ROLE_SID = id
                 }, null, out dsCheckConstraintErrors);
             }
             catch (Exception ex)
@@ -598,29 +598,29 @@ namespace Intel.MyDeals.DataLibrary
 		}
 
         /// <summary>
-        ///  Calls the PR_MANAGE_ROLE_TYPES SP which performs a CRUD operation depending on the state param
+        ///  Calls the PR_MYDL_MANAGE_ROLE_MSTR SP which performs a CRUD operation depending on the state param
         /// </summary>
         /// <returns> List of AdminRoleTypes</returns>
         public List<AdminRoleType> CallManageAdminRoleTypeSP(AdminRoleType dealType, CrudModes state)
         {
-            var ret = new List<AdminRoleType>();
+            List<AdminRoleType> ret;
             try
             {
-                Procs.dbo.PR_MANAGE_ROLE_TYPES cmd = new Procs.dbo.PR_MANAGE_ROLE_TYPES
+                Procs.dbo.PR_MYDL_MANAGE_ROLE_MSTR cmd = new Procs.dbo.PR_MYDL_MANAGE_ROLE_MSTR
                 {
-                    idsid = OpUserStack.MyOpUserToken.Usr.Idsid,
-                    mode = state.ToString()
+                    EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID,
+                    MODE = state.ToString()
                 };
 
                 if (state.Equals(CrudModes.Insert) || state.Equals(CrudModes.Update))
                 {
                     cmd.ACTV_IND = dealType.ACTV_IND;
                     cmd.APP_SID = dealType.APP_SID;
-                    cmd.ROLE_TYPE_SID = dealType.ROLE_SID;
-                    cmd.ROLE_TYPE_CD = dealType.ROLE_NM;
-                    cmd.ROLE_TYPE_DSPLY_CD = dealType.ROLE_DSPLY_NM;
-                    cmd.ROLE_TYPE_DESC = dealType.ROLE_DESC;
-                    cmd.ROLE_TIER_CD = dealType.ROLE_TIER_NM;
+                    cmd.ROLE_SID = dealType.ROLE_SID;
+                    cmd.ROLE_NM = dealType.ROLE_NM;
+                    cmd.ROLE_DSPLY_NM = dealType.ROLE_DSPLY_NM;
+                    cmd.ROLE_DESC = dealType.ROLE_DESC;
+                    cmd.ROLE_TIER_NM = dealType.ROLE_TIER_NM;
                     cmd.IS_SNGL_SLCT = dealType.IS_SNGL_SLCT;
                 }
 
