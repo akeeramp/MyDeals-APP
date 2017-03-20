@@ -8,6 +8,8 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
     // store template information
     //
     $scope.templates = $scope.templates || templateData.data;
+    $scope.constants = contractManagerConstants;
+    var isContractDetailsPage = $state.current.name == $scope.constants.ContractDetails;
 
     // determine if the contract is existing or new... if new, look for pre-population attributes from the URL parameters
     //
@@ -57,61 +59,319 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         return $scope.contractData.DC_ID > 0;
     }
 
-    $scope.contractData.MinYear = 2012;
-    $scope.contractData.MaxYear = 2027;
+    // Contract detail page initializations
+    if (isContractDetailsPage) {
+        $scope.contractData.MinYear = 2012;
+        $scope.contractData.MaxYear = 2027;
+        var today = moment().format('l');
 
-    $scope.constants = contractManagerConstants;
+        // Contract custom initializations and functions
+        $scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV"] = $scope.contractData["CUST_ACCNT_DIV"] === undefined || $scope.contractData["CUST_ACCNT_DIV"] === "";
+        $scope.contractData._behaviors.isReadOnly["CUST_MBR_SID"] = $scope.contractData.DC_ID > 0;
 
-    // Contract custom initializations and functions
-    $scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV"] = $scope.contractData["CUST_ACCNT_DIV"] === undefined || $scope.contractData["CUST_ACCNT_DIV"] === "";
-    $scope.contractData._behaviors.isReadOnly["CUST_MBR_SID"] = $scope.contractData.DC_ID > 0;
+        // In case of existing contract back date reason and text is captured display them
+        $scope.contractData._behaviors.isRequired["BACK_DATE_RSN"] = $scope.contractData.BACK_DATE_RSN !== "";
+        $scope.contractData._behaviors.isHidden["BACK_DATE_RSN"] = $scope.contractData.BACK_DATE_RSN === "";
+        $scope.contractData._behaviors.isRequired["BACK_DATE_RSN_TXT"] = $scope.contractData.BACK_DATE_RSN_TXT !== "";
+        $scope.contractData._behaviors.isHidden["BACK_DATE_RSN_TXT"] = $scope.contractData.BACK_DATE_RSN_TXT === "";
 
-    // In case of existing contract back date reason and text is captured display them
-    $scope.contractData._behaviors.isRequired["BACK_DATE_RSN"] = $scope.contractData.BACK_DATE_RSN !== "";
-    $scope.contractData._behaviors.isHidden["BACK_DATE_RSN"] = $scope.contractData.BACK_DATE_RSN === "";
-    $scope.contractData._behaviors.isRequired["BACK_DATE_RSN_TXT"] = $scope.contractData.BACK_DATE_RSN_TXT !== "";
-    $scope.contractData._behaviors.isHidden["BACK_DATE_RSN_TXT"] = $scope.contractData.BACK_DATE_RSN_TXT === "";
+        // By default set the CUST_ACCPT to pending(99) if new contract
+        $scope.contractData.CUST_ACCPT = $scope.contractData.CUST_ACCPT == "" ? 99 : $scope.contractData.CUST_ACCPT;
 
-    // By default set the CUST_ACCPT to pending(99) if new contract
-    $scope.contractData.CUST_ACCPT = $scope.contractData.CUST_ACCPT == "" ? 99 : $scope.contractData.CUST_ACCPT;
-    var today = moment().startOf('date');
+        // Set customer acceptance rules
+        var setCustAcceptanceRules = function (newValue) {
+            $scope.contractData._behaviors.isHidden["C2A_DATA_C2A_ID"] = (newValue == 99);
+            $scope.contractData._behaviors.isRequired["C2A_DATA_C2A_ID"] = (newValue != 99) && (!hasUnSavedFiles && !hasFiles);
+            $scope.contractData.C2A_DATA_C2A_ID = (newValue == 99) ? "" : $scope.contractData.C2A_DATA_C2A_ID;
+            $scope.contractData.IsAttachmentRequired = ($scope.contractData.C2A_DATA_C2A_ID === "") && (newValue != 99);
+            $scope.contractData.AttachmentError = $scope.contractData.AttachmentError && $scope.contractData.IsAttachmentRequired;
+        }
+
+        // Contract name validation
+        var isDuplicateContractTitle = function (title) {
+            if (title == "") return;
+            objsetService.isDuplicateContractTitle($scope.contractData.DC_ID, title).then(function (response) {
+                $scope.contractData._behaviors.isError['TITLE'] = response.data;
+                $scope.contractData._behaviors.validMsg['TITLE'] = "";
+                if (response.data) {
+                    $scope.contractData._behaviors.validMsg['TITLE'] = "This contract name already exists in another contract.";
+                }
+            });
+        }
+
+        $scope.updateCorpDivision = function (custId) {
+            if (custId === "" || custId == null) return;
+            dataService.get("/api/Customers/GetMyCustomerDivsByCustNmSid/" + custId).then(function (response) {
+                // only show if more than 1 result
+                if (response.data.length <= 1) {
+                    $scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV"] = false;
+                    $scope.contractData._behaviors.isRequired["CUST_ACCNT_DIV"] = false;
+                    $scope.contractData._behaviors.isReadOnly["CUST_ACCNT_DIV"] = true;
+                    $scope.contractData.CUST_ACCNT_DIV = response.data[0].CUST_DIV_NM.toString();
+                } else {
+                    $scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV"] = false;
+                    $scope.contractData._behaviors.isReadOnly["CUST_ACCNT_DIV"] = false;
+                    $scope.contractData._behaviors.isRequired["CUST_ACCNT_DIV"] = true;
+                }
+                if (!!$("#CUST_ACCNT_DIV").data("kendoMultiSelect")) {
+                    $("#CUST_ACCNT_DIV").data("kendoMultiSelect").dataSource.data(response.data);
+                    $("#CUST_ACCNT_DIV").data("kendoMultiSelect").value($scope.contractData.CUST_ACCNT_DIV.split("/"));
+                }
+            }, function (response) {
+                logger.error("Unable to get Customer Divisions.", response, response.statusText);
+            });
+        }
+
+        // Customer and Customer Div functions
+        var initiateCustDivCombobox = function () {
+            if ($scope.contractData.CUST_ACCNT_DIV !== "") {
+                $scope.updateCorpDivision($scope.contractData.CUST_MBR_SID);
+            }
+        }
+
+        initiateCustDivCombobox();
+
+        var setDefaultContractTitle = function (custDiv) {
+            // if user has touched the Title do not set the title
+            if ($scope.contractData.DC_ID <= 0 && custDiv !== ""
+                && !$scope.contractData._behaviors.isDirty['TITLE']) {
+                $scope.contractData.TITLE = "";
+                $scope.contractData.TITLE = "Intel-" + custDiv + " Q" +
+                    $scope.contractData.START_QTR + " " + $scope.contractData.START_YR;
+                if ($scope.contractData.START_QTR != $scope.contractData.END_QTR
+                    || $scope.contractData.START_YR != $scope.contractData.END_YR) {
+                    $scope.contractData.TITLE += "- Q" + $scope.contractData.END_QTR + " " + $scope.contractData.END_YR;
+                }
+                //User has not changed the title, system doing it set dirty flag to false.
+                $timeout(function () {
+                    $scope.contractData._behaviors.isDirty['TITLE'] = false;
+                });
+            }
+        }
+
+        // Date Functions
+        var validateDate = function (dateType) {
+            $scope.contractData._behaviors.isError['START_DT'] =
+                $scope.contractData._behaviors.isError['END_DT'] = false;
+            $scope.contractData._behaviors.validMsg['START_DT'] =
+                $scope.contractData._behaviors.validMsg['END_DT'] = "";
+
+            var startDate = $scope.contractData.START_DT;
+            var endDate = $scope.contractData.END_DT;
+
+            if (dateType == 'START_DT') {
+                if (moment(startDate).isAfter(endDate) || moment(startDate).year() < $scope.contractData.MinYear) {
+                    $scope.contractData._behaviors.isError['START_DT'] = true;
+                    $scope.contractData._behaviors.validMsg['START_DT'] = moment(startDate).year() < $scope.contractData.MinYear ?
+                        "Start date cannot be less than year " + $scope.contractData.MinYear : "Start date cannot be less than End Date";
+                }
+            } else {
+                if (moment(endDate).isBefore(startDate) || moment(endDate).year() > $scope.contractData.MaxYear) {
+                    $scope.contractData._behaviors.isError['END_DT'] = true;
+                    $scope.contractData._behaviors.validMsg['END_DT'] = moment(endDate).year() > $scope.contractData.MaxYear ?
+                        "End date cannot be greater than year " + $scope.contractData.MaxYear : "End date cannot be less than Start Date";
+                }
+            }
+        }
+
+        // Update start date and end date based on the quarter selection
+        var updateDateByQuarter = function (qtrType, qtrValue, yearValue) {
+            var customerMemberSid = $scope.contractData.CUST_MBR_SID == "" ? null : $scope.contractData.CUST_MBR_SID;
+            var quarterDetails = customerService.getCustomerCalendar(customerMemberSid, null, qtrValue, yearValue)
+                .then(function (response) {
+                    if (qtrType == 'START_DATE') {
+                        $scope.contractData.START_DT = response.data.QTR_STRT;
+                        validateDate('START_DT');
+                        unWatchStartDate = true;
+                    } else {
+                        $scope.contractData.END_DT = response.data.QTR_END;
+                        validateDate('END_DT');
+                        unWatchEndDate = true;
+                    }
+                }, function (response) {
+                    errInGettingDates(response);
+                });
+        }
+
+        var resetQtrYrDirty = function () {
+            // When loading quarter and year from date user never makes changes to Quarter and Year we just load them
+            $scope.contractData._behaviors.isDirty['START_QTR'] = $scope.contractData._behaviors.isDirty['START_YR'] = false;
+            $scope.contractData._behaviors.isDirty['END_QTR'] = $scope.contractData._behaviors.isDirty['END_YR'] = false;
+        }
+
+        var updateQuarterByDates = function (dateType, value) {
+            var customerMemberSid = $scope.contractData.CUST_MBR_SID == "" ? null : $scope.contractData.CUST_MBR_SID;
+            var quarterDetails = customerService.getCustomerCalendar(customerMemberSid, value, null, null).then(function (response) {
+                if (dateType == 'START_DT') {
+                    $scope.contractData.START_QTR = response.data.QTR_NBR;
+                    $scope.contractData.START_YR = response.data.YR_NBR;
+                    validateDate('START_DT');
+                    unWatchStartQuarter = true;
+                } else {
+                    $scope.contractData.END_QTR = response.data.QTR_NBR;
+                    $scope.contractData.END_YR = response.data.YR_NBR;
+                    validateDate('END_DT');
+                    unWatchEndQuarter = true;
+                }
+                $timeout(function () {
+                    resetQtrYrDirty();
+                }, 500);
+            }, function (response) {
+                errInGettingDates(response);
+            });
+        }
+
+        var getCurrentQuarterDetails = function () {
+            var customerMemberSid = $scope.contractData.CUST_MBR_SID == "" ? null : $scope.contractData.CUST_MBR_SID;
+            var quarterDetails = customerService.getCustomerCalendar(customerMemberSid, new Date, null, null)
+                .then(function (response) {
+                    $scope.contractData.START_QTR = $scope.contractData.END_QTR = response.data.QTR_NBR;
+                    $scope.contractData.START_YR = $scope.contractData.END_YR = response.data.YR_NBR;
+
+                    // By default we dont want a contract to be backdated
+                    $scope.contractData.START_DT = moment(response.data.QTR_STRT).isBefore(today) ?
+                        today : response.data.QTR_STRT;
+
+                    $scope.contractData.END_DT = response.data.QTR_END;
+                    $timeout(function () {
+                        resetQtrYrDirty();
+                    }, 500);
+
+                    // Unwatch all the dates, quarter and year, else they will go crazy
+                    unWatchStartQuarter = unWatchEndQuarter = unWatchStartDate = unWatchEndDate = true;
+
+                    $timeout(function () {
+                        unWatchStartQuarter = unWatchEndQuarter = unWatchStartDate = unWatchEndDate = false;
+                    }, 500);
+
+                }, function (response) {
+                    errInGettingDates(response);
+                });
+        }
+
+        var errInGettingDates = function (response) {
+            logger.error("Unable to get Customer Calendar Dates.", response, response.statusText);
+        }
+
+        var unWatchStartQuarter = false;
+        var unWatchEndQuarter = false;
+        var unWatchStartDate = false;
+        var unWatchEndDate = false;
+
+        var pastDateConfirm = function (newDate, oldDate) {
+            if (moment(newDate).isBefore(today)) {
+                kendo.confirm($scope.constants.pastDateConfirmText).then(function () {
+                    $scope.contractData._behaviors.isHidden["BACK_DATE_RSN"] = false;
+                    $scope.contractData._behaviors.isRequired["BACK_DATE_RSN"] = true;
+                }, function () {
+                    $scope.contractData.START_DT = oldDate;
+                });
+            } else {
+                $scope.contractData._behaviors.isHidden["BACK_DATE_RSN"] = true;
+                $scope.contractData._behaviors.isRequired["BACK_DATE_RSN"] = false;
+                $scope.contractData._behaviors.isHidden["BACK_DATE_RSN_TXT"] = true;
+                $scope.contractData.BACK_DATE_RSN = "";
+            }
+        }
+
+        if ($scope.contractData.DC_ID <= 0) {
+            getCurrentQuarterDetails();
+        } else {
+            updateQuarterByDates('START_DT', $scope.contractData.START_DT);
+            updateQuarterByDates('END_DT', $scope.contractData.END_DT);
+        }
+
+        $timeout(function () {
+            $scope.contractData.DC_ID > 0 ? $scope.status = { 'isOpen': true } :
+                setCustAcceptanceRules($scope.contractData.CUST_ACCPT);
+        }, 1000);
+    }
 
     // File save methods and variable
-    $scope.fileUploadOptions = { saveUrl: 'save', removeUrl: 'remove', autoUpload: false };
+    var hasUnSavedFiles = false;
+    var hasFiles = false;
+
+    $scope.fileUploadOptions = { saveUrl: '/FileUpload/save', autoUpload: false };
+
+    $scope.filePostAddParams = function (e) {
+        e.data = {
+            custMbrSid: $scope.contractData.CUST_MBR_SID,
+            objSid: $scope.contractData.DC_ID, // Contract
+            objTypeSid: 1
+        }
+    };
+
+    $scope.onFileSelect = function (e) {
+        // Hide default kendo upload and clear buttons as contract is not generated at this point. Upload files after contract id is generated.
+        // TODO: Do we want to show them in edit scenario ?
+        $timeout(function () {
+            $(".k-clear-selected").hide();
+            $(".k-upload-selected").hide();
+        });
+        $scope.contractData._behaviors.isRequired["C2A_DATA_C2A_ID"] = false;
+        hasUnSavedFiles = true;
+        $scope.contractData.AttachmentError = false;
+    }
+
+    $scope.onFileRemove = function (e) {
+        var numberOfFiles = $("#fileUploader").data("kendoUpload").getFiles().length;
+        if (numberOfFiles <= 1) {
+            $scope.contractData._behaviors.isRequired["C2A_DATA_C2A_ID"] = true;
+            hasUnSavedFiles = false;
+        }
+    }
+
+    $scope.onComplete = function () {
+        logger.success("Contract attachments uploaded", null, "Upload successful");
+        $state.go('contract.manager', {
+            cid: $scope.contractData.DC_ID
+        });
+    }
+
+    $scope.onError = function () {
+        logger.error("Files Upload failed, Please try again.");
+    }
+
+    $scope.uploadFile = function (e) {
+        $(".k-upload-selected").click();
+    }
 
     var dataSource = new kendo.data.DataSource({
         transport: {
             read: function (e) {
-                //fileService.getFileAttachments()
-                //    .then(function (response) {
-                //        e.success(response.data);
-                //    }, function (response) {
-                //        logger.error("Unable to get constants.", response, response.statusText);
-                //    });
+                if ($scope.contractData.DC_ID > 0) {
+                    logger.info("Loading contract attachments...");
+                    dataService.get("/api/Files/GetFileAttachments/" + $scope.contractData.CUST_MBR_SID + "/" + 1 + "/" + $scope.contractData.DC_ID + "/CNTRCT")
+                        .then(function (response) {
+                            e.success(response.data);
+                            hasFiles = response.data.length > 0;
+                            setCustAcceptanceRules($scope.contractData.CUST_ACCPT);
+                        }, function (response) {
+                            logger.error("Unable to get file attachments.", response, response.statusText);
+                        });
+                }
             },
             destroy: function (e) {
-                var modalOptions = {
-                    closeButtonText: 'Cancel',
-                    actionButtonText: 'Delete Attachment',
-                    hasActionButton: true,
-                    headerText: 'Delete confirmation',
-                    bodyText: 'Are you sure you would like to Delete this Attachment ?'
-                };
-
-                confirmationModal.showModal({}, modalOptions).then(function (result) {
-                    //fileService.deleteFileAttachments(e.data).then(function (response) {
-                    //    e.success(response.data);
-                    //    logger.success("Attachment Deleted.");
-                    //}, function (response) {
-                    //    logger.error("Unable to delete Attachment.", response, response.statusText);
-                    //});
+                kendo.confirm("Are you sure you want to delete this attachment?").then(function () {
+                    logger.info("Method Not Implemented");
+                    hasFiles = $('#fileAttachmentGrid').data("kendoGrid")._data.length > 0;
+                    setCustAcceptanceRules($scope.contractData.CUST_ACCPT);
+                }, function () {
+                    // If grid is hidden on DOM load, scope doesn't contain the grid name($scope.fileAttachmentGrid is undefined), hack use jQuery
+                    $('#fileAttachmentGrid').data("kendoGrid").cancelChanges();
                 });
             },
         },
         pageSize: 25,
         schema: {
             model: {
-                id: "ATTCH_SID"
+                id: "ATTCH_SID",
+                fields: {
+                    ATTCH_SID: { editable: false, nullable: true },
+                    FILE_NM: { validation: { required: false }, editable: false },
+                    CHG_EMP_WWID: { validation: { required: false }, editable: false },
+                    CHG_DTM: { validation: { required: false }, editable: false },
+                }
             }
         },
     });
@@ -123,24 +383,25 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         selectable: true,
         resizable: true,
         columnMenu: false,
+        editable: { mode: "inline", confirmation: false },
         destroy: function (e) {
             var commandCell = e.container.find("td:first");
             commandCell.html('<a class="k-grid-update" href="#"><span class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span class="k-icon k-i-cancel"></span></a>');
         },
         columns: [
-           {
-               command: [
-                   { name: "edit", template: "<a class='k-grid-edit' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-edit'></span></a>" },
-                   { name: "destroy", template: "<a class='k-grid-delete' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-close'></span></a>" }
-               ],
-               title: " ",
-               width: "7%"
-           },
-          { "field": "FILE_NM", "title": "File Name", "template": "<a href='/api/FileAttachments/OpenAttachment/#: OBJ_SID #/#: ATTCH_SID #'>#: FILE_NM #</a>" },
-          { "field": "CHG_EMP_WWID", "title": "Added By", width: "25%" },
-          { "field": "CHG_DTM", "title": "Date Added", width: "25%" }
-        ]
+        {
+            command: [
+                { name: "destroy", template: "<a class='k-grid-delete' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-close'></span></a>" }
+            ], title: "", width: "7%"
+        },
+        { field: "ATTCH_SID", title: "ID", hidden: true },
+        //IE doesn't support download tag on anchor, added target='_blank' as a work around
+        { field: "FILE_NM", title: "File Name", template: "<a download target='_blank' href='/api/Files/OpenFileAttachment/#: FILE_DATA_SID #/'>#: FILE_NM #</a>" },
+        { field: "CHG_EMP_WWID", title: "Added By", width: "25%" },
+        { field: "CHG_DTM", title: "Date Added", width: "25%", type: "date", template: "#= kendo.toString(new Date(CHG_DTM), 'M/d/yyyy') #" }]
     };
+
+
 
     // Don't let the user leave unless the data is saved
     //
@@ -164,117 +425,6 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         }
     });
 
-    var validateDate = function (dateType) {
-        $scope.contractData._behaviors.isError['START_DT'] =
-            $scope.contractData._behaviors.isError['END_DT'] = false;
-        $scope.contractData._behaviors.validMsg['START_DT'] =
-            $scope.contractData._behaviors.validMsg['END_DT'] = "";
-
-        var startDate = $scope.contractData.START_DT;
-        var endDate = $scope.contractData.END_DT;
-
-        if (dateType == 'START_DT') {
-            if (moment(startDate).isAfter(endDate) || moment(startDate).year() < $scope.contractData.MinYear) {
-                $scope.contractData._behaviors.isError['START_DT'] = true;
-                $scope.contractData._behaviors.validMsg['START_DT'] = moment(startDate).year() < $scope.contractData.MinYear ?
-                    "Start date cannot be less than year " + $scope.contractData.MinYear : "Start date cannot be after End Date";
-            }
-        } else {
-            if (moment(endDate).isBefore(startDate) || moment(endDate).year() > $scope.contractData.MaxYear) {
-                $scope.contractData._behaviors.isError['END_DT'] = true;
-                $scope.contractData._behaviors.validMsg['END_DT'] = moment(endDate).year() > $scope.contractData.MaxYear ?
-                    "End date cannot be greater than year " + $scope.contractData.MaxYear : "End date cannot be before End Date";
-            }
-        }
-    }
-
-    // Update start date and end date based on the quarter selection
-    var updateDateByQuarter = function (qtrType, qtrValue, yearValue) {
-        var customerMemberSid = $scope.contractData.CUST_MBR_SID == "" ? null : $scope.contractData.CUST_MBR_SID;
-        var quarterDetails = customerService.getCustomerCalendar(customerMemberSid, null, qtrValue, yearValue)
-            .then(function (response) {
-                if (qtrType == 'START_DATE') {
-                    $scope.contractData.START_DT = response.data.QTR_STRT;
-                    validateDate('START_DT');
-                    unWatchStartDate = true;
-                } else {
-                    $scope.contractData.END_DT = response.data.QTR_END;
-                    validateDate('END_DT');
-                    unWatchEndDate = true;
-                }
-            }, function (response) {
-                errInGettingDates(response);
-            });
-    }
-
-    var updateQuarterByDates = function (dateType, value) {
-        var customerMemberSid = $scope.contractData.CUST_MBR_SID == "" ? null : $scope.contractData.CUST_MBR_SID;
-        var quarterDetails = customerService.getCustomerCalendar(customerMemberSid, value, null, null).then(function (response) {
-            if (dateType == 'START_DT') {
-                $scope.contractData.START_QTR = response.data.QTR_NBR;
-                $scope.contractData.START_YR = response.data.YR_NBR;
-                validateDate('START_DT');
-                unWatchStartQuarter = true;
-            } else {
-                $scope.contractData.END_QTR = response.data.QTR_NBR;
-                $scope.contractData.END_YR = response.data.YR_NBR;
-                validateDate('END_DT');
-                unWatchEndQuarter = true;
-            }
-        }, function (response) {
-            errInGettingDates(response);
-        });
-    }
-
-    var getCurrentQuarterDetails = function () {
-        var customerMemberSid = $scope.contractData.CUST_MBR_SID == "" ? null : $scope.contractData.CUST_MBR_SID;
-        var quarterDetails = customerService.getCustomerCalendar(customerMemberSid, new Date, null, null)
-            .then(function (response) {
-                $scope.contractData.START_QTR = $scope.contractData.END_QTR = response.data.QTR_NBR;
-                $scope.contractData.START_YR = $scope.contractData.END_YR = response.data.YR_NBR;
-
-                // By default we dont want a contract to be backdated
-                $scope.contractData.START_DT = moment(response.data.QTR_STRT).isBefore(today) ?
-                    moment().format() : response.data.QTR_STRT;
-
-                $scope.contractData.END_DT = response.data.QTR_END;
-
-                // Unwatch all the dates, quarter and year, else they will go crazy
-                unWatchStartQuarter = unWatchEndQuarter = unWatchStartDate = unWatchEndDate = true;
-            }, function (response) {
-                errInGettingDates(response);
-            });
-    }
-
-    var errInGettingDates = function (response) {
-        logger.error("Unable to get Customer Calendar Dates.", response, response.statusText);
-    }
-
-    if ($scope.contractData.DC_ID <= 0) {
-        getCurrentQuarterDetails();
-    } else {
-        updateQuarterByDates('START_DT', $scope.contractData.START_DT);
-        updateQuarterByDates('END_DT', $scope.contractData.END_DT);
-    }
-
-    var unWatchStartQuarter, unWatchEndQuarter, unWatchStartDate, unWatchEndDate = false;
-
-    var pastDateConfirm = function (newDate, oldDate) {
-        if (moment(newDate).isBefore(today)) {
-            kendo.confirm($scope.constants.pastDateConfirmText).then(function () {
-                $scope.contractData._behaviors.isHidden["BACK_DATE_RSN"] = false;
-                $scope.contractData._behaviors.isRequired["BACK_DATE_RSN"] = true;
-            }, function () {
-                $scope.contractData.START_DT = oldDate;
-            });
-        } else {
-            $scope.contractData._behaviors.isHidden["BACK_DATE_RSN"] = true;
-            $scope.contractData._behaviors.isRequired["BACK_DATE_RSN"] = false;
-            $scope.contractData._behaviors.isHidden["BACK_DATE_RSN_TXT"] = true;
-            $scope.contractData.BACK_DATE_RSN = "";
-        }
-    }
-
     // Watch for any changes to contract data to set a dirty bit
     //
     $scope.$watch('contractData',
@@ -287,8 +437,13 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
                 getCurrentQuarterDetails();
             }
 
+            if (oldValue["CUST_ACCNT_DIV"] !== newValue["CUST_ACCNT_DIV"]) {
+                setDefaultContractTitle(newValue["CUST_ACCNT_DIV"]);
+            }
+
             if (oldValue["START_QTR"] !== newValue["START_QTR"]
                 || oldValue["START_YR"] !== newValue["START_YR"]) {
+                setDefaultContractTitle($scope.contractData.CUST_ACCNT_DIV);
                 if (!unWatchStartQuarter) {
                     updateDateByQuarter('START_DATE', newValue["START_QTR"], newValue["START_YR"]);
                 }
@@ -297,6 +452,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
 
             if (oldValue["END_QTR"] !== newValue["END_QTR"]
                             || oldValue["END_YR"] !== newValue["END_YR"]) {
+                setDefaultContractTitle($scope.contractData.CUST_ACCNT_DIV);
                 if (!unWatchEndQuarter) {
                     updateDateByQuarter('END_DATE', newValue["END_QTR"], newValue["END_YR"]);
                 }
@@ -329,53 +485,18 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
                 if (newValue["BACK_DATE_RSN"] != 106) $scope.contractData.BACK_DATE_RSN_TXT = "";
             }
 
+            if (oldValue["CUST_ACCPT"] !== newValue["CUST_ACCPT"]) {
+                setCustAcceptanceRules(newValue["CUST_ACCPT"]);
+            }
+
+            if (oldValue["C2A_DATA_C2A_ID"] !== newValue["C2A_DATA_C2A_ID"]) {
+                $scope.contractData.IsAttachmentRequired = (newValue["C2A_DATA_C2A_ID"] === "");
+                $scope.contractData.AttachmentError = $scope.contractData.IsAttachmentRequired && (!hasUnSavedFiles && !hasFiles);
+            }
+
             el._dirty = true;
             el._dirtyContractOnly = true;
         }, true);
-
-    // Customer and Customer Div functions
-    var initiateCustDivCombobox = function () {
-        if ($scope.contractData.CUST_ACCNT_DIV !== "") {
-            $scope.updateCorpDivision($scope.contractData.CUST_MBR_SID);
-        }
-    }
-
-    // Contract name validation
-    var isDuplicateContractTitle = function (title) {
-        if (title == "") return;
-        objsetService.isDuplicateContractTitle($scope.contractData.DC_ID, title).then(function (response) {
-            $scope.contractData._behaviors.isError['TITLE'] = response.data;
-            $scope.contractData._behaviors.validMsg['TITLE'] = "";
-            if (response.data) {
-                $scope.contractData._behaviors.validMsg['TITLE'] = "This contract name already exists in another contract.";
-            }
-        });
-    }
-
-    $scope.updateCorpDivision = function (custId) {
-        if (custId === "" || custId == null) return;
-        dataService.get("/api/Customers/GetMyCustomerDivsByCustNmSid/" + custId).then(function (response) {
-            // only show if more than 1 result
-            if (response.data.length <= 1) {
-                $scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV"] = false;
-                $scope.contractData._behaviors.isRequired["CUST_ACCNT_DIV"] = false;
-                $scope.contractData._behaviors.isReadOnly["CUST_ACCNT_DIV"] = true;
-                $scope.contractData.CUST_ACCNT_DIV = response.data[0].CUST_DIV_NM.toString();
-            } else {
-                $scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV"] = false;
-                $scope.contractData._behaviors.isReadOnly["CUST_ACCNT_DIV"] = false;
-                $scope.contractData._behaviors.isRequired["CUST_ACCNT_DIV"] = true;
-            }
-            if (!!$("#CUST_ACCNT_DIV").data("kendoMultiSelect")) {
-                $("#CUST_ACCNT_DIV").data("kendoMultiSelect").dataSource.data(response.data);
-                $("#CUST_ACCNT_DIV").data("kendoMultiSelect").value($scope.contractData.CUST_ACCNT_DIV.split("/"));
-            }
-        }, function (response) {
-            logger.error("Unable to get Customer Divisions.", response, response.statusText);
-        });
-    }
-
-    initiateCustDivCombobox();
 
     // **** LEFT NAVIGATION Methods ****
     //
@@ -428,7 +549,8 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         $scope.newPricingTable = util.clone($scope.templates.ObjectTemplates.PRC_TBL.CAP_BAND);
         $scope.newPricingTable.OBJ_SET_TYPE_CD = ""; //reset new PT deal type
         $scope.clearPtTemplateIcons();
-        $scope.curPricingStrategy = {}; //clears curPricingStrategy
+        $scope.curPricingStrategy = {
+        }; //clears curPricingStrategy
     }
 
     // **** PRICING STRATEGY Methods ****
@@ -475,13 +597,15 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
     //
     $scope.unmarkCurPricingStrategyIf = function (id) {
         if ($scope.curPricingStrategyId === id) {
-            $scope.curPricingStrategy = {};
+            $scope.curPricingStrategy = {
+            };
             $scope.curPricingStrategyId = 0;
         }
     }
     $scope.unmarkCurPricingTableIf = function (id) {
         if ($scope.curPricingTableId > 0 && $scope.curPricingTable !== null && $scope.curPricingTable.DC_PARENT_ID === id) {
-            $scope.curPricingTable = {};
+            $scope.curPricingTable = {
+            };
             $scope.curPricingTableId = 0;
         }
     }
@@ -512,7 +636,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
                         logger.error("Could not delete the Pricing Strategy.", result, result.statusText);
                         topbar.hide();
                     }
-                );
+                    );
             });
         });
     }
@@ -539,7 +663,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
                         logger.error("Could not delete the Pricing Table.", response, response.statusText);
                         topbar.hide();
                     }
-                );
+            );
             });
         });
     }
@@ -567,7 +691,6 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         var contractData = $scope._dirtyContractOnly ? [$scope.contractData] : [];
         var curPricingTableData = $scope.curPricingTable.DC_ID === undefined ? [] : [$scope.curPricingTable];
 
-
         // Pricing Table Row
         if (curPricingTableData.length > 0) {
             for (var s = 0; s < sData.length; s++) {
@@ -590,8 +713,6 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
             }
         }
 
-
-
         // Contract is Contract + Pricing Strategies + Pricing Tables in heierarchial format
         // sData is the raw spreadsheet data
         // gData is the raw grid data
@@ -600,7 +721,8 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         var modPs = [];
 
         for (var c = 0; c < contractData.length; c++) {
-            var mCt = {};
+            var mCt = {
+            };
             Object.keys(contractData[c]).forEach(function (key, index) {
                 if (key[0] !== '_' && key !== "Customer" && key !== "PRC_ST") mCt[key] = this[key];
             }, contractData[c]);
@@ -609,14 +731,14 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
             if (contractData[c]["PRC_ST"] === undefined) contractData[c]["PRC_ST"] = [];
             var item = contractData[c]["PRC_ST"];
             for (var p = 0; p < item.length; p++) {
-                var mPs = {};
+                var mPs = {
+                };
                 Object.keys(item[p]).forEach(function (key, index) {
                     if (key[0] !== '_' && key !== "PRC_TBL") mPs[key] = this[key];
                 }, item[p]);
                 modPs.push(mPs);
             }
         }
-
 
         var data = {
             "Contract": modCt,
@@ -626,8 +748,6 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
             "WipDeals": gData === undefined ? [] : gData,
             "EventSource": source
         }
-
-        debugger;
 
         objsetService.updateContractAndCurPricingTable($scope.getCustId(), data).then(
             function (data) {
@@ -640,7 +760,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
                 logger.error("Could not save the contract.", response, response.statusText);
                 topbar.hide();
             }
-        );
+    );
     }
     $scope.saveEntireContract = function () {
         if (!$scope._dirty) return;
@@ -649,6 +769,21 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
     $scope.getCustId = function () {
         return $scope.contractData['CUST_MBR_SID'];
     }
+
+    $scope.checkForMessages = function (collection, key, data) {
+        var isValid = true;
+        if (data.data[key] !== undefined && data.data[key].Messages.Messages.length > 0) {
+            angular.forEach(data.data[key].AllDataElements,
+            function (value, key) {
+                collection._behaviors.validMsg[value.AtrbCd] = value.ValidationMessage;
+                collection._behaviors.isError[value.AtrbCd] = value.ValidationMessage !== "";
+                isValid = false;
+            });
+        }
+        // TODO: Consolidate all the messages warning and errors show in the Validation summary panel ??
+        return isValid;
+    }
+
     $scope.saveContract = function () {
         topbar.show();
 
@@ -663,13 +798,25 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         objsetService.createContract($scope.getCustId(), ct).then(
             function (data) {
                 $scope.updateNegativeIds(ct, "CNTRCT", data);
+
+                //Check for errors
+                if (!$scope.checkForMessages(ct, "CNTRCT", data)) {
+                    logger.error("Could not create the contract.", data, "Save unsuccessful");
+                    topbar.hide();
+                    return;
+                };
+
                 logger.success("Saved the contract", ct, "Save Sucessful");
                 topbar.hide();
 
-                // load the screen
-                //debugger;
-                $scope._dirty = false; // don't want to kick of listeners
-                $state.go('contract.manager', { cid: ct.DC_ID });
+                if (hasUnSavedFiles) {
+                    $scope.uploadFile();
+                } else {
+                    $scope._dirty = false; // don't want to kick of listeners
+                    $state.go('contract.manager', {
+                        cid: ct.DC_ID
+                    });
+                }
             },
             function (result) {
                 logger.error("Could not create the contract.", response, response.statusText);
@@ -685,19 +832,33 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         // Clear all values
         angular.forEach($scope.contractData,
             function (value, key) {
-                ct._behaviors.validMsg[key] = "";
-                ct._behaviors.isError[key] = false;
+                // Do not clear the custom validations user has to correct them e.g contract name duplicate
+                if (ct._behaviors.validMsg[key] === "" || ct._behaviors.validMsg[key] === "* field is required"
+                    || ct._behaviors.validMsg[key] === undefined) {
+
+                    ct._behaviors.validMsg[key] = "";
+                    ct._behaviors.isError[key] = false;
+                }
             });
 
         // Check required
         angular.forEach($scope.contractData,
             function (value, key) {
-                if (key[0] !== '_' && value !== undefined && value !== null && !Array.isArray(value) && typeof (value) !== "object" && (typeof (value) === "string" && value.trim() === "") && ct._behaviors.isRequired[key] === true) {
+                if (key[0] !== '_' && value !== undefined && value !== null && !Array.isArray(value) &&
+                    typeof (value) !== "object" && (typeof (value) === "string" && value.trim() === "") && ct._behaviors.isRequired[key] === true && ct._behaviors.validMsg[key] === "") {
                     ct._behaviors.validMsg[key] = "* field is required";
                     ct._behaviors.isError[key] = true;
                     $scope.isValid = false;
                 }
+                if (ct._behaviors.validMsg[key] !== "") {
+                    $scope.isValid = false;
+                }
             });
+
+        if ($scope.contractData.IsAttachmentRequired && (!hasFiles && !hasUnSavedFiles)) {
+            $scope.contractData.AttachmentError = true;
+            $scope.isValid = false;
+        }
 
         if ($scope.isValid) {
             $scope.saveContract();
@@ -747,7 +908,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
                 logger.error("Could not create the pricing strategy.", response, response.statusText);
                 topbar.hide();
             }
-        );
+    );
     }
     $scope.customAddPsValidate = function () {
         var isValid = true;
@@ -823,13 +984,15 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
 
                 // load the screen
                 //debugger;
-                $state.go('contract.manager.strategy', { cid: $scope.contractData.DC_ID, sid: pt.DC_PARENT_ID, pid: pt.DC_ID });
+                $state.go('contract.manager.strategy', {
+                    cid: $scope.contractData.DC_ID, sid: pt.DC_PARENT_ID, pid: pt.DC_ID
+                });
             },
             function (response) {
                 logger.error("Could not create the pricing table.", response, response.statusText);
                 topbar.hide();
             }
-        );
+    );
     }
     $scope.customAddPtValidate = function () {
         var isValid = true;
@@ -911,11 +1074,15 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
     }
 
     $scope.showWipDeals = function () {
-        $state.go('contract.manager.strategy.wip', { cid: $scope.contractData.DC_ID, sid: $scope.curPricingStrategyId, pid: $scope.curPricingTableId });
+        $state.go('contract.manager.strategy.wip', {
+            cid: $scope.contractData.DC_ID, sid: $scope.curPricingStrategyId, pid: $scope.curPricingTableId
+        });
     }
     $scope.backToPricingTable = function () {
         $scope.spreadNeedsInitialization = true;
-        $state.go('contract.manager.strategy', { cid: $scope.contractData.DC_ID, sid: $scope.curPricingStrategyId, pid: $scope.curPricingTableId });
+        $state.go('contract.manager.strategy', {
+            cid: $scope.contractData.DC_ID, sid: $scope.curPricingStrategyId, pid: $scope.curPricingTableId
+        });
     }
 
     $scope.validateWipDeals = function () {

@@ -23,8 +23,8 @@ namespace Intel.MyDeals.DataLibrary
             registerService.RegisterType<ISecurityAttributesDataLib, SecurityAttributesDataLib>();
             registerService.RegisterType<IUiTemplateDataLib, UiTemplateDataLib>();
             registerService.RegisterType<IWorkFlowDataLib, WorkFlowDataLib>();
-
             registerService.RegisterType<IProductCostTestDataLib, ProductCostTestDataLib>();
+            registerService.RegisterType<IFilesDataLib, FilesDataLib>();
         }
     }
 }

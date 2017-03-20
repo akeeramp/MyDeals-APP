@@ -45,22 +45,5 @@ namespace Intel.MyDeals.Controllers.API
             //TODO : Need to check if we want to show current -1 to current + 6 quarters, depends upon deal creation PSI acceptance criteria
             throw new NotImplementedException("Will be implemented as part of deal creation");
         }
-
-        /// <summary>
-        ///
-        /// </summary>
-        /// <returns></returns>
-        [Route("GetMyCustomerYears")]
-        public List<Year> GetMyCustomerYears()
-        {
-            // TODO, as we dont want user to restrict on quarter ranges, whats the check on Year ??
-            var year = DateTime.Now.Year;
-            var years = new List<Year>();
-            years.Add(new Year { YearNumber = year - 1 });
-            years.Add(new Year { YearNumber = year });
-            years.Add(new Year { YearNumber = year + 1 });
-
-            return years;
-        }
     }
 }

@@ -41,7 +41,7 @@
 
                     confirmationModal.showModal({}, modalOptions).then(function (result) {
                         constantsService.deleteConstants(e.data).then(function (response) {
-                            $scope.grid.removeRow();
+                            $scope.constantsGrid.removeRow();
                             e.success(response.data);
                             logger.success("Constant Deleted.");
                         }, function (response) {
@@ -127,7 +127,7 @@
         };
 
         function cancelChanges() {
-            $scope.grid.cancelChanges();
+            $scope.constantsGrid.cancelChanges();
         }
 
         function dataBound() {

@@ -177,16 +177,26 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "SecurityAttribute";
 	ds.Tables[1].TableName = "SecurityMask";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
-	WriteLine(ScriptTools.DataTableToClass(ds.Tables[1], false));	
-		
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[1], false));
+
 	// SecurityAttributes DropDown
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_SECUR_DROPDOWNS]");
 	ds.Tables[0].TableName = "SecurityAttributesDropDown";
-	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));	
-	
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
 	// Title Validation - PR_MYDL_OBJ_DATA_VLD
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_OBJ_DATA_VLD]  1, 86, 'Intel-HP Worldwide Commercial DT and NB Agreement FQ2’16 to FQ1’17', 0, 0");
 	ds.Tables[0].TableName = "DuplicateTitlesCheck";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
+	// Get File Attachment list
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_ATTCH_LIST] @CUST_MBR_SID=0, @OBJ_TYPE_SID=0, @OBJ_SID=0");
+	ds.Tables[0].TableName = "FileAttachment";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
+	// Get File Attachment data
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_ATTCH_DATA] @FILE_DATA_SID=0");
+	ds.Tables[0].TableName = "FileAttachmentData";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	PopIndent();

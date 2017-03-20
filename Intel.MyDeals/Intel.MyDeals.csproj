@@ -199,6 +199,7 @@
     <Folder Include="Helper Functions\" />
     <Folder Include="ViewModels\" />
     <Folder Include="Views\Base\" />
+    <Folder Include="Views\FileUpload\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionFilters\ApiAuthorizeAttribute.cs" />
@@ -253,6 +254,7 @@
     <Compile Include="Controllers\API\ConstantsController.cs" />
     <Compile Include="Controllers\API\CustomerCalendarController.cs" />
     <Compile Include="Controllers\API\DropdownController.cs" />
+    <Compile Include="Controllers\API\FilesController.cs" />
     <Compile Include="Controllers\API\ProductCostTestController.cs" />
     <Compile Include="Controllers\API\ProductsCategoriesController.cs" />
     <Compile Include="Controllers\API\RulesController.cs" />
@@ -278,6 +280,7 @@
     <Compile Include="Controllers\DocsController.cs" />
     <Compile Include="Controllers\ContactController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\FileUploadController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OthersController.cs" />
     <Compile Include="Controllers\TestCasesController.cs" />

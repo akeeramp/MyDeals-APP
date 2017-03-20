@@ -754,6 +754,16 @@
         text-transform: uppercase;
     }
 
+    .fileAttachmentRequired{
+        border: 1px solid #ed8282;
+    }
+
     .k-spreadsheet>.k-spreadsheet-view {
         font-size: 10px;
+    }
+    .decsription {
+        font-size: 11px;
+        color: #b1babf;
+        font-style: italic;
+        margin-left: 2px;
     }

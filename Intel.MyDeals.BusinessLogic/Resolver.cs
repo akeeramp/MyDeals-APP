@@ -27,6 +27,7 @@ namespace Intel.MyDeals.BusinessLogic
             registerService.RegisterType<ISecurityAttributesLib, SecurityAttributesLib>();
             registerService.RegisterType<IUiTemplateLib, UiTemplateLib>();
             registerService.RegisterType<IWorkFlowLib, WorkFlowLib>();
+            registerService.RegisterType<IFilesLib, FilesLib>();
         }
     }
 }

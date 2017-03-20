@@ -67,6 +67,10 @@
     {
         border: 1px solid #ED1C24;
     }
+    .k-textarea.isError
+    {
+        border: 1px solid #ED1C24;
+    }
     .errTab {
         background-color: #FFFFFF;
         color: #ED1C24;
@@ -139,6 +143,10 @@
         border-bottom: 1px solid #0071C5;
     }
     .k-textbox.isDirty
+    {
+        border-bottom: 1px solid #0071C5;
+    }
+    .k-textarea.isDirty
     {
         border-bottom: 1px solid #0071C5;
     }
