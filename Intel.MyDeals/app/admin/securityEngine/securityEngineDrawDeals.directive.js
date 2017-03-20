@@ -83,25 +83,24 @@ function securityEngineDrawDeals($http, lookupsService, $compile, $templateCache
 		var title = "Deal Type: " + dealType + "\nRole: " + role + "\nStage: " + stgName + "\n";
 		var atrbKey = atrbCd + "/" + dealType + "/" + role + "/" + stgName;
 
-		/* Get classes and innerIcons */
 		// Deal Read Only
-		if (mappingKey === "ATRB_READ_ONLY" && vm.secAtrbUtil.securityMappings["C_UPDATE_DEAL"][atrbKey.replace(atrbCd, dummyAttrName)] === undefined) {
+		if (mappingKey === "ATRB_READ_ONLY" && (vm.secAtrbUtil.securityMappings["C_UPDATE_DEAL"] === undefined || vm.secAtrbUtil.securityMappings["C_UPDATE_DEAL"][atrbKey.replace(atrbCd, dummyAttrName)] === undefined)) {
 			isClickable = true;
 			title += "Deal is Read Only\n";
-			extraClasses.push("atrbbasecolorDealReadOnly");
 			// TODO: add icons in once rules are implemented
+			//extraClasses.push("atrbbasecolorDealReadOnly");
 			//innerIcon += "<i class='fa fa-lock'></i>";
 		}
+
+		/* Get classes and innerIcons */
 		// Not in Deal Type
-		else if (vm.currentTabMode === vm.tabModeEnum.AtrbSecurity && atrbCd !== dummyAttrName && vm.dealTypeAtrbs[vm.filtered.objType.Alias][dealType] !== undefined && !vm.dealTypeAtrbs[vm.filtered.objType.Alias][dealType].contains(atrbCd)) {
+		if (vm.currentTabMode === vm.tabModeEnum.AtrbSecurity && atrbCd !== dummyAttrName && vm.dealTypeAtrbs[vm.filtered.objType.Alias][dealType] !== undefined && !vm.dealTypeAtrbs[vm.filtered.objType.Alias][dealType].contains(atrbCd)) {
 			extraClasses.push("atrbbasecolorNotInDealType");
-			innerIcon += "&nbsp;";
 		}
 		else if (actionCollection !== undefined) {
 			//var rules = secAtrbUtil.ruleMappings[atrbKey]; // TODO: Implement Rules
 			if (actionCollection[atrbKey] !== undefined) { // Normal MetaData
 				isClickable = true;
-				innerIcon += "&nbsp;";
 			}
 				//// TODO: Implement Rules
 				//// Custom Rules
@@ -124,14 +123,12 @@ function securityEngineDrawDeals($http, lookupsService, $compile, $templateCache
 				//}
 			else {
 				isClickable = true;
-				innerIcon += "&nbsp;";
 				extraClasses.push("atrbbasedisabled");
 			}
 		}
 			// atrbbasedisabled
 		else {
 			isClickable = true;
-			innerIcon += "&nbsp;";
 			extraClasses.push("atrbbasedisabled");
 		}
 
