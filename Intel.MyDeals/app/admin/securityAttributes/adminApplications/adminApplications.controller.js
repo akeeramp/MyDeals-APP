@@ -39,8 +39,7 @@
                     };
 
                     confirmationModal.showModal({}, modalOptions).then(function (result) {
-                        ApplicationsService.deleteApplication(e.data.models[0].APPL_SID).then(function (response) {
-                            $scope.grid.removeRow();
+                    	ApplicationsService.deleteApplication(e.data.models[0].APP_SID).then(function (response) {
                             e.success(response.data);
                             logger.success("Delete successful.");
                         }, function (response) {
@@ -67,7 +66,7 @@
                     id: "APP_SID",
                     fields: {
                         APP_SID: { editable: false, nullable: true },
-                        APP_CD: { validation: { required: true } },
+                        APP_NM: { validation: { required: true } },
                         APP_DESC: { validation: { required: true } },
                         APP_SUITE: { validation: { required: true } },
                         ACTV_IND: { type: "boolean" }
@@ -93,7 +92,7 @@
             },
             destroy: function (e) {
                 var commandCell = e.container.find("td:first");
-                commandCell.html('<a class="k-grid-update" href="#"><span class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span class="k-icon k-i-cancel"></span></a>');
+                commandCell.html('<a class="k-grid-delete" href="#"><span class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span class="k-icon k-i-cancel"></span></a>');
             },
             cancel: function (e) {
                 vm.validationMessage = '';
@@ -124,7 +123,7 @@
                 editor: gridUtils.boolEditor,
                 attributes: { style: "text-align: center;" }
             }, {
-                field: "APP_CD",
+                field: "APP_NM",
                 title: "Name",
                 filterable: { multi: true, search: true }
             }, {

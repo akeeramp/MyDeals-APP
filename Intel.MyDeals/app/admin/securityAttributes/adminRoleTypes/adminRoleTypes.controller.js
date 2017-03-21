@@ -39,8 +39,7 @@
                     };
 
                     confirmationModal.showModal({}, modalOptions).then(function (result) {
-                        RoleTypesService.deleteRoleType(e.data.models[0].ROLE_TYPE_SID).then(function (response) {
-                            $scope.grid.removeRow();
+                        RoleTypesService.deleteRoleType(e.data.models[0].ROLE_SID).then(function (response) {
                             e.success(response.data);
                             logger.success("Delete successful.");
                         }, function (response) {
@@ -64,14 +63,14 @@
             pageSize: 20,
             schema: {
                 model: {
-                    id: "ROLE_TYPE_SID",
+                    id: "ROLE_SID",
                     fields: {
-                        ROLE_TYPE_SID: { editable: false, nullable: true },
+                        ROLE_SID: { editable: false, nullable: true },
                         APP_SID: { type: "number", validation: { format: "{0:n0}", decimals: 0, required: true } },
-                        ROLE_TYPE_CD: { validation: { required: true } },
-                        ROLE_TYPE_DSPLY_CD: { validation: { required: true } },
-                        ROLE_TYPE_DESC: { validation: { required: true } },
-                        ROLE_TIER_CD: { validation: { required: true } },
+                        ROLE_NM: { validation: { required: true } },
+                        ROLE_DSPLY_NM: { validation: { required: true } },
+                        ROLE_DESC: { validation: { required: true } },
+                        ROLE_TIER_NM: { validation: { required: true } },
                         IS_SNGL_SLCT: { type: "boolean" },
                         ACTV_IND: { type: "boolean" }
                     }
@@ -96,7 +95,7 @@
             },
             destroy: function (e) {
                 var commandCell = e.container.find("td:first");
-                commandCell.html('<a class="k-grid-update" href="#"><span class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span class="k-icon k-i-cancel"></span></a>');
+                commandCell.html('<a class="k-grid-delete" href="#"><span class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span class="k-icon k-i-cancel"></span></a>');
             },
             pageable: {
                 refresh: true,
@@ -106,14 +105,14 @@
                 {
                     command: [
                         { name: "edit", template: "<a class='k-grid-edit' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-edit'></span></a>" },
-                        { name: "destroy", template: "<a class='k-grid-delete' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-close'></span></a>" }
+						{ name: "destroy", template: "<a class='k-grid-delete' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-close'></span></a>" }
                     ],
                     title: " ",
                     width: "6%",
                     attributes: { style: "text-align: center;" }
                 },
             {
-                field: "ROLE_TYPE_SID",
+                field: "ROLE_SID",
                 title: "ID",
                 hidden: true
             }, {
@@ -135,19 +134,19 @@
                 title: "Application ID",
                 filterable: { multi: true, search: true }
             }, {
-                field: "ROLE_TYPE_CD",
+                field: "ROLE_NM",
                 title: "Name",
                 filterable: { multi: true, search: true }
             }, {
-                field: "ROLE_TYPE_DSPLY_CD",
+                field: "ROLE_DSPLY_NM",
                 title: "Display Name",
                 filterable: { multi: true, search: true }
             }, {
-                field: "ROLE_TYPE_DESC",
+                field: "ROLE_DESC",
                 title: "Description",
                 filterable: { multi: true, search: true }
             }, {
-                field: "ROLE_TIER_CD",
+                field: "ROLE_TIER_NM",
                 title: "Tier",
                 filterable: { multi: true, search: true }
             }]

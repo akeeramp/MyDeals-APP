@@ -39,8 +39,7 @@
                     };
 
                     confirmationModal.showModal({}, modalOptions).then(function (result) {
-                        SecurityActionsService.deleteAction(e.data.models[0].ACTN_SID).then(function (response) {
-                            $scope.grid.removeRow();
+                        SecurityActionsService.deleteAction(e.data.models[0].SECUR_ACTN_SID).then(function (response) {
                             e.success(response.data);
                             logger.success("Delete successful.");
                         }, function (response) {
@@ -64,13 +63,12 @@
             pageSize: 20,
             schema: {
                 model: {
-                    id: "ACTN_SID",
+                    id: "SECUR_ACTN_SID",
                     fields: {
-                        ACTN_SID: { editable: false, nullable: true },
-                        ACTN_CD: { validation: { required: true } },
+                        SECUR_ACTN_SID: { editable: false, nullable: true },
+                        ACTN_NM: { validation: { required: true } },
                         ACTN_DESC: { validation: { required: true } },
-                        ACTN_CAT_CD: { validation: { required: true } },
-                        WFSTG_ACTN_CD: {}
+                        ACTN_CAT_CD: { validation: { required: true } }
                     }
                 }
             }
@@ -93,7 +91,7 @@
             },
             destroy: function (e) {
                 var commandCell = e.container.find("td:first");
-                commandCell.html('<a class="k-grid-update" href="#"><span class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span class="k-icon k-i-cancel"></span></a>');
+                commandCell.html('<a class="k-grid-delete" href="#"><span class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span class="k-icon k-i-cancel"></span></a>');
             },
             pageable: {
                 refresh: true,
@@ -110,11 +108,11 @@
                     attributes: { style: "text-align: center;" }
                 },
             {
-                field: "ACTN_SID",
+                field: "SECUR_ACTN_SID",
                 title: "ID",
                 hidden: true
             }, {
-                field: "ACTN_CD",
+                field: "ACTN_NM",
                 title: "Name",
                 filterable: { multi: true, search: true }
             }, {
@@ -124,10 +122,6 @@
             }, {
                 field: "ACTN_CAT_CD",
                 title: "Category",
-                filterable: { multi: true, search: true }
-            }, {
-                field: "WFSTG_ACTN_CD",
-                title: "Stage",
                 filterable: { multi: true, search: true }
             }]
         }

@@ -40,8 +40,7 @@
                     };
 
                     confirmationModal.showModal({}, modalOptions).then(function (result) {
-                        DealTypesService.deleteDealType(e.data.models[0].DEAL_TYPE_SID).then(function (response) {
-                            $scope.grid.removeRow();
+                        DealTypesService.deleteDealType(e.data.models[0].OBJ_SET_TYPE_SID).then(function (response) {
                             e.success(response.data);
                             logger.success("Delete successful.");
                         }, function (response) {
@@ -65,9 +64,9 @@
             pageSize: 20,
             schema: {
                 model: {
-                    id: "DEAL_TYPE_SID",
+                    id: "OBJ_SET_TYPE_SID",
                     fields: {
-                        DEAL_TYPE_SID: { editable: false, nullable: true },
+                        OBJ_SET_TYPE_SID: { editable: false, nullable: true },
                         DEAL_ATRB_SID: { type: "number" , validation: { required: true } },
                         DEAL_TYPE_CD: { validation: { required: true } },
                         DEAL_TYPE_DESC: { validation: { required: true } },
@@ -97,7 +96,7 @@
             },
             destroy: function (e) {
                 var commandCell = e.container.find("td:first");
-                commandCell.html('<a class="k-grid-update" href="#"><span class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span class="k-icon k-i-cancel"></span></a>');
+                commandCell.html('<a class="k-grid-delete" href="#"><span class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span class="k-icon k-i-cancel"></span></a>');
             },
             pageable: {
                 refresh: true,

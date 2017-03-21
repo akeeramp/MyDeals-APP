@@ -229,8 +229,7 @@ namespace Intel.MyDeals.DataLibrary
             }
 
             // Update Cache
-            DataCollections.ClearCache("_getSecurityActions");
-            DataCollections.LoadCache("_getSecurityActions");
+            DataCollections.RecycleCache("_getSecurityActions");
             return true;
         }
 
@@ -252,8 +251,7 @@ namespace Intel.MyDeals.DataLibrary
             SecurityActions result = CallManageActionSP(action, state).FirstOrDefault();
 
             // Update Cache
-            DataCollections.ClearCache("_getSecurityActions");
-            DataCollections.LoadCache("_getSecurityActions");
+            DataCollections.RecycleCache("_getSecurityActions");
 
             return result;
         }
@@ -342,8 +340,7 @@ namespace Intel.MyDeals.DataLibrary
             }
 
             // Update Cache
-            DataCollections.ClearCache("_getAdminApplications");
-            DataCollections.LoadCache("_getAdminApplications");
+            DataCollections.RecycleCache("_getAdminApplications");
             return true;
         }
 
@@ -365,8 +362,7 @@ namespace Intel.MyDeals.DataLibrary
             AdminApplications result = CallManageAdminApplicationSP(app, state).FirstOrDefault();
 
             // Update Cache
-            DataCollections.ClearCache("_getAdminApplications");
-            DataCollections.LoadCache("_getAdminApplications");
+            DataCollections.RecycleCache("_getAdminApplications");
 
             return result;
         }
@@ -450,8 +446,7 @@ namespace Intel.MyDeals.DataLibrary
                 throw;
             }
             // Update Cache
-            DataCollections.ClearCache("_getAdminDealTypes");
-            DataCollections.LoadCache("_getAdminDealTypes");
+            DataCollections.RecycleCache("_getAdminDealTypes");
             return true;
         }
 
@@ -473,8 +468,7 @@ namespace Intel.MyDeals.DataLibrary
             AdminDealType result = CallManageAdminDealTypeSP(dealType, state).FirstOrDefault();
 
             // Update Cache
-            DataCollections.ClearCache("_getAdminDealTypes");
-            DataCollections.LoadCache("_getAdminDealTypes");
+            DataCollections.RecycleCache("_getAdminDealTypes");
 
             return result;
         }
@@ -566,8 +560,7 @@ namespace Intel.MyDeals.DataLibrary
                 throw;
             }
             // Update Cache
-            DataCollections.ClearCache("_getAdminRoleTypes");
-            DataCollections.LoadCache("_getAdminRoleTypes");
+            DataCollections.RecycleCache("_getAdminRoleTypes");
             return true;
         }
 
@@ -589,8 +582,7 @@ namespace Intel.MyDeals.DataLibrary
             AdminRoleType result = CallManageAdminRoleTypeSP(roleType, state).FirstOrDefault();
 
             // Update Cache
-            DataCollections.ClearCache("_getAdminRoleTypes");
-            DataCollections.LoadCache("_getAdminRoleTypes");
+            DataCollections.RecycleCache("_getAdminRoleTypes");
 
             return result;
         }
