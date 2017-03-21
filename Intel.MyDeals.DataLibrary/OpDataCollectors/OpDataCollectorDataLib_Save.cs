@@ -15,8 +15,6 @@ namespace Intel.MyDeals.DataLibrary
 {
     public partial class OpDataCollectorDataLib : IOpDataCollectorDataLib
     {
-
-
         public MyDealsData SaveMyDealsData(MyDealsData packets, int custId, bool batchMode)
         {
             // Save Data Cycle: Point 15
@@ -50,7 +48,6 @@ namespace Intel.MyDeals.DataLibrary
                 {
                     OpLogPerf.Log(ex);
                 }
-
 
                 if (groupCheck != null && groupCheck.Any())
                 {
@@ -92,7 +89,6 @@ namespace Intel.MyDeals.DataLibrary
                 throw;
             }
         }
-
 
         /// <summary>
         /// Write data packets and actions to dbo.MYDL_CL_WIP_ATRB and dbo.MYDL_CL_WIP_ACTN
@@ -179,7 +175,7 @@ namespace Intel.MyDeals.DataLibrary
             DataSet dsCheckConstraintErrors = null;
             try
             {
-                // Move the data from dbo.MYDL_CL_WIP_ATRB_TMP to dbo.MYDL_CL_WIP_ATRB 
+                // Move the data from dbo.MYDL_CL_WIP_ATRB_TMP to dbo.MYDL_CL_WIP_ATRB
                 DataAccess.ExecuteDataSet(new Procs.dbo.PR_MYDL_TMP_TO_WIP_ATRB()
                 {
                     in_emp_wwid = wwid,
@@ -222,7 +218,6 @@ namespace Intel.MyDeals.DataLibrary
 
             OpLogPerf.Log("DealDataLib.Save:ImportOpDataPackets - Done: deal.PR_MYDL_TMP_TO_WIP_ATRB.");
         }
-
 
         private MyDealsData ActionDealsBatch(IEnumerable<OpDataPacket<OpDataElementType>> packets, int wwid)
         {
@@ -281,6 +276,7 @@ namespace Intel.MyDeals.DataLibrary
                         case DealSaveActionCodes.MESSAGE:
                             WriteMessage(ret[objSet], rdr);
                             break;
+
                         case DealSaveActionCodes.ID_CHANGE:
                             {
                                 int newId = WriteIdChangeAction(ret[objSet], rdr);
@@ -300,14 +296,12 @@ namespace Intel.MyDeals.DataLibrary
                             }
                     }
                 }
-
             }
 
             ret.RemoveEmptyPackets();
 
             return ret;
         }
-
 
         /// <summary>
         /// Perform the requested actions for a deal
@@ -368,6 +362,7 @@ namespace Intel.MyDeals.DataLibrary
                     }
 
                     // TODO: Make plug-in-able action handlers...
+
                     #region MESSAGE
 
                     OpLogPerf.Log("DealDataLib.Save:ActionDeals - Post Processing MESSAGE: {0} '{1}'.", op.PacketType, op.BatchID);
@@ -377,7 +372,8 @@ namespace Intel.MyDeals.DataLibrary
                         processedActions.Add((int)dr[Entities.deal.MYDL_CL_WIP_ACTN.WIP_ACTN_SID]);
                         WriteMessage(retPack, new DataRowRecordAdapter(dr));
                     }
-                    #endregion
+
+                    #endregion MESSAGE
 
                     #region ID_CHANGE
 
@@ -395,7 +391,7 @@ namespace Intel.MyDeals.DataLibrary
                         //}
                     }
 
-                    #endregion
+                    #endregion ID_CHANGE
 
                     #region ATRB_DELETED
 
@@ -411,16 +407,14 @@ namespace Intel.MyDeals.DataLibrary
                         WriteIDListAction(retPack, new DataRowRecordAdapter(dr), OpMsg.MessageType.Info, (string)dr[Entities.deal.MYDL_CL_WIP_ACTN.ACTN_NM]);
                     }
 
-                    #endregion
+                    #endregion ATRB_DELETED
                 }
 
                 OpLogPerf.Log("DealDataLib.Save:ActionDeals - Done: {0} '{1}'.", op.PacketType, op.BatchID);
             }
 
-
             return ret;
         }
-
 
         /// <summary>
         /// Perform a single action
@@ -441,17 +435,17 @@ namespace Intel.MyDeals.DataLibrary
             OpLogPerf.Log("DcsDealLib.TryNextAction - DBO.PR_GET_WIP_ACTN '{0}'.", batchId);
 
             // Get the list of actions...
-            var getActionCmd = new Procs.dbo.PR_GET_WIP_ACTN
+            var getActionCmd = new Procs.dbo.PR_MYDL_GET_WIP_ACTN
             {
-                BTCH_ID = batchId,
-                CSL_DELETE_ACTN_SID = string.Join(",", processedActions),
-                OMIT_ACTN_CD = string.Empty
+                in_btch_id = batchId,
+                in_csl_delete_actn_sid = string.Join(",", processedActions),
+                in_omit_actn_nm = string.Empty
             };
 
             //... after the last performed action
             if (sort != null)
             {
-                getActionCmd.AFTER_SRT_ORD = (int)sort;
+                getActionCmd.in_after_srt_ord = (int)sort;
             }
 
             var dtact = DataAccess.ExecuteDataTable(getActionCmd);
@@ -492,7 +486,6 @@ namespace Intel.MyDeals.DataLibrary
 
             if (actionId != null)
             {
-
                 OpLogPerf.Log(
                     "Processing Action. {0} for {1} @ {2}",
                     actionCode,
@@ -529,7 +522,6 @@ namespace Intel.MyDeals.DataLibrary
 
             return false;
         }
-
 
         private void WriteMessage(OpDataPacket<OpDataElementType> odp, IDataRecord record)
         {
@@ -580,10 +572,8 @@ namespace Intel.MyDeals.DataLibrary
             //    }
             //}
 
-
             odp.Messages.Write(m);
         }
-
 
         private int WriteIdChangeAction(OpDataPacket<OpDataElementType> odp, IDataRecord record)
         {
@@ -607,7 +597,6 @@ namespace Intel.MyDeals.DataLibrary
 
             return newId;
         }
-
 
         private void WriteIDListAction(OpDataPacket<OpDataElementType> odp, IDataRecord record, OpMsg.MessageType msgType, string actnNm)
         {
@@ -640,6 +629,5 @@ namespace Intel.MyDeals.DataLibrary
 
             odp.Actions.Add(oda);
         }
-
     }
 }
