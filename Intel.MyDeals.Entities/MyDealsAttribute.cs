@@ -46,6 +46,11 @@ namespace Intel.MyDeals.Entities
             //    .ToArray();
         }
 
+        public string GetFormatMask()
+        {
+            return FRMT_MSK;
+        }
+
         public bool Equals(MyDealsAttribute other)
         {
             return ATRB_SID == other?.ATRB_SID;

@@ -44,7 +44,7 @@
 		"PIVOT_MSK", //"PVT_MSK",
 		"ARTB_ACTV_IND",
 		"ACTV_IND",
-		"FMT_MSK"
+		"FRMT_MSK"
 
     };
 

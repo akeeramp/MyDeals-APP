@@ -3,9 +3,7 @@
 <#@ Assembly Name="System.Core.dll" #>
 <#@ Assembly Name="System.Windows.Forms.dll" #>
 <#@ Assembly Name="System.Data" #>
-<#@ Assembly Name="System.XML" #>
-<#@ Assembly Name="$(SolutionDir)\Shared Libraries\Intel.Opaque.Templating.dll" #>
-<#@ import namespace="Intel.Opaque.Templating" #>
+<#@ Assembly Name="System.Xml" #>
 <#@ import namespace="System" #>
 <#@ import namespace="System.Collections" #>
 <#@ import namespace="System.Collections.Generic" #>
@@ -14,14 +12,44 @@
 <#@ import namespace="System.Data.Common" #>
 <#@ import namespace="System.Data.SqlClient" #>
 <#@ import namespace="System.Text" #>
+<#@ import namespace="Intel.Opaque.Templating" #>
+<#@ Assembly Name="$(SolutionDir)\Intel.MyDeals.DataAccessLib\bin\Debug\Intel.Opaque.Templating.dll" #>
 
 <#
-
-	
 	// DEVELOPER: Change this to be the namespace to create the SP classes in 
 	const string outputNameSpace = "Intel.MyDeals.Entities";
 	const string TAB = "\t";
-	
+	SqlConnection conn;
+	SqlCommand cmd;
+
+	conn = new SqlConnection(
+		@"Database=MYDEALS;Server=EG1RDMDBDEV01\DEALSDEV,3180;integrated security=SSPI;"
+		);
+
+	conn.Open();
+
+	//-- Write File Header Here --------------------------------------------------------------------------
+
+	WriteLine("/*");
+	WriteLine("File Updated: {0}", DateTime.Now);
+	WriteLine("On: {0}", Environment.MachineName);
+	WriteLine("From: {0}, {1}", conn.DataSource, conn.Database);
+
+	WriteLine("*/");
+
+	WriteLine("using System;");
+	WriteLine("using System.Collections.Generic;");
+	WriteLine("using System.Linq;");
+	WriteLine("using Intel.Opaque.Data;");
+	WriteLine("using Intel.MyDeals.Entities;");
+	WriteLine("");
+
+	WriteLine("namespace {0} {{", outputNameSpace);
+
+	WriteLine("");
+	PushIndent(TAB);
+	//-- Sections Data ------------------------------------------------------------------------------------
+
 
 //	var dbobjects = new DBObjects();
 //
@@ -66,7 +94,7 @@
 //	[DOT_NET_DATA_TYPE],
 //	[ATRB_TGT_COL],
 //	[SQL_DATA_TYPE_FQ],
-//	[FMT_MSK],
+//	[FRMT_MSK],
 //	[ATRB_MAX_LEN],
 //FROM meta.VW_ATRB_MSTR (nolock)
 //ORDER BY ATRB_CD
@@ -132,17 +160,6 @@
 //	WriteLine(dbobjects.BoilerPlateDetails);
 //	WriteLine("");
 
-	WriteLine(@"
-using System;
-using System.Linq;
-using Intel.Opaque.Data;
-using Intel.Opaque.Tools;
-");
-
-	WriteLine("");
-	WriteLine("namespace {0} {{", outputNameSpace);
-	PushIndent(TAB);
-	WriteLine("");
 
 
 //	WriteLine("internal static class KeyWraperConst {");
@@ -345,7 +362,7 @@ using Intel.Opaque.Tools;
 //			WriteLine("/// Label:  \"{0}\"", ar["ATRB_LBL"]);
 //			WriteLine("/// SQL Type: {0}", ar["SQL_DATA_TYPE_FQ"]);
 //			WriteLine("/// Col: {0}", ar["ATRB_TGT_COL"]);
-//			WriteLine("/// Format: {0}", ar["FMT_MSK"]);
+//			WriteLine("/// Format: {0}", ar["FRMT_MSK"]);
 //			WriteLine("///</summary>");
 //        }
 //		
@@ -603,7 +620,181 @@ using Intel.Opaque.Tools;
 //	PopIndent();
 //	WriteLine("}"); // End Class
 
+
+
+// INSERT NEW ATRB CLASS HERE
+	WriteLine("");
+	PushIndent(TAB);
+	//-- AttributeCodes -----------------------------------------------------------------------------------
+    WriteLine("//-- AttributeCodes -----------------------------------------------------------------------------------");
+	WriteLine("");
+
+	// This connection string MUST point to production.  The whole reason we can support this file is
+	// becauase we know the const values are hard coded in produciton (so we don't have to worry about
+	// identity insert sequencing issues).
+	var dbobjects = new DBObjects(
+			//string.Format(@"Database=CDMS;Server=CP1CIAS-PD\CP1CIAS,3180;integrated security=SSPI;")
+			string.Format(@"Database=MYDEALS;Server=EG1RDMDBDEV01\DEALSDEV,3180;integrated security=SSPI;")
+		);
+
+	var atrb_table = dbobjects.ExecuteDataSet(@"
+		SELECT 
+			[ATRB_SID],
+			[ATRB_CD] as [ATRB_COL_NM],
+			[ATRB_DESC],
+			[ATRB_LBL],
+			[ATRB_MAX_LEN],
+			[DIM_SID],
+			[DIM_CD],
+			[DATA_TYPE_CD],
+			[UI_TYPE_CD],
+			[DOT_NET_DATA_TYPE],
+			[FRMT_MSK],
+			[TGT_COL_TYPE]
+		FROM dbo.VW_ATRB_MSTR (nolock)
+		ORDER BY ATRB_CD
+	").Tables[0];
+
+	var cols = atrb_table.Columns.OfType<DataColumn>().OrderBy(dc=>dc.ColumnName.ToUpper());
+
+//	var matched_columns = from rc in cols
+//			join pn in typeof(MyDealsAttribute).GetProperties().Where(pi => pi.CanRead && pi.CanWrite)
+ //           on rc.ColumnName equals pn.Name.Trim().ToUpper()
+ //           select new 
+//			{ 
+//				col = rc, 
+ //               pifo = pn
+  //          };
+
+//	Dictionary<string, string> ColumnNameMap = new Dictionary<string, string>();
+//	foreach(var aty in matched_columns)
+//	{
+//		ColumnNameMap[aty.col.ColumnName] = aty.pifo.Name;
+//   }
+
+	foreach(DataRow dr in atrb_table.Rows)
+	{
+		int max_len = (dr.IsNull("ATRB_MAX_LEN") ? 0 : (int)dr["ATRB_MAX_LEN"]);
+
+		List<string> summary_messages = new List<string>();
+		summary_messages.Add(String.Format("ATRB_SID = {0}", dr["ATRB_SID"]));
+		summary_messages.Add(String.Format("Type = {0}", dr["DOT_NET_DATA_TYPE"]));
+		if(max_len > 0)
+		{
+			summary_messages.Add(String.Format("Max Length = {0}", max_len));
+        }
+
+		WriteSummary(summary_messages.ToArray());
+
+		WriteLine("public static class {0}", TemplateTools.CSharpIfyName(String.Format("{0}", dr["ATRB_COL_NM"])));
+		WriteLine("{");
+		PushIndent(TAB);
+		WriteLine("");
+
+		Dictionary<string, string> ValueMap = new Dictionary<string, string>();
+
+		foreach(DataColumn col in cols)
+		{
+			string value = String.Format("{0}", dr[col]);
+			string data_type = TemplateTools.ToDataTypeString(col.DataType, false);
+
+			WriteSummary((String.IsNullOrEmpty(value) ? "(Null or Blank)" : value));
+
+			if(string.IsNullOrEmpty(value))
+			{
+				value = String.Format("default({0})", data_type);
+			} 
+			else if (col.ColumnName == "DOT_NET_DATA_TYPE")
+			{
+				ValueMap[col.ColumnName] = String.Format("\"{0}\"", value.Replace(@"""", @"\"""));
+
+				// Special Case
+				WriteLine("public static readonly System.Type {0} = System.Type.GetType(\"{1}\", false);", 
+					TemplateTools.CSharpIfyName(string.Format("{0}", col.ColumnName)),
+					value
+				);
+			
+				continue;
+			}
+			else if (col.DataType == typeof(string))
+			{
+				value = String.Format("\"{0}\"", value.Replace(@"""", @"\"""));
+			}
+			else if (col.DataType == typeof(bool))
+			{
+				value = value.ToLower();
+			}
+
+			ValueMap[col.ColumnName] = value;
+
+			WriteLine("public const {0} {1} = {2};", 
+				data_type, 
+				TemplateTools.CSharpIfyName(string.Format("{0}", col.ColumnName)),
+				value
+			);
+		}
+
+		List<string> param_constructor_values = new List<string>();
+		foreach (DataColumn col in cols) //DataColumn col in cols // var mc in matched_columns
+        {
+            param_constructor_values.Add(String.Format("{0} = {1}",
+				col.ColumnName,
+				ValueMap[col.ColumnName]
+			));			
+        }
+
+		WriteSummary("Get this type as a DcsAttribute instance class.");
+		WriteLine("public static MyDealsAttribute AsMyDealsAttribute()");
+		WriteLine("{");
+		PushIndent(TAB);
+			WriteLine("return new MyDealsAttribute(){");
+			Write("\t");
+			WriteLine(String.Join("," + Environment.NewLine + "\t", param_constructor_values));
+			WriteLine("};"); // AsMyDealsAttribute
+		PopIndent();
+		WriteLine("}"); // AsMyDealsAttribute
+
+
+		WriteLine("");
+		PopIndent();
+		WriteLine("}"); // End Class
+	}
+
+
+
+
+// END ATRB CLASS
+
+	WriteLine("");
 	PopIndent();
 	WriteLine("}"); // End NameSpace
+
+#>
+
+<#+
+// End of file
+//--------------------------------------------------------------------------------------------------
+// Start helper classes/functions
+
+
+	// Write a SP class to the file.  Note that I chose the WriteLine() method over the in-line for two
+	// key reasons, 1) easier to manage tabs, and 2) easier to read
+	public void WriteSummary(params string[] lines)
+	{
+		WriteLine("");
+
+		if(lines ==null || !lines.Any()) { return; }
+
+		//WriteLine("#if DEBUG"); // Thought this might help keep the assembly smaller, nope.
+		
+		WriteLine("/// <summary>");
+		foreach(string line in lines)
+		{
+			WriteLine(String.Format("/// {0}", line));
+        }
+		WriteLine("/// </summary>");
+		
+		//WriteLine("#endif");
+	}
 
 #>
