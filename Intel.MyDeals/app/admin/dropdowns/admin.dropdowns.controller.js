@@ -226,10 +226,10 @@
                             string: {
                                 eq: "Is equal to",
                                 neq: "Not equal to",
-                                startswith: "Starts with",
-                                endswith: "Ends with",
-                                contains: "Contains",
-                                doesnotcontain: "Does not contain",
+                                //startswith: "Starts with",
+                                //endswith: "Ends with",
+                                //contains: "Contains",
+                                //doesnotcontain: "Does not contain",
                                 isempty: "Is empty"
                             }
                         }
@@ -263,10 +263,10 @@
                             string: {
                                 eq: "Is equal to",
                                 neq: "Not equal to",
-                                startswith: "Starts with",
-                                endswith: "Ends with",
-                                contains: "Contains",
-                                doesnotcontain: "Does not contain",
+                                //startswith: "Starts with",
+                                //endswith: "Ends with",
+                                //contains: "Contains",
+                                //doesnotcontain: "Does not contain",
                                 isempty: "Is empty"
                             }
                         }
@@ -291,7 +291,7 @@
         }
 
         function dealtypeFilter(element) {
-            element.kendoComboBox({
+            element.kendoDropDownList({
                 dataTextField: "dropdownName",
                 dataValueField: "dropdownID",
                 dataSource: vm.dealtypeDataSource
@@ -299,7 +299,7 @@
         }
 
         function groupFilter(element) {
-            element.kendoComboBox({
+            element.kendoDropDownList({
                 dataTextField: "dropdownName",
                 dataValueField: "dropdownID",
                 dataSource: vm.groupsDataSource
