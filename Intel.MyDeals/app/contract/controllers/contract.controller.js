@@ -2,9 +2,9 @@
     .module('app.contract')
     .controller('ContractController', ContractController);
 
-ContractController.$inject = ['$scope', '$state', 'contractData', 'templateData', 'objsetService', 'templatesService', 'logger', '$uibModal', '$timeout', '$window', '$location', '$rootScope', 'confirmationModal', 'dataService', 'customerService', 'contractManagerConstants'];
+ContractController.$inject = ['$scope', '$state', 'contractData','isNewContract', 'templateData', 'objsetService', 'templatesService', 'logger', '$uibModal', '$timeout', '$window', '$location', '$rootScope', 'confirmationModal', 'dataService', 'customerService', 'contractManagerConstants'];
 
-function ContractController($scope, $state, contractData, templateData, objsetService, templatesService, logger, $uibModal, $timeout, $window, $location, $rootScope, confirmationModal, dataService, customerService, contractManagerConstants) {
+function ContractController($scope, $state, contractData,isNewContract, templateData, objsetService, templatesService, logger, $uibModal, $timeout, $window, $location, $rootScope, confirmationModal, dataService, customerService, contractManagerConstants) {
     // store template information
     //
     $scope.templates = $scope.templates || templateData.data;
@@ -43,6 +43,14 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
     // populate the contract data upon entry... If multiple controller instances are called, reference the initial instance
     //
     $scope.contractData = $scope.contractData || $scope.initContract(contractData);
+    $scope.isNewContract = isNewContract;
+    $scope.contractData.displayTitle = "";
+
+    var updateDisplayTitle = function() {
+        $scope.contractData.displayTitle = isNewContract ? $scope.contractData.TITLE :
+                $scope.contractData.TITLE + " - #" + $scope.contractData.DC_ID;
+    }
+    updateDisplayTitle();
 
     // Initialize current strategy and pricing table variables
     //
@@ -67,7 +75,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
 
         // Contract custom initializations and functions
         $scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV"] = $scope.contractData["CUST_ACCNT_DIV"] === undefined || $scope.contractData["CUST_ACCNT_DIV"] === "";
-        $scope.contractData._behaviors.isReadOnly["CUST_MBR_SID"] = $scope.contractData.DC_ID > 0;
+        $scope.contractData._behaviors.isReadOnly["CUST_MBR_SID"] = !$scope.isNewContract;
 
         // In case of existing contract back date reason and text is captured display them
         $scope.contractData._behaviors.isRequired["BACK_DATE_RSN"] = $scope.contractData.BACK_DATE_RSN !== "";
@@ -77,8 +85,9 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
 
         // By default set the CUST_ACCPT to pending(99) if new contract
         $scope.contractData.CUST_ACCPT = $scope.contractData.CUST_ACCPT == "" ? 99 : $scope.contractData.CUST_ACCPT;
+        $scope.contractData._behaviors.isHidden["C2A_DATA_C2A_ID"] = ($scope.contractData.CUST_ACCPT == 99);
 
-        // Set customer acceptance rules
+        // Set customer acceptance rulesc
         var setCustAcceptanceRules = function (newValue) {
             $scope.contractData._behaviors.isHidden["C2A_DATA_C2A_ID"] = (newValue == 99);
             $scope.contractData._behaviors.isRequired["C2A_DATA_C2A_ID"] = (newValue != 99) && (!hasUnSavedFiles && !hasFiles);
@@ -130,7 +139,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         }
 
         initiateCustDivCombobox();
-
+        var unwatchDivision = false;
         var setDefaultContractTitle = function (custDiv) {
             // if user has touched the Title do not set the title
             if ($scope.contractData.DC_ID <= 0 && custDiv !== ""
@@ -140,7 +149,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
                     $scope.contractData.START_QTR + " " + $scope.contractData.START_YR;
                 if ($scope.contractData.START_QTR != $scope.contractData.END_QTR
                     || $scope.contractData.START_YR != $scope.contractData.END_YR) {
-                    $scope.contractData.TITLE += "- Q" + $scope.contractData.END_QTR + " " + $scope.contractData.END_YR;
+                    defaultContractName += "- Q" + $scope.contractData.END_QTR + " " + $scope.contractData.END_YR;
                 }
 
                 $scope.contractData.TITLE = defaultContractName;
@@ -284,9 +293,9 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         }
 
         $timeout(function () {
-            $scope.contractData.DC_ID > 0 ? $scope.status = { 'isOpen': true } :
+            !$scope.isNewContract ? $scope.status = { 'isOpen': true } :
                 setCustAcceptanceRules($scope.contractData.CUST_ACCPT);
-        }, 1000);
+        }, 300);
     }
 
     // File save methods and variable
@@ -311,7 +320,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
             $(".k-upload-selected").hide();
         });
 
-        $scope.contractData._behaviors.isRequired["C2A_DATA_C2A_ID"] =$scope.contractData._behaviors.isError["C2A_DATA_C2A_ID"]= false;
+        $scope.contractData._behaviors.isRequired["C2A_DATA_C2A_ID"] = $scope.contractData._behaviors.isError["C2A_DATA_C2A_ID"]= false;
         $scope.contractData._behaviors.validMsg["C2A_DATA_C2A_ID"] = "";
         hasUnSavedFiles = true;
         $scope.contractData.AttachmentError = false;
@@ -343,8 +352,9 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
     var dataSource = new kendo.data.DataSource({
         transport: {
             read: function (e) {
-                if ($scope.contractData.DC_ID > 0) {
+                if (!$scope.isNewContract) {
                     logger.info("Loading contract attachments...");
+                    // TODO: Read only when hasFiles is true
                     dataService.get("/api/Files/GetFileAttachments/" + $scope.contractData.CUST_MBR_SID + "/" + 1 + "/" + $scope.contractData.DC_ID + "/CNTRCT")
                         .then(function (response) {
                             e.success(response.data);
@@ -441,8 +451,11 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
                 getCurrentQuarterDetails();
             }
 
-            if (oldValue["CUST_ACCNT_DIV"] !== newValue["CUST_ACCNT_DIV"]) {
-                setDefaultContractTitle(newValue["CUST_ACCNT_DIV"]);
+            if (oldValue["CUST_ACCNT_DIV"].toString() !== newValue["CUST_ACCNT_DIV"].toString()) {
+                if (!unwatchDivision) {
+                    setDefaultContractTitle(newValue["CUST_ACCNT_DIV"]);
+                }
+                unwatchDivision = false;
             }
 
             if (oldValue["START_QTR"] !== newValue["START_QTR"]
@@ -464,6 +477,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
             }
 
             if (oldValue["START_DT"] !== newValue["START_DT"]) {
+                if (moment(oldValue["START_DT"]).format('l') === moment(newValue["START_DT"]).format('l')) return;
                 pastDateConfirm(newValue["START_DT"], oldValue["START_DT"]);
                 if (!unWatchStartDate) {
                     updateQuarterByDates('START_DT', newValue["START_DT"]);
@@ -479,6 +493,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
             }
 
             if (oldValue["TITLE"] !== newValue["TITLE"]) {
+                updateDisplayTitle();
                 isDuplicateContractTitle(newValue["TITLE"]);
             }
 
@@ -495,7 +510,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
 
             if (oldValue["C2A_DATA_C2A_ID"] !== newValue["C2A_DATA_C2A_ID"]) {
                 $scope.contractData.IsAttachmentRequired = (newValue["C2A_DATA_C2A_ID"] === "");
-                $scope.contractData.AttachmentError = $scope.contractData.IsAttachmentRequired && (!hasUnSavedFiles && !hasFiles);
+                $scope.contractData.AttachmentError = ($scope.contractData.CUST_ACCPT != 99) && $scope.contractData.IsAttachmentRequired && (!hasUnSavedFiles && !hasFiles);
             }
 
             el._dirty = true;
@@ -848,15 +863,16 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
 
     $scope.checkForMessages = function (collection, key, data) {
         var isValid = true;
-
-        for (var i = 0; i < data.data[key].length; i++) {
-            if (data.data[key] !== undefined && data.data[key][i].DC_ID !== undefined && data.data[key][i].DC_ID === collection.DC_ID && data.data[key][i].warningMessages.length > 0) {
-                angular.forEach(data.data[key][i]._behaviors.ValidMsg,
-                function (value, key) {
-                    collection._behaviors.validMsg[key] = value;
-                    collection._behaviors.isError[key] = value !== "";
-                    isValid = false;
-                });
+        if (data.data[key] !== undefined){
+            for (var i = 0; i < data.data[key].length; i++) {
+                if (data.data[key][i].DC_ID !== undefined && data.data[key][i].DC_ID === collection.DC_ID && data.data[key][i].warningMessages.length > 0) {
+                    angular.forEach(data.data[key][i]._behaviors.ValidMsg,
+                    function (value, key) {
+                        collection._behaviors.validMsg[key] = value;
+                        collection._behaviors.isError[key] = value !== "";
+                        isValid = false;
+                    });
+                }
             }
         }
 
@@ -872,7 +888,8 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         var ct = $scope.contractData;
 
         // Convert customer division to '/' separated values
-        ct.CUST_ACCNT_DIV = $scope.contractData.CUST_ACCNT_DIV.toString().replace(",", "/");
+        ct.CUST_ACCNT_DIV = $scope.contractData.CUST_ACCNT_DIV.toString().replace(/,/g, '/');
+        unwatchDivision = true;
 
 
         // check for NEW contract
@@ -886,6 +903,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
                 //Check for errors
                 if (!$scope.checkForMessages(ct, "CNTRCT", data)) {
                     ct.CUST_ACCNT_DIV = ct.CUST_ACCNT_DIV.split("/");
+                    unwatchDivision = true;
                     logger.error("Could not create the contract.", data, "Save unsuccessful");
                     topbar.hide();
                     return;
@@ -906,6 +924,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
             function (result) {
                 logger.error("Could not create the contract.", response, response.statusText);
                 ct.CUST_ACCNT_DIV = ct.CUST_ACCNT_DIV.split("/");
+                unwatchDivision = true;
                 topbar.hide();
             }
         );

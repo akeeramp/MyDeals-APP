@@ -29,6 +29,8 @@
                                 }],
                                 templateData: ['$stateParams', 'templatesService', function ($stateParams, templatesService) {
                                     return templatesService.readTemplates();
+                                }],isNewContract: ['$stateParams', function ($stateParams) {
+                                    return $stateParams.cid <= 0;
                                 }]
                             }
                         }
