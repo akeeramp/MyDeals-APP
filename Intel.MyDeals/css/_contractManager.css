@@ -623,9 +623,17 @@
         font-size: 13px;
     }
 
+    .mb5 {
+        margin-bottom: 5px !important;
+    }
+
     .contract-detail-form h4 {
         color:#003C71;
-        font-weight:bold;
+        font-weight: 400;
+        font-size: 24px;
+    }
+    .contract-detail-form .panel-title a {
+        font-size: 17px;
     }
 
     .infospan{
@@ -654,10 +662,11 @@
     .contract-detail-form h6 {
         border-bottom: 1px solid #b1babf;
         color:#0071c5;
-        font-weight:bold;
-        margin-bottom: 0px !important;
-        margin-top: 0px !important;
+        font-weight: 400;
+        margin-bottom: 0 !important;
+        margin-top: 0 !important;
         padding-bottom:5px;
+        font-size: 18px;
     }
 
     .contract-detail-form h6.noBottemBorder {
@@ -678,7 +687,7 @@
     }
 
     .contract-detail-form {
-        padding: 0 20px 20px 20px;
+        padding: 0 20px 90px 20px;
     }
     .contract-detail-form .row {
         margin-bottom: 20px;

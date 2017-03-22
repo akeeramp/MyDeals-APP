@@ -1,10 +1,10 @@
 ﻿
-<div id="secBasicContainerWrapper">
+<div id="secBasicContainerWrapper" style="padding-bottom:130px;">
 
     <form novalidate dirty-tracking obj-type="contractData" class="contract-detail-form">
         <div class="row">
             <h4 class="col-md-3">Contract Details</h4>
-            <span class="col-md-2 infospan"><span> * </span>Indicates Required filed</span>
+            <span class="col-md-2 infospan"><span> * </span>Indicates Required fields</span>
         </div>
 
         <div class="row">
@@ -60,7 +60,7 @@
                 <div class="col-md-12 row">
                     <h6>Dates</h6>
                 </div>
-                <div class="col-md-11 row">
+                <div class="col-md-11 row mb5">
                     <div op-control-flat
                          ng-model="contractData"
                          op-cd="'START_DT'"
@@ -97,7 +97,7 @@
                              op-ui-mode="'VERTICAL'"></div>
                     </div>
                 </div>
-                <div class="col-md-11 row">
+                <div class="col-md-11 row mb5">
                     <div op-control-flat
                          ng-model="contractData"
                          op-cd="'END_DT'"
@@ -197,10 +197,10 @@
                 </div>
                 <div class="col-md-11 row">
                     <uib-accordion close-others="oneAtATime">
-                        <div uib-accordion-group class="panel-default accordion-panel" heading="File attachment details" is-open="status.isOpen">
-                            <div id="fileAttachmentGrid" kendo-grid k-ng-delay="status.isOpen" style="height:150px;"
-                                 footer-offset="500" options="fileAttachmentGridOptions"></div>
-                        </div>
+                    <div uib-accordion-group class="panel-default accordion-panel" heading="File attachment details" is-open="status.isOpen">
+                        <div id="fileAttachmentGrid" kendo-grid k-ng-delay="status.isOpen" style="height:150px;"
+                             footer-offset="500" options="fileAttachmentGridOptions"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -229,8 +229,11 @@
                 <button class="btn btn-primary" style="margin-left:30px;" type="button" ng-click="customContractValidate()">Save</button>
             </div>
         </div>
-
-        <!--<pre style="font-size: 9px; font-family: arial;">{{contractData | json}}</pre>-->
+        
+    <div style="position: fixed; left: 0px; bottom: 0px; height: 50px; width: 100%; background: #fafafa; border-top: 1px solid #eeeeee; padding: 7px 10px; text-align: right;">
+        <button class="btn btn-primary" style="margin-left:30px;" type="button" ng-click="customContractValidate()">Save Contract</button>
+    </div>
+    <!--<pre style="font-size: 9px; font-family: arial;">{{contractData | json}}</pre>-->
     </form>
 
 </div>

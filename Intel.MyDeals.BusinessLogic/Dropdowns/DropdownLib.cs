@@ -54,7 +54,7 @@ namespace Intel.MyDeals.BusinessLogic
         {
             atrbCd = atrbCd.ToUpper();
             return _dataCollectionsDataLib.GetBasicDropdowns().
-                Where(d => d.ATRB_CD.ToUpper() == atrbCd).OrderBy(d => d.ORD);
+                Where(d => d.ATRB_CD.ToUpper() == atrbCd && d.ACTV_IND).OrderBy(d => d.ORD);
         }
 
         /// <summary>

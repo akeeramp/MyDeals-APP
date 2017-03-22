@@ -16,8 +16,7 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     Title="Sync Read Only",
                     ActionRule = MyDcActions.SyncReadOnlyItems,
-                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL, OpDataElementType.DEAL},
-                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnSave, MyRulesTrigger.OnLoad}
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad}
                 },
                 new MyOpRule
                 {

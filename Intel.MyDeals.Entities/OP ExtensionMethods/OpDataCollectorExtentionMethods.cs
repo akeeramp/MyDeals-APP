@@ -195,7 +195,7 @@ namespace Intel.MyDeals.Entities
             Dictionary<string, bool> securityActionCache = null)
         {
             OpDataElementType dcType = (OpDataElementType)Enum.Parse(typeof(OpDataElementType), dc.DcType);
-			OpDataElementSetType objSetType = (OpDataElementSetType)Enum.Parse(typeof(OpDataElementSetType), dc.DataElementDict["OBJ_SET_TYPE_CD"].AtrbCd);
+            OpDataElementSetType objSetType = (OpDataElementSetType)Enum.Parse(typeof(OpDataElementSetType), dc.GetDataElementValue("OBJ_SET_TYPE_CD"));
 			string stg = dc.GetDataElementValue(AttributeCodes.DEAL_STG_CD);
             if (excludeList == null) excludeList = new string[] { };
 

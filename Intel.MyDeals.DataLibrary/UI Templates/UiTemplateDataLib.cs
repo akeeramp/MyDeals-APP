@@ -40,6 +40,8 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem { Id = 36, AtrbCd = AttributeCodes.NUM_OF_TIERS, ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER }, IsExtra = true, Label = "Number of Tiers", IsRequired = true, DataType = "string", UiType = "DROPDOWN", LookupUrl = "/api/Lookups/v1/GetLookups/DROPDOWN", LookupText = "DROP_DOWN", LookupValue = "DROP_DOWN", Template = "#=gridUtils.uiIconWrapper(data, 'DROPDOWN')#" });
             items.Add(new UiTemplateContainerItem { Id = 37, AtrbCd = "DROPDOWN", ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL }, ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER }, IsDefaultable = true, Label = "Dropdown sample", IsRequired = true, DataType = "string", UiType = "DROPDOWN", LookupUrl = "/api/Lookups/v1/GetLookups/DROPDOWN", LookupText = "DROP_DOWN", LookupValue = "DROP_DOWN", Template = "#=gridUtils.uiIconWrapper(data, 'DROPDOWN')#" });
 
+            var test = DEAL_STG_CD.AsMyDealsAttribute();
+
             return items;
         }
 
