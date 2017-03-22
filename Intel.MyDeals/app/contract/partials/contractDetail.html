@@ -194,7 +194,7 @@
                     <div ng-if="contractData.CUST_ACCPT != 99" class="decsription">{{constants.FileAttachementDesc}}</div>
                     <div ng-if="contractData.AttachmentError" class="err-Control">* field is required.</div>
                 </div>
-                <div class="col-md-11 row" ng-if="!isNewContract">
+                <div class="col-md-11 row">
                     <uib-accordion close-others="oneAtATime">
                     <div uib-accordion-group class="panel-default accordion-panel" heading="File attachment details" is-open="status.isOpen">
                         <div id="fileAttachmentGrid" kendo-grid k-ng-delay="status.isOpen" style="height:150px;"
@@ -228,7 +228,7 @@
                 <button class="btn btn-primary" style="margin-left:30px;" type="button" ng-click="customContractValidate()">Save</button>
             </div>
         </div>
-
+        
     <div style="position: fixed; left: 0px; bottom: 0px; height: 50px; width: 100%; background: #fafafa; border-top: 1px solid #eeeeee; padding: 7px 10px; text-align: right;">
         <button class="btn btn-primary" style="margin-left:30px;" type="button" ng-click="customContractValidate()">Save Contract</button>
     </div>
