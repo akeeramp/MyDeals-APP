@@ -72,6 +72,9 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
             objsetItem.SetBehavior("isRequired", de.AtrbCd, de.IsRequired);
             objsetItem.SetBehavior("isReadOnly", de.AtrbCd, de.IsReadOnly);
             objsetItem.SetBehavior("isHidden", de.AtrbCd, de.IsHidden);
+            objsetItem.SetBehavior("isError", de.AtrbCd, de.ValidationMessage != string.Empty);
+            objsetItem.SetBehavior("ValidMsg", de.AtrbCd, de.ValidationMessage);
+
         }
 
         public static int GetIntAtrb(this OpDataCollectorFlattenedItem items, string atrbCd)
@@ -84,13 +87,20 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
         }
 
 
-        private static void SetBehavior(this OpDataCollectorFlattenedItem objsetItem, string behaveType, string name, bool value)
+        private static void SetBehavior<T>(this OpDataCollectorFlattenedItem objsetItem, string behaveType, string name, T value)
         {
             if (!objsetItem.ContainsKey("_behaviors")) objsetItem["_behaviors"] = new OpDataCollectorFlattenedItem();
             OpDataCollectorFlattenedItem behav = (OpDataCollectorFlattenedItem)objsetItem["_behaviors"];
 
             if (!behav.ContainsKey(behaveType)) behav[behaveType] = new OpDataCollectorFlattenedItem();
-            if (value) ((OpDataCollectorFlattenedItem)behav[behaveType])[name] = true;
+            if (value.GetType().Name == "Boolean")
+            {
+                if (bool.Parse(value.ToString())) ((OpDataCollectorFlattenedItem) behav[behaveType])[name] = true;
+            }
+            else
+            {
+                if (value.ToString()!= string.Empty) ((OpDataCollectorFlattenedItem)behav[behaveType])[name] = value;
+            }
         }
 
         private static void PivotData(this OpDataCollectorFlattenedItem objsetItem, OpDataElement de, OpDataCollector dc, ObjSetPivotMode pivotMode, object dimKey)

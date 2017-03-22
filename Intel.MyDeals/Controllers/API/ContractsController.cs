@@ -54,7 +54,7 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [Route("SaveContract/{custId}")]
         [HttpPost]
-        public MyDealsData SaveContract(int custId, OpDataCollectorFlattenedList contracts)
+        public OpDataCollectorFlattenedDictList SaveContract(int custId, OpDataCollectorFlattenedList contracts)
         {
             return SafeExecutor(() => _contractsLib.SaveContract(contracts, custId)
                 , "Unable to save the Contract"
@@ -64,7 +64,7 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [Route("SaveFullContract/{custId}")]
         [HttpPost]
-        public MyDealsData SaveFullContract(int custId, OpDataCollectorFlattenedDictList fullContracts)
+        public OpDataCollectorFlattenedDictList SaveFullContract(int custId, OpDataCollectorFlattenedDictList fullContracts)
         {
             return SafeExecutor(() => _contractsLib.SaveFullContract(custId, fullContracts)
                 , "Unable to save the Contract"
@@ -74,7 +74,7 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [Route("SaveContractAndPricingTable/{custId}")]
         [HttpPost]
-        public MyDealsData SaveContractAndPricingTable(int custId, ContractTransferPacket contractAndPricingTable)
+        public OpDataCollectorFlattenedDictList SaveContractAndPricingTable(int custId, ContractTransferPacket contractAndPricingTable)
         {
             return SafeExecutor(() => _contractsLib.SaveContractAndPricingTable(custId, contractAndPricingTable)
                 , "Unable to save the Contract"

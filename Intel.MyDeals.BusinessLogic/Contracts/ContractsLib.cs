@@ -78,13 +78,13 @@ namespace Intel.MyDeals.BusinessLogic
         /// <param name="data"></param>
         /// <param name="custId">Must pass the customer id to prevent blocking</param>
         /// <returns>MyDealsData</returns>
-        public MyDealsData SaveContract(OpDataCollectorFlattenedList data, int custId)
+        public OpDataCollectorFlattenedDictList SaveContract(OpDataCollectorFlattenedList data, int custId)
         {
             // Save Data Cycle: Point 1
             return _dataCollectorLib.SavePackets(new OpDataCollectorFlattenedDictList
             {
                 [OpDataElementType.CNTRCT] = data
-            }, custId);
+            }, custId).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
         }
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace Intel.MyDeals.BusinessLogic
             return _dataCollectorLib.SavePackets(data, custId);
         }
 
-        public MyDealsData SaveFullContract(int custId, OpDataCollectorFlattenedDictList fullContracts)
+        public OpDataCollectorFlattenedDictList SaveFullContract(int custId, OpDataCollectorFlattenedDictList fullContracts)
         {
             return SaveContract(
                 fullContracts.ContainsKey(OpDataElementType.CNTRCT) ? fullContracts[OpDataElementType.CNTRCT] : new OpDataCollectorFlattenedList(),
@@ -124,10 +124,10 @@ namespace Intel.MyDeals.BusinessLogic
                 fullContracts.ContainsKey(OpDataElementType.PRC_TBL) ? fullContracts[OpDataElementType.PRC_TBL] : new OpDataCollectorFlattenedList(),
                 fullContracts.ContainsKey(OpDataElementType.PRC_TBL_ROW) ? fullContracts[OpDataElementType.PRC_TBL_ROW] : new OpDataCollectorFlattenedList(),
                 fullContracts.ContainsKey(OpDataElementType.WIP_DEAL) ? fullContracts[OpDataElementType.WIP_DEAL] : new OpDataCollectorFlattenedList(),
-                custId);
+                custId).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
         }
 
-        public MyDealsData SaveContractAndPricingTable(int custId, ContractTransferPacket contractAndStrategy)
+        public OpDataCollectorFlattenedDictList SaveContractAndPricingTable(int custId, ContractTransferPacket contractAndStrategy)
         {
             OpDataCollectorFlattenedList translatedFlattenedList = new OpDataCollectorFlattenedList();
 
@@ -148,7 +148,7 @@ namespace Intel.MyDeals.BusinessLogic
                 contractAndStrategy.PricingTable,
                 isWipDealSource ? translatedFlattenedList : contractAndStrategy.PricingTableRow,
                 isPrcTblSource ? translatedFlattenedList : contractAndStrategy.WipDeals,
-                custId);
+                custId).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
         }
 
         public OpMsg DeleteContract(int id)

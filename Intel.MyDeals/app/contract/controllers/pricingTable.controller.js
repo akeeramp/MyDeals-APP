@@ -52,6 +52,9 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
     //
     root.pricingTableData = pricingTableData.data;
 
+    if (root.pricingTableData.PRC_TBL_ROW === undefined) {
+        root.pricingTableData.PRC_TBL_ROW = [];
+    }
     if (root.pricingTableData.PRC_TBL_ROW[0] === undefined) {
         root.pricingTableData.PRC_TBL_ROW[0] = {};
     }
@@ -140,17 +143,17 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
                 }
 
                 // hide all columns based on templating
-                c = 0;
-                for (var i = 0; i < ptTemplate.columns.length; i++) {
-                    if (readonly.indexOf(ptTemplate.columns[i].field) >= 0) {
-                        sheet.range(String.fromCharCode(intA + c) + "1:" + String.fromCharCode(intA + c) + "200").enable(false);
-                    }
-                    if (ptTemplate.columns[i].hidden === true) {
-                        sheet.hideColumn(i);
-                    } else {
-                        c++;
-                    }
-                }
+                //c = 0;
+                //for (var i = 0; i < ptTemplate.columns.length; i++) {
+                //    if (readonly.indexOf(ptTemplate.columns[i].field) >= 0) {
+                //        sheet.range(String.fromCharCode(intA + c) + "1:" + String.fromCharCode(intA + c) + "200").enable(false);
+                //    }
+                //    if (ptTemplate.columns[i].hidden === true) {
+                //        sheet.hideColumn(i);
+                //    } else {
+                //        c++;
+                //    }
+                //}
 
                 // disable first row
                 sheet.range("A0:ZZ0").enable(false);

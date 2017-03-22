@@ -47,7 +47,7 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [Route("SavePricingStrategy/{custId}")]
         [HttpPost]
-        public MyDealsData SavePricingStrategy(int custId, OpDataCollectorFlattenedList pricingStrategies)
+        public OpDataCollectorFlattenedDictList SavePricingStrategy(int custId, OpDataCollectorFlattenedList pricingStrategies)
         {
             return SafeExecutor(() => _pricingStrategiesLib.SavePricingStrategy(pricingStrategies, custId), 
                 "Unable to save the Pricing Strategy"
@@ -58,7 +58,7 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [Route("SaveFullPricingStrategy/{custId}")]
         [HttpPost]
-        public MyDealsData SaveFullPricingStrategy(int custId, OpDataCollectorFlattenedDictList fullpricingStrategies)
+        public OpDataCollectorFlattenedDictList SaveFullPricingStrategy(int custId, OpDataCollectorFlattenedDictList fullpricingStrategies)
         {
             return SafeExecutor(() => _pricingStrategiesLib.SaveFullPricingStrategy(custId, fullpricingStrategies),
                 "Unable to save the Pricing Strategy"

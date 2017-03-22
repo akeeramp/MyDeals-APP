@@ -431,8 +431,24 @@ namespace Intel.MyDeals.BusinessLogic
                     foreach (IOpDataElement de in dc.GetDataElementsWithValidationIssues())
                     {
                         dataHasValidationErrors = true;
-                        dc.Message.WriteMessage(OpMsg.MessageType.Warning, de.ValidationMessage);
-                        myDealsData[opDataElementType].Messages.WriteMessage(OpMsg.MessageType.Warning, $"{dc.DcType} - {dc.DcID} : {de.ValidationMessage}");
+
+                        dc.Message.Messages.Add(new OpMsg
+                        {
+                            DebugMessage = OpMsg.MessageType.Warning.ToString(),
+                            KeyIdentifier = de.DcID,
+                            Message = de.ValidationMessage,
+                            MsgType = OpMsg.MessageType.Warning
+                        });
+
+                        myDealsData[opDataElementType].Messages.Messages.Add(new OpMsg
+                        {
+                            DebugMessage = OpMsg.MessageType.Warning.ToString(),
+                            KeyIdentifier = de.DcID,
+                            Message = $"{dc.DcType} ({dc.DcID}) : {de.ValidationMessage}",
+                            MsgType = OpMsg.MessageType.Warning
+                        });
+                        //dc.Message.WriteMessage(OpMsg.MessageType.Warning, de.ValidationMessage);
+                        //myDealsData[opDataElementType].Messages.WriteMessage(OpMsg.MessageType.Warning, $"{dc.DcType} - {dc.DcID} : {de.ValidationMessage}");
                     }
                 }
             }

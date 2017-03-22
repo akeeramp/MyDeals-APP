@@ -14,7 +14,7 @@ namespace Intel.MyDeals.BusinessRules
         public static void CheckDuplicateObjectTitle(this IOpDataElement de, params object[] args)
         {
             if (de == null) return;
-            bool result = new OpDataCollectorValidationDataLib().IsDuplicateTitle(OpDataElementTypeConverter.IdToOpDataElementTypeString(de.DcType), de.DcID, de.DcParentID, de.AtrbValue.ToString());
+            bool result = new OpDataCollectorValidationDataLib().IsDuplicateTitle(de.DcType.IdToOpDataElementTypeString(), de.DcID, de.DcParentID, de.AtrbValue.ToString());
             if (result)
                 BusinessLogicDeActions.AddValidationMessage(de, args[0]);
         }

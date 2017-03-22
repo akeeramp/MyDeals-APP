@@ -45,19 +45,15 @@ namespace Intel.MyDeals.BusinessLogic
         }
 
 
-        public MyDealsData SavePricingTable(OpDataCollectorFlattenedList data, int custId)
+        public OpDataCollectorFlattenedDictList SavePricingTable(OpDataCollectorFlattenedList data, int custId)
         {
             return _dataCollectorLib.SavePackets(new OpDataCollectorFlattenedDictList
             {
                 [OpDataElementType.PRC_TBL] = data
-            }, custId);
+            }, custId).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
         }
 
-        public MyDealsData SavePricingTable(
-            OpDataCollectorFlattenedList pricingTables,
-            OpDataCollectorFlattenedList pricingTableRows,
-            OpDataCollectorFlattenedList wipDeals,
-            int custId)
+        public OpDataCollectorFlattenedDictList SavePricingTable(OpDataCollectorFlattenedList pricingTables, OpDataCollectorFlattenedList pricingTableRows, OpDataCollectorFlattenedList wipDeals, int custId)
         {
             OpDataCollectorFlattenedDictList data = new OpDataCollectorFlattenedDictList();
 
@@ -65,10 +61,10 @@ namespace Intel.MyDeals.BusinessLogic
             if (pricingTableRows != null && pricingTableRows.Any()) data[OpDataElementType.PRC_TBL_ROW] = pricingTableRows;
             if (wipDeals != null && wipDeals.Any()) data[OpDataElementType.WIP_DEAL] = wipDeals;
 
-            return _dataCollectorLib.SavePackets(data, custId);
+            return _dataCollectorLib.SavePackets(data, custId).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
         }
 
-        public MyDealsData SaveFullPricingTable(OpDataCollectorFlattenedDictList fullpricingTables, int custId)
+        public OpDataCollectorFlattenedDictList SaveFullPricingTable(OpDataCollectorFlattenedDictList fullpricingTables, int custId)
         {
             return SavePricingTable(
                 fullpricingTables.ContainsKey(OpDataElementType.PRC_TBL) ? fullpricingTables[OpDataElementType.PRC_TBL] : new OpDataCollectorFlattenedList(),

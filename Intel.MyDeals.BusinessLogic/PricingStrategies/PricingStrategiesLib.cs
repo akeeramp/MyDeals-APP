@@ -39,20 +39,15 @@ namespace Intel.MyDeals.BusinessLogic
             return GetPricingStrategy(id, true).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
         }
 
-        public MyDealsData SavePricingStrategy(OpDataCollectorFlattenedList data, int custId)
+        public OpDataCollectorFlattenedDictList SavePricingStrategy(OpDataCollectorFlattenedList data, int custId)
         {
             return _dataCollectorLib.SavePackets(new OpDataCollectorFlattenedDictList
             {
                 [OpDataElementType.PRC_ST] = data
-            }, custId);
+            }, custId).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
         }
 
-        public MyDealsData SavePricingStrategy(
-            OpDataCollectorFlattenedList pricingStrategies,
-            OpDataCollectorFlattenedList pricingTables,
-            OpDataCollectorFlattenedList pricingTableRows,
-            OpDataCollectorFlattenedList wipDeals,
-            int custId)
+        public OpDataCollectorFlattenedDictList SavePricingStrategy(OpDataCollectorFlattenedList pricingStrategies, OpDataCollectorFlattenedList pricingTables, OpDataCollectorFlattenedList pricingTableRows, OpDataCollectorFlattenedList wipDeals, int custId)
         {
             OpDataCollectorFlattenedDictList data = new OpDataCollectorFlattenedDictList();
 
@@ -61,10 +56,10 @@ namespace Intel.MyDeals.BusinessLogic
             if (pricingTableRows != null && pricingTableRows.Any()) data[OpDataElementType.PRC_TBL_ROW] = pricingTableRows;
             if (wipDeals != null && wipDeals.Any()) data[OpDataElementType.WIP_DEAL] = wipDeals;
 
-            return _dataCollectorLib.SavePackets(data, custId);
+            return _dataCollectorLib.SavePackets(data, custId).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
         }
 
-        public MyDealsData SaveFullPricingStrategy(int custId, OpDataCollectorFlattenedDictList fullpricingStrategies)
+        public OpDataCollectorFlattenedDictList SaveFullPricingStrategy(int custId, OpDataCollectorFlattenedDictList fullpricingStrategies)
         {
             return SavePricingStrategy(
                 fullpricingStrategies.ContainsKey(OpDataElementType.PRC_ST) ? fullpricingStrategies[OpDataElementType.PRC_ST] : new OpDataCollectorFlattenedList(),

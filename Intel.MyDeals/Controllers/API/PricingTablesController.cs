@@ -44,7 +44,7 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [Route("SavePricingTable/{custId}")]
         [HttpPost]
-        public MyDealsData SavePricingTable(int custId, OpDataCollectorFlattenedList pricingTables)
+        public OpDataCollectorFlattenedDictList SavePricingTable(int custId, OpDataCollectorFlattenedList pricingTables)
         {
             return SafeExecutor(() => _pricingTablesLib.SavePricingTable(pricingTables, custId)
                 , "Unable to save the Pricing Table"
@@ -54,7 +54,7 @@ namespace Intel.MyDeals.Controllers.API
         [Authorize]
         [Route("SaveFullPricingTable/{custId}")]
         [HttpPost]
-        public MyDealsData SaveFullPricingTable(int custId, OpDataCollectorFlattenedDictList fullpricingTables)
+        public OpDataCollectorFlattenedDictList SaveFullPricingTable(int custId, OpDataCollectorFlattenedDictList fullpricingTables)
         {
             return SafeExecutor(() => _pricingTablesLib.SaveFullPricingTable(fullpricingTables, custId)
                 , "Unable to save the Pricing Table"

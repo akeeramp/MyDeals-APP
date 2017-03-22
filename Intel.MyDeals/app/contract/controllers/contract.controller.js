@@ -549,8 +549,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         $scope.newPricingTable = util.clone($scope.templates.ObjectTemplates.PRC_TBL.CAP_BAND);
         $scope.newPricingTable.OBJ_SET_TYPE_CD = ""; //reset new PT deal type
         $scope.clearPtTemplateIcons();
-        $scope.curPricingStrategy = {
-        }; //clears curPricingStrategy
+        $scope.curPricingStrategy = {}; //clears curPricingStrategy
     }
 
     // **** PRICING STRATEGY Methods ****
@@ -597,8 +596,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
     //
     $scope.unmarkCurPricingStrategyIf = function (id) {
         if ($scope.curPricingStrategyId === id) {
-            $scope.curPricingStrategy = {
-            };
+            $scope.curPricingStrategy = {};
             $scope.curPricingStrategyId = 0;
         }
     }
@@ -686,13 +684,18 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         var sData = $scope.spreadDs === undefined ? undefined : $scope.pricingTableData.PRC_TBL_ROW;
         var gData = $scope.gridDs === undefined ? undefined : $scope.gridDs.data(); // TODO after multi dim... need to see if we can read the variable instead of the source
 
-        debugger;
+        //debugger;
 
         var contractData = $scope._dirtyContractOnly ? [$scope.contractData] : [];
         var curPricingTableData = $scope.curPricingTable.DC_ID === undefined ? [] : [$scope.curPricingTable];
 
         // Pricing Table Row
         if (curPricingTableData.length > 0) {
+            // Only save if a product has been filled out
+            sData = sData.filter(function (obj) {
+                return obj.PTR_USER_PRD !== undefined && obj.PTR_USER_PRD !== null && obj.PTR_USER_PRD !== "";
+            });
+            
             for (var s = 0; s < sData.length; s++) {
                 if (sData[s].DC_ID === null) sData[s].DC_ID = $scope.uid--;
                 sData[s].DC_PARENT_ID = curPricingTableData[0].DC_ID;
@@ -750,18 +753,85 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         }
 
         objsetService.updateContractAndCurPricingTable($scope.getCustId(), data).then(
-            function (data) {
+            function (results) {
+                $scope.updateResults(results.data.PRC_TBL_ROW, $scope.pricingTableData.PRC_TBL_ROW, $scope.spreadDs);
+                $scope.updateResults(results.data.WIP_DEAL, $scope.pricingTableData.WIP_DEAL, $scope.gridDs);
+
+
+
+                debugger;
+                // need to check for messages / Actions / ext...
+                //        var gData = $scope.gridDs === undefined ? undefined : $scope.gridDs.data(); // TODO after multi dim... need to see if we can read the variable instead of the source
+                //if ($scope.gridDs !== undefined) $scope.gridDs.sync();
+
+
+
+
                 $scope.resetDirty();
                 logger.success("Saved the contract", $scope.contractData, "Save Sucessful");
                 topbar.hide();
+
                 if (toState !== undefined) $state.go(toState.name, toParams);
             },
             function (response) {
                 logger.error("Could not save the contract.", response, response.statusText);
                 topbar.hide();
             }
-    );
+        );
     }
+
+    $scope.updateResults = function (data, source, ds) {
+        var i, p;
+        if (data !== undefined && data !== null) {
+            // look for actions -> this has to be first because remapping might happen
+            for (i = 0; i < data.length; i++) {
+                if (data[i]["_actions"] !== undefined) {
+                    var actions = data[i]["_actions"];
+                    for (var a = 0; a < actions.length; a++) {
+                        if (actions[a]["Action"] === "ID_CHANGE") {
+                            if (Array.isArray(source)) {
+                                for (p = 0; p < source.length; p++) {
+                                    $scope.mapActionIdChange(source[p], actions[a]);
+                                }
+                            } else {
+                                $scope.mapActionIdChange(source, actions[a]);
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Now look for items that need to be updated
+            for (i = 0; i < data.length; i++) {
+                if (data[i]["DC_ID"] !== undefined) {
+                    if (Array.isArray(source)) {
+                        for (p = 0; p < source.length; p++) {
+                            $scope.mapProperty(source[p], data[i]);
+                        }
+                    } else {
+                        $scope.mapProperty(source, data[i]);
+                    }
+                }
+            }
+
+            // reload the datasource
+            if (ds !== undefined && ds !== null) ds.read();
+        }
+    }
+    $scope.mapProperty = function (src, data) {
+        if (src["DC_ID"] === data["DC_ID"]) {
+            var arItems = data;
+            for (var key in arItems) {
+                if (arItems.hasOwnProperty(key) && key[0] !== '_' && data[key] !== undefined)
+                    src[key] = data[key];
+            }
+        }
+    }
+    $scope.mapActionIdChange = function (src, action) {
+        if (src["DC_ID"] === action["DcID"])
+            src["DC_ID"] = action["AltID"];
+    }
+
     $scope.saveEntireContract = function () {
         if (!$scope._dirty) return;
         $scope.saveEntireContractBase($state.current.name);
@@ -772,14 +842,19 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
 
     $scope.checkForMessages = function (collection, key, data) {
         var isValid = true;
-        if (data.data[key] !== undefined && data.data[key].Messages.Messages.length > 0) {
-            angular.forEach(data.data[key].AllDataElements,
-            function (value, key) {
-                collection._behaviors.validMsg[value.AtrbCd] = value.ValidationMessage;
-                collection._behaviors.isError[value.AtrbCd] = value.ValidationMessage !== "";
-                isValid = false;
-            });
+
+        for (var i = 0; i < data.data[key].length; i++) {
+            if (data.data[key] !== undefined && data.data[key][i].DC_ID !== undefined && data.data[key][i].DC_ID === collection.DC_ID && data.data[key][i].warningMessages.length > 0) {
+                angular.forEach(data.data[key][i]._behaviors.ValidMsg,
+                function (value, key) {
+                    collection._behaviors.validMsg[key] = value;
+                    collection._behaviors.isError[key] = value !== "";
+                    isValid = false;
+                });
+            }
         }
+
+        //
         // TODO: Consolidate all the messages warning and errors show in the Validation summary panel ??
         return isValid;
     }
@@ -797,7 +872,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         // Add to DB first... then add to screen
         objsetService.createContract($scope.getCustId(), ct).then(
             function (data) {
-                $scope.updateNegativeIds(ct, "CNTRCT", data);
+                $scope.updateResults(data.data.CNTRCT, ct);
 
                 //Check for errors
                 if (!$scope.checkForMessages(ct, "CNTRCT", data)) {
@@ -865,16 +940,6 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         }
     }
 
-    $scope.updateNegativeIds = function (collection, key, data) {
-        if (collection.DC_ID <= 0) {
-            for (var a = 0; a < data.data[key].Actions.length; a++) {
-                var action = data.data[key].Actions[a];
-                if (action.Action === "ID_CHANGE" && action.DcID === collection.DC_ID) {
-                    collection.DC_ID = action.AltID;
-                }
-            }
-        }
-    }
 
     // **** NEW PRICING STRATEGY Methods ****
     //
@@ -895,7 +960,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         // Add to DB first... then add to screen
         objsetService.createPricingStrategy($scope.getCustId(), ps).then(
             function (data) {
-                $scope.updateNegativeIds(ps, "PRC_ST", data);
+                $scope.updateResults(data.data.PRC_ST, ps);
 
                 if ($scope.contractData.PRC_ST === undefined) $scope.contractData.PRC_ST = [];
                 $scope.contractData.PRC_ST.push(ps);
@@ -908,7 +973,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
                 logger.error("Could not create the pricing strategy.", response, response.statusText);
                 topbar.hide();
             }
-    );
+        );
     }
     $scope.customAddPsValidate = function () {
         var isValid = true;
@@ -971,19 +1036,19 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         // Add to DB first... then add to screen
         objsetService.createPricingTable($scope.getCustId(), pt).then(
             function (data) {
-                //debugger;
-
-                $scope.updateNegativeIds(pt, "PRC_TBL", data);
+                $scope.updateResults(data.data.PRC_TBL, pt);
 
                 if ($scope.curPricingStrategy.PRC_TBL === undefined) $scope.curPricingStrategy.PRC_TBL = [];
                 $scope.curPricingStrategy.PRC_TBL.push(pt);
                 $scope.hideAddPricingTable();
 
+                $scope.curPricingTable = pt;
+                $scope.curPricingTableId = pt.DC_ID;
+
                 logger.success("Added Pricing Table", pt, "Save Sucessful");
                 topbar.hide();
 
                 // load the screen
-                //debugger;
                 $state.go('contract.manager.strategy', {
                     cid: $scope.contractData.DC_ID, sid: pt.DC_PARENT_ID, pid: pt.DC_ID
                 });

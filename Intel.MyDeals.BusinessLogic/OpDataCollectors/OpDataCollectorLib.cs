@@ -135,7 +135,6 @@ namespace Intel.MyDeals.BusinessLogic
                 case OpActionType.Save:
                     saveResponseSet = myDealsData.Save(custId);
                     // Save Data Cycle: Point 21 (END)
-                    OpDataCollectorFlattenedDictList test = saveResponseSet.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
                     break;
                 case OpActionType.SyncDeal:
         ////        LimitRecords(myDealsData, new List<string> { "PREP2DEAL" }); // SYNCDEAL
