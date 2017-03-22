@@ -1,6 +1,6 @@
 ﻿<div id="secContainerWrapper" ng-show="isAddStrategyHidden && isAddPricingTableHidden">
     <div id="secHeader">
-        <input ng-model="curPricingStrategy.TITLE" class="transparentInput fntXlg fntB noBottomBorder w100"/>
+        <input ng-model="curPricingStrategy.TITLE" class="transparentInput fntXlg fntB noBottomBorder w100" />
     </div>
 
     <div id="secContainer">
@@ -18,7 +18,7 @@
                             <h1><strong>My</strong>Deals</h1>
                             <p class="lead">Contract Manager.</p>
                             <p>
-                                <small>{{ contractData.TITLE }}</small>
+                                <small>{{ contractData.TITLE}}</small><small> - #{{contractData.DC_ID}}</small>
                             </p>
                             <p>
                                 Welcome, use the left navigation to manage pricing strategies and pricing tables.

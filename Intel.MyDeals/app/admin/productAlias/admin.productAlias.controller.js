@@ -140,7 +140,7 @@
                     title: " ",
                     width: "6%"
                 },
-              { field: "PRD_ALS_SID", title: "Id", width: "7%" },
+              { field: "PRD_ALS_SID", title: "Id", width: "7%", hidden: true },
               { field: "PRD_NM", title: "Product Name", width: "10%" },
               { field: "PRD_ALS_NM", title: "Product Alias", width: "20%" }
             ]

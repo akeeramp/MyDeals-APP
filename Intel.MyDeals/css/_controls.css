@@ -71,6 +71,9 @@
     {
         border: 1px solid #ED1C24;
     }
+    .k-multiselect.isError{
+        border: 1px solid #ED1C24;
+    }
     .errTab {
         background-color: #FFFFFF;
         color: #ED1C24;
@@ -148,6 +151,9 @@
     }
     .k-textarea.isDirty
     {
+        border-bottom: 1px solid #0071C5;
+    }
+    .k-multiselect.isErrorisDirty{
         border-bottom: 1px solid #0071C5;
     }
     .isDirtyCell {

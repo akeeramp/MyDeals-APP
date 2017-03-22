@@ -24,7 +24,6 @@
                          op-lookup-value="'CUST_MBR_SID'"
                          op-selected-object="'Customer'"
                          op-ui-mode="'VERTICAL'"></div>
-                    <div ng-if="!contractData.DC_ID > 0" class="decsription">{{constants.CustomerChangeMessage}}</div>
                 </div>
 
                 <div class="col-md-11 row"
@@ -58,7 +57,7 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="col-md-12 row">
-                    <h6>Dates</h6>
+                    <h6>Dates&nbsp;<span kendo-tooltip k-content="constants.helpTipDateRanges" k-position="'left'" class="opElementHelpIcon intelicon-information-outlined"></span></h6>
                 </div>
                 <div class="col-md-11 row mb5">
                     <div op-control-flat

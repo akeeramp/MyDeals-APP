@@ -31,12 +31,12 @@
             conditionCriteria: [{ 'name': 'Include' }, { 'name': 'Exclude' }],
         })
         .constant('contractManagerConstants', {
-            "helptipMsgCustAccpt": "Deals are defaulted to pending until a acceptance selection is made. If kept in the pending status, any deals sent for approval will be kept in pending status until marked into a accepted state below.",
+            "helpTipDateRanges": "Date ranges are based on customer selections above.",
+            "helptipMsgCustAccpt": "Deals are defaulted to pending until an acceptance selection is made. If kept in the pending status, any deals sent for approval will be kept in pending status until marked into an accepted state below.",
             "helptipMsgAttachment": "***Will need to have the guideline for what type of attachment, maximum size etc.",
             "pastDateConfirmText": "You have Selected a date in the past which means the dates you will enter will be considered backdated",
             "FileAttachementDesc": "Either an attachment to deal request is uploaded or C2A id or link is enter above.",
             "C2AIdDesc": "Either C2A id or link is entered or an attachment to deal request is uploaded below.",
             "ContractDetails": 'contract.details',
-            'CustomerChangeMessage': 'Date ranges will reset to selected customer calendar.'
         });
 })();

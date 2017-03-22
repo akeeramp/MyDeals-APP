@@ -135,13 +135,15 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
             // if user has touched the Title do not set the title
             if ($scope.contractData.DC_ID <= 0 && custDiv !== ""
                 && !$scope.contractData._behaviors.isDirty['TITLE']) {
-                $scope.contractData.TITLE = "";
-                $scope.contractData.TITLE = "Intel-" + custDiv + " Q" +
+                var defaultContractName = "";
+                defaultContractName = "Intel-" + custDiv + " Q" +
                     $scope.contractData.START_QTR + " " + $scope.contractData.START_YR;
                 if ($scope.contractData.START_QTR != $scope.contractData.END_QTR
                     || $scope.contractData.START_YR != $scope.contractData.END_YR) {
                     $scope.contractData.TITLE += "- Q" + $scope.contractData.END_QTR + " " + $scope.contractData.END_YR;
                 }
+
+                $scope.contractData.TITLE = defaultContractName;
                 //User has not changed the title, system doing it set dirty flag to false.
                 $timeout(function () {
                     $scope.contractData._behaviors.isDirty['TITLE'] = false;
@@ -163,7 +165,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
                 if (moment(startDate).isAfter(endDate) || moment(startDate).year() < $scope.contractData.MinYear) {
                     $scope.contractData._behaviors.isError['START_DT'] = true;
                     $scope.contractData._behaviors.validMsg['START_DT'] = moment(startDate).year() < $scope.contractData.MinYear ?
-                        "Start date cannot be less than year " + $scope.contractData.MinYear : "Start date cannot be less than End Date";
+                        "Start date cannot be less than year " + $scope.contractData.MinYear : "Start date cannot be greater than End Date";
                 }
             } else {
                 if (moment(endDate).isBefore(startDate) || moment(endDate).year() > $scope.contractData.MaxYear) {
@@ -308,7 +310,9 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
             $(".k-clear-selected").hide();
             $(".k-upload-selected").hide();
         });
-        $scope.contractData._behaviors.isRequired["C2A_DATA_C2A_ID"] = false;
+
+        $scope.contractData._behaviors.isRequired["C2A_DATA_C2A_ID"] =$scope.contractData._behaviors.isError["C2A_DATA_C2A_ID"]= false;
+        $scope.contractData._behaviors.validMsg["C2A_DATA_C2A_ID"] = "";
         hasUnSavedFiles = true;
         $scope.contractData.AttachmentError = false;
     }
@@ -695,7 +699,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
             sData = sData.filter(function (obj) {
                 return obj.PTR_USER_PRD !== undefined && obj.PTR_USER_PRD !== null && obj.PTR_USER_PRD !== "";
             });
-            
+
             for (var s = 0; s < sData.length; s++) {
                 if (sData[s].DC_ID === null) sData[s].DC_ID = $scope.uid--;
                 sData[s].DC_PARENT_ID = curPricingTableData[0].DC_ID;
@@ -754,10 +758,12 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
 
         objsetService.updateContractAndCurPricingTable($scope.getCustId(), data).then(
             function (results) {
-                $scope.updateResults(results.data.PRC_TBL_ROW, $scope.pricingTableData.PRC_TBL_ROW, $scope.spreadDs);
-                $scope.updateResults(results.data.WIP_DEAL, $scope.pricingTableData.WIP_DEAL, $scope.gridDs);
-
-
+                if (!!results.data.PRC_TBL_ROW) {
+                    $scope.updateResults(results.data.PRC_TBL_ROW, $scope.pricingTableData.PRC_TBL_ROW, $scope.spreadDs);
+                }
+                if (!!results.data.WIP_DEAL) {
+                    $scope.updateResults(results.data.WIP_DEAL, $scope.pricingTableData.WIP_DEAL, $scope.gridDs);
+                }
 
                 debugger;
                 // need to check for messages / Actions / ext...
@@ -864,7 +870,10 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
 
         // Contract Data
         var ct = $scope.contractData;
+
+        // Convert customer division to '/' separated values
         ct.CUST_ACCNT_DIV = $scope.contractData.CUST_ACCNT_DIV.toString().replace(",", "/");
+
 
         // check for NEW contract
         if (ct.DC_ID <= 0) ct.DC_ID = $scope.uid--;
@@ -876,6 +885,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
 
                 //Check for errors
                 if (!$scope.checkForMessages(ct, "CNTRCT", data)) {
+                    ct.CUST_ACCNT_DIV = ct.CUST_ACCNT_DIV.split("/");
                     logger.error("Could not create the contract.", data, "Save unsuccessful");
                     topbar.hide();
                     return;
@@ -895,6 +905,7 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
             },
             function (result) {
                 logger.error("Could not create the contract.", response, response.statusText);
+                ct.CUST_ACCNT_DIV = ct.CUST_ACCNT_DIV.split("/");
                 topbar.hide();
             }
         );
@@ -904,15 +915,18 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
         $scope.isValid = true;
         var ct = $scope.contractData;
 
+        // If user has clicked on save, that means he has accepted the default contract name set, make it dirty to avoid any changes to dates making a change to contract name.
+        $scope.contractData._behaviors.isDirty['TITLE'] = true;
+
         // Clear all values
         angular.forEach($scope.contractData,
             function (value, key) {
                 // Do not clear the custom validations user has to correct them e.g contract name duplicate
                 if (ct._behaviors.validMsg[key] === "" || ct._behaviors.validMsg[key] === "* field is required"
                     || ct._behaviors.validMsg[key] === undefined) {
-
                     ct._behaviors.validMsg[key] = "";
                     ct._behaviors.isError[key] = false;
+                    if (ct[key] === null) ct[key] = "";// Special handling for CUST_MBR_SID only field where user can make it null by clearing combobox
                 }
             });
 
@@ -937,6 +951,10 @@ function ContractController($scope, $state, contractData, templateData, objsetSe
 
         if ($scope.isValid) {
             $scope.saveContract();
+        } else {
+            $timeout(function () {
+                if (!!$("input.isError")[0]) $("input.isError")[0].focus();
+            }, 300);
         }
     }
 
