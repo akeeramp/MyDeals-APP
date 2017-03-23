@@ -346,6 +346,7 @@ function ContractController($scope, $state, contractData, isNewContract, templat
 
     $scope.onComplete = function () {
         logger.success("Contract attachments uploaded", null, "Upload successful");
+        $scope._dirty = false; // don't want to kick of listeners
         $state.go('contract.manager', {
             cid: $scope.contractData.DC_ID
         });
