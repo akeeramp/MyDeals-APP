@@ -132,10 +132,8 @@
             edit: function (e) {
                 var OBJ_TYPE = e.model["OBJ_TYPE"];
                 if (OBJ_TYPE.toUpperCase() == 'CONTRACT' || OBJ_TYPE.toUpperCase() == 'PRICING STRATEGY' || OBJ_TYPE.toUpperCase() == 'PRICING TABLES') {
-                    $("#dealTypeCDDropDownEditor").kendoDropDownList({
-                        enable: false,
-
-                    });
+                    $("#dealTypeCDDropDownEditor").data("kendoDropDownList").enable(false);
+                    $("#dealTypeCDDropDownEditor").data("kendoDropDownList").select(1);
                 }
                 var commandCell = e.container.find("td:first");
                 commandCell.html('<a class="k-grid-update" href="#"><span class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span class="k-icon k-i-cancel"></span></a>');
@@ -188,7 +186,6 @@
                 .kendoDropDownList({
                     optionLabel: "Select Obj Type",
                     autoBind: true,
-                    valuePrimitive: true,
                     dataTextField: "Value",
                     dataValueField: "Key",
                     dataSource:
@@ -201,28 +198,12 @@
                     change: function (e) {
                         var valueText = this.text();
                         if (valueText.toUpperCase() == 'CONTRACT' || valueText.toUpperCase() == 'PRICING STRATEGY' || valueText.toUpperCase() == 'PRICING TABLES') {
-                            $("#dealTypeCDDropDownEditor").kendoDropDownList({
-                                enable: false,
-                            });
-                            var dealTypeCDDropDownEditor = $("#dealTypeCDDropDownEditor").data("kendoDropDownList");
-                            dealTypeCDDropDownEditor.select(1);
+                            $("#dealTypeCDDropDownEditor").data("kendoDropDownList").enable(false);
+                            $("#dealTypeCDDropDownEditor").data("kendoDropDownList").select(1);
                         }
-                        else {
-                            var dealTypeCDDropDownEditor = $("#dealTypeCDDropDownEditor").data("kendoDropDownList");
-                            dealTypeCDDropDownEditor.enable(true);
-
-                            $("#dealTypeCDDropDownEditor").kendoDropDownList({
-                                dataSource: {
-                                    data: wrokFlowAttibutes,
-                                    filter: [
-                                            { field: "COL_NM", operator: "eq", value: "OBJ_SET_TYPE_CD" }
-                                    ]
-                                },
-                                dataTextField: "Value",
-                                dataValueField: "Key",
-                                optionLabel: "Select Deal Type"
-                            });
-                            var dropdownlist = $("#dropdownlist").data("kendoDropDownList");
+                        else {                                                      
+                            $("#dealTypeCDDropDownEditor").data("kendoDropDownList").enable(true);
+                            $("#dealTypeCDDropDownEditor").data("kendoDropDownList").select(1);
                         }
                     }
                 });
