@@ -1,8 +1,8 @@
-﻿<div style="margin: 0;">    
-    <div class="fr" ng-include="'app/contract/partials/lnavButtons.html'"></div>
+﻿<div style="margin: 0;">
+    <div ng-if="!isNewContract"class="fr" ng-include="'app/contract/partials/lnavButtons.html'"></div>
     <div class="fl" style="font-size: 20px; padding-top: 4px;">
         <div style="margin: 0 10px; line-height: 1.2em;">
-            {{ contractData.TITLE }}
+            {{ contractData.displayTitle }}
         </div>
     </div>
 
