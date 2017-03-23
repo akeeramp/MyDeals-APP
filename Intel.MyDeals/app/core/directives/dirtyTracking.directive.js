@@ -15,7 +15,7 @@
             },
             link: function (scope, element, attrs) {
                 scope.onExit = function () {
-                    return false;
+                    return "Page has unsaved changes.";
                 }
 
                 // Watch the object for _dirty flag if its dirty prompt browser alert

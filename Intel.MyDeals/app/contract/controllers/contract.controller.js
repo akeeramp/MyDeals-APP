@@ -9,7 +9,7 @@ function ContractController($scope, $state, contractData, isNewContract, templat
     //
     $scope.templates = $scope.templates || templateData.data;
     $scope.constants = contractManagerConstants;
-    var isContractDetailsPage = $state.current.name == $scope.constants.ContractDetails;
+    $scope.isContractDetailsPage = $state.current.name == $scope.constants.ContractDetails;
 
     // determine if the contract is existing or new... if new, look for pre-population attributes from the URL parameters
     //
@@ -68,13 +68,16 @@ function ContractController($scope, $state, contractData, isNewContract, templat
     }
 
     // Contract detail page initializations
-    if (isContractDetailsPage) {
-        $scope.contractData.MinYear = 2012;
-        $scope.contractData.MaxYear = 2027;
+    if ($scope.isContractDetailsPage) {
         var today = moment().format('l');
 
+        $scope.contractData.MinYear = parseInt(moment().format("YYYY")) - 5;
+        $scope.contractData.MaxYear = parseInt(moment().format("YYYY")) + 10;
+
         // Contract custom initializations and functions
-        $scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV"] = $scope.contractData["CUST_ACCNT_DIV"] === undefined || $scope.contractData["CUST_ACCNT_DIV"] === "";
+        // Dummy attribute on the UI which will hold the array of customer divisions
+        $scope.contractData.CUST_ACCNT_DIV_UI = $scope.contractData["CUST_ACCNT_DIV"].split('/');
+        $scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV_UI"] = $scope.isNewContract;
         $scope.contractData._behaviors.isReadOnly["CUST_MBR_SID"] = !$scope.isNewContract;
 
         // In case of existing contract back date reason and text is captured display them
@@ -113,18 +116,16 @@ function ContractController($scope, $state, contractData, isNewContract, templat
             dataService.get("/api/Customers/GetMyCustomerDivsByCustNmSid/" + custId).then(function (response) {
                 // only show if more than 1 result
                 if (response.data.length <= 1) {
-                    $scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV"] = false;
-                    $scope.contractData._behaviors.isRequired["CUST_ACCNT_DIV"] = false;
-                    $scope.contractData._behaviors.isReadOnly["CUST_ACCNT_DIV"] = true;
-                    $scope.contractData.CUST_ACCNT_DIV = response.data[0].CUST_DIV_NM.toString();
+                    $scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV_UI"] = $scope.contractData._behaviors.isRequired["CUST_ACCNT_DIV_UI"] = false;
+                    $scope.contractData._behaviors.isReadOnly["CUST_ACCNT_DIV_UI"] = true;
+                    $scope.contractData.CUST_ACCNT_DIV_UI = response.data[0].CUST_DIV_NM.toString();
                 } else {
-                    $scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV"] = false;
-                    $scope.contractData._behaviors.isReadOnly["CUST_ACCNT_DIV"] = false;
-                    $scope.contractData._behaviors.isRequired["CUST_ACCNT_DIV"] = true;
+                    $scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV_UI"] = $scope.contractData._behaviors.isReadOnly["CUST_ACCNT_DIV_UI"] = false;
+                    $scope.contractData._behaviors.isRequired["CUST_ACCNT_DIV_UI"] = true;
                 }
-                if (!!$("#CUST_ACCNT_DIV").data("kendoMultiSelect")) {
-                    $("#CUST_ACCNT_DIV").data("kendoMultiSelect").dataSource.data(response.data);
-                    $("#CUST_ACCNT_DIV").data("kendoMultiSelect").value($scope.contractData.CUST_ACCNT_DIV.split("/"));
+                if (!!$("#CUST_ACCNT_DIV_UI").data("kendoMultiSelect")) {
+                    $("#CUST_ACCNT_DIV_UI").data("kendoMultiSelect").dataSource.data(response.data);
+                    $("#CUST_ACCNT_DIV_UI").data("kendoMultiSelect").value($scope.contractData.CUST_ACCNT_DIV_UI);
                 }
             }, function (response) {
                 logger.error("Unable to get Customer Divisions.", response, response.statusText);
@@ -133,17 +134,17 @@ function ContractController($scope, $state, contractData, isNewContract, templat
 
         // Customer and Customer Div functions
         var initiateCustDivCombobox = function () {
-            if ($scope.contractData.CUST_ACCNT_DIV !== "") {
+            if ($scope.contractData.CUST_ACCNT_DIV_UI !== "") {
                 $scope.updateCorpDivision($scope.contractData.CUST_MBR_SID);
             }
         }
 
         initiateCustDivCombobox();
-        var unwatchDivision = false;
+
         var setDefaultContractTitle = function (custDiv) {
             // if user has touched the Title do not set the title
             if ($scope.contractData.DC_ID <= 0 && custDiv !== ""
-                && !$scope.contractData._behaviors.isDirty['TITLE']) {
+                && !$scope.contractData._behaviors.isDirty['TITLE'] && $scope.contractData.CUST_MBR_SID > 0) {
                 var defaultContractName = "";
                 defaultContractName = "Intel-" + custDiv + " Q" +
                     $scope.contractData.START_QTR + " " + $scope.contractData.START_YR;
@@ -191,11 +192,11 @@ function ContractController($scope, $state, contractData, isNewContract, templat
             var quarterDetails = customerService.getCustomerCalendar(customerMemberSid, null, qtrValue, yearValue)
                 .then(function (response) {
                     if (qtrType == 'START_DATE') {
-                        $scope.contractData.START_DT = response.data.QTR_STRT;
+                        $scope.contractData.START_DT = moment(response.data.QTR_STRT).format('l');
                         validateDate('START_DT');
                         unWatchStartDate = true;
                     } else {
-                        $scope.contractData.END_DT = response.data.QTR_END;
+                        $scope.contractData.END_DT = moment(response.data.QTR_END).format('l');
                         validateDate('END_DT');
                         unWatchEndDate = true;
                     }
@@ -246,9 +247,9 @@ function ContractController($scope, $state, contractData, isNewContract, templat
 
                     // By default we dont want a contract to be backdated
                     $scope.contractData.START_DT = moment(response.data.QTR_STRT).isBefore(today) ?
-                        today : response.data.QTR_STRT;
+                        today : moment(response.data.QTR_STRT).format('l');
 
-                    $scope.contractData.END_DT = response.data.QTR_END;
+                    $scope.contractData.END_DT = moment(response.data.QTR_END).format('l');
                     $timeout(function () {
                         resetQtrYrDirty();
                     }, 500);
@@ -282,6 +283,7 @@ function ContractController($scope, $state, contractData, isNewContract, templat
                     }, 100);
                 }, function () {
                     $timeout(function () {
+                        // If the old value is also past date its infinite confirmation loop, hence add todays date on cancellation
                         $scope.contractData.START_DT = (moment(oldDate).isBefore(today)) ? today : oldDate;
                     }, 100);
                 });
@@ -445,6 +447,21 @@ function ContractController($scope, $state, contractData, isNewContract, templat
         }
     });
 
+    var delayStartFunction;
+    var delayEndDateFunction;
+    var isValidDate = function (type, oldDate, newDate) {
+        var isValid = true;
+        if (moment(newDate, "l", true).isValid()) {
+            isValid = true;
+            $scope.contractData._behaviors.isError[type] = false;
+            $scope.contractData._behaviors.validMsg[type] = "";
+        } else {
+            isValid = false;
+            $scope.contractData._behaviors.isError[type] = true;
+            $scope.contractData._behaviors.validMsg[type] = "Invaid date."
+        }
+        return isValid;
+    }
     // Watch for any changes to contract data to set a dirty bit
     //
     $scope.$watch('contractData',
@@ -452,48 +469,59 @@ function ContractController($scope, $state, contractData, isNewContract, templat
             if (oldValue === newValue) return;
 
             if (oldValue["CUST_MBR_SID"] !== newValue["CUST_MBR_SID"]) {
-                $scope.contractData.CUST_ACCNT_DIV = "";
+                $scope.contractData.CUST_ACCNT_DIV_UI = "";
                 $scope.updateCorpDivision(newValue["CUST_MBR_SID"]);
                 getCurrentQuarterDetails();
             }
 
-            if (oldValue["CUST_ACCNT_DIV"].toString() !== newValue["CUST_ACCNT_DIV"].toString()) {
-                if (!unwatchDivision) {
-                    setDefaultContractTitle(newValue["CUST_ACCNT_DIV"]);
-                }
-                unwatchDivision = false;
+            if (oldValue["CUST_ACCNT_DIV_UI"].toString() !== newValue["CUST_ACCNT_DIV_UI"].toString()) {
+                setDefaultContractTitle(newValue["CUST_ACCNT_DIV_UI"]);
+                $timeout(function () {
+                    $scope.contractData.CUST_ACCNT_DIV = newValue["CUST_ACCNT_DIV_UI"].toString().replace(/,/g, '/')
+                }, 1)
             }
 
             if (oldValue["START_QTR"] !== newValue["START_QTR"]
                 || oldValue["START_YR"] !== newValue["START_YR"]) {
-                setDefaultContractTitle($scope.contractData.CUST_ACCNT_DIV);
                 if (!unWatchStartQuarter) {
-                    updateDateByQuarter('START_DATE', newValue["START_QTR"], newValue["START_YR"]);
+                    if (delayStartFunction) $timeout.cancel(delayStartFunction);
+                    delayStartFunction = $timeout(function () {
+                        updateDateByQuarter('START_DATE', newValue["START_QTR"], newValue["START_YR"]);
+                        setDefaultContractTitle($scope.contractData.CUST_ACCNT_DIV_UI);
+                    }, 500);
                 }
                 unWatchStartQuarter = false;
             }
 
             if (oldValue["END_QTR"] !== newValue["END_QTR"]
                             || oldValue["END_YR"] !== newValue["END_YR"]) {
-                setDefaultContractTitle($scope.contractData.CUST_ACCNT_DIV);
                 if (!unWatchEndQuarter) {
-                    updateDateByQuarter('END_DATE', newValue["END_QTR"], newValue["END_YR"]);
+                    if (delayEndDateFunction) $timeout.cancel(delayEndDateFunction);
+                    delayEndDateFunction = $timeout(function () {
+                        updateDateByQuarter('END_DATE', newValue["END_QTR"], newValue["END_YR"]);
+                        setDefaultContractTitle($scope.contractData.CUST_ACCNT_DIV_UI);
+                    }, 500);
                 }
                 unWatchEndQuarter = false;
             }
 
             if (oldValue["START_DT"] !== newValue["START_DT"]) {
                 if (moment(oldValue["START_DT"]).format('l') === moment(newValue["START_DT"]).format('l')) return;
-                pastDateConfirm(newValue["START_DT"], oldValue["START_DT"]);
-                if (!unWatchStartDate) {
-                    updateQuarterByDates('START_DT', newValue["START_DT"]);
+                if (isValidDate('START_DT', oldValue["START_DT"], newValue["START_DT"])) {
+                    pastDateConfirm(newValue["START_DT"], oldValue["START_DT"]);
+                    if (!unWatchStartDate) {
+                        updateQuarterByDates('START_DT', newValue["START_DT"]);
+                    }
                 }
                 unWatchStartDate = false;
             }
 
             if (oldValue["END_DT"] !== newValue["END_DT"]) {
-                if (!unWatchEndDate) {
-                    updateQuarterByDates('END_DT', newValue["END_DT"]);
+                if (moment(oldValue["END_DT"]).format('l') === moment(newValue["END_DT"]).format('l')) return;
+                if (isValidDate('END_DT', oldValue["END_DT"], newValue["END_DT"])) {
+                    if (!unWatchEndDate) {
+                        updateQuarterByDates('END_DT', newValue["END_DT"]);
+                    }
                 }
                 unWatchEndDate = false;
             }
@@ -515,7 +543,7 @@ function ContractController($scope, $state, contractData, isNewContract, templat
             }
 
             if (oldValue["C2A_DATA_C2A_ID"] !== newValue["C2A_DATA_C2A_ID"]) {
-                $scope.contractData.IsAttachmentRequired = (newValue["C2A_DATA_C2A_ID"] === "");
+                $scope.contractData.IsAttachmentRequired = (newValue["C2A_DATA_C2A_ID"] === "" && $scope.contractData.CUST_ACCPT != 99);
                 $scope.contractData.AttachmentError = ($scope.contractData.CUST_ACCPT != 99) && $scope.contractData.IsAttachmentRequired && (!hasUnSavedFiles && !hasFiles);
             }
 
@@ -890,10 +918,6 @@ function ContractController($scope, $state, contractData, isNewContract, templat
         // Contract Data
         var ct = $scope.contractData;
 
-        // Convert customer division to '/' separated values
-        ct.CUST_ACCNT_DIV = $scope.contractData.CUST_ACCNT_DIV.toString().replace(/,/g, '/');
-        unwatchDivision = true;
-
         // check for NEW contract
         if (ct.DC_ID <= 0) ct.DC_ID = $scope.uid--;
 
@@ -904,8 +928,6 @@ function ContractController($scope, $state, contractData, isNewContract, templat
 
                 //Check for errors
                 if (!$scope.checkForMessages(ct, "CNTRCT", data)) {
-                    ct.CUST_ACCNT_DIV = ct.CUST_ACCNT_DIV.split("/");
-                    unwatchDivision = true;
                     logger.error("Could not create the contract.", data, "Save unsuccessful");
                     topbar.hide();
                     return;
@@ -924,9 +946,7 @@ function ContractController($scope, $state, contractData, isNewContract, templat
                 }
             },
             function (result) {
-                logger.error("Could not create the contract.", response, response.statusText);
-                ct.CUST_ACCNT_DIV = ct.CUST_ACCNT_DIV.split("/");
-                unwatchDivision = true;
+                logger.error("Could not create the contract.", result, result.statusText);
                 topbar.hide();
             }
         );
