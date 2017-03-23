@@ -334,7 +334,7 @@
         }
 
         function isAllDeals(val) {
-            if (val.dropdownName == "All Deals") {
+            if (val.dropdownName.toLowerCase() == "all deals" || val.dropdownName.toLowerCase() == "all_deals") {
                 return true;
             } else {
                 return false;
