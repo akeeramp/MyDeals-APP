@@ -744,7 +744,7 @@ function ContractController($scope, $state, contractData, isNewContract, templat
         var curPricingTableData = $scope.curPricingTable.DC_ID === undefined ? [] : [$scope.curPricingTable];
 
         // Pricing Table Row
-        if (curPricingTableData.length > 0) {
+        if (curPricingTableData.length > 0 && sData != undefined) {
             // Only save if a product has been filled out
             sData = sData.filter(function (obj) {
                 return obj.PTR_USER_PRD !== undefined && obj.PTR_USER_PRD !== null && obj.PTR_USER_PRD !== "";
