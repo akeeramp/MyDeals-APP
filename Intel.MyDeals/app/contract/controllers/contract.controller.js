@@ -118,6 +118,7 @@ function ContractController($scope, $state, contractData, isNewContract, templat
                 // only show if more than 1 result
                 if (response.data.length <= 1) {
                     $scope.contractData._behaviors.isRequired["CUST_ACCNT_DIV_UI"] = false;
+                    $scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV_UI"] = true;
                     $scope.contractData.CUST_ACCNT_DIV_UI = response.data[0].CUST_DIV_NM.toString();
                 } else {
                     $scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV_UI"] = false;
