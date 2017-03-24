@@ -66,7 +66,7 @@ function ContractController($scope, $state, contractData, isNewContract, templat
     $scope.isExistingContract = function () {
         return $scope.contractData.DC_ID > 0;
     }
-
+    $scope.contractData.CUST_ACCNT_DIV_UI = "";
     // Contract detail page initializations
     if ($scope.isContractDetailsPage) {
         var today = moment().format('l');
@@ -78,6 +78,7 @@ function ContractController($scope, $state, contractData, isNewContract, templat
         // Dummy attribute on the UI which will hold the array of customer divisions
         $scope.contractData.CUST_ACCNT_DIV_UI = $scope.contractData["CUST_ACCNT_DIV"].split('/');
         $scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV_UI"] = $scope.isNewContract;
+        $scope.contractData._behaviors.isRequired["CUST_ACCNT_DIV"] = true;
         $scope.contractData._behaviors.isReadOnly["CUST_MBR_SID"] = !$scope.isNewContract;
 
         // In case of existing contract back date reason and text is captured display them
@@ -116,11 +117,10 @@ function ContractController($scope, $state, contractData, isNewContract, templat
             dataService.get("/api/Customers/GetMyCustomerDivsByCustNmSid/" + custId).then(function (response) {
                 // only show if more than 1 result
                 if (response.data.length <= 1) {
-                    $scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV_UI"] = $scope.contractData._behaviors.isRequired["CUST_ACCNT_DIV_UI"] = false;
-                    $scope.contractData._behaviors.isReadOnly["CUST_ACCNT_DIV_UI"] = true;
+                    $scope.contractData._behaviors.isRequired["CUST_ACCNT_DIV_UI"] = false;
                     $scope.contractData.CUST_ACCNT_DIV_UI = response.data[0].CUST_DIV_NM.toString();
                 } else {
-                    $scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV_UI"] = $scope.contractData._behaviors.isReadOnly["CUST_ACCNT_DIV_UI"] = false;
+                    $scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV_UI"] = false;
                     $scope.contractData._behaviors.isRequired["CUST_ACCNT_DIV_UI"] = true;
                 }
                 if (!!$("#CUST_ACCNT_DIV_UI").data("kendoMultiSelect")) {
@@ -453,9 +453,11 @@ function ContractController($scope, $state, contractData, isNewContract, templat
     var isValidDate = function (type, oldDate, newDate) {
         var isValid = true;
         if (moment(newDate, "l", true).isValid()) {
+            if ($scope.contractData._behaviors.validMsg[type] == "Invaid date.") {
+                $scope.contractData._behaviors.isError[type] = false;
+                $scope.contractData._behaviors.validMsg[type] = "";
+            }
             isValid = true;
-            $scope.contractData._behaviors.isError[type] = false;
-            $scope.contractData._behaviors.validMsg[type] = "";
         } else {
             isValid = false;
             $scope.contractData._behaviors.isError[type] = true;
@@ -985,6 +987,9 @@ function ContractController($scope, $state, contractData, isNewContract, templat
                     $scope.isValid = false;
                 }
             });
+
+        $scope.contractData._behaviors.isError["CUST_ACCNT_DIV_UI"] = $scope.contractData._behaviors.isError["CUST_ACCNT_DIV"];
+        $scope.contractData._behaviors.validMsg["CUST_ACCNT_DIV_UI"] = $scope.contractData._behaviors.validMsg["CUST_ACCNT_DIV"];
 
         if ($scope.contractData.IsAttachmentRequired && (!hasFiles && !hasUnSavedFiles)) {
             $scope.contractData.AttachmentError = true;
