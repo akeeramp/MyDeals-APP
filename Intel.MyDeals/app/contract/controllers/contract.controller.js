@@ -77,7 +77,7 @@ function ContractController($scope, $state, contractData, isNewContract, templat
         // Contract custom initializations and functions
         // Dummy attribute on the UI which will hold the array of customer divisions
         $scope.contractData.CUST_ACCNT_DIV_UI = $scope.contractData["CUST_ACCNT_DIV"].split('/');
-        $scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV_UI"] = $scope.isNewContract;
+        $scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV_UI"] = true;
         $scope.contractData._behaviors.isRequired["CUST_ACCNT_DIV"] = true;
         $scope.contractData._behaviors.isReadOnly["CUST_MBR_SID"] = !$scope.isNewContract;
 
@@ -347,9 +347,11 @@ function ContractController($scope, $state, contractData, isNewContract, templat
 
     $scope.onComplete = function () {
         logger.success("Contract attachments uploaded", null, "Upload successful");
-        $scope._dirty = false; // don't want to kick of listeners
-        $state.go('contract.manager', {
-            cid: $scope.contractData.DC_ID
+        $timeout(function () {
+            $scope._dirty = false; // don't want to kick of listeners
+            $state.go('contract.manager', {
+                cid: $scope.contractData.DC_ID
+            });
         });
     }
 
@@ -943,9 +945,11 @@ function ContractController($scope, $state, contractData, isNewContract, templat
                 if (hasUnSavedFiles) {
                     $scope.uploadFile();
                 } else {
-                    $scope._dirty = false; // don't want to kick of listeners
-                    $state.go('contract.manager', {
-                        cid: ct.DC_ID
+                    $timeout(function () {
+                        $scope._dirty = false; // don't want to kick of listeners
+                        $state.go('contract.manager', {
+                            cid: $scope.contractData.DC_ID
+                        });
                     });
                 }
             },
