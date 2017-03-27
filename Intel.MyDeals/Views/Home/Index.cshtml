@@ -15,6 +15,13 @@
             <p>
                 This is a temporary page to prove the MLAF-Intel theme is setup properly with Twitter Bootstrap and Kendo Controls.  This page will be replaced with a proper UX ready page at some future time.
             </p>
+            <div style="margin-top: 25px;">
+                <button class="btn btn-default" type="button" onclick="newCntrct()">Create New Contract</button>
+                <span style="margin: 0 20px;">or</span>
+                <input placeholder="Enter Contract Number" class="k-textbox" id="cntrcId" /> 
+                <button class="btn btn-default" type="button" onclick="openCntrct()">Open Contract</button>
+
+            </div>
         </div>
     </div>
 
@@ -80,3 +87,17 @@
         </section>
 
 </div>
+
+<script>
+    function newCntrct() {
+        document.location.href = "/Contract#/manager/0/details";
+    }
+    function openCntrct() {
+        var val = $("#cntrcId").val();
+        if (val === "") {
+            alert("please enter a Contract Number");
+            return;
+        }
+        document.location.href = "/Contract#/manager/"+ val;
+    }
+</script>
