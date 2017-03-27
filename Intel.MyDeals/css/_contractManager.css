@@ -623,6 +623,10 @@
         font-size: 13px;
     }
 
+    .opUiLableWidth{
+        width:100% !important;
+    }
+
     .mb5 {
         margin-bottom: 5px !important;
     }

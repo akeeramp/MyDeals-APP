@@ -474,7 +474,7 @@ function ContractController($scope, $state, contractData, isNewContract, templat
         function (newValue, oldValue, el) {
             if (oldValue === newValue) return;
 
-            if (oldValue["CUST_MBR_SID"] !== newValue["CUST_MBR_SID"]) {
+            if (oldValue["CUST_MBR_SID"] != newValue["CUST_MBR_SID"]) {
                 $scope.contractData.CUST_ACCNT_DIV_UI = "";
                 $scope.updateCorpDivision(newValue["CUST_MBR_SID"]);
                 getCurrentQuarterDetails();

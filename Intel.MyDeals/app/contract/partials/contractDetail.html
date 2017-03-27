@@ -179,7 +179,7 @@
                 </div>
                 <!--TODO Move these to FileUploaddirective-->
                 <div class="col-md-11 row">
-                    <div class="f1 opUiLabel" ng-class="{isRequired: contractData.IsAttachmentRequired}">Attachment(s):&nbsp;<span kendo-tooltip k-content="constants.helptipMsgAttachment" k-position="'top'" class="opElementHelpIcon intelicon-information-outlined"></span></div>
+                    <div class="f1 opUiLabel opUiLableWidth" ng-class="{isRequired: contractData.IsAttachmentRequired}">Attachment(s):&nbsp;<span kendo-tooltip k-content="constants.helptipMsgAttachment" k-position="'top'" class="opElementHelpIcon intelicon-information-outlined"></span><span class="decsription">{{constants.uplodaFileHelpText}}</span></div>
                     <div ng-class="{fileAttachmentRequired: contractData.AttachmentError}">
                         <input class="fileAttachmentRequired" id="fileUploader"
                                type="file" name="files"
@@ -221,11 +221,6 @@
                      op-type="'TEXTAREA'"
                      op-label="''"
                      op-ui-mode="'VERTICAL'"></div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-offset-6">
-                <button class="btn btn-primary" style="margin-left:30px;" type="button" ng-click="customContractValidate()">Save</button>
             </div>
         </div>
 
