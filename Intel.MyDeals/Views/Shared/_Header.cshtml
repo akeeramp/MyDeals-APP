@@ -27,7 +27,7 @@
 }
 
 
-
+<div id="smbWindow"></div>
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -38,7 +38,7 @@
                 <span class="sr-only icon-bar"></span>
                 <span class="sr-only icon-bar"></span>
             </button>
-            <img class="navbar-logo" alt="" src="/images/intel-logo-white-100.png">
+            <img class="navbar-logo" alt="" src="/images/intel-logo-white-100.png" ondblclick="eggSmw()">
             <a class="navbar-brand" href="@Url.Action("Index", "Home", new { Area = "" })">MyDeals</a>
         </div>
 
@@ -200,6 +200,10 @@
             '0': 'rgba(196, 214, 0, 1)'
         }
     });
+
+    function eggSmw() {
+        window.open("/egg/mb/menu.html", "_blank", "toolbar=no,scrollbars=no,menubar=no,status=no,titlebar=no,resizable=no,width=642,height=482,top=200,left=200");
+    }
 </script>
 
 

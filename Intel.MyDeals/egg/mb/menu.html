@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset=utf-8 />
+		<title>Super MyDeals Brothers</title>
+		<link href="/egg/mb/Content/style.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<div id="game">
+			<div id="world"></div>
+			<div id="playGame">
+				<div><a href="/egg/mb/index.html">Play Game</a></div>
+				<div style="margin-top: 10px;"><a href="characters.html">About</a></div>
+			</div>
+		</div>
+
+		<script src="/egg/mb/Scripts/jquery-2.2.0.min.js"></script>
+		<script src="/egg/mb/Scripts/testlevels.js"></script>
+		<script src="/egg/mb/Scripts/constants.js"></script>
+		<script src="/egg/mb/Scripts/all-min.js"></script>
+		<script>
+			$(document).ready(function() {
+				var level = new Level('world');
+				level.load(definedMenu[0]);
+				level.start();
+			});
+		</script>
+	</body>
+</html>

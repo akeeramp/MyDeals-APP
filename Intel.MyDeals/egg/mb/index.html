@@ -1,0 +1,48 @@
+﻿<!doctype html>
+<html>
+	<head>
+		<meta charset=utf-8 />
+		<title>Super MyDeals Brothers</title>
+		<link href="/egg/mb/Content/style.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<div id="game">
+			<div id="world"></div>
+			<div id="heartNumber" class="gauge">0</div>
+			<div id="heart" class="gaugeSprite"></div>
+			<div id="liveNumber" class="gauge">0</div>
+			<div id="live" class="gaugeSprite"></div>
+		</div>
+
+		<script src="/egg/mb/Scripts/jquery-2.2.0.min.js"></script>
+		<script src="/egg/mb/Scripts/testlevels.js"></script>
+		<script src="/egg/mb/Scripts/constants.js"></script>
+		<script src="/egg/mb/Scripts/all-min.js"></script>
+		<script>
+		/*
+		 * -------------------------------------------
+		 * DOCUMENT READY STARTUP METHOD
+		 * -------------------------------------------
+		 */
+		$(document).ready(function() {
+			var level = new Level('world');
+			level.setSounds(new SoundManager());	
+			level.setInput(new KeyBoard());
+			level.load(definedLevels[0]);
+			level.setDeadCallback(function() {
+				document.location.href="menu.html";
+			});
+			level.setNextCallback(function() {
+				level.pause();
+				var settings = level.exportSaveGame();		
+				level.reset();
+				level.load(definedLevels[level.id + 1]);
+				level.importSaveGame(settings);		
+				level.start();
+			});
+			level.start();
+		});
+		</script>
+	</body>
+</html>
