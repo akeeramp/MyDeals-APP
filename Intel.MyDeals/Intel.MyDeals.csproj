@@ -879,6 +879,7 @@
     <Content Include="egg\mb\menu.html" />
     <Content Include="egg\mb\Scripts\all-min.js" />
     <Content Include="egg\mb\Scripts\all.js" />
+    <Content Include="egg\mb\Scripts\constants.js" />
     <Content Include="egg\mb\Scripts\jquery-2.2.0.min.js" />
     <Content Include="egg\mb\Scripts\testlevels.js" />
     <Content Include="favicon.ico" />
