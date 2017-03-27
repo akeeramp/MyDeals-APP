@@ -1,0 +1,250 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset=utf-8 />
+		<title>Super MyDeals Brothers</title>
+		<link href="/egg/mb/Content/style.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<div id="game" style="text-align: center;">
+			<div id="world" style="overflow: auto;">
+				<div class="fl back" onclick="goBack()"><< Back</div>
+				<div class="clearboth"></div>
+				<div class="title">Characters</div>
+				<div class="sprite-box">
+					<div class="sprite-mario"></div>
+					<div class="sprite-title">Mario</div>
+					<div class="sprite-desc">Scrum Team employee early in the morning.</div>
+				</div>
+				<div class="sprite-box">
+					<div class="sprite-mario-donut"></div>
+					<div class="sprite-title">Mario</div>
+					<div class="sprite-desc">Scrum Team employee after coffee and donuts.</div>
+				</div>
+				<div class="sprite-box">
+					<div class="sprite-sage"></div>
+					<div class="sprite-title">Princess Sage</div>
+					<div class="sprite-desc">Known for giving rewards and encouraging words.</div>
+				</div>
+				<div class="sprite-box">
+					<div class="sprite-bobafett"></div>
+					<div class="sprite-title">UX Enforcer</div>
+					<div class="sprite-desc">Take care of UX early, or it will sneak up on you.</div>
+				</div>
+				<div class="clearboth"></div>
+
+				<div class="title">Items to collect</div>
+				<div class="sprite-box">
+					<div class="sprite sprite-coffee"></div>
+					<div class="sprite-title">COFFEE</div>
+					<div class="sprite-desc">Need extra energy?  Grab coffee and watch it work.</div>
+				</div>
+				<div class="sprite-box">
+					<div class="sprite sprite-donut"></div>
+					<div class="sprite-title">DONUT</div>
+					<div class="sprite-desc">Coffee not good enough?  Grab some donut power.</div>
+				</div>
+				<div class="sprite-box">
+					<div class="sprite sprite-task"></div>
+					<div class="sprite-title">Scrum Task</div>
+					<div class="sprite-desc">Tasks everywhere... finish task your get a heart.</div>
+				</div>
+				<div class="sprite-box">
+					<div class="sprite sprite-heart"></div>
+					<div class="sprite-title">Heart</div>
+					<div class="sprite-desc">Grab a heart for cancelling a meeting.</div>
+				</div>
+				<div class="clearboth"></div>
+
+				<div class="title">Enemies</div>
+				<div class="sprite-box">
+					<div class="sprite-enemies sprite-sarlacc"></div>
+					<div class="sprite-title">SARLACC</div>
+					<div class="sprite-desc">Watch out! This creature preys on lazy workers.</div>
+				</div>
+				<div class="sprite-box">
+					<div class="sprite-enemies sprite-jawa"></div>
+					<div class="sprite-title">JAWA</div>
+					<div class="sprite-desc">These little ratholes will derail your progress.</div>
+				</div>
+				<div class="sprite-box">
+					<div class="sprite-enemies sprite-bantha"></div>
+					<div class="sprite-title">SARLACC</div>
+					<div class="sprite-desc">Pay attention to the big Bantha in the room.</div>
+				</div>
+				<div class="sprite-box">
+					<div class="sprite-enemies sprite-spike"></div>
+					<div class="sprite-title">Scrum Spikes</div>
+					<div class="sprite-desc">Don't let unknown Scrum Spikes inpact you.</div>
+				</div>				
+			</div>
+		</div>
+
+		<script src="/egg/mb/Scripts/jquery-2.2.0.min.js"></script>
+	</body>
+	
+	<script>
+		function goBack() {
+			document.location.href="menu.html";
+		}
+	</script>
+	<style>
+		body {
+			font-family: verdana;
+			font-size: 10px;
+		}
+
+		#world {
+	    background-image: url(/egg/mb/Content/backgrounds/08.png);
+	    background-repeat: no-repeat;
+	    background-position: 0px -130px;
+	    display: block;
+		}
+		
+		.title {
+			font-size: 20px;
+			font-family: 'SMB';
+			src: local('Super Mario Bros.'), url('/egg/mb/Content/fonts/Super Mario Bros.ttf') format('truetype');
+			padding: 2px 10px 0 10px;
+			margin-top: 10px;
+		}
+		
+		.sprite-title {
+		   font-family: 'SMB';
+		   src: local('Super Mario Bros.'), url('/egg/mb/Content/fonts/Super Mario Bros.ttf') format('truetype');
+		   font-style: normal;
+		   font-size: 14px;
+		}
+		.back {
+		   font-family: 'SMB';
+		   src: local('Super Mario Bros.'), url('/egg/mb/Content/fonts/Super Mario Bros.ttf') format('truetype');
+		   font-style: normal;
+		   font-size: 14px;
+		   margin: 5px;
+		   cursor: pointer;
+		}
+		.back:hover {
+			color: red;
+		}
+		
+		.sprite-box {
+			padding: 5px;
+			width: 134px;
+			text-align: center;
+			margin: 5px;
+			float: left;
+		}
+		
+		.sprite {
+	    margin: 0 auto;
+	    background-image: url(/egg/mb/Content/mario-objects.png);
+	    background-repeat: no-repeat;
+	    display: block;
+		}
+		.sprite-mario {
+	    margin: 0 auto;
+	    background-image: url(/egg/mb/Content/mario-sprites.png);
+	    background-repeat: no-repeat;
+	    display: block;
+	    width: 32px;
+	    height: 50px;
+	    background-position: 0px 0px;
+	    margin-top: 14px;
+	    margin-bottom: 3px;
+		}
+		.sprite-mario-donut {
+	    margin: 0 auto;
+	    background-image: url(/egg/mb/Content/mario-sprites.png);
+	    background-repeat: no-repeat;
+	    display: block;
+	    width: 32px;
+	    height: 65px;
+	    background-position: 0px -152px;
+	    margin-top: 4px;
+		}
+		.sprite-bobafett {
+	    margin: 0 auto;
+	    background-image: url(/egg/mb/Content/mario-bobafett.png);
+	    background-repeat: no-repeat;
+	    display: block;
+	    width: 40px;
+	    height: 70px;
+	    background-position: -123px 0px;
+		}
+		.sprite-enemies {
+	    margin: 0 auto;
+	    background-image: url(/egg/mb/Content/mario-enemies.png);
+	    background-repeat: no-repeat;
+	    display: block;
+		}
+		.sprite-sage {
+	    margin: 0 auto;
+	    background-image: url(/egg/mb/Content/mario-sage.png);
+	    background-repeat: no-repeat;
+	    display: block;
+	    width: 40px;
+	    height: 70px;
+	    background-position: -45px -80px;
+		}
+		.sprite-donut {
+	    width: 40px;
+	    height: 30px;
+	    background-position: -544px -65px;
+	    margin-top: 5px;
+	    margin-bottom: 5px;
+		}
+		.sprite-coffee {
+	    width: 33px;
+	    height: 30px;
+	    background-position: -582px -65px;
+	    margin-top: 5px;
+	    margin-bottom: 5px;
+		}
+		.sprite-task {
+	    width: 33px;
+	    height: 34px;
+	    background-position: -345px -328px;
+	    margin-top: 1px;
+	    margin-bottom: 5px;
+		}
+		.sprite-heart {
+	    width: 33px;
+	    height: 30px;
+	    background-position: 0px 0px;
+	    margin-top: 5px;
+	    margin-bottom: 5px;
+		}
+		.sprite-sarlacc {
+	    width: 33px;
+	    height: 46px;
+	    background-position: 0px 0px;
+	    margin-top: 15px;
+	    margin-bottom: 5px;
+		}
+		.sprite-jawa {
+	    width: 33px;
+	    height: 33px;
+	    background-position: 0px -227px;
+	    margin-top: 28px;
+	    margin-bottom: 5px;
+		}
+		.sprite-bantha {
+	    width: 54px;
+	    height: 66px;
+	    background-position: 0px -320px;
+		}
+		.sprite-spike {
+	    width: 35px;
+	    height: 46px;
+	    background-position: -33px -140px;
+	    margin-top: 20px;
+		}
+		.clearboth {
+      clear: both;
+    }
+    .fl {
+    	float: left;
+    }
+	</style>
+</html>

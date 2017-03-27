@@ -842,6 +842,7 @@
     <Content Include="css\_pocDataFlow.css" />
     <Content Include="css\_search.css" />
     <Content Include="css\_secEngine.css" />
+    <Content Include="egg\mb\characters.html" />
     <Content Include="egg\mb\Content\audio\coin.mp3" />
     <Content Include="egg\mb\Content\audio\die.mp3" />
     <Content Include="egg\mb\Content\audio\editor.mp3" />
