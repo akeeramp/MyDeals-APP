@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html>
 	<head>
 		<meta charset=utf-8 />
@@ -70,7 +70,7 @@
 				</div>
 				<div class="sprite-box">
 					<div class="sprite-enemies sprite-bantha"></div>
-					<div class="sprite-title">SARLACC</div>
+					<div class="sprite-title">TUSKEN RAIDERS</div>
 					<div class="sprite-desc">Pay attention to the big Bantha in the room.</div>
 				</div>
 				<div class="sprite-box">
@@ -96,12 +96,14 @@
 		}
 
 		#world {
-	    background-image: url(/egg/mb/Content/backgrounds/08.png);
-	    background-repeat: no-repeat;
-	    background-position: 0px -130px;
+		    background-image: url(/egg/mb/Content/backgrounds/08.png);
+		    -ms-background-repeat: no-repeat;
+		    background-repeat: no-repeat;
+		    -ms-background-position: 0 -130px;
+		    background-position: 0 -130px;
 	    display: block;
 		}
-		
+
 		.title {
 			font-size: 20px;
 			font-family: 'SMB';
@@ -116,6 +118,11 @@
 		   font-style: normal;
 		   font-size: 14px;
 		}
+
+        .sprite-desc {
+            
+        }
+
 		.back {
 		   font-family: 'SMB';
 		   src: local('Super Mario Bros.'), url('/egg/mb/Content/fonts/Super Mario Bros.ttf') format('truetype');
@@ -137,114 +144,146 @@
 		}
 		
 		.sprite {
-	    margin: 0 auto;
-	    background-image: url(/egg/mb/Content/mario-objects.png);
-	    background-repeat: no-repeat;
-	    display: block;
+		    margin: 0 auto;
+	        background-image: url(/egg/mb/Content/mario-objects.png);
+		    -ms-background-repeat: no-repeat;
+		    background-repeat: no-repeat;
+	        display: block;
 		}
+
 		.sprite-mario {
-	    margin: 0 auto;
-	    background-image: url(/egg/mb/Content/mario-sprites.png);
-	    background-repeat: no-repeat;
-	    display: block;
-	    width: 32px;
-	    height: 50px;
-	    background-position: 0px 0px;
-	    margin-top: 14px;
-	    margin-bottom: 3px;
+		    margin: 0 auto;
+	        background-image: url(/egg/mb/Content/mario-sprites.png);
+		    -ms-background-repeat: no-repeat;
+		    background-repeat: no-repeat;
+	        display: block;
+	        width: 32px;
+	        height: 50px;
+		    -ms-background-position: 0 0;
+		    background-position: 0 0;
+	        margin-top: 14px;
+	        margin-bottom: 3px;
 		}
+
 		.sprite-mario-donut {
-	    margin: 0 auto;
-	    background-image: url(/egg/mb/Content/mario-sprites.png);
-	    background-repeat: no-repeat;
-	    display: block;
-	    width: 32px;
-	    height: 65px;
-	    background-position: 0px -152px;
-	    margin-top: 4px;
+		    margin: 0 auto;
+	        background-image: url(/egg/mb/Content/mario-sprites.png);
+		    -ms-background-repeat: no-repeat;
+		    background-repeat: no-repeat;
+	        display: block;
+	        width: 32px;
+	        height: 65px;
+		    -ms-background-position: 0px -152px;
+		    background-position: 0px -152px;
+	        margin-top: 4px;
 		}
+
 		.sprite-bobafett {
-	    margin: 0 auto;
-	    background-image: url(/egg/mb/Content/mario-bobafett.png);
-	    background-repeat: no-repeat;
-	    display: block;
-	    width: 40px;
-	    height: 70px;
-	    background-position: -123px 0px;
+		    margin: 0 auto;
+	        background-image: url(/egg/mb/Content/mario-bobafett.png);
+		    -ms-background-repeat: no-repeat;
+		    background-repeat: no-repeat;
+	        display: block;
+	        width: 40px;
+	        height: 70px;
+		    -ms-background-position: -123px 0px;
+		    background-position: -123px 0px;
 		}
+
 		.sprite-enemies {
-	    margin: 0 auto;
-	    background-image: url(/egg/mb/Content/mario-enemies.png);
-	    background-repeat: no-repeat;
-	    display: block;
+		    margin: 0 auto;
+	        background-image: url(/egg/mb/Content/mario-enemies.png);
+		    -ms-background-repeat: no-repeat;
+		    background-repeat: no-repeat;
+	        display: block;
 		}
+
 		.sprite-sage {
-	    margin: 0 auto;
-	    background-image: url(/egg/mb/Content/mario-sage.png);
-	    background-repeat: no-repeat;
-	    display: block;
-	    width: 40px;
-	    height: 70px;
-	    background-position: -45px -80px;
+		    margin: 0 auto;
+	        background-image: url(/egg/mb/Content/mario-sage.png);
+		    -ms-background-repeat: no-repeat;
+		    background-repeat: no-repeat;
+	        display: block;
+	        width: 40px;
+	        height: 70px;
+		    -ms-background-position: -45px -80px;
+		    background-position: -45px -80px;
 		}
+
 		.sprite-donut {
-	    width: 40px;
-	    height: 30px;
-	    background-position: -544px -65px;
-	    margin-top: 5px;
-	    margin-bottom: 5px;
+		    width: 40px;
+	        height: 30px;
+		    -ms-background-position: -544px -65px;
+		    background-position: -544px -65px;
+	        margin-top: 5px;
+	        margin-bottom: 5px;
 		}
+
 		.sprite-coffee {
-	    width: 33px;
-	    height: 30px;
-	    background-position: -582px -65px;
-	    margin-top: 5px;
-	    margin-bottom: 5px;
+		    width: 33px;
+	        height: 30px;
+		    -ms-background-position: -582px -65px;
+		    background-position: -582px -65px;
+    	    margin-top: 5px;
+	        margin-bottom: 5px;
 		}
+
 		.sprite-task {
-	    width: 33px;
-	    height: 34px;
-	    background-position: -345px -328px;
-	    margin-top: 1px;
-	    margin-bottom: 5px;
+		    width: 33px;
+	        height: 34px;
+		    -ms-background-position: -345px -328px;
+		    background-position: -345px -328px;
+    	    margin-top: 1px;
+	        margin-bottom: 5px;
 		}
+
 		.sprite-heart {
-	    width: 33px;
-	    height: 30px;
-	    background-position: 0px 0px;
-	    margin-top: 5px;
-	    margin-bottom: 5px;
+		    width: 33px;
+	        height: 30px;
+		    -ms-background-position: 0px 0px;
+		    background-position: 0px 0px;
+    	    margin-top: 5px;
+	        margin-bottom: 5px;
 		}
+
 		.sprite-sarlacc {
-	    width: 33px;
-	    height: 46px;
-	    background-position: 0px 0px;
-	    margin-top: 15px;
-	    margin-bottom: 5px;
+		    width: 33px;
+	        height: 46px;
+		    -ms-background-position: 0px 0px;
+		    background-position: 0px 0px;
+	        margin-top: 15px;
+    	    margin-bottom: 5px;
 		}
+
 		.sprite-jawa {
-	    width: 33px;
-	    height: 33px;
-	    background-position: 0px -227px;
-	    margin-top: 28px;
-	    margin-bottom: 5px;
+		    width: 33px;
+	        height: 33px;
+		    -ms-background-position: 0px -227px;
+		    background-position: 0px -227px;
+	        margin-top: 28px;
+	        margin-bottom: 5px;
 		}
+
 		.sprite-bantha {
-	    width: 54px;
-	    height: 66px;
-	    background-position: 0px -320px;
+		    width: 54px;
+	        height: 66px;
+		    -ms-background-position: 0px -320px;
+		    background-position: 0px -320px;
 		}
+
 		.sprite-spike {
-	    width: 35px;
-	    height: 46px;
-	    background-position: -33px -140px;
-	    margin-top: 20px;
+		    width: 35px;
+	        height: 46px;
+		    -ms-background-position: -33px -140px;
+		    background-position: -33px -140px;
+	        margin-top: 20px;
 		}
+
 		.clearboth {
-      clear: both;
-    }
-    .fl {
-    	float: left;
-    }
+            clear: both;
+        }
+        .fl {
+    	    float: left;
+        }
 	</style>
 </html>
