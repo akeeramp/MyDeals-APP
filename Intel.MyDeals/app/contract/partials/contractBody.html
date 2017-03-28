@@ -17,9 +17,7 @@
                         <div class="container">
                             <h1><strong>My</strong>Deals</h1>
                             <p class="lead">Contract Manager.</p>
-                            <p>
-                                <small>{{ contractData.TITLE}}</small><small> - #{{contractData.DC_ID}}</small>
-                            </p>
+                            <p ng-bind="contractData.displayTitle">
                             <p>
                                 Welcome, use the left navigation to manage pricing strategies and pricing tables.
                             </p>

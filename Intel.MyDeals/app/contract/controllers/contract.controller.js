@@ -48,7 +48,7 @@ function ContractController($scope, $state, contractData, isNewContract, templat
 
     var updateDisplayTitle = function () {
         $scope.contractData.displayTitle = isNewContract ? $scope.contractData.TITLE :
-                $scope.contractData.TITLE + " - #" + $scope.contractData.DC_ID;
+                "#" + $scope.contractData.DC_ID + " - " + $scope.contractData.TITLE;
     }
     updateDisplayTitle();
 

@@ -1,8 +1,11 @@
 ﻿<div style="margin: 0;">
-    <div ng-if="!isNewContract"class="fr" ng-include="'app/contract/partials/lnavButtons.html'"></div>
-    <div class="fl" style="font-size: 20px; padding-top: 4px;">
-        <div style="margin: 0 10px; line-height: 1.2em;">
-            {{ contractData.displayTitle }}
+    <div ng-if="!isNewContract" class="fr" ng-include="'app/contract/partials/lnavButtons.html'"></div>
+    <div class="fl" ng-switch="contractData.DC_ID > 0" style="padding-top: 6px;">
+        <div ng-switch-when="true" class="contractHeader" style="margin: 0 10px; line-height: 1.2em;">
+            <small class="contractHeaderId">#{{ contractData.DC_ID }}</small><small> - </small><small>{{contractData.TITLE}}</small>
+        </div>
+        <div ng-switch-default="ng-switch-default" class="contractHeader" style="margin: 0 10px; line-height: 1.2em;">
+            <small>{{contractData.TITLE}}</small>
         </div>
     </div>
 
