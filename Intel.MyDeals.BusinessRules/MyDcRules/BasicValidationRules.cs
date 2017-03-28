@@ -37,8 +37,8 @@ namespace Intel.MyDeals.BusinessRules
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = BusinessLogicDeActions.AddValidationMessage,
-                            Args = new object[] {"{0} must be no more than 20 characters."},
-                            Where = de => de.AtrbCdIn(new List<string> { AttributeCodes.TITLE }) && de.ExceedsMaxLength(20)
+                            Args = new object[] {"{0} must be no more than 80 characters."},
+                            Where = de => de.AtrbCdIn(new List<string> { AttributeCodes.TITLE }) && de.ExceedsMaxLength(80)
                         }
                     }
                 },
