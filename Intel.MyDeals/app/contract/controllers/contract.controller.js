@@ -820,7 +820,7 @@ function ContractController($scope, $state, contractData, isNewContract, templat
                     $scope.updateResults(results.data.WIP_DEAL, $scope.pricingTableData.WIP_DEAL, $scope.gridDs);
                 }
 
-                debugger;
+                //debugger;
                 // need to check for messages / Actions / ext...
                 //        var gData = $scope.gridDs === undefined ? undefined : $scope.gridDs.data(); // TODO after multi dim... need to see if we can read the variable instead of the source
                 //if ($scope.gridDs !== undefined) $scope.gridDs.sync();
@@ -1099,7 +1099,19 @@ function ContractController($scope, $state, contractData, isNewContract, templat
         pt.DC_PARENT_ID = $scope.curPricingStrategy.DC_ID;
         pt.OBJ_SET_TYPE_CD = $scope.newPricingTable.OBJ_SET_TYPE_CD;
         pt.TITLE = $scope.newPricingTable.TITLE;
-        pt._defaultAtrbs = $scope.newPricingTable._defaultAtrbs;
+
+        for (var atrb in $scope.newPricingTable._extraAtrbs) {
+            if ($scope.newPricingTable._extraAtrbs.hasOwnProperty(atrb) && pt.hasOwnProperty(atrb)) {
+                //note: if in future we give these two objects overlapping properties, then we may get unwanted overwriting here.
+                pt[atrb] = $scope.newPricingTable._extraAtrbs[atrb].value;
+            }
+        }
+        for (var atrb in $scope.newPricingTable._defaultAtrbs) {
+            if ($scope.newPricingTable._defaultAtrbs.hasOwnProperty(atrb) && pt.hasOwnProperty(atrb)) {
+                //note: if in future we give these two objects overlapping properties, then we may get unwanted overwriting here.
+                pt[atrb] = $scope.newPricingTable._defaultAtrbs[atrb].value;
+            }
+        }
 
         //debugger;
         // Add to DB first... then add to screen
