@@ -28,8 +28,8 @@ namespace Intel.MyDeals.BusinessRules
             // TODO revisit these setting when security and actions are ready
             if (r.Dc.DcType == OpDataElementType.WIP_DEAL.ToString() || r.Dc.DcType == OpDataElementType.DEAL.ToString())
             {
-                settings = new List<string> { SecurityActns.C_UPDATE_DEAL, SecurityActns.C_VIEW_QUOTE_LETTER, SecurityActns.C_ADD_ATTACHMENTS, SecurityActns.C_VIEW_ATTACHMENTS, SecurityActns.CAN_VIEW_COST_TEST, SecurityActns.CAN_VIEW_MEET_COMP };
-                actions = new List<string> { SecurityActns.C_APPROVE_, SecurityActns.C_CANCEL_DEAL, SecurityActns.C_REJECT_DEAL };
+                //settings = new List<string> { SecurityActns.C_UPDATE_DEAL, SecurityActns.C_VIEW_QUOTE_LETTER, SecurityActns.C_ADD_ATTACHMENTS, SecurityActns.C_VIEW_ATTACHMENTS, SecurityActns.CAN_VIEW_COST_TEST, SecurityActns.CAN_VIEW_MEET_COMP };
+                //actions = new List<string> { SecurityActns.C_APPROVE_, SecurityActns.C_CANCEL_DEAL, SecurityActns.C_REJECT_DEAL };
             }
             else if (r.Dc.DcType == OpDataElementType.CNTRCT.ToString() || r.Dc.DcType == OpDataElementType.PRC_ST.ToString() || r.Dc.DcType == OpDataElementType.PRC_TBL.ToString())
             {

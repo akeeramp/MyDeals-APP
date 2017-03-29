@@ -335,6 +335,8 @@ namespace Intel.MyDeals.DataLibrary
                 int parntObjSid = rdr.GetTypedValue<int>(IDX_PARNT_OBJ_SID, 0); // Parent ID Key
                 int parntObjKeyTypeSid = rdr.GetTypedValue<int>(IDX_PARNT_OBJ_TYPE_SID, 0); // Parent ID Key Type SID -- IE Contract (1)
                 var parntObjKeyType = parntObjKeyTypeSid.IdToOpDataElementTypeString(); // CNTRCT
+                string objMtxHash = rdr[IDX_ATRB_MTX_HASH].ToString(); // Object MTX Hash
+                //int objMtxSid = rdr.GetTypedValue<int>(IDX_ATRB_MTX_SID, 0); // Object Key
 
                 OpDataCollector odc;
                 if (!odps[objType].Data.TryGetValue(objSid, out odc)) // See if this belongs to an existing DataCollector or if we need to make a new one
@@ -372,8 +374,8 @@ namespace Intel.MyDeals.DataLibrary
                         objSid, // DcId 
                         parntObjSid, // parent id
                         parntObjKeyTypeSid, // Parent Type
-                        0, // Dim
-                        null, // StringDim
+                        0, // Dim - rowcount or order kind of thing
+                        objMtxHash, // StringDim
                         dndt, // DotNetType
                         false // Raise Events flag
                     );

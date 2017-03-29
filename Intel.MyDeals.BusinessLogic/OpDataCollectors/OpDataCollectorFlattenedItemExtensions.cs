@@ -50,7 +50,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
         public static void MapMultiDim(this OpDataCollectorFlattenedItem item)
         {
             if (item.ContainsKey(EN.OBJDIM._MULTIDIM))
-                item[EN.OBJDIM._MULTIDIM] = ((Dictionary<int, OpDataCollectorFlattenedItem>)item[EN.OBJDIM._MULTIDIM]).Values.ToList();
+                item[EN.OBJDIM._MULTIDIM] = ((Dictionary<string, OpDataCollectorFlattenedItem>)item[EN.OBJDIM._MULTIDIM]).Values.ToList();
         }
 
         public static void ApplySingleAndMultiDim(this OpDataCollectorFlattenedItem objsetItem, OpDataElement de, OpDataCollector dc, ObjSetPivotMode pivotMode)
@@ -127,10 +127,10 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
             switch (pivotMode)
             {
                 case ObjSetPivotMode.Pivoted:
-                    if (!objsetItem.ContainsKey(dimName)) objsetItem[dimName] = new Dictionary<int, OpDataCollectorFlattenedItem>();
-                    Dictionary<int, OpDataCollectorFlattenedItem> collection = (Dictionary<int, OpDataCollectorFlattenedItem>)objsetItem[dimName];
+                    if (!objsetItem.ContainsKey(dimName)) objsetItem[dimName] = new Dictionary<string, OpDataCollectorFlattenedItem>();
+                    Dictionary<string, OpDataCollectorFlattenedItem> collection = (Dictionary<string, OpDataCollectorFlattenedItem>)objsetItem[dimName];
 
-                    int intDimKey = (int)dimKey;
+                    string intDimKey = (string)dimKey;
                     if (!collection.ContainsKey(intDimKey)) collection[intDimKey] = new OpDataCollectorFlattenedItem();
 
                     if (!collection[intDimKey].ContainsKey(pivotName))
