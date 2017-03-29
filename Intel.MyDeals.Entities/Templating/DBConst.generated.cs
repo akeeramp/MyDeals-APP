@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 3/28/2017 12:22:56 PM
+File Updated: 3/29/2017 12:12:23 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -40,7 +40,7 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// DIM_SID: 50
-		/// DIM_CD: CUST_DC
+		/// DIM_CD: SECUR
 		/// ATRB_SID: 52001
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.Object
@@ -265,7 +265,7 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// DIM_SID: 50
-		/// DIM_CD: CUST_DC
+		/// DIM_CD: SECUR
 		/// ATRB_SID: 52017
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.Object
@@ -310,7 +310,7 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// DIM_SID: 50
-		/// DIM_CD: CUST_DC
+		/// DIM_CD: SECUR
 		/// ATRB_SID: 52010
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.Object
@@ -328,7 +328,7 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// DIM_SID: 50
-		/// DIM_CD: CUST_DC
+		/// DIM_CD: SECUR
 		/// ATRB_SID: 52003
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.Object
@@ -355,7 +355,7 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// DIM_SID: 50
-		/// DIM_CD: CUST_DC
+		/// DIM_CD: SECUR
 		/// ATRB_SID: 52002
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.Object
@@ -373,7 +373,7 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// DIM_SID: 50
-		/// DIM_CD: CUST_DC
+		/// DIM_CD: SECUR
 		/// ATRB_SID: 52018
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.Object
@@ -489,6 +489,42 @@ namespace Intel.MyDeals.Entities {
 		public const string ECAP_TYPE = "ECAP_TYPE";
 
 		///<summary>
+		/// DIM_SID: 50
+		/// DIM_CD: SECUR
+		/// ATRB_SID: 5085
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Boolean
+		///</summary>
+		public const string EMP_ADM_ACCESS = "EMP_ADM_ACCESS";
+
+		///<summary>
+		/// DIM_SID: 50
+		/// DIM_CD: SECUR
+		/// ATRB_SID: 5028
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.Object
+		///</summary>
+		public const string EMP_CUST_ASGN = "EMP_CUST_ASGN";
+
+		///<summary>
+		/// DIM_SID: 50
+		/// DIM_CD: SECUR
+		/// ATRB_SID: 5031
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.Object
+		///</summary>
+		public const string EMP_GEO_ASGN = "EMP_GEO_ASGN";
+
+		///<summary>
+		/// DIM_SID: 50
+		/// DIM_CD: SECUR
+		/// ATRB_SID: 5032
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.Object
+		///</summary>
+		public const string EMP_VRTCL_ASGN = "EMP_VRTCL_ASGN";
+
+		///<summary>
 		/// DIM_SID: 3
 		/// DIM_CD: DEAL
 		/// ATRB_SID: 3320
@@ -589,7 +625,7 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// DIM_SID: 50
-		/// DIM_CD: CUST_DC
+		/// DIM_CD: SECUR
 		/// ATRB_SID: 52022
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.Object
@@ -634,7 +670,7 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// DIM_SID: 50
-		/// DIM_CD: CUST_DC
+		/// DIM_CD: SECUR
 		/// ATRB_SID: 52021
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.Object
@@ -688,7 +724,7 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// DIM_SID: 50
-		/// DIM_CD: CUST_DC
+		/// DIM_CD: SECUR
 		/// ATRB_SID: 52012
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.Object
@@ -706,12 +742,39 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// DIM_SID: 50
-		/// DIM_CD: CUST_DC
+		/// DIM_CD: SECUR
 		/// ATRB_SID: 52013
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.Object
 		///</summary>
 		public const string INDUS_KEY_CD_DC = "INDUS_KEY_CD_DC";
+
+		///<summary>
+		/// DIM_SID: 50
+		/// DIM_CD: SECUR
+		/// ATRB_SID: 5042
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Boolean
+		///</summary>
+		public const string IS_CHKOUT_USER = "IS_CHKOUT_USER";
+
+		///<summary>
+		/// DIM_SID: 50
+		/// DIM_CD: SECUR
+		/// ATRB_SID: 5043
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Boolean
+		///</summary>
+		public const string IS_DEV_USR = "IS_DEV_USR";
+
+		///<summary>
+		/// DIM_SID: 50
+		/// DIM_CD: SECUR
+		/// ATRB_SID: 5041
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Boolean
+		///</summary>
+		public const string IS_SUPER_USER = "IS_SUPER_USER";
 
 		///<summary>
 		/// DIM_SID: 7
@@ -940,7 +1003,7 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// DIM_SID: 50
-		/// DIM_CD: CUST_DC
+		/// DIM_CD: SECUR
 		/// ATRB_SID: 52014
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.Object
@@ -1101,6 +1164,15 @@ namespace Intel.MyDeals.Entities {
 		public const string SBS_NM = "SBS_NM";
 
 		///<summary>
+		/// DIM_SID: 50
+		/// DIM_CD: SECUR
+		/// ATRB_SID: 5040
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string SECURITY_ACCOUNT_ROLE_ASGN = "SECURITY_ACCOUNT_ROLE_ASGN";
+
+		///<summary>
 		/// DIM_SID: 7
 		/// DIM_CD: PRD
 		/// ATRB_SID: 7042
@@ -1129,7 +1201,7 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// DIM_SID: 50
-		/// DIM_CD: CUST_DC
+		/// DIM_CD: SECUR
 		/// ATRB_SID: 52019
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.Object
@@ -1147,7 +1219,7 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// DIM_SID: 50
-		/// DIM_CD: CUST_DC
+		/// DIM_CD: SECUR
 		/// ATRB_SID: 52004
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.Object
@@ -1280,23 +1352,15 @@ namespace Intel.MyDeals.Entities {
 		///<summary>
 		/// ACTN_SID: 195
 		/// SRT_ORD: 3300
-		/// Message back to WIP Action Queue with ATRB_DELETED and ATRB_SID in OBJ_SID for a specific OBJ_SET.
+		/// DB Returned Action that a given attribute should be deleted
 		///</summary>
 		public const string ATRB_DELETED = "ATRB_DELETED";
 
 
 		///<summary>
-		/// ACTN_SID: 208
-		/// SRT_ORD: 1100
-		/// Action flag to indicate a deal, prep, PLI and/or group has been deleted.
-		///</summary>
-		public const string DEAL_DELETED = "DEAL_DELETED";
-
-
-		///<summary>
 		/// ACTN_SID: 213
 		/// SRT_ORD: 3200
-		/// Message back to WIP Action Queue with deal_prep ID change.
+		/// DB Returned Action to execute object ID change
 		///</summary>
 		public const string ID_CHANGE = "ID_CHANGE";
 
@@ -1304,15 +1368,31 @@ namespace Intel.MyDeals.Entities {
 		///<summary>
 		/// ACTN_SID: 215
 		/// SRT_ORD: 3400
-		/// Write a message to or from the WIP Action Queue.
+		/// DB Returned Action Message
 		///</summary>
 		public const string MESSAGE = "MESSAGE";
 
 
 		///<summary>
+		/// ACTN_SID: 207
+		/// SRT_ORD: 1000
+		/// UI Generated Action to initiate a delete object action
+		///</summary>
+		public const string OBJ_DELETE = "OBJ_DELETE";
+
+
+		///<summary>
+		/// ACTN_SID: 208
+		/// SRT_ORD: 1100
+		/// DB Returned Action for deal like approve, reject, delete and save
+		///</summary>
+		public const string OBJ_DELETED = "OBJ_DELETED";
+
+
+		///<summary>
 		/// ACTN_SID: 221
 		/// SRT_ORD: 600
-		/// Write a deal from WIP_ATRB to proper scheme.
+		/// UI Generated Action to initiate a save object action
 		///</summary>
 		public const string SAVE = "SAVE";
 
@@ -1324,6 +1404,7 @@ namespace Intel.MyDeals.Entities {
 	public static class ToolConstantName {
 		public const string BATCH_LOG = "BATCH_LOG";
 		public const string COST_TEST_TYPES = "COST_TEST_TYPES";
+		public const string CSL_WWID_EXCEPTIONS = "CSL_WWID_EXCEPTIONS ";
 		public const string CUTOFF_DATE = "CUTOFF_DATE";
 		public const string DB_ERROR_CONTACT_EMAIL = "DB_ERROR_CONTACT_EMAIL";
 		public const string DB_LOGGING = "DB_LOGGING";
@@ -1364,8 +1445,6 @@ namespace Intel.MyDeals.Entities {
 		public const string Expired = "Expired";
 		public const string GA_Approved = "GA_Approved";
 		public const string Created = "Created";
-		public const string Test = "Test";
-		//public const string Test = "Test";
 	}
 
 
@@ -1384,7 +1463,6 @@ namespace Intel.MyDeals.Entities {
 	//-- Security Actions ---------------------------------------------------------------------------------
 
 	public static class SecurityActns {
-		public const string Can_add_file_attachments = "Can add file attachments";
 		public const string C_APPROVE_ = "C_APPROVE ";
 		public const string C_CANCEL_DEAL = "C_CANCEL_DEAL";
 		public const string C_REJECT_DEAL = "C_REJECT_DEAL";
@@ -1395,16 +1473,13 @@ namespace Intel.MyDeals.Entities {
 		public const string ATRB_REQUIRED = "ATRB_REQUIRED";
 		public const string C_VIEW_QUOTE_LETTER = "C_VIEW_QUOTE_LETTER";
 		public const string ATRB_DELETED = "ATRB_DELETED";
-		public const string DEAL_DELETED = "DEAL_DELETED";
+		public const string OBJ_DELETE = "OBJ_DELETE";
+		public const string OBJ_DELETED = "OBJ_DELETED";
 		public const string ID_CHANGE = "ID_CHANGE";
 		public const string MESSAGE = "MESSAGE";
 		public const string SAVE = "SAVE";
 		public const string CAN_VIEW_COST_TEST = "CAN_VIEW_COST_TEST";
 		public const string CAN_VIEW_MEET_COMP = "CAN_VIEW_MEET_COMP";
-		public const string TEST = "TEST";
-		//public const string Can_add_file_attachments = "Can add file attachments";
-		public const string updatedTest = "updatedTest";
-		//public const string Can_add_file_attachments = "Can add file attachments";
 	}
 
 

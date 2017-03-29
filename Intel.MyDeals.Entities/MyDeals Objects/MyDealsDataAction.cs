@@ -33,7 +33,7 @@ namespace Intel.MyDeals.Entities
             //// Response Actions
             //, {DealSaveActionCodes.ID_CHANGE, 9100}
             //, {DealSaveActionCodes.ATRB_DELETED, 9200}
-            //, {DealSaveActionCodes.DEAL_DELETED, 9300}
+            //, {DealSaveActionCodes.OBJ_DELETED, 9300}
             //, {DealSaveActionCodes.MESSAGE, 9400}
 
             // TODO: Add more actions here...

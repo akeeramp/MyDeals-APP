@@ -289,7 +289,7 @@ namespace Intel.MyDeals.DataLibrary
                                 break;
                             }
                         case DealSaveActionCodes.ATRB_DELETED:
-                        case DealSaveActionCodes.DEAL_DELETED:
+                        case DealSaveActionCodes.OBJ_DELETED:
                             {
                                 WriteIDListAction(ret[objSet], rdr, OpMsg.MessageType.Info, ACTN_NM);
                                 break;
@@ -400,7 +400,7 @@ namespace Intel.MyDeals.DataLibrary
                     foreach (DataRow dr in dtActionResults.Select(String.Format("{0} IN ('{1}','{2}')",
                         Entities.deal.MYDL_CL_WIP_ACTN.ACTN_NM,
                         DealSaveActionCodes.ATRB_DELETED,
-                        DealSaveActionCodes.DEAL_DELETED
+                        DealSaveActionCodes.OBJ_DELETED
                     )))
                     {
                         processedActions.Add((int)dr[Entities.deal.MYDL_CL_WIP_ACTN.WIP_ACTN_SID]);
