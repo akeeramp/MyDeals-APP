@@ -80,9 +80,11 @@ namespace Intel.MyDeals.Entities.UI_Templates
 
             foreach (UiTemplateContainerItem item in filteredItems.OrderBy(i => i.AtrbOrder).ThenBy(i => i.Order))
             {
+                string dimKey = "";
+                if (!string.IsNullOrEmpty(item.DimCd)) dimKey = item.DimCd.AtrbCdDimKeySafe();
                 if (!item.IsDetail)
                 {
-                    fields[item.AtrbCd] = new UiFieldItem
+                    fields[item.AtrbCd + dimKey] = new UiFieldItem
                     {
                         type = item.DataType,
                         editable = !item.IsReadOnly,
@@ -94,7 +96,7 @@ namespace Intel.MyDeals.Entities.UI_Templates
 
                     columns.Add(new UiColumn
                     {
-                        field = item.AtrbCd,
+                        field = item.AtrbCd + dimKey,
                         title = item.Label,
                         hidden = item.IsHidden,
                         width = item.Width,
@@ -105,7 +107,7 @@ namespace Intel.MyDeals.Entities.UI_Templates
                 }
                 else
                 {
-                    detailsFields[item.AtrbCd] = new UiFieldItem
+                    detailsFields[item.AtrbCd + dimKey] = new UiFieldItem
                     {
                         type = item.DataType,
                         editable = !item.IsReadOnly,
@@ -117,7 +119,7 @@ namespace Intel.MyDeals.Entities.UI_Templates
 
                     detailsColumns.Add(new UiColumn
                     {
-                        field = item.AtrbCd,
+                        field = item.AtrbCd + dimKey,
                         title = item.Label,
                         hidden = item.IsHidden,
                         width = item.Width,

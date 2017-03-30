@@ -81,6 +81,7 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
     //    }
     //});
 
+    debugger;
     var ssTools = new gridTools(ptTemplate.model, ptTemplate.columns);
     root.spreadDs = ssTools.createDataSource(root.pricingTableData.PRC_TBL_ROW);
 

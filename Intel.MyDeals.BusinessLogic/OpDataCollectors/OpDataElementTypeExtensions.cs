@@ -37,8 +37,8 @@ namespace Intel.MyDeals.BusinessLogic
                 ? GetByIDs(opDataElementType, ids, includeTypes, new List<string>())
                     .FillInHolesFromAtrbTemplate(opDataElementSetType) 
                 : GetByIDs(opDataElementType, ids, includeTypes, new List<string>())
-                    .Merge(flattenedDictList)
-                    .FillInHolesFromAtrbTemplate(opDataElementSetType);
+                    .FillInHolesFromAtrbTemplate(opDataElementSetType)
+                    .Merge(flattenedDictList);
         }
 
 

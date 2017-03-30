@@ -738,7 +738,6 @@ function ContractController($scope, $state, contractData, isNewContract, templat
     $scope.saveEntireContractBase = function (stateName, toState, toParams) {
         // async save data
         topbar.show();
-        //debugger;
 
         var source = "";
         if (stateName === "contract.manager.strategy") source = "PRC_TBL";

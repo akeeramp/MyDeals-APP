@@ -36,7 +36,18 @@ namespace Intel.MyDeals.BusinessLogic
 
         public OpDataCollectorFlattenedDictList GetFullNestedPricingTable(int id)
         {
-            return GetPricingTable(id, true).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
+            MyDealsData myDealsData = GetPricingTable(id, true);
+
+            OpDataCollectorFlattenedDictList data = new OpDataCollectorFlattenedDictList();
+
+            foreach (OpDataElementType opDataElementType in myDealsData.Keys)
+            {
+                data[opDataElementType] = myDealsData.ToOpDataCollectorFlattenedDictList(opDataElementType, 
+                    opDataElementType == OpDataElementType.PRC_TBL_ROW ? ObjSetPivotMode.UniqueKey : ObjSetPivotMode.Pivoted);
+            }
+
+            return data;
+            //return GetPricingTable(id, true).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
         }
 
         public OpDataCollectorFlattenedDictList GetFullPricingTable(int id)

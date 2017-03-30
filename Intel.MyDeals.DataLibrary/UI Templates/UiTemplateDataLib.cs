@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.Entities.UI_Templates;
@@ -41,8 +40,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 Id = 2,
                 AtrbCd = AttributeCodes.OBJ_SET_TYPE_CD,
-                ObjType = new List<OpDataElementType> { OpDataElementType.CNTRCT, OpDataElementType.PRC_ST, OpDataElementType.PRC_TBL },
-                DataType = "string"
+                ObjType = new List<OpDataElementType> { OpDataElementType.CNTRCT, OpDataElementType.PRC_ST, OpDataElementType.PRC_TBL }
             });
             items.Add(new UiTemplateContainerItem
             {
@@ -86,7 +84,6 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 20,
                 AtrbCd = AttributeCodes.OBJ_SET_TYPE_CD,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                DataType = "number",
                 Label = "Deal Type",
                 Width = 150
             });
@@ -95,8 +92,6 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 20,
                 AtrbCd = AttributeCodes.START_DT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                DataType = "date",
-                Label = "Start Date",
                 Width = 150
             });
             items.Add(new UiTemplateContainerItem
@@ -104,8 +99,6 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 20,
                 AtrbCd = AttributeCodes.END_DT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                DataType = "date",
-                Label = "End Date",
                 Width = 150
             });
 
@@ -154,59 +147,46 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 29,
                 AtrbCd = AttributeCodes.PTR_USER_PRD,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                DataType = "string",
-                //Label = "Products",
                 Width = 200,
                 Template = "#=gridUtils.uiIconWrapper(data, 'PRODUCTS')#" });
             items.Add(new UiTemplateContainerItem {
                 Id = 29,
                 AtrbCd = AttributeCodes.PTR_SYS_PRD,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                DataType = "string",
-                Label = "Products (system)",
                 Width = 200,
                 Template = "#=gridUtils.uiIconWrapper(data, 'PRODUCTS')#" });
             items.Add(new UiTemplateContainerItem {
                 Id = 33,
                 AtrbCd = AttributeCodes.PRD_LEVEL,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                DataType = "string",
-                Label = "Product Level",
                 Width = 100,
                 Template = "#=gridUtils.uiIconWrapper(data, 'PRD_LEVEL')#" });
             items.Add(new UiTemplateContainerItem {
                 Id = 30,
                 AtrbCd = AttributeCodes.START_DT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                DataType = "date",
-                Label = "Start Date",
                 Width = 100,
                 Template = "#=gridUtils.uiIconWrapper(data, 'START_DT')#" });
             items.Add(new UiTemplateContainerItem {
                 Id = 31,
                 AtrbCd = AttributeCodes.END_DT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                DataType = "date",
-                Label = "End Date",
                 Width = 100,
                 Template = "#=gridUtils.uiIconWrapper(data, 'END_DT')#" });
             items.Add(new UiTemplateContainerItem
             {
                 Id = 29,
                 AtrbCd = "ECAP_PRICE",
+                DimCd = "10:0",
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
-                DataType = "number",
-                Label = "ECAP Price",
                 Width = 100,
-                Template = "#=gridUtils.uiIconWrapper(data, 'ECAP_PRICE')#"
+                Template = "#=gridUtils.uiIconWrapper(data, 'ECAP_PRICE_____10___0')#"
             });
             items.Add(new UiTemplateContainerItem
             {
                 Id = 29,
                 AtrbCd = "PAYOUT_BASED_ON",
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
-                DataType = "string",
-                Label = "Payout Based On",
                 Width = 100,
                 Template = "#=gridUtils.uiIconWrapper(data, 'PAYOUT_BASED_ON')#"
             });
@@ -215,8 +195,6 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 29,
                 AtrbCd = "PROGRAM_PAYMENT",
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
-                DataType = "string",
-                Label = "Program Payment",
                 Width = 100,
                 Template = "#=gridUtils.uiIconWrapper(data, 'PROGRAM_PAYMENT')#"
             });
@@ -225,8 +203,6 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 34,
                 AtrbCd = AttributeCodes.MAX_RPU,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
-                DataType = "number",
-                Label = "MAX RPU",
                 Width = 100,
                 Template = "#=gridUtils.uiIconWrapper(data, 'MAX_RPU')#"
             });
@@ -235,8 +211,6 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 35,
                 AtrbCd = AttributeCodes.AVG_RPU,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
-                DataType = "number",
-                Label = "AVG RPU",
                 Width = 100,
                 Template = "#=gridUtils.uiIconWrapper(data, 'AVG_RPU')#"
             });
@@ -261,7 +235,11 @@ namespace Intel.MyDeals.DataLibrary
                 if (fieldInfo == null) continue;
 
                 MyDealsAttribute atrb = (MyDealsAttribute)fieldInfo.GetValue(null);
+
                 if (string.IsNullOrEmpty(item.Label)) item.Label = atrb.ATRB_LBL;
+                if (string.IsNullOrEmpty(item.DataType)) item.DataType = GetDataType(atrb.DATA_TYPE_CD);
+                if (item.MaxLength == 0) item.MaxLength = atrb.ATRB_MAX_LEN == 0 ? 8000 : atrb.ATRB_MAX_LEN;
+                if (string.IsNullOrEmpty(item.Format)) item.Format = atrb.FRMT_MSK;
             }
 
             return data;
@@ -271,10 +249,19 @@ namespace Intel.MyDeals.DataLibrary
         {
             switch (dataType)
             {
-                case "":
+                case "INT":
+                case "MONEY":
                     return "number";
+                case "VARCHAR":
+                    return "string";
+                case "CUSTOM":
+                    return "object";
+                case "DATETIME":
+                    return "date";
+                case "BIT":
+                    return "boolean";
             }
-            return string.Empty;
+            return "string";
         }
     }
 }

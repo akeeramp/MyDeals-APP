@@ -21,6 +21,8 @@ namespace Intel.MyDeals.Entities
         public string HelpText { get; set; }
         public string DataType { get; set; }
         public string UiType { get; set; }
+        public string DimCd { get; set; }
+        public int MaxLength { get; set; }
         public bool IsDefaultable { get; set; }
         public bool IsDimKey { get; set; }
         public bool IsDetail { get; set; }

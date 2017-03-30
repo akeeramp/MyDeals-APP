@@ -127,6 +127,7 @@ namespace Intel.MyDeals.BusinessLogic
             foreach (OpDataElement de in dc.DataElements)
             {
                 string dimKey = de.DimKeyString;
+                string uniqDimKey = dimKey.AtrbCdDimKeySafe();
 
                 if (string.IsNullOrEmpty(dimKey))
                 {
@@ -151,7 +152,7 @@ namespace Intel.MyDeals.BusinessLogic
                         de.AtrbValue = items[de.AtrbCd];
                     }
                 }
-                else if (items.ContainsKey(de.AtrbCd))
+                else if (items.ContainsKey(de.AtrbCd) && items[de.AtrbCd] != null)
                 {
                     OpDataCollectorFlattenedItem dictValues = OpSerializeHelper.FromJsonString<OpDataCollectorFlattenedItem>(items[de.AtrbCd].ToString());
                     if (dictValues.ContainsKey(dimKey))
@@ -168,6 +169,32 @@ namespace Intel.MyDeals.BusinessLogic
                     {
                         opMsgQueue.Messages.Add(new OpMsg(OpMsg.MessageType.Warning, "Unable to locate attrb ({0}) in deal {1}", dimKey, de.DcID));
                     }
+                }
+                else if (items.ContainsKey(de.AtrbCd + uniqDimKey) && items[de.AtrbCd + uniqDimKey] != null)
+                {
+                    //OpDataCollectorFlattenedItem dictValues = OpSerializeHelper.FromJsonString<OpDataCollectorFlattenedItem>(items[de.AtrbCd].ToString());
+
+                    if (de.DimKeyString == dimKey)
+                    {
+                        de.AtrbValue = items[de.AtrbCd + uniqDimKey];
+                    }
+
+
+
+                    //if (dictValues.ContainsKey(dimKey))
+                    //{
+                    //    if (dictValues.ContainsKey(dimKey))
+                    //    {
+                    //        if (de.DataType == "System.DateTime" &&
+                    //            !String.IsNullOrEmpty(dictValues[dimKey].ToString().Replace("Invalid date", "")))
+                    //            dictValues[dimKey] = Convert.ToDateTime(dictValues[dimKey]);
+                    //        de.AtrbValue = dictValues[dimKey];
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    opMsgQueue.Messages.Add(new OpMsg(OpMsg.MessageType.Warning, "Unable to locate attrb ({0}) in deal {1}", dimKey, de.DcID));
+                    //}
                 }
                 else
                 {

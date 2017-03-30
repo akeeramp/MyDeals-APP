@@ -1,13 +1,10 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
 using Intel.Opaque;
 using Intel.Opaque.Data;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Intel.MyDeals.BusinessLogic.DataCollectors
 {
@@ -124,13 +121,15 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                 ((Dictionary<string, OpDataCollectorFlattenedItem>)objsetItem[pivotKeyName])[dimName][de.AtrbValue.ToString()] = dimKey;
             }
 
+            string strDimKey = ((string)dimKey).DimKeySafe();
+
             switch (pivotMode)
             {
                 case ObjSetPivotMode.Pivoted:
                     if (!objsetItem.ContainsKey(dimName)) objsetItem[dimName] = new Dictionary<string, OpDataCollectorFlattenedItem>();
                     Dictionary<string, OpDataCollectorFlattenedItem> collection = (Dictionary<string, OpDataCollectorFlattenedItem>)objsetItem[dimName];
 
-                    string strDimKey = (string)dimKey;
+
                     if (!collection.ContainsKey(strDimKey)) collection[strDimKey] = new OpDataCollectorFlattenedItem();
 
                     if (!collection[strDimKey].ContainsKey(pivotName))
@@ -154,9 +153,20 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                     Dictionary<string, string> dictDes = new Dictionary<string, string>();
                     foreach (IOpDataElement item in dc.GetDataElements(de.AtrbCd))
                     {
-                        dictDes[dimKey.ToString()] = item.AtrbValue.ToString();
+                        dictDes[strDimKey] = item.AtrbValue.ToString();
                     }
                     objsetItem[de.AtrbCd] = dictDes;
+
+                    break;
+
+                case ObjSetPivotMode.UniqueKey:
+
+                    if (objsetItem.ContainsKey(de.AtrbCd)) return;
+
+                    foreach (IOpDataElement item in dc.GetDataElements(de.AtrbCd))
+                    {
+                        objsetItem[item.AtrbCd + item.DimKeyString.AtrbCdDimKeySafe()] = item.AtrbValue.ToString();                        
+                    }
 
                     break;
             }
@@ -170,7 +180,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
 
             // check that this is the correct OpDataElementType and has products
             if (!opFlatItem.ContainsKey(AttributeCodes.dc_type) || opFlatItem[AttributeCodes.dc_type].ToString() != OpDataElementType.PRC_TBL_ROW.ToString()) return retItems;
-            if (!opFlatItem.ContainsKey(AttributeCodes.PTR_SYS_PRD) || opFlatItem[AttributeCodes.PTR_SYS_PRD].ToString() == string.Empty) return retItems;
+            if (!opFlatItem.ContainsKey(AttributeCodes.PTR_SYS_PRD) || opFlatItem[AttributeCodes.PTR_SYS_PRD] == null|| opFlatItem[AttributeCodes.PTR_SYS_PRD].ToString() == string.Empty) return retItems;
 
             OpDataElementType opType = OpDataElementTypeConverter.FromString(opFlatItem[AttributeCodes.dc_type]);
             OpDataElementSetType opSetType = OpDataElementSetTypeConverter.FromString(opFlatItem[AttributeCodes.OBJ_SET_TYPE_CD]);

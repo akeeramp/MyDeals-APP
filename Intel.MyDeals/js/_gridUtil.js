@@ -164,7 +164,6 @@ gridTools.prototype.formatValue = function (dataValue, dataFormat) {
 }
 
 gridTools.prototype.getLookupData = function (lookupType) {
-    debugger;
     if (this.model.fields[lookupType] === undefined) {
         alert("Lookup values were not defined for " + lookupType);
         return null;
@@ -175,7 +174,6 @@ gridTools.prototype.getLookupData = function (lookupType) {
 
     op.ajaxGetWait(this.model.fields[lookupType].values,
         function (data) {
-            //debugger;
             var items = [];
             items.push({ text: " ", value: "" });
             for (var i = 0; i < data.length; i++) {

@@ -30,5 +30,13 @@ namespace Intel.MyDeals.Entities
             return HttpUtility.HtmlEncode(input);
         }
 
+        public static string DimKeySafe(this string input)
+        {
+            return input.Replace(":", "___").Replace("/", "____").Replace("-", "__");
+        }
+        public static string AtrbCdDimKeySafe(this string input)
+        {
+            return "_____" + input.DimKeySafe();
+        }
     }
 }
