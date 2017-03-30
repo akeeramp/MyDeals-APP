@@ -83,7 +83,7 @@
     <Compile Include="MyDealsAttribute.cs" />
     <Compile Include="ObjSetPivotMode.cs" />
     <Compile Include="OP ExtensionMethods\OpActionType.cs" />
-    <Compile Include="OP ExtensionMethods\OpDataCollectorExtentionMethods.cs" />
+    <Compile Include="OP ExtensionMethods\OpDataCollectorExtensionMethods.cs" />
     <Compile Include="OP ExtensionMethods\OpDataCollectorFlattenedDictList.cs" />
     <Compile Include="OP ExtensionMethods\OpDataCollectorFlattenedItem.cs" />
     <Compile Include="OP ExtensionMethods\OpDataElementExtensionMethods.cs" />

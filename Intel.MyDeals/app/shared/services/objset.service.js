@@ -62,23 +62,23 @@ function objsetService($http, dataService, logger, $q) {
     function updatePricingStrategy(custId, ps) {
         return dataService.post(apiBasePricingStrategyUrl + 'UpdatePricingStrategy/' + custId, [ps]);
     }
-    function deletePricingStrategy(id) {
-        return dataService.get(apiBasePricingStrategyUrl + 'DeletePricingStrategy/' + id);
+    function deletePricingStrategy(custId, ps) {
+        return dataService.post(apiBasePricingStrategyUrl + 'DeletePricingStrategy/' + custId, [ps]);
     }
 
     // #### PRICING TABLE CRUD ####
 
-    function createPricingTable(custId, ps) {
-        return dataService.post(apiBasePricingTableUrl + 'SavePricingTable/' + custId, [ps]);
+    function createPricingTable(custId, pt) {
+        return dataService.post(apiBasePricingTableUrl + 'SavePricingTable/' + custId, [pt]);
     }
     function readPricingTable(id) {
         return dataService.get(apiBasePricingTableUrl + 'GetFullNestedPricingTable/' + id);
     }
-    function updatePricingTable(custId, ps) {
-        return dataService.post(apiBasePricingTableUrl + 'UpdatePricingTable/' + custId, [ps]);
+    function updatePricingTable(custId, pt) {
+        return dataService.post(apiBasePricingTableUrl + 'UpdatePricingTable/' + custId, [pt]);
     }
-    function deletePricingTable(id) {
-        return dataService.get(apiBasePricingTableUrl + 'DeletePricingTable/' + id);
+    function deletePricingTable(custId, pt) {
+        return dataService.post(apiBasePricingTableUrl + 'DeletePricingTable/' + custId, [pt]);
     }
 
     // #### CONTRACT CRUD ####

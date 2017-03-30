@@ -130,20 +130,20 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                     if (!objsetItem.ContainsKey(dimName)) objsetItem[dimName] = new Dictionary<string, OpDataCollectorFlattenedItem>();
                     Dictionary<string, OpDataCollectorFlattenedItem> collection = (Dictionary<string, OpDataCollectorFlattenedItem>)objsetItem[dimName];
 
-                    string intDimKey = (string)dimKey;
-                    if (!collection.ContainsKey(intDimKey)) collection[intDimKey] = new OpDataCollectorFlattenedItem();
+                    string strDimKey = (string)dimKey;
+                    if (!collection.ContainsKey(strDimKey)) collection[strDimKey] = new OpDataCollectorFlattenedItem();
 
-                    if (!collection[intDimKey].ContainsKey(pivotName))
+                    if (!collection[strDimKey].ContainsKey(pivotName))
                     {
-                        collection[intDimKey][AttributeCodes.DC_ID] = de.DcID;
-                        collection[intDimKey][pivotName] = dimKey;
+                        collection[strDimKey][AttributeCodes.DC_ID] = de.DcID;
+                        collection[strDimKey][pivotName] = dimKey;
                     }
 
-                    collection[intDimKey][de.AtrbCd] = de.AtrbValue.ToString();
+                    collection[strDimKey][de.AtrbCd] = de.AtrbValue.ToString();
 
-                    collection[intDimKey].SetBehavior("isRequired", de.AtrbCd, de.IsRequired);
-                    collection[intDimKey].SetBehavior("isReadOnly", de.AtrbCd, de.IsReadOnly);
-                    collection[intDimKey].SetBehavior("isHidden", de.AtrbCd, de.IsHidden);
+                    collection[strDimKey].SetBehavior("isRequired", de.AtrbCd, de.IsRequired);
+                    collection[strDimKey].SetBehavior("isReadOnly", de.AtrbCd, de.IsReadOnly);
+                    collection[strDimKey].SetBehavior("isHidden", de.AtrbCd, de.IsHidden);
 
                     break;
 

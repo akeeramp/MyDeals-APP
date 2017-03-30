@@ -73,16 +73,14 @@ namespace Intel.MyDeals.BusinessLogic
                 custId);
         }
 
-        public OpMsg DeletePricingTable(int id)
+        public OpMsg DeletePricingTable(int custId, OpDataCollectorFlattenedList pricingTables)
         {
-            // TODO replace with Delete call
-            return new OpMsg();
+            return pricingTables.DeleteByIds(OpDataElementType.PRC_TBL, custId, _dataCollectorLib);
         }
 
-        public OpMsg DeletePricingTableRow(int id)
+        public OpMsg DeletePricingTableRow(int custId, OpDataCollectorFlattenedList pricingTableRows)
         {
-            // TODO replace with Delete call
-            return new OpMsg();
+            return pricingTableRows.DeleteByIds(OpDataElementType.PRC_TBL_ROW, custId, _dataCollectorLib);
         }
 
     }

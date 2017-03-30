@@ -9,7 +9,7 @@ namespace Intel.MyDeals.IBusinessLogic
         OpDataCollectorFlattenedDictList SavePricingStrategy(OpDataCollectorFlattenedList data, int custId);
         OpDataCollectorFlattenedDictList SavePricingStrategy(OpDataCollectorFlattenedList pricingStrategies, OpDataCollectorFlattenedList pricingTables, OpDataCollectorFlattenedList pricingTableRows, OpDataCollectorFlattenedList wipDeals, int custId);
         OpDataCollectorFlattenedDictList SaveFullPricingStrategy(int custId, OpDataCollectorFlattenedDictList fullpricingStrategies);
-        OpMsg DeletePricingStrategy(int id);
+        OpMsg DeletePricingStrategy(int custId, OpDataCollectorFlattenedList pricingStrategies);
         OpDataCollectorFlattenedDictList GetFullPricingStrategy(int id);
     }
 }

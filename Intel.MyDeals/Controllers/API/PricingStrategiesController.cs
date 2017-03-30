@@ -67,11 +67,11 @@ namespace Intel.MyDeals.Controllers.API
 
 
         [Authorize]
-        [Route("DeletePricingStrategy/{id}")]
-        [HttpGet]
-        public OpMsg DeletePricingStrategy(int id)
+        [Route("DeletePricingStrategy/{custId}")]
+        [HttpPost]
+        public OpMsg DeletePricingStrategy(int custId, OpDataCollectorFlattenedList pricingStrategies)
         {
-            return SafeExecutor(() => _pricingStrategiesLib.DeletePricingStrategy(id)
+            return SafeExecutor(() => _pricingStrategiesLib.DeletePricingStrategy(custId, pricingStrategies)
                 , "Unable to delete the Pricing Strategy {id}"
             );
         }

@@ -62,11 +62,11 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("DeletePricingTable/{id}")]
-        [HttpGet]
-        public OpMsg DeletePricingTable(int id)
+        [Route("DeletePricingTable/{custId}")]
+        [HttpPost]
+        public OpMsg DeletePricingTable(int custId, OpDataCollectorFlattenedList pricingTables)
         {
-            return SafeExecutor(() => _pricingTablesLib.DeletePricingTable(id)
+            return SafeExecutor(() => _pricingTablesLib.DeletePricingTable(custId, pricingTables)
                 , "Unable to delete the Pricing Table {id}"
             );
         }

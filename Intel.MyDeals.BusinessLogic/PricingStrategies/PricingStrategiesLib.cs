@@ -70,10 +70,9 @@ namespace Intel.MyDeals.BusinessLogic
         }
 
 
-        public OpMsg DeletePricingStrategy(int id)
+        public OpMsg DeletePricingStrategy(int custId, OpDataCollectorFlattenedList pricingStrategies)
         {
-            // TODO replace with Delete call
-            return new OpMsg();
+            return pricingStrategies.DeleteByIds(OpDataElementType.PRC_ST, custId, _dataCollectorLib);
         }
 
 

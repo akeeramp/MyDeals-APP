@@ -12,7 +12,8 @@ namespace Intel.MyDeals.Entities
 
         public override string ToString()
         {
-            return $"{DIM_CD}:{ATRB_COL_NM} = {DIM_SID}:{ATRB_SID}";
+            //return $"{DIM_CD}:{ATRB_COL_NM} = {DIM_SID}:{ATRB_SID}";
+            return ATRB_COL_NM;
         }
 
         /// <summary>

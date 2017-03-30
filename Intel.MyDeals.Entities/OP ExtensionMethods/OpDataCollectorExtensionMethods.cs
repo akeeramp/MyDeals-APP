@@ -5,7 +5,7 @@ using Intel.Opaque.Data;
 
 namespace Intel.MyDeals.Entities
 {
-    public static class OpDataCollectorExtentionMethods
+    public static class OpDataCollectorExtensionMethods
     {
        
         ///// <summary>

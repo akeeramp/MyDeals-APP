@@ -675,9 +675,13 @@ function ContractController($scope, $state, contractData, isNewContract, templat
                 topbar.show();
 
                 // Remove from DB first... then remove from screen
-                objsetService.deletePricingStrategy(ps.DC_ID).then(
+                objsetService.deletePricingStrategy($scope.getCustId(), ps).then(
                     function (data) {
-                        // TODO need to handle exception/error here... right now we do not read response for pass/fail
+
+                        if (data.data.MsgType !== 1) {
+                            logger.warning("Unable to Deleted the Pricing Strategy", ps, "Delete Failed");
+                            return;
+                        }
 
                         // might need to unmark the current selected item
                         $scope.unmarkCurPricingStrategyIf(ps.DC_ID);
@@ -686,7 +690,7 @@ function ContractController($scope, $state, contractData, isNewContract, templat
                         // delete item
                         $scope.contractData.PRC_ST.splice($scope.contractData.PRC_ST.indexOf(ps), 1);
 
-                        logger.success("Deleted the Pricing Strategy", ps, "Save Sucessful");
+                        logger.success("Deleted the Pricing Strategy", ps, "Delete Sucessful");
                         topbar.hide();
                     },
                     function (result) {
@@ -703,9 +707,13 @@ function ContractController($scope, $state, contractData, isNewContract, templat
                 topbar.show();
 
                 // Remove from DB first... then remove from screen
-                objsetService.deletePricingTable(pt.DC_ID).then(
+                objsetService.deletePricingTable($scope.getCustId(), pt).then(
                     function (data) {
-                        // TODO need to handle exception/error here... right now we do not read response for pass/fail
+
+                        if (data.data.MsgType !== 1) {
+                            logger.warning("Unable to Deleted the Pricing Table", pt, "Delete Failed");
+                            return;
+                        }
 
                         // might need to unmark the current selected item
                         $scope.unmarkCurPricingTableIf(ps.DC_ID);
@@ -716,7 +724,7 @@ function ContractController($scope, $state, contractData, isNewContract, templat
                         logger.success("Deleted the Pricing Table", pt, "Save Sucessful");
                         topbar.hide();
                     },
-                    function (result) {
+                    function (response) {
                         logger.error("Could not delete the Pricing Table.", response, response.statusText);
                         topbar.hide();
                     }
@@ -810,6 +818,7 @@ function ContractController($scope, $state, contractData, isNewContract, templat
             "WipDeals": gData === undefined ? [] : gData,
             "EventSource": source
         }
+
 
         objsetService.updateContractAndCurPricingTable($scope.getCustId(), data).then(
             function (results) {

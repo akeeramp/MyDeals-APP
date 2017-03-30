@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Intel.MyDeals.BusinessLogic.DataCollectors;
-using Intel.MyDeals.BusinessRules;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.MyDeals.IDataLibrary;
-using Intel.Opaque;
 using Intel.Opaque.Data;
 
 namespace Intel.MyDeals.BusinessLogic
@@ -36,7 +33,6 @@ namespace Intel.MyDeals.BusinessLogic
             List<int> ids;
             List<OpDataElementType> opDataElementTypes;
             OpDataElementType opTypeGrp;
-            bool dataHasValidationErrors = false;
 
             data.PredictIdsAndLevels(out ids, out opDataElementTypes, out opTypeGrp);
 
@@ -53,7 +49,22 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 if (!data.ContainsKey(opDataElementType)) continue;
                 SavePacketByDictionary(data[opDataElementType], myDealsData, opDataElementType, Guid.NewGuid());
+
+                // Check for delete items
+                //foreach (OpDataCollectorFlattenedItem item in data[opDataElementType])
+                //{
+                //    if (!item.ContainsKey("_actions")) continue;
+                //    OpDataCollectorFlattenedItem fItem = (OpDataCollectorFlattenedItem)item["_actions"];
+
+                //    if (!fItem.ContainsKey("_deleteTargetIds")) continue;
+
+                //    List<int> list = (List<int>)fItem["_deleteTargetIds"];
+                //    myDealsData[opDataElementType].Actions.Add(new MyDealsDataAction(DealSaveActionCodes.OBJ_DELETE, list, 30));
+                //}
+
             }
+
+
 
             return PerformTasks(OpActionType.Save, myDealsData, custId);  // execute all save perform task items now
         }
@@ -64,31 +75,22 @@ namespace Intel.MyDeals.BusinessLogic
 
             myDealsData.Merge(opDataElementType, data);
             OpDataPacket<OpDataElementType> newPacket = myDealsData[opDataElementType].GetChanges(); // Goes through the collection and passes only changes after rules.
+
             newPacket.BatchID = myWbBatchId;
             newPacket.GroupID = -101; // Whatever the real ID of this object is
             newPacket.PacketType = opDataElementType; // Why wasn't this set in constructor??
-
-            // These are actions done in the event of having to seperate out normal save runs from additional special purpose saves.
-            // Remove elements that should be ignored for this stage of the save.  
-            // In the future, this would tag elements that need to be saved that would then roll out of the changes list due to reset modified
-            ////List<string> myRemoveActions = new List<string> { "SYNCDEAL", "ACTION" }; // (REMOVE LIST) Any sync or action will require a full Save/Sync call that runs through rules, so remove it now.
-            ////List<int> removeList = GetTargets(myDealsData[opDataElementType], myRemoveActions);
-            ////List<OpDataCollector> removeDcList = newPacket.AllDataCollectors.Where(d => removeList.Contains(d.DcID)).ToList();
-            ////foreach (OpDataCollector removeDc in removeDcList)
-            ////{
-            ////    if (removeDc.DcID >= 0)
-            ////        newPacket.Data.Remove(removeDc.DcID);
-            ////}
 
             // Back to normal operations, clear out the messages and all.
             newPacket.Actions.RemoveAll(r => r.ActionDirection == OpActionDirection.Inbound);
             newPacket.Messages.Messages.RemoveAll(r => true);
 
             // Tack on the save action call now
-            newPacket.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.SAVE, 20)); // Set action - save it.
+            newPacket.AddSaveActions();
+            newPacket.AddDeleteActions(data);
+
             myDealsData[opDataElementType] = newPacket;
-            // This is replacing the packet with the changes only.
         }
+
 
         //public void SaveDealsbyDictionary(OpDataCollectorFlattenedList data, MyDealsData myDealsData, Guid myWbBatchId)
         //{
@@ -121,7 +123,7 @@ namespace Intel.MyDeals.BusinessLogic
         //    myDealsData[opDataElementType] = newPacket;
         //    // This is replacing the packet with the changes only.
         //}
-        
+
         private MyDealsData PerformTasks(OpActionType? actionToRun, MyDealsData myDealsData, int custId)
         {
             // Save Data Cycle: Point 14

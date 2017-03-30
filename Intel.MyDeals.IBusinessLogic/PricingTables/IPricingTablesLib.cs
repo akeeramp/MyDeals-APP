@@ -11,6 +11,7 @@ namespace Intel.MyDeals.IBusinessLogic
         OpDataCollectorFlattenedDictList SavePricingTable(OpDataCollectorFlattenedList data, int custId);
         OpDataCollectorFlattenedDictList SavePricingTable(OpDataCollectorFlattenedList pricingTables, OpDataCollectorFlattenedList pricingTableRows, OpDataCollectorFlattenedList wipDeals, int custId);
         OpDataCollectorFlattenedDictList SaveFullPricingTable(OpDataCollectorFlattenedDictList fullpricingTables, int custId);
-        OpMsg DeletePricingTable(int id);
+        OpMsg DeletePricingTable(int custId, OpDataCollectorFlattenedList pricingTables);
+        OpMsg DeletePricingTableRow(int custId, OpDataCollectorFlattenedList pricingTableRows);
     }
 }

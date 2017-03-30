@@ -291,7 +291,7 @@ namespace Intel.MyDeals.DataLibrary
                         case DealSaveActionCodes.ATRB_DELETED:
                         case DealSaveActionCodes.OBJ_DELETED:
                             {
-                                WriteIDListAction(ret[objSet], rdr, OpMsg.MessageType.Info, ACTN_NM);
+                                WriteIDListAction(ret[objSet], rdr);
                                 break;
                             }
                     }
@@ -397,14 +397,11 @@ namespace Intel.MyDeals.DataLibrary
 
                     OpLogPerf.Log("DealDataLib.Save:ActionDeals - Post Processing ATRB_DELETED: {0} '{1}'.", op.PacketType, op.BatchID);
 
-                    foreach (DataRow dr in dtActionResults.Select(String.Format("{0} IN ('{1}','{2}')",
-                        Entities.deal.MYDL_CL_WIP_ACTN.ACTN_NM,
-                        DealSaveActionCodes.ATRB_DELETED,
-                        DealSaveActionCodes.OBJ_DELETED
-                    )))
+                    foreach (DataRow dr in dtActionResults.Select(
+                        $"{Entities.deal.MYDL_CL_WIP_ACTN.ACTN_NM} IN ('{DealSaveActionCodes.ATRB_DELETED}','{DealSaveActionCodes.OBJ_DELETED}')"))
                     {
                         processedActions.Add((int)dr[Entities.deal.MYDL_CL_WIP_ACTN.WIP_ACTN_SID]);
-                        WriteIDListAction(retPack, new DataRowRecordAdapter(dr), OpMsg.MessageType.Info, (string)dr[Entities.deal.MYDL_CL_WIP_ACTN.ACTN_NM]);
+                        WriteIDListAction(retPack, new DataRowRecordAdapter(dr));
                     }
 
                     #endregion ATRB_DELETED
@@ -598,36 +595,53 @@ namespace Intel.MyDeals.DataLibrary
             return newId;
         }
 
-        private void WriteIDListAction(OpDataPacket<OpDataElementType> odp, IDataRecord record, OpMsg.MessageType msgType, string actnNm)
+        private void WriteIDListAction(OpDataPacket<OpDataElementType> odp, IDataRecord record)
         {
-            var intIds = OpTypeConverter.StringToIntList($"{record[Entities.deal.MYDL_CL_WIP_ACTN.ACTN_VAL_LIST]}");
-            if (!intIds.Any()) { return; }
+            object noid = record[Entities.deal.MYDL_CL_WIP_ACTN.OBJ_SID];
+            int id = noid == null || noid == DBNull.Value ? 0 : (int)noid;
 
-            var oda = new OpDataAction
+            if (id != 0)
             {
-                Action = actnNm,
-                MessageCode = msgType,
-                TargetDcIDs = intIds.ToList()
-            };
-
-            int idx = record.GetOrdinal(Entities.deal.MYDL_CL_WIP_ACTN.OBJ_SID);
-
-            if (idx > -1 && !record.IsDBNull(idx))
-            {
-                oda.DcID = record.GetInt32(idx);
-            }
-            idx = record.GetOrdinal(Entities.deal.MYDL_CL_WIP_ACTN.OLD_OBJ_SID);
-            if (idx > -1 && !record.IsDBNull(idx))
-            {
-                oda.AltID = record.GetInt32(idx);
-            }
-            idx = record.GetOrdinal(Entities.deal.MYDL_CL_WIP_ACTN.ACTN_VAL_LIST);
-            if (idx > -1 && !record.IsDBNull(idx))
-            {
-                oda.Value = record.GetString(idx);
+                odp.Actions.Add(new OpDataAction
+                {
+                    Action = DealSaveActionCodes.OBJ_DELETED,
+                    DcID = id,
+                    AltID = id,
+                    Value = $"{record[Entities.deal.MYDL_CL_WIP_ACTN.OBJ_TYPE_SID]}",
+                    MessageCode = OpMsg.MessageType.Info
+                });
             }
 
-            odp.Actions.Add(oda);
+            //return newId;
+
+            //var intIds = OpTypeConverter.StringToIntList($"{record[Entities.deal.MYDL_CL_WIP_ACTN.OBJ_SID]}");
+            //if (!intIds.Any()) { return; }
+
+            //var oda = new OpDataAction
+            //{
+            //    Action = actnNm,
+            //    MessageCode = msgType,
+            //    TargetDcIDs = intIds.ToList()
+            //};
+
+            //int idx = record.GetOrdinal(Entities.deal.MYDL_CL_WIP_ACTN.OBJ_SID);
+
+            //if (idx > -1 && !record.IsDBNull(idx))
+            //{
+            //    oda.DcID = record.GetInt32(idx);
+            //}
+            //idx = record.GetOrdinal(Entities.deal.MYDL_CL_WIP_ACTN.OLD_OBJ_SID);
+            //if (idx > -1 && !record.IsDBNull(idx))
+            //{
+            //    oda.AltID = record.GetInt32(idx);
+            //}
+            //idx = record.GetOrdinal(Entities.deal.MYDL_CL_WIP_ACTN.ACTN_VAL_LIST);
+            //if (idx > -1 && !record.IsDBNull(idx))
+            //{
+            //    oda.Value = record.GetString(idx);
+            //}
+
+            //odp.Actions.Add(oda);
         }
     }
 }

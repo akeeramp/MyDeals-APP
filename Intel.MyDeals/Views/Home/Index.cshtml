@@ -89,6 +89,12 @@
 </div>
 
 <script>
+    $("#cntrcId").keypress(function (e) {
+        if (e.keyCode === 13) {
+            openCntrct();
+        }
+    });
+
     function newCntrct() {
         document.location.href = "/Contract#/manager/0/details";
     }
