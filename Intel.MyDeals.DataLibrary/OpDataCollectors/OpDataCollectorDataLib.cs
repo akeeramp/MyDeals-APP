@@ -295,7 +295,7 @@ namespace Intel.MyDeals.DataLibrary
             int IDX_DOT_NET_DATA_TYPE = DB.GetReaderOrdinal(rdr, "DOT_NET_DATA_TYPE"); // Attribute .NET data type
 
             int IDX_ATRB_MTX_SID = DB.GetReaderOrdinal(rdr, "ATRB_MTX_SID"); // Attribute Matrix SID 
-            int IDX_ATRB_MTX_HASH = DB.GetReaderOrdinal(rdr, "ATRB_MTX_HASH"); // Attribute Matrix Hash, ex. "5000:32272/5003:1"
+            int IDX_ATRB_MTX_HASH = DB.GetReaderOrdinal(rdr, "ATRB_MTX_HASH"); // Attribute Matrix Hash, ex. "4:6/10:4"
 
             int IDX_ATRB_VAL_INT = DB.GetReaderOrdinal(rdr, "ATRB_VAL_INT"); // Atrb val INT
             int IDX_ATRB_VAL_MONEY = DB.GetReaderOrdinal(rdr, "ATRB_VAL_MONEY"); // Atrb val MONEY

@@ -77,8 +77,8 @@ namespace Intel.MyDeals.BusinessLogic
         {
             // Load Data Cycle: Point 4
             // Save Data Cycle: Point 8
-            List<string> foundItems = dc.DataElements.Select(d => d.GetFullKeyWithRegNoExtras(new Regex(@"5000:[0-9]*/"), "5000:-99999/")).ToList();
-            IEnumerable<OpDataElement> missingItems = templateSource.Where(d => !foundItems.Contains(new Regex("5000:[0-9]*/").Replace(d.GetFullKeyNoExtras(), "5000:-99999/")));
+            List<string> foundItems = dc.DataElements.Select(d => d.GetFullKeyWithRegNoExtras(new Regex(@"7:[0-9]*/"), "7:-99999/")).ToList(); // Product Dimension moved from 5000: to 7:
+            IEnumerable<OpDataElement> missingItems = templateSource.Where(d => !foundItems.Contains(new Regex("7:[0-9]*/").Replace(d.GetFullKeyNoExtras(), "7:-99999/")));
 
             // items in the template that are missing
             foreach (OpDataElement deUi in missingItems)

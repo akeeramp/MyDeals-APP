@@ -402,7 +402,7 @@ namespace Intel.MyDeals.Entities
         }
 
         ///<summary>
-        /// ATRB_SID: 5003
+        /// ATRB_SID: 10 // Used to be 5003
         ///</summary>
         public static class PRD_BUCKT_SID_VAL
         {
