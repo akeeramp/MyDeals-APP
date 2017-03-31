@@ -412,16 +412,7 @@ function ContractController($scope, $state, contractData, isNewContract, templat
         resizable: true,
         columnMenu: false,
         editable: { mode: "inline", confirmation: false },
-        destroy: function (e) {
-            var commandCell = e.container.find("td:first");
-            commandCell.html('<a class="k-grid-update" href="#"><span class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span class="k-icon k-i-cancel"></span></a>');
-        },
         columns: [
-        {
-            command: [
-                { name: "destroy", template: "<a class='k-grid-delete' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-close'></span></a>" }
-            ], title: "", width: "7%"
-        },
         { field: "ATTCH_SID", title: "ID", hidden: true },
         //IE doesn't support download tag on anchor, added target='_blank' as a work around
         { field: "FILE_NM", title: "File Name", template: "<a download target='_blank' href='/api/Files/OpenFileAttachment/#: FILE_DATA_SID #/'>#: FILE_NM #</a>" },
