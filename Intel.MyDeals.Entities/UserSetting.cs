@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Security.Permissions;
 using Intel.Opaque;
 
 namespace Intel.MyDeals.Entities
@@ -14,6 +13,7 @@ namespace Intel.MyDeals.Entities
             SecurityActions = new ObservableCollection<SecurityAttribute>();
             AllMyCustomers = new List<CustomerItem>();
             UserPreferences = new List<UserPreference>();
+            VerticalSecurity = new ObservableCollection<VerticalSecurityItem>();
         }
 
         public OpUserToken UserToken { get; set; }

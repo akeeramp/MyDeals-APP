@@ -24,33 +24,6 @@
                 <button id="btnHome">Take me back to the Homepage</button>
             </div>
 
-            <div class="debugWin">
-                @if (Model != null)
-                {
-                    <div>
-                        <div>
-                            <pre>
-@Model.Exception.StackTrace
-                            </pre>
-                        </div>
-                    </div>
-
-                    if (Model.Exception.InnerException != null)
-                    {
-                        <div>
-                            <p>
-                                <b>Inner Exception:</b> @Model.Exception.InnerException.Message<br/>
-                            </p>
-                            <div>
-                                <pre>
-@Model.Exception.InnerException.StackTrace
-                </pre>
-                            </div>
-                        </div>
-                    }
-                }
-
-            </div>
         </div>
     </div>
 </div>

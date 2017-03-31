@@ -63,9 +63,6 @@ namespace Intel.MyDeals
                     AppCustomAuthenticationFunc = CustomAuthentication
                 };
 
-				// Load Role Types
-				////opCore.SetRoleType(new SecurityAttributesLib().GetOpRoleTypes());
-
 				return OpCore.Instance;
             }
             catch (Exception ex)
@@ -77,19 +74,13 @@ namespace Intel.MyDeals
 
         public static OpUserToken CustomAuthentication(string idsid, string env)
         {
+            // Loading user token from IDSID, to test out non-existant user, just append something to below ({Idsid = "A" + idsod}};)
             idsid = idsid.Trim();
             OpUserToken opUserToken = new OpUserToken {Usr = {Idsid = idsid}};
 
-            // ALL MASTER DATA WAS REMOVED AND WE CAN NOT AUTHENTICATE UNNTIL IT IS RETURNED... HARD CODE FOR NOW
-            opUserToken.Usr.Idsid = idsid;
-            opUserToken.Usr.WWID = 10548414;
-            opUserToken.Usr.FirstName = idsid;
-            opUserToken.Usr.LastName = idsid;
-            opUserToken.Usr.UserID = 123;
-
             AppLib.PopulateUserSettings(opUserToken);
 
-            return AppLib.UserSettings[idsid.ToUpper()].UserToken;
+            return opUserToken.Usr.WWID == 0 ? null : AppLib.UserSettings[idsid.ToUpper()].UserToken;
         }
 
     }

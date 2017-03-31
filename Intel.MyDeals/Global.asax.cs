@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
@@ -10,9 +9,6 @@ using Intel.MyDeals.BusinessLogic;
 using Intel.MyDeals.Controllers;
 using Intel.MyDeals.Entities.Logging;
 using Intel.Opaque;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Linq;
 
 namespace Intel.MyDeals
 {
@@ -36,6 +32,13 @@ namespace Intel.MyDeals
         {
             Exception ex = Server.GetLastError();
             ErrorControllerContent errCon = AppHelper.GenerateErrorContext(ex, ((WebApiApplication)sender).Context);
+
+            if (ex.Message.Contains("You do not have access to this site"))
+            {
+                errCon.CurrentController = "Error";
+                errCon.CurrentAction = "Access";
+                errCon.RequestContext.RouteData.Values["action"] = "Access";
+            }
 
             var controller = new ErrorController
             {

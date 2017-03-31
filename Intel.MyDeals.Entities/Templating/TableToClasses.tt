@@ -83,6 +83,29 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "CustomerDivision";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
+	// User Vital Objects
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_GET_USR_VITALS] @IDSID = 'mhtippin', @APP_NM = 'MYDL'");
+	ds.Tables[0].TableName = "UserVitalsRole";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
+	ds.Tables[1].TableName = "UserVitalsSecurityAction";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[1], false));
+
+	ds.Tables[2].TableName = "UserVitalsSecurityMask";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[2], false));
+
+	//// Tables[3] - skipped, contains object cache timestamps
+
+	ds.Tables[4].TableName = "UserVitalsVerticals";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[4], false));
+
+	//// Tables[5] - skipped, contains user profile settings
+
+	ds.Tables[6].TableName = "UserVitalsSuper";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[6], false));
+
+	//// Tables[7] - skipped, contains WFSTG Security items
+
 	// My Customer Objects
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_MY_CUST] @in_emp_wwid = 10505693");
 	ds.Tables[0].TableName = "MyCustomersInformation";

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
+using Intel.Opaque;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -20,9 +21,9 @@ namespace Intel.MyDeals.BusinessLogic
 
         #endregion Employees
 
-        public UserSetting GetUserSettings()
+        public UserSetting GetUserSettings(OpUserToken opUserToken)
         {
-            return new EmployeeDataLib().GetUserSettings();
+            return new EmployeeDataLib().GetUserSettings(opUserToken);
         }
 
         public IEnumerable<UserPreference> GetUserPreference()

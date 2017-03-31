@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Security.Authentication;
 using Intel.MyDeals.BusinessLogic;
 using Intel.MyDeals.Entities;
-using Intel.MyDeals.Entities.Helpers;
 using Intel.Opaque;
 
 namespace Intel.MyDeals.App
@@ -11,20 +12,28 @@ namespace Intel.MyDeals.App
     public static class AppLib
     {
         public static ApplicationViewModel AVM;
-		
-		public static Dictionary<string, UserSetting> UserSettings
-        {
-            get { return OpUserStack.UserSettings ?? (OpUserStack.UserSettings = new Dictionary<string, UserSetting>()); }
-            set { OpUserStack.UserSettings = value; }
 
-            //get { return _userSettings ?? (_userSettings = new Dictionary<string, UserSetting>()); }
-            //set { _userSettings = value; }
+        public static Dictionary<string, UserSetting> UserSettings
+        {
+            get
+            {
+                return OpUserStack.UserSettings ?? (OpUserStack.UserSettings = new Dictionary<string, UserSetting>());
+            }
+            set { OpUserStack.UserSettings = value; }
         }
-        //private static Dictionary<string, UserSetting> _userSettings;
 
         public static OpUserToken InitAVM(OpCore op, bool forceLoad = false)
         {
-            OpUserToken user = op.Authenticate("MyDeals", GetEnvironment());
+            OpUserToken user = null;
+            try
+            {
+                user = op.Authenticate("MyDeals", GetEnvironment());
+            }
+            catch (Exception ex)
+            {
+                throw new AuthenticationException(ex.Message, ex);
+            }
+
             new AccountsLib().SetUserAccessLevel(user);
 
             if (AVM != null && !forceLoad)
@@ -43,8 +52,6 @@ namespace Intel.MyDeals.App
                 AppCopy = "© 2016 DEAL COMPLIANCE SOLUTIONS",
                 AppCopyShort = "© 2016 My Deals"
             };
-
-            PopulateUserSettings(user);
 
             SetEnvName();
             SetVersion();
@@ -120,7 +127,7 @@ namespace Intel.MyDeals.App
         {
             if (UserSettings.ContainsKey(opUserToken.Usr.Idsid.ToUpper()) && UserSettings[opUserToken.Usr.Idsid.ToUpper()] != null) return;
 
-            UserSetting settings = new EmployeesLib().GetUserSettings();
+            UserSetting settings = new EmployeesLib().GetUserSettings(opUserToken);
 
             UserSettings[opUserToken.Usr.Idsid.ToUpper()] = settings;
             UserSettings[opUserToken.Usr.Idsid.ToUpper()].UserToken = opUserToken;
