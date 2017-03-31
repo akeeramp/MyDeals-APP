@@ -315,8 +315,7 @@
         text-align: center;
         font: 12px Arial, sans-serif;
         font-weight: bold;
-        margin-right: 8px;
-        margin-top: -5px;
+        margin-left: 8px;
     }
 
     .textName {
@@ -570,8 +569,22 @@
 
     .noFormula .k-spreadsheet-action-bar {
         visibility: hidden;
-    }
+		height: 0px;
+		overflow: hidden;
+		display: block;
+		border: 0;
+	}
 
+	.k-spreadsheet .k-spreadsheet-quick-access-toolbar{
+		position: relative;
+	}
+	.k-tabstrip-wrapper{
+		background-color: #f2f2f2;
+		border-bottom: 1px solid #e7e7e8;
+		height: 49px;
+	}
+
+	/* TODO REEVALUATE IF WE NEED THE BELOW CLASSES */
     .ssIconBtn {
         font-size: 18px;
         cursor: pointer;
@@ -732,6 +745,7 @@
         text-transform: uppercase;
     }
 
+	/* Column Letters */
     .k-spreadsheet-view .k-spreadsheet-fixed-container .k-spreadsheet-pane {
         font-size: 10px;
     }
@@ -776,17 +790,89 @@
     }
 
     .k-spreadsheet>.k-spreadsheet-view {
-        font-size: 10px;
+        font-size: 14px;
     }
     .decsription {
-        font-size: 11px;
         color: #b1babf;
+        font-size: 11px;
         font-style: italic;
         margin-left: 2px;
     }
+
+	/* Spreadsheet Row numbers */
+	.k-spreadsheet-column-header, .k-spreadsheet-row-header, .k-spreadsheet-top-corner {
+		background-color: #f3f3f4;
+		background-image: none;
+		border-color: #bebec3;
+		color: #000;
+	}
+	
+	/* Spreadsheet Custom Toolbar */	
+	.ssToolbarBtn {
+		background-color: #f2f2f2;
+		border-right: 1px solid #d2dade;
+		border-radius: 0px;
+		color:#1A3E6F;
+		font-size: 11px;
+		line-height: normal;
+		margin: 5px 0px;
+		padding: 3px 10px;
+	}
+	.ssToolbarBtn:hover {
+		background-color: #fafafa;
+		color: #0071c5;
+	}
+
+	.skyBlue {
+		color: #00aeef;
+	}
+
+	/* Undo / redo buttons */
+	.k-spreadsheet .k-spreadsheet-quick-access-toolbar{
+		margin-left:55px;
+	}	
+	.k-spreadsheet .k-spreadsheet-quick-access-toolbar .k-button
+	, .k-spreadsheet .k-spreadsheet-sheets-bar .k-button {		
+		width: 3.6em;
+	}
+	.k-spreadsheet .k-spreadsheet-quick-access-toolbar .k-button:hover
+	, .k-spreadsheet .k-spreadsheet-sheets-bar .k-button:hover {
+		background-color: #fafafa;
+		border-color: #fafafa;
+	}
+	.ssUndoButton {		
+		font-size: 23px;
+		margin-top: 9px;
+		color: #42c0fb;
+	}
+
+	.ssWipBar {
+		height: 50px;
+		background-color: #f2df95;
+		width: 100%;
+	}
     .contractHeader small{
         font-size:20px;
     }
     .contractHeaderId{
         color:#0071C5;
     }
+	
+
+	/* SpreadSheet validation */
+	.k-spreadsheet-cell .k-dirty {
+		width: 100%;
+		height: 100%;
+		border-width: 0px;
+	}
+	.k-spreadsheet-cell.k-dirty-cell {
+		border:1px solid red;
+	}
+	.k-spreadsheet .k-spreadsheet-pane .k-spreadsheet-cell.k-dirty-cell {		
+		-webkit-box-sizing: content-box;
+		 box-sizing: content-box; 
+		 padding: 0px;
+	}
+	 .k-spreadsheet .k-dirty-cell .k-vertical-align-bottom {
+		 padding-left: 3px;
+	}

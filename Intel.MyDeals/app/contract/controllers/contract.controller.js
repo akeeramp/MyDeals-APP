@@ -1214,9 +1214,6 @@ function ContractController($scope, $state, contractData, isNewContract, templat
 
     // **** VALIDATE PRICING TABLE Methods ****
     //
-    $scope.validatePricingTable = function () {
-        $scope.showWipDeals();
-    }
 
     $scope.showWipDeals = function () {
         $state.go('contract.manager.strategy.wip', {

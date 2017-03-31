@@ -5943,10 +5943,6 @@ div.k-scheduler-marquee:after {
 
 /* CUSTOM GRID CSS */
 
-.k-dirty {
-    display: none;
-}
-
 .k-grid .k-alt {
     background-color: #F4F4F4;
 }

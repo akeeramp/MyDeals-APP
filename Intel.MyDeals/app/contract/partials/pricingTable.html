@@ -1,18 +1,87 @@
 ﻿<div ui-view="wipDealView" class="fullHeight">
-    <div style="position: absolute; left: 60px; z-index: 1000;">
-        <table style="width: 100%; height: 37px;">
-            <tr>
-                <td style="padding-left: 20px; padding-top: 5px;">
-                    <div class="textCircleMd pct_{{ curPricingTable.PCT_RESULT }}">{{ curPricingTable.OBJ_SET_TYPE_CD | limitTo:1 }}</div>
-                </td>
-                <td style="width: 100%; padding-top: 5px;">
-                    <input type="text" ng-model="curPricingTable.TITLE" class="transparentInput fntLg noBottomBorder w100" />
-                </td>
-                <td style="padding: 1px 2px 0 10px;">
-                    <button class="btn btn-sm intelLtBlue" ng-click="validatePricingTable()">Validate</button>
-                </td>
-            </tr>
-        </table>
-    </div>
-    <div kendo-spreadsheet style="width: 100%; height: 100%;" k-options="ptSpreadOptions" k-scope-field="spreadsheet" class="noFormula"></div>
+	<div class="row">
+		<div class="col-md-11" style="padding-bottom: 5px;">
+			<div class="fl textCircleMd pct_{{ curPricingTable.PCT_RESULT }}">{{ curPricingTable.OBJ_SET_TYPE_CD | limitTo:1 }}</div>
+			<input type="text" ng-model="curPricingTable.TITLE" class="transparentInput fntLg noBottomBorder col-md-11" />
+		</div>
+	</div>
+	<div style="position:absolute; left: 5px; z-index: 1000;">
+		<!-- Save Button -->
+		<button class="btn btn-sm ssToolbarBtn" ng-click="saveEntireContract()" title="Save Pricing Table">
+			<table>
+				<tr>
+					<td>
+						<i class="fa fa-floppy-o skyBlue" aria-hidden="true" style="font-size: 29px; margin-top: 2px;"></i>
+					</td>
+				</tr>
+			</table>
+		</button>
+	</div>
+
+	<div style="position:absolute; left: 140px; z-index: 1000;">
+		<table style="height: 37px;">
+			<tr>
+				<td style="padding: 1px 2px 0 10px;">
+					<!-- Product Selector Button -->
+					<button class="btn btn-sm ssToolbarBtn" ng-click="openProductSelector()" style="border-left: 1px solid #d2dade;">
+						<table>
+							<tr>
+								<td>
+									<i class="fa fa-mouse-pointer skyBlue" aria-hidden="true" style="font-size: 26px"></i>
+								</td>
+								<td style="padding-left: 5px">
+									Product <br />Selector
+								</td>
+							</tr>
+						</table>
+					</button>
+
+					<!-- Validate Products Button -->
+					<button class="btn btn-sm ssToolbarBtn" ng-click="validatePricingTable()">
+						<table>
+							<tr>
+								<td>
+									<i class="fa fa-check-circle skyBlue" aria-hidden="true" style="font-size: 30px"></i>
+								</td>
+								<td style="padding-left: 5px">
+									Validate <br />Products
+								</td>
+							</tr>
+						</table>
+					</button>
+					<!-- view WIP grid Button -->
+					<button class="btn btn-sm ssToolbarBtn" ng-click="showWipDeals()">
+						<table>
+							<tr>
+								<td>
+									<!--<i class="fa fa-check-circle skyBlue" aria-hidden="true" style="font-size: 30px"></i>-->
+								</td>
+								<td style="padding-left: 5px">
+									View WIP deals
+								</td>
+							</tr>
+						</table>
+					</button>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+
+	<div style="position:absolute; float: right; right: 5px; z-index: 1000;">
+		<!-- Save Button -->
+		<button class="btn btn-sm ssToolbarBtn" ng-click="openInfoDialog()" title="Info">
+			<table>
+				<tr>
+					<td>
+						<i class="fa fa-info-circle skyBlue" aria-hidden="true" style="font-size: 29px; margin-top: 2px;"></i>
+					</td>
+				</tr>
+			</table>
+		</button>
+	</div>
+
+	<div kendo-spreadsheet id="pricingTableSpreadsheet" style="width: 100%; height: 100%;" k-options="ptSpreadOptions" k-scope-field="spreadsheet" class="noFormula"></div>
 </div>
+
+<div class="ssWipBar"></div>
