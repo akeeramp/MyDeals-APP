@@ -188,8 +188,8 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
             OpDataElementTypeMapping elMapping = opSetType.OpDataElementTypeChildMapping(opType);
             OpDataElementAtrbTemplate template = OpDataElementUiExtensions.GetAtrbTemplate(elMapping.ChildOpDataElementType, elMapping.ChildOpDataElementSetType);
 
-            List<string> singleDimAtrbs = template.Where(t => t.DimID == 0 && !t.DimKey.Any()).Select(t => t.AtrbCd).ToList();
-            List<string> multiDimAtrbs = template.Where(t => t.DimID != 0 || t.DimKey.Any()).Select(t => t.AtrbCd).ToList();
+            List<string> singleDimAtrbs = template.Where(t => t.DimID == 0 && !t.DimKey.Any()).Select(t => t.AtrbCd).Distinct().ToList();
+            List<string> multiDimAtrbs = template.Where(t => t.DimID != 0 || t.DimKey.Any()).Select(t => t.AtrbCd + t.DimKeyString.AtrbCdDimKeySafe()).Distinct().ToList();
 
 
             // Get Product string already approved by Product Entry.  We should be able to trust these values
@@ -247,7 +247,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                 }
             }
 
-            // not sure what to assign this to yet... if new,no id, if existingneed the id.  We don't have access to that in this scope
+            // not sure what to assign this to yet... if new, no id, if existing need the id.  We don't have access to that in this scope
             //newItem[AttributeCodes.DC_ID] = 0;
             // Thinking we just remove it and let the template and getById populate this for us.  Might need to revisit.
             newItem.Remove(AttributeCodes.DC_ID);

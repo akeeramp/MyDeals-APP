@@ -127,7 +127,7 @@
         height: 33px;
         margin-top: -33px;
         font-size: 14px;
-        padding: 4px 16px;
+        padding: 5px 16px 3px 0;
         font-family: "Intel Clear";
         font-weight: 200;
         font-style: normal;
@@ -135,9 +135,32 @@
         background-color: #ffffff;
         color: #c1c1c1;
     }
+    #secHeader .col-md-11 {
+        padding-left: 4px;
+    }
+    /*#secContainerWrapper {
+        height: 100%;
+        padding: 0 0 0 0;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+    #secHeader {
+        height: 0;
+        margin-top: 0;
+        font-size: 14px;
+        padding: 4px 16px;
+        font-family: "Intel Clear";
+        font-weight: 200;
+        font-style: normal;
+
+        background-color: #ffffff;
+        color: #c1c1c1;
+    }*/
+
     #secContainer {
         height: 100%;
-        overflow: auto;
+        overflow: hidden;
     }
     #secFooter {
         margin: 0 0 -150px 0;
@@ -308,14 +331,14 @@
     }
     .textCircleMd {
         border-radius: 50%;
-        width: 15px;
-        height: 15px;
+        width: 20px;
+        height: 20px;
         padding: 4px;
         color: #003C71;
         text-align: center;
         font: 12px Arial, sans-serif;
         font-weight: bold;
-        margin-left: 8px;
+        margin: 1px 6px 0 8px;
     }
 
     .textName {
@@ -350,6 +373,26 @@
         margin-bottom: 15px;
     }
 
+    .smTabTitle {
+        padding: 5px 8px 2px 4px;
+        -ms-border-top-right-radius: 4px;
+        border-top-right-radius: 4px; 
+        color: #aaaaaa; 
+        background: #eeeeee;
+        cursor: pointer;
+    }
+
+    .smTabTitle:hover {
+        color: #ffffff; 
+        background: #00AEEF;
+    }
+
+    .smTabShowTerms {
+        position: absolute; 
+        bottom: 0; 
+        z-index: 5000;
+    }
+
     .blueBg {
         color: #ffffff;
         background: #00AEEF;
@@ -367,7 +410,9 @@
         background: #F3D54E;
     }
     .pct_ {
-        background: #F3D54E;
+        /* Until we get PCT/MCT done, we will always default to this style.  So let's show a color for now' */
+        /* background: transparent; */
+        background: #C4D600;
     }
 
     .psNav {
@@ -581,7 +626,7 @@
 	.k-tabstrip-wrapper{
 		background-color: #f2f2f2;
 		border-bottom: 1px solid #e7e7e8;
-		height: 49px;
+		height: 39px;
 	}
 
 	/* TODO REEVALUATE IF WE NEED THE BELOW CLASSES */
@@ -790,7 +835,8 @@
     }
 
     .k-spreadsheet>.k-spreadsheet-view {
-        font-size: 14px;
+        font-size: 12px;
+        font-family: "Intel clear";
     }
     .decsription {
         color: #b1babf;
@@ -815,7 +861,7 @@
 		color:#1A3E6F;
 		font-size: 11px;
 		line-height: normal;
-		margin: 5px 0px;
+		margin: 1px 0px;
 		padding: 3px 10px;
 	}
 	.ssToolbarBtn:hover {
@@ -826,6 +872,10 @@
 	.skyBlue {
 		color: #00aeef;
 	}
+
+    #pricingTableSpreadsheet {
+        background-color: #f3f3f4;
+    }
 
 	/* Undo / redo buttons */
 	.k-spreadsheet .k-spreadsheet-quick-access-toolbar{
@@ -842,8 +892,9 @@
 	}
 	.ssUndoButton {		
 		font-size: 23px;
-		margin-top: 9px;
-		color: #42c0fb;
+		margin-top: 5px;
+		margin-bottom: 0;
+		color: #00aeef;
 	}
 
 	.ssWipBar {
@@ -852,10 +903,17 @@
 		width: 100%;
 	}
     .contractHeader small{
-        font-size:20px;
+        font-size:16px;
+    }
+    .contractHeader A {
+        color:#ffffff;
+    }
+    .contractHeader A:hover {
+        text-decoration: none;
+        color:#F3D54E;
     }
     .contractHeaderId{
-        color:#0071C5;
+        color:#F3D54E !important;
     }
 	
 

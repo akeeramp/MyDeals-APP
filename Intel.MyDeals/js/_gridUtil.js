@@ -283,7 +283,7 @@ gridTools.prototype.createDataSource = function (parentSource, pageSize) {
                     var item = e.data.models[i];
 
                     // assign an ID to the new item
-                    item.ID = gTools.nextId--;
+                    //item.DC_ID = gTools.nextId--;
                     // save data item to the original datasource
                     source.push(item);
 

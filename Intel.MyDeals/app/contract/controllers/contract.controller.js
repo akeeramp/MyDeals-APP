@@ -765,10 +765,10 @@ function ContractController($scope, $state, contractData, isNewContract, templat
         // Wip Deal
         if (gData !== undefined && gData !== null) {
             for (var i = 0; i < gData.length; i++) {
+                // TODO... this should probably mimic Pticing Table Rows
                 if (gData[i].DC_ID === null) gData[i].DC_ID = $scope.uid--;
-                var id = gData[i].ID;
-                if ($scope.gridDetailsDs[id] !== undefined) {
-                    gData[i]._MultiDim = $scope.gridDetailsDs[id].data();
+                if ($scope.gridDetailsDs[gData[i].DC_ID] !== undefined) {
+                    gData[i]._MultiDim = $scope.gridDetailsDs[gData[i].DC_ID].data();
                 }
             }
         }
@@ -810,13 +810,17 @@ function ContractController($scope, $state, contractData, isNewContract, templat
         }
 
 
+        //debugger;
         objsetService.updateContractAndCurPricingTable($scope.getCustId(), data).then(
             function (results) {
                 if (!!results.data.PRC_TBL_ROW) {
                     $scope.updateResults(results.data.PRC_TBL_ROW, $scope.pricingTableData.PRC_TBL_ROW, $scope.spreadDs);
+                    $scope.spreadDs.read();
+
                 }
                 if (!!results.data.WIP_DEAL) {
                     $scope.updateResults(results.data.WIP_DEAL, $scope.pricingTableData.WIP_DEAL, $scope.gridDs);
+                    $scope.gridDs.read();
                 }
 
                 //debugger;
@@ -837,7 +841,7 @@ function ContractController($scope, $state, contractData, isNewContract, templat
         );
     }
 
-    $scope.updateResults = function (data, source, ds) {
+    $scope.updateResults = function (data, source) {
         var i, p;
         if (data !== undefined && data !== null) {
             // look for actions -> this has to be first because remapping might happen
@@ -860,19 +864,16 @@ function ContractController($scope, $state, contractData, isNewContract, templat
 
             // Now look for items that need to be updated
             for (i = 0; i < data.length; i++) {
-                if (data[i]["DC_ID"] !== undefined) {
+                if (data[i]["DC_ID"] !== undefined && data[i]["DC_ID"] !== null) {
                     if (Array.isArray(source)) {
                         for (p = 0; p < source.length; p++) {
-                            $scope.mapProperty(source[p], data[i]);
+                            if (data[i]["DC_ID"] === source[p]["DC_ID"]) $scope.mapProperty(source[p], data[i]);
                         }
                     } else {
-                        $scope.mapProperty(source, data[i]);
+                        if (data[i]["DC_ID"] === source["DC_ID"]) $scope.mapProperty(source, data[i]);
                     }
                 }
             }
-
-            // reload the datasource
-            if (ds !== undefined && ds !== null) ds.read();
         }
     }
     $scope.mapProperty = function (src, data) {

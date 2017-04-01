@@ -26,15 +26,18 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
 		textAlign: "left",
 		verticalAlign: "center",
 		color: "black",
-		fontSize: 14
+		fontSize: 12,
+        fontfamily: "Intel Clear"
 	}
-	var headerStyle = {
-		background: "#e7e7e8",
-		textAlign: "center",
-		verticalAlign: "center",
-		color: "#1A3E6F",
-		fontSize: 14
-	};
+    var headerStyle = {
+        background: "#e7e7e8",
+        textAlign: "center",
+        verticalAlign: "center",
+        color: "#003C71",
+        fontSize: 13,
+        fontWeight: "normal"
+    };
+
 	var ptTemplate = null;
 	var columns = null;
 	var gTools = null;
@@ -104,9 +107,17 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
 		//    }
 		//});
 
-		debugger;
-		var ssTools = new gridTools(ptTemplate.model, ptTemplate.columns);
-		root.spreadDs = ssTools.createDataSource(root.pricingTableData.PRC_TBL_ROW);
+        //debugger;
+        var ssTools = new gridTools(ptTemplate.model, ptTemplate.columns);
+
+        // now remove the header for new spreadsheet entries
+        if (Array.isArray($scope.pricingTableData.PRC_TBL_ROW)) {
+            root.pricingTableData.PRC_TBL_ROW = root.pricingTableData.PRC_TBL_ROW.filter(function (obj) {
+                return obj.DC_ID !== undefined && obj.DC_ID !== null;
+            });
+        }
+
+        root.spreadDs = ssTools.createDataSource(root.pricingTableData.PRC_TBL_ROW);
 
 		//debugger;
 		// sample reload data source call
@@ -144,8 +155,9 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
 			sheetsbar: false,
 			defaultCellStyle: {
 				color: cellStyle.color,
-				fontSize: cellStyle.fontSize
-				//fontFamily: ''
+				fontSize: cellStyle.fontSize,
+				background: cellStyle.background,
+				fontFamily: cellStyle.fontfamily
 			},
 			toolbar: {
 				home: false,
@@ -300,6 +312,7 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
 			headerRange.fontSize(headerStyle.fontSize);
 			headerRange.textAlign(headerStyle.textAlign);
 			headerRange.verticalAlign(headerStyle.verticalAlign);
+			headerRange.bold(false);
 
 			//var intA = "A".charCodeAt(0);
 			//var c = 1;
@@ -323,18 +336,18 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
 					readonly.push(key);
 			}
 
-			// hide all columns based on templating
-			//c = 0;
-			//for (var i = 0; i < ptTemplate.columns.length; i++) {
-			//    if (readonly.indexOf(ptTemplate.columns[i].field) >= 0) {
-			//        sheet.range(String.fromCharCode(intA + c) + "1:" + String.fromCharCode(intA + c) + "200").enable(false);
-			//    }
-			//    if (ptTemplate.columns[i].hidden === true) {
-			//        sheet.hideColumn(i);
-			//    } else {
-			//        c++;
-			//    }
-			//}
+                // hide all columns based on templating
+                c = 0;
+                for (var i = 0; i < ptTemplate.columns.length; i++) {
+                    //if (readonly.indexOf(ptTemplate.columns[i].field) >= 0) {
+                    //    sheet.range(String.fromCharCode(intA + c) + "1:" + String.fromCharCode(intA + c) + "200").enable(false);
+                    //}
+                    if (ptTemplate.columns[i].hidden === true) {
+                        sheet.hideColumn(i);
+                    } else {
+                       c++;
+                    }
+                }
 
 		});
 	}

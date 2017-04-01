@@ -25,16 +25,29 @@ namespace Intel.MyDeals.Entities
             return string.Format("{1}{0}{2}{0}{3}{0}{4}{0}{5}", delim, opDataElementType, opRoleType.RoleTypeCd, wfStage, actionCd, atrbCd);
         }
 
-        public bool ChkAtrbRules(OpDataElementType opDataElementType, OpDataElementSetType opDataElementSetType, OpRoleType opRoleType, string wfStage, string actionCd, string atrbCd, Dictionary<string, bool> securityActionCache = null)
+        public bool ChkAtrbRules(OpDataElementType opDataElementType, OpDataElementSetType opDataElementSetType, string wfStage, string actionCd, string atrbCd, Dictionary<string, bool> securityActionCache = null)
         {
             if (string.IsNullOrEmpty(atrbCd)) return false;
+
+            OpUserToken opUserToken = OpUserStack.MyOpUserToken;
+
+
+            
+            
+            // TODO REMOVE THESE LINES ONCE AUTHENTICATION IS IN PLACE
+            opUserToken.Role.RoleTypeCd = "FSE";
+            wfStage = "Draft";
+
+
+
+
 
             // Function returns the true or false value from the security mask - breakpoint here if you want to verify values in code.
 
             if (securityActionCache == null) securityActionCache = new Dictionary<string, bool>();
 
             // Look for cache first
-            string secBaseKey = DefineBaseKey(opDataElementType, opRoleType, wfStage, actionCd, atrbCd);
+            string secBaseKey = DefineBaseKey(opDataElementType, opUserToken.Role, wfStage, actionCd, atrbCd);
             if (securityActionCache.ContainsKey(secBaseKey)) return securityActionCache[secBaseKey];
 
             SecurityAttribute sa = (from el in SecurityAttributes
@@ -47,13 +60,17 @@ namespace Intel.MyDeals.Entities
                 return false;
             }
 
+            int opDataElementTypeId = opDataElementType.ToId();
+            int opDataElementSetTypeId = opDataElementSetType.ToId();
 
+
+            // TODO Why isn't OBJ_SET_TYPE_ID being set... we should be using that instead of CD
             IEnumerable<string> localSecurityMasks =
 			(from el in SecurityMasks
 						where (el.ACTN_NM == null || el.ACTN_NM == "0" || el.ACTN_NM.Trim() == actionCd)
-							  && (el.OBJ_TYPE_SID == 0 || el.OBJ_TYPE_SID == (int)opDataElementType)
-							  && (el.OBJ_SET_TYPE_SID == 0 || el.OBJ_SET_TYPE_SID == (int)opDataElementSetType)
-							  && (el.ROLE_SID == 0 || el.ROLE_NM == opRoleType.RoleTypeCd)
+							  && (el.OBJ_TYPE_SID == 0 || el.OBJ_TYPE_SID == opDataElementTypeId)
+							  && (el.OBJ_SET_TYPE_CD == "" || el.OBJ_SET_TYPE_CD == opDataElementSetType.ToString())
+							  && (el.ROLE_SID == 0 || el.ROLE_NM == opUserToken.Role.RoleTypeCd)
 							  && (el.WFSTG_MBR_SID == 0 || el.WFSTG_NM == wfStage)
 							select el.PERMISSION_MASK
 			);

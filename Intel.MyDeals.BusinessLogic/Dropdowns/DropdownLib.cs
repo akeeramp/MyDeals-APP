@@ -72,7 +72,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns>list of Role Types Dropdowns</returns>
         public List<Dropdown> GetRoleTypesDropdown()
         {
-            return GetDropdowns().Where(dd => dd.dropdownCategory == "Application Role" && dd.subCategory == "IDMS" && dd.active == 1).ToList();
+            return GetDropdowns().Where(dd => dd.dropdownCategory == "Application Role" && dd.subCategory == "MYDL" && dd.active == 1).ToList();
         }
 
         /// <summary>
