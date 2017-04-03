@@ -138,12 +138,30 @@ namespace Intel.MyDeals.App
         // Added Get_My_Cust returns ehre to over-ride CustomerLib.cs calls
         public static List<MyCustomersInformation> GetMyCustomerNames()
         {
-            return UserSettings[OpUserStack.MyOpUserToken.Usr.Idsid.ToUpper()].AllMyCustomers.CustomerInfo.Where(c => c.cust_lvl_id == 2002).ToList();
+            //return UserSettings[OpUserStack.MyOpUserToken.Usr.Idsid.ToUpper()].AllMyCustomers.CustomerInfo.Where(c => c.cust_lvl_id == 2002).ToList();
+            var fullList = UserSettings[OpUserStack.MyOpUserToken.Usr.Idsid.ToUpper()].AllMyCustomers.CustomerInfo;
+            //var cdmsCustIds = fullList.Select(c => c.cdms_cust_id).Distinct();
+
+            List<MyCustomersInformation> customersOnly = (from cust in fullList
+                select new MyCustomersInformation
+                {
+                    cust_nm = cust.cust_nm,
+                    cust_lvl_id = cust.cust_lvl_id,
+                    cust_chnl = cust.cust_chnl,
+                    cdms_cust_id = cust.cdms_cust_id,
+                    access_type = cust.access_type,
+                    actv_ind = cust.actv_ind,
+                    DEAL_FLG = cust.DEAL_FLG,
+                    host_geo = cust.host_geo
+                }).Distinct().ToList();
+
+            return customersOnly.GroupBy(x => x.cdms_cust_id).Select(x => x.First()).ToList();
         }
 
         public static List<MyCustomersInformation> GetMyCustomerDivsByCustNmSid(int custNmSid)
         {
-            return UserSettings[OpUserStack.MyOpUserToken.Usr.Idsid.ToUpper()].AllMyCustomers.CustomerInfo.Where(c => c.cust_lvl_id == 2003 && c.cdms_cust_id == custNmSid).ToList();
+            //return UserSettings[OpUserStack.MyOpUserToken.Usr.Idsid.ToUpper()].AllMyCustomers.CustomerInfo.Where(c => c.cust_lvl_id == 2003 && c.cdms_cust_id == custNmSid).ToList();
+            return UserSettings[OpUserStack.MyOpUserToken.Usr.Idsid.ToUpper()].AllMyCustomers.CustomerInfo.Where(c => c.cdms_cust_id == custNmSid).ToList();
         }
 
         public static List<MyCustomersInformation> GetMyCustomersInfo()

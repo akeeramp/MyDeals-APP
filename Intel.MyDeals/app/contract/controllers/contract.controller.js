@@ -119,7 +119,7 @@ function ContractController($scope, $state, contractData, isNewContract, templat
                 if (response.data.length <= 1) {
                     $scope.contractData._behaviors.isRequired["CUST_ACCNT_DIV_UI"] = false;
                     $scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV_UI"] = true;
-                    $scope.contractData.CUST_ACCNT_DIV_UI = response.data[0].CUST_DIV_NM.toString();
+                    $scope.contractData.CUST_ACCNT_DIV_UI = response.data[0].cust_div_nm.toString();
                 } else {
                     $scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV_UI"] = false;
                     $scope.contractData._behaviors.isRequired["CUST_ACCNT_DIV_UI"] = true;
