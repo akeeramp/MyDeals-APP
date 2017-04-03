@@ -11,7 +11,7 @@ namespace Intel.MyDeals.Entities
         {
             SecurityMasks = new ObservableCollection<SecurityMask>();
             SecurityActions = new ObservableCollection<SecurityAttribute>();
-            AllMyCustomers = new List<CustomerItem>();
+            AllMyCustomers = new MyCustomerDetailsWrapper();
             UserPreferences = new List<UserPreference>();
             VerticalSecurity = new ObservableCollection<VerticalSecurityItem>();
         }
@@ -30,7 +30,7 @@ namespace Intel.MyDeals.Entities
 
         public ObservableCollection<SecurityAttribute> SecurityActions { get; set; }
 
-        public List<CustomerItem> AllMyCustomers { get; set; }
+        public MyCustomerDetailsWrapper AllMyCustomers { get; set; }
 
     }
 }

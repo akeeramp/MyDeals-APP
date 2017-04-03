@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Web.Http;
+using Intel.MyDeals.App;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 
@@ -88,8 +89,8 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetMyCustomerNames")]
         public IEnumerable<MyCustomersInformation> GetMyCustomerNames()
         {
-            return SafeExecutor(() => _customerLib.GetMyCustomerNames()
-                , "Unable to get My Customers"
+            return SafeExecutor(AppLib.GetMyCustomerNames
+                , "Unable to get My Customer Names"
             );
         }
 
@@ -97,8 +98,8 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetMyCustomerDivsByCustNmSid/{custNmSid}")]
         public IEnumerable<MyCustomersInformation> GetMyCustomerDivsByCustNmSid(int custNmSid)
         {
-            return SafeExecutor(() => _customerLib.GetMyCustomerDivsByCustNmSid(custNmSid)
-                , "Unable to get My Customers"
+            return SafeExecutor(() => AppLib.GetMyCustomerDivsByCustNmSid(custNmSid)
+                , "Unable to get My Customer Name IDs"
             );
         }
 
@@ -106,8 +107,8 @@ namespace Intel.MyDeals.Controllers.API
 		[Route("GetMyCustomersInfo")]
 		public List<MyCustomersInformation> GetMyCustomersInfo()
 		{
-            return SafeExecutor(() => _customerLib.GetMyCustomersInfo()
-                , "Unable to get Customers"
+            return SafeExecutor(AppLib.GetMyCustomersInfo
+                , "Unable to get My Customers Info"
             );
 		}
 
@@ -115,8 +116,8 @@ namespace Intel.MyDeals.Controllers.API
 		[Route("GetMyCustomersSoldTo")]
 		public List<MyCustomersSoldTo> GetMyCustomersSoldTo()
 		{
-            return SafeExecutor(() => _customerLib.GetMyCustomersSoldTo()
-                , "Unable to get Customers"
+            return SafeExecutor(AppLib.GetMyCustomersSoldTo
+                , "Unable to get My Customer Sold Tos"
             );
 		}
 	}

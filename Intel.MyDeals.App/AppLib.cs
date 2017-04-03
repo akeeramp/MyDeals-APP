@@ -83,16 +83,16 @@ namespace Intel.MyDeals.App
             AVM.AppVer = Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
 
-        public static List<CustomerItem> GetMyCustomers(OpUserToken opUserToken)
+        public static MyCustomerDetailsWrapper GetMyCustomers(OpUserToken opUserToken)
         {
             string idsid = opUserToken.Usr.Idsid.ToUpper();
             if (!UserSettings.ContainsKey(idsid))
             {
                 PopulateUserSettings(opUserToken);
             }
-            if (!UserSettings[idsid].AllMyCustomers.Any())
+            if (UserSettings[idsid].AllMyCustomers.CustomerInfo == null)
             {
-                ////PE////UserSettings[idsid].AllMyCustomers = new CustomerLib().GetMyCustomers(opUserToken, true);
+                UserSettings[idsid].AllMyCustomers = new CustomerLib().GetMyCustomers();
             }
             return UserSettings[idsid].AllMyCustomers;
         }
@@ -134,10 +134,30 @@ namespace Intel.MyDeals.App
             UserSettings[opUserToken.Usr.Idsid.ToUpper()].AllMyCustomers = GetMyCustomers(opUserToken);
             UserSettings[opUserToken.Usr.Idsid.ToUpper()].UserPreferences = GetUserPreferences(opUserToken);
         }
-		
-		
 
-		public static void ClearCache()
+        // Added Get_My_Cust returns ehre to over-ride CustomerLib.cs calls
+        public static List<MyCustomersInformation> GetMyCustomerNames()
+        {
+            return UserSettings[OpUserStack.MyOpUserToken.Usr.Idsid.ToUpper()].AllMyCustomers.CustomerInfo.Where(c => c.cust_lvl_id == 2002).ToList();
+        }
+
+        public static List<MyCustomersInformation> GetMyCustomerDivsByCustNmSid(int custNmSid)
+        {
+            return UserSettings[OpUserStack.MyOpUserToken.Usr.Idsid.ToUpper()].AllMyCustomers.CustomerInfo.Where(c => c.cust_lvl_id == 2003 && c.cdms_cust_id == custNmSid).ToList();
+        }
+
+        public static List<MyCustomersInformation> GetMyCustomersInfo()
+        {
+            return UserSettings[OpUserStack.MyOpUserToken.Usr.Idsid.ToUpper()].AllMyCustomers.CustomerInfo;
+        }
+
+        public static List<MyCustomersSoldTo> GetMyCustomersSoldTo()
+        {
+            return UserSettings[OpUserStack.MyOpUserToken.Usr.Idsid.ToUpper()].AllMyCustomers.CustomerSoldTo;
+        }
+
+
+        public static void ClearCache()
         {
             OpAuthenticationExtensions.ClearCache();
             UserSettings?.Clear();

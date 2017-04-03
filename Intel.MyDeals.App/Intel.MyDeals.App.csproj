@@ -68,6 +68,10 @@
       <Project>{ae1a3978-08ef-4a15-82cd-7ba6192a9b52}</Project>
       <Name>Intel.MyDeals.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Intel.MyDeals.IBusinessLogic\Intel.MyDeals.IBusinessLogic.csproj">
+      <Project>{A9AF9B92-17BA-4050-B5A7-F5F652AECDF9}</Project>
+      <Name>Intel.MyDeals.IBusinessLogic</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

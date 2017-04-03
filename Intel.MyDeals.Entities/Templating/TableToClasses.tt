@@ -106,8 +106,8 @@ using System.Collections.Generic;
 
 	//// Tables[7] - skipped, contains WFSTG Security items
 
-	// My Customer Objects
-	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_MY_CUST] @in_emp_wwid = 10505693");
+	// My Customer Objects -- @in_emp_wwid = 10505693"
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_MY_CUST] @IN_IDSID = 'mhtippin'");
 	ds.Tables[0].TableName = "MyCustomersInformation";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
