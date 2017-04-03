@@ -2,7 +2,8 @@
     <div class="fl opUiLabel" ng-class="{isRequired: opIsRequired}">{{opLabel}}</div>
     <div style="overflow: hidden;">
         <div kendo-tooltip k-content="tooltipMsg" k-position="'top'" ng-show="opIsError" class="err-bit-el"></div>
-        <select kendo-combo-box class="fl opUiElement"
+        <select id="{{opCd}}"
+                kendo-multi-select class="fl opUiElement"
                 k-ng-model="value"
                 k-ng-readonly="opIsReadOnly"
                 k-data-source="values"

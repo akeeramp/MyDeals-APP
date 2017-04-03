@@ -4,15 +4,15 @@
     <div ng-repeat="item in values">
         <div class="radio">
             <label class="radioControl">
-                <input type="radio" name="item[opLookupText]" value="{{item[opLookupValue]}}"
+                <input type="radio" name="{{item[opLookupText]}}" value="{{item[opLookupValue]}}"
                        ng-model="$parent.value"
                        ng-value="true"
                        ng-readonly="opIsReadOnly"
                        ng-class="{isHidden: opIsHidden, isReadOnly: opIsReadOnly, isError: opIsError, isSaved: opIsSaved, isDirty: opIsDirty}" />
                 {{item[opLookupText]}}
             </label>
-            <span kendo-tooltip k-content="item['ATRB_LKUP_TTIP']" k-position="'top'" class="opElementHelpIcon intelicon-information-outlined"></span>
+            <span ng-if="item['ATRB_LKUP_TTIP'] != ''" kendo-tooltip k-content="item['ATRB_LKUP_TTIP']" k-position="'top'" class="opElementHelpIcon intelicon-information-outlined"></span>
         </div>
-        <span class="lookupDesc" ng-if="$parent.value == item[opLookupValue]">{{item['ATRB_LKUP_DESC']}}</span>
+        <span class="lookupDesc" ng-if="$parent.value == item[opLookupValue] && item['ATRB_LKUP_DESC'] != ''">{{item['ATRB_LKUP_DESC']}}</span>
     </div>
 </div>

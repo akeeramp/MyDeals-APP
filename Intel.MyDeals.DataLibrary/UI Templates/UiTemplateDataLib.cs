@@ -215,8 +215,113 @@ namespace Intel.MyDeals.DataLibrary
                 Template = "#=gridUtils.uiIconWrapper(data, 'AVG_RPU')#"
             });
 
-            items.Add(new UiTemplateContainerItem { Id = 36, AtrbCd = AttributeCodes.NUM_OF_TIERS, ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER }, IsExtra = true, Label = "Number of Tiers", IsRequired = true, DataType = "string", UiType = "DROPDOWN", LookupUrl = "/api/Lookups/v1/GetLookups/DROPDOWN", LookupText = "DROP_DOWN", LookupValue = "DROP_DOWN", Template = "#=gridUtils.uiIconWrapper(data, 'DROPDOWN')#" });
-            items.Add(new UiTemplateContainerItem { Id = 37, AtrbCd = "DROPDOWN", ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL }, ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER }, IsDefaultable = true, Label = "Dropdown sample", IsRequired = true, DataType = "string", UiType = "DROPDOWN", LookupUrl = "/api/Lookups/v1/GetLookups/DROPDOWN", LookupText = "DROP_DOWN", LookupValue = "DROP_DOWN", Template = "#=gridUtils.uiIconWrapper(data, 'DROPDOWN')#" });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 36,
+                AtrbCd = AttributeCodes.NUM_OF_TIERS,
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.CAP_BAND },
+                IsExtra = true,
+                Label = "Number of Tiers",
+                IsRequired = true,
+                DataType = "string",
+                UiType = "DROPDOWN",
+                LookupUrl = "/api/Dropdown/GetNumTiersDropdowns",
+                LookupText = "dropdownName",
+                LookupValue = "dropdownID",
+                Template = "#=gridUtils.uiIconWrapper(data, 'DROPDOWN')#"
+            });
+
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 37,
+                AtrbCd = AttributeCodes.ECAP_TYPE,
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
+                IsDefaultable = true,
+                Label = "ECAP Type",
+                IsRequired = true,
+                DataType = "string",
+                UiType = "DROPDOWN",
+                LookupUrl = "/api/Dropdown/GetDropdowns/PROGRAM_ECAP_TYPE",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN",
+                Template = "#=gridUtils.uiIconWrapper(data, 'ECAP_TYPE')#" });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 38,
+                AtrbCd = AttributeCodes.MRKT_SEG_COMBINED,
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
+                IsDefaultable = true,
+                Label = "Market Segment",
+                IsRequired = true,
+                DataType = "string",
+                UiType = "MULTISELECT",
+                LookupUrl = "/api/Dropdown/GetDropdowns/MRKT_SEG_COMBINED",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN",
+                Template = "#=gridUtils.uiIconWrapper(data, 'MRKT_SEG_COMBINED')#",
+                HelpText = "You cannot mix ALL & other market segments.\n\nNon Corp selects: Consumer retail pull, Education, Government, &SMB"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 39,
+                AtrbCd = AttributeCodes.GEO_COMBINED,
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
+                IsDefaultable = true,
+                Label = "GEO",
+                IsRequired = true,
+                DataType = "string",
+                UiType = "MULTISELECT",
+                LookupUrl = "/api/Dropdown/GetGeosDropdowns",
+                LookupText = "dropdownName",
+                LookupValue = "dropdownName",
+                Template = "#=gridUtils.uiIconWrapper(data, 'GEO_COMBINED')#"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 40,
+                AtrbCd = AttributeCodes.PAYOUT_BASED_ON,
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
+                IsDefaultable = true,
+                Label = "Payout Based On",
+                IsRequired = true,
+                DataType = "string",
+                UiType = "RADIOBUTTONGROUP",
+                LookupUrl = "/api/Dropdown/GetDropdowns/PAYOUT_BASED_ON",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN",
+                Template = "#=gridUtils.uiIconWrapper(data, 'PAYOUT_BASED_ON')#"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 41,
+                AtrbCd = AttributeCodes.MEET_COMP_PRICE_QSTN,
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
+                IsDefaultable = true,
+                Label = "Meet Comp Analysis",
+                IsRequired = true,
+                DataType = "string",
+                UiType = "RADIOBUTTONGROUP",
+                LookupUrl = "/api/Dropdown/GetDropdowns/MEET_COMP_PRICE_QSTN",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN",
+                Template = "#=gridUtils.uiIconWrapper(data, 'MEET_COMP_PRICE_QSTN')#"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 42,
+                AtrbCd = AttributeCodes.PROGRAM_PAYMENT,
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
+                IsDefaultable = true,
+                Label = "Program Pay",
+                IsRequired = true,
+                DataType = "string",
+                UiType = "DROPDOWN",
+                LookupUrl = "/api/Dropdown/GetDropdowns/PROGRAM_PAYMENT",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN",
+                Template = "#=gridUtils.uiIconWrapper(data, 'PROGRAM_PAYMENT')#"
+            });
+
 
 
             return FillInGapsFromT4(items);

@@ -47,7 +47,7 @@ namespace Intel.MyDeals.BusinessLogic
         }
 
         /// <summary>
-        /// Get All Simple Dropdowns
+        /// Get All Simple Dropdowns with grouping of atrbCd
         /// </summary>
         /// <returns>list of dropdowns</returns>
         public IEnumerable<BasicDropdown> GetDropdowns(string atrbCd)
@@ -55,6 +55,19 @@ namespace Intel.MyDeals.BusinessLogic
             atrbCd = atrbCd.ToUpper();
             return _dataCollectionsDataLib.GetBasicDropdowns().
                 Where(d => d.ATRB_CD.ToUpper() == atrbCd && d.ACTV_IND).OrderBy(d => d.ORD);
+        }
+
+        /// <summary>
+        /// Get All Simple Dropdowns with grouping of atrbCd and obj_set_Type of dealtypeCd
+        /// Note: also return those that match "All Deals" type as well as the specified dealtypecd
+        /// </summary>
+        /// <returns>list of dropdowns</returns>
+        public IEnumerable<BasicDropdown> GetDropdowns(string atrbCd, string dealtypeCd)
+        {
+            atrbCd = atrbCd.ToUpper();
+            dealtypeCd = dealtypeCd.ToUpper();
+            return _dataCollectionsDataLib.GetBasicDropdowns().
+                Where(d => d.ATRB_CD.ToUpper() == atrbCd && (d.OBJ_SET_TYPE_CD.ToUpper() == dealtypeCd || d.OBJ_SET_TYPE_CD.ToUpper() == "ALL_DEALS") && d.ACTV_IND).OrderBy(d => d.ORD);
         }
 
         /// <summary>
@@ -76,12 +89,30 @@ namespace Intel.MyDeals.BusinessLogic
         }
 
         /// <summary>
-        /// Get All Deal Types Dropdown
+        /// Get Security Action Dropdown
         /// </summary>
-        /// <returns>list of Deal Types Dropdowns</returns>
+        /// <returns>list of Security Action Dropdowns</returns>
         public List<Dropdown> GetSecurityActionsDropdown()
         {
             return GetDropdowns().Where(dd => dd.dropdownCategory == "Action Security" && dd.active == 1).ToList();
+        }
+
+        /// <summary>
+        /// Get Num Tiers Dropdown
+        /// </summary>
+        /// <returns>list of Num Tiers Dropdowns</returns>
+        public List<Dropdown> GetNumTiersDropdown()
+        {
+            return GetDropdowns().Where(dd => dd.dropdownCategory == "Num Tiers" && dd.active == 1).ToList();
+        }
+
+        /// <summary>
+        /// Get Geos Dropdown
+        /// </summary>
+        /// <returns>list of Num Tiers Dropdowns</returns>
+        public List<Dropdown> GetGeosDropdown()
+        {
+            return GetDropdowns().Where(dd => dd.dropdownCategory == "Geo" && dd.active == 1).OrderBy(dd => dd.dropdownID).ToList();
         }
 
         /// <summary>

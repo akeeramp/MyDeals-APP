@@ -14,7 +14,7 @@
                        maxlength="250"
                        ng-model="newStrategy.TITLE"
                        ng-class="{isError: newStrategy._behaviors.isError.TITLE}"/>
-                <button class="btn btn-sm btn-primary" style="font-size: 12px; margin-left: 6px;" ng-click="customAddPsValidate()">Add</button>
+                <button class="btn btn-sm btn-primary" type="submit" style="font-size: 12px; margin-left: 6px;" ng-click="customAddPsValidate()">Add</button>
                 <div class="clearboth"></div>
                 <div style="color: #F3D54E;">{{ newStrategy._behaviors.validMsg.TITLE }}</div>
             </div>

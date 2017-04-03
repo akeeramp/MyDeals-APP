@@ -27,7 +27,8 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
             'HORIZONTAL_COMBOBOX': 'horizontalComboBox.html',
             'HORIZONTAL_MULTISELECT': 'horizontalMultiSelect.html',
             'HORIZONTAL_CHECKBOX': 'horizontalCheckBox.html',
-            'HORIZONTAL_SLIDER': 'horizontalSlider.html'
+            'HORIZONTAL_SLIDER': 'horizontalSlider.html',
+            'HORIZONTAL_RADIOBUTTONGROUP': 'horizontalRadioButtonGroup.html',
         };
 
         var templateUrl = baseUrl + templateMap[controlType.toUpperCase()];

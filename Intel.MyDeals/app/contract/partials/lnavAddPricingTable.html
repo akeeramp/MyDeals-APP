@@ -33,7 +33,7 @@
             <div class="clearboth"></div>
         </div>
 
-        <!-- ADDITIONAL ATTRIBUTES -->
+        <!-- EXTRA ATTRIBUTES -->
         <div ng-show="newPricingTableExtraLength()">
             <div class="lnavSmTitle">Additional Attributes:</div>
             <div class="rJustLabel">
@@ -46,7 +46,6 @@
                          op-lookup-url="value.opLookupUrl"
                          op-lookup-text="value.opLookupText"
                          op-lookup-value="value.opLookupValue"
-                         op-lookup-values="value.opLookupValues"
                          op-ui-mode="'HORIZONTAL'"></div>
                 </div>
             </div>
@@ -54,7 +53,10 @@
 
         <!-- DEFAULT ATTRIBUTES -->
         <div ng-show="newPricingTableDefaultLength()">
-            <div class="lnavSmTitle">Default Values:</div>
+            
+            <div class="lnavSmTitle"> Autofill Grid Settings
+                <div kendo-tooltip k-content="'Use the Pricing Table Autofill selections to pre-populate your table & reduce data entry. You may override the preselections within the grid if you would like.'" class="fl opElementHelpIcon intelicon-information-outlined"></div>
+            </div>
             <div class="rJustLabel">
                 <div ng-repeat="(key, value) in newPricingTable._defaultAtrbs" class="elOnBlue">
                     <div op-control-data-element
@@ -62,6 +64,9 @@
                             op-cd="key"
                             op-type="value.type"
                             op-label="value.label"
+                            op-lookup-url="value.opLookupUrl"
+                            op-lookup-text="value.opLookupText"
+                            op-lookup-value="value.opLookupValue"
                             op-ui-mode="'HORIZONTAL'"></div>
                 </div>
             </div>
@@ -69,7 +74,7 @@
 
         <div style="text-align: right;">
             <button class="btn btn-sm btn-primary" ng-click="hideAddPricingTable()">Close</button>
-            <button class="btn btn-sm btn-primary" ng-click="customAddPtValidate()">Add</button>
+            <button class="btn btn-sm btn-primary" ng-click="customAddPtValidate()" type="submit">Add</button>
         </div>
 
     </form>

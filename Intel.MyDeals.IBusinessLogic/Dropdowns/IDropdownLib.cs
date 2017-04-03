@@ -9,11 +9,17 @@ namespace Intel.MyDeals.IBusinessLogic
 
 	    IEnumerable<BasicDropdown> GetDropdowns(string atrbCd);
 
+        IEnumerable<BasicDropdown> GetDropdowns(string atrbCd, string dealtypeCd);
+
         List<Dropdown> GetDealTypesDropdown();
 
         List<Dropdown> GetRoleTypesDropdown();
 
         List<Dropdown> GetSecurityActionsDropdown();
+
+        List<Dropdown> GetNumTiersDropdown();
+
+        List<Dropdown> GetGeosDropdown();
 
         List<Dropdown> GetDropdownGroups();
 

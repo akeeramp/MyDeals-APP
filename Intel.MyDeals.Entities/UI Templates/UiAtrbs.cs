@@ -21,5 +21,6 @@ namespace Intel.MyDeals.Entities
 
         public string validMsg { get; set; }
 
+        public string helpMsg { get; set; }
     }
 }

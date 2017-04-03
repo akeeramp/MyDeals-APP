@@ -365,7 +365,13 @@ namespace Intel.MyDeals.Entities.UI_Templates
                     value = item.DefValue ?? "",
                     label = item.Label ?? "" + ":",
                     type = item.UiType ?? "",
-                    isRequired = item.IsRequired
+                    isRequired = item.IsRequired,
+                    isError = false,
+                    opLookupUrl = item.LookupUrl ?? "",
+                    opLookupText = item.LookupText ?? "",
+                    opLookupValue = item.LookupValue ?? "",
+                    validMsg = item.HelpText ?? "",
+                    helpMsg = item.HelpText ?? ""
                 };
             }
             return uiTemplates;

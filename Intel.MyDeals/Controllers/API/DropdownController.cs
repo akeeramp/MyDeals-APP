@@ -34,6 +34,15 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
+        [Route("GetDropdowns/{atrbCd}/{dealtypeCd}")]
+        public IEnumerable<BasicDropdown> GetDropdowns(string atrbCd, string dealtypeCd)
+        {
+            return SafeExecutor(() => _dropdownLib.GetDropdowns(atrbCd, dealtypeCd)
+                , $"Unable to get Dropdowns for {atrbCd} and {dealtypeCd}"
+            );
+        }
+
+        [Authorize]
         [Route("GetDealTypesDropdowns")]
         public IEnumerable<Dropdown> GetDealTypesDropdowns()
         {
@@ -50,7 +59,25 @@ namespace Intel.MyDeals.Controllers.API
                 , $"Unable to get Dropdowns Groups"
             );
         }
-        
+
+        [Authorize]
+        [Route("GetNumTiersDropdowns")]
+        public IEnumerable<Dropdown> GetNumTiersDropdowns()
+        {
+            return SafeExecutor(() => _dropdownLib.GetNumTiersDropdown()
+                , $"Unable to get NumTiers Dropdowns"
+            );
+        }
+
+        [Authorize]
+        [Route("GetGeosDropdowns")]
+        public IEnumerable<Dropdown> GetGeosDropdowns()
+        {
+            return SafeExecutor(() => _dropdownLib.GetGeosDropdown()
+                , $"Unable to get Geos Dropdowns"
+            );
+        }
+
         [HttpPut]
         [Route("UpdateBasicDropdowns")]
         public BasicDropdown UpdateBasicDropdowns(BasicDropdown data)
