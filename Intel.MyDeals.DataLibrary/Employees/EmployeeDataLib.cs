@@ -180,7 +180,6 @@ namespace Intel.MyDeals.DataLibrary
             ////var cmd = new Procs.CDMS_MYDEALS.admin.PR_MANAGE_EMPLOYEES_APPLICATION_ROLES();
             ////using (var rdr = DataAccess.ExecuteReader(cmd))
             ////{
-
             ////    ret.EmpAppRoles = new List<ApplicationRoleLookup>();
             ////    int IDX_ROLE_TYPE_SID = DB.GetReaderOrdinal(rdr, "ROLE_TYPE_SID");
             ////    int IDX_ROLE_TYPE_CD = DB.GetReaderOrdinal(rdr, "ROLE_TYPE_CD");
@@ -365,7 +364,7 @@ namespace Intel.MyDeals.DataLibrary
                         {
                             SUPER_SA = (IDX_SUPER_SA < 0 || rdr.IsDBNull(IDX_SUPER_SA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_SUPER_SA)
                         });
-                    } // while    
+                    } // while
                 }
             }
             catch (Exception ex)
@@ -380,7 +379,7 @@ namespace Intel.MyDeals.DataLibrary
             opUserToken.Usr = new OpUser
             {
                 UserID = tempUserVitalsRole.First().EMP_WWID,
-                Idsid = tempUserVitalsRole.First().IDSID,
+                Idsid = tempUserVitalsRole.First().IDSID.Trim(),
                 WWID = tempUserVitalsRole.First().EMP_WWID,
                 LastName = tempUserVitalsRole.First().LST_NM,
                 FirstName = tempUserVitalsRole.First().FRST_NM,
@@ -391,7 +390,7 @@ namespace Intel.MyDeals.DataLibrary
             opUserToken.Role = new OpRoleType
             {
                 RoleTypeCd = tempUserVitalsRole.First().ROLE_NM,
-                RoleTypeDescription = tempUserVitalsRole.First().ROLE_DSPLY_NM, 
+                RoleTypeDescription = tempUserVitalsRole.First().ROLE_DSPLY_NM,
                 RoleTypeDisplayName = tempUserVitalsRole.First().ROLE_DSPLY_NM,
                 RoleTypeId = tempUserVitalsRole.First().ROLE_SID
             };
@@ -409,7 +408,7 @@ namespace Intel.MyDeals.DataLibrary
                 if (sa.ATRB_CD != null) settings.SecurityActions.Add(sa);
             }
 
-            ////// Table 2 contains SecurityMask    
+            ////// Table 2 contains SecurityMask
             foreach (UserVitalsSecurityMask securityMask in tempUserVitalsSecurityMask)
             {
                 SecurityMask sm = new SecurityMask
@@ -424,7 +423,7 @@ namespace Intel.MyDeals.DataLibrary
                 if (sm.ACTN_NM != null) settings.SecurityMasks.Add(sm);
             }
 
-            ////// Table 4 contains Verticals    
+            ////// Table 4 contains Verticals
             foreach (UserVitalsVerticals vitalsVertical in tempUserVitalsVerticals)
             {
                 VerticalSecurityItem vsi = new VerticalSecurityItem
@@ -466,6 +465,5 @@ namespace Intel.MyDeals.DataLibrary
 
             return ret;
         }
-
     }
 }
