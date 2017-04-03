@@ -26,7 +26,7 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
 		textAlign: "left",
 		verticalAlign: "center",
 		color: "black",
-		fontSize: 12,
+		fontSize: 13,
         fontfamily: "Intel Clear"
 	}
     var headerStyle = {

@@ -401,6 +401,9 @@
     #pricingTableSpreadsheet > div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left > div.k-spreadsheet-column-header > div {height: 30px !important;}
     #pricingTableSpreadsheet > div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-top-corner {height: 30px !important;}
 
+    #pricingTableSpreadsheet > div.k-spreadsheet-view > div.k-spreadsheet-cell-editor.k-spreadsheet-formula-input {margin-top: 10px !important}
+    #pricingTableSpreadsheet .k-resize-handle { height: 30px !important}
+
     div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left > div.k-spreadsheet-column-header .k-vertical-align-center {
         font-family: 'Intel Clear';
         font-weight: 200;
