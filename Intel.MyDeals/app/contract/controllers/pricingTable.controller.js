@@ -260,7 +260,7 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
 			replaceUndoRedoBtns();
 
 	        // hide default binding name (first row)
-	        // This has an unfortunate side effect... can't resize rows... UPDATE... I think I have a workaround
+	        // This has an unfortunate side effect... can't resize rows... UPDATE... I think I have a workaround... must freeze a row also
 			sheet.hideRow(0);
 	    }
 

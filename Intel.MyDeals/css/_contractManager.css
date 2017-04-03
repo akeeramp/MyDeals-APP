@@ -393,27 +393,23 @@
         z-index: 5000;
     }
 
-    div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-left:first-child {
-        top: 40px !important;
-    }
-    div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left > div.k-spreadsheet-column-header,
-    div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left > div.k-spreadsheet-column-header > div,
-    div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left > div.k-resize-handle,
-    div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left > div.k-horizontal-resize,
-    div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left > div.k-spreadsheet-data,
-    div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left,
-    div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-top-corner {
-        height: 40px !important;
-    }
+    #pricingTableSpreadsheet > div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div:nth-child(1) {top: 30px !important;}
+    #pricingTableSpreadsheet > div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left {height: 30px !important;}
+    #pricingTableSpreadsheet > div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left > div.k-spreadsheet-data {height: 30px !important;}
+    #pricingTableSpreadsheet > div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left > div.k-spreadsheet-row-header {height: 30px !important;}
+    #pricingTableSpreadsheet > div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left > div.k-spreadsheet-column-header {height: 30px !important;}
+    #pricingTableSpreadsheet > div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left > div.k-spreadsheet-column-header > div {height: 30px !important;}
+    #pricingTableSpreadsheet > div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-top-corner {height: 30px !important;}
 
     div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left > div.k-spreadsheet-column-header .k-vertical-align-center {
         font-family: 'Intel Clear';
         font-weight: 200;
         font-style: normal;
-        font-size: 13px;
+        font-size: 12px;
         color: #0071C5;
         padding-left: 2px;
         padding-right: 2px;
+        line-height: 1.0em;
     }
 
     .blueBg {
