@@ -43,7 +43,7 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
 	var gTools = null;
 	var ssTools = null;
 	var wipTemplate = null;
-	//vm.colToLetter = {};
+	vm.colToLetter = {};
 
 
 
@@ -244,12 +244,13 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
 
 	// On spreadhseet Render
 	function onRender(e) {
-		if ($scope.$parent.$parent.spreadNeedsInitialization) {
+
+	    if ($scope.$parent.$parent.spreadNeedsInitialization) {
 			$scope.$parent.$parent.spreadNeedsInitialization = false;
 
 			var sheet = e.sender.activeSheet();
 
-			// With initial configuration of datasource spreadsheet displays all the fields as columns,
+	        // With initial configuration of datasource spreadsheet displays all the fields as columns,
 			// thus setting up datasource in reneder event where selective columns from datasource can be displayed.
 			sheet.setDataSource(root.spreadDs, ptTemplate.columns);
 
@@ -258,9 +259,28 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
 			vm.initCustomPaste("#pricingTableSpreadsheet");
 			replaceUndoRedoBtns();
 
+	        // hide default binding name (first row)
+	        // This has an unfortunate side effect... can't resize rows... UPDATE... I think I have a workaround
+			sheet.hideRow(0);
+	    }
 
-		}
+	    // This must be outside the spreadNeedsInitialization check
+	    replaceColumnLabels();
 	}
+
+    function replaceColumnLabels() {
+        var intA = "A".charCodeAt(0);
+        var c = 1;
+
+        // This is nice, but has some flaws... sometime refresh breaks and sometime hidden rows don't hide properly.  Also, this requires hiding the first row which strops resize
+        // If we don't do this... we need to make row 1 readonly as the title row
+        angular.forEach(ptTemplate.columns, function (value, key) {
+            if (value.hidden === false) {
+                $("div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left > div.k-spreadsheet-column-header > div:nth-child(" + c + ") > div").text(value.title);
+                vm.colToLetter[value.title] = String.fromCharCode(intA + c++);
+            }
+        });
+    }
 
 	function replaceUndoRedoBtns() {
 		var redoBtn = $('.k-i-redo');
@@ -293,7 +313,7 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
 			headerRange.enable(false); //("A0:ZZ0")
 
 			// freeze first row
-			sheet.frozenRows(1);
+		    sheet.frozenRows(1);
 
 			// disable formula completion list
 			$(".k-spreadsheet-formula-list").remove();
@@ -314,21 +334,6 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
 			headerRange.verticalAlign(headerStyle.verticalAlign);
 			headerRange.bold(false);
 
-			//var intA = "A".charCodeAt(0);
-			//var c = 1;
-
-			// This is nice, but has some flaws... sometime refresh breaks and sometime hidden rows don't hide properly.  Also, this requires hiding the first row which strops resize
-			// If we don't do this... we need to make row 1 readonly as the title row
-			//angular.forEach(ptTemplate.columns, function (value, key) {
-			//    $(".k-spreadsheet-view .k-spreadsheet-fixed-container .k-spreadsheet-pane .k-spreadsheet-column-header div:nth-of-type(" + c + ") div").html(value.title);
-			//    vm.colToLetter[value.title] = String.fromCharCode(intA + c);
-			//    c++;
-			//});
-
-			// hide default binding name (first row)
-			// This has an unfortunate side effect... can't resize rows
-			//sheet.hideRow(0);
-
 			// get all readonly columns
 			var readonly = [];
 			for (var key in ptTemplate.model.fields) {
@@ -336,18 +341,13 @@ function PricingTableController($scope, $state, $stateParams, pricingTableData, 
 					readonly.push(key);
 			}
 
-                // hide all columns based on templating
-                c = 0;
-                for (var i = 0; i < ptTemplate.columns.length; i++) {
-                    //if (readonly.indexOf(ptTemplate.columns[i].field) >= 0) {
-                    //    sheet.range(String.fromCharCode(intA + c) + "1:" + String.fromCharCode(intA + c) + "200").enable(false);
-                    //}
-                    if (ptTemplate.columns[i].hidden === true) {
-                        sheet.hideColumn(i);
-                    } else {
-                       c++;
-                    }
+            // hide all columns based on templating
+            for (var i = 0; i < ptTemplate.columns.length; i++) {
+                if (ptTemplate.columns[i].hidden === true) {
+                    sheet.hideColumn(i);
                 }
+            }
+
 
 		});
 	}

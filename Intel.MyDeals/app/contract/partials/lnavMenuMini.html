@@ -2,11 +2,11 @@
     <div class="navIconLnk" title="Show Panel" ng-click="toggleLnav()">
         <i class="intelicon-expand"></i>
     </div>
+    <div class="navIconLnk" title="Save Entire Contract" ng-click="saveEntireContract()" ng-show="isExistingContract()" ng-class="{'lnavBtnDisabled': !_dirty}">
+        <i class="intelicon-save-outlined"></i>
+    </div>
     <div class="navIconLnk" title="Add Pricing Strategy" ng-click="toggleLnav();toggleAddStrategy()" ng-class="{'active': !isAddStrategyHidden}" ng-show="isExistingContract()">
         <i class="intelicon-plus-max"></i>
-    </div>
-    <div class="navIconLnk" title="Save Entire Contract" ng-click="saveEntireContract()" ng-show="isExistingContract()">
-        <i class="intelicon-save-outlined"></i>
     </div>
     <div class="navIconLnk" title="Filter Current Contract" ng-show="isExistingContract()" ng-click="toggleLnav();toggleSearch()" ng-class="{'active': !isSearchHidden}">
         <i class="intelicon-search"></i>

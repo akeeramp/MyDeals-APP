@@ -393,6 +393,29 @@
         z-index: 5000;
     }
 
+    div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-left:first-child {
+        top: 40px !important;
+    }
+    div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left > div.k-spreadsheet-column-header,
+    div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left > div.k-spreadsheet-column-header > div,
+    div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left > div.k-resize-handle,
+    div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left > div.k-horizontal-resize,
+    div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left > div.k-spreadsheet-data,
+    div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left,
+    div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-top-corner {
+        height: 40px !important;
+    }
+
+    div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left > div.k-spreadsheet-column-header .k-vertical-align-center {
+        font-family: 'Intel Clear';
+        font-weight: 200;
+        font-style: normal;
+        font-size: 13px;
+        color: #0071C5;
+        padding-left: 2px;
+        padding-right: 2px;
+    }
+
     .blueBg {
         color: #ffffff;
         background: #00AEEF;
