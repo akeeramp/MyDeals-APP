@@ -222,6 +222,21 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "FileAttachmentData";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
+	//Product Include Exclude Attribute Master
+    ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_INCL_EXCL_ATRB]");
+    ds.Tables[0].TableName = "IncExcAttributeMaster";
+    WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
+    //PR_MYDL_GET_DEAL_TYPES
+    ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_DEAL_TYPES]");
+    ds.Tables[0].TableName = "PrdDealType";
+    WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
+    //PR_MYDL_LD_PRD_SEL_LVL
+    ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_LD_PRD_SEL_LVL] @OBJ_SET_TYPE_SID = 3");
+    ds.Tables[0].TableName = "PrdSelLevel";
+    WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
 	PopIndent();
 	WriteLine("}"); // End NameSpace
 

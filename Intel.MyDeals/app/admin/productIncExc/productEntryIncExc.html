@@ -1,0 +1,26 @@
+﻿<div class="col-md-12">
+    <h2>Include Exclude Attribute</h2>
+</div>
+
+<div class="col-md-4 ng-scope">
+    <form name="inputForm" novalidate>
+        <div id="example">
+            <div class="demo-section k-content">
+                <h4>Include Attribute</h4>
+                <select id="multiInculdeDropDown" ng-show="selectedIds.length" kendo-multi-select k-options="selectOptions" k-ng-model="selectedIds"></select>
+            </div>
+            <br />
+            <button type="submit" ng-disabled="inputForm.$invalid" class="btn btn-primary pull-right" ng-click="vm.setIncludeAttibute()"><i class="btn-default"></i>Save</button>
+        </div>
+        <br /><br />
+        <div id="example" ng-app="KendoDemos">
+            <div class="demo-section k-content">
+                <h4>Exclude Attribute</h4>
+                <select id="multiExcludeDropDown" ng-show="selectedExcludeIds.length" kendo-multi-select k-options="selectOptions" k-ng-model="selectedExcludeIds"></select>
+            </div>
+            <br />
+            <button type="submit" ng-disabled="inputForm.$invalid" class="btn btn-primary pull-right" ng-click="vm.setExcludeAttibute()"><i class="btn-default"></i>Save</button>
+        </div>
+    </form>
+</div>
+

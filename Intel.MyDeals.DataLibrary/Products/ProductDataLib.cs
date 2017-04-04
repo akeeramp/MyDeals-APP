@@ -85,6 +85,189 @@ namespace Intel.MyDeals.DataLibrary
             return ret;
         }
 
+        public List<ProductIncExcAttribute> SetIncludeExclude(List<ProductIncExcAttribute> data, string opsType)
+        {
+            OpLogPerf.Log("ProductIncExcAttribute");
+            var ret = new List<ProductIncExcAttribute>();
+            try
+            {
+                // Make datatable
+                in_t_prd_IncExc dt = new in_t_prd_IncExc();
+                dt.AddRows(data);
+
+                Procs.dbo.PR_MYDL_UPD_PRD_ATRB_FLTR_CRI cmd = new Procs.dbo.PR_MYDL_UPD_PRD_ATRB_FLTR_CRI
+                {
+                    MODE = opsType.ToUpper(),
+                    tvt_PRD_ATRB_FLTR_CRI = dt
+                };
+
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    int IDX_ATTR_VAL = DB.GetReaderOrdinal(rdr, "ATTR_VAL");
+
+                    while (rdr.Read())
+                    {
+                        ret.Add(new ProductIncExcAttribute
+                        {
+                            ATTR_VAL = (IDX_ATTR_VAL < 0 || rdr.IsDBNull(IDX_ATTR_VAL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATTR_VAL)
+                        });
+                    } // while
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+            return ret;
+        }
+
+        /// <summary>
+        /// This method will return 3 dataset
+        /// 1- Get the attribute list from master
+        /// 2- Get the include attribute list
+        /// 3- Get the exclude attribute list
+        /// </summary>
+        /// <returns type="ProductIncExcAttributeSelector">List of inclide, exclude and master attribute</returns>
+        public ProductIncExcAttributeSelector GetProductIncludeExcludeAttribute()
+        {
+            OpLogPerf.Log("GetProductIncludeExcludeAttribute");
+
+            var ret = new ProductIncExcAttributeSelector();
+            var retProdIncExcAttribute = new List<IncExcAttributeMaster>();
+            var retProdInc = new List<ProductIncAttributeSelected>();
+            var retProdExc = new List<ProductExcAttributeSelected>();
+            //var ret = new List<IncExcAttributeMaster>();
+
+            var cmd = new Procs.dbo.PR_MYDL_GET_INCL_EXCL_ATRB { };
+
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    int IDX_ATRB_DESC = DB.GetReaderOrdinal(rdr, "ATRB_DESC");
+                    int IDX_ATRB_SID = DB.GetReaderOrdinal(rdr, "ATRB_SID");
+
+                    while (rdr.Read())
+                    {
+                        retProdIncExcAttribute.Add(new IncExcAttributeMaster
+                        {
+                            ATRB_DESC = (IDX_ATRB_DESC < 0 || rdr.IsDBNull(IDX_ATRB_DESC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_DESC),
+                            ATRB_SID = (IDX_ATRB_SID < 0 || rdr.IsDBNull(IDX_ATRB_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ATRB_SID)
+                        });
+                    }
+
+                    ret.IncExcAttributeMaster = retProdIncExcAttribute;
+                    rdr.NextResult();
+
+                    int IDX_ATRB_SID_INC = DB.GetReaderOrdinal(rdr, "ATRB_SID_INC");
+
+                    while (rdr.Read())
+                    {
+                        retProdInc.Add(new ProductIncAttributeSelected
+                        {
+                            ATRB_SID_INC = (IDX_ATRB_SID_INC < 0 || rdr.IsDBNull(IDX_ATRB_SID_INC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_SID_INC)
+                        });
+                    }
+
+                    ret.ProductIncAttributeSelected = retProdInc;
+                    rdr.NextResult();
+
+                    int IDX_ATRB_SID_EXC = DB.GetReaderOrdinal(rdr, "ATRB_SID_EXC");
+
+                    while (rdr.Read())
+                    {
+                        retProdExc.Add(new ProductExcAttributeSelected
+                        {
+                            ATRB_SID_EXC = (IDX_ATRB_SID_EXC < 0 || rdr.IsDBNull(IDX_ATRB_SID_EXC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_SID_EXC)
+                        });
+                    }
+
+                    ret.ProductExcAttributeSelected = retProdExc;
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+            return ret;
+        }
+
+        /// <summary>
+        /// Get Deal types
+        /// </summary>
+        /// <returns type="List<PrdDealType>">List of Deal types</returns>
+        public List<PrdDealType> GetProdDealType()
+        {
+            var ret = new List<PrdDealType>();
+            OpLogPerf.Log("GetProdDealType");
+
+            var cmd = new Procs.dbo.PR_MYDL_GET_DEAL_TYPES { };
+
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    int IDX_OBJ_SET_TYPE_CD = DB.GetReaderOrdinal(rdr, "OBJ_SET_TYPE_CD");
+                    int IDX_OBJ_SET_TYPE_SID = DB.GetReaderOrdinal(rdr, "OBJ_SET_TYPE_SID");
+
+                    while (rdr.Read())
+                    {
+                        ret.Add(new PrdDealType
+                        {
+                            OBJ_SET_TYPE_CD = (IDX_OBJ_SET_TYPE_CD < 0 || rdr.IsDBNull(IDX_OBJ_SET_TYPE_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_SET_TYPE_CD),
+                            OBJ_SET_TYPE_SID = (IDX_OBJ_SET_TYPE_SID < 0 || rdr.IsDBNull(IDX_OBJ_SET_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_SET_TYPE_SID)
+                        });
+                    }
+                }
+                //DataCollections.RecycleCache("_getProductsFromAlias");
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+            return ret;
+        }
+
+        public List<PrdSelLevel> GetProdSelectionLevel(int OBJ_SET_TYPE_SID = 3)
+        {
+            var ret = new List<PrdSelLevel>();
+            OpLogPerf.Log("GetProdSelectionLevel");
+
+            //var cmd = new Procs.dbo.PR_MYDL_LD_PRD_SEL_LVL { };
+
+            try
+            {
+                Procs.dbo.PR_MYDL_LD_PRD_SEL_LVL cmd = new Procs.dbo.PR_MYDL_LD_PRD_SEL_LVL
+                {
+                    OBJ_SET_TYPE_SID = OBJ_SET_TYPE_SID
+                };
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    int IDX_PRD_ATRB_SID = DB.GetReaderOrdinal(rdr, "PRD_ATRB_SID");
+                    int IDX_PRD_SELC_LVL = DB.GetReaderOrdinal(rdr, "PRD_SELC_LVL");
+
+                    while (rdr.Read())
+                    {
+                        ret.Add(new PrdSelLevel
+                        {
+                            PRD_ATRB_SID = (IDX_PRD_ATRB_SID < 0 || rdr.IsDBNull(IDX_PRD_ATRB_SID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_ATRB_SID),
+                            PRD_SELC_LVL = (IDX_PRD_SELC_LVL < 0 || rdr.IsDBNull(IDX_PRD_SELC_LVL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_SELC_LVL)
+                        });
+                    }
+                }
+                //DataCollections.RecycleCache("_getProductsFromAlias");
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+            return ret;
+        }
+
         /// <summary>
         /// To Insert, Update, Delete the Products and Alias in ProductAlias
         /// </summary>
@@ -184,14 +367,14 @@ namespace Intel.MyDeals.DataLibrary
         /// </summary>
         /// <param name="productsToMatch"></param>
         /// <returns></returns>
-        public List<PRD_LOOKUP_RESULTS> FindProductMatch(List<string> productsToMatch)
+        public List<PRD_LOOKUP_RESULTS> FindProductMatch(List<ProductEntryAttribute> productsToMatch)
         {
             OpLogPerf.Log("FindProductMatch");
             var ret = new List<PRD_LOOKUP_RESULTS>();
             try
             {
                 // Make datatable
-                type_list dt = new type_list();
+                in_t_prd_entry dt = new in_t_prd_entry();
                 dt.AddRows(productsToMatch);
 
                 Procs.dbo.PR_MYDL_GET_PRD_BY_HIER_VAL_NM cmd = new Procs.dbo.PR_MYDL_GET_PRD_BY_HIER_VAL_NM
@@ -228,6 +411,64 @@ namespace Intel.MyDeals.DataLibrary
                             PRD_STRT_DTM = (IDX_PRD_STRT_DTM < 0 || rdr.IsDBNull(IDX_PRD_STRT_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_PRD_STRT_DTM),
                             USR_INPUT = (IDX_USR_INPUT < 0 || rdr.IsDBNull(IDX_USR_INPUT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_USR_INPUT),
                             SKU_NM = (IDX_SKU_NM < 0 || rdr.IsDBNull(IDX_SKU_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_SKU_NM)
+                        });
+                    } // while
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+            return ret;
+        }
+
+        public List<PRD_LOOKUP_RESULTS> GetProductDetails(List<ProductEntryAttribute> productsToMatch)
+        {
+            OpLogPerf.Log("FindProductMatch");
+            var ret = new List<PRD_LOOKUP_RESULTS>();
+            try
+            {
+                // Make datatable
+                in_t_prd_selector dt = new in_t_prd_selector();
+                dt.AddRows(productsToMatch);
+
+                Procs.dbo.PR_MYDL_TRANSLT_PRD_ENTRY cmd = new Procs.dbo.PR_MYDL_TRANSLT_PRD_ENTRY
+                {
+                    tvt_HIER_VAL_NM = dt
+                };
+
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    int IDX_BRND_NM = DB.GetReaderOrdinal(rdr, "BRND_NM");
+                    int IDX_DEAL_PRD_NM = DB.GetReaderOrdinal(rdr, "DEAL_PRD_NM");
+                    int IDX_FMLY_NM = DB.GetReaderOrdinal(rdr, "FMLY_NM");
+                    int IDX_HIER_VAL_NM = DB.GetReaderOrdinal(rdr, "HIER_VAL_NM");
+                    int IDX_PCSR_NBR = DB.GetReaderOrdinal(rdr, "PCSR_NBR");
+                    int IDX_PRD_CAT_NM = DB.GetReaderOrdinal(rdr, "PRD_CAT_NM");
+                    int IDX_PRD_END_DTM = DB.GetReaderOrdinal(rdr, "PRD_END_DTM");
+                    int IDX_PRD_MBR_SID = DB.GetReaderOrdinal(rdr, "PRD_MBR_SID");
+                    int IDX_PRD_STRT_DTM = DB.GetReaderOrdinal(rdr, "PRD_STRT_DTM");
+                    int IDX_USR_INPUT = DB.GetReaderOrdinal(rdr, "USR_INPUT");
+                    int IDX_SKU_NM = DB.GetReaderOrdinal(rdr, "SKU_NM");
+                    int IDX_KIT_NM = DB.GetReaderOrdinal(rdr, "KIT_NM");
+
+                    while (rdr.Read())
+                    {
+                        ret.Add(new PRD_LOOKUP_RESULTS
+                        {
+                            BRND_NM = (IDX_BRND_NM < 0 || rdr.IsDBNull(IDX_BRND_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_BRND_NM),
+                            DEAL_PRD_NM = (IDX_DEAL_PRD_NM < 0 || rdr.IsDBNull(IDX_DEAL_PRD_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_PRD_NM),
+                            FMLY_NM = (IDX_FMLY_NM < 0 || rdr.IsDBNull(IDX_FMLY_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_FMLY_NM),
+                            HIER_VAL_NM = (IDX_HIER_VAL_NM < 0 || rdr.IsDBNull(IDX_HIER_VAL_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_HIER_VAL_NM),
+                            PCSR_NBR = (IDX_PCSR_NBR < 0 || rdr.IsDBNull(IDX_PCSR_NBR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PCSR_NBR),
+                            PRD_CAT_NM = (IDX_PRD_CAT_NM < 0 || rdr.IsDBNull(IDX_PRD_CAT_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_CAT_NM),
+                            PRD_END_DTM = (IDX_PRD_END_DTM < 0 || rdr.IsDBNull(IDX_PRD_END_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_PRD_END_DTM),
+                            PRD_MBR_SID = (IDX_PRD_MBR_SID < 0 || rdr.IsDBNull(IDX_PRD_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRD_MBR_SID),
+                            PRD_STRT_DTM = (IDX_PRD_STRT_DTM < 0 || rdr.IsDBNull(IDX_PRD_STRT_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_PRD_STRT_DTM),
+                            USR_INPUT = (IDX_USR_INPUT < 0 || rdr.IsDBNull(IDX_USR_INPUT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_USR_INPUT),
+                            SKU_NM = (IDX_SKU_NM < 0 || rdr.IsDBNull(IDX_SKU_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_SKU_NM),
+                            KIT_NM = (IDX_SKU_NM < 0 || rdr.IsDBNull(IDX_KIT_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_KIT_NM)
                         });
                     } // while
                 }

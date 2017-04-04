@@ -43,6 +43,20 @@ namespace Intel.MyDeals.IBusinessLogic
 
         List<ProductAlias> GetProductsFromAlias(bool getCachedResult = true);
 
-        ProductLookup TranslateProducts(List<string> products);
+        ProductLookup TranslateProducts(List<ProductEntryAttribute> products);
+
+        List<PRD_LOOKUP_RESULTS> GetProductDetails(List<ProductEntryAttribute> productsToMatch);
+
+        ProductLookup FetchProducts(List<ProductIEValues> products);
+
+        List<ProductIncExcAttribute> SetIncludeAttibute(List<ProductIncExcAttribute> prodNames);
+
+        List<ProductIncExcAttribute> SetExcludeAttibute(List<ProductIncExcAttribute> products);
+
+        ProductIncExcAttributeSelector GetProductIncludeExcludeAttribute();
+
+        List<PrdDealType> GetProdDealType();
+
+        List<PrdSelLevel> GetProdSelectionLevel(int OBJ_SET_TYPE_SID);
     }
 }

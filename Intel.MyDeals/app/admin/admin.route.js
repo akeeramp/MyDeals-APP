@@ -84,6 +84,24 @@
                 }
             },
             {
+                state: 'admin.productSelector',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/productSelector/productSelector.html',
+                    url: 'productSelector',
+                    controller: 'ProductSelectorController as vm',
+                }
+            },
+            {
+                state: 'admin.productEntryIncExc',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/productIncExc/productEntryIncExc.html',
+                    url: 'productEntryIncExc',
+                    controller: 'ProductEntryIncExcController as vm',
+                }
+            },
+            {
                 state: 'admin.productEntry',
                 abstract: false,
                 config: {

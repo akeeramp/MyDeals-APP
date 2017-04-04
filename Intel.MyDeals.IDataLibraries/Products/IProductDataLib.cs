@@ -11,6 +11,16 @@ namespace Intel.MyDeals.IDataLibrary
 
         List<ProductAlias> GetProductsFromAlias();
 
-        List<PRD_LOOKUP_RESULTS> FindProductMatch(List<string> productsToMatch);
+        List<PRD_LOOKUP_RESULTS> FindProductMatch(List<ProductEntryAttribute> productsToMatch);
+
+        List<PRD_LOOKUP_RESULTS> GetProductDetails(List<ProductEntryAttribute> productsToMatch);
+
+        List<ProductIncExcAttribute> SetIncludeExclude(List<ProductIncExcAttribute> data, string opsType);
+
+        ProductIncExcAttributeSelector GetProductIncludeExcludeAttribute();
+
+        List<PrdDealType> GetProdDealType();
+
+        List<PrdSelLevel> GetProdSelectionLevel(int OBJ_SET_TYPE_SID);
     }
 }

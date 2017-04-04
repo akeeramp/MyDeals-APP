@@ -215,9 +215,11 @@ namespace Intel.MyDeals.BusinessLogic
         /// </summary>
         /// <param name="products"></param>
         /// <returns></returns>
-        public ProductLookup TranslateProducts(List<string> userProducts)
+        public ProductLookup TranslateProducts(List<ProductEntryAttribute> prodNames)
         {
-            var productsTodb = new List<string>();
+            //var prodNames = new List<string>();
+            var userProducts = prodNames.Select(l => l.USR_INPUT).ToList();
+            var productsTodb = new List<ProductEntryAttribute>();
             var productLookup = new ProductLookup
             {
                 ProdctTransformResults = new Dictionary<string, List<string>>(),
@@ -229,22 +231,45 @@ namespace Intel.MyDeals.BusinessLogic
             //  Check if any product has alias mapping, this will call cache
             var aliasMapping = GetProductsFromAlias();
 
-            foreach (var userProduct in userProducts)
+            foreach (var userProduct in prodNames)
             {
-                var products = TransformProducts(userProduct);
-                var productAliases = (from p in products
-                                      join a in aliasMapping
-                                      on p equals a.PRD_ALS_NM into pa
-                                      from t in pa.DefaultIfEmpty()
-                                      select t == null ? p : t.PRD_NM).Distinct();// In single row users might have entered duplicate names
 
+                var products = TransformProducts(userProduct.USR_INPUT);
+                List<ProductEntryAttribute> prodNamesList = new List<ProductEntryAttribute>();                
+                foreach (var product in products)
+                {
+                    ProductEntryAttribute pea = new ProductEntryAttribute();
+                    pea.USR_INPUT = product.ToString();
+                    pea.START_DATE = userProduct.START_DATE.ToString();
+                    pea.END_DATE = userProduct.END_DATE.ToString();
+                    pea.PRD_ATRB_SID = userProduct.PRD_ATRB_SID;
+                    pea.PRD_SELC_LVL = userProduct.PRD_SELC_LVL;
+                    pea.EXCLUDE = userProduct.EXCLUDE;
+                    pea.FILTER = userProduct.FILTER;
+                    prodNamesList.Add(pea);
+                }
+                var productAliases = (from p in prodNamesList
+                                      join a in aliasMapping
+                                      on p.USR_INPUT equals a.PRD_ALS_NM into pa
+                                      from t in pa.DefaultIfEmpty()
+                                      select new ProductEntryAttribute
+                                      {
+                                          USR_INPUT = t == null ? p.USR_INPUT : t.PRD_NM,
+                                          PRD_ATRB_SID = p.PRD_ATRB_SID,
+                                          PRD_SELC_LVL = p.PRD_SELC_LVL,
+                                          EXCLUDE = p.EXCLUDE,
+                                          FILTER = p.FILTER,
+                                          END_DATE = p.END_DATE,
+                                          START_DATE = p.START_DATE
+                                      }).Distinct();
+                
                 productsTodb.AddRange(productAliases);
-                productLookup.ProdctTransformResults[userProduct] = productAliases.ToList();
+                productLookup.ProdctTransformResults[userProduct.USR_INPUT] = productAliases.Select(x => x.USR_INPUT).ToList();
             }
 
             //  Product match master list
-            var productMatchResults = FindProductMatch(productsTodb);
-
+            //var productMatchResults = FindProductMatch(productsTodb);
+            var productMatchResults = GetProductDetails(productsTodb);
             // Get duplicate and Valid Products
             ExtractValidandDuplicateProducts(productLookup, productMatchResults);
 
@@ -310,9 +335,14 @@ namespace Intel.MyDeals.BusinessLogic
         /// </summary>
         /// <param name="productsToMatch"></param>
         /// <returns></returns>
-        public List<PRD_LOOKUP_RESULTS> FindProductMatch(List<string> productsToMatch)
+        public List<PRD_LOOKUP_RESULTS> FindProductMatch(List<ProductEntryAttribute> productsToMatch)
         {
             return _productDataLib.FindProductMatch(productsToMatch);
+        }
+
+        public List<PRD_LOOKUP_RESULTS> GetProductDetails(List<ProductEntryAttribute> productsToMatch)
+        {
+            return _productDataLib.GetProductDetails(productsToMatch);
         }
 
         /// <summary>
@@ -320,7 +350,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// </summary>
         /// <param name="userProduct">e.g: i5 2400(S,T),H61</param>
         /// <returns></returns>
-        private List<string> TransformProducts(string userProduct)
+        public List<string> TransformProducts(string userProduct)
         {
             var singleProducts = new List<string>();
 
@@ -356,6 +386,85 @@ namespace Intel.MyDeals.BusinessLogic
             return singleProducts;
         }
 
+        /// <summary>
+        /// Translate user entered products into valid products
+        /// ex: i5-2400(s) --> i5-2400, i5-2400s
+        /// </summary>
+        /// <param name="products"></param>
+        /// <returns></returns>
+        public ProductLookup FetchProducts(List<ProductIEValues> prodNames)
+        {
+            var productLookup = new ProductLookup
+            {
+                ProdctTransformResults = new Dictionary<string, List<string>>(),
+                DuplicateProducts = new Dictionary<string, Dictionary<string, List<PRD_LOOKUP_RESULTS>>>(),
+                ValidProducts = new Dictionary<string, List<PRD_LOOKUP_RESULTS>>(),
+                InValidProducts = new Dictionary<string, List<string>>()
+            };
+            return productLookup;
+        }
+
+        /// <summary>
+        /// Translate user entered products into valid products
+        /// ex: i5-2400(s) --> i5-2400, i5-2400s
+        /// </summary>
+        /// <param name="products"></param>
+        /// <returns></returns>
+        //public List<ProductIncExcAttribute> SetIncludeExclude(CrudModes mode, ProductIncExcAttribute data)
+        //{
+        //    return _productDataLib.SetProductAlias(mode, data);
+        //}
+
+        /// <summary>
+        /// Get include attribute list for product
+        /// </summary>
+        /// <param type="List<ProductIncExcAttribute>" name="prodNames"></param>
+        /// <returns type="ProductIncExcAttribute">List of exclude attribute</returns>
+        public List<ProductIncExcAttribute> SetIncludeAttibute(List<ProductIncExcAttribute> prodNames)
+        {
+            return _productDataLib.SetIncludeExclude(prodNames, "INCLUDE");
+        }
+
+        /// <summary>
+        /// Get exclude attribute list for product
+        /// </summary>
+        /// <param name="prodNames"></param>
+        /// <returns type="ProductIncExcAttribute">List of exclude attribute</returns>
+        public List<ProductIncExcAttribute> SetExcludeAttibute(List<ProductIncExcAttribute> prodNames)
+        {
+            return _productDataLib.SetIncludeExclude(prodNames, "EXCLUDE");
+        }
+
+        /// <summary>
+        /// This method will return 3 dataset
+        /// 1- Get the attribute list from master
+        /// 2- Get the include attribute list
+        /// 3- Get the exclude attribute list
+        /// </summary>
+        /// <returns type="ProductIncExcAttributeSelector">List of inclide, exclude and master attribute</returns>
+        public ProductIncExcAttributeSelector GetProductIncludeExcludeAttribute()
+        {
+            return _productDataLib.GetProductIncludeExcludeAttribute(); //return new IncExcAttributeMaster();
+        }
+
+        /// <summary>
+        /// Get Product Deal Type
+        /// </summary>
+        /// <returns type="List<PrdDealType>"> List of product deal type</returns>
+        public List<PrdDealType> GetProdDealType()
+        {
+            return _productDataLib.GetProdDealType();
+        }
+
+        /// <summary>
+        /// Get Product Selection Level
+        /// </summary>
+        /// <param name="OBJ_SET_TYPE_SID"></param>
+        /// <returns type="List<PrdSelLevel>">List of product selection level</returns>
+        public List<PrdSelLevel> GetProdSelectionLevel(int OBJ_SET_TYPE_SID)
+        {
+            return _productDataLib.GetProdSelectionLevel(OBJ_SET_TYPE_SID);
+        }
         #endregion Products
 
         #region ProductAlias
@@ -375,15 +484,15 @@ namespace Intel.MyDeals.BusinessLogic
 
             if (mode == CrudModes.Insert || mode == CrudModes.Update)
             {
-                var isValidProduct = FindProductMatch(product);
-                if (!isValidProduct.Where(x => x.USR_INPUT == data.PRD_NM).Any())
-                {
-                    throw new Exception($"Aw Snap! The product name \"{data.PRD_NM}\" you are trying to map does not exists in Mydeals.");
-                }
-                if (isValidProduct.Where(x => x.USR_INPUT == data.PRD_ALS_NM).Any())
-                {
-                    throw new Exception($"Aw Snap! \"{data.PRD_ALS_NM}\" is valid product name in MyDeals, this cannot be added as alias name.");
-                }
+                //var isValidProduct = FindProductMatch(product);
+                //if (!isValidProduct.Where(x => x.USR_INPUT == data.PRD_NM).Any())
+                //{
+                //    throw new Exception($"Aw Snap! The product name \"{data.PRD_NM}\" you are trying to map does not exists in Mydeals.");
+                //}
+                //if (isValidProduct.Where(x => x.USR_INPUT == data.PRD_ALS_NM).Any())
+                //{
+                //    throw new Exception($"Aw Snap! \"{data.PRD_ALS_NM}\" is valid product name in MyDeals, this cannot be added as alias name.");
+                //}
             }
 
             return _productDataLib.SetProductAlias(mode, data);

@@ -70,7 +70,7 @@
     <Compile Include="CrudModes.cs" />
     <Compile Include="AppRoleLookup.cs" />
     <Compile Include="CacheItem.cs" />
-    <Compile Include="Logging\EmailExLogPerf.cs" />
+    <Compile Include="Op Future Items\Logging\EmailExLogPerf.cs" />
     <Compile Include="MyCustomerDetailsWrapper.cs" />
     <Compile Include="EmployeeDetailData.cs" />
     <Compile Include="EN.cs" />
@@ -81,6 +81,7 @@
     <Compile Include="MyDeals Objects\MyDealsDataAction.cs" />
     <Compile Include="MyDeals Objects\MyDealsTools.cs" />
     <Compile Include="MyDealsAttribute.cs" />
+    <Compile Include="MyProductCollections.cs" />
     <Compile Include="ObjSetPivotMode.cs" />
     <Compile Include="OP ExtensionMethods\OpActionType.cs" />
     <Compile Include="OP ExtensionMethods\OpDataCollectorExtensionMethods.cs" />
@@ -104,10 +105,10 @@
     <Compile Include="OP ExtensionMethods\OpTaskPhase.cs" />
     <Compile Include="OP ExtensionMethods\OpDataElementAtrbTemplate.cs" />
     <Compile Include="OP ExtensionMethods\OpUserTokenExtensionMethods.cs" />
-    <Compile Include="Logging\DbLogPerf.cs" />
-    <Compile Include="Logging\DbLogPerfMessage.cs" />
-    <Compile Include="Logging\LoggingClient.cs" />
-    <Compile Include="Logging\MyDealsWebApiUrl.cs" />
+    <Compile Include="Op Future Items\Logging\DbLogPerf.cs" />
+    <Compile Include="Op Future Items\Logging\DbLogPerfMessage.cs" />
+    <Compile Include="Op Future Items\Logging\LoggingClient.cs" />
+    <Compile Include="Op Future Items\Logging\MyDealsWebApiUrl.cs" />
     <Compile Include="Op Future Items\OpCommonTools.cs" />
     <Compile Include="OpLog.cs" />
     <Compile Include="OpUserStack.cs" />
@@ -116,6 +117,15 @@
     <Compile Include="SecurityEngine\SecurityDropdownData.cs" />
     <Compile Include="SecurityEngine\SecurityWrapper.cs" />
     <Compile Include="SecurityEngine\SecurityMapSave.cs" />
+    <Compile Include="TableTypeParameters\in_t_prd_entry.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TableTypeParameters\in_t_prd_IncExc.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TableTypeParameters\in_t_prd_selector.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="TableTypeParameters\t_secur_info.cs">
       <SubType>Component</SubType>
     </Compile>

@@ -336,11 +336,76 @@ namespace Intel.MyDeals.Controllers.API
 
         [Route("TranslateProducts")]
         [HttpPost]
-        public ProductLookup TranslateProducts(List<string> userInput)
+        public ProductLookup TranslateProducts(List<ProductEntryAttribute> userInput)
         {
             return SafeExecutor(() => _productsLib.TranslateProducts(userInput)
                 , $"Unable to get product mappings for {"userInput"}"
             );
         }
+
+        [Route("GetProductDetails")]
+        [HttpPost]
+        public ProductLookup GetProductDetails(List<ProductEntryAttribute> userInput)
+        {
+            return SafeExecutor(() => _productsLib.TranslateProducts(userInput)
+                , $"Unable to get product mappings for {"userInput"}"
+            );
+        }
+
+        [Route("FetchProducts")]
+        [HttpPost]
+        public ProductLookup FetchProducts(List<ProductIEValues> userInput)
+        {
+            return SafeExecutor(() => _productsLib.FetchProducts(userInput)
+                , $"Unable to get product mappings for {"userInput"}"
+            );
+        }
+
+        [Route("SetIncludeAttibute")]
+        [HttpPost]
+        public List<ProductIncExcAttribute> SetIncludeAttibute(List<ProductIncExcAttribute> userInput)
+        {
+            return SafeExecutor(() => _productsLib.SetIncludeAttibute(userInput)
+                , $"Unable to get product mappings for {"userInput"}"
+            );
+        }
+
+        [Route("SetExcludeAttibute")]
+        [HttpPost]
+        public List<ProductIncExcAttribute> SetExcludeAttibute(List<ProductIncExcAttribute> userInput)
+        {
+            return SafeExecutor(() => _productsLib.SetExcludeAttibute(userInput)
+                , $"Unable to get product mappings for {"userInput"}"
+            );
+        }
+
+        [Route("FetchAttributeMaster")]
+        [HttpPost]
+        public ProductIncExcAttributeSelector FetchAttributeMaster()
+        {
+            return SafeExecutor(() => _productsLib.GetProductIncludeExcludeAttribute()
+                , $"Unable to get product mappings for {"userInput"}"
+            );
+        }
+
+        [Route("GetProdDealType")]
+        [HttpPost]
+        public List<PrdDealType> GetProdDealType()
+        {
+            return SafeExecutor(() => _productsLib.GetProdDealType()
+                , $"Unable to get product mappings for {"userInput"}"
+            );
+        }
+
+        [Route("GetProdSelectionLevel/{OBJ_SET_TYPE_SID}")]
+        public List<PrdSelLevel> GetProdSelectionLevel(int OBJ_SET_TYPE_SID)
+        {
+            return SafeExecutor(() => _productsLib.GetProdSelectionLevel(OBJ_SET_TYPE_SID)
+                , $"Unable to get product mappings for {"userInput"}"
+            );
+        }
+
+
+
     }
 }
