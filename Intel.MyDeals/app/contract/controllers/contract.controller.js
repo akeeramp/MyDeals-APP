@@ -1102,9 +1102,14 @@ function ContractController($scope, $state, contractData, isNewContract, templat
             }
         }
         for (var atrb in $scope.newPricingTable._defaultAtrbs) {
-            if ($scope.newPricingTable._defaultAtrbs.hasOwnProperty(atrb) && pt.hasOwnProperty(atrb)) {
-                //note: if in future we give these two objects overlapping properties, then we may get unwanted overwriting here.
-                pt[atrb] = $scope.newPricingTable._defaultAtrbs[atrb].value;
+            if ($scope.newPricingTable._defaultAtrbs.hasOwnProperty(atrb) && pt.hasOwnProperty(atrb)) {  //note: if in future we give these two objects overlapping properties, then we may get unwanted overwriting here.                
+                if (Array.isArray($scope.newPricingTable._defaultAtrbs[atrb].value)) {
+                    //Array, Middle Tier expects a comma separated string
+                    pt[atrb] = $scope.newPricingTable._defaultAtrbs[atrb].value.join();
+                } else {
+                    //String
+                    pt[atrb] = $scope.newPricingTable._defaultAtrbs[atrb].value;
+                }
             }
         }
 
@@ -1207,6 +1212,8 @@ function ContractController($scope, $state, contractData, isNewContract, templat
         if ($scope.newPricingTable === undefined || $scope.newPricingTable._defaultAtrbs === undefined) return 0;
         return Object.keys($scope.newPricingTable._defaultAtrbs).length;
     }
+
+    
 
     // **** VALIDATE PRICING TABLE Methods ****
     //
