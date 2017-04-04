@@ -442,6 +442,8 @@
     <Content Include="app\admin\securityAttributes\securityActions\securityActions.manage.html" />
     <Content Include="app\testCases\grids\basic.controller.js" />
     <Content Include="app\testCases\grids\basic.manage.html" />
+    <Content Include="app\testCases\opMessages\opMessages.html" />
+    <Content Include="app\testCases\opMessages\opMessages.controller.js" />
     <Content Include="app\testCases\rules\businessRules.controller.js" />
     <Content Include="app\testCases\rules\businessRules.manage.html" />
     <Content Include="app\testCases\testCases.module.js" />

@@ -23,6 +23,7 @@
                          op-lookup-text="'cust_nm'"
                          op-lookup-value="'cdms_cust_id'"
                          op-selected-object="'Customer'"
+                         op-is-form="true"
                          op-ui-mode="'VERTICAL'"></div>
                 </div>
 
@@ -35,6 +36,7 @@
                      op-lookup-values="[]"
                      op-lookup-text="'cust_div_nm'"
                      op-lookup-value="'cust_div_nm'"
+                     op-is-form="true"
                      op-ui-mode="'VERTICAL'"></div>
             </div>
             <div class="col-md-6">
@@ -50,6 +52,7 @@
                      op-lookup-url="'api/Dropdown/GetDropdowns/CUST_ACCPT'"
                      op-lookup-text="'DROP_DOWN'"
                      op-lookup-value="'ATRB_LKUP_SID'"
+                     op-is-form="true"
                      op-ui-mode="'VERTICAL'"></div>
             </div>
         </div>
@@ -65,6 +68,7 @@
                          op-cd="'START_DT'"
                          op-type="'DATEPICKER'"
                          op-label="'Select start date:'"
+                         op-is-form="true"
                          op-ui-mode="'HORIZONTAL'"></div>
                 </div>
                 <div class="clearboth orLabel">OR</div>
@@ -102,7 +106,7 @@
                          op-cd="'END_DT'"
                          op-type="'DATEPICKER'"
                          op-label="'Select end date:'"
-
+                         op-is-form="true"
                          op-ui-mode="'HORIZONTAL'"></div>
                 </div>
                 <div class="clearboth orLabel">OR</div>
@@ -144,6 +148,7 @@
                          op-lookup-url="'api/Dropdown/GetDropdowns/BACK_DATE_RSN'"
                          op-lookup-text="'DROP_DOWN'"
                          op-lookup-value="'ATRB_LKUP_SID'"
+                         op-is-form="true"
                          op-ui-mode="'VERTICAL'"></div>
                     <div class="col-md-11 row"
                          op-control-flat
@@ -151,6 +156,7 @@
                          op-cd="'BACK_DATE_RSN_TXT'"
                          op-type="'TEXTAREA'"
                          op-label="'Back date reason text'"
+                         op-is-form="true"
                          op-ui-mode="'VERTICAL'"></div>
                 </div>
 
@@ -166,6 +172,7 @@
                      op-cd="'TITLE'"
                      op-type="'TEXTBOX'"
                      op-label="'Contract Name:'"
+                     op-is-form="true"
                      op-ui-mode="'VERTICAL'"></div>
 
                 <div class="col-md-11 row">
@@ -174,6 +181,7 @@
                      op-cd="'C2A_DATA_C2A_ID'"
                      op-type="'TEXTBOX'"
                      op-label="'C2A# or link to contract:'"
+                     op-is-form="true"
                      op-ui-mode="'VERTICAL'"></div>
                 <div ng-if="!contractData._behaviors.isHidden['C2A_DATA_C2A_ID']" class="decsription">{{constants.C2AIdDesc}}</div>
                 </div>

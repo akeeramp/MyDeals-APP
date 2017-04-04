@@ -1,24 +1,24 @@
 ﻿(function () {
-	angular
+    angular
     .module('app.testCases')
     .run(appRun);
 
-	appRun.$inject = ['routerHelper'];
+    appRun.$inject = ['routerHelper'];
 
-	/* @ngInject */
-	function appRun(routerHelper) {
-		routerHelper.configureStates(getStates());
-	}
+    /* @ngInject */
+    function appRun(routerHelper) {
+        routerHelper.configureStates(getStates());
+    }
 
-	function getStates() {
-		return [
+    function getStates() {
+        return [
             {
                 state: 'testCases',
-            	config: {
-            	    abstract: true,
-            	    template: '<div ui-view></div>',
+                config: {
+                    abstract: true,
+                    template: '<div ui-view></div>',
                     url: '/'
-            	}
+                }
             },
             {
                 state: 'testCases.uiControls',
@@ -43,7 +43,15 @@
                     url: 'businessRules',
                     controller: 'businessRulesController'
                 }
+            },
+            {
+                state: 'testCases.opMessages',
+                config: {
+                    templateUrl: 'app/testCases/opMessages/opMessages.html',
+                    url: 'opMessages',
+                    controller: 'opMessagesController as vm'
+                }
             }
-		];
-	}
+        ];
+    }
 })();

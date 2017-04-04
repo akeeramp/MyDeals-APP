@@ -186,7 +186,8 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
             opCd: '=',
             opType: '=',
             opValidMsg: '=',
-            opHelpMsg: '='
+            opHelpMsg: '=',
+            opIsForm: '='
         },
         link: linker
     }

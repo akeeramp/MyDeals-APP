@@ -21,6 +21,7 @@ function opControlFlat($http, lookupsService, $compile, $templateCache, logger, 
         el += ' op-selected-object="\'' + scope.opSelectedObject + '\'"';
         el += ' op-min-value="' + scope.opMinValue + '"';
         el += ' op-max-value="' + scope.opMaxValue + '"';
+        el += ' op-is-form="' + scope.opIsForm + '"';
         el += ' op-valid-msg="value._behaviors.validMsg.' + scope.opCd + '"';
         el += ' op-help-msg="value._behaviors.helpMsg.' + scope.opCd + '"';
         el += ' op-is-error="value._behaviors.isError.' + scope.opCd + '"';
@@ -52,7 +53,8 @@ function opControlFlat($http, lookupsService, $compile, $templateCache, logger, 
             opLookupValues: '=',
             opSelectedObject: '=',
             opMinValue: '=',
-            opMaxValue: '='
+            opMaxValue: '=',
+            opIsForm:'=',
         },
         link: linker
     }

@@ -447,7 +447,7 @@ function ContractController($scope, $state, contractData, isNewContract, templat
     var isValidDate = function (type, oldDate, newDate) {
         var isValid = true;
         if (moment(newDate, "l", true).isValid()) {
-            if ($scope.contractData._behaviors.validMsg[type] == "Invaid date.") {
+            if ($scope.contractData._behaviors.validMsg[type] == "Invalid date.") {
                 $scope.contractData._behaviors.isError[type] = false;
                 $scope.contractData._behaviors.validMsg[type] = "";
             }
@@ -455,7 +455,7 @@ function ContractController($scope, $state, contractData, isNewContract, templat
         } else {
             isValid = false;
             $scope.contractData._behaviors.isError[type] = true;
-            $scope.contractData._behaviors.validMsg[type] = "Invaid date."
+            $scope.contractData._behaviors.validMsg[type] = "Invalid date."
         }
         return isValid;
     }
@@ -668,7 +668,6 @@ function ContractController($scope, $state, contractData, isNewContract, templat
                 // Remove from DB first... then remove from screen
                 objsetService.deletePricingStrategy($scope.getCustId(), ps).then(
                     function (data) {
-
                         if (data.data.MsgType !== 1) {
                             logger.warning("Unable to Deleted the Pricing Strategy", ps, "Delete Failed");
                             return;
@@ -700,7 +699,6 @@ function ContractController($scope, $state, contractData, isNewContract, templat
                 // Remove from DB first... then remove from screen
                 objsetService.deletePricingTable($scope.getCustId(), pt).then(
                     function (data) {
-
                         if (data.data.MsgType !== 1) {
                             logger.warning("Unable to Deleted the Pricing Table", pt, "Delete Failed");
                             return;
@@ -809,14 +807,11 @@ function ContractController($scope, $state, contractData, isNewContract, templat
             "EventSource": source
         }
 
-
-        //debugger;
         objsetService.updateContractAndCurPricingTable($scope.getCustId(), data).then(
             function (results) {
                 if (!!results.data.PRC_TBL_ROW) {
                     $scope.updateResults(results.data.PRC_TBL_ROW, $scope.pricingTableData.PRC_TBL_ROW, $scope.spreadDs);
                     $scope.spreadDs.read();
-
                 }
                 if (!!results.data.WIP_DEAL) {
                     $scope.updateResults(results.data.WIP_DEAL, $scope.pricingTableData.WIP_DEAL, $scope.gridDs);

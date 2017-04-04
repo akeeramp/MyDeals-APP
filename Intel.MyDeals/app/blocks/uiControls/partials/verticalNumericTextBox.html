@@ -11,4 +11,5 @@
            k-max="opMaxValue"
            ng-class="{isHidden: opIsHidden, isReadOnly: opIsReadOnly, isError: opIsError, isSaved: opIsSaved, isDirty: opIsDirty}" />
     <div class="clearboth"></div>
+    <div ng-if="opIsError && opIsForm" class="err-Control">{{opValidMsg}}</div>
 </div>

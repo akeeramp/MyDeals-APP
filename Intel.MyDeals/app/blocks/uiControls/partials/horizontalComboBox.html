@@ -11,6 +11,7 @@
                 k-value-primitive="true"
                 ng-class="{isHidden: opIsHidden, isReadOnly: opIsReadOnly, isError: opIsError, isSaved: opIsSaved, isDirty: opIsDirty}"></select>
         <div kendo-tooltip k-content="helptipMsg" k-position="'top'" ng-show="opHelpMsg" class="fl opElementHelpIcon intelicon-information-outlined"></div>
+        <div ng-if="opIsError && opIsForm" class="err-Control">{{opValidMsg}}</div>
         <div class="clearboth"></div>
     </div>
     <div class="clearboth"></div>

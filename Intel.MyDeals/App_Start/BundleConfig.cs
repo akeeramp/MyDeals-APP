@@ -140,6 +140,7 @@ namespace Intel.MyDeals
                 , "~/app/testCases/grids/basic.controller.js"
                 , "~/app/testCases/rules/businessRules.controller.js"
                 , "~/app/testCases/uiControls/uiControls.controller.js"
+                , "~/app/testCases/opMessages/opMessages.controller.js"
                 ));
 
             bundles.Add(new ScriptBundle("~/MyDeals/scripts").Include(

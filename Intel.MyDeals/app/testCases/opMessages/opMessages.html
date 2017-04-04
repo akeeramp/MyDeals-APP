@@ -1,0 +1,75 @@
+﻿<div class="alert alert-danger" role="alert" ng-if="messages.valSummarry">
+    Validation messages from behaviors:
+    <ul style="font-size:12px">
+        <li ng-repeat="(key, value) in contractData" ng-if="!!contractData._behaviors.validMsg[key] && contractData._behaviors.validMsg[key] != ''">
+            <p ng-if="!!contractData._behaviors.validMsg[key]">{{key}}: {{contractData._behaviors.validMsg[key]}}.</p>
+        </li>
+    </ul>
+    Messages from MT and DB:
+    <ul style="font-size:12px">
+        <li ng-repeat="message in warningMessages" ng-if="warningMessages.length > 0">
+            <p>{{message}}</p>
+        </li>
+    </ul>
+</div>
+<div class="alert alert-info" role="alert" ng-if="messages.valSummarry">
+    Info Messages from MT and DB:
+    <ul style="font-size:12px">
+        <li ng-repeat="message in infoMessages" ng-if="infoMessages.length > 0">
+            <p>{{message}}</p>
+        </li>
+    </ul>
+</div>
+
+<div class="fieldcontainer">
+    <label>Types of Messages</label>
+    <div class="form-group">
+        <label class="checkbox-inline">
+            <input type="checkbox" name="messages" ng-disabled="true" ng-model="messagetypes.inline"> In-line
+        </label>
+        <label class="checkbox-inline">
+            <input type="checkbox" name="messages" ng-model="messagetypes.modal"> Modal
+        </label>
+        <label class="checkbox-inline">
+            <input type="checkbox" name="messages" ng-model="messages.valSummarry"> Validation Summary
+        </label>
+    </div>
+</div>
+
+<div class="form-horizontal">
+    <div op-control-flat class="myDealsControl"
+         ng-model="contractData"
+         op-cd="'CUST_MBR_SID'"
+         op-type="'DROPDOWN'"
+         op-label="'Customer:'"
+         op-lookup-url="'/api/Customers/GetMyCustomerNames'"
+         op-lookup-text="'cust_nm'"
+         op-lookup-value="'cdms_cust_id'"
+         op-selected-object="'Customer'"
+         op-is-form="messagetypes.inline"
+         op-ui-mode="'VERTICAL'"></div>
+    <div op-control-flat class="myDealsControl"
+         ng-model="contractData"
+         op-cd="'TITLE'"
+         op-type="'TEXTBOX'"
+         op-label="'Contract Name:'"
+         op-is-form="messagetypes.inline"
+         op-ui-mode="'VERTICAL'"></div>
+    <div op-control-flat class="myDealsControl"
+         ng-model="contractData"
+         op-cd="'START_DT'"
+         op-type="'DATEPICKER'"
+         op-label="'Select start date:'"
+         op-ui-mode="'VERTICAL'"></div>
+    <div op-control-flat class="myDealsControl"
+         ng-model="contractData"
+         op-cd="'END_DT'"
+         op-type="'DATEPICKER'"
+         op-label="'Select end date:'"
+         op-ui-mode="'VERTICAL'"></div>
+    <div class="myDealsControl" style="padding:22px;">
+        <button class="btn btn-primary" ng-click="save()">
+            Save
+        </button>
+    </div>
+</div>

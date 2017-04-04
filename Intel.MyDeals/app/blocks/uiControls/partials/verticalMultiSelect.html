@@ -15,5 +15,5 @@
             style="width: 100%;"
             ng-class="{isHidden: opIsHidden, isReadOnly: opIsReadOnly, isError: opIsError, isSaved: opIsSaved, isDirty: opIsDirty}"></select>
     <div class="clearboth"></div>
-    <div ng-if="opIsError" class="err-Control">{{opValidMsg}}</div>
+    <div ng-if="opIsError && opIsForm" class="err-Control">{{opValidMsg}}</div>
 </div>

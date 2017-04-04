@@ -21,6 +21,7 @@ function opControlDataElement($http, lookupsService, $compile, $templateCache, l
         el += ' op-selected-object="\'' + scope.opSelectedObject + '\'"';
         el += ' op-min-value="' + scope.opMinValue + '"';
         el += ' op-max-value="' + scope.opMaxValue + '"';
+        el += ' op-is-form="' + scope.opIsForm + '"';
         el += ' op-valid-msg="opValue.' + scope.opCd + '.validMsg"';
         el += ' op-help-msg="opValue.' + scope.opCd + '.helpMsg"';
         el += ' op-is-error="opValue.' + scope.opCd + '.isError"';
@@ -52,7 +53,8 @@ function opControlDataElement($http, lookupsService, $compile, $templateCache, l
             opLookupValues: '=',
             opSelectedObject: '=',
             opMinValue: '=',
-            opMaxValue: '='
+            opMaxValue: '=',
+            opIsForm : "="
         },
         link: linker
     }
