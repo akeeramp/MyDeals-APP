@@ -12,7 +12,7 @@
         // Functions
         vm.addItem = addItem;
         vm.updateItem = updateItem;
-        vm.deleteItem = deleteItem
+        vm.deleteItem = deleteItem;
         vm.onChange = onChange;
 
         // Variables
@@ -54,6 +54,8 @@
             selectable: true,
             resizable: true,
             groupable: true,
+            sort: function (e) { gridUtils.cancelChanges(e); },
+            filter: function (e) { gridUtils.cancelChanges(e); },
             toolbar: gridUtils.clearAllFiltersToolbar(),
             editable: "popup",
             pageable: {

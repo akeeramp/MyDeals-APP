@@ -99,7 +99,7 @@
                         ALLW_REDEAL: { type: "boolean" },
                     }
                 }
-            },
+            }
         });
 
         vm.gridOptions = {
@@ -117,6 +117,8 @@
                 var commandCell = e.container.find("td:first");
                 commandCell.html('<a class="k-grid-update" href="#"><span class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span class="k-icon k-i-cancel"></span></a>');
             },
+            sort: function (e) { gridUtils.cancelChanges(e); },
+            filter: function (e) { gridUtils.cancelChanges(e); },
             destroy: function (e) {
                 var commandCell = e.container.find("td:first");
                 commandCell.html('<a class="k-grid-update" href="#"><span class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span class="k-icon k-i-cancel"></span></a>');

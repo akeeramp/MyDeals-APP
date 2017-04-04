@@ -114,6 +114,8 @@
             resizable: true,
             reorderable: true,
             columnMenu: true,
+            sort: function (e) { gridUtils.cancelChanges(e); },
+            filter: function (e) { gridUtils.cancelChanges(e); },
             toolbar: gridUtils.inLineClearAllFiltersToolbar(),
             editable: { mode: "inline", confirmation: false },
             edit: function (e) {

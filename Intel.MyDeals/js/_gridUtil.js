@@ -41,6 +41,17 @@ gridUtils.onDataValueChange = function (e) {
     return null;
 }
 
+gridUtils.cancelChanges = function(e) {
+    $(e.sender.table).closest(".k-grid").data('kendoGrid').dataSource.cancelChanges();
+}
+
+gridUtils.clearAllFiltersAndSorts = function () {
+    gridUtils.clearAllFilters();
+    gridUtils.clearAllSorts();
+}
+gridUtils.clearAllSorts = function () {
+    $(".k-grid").data("kendoGrid").dataSource.sort({});
+}
 gridUtils.clearAllFilters = function () {
     $("form.k-filter-menu button[type='reset']").trigger("click");
 }
@@ -49,7 +60,7 @@ gridUtils.clearAllFiltersToolbar = function () {
 }
 gridUtils.inLineClearAllFiltersToolbar = function () {
     var rtn = '';
-    rtn += '<a role="button" class="k-button k-button-icontext k-grid-add" href="\\#"><span class="k-icon k-i-plus"></span>Add new record</a> ';
+    rtn += '<a role="button" class="k-button k-button-icontext k-grid-add" href="\\#" onClick="gridUtils.clearAllFiltersAndSorts()"><span class="k-icon k-i-plus"></span>Add new record</a> ';
     rtn += '<a role="button" class="k-button k-button-icontext" href="\\#" onClick="gridUtils.clearAllFilters()"><span class="k-icon intelicon-cancel-filter-solid"></span>CLEAR FILTERS</a>';
     return rtn;
 }

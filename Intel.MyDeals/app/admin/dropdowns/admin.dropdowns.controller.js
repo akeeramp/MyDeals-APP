@@ -155,6 +155,8 @@
             resizable: true,
             //reorderable: true,
             //columnMenu: true,
+            sort: function (e) { gridUtils.cancelChanges(e); },
+            filter: function (e) { gridUtils.cancelChanges(e); },
             selectable: true,
             //groupable: true,
             editable: { mode: "inline", confirmation: false },

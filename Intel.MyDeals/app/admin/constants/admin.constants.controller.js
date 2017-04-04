@@ -83,6 +83,8 @@
             selectable: true,
             resizable: true,
             columnMenu: true,
+            sort: function (e) { gridUtils.cancelChanges(e); },
+            filter: function (e) { gridUtils.cancelChanges(e); },
             toolbar: gridUtils.inLineClearAllFiltersToolbar(),
             editable: { mode: "inline", confirmation: false },
             dataBound: dataBound,
