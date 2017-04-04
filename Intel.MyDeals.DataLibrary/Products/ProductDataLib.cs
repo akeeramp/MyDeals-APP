@@ -135,11 +135,8 @@ namespace Intel.MyDeals.DataLibrary
 
             var ret = new ProductIncExcAttributeSelector();
             var retProdIncExcAttribute = new List<IncExcAttributeMaster>();
-            var retProdInc = new List<ProductIncAttributeSelected>();
-            var retProdExc = new List<ProductExcAttributeSelected>();
-            //var ret = new List<IncExcAttributeMaster>();
-
-            var cmd = new Procs.dbo.PR_MYDL_GET_INCL_EXCL_ATRB { };
+            var retProdIncExc = new List<ProductAttributeSelected>();
+            var cmd = new Procs.dbo.PR_MYDL_GET_PRD_INCL_EXCL_CRI { };
 
             try
             {
@@ -161,29 +158,18 @@ namespace Intel.MyDeals.DataLibrary
                     rdr.NextResult();
 
                     int IDX_ATRB_SID_INC = DB.GetReaderOrdinal(rdr, "ATRB_SID_INC");
-
-                    while (rdr.Read())
-                    {
-                        retProdInc.Add(new ProductIncAttributeSelected
-                        {
-                            ATRB_SID_INC = (IDX_ATRB_SID_INC < 0 || rdr.IsDBNull(IDX_ATRB_SID_INC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_SID_INC)
-                        });
-                    }
-
-                    ret.ProductIncAttributeSelected = retProdInc;
-                    rdr.NextResult();
-
                     int IDX_ATRB_SID_EXC = DB.GetReaderOrdinal(rdr, "ATRB_SID_EXC");
 
                     while (rdr.Read())
                     {
-                        retProdExc.Add(new ProductExcAttributeSelected
+                        retProdIncExc.Add(new ProductAttributeSelected
                         {
+                            ATRB_SID_INC = (IDX_ATRB_SID_INC < 0 || rdr.IsDBNull(IDX_ATRB_SID_INC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_SID_INC),
                             ATRB_SID_EXC = (IDX_ATRB_SID_EXC < 0 || rdr.IsDBNull(IDX_ATRB_SID_EXC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_SID_EXC)
                         });
                     }
 
-                    ret.ProductExcAttributeSelected = retProdExc;
+                    ret.ProductIncExcAttributeSelected = retProdIncExc;
                 }
             }
             catch (Exception ex)
@@ -221,7 +207,6 @@ namespace Intel.MyDeals.DataLibrary
                         });
                     }
                 }
-                //DataCollections.RecycleCache("_getProductsFromAlias");
             }
             catch (Exception ex)
             {
@@ -235,9 +220,6 @@ namespace Intel.MyDeals.DataLibrary
         {
             var ret = new List<PrdSelLevel>();
             OpLogPerf.Log("GetProdSelectionLevel");
-
-            //var cmd = new Procs.dbo.PR_MYDL_LD_PRD_SEL_LVL { };
-
             try
             {
                 Procs.dbo.PR_MYDL_LD_PRD_SEL_LVL cmd = new Procs.dbo.PR_MYDL_LD_PRD_SEL_LVL
@@ -258,7 +240,6 @@ namespace Intel.MyDeals.DataLibrary
                         });
                     }
                 }
-                //DataCollections.RecycleCache("_getProductsFromAlias");
             }
             catch (Exception ex)
             {

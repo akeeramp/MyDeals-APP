@@ -21,25 +21,17 @@ namespace Intel.MyDeals.Entities
     ///</summary>
 
     [DataContract]
-    public partial class ProductIncAttributeSelected
+    public partial class ProductAttributeSelected
     {
         [DataMember]
         public System.String ATRB_SID_INC { set; get; }
-    }
-
-    [DataContract]
-    public partial class ProductExcAttributeSelected
-    {
         [DataMember]
         public System.String ATRB_SID_EXC { set; get; }
     }
-
     public class ProductIncExcAttributeSelector
     {
         public List<IncExcAttributeMaster> IncExcAttributeMaster { get; set; }
-        public List<ProductIncAttributeSelected> ProductIncAttributeSelected { get; set; }
-        public List<ProductExcAttributeSelected> ProductExcAttributeSelected { get; set; }
-
+        public List<ProductAttributeSelected> ProductIncExcAttributeSelected { get; set; }
     }
 
     [DataContract]

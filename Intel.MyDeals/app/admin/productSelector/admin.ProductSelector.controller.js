@@ -215,6 +215,7 @@
               },
               { field: "USR_INPUT", template: " #= USR_INPUT # ", title: "User Input", width: "200px" },
               { field: "PRD_MBR_SID", title: "Product No", width: "200px" },
+              { field: "DEAL_PRD_NM", template: " #= DEAL_PRD_NM # ", title: "Deal Prod Name", width: "200px" },
               { field: "PRD_CAT_NM", template: " #= PRD_CAT_NM # ", title: "Category Name", width: "200px" },
               { field: "BRND_NM", template: " #= BRND_NM # ", title: "Brand Name", width: "200px" },
               { field: "FMLY_NM", template: " #= FMLY_NM # ", title: "Family Name", width: "200px" },
@@ -263,6 +264,7 @@
             if (productHierarchy.FMLY_NM !== "") ph += " / " + productHierarchy.FMLY_NM;
             if (productHierarchy.PCSR_NBR !== "") ph += " / " + productHierarchy.PCSR_NBR;
             if (productHierarchy.DEAL_PRD_NM !== "") ph += " / " + productHierarchy.DEAL_PRD_NM;
+            if (productHierarchy.KIT_NM !== "") ph += " / " + productHierarchy.KIT_NM;
             return ph;
         }
 
@@ -275,6 +277,8 @@
                 })
                 .ToArray().length > 0;
             if (productExists) {
+                alert(p.PRD_MBR_SID);
+                alert(productExists);
                 logger.error("Product already exists.", "", "Not allowed");
             } else {
                 vm.dataSource.push(p);

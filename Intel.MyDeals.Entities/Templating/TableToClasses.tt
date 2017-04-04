@@ -223,7 +223,7 @@ using System.Collections.Generic;
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	//Product Include Exclude Attribute Master
-    ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_INCL_EXCL_ATRB]");
+    ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_PRD_INCL_EXCL_CRI]");
     ds.Tables[0].TableName = "IncExcAttributeMaster";
     WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
@@ -236,6 +236,7 @@ using System.Collections.Generic;
     ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_LD_PRD_SEL_LVL] @OBJ_SET_TYPE_SID = 3");
     ds.Tables[0].TableName = "PrdSelLevel";
     WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
 
 	PopIndent();
 	WriteLine("}"); // End NameSpace

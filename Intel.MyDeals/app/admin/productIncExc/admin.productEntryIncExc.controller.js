@@ -23,10 +23,10 @@
                         if (response.statusText == "OK") {                            
                             attributeMasterValues = response.data.IncExcAttributeMaster;
                             
-                            $scope.selectedIds = response.data.ProductIncAttributeSelected[0].ATRB_SID_INC.split(',').map(function (item) {
+                            $scope.selectedIds = response.data.ProductIncExcAttributeSelected[0].ATRB_SID_INC.split(',').map(function (item) {
                                 return parseInt(item, 10);
                             });
-                            $scope.selectedExcludeIds = response.data.ProductExcAttributeSelected[0].ATRB_SID_EXC.split(',').map(function (item) {
+                            $scope.selectedExcludeIds = response.data.ProductIncExcAttributeSelected[0].ATRB_SID_EXC.split(',').map(function (item) {
                                 return parseInt(item, 10);
                             });
                             
