@@ -227,8 +227,7 @@ namespace Intel.MyDeals.DataLibrary
                 UiType = "DROPDOWN",
                 LookupUrl = "/api/Dropdown/GetNumTiersDropdowns",
                 LookupText = "dropdownName",
-                LookupValue = "dropdownID",
-                Template = "#=gridUtils.uiIconWrapper(data, 'DROPDOWN')#"
+                LookupValue = "dropdownID"
             });
 
             items.Add(new UiTemplateContainerItem
@@ -240,10 +239,10 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "ECAP Type",
                 DataType = "string",
                 UiType = "DROPDOWN",
-                LookupUrl = "/api/Dropdown/GetDropdowns/PROGRAM_ECAP_TYPE",
+                LookupUrl = "/api/Dropdown/GetDropdowns/PROGRAM_ECAP_TYPE/ECAP",
                 LookupText = "DROP_DOWN",
-                LookupValue = "DROP_DOWN",
-                Template = "#=gridUtils.uiIconWrapper(data, 'ECAP_TYPE')#" });
+                LookupValue = "DROP_DOWN"
+            });
             items.Add(new UiTemplateContainerItem
             {
                 Id = 38,
@@ -253,10 +252,9 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "Market Segment",
                 DataType = "string",
                 UiType = "MULTISELECT",
-                LookupUrl = "/api/Dropdown/GetDropdowns/MRKT_SEG_COMBINED",
+                LookupUrl = "/api/Dropdown/GetDropdownHierarchy/MRKT_SEG_COMBINED",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN",
-                Template = "#=gridUtils.uiIconWrapper(data, 'MRKT_SEG_COMBINED')#",
                 HelpText = "You cannot mix ALL & other market segments.\n\nNon Corp selects: Consumer retail pull, Education, Government, &SMB"
             });
             items.Add(new UiTemplateContainerItem
@@ -270,8 +268,7 @@ namespace Intel.MyDeals.DataLibrary
                 UiType = "MULTISELECT",
                 LookupUrl = "/api/Dropdown/GetGeosDropdowns",
                 LookupText = "dropdownName",
-                LookupValue = "dropdownName",
-                Template = "#=gridUtils.uiIconWrapper(data, 'GEO_COMBINED')#"
+                LookupValue = "dropdownName"
             });
             items.Add(new UiTemplateContainerItem
             {
@@ -282,10 +279,9 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "Payout Based On",
                 DataType = "string",
                 UiType = "RADIOBUTTONGROUP",
-                LookupUrl = "/api/Dropdown/GetDropdowns/PAYOUT_BASED_ON",
+                LookupUrl = "/api/Dropdown/GetDropdowns/PAYOUT_BASED_ON/ECAP",
                 LookupText = "DROP_DOWN",
-                LookupValue = "DROP_DOWN",
-                Template = "#=gridUtils.uiIconWrapper(data, 'PAYOUT_BASED_ON')#"
+                LookupValue = "DROP_DOWN"
             });
             items.Add(new UiTemplateContainerItem
             {
@@ -296,10 +292,9 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "Meet Comp Analysis",
                 DataType = "string",
                 UiType = "RADIOBUTTONGROUP",
-                LookupUrl = "/api/Dropdown/GetDropdowns/MEET_COMP_PRICE_QSTN",
+                LookupUrl = "/api/Dropdown/GetDropdowns/MEET_COMP_PRICE_QSTN/ECAP",
                 LookupText = "DROP_DOWN",
-                LookupValue = "DROP_DOWN",
-                Template = "#=gridUtils.uiIconWrapper(data, 'MEET_COMP_PRICE_QSTN')#"
+                LookupValue = "DROP_DOWN"
             });
             items.Add(new UiTemplateContainerItem
             {
@@ -310,10 +305,9 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "Program Pay",
                 DataType = "string",
                 UiType = "DROPDOWN",
-                LookupUrl = "/api/Dropdown/GetDropdowns/PROGRAM_PAYMENT",
+                LookupUrl = "/api/Dropdown/GetDropdowns/PROGRAM_PAYMENT/ECAP",
                 LookupText = "DROP_DOWN",
-                LookupValue = "DROP_DOWN",
-                Template = "#=gridUtils.uiIconWrapper(data, 'PROGRAM_PAYMENT')#"
+                LookupValue = "DROP_DOWN"
             });
 
 

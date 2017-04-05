@@ -1213,7 +1213,61 @@ function ContractController($scope, $state, contractData, isNewContract, templat
         return Object.keys($scope.newPricingTable._defaultAtrbs).length;
     }
 
-    
+    var WW = "Worldwide"; //ongoing debates on whether geo will be represented as "WW" or "Worldwide", leaving this here for ease of changing.
+
+    //watch for user changing global auto-fill default values
+    $scope.$watch('newPricingTable._defaultAtrbs',
+        function (newValue, oldValue, el) {
+
+            if (oldValue === newValue) return;
+
+            if (oldValue != null && newValue == null) return;
+
+            if (oldValue == null && newValue != null) {
+                //initialize, hard coded for now, build into an admin page in future.
+                newValue["ECAP_TYPE"].value = "MCP";
+                newValue["MRKT_SEG_COMBINED"].value = ["All"];
+                newValue["GEO_COMBINED"].value = [WW];
+                newValue["PAYOUT_BASED_ON"].value = "Billings"; //TODO: typo- need to correct to "Billing" in db
+                newValue["MEET_COMP_PRICE_QSTN"].value = "Price";
+                newValue["PROGRAM_PAYMENT"].value = "Backend";
+
+            } else {
+
+                //TODO: can we not hard-code these? Can we use attribute codes or just make it more dynamic somehow? (probably not...)
+                //if (oldValue["ECAP_TYPE"].value != newValue["ECAP_TYPE"].value) {
+                //}
+
+                if (oldValue["MRKT_SEG_COMBINED"].value.toString() != newValue["MRKT_SEG_COMBINED"].value.toString()) {
+                    debugger;
+                    //TODO: all sorts of gross stuff
+                }
+
+                if (oldValue["GEO_COMBINED"].value.toString() != newValue["GEO_COMBINED"].value.toString()) {
+                    if (newValue["GEO_COMBINED"].value.length > 1) {
+                        if (newValue["GEO_COMBINED"].value.indexOf(WW) > -1 && !(oldValue["GEO_COMBINED"].value.indexOf(WW) > -1)) {
+                            //if user has another geo selected and then selects WW, need to deselect all other GEOs
+                            newValue["GEO_COMBINED"].value = [WW];
+                            $("#GEO_COMBINED").data("kendoMultiSelect").value([WW])
+                        } else if (oldValue["GEO_COMBINED"].value.length == 1 && oldValue["GEO_COMBINED"].value[0] == WW && newValue["GEO_COMBINED"].value.indexOf(WW) > -1) {
+                            //if user had WW selected and selects another GEO, need to deselect WW
+                            newValue["GEO_COMBINED"].value.splice(newValue["GEO_COMBINED"].value.indexOf(WW), 1)
+                            $("#GEO_COMBINED").data("kendoMultiSelect").value(newValue["GEO_COMBINED"].value)
+                        }
+                    }
+                }
+
+                //if (oldValue["PAYOUT_BASED_ON"] != newValue["PAYOUT_BASED_ON"]) {
+                //}
+
+                //if (oldValue["MEET_COMP_PRICE_QSTN"] != newValue["MEET_COMP_PRICE_QSTN"]) {
+                //}
+
+                //if (oldValue["PROGRAM_PAYMENT"] != newValue["PROGRAM_PAYMENT"]) {
+                //}
+            }
+
+        }, true)
 
     // **** VALIDATE PRICING TABLE Methods ****
     //
