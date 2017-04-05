@@ -10,9 +10,6 @@
     function ProductSelectorController($scope, dataService, ProductSelectorService, logger, confirmationModal, gridConstants, $linq, $state) {
         var vm = this;
         vm.showGrid = false;
-        var attributeMasterValues = '';
-        var IncludeAttributeSelected = [1, 2];
-        var ExcludeAttributeSelected;
         vm.userInput = [];
         vm.products = "";
         vm.invalidProducts = [];
@@ -277,8 +274,6 @@
                 })
                 .ToArray().length > 0;
             if (productExists) {
-                alert(p.PRD_MBR_SID);
-                alert(productExists);
                 logger.error("Product already exists.", "", "Not allowed");
             } else {
                 vm.dataSource.push(p);

@@ -38,7 +38,7 @@
                 <span class="sr-only icon-bar"></span>
                 <span class="sr-only icon-bar"></span>
             </button>
-            <img class="navbar-logo" alt="" src="/images/intel-logo-white-100.png">
+            <img class="navbar-logo" alt="" src="/images/intel-logo-white-100.png" ondblclick="eggSmw()">
             <a class="navbar-brand" href="@Url.Action("Index", "Home", new { Area = "" })">MyDeals</a>
         </div>
 
@@ -48,18 +48,18 @@
 
                 <li style="text-align: center;">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" style="padding: 7px;">
-                        <div class="fl" id="divUsrImg">
-                            <img src="https://photos.intel.com/images/@(usrWwid).jpg" style="width: 35px; height: 35px; margin-right: 5px; border: 1px solid #ffffff;" />
-                        </div>
-                        <div class="fl hidden-sm" style="margin-top: 7px; margin-right: 10px;">
-                            <div style="font-size: 12px; color: #ffffff; line-height: 1em;" id="divUsrName">@usrName</div>
-                            <div style="font-size: 9px; color: #ffffff; line-height: 1em;" id="divUsrRole">@usrRole</div>
-                        </div>
-                        <div class="fl">
-                            <i class="intelicon-down" style="color: #ffffff; margin-top: 5px;"></i>
-                        </div>
-                        <div class="clearboth"></div>
-                    </a>
+                            <div class="fl" id="divUsrImg">
+                                <img src="https://photos.intel.com/images/@(usrWwid).jpg" style="width: 35px; height: 35px; margin-right: 5px; border: 1px solid #ffffff;" />
+                            </div>
+                            <div class="fl hidden-sm" style="margin-top: 7px; margin-right: 10px;">
+                                <div style="font-size: 12px; color: #ffffff; line-height: 1em;" id="divUsrName">@usrName</div>
+                                <div style="font-size: 9px; color: #ffffff; line-height: 1em;" id="divUsrRole">@usrRole</div>
+                            </div>
+                            <div class="fl">
+                                <i class="intelicon-down" style="color: #ffffff; margin-top: 5px;"></i>
+                            </div>
+                            <div class="clearboth"></div>
+</a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a href="#">User Preferences</a></li>
                         <li><a href="#">Some other stuff</a></li>
@@ -107,8 +107,7 @@
                         <ul class="dropdown-menu">
                             <li><a href="CostTest#/CostTest/icostproducts">Legal Classification</a></li>
                             <li><a href="Admin#/productAlias">Product Alias</a></li>
-                            <!--<li><a href="Admin#/productEntry">Product Entry</a></li>-->
-                            <li><a href="Admin#/productSelector">Product Selector</a></li>
+                            <li><a href="Admin#/productSelector">Product Entry</a></li>
                             <li><a href="Admin#/productEntryIncExc">Prod Include Exclude</a></li>
                             <li><a href="Admin#/products">Product Hierarchy</a></li>
                             <li><a href="Admin#/productCategories">Product Vertical Rules</a></li>
@@ -202,6 +201,10 @@
             '0': 'rgba(196, 214, 0, 1)'
         }
     });
+
+    function eggSmw() {
+        window.open("/egg/mb/menu.html", "_blank", "toolbar=no,scrollbars=no,menubar=no,status=no,titlebar=no,resizable=no,width=642,height=482,top=200,left=200");
+    }
 </script>
 
 

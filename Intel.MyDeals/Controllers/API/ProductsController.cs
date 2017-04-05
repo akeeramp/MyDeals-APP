@@ -312,7 +312,7 @@ namespace Intel.MyDeals.Controllers.API
             var productAlias = new List<ProductAlias>();
             try
             {
-                productAlias = _productsLib.SetProductAlias(CrudModes.Insert, data);
+                productAlias = _productsLib.SetProductAlias(CrudModes.Update, data);
             }
             catch (Exception ex)
             {
@@ -339,7 +339,7 @@ namespace Intel.MyDeals.Controllers.API
         public ProductLookup TranslateProducts(List<ProductEntryAttribute> userInput)
         {
             return SafeExecutor(() => _productsLib.TranslateProducts(userInput)
-                , $"Unable to get product mappings for {"userInput"}"
+                , $"Unable to translate {"userInput"}"
             );
         }
 
@@ -348,7 +348,7 @@ namespace Intel.MyDeals.Controllers.API
         public ProductLookup GetProductDetails(List<ProductEntryAttribute> userInput)
         {
             return SafeExecutor(() => _productsLib.TranslateProducts(userInput)
-                , $"Unable to get product mappings for {"userInput"}"
+                , $"Unable to get product {"details"}"
             );
         }
 
@@ -357,7 +357,7 @@ namespace Intel.MyDeals.Controllers.API
         public ProductLookup FetchProducts(List<ProductIEValues> userInput)
         {
             return SafeExecutor(() => _productsLib.FetchProducts(userInput)
-                , $"Unable to get product mappings for {"userInput"}"
+                , $"Unable to get {"product"}"
             );
         }
 
@@ -366,7 +366,7 @@ namespace Intel.MyDeals.Controllers.API
         public List<ProductIncExcAttribute> SetIncludeAttibute(List<ProductIncExcAttribute> userInput)
         {
             return SafeExecutor(() => _productsLib.SetIncludeAttibute(userInput)
-                , $"Unable to get product mappings for {"userInput"}"
+                , $"Unable to save {"include attribute"}"
             );
         }
 
@@ -375,7 +375,7 @@ namespace Intel.MyDeals.Controllers.API
         public List<ProductIncExcAttribute> SetExcludeAttibute(List<ProductIncExcAttribute> userInput)
         {
             return SafeExecutor(() => _productsLib.SetExcludeAttibute(userInput)
-                , $"Unable to get product mappings for {"userInput"}"
+                , $"Unable to save {"exclude attribute"}"
             );
         }
 
@@ -384,7 +384,7 @@ namespace Intel.MyDeals.Controllers.API
         public ProductIncExcAttributeSelector FetchAttributeMaster()
         {
             return SafeExecutor(() => _productsLib.GetProductIncludeExcludeAttribute()
-                , $"Unable to get product mappings for {"userInput"}"
+                , $"Unable to get {"attribute master"}"
             );
         }
 
@@ -393,7 +393,7 @@ namespace Intel.MyDeals.Controllers.API
         public List<PrdDealType> GetProdDealType()
         {
             return SafeExecutor(() => _productsLib.GetProdDealType()
-                , $"Unable to get product mappings for {"userInput"}"
+                , $"Unable to get {"deal types"}"
             );
         }
 
@@ -401,7 +401,7 @@ namespace Intel.MyDeals.Controllers.API
         public List<PrdSelLevel> GetProdSelectionLevel(int OBJ_SET_TYPE_SID)
         {
             return SafeExecutor(() => _productsLib.GetProdSelectionLevel(OBJ_SET_TYPE_SID)
-                , $"Unable to get product mappings for {"userInput"}"
+                , $"Unable to get {"selection level"}"
             );
         }
 

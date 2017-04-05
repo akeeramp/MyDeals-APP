@@ -102,15 +102,6 @@
                 }
             },
             {
-                state: 'admin.productEntry',
-                abstract: false,
-                config: {
-                    templateUrl: 'app/admin/productEntry/productEntry.html',
-                    url: 'productEntry',
-                    controller: 'ProductEntryController as vm',
-                }
-            },
-            {
                 state: 'admin.productAlias',
                 abstract: false,
                 config: {

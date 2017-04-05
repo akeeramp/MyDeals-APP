@@ -70,7 +70,7 @@
     <Compile Include="CrudModes.cs" />
     <Compile Include="AppRoleLookup.cs" />
     <Compile Include="CacheItem.cs" />
-    <Compile Include="Op Future Items\Logging\EmailExLogPerf.cs" />
+    <Compile Include="Logging\EmailExLogPerf.cs" />
     <Compile Include="MyCustomerDetailsWrapper.cs" />
     <Compile Include="EmployeeDetailData.cs" />
     <Compile Include="EN.cs" />
@@ -105,10 +105,10 @@
     <Compile Include="OP ExtensionMethods\OpTaskPhase.cs" />
     <Compile Include="OP ExtensionMethods\OpDataElementAtrbTemplate.cs" />
     <Compile Include="OP ExtensionMethods\OpUserTokenExtensionMethods.cs" />
-    <Compile Include="Op Future Items\Logging\DbLogPerf.cs" />
-    <Compile Include="Op Future Items\Logging\DbLogPerfMessage.cs" />
-    <Compile Include="Op Future Items\Logging\LoggingClient.cs" />
-    <Compile Include="Op Future Items\Logging\MyDealsWebApiUrl.cs" />
+    <Compile Include="Logging\DbLogPerf.cs" />
+    <Compile Include="Logging\DbLogPerfMessage.cs" />
+    <Compile Include="Logging\LoggingClient.cs" />
+    <Compile Include="Logging\MyDealsWebApiUrl.cs" />
     <Compile Include="Op Future Items\OpCommonTools.cs" />
     <Compile Include="OpLog.cs" />
     <Compile Include="OpUserStack.cs" />

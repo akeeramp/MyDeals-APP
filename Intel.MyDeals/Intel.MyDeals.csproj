@@ -319,9 +319,6 @@
     <Content Include="app\admin\productCategories\admin.productCategories.controller.js" />
     <Content Include="app\admin\productCategories\productCategories.html" />
     <Content Include="app\admin\productCategories\productCategories.service.js" />
-    <Content Include="app\admin\productEntry\admin.productEntry.controller.js" />
-    <Content Include="app\admin\productEntry\productEntry.html" />
-    <Content Include="app\admin\productEntry\productEntry.service.js" />
     <Content Include="app\admin\productIncExc\admin.productEntryIncExc.controller.js" />
     <Content Include="app\admin\productIncExc\productEntryIncExc.html" />
     <Content Include="app\admin\productIncExc\productEntryIncExc.service.js" />

@@ -481,21 +481,20 @@ namespace Intel.MyDeals.BusinessLogic
             var product = new List<string>();
             product.Add(data.PRD_NM);
             product.Add(data.PRD_ALS_NM);
-
+            var isValidProduct = _productDataLib.SetProductAlias(mode, data);
             if (mode == CrudModes.Insert || mode == CrudModes.Update)
             {
-                //var isValidProduct = FindProductMatch(product);
-                //if (!isValidProduct.Where(x => x.USR_INPUT == data.PRD_NM).Any())
-                //{
-                //    throw new Exception($"Aw Snap! The product name \"{data.PRD_NM}\" you are trying to map does not exists in Mydeals.");
-                //}
-                //if (isValidProduct.Where(x => x.USR_INPUT == data.PRD_ALS_NM).Any())
-                //{
-                //    throw new Exception($"Aw Snap! \"{data.PRD_ALS_NM}\" is valid product name in MyDeals, this cannot be added as alias name.");
-                //}
+                if (!isValidProduct.Where(x => x.PRD_NM == data.PRD_NM).Any())
+                {
+                    throw new Exception($"The product name \"{data.PRD_NM}\" you are trying to map does not exists in Mydeals.");
+                }
+                if (!isValidProduct.Where(x => x.PRD_ALS_NM == data.PRD_ALS_NM).Any())
+                {
+                    throw new Exception($" \"{data.PRD_ALS_NM}\" is valid product name in MyDeals, this cannot be added as alias name.");
+                }
             }
 
-            return _productDataLib.SetProductAlias(mode, data);
+            return isValidProduct;
         }
 
         /// <summary>
