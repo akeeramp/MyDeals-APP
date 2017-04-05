@@ -154,6 +154,7 @@
         $scope.isSaved = false;
         $scope.isDirty = false;
 
+
         $scope.loadData = function () {
             $scope.des = {
                 "_dirty": false,
@@ -236,7 +237,7 @@
                     isDirty: false,
                     validMsg: "Please enter a valid value.",
                     helpMsg: "Look, here are some helpful instructions"
-                },
+                }
             }
             $scope.flat = {
                 "_dirty": false,
@@ -244,14 +245,19 @@
                 "TEXT": "Hello World",
                 "INT": 123,
                 "DATE": "2/4/2016",
-                "DROPDOWN": "SMB",
+                "DROPDOWNH": "SMB",
+                "DROPDOWNV": "SMB",
                 "DropdownSelected": [],
-                "COMBOBOX": "Gaming",
-                "RADIOBUTTON": "",
-                "TEXTAREA": "Multi-line TextBox",
-                "SliderInt":1,
+                "COMBOBOXH": "Gaming",
+                "COMBOBOXV": "Gaming",
                 "ComboboxSelected": [],
-                "MULTISELECT": ["SMB"],
+                "RADIOBUTTONH": "",
+                "RADIOBUTTONV": "",
+                "TEXTAREA": "Multi-line TextBox",
+                "SliderIntH": 1,
+                "SliderIntV": 1,
+                "MULTISELECTH": ["SMB"],
+                "MULTISELECTV": ["SMB"],
                 "_MultiDim": [
                     {
                         "PIVOT": -1,
@@ -541,6 +547,31 @@
                 };
             };
         };
+
+        $scope.fontSize = "lg";
+        $scope.$watch('fontSize',
+            function (newValue, oldValue, el) {
+                if (oldValue === newValue) return;
+
+                $(".opUiContainer").removeClass("sm").removeClass("md");
+                if (newValue !== "lg")
+                    $(".opUiContainer").addClass(newValue);
+
+            }, true);
+
+        $scope.fontSize = "white";
+        $scope.$watch('bgColor',
+            function (newValue, oldValue, el) {
+                if (oldValue === newValue) return;
+
+                $(".opUiContainer").removeClass("blue").removeClass("intel");
+                $(".fieldcontainer").removeClass("blue").removeClass("intel");
+                if (newValue !== "white") {
+                    $(".opUiContainer").addClass(newValue);
+                    $(".fieldcontainer").addClass(newValue);
+                }
+
+            }, true);
 
         $scope.loadData();
     }

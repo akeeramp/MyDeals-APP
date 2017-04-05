@@ -243,3 +243,18 @@
 .icon-lg{
 	font-size: 1.2em;
 }
+
+
+.btn-group .noMarginSmBtn {
+    margin: 0 !important;
+    padding: 4px 10px; 
+    height: 32px;
+    font-weight: bold !important;
+    font-family: arial !important;
+}
+.btn-group .noMarginSmBtn:first-child {
+    border-right: 0;
+}
+.btn-group .noMarginSmBtn:last-child {
+    border-left: 0;
+}

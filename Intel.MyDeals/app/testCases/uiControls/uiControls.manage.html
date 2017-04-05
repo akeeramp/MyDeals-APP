@@ -1,27 +1,43 @@
 ﻿<div>
     <div id="toolBarChk" ng-init="init()">
         <!--<button class="btn btn-secondary" type="button" ng-click="loadData()" style="margin-right: 25px;">Load Data</button>-->
+        
+        <div class="fl" style="margin: 6px 0 0 8px">
+            <label>
+                <input type="checkbox" ng-model="isHidden" ng-click="clkIsHidden(isHidden)">
+                IsHidden
+            </label>
+            <label>
+                <input type="checkbox" ng-model="isReadOnly" ng-click="clkIsReadOnly(isReadOnly)">
+                IsReadOnly
+            </label>
+            <label>
+                <input type="checkbox" ng-model="isRequired" ng-click="clkIsRequired(isRequired)">
+                IsRequired
+            </label>
+            <label>
+                <input type="checkbox" ng-model="isError" ng-click="clkIsError(isError)">
+                IsError
+            </label>
+            <label>
+                <input type="checkbox" ng-model="isDirty" ng-click="clkIsDirty(isDirty)">
+                IsDirty
+            </label>
+        </div>
+        
+        <div class="btn-group fr">
+            <label class="btn btn-default noMarginSmBtn" ng-model="fontSize" uib-btn-radio="'sm'"><div style="font-size: 8px; margin-top: 6px;">A</div></label>
+            <label class="btn btn-default noMarginSmBtn" ng-model="fontSize" uib-btn-radio="'md'"><div style="font-size: 11px; margin-top: 3px;">A</div></label>
+            <label class="btn btn-default noMarginSmBtn active" ng-model="fontSize" uib-btn-radio="'lg'"><div style="font-size: 14px; margin-top: 1px;">A</div></label>
+        </div>
+    
+        <div class="btn-group fr" style="margin: 0 20px;">
+            <label class="btn btn-default noMarginSmBtn" ng-model="bgColor" uib-btn-radio="'white'">White</label>
+            <label class="btn btn-primary noMarginSmBtn" style="background-color: #0071C5;" ng-model="bgColor" uib-btn-radio="'intel'">Intel</label>
+            <label class="btn btn-primary noMarginSmBtn" style="background-color: #003C71;" ng-model="bgColor" uib-btn-radio="'blue'">Blue</label>
+        </div>
 
-        <label>
-            <input type="checkbox" ng-model="isHidden" ng-click="clkIsHidden(isHidden)">
-            IsHidden
-        </label>
-        <label>
-            <input type="checkbox" ng-model="isReadOnly" ng-click="clkIsReadOnly(isReadOnly)">
-            IsReadOnly
-        </label>
-        <label>
-            <input type="checkbox" ng-model="isRequired" ng-click="clkIsRequired(isRequired)">
-            IsRequired
-        </label>
-        <label>
-            <input type="checkbox" ng-model="isError" ng-click="clkIsError(isError)">
-            IsError
-        </label>
-        <label>
-            <input type="checkbox" ng-model="isDirty" ng-click="clkIsDirty(isDirty)">
-            IsDirty
-        </label>
+        <div class="clearboth"></div>
     </div>
 
     <div class="fieldcontainer">
@@ -112,7 +128,7 @@
     </div>
 
     <div class="fieldcontainer">
-        <div><i class="intelicon-upload-solid" ng-class="{isDirtyIcon: flat._dirty}"></i>Flattened Structure</div>
+        <div><i class="intelicon-upload-solid" ng-class="{isDirtyIcon: flat._dirty}"></i>Flattened Structure - Vertical</div>
 
         <div class="clearboth"></div>
 
@@ -144,7 +160,7 @@
         <div class="myDealsControl"
              op-control-flat
              ng-model="flat"
-             op-cd="'DROPDOWN1'"
+             op-cd="'DROPDOWNV'"
              op-type="'DROPDOWN'"
              op-label="'Dropdown Sample:'"
              op-lookup-url="'/api/Dropdown/GetDropdowns/MRKT_SEG_NON_CORP'"
@@ -156,7 +172,7 @@
         <div class="myDealsControl"
              op-control-flat
              ng-model="flat"
-             op-cd="'COMBOBOX1'"
+             op-cd="'COMBOBOXV'"
              op-type="'COMBOBOX'"
              op-label="'Combobox Sample:'"
              op-lookup-url="'/api/Dropdown/GetDropdowns/MRKT_SEG_NON_CORP'"
@@ -168,7 +184,7 @@
         <div class="myDealsControl"
              op-control-flat
              ng-model="flat"
-             op-cd="'MULTISELECT'"
+             op-cd="'MULTISELECTV'"
              op-type="'MULTISELECT'"
              op-label="'Multiselect Sample:'"
              op-lookup-url="'/api/Dropdown/GetDropdowns/MRKT_SEG_NON_CORP'"
@@ -183,14 +199,14 @@
              ng-model="flat"
              op-cd="'TEXTAREA'"
              op-type="'TEXTAREA'"
-             op-label="'Textarea'"
+             op-label="'Textarea:'"
              op-is-form="true"
              op-ui-mode="'VERTICAL'"></div>
         <div class="myDealsControl"
              style="width: 200px;"
              op-control-flat
              ng-model="flat"
-             op-cd="'SliderInt'"
+             op-cd="'SliderIntV'"
              op-type="'SLIDER'"
              op-label="'Slider Sample:'"
              op-min-value="1"
@@ -200,7 +216,7 @@
         <div class="myDealsControl"
              op-control-flat
              ng-model="flat"
-             op-cd="'RADIOBUTTON'"
+             op-cd="'RADIOBUTTONV'"
              op-type="'RADIOBUTTONGROUP'"
              op-label="'Radio Group Sample:'"
              op-lookup-url="'/api/Dropdown/GetDropdowns/MRKT_SEG_NON_CORP'"
@@ -216,9 +232,95 @@
     </div>
 
     <div class="fieldcontainer">
+        <div><i class="intelicon-upload-solid" ng-class="{isDirtyIcon: flat._dirty}"></i>Flattened Structure - Horizontal</div>
+
+        <div class="clearboth"></div>
+
+        <div class="myDealsControl"
+             op-control-flat
+             ng-model="flat"
+             op-cd="'TEXT'"
+             op-type="'TEXTBOX'"
+             op-label="'Textbox Sample:'"
+             op-ui-mode="'HORIZONTAL'"></div>
+        <div class="myDealsControl"
+             op-control-flat
+             ng-model="flat"
+             op-cd="'DATE'"
+             op-type="'DATEPICKER'"
+             op-label="'Date Sample:'"
+             op-ui-mode="'HORIZONTAL'"></div>
+        <div class="myDealsControl"
+             op-control-flat
+             ng-model="flat"
+             op-cd="'INT'"
+             op-type="'NUMERIC'"
+             op-label="'Numericbox Sample:'"
+             op-min-value="1"
+             op-max-value="4"
+             op-ui-mode="'HORIZONTAL'"></div>
+        <div class="myDealsControl"
+             op-control-flat
+             ng-model="flat"
+             op-cd="'DROPDOWNH'"
+             op-type="'DROPDOWN'"
+             op-label="'Dropdown Sample:'"
+             op-lookup-url="'/api/Dropdown/GetDropdowns/MRKT_SEG_NON_CORP'"
+             op-lookup-text="'DROP_DOWN'"
+             op-lookup-value="'DROP_DOWN'"
+             op-selected-object="'DropdownSelected'"
+             op-ui-mode="'HORIZONTAL'"></div>
+        <div class="myDealsControl"
+             op-control-flat
+             ng-model="flat"
+             op-cd="'COMBOBOXH'"
+             op-type="'COMBOBOX'"
+             op-label="'Combobox Sample:'"
+             op-lookup-url="'/api/Dropdown/GetDropdowns/MRKT_SEG_NON_CORP'"
+             op-lookup-text="'DROP_DOWN'"
+             op-lookup-value="'DROP_DOWN'"
+             op-selected-object="'ComboboxSelected'"
+             op-ui-mode="'HORIZONTAL'"></div>
+        <div class="myDealsControl"
+             op-control-flat
+             ng-model="flat"
+             op-cd="'MULTISELECTH'"
+             op-type="'MULTISELECT'"
+             op-label="'Multiselect Sample:'"
+             op-lookup-url="'/api/Dropdown/GetDropdowns/MRKT_SEG_NON_CORP'"
+             op-lookup-text="'DROP_DOWN'"
+             op-lookup-value="'DROP_DOWN'"
+             op-selected-object="'ComboboxSelected'"
+             op-ui-mode="'HORIZONTAL'"
+             style="width: 250px;"></div>
+        <div class="myDealsControl"
+             op-control-flat
+             ng-model="flat"
+             op-cd="'TEXTAREA'"
+             op-type="'TEXTAREA'"
+             op-label="'Textarea:'"
+             op-ui-mode="'HORIZONTAL'"></div>
+        <div class="myDealsControl"
+             op-control-flat
+             ng-model="flat"
+             op-cd="'RADIOBUTTONH'"
+             op-type="'RADIOBUTTONGROUP'"
+             op-label="'Radio Group Sample:'"
+             op-lookup-url="'/api/Dropdown/GetDropdowns/MRKT_SEG_NON_CORP'"
+             op-lookup-text="'DROP_DOWN'"
+             op-lookup-value="'DROP_DOWN'"
+             op-ui-mode="'HORIZONTAL'"></div>
+
+        <div class="clearboth"></div>
+
+        <!--<pre style="font-size: 9px; font-family: arial;">{{flat | json}}</pre>-->
+
+    </div>
+
+    <div class="fieldcontainer">
         <div>Flattened Grid</div>
-        <div kendo-grid options="mainGridOptions">
-            <div k-detail-template style="margin-bottom: 15px; overflow: auto;">
+        <div kendo-grid options="mainGridOptions" class="opUiContainer sm">
+            <div k-detail-template style="margin-bottom: 15px; overflow: auto;" class="opUiContainer">
                 <div kendo-grid k-options="detailGridOptions(dataItem, '_MultiDim')"></div>
             </div>
         </div>

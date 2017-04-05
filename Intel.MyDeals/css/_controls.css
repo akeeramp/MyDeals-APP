@@ -18,7 +18,9 @@
     .isReadOnly .k-dropdown input,
     .isReadOnly .k-picker-wrap,
     .isReadOnly .k-numeric-wrap,
-    .isReadOnly .k-dropdown-wrap
+    .isReadOnly .k-dropdown-wrap,
+    .isReadOnly .k-multiselect-wrap,
+    .isReadOnly .k-input[readonly]
     {
         color: #999999 !important;
         background-color: #eeeeee !important;
@@ -36,7 +38,6 @@
     .isRequired .k-dropdown-wrap .k-input
     {
         font-weight: bold !important;
-        color: #000000 !important;
     }
 
     .isRequired:before { content:"*"; color: #e32; margin-left: -5px;}
@@ -81,7 +82,7 @@
         padding-left: 1px !important;
     }
     .err-bit {
-        margin: -6px 0 0 0;
+        margin: -11px 0 0 -10px;
         position: absolute;
         border-style: solid;
         border-color: #ED1C24 transparent transparent #ED1C24;
@@ -97,7 +98,6 @@
         margin-top: -6px;
     }
     .err-Control {
-        background-color: #FFFFFF;
         color: #ED1C24;
         font-size: 12px !important;
         padding-left: 1px !important;
@@ -142,19 +142,14 @@
         padding-bottom: 1px;
     }
 
-    .isDirtyWrapper .k-state-default.k-picker-wrap, .isDirtyWrapper .k-state-default.k-numeric-wrap, .isDirtyWrapper .k-state-default.k-dropdown-wrap {
-        border-bottom: 1px solid #0071C5;
-    }
-    .k-textbox.isDirty
-    {
-        border-bottom: 1px solid #0071C5;
-    }
-    .k-textarea.isDirty
-    {
-        border-bottom: 1px solid #0071C5;
-    }
+    .isDirtyWrapper .k-state-default.k-picker-wrap, 
+    .isDirtyWrapper .k-state-default.k-numeric-wrap, 
+    .isDirtyWrapper .k-state-default.k-dropdown-wrap,
+    .isDirtyWrapper .k-multiselect.k-header,
+    .k-textbox.isDirty,
+    .k-textarea.isDirty,
     .k-multiselect.isErrorisDirty{
-        border-bottom: 1px solid #0071C5;
+        border-bottom: 2px solid #0071C5;
     }
     .isDirtyCell {
         border-left: 2px solid #0071C5 !important;
@@ -214,6 +209,14 @@
         padding: 8px;
         margin: 10px 0;
     }
+    .fieldcontainer.blue {
+        background-color: #003C71;
+        color: #ffffff;
+    }
+    .fieldcontainer.intel {
+        background-color: #0071C5;
+        color: #ffffff;
+    }
     .fieldcontainer .myDealsControl {
         margin: 10px;
     }
@@ -246,58 +249,169 @@
         font-weight:bold!important;
     }
 
-    /*
-    .mydeals-grid.k-grid {
-        border: 0 solid transparent;
-    }
-    .mydeals-grid.k-grid td {
-        padding: 0;
-    }
-    .mydeals-grid.k-grid .k-alt {
-        background-color: transparent;
-    }
-    .mydeals-grid.k-grid .k-edit-cell {
-        padding: 0;
-    }
-    .mydeals-grid.k-grid tr td {
-        border-right: 0 solid transparent;
-        border-left: 0 solid transparent;
-    }
-    .mydeals-grid.k-grid tr th {
-        border-right: 0 solid transparent;
-        border-left: 0 solid transparent;
-        border-top: 0 solid transparent;
-        font-weight: bold;
-    }
-    .mydeals-grid .k-dirty {
-        margin: 0 0 0 -.1em;
-        border-color: transparent;
-    }
 
-    .isDirtyIcon {
-        color: #00AEEF;
-    }
 
-    .isDirtyIconContainer {
-        float: left;
-        font-size: 18px;
-        padding-top: 20px;
-        margin-right: 10px;
-        margin-left: 5px;
-        color: #dbdbdb;
-    }
 
-    .isDirtyIconGridContainer {
-        font-size: 20px;
-        color: #dbdbdb;
-        margin-left: 4px;
-    }
-    .gridHeaderIcon {
-        font-size: 16px;
-        color: #c1c1c1;
-    }
+.opUiContainer .radio { padding-left:15px; }
 
-    .k-grid-header th.k-header>.k-link {
-        margin: 0;
-        padding: 0;
-    }*/
+
+/* control sizes */
+
+/* sm */
+.opUiContainer.sm { font-size: 10px; }
+.opUiContainer.sm .opUiLabel { font-size: 10px; width: 100px; }
+.opUiContainer.sm .err-Control { font-size: 10px !important; }
+.opUiContainer.sm .k-icon { font-size: 14px; }
+.opUiContainer.sm .k-numerictextbox .k-link { padding-top: 0; }
+.opUiContainer.sm .k-dropdown-wrap { font-size: 10px; }
+.opUiContainer.sm .radioControl  { font-size: 10px; margin-top: 4px;}
+.opUiContainer.sm input[type="radio"], input[type="checkbox"] { margin-top: 0; }
+.opUiContainer.sm .radio { margin-top: 0; margin-bottom: 0; }
+
+.opUiContainer.sm .err-bit { margin: 0 0 0 -10px; }
+
+.opUiContainer.sm .opElementHelpIcon, .opUiContainer.sm [class^="intelicon-"], .opUiContainer.sm [class*=" intelicon-"] { font-size: 14px !important; }
+
+.opUiContainer.sm.k-grid td { font-size: 10px !important; height: 20px !important;}
+.opUiContainer.sm.k-grid .k-header a { font-size: 10px !important; }
+.opUiContainer.sm.k-grid-header th.k-header { padding-left: 0; }
+
+
+/* md */
+.opUiContainer.md { font-size: 12px; }
+.opUiContainer.md .opUiLabel { font-size: 12px; width: 120px; }
+.opUiContainer.md .err-Control { font-size: 11px !important; }
+.opUiContainer.md .k-icon { font-size: 14px; }
+.opUiContainer.md .k-numerictextbox .k-link { padding-top: 0; }
+.opUiContainer.md .k-dropdown-wrap { font-size: 12px; }
+.opUiContainer.md .radioControl  { font-size: 12px; margin-top: 4px;}
+.opUiContainer.md input[type="radio"], input[type="checkbox"] { margin-top: 0; }
+.opUiContainer.md .radio { margin-top: 0; margin-bottom: 0; }
+
+.opUiContainer.md .err-bit { margin: 0 0 0 -10px; }
+
+.opUiContainer.md .opElementHelpIcon, .opUiContainer.md [class^="intelicon-"], .opUiContainer.md [class*=" intelicon-"] { font-size: 14px !important; }
+
+.opUiContainer.md.k-grid td { font-size: 12px !important; height: 20px !important;}
+.opUiContainer.md.k-grid .k-header a { font-size: 12px !important; }
+.opUiContainer.md.k-grid-header th.k-header { padding-left: 0; }
+
+
+.opUiContainer.blue { color: #ffffff; }
+.opUiContainer.blue .opElementHelpIcon { color: #f3D54E; }
+.opUiContainer.blue .k-slider, .opUiContainer.blue .k-slider .k-icon { color: #ffffff; }
+.opUiContainer.blue .isRequired:before { color: #f3D54E;}
+
+.opUiContainer.blue .k-slider.isReadOnly { background-color: rgba(0, 0, 0, 0.3) !important; }
+.opUiContainer.blue .isReadOnly,
+.opUiContainer.blue .isReadOnly .k-numeric-wrap input,
+.opUiContainer.blue .isReadOnly .k-date-picker input,
+.opUiContainer.blue .isReadOnly .k-dropdown input,
+.opUiContainer.blue .isReadOnly .k-picker-wrap,
+.opUiContainer.blue .isReadOnly .k-numeric-wrap,
+.opUiContainer.blue .isReadOnly .k-dropdown-wrap,
+.opUiContainer.blue .isReadOnly .k-button,
+.opUiContainer.blue .isReadOnly .k-button:hover,
+.opUiContainer.blue .isReadOnly .k-buttonn.k-state-hover,
+.opUiContainer.blue .isReadOnly .k-button:active:hover,
+.opUiContainer.blue .isReadOnly .k-button.k-state-active:hover,
+.opUiContainer.blue .isReadOnly .k-multiselect-wrap,
+.opUiContainer.blue .isReadOnly .k-select,
+.opUiContainer.blue .isReadOnly .k-numerictextbox .k-select,
+.opUiContainer.blue .isReadOnly .k-input[readonly] {
+    background-color: #003462 !important;
+    color: #ffffff;
+    border-color: #002647;
+}
+.opUiContainer.blue .isReadOnly.k-dropdown .k-input, .opUiContainer.blue .isReadOnly.k-dropdown .k-state-focused .k-input, .opUiContainer.blue .isReadOnly.k-menu .k-popup {
+    color: #998c82 !important;
+}
+.opUiContainer.blue .errTab {
+    background-color: #FFFFFF;
+    color: #f3D54E;
+}
+.opUiContainer.blue .err-bit {
+    border-color: #f3D54E transparent transparent #f3D54E;
+}
+.opUiContainer.blue .err-bit-el {
+    border-color: #f3D54E transparent transparent #f3D54E;
+}
+.opUiContainer.blue .err-Control {
+    color: #f3D54E;
+}
+.opUiContainer.blue .k-textbox.isError,
+.opUiContainer.blue .k-textarea.isError,
+.opUiContainer.blue .k-multiselect.isError{
+    border: 1px solid #f3D54E;
+}
+.opUiContainer.blue .isDirtyWrapper .k-state-default.k-picker-wrap, 
+.opUiContainer.blue .isDirtyWrapper .k-state-default.k-numeric-wrap, 
+.opUiContainer.blue .isDirtyWrapper .k-state-default.k-dropdown-wrap,
+.opUiContainer.blue .isDirtyWrapper .k-multiselect.k-header,
+.opUiContainer.blue .k-textbox.isDirty,
+.opUiContainer.blue .k-textarea.isDirty,
+.opUiContainer.blue .k-multiselect.isErrorisDirty {
+    border-bottom: 3px solid #f3D54E;
+}
+
+
+
+
+.opUiContainer.intel { color: #ffffff; }
+.opUiContainer.intel .opElementHelpIcon { color: #f3D54E; }
+.opUiContainer.intel .k-slider, .opUiContainer.intel .k-slider .k-icon { color: #ffffff; }
+.opUiContainer.intel .isRequired:before { color: #f3D54E;}
+
+.opUiContainer.intel .k-slider.isReadOnly { background-color: rgba(0, 0, 0, 0.3) !important; }
+.opUiContainer.intel .isReadOnly,
+.opUiContainer.intel .isReadOnly .k-numeric-wrap input,
+.opUiContainer.intel .isReadOnly .k-date-picker input,
+.opUiContainer.intel .isReadOnly .k-dropdown input,
+.opUiContainer.intel .isReadOnly .k-picker-wrap,
+.opUiContainer.intel .isReadOnly .k-numeric-wrap,
+.opUiContainer.intel .isReadOnly .k-dropdown-wrap,
+.opUiContainer.intel .isReadOnly .k-button,
+.opUiContainer.intel .isReadOnly .k-button:hover,
+.opUiContainer.intel .isReadOnly .k-buttonn.k-state-hover,
+.opUiContainer.intel .isReadOnly .k-button:active:hover,
+.opUiContainer.intel .isReadOnly .k-button.k-state-active:hover,
+.opUiContainer.intel .isReadOnly .k-multiselect-wrap,
+.opUiContainer.intel .isReadOnly .k-select,
+.opUiContainer.intel .isReadOnly .k-numerictextbox .k-select,
+.opUiContainer.intel .isReadOnly .k-input[readonly] {
+    background-color: #003C71 !important;
+    color: #ffffff;
+    border-color: #003462;
+}
+.opUiContainer.intel .isReadOnly.k-dropdown .k-input, .opUiContainer.intel .isReadOnly.k-dropdown .k-state-focused .k-input, .opUiContainer.intel .isReadOnly.k-menu .k-popup {
+    color: #998c82 !important;
+}
+.opUiContainer.intel .errTab {
+    background-color: #FFFFFF;
+    color: #f3D54E;
+}
+.opUiContainer.intel .err-bit {
+    border-color: #f3D54E transparent transparent #f3D54E;
+}
+.opUiContainer.intel .err-bit-el {
+    border-color: #f3D54E transparent transparent #f3D54E;
+}
+.opUiContainer.intel .err-Control {
+    color: #f3D54E;
+}
+.opUiContainer.intel .k-textbox.isError,
+.opUiContainer.intel .k-textarea.isError,
+.opUiContainer.intel .k-multiselect.isError{
+    border: 1px solid #f3D54E;
+}
+.opUiContainer.intel .isDirtyWrapper .k-state-default.k-picker-wrap, 
+.opUiContainer.intel .isDirtyWrapper .k-state-default.k-numeric-wrap, 
+.opUiContainer.intel .isDirtyWrapper .k-state-default.k-dropdown-wrap,
+.opUiContainer.intel .isDirtyWrapper .k-multiselect.k-header,
+.opUiContainer.intel .k-textbox.isDirty,
+.opUiContainer.intel .k-textarea.isDirty,
+.opUiContainer.intel .k-multiselect.isErrorisDirty {
+    border-bottom: 3px solid #f3D54E;
+}
+
+

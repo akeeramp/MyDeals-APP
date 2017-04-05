@@ -5,7 +5,7 @@
         <input type="checkbox" class="k-input fl opUiElement"
                ng-model="value"
                ng-value="true"
-               ng-readonly="opIsReadOnly"
+               ng-disabled="opIsReadOnly"
                ng-class="{isHidden: opIsHidden, isReadOnly: opIsReadOnly, isError: opIsError, isSaved: opIsSaved, isDirty: opIsDirty}" />
         <div kendo-tooltip k-content="helptipMsg" k-position="'top'" ng-show="opHelpMsg" class="fl opElementHelpIcon intelicon-information-outlined"></div>
         <div class="clearboth"></div>
