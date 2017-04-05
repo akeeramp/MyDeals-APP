@@ -1,7 +1,7 @@
 ﻿<div class="opUiContainer" ng-class="{isHidden: opIsHidden, isErrorWrapper: opIsError, isSavedWrapper: opIsSaved, isDirtyWrapper: opIsDirty}">
     <div class="fl opUiLabel" ng-class="{isRequired: opIsRequired}">{{opLabel}}</div>
     <div class="clearboth"></div>
-    <div ng-repeat="item in values" class="fl">
+    <div ng-repeat="item in values">
         <div class="radio">
             <label class="radioControl">
                 <input type="radio" name="{{item[opLookupText]}}" value="{{item[opLookupValue]}}"
