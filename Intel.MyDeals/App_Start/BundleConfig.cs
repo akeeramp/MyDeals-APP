@@ -69,6 +69,7 @@ namespace Intel.MyDeals
                 , "~/app/core/directives/expandKendogrid.directive.js"
                 , "~/app/core/directives/dirtyTracking.directive.js"
                 , "~/app/core/directives/bindToHeight.directive.js"
+                , "~/app/core/directives/adminBanner/adminBanner.directive.js"
                 , "~/app/blocks/util.js"
                 ));
 

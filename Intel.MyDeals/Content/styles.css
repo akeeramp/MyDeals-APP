@@ -51,7 +51,7 @@
         background-color: #ffffff;
     }*/
 
-	
+
     /*.k-filter-row th, .k-grid-header th.k-header
     {
         padding: 0 8px 0 4px;
@@ -65,7 +65,7 @@
 		background-color: #53565a;
     }
 */
-    	
+
 	/* TODO: josiTODO: not all icons are intelicons yet. We'll need to replace all in near future as requested by Tristen */
 	/* Intel-icons on Kendo grid */
 	/*.k-icon:not(.k-loading), .k-icon:not(.k-i-loading), .k-grouping-dropclue, .k-drop-hint, .k-callout, .k-tool-icon, .k-state-hover .k-tool-icon, .k-state-active .k-tool-icon, .k-state-active.k-state-hover .k-tool-icon, .k-state-selected .k-tool-icon, .k-state-selected.k-state-hover .k-tool-icon, .k-column-menu .k-sprite, .k-mobile-list .k-check:checked, .k-mobile-list .k-edit-field [type=checkbox]:checked, .k-mobile-list .k-edit-field [type=radio]:checked{
@@ -222,7 +222,7 @@
 }
 .messageBox.mb-warning {
 	background-color: #ffffff;
-	color: #db704d; /* #cc3300; opacity: .7; */    
+	color: #db704d; /* #cc3300; opacity: .7; */
     font-size: 17px;
 }
 
@@ -247,7 +247,7 @@
 
 .btn-group .noMarginSmBtn {
     margin: 0 !important;
-    padding: 4px 10px; 
+    padding: 4px 10px;
     height: 32px;
     font-weight: bold !important;
     font-family: arial !important;
@@ -257,4 +257,10 @@
 }
 .btn-group .noMarginSmBtn:last-child {
     border-left: 0;
+}
+.adminBanner{
+    font-size:12px;
+    background-color: #F3D54E;
+    z-index:1500;
+    padding:11px;
 }

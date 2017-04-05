@@ -1,0 +1,6 @@
+﻿<div ng-if="$root.adminBannerMessage != ''" class="col-md-6" style="position: absolute; left:25%; right:20%;top:.5%">
+    <div class="alert alert-dismissible adminBanner" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true" class="intelicon-close-solid" ng-click="close()"></span></button>
+        <p ng-bind-html="$root.adminBannerMessage"/>
+    </div>
+</div>
