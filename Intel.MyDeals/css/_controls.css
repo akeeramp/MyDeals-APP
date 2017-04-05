@@ -201,24 +201,17 @@
 		border-bottom-color: #ED1C24;
 	}
 
-    .fieldcontainer {
+    .testContainer {
         font-family: 'Intel Clear', 'Arial';
         color: #000000;
-        border: 1px solid #b1babf;
-        border-radius: 4px;
-        padding: 8px;
-        margin: 10px 0;
     }
-    .fieldcontainer.blue {
+    .testContainer.blue {
         background-color: #003C71;
         color: #ffffff;
     }
-    .fieldcontainer.intel {
+    .testContainer.intel {
         background-color: #0071C5;
         color: #ffffff;
-    }
-    .fieldcontainer .myDealsControl {
-        margin: 10px;
     }
     .uiControlDiv {
         padding: 2px 4px;
@@ -356,7 +349,10 @@
     border-bottom: 3px solid #f3D54E;
 }
 .opUiContainer.blue .isRequired:before { content:"* "; color: #f3D54E;}
-
+.opUiContainer.blue .k-draghandle {     
+    border-color: #f3D54E !important;
+    background-color: #f3D54E !important;
+}
 
 
 /* Intel blue background */
@@ -417,5 +413,9 @@
     border-bottom: 3px solid #f3D54E;
 }
 .opUiContainer.intel .isRequired:before { content:"* "; color: #f3D54E;}
+.opUiContainer.intel .k-draghandle {     
+    border-color: #f3D54E !important;
+    background-color: #f3D54E !important;
+}
 
 

@@ -565,10 +565,10 @@
                 if (oldValue === newValue) return;
 
                 $(".opUiContainer").removeClass("blue").removeClass("intel");
-                $(".fieldcontainer").removeClass("blue").removeClass("intel");
+                $(".testContainer").removeClass("blue").removeClass("intel");
                 if (newValue !== "white") {
                     $(".opUiContainer").addClass(newValue);
-                    $(".fieldcontainer").addClass(newValue);
+                    $(".testContainer").addClass(newValue);
                 }
 
             }, true);
