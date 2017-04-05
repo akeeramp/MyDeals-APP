@@ -704,8 +704,20 @@
         font-size: 13px;
     }
 
+    .lg .opUiLabel 
+    {
+        font-size: 16px !important;
+        font-weight: 400 !important;
+        width: 200px !important;
+    }
+    
     .opUiLableWidth{
         width:100% !important;
+    }
+
+    .blueContainer .opUiElement {
+        width: 100%;
+        margin-bottom: 10px;
     }
 
     .mb5 {
@@ -830,7 +842,7 @@
         margin: 10px 10px 10px 0; overflow: auto;
     }
 
-    .rJustLabel {
+    /*.rJustLabel {
         margin-bottom: 20px;
     }
 
@@ -841,16 +853,21 @@
 
     .rJustLabel div.opUiContainer {
         margin-bottom: 4px;
-    }
+    }*/
 
     .lnavSmTitle {
-        border-bottom: 1px solid #f3D54E;
-        color: #f3D54E;
-        font-weight: 600;
+        border-top: 1px solid #ffffff;
+        border-bottom: 1px solid #ffffff;
+        color: #ffffff;
+        font-weight: 200;
         width: 100%;
         margin-bottom: 10px;
-        font-size: 10px;
-        text-transform: uppercase;
+        font-size: 16px;
+        padding: 0 4px;
+    }
+    .lnavSmTitle .opElementHelpIcon {
+        margin-top: 3px;
+        color: #ffffff;
     }
 
     .fileAttachmentRequired{
@@ -861,7 +878,7 @@
         font-size: 12px;
         font-family: "Intel clear";
     }
-    .decsription {
+    .description {
         color: #b1babf;
         font-size: 11px;
         font-style: italic;

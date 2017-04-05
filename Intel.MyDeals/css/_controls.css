@@ -40,15 +40,15 @@
         font-weight: bold !important;
     }
 
-    .isRequired:before { content:"*"; color: #e32; margin-left: -5px;}
+    .isRequired:before { content:"* "; color: #e32; }
 
     .isRequiredCell {
         border-left: 2px solid #F3D54E !important;
     }
 
-    .elOnBlue .isRequired {
+    /*.elOnBlue .isRequired {
         color: #ffffff !important;
-    }
+    }*/
 
     .isError,
     .isError .k-numeric-wrap input,
@@ -104,7 +104,7 @@
         padding-top: 2px !important;
     }
 
-    .elOnBlue .k-textbox.isError
+    /*.elOnBlue .k-textbox.isError
     {
         border: 1px solid #ED1C24;
     }
@@ -114,7 +114,7 @@
     }
     .elOnBlue .err-bit-el {
         border-color: #ED1C24 transparent transparent #ED1C24;
-    }
+    }*/
 
     .bgBlueContainer .k-textbox.isError
     {
@@ -259,7 +259,7 @@
 
 /* sm */
 .opUiContainer.sm { font-size: 10px; }
-.opUiContainer.sm .opUiLabel { font-size: 10px; width: 100px; }
+.opUiContainer.sm .opUiLabel { font-size: 10px; width: 130px; }
 .opUiContainer.sm .err-Control { font-size: 10px !important; }
 .opUiContainer.sm .k-icon { font-size: 14px; }
 .opUiContainer.sm .k-numerictextbox .k-link { padding-top: 0; }
@@ -279,7 +279,7 @@
 
 /* md */
 .opUiContainer.md { font-size: 12px; }
-.opUiContainer.md .opUiLabel { font-size: 12px; width: 120px; }
+.opUiContainer.md .opUiLabel { font-size: 12px; width: 150px; }
 .opUiContainer.md .err-Control { font-size: 11px !important; }
 .opUiContainer.md .k-icon { font-size: 14px; }
 .opUiContainer.md .k-numerictextbox .k-link { padding-top: 0; }
@@ -297,6 +297,8 @@
 .opUiContainer.md.k-grid-header th.k-header { padding-left: 0; }
 
 
+
+/* dark blue background */
 .opUiContainer.blue { color: #ffffff; }
 .opUiContainer.blue .opElementHelpIcon { color: #f3D54E; }
 .opUiContainer.blue .k-slider, .opUiContainer.blue .k-slider .k-icon { color: #ffffff; }
@@ -328,21 +330,21 @@
 }
 .opUiContainer.blue .errTab {
     background-color: #FFFFFF;
-    color: #f3D54E;
+    color: #FF6E77;
 }
 .opUiContainer.blue .err-bit {
-    border-color: #f3D54E transparent transparent #f3D54E;
+    border-color: #FF6E77 transparent transparent #FF6E77;
 }
 .opUiContainer.blue .err-bit-el {
-    border-color: #f3D54E transparent transparent #f3D54E;
+    border-color: #FF6E77 transparent transparent #FF6E77;
 }
 .opUiContainer.blue .err-Control {
-    color: #f3D54E;
+    color: #FF6E77;
 }
 .opUiContainer.blue .k-textbox.isError,
 .opUiContainer.blue .k-textarea.isError,
 .opUiContainer.blue .k-multiselect.isError{
-    border: 1px solid #f3D54E;
+    border: 1px solid #FF6E77;
 }
 .opUiContainer.blue .isDirtyWrapper .k-state-default.k-picker-wrap, 
 .opUiContainer.blue .isDirtyWrapper .k-state-default.k-numeric-wrap, 
@@ -353,10 +355,11 @@
 .opUiContainer.blue .k-multiselect.isErrorisDirty {
     border-bottom: 3px solid #f3D54E;
 }
+.opUiContainer.blue .isRequired:before { content:"* "; color: #f3D54E;}
 
 
 
-
+/* Intel blue background */
 .opUiContainer.intel { color: #ffffff; }
 .opUiContainer.intel .opElementHelpIcon { color: #f3D54E; }
 .opUiContainer.intel .k-slider, .opUiContainer.intel .k-slider .k-icon { color: #ffffff; }
@@ -388,21 +391,21 @@
 }
 .opUiContainer.intel .errTab {
     background-color: #FFFFFF;
-    color: #f3D54E;
+    color: #FF6E77;
 }
 .opUiContainer.intel .err-bit {
-    border-color: #f3D54E transparent transparent #f3D54E;
+    border-color: #FF6E77 transparent transparent #FF6E77;
 }
 .opUiContainer.intel .err-bit-el {
-    border-color: #f3D54E transparent transparent #f3D54E;
+    border-color: #FF6E77 transparent transparent #FF6E77;
 }
 .opUiContainer.intel .err-Control {
-    color: #f3D54E;
+    color: #FF6E77;
 }
 .opUiContainer.intel .k-textbox.isError,
 .opUiContainer.intel .k-textarea.isError,
 .opUiContainer.intel .k-multiselect.isError{
-    border: 1px solid #f3D54E;
+    border: 1px solid #FF6E77;
 }
 .opUiContainer.intel .isDirtyWrapper .k-state-default.k-picker-wrap, 
 .opUiContainer.intel .isDirtyWrapper .k-state-default.k-numeric-wrap, 
@@ -413,5 +416,6 @@
 .opUiContainer.intel .k-multiselect.isErrorisDirty {
     border-bottom: 3px solid #f3D54E;
 }
+.opUiContainer.intel .isRequired:before { content:"* "; color: #f3D54E;}
 
 

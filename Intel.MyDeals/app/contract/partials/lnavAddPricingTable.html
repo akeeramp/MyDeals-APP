@@ -4,19 +4,18 @@
     <form name="addNewPtForm" ng-submit="submitForm(CustomAddPtValidate())" novalidate>
         <!-- novalidate prevents HTML5 validation since we will be validating ourselves -->
 
-        <div class="bgBlueContainer" ng-class="{isErrorWrapper: newPricingTable._behaviors.isError.TITLE}">
-            <div class="ptLnavTitle">
-                Enter Pricing Table Name
-            </div>
-            <div kendo-tooltip k-content="NewPricingTable._behaviors.validMsg.TITLE" k-position="'top'" ng-show="newPricingTable._behaviors.isError.TITLE" class="err-bit-el"></div>
-            <input type="text" class="k-textbox fl" placeholder=""
-                   style="width: 100%; color: black;"
-                   maxlength="250"
-                   ng-model="newPricingTable.TITLE"
-                   ng-class="{isError: newPricingTable._behaviors.isError.TITLE}" />
-            <div class="clearboth"></div>
-            <div style="color: #F3D54E;">{{ newPricingTable._behaviors.validMsg.TITLE }}</div>
-        </div>
+        <div op-control-flat
+             ng-model="newPricingTable"
+             op-cd="'TITLE'"
+             op-type="'TEXTBOX'"
+             op-class="'md intel'"
+             op-style="'width: 285px;'"
+             op-is-form="true"
+             op-label="'Enter Pricing Table Name'"
+             op-ui-mode="'VERTICAL'"
+             op-max-value='250'
+             class="lg"></div>
+        <div class="clearboth"></div>
 
         <div class="ptLnavTitle">
             Select Pricing Table Deal Type
@@ -24,7 +23,7 @@
 
         <!-- PRICING TABLE TEMPLATES -->
         <div class="ptLnavtmpltContainer">
-            <div style="color: #F3D54E;">{{ newPricingTable._behaviors.validMsg.OBJ_SET_TYPE_CD }}</div>
+            <div style="color: #FF6E77;">{{ newPricingTable._behaviors.validMsg.OBJ_SET_TYPE_CD }}</div>
             <div ng-repeat="(key, value) in templates.ModelTemplates.PRC_TBL" class="fl circleWithText" ng-click="selectPtTemplateIcon(value)" ng-class="{active: value._custom._active}">
                 <div class="fl textCircle blueBg">{{ value._custom.ltr }}</div>
                 <div class="fl textName">{{ value.name }}</div>
@@ -35,41 +34,83 @@
 
         <!-- EXTRA ATTRIBUTES -->
         <div ng-show="newPricingTableExtraLength()">
-            <div class="lnavSmTitle">Additional Attributes:</div>
-            <div class="rJustLabel">
-                <div ng-repeat="(key, value) in newPricingTable._extraAtrbs" class="elOnBlue">
-                    <div op-control-data-element
-                         ng-model="newPricingTable._extraAtrbs"
-                         op-cd="key"
-                         op-type="value.type"
-                         op-label="value.label"
-                         op-lookup-url="value.opLookupUrl"
-                         op-lookup-text="value.opLookupText"
-                         op-lookup-value="value.opLookupValue"
-                         op-is-form="true"
-                         op-ui-mode="'HORIZONTAL'"></div>
+
+            <div style="padding: 0 5px;" class="blueContainer">
+                <div ng-repeat="(key, value) in newPricingTable._extraAtrbs">
+                    <div ng-switch="value.type">
+
+                        <div ng-switch-when="RADIOBUTTONGROUP"
+                                op-control-data-element
+                                op-class="'md intel'"
+                                op-style="'width: 280px;'"
+                                ng-model="newPricingTable._extraAtrbs"
+                                op-cd="key"
+                                op-type="value.type"
+                                op-label="value.label"
+                                op-lookup-url="value.opLookupUrl"
+                                op-lookup-text="value.opLookupText"
+                                op-lookup-value="value.opLookupValue"
+                                op-is-form="true"
+                                op-ui-mode="'HORIZONTAL'"></div>
+
+                        <div ng-switch-default
+                                op-control-data-element
+                                op-class="'md intel'"
+                                op-style="'width: 280px;'"
+                                ng-model="newPricingTable._extraAtrbs"
+                                op-cd="key"
+                                op-type="value.type"
+                                op-label="value.label"
+                                op-lookup-url="value.opLookupUrl"
+                                op-lookup-text="value.opLookupText"
+                                op-lookup-value="value.opLookupValue"
+                                op-is-form="true"
+                                op-ui-mode="'VERTICAL'"></div>
+                    </div>
                 </div>
             </div>
         </div>
 
+
         <!-- DEFAULT ATTRIBUTES -->
         <div ng-show="newPricingTableDefaultLength()">
 
-            <div class="lnavSmTitle"> Autofill Grid Settings
-                <div kendo-tooltip k-content="'Use the Pricing Table Autofill selections to pre-populate your table & reduce data entry. You may override the preselections within the grid if you would like.'" class="fl opElementHelpIcon intelicon-information-outlined"></div>
+            <div class="lnavSmTitle">
+                Autofill Grid Settings
+                <div kendo-tooltip k-content="'Use the Pricing Table Autofill selections to pre-populate your table & reduce data entry. You may override the preselections within the grid if you would like.'" class="fr opElementHelpIcon intelicon-information-outlined"></div>
             </div>
-            <div class="rJustLabel">
-                <div ng-repeat="(key, value) in newPricingTable._defaultAtrbs" class="elOnBlue">
-                    <div op-control-data-element
-                            ng-model="newPricingTable._defaultAtrbs"
-                            op-cd="key"
-                            op-type="value.type"
-                            op-label="value.label"
-                            op-lookup-url="value.opLookupUrl"
-                            op-lookup-text="value.opLookupText"
-                            op-lookup-value="value.opLookupValue"
-                            op-is-form="true"
-                            op-ui-mode="'HORIZONTAL'"></div>
+            <div style="padding: 0 5px;" class="blueContainer">
+                <div ng-repeat="(key, value) in newPricingTable._defaultAtrbs">
+                    <div ng-switch="value.type">
+
+                        <div ng-switch-when="RADIOBUTTONGROUP"
+                                op-control-data-element
+                                op-class="'md intel'"
+                                op-style="'width: 280px;'"
+                                ng-model="newPricingTable._defaultAtrbs"
+                                op-cd="key"
+                                op-type="value.type"
+                                op-label="value.label"
+                                op-lookup-url="value.opLookupUrl"
+                                op-lookup-text="value.opLookupText"
+                                op-lookup-value="value.opLookupValue"
+                                op-is-form="true"
+                                op-ui-mode="'HORIZONTAL'"></div>
+
+                        <div ng-switch-default
+                                op-control-data-element
+                                op-class="'md intel'"
+                                op-style="'width: 280px;'"
+                                ng-model="newPricingTable._defaultAtrbs"
+                                op-cd="key"
+                                op-type="value.type"
+                                op-label="value.label"
+                                op-lookup-url="value.opLookupUrl"
+                                op-lookup-text="value.opLookupText"
+                                op-lookup-value="value.opLookupValue"
+                                op-is-form="true"
+                                op-ui-mode="'VERTICAL'"></div>
+                    </div>
                 </div>
             </div>
         </div>

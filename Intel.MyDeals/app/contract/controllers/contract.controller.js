@@ -1052,7 +1052,7 @@ function ContractController($scope, $state, contractData, isNewContract, templat
         // Check required
         angular.forEach($scope.newStrategy,
             function (value, key) {
-                if (key[0] !== '_' && !Array.isArray(value) && (!isNaN(value) || value.trim() === "") && $scope.newStrategy._behaviors.isRequired[key] === true) {
+                if (key[0] !== '_' && !Array.isArray(value) && (!isNaN(value) || value === undefined || value === null || value.trim() === "") && $scope.newStrategy._behaviors.isRequired[key] === true) {
                     $scope.newStrategy._behaviors.validMsg[key] = "* field is required";
                     $scope.newStrategy._behaviors.isError[key] = true;
                     isValid = false;
@@ -1153,7 +1153,7 @@ function ContractController($scope, $state, contractData, isNewContract, templat
         // Check required
         angular.forEach($scope.newPricingTable,
             function (value, key) {
-                if (key[0] !== '_' && !Array.isArray(value) && (!isNaN(value) || value.trim() === "") && $scope.newPricingTable._behaviors.isRequired[key] === true) {
+                if (key[0] !== '_' && !Array.isArray(value) && (!isNaN(value) || value === undefined || value === null || value.trim() === "") && $scope.newPricingTable._behaviors.isRequired[key] === true) {
                     $scope.newPricingTable._behaviors.validMsg[key] = "* field is required";
                     $scope.newPricingTable._behaviors.isError[key] = true;
                     isValid = false;
