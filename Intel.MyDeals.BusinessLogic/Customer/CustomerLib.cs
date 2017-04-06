@@ -116,12 +116,12 @@ namespace Intel.MyDeals.BusinessLogic
 
         public List<MyCustomersInformation> GetMyCustomerNames()
         {
-            return _customerDataLib.GetMyCustomers().CustomerInfo.Where(c => c.cust_lvl_id == 2002).ToList();
+            return _customerDataLib.GetMyCustomers().CustomerInfo.Where(c => c.CUST_LVL_SID == 2002).ToList();
         }
 
         public List<MyCustomersInformation> GetMyCustomerDivsByCustNmSid(int custNmSid)
         {
-            return _customerDataLib.GetMyCustomers().CustomerInfo.Where(c => c.cust_lvl_id == 2003 && c.cdms_cust_id == custNmSid).ToList();
+            return _customerDataLib.GetMyCustomers().CustomerInfo.Where(c => c.CUST_LVL_SID == 2003 && c.CUST_LVL_SID == custNmSid).ToList();
         }
 
 

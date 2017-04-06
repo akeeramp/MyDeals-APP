@@ -85,33 +85,33 @@ namespace Intel.MyDeals.DataLibrary
                 using (var rdr = DataAccess.ExecuteReader(cmd))
                 {
                     //TABLE 1
-                    int IDX_access_type = DB.GetReaderOrdinal(rdr, "access_type");
-                    int IDX_actv_ind = DB.GetReaderOrdinal(rdr, "actv_ind");
-                    int IDX_cdms_cust_div_id = DB.GetReaderOrdinal(rdr, "cdms_cust_div_id");
-                    int IDX_cdms_cust_id = DB.GetReaderOrdinal(rdr, "cdms_cust_id");
-                    int IDX_cust_chnl = DB.GetReaderOrdinal(rdr, "cust_chnl");
-                    int IDX_cust_div_nm = DB.GetReaderOrdinal(rdr, "cust_div_nm");
-                    int IDX_cust_lvl_id = DB.GetReaderOrdinal(rdr, "cust_lvl_id");
-                    int IDX_cust_nm = DB.GetReaderOrdinal(rdr, "cust_nm");
+                    int IDX_ACCESS_TYPE = DB.GetReaderOrdinal(rdr, "ACCESS_TYPE");
+                    int IDX_ACTV_IND = DB.GetReaderOrdinal(rdr, "ACTV_IND");
+                    int IDX_CUST_CHNL = DB.GetReaderOrdinal(rdr, "CUST_CHNL");
+                    int IDX_CUST_DIV_NM = DB.GetReaderOrdinal(rdr, "CUST_DIV_NM");
+                    int IDX_CUST_DIV_SID = DB.GetReaderOrdinal(rdr, "CUST_DIV_SID");
+                    int IDX_CUST_LVL_SID = DB.GetReaderOrdinal(rdr, "CUST_LVL_SID");
+                    int IDX_CUST_NM = DB.GetReaderOrdinal(rdr, "CUST_NM");
+                    int IDX_CUST_SID = DB.GetReaderOrdinal(rdr, "CUST_SID");
                     int IDX_DEAL_FLG = DB.GetReaderOrdinal(rdr, "DEAL_FLG");
-                    int IDX_disp_nm = DB.GetReaderOrdinal(rdr, "disp_nm");
-                    int IDX_host_geo = DB.GetReaderOrdinal(rdr, "host_geo");
+                    int IDX_DISP_NM = DB.GetReaderOrdinal(rdr, "DISP_NM");
+                    int IDX_HOST_GEO = DB.GetReaderOrdinal(rdr, "HOST_GEO");
 
                     while (rdr.Read())
                     {
                         retCustInfo.Add(new MyCustomersInformation
                         {
-                            access_type = (IDX_access_type < 0 || rdr.IsDBNull(IDX_access_type)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_access_type),
-                            actv_ind = (IDX_actv_ind < 0 || rdr.IsDBNull(IDX_actv_ind)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_actv_ind),
-                            cdms_cust_div_id = (IDX_cdms_cust_div_id < 0 || rdr.IsDBNull(IDX_cdms_cust_div_id)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_cdms_cust_div_id),
-                            cdms_cust_id = (IDX_cdms_cust_id < 0 || rdr.IsDBNull(IDX_cdms_cust_id)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_cdms_cust_id),
-                            cust_chnl = (IDX_cust_chnl < 0 || rdr.IsDBNull(IDX_cust_chnl)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_cust_chnl),
-                            cust_div_nm = (IDX_cust_div_nm < 0 || rdr.IsDBNull(IDX_cust_div_nm)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_cust_div_nm),
-                            cust_lvl_id = (IDX_cust_lvl_id < 0 || rdr.IsDBNull(IDX_cust_lvl_id)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_cust_lvl_id),
-                            cust_nm = (IDX_cust_nm < 0 || rdr.IsDBNull(IDX_cust_nm)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_cust_nm),
+                            ACCESS_TYPE = (IDX_ACCESS_TYPE < 0 || rdr.IsDBNull(IDX_ACCESS_TYPE)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ACCESS_TYPE),
+                            ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_ACTV_IND),
+                            CUST_CHNL = (IDX_CUST_CHNL < 0 || rdr.IsDBNull(IDX_CUST_CHNL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_CHNL),
+                            CUST_DIV_NM = (IDX_CUST_DIV_NM < 0 || rdr.IsDBNull(IDX_CUST_DIV_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_DIV_NM),
+                            CUST_DIV_SID = (IDX_CUST_DIV_SID < 0 || rdr.IsDBNull(IDX_CUST_DIV_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_DIV_SID),
+                            CUST_LVL_SID = (IDX_CUST_LVL_SID < 0 || rdr.IsDBNull(IDX_CUST_LVL_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_LVL_SID),
+                            CUST_NM = (IDX_CUST_NM < 0 || rdr.IsDBNull(IDX_CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_NM),
+                            CUST_SID = (IDX_CUST_SID < 0 || rdr.IsDBNull(IDX_CUST_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_SID),
                             DEAL_FLG = (IDX_DEAL_FLG < 0 || rdr.IsDBNull(IDX_DEAL_FLG)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_FLG),
-                            disp_nm = (IDX_disp_nm < 0 || rdr.IsDBNull(IDX_disp_nm)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_disp_nm),
-                            host_geo = (IDX_host_geo < 0 || rdr.IsDBNull(IDX_host_geo)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_host_geo)
+                            DISP_NM = (IDX_DISP_NM < 0 || rdr.IsDBNull(IDX_DISP_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DISP_NM),
+                            HOST_GEO = (IDX_HOST_GEO < 0 || rdr.IsDBNull(IDX_HOST_GEO)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_HOST_GEO)
                         });
                     } // while
 
@@ -119,23 +119,23 @@ namespace Intel.MyDeals.DataLibrary
                     rdr.NextResult();
 
                     //TABLE 2
-                    int IDX_cdms_cust_div_id2 = DB.GetReaderOrdinal(rdr, "cdms_cust_div_id");
-                    int IDX_cdms_cust_id2 = DB.GetReaderOrdinal(rdr, "cdms_cust_id");
-                    int IDX_cust_nm2 = DB.GetReaderOrdinal(rdr, "cust_nm");
-                    int IDX_disp_nm2 = DB.GetReaderOrdinal(rdr, "disp_nm");
-                    int IDX_geo_nm = DB.GetReaderOrdinal(rdr, "geo_nm");
-                    int IDX_sold_to_id = DB.GetReaderOrdinal(rdr, "sold_to_id");
+                    int IDX_CUST_DIV_SID2 = DB.GetReaderOrdinal(rdr, "CUST_DIV_SID");
+                    int IDX_CUST_NM2 = DB.GetReaderOrdinal(rdr, "CUST_NM");
+                    int IDX_CUST_SID2 = DB.GetReaderOrdinal(rdr, "CUST_SID");
+                    int IDX_DISP_NM2 = DB.GetReaderOrdinal(rdr, "DISP_NM");
+                    int IDX_GEO_NM = DB.GetReaderOrdinal(rdr, "GEO_NM");
+                    int IDX_SOLD_TO_ID = DB.GetReaderOrdinal(rdr, "SOLD_TO_ID");
 
                     while (rdr.Read())
                     {
                         retCustSoldTo.Add(new MyCustomersSoldTo
                         {
-                            cdms_cust_div_id = (IDX_cdms_cust_div_id2 < 0 || rdr.IsDBNull(IDX_cdms_cust_div_id2)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_cdms_cust_div_id2),
-                            cdms_cust_id = (IDX_cdms_cust_id2 < 0 || rdr.IsDBNull(IDX_cdms_cust_id2)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_cdms_cust_id2),
-                            cust_nm = (IDX_cust_nm2 < 0 || rdr.IsDBNull(IDX_cust_nm2)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_cust_nm2),
-                            disp_nm = (IDX_disp_nm2 < 0 || rdr.IsDBNull(IDX_disp_nm2)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_disp_nm2),
-                            geo_nm = (IDX_geo_nm < 0 || rdr.IsDBNull(IDX_geo_nm)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_geo_nm),
-                            sold_to_id = (IDX_sold_to_id < 0 || rdr.IsDBNull(IDX_sold_to_id)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_sold_to_id)
+                            CUST_DIV_SID = (IDX_CUST_DIV_SID2 < 0 || rdr.IsDBNull(IDX_CUST_DIV_SID2)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_DIV_SID2),
+                            CUST_NM = (IDX_CUST_NM2 < 0 || rdr.IsDBNull(IDX_CUST_NM2)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_NM2),
+                            CUST_SID = (IDX_CUST_SID2 < 0 || rdr.IsDBNull(IDX_CUST_SID2)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_SID2),
+                            DISP_NM = (IDX_DISP_NM2 < 0 || rdr.IsDBNull(IDX_DISP_NM2)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DISP_NM2),
+                            GEO_NM = (IDX_GEO_NM < 0 || rdr.IsDBNull(IDX_GEO_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_GEO_NM),
+                            SOLD_TO_ID = (IDX_SOLD_TO_ID < 0 || rdr.IsDBNull(IDX_SOLD_TO_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_SOLD_TO_ID)
                         });
                     } // while
 

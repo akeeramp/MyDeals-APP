@@ -145,23 +145,23 @@ namespace Intel.MyDeals.App
             List<MyCustomersInformation> customersOnly = (from cust in fullList
                 select new MyCustomersInformation
                 {
-                    cust_nm = cust.cust_nm,
-                    cust_lvl_id = cust.cust_lvl_id,
-                    cust_chnl = cust.cust_chnl,
-                    cdms_cust_id = cust.cdms_cust_id,
-                    access_type = cust.access_type,
-                    actv_ind = cust.actv_ind,
+                    CUST_NM = cust.CUST_NM,
+                    CUST_LVL_SID = cust.CUST_LVL_SID,
+                    CUST_CHNL = cust.CUST_CHNL,
+                    CUST_SID = cust.CUST_SID,
+                    ACCESS_TYPE = cust.ACCESS_TYPE,
+                    ACTV_IND = cust.ACTV_IND,
                     DEAL_FLG = cust.DEAL_FLG,
-                    host_geo = cust.host_geo
+                    HOST_GEO = cust.HOST_GEO
                 }).Distinct().ToList();
 
-            return customersOnly.GroupBy(x => x.cdms_cust_id).Select(x => x.First()).ToList();
+            return customersOnly.GroupBy(x => x.CUST_SID).Select(x => x.First()).ToList();
         }
 
         public static List<MyCustomersInformation> GetMyCustomerDivsByCustNmSid(int custNmSid)
         {
             //return UserSettings[OpUserStack.MyOpUserToken.Usr.Idsid.ToUpper()].AllMyCustomers.CustomerInfo.Where(c => c.cust_lvl_id == 2003 && c.cdms_cust_id == custNmSid).ToList();
-            return UserSettings[OpUserStack.MyOpUserToken.Usr.Idsid.ToUpper()].AllMyCustomers.CustomerInfo.Where(c => c.cdms_cust_id == custNmSid).ToList();
+            return UserSettings[OpUserStack.MyOpUserToken.Usr.Idsid.ToUpper()].AllMyCustomers.CustomerInfo.Where(c => c.CUST_SID == custNmSid).ToList();
         }
 
         public static List<MyCustomersInformation> GetMyCustomersInfo()

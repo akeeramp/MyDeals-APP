@@ -96,7 +96,7 @@ using System.Collections.Generic;
 		WriteLine("}"); // End NameSpace
     }
 
-	var dt = dbobjects.ExecuteDataSet("EXEC [dbo].[PR_GET_DEALS_BY_SIDS_NULL]").Tables[0];
+	var dt = dbobjects.ExecuteDataSet("EXEC [dbo].[PR_MYDL_GET_OBJS_BY_SIDS]").Tables[0];
 
 	WriteLine("");
 	WriteLine("namespace deal {");

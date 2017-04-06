@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 3/29/2017 9:34:22 AM
-On: PWECKENR-MOBL
+File Updated: 4/4/2017 2:38:29 PM
+On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
 
@@ -9,9 +9,8 @@ namespace Intel.MyDeals.Entities {
 
 	public static class Attributes
 	{
-	    public static object Me;
 
-        public static MyDealsAttribute ALL_BCKT_NM = new MyDealsAttribute()
+		public static MyDealsAttribute ALL_BCKT_NM = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "ALL_BCKT_NM",
 			ATRB_DESC = "All Buckets",
@@ -36,21 +35,6 @@ namespace Intel.MyDeals.Entities {
 			DATA_TYPE_CD = "CUSTOM",
 			DIM_CD = "CUST",
 			DIM_SID = 2,
-			DOT_NET_DATA_TYPE = "System.Object",
-			FRMT_MSK = "{0}",
-			TGT_COL_TYPE = "VARCHAR",
-			UI_TYPE_CD = default(System.String)
-		};
-		public static MyDealsAttribute ALL_CUST_NM_DC = new MyDealsAttribute()
-		{
-			ATRB_COL_NM = "ALL_CUST_NM_DC",
-			ATRB_DESC = "All Customers",
-			ATRB_LBL = "All Customers",
-			ATRB_MAX_LEN = 100,
-			ATRB_SID = 52001,
-			DATA_TYPE_CD = "CUSTOM",
-			DIM_CD = "SECUR",
-			DIM_SID = 50,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
 			TGT_COL_TYPE = "VARCHAR",
@@ -386,6 +370,21 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
+		public static MyDealsAttribute CSL_WWID_EXCEPTIONS = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "CSL_WWID_EXCEPTIONS",
+			ATRB_DESC = "Employee safety net of users",
+			ATRB_LBL = "Employee safety net of users",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 5044,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "SECUR",
+			DIM_SID = 50,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = default(System.String)
+		};
 		public static MyDealsAttribute CST_USE_IN_CALC = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "CST_USE_IN_CALC",
@@ -411,21 +410,6 @@ namespace Intel.MyDeals.Entities {
 			DATA_TYPE_CD = "CUSTOM",
 			DIM_CD = "CUST",
 			DIM_SID = 2,
-			DOT_NET_DATA_TYPE = "System.Object",
-			FRMT_MSK = "{0}",
-			TGT_COL_TYPE = "VARCHAR",
-			UI_TYPE_CD = default(System.String)
-		};
-		public static MyDealsAttribute CTRY_CD_DC = new MyDealsAttribute()
-		{
-			ATRB_COL_NM = "CTRY_CD_DC",
-			ATRB_DESC = "Country Code",
-			ATRB_LBL = "Country Code",
-			ATRB_MAX_LEN = 20,
-			ATRB_SID = 52017,
-			DATA_TYPE_CD = "CUSTOM",
-			DIM_CD = "SECUR",
-			DIM_SID = 50,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
 			TGT_COL_TYPE = "VARCHAR",
@@ -491,21 +475,6 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
-		public static MyDealsAttribute CUST_CHNL_DC = new MyDealsAttribute()
-		{
-			ATRB_COL_NM = "CUST_CHNL_DC",
-			ATRB_DESC = "Customer Channel",
-			ATRB_LBL = "Customer Channel",
-			ATRB_MAX_LEN = 100,
-			ATRB_SID = 52010,
-			DATA_TYPE_CD = "CUSTOM",
-			DIM_CD = "SECUR",
-			DIM_SID = 50,
-			DOT_NET_DATA_TYPE = "System.Object",
-			FRMT_MSK = "{0}",
-			TGT_COL_TYPE = "VARCHAR",
-			UI_TYPE_CD = default(System.String)
-		};
 		public static MyDealsAttribute CUST_DIV_NM = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "CUST_DIV_NM",
@@ -516,21 +485,6 @@ namespace Intel.MyDeals.Entities {
 			DATA_TYPE_CD = "CUSTOM",
 			DIM_CD = "CUST",
 			DIM_SID = 2,
-			DOT_NET_DATA_TYPE = "System.Object",
-			FRMT_MSK = "{0}",
-			TGT_COL_TYPE = "VARCHAR",
-			UI_TYPE_CD = default(System.String)
-		};
-		public static MyDealsAttribute CUST_DIV_NM_DC = new MyDealsAttribute()
-		{
-			ATRB_COL_NM = "CUST_DIV_NM_DC",
-			ATRB_DESC = "Rebate Customer Division Name",
-			ATRB_LBL = "Rebate Customer Division Name",
-			ATRB_MAX_LEN = 100,
-			ATRB_SID = 52003,
-			DATA_TYPE_CD = "CUSTOM",
-			DIM_CD = "SECUR",
-			DIM_SID = 50,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
 			TGT_COL_TYPE = "VARCHAR",
@@ -566,21 +520,6 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
-		public static MyDealsAttribute CUST_NM_DC = new MyDealsAttribute()
-		{
-			ATRB_COL_NM = "CUST_NM_DC",
-			ATRB_DESC = "Customer Name",
-			ATRB_LBL = "Customer Name",
-			ATRB_MAX_LEN = 100,
-			ATRB_SID = 52002,
-			DATA_TYPE_CD = "CUSTOM",
-			DIM_CD = "SECUR",
-			DIM_SID = 50,
-			DOT_NET_DATA_TYPE = "System.Object",
-			FRMT_MSK = "{0}",
-			TGT_COL_TYPE = "VARCHAR",
-			UI_TYPE_CD = default(System.String)
-		};
 		public static MyDealsAttribute CUST_SRCH_NM = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "CUST_SRCH_NM",
@@ -591,21 +530,6 @@ namespace Intel.MyDeals.Entities {
 			DATA_TYPE_CD = "CUSTOM",
 			DIM_CD = "CUST",
 			DIM_SID = 2,
-			DOT_NET_DATA_TYPE = "System.Object",
-			FRMT_MSK = "{0}",
-			TGT_COL_TYPE = "VARCHAR",
-			UI_TYPE_CD = default(System.String)
-		};
-		public static MyDealsAttribute CUST_SRCH_NM_DC = new MyDealsAttribute()
-		{
-			ATRB_COL_NM = "CUST_SRCH_NM_DC",
-			ATRB_DESC = "Customer Search Name",
-			ATRB_LBL = "Customer Search Name",
-			ATRB_MAX_LEN = 20,
-			ATRB_SID = 52018,
-			DATA_TYPE_CD = "CUSTOM",
-			DIM_CD = "SECUR",
-			DIM_SID = 50,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
 			TGT_COL_TYPE = "VARCHAR",
@@ -1016,21 +940,6 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
-		public static MyDealsAttribute GDM_CUST_DIV_NM_DC = new MyDealsAttribute()
-		{
-			ATRB_COL_NM = "GDM_CUST_DIV_NM_DC",
-			ATRB_DESC = "GDM Customer Divisioin Name",
-			ATRB_LBL = "GDM Customer Divisioin Name",
-			ATRB_MAX_LEN = 100,
-			ATRB_SID = 52022,
-			DATA_TYPE_CD = "CUSTOM",
-			DIM_CD = "SECUR",
-			DIM_SID = 50,
-			DOT_NET_DATA_TYPE = "System.Object",
-			FRMT_MSK = "{0}",
-			TGT_COL_TYPE = "VARCHAR",
-			UI_TYPE_CD = default(System.String)
-		};
 		public static MyDealsAttribute GDM_FMLY_NM = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "GDM_FMLY_NM",
@@ -1086,21 +995,6 @@ namespace Intel.MyDeals.Entities {
 			DATA_TYPE_CD = "CUSTOM",
 			DIM_CD = "CUST",
 			DIM_SID = 2,
-			DOT_NET_DATA_TYPE = "System.Object",
-			FRMT_MSK = "{0}",
-			TGT_COL_TYPE = "VARCHAR",
-			UI_TYPE_CD = default(System.String)
-		};
-		public static MyDealsAttribute GDM_SLD_TO_CUST_NM_DC = new MyDealsAttribute()
-		{
-			ATRB_COL_NM = "GDM_SLD_TO_CUST_NM_DC",
-			ATRB_DESC = "GDM Sold To Customer Name",
-			ATRB_LBL = "GDM Sold To Customer Name",
-			ATRB_MAX_LEN = 100,
-			ATRB_SID = 52021,
-			DATA_TYPE_CD = "CUSTOM",
-			DIM_CD = "SECUR",
-			DIM_SID = 50,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
 			TGT_COL_TYPE = "VARCHAR",
@@ -1181,21 +1075,6 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
-		public static MyDealsAttribute HOST_GEO_DC = new MyDealsAttribute()
-		{
-			ATRB_COL_NM = "HOST_GEO_DC",
-			ATRB_DESC = "Hosted Geo",
-			ATRB_LBL = "Hosted Geo",
-			ATRB_MAX_LEN = 100,
-			ATRB_SID = 52012,
-			DATA_TYPE_CD = "CUSTOM",
-			DIM_CD = "SECUR",
-			DIM_SID = 50,
-			DOT_NET_DATA_TYPE = "System.Object",
-			FRMT_MSK = "{0}",
-			TGT_COL_TYPE = "VARCHAR",
-			UI_TYPE_CD = default(System.String)
-		};
 		public static MyDealsAttribute INDUS_KEY_CD = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "INDUS_KEY_CD",
@@ -1206,21 +1085,6 @@ namespace Intel.MyDeals.Entities {
 			DATA_TYPE_CD = "CUSTOM",
 			DIM_CD = "CUST",
 			DIM_SID = 2,
-			DOT_NET_DATA_TYPE = "System.Object",
-			FRMT_MSK = "{0}",
-			TGT_COL_TYPE = "VARCHAR",
-			UI_TYPE_CD = default(System.String)
-		};
-		public static MyDealsAttribute INDUS_KEY_CD_DC = new MyDealsAttribute()
-		{
-			ATRB_COL_NM = "INDUS_KEY_CD_DC",
-			ATRB_DESC = "Industry Key Code",
-			ATRB_LBL = "Industry Key Code",
-			ATRB_MAX_LEN = 100,
-			ATRB_SID = 52013,
-			DATA_TYPE_CD = "CUSTOM",
-			DIM_CD = "SECUR",
-			DIM_SID = 50,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
 			TGT_COL_TYPE = "VARCHAR",
@@ -1646,21 +1510,6 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
-		public static MyDealsAttribute PRC_GRP_CD_DC = new MyDealsAttribute()
-		{
-			ATRB_COL_NM = "PRC_GRP_CD_DC",
-			ATRB_DESC = "Price Customer Group Code",
-			ATRB_LBL = "Price Customer Group Code",
-			ATRB_MAX_LEN = 100,
-			ATRB_SID = 52014,
-			DATA_TYPE_CD = "CUSTOM",
-			DIM_CD = "SECUR",
-			DIM_SID = 50,
-			DOT_NET_DATA_TYPE = "System.Object",
-			FRMT_MSK = "{0}",
-			TGT_COL_TYPE = "VARCHAR",
-			UI_TYPE_CD = default(System.String)
-		};
 		public static MyDealsAttribute PRD_ATRB = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "PRD_ATRB",
@@ -1976,21 +1825,6 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
-		public static MyDealsAttribute SLS_ORG_CD_DC = new MyDealsAttribute()
-		{
-			ATRB_COL_NM = "SLS_ORG_CD_DC",
-			ATRB_DESC = "Sales Org Code",
-			ATRB_LBL = "Sales Org Code",
-			ATRB_MAX_LEN = 100,
-			ATRB_SID = 52019,
-			DATA_TYPE_CD = "CUSTOM",
-			DIM_CD = "SECUR",
-			DIM_SID = 50,
-			DOT_NET_DATA_TYPE = "System.Object",
-			FRMT_MSK = "{0}",
-			TGT_COL_TYPE = "VARCHAR",
-			UI_TYPE_CD = default(System.String)
-		};
 		public static MyDealsAttribute SOLD_TO_ID = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "SOLD_TO_ID",
@@ -2001,21 +1835,6 @@ namespace Intel.MyDeals.Entities {
 			DATA_TYPE_CD = "CUSTOM",
 			DIM_CD = "CUST",
 			DIM_SID = 2,
-			DOT_NET_DATA_TYPE = "System.Object",
-			FRMT_MSK = "{0}",
-			TGT_COL_TYPE = "VARCHAR",
-			UI_TYPE_CD = default(System.String)
-		};
-		public static MyDealsAttribute SOLD_TO_ID_DC = new MyDealsAttribute()
-		{
-			ATRB_COL_NM = "SOLD_TO_ID_DC",
-			ATRB_DESC = "Sold To ID",
-			ATRB_LBL = "Sold To ID",
-			ATRB_MAX_LEN = 100,
-			ATRB_SID = 52004,
-			DATA_TYPE_CD = "CUSTOM",
-			DIM_CD = "SECUR",
-			DIM_SID = 50,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
 			TGT_COL_TYPE = "VARCHAR",
