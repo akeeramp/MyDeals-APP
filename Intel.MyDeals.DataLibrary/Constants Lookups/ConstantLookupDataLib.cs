@@ -6,57 +6,12 @@ using Intel.MyDeals.Entities;
 using Intel.Opaque.DBAccess;
 using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
 using Intel.MyDeals.IDataLibrary;
+using Intel.Opaque;
 
 namespace Intel.MyDeals.DataLibrary
 {
     public class ConstantLookupDataLib : IConstantLookupDataLib
     {
-
-        #region ToolConstants
-        public List<ToolConstants> GetToolConstants()
-        {
-            var cmd = new Procs.dbo.PR_GET_CONSTANTS
-            {
-                cnst_nm = null
-            };
-
-            List<ToolConstants> returnConstandsList = new List<ToolConstants>();
-            using (var rdr = DataAccess.ExecuteReader(cmd))
-            {
-                int ConstantNameIdx = DB.GetReaderOrdinal(rdr, "CNST_NM");
-                int ConstantDescIdx = DB.GetReaderOrdinal(rdr, "CNST_DESC");
-                int ConstantValueIdx = DB.GetReaderOrdinal(rdr, "CNST_VAL_TXT");
-                while (rdr.Read())
-                {
-                    returnConstandsList.Add(new ToolConstants
-                    {
-                        CNST_NM = rdr.IsDBNull(ConstantNameIdx) ? default(String) : rdr.GetFieldValue<String>(ConstantNameIdx),
-                        CNST_DESC = rdr.IsDBNull(ConstantDescIdx) ? default(String) : rdr.GetFieldValue<String>(ConstantDescIdx),
-                        CNST_VAL_TXT = rdr.IsDBNull(ConstantValueIdx) ? default(String) : rdr.GetFieldValue<String>(ConstantValueIdx),
-                    });
-                }
-            }
-
-            return returnConstandsList;
-        }
-
-        public int GetToolConstInt(string cnstLookup, int defaultValue = 0)
-        {
-            int constRetValue;
-            if (!int.TryParse(GetToolConst(cnstLookup, defaultValue.ToString()), out constRetValue)) constRetValue = defaultValue;
-
-            return constRetValue;
-        }
-
-        public string GetToolConst(string cnstLookup, string defaultValue = "")
-        {
-            return GetToolConstants().Where(c => c.CNST_NM == cnstLookup).Select(c => c.CNST_VAL_TXT).FirstOrDefault() ?? defaultValue;
-        }
-
-        #endregion
-
-
-
         public List<LookupItem> GetLookups()
         {
             List<LookupItem> fake = new List<LookupItem>();
@@ -119,9 +74,20 @@ namespace Intel.MyDeals.DataLibrary
             ////return returnLookupsList;
         }
 
-
-
         #region Constants Admin
+
+        public int GetAdminToolConstInt(string cnstLookup, int defaultValue = 0)
+        {
+            int constRetValue;
+            if (!int.TryParse(GetAdminToolConst(cnstLookup, defaultValue.ToString()), out constRetValue)) constRetValue = defaultValue;
+
+            return constRetValue;
+        }
+
+        public string GetAdminToolConst(string cnstLookup, string defaultValue = "")
+        {
+            return GetAdminConstants().Where(c => c.CNST_NM == cnstLookup).Select(c => c.CNST_VAL_TXT).FirstOrDefault() ?? defaultValue;
+        }
 
         public List<AdminConstant> GetAdminConstants()
         {
@@ -158,40 +124,51 @@ namespace Intel.MyDeals.DataLibrary
 
         public AdminConstant SetAdminConstants(CrudModes mode, AdminConstant adminValues)
         {
+            OpLogPerf.Log("SetAdminConstants");
             var ret = new List<AdminConstant>();
 
-            using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_MANAGE_CONSTANT_VALUES
+            try
             {
-                emp_wwid = OpUserStack.MyOpUserToken.Usr.WWID,
-                mode = mode.ToString(),
-                cnst_nm = adminValues.CNST_NM,
-                cnst_sid = adminValues.CNST_SID,
-                cnst_desc = adminValues.CNST_DESC,
-                cnst_val_txt = adminValues.CNST_VAL_TXT,
-                ui_upd_flg = adminValues.UI_UPD_FLG,
-            }))
-            {
-                int IDX_cnst_desc = DB.GetReaderOrdinal(rdr, "CNST_DESC");
-                int IDX_cnst_nm = DB.GetReaderOrdinal(rdr, "CNST_NM");
-                int IDX_cnst_sid = DB.GetReaderOrdinal(rdr, "CNST_SID");
-                int IDX_cnst_val_txt = DB.GetReaderOrdinal(rdr, "CNST_VAL_TXT");
-                int IDX_UI_UPD_FLG = DB.GetReaderOrdinal(rdr, "UI_UPD_FLG");
-
-                while (rdr.Read())
+                using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_MANAGE_CONSTANT_VALUES
                 {
-                    ret.Add(new AdminConstant
+                    emp_wwid = OpUserStack.MyOpUserToken.Usr.WWID,
+                    mode = mode.ToString(),
+                    cnst_nm = adminValues.CNST_NM,
+                    cnst_sid = adminValues.CNST_SID,
+                    cnst_desc = adminValues.CNST_DESC,
+                    cnst_val_txt = adminValues.CNST_VAL_TXT,
+                    ui_upd_flg = adminValues.UI_UPD_FLG,
+                }))
+                {
+                    int IDX_cnst_desc = DB.GetReaderOrdinal(rdr, "CNST_DESC");
+                    int IDX_cnst_nm = DB.GetReaderOrdinal(rdr, "CNST_NM");
+                    int IDX_cnst_sid = DB.GetReaderOrdinal(rdr, "CNST_SID");
+                    int IDX_cnst_val_txt = DB.GetReaderOrdinal(rdr, "CNST_VAL_TXT");
+                    int IDX_UI_UPD_FLG = DB.GetReaderOrdinal(rdr, "UI_UPD_FLG");
+
+                    while (rdr.Read())
                     {
-                        CNST_DESC = rdr.IsDBNull(IDX_cnst_desc) ? default(String) : rdr.GetFieldValue<String>(IDX_cnst_desc),
-                        CNST_NM = rdr.IsDBNull(IDX_cnst_nm) ? default(String) : rdr.GetFieldValue<String>(IDX_cnst_nm),
-                        CNST_SID = rdr.IsDBNull(IDX_cnst_sid) ? default(Int32) : rdr.GetFieldValue<Int32>(IDX_cnst_sid),
-                        CNST_VAL_TXT = rdr.IsDBNull(IDX_cnst_val_txt) ? default(String) : rdr.GetFieldValue<String>(IDX_cnst_val_txt),
-                        UI_UPD_FLG = rdr.IsDBNull(IDX_UI_UPD_FLG) ? default(Boolean) : rdr.GetFieldValue<Boolean>(IDX_UI_UPD_FLG)
-                    });
-                } // while
+                        ret.Add(new AdminConstant
+                        {
+                            CNST_DESC = rdr.IsDBNull(IDX_cnst_desc) ? default(String) : rdr.GetFieldValue<String>(IDX_cnst_desc),
+                            CNST_NM = rdr.IsDBNull(IDX_cnst_nm) ? default(String) : rdr.GetFieldValue<String>(IDX_cnst_nm),
+                            CNST_SID = rdr.IsDBNull(IDX_cnst_sid) ? default(Int32) : rdr.GetFieldValue<Int32>(IDX_cnst_sid),
+                            CNST_VAL_TXT = rdr.IsDBNull(IDX_cnst_val_txt) ? default(String) : rdr.GetFieldValue<String>(IDX_cnst_val_txt),
+                            UI_UPD_FLG = rdr.IsDBNull(IDX_UI_UPD_FLG) ? default(Boolean) : rdr.GetFieldValue<Boolean>(IDX_UI_UPD_FLG)
+                        });
+                    } // while
+                }
+                DataCollections.RecycleCache("_getToolConstants");
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
             }
 
             return ret.FirstOrDefault();
         }
-        #endregion
+
+        #endregion Constants Admin
     }
 }

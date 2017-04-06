@@ -5,9 +5,9 @@
         .module('app.admin')
         .controller('ConstantsController', ConstantsController);
 
-    ConstantsController.$inject = ['$scope', 'dataService', 'constantsService', 'logger', 'gridConstants', 'confirmationModal'];
+    ConstantsController.$inject = ['$scope', 'dataService', 'constantsService', 'logger', 'gridConstants', 'confirmationModal', '$rootScope'];
 
-    function ConstantsController($scope, dataService, constantsService, logger, gridConstants, confirmationModal) {
+    function ConstantsController($scope, dataService, constantsService, logger, gridConstants, confirmationModal, $rootScope) {
         var vm = this;
 
         // declare dataSource bound to backend
@@ -25,6 +25,7 @@
                     constantsService.updateConstants(e.data)
                         .then(function (response) {
                             e.success(response.data);
+                            updateBannerMessage(e.data);
                             logger.success("Constant updated.");
                         }, function (response) {
                             logger.error("Unable to update constant.", response, response.statusText);
@@ -54,6 +55,7 @@
                 create: function (e) {
                     constantsService.insertConstants(e.data)
                         .then(function (response) {
+                            updateBannerMessage(e.data);
                             e.success(response.data);
                             logger.success("New constant added.");
                         }, function (response) {
@@ -144,6 +146,13 @@
                     $(this).find(".k-grid-delete").remove();
                 }
             });
+        }
+
+        function updateBannerMessage(constant) {
+            if (constant.CNST_NM == 'ADMIN_MESSAGE') {
+                $rootScope.adminBannerMessage = constant.CNST_VAL_TXT == 'NA'
+                                ? "" : constant.CNST_VAL_TXT;
+            }
         }
     }
 })();

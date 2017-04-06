@@ -1,6 +1,9 @@
 ﻿<div ng-if="$root.adminBannerMessage != ''" class="col-md-6" style="position: absolute; left:25%; right:20%;top:.5%">
-    <div class="alert alert-dismissible adminBanner" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true" class="intelicon-close-solid" ng-click="close()"></span></button>
+    <div ng-if="userDismissed == 'false'" class="alert alert-dismissible adminBanner" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true" class="intelicon-close-solid" ng-click="close(true)"></span></button>
         <p ng-bind-html="$root.adminBannerMessage"/>
+    </div>
+    <div ng-if="userDismissed == 'true'" class="text-center adminBannerIcon">
+        <i role="button" ng-click="close(false)" class="intelicon-email-message-solid"></i>
     </div>
 </div>

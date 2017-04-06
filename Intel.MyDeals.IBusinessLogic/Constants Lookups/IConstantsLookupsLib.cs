@@ -6,7 +6,7 @@ namespace Intel.MyDeals.IBusinessLogic
 {
     public interface IConstantsLookupsLib
     {
-        List<AdminConstant> GetAdminConstants();
+        List<AdminConstant> GetAdminConstants(bool getCachedResult = true);
 
         AdminConstant CreateAdminConstant(AdminConstant data);
 
@@ -14,14 +14,12 @@ namespace Intel.MyDeals.IBusinessLogic
 
         void DeleteAdminConstant(AdminConstant data);
 
-        List<ToolConstants> GetToolConstants();
-
-        ToolConstants GetToolConstant(string constant);
-
         string GetToolConstantValue(string constant);
 
         List<LookupItem> GetLookups();
 
         IQueryable<LookupItem> GetLookups(string cd);
+
+        AdminConstant GetConstantsByName(string constant);
     }
 }

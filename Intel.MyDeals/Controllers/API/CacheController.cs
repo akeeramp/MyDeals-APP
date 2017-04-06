@@ -65,7 +65,6 @@ namespace Intel.MyDeals.Controllers.API
         [Route("api/Cache/v1/GetApiCacheStatus")]
         public HttpResponseMessage GetApiCacheStatus()
         {
-
             //Added the logic inside controler as I dont wanted
             //to referance WebApi.OutputCache.V2 to any other project
 
@@ -80,7 +79,6 @@ namespace Intel.MyDeals.Controllers.API
             return Request.CreateResponse(HttpStatusCode.OK, cacheItems);
         }
 
-
         /// <summary>
         /// Get the Api cache clear
         /// </summary>
@@ -89,7 +87,7 @@ namespace Intel.MyDeals.Controllers.API
         public bool GetApiCacheClear()
         {
             var cache = Configuration.CacheOutputConfiguration().GetCacheOutputProvider(Request);
-            foreach(var key in cache.AllKeys.Where(x => !x.Contains("application/json") && !x.Contains("application/xml")))
+            foreach (var key in cache.AllKeys.Where(x => !x.Contains("application/json") && !x.Contains("application/xml")))
             {
                 cache.RemoveStartsWith(key);
             }
@@ -107,7 +105,7 @@ namespace Intel.MyDeals.Controllers.API
         public bool ClearCache(CacheItem cacheItem)
         {
             var cache = Configuration.CacheOutputConfiguration().GetCacheOutputProvider(Request);
-            if(cache.Contains(cacheItem.CacheKey))
+            if (cache.Contains(cacheItem.CacheKey))
             {
                 cache.RemoveStartsWith((cacheItem.CacheKey));
                 return true;
@@ -115,7 +113,5 @@ namespace Intel.MyDeals.Controllers.API
 
             return false;
         }
-
-
     }
 }

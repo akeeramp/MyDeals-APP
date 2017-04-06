@@ -43,11 +43,6 @@ using System.Collections.Generic;
 	////ds.Tables[0].TableName = "LookupItem";
 	////WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
-	// Constants objects
-	ds = dbobjects.ExecuteDataSet("[dbo].[PR_GET_CONSTANTS]");
-	ds.Tables[0].TableName = "ToolConstants";
-	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
-
 	// Admin Constants object
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MANAGE_CONSTANT_VALUES] @emp_wwid = 10505693, @mode = 'Select'");
 	ds.Tables[0].TableName = "AdminConstant";

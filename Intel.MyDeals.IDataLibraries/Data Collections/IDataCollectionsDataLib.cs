@@ -18,7 +18,7 @@ namespace Intel.MyDeals.IDataLibrary
 
         object ViewCache(string fieldName);
 
-        List<ToolConstants> GetToolConstants();
+        List<AdminConstant> GetToolConstants();
 
         List<CustomerDivision> GetCustomerDivisions();
 
@@ -44,18 +44,18 @@ namespace Intel.MyDeals.IDataLibrary
 
         List<Dropdown> GetDropdowns();
 
-		#region Security Attributes
+        #region Security Attributes
 
-		List<AdminApplications> GetAdminApplications();
+        List<AdminApplications> GetAdminApplications();
 
-		List<AdminDealType> GetAdminDealTypes();
+        List<AdminDealType> GetAdminDealTypes();
 
-		List<AdminRoleType> GetAdminRoleTypes();
+        List<AdminRoleType> GetAdminRoleTypes();
 
-		List<SecurityActions> GetSecurityActions();
+        List<SecurityActions> GetSecurityActions();
 
-		#endregion
-		List<SecurityAttributesDropDown> GetObjAtrbs();
+        #endregion Security Attributes
 
-	}
+        List<SecurityAttributesDropDown> GetObjAtrbs();
+    }
 }

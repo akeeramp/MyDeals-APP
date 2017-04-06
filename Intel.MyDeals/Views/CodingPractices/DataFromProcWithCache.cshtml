@@ -353,7 +353,7 @@ namespace Intel.MyDeals.Controllers.API
     {
         OpCore op = OpAppConfig.Init();
 
-        [Route("api/Constants/v1/GetConstants")]
+        [Route("api/AdminConstants/v1/GetConstants")]
         public IEnumerable&lt;ToolConstants&gt; Get()
         {
             return new ConstantsLookupsLib().GetToolConstants();
@@ -471,7 +471,7 @@ namespace Intel.MyDeals.Controllers
                         </li>
                         <li>
                             <p>
-                                For this example, a Kendo Grid control is populated by a datasource referencing the <b>/api/Constants/v1/GetConstants</b> API.<br />
+                                For this example, a Kendo Grid control is populated by a datasource referencing the <b>/api/AdminConstants/v1/GetConstants</b> API.<br />
                             </p>
 
                             <div class="alert alert-info" role="alert">
@@ -494,7 +494,7 @@ namespace Intel.MyDeals.Controllers
             dataSource: {
                 type: "json",
                 transport: {
-                    read: "/api/Constants/v1/GetConstants"
+                    read: "/api/AdminConstants/v1/GetConstants"
                 },
                 schema: {
                     model: {
@@ -571,7 +571,7 @@ namespace Intel.MyDeals.Controllers
             dataSource: {
                 type: "json",
                 transport: {
-                    read: "/api/Constants/v1/GetConstants"
+                    read: "/api/AdminConstants/v1/GetConstants"
                 },
                 schema: {
                     model: {

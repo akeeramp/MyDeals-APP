@@ -5,8 +5,8 @@
         .module('app.core')
         .directive('adminBanner', adminBanner);
 
-    adminBanner.$inject = ['$compile'];
-    function adminBanner($compile) {
+    adminBanner.$inject = ['$compile', 'constantsService'];
+    function adminBanner($compile, constantsService) {
         return {
             restrict: 'E',
             scope: {
@@ -16,16 +16,21 @@
             link: function (scope, element, attrs) {
                 scope.$root.adminBannerMessage = "";
 
-                var userDismissed = sessionStorage.getItem('userDismissedAdminBanner');
+                scope.userDismissed = sessionStorage.getItem('userDismissedAdminBanner') == null ? 'false' :
+                    sessionStorage.getItem('userDismissedAdminBanner');
+
 
                 // If user has closed the banner message he wont see it for the current session again.
-                if (!userDismissed) {
-                    // TODO read it from constant table, make an api call.
-                    scope.$root.adminBannerMessage = "<b>Warning!</b> Message from Admin.";
-                }
+                constantsService.getConstantsByName("ADMIN_MESSAGE").then(function (data) {
+                    if (!!data.data) {
+                        scope.$root.adminBannerMessage = data.data.CNST_VAL_TXT == 'NA'
+                            ? "" : data.data.CNST_VAL_TXT;
+                    }
+                });
 
-                scope.close = function () {
-                    sessionStorage.setItem('userDismissedAdminBanner', true);
+                scope.close = function (value) {
+                    sessionStorage.setItem('userDismissedAdminBanner', value);
+                    scope.userDismissed = sessionStorage.getItem('userDismissedAdminBanner');
                 }
             }
         }

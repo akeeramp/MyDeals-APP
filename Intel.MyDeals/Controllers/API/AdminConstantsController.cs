@@ -4,12 +4,11 @@ using System.Linq;
 using System.Web.Http;
 using WebApi.OutputCache.V2;
 
-namespace Intel.MyDeals.Areas.Admin.Controllers.API
+namespace Intel.MyDeals.Controllers.API
 {
     [AutoInvalidateCacheOutput]
-    public class AdminConstantsController : ApiController
+    public class AdminConstantsController : BaseApiController
     {
-
         private readonly IConstantsLookupsLib _constantsLookupsLib;
 
         public AdminConstantsController(IConstantsLookupsLib constantsLookupsLib)
@@ -19,11 +18,19 @@ namespace Intel.MyDeals.Areas.Admin.Controllers.API
 
         [Authorize]
         [HttpGet]
-        [Route("api/AdminConstants/v1/GetConstants")]
+        [Route("api/AdminConstants/v1/GetConstants/{getCachedResult:bool?}")]
         [CacheOutput(ServerTimeSpan = 50000)]
-        public IQueryable<AdminConstant> GetConstants()
+        public IQueryable<AdminConstant> GetConstants(bool getCachedResult = true)
         {
-            return _constantsLookupsLib.GetAdminConstants().AsQueryable();
+            return _constantsLookupsLib.GetAdminConstants(getCachedResult).AsQueryable();
+        }
+
+        [Route("api/AdminConstants/v1/GetConstantsByName/{name}")]
+        public AdminConstant GetConstantsByName(string name)
+        {
+            return SafeExecutor(() => _constantsLookupsLib.GetConstantsByName(name)
+                , $"Unable to find constant with name {name}"
+            );
         }
 
         [Authorize]

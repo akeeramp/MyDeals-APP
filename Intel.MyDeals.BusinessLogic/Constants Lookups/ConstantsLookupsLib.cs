@@ -28,19 +28,14 @@ namespace Intel.MyDeals.BusinessLogic
 
         #region ToolConstants
 
-        public List<ToolConstants> GetToolConstants()
+        public AdminConstant GetConstantsByName(string constant)
         {
-            return _dataCollectionsDataLib.GetToolConstants();
-        }
-
-        public ToolConstants GetToolConstant(string constant)
-        {
-            return GetToolConstants().FirstOrDefault(c => c.CNST_NM == constant);
+            return GetAdminConstants().FirstOrDefault(c => c.CNST_NM == constant);
         }
 
         public string GetToolConstantValue(string constant)
         {
-            return GetToolConstants()
+            return GetAdminConstants()
                 .Where(c => c.CNST_NM == constant)
                 .Select(c => c.CNST_VAL_TXT)
                 .FirstOrDefault();
@@ -75,9 +70,13 @@ namespace Intel.MyDeals.BusinessLogic
 
         #region Constants Admin
 
-        public List<AdminConstant> GetAdminConstants()
+        public List<AdminConstant> GetAdminConstants(bool getCachedResult = true)
         {
-            return _constantLookupDataLib.GetAdminConstants();
+            if (!getCachedResult)
+            {
+                _constantLookupDataLib.GetAdminConstants();
+            }
+            return _dataCollectionsDataLib.GetToolConstants();
         }
 
         public AdminConstant CreateAdminConstant(AdminConstant data)

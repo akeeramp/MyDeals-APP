@@ -127,7 +127,7 @@
             @RenderLink("BusinessLogicFunction", "Business logic function", ViewData["pageTitle"].ToString())
             @RenderLink("BusinessLogicCallProcedure", "Call a stored procedure", ViewData["pageTitle"].ToString())
             @RenderLink("BusinessLogicCallCache", "Call from data cache", ViewData["pageTitle"].ToString())
-            
+
         }
         else if (ViewData["sectionTitle"].ToString() == "Intel.MyDeals.BusinessRules")
         {
@@ -163,21 +163,12 @@
         {
             @RenderLink("CodingTools", "Introduction", ViewData["pageTitle"].ToString())
             @RenderLink("ErrorHandling", "Error handling", ViewData["pageTitle"].ToString())
-			@RenderLink("CodeReviews", "Code Reviews", ViewData["pageTitle"].ToString())		}
+			@RenderLink("CodeReviews", "Code Reviews", ViewData["pageTitle"].ToString())
             @RenderLink("Logging", "Logging", ViewData["pageTitle"].ToString())
             @RenderLink("UnitTesting", "Unit Testing", ViewData["pageTitle"].ToString())
         }
-
-        
     </div>
-
-
-
 </div>
-
-
-
-
 <script>
     var categoryAction = "@ViewData["categoryAction"].ToString()";
     function toc() {}
@@ -216,15 +207,15 @@
 
 <style>
     #tocWrapper {
-        position: fixed; 
-        top: 130px; left: 10px; 
-        padding: 5px; 
+        position: fixed;
+        top: 130px; left: 10px;
+        padding: 5px;
         width: 180px;
         overflow-y: auto;
     }
 
     #mainBody {
-        margin: 10px; 
+        margin: 10px;
         padding: 0 20px 0 200px;
     }
 
@@ -248,13 +239,13 @@
         font-weight: normal;
     }
     .tocWrapper {
-        font-weight: 200; 
+        font-weight: 200;
         font-size: 12px;
     }
 
     .tocItem {
-        border-left: 1px solid #bebebe; 
-        padding-left: 8px; 
+        border-left: 1px solid #bebebe;
+        padding-left: 8px;
         color: #222222;
         font-size: 11px;
     }
@@ -269,20 +260,20 @@
     .tocItem > div {
         padding: 4px 4px;
     }
-     
+
     .w100 {
         width: 100%;
     }
 
     .rotate90 {
         transform: rotate(90deg);
-	    transform-origin: left top 0;        
+	    transform-origin: left top 0;
     }
 
     .note {
         margin-top: 15px;
         color: #000000;
-        font-weight: 200; 
+        font-weight: 200;
         font-size: 11px;
         padding: 5px;
         border: 1px solid #dddddd;
@@ -296,7 +287,7 @@
     }
 
     .noteBody {
-        font-weight: 200; 
+        font-weight: 200;
         font-size: 10px;
         padding: 5px;
         border-left: 1px solid #dddddd;

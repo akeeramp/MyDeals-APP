@@ -9,7 +9,6 @@
     constantsService.$inject = ['$http', 'dataService', 'logger', '$q'];
 
     function constantsService($http, dataService, logger, $q) {
-
         var apiBaseUrl = "api/AdminConstants/v1/";
 
         var service = {
@@ -17,12 +16,13 @@
             updateConstants: updateConstants,
             deleteConstants: deleteConstants,
             insertConstants: insertConstants,
+            getConstantsByName: getConstantsByName
         }
 
         return service;
 
         function getConstants() {
-            return dataService.get(apiBaseUrl + 'GetConstants');
+            return dataService.get(apiBaseUrl + 'GetConstants/false');
         }
 
         function updateConstants(data) {
@@ -35,6 +35,10 @@
 
         function deleteConstants(data) {
             return dataService.post(apiBaseUrl + 'DeleteConstant', data);
-        }        
+        }
+
+        function getConstantsByName(name) {
+            return dataService.get(apiBaseUrl + 'GetConstantsByName/' + name);
+        }
     }
 })();

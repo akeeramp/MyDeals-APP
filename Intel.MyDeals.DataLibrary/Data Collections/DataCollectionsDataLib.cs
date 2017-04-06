@@ -72,7 +72,7 @@ namespace Intel.MyDeals.DataLibrary
 
         #endregion Cache Functions
 
-        public List<ToolConstants> GetToolConstants()
+        public List<AdminConstant> GetToolConstants()
         {
             return DataCollections.GetToolConstants();
         }
@@ -90,14 +90,14 @@ namespace Intel.MyDeals.DataLibrary
         public List<GeoDimension> GetGeoData()
         {
             return DataCollections.GetGeoData();
-		}
+        }
 
-		public UiTemplates GetUiTemplates()
-		{
-			return DataCollections.GetUiTemplates();
-		}
+        public UiTemplates GetUiTemplates()
+        {
+            return DataCollections.GetUiTemplates();
+        }
 
-		public List<Product> GetProductData()
+        public List<Product> GetProductData()
         {
             return DataCollections.GetProductData();
         }
@@ -122,40 +122,41 @@ namespace Intel.MyDeals.DataLibrary
             return DataCollections.GetRuleTasks();
         }
 
-		#region Security Attributes
+        #region Security Attributes
 
-		public SecurityWrapper GetSecurityWrapper()
-		{
-			return DataCollections.GetSecurityWrapper();
-		}
+        public SecurityWrapper GetSecurityWrapper()
+        {
+            return DataCollections.GetSecurityWrapper();
+        }
 
-		public List<AdminApplications> GetAdminApplications()
-		{
-			return DataCollections.GetAdminApplications();
-		}
+        public List<AdminApplications> GetAdminApplications()
+        {
+            return DataCollections.GetAdminApplications();
+        }
 
-		public List<AdminDealType> GetAdminDealTypes()
-		{
-			return DataCollections.GetAdminDealTypes();
-		}
+        public List<AdminDealType> GetAdminDealTypes()
+        {
+            return DataCollections.GetAdminDealTypes();
+        }
 
-		public List<AdminRoleType> GetAdminRoleTypes()
-		{
-			return DataCollections.GetAdminRoleTypes();
-		}
-		
-		public List<SecurityActions> GetSecurityActions()
-		{
-			return DataCollections.GetSecurityActions();
-		}
+        public List<AdminRoleType> GetAdminRoleTypes()
+        {
+            return DataCollections.GetAdminRoleTypes();
+        }
 
-		public List<SecurityAttributesDropDown> GetObjAtrbs()
-		{
-			return DataCollections.GetObjAtrbs();
-		}
-		#endregion
+        public List<SecurityActions> GetSecurityActions()
+        {
+            return DataCollections.GetSecurityActions();
+        }
 
-		public List<ProductCategory> GetProductCategories()
+        public List<SecurityAttributesDropDown> GetObjAtrbs()
+        {
+            return DataCollections.GetObjAtrbs();
+        }
+
+        #endregion Security Attributes
+
+        public List<ProductCategory> GetProductCategories()
         {
             return DataCollections.GetProductCategories();
         }

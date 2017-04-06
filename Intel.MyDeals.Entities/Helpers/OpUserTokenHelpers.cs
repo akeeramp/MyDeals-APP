@@ -6,7 +6,7 @@ namespace Intel.MyDeals.Entities.Helpers
 {
     public static class OpUserTokenHelpers
     {
-        private static bool IsWwidInString(OpUserToken opUserToken, string strName, List<ToolConstants> toolConstants)
+        private static bool IsWwidInString(OpUserToken opUserToken, string strName, List<AdminConstant> toolConstants)
         {
             //new ConstantsLookupsLib().GetToolConstants()
             string theList = toolConstants
@@ -25,22 +25,22 @@ namespace Intel.MyDeals.Entities.Helpers
             return false;
         }
 
-        public static bool IsSuper(OpUserToken opUserToken, List<ToolConstants> toolConstants)
+        public static bool IsSuper(OpUserToken opUserToken, List<AdminConstant> toolConstants)
         {
             return IsWwidInString(opUserToken, EN.OPUSERTOKEN.SUPER_LIST, toolConstants);
         }
 
-        public static bool IsSuperSa(OpUserToken opUserToken, List<ToolConstants> toolConstants)
+        public static bool IsSuperSa(OpUserToken opUserToken, List<AdminConstant> toolConstants)
         {
             return IsSuper(opUserToken, toolConstants) && opUserToken.Role.RoleTypeCd == RoleTypes.SA;
         }
 
-        public static bool IsDeveloper(OpUserToken opUserToken, List<ToolConstants> toolConstants)
+        public static bool IsDeveloper(OpUserToken opUserToken, List<AdminConstant> toolConstants)
         {
             return IsWwidInString(opUserToken, EN.OPUSERTOKEN.DEVELOPER_LIST, toolConstants);
         }
 
-        public static bool IsTester(OpUserToken opUserToken, List<ToolConstants> toolConstants)
+        public static bool IsTester(OpUserToken opUserToken, List<AdminConstant> toolConstants)
         {
             return IsWwidInString(opUserToken, EN.OPUSERTOKEN.TESTER_LIST, toolConstants);
         }

@@ -9,7 +9,7 @@ namespace Intel.MyDeals.BusinessLogic
     {
         public void SetUserAccessLevel(OpUserToken opUserToken)
         {
-            var toolConstants = new ConstantLookupDataLib().GetToolConstants();
+            var toolConstants = new ConstantLookupDataLib().GetAdminConstants();
             opUserToken.Properties[EN.OPUSERTOKEN.IS_SUPER] = OpUserTokenHelpers.IsSuper(opUserToken, toolConstants);
             opUserToken.Properties[EN.OPUSERTOKEN.IS_SUPER_SA] = OpUserTokenHelpers.IsSuperSa(opUserToken, toolConstants);
             opUserToken.Properties[EN.OPUSERTOKEN.IS_DEVELOPER] = OpUserTokenHelpers.IsDeveloper(opUserToken, toolConstants);
@@ -20,7 +20,6 @@ namespace Intel.MyDeals.BusinessLogic
             opUserToken.Properties[EN.OPUSERTOKEN.IS_SUPER_SA] = true;
             opUserToken.Properties[EN.OPUSERTOKEN.IS_DEVELOPER] = true;
             opUserToken.Properties[EN.OPUSERTOKEN.IS_TESTER] = true;
-
         }
     }
 }

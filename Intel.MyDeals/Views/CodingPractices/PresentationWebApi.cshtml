@@ -65,7 +65,7 @@
         }
 
         [Authorize]
-        [Route("api/Constants/v1/GetConstants")]
+        [Route("api/AdminConstants/v1/GetConstants")]
         public IEnumerable&lt;ToolConstants&gt; Get()
         {
             return _constantsLookupsLib.GetToolConstants();

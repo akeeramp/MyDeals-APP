@@ -264,3 +264,10 @@
     z-index:1500;
     padding:11px;
 }
+.adminBannerIcon{
+    position:relative;
+    color:#F3D54E;
+    z-index:1500;
+    font-size:20px;
+    font-weight:400;
+}
