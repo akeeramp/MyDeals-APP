@@ -138,26 +138,6 @@
     #secHeader .col-md-11 {
         padding-left: 4px;
     }
-    /*#secContainerWrapper {
-        height: 100%;
-        padding: 0 0 0 0;
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        box-sizing: border-box;
-    }
-    #secHeader {
-        height: 0;
-        margin-top: 0;
-        font-size: 14px;
-        padding: 4px 16px;
-        font-family: "Intel Clear";
-        font-weight: 200;
-        font-style: normal;
-
-        background-color: #ffffff;
-        color: #c1c1c1;
-    }*/
-
     #secContainer {
         height: 100%;
         overflow: auto;
@@ -406,7 +386,7 @@
     #pricingTableSpreadsheet .k-resize-handle { height: 30px !important}
 
     div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left > div.k-spreadsheet-column-header .k-vertical-align-center {
-        font-family: 'Intel Clear';
+        /*font-family: 'Intel Clear';*/
         font-weight: 200;
         font-style: normal;
         font-size: 12px;
@@ -820,14 +800,15 @@
         margin-bottom: 10px;
     }
 
+	/* Column Letters */
     .k-spreadsheet-view .k-spreadsheet-fixed-container .k-spreadsheet-pane .k-spreadsheet-column-header div {
         font-weight: bold;
-        text-transform: uppercase;
+		background-color: #e7e7e8;
+		color: #2b4c79;
     }
-
 	/* Column Letters */
     .k-spreadsheet-view .k-spreadsheet-fixed-container .k-spreadsheet-pane {
-        font-size: 10px;
+        font-size: 11px;
     }
 
     .k-detail-row .k-hierarchy-cell {
@@ -875,8 +856,7 @@
     }
 
     .k-spreadsheet>.k-spreadsheet-view {
-        font-size: 12px;
-        font-family: "Intel clear";
+        font-size: 14px;
     }
     .description {
         color: #b1babf;
@@ -912,9 +892,9 @@
 	.skyBlue {
 		color: #00aeef;
 	}
-
+	
     #pricingTableSpreadsheet {
-        background-color: #f3f3f4;
+        background-color: #ffffff;
     }
 
 	/* Undo / redo buttons */
@@ -956,7 +936,6 @@
         color:#F3D54E !important;
     }
 	
-
 	/* SpreadSheet validation */
 	.k-spreadsheet-cell .k-dirty {
 		width: 100%;
@@ -974,3 +953,19 @@
 	 .k-spreadsheet .k-dirty-cell .k-vertical-align-bottom {
 		 padding-left: 3px;
 	}
+
+	 /* Default cell */
+	 .k-spreadsheet-cell {
+		 color: #000000;
+		background-color: white;
+	 }
+	 /* Spreadsheet disabled cells */
+	 .k-spreadsheet-cell.k-state-disabled{
+		 background-color: #f5f5f5;
+		 color:#555555;
+	 }
+	 /* Override k-icon with fontAwesome if the 2 classes are in the same element*/
+	 .k-icon.fa{
+		 font: normal normal normal 14px/1 FontAwesome;
+		 opacity: 1;
+	 }
