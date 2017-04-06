@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System.Net.Http.Headers;
+using System.Web.Http;
 
 namespace Intel.MyDeals
 {
@@ -7,6 +8,8 @@ namespace Intel.MyDeals
         public static void Register(HttpConfiguration config)
         {
             // Web API configuration and services
+
+            config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
 
             // Use camel case for JSON data.
             //config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();

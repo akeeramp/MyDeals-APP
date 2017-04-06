@@ -1,19 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
+using Newtonsoft.Json;
 
 namespace Intel.MyDeals.Entities
 {
     public class DropdownHierarchy: BasicDropdown
     {
-        public List<BasicDropdown> notitems { get; set; }
+        [JsonProperty(TypeNameHandling = TypeNameHandling.Objects)]
+        public List<BasicDropdown> items { get; set; }
 
         public DropdownHierarchy() {
-            this.notitems = new List<BasicDropdown>();
+            this.items = new List<BasicDropdown>();
         }
 
         public DropdownHierarchy(BasicDropdown bd)
         {
-            this.notitems = new List<BasicDropdown>();
+            this.items = new List<BasicDropdown>();
             
             PropertyInfo[] properties = typeof(BasicDropdown).GetProperties();
             foreach (PropertyInfo property in properties)
@@ -22,4 +25,6 @@ namespace Intel.MyDeals.Entities
             }
         }
     }
+
+
 }

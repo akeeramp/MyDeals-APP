@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
@@ -82,7 +83,6 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetDropdownHierarchy/{prnt}")]
         public IEnumerable<DropdownHierarchy> GetDropdownHierarchy(string prnt)
         {
-            var temp = _dropdownLib.GetDropdownHierarchy(prnt);
             return SafeExecutor(() => _dropdownLib.GetDropdownHierarchy(prnt)
                 , $"Unable to get Dropdown Hierarchy for {prnt}"
             );

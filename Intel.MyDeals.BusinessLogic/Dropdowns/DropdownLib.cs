@@ -98,7 +98,7 @@ namespace Intel.MyDeals.BusinessLogic
                 //TODO: get parent relation instead of hardcoding the relationships
                 if (bd.DROP_DOWN == "Embedded")
                 {
-                    newDH.notitems = mrktSubSeg.ToList();
+                    newDH.items = mrktSubSeg.ToList();
                 }
                 ret.Add(newDH);
             }
