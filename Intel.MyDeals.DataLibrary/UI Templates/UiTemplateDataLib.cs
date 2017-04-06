@@ -251,7 +251,7 @@ namespace Intel.MyDeals.DataLibrary
                 IsDefaultable = true,
                 Label = "Market Segment",
                 DataType = "string",
-                UiType = "MULTISELECT",
+                UiType = "EMBEDDEDMULTISELECT",
                 LookupUrl = "/api/Dropdown/GetDropdownHierarchy/MRKT_SEG_COMBINED",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN",

@@ -16,6 +16,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
             'VERTICAL_DROPDOWN': 'verticalDropDown.html',
             'VERTICAL_COMBOBOX': 'verticalComboBox.html',
             'VERTICAL_MULTISELECT': 'verticalMultiSelect.html',
+            'VERTICAL_EMBEDDEDMULTISELECT': 'verticalEmbeddedMultiSelect.html',
             'VERTICAL_CHECKBOX': 'verticalCheckBox.html',
             'VERTICAL_SLIDER': 'verticalSlider.html',
             'VERTICAL_RADIOBUTTONGROUP': 'verticalRadioButtonGroup.html',
@@ -26,6 +27,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
             'HORIZONTAL_DROPDOWN': 'horizontalDropDown.html',
             'HORIZONTAL_COMBOBOX': 'horizontalComboBox.html',
             'HORIZONTAL_MULTISELECT': 'horizontalMultiSelect.html',
+            'HORIZONTAL_EMBEDDEDMULTISELECT': 'horizontalEmbeddedMultiSelect.html',
             'HORIZONTAL_CHECKBOX': 'horizontalCheckBox.html',
             'HORIZONTAL_SLIDER': 'horizontalSlider.html',
             'HORIZONTAL_RADIOBUTTONGROUP': 'horizontalRadioButtonGroup.html'
@@ -60,7 +62,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
         }
 
         var serviceData = []; // data from the service will be pushed into this.
-        if ((scope.opType === 'COMBOBOX' || scope.opType === 'DROPDOWN' || scope.opType === 'MULTISELECT')) {
+        if ((scope.opType === 'COMBOBOX' || scope.opType === 'DROPDOWN' || scope.opType === 'MULTISELECT' || scope.opType === 'EMBEDDEDMULTISELECT')) {
             if ((scope.opLookupUrl !== undefined && scope.opLookupUrl !== "undefined")) {
                 scope.values = {
                     transport: {
@@ -74,6 +76,9 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
                             // Values in the list should be unique
                             serviceData = $filter('unique')(data, scope.opLookupValue);
                             // data from the service will be pushed into this.
+                            if (scope.opType === 'EMBEDDEDMULTISELECT') {
+                                debugger;
+                            }
                             return serviceData;
                         }
                     }
@@ -149,7 +154,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
         scope.helptipMsg = "{{opHelpMsg}}";
 
         function updateSeletedObject() {
-            if (!!scope.opSelectedObject && (scope.opType === 'DROPDOWN' || scope.opType === 'COMBOBOX' || scope.opType === 'MULTISELECT')) {
+            if (!!scope.opSelectedObject && (scope.opType === 'DROPDOWN' || scope.opType === 'COMBOBOX' || scope.opType === 'MULTISELECT' || scope.opType === 'EMBEDDEDMULTISELECT')) {
                 var selected = [];
                 $.each(serviceData, function (idx, elem) {
 

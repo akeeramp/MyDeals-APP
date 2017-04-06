@@ -342,6 +342,8 @@
     <Content Include="app\admin\workflow\workflow.html" />
     <Content Include="app\admin\workflow\workflow.service.js" />
     <Content Include="app\app.module.js" />
+    <Content Include="app\blocks\uiControls\partials\horizontalEmbeddedMultiSelect.html" />
+    <Content Include="app\blocks\uiControls\partials\verticalEmbeddedMultiSelect.html" />
     <Content Include="app\core\directives\adminBanner\adminBanner.directive.js" />
     <Content Include="app\core\directives\adminBanner\adminBanner.directive.html" />
     <Content Include="app\blocks\exception\exception-handler.provider.js" />

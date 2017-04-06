@@ -78,6 +78,16 @@ namespace Intel.MyDeals.Controllers.API
             );
         }
 
+        [Authorize]
+        [Route("GetDropdownHierarchy/{prnt}")]
+        public IEnumerable<DropdownHierarchy> GetDropdownHierarchy(string prnt)
+        {
+            var temp = _dropdownLib.GetDropdownHierarchy(prnt);
+            return SafeExecutor(() => _dropdownLib.GetDropdownHierarchy(prnt)
+                , $"Unable to get Dropdown Hierarchy for {prnt}"
+            );
+        }
+
         [HttpPut]
         [Route("UpdateBasicDropdowns")]
         public BasicDropdown UpdateBasicDropdowns(BasicDropdown data)

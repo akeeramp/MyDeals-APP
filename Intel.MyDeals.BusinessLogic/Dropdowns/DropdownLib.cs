@@ -67,7 +67,42 @@ namespace Intel.MyDeals.BusinessLogic
             atrbCd = atrbCd.ToUpper();
             dealtypeCd = dealtypeCd.ToUpper();
             return _dataCollectionsDataLib.GetBasicDropdowns().
-                Where(d => d.ATRB_CD.ToUpper() == atrbCd && (d.OBJ_SET_TYPE_CD.ToUpper() == dealtypeCd || d.OBJ_SET_TYPE_CD.ToUpper() == "ALL_DEALS") && d.ACTV_IND).OrderBy(d => d.ORD);
+                Where(d => d.ATRB_CD.ToUpper() == atrbCd.ToUpper() && (d.OBJ_SET_TYPE_CD.ToUpper() == dealtypeCd.ToUpper() || d.OBJ_SET_TYPE_CD.ToUpper() == "ALL_DEALS") && d.ACTV_IND).OrderBy(d => d.DROP_DOWN);
+        }
+
+        /// <summary>
+        /// Get All Simple Dropdowns with grouping of atrbCd and obj_set_Type of dealtypeCd
+        /// Note: also return those that match "All Deals" type as well as the specified dealtypecd
+        /// </summary>
+        /// <returns>list of dropdowns</returns>
+        public IEnumerable<DropdownHierarchy> GetDropdownHierarchy(string prnt)
+        {
+            
+            List<DropdownHierarchy> ret = new List<DropdownHierarchy>();
+            List<DropdownHierarchy> sub = new List<DropdownHierarchy>();
+            //TODO: get parent relation instead of hardcoding the relationships
+            IEnumerable<BasicDropdown> mrktSegComb = _dataCollectionsDataLib.GetBasicDropdowns().
+                Where(dd => dd.ATRB_CD.ToUpper() == "MRKT_SEG_COMBINED").OrderBy(dd => dd.DROP_DOWN); ;
+            IEnumerable<BasicDropdown> mrktSubSeg = _dataCollectionsDataLib.GetBasicDropdowns().
+                Where(dd => dd.ATRB_CD.ToUpper() == "MRKT_SUB_SEGMENT").OrderBy(dd => dd.DROP_DOWN);
+
+            foreach (BasicDropdown bd in mrktSubSeg)
+            {
+                DropdownHierarchy newDH = new DropdownHierarchy(bd);
+                sub.Add(newDH);
+            }
+
+            foreach (BasicDropdown bd in mrktSegComb)
+            {
+                DropdownHierarchy newDH = new DropdownHierarchy(bd);
+                //TODO: get parent relation instead of hardcoding the relationships
+                if (bd.DROP_DOWN == "Embedded")
+                {
+                    newDH.notitems = mrktSubSeg.ToList();
+                }
+                ret.Add(newDH);
+            }
+            return ret;
         }
 
         /// <summary>
@@ -76,7 +111,7 @@ namespace Intel.MyDeals.BusinessLogic
 		/// <returns>list of Deal Types Dropdowns</returns>
 		public List<Dropdown> GetDealTypesDropdown()
         {
-            return GetDropdowns().Where(dd => dd.dropdownCategory == "All Deal Types" && dd.active == 1).ToList();
+            return GetDropdowns().Where(dd => dd.dropdownCategory == "All Deal Types" && dd.active == 1).OrderBy(dd => dd.dropdownName).ToList();
         }
 
         /// <summary>
@@ -103,7 +138,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns>list of Num Tiers Dropdowns</returns>
         public List<Dropdown> GetNumTiersDropdown()
         {
-            return GetDropdowns().Where(dd => dd.dropdownCategory == "Num Tiers" && dd.active == 1).ToList();
+            return GetDropdowns().Where(dd => dd.dropdownCategory == "Num Tiers" && dd.active == 1).OrderBy(dd => dd.dropdownID).ToList();
         }
 
         /// <summary>
@@ -112,7 +147,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns>list of Num Tiers Dropdowns</returns>
         public List<Dropdown> GetGeosDropdown()
         {
-            return GetDropdowns().Where(dd => dd.dropdownCategory == "Geo" && dd.active == 1).OrderBy(dd => dd.dropdownID).ToList();
+            return GetDropdowns().Where(dd => dd.dropdownCategory == "Geo" && dd.active == 1).OrderBy(dd => dd.dropdownName).ToList();
         }
 
         /// <summary>
@@ -121,7 +156,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns>list of Dropdown Groups</returns>
         public List<Dropdown> GetDropdownGroups()
         {
-            return GetDropdowns().Where(dd => dd.dropdownCategory == "Basic Dropdowns" && dd.active == 1).ToList();
+            return GetDropdowns().Where(dd => dd.dropdownCategory == "Basic Dropdowns" && dd.active == 1).OrderBy(dd => dd.dropdownName).ToList();
         }
 
         /// <summary>

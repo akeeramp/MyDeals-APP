@@ -1232,6 +1232,10 @@ function ContractController($scope, $state, contractData, isNewContract, templat
                 newValue["MEET_COMP_PRICE_QSTN"].value = "Price";
                 newValue["PROGRAM_PAYMENT"].value = "Backend";
 
+                $("#MRKT_SEG_COMBINED").kendoTreeView({
+                    
+                });
+
             } else {
 
                 //TODO: can we not hard-code these? Can we use attribute codes or just make it more dynamic somehow? (probably not...)
