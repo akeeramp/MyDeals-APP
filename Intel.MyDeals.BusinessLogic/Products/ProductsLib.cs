@@ -532,10 +532,11 @@ namespace Intel.MyDeals.BusinessLogic
             };
 
             // Do some magic here... for now we will pretend we found 15 items
-            IEnumerable<int> hashPrdsMatched = hashPrds.Take(15).Select(p => p.Id);
+            List<int> hashPrdsMatched = hashPrds.Where(h => h.HashName.Contains(prdEntered)).Take(15).Select(p => p.Id).ToList();
 
             // Get the full product based on the matched ID
-            return prds.Where(p => hashPrdsMatched.Contains(p.PRD_MBR_SID)).Take(15).ToList();
+            List<Product> rtn = prds.Where(p => hashPrdsMatched.Contains(p.PRD_MBR_SID)).ToList();
+            return rtn;
         }
 
         #endregion 
