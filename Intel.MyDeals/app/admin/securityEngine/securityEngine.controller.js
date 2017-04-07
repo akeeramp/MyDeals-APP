@@ -41,7 +41,8 @@
     	vm.dropDownDatasource.objTypes = [];
 
     	vm.drilledDownDealTypes = [];
-		
+    	vm.drilledDownStages = [];
+
     	vm.currentDisplayAction = ""; // Text of current action to show in UI
 
     	vm.selected = {}; // holds the user input of dropdown values
@@ -101,13 +102,13 @@
     	vm.dropDownOptions.wfStage = {
     		placeholder: "All Stages",
     		autoBind: false,
-    		dataTextField: "Second",
+    		dataTextField: "Stage",
     		dataSource: {
     			type: "json",
     			serverFiltering: true,
     			transport: {
     				read: function (e) {
-    					e.success(vm.dropDownDatasource.stages);
+    				    e.success(vm.drilledDownStages);
     				}
     			}
     		}
@@ -210,6 +211,7 @@
 						vm.dealTypeAtrbs = response.data;
 						var defaultObjType = $filter('filter')(vm.dropDownDatasource.objTypes, { Alias: vm.default.objTypeName }, true)[0];
 						vm.drilledDownDealTypes = filterObjType(defaultObjType.Alias);
+						vm.drilledDownStages = filterObjTypeForStages(defaultObjType.Alias);
 						deferred.resolve(response);
 					}, function (error) {
 						logger.error("Unable to get Deal Type Attributes.", error, error.statusText);
@@ -252,7 +254,7 @@
     				// Select current filters / all filter data
     				var curAction = mData.ACTN_NM;
     				var curDealType = (mData.OBJ_SET_TYPE_CD === null || mData.OBJ_SET_TYPE_CD === "null" || mData.OBJ_SET_TYPE_CD === "") ? vm.dropDownDatasource.dealTypes.map(function (x) { return x.Alias; }) : [mData.OBJ_SET_TYPE_CD];
-    				var curStage = (mData.WFSTG_NM === null || mData.WFSTG_NM === "null" || mData.WFSTG_NM === "") ? vm.dropDownDatasource.stages.map(function (x) { return x.Second; }) : [mData.WFSTG_NM];
+    				var curStage = (mData.WFSTG_NM === null || mData.WFSTG_NM === "null" || mData.WFSTG_NM === "") ? vm.dropDownDatasource.stages.map(function (x) { return x.Stage; }) : [mData.WFSTG_NM];
     				var curRole = (mData.ROLE_NM === null || mData.ROLE_NM === "null" || mData.ROLE_NM === "") ? vm.dropDownDatasource.roleTypes.map(function (x) { return x.dropdownName; }) : [mData.ROLE_NM];
 
     				// If not already in the mappings list, then create it
@@ -287,13 +289,13 @@
     		// If no items are selected in each dropdown, then select default of all items
     		if (vm.filtered.dealTypes.length == 0) { vm.filtered.dealTypes = angular.copy(vm.drilledDownDealTypes); }
     		if (vm.filtered.roles.length == 0) { vm.filtered.roles = angular.copy(vm.dropDownDatasource.roleTypes); }
-    		if (vm.filtered.stages.length == 0) { vm.filtered.stages = angular.copy(vm.dropDownDatasource.stages); }
+    		if (vm.filtered.stages.length == 0) { vm.filtered.stages = angular.copy(vm.drilledDownStages); }
     		if (vm.filtered.objType == null || typeof vm.filtered.objType === 'undefined' || vm.filtered.objType.Id == null || typeof vm.filtered.objType.Id == 'undefined') {
     			// Get the action object that corresponds to the attrActionName string
     			vm.filtered.objType = $filter('filter')(vm.dropDownDatasource.objTypes, { Alias: vm.default.objTypeName }, true)[0];
     		}
 
-    		var objType = vm.filtered.objType
+	        var objType = vm.filtered.objType;
 
 			// Tab-specific logic
     		if (vm.currentTabMode === vm.tabModeEnum.AtrbSecurity){ // Atrribute Security Tab
@@ -336,9 +338,16 @@
     		lookupsService.asyncRenderHack().then(function () {
     			generateGrid();
     			vm.isGridLoading = false;
-    		});
+    			window.setTimeout(function () {
+    			    resizeGrid();
+    			}, 100);
+		    });
     	}		
 
+    	function resizeGrid() {
+    	    $("#secEngineGrid").css("height", $(window).height() - 150);
+            $("#secEngineGrid").data("kendoGrid").resize();
+        }
     	function generateGrid() {
     		// Make the Roles column
     		var columns = [
@@ -360,8 +369,8 @@
 
     		// Push the stages as column (headers) of the grid
     		for (var r = 0; r < vm.filtered.stages.length; r++) {
-    			var stgID = vm.filtered.stages[r].First;
-    			var stgName = vm.filtered.stages[r].Second;
+    			var stgID = vm.filtered.stages[r].Id;
+    			var stgName = vm.filtered.stages[r].Stage;
     			columns.push({
     				title: stgName,
     				encoded: false,
@@ -370,6 +379,9 @@
     				template: "<security-engine-draw-deals attr-id=\"#= data.ATRB_SID #\" atrb-cd=\"#= data.ATRB_CD #\" stg-Id=\"" + stgID + "\" stg-name=\"" + stgName + "\"></security-engine-draw-deals>"
     			});
     		}
+
+            // this will be the filler column
+    		columns.push({title: "&nbsp;"});
 
     		vm.mainGridOptions = {
     			dataSource: {
@@ -404,7 +416,7 @@
     	};
 
     	function drawRoles() {
-    		var div = "<div class='atrbSubTitle rolebasecolor'>";
+    		var div = "<div class='atrbSubTitle'>";
     		return div + vm.filtered.roles.map(function(role){
     			return role.dropdownName; // role name
     		}).join("</div>" + div) + "</div>";
@@ -564,23 +576,42 @@
 
         function onGroupChange(e) {
         	// Note: kendo select event being called twice: once on click and once on deselect 
-        	vm.drilledDownDealTypes = filterObjType(e.dataItem.Alias);
+            vm.drilledDownDealTypes = filterObjType(e.dataItem.Alias);
+            vm.drilledDownStages = filterObjTypeForStages(e.dataItem.Alias);
 
-			// Update ObjSetType dropdown Datasource
-        	vm.dropDown.objSetType.setDataSource(vm.drilledDownDealTypes)
-
+            // Update ObjSetType dropdown Datasource
+            vm.dropDown.objSetType.setDataSource(vm.drilledDownDealTypes);
+            vm.dropDown.wfStage.setDataSource(vm.drilledDownStages);
+            
         	// Clear selected
-        	vm.selected.dealTypes = [];
+            vm.selected.dealTypes = [];
+            vm.selected.stages = [];
         }
 
         function filterObjType(objTypeName) {
-        	var filteredDeals = [];
-        	for (var key in vm.dealTypeAtrbs[objTypeName]) {
-        		if (typeof vm.dealTypeAtrbs[objTypeName][key] === 'object') {
-        			filteredDeals.push($filter('filter')(vm.dropDownDatasource.dealTypes, { Alias: key }, true)[0]);
-        		}
-        	}
-        	return filteredDeals;
+            var filteredDeals = [];
+            if (vm.dealTypeAtrbs[objTypeName] !== undefined && vm.dealTypeAtrbs[objTypeName]["ATTRBS"] !== undefined) {
+                for (var key in vm.dealTypeAtrbs[objTypeName]["ATTRBS"]) {
+                    if (vm.dealTypeAtrbs[objTypeName]["ATTRBS"].hasOwnProperty(key)) {
+                        if (typeof vm.dealTypeAtrbs[objTypeName]["ATTRBS"][key] === 'object') {
+                            filteredDeals.push($filter('filter')(vm.dropDownDatasource.dealTypes, { Alias: key }, true)[0]);
+                        }
+                    }
+                }
+            }
+            return filteredDeals;
+        }
+        function filterObjTypeForStages(objTypeName) {
+            var filteredStages = [];
+            if (vm.dealTypeAtrbs[objTypeName] !== undefined && vm.dealTypeAtrbs[objTypeName]["STAGES"] !== undefined) {
+                var stgs = vm.dealTypeAtrbs[objTypeName]["STAGES"];
+                for (var key in stgs) {
+                    if (stgs.hasOwnProperty(key)) {
+                        filteredStages.push({ "Stage": stgs[key][0], "Id": key });
+                    }
+                }
+            }
+            return filteredStages;
         }
 
         init();

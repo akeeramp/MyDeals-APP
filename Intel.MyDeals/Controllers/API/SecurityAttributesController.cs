@@ -57,7 +57,7 @@ namespace Intel.MyDeals.Controllers.API
 
 		[HttpGet]
 		[Route("GetObjAtrbs")]
-		public Dictionary<string, Dictionary<string, List<string>>> GetObjAtrbs()
+		public Dictionary<string, Dictionary<string, Dictionary<string, List<string>>>> GetObjAtrbs()
 		{
 			return _securityAttributesLib.GetObjAtrbs();
 		}

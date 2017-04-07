@@ -7,7 +7,7 @@
     SecurityEngineService.$inject = ['$cacheFactory', '$q', '$http', 'dataService'];
 
     function SecurityEngineService($cacheFactory, $q, $http, dataService) {
-        var URL = '/api/SecurityAttributes/' 
+        var URL = '/api/SecurityAttributes/';
 		
         return {
         	getMasks: getMasks

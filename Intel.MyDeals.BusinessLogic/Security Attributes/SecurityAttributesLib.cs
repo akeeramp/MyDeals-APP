@@ -31,19 +31,21 @@ namespace Intel.MyDeals.BusinessLogic
 
 		#region Security Mapping
 
-		public Dictionary<string, Dictionary<string, List<string>>> GetObjAtrbs()
+		public Dictionary<string, Dictionary<string, Dictionary<string, List<string>>>> GetObjAtrbs()
 		{
 			List<SecurityAttributesDropDown> attributesList = _dataCollectionsDataLib.GetObjAtrbs();
 
-			Dictionary<string, Dictionary<string, List<string>>> objTypes = new Dictionary<string, Dictionary<string, List<string>>>();
+			Dictionary<string, Dictionary<string, Dictionary<string, List<string>>>> objTypes = new Dictionary<string, Dictionary<string, Dictionary<string, List<string>>>>();
 			Dictionary<string, List<string>> objsetTypesOfAttributes = new Dictionary<string, List<string>>();
 
 			List<OpDataElementTypeItem> objTypeList = OpDataElementTypeRepository.OpDetCollection.Items; // attributesList.Select(x => x.OBJ_TYPE).Distinct().ToList();
 	
 			Dictionary<OpDataElementType, List<OpDataElementSetType>> objDict = OpDataElementSetTypeRepository.OpDestCollection.Heirarchy;
-			
-			// Create dictionary of ObjTypes and Attributes for easy lookup		
-			foreach (KeyValuePair<OpDataElementType, List<OpDataElementSetType>> objKey in objDict)
+
+		    var workFlows = DataCollections.GetWorkFlowItems();
+
+            // Create dictionary of ObjTypes and Attributes for easy lookup		
+            foreach (KeyValuePair<OpDataElementType, List<OpDataElementSetType>> objKey in objDict)
 			{
 				OpDataElementTypeItem objTypeKey = objTypeList.Find(x => x.OpDeType == objKey.Key);
 
@@ -53,13 +55,41 @@ namespace Intel.MyDeals.BusinessLogic
 					List<string> atrbList = attributesList.Where(x => x.OBJ_TYPE_SID == objTypeKey.Id && (x.OBJ_SET_TYPE == objsetTypeKey.ToString() || x.OBJ_SET_TYPE == "ALL_TYPES")).Select(x => x.ATRB_COL_NM).Distinct().ToList();
 					objsetTypesOfAttributes[objsetTypeKey.ToString()] = atrbList;
 				}
-				objTypes[objTypeKey.Alias] = objsetTypesOfAttributes;
+			    if (!objTypes.ContainsKey(objTypeKey.Alias))
+			    {
+                    objTypes[objTypeKey.Alias] = new Dictionary<string, Dictionary<string, List<string>>>();
+                }
+                objTypes[objTypeKey.Alias]["ATTRBS"] = objsetTypesOfAttributes;
 
-				// Clear Lists for next iteration
-				objsetTypesOfAttributes = new Dictionary<string, List<string>>();
-			}			
+			    objTypes[objTypeKey.Alias]["STAGES"] = new Dictionary<string, List<string>>();
+                foreach (WorkFlows workFlow in workFlows.Where(w => w.OBJ_TYPE_SID == objTypeKey.Id).Distinct())
+                {
+                    if (!objTypes[objTypeKey.Alias]["STAGES"].ContainsKey(workFlow.WFSTG_MBR_SID.ToString()))
+                    {
+                        objTypes[objTypeKey.Alias]["STAGES"][workFlow.WFSTG_MBR_SID.ToString()] = new List<string> { workFlow.WFSTG_CD_SRC };
+                    }
+                    if (!objTypes[objTypeKey.Alias]["STAGES"].ContainsKey(workFlow.WFSTG_DEST_MBR_SID.ToString()))
+                    {
+                        objTypes[objTypeKey.Alias]["STAGES"][workFlow.WFSTG_DEST_MBR_SID.ToString()] = new List<string> { workFlow.WFSTG_CD_DEST };
+                    }
+                }
 
-			return objTypes;
+                // Clear Lists for next iteration
+                objsetTypesOfAttributes = new Dictionary<string, List<string>>();
+			}
+
+            // Now, we must copy the Pricing Strategy Stages all the way down to WIP Deals
+            if (objTypes.ContainsKey(OpDataElementType.PRC_ST.ToString()))
+		    {
+                if (objTypes.ContainsKey(OpDataElementType.PRC_TBL.ToString()))
+                    objTypes[OpDataElementType.PRC_TBL.ToString()]["STAGES"] = objTypes[OpDataElementType.PRC_ST.ToString()]["STAGES"];
+                if (objTypes.ContainsKey(OpDataElementType.PRC_TBL_ROW.ToString()))
+                    objTypes[OpDataElementType.PRC_TBL_ROW.ToString()]["STAGES"] = objTypes[OpDataElementType.PRC_ST.ToString()]["STAGES"];
+                if (objTypes.ContainsKey(OpDataElementType.WIP_DEAL.ToString()))
+                    objTypes[OpDataElementType.WIP_DEAL.ToString()]["STAGES"] = objTypes[OpDataElementType.PRC_ST.ToString()]["STAGES"];
+            }
+
+            return objTypes;
 		}
 
 		public bool SaveSecurityMappings(List<SecurityMapSave> saveMappings)

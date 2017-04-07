@@ -22,8 +22,8 @@
 	color: #000000;
 	padding-left: 3px;
 	padding-right: 5px;
-	background-color: #ffffff;
 	border-color: #eeeeee;
+    background-color: #ffffff;
 }
 
 .atrbbasecolorECAP {
@@ -107,7 +107,19 @@
 
 /* Security Engine Grid */
 #secEngineGrid.k-grid td{
-	padding: 0 !important;
+	padding: 0 6px !important;
+}
+#secEngineGrid.k-grid td, #secEngineGrid.k-grid td.k-alt {
+    background-color: #f9f9f9;
+}
+#secEngineGrid.k-grid td {
+    font-size: 12px;
+}
+#secEngineGrid.k-grid tr:hover, #secEngineGrid.k-grid tr.k-alt:hover, #secEngineGrid.k-grid td.k-state-selected:hover {
+    background-color: #ecf8fb !important;
+}
+#secEngineGrid.k-grid .k-filter-row th, .k-grid-header th.k-header {
+    font-size: 12px;
 }
 
 
@@ -125,13 +137,14 @@
 
 .secEngine_tabs{
 	margin: 20px 0px;
+    font-size: 14px;
 }
 
 .secEngine_tabs .tab-pane{
 	background-color: #ffffff;
 	border: 1px solid #c4cfd4;
 	border-top: none;
-	padding: 20px 0px;
+	padding: 20px 0;
 }
 
 .secEngine_tabs .nav-tabs>li.active>a, .secEngine_tabs .nav-tabs>li.active>a:hover, .secEngine_tabs .nav-tabs>li.active>a:focus {
@@ -148,16 +161,19 @@
 	margin-right: 0px;
 }
 
+.secEngine_tabs .nav>li>a {
+    padding: 5px 5px;
+}
 
 /* Sidebar */
 .secEngine_sidebar {
-	overflow-y: auto;
-	background-color: #efefef;
-	border-radius: 4px;
+	overflow-y: hidden;
+	background-color: #f5f5f5;
+    padding: 0 5px;
 }
 
 .secEngine_viewButton{
-	/*margin: auto;*/
+	margin: 0;
 	border-top: 1px dashed #b1babf;
 	padding: 20px 12px;
 }
@@ -165,4 +181,57 @@
 #secEngine_filters
 {	
     overflow-x: scroll;
+    margin-right: -4px;
 }
+#secEngine_filter div
+{	
+    padding-left: 20px;
+}
+
+
+
+
+
+    .container-fluid, .full {
+        min-height: 100%;
+    }
+
+    #sidebar {
+        margin-left: -30px;
+    }
+
+    @media (min-width:992px) {
+        #sidebar {
+            width: inherit;
+            min-width: 300px;
+            max-width: 300px;
+            float: left;
+            height: 100%;
+            position: relative;
+            overflow: auto;
+        }
+
+        #main {
+            width: calc(100% - 270px);
+        }
+    }
+
+    #secEngine_filters > div.lbl
+    {	
+        padding-left: 20px;
+        margin-bottom: 5px;
+    }
+
+    #secEngine_filters > div.lbl > div:nth-child(1)
+    {
+        float: left;
+        font-size: 12px;
+        width: 80px;
+        margin-top: 5px;
+        color: #0071C5;
+    }
+    #secEngine_filters > div.lbl > div:nth-child(2)
+    {
+        float: left;
+        width: 160px;
+    }
