@@ -374,20 +374,25 @@
         z-index: 5000;
     }
 
-    #pricingTableSpreadsheet > div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div:nth-child(1) {top: 30px !important;}
-    #pricingTableSpreadsheet > div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left {height: 30px !important;}
-    #pricingTableSpreadsheet > div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left > div.k-spreadsheet-data {height: 30px !important;}
-    #pricingTableSpreadsheet > div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left > div.k-spreadsheet-row-header {height: 30px !important;}
-    #pricingTableSpreadsheet > div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left > div.k-spreadsheet-column-header {height: 30px !important;}
-    #pricingTableSpreadsheet > div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left > div.k-spreadsheet-column-header > div {height: 30px !important;}
-    #pricingTableSpreadsheet > div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-top-corner {height: 30px !important;}
+	/* // Adding this makes clicking on cells extremely inaccurate. Don't add this. */
+    /*#pricingTableSpreadsheet > div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div:nth-child(1) {top: 30px !important;}*/ 
 
-    #pricingTableSpreadsheet > div.k-spreadsheet-view > div.k-spreadsheet-cell-editor.k-spreadsheet-formula-input {margin-top: 10px !important}
-    #pricingTableSpreadsheet .k-resize-handle { height: 30px !important}
+
+	/* NOTE: If you resize the below, make sure to resize the "hidden" first row in the spreadsheet via javascript (CODE:  sheet.rowHeight(0, [pixel height here]); ) */
+    #pricingTableSpreadsheet > div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left
+    , #pricingTableSpreadsheet > div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left > div.k-spreadsheet-data
+    , #pricingTableSpreadsheet > div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left > div.k-spreadsheet-row-header
+    , #pricingTableSpreadsheet > div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left > div.k-spreadsheet-column-header
+    , #pricingTableSpreadsheet > div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left > div.k-spreadsheet-column-header > div
+    , #pricingTableSpreadsheet > div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-top-corner 
+	, #pricingTableSpreadsheet .k-resize-handle {
+		height: 30px !important;
+    }
+    /*#pricingTableSpreadsheet > div.k-spreadsheet-view > div.k-spreadsheet-cell-editor.k-spreadsheet-formula-input {margin-top: 10px !important}*/
 
     div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left > div.k-spreadsheet-column-header .k-vertical-align-center {
-        /*font-family: 'Intel Clear';*/
-        font-weight: 200;
+        font-family: 'Intel Clear';
+        font-weight: 600;
         font-style: normal;
         font-size: 12px;
         color: #0071C5;

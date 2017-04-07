@@ -27,7 +27,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 		verticalAlign: "center",
 		color: "black",
 		fontSize: 13,
-		//fontfamily: "Intel Clear"
+		fontfamily: "Intel Clear"
 	}
 	var headerStyle = {
 		background: "#e7e7e8",
@@ -176,9 +176,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 			columns: columns.length,
 			sheetsbar: false,
 			defaultCellStyle: {
-				fontSize: cellStyle.fontSize
+				fontSize: cellStyle.fontSize,
+				fontFamily: cellStyle.fontfamily 
 				//background: cellStyle.background, // Adding this will hide the validation. Don't add this
-				//fontFamily: cellStyle.fontfamily // Adding this makes clicking on cells extremely inaccurate. Don't add this.
 			},
 			toolbar: {
 				home: false,
@@ -353,7 +353,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 			var sheet = e.sender.activeSheet();
 
 			// With initial configuration of datasource spreadsheet displays all the fields as columns,
-			// thus setting up datasource in reneder event where selective columns from datasource can be displayed.
+			// thus setting up datasource in render event where selective columns from datasource can be displayed.
 			sheet.setDataSource(root.spreadDs, ptTemplate.columns);
 
 			sheetBatchOnRender(sheet); // Do all spreadsheet cell changes here
@@ -410,22 +410,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 			// disable right click menu options
 			$(".k-context-menu").remove();
 
+			// Resize the header to hide underneath the header as aworkaround to resize the header and prevent inaccurate cell click 
+			sheet.rowHeight(0, 10);
 
-			//// Stylize header row
-			//headerRange.bold(true);
-			//headerRange.wrap(true);
-			//sheet.rowHeight(0, 40);
-
-			//headerRange.background(headerStyle.background);
-			//headerRange.color(headerStyle.color);
-			//headerRange.fontSize(headerStyle.fontSize);
-			//headerRange.textAlign(headerStyle.textAlign);
-			//headerRange.verticalAlign(headerStyle.verticalAlign);
-			//headerRange.bold(false);
-
-			// hide default binding name (first row)
-			// This has an unfortunate side effect... can't resize rows... UPDATE... I think I have a workaround... must freeze a row also
-			sheet.hideRow(0);
 
 			addValidation(sheet, 1, (root.pricingTableData.PRC_TBL_ROW.length + 1)); // NOTE: This assumes there will be no empty gaps between in the pricing table rows
 
