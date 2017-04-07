@@ -1,7 +1,7 @@
 ﻿@using Intel.MyDeals.App
-@using Intel.MyDeals.Entities
 @using Intel.Opaque
 @{
+    ApplicationViewModel avm = (ApplicationViewModel)ViewData.Model;
     var usrName = "UNKNOWN";
     var usrWwid = 0;
     var usrRole = "UNKNOWN";
@@ -24,6 +24,7 @@
     bool isAdmin = true;
     bool isDeveloper = true;
 
+    var environment = avm.AppEnv.ToUpper().IndexOf("PROD") >= 0 ? "" : " (" + avm.AppEnv + ")";
 }
 
 
@@ -39,7 +40,8 @@
                 <span class="sr-only icon-bar"></span>
             </button>
             <img class="navbar-logo" alt="" src="/images/intel-logo-white-100.png" ondblclick="eggSmw()">
-            <a class="navbar-brand" href="@Url.Action("Index", "Home", new { Area = "" })">MyDeals</a>
+            <a class="navbar-brand" href="@Url.Action("Index", "Home", new { Area = "" })">MyDeals<span style="font-size: 14px; color: #f3D54E; padding-left: 10px;">@environment</span></a>
+            <div style="position: absolute; left: 0; top: 30px; width: 150px; font-size: 10px; font-family: arial; text-align: right; color: #cccccc;">@avm.AppVer</div>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -58,8 +60,8 @@
                             <div class="fl">
                                 <i class="intelicon-down" style="color: #ffffff; margin-top: 5px;"></i>
                             </div>
-                            <div class="clearboth"></div>
-</a>
+                        <div class="clearboth"></div>
+                    </a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a href="#">User Preferences</a></li>
                         <li><a href="#">Some other stuff</a></li>

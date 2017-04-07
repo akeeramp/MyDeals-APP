@@ -13,7 +13,7 @@ namespace Intel.MyDeals.Controllers
             OpUserToken user = AppLib.InitAVM(op);
             ViewBag.UserToken = user;
             ViewBag.AppToken = op.AppToken;
-            return View();
+            return View(AppLib.AVM);
         }
 
     }

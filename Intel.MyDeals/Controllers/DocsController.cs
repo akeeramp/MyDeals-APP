@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using Intel.MyDeals.App;
 
 namespace Intel.MyDeals.Controllers
 {
@@ -12,12 +13,12 @@ namespace Intel.MyDeals.Controllers
 
         public ActionResult Flows()
         {
-            return View();
+            return View(AppLib.AVM);
         }
 
         public ActionResult Formulas()
         {
-            return View();
+            return View(AppLib.AVM);
         }
 
     }

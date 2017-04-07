@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using Intel.MyDeals.App;
 
 namespace Intel.MyDeals.Controllers
 {
@@ -8,7 +9,7 @@ namespace Intel.MyDeals.Controllers
         // TODO: Develop a authorize attribute which will take care of security
         public ActionResult Index()
         {
-            return View();
+            return View(AppLib.AVM);
         }
     }
 }

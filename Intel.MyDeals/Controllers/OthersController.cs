@@ -9,12 +9,12 @@ namespace Intel.MyDeals.Controllers
         // GET: Others
         public ActionResult Index()
         {
-            return View();
+            return View(AppLib.AVM);
         }
 
         public ActionResult Constants()
         {
-            return View();
+            return View(AppLib.AVM);
         }
 
         public ActionResult TestSaveContract()
@@ -23,7 +23,7 @@ namespace Intel.MyDeals.Controllers
             ViewBag.UserToken = user;                 // Apply User Token to viewbag for client use
             ViewBag.AppToken = op.AppToken;           // Apply Application Token to viewbag for client use
 
-            return View();
+            return View(AppLib.AVM);
         }
     }
 }

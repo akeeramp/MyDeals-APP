@@ -9,34 +9,34 @@ namespace Intel.MyDeals.Controllers
         // GET: CodingPractices
         public ActionResult Index()
         {
-            return View();
+            return View(AppLib.AVM);
         }
 
         #region Top Level
 
         public ActionResult BusinessDesign()
         {
-            return View();
+            return View(AppLib.AVM);
         }
 
         public ActionResult Project()
         {
-            return View();
+            return View(AppLib.AVM);
         }
 
         public ActionResult Flows()
         {
-            return View();
+            return View(AppLib.AVM);
         }
 
         public ActionResult Formulas()
         {
-            return View();
+            return View(AppLib.AVM);
         }
 
         public ActionResult CodingTools()
         {
-            return View();
+            return View(AppLib.AVM);
         }
 
         #endregion
@@ -46,12 +46,12 @@ namespace Intel.MyDeals.Controllers
 
         public ActionResult DataAccess()
         {
-            return View();
+            return View(AppLib.AVM);
         }
 
         public ActionResult DataAccessStoredProcedure()
         {
-            return View();
+            return View(AppLib.AVM);
         }
 
         #endregion
@@ -60,17 +60,17 @@ namespace Intel.MyDeals.Controllers
 
         public ActionResult Entities()
         {
-            return View();
+            return View(AppLib.AVM);
         }
 
         public ActionResult SharedClasses()
         {
-            return View();
+            return View(AppLib.AVM);
         }
 
         public ActionResult ClassFromProcedure()
         {
-            return View();
+            return View(AppLib.AVM);
         }
 
         #endregion
@@ -78,22 +78,22 @@ namespace Intel.MyDeals.Controllers
         #region DataLibrary
         public ActionResult DataLibrary()
         {
-            return View();
+            return View(AppLib.AVM);
         }
 
         public ActionResult CallProcedure()
         {
-            return View();
+            return View(AppLib.AVM);
         }
 
         public ActionResult Cache()
         {
-            return View();
+            return View(AppLib.AVM);
         }
 
         public ActionResult CacheManager()
         {
-            return View();
+            return View(AppLib.AVM);
         }
 
         #endregion
@@ -102,32 +102,32 @@ namespace Intel.MyDeals.Controllers
 
         public ActionResult BusinessLogic()
         {
-            return View();
+            return View(AppLib.AVM);
         }
 
         public ActionResult BusinessLogicLayout()
         {
-            return View();
+            return View(AppLib.AVM);
         }
 
         public ActionResult BusinessLogicScope()
         {
-            return View();
+            return View(AppLib.AVM);
         }
 
         public ActionResult BusinessLogicFunction()
         {
-            return View();
+            return View(AppLib.AVM);
         }
 
         public ActionResult BusinessLogicCallProcedure()
         {
-            return View();
+            return View(AppLib.AVM);
         }
 
         public ActionResult BusinessLogicCallCache()
         {
-            return View();
+            return View(AppLib.AVM);
         }
 
         #endregion
@@ -136,39 +136,39 @@ namespace Intel.MyDeals.Controllers
 
         public ActionResult BusinessRules()
         {
-            return View();
+            return View(AppLib.AVM);
         }
 
         public ActionResult Application()
         {
-            return View();
+            return View(AppLib.AVM);
         }
 
         #region MyDeal Presentation
 
         public ActionResult Presentation()
         {
-            return View();
+            return View(AppLib.AVM);
         }
 
         public ActionResult PresentationWebApi()
         {
-            return View();
+            return View(AppLib.AVM);
         }
 
         public ActionResult PresentationMvcController()
         {
-            return View();
+            return View(AppLib.AVM);
         }
 
         public ActionResult PresentationCallWebApi()
         {
-            return View();
+            return View(AppLib.AVM);
         }
 
         public ActionResult PresentationAngularViews()
         {
-            return View();
+            return View(AppLib.AVM);
         }
 
         #endregion
@@ -177,17 +177,17 @@ namespace Intel.MyDeals.Controllers
 
         public ActionResult Examples()
         {
-            return View();
+            return View(AppLib.AVM);
         }
 
         public ActionResult DataFromProcWithCache()
         {
-            return View();
+            return View(AppLib.AVM);
         }
 
         public ActionResult DataFromApiWithCache()
         {
-            return View();
+            return View(AppLib.AVM);
         }
 
         #endregion
@@ -196,12 +196,12 @@ namespace Intel.MyDeals.Controllers
 
         public ActionResult Logging()
         {
-            return View();
+            return View(AppLib.AVM);
         }
 
         public ActionResult ErrorHandling()
         {
-            return View();
+            return View(AppLib.AVM);
         }
 
         public ActionResult UnitTesting()
@@ -209,12 +209,12 @@ namespace Intel.MyDeals.Controllers
             OpUserToken user = AppLib.InitAVM(op);
             ViewBag.UserToken = user;
             ViewBag.AppToken = op.AppToken;
-            return View();
+            return View(AppLib.AVM);
         }
 
 		public ActionResult CodeReviews ()
 		{
-			return View();
+			return View(AppLib.AVM);
 		}
 		
 		#endregion

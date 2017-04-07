@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using Intel.MyDeals.App;
 
 namespace Intel.MyDeals.Controllers
 {
@@ -7,7 +8,7 @@ namespace Intel.MyDeals.Controllers
 		// GET: Cost Test
 		public ActionResult Index()
 		{
-			return View();
+			return View(AppLib.AVM);
 		}
 	}
 }

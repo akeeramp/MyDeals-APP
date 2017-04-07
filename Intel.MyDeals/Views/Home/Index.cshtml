@@ -1,5 +1,4 @@
 ﻿@using Intel.MyDeals.App
-@using Intel.Opaque
 @{
     ApplicationViewModel avm = (ApplicationViewModel)ViewData.Model;
 }
@@ -9,83 +8,36 @@
         <div class="container">
             <h1><strong>My</strong>Deals</h1>
             <p class="lead">Intel - IT BOS - Deal Management Tool.</p>
-            <p>
-                <small>Version: <span class="ng-binding" data-ng-bind="vm.latestTag.name">@avm.AppVer</span></small>
-            </p>
-            <p>
-                This is a temporary page to prove the MLAF-Intel theme is setup properly with Twitter Bootstrap and Kendo Controls.  This page will be replaced with a proper UX ready page at some future time.
-            </p>
-            <div style="margin-top: 25px;">
-                <button class="btn btn-default" type="button" onclick="newCntrct()">Create New Contract</button>
-                <span style="margin: 0 20px;">or</span>
-                <input placeholder="Enter Contract Number" class="k-textbox" id="cntrcId" /> 
-                <button class="btn btn-default" type="button" onclick="openCntrct()">Open Contract</button>
-
-            </div>
         </div>
     </div>
 
     <section class="call-to-action ng-scope">
             <div class="container">
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <h2 aria-hidden="true"><i class="intelicon-new-document-solid text-warning"></i></h2>
-                        <h3>Create Deals Faster</h3>
+                        <h3>Create a New Contract</h3>
                         <p class="lead">
-                            Deal Entry now starts with Pricing Tables. Deals are matched to Contracts for easier management.
+                            Click here to create a new contract.
+                            <div style="width: 100%; text-align: center;">
+                                <button class="btn btn-default" type="button" onclick="newCntrct()">Create New Contract</button>
+                            </div>
                         </p>
                     </div>
-                    <div class="col-md-4">
-                        <h2 aria-hidden="true"><i class="text-primary intelicon-lab"></i></h2>
-                        <h3>Automated Cost Test</h3>
+                    <div class="col-md-6">
+                        <h2 aria-hidden="true"><i class="text-primary intelicon-search-stack-solid"></i></h2>
+                        <h3>Open a Contract</h3>
                         <p class="lead">
-                            With Automated Deal Overlap matching, Cost Test can be quickly calculated.  Simply enter your deals and view the results.
-                        </p>
-                    </div>
-                    <div class="col-md-4">
-                        <h2 aria-hidden="true"><i class="text-success intelicon-tap"></i></h2>
-                        <h3>One Click Bulk Approvals</h3>
-                        <p class="lead">
-                            Since deals are matched to pricing tables, it only takes one click to approve all deals in a pricing table or contract.
+                            Enter the Contract Number.
+                            <div style="width: 100%; text-align: center;">
+                                <input placeholder="Enter Number" style="width: 120px;" class="k-textbox" id="cntrcId" />
+                                <button class="btn btn-default" type="button" onclick="openCntrct()">Open Contract</button>
+                            </div>
                         </p>
                     </div>
                 </div>
             </div>
         </section>
-        <section class="alternate ng-scope">
-            <div class="container">
-                <header class="page-header">
-                    <h4>Other Features</h4>
-                </header>
-                <div class="row">
-                    <div class="col-sm-4">
-                        <ul class="list-unstyled list-links">
-                            <li>
-                                <p><a href="#">Customizable Dashboard</a></p>
-                                <p>Customize your MyDeals Dashboard to fits your needs.</p>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="col-sm-4">
-                        <ul class="list-unstyled list-links">
-                            <li>
-                                <p><a href="#">Quick Search</a></p>
-                                <p>Simply type what you are looking for and let the Quick Search find it for you.</p>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="col-sm-4">
-                        <ul class="list-unstyled list-links">
-                            <li>
-                                <p><a href="#">Reporting</a></p>
-                                <p>No need to leave the application, run your reports from here!</p>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </section>
-
 </div>
 
 <script>
@@ -107,3 +59,10 @@
         document.location.href = "/Contract#/manager/"+ val;
     }
 </script>
+
+<style>
+    .jumbotron {
+        padding-top: 0;
+        padding-bottom: 30px;
+    }
+</style>
