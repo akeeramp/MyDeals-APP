@@ -405,7 +405,14 @@ namespace Intel.MyDeals.Controllers.API
             );
         }
 
-
+        [Route("SuggestProducts/{prdEntered}")]
+        [HttpGet]
+        public List<Product> SuggestProducts(string prdEntered)
+        {
+            return SafeExecutor(() => _productsLib.SuggestProducts(prdEntered)
+                , $"Unable to Suggest Products"
+            );
+        }
 
     }
 }

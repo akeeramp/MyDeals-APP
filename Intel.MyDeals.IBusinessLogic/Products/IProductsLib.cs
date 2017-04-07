@@ -58,5 +58,7 @@ namespace Intel.MyDeals.IBusinessLogic
         List<PrdDealType> GetProdDealType();
 
         List<PrdSelLevel> GetProdSelectionLevel(int OBJ_SET_TYPE_SID);
+
+        List<Product> SuggestProducts(string prdEntered);
     }
 }

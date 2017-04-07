@@ -460,7 +460,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// Get Product Selection Level
         /// </summary>
         /// <param name="OBJ_SET_TYPE_SID"></param>
-        /// <returns type="List<PrdSelLevel>">List of product selection level</returns>
+        /// <returns> type="List<PrdSelLevel>">List of product selection level</returns>
         public List<PrdSelLevel> GetProdSelectionLevel(int OBJ_SET_TYPE_SID)
         {
             return _productDataLib.GetProdSelectionLevel(OBJ_SET_TYPE_SID);
@@ -511,5 +511,34 @@ namespace Intel.MyDeals.BusinessLogic
         }
 
         #endregion ProductAlias
+
+        #region Suggest Products
+        
+        public List<Product> SuggestProducts(string prdEntered)
+        {
+            // this takes time if it is the first time to load into cache
+            List<Product> prds = GetProducts();
+
+            IEnumerable<ProductHash> hashPrds = from prd in prds select new ProductHash
+            {
+                Id = prd.PRD_MBR_SID,
+                HashName = prd.DEAL_PRD_TYPE
+                    + (prd.PRD_CATGRY_NM == string.Empty ? "" : " " + prd.PRD_CATGRY_NM)
+                    + (prd.BRND_NM == string.Empty ? "" : " " + prd.BRND_NM)
+                    + (prd.FMLY_NM == string.Empty ? "" : " " + prd.FMLY_NM)
+                    + (prd.PRCSSR_NBR == string.Empty ? "" : " " + prd.PRCSSR_NBR)
+                    + (prd.DEAL_PRD_NM == string.Empty ? "" : " " + prd.DEAL_PRD_NM)
+                    + (prd.MTRL_ID == string.Empty ? "" : " " + prd.MTRL_ID) 
+            };
+
+            // Do some magic here... for now we will pretend we found 15 items
+            IEnumerable<int> hashPrdsMatched = hashPrds.Take(15).Select(p => p.Id);
+
+            // Get the full product based on the matched ID
+            return prds.Where(p => hashPrdsMatched.Contains(p.PRD_MBR_SID)).Take(15).ToList();
+        }
+
+        #endregion 
+
     }
 }

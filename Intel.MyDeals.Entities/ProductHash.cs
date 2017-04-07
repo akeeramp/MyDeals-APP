@@ -1,8 +1,8 @@
 ﻿namespace Intel.MyDeals.Entities
 {
-    public class VerticalSecurityItem
+    public class ProductHash
     {
         public int Id { get; set; }
-        public string VerticalName { get; set; }
+        public string HashName { get; set; }
     }
 }
