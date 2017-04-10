@@ -185,18 +185,28 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem
             {
                 Id = 29,
-                AtrbCd = "PAYOUT_BASED_ON",
+                AtrbCd = AttributeCodes.PAYOUT_BASED_ON,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
                 Width = 100,
-                Template = "#=gridUtils.uiIconWrapper(data, 'PAYOUT_BASED_ON')#"
+                Template = "#=gridUtils.uiIconWrapper(data, 'PAYOUT_BASED_ON')#",
+                IsDefaultable = true,
+                UiType = "RADIOBUTTONGROUP",
+                LookupUrl = "/api/Dropdown/GetDropdowns/PAYOUT_BASED_ON/ECAP",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN"
             });
             items.Add(new UiTemplateContainerItem
             {
                 Id = 29,
-                AtrbCd = "PROGRAM_PAYMENT",
+                AtrbCd = AttributeCodes.PROGRAM_PAYMENT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
                 Width = 100,
-                Template = "#=gridUtils.uiIconWrapper(data, 'PROGRAM_PAYMENT')#"
+                Template = "#=gridUtils.uiIconWrapper(data, 'PROGRAM_PAYMENT')#",
+                IsDefaultable = true,
+                UiType = "DROPDOWN",
+                LookupUrl = "/api/Dropdown/GetDropdowns/PROGRAM_PAYMENT/ECAP",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN"
             });
             items.Add(new UiTemplateContainerItem
             {
@@ -272,19 +282,6 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 40,
-                AtrbCd = AttributeCodes.PAYOUT_BASED_ON,
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
-                IsDefaultable = true,
-                Label = "Payout Based On",
-                DataType = "string",
-                UiType = "RADIOBUTTONGROUP",
-                LookupUrl = "/api/Dropdown/GetDropdowns/PAYOUT_BASED_ON/ECAP",
-                LookupText = "DROP_DOWN",
-                LookupValue = "DROP_DOWN"
-            });
-            items.Add(new UiTemplateContainerItem
-            {
                 Id = 41,
                 AtrbCd = AttributeCodes.MEET_COMP_PRICE_QSTN,
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
@@ -293,19 +290,6 @@ namespace Intel.MyDeals.DataLibrary
                 DataType = "string",
                 UiType = "RADIOBUTTONGROUP",
                 LookupUrl = "/api/Dropdown/GetDropdowns/MEET_COMP_PRICE_QSTN/ECAP",
-                LookupText = "DROP_DOWN",
-                LookupValue = "DROP_DOWN"
-            });
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 42,
-                AtrbCd = AttributeCodes.PROGRAM_PAYMENT,
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
-                IsDefaultable = true,
-                Label = "Program Pay",
-                DataType = "string",
-                UiType = "DROPDOWN",
-                LookupUrl = "/api/Dropdown/GetDropdowns/PROGRAM_PAYMENT/ECAP",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
             });
