@@ -10,7 +10,7 @@ namespace Intel.MyDeals.Controllers
 
         public ActionResult Index()
         {
-            OpUserToken user = AppLib.InitAVM(op);
+            OpUserToken user = AppLib.InitAvm(op);
             ViewBag.UserToken = user;
             ViewBag.AppToken = op.AppToken;
             return View(AppLib.AVM);

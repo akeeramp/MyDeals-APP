@@ -59,7 +59,7 @@ namespace Intel.MyDeals.ActionFilters
             bool result = true;
             // TODO: Once the OpAppConfig properties are set read from them, enhance the logic to handle other roles
             OpCore op = OpAppConfig.Init();
-            OpUserToken user = AppLib.InitAVM(op);
+            OpUserToken user = AppLib.InitAvm(op);
 
             result = user.IsDeveloper();
             return result;

@@ -22,8 +22,17 @@ namespace Intel.MyDeals.App
             set { OpUserStack.UserSettings = value; }
         }
 
-        public static OpUserToken InitAVM(OpCore op, bool forceLoad = false)
+        public static OpUserToken InitAvm(OpCore op, bool forceLoad = false)
         {
+            // TODO: Some day - call this in a more clean fashion
+            if (forceLoad)
+            {
+                AVM = null;
+                OpUserStack.Clear();
+                UserSettings[OpUserStack.GetMyKey()] = null;
+                OpAuthenticationExtensions.ClearCache();
+            }
+
             OpUserToken user = null;
             try
             {

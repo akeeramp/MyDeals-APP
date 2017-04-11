@@ -19,7 +19,7 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetDBTest")]
         public Dictionary<string, string> GetDBTest()
         {
-            OpUserToken user = AppLib.InitAVM(op);
+            OpUserToken user = AppLib.InitAvm(op);
             return new DevTestsLib().PingDbDetails(user);
         }
 

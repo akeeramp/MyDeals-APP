@@ -1,5 +1,6 @@
 ﻿using System.Web.Mvc;
 using Intel.MyDeals.App;
+using Intel.Opaque;
 
 namespace Intel.MyDeals.Controllers
 {
@@ -34,5 +35,14 @@ namespace Intel.MyDeals.Controllers
             Response.ContentType = "text/html";  //page was rendering as plaintext, this prevents it
             return View(AppLib.AVM);
         }
+
+        public ActionResult ResetAVM()
+        {
+            OpCore op=  OpAppConfig.Init();
+            OpUserToken user = AppLib.InitAvm(op, true);
+
+            return RedirectToAction("Index", "Home");
+        }
+
     }
 }

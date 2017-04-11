@@ -22,7 +22,7 @@ namespace Intel.MyDeals.Controllers
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            OpUserToken user = AppLib.InitAVM(op);
+            OpUserToken user = AppLib.InitAvm(op);
 
             // Set the user details to view bag, these variables are available to all the views
             ViewBag.UserToken = user;

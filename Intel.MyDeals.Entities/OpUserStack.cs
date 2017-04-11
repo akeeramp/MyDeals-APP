@@ -15,7 +15,7 @@ namespace Intel.MyDeals.Entities
         /// Get the authenticated user's Key into the User Stack
         /// </summary>
         /// <returns>User's key</returns>
-        private static string GetMyKey()
+        public static string GetMyKey()
         {
             string key = Utils.ThreadUser;
             if (key.Contains("/"))
@@ -24,6 +24,21 @@ namespace Intel.MyDeals.Entities
             }
             return key.ToUpper();
         }
+
+        /// <summary>
+        /// Get the authenticated user's Key into the User Stack
+        /// </summary>
+        /// <returns>User's key</returns>
+        public static void Clear()
+        {
+            string key = GetMyKey();
+            if (UserSettings.ContainsKey(key))
+            {
+                UserSettings.Remove(key);
+            }
+            UserSettings[key] = new UserSetting {UserToken = new OpUserToken {Usr = new OpUser {Idsid = key} } };
+        }
+
 
         /// <summary>
         /// Get the authenticated user's UserSettings

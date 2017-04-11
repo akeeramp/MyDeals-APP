@@ -1,5 +1,6 @@
 ﻿using System.Web.Mvc;
 using Intel.MyDeals.App;
+using Intel.Opaque;
 
 namespace Intel.MyDeals.Controllers
 {
@@ -11,5 +12,6 @@ namespace Intel.MyDeals.Controllers
         {
             return View(AppLib.AVM);
         }
+
     }
 }

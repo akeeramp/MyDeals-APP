@@ -19,7 +19,7 @@ namespace Intel.MyDeals.Controllers
 
         public ActionResult TestSaveContract()
         {
-            OpUserToken user = AppLib.InitAVM(op);    // Get user details from authentication
+            OpUserToken user = AppLib.InitAvm(op);    // Get user details from authentication
             ViewBag.UserToken = user;                 // Apply User Token to viewbag for client use
             ViewBag.AppToken = op.AppToken;           // Apply Application Token to viewbag for client use
 
