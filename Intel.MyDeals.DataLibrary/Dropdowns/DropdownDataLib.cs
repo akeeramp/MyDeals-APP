@@ -46,6 +46,8 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_dropdownID = DB.GetReaderOrdinal(rdr, "dropdownID");
                     int IDX_dropdownName = DB.GetReaderOrdinal(rdr, "dropdownName");
                     int IDX_parntAtrbCd = DB.GetReaderOrdinal(rdr, "parntAtrbCd");
+                    int IDX_subAtrbCd = DB.GetReaderOrdinal(rdr, "subAtrbCd");
+                    int IDX_subAtrbValue = DB.GetReaderOrdinal(rdr, "subAtrbValue");
                     int IDX_subCategory = DB.GetReaderOrdinal(rdr, "subCategory");
 
                     while (rdr.Read())
@@ -58,6 +60,8 @@ namespace Intel.MyDeals.DataLibrary
                             dropdownID = (IDX_dropdownID < 0 || rdr.IsDBNull(IDX_dropdownID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_dropdownID),
                             dropdownName = (IDX_dropdownName < 0 || rdr.IsDBNull(IDX_dropdownName)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_dropdownName),
                             parntAtrbCd = (IDX_parntAtrbCd < 0 || rdr.IsDBNull(IDX_parntAtrbCd)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_parntAtrbCd),
+                            subAtrbCd = (IDX_subAtrbCd < 0 || rdr.IsDBNull(IDX_subAtrbCd)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_subAtrbCd),
+                            subAtrbValue = (IDX_subAtrbValue < 0 || rdr.IsDBNull(IDX_subAtrbValue)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_subAtrbValue),
                             subCategory = (IDX_subCategory < 0 || rdr.IsDBNull(IDX_subCategory)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_subCategory)
                         });
                     }
@@ -125,6 +129,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_ATRB_LKUP_TTIP = DB.GetReaderOrdinal(rdr, "ATRB_LKUP_TTIP");
                     int IDX_ATRB_SID = DB.GetReaderOrdinal(rdr, "ATRB_SID");
                     int IDX_CUST_NM = DB.GetReaderOrdinal(rdr, "CUST_NM");
+                    int IDX_DFLT_FLG = DB.GetReaderOrdinal(rdr, "DFLT_FLG");
                     int IDX_DROP_DOWN = DB.GetReaderOrdinal(rdr, "DROP_DOWN");
                     int IDX_OBJ_SET_TYPE_CD = DB.GetReaderOrdinal(rdr, "OBJ_SET_TYPE_CD");
                     int IDX_OBJ_SET_TYPE_SID = DB.GetReaderOrdinal(rdr, "OBJ_SET_TYPE_SID");
@@ -141,6 +146,7 @@ namespace Intel.MyDeals.DataLibrary
                             ATRB_LKUP_TTIP = (IDX_ATRB_LKUP_TTIP < 0 || rdr.IsDBNull(IDX_ATRB_LKUP_TTIP)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_LKUP_TTIP),
                             ATRB_SID = (IDX_ATRB_SID < 0 || rdr.IsDBNull(IDX_ATRB_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ATRB_SID),
                             CUST_NM = (IDX_CUST_NM < 0 || rdr.IsDBNull(IDX_CUST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_NM),
+                            DFLT_FLG = (IDX_DFLT_FLG < 0 || rdr.IsDBNull(IDX_DFLT_FLG)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DFLT_FLG),
                             DROP_DOWN = (IDX_DROP_DOWN < 0 || rdr.IsDBNull(IDX_DROP_DOWN)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DROP_DOWN),
                             OBJ_SET_TYPE_CD = (IDX_OBJ_SET_TYPE_CD < 0 || rdr.IsDBNull(IDX_OBJ_SET_TYPE_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_SET_TYPE_CD),
                             OBJ_SET_TYPE_SID = (IDX_OBJ_SET_TYPE_SID < 0 || rdr.IsDBNull(IDX_OBJ_SET_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_SET_TYPE_SID),
