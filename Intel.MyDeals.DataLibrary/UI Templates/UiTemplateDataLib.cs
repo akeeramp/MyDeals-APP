@@ -186,7 +186,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 Id = 29,
                 AtrbCd = AttributeCodes.PAYOUT_BASED_ON,
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL, OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
                 Width = 100,
                 Template = "#=gridUtils.uiIconWrapper(data, 'PAYOUT_BASED_ON')#",
                 IsDefaultable = true,
@@ -199,7 +199,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 Id = 29,
                 AtrbCd = AttributeCodes.PROGRAM_PAYMENT,
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL, OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
                 Width = 100,
                 Template = "#=gridUtils.uiIconWrapper(data, 'PROGRAM_PAYMENT')#",
                 IsDefaultable = true,
