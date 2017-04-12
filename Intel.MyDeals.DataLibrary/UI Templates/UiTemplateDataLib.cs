@@ -186,11 +186,11 @@ namespace Intel.MyDeals.DataLibrary
             {
                 Id = 29,
                 AtrbCd = AttributeCodes.PAYOUT_BASED_ON,
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL, OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
                 Width = 100,
                 Template = "#=gridUtils.uiIconWrapper(data, 'PAYOUT_BASED_ON')#",
                 IsDefaultable = true,
-                UiType = "RADIOBUTTONGROUP",
+                UiType = "DROPDOWN",
                 LookupUrl = "/api/Dropdown/GetDropdowns/PAYOUT_BASED_ON/ECAP",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
@@ -199,7 +199,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 Id = 29,
                 AtrbCd = AttributeCodes.PROGRAM_PAYMENT,
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL, OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
                 Width = 100,
                 Template = "#=gridUtils.uiIconWrapper(data, 'PROGRAM_PAYMENT')#",
                 IsDefaultable = true,
@@ -279,6 +279,30 @@ namespace Intel.MyDeals.DataLibrary
                 LookupUrl = "/api/Dropdown/GetGeosDropdowns",
                 LookupText = "dropdownName",
                 LookupValue = "dropdownName"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
+                AtrbCd = AttributeCodes.PAYOUT_BASED_ON,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
+                Width = 100,
+                IsDefaultable = true,
+                UiType = "RADIOBUTTONGROUP",
+                LookupUrl = "/api/Dropdown/GetDropdowns/PAYOUT_BASED_ON/ECAP",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
+                AtrbCd = AttributeCodes.PROGRAM_PAYMENT,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
+                Width = 100,
+                IsDefaultable = true,
+                UiType = "RADIOBUTTONGROUP",
+                LookupUrl = "/api/Dropdown/GetDropdowns/PROGRAM_PAYMENT/ECAP",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN"
             });
             items.Add(new UiTemplateContainerItem
             {
