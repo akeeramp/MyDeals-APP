@@ -6,7 +6,8 @@
     <div style="padding: 10px; background-color: #0071C5;" ng-hide="isAddStrategyHidden">
         <form name="addNewPsForm" ng-submit="submitForm(CustomAddPsValidate())" novalidate>
             <!-- novalidate prevents HTML5 validation since we will be validating ourselves -->
-
+            <div class="fl ptLnavTitle">Enter Pricing Strategy Name</div>
+            <div class="clearboth"></div>
             <div class="bgBlueContainer" ng-class="{isErrorWrapper: newStrategy._behaviors.isError.TITLE}">
                 <div kendo-tooltip k-content="newStrategy._behaviors.validMsg.TITLE" k-position="'top'" ng-show="newStrategy._behaviors.isError.TITLE" class="err-bit-el"></div>
                 <input type="text" class="k-textbox fl" placeholder=""

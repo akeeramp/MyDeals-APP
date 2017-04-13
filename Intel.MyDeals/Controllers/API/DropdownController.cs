@@ -81,7 +81,7 @@ namespace Intel.MyDeals.Controllers.API
 
         [Authorize]
         [Route("GetDropdownHierarchy/{prnt}")]
-        public IEnumerable<DropdownHierarchy> GetDropdownHierarchy(string prnt)
+        public DropdownHierarchy[] GetDropdownHierarchy(string prnt)
         {
             return SafeExecutor(() => _dropdownLib.GetDropdownHierarchy(prnt)
                 , $"Unable to get Dropdown Hierarchy for {prnt}"

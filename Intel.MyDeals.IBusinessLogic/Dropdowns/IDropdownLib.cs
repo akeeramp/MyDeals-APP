@@ -11,7 +11,7 @@ namespace Intel.MyDeals.IBusinessLogic
 
         IEnumerable<BasicDropdown> GetDropdowns(string atrbCd, string dealtypeCd);
 
-        IEnumerable<DropdownHierarchy> GetDropdownHierarchy(string prnt);
+        DropdownHierarchy[] GetDropdownHierarchy(string prnt);
 
         List<Dropdown> GetDealTypesDropdown();
 

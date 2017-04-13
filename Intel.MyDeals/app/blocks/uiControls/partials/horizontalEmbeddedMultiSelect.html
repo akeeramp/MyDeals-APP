@@ -1,19 +1,44 @@
-﻿<div class="opUiContainer {{opClass}}" style="{{opStyle}}" ng-class="{isHidden: opIsHidden, isErrorWrapper: opIsError, isSavedWrapper: opIsSaved, isDirtyWrapper: opIsDirty}">
+﻿<!--currently same as vertical, need to modify-->
+
+<div class="opUiContainer {{opClass}}" style="{{opStyle}}" ng-class="{isHidden: opIsHidden, isErrorWrapper: opIsError, isSavedWrapper: opIsSaved, isDirtyWrapper: opIsDirty}">
     <div class="fl opUiLabel" ng-class="{isRequired: opIsRequired}">{{opLabel}}</div>
-    <div style="overflow: hidden;">
-        <div kendo-tooltip k-content="tooltipMsg" k-position="'top'" ng-show="opIsError" class="err-bit-el"></div>
-        <select id="{{opCd}}"
-                kendo-multi-select class="fl opUiElement"
-                k-ng-model="value"
-                k-ng-readonly="opIsReadOnly"
-                k-data-source="values"
-                k-data-text-field="opLookupText"
-                k-data-value-field="opLookupValue"
-                k-value-primitive="true"
-                ng-class="{isHidden: opIsHidden, isReadOnly: opIsReadOnly, isError: opIsError, isSaved: opIsSaved, isDirty: opIsDirty}"></select>
-        <div kendo-tooltip k-content="helptipMsg" k-position="'top'" ng-show="opHelpMsg" class="fl opElementHelpIcon intelicon-information-outlined"></div>
-        <div ng-if="opIsError && opIsForm" class="err-Control">{{opValidMsg}}</div>
-        <div class="clearboth"></div>
-    </div>
+    <div kendo-tooltip k-content="helptipMsg" k-position="'top'" ng-show="opHelpMsg" class="fr opElementHelpIcon intelicon-information-outlined"></div>
     <div class="clearboth"></div>
+    <div kendo-tooltip k-content="tooltipMsg" k-position="'top'" ng-show="opIsError" class="err-bit-el"></div>
+
+    <div class="k-content">
+        <div ng-click="showTreeView = !showTreeView">
+            <select id="{{opCd + '_MS'}}"
+                    kendo-multi-select
+                    class="fl opUiElement"
+                    k-ng-model="value"
+                    k-data-source="values"
+                    k-data-text-field="opLookupText"
+                    k-data-value-field="opLookupValue"
+                    k-value-primitive="true"
+                    k-auto-close="false"
+                    k-ng-readonly="true"
+                    style="width: 100%;"
+                    ng-class="{isHidden: opIsHidden, isReadOnly: true, isError: opIsError, isSaved: opIsSaved, isDirty: opIsDirty}"></select>
+        </div>
+
+        <div class="fl opUiElement opUiTreeView">
+            <div id="{{opCd}}"
+                 kendo-tree-view
+                 class="fl opUiElement"
+                 k-options="opHierarchicalDataSource"
+                 k-data-text-field="opLookupText"
+                 k-checkboxes="{checkChildren: true}"
+                 k-selectable="'multiple'"
+                 k-on-check="onCheckFunction()"
+                 k-on-select="onSelectFunction()"
+                 ng-class="{isHidden: opIsHidden, isReadOnly: opIsReadOnly, isError: opIsError}"
+                 ng-show="showTreeView">
+            </div>
+        </div>
+    </div>
+
+    <div class="clearboth"></div>
+    <div ng-if="opIsError && opIsForm" class="err-Control">{{opValidMsg}}</div>
 </div>
+

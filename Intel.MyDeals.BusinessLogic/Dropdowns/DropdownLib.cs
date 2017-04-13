@@ -71,20 +71,22 @@ namespace Intel.MyDeals.BusinessLogic
         }
 
         /// <summary>
-        /// Get All Simple Dropdowns with grouping of atrbCd and obj_set_Type of dealtypeCd
-        /// Note: also return those that match "All Deals" type as well as the specified dealtypecd
+        /// Returns a dropdown hierarchy object using the provided parent name.
+        /// Using the simple dropdown set, it will find the first dropdown with subAtrbCd matching the prnt name.
         /// </summary>
-        /// <returns>list of dropdowns</returns>
-        public IEnumerable<DropdownHierarchy> GetDropdownHierarchy(string prnt)
+        /// <returns>dropdown hierarchy</returns>
+        public DropdownHierarchy[] GetDropdownHierarchy(string prnt)
         {
-            
+            Dropdown chldDropdown = _dataCollectionsDataLib.GetDropdowns().FirstOrDefault(dd => dd.subAtrbCd.ToUpper() == prnt.ToUpper());
+            string chld = chldDropdown.dropdownName;
+
             List<DropdownHierarchy> ret = new List<DropdownHierarchy>();
             List<DropdownHierarchy> sub = new List<DropdownHierarchy>();
-            //TODO: get parent relation instead of hardcoding the relationships
+
             IEnumerable<BasicDropdown> mrktSegComb = _dataCollectionsDataLib.GetBasicDropdowns().
-                Where(dd => dd.ATRB_CD.ToUpper() == "MRKT_SEG_COMBINED").OrderBy(dd => dd.DROP_DOWN); ;
+                Where(dd => dd.ATRB_CD.ToUpper() == prnt.ToUpper()).OrderBy(dd => dd.DROP_DOWN); ;
             IEnumerable<BasicDropdown> mrktSubSeg = _dataCollectionsDataLib.GetBasicDropdowns().
-                Where(dd => dd.ATRB_CD.ToUpper() == "MRKT_SUB_SEGMENT").OrderBy(dd => dd.DROP_DOWN);
+                Where(dd => dd.ATRB_CD.ToUpper() == chld.ToUpper()).OrderBy(dd => dd.DROP_DOWN);
 
             foreach (BasicDropdown bd in mrktSubSeg)
             {
@@ -95,14 +97,14 @@ namespace Intel.MyDeals.BusinessLogic
             foreach (BasicDropdown bd in mrktSegComb)
             {
                 DropdownHierarchy newDH = new DropdownHierarchy(bd);
-                //TODO: get parent relation instead of hardcoding the relationships
-                if (bd.DROP_DOWN == "Embedded")
+                if (bd.DROP_DOWN.ToUpper() == chldDropdown.subAtrbValue.ToUpper())
                 {
-                    newDH.items = mrktSubSeg.ToList();
+                    newDH.items = sub.ToArray();
+                    newDH.expanded = true;
                 }
                 ret.Add(newDH);
             }
-            return ret;
+            return ret.ToArray();
         }
 
         /// <summary>

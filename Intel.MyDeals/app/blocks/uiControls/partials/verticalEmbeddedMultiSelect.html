@@ -5,32 +5,36 @@
     <div kendo-tooltip k-content="tooltipMsg" k-position="'top'" ng-show="opIsError" class="err-bit-el"></div>
 
     <div class="k-content">
-        <div id="dialog">
-            <div class="dialogContent">
-                <div id="{{opCd}}"
-                     kendo-tree-view class="fl opUiElement"
-                     k-ng-model="value"
-                     k-data-source="values"
-                     k-data-text-field="opLookupText"
-                     k-checkboxes="true">
+        <div ng-click="showTreeView = !showTreeView">
+            <select id="{{opCd + '_MS'}}"
+                    kendo-multi-select 
+                    class="fl opUiElement"
+                    k-ng-model="value"
+                    k-data-source="values"
+                    k-data-text-field="opLookupText"
+                    k-data-value-field="opLookupValue"
+                    k-value-primitive="true"
+                    k-auto-close="false"
+                    k-ng-readonly="true"
+                    style="width: 100%;"
+                    ng-class="{isHidden: opIsHidden, isReadOnly: true, isError: opIsError, isSaved: opIsSaved, isDirty: opIsDirty}">
+            </select>
+        </div>
 
-                </div>
+        <div class="fl opUiElement opUiTreeView">
+            <div id="{{opCd}}"
+                 kendo-tree-view
+                 class="fl opUiElement"
+                 k-options="opHierarchicalDataSource"
+                 k-data-text-field="opLookupText"
+                 k-checkboxes="{checkChildren: true}"
+                 k-selectable="'multiple'"
+                 k-on-check="onCheckFunction()"
+                 k-on-select="onSelectFunction()"
+                 ng-class="{isHidden: opIsHidden, isReadOnly: opIsReadOnly, isError: opIsError}"
+                 ng-show="showTreeView">
             </div>
         </div>
-        <select id="{{opCd}}"
-                kendo-multi-select class="fl opUiElement"
-                k-ng-model="value"
-                k-data-source="values"
-                k-data-text-field="opLookupText"
-                k-data-value-field="opLookupValue"
-                k-value-primitive="true"
-                k-auto-close="false"
-                k-ng-readonly="opIsReadOnly"
-                style="width: 100%;"
-                ng-class="{isHidden: opIsHidden, isReadOnly: opIsReadOnly, isError: opIsError, isSaved: opIsSaved, isDirty: opIsDirty}">
-        </select>
-        <br />
-        <button id="openWindow" class="k-primary">SELECT MARKET SEGMENTS</button>
     </div>
 
     <div class="clearboth"></div>

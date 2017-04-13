@@ -40,12 +40,9 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
     }
 
     var linker = function (scope, element, attrs) {
-        //debugger;
         if (scope.opCd === "_dirty") {
-            //debugger;
             return;
         }
-        //debugger;
         if (scope.opIsReadOnly === undefined) scope.opIsReadOnly = false;
         if (scope.opIsRequired === undefined) scope.opIsRequired = false;
         if (scope.opIsHidden === undefined) scope.opIsHidden = false;
@@ -59,7 +56,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
         scope.opOptions = {
             format: "#",
             decimals: 0
-        }
+        }       
 
         var serviceData = []; // data from the service will be pushed into this.
         if ((scope.opType === 'COMBOBOX' || scope.opType === 'DROPDOWN' || scope.opType === 'MULTISELECT' || scope.opType === 'EMBEDDEDMULTISELECT')) {
@@ -77,7 +74,21 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
                             serviceData = $filter('unique')(data, scope.opLookupValue);
                             // data from the service will be pushed into this.
                             if (scope.opType === 'EMBEDDEDMULTISELECT') {
-                                debugger;
+                                var hDS = {
+                                    data: serviceData
+                                };
+                                
+                                //check first item by default
+                                hDS.data[0].checked = true;
+
+                                //treelist datasource
+                                scope.opHierarchicalDataSource = {
+                                    dataSource: hDS
+                                };
+
+                                //flatten service data for use by paired multiselect
+                                serviceData = flattenTreeData(serviceData);
+                                
                             }
                             return serviceData;
                         }
@@ -98,6 +109,48 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
             }
         }
 
+        if (scope.opType === 'EMBEDDEDMULTISELECT') {
+
+            scope.onCheckFunction = function () {
+                var treeview = $("#" + scope.opCd).data("kendoTreeView");
+                var checkedNodes = [];
+
+                function gatherStates(nodes) {
+                    for (var i = 0; i < nodes.length; i++) {
+                        if (nodes[i].checked) {
+                            checkedNodes.push(nodes[i].DROP_DOWN);
+                        }
+
+                        if (nodes[i].hasChildren) {
+                            gatherStates(nodes[i].children.view());
+                        }
+                    }
+                }
+                gatherStates(treeview.dataSource.view());
+
+                //multiselect should display same data as checked treelist nodes
+                $("#" + scope.opCd + "_MS").data("kendoMultiSelect").value(checkedNodes);
+                scope.value = checkedNodes;
+            }
+
+            scope.onSelectFunction = function (e) {
+                //TODO: clicking the name of a treeview node, it should check its respective checkbox as well
+            }
+
+            var flattenTreeData = function (sd) {
+                var ret = [];
+                for (var i = 0; i < sd.length; i++) {
+                    if (sd[i].items == null || sd[i].items.length == 0) {
+                        ret = ret.concat(sd[i]);
+                    } else {
+                        ret = ret.concat(sd[i]);
+                        ret = ret.concat(flattenTreeData(sd[i].items));
+                    }
+                }
+                return ret;
+            }
+        }
+
         var loader = getTemplate(scope.opUiMode + '_' + scope.opType);
         //var promise = loader.success(function (html) {
         //    element.html(html);
@@ -114,7 +167,6 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
         scope.$watch('value',
             function (newValue, oldValue, el) {
                 if (oldValue === newValue) return;
-
                 el.opIsDirty = true;
                 el.$parent.$parent.opIsDirty = true;
 
