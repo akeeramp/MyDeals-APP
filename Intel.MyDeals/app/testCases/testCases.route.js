@@ -51,6 +51,14 @@
                     url: 'opMessages',
                     controller: 'opMessagesController as vm'
                 }
+            },
+            {
+                state: 'testCases.suggestProduct',
+                config: {
+                    templateUrl: 'app/testCases/suggestProduct/suggestProduct.manage.html',
+                    url: 'suggestProduct',
+                    controller: 'suggestProductController'
+                }
             }
         ];
     }

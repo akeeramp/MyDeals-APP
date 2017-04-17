@@ -297,11 +297,6 @@ namespace Intel.MyDeals.DataLibrary
             int IDX_ATRB_MTX_SID = DB.GetReaderOrdinal(rdr, "ATRB_MTX_SID"); // Attribute Matrix SID 
             int IDX_ATRB_MTX_HASH = DB.GetReaderOrdinal(rdr, "ATRB_MTX_HASH"); // Attribute Matrix Hash, ex. "4:6/10:4"
 
-            int IDX_ATRB_VAL_INT = DB.GetReaderOrdinal(rdr, "ATRB_VAL_INT"); // Atrb val INT
-            int IDX_ATRB_VAL_MONEY = DB.GetReaderOrdinal(rdr, "ATRB_VAL_MONEY"); // Atrb val MONEY
-            int IDX_ATRB_VAL_DTM = DB.GetReaderOrdinal(rdr, "ATRB_VAL_DTM"); // Atrb val DATETIME
-            int IDX_ATRB_VAL_CHAR = DB.GetReaderOrdinal(rdr, "ATRB_VAL_CHAR"); // Atrb val CHAR
-            int IDX_ATRB_VAL_CHAR_MAX = DB.GetReaderOrdinal(rdr, "ATRB_VAL_CHAR_MAX"); // Atrb val CHAR_MAX
             int IDX_ATRB_VAL = DB.GetReaderOrdinal(rdr, "ATRB_VAL"); // Atrb val combined
 
             int IDX_ATRB_RVS_NBR = DB.GetReaderOrdinal(rdr, "ATRB_RVS_NBR"); // Revision number

@@ -32,7 +32,7 @@ namespace Intel.MyDeals.DataLibrary
 
             var cmd = new PR_MYDL_GET_OBJS_BY_SIDS() // PR_GET_OBJS_BY_KEYS in original case, new PR_GET_OBJS_BY_SIDS()
             {
-                in_emp_wwid = 10548414, //applySecurity ? OpUserStack.MyOpUserToken.Usr.WWID : 0,
+                in_emp_wwid = OpUserStack.MyOpUserToken.Usr.WWID, //applySecurity ? OpUserStack.MyOpUserToken.Usr.WWID : 0,
                 //APPLY_SECURITY = applySecurity,
                 in_obj_type = opDataElementType.ToAlias(),
                 in_include_groups = strInc,

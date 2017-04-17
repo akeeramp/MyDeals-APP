@@ -513,9 +513,20 @@ namespace Intel.MyDeals.BusinessLogic
         #endregion ProductAlias
 
         #region Suggest Products
-        
-        public List<Product> SuggestProducts(string prdEntered)
+
+        public List<Product> SuggestProducts(string prdEntered, int? returnMax)
         {
+            const int defaultReturnedMaxRecords = 5;
+
+            int returnMaxRecords = returnMax ?? defaultReturnedMaxRecords;
+
+            prdEntered = prdEntered.Replace("?", "."); // Replace any single character wildcards with regex single character token (?)
+            List<string> words = prdEntered.Split('*').ToList(); // Break into list on wildcard characters (*)
+
+            //List<string> words = new List<string> { "(e4400)", "(80..7)" };
+            string pattern = string.Join("|", words);
+            Regex regex = new Regex(pattern, RegexOptions.IgnoreCase);
+
             // this takes time if it is the first time to load into cache
             List<Product> prds = GetProducts();
 
@@ -531,15 +542,57 @@ namespace Intel.MyDeals.BusinessLogic
                     + (prd.MTRL_ID == string.Empty ? "" : " " + prd.MTRL_ID) 
             };
 
-            // Do some magic here... for now we will pretend we found 15 items
-            List<int> hashPrdsMatched = hashPrds.Where(h => h.HashName.Contains(prdEntered)).Take(15).Select(p => p.Id).ToList();
+            List<NodeMatch> myMatches = new List<NodeMatch>();
+            foreach (ProductHash productHash in hashPrds)
+            {
+                MatchCollection matches = regex.Matches(productHash.HashName.ToUpper());
+                if (matches.Count > 0)
+                {
+                    int matchesLength = 0;
+                    string matchVal = "";
+                    foreach (Match match in matches)
+                    {
+                        matchesLength += match.Length;
+                        matchVal += match.Value;
+                    }
 
-            // Get the full product based on the matched ID
-            List<Product> rtn = prds.Where(p => hashPrdsMatched.Contains(p.PRD_MBR_SID)).ToList();
-            return rtn;
+                    float weight = ((float)matchesLength / (float)productHash.HashName.Length)*100;
+
+                    NodeMatch newMatch = new NodeMatch
+                    {
+                        ID = productHash.Id,
+                        Value = productHash.HashName,
+                        MatchVal = matchVal,
+                        MatchLen = matchesLength,
+                        MatchCount = matches.Count,
+                        Weight = weight
+                    };
+                    myMatches.Add(newMatch);
+                }
+            }
+
+            List<NodeMatch> SortedList = myMatches.OrderByDescending(o => o.MatchLen).ThenByDescending(o => o.Weight).ToList();
+            List<int> matchedIDs = SortedList.Take(returnMaxRecords).Select(p => p.ID).ToList();
+            List<Product> rtn = prds.Where(p => matchedIDs.Contains(p.PRD_MBR_SID)).ToList();
+
+            List <Product> Final = new List<Product>();
+            Final.AddRange(rtn);
+
+            return Final;
         }
 
         #endregion 
 
     }
+
+    public class NodeMatch
+    {
+        public int ID { get; set; }
+        public string Value { get; set; }
+        public string MatchVal { get; set; }
+        public int MatchLen { get; set; }
+        public int MatchCount { get; set; }
+        public float Weight { get; set; }
+    }
+
 }

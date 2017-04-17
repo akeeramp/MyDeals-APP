@@ -103,7 +103,7 @@ function ContractController($scope, $state, contractData, isNewContract, templat
         // Contract name validation
         var isDuplicateContractTitle = function (title) {
             if (title == "") return;
-            objsetService.isDuplicateContractTitle($scope.contractData.DC_ID, title).then(function (response) {
+            -byetService.isDuplicateContractTitle($scope.contractData.DC_ID, title).then(function (response) {
                 $scope.contractData._behaviors.isError['TITLE'] = response.data;
                 $scope.contractData._behaviors.validMsg['TITLE'] = "";
                 if (response.data) {
