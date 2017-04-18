@@ -6,6 +6,8 @@ using System.Linq;
 using Intel.MyDeals.IBusinessLogic;
 using System.Text.RegularExpressions;
 using System;
+using System.Collections.Specialized;
+using System.Data;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -352,26 +354,51 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns></returns>
         public List<string> TransformProducts(string userProduct)
         {
+            string userProd = Regex.Replace(userProduct, @"(?<=\([^()]*),", "/");
+            var myRegex = new Regex(@"\([^\)]*\)|(/)");
+
+            if (!string.IsNullOrEmpty(userProd) && userProd.Contains(','))
+                myRegex = new Regex(@"\([^\)]*\)|(,)");
+
+            var group1Caps = new StringCollection();
+
+            string replaced = myRegex.Replace(userProd, delegate (Match m)
+            {
+                if (m.Groups[1].Value == "") return m.Groups[0].Value;
+                else return "~";
+            });
+
+            string[] splits = Regex.Split(replaced, "~");
             var singleProducts = new List<string>();
 
-            // Replace all the comma(",") inside parenthesis with a "/", so that individual products can be split by comma.
-            userProduct = Regex.Replace(userProduct, @"(?<=\([^()]*),", "/"); // i5 2400(S/T), H61
+            //TODO: Later we will get this data from constant table
+            string charset = "i3 ,i5 ,i7 ,E3 ,E5 ,E7 ,X3 ,D ";
+            string[] chararr = charset.Split(',');
 
-            var products = userProduct.Split(',');
-            foreach (var p in products.Where(p => !string.IsNullOrEmpty(p)))
+            foreach (var p in splits.Where(p => !string.IsNullOrEmpty(p)))
             {
-                //Replace all the blanks with '-'
-                var item = Regex.Replace(p.Trim(), @"\s+", "-"); // i5-2400(S/T)
+                string strRep = string.Empty;
+                var item = Regex.Replace(p.Trim(), @"\s+", " ");
+                foreach (string row in chararr)
+                {
+                    if (item.Contains(row.ToString()))
+                    {
+                        strRep = item.Replace(row, row.Trim() + '-');
+                        break;
+                    }
+                    else
+                    {
+                        strRep = item;
+                    }
+                }
+                item = strRep;
+
                 if (item.Contains('(') && item.Contains(')'))
                 {
                     var productNames = item.Split('(', ')');
+                    singleProducts.Add(productNames[0]);
+                    var innerItems = productNames[1].Split('/');
 
-                    // Add i5-2400
-                    singleProducts.Add(productNames[0]); //productNames[0] = i5-2400
-
-                    var innerItems = productNames[1].Split('/'); //productNames[1] = S/T
-
-                    // Add i5-2400S, i5-2400T
                     foreach (var character in innerItems.Where(i => !string.IsNullOrEmpty(i)))
                     {
                         singleProducts.Add(productNames[0] + character.Trim());
@@ -382,7 +409,6 @@ namespace Intel.MyDeals.BusinessLogic
                     singleProducts.Add(item.Trim());
                 }
             }
-
             return singleProducts;
         }
 
