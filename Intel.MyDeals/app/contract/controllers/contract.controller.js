@@ -830,7 +830,8 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                 logger.success("Saved the contract", $scope.contractData, "Save Sucessful");
                 topbar.hide();
 
-                if (toState !== undefined) $state.go(toState.name, toParams);
+                var reloadState = toState.name == $scope.constants.ContractDetails;
+                if (toState !== undefined) $state.go(toState.name, toParams, { reload: reloadState });
             },
             function (response) {
                 logger.error("Could not save the contract.", response, response.statusText);
