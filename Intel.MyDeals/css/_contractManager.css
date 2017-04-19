@@ -145,8 +145,8 @@
     #secFooter {
         margin: 0 0 -50px 0;
         height: 50px;
-        border-top: 1px solid #eeeeee; 
-        padding: 7px 10px; 
+        border-top: 1px solid #eeeeee;
+        padding: 7px 10px;
         text-align: right;
         font-size: 14px;
         background-color: #fafafa;
@@ -357,25 +357,25 @@
     .smTabTitle {
         padding: 5px 8px 2px 4px;
         -ms-border-top-right-radius: 4px;
-        border-top-right-radius: 4px; 
-        color: #aaaaaa; 
+        border-top-right-radius: 4px;
+        color: #aaaaaa;
         background: #eeeeee;
         cursor: pointer;
     }
 
     .smTabTitle:hover {
-        color: #ffffff; 
+        color: #ffffff;
         background: #00AEEF;
     }
 
     .smTabShowTerms {
-        position: absolute; 
-        bottom: 0; 
+        position: absolute;
+        bottom: 0;
         z-index: 5000;
     }
 
 	/* // Adding this makes clicking on cells extremely inaccurate. Don't add this. */
-    /*#pricingTableSpreadsheet > div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div:nth-child(1) {top: 30px !important;}*/ 
+    /*#pricingTableSpreadsheet > div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div:nth-child(1) {top: 30px !important;}*/
 
 
 	/* NOTE: If you resize the below, make sure to resize the "hidden" first row in the spreadsheet via javascript (CODE:  sheet.rowHeight(0, [pixel height here]); ) */
@@ -384,7 +384,7 @@
     , #pricingTableSpreadsheet > div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left > div.k-spreadsheet-row-header
     , #pricingTableSpreadsheet > div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left > div.k-spreadsheet-column-header
     , #pricingTableSpreadsheet > div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left > div.k-spreadsheet-column-header > div
-    , #pricingTableSpreadsheet > div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-top-corner 
+    , #pricingTableSpreadsheet > div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-top-corner
 	, #pricingTableSpreadsheet .k-resize-handle {
 		height: 30px !important;
     }
@@ -689,13 +689,13 @@
         font-size: 13px;
     }
 
-    .lg .opUiLabel 
+    .lg .opUiLabel
     {
         font-size: 16px !important;
         font-weight: 400 !important;
         width: 200px !important;
     }
-    
+
     .opUiLableWidth{
         width:100% !important;
     }
@@ -782,6 +782,12 @@
         font-weight: bold;
         font-size: 14px;
         width: 160px;
+    }
+
+    .contract-detail-form .C2ALabel .opUiLabel {
+        font-weight: bold;
+        font-size: 14px;
+        width: 200px;
     }
 
     .contract-detail-form .opUiElement {
@@ -877,8 +883,8 @@
 		border-color: #bebec3;
 		color: #000;
 	}
-	
-	/* Spreadsheet Custom Toolbar */	
+
+	/* Spreadsheet Custom Toolbar */
 	.ssToolbarBtn {
 		background-color: #f2f2f2;
 		border-right: 1px solid #d2dade;
@@ -897,7 +903,7 @@
 	.skyBlue {
 		color: #00aeef;
 	}
-	
+
     #pricingTableSpreadsheet {
         background-color: #ffffff;
     }
@@ -905,9 +911,9 @@
 	/* Undo / redo buttons */
 	.k-spreadsheet .k-spreadsheet-quick-access-toolbar{
 		margin-left:55px;
-	}	
+	}
 	.k-spreadsheet .k-spreadsheet-quick-access-toolbar .k-button
-	, .k-spreadsheet .k-spreadsheet-sheets-bar .k-button {		
+	, .k-spreadsheet .k-spreadsheet-sheets-bar .k-button {
 		width: 3.6em;
 	}
 	.k-spreadsheet .k-spreadsheet-quick-access-toolbar .k-button:hover
@@ -915,7 +921,7 @@
 		background-color: #fafafa;
 		border-color: #fafafa;
 	}
-	.ssUndoButton {		
+	.ssUndoButton {
 		font-size: 23px;
 		margin-top: 5px;
 		margin-bottom: 0;
@@ -940,7 +946,7 @@
     .contractHeaderId{
         color:#F3D54E !important;
     }
-	
+
 	/* SpreadSheet validation */
 	.k-spreadsheet-cell .k-dirty {
 		width: 100%;
@@ -950,9 +956,9 @@
 	.k-spreadsheet-cell.k-dirty-cell {
 		border:1px solid red;
 	}
-	.k-spreadsheet .k-spreadsheet-pane .k-spreadsheet-cell.k-dirty-cell {		
+	.k-spreadsheet .k-spreadsheet-pane .k-spreadsheet-cell.k-dirty-cell {
 		-webkit-box-sizing: content-box;
-		 box-sizing: content-box; 
+		 box-sizing: content-box;
 		 padding: 0px;
 	}
 	 .k-spreadsheet .k-dirty-cell .k-vertical-align-bottom {

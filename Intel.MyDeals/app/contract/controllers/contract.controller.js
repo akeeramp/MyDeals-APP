@@ -2,9 +2,9 @@
     .module('app.contract')
     .controller('ContractController', ContractController);
 
-ContractController.$inject = ['$scope', '$state', 'contractData', 'isNewContract', 'templateData', 'objsetService', 'templatesService', 'logger', '$uibModal', '$timeout', '$window', '$location', '$rootScope', 'confirmationModal', 'dataService', 'customerService', 'contractManagerConstants'];
+ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'isNewContract', 'templateData', 'objsetService', 'templatesService', 'logger', '$uibModal', '$timeout', '$window', '$location', '$rootScope', 'confirmationModal', 'dataService', 'customerService', 'contractManagerConstants'];
 
-function ContractController($scope, $state, contractData, isNewContract, templateData, objsetService, templatesService, logger, $uibModal, $timeout, $window, $location, $rootScope, confirmationModal, dataService, customerService, contractManagerConstants) {
+function ContractController($scope, $state, $filter, contractData, isNewContract, templateData, objsetService, templatesService, logger, $uibModal, $timeout, $window, $location, $rootScope, confirmationModal, dataService, customerService, contractManagerConstants) {
     // store template information
     //
     $scope.templates = $scope.templates || templateData.data;
@@ -103,7 +103,7 @@ function ContractController($scope, $state, contractData, isNewContract, templat
         // Contract name validation
         var isDuplicateContractTitle = function (title) {
             if (title == "") return;
-            -byetService.isDuplicateContractTitle($scope.contractData.DC_ID, title).then(function (response) {
+            objsetService.isDuplicateContractTitle($scope.contractData.DC_ID, title).then(function (response) {
                 $scope.contractData._behaviors.isError['TITLE'] = response.data;
                 $scope.contractData._behaviors.validMsg['TITLE'] = "";
                 if (response.data) {
@@ -116,6 +116,9 @@ function ContractController($scope, $state, contractData, isNewContract, templat
             if (custId === "" || custId == null) return;
             dataService.get("/api/Customers/GetMyCustomerDivsByCustNmSid/" + custId).then(function (response) {
                 // only show if more than 1 result
+                // TODO: This is a temp fix API is getting the 2002 and 2003 level records, fix the API
+                response.data = $filter('where')(response.data, { CUST_LVL_SID: 2003 });
+
                 if (response.data.length <= 1) {
                     $scope.contractData._behaviors.isRequired["CUST_ACCNT_DIV_UI"] = false;
                     $scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV_UI"] = true;
@@ -1102,7 +1105,7 @@ function ContractController($scope, $state, contractData, isNewContract, templat
             }
         }
         for (var atrb in $scope.newPricingTable._defaultAtrbs) {
-            if ($scope.newPricingTable._defaultAtrbs.hasOwnProperty(atrb) && pt.hasOwnProperty(atrb)) {  //note: if in future we give these two objects overlapping properties, then we may get unwanted overwriting here.                
+            if ($scope.newPricingTable._defaultAtrbs.hasOwnProperty(atrb) && pt.hasOwnProperty(atrb)) {  //note: if in future we give these two objects overlapping properties, then we may get unwanted overwriting here.
                 if (Array.isArray($scope.newPricingTable._defaultAtrbs[atrb].value)) {
                     //Array, Middle Tier expects a comma separated string
                     pt[atrb] = $scope.newPricingTable._defaultAtrbs[atrb].value.join();
@@ -1219,7 +1222,7 @@ function ContractController($scope, $state, contractData, isNewContract, templat
             for (var i = 0; i < response.data.length; i++) {
                 $scope.nonCorpMrktSegments.push(response.data[i].DROP_DOWN);
             }
-        }, 
+        },
         function (response) {
             logger.error("Unable to get Non Corp Market Segments.", response, response.statusText);
         }
@@ -1231,7 +1234,7 @@ function ContractController($scope, $state, contractData, isNewContract, templat
             for (var i = 0; i < response.data.length; i++) {
                 $scope.subMrktSegments.push(response.data[i].DROP_DOWN);
             }
-        }, 
+        },
         function (response) {
             logger.error("Unable to get Market Sub Segments.", response, response.statusText);
         }
@@ -1359,7 +1362,7 @@ function ContractController($scope, $state, contractData, isNewContract, templat
                 //}
 
                 if (oldValue[MRKT_SEG].value.toString() != newValue[MRKT_SEG].value.toString()) {
-                    
+
                     var treeView = $("#" + MRKT_SEG).data("kendoTreeView");
                     var multiSelect = $("#" + MRKT_SEG + "_MS").data("kendoMultiSelect");
 
