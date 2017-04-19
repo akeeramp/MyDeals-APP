@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Intel.Opaque.Data;
+using Newtonsoft.Json;
 
 namespace Intel.MyDeals.Entities
 {
@@ -22,8 +23,9 @@ namespace Intel.MyDeals.Entities
             foreach (OpDataCollectorFlattenedItem item in data)
             {
                 if (!item.ContainsKey("_actions")) continue;
-                OpDataCollectorFlattenedItem fItem = (OpDataCollectorFlattenedItem)item["_actions"];
 
+                OpDataCollectorFlattenedItem fItem = JsonConvert.DeserializeObject<OpDataCollectorFlattenedItem>(item["_actions"].ToString());
+                
                 if (!fItem.ContainsKey("_deleteTargetIds")) continue;
 
                 List<int> list = (List<int>)fItem["_deleteTargetIds"];
