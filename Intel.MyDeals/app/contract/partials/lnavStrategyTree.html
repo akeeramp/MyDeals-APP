@@ -37,7 +37,9 @@
                     <div class="fl textCircle pct_{{ pt.PCT_RESULT }}">{{ pt.OBJ_SET_TYPE_CD | limitTo:1 }}</div>
                     <div class="fl" style="margin: 0 6px;" ng-init="isEditable=false">
                         <input ng-blur="isEditable=false" ng-show="isEditable" focus-on-show ng-model="pt.TITLE" class="flatWhiteInput" />
-                        <div ng-dblclick="isEditable=false" ng-hide="isEditable" style="width: 195px;" ui-sref="contract.manager.strategy({cid:contractData.DC_ID,sid:ps.DC_ID,pid:pt.DC_ID})">
+                        <div ng-dblclick="isEditable=false" ng-hide="isEditable" style="width: 195px;" 
+                             ui-sref="contract.manager.strategy({cid:contractData.DC_ID,sid:ps.DC_ID,pid:pt.DC_ID})"
+                             ui-sref-opts="{reload: true}">
                             {{ pt.TITLE }}
                         </div>
                     </div>
