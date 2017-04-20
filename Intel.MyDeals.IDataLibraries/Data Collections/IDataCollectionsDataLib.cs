@@ -56,6 +56,6 @@ namespace Intel.MyDeals.IDataLibrary
 
         #endregion Security Attributes
 
-        List<SecurityAttributesDropDown> GetObjAtrbs();
+        List<SecurityAttributesDropDown> GetSecurityAttributesDropDownData();
     }
 }

@@ -25,6 +25,8 @@ namespace Intel.MyDeals.IBusinessLogic
 
         SecurityWrapper GetSecurityMasks();
 
+		List<SecurityAttributesDropDown> GetSecurityAttributesDropDownData();
+
 		Dictionary<string, Dictionary<string, Dictionary<string, List<string>>>> GetObjAtrbs();
 
         AdminApplications ManageAdminApplication(AdminApplications app, CrudModes state);

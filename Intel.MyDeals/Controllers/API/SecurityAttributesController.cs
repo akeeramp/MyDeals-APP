@@ -52,7 +52,31 @@ namespace Intel.MyDeals.Controllers.API
 			
 			List<OpDataElementTypeItem> objTypes = OpDataElementTypeRepository.OpDetCollection.Items;
 
-			return ( new SecurityDropdownData(securityActions, dealTypes, roleTypes, workflowStages, objTypes));
+			// Create dictionary to drilldown Attributes by Obj type
+			Dictionary<string, List<SecurityAttributesDropDown>> attrDrilldownByObjType = new Dictionary<string, List<SecurityAttributesDropDown>>();
+			List<SecurityAttributesDropDown> attributesList = _securityAttributesLib.GetSecurityAttributesDropDownData();
+			Dictionary<string, bool> attributeTracker = new Dictionary<string, bool>(); // This makes sure we don't have double attributes 
+			List<SecurityAttributesDropDown> objTypeAttributes = new List<SecurityAttributesDropDown>();
+
+			foreach (OpDataElementTypeItem objType in OpDataElementTypeRepository.OpDetCollection.Items)
+			{
+				// NOTE: we iterate through instead of using Linq because of the double-entries in attributesList via OBJ_SET_TYPE, which we don't drilldown on
+				foreach (SecurityAttributesDropDown attr in attributesList)
+				{
+					if (attr.OBJ_TYPE_SID == objType.Id && !attributeTracker.ContainsKey(attr.ATRB_COL_NM))
+					{
+						objTypeAttributes.Add(attr);
+						attributeTracker[attr.ATRB_COL_NM] = true;
+					}
+				}
+				attrDrilldownByObjType[objType.Alias] = objTypeAttributes;
+
+				// Clear for next iteration
+				objTypeAttributes = new List<SecurityAttributesDropDown>();
+				attributeTracker = new Dictionary<string, bool>();
+			}
+
+			return ( new SecurityDropdownData(attrDrilldownByObjType, securityActions, dealTypes, roleTypes, workflowStages, objTypes));
 		}
 
 		[HttpGet]

@@ -26,7 +26,7 @@ namespace Intel.MyDeals.DataLibrary.Test
 		[TestMethod]
 		public void SecurityEngineObjAtrbsGet()
 		{
-			List<SecurityAttributesDropDown> results = new SecurityAttributesDataLib().GetObjAtrbs();
+			List<SecurityAttributesDropDown> results = new SecurityAttributesDataLib().GetSecurityAttributesDropDownData();
 			Assert.IsTrue(results.Any());
 		}
 

@@ -50,19 +50,19 @@ namespace Intel.MyDeals.DataLibrary
                                                             WFSTG_MBR_SID = Convert.ToInt32(rw["WFSTG_MBR_SID"])
                                                         }).ToList();
 
-                    // TODO: Hook this up when we get roles hooked up on db side
-                    // TODO: re-evaluate if we need the roletypes in here vs getting role types via pr_get_dropdowns?
-                    List<OpRoleType> tmpRoleType = null;
-                    //List<OpRoleType> tmpRoleType = DataCollections.GetAppRoleTiers().Where(r => r.APPL_CD.ToUpper() == "IDMS").Select(appRoleTier => new OpRoleType
-                    //{
-                    //	RoleTypeId = appRoleTier.ROLE_TYPE_SID,
-                    //	RoleTypeCd = appRoleTier.ROLE_TYPE_CD,
-                    //	RoleTypeDescription = appRoleTier.ROLE_TYPE_DESC,
-                    //	RoleTypeDisplayName = appRoleTier.ROLE_TYPE_DSPLY_CD,
-                    //	RoleTier = appRoleTier.ROLE_TIER_CD
-                    //}).ToList();
+					// TODO: Hook this up when we get roles hooked up on db side
+					// TODO: re-evaluate if we need the roletypes in here vs getting role types via pr_get_dropdowns?
+					List<OpRoleType> tmpRoleType = null;
+					//List<OpRoleType> tmpRoleType = DataCollections.GetAppRoleTiers().Where(r => r.APPL_CD.ToUpper() == "IDMS").Select(appRoleTier => new OpRoleType
+					//{
+					//	RoleTypeId = appRoleTier.ROLE_TYPE_SID,
+					//	RoleTypeCd = appRoleTier.ROLE_TYPE_CD,
+					//	RoleTypeDescription = appRoleTier.ROLE_TYPE_DESC,
+					//	RoleTypeDisplayName = appRoleTier.ROLE_TYPE_DSPLY_CD,
+					//	RoleTier = appRoleTier.ROLE_TIER_CD
+					//}).ToList();					
 
-                    return new SecurityWrapper(tmpRoleType, securityAttributes, securityMasks);
+					return new SecurityWrapper(tmpRoleType, securityAttributes, securityMasks);
                 }
             }
             catch (Exception ex)
@@ -113,7 +113,7 @@ namespace Intel.MyDeals.DataLibrary
         /// Gets a list of Attributes used for the Secruity Engine
         /// </summary>
         /// <returns> A list of Attributes </returns>
-        public List<SecurityAttributesDropDown> GetObjAtrbs()
+        public List<SecurityAttributesDropDown> GetSecurityAttributesDropDownData()
         {
             List<SecurityAttributesDropDown> ret;
             try

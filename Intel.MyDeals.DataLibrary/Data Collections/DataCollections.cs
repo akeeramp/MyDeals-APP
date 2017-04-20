@@ -202,18 +202,23 @@ namespace Intel.MyDeals.DataLibrary
         {
             lock (LOCK_OBJECT ?? new object())
             {
-                if (_getRoleTypes != null && _getSecurityAttributes != null && _getSecurityMasks != null)
+				if (_getSecurityWrapper != null)
+				{
+					return _getSecurityWrapper;
+				}
+                else if (/*_getRoleTypes != null && */_getSecurityAttributes != null && _getSecurityMasks != null)
                 {
-                    _getSecurityWrapper = new SecurityWrapper(_getRoleTypes.ToList(), _getSecurityAttributes.ToList(), _getSecurityMasks.ToList());
+					// TODO: Add roles to cache once we get it from the db
+                    _getSecurityWrapper = new SecurityWrapper(/*_getRoleTypes.ToList()*/ null, _getSecurityAttributes.ToList(), _getSecurityMasks.ToList());
                     return _getSecurityWrapper;
                 }
                 else
                 {
                     SecurityWrapper wrapper = new SecurityAttributesDataLib().GetSecurityWrapper();
-                    _getRoleTypes = wrapper.RoleTypes;
-                    _getSecurityAttributes = wrapper.SecurityAttributes.OrderBy(x => x.ATRB_CD);
-                    _getSecurityMasks = wrapper.SecurityMasks;
-                    return wrapper;
+					_getRoleTypes = wrapper.RoleTypes;
+					_getSecurityAttributes = wrapper.SecurityAttributes.OrderBy(x => x.ATRB_CD);
+					_getSecurityMasks = wrapper.SecurityMasks;
+					return wrapper;
                 }
             }
         }
@@ -235,15 +240,15 @@ namespace Intel.MyDeals.DataLibrary
         }
 
         private static SecurityWrapper _getSecurityWrapper;
-        private static IEnumerable<OpRoleType> _getRoleTypes;
+		private static IEnumerable<OpRoleType> _getRoleTypes;
         private static IEnumerable<SecurityAttribute> _getSecurityAttributes;
         private static IEnumerable<SecurityMask> _getSecurityMasks;
 
-        public static List<SecurityAttributesDropDown> GetObjAtrbs()
+        public static List<SecurityAttributesDropDown> GetSecurityAttributesDropDownData()
         {
             lock (LOCK_OBJECT ?? new object())
             {
-                return _getObjAtrbs ?? (_getObjAtrbs = new SecurityAttributesDataLib().GetObjAtrbs());
+                return _getObjAtrbs ?? (_getObjAtrbs = new SecurityAttributesDataLib().GetSecurityAttributesDropDownData());
             }
         }
 

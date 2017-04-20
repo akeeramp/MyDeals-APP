@@ -117,9 +117,9 @@
                         <p><h3>Please select grid filters on the left sidebar.</h3></p>
                         <p><i>Detailed Instructions:</i></p>
                         <ol>
-                            <li>On the left-hand side menu, select the role, stage and deal types to view. Note that leaving the select blank will default to "ALL".</li>
-                            <li>Select either "Attribute Security" or "Deal Security" and enter remaining details.</li>
-                            <li>When done, click the "View" button.</li>
+                            <li>On the left-hand side menu, select the ObjType, Roles, Stages and ObjSet types you want to view. Note that leaving the select blank will default to "ALL".</li>
+                            <li>Select either the "Attribute Security" or "Deal Security" tab and enter remaining details.</li>
+                            <li>When done, click the "View Security Attributes" button on the bottom.</li>
                         </ol>
                     </div>
                     <div ng-show="vm.isShowMainContent && !vm.isGridLoading">
@@ -142,6 +142,10 @@
 
                                         <div class="atrbbasecolorCAP_BAND fl atrbContainer secEngine_key">&nbsp;</div>
                                         <div class="fl secEngine_keyBlock"> = CAP BAND</div>
+
+										<div class="atrbbasecolor fl atrbContainer secEngine_key" style="border-color: red;">&nbsp;</div>
+										<div class="fl secEngine_keyBlock"> = Other (hover on box to see)</div>
+
                                     </div>
                                 </div>
                             </div>

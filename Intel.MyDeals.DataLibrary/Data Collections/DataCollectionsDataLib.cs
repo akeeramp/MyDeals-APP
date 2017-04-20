@@ -149,9 +149,9 @@ namespace Intel.MyDeals.DataLibrary
             return DataCollections.GetSecurityActions();
         }
 
-        public List<SecurityAttributesDropDown> GetObjAtrbs()
+        public List<SecurityAttributesDropDown> GetSecurityAttributesDropDownData()
         {
-            return DataCollections.GetObjAtrbs();
+            return DataCollections.GetSecurityAttributesDropDownData();
         }
 
         #endregion Security Attributes

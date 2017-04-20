@@ -31,9 +31,14 @@ namespace Intel.MyDeals.BusinessLogic
 
 		#region Security Mapping
 
+		public List<SecurityAttributesDropDown> GetSecurityAttributesDropDownData()
+		{
+			return _dataCollectionsDataLib.GetSecurityAttributesDropDownData();
+		}
+
 		public Dictionary<string, Dictionary<string, Dictionary<string, List<string>>>> GetObjAtrbs()
 		{
-			List<SecurityAttributesDropDown> attributesList = _dataCollectionsDataLib.GetObjAtrbs();
+			List<SecurityAttributesDropDown> attributesList = _dataCollectionsDataLib.GetSecurityAttributesDropDownData();
 
 			Dictionary<string, Dictionary<string, Dictionary<string, List<string>>>> objTypes = new Dictionary<string, Dictionary<string, Dictionary<string, List<string>>>>();
 			Dictionary<string, List<string>> objsetTypesOfAttributes = new Dictionary<string, List<string>>();
@@ -61,7 +66,7 @@ namespace Intel.MyDeals.BusinessLogic
                 }
                 objTypes[objTypeKey.Alias]["ATTRBS"] = objsetTypesOfAttributes;
 
-			    objTypes[objTypeKey.Alias]["STAGES"] = new Dictionary<string, List<string>>();
+				objTypes[objTypeKey.Alias]["STAGES"] = new Dictionary<string, List<string>>();
                 foreach (WorkFlows workFlow in workFlows.Where(w => w.OBJ_TYPE_SID == objTypeKey.Id).Distinct())
                 {
                     if (!objTypes[objTypeKey.Alias]["STAGES"].ContainsKey(workFlow.WFSTG_MBR_SID.ToString()))

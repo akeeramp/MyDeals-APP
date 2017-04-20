@@ -18,7 +18,7 @@
     	vm.save = save;
     	vm.reset = reset;
     	vm.magicWandSelect = magicWandSelect;
-    	vm.onGroupChange = onGroupChange;
+    	vm.onObjTypeChange = onObjTypeChange;
 
     	// Variables     
     	vm.tabModeEnum = {
@@ -40,6 +40,7 @@
     	vm.dropDownDatasource.stages = [];
     	vm.dropDownDatasource.objTypes = [];
 
+    	vm.drilledDownAttributes = [];
     	vm.drilledDownDealTypes = [];
     	vm.drilledDownStages = [];
 
@@ -58,7 +59,7 @@
     	vm.default.objTypeName = "CNTRCT";
 
     	vm.filtered = {}; // A copy of vm.selected's values to create the grid
-    	vm.filtered.attributes = {};
+    	vm.filtered.attributes = [];
 		
     	vm.isDropdownsLoaded = false; // Determines load for k-ng-delay on dropdowns
     	vm.isShowMainContent = false;
@@ -131,7 +132,7 @@
     	};
     	vm.dropDownOptions.attributes = {
     		placeholder: "All Attributes",
-    		dataTextField: "ATRB_CD",
+    		dataTextField: "ATRB_COL_NM", // ATRB_CD
     		dataValueField: "ATRB_SID",
     		valuePrimitive: false,
     		autoBind: false,
@@ -140,7 +141,7 @@
     			serverFiltering: true,
     			transport: {
     				read: function (e) {
-    					e.success(vm.dropDownDatasource.attributes);
+    					e.success(vm.drilledDownAttributes);
     				},
     				create: function (e) {
     					e.preventDefault();
@@ -167,7 +168,7 @@
     	vm.dropDownOptions.objType = {
     		optionLabel: "Default (CNTRACT)",
     		autoBind: false,
-    		select: vm.onGroupChange,
+    		select: vm.onObjTypeChange,
     		dataTextField: "Alias",
     		dataSource: {
     			type: "json",
@@ -194,7 +195,6 @@
     		var deferred = $q.defer();
     			SecurityEngineService.getMasks()
 					.then(function (response) {
-						vm.dropDownDatasource.attributes = response.data.SecurityAttributes;
 						processMaskData(response.data);
 						deferred.resolve(response);
 					}, function (error) {
@@ -224,6 +224,10 @@
     		var deferred = $q.defer();
     			SecurityEngineService.getSecurityDropdownData()
 					.then(function (response) {
+
+						vm.dropDownDatasource.attributes = response.data.AttributesByObjType;
+						vm.drilledDownAttributes = response.data.AttributesByObjType[vm.default.objTypeName];
+
 						vm.dropDownDatasource.actions = response.data.SecurityActions;
 						vm.dropDownDatasource.dealTypes = response.data.AdminDealTypes;
 						vm.dropDownDatasource.roleTypes = response.data.AdminRoleTypes;
@@ -298,8 +302,9 @@
 	        var objType = vm.filtered.objType;
 
 			// Tab-specific logic
-    		if (vm.currentTabMode === vm.tabModeEnum.AtrbSecurity){ // Atrribute Security Tab
-    			if (vm.filtered.attributes.length == 0) { vm.filtered.attributes = angular.copy(vm.dropDownDatasource.attributes); }
+	        if (vm.currentTabMode === vm.tabModeEnum.AtrbSecurity) { // Atrribute Security Tab
+				
+	        	if (vm.filtered.attributes.length == 0) { vm.filtered.attributes = angular.copy(vm.dropDownDatasource.attributes[getSelectedObjType()]); }
 
     			// Get default selected action if no selected action
     			if (vm.filtered.attrAction == null || typeof vm.filtered.attrAction === 'undefined') {
@@ -315,9 +320,7 @@
     				for(var i=0; i<vm.filtered.dealActions.length; i++){
     					// TODO: perform saves on Deal Security via -1 bits
     					vm.filtered.attributes.push({
-    						ATRB_BIT: -1,
-    						ATRB_MAGNITUDE: -1,
-    						ATRB_CD: angular.copy(vm.filtered.dealActions[i].dropdownName),
+    						ATRB_COL_NM: angular.copy(vm.filtered.dealActions[i].dropdownName),
     						ATRB_SID:  angular.copy(vm.filtered.dealActions[i].dropdownID) // Note: for deal security only, atrb ID is actually action ID, whcih will be used during saving
     					});
     				}
@@ -326,9 +329,7 @@
     				for (var i = 0; i < allDealActions.length; i++) {
     					// TODO: perform saves on Deal Security via -1 bits
     					vm.filtered.attributes.push({
-    						ATRB_BIT: -1, // TODO
-    						ATRB_MAGNITUDE: -1,
-    						ATRB_CD: angular.copy(allDealActions[i].dropdownName),
+    						ATRB_COL_NM: angular.copy(allDealActions[i].dropdownName),
     						ATRB_SID: angular.copy(allDealActions[i].dropdownID) // Note: for deal security only, atrb ID is actually action ID, whcih will be used during saving
     					});
     				}
@@ -352,9 +353,10 @@
     		// Make the Roles column
     		var columns = [
 				{
-					field: "ATRB_CD",
+					field: "ATRB_COL_NM",
 					title: "Attribute/Action",
-					width: 140
+					width: 140,	
+					template: "#= data.ATRB_COL_NM # <br/> #= data.ATRB_SID #"
 				},
 				{
 					title: "Role",
@@ -376,7 +378,7 @@
     				encoded: false,
     				width: stageColWidth, 
     				// HACK: template has a directive work-around to bind and compile html with angular
-    				template: "<security-engine-draw-deals attr-id=\"#= data.ATRB_SID #\" atrb-cd=\"#= data.ATRB_CD #\" stg-Id=\"" + stgID + "\" stg-name=\"" + stgName + "\"></security-engine-draw-deals>"
+    				template: "<security-engine-draw-deals attr-id=\"#= data.ATRB_SID #\" atrb-cd=\"#= data.ATRB_COL_NM #\" stg-Id=\"" + stgID + "\" stg-name=\"" + stgName + "\"></security-engine-draw-deals>"
     			});
     		}
 
@@ -394,7 +396,7 @@
     				schema: {
     					model: {
     						fields: {
-    							ATRB_CD: { type: "string" }
+    							ATRB_COL_NM: { type: "string" }
     						}
     					}
     				},
@@ -429,10 +431,10 @@
     			closeButtonText: 'Close',
     			hasActionButton: false,
     			headerText: 'Help Text',
-    			bodyText: 'Start by selecting the role, stage and deal types to view.'
-					 + ' Leaving the select blank will default to ALL.'
-					 + ' Then, select either Attribute Security or Deal Security and enter remaining details.'
-					 + ' When done, click the View Security Attributes button.'
+    			bodyText: 'Start by selecting the ObjType, Roles, Stages and ObjSet types you want to view.'
+					 + ' Note that leaving the select blank will default to ALL.'
+					 + ' Then, select either Attribute Security or Deal Security tab and enter remaining details.'
+					 + ' When done, click the View Security Attributes button on the bottom.'
     		};
     		confirmationModal.showModal({}, modalOptions);
     	}
@@ -455,7 +457,7 @@
     		var objToSave = {
     			ACTN_NM: actnCd,
     			SECUR_ACTN_SID: actnId,
-    			ATRB_CD: attrCd,
+    			ATRB_COL_NM: attrCd,
     			ATRB_SID: attrId,
     			OBJ_TYPE: vm.filtered.objType.Alias,
     			OBJ_TYPE_SID: vm.filtered.objType.Id,
@@ -524,7 +526,7 @@
 					for (var key in vm.pendingSaveArray) {
 						if (typeof vm.pendingSaveArray[key] === 'object') {
 							var value = vm.pendingSaveArray[key];
-							var secKey = value.ATRB_CD + "/" + value.OBJ_SET_TYPE_CD + "/" + value.ROLE_NM + "/" + value.WFSTG_NM;
+							var secKey = value.ATRB_COL_NM + "/" + value.OBJ_SET_TYPE_CD + "/" + value.ROLE_NM + "/" + value.WFSTG_NM;
 
 							if (value.isNowChecked) {
 								// Add new values to the security mask
@@ -563,8 +565,9 @@
 			// Reset
         	vm.selected.attributes = [];
 
+			// Compare elements against magic wand array
         	for (var i = 0; i < bestGuessAttributes.length; i++) {
-        		var found = $filter('filter')(vm.dropDownDatasource.attributes, { ATRB_CD: bestGuessAttributes[i] }, true)[0];
+        		var found = $filter('filter')(vm.dropDownDatasource.attributes[getSelectedObjType()], { ATRB_COL_NM: bestGuessAttributes[i] }, true)[0];
         		if (found != null) {
         			vm.selected.attributes.push(found);
         		}
@@ -574,18 +577,28 @@
         	vm.dropDown.dealSecurity;
         }
 
-        function onGroupChange(e) {
+        function onObjTypeChange(e) {
         	// Note: kendo select event being called twice: once on click and once on deselect 
-            vm.drilledDownDealTypes = filterObjType(e.dataItem.Alias);
-            vm.drilledDownStages = filterObjTypeForStages(e.dataItem.Alias);
-
+        	vm.drilledDownDealTypes = filterObjType(e.dataItem.Alias);
+        	vm.drilledDownStages = filterObjTypeForStages(e.dataItem.Alias);
+			
+			// Attribute drilldown by Obj type
+        	if (vm.dropDownDatasource.attributes[e.dataItem.Alias] == undefined) {
+        		vm.drilledDownAttributes = vm.dropDownDatasource.attributes[vm.default.objTypeName];
+        	} else {
+        		vm.drilledDownAttributes = vm.dropDownDatasource.attributes[e.dataItem.Alias];
+        	}
+			
             // Update ObjSetType dropdown Datasource
             vm.dropDown.objSetType.setDataSource(vm.drilledDownDealTypes);
             vm.dropDown.wfStage.setDataSource(vm.drilledDownStages);
-            
+            vm.dropDown.attributes.setDataSource(vm.drilledDownAttributes);
+			
         	// Clear selected
             vm.selected.dealTypes = [];
             vm.selected.stages = [];
+            vm.selected.attributes = [];
+            $scope.$apply;
         }
 
         function filterObjType(objTypeName) {
@@ -602,18 +615,25 @@
             return filteredDeals;
         }
         function filterObjTypeForStages(objTypeName) {
-            var filteredStages = [];
-            if (vm.dealTypeAtrbs[objTypeName] !== undefined && vm.dealTypeAtrbs[objTypeName]["STAGES"] !== undefined) {
-                var stgs = vm.dealTypeAtrbs[objTypeName]["STAGES"];
-                for (var key in stgs) {
-                    if (stgs.hasOwnProperty(key)) {
-                        filteredStages.push({ "Stage": stgs[key][0], "Id": key });
-                    }
-                }
-            }
-            return filteredStages;
+        	var filteredStages = [];
+        	if (vm.dealTypeAtrbs[objTypeName] !== undefined && vm.dealTypeAtrbs[objTypeName]["STAGES"] !== undefined) {
+        		var stgs = vm.dealTypeAtrbs[objTypeName]["STAGES"];
+        		for (var key in stgs) {
+        			if (stgs.hasOwnProperty(key)) {
+        				filteredStages.push({ "Stage": stgs[key][0], "Id": key });
+        			}
+        		}
+        	}
+        	return filteredStages;
         }
 
+        function getSelectedObjType() {
+        	if (vm.selected.objType != null) {
+        		return vm.selected.objType.Alias;
+        	} else {
+        		return vm.default.objTypeName;
+        	}
+        }
         init();
     }
 })();
