@@ -262,7 +262,7 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "Market Segment",
                 DataType = "string",
                 UiType = "EMBEDDEDMULTISELECT",
-                LookupUrl = "/api/Dropdown/GetDropdownHierarchy/MRKT_SEG_COMBINED",
+                LookupUrl = "/api/Dropdown/GetDropdownHierarchy/MRKT_SEG",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN",
                 HelpText = "You cannot mix ALL & other market segments.\n\nNon Corp selects: Consumer retail pull, Education, Government, &SMB"

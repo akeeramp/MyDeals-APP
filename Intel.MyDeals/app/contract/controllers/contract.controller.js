@@ -1331,7 +1331,7 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
 
     //setting a few constants for the strings that occur a lot
     var GEO = "GEO_COMBINED";
-    var MRKT_SEG = "MRKT_SEG_COMBINED"
+    var MRKT_SEG = "MRKT_SEG"
 
     //these strings will need to be updated if they ever change it in the db or admin screen... TODO: tap into default values bool in basic dropdowns table once those db changes are made
     var WW = "Worldwide";

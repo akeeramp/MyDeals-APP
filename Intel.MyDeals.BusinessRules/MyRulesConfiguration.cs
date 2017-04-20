@@ -116,7 +116,7 @@ namespace Intel.MyDeals.BusinessRules
         //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunMustBePositiveOrZero, OnSaveTrigger = true, StringArrayVal1 = new[] { EN.ATRB.REBATE_OA_MAX_VOL, EN.ATRB.REBATE_OA_MAX_AMT }, StringVal2 = ">" });
         //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunMaxCharLimit, OnSaveTrigger = true, StringVal1 = EN.ATRB.BACKDATE_REASON_TXT, IntVal1 = 25 });
         //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunMaxCharLimit, OnSaveTrigger = true, StringVal1 = EN.ATRB.C2A_DATA_C2A_ID, IntVal1 = 100 });
-        //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunMinDealReqs, OnSaveTrigger = true, StringArrayVal1 = new[] { "PRODUCT_FILTER", "PRODUCT_TITLE", "NUM_OF_TIERS", AttributeCodes.PROGRAM_PAYMENT, "STRT_VOL", "END_VOL", "RATE", "START_DT", "END_DT", "DEAL_STG_CD", "PRD_NM_COMBINED", "MRKT_SEG_COMBINED", "TRGT_RGN_CHK", "PRD_LEVEL", "DEAL_TYPE_CD_SID", "CUST_MBR_SID" } });
+        //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunMinDealReqs, OnSaveTrigger = true, StringArrayVal1 = new[] { "PRODUCT_FILTER", "PRODUCT_TITLE", "NUM_OF_TIERS", AttributeCodes.PROGRAM_PAYMENT, "STRT_VOL", "END_VOL", "RATE", "START_DT", "END_DT", "DEAL_STG_CD", "PRD_NM_COMBINED", "MRKT_SEG", "TRGT_RGN_CHK", "PRD_LEVEL", "DEAL_TYPE_CD_SID", "CUST_MBR_SID" } });
         //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunMaxCharLimit, OnSaveTrigger = true, StringVal1 = "REBATE_DISTI", IntVal1 = 50 });
 
         //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunClearMessage, OnLoadTrigger = true });
@@ -168,7 +168,7 @@ namespace Intel.MyDeals.BusinessRules
         //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunMaxCharLimit, OnSaveTrigger = true, StringVal1 = EN.ATRB.BACKDATE_REASON_TXT, IntVal1 = 25 });
         //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunMaxCharLimit, OnSaveTrigger = true, StringVal1 = EN.ATRB.C2A_DATA_C2A_ID, IntVal1 = 100 });
         //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunClearMessage, OnLoadTrigger = true });
-        //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunMinDealReqs, OnSaveTrigger = true, StringArrayVal1 = new[] { "PRODUCT_FILTER", "PRODUCT_TITLE", "DEAL_TYPE_CD", "START_DT", "END_DT", "DEAL_STG_CD", "PRD_NM_COMBINED", "NUM_OF_TIERS", "PAYOUT_BASED_ON", AttributeCodes.PROGRAM_PAYMENT, "MRKT_SEG_COMBINED", "TRGT_RGN_CHK", "RATE", "STRT_CAP", "END_CAP", "DEAL_TYPE_CD_SID", "CUST_MBR_SID" } });
+        //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunMinDealReqs, OnSaveTrigger = true, StringArrayVal1 = new[] { "PRODUCT_FILTER", "PRODUCT_TITLE", "DEAL_TYPE_CD", "START_DT", "END_DT", "DEAL_STG_CD", "PRD_NM_COMBINED", "NUM_OF_TIERS", "PAYOUT_BASED_ON", AttributeCodes.PROGRAM_PAYMENT, "MRKT_SEG", "TRGT_RGN_CHK", "RATE", "STRT_CAP", "END_CAP", "DEAL_TYPE_CD_SID", "CUST_MBR_SID" } });
         //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunMaxCharLimit, OnSaveTrigger = true, StringVal1 = "REBATE_DISTI", IntVal1 = 50 });
 
         //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunValidateRequiredFields, OnSaveTrigger = true });
@@ -210,7 +210,7 @@ namespace Intel.MyDeals.BusinessRules
         //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunClearMessage, OnLoadTrigger = true });
         //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunMustBePositive, OnSaveTrigger = true, StringArrayVal1 = new[] { "ADJ_ECAP_UNIT" }, StringVal2 = ">" });
         //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunMaxCharLimit, OnSaveTrigger = true, StringVal1 = "ORIG_ECAP_TRKR_NBR", IntVal1 = 20 });
-        //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunMinDealReqs, OnSaveTrigger = true, StringArrayVal1 = new[] { "PRODUCT_FILTER", "DEAL_TYPE_CD", "START_DT", "END_DT", "DEAL_STG_CD", "PRD_NM_COMBINED", "MRKT_SEG_COMBINED", "DEAL_PGM_TYPE", "TOTAL_DOLLAR_AMOUNT", "PRODUCT_TITLE", "PGM_TYPE_CHK", "PRD_LEVEL", "DEAL_TYPE_CD_SID", "CUST_MBR_SID", AttributeCodes.DEAL_PGM_TYPE } });
+        //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunMinDealReqs, OnSaveTrigger = true, StringArrayVal1 = new[] { "PRODUCT_FILTER", "DEAL_TYPE_CD", "START_DT", "END_DT", "DEAL_STG_CD", "PRD_NM_COMBINED", "MRKT_SEG", "DEAL_PGM_TYPE", "TOTAL_DOLLAR_AMOUNT", "PRODUCT_TITLE", "PGM_TYPE_CHK", "PRD_LEVEL", "DEAL_TYPE_CD_SID", "CUST_MBR_SID", AttributeCodes.DEAL_PGM_TYPE } });
         //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunMaxCharLimit, OnSaveTrigger = true, StringVal1 = "REBATE_DISTI", IntVal1 = 50 });
 
         //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunValidateRequiredFields, OnSaveTrigger = true });
@@ -249,7 +249,7 @@ namespace Intel.MyDeals.BusinessRules
         //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunPerformActionForEachAtrbInWhere, OnHiddenTrigger = true, AtrbAction = BusinessLogicDataElementActions.SetHidden, AtrbActionTarget = new[] { AttributeCodes.BACK_DATE_RSN }, AtrbCondIf = de => de.AtrbCdIs(AttributeCodes.START_DT) && !de.IsDateInPast() && de.State != OpDataElementState.Modified });
         //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunPerformActionForEachAtrbInWhere, OnHiddenTrigger = true, AtrbAction = BusinessLogicDataElementActions.SetHidden, AtrbActionTarget = new[] { AttributeCodes.BACK_DATE_RSN_TXT }, AtrbCondIf = de => de.AtrbHasNoValue(AttributeCodes.BACK_DATE_RSN, EN.VALUES.OTHER) });
 
-        //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunHideRowBasedOnAtrbValueAndVerts, OnHiddenTrigger = true, StringVal1 = EN.ATRB.MRKT_SEG_COMBINED, StringArrayVal1 = new[] { EN.VALUES.CONSUMER_RETAIL_PULL }, StringArrayVal2 = new[] { "DT", "Mb" }, StringArrayVal3 = new[] { EN.ATRB.CPU_PULL_DLR, EN.ATRB.CPU_PULL_DLR_SDM } });
+        //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunHideRowBasedOnAtrbValueAndVerts, OnHiddenTrigger = true, StringVal1 = EN.ATRB.MRKT_SEG, StringArrayVal1 = new[] { EN.VALUES.CONSUMER_RETAIL_PULL }, StringArrayVal2 = new[] { "DT", "Mb" }, StringArrayVal3 = new[] { EN.ATRB.CPU_PULL_DLR, EN.ATRB.CPU_PULL_DLR_SDM } });
         //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunHideBasedOnValueAndVerts, OnHiddenTrigger = true, StringVal1 = EN.ATRB.ECAP_TYPE, StringArrayVal1 = new[] { EN.VALUES.TENDER }, StringArrayVal2 = new[] { EN.VALUES.SVRWS }, StringArrayVal3 = new[] { EN.ATRB.SERVER_DEAL_TYPE } });
         //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunForceHiddenBasedOnStartDateAndDealType, OnHiddenTrigger = true, StringArrayVal1 = new[] { EN.ATRB.BACKDATE_REASON, EN.ATRB.BACKDATE_REASON_TXT }, StringArrayVal2 = new[] { EN.VALUES.NONE } });
         //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunForceHiddenBasedOnValue, OnHiddenTrigger = true, StringVal1 = AttributeCodes.PROGRAM_PAYMENT, StringArrayVal1 = new[] { "Backend" }, StringVal2 = AttributeCodes.DEAL_SOLD_TO_ID });
@@ -268,7 +268,7 @@ namespace Intel.MyDeals.BusinessRules
         //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunMaxCharLimit, OnSaveTrigger = true, StringVal1 = "REBATE_DISTI", IntVal1 = 50 });
         //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunMaxCharLimit, OnSaveTrigger = true, StringVal1 = "QLTR_PROJECT", IntVal1 = 150 });
         //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunMaxCharLimit, OnSaveTrigger = true, StringVal1 = "QLTR_TERMS", IntVal1 = 500 });
-        //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunMinDealReqs, OnSaveTrigger = true, StringArrayVal1 = new[] { "PRODUCT_FILTER", "START_DT", "END_DT", "VOLUME", "DEAL_STG_CD", "DIVISION_APPROVED_LIMIT", "PRD_NM_COMBINED", "KIT_CHK", "PROGRAM_PAYMENT", "PAYOUT_BASED_ON", "MRKT_SEG_COMBINED", AttributeCodes.ECAP_TYPE, "ECAP_PRICE", "TRGT_RGN_CHK", "PRD_LEVEL", "CAP", "PRD_BUCKET_CHK", "DEAL_TYPE_CD_SID", "CUST_MBR_SID" } });
+        //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunMinDealReqs, OnSaveTrigger = true, StringArrayVal1 = new[] { "PRODUCT_FILTER", "START_DT", "END_DT", "VOLUME", "DEAL_STG_CD", "DIVISION_APPROVED_LIMIT", "PRD_NM_COMBINED", "KIT_CHK", "PROGRAM_PAYMENT", "PAYOUT_BASED_ON", "MRKT_SEG", AttributeCodes.ECAP_TYPE, "ECAP_PRICE", "TRGT_RGN_CHK", "PRD_LEVEL", "CAP", "PRD_BUCKET_CHK", "DEAL_TYPE_CD_SID", "CUST_MBR_SID" } });
 
         //    //atrbRules.Add(new AttributeRule { ActionRule = AttributeRules.RunValidateRequiredFields, OnSaveTrigger = true });
 

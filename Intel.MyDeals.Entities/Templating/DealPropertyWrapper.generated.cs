@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 4/20/2017 10:25:02 AM
-On: MHTIPPIN-MOBL
+File Updated: 4/20/2017 3:22:25 PM
+On: JJYEH-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
 
@@ -1705,9 +1705,9 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
-		public static MyDealsAttribute MRKT_SEG = new MyDealsAttribute()
+		public static MyDealsAttribute MRKT_SEG_COMBINED = new MyDealsAttribute()
 		{
-			ATRB_COL_NM = "MRKT_SEG",
+			ATRB_COL_NM = "MRKT_SEG_COMBINED",
 			ATRB_DESC = "Concatenated Market Segment",
 			ATRB_LBL = "Market Segment",
 			ATRB_MAX_LEN = 500,
