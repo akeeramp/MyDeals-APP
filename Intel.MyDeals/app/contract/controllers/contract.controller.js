@@ -569,7 +569,7 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
     $scope.strategyTreeCollapseAll = true;
     $scope.toggleStrategyTree = function () {
         var container = angular.element(".lnavStrategyContainer");
-        while (container.length != 0) {
+        while (container.length !== 0) {
             //isCollapsed is only defined in the ng-repeat's local scope, so we need to iterate through them here
             container.scope().isCollapsed = $scope.strategyTreeCollapseAll;
             container = container.next();
@@ -948,7 +948,7 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                         $scope._dirty = false; // don't want to kick of listeners
                         $state.go('contract.manager', {
                             cid: $scope.contractData.DC_ID
-                        });
+                        }, { reload: true });
                     });
                 }
             },
@@ -1136,7 +1136,7 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                 // load the screen
                 $state.go('contract.manager.strategy', {
                     cid: $scope.contractData.DC_ID, sid: pt.DC_PARENT_ID, pid: pt.DC_ID
-                });
+                }, { reload: true });
             },
             function (response) {
                 logger.error("Could not create the pricing table.", response, response.statusText);
@@ -1461,13 +1461,13 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
     $scope.showWipDeals = function () {
         $state.go('contract.manager.strategy.wip', {
             cid: $scope.contractData.DC_ID, sid: $scope.curPricingStrategyId, pid: $scope.curPricingTableId
-        });
+        }, { reload: true });
     }
     $scope.backToPricingTable = function () {
         $scope.spreadNeedsInitialization = true;
         $state.go('contract.manager.strategy', {
             cid: $scope.contractData.DC_ID, sid: $scope.curPricingStrategyId, pid: $scope.curPricingTableId
-        });
+        }, { reload: true });
     }
 
     $scope.validateWipDeals = function () {
