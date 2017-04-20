@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 4/4/2017 2:38:29 PM
+File Updated: 4/20/2017 10:25:02 AM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -160,6 +160,21 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
+		public static MyDealsAttribute BLLG_DT = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "BLLG_DT",
+			ATRB_DESC = "Last Credit/Debit payment date",
+			ATRB_LBL = "Last Credit/Debit payment date",
+			ATRB_MAX_LEN = 100,
+			ATRB_SID = 3521,
+			DATA_TYPE_CD = "DATETIME",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.DateTime",
+			FRMT_MSK = "{0:MM/dd/yyyy HH:mm:ss.fff}",
+			TGT_COL_TYPE = "DATETIME",
+			UI_TYPE_CD = "Label"
+		};
 		public static MyDealsAttribute BNB_STATUS = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "BNB_STATUS",
@@ -250,6 +265,21 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "CheckBox"
 		};
+		public static MyDealsAttribute CAP = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "CAP",
+			ATRB_DESC = "CAP",
+			ATRB_LBL = "CAP",
+			ATRB_MAX_LEN = 50,
+			ATRB_SID = 86,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "Label"
+		};
 		public static MyDealsAttribute CAP_PRICE = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "CAP_PRICE",
@@ -280,6 +310,111 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
+		public static MyDealsAttribute COMP_BENCH = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "COMP_BENCH",
+			ATRB_DESC = "PLI COMP Bench",
+			ATRB_LBL = "COMP Bench",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3627,
+			DATA_TYPE_CD = "MONEY",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Double",
+			FRMT_MSK = "{0:c}",
+			TGT_COL_TYPE = "MONEY",
+			UI_TYPE_CD = "TextBox"
+		};
+		public static MyDealsAttribute COMP_SKU = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "COMP_SKU",
+			ATRB_DESC = "Competitive SKU",
+			ATRB_LBL = "Competitive SKU",
+			ATRB_MAX_LEN = 255,
+			ATRB_SID = 3621,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "CMNT_HIST"
+		};
+		public static MyDealsAttribute COMP_SKU_OTHR = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "COMP_SKU_OTHR",
+			ATRB_DESC = "Competitive SKU Other",
+			ATRB_LBL = "Comp Sku Other",
+			ATRB_MAX_LEN = 255,
+			ATRB_SID = 3622,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "TextBox"
+		};
+		public static MyDealsAttribute COMP_TARGET_SYSTEM_PRICE = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "COMP_TARGET_SYSTEM_PRICE",
+			ATRB_DESC = "Competitive Target System Price",
+			ATRB_LBL = "Competitive Target System Price",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3356,
+			DATA_TYPE_CD = "MONEY",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Double",
+			FRMT_MSK = "{0:c}",
+			TGT_COL_TYPE = "MONEY",
+			UI_TYPE_CD = "TextBox"
+		};
+		public static MyDealsAttribute COMPETITIVE_PRICE = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "COMPETITIVE_PRICE",
+			ATRB_DESC = "Competitive Price Textbox",
+			ATRB_LBL = "Competitive Price Textbox",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3354,
+			DATA_TYPE_CD = "MONEY",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Double",
+			FRMT_MSK = "{0:c}",
+			TGT_COL_TYPE = "MONEY",
+			UI_TYPE_CD = "TextBox"
+		};
+		public static MyDealsAttribute CONSUMPTION_REASON = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "CONSUMPTION_REASON",
+			ATRB_DESC = "Consumption Reason",
+			ATRB_LBL = "Consumption Reason",
+			ATRB_MAX_LEN = 100,
+			ATRB_SID = 3459,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "ComboBox"
+		};
+		public static MyDealsAttribute CONSUMPTION_REASON_CMNT = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "CONSUMPTION_REASON_CMNT",
+			ATRB_DESC = "Consumption Reason Comment",
+			ATRB_LBL = "Consumption Reason Comment",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3460,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "TextBox"
+		};
 		public static MyDealsAttribute CONTRACT_STATUS = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "CONTRACT_STATUS",
@@ -294,6 +429,81 @@ namespace Intel.MyDeals.Entities {
 			FRMT_MSK = "{0}",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute COST_TEST_FAIL_OVERRIDE = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "COST_TEST_FAIL_OVERRIDE",
+			ATRB_DESC = "Deal Cost Test Fail Override",
+			ATRB_LBL = "Deal Cost Test Fail Override",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3647,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "TextBox"
+		};
+		public static MyDealsAttribute COST_TEST_FAIL_OVERRIDE_REASON = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "COST_TEST_FAIL_OVERRIDE_REASON",
+			ATRB_DESC = "Competitive Price Textbox",
+			ATRB_LBL = "Competitive Price Textbox",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3648,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "TextBox"
+		};
+		public static MyDealsAttribute COST_TEST_OVERRIDE = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "COST_TEST_OVERRIDE",
+			ATRB_DESC = "Cost Test Override",
+			ATRB_LBL = "Cost Test Override",
+			ATRB_MAX_LEN = 100,
+			ATRB_SID = 3449,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "ComboBox"
+		};
+		public static MyDealsAttribute COST_TEST_RESULT = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "COST_TEST_RESULT",
+			ATRB_DESC = "Deal Cost Test Result",
+			ATRB_LBL = "Deal Cost Test Result",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3652,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "TextBox"
+		};
+		public static MyDealsAttribute COST_TYPE_USED = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "COST_TYPE_USED",
+			ATRB_DESC = "Cost Type Used",
+			ATRB_LBL = "Cost Type Used",
+			ATRB_MAX_LEN = 100,
+			ATRB_SID = 3556,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "Label"
 		};
 		public static MyDealsAttribute CPU_CACHE = new MyDealsAttribute()
 		{
@@ -369,6 +579,51 @@ namespace Intel.MyDeals.Entities {
 			FRMT_MSK = "{0}",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute CREDIT_VOLUME = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "CREDIT_VOLUME",
+			ATRB_DESC = "Credit Volume",
+			ATRB_LBL = "Credit Volume",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3488,
+			DATA_TYPE_CD = "INT",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Int32",
+			FRMT_MSK = "{0:d}",
+			TGT_COL_TYPE = "INT",
+			UI_TYPE_CD = "Label"
+		};
+		public static MyDealsAttribute CS_SHIP_AHEAD_END_DT = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "CS_SHIP_AHEAD_END_DT",
+			ATRB_DESC = "CS Ship Ahead End Date",
+			ATRB_LBL = "CS Ship Ahead End Date",
+			ATRB_MAX_LEN = 20,
+			ATRB_SID = 3463,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "ComboBox"
+		};
+		public static MyDealsAttribute CS_SHIP_AHEAD_STRT_DT = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "CS_SHIP_AHEAD_STRT_DT",
+			ATRB_DESC = "CS Ship Ahead Start Date",
+			ATRB_LBL = "CS Ship Ahead Start Date",
+			ATRB_MAX_LEN = 100,
+			ATRB_SID = 3462,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "ComboBox"
 		};
 		public static MyDealsAttribute CSL_WWID_EXCEPTIONS = new MyDealsAttribute()
 		{
@@ -550,6 +805,21 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
+		public static MyDealsAttribute DEAL_COMB_TYPE = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "DEAL_COMB_TYPE",
+			ATRB_DESC = "Deal Combination type",
+			ATRB_LBL = "Additive",
+			ATRB_MAX_LEN = 50,
+			ATRB_SID = 3594,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "ComboBox"
+		};
 		public static MyDealsAttribute DEAL_CUST_NM = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "DEAL_CUST_NM",
@@ -563,6 +833,21 @@ namespace Intel.MyDeals.Entities {
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
 			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "Label"
+		};
+		public static MyDealsAttribute DEAL_MSP_PRC = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "DEAL_MSP_PRC",
+			ATRB_DESC = "MSP Price for a product in a deal",
+			ATRB_LBL = "MSP Price",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 97,
+			DATA_TYPE_CD = "MONEY",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Double",
+			FRMT_MSK = "{0:c}",
+			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "Label"
 		};
 		public static MyDealsAttribute DEAL_PRD_NM = new MyDealsAttribute()
@@ -610,6 +895,21 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "Label"
 		};
+		public static MyDealsAttribute DEAL_SOLD_TO_ID = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "DEAL_SOLD_TO_ID",
+			ATRB_DESC = "Sold To Id",
+			ATRB_LBL = "Sold To Id",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3540,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "SoldToPicker"
+		};
 		public static MyDealsAttribute DEAL_STG_CD = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "DEAL_STG_CD",
@@ -623,6 +923,21 @@ namespace Intel.MyDeals.Entities {
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
 			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "Label"
+		};
+		public static MyDealsAttribute DEBIT_VOLUME = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "DEBIT_VOLUME",
+			ATRB_DESC = "Debit Volume",
+			ATRB_LBL = "Debit Volume",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3489,
+			DATA_TYPE_CD = "INT",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Int32",
+			FRMT_MSK = "{0:d}",
+			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "Label"
 		};
 		public static MyDealsAttribute DEVICE_TYPE = new MyDealsAttribute()
@@ -670,6 +985,36 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
+		public static MyDealsAttribute DIVISION_APPROVAL_PRICE = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "DIVISION_APPROVAL_PRICE",
+			ATRB_DESC = "Division Approval Price",
+			ATRB_LBL = "Division Approval Price",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 4,
+			DATA_TYPE_CD = "MONEY",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Double",
+			FRMT_MSK = "{0:c}",
+			TGT_COL_TYPE = "MONEY",
+			UI_TYPE_CD = "Label"
+		};
+		public static MyDealsAttribute DIVISION_APPROVED_LIMIT = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "DIVISION_APPROVED_LIMIT",
+			ATRB_DESC = "Division Approved Limit",
+			ATRB_LBL = "Division Approved Limit",
+			ATRB_MAX_LEN = 100,
+			ATRB_SID = 3471,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "ComboBox"
+		};
 		public static MyDealsAttribute DRAWING_ORD = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "DRAWING_ORD",
@@ -684,6 +1029,21 @@ namespace Intel.MyDeals.Entities {
 			FRMT_MSK = "{0:d}",
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "TextBox"
+		};
+		public static MyDealsAttribute ECAP_FLR = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "ECAP_FLR",
+			ATRB_DESC = "ECAP Floor",
+			ATRB_LBL = "ECAP Floor",
+			ATRB_MAX_LEN = 100,
+			ATRB_SID = 3615,
+			DATA_TYPE_CD = "MONEY",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Double",
+			FRMT_MSK = "{0:c}",
+			TGT_COL_TYPE = "MONEY",
+			UI_TYPE_CD = default(System.String)
 		};
 		public static MyDealsAttribute ECAP_PRICE = new MyDealsAttribute()
 		{
@@ -775,6 +1135,21 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
+		public static MyDealsAttribute END_CUSTOMER_RETAIL = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "END_CUSTOMER_RETAIL",
+			ATRB_DESC = "End Customer/Retail",
+			ATRB_LBL = "End Customer/Retail",
+			ATRB_MAX_LEN = 100,
+			ATRB_SID = 3348,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "TextBox"
+		};
 		public static MyDealsAttribute END_DT = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "END_DT",
@@ -819,6 +1194,21 @@ namespace Intel.MyDeals.Entities {
 			FRMT_MSK = "{0}",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute EXPIRE_YCS2 = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "EXPIRE_YCS2",
+			ATRB_DESC = "Expire SAP YCS2",
+			ATRB_LBL = "Expire YCS2",
+			ATRB_MAX_LEN = 3,
+			ATRB_SID = 3562,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "ComboBox"
 		};
 		public static MyDealsAttribute FG_MTRL_STS_CD = new MyDealsAttribute()
 		{
@@ -909,6 +1299,21 @@ namespace Intel.MyDeals.Entities {
 			FRMT_MSK = "{0}",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute FSE_APPROVED_PRICE = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "FSE_APPROVED_PRICE",
+			ATRB_DESC = "FSE Approved Price",
+			ATRB_LBL = "FSE Approved Price",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 10,
+			DATA_TYPE_CD = "MONEY",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Double",
+			FRMT_MSK = "{0:c}",
+			TGT_COL_TYPE = "MONEY",
+			UI_TYPE_CD = "Label"
 		};
 		public static MyDealsAttribute GDM_BRND_NM = new MyDealsAttribute()
 		{
@@ -1015,6 +1420,21 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
+		public static MyDealsAttribute GEO_APPROVED_PRICE = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "GEO_APPROVED_PRICE",
+			ATRB_DESC = "Geo Approved Price",
+			ATRB_LBL = "Geo Approved Price",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 11,
+			DATA_TYPE_CD = "MONEY",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Double",
+			FRMT_MSK = "{0:c}",
+			TGT_COL_TYPE = "MONEY",
+			UI_TYPE_CD = "Label"
+		};
 		public static MyDealsAttribute GEO_COMBINED = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "GEO_COMBINED",
@@ -1040,6 +1460,21 @@ namespace Intel.MyDeals.Entities {
 			DATA_TYPE_CD = "CUSTOM",
 			DIM_CD = "GEO",
 			DIM_SID = 4,
+			DOT_NET_DATA_TYPE = "System.Object",
+			FRMT_MSK = "{0}",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute HIER_NM_HASH = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "HIER_NM_HASH",
+			ATRB_DESC = "Product Hierarchy Hash Names",
+			ATRB_LBL = default(System.String),
+			ATRB_MAX_LEN = 1000,
+			ATRB_SID = 7091,
+			DATA_TYPE_CD = "CUSTOM",
+			DIM_CD = "PRD",
+			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
 			TGT_COL_TYPE = "VARCHAR",
@@ -1111,7 +1546,7 @@ namespace Intel.MyDeals.Entities {
 			ATRB_DESC = "employee is a dev user",
 			ATRB_LBL = "Developer",
 			ATRB_MAX_LEN = 0,
-			ATRB_SID = 5043,
+			ATRB_SID = 5041,
 			DATA_TYPE_CD = "BIT",
 			DIM_CD = "SECUR",
 			DIM_SID = 50,
@@ -1126,7 +1561,7 @@ namespace Intel.MyDeals.Entities {
 			ATRB_DESC = "employee is a super user",
 			ATRB_LBL = "Super User",
 			ATRB_MAX_LEN = 0,
-			ATRB_SID = 5041,
+			ATRB_SID = 5043,
 			DATA_TYPE_CD = "BIT",
 			DIM_CD = "SECUR",
 			DIM_SID = 50,
@@ -1180,6 +1615,51 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
+		public static MyDealsAttribute MEETCOMP_TEST_FAIL_OVERRIDE = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "MEETCOMP_TEST_FAIL_OVERRIDE",
+			ATRB_DESC = "Deal Meet Comp Test Fail Override",
+			ATRB_LBL = "Deal Meet Comp Test Fail Override",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3649,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "TextBox"
+		};
+		public static MyDealsAttribute MEETCOMP_TEST_FAIL_OVERRIDE_REASON = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "MEETCOMP_TEST_FAIL_OVERRIDE_REASON",
+			ATRB_DESC = "Deal Meet Comp Test Fail Override Reason",
+			ATRB_LBL = "Deal Meet Comp Test Fail Override Reason",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3650,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "TextBox"
+		};
+		public static MyDealsAttribute MEETCOMP_TEST_RESULT = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "MEETCOMP_TEST_RESULT",
+			ATRB_DESC = "Deal Meet Comp Test Result",
+			ATRB_LBL = "Deal Meet Comp Test Result",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3651,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "TextBox"
+		};
 		public static MyDealsAttribute MKTING_CD_NM = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "MKTING_CD_NM",
@@ -1225,9 +1705,9 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
-		public static MyDealsAttribute MRKT_SEG_COMBINED = new MyDealsAttribute()
+		public static MyDealsAttribute MRKT_SEG = new MyDealsAttribute()
 		{
-			ATRB_COL_NM = "MRKT_SEG_COMBINED",
+			ATRB_COL_NM = "MRKT_SEG",
 			ATRB_DESC = "Concatenated Market Segment",
 			ATRB_LBL = "Market Segment",
 			ATRB_MAX_LEN = 500,
@@ -1450,6 +1930,21 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
+		public static MyDealsAttribute ON_ADD_DT = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "ON_ADD_DT",
+			ATRB_DESC = "On Ad Date",
+			ATRB_LBL = "On Ad Date",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3435,
+			DATA_TYPE_CD = "DATETIME",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.DateTime",
+			FRMT_MSK = "{0:MM/dd/yyyy HH:mm:ss.fff}",
+			TGT_COL_TYPE = "DATETIME",
+			UI_TYPE_CD = "DatePicker"
+		};
 		public static MyDealsAttribute OP_CD = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "OP_CD",
@@ -1553,6 +2048,21 @@ namespace Intel.MyDeals.Entities {
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
 			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute PRD_COST = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "PRD_COST",
+			ATRB_DESC = "Product Cost",
+			ATRB_LBL = "Cost",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 140,
+			DATA_TYPE_CD = "MONEY",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Double",
+			FRMT_MSK = "{0:c}",
+			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = default(System.String)
 		};
 		public static MyDealsAttribute PRD_END_DTM = new MyDealsAttribute()
@@ -1720,6 +2230,36 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
+		public static MyDealsAttribute REBATE_BILLING_END = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "REBATE_BILLING_END",
+			ATRB_DESC = "Billing END Date (for Consumption)",
+			ATRB_LBL = "Billing END Date (for Consumption)",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3571,
+			DATA_TYPE_CD = "DATETIME",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.DateTime",
+			FRMT_MSK = "{0:MM/dd/yyyy HH:mm:ss.fff}",
+			TGT_COL_TYPE = "DATETIME",
+			UI_TYPE_CD = "DatePicker"
+		};
+		public static MyDealsAttribute REBATE_BILLING_START = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "REBATE_BILLING_START",
+			ATRB_DESC = "Billing START Date (for Consumption)",
+			ATRB_LBL = "Billing START Date (for Consumption)",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3570,
+			DATA_TYPE_CD = "DATETIME",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.DateTime",
+			FRMT_MSK = "{0:MM/dd/yyyy HH:mm:ss.fff}",
+			TGT_COL_TYPE = "DATETIME",
+			UI_TYPE_CD = "DatePicker"
+		};
 		public static MyDealsAttribute REBATE_PROD_FLAG = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "REBATE_PROD_FLAG",
@@ -1734,6 +2274,81 @@ namespace Intel.MyDeals.Entities {
 			FRMT_MSK = "{0}",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute RETAIL_CYCLE = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "RETAIL_CYCLE",
+			ATRB_DESC = "Retail Cycle",
+			ATRB_LBL = "Retail Cycle",
+			ATRB_MAX_LEN = 100,
+			ATRB_SID = 3466,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "ComboBox"
+		};
+		public static MyDealsAttribute RETAIL_PULL = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "RETAIL_PULL",
+			ATRB_DESC = "Retail Pull $",
+			ATRB_LBL = "Retail Pull $",
+			ATRB_MAX_LEN = 100,
+			ATRB_SID = 3612,
+			DATA_TYPE_CD = "MONEY",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Double",
+			FRMT_MSK = "{0:c}",
+			TGT_COL_TYPE = "MONEY",
+			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute RETAIL_PULL_USR_DEF = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "RETAIL_PULL_USR_DEF",
+			ATRB_DESC = "Retail Pull$ User Defined",
+			ATRB_LBL = "Retail Pull$ User Defined",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3618,
+			DATA_TYPE_CD = "MONEY",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Double",
+			FRMT_MSK = "{0:c}",
+			TGT_COL_TYPE = "MONEY",
+			UI_TYPE_CD = "TextBox"
+		};
+		public static MyDealsAttribute RETAIL_PULL_USR_DEF_CMNT = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "RETAIL_PULL_USR_DEF_CMNT",
+			ATRB_DESC = "Retail Pull Dollar User Defined Comments",
+			ATRB_LBL = "Retail Pull Dollar User Defined Comments",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3619,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "TextBox"
+		};
+		public static MyDealsAttribute RETAIL_SHP_AHEAD_DT = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "RETAIL_SHP_AHEAD_DT",
+			ATRB_DESC = "Retail Ship Ahead Date",
+			ATRB_LBL = "Retail Ship Ahead",
+			ATRB_MAX_LEN = 20,
+			ATRB_SID = 3436,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "Label"
 		};
 		public static MyDealsAttribute RGN_NM = new MyDealsAttribute()
 		{
@@ -1779,6 +2394,21 @@ namespace Intel.MyDeals.Entities {
 			FRMT_MSK = "{0}",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute SERVER_DEAL_TYPE = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "SERVER_DEAL_TYPE",
+			ATRB_DESC = "Server Deal Type",
+			ATRB_LBL = "Server Deal Type",
+			ATRB_MAX_LEN = 100,
+			ATRB_SID = 3347,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "ComboBox"
 		};
 		public static MyDealsAttribute SKU_MARKET_SEGMENT = new MyDealsAttribute()
 		{
@@ -1960,6 +2590,21 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
+		public static MyDealsAttribute TRGT_RGN = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "TRGT_RGN",
+			ATRB_DESC = "Target Region",
+			ATRB_LBL = "Target Region",
+			ATRB_MAX_LEN = 50,
+			ATRB_SID = 23,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "TargetRegionPicker"
+		};
 		public static MyDealsAttribute TRKR_NBR = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "TRKR_NBR",
@@ -2020,6 +2665,21 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
+		public static MyDealsAttribute VOLUME = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "VOLUME",
+			ATRB_DESC = "Ceiling Volume",
+			ATRB_LBL = "Ceiling Volume",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3321,
+			DATA_TYPE_CD = "INT",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Int32",
+			FRMT_MSK = "{0:d}",
+			TGT_COL_TYPE = "INT",
+			UI_TYPE_CD = "TextBox"
+		};
 		public static MyDealsAttribute VRTCL_SEG_CD = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "VRTCL_SEG_CD",
@@ -2034,6 +2694,81 @@ namespace Intel.MyDeals.Entities {
 			FRMT_MSK = "{0}",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute WF_STG_CD = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "WF_STG_CD",
+			ATRB_DESC = "Workflow stage code",
+			ATRB_LBL = "Stage",
+			ATRB_MAX_LEN = 50,
+			ATRB_SID = 26,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "WorkFlow"
+		};
+		public static MyDealsAttribute YCS2_END_DT = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "YCS2_END_DT",
+			ATRB_DESC = "YCS2 End Date",
+			ATRB_LBL = "YCS2 End Date",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 139,
+			DATA_TYPE_CD = "DATETIME",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.DateTime",
+			FRMT_MSK = "{0:MM/dd/yyyy HH:mm:ss.fff}",
+			TGT_COL_TYPE = "DATETIME",
+			UI_TYPE_CD = "LINK_LABEL"
+		};
+		public static MyDealsAttribute YCS2_OVERLAP_OVERRIDE = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "YCS2_OVERLAP_OVERRIDE",
+			ATRB_DESC = "YCS2 Overlp Override flag",
+			ATRB_LBL = "YCS2 Overlp Override",
+			ATRB_MAX_LEN = 3,
+			ATRB_SID = 3542,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "ComboBox"
+		};
+		public static MyDealsAttribute YCS2_PRC_IRBT = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "YCS2_PRC_IRBT",
+			ATRB_DESC = "YCS2 Price/Instant Rebate",
+			ATRB_LBL = "YCS2 Price/Instant Rebate",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 137,
+			DATA_TYPE_CD = "MONEY",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Double",
+			FRMT_MSK = "{0:c}",
+			TGT_COL_TYPE = "MONEY",
+			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute YCS2_START_DT = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "YCS2_START_DT",
+			ATRB_DESC = "YCS2 Start Date",
+			ATRB_LBL = "YCS2 Start Date",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 138,
+			DATA_TYPE_CD = "DATETIME",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.DateTime",
+			FRMT_MSK = "{0:MM/dd/yyyy HH:mm:ss.fff}",
+			TGT_COL_TYPE = "DATETIME",
+			UI_TYPE_CD = "LINK_LABEL"
 		};
 
 	}

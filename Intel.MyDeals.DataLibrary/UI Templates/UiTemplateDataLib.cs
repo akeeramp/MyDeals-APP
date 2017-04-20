@@ -256,7 +256,7 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem
             {
                 Id = 38,
-                AtrbCd = AttributeCodes.MRKT_SEG_COMBINED,
+                AtrbCd = AttributeCodes.MRKT_SEG,
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
                 IsDefaultable = true,
                 Label = "Market Segment",

@@ -203,7 +203,7 @@
     WriteLine("//-- WorkFlow Stages ---------------------------------------------------------------------------------");
 	WriteLine("");
 
-	cmd = new SqlCommand(@"SELECT WFSTG_NM FROM [dbo].[WFSTG_MSTR]", conn);
+	cmd = new SqlCommand(@"SELECT DISTINCT WFSTG_NM FROM [dbo].[WFSTG_MSTR]", conn);
 
 	WriteLine("public static class WorkFlowStages {");
 	PushIndent(TAB);
