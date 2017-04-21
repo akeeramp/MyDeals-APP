@@ -33,5 +33,21 @@ namespace Intel.MyDeals.Entities
             }
         }
 
+        public static void AddApprovalActions(this OpDataPacket<OpDataElementType> packet, OpDataCollectorFlattenedList data)
+        {
+            foreach (OpDataCollectorFlattenedItem item in data)
+            {
+                if (!item.ContainsKey("_actions")) continue;
+
+                OpDataCollectorFlattenedItem fItem = JsonConvert.DeserializeObject<OpDataCollectorFlattenedItem>(item["_actions"].ToString());
+
+                if (!fItem.ContainsKey("_deleteTargetIds")) continue;
+
+                List<int> list = (List<int>)fItem["_deleteTargetIds"];
+                packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.OBJ_DELETE, list, 30));
+            }
+        }
+
+
     }
 }

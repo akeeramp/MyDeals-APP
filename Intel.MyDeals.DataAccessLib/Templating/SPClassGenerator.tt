@@ -22,6 +22,7 @@
 
 	string[] EXCLUDE_PROCS = new string[]
 	{
+		"PR_USER_DEAL_WF"
     };
 
 	string[] TargetDatabases = new string[]
