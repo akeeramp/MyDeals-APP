@@ -377,7 +377,8 @@
 	/* // Adding this makes clicking on cells extremely inaccurate. Don't add this. */
     /*#pricingTableSpreadsheet > div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div:nth-child(1) {top: 30px !important;}*/
 
-
+	
+	/* Column Letters */
 	/* NOTE: If you resize the below, make sure to resize the "hidden" first row in the spreadsheet via javascript (CODE:  sheet.rowHeight(0, [pixel height here]); ) */
     #pricingTableSpreadsheet > div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left
     , #pricingTableSpreadsheet > div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left > div.k-spreadsheet-data
@@ -386,20 +387,37 @@
     , #pricingTableSpreadsheet > div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left > div.k-spreadsheet-column-header > div
     , #pricingTableSpreadsheet > div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-top-corner
 	, #pricingTableSpreadsheet .k-resize-handle {
-		height: 30px !important;
-    }
+		/*height: 50px !important;*/
+		z-index: 3000;
+		/*top:25px;*/
+		background-color: #e7e7e8;
+    }	
     /*#pricingTableSpreadsheet > div.k-spreadsheet-view > div.k-spreadsheet-cell-editor.k-spreadsheet-formula-input {margin-top: 10px !important}*/
-
     div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left > div.k-spreadsheet-column-header .k-vertical-align-center {
         font-family: 'Intel Clear';
-        font-weight: 600;
-        font-style: normal;
-        font-size: 12px;
+        font-weight: 400;
+        font-size: 11px;
         color: #0071C5;
         padding-left: 2px;
         padding-right: 2px;
         line-height: 1.0em;
     }
+	/* Column Letters */
+    .k-spreadsheet-view .k-spreadsheet-fixed-container .k-spreadsheet-pane .k-spreadsheet-column-header div {
+		/*background-color: #e7e7e8;*/
+    }
+	/* Column Letters */
+    .k-spreadsheet-view .k-spreadsheet-fixed-container .k-spreadsheet-pane {
+        font-size: 11px;
+    }		
+	 /* Column letters border */
+	 .k-spreadsheet-column-header .k-selection-full
+	 ,.k-spreadsheet-column-header .k-selection-none
+	 ,.k-spreadsheet-column-header .k-selection-partial {
+		 border: 1px solid #ddd;
+		 border-top: 0px;
+		 border-bottom: 0px;
+	 }
 
     .blueBg {
         color: #ffffff;
@@ -811,17 +829,6 @@
         margin-bottom: 10px;
     }
 
-	/* Column Letters */
-    .k-spreadsheet-view .k-spreadsheet-fixed-container .k-spreadsheet-pane .k-spreadsheet-column-header div {
-        font-weight: bold;
-		background-color: #e7e7e8;
-		color: #2b4c79;
-    }
-	/* Column Letters */
-    .k-spreadsheet-view .k-spreadsheet-fixed-container .k-spreadsheet-pane {
-        font-size: 11px;
-    }
-
     .k-detail-row .k-hierarchy-cell {
         background-color: #ecf8fb;
     }
@@ -979,4 +986,12 @@
 	 .k-icon.fa{
 		 font: normal normal normal 14px/1 FontAwesome;
 		 opacity: 1;
+	 }
+
+	 /* Error icon button for spreadsheet cell editor */
+	 .ssEditorBtn {
+		background-color: #00aeef;
+		color: white;
+		padding: 3px;
+		border-radius: 2px;
 	 }

@@ -22,5 +22,9 @@ namespace Intel.MyDeals.Entities
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string editor { get; set; }
-    }
+
+		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+		public bool isRequired { get; set; }
+
+	}
 }

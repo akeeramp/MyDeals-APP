@@ -12,6 +12,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
 	// Functions
 	vm.initCustomPaste = initCustomPaste;
+	vm.customDragDropAutoFill = customDragDropAutoFill;
 	vm.resetDirty = resetDirty;
 	vm.getColumns = getColumns;
 	$scope.openProductSelector = openProductSelector;
@@ -22,7 +23,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 	// Variables
 	var root = $scope.$parent.$parent;	// Access to parent scope
 	var cellStyle = {
-		background: "white",
 		textAlign: "left",
 		verticalAlign: "center",
 		color: "black",
@@ -46,6 +46,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 	var productLevel = null;
 	vm.colToLetter = {}; // Contains "dictionary" of  (Key : Value) as (Db Column Name : Column Letter)
 	vm.readOnlyColLetters = [];
+	vm.requiredStringColumns = {};
 
 	function init() {
 		// force a resize event to format page
@@ -74,7 +75,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 			$state.go('contract.manager', { cid: root.contractData.DC_ID });
 		}
 
-		$scope.$parent.$parent.spreadNeedsInitialization = true;
+		root.spreadNeedsInitialization = true;
 
 		// Pricing Table data
 		root.pricingTableData = pricingTableData.data;
@@ -177,7 +178,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 			sheetsbar: false,
 			defaultCellStyle: {
 				fontSize: cellStyle.fontSize,
-				fontFamily: cellStyle.fontfamily 
+				fontFamily: cellStyle.fontfamily
 				//background: cellStyle.background, // Adding this will hide the validation. Don't add this
 			},
 			toolbar: {
@@ -186,9 +187,14 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 				data: false
 			},
 			sheets: [
-			{
-				columns: columns
-			}],
+				{
+					name: "Main",
+					columns: columns
+				},
+				{
+					name: "DropdownValuesSheet", // COntains lists of data used for dropdowns
+				}
+			],
 			render: onRender
 		};
 
@@ -246,11 +252,20 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
 	function getColumns(ptTemplate) {
 		var cols = [];
+		var intA = "A".charCodeAt(0);
+		var c = -1;
+
 		if (ptTemplate !== undefined && ptTemplate !== null) {
 			angular.forEach(ptTemplate.columns, function (value, key) {
 				var col = {};
 				if (ptTemplate.columns[key].width) col.width = ptTemplate.columns[key].width;
 				cols.push(col);
+
+				c += 1;
+				if (value.hidden === false) {
+					// Create column to letter mapping
+					vm.colToLetter[value.field] = String.fromCharCode(intA + c);
+				}
 			});
 		}
 		return cols;
@@ -259,18 +274,23 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 	// On Spreadsheet change
 	function onChange(arg) {
 		var sheet = arg.sender.activeSheet();
+
+		// Don't do onchange events for any sheet other than the Main one
+		if (arg.range._sheet._sheetName !== "Main") {
+			return;
+		}
 		var intA = "A".charCodeAt(0);
 		var productColIndex = (vm.colToLetter["PTR_USER_PRD"].charCodeAt(0) - intA);
 		var topLeftRowIndex = (arg.range._ref.topLeft.row + 1);
 		var bottomRightRowIndex = (arg.range._ref.bottomRight.row + 1);
 
+		var isProductColumnChanged = (arg.range._ref.topLeft.col >= productColIndex) && (arg.range._ref.bottomRight.col <= productColIndex);
+
 		sheet.batch(function () {
 			// Trigger only if the changed range contains the product column
 			// NOTE: The below condition assumes that a dragged range is dragged from top-to-bottom, left-to-right. If that ever 
 			// changes (i.e. we move the products column so it's not the first editable column), then we should change this logic to accomodate that.
-			if ((arg.range._ref.topLeft.col >= productColIndex) && (arg.range._ref.bottomRight.col <= productColIndex)) {
-
-				addValidation(sheet, topLeftRowIndex, bottomRightRowIndex);
+			if (isProductColumnChanged) {
 
 				// Enable other cells
 				var range = sheet.range("B" + topLeftRowIndex + ":Z" + bottomRightRowIndex);
@@ -294,6 +314,45 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 							disableIndividualReadOnlyCells(sheet, rowInfo, rowIndex, 1);
 						}
 					}
+
+					// Trigger only if the changed range contains the product column
+					if (isProductColumnChanged) {
+						for (var key in ptTemplate.model.fields) {
+							// Auto-fill default values from Contract level
+							if ((root.contractData[key] !== undefined)
+									&& (root.contractData[key] !== null)
+									&& (vm.colToLetter[key] != undefined)
+									&& ((sheet.range(vm.colToLetter[key] + (rowIndex + 1)).value()) == "" || (sheet.range(vm.colToLetter[key] + (rowIndex + 1)).value() == null)) // don't override existing values for autofill
+								) {
+								var fillValue = root.contractData[key];
+								if (ptTemplate.model.fields[key].type == "date") {
+									fillValue = new Date(root.contractData[key]);
+								}
+								sheet.range(vm.colToLetter[key] + (rowIndex + 1)).value(fillValue);
+							}
+							// Auto-fill default values from Pricing Strategy level
+							if ((root.curPricingTable[key] !== undefined)
+									&& (root.curPricingTable[key] !== null)
+									&& (vm.colToLetter[key] != undefined)
+									&& ((sheet.range(vm.colToLetter[key] + (rowIndex + 1)).value()) == "" || (sheet.range(vm.colToLetter[key] + (rowIndex + 1)).value() == null)) // don't override existing values for autofill
+								) {
+								sheet.range(vm.colToLetter[key] + (rowIndex + 1)).value(root.curPricingTable[key]);
+							}
+
+
+							// Add LEN validation for required string fields
+							// NOTE: this is not validation for date or number fields as they do not require LEN validation
+							if (vm.requiredStringColumns.hasOwnProperty(key)) {
+								sheet.range(vm.colToLetter[key] + (rowIndex + 1)).validation({
+									dataType: "custom",
+									from: "LEN(" + vm.colToLetter[key] + (rowIndex + 1) + ")>0",
+									allowNulls: false,
+									type: "warning",
+									messageTemplate: "This field is required."
+								});
+							}
+						}
+					}
 				}
 			);
 		});
@@ -305,33 +364,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 		}
 	}
 
-
-	function addValidation(sheet, topLeftRowIndex, bottomRightRowIndex) {
-		// Start and End Date Calendar dropdowmn and validations
-		sheet.range(vm.colToLetter["START_DT"] + topLeftRowIndex + ":" + vm.colToLetter["END_DT"] + bottomRightRowIndex).validation({
-			dataType: "date",
-			showButton: true,
-			comparerType: "between",
-			from: 'DATEVALUE("1/1/1900")',
-			to: 'DATEVALUE("12/31/9999")',
-			allowNulls: false,
-			type: "warning",
-			messageTemplate: "Value must be a date"
-		});
-
-		// TODO: Remove later. Temporary for stylizing
-		sheet.range(vm.colToLetter["MAX_RPU"] + topLeftRowIndex + ":" + vm.colToLetter["MAX_RPU"] + bottomRightRowIndex)
-			.validation({
-				dataType: "number",
-				from: 2,
-				comparerType: "greaterThan",
-				allowNulls: false,
-				type: "warning",
-				messageTemplate: "TEST error: Cell must be positive number."
-			})
-			.editor("cellProductSelector")
-		;
-	}
 
 	function disableIndividualReadOnlyCells(sheet, rowInfo, rowIndex, rowIndexOffset) {
 		for (var property in rowInfo._behaviors.isReadOnly) {
@@ -347,37 +379,27 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
 	// On spreadsheet Render
 	function onRender(e) {
-		if ($scope.$parent.$parent.spreadNeedsInitialization) {
-			$scope.$parent.$parent.spreadNeedsInitialization = false;
+		if (root.spreadNeedsInitialization) {
+			root.spreadNeedsInitialization = false;
+
+			// Set Active sheet
+			e.sender.activeSheet(e.sender.sheetByName("Main"));
 
 			var sheet = e.sender.activeSheet();
+			var dropdownValuesSheet = e.sender.sheetByName("DropdownValuesSheet");
 
 			// With initial configuration of datasource spreadsheet displays all the fields as columns,
 			// thus setting up datasource in render event where selective columns from datasource can be displayed.
 			sheet.setDataSource(root.spreadDs, ptTemplate.columns);
 
-			sheetBatchOnRender(sheet); // Do all spreadsheet cell changes here
+			sheetBatchOnRender(sheet, dropdownValuesSheet); // Do all spreadsheet cell changes here
 
 			vm.initCustomPaste("#pricingTableSpreadsheet");
+			vm.customDragDropAutoFill("#pricingTableSpreadsheet");
 			replaceUndoRedoBtns();
+
+			//e.sender.activeSheet(e.sender.sheetByName("DropdownValuesSheet"));
 		}
-
-		// This must be outside the spreadNeedsInitialization check
-		replaceColumnLabels();
-	}
-
-	function replaceColumnLabels() {
-		var intA = "A".charCodeAt(0);
-		var c = 1;
-
-		// This is nice, but has some flaws... sometime refresh breaks and sometime hidden rows don't hide properly.  Also, this requires hiding the first row which strops resize
-		// If we don't do this... we need to make row 1 readonly as the title row
-		angular.forEach(ptTemplate.columns, function (value, key) {
-			if (value.hidden === false) {
-				$("div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left > div.k-spreadsheet-column-header > div:nth-child(" + c + ") > div").text(value.title);
-				vm.colToLetter[value.field] = String.fromCharCode(intA + c++);
-			}
-		});
 	}
 
 	function replaceUndoRedoBtns() {
@@ -391,7 +413,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 	}
 
 	// Initiates in a batch call (which may make the spreadsheet load faster
-	function sheetBatchOnRender(sheet) {
+	function sheetBatchOnRender(sheet, dropdownValuesSheet) {
 		var rowIndexOffset = 2; // This is 2 because row 0 and row 1 are hidden
 
 		sheet.batch(function () {
@@ -404,24 +426,126 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 			// freeze first row
 			sheet.frozenRows(1);
 
+			// Stylize header row
+			headerRange.bold(true);
+			headerRange.wrap(true);
+			sheet.rowHeight(0, 35);
+
+			headerRange.background(headerStyle.background);
+			headerRange.color(headerStyle.color);
+			headerRange.fontSize(headerStyle.fontSize);
+			headerRange.textAlign(headerStyle.textAlign);
+			headerRange.verticalAlign(headerStyle.verticalAlign);
+
 			// disable formula completion list
 			$(".k-spreadsheet-formula-list").remove();
 
 			// disable right click menu options
 			$(".k-context-menu").remove();
 
-			// Resize the header to hide underneath the header as aworkaround to resize the header and prevent inaccurate cell click 
-			sheet.rowHeight(0, 10);
 
+			// Add product selector editor on Product cells
+			sheet.range(vm.colToLetter["PTR_USER_PRD"] + ":" + vm.colToLetter["PTR_USER_PRD"]).editor("cellProductSelector");
 
-			addValidation(sheet, 1, (root.pricingTableData.PRC_TBL_ROW.length + 1)); // NOTE: This assumes there will be no empty gaps between in the pricing table rows
 
 			for (var key in ptTemplate.model.fields) {
-				// Disable all readonly columns
-				if (ptTemplate.model.fields.hasOwnProperty(key) && ptTemplate.model.fields[key].editable !== true) {
-					if (vm.colToLetter[key] !== undefined) {
+				if (ptTemplate.model.fields.hasOwnProperty(key) && vm.colToLetter[key] !== undefined) {
+					// Disable all readonly columns
+					if (ptTemplate.model.fields[key].editable !== true && vm.colToLetter[key] !== undefined) {
 						vm.readOnlyColLetters[vm.colToLetter[key]] = true;
 						disableRange(sheet.range(vm.colToLetter[key] + ":" + vm.colToLetter[key]));
+					}
+
+					// Flag which rows have something in them, ao we don't disable rows
+					var numRowsContainingData = 0;
+					if (root.pricingTableData.PRC_TBL_ROW.length > 0) {
+						numRowsContainingData = root.pricingTableData.PRC_TBL_ROW.length + rowIndexOffset;
+					}
+					// Disable all cells except product and cells that are read-only from template
+					if (key != "PTR_USER_PRD") {
+						disableRange(sheet.range(vm.colToLetter[key] + numRowsContainingData + ":" + vm.colToLetter[key]));
+					}
+
+					// Add validation dropdowns/multiselects onto the cells
+					// TODO ///
+					// ptTemplate.column[].uiType == "RADIOBUTTONGROUP" "DROPDOWN" "EMBEDDEDMULTISELECT" "MULTISELECT"
+					if (ptTemplate.model.fields[key].opLookupText == "DROP_DOWN" || ptTemplate.model.fields[key].opLookupText == "dropdownName") {
+						dropdownValuesSheet.batch(function () {
+							// Call API
+							dataService.get(ptTemplate.model.fields[key].opLookupUrl).then(function (response) {
+								for (var i = 0; i < response.data.length; i++) {
+									var myKey = response.data[i].ATRB_CD;
+									// TODO: Why is ECAP_TYPE called PROGRAM_ECAP_TYPE and can we change that?
+									if (response.data[i].ATRB_CD == "PROGRAM_ECAP_TYPE") {
+										myKey = "ECAP_TYPE";
+									}
+									// Add values onto the other sheet
+									dropdownValuesSheet.range(vm.colToLetter[myKey] + (i + 1)).value(response.data[i].DROP_DOWN);
+								}
+							}, function (error) {
+								logger.error("Unable to get dropdown data.", error, error.statusText);
+								deferred.reject();
+							});
+						});
+						if (ptTemplate.model.fields[key].uiType == "RADIOBUTTONGROUP" || ptTemplate.model.fields[key].uiType == "DROPDOWN") {
+							sheet.range(vm.colToLetter[key] + ":" + vm.colToLetter[key]).validation({
+								dataType: "list",
+								showButton: true,
+								from: "DropdownValuesSheet!" + vm.colToLetter[key] + ":" + vm.colToLetter[key],
+								allowNulls: ptTemplate.model.fields[key].nullable,
+								type: "warning",
+								titleTemplate: "Invalid value",
+								messageTemplate: "Invalid value. Please use dropdown"
+							});
+						} else if (ptTemplate.model.fields[key].uiType == "EMBEDDEDMULTISELECT"  || ptTemplate.model.fields[key].uiType == "MULTISELECT"){
+							sheet.range(vm.colToLetter[key] + ":" + vm.colToLetter[key]).editor("cellDropDown");
+							// TODO: Add a better validator which makes sure the selected items are in the multiselect list
+							vm.requiredStringColumns[key] = true;
+						}
+					}
+					else {
+						// Add validations based on column type
+						switch (ptTemplate.model.fields[key].type) {
+							case "date":
+								// Add date picker editor and validation
+								sheet.range(vm.colToLetter[key] + ":" + vm.colToLetter[key]).validation({
+									dataType: "date",
+									showButton: true,
+									comparerType: "between",
+									from: 'DATEVALUE("1/1/1900")',
+									to: 'DATEVALUE("12/31/9999")',
+									allowNulls: ptTemplate.model.fields[key].nullable,
+									type: "warning",
+									messageTemplate: "Value must be a date"
+								});
+								sheet.range(vm.colToLetter[key] + ":" + vm.colToLetter[key]).format("MM/dd/yyyy");
+								break;
+							case "number":
+								if (!ptTemplate.model.fields[key].nullable) {
+									sheet.range(vm.colToLetter[key] + ":" + vm.colToLetter[key]).validation({
+										dataType: "number",
+										from: 0,
+										comparerType: "greaterThan",
+										allowNulls: false,
+										type: "warning",
+										messageTemplate: "Value must be positive number."
+									});
+								}
+								// Money Formatting
+								if (ptTemplate.model.fields[key].format == "{0:c}") {
+									sheet.range(vm.colToLetter[key] + ":" + vm.colToLetter[key]).format("$#,##0.00");
+								}
+								break;
+							case "string":
+								if (!ptTemplate.model.fields[key].nullable) {
+									// TODO: find out how we do an isRequired on strings without LEN?
+									// Add required string columns to dictionay to add LEN validations onchange and later
+									vm.requiredStringColumns[key] = true;
+								}
+								break;
+							default:
+								break;
+						}
 					}
 				}
 			}
@@ -433,11 +557,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 				}
 			}
 
-			// Individual cell security via json obj behaviors
+			// Individual cell security via security mask's json obj behaviors
 			for (var rowIndex = 0; rowIndex < root.pricingTableData.PRC_TBL_ROW.length; rowIndex++) {
 				var rowInfo = root.pricingTableData.PRC_TBL_ROW[rowIndex];
+
 				// Required cells
-				// TODO: Would we ever need to have isRequired individual cell validation vs column validation on init? If not remove this.
 				for (var property in rowInfo._behaviors.isRequired) {
 					if (rowInfo._behaviors.isRequired.hasOwnProperty(property)) {
 						var colLetter = vm.colToLetter[property];
@@ -452,22 +576,23 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 						}
 					}
 				}
-				// Read Only cells
+				// Read Only cells 
 				disableIndividualReadOnlyCells(sheet, rowInfo, rowIndex, rowIndexOffset);
-			}
 
-			// Don't disable rows that have something in them
-			var numRowsContainingData = 0;
-			if (root.pricingTableData.PRC_TBL_ROW.length > 0) {
-				numRowsContainingData = root.pricingTableData.PRC_TBL_ROW.length + rowIndexOffset;
-			}
-			// Disable all cells except product and cells that are read-only from template
-			for (var key in ptTemplate.model.fields) {
-				if ((vm.colToLetter[key] !== undefined) && (key != "PTR_USER_PRD")) {
-					disableRange(sheet.range(vm.colToLetter[key] + numRowsContainingData + ":" + vm.colToLetter[key]));
+				for (var key in ptTemplate.model.fields) {
+					// Required string validation via columns 
+					// NOTE: LEN validation means that we need to put validation on ecah individual cell rather than bulk
+					if ((vm.colToLetter[key] !== undefined) && (vm.requiredStringColumns.hasOwnProperty(key))) {
+						sheet.range(vm.colToLetter[key] + (rowIndex + rowIndexOffset)).validation({
+							dataType: "custom",
+							from: "LEN(" + vm.colToLetter[key] + (rowIndex + rowIndexOffset) + ")>0",
+							allowNulls: false,
+							type: "warning",
+							messageTemplate: "This field is required."
+						});
+					}
 				}
 			}
-
 		});
 	}
 
@@ -476,10 +601,38 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 		range.background('#f5f5f5'); // HACK: Disabled cells with null values have no class we can stylize, so we must change the cell directly :(
 	}
 
+	// HACK: override kendo's autofill property
+	// Note that a good amount of this code is Kendo's default code, Kendo v2017.1.118
+	function customDragDropAutoFill(handle) {
+		var spreadsheet = kendo.spreadsheet;
+		var Range = spreadsheet.Range;
+
+		// NOTE: range.fillFrom() is called by Kendo's AutoFillCommand, which is responsible for the drag-to-copy
+		Range.prototype.fillFrom = function (srcRange, direction) {
+			// Original kendo code
+			var x = this._previewFillFrom(srcRange, direction);
+
+			// Custom code
+			for (var i = 0; i < x.props.length; i++) { // each col
+				for (var j = 0; j < x.props[i].length; j++) { // each row
+					var newVal = x.props[i][j].value;
+
+					// Make a new object with only the value - no validation or editor properties
+					x.props[i][j] = {
+						value: newVal
+					}
+				}
+			}
+			// Original kendo code
+			x.dest._properties(x.props);
+			return x.dest;
+		};
+	}
+
+
 	// HACK: override kendo's clipboard paste
 	// Note that a good amount of this code is Kendo's default code, Kendo v2017.1.118
 	function initCustomPaste(handle) {
-
 		var spreadsheet = $(handle).data("kendoSpreadsheet");
 		var sheet = spreadsheet.activeSheet();
 		var Command = kendo.spreadsheet.Command;
@@ -558,7 +711,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 						var cellData = state.data[row][col];
 
 						// Prevent the user form pasting in new cell styles
-						cellData.background = cellStyle.background;
+						cellData.background = null;
 						cellData.bold = null;
 						cellData.borderBottom = null;
 						cellData.borderLeft = null;
@@ -582,6 +735,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 						var originalCellState = sheet.range(myRow, myCol).getState().data[0][0];
 						if (originalCellState != null) {
 							cellData.validation = originalCellState.validation;
+							cellData.editor = originalCellState.editor;
 						}
 					}
 				}
@@ -652,8 +806,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 			prdList.push(
 				{
 					USR_INPUT: sData[i].PTR_USER_PRD
-					, PRD_ATRB_SID: productLevel.PRD_ATRB_SID 
-					, PRD_SELC_LVL: productLevel.PRD_SELC_LVL 
+					, PRD_ATRB_SID: productLevel.PRD_ATRB_SID
+					, PRD_SELC_LVL: productLevel.PRD_SELC_LVL
 					, EXCLUDE: ""
 					, FILTER: ""
 					, START_DATE: sData[i].START_DT
@@ -686,8 +840,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 				context = options;
 				open();
 			},
-			//icon: "fa fa-mouse-pointer skyBlue"
-			icon: "k-font-icon k-i-list-unordered" // TODO: for some reason, the icon is difficult to click for some reason. Find out why. 
+			icon: "fa fa-mouse-pointer ssEditorBtn"
+			//icon: "k-font-icon k-i-list-unordered" // TODO: for some reason, the icon is difficult to click for some reason. Find out why. 
 		};
 
 		// This function actually creates the UI if not already there, and
@@ -707,7 +861,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					}
 				});
 				var el = $("<div data-visible='true' data-role='window' data-modal='true' data-resizable='false' data-title='Product Selector'>" +
-							" <div>TODO: Product Selector to go here</div> " + 
+							" <div>TODO: Product Selector to go here</div> " +
 						   "    <button style='width: 5em' class='k-button' data-bind='click: ok'>OK</button>" +
 						   "    <button style='width: 5em' class='k-button' data-bind='click: cancel'>Cancel</button>" +
 						   "  </div>" +
@@ -732,6 +886,76 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 			}
 		}
 	});
+
+
+
+
+	// TODO: Product Selector dialog box below
+	kendo.spreadsheet.registerEditor("cellDropDown", function () {
+		var context, dlg, model;
+
+		// Further delay the initialization of the UI until the `edit` method is
+		// actually called, so here just return the object with the required API.
+
+		return {
+			edit: function (options) {
+				context = options;
+				open();
+			},
+			icon: "fa fa-mouse-pointer ssEditorBtn"
+			//icon: "k-font-icon k-i-list-unordered" // TODO: for some reason, the icon is difficult to click for some reason. Find out why. 
+		};
+
+		// This function actually creates the UI if not already there, and
+		// caches the dialog and the model.
+		function create() {
+			if (!dlg) {
+				model = kendo.observable({
+					value: "default",
+					ok: function () {
+						// This is the result when OK is clicked. Invoke the
+						// callback with the value.
+						context.callback(model.value);
+						dlg.close();
+					},
+					cancel: function () {
+						dlg.close();
+					}
+				});
+				var el = $("<div data-visible='true' data-role='window' data-modal='true' data-resizable='false' data-title='TODO: Select MultiSelect dropdown'>" +
+                           "  <select id='geo' style='width: 100%;' data-bind='value: value' >" +
+                           "    <option value='' disabled selected'>Please Choose</option>" +
+                           "    <option value='User selected APAC'>TODO</option>" +
+                           "    <option value='ASMO ID = 1'>TODO2</option>" +
+                           "    <option>TODO3</option>" +
+                           "  </select>" +
+                           "  <div style='margin-top: 1em; text-align: right'>" +
+                           "    <button style='width: 5em' class='k-button' data-bind='click: ok'>OK</button>" +
+                           "    <button style='width: 5em' class='k-button' data-bind='click: cancel'>Cancel</button>" +
+                           "  </div>" +
+                           "</div>");
+				kendo.bind(el, model);
+
+				// Cache the dialog.
+				dlg = el.getKendoWindow();
+				//$("#geo").kendoComboBox(); //why doesnt this work? kendo combobox styles load in but it doesnt work correctly
+			}
+		}
+
+		function open() {
+			create();
+			dlg.open();
+			dlg.center();
+
+			// If the selected cell already contains some value, reflect
+			// it in the custom editor.
+			var value = context.range.value();
+			if (value != null) {
+				model.set("value", value);
+			}
+		}
+	});
+
 
 
 	init();

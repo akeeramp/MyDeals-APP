@@ -18,8 +18,25 @@ namespace Intel.MyDeals.Entities
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string valuesText { get; set; }
 
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public string valuesValue { get; set; }
-        
-    }
+		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+		public string valuesValue { get; set; }
+
+		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+		public string format { get; set; }
+
+		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+		public string opLookupUrl { get; set; }
+
+		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+		public string opLookupText { get; set; }
+
+		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+		public string opLookupValue { get; set; }
+
+		public string validMsg { get; set; }
+
+		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+		public string uiType { get; set; }
+
+	}
 }

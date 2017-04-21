@@ -2219,7 +2219,7 @@ namespace Intel.MyDeals.Entities {
 		{
 			ATRB_COL_NM = "PTR_USER_PRD",
 			ATRB_DESC = "PTR User Product List",
-			ATRB_LBL = "PTR User Product List",
+			ATRB_LBL = "Include Product(s)",
 			ATRB_MAX_LEN = 0,
 			ATRB_SID = 3658,
 			DATA_TYPE_CD = "VARCHAR",

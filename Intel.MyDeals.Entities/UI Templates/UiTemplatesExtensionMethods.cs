@@ -91,8 +91,14 @@ namespace Intel.MyDeals.Entities.UI_Templates
                         nullable = !item.IsRequired,
                         values = item.LookupValue,
                         valuesText = item.LookupText,
-                        valuesValue = item.LookupValue
-                    };
+                        valuesValue = item.LookupValue,
+						format = item.Format,
+						opLookupUrl = item.LookupUrl ?? "",
+						opLookupText = item.LookupText ?? "",
+						opLookupValue = item.LookupValue ?? "",
+						validMsg = item.HelpText ?? "",
+						uiType = item.UiType
+					};
 
                     columns.Add(new UiColumn
                     {
@@ -103,7 +109,7 @@ namespace Intel.MyDeals.Entities.UI_Templates
                         editor = item.Editor,
                         template = item.Template,
                         uiType = item.UiType
-                    });
+					});
                 }
                 else
                 {
@@ -114,8 +120,14 @@ namespace Intel.MyDeals.Entities.UI_Templates
                         nullable = !item.IsRequired,
                         values = item.LookupValue,
                         valuesText = item.LookupText,
-                        valuesValue = item.LookupValue
-                    };
+                        valuesValue = item.LookupValue,
+						format = item.Format,
+						opLookupUrl = item.LookupUrl ?? "",
+						opLookupText = item.LookupText ?? "",
+						opLookupValue = item.LookupValue ?? "",
+						validMsg = item.HelpText ?? "",
+						uiType = item.UiType
+					};
 
                     detailsColumns.Add(new UiColumn
                     {
@@ -126,7 +138,7 @@ namespace Intel.MyDeals.Entities.UI_Templates
                         editor = item.Editor,
                         template = item.Template,
                         uiType = item.UiType
-                    });
+					});
                 }
             }
 
@@ -300,7 +312,7 @@ namespace Intel.MyDeals.Entities.UI_Templates
 
             foreach (UiTemplateContainerItem item in filteredItems)
             {
-                ex.extraAtrbs[item.AtrbCd] = new UiAtrbs
+                ex.extraAtrbs[item.AtrbCd] = new UiAtrbs 
                 {
                     value = item.DefValue ?? "",
                     label = item.Label ?? "" + ":",
