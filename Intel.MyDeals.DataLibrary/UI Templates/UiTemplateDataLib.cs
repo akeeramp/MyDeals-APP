@@ -313,7 +313,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
                 Width = 100,
                 IsDefaultable = true,
-                UiType = "RADIOBUTTONGROUP",
+                UiType = "DROPDOWN",
                 LookupUrl = "/api/Dropdown/GetDropdowns/PROGRAM_PAYMENT/ECAP",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"

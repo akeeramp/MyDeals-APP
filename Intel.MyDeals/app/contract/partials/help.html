@@ -1,0 +1,30 @@
+﻿<div id="secContainerWrapper">
+
+    <div id="secContainer">
+        <div kendo-splitter
+             k-panes="[null, { collapsible: true, min: '235px', size: '235px' }]"
+             k-orientation="'vertical'"
+             id="k-splitter"
+             style="height: 100%; border: 0 solid transparent;">
+
+            <div>
+                <div ui-view="pricingTableView" class="fullHeight">
+                    <div class="jumbotron">
+                        <div class="container">
+                            <h1><strong>My</strong>Deals</h1>
+                            <p class="lead">Contract Manager.</p>
+                            <p ng-bind="contractData.displayTitle">
+                            <p>
+                                Please use the left side navigation menu to complete creation of your new Pricing Strategy or Pricing Table.
+
+                                If you wish to see existing pricing table row details, please select a Pricing Table from the left hand navigation.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>

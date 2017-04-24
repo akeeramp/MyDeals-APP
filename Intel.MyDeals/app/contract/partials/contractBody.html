@@ -55,6 +55,10 @@
 
 </div>
 
+<div ng-show="!(isAddStrategyHidden && isAddPricingTableHidden)">
+    <div ng-include="'app/contract/partials/help.html'"></div>
+</div>
+
 <script>
     function closeSplitter() {
         $("#k-splitter").data("kendoSplitter").collapse(".k-pane:last");

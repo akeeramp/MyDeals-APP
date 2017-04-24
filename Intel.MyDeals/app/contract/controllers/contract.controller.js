@@ -667,10 +667,11 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
         kendo.confirm("Are you sure that you want to delete this pricing strategy?").then(function () {
             $scope.$apply(function () {
                 topbar.show();
-
+                debugger;
                 // Remove from DB first... then remove from screen
                 objsetService.deletePricingStrategy($scope.getCustId(), ps).then(
                     function (data) {
+                        debugger;
                         if (data.data.MsgType !== 1) {
                             logger.warning("Unable to Deleted the Pricing Strategy", ps, "Delete Failed");
                             return;
@@ -687,6 +688,7 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                         topbar.hide();
                     },
                     function (result) {
+                        debugger;
                         logger.error("Could not delete the Pricing Strategy.", result, result.statusText);
                         topbar.hide();
                     }
@@ -698,10 +700,11 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
         kendo.confirm("Are you sure that you want to delete this pricing table?").then(function () {
             $scope.$apply(function () {
                 topbar.show();
-
+                debugger;
                 // Remove from DB first... then remove from screen
                 objsetService.deletePricingTable($scope.getCustId(), pt).then(
                     function (data) {
+                        debugger;
                         if (data.data.MsgType !== 1) {
                             logger.warning("Unable to Deleted the Pricing Table", pt, "Delete Failed");
                             return;
@@ -717,6 +720,7 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                         topbar.hide();
                     },
                     function (response) {
+                        debugger;
                         logger.error("Could not delete the Pricing Table.", response, response.statusText);
                         topbar.hide();
                     }
@@ -1340,6 +1344,7 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
     var uncheckAllNC = true;
 
     //watch for user changing global auto-fill default values
+    //TODO: restrict to only ECAP deal type for logic below
     $scope.$watch('newPricingTable._defaultAtrbs',
         function (newValue, oldValue, el) {
 
