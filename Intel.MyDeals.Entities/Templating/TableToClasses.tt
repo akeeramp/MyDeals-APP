@@ -169,9 +169,8 @@ using System.Collections.Generic;
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[1], false));
 
 
-
 	// Product Selector(Lookup)
-	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_PRD_BY_HIER_VAL_NM]");
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_TRANSLT_PRD_ENTRY] @CUST_MBR_SID=1");
 	ds.Tables[0].TableName = "PRD_LOOKUP_RESULTS";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
@@ -232,6 +231,15 @@ using System.Collections.Generic;
     ds.Tables[0].TableName = "PrdSelLevel";
     WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
+	//PR_MYDL_SEARCH_PRD_DTL
+    ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_SEARCH_PRD_DTL] @SEARCH_HASH = null, @STRT_DTM='2010-03-06', @END_DTM='2017-12-31', @SEL_LVL='7008'");
+    ds.Tables[0].TableName = "ProductSelectionLevels";
+    WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
+	//PR_MYDL_SEARCH_PRD_DTL
+    ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_SEARCH_PRD_DTL] @SEARCH_HASH = '', @STRT_DTM='2010-03-06', @END_DTM='2017-12-31', @SEL_LVL='7008', @DRILL_DOWN_FLTR_4=''");
+    ds.Tables[0].TableName = "ProductSelectionResults";
+    WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	PopIndent();
 	WriteLine("}"); // End NameSpace
