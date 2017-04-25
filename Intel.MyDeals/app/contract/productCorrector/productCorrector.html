@@ -1,0 +1,119 @@
+﻿
+<div class="modal-content" style="height:85vh;background-color:#1a3e6f;overflow-y:auto;overflow-x:hidden;">
+    <div style="padding:15px;">
+        <div class="row">
+            <div class="col-md-11">
+                <p style="color:white;font-size:32px">Product Corrector</p>
+            </div>
+            
+            <span style="color:white;font-size:32px;padding-top:12px;padding-left:20px;">
+                <i role="button" title="Close" class="intelicon-close-max"   ng-click="vm.closeModal()"></i>
+            </span>
+        </div>
+        <div class="row" style="padding:10px">
+                
+                <div class="col-md-6" style="height:180px">
+                    <label style="color:#ffffff">Products not found</label>
+                    <div class="col-md-12" style="background: #ffffff;height:150px">
+                    </div>
+                </div>
+            
+                <div class="col-md-6" style="height:180px">
+                    <label style="color:#ffffff">Products Suggestion</label>
+                    <div class="col-md-12" style="background: #ffffff;height:150px">
+                    </div>
+                </div>
+
+            </div>
+        <br/>
+        <div class="row" style="padding:10px">
+
+                <div class="col-md-12" style="height:180px">
+                    <label style="color:#ffffff">Products found and included</label>
+                    <div class="col-md-12" style="background: #ffffff;height:150px">
+                    </div>
+                </div>
+
+        </div>
+ 
+           
+        </div>
+        </div>
+        <style>
+            .productpath.breadcrumb > li + li:before {
+                padding: 0 5px;
+                color: white;
+                content: ">";
+                font-size: 16px;
+            }
+
+            .productpath.breadcrumb {
+                color: white;
+                background-color: #1a3e6f;
+                padding: 10px;
+                margin-bottom: 0px;
+            }
+
+            a.prdAnchor {
+                color: white;
+            }
+
+                a.prdAnchor:hover {
+                    color: #199ed8;
+                    text-decoration: none;
+                }
+
+            .drillDown.btn-group button {
+                background-color: #199ed8;
+                border-left: none;
+                border-top: none;
+                border-bottom: none;
+                border-right: 1px solid white;
+                color: white; /* White text */
+                cursor: pointer; /* Pointer/hand icon */
+                float: left; /* Float the buttons side by side */
+            }
+
+            .drillDown {
+                background-color: #199ed8;
+            }
+
+                .drillDown.btn-group {
+                    padding-top: 3px;
+                    padding-bottom: 3px;
+                }
+
+                    .drillDown.btn-group button:not(:last-child) {
+                        border-right: none; /* Prevent double borders */
+                    }
+
+                    .drillDown.btn-group button.noborder {
+                        border-right: none;
+                    }
+
+                    /* Add a background color on hover */
+                    .drillDown.btn-group button:hover {
+                        background-color: #199ed8;
+                        color: #1a3e6f;
+                    }
+
+                    .drillDown.btn-group button:focus, .button:active {
+                        outline: none !important;
+                        background-color: #199ed8;
+                    }
+
+            .prodDrillDownLarge {
+                background-color: #f3f3f3;
+                border: 1px solid white;
+                text-align: center;
+            }
+
+                .prodDrillDownLarge p {
+                    font-size: 13px;
+                    margin-top: 11px;
+                }
+
+                    .prodDrillDownLarge p:hover {
+                        color: #199ed8;
+                    }
+        </style>

@@ -17,10 +17,15 @@ namespace Intel.MyDeals.BusinessLogic
 
         private readonly IDataCollectionsDataLib _dataCollectionsDataLib;
 
-        public ProductsLib(IProductDataLib productDataLib, IDataCollectionsDataLib dataCollectionsDataLib)
+        private readonly IConstantsLookupsLib _constantsLookupsLib;
+
+        public ProductsLib(IProductDataLib productDataLib, IDataCollectionsDataLib dataCollectionsDataLib, IConstantsLookupsLib constantsLookupsLib)
         {
             _productDataLib = productDataLib;
             _dataCollectionsDataLib = dataCollectionsDataLib;
+
+            _constantsLookupsLib = constantsLookupsLib;
+
         }
 
         /// <summary>
@@ -217,7 +222,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// </summary>
         /// <param name="products"></param>
         /// <returns></returns>
-        public ProductLookup TranslateProducts(List<ProductEntryAttribute> prodNames)
+        public ProductLookup TranslateProducts(List<ProductEntryAttribute> prodNames, Int32 CUST_MBR_SID)
         {
             //var prodNames = new List<string>();
             var userProducts = prodNames.Select(l => l.USR_INPUT).ToList();
@@ -237,7 +242,43 @@ namespace Intel.MyDeals.BusinessLogic
             {
 
                 var products = TransformProducts(userProduct.USR_INPUT);
-                List<ProductEntryAttribute> prodNamesList = new List<ProductEntryAttribute>();                
+                var prodTemp = products;
+                foreach (var product in prodTemp.ToList())
+                {
+                    string productName = product.ToString().Trim();
+                    if (productName.Contains(" "))//Checking for Long Text search like DT I3 
+                    {
+                        string[] prodductSplit = productName.Split(' ');
+                        string finalProdName = "";
+                        List<ProductEntryAttribute> prodNamesListSplit = new List<ProductEntryAttribute>();
+                        foreach (var ps in prodductSplit)
+                        {
+                            ProductEntryAttribute peaSplitList = new ProductEntryAttribute();
+                            peaSplitList.USR_INPUT = ps.ToString();
+                            prodNamesListSplit.Add(peaSplitList);
+                        }
+
+                        var productAliasesSplit = (from p in prodNamesListSplit
+                                                   join a in aliasMapping
+                                              on p.USR_INPUT equals a.PRD_ALS_NM into pa
+                                                   from t in pa.DefaultIfEmpty()
+                                                   select new ProductEntryAttribute
+                                                   {
+                                                       USR_INPUT = t == null ? p.USR_INPUT : t.PRD_NM
+
+                                                   }).Distinct();
+
+                        foreach (var pas in productAliasesSplit)
+                        {
+                            finalProdName = finalProdName + '/' + pas.USR_INPUT.ToString();
+                        }
+                        finalProdName = finalProdName.Remove(0, 1);
+                        int index = products.IndexOf(productName);
+                        if (index != -1)
+                            products[index] = finalProdName;
+                    }
+                }
+                List<ProductEntryAttribute> prodNamesList = new List<ProductEntryAttribute>();
                 foreach (var product in products)
                 {
                     ProductEntryAttribute pea = new ProductEntryAttribute();
@@ -264,14 +305,14 @@ namespace Intel.MyDeals.BusinessLogic
                                           END_DATE = p.END_DATE,
                                           START_DATE = p.START_DATE
                                       }).Distinct();
-                
+
                 productsTodb.AddRange(productAliases);
                 productLookup.ProdctTransformResults[userProduct.USR_INPUT] = productAliases.Select(x => x.USR_INPUT).ToList();
             }
 
             //  Product match master list
             //var productMatchResults = FindProductMatch(productsTodb);
-            var productMatchResults = GetProductDetails(productsTodb);
+            var productMatchResults = GetProductDetails(productsTodb, CUST_MBR_SID);
             // Get duplicate and Valid Products
             ExtractValidandDuplicateProducts(productLookup, productMatchResults);
 
@@ -342,9 +383,9 @@ namespace Intel.MyDeals.BusinessLogic
             return _productDataLib.FindProductMatch(productsToMatch);
         }
 
-        public List<PRD_LOOKUP_RESULTS> GetProductDetails(List<ProductEntryAttribute> productsToMatch)
+        public List<PRD_LOOKUP_RESULTS> GetProductDetails(List<ProductEntryAttribute> productsToMatch, Int32 CUST_MBR_SID)
         {
-            return _productDataLib.GetProductDetails(productsToMatch);
+            return _productDataLib.GetProductDetails(productsToMatch, CUST_MBR_SID);
         }
 
         /// <summary>
@@ -354,6 +395,10 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns></returns>
         public List<string> TransformProducts(string userProduct)
         {
+            //Getting value from Constant Table
+            var charsetResult = _constantsLookupsLib.GetConstantsByName("PROD_REPLACE_CHARSET");
+            string charset = charsetResult.CNST_VAL_TXT;
+
             string userProd = Regex.Replace(userProduct, @"(?<=\([^()]*),", "/");
             var myRegex = new Regex(@"\([^\)]*\)|(/)");
 
@@ -371,8 +416,7 @@ namespace Intel.MyDeals.BusinessLogic
             string[] splits = Regex.Split(replaced, "~");
             var singleProducts = new List<string>();
 
-            //TODO: Later we will get this data from constant table
-            string charset = "i3 ,i5 ,i7 ,E3 ,E5 ,E7 ,X3 ,D ";
+            //string charset = "i3 ,i5 ,i7 ,E3 ,E5 ,E7 ,X3 ";
             string[] chararr = charset.Split(',');
 
             foreach (var p in splits.Where(p => !string.IsNullOrEmpty(p)))
@@ -381,7 +425,8 @@ namespace Intel.MyDeals.BusinessLogic
                 var item = Regex.Replace(p.Trim(), @"\s+", " ");
                 foreach (string row in chararr)
                 {
-                    if (item.Contains(row.ToString()))
+                    if (item.IndexOf(row) == 0)
+                    //if (item.Contains(row.ToString()))
                     {
                         strRep = item.Replace(row, row.Trim() + '-');
                         break;
@@ -556,17 +601,18 @@ namespace Intel.MyDeals.BusinessLogic
             // this takes time if it is the first time to load into cache
             List<Product> prds = GetProducts();
 
-            IEnumerable<ProductHash> hashPrds = from prd in prds select new ProductHash
-            {
-                Id = prd.PRD_MBR_SID,
-                HashName = prd.DEAL_PRD_TYPE
-                    + (prd.PRD_CATGRY_NM == string.Empty ? "" : " " + prd.PRD_CATGRY_NM)
-                    + (prd.BRND_NM == string.Empty ? "" : " " + prd.BRND_NM)
-                    + (prd.FMLY_NM == string.Empty ? "" : " " + prd.FMLY_NM)
-                    + (prd.PRCSSR_NBR == string.Empty ? "" : " " + prd.PRCSSR_NBR)
-                    + (prd.DEAL_PRD_NM == string.Empty ? "" : " " + prd.DEAL_PRD_NM)
-                    + (prd.MTRL_ID == string.Empty ? "" : " " + prd.MTRL_ID) 
-            };
+            IEnumerable<ProductHash> hashPrds = from prd in prds
+                                                select new ProductHash
+                                                {
+                                                    Id = prd.PRD_MBR_SID,
+                                                    HashName = prd.DEAL_PRD_TYPE
+   + (prd.PRD_CATGRY_NM == string.Empty ? "" : " " + prd.PRD_CATGRY_NM)
+   + (prd.BRND_NM == string.Empty ? "" : " " + prd.BRND_NM)
+   + (prd.FMLY_NM == string.Empty ? "" : " " + prd.FMLY_NM)
+   + (prd.PRCSSR_NBR == string.Empty ? "" : " " + prd.PRCSSR_NBR)
+   + (prd.DEAL_PRD_NM == string.Empty ? "" : " " + prd.DEAL_PRD_NM)
+   + (prd.MTRL_ID == string.Empty ? "" : " " + prd.MTRL_ID)
+                                                };
 
             List<NodeMatch> myMatches = new List<NodeMatch>();
             foreach (ProductHash productHash in hashPrds)
@@ -582,7 +628,7 @@ namespace Intel.MyDeals.BusinessLogic
                         matchVal += match.Value;
                     }
 
-                    float weight = ((float)matchesLength / (float)productHash.HashName.Length)*100;
+                    float weight = ((float)matchesLength / (float)productHash.HashName.Length) * 100;
 
                     NodeMatch newMatch = new NodeMatch
                     {
@@ -601,7 +647,7 @@ namespace Intel.MyDeals.BusinessLogic
             List<int> matchedIDs = SortedList.Take(returnMaxRecords).Select(p => p.ID).ToList();
             List<Product> rtn = prds.Where(p => matchedIDs.Contains(p.PRD_MBR_SID)).ToList();
 
-            List <Product> Final = new List<Product>();
+            List<Product> Final = new List<Product>();
             Final.AddRange(rtn);
 
             return Final;
