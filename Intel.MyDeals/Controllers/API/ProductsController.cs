@@ -334,20 +334,20 @@ namespace Intel.MyDeals.Controllers.API
              );
         }
 
-        [Route("TranslateProducts/{CUST_MBR_SID}")]
+        [Route("TranslateProducts")]
         [HttpPost]
-        public ProductLookup TranslateProducts(List<ProductEntryAttribute> userInput, Int32 CUST_MBR_SID)
+        public ProductLookup TranslateProducts(List<ProductEntryAttribute> userInput)
         {
-            return SafeExecutor(() => _productsLib.TranslateProducts(userInput, CUST_MBR_SID)
+            return SafeExecutor(() => _productsLib.TranslateProducts(userInput)
                 , $"Unable to translate {"userInput"}"
             );
         }
 
         [Route("GetProductDetails")]
         [HttpPost]
-        public ProductLookup GetProductDetails(List<ProductEntryAttribute> userInput, Int32 CUST_MBR_SID)
+        public ProductLookup GetProductDetails(List<ProductEntryAttribute> userInput)
         {
-            return SafeExecutor(() => _productsLib.TranslateProducts(userInput, CUST_MBR_SID)
+            return SafeExecutor(() => _productsLib.TranslateProducts(userInput)
                 , $"Unable to get product {"details"}"
             );
         }

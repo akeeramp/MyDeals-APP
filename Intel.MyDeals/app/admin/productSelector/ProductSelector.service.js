@@ -21,8 +21,8 @@
 
         return service;
 
-        function TranslateProducts(products, CUST_CD) {
-            return dataService.post(apiBaseUrl + 'TranslateProducts/' + CUST_CD, products);
+        function TranslateProducts(products) {
+            return dataService.post(apiBaseUrl + 'TranslateProducts', products);
         }
 
         function FetchProducts(products) {
@@ -37,9 +37,9 @@
             return dataService.get(apiBaseUrl + 'GetProdSelectionLevel/' + OBJ_SET_TYPE_SID);
         }
 
-        function GetProductDetails(products, CUST_CD)
+        function GetProductDetails(products)
         {
-            return dataService.post(apiBaseUrl + 'GetProductDetails/' + CUST_CD, products);
+            return dataService.post(apiBaseUrl + 'GetProductDetails', products);
         }
     }
 })();

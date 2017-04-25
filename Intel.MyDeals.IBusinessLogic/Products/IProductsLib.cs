@@ -43,9 +43,9 @@ namespace Intel.MyDeals.IBusinessLogic
 
         List<ProductAlias> GetProductsFromAlias(bool getCachedResult = true);
 
-        ProductLookup TranslateProducts(List<ProductEntryAttribute> products, int CUST_MBR_SID);
+        ProductLookup TranslateProducts(List<ProductEntryAttribute> products);
 
-        List<PRD_LOOKUP_RESULTS> GetProductDetails(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID);
+        List<PRD_LOOKUP_RESULTS> GetProductDetails(List<ProductEntryAttribute> productsToMatch);
 
         ProductLookup FetchProducts(List<ProductIEValues> products);
 

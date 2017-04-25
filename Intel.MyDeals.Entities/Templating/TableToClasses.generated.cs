@@ -2492,53 +2492,48 @@ namespace Intel.MyDeals.Entities {
 	
 	[DataMember]
 	public System.String USR_INPUT {set;get;}
-
-    [DataMember]
-	public System.String HIER_NM_HASH { set; get; }
-
-    [DataMember]
-    public System.String DEAL_PRD_TYPE { set; get; }
-
-        /*
-        private static List<PRD_LOOKUP_RESULTS> PRD_LOOKUP_RESULTSFromReader(SqlDataReader rdr){
-        // This helper method is template generated.
-        // Refer to that template for details to modify this code.
-
-        var ret = new List<PRD_LOOKUP_RESULTS>();
-        int IDX_BRND_NM = DB.GetReaderOrdinal(rdr, "BRND_NM");
-        int IDX_DEAL_PRD_NM = DB.GetReaderOrdinal(rdr, "DEAL_PRD_NM");
-        int IDX_FMLY_NM = DB.GetReaderOrdinal(rdr, "FMLY_NM");
-        int IDX_HIER_VAL_NM = DB.GetReaderOrdinal(rdr, "HIER_VAL_NM");
-        int IDX_KIT_NM = DB.GetReaderOrdinal(rdr, "KIT_NM");
-        int IDX_PCSR_NBR = DB.GetReaderOrdinal(rdr, "PCSR_NBR");
-        int IDX_PRD_CAT_NM = DB.GetReaderOrdinal(rdr, "PRD_CAT_NM");
-        int IDX_PRD_END_DTM = DB.GetReaderOrdinal(rdr, "PRD_END_DTM");
-        int IDX_PRD_MBR_SID = DB.GetReaderOrdinal(rdr, "PRD_MBR_SID");
-        int IDX_PRD_STRT_DTM = DB.GetReaderOrdinal(rdr, "PRD_STRT_DTM");
-        int IDX_SKU_NM = DB.GetReaderOrdinal(rdr, "SKU_NM");
-        int IDX_USR_INPUT = DB.GetReaderOrdinal(rdr, "USR_INPUT");
-
-        while (rdr.Read()){
-        ret.Add(new PRD_LOOKUP_RESULTS {
-        BRND_NM = (IDX_BRND_NM < 0 || rdr.IsDBNull(IDX_BRND_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_BRND_NM),
-        DEAL_PRD_NM = (IDX_DEAL_PRD_NM < 0 || rdr.IsDBNull(IDX_DEAL_PRD_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_PRD_NM),
-        FMLY_NM = (IDX_FMLY_NM < 0 || rdr.IsDBNull(IDX_FMLY_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_FMLY_NM),
-        HIER_VAL_NM = (IDX_HIER_VAL_NM < 0 || rdr.IsDBNull(IDX_HIER_VAL_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_HIER_VAL_NM),
-        KIT_NM = (IDX_KIT_NM < 0 || rdr.IsDBNull(IDX_KIT_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_KIT_NM),
-        PCSR_NBR = (IDX_PCSR_NBR < 0 || rdr.IsDBNull(IDX_PCSR_NBR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PCSR_NBR),
-        PRD_CAT_NM = (IDX_PRD_CAT_NM < 0 || rdr.IsDBNull(IDX_PRD_CAT_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_CAT_NM),
-        PRD_END_DTM = (IDX_PRD_END_DTM < 0 || rdr.IsDBNull(IDX_PRD_END_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_PRD_END_DTM),
-        PRD_MBR_SID = (IDX_PRD_MBR_SID < 0 || rdr.IsDBNull(IDX_PRD_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRD_MBR_SID),
-        PRD_STRT_DTM = (IDX_PRD_STRT_DTM < 0 || rdr.IsDBNull(IDX_PRD_STRT_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_PRD_STRT_DTM),
-        SKU_NM = (IDX_SKU_NM < 0 || rdr.IsDBNull(IDX_SKU_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_SKU_NM),
-        USR_INPUT = (IDX_USR_INPUT < 0 || rdr.IsDBNull(IDX_USR_INPUT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_USR_INPUT)
-        });
-        } // while
-        return ret;
-        }
-        */
-
-    } // End of class PRD_LOOKUP_RESULTS
+	
+	
+	/*
+	private static List<PRD_LOOKUP_RESULTS> PRD_LOOKUP_RESULTSFromReader(SqlDataReader rdr){
+	// This helper method is template generated.
+	// Refer to that template for details to modify this code.
+	
+	var ret = new List<PRD_LOOKUP_RESULTS>();
+	int IDX_BRND_NM = DB.GetReaderOrdinal(rdr, "BRND_NM");
+	int IDX_DEAL_PRD_NM = DB.GetReaderOrdinal(rdr, "DEAL_PRD_NM");
+	int IDX_FMLY_NM = DB.GetReaderOrdinal(rdr, "FMLY_NM");
+	int IDX_HIER_VAL_NM = DB.GetReaderOrdinal(rdr, "HIER_VAL_NM");
+	int IDX_KIT_NM = DB.GetReaderOrdinal(rdr, "KIT_NM");
+	int IDX_PCSR_NBR = DB.GetReaderOrdinal(rdr, "PCSR_NBR");
+	int IDX_PRD_CAT_NM = DB.GetReaderOrdinal(rdr, "PRD_CAT_NM");
+	int IDX_PRD_END_DTM = DB.GetReaderOrdinal(rdr, "PRD_END_DTM");
+	int IDX_PRD_MBR_SID = DB.GetReaderOrdinal(rdr, "PRD_MBR_SID");
+	int IDX_PRD_STRT_DTM = DB.GetReaderOrdinal(rdr, "PRD_STRT_DTM");
+	int IDX_SKU_NM = DB.GetReaderOrdinal(rdr, "SKU_NM");
+	int IDX_USR_INPUT = DB.GetReaderOrdinal(rdr, "USR_INPUT");
+	
+	while (rdr.Read()){
+	ret.Add(new PRD_LOOKUP_RESULTS {
+	BRND_NM = (IDX_BRND_NM < 0 || rdr.IsDBNull(IDX_BRND_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_BRND_NM),
+	DEAL_PRD_NM = (IDX_DEAL_PRD_NM < 0 || rdr.IsDBNull(IDX_DEAL_PRD_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_PRD_NM),
+	FMLY_NM = (IDX_FMLY_NM < 0 || rdr.IsDBNull(IDX_FMLY_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_FMLY_NM),
+	HIER_VAL_NM = (IDX_HIER_VAL_NM < 0 || rdr.IsDBNull(IDX_HIER_VAL_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_HIER_VAL_NM),
+	KIT_NM = (IDX_KIT_NM < 0 || rdr.IsDBNull(IDX_KIT_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_KIT_NM),
+	PCSR_NBR = (IDX_PCSR_NBR < 0 || rdr.IsDBNull(IDX_PCSR_NBR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PCSR_NBR),
+	PRD_CAT_NM = (IDX_PRD_CAT_NM < 0 || rdr.IsDBNull(IDX_PRD_CAT_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_CAT_NM),
+	PRD_END_DTM = (IDX_PRD_END_DTM < 0 || rdr.IsDBNull(IDX_PRD_END_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_PRD_END_DTM),
+	PRD_MBR_SID = (IDX_PRD_MBR_SID < 0 || rdr.IsDBNull(IDX_PRD_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRD_MBR_SID),
+	PRD_STRT_DTM = (IDX_PRD_STRT_DTM < 0 || rdr.IsDBNull(IDX_PRD_STRT_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_PRD_STRT_DTM),
+	SKU_NM = (IDX_SKU_NM < 0 || rdr.IsDBNull(IDX_SKU_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_SKU_NM),
+	USR_INPUT = (IDX_USR_INPUT < 0 || rdr.IsDBNull(IDX_USR_INPUT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_USR_INPUT)
+	});
+	} // while
+	return ret;
+	}
+	*/
+	
+	} // End of class PRD_LOOKUP_RESULTS
 
 	///<summary>
 	/// Class created via template - Do Not Modify!

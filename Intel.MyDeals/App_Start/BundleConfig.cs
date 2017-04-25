@@ -122,8 +122,6 @@ namespace Intel.MyDeals
                 , "~/app/contract/contract.route.js"
                 , "~/app/contract/controllers/contract.controller.js"
                 , "~/app/contract/controllers/pricingTable.controller.js"
-                , "~/app/contract/productSelector/productSelector.controller.js"
-                , "~/app/contract/productCorrector/productCorrector.controller.js"
                 , "~/app/costTest/costtest.module.js"
                 , "~/app/costTest/costtest.route.js"
                 , "~/app/dashboard/dashboard.module.js"
