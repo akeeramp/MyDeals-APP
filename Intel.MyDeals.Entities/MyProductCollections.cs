@@ -59,6 +59,11 @@ namespace Intel.MyDeals.Entities
         [DataMember]
         public System.String END_DATE { set; get; }
 
+        [DataMember]
+        public System.String HIER_NM_HASH { set; get; }
+
+        [DataMember]
+        public System.String DEAL_PRD_TYPE { set; get; }
 
         /*
         private static List<WorkFlowAttribute> WorkFlowAttributeFromReader(SqlDataReader rdr){

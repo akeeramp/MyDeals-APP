@@ -17,10 +17,15 @@ namespace Intel.MyDeals.BusinessLogic
 
         private readonly IDataCollectionsDataLib _dataCollectionsDataLib;
 
-        public ProductsLib(IProductDataLib productDataLib, IDataCollectionsDataLib dataCollectionsDataLib)
+        private readonly IConstantsLookupsLib _constantsLookupsLib;
+
+        public ProductsLib(IProductDataLib productDataLib, IDataCollectionsDataLib dataCollectionsDataLib, IConstantsLookupsLib constantsLookupsLib)
         {
             _productDataLib = productDataLib;
             _dataCollectionsDataLib = dataCollectionsDataLib;
+
+            _constantsLookupsLib = constantsLookupsLib;
+
         }
 
         /// <summary>
@@ -217,7 +222,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// </summary>
         /// <param name="products"></param>
         /// <returns></returns>
-        public ProductLookup TranslateProducts(List<ProductEntryAttribute> prodNames)
+        public ProductLookup TranslateProducts(List<ProductEntryAttribute> prodNames, Int32 CUST_MBR_SID)
         {
             //var prodNames = new List<string>();
             var userProducts = prodNames.Select(l => l.USR_INPUT).ToList();
@@ -235,8 +240,44 @@ namespace Intel.MyDeals.BusinessLogic
 
             foreach (var userProduct in prodNames)
             {
-
+                
                 var products = TransformProducts(userProduct.USR_INPUT);
+                var prodTemp = products;
+                foreach (var product in prodTemp.ToList())
+                {                    
+                    string productName = product.ToString().Trim();
+                    if(productName.Contains(" "))//Checking for Long Text search like DT I3 
+                    {
+                        string[] prodductSplit = productName.Split(' ');
+                        string finalProdName = "";
+                        List<ProductEntryAttribute> prodNamesListSplit = new List<ProductEntryAttribute>();
+                        foreach (var ps in prodductSplit)
+                        {
+                            ProductEntryAttribute peaSplitList = new ProductEntryAttribute();
+                            peaSplitList.USR_INPUT = ps.ToString();
+                            prodNamesListSplit.Add(peaSplitList);
+                        }
+
+                        var productAliasesSplit = (from p in prodNamesListSplit
+                                                   join a in aliasMapping
+                                              on p.USR_INPUT equals a.PRD_ALS_NM into pa
+                                                   from t in pa.DefaultIfEmpty()
+                                                   select new ProductEntryAttribute
+                                                   {
+                                                       USR_INPUT = t == null ? p.USR_INPUT : t.PRD_NM
+
+                                                   }).Distinct();
+
+                        foreach (var pas in productAliasesSplit)
+                        {
+                            finalProdName = finalProdName + '/' + pas.USR_INPUT.ToString();
+                        }
+                        finalProdName = finalProdName.Remove(0, 1);
+                        int index = products.IndexOf(productName);
+                        if (index != -1)
+                            products[index] = finalProdName;
+                    }       
+                }
                 List<ProductEntryAttribute> prodNamesList = new List<ProductEntryAttribute>();                
                 foreach (var product in products)
                 {
@@ -271,7 +312,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             //  Product match master list
             //var productMatchResults = FindProductMatch(productsTodb);
-            var productMatchResults = GetProductDetails(productsTodb);
+            var productMatchResults = GetProductDetails(productsTodb, CUST_MBR_SID);
             // Get duplicate and Valid Products
             ExtractValidandDuplicateProducts(productLookup, productMatchResults);
 
@@ -342,9 +383,9 @@ namespace Intel.MyDeals.BusinessLogic
             return _productDataLib.FindProductMatch(productsToMatch);
         }
 
-        public List<PRD_LOOKUP_RESULTS> GetProductDetails(List<ProductEntryAttribute> productsToMatch)
+        public List<PRD_LOOKUP_RESULTS> GetProductDetails(List<ProductEntryAttribute> productsToMatch, Int32 CUST_MBR_SID)
         {
-            return _productDataLib.GetProductDetails(productsToMatch);
+            return _productDataLib.GetProductDetails(productsToMatch, CUST_MBR_SID);
         }
 
         /// <summary>
@@ -354,6 +395,10 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns></returns>
         public List<string> TransformProducts(string userProduct)
         {
+            //Getting value from Constant Table
+            var charsetResult = _constantsLookupsLib.GetConstantsByName("PROD_REPLACE_CHARSET");
+            string charset = charsetResult.CNST_VAL_TXT;
+
             string userProd = Regex.Replace(userProduct, @"(?<=\([^()]*),", "/");
             var myRegex = new Regex(@"\([^\)]*\)|(/)");
 
@@ -369,10 +414,9 @@ namespace Intel.MyDeals.BusinessLogic
             });
 
             string[] splits = Regex.Split(replaced, "~");
-            var singleProducts = new List<string>();
-
-            //TODO: Later we will get this data from constant table
-            string charset = "i3 ,i5 ,i7 ,E3 ,E5 ,E7 ,X3 ,D ";
+            var singleProducts = new List<string>();            
+            
+            //string charset = "i3 ,i5 ,i7 ,E3 ,E5 ,E7 ,X3 ";
             string[] chararr = charset.Split(',');
 
             foreach (var p in splits.Where(p => !string.IsNullOrEmpty(p)))
@@ -381,7 +425,8 @@ namespace Intel.MyDeals.BusinessLogic
                 var item = Regex.Replace(p.Trim(), @"\s+", " ");
                 foreach (string row in chararr)
                 {
-                    if (item.Contains(row.ToString()))
+                    if (item.IndexOf(row) ==  0)
+                    //if (item.Contains(row.ToString()))
                     {
                         strRep = item.Replace(row, row.Trim() + '-');
                         break;

@@ -189,6 +189,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="app\admin\productEntry\" />
     <Folder Include="app\admin\services\" />
     <Folder Include="app\dealManager\" />
     <Folder Include="app\errorHandling\" />
@@ -305,7 +306,10 @@
     <Content Include="app\app.module.js" />
     <Content Include="app\blocks\uiControls\partials\horizontalEmbeddedMultiSelect.html" />
     <Content Include="app\blocks\uiControls\partials\verticalEmbeddedMultiSelect.html" />
-    <Content Include="app\contract\partials\help.html" />
+    <Content Include="app\contract\productCorrector\productCorrector.controller.js" />
+    <Content Include="app\contract\productCorrector\productCorrector.html" />
+    <Content Include="app\contract\productSelector\productSelector.controller.js" />
+    <Content Include="app\contract\productSelector\productSelector.html" />
     <Content Include="app\core\directives\adminBanner\adminBanner.directive.js" />
     <Content Include="app\core\directives\adminBanner\adminBanner.directive.html" />
     <Content Include="app\blocks\exception\exception-handler.provider.js" />
@@ -409,9 +413,6 @@
     <Content Include="app\testCases\opMessages\opMessages.controller.js" />
     <Content Include="app\testCases\rules\businessRules.controller.js" />
     <Content Include="app\testCases\rules\businessRules.manage.html" />
-    <Content Include="app\testCases\suggestProduct\suggestProduct.controller.js" />
-    <Content Include="app\testCases\suggestProduct\suggestProduct.manage.html" />
-    <Content Include="app\testCases\suggestProduct\suggestProduct.service.js" />
     <Content Include="app\testCases\testCases.module.js" />
     <Content Include="app\testCases\testCases.route.js" />
     <Content Include="app\testCases\uiControls\uiControls.controller.js" />
