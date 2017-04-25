@@ -718,11 +718,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 						cellData.borderRight = null;
 						cellData.borderTop = null;
 						cellData.color = cellStyle.color;
-						cellData.fontFamily = null;
+						cellData.fontFamily = cellStyle.fontfamily;
 						cellData.fontSize = cellStyle.fontSize;
 						cellData.italic = null;
 						cellData.link = null;
-						cellData.textAlign = cellStyle.textAlign;
+						//cellData.textAlign = cellStyle.textAlign;
 						cellData.underline = null;
 						cellData.verticalAlign = cellStyle.verticalAlign;
 						cellData.wrap = null;
