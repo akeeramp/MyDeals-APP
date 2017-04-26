@@ -207,18 +207,6 @@ namespace Intel.MyDeals.DataLibrary
 				IsRequired = true
 			});
 			items.Add(new UiTemplateContainerItem
-			{
-				Id = 29,
-				AtrbCd = AttributeCodes.PAYOUT_BASED_ON,
-				ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
-				Width = 100,
-				IsDefaultable = true,
-				UiType = "RADIOBUTTONGROUP",
-				LookupUrl = "/api/Dropdown/GetDropdowns/PAYOUT_BASED_ON/ECAP",
-				LookupText = "DROP_DOWN",
-				LookupValue = "DROP_DOWN"
-			});
-			items.Add(new UiTemplateContainerItem
             {
                 Id = 37,
                 AtrbCd = AttributeCodes.ECAP_TYPE,
@@ -318,6 +306,18 @@ namespace Intel.MyDeals.DataLibrary
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
             });
+			items.Add(new UiTemplateContainerItem
+			{
+				Id = 29,
+				AtrbCd = AttributeCodes.PAYOUT_BASED_ON,
+				ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
+				Width = 100,
+				IsDefaultable = true,
+				UiType = "RADIOBUTTONGROUP",
+				LookupUrl = "/api/Dropdown/GetDropdowns/PAYOUT_BASED_ON/ECAP",
+				LookupText = "DROP_DOWN",
+				LookupValue = "DROP_DOWN"
+			});
 			items.Add(new UiTemplateContainerItem
 			{
 				Id = 41,

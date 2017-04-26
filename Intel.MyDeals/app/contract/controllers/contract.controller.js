@@ -2,9 +2,9 @@
     .module('app.contract')
     .controller('ContractController', ContractController);
 
-ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'isNewContract', 'templateData', 'objsetService', 'templatesService', 'logger', '$uibModal', '$timeout', '$window', '$location', '$rootScope', 'confirmationModal', 'dataService', 'customerService', 'contractManagerConstants'];
+ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'isNewContract', 'templateData', 'objsetService', 'templatesService', 'logger', '$uibModal', '$timeout', '$window', '$location', '$rootScope', 'confirmationModal', 'dataService', 'customerService', 'contractManagerConstants', 'MrktSegMultiSelectService'];
 
-function ContractController($scope, $state, $filter, contractData, isNewContract, templateData, objsetService, templatesService, logger, $uibModal, $timeout, $window, $location, $rootScope, confirmationModal, dataService, customerService, contractManagerConstants) {
+function ContractController($scope, $state, $filter, contractData, isNewContract, templateData, objsetService, templatesService, logger, $uibModal, $timeout, $window, $location, $rootScope, confirmationModal, dataService, customerService, contractManagerConstants, MrktSegMultiSelectService) {
     // store template information
     //
     $scope.templates = $scope.templates || templateData.data;
@@ -1220,247 +1220,52 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
         return Object.keys($scope.newPricingTable._defaultAtrbs).length;
     }
 
-    $scope.nonCorpMrktSegments = [];
-    dataService.get("/api/Dropdown/GetDropdowns/MRKT_SEG_NON_CORP").then(
-        function (response) {
-            for (var i = 0; i < response.data.length; i++) {
-                $scope.nonCorpMrktSegments.push(response.data[i].DROP_DOWN);
-            }
-        },
-        function (response) {
-            logger.error("Unable to get Non Corp Market Segments.", response, response.statusText);
-        }
-    );
 
-    $scope.subMrktSegments = [];
-    dataService.get("/api/Dropdown/GetDropdowns/MRKT_SUB_SEGMENT").then(
-        function (response) {
-            for (var i = 0; i < response.data.length; i++) {
-                $scope.subMrktSegments.push(response.data[i].DROP_DOWN);
-            }
-        },
-        function (response) {
-            logger.error("Unable to get Market Sub Segments.", response, response.statusText);
-        }
-    );
-
-    //toggles all given tree view nodes to the "checked" boolean state
-    function setAllNodes(nodes, checked) {
-        for (var i = 0; i < nodes.length; i++) {
-            nodes[i].set("checked", checked);
-
-            if (nodes[i].hasChildren) {
-                setAllNodes(nodes[i].children.view(), checked);
-            }
-        }
-    }
-
-    //returns subset of 'base' nodes that are non corp market segments
-    function getNonCorpNodes(treeView) {
-        var base = treeView.dataSource.view();
-        var ret = [];
-        for (var i = 0; i < base.length; i++) {
-            if ($scope.nonCorpMrktSegments.indexOf(base[i].DROP_DOWN) > -1)
-                ret.push(base[i])
-        }
-        return ret;
-    }
-
-    //given boolean emb, either returns all tree nodes that ARE embedded sub segments or all tree nodes that ARE NOT embedded sub segments
-    function getEmbeddedNodes(treeNodes, emb) {
-        var ret = [];
-        if (emb) {
-            //return all embedded market sub segments
-            for (var i = 0; i < treeNodes.length; i++) {
-                if ($scope.subMrktSegments.indexOf(treeNodes[i].DROP_DOWN) > -1) {
-                    ret.push(treeNodes[i])
-                }
-                if (treeNodes[i].hasChildren) {
-                    ret = ret.concat(getEmbeddedNodes(treeNodes[i].children.view(), emb));
-                }
-            }
-        } else {
-            //return all tree nodes that are NOT embedded market sub segments
-            //Note: had to hardcode Embedded to be excluded from the result set, unchecking embedded will also uncheck all its children.  Remove that extra condition if we prevent checking of parent nodes.
-            for (var i = 0; i < treeNodes.length; i++) {
-                if (!($scope.subMrktSegments.indexOf(treeNodes[i].DROP_DOWN) > -1) && treeNodes[i].DROP_DOWN != "Embedded") {
-                    ret.push(treeNodes[i]);
-                }
-                //TODO: need to also add recursive call line here if there will ever be other sub-trees other than "Embedded"
-            }
-        }
-        return ret;
-    }
-
-    //output a.concat(b) with duplicates stripped out, i.e. if a contains "C" and b contains "C", only one occurance of "C" will be in final return
-    function arrayMergeUnique(a, b) {
-        for (var i = 0; i < b.length; i++) {
-            if (a.indexOf(b[i]) < 0) {
-                a.push(b[i]);
-            }
-        }
-        return a;
-    }
-
-    //returns a bool indicating whether a member of $scope.nonCorpMrktSegments has been removed (i.e. present in oldVal, not present in newVal)
-    function removedNonCorpMemberNode(newVal, oldVal) {
-        for (var i = 0; i < $scope.nonCorpMrktSegments.length; i++) {
-            if (newVal.indexOf($scope.nonCorpMrktSegments[i]) < 0 && oldVal.indexOf($scope.nonCorpMrktSegments[i]) > -1) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    function checkedEmbeddedSubSegment(newVal, oldVal, checkBool) {
-        if (checkBool) {
-            //check if user checked a node that is an embedded sub segment
-            for (var i = 0; i < $scope.subMrktSegments.length; i++) {
-                if (newVal.indexOf($scope.subMrktSegments[i]) > -1 && oldVal.indexOf($scope.subMrktSegments[i]) < 0) {
-                    return true;
-                }
-            }
-            return false;
-        } else {
-            //check if user checked a node that is not an embedded sub segment
-            for (var i = 0; i < newVal.length; i++) {
-                if (oldVal.indexOf(newVal[i]) < 0 && !($scope.subMrktSegments.indexOf(newVal[i]) > -1)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
-
-    //setting a few constants for the strings that occur a lot
+	//setting a few constants for the strings that occur a lot
     var GEO = "GEO_COMBINED";
     var MRKT_SEG = "MRKT_SEG"
 
-    //these strings will need to be updated if they ever change it in the db or admin screen... TODO: tap into default values bool in basic dropdowns table once those db changes are made
-    var WW = "Worldwide";
-    var ALL = "All";
-    var NONCORP = "NON Corp"
-
-    var uncheckAllNC = true;
-
-    //watch for user changing global auto-fill default values
-    //TODO: restrict to only ECAP deal type for logic below
+	//watch for user changing global auto-fill default values
     $scope.$watch('newPricingTable._defaultAtrbs',
-        function (newValue, oldValue, el) {
+		function (newValue, oldValue, el) {
 
-            if (oldValue === newValue) return;
+			if (oldValue === newValue) return;
 
-            if (oldValue != null && newValue == null) return;
+			if (oldValue != null && newValue == null) return;
 
-            if (oldValue == null && newValue != null) {
-                //initialize, hard coded for now, build into an admin page in future.
-                newValue["ECAP_TYPE"].value = "MCP";
-                newValue[MRKT_SEG].value = [ALL];
-                newValue[GEO].value = [WW];
-                newValue["PAYOUT_BASED_ON"].value = "Billings"; //TODO: typo- need to correct to "Billing" in db
-                newValue["MEET_COMP_PRICE_QSTN"].value = "Price";
-                newValue["PROGRAM_PAYMENT"].value = "Backend";
+			if (oldValue == null && newValue != null) {
+				//initialize, hard coded for now, build into an admin page in future.
+				newValue["ECAP_TYPE"].value = "MCP";
+				newValue[MRKT_SEG].value = ["All"];
+				newValue[GEO].value = ["Worldwide"];
+				newValue["PAYOUT_BASED_ON"].value = "Billings"; //TODO: typo- need to correct to "Billing" in db
+				newValue["MEET_COMP_PRICE_QSTN"].value = "Price";
+				newValue["PROGRAM_PAYMENT"].value = "Backend";
 
-            } else {
+			} else {
+				// TODO: Hook these up to service (add service into injection and physical files)
+				MrktSegMultiSelectService.setMkrtSegMultiSelect(MRKT_SEG, (MRKT_SEG + "_MS"), newValue, oldValue);
+				MrktSegMultiSelectService.setGeoMultiSelect(GEO, newValue, oldValue);
 
-                //if (oldValue["ECAP_TYPE"].value != newValue["ECAP_TYPE"].value) {
-                //}
 
-                if (oldValue[MRKT_SEG].value.toString() != newValue[MRKT_SEG].value.toString()) {
+				//if (oldValue["ECAP_TYPE"].value != newValue["ECAP_TYPE"].value) {
+				//}
 
-                    var treeView = $("#" + MRKT_SEG).data("kendoTreeView");
-                    var multiSelect = $("#" + MRKT_SEG + "_MS").data("kendoMultiSelect");
 
-                    if (treeView != null) {
+				//if (oldValue["PAYOUT_BASED_ON"] != newValue["PAYOUT_BASED_ON"]) {
+				//}
 
-                        if (newValue[MRKT_SEG].value.length > 0) {
-                            //Logic for "ALL"
-                            if (newValue[MRKT_SEG].value.indexOf(ALL) > -1 && !(oldValue[MRKT_SEG].value.indexOf(ALL) > -1)) {
-                                //if user has another mrkt seg selected and then selects ALL, need to deselect all other MRKT SEGs
-                                newValue[MRKT_SEG].value = [ALL];
-                                multiSelect.value([ALL]);
-                                setAllNodes(treeView.dataSource.view(), false);
-                                treeView.dataItem(treeView.findByText(ALL)).set("checked", true);
-                            } else if (oldValue[MRKT_SEG].value.length == 1 && oldValue[MRKT_SEG].value[0] == ALL && newValue[MRKT_SEG].value.indexOf(ALL) > -1) {
-                                //if user had ALL selected and selects another MRKT SEG, need to deselect ALL
-                                newValue[MRKT_SEG].value.splice(newValue[MRKT_SEG].value.indexOf(ALL), 1);
-                                multiSelect.value(newValue[MRKT_SEG].value);
-                                treeView.dataItem(treeView.findByText(ALL)).set("checked", false);
-                            }
+				//if (oldValue["MEET_COMP_PRICE_QSTN"] != newValue["MEET_COMP_PRICE_QSTN"]) {
+				//}
 
-                            //Logic for NonCorp
-                            if (newValue[MRKT_SEG].value.indexOf(NONCORP) > -1 && !(oldValue[MRKT_SEG].value.indexOf(NONCORP) > -1)) {
-                                //if user selects NonCorp, make sure all NonCorp nodes are checked
-                                newValue[MRKT_SEG].value = arrayMergeUnique(newValue[MRKT_SEG].value, $scope.nonCorpMrktSegments);
-                                multiSelect.value(newValue[MRKT_SEG].value);
-                                setAllNodes(getNonCorpNodes(treeView), true);
-                            } else if (newValue[MRKT_SEG].value.indexOf(NONCORP) < 0 && oldValue[MRKT_SEG].value.indexOf(NONCORP) > -1) {
-                                //if user deselects NonCorp, make sure all NonCorp nodes are unchecked
-                                if (uncheckAllNC) {
-                                    newValue[MRKT_SEG].value = newValue[MRKT_SEG].value.filter(function (x) { return $scope.nonCorpMrktSegments.indexOf(x) < 0 });
-                                    multiSelect.value(newValue[MRKT_SEG].value);
-                                    setAllNodes(getNonCorpNodes(treeView), false);
-                                } else {
-                                    //if user deselects a noncorp member, the noncorp node itself must be unchecked.  this case accounts for that scenario so that the noncorp node can be unchecked without all other noncorp market segments being unchecked along with it.
-                                    uncheckAllNC = true;
-                                }
-                            } else if (newValue[MRKT_SEG].value.indexOf(NONCORP) > -1 && removedNonCorpMemberNode(newValue[MRKT_SEG].value, oldValue[MRKT_SEG].value)) {
-                                //if user deselects any Noncorp member node, deselect NonCorp node itself if noncorp node was in selection
-                                newValue[MRKT_SEG].value.splice(newValue[MRKT_SEG].value.indexOf(NONCORP), 1);
-                                multiSelect.value(newValue[MRKT_SEG].value);
-                                if (treeView.dataItem(treeView.findByText(NONCORP)).checked == true) {
-                                    treeView.dataItem(treeView.findByText(NONCORP)).set("checked", false);
-                                    uncheckAllNC = false; //set NONCORP to unchecked, but do not want to uncheck all noncorp nodes on next sweep.
-                                }
-                            }
+				//if (oldValue["PROGRAM_PAYMENT"] != newValue["PROGRAM_PAYMENT"]) {
+				//}
+			}
 
-                            //Logic for Embedded
-                            //getEmbeddedNodes
-                            if (checkedEmbeddedSubSegment(newValue[MRKT_SEG].value, oldValue[MRKT_SEG].value, true)) {
-                                //if select any EMBEDDED SUB SEGMENT, uncheck all non Embedded SUB SEGMENTS
-                                newValue[MRKT_SEG].value = newValue[MRKT_SEG].value.filter(function (x) { return $scope.subMrktSegments.indexOf(x) > -1 });
-                                multiSelect.value(newValue[MRKT_SEG].value);
-                                setAllNodes(getEmbeddedNodes(treeView.dataSource.view(), false), false);
-                            } else if (checkedEmbeddedSubSegment(newValue[MRKT_SEG].value, oldValue[MRKT_SEG].value, false)) {
-                                //if select non EMBEDDED SUB SEGMENT, uncheck all EMBEDDED SUB SEGMENTS
-                                newValue[MRKT_SEG].value = newValue[MRKT_SEG].value.filter(function (x) { return $scope.subMrktSegments.indexOf(x) < 0 });
-                                multiSelect.value(newValue[MRKT_SEG].value);
-                                setAllNodes(getEmbeddedNodes(treeView.dataSource.view(), true), false);
-                            }
+		}, true)
 
-                            //TODO: if select embedded, do not let them. is that possible? may need to disable checkchicldren
-                        }
-                    }
-                }
-
-                if (oldValue[GEO].value.toString() != newValue[GEO].value.toString()) {
-                    if (newValue[GEO].value.length > 1) {
-                        if (newValue[GEO].value.indexOf(WW) > -1 && !(oldValue[GEO].value.indexOf(WW) > -1)) {
-                            //if user has another geo selected and then selects WW, need to deselect all other GEOs
-                            newValue[GEO].value = [WW];
-                            $("#" + GEO).data("kendoMultiSelect").value([WW])
-                        } else if (oldValue[GEO].value.length == 1 && oldValue[GEO].value[0] == WW && newValue[GEO].value.indexOf(WW) > -1) {
-                            //if user had WW selected and selects another GEO, need to deselect WW
-                            newValue[GEO].value.splice(newValue[GEO].value.indexOf(WW), 1)
-                            $("#" + GEO).data("kendoMultiSelect").value(newValue[GEO].value)
-                        }
-                    }
-                }
-
-                //if (oldValue["PAYOUT_BASED_ON"] != newValue["PAYOUT_BASED_ON"]) {
-                //}
-
-                //if (oldValue["MEET_COMP_PRICE_QSTN"] != newValue["MEET_COMP_PRICE_QSTN"]) {
-                //}
-
-                //if (oldValue["PROGRAM_PAYMENT"] != newValue["PROGRAM_PAYMENT"]) {
-                //}
-            }
-
-        }, true)
-
-    // **** VALIDATE PRICING TABLE Methods ****
-    //
+	// **** VALIDATE PRICING TABLE Methods ****
+	//
 
     $scope.showWipDeals = function () {
         $state.go('contract.manager.strategy.wip', {

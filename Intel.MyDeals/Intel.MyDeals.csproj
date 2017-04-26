@@ -306,6 +306,9 @@
     <Content Include="app\blocks\uiControls\partials\horizontalEmbeddedMultiSelect.html" />
     <Content Include="app\blocks\uiControls\partials\verticalEmbeddedMultiSelect.html" />
     <Content Include="app\contract\partials\help.html" />
+    <Content Include="app\contract\controllers\contract.controller.js" />
+    <Content Include="app\contract\controllers\mrktSegMultiSelect.service.js" />
+    <Content Include="app\contract\controllers\pricingTable.controller.js" />
     <Content Include="app\core\directives\adminBanner\adminBanner.directive.js" />
     <Content Include="app\core\directives\adminBanner\adminBanner.directive.html" />
     <Content Include="app\blocks\exception\exception-handler.provider.js" />
@@ -327,10 +330,8 @@
     <Content Include="app\blocks\uiControls\partials\verticalSlider.html" />
     <Content Include="app\blocks\uiControls\uiControls.module.js" />
     <Content Include="app\blocks\util.js" />
-    <Content Include="app\contract\controllers\contract.controller.js" />
     <Content Include="app\contract\contract.module.js" />
     <Content Include="app\contract\contract.route.js" />
-    <Content Include="app\contract\controllers\pricingTable.controller.js" />
     <Content Include="app\contract\partials\contractDetail.html" />
     <Content Include="app\contract\partials\otherwise.html" />
     <Content Include="app\contract\partials\wipDeals.html" />
