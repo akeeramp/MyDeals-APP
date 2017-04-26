@@ -433,6 +433,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_CPU_VOLTAGE_SEGMENT = DB.GetReaderOrdinal(rdr, "CPU_VOLTAGE_SEGMENT");
                     int IDX_CPU_WATTAGE = DB.GetReaderOrdinal(rdr, "CPU_WATTAGE");
                     int IDX_DEAL_PRD_NM = DB.GetReaderOrdinal(rdr, "DEAL_PRD_NM");
+                    int IDX_DEAL_PRD_TYPE = DB.GetReaderOrdinal(rdr, "DEAL_PRD_TYPE");
                     int IDX_EFF_FR_DTM = DB.GetReaderOrdinal(rdr, "EFF_FR_DTM");
                     int IDX_EPM_NM = DB.GetReaderOrdinal(rdr, "EPM_NM");
                     int IDX_FMLY_NM = DB.GetReaderOrdinal(rdr, "FMLY_NM");
@@ -468,6 +469,7 @@ namespace Intel.MyDeals.DataLibrary
                             CPU_VOLTAGE_SEGMENT = (IDX_CPU_VOLTAGE_SEGMENT < 0 || rdr.IsDBNull(IDX_CPU_VOLTAGE_SEGMENT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CPU_VOLTAGE_SEGMENT),
                             CPU_WATTAGE = (IDX_CPU_WATTAGE < 0 || rdr.IsDBNull(IDX_CPU_WATTAGE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CPU_WATTAGE),
                             DEAL_PRD_NM = (IDX_DEAL_PRD_NM < 0 || rdr.IsDBNull(IDX_DEAL_PRD_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_PRD_NM),
+                            DEAL_PRD_TYPE = (IDX_DEAL_PRD_TYPE < 0 || rdr.IsDBNull(IDX_DEAL_PRD_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_PRD_TYPE),
                             EFF_FR_DTM = (IDX_EFF_FR_DTM < 0 || rdr.IsDBNull(IDX_EFF_FR_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_EFF_FR_DTM),
                             EPM_NM = (IDX_EPM_NM < 0 || rdr.IsDBNull(IDX_EPM_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_EPM_NM),
                             FMLY_NM = (IDX_FMLY_NM < 0 || rdr.IsDBNull(IDX_FMLY_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_FMLY_NM),
