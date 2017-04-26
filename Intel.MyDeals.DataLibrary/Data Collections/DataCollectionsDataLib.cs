@@ -166,6 +166,11 @@ namespace Intel.MyDeals.DataLibrary
             return DataCollections.GetProductsFromAlias();
         }
 
+        public List<ProductSelectionLevels> GetProductSelectionLevels()
+        {
+            return DataCollections.GetProductSelectionLevels();
+        }
+
         public List<BasicDropdown> GetBasicDropdowns()
         {
             return DataCollections.GetBasicDropdowns();

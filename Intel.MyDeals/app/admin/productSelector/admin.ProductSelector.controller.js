@@ -8,33 +8,38 @@
     ProductSelectorController.$inject = ['$scope', 'dataService', 'ProductSelectorService', 'logger', 'confirmationModal', 'gridConstants', '$linq', '$state', '$uibModal'];
 
     function ProductSelectorController($scope, dataService, ProductSelectorService, logger, confirmationModal, gridConstants, $linq, $state, $uibModal) {
-        var vm = this;
-        vm.counter = 0;
+        var vm = this
+
         vm.openProdSelector = function (row) {
             var modal = $uibModal.open({
                 backdrop: 'static',
-                templateUrl: 'app/contract/productCorrector/productCorrector.html',
-                controller: 'ProductCorrectorModalController',
+                templateUrl: 'app/contract/productSelector/productSelector.html',
+                controller: 'ProductSelectorModalController',
                 controllerAs: 'vm',
                 size: 'lg',
+                resolve: {
+                    productSelectionLevels: ['ProductSelectorService', function (ProductSelectorService) {
+                        return ProductSelectorService.GetProductSelectionLevels();
+                    }],
+                    contractData: angular.copy($scope.contractData)
+                }
             });
 
             modal.result.then(
                 //close
                 function () {
-                    toastr.success("Updated successfully");
+                    toastr.success("Products updated successfully.");
                 },
                 function () {
-                    toastr.success("Closed successfully");
                 });
-
-
         }
+
         vm.closeModal = function () {
             dialog.close(result);
         }
 
-        $scope.contractData = { 'CUST_MBR_SID': 2 };
+        // TODO This will c
+        $scope.contractData = { 'CUST_MBR_SID': 2, 'GEO_MBR_SID': 1, "START_DT": "01/01/2017", "END_DT": "12/31/2017" };
 
         //#region prev code
         vm.showGrid = false;
@@ -83,7 +88,6 @@
         vm.dataSourceProduct = new kendo.data.DataSource({
             transport: {
                 read: function (e) {
-
                 },
                 update: function (e) {
                     e.data["PROD_MBR_SID"] = vm.counter + 1;
@@ -92,7 +96,6 @@
                     logger.success("Product added.");
                 },
                 destroy: function (e) {
-
                 },
                 create: function (e) {
                     e.data["PROD_MBR_SID"] = vm.counter + 1;
@@ -113,15 +116,20 @@
                         SEL_LEVEL: {
                             defaultValue: { PRD_ATRB_SID: 7008, PRD_SELC_LVL: " MM" }
                         },
-                                EXCLUDE: { validation: { required: false }
+                        EXCLUDE: {
+                            validation: { required: false }
                         },
-                                FILTER: { validation: { required: false }
+                        FILTER: {
+                            validation: { required: false }
                         },
-                                START_DATE: { validation: { required: false }, type: "date"
+                        START_DATE: {
+                            validation: { required: false }, type: "date"
                         },
-                                END_DATE: { validation: { required: false }, type: "date"
+                        END_DATE: {
+                            validation: { required: false }, type: "date"
                         },
-                        "_behaviors": { type: "object"
+                        "_behaviors": {
+                            type: "object"
                         }
                     }
                 }
@@ -136,15 +144,16 @@
                 ROW_NUMBER: 1,
                 USR_INPUT: "",
                 SEL_LEVEL:
-                    {PRD_ATRB_SID: "",
-                    PRD_SELC_LVL: ""
+                    {
+                        PRD_ATRB_SID: "",
+                        PRD_SELC_LVL: ""
                     },
                 EXCLUDE: "",
                 FILTER: "",
                 START_DATE: "",
-                END_DATE: ""                
+                END_DATE: ""
             }, {
-                ROW_NUMBER:2,
+                ROW_NUMBER: 2,
                 USR_INPUT: "",
                 SEL_LEVEL:
                     {
@@ -264,7 +273,7 @@
             resizable: true,
             reorderable: true,
             columnMenu: true,
-            enableHorizontalScrollbar:true,
+            enableHorizontalScrollbar: true,
             toolbar: gridUtils.inLineClearAllFiltersToolbar(),
             editable: true,
             pageable: {
@@ -285,10 +294,11 @@
               //    title: " ",
               //    width: "100px"
               //},
-              { field: "ROW_NUMBER", title: "Sl No", width: "50px", editor:RWNM},
+              { field: "ROW_NUMBER", title: "Sl No", width: "50px", editor: RWNM },
               { field: "USR_INPUT", title: "Product Name", width: "200px" },
-              { field: "SEL_LEVEL", template: " #= SEL_LEVEL.PRD_SELC_LVL # ", title: "Selection Level", width: "200px", editor: selectionLevelDropDownList
-            },
+              {
+                  field: "SEL_LEVEL", template: " #= SEL_LEVEL.PRD_SELC_LVL # ", title: "Selection Level", width: "200px", editor: selectionLevelDropDownList
+              },
               { field: "EXCLUDE", title: "Exclude", width: "200px" },
               { field: "FILTER", template: " #= FILTER # ", title: "Filter", width: "200px" },
               { field: "START_DATE", template: "#=gridUtils.uiControlWrapper(data, 'START_DATE', \"date:'MM/dd/yyyy'\")#", title: "Start date", width: "200px" },
@@ -297,9 +307,8 @@
         };
 
         loadDDLValues();
-        function RWNM(container, options)
-        {
-            
+        function RWNM(container, options) {
+
         }
         function loadSelectionLevelValues() {
             var dealTypeSelect = $("#dropdownDealType").data("kendoDropDownList");
@@ -322,7 +331,7 @@
                 .appendTo(container)
                 .kendoDropDownList({
                     optionLabel: "Select Level",
-                    autoBind: false,                    
+                    autoBind: false,
                     dataTextField: "PRD_SELC_LVL",
                     dataValueField: "PRD_ATRB_SID",
                     dataSource:
@@ -340,50 +349,47 @@
 
         function fetchProductDetails() {
             var dataSelect = [];
-            
-            var CUST_CD = $scope.contractData.CUST_MBR_SID;          
+
+            var CUST_CD = $scope.contractData.CUST_MBR_SID;
 
             var resultData = $linq.Enumerable().From($scope.prodGrid._data)
                 .Where(function (x) {
-                    return x.USR_INPUT.length > 0 && x.START_DATE.length > 0 && x.END_DATE.length > 0 ;
+                    return x.USR_INPUT.length > 0 && x.START_DATE.length > 0 && x.END_DATE.length > 0;
                 }).ToArray();
-            
-            for (var i = 0; i < resultData.length; i++)
-            {
+
+            for (var i = 0; i < resultData.length; i++) {
                 var sendObj = {
                     ROW_NUMBER: resultData[i].ROW_NUMBER,
                     USR_INPUT: resultData[i].USR_INPUT,
-                        PRD_ATRB_SID: resultData[i].SEL_LEVEL.PRD_ATRB_SID,
-                        PRD_SELC_LVL: resultData[i].SEL_LEVEL.PRD_SELC_LVL,
-                        EXCLUDE: resultData[i].EXCLUDE,
-                            FILTER: resultData[i].FILTER,
-                            START_DATE: resultData[i].START_DATE,
-                            END_DATE: resultData[i].END_DATE
+                    PRD_ATRB_SID: resultData[i].SEL_LEVEL.PRD_ATRB_SID,
+                    PRD_SELC_LVL: resultData[i].SEL_LEVEL.PRD_SELC_LVL,
+                    EXCLUDE: resultData[i].EXCLUDE,
+                    FILTER: resultData[i].FILTER,
+                    START_DATE: resultData[i].START_DATE,
+                    END_DATE: resultData[i].END_DATE
                 }
                 dataSelect.push(sendObj);
             }
-           if (resultData.length > 0)
-           {
-               ProductSelectorService.TranslateProducts(dataSelect, CUST_CD)
-               .then(
-                   function (response) {
-                       if (response.statusText == "OK") {
-                           vm.showGrid = true;
-                           cookProducts(response.data);
-                       }
-                   },
-                   function (response) {
-                       logger.error("Unable to get Product.", response, response.statusText);
-                   }
-               );
-           }
-           else
-           {
-               logger.error('Not a valid row');
-           }
-           
+            if (resultData.length > 0) {
+                ProductSelectorService.TranslateProducts(dataSelect, CUST_CD)
+                .then(
+                    function (response) {
+                        if (response.statusText == "OK") {
+                            vm.showGrid = true;
+                            cookProducts(response.data);
+                        }
+                    },
+                    function (response) {
+                        logger.error("Unable to get Product.", response, response.statusText);
+                    }
+                );
+            }
+            else {
+                logger.error('Not a valid row');
+            }
+
         }
-        function fetchProductDetailsOnClick() {            
+        function fetchProductDetailsOnClick() {
             var grid = $("#prodGrid").data("kendoGrid");
             var selectedItem = grid.dataItem(grid.select());
             var sendObj = {
@@ -401,8 +407,7 @@
             var dataSelect = [];
             dataSelect.push(sendObj);
 
-            if (dataSelect.length > 0)
-            {                
+            if (dataSelect.length > 0) {
                 ProductSelectorService.TranslateProducts(dataSelect, CUST_CD)
                     .then(
                         function (response) {
@@ -419,7 +424,7 @@
             else {
                 logger.error('Not a valid row');
             }
-            
+
         }
 
         vm.dataSource = new kendo.data.DataSource({
@@ -459,14 +464,14 @@
             serverPaging: true,
             serverSorting: true
         });
-        
+
         vm.gridOptions = {
             dataSource: vm.dataSource,
             filterable: true,
             sortable: false,
             selectable: true,
             resizable: true,
-            groupable:true,
+            groupable: true,
             columnMenu: true,
             scrollable: true,
             editable: false,
@@ -476,14 +481,14 @@
             },
             columns: [
               {
-                  command: [                      
+                  command: [
                       { name: "destroy", template: "<a class='k-grid-delete' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-close'></span></a>" }
 
                   ],
                   title: " ",
                   width: "100px"
-              },                
-              { field: "USR_INPUT", template: " #= USR_INPUT # ", title: "User Input", width: "200px"},
+              },
+              { field: "USR_INPUT", template: " #= USR_INPUT # ", title: "User Input", width: "200px" },
               { field: "PRD_MBR_SID", title: "Product No", width: "200px" },
               { field: "DEAL_PRD_NM", template: " #= DEAL_PRD_NM # ", title: "Deal Prod Name", width: "200px" },
               { field: "PRD_CAT_NM", template: " #= PRD_CAT_NM # ", title: "Category Name", width: "200px" },
@@ -491,7 +496,7 @@
               { field: "FMLY_NM", template: " #= FMLY_NM # ", title: "Family Name", width: "200px" },
               { field: "PCSR_NBR", template: " #= PCSR_NBR # ", title: "Processor No", width: "200px" },
               { field: "KIT_NM", template: " #= KIT_NM # ", title: "KIT Name", width: "200px" },
-              
+
             ]
         };
 
@@ -512,11 +517,11 @@
 
                 // Process multiple match products to make html to display
                 if (!!data.DuplicateProducts[key]) {
-                    var PROD_HIER_NM = ["DEAL_PRD_TYPE", "PRD_CAT_NM", "BRND_NM", "FMLY_NM", "PCSR_NBR", "DEAL_PRD_NM"];           
+                    var PROD_HIER_NM = ["DEAL_PRD_TYPE", "PRD_CAT_NM", "BRND_NM", "FMLY_NM", "PCSR_NBR", "DEAL_PRD_NM"];
                     //var PROD_HIER_NM = ["DEAL_PRD_TYPE", "PRD_CAT_NM", "BRND_NM"];
                     var object = { "Row": "", "Items": [] };
                     object.Row = key;
-                    object.Items = !!data.DuplicateProducts[key] ? data.DuplicateProducts[key] : "";              
+                    object.Items = !!data.DuplicateProducts[key] ? data.DuplicateProducts[key] : "";
                     var DEAL_PRD_TYPE = false;
                     for (var prod in object.Items) {
                         if (object.Items[prod].length > 0) {
@@ -525,18 +530,15 @@
                                 var HIER_NM_HASH = object.Items[prod][1].HIER_NM_HASH;
                                 var HIER_NM_HASH_ARR = HIER_NM_HASH.split('/');
                                 var counter = 0;
-                                for (var z = 0 ; z < HIER_NM_HASH_ARR.length; z++)
-                                {
-                                    if (HIER_NM_HASH_ARR[z] == prod)
-                                    {
+                                for (var z = 0 ; z < HIER_NM_HASH_ARR.length; z++) {
+                                    if (HIER_NM_HASH_ARR[z] == prod) {
                                         counter = z;
                                         break;
                                     }
-                                        
+
                                 }
 
-                                if (counter > 0)
-                                {
+                                if (counter > 0) {
                                     // Checking for Deal product Type conflict
                                     DEAL_PRD_TYPE = $linq.Enumerable().From(object.Items[prod])
                                     .GroupBy(function (x) {
@@ -547,9 +549,8 @@
                                         break;
                                     }
                                 }
-                                
-                                if (counter > 1)
-                                {
+
+                                if (counter > 1) {
                                     DEAL_PRD_TYPE = $linq.Enumerable().From(object.Items[prod])
                                     .GroupBy(function (x) {
                                         return (x.PRD_CAT_NM);
@@ -557,11 +558,10 @@
                                     }).ToArray().length > 1;
                                     if (DEAL_PRD_TYPE) {
                                         break;
-                                    }                                    
+                                    }
                                 }
-                                
-                                if (counter > 2)
-                                {
+
+                                if (counter > 2) {
                                     DEAL_PRD_TYPE = $linq.Enumerable().From(object.Items[prod])
                                     .GroupBy(function (x) {
                                         return (x.BRND_NM);
@@ -571,9 +571,8 @@
                                         break;
                                     }
                                 }
-                                                           
-                                if (counter > 3)
-                                {
+
+                                if (counter > 3) {
                                     DEAL_PRD_TYPE = $linq.Enumerable().From(object.Items[prod])
                                     .GroupBy(function (x) {
                                         return (x.FMLY_NM);
@@ -583,9 +582,8 @@
                                         break;
                                     }
                                 }
-                                                                
-                                if (counter > 4)
-                                {
+
+                                if (counter > 4) {
                                     DEAL_PRD_TYPE = $linq.Enumerable().From(object.Items[prod])
                                     .GroupBy(function (x) {
                                         return (x.PCSR_NBR);
@@ -595,9 +593,8 @@
                                         break;
                                     }
                                 }
-                                
-                                if (counter > 5)
-                                {
+
+                                if (counter > 5) {
                                     DEAL_PRD_TYPE = $linq.Enumerable().From(object.Items[prod])
                                     .GroupBy(function (x) {
                                         return (x.DEAL_PRD_NM);
@@ -608,20 +605,18 @@
                                     }
                                 }
                             }
-                            if(!DEAL_PRD_TYPE)
-                            {
+                            if (!DEAL_PRD_TYPE) {
                                 for (var i = 0; i < object.Items[prod].length; i++) {
                                     vm.dataSource._data.push(object.Items[prod][i]);
                                 }
                             }
-                            else
-                            {
+                            else {
                                 vm.multipleMatchProducts.push(object);
                             }
                         }
 
                     }
-                    
+
                 }
             }
         }
@@ -661,5 +656,6 @@
                 //$scope.prodSelectGrid.refresh();
             }
         }
+        //#endregion prev code
     }
 })();

@@ -414,5 +414,30 @@ namespace Intel.MyDeals.Controllers.API
             );
         }
 
+        /// <summary>
+        /// Get Product selection levels
+        /// </summary>
+        /// <returns></returns>
+        public List<ProductSelectionLevels> GetProductSelectionLevels()
+        {
+            return SafeExecutor(() => _productsLib.GetProductSelectionLevels()
+                , $"Unable to get Product selection levels"
+            );
+        }
+
+        /// <summary>
+        /// Get Product selection levels
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetProductSelectionResults")]
+        [HttpPost]
+        public List<ProductSelectionResults> GetProductSelectionResults([FromBody]dynamic input)
+        {
+            return SafeExecutor(() => _productsLib.GetProductSelectionResults((string)input.searchHash,
+                (DateTime)input.startDate, (DateTime)input.endDate, (int)input.selectionLevel, (string)input.drillDownFilter4,
+                (string)input.drillDownFilter5, (int)input.custSid, (int)input.geoSid)
+                , $"Unable to Suggest Products 3"
+            );
+        }
     }
 }

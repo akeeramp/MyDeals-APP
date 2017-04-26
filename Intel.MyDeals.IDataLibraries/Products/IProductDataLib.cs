@@ -1,4 +1,5 @@
 ﻿using Intel.MyDeals.Entities;
+using System;
 using System.Collections.Generic;
 
 namespace Intel.MyDeals.IDataLibrary
@@ -22,5 +23,10 @@ namespace Intel.MyDeals.IDataLibrary
         List<PrdDealType> GetProdDealType();
 
         List<PrdSelLevel> GetProdSelectionLevel(int OBJ_SET_TYPE_SID);
+
+        List<ProductSelectionLevels> GetProductSelectionLevels();
+
+        List<ProductSelectionResults> GetProductSelectionResults(string searchHash, DateTime startDate, DateTime endDateTime,
+                int selectionLevel, string drillDownFilter4, string drillDownFilter5, int custSid, int geoSid);
     }
 }

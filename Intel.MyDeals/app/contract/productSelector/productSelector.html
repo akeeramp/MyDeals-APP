@@ -1,0 +1,244 @@
+﻿<div class="modal-content" style="height:85vh;background-color:#1a3e6f;overflow-y:auto;overflow-x:hidden;">
+    <div style="padding:15px;">
+        <div class="row">
+            <div class="col-md-4">
+                <p class="prodHeader">Product Selector</p>
+            </div>
+            <div class="col-md-1" style="padding-top:15px;">
+                <img ng-if="loading" src="/Images/loadingSmall.gif" />
+            </div>
+            <div class="col-md-6 prodSelectorSearch">
+                <input ng-keyup="$event.keyCode == 13 ? vm.searchProduct() : null" class="col-md-12 k-textbox fl input-sm opUiElement"
+                       ng-model="vm.userInput" placeholder="Search for products:" />
+            </div>
+            <span class="modalCloseIcon">
+                <i role="button" title="Close" class="intelicon-close-max" ng-click="vm.cancel()"></i>
+            </span>
+        </div>
+        <div class="row breadCrumbWrapper">
+            <ul class="productpath breadcrumb">
+                <li><a role="button" class="prdAnchor" ng-click="vm.selectPath(0)">Select</a></li>
+                <li ng-repeat="p in vm.selectedPathParts" ng-if="p.name != 'NA'">
+                    <a role="button" class="prdAnchor" ng-click="vm.selectPath($index + 1)">{{:: p.name }}</a>
+                </li>
+            </ul>
+        </div>
+        <div ng-if="!vm.hideSelection" ng-switch="vm.getDisplayTemplate()" style="max-height:35vh;min-height:35vh;overflow-y:auto;overflow-x:hidden">
+            <div ng-switch-when="btnGroup" class="row" style="padding-left:10px;padding-right:10px;font-size:16px;">
+                <div class="drillDown btn-group btn-group-justified" role="group" aria-label="...">
+                    <div class="btn-group" ng-repeat="p in vm.items | orderBy:'name' " role="group">
+                        <button type="button" ng-class="{'noborder':$last}" ng-click="vm.selectItem(p)" class="btn btn-default">{{::p.name}}</button>
+                    </div>
+                </div>
+            </div>
+            <div ng-switch-when="btnGrid" class="row" style="margin:2px;">
+                <div ng-repeat="p in vm.items | orderBy:'name'">
+                    <div class="clearfix" ng-if="$index % 4 == 0"></div>
+                    <div class="col-sm-3 prodDrillDownLarge" ng-class="{'noLeftBorder':$index % 4 == 0}">
+                        <p role="button" ng-click="vm.selectItem(p)">{{::p.name}}</p>
+                    </div>
+                </div>
+            </div>
+            <div ng-switch-default="ng-switch-default">
+                <div id="prodGrid" kendo-grid="prodGrid" class="table table-bordered table-striped table-intel" style="max-height:30vh" options="vm.gridOptionsProduct"></div>
+            </div>
+        </div>
+        <div ng-if="vm.hideSelection" style="max-height:35vh;min-height:35vh;overflow-y:auto;overflow-x:hidden">
+            <div class="row" ng-if="vm.searchItems.length > 0" style="padding-left:10px;padding-right:10px;font-size:16px;">
+                <div class="drillDown btn-group btn-group-justified" role="group" aria-label="...">
+                    <div class="btn-group" ng-repeat="p in vm.searchItems | orderBy:'name' " role="group">
+                        <button type="button" ng-class="{'noborder':$last}" ng-click="vm.selectsearchItem(p)" class="btn btn-default">{{::p.name}}</button>
+                    </div>
+                </div>
+            </div>
+            <div ng-if="vm.showSearchResults">
+                <div id="prodGrid" kendo-grid="prodGrid" class="table table-bordered table-striped table-intel" style="max-height:30vh" options="vm.gridOptionsProduct"></div>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-6 fr">
+                <button class="btn btn-primary fr prdBtn" style="font-size:13px;" ng-click="vm.addProducts()">Add Product(s)</button>
+            </div>
+            <div class="col-md-6 fl textProdSelector">
+                <p>Selected Products</p>
+            </div>
+        </div>
+        <div class="row" style="padding-left:15px;padding-right:15px;">
+            <ui-select allow-clear="true" onkeypress="return false;" class="prodSelected"
+                       tagging="true" multiple ng-model="vm.addedProducts" theme="bootstrap">
+                <ui-select-match><span kendo-tooltip k-content='$item.HIER_NM_HASH'>{{$item.HIER_VAL_NM}}</span></ui-select-match>
+                <ui-select-choices repeat="products in vm.selectedProducts">
+                </ui-select-choices>
+            </ui-select>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <p class="col-md-6 insertAtRowsText">Insert at row(s):</p>
+                    <div class="col-md-6">
+                        <input class="form-control input-sm" type="text" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="col-md-7 insertAtRowsText">
+                    <input type="checkbox">&nbsp;Separate product in rows
+                </div>
+                <div class="col-md-5 text-left" style="padding-right:0px;">
+                    <button class="btn btn-primary fr prdBtn" ng-click="vm.save()">Save</button>
+                    <button class="btn btn-default fr prdBtn" ng-click="vm.cancel()" style="margin-right:4px;">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .prodSelectorSearch {
+        padding-top: 6px;
+        overflow: hidden;
+    }
+
+    .textProdSelector {
+        font-size: 19px;
+        color: white;
+    }
+
+    .insertAtRowsText {
+        color: white;
+        font-size: 16px;
+    }
+
+    .prodHeader {
+        color: white;
+        font-size: 32px;
+    }
+
+    .breadCrumbWrapper {
+        padding-left: 10px;
+        padding-right: 10px;
+        font-size: 21px;
+    }
+
+    .modalCloseIcon {
+        color: white;
+        font-size: 32px;
+        padding-top: 12px;
+        padding-left: 20px;
+    }
+
+    .productpath.breadcrumb > li + li:before {
+        padding: 0 5px;
+        color: white;
+        content: ">";
+        font-size: 16px;
+    }
+
+    .productpath.breadcrumb {
+        color: white;
+        background-color: #1a3e6f;
+        padding: 10px;
+        margin-bottom: 0px;
+    }
+
+    a.prdAnchor {
+        color: white;
+    }
+
+        a.prdAnchor:hover {
+            color: #199ed8;
+            text-decoration: none;
+        }
+
+    .drillDown.btn-group button {
+        background-color: #199ed8;
+        border-left: none;
+        border-top: none;
+        border-bottom: none;
+        border-right: 1px solid white;
+        color: white; /* White text */
+        cursor: pointer; /* Pointer/hand icon */
+        float: left; /* Float the buttons side by side */
+    }
+
+    .drillDown {
+        background-color: #199ed8;
+    }
+
+        .drillDown.btn-group {
+            padding-top: 3px;
+            padding-bottom: 3px;
+        }
+
+            .drillDown.btn-group.btn {
+                white-space: normal !important;
+                word-wrap: break-word;
+            }
+
+            .drillDown.btn-group button:not(:last-child) {
+                border-right: none; /* Prevent double borders */
+            }
+
+            .drillDown.btn-group button.noborder {
+                border-right: none;
+            }
+
+            /* Add a background color on hover */
+            .drillDown.btn-group button:hover {
+                background-color: #199ed8;
+                color: #1a3e6f;
+            }
+
+            .drillDown.btn-group button:focus, .button:active {
+                outline: none !important;
+                background-color: #199ed8;
+            }
+
+    .noLeftBorder {
+        border-left: none !important;
+    }
+
+    .prodDrillDownLarge {
+        background-color: #199ed8;
+        border-bottom: 2px solid #1a3e6f;
+        border-left: 1px solid #ffffff;
+        border-right: none;
+        border-top: none;
+        text-align: center;
+    }
+
+        .prodDrillDownLarge p {
+            font-size: 13px;
+            margin-top: 11px;
+            color: #fff;
+        }
+
+            .prodDrillDownLarge p:hover {
+                color: #1a3e6f;
+            }
+
+    .prodSelected.ui-select-multiple.ui-select-bootstrap {
+        min-height: 100px !important;
+        max-height: 100px !important;
+        overflow-y: auto;
+    }
+
+    .prdBtn {
+        font-size: 13px;
+    }
+
+        .prdBtn.btn-primary {
+            background-color: #199ed8;
+        }
+
+            .prdBtn.btn-primary:hover {
+                background-color: #199ed8;
+                color: #1a3e6f;
+            }
+
+            .prdBtn.btn-primary:focus, .btn-primary:active {
+                outline: none !important;
+                background-color: #199ed8;
+            }
+</style>

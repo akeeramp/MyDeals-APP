@@ -240,7 +240,6 @@ namespace Intel.MyDeals.BusinessLogic
 
             foreach (var userProduct in prodNames)
             {
-
                 var products = TransformProducts(userProduct.USR_INPUT);
                 var prodTemp = products;
                 foreach (var product in prodTemp.ToList())
@@ -536,6 +535,7 @@ namespace Intel.MyDeals.BusinessLogic
         {
             return _productDataLib.GetProdSelectionLevel(OBJ_SET_TYPE_SID);
         }
+
         #endregion Products
 
         #region ProductAlias
@@ -653,8 +653,31 @@ namespace Intel.MyDeals.BusinessLogic
             return Final;
         }
 
-        #endregion 
+        #endregion Suggest Products
 
+        /// <summary>
+        /// Get product selection levels
+        /// </summary>
+        /// <returns></returns>
+        public List<ProductSelectionLevels> GetProductSelectionLevels()
+        {
+            return _dataCollectionsDataLib.GetProductSelectionLevels();
+        }
+
+        /// <summary>
+        /// Get ProductSelectionResults
+        /// </summary>
+        /// <param name="searchHash"></param>
+        /// <param name="startDate"></param>
+        /// <param name="endDateTime"></param>
+        /// <param name="selectionLevel"></param>
+        /// <param name="drillDownFilter"></param>
+        /// <returns></returns>
+        public List<ProductSelectionResults> GetProductSelectionResults(string searchHash,
+            DateTime startDate, DateTime endDate, int selectionLevel, string drillDownFilter4, string drillDownFilter5, int custSid, int geoSid)
+        {
+            return _productDataLib.GetProductSelectionResults(searchHash, startDate, endDate, selectionLevel, drillDownFilter4, drillDownFilter5, custSid, geoSid);
+        }
     }
 
     public class NodeMatch
@@ -666,5 +689,4 @@ namespace Intel.MyDeals.BusinessLogic
         public int MatchCount { get; set; }
         public float Weight { get; set; }
     }
-
 }

@@ -1,12 +1,15 @@
 ﻿<div class="col-md-12">
-    <h2>Product Entry</h2>
+    <h2 class="col-md-2">Product Entry</h2>
+    <div class="col-md-10" ng-click="vm.openProdSelector()" role="button">
+        <i role="button" class="fa fa-mouse-pointer skyBlue" aria-hidden="true" style="font-size: 20px;margin-top:30px"></i>
+        <label style="font-size: 20px;margin-top:30px">Product Selector</label>
+    </div>
 </div>
 <div class="col-md-12" style="padding-top: 20px;">
-    
+
     <div class="col-md-3" style="width:200px">
         <label>Deal Type:</label>
         <select id="dropdownDealType" kendo-drop-down-list k-options="selectOptions" k-ng-model="selectedIds" style="width: 100%;"></select>
-
         <!--TODO:Add exclude and Filter input boxes-->
     </div>
     <div class="col-md-3" style="width:200px">
@@ -25,7 +28,7 @@
     <div class="col-md-3" style="width:200px">
         <div style="display: inline-block;max-width: 100%;margin-bottom: 5px;font-size: 15px;font-weight: bold;" op-control-flat class="myDealsControl"
              ng-model="contractData"
-             op-cd="'CUST_MBR_SID'"
+             op-cd="'GEO_MBR_SID'"
              op-type="'DROPDOWN'"
              op-label="'GEO:'"
              op-lookup-url="'/api/Dropdown/GetGeosDropdowns'"
@@ -40,7 +43,7 @@
              ng-model="contractData"
              op-cd="'START_DT'"
              op-type="'DATEPICKER'"
-             op-label="'Select start date:'"
+             op-label="'Select star t date:'"
              op-ui-mode="'VERTICAL'"></div>
     </div>
     <div class="col-md-3" style="width:200px">
@@ -51,7 +54,7 @@
              op-label="'Select end date:'"
              op-ui-mode="'VERTICAL'"></div>
     </div>
-    </div>
+</div>
 
 <div class="col-md-12">
     <div class="col-md-5">
@@ -88,15 +91,15 @@
         </div>
     </div>
 
-    </div>
+</div>
 
 <div class="col-md-4" style="padding-top: 20px;">
-    
+
 </div>
 <div class="col-md-12">
     <div class="col-md-5" ng-show="IsVisible">
-        <div id="prodGrid" kendo-grid="prodGrid" class="table table-bordered table-striped table-intel" expand-k-collapsible expand-k-grid options="vm.gridOptionsProduct"  k-rebind="vm.gridOptions.selectable"
-       ng-dblclick="vm.handleDoubleClick()"></div>
+        <div id="prodGrid" kendo-grid="prodGrid" class="table table-bordered table-striped table-intel" expand-k-collapsible expand-k-grid options="vm.gridOptionsProduct" k-rebind="vm.gridOptions.selectable"
+             ng-dblclick="vm.handleDoubleClick()"></div>
     </div>
 
     <div class="col-md-2" style="padding-top: 250px;" ng-show="IsVisible">
@@ -104,7 +107,7 @@
     </div>
 
     <div class="col-md-5" ng-show="IsVisible">
-        <div id="prodSelectGrid" kendo-grid="grid" groupable="true" class="table" expand-k-grid footer-offset="90" options="vm.gridOptions" ></div>
+        <div id="prodSelectGrid" kendo-grid="grid" groupable="true" class="table" expand-k-grid footer-offset="90" options="vm.gridOptions"></div>
     </div>
 </div>
 
@@ -117,6 +120,7 @@
         background-color: #0071c5 !important;
         color: #ffffff !important;
     }
+
     .k-button {
         font-size: inherit;
         line-height: inherit;
@@ -124,8 +128,8 @@
         height: auto;
         margin-left: 0;
     }
+
     .k-grid-add {
-        display:none;
+        display: none;
     }
-   
 </style>

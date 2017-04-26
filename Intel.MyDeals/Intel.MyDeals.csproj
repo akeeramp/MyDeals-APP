@@ -309,6 +309,8 @@
     <Content Include="app\contract\controllers\contract.controller.js" />
     <Content Include="app\contract\controllers\mrktSegMultiSelect.service.js" />
     <Content Include="app\contract\controllers\pricingTable.controller.js" />
+    <Content Include="app\contract\productSelector\productSelector.controller.js" />
+    <Content Include="app\contract\productSelector\productSelector.html" />
     <Content Include="app\core\directives\adminBanner\adminBanner.directive.js" />
     <Content Include="app\core\directives\adminBanner\adminBanner.directive.html" />
     <Content Include="app\blocks\exception\exception-handler.provider.js" />
@@ -967,6 +969,7 @@
     <Content Include="Images\intel-logo-white-max.png" />
     <Content Include="Images\intelMyDeals.png" />
     <Content Include="Images\intelsm.png" />
+    <Content Include="Images\loadingSmall.gif" />
     <Content Include="Images\NoAccess.png" />
     <Content Include="Images\PageNotFound.png" />
     <Content Include="Images\radio-checked.png" />

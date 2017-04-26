@@ -17,6 +17,8 @@
             GetProdSelectionLevel: GetProdSelectionLevel,
             TranslateProducts: TranslateProducts,
             GetProductDetails: GetProductDetails,
+            GetProductSelectionLevels: GetProductSelectionLevels,
+            GetProductSelectionResults: GetProductSelectionResults
         }
 
         return service;
@@ -40,6 +42,14 @@
         function GetProductDetails(products, CUST_CD)
         {
             return dataService.post(apiBaseUrl + 'GetProductDetails/' + CUST_CD, products);
+        }
+
+        function GetProductSelectionLevels() {
+            return dataService.get(apiBaseUrl + 'GetProductSelectionLevels');
+        }
+
+        function GetProductSelectionResults(prodSelectionLevels) {
+            return dataService.post(apiBaseUrl + 'GetProductSelectionResults', prodSelectionLevels);
         }
     }
 })();

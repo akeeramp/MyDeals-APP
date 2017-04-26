@@ -53,7 +53,7 @@ using System.Data.SqlClient;
 
 
 		// So we can work with stronly structured objects, cache the DB results here...
-		var ALL_PROCS = dbobjects.StoredProcedures 
+		var ALL_PROCS = dbobjects.StoredProcedures
 			.Where(sp => {
 				string sp_un = sp.name.ToUpper().Trim();
 
