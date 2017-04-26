@@ -21,6 +21,7 @@
 
 		vm.nonCorpMrktSegments = [];
 		vm.subMrktSegments = [];
+		vm.changedVal = "";
 
 		init();
 
@@ -126,7 +127,8 @@
 			if (checkBool) {
 				//check if user checked a node that is an embedded sub segment
 				for (var i = 0; i < vm.subMrktSegments.length; i++) {
-					if (newVal.indexOf(vm.subMrktSegments[i]) > -1 && oldVal.indexOf(vm.subMrktSegments[i]) < 0) {
+				    if (newVal.indexOf(vm.subMrktSegments[i]) > -1 && oldVal.indexOf(vm.subMrktSegments[i]) < 0) {
+				        vm.changedVal = vm.subMrktSegments[i];
 						return true;
 					}
 				}
@@ -134,7 +136,8 @@
 			} else {
 				//check if user checked a node that is not an embedded sub segment
 				for (var i = 0; i < newVal.length; i++) {
-					if (oldVal.indexOf(newVal[i]) < 0 && !(vm.subMrktSegments.indexOf(newVal[i]) > -1)) {
+				    if (oldVal.indexOf(newVal[i]) < 0 && !(vm.subMrktSegments.indexOf(newVal[i]) > -1)) {
+				        vm.changedVal = newVal[i];
 						return true;
 					}
 				}
@@ -195,10 +198,11 @@
 						//Logic for Embedded
 						//getEmbeddedNodes
 						if (checkedEmbeddedSubSegment(newValue[MRKT_SEG].value, oldValue[MRKT_SEG].value, true)) {
-							//if select any EMBEDDED SUB SEGMENT, uncheck all non Embedded SUB SEGMENTS
-							newValue[MRKT_SEG].value = newValue[MRKT_SEG].value.filter(function (x) { return vm.subMrktSegments.indexOf(x) > -1 });
+							//if select any EMBEDDED SUB SEGMENT, uncheck everything except the selected EMBEDDED SUB SEGMENT
+						    newValue[MRKT_SEG].value = [vm.changedVal];
 							multiSelect.value(newValue[MRKT_SEG].value);
-							setAllNodes(getEmbeddedNodes(treeView.dataSource.view(), false), false);
+							setAllNodes(treeView.dataSource.view(), false);
+							treeView.dataItem(treeView.findByText(vm.changedVal)).set("checked", true);
 						} else if (checkedEmbeddedSubSegment(newValue[MRKT_SEG].value, oldValue[MRKT_SEG].value, false)) {
 							//if select non EMBEDDED SUB SEGMENT, uncheck all EMBEDDED SUB SEGMENTS
 							newValue[MRKT_SEG].value = newValue[MRKT_SEG].value.filter(function (x) { return vm.subMrktSegments.indexOf(x) < 0 });

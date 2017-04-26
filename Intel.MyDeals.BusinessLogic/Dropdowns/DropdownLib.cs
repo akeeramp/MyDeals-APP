@@ -100,7 +100,7 @@ namespace Intel.MyDeals.BusinessLogic
                 if (bd.DROP_DOWN.ToUpper() == chldDropdown.subAtrbValue.ToUpper())
                 {
                     newDH.items = sub.ToArray();
-                    newDH.expanded = false; //this sets dropdown items with children nodes to be expanded/notexpanded by default
+                    newDH.expanded = true; //this sets dropdown items with children nodes to be expanded/notexpanded by default
                 }
                 ret.Add(newDH);
             }
