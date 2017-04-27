@@ -42,7 +42,7 @@ namespace Intel.MyDeals.BusinessRules
             }
             else if (opDeType == OpDataElementType.WIP_DEAL.ToString())
             {
-                newStage = WorkFlowStages.Working;
+                newStage = WorkFlowStages.Draft;
             }
             else if (opDeType == OpDataElementType.DEAL.ToString())
             {

@@ -18,22 +18,38 @@ namespace Intel.MyDeals.BusinessRules
                     ActionRule = MyDcActions.SyncReadOnlyItems,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad}
                 },
-                new MyOpRule
+                new MyOpRule // Set to read only if yuo have a TRACKER NUMBER
                 {
                     Title="Readonly if Tracker Exists",
                     ActionRule = MyDcActions.ExecuteActions,
                     InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL, OpDataElementType.DEAL},
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnReadonly},
-                    WithTracker = true,
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.TRKR_NBR) && de.HasValue()).Any(),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = BusinessLogicDeActions.SetReadOnly,
-                            Target = new[] {AttributeCodes.TRKR_NBR, AttributeCodes.SOLD_TO_ID}
+                            Target = new[] {AttributeCodes.TRGT_RGN, AttributeCodes.GEO_COMBINED, AttributeCodes.SOLD_TO_ID}
                         }
                     }
                 },
+                new MyOpRule // Set to read only if yuo have a DEAL NUMBER
+                {
+                    Title="Readonly if Has Positive Deal number",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnReadonly},
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.DC_ID) && de.IsPositive()).Any(), // If it has a deal number and it is positive
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetReadOnly,
+                            Target = new[] {AttributeCodes.TRGT_RGN, AttributeCodes.GEO_COMBINED, AttributeCodes.SOLD_TO_ID} // Items to set readonly
+                        }
+                    }
+                },
+
                 new MyOpRule
                 {
                     Title="Readonly ALWAYS",
