@@ -301,14 +301,22 @@
               },
               { field: "EXCLUDE", title: "Exclude", width: "200px" },
               { field: "FILTER", template: " #= FILTER # ", title: "Filter", width: "200px" },
-              { field: "START_DATE", template: "#=gridUtils.uiControlWrapper(data, 'START_DATE', \"date:'MM/dd/yyyy'\")#", title: "Start date", width: "200px" },
-              { field: "END_DATE", template: "#=gridUtils.uiControlWrapper(data, 'END_DATE', \"date:'MM/dd/yyyy'\")#", title: "End Date", width: "200px" }
+              { field: "START_DATE", template: "#=gridUtils.uiControlWrapper(data, 'START_DATE', \"date:'MM/dd/yyyy'\")#", title: "Start date", width: "200px", editor: dateTime },
+              { field: "END_DATE", template: "#=gridUtils.uiControlWrapper(data, 'END_DATE', \"date:'MM/dd/yyyy'\")#", title: "End Date", width: "200px", editor: dateTime }
             ]
         };
 
         loadDDLValues();
         function RWNM(container, options) {
 
+        }
+        function dateTime(container, options) {
+            $('<input data-text-field="' + options.field + '" data-value-field="' + options.field + '" data-bind="value:' + options.field + '" />')
+            .appendTo(container)
+            .kendoDatePicker({
+                format: "MM/dd/yyyy",
+                value: kendo.toString(new Date(), 'MM/dd/yyyy')
+            });
         }
         function loadSelectionLevelValues() {
             var dealTypeSelect = $("#dropdownDealType").data("kendoDropDownList");
@@ -518,11 +526,11 @@
                 // Process multiple match products to make html to display
                 if (!!data.DuplicateProducts[key]) {
                     var PROD_HIER_NM = ["DEAL_PRD_TYPE", "PRD_CAT_NM", "BRND_NM", "FMLY_NM", "PCSR_NBR", "DEAL_PRD_NM"];
-                    //var PROD_HIER_NM = ["DEAL_PRD_TYPE", "PRD_CAT_NM", "BRND_NM"];
+                    var conflictLevel = '';
                     var object = { "Row": "", "Items": [] };
                     object.Row = key;
                     object.Items = !!data.DuplicateProducts[key] ? data.DuplicateProducts[key] : "";
-                    var DEAL_PRD_TYPE = false;
+                    var isConflict = false;
                     for (var prod in object.Items) {
                         if (object.Items[prod].length > 0) {
                             for (var j = 0; j < 1; j++) {
@@ -530,87 +538,100 @@
                                 var HIER_NM_HASH = object.Items[prod][1].HIER_NM_HASH;
                                 var HIER_NM_HASH_ARR = HIER_NM_HASH.split('/');
                                 var counter = 0;
+
                                 for (var z = 0 ; z < HIER_NM_HASH_ARR.length; z++) {
-                                    if (HIER_NM_HASH_ARR[z] == prod) {
-                                        counter = z;
+                                    if (HIER_NM_HASH_ARR[z].toUpperCase() == prod.toUpperCase()) {
+                                        counter = z; // That will tell me the how many level i have to check for conflict.
                                         break;
                                     }
-
+                                }
+                                if (counter == 0) {
+                                    conflictLevel = "HIERARCHY NOT FOUND";
+                                    isConflict = true;
                                 }
 
+                                // Checking for conflict in Deal Product Type i.e. CPU or EIA products
                                 if (counter > 0) {
-                                    // Checking for Deal product Type conflict
-                                    DEAL_PRD_TYPE = $linq.Enumerable().From(object.Items[prod])
-                                    .GroupBy(function (x) {
-                                        return (x.DEAL_PRD_TYPE);
-                                        //return (column_NM);
-                                    }).ToArray().length > 1;
-                                    if (DEAL_PRD_TYPE) {
+                                    isConflict = $linq.Enumerable().From(object.Items[prod])
+                                                    .GroupBy(function (x) {
+                                                        return (x.DEAL_PRD_TYPE);
+                                                    }).ToArray().length > 1;
+
+                                    if (isConflict) {
+                                        conflictLevel = "DEAL_PRD_TYPE";
                                         break;
                                     }
                                 }
-
+                                //Checking for conflict in Category Name i.e. DT OR Mb or etc                               
                                 if (counter > 1) {
-                                    DEAL_PRD_TYPE = $linq.Enumerable().From(object.Items[prod])
-                                    .GroupBy(function (x) {
-                                        return (x.PRD_CAT_NM);
-                                        //return (column_NM);
-                                    }).ToArray().length > 1;
-                                    if (DEAL_PRD_TYPE) {
+                                    isConflict = $linq.Enumerable().From(object.Items[prod])
+                                                    .GroupBy(function (x) {
+                                                        return (x.PRD_CAT_NM);
+                                                    }).ToArray().length > 1;
+
+                                    if (isConflict) {
+                                        conflictLevel = "DEAL_PRD_TYPE";
                                         break;
                                     }
                                 }
-
+                                //Checking for conflict in Brand Name i.e. ci3 or ci5, ci7 etc
                                 if (counter > 2) {
-                                    DEAL_PRD_TYPE = $linq.Enumerable().From(object.Items[prod])
-                                    .GroupBy(function (x) {
-                                        return (x.BRND_NM);
-                                        //return (column_NM);
-                                    }).ToArray().length > 1;
-                                    if (DEAL_PRD_TYPE) {
+                                    isConflict = $linq.Enumerable().From(object.Items[prod])
+                                                    .GroupBy(function (x) {
+                                                        return (x.BRND_NM);
+                                                    }).ToArray().length > 1;
+
+                                    if (isConflict) {
+                                        conflictLevel = "BRND_NM";
                                         break;
                                     }
                                 }
-
+                                //Checking for conflict in Family Name i.e                           
                                 if (counter > 3) {
-                                    DEAL_PRD_TYPE = $linq.Enumerable().From(object.Items[prod])
-                                    .GroupBy(function (x) {
-                                        return (x.FMLY_NM);
-                                        //return (column_NM);
-                                    }).ToArray().length > 1;
-                                    if (DEAL_PRD_TYPE) {
+                                    isConflict = $linq.Enumerable().From(object.Items[prod])
+                                                    .GroupBy(function (x) {
+                                                        return (x.FMLY_NM);
+                                                    }).ToArray().length > 1;
+
+                                    if (isConflict) {
+                                        conflictLevel = "FMLY_NM";
                                         break;
                                     }
                                 }
-
+                                //Checking for conflict in Processor Number                                
                                 if (counter > 4) {
-                                    DEAL_PRD_TYPE = $linq.Enumerable().From(object.Items[prod])
-                                    .GroupBy(function (x) {
-                                        return (x.PCSR_NBR);
-                                        //return (column_NM);
-                                    }).ToArray().length > 1;
-                                    if (DEAL_PRD_TYPE) {
+                                    isConflict = $linq.Enumerable().From(object.Items[prod])
+                                                    .GroupBy(function (x) {
+                                                        return (x.PCSR_NBR);
+                                                    }).ToArray().length > 1;
+
+                                    if (isConflict) {
+                                        conflictLevel = "PCSR_NBR";
                                         break;
                                     }
                                 }
-
+                                //Checking for conflict in Product Number
                                 if (counter > 5) {
-                                    DEAL_PRD_TYPE = $linq.Enumerable().From(object.Items[prod])
-                                    .GroupBy(function (x) {
-                                        return (x.DEAL_PRD_NM);
-                                        //return (column_NM);
-                                    }).ToArray().length > 1;
-                                    if (DEAL_PRD_TYPE) {
+                                    isConflict = $linq.Enumerable().From(object.Items[prod])
+                                                    .GroupBy(function (x) {
+                                                        return (x.DEAL_PRD_NM);
+                                                    }).ToArray().length > 1;
+
+                                    if (isConflict) {
+                                        conflictLevel = "DEAL_PRD_NM";
                                         break;
                                     }
                                 }
                             }
-                            if (!DEAL_PRD_TYPE) {
+                            //Checking Conflict found or not..
+                            if (!isConflict) {
+                                //No conflict. Product will be a direct match
                                 for (var i = 0; i < object.Items[prod].length; i++) {
                                     vm.dataSource._data.push(object.Items[prod][i]);
                                 }
                             }
                             else {
+                                //Conflict found.. we can identify the level using conflictLevel variable
                                 vm.multipleMatchProducts.push(object);
                             }
                         }
