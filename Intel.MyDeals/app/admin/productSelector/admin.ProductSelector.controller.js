@@ -101,8 +101,7 @@
                     e.data["PROD_MBR_SID"] = vm.counter + 1;
                     e.data["PRD_SELC_LVL"] = vm.selectionLevelDropDownList;
                     e.success(e.data);
-                    logger.success("Product added.");
-                    //$scope.IsSelVisible = $scope.IsHidden ? false : true;
+                    logger.success("Product added.");                    
                 }
             },
             pageSize: 10,
@@ -113,24 +112,12 @@
                     fields: {
                         ROW_NUMBER: { editable: false, nullable: true },
                         USR_INPUT: { validation: { required: true } },
-                        SEL_LEVEL: {
-                            defaultValue: { PRD_ATRB_SID: 7008, PRD_SELC_LVL: " MM" }
-                        },
-                        EXCLUDE: {
-                            validation: { required: false }
-                        },
-                        FILTER: {
-                            validation: { required: false }
-                        },
-                        START_DATE: {
-                            validation: { required: false }, type: "date"
-                        },
-                        END_DATE: {
-                            validation: { required: false }, type: "date"
-                        },
-                        "_behaviors": {
-                            type: "object"
-                        }
+                        SEL_LEVEL: { defaultValue: { PRD_ATRB_SID: 7008, PRD_SELC_LVL: " MM" } },
+                        EXCLUDE: { validation: { required: false } },
+                        FILTER: {  validation: { required: false } },
+                        START_DATE: { validation: { required: false }, type: "date" },
+                        END_DATE: { validation: { required: false }, type: "date" },
+                        "_behaviors": { type: "object" }
                     }
                 }
             },
@@ -280,20 +267,7 @@
                 refresh: true,
                 pageSizes: gridConstants.pageSizes
             },
-            //edit: function (e) {
-            //    var commandCell = e.container.find("td:first");
-            //    commandCell.html('<a class="k-grid-update" href="#"><span class="k-icon k-i-check"></span></a><a class="k-grid-cancel" href="#"><span class="k-icon k-i-cancel"></span></a>');
-            //},
-            columns: [
-              //{
-              //    command: [
-              //        { name: "edit", template: "<a class='k-grid-edit' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-edit'></span></a>" },
-              //        { name: "destroy", template: "<a class='k-grid-delete' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-close'></span></a>" }
-
-              //    ],
-              //    title: " ",
-              //    width: "100px"
-              //},
+            columns: [              
               { field: "ROW_NUMBER", title: "Sl No", width: "50px", editor: RWNM },
               { field: "USR_INPUT", title: "Product Name", width: "200px" },
               {
@@ -347,10 +321,7 @@
                             data: selectionLevel,
                         },
                     change: function (e) {
-                        vm.selectionLevelDropDownList = $("#selectionLevelDropDownList").data("kendoDropDownList").text();
-                        //vm.gridOptionsProduct.dataSource["PRD_SELC_LVL"] = vm.selectionLevelDropDownList;
-                        //vm.gridOptionsProduct.dataSource.read();
-                        $("#selectionLevelDropDownList_listbox").value = vm.selectionLevelDropDownList;
+                        vm.selectionLevelDropDownList = $("#selectionLevelDropDownList").data("kendoDropDownList").text();                        
                     }
                 });
         }
@@ -438,7 +409,7 @@
         vm.dataSource = new kendo.data.DataSource({
             transport: {
                 read: function (e) {
-                    //addToMydealProducts(p);
+                    
                 },
                 update: function (e) {
 
@@ -447,10 +418,7 @@
 
                 },
                 create: function (e) {
-                    //e.data["PRD_SELC_LVL"] = vm.selectionLevelDropDownList;
-                    //e.success(e.data);
-                    //logger.success("Product added.");
-                    //$scope.IsSelVisible = $scope.IsHidden ? false : true;
+                    
                 }
             },
             schema: {
@@ -525,23 +493,28 @@
 
                 // Process multiple match products to make html to display
                 if (!!data.DuplicateProducts[key]) {
-                    var PROD_HIER_NM = ["DEAL_PRD_TYPE", "PRD_CAT_NM", "BRND_NM", "FMLY_NM", "PCSR_NBR", "DEAL_PRD_NM"];
-                    var conflictLevel = '';
-                    var object = { "Row": "", "Items": [] };
+                    var PROD_HIER_NM = ["DEAL_PRD_TYPE", "PRD_CAT_NM", "BRND_NM", "FMLY_NM", "PCSR_NBR", "DEAL_PRD_NM"]; // Product HIERARCHY 
+                    var conflictLevel = ''; //Will hold the conflicting Level
+                    var object = { "Row": "", "Items": [] }; //Multiple Match Key Value pair
                     object.Row = key;
                     object.Items = !!data.DuplicateProducts[key] ? data.DuplicateProducts[key] : "";
+                                        
                     var isConflict = false;
                     for (var prod in object.Items) {
                         if (object.Items[prod].length > 0) {
                             for (var j = 0; j < 1; j++) {
                                 var column_NM = PROD_HIER_NM[j];
+
                                 var HIER_NM_HASH = object.Items[prod][1].HIER_NM_HASH;
-                                var HIER_NM_HASH_ARR = HIER_NM_HASH.split('/');
+                                var HIER_NM_HASH_ARR = HIER_NM_HASH.split('/'); //HASH value splited by /
                                 var counter = 0;
 
+                                // HASH value split to get Starting Level.. i.c CPU/DT/Ci3/Skylake output: CPU
+                                var insertedLevel = prod.split('/')[0];
+
                                 for (var z = 0 ; z < HIER_NM_HASH_ARR.length; z++) {
-                                    if (HIER_NM_HASH_ARR[z].toUpperCase() == prod.toUpperCase()) {
-                                        counter = z; // That will tell me the how many level i have to check for conflict.
+                                    if (HIER_NM_HASH_ARR[z].toUpperCase() == insertedLevel.toUpperCase()) {
+                                        counter = z; // That will tell me the how many level we have to check for conflict.
                                         break;
                                     }
                                 }
@@ -625,19 +598,17 @@
                             }
                             //Checking Conflict found or not..
                             if (!isConflict) {
-                                //No conflict. Product will be a direct match
+                                //No High level conflict. Product will be a direct match
                                 for (var i = 0; i < object.Items[prod].length; i++) {
-                                    vm.dataSource._data.push(object.Items[prod][i]);
+                                    vm.dataSource._data.push(object.Items[prod][i]);                                    
                                 }
-                            }
-                            else {
-                                //Conflict found.. we can identify the level using conflictLevel variable
-                                vm.multipleMatchProducts.push(object);
-                            }
+                                object.Items[prod].splice(0, object.Items[prod].length); // Removing all the matched item from the collection
+                            }                            
                         }
 
                     }
-
+                    
+                    vm.multipleMatchProducts.push(object); // Pushing final product list with Multiple match
                 }
             }
         }
@@ -650,13 +621,7 @@
         }
 
         // Build the Hierarchy
-        function makeHierarchy(productHierarchy) {
-            //var ph = productHierarchy.PRD_CAT_NM;
-            //if (productHierarchy.BRND_NM !== "") ph += " / " + productHierarchy.BRND_NM;
-            //if (productHierarchy.FMLY_NM !== "") ph += " / " + productHierarchy.FMLY_NM;
-            //if (productHierarchy.PCSR_NBR !== "") ph += " / " + productHierarchy.PCSR_NBR;
-            //if (productHierarchy.DEAL_PRD_NM !== "") ph += " / " + productHierarchy.DEAL_PRD_NM;
-            //if (productHierarchy.KIT_NM !== "") ph += " / " + productHierarchy.KIT_NM;
+        function makeHierarchy(productHierarchy) {            
             var HIER_NM_HASH = productHierarchy.HIER_NM_HASH.replace(new RegExp('/', 'g'), " / ");
             return HIER_NM_HASH;
         }
@@ -672,11 +637,9 @@
             if (productExists) {
                 logger.error("Product already exists.", "", "Not allowed");
             } else {
-                vm.dataSource._data.push(p);
-                //$scope.prodSelectGrid._thead();
-                //$scope.prodSelectGrid.refresh();
+                vm.dataSource._data.push(p);                
             }
         }
-        //#endregion prev code
+        //#endregion
     }
 })();

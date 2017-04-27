@@ -67,13 +67,15 @@
 
                     </ul>
                     <div ng-repeat="(productName, productHierarchy) in a.Items">
-                        {{productName}} <i class="intelicon-arrow-forward-right"></i>
-                        <ul>
-                            <li ng-repeat="product in productHierarchy">
-                                <div role="button" kendo-tooltip k-content="'Click here to choose.'" ng-click="vm.addToMydealProducts(product)">{{vm.makeHierarchy(product)}}</div>
-                            </li>
-                        </ul>
-                    </div>
+                        <div ng-if="productHierarchy.length != 0">
+                            {{productName}} <i class="intelicon-arrow-forward-right"></i>
+                            <ul>
+                                <li ng-repeat="product in productHierarchy">
+                                    <div role="button" kendo-tooltip k-content="'Click here to choose.'" ng-click="vm.addToMydealProducts(product)">{{vm.makeHierarchy(product)}}</div>
+                                </li>
+                            </ul>
+                            </div>
+                        </div>
                 </div>
             </div>
         </div>
