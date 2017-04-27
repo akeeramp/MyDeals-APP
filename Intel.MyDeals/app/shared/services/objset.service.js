@@ -29,7 +29,8 @@ function objsetService($http, dataService, logger, $q) {
         updatePricingTable: updatePricingTable,
         deletePricingTable: deletePricingTable,
 
-        updateContractAndCurPricingTable: updateContractAndCurPricingTable
+        updateContractAndCurPricingTable: updateContractAndCurPricingTable,
+        readContractStatus: readContractStatus
     }
 
     return service;
@@ -86,4 +87,10 @@ function objsetService($http, dataService, logger, $q) {
     function updateContractAndCurPricingTable(custId, data) {
         return dataService.post(apiBaseContractUrl + "SaveContractAndPricingTable/" + custId, data);
     }
+
+    function readContractStatus(id) {
+        return dataService.get(apiBaseContractUrl + 'GetContractStatus/' + id);
+    }
+
+    
 }

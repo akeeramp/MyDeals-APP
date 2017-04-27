@@ -1,4 +1,6 @@
 ﻿@using Intel.MyDeals.App
+@using Intel.MyDeals.DataLibrary
+@using Intel.MyDeals.Entities
 @using Intel.Opaque
 @{
     ApplicationViewModel avm = (ApplicationViewModel)ViewData.Model;
@@ -19,10 +21,10 @@
     OpUserToken opUserToken = (OpUserToken)ViewBag.UserToken;
 
     //  TODO HARD CODE AGAIN UNTIL MASTER DATA IS RETURNED
-    //bool isAdmin = AppLib.ChkDealRules(opUserToken, "C_CAN_VIEW_ADMINTOOL");
-    //bool isDeveloper = opUserToken.IsDeveloper();
+    //bool isAdmin = DataCollections.GetSecurityWrapper().ChkDealRules(OpDataElementType.Unknown, OpDataElementSetType.Unknown, null,"C_CAN_VIEW_ADMINTOOL");
+    bool isDeveloper = opUserToken.IsDeveloper();
     bool isAdmin = true;
-    bool isDeveloper = true;
+    //bool isDeveloper = true;
 
     var environment = avm.AppEnv.ToUpper().IndexOf("PROD") >= 0 ? "" : " (" + avm.AppEnv + ")";
 }
@@ -41,7 +43,7 @@
             </button>
             <img class="navbar-logo" alt="" src="/images/intel-logo-white-100.png" ondblclick="eggSmw()">
             <a class="navbar-brand" href="@Url.Action("Index", "Home", new { Area = "" })">MyDeals<span style="font-size: 14px; color: #f3D54E; padding-left: 10px;">@environment</span></a>
-            <div style="position: absolute; left: 0; top: 30px; width: 150px; font-size: 10px; font-family: arial; text-align: right; color: #cccccc;">@avm.AppVer</div>
+            <div style="position: absolute; left: 0; top: 30px; width: 160px; font-size: 10px; font-family: arial; text-align: right; color: #cccccc;">@avm.AppVer</div>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -83,6 +85,7 @@
 
 
         <li><a href="@Url.Action("Index", "Home", new {Area = ""})" title="Home"><i class="intelicon-home-solid"></i><span class="hidden-xs"> Home</span></a></li>
+        <li><a href="/Dashboard#/portal" title="Dashboard"><i class="intelicon-line-chart-outlined"></i><span class="hidden-xs"> Dashboard</span></a></li>
         <li><a href="@Url.Action("Index", "Home", new { Area = "" })" title="Settings"><i class="intelicon-settings-solid"></i><span class="hidden-xs"> Settings</span></a></li>
 
         <li class="dropdown">
@@ -134,11 +137,6 @@
             </li>
         }
 
-        <li class="dropdown">
-            <a class="btn btn-primary" id="dLabel" role="button" href="/page.html" data-toggle="dropdown" data-target="#">Cost Test</a>
-        </li>
-        <li><a href="@Url.Action("Index", "Contract", new { Area = "" })">Contracts</a></li>
-        <li><a href="@Url.Action("Index", "Dashboard", new { Area = "" })">Dashboard</a></li>
 
         @*<li class="dropdown">
                 <a class="btn btn-primary" role="button" href="/" data-toggle="dropdown" data-target="#">Debug <i class="intelicon-down"></i></a>

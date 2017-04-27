@@ -1223,7 +1223,7 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
 
 	//setting a few constants for the strings that occur a lot
     var GEO = "GEO_COMBINED";
-    var MRKT_SEG = "MRKT_SEG"
+    var MRKT_SEG = "MRKT_SEG";
 
 	//watch for user changing global auto-fill default values
     $scope.$watch('newPricingTable._defaultAtrbs',

@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Intel.MyDeals.BusinessLogic.DataCollectors;
+using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.DataLibrary.OpDataCollectors;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
@@ -51,7 +53,11 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns>MyDealsData</returns>
         public MyDealsData GetContract(int id, List<OpDataElementType> opDataElementTypes = null)
         {
-            return OpDataElementType.CNTRCT.GetByIDs(new List<int> {id}, opDataElementTypes ?? new List<OpDataElementType> { OpDataElementType.CNTRCT });
+            return OpDataElementType.CNTRCT.GetByIDs(new List<int> { id }, opDataElementTypes ?? new List<OpDataElementType> { OpDataElementType.CNTRCT });
+        }
+        public MyDealsData GetContract(int id, List<OpDataElementType> opDataElementTypes, IEnumerable<int> atrbs)
+        {
+            return OpDataElementType.CNTRCT.GetByIDs(new List<int> { id }, opDataElementTypes ?? new List<OpDataElementType> { OpDataElementType.CNTRCT }, atrbs);
         }
 
         public OpDataCollectorFlattenedList GetUpperContract(int id)
@@ -66,6 +72,27 @@ namespace Intel.MyDeals.BusinessLogic
                 .ToHierarchialList(OpDataElementType.CNTRCT);
         }
 
+        public OpDataCollectorFlattenedList GetContractStatus(int id)
+        {
+            List<int> atrbs = new List<int>
+            {
+                Attributes.TITLE.ATRB_SID,
+                Attributes.PTR_USER_PRD.ATRB_SID,
+                Attributes.OBJ_SET_TYPE_CD.ATRB_SID
+            };
+
+            return GetContract(id, new List<OpDataElementType>
+                {
+                    OpDataElementType.CNTRCT,
+                    OpDataElementType.PRC_ST,
+                    OpDataElementType.PRC_TBL,
+                    OpDataElementType.PRC_TBL_ROW,
+                    OpDataElementType.WIP_DEAL
+                }, atrbs)
+                .ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted, false)
+                .ToHierarchialList(OpDataElementType.CNTRCT);
+        }
+        
         public OpDataCollectorFlattenedDictList GetFullContract(int id)
         {
             return GetContract(id, true).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
@@ -162,6 +189,54 @@ namespace Intel.MyDeals.BusinessLogic
             return new OpDataCollectorValidationDataLib().IsDuplicateTitle(OpDataElementType.CNTRCT, dcId, 0, title);
         }
 
+
+        public dynamic GetContractsStatus(DashboardFilter dashboardFilter)
+        {
+            Random r = new Random();
+
+            List<string> status = new List<string> { "Incomplete", "Complete", "Archived" };
+            List<string> notes = new List<string>
+            {
+                "",
+                "Just trying to get ahead",
+                "It will pass... come on baby... pass PCT",
+                "Pending Cost Test",
+                "Please review"
+            };
+
+            string customer = new CustomerLib().GetMyCustomersInfo().Where(c => dashboardFilter.CustomerIds.Contains(c.CUST_DIV_SID)).Select(c => c.CUST_NM).FirstOrDefault();
+
+            List<string> title = new List<string>
+            {
+                "Retail Q4 ECAP Standalone",
+                "Yearly Server",
+                "Quarterly Events Tender"
+            };
+            List<string> approver = new List<string> { "Trang Van", "Tom Pope", "Tom Hanks", "Tim Burton" };
+            List<string> custaccept = new List<string> { "Yes", "No", "Pending" };
+            
+            var rtn = new List<Dictionary<string,string>>();
+
+            for (var i = 0; i < 200; i++)
+            {
+                var s = status[r.Next(status.Count)];
+                rtn.Add(new Dictionary<string, string>
+                {
+                    ["Id"] = (i + 88).ToString(),
+                    ["Status"] = s,
+                    ["Notes"] = notes[r.Next(notes.Count)],
+                    ["Customer"] = customer,
+                    ["Title"] = title[r.Next(title.Count)],
+                    ["StartDate"] = dashboardFilter.StartDate.ToString("d"),
+                    ["EndDate"] = dashboardFilter.EndDate.ToString("d"),
+                    ["Approver"] = approver[r.Next(approver.Count)],
+                    ["CustAccept"] = custaccept[r.Next(custaccept.Count)],
+                    ["Perc"] = s == "Complete" ? "100" : r.Next(0, 100).ToString()
+                });
+            }
+
+            return rtn;
+        }
 
     }
 }

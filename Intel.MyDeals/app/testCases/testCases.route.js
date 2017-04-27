@@ -37,6 +37,22 @@
                 }
             },
             {
+                state: 'testCases.statusGrid',
+                config: {
+                    templateUrl: 'app/testCases/grids/status.manage.html',
+                    url: 'statusGrid',
+                    controller: 'statusController'
+                }
+            },
+            {
+                state: 'testCases.opGrid',
+                config: {
+                    templateUrl: 'app/testCases/grids/opGrid.manage.html',
+                    url: 'opGrid',
+                    controller: 'opGridController'
+                }
+            },
+            {
                 state: 'testCases.businessRules',
                 config: {
                     templateUrl: 'app/testCases/rules/businessRules.manage.html',

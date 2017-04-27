@@ -1,0 +1,24 @@
+﻿<div id="horizontal-dashboard" ng-class="{'collapsed': isLnavHidden, 'expanded': !isLnavHidden}">
+    <div id="center-pane-dashboard" class="fr">
+        <div id="dashboardContainerWrapper">
+            <div id="dashboardHeader">
+                <div ui-view="dashboardHeaderView"></div>
+            </div>
+            <div id="dashboardContainer" class="fullHeight">
+                <div ui-view="dashboardWrapperView" class="fullHeight"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="left-pane-dashboard" ng-class="{'collapsed': isLnavHidden, 'expanded': !isLnavHidden}">
+        <div ui-view="lnavView" class="fullHeight"></div>
+    </div>
+
+    <div class="clearboth"></div>
+</div>
+
+<style>
+    .modal-dialog {
+        margin-top: 100px;
+    }
+</style>

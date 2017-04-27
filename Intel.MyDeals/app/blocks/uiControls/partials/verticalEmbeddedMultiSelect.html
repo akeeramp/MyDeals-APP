@@ -17,11 +17,11 @@
                     k-auto-close="false"
                     k-ng-readonly="true"
                     style="width: 100%;"
-                    ng-class="{isHidden: opIsHidden, isReadOnly: true, isError: opIsError, isSaved: opIsSaved, isDirty: opIsDirty}">
+                    ng-class="{isHidden: opIsHidden, isReadOnlyFaux: true, isError: opIsError, isSaved: opIsSaved, isDirty: opIsDirty}">
             </select>
         </div>
 
-        <div class="fl opUiElement opUiTreeView">
+        <div class="fl opUiElement opUiTreeView" style="margin-bottom: 0 !important;">
             <div id="{{opCd}}"
                  kendo-tree-view
                  class="fl opUiElement"

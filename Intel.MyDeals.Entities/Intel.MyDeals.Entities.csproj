@@ -66,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AttributeCollection.cs" />
+    <Compile Include="DashboardFilter.cs" />
     <Compile Include="DropdownHierarchy.cs" />
     <Compile Include="ContractTransferPacket.cs" />
     <Compile Include="CrudModes.cs" />

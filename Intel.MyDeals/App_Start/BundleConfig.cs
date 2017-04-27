@@ -24,7 +24,6 @@ namespace Intel.MyDeals
                 "~/Scripts/kendo/kendo.aspnetmvc.min.js",
                 "~/Scripts/jquery.easypiechart.min.js",
                 "~/Scripts/moment.js",
-                "~/Scripts/d3.min.js",
                 "~/Scripts/Opaque/OpaqueUtils.js",
                 "~/Scripts/toastr.min.js",
                 "~/Scripts/topbar.min.js",
@@ -34,10 +33,14 @@ namespace Intel.MyDeals
                 "~/js/bootstrap.min.js",
                 "~/Scripts/angular-bootstrap-toggle.js",
                 "~/Scripts/Angular/select.min.js",
-                "~/Scripts/Angular/angular-linq.min.js"
+                "~/Scripts/Angular/angular-linq.min.js",
+                "~/Scripts/angular-gridster.min.js",
+                "~/Scripts/d3/d3.min.js",
+                "~/Scripts/angular-nvd3.min.js",
+                "~/Scripts/nv.d3.min.js"
                 ));
 
-            bundles.Add(new ScriptBundle("~/bundles/angular").Include(
+                 bundles.Add(new ScriptBundle("~/bundles/angular").Include(
                 "~/Scripts/Angular/1.5.8/angular-ui-router.min.js"
                 , "~/Scripts/Angular/1.5.8/angular-animate.min.js"
                 , "~/Scripts/Angular/1.5.8/angular-sanitize.min.js"
@@ -70,6 +73,12 @@ namespace Intel.MyDeals
                 , "~/app/core/directives/dirtyTracking.directive.js"
                 , "~/app/core/directives/bindToHeight.directive.js"
                 , "~/app/core/directives/adminBanner/adminBanner.directive.js"
+                , "~/app/core/directives/gridCell/dealDetail.directive.js"
+                , "~/app/core/directives/gridCell/dealTools.directive.js"
+                , "~/app/core/directives/gridCell/percentBar.directive.js"
+                , "~/app/core/directives/gridStatusBoard/contractStatusBoard.directive.js"
+                , "~/app/core/directives/gridStatusBoard/gridStatusBoard.directive.js"
+                , "~/app/core/directives/opGrid/opGrid.directive.js"
                 , "~/app/blocks/util.js"
                 ));
 
@@ -128,6 +137,7 @@ namespace Intel.MyDeals
                 , "~/app/costTest/costtest.route.js"
                 , "~/app/dashboard/dashboard.module.js"
                 , "~/app/dashboard/dashboard.route.js"
+                , "~/app/dashboard/controllers/dashboard.controller.js"
                 , "~/app/blocks/uiControls/focusOnShow.directive.js"
                 , "~/app/blocks/uiControls/opcontrol.directive.js"
                 , "~/app/blocks/uiControls/opcontrolFlat.directive.js"
@@ -139,6 +149,8 @@ namespace Intel.MyDeals
                 , "~/app/testCases/testCases.module.js"
                 , "~/app/testCases/testCases.route.js"
                 , "~/app/testCases/grids/basic.controller.js"
+                , "~/app/testCases/grids/status.controller.js"
+                , "~/app/testCases/grids/opGrid.controller.js"
                 , "~/app/testCases/rules/businessRules.controller.js"
                 , "~/app/testCases/uiControls/uiControls.controller.js"
                 , "~/app/testCases/opMessages/opMessages.controller.js"
@@ -162,7 +174,9 @@ namespace Intel.MyDeals
                 "~/css/kendo.intel.css",
                 "~/css/angular-bootstrap-toggle.min.css",
                 "~/css/select.min.css",
-                "~/css/select2.min.css"
+                "~/css/select2.min.css",
+                "~/css/nv.d3.min.css",
+                "~/css/angular-gridster.css"
                 ));
 
             //"~/Content/kendo/2016.3.914/kendo.office365.min.css",
@@ -172,7 +186,8 @@ namespace Intel.MyDeals
                 "~/css/_secEngine.css",
                 "~/Content/styles.css",
                 "~/css/_controls.css",
-                "~/css/_contractManager.css"
+                "~/css/_contractManager.css",
+                "~/css/_dashboard.css"
                 ));
         }
     }

@@ -43,6 +43,16 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
+        [Route("GetContractStatus/{id}")]
+        public OpDataCollectorFlattenedList GetContractStatus(int id)
+        {
+            return SafeExecutor(() => _contractsLib.GetContractStatus(id)
+                , $"Unable to get Contract {id}"
+            );
+        }
+        
+
+        [Authorize]
         [Route("GetFullContract/{id}")]
         public OpDataCollectorFlattenedDictList GetFullContract(int id)
         {
@@ -98,6 +108,16 @@ namespace Intel.MyDeals.Controllers.API
         {
             return SafeExecutor(() => _contractsLib.IsDuplicateContractTitle(dcId, title)
                 , "Unable to validate contract name {title}"
+            );
+        }
+
+        [Authorize]
+        [Route("GetContractsStatus")]
+        [HttpPost]
+        public dynamic GetContractsStatus([FromBody] DashboardFilter data)
+        {
+            return SafeExecutor(() => _contractsLib.GetContractsStatus(data)
+                , $"Unable to get Contracts Status"
             );
         }
     }

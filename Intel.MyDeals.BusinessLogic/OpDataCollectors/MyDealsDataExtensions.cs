@@ -61,12 +61,25 @@ namespace Intel.MyDeals.BusinessLogic
                 int parentid = items.GetIntAtrb(AttributeCodes.DC_PARENT_ID);
                 int parentidtype = items.GetIntAtrbFromOpDataElementType(AttributeCodes.dc_parent_type);
 
-
                 if (opType == OpDataElementType.WIP_DEAL && id == 0)
                 {
-                    id = myDealsData[OpDataElementType.PRC_TBL_ROW].AllDataCollectors.Where(d => d.DcID == parentid).Select(d => d.DcID).FirstOrDefault();
+                    OpDataElementSetType objSetType = OpDataElementSetTypeConverter.FromString(items[AttributeCodes.OBJ_SET_TYPE_CD]);
+                    OpDataElementTypeMapping elMapping = objSetType.OpDataElementTypeParentMapping(opType);
+                    if (elMapping.TranslationType == OpTranslationType.OneDealPerProduct)
+                    {
+                        string wipProd = items[AttributeCodes.PTR_USER_PRD + EN.VARIABLES.PRIMARY_DIMKEY].ToString();
+                        List<OpDataCollector> myDcs = myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.Where(d => d.DcParentID == parentid).ToList();
+                        foreach (OpDataCollector odc in myDcs)
+                        {
+                            if (odc.GetDataElementValue(AttributeCodes.PTR_USER_PRD) == wipProd) id = odc.DcID;
+                        }
+                    }
+                    else
+                    {
+                        // TODO for all except ECAP
+                    }
                 }
-
+                
 
                 // Handle multi dim items
                 if (items.ContainsKey(EN.OBJDIM._MULTIDIM))
@@ -161,14 +174,15 @@ namespace Intel.MyDeals.BusinessLogic
         /// </summary>
         /// <param name="myDealsData"></param>
         /// <param name="pivotMode"></param>
+        /// <param name="security"></param>
         /// <returns>OpDataCollectorFlattenedDictList</returns>
-        public static OpDataCollectorFlattenedDictList ToOpDataCollectorFlattenedDictList(this MyDealsData myDealsData, ObjSetPivotMode pivotMode)
+        public static OpDataCollectorFlattenedDictList ToOpDataCollectorFlattenedDictList(this MyDealsData myDealsData, ObjSetPivotMode pivotMode, bool security = true)
         {
             OpDataCollectorFlattenedDictList data = new OpDataCollectorFlattenedDictList();
 
             foreach (OpDataElementType opDataElementType in myDealsData.Keys)
             {
-                data[opDataElementType] = myDealsData.ToOpDataCollectorFlattenedDictList(opDataElementType, pivotMode);
+                data[opDataElementType] = myDealsData.ToOpDataCollectorFlattenedDictList(opDataElementType, pivotMode, security);
             }
             return data;
         }
@@ -179,8 +193,9 @@ namespace Intel.MyDeals.BusinessLogic
         /// <param name="myDealsData"></param>
         /// <param name="opType"></param>
         /// <param name="pivotMode"></param>
+        /// <param name="security"></param>
         /// <returns>OpDataCollectorFlattenedList</returns>
-        public static OpDataCollectorFlattenedList ToOpDataCollectorFlattenedDictList(this MyDealsData myDealsData, OpDataElementType opType, ObjSetPivotMode pivotMode)
+        public static OpDataCollectorFlattenedList ToOpDataCollectorFlattenedDictList(this MyDealsData myDealsData, OpDataElementType opType, ObjSetPivotMode pivotMode, bool security = true)
         {
             // Construct return variable
             OpDataCollectorFlattenedList data = new OpDataCollectorFlattenedList();
@@ -192,7 +207,7 @@ namespace Intel.MyDeals.BusinessLogic
             // Get DataPacket
             OpDataPacket<OpDataElementType> dpObjSet = myDealsData[opType];
 
-            if (dpObjSet.Actions.Any()) data.Add(new OpDataCollectorFlattenedItem {["_actions"] = dpObjSet.Actions });
+            if (security && dpObjSet.Actions.Any()) data.Add(new OpDataCollectorFlattenedItem {["_actions"] = dpObjSet.Actions });
 
             // Tag Attachments
             // TODO Inject a Rule Trigger here and the below commands should be a rules for this trigger
@@ -200,7 +215,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             // TODO make this a rule
             // Since this is a DB call, we don't want to do this for EVERY data collector individually
-            myDealsData.TagWithAttachments(dpObjSet);
+            if (security) myDealsData.TagWithAttachments(dpObjSet);
 
             //Get Products
             // TODO make this a rule
@@ -210,7 +225,7 @@ namespace Intel.MyDeals.BusinessLogic
                 prdMaps = dpObjSet.GetProductMapping();
 
             // loop through deals and flatten each Data Collector
-            data.AddRange(dpObjSet.AllDataCollectors.Select(dc => dc.ToOpDataCollectorFlattenedItem(opType, pivotMode, prdMaps, myDealsData)));
+            data.AddRange(dpObjSet.AllDataCollectors.Select(dc => dc.ToOpDataCollectorFlattenedItem(opType, pivotMode, prdMaps, myDealsData, security)));
 
             return data;
         }
@@ -311,8 +326,13 @@ namespace Intel.MyDeals.BusinessLogic
 
             // Get existing DC or spawn a new one
             OpDataCollector dc;
-            if (dcId < 0 || !dpDeals.Data.ContainsKey(dcId)) // missing
+            if (dcId <= 0 || !dpDeals.Data.ContainsKey(dcId)) // missing
             {
+                if (dcId == 0)
+                {
+                    dcId = EN.VARIABLES.NEW_UNIQ_ID--;
+                    if (EN.VARIABLES.NEW_UNIQ_ID < -99999) EN.VARIABLES.NEW_UNIQ_ID = -1000;
+                }
                 dc = new OpDataCollector
                 {
                     DcID = dcId,

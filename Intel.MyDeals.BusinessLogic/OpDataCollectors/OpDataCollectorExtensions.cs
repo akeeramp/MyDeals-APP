@@ -213,16 +213,18 @@ namespace Intel.MyDeals.BusinessLogic
         /// <param name="pivotMode">Mode to pivote data: ex. Pivoted, Nested</param>
         /// <param name="prdMaps">Product Mapping collection</param>
         /// <param name="myDealsData">MyDealsData source</param>
+        /// <param name="security"></param>
         /// <returns></returns>
         public static OpDataCollectorFlattenedItem ToOpDataCollectorFlattenedItem(this OpDataCollector dc,
             OpDataElementType opType,
             ObjSetPivotMode pivotMode,
             Dictionary<int, string> prdMaps,
-            MyDealsData myDealsData)
+            MyDealsData myDealsData,
+            bool security = true)
         {
 
             // Call all load triggered rules
-            dc.ApplyRules(MyRulesTrigger.OnLoad);
+            if (security) dc.ApplyRules(MyRulesTrigger.OnLoad);
 
             // Create the collection to return
             OpDataCollectorFlattenedItem objsetItem = new OpDataCollectorFlattenedItem();
@@ -237,10 +239,10 @@ namespace Intel.MyDeals.BusinessLogic
             objsetItem.MapMultiDim();
 
             // Apply rules directly to dictionary
-            dc.ApplyRules(MyRulesTrigger.OnOpCollectorConvert, null, objsetItem, dc.GetCustomerDivision());
+            if (security) dc.ApplyRules(MyRulesTrigger.OnOpCollectorConvert, null, objsetItem, dc.GetCustomerDivision());
 
             // assign all messages
-            objsetItem.ApplyMessages(myDealsData);
+            if (security) objsetItem.ApplyMessages(myDealsData);
 
             return objsetItem;
         }

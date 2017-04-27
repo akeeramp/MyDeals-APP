@@ -1,0 +1,75 @@
+﻿<div class="add-widget-container">
+    <form name="_form" class="form-horizontal">
+        <div class="modal-header">
+            <h5>Add a Widget</h5>
+            <button type="button" class="close fr" ng-click="dismiss()" aria-hidden="true">&times;</button>
+            <div class="clearboth"></div>
+        </div>
+
+        <div class="modal-body">
+            <div style="width: 100%; height: 300px;">
+                <div style="height: 100%; overflow: auto; background-color: #fafafa;">
+                    <div ng-repeat="widget in widgets" class="widget-wrapper" ng-click="add(widget)">
+                        <div class="fl">
+                            <i class="{{widget.icon}}"></i>
+                        </div>
+                        <div class="fl">
+                            <div class="ttl">{{widget.name}}</div>
+                            <div class="dsc">{{widget.desc}}</div>
+                        </div>
+                        <div class="clearboth"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+
+<style>
+    .add-widget-container .modal-header h5 {
+        margin-top: 2px !important;
+        float: left;
+    }
+    .add-widget-container .modal-body {
+        padding: 0;
+    }
+    .add-widget-container .widget-wrapper .ttl {
+        margin-top: 3px; 
+        line-height: 1.1em;
+    }
+    .add-widget-container .widget-wrapper:hover .ttl {
+        color: #ffffff;
+    }
+
+    .add-widget-container .widget-wrapper .dsc {
+        font-size: 11px; 
+        color: #aaaaaa; 
+        line-height: 1.1em;
+    }
+    .add-widget-container .widget-wrapper:hover .dsc {
+        color: #003C71;
+    }
+
+    .add-widget-container .widget-wrapper {
+        padding: 6px; 
+        font-family: 'Intel Clear'; 
+        font-weight: 200; 
+        font-size: 14px; 
+        cursor: pointer;
+    }
+    .add-widget-container .widget-wrapper:hover {
+        background-color: #00AEEF;
+    }
+
+    .add-widget-container .widget-wrapper i {
+        font-size: 34px;
+        margin-right: 10px;
+        color: #0071C5;
+    }
+    .add-widget-container .widget-wrapper:hover i {
+        color: #ffffff;
+    }
+
+</style>

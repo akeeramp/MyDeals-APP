@@ -1,0 +1,180 @@
+﻿<div class="container-fluid widget-container" style="overflow: auto; height: 100%;">
+
+    <div class="horizontal-widget">
+        <div class="left-pane-widget">
+            <div class="inner">
+                <h6>Contract Status</h6>
+                <div class="stgLnkBox">
+                    <div class="stgLnk active" id="fltr_All" ng-click="clkFilter('fltr_All')"><i class="intelicon-workflow-process-outlined"></i> All<span class="badge">{{stageCnt}}</span></div>
+                    <div ng-repeat="item in stages" class="stgLnk" id="fltr_{{item.Stage}}" ng-click="clkFilter('fltr_' + item.Stage)"><i class="intelicon-workflow-process-outlined"></i> {{item.Stage}} <span class="badge">{{item.Cnt}}</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="center-pane-widget">
+            <div class="inner">
+                <kendo-grid options="ds" class="opUiContainer dashboard md dashboard-grid" style="height: 100%;" id="gridContractStatus">
+                    <div k-detail-template style="margin: 0; padding: 0;">
+                        <div contract-status-board ng-model="dataItem.CNTRCT_OBJ_SID"></div>
+                    </div>
+                </kendo-grid>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<style>
+    .dashboard-grid.k-grid .k-grid-content td {
+        padding: 0;
+    }
+
+    .dashboard-grid.k-grid .k-hierarchy-cell {
+        text-align: center;
+    }
+
+    .dashboard-grid.k-grid .k-detail-row, .dashboard-grid.k-grid .k-detail-cell {
+        height: 160px;
+        background-color: #fafafa !important;
+        padding: 0;
+    }
+
+    .dashboard-grid.k-grid .k-hierarchy-cell {
+        background-color: transparent !important;
+    }
+
+    .dashboard-grid.k-grid .k-grid-content td a:hover {
+        border-bottom: 1px dotted #00AEEF;
+        text-decoration: none;
+    }
+
+    .dashboard-grid.k-grid .k-grid-content td > div:first-child {
+        padding: 6px;
+    }
+
+    .dashboard-grid.k-grid .k-grid-content td > span:first-child {
+        padding: 6px;
+    }
+
+    .dashboard-grid.k-grid td {
+        white-space: nowrap;
+    }
+
+    .dashboard-grid.k-grid tr.k-alt {
+        background-color: transparent;
+    }
+
+        .dashboard-grid.k-grid tr.k-alt:hover, .dashboard-grid.k-grid tr:hover {
+            background-color: rgba(0,174,239,0.05);
+        }
+
+    .dashboard-grid.k-grid .k-grid-content td > div.status {
+        font-weight: 600;
+        text-align: center;
+    }
+
+    .dashboard-grid.k-grid .k-grid-content td > div.Complete {
+        background-color: #C4D600;
+    }
+
+    .dashboard-grid.k-grid .k-grid-content td > div.InComplete {
+        background-color: #f3D54E;
+    }
+
+    .dashboard-grid.k-grid .k-grid-content td > div.Archived {
+        background-color: #d8dddf;
+    }
+
+    .horizontal-widget {
+        margin-top: 0;
+        border: 0 solid transparent;
+        margin-left: 150px;
+        height: 100%;
+        font-size: 12px;
+    }
+
+    .left-pane-widget {
+        height: 100%;
+        float: left;
+        overflow: auto;
+        width: 150px;
+        margin-left: -150px;
+        padding: 5px 0 3px 0;
+    }
+
+    .left-pane-widget .inner {
+        height: 100%;
+        border-top: 1px solid #e6e6e6;
+        border-left: 1px solid #e6e6e6;
+        border-bottom: 1px solid #e6e6e6;
+        padding: 5px 0;
+    }
+
+    .left-pane-widget .stgLnk {
+        font-size: 13px;
+        margin: 0;
+        padding: 8px 0;
+        background-color: #ffffff;
+        padding-left: 8px;
+        cursor: pointer;
+    }
+
+    .left-pane-widget .stgLnk i {
+        color: #aaaaaa;
+    }
+
+    .left-pane-widget .stgLnk:hover {
+        background-color: #f5f5f5;
+    }
+
+    .left-pane-widget .stgLnk.active {
+        background-color: #00AEEF;
+        color: #ffffff;
+    }
+
+    .left-pane-widget .stgLnk.active i {
+        color: #ffffff;
+    }
+
+    .left-pane-widget .stgLnkBox {
+        margin-top: 15px;
+    }
+
+    .inner h6 {
+        margin-top: 6px;
+        margin-left: 6px;
+        font-size: 16px;
+    }
+
+    .center-pane-widget {
+        height: 100%;
+        overflow: auto;
+        width: 100%;
+    }
+
+
+    .center-pane-widget .inner {
+        height: 100%;
+        padding: 5px 0;
+    }
+
+    .opUiContainer.dashboard .k-grid-header, .opUiContainer.dashboard .k-grid-header .k-header,
+    .opUiContainer.dashboard .k-pager-wrap, .opUiContainer.dashboard .k-pager-numbers .k-state-selected,
+    .opUiContainer.dashboard .k-grid-footer, .opUiContainer.dashboard .k-grid-footer td,
+    .opUiContainer.dashboard .k-scheduler-header, .opUiContainer.dashboard .km-pane-wrapper .k-grid-header .k-header {
+        background-color: #fafafa;
+    }
+
+    .stgLnkBox .badge {
+        font-size: 10px; 
+        margin-left: 5px; 
+        background-color: #0071C5;
+        margin-bottom: 4px;
+    }
+    .stgLnk.active .badge {
+        color: #0071C5;
+        background-color: #ffffff;
+    }
+
+</style>

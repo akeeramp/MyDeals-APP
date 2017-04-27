@@ -93,6 +93,21 @@ namespace Intel.MyDeals.BusinessRules
                             Where = de => de.AtrbCdIn(new List<string> {AttributeCodes.END_DT})
                         }
                     }
+                },
+                new MyOpRule
+                {
+                    Title="Default Workflow on Save",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnSave},
+                    AtrbCondIf = dc => dc.IsNegativeOrZero(AttributeCodes.DC_ID),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = MyDeActions.CheckInitialWorkFlow,
+                            Where = de => de.AtrbCdIn(new List<string> {AttributeCodes.WF_STG_CD})
+                        }
+                    }
                 }
             };
         }

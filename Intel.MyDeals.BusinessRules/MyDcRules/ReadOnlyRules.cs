@@ -38,13 +38,14 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     Title="Readonly ALWAYS",
                     ActionRule = MyDcActions.ExecuteActions,
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL, OpDataElementType.DEAL},
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnReadonly},
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = BusinessLogicDeActions.SetReadOnly,
-                            Target = new[] {AttributeCodes.PROGRAM_ECAP_TYPE}
+                            Target = new[] { AttributeCodes.DC_ID, AttributeCodes.OBJ_SET_TYPE_CD, AttributeCodes.START_DT, AttributeCodes.END_DT, AttributeCodes.CUST_MBR_SID, AttributeCodes.ECAP_PRICE, AttributeCodes.WF_STG_CD, AttributeCodes.CREDIT_VOLUME, AttributeCodes.DEBIT_VOLUME, AttributeCodes.PTR_USER_PRD }
                         }
                     }
                 },

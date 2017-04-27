@@ -31,6 +31,11 @@ namespace Intel.MyDeals.Entities
                 m => m.ParentOpDataElementType == opDataElementType && m.ParentOpDataElementSetType == opDataElementSetType);
         }
 
+        public static OpDataElementTypeMapping OpDataElementTypeParentMapping(this OpDataElementSetType opDataElementSetType, OpDataElementType opDataElementType)
+        {
+            return OpDataElementSetTypeRepository.OpDestCollection.OpDataElementTypeMappings.FirstOrDefault(
+                m => m.ChildOpDataElementType == opDataElementType && m.ChildOpDataElementSetType == opDataElementSetType);
+        }
 
 
         public static int ToId(this OpDataElementSetType opDataElementSetType)

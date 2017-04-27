@@ -77,6 +77,7 @@
     <Compile Include="Contracts\ContractsLib.cs" />
     <Compile Include="CustomerCalendar\CustomerCalendarLib.cs" />
     <Compile Include="Customer\CustomerLib.cs" />
+    <Compile Include="Dashboard\DashboardLib.cs" />
     <Compile Include="Files\FilesLib.cs" />
     <Compile Include="OpDataCollectors\OpDataCollectorLib.cs" />
     <Compile Include="BusinessLogic.cs" />

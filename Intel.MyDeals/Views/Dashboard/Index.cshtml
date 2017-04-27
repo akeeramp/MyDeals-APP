@@ -1,15 +1,16 @@
-﻿@{
+﻿<script src="/app/dashboard/config/widget.config.js"></script>
+@{
     ViewBag.Title = "Dashboard";
 }
 
-<h2>Dashboard</h2>
-
-<div class="col-md-2">
-    <ul>
-        <li><a ui-sref="dashboard.view">Dashboard</a></li>
-        <li><a ui-sref="dashboard.configuration">Configuration</a></li>
-        <li><a ui-sref="dashboard.managelayouts">Manage Layouts</a></li>
-    </ul>
+<div ui-view="bodyView" class="fullHeight">
+    <div class="jumbotron ng-scope">
+        <div class="container">
+            <h1><strong>My</strong>Deals</h1>
+            <p class="lead">Dashboard.</p>
+            <p>
+                The Dashboard is Loading...
+            </p>
+        </div>
+    </div>
 </div>
-
-<div ui-view></div>

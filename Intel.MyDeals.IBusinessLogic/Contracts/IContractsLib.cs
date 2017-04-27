@@ -18,6 +18,8 @@ namespace Intel.MyDeals.IBusinessLogic
 
         OpDataCollectorFlattenedList GetUpperContract(int id);
 
+        OpDataCollectorFlattenedList GetContractStatus(int id);
+        
         OpDataCollectorFlattenedDictList GetFullContract(int id);
 
         OpDataCollectorFlattenedDictList SaveFullContract(int custId, OpDataCollectorFlattenedDictList fullContracts);
@@ -25,5 +27,7 @@ namespace Intel.MyDeals.IBusinessLogic
         OpDataCollectorFlattenedDictList SaveContractAndPricingTable(int custId, ContractTransferPacket contractAndStrategy);
 
         bool IsDuplicateContractTitle(int dcId, string title);
+
+        dynamic GetContractsStatus(DashboardFilter dashboardFilter);
     }
 }

@@ -108,6 +108,9 @@ namespace Intel.MyDeals.Entities.UI_Templates
                         width = item.Width,
                         editor = item.Editor,
                         template = item.Template,
+                        headerTemplate = item.HeaderTemplate,
+                        filterable = item.IsFilterable,
+                        sortable = item.IsSortable,
                         uiType = item.UiType
 					});
                 }
@@ -137,6 +140,9 @@ namespace Intel.MyDeals.Entities.UI_Templates
                         width = item.Width,
                         editor = item.Editor,
                         template = item.Template,
+                        headerTemplate = item.HeaderTemplate,
+                        filterable = item.IsFilterable,
+                        sortable = item.IsSortable,
                         uiType = item.UiType
 					});
                 }

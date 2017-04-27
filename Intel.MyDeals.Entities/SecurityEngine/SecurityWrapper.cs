@@ -111,7 +111,7 @@ namespace Intel.MyDeals.Entities
 						  && (el.OBJ_TYPE_SID == 0 || el.OBJ_TYPE_SID == (int)opDataElementType)
                           && (el.OBJ_SET_TYPE_SID == 0 || el.OBJ_SET_TYPE_SID == (int)opDataElementSetType)
                           && (el.ROLE_SID == 0 || el.ROLE_SID == OpUserStack.MyOpUserToken.Role.RoleTypeId)
-                          && ( el.WFSTG_MBR_SID == 0 || el.WFSTG_NM == wfStage)
+                          && (el.WFSTG_MBR_SID == 0 || el.WFSTG_NM == wfStage)
                     select el.PERMISSION_MASK).Any();
         }
     }

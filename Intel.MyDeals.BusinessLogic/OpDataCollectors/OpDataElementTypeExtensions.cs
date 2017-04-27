@@ -15,7 +15,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns></returns>
         public static MyDealsData GetByIDs(this OpDataElementType opDataElementType, IEnumerable<int> ids)
         {
-            return GetByIDs(opDataElementType, ids, new List<OpDataElementType> { opDataElementType }, new List<string>());
+            return GetByIDs(opDataElementType, ids, new List<OpDataElementType> { opDataElementType }, new List<int>());
         }
 
 
@@ -34,9 +34,9 @@ namespace Intel.MyDeals.BusinessLogic
                 : OpDataElementSetTypeConverter.FromString(flattenedDictList[opDataElementType][0][AttributeCodes.OBJ_SET_TYPE_CD]);
 
             return flattenedDictList == null 
-                ? GetByIDs(opDataElementType, ids, includeTypes, new List<string>())
+                ? GetByIDs(opDataElementType, ids, includeTypes, new List<int>())
                     .FillInHolesFromAtrbTemplate(opDataElementSetType) 
-                : GetByIDs(opDataElementType, ids, includeTypes, new List<string>())
+                : GetByIDs(opDataElementType, ids, includeTypes, new List<int>())
                     .FillInHolesFromAtrbTemplate(opDataElementSetType)
                     .Merge(flattenedDictList);
         }
@@ -50,7 +50,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <param name="includeTypes">Which object types to include in the request.</param>
         /// <param name="atrbs">Attributes that need to be brought in as well.</param>
         /// <returns></returns>
-        public static MyDealsData GetByIDs(this OpDataElementType opDataElementType, IEnumerable<int> ids, List<OpDataElementType> includeTypes, IEnumerable<string> atrbs)
+        public static MyDealsData GetByIDs(this OpDataElementType opDataElementType, IEnumerable<int> ids, List<OpDataElementType> includeTypes, IEnumerable<int> atrbs)
         {
             return new OpDataCollectorDataLib().GetByIDs(opDataElementType, ids, includeTypes, atrbs);
         }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
 using Intel.MyDeals.App;
 using Intel.MyDeals.Entities;
@@ -89,7 +90,7 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetMyCustomerNames")]
         public IEnumerable<MyCustomersInformation> GetMyCustomerNames()
         {
-            return SafeExecutor(AppLib.GetMyCustomerNames
+            return SafeExecutor(() => AppLib.GetMyCustomerNames().OrderBy(c => c.CUST_NM)
                 , "Unable to get My Customer Names"
             );
         }
@@ -98,16 +99,15 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetMyCustomerDivsByCustNmSid/{custNmSid}")]
         public IEnumerable<MyCustomersInformation> GetMyCustomerDivsByCustNmSid(int custNmSid)
         {
-            return SafeExecutor(() => AppLib.GetMyCustomerDivsByCustNmSid(custNmSid)
+            return SafeExecutor(() => AppLib.GetMyCustomerDivsByCustNmSid(custNmSid).OrderBy(c => c.CUST_DIV_NM)
                 , "Unable to get My Customer Name IDs"
             );
         }
 
-        [Authorize]
 		[Route("GetMyCustomersInfo")]
-		public List<MyCustomersInformation> GetMyCustomersInfo()
+		public IEnumerable<MyCustomersInformation> GetMyCustomersInfo()
 		{
-            return SafeExecutor(AppLib.GetMyCustomersInfo
+            return SafeExecutor(() => AppLib.GetMyCustomersInfo().OrderBy(c => c.CUST_NM)
                 , "Unable to get My Customers Info"
             );
 		}

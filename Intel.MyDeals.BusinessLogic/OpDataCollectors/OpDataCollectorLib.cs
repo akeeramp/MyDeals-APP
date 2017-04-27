@@ -73,7 +73,7 @@ namespace Intel.MyDeals.BusinessLogic
         {
             // Save Data Cycle: Point 10
 
-            myDealsData.Merge(opDataElementType, data);
+            //myDealsData.Merge(opDataElementType, data);
             OpDataPacket<OpDataElementType> newPacket = myDealsData[opDataElementType].GetChanges(); // Goes through the collection and passes only changes after rules.
 
             newPacket.BatchID = myWbBatchId;

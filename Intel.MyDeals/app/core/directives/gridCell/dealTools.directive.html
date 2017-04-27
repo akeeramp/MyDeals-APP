@@ -1,0 +1,55 @@
+﻿<div class="dealTools">
+    <div class='fl gridStatusMarker {{dataItem.WF_STG_CD}}' title='{{dataItem.WF_STG_CD}}'>{{stgOneChar()}}</div>
+    <div class='fl'><input type="checkbox" style="margin: 8px 2px 4px 8px;" ng-model="dataItem.isLinked" /></div>
+    <div class='fl md-icon'><i class='intelicon-discussion-solid' style="font-size: 20px !important;" title="Add a Comment"></i></div>
+    <div class='fl md-icon'><i class='intelicon-trash-solid' style="font-size: 20px !important;" title="Delete the deal"></i></div>
+    <div class='fl md-icon'><i class='intelicon-attach' style="font-size: 20px !important;" title="File Attachment"></i></div>
+    <div class='clearboth'></div>
+</div>
+
+<style>
+    .dealTools {
+        line-height: 1.3em;
+        height: 100% !important;
+        width: 100%;
+    }
+
+    .dealTools .gridStatusMarker {
+        font-family: arial;
+    }
+
+    .dealTools i:hover {
+        color: #003C71;
+    }
+
+    .gridStatusMarker {
+        height: 100%; 
+        width: 16px; 
+        color: #000000;
+        background-color: #cccccc;
+        font-size: 14px;
+        font-weight: 600;
+        padding: 6px 2px 6px 2px;
+        text-align: center;
+    }
+    .gridStatusMarker.Working {
+        color: #000000;
+        background-color: #FFA300;
+    }
+    .gridStatusMarker.Active {
+        color: #000000;
+        background-color: #C4D600;
+    }
+    .gridStatusMarker.Cancelled {
+        color: #000000;
+        background-color: #cccccc;
+    }
+
+    .md-icon {
+        padding: 4px 2px 0 5px;
+    }
+    .md-icon i {
+        color: #00AEEF;
+    }
+
+</style>

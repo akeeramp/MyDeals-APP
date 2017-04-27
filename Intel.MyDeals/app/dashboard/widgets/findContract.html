@@ -1,0 +1,20 @@
+﻿<div class="container-fluid widget-container" style="overflow: auto; text-align: center; display: table;">
+    <div style="vertical-align: middle; display: table-cell;">
+        <h2 aria-hidden="true"><i class="text-primary intelicon-search-stack-solid"></i></h2>
+        <div style="width: 100%; text-align: center;">
+            <input placeholder="Name or Number" style="border-color: #b1babf; width: 120px; padding: 2px; height: 36px;" class="k-textbox" id="cntrcId" />
+            <button class="btn btn-default" type="button" onclick="openCntrct()">Open</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openCntrct() {
+        var val = $("#cntrcId").val();
+        if (val === "") {
+            alert("please enter a Contract Number");
+            return;
+        }
+        document.location.href = "/Contract#/manager/" + val;
+    }
+</script>

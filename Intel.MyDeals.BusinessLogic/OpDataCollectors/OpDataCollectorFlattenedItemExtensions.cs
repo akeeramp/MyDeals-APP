@@ -210,6 +210,9 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                 {
                     foreach (KeyValuePair<string, object> kvp in item)
                     {
+                        opFlatItem[AttributeCodes.PRODUCT_FILTER + EN.VARIABLES.PRIMARY_DIMKEY] = kvp.Value;
+                        opFlatItem[AttributeCodes.PTR_USER_PRD + EN.VARIABLES.PRIMARY_DIMKEY] = kvp.Key;
+                        
                         // TODO NEED to tack on product info here
                         retItems.CopyMatchingAttributes(opFlatItem, elMapping, singleDimAtrbs, multiDimAtrbs);
                     }

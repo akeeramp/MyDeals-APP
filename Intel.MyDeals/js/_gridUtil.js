@@ -9,29 +9,49 @@ gridUtils.formatValue = function (dataValue, dataFormat) {
     return dataValue;
 }
 gridUtils.uiControlWrapper = function (passedData, field, format) {
-    var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.#=field#" kendo-tooltip k-content="dataItem._behaviors.validMsg.#=field#"></div>';
-    tmplt += '<div class="uiControlDiv"';
-    tmplt += '     ng-class="{isHiddenCell: dataItem._behaviors.isHidden.#=field#, isReadOnlyCell: dataItem._behaviors.isReadOnly.#=field#,';
-    tmplt += '     isRequiredCell: dataItem._behaviors.isRequired.#=field#, isErrorCell: dataItem._behaviors.isError.#=field#, isSavedCell: dataItem._behaviors.isSaved.#=field#, isDirtyCell: dataItem._behaviors.isDirty.#=field#}">';
-    tmplt += '    <span class="ng-binding" ng-bind="(dataItem.#=field# #=gridUtils.getFormat(field, format)#)"></span>';
-    tmplt += '</div>';
 
-    return kendo.template(tmplt)({
-        "innerData": passedData,
-        "field": field,
-        "format": format
-    });
+    // This is nicer, but slower... rendering template on large data is slower
+    //var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.#=field#" kendo-tooltip k-content="dataItem._behaviors.validMsg.#=field#"></div>';
+    //tmplt += '<div class="uiControlDiv"';
+    //tmplt += '     ng-class="{isHiddenCell: dataItem._behaviors.isHidden.#=field#, isReadOnlyCell: dataItem._behaviors.isReadOnly.#=field#,';
+    //tmplt += '     isRequiredCell: dataItem._behaviors.isRequired.#=field#, isErrorCell: dataItem._behaviors.isError.#=field#, isSavedCell: dataItem._behaviors.isSaved.#=field#, isDirtyCell: dataItem._behaviors.isDirty.#=field#}">';
+    //tmplt += '    <span class="ng-binding" ng-bind="(dataItem.#=field# #=gridUtils.getFormat(field, format)#)"></span>';
+    //tmplt += '</div>';
+
+    //return kendo.template(tmplt)({
+    //    "innerData": passedData,
+    //    "field": field,
+    //    "format": format
+    //});
+
+    // MUCH FASTER
+    var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
+    tmplt += '<div class="uiControlDiv"';
+    tmplt += '     ng-class="{isHiddenCell: dataItem._behaviors.isHidden.' + field + ', isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ',';
+    tmplt += '     isRequiredCell: dataItem._behaviors.isRequired.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + ', isSavedCell: dataItem._behaviors.isSaved.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + '}">';
+    tmplt += '    <span class="ng-binding" ng-bind="(dataItem.' + field + ' ' + gridUtils.getFormat(field, format) + ')"></span>';
+    tmplt += '</div>';
+    return tmplt;
 }
 gridUtils.uiIconWrapper = function (passedData, field, format) {
-    var tmplt = '<div class="isDirtyIconGridContainer">';
-    tmplt += '<i class="intelicon-upload-solid" style="font-size: 20px; margin-left: 10px;" ng-class="{isDirtyIcon: dataItem.#=field#}"></i>';
-    tmplt += '</div>';
 
-    return kendo.template(tmplt)({
-        "innerData": passedData,
-        "field": field,
-        "format": format
-    });
+    // This is nicer, but slower... rendering template on large data is slower
+    //var tmplt = '<div class="isDirtyIconGridContainer">';
+    //tmplt += '<i class="intelicon-upload-solid" style="font-size: 20px; margin-left: 10px;" ng-class="{isDirtyIcon: dataItem.#=field#}"></i>';
+    //tmplt += '</div>';
+
+    //return kendo.template(tmplt)({
+    //    "innerData": passedData,
+    //    "field": field,
+    //    "format": format
+    //});
+
+    // MUCH FASTER
+    var tmplt = '<div class="isDirtyIconGridContainer">';
+    tmplt += '<i class="intelicon-upload-solid" style="font-size: 20px; margin-left: 10px;" ng-class="{isDirtyIcon: dataItem.' + field + '}"></i>';
+    tmplt += '</div>';
+    return tmplt;
+
 }
 gridUtils.getFormat = function (lType, lFormat) {
     return lFormat === undefined ? "" : "| " + lFormat;
@@ -115,6 +135,20 @@ gridUtils.lookupEditor = function (container, options) {
     }
 }
 
+gridUtils.drawDetails = function(data) {
+    var ret = "";
+
+    ret += "<div>";
+    ret += "<div class='fl'>Deal number</div>";
+    ret += "<div class='fr'>Deal number</div>";
+    ret += "<div class='clearboth'></div>";
+    ret += "<div class='fl'>Deal number</div>";
+    ret += "<div class='fr'>Deal number</div>";
+    ret += "<div class='clearboth'></div>";
+    ret += "</div>";
+
+    return ret;
+}
 
 
 
@@ -149,17 +183,17 @@ gridTools.prototype.loadDropDownAndAction = function (aLookups) {
 }
 
 gridTools.prototype.saveCell = function (e) {
-    if (e.model.fields._behaviors === undefined) e.model.fields._behaviors = {};
-    if (e.model.fields._behaviors.isDirty === undefined) e.model.fields._behaviors.isDirty = {};
-    e.model.fields._behaviors.isDirty[util.getFirstKey(e.values)] = true;
-    e.model.fields._dirty = true;
+    if (e.model._behaviors === undefined) e.model._behaviors = {};
+    if (e.model._behaviors.isDirty === undefined) e.model._behaviors.isDirty = {};
+    e.model._behaviors.isDirty[util.getFirstKey(e.values)] = true;
+    e.model._dirty = true;
 
     // now if we are in the details... set the parent dirty
     var parentRow = e.container.closest(".k-detail-row").prev();
     var parentGrid = parentRow.closest("[data-role=grid").data("kendoGrid");
     if (!util.isNull(parentGrid)) {
         var parentModel = parentGrid.dataItem(parentRow);
-        parentModel.fields._dirty = true;
+        parentModel._dirty = true;
     }
 
     // Lastly... execute change value function

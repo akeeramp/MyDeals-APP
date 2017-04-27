@@ -1,0 +1,78 @@
+﻿
+<div id="lnavLghtContainerWrapper">
+    <div id="lnavLghtHeader">
+        <a class="pull-left btn btn-default btn-sm" style="margin-right: 6px; padding: 4px 6px;" ng-click="toggleLnav()" title="Hide Panel">
+            <i class="intelicon-shrink flip-horizontal" style="font-size: 18px;"></i>
+        </a>
+        Dashboard Settings
+    </div>
+    <div id="lnavLghtContainer" bind-to-height="[33, '#lnavMenuContainer', 'padding-top','#lnavContainerWrapper', 'margin-top','#lnavHeader']">
+        
+        <div class="config-container">
+            <div>
+                I am thinking this would beto manage layout settings... maybe the default view to load???
+            </div>
+        </div>
+
+        <div class="config-container">
+            <h5>Date Range</h5>
+            <div>
+                <input kendo-date-picker ng-model="startDate" style="width: 130px;" /> - <input kendo-date-picker ng-model="endDate" style="width: 130px;" />
+            </div>
+        </div>
+
+        <div class="config-container">
+            <div class="fr"><i class="intelicon-select-all" title="Select All" ng-click="allCust(selectedCustomerIds, selectCustomerOptions.dataSource)"></i></div>
+            <div class="fr"><i class="intelicon-select-area" title="Select None" ng-click="noCust(selectedCustomerIds)"></i></div>
+            <h5>Customers</h5>
+            <div>
+                <select kendo-multi-select k-options="selectCustomerOptions" k-ng-model="selectedCustomerIds"></select>
+                <p><i>Not selecting will result in all customers.</i></p>
+            </div>
+        </div>
+        
+        <a class="btn btn-primary btn-sm" ng-click="addWidget()">
+            <i class="intelicon-plus-max"></i> Add Widget
+        </a>
+        <a class="btn btn-warning btn-sm" ng-click="clear()">
+            <i class="intelicon-close-solid"></i> Clear
+        </a>
+
+    </div>
+</div>
+
+
+<style>
+    .config-container {
+        margin: 10px;
+        font-size: 12px;
+    }
+    .config-container > div > i {
+        font-size: 18px;
+        cursor: pointer;
+    }
+    .config-container h5 {
+        font-size: 16px;
+        margin: 25px 0 5px 0;
+    }
+    .config-container > div {
+        margin-left: 5px;
+    }
+    .config-container > div > p > i {
+        color: #0071C5;
+        margin-left: 4px;
+    }
+
+    .dashboard-header .k-picker-wrap,
+    .config-container .k-picker-wrap {
+        background-color: #ffffff !important;
+    }
+    .dashboard-header .k-picker-wrap .k-input,
+    .config-container .k-picker-wrap .k-input {
+        background-color: #ffffff !important;
+    }
+    .config-container .k-multiselect-wrap {
+        max-height: 150px;
+        overflow: auto;
+    }
+</style>

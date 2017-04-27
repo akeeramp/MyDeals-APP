@@ -7,9 +7,27 @@
     {
         display: none;
     }
-    .isHiddenCell
+    .isHiddenCell span
     {
         display: none;
+    }
+    .isHiddenCell
+    {
+        background-color: rgba(250, 250, 250, 0.7) !important;
+    }
+    .isHiddenCell::before
+    {
+        font-family: "FontAwesome";
+        content: "\f023";
+        font-size: 14px;
+        color: #cccccc;
+    }
+    .isHiddenCell::after
+    {
+        padding-left: 6px;
+        content: "NO ACCESS";
+        font-size: 10px;
+        color: #cccccc;
     }
 
     .isReadOnly,
@@ -28,7 +46,7 @@
 
     .isReadOnlyCell {
         color: #999999 !important;
-        background-color: rgba(240, 240, 240, 0.9) !important;
+        background-color: rgba(250, 250, 250, 0.7) !important;
     }
 
     .isRequired,
@@ -45,6 +63,7 @@
     .isRequiredCell {
         border-left: 2px solid #F3D54E !important;
     }
+
 
     /*.elOnBlue .isRequired {
         color: #ffffff !important;
@@ -239,7 +258,6 @@
 
     .radioControl{
         font-size:14px;
-        font-weight:bold!important;
     }
 
 
@@ -281,7 +299,7 @@
 .opUiContainer.md input[type="radio"], input[type="checkbox"] { margin-top: 0; }
 .opUiContainer.md .radio { margin-top: 0; margin-bottom: 0; }
 
-.opUiContainer.md .err-bit { margin: 0 0 0 -10px; }
+.opUiContainer.md .err-bit { margin: 0 0 0 0; }
 
 .opUiContainer.md .opElementHelpIcon, .opUiContainer.md [class^="intelicon-"], .opUiContainer.md [class*=" intelicon-"] { font-size: 14px !important; }
 
@@ -421,3 +439,16 @@
 .opUiTreeView{
     background-color: white;
 }
+
+
+
+
+/* grid cell controls */
+.gridCellStatus {
+    width: 100%; height: 12px;
+}
+
+.gridCellStatus .k-progress-status-wrap {
+    line-height: 1em !important;
+}
+

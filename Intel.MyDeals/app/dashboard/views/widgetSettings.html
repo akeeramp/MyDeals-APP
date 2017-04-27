@@ -1,0 +1,23 @@
+﻿<div>
+    <form name="_form" class="form-horizontal" ng-submit="submit(_form)">
+        <div class="modal-header">
+            <h5 class="fl" style="margin-top: 2px !important;">Widget Settings</h5>
+            <button type="button" class="close fr" ng-click="dismiss()" aria-hidden="true">&times;</button>
+            <div class="clearboth"></div>
+        </div>
+
+        <div class="modal-body">
+            <div class="form-group" ng-class="{error: _form.name.$error && _form.submitted}">
+                <label class="control-label col-lg-3 col-md-3">Name</label>
+                <div class="col-lg-9 col-md-9">
+                    <input name="name" type="text" ng-model="form.name" class="form-control" />
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <a ng-click="dismiss()" class="btn btn-default" tabindex="-1"><i class="glyphicon glyphicon-remove"></i> Cancel</a>
+            <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-ok"></i> Save</button>
+        </div>
+    </form>
+</div>

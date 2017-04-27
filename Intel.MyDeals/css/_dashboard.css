@@ -1,0 +1,185 @@
+﻿    #horizontal-dashboard {
+        margin-top: 0;
+        border: 0 solid transparent;
+        margin-left: 300px;
+        height: 100%;
+        font-size: 12px;
+    }
+    #horizontal-dashboard.collapsed {
+        margin-left: 0;
+    }
+    #horizontal-dashboard.expanded {
+        margin-left: 300px;
+    }
+    #left-pane-dashboard {
+        height: 100%;
+        float: left;
+        overflow: auto;
+        width: 300px;
+        margin-left: -300px;
+        padding: 0;
+        background-color: #f9f9f9;
+    }
+    #left-pane-dashboard.collapsed {
+        margin-left: -600px;
+    }
+    #left-pane-dashboard.expanded {
+        margin-left: -300px;
+    }
+    #center-pane-dashboard {
+        height: 100%;
+        overflow: auto;
+        width: 100%;
+    }
+
+
+    #lnavLghtContainerWrapper {
+        height: 100%;
+        padding: 40px 0 0 0;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        overflow: hidden;
+    }
+    #lnavLghtHeader {
+        height: 40px;
+        margin-top: -40px;
+        padding: 4px 8px;
+        font-size: 20px;
+        font-family: "Intel Clear";
+        font-weight: 200;
+        font-style: normal;
+        background-color: #fafafa;
+        color: #666666;
+    }
+    #lnavLghtMenuContainer {
+        color: #666666;
+        background-color: #0071C5;
+    }
+    #lnavLghtContainer {
+        height: 100%;
+        overflow: auto;
+        color: #666666;
+        background-color: #fafafa;
+        border-right: 1px solid #eeeeee;
+    }
+
+
+    .dashboard-header a i {
+        font-size: 18px;
+    }
+
+    .dashboard-header {
+        padding: 2px;
+    }
+
+    .dashboard-header .btn {
+        margin-left: 5px;
+    }
+
+    .dashboard-header .form-control {
+        width: 150px;
+        display: inline-block;
+    }
+
+    .dashboard-header .k-input, .dashboard-header .k-autocomplete.k-state-default, .dashboard-header .k-picker-wrap.k-state-default, .dashboard-header .k-numeric-wrap.k-state-default, .dashboard-header .k-dropdown-wrap.k-state-default {
+        border-color: #b1babf;
+    }
+
+
+    .dashboard .controls {
+        margin-bottom: 20px;
+    }
+
+    .dashboard ul {
+        list-style: none;
+    }
+
+
+
+
+
+
+    .dashboard .box {
+        height: 100%;
+        border: 1px solid transparent;
+        background-color: #fff;
+        padding-top: 35px;
+    }
+    .dashboard .gridster-item:hover .box {
+        border: 1px solid #eeeeee;
+    }
+
+    .dashboard .box-header {
+        background-color: transparent;
+        padding: 0 42px 0 10px;
+        border: 1px solid transparent;
+        border-bottom: 1px solid #eeeeee;
+        cursor: move;
+        position: absolute;
+        width: 100%;
+        height: 36px;
+        top: 0;
+        left: 0;
+    }
+    .dashboard .gridster-item:hover .box-header {
+        background-color: #fafafa;
+        border: 1px solid #eeeeee;
+    }
+
+    .dashboard .box-header h3 {
+        width: 100%;
+        font-size: 15px;
+        margin: 9px 0;
+        display: inline-block;
+    }
+
+    .dashboard .box-content {
+        height: 100%;
+        padding: 5px;
+    }
+
+    .dashboard .box-header-btns {
+        top: 9px;
+        right: 10px;
+        cursor: pointer;
+        position: absolute;
+    }
+
+    .dashboard .box-header-btns a {
+        color: transparent;
+    }
+    .dashboard .gridster-item:hover .box-header-btns a {
+        color: #aaaaaa;
+    }
+
+    .dashboard form {
+        margin-bottom: 0;
+    }
+
+    /* Modal */
+    .dashboard .modal {
+        overflow-y: hidden;
+    }
+
+    .widget-container h2 {
+        margin: 2px;
+        font-size: 5vw;
+    }
+    .widget-container h3 {
+        font-size: 20px;
+        font-size: 1.5vw;
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
+    .widget-container p {
+        font-size: 1vw;
+    }
+    .widget-container .btn {
+        font-size: 1vw;
+    }
+    .widget-container.container-fluid {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+

@@ -53,6 +53,7 @@
     <Compile Include="Customer\ICustomerDataLib.cs" />
     <Compile Include="Data Collections\IDataCollectionsDataLib.cs" />
     <Compile Include="Files\IFilesDataLib.cs" />
+    <Compile Include="Dashboard\IDashboardDataLib.cs" />
     <Compile Include="OpDataCollectors\IOpDataCollectorDataLib.cs" />
     <Compile Include="Dropdowns\IDropdownDataLib.cs" />
     <Compile Include="Geos\IGeoDataLib.cs" />

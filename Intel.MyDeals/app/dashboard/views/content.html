@@ -1,0 +1,33 @@
+﻿    <div class="dashboard">
+        <div gridster="gridsterOptions">
+            <ul>
+                <li gridster-item="widget" ng-repeat="widget in dashboarddata.current">
+                    <div class="box" ng-controller="CustomWidgetCtrl">
+                        <div class="box-header">
+                            <h3>{{ widget.name }}</h3>
+                            <div class="box-header-btns pull-right">
+                                <a title="settings" ng-show="widget.hasConfig" ng-click="openSettings(widget)"><i class="glyphicon glyphicon-cog"></i></a>
+                                <a title="Remove widget" ng-click="remove(widget)"><i class="glyphicon glyphicon-trash"></i></a>
+                            </div>
+                        </div>
+                        <div class="box-content" ng-include="widget.template" style="overflow: auto !important;"></div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+
+<script type="text/x-kendo-tmpl" id="templateWbDealPie">
+    #
+    var NUM_DEALS = 50;
+    var NUM_PREP_DEALS = 125;
+    var perc = (NUM_DEALS + NUM_PREP_DEALS) == 0 ? 0 : (NUM_DEALS / (NUM_DEALS + NUM_PREP_DEALS)) * 100;
+    perc = Math.round(perc * 100) / 100;
+    #
+    <div>
+        <div class="wbDealPie fl"></div>
+        <div class="fl" style="margin-left: 5px;">#:perc#<span style="font-family: verdana;">%</span></div>
+        <div class="clearboth"></div>
+    </div>
+</script>

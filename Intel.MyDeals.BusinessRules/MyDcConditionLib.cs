@@ -2,6 +2,7 @@
 using Intel.MyDeals.Entities;
 using Intel.Opaque;
 using Intel.Opaque.Data;
+using Intel.Opaque.Tools;
 
 namespace Intel.MyDeals.BusinessRules
 {
@@ -65,6 +66,13 @@ namespace Intel.MyDeals.BusinessRules
         {
             if (dc == null || ar == null) return false;
             return ar.AtrbCondIf == null || ar.AtrbCondIf(dc);
+        }
+
+        public static bool IsNegativeOrZero(this OpDataCollector dc, string atrbCd)
+        {
+            IOpDataElement de = dc.GetDataElement(atrbCd);
+            if (de == null || de.AtrbValue.ToString() == string.Empty) return true;
+            return OpConvertSafe.ToDouble(de.AtrbValue.ToString().Replace("$", "")) <= 0;
         }
 
     }

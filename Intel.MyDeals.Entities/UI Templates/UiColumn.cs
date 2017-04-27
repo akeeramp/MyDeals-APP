@@ -23,8 +23,17 @@ namespace Intel.MyDeals.Entities
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string editor { get; set; }
 
-		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-		public bool isRequired { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public bool isRequired { get; set; }
 
-	}
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public bool sortable { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public bool filterable { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string headerTemplate { get; set; }
+
+    }
 }

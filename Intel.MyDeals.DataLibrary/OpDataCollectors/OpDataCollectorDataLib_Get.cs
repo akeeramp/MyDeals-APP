@@ -18,7 +18,7 @@ namespace Intel.MyDeals.DataLibrary
         /// <param name="includeTypes">Which object types to include in the request.</param>
         /// <param name="atrbs">Attributes that need to be brought in as well.</param>
         /// <returns></returns>
-        public MyDealsData GetByIDs(OpDataElementType opDataElementType, IEnumerable<int> ids, List<OpDataElementType> includeTypes, IEnumerable<string> atrbs)
+        public MyDealsData GetByIDs(OpDataElementType opDataElementType, IEnumerable<int> ids, List<OpDataElementType> includeTypes, IEnumerable<int> atrbs)
         {
             // Load Data Cycle: Point 3
 
@@ -30,14 +30,13 @@ namespace Intel.MyDeals.DataLibrary
                 strInc = string.Join(",", includeTypes.Select(OpDataElementTypeConverter.ToAlias).Distinct());
             }
 
-            var cmd = new PR_MYDL_GET_OBJS_BY_SIDS() // PR_GET_OBJS_BY_KEYS in original case, new PR_GET_OBJS_BY_SIDS()
+            var cmd = new PR_MYDL_GET_OBJS_BY_SIDS
             {
-                in_emp_wwid = OpUserStack.MyOpUserToken.Usr.WWID, //applySecurity ? OpUserStack.MyOpUserToken.Usr.WWID : 0,
-                //APPLY_SECURITY = applySecurity,
+                in_emp_wwid = OpUserStack.MyOpUserToken.Usr.WWID,
                 in_obj_type = opDataElementType.ToAlias(),
                 in_include_groups = strInc,
-                //SRCH_GRP = searchGroup,
-                in_obj_sids = new type_int_list(ids.ToArray())
+                in_obj_sids = new type_int_list(ids.ToArray()),
+                in_atrbs_list = new type_int_list(atrbs.ToArray())
             };
 
 
@@ -64,6 +63,11 @@ namespace Intel.MyDeals.DataLibrary
 
                 // Populate this according to the template
                 odcs[opDataElementType].Data[id] = GetDataCollectorFromTemplate(opDataElementType, id, 0);
+            }
+
+            foreach (OpDataElementType oType in includeTypes)
+            {
+                if (!odcs.ContainsKey(oType)) odcs[oType] = new OpDataPacket<OpDataElementType> {PacketType = oType};
             }
 
             return odcs;

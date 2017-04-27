@@ -101,6 +101,12 @@ using System.Collections.Generic;
 
 	//// Tables[7] - skipped, contains WFSTG Security items
 
+
+	ds = dbobjects.ExecuteDataSet("DECLARE @CUST_SIDS [dbo].[type_int_list]; INSERT INTO @CUST_SIDS(ITEM) VALUES (2); exec dbo.PR_MYDL_GET_CNSNT_SUMMARY @CUST_SIDS, '1/1/2016', '1/1/2018'");
+	ds.Tables[0].TableName = "DashboardContractSummary";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
+
 	// My Customer Objects -- @in_emp_wwid = 10505693"
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_MY_CUST] @IN_IDSID = 'mhtippin'");
 	ds.Tables[0].TableName = "MyCustomersInformation";

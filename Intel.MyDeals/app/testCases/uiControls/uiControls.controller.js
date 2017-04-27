@@ -102,7 +102,6 @@
 
             // flatGrid
             if ($scope.flatGrid !== undefined) {
-                //debugger;
                 for (var i = 0; i < $scope.flatGrid.length; i++) {
                     $scope.flatGrid[i]._dirty = $event;
                     angular.forEach($scope.flatGrid[i],

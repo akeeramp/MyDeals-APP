@@ -1,0 +1,320 @@
+﻿
+<div class="op-grid-container-wrapper">
+        
+        <div class="op-grid-header" ng-show="isToolbarVisible">
+            
+            <div id="tabstrip" kendo-tab-strip class="gradTab" k-ng-delay="tabStripDelay" ng-show="tabStripDelay">
+                <ul>
+                    <li ng-repeat="group in opOptions.groups | orderBy:'order'" ng-click="showCols(group.name)">
+                        <i class="intelicon-pin-outlined" ng-hide="{{ group.name == 'All'}}" ng-click="clickPin($event, group.name)"></i> {{group.name}}
+                        <span class="badge error" ng-show="group.numErrors > 0">{{group.numErrors}}</span>
+                        <i class="intelicon-close-solid closeGrp" ng-hide="{{ group.name == 'All'}}" ng-click="removeGrp($event, group.name)"></i>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="toolbar">
+                <button class="btn btn-sm btn-default" ng-click="validateGrid()">
+                    <i class="intelicon-protection-checked-verified-outlined" style="font-size: 18px;"></i> VALIDATE
+                </button>
+                <div class="fr">
+                    <ul kendo-menu>
+                        <li>
+                            <i class="intelicon-settings-solid" style="font-size: 22px !important;" title="Manage Layout"></i>
+                            <ul>
+                                <li ng-click="addGrp()">
+                                    <i class="intelicon-plus-outlined" style="font-size: 18px;"></i> ADD GROUP
+                                </li>
+                                <li ng-click="renameGrp()">
+                                    <i class="intelicon-plus-outlined" style="font-size: 18px;"></i> RENAME GROUP
+                                </li>
+                                <li ng-click="restoreLayout()">
+                                    <i class="intelicon-dashboard-solid" style="font-size: 18px;"></i> DEFAULT LAYOUT
+                                </li>
+                                <li ng-click="customLayout()">
+                                    <i class="intelicon-dashboard-outlined" style="font-size: 18px;"></i> CUSTOM LAYOUT
+                                </li>
+                                <li  ng-click="saveLayout()">
+                                    <i class="intelicon-save-outlined" style="font-size: 18px;"></i> SAVE LAYOUT
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div class="clearboth"></div>
+            </div>
+        </div>
+
+        <div class="op-grid-container">
+            <kendo-grid options="ds" class="opUiContainer dashboard md op-grid" style="height: 100%;"></kendo-grid>
+        </div>
+
+    </div>
+
+
+<style>
+    .k-dialog.k-alert .k-dialog-titlebar, .k-dialog.k-confirm .k-dialog-titlebar, .k-dialog.k-prompt .k-dialog-titlebar {
+        display: none;
+    }
+
+    .k-menu .k-item>.k-link {
+        padding: 4px 0.5em;
+        color: #00AEEF;
+    }
+    .k-menu .k-item>.k-link:hover {
+        color: #FFFFFF;
+    }
+
+    .gradTab.k-tabstrip {
+        background: #fdfdfd; /* Old browsers */
+        background: -moz-linear-gradient(top,  #fdfdfd 0%, #d9d9d9 100%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(top,  #fdfdfd 0%,#d9d9d9 100%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to bottom,  #fdfdfd 0%,#d9d9d9 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fdfdfd', endColorstr='#d9d9d9',GradientType=0 ); /* IE6-9 */
+        border-top: 1px solid #f2f2f2;
+        border-bottom: 0 solid transparent;
+        height: 37px;
+        font-size: 14px;
+        font-family: "Intel Clear";
+    }
+    .gradTab .k-tabstrip-items .k-item {
+        background: #fdfdfd; /* Old browsers */
+        background: -moz-linear-gradient(top,  #fdfdfd 0%, #d9d9d9 100%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(top,  #fdfdfd 0%,#d9d9d9 100%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to bottom,  #fdfdfd 0%,#d9d9d9 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fdfdfd', endColorstr='#d9d9d9',GradientType=0 ); /* IE6-9 */
+        border: 0 solid transparent;
+    }
+    .gradTab .k-tabstrip-items {
+        border-color: transparent;
+        border-width: 1px;
+        border-left-width: 1px;
+        border-top-width: 1px;
+        border-right-width: 1px;
+        border-bottom-width: 0;
+        border-radius: 4px 4px 0 0;
+    }
+    .gradTab .k-tabstrip-items .k-state-active {
+        background-color: #fff;
+        border-color: #b1babf;
+        border-width: 1px;
+        border-left-width: 1px;
+        border-top-width: 1px;
+        border-right-width: 1px;
+        border-bottom-width: 0;
+        border-radius: 4px 4px 0 0;
+    }
+    .gradTab .k-tabstrip-top>.k-tabstrip-items>.k-item {
+        border-bottom-width: 0;
+        border: 0 solid transparent;
+    }
+    .gradTab.k-tabstrip .k-tabstrip-items .k-link {
+        background: #fdfdfd; /* Old browsers */
+        background: -moz-linear-gradient(top,  #fdfdfd 0%, #d9d9d9 100%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(top,  #fdfdfd 0%,#d9d9d9 100%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to bottom,  #fdfdfd 0%,#d9d9d9 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fdfdfd', endColorstr='#d9d9d9',GradientType=0 ); /* IE6-9 */
+        color: #003C71;    
+        padding: 0.6em !important;
+        text-transform: none !important;
+        background-color: #fff;
+        border-bottom-width: 0;
+    }
+    .gradTab.k-tabstrip .k-tabstrip-items .k-state-active .k-link {
+        color: #00AEEF;
+        background-color: #ffffff;
+        background: #ffffff; /* Old browsers */
+        background: -moz-linear-gradient(top,  #ffffff 0%, #ffffff 100%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(top,  #ffffff 0%,#ffffff 100%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to bottom,  #ffffff 0%,#ffffff 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
+    }
+    .gradTab.k-tabstrip .k-tabstrip-items .k-state-hover .k-link {
+        background: #d9d9d9; /* Old browsers */
+        background: -moz-linear-gradient(top,  #d9d9d9 0%, #fdfdfd 100%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(top,  #d9d9d9 0%,#fdfdfd 100%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to bottom,  #d9d9d9 0%,#fdfdfd 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d9d9d9', endColorstr='#fdfdfd',GradientType=0 ); /* IE6-9 */
+        color: #003C71;
+    }
+    .gradTab.k-tabstrip .k-tabstrip-items {
+        padding: 2px 0;
+    }
+    .gradTab.k-tabstrip:focus {
+        box-shadow: none !important;
+    }
+
+
+
+    .gradTab i:first-child {
+        font-size: 16px;
+        cursor: pointer;
+        color: #00AEEF;
+        padding: 3px;
+        border-radius: 50%;
+        background-color: transparent;
+        margin-left: 4px;
+    }
+    .gradTab i:first-child:hover {
+        color: #FFFFFF;
+        background-color: #00AEEF;
+    }
+    .gradTab i.active {
+        color: #FFFFFF;
+        background-color: #003C71;
+    }
+
+    .gradTab i.closeGrp {
+        font-size: 16px;
+        color: #cccccc;
+        margin-left: 6px;
+        margin-right: 4px
+    }
+    .gradTab i.closeGrp:hover {
+        color: #FC4C02;
+    }
+
+    .gradTab .badge {
+        vertical-align: top;
+    }
+    .gradTab .badge.error {
+        background-color: #FC4C02;
+    }
+
+    .toolbar {
+        border: 0 solid #b1babf;
+        border-right: 1px solid #b1babf;
+        border-left: 1px solid #b1babf;
+        height: 55px;
+        padding: 7px 10px 3px 10px;
+    }
+    .toolbar .btn {
+        border: 1px solid transparent;
+        color: #00AEEF;
+    }
+
+
+
+    .op-grid .k-dirty {
+        display: none;
+    }
+
+    .op-grid.k-grid {
+        width: 100% !important;
+        border-left: 0 solid transparent;
+        border-right: 0 solid transparent;
+        border-bottom: 0 solid transparent;
+    }
+
+    .op-grid.k-grid .k-grid-header th.k-header {
+        vertical-align: top;
+    }
+
+    .op-grid.k-grid .uiControlDiv {
+        height: 100%;
+    }
+
+    .op-grid.k-grid .k-grid-header .k-grid-filter, .op-grid .k-grid-header .k-header-column-menu {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .op-grid.k-grid .k-grid-header .k-header  .k-link {
+        height: auto;
+    }
+  
+    .op-grid.k-grid .k-grid-header .k-header {
+        white-space: normal;
+    }
+
+    .op-grid.k-grid .k-header a {
+        font-size: 11px !important;
+    }
+
+    .op-grid.k-grid tr th {
+        border-right: 1px solid #e6e6e6;
+        border-left: 0 solid transparent;
+        background: #fdfdfd; /* Old browsers */
+        background: -moz-linear-gradient(top,  #fdfdfd 0%, #d9d9d9 100%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(top,  #fdfdfd 0%,#d9d9d9 100%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to bottom,  #fdfdfd 0%,#d9d9d9 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fdfdfd', endColorstr='#d9d9d9',GradientType=0 ); /* IE6-9 */
+    }
+    .op-grid.k-grid tr td {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        border-right: 1px solid #e6e6e6;
+    }
+
+    .op-grid.k-grid .k-grid-header, .op-grid.k-grid .k-grid-content {
+        border-right: 1px solid #e6e6e6;
+        border-left: 1px solid #e6e6e6;
+    }
+
+
+    .op-grid-container-wrapper {
+        height: 100%;
+        padding: 85px 0 0 0;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+    .op-grid-header {
+        height: 85px;
+        margin-top: -85px;
+        padding: 0;
+        font-size: 12px;
+        font-family: "Intel Clear";
+        font-weight: 200;
+        font-style: normal;
+    }
+    .op-grid-container {
+        height: 100%;
+        width: 100%;
+        padding: 0 10px;
+        overflow: hidden;
+        border-left: 1px solid #b1babf;
+        border-right: 1px solid #b1babf;
+        border-bottom: 1px solid #b1babf;
+    }     
+
+    .dashboard-grid.k-grid td {
+        white-space: nowrap;
+    }
+
+    .op-grid.k-grid tr.k-alt {
+        background-color: transparent;
+    }
+
+    .op-grid .k-grid-header {
+        padding-right: 0 !important;
+    }
+
+    .op-grid.k-grid tr.k-alt:hover, .op-grid.k-grid tr:hover {
+        background-color: rgba(0,174,239,0.05);
+    }
+
+    .op-grid .k-pager-wrap, .op-grid .k-pager-wrap .k-textbox, .op-grid .k-pager-wrap .k-link, .op-grid .k-grid-footer td {
+        border-left: 0 solid transparent;
+        border-right: 0 solid transparent;
+        border-bottom: 0 solid transparent;
+    }
+
+    .op-grid .k-grid-header, .op-grid .k-grid-header .k-header, .op-grid .k-pager-wrap, .op-grid .k-pager-numbers .k-state-selected, .k-grid-footer, .op-grid .k-grid-footer td {
+        background-color: #ffffff;        
+    }
+
+    .op-grid .uiControlDiv {
+        padding: 4px 8px;
+        min-height: 20px;
+    }
+    .op-grid .uiControlDiv span {
+        padding-top: 4px;
+    }
+
+    .dealLnk a {
+        margin-left: 6px;
+        color: #999999;
+        font-style: italic;
+    }
+</style>
