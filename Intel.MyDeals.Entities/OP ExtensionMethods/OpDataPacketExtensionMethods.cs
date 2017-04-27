@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Intel.Opaque.Data;
 using Newtonsoft.Json;
@@ -24,8 +25,16 @@ namespace Intel.MyDeals.Entities
             {
                 if (!item.ContainsKey("_actions")) continue;
 
-                OpDataCollectorFlattenedItem fItem = JsonConvert.DeserializeObject<OpDataCollectorFlattenedItem>(item["_actions"].ToString());
-                
+                OpDataCollectorFlattenedItem fItem;
+                try
+                {
+                    fItem = (OpDataCollectorFlattenedItem)item["_actions"];
+                }
+                catch (Exception)
+                {
+                    fItem = JsonConvert.DeserializeObject<OpDataCollectorFlattenedItem>(item["_actions"].ToString());
+                }
+
                 if (!fItem.ContainsKey("_deleteTargetIds")) continue;
 
                 List<int> list = (List<int>)fItem["_deleteTargetIds"];
@@ -39,7 +48,15 @@ namespace Intel.MyDeals.Entities
             {
                 if (!item.ContainsKey("_actions")) continue;
 
-                OpDataCollectorFlattenedItem fItem = JsonConvert.DeserializeObject<OpDataCollectorFlattenedItem>(item["_actions"].ToString());
+                OpDataCollectorFlattenedItem fItem;
+                try
+                {
+                    fItem = (OpDataCollectorFlattenedItem)item["_actions"];
+                }
+                catch (Exception)
+                {
+                    fItem = JsonConvert.DeserializeObject<OpDataCollectorFlattenedItem>(item["_actions"].ToString());
+                }
 
                 if (!fItem.ContainsKey("_deleteTargetIds")) continue;
 
