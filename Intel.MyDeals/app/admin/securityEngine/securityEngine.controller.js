@@ -206,7 +206,7 @@
 
     	function getObjAtrbs() {
     		var deferred = $q.defer();
-    			SecurityEngineService.getObjAtrbs()
+    			SecurityEngineService.getObjAtrbs() 
 					.then(function (response) {
 						vm.dealTypeAtrbs = response.data;
 						var defaultObjType = $filter('filter')(vm.dropDownDatasource.objTypes, { Alias: vm.default.objTypeName }, true)[0];
@@ -249,7 +249,7 @@
 								
     			// Does security mask have a things that are not just "0"?
     			if (mData.PERMISSION_MASK.replace(/0/g, "").replace(/\./g, "") !== "") {
-
+					
     				// Determine accesses from mask's hex values
     				if (vm.secAtrbUtil.maskMappings[mData.PERMISSION_MASK] === undefined) {
     					vm.secAtrbUtil.maskMappings[mData.PERMISSION_MASK] = SecUtil.ChkAtrbRulesBase(mData.PERMISSION_MASK, data.SecurityAttributes);
@@ -260,18 +260,22 @@
     				var curDealType = (mData.OBJ_SET_TYPE_CD === null || mData.OBJ_SET_TYPE_CD === "null" || mData.OBJ_SET_TYPE_CD === "") ? vm.dropDownDatasource.dealTypes.map(function (x) { return x.Alias; }) : [mData.OBJ_SET_TYPE_CD];
     				var curStage = (mData.WFSTG_NM === null || mData.WFSTG_NM === "null" || mData.WFSTG_NM === "") ? vm.dropDownDatasource.stages.map(function (x) { return x.Stage; }) : [mData.WFSTG_NM];
     				var curRole = (mData.ROLE_NM === null || mData.ROLE_NM === "null" || mData.ROLE_NM === "") ? vm.dropDownDatasource.roleTypes.map(function (x) { return x.dropdownName; }) : [mData.ROLE_NM];
+					// TODO: Change objType id to name if we ever get that from the db
+    				var curObjType = (mData.OBJ_TYPE_SID === null || mData.OBJ_TYPE_SID === "null" || mData.OBJ_TYPE_SID === "") ? vm.dropDownDatasource.objTypes.map(function (x) { return x.Id; }) : [mData.OBJ_TYPE_SID];
 
     				// If not already in the mappings list, then create it
     				if (vm.secAtrbUtil.securityMappings[curAction] === undefined) vm.secAtrbUtil.securityMappings[curAction] = {};
 
     				// Update/create the mapping with the current role, deal type, and stage ... for every role, deal type, and stage
-    				for (var d = 0; d < curDealType.length; d++) {
-    					for (var r = 0; r < curRole.length; r++) {
-    						for (var s = 0; s < curStage.length; s++) {
-    							for (var v = 0; v < vm.secAtrbUtil.maskMappings[mData.PERMISSION_MASK].length; v++) {
-    								// Create security mapping, which we will use to color-in or not color-in blocks
-    								var secKey = vm.secAtrbUtil.maskMappings[mData.PERMISSION_MASK][v] + "/" + curDealType[d] + "/" + curRole[r] + "/" + curStage[s];
-    								vm.secAtrbUtil.securityMappings[curAction][secKey] = 1;
+    				for (var o = 0; o < curObjType.length; o++){
+    					for (var d = 0; d < curDealType.length; d++) {
+    						for (var r = 0; r < curRole.length; r++) {
+    							for (var s = 0; s < curStage.length; s++) {
+    								for (var v = 0; v < vm.secAtrbUtil.maskMappings[mData.PERMISSION_MASK].length; v++) {
+    									// Create security mapping, which we will use to color-in or not color-in blocks
+    									var secKey = vm.secAtrbUtil.maskMappings[mData.PERMISSION_MASK][v] + "/" + curObjType[o] + "/" + curDealType[d] + "/" + curRole[r] + "/" + curStage[s];
+    									vm.secAtrbUtil.securityMappings[curAction][secKey] = 1;
+    								}
     							}
     						}
     					}
@@ -353,10 +357,14 @@
     		// Make the Roles column
     		var columns = [
 				{
+					field: "ATRB_SID",
+					title: "Id",
+					width: 70
+				},
+				{
 					field: "ATRB_COL_NM",
 					title: "Attribute/Action",
-					width: 140,	
-					template: "#= data.ATRB_COL_NM # <br/> #= data.ATRB_SID #"
+					width: 140
 				},
 				{
 					title: "Role",
@@ -403,15 +411,10 @@
     				selectable: "none"
     			},
     			toolbar: kendo.template($("#toolBarTemplate").html()),
-    			//filterable: gridConstants.filterable,
     			sortable: true,
     			selectable: true,
     			resizable: true,
     			scrollable: true,
-    			//pageable: {
-    			//	refresh: true,
-    			//	pageSizes: gridConstants.pageSizes,
-    			//},
     			columns: columns
     		}
 
@@ -511,7 +514,7 @@
 
     		// Turn the js "Dictionary" into an array
     		for (var key in vm.pendingSaveArray) {
-    			if (typeof vm.pendingSaveArray[key] === 'object') {
+    			if (vm.pendingSaveArray.hasOwnProperty(key)) {
     				var value = vm.pendingSaveArray[key];
     				saveArray.push(value);
     			}
@@ -524,9 +527,9 @@
 					logger.success('Update successful.');
 
 					for (var key in vm.pendingSaveArray) {
-						if (typeof vm.pendingSaveArray[key] === 'object') {
+						if (vm.pendingSaveArray.hasOwnProperty(key)) {
 							var value = vm.pendingSaveArray[key];
-							var secKey = value.ATRB_COL_NM + "/" + value.OBJ_SET_TYPE_CD + "/" + value.ROLE_NM + "/" + value.WFSTG_NM;
+							var secKey = value.ATRB_COL_NM + "/" + value.OBJ_TYPE_SID + "/" + value.OBJ_SET_TYPE_CD + "/" + value.ROLE_NM + "/" + value.WFSTG_NM;
 
 							if (value.isNowChecked) {
 								// Add new values to the security mask
@@ -595,10 +598,12 @@
             vm.dropDown.attributes.setDataSource(vm.drilledDownAttributes);
 			
         	// Clear selected
-            vm.selected.dealTypes = [];
-            vm.selected.stages = [];
-            vm.selected.attributes = [];
-            $scope.$apply;
+            $scope.$apply( function() {
+				vm.selected.dealTypes = [];
+				vm.selected.stages = [];
+				vm.selected.attributes = [];
+				$("#dropDownAttributes").data("kendoMultiSelect").value([]);
+            });
         }
 
         function filterObjType(objTypeName) {
@@ -606,7 +611,7 @@
             if (vm.dealTypeAtrbs[objTypeName] !== undefined && vm.dealTypeAtrbs[objTypeName]["ATTRBS"] !== undefined) {
                 for (var key in vm.dealTypeAtrbs[objTypeName]["ATTRBS"]) {
                     if (vm.dealTypeAtrbs[objTypeName]["ATTRBS"].hasOwnProperty(key)) {
-                        if (typeof vm.dealTypeAtrbs[objTypeName]["ATTRBS"][key] === 'object') {
+                    	if (vm.dealTypeAtrbs[objTypeName]["ATTRBS"].hasOwnProperty(key)) {
                             filteredDeals.push($filter('filter')(vm.dropDownDatasource.dealTypes, { Alias: key }, true)[0]);
                         }
                     }

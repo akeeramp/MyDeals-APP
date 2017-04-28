@@ -206,18 +206,18 @@ namespace Intel.MyDeals.DataLibrary
                 {
                     return _getSecurityWrapper;
                 }
-                else if (/*_getRoleTypes != null && */_getSecurityAttributes != null && _getSecurityMasks != null)
-                {
-                    // TODO: Add roles to cache once we get it from the db
-                    _getSecurityWrapper = new SecurityWrapper(/*_getRoleTypes.ToList()*/ null, _getSecurityAttributes.ToList(), _getSecurityMasks.ToList());
-                    return _getSecurityWrapper;
-                }
                 else
                 {
                     SecurityWrapper wrapper = new SecurityAttributesDataLib().GetSecurityWrapper();
                     _getRoleTypes = wrapper.RoleTypes;
                     _getSecurityAttributes = wrapper.SecurityAttributes.OrderBy(x => x.ATRB_CD);
                     _getSecurityMasks = wrapper.SecurityMasks;
+
+					if (/*_getRoleTypes != null && */ _getSecurityAttributes != null && _getSecurityMasks != null)
+					{
+						// TODO: Add roles to cache once we get it from the db
+						_getSecurityWrapper = new SecurityWrapper(/*_getRoleTypes.ToList()*/ null, _getSecurityAttributes.ToList(), _getSecurityMasks.ToList());
+					}
                     return wrapper;
                 }
             }

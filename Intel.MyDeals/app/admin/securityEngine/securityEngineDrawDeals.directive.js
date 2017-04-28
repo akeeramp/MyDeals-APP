@@ -81,7 +81,7 @@ function securityEngineDrawDeals($http, lookupsService, $compile, $templateCache
 
 		var actionCollection = vm.secAtrbUtil.securityMappings[mappingKey];
 		var title = "Deal Type: " + dealType + "\nRole: " + role + "\nStage: " + stgName + "\n";
-		var atrbKey = atrbCd + "/" + dealType + "/" + role + "/" + stgName;
+		var atrbKey = atrbCd + "/" + vm.filtered.objType.Id + "/" + dealType + "/" + role + "/" + stgName;
 
 		// Deal Read Only
 		if (mappingKey === "ATRB_READ_ONLY" && (vm.secAtrbUtil.securityMappings["C_UPDATE_DEAL"] === undefined || vm.secAtrbUtil.securityMappings["C_UPDATE_DEAL"][atrbKey.replace(atrbCd, dummyAttrName)] === undefined)) {
@@ -94,7 +94,7 @@ function securityEngineDrawDeals($http, lookupsService, $compile, $templateCache
 
 		/* Get classes and innerIcons */
 		// Not in Deal Type
-		if (vm.currentTabMode === vm.tabModeEnum.AtrbSecurity && atrbCd !== dummyAttrName && vm.dealTypeAtrbs[vm.filtered.objType.Alias][dealType] !== undefined && !vm.dealTypeAtrbs[vm.filtered.objType.Alias][dealType].contains(atrbCd)) {
+		if (vm.currentTabMode === vm.tabModeEnum.AtrbSecurity && atrbCd !== dummyAttrName && vm.dealTypeAtrbs[vm.filtered.objType.Alias]["ATTRBS"][dealType] !== undefined && !vm.dealTypeAtrbs[vm.filtered.objType.Alias]["ATTRBS"][dealType].contains(atrbCd)) {
 			extraClasses.push("atrbbasecolorNotInDealType");
 		}
 		else if (actionCollection !== undefined) {
@@ -126,7 +126,7 @@ function securityEngineDrawDeals($http, lookupsService, $compile, $templateCache
 				extraClasses.push("atrbbasedisabled");
 			}
 		}
-			// atrbbasedisabled
+		// atrbbasedisabled
 		else {
 			isClickable = true;
 			extraClasses.push("atrbbasedisabled");
