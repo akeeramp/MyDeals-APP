@@ -10,6 +10,9 @@
             <div class="col-md-6 prodSelectorSearch">
                 <input ng-keyup="$event.keyCode == 13 ? vm.searchProduct() : null" class="col-md-12 k-textbox fl input-sm opUiElement"
                        ng-model="vm.userInput" placeholder="Search for products:" />
+                <div class="err-Search" ng-if="vm.errorMessage.length > 0">
+                    {{vm.errorMessage}}
+                </div>
             </div>
             <span class="modalCloseIcon">
                 <i role="button" title="Close" class="intelicon-close-max" ng-click="vm.cancel()"></i>
@@ -222,6 +225,13 @@
         min-height: 100px !important;
         max-height: 100px !important;
         overflow-y: auto;
+    }
+
+    .err-Search {
+        color: #FF6E77;
+        font-size: 12px !important;
+        padding-left: 1px !important;
+        padding-top: 2px !important;
     }
 
     .prdBtn {

@@ -241,6 +241,7 @@
         // When user clicks on the breadcrumb
         function selectPath(index) {
             vm.hideSelection = false;
+            vm.errorMessage = "";
             vm.selectedPathParts.splice(index, vm.selectedPathParts.length);
             var item = vm.selectedPathParts.length > 0 ? vm.selectedPathParts[vm.selectedPathParts.length - 1]
                 : newItem();
@@ -361,7 +362,7 @@
                 },
                 {
                     field: "PRD_STRT_DTM",
-                    title: "Start Date",
+                    title: "Product Start Date",
                     type: "date",
                     template: "#= kendo.toString(new Date(PRD_STRT_DTM), 'M/d/yyyy') #",
                     width: "150px"
@@ -413,6 +414,12 @@
                     width: "150px"
                 },
                 {
+                    field: "fmly_nm_MM",
+                    title: "EDW Family Name",
+                    template: "<div kendo-tooltip k-content='dataItem.fmly_nm_MM'>{{(dataItem.fmly_nm_MM | limitTo: 20) + (dataItem.fmly_nm_MM.length > 20 ? '...' : '')}}</div>",
+                    width: "150px"
+                },
+                {
                     field: "PRC_AMT",
                     title: "CAP Price",
                     width: "150px"
@@ -420,7 +427,7 @@
                 {
                     field: "EFF_FR_DTM",
                     title: "CAP Availability date",
-                    template: "#= kendo.toString(new Date(PRD_STRT_DTM), 'M/d/yyyy') #",
+                    template: "#= kendo.toString(new Date(EFF_FR_DTM), 'M/d/yyyy') #",
                     width: "150px"
                 },
                 {
@@ -466,6 +473,7 @@
         vm.productSearchValues = [];
         function processProducts(data) {
             vm.hideSelection = true;
+            vm.errorMessage = "";
             vm.productSearchValues = [];
             vm.selectedPathParts = []; // Reset the breadcrumb
             vm.showSearchResults = false; // Hide the grid
@@ -486,10 +494,7 @@
                 }
             }
 
-            if (vm.productSearchValues.length == 0) {
-                // TODO show message "NO Matching product found. Click on Select.
-            }
-
+            vm.errorMessage = vm.productSearchValues.length == 0 ? "Unable to match with a valid product. Click on Select to find products" : "";
             var productCategories = $filter('unique')(vm.productSearchValues, 'PRD_CAT_NM');
 
             vm.searchItems = productCategories.map(function (i) {
