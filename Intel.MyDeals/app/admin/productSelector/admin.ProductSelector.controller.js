@@ -333,10 +333,10 @@
 
             var resultData = $linq.Enumerable().From($scope.prodGrid._data)
                 .Where(function (x) {
-                    return x.USR_INPUT.length > 0 && x.START_DATE.length > 0 && x.END_DATE.length > 0;
+                    return x.USR_INPUT.length > 0 && x.START_DATE > 0 && x.END_DATE > 0;
                 }).ToArray();
 
-            for (var i = 0; i < resultData.length; i++) {
+            for (var i = 0; i < resultData.length; i++) {    
                 var sendObj = {
                     ROW_NUMBER: resultData[i].ROW_NUMBER,
                     USR_INPUT: resultData[i].USR_INPUT,
