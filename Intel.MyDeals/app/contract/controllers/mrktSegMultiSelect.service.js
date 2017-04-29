@@ -124,9 +124,14 @@
 		}
 
 		function checkedEmbeddedSubSegment(newVal, oldVal, checkBool) {
-			if (checkBool) {
+		    if (checkBool) {
+		        if (newVal.indexOf("Embedded") > -1) {
+		            //user selected parent embedded node, set changed val to first sub mrkt segment
+		            vm.changedVal = vm.subMrktSegments[0];
+		            return true;
+		        }
 				//check if user checked a node that is an embedded sub segment
-				for (var i = 0; i < vm.subMrktSegments.length; i++) {
+			    for (var i = 0; i < vm.subMrktSegments.length; i++) {
 				    if (newVal.indexOf(vm.subMrktSegments[i]) > -1 && oldVal.indexOf(vm.subMrktSegments[i]) < 0) {
 				        vm.changedVal = vm.subMrktSegments[i];
 						return true;

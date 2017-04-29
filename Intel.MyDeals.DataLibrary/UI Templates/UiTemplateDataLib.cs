@@ -106,30 +106,6 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 29,
-                AtrbCd = AttributeCodes.PAYOUT_BASED_ON,
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
-                Width = 100,
-                IsDefaultable = true,
-                UiType = "RADIOBUTTONGROUP",
-                LookupUrl = "/api/Dropdown/GetDropdowns/PAYOUT_BASED_ON/ECAP",
-                LookupText = "DROP_DOWN",
-                LookupValue = "DROP_DOWN"
-            });
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 29,
-                AtrbCd = AttributeCodes.PROGRAM_PAYMENT,
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
-                Width = 100,
-                IsDefaultable = true,
-                UiType = "RADIOBUTTONGROUP",
-                LookupUrl = "/api/Dropdown/GetDropdowns/PROGRAM_PAYMENT/ECAP",
-                LookupText = "DROP_DOWN",
-                LookupValue = "DROP_DOWN"
-            });
-            items.Add(new UiTemplateContainerItem
-            {
                 Id = 36,
                 AtrbCd = AttributeCodes.NUM_OF_TIERS,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
@@ -145,12 +121,15 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 29,
-                AtrbCd = "MEET_COMP_PRICE_QSTN",
+                Id = 37,
+                AtrbCd = AttributeCodes.ECAP_TYPE,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
                 IsDefaultable = true,
-                UiType = "RADIOBUTTONGROUP",
-                LookupUrl = "/api/Dropdown/GetDropdowns/MEET_COMP_PRICE_QSTN/ECAP",
+                Label = "ECAP Type",
+                DataType = "string",
+                UiType = "DROPDOWN",
+                LookupUrl = "/api/Dropdown/GetDropdowns/PROGRAM_ECAP_TYPE/ECAP",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
             });
@@ -183,15 +162,36 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 37,
-                AtrbCd = AttributeCodes.ECAP_TYPE,
+                Id = 29,
+                AtrbCd = AttributeCodes.PAYOUT_BASED_ON,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
+                Width = 100,
                 IsDefaultable = true,
-                Label = "ECAP Type",
-                DataType = "string",
+                UiType = "RADIOBUTTONGROUP",
+                LookupUrl = "/api/Dropdown/GetDropdowns/PAYOUT_BASED_ON/ECAP",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
+                AtrbCd = "MEET_COMP_PRICE_QSTN",
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
+                IsDefaultable = true,
+                UiType = "RADIOBUTTONGROUP",
+                LookupUrl = "/api/Dropdown/GetDropdowns/MEET_COMP_PRICE_QSTN/ECAP",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
+                AtrbCd = AttributeCodes.PROGRAM_PAYMENT,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
+                Width = 100,
+                IsDefaultable = true,
                 UiType = "DROPDOWN",
-                LookupUrl = "/api/Dropdown/GetDropdowns/PROGRAM_ECAP_TYPE/ECAP",
+                LookupUrl = "/api/Dropdown/GetDropdowns/PROGRAM_PAYMENT/ECAP",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
             });
