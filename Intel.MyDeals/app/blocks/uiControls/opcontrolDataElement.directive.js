@@ -6,14 +6,24 @@
 opControlDataElement.$inject = ['$http', 'lookupsService', '$compile', '$templateCache', 'logger', '$q'];
 
 function opControlDataElement($http, lookupsService, $compile, $templateCache, logger, $q) {
-    var linker = function (scope, element, attrs) {
+	var linker = function (scope, element, attrs) {
+		
+		var placeholder = "";
+		var label = "";
+		if (scope.opPlaceholder !== undefined) {
+			placeholder = scope.opPlaceholder;
+		}
+		if (scope.opLabel !== undefined) {
+			label = scope.opLabel;
+		}
+
         var el = "";
         el += '<div op-control';
         el += ' ng-model="opValue.' + scope.opCd + '.value"';
         el += ' op-ui-mode="\'' + scope.opUiMode + '\'"';
         el += ' op-cd="\'' + scope.opCd + '\'"';
         el += ' op-type="\'' + scope.opType + '\'"';
-        el += ' op-label="\'' + scope.opLabel + '\'"';
+        el += ' op-label="\'' + label + '\'"';
         el += ' op-lookup-url="\'' + scope.opLookupUrl + '\'"';
         el += ' op-lookup-text="\'' + scope.opLookupText + '\'"';
         el += ' op-lookup-value="\'' + scope.opLookupValue + '\'"';
@@ -24,6 +34,7 @@ function opControlDataElement($http, lookupsService, $compile, $templateCache, l
         el += ' op-is-form="' + scope.opIsForm + '"';
         el += ' op-class="\'' + scope.opClass + '\'"';
         el += ' op-style="\'' + scope.opStyle + '\'"';
+        el += ' op-placeholder="\'' + placeholder + '\'"';
         el += ' op-valid-msg="opValue.' + scope.opCd + '.validMsg"';
         el += ' op-help-msg="opValue.' + scope.opCd + '.helpMsg"';
         el += ' op-is-error="opValue.' + scope.opCd + '.isError"';
@@ -58,7 +69,8 @@ function opControlDataElement($http, lookupsService, $compile, $templateCache, l
             opMaxValue: '=',
             opIsForm: "=",
             opClass: "=",
-            opStyle: "="
+            opStyle: "=",
+            opPlaceholder: '='
     },
         link: linker
     }

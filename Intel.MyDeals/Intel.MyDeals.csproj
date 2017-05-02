@@ -306,6 +306,7 @@
     <Content Include="app\app.module.js" />
     <Content Include="app\blocks\uiControls\partials\horizontalEmbeddedMultiSelect.html" />
     <Content Include="app\blocks\uiControls\partials\verticalEmbeddedMultiSelect.html" />
+    <Content Include="app\contract\controllers\multiSelectModalCtrl.controller.js" />
     <Content Include="app\contract\partials\help.html" />
     <Content Include="app\contract\controllers\contract.controller.js" />
     <Content Include="app\contract\controllers\mrktSegMultiSelect.service.js" />

@@ -85,19 +85,21 @@ namespace Intel.MyDeals.Entities.UI_Templates
                 if (!item.IsDetail)
                 {
                     fields[item.AtrbCd + dimKey] = new UiFieldItem
-                    {
-                        type = item.DataType,
-                        editable = !item.IsReadOnly,
-                        nullable = !item.IsRequired,
-                        values = item.LookupValue,
-                        valuesText = item.LookupText,
-                        valuesValue = item.LookupValue,
+					{
+						editable = !item.IsReadOnly,
+						field = item.AtrbCd + dimKey,
 						format = item.Format,
+						label = item.Label,
+                        nullable = !item.IsRequired,
 						opLookupUrl = item.LookupUrl ?? "",
 						opLookupText = item.LookupText ?? "",
 						opLookupValue = item.LookupValue ?? "",
+						uiType = item.UiType,
+                        type = item.DataType,
 						validMsg = item.HelpText ?? "",
-						uiType = item.UiType
+                        values = item.LookupValue,
+                        valuesText = item.LookupText,
+                        valuesValue = item.LookupValue
 					};
 
                     columns.Add(new UiColumn
@@ -118,18 +120,20 @@ namespace Intel.MyDeals.Entities.UI_Templates
                 {
                     detailsFields[item.AtrbCd + dimKey] = new UiFieldItem
                     {
-                        type = item.DataType,
-                        editable = !item.IsReadOnly,
-                        nullable = !item.IsRequired,
-                        values = item.LookupValue,
-                        valuesText = item.LookupText,
-                        valuesValue = item.LookupValue,
+						editable = !item.IsReadOnly,
+						field = item.AtrbCd + dimKey,
 						format = item.Format,
+						label = item.Label,
+						nullable = !item.IsRequired,
 						opLookupUrl = item.LookupUrl ?? "",
 						opLookupText = item.LookupText ?? "",
 						opLookupValue = item.LookupValue ?? "",
+                        type = item.DataType,
+						uiType = item.UiType,
 						validMsg = item.HelpText ?? "",
-						uiType = item.UiType
+                        values = item.LookupValue,
+                        valuesText = item.LookupText,
+                        valuesValue = item.LookupValue
 					};
 
                     detailsColumns.Add(new UiColumn

@@ -66,8 +66,7 @@
 			</tr>
 		</table>
 	</div>
-
-
+	
 	<div style="position:absolute; float: right; right: 5px; z-index: 900;">
 		<!-- Save Button -->
 		<button class="btn btn-sm ssToolbarBtn" ng-click="openInfoDialog()" title="Info">
@@ -83,3 +82,39 @@
 
 	<div kendo-spreadsheet id="pricingTableSpreadsheet" style="width: 100%; height: 100%;" k-options="ptSpreadOptions" k-scope-field="spreadsheet" class="noFormula"></div>
 </div>
+
+
+
+
+
+<script type="text/ng-template" id="cellPopupModal">
+	<div class="modal-header">
+		<h3 class="modal-title" id="modal-title">{{$ctrl.multiSelectPopUpModel.label}} selector</h3>
+	</div>
+	<div class="modal-body" id="modal-body">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="fr">
+					<button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">Update</button>
+					<button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
+				</div>
+			</div>
+		</div>
+		<div op-control-flat
+			 ng-model="$ctrl.popupResult"
+			 op-cd="'MultiSelectSelections'"
+			 op-type="$ctrl.multiSelectPopUpModel.uiType"
+			 op-label="'Select '+ $ctrl.multiSelectPopUpModel.label +':'"
+			 op-lookup-url="$ctrl.multiSelectPopUpModel.opLookupUrl"
+			 op-lookup-text="$ctrl.multiSelectPopUpModel.opLookupText"
+			 op-lookup-value="$ctrl.multiSelectPopUpModel.opLookupValue"
+			 op-placeholder="$ctrl.placeholderText"
+			 op-is-form="true" 
+			 op-ui-mode="'VERTICAL'">
+		</div>
+
+		<!--<div class="col-md-12 row">			Selected: <b>{{ $ctrl.popupResult.MultiSelectSelections }}</b>		</div>-->
+	</div>
+	<div class="modal-footer">	</div>
+</script>
+

@@ -56,16 +56,21 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
         scope.opOptions = {
             format: "#",
             decimals: 0
-        }       
+        }
 
         var serviceData = []; // data from the service will be pushed into this.
         if ((scope.opType === 'COMBOBOX' || scope.opType === 'DROPDOWN' || scope.opType === 'MULTISELECT' || scope.opType === 'EMBEDDEDMULTISELECT')) {
             if ((scope.opLookupUrl !== undefined && scope.opLookupUrl !== "undefined")) {
-                scope.values = {
+            	scope.values = {
                     transport: {
-                        read: {
-                            url: scope.opLookupUrl,
-                            dataType: "json"
+                    	read: function(e) {
+                    		// Use dataService to take advantage of ng caching							
+                    		dataService.get(scope.opLookupUrl)
+								.then(function (response) {
+									e.success(response.data);
+								}, function (response) {
+									logger.error("Unable to get data for dropdowns.", response, response.statusText);
+								});
                         }
                     },
                     schema: {
@@ -111,6 +116,10 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
 
         if (scope.opType === 'EMBEDDEDMULTISELECT') {
 
+        	// Onclick event for embedded Multiselects
+        	scope.onEmbeddedMultiSelectClick = function () {
+        		return scope.showTreeView = !scope.showTreeView;
+        	}
             scope.onCheckFunction = function () {
                 var treeview = $("#" + scope.opCd).data("kendoTreeView");
                 var checkedNodes = [];
@@ -246,7 +255,8 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
             opHelpMsg: '=',
             opIsForm: '=',
             opClass: '=',
-            opStyle: '='
+            opStyle: '=',
+            opPlaceholder: '='
         },
         link: linker
     }

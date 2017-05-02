@@ -4,25 +4,19 @@ namespace Intel.MyDeals.Entities
 {
     public class UiFieldItem
     {
-        public string type { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public bool editable { get; set; }
 
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public bool nullable { get; set; }
-
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public string values { get; set; }
-
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public string valuesText { get; set; }
-
-		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-		public string valuesValue { get; set; }
+		public string field  { get; set; }
 
 		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 		public string format { get; set; }
+		
+		public string label { get; set; }
+
+		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public bool nullable { get; set; }
 
 		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 		public string opLookupUrl { get; set; }
@@ -33,10 +27,21 @@ namespace Intel.MyDeals.Entities
 		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 		public string opLookupValue { get; set; }
 
-		public string validMsg { get; set; }
-
 		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 		public string uiType { get; set; }
+
+        public string type { get; set; }
+
+		public string validMsg { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string values { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string valuesText { get; set; }
+
+		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+		public string valuesValue { get; set; }
 
 	}
 }

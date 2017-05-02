@@ -5,7 +5,7 @@
     <div kendo-tooltip k-content="tooltipMsg" k-position="'top'" ng-show="opIsError" class="err-bit-el"></div>
 
     <div class="k-content">
-        <div ng-click="showTreeView = !showTreeView">
+        <div ng-click="onEmbeddedMultiSelectClick()">
             <select id="{{opCd + '_MS'}}"
                     kendo-multi-select 
                     class="fl opUiElement"
@@ -15,6 +15,7 @@
                     k-data-value-field="opLookupValue"
                     k-value-primitive="true"
                     k-auto-close="false"
+					k-placeholder="opPlaceholder"
                     k-ng-readonly="true"
                     style="width: 100%;"
                     ng-class="{isHidden: opIsHidden, isReadOnlyFaux: true, isError: opIsError, isSaved: opIsSaved, isDirty: opIsDirty}">

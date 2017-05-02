@@ -10,7 +10,7 @@
     function dataService($http) {
         var isPrimed = false;
         var primePromise;
-
+		
         var service = {
             get: get,
             put: put,
@@ -18,8 +18,15 @@
             Delete: Delete // 'delete' is a javascript keyword hence using 'Delete'
         };
 
-        function get(apiUrl, successCallback, errorCallback) {
-            return $http.get(apiUrl).then(successCallback, errorCallback);
+        function get(apiUrl, successCallback, errorCallback, isForceReGet) {
+        	var isGetFromNgCache = true;
+
+        	// Get from angular(Ng) built-in $http caching unless otherwise stated
+			// This will remove unneccessary API calls, thus making the app faster
+        	if (isForceReGet !== undefined && isForceReGet !== null) {
+        		isGetFromNgCache = isForceReGet;
+        	}
+        	return $http.get(apiUrl, { cache: isGetFromNgCache }).then(successCallback, errorCallback);
         }
 
         function put(apiUrl, dto, successCallback, errorCallback) {

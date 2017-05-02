@@ -4,9 +4,9 @@
 
 // logger :Injected logger service to for loging to remote database or throwing error on the ui
 // dataService :Application level service, to be used for common api calls, eg: user token, department etc
-PricingTableController.$inject = ['$scope', '$state', '$stateParams', '$filter', 'confirmationModal', 'dataService', 'logger', 'pricingTableData', 'ProductSelectorService'];
+PricingTableController.$inject = ['$scope', '$state', '$stateParams', '$filter', 'confirmationModal', 'dataService', 'logger', 'pricingTableData', 'ProductSelectorService', 'MrktSegMultiSelectService', '$uibModal'];
 
-function PricingTableController($scope, $state, $stateParams, $filter, confirmationModal, dataService, logger, pricingTableData, ProductSelectorService) {
+function PricingTableController($scope, $state, $stateParams, $filter, confirmationModal, dataService, logger, pricingTableData, ProductSelectorService, MrktSegMultiSelectService, $uibModal) {
 
 	var vm = this;
 
@@ -38,6 +38,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 		fontWeight: "normal"
 	};
 
+	var intA = "A".charCodeAt(0);
 	var ptTemplate = null;
 	var columns = null;
 	var gTools = null;
@@ -45,6 +46,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 	var wipTemplate = null;
 	var productLevel = null;
 	vm.colToLetter = {}; // Contains "dictionary" of  (Key : Value) as (Db Column Name : Column Letter)
+	vm.letterToCol = {};
 	vm.readOnlyColLetters = [];
 	vm.requiredStringColumns = {};
 
@@ -252,7 +254,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
 	function getColumns(ptTemplate) {
 		var cols = [];
-		var intA = "A".charCodeAt(0);
 		var c = -1;
 
 		if (ptTemplate !== undefined && ptTemplate !== null) {
@@ -264,7 +265,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 				c += 1;
 				if (value.hidden === false) {
 					// Create column to letter mapping
-					vm.colToLetter[value.field] = String.fromCharCode(intA + c);
+					var letter = String.fromCharCode(intA + c);
+					vm.colToLetter[value.field] = letter;
+					vm.letterToCol[letter] = value.field;
 				}
 			});
 		}
@@ -279,21 +282,21 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 		if (arg.range._sheet._sheetName !== "Main") {
 			return;
 		}
-		var intA = "A".charCodeAt(0);
 		var productColIndex = (vm.colToLetter["PTR_USER_PRD"].charCodeAt(0) - intA);
 		var topLeftRowIndex = (arg.range._ref.topLeft.row + 1);
 		var bottomRightRowIndex = (arg.range._ref.bottomRight.row + 1);
 
-		var isProductColumnChanged = (arg.range._ref.topLeft.col >= productColIndex) && (arg.range._ref.bottomRight.col <= productColIndex);
+		var isProductColumnIncludedInChanges = (arg.range._ref.topLeft.col >= productColIndex) && (arg.range._ref.bottomRight.col <= productColIndex);
 
 		sheet.batch(function () {
 			// Trigger only if the changed range contains the product column
 			// NOTE: The below condition assumes that a dragged range is dragged from top-to-bottom, left-to-right. If that ever 
 			// changes (i.e. we move the products column so it's not the first editable column), then we should change this logic to accomodate that.
-			if (isProductColumnChanged) {
+			if (isProductColumnIncludedInChanges) {
 
+				var finalColLetter = String.fromCharCode(intA + (ptTemplate.columns.length - 1));
 				// Enable other cells
-				var range = sheet.range("B" + topLeftRowIndex + ":Z" + bottomRightRowIndex);
+				var range = sheet.range("B" + topLeftRowIndex + ":" + finalColLetter + bottomRightRowIndex);
 				range.enable(true);
 				range.background(null);
 
@@ -303,65 +306,61 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 						disableRange(sheet.range(key + topLeftRowIndex + ":" + key + bottomRightRowIndex));
 					}
 				}
-			}
 
-			arg.range.forEachCell(
-				function (rowIndex, colIndex, value) {
-					if (colIndex == productColIndex) { // Product Row changed
-						// Re-disable specific cells that are readOnly
-						var rowInfo = root.pricingTableData.PRC_TBL_ROW[(rowIndex - 1)]; // This is -1 to account for the 0th rows in the spreadsheet
-						if (rowInfo != undefined) { // The row was pre-existing
-							disableIndividualReadOnlyCells(sheet, rowInfo, rowIndex, 1);
-						}
-					}
+				arg.range.forEachCell(
+					function (rowIndex, colIndex, value) {
+						if (colIndex == productColIndex) { // Product Col changed
+							// Re-disable specific cells that are readOnly
+							var rowInfo = root.pricingTableData.PRC_TBL_ROW[(rowIndex - 1)]; // This is -1 to account for the 0th rows in the spreadsheet
+							if (rowInfo != undefined) { // The row was pre-existing
+								disableIndividualReadOnlyCells(sheet, rowInfo, rowIndex, 1);
+							}
 
-					// Trigger only if the changed range contains the product column
-					if (isProductColumnChanged) {
-						for (var key in ptTemplate.model.fields) {
-							// Auto-fill default values from Contract level
-							if ((root.contractData[key] !== undefined)
-									&& (root.contractData[key] !== null)
-									&& (vm.colToLetter[key] != undefined)
-									&& ((sheet.range(vm.colToLetter[key] + (rowIndex + 1)).value()) == "" || (sheet.range(vm.colToLetter[key] + (rowIndex + 1)).value() == null)) // don't override existing values for autofill
-								) {
-								var fillValue = root.contractData[key];
-								if (ptTemplate.model.fields[key].type == "date") {
-									fillValue = new Date(root.contractData[key]);
+							for (var key in ptTemplate.model.fields) {
+								var hasExistingCellValue = (sheet.range(vm.colToLetter[key] + (rowIndex + 1)).value()) == "" || (sheet.range(vm.colToLetter[key] + (rowIndex + 1)).value() == null); // don't override existing values for autofill
+
+								// Auto-fill default values from Contract level
+								if ((root.contractData[key] !== undefined)
+										&& (root.contractData[key] !== null)
+										&& (vm.colToLetter[key] != undefined)
+										&& (hasExistingCellValue)
+									) {
+									var fillValue = root.contractData[key];
+									if (ptTemplate.model.fields[key].type == "date") {
+										fillValue = new Date(root.contractData[key]);
+									}
+									sheet.range(vm.colToLetter[key] + (rowIndex + 1)).value(fillValue);
 								}
-								sheet.range(vm.colToLetter[key] + (rowIndex + 1)).value(fillValue);
-							}
-							// Auto-fill default values from Pricing Strategy level
-							if ((root.curPricingTable[key] !== undefined)
-									&& (root.curPricingTable[key] !== null)
-									&& (vm.colToLetter[key] != undefined)
-									&& ((sheet.range(vm.colToLetter[key] + (rowIndex + 1)).value()) == "" || (sheet.range(vm.colToLetter[key] + (rowIndex + 1)).value() == null)) // don't override existing values for autofill
-								) {
-								sheet.range(vm.colToLetter[key] + (rowIndex + 1)).value(root.curPricingTable[key]);
-							}
+								// Auto-fill default values from Pricing Strategy level
+								if ((root.curPricingTable[key] !== undefined)
+										&& (root.curPricingTable[key] !== null)
+										&& (vm.colToLetter[key] != undefined)
+										&& (hasExistingCellValue)
+									) {
+									sheet.range(vm.colToLetter[key] + (rowIndex + 1)).value(root.curPricingTable[key]);
+								}
 
-
-							// Add LEN validation for required string fields
-							// NOTE: this is not validation for date or number fields as they do not require LEN validation
-							if (vm.requiredStringColumns.hasOwnProperty(key)) {
-								sheet.range(vm.colToLetter[key] + (rowIndex + 1)).validation({
-									dataType: "custom",
-									from: "LEN(" + vm.colToLetter[key] + (rowIndex + 1) + ")>0",
-									allowNulls: false,
-									type: "warning",
-									messageTemplate: "This field is required."
-								});
+								// Add LEN validation for required string fields
+								// NOTE: this is not validation for date or number fields as they do not require LEN validation
+								if (vm.requiredStringColumns.hasOwnProperty(key)) {
+									sheet.range(vm.colToLetter[key] + (rowIndex + 1)).validation({
+										dataType: "custom",
+										from: "LEN(" + vm.colToLetter[key] + (rowIndex + 1) + ")>0",
+										allowNulls: false,
+										type: "warning",
+										messageTemplate: "This field is required."
+									});
+								}
 							}
 						}
 					}
-				}
-			);
+				);
+			}
 		});
 
 		if (!root._dirty) {
-			$scope.$apply(function () {
-				root._dirty = true;
-			});
-		}
+			root._dirty = true;
+		} 
 	}
 
 
@@ -412,9 +411,17 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 		undoBtn.removeClass('k-i-undo k-icon');
 	}
 
+
+	// TDOO: This needs major perfromance refactoring because it makes things slow for poeple with bad computer specs :<
 	// Initiates in a batch call (which may make the spreadsheet load faster
 	function sheetBatchOnRender(sheet, dropdownValuesSheet) {
 		var rowIndexOffset = 2; // This is 2 because row 0 and row 1 are hidden
+
+		// disable formula completion list
+		$(".k-spreadsheet-formula-list").remove();
+
+		// disable right click menu options
+		$(".k-context-menu").remove();
 
 		sheet.batch(function () {
 
@@ -436,13 +443,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 			headerRange.fontSize(headerStyle.fontSize);
 			headerRange.textAlign(headerStyle.textAlign);
 			headerRange.verticalAlign(headerStyle.verticalAlign);
-
-			// disable formula completion list
-			$(".k-spreadsheet-formula-list").remove();
-
-			// disable right click menu options
-			$(".k-context-menu").remove();
-
 
 			// Add product selector editor on Product cells
 			sheet.range(vm.colToLetter["PTR_USER_PRD"] + ":" + vm.colToLetter["PTR_USER_PRD"]).editor("cellProductSelector");
@@ -484,7 +484,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 								}
 							}, function (error) {
 								logger.error("Unable to get dropdown data.", error, error.statusText);
-								deferred.reject();
 							});
 						});
 						if (ptTemplate.model.fields[key].uiType == "RADIOBUTTONGROUP" || ptTemplate.model.fields[key].uiType == "DROPDOWN") {
@@ -498,7 +497,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 								messageTemplate: "Invalid value. Please use dropdown"
 							});
 						} else if (ptTemplate.model.fields[key].uiType == "EMBEDDEDMULTISELECT"  || ptTemplate.model.fields[key].uiType == "MULTISELECT"){
-							sheet.range(vm.colToLetter[key] + ":" + vm.colToLetter[key]).editor("cellDropDown");
+							sheet.range(vm.colToLetter[key] + ":" + vm.colToLetter[key]).editor("multiSelectPopUpEditor");
 							// TODO: Add a better validator which makes sure the selected items are in the multiselect list
 							vm.requiredStringColumns[key] = true;
 						}
@@ -827,7 +826,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 			}
 		);
 	}
-
+	
 	// TODO: Product Selector dialog box below
 	kendo.spreadsheet.registerEditor("cellProductSelector", function () {
 		var context, dlg, model;
@@ -838,125 +837,86 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 		return {
 			edit: function (options) {
 				context = options;
-				open();
+
+				//// If the selected cell already contains some value, reflect
+				//// it in the custom editor.
+				//var value = context.range.value();
+				//if (value != null) {
+				//	model.set("value", value);
+				//}
+
+				// TODO: Replace with actual Product Selector!
+				var modalOptions = {
+					closeButtonText: 'Close',
+					hasActionButton: false,
+					headerText: 'Help Text',
+					bodyText: 'TODO'
+				};
+				confirmationModal.showModal({}, modalOptions);
+
 			},
 			icon: "fa fa-mouse-pointer ssEditorBtn"
-			//icon: "k-font-icon k-i-list-unordered" // TODO: for some reason, the icon is difficult to click for some reason. Find out why. 
 		};
 
-		// This function actually creates the UI if not already there, and
-		// caches the dialog and the model.
-		function create() {
-			if (!dlg) {
-				model = kendo.observable({
-					value: "#000000",
-					ok: function () {
-						// This is the result when OK is clicked. Invoke the
-						// callback with the value.
-						context.callback(model.value);
-						dlg.close();
-					},
-					cancel: function () {
-						dlg.close();
-					}
-				});
-				var el = $("<div data-visible='true' data-role='window' data-modal='true' data-resizable='false' data-title='Product Selector'>" +
-							" <div>TODO: Product Selector to go here</div> " +
-						   "    <button style='width: 5em' class='k-button' data-bind='click: ok'>OK</button>" +
-						   "    <button style='width: 5em' class='k-button' data-bind='click: cancel'>Cancel</button>" +
-						   "  </div>" +
-						   "</div>");
-				kendo.bind(el, model);
-
-				// Cache the dialog.
-				dlg = el.getKendoWindow();
-			}
-		}
-
-		function open() {
-			create();
-			dlg.open();
-			dlg.center();
-
-			// If the selected cell already contains some value, reflect
-			// it in the custom editor.
-			var value = context.range.value();
-			if (value != null) {
-				model.set("value", value);
-			}
-		}
 	});
 
+	
 
-
-
-	// TODO: Product Selector dialog box below
-	kendo.spreadsheet.registerEditor("cellDropDown", function () {
-		var context, dlg, model;
+	kendo.spreadsheet.registerEditor("multiSelectPopUpEditor", function () {
+		var context;
 
 		// Further delay the initialization of the UI until the `edit` method is
 		// actually called, so here just return the object with the required API.
-
 		return {
 			edit: function (options) {
-				context = options;
-				open();
-			},
-			icon: "fa fa-mouse-pointer ssEditorBtn"
-			//icon: "k-font-icon k-i-list-unordered" // TODO: for some reason, the icon is difficult to click for some reason. Find out why. 
-		};
 
-		// This function actually creates the UI if not already there, and
-		// caches the dialog and the model.
-		function create() {
-			if (!dlg) {
-				model = kendo.observable({
-					value: "default",
-					ok: function () {
-						// This is the result when OK is clicked. Invoke the
-						// callback with the value.
-						context.callback(model.value);
-						dlg.close();
-					},
-					cancel: function () {
-						dlg.close();
+				context = options;
+
+				// Get selected cell
+				var currColIndex = options.range._ref.col;
+
+				// Get column name out of selected cell
+				var colName = vm.letterToCol[String.fromCharCode(intA + currColIndex)]
+
+				// Get columnData (urls, name, etc) from column name
+				var colData = $scope.$parent.$parent.templates.ModelTemplates.PRC_TBL_ROW['ECAP'].model.fields[colName];
+
+				// We have a "generic" variable in the scope to be the model. Then we replace the generic with a copy of the columnData
+				// Inside the script tag, we have a ng-if equals column name then use whichever multiselct. 
+
+
+				// If the selected cell already contains some value, reflect it in the custom editor.
+				var cellCurrVal = context.range.value();
+				var typeoftest = (typeof cellCurrVal);
+				if (cellCurrVal !== null && cellCurrVal !== "" && typeof cellCurrVal == "string") {
+					cellCurrVal = cellCurrVal.split(',');
+				}
+
+				var modalInstance = $uibModal.open({
+					//animation: $ctrl.animationsEnabled,
+					ariaLabelledBy: 'modal-title',
+					ariaDescribedBy: 'modal-body',
+					templateUrl: 'cellPopupModal',
+					controller: 'MultiSelectModalCtrl',
+					controllerAs: '$ctrl',
+					size: 'md',
+					resolve: {
+						items: function () {
+							return colData;
+						},
+						cellCurrValues: function () {
+							return cellCurrVal;
+						}
 					}
 				});
-				var el = $("<div data-visible='true' data-role='window' data-modal='true' data-resizable='false' data-title='TODO: Select MultiSelect dropdown'>" +
-                           "  <select id='geo' style='width: 100%;' data-bind='value: value' >" +
-                           "    <option value='' disabled selected'>Please Choose</option>" +
-                           "    <option value='User selected APAC'>TODO</option>" +
-                           "    <option value='ASMO ID = 1'>TODO2</option>" +
-                           "    <option>TODO3</option>" +
-                           "  </select>" +
-                           "  <div style='margin-top: 1em; text-align: right'>" +
-                           "    <button style='width: 5em' class='k-button' data-bind='click: ok'>OK</button>" +
-                           "    <button style='width: 5em' class='k-button' data-bind='click: cancel'>Cancel</button>" +
-                           "  </div>" +
-                           "</div>");
-				kendo.bind(el, model);
-
-				// Cache the dialog.
-				dlg = el.getKendoWindow();
-				//$("#geo").kendoComboBox(); //why doesnt this work? kendo combobox styles load in but it doesnt work correctly
-			}
-		}
-
-		function open() {
-			create();
-			dlg.open();
-			dlg.center();
-
-			// If the selected cell already contains some value, reflect
-			// it in the custom editor.
-			var value = context.range.value();
-			if (value != null) {
-				model.set("value", value);
-			}
-		}
+				
+				modalInstance.result.then(function (selectedItem) {
+					context.callback(selectedItem);
+				}, function () { });				
+			},
+			icon: "fa fa-mouse-pointer ssEditorBtn"
+		};
 	});
-
-
 
 	init();
 }

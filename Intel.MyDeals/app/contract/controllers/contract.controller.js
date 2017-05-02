@@ -1244,14 +1244,12 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
 
 			} else {
 				// TODO: Hook these up to service (add service into injection and physical files)
-				MrktSegMultiSelectService.setMkrtSegMultiSelect(MRKT_SEG, (MRKT_SEG + "_MS"), newValue, oldValue);
-				MrktSegMultiSelectService.setGeoMultiSelect(GEO, newValue, oldValue);
-
-
+				newValue[MRKT_SEG].value = MrktSegMultiSelectService.setMkrtSegMultiSelect(MRKT_SEG, (MRKT_SEG + "_MS"), newValue[MRKT_SEG].value, oldValue[MRKT_SEG].value);
+				newValue[GEO].value = MrktSegMultiSelectService.setGeoMultiSelect(GEO, newValue[GEO].value, oldValue[GEO].value);
+				
 				//if (oldValue["ECAP_TYPE"].value != newValue["ECAP_TYPE"].value) {
 				//}
-
-
+				
 				//if (oldValue["PAYOUT_BASED_ON"] != newValue["PAYOUT_BASED_ON"]) {
 				//}
 

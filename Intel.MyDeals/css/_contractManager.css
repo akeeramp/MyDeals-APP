@@ -744,7 +744,7 @@
     }
 
     .opUiLabel {
-        width: 130px;
+        /*width: 130px;*/
         padding-top: 4px;
         font-size: 13px;
     }

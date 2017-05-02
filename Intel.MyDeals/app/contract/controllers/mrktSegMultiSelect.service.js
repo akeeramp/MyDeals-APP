@@ -152,48 +152,49 @@
 
 
 		function setMkrtSegMultiSelect(treeViewDivId, multiSelectDivId, newValue, oldValue) {
-			if (oldValue[MRKT_SEG].value.toString() != newValue[MRKT_SEG].value.toString()) {
+			
+			if (oldValue.toString() != newValue.toString()) {
 
 				var treeView = $("#" + treeViewDivId).data("kendoTreeView");
 				var multiSelect = $("#" + multiSelectDivId).data("kendoMultiSelect");
 
 				if (treeView != null) {
 
-					if (newValue[MRKT_SEG].value.length > 0) {
+					if (newValue.length > 0) {
 						//Logic for "ALL"
-						if (newValue[MRKT_SEG].value.indexOf(ALL) > -1 && !(oldValue[MRKT_SEG].value.indexOf(ALL) > -1)) {
+						if (newValue.indexOf(ALL) > -1 && !(oldValue.indexOf(ALL) > -1)) {
 							//if user has another mrkt seg selected and then selects ALL, need to deselect all other MRKT SEGs
-							newValue[MRKT_SEG].value = [ALL];
+							newValue = [ALL];
 							multiSelect.value([ALL]);
 							setAllNodes(treeView.dataSource.view(), false);
 							treeView.dataItem(treeView.findByText(ALL)).set("checked", true);
-						} else if (oldValue[MRKT_SEG].value.length == 1 && oldValue[MRKT_SEG].value[0] == ALL && newValue[MRKT_SEG].value.indexOf(ALL) > -1) {
+						} else if (oldValue.length == 1 && oldValue[0] == ALL && newValue.indexOf(ALL) > -1) {
 							//if user had ALL selected and selects another MRKT SEG, need to deselect ALL
-							newValue[MRKT_SEG].value.splice(newValue[MRKT_SEG].value.indexOf(ALL), 1);
-							multiSelect.value(newValue[MRKT_SEG].value);
+							newValue.splice(newValue.indexOf(ALL), 1);
+							multiSelect.value(newValue);
 							treeView.dataItem(treeView.findByText(ALL)).set("checked", false);
 						}
 
 						//Logic for NonCorp
-						if (newValue[MRKT_SEG].value.indexOf(NONCORP) > -1 && !(oldValue[MRKT_SEG].value.indexOf(NONCORP) > -1)) {
+						if (newValue.indexOf(NONCORP) > -1 && !(oldValue.indexOf(NONCORP) > -1)) {
 							//if user selects NonCorp, make sure all NonCorp nodes are checked
-							newValue[MRKT_SEG].value = arrayMergeUnique(newValue[MRKT_SEG].value, vm.nonCorpMrktSegments);
-							multiSelect.value(newValue[MRKT_SEG].value);
+							newValue = arrayMergeUnique(newValue, vm.nonCorpMrktSegments);
+							multiSelect.value(newValue);
 							setAllNodes(getNonCorpNodes(treeView), true);
-						} else if (newValue[MRKT_SEG].value.indexOf(NONCORP) < 0 && oldValue[MRKT_SEG].value.indexOf(NONCORP) > -1) {
+						} else if (newValue.indexOf(NONCORP) < 0 && oldValue.indexOf(NONCORP) > -1) {
 							//if user deselects NonCorp, make sure all NonCorp nodes are unchecked
 							if (uncheckAllNC) {
-								newValue[MRKT_SEG].value = newValue[MRKT_SEG].value.filter(function (x) { return vm.nonCorpMrktSegments.indexOf(x) < 0 });
-								multiSelect.value(newValue[MRKT_SEG].value);
+								newValue = newValue.filter(function (x) { return vm.nonCorpMrktSegments.indexOf(x) < 0 });
+								multiSelect.value(newValue);
 								setAllNodes(getNonCorpNodes(treeView), false);
 							} else {
 								//if user deselects a noncorp member, the noncorp node itself must be unchecked.  this case accounts for that scenario so that the noncorp node can be unchecked without all other noncorp market segments being unchecked along with it.
 								uncheckAllNC = true;
 							}
-						} else if (newValue[MRKT_SEG].value.indexOf(NONCORP) > -1 && removedNonCorpMemberNode(newValue[MRKT_SEG].value, oldValue[MRKT_SEG].value)) {
+						} else if (newValue.indexOf(NONCORP) > -1 && removedNonCorpMemberNode(newValue, oldValue)) {
 							//if user deselects any Noncorp member node, deselect NonCorp node itself if noncorp node was in selection
-							newValue[MRKT_SEG].value.splice(newValue[MRKT_SEG].value.indexOf(NONCORP), 1);
-							multiSelect.value(newValue[MRKT_SEG].value);
+							newValue.splice(newValue.indexOf(NONCORP), 1);
+							multiSelect.value(newValue);
 							if (treeView.dataItem(treeView.findByText(NONCORP)).checked == true) {
 								treeView.dataItem(treeView.findByText(NONCORP)).set("checked", false);
 								uncheckAllNC = false; //set NONCORP to unchecked, but do not want to uncheck all noncorp nodes on next sweep.
@@ -202,16 +203,16 @@
 
 						//Logic for Embedded
 						//getEmbeddedNodes
-						if (checkedEmbeddedSubSegment(newValue[MRKT_SEG].value, oldValue[MRKT_SEG].value, true)) {
+						if (checkedEmbeddedSubSegment(newValue, oldValue, true)) {
 							//if select any EMBEDDED SUB SEGMENT, uncheck everything except the selected EMBEDDED SUB SEGMENT
-						    newValue[MRKT_SEG].value = [vm.changedVal];
-							multiSelect.value(newValue[MRKT_SEG].value);
+						    newValue = [vm.changedVal];
+							multiSelect.value(newValue);
 							setAllNodes(treeView.dataSource.view(), false);
 							treeView.dataItem(treeView.findByText(vm.changedVal)).set("checked", true);
-						} else if (checkedEmbeddedSubSegment(newValue[MRKT_SEG].value, oldValue[MRKT_SEG].value, false)) {
+						} else if (checkedEmbeddedSubSegment(newValue, oldValue, false)) {
 							//if select non EMBEDDED SUB SEGMENT, uncheck all EMBEDDED SUB SEGMENTS
-							newValue[MRKT_SEG].value = newValue[MRKT_SEG].value.filter(function (x) { return vm.subMrktSegments.indexOf(x) < 0 });
-							multiSelect.value(newValue[MRKT_SEG].value);
+							newValue = newValue.filter(function (x) { return vm.subMrktSegments.indexOf(x) < 0 });
+							multiSelect.value(newValue);
 							setAllNodes(getEmbeddedNodes(treeView.dataSource.view(), true), false);
 						}
 
@@ -219,22 +220,25 @@
 					}
 				}
 			}
+			return newValue;
 		}
 
 		function setGeoMultiSelect(divId, newValue, oldValue) {
-			if (oldValue[GEO].value.toString() != newValue[GEO].value.toString()) {
-				if (newValue[GEO].value.length > 1) {
-					if (newValue[GEO].value.indexOf(WW) > -1 && !(oldValue[GEO].value.indexOf(WW) > -1)) {
+
+			if (oldValue.toString() != newValue.toString()) {
+				if (newValue.length > 1) {
+					if (newValue.indexOf(WW) > -1 && !(oldValue.indexOf(WW) > -1)) {
 						//if user has another geo selected and then selects WW, need to deselect all other GEOs
-						newValue[GEO].value = [WW];
+						newValue = [WW];
 						$("#" + divId).data("kendoMultiSelect").value([WW])
-					} else if (oldValue[GEO].value.length == 1 && oldValue[GEO].value[0] == WW && newValue[GEO].value.indexOf(WW) > -1) {
+					} else if (oldValue.length == 1 && oldValue[0] == WW && newValue.indexOf(WW) > -1) {
 						//if user had WW selected and selects another GEO, need to deselect WW
-						newValue[GEO].value.splice(newValue[GEO].value.indexOf(WW), 1)
-						$("#" + divId).data("kendoMultiSelect").value(newValue[GEO].value)
+						newValue.splice(newValue.indexOf(WW), 1)
+						$("#" + divId).data("kendoMultiSelect").value(newValue)
 					}
 				}
 			}
+			return newValue;
 		}
 
 	}
