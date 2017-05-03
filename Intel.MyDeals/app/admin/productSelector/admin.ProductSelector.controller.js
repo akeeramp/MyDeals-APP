@@ -17,6 +17,7 @@
                 controller: 'ProductSelectorModalController',
                 controllerAs: 'vm',
                 size: 'lg',
+                windowClass: 'prdSelector-modal-window',
                 resolve: {
                     productSelectionLevels: ['ProductSelectorService', function (ProductSelectorService) {
                         return ProductSelectorService.GetProductSelectionLevels();
@@ -101,7 +102,7 @@
                     e.data["PROD_MBR_SID"] = vm.counter + 1;
                     e.data["PRD_SELC_LVL"] = vm.selectionLevelDropDownList;
                     e.success(e.data);
-                    logger.success("Product added.");                    
+                    logger.success("Product added.");
                 }
             },
             pageSize: 10,
@@ -267,7 +268,7 @@
                 refresh: true,
                 pageSizes: gridConstants.pageSizes
             },
-            columns: [              
+            columns: [
               { field: "ROW_NUMBER", title: "Sl No", width: "50px", editor: RWNM },
               { field: "USR_INPUT", title: "Product Name", width: "200px" },
               {
@@ -321,7 +322,7 @@
                             data: selectionLevel,
                         },
                     change: function (e) {
-                        vm.selectionLevelDropDownList = $("#selectionLevelDropDownList").data("kendoDropDownList").text();                        
+                        vm.selectionLevelDropDownList = $("#selectionLevelDropDownList").data("kendoDropDownList").text();
                     }
                 });
         }
@@ -336,7 +337,7 @@
                     return x.USR_INPUT.length > 0 && x.START_DATE > 0 && x.END_DATE > 0;
                 }).ToArray();
 
-            for (var i = 0; i < resultData.length; i++) {    
+            for (var i = 0; i < resultData.length; i++) {
                 var sendObj = {
                     ROW_NUMBER: resultData[i].ROW_NUMBER,
                     USR_INPUT: resultData[i].USR_INPUT,
@@ -409,7 +410,7 @@
         vm.dataSource = new kendo.data.DataSource({
             transport: {
                 read: function (e) {
-                    
+
                 },
                 update: function (e) {
 
@@ -418,7 +419,7 @@
 
                 },
                 create: function (e) {
-                    
+
                 }
             },
             schema: {
@@ -493,12 +494,12 @@
 
                 // Process multiple match products to make html to display
                 if (!!data.DuplicateProducts[key]) {
-                    var PROD_HIER_NM = ["DEAL_PRD_TYPE", "PRD_CAT_NM", "BRND_NM", "FMLY_NM", "PCSR_NBR", "DEAL_PRD_NM"]; // Product HIERARCHY 
+                    var PROD_HIER_NM = ["DEAL_PRD_TYPE", "PRD_CAT_NM", "BRND_NM", "FMLY_NM", "PCSR_NBR", "DEAL_PRD_NM"]; // Product HIERARCHY
                     var conflictLevel = ''; //Will hold the conflicting Level
                     var object = { "Row": "", "Items": [] }; //Multiple Match Key Value pair
                     object.Row = key;
                     object.Items = !!data.DuplicateProducts[key] ? data.DuplicateProducts[key] : "";
-                                        
+
                     var isConflict = false;
                     for (var prod in object.Items) {
                         if (object.Items[prod].length > 0) {
@@ -535,7 +536,7 @@
                                         break;
                                     }
                                 }
-                                //Checking for conflict in Category Name i.e. DT OR Mb or etc                               
+                                //Checking for conflict in Category Name i.e. DT OR Mb or etc
                                 if (counter > 1) {
                                     isConflict = $linq.Enumerable().From(object.Items[prod])
                                                     .GroupBy(function (x) {
@@ -559,7 +560,7 @@
                                         break;
                                     }
                                 }
-                                //Checking for conflict in Family Name i.e                           
+                                //Checking for conflict in Family Name i.e
                                 if (counter > 3) {
                                     isConflict = $linq.Enumerable().From(object.Items[prod])
                                                     .GroupBy(function (x) {
@@ -571,7 +572,7 @@
                                         break;
                                     }
                                 }
-                                //Checking for conflict in Processor Number                                
+                                //Checking for conflict in Processor Number
                                 if (counter > 4) {
                                     isConflict = $linq.Enumerable().From(object.Items[prod])
                                                     .GroupBy(function (x) {
@@ -600,14 +601,14 @@
                             if (!isConflict) {
                                 //No High level conflict. Product will be a direct match
                                 for (var i = 0; i < object.Items[prod].length; i++) {
-                                    vm.dataSource._data.push(object.Items[prod][i]);                                    
+                                    vm.dataSource._data.push(object.Items[prod][i]);
                                 }
                                 object.Items[prod].splice(0, object.Items[prod].length); // Removing all the matched item from the collection
-                            }                            
+                            }
                         }
 
                     }
-                    
+
                     vm.multipleMatchProducts.push(object); // Pushing final product list with Multiple match
                 }
             }
@@ -621,7 +622,7 @@
         }
 
         // Build the Hierarchy
-        function makeHierarchy(productHierarchy) {            
+        function makeHierarchy(productHierarchy) {
             var HIER_NM_HASH = productHierarchy.HIER_NM_HASH.replace(new RegExp('/', 'g'), " / ");
             return HIER_NM_HASH;
         }
@@ -637,7 +638,7 @@
             if (productExists) {
                 logger.error("Product already exists.", "", "Not allowed");
             } else {
-                vm.dataSource._data.push(p);                
+                vm.dataSource._data.push(p);
             }
         }
         //#endregion

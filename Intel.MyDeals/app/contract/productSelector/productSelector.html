@@ -1,18 +1,22 @@
-﻿<div class="modal-content" style="height:85vh;background-color:#1a3e6f;overflow-y:auto;overflow-x:hidden;">
-    <div style="padding:15px;">
+﻿<div class="modal-content" style="height:85vh;background-color:#1a3e6f;overflow-y:auto;overflow-x:hidden;border-left:none;border-right:none;">
+    <div class="prodSelector modal-header">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <p class="prodHeader">Product Selector</p>
             </div>
             <div class="col-md-1" style="padding-top:15px;">
                 <img ng-if="loading" src="/Images/loadingSmall.gif" />
             </div>
-            <div class="col-md-6 prodSelectorSearch">
-                <input ng-keyup="$event.keyCode == 13 ? vm.searchProduct() : null" class="col-md-12 k-textbox fl input-sm opUiElement"
+            <div class="col-md-5 prodSelectorSearch">
+                <input type="search" ng-keyup="$event.keyCode == 13 ? vm.searchProduct() : null" class="form-control fl input-sm opUiElement"
                        ng-model="vm.userInput" placeholder="Search for products:" />
                 <div class="err-Search" ng-if="vm.errorMessage.length > 0">
                     {{vm.errorMessage}}
                 </div>
+            </div>
+            <div class="col-md-2" style="padding-left:0px;padding-top:8px">
+                <button class="btn btn-primary prdBtn" ng-click="vm.searchProduct()">Search</button>
+                <button class="btn btn-default prdBtn" ng-click="vm.clearSearch()" style="margin-left:2px;">Clear</button>
             </div>
             <span class="modalCloseIcon">
                 <i role="button" title="Close" class="intelicon-close-max" ng-click="vm.cancel()"></i>
@@ -26,10 +30,12 @@
                 </li>
             </ul>
         </div>
-        <div ng-if="!vm.hideSelection" ng-switch="vm.getDisplayTemplate()" style="max-height:35vh;min-height:35vh;overflow-y:auto;overflow-x:hidden">
+    </div>
+    <div class="prodSelector modal-body">
+        <div ng-if="!vm.hideSelection" ng-switch="vm.getDisplayTemplate()">
             <div ng-switch-when="btnGroup" class="row" style="padding-left:10px;padding-right:10px;font-size:16px;">
                 <div class="drillDown btn-group btn-group-justified" role="group" aria-label="...">
-                    <div class="btn-group" ng-repeat="p in vm.items | orderBy:'name' " role="group">
+                    <div class="btn-group" ng-repeat="p in vm.items | orderBy:'name'" role="group">
                         <button type="button" ng-class="{'noborder':$last}" ng-click="vm.selectItem(p)" class="btn btn-default">{{::p.name}}</button>
                     </div>
                 </div>
@@ -43,10 +49,10 @@
                 </div>
             </div>
             <div ng-switch-default="ng-switch-default">
-                <div id="prodGrid" kendo-grid="prodGrid" class="table table-bordered table-striped table-intel" style="max-height:30vh" options="vm.gridOptionsProduct"></div>
+                <div id="prodGrid" kendo-grid="prodGrid" kendo-grid-check-box k-grid-checkbox="vm" class="prodSelector kendoGridHeight table table-bordered table-striped table-intel" k-options="vm.gridOptionsProduct"></div>
             </div>
         </div>
-        <div ng-if="vm.hideSelection" style="max-height:35vh;min-height:35vh;overflow-y:auto;overflow-x:hidden">
+        <div ng-if="vm.hideSelection">
             <div class="row" ng-if="vm.searchItems.length > 0" style="padding-left:10px;padding-right:10px;font-size:16px;">
                 <div class="drillDown btn-group btn-group-justified" role="group" aria-label="...">
                     <div class="btn-group" ng-repeat="p in vm.searchItems | orderBy:'name' " role="group">
@@ -55,20 +61,21 @@
                 </div>
             </div>
             <div ng-if="vm.showSearchResults">
-                <div id="prodGrid" kendo-grid="prodGrid" class="table table-bordered table-striped table-intel" style="max-height:30vh" options="vm.gridOptionsProduct"></div>
+                <div id="prodGrid" kendo-grid="prodGrid" kendo-grid-check-box k-grid-checkbox="vm" class="prodSelector kendoGridHeight table table-bordered table-striped table-intel" k-options="vm.gridOptionsProduct"></div>
             </div>
         </div>
-        <br />
+    </div>
+    <div class="prodSelector modal-footer">
         <div class="row">
-            <div class="col-md-6 fr">
-                <button class="btn btn-primary fr prdBtn" style="font-size:13px;" ng-click="vm.addProducts()">Add Product(s)</button>
+            <div class="col-md-6 text-left textProdSelector">
+                <p>Selected Products<small>&nbsp;({{vm.addedProducts.length}})</small></p>
             </div>
-            <div class="col-md-6 fl textProdSelector">
-                <p>Selected Products</p>
+            <div class="col-md-6">
+                <button class="btn btn-primary fr prdBtn" ng-click="vm.addProducts()">Add Product(s)</button>
             </div>
         </div>
         <div class="row" style="padding-left:15px;padding-right:15px;">
-            <ui-select allow-clear="true" onkeypress="return false;" class="prodSelected"
+            <ui-select allow-clear="true" onkeypress="return false;" class="prodSelected text-left"
                        tagging="true" multiple ng-model="vm.addedProducts" theme="bootstrap">
                 <ui-select-match><span kendo-tooltip k-content='$item.HIER_NM_HASH'>{{$item.HIER_VAL_NM}}</span></ui-select-match>
                 <ui-select-choices repeat="products in vm.selectedProducts">
@@ -76,30 +83,25 @@
             </ui-select>
         </div>
         <br />
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <p class="col-md-6 insertAtRowsText">Insert at row(s):</p>
-                    <div class="col-md-6">
-                        <input class="form-control input-sm" type="text" />
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="col-md-7 insertAtRowsText">
-                    <input type="checkbox">&nbsp;Separate product in rows
-                </div>
-                <div class="col-md-5 text-left" style="padding-right:0px;">
-                    <button class="btn btn-primary fr prdBtn" ng-click="vm.save()">Save</button>
-                    <button class="btn btn-default fr prdBtn" ng-click="vm.cancel()" style="margin-right:4px;">Cancel</button>
-                </div>
-            </div>
+        <div class="form-inline insertAtRowsText">
+            <label class="text-left fl marginRight">Insert at row(s):</label>
+            <input class="form-control fl marginRight input-sm" placeholder="paddingBottom5" style="width:200px;" type="text" />
+            <span class="fl">
+                <input id="separateProduct" class="checkbox-custom" name="checkbox-3" type="checkbox">
+                <label for="separateProduct" class="checkbox-custom-label" style="padding-bottom:5px;margin-top:0px;">&nbsp;Separate product in rows</label>
+            </span>
+            <button class="btn btn-primary fr prdBtn" ng-click="vm.save()">Save</button>
+            <button class="btn btn-default fr prdBtn" ng-click="vm.cancel()" style="margin-right:4px;">Cancel</button>
         </div>
     </div>
 </div>
 <style>
+    .marginRight {
+        margin-right: 10px;
+    }
+
     .prodSelectorSearch {
-        padding-top: 6px;
+        padding-top: 8px;
         overflow: hidden;
     }
 
@@ -150,12 +152,12 @@
     }
 
         a.prdAnchor:hover {
-            color: #199ed8;
+            color: #01AEEF;
             text-decoration: none;
         }
 
     .drillDown.btn-group button {
-        background-color: #199ed8;
+        background-color: #01AEEF;
         border-left: none;
         border-top: none;
         border-bottom: none;
@@ -166,7 +168,7 @@
     }
 
     .drillDown {
-        background-color: #199ed8;
+        background-color: #01AEEF;
     }
 
         .drillDown.btn-group {
@@ -189,13 +191,13 @@
 
             /* Add a background color on hover */
             .drillDown.btn-group button:hover {
-                background-color: #199ed8;
+                background-color: #01AEEF;
                 color: #1a3e6f;
             }
 
             .drillDown.btn-group button:focus, .button:active {
                 outline: none !important;
-                background-color: #199ed8;
+                background-color: #01AEEF;
             }
 
     .noLeftBorder {
@@ -203,7 +205,7 @@
     }
 
     .prodDrillDownLarge {
-        background-color: #199ed8;
+        background-color: #01AEEF;
         border-bottom: 2px solid #1a3e6f;
         border-left: 1px solid #ffffff;
         border-right: none;
@@ -225,6 +227,7 @@
         min-height: 100px !important;
         max-height: 100px !important;
         overflow-y: auto;
+        overflow-x: hidden;
     }
 
     .err-Search {
@@ -239,16 +242,87 @@
     }
 
         .prdBtn.btn-primary {
-            background-color: #199ed8;
+            background-color: #01AEEF;
         }
 
             .prdBtn.btn-primary:hover {
-                background-color: #199ed8;
+                background-color: #01AEEF;
                 color: #1a3e6f;
             }
 
             .prdBtn.btn-primary:focus, .btn-primary:active {
                 outline: none !important;
-                background-color: #199ed8;
+                background-color: #01AEEF;
             }
+
+    .prodSelector.modal-body {
+        padding-top: 2px;
+        padding-bottom: 0px;
+        min-height: calc(85vh - 370px);
+        max-height: calc(85vh - 370px);
+        overflow-y: auto;
+    }
+
+    .prodSelector.modal-footer {
+        border-top: none;
+    }
+
+    .prodSelector.modal-header {
+        border-bottom: none;
+        padding-bottom: 0px;
+    }
+
+    .prodSelector.kendoGridHeight {
+        height: calc(85vh - 400px);
+    }
+
+    .modal-prodSelector {
+        /* new custom width */
+        width: 750px;
+        /* must be half of the width, minus scrollbar on the left (30px) */
+        margin-left: -375px;
+    }
+
+    .prdSelector-modal-window, .modal-dialog {
+        width: 85%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .checkbox-custom {
+        opacity: 0;
+        position: absolute;
+    }
+
+    .checkbox-custom, .checkbox-custom-label {
+        display: inline-block;
+        vertical-align: middle;
+        margin: 5px;
+        cursor: pointer;
+    }
+
+    .checkbox-custom-label {
+        position: relative;
+    }
+
+    .checkbox-custom + .checkbox-custom-label:before {
+        content: '';
+        background: #fff;
+        border: 1.5px solid #eee;
+        border-radius: 4px;
+        display: inline-block;
+        vertical-align: middle;
+        width: 22px;
+        height: 20px;
+        padding: 2px;
+        text-align: center;
+    }
+
+    .checkbox-custom:checked + .checkbox-custom-label:before {
+        background: #01AEEF;
+    }
+
+    .checkbox-custom:hover +.checkbox-custom-label:before {
+        border: 1.5px solid #01AEEF;
+    }
 </style>

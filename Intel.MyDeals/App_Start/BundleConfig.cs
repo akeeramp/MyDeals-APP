@@ -40,14 +40,14 @@ namespace Intel.MyDeals
                 "~/Scripts/nv.d3.min.js"
                 ));
 
-                 bundles.Add(new ScriptBundle("~/bundles/angular").Include(
-                "~/Scripts/Angular/1.5.8/angular-ui-router.min.js"
-                , "~/Scripts/Angular/1.5.8/angular-animate.min.js"
-                , "~/Scripts/Angular/1.5.8/angular-sanitize.min.js"
-                , "~/Scripts/Angular/ui-bootstrap-tpls-2.2.0.min.js"
-                , "~/Scripts/Angular/angular-linq.min.js"
-                , "~/Scripts/Angular/angular-filter.min.js"
-                ));
+            bundles.Add(new ScriptBundle("~/bundles/angular").Include(
+           "~/Scripts/Angular/1.5.8/angular-ui-router.min.js"
+           , "~/Scripts/Angular/1.5.8/angular-animate.min.js"
+           , "~/Scripts/Angular/1.5.8/angular-sanitize.min.js"
+           , "~/Scripts/Angular/ui-bootstrap-tpls-2.2.0.min.js"
+           , "~/Scripts/Angular/angular-linq.min.js"
+           , "~/Scripts/Angular/angular-filter.min.js"
+           ));
 
             bundles.Add(new ScriptBundle("~/bundles/angularReusable").Include(
                  "~/app/app.module.js"
@@ -129,11 +129,12 @@ namespace Intel.MyDeals
                 , "~/app/admin/workflowStage/workflowStages.service.js"
                 , "~/app/contract/contract.module.js"
                 , "~/app/contract/contract.route.js"
-				, "~/app/contract/controllers/contract.controller.js"
-				, "~/app/contract/controllers/mrktSegMultiSelect.service.js"
-				, "~/app/contract/controllers/multiSelectModalCtrl.controller.js"
+                , "~/app/contract/controllers/contract.controller.js"
+                , "~/app/contract/controllers/mrktSegMultiSelect.service.js"
+                , "~/app/contract/controllers/multiSelectModalCtrl.controller.js"
                 , "~/app/contract/controllers/pricingTable.controller.js"
                 , "~/app/contract/productSelector/productSelector.controller.js"
+                , "~/app/contract/productSelector/kendoGridCheckBox.directive.js"
                 , "~/app/costTest/costtest.module.js"
                 , "~/app/costTest/costtest.route.js"
                 , "~/app/dashboard/dashboard.module.js"

@@ -4,9 +4,9 @@
        .module('app.admin') //TODO: once we integrate with contract manager change the module to contract
        .controller('ProductSelectorModalController', ProductSelectorModalController);
 
-    ProductSelectorModalController.$inject = ['$filter', '$scope', '$uibModalInstance', 'productSelectionLevels', 'ProductSelectorService', 'contractData', '$timeout'];
+    ProductSelectorModalController.$inject = ['$filter', '$scope', '$uibModalInstance', 'productSelectionLevels', 'ProductSelectorService', 'contractData', '$timeout', 'logger'];
 
-    function ProductSelectorModalController($filter, $scope, $uibModalInstance, productSelectionLevels, ProductSelectorService, contractData, $timeout) {
+    function ProductSelectorModalController($filter, $scope, $uibModalInstance, productSelectionLevels, ProductSelectorService, contractData, $timeout, logger) {
         var vm = this;
         var vm = this;
         var verticalsWithDrillDownLevel4 = ["DT", "Mb", "SvrWS", "EIA CPU", "IMC", "EIA MISC", "NAND (SSD)", "NAND"];
@@ -24,8 +24,8 @@
         vm.selectPath = selectPath;
         vm.getDisplayTemplate = getDisplayTemplate;
         vm.addProducts = addProducts;
-        vm.onHeaderSelection = onHeaderSelection;
         vm.hideSelection = false;
+        vm.selectedItems = [];
 
         // Get the drilldown items based on the selection level
         // The selection follows a pattern, if only single item present select it,
@@ -275,28 +275,9 @@
             return displayTemplateType;
         }
 
-        function onHeaderSelection() {
-            var allrows = $('.prdRow.checkbox');
-            allrows.each(function (idx, item) {
-                $(item).closest('tr').is('.k-state-selected');
-                $(item).click();
-            });
-        }
-
-        // TODO: Instead of accessing the grid for selected dataItem read it from grid datasource that would be more faster ??
         function addProducts() {
-            var grid = $("#prodGrid").data("kendoGrid");
-            var selectedItem = grid.select();
-            vm.selectedProducts = [];
-
-            // Get the checked dataItem from grid
-            selectedItem.each(function () {
-                var dataItem = grid.dataItem($(this));
-                vm.selectedProducts.push(dataItem);
-            });
-
             // Add them to box, check for duplicate prd_mbr_sid
-            angular.forEach(vm.selectedProducts, function (value, key) {
+            angular.forEach(vm.selectedItems, function (value, key) {
                 if (!$filter("where")(vm.addedProducts, { PRD_MBR_SID: value.PRD_MBR_SID }).length > 0) {
                     vm.addedProducts.push(value);
                 }
@@ -308,22 +289,11 @@
             filterable: true,
             scrollable: true,
             sortable: true,
-            selectable: true,
             resizable: true,
             reorderable: true,
             columnMenu: true,
             enableHorizontalScrollbar: true,
-            dataBound: function () {
-                $(".prdRow.checkbox").bind("change", function (e) {
-                    $(e.target).closest("tr").toggleClass("k-state-selected");
-                });
-            },
             columns: [
-                {
-                    headerTemplate: '<input type="checkbox" id="header-chb" ng-click="vm.onHeaderSelection()" class="header checkbox">',
-                    template: "<input type='checkbox' class='prdRow checkbox'/>",
-                    width: "40px"
-                },
                 {
                     field: "PCSR_NBR",
                     title: "Processor Number",
@@ -467,6 +437,11 @@
             }, function (response) {
                 logger.error("Unable to get products.", response, response.statusText);
             });
+        }
+
+        vm.clearSearch = function () {
+            vm.selectPath(0);
+            vm.userInput = "";
         }
 
         // Search functionality code, refine this further

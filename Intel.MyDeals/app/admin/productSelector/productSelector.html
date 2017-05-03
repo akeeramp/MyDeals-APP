@@ -61,7 +61,7 @@
         <div ng-if="vm.multipleMatchProducts.length != 0">
             <label>Multiple match found for Products, go to Product Corrector(s).</label>
             <div class="alert alert-warning" style="max-height: 200px;overflow: scroll;">
-                <div ng-repeat="a in vm.multipleMatchProducts">                    
+                <div ng-repeat="a in vm.multipleMatchProducts">
                     <div ng-repeat="(productName, productHierarchy) in a.Items">
                         <div ng-if="productHierarchy.length != 0">
                             {{productName}} <i class="intelicon-arrow-forward-right"></i>
@@ -110,7 +110,7 @@
 </div>
 
 <style>
-    #prodSelectGrid, #prodGrid {
+    #prodSelectGrid {
         height: 500px;
     }
 
