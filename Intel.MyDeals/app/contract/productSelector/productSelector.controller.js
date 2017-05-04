@@ -31,6 +31,7 @@
         // The selection follows a pattern, if only single item present select it,
         // if the selected item is NA look for the alternate columns for values ex: GDM Family, NAND Famliy
         var getItems = function (item) {
+            vm.selectedItems = []; // Clear the selected items, when user moves around drill levels
             if (vm.selectedPathParts.length === 0) {
                 var markLevel1 = $filter('unique')(vm.productSelectionLevels, 'MRK_LVL1');
 
@@ -212,7 +213,7 @@
             var grid = $("#prodGrid").data("kendoGrid");
             angular.forEach(vm.gridOptionsProduct.columns, function (item, key) {
                 var columnValue = $filter('unique')(data, item.field);
-                if (columnValue.length == 1 && item.field !== undefined &&
+                if (columnValue.length == 1 && item.field !== undefined && item.field != "CheckBox" &&
                     (columnValue[0][item.field] == "" || columnValue[0][item.field] == null)) {
                     grid.hideColumn(item.field);//hide column
                 } else {
@@ -422,6 +423,7 @@
 
         // Called when user enters value into search box and hits enter
         vm.searchProduct = function () {
+            if (vm.userInput == "") return;
             var searchObject = [{
                 USR_INPUT: vm.userInput,
                 PRD_ATRB_SID: 7007,

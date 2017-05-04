@@ -18,6 +18,7 @@
 
         function linkFunc(scope, element, attrs) {
             var options = scope.$eval(attrs.kOptions);
+            scope.vm.selectedItems = [];
             var checkBoxColumnExists = options.columns.filter(function (x) {
                 return x.field == 'CheckBox'
             });

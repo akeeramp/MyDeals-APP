@@ -374,6 +374,7 @@
     <Content Include="app\core\directives\gridStatusBoard\contractStatusBoard.directive.js" />
     <Content Include="app\core\directives\gridStatusBoard\gridStatusBoard.directive.html" />
     <Content Include="app\core\directives\gridStatusBoard\gridStatusBoard.directive.js" />
+    <Content Include="app\core\directives\moveablemodal.directive.js" />
     <Content Include="app\core\directives\opGrid\opGrid.directive.html" />
     <Content Include="app\core\directives\opGrid\opGrid.directive.js" />
     <Content Include="app\dashboard\config\widget.config.js" />
