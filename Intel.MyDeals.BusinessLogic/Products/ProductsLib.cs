@@ -395,13 +395,17 @@ namespace Intel.MyDeals.BusinessLogic
         public List<string> TransformProducts(string userProduct)
         {
             //Getting value from Constant Table
-            var charsetResult = _constantsLookupsLib.GetConstantsByName("PROD_REPLACE_CHARSET");
-            string charset = charsetResult.CNST_VAL_TXT;
+            string charset = "";
+            var charsetResult = _constantsLookupsLib.GetConstantsByName("PROD_REPLACE_CHARSET"); // NULL Check 
+            if (charsetResult != null)
+                charset = charsetResult.CNST_VAL_TXT;
 
             string userProd = Regex.Replace(userProduct, @"(?<=\([^()]*),", "/");
+            userProd = userProd.Replace(" OR ", ",");
+            userProd = userProd.Replace(" & ", ",");
             var myRegex = new Regex(@"\([^\)]*\)|(/)");
 
-            if (!string.IsNullOrEmpty(userProd) && userProd.Contains(','))
+            if (!string.IsNullOrEmpty(userProd) && (userProd.Contains(',')))
                 myRegex = new Regex(@"\([^\)]*\)|(,)");
 
             var group1Caps = new StringCollection();
@@ -422,20 +426,24 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 string strRep = string.Empty;
                 var item = Regex.Replace(p.Trim(), @"\s+", " ");
-                foreach (string row in chararr)
+                if (charset.Length > 0)
                 {
-                    if (item.IndexOf(row) == 0)
-                    //if (item.Contains(row.ToString()))
+                    foreach (string row in chararr)
                     {
-                        strRep = item.Replace(row, row.Trim() + '-');
-                        break;
+                        if (item.IndexOf(row) == 0)
+                        //if (item.Contains(row.ToString()))
+                        {
+                            strRep = item.Replace(row, row.Trim() + '-');
+                            break;
+                        }
+                        else
+                        {
+                            strRep = item;
+                        }
                     }
-                    else
-                    {
-                        strRep = item;
-                    }
+
+                    item = strRep;
                 }
-                item = strRep;
 
                 if (item.Contains('(') && item.Contains(')'))
                 {
