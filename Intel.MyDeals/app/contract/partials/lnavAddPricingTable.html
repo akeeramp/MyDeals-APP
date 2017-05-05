@@ -72,53 +72,10 @@
         </div>
 
 
-        <!-- DEFAULT ATTRIBUTES -->
-        <div ng-show="newPricingTableDefaultLength()">
 
-            <div class="lnavSmTitle">
-                Autofill Grid Settings
-                <div kendo-tooltip class="fr opElementHelpIcon intelicon-information-outlined" k-content="'Use the Pricing Table Autofill selections to pre-populate your table & reduce data entry. You may override the preselections within the grid if you would like.'"></div>
-            </div>
-            <div style="padding: 0 5px;" class="blueContainer">
-                <div ng-repeat="(key, value) in newPricingTable._defaultAtrbs">
-                    <div ng-switch="value.type">
 
-                        <div ng-switch-when="RADIOBUTTONGROUP"
-                                op-control-data-element
-                                op-class="'md intel'"
-                                op-style="'width: 280px;'"
-                                ng-model="newPricingTable._defaultAtrbs"
-                                op-cd="key"
-                                op-type="value.type"
-                                op-label="value.label"
-                                op-lookup-url="value.opLookupUrl"
-                                op-lookup-text="value.opLookupText"
-                                op-lookup-value="value.opLookupValue"
-                                op-is-form="true"
-                                op-ui-mode="'HORIZONTAL'"></div>
 
-                        <div ng-switch-default
-                                op-control-data-element
-                                op-class="'md intel'"
-                                op-style="'width: 280px;'"
-                                ng-model="newPricingTable._defaultAtrbs"
-                                op-cd="key"
-                                op-type="value.type"
-                                op-label="value.label"
-                                op-lookup-url="value.opLookupUrl"
-                                op-lookup-text="value.opLookupText"
-                                op-lookup-value="value.opLookupValue"
-                                op-is-form="true"
-                                op-ui-mode="'VERTICAL'"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <div style="text-align: right;">
-            <button class="btn btn-sm btn-primary" ng-click="hideAddPricingTable()">Cancel</button>
-            <button class="btn btn-sm btn-primary" ng-click="customAddPtValidate()" type="submit">Add</button>
-        </div>
 
     </form>
 </div>

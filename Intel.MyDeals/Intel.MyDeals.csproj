@@ -314,6 +314,7 @@
     <Content Include="app\contract\productSelector\kendoGridCheckBox.directive.js" />
     <Content Include="app\contract\productSelector\productSelector.controller.js" />
     <Content Include="app\contract\productSelector\productSelector.html" />
+    <Content Include="app\contract\partials\lnavEditPricingTableDefaults.html" />
     <Content Include="app\core\directives\adminBanner\adminBanner.directive.js" />
     <Content Include="app\core\directives\adminBanner\adminBanner.directive.html" />
     <Content Include="app\blocks\exception\exception-handler.provider.js" />

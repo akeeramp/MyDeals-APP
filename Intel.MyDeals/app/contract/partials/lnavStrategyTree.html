@@ -16,7 +16,7 @@
                 <i class="glyphicon" style="margin-right: 5px; margin-top: 3px;" ng-class="{'glyphicon-chevron-down': !isCollapsed, 'glyphicon-chevron-right': isCollapsed}"></i>
             </div>
             <div class="fl" style="width: 225px; font-size: 12px;" ng-init="isEditable=false">
-                <input ng-blur="isEditable=false" ng-show="isEditable" focus-on-show ng-model="ps.TITLE" class="flatWhiteInput" />
+                <input ng-blur="isEditable=false" ng-show="isEditable" focus-on-show ng-model="ps.TITLE" class="flatWhiteInput" required/>
                 <div ng-click="isCollapsed = !isCollapsed" ng-dblclick="isEditable=false" ng-hide="isEditable" class="w100">{{ ps.TITLE }}</div>
             </div>
 
@@ -47,6 +47,7 @@
                     <div class="fr">
                         <span class="hasMenuPt{{ pt.DC_ID }} ptBtn" title="View more options"><i class="intelicon-vertical-menu"></i></span>
                         <ul kendo-context-menu k-filter="'.hasMenuPt{{ pt.DC_ID }}'" k-show-on="'click'">
+                            <li role="presentation"><a tabindex="-1" role="menuitem" ng-click="showEditPricingTableDefaults(pt)"><i class="intelicon-edit"></i> Edit Autofill Defaults</a></li>
                             <li role="presentation"><a tabindex="-1" role="menuitem" ng-click="deletePricingTable(ps, pt)"><i class="intelicon-trash-outlined"></i> Delete Pricing Table</a></li>
                         </ul>
                     </div>

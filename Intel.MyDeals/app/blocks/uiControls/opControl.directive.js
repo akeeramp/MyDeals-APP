@@ -84,7 +84,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
                                 };
                                 
                                 //check first item by default
-                                hDS.data[0].checked = true;
+                                //hDS.data[0].checked = true;
 
                                 //treelist datasource
                                 scope.opHierarchicalDataSource = {
@@ -116,9 +116,22 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
 
         if (scope.opType === 'EMBEDDEDMULTISELECT') {
 
+            //when user clicks multiselect to open treeview, ensure that treeview's checked values match to those of the multiselect.
+            var updateTreeView = function () {
+                if (scope.showTreeView == true) {
+                    var msValues = $("#" + scope.opCd + "_MS").data("kendoMultiSelect").value();
+                    var treeview = $("#" + scope.opCd).data("kendoTreeView");
+
+                    for (var i = 0; i < msValues.length; i++) {
+                        treeview.dataItem(treeview.findByText(msValues[i])).set("checked", true);
+                    }
+                }
+            }
+
         	// Onclick event for embedded Multiselects
         	scope.onEmbeddedMultiSelectClick = function () {
-        		return scope.showTreeView = !scope.showTreeView;
+        	    scope.showTreeView = !scope.showTreeView;
+        	    updateTreeView();
         	}
             scope.onCheckFunction = function () {
                 var treeview = $("#" + scope.opCd).data("kendoTreeView");

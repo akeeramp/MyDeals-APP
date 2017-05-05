@@ -1,7 +1,7 @@
 ﻿<div id="secContainerWrapper" ng-show="isAddStrategyHidden && isAddPricingTableHidden">
     <div id="secHeader">
         <!--<input ng-model="curPricingStrategy.TITLE" class="transparentInput fntXlg fntB noBottomBorder w100"/>-->
-        <div class="col-md-11" style="padding-bottom: 5px;">
+        <div ng-show="curPricingTableId > 0" class="col-md-11" style="padding-bottom: 5px;">
             <div class="fl textCircleMd pct_{{ curPricingTable.PCT_RESULT }}">{{ curPricingTable.OBJ_SET_TYPE_CD | limitTo:1 }}</div>
             <input type="text" ng-model="curPricingTable.TITLE" class="transparentInput fntLg noBottomBorder col-md-11" />
         </div>

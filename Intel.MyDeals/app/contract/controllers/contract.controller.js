@@ -620,28 +620,48 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
     //
     $scope.isSearchHidden = true;
     $scope.isAddPricingTableHidden = true;
+    $scope.isEditPricingTableDefaultsHidden = true;
     $scope.toggleSearch = function () {
         $scope.isSearchHidden = !$scope.isSearchHidden;
         $scope.isAddStrategyHidden = true;
         $scope.isAddStrategyBtnHidden = false;
         $scope.isAddPricingTableHidden = true;
+        $scope.isEditPricingTableDefaultsHidden = true;
     }
     $scope.showAddPricingTable = function (ps) {
         $scope.isAddPricingTableHidden = false;
         $scope.isAddStrategyHidden = true;
         $scope.isAddStrategyBtnHidden = true;
         $scope.isSearchHidden = true;
+        $scope.isEditPricingTableDefaultsHidden = false;
         $scope.curPricingStrategy = ps;
+    }
+    $scope.showEditPricingTableDefaults = function (pt) {
+        $scope.isAddPricingTableHidden = true;
+        $scope.isAddStrategyHidden = true;
+        $scope.isSearchHidden = true;
+        $scope.isEditPricingTableDefaultsHidden = false;
+        $scope.setNptTemplate(pt);
     }
     $scope.hideAddPricingTable = function () {
         $scope.isAddPricingTableHidden = true;
         $scope.isAddStrategyHidden = true;
         $scope.isAddStrategyBtnHidden = false;
         $scope.isSearchHidden = true;
+        $scope.isEditPricingTableDefaultsHidden = true;
         $scope.newPricingTable = util.clone($scope.templates.ObjectTemplates.PRC_TBL.CAP_BAND);
         $scope.newPricingTable.OBJ_SET_TYPE_CD = ""; //reset new PT deal type
         $scope.clearPtTemplateIcons();
         $scope.curPricingStrategy = {}; //clears curPricingStrategy
+    }
+    $scope.hideEditPricingTableDefaults = function () {
+        $scope.isAddPricingTableHidden = true;
+        $scope.isAddStrategyHidden = true;
+        $scope.isSearchHidden = true;
+        $scope.isEditPricingTableDefaultsHidden = true;
+        $scope.newPricingTable = util.clone($scope.templates.ObjectTemplates.PRC_TBL.CAP_BAND);
+        $scope.newPricingTable.OBJ_SET_TYPE_CD = ""; //reset new PT deal type
+        $scope.currentPricingTable = null;
     }
 
     // **** PRICING STRATEGY Methods ****
@@ -682,6 +702,15 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
         //    $scope.customAddPtValidate();
         //}
     }
+    $scope.setNptTemplate = function (pt) {
+        $scope.currentPricingTable = pt;
+        var ptTemplate = $scope.templates.ModelTemplates.PRC_TBL[pt.OBJ_SET_TYPE_CD]
+        //$scope.newPricingTable = util.clone($scope.templates.ObjectTemplates.PRC_TBL.CAP_BAND); //TODO: replace with existing/current rather than new...? -> clone curPT rather than template? - keep it same as "new" pricing table and copy it over later, todo rename "new"pt variable
+        $scope.newPricingTable = util.clone(pt);
+        $scope.newPricingTable["OBJ_SET_TYPE_CD"] = pt.OBJ_SET_TYPE_CD;
+        $scope.newPricingTable["_extraAtrbs"] = ptTemplate.extraAtrbs;
+        $scope.newPricingTable["_defaultAtrbs"] = ptTemplate.defaultAtrbs;
+    }
     $scope.addCustomToTemplates();
 
     // **** UNMARK CURRENT Methods ****
@@ -714,6 +743,11 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                             return;
                         }
 
+                        var deleteReload = false;
+                        if ($scope.curPricingTableId > 0) {
+                            deleteReload = true;
+                        }
+
                         // might need to unmark the current selected item
                         $scope.unmarkCurPricingStrategyIf(ps.DC_ID);
                         $scope.unmarkCurPricingTableIf(ps.DC_ID);
@@ -721,8 +755,18 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                         // delete item
                         $scope.contractData.PRC_ST.splice($scope.contractData.PRC_ST.indexOf(ps), 1);
 
+                        // hide PT defaults editor regardless of whether you deleted the one being edited - ideally we will only hide if deleting the one being edited but this behavior is fine for the time being
+                        $scope.hideEditPricingTableDefaults()
+
                         logger.success("Deleted the Pricing Strategy", ps, "Delete Sucessful");
                         topbar.hide();
+
+                        // redirect if focused PT belongs to deleted PS
+                        if (deleteReload) {
+                            $state.go('contract.manager', {
+                                cid: $scope.contractData.DC_ID
+                            }, { reload: true });
+                        }
                     },
                     function (result) {
                         logger.error("Could not delete the Pricing Strategy.", result, result.statusText);
@@ -744,14 +788,29 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                             return;
                         }
 
+                        var deleteReload = false;
+                        if ($scope.curPricingTableId == pt.DC_ID) {
+                            deleteReload = true;
+                        }
+
                         // might need to unmark the current selected item
                         $scope.unmarkCurPricingTableIf(ps.DC_ID);
 
                         // delete item
                         ps.PRC_TBL.splice(ps.PRC_TBL.indexOf(pt), 1);
 
+                        // hide PT defaults editor regardless of whether you deleted the one being edited - ideally we will only hide if deleting the one being edited but this behavior is fine for the time being
+                        $scope.hideEditPricingTableDefaults()
+
                         logger.success("Deleted the Pricing Table", pt, "Save Sucessful");
                         topbar.hide();
+
+                        // redirect if deleted the currently focused PT
+                        if (deleteReload) {
+                            $state.go('contract.manager', {
+                                cid: $scope.contractData.DC_ID
+                            }, { reload: true });
+                        }
                     },
                     function (response) {
                         logger.error("Could not delete the Pricing Table.", response, response.statusText);
@@ -1059,7 +1118,6 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
 
     // **** NEW PRICING STRATEGY Methods ****
     //
-    //debugger;
     $scope.newStrategy = util.clone($scope.templates.ObjectTemplates.PRC_ST.ALL_TYPES);
     $scope.addPricingStrategy = function () {
         topbar.show();
@@ -1071,7 +1129,6 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
         ps.DC_PARENT_ID = ct.DC_ID;
         ps.PRC_TBL = [];
         ps.TITLE = $scope.newStrategy.TITLE;
-        //debugger;
 
         // Add to DB first... then add to screen
         objsetService.createPricingStrategy($scope.getCustId(), ps).then(
@@ -1132,7 +1189,7 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
         }
     }
 
-    // **** NEW PRICING TABLE Methods ****
+    // **** NEW/EDIT PRICING TABLE Methods ****
     //
     $scope.newPricingTable = util.clone($scope.templates.ObjectTemplates.PRC_TBL.CAP_BAND);
     $scope.newPricingTable.OBJ_SET_TYPE_CD = ""; //reset new PT deal type so it does not inherit from clone
@@ -1140,7 +1197,6 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
         topbar.show();
 
         // Clone base model and populate changes
-        //debugger;
         var pt = util.clone($scope.templates.ObjectTemplates.PRC_TBL[$scope.newPricingTable.OBJ_SET_TYPE_CD]);
         pt.DC_ID = $scope.uid--;
         pt.DC_PARENT_ID = $scope.curPricingStrategy.DC_ID;
@@ -1165,7 +1221,6 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
             }
         }
 
-        //debugger;
         // Add to DB first... then add to screen
         objsetService.createPricingTable($scope.getCustId(), pt).then(
             function (data) {
@@ -1191,8 +1246,88 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                 logger.error("Could not create the pricing table.", response, response.statusText);
                 topbar.hide();
             }
-    );
+        );
     }
+
+    $scope.editPricingTable = function () {
+        topbar.show();
+
+        // Clone base model and populate changes
+        var pt = util.clone($scope.currentPricingTable);
+
+        //for now we do not allow edit of extra atrbs
+        //for (var atrb in $scope.newPricingTable._extraAtrbs) {
+        //    if ($scope.newPricingTable._extraAtrbs.hasOwnProperty(atrb) && pt.hasOwnProperty(atrb)) {
+        //        //note: if in future we give these two objects overlapping properties, then we may get unwanted overwriting here.
+        //        pt[atrb] = $scope.newPricingTable._extraAtrbs[atrb].value;
+        //    }
+        //}
+        for (var atrb in $scope.newPricingTable._defaultAtrbs) {
+            if ($scope.newPricingTable._defaultAtrbs.hasOwnProperty(atrb) && pt.hasOwnProperty(atrb)) {  //note: if in future we give these two objects overlapping properties, then we may get unwanted overwriting here.
+                if (Array.isArray($scope.newPricingTable._defaultAtrbs[atrb].value)) {
+                    //Array, Middle Tier expects a comma separated string
+                    pt[atrb] = $scope.newPricingTable._defaultAtrbs[atrb].value.join();
+                    $scope.currentPricingTable[atrb] = $scope.newPricingTable._defaultAtrbs[atrb].value.join();
+                } else {
+                    //String
+                    pt[atrb] = $scope.newPricingTable._defaultAtrbs[atrb].value;
+                    $scope.currentPricingTable[atrb] = $scope.newPricingTable._defaultAtrbs[atrb].value;
+                }
+            }
+        }
+
+        objsetService.updatePricingTable($scope.getCustId(), pt).then(
+            function (data) {
+                $scope.updateResults(data.data.PRC_TBL, pt); //?? needed?
+
+                $scope.hideEditPricingTableDefaults();
+
+                //$scope.curPricingTable = pt; 
+                //var seeme = $scope.curPricingTable
+                //$scope.curPricingTableId = pt.DC_ID;
+
+                logger.success("Edited Pricing Table", pt, "Save Sucessful");
+                topbar.hide();
+            },
+            function (response) {
+                logger.error("Could not edit the pricing table.", response, response.statusText);
+                topbar.hide();
+            }
+        );
+    }
+
+    $scope.customEditPtValidate = function () {
+        var isValid = true;
+
+        // Check required
+        angular.forEach($scope.newPricingTable,
+            function (value, key) {
+                if (key[0] !== '_' && !Array.isArray(value) && (!isNaN(value) || value === undefined || value === null || value.trim() === "") && $scope.newPricingTable._behaviors.isRequired[key] === true) {
+                    $scope.newPricingTable._behaviors.validMsg[key] = "* field is required";
+                    $scope.newPricingTable._behaviors.isError[key] = true;
+                    isValid = false;
+                }
+            });
+
+        // Check Extra atribs
+        angular.forEach($scope.newPricingTable["_extraAtrbs"],
+        function (value, key) {
+            if (value.isRequired === true && (value.value === undefined || value.value === "")) {
+                value.validMsg = "* field is required";
+                value.isError = true;
+                isValid = false;
+            } else {
+                value.isError = false;
+            }
+        });
+
+        // No check for defaultatribs because they are optional
+
+        if (isValid) {
+            $scope.editPricingTable();
+        }
+    }
+
     $scope.customAddPtValidate = function () {
         var isValid = true;
 
@@ -1280,14 +1415,22 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
 			if (oldValue != null && newValue == null) return;
 
 			if (oldValue == null && newValue != null) {
-				//initialize, hard coded for now, build into an admin page in future.
-				newValue["ECAP_TYPE"].value = "MCP";
-				newValue[MRKT_SEG].value = ["All"];
-				newValue[GEO].value = ["Worldwide"];
-				newValue["PAYOUT_BASED_ON"].value = "Billings"; //TODO: typo- need to correct to "Billing" in db
-				newValue["MEET_COMP_PRICE_QSTN"].value = "Price";
-				newValue["PROGRAM_PAYMENT"].value = "Backend";
-
+			    //initialize, hard coded for now, build into an admin page in future.
+			    if ($scope.currentPricingTable == null) {
+			        newValue["ECAP_TYPE"].value = "MCP";
+			        newValue[MRKT_SEG].value = ["All"];
+			        newValue[GEO].value = ["Worldwide"];
+			        newValue["PAYOUT_BASED_ON"].value = "Billings"; //TODO: typo- need to correct to "Billing" in db
+			        newValue["MEET_COMP_PRICE_QSTN"].value = "Price";
+			        newValue["PROGRAM_PAYMENT"].value = "Backend";
+			    } else {
+			        newValue["ECAP_TYPE"].value = $scope.currentPricingTable["ECAP_TYPE"];
+			        newValue[MRKT_SEG].value = $scope.currentPricingTable[MRKT_SEG].split(',');
+			        newValue[GEO].value = $scope.currentPricingTable[GEO].split(',');
+			        newValue["PAYOUT_BASED_ON"].value = $scope.currentPricingTable["PAYOUT_BASED_ON"];
+			        newValue["MEET_COMP_PRICE_QSTN"].value = $scope.currentPricingTable["MEET_COMP_PRICE_QSTN"];
+			        newValue["PROGRAM_PAYMENT"].value = $scope.currentPricingTable["PROGRAM_PAYMENT"];
+			    }
 			} else {
 				// TODO: Hook these up to service (add service into injection and physical files)
 				newValue[MRKT_SEG].value = MrktSegMultiSelectService.setMkrtSegMultiSelect(MRKT_SEG, (MRKT_SEG + "_MS"), newValue[MRKT_SEG].value, oldValue[MRKT_SEG].value);

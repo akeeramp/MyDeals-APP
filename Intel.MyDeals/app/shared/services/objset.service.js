@@ -77,7 +77,7 @@ function objsetService($http, dataService, logger, $q) {
         return dataService.get(apiBasePricingTableUrl + 'GetFullNestedPricingTable/' + id);
     }
     function updatePricingTable(custId, pt) {
-        return dataService.post(apiBasePricingTableUrl + 'UpdatePricingTable/' + custId, [pt]);
+        return dataService.post(apiBasePricingTableUrl + 'SavePricingTable/' + custId, [pt]);
     }
     function deletePricingTable(custId, pt) {
         return dataService.post(apiBasePricingTableUrl + 'DeletePricingTable/' + custId, [pt]);

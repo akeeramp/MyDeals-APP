@@ -1,0 +1,103 @@
+﻿<!-- Edit Pricing Table Attributes -->
+<div style="padding: 6px; background-color: #0071C5;" ng-hide="isEditPricingTableDefaultsHidden">
+    <form name="editPtForm">
+        <!-- EXTRA ATTRIBUTES -->
+        <!--Defaults only - Extra Atributes like Num-Tiers for now non-editable-->
+        <!--<div ng-if="newPricingTableExtraLength()">
+
+            <div style="padding: 0 5px;" class="blueContainer">
+                <div ng-repeat="(key, value) in newPricingTable._extraAtrbs">
+                    <div ng-switch="value.type">
+
+                        <div ng-switch-when="RADIOBUTTONGROUP"
+                             op-control-data-element
+                             op-class="'md intel'"
+                             op-style="'width: 280px;'"
+                             ng-model="newPricingTable._extraAtrbs"
+                             op-cd="key"
+                             op-type="value.type"
+                             op-label="value.label"
+                             op-lookup-url="value.opLookupUrl"
+                             op-lookup-text="value.opLookupText"
+                             op-lookup-value="value.opLookupValue"
+                             op-is-form="true"
+                             op-ui-mode="'HORIZONTAL'"></div>
+
+                        <div ng-switch-default
+                             op-control-data-element
+                             op-class="'md intel'"
+                             op-style="'width: 280px;'"
+                             ng-model="newPricingTable._extraAtrbs"
+                             op-cd="key"
+                             op-type="value.type"
+                             op-label="value.label"
+                             op-lookup-url="value.opLookupUrl"
+                             op-lookup-text="value.opLookupText"
+                             op-lookup-value="value.opLookupValue"
+                             op-is-form="true"
+                             op-ui-mode="'VERTICAL'"></div>
+                    </div>
+                </div>
+            </div>
+        </div>-->
+
+
+        <!-- DEFAULT ATTRIBUTES -->
+        <div ng-if="newPricingTableDefaultLength()">
+
+            <div class="lnavSmTitle">
+                {{newPricingTable.Title}} Autofill Settings
+                <div kendo-tooltip class="fr opElementHelpIcon intelicon-information-outlined" k-content="'Use the Pricing Table Autofill selections to pre-populate your table & reduce data entry. You may override the preselections within the grid if you would like.'"></div>
+            </div>
+            <div style="padding: 0 5px;" class="blueContainer">
+                <div ng-repeat="(key, value) in newPricingTable._defaultAtrbs">
+                    <div ng-switch="value.type">
+
+                        <div ng-switch-when="RADIOBUTTONGROUP"
+                             op-control-data-element
+                             op-class="'md intel'"
+                             op-style="'width: 280px;'"
+                             ng-model="newPricingTable._defaultAtrbs"
+                             op-cd="key"
+                             op-type="value.type"
+                             op-label="value.label"
+                             op-lookup-url="value.opLookupUrl"
+                             op-lookup-text="value.opLookupText"
+                             op-lookup-value="value.opLookupValue"
+                             op-is-form="true"
+                             op-ui-mode="'HORIZONTAL'"></div>
+
+                        <div ng-switch-default
+                             op-control-data-element
+                             op-class="'md intel'"
+                             op-style="'width: 280px;'"
+                             ng-model="newPricingTable._defaultAtrbs"
+                             op-cd="key"
+                             op-type="value.type"
+                             op-label="value.label"
+                             op-lookup-url="value.opLookupUrl"
+                             op-lookup-text="value.opLookupText"
+                             op-lookup-value="value.opLookupValue"
+                             op-is-form="true"
+                             op-ui-mode="'VERTICAL'"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div ng-if="isAddPricingTableHidden">
+            <div style="text-align: right;">
+                <button class="btn btn-sm btn-primary" ng-click="hideEditPricingTableDefaults()">Cancel</button>
+                <button class="btn btn-sm btn-primary" ng-click="customEditPtValidate()" type="submit">Save Defaults</button>
+            </div>
+        </div>
+
+        <div ng-if="!isAddPricingTableHidden">
+            <div style="text-align: right;">
+                <button class="btn btn-sm btn-primary" ng-click="hideAddPricingTable()">Cancel</button>
+                <button class="btn btn-sm btn-primary" ng-click="customAddPtValidate()" type="submit">Add</button>
+            </div>
+        </div>
+
+    </form>
+</div>
