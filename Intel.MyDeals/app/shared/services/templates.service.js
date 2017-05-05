@@ -17,8 +17,10 @@ function templatesService($http, dataService, logger, $q) {
 
     return service;
 
-    function readTemplates() {
-        return dataService.get(apiBaseTemplateUrl + 'GetUiTemplates');
+    function readTemplates(isForceReGet) {
+    	var isGetViaAngularCache = true;
+    	if (isForceReGet) { isGetViaAngularCache = false; }
+    	return dataService.get(apiBaseTemplateUrl + 'GetUiTemplates', null, null, isGetViaAngularCache);
     }
 
 }

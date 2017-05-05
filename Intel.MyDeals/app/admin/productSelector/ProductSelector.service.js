@@ -29,8 +29,10 @@
             return dataService.post(apiBaseUrl + 'FetchProducts', products);
         }
 
-        function GetProdDealType() {
-            return dataService.get(apiBaseUrl + 'GetProdDealType');
+        function GetProdDealType(isForceReGet) {
+        	var isGetViaAngularCache = true;
+        	if (isForceReGet) { isGetViaAngularCache = false; }
+        	return dataService.get(apiBaseUrl + 'GetProdDealType', null, null, isGetViaAngularCache);
         }
 
         function GetProdSelectionLevel(OBJ_SET_TYPE_SID) {

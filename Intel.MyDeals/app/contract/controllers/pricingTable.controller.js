@@ -612,7 +612,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					if (myFieldModel.opLookupText == "DROP_DOWN" || myFieldModel.opLookupText == "dropdownName") {
 						dropdownValuesSheet.batch(function () {
 							// Call API
-							dataService.get(myFieldModel.opLookupUrl).then(function (response) {
+							dataService.get(myFieldModel.opLookupUrl, null, null, true).then(function (response) {
 								for (var i = 0; i < response.data.length; i++) {
 									var myKey = response.data[i].ATRB_CD;
 									// TODO: Why is ECAP_TYPE called PROGRAM_ECAP_TYPE and can we change that?

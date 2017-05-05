@@ -18,13 +18,15 @@
             Delete: Delete // 'delete' is a javascript keyword hence using 'Delete'
         };
 
-        function get(apiUrl, successCallback, errorCallback, isForceReGet) {
-        	var isGetFromNgCache = true;
+        function get(apiUrl, successCallback, errorCallback, isDoAngularCaching) {
+        	var isGetFromNgCache = false;
 
-        	// Get from angular(Ng) built-in $http caching unless otherwise stated
-			// This will remove unneccessary API calls, thus making the app faster
-        	if (isForceReGet !== undefined && isForceReGet !== null) {
-        		isGetFromNgCache = !isForceReGet;
+        	// NOTE: Use isDoAngularCaching to speed up UI perfromance of pages that require data from API calls.
+        	//		isDoAngularCaching=true will get via angular(Ng) built-in $http caching - thus remove unneccessary API calls and making the app faster.
+        	//		BUT note that when the data is cached, any changes the user makes to the data will be forgotten unless  isDoAngularCaching=false or 
+        	//		the user refreshes the page, so be careful when using this! I reccomend using it to get data that the user will not change - such as dropdown data.
+        	if (isDoAngularCaching == true) {
+        		isGetFromNgCache = true;
         	}
         	return $http.get(apiUrl, { cache: isGetFromNgCache }).then(successCallback, errorCallback);
         }

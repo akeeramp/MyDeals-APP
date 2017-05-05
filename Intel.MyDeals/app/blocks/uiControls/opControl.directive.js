@@ -65,7 +65,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
                     transport: {
                     	read: function(e) {
                     		// Use dataService to take advantage of ng caching							
-                    		dataService.get(scope.opLookupUrl)
+                    		dataService.get(scope.opLookupUrl, null, null, true)
 								.then(function (response) {
 									e.success(response.data);
 								}, function (response) {
@@ -106,7 +106,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
 
         if (scope.opType === 'RADIOBUTTONGROUP') {
             if (scope.opLookupUrl !== undefined && scope.opLookupUrl !== "undefined") {
-                dataService.get(scope.opLookupUrl).then(function (response) {
+                dataService.get(scope.opLookupUrl, null, null, true).then(function (response) {
                     scope.values = response.data;
                 }, function (response) {
                     logger.error("Unable to get lookup values.", response, response.statusText);

@@ -20,16 +20,22 @@
             insertBasicDropdowns: insertBasicDropdowns,
         }
 
-        function getBasicDropdowns() {
-        	return dataService.get(apiBaseUrl + 'GetBasicDropdowns');
+        function getBasicDropdowns(isForceReGet) {
+        	var isGetViaAngularCache = true;
+        	if (isForceReGet) { isGetViaAngularCache = false; }
+        	return dataService.get(apiBaseUrl + 'GetBasicDropdowns', null, null, isGetViaAngularCache);
         }
 
-        function getDealTypesDropdowns() {
-            return dataService.get(apiBaseUrl + 'GetDealTypesDropdowns');
+        function getDealTypesDropdowns(isForceReGet) {
+        	var isGetViaAngularCache = true;
+        	if (isForceReGet) { isGetViaAngularCache = false; }
+        	return dataService.get(apiBaseUrl + 'GetDealTypesDropdowns', null, null, isGetViaAngularCache);
         }
 
-        function getDropdownGroups() {
-            return dataService.get(apiBaseUrl + 'GetDropdownGroups');
+        function getDropdownGroups(isForceReGet) {
+        	var isGetViaAngularCache= true;
+        	if (isForceReGet) { isGetViaAngularCache = false; }
+        	return dataService.get(apiBaseUrl + 'GetDropdownGroups', null, null, isGetViaAngularCache);
         }
 
         function updateBasicDropdowns(dropdown) {
