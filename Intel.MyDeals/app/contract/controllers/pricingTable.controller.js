@@ -70,8 +70,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 		if (root.curPricingTableId !== $stateParams.pid) {
 			root.curPricingTableId = $stateParams.pid;
 			if (root.curPricingStrategy.PRC_TBL !== undefined)
-				root.curPricingTable = util.findInArray(root.curPricingStrategy.PRC_TBL, root.curPricingTableId);
+				root.curPricingTable = util.findInArray(root.curPricingStrategy.PRC_TBL, root.curPricingTableId); // TODO: It's not finding the curPricingTable after adding a new one :<
 		}
+
 		if (root.curPricingTable === null) {
 			logger.error("Unable to locate Pricing Table " + $stateParams.pid);
 			$state.go('contract.manager', { cid: root.contractData.DC_ID });
@@ -316,7 +317,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 								disableIndividualReadOnlyCells(sheet, rowInfo, rowIndex, 1);
 							}
 
-							for (var key in ptTemplate.model.fields) {
+							for (var key in ptTemplate.model.fields) { 
 								var hasExistingCellValue = (sheet.range(vm.colToLetter[key] + (rowIndex + 1)).value()) == "" || (sheet.range(vm.colToLetter[key] + (rowIndex + 1)).value() == null); // don't override existing values for autofill
 
 								// Auto-fill default values from Contract level
@@ -326,7 +327,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 										&& (hasExistingCellValue)
 									) {
 									var fillValue = root.contractData[key];
-									if (ptTemplate.model.fields[key].type == "date") {
+									if (ptTemplate.model.fields[key].type == "date") { 
 										fillValue = new Date(root.contractData[key]);
 									}
 									sheet.range(vm.colToLetter[key] + (rowIndex + 1)).value(fillValue);
@@ -379,6 +380,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 	// On spreadsheet Render
 	function onRender(e) {
 		if (root.spreadNeedsInitialization) {
+
 			root.spreadNeedsInitialization = false;
 
 			// Set Active sheet
@@ -447,32 +449,36 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 			// Add product selector editor on Product cells
 			sheet.range(vm.colToLetter["PTR_USER_PRD"] + ":" + vm.colToLetter["PTR_USER_PRD"]).editor("cellProductSelector");
 
+			for (var key in ptTemplate.model.fields) { 
 
-			for (var key in ptTemplate.model.fields) {
-				if (ptTemplate.model.fields.hasOwnProperty(key) && vm.colToLetter[key] !== undefined) {
-					// Disable all readonly columns
-					if (ptTemplate.model.fields[key].editable !== true && vm.colToLetter[key] !== undefined) {
-						vm.readOnlyColLetters[vm.colToLetter[key]] = true;
-						disableRange(sheet.range(vm.colToLetter[key] + ":" + vm.colToLetter[key]));
-					}
+				var myColumnName = vm.colToLetter[key];
+				var myFieldModel = ptTemplate.model.fields[key];
 
-					// Flag which rows have something in them, ao we don't disable rows
-					var numRowsContainingData = 0;
-					if (root.pricingTableData.PRC_TBL_ROW.length > 0) {
-						numRowsContainingData = root.pricingTableData.PRC_TBL_ROW.length + rowIndexOffset;
-					}
-					// Disable all cells except product and cells that are read-only from template
-					if (key != "PTR_USER_PRD") {
-						disableRange(sheet.range(vm.colToLetter[key] + numRowsContainingData + ":" + vm.colToLetter[key]));
+				if (ptTemplate.model.fields.hasOwnProperty(key) && myColumnName !== undefined) {
+
+					// Disabling logic
+					if (myFieldModel.editable !== true) {
+						// Disable all readonly columns
+						vm.readOnlyColLetters[myColumnName] = true;
+						disableRange(sheet.range(myColumnName + ":" + myColumnName));
+					} else {
+						// Flag which rows have something in them, ao we don't disable rows
+						var numRowsContainingData = 0;
+						if (root.pricingTableData.PRC_TBL_ROW.length > 0) {
+							numRowsContainingData = root.pricingTableData.PRC_TBL_ROW.length + rowIndexOffset;
+						}
+						// Disable all cells except product and cells that are read-only from template
+						if (key != "PTR_USER_PRD") {
+							disableRange(sheet.range(myColumnName + numRowsContainingData + ":" + myColumnName));
+						}
 					}
 
 					// Add validation dropdowns/multiselects onto the cells
 					// TODO ///
-					// ptTemplate.column[].uiType == "RADIOBUTTONGROUP" "DROPDOWN" "EMBEDDEDMULTISELECT" "MULTISELECT"
-					if (ptTemplate.model.fields[key].opLookupText == "DROP_DOWN" || ptTemplate.model.fields[key].opLookupText == "dropdownName") {
+					if (myFieldModel.opLookupText == "DROP_DOWN" || myFieldModel.opLookupText == "dropdownName") {
 						dropdownValuesSheet.batch(function () {
 							// Call API
-							dataService.get(ptTemplate.model.fields[key].opLookupUrl).then(function (response) {
+							dataService.get(myFieldModel.opLookupUrl).then(function (response) {
 								for (var i = 0; i < response.data.length; i++) {
 									var myKey = response.data[i].ATRB_CD;
 									// TODO: Why is ECAP_TYPE called PROGRAM_ECAP_TYPE and can we change that?
@@ -486,42 +492,42 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 								logger.error("Unable to get dropdown data.", error, error.statusText);
 							});
 						});
-						if (ptTemplate.model.fields[key].uiType == "RADIOBUTTONGROUP" || ptTemplate.model.fields[key].uiType == "DROPDOWN") {
-							sheet.range(vm.colToLetter[key] + ":" + vm.colToLetter[key]).validation({
+						if (myFieldModel.uiType == "RADIOBUTTONGROUP" || myFieldModel.uiType == "DROPDOWN") {
+							sheet.range(myColumnName + ":" + myColumnName).validation({
 								dataType: "list",
 								showButton: true,
-								from: "DropdownValuesSheet!" + vm.colToLetter[key] + ":" + vm.colToLetter[key],
-								allowNulls: ptTemplate.model.fields[key].nullable,
+								from: "DropdownValuesSheet!" + myColumnName + ":" + myColumnName,
+								allowNulls: myFieldModel.nullable,
 								type: "warning",
 								titleTemplate: "Invalid value",
-								messageTemplate: "Invalid value. Please use dropdown"
+								messageTemplate: "Invalid value. Please use the dropdown for available options."
 							});
-						} else if (ptTemplate.model.fields[key].uiType == "EMBEDDEDMULTISELECT"  || ptTemplate.model.fields[key].uiType == "MULTISELECT"){
-							sheet.range(vm.colToLetter[key] + ":" + vm.colToLetter[key]).editor("multiSelectPopUpEditor");
+						} else if (myFieldModel.uiType == "EMBEDDEDMULTISELECT"  || myFieldModel.uiType == "MULTISELECT"){
+							sheet.range(myColumnName + ":" + myColumnName).editor("multiSelectPopUpEditor");
 							// TODO: Add a better validator which makes sure the selected items are in the multiselect list
 							vm.requiredStringColumns[key] = true;
 						}
 					}
 					else {
 						// Add validations based on column type
-						switch (ptTemplate.model.fields[key].type) {
+						switch (myFieldModel.type) {
 							case "date":
 								// Add date picker editor and validation
-								sheet.range(vm.colToLetter[key] + ":" + vm.colToLetter[key]).validation({
+								sheet.range(myColumnName + ":" + myColumnName).validation({
 									dataType: "date",
 									showButton: true,
 									comparerType: "between",
 									from: 'DATEVALUE("1/1/1900")',
 									to: 'DATEVALUE("12/31/9999")',
-									allowNulls: ptTemplate.model.fields[key].nullable,
+									allowNulls: myFieldModel.nullable,
 									type: "warning",
 									messageTemplate: "Value must be a date"
 								});
-								sheet.range(vm.colToLetter[key] + ":" + vm.colToLetter[key]).format("MM/dd/yyyy");
+								sheet.range(myColumnName + ":" + myColumnName).format("MM/dd/yyyy");
 								break;
 							case "number":
-								if (!ptTemplate.model.fields[key].nullable) {
-									sheet.range(vm.colToLetter[key] + ":" + vm.colToLetter[key]).validation({
+								if (!myFieldModel.nullable) {
+									sheet.range(myColumnName + ":" + myColumnName).validation({
 										dataType: "number",
 										from: 0,
 										comparerType: "greaterThan",
@@ -531,12 +537,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 									});
 								}
 								// Money Formatting
-								if (ptTemplate.model.fields[key].format == "{0:c}") {
-									sheet.range(vm.colToLetter[key] + ":" + vm.colToLetter[key]).format("$#,##0.00");
+								if (myFieldModel.format == "{0:c}") {
+									sheet.range(myColumnName + ":" + myColumnName).format("$#,##0.00");
 								}
 								break;
 							case "string":
-								if (!ptTemplate.model.fields[key].nullable) {
+								if (!myFieldModel.nullable) {
 									// TODO: find out how we do an isRequired on strings without LEN?
 									// Add required string columns to dictionay to add LEN validations onchange and later
 									vm.requiredStringColumns[key] = true;
@@ -549,7 +555,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 				}
 			}
 
-			// Hide all columns based on templating
+			// Hide columns based on templating
 			for (var i = 0; i < ptTemplate.columns.length; i++) {
 				if (ptTemplate.columns[i].hidden === true) {
 					sheet.hideColumn(i);
@@ -578,7 +584,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 				// Read Only cells 
 				disableIndividualReadOnlyCells(sheet, rowInfo, rowIndex, rowIndexOffset);
 
-				for (var key in ptTemplate.model.fields) {
+				for (var key in ptTemplate.model.fields) { 
 					// Required string validation via columns 
 					// NOTE: LEN validation means that we need to put validation on ecah individual cell rather than bulk
 					if ((vm.colToLetter[key] !== undefined) && (vm.requiredStringColumns.hasOwnProperty(key))) {

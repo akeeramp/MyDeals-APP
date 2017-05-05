@@ -389,7 +389,7 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Route("GetProdDealType")]
-        [HttpPost]
+        [HttpGet]
         public List<PrdDealType> GetProdDealType()
         {
             return SafeExecutor(() => _productsLib.GetProdDealType()

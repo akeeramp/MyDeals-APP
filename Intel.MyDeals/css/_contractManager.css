@@ -1037,3 +1037,31 @@
 		padding: 3px;
 		border-radius: 2px;
 	 }
+
+	.ss-loading-overlay {
+		background: rgba(255,255,255, 0.5);
+		height: 100%;
+		width: 100%;
+		z-index: 1000;
+		position: absolute;
+		top: 0px;
+	}
+	
+	.ss-loading-panel {    
+		background-color: #ffffff;
+		margin-top: 200px;
+		margin-left: 30%;
+		min-height: 100px;
+		width: 300px;
+		border-radius: 5px;
+		padding: 10px;
+		border: 2px #939598 solid;
+	}
+	.ss-loading-panel h2 {   
+		margin-top:0px;
+	}
+
+	.fa-disabled {
+		color: #939598;
+		cursor: default;
+	}

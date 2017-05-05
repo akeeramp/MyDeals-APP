@@ -32,7 +32,7 @@
         }
 
         function GetProdDealType() {
-            return dataService.post(apiBaseUrl + 'GetProdDealType');
+            return dataService.get(apiBaseUrl + 'GetProdDealType');
         }
 
         function GetProdSelectionLevel(OBJ_SET_TYPE_SID) {

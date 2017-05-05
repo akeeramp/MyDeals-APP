@@ -24,7 +24,7 @@
         	// Get from angular(Ng) built-in $http caching unless otherwise stated
 			// This will remove unneccessary API calls, thus making the app faster
         	if (isForceReGet !== undefined && isForceReGet !== null) {
-        		isGetFromNgCache = isForceReGet;
+        		isGetFromNgCache = !isForceReGet;
         	}
         	return $http.get(apiUrl, { cache: isGetFromNgCache }).then(successCallback, errorCallback);
         }

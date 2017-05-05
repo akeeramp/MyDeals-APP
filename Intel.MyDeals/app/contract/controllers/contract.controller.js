@@ -10,6 +10,7 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
     $scope.templates = $scope.templates || templateData.data;
     $scope.constants = contractManagerConstants;
     $scope.isContractDetailsPage = $state.current.name == $scope.constants.ContractDetails;
+    $scope.isSaving = false;
 
     // determine if the contract is existing or new... if new, look for pre-population attributes from the URL parameters
     //
@@ -814,8 +815,12 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
             "EventSource": source
         }
 
-        objsetService.updateContractAndCurPricingTable($scope.getCustId(), data).then(
+        $scope.isSaving = true;
+
+        objsetService.updateContractAndCurPricingTable($scope.getCustId(), data).then( 
             function (results) {
+            	$scope.isSaving = false;
+
                 if (!!results.data.PRC_TBL_ROW) {
                     $scope.updateResults(results.data.PRC_TBL_ROW, $scope.pricingTableData.PRC_TBL_ROW, $scope.spreadDs);
                     $scope.spreadDs.read();
@@ -837,6 +842,7 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                 if (toState !== undefined) $state.go(toState.name, toParams, { reload: true });
             },
             function (response) {
+            	$scope.isSaving = false;
                 logger.error("Could not save the contract.", response, response.statusText);
                 topbar.hide();
             }
@@ -1126,12 +1132,13 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
             function (data) {
                 $scope.updateResults(data.data.PRC_TBL, pt);
 
-                if ($scope.curPricingStrategy.PRC_TBL === undefined) $scope.curPricingStrategy.PRC_TBL = [];
-                $scope.curPricingStrategy.PRC_TBL.push(pt);
-                $scope.hideAddPricingTable();
+				//// NOTE: the below commented out code does nothing now because the #state.go's reload will reload the scope anyways
+                //if ($scope.curPricingStrategy.PRC_TBL === undefined) $scope.curPricingStrategy.PRC_TBL = [];
+            	//$scope.curPricingStrategy.PRC_TBL.push(pt);
+            	//$scope.hideAddPricingTable();
 
-                $scope.curPricingTable = pt;
-                $scope.curPricingTableId = pt.DC_ID;
+                //$scope.curPricingTable = pt;
+                //$scope.curPricingTableId = pt.DC_ID;
 
                 logger.success("Added Pricing Table", pt, "Save Sucessful");
                 topbar.hide();
@@ -1139,7 +1146,7 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                 // load the screen
                 $state.go('contract.manager.strategy', {
                     cid: $scope.contractData.DC_ID, sid: pt.DC_PARENT_ID, pid: pt.DC_ID
-                }, { reload: true });
+                }, { reload: true }); // HACK: workaorund for the bug where the "view more options" button is unclickable after saving
             },
             function (response) {
                 logger.error("Could not create the pricing table.", response, response.statusText);
