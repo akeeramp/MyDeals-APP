@@ -24,6 +24,7 @@
         vm.selectPath = selectPath;
         vm.getDisplayTemplate = getDisplayTemplate;
         vm.addProducts = addProducts;
+        vm.clearProducts = clearProducts;
         vm.hideSelection = false;
         vm.selectedItems = [];
 
@@ -284,6 +285,11 @@
                 }
             });
         }
+
+        function clearProducts() {
+            vm.addedProducts = [];
+        }
+
 
         vm.gridOptionsProduct = {
             dataSource: dataSourceProduct,

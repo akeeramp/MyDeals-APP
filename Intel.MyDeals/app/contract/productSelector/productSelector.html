@@ -2,7 +2,7 @@
     <div class="prodSelector modal-header">
         <div class="row">
             <div class="col-md-3">
-                <p class="prodHeader">Product Selector</p>
+                <p class="prodHeader cursorArea">Product Selector</p>
             </div>
             <div class="col-md-1" style="padding-top:15px;">
                 <img ng-if="loading" src="/Images/loadingSmall.gif" />
@@ -25,7 +25,7 @@
         <div class="row breadCrumbWrapper">
             <ul class="productpath breadcrumb">
                 <li><a role="button" class="prdAnchor" ng-click="vm.selectPath(0)">Select</a></li>
-                <li ng-repeat="p in vm.selectedPathParts" ng-if="p.name != 'NA'">
+                <li ng-repeat="p in vm.selectedPathParts | unique:'name'" ng-if="p.name != 'NA'">
                     <a role="button" class="prdAnchor" ng-click="vm.selectPath($index + 1)">{{:: p.name }}</a>
                 </li>
             </ul>
@@ -71,6 +71,7 @@
                 <p>Selected Products<small>&nbsp;({{vm.addedProducts.length}})</small></p>
             </div>
             <div class="col-md-6">
+                <button class="btn btn-default prdBtn" ng-click="vm.clearProducts()" style="margin-left:2px;">Clear all products</button>
                 <button class="btn btn-primary fr prdBtn" ng-click="vm.addProducts()">Add Product(s)</button>
             </div>
         </div>
@@ -315,7 +316,7 @@
         background: #01AEEF;
     }
 
-    .checkbox-custom:hover +.checkbox-custom-label:before {
+    .checkbox-custom:hover + .checkbox-custom-label:before {
         border: 1.5px solid #01AEEF;
     }
 </style>

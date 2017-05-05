@@ -14,11 +14,19 @@
               x = 0,
               y = 0;
             element = angular.element(document.getElementsByClassName("modal"));
+
+            // listen to mouse events only on cursor area, else it will be a snake game.
+            var cursorArea = angular.element(document.getElementsByClassName("cursorArea"));
+
             element.css({
                 position: 'fixed',
             });
 
-            element.on('mousedown', function (event) {
+            cursorArea.css({
+                cursor: "move"
+            });
+
+            cursorArea.on('mousedown', function (event) {
                 // Prevent default dragging of selected content
                 event.preventDefault();
                 startX = event.screenX - x;
