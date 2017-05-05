@@ -30,40 +30,6 @@
             costTestProductType: [{ 'name': 'L1' }, { 'name': 'L2' }],
             conditionCriteria: [{ 'name': 'Include' }, { 'name': 'Exclude' }],
         })
-        .constant('colorDictionary', {
-            "pct": {
-                "FAIL": "#FC4C02",
-                "PASS": "#C4D600",
-                "INCOMPLETE": "#f3D54E",
-                "NA": "#cccccc"
-            },
-            "mct": {
-                "FAIL": "#FC4C02",
-                "PASS": "#C4D600",
-                "INCOMPLETE": "#f3D54E",
-                "NA": "#cccccc"
-            },
-            "type": {
-                "ALL_TYPES": "#0071C5",
-                "ECAP": "#00AEEF",
-                "PROGRAM": "#FFA300",
-                "VOL_TIER": "#f3D54E",
-                "CAP_BAND": "#C4D600"
-            },
-            "stage": {
-                "Complete": "#C4D600",
-                "InComplete": "#FC4C02",
-                "Draft": "#f3D54E",
-                "Requested": "#FFA300",
-                "Submitted": "#00AEEF",
-                "Accepted": "#C4D600",
-                "InProgress": "#f3D54E",
-                "Processed": "#C4D600",
-                "Active": "#C4D600",
-                "Pending Bid": "#FFA300",
-                "Lost Bid": "#FC4C02"
-            }
-        })
         .constant('contractManagerConstants', {
             "helpTipDateRanges": "Date ranges are based on customer selections above.",
             "helptipMsgCustAccpt": "Deals are defaulted to pending until an acceptance selection is made. If kept in the pending status, any deals sent for approval will be kept in pending status until marked into an accepted state below.",

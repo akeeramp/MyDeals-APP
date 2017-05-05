@@ -52,7 +52,7 @@
                         dropdownsService.deleteBasicDropdowns(e.data.models[0].ATRB_LKUP_SID)
                         .then(function (response) {
                             e.success(response.data);
-                            if (e.data.models[0].ATRB_CD == "MRKT_SEG") {
+                            if (e.data.models[0].ATRB_CD == "MRKT_SEG_COMBINED") {
                                 var indx = vm.nonCorpInheritableValues.indexOf(e.data.models[0].DROP_DOWN);
                                 if (indx > -1) {
                                     vm.nonCorpInheritableValues.splice(indx, 1);
@@ -73,7 +73,7 @@
                         .then(function (response) {
                             e.success(response.data);
                             vm.selectedInheritanceGroup = "";
-                            if (response.data.ATRB_CD == "MRKT_SEG") {
+                            if (response.data.ATRB_CD == "MRKT_SEG_COMBINED") {
                                 vm.nonCorpInheritableValues.push(response.data.DROP_DOWN);
                             }
                             logger.success("New Dropdown Added.");
@@ -100,7 +100,7 @@
                                 required: true,
                                 inheritancevalidation: function (input) {
                                     if (input.is("[name='DROP_DOWN']") && input.val() != "") {
-                                        input.attr("data-inheritancevalidation-msg", "MRKT_SEG_NON_CORP values must match an existing MRKT_SEG value.");
+                                        input.attr("data-inheritancevalidation-msg", "MRKT_SEG_NON_CORP values must match an existing MRKT_SEG_COMBINED value.");
                                         if (vm.selectedInheritanceGroup == "MRKT_SEG_NON_CORP") {
                                             return (vm.nonCorpInheritableValues.indexOf(input.val()) > -1);
                                         }
@@ -311,7 +311,7 @@
         function setNonCorpInheritableValues(data) {
             //list of basic dropdown objects
             for (var i = 0; i <= data.length; i++) {
-                if (data[i] != null && data[i].ATRB_CD == "MRKT_SEG") {
+                if (data[i] != null && data[i].ATRB_CD == "MRKT_SEG_COMBINED") {
                     vm.nonCorpInheritableValues.push(data[i].DROP_DOWN);
                 }
             }

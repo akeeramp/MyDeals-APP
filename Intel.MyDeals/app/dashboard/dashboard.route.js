@@ -1,46 +1,45 @@
 ﻿(function () {
-    angular
-        .module('app.dashboard')
-        .run(appRun);
+angular
+    .module('app.dashboard')
+    .run(appRun);
 
-    appRun.$inject = ['routerHelper'];
+appRun.$inject = ['routerHelper'];
 
-     function appRun(routerHelper) {
-        routerHelper.configureStates(getStates());
-    }
+function appRun(routerHelper) {
+    routerHelper.configureStates(getStates());
+}
 
-    function getStates() {
-        return [
-            {
-                state: 'dashboard',
-                config: {
-                    url: '/',
-                    abstract: true,
-                    views: {
-                        'bodyView': {
-                            templateUrl: '/app/dashboard/views/portal.html',
-                            controller: 'DashboardController',
-                            controllerAs: 'dashboard'
-                        }
-                    }
-                }
-            }, {
-                state: 'dashboard.portal',
-                config: {
-                    url: 'portal',
-                    views: {
-                        'lnavView': {
-                            templateUrl: '/app/dashboard/views/nav.html'
-                        },
-                        'dashboardHeaderView': {
-                            templateUrl: '/app/dashboard/views/header.html'
-                        },
-                        'dashboardWrapperView': {
-                            templateUrl: '/app/dashboard/views/content.html'
-                        }
-                    }
-                }
+function getStates() {
+    return [
+        {
+            state: 'dashboard',
+            config: {
+                abstract: false,
+                template: '<div ui-view></div>',
+                url: '/'
             }
-        ];
-    }
+        },
+        {
+            state: 'dashboard.managelayouts',
+            config: {
+                templateUrl: 'app/dashboard/dashboard.manageLayouts.html',
+                url: 'manageLayouts'
+            }
+        },
+        {
+            state: 'dashboard.configuration',
+            config: {
+                template: '<h1>Manage configuration</h1>',
+                url: 'configuration'
+            }
+        },
+        {
+            state: 'dashboard.view',
+            config: {
+                template: '<h1>Dashboard</h1>',
+                url: 'view'
+            }
+        }
+    ];
+}
 })();

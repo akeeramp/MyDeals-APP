@@ -58,7 +58,7 @@ function securityEngineDrawDeals($http, lookupsService, $compile, $templateCache
 					var myActnCd = $filter('filter')(vm.dropDownDatasource.actions, { dropdownID: parseInt(atrbId) }, true)[0];
 					actnCd = (myActnCd ? myActnCd.dropdownName : -1);
 					mappingKey = atrbCd;
-					var dummyAttr = $filter('filter')(vm.drilledDownAttributes, { ATRB_COL_NM: dummyAttrName }, true)[0]
+					var dummyAttr = $filter('filter')(vm.dropDownDatasource.attributes, { ATRB_CD: dummyAttrName }, true)[0]
 					newAtrbId = dummyAttr.ATRB_SID;
 					newAtrbCd = dummyAttrName;
 				}
