@@ -63,9 +63,11 @@
     function closeSplitter() {
         $("#k-splitter").data("kendoSplitter").collapse(".k-pane:last");
         $("#divTabTerms").show();
+        $("#k-splitter").data("kendoSplitter").resize();
     }
     function openSplitter() {
         $("#k-splitter").data("kendoSplitter").expand(".k-pane:last");
         $("#divTabTerms").hide();
+        $("#k-splitter").data("kendoSplitter").resize();
     }
 </script>

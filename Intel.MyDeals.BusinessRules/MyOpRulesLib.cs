@@ -22,5 +22,6 @@ namespace Intel.MyDeals.BusinessRules
             var newArs = new List<OpRule<OpDataCollector, IOpDataElement, MyRulesTrigger, OpDataElementType>>(ars);
             return OpRulesLib<OpDataCollector, IOpDataElement, MyRulesTrigger, OpDataElementType>.ApplyRules(dc, trigger, newArs, securityActionCache, args);
         }
+
     }
 }

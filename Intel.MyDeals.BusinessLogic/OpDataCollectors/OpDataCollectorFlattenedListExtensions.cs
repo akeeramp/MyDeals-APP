@@ -25,10 +25,11 @@ namespace Intel.MyDeals.BusinessLogic
             OpDataCollectorFlattenedList retFlatList = new OpDataCollectorFlattenedList();
             foreach (OpDataCollectorFlattenedItem item in opFlatList)
             {
-                retFlatList.AddRange(item.TranslateToWip());
+                retFlatList.AddRange(item.TranslateToPrcTbl());
             }
             return retFlatList;
         }
+
 
         public static OpMsg DeleteByIds(this OpDataCollectorFlattenedList opFlatList, OpDataElementType opDataElementType, int custId, IOpDataCollectorLib dataCollectorLib)
         {

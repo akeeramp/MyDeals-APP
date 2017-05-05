@@ -25,14 +25,18 @@ namespace Intel.MyDeals.BusinessRules
 
                 _attrbRules = new List<MyOpRule>();
                 _attrbRules.AddRange(AllRules.GetReadOnlyRules());
+                _attrbRules.AddRange(AllRules.GetRequiredRules());
+                _attrbRules.AddRange(AllRules.GetHiddenRules());
                 _attrbRules.AddRange(AllRules.GetBasicValidationRules());
                 _attrbRules.AddRange(AllRules.GetAutomatedTestingRules());
                 _attrbRules.AddRange(AllRules.GetOpCollectorToDictRules());
+                _attrbRules.AddRange(AllRules.GetMergeRules());
 
                 return _attrbRules;
             }
         }
         private static List<MyOpRule> _attrbRules;
+
 
         /// <summary>
         /// Apply rules based on a trigger.  Based on the OpDataCollector and the trigger, the appropriate rules will be run
@@ -54,7 +58,6 @@ namespace Intel.MyDeals.BusinessRules
             return MyOpRulesLib.ApplyRules(dc, ruleTriggerPoint, attrbRules.ToList(), securityActionCache, args);
         }
 
-        
 
         // THESE ARE DCS RULES AND NOT TO BE BROUGHT IN.  THESE ARE USED AS REFERENCES TO ENSURE THE ENGINE CAN HANDLE THEM
         // TODO REMOVE THESE AFTER THE ENGINE IS PROVEN OUT

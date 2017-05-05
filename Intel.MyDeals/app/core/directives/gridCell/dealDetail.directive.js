@@ -13,8 +13,8 @@ function dealDetail(colorDictionary) {
         templateUrl: '/app/core/directives/gridCell/dealDetail.directive.html',
         controller: ['$scope', '$http', function ($scope, $http) {
 
-            $scope.stStr = moment($scope.dataItem.START_DT).format('DD/MM/YYYY');
-            $scope.enStr = moment($scope.dataItem.END_DT).format('DD/MM/YYYY');
+            $scope.stStr = moment($scope.dataItem.START_DT).format('MM/DD/YYYY');
+            $scope.enStr = moment($scope.dataItem.END_DT).format('MM/DD/YYYY');
 
             $scope.colorStyle = function () {
                 return { "background-color": colorDictionary["type"][$scope.dataItem.OBJ_SET_TYPE_CD] };

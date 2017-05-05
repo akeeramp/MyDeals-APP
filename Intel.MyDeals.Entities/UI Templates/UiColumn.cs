@@ -35,5 +35,14 @@ namespace Intel.MyDeals.Entities
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string headerTemplate { get; set; }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string lookupUrl { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string lookupText { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string lookupValue { get; set; }
+
     }
 }

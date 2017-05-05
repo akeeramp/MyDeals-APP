@@ -111,5 +111,6 @@ namespace Intel.MyDeals.BusinessLogic
             //List<MyOpRule> AttrbRules
             return MyRulesConfiguration.AttrbRules;
         }
+
     }
 }

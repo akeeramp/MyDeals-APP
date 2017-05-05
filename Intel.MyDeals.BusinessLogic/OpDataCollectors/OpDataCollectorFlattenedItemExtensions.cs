@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Intel.MyDeals.BusinessRules;
 using Intel.MyDeals.Entities;
 using Intel.Opaque;
 using Intel.Opaque.Data;
@@ -153,7 +154,8 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                     Dictionary<string, string> dictDes = new Dictionary<string, string>();
                     foreach (IOpDataElement item in dc.GetDataElements(de.AtrbCd))
                     {
-                        dictDes[strDimKey] = item.AtrbValue.ToString();
+                        if (item.AtrbValue.ToString() != string.Empty || item.State != OpDataElementState.Unchanged)
+                            dictDes[item.DimKey.ToString().DimKeySafe()] = item.AtrbValue.ToString();
                     }
                     objsetItem[de.AtrbCd] = dictDes;
 
@@ -176,7 +178,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
         public static OpDataCollectorFlattenedList TranslateToWip(this OpDataCollectorFlattenedItem opFlatItem)
         {
             OpDataCollectorFlattenedList retItems = new OpDataCollectorFlattenedList();
-            OpDataCollectorFlattenedList items = null;
+            ProdMappings items = null;
 
             // check that this is the correct OpDataElementType and has products
             if (!opFlatItem.ContainsKey(AttributeCodes.dc_type) || opFlatItem[AttributeCodes.dc_type].ToString() != OpDataElementType.PRC_TBL_ROW.ToString()) return retItems;
@@ -197,39 +199,72 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
 
             try
             {
-                items = JsonConvert.DeserializeObject<OpDataCollectorFlattenedList>(products);
+                items = JsonConvert.DeserializeObject<ProdMappings>(products);
             }
             catch (Exception ex)
             {
                 throw new Exception("Unable to parse the Products entered", ex);
             }
 
-            if (elMapping.TranslationType == OpTranslationType.OneDealPerProduct)
+            switch (elMapping.TranslationType)
             {
-                foreach (OpDataCollectorFlattenedItem item in items)
-                {
-                    foreach (KeyValuePair<string, object> kvp in item)
+                case OpTranslationType.OneDealPerProduct:
+                    foreach (var enumerable in items.Values)
                     {
-                        opFlatItem[AttributeCodes.PRODUCT_FILTER + EN.VARIABLES.PRIMARY_DIMKEY] = kvp.Value;
-                        opFlatItem[AttributeCodes.PTR_USER_PRD + EN.VARIABLES.PRIMARY_DIMKEY] = kvp.Key;
-                        
-                        // TODO NEED to tack on product info here
-                        retItems.CopyMatchingAttributes(opFlatItem, elMapping, singleDimAtrbs, multiDimAtrbs);
+                        var item = (List<ProdMapping>) enumerable;
+                        foreach (ProdMapping pMap in item)
+                        {
+                            retItems.CopyMatchingAttributes(opFlatItem, elMapping, singleDimAtrbs, multiDimAtrbs, new List<ProdMapping> { pMap });
+                        }
                     }
-                }
-            }
-            else if (elMapping.TranslationType == OpTranslationType.OneDealPerRow)
-            {
-                retItems.CopyMatchingAttributes(opFlatItem, elMapping, singleDimAtrbs, multiDimAtrbs);
+                    break;
+
+                case OpTranslationType.OneDealPerRow:
+
+                    List<ProdMapping> pMaps = new List<ProdMapping>();
+                    foreach (IEnumerable<ProdMapping> enumerable in items.Values)
+                    {
+                        pMaps.AddRange((List<ProdMapping>)enumerable);
+                    }
+                    retItems.CopyMatchingAttributes(opFlatItem, elMapping, singleDimAtrbs, multiDimAtrbs, pMaps);
+                    break;
             }
 
             return retItems;
         }
 
+        public static OpDataCollectorFlattenedList TranslateToPrcTbl(this OpDataCollectorFlattenedItem opFlatItem)
+        {
+            OpDataCollectorFlattenedList retItems = new OpDataCollectorFlattenedList();
+
+            // check that this is the correct OpDataElementType
+            if (!opFlatItem.ContainsKey(AttributeCodes.dc_type) || opFlatItem[AttributeCodes.dc_type].ToString() != OpDataElementType.WIP_DEAL.ToString()) return retItems;
+            if (!opFlatItem.ContainsKey(AttributeCodes.PTR_SYS_PRD) || opFlatItem[AttributeCodes.PTR_SYS_PRD].ToString() == "") return retItems;
+
+
+
+            return retItems;
+        }
+
+
+
         public static void CopyMatchingAttributes(this OpDataCollectorFlattenedList retItems, OpDataCollectorFlattenedItem opFlatItem, OpDataElementTypeMapping elMapping,
-            List<string> singleDimAtrbs, List<string> multiDimAtrbs)
+            List<string> singleDimAtrbs, List<string> multiDimAtrbs, List<ProdMapping> pMaps)
         {
             OpDataCollectorFlattenedItem newItem = new OpDataCollectorFlattenedItem();
+
+            foreach (ProdMapping pMap in pMaps)
+            {
+                opFlatItem[AttributeCodes.PRODUCT_FILTER + EN.VARIABLES.PRIMARY_DIMKEY] = pMap.PRD_MBR_SID;
+                opFlatItem[AttributeCodes.PTR_USER_PRD + EN.VARIABLES.PRIMARY_DIMKEY] = pMap.DISPLAY_NM;
+                opFlatItem[AttributeCodes.CAP + EN.VARIABLES.PRIMARY_DIMKEY] = pMap.CAP;
+                opFlatItem[AttributeCodes.CAP_STRT_DT + EN.VARIABLES.PRIMARY_DIMKEY] = pMap.CAP_START;
+                opFlatItem[AttributeCodes.CAP_END_DT + EN.VARIABLES.PRIMARY_DIMKEY] = pMap.CAP_END;
+                opFlatItem[AttributeCodes.YCS2_PRC_IRBT + EN.VARIABLES.PRIMARY_DIMKEY] = pMap.YCS2;
+                opFlatItem[AttributeCodes.YCS2_START_DT + EN.VARIABLES.PRIMARY_DIMKEY] = pMap.YCS2_START;
+                opFlatItem[AttributeCodes.YCS2_END_DT + EN.VARIABLES.PRIMARY_DIMKEY] = pMap.YCS2_END;
+                opFlatItem[AttributeCodes.PRD_COST + EN.VARIABLES.PRIMARY_DIMKEY] = pMap.PRD_COST;
+            }
 
             foreach (string key in opFlatItem.Keys.Where(k => k != AttributeCodes.dc_type && k != AttributeCodes.dc_parent_type))
             {
@@ -261,19 +296,6 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
             newItem[AttributeCodes.OBJ_SET_TYPE_CD] = elMapping.ChildOpDataElementSetType;
 
             retItems.Add(newItem);
-        }
-
-        public static OpDataCollectorFlattenedItem TranslateToPrcTbl(this OpDataCollectorFlattenedItem opFlatItem)
-        {
-            OpDataCollectorFlattenedItem retItem = new OpDataCollectorFlattenedItem();
-
-            // check that this is the correct OpDataElementType
-            if (!opFlatItem.ContainsKey(AttributeCodes.dc_type) || opFlatItem[AttributeCodes.dc_type].ToString() != OpDataElementType.WIP_DEAL.ToString()) return opFlatItem;
-            if (!opFlatItem.ContainsKey(AttributeCodes.PTR_SYS_PRD) || opFlatItem[AttributeCodes.PTR_SYS_PRD].ToString() == "") return retItem;
-
-
-
-            return retItem;
         }
     }
 }

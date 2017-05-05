@@ -414,6 +414,7 @@
         position: absolute;
         bottom: 0;
         z-index: 5000;
+        left: 45%;
     }
 
 	/* // Adding this makes clicking on cells extremely inaccurate. Don't add this. */

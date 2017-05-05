@@ -85,17 +85,15 @@ namespace Intel.MyDeals.Entities.UI_Templates
                 if (!item.IsDetail)
                 {
                     fields[item.AtrbCd + dimKey] = new UiFieldItem
-					{
-						editable = !item.IsReadOnly,
-						field = item.AtrbCd + dimKey,
-						format = item.Format,
-						label = item.Label,
+                    {
+                        type = item.DataType,
+                        editable = !item.IsReadOnly,
                         nullable = !item.IsRequired,
+						format = item.Format,
 						opLookupUrl = item.LookupUrl ?? "",
 						opLookupText = item.LookupText ?? "",
 						opLookupValue = item.LookupValue ?? "",
 						uiType = item.UiType,
-                        type = item.DataType,
 						validMsg = item.HelpText ?? "",
                         values = item.LookupValue,
                         valuesText = item.LookupText,
@@ -113,6 +111,9 @@ namespace Intel.MyDeals.Entities.UI_Templates
                         headerTemplate = item.HeaderTemplate,
                         filterable = item.IsFilterable,
                         sortable = item.IsSortable,
+                        lookupUrl = item.LookupUrl ?? "",
+                        lookupText = item.LookupText ?? "",
+                        lookupValue = item.LookupValue ?? "",
                         uiType = item.UiType
 					});
                 }
@@ -120,15 +121,13 @@ namespace Intel.MyDeals.Entities.UI_Templates
                 {
                     detailsFields[item.AtrbCd + dimKey] = new UiFieldItem
                     {
-						editable = !item.IsReadOnly,
-						field = item.AtrbCd + dimKey,
+                        type = item.DataType,
+                        editable = !item.IsReadOnly,
+                        nullable = !item.IsRequired,
 						format = item.Format,
-						label = item.Label,
-						nullable = !item.IsRequired,
 						opLookupUrl = item.LookupUrl ?? "",
 						opLookupText = item.LookupText ?? "",
 						opLookupValue = item.LookupValue ?? "",
-                        type = item.DataType,
 						uiType = item.UiType,
 						validMsg = item.HelpText ?? "",
                         values = item.LookupValue,
@@ -147,6 +146,9 @@ namespace Intel.MyDeals.Entities.UI_Templates
                         headerTemplate = item.HeaderTemplate,
                         filterable = item.IsFilterable,
                         sortable = item.IsSortable,
+                        lookupUrl = item.LookupUrl ?? "",
+                        lookupText = item.LookupText ?? "",
+                        lookupValue = item.LookupValue ?? "",
                         uiType = item.UiType
 					});
                 }

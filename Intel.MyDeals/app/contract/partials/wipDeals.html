@@ -1,21 +1,7 @@
-﻿<div style="position: absolute; left: 16px; z-index: 1000;">
-    <table style="width: 100%; height: 37px;">
-        <tr>
-            <td style="padding-top: 5px;">
-                <div class="textCircleMd pct_{{ curPricingTable.PCT_RESULT }}">{{ curPricingTable.OBJ_SET_TYPE_CD | limitTo:1 }}</div>
-            </td>
-            <td style="width: 100%;">
-                <input type="text" ng-model="curPricingTable.TITLE" class="transparentInput fntLg noBottomBorder w100" />
-            </td>
-            <td style="padding: 1px 2px 0 10px;" nowrap>
-                <button class="btn btn-sm intelLtBlue" ng-click="backToPricingTable()"><< Back</button>
-                <button class="btn btn-sm intelLtBlue" ng-click="validateWipDeals()">Validate</button>
-            </td>
-        </tr>
-    </table>
+﻿<div ng-if="wipData.length == 0">
+    <div><img src="/images/032.gif" /></div>
+    Loading data....
 </div>
-<div kendo-grid style="width: 100%; height: 100%;" k-options="mainGridOptions" class="mydeals-grid">
-    <div k-detail-template>
-        <div kendo-grid k-options="detailGridOptions(dataItem, '_MultiDim')"></div>
-    </div>
-</div>
+<div op-grid style="height: 100%;" op-data="wipData" op-options="wipOptions" ng-if="wipData.length > 0"></div>
+
+<!--<div kendo-grid style="width: 100%; height: 100%;" k-options="mainGridOptions" class="mydeals-grid"></div>-->

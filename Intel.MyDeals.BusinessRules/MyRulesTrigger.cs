@@ -13,7 +13,8 @@
         OnReadonly,
         OnHidden,
         OnRequired,
-        OnAutomatedTesting
+        OnAutomatedTesting,
+        OnMerge
     }
 
 }

@@ -2,7 +2,13 @@
     <div class='fl gridStatusMarker {{dataItem.WF_STG_CD}}' title='{{dataItem.WF_STG_CD}}'>{{stgOneChar()}}</div>
     <div class='fl'><input type="checkbox" style="margin: 8px 2px 4px 8px;" ng-model="dataItem.isLinked" /></div>
     <div class='fl md-icon'><i class='intelicon-discussion-solid' style="font-size: 20px !important;" title="Add a Comment"></i></div>
-    <div class='fl md-icon'><i class='intelicon-trash-solid' style="font-size: 20px !important;" title="Delete the deal"></i></div>
+    <div class='fl md-icon' ng-if="dataItem._parentCnt === undefined || dataItem._parentCnt <= 1">
+        <a href='#'><i class='intelicon-trash-solid' style="font-size: 20px !important;" title="Click to Delete the deal"></i></a>
+    </div>
+    <div class='fl md-icon' ng-if="dataItem._parentCnt !== undefined && dataItem._parentCnt > 1">
+        <i class='intelicon-trash-solid' style="font-size: 20px !important; color: #e7e7e8;"
+           title="This deal shares the same pricing table row as other deals.  You will need to delete the deal from the Pricing Table."></i>
+    </div>
     <div class='fl md-icon'><i class='intelicon-attach' style="font-size: 20px !important;" title="File Attachment"></i></div>
     <div class='clearboth'></div>
 </div>
@@ -16,6 +22,10 @@
 
     .dealTools .gridStatusMarker {
         font-family: arial;
+    }
+
+    .dealTools a {
+        text-decoration: none;
     }
 
     .dealTools i:hover {

@@ -14,6 +14,9 @@
             </div>
             
             <div class="toolbar">
+                <button class="btn btn-sm btn-default" ng-click="backToPricingTable()">
+                    <i class="intelicon-arrow-back-left" style="font-size: 18px;"></i> BACK TO PRICING TABLE
+                </button>
                 <button class="btn btn-sm btn-default" ng-click="validateGrid()">
                     <i class="intelicon-protection-checked-verified-outlined" style="font-size: 18px;"></i> VALIDATE
                 </button>
@@ -145,7 +148,6 @@
     }
 
 
-
     .gradTab i:first-child {
         font-size: 16px;
         cursor: pointer;
@@ -183,8 +185,6 @@
 
     .toolbar {
         border: 0 solid #b1babf;
-        border-right: 1px solid #b1babf;
-        border-left: 1px solid #b1babf;
         height: 55px;
         padding: 7px 10px 3px 10px;
     }
@@ -194,6 +194,14 @@
     }
 
 
+    .dimKey {
+        font-size: 9px; 
+        line-height: 1em; 
+        background-color: #00AEEF; 
+        color: #ffffff;
+        padding: 2px;
+        text-transform: uppercase;
+    }
 
     .op-grid .k-dirty {
         display: none;
@@ -210,6 +218,10 @@
         vertical-align: top;
     }
 
+    .k-tabstrip-wrapper {
+        border-bottom: 0 solid transparent;
+    }
+
     .op-grid.k-grid .uiControlDiv {
         height: 100%;
     }
@@ -221,8 +233,9 @@
 
     .op-grid.k-grid .k-grid-header .k-header  .k-link {
         height: auto;
+        font-weight: 400;
     }
-  
+
     .op-grid.k-grid .k-grid-header .k-header {
         white-space: normal;
     }
@@ -273,9 +286,6 @@
         width: 100%;
         padding: 0 10px;
         overflow: hidden;
-        border-left: 1px solid #b1babf;
-        border-right: 1px solid #b1babf;
-        border-bottom: 1px solid #b1babf;
     }     
 
     .dashboard-grid.k-grid td {

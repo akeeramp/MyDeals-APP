@@ -124,6 +124,9 @@ namespace Intel.MyDeals.BusinessLogic
 
             OpMsgQueue opMsgQueue = new OpMsgQueue();
 
+            // Apply merge rules before overlaying the changes to the source in order to capture modification flags
+            dc.ApplyRules(MyRulesTrigger.OnMerge, null, items);
+
             foreach (OpDataElement de in dc.DataElements)
             {
                 string dimKey = de.DimKeyString;

@@ -31,17 +31,6 @@ namespace Intel.MyDeals.Entities
 
             OpUserToken opUserToken = OpUserStack.MyOpUserToken;
 
-
-            
-            
-            // TODO REMOVE THESE LINES ONCE AUTHENTICATION IS IN PLACE
-            opUserToken.Role.RoleTypeCd = "FSE";
-            wfStage = "Draft";
-
-
-
-
-
             // Function returns the true or false value from the security mask - breakpoint here if you want to verify values in code.
 
             if (securityActionCache == null) securityActionCache = new Dictionary<string, bool>();

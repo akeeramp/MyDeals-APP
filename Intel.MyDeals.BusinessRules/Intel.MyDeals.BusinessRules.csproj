@@ -56,6 +56,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MyDcRules\RequiredRules.cs" />
+    <Compile Include="MyDcRules\MergeRules.cs" />
+    <Compile Include="MyDcRules\HiddenRules.cs" />
     <Compile Include="MyOpDataCollectorFlattenedItemActions.cs" />
     <Compile Include="MyDcConditionLib.cs" />
     <Compile Include="MyDcActions.cs" />

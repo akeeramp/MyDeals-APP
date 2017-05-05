@@ -204,7 +204,11 @@ namespace Intel.MyDeals.Entities
             // For each element, apply metadata rules
             foreach (OpDataElement de in dc.DataElements)
             {
-                de.IsReadOnly = !excludeList.Contains(de.AtrbCd) && securityWrapper.ChkAtrbRules(
+                var prop = de.IsReadOnly;
+                if (atrbAction == "ATRB_REQUIRED") prop = de.IsRequired;
+                if (atrbAction == "ATRB_HIDDEN") prop = de.IsHidden;
+
+                prop = !excludeList.Contains(de.AtrbCd) && securityWrapper.ChkAtrbRules(
                     dcType,
 					objSetType,
                     stg,

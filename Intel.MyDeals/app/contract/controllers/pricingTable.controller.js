@@ -4,11 +4,15 @@
 
 // logger :Injected logger service to for loging to remote database or throwing error on the ui
 // dataService :Application level service, to be used for common api calls, eg: user token, department etc
-PricingTableController.$inject = ['$scope', '$state', '$stateParams', '$filter', 'confirmationModal', 'dataService', 'logger', 'pricingTableData', 'ProductSelectorService', 'MrktSegMultiSelectService', '$uibModal'];
+PricingTableController.$inject = ['$scope', '$state', '$stateParams', '$filter', 'confirmationModal', 'dataService', 'logger', 'pricingTableData', 'ProductSelectorService', 'MrktSegMultiSelectService', '$uibModal', '$timeout'];
 
-function PricingTableController($scope, $state, $stateParams, $filter, confirmationModal, dataService, logger, pricingTableData, ProductSelectorService, MrktSegMultiSelectService, $uibModal) {
+function PricingTableController($scope, $state, $stateParams, $filter, confirmationModal, dataService, logger, pricingTableData, ProductSelectorService, MrktSegMultiSelectService, $uibModal, $timeout) {
 
 	var vm = this;
+
+    // HACK: Not sure why this controller gets called twice.  This is to see if it is already started and exit.
+    // If this controller gets called twice, 2 scopes are instanciated and Datasource syncing gets confused producing not data to save.
+	if ($scope.$parent.$parent.spreadDs !== undefined) return;
 
 	// Functions
 	vm.initCustomPaste = initCustomPaste;
@@ -18,7 +22,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 	$scope.openProductSelector = openProductSelector;
 	$scope.openInfoDialog = openInfoDialog;
 	$scope.validatePricingTable = validatePricingTable;
-	$scope.detailGridOptions = detailGridOptions;
 
 	// Variables
 	var root = $scope.$parent.$parent;	// Access to parent scope
@@ -49,6 +52,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 	vm.letterToCol = {};
 	vm.readOnlyColLetters = [];
 	vm.requiredStringColumns = {};
+	root.wipData;
+	root.wipOptions;
 
 	function init() {
 		// force a resize event to format page
@@ -137,7 +142,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 		ProductSelectorService.GetProdDealType()
 			.then(
 				function (response) {
-					if (response.statusText == "OK") {
+					if (response.statusText === "OK") {
 						var dealType = $filter('filter')(response.data, { OBJ_SET_TYPE_CD: root.curPricingTable.OBJ_SET_TYPE_CD }, true)[0];
 						// Get Product Level
 						ProductSelectorService.GetProdSelectionLevel(dealType.OBJ_SET_TYPE_SID).then(
@@ -206,52 +211,181 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 			root._dirty = true;
 		}
 
-		root.gridDs = gTools.createDataSource($scope.dataGrid);
-		$scope.mainGridOptions = {
-			dataSource: root.gridDs,
-			columns: gTools.cols,
-			toolbar: "&nbsp;",
-			scrollable: true,
-			sortable: true,
-			editable: true,
-			navigatable: true,
-			filterable: true,
-			groupable: false,
-			resizable: true,
-			reorderable: true,
-			columnMenu: true,
-			save: gTools.saveCell,
-			dataBound: function (e) {
-				e.sender.thead.find("[data-index=0]>.k-header-column-menu").remove();
-			}
-		};
+		wipTemplate = root.templates.ModelTemplates.WIP_DEAL[root.curPricingTable.OBJ_SET_TYPE_CD];
 
-		// Define Kendo Details Grid options
-		root.gridDetailsDs = {};
+		$timeout(function () {
+		    root.wipOptions = {};
+		    root.wipOptions.columns = wipTemplate.columns;
+		    root.wipOptions.model = wipTemplate.model;
+		    root.wipOptions.default = {};
+		    root.wipOptions.default.groups = [
+                { "name": "Deal Info", "order": 0 },
+                { "name": "Consumption", "order": 1 },
+                { "name": "Meet Comp", "order": 2 },
+                { "name": "Retail Cycle", "order": 3 },
+                { "name": "Backdate", "order": 4 },
+                { "name": "Overlapping", "order": 5 },
+                { "name": "Cost Test", "order": 6 },
+                { "name": "All", "order": 99 }
+		    ];
+		    root.wipOptions.default.groupColumns = {
+		        "tools": {
+		            "Groups": ["Deal Info", "Consumption", "Cost Test", "Meet Comp", "Retail Cycle", "Backdate", "Overlapping"]
+		        },
+		        "details": {
+		            "Groups": ["Consumption", "Cost Test", "Meet Comp", "Retail Cycle", "Backdate", "Overlapping"]
+		        },
+		        "DC_ID": {
+		            "Groups": ["Deal Info"]
+		        },
+		        "START_DT": {
+		            "Groups": ["Deal Info"]
+		        },
+		        "END_DT": {
+		            "Groups": ["Deal Info"]
+		        },
+		        "WF_STG_CD": {
+		            "Groups": ["Deal Info"]
+		        },
+		        "OBJ_SET_TYPE_CD": {
+		            "Groups": ["Deal Info"]
+		        },
+		        "PTR_USER_PRD": {
+		            "Groups": ["Deal Info"]
+		        },
+		        "PRODUCT_FILTER": {
+		            "Groups": ["Deal Info"]
+		        },
+		        "DEAL_COMB_TYPE": {
+		            "Groups": ["Deal Info"]
+		        },
+		        "ECAP_PRICE": {
+		            "Groups": ["Deal Info"]
+		        },
+		        "CAP": {
+		            "Groups": ["Deal Info"]
+		        },
+		        "YCS2_PRC_IRBT": {
+		            "Groups": ["Deal Info"]
+		        },
+		        "VOLUME": {
+		            "Groups": ["Deal Info"]
+		        },
+		        "ON_ADD_DT": {
+		            "Groups": ["Deal Info"]
+		        },
+		        "DEAL_SOLD_TO_ID": {
+		            "Groups": ["Deal Info"]
+		        },
+		        "EXPIRE_YCS2": {
+		            "Groups": ["Deal Info"]
+		        },
+		        "ECAP_TYPE": {
+		            "Groups": ["Deal Info"]
+		        },
+		        "MRKT_SEG": {
+		            "Groups": ["Deal Info"]
+		        },
+		        "GEO_COMBINED": {
+		            "Groups": ["Deal Info"]
+		        },
+		        "TRGT_RGN": {
+		            "Groups": ["Deal Info"]
+		        },
+		        "PAYOUT_BASED_ON": {
+		            "Groups": ["Deal Info"]
+		        },
+		        "PROGRAM_PAYMENT": {
+		            "Groups": ["Deal Info"]
+		        },
+		        "TERMS": {
+		            "Groups": ["Deal Info"]
+		        },
+		        "REBATE_BILLING_START": {
+		            "Groups": ["Consumption"]
+		        },
+		        "REBATE_BILLING_END": {
+		            "Groups": ["Consumption"]
+		        },
+		        "CONSUMPTION_REASON": {
+		            "Groups": ["Consumption"]
+		        },
+		        "CONSUMPTION_REASON_CMNT": {
+		            "Groups": ["Consumption"]
+		        },
+		        "COST_TEST_RESULT": {
+		            "Groups": ["Cost Test"]
+		        },
+		        "PRD_COST": {
+		            "Groups": ["Cost Test"]
+		        },
+		        "COST_TYPE_USED": {
+		            "Groups": ["Cost Test"]
+		        },
+		        "COST_TEST_FAIL_OVERRIDE": {
+		            "Groups": ["Cost Test"]
+		        },
+		        "COST_TEST_FAIL_OVERRIDE_REASON": {
+		            "Groups": ["Cost Test"]
+		        },
+		        "YCS2_OVERLAP_OVERRIDE": {
+		            "Groups": ["Cost Test"]
+		        },
+		        "MEET_COMP_PRICE_QSTN": {
+		            "Groups": ["Meet Comp"]
+		        },
+		        "COMP_SKU": {
+		            "Groups": ["Meet Comp"]
+		        },
+		        "COMP_SKU_OTHR": {
+		            "Groups": ["Meet Comp"]
+		        },
+		        "COMPETITIVE_PRICE": {
+		            "Groups": ["Meet Comp"]
+		        },
+		        "COMP_BENCH": {
+		            "Groups": ["Meet Comp"]
+		        },
+		        "IA_BENCH": {
+		            "Groups": ["Meet Comp"]
+		        },
+		        "COMP_TARGET_SYSTEM_PRICE": {
+		            "Groups": ["Meet Comp"]
+		        },
+		        "MEETCOMP_TEST_RESULT": {
+		            "Groups": ["Meet Comp"]
+		        },
+		        "MEETCOMP_TEST_FAIL_OVERRIDE": {
+		            "Groups": ["Meet Comp"]
+		        },
+		        "MEETCOMP_TEST_FAIL_OVERRIDE_REASON": {
+		            "Groups": ["Meet Comp"]
+		        },
+		        "RETAIL_CYCLE": {
+		            "Groups": ["Retail Cycle"]
+		        },
+		        "RETAIL_PULL": {
+		            "Groups": ["Retail Cycle"]
+		        },
+		        "RETAIL_PULL_USR_DEF": {
+		            "Groups": ["Retail Cycle"]
+		        },
+		        "RETAIL_PULL_USR_DEF_CMNT": {
+		            "Groups": ["Retail Cycle"]
+		        },
+		        "ECAP_FLR": {
+		            "Groups": ["Retail Cycle"]
+		        },
+		        "BACK_DATE_RSN": {
+		            "Groups": ["Backdate"]
+		        },
+		        "BACK_DATE_RSN_TXT": {
+		            "Groups": ["Backdate"]
+		        }
+		    };
+		    root.wipData = root.pricingTableData.WIP_DEAL;
+		}, 10);
 	}
-
-	function detailGridOptions(dataItem, pivotName) {
-		var gt = new gridTools(wipTemplate.detailsModel, wipTemplate.detailsColumns);
-		gt.assignColSettings();
-
-		var idIndx = $scope.dataGrid.indexOfField("DC_ID", dataItem["DC_ID"]);
-		var src = $scope.dataGrid[idIndx][pivotName];
-
-		// define datasource not inline so we can reference it
-		if (root.gridDetailsDs[dataItem["DC_ID"]] === undefined) root.gridDetailsDs[dataItem["DC_ID"]] = gt.createDataSource(src);
-		return {
-			dataSource: root.gridDetailsDs[dataItem["DC_ID"]],
-			columns: gt.cols,
-			sortable: true,
-			editable: true,
-			resizable: true,
-			reorderable: true,
-			save: gTools.saveCell,
-			dataBound: function (e) {
-				e.sender.thead.find("[data-index=0]>.k-header-column-menu").remove();
-			}
-		};
-	};
 
 	function getColumns(ptTemplate) {
 		var cols = [];
@@ -762,34 +896,34 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 	// Reset relative dirty bits
 	function resetDirty() {
 		var field = "isDirty";
-		var mainData = $scope.mainGridOptions.dataSource.data();
+		//var mainData = $scope.mainGridOptions.dataSource.data();
 
-		if ($scope.dataGrid !== undefined) {
-			for (var i = 0; i < $scope.dataGrid.length; i++) {
-				if (mainData[i] !== undefined) mainData[i]._dirty = false;
-				angular.forEach(mainData[i],
-                    function (value, key) {
-                    	var item = mainData[i];
-                    	if (item._behaviors[field] === undefined) item._behaviors[field] = {};
-                    	item._behaviors[field][key] = false;
+		//if ($scope.dataGrid !== undefined) {
+		//	for (var i = 0; i < $scope.dataGrid.length; i++) {
+		//		if (mainData[i] !== undefined) mainData[i]._dirty = false;
+		//		angular.forEach(mainData[i],
+        //            function (value, key) {
+        //            	var item = mainData[i];
+        //            	if (item._behaviors[field] === undefined) item._behaviors[field] = {};
+        //            	item._behaviors[field][key] = false;
 
-                    	//_MultiDim
-                    	if (!util.isNull(root.gridDetailsDs[item["DC_ID"]])) {
-                    		var detailData = root.gridDetailsDs[item["DC_ID"]].data();
-                    		for (var ii = 0; ii < item._MultiDim.length; ii++) {
-                    			detailData[ii]._dirty = false;
-                    			angular.forEach(detailData[ii],
-                                    function (v1, k1) {
-                                    	var item2 = detailData[ii];
-                                    	if (item2._behaviors === undefined || item2._behaviors === null) item2._behaviors = {};
-                                    	if (item2._behaviors[field] === undefined || item2._behaviors[field] === null) item2._behaviors[field] = {};
-                                    	item2._behaviors[field][k1] = false;
-                                    });
-                    		}
-                    	}
-                    });
-			}
-		}
+        //            	//_MultiDim
+        //            	if (!util.isNull(root.gridDetailsDs[item["DC_ID"]])) {
+        //            		var detailData = root.gridDetailsDs[item["DC_ID"]].data();
+        //            		for (var ii = 0; ii < item._MultiDim.length; ii++) {
+        //            			detailData[ii]._dirty = false;
+        //            			angular.forEach(detailData[ii],
+        //                            function (v1, k1) {
+        //                            	var item2 = detailData[ii];
+        //                            	if (item2._behaviors === undefined || item2._behaviors === null) item2._behaviors = {};
+        //                            	if (item2._behaviors[field] === undefined || item2._behaviors[field] === null) item2._behaviors[field] = {};
+        //                            	item2._behaviors[field][k1] = false;
+        //                            });
+        //            		}
+        //            	}
+        //            });
+		//	}
+		//}
 	}
 
 	// Watch for any changes to contract data to set a dirty bit
@@ -801,7 +935,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
 
 	function validatePricingTable() {
-		// sync spreadsheet data
+		// sync spreadsheet data0
 		if ($scope.spreadDs !== undefined) $scope.spreadDs.sync();
 		var sData = $scope.spreadDs === undefined ? undefined : $scope.pricingTableData.PRC_TBL_ROW;
 

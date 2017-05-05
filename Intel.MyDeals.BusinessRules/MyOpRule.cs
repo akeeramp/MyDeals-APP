@@ -8,8 +8,8 @@ namespace Intel.MyDeals.BusinessRules
     /// MyDeals specific strongly typed OpRule class
     /// This class is just to make writing rules much easier.
     /// </summary>
- 
-    public class MyOpRule: OpRule<OpDataCollector, IOpDataElement, MyRulesTrigger, OpDataElementType>
+
+    public class MyOpRule : OpRule<OpDataCollector, IOpDataElement, MyRulesTrigger, OpDataElementType>
     {
     }
 }

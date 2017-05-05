@@ -13,7 +13,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
         restrict: 'AE',
         templateUrl: '/app/core/directives/opGrid/opGrid.directive.html',
         controller: ['$scope', '$http', function ($scope, $http) {
-
+            
             $timeout(function () {
                 $scope.tabStripDelay = true;
                 $timeout(function () {
@@ -45,9 +45,17 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
 
                 var cols = $scope.opOptions.columns;
                 for (var c = 0; c < cols.length; c++) {
-                    if (cols[c].editor !== undefined && cols[c].editor === "lookupEditor") {
+
+                    if (cols[c].editor !== undefined) {
+                        if (cols[c].editor === "multiDimEditor") {
+                            cols[c].editor = $scope.multiDimEditor;
+                        }
+                    } else if (cols[c].lookupUrl !== undefined && cols[c].lookupUrl !== "") {
                         cols[c].editor = $scope.lookupEditor;
                     }
+
+                    //fix multi dim to single dim column for nested data
+                    cols[c].field = cols[c].field.split("_____")[0];
 
                     // mark index order
                     cols[c].indx = indxs[cols[c].field] === undefined ? 0 : indxs[cols[c].field];
@@ -90,7 +98,6 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
             if ($scope.opOptions.custom === undefined) {
                 $scope.cloneWithOrder("default");
             }
-
 
             $scope.configureSortableTab = function() {
                 $("#tabstrip ul.k-tabstrip-items").kendoSortable({
@@ -268,9 +275,19 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
             $scope.contractDs = new kendo.data.DataSource({
                 transport: {
                     read: function (e) {
+                        var childParent = {};
                         for (var i = 0; i < $scope.opData.length; i++) {
-                            if ($scope.opData[i].isLinked === undefined) $scope.opData[i].isLinked = false;
+                            var item = $scope.opData[i];
+                            if (item.isLinked === undefined) item.isLinked = false;
+                            if (childParent[item.DC_PARENT_ID] === undefined) childParent[item.DC_PARENT_ID] = 0;
+                            childParent[item.DC_PARENT_ID]++;
                         }
+
+                        // now set total values
+                        for (var j = 0; j < $scope.opData.length; j++) {
+                            $scope.opData[j]["_parentCnt"] = childParent[$scope.opData[j].DC_PARENT_ID];
+                        }
+                        
                         var source = $scope.opData;
 
                         // on success
@@ -294,7 +311,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
                         // locate item in original datasource and update it
                         for (var i = 0; i < e.data.models.length; i++) {
                             var item = e.data.models[i];
-                            source[$scope.getIndexById(item.ID, source)] = item;
+                            source[$scope.getIndexById(item.DC_ID, source)] = item;
                         }
                         // on success
                         e.success();
@@ -303,7 +320,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
                         var source = $scope.opData;
 
                         // locate item in original datasource and remove it
-                        source.splice($scope.getIndexById(e.data.ID, source), 1);
+                        source.splice($scope.getIndexById(e.data.DC_ID, source), 1);
 
                         // on success
                         e.success();
@@ -343,6 +360,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
                     if (e.model.isLinked !== undefined && e.model.isLinked) {
                         $scope.syncLinked(newField, e.values[newField]);
                     }
+
+                    gridUtils.onDataValueChange(e);
 
                 },
                 edit: function (e) {
@@ -397,18 +416,17 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
                 }
 
                 if (col.uiType === "ComboBox") {
-                    //debugger;
                     $('<input required name="' + options.field + '"/>')
                         .appendTo(container)
                         .kendoComboBox({
                             autoBind: false,
                             valuePrimitive: true,
-                            dataTextField: field.valuesText,
-                            dataValueField: field.valuesValue,
+                            dataTextField: field.opLookupText,
+                            dataValueField: field.opLookupValue,
                             dataSource: {
                                 type: "json",
                                 transport: {
-                                    read: field.values
+                                    read: field.opLookupUrl
                                 }
                             }
                         });
@@ -418,18 +436,73 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
                         .kendoDropDownList({
                             autoBind: false,
                             valuePrimitive: true,
-                            dataTextField: field.valuesText,
-                            dataValueField: field.valuesValue,
+                            dataTextField: field.opLookupText,
+                            dataValueField: field.opLookupValue,
                             dataSource: {
                                 type: "json",
                                 transport: {
-                                    read: field.values
+                                    read: field.opLookupUrl
                                 }
                             }
                         });
                 }
             }
             
+            $scope.multiDimEditor = function(container, options) {
+                var field = $(container).closest("[data-role=grid]").data("kendoGrid").dataSource.options.schema.model.fields[options.field];
+                var cols = $(container).closest("[data-role=grid]").data("kendoGrid").columns;
+                var col = { field: options.field };
+
+                for (var c = 0; c < cols.length; c++) {
+                    if (cols[c].field === options.field) col = cols[c];
+                }
+
+                var el = "";
+                var model = options.model[options.field];
+                for (var key in model) {
+                    if (model.hasOwnProperty(key) && key[0] !== '_' && key !== "parent" && key !== "uid") {
+                        el += $scope.createEditEl(options.field, field.uiType, key, field.format);
+                    }
+                }
+
+                $(el).appendTo(container);
+            }
+
+            $scope.createEditEl = function (field, type, dimKey, format) {
+                var el = '<div class="dimKey">' + $scope.translateDimKey(dimKey) + ':</div>';
+                if (type === "TextBox") {
+                    el += '<input k-ng-model="dataItem.' + field + '[\'' + dimKey + '\']" style="width: 100%;" />';
+
+                } else if (type === "ComboBox") {
+                    
+                } else if (type === "DropDown") {
+                    
+                } else if (type === "DatePicker") {
+                    
+                } else if (type === "Label") {
+                    
+                } else if (type === "CheckBox") {
+                    
+                } else if (type === "NumericTextBox") {
+                    el += '<input kendo-numeric-text-box k-ng-model="dataItem.' + field + '[\'' + dimKey + '\']" style="width: 100%;" />';
+
+                } else {
+                    el += '<input k-ng-model="dataItem.' + field + '[\'' + dimKey + '\']" style="width: 100%;" />';
+                }
+
+                return el;
+            }
+
+            $scope.translateDimKey = function(key) {
+                if (key === "10___0") return "Primary";
+                if (key === "10____1") return "Kit";
+                if (key === "10___1") return "Secondary 1";
+                if (key === "10___2") return "Secondary 2";
+                if (key === "10___3") return "Secondary 3";
+                if (key === "10___4") return "Secondary 4";
+                return "";
+            }
+
             $scope.showCols = function (grpName) {
                 var c;
                 var colNames = [];
@@ -515,12 +588,20 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
 
             });
 
+            $scope.$on('syncDs', function (event, args) {
+                event.currentScope.contractDs.sync();
+            });
+
+            $scope.backToPricingTable = function () {
+                $scope.$parent.$parent.$parent.backToPricingTable();
+            }
+
             $scope.validateGrid = function () {
                 var valid = true;
 
                 // clear out badges
                 var grps = $scope.opOptions.groups;
-                angular.forEach(grps, function(value, key) {
+                angular.forEach(grps, function (value, key) {
                     grps[key].numErrors = 0;
                 });
 

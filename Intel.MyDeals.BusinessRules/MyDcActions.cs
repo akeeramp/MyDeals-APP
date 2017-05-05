@@ -1,6 +1,8 @@
-﻿using Intel.MyDeals.DataLibrary;
+﻿using System;
+using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
 using Intel.Opaque.Data;
+using Intel.Opaque.Rules;
 
 namespace Intel.MyDeals.BusinessRules
 {
@@ -21,6 +23,37 @@ namespace Intel.MyDeals.BusinessRules
             if (!r.IsValid) return;
 
             r.Dc.ApplyActions(r.Dc.MeetsRuleCondition(r.Rule) ? r.Rule.OpRuleActions : r.Rule.OpRuleElseActions);
+        }
+
+        public static void ExecuteMerges(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            OpDataCollectorFlattenedItem item = ((object[])args[3])[0] as OpDataCollectorFlattenedItem;
+            if (item == null) return;
+
+            // Deal Dates
+            string dcStStr = r.Dc.GetDataElementValue(AttributeCodes.START_DT);
+            string dcEnStr = r.Dc.GetDataElementValue(AttributeCodes.END_DT);
+            string dcSt = DateTime.Parse(dcStStr == "" ? item[AttributeCodes.START_DT].ToString() : dcStStr).ToString("MM/dd/yyyy");
+            string dcEn = DateTime.Parse(dcEnStr == "" ? item[AttributeCodes.END_DT].ToString() : dcEnStr).ToString("MM/dd/yyyy");
+            string dcItemSt = DateTime.Parse(item[AttributeCodes.START_DT].ToString()).ToString("MM/dd/yyyy");
+            string dcItemEn = DateTime.Parse(item[AttributeCodes.END_DT].ToString()).ToString("MM/dd/yyyy");
+
+            // Billing Dates
+            if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.REBATE_BILLING_START)) || dcSt != dcItemSt)
+            {
+                item[AttributeCodes.REBATE_BILLING_START] = dcItemSt;
+            }
+            if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.REBATE_BILLING_END)) || dcEn != dcItemEn)
+            {
+                item[AttributeCodes.REBATE_BILLING_END] = dcItemEn;
+            }
+
+
+
+            //r.Dc.ApplyActions(r.Dc.MeetsRuleCondition(r.Rule) ? r.Rule.OpRuleActions : r.Rule.OpRuleElseActions);
         }
 
         /// <summary>

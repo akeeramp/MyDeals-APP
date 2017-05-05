@@ -219,7 +219,7 @@ namespace Intel.MyDeals.DataLibrary
         {
             retSet.Add(new OpDataElementUI
             {
-                AtrbID = 11,
+                AtrbID = 1,
                 AtrbCd = AttributeCodes.DC_ID,
                 AtrbValue = 0,
                 DcID = 0,
@@ -230,7 +230,7 @@ namespace Intel.MyDeals.DataLibrary
 
             retSet.Add(new OpDataElementUI
             {
-                AtrbID = 12,
+                AtrbID = 2,
                 AtrbCd = AttributeCodes.DC_PARENT_ID,
                 AtrbValue = 0,
                 DcID = 0,

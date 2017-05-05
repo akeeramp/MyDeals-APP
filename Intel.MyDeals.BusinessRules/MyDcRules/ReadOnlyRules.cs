@@ -34,7 +34,7 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }
                 },
-                new MyOpRule // Set to read only if yuo have a DEAL NUMBER
+                new MyOpRule // Set to read only if you have a DEAL NUMBER
                 {
                     Title="Readonly if Has Positive Deal number",
                     ActionRule = MyDcActions.ExecuteActions,
@@ -45,7 +45,7 @@ namespace Intel.MyDeals.BusinessRules
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = BusinessLogicDeActions.SetReadOnly,
-                            Target = new[] {AttributeCodes.TRGT_RGN, AttributeCodes.GEO_COMBINED, AttributeCodes.SOLD_TO_ID} // Items to set readonly
+                            Target = new[] {AttributeCodes.GEO_COMBINED, AttributeCodes.SOLD_TO_ID} // Items to set readonly
                         }
                     }
                 },
@@ -61,7 +61,37 @@ namespace Intel.MyDeals.BusinessRules
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = BusinessLogicDeActions.SetReadOnly,
-                            Target = new[] { AttributeCodes.DC_ID, AttributeCodes.OBJ_SET_TYPE_CD, AttributeCodes.START_DT, AttributeCodes.END_DT, AttributeCodes.CUST_MBR_SID, AttributeCodes.ECAP_PRICE, AttributeCodes.WF_STG_CD, AttributeCodes.CREDIT_VOLUME, AttributeCodes.DEBIT_VOLUME, AttributeCodes.PTR_USER_PRD }
+                            Target = new[]
+                            {
+                                AttributeCodes.CAP,
+                                AttributeCodes.COST_TEST_RESULT,
+                                AttributeCodes.COST_TYPE_USED,
+                                AttributeCodes.ECAP_FLR,
+                                AttributeCodes.ECAP_PRICE,
+                                AttributeCodes.ECAP_TYPE,
+                                AttributeCodes.END_DT,
+                                AttributeCodes.GEO_COMBINED,
+                                AttributeCodes.MEETCOMP_TEST_RESULT,
+                                AttributeCodes.MEET_COMP_PRICE_QSTN,
+                                AttributeCodes.MRKT_SEG,
+                                AttributeCodes.OBJ_SET_TYPE_CD,
+                                AttributeCodes.PAYOUT_BASED_ON,
+                                AttributeCodes.PRD_COST,
+                                AttributeCodes.PRODUCT_FILTER,
+                                AttributeCodes.PROGRAM_PAYMENT,
+                                AttributeCodes.PTR_USER_PRD,
+                                AttributeCodes.RETAIL_PULL,
+                                AttributeCodes.START_DT,
+                                AttributeCodes.WF_STG_CD,
+                                AttributeCodes.YCS2_PRC_IRBT,
+                                AttributeCodes.CREDIT_VOLUME,
+                                AttributeCodes.DEBIT_VOLUME,
+                                AttributeCodes.BLLG_DT,
+                                AttributeCodes.YCS2_START_DT,
+                                AttributeCodes.YCS2_END_DT,
+                                AttributeCodes.CAP_STRT_DT,
+                                AttributeCodes.CAP_END_DT
+                            }
                         }
                     }
                 },
@@ -70,66 +100,84 @@ namespace Intel.MyDeals.BusinessRules
                     Title="Readonly if in the past",
                     ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnReadonly},
-                    NotInStages = new List<string>{"Created"},
-                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.END_DT) && de.IsDateInPast()).Any(),
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.END_DT) && !de.IsDateInPast()).Any(),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = BusinessLogicDeActions.SetReadOnly,
-                            Target = new[] {AttributeCodes.START_DT, AttributeCodes.END_DT}
+                            Target = new[] {AttributeCodes.BACK_DATE_RSN, AttributeCodes.BACK_DATE_RSN_TXT}
                         }
                     }
-
                 },
                 new MyOpRule
                 {
-                    Title="Readonly if in past",
+                    Title="Readonly if Consumption",
                     ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnReadonly},
-                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.START_DT) && de.IsDateInPast() && de.HasValue()).Any(),
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PAYOUT_BASED_ON) && de.AtrbValue != null && de.AtrbValue.ToString() != "Consumption").Any(),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = BusinessLogicDeActions.SetReadOnly,
-                            Target = new[] { AttributeCodes.CUST_MBR_SID }
+                            Target = new[] {AttributeCodes.REBATE_BILLING_START, AttributeCodes.REBATE_BILLING_END }
                         }
-                    },
-                    OpRuleElseActions = new List<OpRuleAction<IOpDataElement>>
+                    }                
+                },
+                new MyOpRule
+                {
+                    Title="Readonly if Not Backend",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnReadonly},
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PROGRAM_PAYMENT) && de.AtrbValue != null && de.AtrbValue.ToString() != "Backend").Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
                         new OpRuleAction<IOpDataElement>
                         {
-                            Action = BusinessLogicDeActions.SetNotReadOnly,
-                            Target = new[] { AttributeCodes.CUST_MBR_SID }
+                            Action = BusinessLogicDeActions.SetReadOnly,
+                            Target = new[] {AttributeCodes.VOLUME }
                         }
                     }
                 },
                 new MyOpRule
                 {
-                    Title="Not Required if in the past",
+                    Title="Readonly if Not Backend and has tracker",
                     ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnReadonly},
-                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs("START_DT") && !de.IsDateInPast() && de.HasValue()).Any(),
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PROGRAM_PAYMENT) && de.AtrbValue != null && de.AtrbValue.ToString() == "Backend" && dc.DcID > 0).Any(),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
                         new OpRuleAction<IOpDataElement>
                         {
-                            Action = BusinessLogicDeActions.SetNotRequired,
-                            Target = new[] { AttributeCodes.CUST_MBR_SID }
+                            Action = BusinessLogicDeActions.SetReadOnly,
+                            Target = new[] {AttributeCodes.EXPIRE_YCS2 }
                         }
-                    },
-                    OpRuleElseActions = new List<OpRuleAction<IOpDataElement>>
+                    }
+                },
+                new MyOpRule
+                {
+                    Title="Readonly if geo is WW",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnReadonly},
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.GEO_COMBINED) && de.AtrbValue != null && (de.AtrbValue.ToString() == "WW" || de.AtrbValue.ToString() == "Worldwide")).Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
                         new OpRuleAction<IOpDataElement>
                         {
-                            Action = BusinessLogicDeActions.SetRequired,
-                            Target = new[] { AttributeCodes.CUST_MBR_SID }
+                            Action = BusinessLogicDeActions.SetReadOnly,
+                            Target = new[] {AttributeCodes.TRGT_RGN }
                         }
                     }
                 }
             };
         }
+
     }
 
 }

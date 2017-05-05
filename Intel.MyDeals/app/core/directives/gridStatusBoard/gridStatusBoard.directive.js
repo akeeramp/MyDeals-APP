@@ -46,7 +46,8 @@ function gridStatusBoard($compile, objsetService, $timeout) {
                             END_DTM: { type: "date" },
                             NOTES: { type: "string" },
                             NUM_APPRV_PRC_ST: { type: "number" },
-                            NUM_PRC_ST: { type: "number" }
+                            NUM_PRC_ST: { type: "number" },
+                            PERC_PRC_ST: { type: "number"}
                         }
                     }
                 },
@@ -58,6 +59,9 @@ function gridStatusBoard($compile, objsetService, $timeout) {
                     $scope.stageCnt = e.response.length;
 
                     for (var i = 0; i < e.response.length; i++) {
+                        e.response[i]["PERC_PRC_ST"] = (e.response[i]["NUM_PRC_ST"] === 0 ? 0 : e.response[i]["NUM_APPRV_PRC_ST"] / e.response[i]["NUM_PRC_ST"] * 100);
+
+                        // temporary untill we get stages
                         if (rtn[e.response[i].WF_STG_CD] === undefined) rtn[e.response[i].WF_STG_CD] = 0;
                         rtn[e.response[i].WF_STG_CD]++;
                     }
@@ -73,7 +77,7 @@ function gridStatusBoard($compile, objsetService, $timeout) {
                 }
 
             });
-
+            
             $scope.ds = {
                 dataSource: $scope.contractDs,
                 resizable: true,
@@ -87,9 +91,9 @@ function gridStatusBoard($compile, objsetService, $timeout) {
                         template: '<div class="status #:WF_STG_CD#">#:WF_STG_CD[0]#</div>'
                     }, {
                         title: "% Complete",
-                        field: "NUM_PRC_ST",
+                        field: "PERC_PRC_ST",
                         width: "100px",
-                        template: '<div percent-bar data-perc="#:(NUM_PRC_ST == 0 ? 0 : NUM_APPRV_PRC_ST / NUM_PRC_ST * 100)#"></div>'
+                        template: '<div percent-bar data-perc="#:PERC_PRC_ST#"></div>'
                     }, {
                         title: "Contract Title",
                         field: "TITLE",

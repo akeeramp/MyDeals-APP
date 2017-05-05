@@ -41,6 +41,40 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
         return c;
     }
 
+    $scope.removeDimKeyFromWipTemplates = function() {
+        if ($scope.templates === undefined) return;
+        if ($scope.templates.ModelTemplates === undefined) return;
+        if ($scope.templates.ModelTemplates.WIP_DEAL === undefined) return;
+
+        var wipTemplates = $scope.templates.ModelTemplates.WIP_DEAL;
+        for (var key in wipTemplates) {
+            if (wipTemplates.hasOwnProperty(key)) {
+                for (var i = 0; i < wipTemplates[key].columns.length; i++) {
+                    var indx = wipTemplates[key].columns[i].field.indexOf("____");
+                    if (indx >= 0) {
+                        wipTemplates[key].columns[i].field = wipTemplates[key].columns[i].field.substr(0, indx);
+                    }
+                }
+
+                var fields = wipTemplates[key].model.fields;
+                var wipModel = {};
+                for (var fKey in fields) {
+                    if (fields.hasOwnProperty(fKey)) {
+                        var fIndx = fKey.indexOf("____");
+                        if (fIndx >= 0) {
+                            wipModel[fKey.substr(0, fIndx)] = fields[fKey];
+                        } else {
+                            wipModel[fKey] = fields[fKey];
+                        }
+
+                    }
+                }
+                wipTemplates[key].model.fields = wipModel;
+            }
+        }
+    }
+    $scope.removeDimKeyFromWipTemplates();
+
     // populate the contract data upon entry... If multiple controller instances are called, reference the initial instance
     //
     $scope.contractData = $scope.contractData || $scope.initContract(contractData);
@@ -565,6 +599,10 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
             var evt = $window.document.createEvent('UIEvents');
             evt.initUIEvent('resize', true, false, window, 200);
             window.dispatchEvent(evt);
+            $timeout(function () {
+                var splitter = $("#k-splitter").data("kendoSplitter");
+                if (splitter !== undefined && splitter !== null) splitter.resize();
+            }, 10);
         });
     }
     $scope.strategyTreeCollapseAll = true;
@@ -668,11 +706,9 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
         kendo.confirm("Are you sure that you want to delete this pricing strategy?").then(function () {
             $scope.$apply(function () {
                 topbar.show();
-                debugger;
                 // Remove from DB first... then remove from screen
                 objsetService.deletePricingStrategy($scope.getCustId(), ps).then(
                     function (data) {
-                        debugger;
                         if (data.data.MsgType !== 1) {
                             logger.warning("Unable to Deleted the Pricing Strategy", ps, "Delete Failed");
                             return;
@@ -689,7 +725,6 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                         topbar.hide();
                     },
                     function (result) {
-                        debugger;
                         logger.error("Could not delete the Pricing Strategy.", result, result.statusText);
                         topbar.hide();
                     }
@@ -701,11 +736,9 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
         kendo.confirm("Are you sure that you want to delete this pricing table?").then(function () {
             $scope.$apply(function () {
                 topbar.show();
-                debugger;
                 // Remove from DB first... then remove from screen
                 objsetService.deletePricingTable($scope.getCustId(), pt).then(
                     function (data) {
-                        debugger;
                         if (data.data.MsgType !== 1) {
                             logger.warning("Unable to Deleted the Pricing Table", pt, "Delete Failed");
                             return;
@@ -721,7 +754,6 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                         topbar.hide();
                     },
                     function (response) {
-                        debugger;
                         logger.error("Could not delete the Pricing Table.", response, response.statusText);
                         topbar.hide();
                     }
@@ -742,12 +774,14 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
 
         // sync all detail data sources into main grid datasource for a single save
         if ($scope.spreadDs !== undefined) $scope.spreadDs.sync();
-        if ($scope.gridDs !== undefined) $scope.gridDs.sync();
+        //if ($scope.gridDs !== undefined) $scope.gridDs.sync();
 
         var sData = $scope.spreadDs === undefined ? undefined : $scope.pricingTableData.PRC_TBL_ROW;
-        var gData = $scope.gridDs === undefined ? undefined : $scope.gridDs.data(); // TODO after multi dim... need to see if we can read the variable instead of the source
+        //var gData = $scope.gridDs === undefined ? undefined : $scope.gridDs.data(); // TODO after multi dim... need to see if we can read the variable instead of the source
 
-        //debugger;
+        $scope.$broadcast('syncDs');
+
+        var gData = $scope.wipData;
 
         var contractData = $scope._dirtyContractOnly ? [$scope.contractData] : [];
         var curPricingTableData = $scope.curPricingTable.DC_ID === undefined ? [] : [$scope.curPricingTable];
@@ -759,12 +793,26 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                 return obj.PTR_USER_PRD !== undefined && obj.PTR_USER_PRD !== null && obj.PTR_USER_PRD !== "";
             });
 
+            // find all date fields
+            var dateFields = [];
+            var fields = $scope.templates.ModelTemplates.PRC_TBL_ROW[$scope.curPricingTable.OBJ_SET_TYPE_CD].model.fields;
+            for (var key in fields) {
+                if (typeof fields[key] !== 'function') {
+                    if (fields[key].type === "date") dateFields.push(key);
+                }
+            }
+
             for (var s = 0; s < sData.length; s++) {
                 if (sData[s].DC_ID === null) sData[s].DC_ID = $scope.uid--;
                 sData[s].DC_PARENT_ID = curPricingTableData[0].DC_ID;
                 sData[s].dc_type = "PRC_TBL_ROW";
                 sData[s].dc_parent_type = curPricingTableData[0].dc_type;
                 sData[s].OBJ_SET_TYPE_CD = curPricingTableData[0].OBJ_SET_TYPE_CD;
+
+                // fix date formats
+                for (var d = 0; d < dateFields.length; d++) {
+                    sData[s][dateFields[d]] = moment(sData[s][dateFields[d]]).format("MM/DD/YYYY");
+                }
             }
         }
 
@@ -773,9 +821,6 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
             for (var i = 0; i < gData.length; i++) {
                 // TODO... this should probably mimic Pticing Table Rows
                 if (gData[i].DC_ID === null) gData[i].DC_ID = $scope.uid--;
-                if ($scope.gridDetailsDs[gData[i].DC_ID] !== undefined) {
-                    gData[i]._MultiDim = $scope.gridDetailsDs[gData[i].DC_ID].data();
-                }
             }
         }
 
@@ -827,13 +872,7 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                 }
                 if (!!results.data.WIP_DEAL) {
                     $scope.updateResults(results.data.WIP_DEAL, $scope.pricingTableData.WIP_DEAL, $scope.gridDs);
-                    $scope.gridDs.read();
                 }
-
-                //debugger;
-                // need to check for messages / Actions / ext...
-                //        var gData = $scope.gridDs === undefined ? undefined : $scope.gridDs.data(); // TODO after multi dim... need to see if we can read the variable instead of the source
-                //if ($scope.gridDs !== undefined) $scope.gridDs.sync();
 
                 $scope.resetDirty();
                 logger.success("Saved the contract", $scope.contractData, "Save Sucessful");
