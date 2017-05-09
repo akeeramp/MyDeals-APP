@@ -21,8 +21,8 @@
 
         return service;
 
-        function TranslateProducts(products) {
-            return dataService.post(apiBaseUrl + 'TranslateProducts', products);
+        function TranslateProducts(products, CUST_CD) {
+            return dataService.post(apiBaseUrl + 'TranslateProducts/' + CUST_CD, products);
         }
 
         function FetchProducts(products) {

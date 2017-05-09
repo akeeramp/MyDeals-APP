@@ -77,8 +77,8 @@ function ProductCorrectorModalController($filter) {
 
     getItems();
 
-    vm.closeModal = function () {
-        dialog.close();
+    vm.cancel = function () {
+        $uibModalInstance.dismiss();
     }
     
 }

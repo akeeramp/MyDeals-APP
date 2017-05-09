@@ -18,9 +18,7 @@ namespace Intel.MyDeals.Entities
 		protected override void Init()
 		{
             //// This order must match EXACTLY the order as it appears in the TYPE definition (lame!)            
-            this.Columns.Add("USR_INPUT", typeof(string));
-            this.Columns.Add("PRD_ATRB_SID", typeof(int));
-            this.Columns.Add("PRD_SELC_LVL", typeof(string));
+            this.Columns.Add("USR_INPUT", typeof(string));           
             this.Columns.Add("EXCLUDE", typeof(string));
             this.Columns.Add("FILTER", typeof(string));
             this.Columns.Add("START_DATE", typeof(string));
@@ -34,9 +32,7 @@ namespace Intel.MyDeals.Entities
 		{
 			if (itm == null) { return; }
 			var r = this.NewRow();
-            r["USR_INPUT"] = itm.USR_INPUT;
-            r["PRD_ATRB_SID"] = itm.PRD_ATRB_SID;
-            r["PRD_SELC_LVL"] = itm.PRD_SELC_LVL;
+            r["USR_INPUT"] = itm.USR_INPUT;            
             r["EXCLUDE"] = itm.EXCLUDE;
             r["FILTER"] = itm.FILTER;
             r["START_DATE"] = itm.START_DATE;
@@ -55,9 +51,7 @@ namespace Intel.MyDeals.Entities
 			foreach (var itm in itms)
 			{
 				var r = this.NewRow();
-                r["USR_INPUT"] = itm.USR_INPUT;
-                r["PRD_ATRB_SID"] = itm.PRD_ATRB_SID;
-                r["PRD_SELC_LVL"] = itm.PRD_SELC_LVL;
+                r["USR_INPUT"] = itm.USR_INPUT;                
                 r["EXCLUDE"] = itm.EXCLUDE;
                 r["FILTER"] = itm.FILTER;
                 r["START_DATE"] = itm.START_DATE;

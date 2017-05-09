@@ -283,9 +283,7 @@ namespace Intel.MyDeals.BusinessLogic
                     ProductEntryAttribute pea = new ProductEntryAttribute();
                     pea.USR_INPUT = product.ToString();
                     pea.START_DATE = userProduct.START_DATE.ToString();
-                    pea.END_DATE = userProduct.END_DATE.ToString();
-                    pea.PRD_ATRB_SID = userProduct.PRD_ATRB_SID;
-                    pea.PRD_SELC_LVL = userProduct.PRD_SELC_LVL;
+                    pea.END_DATE = userProduct.END_DATE.ToString();                    
                     pea.EXCLUDE = userProduct.EXCLUDE;
                     pea.FILTER = userProduct.FILTER;
                     prodNamesList.Add(pea);
@@ -296,9 +294,7 @@ namespace Intel.MyDeals.BusinessLogic
                                       from t in pa.DefaultIfEmpty()
                                       select new ProductEntryAttribute
                                       {
-                                          USR_INPUT = t == null ? p.USR_INPUT : t.PRD_NM,
-                                          PRD_ATRB_SID = p.PRD_ATRB_SID,
-                                          PRD_SELC_LVL = p.PRD_SELC_LVL,
+                                          USR_INPUT = t == null ? p.USR_INPUT : t.PRD_NM,                                          
                                           EXCLUDE = p.EXCLUDE,
                                           FILTER = p.FILTER,
                                           END_DATE = p.END_DATE,
@@ -401,7 +397,7 @@ namespace Intel.MyDeals.BusinessLogic
                 charset = charsetResult.CNST_VAL_TXT;
 
             string userProd = Regex.Replace(userProduct, @"(?<=\([^()]*),", "/");
-            userProd = userProd.Replace(" OR ", ",");
+            userProd = Regex.Replace(userProd, " OR ", @", ", RegexOptions.IgnoreCase);            
             userProd = userProd.Replace(" & ", ",");
             var myRegex = new Regex(@"\([^\)]*\)|(/)");
 
@@ -418,8 +414,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             string[] splits = Regex.Split(replaced, "~");
             var singleProducts = new List<string>();
-
-            //string charset = "i3 ,i5 ,i7 ,E3 ,E5 ,E7 ,X3 ";
+            
             string[] chararr = charset.Split(',');
 
             foreach (var p in splits.Where(p => !string.IsNullOrEmpty(p)))
@@ -430,8 +425,7 @@ namespace Intel.MyDeals.BusinessLogic
                 {
                     foreach (string row in chararr)
                     {
-                        if (item.IndexOf(row) == 0)
-                        //if (item.Contains(row.ToString()))
+                        if (item.IndexOf(row) == 0)                        
                         {
                             strRep = item.Replace(row, row.Trim() + '-');
                             break;

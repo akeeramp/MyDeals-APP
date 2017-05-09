@@ -38,14 +38,8 @@ namespace Intel.MyDeals.Entities
     public partial class ProductEntryAttribute
     {
         [DataMember]
-        public System.String USR_INPUT { set; get; }
-
-        [DataMember]
-        public System.Int32 PRD_ATRB_SID { set; get; }
-
-        [DataMember]
-        public System.String PRD_SELC_LVL { set; get; }
-
+        public System.String USR_INPUT { set; get; }     
+                
         [DataMember]
         public System.String EXCLUDE { set; get; }
 
