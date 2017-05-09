@@ -61,7 +61,7 @@
         <div ng-if="vm.multipleMatchProducts.length != 0">
             <label>Multiple match found for Products, go to Product Corrector(s).</label>
             <div class="alert alert-warning" style="max-height: 200px;overflow: scroll;">
-                <div ng-repeat="a in vm.multipleMatchProducts">
+                <div ng-repeat="a in vm.multipleMatchProducts">                    
                     <div ng-repeat="(productName, productHierarchy) in a.Items">
                         <div ng-if="productHierarchy.length != 0">
                             {{productName}} <i class="intelicon-arrow-forward-right"></i>
@@ -70,8 +70,8 @@
                                     <div role="button" kendo-tooltip k-content="'Click here to choose.'" ng-click="vm.addToMydealProducts(product)">{{vm.makeHierarchy(product)}}</div>
                                 </li>
                             </ul>
-                            </div>
                         </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -95,22 +95,22 @@
 
 </div>
 <div class="col-md-12">
-    <div class="col-md-5" ng-show="IsVisible">
+    <div class="col-md-5">
         <div id="prodGrid" kendo-grid="prodGrid" class="table table-bordered table-striped table-intel" expand-k-collapsible expand-k-grid options="vm.gridOptionsProduct" k-rebind="vm.gridOptions.selectable"
              ng-dblclick="vm.handleDoubleClick()"></div>
     </div>
 
-    <div class="col-md-2" style="padding-top: 250px;" ng-show="IsVisible">
+    <div class="col-md-2" style="padding-top: 250px;">
         <a role="button" ng-click="vm.fetchProductDetails()" class="k-header k-button k-button-icontext">Translate</a>
     </div>
 
-    <div class="col-md-5" ng-show="IsVisible">
+    <div class="col-md-5">
         <div id="prodSelectGrid" kendo-grid="grid" groupable="true" class="table" expand-k-grid footer-offset="90" options="vm.gridOptions"></div>
     </div>
 </div>
 
 <style>
-    #prodSelectGrid {
+    #prodSelectGrid, #prodGrid {
         height: 500px;
     }
 
