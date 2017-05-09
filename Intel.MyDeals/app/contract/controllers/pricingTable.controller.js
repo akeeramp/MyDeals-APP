@@ -608,11 +608,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					}
 
 					// Add validation dropdowns/multiselects onto the cells
-					// TODO ///
 					if (myFieldModel.opLookupText == "DROP_DOWN" || myFieldModel.opLookupText == "dropdownName") {
-						dropdownValuesSheet.batch(function () {
-							// Call API
-							dataService.get(myFieldModel.opLookupUrl, null, null, true).then(function (response) {
+						// Call API
+						dataService.get(myFieldModel.opLookupUrl, null, null, true).then(function (response) {
+							dropdownValuesSheet.batch(function () {
 								for (var i = 0; i < response.data.length; i++) {
 									var myKey = response.data[i].ATRB_CD;
 									// TODO: Why is ECAP_TYPE called PROGRAM_ECAP_TYPE and can we change that?
@@ -622,9 +621,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 									// Add values onto the other sheet
 									dropdownValuesSheet.range(vm.colToLetter[myKey] + (i + 1)).value(response.data[i].DROP_DOWN);
 								}
+							});
 							}, function (error) {
 								logger.error("Unable to get dropdown data.", error, error.statusText);
-							});
 						});
 						if (myFieldModel.uiType == "RADIOBUTTONGROUP" || myFieldModel.uiType == "DROPDOWN") {
 							sheet.range(myColumnName + ":" + myColumnName).validation({
@@ -646,18 +645,20 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 						// Add validations based on column type
 						switch (myFieldModel.type) {
 							case "date":
-								// Add date picker editor and validation
-								sheet.range(myColumnName + ":" + myColumnName).validation({
-									dataType: "date",
-									showButton: true,
-									comparerType: "between",
-									from: 'DATEVALUE("1/1/1900")',
-									to: 'DATEVALUE("12/31/9999")',
-									allowNulls: myFieldModel.nullable,
-									type: "warning",
-									messageTemplate: "Value must be a date"
-								});
-								sheet.range(myColumnName + ":" + myColumnName).format("MM/dd/yyyy");
+								//// TODO: Date conversion is killing IE by 1-2 minutes (on Jeff's computer)
+								//// Add date picker editor and validation
+								//sheet.range(myColumnName + ":" + myColumnName).validation({
+								//	dataType: "date",
+								//	showButton: true,
+								//	comparerType: "between",
+								//	from: 'DATEVALUE("1/1/1900")',
+								//	to: 'DATEVALUE("12/31/9999")',
+								//	allowNulls: myFieldModel.nullable,
+								//	type: "warning",
+								//	messageTemplate: "Value must be a date"
+								//});
+								//sheet.range(myColumnName + ":" + myColumnName).format("MM/dd/yyyy");
+								vm.requiredStringColumns[key] = true;
 								break;
 							case "number":
 								if (!myFieldModel.nullable) {
