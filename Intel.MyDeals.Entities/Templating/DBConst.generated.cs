@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 5/9/2017 6:23:59 PM
+File Updated: 5/11/2017 10:48:45 AM
 On: PWECKENR-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -370,15 +370,6 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Object
 		///</summary>
 		public const string CPU_PACKAGE = "CPU_PACKAGE";
-
-		///<summary>
-		/// DIM_SID: 7
-		/// DIM_CD: PRD
-		/// ATRB_SID: 7086
-		/// TGT_COL_TYPE: VARCHAR
-		/// DOT_NET_DATA_TYPE: System.Object
-		///</summary>
-		public const string CPU_PROCESSOR_NUMBER = "CPU_PROCESSOR_NUMBER";
 
 		///<summary>
 		/// DIM_SID: 7
@@ -840,15 +831,6 @@ namespace Intel.MyDeals.Entities {
 		public const string FSE_APPROVED_PRICE = "FSE_APPROVED_PRICE";
 
 		///<summary>
-		/// DIM_SID: 7
-		/// DIM_CD: PRD
-		/// ATRB_SID: 7084
-		/// TGT_COL_TYPE: VARCHAR
-		/// DOT_NET_DATA_TYPE: System.Object
-		///</summary>
-		public const string GDM_BRND_NM = "GDM_BRND_NM";
-
-		///<summary>
 		/// DIM_SID: 2
 		/// DIM_CD: CUST
 		/// ATRB_SID: 2022
@@ -856,15 +838,6 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Object
 		///</summary>
 		public const string GDM_CUST_DIV_NM = "GDM_CUST_DIV_NM";
-
-		///<summary>
-		/// DIM_SID: 7
-		/// DIM_CD: PRD
-		/// ATRB_SID: 7085
-		/// TGT_COL_TYPE: VARCHAR
-		/// DOT_NET_DATA_TYPE: System.Object
-		///</summary>
-		public const string GDM_FMLY_NM = "GDM_FMLY_NM";
 
 		///<summary>
 		/// DIM_SID: 7

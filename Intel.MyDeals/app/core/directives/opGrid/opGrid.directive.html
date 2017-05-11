@@ -6,9 +6,9 @@
             <div id="tabstrip" kendo-tab-strip class="gradTab" k-ng-delay="tabStripDelay" ng-show="tabStripDelay">
                 <ul>
                     <li ng-repeat="group in opOptions.groups | orderBy:'order'" ng-click="showCols(group.name)">
-                        <i class="intelicon-pin-outlined" ng-hide="{{ group.name == 'All'}}" ng-click="clickPin($event, group.name)"></i> {{group.name}}
+                        <i class="intelicon-pin-outlined" ng-hide="{{ group.name == 'All'}}" title="Pin tab so it always shows in the grid" ng-click="clickPin($event, group.name)"></i> {{group.name}}
                         <span class="badge error" ng-show="group.numErrors > 0">{{group.numErrors}}</span>
-                        <i class="intelicon-close-solid closeGrp" ng-hide="{{ group.name == 'All'}}" ng-click="removeGrp($event, group.name)"></i>
+                        <i class="intelicon-close-solid closeGrp" ng-hide="{{ group.name == 'All'}}" title="Close tab" ng-click="removeGrp($event, group.name)"></i>
                     </li>
                 </ul>
             </div>
@@ -175,7 +175,7 @@
 
     .gradTab i.closeGrp {
         font-size: 16px;
-        color: #cccccc;
+        color: #00AEEF;
         margin-left: 6px;
         margin-right: 4px
     }
@@ -263,6 +263,10 @@
         background: -webkit-linear-gradient(top,  #fdfdfd 0%,#d9d9d9 100%); /* Chrome10-25,Safari5.1-6 */
         background: linear-gradient(to bottom,  #fdfdfd 0%,#d9d9d9 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fdfdfd', endColorstr='#d9d9d9',GradientType=0 ); /* IE6-9 */
+        font-weight: 600;
+    }
+    .op-grid.k-grid .k-grid-header .k-header .k-link {
+        font-weight: 600;
     }
     .op-grid.k-grid tr td {
         padding-left: 0 !important;
@@ -303,6 +307,10 @@
         white-space: nowrap;
     }
 
+    .op-grid.k-grid td {
+        color: #000000;
+    }
+
     .op-grid.k-grid tr.k-alt {
         background-color: transparent;
     }
@@ -335,7 +343,12 @@
 
     .dealLnk a {
         margin-left: 6px;
-        color: #999999;
+        color: #00AEEF;
         font-style: italic;
     }
+
+    .valid-icon {
+        margin-left: 6px;
+    }
+
 </style>

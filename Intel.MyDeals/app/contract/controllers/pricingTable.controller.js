@@ -253,6 +253,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 		        "PTR_USER_PRD": {
 		            "Groups": ["Deal Info"]
 		        },
+		        "TITLE": {
+		            "Groups": ["Deal Info"]
+		        },
 		        "PRODUCT_FILTER": {
 		            "Groups": ["Deal Info"]
 		        },

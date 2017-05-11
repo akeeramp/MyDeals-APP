@@ -2,7 +2,6 @@
     <div id="secHeader">
         <div ng-show="curPricingTableId > 0" class="col-md-11" style="padding-bottom: 5px;">
             <div class="fl textCircleMd pct_{{ curPricingTable.PASSED_VALIDATION }}">{{ curPricingTable.OBJ_SET_TYPE_CD | limitTo:1 }}</div>
-            {{ curPricingTable.PASSED_VALIDATION }}
             <input type="text" ng-model="curPricingTable.TITLE" class="transparentInput fntLg noBottomBorder col-md-11" />
         </div>
     </div>

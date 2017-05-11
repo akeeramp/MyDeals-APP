@@ -209,12 +209,12 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
             switch (elMapping.TranslationType)
             {
                 case OpTranslationType.OneDealPerProduct:
-                    foreach (var enumerable in items.Values)
+                    foreach (KeyValuePair<string, IEnumerable<ProdMapping>> kvp in items)
                     {
-                        var item = (List<ProdMapping>) enumerable;
+                        var item = (List<ProdMapping>)kvp.Value;
                         foreach (ProdMapping pMap in item)
                         {
-                            retItems.CopyMatchingAttributes(opFlatItem, elMapping, singleDimAtrbs, multiDimAtrbs, new List<ProdMapping> { pMap });
+                            retItems.CopyMatchingAttributes(opFlatItem, elMapping, singleDimAtrbs, multiDimAtrbs, kvp.Key, new List <ProdMapping> { pMap });
                         }
                     }
                     break;
@@ -222,11 +222,13 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                 case OpTranslationType.OneDealPerRow:
 
                     List<ProdMapping> pMaps = new List<ProdMapping>();
-                    foreach (IEnumerable<ProdMapping> enumerable in items.Values)
+                    string key = "";
+                    foreach (KeyValuePair<string, IEnumerable<ProdMapping>> kvp in items)
                     {
-                        pMaps.AddRange((List<ProdMapping>)enumerable);
+                        key = kvp.Key;
+                        pMaps.AddRange((List<ProdMapping>)kvp.Value);
                     }
-                    retItems.CopyMatchingAttributes(opFlatItem, elMapping, singleDimAtrbs, multiDimAtrbs, pMaps);
+                    retItems.CopyMatchingAttributes(opFlatItem, elMapping, singleDimAtrbs, multiDimAtrbs, key, pMaps);
                     break;
             }
 
@@ -249,14 +251,15 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
 
 
         public static void CopyMatchingAttributes(this OpDataCollectorFlattenedList retItems, OpDataCollectorFlattenedItem opFlatItem, OpDataElementTypeMapping elMapping,
-            List<string> singleDimAtrbs, List<string> multiDimAtrbs, List<ProdMapping> pMaps)
+            List<string> singleDimAtrbs, List<string> multiDimAtrbs, string userPrdNm, List<ProdMapping> pMaps)
         {
             OpDataCollectorFlattenedItem newItem = new OpDataCollectorFlattenedItem();
 
             foreach (ProdMapping pMap in pMaps)
             {
                 opFlatItem[AttributeCodes.PRODUCT_FILTER] = pMap.PRD_MBR_SID;
-                opFlatItem[AttributeCodes.PTR_USER_PRD] = pMap.DISPLAY_NM;
+                opFlatItem[AttributeCodes.TITLE] = pMap.DISPLAY_NM;                
+                opFlatItem[AttributeCodes.PTR_USER_PRD] = userPrdNm;
                 opFlatItem[AttributeCodes.CAP] = pMap.CAP;
                 opFlatItem[AttributeCodes.CAP_STRT_DT] = pMap.CAP_START;
                 opFlatItem[AttributeCodes.CAP_END_DT] = pMap.CAP_END;

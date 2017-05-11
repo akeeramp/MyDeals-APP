@@ -478,7 +478,14 @@ namespace Intel.MyDeals.BusinessLogic
                         //myDealsData[opDataElementType].Messages.WriteMessage(OpMsg.MessageType.Warning, $"{dc.DcType} - {dc.DcID} : {de.ValidationMessage}");
                     }
 
-                    dc.SetDataElementValue(AttributeCodes.PASSED_VALIDATION, !dcHasErrors);
+                    if (forceValidation && !dcHasErrors)
+                    {
+                        dc.SetDataElementValue(AttributeCodes.PASSED_VALIDATION, true);
+                    }
+                    else if (dc.IsModified)
+                    {
+                        dc.SetDataElementValue(AttributeCodes.PASSED_VALIDATION, false);
+                    }
                 }
             }
 

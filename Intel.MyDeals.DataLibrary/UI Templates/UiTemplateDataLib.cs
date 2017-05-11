@@ -403,7 +403,7 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "Deal Id",
                 Width = 90,
                 IsReadOnly = true,
-                Template = "<div class='dealLnk'><a href=''>#=DC_ID#</a></div>"
+                Template = "<div class='dealLnk'><i class='intelicon-protection-solid valid-icon' title='Validation: {{dataItem.PASSED_VALIDATION}}' ng-class='{ pctf_: (dataItem.PASSED_VALIDATION === undefined || dataItem.PASSED_VALIDATION === \"\"), pctf_true: (dataItem.PASSED_VALIDATION === \"True\"), pctf_false: (dataItem.PASSED_VALIDATION === \"False\"), \"intelicon-protection-solid\": (dataItem.PASSED_VALIDATION === undefined || dataItem.PASSED_VALIDATION === \"\"), \"intelicon-protection-checked-verified-solid\": (dataItem.PASSED_VALIDATION === \"True\"), \"intelicon-protection-failed-solid\": (dataItem.PASSED_VALIDATION === \"False\") }'></i><a href=''>#=DC_ID#</a></div>"
             });
             items.Add(new UiTemplateContainerItem
             {
@@ -477,6 +477,15 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.PTR_USER_PRD,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 Template = "#=gridUtils.uiControlWrapper(data, 'PTR_USER_PRD')#",
+                DataType = "object",
+                Width = 150
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 20,
+                AtrbCd = AttributeCodes.TITLE,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Template = "#=gridUtils.uiControlWrapper(data, 'TITLE')#",
                 DataType = "object",
                 Width = 150
             });

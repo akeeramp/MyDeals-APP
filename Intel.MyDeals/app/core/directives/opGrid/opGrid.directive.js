@@ -597,6 +597,13 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
             $scope.$on('saveComplete', function (event, args) {
                 // need to clean out all flags... dirty, error, validMsg
                 $scope.cleanFlags();
+
+                if (!!args.data.WIP_DEAL) {
+                    for (var i = 0; i < args.data.WIP_DEAL.length; i++) {
+                        var dataItem = $scope.findDataItemById(args.data.WIP_DEAL[i]["DC_ID"]);
+                        dataItem["PASSED_VALIDATION"] = args.data.WIP_DEAL[i]["PASSED_VALIDATION"];
+                    }
+                }
             });
 
             $scope.$on('saveWithWarnings', function (event, args) {
@@ -604,25 +611,29 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
                 $scope.cleanFlags();
 
                 // need to set all flags... dirty, error, validMsg
-                for (var i = 0; i < args.data.WIP_DEAL.length; i++) {
-                    if (args.data.WIP_DEAL[i].warningMessages.length === 0) continue;
+                if (!!args.data.WIP_DEAL) {
+                    for (var i = 0; i < args.data.WIP_DEAL.length; i++) {
+                        var dataItem = $scope.findDataItemById(args.data.WIP_DEAL[i]["DC_ID"]);
+                        dataItem["PASSED_VALIDATION"] = args.data.WIP_DEAL[i]["PASSED_VALIDATION"];
 
-                    var beh = args.data.WIP_DEAL[i]._behaviors;
-                    if (!beh) beh = {};
-                    if (beh.isError === undefined) beh.isError = {};
-                    if (beh.validMsg === undefined) beh.validMsg = {};
+                        if (args.data.WIP_DEAL[i].warningMessages.length !== 0) {
+                            var beh = args.data.WIP_DEAL[i]._behaviors;
+                            if (!beh) beh = {};
+                            if (beh.isError === undefined) beh.isError = {};
+                            if (beh.validMsg === undefined) beh.validMsg = {};
 
-                    var dataItem = $scope.findDataItemById(args.data.WIP_DEAL[i]["DC_ID"]);
-                    if (dataItem != null) {
-                        Object.keys(beh.isError).forEach(function (key, index) {
+                            if (dataItem != null) {
+                                Object.keys(beh.isError).forEach(function(key, index) {
 
-                            dataItem._behaviors.isError[key] = beh.isError[key];
-                            dataItem._behaviors.validMsg[key] = beh.ValidMsg[key];
-                            $scope.increaseBadgeCnt(key);
+                                        dataItem._behaviors.isError[key] = beh.isError[key];
+                                        dataItem._behaviors.validMsg[key] = beh.ValidMsg[key];
+                                        $scope.increaseBadgeCnt(key);
 
-                        }, beh.isError);
+                                    },
+                                    beh.isError);
+                            }
+                        }
                     }
-
                 }
 
             });

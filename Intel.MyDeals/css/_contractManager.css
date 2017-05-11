@@ -474,7 +474,16 @@
         color: #ffffff;
     }
     .pct_ {
-        background: #F3D54E;
+        background: #FFA300;
+    }
+    .pctf_True, .pctf_true {
+        color: #C4D600;
+    }
+    .pctf_False, .pctf_false {
+        color: #ED1C24;
+    }
+    .pctf_ {
+        color: #FFA300;
     }
  
     .psNav {
@@ -1023,6 +1032,18 @@
 		 font: normal normal normal 14px/1 FontAwesome;
 		 opacity: 1;
 	 }
+
+     .ttl-stage {
+         padding: 3px 15px 0 15px;
+         font-size: 14px;
+         color: #003C71;
+         height: 30px;
+     }
+     .ttl-stage i {
+         font-size: 18px;
+         vertical-align: text-bottom;
+         margin-bottom: 4px;
+     }
 
 	 /* Error icon button for spreadsheet cell editor */
 	 .ssEditorBtn {

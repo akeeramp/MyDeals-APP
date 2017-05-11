@@ -1,4 +1,5 @@
-﻿.myDealsControl {
+﻿
+.myDealsControl {
         margin: 5px 0 5px 5px;
         float: left;
     }
@@ -40,12 +41,12 @@
     .isReadOnly .k-multiselect-wrap,
     .isReadOnly .k-input[readonly]
     {
-        color: #999999 !important;
+        color: #777 !important;
         background-color: #eeeeee !important;
     }
 
     .isReadOnlyCell {
-        color: #999999 !important;
+        color: #777 !important;
         background-color: rgba(250, 250, 250, 0.7) !important;
     }
 
@@ -302,6 +303,7 @@
 .opUiContainer.md .err-bit { margin: 0 0 0 0; }
 
 .opUiContainer.md .opElementHelpIcon, .opUiContainer.md [class^="intelicon-"], .opUiContainer.md [class*=" intelicon-"] { font-size: 14px !important; }
+.opUiContainer.md [class^="intelicon-"].valid-icon, .opUiContainer.md [class*=" intelicon-"].valid-icon { font-size: 20px !important; }
 
 .opUiContainer.md.k-grid td { font-size: 12px !important; height: 20px !important;}
 .opUiContainer.md.k-grid .k-header a { font-size: 12px !important; }
