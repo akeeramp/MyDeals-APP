@@ -92,10 +92,16 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
         }
         updateDisplayTitle();
 
-        $scope.refreshContractData = function () {
+        $scope.refreshContractData = function (id) {
             objsetService.readContract($scope.contractData.DC_ID).then(function (data) {
                 $scope.contractData = $scope.initContract(data);
                 $scope.contractData.CUST_ACCNT_DIV_UI = "";
+
+                // if the current strategy was changed, update it
+                if ($scope.curPricingStrategyId === id) {
+                    $scope.curPricingStrategy = util.findInArray($scope.contractData.PRC_ST, id);
+                }
+
                 $timeout(function () {
                     $scope.$apply();
                 });
@@ -830,7 +836,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                     $timeout(function () {
                         $scope.$broadcast('refresh');
                         $("#wincontractMessages").data("kendoWindow").open();
-                        $scope.refreshContractData();
+                        $scope.refreshContractData(ps.DC_ID);
                     }, 50);
                 },
                 function(result) {
