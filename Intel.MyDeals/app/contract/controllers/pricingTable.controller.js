@@ -262,11 +262,29 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 		        "ECAP_PRICE": {
 		            "Groups": ["Deal Info"]
 		        },
+		        "CAP_INFO": {
+		            "Groups": ["Deal Info"]
+		        },
 		        "CAP": {
+		            "Groups": ["All"]
+		        },
+		        "CAP_STRT_DT": {
+		            "Groups": ["All"]
+		        },
+		        "CAP_END_DT": {
+		            "Groups": ["All"]
+		        },
+		        "YCS2_INFO": {
 		            "Groups": ["Deal Info"]
 		        },
 		        "YCS2_PRC_IRBT": {
-		            "Groups": ["Deal Info"]
+		            "Groups": ["All"]
+		        },
+		        "YCS2_START_DT": {
+		            "Groups": ["All"]
+		        },
+		        "YCS2_END_DT": {
+		            "Groups": ["All"]
 		        },
 		        "VOLUME": {
 		            "Groups": ["Deal Info"]

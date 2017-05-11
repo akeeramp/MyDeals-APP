@@ -16,10 +16,25 @@ function dealTools() {
             $scope.stgOneChar = function () {
                 return $scope.dataItem.WF_STG_CD === undefined ? "&nbsp;" : $scope.dataItem.WF_STG_CD[0];
             }
-            
-            $scope.clkAllItems = function(e) {
-                debugger;
+
+            $scope.notesActions = [
+                {
+                    text: 'OK',
+                    action: function () {
+                        $scope.$apply(function () {
+                            var dataItem = $scope.dataItem;
+                            if (dataItem._behaviors.isDirty === undefined) dataItem._behaviors.isDirty = {};
+                            dataItem._behaviors.isDirty['NOTES'] = true;
+                            dataItem._dirty = true;
+                        });
+                    }
+                }
+            ];
+
+            $scope.dialogShow = function() {
+
             }
+            
         }],
         link: function (scope, element, attr) {
         }

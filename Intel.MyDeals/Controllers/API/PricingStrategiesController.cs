@@ -75,5 +75,17 @@ namespace Intel.MyDeals.Controllers.API
                 , "Unable to delete the Pricing Strategy {id}"
             );
         }
+
+        
+        [Authorize]
+        [Route("ActionPricingStrategy/{custId}/{actn}")]
+        [HttpPost]
+        public OpMsgQueue ActionPricingStrategy(int custId, string actn, OpDataCollectorFlattenedList pricingStrategies)
+        {
+            return SafeExecutor(() => _pricingStrategiesLib.ActionPricingStrategy(custId, actn, pricingStrategies)
+                , "Unable to action the Pricing Strategy {id}"
+            );
+        }
+
     }
 }

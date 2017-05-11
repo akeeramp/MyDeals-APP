@@ -178,7 +178,7 @@
     WriteLine("//-- Roles ---------------------------------------------------------------------------------");
 	WriteLine("");
 
-	cmd = new SqlCommand(@"SELECT ROLE_NM from [dbo].[ROLE_MSTR] WHERE app_sid = 1 and ROLE_NM != 'All Role Types'", conn);
+	cmd = new SqlCommand(@"SELECT ROLE_NM, ROLE_TIER_NM from [dbo].[ROLE_MSTR] WHERE app_sid = 1 and ROLE_NM != 'All Role Types'", conn);
 
 	WriteLine("public static class RoleTypes {");
 	PushIndent(TAB);
@@ -190,6 +190,17 @@
 			WriteLine(@"public const string {0} = ""{1}"";", rdr["ROLE_NM"].ToString().Replace(" ","_"), rdr["ROLE_NM"]);
 		} 
     }
+
+
+	WriteLine(@"public static Dictionary<string, string> Tiers = new Dictionary<string, string> {");
+	using(var rdr = cmd.ExecuteReader())
+	{
+		while(rdr.Read())
+		{
+			WriteLine(@"[""{0}""] = ""{1}"",", rdr["ROLE_NM"].ToString().Replace(" ","_"), rdr["ROLE_TIER_NM"].ToString());
+		} 
+    }
+	WriteLine(@"};");
 
 	PopIndent();
 	WriteLine("}"); // class
@@ -324,7 +335,7 @@
 	foreach (DataRow drg in dt_objs.Rows)
     {
 		//Format is: new OpDataElementTypeItem { Id = 1, OpDeType = OpDataElementType.Contract, Alias = "CNTRCT", Order = 10 },
-		WriteLine("new OpDataElementTypeItem {Id = " + drg["OBJ_TYPE_SID"] + ", OpDeType = OpDataElementType." + drg["OBJ_TYPE"] + ", Alias = \"" + drg["OBJ_TYPE"] + "\", Order = " + drg["OBJ_PRCSS_ORD"] + " },");
+		WriteLine("new OpDataElementTypeItem {Id = " + drg["OBJ_TYPE_SID"] + ", OpDeType = OpDataElementType." + drg["OBJ_TYPE"] + ", Alias = \"" + drg["OBJ_TYPE"] + "\", Description = \"" + drg["OBJ_DESC"] + "\", Order = " + drg["OBJ_PRCSS_ORD"] + " },");
 	}
 	PopIndent();
 

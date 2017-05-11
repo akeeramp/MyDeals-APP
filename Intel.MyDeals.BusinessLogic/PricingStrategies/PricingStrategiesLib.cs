@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Intel.MyDeals.Entities;
@@ -73,6 +74,93 @@ namespace Intel.MyDeals.BusinessLogic
         public OpMsg DeletePricingStrategy(int custId, OpDataCollectorFlattenedList pricingStrategies)
         {
             return pricingStrategies.DeleteByIds(OpDataElementType.PRC_ST, custId, _dataCollectorLib);
+        }
+
+        public OpMsgQueue ActionPricingStrategy(int custId, string actn, OpDataCollectorFlattenedList pricingStrategies)
+        {
+            OpMsgQueue opMsgQueue = new OpMsgQueue();
+
+            List<OpDataElementType> opDataElementTypes = new List<OpDataElementType>
+            {
+                OpDataElementType.PRC_ST,
+                OpDataElementType.PRC_TBL_ROW,
+                OpDataElementType.WIP_DEAL
+            };
+
+            List<int> atrbs = new List<int>
+            {
+                Attributes.WF_STG_CD.ATRB_SID,
+                Attributes.OBJ_SET_TYPE_CD.ATRB_SID,
+                Attributes.PASSED_VALIDATION.ATRB_SID
+            };
+
+            List<int> ids = pricingStrategies.Select(item => int.Parse(item[AttributeCodes.DC_ID].ToString())).ToList();
+
+
+            MyDealsData myDealsData = OpDataElementType.PRC_ST.GetByIDs(ids, opDataElementTypes, atrbs);
+            foreach (OpDataCollectorFlattenedItem item in pricingStrategies)
+            {
+                OpDataCollector dc = myDealsData[OpDataElementType.PRC_ST].Data[int.Parse(item[AttributeCodes.DC_ID].ToString())];
+                string stageInDb = dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
+                string stageIn = item[AttributeCodes.WF_STG_CD].ToString();
+
+                // concurency check
+                if (stageIn != stageInDb)
+                {
+                    opMsgQueue.Messages.Add(new OpMsg
+                    {
+                        Message = "The stage was change by another source prior to this action.  Please refresh and try again.",
+                        MsgType = OpMsg.MessageType.Warning,
+                        ExtraDetails = dc.DcType,
+                        KeyIdentifiers = new[] { dc.DcID }
+                    });
+                    continue;
+                }
+
+                // get next stage
+                string targetStage = dc.GetNextStage(actn);
+
+                if (string.IsNullOrEmpty(targetStage))
+                {
+                    opMsgQueue.Messages.Add(new OpMsg
+                    {
+                        Message = $"You do not have permission to {actn} the Pricing Strategy from the {stageIn} stage.",
+                        MsgType = OpMsg.MessageType.Warning,
+                        ExtraDetails = dc.DcType,
+                        KeyIdentifiers = new[] { dc.DcID }
+                    });
+                    continue;
+                }
+
+                dc.SetDataElementValue(AttributeCodes.WF_STG_CD, targetStage);
+                opMsgQueue.Messages.Add(new OpMsg
+                {
+                    Message = $"Pricing Strategy moved from {stageIn} to {targetStage}.",
+                    MsgType = OpMsg.MessageType.Info,
+                    ExtraDetails = dc.DcType,
+                    KeyIdentifiers = new[] { dc.DcID }
+                });
+
+                // TODO add actions to stack like TRACKER NUMBER or WIP-TO_REAL or COST TEST, etc...
+                // This should probably be a rule item
+
+            }
+
+            myDealsData[OpDataElementType.PRC_ST].BatchID = Guid.NewGuid();
+            myDealsData[OpDataElementType.PRC_ST].GroupID = -101; // Whatever the real ID of this object is
+            
+            // Back to normal operations, clear out the messages and all.
+            myDealsData[OpDataElementType.PRC_ST].Actions.RemoveAll(r => r.ActionDirection == OpActionDirection.Inbound);
+            myDealsData[OpDataElementType.PRC_ST].Messages.Messages.RemoveAll(r => true);
+
+            // Tack on the save action call now
+            myDealsData[OpDataElementType.PRC_ST].AddSaveActions();
+
+
+            myDealsData.EnsureBatchIDs();
+            myDealsData.Save(custId);
+
+            return opMsgQueue;
         }
 
 

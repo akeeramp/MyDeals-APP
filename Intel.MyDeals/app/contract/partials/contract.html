@@ -5,6 +5,9 @@
                 <div ui-view="contractHeaderView"></div>
             </div>
             <div id="contractContainer" class="fullHeight">
+                <div kendo-window id="wincontractMessages" k-title="'Results'" k-visible="false" k-width="'620px;'" k-position="{ top: 200, left: 350 }">
+                    <div message-board ng-model="messages" id-title="'Pricing Strategy'"></div>
+                </div>
                 <div ui-view="contractWrapperView" class="fullHeight"></div>
             </div>
         </div>

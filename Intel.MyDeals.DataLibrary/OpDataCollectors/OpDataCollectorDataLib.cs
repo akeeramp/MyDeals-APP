@@ -225,7 +225,8 @@ namespace Intel.MyDeals.DataLibrary
                 DcID = 0,
                 DcType = opDataElementType.ToId(),
                 DcParentType = opDataElementType.GetParent().ToId(),
-                DcParentID = 0
+                DcParentID = 0,
+                State = OpDataElementState.Unchanged
             });
 
             retSet.Add(new OpDataElementUI
@@ -236,7 +237,8 @@ namespace Intel.MyDeals.DataLibrary
                 DcID = 0,
                 DcType = opDataElementType.ToId(),
                 DcParentType = opDataElementType.GetParent().ToId(),
-                DcParentID = 0
+                DcParentID = 0,
+                State = OpDataElementState.Unchanged
             });
         }
 

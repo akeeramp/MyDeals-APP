@@ -169,7 +169,7 @@
     }
     #secContainer {
         height: 100%;
-        overflow: auto;
+        overflow: hidden;
     }
     #secFooter {
         margin: 0 0 -50px 0;
@@ -466,24 +466,17 @@
         color: #ffffff;
         background: #00AEEF;
     }
-    .pct_PASS {
+    .pct_True {
         background: #C4D600;
     }
-    .pct_FAIL {
+    .pct_False {
         background: #ED1C24;
-    }
-    .pct_NA {
-        background: #939598;
-    }
-    .pct_INCOMPLETE {
-        background: #F3D54E;
+        color: #ffffff;
     }
     .pct_ {
-        /* Until we get PCT/MCT done, we will always default to this style.  So let's show a color for now' */
-        /* background: transparent; */
-        background: #C4D600;
+        background: #F3D54E;
     }
-
+ 
     .psNav {
         cursor: pointer;
         font-family: 'Intel Clear';

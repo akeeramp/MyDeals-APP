@@ -68,7 +68,8 @@ namespace Intel.MyDeals.BusinessLogic
                     OpDataElementTypeMapping elMapping = objSetType.OpDataElementTypeParentMapping(opType);
                     if (elMapping.TranslationType == OpTranslationType.OneDealPerProduct)
                     {
-                        string wipProd = items[AttributeCodes.PTR_USER_PRD + EN.VARIABLES.PRIMARY_DIMKEY].ToString();
+                        //string wipProd = items[AttributeCodes.PTR_USER_PRD + EN.VARIABLES.PRIMARY_DIMKEY].ToString();
+                        string wipProd = items[AttributeCodes.PTR_USER_PRD].ToString();
                         List<OpDataCollector> myDcs = myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.Where(d => d.DcParentID == parentid).ToList();
                         foreach (OpDataCollector odc in myDcs)
                         {
@@ -438,7 +439,7 @@ namespace Intel.MyDeals.BusinessLogic
             return opMsgQueue;
         }
 
-        public static bool ValidationApplyRules(this MyDealsData myDealsData)
+        public static bool ValidationApplyRules(this MyDealsData myDealsData, bool forceValidation = false)
         {
             // Apply rules to save packets here.  If validations are hit, append them to the DC and packet message lists.
             bool dataHasValidationErrors = false;
@@ -448,10 +449,15 @@ namespace Intel.MyDeals.BusinessLogic
                 if (!myDealsData.ContainsKey(opDataElementType)) continue;
                 foreach (OpDataCollector dc in myDealsData[opDataElementType].AllDataCollectors)
                 {
+                    var dcHasErrors = false;
+
                     dc.ApplyRules(MyRulesTrigger.OnSave);
+                    if (forceValidation) dc.ApplyRules(MyRulesTrigger.OnValidate);
+
                     foreach (IOpDataElement de in dc.GetDataElementsWithValidationIssues())
                     {
                         dataHasValidationErrors = true;
+                        dcHasErrors = true;
 
                         dc.Message.Messages.Add(new OpMsg
                         {
@@ -471,6 +477,8 @@ namespace Intel.MyDeals.BusinessLogic
                         //dc.Message.WriteMessage(OpMsg.MessageType.Warning, de.ValidationMessage);
                         //myDealsData[opDataElementType].Messages.WriteMessage(OpMsg.MessageType.Warning, $"{dc.DcType} - {dc.DcID} : {de.ValidationMessage}");
                     }
+
+                    dc.SetDataElementValue(AttributeCodes.PASSED_VALIDATION, !dcHasErrors);
                 }
             }
 

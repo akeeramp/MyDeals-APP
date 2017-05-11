@@ -392,7 +392,8 @@ namespace Intel.MyDeals.DataLibrary
                 RoleTypeCd = tempUserVitalsRole.First().ROLE_NM,
                 RoleTypeDescription = tempUserVitalsRole.First().ROLE_DSPLY_NM,
                 RoleTypeDisplayName = tempUserVitalsRole.First().ROLE_DSPLY_NM,
-                RoleTypeId = tempUserVitalsRole.First().ROLE_SID
+                RoleTypeId = tempUserVitalsRole.First().ROLE_SID,
+                RoleTier = RoleTypes.Tiers.ContainsKey(tempUserVitalsRole.First().ROLE_NM) ? RoleTypes.Tiers[tempUserVitalsRole.First().ROLE_NM] : ""
             };
 
             ////// Table 1 contains SecurityAction

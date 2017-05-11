@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 5/5/2017 2:37:50 PM
-On: MHTIPPIN-MOBL
+File Updated: 5/9/2017 6:23:59 PM
+On: PWECKENR-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
 using System;
@@ -1256,6 +1256,15 @@ namespace Intel.MyDeals.Entities {
 		///<summary>
 		/// DIM_SID: 3
 		/// DIM_CD: DEAL
+		/// ATRB_SID: 3668
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Boolean
+		///</summary>
+		public const string PASSED_VALIDATION = "PASSED_VALIDATION";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
 		/// ATRB_SID: 35
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.String
@@ -1853,6 +1862,17 @@ namespace Intel.MyDeals.Entities {
 		public const string RA = "RA";
 		public const string SA = "SA";
 		public const string DEV = "DEV";
+		public static Dictionary<string, string> Tiers = new Dictionary<string, string> {
+		["CBA"] = "Tier_2",
+		["DA"] = "Tier_3",
+		["Finance"] = "Tier_0",
+		["FSE"] = "Tier_1",
+		["GA"] = "Tier_2",
+		["Legal"] = "Tier_0",
+		["RA"] = "Tier_1",
+		["SA"] = "Tier_3",
+		["DEV"] = "Tier_0",
+		};
 	}
 
 
@@ -1933,12 +1953,12 @@ namespace Intel.MyDeals.Entities {
 		public static readonly OpDataElementTypeCollection OpDetCollection = new OpDataElementTypeCollection(
 			new List<OpDataElementTypeItem>
 			{
-				new OpDataElementTypeItem {Id = 1, OpDeType = OpDataElementType.CNTRCT, Alias = "CNTRCT", Order = 10 },
-				new OpDataElementTypeItem {Id = 2, OpDeType = OpDataElementType.PRC_ST, Alias = "PRC_ST", Order = 20 },
-				new OpDataElementTypeItem {Id = 3, OpDeType = OpDataElementType.PRC_TBL, Alias = "PRC_TBL", Order = 30 },
-				new OpDataElementTypeItem {Id = 4, OpDeType = OpDataElementType.PRC_TBL_ROW, Alias = "PRC_TBL_ROW", Order = 40 },
-				new OpDataElementTypeItem {Id = 5, OpDeType = OpDataElementType.WIP_DEAL, Alias = "WIP_DEAL", Order = 50 },
-				new OpDataElementTypeItem {Id = 6, OpDeType = OpDataElementType.DEAL, Alias = "DEAL", Order = 60 },
+				new OpDataElementTypeItem {Id = 1, OpDeType = OpDataElementType.CNTRCT, Alias = "CNTRCT", Description = "Contract", Order = 10 },
+				new OpDataElementTypeItem {Id = 2, OpDeType = OpDataElementType.PRC_ST, Alias = "PRC_ST", Description = "PricingStrategy", Order = 20 },
+				new OpDataElementTypeItem {Id = 3, OpDeType = OpDataElementType.PRC_TBL, Alias = "PRC_TBL", Description = "PricingTable", Order = 30 },
+				new OpDataElementTypeItem {Id = 4, OpDeType = OpDataElementType.PRC_TBL_ROW, Alias = "PRC_TBL_ROW", Description = "PricingTableRow", Order = 40 },
+				new OpDataElementTypeItem {Id = 5, OpDeType = OpDataElementType.WIP_DEAL, Alias = "WIP_DEAL", Description = "WipDeals", Order = 50 },
+				new OpDataElementTypeItem {Id = 6, OpDeType = OpDataElementType.DEAL, Alias = "DEAL", Description = "Deals", Order = 60 },
 			},
 
 			new Dictionary<OpDataElementType, OpDataElementType>

@@ -147,12 +147,23 @@ namespace Intel.MyDeals.BusinessLogic
                         }
                         else
                         {
-                            de.AtrbValue = items[de.AtrbCd];
+                            if (de.AtrbValue == null)
+                            {
+                                de.AtrbValue = items[de.AtrbCd];
+                            }
+                            else
+                            {
+                                string atrbdate = string.IsNullOrEmpty(de.AtrbValue.ToString()) ? "" : DateTime.Parse(de.AtrbValue.ToString()).ToString("MM/dd/yyyy");
+                                if (atrbdate != date.ToString("MM/dd/yyyy"))
+                                    de.AtrbValue = items[de.AtrbCd];
+
+                            }
                         }
                     }
                     else
                     {
                         de.AtrbValue = items[de.AtrbCd];
+                        if (de.AtrbID <= 2) de.State = OpDataElementState.Unchanged;
                     }
                 }
                 else if (items.ContainsKey(de.AtrbCd) && items[de.AtrbCd] != null)
@@ -203,6 +214,13 @@ namespace Intel.MyDeals.BusinessLogic
                 {
                     opMsgQueue.Messages.Add(new OpMsg(OpMsg.MessageType.Warning, "Unable to locate attrb ({0}) in deal {1}", dimKey, de.DcID));
                 }
+            }
+
+            // Now check for changes to see if the PASSED_VALIDATION flag needs to be reset
+            IOpDataElement dePassValid = dc.GetDataElement(AttributeCodes.PASSED_VALIDATION);
+            if (dePassValid != null && dc.ModifiedDataElements.Any())
+            {
+                dePassValid.AtrbValue = false;
             }
 
             return opMsgQueue;
@@ -258,6 +276,27 @@ namespace Intel.MyDeals.BusinessLogic
         public static string DisplayDealId(this OpDataCollector dc)
         {
             return dc.DcID.ToString();
+        }
+
+        public static string GetNextStage(this OpDataCollector dc, string actn)
+        {
+            OpUserToken opUserToken = OpUserStack.MyOpUserToken;
+
+            string stage = dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
+            string objSetType = dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
+
+            OpDataElementType opDataElementType = OpDataElementTypeConverter.FromString(dc.DcType);
+
+            // load actions
+            return DataCollections.GetWorkFlowItems()
+                .Where(w =>
+                w.WF_NM == "General WF" &&
+                w.OBJ_TYPE == opDataElementType.ToDesc() &&
+                w.OBJ_SET_TYPE_CD == objSetType &&
+                w.WFSTG_CD_SRC == stage &&
+                w.WFSTG_ACTN_NM == actn &&
+                w.ROLE_TIER_NM == opUserToken.Role.RoleTier)
+                .Select(w => w.WFSTG_CD_DEST).FirstOrDefault();
         }
     }
 }

@@ -1,24 +1,61 @@
-﻿<div class="dealTools">
+﻿
+<div class="dealTools">
     <div class='fl gridStatusMarker {{dataItem.WF_STG_CD}}' title='{{dataItem.WF_STG_CD}}'>{{stgOneChar()}}</div>
     <div class='fl'><input type="checkbox" style="margin: 8px 2px 4px 8px;" ng-model="dataItem.isLinked" /></div>
-    <div class='fl md-icon'><i class='intelicon-discussion-solid' style="font-size: 20px !important;" title="Add a Comment"></i></div>
+
+    <div class='fl md-icon' ng-if="dataItem.NOTES === undefined || dataItem.NOTES === ''">
+        <i class='intelicon-discussion-solid' style="font-size: 20px !important; cursor: pointer; color: #00AEEF;" title="Add a Comment" ng-click="dialog.open()"></i>
+    </div>
+    <div class='fl md-icon' ng-if="dataItem.NOTES !== undefined && dataItem.NOTES !== ''">
+        <i class='intelicon-discussion-solid' style="font-size: 20px !important; cursor: pointer; color: #003C71;" title="{{dataItem.NOTES}}" ng-click="dialog.open()"></i>
+    </div>
+
     <div class='fl md-icon' ng-if="dataItem._parentCnt === undefined || dataItem._parentCnt <= 1">
         <a href='#'><i class='intelicon-trash-solid' style="font-size: 20px !important;" title="Click to Delete the deal"></i></a>
     </div>
-    <div class='fl md-icon' ng-if="dataItem._parentCnt !== undefined && dataItem._parentCnt > 1">
+    <div class='fl md-icon-disabled' ng-if="dataItem._parentCnt !== undefined && dataItem._parentCnt > 1">
         <i class='intelicon-trash-solid' style="font-size: 20px !important; color: #e7e7e8;"
            title="This deal shares the same pricing table row as other deals.  You will need to delete the deal from the Pricing Table."></i>
     </div>
-    <div class='fl md-icon'><i class='intelicon-attach' style="font-size: 20px !important;" title="File Attachment"></i></div>
+
+    <div class='fl md-icon' ng-if="dataItem.HasFiles === undefined || !dataItem.HasFiles">
+        <i class='intelicon-attach' style="font-size: 20px !important; color: #00AEEF; cursor: pointer;" title="Click to Add an Attachment"></i>
+    </div>
+    <div class='fl md-icon' ng-if="dataItem.HasFiles !== undefined && dataItem.HasFiles">
+        <i class='intelicon-attach' style="font-size: 20px !important; color: #003C71;" title="Click to view or add attachments"></i>
+    </div>
+
     <div class='clearboth'></div>
 </div>
 
+<div class="noteDialog" kendo-dialog="dialog" k-title="'Notes'" k-show="dialogShow" k-visible="false" k-modal="true" k-actions="notesActions" k-width="500" k-height="400">
+    <div class="myDealsControl"
+         op-control-flat
+         ng-model="dataItem"
+         op-cd="'NOTES'"
+         op-type="'TEXTAREA'"
+         op-label="''"
+         op-is-form="true"
+         op-ui-mode="'VERTICAL'"></div>
+</div>
+
 <style>
-    .dealTools {
-        line-height: 1.3em;
-        height: 100% !important;
-        width: 100%;
+    
+    .k-dialog .noteDialog.k-content textarea {
+        width: 450px;
+        height: 250px;
     }
+    .k-dialog .noteDialog.k-content .opUiContainer  {
+        margin-top: -30px;
+    }
+
+    
+
+     .dealTools {
+         line-height: 1.3em;
+         height: 100% !important;
+         width: 100%;
+     }
 
     .dealTools .gridStatusMarker {
         font-family: arial;
@@ -61,5 +98,14 @@
     .md-icon i {
         color: #00AEEF;
     }
+    .md-icon i:hover {
+        color: #003C71 !important;
+    }
 
+    .md-icon-disabled {
+        padding: 4px 2px 0 5px;
+    }
+    .md-icon-disabled i {
+        color: #00AEEF;
+    }
 </style>

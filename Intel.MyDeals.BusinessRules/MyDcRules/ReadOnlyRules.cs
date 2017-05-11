@@ -90,7 +90,8 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.YCS2_START_DT,
                                 AttributeCodes.YCS2_END_DT,
                                 AttributeCodes.CAP_STRT_DT,
-                                AttributeCodes.CAP_END_DT
+                                AttributeCodes.CAP_END_DT,
+                                AttributeCodes.TERMS
                             }
                         }
                     }

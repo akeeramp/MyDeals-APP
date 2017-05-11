@@ -29,7 +29,9 @@ function objsetService($http, dataService, logger, $q) {
         updatePricingTable: updatePricingTable,
         deletePricingTable: deletePricingTable,
 
-        updateContractAndCurPricingTable: updateContractAndCurPricingTable
+        updateContractAndCurPricingTable: updateContractAndCurPricingTable,
+        readContractStatus: readContractStatus,
+        actionPricingStrategy: actionPricingStrategy
     }
 
     return service;
@@ -82,9 +84,21 @@ function objsetService($http, dataService, logger, $q) {
         return dataService.post(apiBasePricingTableUrl + 'DeletePricingTable/' + custId, [pt]);
     }
 
+
+    function actionPricingStrategy(custId, pt, actn) {
+        return dataService.post(apiBasePricingStrategyUrl + 'ActionPricingStrategy/' + custId + '/' + actn, [pt]);
+    }
+
     // #### CONTRACT CRUD ####
 
-    function updateContractAndCurPricingTable(custId, data) {
-        return dataService.post(apiBaseContractUrl + "SaveContractAndPricingTable/" + custId, data);
+    function updateContractAndCurPricingTable(custId, data, forceValidation) {
+        if (forceValidation) {
+            return dataService.post(apiBaseContractUrl + "SaveAndValidateContractAndPricingTable/" + custId, data);
+        } else {
+            return dataService.post(apiBaseContractUrl + "SaveContractAndPricingTable/" + custId, data);
+        }
+    }
+    function readContractStatus(id) {
+        return dataService.get(apiBaseContractUrl + 'GetContractStatus/' + id);
     }
 }

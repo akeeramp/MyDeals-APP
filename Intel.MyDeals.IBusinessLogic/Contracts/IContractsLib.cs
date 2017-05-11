@@ -10,9 +10,9 @@ namespace Intel.MyDeals.IBusinessLogic
 
         MyDealsData GetContract(int id, bool inclusive = false);
 
-        OpDataCollectorFlattenedDictList SaveContract(OpDataCollectorFlattenedList data, int custId);
+        OpDataCollectorFlattenedDictList SaveContract(OpDataCollectorFlattenedList data, int custId, bool forceValidation = false);
 
-        MyDealsData SaveContract(OpDataCollectorFlattenedList contracts, OpDataCollectorFlattenedList pricingStrategies, OpDataCollectorFlattenedList pricingTables, OpDataCollectorFlattenedList pricingTableRows, OpDataCollectorFlattenedList wipDeals, int custId);
+        MyDealsData SaveContract(OpDataCollectorFlattenedList contracts, OpDataCollectorFlattenedList pricingStrategies, OpDataCollectorFlattenedList pricingTables, OpDataCollectorFlattenedList pricingTableRows, OpDataCollectorFlattenedList wipDeals, int custId, bool forceValidation = false);
 
         OpMsg DeleteContract(int id);
 
@@ -22,9 +22,9 @@ namespace Intel.MyDeals.IBusinessLogic
         
         OpDataCollectorFlattenedDictList GetFullContract(int id);
 
-        OpDataCollectorFlattenedDictList SaveFullContract(int custId, OpDataCollectorFlattenedDictList fullContracts);
+        OpDataCollectorFlattenedDictList SaveFullContract(int custId, OpDataCollectorFlattenedDictList fullContracts, bool forceValidation = false);
 
-        OpDataCollectorFlattenedDictList SaveContractAndPricingTable(int custId, ContractTransferPacket contractAndStrategy);
+        OpDataCollectorFlattenedDictList SaveContractAndPricingTable(int custId, ContractTransferPacket contractAndStrategy, bool forceValidation = false);
 
         bool IsDuplicateContractTitle(int dcId, string title);
 

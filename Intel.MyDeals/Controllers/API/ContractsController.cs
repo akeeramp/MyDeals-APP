@@ -92,6 +92,17 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
+        [Route("SaveAndValidateContractAndPricingTable/{custId}")]
+        [HttpPost]
+        public OpDataCollectorFlattenedDictList SaveAndValidateContractAndPricingTable(int custId, ContractTransferPacket contractAndPricingTable)
+        {
+            return SafeExecutor(() => _contractsLib.SaveContractAndPricingTable(custId, contractAndPricingTable, true)
+                , "Unable to save the Contract"
+            );
+        }
+        
+
+        [Authorize]
         [Route("DeleteContract/{id}")]
         [HttpGet]
         public OpMsg DeleteContract(int id)

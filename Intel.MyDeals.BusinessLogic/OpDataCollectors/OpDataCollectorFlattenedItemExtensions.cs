@@ -255,15 +255,15 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
 
             foreach (ProdMapping pMap in pMaps)
             {
-                opFlatItem[AttributeCodes.PRODUCT_FILTER + EN.VARIABLES.PRIMARY_DIMKEY] = pMap.PRD_MBR_SID;
-                opFlatItem[AttributeCodes.PTR_USER_PRD + EN.VARIABLES.PRIMARY_DIMKEY] = pMap.DISPLAY_NM;
-                opFlatItem[AttributeCodes.CAP + EN.VARIABLES.PRIMARY_DIMKEY] = pMap.CAP;
-                opFlatItem[AttributeCodes.CAP_STRT_DT + EN.VARIABLES.PRIMARY_DIMKEY] = pMap.CAP_START;
-                opFlatItem[AttributeCodes.CAP_END_DT + EN.VARIABLES.PRIMARY_DIMKEY] = pMap.CAP_END;
-                opFlatItem[AttributeCodes.YCS2_PRC_IRBT + EN.VARIABLES.PRIMARY_DIMKEY] = pMap.YCS2;
-                opFlatItem[AttributeCodes.YCS2_START_DT + EN.VARIABLES.PRIMARY_DIMKEY] = pMap.YCS2_START;
-                opFlatItem[AttributeCodes.YCS2_END_DT + EN.VARIABLES.PRIMARY_DIMKEY] = pMap.YCS2_END;
-                opFlatItem[AttributeCodes.PRD_COST + EN.VARIABLES.PRIMARY_DIMKEY] = pMap.PRD_COST;
+                opFlatItem[AttributeCodes.PRODUCT_FILTER] = pMap.PRD_MBR_SID;
+                opFlatItem[AttributeCodes.PTR_USER_PRD] = pMap.DISPLAY_NM;
+                opFlatItem[AttributeCodes.CAP] = pMap.CAP;
+                opFlatItem[AttributeCodes.CAP_STRT_DT] = pMap.CAP_START;
+                opFlatItem[AttributeCodes.CAP_END_DT] = pMap.CAP_END;
+                opFlatItem[AttributeCodes.YCS2_PRC_IRBT] = pMap.YCS2;
+                opFlatItem[AttributeCodes.YCS2_START_DT] = pMap.YCS2_START;
+                opFlatItem[AttributeCodes.YCS2_END_DT] = pMap.YCS2_END;
+                opFlatItem[AttributeCodes.PRD_COST] = pMap.PRD_COST;
             }
 
             foreach (string key in opFlatItem.Keys.Where(k => k != AttributeCodes.dc_type && k != AttributeCodes.dc_parent_type))

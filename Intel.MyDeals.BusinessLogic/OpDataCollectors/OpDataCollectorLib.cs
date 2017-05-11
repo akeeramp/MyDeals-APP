@@ -5,6 +5,7 @@ using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.MyDeals.IDataLibrary;
 using Intel.Opaque.Data;
+using Newtonsoft.Json;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -21,7 +22,7 @@ namespace Intel.MyDeals.BusinessLogic
         }
 
 
-        public MyDealsData SavePackets(OpDataCollectorFlattenedDictList data, int custId)
+        public MyDealsData SavePackets(OpDataCollectorFlattenedDictList data, int custId, bool forceValidation)
         {
             // Save Data Cycle: Point 9
 
@@ -40,9 +41,16 @@ namespace Intel.MyDeals.BusinessLogic
             MyDealsData myDealsData = opTypeGrp.GetByIDs(ids, opDataElementTypes, data);
 
             myDealsData.EnsureRowAndWipDcIds();
-            
-            // RUN RULES HERE - If there are validation errors, just return to the user, otherwise, continue with the save process.
-            if (myDealsData.ValidationApplyRules()) return myDealsData;
+
+            // RUN RULES HERE - If there are validation errors... stop... but we need to save the validation status
+            MyDealsData myDealsDataWithErrors = null;
+            bool hasErrors = myDealsData.ValidationApplyRules(forceValidation);
+            if (hasErrors)
+            {
+                // "Clone" to object...
+                string json = JsonConvert.SerializeObject(myDealsData);
+                myDealsDataWithErrors = JsonConvert.DeserializeObject<MyDealsData>(json);
+            }
 
             // Note to self..  This does take order values into account.
             foreach (OpDataElementType opDataElementType in Enum.GetValues(typeof(OpDataElementType)))
@@ -64,9 +72,9 @@ namespace Intel.MyDeals.BusinessLogic
 
             }
 
+            MyDealsData myDealsDataResults = PerformTasks(OpActionType.Save, myDealsData, custId);  // execute all save perform task items now
 
-
-            return PerformTasks(OpActionType.Save, myDealsData, custId);  // execute all save perform task items now
+            return hasErrors ? myDealsDataWithErrors : myDealsDataResults;
         }
 
         public void SavePacketByDictionary(OpDataCollectorFlattenedList data, MyDealsData myDealsData, OpDataElementType opDataElementType, Guid myWbBatchId)
@@ -82,7 +90,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             // Back to normal operations, clear out the messages and all.
             newPacket.Actions.RemoveAll(r => r.ActionDirection == OpActionDirection.Inbound);
-            newPacket.Messages.Messages.RemoveAll(r => true);
+            //newPacket.Messages.Messages.RemoveAll(r => true);
 
             // Tack on the save action call now
             newPacket.AddSaveActions();

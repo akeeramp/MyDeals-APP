@@ -237,10 +237,9 @@ namespace Intel.MyDeals.DataLibrary
             {
                 Id = 29,
                 AtrbCd = AttributeCodes.ECAP_PRICE,
-                DimCd = "10:0",
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 Width = 100,
-                Template = "#=gridUtils.uiIconWrapper(data, 'ECAP_PRICE_____10___0')#",
+                Template = "#=gridUtils.uiIconWrapper(data, 'ECAP_PRICE')#",
                 Format = "{0:c}",
                 IsRequired = true
             });
@@ -477,7 +476,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 20,
                 AtrbCd = AttributeCodes.PTR_USER_PRD,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Template = "#=gridUtils.uiDimControlWrapper(data, 'PTR_USER_PRD', '10___0')#",
+                Template = "#=gridUtils.uiControlWrapper(data, 'PTR_USER_PRD')#",
                 DataType = "object",
                 Width = 150
             });
@@ -486,7 +485,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 20,
                 AtrbCd = AttributeCodes.PRODUCT_FILTER,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Template = "#=gridUtils.uiDimControlWrapper(data, 'PRODUCT_FILTER', '10___0')#",
+                Template = "#=gridUtils.uiControlWrapper(data, 'PRODUCT_FILTER')#",
                 DataType = "object",
                 Width = 150
             });
@@ -582,10 +581,9 @@ namespace Intel.MyDeals.DataLibrary
             {
                 Id = 29,
                 AtrbCd = AttributeCodes.ECAP_PRICE,
-                DimCd = "10:0",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 Width = 130,
-                Template = "#=gridUtils.uiDimControlWrapper(data, 'ECAP_PRICE', '10___0', 'currency')#",
+                Template = "#=gridUtils.uiControlWrapper(data, 'ECAP_PRICE', 'currency')#",
                 DataType = "object",
                 IsFilterable = true,
                 IsSortable = true,
@@ -595,11 +593,11 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem
             {
                 Id = 29,
-                AtrbCd = AttributeCodes.CAP,
-                DimCd = "10:0",
+                AtrbCd = "CAP_INFO",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 Width = 130,
-                Template = "#=gridUtils.uiDimMoneyDatesControlWrapper(data, 'CAP', 'CAP_STRT_DT', 'CAP_END_DT', '10___0')#",
+                Template = "#=gridUtils.uiMoneyDatesControlWrapper(data, 'CAP', 'CAP_STRT_DT', 'CAP_END_DT')#",
+                Label = "CAP Info",
                 DataType = "object",
                 IsFilterable = true,
                 IsSortable = true,
@@ -607,17 +605,86 @@ namespace Intel.MyDeals.DataLibrary
                 UiType = "NumericTextBox",
                 Editor = "multiDimEditor"
             });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
+                AtrbCd = AttributeCodes.CAP,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Width = 130,
+                Template = "#=gridUtils.uiControlWrapper(data, 'CAP', 'currency')#",
+                DataType = "object",
+                IsFilterable = true,
+                IsSortable = true,
+                Format = "{0:c}"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 20,
+                AtrbCd = AttributeCodes.CAP_STRT_DT,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Template = "#=gridUtils.uiControlWrapper(data, 'CAP_STRT_DT', \"date:'MM/dd/yyyy'\")#",
+                IsFilterable = true,
+                IsSortable = true,
+                IsHidden = true,
+                Width = 100
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 20,
+                AtrbCd = AttributeCodes.CAP_END_DT,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Template = "#=gridUtils.uiControlWrapper(data, 'CAP_END_DT', \"date:'MM/dd/yyyy'\")#",
+                IsFilterable = true,
+                IsSortable = true,
+                IsHidden = true,
+                Width = 100
+            });
 
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
+                AtrbCd = "YCS2_INFO",
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Width = 130,
+                Label = "YCS2 Info",
+                IsFilterable = true,
+                IsSortable = true,
+                Template = "#=gridUtils.uiMoneyDatesControlWrapper(data, 'YCS2_PRC_IRBT', 'YCS2_START_DT', 'YCS2_END_DT')#"
+            });
             items.Add(new UiTemplateContainerItem
             {
                 Id = 29,
                 AtrbCd = AttributeCodes.YCS2_PRC_IRBT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 Width = 130,
+                Template = "#=gridUtils.uiControlWrapper(data, 'YCS2_PRC_IRBT', 'currency')#",
                 Label = "YCS2 Price",
+                DataType = "object",
                 IsFilterable = true,
                 IsSortable = true,
-                Template = "#=gridUtils.uiDimMoneyDatesControlWrapper(data, 'YCS2_PRC_IRBT', 'YCS2_START_DT', 'YCS2_END_DT', '10___0')#"
+                Format = "{0:c}"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 20,
+                AtrbCd = AttributeCodes.YCS2_START_DT,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Template = "#=gridUtils.uiControlWrapper(data, 'YCS2_START_DT', \"date:'MM/dd/yyyy'\")#",
+                IsFilterable = true,
+                IsSortable = true,
+                IsHidden = true,
+                Width = 100
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 20,
+                AtrbCd = AttributeCodes.YCS2_END_DT,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Template = "#=gridUtils.uiControlWrapper(data, 'YCS2_END_DT', \"date:'MM/dd/yyyy'\")#",
+                IsFilterable = true,
+                IsSortable = true,
+                IsHidden = true,
+                Width = 100
             });
 
             items.Add(new UiTemplateContainerItem

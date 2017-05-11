@@ -1,0 +1,45 @@
+﻿
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3" style="text-align: right;">
+            <i class="intelicon-alert-solid" style="font-size: 120px; color: #FC4C02;" ng-hide="warnCnt == 0"></i>
+            <i class="intelicon-information-solid" style="font-size: 120px; color: #C4D600;" ng-show="warnCnt == 0"></i>
+        </div>
+        <div class="col-md-7">
+            <h4>{{title}}</h4>
+            <div ng-hide="infoCnt == 0" style="color: #C4D600; font-size: 18px;"><i class="intelicon-information-solid" style="font-size: 18px; color: #C4D600;"></i> {{infoMsg}}</div>
+            <div ng-hide="warnCnt == 0" style="color: #FC4C02; font-size: 18px;"><i class="intelicon-alert-solid" style="font-size: 18px; color: #FC4C02;"></i> {{warnMsg}}</div>
+            <div style="margin-top: 15px;">
+                <div style="font-size: 12px;"><a href="" ng-click="showDetails=true" ng-hide="showDetails">View details</a></div>
+                <div style="font-size: 12px;"><a href="" ng-click="showDetails=false" ng-show="showDetails">Hide details</a></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="msgGrid" class="msgGrid" ng-show="showDetails" style="margin-top: 20px;"></div>
+
+<style>
+    .k-window-actions .k-i-close {
+        color: #ffffff !important;
+    }
+
+    .msgGrid.k-grid {
+        font-size: 10px;
+        border: 0 solid transparent;
+    }
+
+    .msgGrid.k-grid td {
+        font-size: 11px;
+    }
+    .msgGrid.k-grid th {
+        text-transform: uppercase;
+    }
+
+    .msgGrid.k-grid .k-header, .msgGrid.k-grid .k-grid-header-wrap, .msgGrid.k-grid .k-grid-header {
+        border-right: 0 solid transparent;
+        background-color: #ffffff !important;
+    }
+
+</style>

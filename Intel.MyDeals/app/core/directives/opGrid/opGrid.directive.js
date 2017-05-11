@@ -32,6 +32,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
             $scope.contractDs = null;
             $scope.isGridVisible = false;
             $scope.curGroup = "";
+            $scope._dirty = false;
 
             
             $scope.assignColSettings = function () {
@@ -62,6 +63,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
 
                     // mark everything hidden by default
                     cols[c].hidden = true;
+
+                    if (cols[c].filterable !== undefined && cols[c].filterable) {
+                        cols[c].filterable = { "multi": true, search: true };
+                    }
                 }
                 // now sort the columns based on the group settings
                 cols.sort(function(a, b) {
@@ -582,28 +587,104 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
                 if (dataItem._behaviors.isDirty === undefined) dataItem._behaviors.isDirty = {};
                 dataItem._behaviors.isDirty[newField] = true;
                 dataItem._dirty = true;
+                $scope._dirty = true;
             }
 
             $scope.$on('refresh', function (event, args) {
 
             });
 
+            $scope.$on('saveComplete', function (event, args) {
+                // need to clean out all flags... dirty, error, validMsg
+                $scope.cleanFlags();
+            });
+
+            $scope.$on('saveWithWarnings', function (event, args) {
+                // need to clean out all flags... dirty, error, validMsg
+                $scope.cleanFlags();
+
+                // need to set all flags... dirty, error, validMsg
+                for (var i = 0; i < args.data.WIP_DEAL.length; i++) {
+                    if (args.data.WIP_DEAL[i].warningMessages.length === 0) continue;
+
+                    var beh = args.data.WIP_DEAL[i]._behaviors;
+                    if (!beh) beh = {};
+                    if (beh.isError === undefined) beh.isError = {};
+                    if (beh.validMsg === undefined) beh.validMsg = {};
+
+                    var dataItem = $scope.findDataItemById(args.data.WIP_DEAL[i]["DC_ID"]);
+                    if (dataItem != null) {
+                        Object.keys(beh.isError).forEach(function (key, index) {
+
+                            dataItem._behaviors.isError[key] = beh.isError[key];
+                            dataItem._behaviors.validMsg[key] = beh.ValidMsg[key];
+                            $scope.increaseBadgeCnt(key);
+
+                        }, beh.isError);
+                    }
+
+                }
+
+            });
+
+            $scope.increaseBadgeCnt = function(key) {
+                for (var i = 0; i < $scope.opOptions.groupColumns[key].Groups.length; i++) {
+                    for (var g = 0; g < $scope.opOptions.groups.length; g++) {
+                        if ($scope.opOptions.groups[g].name === $scope.opOptions.groupColumns[key].Groups[i] || $scope.opOptions.groups[g].name === "All") {
+                            $scope.opOptions.groups[g].numErrors++;
+                        }
+                    }
+                }
+            }
+
+            $scope.findDataItemById = function(id) {
+                var data = $scope.contractDs.data();
+                for (var d = 0; d < data.length; d++) {
+                    if (!!data[d]["DC_ID"] && data[d]["DC_ID"] === id) return data[d];
+                }
+                return null;
+            }
+            
             $scope.$on('syncDs', function (event, args) {
                 event.currentScope.contractDs.sync();
             });
 
+            $scope.cleanFlags = function () {
+                $scope.clearBadges();
+
+                var data = $scope.contractDs.data();
+                for (var d = 0; d < data.length; d++) {
+                    var beh = data[d]._behaviors;
+
+                    // clear items for this row
+                    beh.isError = {};
+                    beh.validMsg = {};
+                    beh.isDirty = {};
+                }
+
+                $scope._dirty = false;
+            }
+
+            $scope.saveWipDeals = function() {
+                $scope.$parent.$parent.$parent.saveEntireContract();
+            }
+
             $scope.backToPricingTable = function () {
                 $scope.$parent.$parent.$parent.backToPricingTable();
+            }
+
+            $scope.clearBadges = function() {
+                var grps = $scope.opOptions.groups;
+                angular.forEach(grps, function (value, key) {
+                    grps[key].numErrors = 0;
+                });
             }
 
             $scope.validateGrid = function () {
                 var valid = true;
 
                 // clear out badges
-                var grps = $scope.opOptions.groups;
-                angular.forEach(grps, function (value, key) {
-                    grps[key].numErrors = 0;
-                });
+                $scope.clearBadges();
 
                 var data = $scope.contractDs.data();
                 for (var d = 0; d < data.length; d++) {
@@ -611,7 +692,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
                 }
 
                 if (valid) {
-                    op.notifyInfo("Everything looks good!!!", "Validation Results");
+                    op.notifyInfo("Initial check looks good.  Validating Data.", "Validation Results");
+                    $scope.$parent.$parent.$parent.validateWipDeals();
                 } else {
                     op.notifyWarning("Looks like there are items that need to be fixed.", "Validation Results");
                 }
@@ -642,10 +724,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
                         if (beh.validMsg[key] === undefined) beh.validMsg[key] = "";
                         beh.validMsg[key] += title + " is required<br/>";
 
-                        // add badge count
-                        for (var i = 0; i < scope.opOptions.groupColumns[key].Groups.length; i++) {
-                            scope.opOptions.groups[scope.opOptions.groupColumns[key].Groups[i]].numErrors++;
-                        }
+                        $scope.increaseBadgeCnt(key);
                         valid = false;
                     }
                 }, scope);

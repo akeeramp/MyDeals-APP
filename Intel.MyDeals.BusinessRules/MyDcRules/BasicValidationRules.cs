@@ -29,6 +29,21 @@ namespace Intel.MyDeals.BusinessRules
                 },
                 new MyOpRule
                 {
+                    Title="Must have a positive or zero value",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.AddValidationMessage,
+                            Args = new object[] {"{0} must be positive"},
+                            Where = de => de.AtrbCdIn(new List<string> { AttributeCodes.VOLUME }) && de.HasValue() && de.IsNegative()
+                        }
+                    }
+                },
+                new MyOpRule
+                {
                     Title="Does not exceed max character limit",
                     ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnSave},

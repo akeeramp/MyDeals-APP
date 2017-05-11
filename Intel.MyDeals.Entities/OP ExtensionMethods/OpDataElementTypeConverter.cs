@@ -31,6 +31,10 @@ namespace Intel.MyDeals.Entities
         {
             return OpDataElementTypeRepository.OpDetCollection.Items.FirstOrDefault(o => o.OpDeType == opDataElementType)?.Alias ?? "";
         }
+        public static string ToDesc(this OpDataElementType opDataElementType)
+        {
+            return OpDataElementTypeRepository.OpDetCollection.Items.FirstOrDefault(o => o.OpDeType == opDataElementType)?.Description ?? "";
+        }
 
         public static OpDataElementType IdToOpDataElementTypeString(this int packetId)
         {

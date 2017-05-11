@@ -14,12 +14,19 @@
             </div>
             
             <div class="toolbar">
+
+                <button class="btn btn-sm btn-default" ng-class="{'disabled': !_dirty}" ng-click="saveWipDeals()">
+                    <i class="fa fa-floppy-o" style="font-size: 30px; vertical-align: middle; margin-right: 4px;"></i> SAVE WIP DEALS
+                </button>
+
                 <button class="btn btn-sm btn-default" ng-click="backToPricingTable()">
-                    <i class="intelicon-arrow-back-left" style="font-size: 18px;"></i> BACK TO PRICING TABLE
+                    <i class="intelicon-grid" style="font-size: 30px; vertical-align: middle;"></i> VIEW PRICING TABLE
                 </button>
+
                 <button class="btn btn-sm btn-default" ng-click="validateGrid()">
-                    <i class="intelicon-protection-checked-verified-outlined" style="font-size: 18px;"></i> VALIDATE
+                    <i class="intelicon-protection-checked-verified-outlined" style="font-size: 30px; vertical-align: middle;"></i> VALIDATE
                 </button>
+
                 <div class="fr">
                     <ul kendo-menu>
                         <li>
@@ -37,7 +44,7 @@
                                 <li ng-click="customLayout()">
                                     <i class="intelicon-dashboard-outlined" style="font-size: 18px;"></i> CUSTOM LAYOUT
                                 </li>
-                                <li  ng-click="saveLayout()">
+                                <li ng-click="saveLayout()">
                                     <i class="intelicon-save-outlined" style="font-size: 18px;"></i> SAVE LAYOUT
                                 </li>
                             </ul>
@@ -186,13 +193,17 @@
     .toolbar {
         border: 0 solid #b1babf;
         height: 55px;
-        padding: 7px 10px 3px 10px;
+        padding: 2px 10px 3px 10px;
     }
     .toolbar .btn {
         border: 1px solid transparent;
         color: #00AEEF;
     }
 
+    .toolbar .btn-default.disabled {
+        background-color: transparent !important;
+        color: #dddddd !important;
+    }
 
     .dimKey {
         font-size: 9px; 
@@ -283,7 +294,7 @@
     }
     .op-grid-container {
         height: 100%;
-        width: 100%;
+        /*width: 100%;  This causes the grid to loose it's vertical scrollbar'*/
         padding: 0 10px;
         overflow: hidden;
     }     

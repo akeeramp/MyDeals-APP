@@ -79,6 +79,7 @@ namespace Intel.MyDeals
                 , "~/app/core/directives/gridCell/percentBar.directive.js"
                 , "~/app/core/directives/gridStatusBoard/contractStatusBoard.directive.js"
                 , "~/app/core/directives/gridStatusBoard/gridStatusBoard.directive.js"
+                , "~/app/core/directives/messageBoard/messageBoard.directive.js"
                 , "~/app/core/directives/opGrid/opGrid.directive.js"
                 , "~/app/blocks/util.js"
                 ));

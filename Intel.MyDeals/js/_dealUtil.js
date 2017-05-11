@@ -271,7 +271,7 @@ dealUtil.renderGridByDealIds = function (dealIds) {
 dealUtil.formatDates = function(deals) {
     var dateAtrbs = [];
     Object.keys(dealUtil.model).forEach(function (key, index) {
-        if (this[key].type === "date") dateAtrbs.push(key);
+        if (this[key].type === "date" || key.slice(-3) === "_DT") dateAtrbs.push(key);
     }, dealUtil.model);
 
     for (var d = 0; d < deals.length; d++) {

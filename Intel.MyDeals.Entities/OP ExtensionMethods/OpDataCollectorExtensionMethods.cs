@@ -198,23 +198,25 @@ namespace Intel.MyDeals.Entities
             if (dc.GetDataElementValue("OBJ_SET_TYPE_CD") == "") return;
 
             OpDataElementSetType objSetType = (OpDataElementSetType)Enum.Parse(typeof(OpDataElementSetType), dc.GetDataElementValue("OBJ_SET_TYPE_CD"));
-			string stg = dc.GetDataElementValue(AttributeCodes.DEAL_STG_CD);
+			string stg = dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
             if (excludeList == null) excludeList = new string[] { };
 
             // For each element, apply metadata rules
             foreach (OpDataElement de in dc.DataElements)
             {
-                var prop = de.IsReadOnly;
-                if (atrbAction == "ATRB_REQUIRED") prop = de.IsRequired;
-                if (atrbAction == "ATRB_HIDDEN") prop = de.IsHidden;
+                var prop = "IsReadOnly";
+                if (atrbAction == "ATRB_REQUIRED") prop = "IsRequired";
+                if (atrbAction == "ATRB_HIDDEN") prop = "IsHidden";
 
-                prop = !excludeList.Contains(de.AtrbCd) && securityWrapper.ChkAtrbRules(
+                var result = !excludeList.Contains(de.AtrbCd) && securityWrapper.ChkAtrbRules(
                     dcType,
 					objSetType,
                     stg,
                     atrbAction,
                     de.AtrbCd,
                     securityActionCache);
+
+                if (result) typeof(OpDataElement).GetProperty(prop).SetValue(de, true);
             }
         }
     }

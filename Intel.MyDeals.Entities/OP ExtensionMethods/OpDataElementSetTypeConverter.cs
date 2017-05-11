@@ -37,6 +37,11 @@ namespace Intel.MyDeals.Entities
                 m => m.ChildOpDataElementType == opDataElementType && m.ChildOpDataElementSetType == opDataElementSetType);
         }
 
+        public static string ToDesc(this OpDataElementSetType opDataElementSetType)
+        {
+            return OpDataElementSetTypeRepository.OpDestCollection.Items.FirstOrDefault(o => o.OpDeSetType == opDataElementSetType)?.Description ?? "";
+        }
+
 
         public static int ToId(this OpDataElementSetType opDataElementSetType)
         {
