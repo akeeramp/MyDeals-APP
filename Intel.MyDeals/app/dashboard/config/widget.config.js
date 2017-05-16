@@ -41,12 +41,30 @@ widgetConfig.configWidgets = function () {
     widgetConfig.widgets["8"] = {
         sizeX: 1,
         sizeY: 1,
-        name: "Find Contracts",
-        desc: "Find a contract by entering the name or id",
+        name: "Search Contracts",
+        desc: "Search for contracts, pricing strategies, or pricing tables by entering a name or id",
         icon: "intelicon-tools",
-        type: 'findContracts',
+        type: 'searchContracts',
         hasConfig: true,
-        template: 'app/dashboard/widgets/findContract.html',
+        template: 'app/dashboard/widgets/searchContract.html',
+        widgetConfig: {
+            options: {},
+            data: [],
+            api: {}
+        },
+        resizeEvent: function (widget) {
+        }
+    };
+
+    widgetConfig.widgets["9"] = {
+        sizeX: 1,
+        sizeY: 1,
+        name: "Open Contracts By Id",
+        desc: "Quickly Navigate to a contract by entering its Id",
+        icon: "intelicon-tools",
+        type: 'openContracts',
+        hasConfig: true,
+        template: 'app/dashboard/widgets/openContract.html',
         widgetConfig: {
             options: {},
             data: [],

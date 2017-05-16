@@ -14,8 +14,10 @@ namespace Intel.MyDeals.BusinessLogic
             registerService.RegisterType<IConstantsLookupsLib, ConstantsLookupsLib>();
             registerService.RegisterType<ICustomerCalendarLib, CustomerCalendarLib>();
             registerService.RegisterType<ICustomerLib, CustomerLib>();
+            registerService.RegisterType<IDashboardLib, DashboardLib>();
             registerService.RegisterType<IOpDataCollectorLib, OpDataCollectorLib>();
             registerService.RegisterType<IDropdownLib, DropdownLib>();
+            registerService.RegisterType<IFilesLib, FilesLib>();
             registerService.RegisterType<IGeosLib, GeosLib>();
             registerService.RegisterType<ILoggingLib, LoggingLib>();
             registerService.RegisterType<IPricingStrategiesLib, PricingStrategiesLib>();
@@ -24,11 +26,10 @@ namespace Intel.MyDeals.BusinessLogic
             registerService.RegisterType<IProductCategoriesLib, ProductCategoriesLib>();
             registerService.RegisterType<IProductCostTestLib, ProductCostTestLib>();
             registerService.RegisterType<IRuleEngineLib, RuleEngineLib>();
+            registerService.RegisterType<ISearchLib, SearchLib>();
             registerService.RegisterType<ISecurityAttributesLib, SecurityAttributesLib>();
             registerService.RegisterType<IUiTemplateLib, UiTemplateLib>();
             registerService.RegisterType<IWorkFlowLib, WorkFlowLib>();
-            registerService.RegisterType<IFilesLib, FilesLib>();
-            registerService.RegisterType<IDashboardLib, DashboardLib>();
         }
     }
 }

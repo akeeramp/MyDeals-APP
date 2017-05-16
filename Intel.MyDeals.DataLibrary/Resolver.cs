@@ -12,20 +12,21 @@ namespace Intel.MyDeals.DataLibrary
             registerService.RegisterType<IConstantLookupDataLib, ConstantLookupDataLib>();
             registerService.RegisterType<ICustomerCalendarDataLib, CustomerCalendarDataLib>();
             registerService.RegisterType<ICustomerDataLib, CustomerDataLib>();
+            registerService.RegisterType<IDashboardDataLib, DashboardDataLib>();
             registerService.RegisterType<IDataCollectionsDataLib, DataCollectionsDataLib>();
             registerService.RegisterType<IOpDataCollectorDataLib, OpDataCollectorDataLib>();
             registerService.RegisterType<IDropdownDataLib, DropdownDataLib>();
+            registerService.RegisterType<IFilesDataLib, FilesDataLib>();
             registerService.RegisterType<IGeoDataLib, GeoDataLib>();
             registerService.RegisterType<ILoggingDataLib, LoggingDataLib>();
             registerService.RegisterType<IProductCategoriesDataLib, ProductCategoriesDataLib>();
+            registerService.RegisterType<IProductCostTestDataLib, ProductCostTestDataLib>();
             registerService.RegisterType<IProductDataLib, ProductDataLib>();
             registerService.RegisterType<IRuleEngineDataLib, RuleEngineDataLib>();
+            registerService.RegisterType<ISearchDataLib, SearchDataLib>();
             registerService.RegisterType<ISecurityAttributesDataLib, SecurityAttributesDataLib>();
             registerService.RegisterType<IUiTemplateDataLib, UiTemplateDataLib>();
             registerService.RegisterType<IWorkFlowDataLib, WorkFlowDataLib>();
-            registerService.RegisterType<IProductCostTestDataLib, ProductCostTestDataLib>();
-            registerService.RegisterType<IFilesDataLib, FilesDataLib>();
-            registerService.RegisterType<IDashboardDataLib, DashboardDataLib>();
         }
     }
 }

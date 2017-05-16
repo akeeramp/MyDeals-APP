@@ -1,17 +1,29 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Http;
+using Intel.MyDeals.App;
+using Intel.MyDeals.Entities;
+using Intel.MyDeals.IBusinessLogic;
+
 namespace Intel.MyDeals.Controllers.API
 {
+    [RoutePrefix("api/Search")]
     public class SearchController : BaseApiController
     {
-        ////OpCore op = OpAppConfig.Init();
+        private readonly ISearchLib _searchLib;
 
-        ////#region Search
-        ////[HttpGet]
-        ////[Route("api/Search/v1/Search/{searchString}")]
-        ////public SearchResultsWrapper Quick(string searchString)
-        ////{
-        ////    OpUserToken opUserToken = AppLib.InitAVM(OpAppConfig.Init());
-        ////    return new QuickSearchLib().QuickSearch(searchString, opUserToken);
-        ////}
-        ////#endregion
+        public SearchController(ISearchLib searchLib)
+        {
+            _searchLib = searchLib;
+        }
+
+        [Authorize]
+        [Route("GetSearchResults/{searchText}")]
+        public List<SearchResults> GetSearchResults(string searchText)
+        {
+            return SafeExecutor(() => _searchLib.GetSearchResults(searchText, AppLib.GetMyCustomersInfo().Select(c => c.CUST_SID).Distinct().ToList())
+                , $"Unable to get Search Results for {searchText}"
+            );
+        }
     }
 }

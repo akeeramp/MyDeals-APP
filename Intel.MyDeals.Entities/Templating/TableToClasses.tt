@@ -250,6 +250,11 @@ using System.Collections.Generic;
     ds.Tables[0].TableName = "ProductSelectionResults";
     WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
+	//PR_MYDL_SRCH_OBJ
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_SRCH_OBJ] @in_srch_txt = ''");
+	ds.Tables[0].TableName = "SearchResults";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
 	PopIndent();
 	WriteLine("}"); // End NameSpace
 

@@ -271,3 +271,32 @@
     font-size:20px;
     font-weight:400;
 }
+
+.searchResultsTitle{
+    font-size:28px;
+}
+.searchResultsBack{
+    cursor: pointer;
+}
+.searchResultsLoading{
+    padding-top: 15px;
+    color: #00AEEF;
+    font-size: 22px;
+}
+.searchResultsCategory{
+    padding-top: 15px;
+    font-size: 20px;
+}
+.searchResultsCustomer{
+    font-size: 15px;
+}
+.searchResultsContent{
+    font-size: 12px;
+    padding-left: 25px;
+    padding-right: 25px;
+
+    margin-bottom: 5px;
+    
+    border-style: solid;
+    border-color: lightgrey;
+}

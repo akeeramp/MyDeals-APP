@@ -57,6 +57,7 @@
     <Compile Include="CustomerCalendar\ICustomerCalendarLib.cs" />
     <Compile Include="Customer\ICustomerLib.cs" />
     <Compile Include="DataCollections\ICacheLib.cs" />
+    <Compile Include="Search\ISearchLib.cs" />
     <Compile Include="Files\IFilesLib.cs" />
     <Compile Include="Dashboard\IDashboardLib.cs" />
     <Compile Include="OpDataCollectors\IOpDataCollectorLib.cs" />

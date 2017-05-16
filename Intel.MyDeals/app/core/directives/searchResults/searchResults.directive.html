@@ -1,0 +1,102 @@
+﻿<div class="container-fluid widget-container" style="overflow: auto; display: table;">
+    <div style="vertical-align: middle; display: table-cell;">
+        <div ng-show="!showResults">
+            <h2 aria-hidden="true" style="text-align: center;"><i class="text-primary intelicon-search-stack-solid"></i></h2>
+            <div id="searchWidget" style="width: 100%; text-align: center;">
+                <div ng-show="!showLoading">
+                    <input id="searchField" placeholder="Name or Number" style="border-color: #b1babf; width: 120px; padding: 2px; height: 36px;" class="k-textbox" ng-model="searchText">
+                    <button id="searchButton" ng-click="showLoading=true; searchAll();" class="btn btn-default" type="button">Search</button>
+                </div>
+
+                <div ng-show="showLoading" class="searchResultsLoading">
+                    Searching...
+                </div>
+            </div>
+        </div>
+
+        
+
+        <div ng-show="showResults">
+            <div class="searchResultsTitle">Search Results</div>
+            <div class="searchResultsBack" ng-click="showResults=false; showLoading=false"><span aria-hidden="true" class="intelicon-arrow-back-left"></span> New Search Query</div>
+            <div class="clearboth"></div>
+
+            <div ng-show="searchResultItems.length == 0 && showLoading == false">
+                No Results Found
+            </div>
+
+            <div ng-if="!isEmpty(searchResultContracts)" class="resultsCategory">
+                <div class="searchResultsCategory">
+                    Contract Results
+                </div>
+                <div ng-repeat="(key, value) in searchResultContracts">
+                    <div class="searchResultsCustomer">
+                        {{key}} Contracts <br />
+                    </div>
+                    <div ng-repeat="item in value">
+                        <div class="searchResultsContent">
+                            <div>
+                                Contract Name: {{item.TITLE}}
+                            </div>
+                            <div>
+                                Contract ID: {{item.OBJ_SID}}
+                            </div>
+                            <div>
+                                Link: <a href="/Contract#/manager/{{item.OBJ_HIER}}" target="_blank">Open Contract</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div ng-if="!isEmpty(searchResultPricingStrategies)" class="resultsCategory">
+                <div class="searchResultsCategory">
+                    Pricing Strategy Results
+                </div>
+                <div ng-repeat="(key, value) in searchResultPricingStrategies">
+                    <div class="searchResultsCustomer">
+                        {{key}} Pricing Strategies <br />
+                    </div>
+                    <div ng-repeat="item in value">
+                        <div class="searchResultsContent">
+                            <div>
+                                Strategy Name: {{item.TITLE}}
+                            </div>
+                            <div>
+                                Strategy ID: {{item.OBJ_SID}}
+                            </div>
+                            <div>
+                                Link: <a href="/Contract#/manager/{{item.OBJ_HIER}}" target="_blank">Open Pricing Strategy's Contract</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div ng-if="!isEmpty(searchResultPricingTables)" class="resultsCategory">
+                <div class="searchResultsCategory">
+                    Pricing Table Results
+                </div>
+                <div ng-repeat="(key, value) in searchResultPricingTables">
+                    <div class="searchResultsCustomer">
+                        {{key}} Pricing Tables <br />
+                    </div>
+                    <div ng-repeat="item in value">
+                        <div class="searchResultsContent">
+                            <div>
+                                Table Name: {{item.TITLE}}
+                            </div>
+                            <div>
+                                Table ID: {{item.OBJ_SID}}
+                            </div>
+                            <div>
+                                Link: <a href="/Contract#/manager/{{item.OBJ_HIER}}" target="_blank">Open Pricing Table</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
