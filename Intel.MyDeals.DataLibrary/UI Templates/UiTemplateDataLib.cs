@@ -216,24 +216,35 @@ namespace Intel.MyDeals.DataLibrary
             {
                 Id = 29,
                 AtrbCd = AttributeCodes.PTR_USER_PRD,
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                Width = 200,
-                Template = "#=gridUtils.uiIconWrapper(data, 'PRODUCTS')#"
-            });
+				Label = "User Product",
+				ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+				Width = 220
+			});
             items.Add(new UiTemplateContainerItem
             {
                 Id = 29,
                 AtrbCd = AttributeCodes.PTR_SYS_PRD,
+				Label = "System Products",
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                IsReadOnly = false,
+                IsReadOnly = true,
                 IsHidden = false,
-                Template = "#=gridUtils.uiIconWrapper(data, 'PRODUCTS')#"
-            });
-            // This is how it should be set once the product selector is in place
-            //IsReadOnly = true,
-            //IsHidden = true,
+				Width = 220
+			});
+			items.Add(new UiTemplateContainerItem
+			{
+				Id = 29,
+				AtrbCd = AttributeCodes.PRD_LEVEL,
+				Label = "Product Level",
+				ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW }
+				//LookupUrl = "/api/Dropdown/GetDropdowns/PRD_LEVEL",
+				//LookupText = "DROP_DOWN",
+				//LookupValue = "DROP_DOWN"
+			});
+			// This is how it should be set once the product selector is in place
+			//IsReadOnly = true,
+			//IsHidden = true,
 
-            items.Add(new UiTemplateContainerItem
+			items.Add(new UiTemplateContainerItem
             {
                 Id = 29,
                 AtrbCd = AttributeCodes.ECAP_PRICE,
@@ -366,6 +377,19 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
+                Id = 41,
+                AtrbCd = AttributeCodes.MM_MEDIA_CD,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                DataType = "string",
+                IsRequired = true
+				//UiType = "RADIOBUTTONGROUP",
+				//LookupUrl = "/api/Dropdown/GetDropdowns/MM_MEDIA_CD",
+				//LookupText = "DROP_DOWN",
+				//LookupValue = "DROP_DOWN"
+			});
+
+            items.Add(new UiTemplateContainerItem
+            {
                 Id = 39,
                 AtrbCd = AttributeCodes.TERMS,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
@@ -374,24 +398,12 @@ namespace Intel.MyDeals.DataLibrary
                 DataType = "string",
                 IsRequired = false
             });
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 41,
-                AtrbCd = AttributeCodes.MM_MEDIA_CD,
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                DataType = "string",
-                IsRequired = true
-                //UiType = "RADIOBUTTONGROUP",
-                //LookupUrl = "/api/Dropdown/GetDropdowns/MEET_COMP_PRICE_QSTN/ECAP",
-                //LookupText = "DROP_DOWN",
-                //LookupValue = "DROP_DOWN"
-            });
 
-            #endregion
+			#endregion
 
-            #region  WIP DEAL
-            
-            items.Add(new UiTemplateContainerItem
+			#region  WIP DEAL
+
+			items.Add(new UiTemplateContainerItem
             {
                 Id = 1,
                 AtrbCd = AttributeCodes.DC_ID,

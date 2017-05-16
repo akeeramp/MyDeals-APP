@@ -41,7 +41,7 @@
 			<tr>
 				<td style="padding: 1px 2px 0 10px;">
 					<!-- Product Selector Button -->
-					<button class="btn btn-sm ssToolbarBtn" ng-click="openProductSelector()" style="border-left: 1px solid #d2dade;">
+					<button class="btn btn-sm ssToolbarBtn" ng-click="openProductSelector()" style="border-left: 1px solid #d2dade;" title="Open Product Selector">
 						<table>
 							<tr>
 								<td>
@@ -55,7 +55,7 @@
 					</button>
 
 					<!-- Validate Products Button -->
-					<button class="btn btn-sm ssToolbarBtn" ng-click="validatePricingTable()">
+					<button class="btn btn-sm ssToolbarBtn" ng-click="validatePricingTable()" title="Validate Pricing Table">
 						<table>
 							<tr>
 								<td>
@@ -68,7 +68,7 @@
 						</table>
 					</button>
 					<!-- view WIP grid Button -->
-					<button class="btn btn-sm ssToolbarBtn" ng-click="showWipDeals()">
+					<button class="btn btn-sm ssToolbarBtn" ng-click="showWipDeals()" title="Show WIP deals">
 						<table>
 							<tr>
 								<td>
@@ -102,37 +102,5 @@
 </div>
 
 
-
-
-
-<script type="text/ng-template" id="cellPopupModal">
-	<div class="modal-header">
-		<h3 class="modal-title" id="modal-title">{{$ctrl.multiSelectPopUpModel.label}} selector</h3>
-	</div>
-	<div class="modal-body" id="modal-body">
-		<div class="row">
-			<div class="col-md-12">
-				<div class="fr">
-					<button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">Update</button>
-					<button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
-				</div>
-			</div>
-		</div>
-		<div op-control-flat
-			 ng-model="$ctrl.popupResult"
-			 op-cd="'MultiSelectSelections'"
-			 op-type="$ctrl.multiSelectPopUpModel.uiType"
-			 op-label="'Select '+ $ctrl.multiSelectPopUpModel.label +':'"
-			 op-lookup-url="$ctrl.multiSelectPopUpModel.opLookupUrl"
-			 op-lookup-text="$ctrl.multiSelectPopUpModel.opLookupText"
-			 op-lookup-value="$ctrl.multiSelectPopUpModel.opLookupValue"
-			 op-placeholder="$ctrl.placeholderText"
-			 op-is-form="true"
-			 op-ui-mode="'VERTICAL'">
-		</div>
-
-		<!--<div class="col-md-12 row">			Selected: <b>{{ $ctrl.popupResult.MultiSelectSelections }}</b>		</div>-->
-	</div>
-	<div class="modal-footer">	</div>
-</script>
-
+<div ng-include="'app/contract/partials/datePickerModal.html'"></div>
+<div ng-include="'app/contract/partials/multiSelectPopUpModal.html'"></div>

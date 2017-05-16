@@ -438,31 +438,37 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 		if (arg.range._sheet._sheetName !== "Main") {
 			return;
 		}
+
+		if (arg.range._ref.topLeft === undefined) {
+			return;
+		}
+
 		var productColIndex = (vm.colToLetter["PTR_USER_PRD"].charCodeAt(0) - intA);
 		var topLeftRowIndex = (arg.range._ref.topLeft.row + 1);
 		var bottomRightRowIndex = (arg.range._ref.bottomRight.row + 1);
 
 		var isProductColumnIncludedInChanges = (arg.range._ref.topLeft.col >= productColIndex) && (arg.range._ref.bottomRight.col <= productColIndex);
-
-		sheet.batch(function () {
+		
+		//sheet.batch(function () {
 			// Trigger only if the changed range contains the product column
 			// NOTE: The below condition assumes that a dragged range is dragged from top-to-bottom, left-to-right. If that ever 
 			// changes (i.e. we move the products column so it's not the first editable column), then we should change this logic to accomodate that.
 			if (isProductColumnIncludedInChanges) {
 
-				var finalColLetter = String.fromCharCode(intA + (ptTemplate.columns.length - 1));
-				// Enable other cells
-				var range = sheet.range("B" + topLeftRowIndex + ":" + finalColLetter + bottomRightRowIndex);
-				range.enable(true);
-				range.background(null);
+				sheet.batch(function () {
+					var finalColLetter = String.fromCharCode(intA + (ptTemplate.columns.length - 1));
+					// Enable other cells
+					var range = sheet.range("B" + topLeftRowIndex + ":" + finalColLetter + bottomRightRowIndex);
+					range.enable(true);
+					range.background(null);
 
-				// Re-disable columns that are readOnly
-				for (var key in vm.readOnlyColLetters) {
-					if (vm.readOnlyColLetters.hasOwnProperty(key)) {
-						disableRange(sheet.range(key + topLeftRowIndex + ":" + key + bottomRightRowIndex));
+					// Re-disable columns that are readOnly
+					for (var key in vm.readOnlyColLetters) {
+						if (vm.readOnlyColLetters.hasOwnProperty(key)) {
+							disableRange(sheet.range(key + topLeftRowIndex + ":" + key + bottomRightRowIndex));
+						}
 					}
-				}
-
+				});
 				arg.range.forEachCell(
 					function (rowIndex, colIndex, value) {
 						if (colIndex == productColIndex) { // Product Col changed
@@ -512,24 +518,28 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					}
 				);
 			}
-		});
+		//});
 
-		if (!root._dirty) {
-			root._dirty = true;
-		} 
+		$scope.$apply(function(){
+			if (!root._dirty) {
+				root._dirty = true;
+			} 
+		});
 	}
 
 
 	function disableIndividualReadOnlyCells(sheet, rowInfo, rowIndex, rowIndexOffset) {
-		for (var property in rowInfo._behaviors.isReadOnly) {
-			if (rowInfo._behaviors.isReadOnly.hasOwnProperty(property)) {
-				var colLetter = vm.colToLetter[property];
-				if (colLetter != null) {
-					//vm.readOnlyColLetters[vm.colToLetter[property]] = true;
-					disableRange(sheet.range(colLetter + (rowIndex + rowIndexOffset)));
+		sheet.batch(function () {
+			for (var property in rowInfo._behaviors.isReadOnly) {
+				if (rowInfo._behaviors.isReadOnly.hasOwnProperty(property)) {
+					var colLetter = vm.colToLetter[property];
+					if (colLetter != null) {
+						//vm.readOnlyColLetters[vm.colToLetter[property]] = true;
+						disableRange(sheet.range(colLetter + (rowIndex + rowIndexOffset)));
+					}
 				}
 			}
-		}
+		});
 	}
 
 	// On spreadsheet Render
@@ -666,19 +676,20 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 						// Add validations based on column type
 						switch (myFieldModel.type) {
 							case "date":
-								//// TODO: Date conversion is killing IE by 1-2 minutes (on Jeff's computer)
-								//// Add date picker editor and validation
-								//sheet.range(myColumnName + ":" + myColumnName).validation({
-								//	dataType: "date",
-								//	showButton: true,
-								//	comparerType: "between",
-								//	from: 'DATEVALUE("1/1/1900")',
-								//	to: 'DATEVALUE("12/31/9999")',
-								//	allowNulls: myFieldModel.nullable,
-								//	type: "warning",
-								//	messageTemplate: "Value must be a date"
-								//});
+									//// TODO: Date conversion is killing IE by 1-2 minutes (on Jeff's computer)
+									//// Add date picker editor and validation
+									//sheet.range(myColumnName + ":" + myColumnName).validation({
+									//	dataType: "date",
+									//	showButton: true,
+									//	comparerType: "between",
+									//	from: 'DATEVALUE("1/1/1900")',
+									//	to: 'DATEVALUE("12/31/9999")',
+									//	allowNulls: myFieldModel.nullable,
+									//	type: "warning",
+									//	messageTemplate: "Value must be a date"
+									//});
 								//sheet.range(myColumnName + ":" + myColumnName).format("MM/dd/yyyy");
+								sheet.range(myColumnName + ":" + myColumnName).editor("datePickerEditor");
 								vm.requiredStringColumns[key] = true;
 								break;
 							case "number":
@@ -999,27 +1010,22 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 		return {
 			edit: function (options) {
 				context = options;
-
-				//// If the selected cell already contains some value, reflect
-				//// it in the custom editor.
-				//var value = context.range.value();
-				//if (value != null) {
-				//	model.set("value", value);
-				//}
-
-				// TODO: Replace with actual Product Selector!
-				var modalOptions = {
-					closeButtonText: 'Close',
-					hasActionButton: false,
-					headerText: 'Help Text',
-					bodyText: 'TODO'
-				};
-				confirmationModal.showModal({}, modalOptions);
-
+				open();
 			},
-			icon: "fa fa-mouse-pointer ssEditorBtn"
+			icon: "fa fa-check ssEditorBtn"
 		};
+		function open() {
+			//var value = context.range.value();
 
+			// TODO: Replace with actual Product Selector!
+			var modalOptions = {
+				closeButtonText: 'Close',
+				hasActionButton: false,
+				headerText: 'Help Text',
+				bodyText: 'TODO'
+			};
+			confirmationModal.showModal({}, modalOptions);
+		}
 	});
 
 	
@@ -1031,54 +1037,132 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 		// actually called, so here just return the object with the required API.
 		return {
 			edit: function (options) {
-
 				context = options;
-
-				// Get selected cell
-				var currColIndex = options.range._ref.col;
-
-				// Get column name out of selected cell
-				var colName = vm.letterToCol[String.fromCharCode(intA + currColIndex)]
-
-				// Get columnData (urls, name, etc) from column name
-				var colData = $scope.$parent.$parent.templates.ModelTemplates.PRC_TBL_ROW['ECAP'].model.fields[colName];
-
-				// We have a "generic" variable in the scope to be the model. Then we replace the generic with a copy of the columnData
-				// Inside the script tag, we have a ng-if equals column name then use whichever multiselct. 
-
-
-				// If the selected cell already contains some value, reflect it in the custom editor.
-				var cellCurrVal = context.range.value();
-				var typeoftest = (typeof cellCurrVal);
-				if (cellCurrVal !== null && cellCurrVal !== "" && typeof cellCurrVal == "string") {
-					cellCurrVal = cellCurrVal.split(',');
-				}
-
-				var modalInstance = $uibModal.open({
-					//animation: $ctrl.animationsEnabled,
-					ariaLabelledBy: 'modal-title',
-					ariaDescribedBy: 'modal-body',
-					templateUrl: 'cellPopupModal',
-					controller: 'MultiSelectModalCtrl',
-					controllerAs: '$ctrl',
-					size: 'md',
-					resolve: {
-						items: function () {
-							return colData;
-						},
-						cellCurrValues: function () {
-							return cellCurrVal;
-						}
-					}
-				});
-				
-				modalInstance.result.then(function (selectedItem) {
-					context.callback(selectedItem);
-				}, function () { });				
+				open();
 			},
-			icon: "fa fa-mouse-pointer ssEditorBtn"
+			icon: "fa fa-check ssEditorBtn"
 		};
+
+		function open() {
+			// Get selected cell
+			var currColIndex = context.range._ref.col;
+
+			// Get column name out of selected cell
+			var colName = vm.letterToCol[String.fromCharCode(intA + currColIndex)]
+
+			// Get columnData (urls, name, etc) from column name
+			var colData = $scope.$parent.$parent.templates.ModelTemplates.PRC_TBL_ROW['ECAP'].model.fields[colName];
+
+			// We have a "generic" variable in the scope to be the model. Then we replace the generic with a copy of the columnData
+			// Inside the script tag, we have a ng-if equals column name then use whichever multiselct. 
+
+
+			// If the selected cell already contains some value, reflect it in the custom editor.
+			// TODO: For whatever reason, Kendo is automatically formatting dates to a strange number, which does not correspond to date values. Fix this.
+			var cellCurrVal = context.range.value();
+			//var typeoftest = (typeof cellCurrVal);
+			//if (cellCurrVal !== null && cellCurrVal !== "" && typeof cellCurrVal == "string") {
+			//	cellCurrVal = cellCurrVal.split(',');
+			//}
+
+			var modalInstance = $uibModal.open({
+				//animation: $ctrl.animationsEnabled,
+				ariaLabelledBy: 'modal-title',
+				ariaDescribedBy: 'modal-body',
+				templateUrl: 'multiSelectPopUpModel',
+				controller: 'MultiSelectModalCtrl',
+				controllerAs: '$ctrl',
+				size: 'md',
+				resolve: {
+					items: function () {
+						return colData;
+					},
+					cellCurrValues: function () {
+						return cellCurrVal;
+					},
+					colName: function () {
+						return colName;
+					}
+				}
+			});
+
+			modalInstance.result.then(function (selectedItem) {
+				context.callback(selectedItem);
+			}, function () { });
+		}
 	});
 
+
+
+	// NOTE: Thhis is a workaround because the bulit-in kendo spreadsheet datepicker causes major perfromance issues in IE
+	kendo.spreadsheet.registerEditor("datePickerEditor", function () {
+		var context;
+
+		// Further delay the initialization of the UI until the `edit` method is
+		// actually called, so here just return the object with the required API.
+		return {
+			edit: function (options) {
+				context = options;
+				open();
+			},
+			icon: "k-icon k-i-calendar ssEditorBtn"
+		};
+
+		function open() {
+			// Get selected cell
+			var currColIndex = context.range._ref.col;
+
+			// Get column name out of selected cell
+			var colName = vm.letterToCol[String.fromCharCode(intA + currColIndex)]
+
+			// Get columnData (urls, name, etc) from column name
+			var colData = $scope.$parent.$parent.templates.ModelTemplates.PRC_TBL_ROW['ECAP'].model.fields[colName];
+
+			//// If the selected cell already contains some value, reflect it in the custom editor.
+			//var cellCurrVal = context.range.value();
+			//if (cellCurrVal !== undefined && cellCurrVal != null) {
+			//	var date = new Date(cellCurrVal);
+			//	var day = date.getDate();
+			//	var monthIndex = date.getMonth();
+			//	var year = date.getFullYear();
+			//}
+			//cellCurrVal = "" + monthIndex + "/" + day + "/" + year;
+
+			// TODO: Remove this once we figure out why Kendo is automatically formatting dates to a strange number, which does not correspond to date values. 
+			var cellCurrVal = null;
+
+			var contractStartDate = $scope.$parent.$parent.contractData["START_DT"];
+			var contractEndDate = $scope.$parent.$parent.contractData["END_DT"];
+
+			var modalInstance = $uibModal.open({
+				//animation: $ctrl.animationsEnabled,
+				ariaLabelledBy: 'modal-title',
+				ariaDescribedBy: 'modal-body',
+				templateUrl: 'datePickerPopupModal',
+				controller: 'DatePickerModalCtrl',
+				controllerAs: '$ctrl',
+				size: 'md',
+				resolve: {
+					cellCurrValues: function () {
+						return cellCurrVal;
+					},
+					colName: function () {
+						return colName;
+					},
+					contractStartDate: function () {
+						return contractStartDate;
+					},
+					contractEndDate: function () {
+						return contractEndDate;
+					}
+				}
+			});
+
+			modalInstance.result.then(function (selectedItem) {
+				context.callback(selectedItem);
+			}, function () { });
+		}
+	});
+	
 	init();
 }

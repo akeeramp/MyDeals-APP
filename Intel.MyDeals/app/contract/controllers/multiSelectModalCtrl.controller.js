@@ -2,15 +2,22 @@
     .module('app.contract')
     .controller('MultiSelectModalCtrl', MultiSelectModalCtrl);
 
-MultiSelectModalCtrl.$inject = ['$scope', '$uibModalInstance', 'MrktSegMultiSelectService', 'items', 'cellCurrValues'];
+MultiSelectModalCtrl.$inject = ['$scope', '$uibModalInstance', 'MrktSegMultiSelectService', 'items', 'cellCurrValues', 'colName'];
 
-function MultiSelectModalCtrl($scope, $uibModalInstance, MrktSegMultiSelectService, items, cellCurrValues) {
+function MultiSelectModalCtrl($scope, $uibModalInstance, MrktSegMultiSelectService, items, cellCurrValues, colName) {
 	var $ctrl = this;
+	var GEO = "GEO_COMBINED";
+	var MRKT_SEG = "MRKT_SEG"
+
 	$ctrl.multiSelectPopUpModel = items;
 	$ctrl.popupResult = [];
 	$ctrl.popupResult.MultiSelectSelections = cellCurrValues;
-
+	$ctrl.colName = colName;
 	$ctrl.placeholderText = "Click to Select..."
+
+	$ctrl.isGeo = (colName == GEO);
+	$ctrl.isGeoBlend = false;
+
 	
 	$ctrl.ok = function () {
 		var returnVal = "";
@@ -24,9 +31,6 @@ function MultiSelectModalCtrl($scope, $uibModalInstance, MrktSegMultiSelectServi
 		$uibModalInstance.dismiss();
 	};
 
-	//setting a few constants for the strings that occur a lot
-	var GEO = "GEO_COMBINED";
-	var MRKT_SEG = "MRKT_SEG"
 
 	//watch for user changing global auto-fill default values
 	$scope.$watch('$ctrl.popupResult.MultiSelectSelections',
@@ -44,10 +48,9 @@ function MultiSelectModalCtrl($scope, $uibModalInstance, MrktSegMultiSelectServi
 			else {
 				// HACK: These get called twice because we set newValue via $ctrl.popupResult.MultiSelectSelections directly instead 
 				// of newValue. However, we need to do this otherwise the newValue will not neccessarly change  in the MrktSegMultiSelectService
-				if ($ctrl.multiSelectPopUpModel.field == MRKT_SEG) {
-					// TODO: Market Segment multiSelect logic doesn't work yet! 
+				if ($ctrl.colName == MRKT_SEG) {
 					$ctrl.popupResult.MultiSelectSelections = MrktSegMultiSelectService.setMkrtSegMultiSelect("MultiSelectSelections", "MultiSelectSelections_MS", newValue, oldValue);
-				} else if ($ctrl.multiSelectPopUpModel.field == GEO) {
+				} else if (($ctrl.isGeo) && ($ctrl.isGeoBlend)) {
 					$ctrl.popupResult.MultiSelectSelections = MrktSegMultiSelectService.setGeoMultiSelect("MultiSelectSelections", newValue, oldValue);
 				}
 			}

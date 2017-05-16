@@ -306,11 +306,14 @@
     <Content Include="app\app.module.js" />
     <Content Include="app\blocks\uiControls\partials\horizontalEmbeddedMultiSelect.html" />
     <Content Include="app\blocks\uiControls\partials\verticalEmbeddedMultiSelect.html" />
+    <Content Include="app\contract\controllers\datePickerModalCtrl.controller.js" />
     <Content Include="app\contract\controllers\multiSelectModalCtrl.controller.js" />
+    <Content Include="app\contract\partials\datePickerModal.html" />
     <Content Include="app\contract\partials\help.html" />
     <Content Include="app\contract\controllers\contract.controller.js" />
     <Content Include="app\contract\controllers\mrktSegMultiSelect.service.js" />
     <Content Include="app\contract\controllers\pricingTable.controller.js" />
+    <Content Include="app\contract\partials\multiSelectPopUpModal.html" />
     <Content Include="app\contract\productSelector\kendoGridCheckBox.directive.js" />
     <Content Include="app\contract\productSelector\productSelector.controller.js" />
     <Content Include="app\contract\productSelector\productSelector.html" />

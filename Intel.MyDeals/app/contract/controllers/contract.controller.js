@@ -1009,6 +1009,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
             var modCt = [];
             var modPs = [];
 
+            var greatestPtrIndex = sData.length;
             for (var c = 0; c < contractData.length; c++) {
                 var mCt = {
             
@@ -1033,14 +1034,49 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                 }
             }
 
-            var data = {
-                "Contract": modCt,
-                "PricingStrategy": modPs,
-                "PricingTable": curPricingTableData,
-                "PricingTableRow": sData === undefined ? [] : sData,
-                "WipDeals": gData === undefined ? [] : gData,
-                "EventSource": source
-            }
+
+    	// Check PricingTableRow validations before we submit to the API
+        if (sData !== undefined) {
+        	var errorList = [];
+
+        	var intA = "A".charCodeAt(0);
+        	var finalColLetter = String.fromCharCode(intA + ($scope.templates.ModelTemplates.PRC_TBL_ROW["ECAP"].columns.length - 1)); // TODO: Make this flexible against any ObjType
+        	var spreadsheet = $("#pricingTableSpreadsheet").data("kendoSpreadsheet");
+        	var sheet = spreadsheet.activeSheet();
+        	var cellsStates = sheet.range('A2:' +finalColLetter + (greatestPtrIndex + 1)).getState();
+
+        	for (var r in cellsStates.data) {
+        		for (var c in cellsStates.data[r]) {
+        			if (cellsStates.data[r][c].validation && !cellsStates.data[r][c].validation.value) {
+        				var errorMessage = (String.fromCharCode(intA + parseInt(c)) + (parseInt(r) + 2)); // +2 because we start at A2
+        				errorList.push(errorMessage);
+        			}
+        		}
+        	}
+			
+			//// TODO: uncomment this for UI-side validation once we figure oout the duplicate cell value on error bug
+        	//if (errorList.length > 0) {
+        	//	alert("TODO: better message. Also show the rows where the error is. Error: You have errors on your spreadsheet you still need to fix");
+        	//	console.log(errorList);
+        	//	return;
+			//}
+			
+        	// Get the rows where products are entered
+        	// Compare that rowIndex with the greatestRowIndex variable to get the last row where user has enetered data
+        	// use that last row to get the range which we will iterate thorugh to find errors
+        	//http://docs.telerik.com/kendo-ui/controls/data-management/spreadsheet/how-to/get-flagged-cells
+        	//http://dojo.telerik.com/iCola
+		}
+
+
+        var data = {
+            "Contract": modCt,
+            "PricingStrategy": modPs,
+            "PricingTable": curPricingTableData,
+            "PricingTableRow": sData === undefined ? [] : sData,
+            "WipDeals": gData === undefined ? [] : gData,
+            "EventSource": source
+        }
 
             $scope.isSaving = true;
 

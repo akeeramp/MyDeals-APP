@@ -1,0 +1,39 @@
+﻿<script type="text/ng-template" id="multiSelectPopUpModel">
+	<div class="modal-header">
+		<h3 class="modal-title" id="modal-title">Select {{$ctrl.multiSelectPopUpModel.label}}</h3>
+	</div>
+	<div class="modal-body" id="modal-body">
+		<p>
+			Select which {{$ctrl.multiSelectPopUpModel.label}}(s) to apply below: <br />
+			<span ng-if="$ctrl.isGeo">
+				If blending, you may <b>not select</b> Worldwide & another geo concurrently.
+			</span>
+		</p>
+		<div op-control-flat
+			 ng-model="$ctrl.popupResult"
+			 op-cd="'MultiSelectSelections'"
+			 op-type="$ctrl.multiSelectPopUpModel.uiType"
+			 op-label="''"
+			 op-lookup-url="$ctrl.multiSelectPopUpModel.opLookupUrl"
+			 op-lookup-text="$ctrl.multiSelectPopUpModel.opLookupText"
+			 op-lookup-value="$ctrl.multiSelectPopUpModel.opLookupValue"
+			 op-placeholder="$ctrl.placeholderText"
+			 op-is-form="true"
+			 op-ui-mode="'VERTICAL'">
+		</div>
+		<br />
+		<p ng-if="$ctrl.isGeo">
+			<input type="checkbox" ng-model="$ctrl.isGeoBlend" /> <b>Blend</b>
+		</p>
+
+		<div class="row">
+			<div class="col-md-12">
+				<div class="fr">
+					<button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
+					<button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">Add to grid</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--<div class="modal-footer">	</div>-->
+</script>

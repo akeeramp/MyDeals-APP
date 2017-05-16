@@ -1,0 +1,60 @@
+﻿<script type="text/ng-template" id="datePickerPopupModal">
+	<div class="modal-header">
+		<h3 class="modal-title" id="modal-title">Date picker</h3>
+	</div>
+	<div class="modal-body" id="modal-body">
+		<div class="row">
+			<div class="col-md-12">
+				<label>
+					Please click the box below to choose the date:
+				</label>
+				<input kendo-date-picker
+					   ng-class="{'isErrorWrapper': !$ctrl.isValidDate }"
+					   id="datePickerPopup"
+					   ng-model="$ctrl.popupResult"
+					   k-placeholder="$ctrl.placeholderText"
+					   k-options="$ctrl.datepickerOptions"
+					   style="width: 100%;" />
+				<p ng-show="!$ctrl.isValidDate" class="err-Control">
+					{{$ctrl.errorMsg }}
+				</p>
+			</div>
+		</div>
+		<!-- TODO: maybe. Backdate is still being hashed out (5/15/2017). When we find out, either uncomment below code if needed, else just remove it-->
+		<!--<div class="row">
+			<div class="col-md-12" ng-if="$ctrl.isStartDate">
+				<br />
+				<label>Backdate reason:</label>
+				<i class="fa fa-info-circle skyBlue"
+				   aria-hidden="true"
+				   uib-tooltip="Backdate reasons are only required when deal start date is before today's date."
+				   tooltip-placement="right">
+				</i>
+
+				<textarea type="text"
+						  class="fl opUiElement k-textarea"
+						  ng-model="$ctrl.backDateReason"
+						  ng-class="{'isReadOnly': !$ctrl.isBackDateReasonRequired, 'isError': ($ctrl.isBackDateReasonRequired && $ctrl.backDateReason == '') }"
+						  ng-disabled="!$ctrl.isBackDateReasonRequired"
+						  style="width: 100%;"></textarea>
+				<p ng-show="($ctrl.isBackDateReasonRequired && $ctrl.backDateReason == '')" class="err-Control">
+					Please enter a backdate reason. Backdate reasons are required when deal start date is before today's date.
+				</p>
+			</div>
+		</div>-->
+
+		<div ng-init="$ctrl.init()"> </div> <!-- NOTE: init() must be beneath the kendo-date-picker element to set the datepicker's values -->
+		<br />
+
+		<div class="row">
+			<div class="col-md-12">
+				<div class="fr">
+					<button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
+					<button class="btn btn-primary" type="button" ng-click="$ctrl.ok()" ng-disabled="(!$ctrl.isValidDate)">Add to Grid</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">	</div>
+</script>
+

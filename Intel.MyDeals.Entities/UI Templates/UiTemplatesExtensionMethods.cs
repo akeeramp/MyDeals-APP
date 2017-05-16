@@ -86,14 +86,16 @@ namespace Intel.MyDeals.Entities.UI_Templates
                 {
                     fields[item.AtrbCd + dimKey] = new UiFieldItem
                     {
-                        type = item.DataType,
                         editable = !item.IsReadOnly,
-                        nullable = !item.IsRequired,
+						field = item.AtrbCd + dimKey,
 						format = item.Format,
+						label = item.Label,
+						nullable = !item.IsRequired,
 						opLookupUrl = item.LookupUrl ?? "",
 						opLookupText = item.LookupText ?? "",
 						opLookupValue = item.LookupValue ?? "",
 						uiType = item.UiType,
+						type = item.DataType,
 						validMsg = item.HelpText ?? "",
                         values = item.LookupValue,
                         valuesText = item.LookupText,
@@ -121,13 +123,15 @@ namespace Intel.MyDeals.Entities.UI_Templates
                 {
                     detailsFields[item.AtrbCd + dimKey] = new UiFieldItem
                     {
-                        type = item.DataType,
                         editable = !item.IsReadOnly,
-                        nullable = !item.IsRequired,
+						field = item.AtrbCd + dimKey,
 						format = item.Format,
+						label = item.Label,
+						nullable = !item.IsRequired,
 						opLookupUrl = item.LookupUrl ?? "",
 						opLookupText = item.LookupText ?? "",
 						opLookupValue = item.LookupValue ?? "",
+                        type = item.DataType,
 						uiType = item.UiType,
 						validMsg = item.HelpText ?? "",
                         values = item.LookupValue,
