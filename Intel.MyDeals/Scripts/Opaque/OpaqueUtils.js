@@ -114,6 +114,7 @@ op.toJS = function (json) {
 }
 
 op.error = function (ex, msg) {
+    return;
     var ver = (op.appVersion !== undefined) ? op.appVersion : "1";
     var app = (op.appToken !== undefined && op.appToken.AppCd !== undefined) ? op.appToken.AppCd : "UNKNOWN";
     var env = (op.appToken !== undefined && op.appToken.Environment !== undefined && op.appToken.Environment.Location !== undefined) ? op.appToken.Environment.Location : "UNKNOWN";
