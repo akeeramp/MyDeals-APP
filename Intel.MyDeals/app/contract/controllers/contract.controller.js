@@ -98,7 +98,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                 $scope.contractData.CUST_ACCNT_DIV_UI = "";
 
                 // if the current strategy was changed, update it
-                if ($scope.curPricingStrategyId === id) {
+                if (id != undefined && $scope.curPricingStrategyId === id) {
                     $scope.curPricingStrategy = util.findInArray($scope.contractData.PRC_ST, id);
                 }
 
@@ -711,10 +711,12 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
 
     // **** MINI NAV ICON Methods ****ex
     //
-    $scope.isSearchHidden = true;
-    $scope.isAddPricingTableHidden = true;
-    $scope.isEditPricingTableDefaultsHidden = true;
-    $scope.toggleSearch = function () {
+        $scope.isSearchHidden = true;
+        $scope.isSummaryHidden = true;
+        
+        $scope.isAddPricingTableHidden = true;
+        $scope.isEditPricingTableDefaultsHidden = true;
+        $scope.toggleSearch = function () {
         $scope.isSearchHidden = !$scope.isSearchHidden;
         $scope.isAddStrategyHidden = true;
         $scope.isAddStrategyBtnHidden = false;
@@ -836,7 +838,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                     $timeout(function () {
                         $scope.$broadcast('refresh');
                         $("#wincontractMessages").data("kendoWindow").open();
-                        $scope.refreshContractData(ps.DC_ID);
+                        if (ps !== undefined) $scope.refreshContractData(ps.DC_ID);
                     }, 50);
                 },
                 function(result) {
@@ -845,6 +847,22 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
             );
         }
 
+        $scope.actionPricingStrategies = function (data) {
+            objsetService.actionPricingStrategies($scope.getCustId(), data).then(
+                function (data) {
+                    $scope.messages = data.data.Messages;
+
+                    $timeout(function () {
+                        $scope.$broadcast('refresh');
+                        $("#wincontractMessages").data("kendoWindow").open();
+                        $scope.refreshContractData();
+                    }, 50);
+                },
+                function (result) {
+                    debugger;
+                }
+            );
+        }
 
         // **** DELETE Methods ****
         //
@@ -1526,6 +1544,8 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
             $scope.editPricingTable();
         }
     }
+
+
 
     $scope.customAddPtValidate = function () {
         var isValid = true;

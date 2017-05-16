@@ -1,0 +1,17 @@
+﻿
+<div ng-if="!isNewContract" ng-include="'app/contract/partials/lnavMenuMini.html'"></div>
+
+<div ng-if="!isNewContract" id="lnavContainerWrapper">
+    <div id="lnavHeader">
+        <div ng-include="'app/contract/partials/lnavMenu.html'"></div>
+    </div>
+    <div id="lnavMenuContainer">
+        <div ng-include="'app/contract/partials/lnavSearch.html'"></div>
+        <div ng-include="'app/contract/partials/lnavAddPricingStrategy.html'"></div>
+        <div ng-include="'app/contract/partials/lnavAddPricingTable.html'"></div>
+        <div ng-include="'app/contract/partials/lnavEditPricingTableDefaults.html'"></div>
+    </div>
+    <div id="lnavContainer" bind-to-height="[33, '#lnavMenuContainer', 'padding-top','#lnavContainerWrapper', 'margin-top','#lnavHeader']">
+        <div ng-include="'app/contract/partials/lnavSummaryMenu.html'"></div>
+    </div>
+</div>

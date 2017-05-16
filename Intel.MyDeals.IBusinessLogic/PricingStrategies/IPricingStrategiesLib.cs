@@ -1,4 +1,5 @@
-﻿using Intel.MyDeals.Entities;
+﻿using System.Collections.Generic;
+using Intel.MyDeals.Entities;
 using Intel.Opaque;
 
 namespace Intel.MyDeals.IBusinessLogic
@@ -10,7 +11,7 @@ namespace Intel.MyDeals.IBusinessLogic
         OpDataCollectorFlattenedDictList SavePricingStrategy(OpDataCollectorFlattenedList pricingStrategies, OpDataCollectorFlattenedList pricingTables, OpDataCollectorFlattenedList pricingTableRows, OpDataCollectorFlattenedList wipDeals, int custId);
         OpDataCollectorFlattenedDictList SaveFullPricingStrategy(int custId, OpDataCollectorFlattenedDictList fullpricingStrategies);
         OpMsg DeletePricingStrategy(int custId, OpDataCollectorFlattenedList pricingStrategies);
-        OpMsgQueue ActionPricingStrategy(int custId, string actn, OpDataCollectorFlattenedList pricingStrategies);
+        OpMsgQueue ActionPricingStrategies(int custId, Dictionary<string, List<WfActnItem>> actnPs);
         OpDataCollectorFlattenedDictList GetFullPricingStrategy(int id);
     }
 }

@@ -76,7 +76,7 @@ namespace Intel.MyDeals.BusinessLogic
             return pricingStrategies.DeleteByIds(OpDataElementType.PRC_ST, custId, _dataCollectorLib);
         }
 
-        public OpMsgQueue ActionPricingStrategy(int custId, string actn, OpDataCollectorFlattenedList pricingStrategies)
+        public OpMsgQueue ActionPricingStrategies(int custId, Dictionary<string, List<WfActnItem>> actnPs)
         {
             OpMsgQueue opMsgQueue = new OpMsgQueue();
 
@@ -94,15 +94,30 @@ namespace Intel.MyDeals.BusinessLogic
                 Attributes.PASSED_VALIDATION.ATRB_SID
             };
 
-            List<int> ids = pricingStrategies.Select(item => int.Parse(item[AttributeCodes.DC_ID].ToString())).ToList();
+            Dictionary<int, string> id2actnMapping = new Dictionary<int, string>();
+            Dictionary<int, string> id2stageMapping = new Dictionary<int, string>();
+            List<int> ids = new List<int>();
+            foreach (KeyValuePair<string, List<WfActnItem>> kvp in actnPs)
+            {
+                List<int> psIds = kvp.Value.Select(t => t.DC_ID).ToList();
+                ids.AddRange(psIds);
+                foreach (int i in psIds)
+                {
+                    id2actnMapping[i] = kvp.Key;
+                }
+                foreach (WfActnItem wfActnItem in kvp.Value)
+                {
+                    id2stageMapping[wfActnItem.DC_ID] = wfActnItem.WF_STG_CD;
+                }
+            }
 
 
             MyDealsData myDealsData = OpDataElementType.PRC_ST.GetByIDs(ids, opDataElementTypes, atrbs);
-            foreach (OpDataCollectorFlattenedItem item in pricingStrategies)
+            foreach (OpDataCollector dc in myDealsData[OpDataElementType.PRC_ST].AllDataCollectors)
             {
-                OpDataCollector dc = myDealsData[OpDataElementType.PRC_ST].Data[int.Parse(item[AttributeCodes.DC_ID].ToString())];
                 string stageInDb = dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
-                string stageIn = item[AttributeCodes.WF_STG_CD].ToString();
+                string stageIn = id2stageMapping[dc.DcID];
+                string actn = id2actnMapping[dc.DcID];
 
                 // concurency check
                 if (stageIn != stageInDb)
@@ -143,8 +158,9 @@ namespace Intel.MyDeals.BusinessLogic
 
                 // TODO add actions to stack like TRACKER NUMBER or WIP-TO_REAL or COST TEST, etc...
                 // This should probably be a rule item
-
             }
+
+
 
             myDealsData[OpDataElementType.PRC_ST].BatchID = Guid.NewGuid();
             myDealsData[OpDataElementType.PRC_ST].GroupID = -101; // Whatever the real ID of this object is

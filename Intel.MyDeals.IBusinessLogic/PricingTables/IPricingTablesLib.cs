@@ -7,6 +7,7 @@ namespace Intel.MyDeals.IBusinessLogic
     {
         MyDealsData GetPricingTable(int id, bool inclusive = false);
         OpDataCollectorFlattenedDictList GetFullPricingTable(int id);
+        
         OpDataCollectorFlattenedDictList GetFullNestedPricingTable(int id);
         OpDataCollectorFlattenedDictList SavePricingTable(OpDataCollectorFlattenedList data, int custId);
         OpDataCollectorFlattenedDictList SavePricingTable(OpDataCollectorFlattenedList pricingTables, OpDataCollectorFlattenedList pricingTableRows, OpDataCollectorFlattenedList wipDeals, int custId);

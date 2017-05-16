@@ -53,13 +53,13 @@
             "stage": {
                 "Complete": "#C4D600",
                 "InComplete": "#FC4C02",
-                "Draft": "#f3D54E",
-                "Requested": "#FFA300",
-                "Submitted": "#00AEEF",
-                "Accepted": "#C4D600",
-                "InProgress": "#f3D54E",
+                "Draft": "#d8dddf",
+                "Requested": "#f9eaa7",
+                "Submitted": "#ffd180",
+                "Approved": "#c4d600",
+                "InProgress": "#d8dddf",
                 "Processed": "#C4D600",
-                "Active": "#C4D600",
+                "Active": "#c4d600",
                 "Pending Bid": "#FFA300",
                 "Lost Bid": "#FC4C02"
             }

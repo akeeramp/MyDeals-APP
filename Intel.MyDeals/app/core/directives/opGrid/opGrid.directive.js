@@ -96,6 +96,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
                     }
                 }
                 $scope.opOptions.groupColumns = newObj;
+                //debugger;
                 //util.clone($scope.opOptions[source].groupColumns);
                 //debugger;
             }

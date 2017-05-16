@@ -1,4 +1,6 @@
-﻿using System.Web.Http;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Web.Http;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque;
@@ -76,13 +78,32 @@ namespace Intel.MyDeals.Controllers.API
             );
         }
 
-        
+
         [Authorize]
         [Route("ActionPricingStrategy/{custId}/{actn}")]
         [HttpPost]
         public OpMsgQueue ActionPricingStrategy(int custId, string actn, OpDataCollectorFlattenedList pricingStrategies)
         {
-            return SafeExecutor(() => _pricingStrategiesLib.ActionPricingStrategy(custId, actn, pricingStrategies)
+            Dictionary<string, List<WfActnItem>> actnPs = new Dictionary<string, List<WfActnItem>>
+            {
+                [actn] = pricingStrategies.Select(item => new WfActnItem
+                {
+                    DC_ID = int.Parse(item[AttributeCodes.DC_ID].ToString()),
+                    WF_STG_CD = item[AttributeCodes.WF_STG_CD].ToString()
+                }).ToList()
+            };
+
+            return SafeExecutor(() => ActionPricingStrategies(custId, actnPs)
+                , "Unable to action the Pricing Strategy {id}"
+            );
+        }
+
+        [Authorize]
+        [Route("ActionPricingStrategies/{custId}")]
+        [HttpPost]
+        public OpMsgQueue ActionPricingStrategies(int custId, Dictionary<string, List<WfActnItem>> actnPs)
+        {
+            return SafeExecutor(() => _pricingStrategiesLib.ActionPricingStrategies(custId, actnPs)
                 , "Unable to action the Pricing Strategy {id}"
             );
         }

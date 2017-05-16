@@ -12,7 +12,7 @@ function contractStatusBoard($compile, objsetService,colorDictionary) {
         restrict: 'AE',
         templateUrl: '/app/core/directives/gridStatusBoard/contractStatusBoard.directive.html',
         controller: ['$scope', '$http', function ($scope, $http) {
-
+            
             $scope.isLoaded = false;
             $scope.Title = "";
             $scope.width = 175;
@@ -93,7 +93,7 @@ function contractStatusBoard($compile, objsetService,colorDictionary) {
                     width: "20px",
                     sortable: false,
                     filterable: false,
-                    template: "<a href='\\#' ng-click='gotoContractManager(dataItem.id)' style='margin-left: 3px;' title='Click to open the Contract in the Contract Manager'><i class='intelicon-frame-template'></i></a>"
+                    template: "<a href='\\#' ng-click='gotoContractManager(dataItem.id)' style='margin-left: 3px;' title='Click to open the Contract in the Contract Editor'><i class='intelicon-frame-template'></i></a>"
                 }, {
                     field: "name",
                     title: "Name",

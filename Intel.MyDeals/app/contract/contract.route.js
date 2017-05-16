@@ -37,6 +37,51 @@
                     }
                 }
             }, {
+                state: 'contract.pct',
+                config: {
+                    url: '/pct',
+                    views: {
+                        'lnavView': {
+                            templateUrl: '/app/contract/partials/lnavSummary.html'
+                        },
+                        'contractHeaderView': {
+                            templateUrl: '/app/contract/partials/contractSummaryHeader.html'
+                        },
+                        'contractWrapperView': {
+                            templateUrl: '/app/contract/partials/contractSummaryPct.html',
+                            controller: 'managerPctController'
+                        }
+                    }
+                }
+            }, {
+                state: 'contract.summary',
+                config: {
+                    url: '/summary',
+                    views: {
+                        'lnavView': {
+                            templateUrl: '/app/contract/partials/lnavSummary.html'
+                        },
+                        'contractHeaderView': {
+                            templateUrl: '/app/contract/partials/contractSummaryHeader.html'
+                        },
+                        'contractWrapperView': {
+                            templateUrl: '/app/contract/partials/contractSummary.html',
+                            controller: 'managerController'
+                        }
+                    }
+                }
+            }, {
+                state: 'contract.summary.dealtype',
+                config: {
+                    url: '/dealtype',
+                    views: {
+                        'summaryContentView': {
+                            templateUrl: '/app/contract/partials/contractSummaryDealType.html',
+                            controller: 'managerDealTypeController'
+                        }
+                    }
+                }
+            }, {
                 state: 'contract.details',
                 config: {
                     url: '/details',
@@ -49,22 +94,6 @@
                         },
                         'contractWrapperView': {
                             templateUrl: '/app/contract/partials/contractDetail.html'
-                        }
-                    }
-                }
-            }, {
-                state: 'contract.summary',
-                config: {
-                    url: '/summary',
-                    views: {
-                        'lnavView': {
-                            templateUrl: '/app/contract/partials/lnav.html'
-                        },
-                        'contractHeaderView': {
-                            templateUrl: '/app/contract/partials/contractHeader.html'
-                        },
-                        'contractWrapperView': {
-                            templateUrl: '/app/contract/partials/contractSummary.html'
                         }
                     }
                 }

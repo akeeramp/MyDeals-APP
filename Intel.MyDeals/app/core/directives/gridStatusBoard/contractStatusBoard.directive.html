@@ -4,7 +4,7 @@
     <img src="/images/032.gif"/> 
 </div>
 <div ng-show="isLoaded" class="contract-board">
-    <div class="left-pane">
+    <div class="left-pane" >
         <div style="height: 20px; text-align: center;">
 
             <div class="opUiContainer md">
@@ -22,7 +22,6 @@
     </div>      
     <div class="center-pane">
         <div style="padding: 2px 6px;">
-            
             <div class="ttl" ng-bind="Title"></div>
             <kendo-grid options="mainGridOptions" style="height: 155px;"></kendo-grid>
             <div class="legend" ng-show="breadcrumbs.length == 0">

@@ -31,7 +31,8 @@ function objsetService($http, dataService, logger, $q) {
 
         updateContractAndCurPricingTable: updateContractAndCurPricingTable,
         readContractStatus: readContractStatus,
-        actionPricingStrategy: actionPricingStrategy
+        actionPricingStrategy: actionPricingStrategy,
+        actionPricingStrategies: actionPricingStrategies
     }
 
     return service;
@@ -85,9 +86,6 @@ function objsetService($http, dataService, logger, $q) {
     }
 
 
-    function actionPricingStrategy(custId, pt, actn) {
-        return dataService.post(apiBasePricingStrategyUrl + 'ActionPricingStrategy/' + custId + '/' + actn, [pt]);
-    }
 
     // #### CONTRACT CRUD ####
 
@@ -100,5 +98,13 @@ function objsetService($http, dataService, logger, $q) {
     }
     function readContractStatus(id) {
         return dataService.get(apiBaseContractUrl + 'GetContractStatus/' + id);
+    }
+
+
+    function actionPricingStrategy(custId, pt, actn) {
+        return dataService.post(apiBasePricingStrategyUrl + 'ActionPricingStrategy/' + custId + '/' + actn, [pt]);
+    }
+    function actionPricingStrategies(custId, data) {
+        return dataService.post(apiBasePricingStrategyUrl + 'ActionPricingStrategies/' + custId, data);
     }
 }

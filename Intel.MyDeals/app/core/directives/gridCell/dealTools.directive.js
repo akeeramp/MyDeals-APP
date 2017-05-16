@@ -7,11 +7,14 @@ dealTools.$inject = [];
 function dealTools() {
     return {
         scope: {
-            dataItem: '=ngModel'
+            dataItem: '=ngModel',
+            isEditable: '@isEditable'
         },
         restrict: 'AE',
         templateUrl: '/app/core/directives/gridCell/dealTools.directive.html',
         controller: ['$scope', '$http', function ($scope, $http) {
+
+            if (!!$scope.isEditable) $scope.isEditable = false;
 
             $scope.stgOneChar = function () {
                 return $scope.dataItem.WF_STG_CD === undefined ? "&nbsp;" : $scope.dataItem.WF_STG_CD[0];

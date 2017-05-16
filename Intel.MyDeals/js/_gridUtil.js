@@ -173,6 +173,10 @@ gridUtils.msgIcon = function(dataItem) {
     return dataItem.MsgType;
 }
 
+gridUtils.dialogShow = function() {
+    dialog.open();
+}
+
 
 
 

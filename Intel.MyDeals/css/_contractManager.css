@@ -466,23 +466,23 @@
         color: #ffffff;
         background: #00AEEF;
     }
-    .pct_True {
+    .valid_True {
         background: #C4D600;
     }
-    .pct_False {
+    .valid_False {
         background: #ED1C24;
         color: #ffffff;
     }
-    .pct_ {
+    .valid_ {
         background: #FFA300;
     }
-    .pctf_True, .pctf_true {
+    .validf_True, .validf_true {
         color: #C4D600;
     }
-    .pctf_False, .pctf_false {
+    .validf_False, .validf_false {
         color: #ED1C24;
     }
-    .pctf_ {
+    .validf_ {
         color: #FFA300;
     }
  

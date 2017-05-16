@@ -415,7 +415,7 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "Deal Id",
                 Width = 90,
                 IsReadOnly = true,
-                Template = "<div class='dealLnk'><i class='intelicon-protection-solid valid-icon' title='Validation: {{dataItem.PASSED_VALIDATION}}' ng-class='{ pctf_: (dataItem.PASSED_VALIDATION === undefined || dataItem.PASSED_VALIDATION === \"\"), pctf_true: (dataItem.PASSED_VALIDATION === \"True\"), pctf_false: (dataItem.PASSED_VALIDATION === \"False\"), \"intelicon-protection-solid\": (dataItem.PASSED_VALIDATION === undefined || dataItem.PASSED_VALIDATION === \"\"), \"intelicon-protection-checked-verified-solid\": (dataItem.PASSED_VALIDATION === \"True\"), \"intelicon-protection-failed-solid\": (dataItem.PASSED_VALIDATION === \"False\") }'></i><a href=''>#=DC_ID#</a></div>"
+                Template = "<div class='dealLnk'><i class='intelicon-protection-solid valid-icon' title='Validation: {{dataItem.PASSED_VALIDATION}}' ng-class='{ validf_: (dataItem.PASSED_VALIDATION === undefined || dataItem.PASSED_VALIDATION === \"\"), validf_true: (dataItem.PASSED_VALIDATION === \"True\"), validf_false: (dataItem.PASSED_VALIDATION === \"False\"), \"intelicon-protection-solid\": (dataItem.PASSED_VALIDATION === undefined || dataItem.PASSED_VALIDATION === \"\"), \"intelicon-protection-checked-verified-solid\": (dataItem.PASSED_VALIDATION === \"True\"), \"intelicon-protection-failed-solid\": (dataItem.PASSED_VALIDATION === \"False\") }'></i><a href=''>#=DC_ID#</a></div>"
             });
             items.Add(new UiTemplateContainerItem
             {
@@ -439,7 +439,7 @@ namespace Intel.MyDeals.DataLibrary
                 IsSortable = false,
                 IsFilterable = false,
                 IsReadOnly = true,
-                Template = "<deal-tools ng-model='dataItem'></deal-tools>",
+                Template = "<deal-tools ng-model='dataItem' is-editable='true'></deal-tools>",
                 HeaderTemplate = "<input type='checkbox' style='margin: 0px 6px 0px 13px;' ng-click='clkAllItems()' id='chkDealTools' />Deal Tools"
             });
             items.Add(new UiTemplateContainerItem

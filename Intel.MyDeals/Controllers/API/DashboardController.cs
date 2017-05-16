@@ -8,6 +8,7 @@ using Intel.MyDeals.IBusinessLogic;
 
 namespace Intel.MyDeals.Controllers.API
 {
+
     [RoutePrefix("api/Dashboard")]
     public class DashboardController : BaseApiController
     {
@@ -45,6 +46,15 @@ namespace Intel.MyDeals.Controllers.API
             return y;
         }
 
+        [Authorize]
+        [Route("GetWipSummary/{id}")]
+        [HttpGet]
+        public OpDataCollectorFlattenedList GetWipSummary(int id)
+        {
+            return SafeExecutor(() => _dashboardLib.GetWipSummary(id)[OpDataElementType.WIP_DEAL]
+                , $"Unable to get Pricing Table {id}"
+            );
+        }
 
     }
 }
