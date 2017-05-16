@@ -2,9 +2,9 @@
     .module('app.contract')
     .controller('MultiSelectModalCtrl', MultiSelectModalCtrl);
 
-MultiSelectModalCtrl.$inject = ['$scope', '$uibModalInstance', 'MrktSegMultiSelectService', 'items', 'cellCurrValues', 'colName'];
+MultiSelectModalCtrl.$inject = ['$scope', '$uibModalInstance', 'MrktSegMultiSelectService', 'items', 'cellCurrValues', 'colName', 'isBlendedGeo'];
 
-function MultiSelectModalCtrl($scope, $uibModalInstance, MrktSegMultiSelectService, items, cellCurrValues, colName) {
+function MultiSelectModalCtrl($scope, $uibModalInstance, MrktSegMultiSelectService, items, cellCurrValues, colName, isBlendedGeo) {
 	var $ctrl = this;
 	var GEO = "GEO_COMBINED";
 	var MRKT_SEG = "MRKT_SEG"
@@ -16,14 +16,36 @@ function MultiSelectModalCtrl($scope, $uibModalInstance, MrktSegMultiSelectServi
 	$ctrl.placeholderText = "Click to Select..."
 
 	$ctrl.isGeo = (colName == GEO);
-	$ctrl.isGeoBlend = false;
+	$ctrl.isGeoBlend = isBlendedGeo;
 
 	
 	$ctrl.ok = function () {
 		var returnVal = "";
 		if ($ctrl.popupResult.MultiSelectSelections !== undefined) {
 			returnVal = $ctrl.popupResult.MultiSelectSelections;
+
+			// Format geo
+			if ($ctrl.isGeo) {
+				var wwIndex = returnVal.indexOf("Worldwide");
+				if (wwIndex > -1) {
+					returnVal.splice(wwIndex, 1);
+				}
+
+				if ($ctrl.isGeoBlend) {
+					if (returnVal.length > 0) {
+						returnVal = "[" + returnVal.join() + "]";
+					}
+					
+					if (wwIndex > -1) {
+						if (returnVal.length !== 0) {
+							returnVal += ","
+						}
+						returnVal += "Worldwide";
+					}
+				}
+			}
 		}
+		
 		$uibModalInstance.close(returnVal);
 	};
 
@@ -50,7 +72,7 @@ function MultiSelectModalCtrl($scope, $uibModalInstance, MrktSegMultiSelectServi
 				// of newValue. However, we need to do this otherwise the newValue will not neccessarly change  in the MrktSegMultiSelectService
 				if ($ctrl.colName == MRKT_SEG) {
 					$ctrl.popupResult.MultiSelectSelections = MrktSegMultiSelectService.setMkrtSegMultiSelect("MultiSelectSelections", "MultiSelectSelections_MS", newValue, oldValue);
-				} else if (($ctrl.isGeo) && ($ctrl.isGeoBlend)) {
+				} else if (($ctrl.isGeo) && (!$ctrl.isGeoBlend)) {
 					$ctrl.popupResult.MultiSelectSelections = MrktSegMultiSelectService.setGeoMultiSelect("MultiSelectSelections", newValue, oldValue);
 				}
 			}

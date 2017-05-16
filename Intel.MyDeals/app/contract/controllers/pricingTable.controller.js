@@ -138,27 +138,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 		gTools = new gridTools(wipTemplate.model, wipTemplate.columns);
 		gTools.assignColSettings();
 
-		// Get DealType for Validate Products functionaility
-		ProductSelectorService.GetProdDealType()
-			.then(
-				function (response) {
-					if (response.statusText === "OK") {
-						var dealType = $filter('filter')(response.data, { OBJ_SET_TYPE_CD: root.curPricingTable.OBJ_SET_TYPE_CD }, true)[0];
-						// Get Product Level
-						ProductSelectorService.GetProdSelectionLevel(dealType.OBJ_SET_TYPE_SID).then(
-							function (response) {
-								// TODO: This code is only getting "Processor_Nbr" [0], but the user should be able to enter any of "Processor_Nbr", "MM", or "Level4". We need to change the Translate Products API to reflect this.
-								productLevel = response.data[0]; // TODO
-							},
-							function (response) {
-								logger.error("Unable to get Product Level.", response, response.statusText);
-							});
-					}
-				},
-				function (response) {
-					logger.error("Unable to get Deal Types.", response, response.statusText);
-				}
-		);
 		generateKendoOptions();
 
 	}
@@ -520,11 +499,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 			}
 		//});
 
-		$scope.$apply(function(){
-			if (!root._dirty) {
-				root._dirty = true;
-			} 
-		});
+		if (!root._dirty) {
+			root._dirty = true;
+		} 
 	}
 
 
@@ -1058,12 +1035,17 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
 
 			// If the selected cell already contains some value, reflect it in the custom editor.
-			// TODO: For whatever reason, Kendo is automatically formatting dates to a strange number, which does not correspond to date values. Fix this.
 			var cellCurrVal = context.range.value();
-			//var typeoftest = (typeof cellCurrVal);
-			//if (cellCurrVal !== null && cellCurrVal !== "" && typeof cellCurrVal == "string") {
-			//	cellCurrVal = cellCurrVal.split(',');
-			//}
+			var typeoftest = (typeof cellCurrVal);
+			var isBlendedGeo = false;
+			if (cellCurrVal !== null && cellCurrVal !== "" && typeof cellCurrVal == "string") {
+				isBlendedGeo = cellCurrVal.includes("[");
+				// Remove brackets
+				cellCurrVal = cellCurrVal.replace(/\[(.*?)\]/g, "$1");
+
+				cellCurrVal = cellCurrVal.trim();
+				cellCurrVal = cellCurrVal.split(',');
+			}
 
 			var modalInstance = $uibModal.open({
 				//animation: $ctrl.animationsEnabled,
@@ -1082,6 +1064,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					},
 					colName: function () {
 						return colName;
+					},
+					isBlendedGeo: function () {
+						return isBlendedGeo;
 					}
 				}
 			});
@@ -1118,6 +1103,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 			// Get columnData (urls, name, etc) from column name
 			var colData = $scope.$parent.$parent.templates.ModelTemplates.PRC_TBL_ROW['ECAP'].model.fields[colName];
 
+			// TODO: For whatever reason, Kendo is automatically formatting dates to a strange number, which does not correspond to date values. Fix this.
 			//// If the selected cell already contains some value, reflect it in the custom editor.
 			//var cellCurrVal = context.range.value();
 			//if (cellCurrVal !== undefined && cellCurrVal != null) {
