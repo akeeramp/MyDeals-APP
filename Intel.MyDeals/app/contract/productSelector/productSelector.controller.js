@@ -4,13 +4,16 @@
        .module('app.admin') //TODO: once we integrate with contract manager change the module to contract
        .controller('ProductSelectorModalController', ProductSelectorModalController);
 
-    ProductSelectorModalController.$inject = ['$filter', '$scope', '$uibModalInstance', 'productSelectionLevels', 'ProductSelectorService', 'contractData', '$timeout', 'logger'];
+    ProductSelectorModalController.$inject = ['$filter', '$scope', '$uibModalInstance', 'productSelectionLevels', 'ProductSelectorService', 'contractData', '$timeout', 'logger', 'gridConstants'];
 
-    function ProductSelectorModalController($filter, $scope, $uibModalInstance, productSelectionLevels, ProductSelectorService, contractData, $timeout, logger) {
+    function ProductSelectorModalController($filter, $scope, $uibModalInstance, productSelectionLevels, ProductSelectorService, contractData, $timeout, logger, gridConstants) {
         var vm = this;
-        var vm = this;
-        var verticalsWithDrillDownLevel4 = ["DT", "Mb", "SvrWS", "EIA CPU", "IMC", "EIA MISC", "NAND (SSD)", "NAND"];
-        vm.productSelectionLevels = productSelectionLevels.data;
+        // Non CPU verticals with drill down level 4
+        var verticalsWithDrillDownLevel4 = ["EIA CPU", "EIA MISC"];
+        var verticalsWithNoMMSelection = ["CS", "WC"];
+        var verticalsWithGDMFamlyAsDrillLevel4 = ["CS", "EIA CS", "EIA CPU"]
+        vm.productSelectionLevels = productSelectionLevels.data.ProductSelectionLevels;
+        vm.productSelectionLevelsAttributes = productSelectionLevels.data.ProductSelectionLevelsAttributes;
 
         // Variables with vm are binded to HTML
         vm.selectedPathParts = [];
@@ -27,6 +30,7 @@
         vm.clearProducts = clearProducts;
         vm.hideSelection = false;
         vm.selectedItems = [];
+        vm.prdSelLvlAtrbsForCategory = [];
 
         // Get the drilldown items based on the selection level
         // The selection follows a pattern, if only single item present select it,
@@ -99,12 +103,16 @@
                 // For non CPU products check for GDM columns
                 // All this special handling would go if GDM attributes are populated at hierarchical columns
                 if (vm.items.length == 1 && vm.items[0].name == 'NA') {
+                    vm.prdSelLvlAtrbsForCategory = vm.productSelectionLevelsAttributes.filter(function (x) {
+                        return x.PRD_CAT_NM == item.name
+                    });
                     if (arrayContainsString(verticalsWithDrillDownLevel4, item.name)) {
-                        vm.items = brandName[0].GDM_BRND_NM.split(',').map(function (i) {
+                        vm.items = $filter('unique')(vm.prdSelLvlAtrbsForCategory, 'GDM_BRND_NM');
+                        vm.items = vm.items.map(function (i) {
                             return {
-                                name: i,
-                                path: brandName[0].HIER_NM_HASH,
-                                drillDownFilter4: i
+                                name: i.GDM_BRND_NM,
+                                path: item.path,
+                                drillDownFilter4: i.GDM_BRND_NM
                             }
                         });
                         if (vm.items.length == 1) {
@@ -130,37 +138,45 @@
                 });
 
                 if (vm.items.length == 1 && vm.items[0].name == 'NA') {
-                    if (familyName[0].GDM_FMLY_NM != null && familyName[0].GDM_FMLY_NM != "") {
-                        vm.items = familyName[0].GDM_FMLY_NM.split(',').map(function (i) {
+                    var drillLevel5 = $filter('unique')(vm.prdSelLvlAtrbsForCategory, 'PRD_FMLY_TXT');
+                    // Check if we have prd_fmly_txt
+
+                    if ((drillLevel5.length == 1 && drillLevel5[0].PRD_FMLY_TXT == "") ||
+                        arrayContainsString(verticalsWithGDMFamlyAsDrillLevel4, drillLevel5[0].PRD_CAT_NM)) {
+                        // If null or empty fall back to GDM_FMLY_NM
+                        drillLevel5 = $filter('unique')(vm.prdSelLvlAtrbsForCategory, 'GDM_FMLY_NM');
+                        vm.items = drillLevel5.map(function (i) {
                             return {
-                                name: i,
-                                path: familyName[0].HIER_NM_HASH,
-                                drillDownFilter4: item.drillDownFilter4,
-                                drillDownFilter5: i
+                                name: i.GDM_FMLY_NM,
+                                path: vm.items[0].path,
+                                drillDownFilter5: i.GDM_FMLY_NM
                             }
                         });
-                        if (vm.items.length == 1) {
-                            vm.selectItem(vm.items[0])
-                        }
                     } else {
-                        // Family not available, hit database for processor numbers
+                        vm.items = drillLevel5.map(function (i) {
+                            return {
+                                name: i.PRD_FMLY_TXT,
+                                path: vm.items[0].path,
+                                drillDownFilter5: i.GDM_FMLY_NM
+                            }
+                        });
+                    }
+
+                    if (vm.items.length == 1) {
                         vm.selectItem(vm.items[0]);
                     }
                 }
                 return;
             }
             if (vm.selectedPathParts.length === 5) {
-                vm.items = [];
                 getProductSelectionResults(item, 7006);
                 return;
             }
             if (vm.selectedPathParts.length === 6) {
-                vm.items = [];
                 getProductSelectionResults(item, 7007);
                 return;
             }
             if (vm.selectedPathParts.length === 7) {
-                vm.items = [];
                 getProductSelectionResults(item, 7008);
                 return;
             }
@@ -175,6 +191,7 @@
         }
 
         var getProductSelectionResults = function (item, selectionLevel) {
+            vm.items = [];
             vm.gridData = [];
             dataSourceProduct.read();
             var data = {
@@ -192,22 +209,22 @@
             // drillDownFilter4 = GDM_BRND_NM/EDW Product Family/GDM_FMLY depends upon vertical
             // drillDownFilter5 = GDM_FMLY/NAND Family depends upon vertical
             if (selectionLevel == 7007) {
-                data.drillDownFilter4 = (!!!item.drillDownFilter4 && item.drillDownFilter4 != "") ? null : item.drillDownFilter4,
-                data.drillDownFilter5 = (!!!item.drillDownFilter5 && item.drillDownFilter5 != "") ? null : item.drillDownFilter5
+                data.drillDownFilter4 = (!!!item.drillDownFilter4 && item.drillDownFilter4 == "") ? null : item.drillDownFilter4,
+                data.drillDownFilter5 = (!!!item.drillDownFilter5 && item.drillDownFilter5 == "") ? null : item.drillDownFilter5
             }
 
             ProductSelectorService.GetProductSelectionResults(data).then(function (response) {
                 if (response.data.length == 1 && response.data[0].HIER_VAL_NM == 'NA') {
                     //if the processor number is NA, send GDM values to filter out L4 data
-                    response.data[0]['drillDownFilter4'] = item.drillDownFilter4;
-                    response.data[0]['drillDownFilter5'] = item.drillDownFilter5;
+                    response.data[0]['drillDownFilter4'] = (!!!item.drillDownFilter4 && item.drillDownFilter4 == "") ? null : item.drillDownFilter4;
+                    response.data[0]['drillDownFilter5'] = (!!!item.drillDownFilter5 && item.drillDownFilter5 == "") ? null : item.drillDownFilter5;
                     vm.gridSelectItem(response.data[0]);
                 } else {
                     vm.gridData = response.data;
                     toggleColumnsWhenEmpty(vm.gridData);
                     dataSourceProduct.read();
                 }
-            })
+            });
         }
 
         function toggleColumnsWhenEmpty(data) {
@@ -215,7 +232,7 @@
             angular.forEach(vm.gridOptionsProduct.columns, function (item, key) {
                 var columnValue = $filter('unique')(data, item.field);
                 if (columnValue.length == 1 && item.field !== undefined && item.field != "CheckBox" &&
-                    (columnValue[0][item.field] == "" || columnValue[0][item.field] == null)) {
+                    (columnValue[0][item.field] == "" || columnValue[0][item.field] == null || columnValue[0][item.field] == 'NA')) {
                     grid.hideColumn(item.field);//hide column
                 } else {
                     grid.showColumn(item.field); //show column
@@ -290,15 +307,35 @@
             vm.addedProducts = [];
         }
 
+        vm.checkForBlank = function (val) {
+            if (val == "") {
+                val = "Blank";
+            }
+            return val;
+        }
+
+        vm.allowMMSelection = function (dataItem) {
+            if (dataItem.PRD_ATRB_SID == 7007) {
+                return !arrayContainsString(verticalsWithNoMMSelection, dataItem.PRD_CAT_NM);
+            }
+            return false;
+        }
+
+        vm.getFormatedDate = function (datVal) {
+            var date = kendo.toString(new Date(datVal), 'M/d/yyyy');
+            if (date == '1/1/0001') {
+                return '';
+            }
+            return date;
+        }
 
         vm.gridOptionsProduct = {
             dataSource: dataSourceProduct,
-            filterable: true,
+            filterable: gridConstants.filterable,
             scrollable: true,
             sortable: true,
             resizable: true,
             reorderable: true,
-            columnMenu: true,
             enableHorizontalScrollbar: true,
             columns: [
                 {
@@ -310,12 +347,36 @@
                 {
                     field: "DEAL_PRD_NM",
                     title: "Deal Product Name",
-                    template: "<a role='button' ng-if='dataItem.PRD_ATRB_SID == 7007' ng-click='vm.gridSelectItem(dataItem)'>#= DEAL_PRD_NM #</a><div ng-if='dataItem.PRD_ATRB_SID != 7007'>#= DEAL_PRD_NM #</div>",
+                    template: "<a role='button' ng-if='vm.allowMMSelection(dataItem)' ng-click='vm.gridSelectItem(dataItem)'>#= DEAL_PRD_NM #</a><div ng-if='!vm.allowMMSelection(dataItem)'>#= DEAL_PRD_NM #</div>",
                     width: "180px"
                 },
                 {
                     field: "MTRL_ID",
                     title: "Material Id",
+                    width: "150px"
+                },
+                {
+                    field: "PRD_STRT_DTM",
+                    title: "Product Start Date",
+                    type: "date",
+                    template: "#= kendo.toString(new Date(PRD_STRT_DTM), 'M/d/yyyy') #",
+                    width: "150px"
+                },
+                {
+                    field: "EFF_FR_DTM",
+                    title: "CAP Availability date",
+                    template: "<div>{{vm.getFormatedDate(dataItem.EFF_FR_DTM)}}</div>",
+                    width: "150px"
+                },
+                {
+                    field: "cpu_processor_number",
+                    title: "CPU Processor number",
+                    width: "150px"
+                },
+                {
+                    field: "fmly_nm_MM",
+                    title: "EDW Family Name",
+                    template: "<div kendo-tooltip k-content='dataItem.fmly_nm_MM'>{{(dataItem.fmly_nm_MM | limitTo: 20) + (dataItem.fmly_nm_MM.length > 20 ? '...' : '')}}</div>",
                     width: "150px"
                 },
                 {
@@ -336,13 +397,6 @@
                     title: "KIT Name",
                     template: "<div kendo-tooltip k-content='dataItem.KIT_NM'>{{(dataItem.KIT_NM | limitTo: 20) + (dataItem.KIT_NM.length > 20 ? '...' : '')}}</div>",
                     width: "180px"
-                },
-                {
-                    field: "PRD_STRT_DTM",
-                    title: "Product Start Date",
-                    type: "date",
-                    template: "#= kendo.toString(new Date(PRD_STRT_DTM), 'M/d/yyyy') #",
-                    width: "150px"
                 },
                 {
                     field: "NAND_FAMILY",
@@ -385,31 +439,8 @@
                     width: "150px"
                 },
                 {
-                    field: "PRD_Fmly_Txt",
-                    title: "EDW Product family",
-                    template: "<div kendo-tooltip k-content='dataItem.PRD_Fmly_Txt'>{{(dataItem.PRD_Fmly_Txt | limitTo: 20) + (dataItem.PRD_Fmly_Txt.length > 20 ? '...' : '')}}</div>",
-                    width: "150px"
-                },
-                {
-                    field: "fmly_nm_MM",
-                    title: "EDW Family Name",
-                    template: "<div kendo-tooltip k-content='dataItem.fmly_nm_MM'>{{(dataItem.fmly_nm_MM | limitTo: 20) + (dataItem.fmly_nm_MM.length > 20 ? '...' : '')}}</div>",
-                    width: "150px"
-                },
-                {
                     field: "PRC_AMT",
                     title: "CAP Price",
-                    width: "150px"
-                },
-                {
-                    field: "EFF_FR_DTM",
-                    title: "CAP Availability date",
-                    template: "#= kendo.toString(new Date(EFF_FR_DTM), 'M/d/yyyy') #",
-                    width: "150px"
-                },
-                {
-                    field: "cpu_processor_number",
-                    title: "CPU Processor number",
                     width: "150px"
                 }
             ]
@@ -432,8 +463,6 @@
             if (vm.userInput == "") return;
             var searchObject = [{
                 USR_INPUT: vm.userInput,
-                PRD_ATRB_SID: 7007,
-                PRD_SELC_LVL: "L4", // BIG TODO: This is wrong, change the translation api to handle selection level dynamically.
                 EXCLUDE: "",
                 FILTER: "",
                 START_DATE: contractData.START_DT,

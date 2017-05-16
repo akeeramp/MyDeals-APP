@@ -418,9 +418,11 @@ namespace Intel.MyDeals.Controllers.API
         /// Get Product selection levels
         /// </summary>
         /// <returns></returns>
-        public List<ProductSelectionLevels> GetProductSelectionLevels()
+        [HttpPost]
+        [Route("GetProductSelectorWrapper")]
+        public ProductSelectorWrapper GetProductSelectorWrapper([FromBody]dynamic input)
         {
-            return SafeExecutor(() => _productsLib.GetProductSelectionLevels()
+            return SafeExecutor(() => _productsLib.GetProductSelectorWrapperByDates((DateTime)input.startDate, (DateTime)input.endDate)
                 , $"Unable to get Product selection levels"
             );
         }

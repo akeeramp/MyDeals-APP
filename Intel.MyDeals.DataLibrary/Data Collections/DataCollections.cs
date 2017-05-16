@@ -213,11 +213,11 @@ namespace Intel.MyDeals.DataLibrary
                     _getSecurityAttributes = wrapper.SecurityAttributes.OrderBy(x => x.ATRB_CD);
                     _getSecurityMasks = wrapper.SecurityMasks;
 
-					if (/*_getRoleTypes != null && */ _getSecurityAttributes != null && _getSecurityMasks != null)
-					{
-						// TODO: Add roles to cache once we get it from the db
-						_getSecurityWrapper = new SecurityWrapper(/*_getRoleTypes.ToList()*/ null, _getSecurityAttributes.ToList(), _getSecurityMasks.ToList());
-					}
+                    if (/*_getRoleTypes != null && */ _getSecurityAttributes != null && _getSecurityMasks != null)
+                    {
+                        // TODO: Add roles to cache once we get it from the db
+                        _getSecurityWrapper = new SecurityWrapper(/*_getRoleTypes.ToList()*/ null, _getSecurityAttributes.ToList(), _getSecurityMasks.ToList());
+                    }
                     return wrapper;
                 }
             }
@@ -430,15 +430,32 @@ namespace Intel.MyDeals.DataLibrary
 
         private static List<ProductAlias> _getProductsFromAlias;
 
-        public static List<ProductSelectionLevels> GetProductSelectionLevels()
+        private static ProductSelectorWrapper _getProductSelectorWrapper;
+
+        // This collection gets the selection level drill down levels for CPU, hierarchical levels
+        private static IEnumerable<ProductSelectionLevels> _getProductSelectionLevels;
+
+        // This collection gets the selection level drill down levels for non CPU, non hierarchical levels
+        private static IEnumerable<ProductSelectionLevelsAttributes> _getProductSelectionLevelsAttributes;
+
+        public static ProductSelectorWrapper GetProductSelectorWrapper()
         {
             lock (LOCK_OBJECT ?? new object())
             {
-                return _getProductSelectionLevels ?? (_getProductSelectionLevels = new ProductDataLib().GetProductSelectionLevels());
+                if (_getProductSelectorWrapper != null)
+                {
+                    return _getProductSelectorWrapper;
+                }
+                else
+                {
+                    _getProductSelectorWrapper = new ProductDataLib().GetProductSelectorWrapper();
+                    _getProductSelectionLevels = _getProductSelectorWrapper.ProductSelectionLevels;
+                    _getProductSelectionLevelsAttributes = _getProductSelectorWrapper.ProductSelectionLevelsAttributes;
+
+                    return _getProductSelectorWrapper;
+                }
             }
         }
-
-        private static List<ProductSelectionLevels> _getProductSelectionLevels;
 
         #region Rules Engine
 

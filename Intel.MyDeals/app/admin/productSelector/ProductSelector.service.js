@@ -14,9 +14,10 @@
         var service = {
             FetchProducts: FetchProducts,
             GetProdDealType: GetProdDealType,
-            GetProdSelectionLevel: GetProdSelectionLevel,
+            GetProductSelectorWrapper: GetProductSelectorWrapper,
             TranslateProducts: TranslateProducts,
             GetProductDetails: GetProductDetails,
+            GetProductSelectionResults: GetProductSelectionResults
         }
 
         return service;
@@ -30,18 +31,25 @@
         }
 
         function GetProdDealType(isForceReGet) {
-        	var isGetViaAngularCache = true;
-        	if (isForceReGet) { isGetViaAngularCache = false; }
-        	return dataService.get(apiBaseUrl + 'GetProdDealType', null, null, isGetViaAngularCache);
+            var isGetViaAngularCache = true;
+            if (isForceReGet) { isGetViaAngularCache = false; }
+            return dataService.get(apiBaseUrl + 'GetProdDealType', null, null, isGetViaAngularCache);
         }
 
         function GetProdSelectionLevel(OBJ_SET_TYPE_SID) {
             return dataService.get(apiBaseUrl + 'GetProdSelectionLevel/' + OBJ_SET_TYPE_SID);
         }
 
-        function GetProductDetails(products)
-        {
-            return dataService.post(apiBaseUrl + 'GetProductDetails', products);
+        function GetProductDetails(products, CUST_CD) {
+            return dataService.post(apiBaseUrl + 'GetProductDetails/' + CUST_CD, products);
+        }
+
+        function GetProductSelectorWrapper(dto) {
+            return dataService.post(apiBaseUrl + 'GetProductSelectorWrapper', dto);
+        }
+
+        function GetProductSelectionResults(prodSelectionLevels) {
+            return dataService.post(apiBaseUrl + 'GetProductSelectionResults', prodSelectionLevels);
         }
     }
 })();

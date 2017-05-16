@@ -36,7 +36,7 @@
             <div ng-switch-when="btnGroup" class="row" style="padding-left:10px;padding-right:10px;font-size:16px;">
                 <div class="drillDown btn-group btn-group-justified" role="group" aria-label="...">
                     <div class="btn-group" ng-repeat="p in vm.items | orderBy:'name'" role="group">
-                        <button type="button" ng-class="{'noborder':$last}" ng-click="vm.selectItem(p)" class="btn btn-default">{{::p.name}}</button>
+                        <button type="button" ng-class="{'noborder':$last}" ng-click="vm.selectItem(p)" class="btn btn-default">{{::vm.checkForBlank(p.name)}}</button>
                     </div>
                 </div>
             </div>
@@ -44,7 +44,7 @@
                 <div ng-repeat="p in vm.items | orderBy:'name'">
                     <div class="clearfix" ng-if="$index % 4 == 0"></div>
                     <div class="col-sm-3 prodDrillDownLarge" ng-class="{'noLeftBorder':$index % 4 == 0}">
-                        <p role="button" ng-click="vm.selectItem(p)">{{::p.name}}</p>
+                        <p role="button" ng-click="vm.selectItem(p)">{{::vm.checkForBlank(p.name)}}</p>
                     </div>
                 </div>
             </div>

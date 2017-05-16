@@ -242,6 +242,9 @@ using System.Collections.Generic;
     ds.Tables[0].TableName = "ProductSelectionLevels";
     WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
+	ds.Tables[1].TableName = "ProductSelectionLevelsAttributes";
+    WriteLine(ScriptTools.DataTableToClass(ds.Tables[1], false));
+
 	//PR_MYDL_SEARCH_PRD_DTL
     ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_SEARCH_PRD_DTL] @SEARCH_HASH = '', @STRT_DTM='2010-03-06', @END_DTM='2017-12-31', @SEL_LVL='7008', @DRILL_DOWN_FLTR_4=''");
     ds.Tables[0].TableName = "ProductSelectionResults";

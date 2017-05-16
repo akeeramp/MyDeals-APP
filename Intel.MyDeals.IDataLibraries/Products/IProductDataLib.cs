@@ -24,7 +24,7 @@ namespace Intel.MyDeals.IDataLibrary
 
         List<PrdSelLevel> GetProdSelectionLevel(int OBJ_SET_TYPE_SID);
 
-        List<ProductSelectionLevels> GetProductSelectionLevels();
+        ProductSelectorWrapper GetProductSelectorWrapper();
 
         List<ProductSelectionResults> GetProductSelectionResults(string searchHash, DateTime startDate, DateTime endDateTime,
                 int selectionLevel, string drillDownFilter4, string drillDownFilter5, int custSid, int geoSid);

@@ -62,7 +62,9 @@ namespace Intel.MyDeals.IBusinessLogic
 
         List<Product> SuggestProducts(string prdEntered, int? returnMax);
 
-        List<ProductSelectionLevels> GetProductSelectionLevels();
+        ProductSelectorWrapper GetProductSelectorWrapper();
+
+        ProductSelectorWrapper GetProductSelectorWrapperByDates(DateTime startDate, DateTime endDate);
 
         List<ProductSelectionResults> GetProductSelectionResults(string searchHash, DateTime startDate, DateTime endDateTime,
                 int selectionLevel, string drillDownFilter4, string drillDownFilter5, int custSid, int geoSid);

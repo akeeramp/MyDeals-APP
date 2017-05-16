@@ -25,7 +25,6 @@ namespace Intel.MyDeals.BusinessLogic
             _dataCollectionsDataLib = dataCollectionsDataLib;
 
             _constantsLookupsLib = constantsLookupsLib;
-
         }
 
         /// <summary>
@@ -245,7 +244,7 @@ namespace Intel.MyDeals.BusinessLogic
                 foreach (var product in prodTemp.ToList())
                 {
                     string productName = product.ToString().Trim();
-                    if (productName.Contains(" "))//Checking for Long Text search like DT I3 
+                    if (productName.Contains(" "))//Checking for Long Text search like DT I3
                     {
                         string[] prodductSplit = productName.Split(' ');
                         string finalProdName = "";
@@ -264,7 +263,6 @@ namespace Intel.MyDeals.BusinessLogic
                                                    select new ProductEntryAttribute
                                                    {
                                                        USR_INPUT = t == null ? p.USR_INPUT : t.PRD_NM
-
                                                    }).Distinct();
 
                         foreach (var pas in productAliasesSplit)
@@ -283,7 +281,7 @@ namespace Intel.MyDeals.BusinessLogic
                     ProductEntryAttribute pea = new ProductEntryAttribute();
                     pea.USR_INPUT = product.ToString();
                     pea.START_DATE = userProduct.START_DATE.ToString();
-                    pea.END_DATE = userProduct.END_DATE.ToString();                    
+                    pea.END_DATE = userProduct.END_DATE.ToString();
                     pea.EXCLUDE = userProduct.EXCLUDE;
                     pea.FILTER = userProduct.FILTER;
                     prodNamesList.Add(pea);
@@ -294,7 +292,7 @@ namespace Intel.MyDeals.BusinessLogic
                                       from t in pa.DefaultIfEmpty()
                                       select new ProductEntryAttribute
                                       {
-                                          USR_INPUT = t == null ? p.USR_INPUT : t.PRD_NM,                                          
+                                          USR_INPUT = t == null ? p.USR_INPUT : t.PRD_NM,
                                           EXCLUDE = p.EXCLUDE,
                                           FILTER = p.FILTER,
                                           END_DATE = p.END_DATE,
@@ -392,12 +390,12 @@ namespace Intel.MyDeals.BusinessLogic
         {
             //Getting value from Constant Table
             string charset = "";
-            var charsetResult = _constantsLookupsLib.GetConstantsByName("PROD_REPLACE_CHARSET"); // NULL Check 
+            var charsetResult = _constantsLookupsLib.GetConstantsByName("PROD_REPLACE_CHARSET"); // NULL Check
             if (charsetResult != null)
                 charset = charsetResult.CNST_VAL_TXT;
 
             string userProd = Regex.Replace(userProduct, @"(?<=\([^()]*),", "/");
-            userProd = Regex.Replace(userProd, " OR ", @", ", RegexOptions.IgnoreCase);            
+            userProd = Regex.Replace(userProd, " OR ", @", ", RegexOptions.IgnoreCase);
             userProd = userProd.Replace(" & ", ",");
             var myRegex = new Regex(@"\([^\)]*\)|(/)");
 
@@ -414,7 +412,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             string[] splits = Regex.Split(replaced, "~");
             var singleProducts = new List<string>();
-            
+
             string[] chararr = charset.Split(',');
 
             foreach (var p in splits.Where(p => !string.IsNullOrEmpty(p)))
@@ -425,7 +423,7 @@ namespace Intel.MyDeals.BusinessLogic
                 {
                     foreach (string row in chararr)
                     {
-                        if (item.IndexOf(row) == 0)                        
+                        if (item.IndexOf(row) == 0)
                         {
                             strRep = item.Replace(row, row.Trim() + '-');
                             break;
@@ -661,9 +659,29 @@ namespace Intel.MyDeals.BusinessLogic
         /// Get product selection levels
         /// </summary>
         /// <returns></returns>
-        public List<ProductSelectionLevels> GetProductSelectionLevels()
+        public ProductSelectorWrapper GetProductSelectorWrapper()
         {
-            return _dataCollectionsDataLib.GetProductSelectionLevels();
+            return _dataCollectionsDataLib.GetProductSelectorWrapper();
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <returns></returns>
+        public ProductSelectorWrapper GetProductSelectorWrapperByDates(DateTime startDate, DateTime endDate)
+        {
+            var productSelectorWrapper = GetProductSelectorWrapper();
+            var productSelectionLevels = productSelectorWrapper.ProductSelectionLevels.
+                Where(x => x.PRD_STRT_DTM <= endDate && x.PRD_END_DTM >= startDate);
+            var productSelectionLevelsAttributes = productSelectorWrapper.ProductSelectionLevelsAttributes.
+                Where(x => x.PRD_STRT_DTM <= endDate && x.PRD_END_DTM >= startDate);
+
+            var result = new ProductSelectorWrapper();
+            result.ProductSelectionLevels = productSelectionLevels.ToList();
+            result.ProductSelectionLevelsAttributes = productSelectionLevelsAttributes.ToList();
+            return result;
         }
 
         /// <summary>

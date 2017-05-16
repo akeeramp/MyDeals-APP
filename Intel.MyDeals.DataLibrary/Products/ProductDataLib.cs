@@ -510,10 +510,10 @@ namespace Intel.MyDeals.DataLibrary
         /// Type/Vertical/Brand(GDM Brand)/Family(GDM Family)/Processor/DealProduct/MM
         /// </summary>
         /// <returns></returns>
-        public List<ProductSelectionLevels> GetProductSelectionLevels()
+        public ProductSelectorWrapper GetProductSelectorWrapper()
         {
             OpLogPerf.Log("GetProductSelectionLevels");
-            var ret = new List<ProductSelectionLevels>();
+            var ret = new ProductSelectorWrapper();
             var cmd = new Procs.dbo.PR_MYDL_SEARCH_PRD_DTL();
             try
             {
@@ -525,25 +525,24 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_DEAL_PRD_TYPE = DB.GetReaderOrdinal(rdr, "DEAL_PRD_TYPE");
                     int IDX_DEAL_PRD_TYPE_SID = DB.GetReaderOrdinal(rdr, "DEAL_PRD_TYPE_SID");
                     int IDX_FMLY_NM = DB.GetReaderOrdinal(rdr, "FMLY_NM");
-                    int IDX_GDM_BRND_NM = DB.GetReaderOrdinal(rdr, "GDM_BRND_NM");
-                    int IDX_GDM_FMLY_NM = DB.GetReaderOrdinal(rdr, "GDM_FMLY_NM");
                     int IDX_HIER_NM_HASH = DB.GetReaderOrdinal(rdr, "HIER_NM_HASH");
                     int IDX_HIER_VAL_NM = DB.GetReaderOrdinal(rdr, "HIER_VAL_NM");
                     int IDX_MRK_LVL1 = DB.GetReaderOrdinal(rdr, "MRK_LVL1");
                     int IDX_MRK_LVL2 = DB.GetReaderOrdinal(rdr, "MRK_LVL2");
                     int IDX_MTRL_ID = DB.GetReaderOrdinal(rdr, "MTRL_ID");
                     int IDX_NAND_Density = DB.GetReaderOrdinal(rdr, "NAND_Density");
-                    int IDX_NAND_FAMILY = DB.GetReaderOrdinal(rdr, "NAND_FAMILY");
                     int IDX_PCSR_NBR = DB.GetReaderOrdinal(rdr, "PCSR_NBR");
                     int IDX_PRD_ATRB_SID = DB.GetReaderOrdinal(rdr, "PRD_ATRB_SID");
                     int IDX_PRD_CAT_NM = DB.GetReaderOrdinal(rdr, "PRD_CAT_NM");
                     int IDX_PRD_CAT_NM_SID = DB.GetReaderOrdinal(rdr, "PRD_CAT_NM_SID");
+                    int IDX_PRD_END_DTM = DB.GetReaderOrdinal(rdr, "PRD_END_DTM");
                     int IDX_PRD_MBR_SID = DB.GetReaderOrdinal(rdr, "PRD_MBR_SID");
                     int IDX_PRD_MRK_MBR_SID = DB.GetReaderOrdinal(rdr, "PRD_MRK_MBR_SID");
+                    int IDX_PRD_STRT_DTM = DB.GetReaderOrdinal(rdr, "PRD_STRT_DTM");
 
                     while (rdr.Read())
                     {
-                        ret.Add(new ProductSelectionLevels
+                        ret.ProductSelectionLevels.Add(new ProductSelectionLevels
                         {
                             BRND_NM = (IDX_BRND_NM < 0 || rdr.IsDBNull(IDX_BRND_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_BRND_NM),
                             BRND_NM_SID = (IDX_BRND_NM_SID < 0 || rdr.IsDBNull(IDX_BRND_NM_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_BRND_NM_SID),
@@ -551,21 +550,44 @@ namespace Intel.MyDeals.DataLibrary
                             DEAL_PRD_TYPE = (IDX_DEAL_PRD_TYPE < 0 || rdr.IsDBNull(IDX_DEAL_PRD_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_PRD_TYPE),
                             DEAL_PRD_TYPE_SID = (IDX_DEAL_PRD_TYPE_SID < 0 || rdr.IsDBNull(IDX_DEAL_PRD_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_PRD_TYPE_SID),
                             FMLY_NM = (IDX_FMLY_NM < 0 || rdr.IsDBNull(IDX_FMLY_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_FMLY_NM),
-                            GDM_BRND_NM = (IDX_GDM_BRND_NM < 0 || rdr.IsDBNull(IDX_GDM_BRND_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_GDM_BRND_NM),
-                            GDM_FMLY_NM = (IDX_GDM_FMLY_NM < 0 || rdr.IsDBNull(IDX_GDM_FMLY_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_GDM_FMLY_NM),
                             HIER_NM_HASH = (IDX_HIER_NM_HASH < 0 || rdr.IsDBNull(IDX_HIER_NM_HASH)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_HIER_NM_HASH),
                             HIER_VAL_NM = (IDX_HIER_VAL_NM < 0 || rdr.IsDBNull(IDX_HIER_VAL_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_HIER_VAL_NM),
                             MRK_LVL1 = (IDX_MRK_LVL1 < 0 || rdr.IsDBNull(IDX_MRK_LVL1)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MRK_LVL1),
                             MRK_LVL2 = (IDX_MRK_LVL2 < 0 || rdr.IsDBNull(IDX_MRK_LVL2)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MRK_LVL2),
                             MTRL_ID = (IDX_MTRL_ID < 0 || rdr.IsDBNull(IDX_MTRL_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MTRL_ID),
                             NAND_Density = (IDX_NAND_Density < 0 || rdr.IsDBNull(IDX_NAND_Density)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_NAND_Density),
-                            NAND_FAMILY = (IDX_NAND_FAMILY < 0 || rdr.IsDBNull(IDX_NAND_FAMILY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_NAND_FAMILY),
                             PCSR_NBR = (IDX_PCSR_NBR < 0 || rdr.IsDBNull(IDX_PCSR_NBR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PCSR_NBR),
                             PRD_ATRB_SID = (IDX_PRD_ATRB_SID < 0 || rdr.IsDBNull(IDX_PRD_ATRB_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRD_ATRB_SID),
                             PRD_CAT_NM = (IDX_PRD_CAT_NM < 0 || rdr.IsDBNull(IDX_PRD_CAT_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_CAT_NM),
                             PRD_CAT_NM_SID = (IDX_PRD_CAT_NM_SID < 0 || rdr.IsDBNull(IDX_PRD_CAT_NM_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRD_CAT_NM_SID),
+                            PRD_END_DTM = (IDX_PRD_END_DTM < 0 || rdr.IsDBNull(IDX_PRD_END_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_PRD_END_DTM),
                             PRD_MBR_SID = (IDX_PRD_MBR_SID < 0 || rdr.IsDBNull(IDX_PRD_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRD_MBR_SID),
-                            PRD_MRK_MBR_SID = (IDX_PRD_MRK_MBR_SID < 0 || rdr.IsDBNull(IDX_PRD_MRK_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRD_MRK_MBR_SID)
+                            PRD_MRK_MBR_SID = (IDX_PRD_MRK_MBR_SID < 0 || rdr.IsDBNull(IDX_PRD_MRK_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRD_MRK_MBR_SID),
+                            PRD_STRT_DTM = (IDX_PRD_STRT_DTM < 0 || rdr.IsDBNull(IDX_PRD_STRT_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_PRD_STRT_DTM)
+                        });
+                    } // while
+
+                    rdr.NextResult();
+
+                    int IDX_GDM_BRND_NM = DB.GetReaderOrdinal(rdr, "GDM_BRND_NM");
+                    int IDX_GDM_FMLY_NM = DB.GetReaderOrdinal(rdr, "GDM_FMLY_NM");
+                    int IDX_NAND_FAMILY = DB.GetReaderOrdinal(rdr, "NAND_FAMILY");
+                    int IDX_PRD_FMLY_TXT = DB.GetReaderOrdinal(rdr, "PRD_FMLY_TXT");
+                    int IDX_PRD_STRT_DTM_1 = DB.GetReaderOrdinal(rdr, "PRD_STRT_DTM");
+                    int IDX_PRD_END_DTM_1 = DB.GetReaderOrdinal(rdr, "PRD_END_DTM");
+                    int IDX_PRD_CAT_NM1 = DB.GetReaderOrdinal(rdr, "PRD_CAT_NM");
+
+                    while (rdr.Read())
+                    {
+                        ret.ProductSelectionLevelsAttributes.Add(new ProductSelectionLevelsAttributes
+                        {
+                            GDM_BRND_NM = (IDX_GDM_BRND_NM < 0 || rdr.IsDBNull(IDX_GDM_BRND_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_GDM_BRND_NM),
+                            GDM_FMLY_NM = (IDX_GDM_FMLY_NM < 0 || rdr.IsDBNull(IDX_GDM_FMLY_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_GDM_FMLY_NM),
+                            NAND_FAMILY = (IDX_NAND_FAMILY < 0 || rdr.IsDBNull(IDX_NAND_FAMILY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_NAND_FAMILY),
+                            PRD_CAT_NM = (IDX_PRD_CAT_NM1 < 0 || rdr.IsDBNull(IDX_PRD_CAT_NM1)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_CAT_NM1),
+                            PRD_END_DTM = (IDX_PRD_END_DTM_1 < 0 || rdr.IsDBNull(IDX_PRD_END_DTM_1)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_PRD_END_DTM_1),
+                            PRD_FMLY_TXT = (IDX_PRD_FMLY_TXT < 0 || rdr.IsDBNull(IDX_PRD_FMLY_TXT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_FMLY_TXT),
+                            PRD_STRT_DTM = (IDX_PRD_STRT_DTM_1 < 0 || rdr.IsDBNull(IDX_PRD_STRT_DTM_1)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_PRD_STRT_DTM_1)
                         });
                     } // while
                 }
@@ -630,7 +652,6 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_GDM_FMLY_NM = DB.GetReaderOrdinal(rdr, "GDM_FMLY_NM");
                     int IDX_HIER_NM_HASH = DB.GetReaderOrdinal(rdr, "HIER_NM_HASH");
                     int IDX_HIER_VAL_NM = DB.GetReaderOrdinal(rdr, "HIER_VAL_NM");
-                    int IDX_KIT_NM = DB.GetReaderOrdinal(rdr, "KIT_NM");
                     int IDX_MTRL_ID = DB.GetReaderOrdinal(rdr, "MTRL_ID");
                     int IDX_NAND_Density = DB.GetReaderOrdinal(rdr, "NAND_Density");
                     int IDX_NAND_FAMILY = DB.GetReaderOrdinal(rdr, "NAND_FAMILY");
@@ -672,7 +693,6 @@ namespace Intel.MyDeals.DataLibrary
                             GDM_FMLY_NM = (IDX_GDM_FMLY_NM < 0 || rdr.IsDBNull(IDX_GDM_FMLY_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_GDM_FMLY_NM),
                             HIER_NM_HASH = (IDX_HIER_NM_HASH < 0 || rdr.IsDBNull(IDX_HIER_NM_HASH)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_HIER_NM_HASH),
                             HIER_VAL_NM = (IDX_HIER_VAL_NM < 0 || rdr.IsDBNull(IDX_HIER_VAL_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_HIER_VAL_NM),
-                            KIT_NM = (IDX_KIT_NM < 0 || rdr.IsDBNull(IDX_KIT_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_KIT_NM),
                             MTRL_ID = (IDX_MTRL_ID < 0 || rdr.IsDBNull(IDX_MTRL_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MTRL_ID),
                             NAND_Density = (IDX_NAND_Density < 0 || rdr.IsDBNull(IDX_NAND_Density)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_NAND_Density),
                             NAND_FAMILY = (IDX_NAND_FAMILY < 0 || rdr.IsDBNull(IDX_NAND_FAMILY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_NAND_FAMILY),

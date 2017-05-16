@@ -8,7 +8,7 @@
     ProductSelectorController.$inject = ['$scope', 'dataService', 'ProductSelectorService', 'logger', 'confirmationModal', 'gridConstants', '$linq', '$state', '$uibModal'];
 
     function ProductSelectorController($scope, dataService, ProductSelectorService, logger, confirmationModal, gridConstants, $linq, $state, $uibModal) {
-        var vm = this
+        var vm = this;
 
         vm.openProdSelector = function (row) {
             var modal = $uibModal.open({
@@ -17,9 +17,11 @@
                 controller: 'ProductSelectorModalController',
                 controllerAs: 'vm',
                 size: 'lg',
+                windowClass: 'prdSelector-modal-window',
                 resolve: {
                     productSelectionLevels: ['ProductSelectorService', function (ProductSelectorService) {
-                        return ProductSelectorService.GetProductSelectionLevels();
+                        var dtoDateRange = { startDate: $scope.contractData.START_DT, endDate: $scope.contractData.END_DT };
+                        return ProductSelectorService.GetProductSelectorWrapper(dtoDateRange);
                     }],
                     contractData: angular.copy($scope.contractData)
                 }
@@ -48,7 +50,7 @@
         vm.invalidProducts = [];
         vm.multipleMatchProducts = [];
         vm.makeHierarchy = makeHierarchy;
-        vm.addToMydealProducts = addToMydealProducts;       
+        vm.addToMydealProducts = addToMydealProducts;
         vm.PROD_MBR_SID = 0;
         vm.fetchProductDetails = fetchProductDetails;
         vm.makeHierarchy = makeHierarchy;
@@ -69,7 +71,7 @@
                                     data: response.data,
                                 },
                                 change: function (e) {
-                                    $scope.IsVisible = $scope.IsHidden ? false : true;                                    
+                                    $scope.IsVisible = $scope.IsHidden ? false : true;
                                 }
                             };
                             $scope.selectedIds = [0];
@@ -98,7 +100,7 @@
                     e.data["PROD_MBR_SID"] = vm.counter + 1;
                     e.data["PRD_SELC_LVL"] = vm.selectionLevelDropDownList;
                     e.success(e.data);
-                    logger.success("Product added.");                    
+                    logger.success("Product added.");
                 }
             },
             pageSize: 10,
@@ -108,9 +110,9 @@
                     id: "ROW_NUMBER",
                     fields: {
                         ROW_NUMBER: { editable: false, nullable: true },
-                        USR_INPUT: { validation: { required: true } },                        
+                        USR_INPUT: { validation: { required: true } },
                         EXCLUDE: { validation: { required: false } },
-                        FILTER: {  validation: { required: false } },
+                        FILTER: { validation: { required: false } },
                         START_DATE: { validation: { required: false }, type: "date" },
                         END_DATE: { validation: { required: false }, type: "date" },
                         "_behaviors": { type: "object" }
@@ -125,14 +127,14 @@
         vm.gridOptionsProduct = {
             dataSource: [{
                 ROW_NUMBER: 1,
-                USR_INPUT: "",               
+                USR_INPUT: "",
                 EXCLUDE: "",
                 FILTER: "",
                 START_DATE: "",
                 END_DATE: ""
             }, {
                 ROW_NUMBER: 2,
-                USR_INPUT: "",                
+                USR_INPUT: "",
                 EXCLUDE: "",
                 FILTER: "",
                 START_DATE: "",
@@ -140,14 +142,14 @@
             },
             {
                 ROW_NUMBER: 3,
-                USR_INPUT: "",                
+                USR_INPUT: "",
                 EXCLUDE: "",
                 FILTER: "",
                 START_DATE: "",
                 END_DATE: ""
             }, {
                 ROW_NUMBER: 4,
-                USR_INPUT: "",                
+                USR_INPUT: "",
                 EXCLUDE: "",
                 FILTER: "",
                 START_DATE: "",
@@ -155,14 +157,14 @@
             },
             {
                 ROW_NUMBER: 5,
-                USR_INPUT: "",                
+                USR_INPUT: "",
                 EXCLUDE: "",
                 FILTER: "",
                 START_DATE: "",
                 END_DATE: ""
             }, {
                 ROW_NUMBER: 6,
-                USR_INPUT: "",               
+                USR_INPUT: "",
                 EXCLUDE: "",
                 FILTER: "",
                 START_DATE: "",
@@ -170,14 +172,14 @@
             },
             {
                 ROW_NUMBER: 7,
-                USR_INPUT: "",                
+                USR_INPUT: "",
                 EXCLUDE: "",
                 FILTER: "",
                 START_DATE: "",
                 END_DATE: ""
             }, {
                 ROW_NUMBER: 8,
-                USR_INPUT: "",                
+                USR_INPUT: "",
                 EXCLUDE: "",
                 FILTER: "",
                 START_DATE: "",
@@ -185,14 +187,14 @@
             },
             {
                 ROW_NUMBER: 9,
-                USR_INPUT: "",                
+                USR_INPUT: "",
                 EXCLUDE: "",
                 FILTER: "",
                 START_DATE: "",
                 END_DATE: ""
             }, {
                 ROW_NUMBER: 10,
-                USR_INPUT: "",                
+                USR_INPUT: "",
                 EXCLUDE: "",
                 FILTER: "",
                 START_DATE: "",
@@ -213,9 +215,9 @@
                 refresh: true,
                 pageSizes: gridConstants.pageSizes
             },
-            columns: [              
+            columns: [
               { field: "ROW_NUMBER", title: "Sl No", width: "50px", editor: RWNM },
-              { field: "USR_INPUT", title: "Product Name", width: "200px" },              
+              { field: "USR_INPUT", title: "Product Name", width: "200px" },
               { field: "EXCLUDE", title: "Exclude", width: "200px" },
               { field: "FILTER", template: " #= FILTER # ", title: "Filter", width: "200px" },
               { field: "START_DATE", template: "#=gridUtils.uiControlWrapper(data, 'START_DATE', \"date:'MM/dd/yyyy'\")#", title: "Start date", width: "200px", editor: dateTime },
@@ -225,7 +227,6 @@
 
         loadDDLValues();
         function RWNM(container, options) {
-
         }
         function dateTime(container, options) {
             $('<input data-text-field="' + options.field + '" data-value-field="' + options.field + '" data-bind="value:' + options.field + '" />')
@@ -235,15 +236,14 @@
                 value: kendo.toString(new Date(), 'MM/dd/yyyy')
             });
         }
-        
+
         function fetchProductDetails() {
             var dataSelect = [];
-            
+
             var dealTypeSelect = $("#dropdownDealType").data("kendoDropDownList");
             var value = dealTypeSelect.value();
-            
-            if (value >= 0 && value != "" && value != null)
-            {
+
+            if (value >= 0 && value != "" && value != null) {
                 var CUST_CD = $scope.contractData.CUST_MBR_SID;
 
                 var resultData = $linq.Enumerable().From($scope.prodGrid._data)
@@ -283,13 +283,11 @@
             else {
                 logger.error('Not a Valid Deal type');
             }
-            
-
         }
         function fetchProductDetailsOnClick() {
             var dealTypeSelect = $("#dropdownDealType").data("kendoDropDownList");
             var value = dealTypeSelect.value();
-            
+
             if (value >= 0 && value != "" && value != null) {
                 var grid = $("#prodGrid").data("kendoGrid");
                 var selectedItem = grid.dataItem(grid.select());
@@ -327,22 +325,17 @@
             else {
                 logger.error('Not a Valid Deal type');
             }
-
         }
 
         vm.dataSource = new kendo.data.DataSource({
             transport: {
                 read: function (e) {
-                    
                 },
                 update: function (e) {
-
                 },
                 destroy: function (e) {
-
                 },
                 create: function (e) {
-                    
                 }
             },
             schema: {
@@ -417,16 +410,15 @@
 
                 // Process multiple match products to make html to display
                 if (!!data.DuplicateProducts[key]) {
-                    var PROD_HIER_NM = ["DEAL_PRD_TYPE", "PRD_CAT_NM", "BRND_NM", "FMLY_NM", "PCSR_NBR", "DEAL_PRD_NM"]; // Product HIERARCHY 
+                    var PROD_HIER_NM = ["DEAL_PRD_TYPE", "PRD_CAT_NM", "BRND_NM", "FMLY_NM", "PCSR_NBR", "DEAL_PRD_NM"]; // Product HIERARCHY
                     var conflictLevel = ''; //Will hold the conflicting Level
                     var object = { "Row": "", "Items": [] }; //Multiple Match Key Value pair
                     object.Row = key;
                     object.Items = !!data.DuplicateProducts[key] ? data.DuplicateProducts[key] : "";
-                                        
+
                     var isConflict = false;
                     for (var prod in object.Items) {
                         if (object.Items[prod].length > 0) {
-                            
                             var HIER_NM_HASH = object.Items[prod][1].HIER_NM_HASH;
                             var HIER_NM_HASH_ARR = HIER_NM_HASH.split('/'); //HASH value splited by /
                             var counter = 0;
@@ -457,7 +449,7 @@
                                     break;
                                 }
                             }
-                            //Checking for conflict in Category Name i.e. DT OR Mb or etc                               
+                            //Checking for conflict in Category Name i.e. DT OR Mb or etc
                             if (counter > 1) {
                                 isConflict = $linq.Enumerable().From(object.Items[prod])
                                                 .GroupBy(function (x) {
@@ -481,7 +473,7 @@
                                     break;
                                 }
                             }
-                            //Checking for conflict in Family Name i.e                           
+                            //Checking for conflict in Family Name i.e
                             if (counter > 3) {
                                 isConflict = $linq.Enumerable().From(object.Items[prod])
                                                 .GroupBy(function (x) {
@@ -493,7 +485,7 @@
                                     break;
                                 }
                             }
-                            //Checking for conflict in Processor Number                                
+                            //Checking for conflict in Processor Number
                             if (counter > 4) {
                                 isConflict = $linq.Enumerable().From(object.Items[prod])
                                                 .GroupBy(function (x) {
@@ -516,8 +508,7 @@
                                     conflictLevel = "DEAL_PRD_NM";
                                     break;
                                 }
-                            }                            
-                                                      
+                            }
                         }
 
                         //// END IF
@@ -530,7 +521,7 @@
                             }
                             object.Items[prod].splice(0, object.Items[prod].length); // Removing all the matched item from the collection
                         }
-                    }                    
+                    }
                     vm.multipleMatchProducts.push(object); // Pushing final product list with Multiple match
                 }
             }
@@ -544,7 +535,7 @@
         }
 
         // Build the Hierarchy
-        function makeHierarchy(productHierarchy) {            
+        function makeHierarchy(productHierarchy) {
             var HIER_NM_HASH = productHierarchy.HIER_NM_HASH.replace(new RegExp('/', 'g'), " / ");
             return HIER_NM_HASH;
         }
@@ -560,7 +551,7 @@
             if (productExists) {
                 logger.error("Product already exists.", "", "Not allowed");
             } else {
-                vm.dataSource._data.push(p);                
+                vm.dataSource._data.push(p);
             }
         }
         //#endregion

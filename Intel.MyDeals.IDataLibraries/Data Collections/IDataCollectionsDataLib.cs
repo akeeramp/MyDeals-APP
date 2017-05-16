@@ -58,6 +58,6 @@ namespace Intel.MyDeals.IDataLibrary
 
         List<SecurityAttributesDropDown> GetSecurityAttributesDropDownData();
 
-        List<ProductSelectionLevels> GetProductSelectionLevels();
+        ProductSelectorWrapper GetProductSelectorWrapper();
     }
 }
