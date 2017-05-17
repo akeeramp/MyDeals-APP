@@ -5,11 +5,12 @@
         .module('app.admin')
         .controller('ProductSelectorController', ProductSelectorController);
 
-    ProductSelectorController.$inject = ['$scope', 'dataService', 'ProductSelectorService', 'logger', 'confirmationModal', 'gridConstants', '$linq', '$state', '$uibModal'];
+    ProductSelectorController.$inject = ['$filter','$scope', 'dataService', 'ProductSelectorService', 'logger', 'confirmationModal', 'gridConstants', '$linq', '$state', '$uibModal'];
 
-    function ProductSelectorController($scope, dataService, ProductSelectorService, logger, confirmationModal, gridConstants, $linq, $state, $uibModal) {
-        var vm = this;
+    function ProductSelectorController($filter, $scope, dataService, ProductSelectorService, logger, confirmationModal, gridConstants, $linq, $state, $uibModal) {
+        var vm = this
 
+        //Product Selector Modal opener
         vm.openProdSelector = function (row) {
             var modal = $uibModal.open({
                 backdrop: 'static',
@@ -40,23 +41,48 @@
             dialog.close(result);
         }
 
-        // TODO This will c
+        // TODO This will coded
         $scope.contractData = { 'CUST_MBR_SID': 2, 'GEO_MBR_SID': 1, "START_DT": "01/01/2017", "END_DT": "12/31/2017" };
 
-        //#region prev code
-        vm.showGrid = false;
-        vm.userInput = [];
-        vm.products = "";
-        vm.invalidProducts = [];
-        vm.multipleMatchProducts = [];
-        vm.makeHierarchy = makeHierarchy;
-        vm.addToMydealProducts = addToMydealProducts;
+        vm.invalidProducts = []; // This will hold InValid Products        
+        vm.isMultipleORInvalid = true;  // Checking for In there any Duplicate or Invalid Product found or not
         vm.PROD_MBR_SID = 0;
-        vm.fetchProductDetails = fetchProductDetails;
-        vm.makeHierarchy = makeHierarchy;
-        $scope.IsVisible = false;
-        vm.datSource = {};
+        vm.fetchProductDetails = fetchProductDetails; //  This method will Translate the User Inserted product into Product Details.        
+        $scope.IsVisible = false; //  Scope Visibility Variable to used for Hide and show div
+        vm.datSourceCorrector = {}; // Will Hold Global Product Master List
+        vm.addProducts = addProducts; // Method for Adding Valid products to the list
+        vm.validProducts = []; // Contain Valid Product
+        vm.currentRow = 1; // Will hold the clicked row Number. In case of Bulk it will hold 1
 
+        //Product Corrector Modal opener
+        vm.openProdCorrector = function (row) {
+            var modal = $uibModal.open({
+                backdrop: 'static',
+                templateUrl: 'app/contract/productCorrector/productCorrector.html',
+                controller: 'ProductCorrectorModalController',
+                controllerAs: 'vm',
+                size: 'lg',
+                resolve: {
+                    GetProductCorrectorData: angular.copy(vm.datSourceCorrector), //Product Master List
+                    contractData: angular.copy($scope.contractData), // Contract data
+                    RowId: angular.copy(vm.currentRow) // Row ID which should be validated
+                }
+            });
+
+            modal.result.then(
+                //close
+                function (GetProductCorrectorData) {
+                    toastr.success("Products updated successfully.");
+                    vm.datSourceCorrector = GetProductCorrectorData;
+                    addProducts();
+                    dataSource.read();
+                    
+                },
+                function () {                    
+                });
+        }
+
+        // Load Deal Type Values
         var loadDDLValues = function (e) {
             ProductSelectorService.GetProdDealType()
                 .then(
@@ -124,21 +150,22 @@
             fetchProductDetailsOnClick();
         };
 
+        // Options for the User Input Product Grid
         vm.gridOptionsProduct = {
             dataSource: [{
                 ROW_NUMBER: 1,
-                USR_INPUT: "",
+                USR_INPUT: "ci3",
                 EXCLUDE: "",
                 FILTER: "",
-                START_DATE: "",
-                END_DATE: ""
+                START_DATE: "01/01/2010",
+                END_DATE: "01/01/2018"
             }, {
                 ROW_NUMBER: 2,
-                USR_INPUT: "",
+                USR_INPUT: "ci5",
                 EXCLUDE: "",
                 FILTER: "",
-                START_DATE: "",
-                END_DATE: ""
+                START_DATE: "01/01/2010",
+                END_DATE: "01/01/2018"
             },
             {
                 ROW_NUMBER: 3,
@@ -225,9 +252,15 @@
             ]
         };
 
+        // Load Deal Type Values
         loadDDLValues();
+
+        //Editor for Start Date and End Date
         function RWNM(container, options) {
+
         }
+
+        //Editor for Start Date and End Date
         function dateTime(container, options) {
             $('<input data-text-field="' + options.field + '" data-value-field="' + options.field + '" data-bind="value:' + options.field + '" />')
             .appendTo(container)
@@ -237,6 +270,7 @@
             });
         }
 
+        // Translate Bulk Product(s) 
         function fetchProductDetails() {
             var dataSelect = [];
 
@@ -245,7 +279,7 @@
 
             if (value >= 0 && value != "" && value != null) {
                 var CUST_CD = $scope.contractData.CUST_MBR_SID;
-
+                var GEO_MBR_SID = $scope.contractData.GEO_MBR_SID;
                 var resultData = $linq.Enumerable().From($scope.prodGrid._data)
                     .Where(function (x) {
                         return x.USR_INPUT.length > 0 && x.START_DATE > 0 && x.END_DATE > 0;
@@ -263,11 +297,10 @@
                     dataSelect.push(sendObj);
                 }
                 if (resultData.length > 0) {
-                    ProductSelectorService.TranslateProducts(dataSelect, CUST_CD)
+                    ProductSelectorService.TranslateProducts(dataSelect, CUST_CD, GEO_MBR_SID)
                     .then(
                         function (response) {
-                            if (response.statusText == "OK") {
-                                vm.showGrid = true;
+                            if (response.statusText == "OK") {                                
                                 cookProducts(response.data);
                             }
                         },
@@ -283,7 +316,11 @@
             else {
                 logger.error('Not a Valid Deal type');
             }
+
+
         }
+
+        // Translate Product(s) by Double Clicking on Rows
         function fetchProductDetailsOnClick() {
             var dealTypeSelect = $("#dropdownDealType").data("kendoDropDownList");
             var value = dealTypeSelect.value();
@@ -299,17 +336,17 @@
                     START_DATE: selectedItem.START_DATE,
                     END_DATE: selectedItem.END_DATE
                 }
-
+                vm.currentRow = selectedItem.ROW_NUMBER;
                 var CUST_CD = $scope.contractData.CUST_MBR_SID;
+                var GEO_MBR_SID = $scope.contractData.GEO_MBR_SID;
                 var dataSelect = [];
                 dataSelect.push(sendObj);
 
                 if (dataSelect.length > 0) {
-                    ProductSelectorService.TranslateProducts(dataSelect, CUST_CD)
+                    ProductSelectorService.TranslateProducts(dataSelect, CUST_CD, GEO_MBR_SID)
                         .then(
                             function (response) {
-                                if (response.statusText == "OK") {
-                                    vm.showGrid = true;
+                                if (response.statusText == "OK") {                                    
                                     cookProducts(response.data);
                                 }
                             },
@@ -325,17 +362,23 @@
             else {
                 logger.error('Not a Valid Deal type');
             }
+
         }
 
-        vm.dataSource = new kendo.data.DataSource({
+        // Data Source for Final PRoduct Grid
+        var dataSource = new kendo.data.DataSource({
             transport: {
                 read: function (e) {
+                    e.success(vm.validProducts);
                 },
                 update: function (e) {
+
                 },
                 destroy: function (e) {
+
                 },
                 create: function (e) {
+
                 }
             },
             schema: {
@@ -358,8 +401,9 @@
             serverSorting: true
         });
 
+        // Options for Final Product Grid
         vm.gridOptions = {
-            dataSource: vm.dataSource,
+            dataSource: dataSource,
             filterable: true,
             sortable: false,
             selectable: true,
@@ -393,15 +437,18 @@
             ]
         };
 
+        // Master Product Massaging
         function cookProducts(data) {
             //reset();
+            var multipleMatch = false;
             for (var key in data.ProdctTransformResults) {
                 for (var i = 0; i < data.ValidProducts[key].length; i++) {
-                    vm.dataSource._data.push(data.ValidProducts[key][i]);
+                    vm.validProducts.push(data.ValidProducts[key][i]);
                 }
 
                 // Process invalid products to make html to display
                 if (data.InValidProducts[key].length > 0) {
+                    multipleMatch = true;
                     var object = { "Row": "", "Items": [] };
                     object.Row = key;
                     object.Items = data.InValidProducts[key].join(", ")
@@ -410,7 +457,8 @@
 
                 // Process multiple match products to make html to display
                 if (!!data.DuplicateProducts[key]) {
-                    var PROD_HIER_NM = ["DEAL_PRD_TYPE", "PRD_CAT_NM", "BRND_NM", "FMLY_NM", "PCSR_NBR", "DEAL_PRD_NM"]; // Product HIERARCHY
+
+                    var PROD_HIER_NM = ["DEAL_PRD_TYPE", "PRD_CAT_NM", "BRND_NM", "FMLY_NM", "PCSR_NBR", "DEAL_PRD_NM"]; // Product HIERARCHY 
                     var conflictLevel = ''; //Will hold the conflicting Level
                     var object = { "Row": "", "Items": [] }; //Multiple Match Key Value pair
                     object.Row = key;
@@ -419,26 +467,27 @@
                     var isConflict = false;
                     for (var prod in object.Items) {
                         if (object.Items[prod].length > 0) {
+
                             var HIER_NM_HASH = object.Items[prod][1].HIER_NM_HASH;
                             var HIER_NM_HASH_ARR = HIER_NM_HASH.split('/'); //HASH value splited by /
-                            var counter = 0;
+                            var selectionLevel = 0;
 
                             // HASH value split to get Starting Level.. i.c CPU/DT/Ci3/Skylake output: CPU
                             var insertedLevel = prod.split('/')[0];
 
                             for (var z = 0 ; z < HIER_NM_HASH_ARR.length; z++) {
                                 if (HIER_NM_HASH_ARR[z].toUpperCase() == insertedLevel.toUpperCase()) {
-                                    counter = z; // That will tell me the how many level we have to check for conflict.
+                                    selectionLevel = z; // That will tell me the how many level we have to check for conflict.
                                     break;
                                 }
                             }
-                            if (counter < 0) {
+                            if (selectionLevel < 0) {
                                 conflictLevel = "HIERARCHY NOT FOUND";
                                 isConflict = true;
                             }
 
                             // Checking for conflict in Deal Product Type i.e. CPU or EIA products
-                            if (counter > 0) {
+                            if (selectionLevel > 0) {
                                 isConflict = $linq.Enumerable().From(object.Items[prod])
                                                 .GroupBy(function (x) {
                                                     return (x.DEAL_PRD_TYPE);
@@ -446,11 +495,11 @@
 
                                 if (isConflict) {
                                     conflictLevel = "DEAL_PRD_TYPE";
-                                    break;
+                                    //break;
                                 }
                             }
-                            //Checking for conflict in Category Name i.e. DT OR Mb or etc
-                            if (counter > 1) {
+                            //Checking for conflict in Category Name i.e. DT OR Mb or etc                               
+                            if (selectionLevel > 1 && !isConflict) {
                                 isConflict = $linq.Enumerable().From(object.Items[prod])
                                                 .GroupBy(function (x) {
                                                     return (x.PRD_CAT_NM);
@@ -458,11 +507,11 @@
 
                                 if (isConflict) {
                                     conflictLevel = "DEAL_PRD_TYPE";
-                                    break;
+                                    //break;
                                 }
                             }
                             //Checking for conflict in Brand Name i.e. ci3 or ci5, ci7 etc
-                            if (counter > 2) {
+                            if (selectionLevel > 2 && !isConflict) {
                                 isConflict = $linq.Enumerable().From(object.Items[prod])
                                                 .GroupBy(function (x) {
                                                     return (x.BRND_NM);
@@ -470,11 +519,11 @@
 
                                 if (isConflict) {
                                     conflictLevel = "BRND_NM";
-                                    break;
+                                    //break;
                                 }
                             }
-                            //Checking for conflict in Family Name i.e
-                            if (counter > 3) {
+                            //Checking for conflict in Family Name i.e                           
+                            if (selectionLevel > 3 && !isConflict) {
                                 isConflict = $linq.Enumerable().From(object.Items[prod])
                                                 .GroupBy(function (x) {
                                                     return (x.FMLY_NM);
@@ -482,33 +531,10 @@
 
                                 if (isConflict) {
                                     conflictLevel = "FMLY_NM";
-                                    break;
+                                    //break;
                                 }
                             }
-                            //Checking for conflict in Processor Number
-                            if (counter > 4) {
-                                isConflict = $linq.Enumerable().From(object.Items[prod])
-                                                .GroupBy(function (x) {
-                                                    return (x.PCSR_NBR);
-                                                }).ToArray().length > 1;
 
-                                if (isConflict) {
-                                    conflictLevel = "PCSR_NBR";
-                                    break;
-                                }
-                            }
-                            //Checking for conflict in Product Number
-                            if (counter > 5) {
-                                isConflict = $linq.Enumerable().From(object.Items[prod])
-                                                .GroupBy(function (x) {
-                                                    return (x.DEAL_PRD_NM);
-                                                }).ToArray().length > 1;
-
-                                if (isConflict) {
-                                    conflictLevel = "DEAL_PRD_NM";
-                                    break;
-                                }
-                            }
                         }
 
                         //// END IF
@@ -516,44 +542,42 @@
                         if (!isConflict) {
                             //No High level conflict. Product will be a direct match
                             for (var i = 0; i < object.Items[prod].length; i++) {
-                                vm.dataSource._data.push(object.Items[prod][i]);
+                                vm.validProducts.push(object.Items[prod][i]);
                                 data.ValidProducts[key][i] = object.Items[prod][i];
                             }
-                            object.Items[prod].splice(0, object.Items[prod].length); // Removing all the matched item from the collection
+                            object.Items[prod].splice(0, object.Items[prod].length);  // Removing all the matched item from the collection
+                        }
+                        else {
+                            if (isConflict && !multipleMatch)
+                                multipleMatch = true;
                         }
                     }
-                    vm.multipleMatchProducts.push(object); // Pushing final product list with Multiple match
+
                 }
+
+            }
+
+            vm.datSourceCorrector = data;
+            //OPen Product Corrector 
+            if (multipleMatch) {
+                vm.openProdCorrector();
+                vm.isMultipleORInvalid = false;                
             }
         }
-
-        var reset = function reset() {
-            // Make observable array empty
-            vm.dataSource.splice(0, vm.dataSource.length);
-            vm.multipleMatchProducts = [];
-            vm.invalidProducts = [];
-        }
-
-        // Build the Hierarchy
-        function makeHierarchy(productHierarchy) {
-            var HIER_NM_HASH = productHierarchy.HIER_NM_HASH.replace(new RegExp('/', 'g'), " / ");
-            return HIER_NM_HASH;
-        }
-
-        // Add to my deals products from multiple match bucket
-        function addToMydealProducts(p) {
-            //  linq less number lines
-            var productExists = $linq.Enumerable().From(vm.dataSource._data)
-                .Where(function (x) {
-                    return x.PRD_MBR_SID == p.PRD_MBR_SID;
-                })
-                .ToArray().length > 0;
-            if (productExists) {
-                logger.error("Product already exists.", "", "Not allowed");
-            } else {
-                vm.dataSource._data.push(p);
+        
+        //Add Product in The Product GRID
+        function addProducts() {
+            vm.validProducts = [];
+            var GetProductCorrectorData = vm.datSourceCorrector;
+            for (var key in GetProductCorrectorData.ProdctTransformResults) {
+                var dataSelectedProd = GetProductCorrectorData.ValidProducts[key];
+                angular.forEach(dataSelectedProd, function (value, key) {
+                    //Duplicate check                                
+                    if (!$filter("where")(vm.validProducts, { PRD_MBR_SID: value.PRD_MBR_SID }).length > 0) {
+                        vm.validProducts.push(value);
+                    }
+                });
             }
         }
-        //#endregion
     }
 })();

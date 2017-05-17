@@ -38,6 +38,9 @@ namespace Intel.MyDeals.Entities
     public partial class ProductEntryAttribute
     {
         [DataMember]
+        public System.Int32 ROW_NUMBER { set; get; }
+
+        [DataMember]
         public System.String USR_INPUT { set; get; }     
                 
         [DataMember]

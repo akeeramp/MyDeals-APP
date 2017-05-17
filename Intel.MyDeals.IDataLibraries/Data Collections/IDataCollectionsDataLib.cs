@@ -28,6 +28,8 @@ namespace Intel.MyDeals.IDataLibrary
 
         List<Product> GetProductData();
 
+        List<ProductDatails> GetProductsDetails();
+
         List<RuleSet> GetRuleSets();
 
         List<RuleItem> GetRuleItems();

@@ -44,9 +44,9 @@ namespace Intel.MyDeals.IBusinessLogic
 
         List<ProductAlias> GetProductsFromAlias(bool getCachedResult = true);
 
-        ProductLookup TranslateProducts(List<ProductEntryAttribute> products, int CUST_MBR_SID);
+        ProductLookup TranslateProducts(List<ProductEntryAttribute> products, int CUST_MBR_SID, int GEO_MBR_SID);
 
-        List<PRD_LOOKUP_RESULTS> GetProductDetails(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID);
+        List<PRD_LOOKUP_RESULTS> GetProductDetails(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID, int GEO_MBR_SID);
 
         ProductLookup FetchProducts(List<ProductIEValues> products);
 
@@ -60,7 +60,7 @@ namespace Intel.MyDeals.IBusinessLogic
 
         List<PrdSelLevel> GetProdSelectionLevel(int OBJ_SET_TYPE_SID);
 
-        List<Product> SuggestProducts(string prdEntered, int? returnMax);
+        List<ProductDatails> SuggestProducts(string prdEntered, int? returnMax);
 
         ProductSelectorWrapper GetProductSelectorWrapper();
 

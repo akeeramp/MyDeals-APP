@@ -8,13 +8,15 @@ namespace Intel.MyDeals.IDataLibrary
     {
         List<Product> GetProducts();
 
+        List<ProductDatails> GetProductsDetails();
+
         List<ProductAlias> SetProductAlias(CrudModes mode, ProductAlias data);
 
         List<ProductAlias> GetProductsFromAlias();
 
         List<PRD_LOOKUP_RESULTS> FindProductMatch(List<ProductEntryAttribute> productsToMatch);
 
-        List<PRD_LOOKUP_RESULTS> GetProductDetails(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID);
+        List<PRD_LOOKUP_RESULTS> GetProductDetails(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID, int GEO_MBR_SID);
 
         List<ProductIncExcAttribute> SetIncludeExclude(List<ProductIncExcAttribute> data, string opsType);
 

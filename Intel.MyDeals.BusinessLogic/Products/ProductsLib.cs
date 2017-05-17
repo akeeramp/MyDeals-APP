@@ -52,6 +52,15 @@ namespace Intel.MyDeals.BusinessLogic
             return _dataCollectionsDataLib.GetProductData();
         }
 
+        public List<ProductDatails> GetProductsDetails(bool getCachedResult = true)
+        {
+            if (!getCachedResult)
+            {
+                _productDataLib.GetProductsDetails();
+            }
+            return _dataCollectionsDataLib.GetProductsDetails();
+        }
+
         /// <summary>
         /// Get specific Product
         /// </summary>
@@ -221,7 +230,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// </summary>
         /// <param name="products"></param>
         /// <returns></returns>
-        public ProductLookup TranslateProducts(List<ProductEntryAttribute> prodNames, Int32 CUST_MBR_SID)
+        public ProductLookup TranslateProducts(List<ProductEntryAttribute> prodNames, Int32 CUST_MBR_SID, int GEO_MBR_SID)
         {
             //var prodNames = new List<string>();
             var userProducts = prodNames.Select(l => l.USR_INPUT).ToList();
@@ -279,6 +288,7 @@ namespace Intel.MyDeals.BusinessLogic
                 foreach (var product in products)
                 {
                     ProductEntryAttribute pea = new ProductEntryAttribute();
+                    pea.ROW_NUMBER = userProduct.ROW_NUMBER;
                     pea.USR_INPUT = product.ToString();
                     pea.START_DATE = userProduct.START_DATE.ToString();
                     pea.END_DATE = userProduct.END_DATE.ToString();
@@ -292,7 +302,8 @@ namespace Intel.MyDeals.BusinessLogic
                                       from t in pa.DefaultIfEmpty()
                                       select new ProductEntryAttribute
                                       {
-                                          USR_INPUT = t == null ? p.USR_INPUT : t.PRD_NM,
+                                          ROW_NUMBER = p.ROW_NUMBER,
+                                          USR_INPUT = t == null ? p.USR_INPUT : t.PRD_NM,                                          
                                           EXCLUDE = p.EXCLUDE,
                                           FILTER = p.FILTER,
                                           END_DATE = p.END_DATE,
@@ -300,12 +311,12 @@ namespace Intel.MyDeals.BusinessLogic
                                       }).Distinct();
 
                 productsTodb.AddRange(productAliases);
-                productLookup.ProdctTransformResults[userProduct.USR_INPUT] = productAliases.Select(x => x.USR_INPUT).ToList();
+                productLookup.ProdctTransformResults[userProduct.ROW_NUMBER.ToString()] = productAliases.Select(x => x.ROW_NUMBER.ToString()).ToList(); // Adding ROW_NUMBER as a key
+                productLookup.ProdctTransformResults[userProduct.ROW_NUMBER.ToString()] = productAliases.Select(x => x.USR_INPUT).ToList(); // Adding ROW_NUMBER as a key       
             }
 
-            //  Product match master list
-            //var productMatchResults = FindProductMatch(productsTodb);
-            var productMatchResults = GetProductDetails(productsTodb, CUST_MBR_SID);
+            //  Product match master list            
+            var productMatchResults = GetProductDetails(productsTodb, CUST_MBR_SID, GEO_MBR_SID);
             // Get duplicate and Valid Products
             ExtractValidandDuplicateProducts(productLookup, productMatchResults);
 
@@ -346,7 +357,7 @@ namespace Intel.MyDeals.BusinessLogic
                     duplicateProds.ToList().ForEach(d => records[d] = new List<PRD_LOOKUP_RESULTS>());
 
                     duplicateRecords.ForEach(r => records[r.USR_INPUT].Add(r));
-
+                    
                     productLookup.DuplicateProducts[userProduct.Key] = records;
                 }
 
@@ -376,9 +387,9 @@ namespace Intel.MyDeals.BusinessLogic
             return _productDataLib.FindProductMatch(productsToMatch);
         }
 
-        public List<PRD_LOOKUP_RESULTS> GetProductDetails(List<ProductEntryAttribute> productsToMatch, Int32 CUST_MBR_SID)
+        public List<PRD_LOOKUP_RESULTS> GetProductDetails(List<ProductEntryAttribute> productsToMatch, Int32 CUST_MBR_SID, Int32 GEO_MBR_SID)
         {
-            return _productDataLib.GetProductDetails(productsToMatch, CUST_MBR_SID);
+            return _productDataLib.GetProductDetails(productsToMatch, CUST_MBR_SID, GEO_MBR_SID);
         }
 
         /// <summary>
@@ -585,7 +596,7 @@ namespace Intel.MyDeals.BusinessLogic
 
         #region Suggest Products
 
-        public List<Product> SuggestProducts(string prdEntered, int? returnMax)
+        public List<ProductDatails> SuggestProducts(string prdEntered, int? returnMax)
         {
             const int defaultReturnedMaxRecords = 5;
 
@@ -599,19 +610,43 @@ namespace Intel.MyDeals.BusinessLogic
             Regex regex = new Regex(pattern, RegexOptions.IgnoreCase);
 
             // this takes time if it is the first time to load into cache
-            List<Product> prds = GetProducts();
+            List<ProductDatails> prds = GetProductsDetails();
 
             IEnumerable<ProductHash> hashPrds = from prd in prds
                                                 select new ProductHash
                                                 {
                                                     Id = prd.PRD_MBR_SID,
                                                     HashName = prd.DEAL_PRD_TYPE
-   + (prd.PRD_CATGRY_NM == string.Empty ? "" : " " + prd.PRD_CATGRY_NM)
-   + (prd.BRND_NM == string.Empty ? "" : " " + prd.BRND_NM)
-   + (prd.FMLY_NM == string.Empty ? "" : " " + prd.FMLY_NM)
-   + (prd.PRCSSR_NBR == string.Empty ? "" : " " + prd.PRCSSR_NBR)
-   + (prd.DEAL_PRD_NM == string.Empty ? "" : " " + prd.DEAL_PRD_NM)
-   + (prd.MTRL_ID == string.Empty ? "" : " " + prd.MTRL_ID)
+                                                   + (prd.BRND_NM == string.Empty ? "" : " " + prd.BRND_NM)
+                                                   + (prd.CPU_CACHE == string.Empty ? "" : " " + prd.CPU_CACHE)
+                                                   + (prd.CPU_PACKAGE == string.Empty ? "" : " " + prd.CPU_PACKAGE)
+                                                   + (prd.CPU_PROCESSOR_NUMBER == string.Empty ? "" : " " + prd.CPU_PROCESSOR_NUMBER)
+                                                   + (prd.CPU_VOLTAGE_SEGMENT == string.Empty ? "" : " " + prd.CPU_VOLTAGE_SEGMENT)
+                                                   + (prd.CPU_WATTAGE == string.Empty ? "" : " " + prd.CPU_WATTAGE)
+                                                   + (prd.DEAL_PRD_NM == string.Empty ? "" : " " + prd.DEAL_PRD_NM)
+                                                   + (prd.DEAL_PRD_TYPE == string.Empty ? "" : " " + prd.DEAL_PRD_TYPE)
+                                                   + (prd.EFF_FR_DTM == string.Empty ? "" : " " + prd.EFF_FR_DTM)
+                                                   + (prd.EPM_NM == string.Empty ? "" : " " + prd.EPM_NM)
+                                                   + (prd.FMLY_NM == string.Empty ? "" : " " + prd.FMLY_NM)
+                                                   + (prd.FMLY_NM_MM == string.Empty ? "" : " " + prd.FMLY_NM_MM)
+                                                   + (prd.GDM_BRND_NM == string.Empty ? "" : " " + prd.GDM_BRND_NM)
+                                                   + (prd.GDM_FMLY_NM == string.Empty ? "" : " " + prd.GDM_FMLY_NM)
+                                                   + (prd.HIER_NM_HASH == string.Empty ? "" : " " + prd.HIER_NM_HASH)
+                                                   + (prd.HIER_VAL_NM == string.Empty ? "" : " " + prd.HIER_VAL_NM)
+                                                   + (prd.KIT_NM == string.Empty ? "" : " " + prd.KIT_NM)
+                                                   + (prd.MTRL_ID == string.Empty ? "" : " " + prd.MTRL_ID)
+                                                   + (prd.NAND_DENSITY == string.Empty ? "" : " " + prd.NAND_DENSITY)
+                                                   + (prd.NAND_FAMILY == string.Empty ? "" : " " + prd.NAND_FAMILY)
+                                                   + (prd.PRCSSR_NBR == string.Empty ? "" : " " + prd.PRCSSR_NBR)
+                                                   + (prd.PRD_ATRB_SID == prd.PRD_ATRB_SID)
+                                                   + (prd.PRD_CATGRY_NM == string.Empty ? "" : " " + prd.PRD_CATGRY_NM)
+                                                   + (prd.PRD_END_DTM == prd.PRD_END_DTM)
+                                                   + (prd.PRD_MBR_SID == prd.PRD_MBR_SID)
+                                                   + (prd.PRD_STRT_DTM == prd.PRD_STRT_DTM)
+                                                   + (prd.PRICE_SEGMENT == string.Empty ? "" : " " + prd.PRICE_SEGMENT)
+                                                   + (prd.SBS_NM == string.Empty ? "" : " " + prd.SBS_NM)
+                                                   + (prd.SKU_MARKET_SEGMENT == string.Empty ? "" : " " + prd.SKU_MARKET_SEGMENT)
+                                                   + (prd.SKU_NM == string.Empty ? "" : " " + prd.SKU_NM) 
                                                 };
 
             List<NodeMatch> myMatches = new List<NodeMatch>();
@@ -645,9 +680,14 @@ namespace Intel.MyDeals.BusinessLogic
 
             List<NodeMatch> SortedList = myMatches.OrderByDescending(o => o.MatchLen).ThenByDescending(o => o.Weight).ToList();
             List<int> matchedIDs = SortedList.Take(returnMaxRecords).Select(p => p.ID).ToList();
-            List<Product> rtn = prds.Where(p => matchedIDs.Contains(p.PRD_MBR_SID)).ToList();
+            List<ProductDatails> rtn = prds.Where(p => matchedIDs.Contains(p.PRD_MBR_SID)).ToList();
 
-            List<Product> Final = new List<Product>();
+            foreach(var p in rtn)
+            {
+                p.USR_INPUT = prdEntered;
+            }
+            
+            List<ProductDatails> Final = new List<ProductDatails>();
             Final.AddRange(rtn);
 
             return Final;

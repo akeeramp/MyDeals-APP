@@ -1,12 +1,15 @@
 ﻿<div class="col-md-12">
     <h2 class="col-md-2">Product Entry</h2>
-    <div class="col-md-10" ng-click="vm.openProdSelector()" role="button">
+    <div class="col-md-2" ng-click="vm.openProdSelector()" role="button">
         <i role="button" class="fa fa-mouse-pointer skyBlue" aria-hidden="true" style="font-size: 20px;margin-top:30px"></i>
         <label style="font-size: 20px;margin-top:30px">Product Selector</label>
     </div>
+    <div class="col-md-8" ng-click="vm.openProdCorrector()" role="button" ng-hide="vm.isMultipleORInvalid">
+        <i role="button" class="intelicon-compose skyBlue" aria-hidden="true" style="font-size: 20px;margin-top:30px"></i>
+        <label style="font-size: 20px;margin-top:30px">Product Corrector</label>
+    </div>
 </div>
 <div class="col-md-12" style="padding-top: 20px;">
-
     <div class="col-md-3" style="width:200px">
         <label>Deal Type:</label>
         <select id="dropdownDealType" kendo-drop-down-list k-options="selectOptions" k-ng-model="selectedIds" style="width: 100%;"></select>
@@ -55,42 +58,6 @@
              op-ui-mode="'VERTICAL'"></div>
     </div>
 </div>
-
-<div class="col-md-12">
-    <div class="col-md-5">
-        <div ng-if="vm.multipleMatchProducts.length != 0">
-            <label>Multiple match found for Products, go to Product Corrector(s).</label>
-            <div class="alert alert-warning" style="max-height: 200px;overflow: scroll;">
-                <div ng-repeat="a in vm.multipleMatchProducts">
-                    <div ng-repeat="(productName, productHierarchy) in a.Items">
-                        <div ng-if="productHierarchy.length != 0">
-                            {{productName}} <i class="intelicon-arrow-forward-right"></i>
-                            <ul>
-                                <li ng-repeat="product in productHierarchy">
-                                    <div role="button" kendo-tooltip k-content="'Click here to choose.'" ng-click="vm.addToMydealProducts(product)">{{vm.makeHierarchy(product)}}</div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-2"></div>
-    <div class="col-md-5">
-        <div ng-if="vm.invalidProducts.length != 0">
-            <label>Invalid Products:</label>
-            <div class="alert alert-danger" style="max-height: 200px;overflow: scroll;">
-                <div ng-repeat="a in vm.invalidProducts">
-                    <b>{{a.Row}}</b><i class="intelicon-arrow-forward-right"></i>
-                    {{a.Items}}
-                </div>
-            </div>
-        </div>
-    </div>
-
-</div>
-
 <div class="col-md-4" style="padding-top: 20px;">
 
 </div>
@@ -110,7 +77,7 @@
 </div>
 
 <style>
-    #prodSelectGrid {
+    #prodSelectGrid, #prodGrid {
         height: 500px;
     }
 

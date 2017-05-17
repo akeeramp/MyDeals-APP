@@ -1,119 +1,335 @@
-﻿
-<div class="modal-content" style="height:85vh;background-color:#1a3e6f;overflow-y:auto;overflow-x:hidden;">
+﻿<div class="modal-content" moveablemodal style="height:85vh;background-color:#1a3e6f;overflow-y:auto;overflow-x:hidden;border-left:none;border-right:none;">
     <div style="padding:15px;">
-        <div class="row">
-            <div class="col-md-11">
-                <p style="color:white;font-size:32px">Product Corrector</p>
+        <div class="prodSelector modal-header" style="margin-bottom:15px">
+            <div class="row prodCorrectorHeader">
+                <div class="col-md-3" style="padding-left:0px">
+                    <p class="prodText">Product Corrector</p>
+                </div>
+                <div class="col-md-6 text-center">
+                    <span class="rowNavigation"><label style="font-weight:400">Row {{ vm.currentRow }}</label></span>
+                    <span class="rowNavPanel" ng-hide="vm.hideNavigation">
+                        <i role="button" title="Previous Row" class="intelicon-left-previous skyBlue" ng-click="vm.prevRow()" ng-disabled="vm.isPrevDisabled"></i>
+                        <label> {{ vm.currentRow }} of {{ vm.rows }} </label>
+                        <i role="button" title="Next Row" class="intelicon-right-next skyBlue" ng-click="vm.nextRow()" ng-disabled="checked"></i>
+                    </span>
+                </div>
+                <span class="rowNavPanel">
+                    <i role="button" title="Close" class="intelicon-close-max fr" ng-click="vm.cancel()"></i>
+                </span>
+            </div>
+        </div>
+        <div class="prodSelector modal-body"> 
+            <div class="row" style="margin:0px" ng-hide="vm.isMultipleProduct">
+                <div ng-if="vm.items.length != 0">
+                    <label class="text-left fl marginRight textProdSelector" ng-hide="vm.isMultipleProduct">Multiple Product found for: {{ vm.productName }}</label>
+                    <div class="drillDown btn-group btn-group-justified" role="group" aria-label="...">
+                        <div class="btn-group" ng-repeat="p in vm.items" role="group">
+                            <button type="button" ng-class="{'noborder':$last}" ng-click="vm.selectsearchItem(p)" class="btn btn-default">{{::p.name}}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 insertAtRowsText" ng-hide="vm.isInvalidProduct">
+                    <label class="text-left fl marginRight textProdSelector" ng-hide="vm.isInvalidProduct">Product Not Found: </label>                    
+                    <ui-select allow-clear="true" onkeypress="return false;" class="prodSelected text-left"
+                                tagging="true" multiple ng-model="vm.invalidProducts" theme="bootstrap">
+                        <ui-select-match><span kendo-tooltip k-content='$item.USR_INPUT' ng-click="vm.productSuggestion($item)">{{$item.USR_INPUT}}</span></ui-select-match>
+                        <ui-select-choices repeat="products in vm.selectedProducts">
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <div class="col-md-6 insertAtRowsText" ng-hide="vm.isInvalidProduct">
+                    <label class="text-left fl marginRight textProdSelector">Product Suggestions: </label>
+                    <ui-select allow-clear="true" onkeypress="return false;" class="prodSelected text-left"
+                                tagging="true" multiple ng-model="vm.suggestedProduct" theme="bootstrap">
+                        <ui-select-match><span kendo-tooltip k-content='$item.HIER_NM_HASH' ng-click="vm.addProductSuggested($item)">{{$item.HIER_VAL_NM}}</span></ui-select-match>
+                        <ui-select-choices repeat="products in vm.selectedProducts">
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
             </div>
             
-            <span style="color:white;font-size:32px;padding-top:12px;padding-left:20px;">
-                <i role="button" title="Close" class="intelicon-close-max"   ng-click="vm.cancel()"></i>
-            </span>
         </div>
-        <div class="row" style="padding:10px">
-                
-                <div class="col-md-6" style="height:180px">
-                    <label style="color:#ffffff">Products not found</label>
-                    <div class="col-md-12" style="background: #ffffff;height:150px">
-                    </div>
+        <div class="prodSelector modal-footer">            
+            <div class="row" style="margin:0px">
+                <div class="col-md-6 text-left textProdSelector">
+                    <p>Selected Products<small>&nbsp;({{vm.addedProducts.length}})</small></p>
                 </div>
-            
-                <div class="col-md-6" style="height:180px">
-                    <label style="color:#ffffff">Products Suggestion</label>
-                    <div class="col-md-12" style="background: #ffffff;height:150px">
-                    </div>
+                <div class="col-md-6">                        
+                    <button class="btn btn-default prdBtn" ng-click="vm.clearProducts()" style="margin-left:2px;">Clear all products</button>
                 </div>
-
             </div>
-        <br/>
-        <div class="row" style="padding:10px">
+            <div class="col-md-12 addedProduct">
+                <ui-select allow-clear="true" onkeypress="return false;" class="prodSelected text-left"
+                            tagging="true" multiple ng-model="vm.addedProducts" theme="bootstrap" style="min-height:200px !important">
+                    <ui-select-match><span kendo-tooltip k-content='$item.HIER_NM_HASH'>{{$item.HIER_VAL_NM}}</span></ui-select-match>
+                    <ui-select-choices repeat="products in vm.selectedProducts">
+                    </ui-select-choices>
+                </ui-select>
+            </div>
 
-                <div class="col-md-12" style="height:180px">
-                    <label style="color:#ffffff">Products found and included</label>
-                    <div class="col-md-12" style="background: #ffffff;height:150px">
-                    </div>
-                </div>
-
+            <br />
+            <div class="col-md-6 form-inline insertAtRowsText">
+                <label class="text-left fl marginRight" style="font-weight:400!important">Not Correct? &nbsp;Try using <a style="color:#00AEEF;text-decoration:underline;cursor:pointer">Product Selector</a></label>
+            </div>
+            <div class="col-md-6">
+                <button class="btn btn-default prdBtn" ng-click="vm.clearProducts()" style="margin-left:2px;">Cancel</button>
+                <button class="btn btn-primary fr prdBtn" ng-click="vm.saveProducts()">Save</button>
+            </div>            
         </div>
- 
-           
-        </div>
-        </div>
-        <style>
-            .productpath.breadcrumb > li + li:before {
-                padding: 0 5px;
-                color: white;
-                content: ">";
-                font-size: 16px;
+    </div>
+</div>
+<style>
+    .prodCorrectorHeader{
+        border-bottom:1px solid #ffffff;
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+    .rowNavigation{
+        color:yellow;
+        font-size:32px; 
+        text-transform:uppercase;
+    }
+    .prodText{
+        color:white;
+        font-size:32px
+    }
+    .rowNavPanel{
+        color:white;
+        font-size:32px;
+        padding-top:12px;
+        padding-left:20px;
+    }
+    .marginRight {
+        margin-right: 10px;
+    }
+
+    .prodSelectorSearch {
+        padding-top: 8px;
+        overflow: hidden;
+    }
+    .addedProduct{
+        padding-left:15px;
+        padding-right:15px;
+        height:200px !important;
+        margin-bottom: 15px;
+    }
+    .textProdSelector {
+        font-size: 19px;
+        color: white;
+        font-weight: 400;
+        font-style: normal;
+    }
+
+    .insertAtRowsText {
+        color: white;
+        font-weight: 400 !important;
+        font-style: normal;
+        font-size: 19px;
+    }
+
+    .prodHeader {
+        color: white;
+        font-size: 32px;
+    }
+
+    .breadCrumbWrapper {
+        padding-left: 10px;
+        padding-right: 10px;
+        font-size: 21px;
+    }
+
+    .modalCloseIcon {
+        color: white;
+        font-size: 32px;
+        padding-top: 12px;
+        padding-left: 20px;
+    }
+
+    .productpath.breadcrumb > li + li:before {
+        padding: 0 5px;
+        color: white;
+        content: ">";
+        font-size: 16px;
+    }
+
+    .productpath.breadcrumb {
+        color: white;
+        background-color: #1a3e6f;
+        padding: 10px;
+        margin-bottom: 0px;
+    }
+
+    a.prdAnchor {
+        color: white;
+    }
+
+        a.prdAnchor:hover {
+            color: #01AEEF;
+            text-decoration: none;
+        }
+
+    .drillDown.btn-group button {
+        background-color: #01AEEF;
+        border-left: none;
+        border-top: none;
+        border-bottom: none;
+        border-right: 1px solid white;
+        color: white; /* White text */
+        cursor: pointer; /* Pointer/hand icon */
+        float: left; /* Float the buttons side by side */
+    }
+
+    .drillDown {
+        background-color: #01AEEF;
+    }
+
+        .drillDown.btn-group {
+            padding-top: 3px;
+            padding-bottom: 3px;
+        }
+
+            .drillDown.btn-group.btn {
+                white-space: normal !important;
+                word-wrap: break-word;
             }
 
-            .productpath.breadcrumb {
-                color: white;
-                background-color: #1a3e6f;
-                padding: 10px;
-                margin-bottom: 0px;
+            .drillDown.btn-group button:not(:last-child) {
+                border-right: none; /* Prevent double borders */
             }
 
-            a.prdAnchor {
-                color: white;
+            .drillDown.btn-group button.noborder {
+                border-right: none;
             }
 
-                a.prdAnchor:hover {
-                    color: #199ed8;
-                    text-decoration: none;
-                }
-
-            .drillDown.btn-group button {
-                background-color: #199ed8;
-                border-left: none;
-                border-top: none;
-                border-bottom: none;
-                border-right: 1px solid white;
-                color: white; /* White text */
-                cursor: pointer; /* Pointer/hand icon */
-                float: left; /* Float the buttons side by side */
+            /* Add a background color on hover */
+            .drillDown.btn-group button:hover {
+                background-color: #01AEEF;
+                color: #1a3e6f;
             }
 
-            .drillDown {
-                background-color: #199ed8;
+            .drillDown.btn-group button:focus, .button:active {
+                outline: none !important;
+                background-color: #01AEEF;
             }
 
-                .drillDown.btn-group {
-                    padding-top: 3px;
-                    padding-bottom: 3px;
-                }
+    .noLeftBorder {
+        border-left: none !important;
+    }
 
-                    .drillDown.btn-group button:not(:last-child) {
-                        border-right: none; /* Prevent double borders */
-                    }
+    .prodDrillDownLarge {
+        background-color: #01AEEF;
+        border-bottom: 2px solid #1a3e6f;
+        border-left: 1px solid #ffffff;
+        border-right: none;
+        border-top: none;
+        text-align: center;
+    }
 
-                    .drillDown.btn-group button.noborder {
-                        border-right: none;
-                    }
+        .prodDrillDownLarge p {
+            font-size: 13px;
+            margin-top: 11px;
+            color: #fff;
+        }
 
-                    /* Add a background color on hover */
-                    .drillDown.btn-group button:hover {
-                        background-color: #199ed8;
-                        color: #1a3e6f;
-                    }
-
-                    .drillDown.btn-group button:focus, .button:active {
-                        outline: none !important;
-                        background-color: #199ed8;
-                    }
-
-            .prodDrillDownLarge {
-                background-color: #f3f3f3;
-                border: 1px solid white;
-                text-align: center;
+            .prodDrillDownLarge p:hover {
+                color: #1a3e6f;
             }
 
-                .prodDrillDownLarge p {
-                    font-size: 13px;
-                    margin-top: 11px;
-                }
+    .prodSelected.ui-select-multiple.ui-select-bootstrap {
+        min-height: 100px !important;
+        max-height: 100px !important;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
 
-                    .prodDrillDownLarge p:hover {
-                        color: #199ed8;
-                    }
-        </style>
+    .err-Search {
+        color: #FF6E77;
+        font-size: 12px !important;
+        padding-left: 1px !important;
+        padding-top: 2px !important;
+    }
+
+    .prdBtn {
+        font-size: 13px;
+    }
+
+        .prdBtn.btn-primary {
+            background-color: #01AEEF;
+        }
+
+            .prdBtn.btn-primary:hover {
+                background-color: #01AEEF;
+                color: #1a3e6f;
+            }
+
+            .prdBtn.btn-primary:focus, .btn-primary:active {
+                outline: none !important;
+                background-color: #01AEEF;
+            }
+
+    .prodSelector.modal-body {
+        padding-top: 2px;
+        padding-bottom: 0px;
+        min-height: calc(75vh - 370px);
+        max-height: calc(805vh - 370px);
+        overflow-y: auto;
+    }
+
+    .prodSelector.modal-footer {
+        border-top: none;
+    }
+
+    .prodSelector.modal-header {
+        border-bottom: none;
+        padding-bottom: 0px;
+    }
+
+    .prodSelector.kendoGridHeight {
+        height: calc(85vh - 400px);
+    }
+
+    .prdSelector-modal-window, .modal-dialog {
+        width: 85%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .checkbox-custom {
+        opacity: 0;
+        position: absolute;
+    }
+
+    .checkbox-custom, .checkbox-custom-label {
+        display: inline-block;
+        vertical-align: middle;
+        margin: 5px;
+        cursor: pointer;
+    }
+
+    .checkbox-custom-label {
+        position: relative;
+    }
+
+    .checkbox-custom + .checkbox-custom-label:before {
+        content: '';
+        background: #fff;
+        border: 1.5px solid #eee;
+        border-radius: 4px;
+        display: inline-block;
+        vertical-align: middle;
+        width: 22px;
+        height: 20px;
+        padding: 2px;
+        text-align: center;
+    }
+
+    .checkbox-custom:checked + .checkbox-custom-label:before {
+        background: #01AEEF;
+    }
+
+    .checkbox-custom:hover + .checkbox-custom-label:before {
+        border: 1.5px solid #01AEEF;
+    }
+</style>

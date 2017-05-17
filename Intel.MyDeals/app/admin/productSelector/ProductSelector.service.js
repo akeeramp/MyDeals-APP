@@ -22,8 +22,8 @@
 
         return service;
 
-        function TranslateProducts(products, CUST_CD) {
-            return dataService.post(apiBaseUrl + 'TranslateProducts/' + CUST_CD, products);
+        function TranslateProducts(products, CUST_CD, GEO_MBR_SID) {
+            return dataService.post(apiBaseUrl + 'TranslateProducts/' + CUST_CD + "/" + GEO_MBR_SID, products);
         }
 
         function FetchProducts(products) {
