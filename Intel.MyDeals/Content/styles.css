@@ -300,3 +300,8 @@
     border-style: solid;
     border-color: lightgrey;
 }
+
+.btn-pending {
+    opacity:0.5;
+    
+}

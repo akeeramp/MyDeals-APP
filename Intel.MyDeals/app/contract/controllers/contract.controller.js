@@ -768,10 +768,13 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
             $scope.isAddStrategyBtnHidden = !$scope.isAddStrategyHidden;
             $scope.isSearchHidden = true;
             $scope.isAddPricingTableHidden = true;
+            $scope.isEditPricingTableDefaultsHidden = true;
         }
+        $scope.addStrategyDisabled = false;
 
         // **** PRICING TABLE Methods ****
         //
+        $scope.addTableDisabled = false;
         $scope.addCustomToTemplates = function() {
             angular.forEach($scope.templates.ModelTemplates.PRC_TBL,
                 function(value, key) {
@@ -1370,17 +1373,19 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                     if ($scope.contractData.PRC_ST === undefined) $scope.contractData.PRC_ST = [];
                     $scope.contractData.PRC_ST.push(ps);
                     $scope.showAddPricingTable(ps);
+                    $scope.addStrategyDisabled = false;
                     logger.success("Added Pricing Strategy", ps, "Save Sucessful");
                     topbar.hide();
                     $scope.newStrategy.TITLE = "";
                 },
-                function(result) {
+                function (result) {
+                    $scope.addStrategyDisabled = false;
                     logger.error("Could not create the pricing strategy.", response, response.statusText);
                     topbar.hide();
                 }
             );
         }
-        $scope.customAddPsValidate = function() {
+    $scope.customAddPsValidate = function () {
             var isValid = true;
 
             // Clear all values
@@ -1421,6 +1426,8 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
 
             if (isValid) {
                 $scope.addPricingStrategy();
+            } else {
+                $scope.addStrategyDisabled = false;
             }
         }
 
@@ -1474,6 +1481,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                     //$scope.curPricingTableId = pt.DC_ID;
 
                     logger.success("Added Pricing Table", pt, "Save Sucessful");
+                    $scope.addTableDisabled = false;
                     topbar.hide();
 
                 // load the screen
@@ -1482,6 +1490,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                 }, { reload: true }); // HACK: workaorund for the bug where the "view more options" button is unclickable after saving
             },
             function (response) {
+                $scope.addTableDisabled = false;
                 logger.error("Could not create the pricing table.", response, response.statusText);
                 topbar.hide();
             }
@@ -1520,7 +1529,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                 $scope.updateResults(data.data.PRC_TBL, pt); //?? needed?
 
                 $scope.hideEditPricingTableDefaults();
-
+                $scope.addTableDisabled = false;
                 //$scope.curPricingTable = pt; 
                 //var seeme = $scope.curPricingTable
                 //$scope.curPricingTableId = pt.DC_ID;
@@ -1529,6 +1538,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                 topbar.hide();
             },
             function (response) {
+                $scope.addTableDisabled = false;
                 logger.error("Could not edit the pricing table.", response, response.statusText);
                 topbar.hide();
             }
@@ -1564,6 +1574,8 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
 
         if (isValid) {
             $scope.editPricingTable();
+        } else {
+            $scope.addTableDisabled = false;
         }
     }
 
@@ -1635,6 +1647,8 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
 
             if (isValid) {
                 $scope.addPricingTable();
+            } else {
+                $scope.addTableDisabled = false;
             }
         }
         $scope.newPricingTableExtraLength = function() {
