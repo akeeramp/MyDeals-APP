@@ -49,16 +49,16 @@
                                 <i class="chevron linkable" ng-class="{'intelicon-down': isCollapsed, 'intelicon-right-next': !isCollapsed}"></i>
                             </td>
                             <td style="width: 120px; text-align: center;">
-                                <i class="intelicon-passed-completed-solid bigIcon" style="color: {{ getColorPct(ps.COST_TEST_RESULT) }};" ng-show="ps.COST_TEST_RESULT === 'PASS'" title="{{ps.COST_TEST_RESULT}}"></i>
-                                <i class="intelicon-alert-solid bigIcon" style="color: {{ getColorPct(ps.COST_TEST_RESULT) }};" ng-show="ps.COST_TEST_RESULT === 'FAIL'" title="{{ps.COST_TEST_RESULT}}"></i>
-                                <i class="intelicon-information-solid bigIcon" style="color: {{ getColorPct(ps.COST_TEST_RESULT) }};" ng-show="ps.COST_TEST_RESULT === 'NA'" title="{{ps.COST_TEST_RESULT}}"></i>
-                                <i class="intelicon-help-solid bigIcon" style="color: {{ getColorPct('INCOMPLETE') }};" ng-show="ps.COST_TEST_RESULT !== 'PASS' && ps.COST_TEST_RESULT !== 'FAIL' && ps.COST_TEST_RESULT !== 'NA'" title="{{ps.COST_TEST_RESULT || 'Not run yet'}}"></i>
+                                <i class="intelicon-passed-completed-solid bigIcon" ng-style="getColorStyle(ps.COST_TEST_RESULT)" ng-show="ps.COST_TEST_RESULT === 'PASS'" title="{{ps.COST_TEST_RESULT}}"></i>
+                                <i class="intelicon-alert-solid bigIcon" ng-style="getColorStyle(ps.COST_TEST_RESULT)" ng-show="ps.COST_TEST_RESULT === 'FAIL'" title="{{ps.COST_TEST_RESULT}}"></i>
+                                <i class="intelicon-information-solid bigIcon" ng-style="getColorStyle(ps.COST_TEST_RESULT)" ng-show="ps.COST_TEST_RESULT === 'NA'" title="{{ps.COST_TEST_RESULT}}"></i>
+                                <i class="intelicon-help-solid bigIcon" ng-style="getColorStyle(ps.COST_TEST_RESULT)" ng-show="ps.COST_TEST_RESULT !== 'PASS' && ps.COST_TEST_RESULT !== 'FAIL' && ps.COST_TEST_RESULT !== 'NA'" title="{{ps.COST_TEST_RESULT || 'Not run yet'}}"></i>
                             </td>
                             <td style="width: 120px; text-align: center;">
-                                <i class="intelicon-passed-completed-solid bigIcon" style="color: {{ getColorPct(ps.MEETCOMP_TEST_RESULT) }};" ng-show="ps.MEETCOMP_TEST_RESULT === 'PASS'" title="{{ps.MEETCOMP_TEST_RESULT}}"></i>
-                                <i class="intelicon-alert-solid bigIcon" style="color: {{ getColorPct(ps.MEETCOMP_TEST_RESULT) }};" ng-show="ps.MEETCOMP_TEST_RESULT === 'FAIL'" title="{{ps.MEETCOMP_TEST_RESULT}}"></i>
-                                <i class="intelicon-information-solid bigIcon" style="color: {{ getColorPct(ps.MEETCOMP_TEST_RESULT) }};" ng-show="ps.MEETCOMP_TEST_RESULT === 'NA'" title="{{ps.MEETCOMP_TEST_RESULT}}"></i>
-                                <i class="intelicon-help-solid bigIcon" style="color: {{ getColorPct('INCOMPLETE') }};" ng-show="ps.MEETCOMP_TEST_RESULT !== 'PASS' && ps.MEETCOMP_TEST_RESULT !== 'FAIL' && ps.MEETCOMP_TEST_RESULT !== 'NA'" title="{{ps.MEETCOMP_TEST_RESULT || 'Not run yet'}}"></i>
+                                <i class="intelicon-passed-completed-solid bigIcon" ng-style="getColorStyle(ps.MEETCOMP_TEST_RESULT)" ng-show="ps.MEETCOMP_TEST_RESULT === 'PASS'" title="{{ps.MEETCOMP_TEST_RESULT}}"></i>
+                                <i class="intelicon-alert-solid bigIcon"  ng-style="getColorStyle(ps.MEETCOMP_TEST_RESULT)" ng-show="ps.MEETCOMP_TEST_RESULT === 'FAIL'" title="{{ps.MEETCOMP_TEST_RESULT}}"></i>
+                                <i class="intelicon-information-solid bigIcon"  ng-style="getColorStyle(ps.MEETCOMP_TEST_RESULT)" ng-show="ps.MEETCOMP_TEST_RESULT === 'NA'" title="{{ps.MEETCOMP_TEST_RESULT}}"></i>
+                                <i class="intelicon-help-solid bigIcon"  ng-style="getColorStyle(ps.MEETCOMP_TEST_RESULT)" ng-show="ps.MEETCOMP_TEST_RESULT !== 'PASS' && ps.MEETCOMP_TEST_RESULT !== 'FAIL' && ps.MEETCOMP_TEST_RESULT !== 'NA'" title="{{ps.MEETCOMP_TEST_RESULT || 'Not run yet'}}"></i>
                             </td>
                             <td>
                                 <div ng-bind="ps.TITLE" class="bolder linkable" ng-click="gotoContractEditor(ps)" title="Click to open the Pricing Strategy in the Contract Editor"></div>
@@ -73,16 +73,16 @@
                                     <i class="chevron linkable" style="font-size: 20px; padding-left: 6px;" ng-class="{'intelicon-down': isPtCollapsed, 'intelicon-right-next': !isPtCollapsed}"></i>
                                 </td>
                                 <td style="width: 120px; color: #000000; text-align: center;">
-                                    <i class="intelicon-passed-completed-solid medIcon" style="color: {{ getColorPct(pt.COST_TEST_RESULT) }};" ng-show="pt.COST_TEST_RESULT === 'PASS'" title="{{pt.COST_TEST_RESULT}}"></i>
-                                    <i class="intelicon-alert-solid medIcon" style="color: {{ getColorPct(pt.COST_TEST_RESULT) }};" ng-show="pt.COST_TEST_RESULT === 'FAIL'" title="{{pt.COST_TEST_RESULT}}"></i>
-                                    <i class="intelicon-information-solid medIcon" style="color: {{ getColorPct(pt.COST_TEST_RESULT) }};" ng-show="pt.COST_TEST_RESULT === 'NA'" title="{{pt.COST_TEST_RESULT}}"></i>
-                                    <i class="intelicon-help-solid medIcon" style="color: {{ getColorPct('INCOMPLETE') }};" ng-show="pt.COST_TEST_RESULT !== 'PASS' && pt.COST_TEST_RESULT !== 'FAIL' && pt.COST_TEST_RESULT !== 'NA'" title="{{pt.COST_TEST_RESULT || 'Not run yet'}}"></i>
+                                    <i class="intelicon-passed-completed-solid medIcon" ng-style="getColorStyle(pt.COST_TEST_RESULT)" ng-show="pt.COST_TEST_RESULT === 'PASS'" title="{{pt.COST_TEST_RESULT}}"></i>
+                                    <i class="intelicon-alert-solid medIcon" ng-style="getColorStyle(pt.COST_TEST_RESULT)" ng-show="pt.COST_TEST_RESULT === 'FAIL'" title="{{pt.COST_TEST_RESULT}}"></i>
+                                    <i class="intelicon-information-solid medIcon" ng-style="getColorStyle(pt.COST_TEST_RESULT)" ng-show="pt.COST_TEST_RESULT === 'NA'" title="{{pt.COST_TEST_RESULT}}"></i>
+                                    <i class="intelicon-help-solid medIcon" ng-style="getColorStyle(pt.COST_TEST_RESULT)" ng-show="pt.COST_TEST_RESULT !== 'PASS' && pt.COST_TEST_RESULT !== 'FAIL' && pt.COST_TEST_RESULT !== 'NA'" title="{{pt.COST_TEST_RESULT || 'Not run yet'}}"></i>
                                 </td>
                                 <td style="width: 120px; color: #000000; text-align: center;">
-                                    <i class="intelicon-passed-completed-solid medIcon" style="color: {{ getColorPct(pt.MEETCOMP_TEST_RESULT) }};" ng-show="pt.MEETCOMP_TEST_RESULT === 'PASS'" title="{{pt.MEETCOMP_TEST_RESULT}}"></i>
-                                    <i class="intelicon-alert-solid medIcon" style="color: {{ getColorPct(pt.MEETCOMP_TEST_RESULT) }};" ng-show="pt.MEETCOMP_TEST_RESULT === 'FAIL'" title="{{pt.MEETCOMP_TEST_RESULT}}"></i>
-                                    <i class="intelicon-information-solid medIcon" style="color: {{ getColorPct(pt.MEETCOMP_TEST_RESULT) }};" ng-show="pt.MEETCOMP_TEST_RESULT === 'NA'" title="{{pt.MEETCOMP_TEST_RESULT}}"></i>
-                                    <i class="intelicon-help-solid medIcon" style="color: {{ getColorPct('INCOMPLETE') }};" ng-show="pt.MEETCOMP_TEST_RESULT !== 'PASS' && pt.MEETCOMP_TEST_RESULT !== 'FAIL' && pt.MEETCOMP_TEST_RESULT !== 'NA'" title="{{pt.MEETCOMP_TEST_RESULT || 'Not run yet'}}"></i>
+                                    <i class="intelicon-passed-completed-solid medIcon"  ng-style="getColorStyle(ps.MEETCOMP_TEST_RESULT)" ng-show="pt.MEETCOMP_TEST_RESULT === 'PASS'" title="{{pt.MEETCOMP_TEST_RESULT}}"></i>
+                                    <i class="intelicon-alert-solid medIcon"  ng-style="getColorStyle(ps.MEETCOMP_TEST_RESULT)" ng-show="pt.MEETCOMP_TEST_RESULT === 'FAIL'" title="{{pt.MEETCOMP_TEST_RESULT}}"></i>
+                                    <i class="intelicon-information-solid medIcon"  ng-style="getColorStyle(ps.MEETCOMP_TEST_RESULT)" ng-show="pt.MEETCOMP_TEST_RESULT === 'NA'" title="{{pt.MEETCOMP_TEST_RESULT}}"></i>
+                                    <i class="intelicon-help-solid medIcon"  ng-style="getColorStyle(ps.MEETCOMP_TEST_RESULT)" ng-show="pt.MEETCOMP_TEST_RESULT !== 'PASS' && pt.MEETCOMP_TEST_RESULT !== 'FAIL' && pt.MEETCOMP_TEST_RESULT !== 'NA'" title="{{pt.MEETCOMP_TEST_RESULT || 'Not run yet'}}"></i>
                                 </td>
                                 <td style="width: 30px;"></td>
                                 <td>

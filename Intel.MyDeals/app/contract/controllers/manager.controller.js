@@ -35,6 +35,13 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         }
     }
 
+    $scope.getStageBgColorStyle = function (c) {
+        return { backgroundColor: $scope.getColorStage(c) };
+    }
+    $scope.getColorStyle = function (c) {
+        return { color: $scope.getColorPct(c) };
+    }
+
     $scope.getColor = function (k, c) {
         if (colorDictionary[k] !== undefined && colorDictionary[k][c] !== undefined) {
             return colorDictionary[k][c];

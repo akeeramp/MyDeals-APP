@@ -25,6 +25,13 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
         $scope.pctFilter = tabName === "All" ? "" : tabName;
     }
 
+    $scope.getStageBgColorStyle = function (c) {
+        return { backgroundColor: $scope.getColorStage(c) };
+    }
+    $scope.getColorStyle = function (c) {
+        return { color: $scope.getColorPct(c) };
+    }
+
     $scope.getColor = function (k, c) {
         if (colorDictionary[k] !== undefined && colorDictionary[k][c] !== undefined) {
             return colorDictionary[k][c];
@@ -57,6 +64,23 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
         }
         $scope.isAllCollapsed = !$scope.isAllCollapsed;
     }
+
+    $scope.gotoContractEditor = function (ps, pt) {
+        if (!pt) {
+            $state.go('contract.manager',
+                {
+                    cid: ps.DC_PARENT_ID
+                });
+        }
+
+        $state.go('contract.manager.strategy',
+            {
+                cid: ps.DC_PARENT_ID,
+                sid: ps.DC_ID,
+                pid: pt.DC_ID
+            });
+    }
+
 
     $scope.customFilter = function (ps) {
         return (
