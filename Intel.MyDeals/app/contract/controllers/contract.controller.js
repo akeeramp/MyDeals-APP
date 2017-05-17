@@ -954,7 +954,159 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
             );
             });
         });
-    }
+        }
+
+        function createEntireContractBase(stateName) {
+        	var source = "";
+        	if (stateName === "contract.manager.strategy") source = "PRC_TBL";
+        	if (stateName === "contract.manager.strategy.wip") source = "WIP_DEAL";
+
+        	// sync all detail data sources into main grid datasource for a single save
+        	if ($scope.spreadDs !== undefined) $scope.spreadDs.sync();
+        	//if ($scope.gridDs !== undefined) $scope.gridDs.sync();
+
+        	var sData = $scope.spreadDs === undefined ? undefined : $scope.pricingTableData.PRC_TBL_ROW;
+        	//var gData = $scope.gridDs === undefined ? undefined : $scope.gridDs.data(); // TODO after multi dim... need to see if we can read the variable instead of the source
+
+        	$scope.$broadcast('syncDs');
+
+        	var gData = $scope.wipData;
+
+        	var contractData = $scope._dirtyContractOnly ? [$scope.contractData] : [];
+        	var curPricingTableData = $scope.curPricingTable.DC_ID === undefined ? [] : [$scope.curPricingTable];
+
+        	// Pricing Table Row
+        	if (curPricingTableData.length > 0 && sData != undefined) {
+        		// Only save if a product has been filled out
+        		sData = sData.filter(function (obj) {
+        			return obj.PTR_USER_PRD !== undefined && obj.PTR_USER_PRD !== null && obj.PTR_USER_PRD !== "";
+        		});
+
+        		// find all date fields
+        		var dateFields = [];
+        		var fields = $scope.templates.ModelTemplates.PRC_TBL_ROW[$scope.curPricingTable.OBJ_SET_TYPE_CD].model.fields;
+        		for (var key in fields) {
+        			if (typeof fields[key] !== 'function') {
+        				if (fields[key].type === "date" || key.slice(-3) === "_DT") dateFields.push(key);
+        			}
+        		}
+
+        		for (var s = 0; s < sData.length; s++) {
+        			if (sData[s].DC_ID === null) sData[s].DC_ID = $scope.uid--;
+        			sData[s].DC_PARENT_ID = curPricingTableData[0].DC_ID;
+        			sData[s].dc_type = "PRC_TBL_ROW";
+        			sData[s].dc_parent_type = curPricingTableData[0].dc_type;
+        			sData[s].OBJ_SET_TYPE_CD = curPricingTableData[0].OBJ_SET_TYPE_CD;
+
+        			// fix date formats
+        			for (var d = 0; d < dateFields.length; d++) {
+        				sData[s][dateFields[d]] = moment(sData[s][dateFields[d]]).format("MM/DD/YYYY");
+        			}
+        		}
+        	}
+
+        	// Wip Deal
+        	if (gData !== undefined && gData !== null) {
+        		for (var i = 0; i < gData.length; i++) {
+        			// TODO... this should probably mimic Pricing Table Rows
+        			if (gData[i].DC_ID === null) gData[i].DC_ID = $scope.uid--;
+        		}
+        	}
+
+        	// Contract is Contract + Pricing Strategies + Pricing Tables in heierarchial format
+        	// sData is the raw spreadsheet data
+        	// gData is the raw grid data
+
+        	var modCt = [];
+        	var modPs = [];
+
+        	//if (sData != null) {
+        	//	var greatestPtrIndex = sData.length;
+        	//}
+        	for (var c = 0; c < contractData.length; c++) {
+        		var mCt = {
+
+        		};
+        		Object.keys(contractData[c]).forEach(function (key, index) {
+        			if (key[0] !== '_' && key !== "Customer" && key !== "PRC_ST") mCt[key] = this[key];
+        		},
+                    contractData[c]);
+        		modCt.push(mCt);
+
+        		if (contractData[c]["PRC_ST"] === undefined) contractData[c]["PRC_ST"] = [];
+        		var item = contractData[c]["PRC_ST"];
+        		for (var p = 0; p < item.length; p++) {
+        			var mPs = {
+
+        			};
+        			Object.keys(item[p]).forEach(function (key, index) {
+        				if (key[0] !== '_' && key !== "PRC_TBL") mPs[key] = this[key];
+        			},
+                        item[p]);
+        			modPs.push(mPs);
+        		}
+        	}
+
+
+        	//// Check PricingTableRow validations before we submit to the API
+        	//if (sData !== undefined) {
+        	//	var errorList = [];
+
+        	//	var intA = "A".charCodeAt(0);
+        	//	var finalColLetter = String.fromCharCode(intA + ($scope.templates.ModelTemplates.PRC_TBL_ROW["ECAP"].columns.length - 1)); // TODO: Make this flexible against any ObjType
+        	//	var spreadsheet = $("#pricingTableSpreadsheet").data("kendoSpreadsheet");
+        	//	var sheet = spreadsheet.activeSheet();
+        	//	var cellsStates = sheet.range('A2:' + finalColLetter + (greatestPtrIndex + 1)).getState();
+
+        	//	for (var r in cellsStates.data) {
+        	//		for (var c in cellsStates.data[r]) {
+        	//			if (cellsStates.data[r][c].validation && !cellsStates.data[r][c].validation.value) {
+        	//				var errorMessage = (String.fromCharCode(intA + parseInt(c)) + (parseInt(r) + 2)); // +2 because we start at A2
+        	//				errorList.push(errorMessage);
+        	//			}
+        	//		}
+        	//	}
+
+        	//	//// TODO: uncomment this for UI-side validation once we figure oout the duplicate cell value on error bug
+        	//	//if (errorList.length > 0) {
+        	//	//	alert("TODO: better message. Also show the rows where the error is. Error: You have errors on your spreadsheet you still need to fix");
+        	//	//	console.log(errorList);
+        	//	//	return;
+        	//	//}
+
+        	//	// Get the rows where products are entered
+        	//	// Compare that rowIndex with the greatestRowIndex variable to get the last row where user has enetered data
+        	//	// use that last row to get the range which we will iterate thorugh to find errors
+        	//	//http://docs.telerik.com/kendo-ui/controls/data-management/spreadsheet/how-to/get-flagged-cells
+        	//	//http://dojo.telerik.com/iCola
+        	//}
+
+
+        	return {
+        		"Contract": modCt,
+        		"PricingStrategy": modPs,
+        		"PricingTable": curPricingTableData,
+        		"PricingTableRow": sData === undefined ? [] : sData,
+        		"WipDeals": gData === undefined ? [] : gData,
+        		"EventSource": source
+        	}
+        }
+
+        $scope.validatePricingTable = function (stateName) {
+        	var data = createEntireContractBase(stateName);
+			
+        	objsetService.validatePricingTableRow(data)
+				.then(function (response) {
+					// TODO: Put the data into the Processed Product list column?
+					console.log(response.data);
+					alert("TODO: Do something with the translated product response. Check the console for translated data.");
+				}, function (response) {
+					console.log(response.data);
+					alert("Errors found - TODO: Do something with the translated product response. Check the console for translated data.");
+					logger.error("Unable to translate products.", response, response.statusText);
+				}
+			);
+        }
 
         // **** SAVE CONTRACT Methods ****
         //
@@ -964,137 +1116,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
 
             if (forceValidation === undefined || forceValidation === null) forceValidation = false;
 
-            var source = "";
-            if (stateName === "contract.manager.strategy") source = "PRC_TBL";
-            if (stateName === "contract.manager.strategy.wip") source = "WIP_DEAL";
-
-            // sync all detail data sources into main grid datasource for a single save
-            if ($scope.spreadDs !== undefined) $scope.spreadDs.sync();
-            //if ($scope.gridDs !== undefined) $scope.gridDs.sync();
-
-            var sData = $scope.spreadDs === undefined ? undefined : $scope.pricingTableData.PRC_TBL_ROW;
-            //var gData = $scope.gridDs === undefined ? undefined : $scope.gridDs.data(); // TODO after multi dim... need to see if we can read the variable instead of the source
-
-            $scope.$broadcast('syncDs');
-
-            var gData = $scope.wipData;
-
-            var contractData = $scope._dirtyContractOnly ? [$scope.contractData] : [];
-            var curPricingTableData = $scope.curPricingTable.DC_ID === undefined ? [] : [$scope.curPricingTable];
-
-            // Pricing Table Row
-            if (curPricingTableData.length > 0 && sData != undefined) {
-                // Only save if a product has been filled out
-                sData = sData.filter(function(obj) {
-                    return obj.PTR_USER_PRD !== undefined && obj.PTR_USER_PRD !== null && obj.PTR_USER_PRD !== "";
-                });
-
-                // find all date fields
-                var dateFields = [];
-                var fields = $scope.templates.ModelTemplates.PRC_TBL_ROW[$scope.curPricingTable.OBJ_SET_TYPE_CD].model.fields;
-                for (var key in fields) {
-                    if (typeof fields[key] !== 'function') {
-                        if (fields[key].type === "date" || key.slice(-3) === "_DT") dateFields.push(key);
-                    }
-                }
-
-                for (var s = 0; s < sData.length; s++) {
-                    if (sData[s].DC_ID === null) sData[s].DC_ID = $scope.uid--;
-                    sData[s].DC_PARENT_ID = curPricingTableData[0].DC_ID;
-                    sData[s].dc_type = "PRC_TBL_ROW";
-                    sData[s].dc_parent_type = curPricingTableData[0].dc_type;
-                    sData[s].OBJ_SET_TYPE_CD = curPricingTableData[0].OBJ_SET_TYPE_CD;
-
-                    // fix date formats
-                    for (var d = 0; d < dateFields.length; d++) {
-                        sData[s][dateFields[d]] = moment(sData[s][dateFields[d]]).format("MM/DD/YYYY");
-                    }
-                }
-            }
-
-            // Wip Deal
-            if (gData !== undefined && gData !== null) {
-                for (var i = 0; i < gData.length; i++) {
-                    // TODO... this should probably mimic Pricing Table Rows
-                    if (gData[i].DC_ID === null) gData[i].DC_ID = $scope.uid--;
-                }
-            }
-
-            // Contract is Contract + Pricing Strategies + Pricing Tables in heierarchial format
-            // sData is the raw spreadsheet data
-            // gData is the raw grid data
-
-            var modCt = [];
-            var modPs = [];
-
-            var greatestPtrIndex = sData.length;
-            for (var c = 0; c < contractData.length; c++) {
-                var mCt = {
-            
-                };
-                Object.keys(contractData[c]).forEach(function(key, index) {
-                        if (key[0] !== '_' && key !== "Customer" && key !== "PRC_ST") mCt[key] = this[key];
-                    },
-                    contractData[c]);
-                modCt.push(mCt);
-
-                if (contractData[c]["PRC_ST"] === undefined) contractData[c]["PRC_ST"] = [];
-                var item = contractData[c]["PRC_ST"];
-                for (var p = 0; p < item.length; p++) {
-                    var mPs = {
-                
-                    };
-                    Object.keys(item[p]).forEach(function(key, index) {
-                            if (key[0] !== '_' && key !== "PRC_TBL") mPs[key] = this[key];
-                        },
-                        item[p]);
-                    modPs.push(mPs);
-                }
-            }
-
-
-    	// Check PricingTableRow validations before we submit to the API
-        if (sData !== undefined) {
-        	var errorList = [];
-
-        	var intA = "A".charCodeAt(0);
-        	var finalColLetter = String.fromCharCode(intA + ($scope.templates.ModelTemplates.PRC_TBL_ROW["ECAP"].columns.length - 1)); // TODO: Make this flexible against any ObjType
-        	var spreadsheet = $("#pricingTableSpreadsheet").data("kendoSpreadsheet");
-        	var sheet = spreadsheet.activeSheet();
-        	var cellsStates = sheet.range('A2:' +finalColLetter + (greatestPtrIndex + 1)).getState();
-
-        	for (var r in cellsStates.data) {
-        		for (var c in cellsStates.data[r]) {
-        			if (cellsStates.data[r][c].validation && !cellsStates.data[r][c].validation.value) {
-        				var errorMessage = (String.fromCharCode(intA + parseInt(c)) + (parseInt(r) + 2)); // +2 because we start at A2
-        				errorList.push(errorMessage);
-        			}
-        		}
-        	}
-			
-			//// TODO: uncomment this for UI-side validation once we figure oout the duplicate cell value on error bug
-        	//if (errorList.length > 0) {
-        	//	alert("TODO: better message. Also show the rows where the error is. Error: You have errors on your spreadsheet you still need to fix");
-        	//	console.log(errorList);
-        	//	return;
-			//}
-			
-        	// Get the rows where products are entered
-        	// Compare that rowIndex with the greatestRowIndex variable to get the last row where user has enetered data
-        	// use that last row to get the range which we will iterate thorugh to find errors
-        	//http://docs.telerik.com/kendo-ui/controls/data-management/spreadsheet/how-to/get-flagged-cells
-        	//http://dojo.telerik.com/iCola
-		}
-
-
-        var data = {
-            "Contract": modCt,
-            "PricingStrategy": modPs,
-            "PricingTable": curPricingTableData,
-            "PricingTableRow": sData === undefined ? [] : sData,
-            "WipDeals": gData === undefined ? [] : gData,
-            "EventSource": source
-        }
+            var data = createEntireContractBase(stateName);
 
             $scope.isSaving = true;
 
@@ -1135,7 +1157,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
 
                 },
                 function(response) {
-                    $scope.isSaving = false;
+                    $scope.isSaving = false; 
                     logger.error("Could not save the contract.", response, response.statusText);
                     topbar.hide();
                 }

@@ -226,9 +226,10 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.PTR_SYS_PRD,
 				Label = "System Products",
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                IsReadOnly = true,
-                IsHidden = false,
 				Width = 220
+				//// This is how it should be set once the product selector is in place:
+				//IsReadOnly = true,
+				//IsHidden = true,
 			});
 			items.Add(new UiTemplateContainerItem
 			{
@@ -240,10 +241,6 @@ namespace Intel.MyDeals.DataLibrary
 				//LookupText = "DROP_DOWN",
 				//LookupValue = "DROP_DOWN"
 			});
-			// This is how it should be set once the product selector is in place
-			//IsReadOnly = true,
-			//IsHidden = true,
-
 			items.Add(new UiTemplateContainerItem
             {
                 Id = 29,

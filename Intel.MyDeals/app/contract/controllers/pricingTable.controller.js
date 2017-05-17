@@ -21,7 +21,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 	vm.getColumns = getColumns;
 	$scope.openProductSelector = openProductSelector;
 	$scope.openInfoDialog = openInfoDialog;
-	$scope.validatePricingTable = validatePricingTable;
 
 	// Variables
 	var root = $scope.$parent.$parent;	// Access to parent scope
@@ -943,39 +942,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 		}
 	}, true);
 
-
-	function validatePricingTable() {
-		// sync spreadsheet data0
-		if ($scope.spreadDs !== undefined) $scope.spreadDs.sync();
-		var sData = $scope.spreadDs === undefined ? undefined : $scope.pricingTableData.PRC_TBL_ROW;
-
-		var prdList = [];
-		// Get products as list of string
-		for (var i = 0; i < sData.length; i++) {
-			prdList.push(
-				{
-					USR_INPUT: sData[i].PTR_USER_PRD
-					, PRD_ATRB_SID: productLevel.PRD_ATRB_SID
-					, PRD_SELC_LVL: productLevel.PRD_SELC_LVL
-					, EXCLUDE: ""
-					, FILTER: ""
-					, START_DATE: sData[i].START_DT
-					, END_DATE: sData[i].END_DT
-				}
-			);
-		}
-
-		// Send to API
-		ProductSelectorService.TranslateProducts(prdList)
-			.then(function (response) {
-				// TODO: Put the data into the Processed Product list column?
-				console.log(response.data);
-				alert("TODO: Do something with the translated product response. Check the console for translated data.");
-			}, function (response) {
-				logger.error("Unable to translate products.", response, response.statusText);
-			}
-		);
-	}
 	
 	// TODO: Product Selector dialog box below
 	kendo.spreadsheet.registerEditor("cellProductSelector", function () {

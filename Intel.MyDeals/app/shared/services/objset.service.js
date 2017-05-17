@@ -29,6 +29,8 @@ function objsetService($http, dataService, logger, $q) {
         updatePricingTable: updatePricingTable,
         deletePricingTable: deletePricingTable,
 
+        validatePricingTableRow: validatePricingTableRow,
+
         updateContractAndCurPricingTable: updateContractAndCurPricingTable,
         readContractStatus: readContractStatus,
         actionPricingStrategy: actionPricingStrategy,
@@ -85,7 +87,10 @@ function objsetService($http, dataService, logger, $q) {
         return dataService.post(apiBasePricingTableUrl + 'DeletePricingTable/' + custId, [pt]);
     }
 
-
+	// #### PRICING TABLE ROW ####
+    function validatePricingTableRow(data) {
+    	return dataService.post(apiBaseContractUrl + 'ValidatePricingTableRows/', data);
+    }
 
     // #### CONTRACT CRUD ####
 
