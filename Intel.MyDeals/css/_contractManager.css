@@ -466,24 +466,26 @@
         color: #ffffff;
         background: #00AEEF;
     }
-    .valid_True {
+
+    .valid_Valid {
         background: #C4D600;
     }
-    .valid_False {
-        background: #ED1C24;
+    .valid_Published {
+        background: #0071C5;
         color: #ffffff;
     }
-    .valid_ {
-        background: #FFA300;
+    .valid_, .valid_Dirty {
+        background: #cccccc;
     }
-    .validf_True, .validf_true {
+
+    .validf_Valid {
         color: #C4D600;
     }
-    .validf_False, .validf_false {
-        color: #ED1C24;
+    .validf_Published {
+        color: #0071C5;
     }
-    .validf_ {
-        color: #FFA300;
+    .validf_, .validf_Dirty {
+        color: #cccccc;
     }
  
     .psNav {

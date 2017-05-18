@@ -114,6 +114,7 @@
     <Compile Include="Op Future Items\OpCommonTools.cs" />
     <Compile Include="OpLog.cs" />
     <Compile Include="OpUserStack.cs" />
+    <Compile Include="PassedValidation.cs" />
     <Compile Include="ProdMapping.cs" />
     <Compile Include="ProdMappings.cs" />
     <Compile Include="ProductHash.cs" />

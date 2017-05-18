@@ -439,7 +439,7 @@ namespace Intel.MyDeals.BusinessLogic
             return opMsgQueue;
         }
 
-        public static bool ValidationApplyRules(this MyDealsData myDealsData, bool forceValidation = false)
+        public static bool ValidationApplyRules(this MyDealsData myDealsData, bool forceValidation, bool forcePublish)
         {
             // Apply rules to save packets here.  If validations are hit, append them to the DC and packet message lists.
             bool dataHasValidationErrors = false;
@@ -480,11 +480,13 @@ namespace Intel.MyDeals.BusinessLogic
 
                     if (forceValidation && !dcHasErrors)
                     {
-                        dc.SetDataElementValue(AttributeCodes.PASSED_VALIDATION, true);
+                        // only force publish to PTR
+                        PassedValidation passedValidation = forcePublish ? PassedValidation.Published : PassedValidation.Valid;
+                        dc.SetDataElementValue(AttributeCodes.PASSED_VALIDATION, passedValidation.ToString());
                     }
                     else if (dc.IsModified)
                     {
-                        dc.SetDataElementValue(AttributeCodes.PASSED_VALIDATION, false);
+                        dc.SetDataElementValue(AttributeCodes.PASSED_VALIDATION, PassedValidation.Dirty);
                     }
                 }
             }

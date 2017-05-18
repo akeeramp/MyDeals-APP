@@ -1,14 +1,30 @@
-﻿<div></div>
+﻿
+<div class="contractTitleDiv">
+    <div class="fl lightBlue">{{contractData.DC_ID}}</div>
+    <div class="fl">{{contractData.TITLE}}</div>
+    <div class="fr">{{contractData.WF_STG_CD}}</div>
+</div>
 
 <style>
-
+    .lightBlue {
+        color: #00AEEF;
+        margin-right: 10px;
+    }
+    .contractTitleDiv{
+        margin: 10px 18px; 
+        background-color: #eeeeee; 
+        height: 30px;
+        padding: 4px 10px; 
+        font-size: 16px;
+        font-weight: 600;
+    }
     #contractContainerWrapper {
-        padding: 0;
+        padding: 50px 0 0 0;
         overflow: hidden;
     }
     #contractHeader {
-        height: 0;
-        margin-top: 0;
+        height: 50px;
+        margin-top: -50px;
         border-bottom: 0 solid #eeeeee;
         padding: 2px;
         background-color: #ffffff;

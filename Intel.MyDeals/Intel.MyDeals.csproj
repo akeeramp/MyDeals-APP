@@ -311,6 +311,8 @@
     <Content Include="app\contract\controllers\manager.controller.js" />
     <Content Include="app\contract\controllers\datePickerModalCtrl.controller.js" />
     <Content Include="app\contract\controllers\multiSelectModalCtrl.controller.js" />
+    <Content Include="app\contract\controllers\allDeals.controller.js" />
+    <Content Include="app\contract\partials\contractSummaryDeals.html" />
     <Content Include="app\contract\partials\datePickerModal.html" />
     <Content Include="app\contract\partials\contractSummaryPct.html" />
     <Content Include="app\contract\partials\contractSummaryDealType.html" />

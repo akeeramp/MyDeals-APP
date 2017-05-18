@@ -33,6 +33,7 @@ function objsetService($http, dataService, logger, $q) {
 
         updateContractAndCurPricingTable: updateContractAndCurPricingTable,
         readContractStatus: readContractStatus,
+        readWipFromContract: readWipFromContract,
         actionPricingStrategy: actionPricingStrategy,
         actionPricingStrategies: actionPricingStrategies
     }
@@ -94,8 +95,10 @@ function objsetService($http, dataService, logger, $q) {
 
     // #### CONTRACT CRUD ####
 
-    function updateContractAndCurPricingTable(custId, data, forceValidation) {
-        if (forceValidation) {
+    function updateContractAndCurPricingTable(custId, data, forceValidation, forcePublish) {
+        if (forceValidation && forcePublish) {
+            return dataService.post(apiBaseContractUrl + "SaveAndValidateAndPublishContractAndPricingTable/" + custId, data);
+        } else if (forceValidation) {
             return dataService.post(apiBaseContractUrl + "SaveAndValidateContractAndPricingTable/" + custId, data);
         } else {
             return dataService.post(apiBaseContractUrl + "SaveContractAndPricingTable/" + custId, data);
@@ -103,6 +106,9 @@ function objsetService($http, dataService, logger, $q) {
     }
     function readContractStatus(id) {
         return dataService.get(apiBaseContractUrl + 'GetContractStatus/' + id);
+    }
+    function readWipFromContract(id) {
+        return dataService.get(apiBaseContractUrl + 'GetWipFromContract/' + id);
     }
 
 

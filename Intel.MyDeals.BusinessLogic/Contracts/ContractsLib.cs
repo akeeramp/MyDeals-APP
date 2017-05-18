@@ -104,14 +104,15 @@ namespace Intel.MyDeals.BusinessLogic
         /// <param name="data"></param>
         /// <param name="custId">Must pass the customer id to prevent blocking</param>
         /// <param name="forceValidation"></param>
+        /// <param name="forcePublish"></param>
         /// <returns>MyDealsData</returns>
-        public OpDataCollectorFlattenedDictList SaveContract(OpDataCollectorFlattenedList data, int custId, bool forceValidation = false)
+        public OpDataCollectorFlattenedDictList SaveContract(OpDataCollectorFlattenedList data, int custId, bool forceValidation, bool forcePublish)
         {
             // Save Data Cycle: Point 1
             return _dataCollectorLib.SavePackets(new OpDataCollectorFlattenedDictList
             {
                 [OpDataElementType.CNTRCT] = data
-            }, custId, forceValidation).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
+            }, custId, forceValidation, forcePublish).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
         }
 
         /// <summary>
@@ -124,6 +125,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <param name="wipDeals">Wip Deals collection</param>
         /// <param name="custId">Must pass the customer id to prevent blocking</param>
         /// <param name="forceValidation"></param>
+        /// <param name="forcePublish"></param>
         /// <returns>MyDealsData</returns>
         public MyDealsData SaveContract(
             OpDataCollectorFlattenedList contracts,
@@ -132,7 +134,8 @@ namespace Intel.MyDeals.BusinessLogic
             OpDataCollectorFlattenedList pricingTableRows,
             OpDataCollectorFlattenedList wipDeals,
             int custId,
-            bool forceValidation = false)
+            bool forceValidation,
+            bool forcePublish)
         {
             OpDataCollectorFlattenedDictList data = new OpDataCollectorFlattenedDictList();
 
@@ -142,10 +145,10 @@ namespace Intel.MyDeals.BusinessLogic
             if (pricingTableRows != null && pricingTableRows.Any()) data[OpDataElementType.PRC_TBL_ROW] = pricingTableRows;
             if (wipDeals != null && wipDeals.Any()) data[OpDataElementType.WIP_DEAL] = wipDeals;
 
-            return _dataCollectorLib.SavePackets(data, custId, forceValidation);
+            return _dataCollectorLib.SavePackets(data, custId, forceValidation, forcePublish);
         }
 
-        public OpDataCollectorFlattenedDictList SaveFullContract(int custId, OpDataCollectorFlattenedDictList fullContracts, bool forceValidation = false)
+        public OpDataCollectorFlattenedDictList SaveFullContract(int custId, OpDataCollectorFlattenedDictList fullContracts, bool forceValidation, bool forcePublish)
         {
             return SaveContract(
                 fullContracts.ContainsKey(OpDataElementType.CNTRCT) ? fullContracts[OpDataElementType.CNTRCT] : new OpDataCollectorFlattenedList(),
@@ -153,10 +156,10 @@ namespace Intel.MyDeals.BusinessLogic
                 fullContracts.ContainsKey(OpDataElementType.PRC_TBL) ? fullContracts[OpDataElementType.PRC_TBL] : new OpDataCollectorFlattenedList(),
                 fullContracts.ContainsKey(OpDataElementType.PRC_TBL_ROW) ? fullContracts[OpDataElementType.PRC_TBL_ROW] : new OpDataCollectorFlattenedList(),
                 fullContracts.ContainsKey(OpDataElementType.WIP_DEAL) ? fullContracts[OpDataElementType.WIP_DEAL] : new OpDataCollectorFlattenedList(),
-                custId, forceValidation).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
+                custId, forceValidation, forcePublish).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
         }
 
-        public OpDataCollectorFlattenedDictList SaveContractAndPricingTable(int custId, ContractTransferPacket contractAndStrategy, bool forceValidation)
+        public OpDataCollectorFlattenedDictList SaveContractAndPricingTable(int custId, ContractTransferPacket contractAndStrategy, bool forceValidation, bool forcePublish)
         {
             OpDataCollectorFlattenedList translatedFlattenedList = new OpDataCollectorFlattenedList();
 
@@ -164,11 +167,16 @@ namespace Intel.MyDeals.BusinessLogic
             bool isPrcTblSource = contractAndStrategy.EventSource == OpDataElementType.PRC_TBL.ToString();
             bool isWipDealSource = contractAndStrategy.EventSource == OpDataElementType.WIP_DEAL.ToString();
 
-            if (isPrcTblSource)
+            if (forcePublish)
             {
-                translatedFlattenedList = contractAndStrategy.PricingTableRow.TranslateToWip();
-            } else if (isWipDealSource) {
-                translatedFlattenedList = contractAndStrategy.WipDeals.TranslateToPrcTbl();
+                if (isPrcTblSource)
+                {
+                    translatedFlattenedList = contractAndStrategy.PricingTableRow.TranslateToWip();
+                }
+                else if (isWipDealSource)
+                {
+                    translatedFlattenedList = contractAndStrategy.WipDeals.TranslateToPrcTbl();
+                }
             }
 
             return SaveContract(
@@ -178,7 +186,8 @@ namespace Intel.MyDeals.BusinessLogic
                 isWipDealSource ? translatedFlattenedList : contractAndStrategy.PricingTableRow,
                 isPrcTblSource ? translatedFlattenedList : contractAndStrategy.WipDeals,
                 custId,
-                forceValidation).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
+                forceValidation,
+                forcePublish).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
         }
 
         public OpMsg DeleteContract(int id)
@@ -239,6 +248,69 @@ namespace Intel.MyDeals.BusinessLogic
             }
 
             return rtn;
+        }
+
+        public OpDataCollectorFlattenedDictList GetWipFromContract(int id)
+        {
+            List<OpDataElementType> opDataElementTypes = new List<OpDataElementType>
+            {
+                OpDataElementType.WIP_DEAL
+            };
+
+            List<int> atrbs = new List<int>
+            {
+                Attributes.BACK_DATE_RSN.ATRB_SID,
+                Attributes.BACK_DATE_RSN_TXT.ATRB_SID,
+                Attributes.CAP.ATRB_SID,
+                Attributes.CAP_END_DT.ATRB_SID,
+                Attributes.CAP_STRT_DT.ATRB_SID,
+                Attributes.COMPETITIVE_PRICE.ATRB_SID,
+                Attributes.COMP_BENCH.ATRB_SID,
+                Attributes.COMP_SKU.ATRB_SID,
+                Attributes.COMP_SKU_OTHR.ATRB_SID,
+                Attributes.COMP_TARGET_SYSTEM_PRICE.ATRB_SID,
+                Attributes.CONSUMPTION_REASON.ATRB_SID,
+                Attributes.CONSUMPTION_REASON_CMNT.ATRB_SID,
+                Attributes.COST_TEST_FAIL_OVERRIDE.ATRB_SID,
+                Attributes.COST_TEST_FAIL_OVERRIDE_REASON.ATRB_SID,
+                Attributes.COST_TEST_RESULT.ATRB_SID,
+                Attributes.COST_TYPE_USED.ATRB_SID,
+                Attributes.DEAL_COMB_TYPE.ATRB_SID,
+                Attributes.ECAP_FLR.ATRB_SID,
+                Attributes.ECAP_PRICE.ATRB_SID,
+                Attributes.ECAP_TYPE.ATRB_SID,
+                Attributes.END_DT.ATRB_SID,
+                Attributes.GEO_COMBINED.ATRB_SID,
+                Attributes.IA_BENCH.ATRB_SID,
+                Attributes.MEETCOMP_TEST_FAIL_OVERRIDE.ATRB_SID,
+                Attributes.MEETCOMP_TEST_FAIL_OVERRIDE_REASON.ATRB_SID,
+                Attributes.MEETCOMP_TEST_RESULT.ATRB_SID,
+                Attributes.MEET_COMP_PRICE_QSTN.ATRB_SID,
+                Attributes.MRKT_SEG.ATRB_SID,
+                Attributes.OBJ_SET_TYPE_CD.ATRB_SID,
+                Attributes.PASSED_VALIDATION.ATRB_SID,
+                Attributes.PAYOUT_BASED_ON.ATRB_SID,
+                Attributes.PRD_COST.ATRB_SID,
+                Attributes.PRODUCT_FILTER.ATRB_SID,
+                Attributes.PROGRAM_PAYMENT.ATRB_SID,
+                Attributes.PTR_USER_PRD.ATRB_SID,
+                Attributes.RETAIL_CYCLE.ATRB_SID,
+                Attributes.RETAIL_PULL.ATRB_SID,
+                Attributes.RETAIL_PULL_USR_DEF.ATRB_SID,
+                Attributes.RETAIL_PULL_USR_DEF_CMNT.ATRB_SID,
+                Attributes.START_DT.ATRB_SID,
+                Attributes.TERMS.ATRB_SID,
+                Attributes.TITLE.ATRB_SID,
+                Attributes.TRGT_RGN.ATRB_SID,
+                Attributes.VOLUME.ATRB_SID,
+                Attributes.WF_STG_CD.ATRB_SID,
+                Attributes.YCS2_END_DT.ATRB_SID,
+                Attributes.YCS2_OVERLAP_OVERRIDE.ATRB_SID,
+                Attributes.YCS2_PRC_IRBT.ATRB_SID,
+                Attributes.YCS2_START_DT.ATRB_SID,
+            };
+
+            return OpDataElementType.CNTRCT.GetByIDs(new List<int> { id }, opDataElementTypes, atrbs).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted, true);
         }
 
     }

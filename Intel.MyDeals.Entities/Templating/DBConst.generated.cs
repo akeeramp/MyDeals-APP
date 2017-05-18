@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 5/11/2017 10:48:45 AM
+File Updated: 5/17/2017 10:22:01 PM
 On: PWECKENR-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -370,6 +370,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Object
 		///</summary>
 		public const string CPU_PACKAGE = "CPU_PACKAGE";
+
+		///<summary>
+		/// DIM_SID: 7
+		/// DIM_CD: PRD
+		/// ATRB_SID: 7086
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.Object
+		///</summary>
+		public const string CPU_PROCESSOR_NUMBER = "CPU_PROCESSOR_NUMBER";
 
 		///<summary>
 		/// DIM_SID: 7
@@ -831,6 +840,15 @@ namespace Intel.MyDeals.Entities {
 		public const string FSE_APPROVED_PRICE = "FSE_APPROVED_PRICE";
 
 		///<summary>
+		/// DIM_SID: 7
+		/// DIM_CD: PRD
+		/// ATRB_SID: 7084
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.Object
+		///</summary>
+		public const string GDM_BRND_NM = "GDM_BRND_NM";
+
+		///<summary>
 		/// DIM_SID: 2
 		/// DIM_CD: CUST
 		/// ATRB_SID: 2022
@@ -838,6 +856,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Object
 		///</summary>
 		public const string GDM_CUST_DIV_NM = "GDM_CUST_DIV_NM";
+
+		///<summary>
+		/// DIM_SID: 7
+		/// DIM_CD: PRD
+		/// ATRB_SID: 7085
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.Object
+		///</summary>
+		public const string GDM_FMLY_NM = "GDM_FMLY_NM";
 
 		///<summary>
 		/// DIM_SID: 7
@@ -1230,8 +1257,8 @@ namespace Intel.MyDeals.Entities {
 		/// DIM_SID: 3
 		/// DIM_CD: DEAL
 		/// ATRB_SID: 3668
-		/// TGT_COL_TYPE: INT
-		/// DOT_NET_DATA_TYPE: System.Boolean
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
 		///</summary>
 		public const string PASSED_VALIDATION = "PASSED_VALIDATION";
 
@@ -1754,6 +1781,30 @@ namespace Intel.MyDeals.Entities {
 
 
 		///<summary>
+		/// ACTN_SID: 196
+		/// SRT_ORD: 1600
+		/// Calculate CAP MSP
+		///</summary>
+		public const string CALC_MSP = "CALC_MSP";
+
+
+		///<summary>
+		/// ACTN_SID: 210
+		/// SRT_ORD: 1200
+		/// Roll the deal details back to the last valid active tracker state
+		///</summary>
+		public const string DEAL_ROLLBACK_TO_ACTIVE = "DEAL_ROLLBACK_TO_ACTIVE";
+
+
+		///<summary>
+		/// ACTN_SID: 212
+		/// SRT_ORD: 1400
+		/// Generate a tracker number
+		///</summary>
+		public const string GEN_TRACKER = "GEN_TRACKER";
+
+
+		///<summary>
 		/// ACTN_SID: 213
 		/// SRT_ORD: 3200
 		/// DB Returned Action to execute object ID change
@@ -1786,11 +1837,35 @@ namespace Intel.MyDeals.Entities {
 
 
 		///<summary>
+		/// ACTN_SID: 218
+		/// SRT_ORD: 2400
+		/// Execute Cost Test calls
+		///</summary>
+		public const string RUN_COST_TEST = "RUN_COST_TEST";
+
+
+		///<summary>
 		/// ACTN_SID: 221
 		/// SRT_ORD: 600
 		/// UI Generated Action to initiate a save object action
 		///</summary>
 		public const string SAVE = "SAVE";
+
+
+		///<summary>
+		/// ACTN_SID: 223
+		/// SRT_ORD: 2100
+		/// Either push to or pull from snapshot as needed; push to snapshot on deal save
+		///</summary>
+		public const string SNAPSHOT = "SNAPSHOT";
+
+
+		///<summary>
+		/// ACTN_SID: 216
+		/// SRT_ORD: 1800
+		/// Sync Deals from WIP Deals
+		///</summary>
+		public const string SYNC_DEALS = "SYNC_DEALS";
 
 	}
 
@@ -1897,11 +1972,17 @@ namespace Intel.MyDeals.Entities {
 		public const string ATRB_REQUIRED = "ATRB_REQUIRED";
 		public const string C_VIEW_QUOTE_LETTER = "C_VIEW_QUOTE_LETTER";
 		public const string ATRB_DELETED = "ATRB_DELETED";
+		public const string CALC_MSP = "CALC_MSP";
 		public const string OBJ_DELETE = "OBJ_DELETE";
 		public const string OBJ_DELETED = "OBJ_DELETED";
+		public const string DEAL_ROLLBACK_TO_ACTIVE = "DEAL_ROLLBACK_TO_ACTIVE";
+		public const string GEN_TRACKER = "GEN_TRACKER";
 		public const string ID_CHANGE = "ID_CHANGE";
 		public const string MESSAGE = "MESSAGE";
+		public const string SYNC_DEALS = "SYNC_DEALS";
+		public const string RUN_COST_TEST = "RUN_COST_TEST";
 		public const string SAVE = "SAVE";
+		public const string SNAPSHOT = "SNAPSHOT";
 		public const string CAN_VIEW_COST_TEST = "CAN_VIEW_COST_TEST";
 		public const string CAN_VIEW_MEET_COMP = "CAN_VIEW_MEET_COMP";
 		public const string C_VERTCL_BASED = "C_VERTCL_BASED";

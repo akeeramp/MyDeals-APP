@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 5/9/2017 6:26:25 PM
+File Updated: 5/17/2017 10:22:06 PM
 On: PWECKENR-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -2070,15 +2070,15 @@ namespace Intel.MyDeals.Entities {
 			ATRB_COL_NM = "PASSED_VALIDATION",
 			ATRB_DESC = "Passed Validation",
 			ATRB_LBL = "Passed Validation",
-			ATRB_MAX_LEN = 1,
+			ATRB_MAX_LEN = 10,
 			ATRB_SID = 3668,
-			DATA_TYPE_CD = "BIT",
+			DATA_TYPE_CD = "VARCHAR",
 			DIM_CD = "DEAL",
 			DIM_SID = 3,
-			DOT_NET_DATA_TYPE = "System.Boolean",
+			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			TGT_COL_TYPE = "INT",
-			UI_TYPE_CD = "CheckBox"
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "TextBox"
 		};
 		public static MyDealsAttribute PAYOUT_BASED_ON = new MyDealsAttribute()
 		{

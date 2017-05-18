@@ -54,6 +54,23 @@
                     }
                 }
             }, {
+                state: 'contract.deals',
+                config: {
+                    url: '/deals',
+                    views: {
+                        'lnavView': {
+                            templateUrl: '/app/contract/partials/lnavSummary.html'
+                        },
+                        'contractHeaderView': {
+                            templateUrl: '/app/contract/partials/contractSummaryHeader.html'
+                        },
+                        'contractWrapperView': {
+                            templateUrl: '/app/contract/partials/contractSummaryDeals.html',
+                            controller: 'AllDealsController'
+                        }
+                    }
+                }
+            }, {
                 state: 'contract.summary',
                 config: {
                     url: '/summary',

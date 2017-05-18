@@ -561,7 +561,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                     event.preventDefault();
 
                     // async save data
-                    $scope.saveEntireContractBase(fromState.name, false, toState, toParams);
+                    $scope.saveEntireContractBase(fromState.name, false, false, toState.name, toParams);
                 }
             });
 
@@ -959,10 +959,19 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
         });
         }
 
-        function createEntireContractBase(stateName) {
-        	var source = "";
-        	if (stateName === "contract.manager.strategy") source = "PRC_TBL";
-        	if (stateName === "contract.manager.strategy.wip") source = "WIP_DEAL";
+        // **** SAVE CONTRACT Methods ****
+        //
+        $scope.saveEntireContractBase = function (stateName, forceValidation, forcePublish, toState, toParams) {
+            // async save data
+
+            topbar.show();
+
+            if (forceValidation === undefined || forceValidation === null) forceValidation = false;
+            if (forcePublish === undefined || forcePublish === null) forcePublish = false;
+
+            var source = "";
+            if (stateName === "contract.manager.strategy") source = "PRC_TBL";
+            if (stateName === "contract.manager.strategy.wip") source = "WIP_DEAL";
 
         	// sync all detail data sources into main grid datasource for a single save
         	if ($scope.spreadDs !== undefined) $scope.spreadDs.sync();
@@ -1023,52 +1032,37 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
         	var modCt = [];
         	var modPs = [];
 
-        	//if (sData != null) {
-        	//	var greatestPtrIndex = sData.length;
-        	//}
-        	for (var c = 0; c < contractData.length; c++) {
-        		var mCt = {
-
-        		};
-        		Object.keys(contractData[c]).forEach(function (key, index) {
-        			if (key[0] !== '_' && key !== "Customer" && key !== "PRC_ST") mCt[key] = this[key];
-        		},
+            var greatestPtrIndex = sData === undefined ? 0 : sData.length;
+            for (var c = 0; c < contractData.length; c++) {
+                var mCt = {};
+                Object.keys(contractData[c]).forEach(function(key, index) {
+                        if (key[0] !== '_' && key !== "Customer" && key !== "PRC_ST") mCt[key] = this[key];
+                    },
                     contractData[c]);
         		modCt.push(mCt);
 
-        		if (contractData[c]["PRC_ST"] === undefined) contractData[c]["PRC_ST"] = [];
-        		var item = contractData[c]["PRC_ST"];
-        		for (var p = 0; p < item.length; p++) {
-        			var mPs = {
-
-        			};
-        			Object.keys(item[p]).forEach(function (key, index) {
-        				if (key[0] !== '_' && key !== "PRC_TBL") mPs[key] = this[key];
-        			},
+                if (contractData[c]["PRC_ST"] === undefined) contractData[c]["PRC_ST"] = [];
+                var item = contractData[c]["PRC_ST"];
+                for (var p = 0; p < item.length; p++) {
+                    var mPs = {};
+                    Object.keys(item[p]).forEach(function(key, index) {
+                            if (key[0] !== '_' && key !== "PRC_TBL") mPs[key] = this[key];
+                        },
                         item[p]);
         			modPs.push(mPs);
         		}
         	}
 
 
-        	//// Check PricingTableRow validations before we submit to the API
-        	//if (sData !== undefined) {
-        	//	var errorList = [];
+    	    // Check PricingTableRow validations before we submit to the API
+            if (sData !== undefined) {
+        	    var errorList = [];
 
-        	//	var intA = "A".charCodeAt(0);
-        	//	var finalColLetter = String.fromCharCode(intA + ($scope.templates.ModelTemplates.PRC_TBL_ROW["ECAP"].columns.length - 1)); // TODO: Make this flexible against any ObjType
-        	//	var spreadsheet = $("#pricingTableSpreadsheet").data("kendoSpreadsheet");
-        	//	var sheet = spreadsheet.activeSheet();
-        	//	var cellsStates = sheet.range('A2:' + finalColLetter + (greatestPtrIndex + 1)).getState();
-
-        	//	for (var r in cellsStates.data) {
-        	//		for (var c in cellsStates.data[r]) {
-        	//			if (cellsStates.data[r][c].validation && !cellsStates.data[r][c].validation.value) {
-        	//				var errorMessage = (String.fromCharCode(intA + parseInt(c)) + (parseInt(r) + 2)); // +2 because we start at A2
-        	//				errorList.push(errorMessage);
-        	//			}
-        	//		}
-        	//	}
+        	    var intA = "A".charCodeAt(0);
+        	    var finalColLetter = String.fromCharCode(intA + ($scope.templates.ModelTemplates.PRC_TBL_ROW["ECAP"].columns.length - 1)); // TODO: Make this flexible against any ObjType
+        	    var spreadsheet = $("#pricingTableSpreadsheet").data("kendoSpreadsheet");
+        	    var sheet = spreadsheet.activeSheet();
+        	    var cellsStates = sheet.range('A2:' +finalColLetter + (greatestPtrIndex + 1)).getState();
 
         	//	//// TODO: uncomment this for UI-side validation once we figure oout the duplicate cell value on error bug
         	//	//if (errorList.length > 0) {
@@ -1145,7 +1139,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
 
             $scope.isSaving = true;
 
-            objsetService.updateContractAndCurPricingTable($scope.getCustId(), data, forceValidation).then(
+            objsetService.updateContractAndCurPricingTable($scope.getCustId(), data, forceValidation, forcePublish).then(
                 function (results) {
                     var i = 0;
                     $scope.isSaving = false;
@@ -1157,15 +1151,15 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                             if (results.data.PRC_TBL_ROW[i].warningMessages !== undefined && results.data.PRC_TBL_ROW[i].warningMessages.length > 0) anyWarnings = true;
                         }
                         $scope.updateResults(results.data.PRC_TBL_ROW,
-                            $scope.pricingTableData.PRC_TBL_ROW,
-                            $scope.spreadDs);
+                            $scope.pricingTableData.PRC_TBL_ROW);
                         $scope.spreadDs.read();
                     }
                     if (!!results.data.WIP_DEAL) {
                         for (i = 0; i < results.data.WIP_DEAL.length; i++) {
                             if (results.data.WIP_DEAL[i].warningMessages !== undefined && results.data.WIP_DEAL[i].warningMessages.length > 0) anyWarnings = true;
                         }
-                        $scope.updateResults(results.data.WIP_DEAL, $scope.pricingTableData.WIP_DEAL, $scope.gridDs);
+                        $scope.updateResults(results.data.WIP_DEAL,
+                            $scope.pricingTableData === undefined ? [] : $scope.pricingTableData.WIP_DEAL);
                     }
 
                     topbar.hide();
@@ -1174,7 +1168,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                         $scope.resetDirty();
                         $scope.$broadcast('saveComplete', results);
                         logger.success("Saved the contract", $scope.contractData, "Save Successful");
-                        if (toState !== undefined) $state.go(toState.name, toParams, { reload: true });
+                        if (toState !== undefined) $state.go(toState, toParams, { reload: true });
                     } else {
                         logger.warning("Didn't pass Validation", $scope.contractData, "Saved with warnings");
                         $scope.$broadcast('saveWithWarnings', results);
@@ -1736,14 +1730,17 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
         // **** VALIDATE PRICING TABLE Methods ****
         //
 
-        $scope.showWipDeals = function() {
-            $state.go('contract.manager.strategy.wip',
-                {
-                    cid: $scope.contractData.DC_ID,
-                    sid: $scope.curPricingStrategyId,
-                    pid: $scope.curPricingTableId
-                },
-                { reload: true });
+        $scope.publishWipDeals = function () {
+            $scope.saveEntireContractBase($state.current.name, true, true, 'contract.manager.strategy.wip', { cid: $scope.contractData.DC_ID, sid: $scope.curPricingStrategyId, pid: $scope.curPricingTableId });
+
+            //debugger;
+            //$state.go('contract.manager.strategy.wip',
+            //    {
+            //        cid: $scope.contractData.DC_ID,
+            //        sid: $scope.curPricingStrategyId,
+            //        pid: $scope.curPricingTableId
+            //    },
+            //    { reload: true });
         }
         $scope.backToPricingTable = function() {
             $scope.spreadNeedsInitialization = true;

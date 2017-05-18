@@ -35,6 +35,14 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
+                Id = 29,
+                AtrbCd = AttributeCodes.PASSED_VALIDATION,
+                ObjType = new List<OpDataElementType> { OpDataElementType.CNTRCT },
+                Width = 40
+            });
+
+            items.Add(new UiTemplateContainerItem
+            {
                 Id = 3,
                 AtrbCd = AttributeCodes.TITLE,
                 ObjType = new List<OpDataElementType> { OpDataElementType.CNTRCT },
@@ -66,6 +74,14 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
+                Id = 29,
+                AtrbCd = AttributeCodes.PASSED_VALIDATION,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_ST },
+                Width = 40
+            });
+
+            items.Add(new UiTemplateContainerItem
+            {
                 Id = 3,
                 AtrbCd = AttributeCodes.TITLE,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_ST },
@@ -94,6 +110,13 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 2,
                 AtrbCd = AttributeCodes.OBJ_SET_TYPE_CD,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL }
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
+                AtrbCd = AttributeCodes.PASSED_VALIDATION,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
+                Width = 40
             });
             items.Add(new UiTemplateContainerItem
             {
@@ -216,16 +239,18 @@ namespace Intel.MyDeals.DataLibrary
             {
                 Id = 29,
                 AtrbCd = AttributeCodes.PTR_USER_PRD,
-				Label = "User Product",
-				ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-				Width = 220
-			});
+                Label = "User Product",
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                Width = 220
+            });
             items.Add(new UiTemplateContainerItem
             {
                 Id = 29,
                 AtrbCd = AttributeCodes.PTR_SYS_PRD,
 				Label = "System Products",
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                IsReadOnly = false, // need to set to true after product selector is in place
+                IsHidden = false,
 				Width = 220
 				//// This is how it should be set once the product selector is in place:
 				//IsReadOnly = true,
@@ -412,7 +437,7 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "Deal Id",
                 Width = 90,
                 IsReadOnly = true,
-                Template = "<div class='dealLnk'><i class='intelicon-protection-solid valid-icon' title='Validation: {{dataItem.PASSED_VALIDATION}}' ng-class='{ validf_: (dataItem.PASSED_VALIDATION === undefined || dataItem.PASSED_VALIDATION === \"\"), validf_true: (dataItem.PASSED_VALIDATION === \"True\"), validf_false: (dataItem.PASSED_VALIDATION === \"False\"), \"intelicon-protection-solid\": (dataItem.PASSED_VALIDATION === undefined || dataItem.PASSED_VALIDATION === \"\"), \"intelicon-protection-checked-verified-solid\": (dataItem.PASSED_VALIDATION === \"True\"), \"intelicon-protection-failed-solid\": (dataItem.PASSED_VALIDATION === \"False\") }'></i><a href=''>#=DC_ID#</a></div>"
+                Template = "<div class='dealLnk'><a href=''>#=DC_ID#</a></div>"
             });
             items.Add(new UiTemplateContainerItem
             {
@@ -438,6 +463,18 @@ namespace Intel.MyDeals.DataLibrary
                 IsReadOnly = true,
                 Template = "<deal-tools ng-model='dataItem' is-editable='true'></deal-tools>",
                 HeaderTemplate = "<input type='checkbox' style='margin: 0px 6px 0px 13px;' ng-click='clkAllItems()' id='chkDealTools' />Deal Tools"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
+                AtrbCd = AttributeCodes.PASSED_VALIDATION,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Width = 50,
+                IsSortable = true,
+                IsFilterable = true,
+                Label = "<i class='intelicon-protection-solid' style='color: #00AEEF; font-size: 20px;'></i>",
+                IsReadOnly = true,
+                Template = "<i class='valid-icon validf_{{ dataItem.PASSED_VALIDATION }} {{ (dataItem.PASSED_VALIDATION === undefined || dataItem.PASSED_VALIDATION === \"\") ? \"intelicon-protection-solid\" : (dataItem.PASSED_VALIDATION == \"Valid\" ? \"intelicon-protection-checked-verified-solid\" : \"intelicon-protection-failed-solid\") }}' title='Validation: {{dataItem.PASSED_VALIDATION || \"Not validated yet\"}}' style='margin-left: 14px;'></i>"
             });
             items.Add(new UiTemplateContainerItem
             {

@@ -77,36 +77,35 @@ namespace Intel.MyDeals.Controllers.API
 			);
 		}
 
-		[Authorize]
-		[Route("SaveContract/{custId}")]
-		[HttpPost]
-		public OpDataCollectorFlattenedDictList SaveContract(int custId, OpDataCollectorFlattenedList contracts)
-		{
-			return SafeExecutor(() => _contractsLib.SaveContract(contracts, custId)
-				, "Unable to save the Contract"
-			);
-		}
+        [Authorize]
+        [Route("SaveContract/{custId}")]
+        [HttpPost]
+        public OpDataCollectorFlattenedDictList SaveContract(int custId, OpDataCollectorFlattenedList contracts)
+        {
+            return SafeExecutor(() => _contractsLib.SaveContract(contracts, custId, false, false)
+                , "Unable to save the Contract"
+            );
+        }
 
-		[Authorize]
-		[Route("SaveFullContract/{custId}")]
-		[HttpPost]
-		public OpDataCollectorFlattenedDictList SaveFullContract(int custId, OpDataCollectorFlattenedDictList fullContracts)
-		{
-			return SafeExecutor(() => _contractsLib.SaveFullContract(custId, fullContracts)
-				, "Unable to save the Contract"
-			);
-		}
+        [Authorize]
+        [Route("SaveFullContract/{custId}")]
+        [HttpPost]
+        public OpDataCollectorFlattenedDictList SaveFullContract(int custId, OpDataCollectorFlattenedDictList fullContracts)
+        {
+            return SafeExecutor(() => _contractsLib.SaveFullContract(custId, fullContracts, false, false)
+                , "Unable to save the Contract"
+            );
+        }
 
-		[Authorize]
-		[Route("SaveContractAndPricingTable/{custId}")]
-		[HttpPost]
-		public OpDataCollectorFlattenedDictList SaveContractAndPricingTable(int custId, ContractTransferPacket contractAndPricingTable)
-		{
-			// Save the contract + pricing table
-			return SafeExecutor(() => _contractsLib.SaveContractAndPricingTable(custId, contractAndPricingTable)
-				, "Unable to save the Contract"
-			);
-		}
+        [Authorize]
+        [Route("SaveContractAndPricingTable/{custId}")]
+        [HttpPost]
+        public OpDataCollectorFlattenedDictList SaveContractAndPricingTable(int custId, ContractTransferPacket contractAndPricingTable)
+        {
+            return SafeExecutor(() => _contractsLib.SaveContractAndPricingTable(custId, contractAndPricingTable, false, false)
+                , "Unable to save the Contract"
+            );
+        }
 
 		[Authorize]
 		[Route("SaveAndValidateContractAndPricingTable/{custId}")]
@@ -526,14 +525,24 @@ namespace Intel.MyDeals.Controllers.API
 			);
 		}
 
-		[Authorize]
-		[Route("GetContractsStatus")]
-		[HttpPost]
-		public dynamic GetContractsStatus([FromBody] DashboardFilter data)
-		{
-			return SafeExecutor(() => _contractsLib.GetContractsStatus(data)
-				, $"Unable to get Contracts Status"
-			);
-		}
-	}
+        [Authorize]
+        [Route("GetContractsStatus")]
+        [HttpPost]
+        public dynamic GetContractsStatus([FromBody] DashboardFilter data)
+        {
+            return SafeExecutor(() => _contractsLib.GetContractsStatus(data)
+                , $"Unable to get Contracts Status"
+            );
+        }
+
+        [Authorize]
+        [Route("GetWipFromContract/{id}")]
+        public OpDataCollectorFlattenedDictList GetWipFromContract(int id)
+        {
+            return SafeExecutor(() => _contractsLib.GetWipFromContract(id)
+                , $"Unable to get WIP Deals {id}"
+            );
+        }
+
+    }
 }

@@ -132,6 +132,7 @@ namespace Intel.MyDeals
                 , "~/app/admin/workflowStage/workflowStages.service.js"
                 , "~/app/contract/contract.module.js"
                 , "~/app/contract/contract.route.js"
+                , "~/app/contract/controllers/allDeals.controller.js"
                 , "~/app/contract/controllers/contract.controller.js"
                 , "~/app/contract/controllers/manager.controller.js"
                 , "~/app/contract/controllers/managerDealType.controller.js"

@@ -1,0 +1,9 @@
+﻿<div style="padding: 20px; height: 100%;">
+    <div ng-if="wipData.length == 0">
+        <div><img src="/images/032.gif" /></div>
+        Loading all deals....
+    </div>
+    
+    <div op-grid style="height: 100%;" op-data="wipData" op-options="wipOptions" ng-if="wipData.length > 0"></div>
+</div>
+

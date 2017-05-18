@@ -22,7 +22,7 @@ namespace Intel.MyDeals.BusinessLogic
         }
 
 
-        public MyDealsData SavePackets(OpDataCollectorFlattenedDictList data, int custId, bool forceValidation)
+        public MyDealsData SavePackets(OpDataCollectorFlattenedDictList data, int custId, bool forceValidation, bool forcePublish)
         {
             // Save Data Cycle: Point 9
 
@@ -44,7 +44,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             // RUN RULES HERE - If there are validation errors... stop... but we need to save the validation status
             MyDealsData myDealsDataWithErrors = null;
-            bool hasErrors = myDealsData.ValidationApplyRules(forceValidation);
+            bool hasErrors = myDealsData.ValidationApplyRules(forceValidation, forcePublish);
             if (hasErrors)
             {
                 // "Clone" to object...
@@ -57,19 +57,6 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 if (!data.ContainsKey(opDataElementType)) continue;
                 SavePacketByDictionary(data[opDataElementType], myDealsData, opDataElementType, Guid.NewGuid());
-
-                // Check for delete items
-                //foreach (OpDataCollectorFlattenedItem item in data[opDataElementType])
-                //{
-                //    if (!item.ContainsKey("_actions")) continue;
-                //    OpDataCollectorFlattenedItem fItem = (OpDataCollectorFlattenedItem)item["_actions"];
-
-                //    if (!fItem.ContainsKey("_deleteTargetIds")) continue;
-
-                //    List<int> list = (List<int>)fItem["_deleteTargetIds"];
-                //    myDealsData[opDataElementType].Actions.Add(new MyDealsDataAction(DealSaveActionCodes.OBJ_DELETE, list, 30));
-                //}
-
             }
 
             MyDealsData myDealsDataResults = PerformTasks(OpActionType.Save, myDealsData, custId);  // execute all save perform task items now
