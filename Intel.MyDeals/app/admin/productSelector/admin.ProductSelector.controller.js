@@ -444,6 +444,7 @@
             for (var key in data.ProdctTransformResults) {
                 for (var i = 0; i < data.ValidProducts[key].length; i++) {
                     vm.validProducts.push(data.ValidProducts[key][i]);
+                    dataSource.read();
                 }
 
                 // Process invalid products to make html to display
@@ -453,6 +454,7 @@
                     object.Row = key;
                     object.Items = data.InValidProducts[key].join(", ")
                     vm.invalidProducts.push(object);
+                    dataSource.read();
                 }
 
                 // Process multiple match products to make html to display
@@ -506,7 +508,7 @@
                                                 }).ToArray().length > 1;
 
                                 if (isConflict) {
-                                    conflictLevel = "DEAL_PRD_TYPE";
+                                    conflictLevel = "PRD_CAT_NM";
                                     //break;
                                 }
                             }

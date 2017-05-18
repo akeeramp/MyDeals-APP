@@ -130,6 +130,11 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "Product";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
+	// Product Details
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_PRD_DETAILS]");
+	ds.Tables[0].TableName = "ProductDatails";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
 	// Product Category CPU
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_PRD_CAT_MAP]");
 	ds.Tables[0].TableName = "ProductCategory";
@@ -176,10 +181,10 @@ using System.Collections.Generic;
 
 
 	// Product Selector(Lookup)
-	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_TRANSLT_PRD_ENTRY] @CUST_MBR_SID=1");
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_TRANSLT_PRD_ENTRY] @CUST_MBR_SID=1, @GEO_MBR_SID=1");
 	ds.Tables[0].TableName = "PRD_LOOKUP_RESULTS";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
-
+	
     // Product Cost Test Rules
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_PCT_RULE_UI_FETCH]");
 	ds.Tables[0].TableName = "ProductCostTestRules";
