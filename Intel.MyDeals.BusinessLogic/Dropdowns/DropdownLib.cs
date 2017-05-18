@@ -152,11 +152,21 @@ namespace Intel.MyDeals.BusinessLogic
             return GetDropdowns().Where(dd => dd.dropdownCategory == "Geo" && dd.active == 1).OrderBy(dd => dd.dropdownName).ToList();
         }
 
-        /// <summary>
-        /// Get All Dropdown Groups
-        /// </summary>
-        /// <returns>list of Dropdown Groups</returns>
-        public List<Dropdown> GetDropdownGroups()
+
+		/// <summary>
+		/// Get Num Tiers Dropdown
+		/// </summary>
+		/// <returns>list of Num Tiers Dropdowns</returns>
+		public List<Dropdown> GetProductLevelDropdown()
+		{
+			return GetDropdowns().Where(dd => dd.dropdownCategory == "Product Level" && dd.active == 1).OrderBy(dd => dd.dropdownID).ToList();
+		}
+
+		/// <summary>
+		/// Get All Dropdown Groups
+		/// </summary>
+		/// <returns>list of Dropdown Groups</returns>
+		public List<Dropdown> GetDropdownGroups()
         {
             return GetDropdowns().Where(dd => dd.dropdownCategory == "Basic Dropdowns" && dd.active == 1).OrderBy(dd => dd.dropdownName).ToList();
         }

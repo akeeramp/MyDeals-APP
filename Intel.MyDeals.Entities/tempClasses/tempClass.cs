@@ -9,7 +9,52 @@ using Intel.Opaque.DBAccess;
 
 namespace Intel.MyDeals.Entities
 {
-    [DataContract]
+	[DataContract]
+	public partial class PRD_LOOKUP_RESULTS_tempWithCAP : PRD_LOOKUP_RESULTS
+	{
+
+		//[DataMember]
+		//public System.Int32 PRD_MBR_SID { get; set; }
+		//[DataMember]
+		//public System.DateTime DEAL_START_DATE { get; set; }
+		//[DataMember]
+		//public System.DateTime DEAL_END_DATE { get; set; }
+
+
+
+		[DataMember]
+		public System.Int32 CUST_MBR_SID { get; set; }
+		//[DataMember]
+		//public System.Int32 RowNumber { set; get; }
+		//[DataMember]
+		//public System.Int32 PRD_MBR_SID { set; get; }
+		//[DataMember]
+		//public System.String HIER_VAL_NM { set; get; }
+		[DataMember]
+		public System.String GEO_MBR_SID { set; get; }
+		//[DataMember]
+		//public System.Int32 CUST_MBR_SID { set; get; }
+		[DataMember]
+		public System.Decimal CAP { set; get; }
+		[DataMember]
+		public System.DateTime CAP_START_DATE { set; get; }
+		[DataMember]
+		public System.DateTime CAP_END_DATE { set; get; }
+		[DataMember]
+		public System.String CAP_PRC_COND { set; get; }
+		[DataMember]
+		public System.String Flag_pick { set; get; }
+		[DataMember]
+		public System.Decimal YCS2 { set; get; }
+		[DataMember]
+		public System.DateTime YCS2_Start_Date { set; get; }
+		[DataMember]
+		public System.DateTime YCS2_End_Date { set; get; }
+	}
+
+
+
+	[DataContract]
     public partial class EmployeeGeo
     {
 

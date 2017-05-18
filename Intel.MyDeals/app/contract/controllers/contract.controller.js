@@ -1102,7 +1102,29 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
 				.then(function (response) {
 					// TODO: Put the data into the Processed Product list column?
 					console.log(response.data);
-					alert("TODO: Do something with the translated product response. Check the console for translated data.");
+
+					var errStr = "";
+					// Format the error data
+					if (response.data.ColumnErrors !== undefined && response.data.ColumnErrors !== null) {
+						for (var rowIndex in response.data.ColumnErrors) {
+							if (response.data.ColumnErrors.hasOwnProperty(rowIndex)) {
+								var rowErrorsList = response.data.ColumnErrors[rowIndex]
+								for (var colName in rowErrorsList) {									
+									if (rowErrorsList.hasOwnProperty(colName)) {
+										if (rowErrorsList[colName] !== null && rowErrorsList[colName].length > 0) {
+											for (var i = 0; i < rowErrorsList[colName].length; i++) {
+												var myErrMsg = rowErrorsList[colName][i];
+												errStr += "- " + myErrMsg + "\n ";
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					// TODO: put these errors in the product corrector or something
+					alert("Errors found: (TODO: put the err object into product corrector) \n" + errStr);
+
 				}, function (response) {
 					console.log(response.data);
 					alert("Errors found - TODO: Do something with the translated product response. Check the console for translated data.");

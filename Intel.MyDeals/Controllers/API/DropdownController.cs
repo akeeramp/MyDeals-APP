@@ -79,7 +79,16 @@ namespace Intel.MyDeals.Controllers.API
             );
         }
 
-        [Authorize]
+		[Authorize]
+		[Route("GetProductLevelDropdowns")]
+		public IEnumerable<Dropdown> GetProductLevelDropdowns()
+		{
+			return SafeExecutor(() => _dropdownLib.GetProductLevelDropdown()
+				, $"Unable to get Geos Dropdowns"
+			);
+		}
+
+		[Authorize]
         [Route("GetDropdownHierarchy/{prnt}")]
         public DropdownHierarchy[] GetDropdownHierarchy(string prnt)
         {

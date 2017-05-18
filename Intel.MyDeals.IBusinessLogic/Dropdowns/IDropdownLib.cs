@@ -23,7 +23,9 @@ namespace Intel.MyDeals.IBusinessLogic
 
         List<Dropdown> GetGeosDropdown();
 
-        List<Dropdown> GetDropdownGroups();
+		List<Dropdown> GetProductLevelDropdown();
+
+		List<Dropdown> GetDropdownGroups();
 
         BasicDropdown ManageBasicDropdowns(BasicDropdown dropdown, CrudModes type);
 

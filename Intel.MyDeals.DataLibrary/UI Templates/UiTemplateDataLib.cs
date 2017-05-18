@@ -236,10 +236,10 @@ namespace Intel.MyDeals.DataLibrary
 				Id = 29,
 				AtrbCd = AttributeCodes.PRD_LEVEL,
 				Label = "Product Level",
-				ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW }
-				//LookupUrl = "/api/Dropdown/GetDropdowns/PRD_LEVEL",
-				//LookupText = "DROP_DOWN",
-				//LookupValue = "DROP_DOWN"
+				ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+				LookupUrl = "/api/Dropdown/GetProductLevelDropdowns",
+				LookupText = "DROP_DOWN",
+				LookupValue = "DROP_DOWN"
 			});
 			items.Add(new UiTemplateContainerItem
             {
