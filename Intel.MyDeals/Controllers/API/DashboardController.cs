@@ -36,12 +36,13 @@ namespace Intel.MyDeals.Controllers.API
         List<DashboardContractSummary> Temp(DashboardFilter data)
         {
             List<DashboardContractSummary> y = _dashboardLib.GetDashboardContractSummary(data.CustomerIds, data.StartDate, data.EndDate);
-            Random rnd = new Random();
-            List<string> stages = new List<string> {"Complete", "InComplete", "Archived"};
+            //Random rnd = new Random();
+            //List<string> stages = new List<string> {"Complete", "InComplete", "Archived"};
             
             foreach (DashboardContractSummary item in y)
             {
-                if (item.WF_STG_CD == string.Empty) item.WF_STG_CD = stages[rnd.Next(stages.Count)];
+                //if (item.WF_STG_CD == string.Empty) item.WF_STG_CD = stages[rnd.Next(stages.Count)];
+                if (item.WF_STG_CD == string.Empty) item.WF_STG_CD = "InComplete"; //TODO: hook up to workflow
             }
             return y;
         }

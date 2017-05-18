@@ -26,16 +26,16 @@
                 scope.showLoading = false;
                 scope.searchText = "";
 
-                scope.$watch("searchText", function (newValue, oldValue) {
-                    //This gets called when data changes.
-                    console.log(newValue)
-                    console.log(oldValue)
+                //scope.$watch("searchText", function (newValue, oldValue) {
+                //    //This gets called when data changes.
+                //    console.log(newValue)
+                //    console.log(oldValue)
 
-                    //TODO: hook up the below to work with search - but first get them reading the right data
-                    console.log(scope.custId)
-                    console.log(scope.startDt)
-                    console.log(scope.endDt)
-                });
+                //    //TODO: hook up the below to work with search - but first get them reading the right data
+                //    console.log(scope.custId)
+                //    console.log(scope.startDt)
+                //    console.log(scope.endDt)
+                //});
 
                 scope.searchAll = function () {
                     //clear any previous search data

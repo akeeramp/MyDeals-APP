@@ -160,9 +160,9 @@ function contractStatusBoard($compile, objsetService,colorDictionary) {
                         "name": data[i][titleCd],
                         "obj": $scope.getObjType(data[i]["dc_type"]),
                         "type": data[i]["OBJ_SET_TYPE_CD"],
-                        "stage": stages[Math.floor(Math.random() * stages.length)],
-                        "mct": results[Math.floor(Math.random() * results.length)],
-                        "pct": results[Math.floor(Math.random() * results.length)],
+                        "stage": stages[0], //stages[Math.floor(Math.random() * stages.length)], //TODO: hook up
+                        "mct": results[3], //results[Math.floor(Math.random() * results.length)], //TODO: hook up
+                        "pct": results[3], //results[Math.floor(Math.random() * results.length)], //TODO: hook up
                         "children": data[i][next] === undefined ? [] : $scope.recurCalcData(data[i][next])
                     });
                 }
