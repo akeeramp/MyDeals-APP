@@ -439,11 +439,18 @@
 }
 
 .opUiTreeView{
+    overflow:scroll;
     background-color: white;
+    margin-top: -13px;
+    border-top-style: solid;
+    border-top-color: lightgrey;
+    height: 350px;
+    width: 100%;
 }
 
-
-
+.opUiElement > .k-multiselect-wrap {
+    cursor: pointer;
+}
 
 /* grid cell controls */
 .gridCellStatus {

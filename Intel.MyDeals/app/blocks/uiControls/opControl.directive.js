@@ -171,6 +171,21 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
                 }
                 return ret;
             }
+
+            ////Note: this doesn't work, clicking anywhere causes the doc-hide to trigger.  also would need to move elsewhere as each time you open an editor it will link the event causing double/triple/etc hits on these debuggers.
+            //$("#" + scope.opCd + "_MS").click(function (e) {
+            //    debugger;
+            //    $("#" + scope.opCd).toggle();
+            //    e.stopPropagation();
+            //});
+            //$(document).click(function () {
+            //    debugger;
+            //    $("#" + scope.opCd).hide();
+            //});
+            //$("#" + scope.opCd).click(function (e) {
+            //    debugger;
+            //    e.stopPropagation();
+            //});
         }
 
         var loader = getTemplate(scope.opUiMode + '_' + scope.opType);

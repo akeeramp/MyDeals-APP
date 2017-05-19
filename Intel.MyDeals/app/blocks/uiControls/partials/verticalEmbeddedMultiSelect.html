@@ -22,7 +22,7 @@
             </select>
         </div>
 
-        <div class="fl opUiElement opUiTreeView" style="margin-bottom: 0 !important;">
+        <div class="fl opUiElement opUiTreeView" style="margin-bottom: 0 !important;" ng-show="showTreeView">
             <div id="{{opCd}}"
                  kendo-tree-view
                  class="fl opUiElement"
@@ -33,7 +33,7 @@
                  k-on-check="onCheckFunction()"
                  k-on-select="onSelectFunction()"
                  ng-class="{isHidden: opIsHidden, isReadOnly: opIsReadOnly, isError: opIsError}"
-                 ng-show="showTreeView">
+                 style="overflow: hidden">
             </div>
         </div>
     </div>
