@@ -98,8 +98,8 @@
                             <td style="width: 60px; text-align: center;" ng-show="canEdit">
                                 <div ng-show="ps._actions['Approve'] !== undefined && ps._actions['Approve'] === true">
                                     <input type="checkbox" name="radGrp{{ps.DC_ID}}" dcId="{{ps.DC_ID}}"
-                                           ng-class="{'disabled': ps.PASSED_VALIDATION != 'True'}"
-                                           ng-disabled="ps.PASSED_VALIDATION != 'True'"
+                                           ng-class="{'disabled': ps.PASSED_VALIDATION != 'Complete'}"
+                                           ng-disabled="ps.PASSED_VALIDATION != 'Complete'"
                                            class="with-font psCheck psCheck-Approve" id="rad_approve_{{ps.DC_ID}}"
                                            ng-click="clkRow($event)" /><label for="rad_approve_{{ps.DC_ID}}"></label>
                                 </div>
@@ -107,8 +107,8 @@
                             <td style="width: 50px; text-align: center;" ng-show="canEdit">
                                 <div ng-show="ps._actions['Revise'] !== undefined && ps._actions['Revise'] === true">
                                     <input type="checkbox" name="radGrp{{ps.DC_ID}}" dcId="{{ps.DC_ID}}"
-                                           ng-class="{'disabled': ps.PASSED_VALIDATION != 'True'}"
-                                           ng-disabled="ps.PASSED_VALIDATION != 'True'"
+                                           ng-class="{'disabled': ps.PASSED_VALIDATION != 'Complete'}"
+                                           ng-disabled="ps.PASSED_VALIDATION != 'Complete'"
                                            class="with-font psCheck psCheck-Revise" id="rad_revise_{{ps.DC_ID}}"
                                            ng-click="clkRow($event)" /><label for="rad_revise_{{ps.DC_ID}}"></label>
                                 </div>
@@ -126,10 +126,10 @@
                                 </div>
                             </td>
                             <td style="width: 50px; text-align: center;">
+                                <i class="intelicon-protection-checked-verified-solid bigIcon validf_{{ps.PASSED_VALIDATION}}" ng-show="ps.PASSED_VALIDATION === 'Complete'" title="{{ps.PASSED_VALIDATION}}"></i>
                                 <i class="intelicon-protection-checked-verified-solid bigIcon validf_{{ps.PASSED_VALIDATION}}" ng-show="ps.PASSED_VALIDATION === 'Valid'" title="{{ps.PASSED_VALIDATION}}"></i>
                                 <i class="intelicon-protection-failed-solid bigIcon validf_{{ps.PASSED_VALIDATION}}" ng-show="ps.PASSED_VALIDATION === 'Dirty'" title="{{ps.PASSED_VALIDATION}}"></i>
-                                <i class="intelicon-save-solid bigIcon validf_{{ps.PASSED_VALIDATION}}" ng-show="ps.PASSED_VALIDATION === 'Published'" title="{{ps.PASSED_VALIDATION}}"></i>
-                                <i class="intelicon-protection-solid bigIcon validf_{{ps.PASSED_VALIDATION}}" ng-show="ps.PASSED_VALIDATION !== 'Valid' && ps.PASSED_VALIDATION !== 'Dirty' && ps.PASSED_VALIDATION !== 'Published'" title="{{ps.PASSED_VALIDATION || 'Not validated yet'}}"></i>
+                                <i class="intelicon-protection-solid bigIcon validf_{{ps.PASSED_VALIDATION}}" ng-show="ps.PASSED_VALIDATION !== 'Valid' && ps.PASSED_VALIDATION !== 'Dirty' && ps.PASSED_VALIDATION !== 'Complete'" title="{{ps.PASSED_VALIDATION || 'Not validated yet'}}"></i>
                             </td>
                             <td>
                                 <div ng-bind="ps.TITLE" class="bolder linkable" ng-click="gotoContractEditor(ps)" title="Click to open the Pricing Strategy in the Contract Editor"></div>
@@ -535,7 +535,7 @@
         color: #003C71;
     }
     .gradTab.k-tabstrip .k-tabstrip-items {
-        padding: 2px 0;
+        padding: 2px 10px;
     }
     .gradTab.k-tabstrip:focus {
         box-shadow: none !important;

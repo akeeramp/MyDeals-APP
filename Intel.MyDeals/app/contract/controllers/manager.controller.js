@@ -137,18 +137,17 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
     $scope.gotoContractEditor = function (ps, pt) {
         if (!pt) {
             $state.go('contract.manager',
+            {
+                cid: ps.DC_PARENT_ID
+            });
+        } else {
+            $state.go('contract.manager.strategy',
                 {
-                        cid: ps.DC_PARENT_ID
+                    cid: ps.DC_PARENT_ID,
+                    sid: ps.DC_ID,
+                    pid: pt.DC_ID
                 });
         }
-
-        $state.go('contract.manager.strategy',
-            {
-                cid: ps.DC_PARENT_ID,
-                sid: ps.DC_ID,
-                pid: pt.DC_ID
-            });
-
     }
 
     $scope.isAllCollapsed = true;
@@ -221,7 +220,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
                         field: "DC_ID",
                         title: "Deal Id",
                         width: "90px",
-                        template: "<div class='dealLnk'><i class='intelicon-protection-solid valid-icon validf_{{dataItem.PASSED_VALIDATION}}' title='Validation: {{ dataItem.PASSED_VALIDATION || \"Not validated yet\" }}' ng-class='{ \"intelicon-protection-solid\": (dataItem.PASSED_VALIDATION === undefined || dataItem.PASSED_VALIDATION === \"\"), \"intelicon-protection-checked-verified-solid\": (dataItem.PASSED_VALIDATION === \"Valid\"), \"intelicon-protection-failed-solid\": (dataItem.PASSED_VALIDATION === \"Dirty\") }'></i><a href=''>#=DC_ID#</a></div>"
+                        template: "<div class='dealLnk'><i class='intelicon-protection-solid valid-icon validf_{{dataItem.PASSED_VALIDATION}}' title='Validation: {{ dataItem.PASSED_VALIDATION || \"Not validated yet\" }}' ng-class='{ \"intelicon-protection-solid\": (dataItem.PASSED_VALIDATION === undefined || dataItem.PASSED_VALIDATION === \"\"), \"intelicon-protection-checked-verified-solid\": (dataItem.PASSED_VALIDATION === \"Complete\" || dataItem.PASSED_VALIDATION === \"Valid\"), \"intelicon-protection-failed-solid\": (dataItem.PASSED_VALIDATION === \"Dirty\") }'></i><a href=''>#=DC_ID#</a></div>"
                     }, {
                         field: "TRKR_NBR",
                         title: "Tracker Number",

@@ -615,7 +615,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
                 if (!!args.data.WIP_DEAL) {
                     for (var i = 0; i < args.data.WIP_DEAL.length; i++) {
                         var dataItem = $scope.findDataItemById(args.data.WIP_DEAL[i]["DC_ID"]);
-                        dataItem["PASSED_VALIDATION"] = args.data.WIP_DEAL[i]["PASSED_VALIDATION"];
+                        if (dataItem != null) dataItem["PASSED_VALIDATION"] = args.data.WIP_DEAL[i]["PASSED_VALIDATION"];
 
                         if (args.data.WIP_DEAL[i].warningMessages.length !== 0) {
                             var beh = args.data.WIP_DEAL[i]._behaviors;
@@ -649,7 +649,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
                 }
             }
 
-            $scope.findDataItemById = function(id) {
+            $scope.findDataItemById = function (id) {
                 var data = $scope.contractDs.data();
                 for (var d = 0; d < data.length; d++) {
                     if (!!data[d]["DC_ID"] && data[d]["DC_ID"] === id) return data[d];

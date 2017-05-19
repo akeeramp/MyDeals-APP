@@ -469,7 +469,7 @@
     .valid_Valid {
         background: #C4D600;
     }
-    .valid_Published {
+    .valid_Complete {
         background: #0071C5;
         color: #ffffff;
     }
@@ -480,7 +480,7 @@
     .validf_Valid {
         color: #C4D600;
     }
-    .validf_Published {
+    .validf_Complete {
         color: #0071C5;
     }
     .validf_, .validf_Dirty {

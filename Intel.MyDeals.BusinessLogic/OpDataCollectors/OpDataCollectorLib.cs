@@ -22,7 +22,7 @@ namespace Intel.MyDeals.BusinessLogic
         }
 
 
-        public MyDealsData SavePackets(OpDataCollectorFlattenedDictList data, int custId, bool forceValidation, bool forcePublish, string sourceEvent)
+        public MyDealsData SavePackets(OpDataCollectorFlattenedDictList data, int custId, List<int> validateIds, bool forcePublish, string sourceEvent)
         {
             // Save Data Cycle: Point 9
 
@@ -44,7 +44,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             // RUN RULES HERE - If there are validation errors... stop... but we need to save the validation status
             MyDealsData myDealsDataWithErrors = null;
-            bool hasErrors = myDealsData.ValidationApplyRules(forceValidation, forcePublish, sourceEvent);
+            bool hasErrors = myDealsData.ValidationApplyRules(validateIds, forcePublish, sourceEvent);
             if (hasErrors)
             {
                 // "Clone" to object...

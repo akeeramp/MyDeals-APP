@@ -10,9 +10,9 @@ namespace Intel.MyDeals.IBusinessLogic
 
         MyDealsData GetContract(int id, bool inclusive = false);
 
-        OpDataCollectorFlattenedDictList SaveContract(OpDataCollectorFlattenedList data, int custId, bool forceValidation, bool forcePublish, string sourceEvent);
+        OpDataCollectorFlattenedDictList SaveContract(OpDataCollectorFlattenedList data, int custId, List<int> validateIds, bool forcePublish, string sourceEvent);
 
-        MyDealsData SaveContract(OpDataCollectorFlattenedList contracts, OpDataCollectorFlattenedList pricingStrategies, OpDataCollectorFlattenedList pricingTables, OpDataCollectorFlattenedList pricingTableRows, OpDataCollectorFlattenedList wipDeals, int custId, bool forceValidation, bool forcePublish, string sourceEvent);
+        MyDealsData SaveContract(OpDataCollectorFlattenedList contracts, OpDataCollectorFlattenedList pricingStrategies, OpDataCollectorFlattenedList pricingTables, OpDataCollectorFlattenedList pricingTableRows, OpDataCollectorFlattenedList wipDeals, int custId, List<int> validateIds, bool forcePublish, string sourceEvent);
 
         OpMsg DeleteContract(int id);
 
@@ -22,7 +22,7 @@ namespace Intel.MyDeals.IBusinessLogic
         
         OpDataCollectorFlattenedDictList GetFullContract(int id);
 
-        OpDataCollectorFlattenedDictList SaveFullContract(int custId, OpDataCollectorFlattenedDictList fullContracts, bool forceValidation, bool forcePublish, string sourceEvent);
+        OpDataCollectorFlattenedDictList SaveFullContract(int custId, OpDataCollectorFlattenedDictList fullContracts, List<int> validateIds, bool forcePublish, string sourceEvent);
 
         OpDataCollectorFlattenedDictList SaveContractAndPricingTable(int custId, ContractTransferPacket contractAndStrategy, bool forceValidation, bool forcePublish);
 

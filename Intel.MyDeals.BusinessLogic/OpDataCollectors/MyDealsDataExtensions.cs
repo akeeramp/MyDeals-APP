@@ -439,7 +439,7 @@ namespace Intel.MyDeals.BusinessLogic
             return opMsgQueue;
         }
 
-        public static bool ValidationApplyRules(this MyDealsData myDealsData, bool forceValidation, bool forcePublish, string sourceEvent)
+        public static bool ValidationApplyRules(this MyDealsData myDealsData, List<int> validateIds, bool forcePublish, string sourceEvent)
         {
             // Apply rules to save packets here.  If validations are hit, append them to the DC and packet message lists.
             bool dataHasValidationErrors = false;
@@ -459,7 +459,16 @@ namespace Intel.MyDeals.BusinessLogic
                     var dcHasErrors = false;
 
                     dc.ApplyRules(MyRulesTrigger.OnSave);
-                    if (forceValidation) dc.ApplyRules(MyRulesTrigger.OnValidate);
+                    if (validateIds.Any())
+                    {
+                        if (opDataElementType == OpDataElementType.WIP_DEAL || opDataElementType == OpDataElementType.WIP_DEAL) {
+                            if (validateIds.Contains(dc.DcID)) dc.ApplyRules(MyRulesTrigger.OnValidate);
+                        }
+                        else
+                        {
+                            dc.ApplyRules(MyRulesTrigger.OnValidate);
+                        }
+                    }
 
                     foreach (IOpDataElement de in dc.GetDataElementsWithValidationIssues())
                     {
@@ -485,10 +494,10 @@ namespace Intel.MyDeals.BusinessLogic
                         //myDealsData[opDataElementType].Messages.WriteMessage(OpMsg.MessageType.Warning, $"{dc.DcType} - {dc.DcID} : {de.ValidationMessage}");
                     }
 
-                    if (forceValidation && !dcHasErrors)
+                    if (validateIds.Any() && !dcHasErrors && (opDataElementType == OpDataElementType.PRC_TBL_ROW || opDataElementType == OpDataElementType.WIP_DEAL))
                     {
                         // only force publish to PTR
-                        PassedValidation passedValidation = forcePublish ? PassedValidation.Published : PassedValidation.Valid;
+                        PassedValidation passedValidation = forcePublish || opDataElementType == OpDataElementType.WIP_DEAL ? PassedValidation.Complete : PassedValidation.Valid;
                         dc.SetDataElementValue(AttributeCodes.PASSED_VALIDATION, passedValidation.ToString());
                     }
                     else if (dc.IsModified)

@@ -1088,66 +1088,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                 "EventSource": source
             }
         }
-
-
-
-        // **** SAVE CONTRACT Methods ****
-        //
-        $scope.saveEntireContractBase = function (stateName, forceValidation, forcePublish, toState, toParams) {
-            // async save data
-
-            topbar.show();
-
-            if (forceValidation === undefined || forceValidation === null) forceValidation = false;
-            if (forcePublish === undefined || forcePublish === null) forcePublish = false;
-
-            var data = createEntireContractBase(stateName);
-
-            $scope.isSaving = true;
-
-            objsetService.updateContractAndCurPricingTable($scope.getCustId(), data, forceValidation, forcePublish).then(
-                function (results) {
-                    var i = 0;
-                    $scope.isSaving = false;
-
-                    var anyWarnings = false;
-
-                    if (!!results.data.PRC_TBL_ROW) {
-                        for (i = 0; i < results.data.PRC_TBL_ROW.length; i++) {
-                            if (results.data.PRC_TBL_ROW[i].warningMessages !== undefined && results.data.PRC_TBL_ROW[i].warningMessages.length > 0) anyWarnings = true;
-                        }
-                        $scope.updateResults(results.data.PRC_TBL_ROW,
-                            $scope.pricingTableData.PRC_TBL_ROW,
-                            $scope.spreadDs);
-                        $scope.spreadDs.read();
-                    }
-                    if (!!results.data.WIP_DEAL) {
-                        for (i = 0; i < results.data.WIP_DEAL.length; i++) {
-                            if (results.data.WIP_DEAL[i].warningMessages !== undefined && results.data.WIP_DEAL[i].warningMessages.length > 0) anyWarnings = true;
-                        }
-                        $scope.updateResults(results.data.WIP_DEAL, $scope.pricingTableData.WIP_DEAL, $scope.gridDs);
-                    }
-
-                    topbar.hide();
-
-                    if (!anyWarnings) {
-                        $scope.resetDirty();
-                        $scope.$broadcast('saveComplete', results);
-                        logger.success("Saved the contract", $scope.contractData, "Save Successful");
-                        if (toState !== undefined) $state.go(toState.name, toParams, { reload: true });
-                    } else {
-                        logger.warning("Didn't pass Validation", $scope.contractData, "Saved with warnings");
-                        $scope.$broadcast('saveWithWarnings', results);
-                    }
-
-                },
-                function (response) {
-                    $scope.isSaving = false;
-                    logger.error("Could not save the contract.", response, response.statusText);
-                    topbar.hide();
-                }
-            );
-        }
+        
 
         $scope.validatePricingTable = function (stateName) {
         	var data = createEntireContractBase(stateName, true);
@@ -1187,11 +1128,52 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
 			);
         }
 
+        $scope.validateTitles = function () {
+            var rtn = true;
+
+            if ($scope.curPricingTable._behaviors === undefined) $scope.curPricingTable._behaviors = {};
+            if ($scope.curPricingTable._behaviors.validMsg === undefined) $scope.curPricingTable._behaviors.validMsg = {};
+            if ($scope.curPricingTable._behaviors.isError === undefined) $scope.curPricingTable._behaviors.isError = {};
+
+            if ($scope.curPricingTable !== undefined && $scope.curPricingTable.TITLE === "") {
+                $scope.curPricingTable._behaviors.validMsg["TITLE"] = "The Pricing Table needs a Title.";
+                $scope.curPricingTable._behaviors.isError["TITLE"] = true;
+                rtn = false;
+            } else {
+                $scope.curPricingTable._behaviors.isError["TITLE"] = false;
+            }
+
+            if ($scope.curPricingStrategy._behaviors === undefined) $scope.curPricingStrategy._behaviors = {};
+            if ($scope.curPricingStrategy._behaviors.validMsg === undefined) $scope.curPricingStrategy._behaviors.validMsg = {};
+            if ($scope.curPricingStrategy._behaviors.isError === undefined) $scope.curPricingStrategy._behaviors.isError = {};
+
+            if ($scope.curPricingStrategy !== undefined && $scope.curPricingStrategy.TITLE === "") {
+                $scope.curPricingStrategy._behaviors.validMsg["TITLE"] = "The Pricing Strategy needs a Title.";
+                $scope.curPricingStrategy._behaviors.isError["TITLE"] = true;
+                rtn = false;
+            } else {
+                $scope.curPricingStrategy._behaviors.isError["TITLE"] = false;
+            }
+
+            return rtn;
+        }
+
         // **** SAVE CONTRACT Methods ****
         //
         $scope.saveEntireContractBase = function (stateName, forceValidation, forcePublish, toState, toParams) {
             // async save data
             topbar.show();
+
+            if (!$scope.validateTitles()) {
+                $scope.isSaving = false;
+                topbar.hide();
+
+                var msg = [];
+                if ($scope.curPricingTable._behaviors.isError["TITLE"]) msg.push("Pricing Table");
+                if ($scope.curPricingStrategy._behaviors.isError["TITLE"]) msg.push("Pricing Strategy");
+                kendo.alert("The " + msg.join(" and ") + " needs a title.");
+                return;
+            }
 
             if (forceValidation === undefined || forceValidation === null) forceValidation = false;
             if (forcePublish === undefined || forcePublish === null) forcePublish = false;
@@ -1211,16 +1193,14 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                         for (i = 0; i < results.data.PRC_TBL_ROW.length; i++) {
                             if (results.data.PRC_TBL_ROW[i].warningMessages !== undefined && results.data.PRC_TBL_ROW[i].warningMessages.length > 0) anyWarnings = true;
                         }
-                        $scope.updateResults(results.data.PRC_TBL_ROW,
-                            $scope.pricingTableData.PRC_TBL_ROW);
+                        $scope.updateResults(results.data.PRC_TBL_ROW, $scope.pricingTableData.PRC_TBL_ROW);
                         $scope.spreadDs.read();
                     }
                     if (!!results.data.WIP_DEAL) {
                         for (i = 0; i < results.data.WIP_DEAL.length; i++) {
                             if (results.data.WIP_DEAL[i].warningMessages !== undefined && results.data.WIP_DEAL[i].warningMessages.length > 0) anyWarnings = true;
                         }
-                        $scope.updateResults(results.data.WIP_DEAL,
-                            $scope.pricingTableData === undefined ? [] : $scope.pricingTableData.WIP_DEAL);
+                        $scope.updateResults(results.data.WIP_DEAL, $scope.pricingTableData === undefined ? [] : $scope.pricingTableData.WIP_DEAL);
                     }
 
                     topbar.hide();
@@ -1301,7 +1281,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
             return $scope.contractData['CUST_MBR_SID'];
         }
 
-        $scope.checkForMessages = function(collection, key, data) {
+        $scope.checkForMessages = function (collection, key, data) {
             var isValid = true;
             if (data.data[key] !== undefined) {
                 for (var i = 0; i < data.data[key].length; i++) {

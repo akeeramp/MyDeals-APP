@@ -16,15 +16,15 @@
             <div class="toolbar">
 
                 <button class="btn btn-sm btn-default" ng-class="{'disabled': !_dirty}" ng-click="saveWipDeals()">
-                    <i class="fa fa-floppy-o" style="font-size: 30px; vertical-align: middle; margin-right: 4px;"></i> SAVE WIP DEALS
+                    <i class="fa fa-floppy-o" style="font-size: 30px; vertical-align: middle; margin-right: 4px;" title="Save Deals"></i>
                 </button>
 
                 <button class="btn btn-sm btn-default" ng-click="backToPricingTable()">
-                    <i class="intelicon-grid" style="font-size: 30px; vertical-align: middle;"></i> VIEW PRICING TABLE
+                    <i class="intelicon-import-all-outlined" style="font-size: 30px; vertical-align: middle;" title="Back to Pricing Table Editor"></i>
                 </button>
 
                 <button class="btn btn-sm btn-default" ng-click="validateGrid()">
-                    <i class="intelicon-protection-checked-verified-outlined" style="font-size: 30px; vertical-align: middle;"></i> VALIDATE
+                    <i class="intelicon-protection-checked-verified-outlined" style="font-size: 30px; vertical-align: middle;" title="Save and Validate Deals"></i>
                 </button>
 
                 <div class="fr">
@@ -148,7 +148,7 @@
         color: #003C71;
     }
     .gradTab.k-tabstrip .k-tabstrip-items {
-        padding: 2px 0;
+        padding: 2px 10px;
     }
     .gradTab.k-tabstrip:focus {
         box-shadow: none !important;

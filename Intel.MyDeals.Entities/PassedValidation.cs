@@ -4,6 +4,6 @@
     {
         Dirty,
         Valid,
-        Published
+        Complete
     }
 }
