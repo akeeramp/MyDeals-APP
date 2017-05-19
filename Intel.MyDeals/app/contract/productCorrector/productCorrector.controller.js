@@ -62,8 +62,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                     object.Items = !!data.DuplicateProducts[key] ? data.DuplicateProducts[key] : "";
 
                     var isConflict = false;
-                    for (var prod in object.Items) {
-                        //prod = prod.replace(new RegExp('/', 'g'), " ");
+                    for (var prod in object.Items) {                        
                         vm.productName = prod;
                         if (object.Items[prod].length > 0) { 
                             vm.selectedDataSet = object.Items[prod];
