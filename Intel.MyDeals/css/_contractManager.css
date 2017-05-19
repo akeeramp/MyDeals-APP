@@ -422,7 +422,6 @@
 
 	
 	/* Column Letters */
-	/* NOTE: If you resize the below, make sure to resize the "hidden" first row in the spreadsheet via javascript (CODE:  sheet.rowHeight(0, [pixel height here]); ) */
     #pricingTableSpreadsheet > div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left
     , #pricingTableSpreadsheet > div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left > div.k-spreadsheet-data
     , #pricingTableSpreadsheet > div.k-spreadsheet-view > div.k-spreadsheet-fixed-container > div.k-spreadsheet-pane.k-top.k-left > div.k-spreadsheet-row-header
@@ -938,6 +937,15 @@
 		color: #000;
 	}
 
+	/* Hide the Row numbers */
+	div.k-spreadsheet-formula-bar, 
+	div.k-spreadsheet-row-header,
+	/*div.k-spreadsheet-column-header,*/
+	div.k-spreadsheet-top-corner
+	{
+		display: none;
+	}
+	
 	/* Spreadsheet Custom Toolbar */
 	.ssToolbarBtn {
 		background-color: #f2f2f2;

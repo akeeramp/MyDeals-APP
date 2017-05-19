@@ -159,6 +159,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 	function generateKendoOptions() {
 
 		$scope.ptSpreadOptions = {
+			headerWidth: 0, /* Hide the Row numbers */
 			change: onChange,
 			columns: columns.length,
 			sheetsbar: false,
