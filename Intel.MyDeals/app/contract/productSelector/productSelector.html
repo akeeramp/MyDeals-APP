@@ -49,7 +49,7 @@
                 </div>
             </div>
             <div ng-switch-default="ng-switch-default">
-                <div id="prodGrid" kendo-grid="prodGrid" kendo-grid-check-box k-grid-checkbox="vm" class="prodSelector kendoGridHeight table table-bordered table-striped table-intel" k-options="vm.gridOptionsProduct"></div>
+                <div id="prodGrid" kendo-grid="prodGrid" kendo-grid-check-box k-grid-checkbox="vm" class="prodSelector opUiContainer md prodSelector-grid k-grid kendoGridHeight" k-options="vm.gridOptionsProduct"></div>
             </div>
         </div>
         <div ng-if="vm.hideSelection">
@@ -61,7 +61,7 @@
                 </div>
             </div>
             <div ng-if="vm.showSearchResults">
-                <div id="prodGrid" kendo-grid="prodGrid" kendo-grid-check-box k-grid-checkbox="vm" class="prodSelector kendoGridHeight table table-bordered table-striped table-intel" k-options="vm.gridOptionsProduct"></div>
+                <div id="prodGrid" kendo-grid="prodGrid" kendo-grid-check-box k-grid-checkbox="vm" class="prodSelector opUiContainer md prodSelector-grid k-grid kendoGridHeight" k-options="vm.gridOptionsProduct"></div>
             </div>
         </div>
     </div>
@@ -318,5 +318,24 @@
 
     .checkbox-custom:hover + .checkbox-custom-label:before {
         border: 1.5px solid #01AEEF;
+    }
+
+    .increase-popover-width {
+        max-width: 400px;
+        min-width: 400px;
+        z-index:9999;
+    }
+
+    .prodSelector-grid.k-grid td {
+        white-space: nowrap;
+        color: #000000;
+    }
+
+    .prodSelector-grid.k-grid tr.k-alt {
+        background-color: transparent;
+    }
+
+    .prodSelector-grid.k-grid .k-grid-header th.k-header {
+        vertical-align: middle;
     }
 </style>

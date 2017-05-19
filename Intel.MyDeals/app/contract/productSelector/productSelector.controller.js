@@ -4,14 +4,14 @@
        .module('app.admin') //TODO: once we integrate with contract manager change the module to contract
        .controller('ProductSelectorModalController', ProductSelectorModalController);
 
-    ProductSelectorModalController.$inject = ['$filter', '$scope', '$uibModalInstance', 'productSelectionLevels', 'ProductSelectorService', 'contractData', '$timeout', 'logger', 'gridConstants'];
+    ProductSelectorModalController.$inject = ['$filter', '$scope', '$uibModal', '$uibModalInstance', 'productSelectionLevels', 'ProductSelectorService', 'contractData', '$timeout', 'logger', 'gridConstants'];
 
-    function ProductSelectorModalController($filter, $scope, $uibModalInstance, productSelectionLevels, ProductSelectorService, contractData, $timeout, logger, gridConstants) {
+    function ProductSelectorModalController($filter, $scope, $uibModal, $uibModalInstance, productSelectionLevels, ProductSelectorService, contractData, $timeout, logger, gridConstants) {
         var vm = this;
         // Non CPU verticals with drill down level 4
         var verticalsWithDrillDownLevel4 = ["EIA CPU", "EIA MISC"];
         var verticalsWithNoMMSelection = ["CS", "WC"];
-        var verticalsWithGDMFamlyAsDrillLevel4 = ["CS", "EIA CS", "EIA CPU"]
+        var verticalsWithGDMFamlyAsDrillLevel5 = ["CS", "EIA CS", "EIA CPU", 'EIA MISC']
         vm.productSelectionLevels = productSelectionLevels.data.ProductSelectionLevels;
         vm.productSelectionLevelsAttributes = productSelectionLevels.data.ProductSelectionLevelsAttributes;
 
@@ -142,7 +142,7 @@
                     // Check if we have prd_fmly_txt
 
                     if ((drillLevel5.length == 1 && drillLevel5[0].PRD_FMLY_TXT == "") ||
-                        arrayContainsString(verticalsWithGDMFamlyAsDrillLevel4, drillLevel5[0].PRD_CAT_NM)) {
+                        arrayContainsString(verticalsWithGDMFamlyAsDrillLevel5, drillLevel5[0].PRD_CAT_NM)) {
                         // If null or empty fall back to GDM_FMLY_NM
                         drillLevel5 = $filter('unique')(vm.prdSelLvlAtrbsForCategory, 'GDM_FMLY_NM');
                         vm.items = drillLevel5.map(function (i) {
@@ -157,7 +157,7 @@
                             return {
                                 name: i.PRD_FMLY_TXT,
                                 path: vm.items[0].path,
-                                drillDownFilter5: i.GDM_FMLY_NM
+                                drillDownFilter5: i.PRD_FMLY_TXT
                             }
                         });
                     }
@@ -202,7 +202,7 @@
                 "drillDownFilter4": null,
                 "drillDownFilter5": null,
                 "custSid": contractData.CUST_MBR_SID,
-                "geoSid": contractData.GEO_MBR_SID
+                "geoSid": contractData.GEO_MBR_SID.toString()
             }
 
             // We need to send two special attributes for getting the data for non CPU products
@@ -231,7 +231,7 @@
             var grid = $("#prodGrid").data("kendoGrid");
             angular.forEach(vm.gridOptionsProduct.columns, function (item, key) {
                 var columnValue = $filter('unique')(data, item.field);
-                if (columnValue.length == 1 && item.field !== undefined && item.field != "CheckBox" &&
+                if (columnValue.length == 1 && item.field !== undefined && item.field != "CheckBox" && item.field != 'CAP' && item.field != 'YCS2' &&
                     (columnValue[0][item.field] == "" || columnValue[0][item.field] == null || columnValue[0][item.field] == 'NA')) {
                     grid.hideColumn(item.field);//hide column
                 } else {
@@ -282,6 +282,7 @@
                     e.success(vm.gridData);
                 },
             },
+            pageSize: 10,
             schema: {
                 model: {
                     id: "PROD_MBR_SID"
@@ -303,6 +304,7 @@
             });
         }
 
+        // Grid ddiplay helper functions
         function clearProducts() {
             vm.addedProducts = [];
         }
@@ -336,6 +338,9 @@
             sortable: true,
             resizable: true,
             reorderable: true,
+            pageable: {
+                pageSizes: gridConstants.pageSizes,
+            },
             enableHorizontalScrollbar: true,
             columns: [
                 {
@@ -363,39 +368,36 @@
                     width: "150px"
                 },
                 {
-                    field: "EFF_FR_DTM",
+                    field: "CAP_START_DATE",
                     title: "CAP Availability date",
-                    template: "<div>{{vm.getFormatedDate(dataItem.EFF_FR_DTM)}}</div>",
+                    template: "<div>{{vm.getFormatedDate(dataItem.CAP_START_DATE)}}</div>",
                     width: "150px"
                 },
                 {
-                    field: "cpu_processor_number",
+                    field: "CPU_PROCESSOR_NUMBER",
                     title: "CPU Processor number",
                     width: "150px"
                 },
                 {
-                    field: "fmly_nm_MM",
+                    field: "FMLY_NM_MM",
                     title: "EDW Family Name",
-                    template: "<div kendo-tooltip k-content='dataItem.fmly_nm_MM'>{{(dataItem.fmly_nm_MM | limitTo: 20) + (dataItem.fmly_nm_MM.length > 20 ? '...' : '')}}</div>",
+                    template: "<div kendo-tooltip k-content='dataItem.EPM_NMFMLY_NM_MM'>{{dataItem.FMLY_NM_MM}}</div>",
+                    //template: "<div kendo-tooltip k-content='dataItem.FMLY_NM_MM'>{{(dataItem.FMLY_NM_MM | limitTo: 20) + (dataItem.FMLY_NM_MM.length > 20 ? '...' : '')}}</div>",
                     width: "150px"
                 },
                 {
                     field: "EPM_NM",
                     title: "EPM Name",
                     //TODO: Convert this a limitTo directive
-                    template: "<div kendo-tooltip k-content='dataItem.EPM_NM'>{{(dataItem.EPM_NM | limitTo: 20) + (dataItem.EPM_NM.length > 20 ? '...' : '')}}</div>",
+                    template: "<div kendo-tooltip k-content='dataItem.EPM_NM'>{{dataItem.EPM_NM}}</div>",
+                    //template: "<div kendo-tooltip k-content='dataItem.EPM_NM'>{{(dataItem.EPM_NM | limitTo: 20) + (dataItem.EPM_NM.length > 20 ? '...' : '')}}</div>",
                     width: "180px"
                 },
                 {
                     field: "SKU_NM",
                     title: "SKU Name",
-                    template: "<div kendo-tooltip k-content='dataItem.SKU_NM'>{{(dataItem.SKU_NM | limitTo: 20) + (dataItem.SKU_NM.length > 20 ? '...' : '')}}</div>",
-                    width: "180px"
-                },
-                {
-                    field: "KIT_NM",
-                    title: "KIT Name",
-                    template: "<div kendo-tooltip k-content='dataItem.KIT_NM'>{{(dataItem.KIT_NM | limitTo: 20) + (dataItem.KIT_NM.length > 20 ? '...' : '')}}</div>",
+                    template: "<div kendo-tooltip k-content='dataItem.SKU_NM'>{{dataItem.SKU_NM}}</div>",
+                    //template: "<div kendo-tooltip k-content='dataItem.SKU_NM'>{{(dataItem.SKU_NM | limitTo: 20) + (dataItem.SKU_NM.length > 20 ? '...' : '')}}</div>",
                     width: "180px"
                 },
                 {
@@ -439,11 +441,57 @@
                     width: "150px"
                 },
                 {
-                    field: "PRC_AMT",
-                    title: "CAP Price",
+                    field: "MM_CUST_CUSTOMER",
+                    title: "MM Customer Name",
                     width: "150px"
+                },
+                {
+                    field: "CAP",
+                    title: "CAP Price",
+                    width: "150px",
+                    template: "<op-popover ng-click='vm.openCAPBreakOut(dataItem, null)' op-options='CAP' op-label='#= CAP #' op-data='vm.getPrductDetails(dataItem, null)' />"
+                },
+                {
+                    field: "YCS2",
+                    title: "YCS2",
+                    width: "150px",
+                    template: "<op-popover op-options='YCS2' op-label='#= YCS2 #' op-data='vm.getPrductDetails(dataItem, \"YCS2\")' />"
                 }
             ]
+        }
+
+        vm.getPrductDetails = function (dataItem, priceCondition) {
+            return [{
+                'CUST_MBR_SID': contractData.CUST_MBR_SID,
+                'PRD_MBR_SID': dataItem.PRD_MBR_SID,
+                'GEO_MBR_SID': contractData.GEO_MBR_SID.toString(),
+                'DEAL_STRT_DT': contractData.START_DT,
+                'DEAL_END_DT': contractData.END_DT,
+                'getAvailable': 'N',
+                'priceCondition': priceCondition == null ? dataItem.CAP_PRC_COND : priceCondition
+            }];
+        }
+
+        // TODO remove once integrated in CM
+        vm.openCAPBreakOut = function (dataItem, priceCondition) {
+            var capModal = $uibModal.open({
+                backdrop: 'static',
+                templateUrl: 'app/contract/productCAPBreakout/productCAPBreakout.html',
+                controller: 'ProductCAPBreakoutController',
+                controllerAs: 'vm',
+                windowClass: 'cap-modal-window',
+                size: 'lg',
+                resolve: {
+                    productData: angular.copy(dataItem),
+                    contractData: angular.copy(contractData),
+                }
+            });
+
+            capModal.result.then(
+                function () {
+                },
+                function () {
+                });
         }
 
         vm.cancel = function () {

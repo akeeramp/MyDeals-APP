@@ -321,6 +321,8 @@
     <Content Include="app\contract\controllers\contract.controller.js" />
     <Content Include="app\contract\controllers\mrktSegMultiSelect.service.js" />
     <Content Include="app\contract\controllers\pricingTable.controller.js" />
+    <Content Include="app\contract\productCAPBreakout\productCAPBreakout.controller.js" />
+    <Content Include="app\contract\productCAPBreakout\productCAPBreakout.html" />
     <Content Include="app\contract\productCorrector\productCorrector.controller.js" />
     <Content Include="app\contract\productCorrector\productCorrector.html" />
     <Content Include="app\contract\productCorrector\productCorrector.service.js" />
@@ -398,6 +400,8 @@
     <Content Include="app\core\directives\opGrid\opGrid.directive.js" />
     <Content Include="app\core\directives\searchResults\searchResults.directive.html" />
     <Content Include="app\core\directives\searchResults\searchResults.directive.js" />
+    <Content Include="app\core\directives\opPopover\opPopover.directive.html" />
+    <Content Include="app\core\directives\opPopover\opPopover.directive.js" />
     <Content Include="app\dashboard\config\widget.config.js" />
     <Content Include="app\dashboard\controllers\dashboard.controller.js" />
     <Content Include="app\dashboard\views\addWidget.html" />

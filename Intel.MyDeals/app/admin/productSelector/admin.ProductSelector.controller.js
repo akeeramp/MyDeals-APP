@@ -44,10 +44,10 @@
         // TODO This will coded
         $scope.contractData = { 'CUST_MBR_SID': 2, 'GEO_MBR_SID': 1, "START_DT": "01/01/2017", "END_DT": "12/31/2017" };
 
-        vm.invalidProducts = []; // This will hold InValid Products        
+        vm.invalidProducts = []; // This will hold InValid Products
         vm.isMultipleORInvalid = true;  // Checking for In there any Duplicate or Invalid Product found or not
         vm.PROD_MBR_SID = 0;
-        vm.fetchProductDetails = fetchProductDetails; //  This method will Translate the User Inserted product into Product Details.        
+        vm.fetchProductDetails = fetchProductDetails; //  This method will Translate the User Inserted product into Product Details.
         $scope.IsVisible = false; //  Scope Visibility Variable to used for Hide and show div
         vm.datSourceCorrector = {}; // Will Hold Global Product Master List
         vm.addProducts = addProducts; // Method for Adding Valid products to the list
@@ -76,9 +76,9 @@
                     vm.datSourceCorrector = GetProductCorrectorData;
                     addProducts();
                     dataSource.read();
-                    
+
                 },
-                function () {                    
+                function () {
                 });
         }
 
@@ -262,7 +262,7 @@
             });
         }
 
-        // Translate Bulk Product(s) 
+        // Translate Bulk Product(s)
         function fetchProductDetails() {
             var dataSelect = [];
 
@@ -292,7 +292,7 @@
                     ProductSelectorService.TranslateProducts(dataSelect, CUST_CD, GEO_MBR_SID)
                     .then(
                         function (response) {
-                            if (response.statusText == "OK") {                                
+                            if (response.statusText == "OK") {
                                 cookProducts(response.data);
                             }
                         },
@@ -338,7 +338,7 @@
                     ProductSelectorService.TranslateProducts(dataSelect, CUST_CD, GEO_MBR_SID)
                         .then(
                             function (response) {
-                                if (response.statusText == "OK") {                                    
+                                if (response.statusText == "OK") {
                                     cookProducts(response.data);
                                 }
                             },
@@ -472,7 +472,7 @@
             dataSource.read();
             
         }
-        
+
         //Add Product in The Product GRID
         function addProducts() {
             vm.validProducts = [];
@@ -480,7 +480,7 @@
             for (var key in GetProductCorrectorData.ProdctTransformResults) {
                 var dataSelectedProd = GetProductCorrectorData.ValidProducts[key];
                 angular.forEach(dataSelectedProd, function (value, key) {
-                    //Duplicate check                                
+                    //Duplicate check
                     if (!$filter("where")(vm.validProducts, { PRD_MBR_SID: value.PRD_MBR_SID }).length > 0) {
                         vm.validProducts.push(value);
                     }

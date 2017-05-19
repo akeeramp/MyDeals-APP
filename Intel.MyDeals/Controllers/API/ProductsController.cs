@@ -337,7 +337,7 @@ namespace Intel.MyDeals.Controllers.API
         [Route("TranslateProducts/{CUST_MBR_SID}/{GEO_MBR_SID}")]
         [HttpPost]
         public ProductLookup TranslateProducts(List<ProductEntryAttribute> userInput, Int32 CUST_MBR_SID, int GEO_MBR_SID)
-        {            
+        {
             return SafeExecutor(() => _productsLib.TranslateProducts(userInput, CUST_MBR_SID, GEO_MBR_SID)
                 , $"Unable to translate {"userInput"}"
             );
@@ -437,8 +437,24 @@ namespace Intel.MyDeals.Controllers.API
         {
             return SafeExecutor(() => _productsLib.GetProductSelectionResults((string)input.searchHash,
                 (DateTime)input.startDate, (DateTime)input.endDate, (int)input.selectionLevel, (string)input.drillDownFilter4,
-                (string)input.drillDownFilter5, (int)input.custSid, (int)input.geoSid)
-                , $"Unable to Suggest Products 3"
+                (string)input.drillDownFilter5, (int)input.custSid, (string)input.geoSid)
+                , $"Unable to get product selection levels"
+            );
+        }
+
+        /// <summary>
+        /// Get CAP and YCS2 data for the Product
+        /// </summary>
+        /// <param name="productCAPCalc"></param>
+        /// <param name="getAvailable">Will get available CAP or YCS2 values</param>
+        /// <param name="priceCondition">Price condition can be (YCS2 or YCP1) for CAP and YCS2</param>
+        /// <returns></returns>
+        [Route("GetProductCAPYCS2Data/{getAvailable}/{priceCondition?}")]
+        [HttpPost]
+        public List<ProductCAPYCS2> GetProductCAPYCS2Data(List<ProductCAPYCS2Calc> productCAPCalc, string getAvailable, string priceCondition = "")
+        {
+            return SafeExecutor(() => _productsLib.GetProductCAPYCS2Data(productCAPCalc, getAvailable, priceCondition)
+                , $"Unable to get Product CAP and YCS2 values"
             );
         }
     }

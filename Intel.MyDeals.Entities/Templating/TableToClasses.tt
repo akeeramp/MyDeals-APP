@@ -184,7 +184,7 @@ using System.Collections.Generic;
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_TRANSLT_PRD_ENTRY] @CUST_MBR_SID=1, @GEO_MBR_SID=1");
 	ds.Tables[0].TableName = "PRD_LOOKUP_RESULTS";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
-	
+
     // Product Cost Test Rules
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_PCT_RULE_UI_FETCH]");
 	ds.Tables[0].TableName = "ProductCostTestRules";
@@ -258,6 +258,11 @@ using System.Collections.Generic;
 	//PR_MYDL_SRCH_OBJ
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_SRCH_OBJ] @in_srch_txt = ''");
 	ds.Tables[0].TableName = "SearchResults";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
+
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_CAP_YCS2_CALC] @PrcCond='YCS2', @FlagPick='N'");
+	ds.Tables[0].TableName = "ProductCAPYCS2";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	PopIndent();

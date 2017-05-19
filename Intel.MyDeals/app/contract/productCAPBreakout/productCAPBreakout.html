@@ -1,0 +1,52 @@
+﻿<div class="modal-content" moveablemodal style="background-color:#1a3e6f;overflow-y:auto;overflow-x:hidden;border-left:none;border-right:none;">
+    <div class="capbreakout modal-header">
+        <div class="row">
+            <div class="cursorArea col-md-6 cappProdHeader">
+                <p class="">Product CAP Breakout</p>
+            </div>
+            <div class="col-md-1" style="padding-top:15px;">
+                <img ng-if="loading" src="/Images/loadingSmall.gif" />
+            </div>
+            <span class="capmodalCloseIcon fr">
+                <i role="button" title="Close" class="intelicon-close-max" ng-click="vm.cancel()"></i>
+            </span>
+        </div>
+    </div>
+    <div class="capbreakout modal-body">
+        <div>
+            <div kendo-grid class="opUiContainer md capbreakout kendoGridHeight" k-options="vm.gridOptionsCAP"></div>
+        </div>
+    </div>
+</div>
+<style>
+    .cappProdHeader {
+        color: white;
+        font-size: 26px;
+    }
+
+    .capmodalCloseIcon {
+        color: white;
+        font-size: 26px;
+        padding-right: 20px;
+    }
+
+    .capbreakout.modal-header {
+        border-bottom: none;
+        padding-bottom: 0px;
+    }
+    .cap-modal-window, .modal-dialog {
+        width: 60%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .capbreakout.modal-body {
+        padding-top: 2px;
+        padding-bottom: 0px;
+        min-height: calc(40vh);
+        max-height: calc(40vh);
+        overflow-y: auto;
+    }
+    .capbreakout.kendoGridHeight {
+        height: calc(40vh - 50px);
+    }
+</style>

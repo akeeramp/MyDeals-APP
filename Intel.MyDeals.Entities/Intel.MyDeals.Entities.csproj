@@ -117,6 +117,7 @@
     <Compile Include="PassedValidation.cs" />
     <Compile Include="ProdMapping.cs" />
     <Compile Include="ProdMappings.cs" />
+    <Compile Include="ProductCAPCalc.cs" />
     <Compile Include="ProductHash.cs" />
     <Compile Include="ProductLookup.cs" />
     <Compile Include="ProductSelectorDrillDownLevels.cs" />
@@ -125,6 +126,9 @@
     <Compile Include="SecurityEngine\SecurityDropdownData.cs" />
     <Compile Include="SecurityEngine\SecurityWrapper.cs" />
     <Compile Include="SecurityEngine\SecurityMapSave.cs" />
+    <Compile Include="TableTypeParameters\in_t_prd_cap_calc.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="TableTypeParameters\in_t_prd_entry.cs">
       <SubType>Component</SubType>
     </Compile>

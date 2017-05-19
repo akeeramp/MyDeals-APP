@@ -1,0 +1,17 @@
+﻿<div>
+    <a popover-hoverable="true" popover-class="increase-popover-width" popover-is-open="dynamicPopover.isOpen" popover-placement="left"
+       uib-popover-template="dynamicPopover.templateUrl">{{opLabel}}</a>
+
+    <script type="text/ng-template" id="capPopoverTemplate.html">
+        <div>
+            <div ng-if="loading" class="text-center">
+                <img src="/Images/032.gif" />
+            </div>
+
+            <div ng-if="!loading" kendo-grid class="table" options="gridOptions"></div>
+        </div>
+    </script>
+</div>
+
+
+

@@ -303,7 +303,7 @@ namespace Intel.MyDeals.BusinessLogic
                                       select new ProductEntryAttribute
                                       {
                                           ROW_NUMBER = p.ROW_NUMBER,
-                                          USR_INPUT = t == null ? p.USR_INPUT : t.PRD_NM,                                          
+                                          USR_INPUT = t == null ? p.USR_INPUT : t.PRD_NM,
                                           EXCLUDE = p.EXCLUDE,
                                           FILTER = p.FILTER,
                                           END_DATE = p.END_DATE,
@@ -312,10 +312,10 @@ namespace Intel.MyDeals.BusinessLogic
 
                 productsTodb.AddRange(productAliases);
                 productLookup.ProdctTransformResults[userProduct.ROW_NUMBER.ToString()] = productAliases.Select(x => x.ROW_NUMBER.ToString()).ToList(); // Adding ROW_NUMBER as a key
-                productLookup.ProdctTransformResults[userProduct.ROW_NUMBER.ToString()] = productAliases.Select(x => x.USR_INPUT).ToList(); // Adding ROW_NUMBER as a key       
+                productLookup.ProdctTransformResults[userProduct.ROW_NUMBER.ToString()] = productAliases.Select(x => x.USR_INPUT).ToList(); // Adding ROW_NUMBER as a key
             }
 
-            //  Product match master list            
+            //  Product match master list
             var productMatchResults = GetProductDetails(productsTodb, CUST_MBR_SID, GEO_MBR_SID);
             // Get duplicate and Valid Products
             ExtractValidandDuplicateProducts(productLookup, productMatchResults);
@@ -371,7 +371,7 @@ namespace Intel.MyDeals.BusinessLogic
                     duplicateProds.ToList().ForEach(d => records[d] = new List<PRD_LOOKUP_RESULTS>());
 
                     duplicateRecords.ForEach(r => records[r.USR_INPUT].Add(r));
-                    
+
                     productLookup.DuplicateProducts[userProduct.Key] = records;
                 }
 
@@ -660,7 +660,7 @@ namespace Intel.MyDeals.BusinessLogic
                                                    + (prd.PRICE_SEGMENT == string.Empty ? "" : " " + prd.PRICE_SEGMENT)
                                                    + (prd.SBS_NM == string.Empty ? "" : " " + prd.SBS_NM)
                                                    + (prd.SKU_MARKET_SEGMENT == string.Empty ? "" : " " + prd.SKU_MARKET_SEGMENT)
-                                                   + (prd.SKU_NM == string.Empty ? "" : " " + prd.SKU_NM) 
+                                                   + (prd.SKU_NM == string.Empty ? "" : " " + prd.SKU_NM)
                                                 };
 
             List<NodeMatch> myMatches = new List<NodeMatch>();
@@ -696,11 +696,11 @@ namespace Intel.MyDeals.BusinessLogic
             List<int> matchedIDs = SortedList.Take(returnMaxRecords).Select(p => p.ID).ToList();
             List<ProductDatails> rtn = prds.Where(p => matchedIDs.Contains(p.PRD_MBR_SID)).ToList();
 
-            foreach(var p in rtn)
+            foreach (var p in rtn)
             {
                 p.USR_INPUT = prdEntered;
             }
-            
+
             List<ProductDatails> Final = new List<ProductDatails>();
             Final.AddRange(rtn);
 
@@ -748,9 +748,21 @@ namespace Intel.MyDeals.BusinessLogic
         /// <param name="drillDownFilter"></param>
         /// <returns></returns>
         public List<ProductSelectionResults> GetProductSelectionResults(string searchHash,
-            DateTime startDate, DateTime endDate, int selectionLevel, string drillDownFilter4, string drillDownFilter5, int custSid, int geoSid)
+            DateTime startDate, DateTime endDate, int selectionLevel, string drillDownFilter4, string drillDownFilter5, int custSid, string geoSid)
         {
             return _productDataLib.GetProductSelectionResults(searchHash, startDate, endDate, selectionLevel, drillDownFilter4, drillDownFilter5, custSid, geoSid);
+        }
+
+        /// <summary>
+        /// Get CAP and YCS2 values for given product with Geombrsid, cust_mbr_sid, and deal start and end date
+        /// </summary>
+        /// <param name="productCAPCalc"></param>
+        /// <param name="getAvailable"></param>
+        /// <param name="priceCondition"></param>
+        /// <returns></returns>
+        public List<ProductCAPYCS2> GetProductCAPYCS2Data(List<ProductCAPYCS2Calc> productCAPCalc, string getAvailable, string priceCondition)
+        {
+            return _productDataLib.GetProductCAPYCS2Data(productCAPCalc, getAvailable, priceCondition);
         }
     }
 

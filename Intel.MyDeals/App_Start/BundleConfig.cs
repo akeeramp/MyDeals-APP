@@ -81,6 +81,7 @@ namespace Intel.MyDeals
                 , "~/app/core/directives/gridStatusBoard/gridStatusBoard.directive.js"
                 , "~/app/core/directives/messageBoard/messageBoard.directive.js"
                 , "~/app/core/directives/opGrid/opGrid.directive.js"
+                , "~/app/core/directives/opPopover/opPopover.directive.js"
                 , "~/app/core/directives/searchResults/searchResults.directive.js"
                 , "~/app/blocks/util.js"
                 ));
@@ -145,6 +146,7 @@ namespace Intel.MyDeals
                 , "~/app/contract/productCorrector/productCorrector.controller.js"
                 , "~/app/contract/productCorrector/productCorrector.service.js"
                 , "~/app/contract/productSelector/kendoGridCheckBox.directive.js"
+                , "~/app/contract/productCAPBreakout/productCAPBreakout.controller.js"
                 , "~/app/costTest/costtest.module.js"
                 , "~/app/costTest/costtest.route.js"
                 , "~/app/dashboard/dashboard.module.js"
