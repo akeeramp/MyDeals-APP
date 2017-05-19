@@ -9,6 +9,6 @@ namespace Intel.MyDeals.Entities
 	public class PtrValidationContainer
 	{
 		public Dictionary<int, Dictionary<string, List<string>>> ColumnErrors { get; set; } // Key: Column name, Value: list of errors associated with the key
-		public ProductLookup ProductLookup { get; set; }
+		public ProductLookup_tempWithCAP ProductLookup { get; set; } // TODO: replace with regular ProductLookup when Product Translate API is completed
 	}
 }

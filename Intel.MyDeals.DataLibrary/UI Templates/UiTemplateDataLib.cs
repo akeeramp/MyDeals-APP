@@ -262,6 +262,7 @@ namespace Intel.MyDeals.DataLibrary
 				AtrbCd = AttributeCodes.PRD_LEVEL,
 				Label = "Product Level",
 				ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+				UiType = "DROPDOWN",
 				LookupUrl = "/api/Dropdown/GetProductLevelDropdowns",
 				LookupText = "DROP_DOWN",
 				LookupValue = "DROP_DOWN"

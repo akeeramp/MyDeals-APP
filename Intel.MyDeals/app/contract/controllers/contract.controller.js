@@ -961,7 +961,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
 
         // **** SAVE CONTRACT Methods ****
         //
-        $scope.saveEntireContractBase = function (stateName, forceValidation, forcePublish, toState, toParams) {
+        $scope.saveEntireContractBase = function (stateName, forceValidation, forcePublish, toState, toParams,  _dirtyContractOnly) {
             // async save data
 
             topbar.show();
@@ -984,7 +984,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
 
         	var gData = $scope.wipData;
 
-        	var contractData = $scope._dirtyContractOnly ? [$scope.contractData] : [];
+        	var contractData = _dirtyContractOnly ? [$scope.contractData] : [];
         	var curPricingTableData = $scope.curPricingTable.DC_ID === undefined ? [] : [$scope.curPricingTable];
 
         	// Pricing Table Row
@@ -1090,7 +1090,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
         }
 
         $scope.validatePricingTable = function (stateName) {
-        	var data = createEntireContractBase(stateName);
+        	var data = createEntireContractBase(stateName, true);
 			
         	objsetService.validatePricingTableRow(data)
 				.then(function (response) {
@@ -1108,7 +1108,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
 										if (rowErrorsList[colName] !== null && rowErrorsList[colName].length > 0) {
 											for (var i = 0; i < rowErrorsList[colName].length; i++) {
 												var myErrMsg = rowErrorsList[colName][i];
-												errStr += "- " + myErrMsg + "\n ";
+												errStr += "\n - Row #" + rowIndex + " (" + colName +")     " + myErrMsg;
 											}
 										}
 									}
@@ -1135,7 +1135,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
 
             if (forceValidation === undefined || forceValidation === null) forceValidation = false;
 
-            var data = createEntireContractBase(stateName);
+            var data = createEntireContractBase(stateName, $scope._dirtyContractOnly);
 
             $scope.isSaving = true;
 

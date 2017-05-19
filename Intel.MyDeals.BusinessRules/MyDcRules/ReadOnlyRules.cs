@@ -45,7 +45,7 @@ namespace Intel.MyDeals.BusinessRules
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = BusinessLogicDeActions.SetReadOnly,
-                            Target = new[] {AttributeCodes.GEO_COMBINED, AttributeCodes.SOLD_TO_ID} // Items to set readonly
+                            Target = new[] { AttributeCodes.SOLD_TO_ID} // Items to set readonly
                         }
                     }
                 },

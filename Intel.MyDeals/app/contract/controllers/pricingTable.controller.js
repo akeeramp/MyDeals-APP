@@ -624,12 +624,21 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 							dropdownValuesSheet.batch(function () {
 								for (var i = 0; i < response.data.length; i++) {
 									var myKey = response.data[i].ATRB_CD;
+									if (myKey === null || myKey === undefined) {
+										myKey = response.data[i].subAtrbValue; // HACK: this is for Product Level's atrb code because it pulls form a different dropdown sp
+									}
+
 									// TODO: Why is ECAP_TYPE called PROGRAM_ECAP_TYPE and can we change that?
 									if (response.data[i].ATRB_CD == "PROGRAM_ECAP_TYPE") {
 										myKey = "ECAP_TYPE";
 									}
 									// Add values onto the other sheet
-									dropdownValuesSheet.range(vm.colToLetter[myKey] + (i + 1)).value(response.data[i].DROP_DOWN);
+									var dropdownValue = response.data[i].DROP_DOWN;
+									if (dropdownValue === undefined || dropdownValue === null) {
+										dropdownValue = response.data[i].dropdownName; // HACK: this is for Product Level's atrb code because it pulls form a different dropdown sp
+									}
+
+									dropdownValuesSheet.range(vm.colToLetter[myKey] + (i + 1)).value(dropdownValue);
 								}
 							});
 							}, function (error) {
@@ -655,19 +664,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 						// Add validations based on column type
 						switch (myFieldModel.type) {
 							case "date":
-									//// TODO: Date conversion is killing IE by 1-2 minutes (on Jeff's computer)
-									//// Add date picker editor and validation
-									//sheet.range(myColumnName + ":" + myColumnName).validation({
-									//	dataType: "date",
-									//	showButton: true,
-									//	comparerType: "between",
-									//	from: 'DATEVALUE("1/1/1900")',
-									//	to: 'DATEVALUE("12/31/9999")',
-									//	allowNulls: myFieldModel.nullable,
-									//	type: "warning",
-									//	messageTemplate: "Value must be a date"
-									//});
-								//sheet.range(myColumnName + ":" + myColumnName).format("MM/dd/yyyy");
+								//sheet.range(myColumnName + ":" + myColumnName).format("MM/dd/yyyy");								
 								sheet.range(myColumnName + ":" + myColumnName).editor("datePickerEditor");
 								vm.requiredStringColumns[key] = true;
 								break;
@@ -873,7 +870,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 						cellData.fontSize = cellStyle.fontSize;
 						cellData.italic = null;
 						cellData.link = null;
-						//cellData.textAlign = cellStyle.textAlign;
+						cellData.textAlign = cellStyle.textAlign;
 						cellData.underline = null;
 						cellData.verticalAlign = cellStyle.verticalAlign;
 						cellData.wrap = null;
