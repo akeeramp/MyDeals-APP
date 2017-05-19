@@ -961,14 +961,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
 
         // **** SAVE CONTRACT Methods ****
         //
-        $scope.saveEntireContractBase = function (stateName, forceValidation, forcePublish, toState, toParams,  _dirtyContractOnly) {
-            // async save data
-
-            topbar.show();
-
-            if (forceValidation === undefined || forceValidation === null) forceValidation = false;
-            if (forcePublish === undefined || forcePublish === null) forcePublish = false;
-
+        function createEntireContractBase(stateName, _dirtyContractOnly) {
             var source = "";
             if (stateName === "contract.manager.strategy") source = "PRC_TBL";
             if (stateName === "contract.manager.strategy.wip") source = "WIP_DEAL";
@@ -1054,15 +1047,15 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
         	}
 
 
-    	    // Check PricingTableRow validations before we submit to the API
-            if (sData !== undefined) {
-        	    var errorList = [];
+    	    //// Check PricingTableRow validations before we submit to the API
+            //if (sData !== undefined) {
+        	//    var errorList = [];
 
-        	    var intA = "A".charCodeAt(0);
-        	    var finalColLetter = String.fromCharCode(intA + ($scope.templates.ModelTemplates.PRC_TBL_ROW["ECAP"].columns.length - 1)); // TODO: Make this flexible against any ObjType
-        	    var spreadsheet = $("#pricingTableSpreadsheet").data("kendoSpreadsheet");
-        	    var sheet = spreadsheet.activeSheet();
-        	    var cellsStates = sheet.range('A2:' +finalColLetter + (greatestPtrIndex + 1)).getState();
+        	//    var intA = "A".charCodeAt(0);
+        	//    var finalColLetter = String.fromCharCode(intA + ($scope.templates.ModelTemplates.PRC_TBL_ROW["ECAP"].columns.length - 1)); // TODO: Make this flexible against any ObjType
+        	//    var spreadsheet = $("#pricingTableSpreadsheet").data("kendoSpreadsheet");
+        	//    var sheet = spreadsheet.activeSheet();
+        	//    var cellsStates = sheet.range('A2:' +finalColLetter + (greatestPtrIndex + 1)).getState();
 
         	//	//// TODO: uncomment this for UI-side validation once we figure oout the duplicate cell value on error bug
         	//	//if (errorList.length > 0) {
@@ -1128,12 +1121,13 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
         }
 
         // **** SAVE CONTRACT Methods ****
-        //
-        $scope.saveEntireContractBase = function(stateName, forceValidation, toState, toParams) {
+    	//
+        $scope.saveEntireContractBase = function (stateName, forceValidation, forcePublish, toState, toParams) {
             // async save data
             topbar.show();
 
             if (forceValidation === undefined || forceValidation === null) forceValidation = false;
+            if (forcePublish === undefined || forcePublish === null) forcePublish = false;
 
             var data = createEntireContractBase(stateName, $scope._dirtyContractOnly);
 

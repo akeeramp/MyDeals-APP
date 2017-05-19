@@ -181,7 +181,7 @@ namespace Intel.MyDeals.Controllers.API
 
 			// Hard coded values :C
 			string worldWide = "Worldwide";
-			string colName_ecapPrice = "ECAP_PRICE_____10___0";
+			string colName_ecapPrice = "ECAP_PRICE";
 			string colName_geo = "GEO_COMBINED";
 			string colName_startDate = "START_DT";
 			string colName_contract_startDate = "START_DT";
@@ -353,7 +353,7 @@ namespace Intel.MyDeals.Controllers.API
 				object val_OBJ_SET_TYPE_CD = new object();
 
 				row.TryGetValue("PTR_USER_PRD", out val_PTR_USER_PRD);
-				row.TryGetValue("ECAP_PRICE_____10___0", out val_ECAP_PRICE);
+				row.TryGetValue("ECAP_PRICE", out val_ECAP_PRICE);
 				row.TryGetValue("START_DT", out val_START_DT);
 				row.TryGetValue("END_DT", out val_END_DT);
 				row.TryGetValue("PAYOUT_BASED_ON", out val_PAYOUT_BASED_ON);
@@ -550,7 +550,7 @@ namespace Intel.MyDeals.Controllers.API
 							// When ECAP Price is greater than CAP, UI validation check on deal creation and system should give a soft warning. 
 							if (val_ECAP_PRICE != null && prod.CAP > Int32.Parse(val_ECAP_PRICE.ToString()))
 							{
-								myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_ecapPrice, "CAP price (" + prod.CAP + ") is graeter than ECAP Price.");
+								myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_ecapPrice, "CAP price (" + prod.CAP + ") is greater than ECAP Price.");
 							}
 
 							// If the product start date is after the deal start date, then deal start date should match with product start date and back date would not apply.
