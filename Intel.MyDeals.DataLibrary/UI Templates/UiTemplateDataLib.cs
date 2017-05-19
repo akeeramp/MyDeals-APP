@@ -230,16 +230,15 @@ namespace Intel.MyDeals.DataLibrary
                 IsKey = true,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 DataType = "number",
-                Label = "Id",
+                Label = "Row ID",
                 Width = 50,
-                IsHidden = true,
                 IsReadOnly = true
             });
             items.Add(new UiTemplateContainerItem
             {
                 Id = 29,
                 AtrbCd = AttributeCodes.PTR_USER_PRD,
-                Label = "User Product",
+                Label = "Contract Product",
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 Width = 220
             });
@@ -247,7 +246,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 Id = 29,
                 AtrbCd = AttributeCodes.PTR_SYS_PRD,
-				Label = "System Products",
+				Label = "Json String (will be hidden)",
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 IsReadOnly = false, // need to set to true after product selector is in place
                 IsHidden = false,
@@ -267,13 +266,23 @@ namespace Intel.MyDeals.DataLibrary
 				LookupText = "DROP_DOWN",
 				LookupValue = "DROP_DOWN"
 			});
-			items.Add(new UiTemplateContainerItem
+            items.Add(new UiTemplateContainerItem
             {
                 Id = 29,
                 AtrbCd = AttributeCodes.ECAP_PRICE,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 Width = 100,
                 Template = "#=gridUtils.uiIconWrapper(data, 'ECAP_PRICE')#",
+                Format = "{0:c}",
+                IsRequired = true
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
+                AtrbCd = AttributeCodes.VOLUME,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                Width = 100,
+                Template = "#=gridUtils.uiIconWrapper(data, 'VOLUME')#",
                 Format = "{0:c}",
                 IsRequired = true
             });
@@ -479,6 +488,16 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
+                Id = 29,
+                AtrbCd = "DC_PARENT_ID",
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Template = "#=gridUtils.uiControlWrapper(data, 'DC_PARENT_ID')#",
+                Width = 90,
+                Label = "Prc Table Row ID",
+                IsReadOnly = true
+            });
+            items.Add(new UiTemplateContainerItem
+            {
                 Id = 20,
                 AtrbCd = AttributeCodes.START_DT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
@@ -522,6 +541,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 Id = 20,
                 AtrbCd = AttributeCodes.PTR_USER_PRD,
+                Label = "Contract Product",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 Template = "#=gridUtils.uiControlWrapper(data, 'PTR_USER_PRD')#",
                 DataType = "object",
@@ -531,6 +551,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 Id = 20,
                 AtrbCd = AttributeCodes.TITLE,
+                Label = "MyDeals Product",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 Template = "#=gridUtils.uiControlWrapper(data, 'TITLE')#",
                 DataType = "object",
@@ -558,47 +579,6 @@ namespace Intel.MyDeals.DataLibrary
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
             });
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 20,
-                AtrbCd = AttributeCodes.VOLUME,
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Template = "#=gridUtils.uiControlWrapper(data, 'VOLUME')#",
-                IsFilterable = true,
-                IsSortable = true,
-                Width = 125
-            });
-            //items.Add(new UiTemplateContainerItem
-            //{
-            //    Id = 20,
-            //    AtrbCd = AttributeCodes.CREDIT_VOLUME,
-            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-            //    Template = "#=gridUtils.uiControlWrapper(data, 'CREDIT_VOLUME')#",
-            //    IsFilterable = true,
-            //    IsSortable = true,
-            //    Width = 95
-            //});
-            //items.Add(new UiTemplateContainerItem
-            //{
-            //    Id = 20,
-            //    AtrbCd = AttributeCodes.DEBIT_VOLUME,
-            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-            //    Template = "#=gridUtils.uiControlWrapper(data, 'DEBIT_VOLUME')#",
-            //    IsFilterable = true,
-            //    IsSortable = true,
-            //    Width = 95
-            //});
-            //items.Add(new UiTemplateContainerItem
-            //{
-            //    Id = 20,
-            //    AtrbCd = AttributeCodes.BLLG_DT,
-            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-            //    Template = "#=gridUtils.uiControlWrapper(data, 'BLLG_DT', \"date:'MM/dd/yyyy'\")#",
-            //    Label = "Last Credit / Debit Date",
-            //    IsFilterable = true,
-            //    IsSortable = true,
-            //    Width = 110
-            //});
             items.Add(new UiTemplateContainerItem
             {
                 Id = 20,
@@ -755,6 +735,17 @@ namespace Intel.MyDeals.DataLibrary
                 LookupUrl = "/api/Dropdown/GetDropdowns/YCS2_OVERLAP_OVERRIDE",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
+                AtrbCd = AttributeCodes.VOLUME,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Width = 100,
+                Format = "{0:d}",
+                IsFilterable = true,
+                IsSortable = true,
+                Template = "#=gridUtils.uiControlWrapper(data, 'VOLUME')#"
             });
 
 

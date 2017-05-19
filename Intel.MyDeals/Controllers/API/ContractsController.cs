@@ -82,7 +82,7 @@ namespace Intel.MyDeals.Controllers.API
         [HttpPost]
         public OpDataCollectorFlattenedDictList SaveContract(int custId, OpDataCollectorFlattenedList contracts)
         {
-            return SafeExecutor(() => _contractsLib.SaveContract(contracts, custId, false, false)
+            return SafeExecutor(() => _contractsLib.SaveContract(contracts, custId, false, false, "")
                 , "Unable to save the Contract"
             );
         }
@@ -92,7 +92,7 @@ namespace Intel.MyDeals.Controllers.API
         [HttpPost]
         public OpDataCollectorFlattenedDictList SaveFullContract(int custId, OpDataCollectorFlattenedDictList fullContracts)
         {
-            return SafeExecutor(() => _contractsLib.SaveFullContract(custId, fullContracts, false, false)
+            return SafeExecutor(() => _contractsLib.SaveFullContract(custId, fullContracts, false, false, "")
                 , "Unable to save the Contract"
             );
         }
@@ -106,30 +106,45 @@ namespace Intel.MyDeals.Controllers.API
                 , "Unable to save the Contract"
             );
         }
-
-		[Authorize]
+        
+        [Authorize]
 		[Route("SaveAndValidateContractAndPricingTable/{custId}")]
 		[HttpPost]
 		public OpDataCollectorFlattenedDictList SaveAndValidateContractAndPricingTable(int custId, ContractTransferPacket contractAndPricingTable)
 		{
-			PtrValidationContainer errorList = new PtrValidationContainer();
-			errorList = ValidateEcapPricingTableRows(contractAndPricingTable);
+		    if (contractAndPricingTable.EventSource == OpDataElementType.PRC_TBL.ToString())
+		    {
+			    PtrValidationContainer errorList = new PtrValidationContainer();
+			    errorList = ValidateEcapPricingTableRows(contractAndPricingTable);
 
-			if (errorList.ColumnErrors.Count > 0)
-			{
-				// Pricing Table Row has errors, so throw an exception
-				throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
-				{
-					Content = new ObjectContent<PtrValidationContainer>(errorList, new JsonMediaTypeFormatter())
-				});
-			}
+			    if (errorList.ColumnErrors.Count > 0)
+			    {
+				    // Pricing Table Row has errors, so throw an exception
+				    throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
+				    {
+					    Content = new ObjectContent<PtrValidationContainer>(errorList, new JsonMediaTypeFormatter())
+				    });
+			    }
+            }
 
-			return SafeExecutor(() => _contractsLib.SaveContractAndPricingTable(custId, contractAndPricingTable, true, false) // TODO: Phil/Mike: check if the last param is what you want
+            return SafeExecutor(() => _contractsLib.SaveContractAndPricingTable(custId, contractAndPricingTable, true, false)
 				, "Unable to save the Contract"
 			);
 		}
 
-		[Authorize]
+        [Authorize]
+        [Route("SaveAndValidateAndPublishContractAndPricingTable/{custId}")]
+        [HttpPost]
+        public OpDataCollectorFlattenedDictList SaveAndValidateAndPublishContractAndPricingTable(int custId, ContractTransferPacket contractAndPricingTable)
+        {
+            // TODO - ADD validation logice here before saving.
+
+            return SafeExecutor(() => _contractsLib.SaveContractAndPricingTable(custId, contractAndPricingTable, true, true)
+                , "Unable to save the Contract"
+            );
+        }
+
+        [Authorize]
 		[Route("ValidatePricingTableRows")]
 		[HttpPost]
 		public PtrValidationContainer ValidatePricingTableRows(ContractTransferPacket contractAndPricingTable)

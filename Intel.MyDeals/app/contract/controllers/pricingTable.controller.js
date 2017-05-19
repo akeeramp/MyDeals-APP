@@ -216,6 +216,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 		        "DC_ID": {
 		            "Groups": ["Deal Info"]
 		        },
+		        "DC_PARENT_ID": {
+		            "Groups": ["Deal Info"]
+		        },
 		        "PASSED_VALIDATION": {
 		            "Groups": ["Deal Info"]
 		        },

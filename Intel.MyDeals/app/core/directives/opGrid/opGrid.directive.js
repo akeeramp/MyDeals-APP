@@ -738,6 +738,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
 
                         $scope.increaseBadgeCnt(key);
                         valid = false;
+                        row["PASSED_VALIDATION"] = "Dirty";
                     }
                 }, scope);
 

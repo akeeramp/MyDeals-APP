@@ -439,14 +439,21 @@ namespace Intel.MyDeals.BusinessLogic
             return opMsgQueue;
         }
 
-        public static bool ValidationApplyRules(this MyDealsData myDealsData, bool forceValidation, bool forcePublish)
+        public static bool ValidationApplyRules(this MyDealsData myDealsData, bool forceValidation, bool forcePublish, string sourceEvent)
         {
             // Apply rules to save packets here.  If validations are hit, append them to the DC and packet message lists.
             bool dataHasValidationErrors = false;
 
+
+            // TODO Only validate sourceEvent
+            List<OpDataElementType> ignoreTypes = new List<OpDataElementType>();
+            if (sourceEvent == OpDataElementType.PRC_TBL.ToString()) ignoreTypes.Add(OpDataElementType.WIP_DEAL);
+            if (sourceEvent == OpDataElementType.WIP_DEAL.ToString()) ignoreTypes.Add(OpDataElementType.PRC_TBL);
+
+
             foreach (OpDataElementType opDataElementType in Enum.GetValues(typeof(OpDataElementType)))
             {
-                if (!myDealsData.ContainsKey(opDataElementType)) continue;
+                if (!myDealsData.ContainsKey(opDataElementType) || ignoreTypes.Contains(opDataElementType)) continue;
                 foreach (OpDataCollector dc in myDealsData[opDataElementType].AllDataCollectors)
                 {
                     var dcHasErrors = false;

@@ -717,47 +717,48 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
         $scope.isAddPricingTableHidden = true;
         $scope.isEditPricingTableDefaultsHidden = true;
         $scope.toggleSearch = function () {
-        $scope.isSearchHidden = !$scope.isSearchHidden;
-        $scope.isAddStrategyHidden = true;
-        $scope.isAddStrategyBtnHidden = false;
-        $scope.isAddPricingTableHidden = true;
-        $scope.isEditPricingTableDefaultsHidden = true;
-    }
-    $scope.showAddPricingTable = function (ps) {
-        $scope.isAddPricingTableHidden = false;
-        $scope.isAddStrategyHidden = true;
-        $scope.isAddStrategyBtnHidden = true;
-        $scope.isSearchHidden = true;
-        $scope.isEditPricingTableDefaultsHidden = false;
-        $scope.curPricingStrategy = ps;
-    }
-    $scope.showEditPricingTableDefaults = function (pt) {
-        $scope.isAddPricingTableHidden = true;
-        $scope.isAddStrategyHidden = true;
-        $scope.isSearchHidden = true;
-        $scope.isEditPricingTableDefaultsHidden = false;
-        $scope.setNptTemplate(pt);
-    }
-    $scope.hideAddPricingTable = function () {
-        $scope.isAddPricingTableHidden = true;
-        $scope.isAddStrategyHidden = true;
-        $scope.isAddStrategyBtnHidden = false;
-        $scope.isSearchHidden = true;
-        $scope.isEditPricingTableDefaultsHidden = true;
-        $scope.newPricingTable = util.clone($scope.templates.ObjectTemplates.PRC_TBL.CAP_BAND);
-        $scope.newPricingTable.OBJ_SET_TYPE_CD = ""; //reset new PT deal type
-        $scope.clearPtTemplateIcons();
-        $scope.curPricingStrategy = {}; //clears curPricingStrategy
-    }
-    $scope.hideEditPricingTableDefaults = function () {
-        $scope.isAddPricingTableHidden = true;
-        $scope.isAddStrategyHidden = true;
-        $scope.isSearchHidden = true;
-        $scope.isEditPricingTableDefaultsHidden = true;
-        $scope.newPricingTable = util.clone($scope.templates.ObjectTemplates.PRC_TBL.CAP_BAND);
-        $scope.newPricingTable.OBJ_SET_TYPE_CD = ""; //reset new PT deal type
-        $scope.currentPricingTable = null;
-    }
+            $scope.isSearchHidden = !$scope.isSearchHidden;
+            $scope.isAddStrategyHidden = true;
+            $scope.isAddStrategyBtnHidden = false;
+            $scope.isAddPricingTableHidden = true;
+            $scope.isEditPricingTableDefaultsHidden = true;
+        }
+
+        $scope.showAddPricingTable = function (ps) {
+            $scope.isAddPricingTableHidden = false;
+            $scope.isAddStrategyHidden = true;
+            $scope.isAddStrategyBtnHidden = true;
+            $scope.isSearchHidden = true;
+            $scope.isEditPricingTableDefaultsHidden = false;
+            $scope.curPricingStrategy = ps;
+        }
+        $scope.showEditPricingTableDefaults = function (pt) {
+            $scope.isAddPricingTableHidden = true;
+            $scope.isAddStrategyHidden = true;
+            $scope.isSearchHidden = true;
+            $scope.isEditPricingTableDefaultsHidden = false;
+            $scope.setNptTemplate(pt);
+        }
+        $scope.hideAddPricingTable = function () {
+            $scope.isAddPricingTableHidden = true;
+            $scope.isAddStrategyHidden = true;
+            $scope.isAddStrategyBtnHidden = false;
+            $scope.isSearchHidden = true;
+            $scope.isEditPricingTableDefaultsHidden = true;
+            $scope.newPricingTable = util.clone($scope.templates.ObjectTemplates.PRC_TBL.CAP_BAND);
+            $scope.newPricingTable.OBJ_SET_TYPE_CD = ""; //reset new PT deal type
+            $scope.clearPtTemplateIcons();
+            $scope.curPricingStrategy = {}; //clears curPricingStrategy
+        }
+        $scope.hideEditPricingTableDefaults = function () {
+            $scope.isAddPricingTableHidden = true;
+            $scope.isAddStrategyHidden = true;
+            $scope.isSearchHidden = true;
+            $scope.isEditPricingTableDefaultsHidden = true;
+            $scope.newPricingTable = util.clone($scope.templates.ObjectTemplates.PRC_TBL.CAP_BAND);
+            $scope.newPricingTable.OBJ_SET_TYPE_CD = ""; //reset new PT deal type
+            $scope.currentPricingTable = null;
+        }
 
         // **** PRICING STRATEGY Methods ****
         //
@@ -797,21 +798,21 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
             $scope.newPricingTable["_extraAtrbs"] = ptTmplt.extraAtrbs;
             $scope.newPricingTable["_defaultAtrbs"] = ptTmplt.defaultAtrbs;
 
-        // Maybe don't do this...
-        //if (util.isEmpty(ptTmplt.extraAtrbs)) {
-        //    $scope.customAddPtValidate();
-        //}
-    }
-    $scope.setNptTemplate = function (pt) {
-        $scope.currentPricingTable = pt;
-        var ptTemplate = $scope.templates.ModelTemplates.PRC_TBL[pt.OBJ_SET_TYPE_CD]
-        //$scope.newPricingTable = util.clone($scope.templates.ObjectTemplates.PRC_TBL.CAP_BAND); //TODO: replace with existing/current rather than new...? -> clone curPT rather than template? - keep it same as "new" pricing table and copy it over later, todo rename "new"pt variable
-        $scope.newPricingTable = util.clone(pt);
-        $scope.newPricingTable["OBJ_SET_TYPE_CD"] = pt.OBJ_SET_TYPE_CD;
-        $scope.newPricingTable["_extraAtrbs"] = ptTemplate.extraAtrbs;
-        $scope.newPricingTable["_defaultAtrbs"] = ptTemplate.defaultAtrbs;
-    }
-    $scope.addCustomToTemplates();
+            // Maybe don't do this...
+            //if (util.isEmpty(ptTmplt.extraAtrbs)) {
+            //    $scope.customAddPtValidate();
+            //}
+        }
+        $scope.setNptTemplate = function (pt) {
+            $scope.currentPricingTable = pt;
+            var ptTemplate = $scope.templates.ModelTemplates.PRC_TBL[pt.OBJ_SET_TYPE_CD]
+            //$scope.newPricingTable = util.clone($scope.templates.ObjectTemplates.PRC_TBL.CAP_BAND); //TODO: replace with existing/current rather than new...? -> clone curPT rather than template? - keep it same as "new" pricing table and copy it over later, todo rename "new"pt variable
+            $scope.newPricingTable = util.clone(pt);
+            $scope.newPricingTable["OBJ_SET_TYPE_CD"] = pt.OBJ_SET_TYPE_CD;
+            $scope.newPricingTable["_extraAtrbs"] = ptTemplate.extraAtrbs;
+            $scope.newPricingTable["_defaultAtrbs"] = ptTemplate.defaultAtrbs;
+        }
+        $scope.addCustomToTemplates();
 
         // **** UNMARK CURRENT Methods ****
         //
@@ -926,37 +927,37 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                                 return;
                             }
 
-                        var deleteReload = false;
-                        if ($scope.curPricingTableId == pt.DC_ID) {
-                            deleteReload = true;
-                        }
+                            var deleteReload = false;
+                            if ($scope.curPricingTableId == pt.DC_ID) {
+                                deleteReload = true;
+                            }
 
-                        // might need to unmark the current selected item
-                        $scope.unmarkCurPricingTableIf(ps.DC_ID);
+                            // might need to unmark the current selected item
+                            $scope.unmarkCurPricingTableIf(ps.DC_ID);
 
                             // delete item
                             ps.PRC_TBL.splice(ps.PRC_TBL.indexOf(pt), 1);
 
-                        // hide PT defaults editor regardless of whether you deleted the one being edited - ideally we will only hide if deleting the one being edited but this behavior is fine for the time being
-                        $scope.hideEditPricingTableDefaults()
+                            // hide PT defaults editor regardless of whether you deleted the one being edited - ideally we will only hide if deleting the one being edited but this behavior is fine for the time being
+                            $scope.hideEditPricingTableDefaults()
 
-                        logger.success("Deleted the Pricing Table", pt, "Save Sucessful");
-                        topbar.hide();
+                            logger.success("Deleted the Pricing Table", pt, "Save Sucessful");
+                            topbar.hide();
 
-                        // redirect if deleted the currently focused PT
-                        if (deleteReload) {
-                            $state.go('contract.manager', {
-                                cid: $scope.contractData.DC_ID
-                            }, { reload: true });
-                        }
-                    },
+                            // redirect if deleted the currently focused PT
+                            if (deleteReload) {
+                                $state.go('contract.manager', {
+                                    cid: $scope.contractData.DC_ID
+                                }, { reload: true });
+                            }
+                        },
                     function (response) {
                         logger.error("Could not delete the Pricing Table.", response, response.statusText);
                         topbar.hide();
                     }
-            );
+                    );
+                });
             });
-        });
         }
 
         // **** SAVE CONTRACT Methods ****
@@ -966,85 +967,91 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
             if (stateName === "contract.manager.strategy") source = "PRC_TBL";
             if (stateName === "contract.manager.strategy.wip") source = "WIP_DEAL";
 
-        	// sync all detail data sources into main grid datasource for a single save
-        	if ($scope.spreadDs !== undefined) $scope.spreadDs.sync();
-        	//if ($scope.gridDs !== undefined) $scope.gridDs.sync();
+            // sync all detail data sources into main grid datasource for a single save
+            if ($scope.spreadDs !== undefined) $scope.spreadDs.sync();
+            //if ($scope.gridDs !== undefined) $scope.gridDs.sync();
 
-        	var sData = $scope.spreadDs === undefined ? undefined : $scope.pricingTableData.PRC_TBL_ROW;
-        	//var gData = $scope.gridDs === undefined ? undefined : $scope.gridDs.data(); // TODO after multi dim... need to see if we can read the variable instead of the source
+            var sData = $scope.spreadDs === undefined ? undefined : $scope.pricingTableData.PRC_TBL_ROW;
+            //var gData = $scope.gridDs === undefined ? undefined : $scope.gridDs.data(); // TODO after multi dim... need to see if we can read the variable instead of the source
 
-        	$scope.$broadcast('syncDs');
+            $scope.$broadcast('syncDs');
 
-        	var gData = $scope.wipData;
+            var gData = $scope.wipData;
 
         	var contractData = _dirtyContractOnly ? [$scope.contractData] : [];
         	var curPricingTableData = $scope.curPricingTable.DC_ID === undefined ? [] : [$scope.curPricingTable];
 
-        	// Pricing Table Row
-        	if (curPricingTableData.length > 0 && sData != undefined) {
-        		// Only save if a product has been filled out
-        		sData = sData.filter(function (obj) {
-        			return obj.PTR_USER_PRD !== undefined && obj.PTR_USER_PRD !== null && obj.PTR_USER_PRD !== "";
-        		});
+            // Pricing Table Row
+            if (curPricingTableData.length > 0 && sData != undefined) {
+                // Only save if a product has been filled out
+                sData = sData.filter(function (obj) {
+                    return obj.PTR_USER_PRD !== undefined && obj.PTR_USER_PRD !== null && obj.PTR_USER_PRD !== "";
+                });
 
-        		// find all date fields
-        		var dateFields = [];
-        		var fields = $scope.templates.ModelTemplates.PRC_TBL_ROW[$scope.curPricingTable.OBJ_SET_TYPE_CD].model.fields;
-        		for (var key in fields) {
-        			if (typeof fields[key] !== 'function') {
-        				if (fields[key].type === "date" || key.slice(-3) === "_DT") dateFields.push(key);
-        			}
-        		}
+                // find all date fields
+                var dateFields = [];
+                var fields = $scope.templates.ModelTemplates.PRC_TBL_ROW[$scope.curPricingTable.OBJ_SET_TYPE_CD].model.fields;
+                for (var key in fields) {
+                    if (typeof fields[key] !== 'function') {
+                        if (fields[key].type === "date" || key.slice(-3) === "_DT") dateFields.push(key);
+                    }
+                }
 
-        		for (var s = 0; s < sData.length; s++) {
-        			if (sData[s].DC_ID === null) sData[s].DC_ID = $scope.uid--;
-        			sData[s].DC_PARENT_ID = curPricingTableData[0].DC_ID;
-        			sData[s].dc_type = "PRC_TBL_ROW";
-        			sData[s].dc_parent_type = curPricingTableData[0].dc_type;
-        			sData[s].OBJ_SET_TYPE_CD = curPricingTableData[0].OBJ_SET_TYPE_CD;
+                for (var s = 0; s < sData.length; s++) {
+                    if (sData[s].DC_ID === null) sData[s].DC_ID = $scope.uid--;
+                    sData[s].DC_PARENT_ID = curPricingTableData[0].DC_ID;
+                    sData[s].dc_type = "PRC_TBL_ROW";
+                    sData[s].dc_parent_type = curPricingTableData[0].dc_type;
+                    sData[s].OBJ_SET_TYPE_CD = curPricingTableData[0].OBJ_SET_TYPE_CD;
 
-        			// fix date formats
-        			for (var d = 0; d < dateFields.length; d++) {
-        				sData[s][dateFields[d]] = moment(sData[s][dateFields[d]]).format("MM/DD/YYYY");
-        			}
-        		}
-        	}
+                    // fix date formats
+                    for (var d = 0; d < dateFields.length; d++) {
+                        sData[s][dateFields[d]] = moment(sData[s][dateFields[d]]).format("MM/DD/YYYY");
+                    }
+                }
+            }
 
-        	// Wip Deal
-        	if (gData !== undefined && gData !== null) {
-        		for (var i = 0; i < gData.length; i++) {
-        			// TODO... this should probably mimic Pricing Table Rows
-        			if (gData[i].DC_ID === null) gData[i].DC_ID = $scope.uid--;
-        		}
-        	}
+            // Wip Deal
+            if (gData !== undefined && gData !== null) {
+                for (var i = 0; i < gData.length; i++) {
+                    // TODO... this should probably mimic Pricing Table Rows
+                    if (gData[i].DC_ID === null) gData[i].DC_ID = $scope.uid--;
+                }
+            }
 
-        	// Contract is Contract + Pricing Strategies + Pricing Tables in heierarchial format
-        	// sData is the raw spreadsheet data
-        	// gData is the raw grid data
+            // Contract is Contract + Pricing Strategies + Pricing Tables in heierarchial format
+            // sData is the raw spreadsheet data
+            // gData is the raw grid data
 
-        	var modCt = [];
-        	var modPs = [];
+            var modCt = [];
+            var modPs = [];
 
-            var greatestPtrIndex = sData === undefined ? 0 : sData.length;
+            //if (sData != null) {
+            //	var greatestPtrIndex = sData.length;
+            //}
             for (var c = 0; c < contractData.length; c++) {
-                var mCt = {};
-                Object.keys(contractData[c]).forEach(function(key, index) {
-                        if (key[0] !== '_' && key !== "Customer" && key !== "PRC_ST") mCt[key] = this[key];
-                    },
+                var mCt = {
+
+                };
+                Object.keys(contractData[c]).forEach(function (key, index) {
+                    if (key[0] !== '_' && key !== "Customer" && key !== "PRC_ST") mCt[key] = this[key];
+                },
                     contractData[c]);
-        		modCt.push(mCt);
+                modCt.push(mCt);
 
                 if (contractData[c]["PRC_ST"] === undefined) contractData[c]["PRC_ST"] = [];
                 var item = contractData[c]["PRC_ST"];
                 for (var p = 0; p < item.length; p++) {
-                    var mPs = {};
-                    Object.keys(item[p]).forEach(function(key, index) {
-                            if (key[0] !== '_' && key !== "PRC_TBL") mPs[key] = this[key];
-                        },
+                    var mPs = {
+
+                    };
+                    Object.keys(item[p]).forEach(function (key, index) {
+                        if (key[0] !== '_' && key !== "PRC_TBL") mPs[key] = this[key];
+                    },
                         item[p]);
-        			modPs.push(mPs);
-        		}
-        	}
+                    modPs.push(mPs);
+                }
+            }
 
 
     	    //// Check PricingTableRow validations before we submit to the API
@@ -1057,29 +1064,89 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
         	//    var sheet = spreadsheet.activeSheet();
         	//    var cellsStates = sheet.range('A2:' +finalColLetter + (greatestPtrIndex + 1)).getState();
 
-        	//	//// TODO: uncomment this for UI-side validation once we figure oout the duplicate cell value on error bug
-        	//	//if (errorList.length > 0) {
-        	//	//	alert("TODO: better message. Also show the rows where the error is. Error: You have errors on your spreadsheet you still need to fix");
-        	//	//	console.log(errorList);
-        	//	//	return;
-        	//	//}
+            //	//// TODO: uncomment this for UI-side validation once we figure oout the duplicate cell value on error bug
+            //	//if (errorList.length > 0) {
+            //	//	alert("TODO: better message. Also show the rows where the error is. Error: You have errors on your spreadsheet you still need to fix");
+            //	//	console.log(errorList);
+            //	//	return;
+            //	//}
 
-        	//	// Get the rows where products are entered
-        	//	// Compare that rowIndex with the greatestRowIndex variable to get the last row where user has enetered data
-        	//	// use that last row to get the range which we will iterate thorugh to find errors
-        	//	//http://docs.telerik.com/kendo-ui/controls/data-management/spreadsheet/how-to/get-flagged-cells
-        	//	//http://dojo.telerik.com/iCola
-        	//}
+            //	// Get the rows where products are entered
+            //	// Compare that rowIndex with the greatestRowIndex variable to get the last row where user has enetered data
+            //	// use that last row to get the range which we will iterate thorugh to find errors
+            //	//http://docs.telerik.com/kendo-ui/controls/data-management/spreadsheet/how-to/get-flagged-cells
+            //	//http://dojo.telerik.com/iCola
+            //}
 
 
-        	return {
-        		"Contract": modCt,
-        		"PricingStrategy": modPs,
-        		"PricingTable": curPricingTableData,
-        		"PricingTableRow": sData === undefined ? [] : sData,
-        		"WipDeals": gData === undefined ? [] : gData,
-        		"EventSource": source
-        	}
+            return {
+                "Contract": modCt,
+                "PricingStrategy": modPs,
+                "PricingTable": curPricingTableData,
+                "PricingTableRow": sData === undefined ? [] : sData,
+                "WipDeals": gData === undefined ? [] : gData,
+                "EventSource": source
+            }
+        }
+
+
+
+        // **** SAVE CONTRACT Methods ****
+        //
+        $scope.saveEntireContractBase = function (stateName, forceValidation, forcePublish, toState, toParams) {
+            // async save data
+
+            topbar.show();
+
+            if (forceValidation === undefined || forceValidation === null) forceValidation = false;
+            if (forcePublish === undefined || forcePublish === null) forcePublish = false;
+
+            var data = createEntireContractBase(stateName);
+
+            $scope.isSaving = true;
+
+            objsetService.updateContractAndCurPricingTable($scope.getCustId(), data, forceValidation, forcePublish).then(
+                function (results) {
+                    var i = 0;
+                    $scope.isSaving = false;
+
+                    var anyWarnings = false;
+
+                    if (!!results.data.PRC_TBL_ROW) {
+                        for (i = 0; i < results.data.PRC_TBL_ROW.length; i++) {
+                            if (results.data.PRC_TBL_ROW[i].warningMessages !== undefined && results.data.PRC_TBL_ROW[i].warningMessages.length > 0) anyWarnings = true;
+                        }
+                        $scope.updateResults(results.data.PRC_TBL_ROW,
+                            $scope.pricingTableData.PRC_TBL_ROW,
+                            $scope.spreadDs);
+                        $scope.spreadDs.read();
+                    }
+                    if (!!results.data.WIP_DEAL) {
+                        for (i = 0; i < results.data.WIP_DEAL.length; i++) {
+                            if (results.data.WIP_DEAL[i].warningMessages !== undefined && results.data.WIP_DEAL[i].warningMessages.length > 0) anyWarnings = true;
+                        }
+                        $scope.updateResults(results.data.WIP_DEAL, $scope.pricingTableData.WIP_DEAL, $scope.gridDs);
+                    }
+
+                    topbar.hide();
+
+                    if (!anyWarnings) {
+                        $scope.resetDirty();
+                        $scope.$broadcast('saveComplete', results);
+                        logger.success("Saved the contract", $scope.contractData, "Save Successful");
+                        if (toState !== undefined) $state.go(toState.name, toParams, { reload: true });
+                    } else {
+                        logger.warning("Didn't pass Validation", $scope.contractData, "Saved with warnings");
+                        $scope.$broadcast('saveWithWarnings', results);
+                    }
+
+                },
+                function (response) {
+                    $scope.isSaving = false;
+                    logger.error("Could not save the contract.", response, response.statusText);
+                    topbar.hide();
+                }
+            );
         }
 
         $scope.validatePricingTable = function (stateName) {
@@ -1121,7 +1188,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
         }
 
         // **** SAVE CONTRACT Methods ****
-    	//
+        //
         $scope.saveEntireContractBase = function (stateName, forceValidation, forcePublish, toState, toParams) {
             // async save data
             topbar.show();

@@ -106,13 +106,13 @@ namespace Intel.MyDeals.BusinessLogic
         /// <param name="forceValidation"></param>
         /// <param name="forcePublish"></param>
         /// <returns>MyDealsData</returns>
-        public OpDataCollectorFlattenedDictList SaveContract(OpDataCollectorFlattenedList data, int custId, bool forceValidation, bool forcePublish)
+        public OpDataCollectorFlattenedDictList SaveContract(OpDataCollectorFlattenedList data, int custId, bool forceValidation, bool forcePublish, string sourceEvent)
         {
             // Save Data Cycle: Point 1
             return _dataCollectorLib.SavePackets(new OpDataCollectorFlattenedDictList
             {
                 [OpDataElementType.CNTRCT] = data
-            }, custId, forceValidation, forcePublish).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
+            }, custId, forceValidation, forcePublish, sourceEvent).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
         }
 
         /// <summary>
@@ -135,7 +135,8 @@ namespace Intel.MyDeals.BusinessLogic
             OpDataCollectorFlattenedList wipDeals,
             int custId,
             bool forceValidation,
-            bool forcePublish)
+            bool forcePublish,
+            string sourceEvent)
         {
             OpDataCollectorFlattenedDictList data = new OpDataCollectorFlattenedDictList();
 
@@ -145,10 +146,10 @@ namespace Intel.MyDeals.BusinessLogic
             if (pricingTableRows != null && pricingTableRows.Any()) data[OpDataElementType.PRC_TBL_ROW] = pricingTableRows;
             if (wipDeals != null && wipDeals.Any()) data[OpDataElementType.WIP_DEAL] = wipDeals;
 
-            return _dataCollectorLib.SavePackets(data, custId, forceValidation, forcePublish);
+            return _dataCollectorLib.SavePackets(data, custId, forceValidation, forcePublish, sourceEvent);
         }
 
-        public OpDataCollectorFlattenedDictList SaveFullContract(int custId, OpDataCollectorFlattenedDictList fullContracts, bool forceValidation, bool forcePublish)
+        public OpDataCollectorFlattenedDictList SaveFullContract(int custId, OpDataCollectorFlattenedDictList fullContracts, bool forceValidation, bool forcePublish, string sourceEvent)
         {
             return SaveContract(
                 fullContracts.ContainsKey(OpDataElementType.CNTRCT) ? fullContracts[OpDataElementType.CNTRCT] : new OpDataCollectorFlattenedList(),
@@ -156,7 +157,7 @@ namespace Intel.MyDeals.BusinessLogic
                 fullContracts.ContainsKey(OpDataElementType.PRC_TBL) ? fullContracts[OpDataElementType.PRC_TBL] : new OpDataCollectorFlattenedList(),
                 fullContracts.ContainsKey(OpDataElementType.PRC_TBL_ROW) ? fullContracts[OpDataElementType.PRC_TBL_ROW] : new OpDataCollectorFlattenedList(),
                 fullContracts.ContainsKey(OpDataElementType.WIP_DEAL) ? fullContracts[OpDataElementType.WIP_DEAL] : new OpDataCollectorFlattenedList(),
-                custId, forceValidation, forcePublish).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
+                custId, forceValidation, forcePublish, sourceEvent).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
         }
 
         public OpDataCollectorFlattenedDictList SaveContractAndPricingTable(int custId, ContractTransferPacket contractAndStrategy, bool forceValidation, bool forcePublish)
@@ -187,7 +188,8 @@ namespace Intel.MyDeals.BusinessLogic
                 isPrcTblSource ? translatedFlattenedList : contractAndStrategy.WipDeals,
                 custId,
                 forceValidation,
-                forcePublish).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
+                forcePublish,
+                contractAndStrategy.EventSource).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
         }
 
         public OpMsg DeleteContract(int id)
