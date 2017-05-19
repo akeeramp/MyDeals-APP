@@ -159,12 +159,18 @@ namespace Intel.MyDeals.Controllers.API
 
 		private PtrValidationContainer ValidateEcapPricingTableRows(ContractTransferPacket contractAndPricingTable)
 		{
-			PtrValidationContainer myContainer = new PtrValidationContainer();
+            //TODO: All of this "logic" should be moved to Business Layer Project to adhere to our coding convention - API controllers should just be logic-free shells invoking Business Logic functions
+
+            PtrValidationContainer myContainer = new PtrValidationContainer();
 			UiTemplates uiTemplate = _uiTemplateLib.GetUiTemplates();
 
-			// TODO: remove the below json-converter rows in favor of hooking up to   _productsLib.TranslateProducts when that's finished
-			#region JSON String - TODO: rmeove when no longer needed
-			string jsonString = @"{
+            List<BasicDropdown> VALID_MRKT_SEG = _dropdownLib.GetDropdowns(AttributeCodes.MRKT_SEG).ToList();
+            List<BasicDropdown> VALID_MRKT_NON_CORP = _dropdownLib.GetDropdowns(AttributeCodes.MRKT_SEG_NON_CORP).ToList();
+            List<BasicDropdown> VALID_MRKT_EMB_SUBSEG = _dropdownLib.GetDropdowns(AttributeCodes.MRKT_SUB_SEGMENT).ToList();
+
+            // TODO: remove the below json-converter rows in favor of hooking up to   _productsLib.TranslateProducts when that's finished
+            #region JSON String - TODO: rmeove when no longer needed
+            string jsonString = @"{
 
 	'ProdctTransformResults': {
 				'1': [
@@ -298,8 +304,7 @@ namespace Intel.MyDeals.Controllers.API
 			//	, END_DATE = x["END_DT"].ToString()
 			//}).ToList();
 			// _productsLib.TranslateProducts(userInput, CUST_MBR_SID, GEO_MBR_SID);
-
-
+            
 
 			// Pricing Table Validation logic
 			for (int i = 0; i < contractAndPricingTable.PricingTableRow.Count; i++)
@@ -400,13 +405,59 @@ namespace Intel.MyDeals.Controllers.API
 					}
 										
 					#region Market Segment Validations
-					// TODO: Market Segment "ALL" cannot be blended with any other market segment.
-					// TODO: Market Segment "Embedded" cannot be blended with any other market segment.
-					// TODO: If Non Corp is chosen then user should not select a duplicate value outside of non corp selection.
-					#endregion
+					
+                    if (!(val_MRKT_SEG == null))
+                    {
+                        string[] user_mrkt_segs = val_MRKT_SEG.ToString().ToUpper().Split(',').Select(mrkt => mrkt.Trim()).ToArray(); //TODO: we trim each comma separated value of white space for validation, but the trimmed white space will still be saved in the db.  Is that ok?  Need to clarify with SA/BA.
+                        
+                        //"ALL" check
+                        if (user_mrkt_segs.Length > 1 && Array.IndexOf(user_mrkt_segs, "ALL") >= 0)
+                        {
+                            myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_mrktSeg, "Market Segment ALL cannot be blended with any other Market Segment");
+                        }
 
-					#region GEO Validations
-					List<string> geosList = new List<string>();
+                        //"Embedded" check
+                        if (user_mrkt_segs.Length > 1)
+                        {
+                            for (int j = 0; j < user_mrkt_segs.Length; j++)
+                            {
+                                if (VALID_MRKT_EMB_SUBSEG.FirstOrDefault(mrkt => mrkt.DROP_DOWN.ToUpper() == user_mrkt_segs[j]) != null)
+                                {
+                                    //encountered an embedded sub segment that is blended with other market seg inputs
+                                    myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_mrktSeg, "Embedded Market Segments cannot be blended with any other market segment.");
+                                }
+                            }
+                        }
+
+                        //"NonCorp" check - // TODO: If Non Corp is chosen then user should not select a duplicate value outside of non corp selection.
+                        if (Array.IndexOf(user_mrkt_segs, "NON CORP") >= 0)
+                        {
+                            //NONCORP is checked - make sure all NONCORP options are also included in user input
+                            foreach (BasicDropdown mrkt in VALID_MRKT_NON_CORP)
+                            {
+                                if(Array.IndexOf(user_mrkt_segs, mrkt.DROP_DOWN.ToUpper()) < 0)
+                                {
+                                    // user selected noncorp but did not include all noncorp options
+                                    myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_mrktSeg, "NonCorp Market Segment selected but " + mrkt.DROP_DOWN + " not included.");
+                                }
+                            }
+                        }
+
+                        // Valid Name Mrkt Seg Check
+                        for (int j = 0; j < user_mrkt_segs.Length; j++)
+                        {
+                            if (VALID_MRKT_EMB_SUBSEG.FirstOrDefault(mrkt => mrkt.DROP_DOWN.ToUpper() == user_mrkt_segs[j]) == null &&
+                                VALID_MRKT_SEG.FirstOrDefault(mrkt => mrkt.DROP_DOWN.ToUpper() == user_mrkt_segs[j]) == null)
+                            {
+                                // user inputed mrkt seg value does not match with any allowed mrkt seg or mrkt seg embedded values (mrkt seg includes mrkt noncorp)
+                                myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_mrktSeg, user_mrkt_segs[j] + " is not a valid Market Segment.");
+                            }
+                        }
+                    }
+                    #endregion
+
+                    #region GEO Validations
+                    List<string> geosList = new List<string>();
 					string geoString = val_GEO_COMBINED.ToString();
 					string newGeoString = geoString;
 					bool isBlendedGeo = geoString.Contains("[");
