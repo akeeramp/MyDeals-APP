@@ -339,18 +339,32 @@ namespace Intel.MyDeals.BusinessLogic
                 // Step 1: Get matching products for a particular row from master match list
                 var tranlatedProducts = productLookup.ProdctTransformResults[userProduct.Key];
 
-                // Step 2: Find duplicate match products
-                var duplicateProds = from p in productMatchResults
-                                     join t in tranlatedProducts
-                                     on p.USR_INPUT equals t
-                                     group p by p.USR_INPUT into d
-                                     where d.Count() > 1
-                                     select d.Key;
+                //Step 2.1: Checking for Conflict upto Family Name
+                var isConflict = (from p in productMatchResults
+                                  join t in tranlatedProducts
+                                  on p.USR_INPUT equals t
+                                  group p by new
+                                  {
+                                      p.USR_INPUT,
+                                      p.DEAL_PRD_TYPE,
+                                      p.PRD_CAT_NM,
+                                      p.BRND_NM,
+                                      p.FMLY_NM
+                                  }
+                                     into d
+                                  select d.Key).ToList();
+
+                // Step 2.2: Find duplicate match products
+                var duplicateProds = from d in isConflict
+                                     group d by d.USR_INPUT 
+                                     into p
+                                     where p.Count() > 1
+                                     select p.Key; 
 
                 // If any duplicates found extract them
                 if (duplicateProds.Any())
                 {
-                    var duplicateRecords = productMatchResults.FindAll(p => duplicateProds.Contains(p.USR_INPUT));
+                    var duplicateRecords = productMatchResults.FindAll(p => isConflict[0].USR_INPUT.Contains(p.USR_INPUT));
 
                     var records = new Dictionary<string, List<PRD_LOOKUP_RESULTS>>();
 

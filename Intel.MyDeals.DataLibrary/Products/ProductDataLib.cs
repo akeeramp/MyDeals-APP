@@ -524,6 +524,10 @@ namespace Intel.MyDeals.DataLibrary
                 using (var rdr = DataAccess.ExecuteReader(cmd))
                 {
                     int IDX_BRND_NM = DB.GetReaderOrdinal(rdr, "BRND_NM");
+                    int IDX_CAP = DB.GetReaderOrdinal(rdr, "CAP");
+                    int IDX_CAP_END_DATE = DB.GetReaderOrdinal(rdr, "CAP_END_DATE");
+                    int IDX_CAP_PRC_COND = DB.GetReaderOrdinal(rdr, "CAP_PRC_COND");
+                    int IDX_CAP_START_DATE = DB.GetReaderOrdinal(rdr, "CAP_START_DATE");
                     int IDX_CPU_CACHE = DB.GetReaderOrdinal(rdr, "CPU_CACHE");
                     int IDX_CPU_PACKAGE = DB.GetReaderOrdinal(rdr, "CPU_PACKAGE");
                     int IDX_CPU_PROCESSOR_NUMBER = DB.GetReaderOrdinal(rdr, "CPU_PROCESSOR_NUMBER");
@@ -531,7 +535,6 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_CPU_WATTAGE = DB.GetReaderOrdinal(rdr, "CPU_WATTAGE");
                     int IDX_DEAL_PRD_NM = DB.GetReaderOrdinal(rdr, "DEAL_PRD_NM");
                     int IDX_DEAL_PRD_TYPE = DB.GetReaderOrdinal(rdr, "DEAL_PRD_TYPE");
-                    int IDX_EFF_FR_DTM = DB.GetReaderOrdinal(rdr, "EFF_FR_DTM");
                     int IDX_EPM_NM = DB.GetReaderOrdinal(rdr, "EPM_NM");
                     int IDX_FMLY_NM = DB.GetReaderOrdinal(rdr, "FMLY_NM");
                     int IDX_FMLY_NM_MM = DB.GetReaderOrdinal(rdr, "FMLY_NM_MM");
@@ -545,7 +548,6 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_NAND_Density = DB.GetReaderOrdinal(rdr, "NAND_Density");
                     int IDX_NAND_FAMILY = DB.GetReaderOrdinal(rdr, "NAND_FAMILY");
                     int IDX_PCSR_NBR = DB.GetReaderOrdinal(rdr, "PCSR_NBR");
-                    int IDX_PRC_AMT = DB.GetReaderOrdinal(rdr, "PRC_AMT");
                     int IDX_PRD_ATRB_SID = DB.GetReaderOrdinal(rdr, "PRD_ATRB_SID");
                     int IDX_PRD_CAT_NM = DB.GetReaderOrdinal(rdr, "PRD_CAT_NM");
                     int IDX_PRD_END_DTM = DB.GetReaderOrdinal(rdr, "PRD_END_DTM");
@@ -556,12 +558,19 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_SKU_MARKET_SEGMENT = DB.GetReaderOrdinal(rdr, "SKU_MARKET_SEGMENT");
                     int IDX_SKU_NM = DB.GetReaderOrdinal(rdr, "SKU_NM");
                     int IDX_USR_INPUT = DB.GetReaderOrdinal(rdr, "USR_INPUT");
+                    int IDX_YCS2 = DB.GetReaderOrdinal(rdr, "YCS2");
+                    int IDX_YCS2_END_DATE = DB.GetReaderOrdinal(rdr, "YCS2_END_DATE");
+                    int IDX_YCS2_START_DATE = DB.GetReaderOrdinal(rdr, "YCS2_START_DATE");
 
                     while (rdr.Read())
                     {
                         ret.Add(new PRD_LOOKUP_RESULTS
                         {
                             BRND_NM = (IDX_BRND_NM < 0 || rdr.IsDBNull(IDX_BRND_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_BRND_NM),
+                            CAP = (IDX_CAP < 0 || rdr.IsDBNull(IDX_CAP)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_CAP),
+                            CAP_END_DATE = (IDX_CAP_END_DATE < 0 || rdr.IsDBNull(IDX_CAP_END_DATE)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CAP_END_DATE),
+                            CAP_PRC_COND = (IDX_CAP_PRC_COND < 0 || rdr.IsDBNull(IDX_CAP_PRC_COND)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CAP_PRC_COND),
+                            CAP_START_DATE = (IDX_CAP_START_DATE < 0 || rdr.IsDBNull(IDX_CAP_START_DATE)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CAP_START_DATE),
                             CPU_CACHE = (IDX_CPU_CACHE < 0 || rdr.IsDBNull(IDX_CPU_CACHE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CPU_CACHE),
                             CPU_PACKAGE = (IDX_CPU_PACKAGE < 0 || rdr.IsDBNull(IDX_CPU_PACKAGE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CPU_PACKAGE),
                             CPU_PROCESSOR_NUMBER = (IDX_CPU_PROCESSOR_NUMBER < 0 || rdr.IsDBNull(IDX_CPU_PROCESSOR_NUMBER)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CPU_PROCESSOR_NUMBER),
@@ -569,7 +578,6 @@ namespace Intel.MyDeals.DataLibrary
                             CPU_WATTAGE = (IDX_CPU_WATTAGE < 0 || rdr.IsDBNull(IDX_CPU_WATTAGE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CPU_WATTAGE),
                             DEAL_PRD_NM = (IDX_DEAL_PRD_NM < 0 || rdr.IsDBNull(IDX_DEAL_PRD_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_PRD_NM),
                             DEAL_PRD_TYPE = (IDX_DEAL_PRD_TYPE < 0 || rdr.IsDBNull(IDX_DEAL_PRD_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_PRD_TYPE),
-                            EFF_FR_DTM = (IDX_EFF_FR_DTM < 0 || rdr.IsDBNull(IDX_EFF_FR_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_EFF_FR_DTM),
                             EPM_NM = (IDX_EPM_NM < 0 || rdr.IsDBNull(IDX_EPM_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_EPM_NM),
                             FMLY_NM = (IDX_FMLY_NM < 0 || rdr.IsDBNull(IDX_FMLY_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_FMLY_NM),
                             FMLY_NM_MM = (IDX_FMLY_NM_MM < 0 || rdr.IsDBNull(IDX_FMLY_NM_MM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_FMLY_NM_MM),
@@ -583,7 +591,6 @@ namespace Intel.MyDeals.DataLibrary
                             NAND_Density = (IDX_NAND_Density < 0 || rdr.IsDBNull(IDX_NAND_Density)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_NAND_Density),
                             NAND_FAMILY = (IDX_NAND_FAMILY < 0 || rdr.IsDBNull(IDX_NAND_FAMILY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_NAND_FAMILY),
                             PCSR_NBR = (IDX_PCSR_NBR < 0 || rdr.IsDBNull(IDX_PCSR_NBR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PCSR_NBR),
-                            PRC_AMT = (IDX_PRC_AMT < 0 || rdr.IsDBNull(IDX_PRC_AMT)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_PRC_AMT),
                             PRD_ATRB_SID = (IDX_PRD_ATRB_SID < 0 || rdr.IsDBNull(IDX_PRD_ATRB_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRD_ATRB_SID),
                             PRD_CAT_NM = (IDX_PRD_CAT_NM < 0 || rdr.IsDBNull(IDX_PRD_CAT_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_CAT_NM),
                             PRD_END_DTM = (IDX_PRD_END_DTM < 0 || rdr.IsDBNull(IDX_PRD_END_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_PRD_END_DTM),
@@ -593,7 +600,10 @@ namespace Intel.MyDeals.DataLibrary
                             SBS_NM = (IDX_SBS_NM < 0 || rdr.IsDBNull(IDX_SBS_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_SBS_NM),
                             SKU_MARKET_SEGMENT = (IDX_SKU_MARKET_SEGMENT < 0 || rdr.IsDBNull(IDX_SKU_MARKET_SEGMENT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_SKU_MARKET_SEGMENT),
                             SKU_NM = (IDX_SKU_NM < 0 || rdr.IsDBNull(IDX_SKU_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_SKU_NM),
-                            USR_INPUT = (IDX_USR_INPUT < 0 || rdr.IsDBNull(IDX_USR_INPUT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_USR_INPUT)
+                            USR_INPUT = (IDX_USR_INPUT < 0 || rdr.IsDBNull(IDX_USR_INPUT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_USR_INPUT),
+                            YCS2 = (IDX_YCS2 < 0 || rdr.IsDBNull(IDX_YCS2)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_YCS2),
+                            YCS2_END_DATE = (IDX_YCS2_END_DATE < 0 || rdr.IsDBNull(IDX_YCS2_END_DATE)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_YCS2_END_DATE),
+                            YCS2_START_DATE = (IDX_YCS2_START_DATE < 0 || rdr.IsDBNull(IDX_YCS2_START_DATE)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_YCS2_START_DATE)
                         });
                     } // while
                 }

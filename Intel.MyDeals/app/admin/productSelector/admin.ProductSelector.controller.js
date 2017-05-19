@@ -114,19 +114,11 @@
             transport: {
                 read: function (e) {
                 },
-                update: function (e) {
-                    e.data["PROD_MBR_SID"] = vm.counter + 1;
-                    e.data["PRD_SELC_LVL"] = vm.selectionLevelDropDownList;
-                    e.success(e.data);
-                    logger.success("Product added.");
+                update: function (e) {                   
                 },
                 destroy: function (e) {
                 },
-                create: function (e) {
-                    e.data["PROD_MBR_SID"] = vm.counter + 1;
-                    e.data["PRD_SELC_LVL"] = vm.selectionLevelDropDownList;
-                    e.success(e.data);
-                    logger.success("Product added.");
+                create: function (e) {                    
                 }
             },
             pageSize: 10,
@@ -391,7 +383,14 @@
                         BRND_NM: {},
                         FMLY_NM: {},
                         PCSR_NBR: {},
-                        KIT_NM: {}
+                        KIT_NM: {},
+                        CAP: {},
+                        CAP_START_DATE: {},
+                        CAP_END_DATE: {},
+                        CAP_PRC_COND: {},
+                        YCS2: {},
+                        YCS2_START_DATE: {},
+                        YCS2_END_DATE: {}
                     }
                 }
             },
@@ -433,138 +432,45 @@
               { field: "FMLY_NM", template: " #= FMLY_NM # ", title: "Family Name", width: "200px" },
               { field: "PCSR_NBR", template: " #= PCSR_NBR # ", title: "Processor No", width: "200px" },
               { field: "KIT_NM", template: " #= KIT_NM # ", title: "KIT Name", width: "200px" },
-
+              { field: "CAP", template: " #= CAP # ", title: "CAP", width: "200px" },
+              { field: "CAP_START_DATE", template: " #= CAP_START_DATE # ", title: "CAP Start Date", width: "200px" },
+              { field: "CAP_END_DATE", template: " #= CAP_END_DATE # ", title: "CAP End Date", width: "200px" },
+              { field: "CAP_PRC_COND", template: " #= CAP_PRC_COND # ", title: "CAP Condition", width: "200px" },
+              { field: "YCS2", template: " #= YCS2 # ", title: "YCS2", width: "200px" },
+              { field: "YCS2_START_DATE", template: " #= YCS2_START_DATE # ", title: "YCS2 Start Date", width: "200px" },
+              { field: "YCS2_END_DATE", template: " #= YCS2_END_DATE # ", title: "YCS2 End Date", width: "200px" },
+              { field: "MM_CUST_CUSTOMER", template: " #= MM_CUST_CUSTOMER # ", title: "MM Customer", width: "200px" },
             ]
         };
 
         // Master Product Massaging
         function cookProducts(data) {
             //reset();
+            vm.datSourceCorrector = data;
             var multipleMatch = false;
             for (var key in data.ProdctTransformResults) {
                 for (var i = 0; i < data.ValidProducts[key].length; i++) {
-                    vm.validProducts.push(data.ValidProducts[key][i]);
-                    dataSource.read();
+                    vm.validProducts.push(data.ValidProducts[key][i]);                    
                 }
 
                 // Process invalid products to make html to display
                 if (data.InValidProducts[key].length > 0) {
                     multipleMatch = true;
-                    var object = { "Row": "", "Items": [] };
-                    object.Row = key;
-                    object.Items = data.InValidProducts[key].join(", ")
-                    vm.invalidProducts.push(object);
-                    dataSource.read();
+                    vm.openProdCorrector();
+                    vm.isMultipleORInvalid = false;                    
                 }
 
                 // Process multiple match products to make html to display
                 if (!!data.DuplicateProducts[key]) {
-
-                    var PROD_HIER_NM = ["DEAL_PRD_TYPE", "PRD_CAT_NM", "BRND_NM", "FMLY_NM", "PCSR_NBR", "DEAL_PRD_NM"]; // Product HIERARCHY 
-                    var conflictLevel = ''; //Will hold the conflicting Level
-                    var object = { "Row": "", "Items": [] }; //Multiple Match Key Value pair
-                    object.Row = key;
-                    object.Items = !!data.DuplicateProducts[key] ? data.DuplicateProducts[key] : "";
-
-                    var isConflict = false;
-                    for (var prod in object.Items) {
-                        if (object.Items[prod].length > 0) {
-
-                            var HIER_NM_HASH = object.Items[prod][1].HIER_NM_HASH;
-                            var HIER_NM_HASH_ARR = HIER_NM_HASH.split('/'); //HASH value splited by /
-                            var selectionLevel = 0;
-
-                            // HASH value split to get Starting Level.. i.c CPU/DT/Ci3/Skylake output: CPU
-                            var insertedLevel = prod.split('/')[0];
-
-                            for (var z = 0 ; z < HIER_NM_HASH_ARR.length; z++) {
-                                if (HIER_NM_HASH_ARR[z].toUpperCase() == insertedLevel.toUpperCase()) {
-                                    selectionLevel = z; // That will tell me the how many level we have to check for conflict.
-                                    break;
-                                }
-                            }
-                            if (selectionLevel < 0) {
-                                conflictLevel = "HIERARCHY NOT FOUND";
-                                isConflict = true;
-                            }
-
-                            // Checking for conflict in Deal Product Type i.e. CPU or EIA products
-                            if (selectionLevel > 0) {
-                                isConflict = $linq.Enumerable().From(object.Items[prod])
-                                                .GroupBy(function (x) {
-                                                    return (x.DEAL_PRD_TYPE);
-                                                }).ToArray().length > 1;
-
-                                if (isConflict) {
-                                    conflictLevel = "DEAL_PRD_TYPE";
-                                    //break;
-                                }
-                            }
-                            //Checking for conflict in Category Name i.e. DT OR Mb or etc                               
-                            if (selectionLevel > 1 && !isConflict) {
-                                isConflict = $linq.Enumerable().From(object.Items[prod])
-                                                .GroupBy(function (x) {
-                                                    return (x.PRD_CAT_NM);
-                                                }).ToArray().length > 1;
-
-                                if (isConflict) {
-                                    conflictLevel = "PRD_CAT_NM";
-                                    //break;
-                                }
-                            }
-                            //Checking for conflict in Brand Name i.e. ci3 or ci5, ci7 etc
-                            if (selectionLevel > 2 && !isConflict) {
-                                isConflict = $linq.Enumerable().From(object.Items[prod])
-                                                .GroupBy(function (x) {
-                                                    return (x.BRND_NM);
-                                                }).ToArray().length > 1;
-
-                                if (isConflict) {
-                                    conflictLevel = "BRND_NM";
-                                    //break;
-                                }
-                            }
-                            //Checking for conflict in Family Name i.e                           
-                            if (selectionLevel > 3 && !isConflict) {
-                                isConflict = $linq.Enumerable().From(object.Items[prod])
-                                                .GroupBy(function (x) {
-                                                    return (x.FMLY_NM);
-                                                }).ToArray().length > 1;
-
-                                if (isConflict) {
-                                    conflictLevel = "FMLY_NM";
-                                    //break;
-                                }
-                            }
-
-                        }
-
-                        //// END IF
-                        //Checking Conflict found or not..
-                        if (!isConflict) {
-                            //No High level conflict. Product will be a direct match
-                            for (var i = 0; i < object.Items[prod].length; i++) {
-                                vm.validProducts.push(object.Items[prod][i]);
-                                data.ValidProducts[key][i] = object.Items[prod][i];
-                            }
-                            object.Items[prod].splice(0, object.Items[prod].length);  // Removing all the matched item from the collection
-                        }
-                        else {
-                            if (isConflict && !multipleMatch)
-                                multipleMatch = true;
-                        }
-                    }
-
+                    vm.openProdCorrector();
+                    vm.isMultipleORInvalid = false;
                 }
 
             }
-
-            vm.datSourceCorrector = data;
-            //OPen Product Corrector 
-            if (multipleMatch) {
-                vm.openProdCorrector();
-                vm.isMultipleORInvalid = false;                
-            }
+            
+            // Refreshed the Grid
+            dataSource.read();
+            
         }
         
         //Add Product in The Product GRID

@@ -63,12 +63,10 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
 
                     var isConflict = false;
                     for (var prod in object.Items) {
-                        prod = prod.replace(new RegExp('/', 'g'), " ");
+                        //prod = prod.replace(new RegExp('/', 'g'), " ");
                         vm.productName = prod;
-                        if (object.Items[prod].length > 0) {                            
-
+                        if (object.Items[prod].length > 0) { 
                             vm.selectedDataSet = object.Items[prod];
-
                             result = checkNextLevelOfConflict();
                             if (result)
                                 break;
@@ -76,7 +74,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                     }                    
                 }
                 // Process invalid product(s) to make html to display
-                else if (!!data.InValidProducts[key]) {
+                else if (!!data.InValidProducts[key] && data.InValidProducts[vm.currentRow].length > 0) {
                     vm.invalidProducts = [];
                     vm.opMode = 'I';
                     vm.isInvalidProduct = false;
