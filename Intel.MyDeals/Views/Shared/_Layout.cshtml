@@ -16,13 +16,14 @@
 </head>
 
 <body>
-    <admin-banner></admin-banner>
     @Html.Partial("_Header")
     <div id="modals"></div>
-    <div id="bodyContent" style="position: absolute; top: 78px; bottom: 0; left: 0; right: 0; overflow: auto;">
-        @Html.Partial("_Loading")
+    <div id="bodyContent" style="position: absolute; top: 84px; bottom: 15px; left: 0; right: 0; overflow: auto;">
         @RenderBody()
     </div>
+    @Html.Partial("_Footer")
+    @Html.Partial("_Loading")
+
 
     @Scripts.Render("~/bundles/angular")
     <!-- inject:js -->

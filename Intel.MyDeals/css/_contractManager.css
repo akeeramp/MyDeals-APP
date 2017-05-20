@@ -35,22 +35,22 @@
 
     #lnavContainerWrapper {
         height: 100%;
-        padding: 33px 0 0 0;
+        padding: 79px 0 0 0;
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
         box-sizing: border-box;
         overflow: hidden;
     }
     #lnavHeader {
-        height: 33px;
-        margin-top: -33px;
+        height: 79px;
+        margin-top: -79px;
         padding: 0;
         font-size: 14px;
         font-family: "Intel Clear";
         font-weight: 200;
         font-style: normal;
-        background-color: #00AEEF;
-        color: #ffffff;
+        background-color: #ffffff;
+        color: #00AEEF;
     }
     #lnavMenuContainer {
         color: #ffffff;
@@ -226,14 +226,16 @@
         font-size: 22px;
         cursor: pointer;
         padding: 0 8px;
-        background-color: #00AEEF;
-        color: #ffffff;
+        background-color: #ffffff;
+        color: #00AEEF;
     }
     .navIconLnk.active {
         background-color: #0071C5;
+        color: #ffffff;
     }
     .navIconLnk:hover {
-        background-color: #0071C5;
+        background-color: #00AEEF;
+        color: #ffffff;
     }
 
     .navIconLghtLnk {
@@ -251,9 +253,9 @@
     }
 
     .navIconLnk.lnavBtnDisabled, .navIconLnk.lnavBtnDisabled:hover {
-        color: #0071C5;
+        color: #cccccc;
         cursor: default;
-        background-color: #00AEEF;
+        background-color: #ffffff;
     }
 
     .lnavBtn:hover, .lnavBtnDrp:hover {
@@ -995,18 +997,18 @@
 		background-color: #f2df95;
 		width: 100%;
 	}
-    .contractHeader small{
-        font-size:16px;
+    .contract-title-container small{
+        font-size:14px;
     }
-    .contractHeader A {
-        color:#ffffff;
+    .contract-title-container A {
+        color:#003C71;
     }
-    .contractHeader A:hover {
+    .contract-title-container A:hover {
         text-decoration: none;
-        color:#F3D54E;
+        color:#00aeef;
     }
     .contractHeaderId{
-        color:#F3D54E !important;
+        color:#00aeef !important;
     }
 
 	/* SpreadSheet validation */

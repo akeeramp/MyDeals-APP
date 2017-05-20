@@ -1,3 +1,24 @@
-﻿<div ng-if="loading" style="position: absolute; left:50%; right:50%">
-    <img src="/Images/032.gif" />
-</div>
+﻿<div id="saving-bar" ng-if="loading"><img src="/images/loading022.gif" /></div>
+<div id="saving-text" ng-if="loading">{{loadingMessage}}</div>
+
+<style>
+    #saving-bar {
+        position: absolute;
+        right: 1px;
+        bottom: 0;
+        opacity: .8;
+    }
+    #saving-text {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        width: 210px;
+        height:12px;
+        font-size: 10px;
+        font-family: arial;
+        line-height: .9em;
+        text-align: center;
+        overflow: hidden;
+        text-transform: uppercase;
+    }
+</style>

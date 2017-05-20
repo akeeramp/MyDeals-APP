@@ -1,14 +1,6 @@
 ﻿<!-- Pricing Strategies -->
 <div ng-hide="isPricingStrategiesHidden" style="margin-top: 10px; ">
     
-    <div style="padding: 6px;">
-        <div class="contractHeader" style="margin: 0 5px; line-height: 1.3em;" title="View Contract Details" >
-            <a ng-if="!('contract.details' | isState)" ui-sref="contract.details({cid:contractData.DC_ID})" ui-sref-opts="{ reload: true }">
-                <small class="contractHeaderId">#{{ contractData.DC_ID }}</small> <small>{{contractData.TITLE}}</small>
-            </a>
-        </div>
-    </div>
-
     <div ng-repeat="ps in contractData.PRC_ST | filter:query" class="lnavStrategyContainer">
 
         <div class="psNav" ng-class="{active: (curPricingStrategy.DC_ID == ps.DC_ID && isAddStrategyHidden == true && isAddPricingTableHidden == false)}">

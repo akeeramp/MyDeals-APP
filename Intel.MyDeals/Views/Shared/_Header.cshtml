@@ -1,5 +1,4 @@
 ﻿@using Intel.MyDeals.App
-@using Intel.MyDeals.DataLibrary
 @using Intel.MyDeals.Entities
 @using Intel.Opaque
 @{
@@ -26,7 +25,6 @@
     bool isAdmin = true;
     //bool isDeveloper = true;
 
-    var environment = avm.AppEnv.ToUpper().IndexOf("PROD") >= 0 ? "" : " (" + avm.AppEnv + ")";
 }
 
 
@@ -42,8 +40,7 @@
                 <span class="sr-only icon-bar"></span>
             </button>
             <img class="navbar-logo" alt="" src="/images/intel-logo-white-100.png" ondblclick="eggSmw()">
-            <a class="navbar-brand" href="@Url.Action("Index", "Home", new { Area = "" })">MyDeals<span style="font-size: 14px; color: #f3D54E; padding-left: 10px;">@environment</span></a>
-            <div style="position: absolute; left: 0; top: 30px; width: 160px; font-size: 10px; font-family: arial; text-align: right; color: #cccccc;">@avm.AppVer</div>
+            <a class="navbar-brand" href="@Url.Action("Index", "Home", new { Area = "" })">MyDeals</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -52,16 +49,16 @@
 
                 <li style="text-align: center;">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" style="padding: 7px;">
-                            <div class="fl" id="divUsrImg">
-                                <img src="https://photos.intel.com/images/@(usrWwid).jpg" style="width: 35px; height: 35px; margin-right: 5px; border: 1px solid #ffffff;" />
-                            </div>
-                            <div class="fl hidden-sm" style="margin-top: 7px; margin-right: 10px;">
-                                <div style="font-size: 12px; color: #ffffff; line-height: 1em;" id="divUsrName">@usrName</div>
-                                <div style="font-size: 9px; color: #ffffff; line-height: 1em;" id="divUsrRole">@usrRole</div>
-                            </div>
-                            <div class="fl">
-                                <i class="intelicon-down" style="color: #ffffff; margin-top: 5px;"></i>
-                            </div>
+                        <div class="fl" id="divUsrImg">
+                            <img src="https://photos.intel.com/images/@(usrWwid).jpg" style="width: 35px; height: 35px; margin-right: 5px; border: 1px solid #ffffff;"/>
+                        </div>
+                        <div class="fl hidden-sm" style="margin-top: 7px; margin-right: 10px;">
+                            <div style="font-size: 12px; color: #ffffff; line-height: 1em;" id="divUsrName">@usrName</div>
+                            <div style="font-size: 9px; color: #ffffff; line-height: 1em;" id="divUsrRole">@usrRole</div>
+                        </div>
+                        <div class="fl">
+                            <i class="intelicon-down" style="color: #ffffff; margin-top: 5px;"></i>
+                        </div>
                         <div class="clearboth"></div>
                     </a>
                     <ul class="dropdown-menu" role="menu">
@@ -70,12 +67,17 @@
                     </ul>
                 </li>
             </ul>
+            <div class="fr">
+                <admin-banner></admin-banner>
+                <admin-banner></admin-banner>
+            </div>
         </div>
         <!-- /.navbar-collapse -->
     </div>
-    <!-- /.container-fluid -->
-    <ul class="nav nav-tabs nav-tabs-intel-blocks" id="myTab" role="tablist">
-        @*<li class="dropdown">
+
+    <div class="menu-bar {}">
+        <ul class="nav nav-tabs nav-tabs-intel-blocks" id="myTab" role="tablist">
+            @*<li class="dropdown">
                 <a class="btn btn-primary" id="dLabel" role="button" href="/" data-toggle="dropdown" data-target="#">Contracts <i class="intelicon-down"></i></a>
                 <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
                     <li><a href="@Url.Action("New", "Contract")">New Contract</a></li>
@@ -84,61 +86,61 @@
             </li>*@
 
 
-        <li><a href="@Url.Action("Index", "Home", new {Area = ""})" title="Home"><i class="intelicon-home-solid"></i><span class="hidden-xs"> Home</span></a></li>
-        <li><a href="/Dashboard#/portal" title="Dashboard"><i class="intelicon-line-chart-outlined"></i><span class="hidden-xs"> Dashboard</span></a></li>
-        <li><a href="@Url.Action("Index", "Home", new { Area = "" })" title="Settings"><i class="intelicon-settings-solid"></i><span class="hidden-xs"> Settings</span></a></li>
+            <li><a href="@Url.Action("Index", "Home", new {Area = ""})" title="Home"><i class="intelicon-home-solid"></i><span class="hidden-xs"> Home</span></a></li>
+            <li><a href="/Dashboard#/portal" title="Dashboard"><i class="intelicon-line-chart-outlined"></i><span class="hidden-xs"> Dashboard</span></a></li>
+            <li><a href="@Url.Action("Index", "Home", new { Area = "" })" title="Settings"><i class="intelicon-settings-solid"></i><span class="hidden-xs"> Settings</span></a></li>
 
-        <li class="dropdown">
-            <a class="btn btn-primary" role="button" href="/" data-toggle="dropdown" data-target="#" title="Docs"><i class="intelicon-attach-document-solid"></i><span class="hidden-xs"> Docs </span><i class="intelicon-down"></i></a>
-            <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
-                <li><a href="@Url.Action("Index", "CodingPractices", new { Area = "" })">Coding Practices</a></li>
-            </ul>
-        </li>
-
-        @*Instead of using href can use the ui-sref to translate routes,
-            however as we want to retain the # routing to distinguish between MVC and angular routes hence using href*@
-
-        @if (isAdmin)
-        {
             <li class="dropdown">
-                <a class="btn btn-primary" id="dLabel" role="button" href="/page.html" data-toggle="dropdown" data-target="#">Admin <i class="intelicon-down"></i></a>
+                <a class="btn btn-primary" role="button" href="/" data-toggle="dropdown" data-target="#" title="Docs"><i class="intelicon-attach-document-solid"></i><span class="hidden-xs"> Docs </span><i class="intelicon-down"></i></a>
                 <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
-                    <li><a href="/error/ResetAVM">Clear View Model</a></li>
-                    <li><a href="Admin#/cache">Cache Manager</a></li>
-                    <li><a href="Admin#/constants">Constants</a></li>
-                    <li><a href="Admin#/customers">Customer</a></li>
-                    <li><a href="Admin#/geo">Geo</a></li>
-                    <li class="dropdown-submenu">
-                        <a tabindex="-1">Products</a>
-                        <ul class="dropdown-menu">
-                            <li><a href="CostTest#/CostTest/icostproducts">Legal Classification</a></li>
-                            <li><a href="Admin#/productAlias">Product Alias</a></li>
-                            <li><a href="Admin#/productSelector">Product Entry</a></li>
-                            <li><a href="Admin#/productEntryIncExc">Prod Include Exclude</a></li>
-                            <li><a href="Admin#/products">Product Hierarchy</a></li>
-                            <li><a href="Admin#/productCategories">Product Vertical Rules</a></li>
-                        </ul>
-                    </li>
-                    @*<li><a href="Admin#/rules">Rules</a></li>*@
-                    <li><a href="Admin#/SecurityEngine">Security Engine</a></li>
-                    <li class="dropdown-submenu">
-                        <a tabindex="-1">Security Attributes</a>
-                        <ul class="dropdown-menu">
-                            <li><a href="Admin#/SecurityAttributes/Actions">Actions</a></li>
-                            <li><a href="Admin#/SecurityAttributes/Applications">Applications</a></li>
-                            <li><a href="Admin#/SecurityAttributes/DealTypes">Deal Types</a></li>
-                            <li><a href="Admin#/SecurityAttributes/RoleTypes">Role Types</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="Admin#/dropdowns">UI Control Values</a></li>
-                    <li><a href="Admin#/workflow">WorkFlow</a></li>
-                    <li><a href="Admin#/workflowstage">WorkFlow Stages</a></li>
+                    <li><a href="@Url.Action("Index", "CodingPractices", new { Area = "" })">Coding Practices</a></li>
                 </ul>
             </li>
-        }
+
+            @*Instead of using href can use the ui-sref to translate routes,
+            however as we want to retain the # routing to distinguish between MVC and angular routes hence using href*@
+
+            @if (isAdmin)
+            {
+                <li class="dropdown">
+                    <a class="btn btn-primary" id="dLabel" role="button" href="/page.html" data-toggle="dropdown" data-target="#">Admin <i class="intelicon-down"></i></a>
+                    <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+                        <li><a href="/error/ResetAVM">Clear View Model</a></li>
+                        <li><a href="Admin#/cache">Cache Manager</a></li>
+                        <li><a href="Admin#/constants">Constants</a></li>
+                        <li><a href="Admin#/customers">Customer</a></li>
+                        <li><a href="Admin#/geo">Geo</a></li>
+                        <li class="dropdown-submenu">
+                            <a tabindex="-1">Products</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="CostTest#/CostTest/icostproducts">Legal Classification</a></li>
+                                <li><a href="Admin#/productAlias">Product Alias</a></li>
+                                <li><a href="Admin#/productSelector">Product Entry</a></li>
+                                <li><a href="Admin#/productEntryIncExc">Prod Include Exclude</a></li>
+                                <li><a href="Admin#/products">Product Hierarchy</a></li>
+                                <li><a href="Admin#/productCategories">Product Vertical Rules</a></li>
+                            </ul>
+                        </li>
+                        @*<li><a href="Admin#/rules">Rules</a></li>*@
+                        <li><a href="Admin#/SecurityEngine">Security Engine</a></li>
+                        <li class="dropdown-submenu">
+                            <a tabindex="-1">Security Attributes</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="Admin#/SecurityAttributes/Actions">Actions</a></li>
+                                <li><a href="Admin#/SecurityAttributes/Applications">Applications</a></li>
+                                <li><a href="Admin#/SecurityAttributes/DealTypes">Deal Types</a></li>
+                                <li><a href="Admin#/SecurityAttributes/RoleTypes">Role Types</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="Admin#/dropdowns">UI Control Values</a></li>
+                        <li><a href="Admin#/workflow">WorkFlow</a></li>
+                        <li><a href="Admin#/workflowstage">WorkFlow Stages</a></li>
+                    </ul>
+                </li>
+            }
 
 
-        @*<li class="dropdown">
+            @*<li class="dropdown">
                 <a class="btn btn-primary" role="button" href="/" data-toggle="dropdown" data-target="#">Debug <i class="intelicon-down"></i></a>
                 <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
                     <li><div style="cursor: pointer; padding: 2px 4px;" onClick="rs.viewJson()">View Json Data</div></li>
@@ -146,7 +148,7 @@
                 </ul>
             </li>*@
 
-        @*<li class="dropdown">
+            @*<li class="dropdown">
                 <a class="btn btn-primary" id="dLabel" role="button" href="/page.html" data-toggle="dropdown" data-target="#">Dropdown <i class="intelicon-down"></i></a>
                 <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
                     <li><a href="#">Some action</a></li>
@@ -172,28 +174,34 @@
             <li><a href="@Url.Action("Index", "Dashboard")">Dashboard</a></li>
             <li><a href="@Url.Action("Index", "Contract")">Contract</a></li>
             <li><a href="@Url.Action("Index", "DealManager")">Deal Manager</a></li>*@
-        @Html.Partial("_Search")
-    </ul>
+            @Html.Partial("_Search")
+        </ul>
+    </div>
 </nav>
 
 <style>
-    nav .hdrIcon {
-        text-align: center;
+    .menu-bar {
+        background-color: #0071C5; 
+        padding: 0 6px 6px 6px;
     }
 
-        nav .hdrIcon a {
-            padding: 6px;
-        }
+     nav .hdrIcon {
+         text-align: center;
+     }
 
-            nav .hdrIcon a i {
-                line-height: .9em;
-                font-size: 20px;
-            }
+    nav .hdrIcon a {
+        padding: 6px;
+    }
 
-            nav .hdrIcon a div {
-                font-size: 9px;
-                line-height: .9em;
-            }
+    nav .hdrIcon a i {
+        line-height: .9em;
+        font-size: 20px;
+    }
+
+    nav .hdrIcon a div {
+        font-size: 9px;
+        line-height: .9em;
+    }
 </style>
 
 <script>

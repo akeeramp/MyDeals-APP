@@ -1574,6 +1574,7 @@
     <Content Include="Scripts\kendo\2017.R1\kendo.web.min.js.map" />
     <Content Include="Scripts\kendo\2017.R1\kendo.window.min.js.map" />
     <Content Include="Views\CodingPractices\UnitTesting.cshtml" />
+    <Content Include="Views\Shared\_Footer.cshtml" />
     <None Include="Web.cons.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
