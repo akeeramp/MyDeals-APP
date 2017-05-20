@@ -31,5 +31,7 @@ namespace Intel.MyDeals.IBusinessLogic
         bool IsDuplicateContractTitle(int dcId, string title);
 
         dynamic GetContractsStatus(DashboardFilter dashboardFilter);
-    }
+
+		PtrValidationContainer ValidatePricingTableRows(ContractTransferPacket contractAndStrategy);
+	}
 }

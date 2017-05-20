@@ -1009,7 +1009,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 			var typeoftest = (typeof cellCurrVal);
 			var isBlendedGeo = false;
 			if (cellCurrVal !== null && cellCurrVal !== "" && typeof cellCurrVal == "string") {
-				isBlendedGeo = cellCurrVal.includes("[");
+				isBlendedGeo = (cellCurrVal.indexOf("[") >= 0);
 				// Remove brackets
 				cellCurrVal = cellCurrVal.replace(/\[(.*?)\]/g, "$1");
 
