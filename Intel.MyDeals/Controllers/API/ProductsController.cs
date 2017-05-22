@@ -336,7 +336,7 @@ namespace Intel.MyDeals.Controllers.API
 
         [Route("TranslateProducts/{CUST_MBR_SID}/{GEO_MBR_SID}")]
         [HttpPost]
-        public ProductLookup TranslateProducts(List<ProductEntryAttribute> userInput, Int32 CUST_MBR_SID, int GEO_MBR_SID)
+        public ProductLookup TranslateProducts(List<ProductEntryAttribute> userInput, Int32 CUST_MBR_SID, string GEO_MBR_SID)
         {
             return SafeExecutor(() => _productsLib.TranslateProducts(userInput, CUST_MBR_SID, GEO_MBR_SID)
                 , $"Unable to translate {"userInput"}"
@@ -345,7 +345,7 @@ namespace Intel.MyDeals.Controllers.API
 
         [Route("GetProductDetails")]
         [HttpPost]
-        public ProductLookup GetProductDetails(List<ProductEntryAttribute> userInput, Int32 CUST_MBR_SID, Int32 GEO_MBR_SID)
+        public ProductLookup GetProductDetails(List<ProductEntryAttribute> userInput, Int32 CUST_MBR_SID, string GEO_MBR_SID)
         {
             return SafeExecutor(() => _productsLib.TranslateProducts(userInput, CUST_MBR_SID, GEO_MBR_SID)
                 , $"Unable to get product {"details"}"
