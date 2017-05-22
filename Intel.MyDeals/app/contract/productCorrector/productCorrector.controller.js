@@ -31,6 +31,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
     var isConflict = false;
     var _selectionLevel = 0;
     vm.productName = '';
+    var _lastConflictedState = 0;
 
     //Page number calculation and navigation 
     var generatePagination = function (e) {        
@@ -252,10 +253,11 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
     // Loop to drill down for Conflict up to FAMILY LEVEL
     function checkNextLevelOfConflict() {
         if (_selectionLevel > -1 && _selectionLevel < 4) {
-            for (var cnt = _selectionLevel ; cnt < 5; cnt++) {
+            for (var cnt = _selectionLevel ; cnt < 4; cnt++) {
                 var result = cehckingConflict(vm.selectedDataSet, _selectionLevel);
                 _selectionLevel = cnt + 1;
                 if (result) {
+                    _lastConflictedState = _selectionLevel;
                     return result;
                 }
             }
@@ -280,7 +282,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         else {
             var dataSelected = [];
             // Checking PRODUCT DEAL TYPE
-            if (_selectionLevel == 1) {
+            if (_lastConflictedState == 1) {
                 dataSelected = $linq.Enumerable().From(vm.selectedDataSet)
                                 .Where(function (x) {
                                     return (x.DEAL_PRD_TYPE == item.name);
@@ -288,7 +290,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                         .ToArray();
             }
                 // Checking PRODUCT CATEGORY NAME
-            else if (_selectionLevel == 2) {
+            else if (_lastConflictedState == 2) {
                 dataSelected = $linq.Enumerable().From(vm.selectedDataSet)
                                 .Where(function (x) {
                                     return (x.PRD_CAT_NM == item.name);
@@ -296,7 +298,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                         .ToArray();
             }
             // Checking BRAND NAME
-            else if (_selectionLevel == 3) {
+            else if (_lastConflictedState == 3) {
                 dataSelected = $linq.Enumerable().From(vm.selectedDataSet)
                                                 .Where(function (x) {
                                                     return (x.BRND_NM == item.name);
@@ -304,7 +306,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                                         .ToArray();
             }
             // Checking FAMILY NAME
-            else if (_selectionLevel == 4) {
+            else if (_lastConflictedState == 4) {
                 dataSelected = $linq.Enumerable().From(vm.selectedDataSet)
                                                 .Where(function (x) {
                                                     return (x.FMLY_NM == item.name);
@@ -312,7 +314,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                                         .ToArray();
             }
             // Checking PROCESSOR NUMBER
-            else if (_selectionLevel == 5) {
+            else if (_lastConflictedState == 5) {
                 dataSelected = $linq.Enumerable().From(vm.selectedDataSet)
                                                 .Where(function (x) {
                                                     return (x.PCSR_NBR == item.name);

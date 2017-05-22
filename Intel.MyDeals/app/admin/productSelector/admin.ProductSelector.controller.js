@@ -432,16 +432,60 @@
               { field: "FMLY_NM", template: " #= FMLY_NM # ", title: "Family Name", width: "200px" },
               { field: "PCSR_NBR", template: " #= PCSR_NBR # ", title: "Processor No", width: "200px" },
               { field: "KIT_NM", template: " #= KIT_NM # ", title: "KIT Name", width: "200px" },
-              { field: "CAP", template: " #= CAP # ", title: "CAP", width: "200px" },
-              { field: "CAP_START_DATE", template: " #= CAP_START_DATE # ", title: "CAP Start Date", width: "200px" },
-              { field: "CAP_END_DATE", template: " #= CAP_END_DATE # ", title: "CAP End Date", width: "200px" },
-              { field: "CAP_PRC_COND", template: " #= CAP_PRC_COND # ", title: "CAP Condition", width: "200px" },
-              { field: "YCS2", template: " #= YCS2 # ", title: "YCS2", width: "200px" },
-              { field: "YCS2_START_DATE", template: " #= YCS2_START_DATE # ", title: "YCS2 Start Date", width: "200px" },
-              { field: "YCS2_END_DATE", template: " #= YCS2_END_DATE # ", title: "YCS2 End Date", width: "200px" },
-              { field: "MM_CUST_CUSTOMER", template: " #= MM_CUST_CUSTOMER # ", title: "MM Customer", width: "200px" },
+              {
+                  field: "MM_CUST_CUSTOMER",
+                  title: "MM Customer Name",
+                  width: "150px"
+              },
+              {
+                  field: "CAP",
+                  title: "CAP Price",
+                  width: "150px",
+                  template: "<op-popover ng-click='vm.openCAPBreakOut(dataItem, null)' op-options='CAP' op-label='#= CAP #' op-data='vm.getPrductDetails(dataItem, null)' />"
+              },
+              {
+                  field: "YCS2",
+                  title: "YCS2",
+                  width: "150px",
+                  template: "<op-popover op-options='YCS2' op-label='#= YCS2 #' op-data='vm.getPrductDetails(dataItem, \"YCS2\")' />"
+              }
             ]
         };
+
+        //Getting CAP Product Details for Tooltip
+        vm.getPrductDetails = function (dataItem, priceCondition) {
+            return [{
+                'CUST_MBR_SID': $scope.contractData.CUST_MBR_SID,
+                'PRD_MBR_SID': dataItem.PRD_MBR_SID,
+                'GEO_MBR_SID': $scope.contractData.GEO_MBR_SID.toString(),
+                'DEAL_STRT_DT': $scope.contractData.START_DT,
+                'DEAL_END_DT': $scope.contractData.END_DT,
+                'getAvailable': 'N',
+                'priceCondition': priceCondition == null ? dataItem.CAP_PRC_COND : priceCondition
+            }];
+        }
+
+        // TODO remove once integrated in CM
+        vm.openCAPBreakOut = function (dataItem, priceCondition) {
+            var capModal = $uibModal.open({
+                backdrop: 'static',
+                templateUrl: 'app/contract/productCAPBreakout/productCAPBreakout.html',
+                controller: 'ProductCAPBreakoutController',
+                controllerAs: 'vm',
+                windowClass: 'cap-modal-window',
+                size: 'lg',
+                resolve: {
+                    productData: angular.copy(dataItem),
+                    contractData: angular.copy($scope.contractData),
+                }
+            });
+
+            capModal.result.then(
+                function () {
+                },
+                function () {
+                });
+        }
 
         // Master Product Massaging
         function cookProducts(data) {
@@ -475,7 +519,7 @@
 
         //Add Product in The Product GRID
         function addProducts() {
-            vm.validProducts = [];
+            //vm.validProducts = [];
             var GetProductCorrectorData = vm.datSourceCorrector;
             for (var key in GetProductCorrectorData.ProdctTransformResults) {
                 var dataSelectedProd = GetProductCorrectorData.ValidProducts[key];
