@@ -504,7 +504,7 @@ namespace Intel.MyDeals.DataLibrary
             return ret;
         }
 
-        public List<PRD_LOOKUP_RESULTS> GetProductDetails(List<ProductEntryAttribute> productsToMatch, Int32 CUST_MBR_SID, Int32 GEO_MBR_SID)
+        public List<PRD_LOOKUP_RESULTS> GetProductDetails(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID, string GEO_MBR_SID)
         {
             OpLogPerf.Log("FindProductMatch");
             var ret = new List<PRD_LOOKUP_RESULTS>();

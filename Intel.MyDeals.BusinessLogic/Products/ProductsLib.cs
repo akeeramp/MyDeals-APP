@@ -230,7 +230,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// </summary>
         /// <param name="products"></param>
         /// <returns></returns>
-        public ProductLookup TranslateProducts(List<ProductEntryAttribute> prodNames, Int32 CUST_MBR_SID, int GEO_MBR_SID)
+        public ProductLookup TranslateProducts(List<ProductEntryAttribute> prodNames, int CUST_MBR_SID, string GEO_MBR_SID)
         {
             //var prodNames = new List<string>();
             var userProducts = prodNames.Select(l => l.USR_INPUT).ToList();
@@ -401,7 +401,7 @@ namespace Intel.MyDeals.BusinessLogic
             return _productDataLib.FindProductMatch(productsToMatch);
         }
 
-        public List<PRD_LOOKUP_RESULTS> GetProductDetails(List<ProductEntryAttribute> productsToMatch, Int32 CUST_MBR_SID, Int32 GEO_MBR_SID)
+        public List<PRD_LOOKUP_RESULTS> GetProductDetails(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID, string GEO_MBR_SID)
         {
             return _productDataLib.GetProductDetails(productsToMatch, CUST_MBR_SID, GEO_MBR_SID);
         }

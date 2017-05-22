@@ -374,12 +374,18 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
     //Add suggestion to the suggestion product
     function productSuggestion(item) {
         productCorrectorService.FindSuggestedProduct(item.USR_INPUT)
-        .then(function (response) {
-            angular.forEach(response.data, function (value, key) {
-                if (!$filter("where")(vm.suggestedProduct, { PRD_MBR_SID: value.PRD_MBR_SID }).length > 0) {
-                    vm.suggestedProduct.push(value);
+            .then(function (response) {
+                if (response.data.length > 1) {
+                    angular.forEach(response.data, function (value, key) {
+                        if (!$filter("where")(vm.suggestedProduct, { PRD_MBR_SID: value.PRD_MBR_SID }).length > 0) {
+                            vm.suggestedProduct.push(value);
+                        }
+                    });
                 }
-            });
+                else {
+                    logger.error("No suggestion found");
+                }
+            
 
         }, function (response) {
             logger.error("Unable to run Suggest Product 2.", response, response.statusText);
