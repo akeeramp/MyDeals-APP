@@ -112,7 +112,7 @@
                             return {
                                 name: i.GDM_BRND_NM,
                                 path: item.path,
-                                drillDownFilter4: i.GDM_BRND_NM
+                                drillDownFilter4: i.GDM_BRND_NM == "" ? 'Blank_GDM' : i.GDM_BRND_NM
                             }
                         });
                         if (vm.items.length == 1) {
@@ -133,7 +133,7 @@
                 vm.items = familyName.map(function (i) {
                     return {
                         name: i.FMLY_NM,
-                        path: i.HIER_NM_HASH,
+                        path: i.HIER_NM_HASH
                     }
                 });
 
@@ -145,19 +145,31 @@
                         arrayContainsString(verticalsWithGDMFamlyAsDrillLevel5, drillLevel5[0].PRD_CAT_NM)) {
                         // If null or empty fall back to GDM_FMLY_NM
                         drillLevel5 = $filter('unique')(vm.prdSelLvlAtrbsForCategory, 'GDM_FMLY_NM');
+                        if (vm.selectedPathParts[3].drillDownFilter4 != undefined && vm.selectedPathParts[3].drillDownFilter4 != "Blank_GDM") {
+                            drillLevel5 = drillLevel5.filter(function (x) {
+                                return x.GDM_BRND_NM == vm.selectedPathParts[3].drillDownFilter4;
+                            })
+                        }
                         vm.items = drillLevel5.map(function (i) {
                             return {
-                                name: i.GDM_FMLY_NM,
+                                name: i.GDM_FMLY_NM, //TODO Chane these values in db
                                 path: vm.items[0].path,
-                                drillDownFilter5: i.GDM_FMLY_NM
+                                drillDownFilter5: i.GDM_FMLY_NM == "" ? 'Blank' : i.GDM_FMLY_NM,
+                                drillDownFilter4: vm.selectedPathParts[3].drillDownFilter4
                             }
                         });
                     } else {
+                        if (vm.selectedPathParts[3].drillDownFilter4 != undefined && vm.selectedPathParts[3].drillDownFilter4 != "Blank_GDM") {
+                            drillLevel5 = drillLevel5.filter(function (x) {
+                                return x.PRD_FMLY_TXT == vm.selectedPathParts[3].drillDownFilter4;
+                            })
+                        }
                         vm.items = drillLevel5.map(function (i) {
                             return {
                                 name: i.PRD_FMLY_TXT,
                                 path: vm.items[0].path,
-                                drillDownFilter5: i.PRD_FMLY_TXT
+                                drillDownFilter5: i.PRD_FMLY_TXT == "" ? 'Blank_PRD' : i.PRD_FMLY_TXT,
+                                drillDownFilter4: vm.selectedPathParts[3].drillDownFilter4
                             }
                         });
                     }
@@ -311,7 +323,7 @@
 
         vm.checkForBlank = function (val) {
             if (val == "") {
-                val = "Blank";
+                return "Blank";
             }
             return val;
         }
@@ -507,9 +519,12 @@
         getItems();
 
         // Called when user enters value into search box and hits enter
-        vm.searchProduct = function () {
+        vm.searchProduct = function (row) {
+            // TODO when Integrated make  remove this
+            row = 1;
             if (vm.userInput == "") return;
             var searchObject = [{
+                ROW_NUMBER: row,
                 USR_INPUT: vm.userInput,
                 EXCLUDE: "",
                 FILTER: "",
@@ -517,7 +532,7 @@
                 END_DATE: contractData.END_DT
             }];
 
-            ProductSelectorService.TranslateProducts(searchObject, contractData.CUST_MBR_SID).then(function (response) {
+            ProductSelectorService.TranslateProducts(searchObject, contractData.CUST_MBR_SID, contractData.GEO_MBR_SID).then(function (response) {
                 processProducts(response.data);
             }, function (response) {
                 logger.error("Unable to get products.", response, response.statusText);
@@ -540,7 +555,7 @@
             vm.searchItems = []; // store conflict hierarchical levels, for user selection
 
             var validProductMatches = data["ValidProducts"];
-            var products = validProductMatches[vm.userInput];
+            var products = validProductMatches[1];
             if (products.length > 0) {
                 vm.productSearchValues = products;
             }
@@ -548,7 +563,7 @@
             // If empty look out for conflicts
             if (vm.productSearchValues.length === 0) {
                 var multipleMatch = data["DuplicateProducts"];
-                var duplicateProducts = multipleMatch[vm.userInput];
+                var duplicateProducts = multipleMatch[1];
                 for (var key in duplicateProducts) {
                     vm.productSearchValues = duplicateProducts[key];
                 }
