@@ -532,7 +532,7 @@
                 END_DATE: contractData.END_DT
             }];
 
-            ProductSelectorService.TranslateProducts(searchObject, contractData.CUST_MBR_SID, contractData.GEO_MBR_SID).then(function (response) {
+            ProductSelectorService.TranslateProducts(searchObject, contractData.CUST_MBR_SID, contractData.GEO_MBR_SID.toString()).then(function (response) {
                 processProducts(response.data);
             }, function (response) {
                 logger.error("Unable to get products.", response, response.statusText);

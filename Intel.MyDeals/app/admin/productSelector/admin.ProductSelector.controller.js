@@ -271,7 +271,7 @@
 
             if (value >= 0 && value != "" && value != null) {
                 var CUST_CD = $scope.contractData.CUST_MBR_SID;
-                var GEO_MBR_SID = $scope.contractData.GEO_MBR_SID;
+                var GEO_MBR_SID = $scope.contractData.GEO_MBR_SID.toString();
                 var resultData = $linq.Enumerable().From($scope.prodGrid._data)
                     .Where(function (x) {
                         return x.USR_INPUT.length > 0 && x.START_DATE > 0 && x.END_DATE > 0;
@@ -330,7 +330,7 @@
                 }
                 vm.currentRow = selectedItem.ROW_NUMBER;
                 var CUST_CD = $scope.contractData.CUST_MBR_SID;
-                var GEO_MBR_SID = $scope.contractData.GEO_MBR_SID;
+                var GEO_MBR_SID = $scope.contractData.GEO_MBR_SID.toString();
                 var dataSelect = [];
                 dataSelect.push(sendObj);
 
