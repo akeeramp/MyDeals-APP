@@ -16,7 +16,7 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     Title="Sync Required",
                     ActionRule = MyDcActions.SyncRequiredItems,
-                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad}
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate }
                 }
             };
         }

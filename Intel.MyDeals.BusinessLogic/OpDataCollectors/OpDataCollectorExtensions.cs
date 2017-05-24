@@ -41,7 +41,8 @@ namespace Intel.MyDeals.BusinessLogic
             // Load Data Cycle: Point 2
             // Save Data Cycle: Point 7
             OpDataElementType opDataElementType = OpDataElementTypeConverter.FromString(dc.DcType);
-            if (opDataElementSetType == OpDataElementSetType.Unknown) opDataElementSetType = OpDataElementSetTypeConverter.FromString(dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD));
+            if (opDataElementSetType == OpDataElementSetType.Unknown)
+                opDataElementSetType = OpDataElementSetTypeConverter.FromString(dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD));
 
             OpDataElementAtrbTemplate template = OpDataElementUiExtensions.GetAtrbTemplate(opDataElementType, opDataElementSetType);
 
@@ -220,7 +221,7 @@ namespace Intel.MyDeals.BusinessLogic
             IOpDataElement dePassValid = dc.GetDataElement(AttributeCodes.PASSED_VALIDATION);
             if (dePassValid != null && dc.ModifiedDataElements.Any())
             {
-                dePassValid.AtrbValue = false;
+                dePassValid.AtrbValue = PassedValidation.Dirty;
             }
 
             return opMsgQueue;

@@ -85,6 +85,8 @@ namespace Intel.MyDeals.Controllers.API
             );
         }
 
+
+
         [Authorize]
         [Route("SaveContractAndPricingTable/{custId}")]
         [HttpPost]
@@ -94,39 +96,42 @@ namespace Intel.MyDeals.Controllers.API
                 , "Unable to save the Contract"
             );
         }
-        
+
         [Authorize]
 		[Route("SaveAndValidateContractAndPricingTable/{custId}")]
 		[HttpPost]
 		public OpDataCollectorFlattenedDictList SaveAndValidateContractAndPricingTable(int custId, ContractTransferPacket contractAndPricingTable)
 		{
-		    if (contractAndPricingTable.EventSource == OpDataElementType.PRC_TBL.ToString())
-		    {
-			    PtrValidationContainer errorList = new PtrValidationContainer();
-			    errorList = ValidatePricingTableRows(contractAndPricingTable);
+            //   if (contractAndPricingTable.EventSource == OpDataElementType.PRC_TBL.ToString())
+            //   {
+            //    PtrValidationContainer errorList = new PtrValidationContainer();
+            //    errorList = ValidatePricingTableRows(contractAndPricingTable);
 
-			    if (errorList.ColumnErrors.Count > 0)
-			    {
-				    // Pricing Table Row has errors, so throw an exception
-				    throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
-				    {
-					    Content = new ObjectContent<PtrValidationContainer>(errorList, new JsonMediaTypeFormatter())
-				    });
-			    }
-            }
+            //    if (errorList.ColumnErrors.Count > 0)
+            //    {
+            //	    // Pricing Table Row has errors, so throw an exception
+            //	    throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError)
+            //	    {
+            //		    Content = new ObjectContent<PtrValidationContainer>(errorList, new JsonMediaTypeFormatter())
+            //	    });
+            //    }
+            //         }
+
+            //         return SafeExecutor(() => _contractsLib.SaveContractAndPricingTable(custId, contractAndPricingTable, true, false)
+            //	, "Unable to save the Contract"
+            //);
 
             return SafeExecutor(() => _contractsLib.SaveContractAndPricingTable(custId, contractAndPricingTable, true, false)
-				, "Unable to save the Contract"
-			);
-		}
+                , "Unable to save the Contract"
+            );
+
+        }
 
         [Authorize]
         [Route("SaveAndValidateAndPublishContractAndPricingTable/{custId}")]
         [HttpPost]
         public OpDataCollectorFlattenedDictList SaveAndValidateAndPublishContractAndPricingTable(int custId, ContractTransferPacket contractAndPricingTable)
         {
-            // TODO: Add validation logic here before saving.
-
             return SafeExecutor(() => _contractsLib.SaveContractAndPricingTable(custId, contractAndPricingTable, true, true)
                 , "Unable to save the Contract"
             );

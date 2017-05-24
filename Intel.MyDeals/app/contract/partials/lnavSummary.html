@@ -3,6 +3,12 @@
 
 <div ng-if="!isNewContract" id="lnavContainerWrapper">
     <div id="lnavHeader">
+        <div class="contract-status-bar stage_{{ contractData.WF_STG_CD }}">{{ contractData.WF_STG_CD }}</div>
+        <div class="contract-title-container" title="View Contract Details">
+            <a ng-if="!('contract.details' | isState)" ui-sref="contract.details({cid:contractData.DC_ID})" ui-sref-opts="{ reload: true }">
+                <small class="contractHeaderId">#{{ contractData.DC_ID }}</small> <small>{{contractData.TITLE}}</small>
+            </a>
+        </div>
         <div ng-include="'app/contract/partials/lnavMenu.html'"></div>
     </div>
     <div id="lnavMenuContainer">
@@ -11,7 +17,8 @@
         <div ng-include="'app/contract/partials/lnavAddPricingTable.html'"></div>
         <div ng-include="'app/contract/partials/lnavEditPricingTableDefaults.html'"></div>
     </div>
-    <div id="lnavContainer" bind-to-height="[33, '#lnavMenuContainer', 'padding-top','#lnavContainerWrapper', 'margin-top','#lnavHeader']">
+    <div id="lnavContainer" bind-to-height="[79, '#lnavMenuContainer', 'padding-top','#lnavContainerWrapper', 'margin-top','#lnavHeader']">
         <div ng-include="'app/contract/partials/lnavSummaryMenu.html'"></div>
     </div>
 </div>
+

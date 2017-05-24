@@ -8,5 +8,12 @@ namespace Intel.MyDeals.IBusinessLogic
     {
         void SavePacketByDictionary(OpDataCollectorFlattenedList data, MyDealsData myDealsData, OpDataElementType opDataElementType, Guid myWbBatchId);
         MyDealsData SavePackets(OpDataCollectorFlattenedDictList data, int custId, List<int> validateIds, bool forcePublish, string sourceEvent);
+
+        MyDealsData SavePackets(OpDataCollectorFlattenedDictList data, int custId, List<int> validateIds,
+            bool forcePublish, string sourceEvent,
+            List<int> ids, List<OpDataElementType> opDataElementTypes, OpDataElementType opTypeGrp,
+            List<int> secondaryIds, List<OpDataElementType> secondaryOpDataElementTypes,
+            OpDataElementType secondaryOpTypeGrp);
+
     }
 }

@@ -14,6 +14,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
         $scope.constants = contractManagerConstants;
         $scope.isContractDetailsPage = $state.current.name === $scope.constants.ContractDetails;
         $scope.isSaving = false;
+        $scope.stealthMode = false;
         $scope.messages = [];
 
         // determine if the contract is existing or new... if new, look for pre-population attributes from the URL parameters
@@ -133,6 +134,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
             // Contract custom initializations and functions
             // Dummy attribute on the UI which will hold the array of customer divisions
             $scope.contractData.CUST_ACCNT_DIV_UI = $scope.contractData["CUST_ACCNT_DIV"].split('/');
+
             $scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV_UI"] = true;
             $scope.contractData._behaviors.isRequired["CUST_ACCNT_DIV"] = true;
             $scope.contractData._behaviors.isReadOnly["CUST_MBR_SID"] = !$scope.isNewContract;
@@ -450,10 +452,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
             logger.success("Contract attachments uploaded", null, "Upload successful");
             $timeout(function() {
                 $scope._dirty = false; // don't want to kick of listeners
-                $state.go('contract.manager',
-                {
-                    cid: $scope.contractData.DC_ID
-                });
+                $state.go('contract.manager', { cid: $scope.contractData.DC_ID });
             });
         }
 
@@ -582,11 +581,13 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
             }
             return isValid;
         }
+
+
         // Watch for any changes to contract data to set a dirty bit
         //
         $scope.$watch('contractData',
-            function(newValue, oldValue, el) {
-                if (oldValue === newValue) return;
+            function (newValue, oldValue, el) {
+                if (oldValue === newValue || $scope.stealthMode) return;
 
                 if (oldValue["CUST_MBR_SID"] != newValue["CUST_MBR_SID"]) {
                     $scope.contractData.CUST_ACCNT_DIV_UI = "";
@@ -598,9 +599,9 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                     setDefaultContractTitle(newValue["CUST_ACCNT_DIV_UI"]);
                     $timeout(function() {
                             $scope.contractData.CUST_ACCNT_DIV = newValue["CUST_ACCNT_DIV_UI"].toString()
-                                .replace(/,/g, '/')
+                                .replace(/,/g, '/');
                         },
-                        1)
+                        1);
                 }
 
                 if (oldValue["START_QTR"] !== newValue["START_QTR"] || oldValue["START_YR"] !== newValue["START_YR"]) {
@@ -673,10 +674,33 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                         (!hasUnSavedFiles && !hasFiles);
                 }
 
-                el._dirty = true;
-                el._dirtyContractOnly = true;
+
+                if ($scope.keyContractItemchanged(oldValue, newValue)) {
+                    el._dirty = true;
+                    el._dirtyContractOnly = true;
+                }
+
             },
             true);
+
+        $scope.keyContractItemchanged = function (oldValue, newValue) {
+            function purgeBehaviors(lData) {
+                lData._behaviors = {};
+                if (!!lData.PRC_ST) {
+                    for (var s = 0; s < lData.PRC_ST.length; s++) {
+                        var item = lData.PRC_ST[s];
+                        item._behaviors = {};
+                        if (!!item.PRC_TBL) {
+                            for (var t = 0; t < item.PRC_TBL.length; t++) {
+                                item.PRC_TBL[t]._behaviors = {};
+                            }
+                        }
+                    }
+                }
+                return kendo.stringify(lData);
+            }
+            return purgeBehaviors(JSON.parse(kendo.stringify(oldValue))) !== purgeBehaviors(JSON.parse(kendo.stringify(newValue)));
+        }
 
         // **** LEFT NAVIGATION Methods ****
         //
@@ -690,12 +714,12 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
             $timeout(function() {
                 var evt = $window.document.createEvent('UIEvents');
                 evt.initUIEvent('resize', true, false, window, 200);
+                evt.initUIEvent('resize', true, false, window, 200);
                 window.dispatchEvent(evt);
                 $timeout(function() {
                         var splitter = $("#k-splitter").data("kendoSplitter");
                         if (splitter !== undefined && splitter !== null) splitter.resize();
-                    },
-                    10);
+                    },10);
             });
         }
         $scope.strategyTreeCollapseAll = true;
@@ -939,7 +963,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                             ps.PRC_TBL.splice(ps.PRC_TBL.indexOf(pt), 1);
 
                             // hide PT defaults editor regardless of whether you deleted the one being edited - ideally we will only hide if deleting the one being edited but this behavior is fine for the time being
-                            $scope.hideEditPricingTableDefaults()
+                            $scope.hideEditPricingTableDefaults();
 
                             logger.success("Deleted the Pricing Table", pt, "Save Sucessful");
                             topbar.hide();
@@ -962,94 +986,98 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
 
         // **** SAVE CONTRACT Methods ****
         //
-        function createEntireContractBase(stateName, _dirtyContractOnly) {
+        function createEntireContractBase(stateName, dirtyContractOnly) {
             var source = "";
-            if (stateName === "contract.manager.strategy") source = "PRC_TBL";
-            if (stateName === "contract.manager.strategy.wip") source = "WIP_DEAL";
-
-            // sync all detail data sources into main grid datasource for a single save
-            if ($scope.spreadDs !== undefined) $scope.spreadDs.sync();
-            //if ($scope.gridDs !== undefined) $scope.gridDs.sync();
-
-            var sData = $scope.spreadDs === undefined ? undefined : $scope.pricingTableData.PRC_TBL_ROW;
-            //var gData = $scope.gridDs === undefined ? undefined : $scope.gridDs.data(); // TODO after multi dim... need to see if we can read the variable instead of the source
-
-            $scope.$broadcast('syncDs');
-
-            var gData = $scope.wipData;
-
-        	var contractData = _dirtyContractOnly ? [$scope.contractData] : [];
-        	var curPricingTableData = $scope.curPricingTable.DC_ID === undefined ? [] : [$scope.curPricingTable];
-
-            // Pricing Table Row
-            if (curPricingTableData.length > 0 && sData != undefined) {
-                // Only save if a product has been filled out
-                sData = sData.filter(function (obj) {
-                    return obj.PTR_USER_PRD !== undefined && obj.PTR_USER_PRD !== null && obj.PTR_USER_PRD !== "";
-                });
-
-                // find all date fields
-                var dateFields = [];
-                var fields = $scope.templates.ModelTemplates.PRC_TBL_ROW[$scope.curPricingTable.OBJ_SET_TYPE_CD].model.fields;
-                for (var key in fields) {
-                    if (typeof fields[key] !== 'function') {
-                        if (fields[key].type === "date" || key.slice(-3) === "_DT") dateFields.push(key);
-                    }
-                }
-
-                for (var s = 0; s < sData.length; s++) {
-                    if (sData[s].DC_ID === null) sData[s].DC_ID = $scope.uid--;
-                    sData[s].DC_PARENT_ID = curPricingTableData[0].DC_ID;
-                    sData[s].dc_type = "PRC_TBL_ROW";
-                    sData[s].dc_parent_type = curPricingTableData[0].dc_type;
-                    sData[s].OBJ_SET_TYPE_CD = curPricingTableData[0].OBJ_SET_TYPE_CD;
-
-                    // fix date formats
-                    for (var d = 0; d < dateFields.length; d++) {
-                        sData[s][dateFields[d]] = moment(sData[s][dateFields[d]]).format("MM/DD/YYYY");
-                    }
-                }
-            }
-
-            // Wip Deal
-            if (gData !== undefined && gData !== null) {
-                for (var i = 0; i < gData.length; i++) {
-                    // TODO... this should probably mimic Pricing Table Rows
-                    if (gData[i].DC_ID === null) gData[i].DC_ID = $scope.uid--;
-                }
-            }
-
-            // Contract is Contract + Pricing Strategies + Pricing Tables in heierarchial format
-            // sData is the raw spreadsheet data
-            // gData is the raw grid data
-
             var modCt = [];
             var modPs = [];
+            var sData = [];
+            var gData = [];
 
-            //if (sData != null) {
-            //	var greatestPtrIndex = sData.length;
-            //}
-            for (var c = 0; c < contractData.length; c++) {
-                var mCt = {
+            var contractData = [];
+            var curPricingTableData = [];
 
-                };
-                Object.keys(contractData[c]).forEach(function (key, index) {
-                    if (key[0] !== '_' && key !== "Customer" && key !== "PRC_ST") mCt[key] = this[key];
-                },
-                    contractData[c]);
-                modCt.push(mCt);
+            // Contract and Pricing Strategies
+            if (dirtyContractOnly) {
+                contractData = [$scope.contractData];
+                for (var c = 0; c < contractData.length; c++) {
+                    var mCt = {};
+                    Object.keys(contractData[c]).forEach(function (key, index) {
+                        if (key[0] !== '_' && key !== "Customer" && key !== "PRC_ST") mCt[key] = this[key];
+                    }, contractData[c]);
+                    modCt.push(mCt);
 
-                if (contractData[c]["PRC_ST"] === undefined) contractData[c]["PRC_ST"] = [];
-                var item = contractData[c]["PRC_ST"];
-                for (var p = 0; p < item.length; p++) {
-                    var mPs = {
+                    if (!contractData[c]["PRC_ST"]) contractData[c]["PRC_ST"] = [];
+                    var item = contractData[c]["PRC_ST"];
+                    for (var p = 0; p < item.length; p++) {
+                        var mPs = {};
+                        Object.keys(item[p]).forEach(function (key, index) {
+                            if (key[0] !== '_' && key !== "PRC_TBL") mPs[key] = this[key];
+                        }, item[p]);
+                        modPs.push(mPs);
+                    }
+                }
 
-                    };
-                    Object.keys(item[p]).forEach(function (key, index) {
-                        if (key[0] !== '_' && key !== "PRC_TBL") mPs[key] = this[key];
-                    },
-                        item[p]);
-                    modPs.push(mPs);
+            }
+
+            // Pricing Table Header
+            if (!!$scope.curPricingTable.DC_ID) curPricingTableData = [$scope.curPricingTable];
+
+            // Pricing Table Rows
+            if (stateName === "contract.manager.strategy") {
+
+                source = "PRC_TBL";
+                // sync all detail data sources into main grid datasource for a single save
+                if ($scope.spreadDs !== undefined) $scope.spreadDs.sync();
+                sData = $scope.spreadDs === undefined ? undefined : $scope.pricingTableData.PRC_TBL_ROW;
+                $scope.$broadcast('syncDs');
+
+                // Pricing Table Row
+                if (curPricingTableData.length > 0 && sData != undefined) {
+                    // Only save if a product has been filled out
+                    sData = sData.filter(function (obj) {
+                        return obj.PTR_USER_PRD !== undefined && obj.PTR_USER_PRD !== null && obj.PTR_USER_PRD !== "";
+                    });
+
+                    // find all date fields
+                    var dateFields = [];
+                    var fields = $scope.templates.ModelTemplates.PRC_TBL_ROW[$scope.curPricingTable.OBJ_SET_TYPE_CD].model.fields;
+                    for (var key in fields) {
+                        if (fields.hasOwnProperty(key)) {
+                            if (typeof fields[key] !== 'function') {
+                                if (fields[key].type === "date" || key.slice(-3) === "_DT") dateFields.push(key);
+                            }
+                        }
+                    }
+
+                    for (var s = 0; s < sData.length; s++) {
+                        if (sData[s].DC_ID === null) sData[s].DC_ID = $scope.uid--;
+                        sData[s].DC_PARENT_ID = curPricingTableData[0].DC_ID;
+                        sData[s].dc_type = "PRC_TBL_ROW";
+                        sData[s].dc_parent_type = curPricingTableData[0].dc_type;
+                        sData[s].OBJ_SET_TYPE_CD = curPricingTableData[0].OBJ_SET_TYPE_CD;
+
+                        if (!sData[s].START_DT || sData[s].START_DT === "") sData[s].START_DT = $scope.contractData["START_DT"];
+                        if (!sData[s].END_DT || sData[s].END_DT === "") sData[s].END_DT = $scope.contractData["END_DT"];
+
+                        // fix date formats
+                        for (var d = 0; d < dateFields.length; d++) {
+                            sData[s][dateFields[d]] = moment(sData[s][dateFields[d]]).format("MM/DD/YYYY");
+                        }
+                    }
+                }
+            }
+
+            // WIP Deals
+            if (stateName === "contract.manager.strategy.wip") {
+                source = "WIP_DEAL";
+                gData = $scope.wipData;
+
+                // Wip Deal
+                if (gData !== undefined && gData !== null) {
+                    for (var i = 0; i < gData.length; i++) {
+                        // TODO... this should probably mimic Pricing Table Rows
+                        if (gData[i].DC_ID === null) gData[i].DC_ID = $scope.uid--;
+                    }
                 }
             }
 
@@ -1078,7 +1106,6 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
             //	//http://dojo.telerik.com/iCola
             //}
 
-
             return {
                 "Contract": modCt,
                 "PricingStrategy": modPs,
@@ -1089,44 +1116,6 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
             }
         }
         
-
-        $scope.validatePricingTable = function (stateName) {
-        	var data = createEntireContractBase(stateName, true);
-			
-        	objsetService.validatePricingTableRow(data)
-				.then(function (response) {
-					// TODO: Put the data into the Processed Product list column?
-					console.log(response.data);
-
-					var errStr = "";
-					// Format the error data
-					if (response.data.ColumnErrors !== undefined && response.data.ColumnErrors !== null) {
-						for (var rowIndex in response.data.ColumnErrors) {
-							if (response.data.ColumnErrors.hasOwnProperty(rowIndex)) {
-								var rowErrorsList = response.data.ColumnErrors[rowIndex]
-								for (var colName in rowErrorsList) {									
-									if (rowErrorsList.hasOwnProperty(colName)) {
-										if (rowErrorsList[colName] !== null && rowErrorsList[colName].length > 0) {
-											for (var i = 0; i < rowErrorsList[colName].length; i++) {
-												var myErrMsg = rowErrorsList[colName][i];
-												errStr += "\n - Row #" + rowIndex + " (" + colName +")     " + myErrMsg;
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-					// TODO: put these errors in the product corrector or something
-					alert("Errors found: (TODO: put the err object into product corrector) \n" + errStr);
-
-				}, function (response) {
-					console.log(response.data);
-					alert("Errors found - TODO: Do something with the translated product response. Check the console for translated data.");
-					logger.error("Unable to translate products.", response, response.statusText);
-				}
-			);
-        }
 
         $scope.validateTitles = function () {
             var rtn = true;
@@ -1193,8 +1182,11 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                         for (i = 0; i < results.data.PRC_TBL_ROW.length; i++) {
                             if (results.data.PRC_TBL_ROW[i].warningMessages !== undefined && results.data.PRC_TBL_ROW[i].warningMessages.length > 0) anyWarnings = true;
                         }
+                        //debugger;
                         $scope.updateResults(results.data.PRC_TBL_ROW, $scope.pricingTableData.PRC_TBL_ROW);
+                        //debugger;
                         $scope.spreadDs.read();
+                        $scope.syncCellsOnAllRows(results.data.PRC_TBL_ROW);
                     }
                     if (!!results.data.WIP_DEAL) {
                         for (i = 0; i < results.data.WIP_DEAL.length; i++) {
@@ -1202,6 +1194,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                         }
                         $scope.updateResults(results.data.WIP_DEAL, $scope.pricingTableData === undefined ? [] : $scope.pricingTableData.WIP_DEAL);
                     }
+
 
                     topbar.hide();
 
@@ -1223,6 +1216,47 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                 }
             );
         }
+
+        $scope.syncCellsOnAllRows = function (data) {
+            var spreadsheet = $("#pricingTableSpreadsheet").data("kendoSpreadsheet");
+            var sheet = spreadsheet.activeSheet();
+            var rowsCount = sheet._rows._count;
+
+            var ptTemplate = $scope.templates.ModelTemplates.PRC_TBL_ROW[$scope.curPricingTable.OBJ_SET_TYPE_CD];
+            if (ptTemplate !== undefined && ptTemplate !== null) {
+                for (var i = 0; i < rowsCount; i++) {
+                    $scope.syncCellsOnSingleRow(sheet, data[i], i);
+                }
+            }
+        }
+
+        $scope.syncCellsOnSingleRow = function (sheet, dataItem, row) {
+            var ptTemplate = $scope.templates.ModelTemplates.PRC_TBL_ROW[$scope.curPricingTable.OBJ_SET_TYPE_CD];
+            var c = 0;
+            if (!!dataItem) {
+                var beh = dataItem._behaviors;
+                if (!beh) beh = {};
+
+                angular.forEach(ptTemplate.columns, function (value, key) {
+                    var isError = !!beh.isError && !!beh.isError[value.field];
+                    var isRequired = !!beh.isRequired && !!beh.isRequired[value.field];
+                    var msg = isError ? beh.validMsg[value.field] : (isRequired) ? "This field is required." : "UNKNOWN";
+
+                    sheet.range(row + 1, c++).validation($scope.myDealsValidation(isError, msg, isRequired));
+                });
+            }
+        }
+
+        $scope.myDealsValidation = function (isError, msg, isReq) {
+            return {
+                comparerType: "custom",
+                dataType: "custom",
+                from: "=MYDEALS_ERROR(" + isError + ")",
+                type: "warning",
+                allowNulls: !isReq,
+                messageTemplate: msg
+            };
+        };
 
         $scope.updateResults = function(data, source) {
             var i, p;
@@ -1288,7 +1322,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                     if (data.data[key][i].DC_ID !== undefined &&
                         data.data[key][i].DC_ID === collection.DC_ID &&
                         data.data[key][i].warningMessages.length > 0) {
-                        angular.forEach(data.data[key][i]._behaviors.ValidMsg,
+                        angular.forEach(data.data[key][i]._behaviors.validMsg,
                             function(value, key) {
                                 collection._behaviors.validMsg[key] = value;
                                 collection._behaviors.isError[key] = value !== "";
@@ -1771,17 +1805,50 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
         // **** VALIDATE PRICING TABLE Methods ****
         //
 
+        $scope.validatePricingTable = function (stateName) {
+            $scope.saveEntireContractBase($state.current.name, true, false);
+
+            return;
+            var data = createEntireContractBase('contract.manager.strategy', $scope._dirtyContractOnly);
+
+            debugger;
+            objsetService.validatePricingTableRow(data)
+				.then(function (response) {
+				    // TODO: Put the data into the Processed Product list column?
+				    console.log(response.data);
+
+				    var errStr = "";
+				    // Format the error data
+				    if (response.data.ColumnErrors !== undefined && response.data.ColumnErrors !== null) {
+				        for (var rowIndex in response.data.ColumnErrors) {
+				            if (response.data.ColumnErrors.hasOwnProperty(rowIndex)) {
+				                var rowErrorsList = response.data.ColumnErrors[rowIndex];
+				                for (var colName in rowErrorsList) {
+				                    if (rowErrorsList.hasOwnProperty(colName)) {
+				                        if (rowErrorsList[colName] !== null && rowErrorsList[colName].length > 0) {
+				                            for (var i = 0; i < rowErrorsList[colName].length; i++) {
+				                                var myErrMsg = rowErrorsList[colName][i];
+				                                errStr += "\n - Row #" + rowIndex + " (" + colName + ")     " + myErrMsg;
+				                            }
+				                        }
+				                    }
+				                }
+				            }
+				        }
+				    }
+				    // TODO: put these errors in the product corrector or something
+				    alert("Errors found: (TODO: put the err object into product corrector) \n" + errStr);
+
+				}, function (response) {
+				    console.log(response.data);
+				    alert("Errors found - TODO: Do something with the translated product response. Check the console for translated data.");
+				    logger.error("Unable to translate products.", response, response.statusText);
+				}
+			);
+        }
+
         $scope.publishWipDeals = function () {
             $scope.saveEntireContractBase($state.current.name, true, true, 'contract.manager.strategy.wip', { cid: $scope.contractData.DC_ID, sid: $scope.curPricingStrategyId, pid: $scope.curPricingTableId });
-
-            //debugger;
-            //$state.go('contract.manager.strategy.wip',
-            //    {
-            //        cid: $scope.contractData.DC_ID,
-            //        sid: $scope.curPricingStrategyId,
-            //        pid: $scope.curPricingTableId
-            //    },
-            //    { reload: true });
         }
         $scope.backToPricingTable = function() {
             $scope.spreadNeedsInitialization = true;

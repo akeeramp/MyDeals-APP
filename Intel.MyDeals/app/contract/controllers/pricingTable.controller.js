@@ -28,7 +28,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 		textAlign: "left",
 		verticalAlign: "center",
 		color: "black",
-		fontSize: 13,
+		fontSize: 12,
 		fontfamily: "Intel Clear"
 	}
 	var headerStyle = {
@@ -36,7 +36,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 		textAlign: "center",
 		verticalAlign: "center",
 		color: "#003C71",
-		fontSize: 13,
+		fontSize: 12,
 		fontWeight: "normal"
 	};
 
@@ -56,7 +56,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
 	function init() {
 		// force a resize event to format page
-		$scope.resizeEvent();
+		//$scope.resizeEvent();
 
 		topbar.hide();
 
@@ -97,66 +97,27 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 			root.pricingTableData.WIP_DEAL = [];
 		}
 
-		//$scope.dataSpreadSheet = root.pricingTableData.PRC_TBL_ROW;
-		$scope.dataGrid = root.pricingTableData.WIP_DEAL;
+		//$scope.dataGrid = root.pricingTableData.WIP_DEAL;
 
-
-		ptTemplate = root.templates.ModelTemplates.PRC_TBL_ROW[root.curPricingTable.OBJ_SET_TYPE_CD];
-		columns = vm.getColumns(ptTemplate);
-
-
-		//debugger;
-		// Define Kendo Spreadsheet options
-		//
-		//root.spreadDs = new kendo.data.DataSource({
-		//    data: $scope.dataSpreadSheet,
-		//    schema: {
-		//        model: ptTemplate.model
-		//    }
-		//});
-
-		//debugger;
-		var ssTools = new gridTools(ptTemplate.model, ptTemplate.columns);
-
-		// now remove the header for new spreadsheet entries
-		if (Array.isArray($scope.pricingTableData.PRC_TBL_ROW)) {
-			root.pricingTableData.PRC_TBL_ROW = root.pricingTableData.PRC_TBL_ROW.filter(function (obj) {
-				return obj.DC_ID !== undefined && obj.DC_ID !== null;
-			});
-		}
-
-		root.spreadDs = ssTools.createDataSource(root.pricingTableData.PRC_TBL_ROW);
-
-		//debugger;
-		// sample reload data source call
-		//root.spreadDs.read().then(function () {
-		//    var view = root.spreadDs.view();
-		//});
-
-		wipTemplate = root.templates.ModelTemplates.WIP_DEAL[root.curPricingTable.OBJ_SET_TYPE_CD];
-		gTools = new gridTools(wipTemplate.model, wipTemplate.columns);
-		gTools.assignColSettings();
-
-		generateKendoOptions();
-
-	}
-
-	function openProductSelector() {
-		alert('TODO: Product Selector');
-	}
-
-	function openInfoDialog() {
-		var modalOptions = {
-			closeButtonText: 'Close',
-			hasActionButton: false,
-			headerText: 'Info',
-			bodyText: 'TODO: Put info text and shortcuts here'
-		};
-		confirmationModal.showModal({}, modalOptions);
+		generateKendoSpreadheetOptions();
+	    generateKendoGridOptions();
 	}
 
 	// Generates options that kendo's html directives will use
-	function generateKendoOptions() {
+	function generateKendoSpreadheetOptions() {
+	    ptTemplate = root.templates.ModelTemplates.PRC_TBL_ROW[root.curPricingTable.OBJ_SET_TYPE_CD];
+	    columns = vm.getColumns(ptTemplate);
+
+	    var ssTools = new gridTools(ptTemplate.model, ptTemplate.columns);
+
+	    // now remove the header for new spreadsheet entries
+	    if (Array.isArray($scope.pricingTableData.PRC_TBL_ROW)) {
+	        root.pricingTableData.PRC_TBL_ROW = root.pricingTableData.PRC_TBL_ROW.filter(function (obj) {
+	            return obj.DC_ID !== undefined && obj.DC_ID !== null;
+	        });
+	    }
+
+	    root.spreadDs = ssTools.createDataSource(root.pricingTableData.PRC_TBL_ROW);
 
 		$scope.ptSpreadOptions = {
 			headerWidth: 0, /* Hide the Row numbers */
@@ -187,10 +148,15 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
 		// Define Kendo Main Grid options
 		gridUtils.onDataValueChange = function (e) {
-			root._dirty = true;
+		    root._dirty = true;
 		}
+	}
 
+    // Generates options that kendo's html directives will use
+	function generateKendoGridOptions() {
 		wipTemplate = root.templates.ModelTemplates.WIP_DEAL[root.curPricingTable.OBJ_SET_TYPE_CD];
+		gTools = new gridTools(wipTemplate.model, wipTemplate.columns);
+		gTools.assignColSettings();
 
 		$timeout(function () {
 		    root.wipOptions = {};
@@ -393,6 +359,20 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 		}, 10);
 	}
 
+	function openProductSelector() {
+	    alert('TODO: Product Selector');
+	}
+
+	function openInfoDialog() {
+	    var modalOptions = {
+	        closeButtonText: 'Close',
+	        hasActionButton: false,
+	        headerText: 'Info',
+	        bodyText: 'TODO: Put info text and shortcuts here'
+	    };
+	    confirmationModal.showModal({}, modalOptions);
+	}
+
 	function getColumns(ptTemplate) {
 		var cols = [];
 		var c = -1;
@@ -490,13 +470,14 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 								// Add LEN validation for required string fields
 								// NOTE: this is not validation for date or number fields as they do not require LEN validation
 								if (vm.requiredStringColumns.hasOwnProperty(key)) {
-									sheet.range(vm.colToLetter[key] + (rowIndex + 1)).validation({
-										dataType: "custom",
-										from: "LEN(" + vm.colToLetter[key] + (rowIndex + 1) + ")>0",
-										allowNulls: false,
-										type: "warning",
-										messageTemplate: "This field is required."
-									});
+                                    // MOVED TO MT VALIDATION AS MULTIPLE VALIDATIONS ARE NOT SUPPORTED AND MYDEALS_ERROR IS THE VALIDATION WE WILL USE
+									//sheet.range(vm.colToLetter[key] + (rowIndex + 1)).validation({
+									//	dataType: "custom",
+									//	from: "LEN(" + vm.colToLetter[key] + (rowIndex + 1) + ")>0",
+									//	allowNulls: false,
+									//	type: "warning",
+									//	messageTemplate: "This field is required."
+									//});
 								}
 							}
 						}
@@ -505,14 +486,15 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 			}
 		//});
 
-		if (!root._dirty) {
-			root._dirty = true;
-		} 
+			if (!root._dirty) {
+			    root._dirty = true;
+            }
 	}
 
 
 	function disableIndividualReadOnlyCells(sheet, rowInfo, rowIndex, rowIndexOffset) {
-		sheet.batch(function () {
+	    sheet.batch(function () {
+	        if (!rowInfo._behaviors) return;
 			for (var property in rowInfo._behaviors.isReadOnly) {
 				if (rowInfo._behaviors.isReadOnly.hasOwnProperty(property)) {
 					var colLetter = vm.colToLetter[property];
@@ -527,7 +509,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
 	// On spreadsheet Render
 	function onRender(e) {
-		if (root.spreadNeedsInitialization) {
+	    if (root.spreadNeedsInitialization) {
 
 			root.spreadNeedsInitialization = false;
 
@@ -551,6 +533,14 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 		}
 	}
 
+    $scope.$on('saveWithWarnings',
+        function (event, args) {
+            var spreadsheet = $("#pricingTableSpreadsheet").data("kendoSpreadsheet");
+            var sheet = spreadsheet.activeSheet();
+            var dropdownValuesSheet = spreadsheet.sheetByName("DropdownValuesSheet");
+            sheetBatchOnRender(sheet, dropdownValuesSheet);
+        });
+
 	function replaceUndoRedoBtns() {
 		var redoBtn = $('.k-i-redo');
 		redoBtn.addClass('fa fa-share ssUndoButton');
@@ -573,179 +563,194 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 		// disable right click menu options
 		$(".k-context-menu").remove();
 
-		sheet.batch(function () {
+	    sheet.batch(function() {
 
-			var headerRange = sheet.range("1:1");
+	        var headerRange = sheet.range("1:1");
 
-			// disable first row
-			headerRange.enable(false); //("A0:ZZ0")
+	        // disable first row
+	        headerRange.enable(false); //("A0:ZZ0")
 
-			// freeze first row
-			sheet.frozenRows(1);
+	        // freeze first row
+	        sheet.frozenRows(1);
 
-			// Stylize header row
-			headerRange.bold(true);
-			headerRange.wrap(true);
-			sheet.rowHeight(0, 35);
+	        // Stylize header row
+	        headerRange.bold(true);
+	        headerRange.wrap(true);
+	        sheet.rowHeight(0, 35);
 
-			headerRange.background(headerStyle.background);
-			headerRange.color(headerStyle.color);
-			headerRange.fontSize(headerStyle.fontSize);
-			headerRange.textAlign(headerStyle.textAlign);
-			headerRange.verticalAlign(headerStyle.verticalAlign);
+	        headerRange.background(headerStyle.background);
+	        headerRange.color(headerStyle.color);
+	        headerRange.fontSize(headerStyle.fontSize);
+	        headerRange.textAlign(headerStyle.textAlign);
+	        headerRange.verticalAlign(headerStyle.verticalAlign);
 
-			// Add product selector editor on Product cells
-			sheet.range(vm.colToLetter["PTR_USER_PRD"] + ":" + vm.colToLetter["PTR_USER_PRD"]).editor("cellProductSelector");
+	        // Add product selector editor on Product cells
+	        sheet.range(vm.colToLetter["PTR_USER_PRD"] + ":" + vm.colToLetter["PTR_USER_PRD"])
+	            .editor("cellProductSelector");
 
-			for (var key in ptTemplate.model.fields) { 
+	        for (var key in ptTemplate.model.fields) {
 
-				var myColumnName = vm.colToLetter[key];
-				var myFieldModel = ptTemplate.model.fields[key];
+	            var myColumnName = vm.colToLetter[key];
+	            var myFieldModel = ptTemplate.model.fields[key];
 
-				if (ptTemplate.model.fields.hasOwnProperty(key) && myColumnName !== undefined) {
+	            if (ptTemplate.model.fields.hasOwnProperty(key) && myColumnName !== undefined) {
 
-					// Disabling logic
-					if (myFieldModel.editable !== true) {
-						// Disable all readonly columns
-						vm.readOnlyColLetters[myColumnName] = true;
-						disableRange(sheet.range(myColumnName + ":" + myColumnName));
-					} else {
-						// Flag which rows have something in them, ao we don't disable rows
-						var numRowsContainingData = 0;
-						if (root.pricingTableData.PRC_TBL_ROW.length > 0) {
-							numRowsContainingData = root.pricingTableData.PRC_TBL_ROW.length + rowIndexOffset;
-						}
-						// Disable all cells except product and cells that are read-only from template
-						if (key != "PTR_USER_PRD") {
-							disableRange(sheet.range(myColumnName + numRowsContainingData + ":" + myColumnName));
-						}
-					}
+	                // Disabling logic
+	                if (myFieldModel.editable !== true) {
+	                    // Disable all readonly columns
+	                    vm.readOnlyColLetters[myColumnName] = true;
+	                    disableRange(sheet.range(myColumnName + ":" + myColumnName));
+	                } else {
+	                    // Flag which rows have something in them, ao we don't disable rows
+	                    var numRowsContainingData = 0;
+	                    if (root.pricingTableData.PRC_TBL_ROW.length > 0) {
+	                        numRowsContainingData = root.pricingTableData.PRC_TBL_ROW.length + rowIndexOffset;
+	                    }
+	                    // Disable all cells except product and cells that are read-only from template
+	                    if (key != "PTR_USER_PRD") {
+	                        disableRange(sheet.range(myColumnName + numRowsContainingData + ":" + myColumnName));
+	                    }
+	                }
 
-					// Add validation dropdowns/multiselects onto the cells
-					if (myFieldModel.opLookupText == "DROP_DOWN" || myFieldModel.opLookupText == "dropdownName") {
-						// Call API
-						dataService.get(myFieldModel.opLookupUrl, null, null, true).then(function (response) {
-							dropdownValuesSheet.batch(function () {
-								for (var i = 0; i < response.data.length; i++) {
-									var myKey = response.data[i].ATRB_CD;
-									if (myKey === null || myKey === undefined) {
-										myKey = response.data[i].subAtrbValue; // HACK: this is for Product Level's atrb code because it pulls form a different dropdown sp
-									}
+	                // Add validation dropdowns/multiselects onto the cells
+	                if (myFieldModel.opLookupText == "DROP_DOWN" || myFieldModel.opLookupText == "dropdownName") {
+	                    // Call API
+	                    dataService.get(myFieldModel.opLookupUrl, null, null, true).then(function(response) {
+	                            dropdownValuesSheet.batch(function() {
+	                                for (var i = 0; i < response.data.length; i++) {
+	                                    var myKey = response.data[i].ATRB_CD;
+	                                    if (myKey === null || myKey === undefined) {
+	                                        myKey = response.data[i]
+	                                            .subAtrbValue;
+// HACK: this is for Product Level's atrb code because it pulls form a different dropdown sp
+	                                    }
 
-									// TODO: Why is ECAP_TYPE called PROGRAM_ECAP_TYPE and can we change that?
-									if (response.data[i].ATRB_CD == "PROGRAM_ECAP_TYPE") {
-										myKey = "ECAP_TYPE";
-									}
-									// Add values onto the other sheet
-									var dropdownValue = response.data[i].DROP_DOWN;
-									if (dropdownValue === undefined || dropdownValue === null) {
-										dropdownValue = response.data[i].dropdownName; // HACK: this is for Product Level's atrb code because it pulls form a different dropdown sp
-									}
+	                                    // TODO: Why is ECAP_TYPE called PROGRAM_ECAP_TYPE and can we change that?
+	                                    if (response.data[i].ATRB_CD == "PROGRAM_ECAP_TYPE") {
+	                                        myKey = "ECAP_TYPE";
+	                                    }
+	                                    // Add values onto the other sheet
+	                                    var dropdownValue = response.data[i].DROP_DOWN;
+	                                    if (dropdownValue === undefined || dropdownValue === null) {
+	                                        dropdownValue = response.data[i]
+	                                            .dropdownName;
+// HACK: this is for Product Level's atrb code because it pulls form a different dropdown sp
+	                                    }
 
-									dropdownValuesSheet.range(vm.colToLetter[myKey] + (i + 1)).value(dropdownValue);
-								}
-							});
-							}, function (error) {
-								logger.error("Unable to get dropdown data.", error, error.statusText);
-						});
-						if (myFieldModel.uiType == "RADIOBUTTONGROUP" || myFieldModel.uiType == "DROPDOWN") {
-							sheet.range(myColumnName + ":" + myColumnName).validation({
-								dataType: "list",
-								showButton: true,
-								from: "DropdownValuesSheet!" + myColumnName + ":" + myColumnName,
-								allowNulls: myFieldModel.nullable,
-								type: "warning",
-								titleTemplate: "Invalid value",
-								messageTemplate: "Invalid value. Please use the dropdown for available options."
-							});
-						} else if (myFieldModel.uiType == "EMBEDDEDMULTISELECT"  || myFieldModel.uiType == "MULTISELECT"){
-							sheet.range(myColumnName + ":" + myColumnName).editor("multiSelectPopUpEditor");
-							// TODO: Add a better validator which makes sure the selected items are in the multiselect list
-							vm.requiredStringColumns[key] = true;
-						}
-					}
-					else {
-						// Add validations based on column type
-						switch (myFieldModel.type) {
-							case "date":
-								//sheet.range(myColumnName + ":" + myColumnName).format("MM/dd/yyyy");								
-								sheet.range(myColumnName + ":" + myColumnName).editor("datePickerEditor");
-								vm.requiredStringColumns[key] = true;
-								break;
-							case "number":
-								if (!myFieldModel.nullable) {
-									sheet.range(myColumnName + ":" + myColumnName).validation({
-										dataType: "number",
-										from: 0,
-										comparerType: "greaterThan",
-										allowNulls: false,
-										type: "warning",
-										messageTemplate: "Value must be positive number."
-									});
-								}
-								// Money Formatting
-								if (myFieldModel.format == "{0:c}") {
-									sheet.range(myColumnName + ":" + myColumnName).format("$#,##0.00");
-								}
-								break;
-							case "string":
-								if (!myFieldModel.nullable) {
-									// TODO: find out how we do an isRequired on strings without LEN?
-									// Add required string columns to dictionay to add LEN validations onchange and later
-									vm.requiredStringColumns[key] = true;
-								}
-								break;
-							default:
-								break;
-						}
-					}
-				}
-			}
+	                                    dropdownValuesSheet.range(vm.colToLetter[myKey] + (i + 1)).value(dropdownValue);
+	                                }
+	                            });
+	                        },
+	                        function(error) {
+	                            logger.error("Unable to get dropdown data.", error, error.statusText);
+	                        });
+	                    if (myFieldModel.uiType == "RADIOBUTTONGROUP" || myFieldModel.uiType == "DROPDOWN") {
+	                        // MOVED TO MT VALIDATION AS MULTIPLE VALIDATIONS ARE NOT SUPPORTED AND MYDEALS_ERROR IS THE VALIDATION WE WILL USE
+	                        sheet.range(myColumnName + ":" + myColumnName).validation({
+	                            dataType: "list",
+	                            showButton: true,
+	                            from: "DropdownValuesSheet!" + myColumnName + ":" + myColumnName,
+	                            allowNulls: myFieldModel.nullable,
+	                            type: "warning",
+	                            titleTemplate: "Invalid value",
+	                            messageTemplate: "Invalid value. Please use the dropdown for available options."
+	                        });
+	                    } else if (myFieldModel.uiType == "EMBEDDEDMULTISELECT" || myFieldModel.uiType == "MULTISELECT") {
+	                        sheet.range(myColumnName + ":" + myColumnName).editor("multiSelectPopUpEditor");
+	                        // TODO: Add a better validator which makes sure the selected items are in the multiselect list
+	                        vm.requiredStringColumns[key] = true;
+	                    }
+	                } else {
+	                    // Add validations based on column type
+	                    switch (myFieldModel.type) {
+	                    case "date":
+	                        //sheet.range(myColumnName + ":" + myColumnName).format("MM/dd/yyyy");								
+	                        sheet.range(myColumnName + ":" + myColumnName).editor("datePickerEditor");
+	                        vm.requiredStringColumns[key] = true;
+	                        break;
+	                    case "number":
+	                        if (!myFieldModel.nullable) {
+	                            // MOVED TO MT VALIDATION AS MULTIPLE VALIDATIONS ARE NOT SUPPORTED AND MYDEALS_ERROR IS THE VALIDATION WE WILL USE
+	                            //sheet.range(myColumnName + ":" + myColumnName).validation({
+	                            //    dataType: "number",
+	                            //    from: 0,
+	                            //    comparerType: "greaterThan",
+	                            //    allowNulls: false,
+	                            //    type: "warning",
+	                            //    messageTemplate: "Value must be positive number."
+	                            //});
+	                        }
+	                        // Money Formatting
+	                        if (myFieldModel.format == "{0:c}") {
+	                            sheet.range(myColumnName + ":" + myColumnName).format("$#,##0.00");
+	                        }
+	                        break;
+	                    case "string":
+	                        if (!myFieldModel.nullable) {
+	                            // TODO: find out how we do an isRequired on strings without LEN?
+	                            // Add required string columns to dictionay to add LEN validations onchange and later
+	                            vm.requiredStringColumns[key] = true;
+	                        }
+	                        break;
+	                    default:
+	                        break;
+	                    }
+	                }
+	            }
+	        }
 
-			// Hide columns based on templating
-			for (var i = 0; i < ptTemplate.columns.length; i++) {
-				if (ptTemplate.columns[i].hidden === true) {
-					sheet.hideColumn(i);
-				}
-			}
+	        // Hide columns based on templating
+	        for (var i = 0; i < ptTemplate.columns.length; i++) {
+	            if (ptTemplate.columns[i].hidden === true) {
+	                sheet.hideColumn(i);
+	            }
+	        }
 
-			// Individual cell security via security mask's json obj behaviors
-			for (var rowIndex = 0; rowIndex < root.pricingTableData.PRC_TBL_ROW.length; rowIndex++) {
-				var rowInfo = root.pricingTableData.PRC_TBL_ROW[rowIndex];
+	        // Individual cell security via security mask's json obj behaviors
+	        for (var rowIndex = 0; rowIndex < root.pricingTableData.PRC_TBL_ROW.length; rowIndex++) {
+	            var rowInfo = root.pricingTableData.PRC_TBL_ROW[rowIndex];
 
-				// Required cells
-				for (var property in rowInfo._behaviors.isRequired) {
-					if (rowInfo._behaviors.isRequired.hasOwnProperty(property)) {
-						var colLetter = vm.colToLetter[property];
-						if (colLetter != null) {
-							sheet.range(colLetter + (rowIndex + rowIndexOffset)).validation({
-								dataType: "custom",
-								from: "LEN(" + colLetter + (rowIndex + rowIndexOffset) + ")>0",
-								allowNulls: false,
-								type: "warning",
-								messageTemplate: "This field is required."
-							});
-						}
-					}
-				}
-				// Read Only cells 
-				disableIndividualReadOnlyCells(sheet, rowInfo, rowIndex, rowIndexOffset);
+	            // Required cells
+	            if (!!rowInfo._behaviors) {
+	                for (var property in rowInfo._behaviors.isRequired) {
+	                    if (rowInfo._behaviors.isRequired.hasOwnProperty(property)) {
+	                        var colLetter = vm.colToLetter[property];
+	                        if (colLetter != null) {
+	                            // MOVED TO MT VALIDATION AS MULTIPLE VALIDATIONS ARE NOT SUPPORTED AND MYDEALS_ERROR IS THE VALIDATION WE WILL USE
+	                            //sheet.range(colLetter + (rowIndex + rowIndexOffset)).validation({
+	                            //    dataType: "custom",
+	                            //    from: "LEN(" + colLetter + (rowIndex + rowIndexOffset) + ")>0",
+	                            //    allowNulls: false,
+	                            //    type: "warning",
+	                            //    messageTemplate: "This field is required."
+	                            //});
+	                        }
+	                    }
+	                }
+	            }
+
+			    // Read Only cells 
+	            disableIndividualReadOnlyCells(sheet, rowInfo, rowIndex, rowIndexOffset);
+
+	            //root.syncCellsOnSingleRow(sheet, rowInfo, rowIndex);
 
 				for (var key in ptTemplate.model.fields) { 
 					// Required string validation via columns 
 					// NOTE: LEN validation means that we need to put validation on ecah individual cell rather than bulk
-					if ((vm.colToLetter[key] !== undefined) && (vm.requiredStringColumns.hasOwnProperty(key))) {
-						sheet.range(vm.colToLetter[key] + (rowIndex + rowIndexOffset)).validation({
-							dataType: "custom",
-							from: "LEN(" + vm.colToLetter[key] + (rowIndex + rowIndexOffset) + ")>0",
-							allowNulls: false,
-							type: "warning",
-							messageTemplate: "This field is required."
-						});
+				    if ((vm.colToLetter[key] !== undefined) && (vm.requiredStringColumns.hasOwnProperty(key))) {
+				        // MOVED TO MT VALIDATION AS MULTIPLE VALIDATIONS ARE NOT SUPPORTED AND MYDEALS_ERROR IS THE VALIDATION WE WILL USE
+					    //sheet.range(vm.colToLetter[key] + (rowIndex + rowIndexOffset)).validation({
+						//	dataType: "custom",
+						//	from: "LEN(" + vm.colToLetter[key] + (rowIndex + rowIndexOffset) + ")>0",
+						//	allowNulls: false,
+						//	type: "warning",
+						//	messageTemplate: "This field is required."
+						//});
 					}
 				}
-			}
-		});
+	        }
+
+	    });
 	}
 
 	function disableRange(range) {
@@ -786,7 +791,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 	// Note that a good amount of this code is Kendo's default code, Kendo v2017.1.118
 	function initCustomPaste(handle) {
 		var spreadsheet = $(handle).data("kendoSpreadsheet");
-		var sheet = spreadsheet.activeSheet();
+		//var sheet = spreadsheet.activeSheet();
 		var Command = kendo.spreadsheet.Command;
 
 		// This is all default Kendo code except customPaste()

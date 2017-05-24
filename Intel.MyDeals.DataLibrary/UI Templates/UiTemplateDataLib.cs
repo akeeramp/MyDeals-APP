@@ -260,7 +260,8 @@ namespace Intel.MyDeals.DataLibrary
 				Id = 29,
 				AtrbCd = AttributeCodes.PRD_LEVEL,
 				Label = "Product Level",
-				ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                Width = 100,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
 				UiType = "DROPDOWN",
 				LookupUrl = "/api/Dropdown/GetProductLevelDropdowns",
 				LookupText = "DROP_DOWN",
@@ -283,7 +284,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 Width = 100,
                 Template = "#=gridUtils.uiIconWrapper(data, 'VOLUME')#",
-                Format = "{0:c}",
+                Format = "{0:d}",
                 IsRequired = true
             });
             items.Add(new UiTemplateContainerItem
@@ -311,7 +312,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 29,
                 AtrbCd = AttributeCodes.PAYOUT_BASED_ON,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                Width = 100,
+                Width = 120,
                 Template = "#=gridUtils.uiIconWrapper(data, 'PAYOUT_BASED_ON')#",
                 IsDefaultable = true,
                 UiType = "DROPDOWN",
@@ -325,7 +326,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 29,
                 AtrbCd = AttributeCodes.PROGRAM_PAYMENT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                Width = 100,
+                Width = 120,
                 Template = "#=gridUtils.uiIconWrapper(data, 'PROGRAM_PAYMENT')#",
                 IsDefaultable = true,
                 UiType = "DROPDOWN",
@@ -342,6 +343,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
                 IsDefaultable = true,
                 Label = "ECAP Type",
+                Width = 100,
                 DataType = "string",
                 UiType = "DROPDOWN",
                 LookupUrl = "/api/Dropdown/GetDropdowns/PROGRAM_ECAP_TYPE/ECAP",
@@ -372,6 +374,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 IsDefaultable = true,
                 Label = "Market Segment",
+                Width = 140,
                 DataType = "string",
                 UiType = "EMBEDDEDMULTISELECT",
                 LookupUrl = "/api/Dropdown/GetDropdownHierarchy/MRKT_SEG",
@@ -387,6 +390,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 IsDefaultable = true,
                 Label = "Geo",
+                Width = 120,
                 DataType = "string",
                 UiType = "MULTISELECT",
                 LookupUrl = "/api/Dropdown/GetGeosDropdowns",
@@ -401,6 +405,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 IsDefaultable = true,
                 Label = "Meet Comp Analysis",
+                Width = 120,
                 DataType = "string",
                 UiType = "RADIOBUTTONGROUP",
                 LookupUrl = "/api/Dropdown/GetDropdowns/MEET_COMP_PRICE_QSTN/ECAP",
@@ -413,12 +418,12 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.MM_MEDIA_CD,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 DataType = "string",
-                IsRequired = true
-				//UiType = "RADIOBUTTONGROUP",
-				//LookupUrl = "/api/Dropdown/GetDropdowns/MM_MEDIA_CD",
-				//LookupText = "DROP_DOWN",
-				//LookupValue = "DROP_DOWN"
-			});
+                Width = 100,
+                UiType = "DROPDOWN",
+                LookupUrl = "/api/Dropdown/GetDropdowns/MM_MEDIA_CD",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN"
+            });
 
             items.Add(new UiTemplateContainerItem
             {

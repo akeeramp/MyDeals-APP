@@ -1,32 +1,15 @@
 ﻿
-<div class="contractTitleDiv">
-    <div class="fl lightBlue">{{contractData.DC_ID}}</div>
-    <div class="fl">{{contractData.TITLE}}</div>
-    <div class="fr">{{contractData.WF_STG_CD}}</div>
-</div>
+<div class="contract-status-bar valid_{{ contractData.PASSED_VALIDATION }}"></div>
 
 <style>
-    .lightBlue {
-        color: #00AEEF;
-        margin-right: 10px;
-    }
-    .contractTitleDiv{
-        margin: 10px 18px; 
-        background-color: #eeeeee; 
-        height: 30px;
-        padding: 4px 10px; 
-        font-size: 16px;
-        font-weight: 600;
-    }
     #contractContainerWrapper {
-        padding: 50px 0 0 0;
+        padding: 20px 0 0 0;
         overflow: hidden;
     }
     #contractHeader {
-        height: 50px;
-        margin-top: -50px;
+        height: 20px;
+        margin-top: -20px;
         border-bottom: 0 solid #eeeeee;
-        padding: 2px;
         background-color: #ffffff;
     }
     

@@ -9,13 +9,13 @@ namespace Intel.MyDeals.DataLibrary
 {
     public partial class OpDataCollectorDataLib
     {
-
         /// <summary>
         /// Get an object tree from its user displayed ID
         /// </summary>
         /// <param name="opDataElementType">Top level of object tree that you expect to get.</param>
         /// <param name="ids">List of IDs to pull.</param>
         /// <param name="includeTypes">Which object types to include in the request.</param>
+        /// <param name="includeSecondaryTypes"></param>
         /// <param name="atrbs">Attributes that need to be brought in as well.</param>
         /// <returns></returns>
         public MyDealsData GetByIDs(OpDataElementType opDataElementType, IEnumerable<int> ids, List<OpDataElementType> includeTypes, IEnumerable<int> atrbs)

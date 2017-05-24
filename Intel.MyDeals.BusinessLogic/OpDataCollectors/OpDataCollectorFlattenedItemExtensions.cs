@@ -71,7 +71,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
             objsetItem.SetBehavior("isReadOnly", de.AtrbCd, de.IsReadOnly);
             objsetItem.SetBehavior("isHidden", de.AtrbCd, de.IsHidden);
             objsetItem.SetBehavior("isError", de.AtrbCd, de.ValidationMessage != string.Empty);
-            objsetItem.SetBehavior("ValidMsg", de.AtrbCd, de.ValidationMessage);
+            objsetItem.SetBehavior("validMsg", de.AtrbCd, de.ValidationMessage);
 
         }
 

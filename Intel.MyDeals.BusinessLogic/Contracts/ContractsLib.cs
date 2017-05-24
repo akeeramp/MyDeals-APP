@@ -152,13 +152,47 @@ namespace Intel.MyDeals.BusinessLogic
         {
             OpDataCollectorFlattenedDictList data = new OpDataCollectorFlattenedDictList();
 
-            if (contracts != null && contracts.Any()) data[OpDataElementType.CNTRCT] = contracts;
-            if (pricingStrategies != null && pricingStrategies.Any()) data[OpDataElementType.PRC_ST] = pricingStrategies;
-            if (pricingTables != null && pricingTables.Any()) data[OpDataElementType.PRC_TBL] = pricingTables;
-            if (pricingTableRows != null && pricingTableRows.Any()) data[OpDataElementType.PRC_TBL_ROW] = pricingTableRows;
-            if (wipDeals != null && wipDeals.Any()) data[OpDataElementType.WIP_DEAL] = wipDeals;
+            List<int> primaryIds = new List<int>();
+            List<int> secondaryIds = new List<int>();
 
-            return _dataCollectorLib.SavePackets(data, custId, validateIds, forcePublish, sourceEvent);
+            List<OpDataElementType> primaryOpDataElementTypes = new List<OpDataElementType>();
+            List<OpDataElementType> secondaryOpDataElementTypes = new List<OpDataElementType>();
+
+            if (contracts != null && contracts.Any())
+            {
+                data[OpDataElementType.CNTRCT] = contracts;
+                primaryOpDataElementTypes.Add(OpDataElementType.CNTRCT);
+                primaryIds = contracts.Where(items => items.ContainsKey(AttributeCodes.DC_ID))
+                        .Select(items => int.Parse(items[AttributeCodes.DC_ID].ToString())).ToList();
+            }
+            if (pricingStrategies != null && pricingStrategies.Any())
+            {
+                data[OpDataElementType.PRC_ST] = pricingStrategies;
+                primaryOpDataElementTypes.Add(OpDataElementType.PRC_ST);
+            }
+            if (pricingTables != null && pricingTables.Any())
+            {
+                data[OpDataElementType.PRC_TBL] = pricingTables;
+                primaryOpDataElementTypes.Add(OpDataElementType.PRC_TBL);
+                secondaryOpDataElementTypes.Add(OpDataElementType.PRC_TBL);
+                secondaryIds = pricingTables.Where(items => items.ContainsKey(AttributeCodes.DC_ID))
+                        .Select(items => int.Parse(items[AttributeCodes.DC_ID].ToString())).ToList();
+            }
+            if (pricingTableRows != null && pricingTableRows.Any())
+            {
+                data[OpDataElementType.PRC_TBL_ROW] = pricingTableRows;
+                secondaryOpDataElementTypes.Add(OpDataElementType.PRC_TBL_ROW);
+            }
+            if (wipDeals != null && wipDeals.Any())
+            {
+                data[OpDataElementType.WIP_DEAL] = wipDeals;
+                secondaryOpDataElementTypes.Add(OpDataElementType.WIP_DEAL);
+            }
+
+            return _dataCollectorLib.SavePackets(
+                data, custId, validateIds, forcePublish, sourceEvent,
+                primaryIds, primaryOpDataElementTypes, OpDataElementType.CNTRCT,
+                secondaryIds, secondaryOpDataElementTypes, OpDataElementType.PRC_TBL);
         }
 
         public OpDataCollectorFlattenedDictList SaveFullContract(int custId, OpDataCollectorFlattenedDictList fullContracts, List<int> validateIds, bool forcePublish, string sourceEvent)
@@ -181,15 +215,15 @@ namespace Intel.MyDeals.BusinessLogic
             bool isWipDealSource = contractAndStrategy.EventSource == OpDataElementType.WIP_DEAL.ToString();
             List<int> validationIds = new List<int>();
 
-            if (forcePublish)
+            if (forceValidation)
             {
                 if (isPrcTblSource)
                 {
-                    validationIds.AddRange(contractAndStrategy.PricingTableRow.Select(item => int.Parse(item["DC_PARENT_ID"].ToString())));
+                    validationIds.AddRange(contractAndStrategy.PricingTableRow.Select(item => int.Parse(item[AttributeCodes.DC_ID].ToString())));
                 }
                 else if (isWipDealSource)
                 {
-                    validationIds.AddRange(contractAndStrategy.WipDeals.Select(item => int.Parse(item["DC_PARENT_ID"].ToString())));
+                    validationIds.AddRange(contractAndStrategy.WipDeals.Select(item => int.Parse(item[AttributeCodes.DC_ID].ToString())));
                 }
             }
 
@@ -348,18 +382,25 @@ namespace Intel.MyDeals.BusinessLogic
 		/// <returns>PtrValidationContainer - consisting of </returns>
 		public PtrValidationContainer ValidatePricingTableRows(ContractTransferPacket contractAndPricingTable)
 		{
-			if ((contractAndPricingTable.PricingTable.Count <= 0) || (contractAndPricingTable.PricingTableRow.Count <= 0))
+			if (contractAndPricingTable.PricingTable.Count <= 0 || contractAndPricingTable.PricingTableRow.Count <= 0)
 			{
-				PtrValidationContainer myContainer = new PtrValidationContainer();
-				myContainer.ColumnErrors = new Dictionary<int, Dictionary<string, List<string>>>();
-				myContainer.ColumnErrors[0] = new Dictionary<string, List<string>>();
-				myContainer.ColumnErrors[0]["general"].Add("No Pricing Table or Rows were found to check validations against.");
+			    PtrValidationContainer myContainer = new PtrValidationContainer
+			    {
+			        ColumnErrors = new Dictionary<int, Dictionary<string, List<string>>>
+			        {
+			            [0] = new Dictionary<string, List<string>>()
+			        }
+			    };
+			    if (!myContainer.ColumnErrors[0].ContainsKey("general")) myContainer.ColumnErrors[0]["general"] = new List<string>();
+
+                myContainer.ColumnErrors[0]["general"].Add("No Pricing Table or Rows were found to check validations against.");
 
 				return myContainer;
 			}
 
 			// TODO: this assumes we only get one contract which might not always true in the future? -- look at DC_PARENT_ID and DC_ID to get associated Pt, contracts, and ptrs
-			if ((string)contractAndPricingTable.PricingTable.FirstOrDefault()["OBJ_SET_TYPE_CD"] == ObjSetTypeCodes.ECAP.ToString())
+		    var opDataCollectorFlattenedItem = contractAndPricingTable.PricingTable.FirstOrDefault();
+		    if (opDataCollectorFlattenedItem != null && (string)opDataCollectorFlattenedItem["OBJ_SET_TYPE_CD"] == ObjSetTypeCodes.ECAP.ToString())
 			{
 				return ValidateEcapPricingTableRows(contractAndPricingTable);
 			}
@@ -408,12 +449,8 @@ namespace Intel.MyDeals.BusinessLogic
 			string jsonString = @"{
 
 	'ProdctTransformResults': {
-				'1': [
-		            'e3200'
-        ],
-        '2': [
-            't7100'
-        ]
+        '1': ['e3200'],
+        '2': ['t7100']
 	},
     'DuplicateProducts': {},
     'ValidProducts': {

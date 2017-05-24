@@ -1,13 +1,5 @@
 ﻿<div ng-hide="isPricingStrategiesHidden" style="margin-top: 10px; ">
 
-    <div style="padding: 6px;">
-        <div class="contractHeader" style="margin: 0 5px; line-height: 1.3em;" title="View Contract Details">
-            <a ng-if="!('contract.details' | isState)" ui-sref="contract.details({cid:contractData.DC_ID})" ui-sref-opts="{ reload: true }">
-                <small class="contractHeaderId">#{{ contractData.DC_ID }}</small> <small>{{contractData.TITLE}}</small>
-            </a>
-        </div>
-    </div>
-    
     <div class="lnav-sum-container">
 
         <h4>Contract Manager</h4>
@@ -19,10 +11,7 @@
             <a ui-sref="contract.deals" ui-sref-opts="{reload: true}"><div id="dealsDiv">All Deals</div></a>
         </div>
 
-        <h4>Contract Stats</h4>
-
     </div>
-
 
 </div>
 

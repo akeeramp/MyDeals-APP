@@ -88,21 +88,19 @@
 
     #contractContainerWrapper {
         height: 100%;
-        padding: 33px 0 0 0;
+        padding: 46px 0 0 0;
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
         box-sizing: border-box;
     }
     #contractHeader {
-        height: 33px;
-        margin-top: -33px;
+        height: 46px;
+        margin-top: -46px;
         border-bottom: 1px solid #eeeeee;
-        padding: 2px;
         font-size: 14px;
         font-family: "Intel Clear";
         font-weight: 200;
         font-style: normal;
-        background-color: #fafafa;
     }
     #contractContainer {
         height: 100%;
@@ -694,6 +692,10 @@
 		border: 0;
 	}
 
+    .k-spreadsheet .kendo-context-menu .k-animation-container {
+        width: 200px;
+    }
+
 	.k-spreadsheet .k-spreadsheet-quick-access-toolbar{
 		position: relative;
 	}
@@ -1032,7 +1034,6 @@
 	 /* Default cell */
 	 .k-spreadsheet-cell {
 		 color: #000000;
-		background-color: white;
 	 }
 	 /* Spreadsheet disabled cells */
 	 .k-spreadsheet-cell.k-state-disabled{
@@ -1092,3 +1093,30 @@
 		color: #939598;
 		cursor: default;
 	}
+
+
+
+    .contract-status-bar {
+        color: #000000; 
+        padding: 1px 10px 0 6px; 
+        font-size: 10px; 
+        font-family: arial; 
+        text-transform: uppercase;
+        height: 16px;
+    }
+    .contract-title-container {
+        padding: 4px 8px; 
+        overflow: hidden; 
+        text-overflow: ellipsis; 
+        height: 30px; 
+        white-space: nowrap; 
+        width: 300px;
+        border-bottom: 1px solid #e8eaec;
+    }
+    .stage_, .stage_InComplete {
+        background-color: #e8eaec; 
+    }
+    .stage_Complete {
+        background-color: #C4D600; 
+    }
+

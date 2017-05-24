@@ -370,7 +370,7 @@ gridTools.prototype.createDataSource = function (parentSource, pageSize) {
                 // locate item in original datasource and update it
                 for (var i = 0; i < e.data.models.length; i++) {
                     var item = e.data.models[i];
-                    source[gTools.getIndexById(item.ID, source)] = item;
+                    source[gTools.getIndexById(item.DC_ID, source)] = item;
                 }
                 // on success
                 e.success();
@@ -381,7 +381,7 @@ gridTools.prototype.createDataSource = function (parentSource, pageSize) {
                 var source = parentSource;
 
                 // locate item in original datasource and remove it
-                source.splice(gTools.getIndexById(e.data.ID, source), 1);
+                source.splice(gTools.getIndexById(e.data.DC_ID, source), 1);
                 // on success
                 e.success();
                 // on failure
@@ -418,3 +418,4 @@ Array.prototype.indexOfField = function (propertyName, value) {
             return i;
     return -1;
 }
+

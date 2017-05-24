@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Intel.MyDeals.BusinessLogic.DataCollectors;
+using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.MyDeals.IDataLibrary;
@@ -22,7 +24,51 @@ namespace Intel.MyDeals.BusinessLogic
         }
 
 
+        public MyDealsData SavePackets(OpDataCollectorFlattenedDictList data, int custId, List<int> validateIds, bool forcePublish, string sourceEvent,
+            List<int> ids, List<OpDataElementType> opDataElementTypes, OpDataElementType opTypeGrp,
+            List<int> secondaryIds, List<OpDataElementType> secondaryOpDataElementTypes, OpDataElementType secondaryOpTypeGrp)
+        {
+            MyDealsData myDealsData = new MyDealsData();
+
+            // Get the data from the DB, data is the data passed from the UI, it is then merged together down below.
+            if (ids.Any() && opDataElementTypes.Any())
+            {
+                MyDealsData primaryMyDealsData = opTypeGrp.GetByIDs(ids, opDataElementTypes, data);
+                foreach (KeyValuePair<OpDataElementType, OpDataPacket<OpDataElementType>> kvp in primaryMyDealsData)
+                {
+                    myDealsData[kvp.Key] = kvp.Value;
+                }
+            }
+
+            if (secondaryIds.Any() && secondaryOpDataElementTypes.Any())
+            {
+                MyDealsData secondaryMyDealsData = secondaryOpTypeGrp.GetByIDs(secondaryIds, secondaryOpDataElementTypes, data);
+                foreach (KeyValuePair<OpDataElementType, OpDataPacket<OpDataElementType>> kvp in secondaryMyDealsData)
+                {
+                    myDealsData[kvp.Key] = kvp.Value;
+                }
+            }
+
+            return SavePacketsBase(data, custId, myDealsData, validateIds, forcePublish, sourceEvent);
+        }
+
         public MyDealsData SavePackets(OpDataCollectorFlattenedDictList data, int custId, List<int> validateIds, bool forcePublish, string sourceEvent)
+        {
+            List<int> ids;
+            List<OpDataElementType> opDataElementTypes;
+            OpDataElementType opTypeGrp;
+
+            // get all layer (OpDataElementTypes) based on passed data
+            data.PredictIdsAndLevels(out ids, out opDataElementTypes, out opTypeGrp);
+
+            // Get the data from the DB, data is the data passed from the UI, it is then merged together down below.
+            MyDealsData myDealsData = opTypeGrp.GetByIDs(ids, opDataElementTypes, data);
+
+            return SavePacketsBase(data, custId, myDealsData, validateIds, forcePublish, sourceEvent);
+        }
+
+
+        public MyDealsData SavePacketsBase(OpDataCollectorFlattenedDictList data, int custId, MyDealsData myDealsData, List<int> validateIds, bool forcePublish, string sourceEvent)
         {
             // Save Data Cycle: Point 9
 
@@ -30,17 +76,7 @@ namespace Intel.MyDeals.BusinessLogic
             // Step 1 - get all of the related DEs for each object given a set of object levels (OpDataElementType) and IDs
             // Step 2 - For each OpDataElementType, Merge changes, then validate
 
-            // get all layer (OpDataElementTypes) based on passed data
-            List<int> ids;
-            List<OpDataElementType> opDataElementTypes;
-            OpDataElementType opTypeGrp;
 
-            data.PredictIdsAndLevels(out ids, out opDataElementTypes, out opTypeGrp);
-
-            // Get the data from the DB, data is the data passed from the UI, it is then merged together down below.
-            MyDealsData myDealsData = opTypeGrp.GetByIDs(ids, opDataElementTypes, data);
-
-            myDealsData.EnsureRowAndWipDcIds();
 
             // RUN RULES HERE - If there are validation errors... stop... but we need to save the validation status
             MyDealsData myDealsDataWithErrors = null;
@@ -61,7 +97,18 @@ namespace Intel.MyDeals.BusinessLogic
 
             MyDealsData myDealsDataResults = PerformTasks(OpActionType.Save, myDealsData, custId);  // execute all save perform task items now
 
+            if (hasErrors) TransferActions(myDealsDataResults, myDealsDataWithErrors);
             return hasErrors ? myDealsDataWithErrors : myDealsDataResults;
+        }
+
+        private void TransferActions(MyDealsData myDealsDataResults, MyDealsData myDealsDataWithErrors)
+        {
+            foreach (KeyValuePair<OpDataElementType, OpDataPacket<OpDataElementType>> kvp in myDealsDataResults)
+            {
+                if (myDealsDataResults[kvp.Key].Actions == null || !myDealsDataResults[kvp.Key].Actions.Any()) continue;
+                if (!myDealsDataWithErrors.ContainsKey(kvp.Key)) myDealsDataWithErrors[kvp.Key] = new OpDataPacket<OpDataElementType>();
+                myDealsDataWithErrors[kvp.Key].Actions = myDealsDataResults[kvp.Key].Actions;
+            }
         }
 
         public void SavePacketByDictionary(OpDataCollectorFlattenedList data, MyDealsData myDealsData, OpDataElementType opDataElementType, Guid myWbBatchId)

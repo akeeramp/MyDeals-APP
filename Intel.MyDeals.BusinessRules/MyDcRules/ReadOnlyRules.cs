@@ -16,7 +16,7 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     Title="Sync Read Only",
                     ActionRule = MyDcActions.SyncReadOnlyItems,
-                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad}
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate }
                 },
                 new MyOpRule // Set to read only if yuo have a TRACKER NUMBER
                 {

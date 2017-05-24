@@ -98,9 +98,17 @@
 		</button>
 	</div>
 
-	<div kendo-spreadsheet id="pricingTableSpreadsheet" style="width: 100%; height: 100%;" k-options="ptSpreadOptions" k-scope-field="spreadsheet" class="noFormula"></div>
+	<div kendo-spreadsheet id="pricingTableSpreadsheet" style="width: 100%; height: 100%; margin-top: -3px; margin-left: -2px;" k-options="ptSpreadOptions" k-scope-field="spreadsheet" class="noFormula"></div>
 </div>
 
 
 <div ng-include="'app/contract/partials/datePickerModal.html'"></div>
 <div ng-include="'app/contract/partials/multiSelectPopUpModal.html'"></div>
+
+<script>
+    kendo.spreadsheet.defineFunction("MYDEALS_ERROR", function (val) {
+        return val !== true;
+    }).args([
+        ['*value', 'anything!']
+    ]);
+</script>

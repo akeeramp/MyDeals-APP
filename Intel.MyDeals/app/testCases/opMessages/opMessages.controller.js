@@ -82,7 +82,7 @@
             if (data.data[key] !== undefined) {
                 for (var i = 0; i < data.data[key].length; i++) {
                     if (data.data[key][i].DC_ID !== undefined && data.data[key][i].DC_ID === collection.DC_ID && data.data[key][i].warningMessages.length > 0) {
-                        angular.forEach(data.data[key][i]._behaviors.ValidMsg,
+                        angular.forEach(data.data[key][i]._behaviors.validMsg,
                         function (value, key) {
                             collection._behaviors.validMsg[key] = value;
                             collection._behaviors.isError[key] = value !== "";

@@ -1,7 +1,11 @@
 ﻿<div style="margin: 0;">
     <div ng-if="!isNewContract" class="fr" ng-include="'app/contract/partials/lnavButtons.html'"></div>
     
-    <div class="col-md-10" style="padding-top: 3px;">
+    <div class="pricing-strategy-status-bar valid_{{ curPricingStrategy.PASSED_VALIDATION }}">
+        <div class="fl">Pricing Table Editor</div>
+        <div class="fr"><span style="opacity: 0.5;">Pricing Strategy:</span> {{ curPricingStrategy.WF_STG_CD }}</div>
+    </div>
+    <div style="padding-top: 3px;">
         <div class="contractHeader" style="margin: 0 10px 0 -13px; line-height: 1.2em; font-size: 18px;">
             <div class="myDealsControl"
                  op-control-flat
@@ -16,28 +20,32 @@
         </div>
     </div>
     
-    <div class="fr ttl-stage">
-        <i class="intelicon-workflow-process-outlined"></i>
-        <span ng-bind="curPricingStrategy.WF_STG_CD"></span>
-    </div>
-
     <div class="clearboth"></div>
 </div>
 
 <style>
-    .contractHeader .opUiContainer .k-input, input.k-textbox, .opUiContainer .k-input, input.k-textbox:hover {
-        background-color: transparent !important;
-        border-color: transparent;
+    .contractHeader .opUiContainer input.k-textbox, .contractHeader .opUiContainer input.k-textbox:hover {
+        border-right-color: transparent;
+        border-left-color: transparent;
+        border-top-color: transparent;
         height: 30px;
         width: 100%;
     }
-    .contractHeader .opUiContainer .k-input, input.k-textbox:hover {
-        border-color: #dfdfdf !important;
+    .contractHeader .opUiContainer input.k-textbox:hover {
     }
 
     .contractHeader .myDealsControl {
-        margin: -3px 0 0 -15px;
+        margin: -3px 0 0 0px;
         float: left;
-        width: 90%;
+        width: 100%;
     }
+    .pricing-strategy-status-bar {
+        color: #000000; 
+        padding: 1px 10px 0 6px; 
+        font-size: 10px; 
+        font-family: arial; 
+        text-transform: uppercase;
+        height: 16px;
+    }
+
 </style>

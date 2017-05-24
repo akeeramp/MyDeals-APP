@@ -70,10 +70,11 @@ namespace Intel.MyDeals.BusinessLogic
                     {
                         //string wipProd = items[AttributeCodes.PTR_USER_PRD + EN.VARIABLES.PRIMARY_DIMKEY].ToString();
                         string wipProd = items[AttributeCodes.PTR_USER_PRD].ToString();
+                        string wipProdFilter = items[AttributeCodes.PRODUCT_FILTER].ToString();
                         List<OpDataCollector> myDcs = myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.Where(d => d.DcParentID == parentid).ToList();
                         foreach (OpDataCollector odc in myDcs)
                         {
-                            if (odc.GetDataElementValue(AttributeCodes.PTR_USER_PRD) == wipProd) id = odc.DcID;
+                            if (odc.GetDataElementValue(AttributeCodes.PTR_USER_PRD) == wipProd && odc.GetDataElementValue(AttributeCodes.PRODUCT_FILTER) == wipProdFilter) id = odc.DcID;
                         }
                     }
                     else
@@ -159,6 +160,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             foreach (OpDataCollector allDataCollector in myDealsData[opDataElementType].AllDataCollectors)
             {
+                if (allDataCollector.DcType == null) allDataCollector.DcType = opDataElementType.ToString();
                 allDataCollector.FillInHolesFromAtrbTemplate(opDataElementSetType);
             }
 
@@ -209,15 +211,17 @@ namespace Intel.MyDeals.BusinessLogic
             // Get DataPacket
             OpDataPacket<OpDataElementType> dpObjSet = myDealsData[opType];
 
-            if (security && dpObjSet.Actions.Any()) data.Add(new OpDataCollectorFlattenedItem {["_actions"] = dpObjSet.Actions });
+            if (security)
+            {
+                if (dpObjSet.Actions.Any())
+                    data.Add(new OpDataCollectorFlattenedItem { ["_actions"] = dpObjSet.Actions });
 
-            // Tag Attachments
-            // TODO Inject a Rule Trigger here and the below commands should be a rules for this trigger
+                myDealsData.InjectParentStages();
 
-
-            // TODO make this a rule
-            // Since this is a DB call, we don't want to do this for EVERY data collector individually
-            if (security) myDealsData.TagWithAttachments(dpObjSet);
+                // TODO make this a rule
+                // Since this is a DB call, we don't want to do this for EVERY data collector individually
+                myDealsData.TagWithAttachments(dpObjSet);
+            }
 
             //Get Products
             // TODO make this a rule
@@ -439,30 +443,94 @@ namespace Intel.MyDeals.BusinessLogic
             return opMsgQueue;
         }
 
-        public static bool ValidationApplyRules(this MyDealsData myDealsData, List<int> validateIds, bool forcePublish, string sourceEvent)
+        public static void InjectParentStages(this MyDealsData myDealsData, string sourceEvent = null)
         {
-            // Apply rules to save packets here.  If validations are hit, append them to the DC and packet message lists.
-            bool dataHasValidationErrors = false;
-
-
-            // TODO Only validate sourceEvent
             List<OpDataElementType> ignoreTypes = new List<OpDataElementType>();
             if (sourceEvent == OpDataElementType.PRC_TBL.ToString()) ignoreTypes.Add(OpDataElementType.WIP_DEAL);
             if (sourceEvent == OpDataElementType.WIP_DEAL.ToString()) ignoreTypes.Add(OpDataElementType.PRC_TBL);
 
+            // Since PRC_TBL_ROW do nor have a stage, they rely on the PRC_ST's WF_STG_CD
+            Dictionary<int, string> prcSt2StgMapping = new Dictionary<int, string>();
+            Dictionary<int, string> prcSt2PrcTblMapping = new Dictionary<int, string>();
+
+            if (!myDealsData.ContainsKey(OpDataElementType.PRC_TBL_ROW)) return;
+
+            List<int> ids = myDealsData[OpDataElementType.PRC_TBL_ROW].AllDataCollectors.Select(d => d.DcParentID).Distinct().ToList();
+            List<int> atrbs = new List<int>
+            {
+                Attributes.WF_STG_CD.ATRB_SID,
+                Attributes.TITLE.ATRB_SID
+            };
+
+            MyDealsData temp = OpDataElementType.PRC_TBL.GetByIDs(ids, new List<OpDataElementType> { OpDataElementType.PRC_ST, OpDataElementType.PRC_TBL }, atrbs);
+
+            if (temp.ContainsKey(OpDataElementType.PRC_ST))
+            {
+                foreach (var item in temp[OpDataElementType.PRC_ST].AllDataElements.Where(d => d.AtrbCd == AttributeCodes.WF_STG_CD))
+                {
+                    prcSt2StgMapping[item.DcID] = item.AtrbValue.ToString();
+                }
+            }
+
+            if (temp.ContainsKey(OpDataElementType.PRC_TBL))
+            {
+                foreach (var item in temp[OpDataElementType.PRC_TBL].AllDataElements)
+                {
+                    prcSt2PrcTblMapping[item.DcID] = prcSt2StgMapping[item.DcParentID];
+                }
+            }
 
             foreach (OpDataElementType opDataElementType in Enum.GetValues(typeof(OpDataElementType)))
             {
                 if (!myDealsData.ContainsKey(opDataElementType) || ignoreTypes.Contains(opDataElementType)) continue;
                 foreach (OpDataCollector dc in myDealsData[opDataElementType].AllDataCollectors)
                 {
+                    if (opDataElementType != OpDataElementType.WIP_DEAL && opDataElementType != OpDataElementType.PRC_TBL_ROW) continue;
+                    if (opDataElementType == OpDataElementType.PRC_TBL_ROW && prcSt2PrcTblMapping.ContainsKey(dc.DcParentID))
+                    {
+                        // We can add this because it is NOT part of the template.  It will naturally get stripped off on the save.  Until then, we will use this for security rules
+                        dc.DataElements.Add(new OpDataElement
+                        {
+                            AtrbCd = AttributeCodes.WF_STG_CD,
+                            AtrbValue = prcSt2PrcTblMapping[dc.DcParentID],
+                            AtrbID = 0,
+                            DcParentID = dc.DcParentID,
+                            DcID = dc.DcID
+                        });
+                    }
+                }
+            }
+        }
+
+        public static bool ValidationApplyRules(this MyDealsData myDealsData, List<int> validateIds, bool forcePublish, string sourceEvent)
+        {
+            // Apply rules to save packets here.  If validations are hit, append them to the DC and packet message lists.
+            bool dataHasValidationErrors = false;
+            
+            List<OpDataElementType> ignoreTypes = new List<OpDataElementType>();
+            if (sourceEvent == OpDataElementType.PRC_TBL.ToString()) ignoreTypes.Add(OpDataElementType.WIP_DEAL);
+            if (sourceEvent == OpDataElementType.WIP_DEAL.ToString()) ignoreTypes.Add(OpDataElementType.PRC_TBL);
+
+            if (validateIds.Any() && sourceEvent == OpDataElementType.PRC_TBL.ToString() && myDealsData.ContainsKey(OpDataElementType.PRC_TBL_ROW))
+            {
+                myDealsData.InjectParentStages(sourceEvent);
+            }
+
+            foreach (OpDataElementType opDataElementType in Enum.GetValues(typeof(OpDataElementType)))
+            {
+                if (!myDealsData.ContainsKey(opDataElementType)) continue;
+                foreach (OpDataCollector dc in myDealsData[opDataElementType].AllDataCollectors)
+                {
                     var dcHasErrors = false;
 
                     dc.ApplyRules(MyRulesTrigger.OnSave);
-                    if (validateIds.Any())
+                    if (validateIds.Any() && !ignoreTypes.Contains(opDataElementType))
                     {
-                        if (opDataElementType == OpDataElementType.WIP_DEAL || opDataElementType == OpDataElementType.WIP_DEAL) {
-                            if (validateIds.Contains(dc.DcID)) dc.ApplyRules(MyRulesTrigger.OnValidate);
+                        if (opDataElementType == OpDataElementType.WIP_DEAL || opDataElementType == OpDataElementType.PRC_TBL_ROW) {
+                            if (validateIds.Contains(dc.DcID))
+                            {
+                                dc.ApplyRules(MyRulesTrigger.OnValidate);
+                            }
                         }
                         else
                         {

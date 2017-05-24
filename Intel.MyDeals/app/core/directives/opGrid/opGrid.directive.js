@@ -627,7 +627,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
                                 Object.keys(beh.isError).forEach(function(key, index) {
 
                                         dataItem._behaviors.isError[key] = beh.isError[key];
-                                        dataItem._behaviors.validMsg[key] = beh.ValidMsg[key];
+                                        dataItem._behaviors.validMsg[key] = beh.validMsg[key];
                                         $scope.increaseBadgeCnt(key);
 
                                     },
@@ -725,22 +725,22 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
                 beh.validMsg = {};
 
                 // check for required fields
-                angular.forEach(beh.isRequired, function (value, key) {
-                    if ((row[key] === undefined || row[key] === null || row[key] === '') && (beh.isReadOnly[key] === undefined && !beh.isReadOnly[key]) && (beh.isHidden[key] === undefined && !beh.isHidden[key])) {
-                        var cols = this.grid.columns;
-                        var title = cols.find(function (v, i) {
-                            return cols[i].field === key;
-                        }).title;
-                        beh.isError[key] = true;
+                //angular.forEach(beh.isRequired, function (value, key) {
+                //    if ((row[key] === undefined || row[key] === null || row[key] === '') && (beh.isReadOnly[key] === undefined && !beh.isReadOnly[key]) && (beh.isHidden[key] === undefined && !beh.isHidden[key])) {
+                //        var cols = this.grid.columns;
+                //        var title = cols.find(function (v, i) {
+                //            return cols[i].field === key;
+                //        }).title;
+                //        beh.isError[key] = true;
 
-                        if (beh.validMsg[key] === undefined) beh.validMsg[key] = "";
-                        beh.validMsg[key] += title + " is required<br/>";
+                //        if (beh.validMsg[key] === undefined) beh.validMsg[key] = "";
+                //        beh.validMsg[key] += title + " is required<br/>";
 
-                        $scope.increaseBadgeCnt(key);
-                        valid = false;
-                        row["PASSED_VALIDATION"] = "Dirty";
-                    }
-                }, scope);
+                //        $scope.increaseBadgeCnt(key);
+                //        valid = false;
+                //        row["PASSED_VALIDATION"] = "Dirty";
+                //    }
+                //}, scope);
 
                 return valid;
             }

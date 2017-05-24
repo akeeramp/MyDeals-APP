@@ -29,6 +29,21 @@ namespace Intel.MyDeals.BusinessRules
                 },
                 new MyOpRule
                 {
+                    Title="Enforce Required Fields",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.AddValidationMessage,
+                            Args = new object[] {"{0} is required"},
+                            Where = de => de.IsRequired && de.HasNoValue()
+                        }
+                    }
+                },
+                new MyOpRule
+                {
                     Title="Must have a positive or zero value",
                     ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
@@ -97,7 +112,7 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     Title="Make sure End Date is later than Credit Date",
                     ActionRule = MyDcActions.ExecuteActions,
-                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnSave},
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
                     AtrbCondIf = dc => dc.IsDateBefore(AttributeCodes.END_DT, "BLLG_DT"),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
@@ -121,6 +136,21 @@ namespace Intel.MyDeals.BusinessRules
                         {
                             Action = MyDeActions.CheckInitialWorkFlow,
                             Where = de => de.AtrbCdIn(new List<string> {AttributeCodes.WF_STG_CD})
+                        }
+                    }
+                },
+                new MyOpRule
+                {
+                    Title="Validate Market Segments",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.MRKT_SEG) && de.HasValue()).Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = MyDeActions.CheckMarketSegment,
+                            Where = de => de.AtrbCdIn(new List<string> {AttributeCodes.MRKT_SEG})
                         }
                     }
                 }
