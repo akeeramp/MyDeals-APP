@@ -59,6 +59,14 @@ namespace Intel.MyDeals.BusinessRules
                 },
                 new MyOpRule
                 {
+                    Title="Validate ECAP Price",
+                    ActionRule = MyDcActions.ValidateEcapPrice,
+                    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW},
+                    InObjSetType = new List<string> {OpDataElementSetType.ECAP.ToString()},
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate}
+                },
+                new MyOpRule
+                {
                     Title="Does not exceed max character limit",
                     ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnSave},
@@ -110,10 +118,26 @@ namespace Intel.MyDeals.BusinessRules
                 },
                 new MyOpRule
                 {
+                    Title="Make sure End Date is later than Start Date",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
+                    AtrbCondIf = dc => dc.IsDateBefore(AttributeCodes.END_DT, AttributeCodes.START_DT),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.AddValidationMessage,
+                            Args = new object[] {"End date must be after the start date."},
+                            Where = de => de.AtrbCdIn(new List<string> {AttributeCodes.END_DT})
+                        }
+                    }
+                },
+                new MyOpRule
+                {
                     Title="Make sure End Date is later than Credit Date",
                     ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
-                    AtrbCondIf = dc => dc.IsDateBefore(AttributeCodes.END_DT, "BLLG_DT"),
+                    AtrbCondIf = dc => dc.IsDateBefore(AttributeCodes.END_DT, AttributeCodes.BLLG_DT),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
                         new OpRuleAction<IOpDataElement>
@@ -141,6 +165,13 @@ namespace Intel.MyDeals.BusinessRules
                 },
                 new MyOpRule
                 {
+                    Title="Frontend Start Date Validation",
+                    ActionRule = MyDcActions.CheckFrontendDates,
+                    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW},
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate}
+                },
+                new MyOpRule
+                {
                     Title="Validate Market Segments",
                     ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
@@ -153,7 +184,30 @@ namespace Intel.MyDeals.BusinessRules
                             Where = de => de.AtrbCdIn(new List<string> {AttributeCodes.MRKT_SEG})
                         }
                     }
+                },
+                new MyOpRule
+                {
+                    Title="Validate Geos",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.GEO_COMBINED) && de.HasValue()).Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = MyDeActions.CheckGeos,
+                            Where = de => de.AtrbCdIn(new List<string> {AttributeCodes.GEO_COMBINED})
+                        }
+                    }
+                },
+                new MyOpRule
+                {
+                    Title="Validate Product Json",
+                    ActionRule = MyDcActions.CheckProductJson,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
+                    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW}
                 }
+                
             };
         }
     }

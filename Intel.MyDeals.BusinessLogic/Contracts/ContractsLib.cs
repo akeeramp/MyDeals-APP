@@ -600,7 +600,7 @@ namespace Intel.MyDeals.BusinessLogic
 				object val_GEO_COMBINED = new object();
 				object val_MEET_COMP_PRICE_QSTN = new object();
 				object val_TERMS = new object();
-				object val_MM_MEDIA_CD = new object();
+				object val_PROD_INCLDS = new object();
 				object val_OBJ_SET_TYPE_CD = new object();
 
 				row.TryGetValue("PTR_USER_PRD", out val_PTR_USER_PRD);
@@ -614,7 +614,7 @@ namespace Intel.MyDeals.BusinessLogic
 				row.TryGetValue("GEO_COMBINED", out val_GEO_COMBINED);
 				row.TryGetValue("MEET_COMP_PRICE_QSTN", out val_MEET_COMP_PRICE_QSTN);
 				row.TryGetValue("TERMS", out val_TERMS);
-				row.TryGetValue("MM_MEDIA_CD", out val_MM_MEDIA_CD);
+				row.TryGetValue("PROD_INCLDS", out val_PROD_INCLDS);
 				row.TryGetValue("OBJ_SET_TYPE_CD", out val_OBJ_SET_TYPE_CD);
 				#endregion
 

@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
 using Intel.Opaque.Data;
 using Intel.Opaque.Rules;
+using Newtonsoft.Json;
 
 namespace Intel.MyDeals.BusinessRules
 {
@@ -100,7 +103,151 @@ namespace Intel.MyDeals.BusinessRules
             SyncAtrbPropertyItems(SecurityActns.ATRB_HIDDEN, MyRulesTrigger.OnHidden, args);
         }
 
+        public static void CheckProductJson(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
 
+            IOpDataElement dePrdUsr = r.Dc.GetDataElement(AttributeCodes.PTR_USER_PRD);
+            string prdJson = r.Dc.GetDataElementValue(AttributeCodes.PTR_SYS_PRD);
+            if (string.IsNullOrEmpty(prdJson)) return;
+
+            ProdMappings items = null;
+            try
+            {
+                items = JsonConvert.DeserializeObject<ProdMappings>(prdJson);
+            }
+            catch (Exception ex)
+            {
+                BusinessLogicDeActions.AddValidationMessage(dePrdUsr, "Unable to read the selected products.  Please use the Product Selector to fix the issue.");
+                return;
+            }
+
+            if (!items.Any())
+            {
+                BusinessLogicDeActions.AddValidationMessage(dePrdUsr, "Product select did not result in any products.");
+                return;
+            }
+
+            foreach (KeyValuePair<string, IEnumerable<ProdMapping>> kvp in items)
+            {
+                foreach (ProdMapping prodMapping in kvp.Value)
+                {
+                    if (string.IsNullOrEmpty(prodMapping.PRD_MBR_SID))
+                    {
+                        BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"User entered product ({kvp.Key}) is unable to locate product ({prodMapping.DISPLAY_NM})");
+                    }
+
+                    if (r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD) == OpDataElementSetType.ECAP.ToString())
+                    {
+
+                        #region CAP Validations
+
+                        double cap;
+                        double ecap;
+                        if (!double.TryParse(prodMapping.CAP, out cap)) cap = 0;
+                        if (!double.TryParse(r.Dc.GetDataElementValue(AttributeCodes.ECAP_PRICE), out ecap)) ecap = 0;
+
+                        // When ECAP Price is greater than CAP, UI validation check on deal creation and system should give a soft warning. 
+                        // TODO... put this as a soft warning on the grid
+                        //if (ecap > 0 && cap > ecap)
+                        //{
+                        //    BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"CAP price ({cap}) is greater than ECAP Price.");
+                        //}
+
+                        // IF CAP is not available at all then show as NO CAP.User can not create deals.
+                        if (cap <= 0)
+                        {
+                            BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"CAP is not available ({prodMapping.CAP}). You can not create deals with this product.");
+                        }
+
+                        if (!string.IsNullOrEmpty(prodMapping.PRD_START) && string.IsNullOrEmpty(prodMapping.CAP_START))
+                        {
+                            DateTime capStart = DateTime.Parse(prodMapping.CAP_START);
+                            DateTime capEnd = DateTime.Parse(prodMapping.CAP_END);
+                            DateTime prdStart = DateTime.Parse(prodMapping.PRD_START);
+
+                            // If the product start date is after the deal start date, then deal start date should match with product start date and back date would not apply.
+                            if (prdStart > capStart)
+                            {
+                                BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"If the product start date is after the deal start date, then deal start date should match with product start date and back date would not apply.");
+                            }
+
+                            DateTime dealStart;
+                            DateTime dealEnd;
+                            if (DateTime.TryParse(r.Dc.GetDataElementValue(AttributeCodes.START_DT), out dealStart) && DateTime.TryParse(r.Dc.GetDataElementValue(AttributeCodes.END_DT), out dealEnd))
+                            {
+                                if (capStart < dealEnd && dealStart < capEnd)
+                                {
+                                    BusinessLogicDeActions.AddValidationMessage(dePrdUsr, "Product entered does not have CAP within the Deal's start date and end date");
+                                }
+
+                                if (capStart > dealEnd)
+                                {
+                                    BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"The CAP start date ({capStart:mm/dd/yyyy}) and end date ({capEnd:mm/dd/yyyy}) exists in future outside of deal end date. Please change the deal start date to match the CAP start date.");
+                                }
+                            }
+
+                        }
+
+                        #endregion
+
+                    }
+                }
+            }
+
+
+        }
+
+        public static void CheckFrontendDates(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement deStart = r.Dc.GetDataElement(AttributeCodes.START_DT);
+            string progPayment = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT);
+            if (string.IsNullOrEmpty(progPayment) || string.IsNullOrEmpty(deStart?.AtrbValue.ToString())) return;
+
+            DateTime startDate = DateTime.Parse(deStart.AtrbValue.ToString());
+            DateTime today = DateTime.UtcNow;
+
+            // Additional validation-for program payment=Front end, the deal st. date can not be past, it should be >= current date 
+            if (progPayment.Contains("rontend") && startDate < today)
+            {
+                BusinessLogicDeActions.AddValidationMessage(deStart, "The deal start date must be greater or equal to the current date if program payment is Frontend.");
+            }
+        }
+
+        public static void ValidateEcapPrice(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement deEcapPrice = r.Dc.GetDataElement(AttributeCodes.ECAP_PRICE);
+            double price;
+            if (!double.TryParse(deEcapPrice.AtrbValue.ToString(), out price))
+            {
+                BusinessLogicDeActions.AddValidationMessage(deEcapPrice, "ECAP Price is not a valid number.");
+                return;
+            }
+
+            IOpDataElement ecapType = r.Dc.GetDataElement(AttributeCodes.ECAP_TYPE);
+            if (ecapType == null) return;
+            if (ecapType.ToString() == string.Empty)
+            {
+                BusinessLogicDeActions.AddValidationMessage(ecapType, "ECAP Type must be filled out.");
+                return;
+            }
+
+            if (ecapType.AtrbValue.ToString() == "SEED" && price < 0)
+            {
+                BusinessLogicDeActions.AddValidationMessage(deEcapPrice, "ECAP Price for SEED must not be negative.");
+            }
+            else if (ecapType.AtrbValue.ToString() != "SEED" && price <= 0)
+            {
+                BusinessLogicDeActions.AddValidationMessage(deEcapPrice, "ECAP Price must be a positive number.");
+            }
+        }
 
     }
 }

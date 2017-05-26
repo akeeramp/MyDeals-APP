@@ -2,19 +2,17 @@
     .module('app.contract')
     .controller('DatePickerModalCtrl', DatePickerModalCtrl);
 
-DatePickerModalCtrl.$inject = ['$scope', '$uibModalInstance', 'MrktSegMultiSelectService', 'cellCurrValues', 'colName', 'contractStartDate', 'contractEndDate'];
+DatePickerModalCtrl.$inject = ['$scope', '$uibModalInstance', 'cellCurrValues', 'colName', 'contractStartDate', 'contractEndDate'];
 
-function DatePickerModalCtrl($scope, $uibModalInstance, MrktSegMultiSelectService, cellCurrValues, colName, contractStartDate, contractEndDate) {
+function DatePickerModalCtrl($scope, $uibModalInstance, cellCurrValues, colName, contractStartDate, contractEndDate) {
 	var $ctrl = this;
 	$ctrl.popupResult = cellCurrValues;
-	$ctrl.placeholderText = "Click to Select..."
+    $ctrl.placeholderText = "Click to Select...";
+    $ctrl.errorMsg = "Dates must overlap contract's date range (" + contractStartDate.split(' ')[0] + " - " + contractEndDate.split(' ')[0] + ").";
 
-	$ctrl.errorMsg = "Dates must be within contract's start date (" + contractStartDate.split(' ')[0] + ") and end date (" + contractEndDate.split(' ')[0] + ")."
-
-	$ctrl.isStartDate = (colName == "START_DT");
+	$ctrl.isStartDate = (colName === "START_DT");
 	$ctrl.backDateReason = "";
 	$ctrl.isBackDateReasonRequired = false;
-
 
 	$ctrl.ok = function () {
 		var returnVal = "";
@@ -35,24 +33,29 @@ function DatePickerModalCtrl($scope, $uibModalInstance, MrktSegMultiSelectServic
 			var value = this.value();
 			var today = new Date();
 
-			if ( (value < new Date(contractStartDate)) || (value > new Date(contractEndDate)) ) {
-				$ctrl.isValidDate = false;
-			} else {
-				$ctrl.isValidDate = true;
+			$ctrl.isValidDate = true;
+
+            // date must overlapp contract range... not inside of the range
+			if ($ctrl.isStartDate && value > new Date(contractEndDate)) {
+			    $ctrl.isValidDate = false;
+			}
+			if (!$ctrl.isStartDate && value < new Date(contractStartDate)) {
+			    $ctrl.isValidDate = false;
 			}
 
-			//// TODO: maybe. Backdate is still being hashed out (5/15/2017). When we find out, either uncomment below code if needed, else just remove it
-			//// Back Date
-			//if ($ctrl.isStartDate) {
-			//	if ((value < today) && ($ctrl.backDateReason === "")) { // If the contract start date is selected before today's date
-			//		$ctrl.isBackDateReasonRequired = true;
-			//	}
-			//	else {
-			//		// Clear backdate reason in case there is any
-			//		$ctrl.backDateReason = "";
-			//		$ctrl.isBackDateReasonRequired = false;
-			//	}
-			//} 
+		    //// NO BACKDATE HERE.  It will be set in the Grid
+		    //// TODO: maybe. Backdate is still being hashed out (5/15/2017). When we find out, either uncomment below code if needed, else just remove it
+		    //// Back Date
+		    //if ($ctrl.isStartDate) {
+		    //	if ((value < today) && ($ctrl.backDateReason === "")) { // If the contract start date is selected before today's date
+		    //		$ctrl.isBackDateReasonRequired = true;
+		    //	}
+		    //	else {
+		    //		// Clear backdate reason in case there is any
+		    //		$ctrl.backDateReason = "";
+		    //		$ctrl.isBackDateReasonRequired = false;
+		    //	}
+		    //} 
 		}
 	}
 

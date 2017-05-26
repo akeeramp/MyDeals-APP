@@ -77,7 +77,7 @@ namespace Intel.MyDeals.BusinessLogic
                 : OpDataElementSetTypeConverter.FromString(flattenedDictList[opDataElementType][0][AttributeCodes.OBJ_SET_TYPE_CD]);
 
             MyDealsData myDealsData = GetByIDs(opDataElementType, ids, includeTypes, new List<int>())
-                .FillInHolesFromAtrbTemplate(opDataElementType, opDataElementSetType);
+                .FillInHolesFromAtrbTemplate(includeTypes, opDataElementSetType);
 
             if (flattenedDictList != null) myDealsData.Merge(flattenedDictList);
             return myDealsData;

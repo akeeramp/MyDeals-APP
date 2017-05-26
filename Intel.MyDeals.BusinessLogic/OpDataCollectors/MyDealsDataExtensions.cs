@@ -127,7 +127,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns></returns>
         public static MyDealsData FillInHolesFromAtrbTemplate(this MyDealsData myDealsData, OpDataElementSetType opDataElementSetType)
         {
-            return myDealsData.FillInHolesFromAtrbTemplate(myDealsData.Keys, opDataElementSetType);
+            return myDealsData.FillInHolesFromAtrbTemplate(myDealsData.Keys.ToList(), opDataElementSetType);
         }
 
 
@@ -138,7 +138,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <param name="opDataElementTypes">Specific object collection.</param>
         /// <param name="opDataElementSetType"></param>
         /// <returns></returns>
-        public static MyDealsData FillInHolesFromAtrbTemplate(this MyDealsData myDealsData, IEnumerable<OpDataElementType> opDataElementTypes, OpDataElementSetType opDataElementSetType)
+        public static MyDealsData FillInHolesFromAtrbTemplate(this MyDealsData myDealsData, List<OpDataElementType> opDataElementTypes, OpDataElementSetType opDataElementSetType)
         {
             foreach (OpDataElementType opDataElementType in opDataElementTypes)
             {
@@ -523,7 +523,7 @@ namespace Intel.MyDeals.BusinessLogic
                 {
                     var dcHasErrors = false;
 
-                    dc.ApplyRules(MyRulesTrigger.OnSave);
+                    OpMsgQueue opMsgQueue = dc.ApplyRules(MyRulesTrigger.OnSave);
                     if (validateIds.Any() && !ignoreTypes.Contains(opDataElementType))
                     {
                         if (opDataElementType == OpDataElementType.WIP_DEAL || opDataElementType == OpDataElementType.PRC_TBL_ROW) {

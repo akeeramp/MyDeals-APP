@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.DataLibrary.OpDataCollectors;
 using Intel.MyDeals.Entities;
@@ -54,6 +55,61 @@ namespace Intel.MyDeals.BusinessRules
             }
 
             de.AtrbValue = newStage;
+        }
+
+        public static void CheckGeos(this IOpDataElement de, params object[] args)
+        {
+            if (de == null) return;
+
+            string ww = "Worldwide";
+            string geoString = de.AtrbValue.ToString();
+            string newGeoString = geoString;
+            bool isBlendedGeo = geoString.Contains("[");
+
+            // Format geo string to make into an array
+            newGeoString = newGeoString.Replace("[", "");
+            newGeoString = newGeoString.Replace("]", "");
+            newGeoString = newGeoString.Replace(" ", "");
+
+            List<string> geosList = newGeoString.Split(',').ToList();
+
+            // Check that thse geos are valid
+            List<string> validGeoValues = DataCollections.GetGeoData().Where(g => string.IsNullOrEmpty(g.CTRY_NM) && string.IsNullOrEmpty(g.RGN_NM)).Select(g => g.GEO_NM).ToList();
+            foreach (string geo in geosList)
+            {
+                if (validGeoValues.All(x => (string.IsNullOrEmpty(x) ? ww : x) != geo))
+                {
+                    // now check for duplicates before throwing and error
+                    string posMatch = validGeoValues.Where(g => g.ToUpper() == geo.ToUpper()).Select(g => g).FirstOrDefault();
+                    if (string.IsNullOrEmpty(posMatch))
+                    {
+                        BusinessLogicDeActions.AddValidationMessage(de, geo + " is not a valid Geo.");
+                    }
+                    else
+                    {
+                        geoString = geoString.Replace(geo, posMatch);
+                    }
+                }
+            }
+
+            // Blended GEO, can not mix WW and other Geo
+            if (isBlendedGeo)
+            {
+                // Is "WorldWide" inside brackets?
+                string wwRegex = @"\[((.*)" + ww + @"(.*))\]";
+                bool isWorldWideInsideBlended = Regex.IsMatch(geoString, wwRegex);
+
+                if (isWorldWideInsideBlended)
+                {
+                    BusinessLogicDeActions.AddValidationMessage(de, ww + " cannot be mixed with other geos in a blend geo.");
+                }
+            }
+
+            if (geoString != de.AtrbValue.ToString())
+            {
+                de.AtrbValue = geoString;
+                de.State = OpDataElementState.Modified;
+            }
         }
 
         public static void CheckMarketSegment(this IOpDataElement de, params object[] args)
@@ -120,5 +176,6 @@ namespace Intel.MyDeals.BusinessRules
             string newVal = string.Join(", ", userMrktSegs);
             de.AtrbValue = newVal;
         }
+
     }
 }

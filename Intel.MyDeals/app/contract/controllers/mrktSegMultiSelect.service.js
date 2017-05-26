@@ -11,11 +11,11 @@
 
 		//setting a few constants for the strings that occur a lot
 		var GEO = "GEO_COMBINED";
-		var MRKT_SEG = "MRKT_SEG"
+	    var MRKT_SEG = "MRKT_SEG";
 		//these strings will need to be updated if they ever change it in the db or admin screen... TODO: tap into default values bool in basic dropdowns table once those db changes are made
 		var WW = "Worldwide";
 		var ALL = "All";
-		var NONCORP = "NON Corp"
+	    var NONCORP = "NON Corp";
 
 		var uncheckAllNC = true;
 
@@ -178,27 +178,38 @@
 						//Logic for NonCorp
 						if (newValue.indexOf(NONCORP) > -1 && !(oldValue.indexOf(NONCORP) > -1)) {
 							//if user selects NonCorp, make sure all NonCorp nodes are checked
-							newValue = arrayMergeUnique(newValue, vm.nonCorpMrktSegments);
-							multiSelect.value(newValue);
+						    newValue = arrayMergeUnique(newValue, vm.nonCorpMrktSegments);
+
+						    // New request... do NOT select NON Corp... just the non corp values
+						    newValue.shift();
+							//newValue.splice(newValue.indexOf(NONCORP), 1);
+
+						    multiSelect.value(newValue);
 							setAllNodes(getNonCorpNodes(treeView), true);
-						} else if (newValue.indexOf(NONCORP) < 0 && oldValue.indexOf(NONCORP) > -1) {
-							//if user deselects NonCorp, make sure all NonCorp nodes are unchecked
-							if (uncheckAllNC) {
-								newValue = newValue.filter(function (x) { return vm.nonCorpMrktSegments.indexOf(x) < 0 });
-								multiSelect.value(newValue);
-								setAllNodes(getNonCorpNodes(treeView), false);
-							} else {
-								//if user deselects a noncorp member, the noncorp node itself must be unchecked.  this case accounts for that scenario so that the noncorp node can be unchecked without all other noncorp market segments being unchecked along with it.
-								uncheckAllNC = true;
-							}
-						} else if (newValue.indexOf(NONCORP) > -1 && removedNonCorpMemberNode(newValue, oldValue)) {
-							//if user deselects any Noncorp member node, deselect NonCorp node itself if noncorp node was in selection
-							newValue.splice(newValue.indexOf(NONCORP), 1);
-							multiSelect.value(newValue);
-							if (treeView.dataItem(treeView.findByText(NONCORP)).checked == true) {
-								treeView.dataItem(treeView.findByText(NONCORP)).set("checked", false);
-								uncheckAllNC = false; //set NONCORP to unchecked, but do not want to uncheck all noncorp nodes on next sweep.
-							}
+						    if (treeView.dataItem(treeView.findByText(NONCORP)).checked == true) {
+						    	treeView.dataItem(treeView.findByText(NONCORP)).set("checked", false);
+						    	uncheckAllNC = false; //set NONCORP to unchecked, but do not want to uncheck all noncorp nodes on next sweep.
+						    }
+
+						// New request... do NOT select NON Corp... just the non corp values
+						//} else if (newValue.indexOf(NONCORP) < 0 && oldValue.indexOf(NONCORP) > -1) {
+						//	//if user deselects NonCorp, make sure all NonCorp nodes are unchecked
+						//	if (uncheckAllNC) {
+						//		newValue = newValue.filter(function (x) { return vm.nonCorpMrktSegments.indexOf(x) < 0 });
+						//		multiSelect.value(newValue);
+						//		setAllNodes(getNonCorpNodes(treeView), false);
+						//	} else {
+						//		//if user deselects a noncorp member, the noncorp node itself must be unchecked.  this case accounts for that scenario so that the noncorp node can be unchecked without all other noncorp market segments being unchecked along with it.
+						//		uncheckAllNC = true;
+						//	}
+						//} else if (newValue.indexOf(NONCORP) > -1 && removedNonCorpMemberNode(newValue, oldValue)) {
+						//	//if user deselects any Noncorp member node, deselect NonCorp node itself if noncorp node was in selection
+						//	newValue.splice(newValue.indexOf(NONCORP), 1);
+						//	multiSelect.value(newValue);
+						//	if (treeView.dataItem(treeView.findByText(NONCORP)).checked == true) {
+						//		treeView.dataItem(treeView.findByText(NONCORP)).set("checked", false);
+						//		uncheckAllNC = false; //set NONCORP to unchecked, but do not want to uncheck all noncorp nodes on next sweep.
+						//	}
 						}
 
 						//Logic for Embedded
@@ -225,19 +236,20 @@
 
 		function setGeoMultiSelect(divId, newValue, oldValue) {
 
-			if (oldValue.toString() != newValue.toString()) {
-				if (newValue.length > 1) {
-					if (newValue.indexOf(WW) > -1 && !(oldValue.indexOf(WW) > -1)) {
-						//if user has another geo selected and then selects WW, need to deselect all other GEOs
-						newValue = [WW];
-						$("#" + divId).data("kendoMultiSelect").value([WW])
-					} else if (oldValue.length == 1 && oldValue[0] == WW && newValue.indexOf(WW) > -1) {
-						//if user had WW selected and selects another GEO, need to deselect WW
-						newValue.splice(newValue.indexOf(WW), 1)
-						$("#" + divId).data("kendoMultiSelect").value(newValue)
-					}
-				}
-			}
+            // NEW RULE: they want WW and geos together.
+			//if (oldValue.toString() != newValue.toString()) {
+			//	if (newValue.length > 1) {
+			//		if (newValue.indexOf(WW) > -1 && !(oldValue.indexOf(WW) > -1)) {
+			//			//if user has another geo selected and then selects WW, need to deselect all other GEOs
+			//			newValue = [WW];
+			//			$("#" + divId).data("kendoMultiSelect").value([WW])
+			//		} else if (oldValue.length == 1 && oldValue[0] == WW && newValue.indexOf(WW) > -1) {
+			//			//if user had WW selected and selects another GEO, need to deselect WW
+			//			newValue.splice(newValue.indexOf(WW), 1)
+			//			$("#" + divId).data("kendoMultiSelect").value(newValue)
+			//		}
+			//	}
+			//}
 			return newValue;
 		}
 

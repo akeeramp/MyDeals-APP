@@ -16,6 +16,9 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
         $scope.isSaving = false;
         $scope.stealthMode = false;
         $scope.messages = [];
+        $scope.colToLetter = {};
+        $scope.letterToCol = {};
+        var intA = "A".charCodeAt(0);
 
         // determine if the contract is existing or new... if new, look for pre-population attributes from the URL parameters
         //
@@ -986,12 +989,14 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
 
         // **** SAVE CONTRACT Methods ****
         //
-        function createEntireContractBase(stateName, dirtyContractOnly) {
+        function createEntireContractBase(stateName, dirtyContractOnly, forceValidation) {
             var source = "";
             var modCt = [];
             var modPs = [];
             var sData = [];
             var gData = [];
+            var errs = {};
+            var needPrdVld = [];
 
             var contractData = [];
             var curPricingTableData = [];
@@ -1033,6 +1038,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
 
                 // Pricing Table Row
                 if (curPricingTableData.length > 0 && sData != undefined) {
+
                     // Only save if a product has been filled out
                     sData = sData.filter(function (obj) {
                         return obj.PTR_USER_PRD !== undefined && obj.PTR_USER_PRD !== null && obj.PTR_USER_PRD !== "";
@@ -1062,6 +1068,55 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                         // fix date formats
                         for (var d = 0; d < dateFields.length; d++) {
                             sData[s][dateFields[d]] = moment(sData[s][dateFields[d]]).format("MM/DD/YYYY");
+                            if (sData[s][dateFields[d]] === "Invalid date") {
+                                if (!sData[s]._behaviors) sData[s]._behaviors = {};
+                                if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
+                                if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
+                                sData[s]._behaviors.isError[dateFields[d]] = true;
+                                sData[s]._behaviors.validMsg[dateFields[d]] = "Date is invalid or formated improperly. Try formatting as mm/dd/yyyy.";
+                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                errs.PRC_TBL_ROW.push("Date is invalid or formated improperly. Try formatting as mm/dd/yyyy.");
+                            } else {
+                                
+                                // check dates against contract
+                                if (dateFields[d] === "START_DT") {
+                                    var tblStartDate = sData[s][dateFields[d]];
+                                    var endDate = $scope.contractData.END_DT;
+                                    if (moment(tblStartDate).isAfter(endDate)) {
+                                        sData[s]._behaviors.isError['START_DT'] = true;
+                                        sData[s]._behaviors.validMsg['START_DT'] = "Start date cannot be greater than the Contract End Date (" + endDate + ")";
+                                        if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                        errs.PRC_TBL_ROW.push("Start date cannot be greater than the Contract End Date (" + endDate + ")");
+                                    }
+                                }
+                                if (dateFields[d] === "END_DT") {
+                                    var tblEndDate = sData[s][dateFields[d]];
+                                    var startDate = $scope.contractData.START_DT;
+                                    if (moment(tblEndDate).isBefore(startDate)) {
+                                        sData[s]._behaviors.isError['END_DT'] = true;
+                                        sData[s]._behaviors.validMsg['END_DT'] = "End date cannot be earlier than the Contract Start Date (" + startDate + ")";
+                                        if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                        errs.PRC_TBL_ROW.push("End date cannot be earlier than the Contract Start Date (" + startDate + ")");
+                                    }
+                                }
+
+                            }
+                        }
+
+                        if (forceValidation) {
+                            // check for rows that need to be translated
+                            if ((!!sData[s].PTR_USER_PRD && sData[s].PTR_USER_PRD !== "") && (!sData[s].PTR_SYS_PRD || sData[s].PTR_SYS_PRD === "")) {
+                                if (!sData[s]._behaviors) sData[s]._behaviors = {};
+                                if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
+                                if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
+                                sData[s]._behaviors.isError["PTR_USER_PRD"] = true;
+                                sData[s]._behaviors.validMsg["PTR_USER_PRD"] = "Product Translator needs to run.";
+                                needPrdVld.push({
+                                    "row": s+1,
+                                    "DC_ID": sData[s].DC_ID,
+                                    "PTR_USER_PRD": sData[s].PTR_USER_PRD
+                                });
+                            }
                         }
                     }
                 }
@@ -1105,6 +1160,11 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
             //	//http://docs.telerik.com/kendo-ui/controls/data-management/spreadsheet/how-to/get-flagged-cells
             //	//http://dojo.telerik.com/iCola
             //}
+
+            if (Object.getOwnPropertyNames(errs).length > 0 || needPrdVld.length > 0) return {
+                "errors": errs,
+                "needPrdVld": needPrdVld
+            };
 
             return {
                 "Contract": modCt,
@@ -1153,6 +1213,11 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
             // async save data
             topbar.show();
 
+            if (forceValidation === undefined || forceValidation === null) forceValidation = false;
+            if (forcePublish === undefined || forcePublish === null) forcePublish = false;
+
+            $scope.clearValidations();
+
             if (!$scope.validateTitles()) {
                 $scope.isSaving = false;
                 topbar.hide();
@@ -1164,11 +1229,17 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                 return;
             }
 
-            if (forceValidation === undefined || forceValidation === null) forceValidation = false;
-            if (forcePublish === undefined || forcePublish === null) forcePublish = false;
+            var data = createEntireContractBase(stateName, $scope._dirtyContractOnly, forceValidation);
 
-            var data = createEntireContractBase(stateName, $scope._dirtyContractOnly);
-
+            // If there are critical errors like bad dates, we need to stop immediately and have the user fix them
+            if (!!data.errors) {
+                logger.warning("Errors prevent anything from being saved", $scope.contractData, "Unable to Save");
+                $scope.syncCellsOnAllRows($scope.pricingTableData["PRC_TBL_ROW"]);
+                $scope.isSaving = false;
+                topbar.hide();
+                return;
+            }
+            
             $scope.isSaving = true;
 
             objsetService.updateContractAndCurPricingTable($scope.getCustId(), data, forceValidation, forcePublish).then(
@@ -1182,9 +1253,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                         for (i = 0; i < results.data.PRC_TBL_ROW.length; i++) {
                             if (results.data.PRC_TBL_ROW[i].warningMessages !== undefined && results.data.PRC_TBL_ROW[i].warningMessages.length > 0) anyWarnings = true;
                         }
-                        //debugger;
                         $scope.updateResults(results.data.PRC_TBL_ROW, $scope.pricingTableData.PRC_TBL_ROW);
-                        //debugger;
                         $scope.spreadDs.read();
                         $scope.syncCellsOnAllRows(results.data.PRC_TBL_ROW);
                     }
@@ -1217,21 +1286,55 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
             );
         }
 
-        $scope.syncCellsOnAllRows = function (data) {
-            var spreadsheet = $("#pricingTableSpreadsheet").data("kendoSpreadsheet");
-            var sheet = spreadsheet.activeSheet();
-            var rowsCount = sheet._rows._count;
+        $scope.getColumns = function(ptTemplate) {
+            var cols = [];
+            var c = -1;
 
-            var ptTemplate = $scope.templates.ModelTemplates.PRC_TBL_ROW[$scope.curPricingTable.OBJ_SET_TYPE_CD];
             if (ptTemplate !== undefined && ptTemplate !== null) {
-                for (var i = 0; i < rowsCount; i++) {
-                    $scope.syncCellsOnSingleRow(sheet, data[i], i);
-                }
+                angular.forEach(ptTemplate.columns, function (value, key) {
+                    var col = {};
+                    if (ptTemplate.columns[key].width) col.width = ptTemplate.columns[key].width;
+                    cols.push(col);
+
+                    c += 1;
+                    if (value.hidden === false) {
+                        // Create column to letter mapping
+                        var letter = String.fromCharCode(intA + c);
+                        $scope.colToLetter[value.field] = letter;
+                        $scope.letterToCol[letter] = value.field;
+                    }
+                });
             }
+            return cols;
+        }
+
+        $scope.syncCellsOnAllRows = function (data) {
+            // kind of annoying, but layering validations tends to stall all validations. 
+            // so... before applying any validations, we are cleaning all existing validations
+
+            $timeout(function () {
+                $scope.clearValidations();
+
+                var spreadsheet = $("#pricingTableSpreadsheet").data("kendoSpreadsheet");
+                var sheet = spreadsheet.activeSheet();
+                var rowsCount = sheet._rows._count;
+
+                sheet.batch(function () {
+                    var ptTemplate = $scope.templates.ModelTemplates.PRC_TBL_ROW[$scope.curPricingTable.OBJ_SET_TYPE_CD];
+                    if (ptTemplate !== undefined && ptTemplate !== null) {
+                        for (var i = 0; i < rowsCount; i++) {
+                            $scope.syncCellsOnSingleRow(sheet, data[i], i);
+                        }
+                    }
+                });
+
+            }, 10);
+
         }
 
         $scope.syncCellsOnSingleRow = function (sheet, dataItem, row) {
             var ptTemplate = $scope.templates.ModelTemplates.PRC_TBL_ROW[$scope.curPricingTable.OBJ_SET_TYPE_CD];
+            $scope.columns = $scope.getColumns(ptTemplate);
             var c = 0;
             if (!!dataItem) {
                 var beh = dataItem._behaviors;
@@ -1242,10 +1345,43 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                     var isRequired = !!beh.isRequired && !!beh.isRequired[value.field];
                     var msg = isError ? beh.validMsg[value.field] : (isRequired) ? "This field is required." : "UNKNOWN";
 
-                    sheet.range(row + 1, c++).validation($scope.myDealsValidation(isError, msg, isRequired));
+                    if (value.uiType === "DROPDOWN") {
+                        sheet.range(row + 1, c++).validation({
+                            dataType: "list",
+                            showButton: true,
+                            from: "DropdownValuesSheet!" + $scope.colToLetter[value.field] + ":" + $scope.colToLetter[value.field],
+                            allowNulls: value.nullable,
+                            type: "warning",
+                            titleTemplate: "Invalid value",
+                            messageTemplate: "Invalid value. Please use the dropdown for available options."
+                        });
+                    } else {
+                        sheet.range(row + 1, c++).validation($scope.myDealsValidation(isError, msg, isRequired));
+                    }
                 });
             }
+            
         }
+
+        $scope.clearValidations = function () {
+            var spreadsheet = $("#pricingTableSpreadsheet").data("kendoSpreadsheet");
+            var sheet = spreadsheet.activeSheet();
+            var rowsCount = sheet._rows._count;
+
+            sheet.batch(function () {
+                var ptTemplate = $scope.templates.ModelTemplates.PRC_TBL_ROW[$scope.curPricingTable.OBJ_SET_TYPE_CD];
+                if (ptTemplate !== undefined && ptTemplate !== null) {
+                    for (var row = 0; row < rowsCount; row++) {
+                        var c = 0;
+                        angular.forEach(ptTemplate.columns, function (value, key) {
+                            sheet.range(row + 1, c++).validation(null);
+                        });
+                    }
+                }
+            });
+
+        }
+
 
         $scope.myDealsValidation = function (isError, msg, isReq) {
             return {
@@ -1846,6 +1982,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
 				}
 			);
         }
+
 
         $scope.publishWipDeals = function () {
             $scope.saveEntireContractBase($state.current.name, true, true, 'contract.manager.strategy.wip', { cid: $scope.contractData.DC_ID, sid: $scope.curPricingStrategyId, pid: $scope.curPricingTableId });

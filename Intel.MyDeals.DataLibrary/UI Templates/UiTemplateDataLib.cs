@@ -191,7 +191,7 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 100,
                 IsDefaultable = true,
                 UiType = "RADIOBUTTONGROUP",
-                LookupUrl = "/api/Dropdown/GetDropdowns/PAYOUT_BASED_ON/ECAP",
+                LookupUrl = "/api/Dropdown/GetDropdowns/PAYOUT_BASED_ON",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
             });
@@ -202,7 +202,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
                 IsDefaultable = true,
                 UiType = "RADIOBUTTONGROUP",
-                LookupUrl = "/api/Dropdown/GetDropdowns/MEET_COMP_PRICE_QSTN/ECAP",
+                LookupUrl = "/api/Dropdown/GetDropdowns/MEET_COMP_PRICE_QSTN",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
             });
@@ -213,11 +213,24 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
                 Width = 100,
                 IsDefaultable = true,
-                UiType = "DROPDOWN",
-                LookupUrl = "/api/Dropdown/GetDropdowns/PROGRAM_PAYMENT/ECAP",
+                UiType = "RADIOBUTTONGROUP",
+                LookupUrl = "/api/Dropdown/GetDropdowns/PROGRAM_PAYMENT",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
             });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
+                AtrbCd = AttributeCodes.PROD_INCLDS,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
+                Width = 100,
+                IsDefaultable = true,
+                UiType = "RADIOBUTTONGROUP",
+                LookupUrl = "/api/Dropdown/GetDropdowns/PROD_INCLDS",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN"
+            });
+
 
             #endregion
 
@@ -415,12 +428,12 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem
             {
                 Id = 41,
-                AtrbCd = AttributeCodes.MM_MEDIA_CD,
+                AtrbCd = AttributeCodes.PROD_INCLDS,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 DataType = "string",
                 Width = 100,
                 UiType = "DROPDOWN",
-                LookupUrl = "/api/Dropdown/GetDropdowns/MM_MEDIA_CD",
+                LookupUrl = "/api/Dropdown/GetDropdowns/PROD_INCLDS",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
             });

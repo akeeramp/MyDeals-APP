@@ -47,8 +47,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 	var ssTools = null;
 	var wipTemplate = null;
 	var productLevel = null;
-	vm.colToLetter = {}; // Contains "dictionary" of  (Key : Value) as (Db Column Name : Column Letter)
-	vm.letterToCol = {};
+	root.colToLetter = {}; // Contains "dictionary" of  (Key : Value) as (Db Column Name : Column Letter)
+	root.letterToCol = {};
 	vm.readOnlyColLetters = [];
 	vm.requiredStringColumns = {};
 	root.wipData;
@@ -387,8 +387,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 				if (value.hidden === false) {
 					// Create column to letter mapping
 					var letter = String.fromCharCode(intA + c);
-					vm.colToLetter[value.field] = letter;
-					vm.letterToCol[letter] = value.field;
+					root.colToLetter[value.field] = letter;
+					root.letterToCol[letter] = value.field;
 				}
 			});
 		}
@@ -397,7 +397,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
 	// On Spreadsheet change
 	function onChange(arg) {
-		var sheet = arg.sender.activeSheet();
+	    var sheet = arg.sender.activeSheet();
+	    var flushSysPrdFields = ["START_DT", "END_DT", "GEO_COMBINED", "PROD_INCLDS"];
 
 		// Don't do onchange events for any sheet other than the Main one
 		if (arg.range._sheet._sheetName !== "Main") {
@@ -408,12 +409,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 			return;
 		}
 
-		var productColIndex = (vm.colToLetter["PTR_USER_PRD"].charCodeAt(0) - intA);
+		var productColIndex = (root.colToLetter["PTR_USER_PRD"].charCodeAt(0) - intA);
 		var topLeftRowIndex = (arg.range._ref.topLeft.row + 1);
 		var bottomRightRowIndex = (arg.range._ref.bottomRight.row + 1);
 
 		var isProductColumnIncludedInChanges = (arg.range._ref.topLeft.col >= productColIndex) && (arg.range._ref.bottomRight.col <= productColIndex);
-		
+
+
 		//sheet.batch(function () {
 			// Trigger only if the changed range contains the product column
 			// NOTE: The below condition assumes that a dragged range is dragged from top-to-bottom, left-to-right. If that ever 
@@ -444,52 +446,65 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 							}
 
 							for (var key in ptTemplate.model.fields) { 
-								var hasExistingCellValue = (sheet.range(vm.colToLetter[key] + (rowIndex + 1)).value()) == "" || (sheet.range(vm.colToLetter[key] + (rowIndex + 1)).value() == null); // don't override existing values for autofill
+							    var hasExistingCellValue = (sheet.range(root.colToLetter[key] + (rowIndex + 1)).value()) == "" || (sheet.range(root.colToLetter[key] + (rowIndex + 1)).value() == null); // don't override existing values for autofill
 
 								// Auto-fill default values from Contract level
 								if ((root.contractData[key] !== undefined)
 										&& (root.contractData[key] !== null)
-										&& (vm.colToLetter[key] != undefined)
+										&& (root.colToLetter[key] != undefined)
 										&& (hasExistingCellValue)
 									) {
 									var fillValue = root.contractData[key];
 									if (ptTemplate.model.fields[key].type == "date") { 
 										fillValue = new Date(root.contractData[key]);
 									}
-									sheet.range(vm.colToLetter[key] + (rowIndex + 1)).value(fillValue);
+									sheet.range(root.colToLetter[key] + (rowIndex + 1)).value(fillValue);
 								}
 								// Auto-fill default values from Pricing Strategy level
 								if ((root.curPricingTable[key] !== undefined)
 										&& (root.curPricingTable[key] !== null)
-										&& (vm.colToLetter[key] != undefined)
+										&& (root.colToLetter[key] != undefined)
 										&& (hasExistingCellValue)
 									) {
-									sheet.range(vm.colToLetter[key] + (rowIndex + 1)).value(root.curPricingTable[key]);
+								    sheet.range(root.colToLetter[key] + (rowIndex + 1)).value(root.curPricingTable[key]);
 								}
 
 								// Add LEN validation for required string fields
 								// NOTE: this is not validation for date or number fields as they do not require LEN validation
-								if (vm.requiredStringColumns.hasOwnProperty(key)) {
+								//if (vm.requiredStringColumns.hasOwnProperty(key)) {
                                     // MOVED TO MT VALIDATION AS MULTIPLE VALIDATIONS ARE NOT SUPPORTED AND MYDEALS_ERROR IS THE VALIDATION WE WILL USE
-									//sheet.range(vm.colToLetter[key] + (rowIndex + 1)).validation({
+							    //sheet.range(root.colToLetter[key] + (rowIndex + 1)).validation({
 									//	dataType: "custom",
-									//	from: "LEN(" + vm.colToLetter[key] + (rowIndex + 1) + ")>0",
+							    //	from: "LEN(" + root.colToLetter[key] + (rowIndex + 1) + ")>0",
 									//	allowNulls: false,
 									//	type: "warning",
 									//	messageTemplate: "This field is required."
 									//});
-								}
+								//}
 							}
 						}
 					}
 				);
 			}
+
+	        // need to see if an item changed that would cause the PTR_SYS_PRD to be cleared out
+			var isPtrSysPrdFlushed = false;
+			for (var f = 0; f < flushSysPrdFields.length; f++) {
+			    var colIndx = root.colToLetter[flushSysPrdFields[f]].charCodeAt(0) - intA;
+			    if (arg.range._ref.topLeft.col <= colIndx && arg.range._ref.bottomRight.col >= colIndx) isPtrSysPrdFlushed = true;
+			}
+
+			if (isPtrSysPrdFlushed) {
+                // TODO we will need to revisit.  There are cases where we CANNOT remove products and reload... active deals for example
+			    var range = sheet.range("C" + topLeftRowIndex + ":C" + bottomRightRowIndex);
+			    range.value("");
+			}
 		//});
 
-			if (!root._dirty) {
-			    root._dirty = true;
-            }
-	}
+		if (!root._dirty) {
+			root._dirty = true;
+        }
+}
 
 
 	function disableIndividualReadOnlyCells(sheet, rowInfo, rowIndex, rowIndexOffset) {
@@ -497,9 +512,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 	        if (!rowInfo._behaviors) return;
 			for (var property in rowInfo._behaviors.isReadOnly) {
 				if (rowInfo._behaviors.isReadOnly.hasOwnProperty(property)) {
-					var colLetter = vm.colToLetter[property];
+				    var colLetter = root.colToLetter[property];
 					if (colLetter != null) {
-						//vm.readOnlyColLetters[vm.colToLetter[property]] = true;
+					    //vm.readOnlyColLetters[root.colToLetter[property]] = true;
 						disableRange(sheet.range(colLetter + (rowIndex + rowIndexOffset)));
 					}
 				}
@@ -585,12 +600,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 	        headerRange.verticalAlign(headerStyle.verticalAlign);
 
 	        // Add product selector editor on Product cells
-	        sheet.range(vm.colToLetter["PTR_USER_PRD"] + ":" + vm.colToLetter["PTR_USER_PRD"])
+	        sheet.range(root.colToLetter["PTR_USER_PRD"] + ":" + root.colToLetter["PTR_USER_PRD"])
 	            .editor("cellProductSelector");
 
 	        for (var key in ptTemplate.model.fields) {
 
-	            var myColumnName = vm.colToLetter[key];
+	            var myColumnName = root.colToLetter[key];
 	            var myFieldModel = ptTemplate.model.fields[key];
 
 	            if (ptTemplate.model.fields.hasOwnProperty(key) && myColumnName !== undefined) {
@@ -637,7 +652,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 // HACK: this is for Product Level's atrb code because it pulls form a different dropdown sp
 	                                    }
 
-	                                    dropdownValuesSheet.range(vm.colToLetter[myKey] + (i + 1)).value(dropdownValue);
+	                                    dropdownValuesSheet.range(root.colToLetter[myKey] + (i + 1)).value(dropdownValue);
 	                                }
 	                            });
 	                        },
@@ -663,9 +678,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 	                } else {
 	                    // Add validations based on column type
 	                    switch (myFieldModel.type) {
-	                    case "date":
+	                        case "date":
+	                            var cellSelection = sheet.range(myColumnName + ":" + myColumnName);
 	                        //sheet.range(myColumnName + ":" + myColumnName).format("MM/dd/yyyy");								
-	                        sheet.range(myColumnName + ":" + myColumnName).editor("datePickerEditor");
+	                        cellSelection.editor("datePickerEditor");
+
 	                        vm.requiredStringColumns[key] = true;
 	                        break;
 	                    case "number":
@@ -711,43 +728,43 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 	            var rowInfo = root.pricingTableData.PRC_TBL_ROW[rowIndex];
 
 	            // Required cells
-	            if (!!rowInfo._behaviors) {
-	                for (var property in rowInfo._behaviors.isRequired) {
-	                    if (rowInfo._behaviors.isRequired.hasOwnProperty(property)) {
-	                        var colLetter = vm.colToLetter[property];
-	                        if (colLetter != null) {
-	                            // MOVED TO MT VALIDATION AS MULTIPLE VALIDATIONS ARE NOT SUPPORTED AND MYDEALS_ERROR IS THE VALIDATION WE WILL USE
-	                            //sheet.range(colLetter + (rowIndex + rowIndexOffset)).validation({
-	                            //    dataType: "custom",
-	                            //    from: "LEN(" + colLetter + (rowIndex + rowIndexOffset) + ")>0",
-	                            //    allowNulls: false,
-	                            //    type: "warning",
-	                            //    messageTemplate: "This field is required."
-	                            //});
-	                        }
-	                    }
-	                }
-	            }
+	            //if (!!rowInfo._behaviors) {
+	            //    for (var property in rowInfo._behaviors.isRequired) {
+	            //        if (rowInfo._behaviors.isRequired.hasOwnProperty(property)) {
+	            //            var colLetter = root.colToLetter[property];
+	            //            if (colLetter != null) {
+	            //                // MOVED TO MT VALIDATION AS MULTIPLE VALIDATIONS ARE NOT SUPPORTED AND MYDEALS_ERROR IS THE VALIDATION WE WILL USE
+	            //                //sheet.range(colLetter + (rowIndex + rowIndexOffset)).validation({
+	            //                //    dataType: "custom",
+	            //                //    from: "LEN(" + colLetter + (rowIndex + rowIndexOffset) + ")>0",
+	            //                //    allowNulls: false,
+	            //                //    type: "warning",
+	            //                //    messageTemplate: "This field is required."
+	            //                //});
+	            //            }
+	            //        }
+	            //    }
+	            //}
 
 			    // Read Only cells 
 	            disableIndividualReadOnlyCells(sheet, rowInfo, rowIndex, rowIndexOffset);
 
 	            //root.syncCellsOnSingleRow(sheet, rowInfo, rowIndex);
 
-				for (var key in ptTemplate.model.fields) { 
-					// Required string validation via columns 
-					// NOTE: LEN validation means that we need to put validation on ecah individual cell rather than bulk
-				    if ((vm.colToLetter[key] !== undefined) && (vm.requiredStringColumns.hasOwnProperty(key))) {
-				        // MOVED TO MT VALIDATION AS MULTIPLE VALIDATIONS ARE NOT SUPPORTED AND MYDEALS_ERROR IS THE VALIDATION WE WILL USE
-					    //sheet.range(vm.colToLetter[key] + (rowIndex + rowIndexOffset)).validation({
-						//	dataType: "custom",
-						//	from: "LEN(" + vm.colToLetter[key] + (rowIndex + rowIndexOffset) + ")>0",
-						//	allowNulls: false,
-						//	type: "warning",
-						//	messageTemplate: "This field is required."
-						//});
-					}
-				}
+				//for (var key in ptTemplate.model.fields) { 
+				//	// Required string validation via columns 
+				//	// NOTE: LEN validation means that we need to put validation on ecah individual cell rather than bulk
+	            //    if ((root.colToLetter[key] !== undefined) && (vm.requiredStringColumns.hasOwnProperty(key))) {
+				//        // MOVED TO MT VALIDATION AS MULTIPLE VALIDATIONS ARE NOT SUPPORTED AND MYDEALS_ERROR IS THE VALIDATION WE WILL USE
+	            //	    //sheet.range(root.colToLetter[key] + (rowIndex + rowIndexOffset)).validation({
+				//		//	dataType: "custom",
+	            //		//	from: "LEN(" + root.colToLetter[key] + (rowIndex + rowIndexOffset) + ")>0",
+				//		//	allowNulls: false,
+				//		//	type: "warning",
+				//		//	messageTemplate: "This field is required."
+				//		//});
+				//	}
+				//}
 	        }
 
 	    });
@@ -1000,7 +1017,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 			var currColIndex = context.range._ref.col;
 
 			// Get column name out of selected cell
-			var colName = vm.letterToCol[String.fromCharCode(intA + currColIndex)]
+			var colName = root.letterToCol[String.fromCharCode(intA + currColIndex)]
 
 			// Get columnData (urls, name, etc) from column name
 			var colData = $scope.$parent.$parent.templates.ModelTemplates.PRC_TBL_ROW['ECAP'].model.fields[colName];
@@ -1068,29 +1085,23 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 			icon: "k-icon k-i-calendar ssEditorBtn"
 		};
 
+        function fromOaDate(oadate) {
+            var date = new Date(((oadate - 25569) * 86400000));
+            var tz = date.getTimezoneOffset();
+            return new Date(((oadate - 25569 + (tz / (60 * 24))) * 86400000));
+        }
+
 		function open() {
 			// Get selected cell
 			var currColIndex = context.range._ref.col;
 
 			// Get column name out of selected cell
-			var colName = vm.letterToCol[String.fromCharCode(intA + currColIndex)]
+			var colName = root.letterToCol[String.fromCharCode(intA + currColIndex)]
 
 			// Get columnData (urls, name, etc) from column name
 			var colData = $scope.$parent.$parent.templates.ModelTemplates.PRC_TBL_ROW['ECAP'].model.fields[colName];
 
-			// TODO: For whatever reason, Kendo is automatically formatting dates to a strange number, which does not correspond to date values. Fix this.
-			//// If the selected cell already contains some value, reflect it in the custom editor.
-			//var cellCurrVal = context.range.value();
-			//if (cellCurrVal !== undefined && cellCurrVal != null) {
-			//	var date = new Date(cellCurrVal);
-			//	var day = date.getDate();
-			//	var monthIndex = date.getMonth();
-			//	var year = date.getFullYear();
-			//}
-			//cellCurrVal = "" + monthIndex + "/" + day + "/" + year;
-
-			// TODO: Remove this once we figure out why Kendo is automatically formatting dates to a strange number, which does not correspond to date values. 
-			var cellCurrVal = null;
+			var cellDate = fromOaDate(context.range.value());
 
 			var contractStartDate = $scope.$parent.$parent.contractData["START_DT"];
 			var contractEndDate = $scope.$parent.$parent.contractData["END_DT"];
@@ -1104,8 +1115,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 				controllerAs: '$ctrl',
 				size: 'md',
 				resolve: {
-					cellCurrValues: function () {
-						return cellCurrVal;
+				    cellCurrValues: function () {
+				        return cellDate;
 					},
 					colName: function () {
 						return colName;
@@ -1120,7 +1131,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 			});
 
 			modalInstance.result.then(function (selectedItem) {
-				context.callback(selectedItem);
+			    context.callback(new Date(selectedItem));
 			}, function () { });
 		}
 	});

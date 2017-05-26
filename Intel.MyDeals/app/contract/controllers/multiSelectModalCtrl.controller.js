@@ -7,13 +7,13 @@ MultiSelectModalCtrl.$inject = ['$scope', '$uibModalInstance', 'MrktSegMultiSele
 function MultiSelectModalCtrl($scope, $uibModalInstance, MrktSegMultiSelectService, items, cellCurrValues, colName, isBlendedGeo) {
 	var $ctrl = this;
 	var GEO = "GEO_COMBINED";
-	var MRKT_SEG = "MRKT_SEG"
+    var MRKT_SEG = "MRKT_SEG";
 
 	$ctrl.multiSelectPopUpModel = items;
 	$ctrl.popupResult = [];
 	$ctrl.popupResult.MultiSelectSelections = cellCurrValues;
 	$ctrl.colName = colName;
-	$ctrl.placeholderText = "Click to Select..."
+    $ctrl.placeholderText = "Click to Select...";
 
 	$ctrl.isGeo = (colName == GEO);
 	$ctrl.isGeoBlend = isBlendedGeo;

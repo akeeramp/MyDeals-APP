@@ -88,7 +88,12 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
 
                                 //treelist datasource
                                 scope.opHierarchicalDataSource = {
-                                    dataSource: hDS
+                                    dataSource: hDS,
+                                    dataBound: function (e) {
+                                        var treeview = $("#" + scope.opCd).data("kendoTreeView");
+                                        // collapse all items
+                                        treeview.collapse(".k-item");
+                                    }
                                 };
 
                                 //flatten service data for use by paired multiselect
