@@ -428,7 +428,7 @@
                     title: " ",
                     width: "100px"
                 },
-                { field: "ROW_NUMBER", template: " #= ROW_NUMBER # ", title: "Row No", width: "200px", IsVisible: false },
+                { field: "ROW_NUMBER", template: " #= ROW_NUMBER # ", title: "Row No", width: "200px", hidden: true },
                 { field: "USR_INPUT", template: " #= USR_INPUT # ", title: "User Input", width: "200px" },
                 { field: "PRD_MBR_SID", title: "Product No", width: "200px" },
                 { field: "DEAL_PRD_NM", template: " #= DEAL_PRD_NM # ", title: "Deal Prod Name", width: "200px" },
