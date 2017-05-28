@@ -52,13 +52,13 @@ namespace Intel.MyDeals.BusinessLogic
             return _dataCollectionsDataLib.GetProductData();
         }
 
-        public List<ProductDatails> GetProductsDetails(bool getCachedResult = true)
+        public List<Product> GetProductsDetails(bool getCachedResult = true)
         {
             if (!getCachedResult)
             {
-                _productDataLib.GetProductsDetails();
+                _productDataLib.GetProducts();
             }
-            return _dataCollectionsDataLib.GetProductsDetails();
+            return _dataCollectionsDataLib.GetProductData();
         }
 
         /// <summary>
@@ -239,7 +239,7 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 ProdctTransformResults = new Dictionary<string, List<string>>(),
                 DuplicateProducts = new Dictionary<string, Dictionary<string, List<PRD_LOOKUP_RESULTS>>>(),
-                ValidProducts = new Dictionary<string, List<PRD_LOOKUP_RESULTS>>(),
+                ValidProducts = new Dictionary<string, Dictionary<string, List<PRD_LOOKUP_RESULTS>>>(),
                 InValidProducts = new Dictionary<string, List<string>>()
             };
 
@@ -355,16 +355,16 @@ namespace Intel.MyDeals.BusinessLogic
                                   select d.Key).ToList();
 
                 // Step 2.2: Find duplicate match products
-                var duplicateProds = from d in isConflict
-                                     group d by d.USR_INPUT 
-                                     into p
-                                     where p.Count() > 1
-                                     select p.Key; 
+                var duplicateProds = from p in isConflict
+                                     group p by p.USR_INPUT
+                                     into d
+                                     where d.Count() > 1
+                                     select d.Key;
 
                 // If any duplicates found extract them
                 if (duplicateProds.Any())
                 {
-                    var duplicateRecords = productMatchResults.FindAll(p => isConflict[0].USR_INPUT.Contains(p.USR_INPUT));
+                    var duplicateRecords = productMatchResults.FindAll(p => duplicateProds.Contains(p.USR_INPUT));
 
                     var records = new Dictionary<string, List<PRD_LOOKUP_RESULTS>>();
 
@@ -376,18 +376,31 @@ namespace Intel.MyDeals.BusinessLogic
                 }
 
                 // Step 3: Find the Valid products
-                productLookup.ValidProducts[userProduct.Key] = new List<PRD_LOOKUP_RESULTS>();
+
+                //productLookup.ValidProducts[userProduct.Key] = new List<PRD_LOOKUP_RESULTS>();
 
                 var validProducts = productMatchResults.Where(p => !duplicateProds.Contains(p.USR_INPUT)
                                                             && tranlatedProducts.Any(t => t.Equals(p.USR_INPUT, StringComparison.InvariantCultureIgnoreCase)));
 
-                productLookup.ValidProducts[userProduct.Key] = validProducts.ToList();
+                var isConflictValid = from p in validProducts                                  
+                                        group p by p.USR_INPUT                                      
+                                        into d
+                                        select d.Key;
+                if (isConflictValid.Any())
+                {
+                    var validProduct = productMatchResults.FindAll(p => isConflictValid.Contains(p.USR_INPUT));
+                    var validRecords = new Dictionary<string, List<PRD_LOOKUP_RESULTS>>();
+                    isConflictValid.ToList().ForEach(d => validRecords[d] = new List<PRD_LOOKUP_RESULTS>());
+                    validProduct.ForEach(r => validRecords[r.USR_INPUT].Add(r));
+                    productLookup.ValidProducts[userProduct.Key] = validRecords;
+
+                }
 
                 productLookup.InValidProducts[userProduct.Key] = new List<string>();
 
                 // Step 4: Find InValid products, products which are present in master match result and not present in duplicate products and valid products
                 productLookup.InValidProducts[userProduct.Key] = tranlatedProducts.Where(t => !duplicateProds.Contains(t) &&
-                                        !validProducts.Any(v => v.USR_INPUT.Equals(t, StringComparison.InvariantCultureIgnoreCase))).ToList();
+                                                                !validProducts.Any(v => v.USR_INPUT.Equals(t, StringComparison.InvariantCultureIgnoreCase))).ToList();
             }
         }
 
@@ -420,22 +433,29 @@ namespace Intel.MyDeals.BusinessLogic
                 charset = charsetResult.CNST_VAL_TXT;
 
             string userProd = Regex.Replace(userProduct, @"(?<=\([^()]*),", "/");
-            userProd = Regex.Replace(userProd, " OR ", @", ", RegexOptions.IgnoreCase);
-            userProd = userProd.Replace(" & ", ",");
-            var myRegex = new Regex(@"\([^\)]*\)|(/)");
+            userProd = Regex.Replace(userProd, @"\s+", " ");// Replace multiple spaces with single line
+            userProd = Regex.Replace(userProd, @"\s*([-])\s", "$1"); // Replace multiple space before and after - (Hyphen)
 
-            if (!string.IsNullOrEmpty(userProd) && (userProd.Contains(',')))
-                myRegex = new Regex(@"\([^\)]*\)|(,)");
+            userProd = Regex.Replace(userProd, " OR ", @"~", RegexOptions.IgnoreCase); // Replace OR with ~
+            userProd = userProd.Replace("&", "~"); // Replace & with ~
 
-            var group1Caps = new StringCollection();
-
-            string replaced = myRegex.Replace(userProd, delegate (Match m)
+            // Replace forward slash product separator
+            var replaceSlashRegex = new Regex(@"\([^\)]*\)|(/)");
+            var replaceSlash = replaceSlashRegex.Replace(userProd, delegate (Match m)
+            {
+                if (m.Groups[1].Value == "") return m.Groups[0].Value;
+                else return "~";
+            });
+            
+            // Replace comma product separator
+            var replaceCommaRegex = new Regex(@"\([^\)]*\)|(,)");
+            var replaceComma = replaceCommaRegex.Replace(replaceSlash, delegate (Match m)
             {
                 if (m.Groups[1].Value == "") return m.Groups[0].Value;
                 else return "~";
             });
 
-            string[] splits = Regex.Split(replaced, "~");
+            string[] splits = Regex.Split(replaceComma, "~");
             var singleProducts = new List<string>();
 
             string[] chararr = charset.Split(',');
@@ -493,7 +513,7 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 ProdctTransformResults = new Dictionary<string, List<string>>(),
                 DuplicateProducts = new Dictionary<string, Dictionary<string, List<PRD_LOOKUP_RESULTS>>>(),
-                ValidProducts = new Dictionary<string, List<PRD_LOOKUP_RESULTS>>(),
+                ValidProducts = new Dictionary<string, Dictionary<string, List<PRD_LOOKUP_RESULTS>>>(),
                 InValidProducts = new Dictionary<string, List<string>>()
             };
             return productLookup;
@@ -610,7 +630,7 @@ namespace Intel.MyDeals.BusinessLogic
 
         #region Suggest Products
 
-        public List<ProductDatails> SuggestProducts(string prdEntered, int? returnMax)
+        public List<Product> SuggestProducts(string prdEntered, int? returnMax)
         {
             const int defaultReturnedMaxRecords = 5;
 
@@ -624,7 +644,7 @@ namespace Intel.MyDeals.BusinessLogic
             Regex regex = new Regex(pattern, RegexOptions.IgnoreCase);
 
             // this takes time if it is the first time to load into cache
-            List<ProductDatails> prds = GetProductsDetails();
+            List<Product> prds = GetProductsDetails();
 
             IEnumerable<ProductHash> hashPrds = from prd in prds
                                                 select new ProductHash
@@ -694,14 +714,14 @@ namespace Intel.MyDeals.BusinessLogic
 
             List<NodeMatch> SortedList = myMatches.OrderByDescending(o => o.MatchLen).ThenByDescending(o => o.Weight).ToList();
             List<int> matchedIDs = SortedList.Take(returnMaxRecords).Select(p => p.ID).ToList();
-            List<ProductDatails> rtn = prds.Where(p => matchedIDs.Contains(p.PRD_MBR_SID)).ToList();
+            List<Product> rtn = prds.Where(p => matchedIDs.Contains(p.PRD_MBR_SID)).ToList();
 
             foreach (var p in rtn)
             {
                 p.USR_INPUT = prdEntered;
             }
 
-            List<ProductDatails> Final = new List<ProductDatails>();
+            List<Product> Final = new List<Product>();
             Final.AddRange(rtn);
 
             return Final;

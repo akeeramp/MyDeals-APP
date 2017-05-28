@@ -18,10 +18,10 @@ namespace Intel.MyDeals.Entities
         /// </summary>
         public Dictionary<string, Dictionary<string, List<PRD_LOOKUP_RESULTS>>> DuplicateProducts { get; set; }
 
-		/// <summary>
-		/// Valid products for each row, where key(string) is row input
-		/// </summary>
-		public Dictionary<string, List<PRD_LOOKUP_RESULTS>> ValidProducts { get; set; }
+        /// <summary>
+        /// Valid products for each row, where key(string) is row input
+        /// </summary>
+        public Dictionary<string, Dictionary<string, List<PRD_LOOKUP_RESULTS>>> ValidProducts { get; set; }
 
         /// <summary>
         /// InValid products for each row, where key(string) is row input

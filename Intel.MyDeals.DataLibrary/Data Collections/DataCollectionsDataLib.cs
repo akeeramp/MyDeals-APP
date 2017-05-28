@@ -102,11 +102,6 @@ namespace Intel.MyDeals.DataLibrary
             return DataCollections.GetProductData();
         }
 
-        public List<ProductDatails> GetProductsDetails()
-        {
-            return DataCollections.GetProductsDetails();
-        }
-
         public List<RuleSet> GetRuleSets()
         {
             return DataCollections.GetRuleSets();

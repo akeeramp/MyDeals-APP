@@ -60,7 +60,7 @@ namespace Intel.MyDeals.IBusinessLogic
 
         List<PrdSelLevel> GetProdSelectionLevel(int OBJ_SET_TYPE_SID);
 
-        List<ProductDatails> SuggestProducts(string prdEntered, int? returnMax);
+        List<Product> SuggestProducts(string prdEntered, int? returnMax);
 
         ProductSelectorWrapper GetProductSelectorWrapper();
 

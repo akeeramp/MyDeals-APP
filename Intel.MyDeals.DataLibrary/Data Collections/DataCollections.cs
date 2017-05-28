@@ -418,17 +418,8 @@ namespace Intel.MyDeals.DataLibrary
             }
         }
 
-        public static List<ProductDatails> GetProductsDetails()
-        {
-            lock (LOCK_OBJECT ?? new object())
-            {
-                return _getProductsData ?? (_getProductsData = new ProductDataLib().GetProductsDetails());
-            }
-        }
-
         private static List<Product> _getProductData;
-        private static List<ProductDatails> _getProductsData;
-
+        
         public static List<ProductAlias> GetProductsFromAlias()
         {
             lock (LOCK_OBJECT ?? new object())

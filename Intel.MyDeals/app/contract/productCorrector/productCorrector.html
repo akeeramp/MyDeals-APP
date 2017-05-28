@@ -9,7 +9,7 @@
                     <span class="rowNavigation"><label style="font-weight:400">Row {{ vm.currentRow }}</label></span>
                     <span class="rowNavPanel" ng-hide="vm.hideNavigation">
                         <i role="button" title="Previous Row" class="intelicon-left-previous skyBlue" ng-click="vm.prevRow()" ng-disabled="vm.isPrevDisabled"></i>
-                        <label> {{ vm.currentRow }} of {{ vm.rows }} </label>
+                        <label> {{ vm.rowNumber }} of {{ vm.rows }} </label>
                         <i role="button" title="Next Row" class="intelicon-right-next skyBlue" ng-click="vm.nextRow()" ng-disabled="checked"></i>
                     </span>
                 </div>
@@ -31,22 +31,24 @@
             </div>
             <div class="row">
                 <div class="col-md-6 insertAtRowsText" ng-hide="vm.isInvalidProduct">
-                    <label class="text-left fl marginRight textProdSelector" ng-hide="vm.isInvalidProduct">Product Not Found: </label>                    
-                    <ui-select allow-clear="true" onkeypress="return false;" class="prodSelected text-left"
+                    <label class="text-left fl marginRight textProdSelector" ng-hide="vm.isInvalidProduct">Product Not Found: </label>
+                    <div id="invalidProdGrid" kendo-grid="grid" class="table prodSelected text-left" k-on-change="vm.handleChange(data, dataItem, columns)" expand-k-grid footer-offset="90" options="vm.gridOptions" style="height:250px"></div>
+                    <!--<ui-select allow-clear="true" onkeypress="return false;" class="prodSelected text-left"
                                 tagging="true" multiple ng-model="vm.invalidProducts" theme="bootstrap">
-                        <ui-select-match><span kendo-tooltip k-content='$item.USR_INPUT' ng-click="vm.productSuggestion($item)">{{$item.USR_INPUT}}</span></ui-select-match>
+                        <ui-select-match><span kendo-tooltip k-content='$item.USR_INPUT' ng-click="vm.productSuggestion(item)">{{$item.USR_INPUT}}</span></ui-select-match>
                         <ui-select-choices repeat="products in vm.selectedProducts">
                         </ui-select-choices>
-                    </ui-select>
+                    </ui-select>-->
                 </div>
                 <div class="col-md-6 insertAtRowsText" ng-hide="vm.isInvalidProduct">
                     <label class="text-left fl marginRight textProdSelector">Product Suggestions: </label>
-                    <ui-select allow-clear="true" onkeypress="return false;" class="prodSelected text-left"
+                    <div id="suggestionProdGrid" kendo-grid="grid" class="table prodSelected text-left" expand-k-grid footer-offset="90" k-on-change="vm.addChange(data, dataItem, columns)" options="vm.gridOptionsSuggested"></div>
+                    <!--<ui-select allow-clear="true" onkeypress="return false;" class="prodSelected text-left"
                                 tagging="true" multiple ng-model="vm.suggestedProduct" theme="bootstrap">
-                        <ui-select-match><span kendo-tooltip k-content='$item.HIER_NM_HASH' ng-click="vm.addProductSuggested($item)">{{$item.HIER_VAL_NM}}</span></ui-select-match>
+                        <ui-select-match><span kendo-tooltip k-content='$item.HIER_NM_HASH' ng-click="vm.addProductSuggested(item)">{{$item.HIER_VAL_NM}}</span></ui-select-match>
                         <ui-select-choices repeat="products in vm.selectedProducts">
                         </ui-select-choices>
-                    </ui-select>
+                    </ui-select>-->
                 </div>
             </div>
             
@@ -54,7 +56,7 @@
         <div class="prodSelector modal-footer">            
             <div class="row" style="margin:0px">
                 <div class="col-md-6 text-left textProdSelector">
-                    <p>Selected Products<small>&nbsp;({{vm.addedProducts.length}})</small></p>
+                    <p>Valid and Selected Products<small>&nbsp;({{vm.addedProducts.length}})</small></p>
                 </div>
                 <div class="col-md-6">                        
                     <button class="btn btn-default prdBtn" ng-click="vm.clearProducts()" style="margin-left:2px;">Clear all products</button>
@@ -62,7 +64,7 @@
             </div>
             <div class="col-md-12 addedProduct">
                 <ui-select allow-clear="true" onkeypress="return false;" class="prodSelected text-left"
-                            tagging="true" multiple ng-model="vm.addedProducts" theme="bootstrap" style="min-height:200px !important">
+                            tagging="true" multiple ng-model="vm.addedProducts" theme="bootstrap" >
                     <ui-select-match><span kendo-tooltip k-content='$item.HIER_NM_HASH'>{{$item.HIER_VAL_NM}}</span></ui-select-match>
                     <ui-select-choices repeat="products in vm.selectedProducts">
                     </ui-select-choices>
@@ -74,15 +76,23 @@
                 <label class="text-left fl marginRight" style="font-weight:400!important">Not Correct? &nbsp;Try using <a style="color:#00AEEF;text-decoration:underline;cursor:pointer">Product Selector</a></label>
             </div>
             <div class="col-md-6">
-                <button class="btn btn-default prdBtn" ng-click="vm.clearProducts()" style="margin-left:2px;">Cancel</button>
+                <button class="btn btn-default prdBtn" ng-click="vm.cancel()" style="margin-left:2px;">Cancel</button>
                 <button class="btn btn-primary fr prdBtn" ng-click="vm.saveProducts()">Save</button>
             </div>            
         </div>
     </div>
 </div>
 <style>
-    .prodCorrectorHeader{
-        border-bottom:1px solid #ffffff;
+    .k-grid tr.k-state-selected, .k-grid td.k-state-selected, .k-grid td.k-state-selected.k-state-focused, .k-grid tr.k-state-selected.k-state-hover, .k-grid td.k-state-selected.k-state-hover, .k-grid td.k-state-selected.k-state-focused.k-state-hover {
+        background-color: transparent;
+        background: #00aeef;
+    }
+    #invalidProdGrid, #suggestionProdGrid {
+        height: 250px !important;
+        overflow: scroll;
+    } 
+    .prodCorrectorHeader {
+        border-bottom: 1px solid #ffffff;
         margin-left: 0px;
         margin-right: 0px;
     }

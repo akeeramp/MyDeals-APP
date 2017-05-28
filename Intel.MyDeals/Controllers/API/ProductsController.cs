@@ -407,7 +407,7 @@ namespace Intel.MyDeals.Controllers.API
 
         [Route("FindSuggestedProduct/{prdEntered}")]
         [HttpPost]
-        public List<ProductDatails> FindSuggestedProduct(string prdEntered)
+        public List<Product> FindSuggestedProduct(string prdEntered)
         {
             return SafeExecutor(() => _productsLib.SuggestProducts(prdEntered, null)
                 , $"Unable to Suggest Products 3"

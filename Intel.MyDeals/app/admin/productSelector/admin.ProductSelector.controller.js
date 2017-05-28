@@ -5,10 +5,11 @@
         .module('app.admin')
         .controller('ProductSelectorController', ProductSelectorController);
 
-    ProductSelectorController.$inject = ['$filter','$scope', 'dataService', 'ProductSelectorService', 'logger', 'confirmationModal', 'gridConstants', '$linq', '$state', '$uibModal'];
+    ProductSelectorController.$inject = ['$filter', '$scope', 'dataService', 'ProductSelectorService', 'logger', 'confirmationModal', 'gridConstants', '$linq', '$state', '$uibModal'];
 
     function ProductSelectorController($filter, $scope, dataService, ProductSelectorService, logger, confirmationModal, gridConstants, $linq, $state, $uibModal) {
         var vm = this
+        vm.checked = false;
 
         //Product Selector Modal opener
         vm.openProdSelector = function (row) {
@@ -76,7 +77,7 @@
                     vm.datSourceCorrector = GetProductCorrectorData;
                     addProducts();
                     dataSource.read();
-
+                    vm.checked = false;
                 },
                 function () {
                 });
@@ -86,26 +87,26 @@
         var loadDDLValues = function (e) {
             ProductSelectorService.GetProdDealType()
                 .then(
-                    function (response) {
-                        if (response.statusText == "OK") {
-                            $scope.selectOptions = {
-                                optionLabel: "Select Deal Type...",
-                                dataTextField: "OBJ_SET_TYPE_CD",
-                                dataValueField: "OBJ_SET_TYPE_SID",
-                                valuePrimitive: true,
-                                dataSource: {
-                                    data: response.data,
-                                },
-                                change: function (e) {
-                                    $scope.IsVisible = $scope.IsHidden ? false : true;
-                                }
-                            };
-                            $scope.selectedIds = [0];
-                        }
-                    },
-                    function (response) {
-                        logger.error("Unable to get Product.", response, response.statusText);
+                function (response) {
+                    if (response.statusText == "OK") {
+                        $scope.selectOptions = {
+                            optionLabel: "Select Deal Type...",
+                            dataTextField: "OBJ_SET_TYPE_CD",
+                            dataValueField: "OBJ_SET_TYPE_SID",
+                            valuePrimitive: true,
+                            dataSource: {
+                                data: response.data,
+                            },
+                            change: function (e) {
+                                $scope.IsVisible = $scope.IsHidden ? false : true;
+                            }
+                        };
+                        $scope.selectedIds = [0];
                     }
+                },
+                function (response) {
+                    logger.error("Unable to get Product.", response, response.statusText);
+                }
                 );
         };
 
@@ -114,11 +115,11 @@
             transport: {
                 read: function (e) {
                 },
-                update: function (e) {                   
+                update: function (e) {
                 },
                 destroy: function (e) {
                 },
-                create: function (e) {                    
+                create: function (e) {
                 }
             },
             pageSize: 10,
@@ -146,33 +147,33 @@
         vm.gridOptionsProduct = {
             dataSource: [{
                 ROW_NUMBER: 1,
-                USR_INPUT: "",
+                USR_INPUT: "ci3",
                 EXCLUDE: "",
                 FILTER: "",
-                START_DATE: "",
-                END_DATE: ""
+                START_DATE: "01/01/2010",
+                END_DATE: "01/01/2018"
             }, {
                 ROW_NUMBER: 2,
-                USR_INPUT: "",
+                USR_INPUT: "5Y71",
                 EXCLUDE: "",
                 FILTER: "",
-                START_DATE: "",
-                END_DATE: ""
+                START_DATE: "01/01/2010",
+                END_DATE: "01/01/2018"
             },
             {
                 ROW_NUMBER: 3,
-                USR_INPUT: "",
+                USR_INPUT: "E2160",
                 EXCLUDE: "",
                 FILTER: "",
-                START_DATE: "",
-                END_DATE: ""
+                START_DATE: "01/01/2010",
+                END_DATE: "01/01/2018"
             }, {
                 ROW_NUMBER: 4,
-                USR_INPUT: "",
+                USR_INPUT: "E5-2690",
                 EXCLUDE: "",
                 FILTER: "",
-                START_DATE: "",
-                END_DATE: ""
+                START_DATE: "01/01/2010",
+                END_DATE: "01/01/2018"
             },
             {
                 ROW_NUMBER: 5,
@@ -235,12 +236,12 @@
                 pageSizes: gridConstants.pageSizes
             },
             columns: [
-              { field: "ROW_NUMBER", title: "Sl No", width: "50px", editor: RWNM },
-              { field: "USR_INPUT", title: "Product Name", width: "200px" },
-              { field: "EXCLUDE", title: "Exclude", width: "200px" },
-              { field: "FILTER", template: " #= FILTER # ", title: "Filter", width: "200px" },
-              { field: "START_DATE", template: "#=gridUtils.uiControlWrapper(data, 'START_DATE', \"date:'MM/dd/yyyy'\")#", title: "Start date", width: "200px", editor: dateTime },
-              { field: "END_DATE", template: "#=gridUtils.uiControlWrapper(data, 'END_DATE', \"date:'MM/dd/yyyy'\")#", title: "End Date", width: "200px", editor: dateTime }
+                { field: "ROW_NUMBER", title: "Sl No", width: "50px", editor: RWNM },
+                { field: "USR_INPUT", title: "Product Name", width: "200px" },
+                { field: "EXCLUDE", title: "Exclude", width: "200px" },
+                { field: "FILTER", template: " #= FILTER # ", title: "Filter", width: "200px" },
+                { field: "START_DATE", template: "#=gridUtils.uiControlWrapper(data, 'START_DATE', \"date:'MM/dd/yyyy'\")#", title: "Start date", width: "200px", editor: dateTime },
+                { field: "END_DATE", template: "#=gridUtils.uiControlWrapper(data, 'END_DATE', \"date:'MM/dd/yyyy'\")#", title: "End Date", width: "200px", editor: dateTime }
             ]
         };
 
@@ -255,61 +256,63 @@
         //Editor for Start Date and End Date
         function dateTime(container, options) {
             $('<input data-text-field="' + options.field + '" data-value-field="' + options.field + '" data-bind="value:' + options.field + '" />')
-            .appendTo(container)
-            .kendoDatePicker({
-                format: "MM/dd/yyyy",
-                value: kendo.toString(new Date(), 'MM/dd/yyyy')
-            });
+                .appendTo(container)
+                .kendoDatePicker({
+                    format: "MM/dd/yyyy",
+                    value: kendo.toString(new Date(), 'MM/dd/yyyy')
+                });
         }
 
         // Translate Bulk Product(s)
         function fetchProductDetails() {
-            var dataSelect = [];
+            if (!vm.checked) {
+                var dataSelect = [];
+                var dealTypeSelect = $("#dropdownDealType").data("kendoDropDownList");
+                var value = dealTypeSelect.value();
 
-            var dealTypeSelect = $("#dropdownDealType").data("kendoDropDownList");
-            var value = dealTypeSelect.value();
+                if (value >= 0 && value != "" && value != null) {
+                    var CUST_CD = $scope.contractData.CUST_MBR_SID;
+                    var GEO_MBR_SID = $scope.contractData.GEO_MBR_SID.toString();
+                    var resultData = $linq.Enumerable().From($scope.prodGrid._data)
+                        .Where(function (x) {
+                            return x.USR_INPUT.length > 0 && x.START_DATE > 0 && x.END_DATE > 0;
+                        }).ToArray();
 
-            if (value >= 0 && value != "" && value != null) {
-                var CUST_CD = $scope.contractData.CUST_MBR_SID;
-                var GEO_MBR_SID = $scope.contractData.GEO_MBR_SID.toString();
-                var resultData = $linq.Enumerable().From($scope.prodGrid._data)
-                    .Where(function (x) {
-                        return x.USR_INPUT.length > 0 && x.START_DATE > 0 && x.END_DATE > 0;
-                    }).ToArray();
-
-                for (var i = 0; i < resultData.length; i++) {
-                    var sendObj = {
-                        ROW_NUMBER: resultData[i].ROW_NUMBER,
-                        USR_INPUT: resultData[i].USR_INPUT,
-                        EXCLUDE: resultData[i].EXCLUDE,
-                        FILTER: resultData[i].FILTER,
-                        START_DATE: resultData[i].START_DATE,
-                        END_DATE: resultData[i].END_DATE
-                    }
-                    dataSelect.push(sendObj);
-                }
-                if (resultData.length > 0) {
-                    ProductSelectorService.TranslateProducts(dataSelect, CUST_CD, GEO_MBR_SID)
-                    .then(
-                        function (response) {
-                            if (response.statusText == "OK") {
-                                cookProducts(response.data);
-                            }
-                        },
-                        function (response) {
-                            logger.error("Unable to get Product.", response, response.statusText);
+                    for (var i = 0; i < resultData.length; i++) {
+                        var sendObj = {
+                            ROW_NUMBER: resultData[i].ROW_NUMBER,
+                            USR_INPUT: resultData[i].USR_INPUT,
+                            EXCLUDE: resultData[i].EXCLUDE,
+                            FILTER: resultData[i].FILTER,
+                            START_DATE: resultData[i].START_DATE,
+                            END_DATE: resultData[i].END_DATE
                         }
-                    );
+                        dataSelect.push(sendObj);
+                    }
+                    if (resultData.length > 0) {
+                        vm.checked = true;
+                        ProductSelectorService.TranslateProducts(dataSelect, CUST_CD, GEO_MBR_SID)
+                            .then(
+                            function (response) {
+                                if (response.statusText == "OK") {
+                                    cookProducts(response.data);
+                                    vm.validProducts = [];
+                                }
+                            },
+                            function (response) {
+                                logger.error("Unable to get Product.", response, response.statusText);
+                                vm.checked = false;
+                            }
+                            );
+                    }
+                    else {
+                        logger.error('Not a valid row');
+                    }
                 }
                 else {
-                    logger.error('Not a valid row');
+                    logger.error('Not a Valid Deal type');
                 }
             }
-            else {
-                logger.error('Not a Valid Deal type');
-            }
-
-
         }
 
         // Translate Product(s) by Double Clicking on Rows
@@ -337,14 +340,14 @@
                 if (dataSelect.length > 0) {
                     ProductSelectorService.TranslateProducts(dataSelect, CUST_CD, GEO_MBR_SID)
                         .then(
-                            function (response) {
-                                if (response.statusText == "OK") {
-                                    cookProducts(response.data);
-                                }
-                            },
-                            function (response) {
-                                logger.error("Unable to get Product.", response, response.statusText);
+                        function (response) {
+                            if (response.statusText == "OK") {
+                                cookProducts(response.data);
                             }
+                        },
+                        function (response) {
+                            logger.error("Unable to get Product.", response, response.statusText);
+                        }
                         );
                 }
                 else {
@@ -376,6 +379,7 @@
             schema: {
                 model: {
                     fields: {
+                        ROW_NUMBER: {},
                         USR_INPUT: {},
                         PRD_MBR_SID: {},
                         DEAL_PRD_NM: {},
@@ -394,7 +398,7 @@
                     }
                 }
             },
-            group: { field: "USR_INPUT" },
+            group: ([{ field: "ROW_NUMBER" }, { field: "USR_INPUT" }]),
             pageSize: 5,
             serverPaging: true,
             serverSorting: true
@@ -416,39 +420,40 @@
                 this.expandRow(this.tbody.find("tr.k-master-row").first());
             },
             columns: [
-              {
-                  command: [
-                      { name: "destroy", template: "<a class='k-grid-delete' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-close'></span></a>" }
+                {
+                    command: [
+                        { name: "destroy", template: "<a class='k-grid-delete' href='\\#' style='margin-right: 6px;'><span class='k-icon k-i-close'></span></a>" }
 
-                  ],
-                  title: " ",
-                  width: "100px"
-              },
-              { field: "USR_INPUT", template: " #= USR_INPUT # ", title: "User Input", width: "200px" },
-              { field: "PRD_MBR_SID", title: "Product No", width: "200px" },
-              { field: "DEAL_PRD_NM", template: " #= DEAL_PRD_NM # ", title: "Deal Prod Name", width: "200px" },
-              { field: "PRD_CAT_NM", template: " #= PRD_CAT_NM # ", title: "Category Name", width: "200px" },
-              { field: "BRND_NM", template: " #= BRND_NM # ", title: "Brand Name", width: "200px" },
-              { field: "FMLY_NM", template: " #= FMLY_NM # ", title: "Family Name", width: "200px" },
-              { field: "PCSR_NBR", template: " #= PCSR_NBR # ", title: "Processor No", width: "200px" },
-              { field: "KIT_NM", template: " #= KIT_NM # ", title: "KIT Name", width: "200px" },
-              {
-                  field: "MM_CUST_CUSTOMER",
-                  title: "MM Customer Name",
-                  width: "150px"
-              },
-              {
-                  field: "CAP",
-                  title: "CAP Price",
-                  width: "150px",
-                  template: "<op-popover ng-click='vm.openCAPBreakOut(dataItem, null)' op-options='CAP' op-label='#= CAP #' op-data='vm.getPrductDetails(dataItem, null)' />"
-              },
-              {
-                  field: "YCS2",
-                  title: "YCS2",
-                  width: "150px",
-                  template: "<op-popover op-options='YCS2' op-label='#= YCS2 #' op-data='vm.getPrductDetails(dataItem, \"YCS2\")' />"
-              }
+                    ],
+                    title: " ",
+                    width: "100px"
+                },
+                { field: "ROW_NUMBER", template: " #= ROW_NUMBER # ", title: "Row No", width: "200px", IsVisible: false },
+                { field: "USR_INPUT", template: " #= USR_INPUT # ", title: "User Input", width: "200px" },
+                { field: "PRD_MBR_SID", title: "Product No", width: "200px" },
+                { field: "DEAL_PRD_NM", template: " #= DEAL_PRD_NM # ", title: "Deal Prod Name", width: "200px" },
+                { field: "PRD_CAT_NM", template: " #= PRD_CAT_NM # ", title: "Category Name", width: "200px" },
+                { field: "BRND_NM", template: " #= BRND_NM # ", title: "Brand Name", width: "200px" },
+                { field: "FMLY_NM", template: " #= FMLY_NM # ", title: "Family Name", width: "200px" },
+                { field: "PCSR_NBR", template: " #= PCSR_NBR # ", title: "Processor No", width: "200px" },
+                { field: "KIT_NM", template: " #= KIT_NM # ", title: "KIT Name", width: "200px" },
+                {
+                    field: "MM_CUST_CUSTOMER",
+                    title: "MM Customer Name",
+                    width: "150px"
+                },
+                {
+                    field: "CAP",
+                    title: "CAP Price",
+                    width: "150px",
+                    template: "<op-popover ng-click='vm.openCAPBreakOut(dataItem, null)' op-options='CAP' op-label='#= CAP #' op-data='vm.getPrductDetails(dataItem, null)' />"
+                },
+                {
+                    field: "YCS2",
+                    title: "YCS2",
+                    width: "150px",
+                    template: "<op-popover op-options='YCS2' op-label='#= YCS2 #' op-data='vm.getPrductDetails(dataItem, \"YCS2\")' />"
+                }
             ]
         };
 
@@ -491,45 +496,62 @@
         function cookProducts(data) {
             //reset();
             vm.datSourceCorrector = data;
+            var isAllValidated = 1;
             var multipleMatch = false;
             for (var key in data.ProdctTransformResults) {
-                for (var i = 0; i < data.ValidProducts[key].length; i++) {
-                    vm.validProducts.push(data.ValidProducts[key][i]);                    
-                }
-
                 // Process invalid products to make html to display
                 if (data.InValidProducts[key].length > 0) {
                     multipleMatch = true;
                     vm.openProdCorrector();
-                    vm.isMultipleORInvalid = false;                    
+                    vm.isMultipleORInvalid = false;
+                    vm.checked = true;
+                    isAllValidated = 0;
+                    break;
                 }
 
                 // Process multiple match products to make html to display
                 if (!!data.DuplicateProducts[key]) {
                     vm.openProdCorrector();
                     vm.isMultipleORInvalid = false;
+                    vm.checked = true;
+                    isAllValidated = 0;
+                    break;
                 }
 
             }
-            
+
             // Refreshed the Grid
-            dataSource.read();
-            
+            if (isAllValidated == 1) {
+                addProducts();
+                dataSource.read();
+            }
         }
 
         //Add Product in The Product GRID
         function addProducts() {
             //vm.validProducts = [];
-            var GetProductCorrectorData = vm.datSourceCorrector;
-            for (var key in GetProductCorrectorData.ProdctTransformResults) {
-                var dataSelectedProd = GetProductCorrectorData.ValidProducts[key];
-                angular.forEach(dataSelectedProd, function (value, key) {
-                    //Duplicate check
-                    if (!$filter("where")(vm.validProducts, { PRD_MBR_SID: value.PRD_MBR_SID }).length > 0) {
-                        vm.validProducts.push(value);
+            var data = vm.datSourceCorrector;
+            for (var key in data.ProdctTransformResults) {
+                if (!!data.ValidProducts[key]) {
+                    for (var a = 0; a < data.ProdctTransformResults[key].length; a++) {
+                        var value = data.ProdctTransformResults[key][a];
+                        for (var i = 0; i < data.ValidProducts[key][value].length; i++) {
+                            data.ValidProducts[key][value][i]["ROW_NUMBER"] = key;
+                            vm.validProducts.push(data.ValidProducts[key][value][i]);
+                        }
                     }
-                });
+                }
             }
+
+            //for (var key in GetProductCorrectorData.ProdctTransformResults) {
+            //    var dataSelectedProd = GetProductCorrectorData.ValidProducts[key];
+            //    angular.forEach(dataSelectedProd, function (value, key) {
+            //        //Duplicate check
+            //        if (!$filter("where")(vm.validProducts, { PRD_MBR_SID: value.PRD_MBR_SID }).length > 0) {
+            //            vm.validProducts.push(value);
+            //        }
+            //    });
+            //}
         }
     }
 })();

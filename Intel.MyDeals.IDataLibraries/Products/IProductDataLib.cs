@@ -8,8 +8,6 @@ namespace Intel.MyDeals.IDataLibrary
     {
         List<Product> GetProducts();
 
-        List<ProductDatails> GetProductsDetails();
-
         List<ProductAlias> SetProductAlias(CrudModes mode, ProductAlias data);
 
         List<ProductAlias> GetProductsFromAlias();

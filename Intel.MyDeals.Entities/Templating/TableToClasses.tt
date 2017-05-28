@@ -128,12 +128,7 @@ using System.Collections.Generic;
 	// Products
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_PRD_DTL]");
 	ds.Tables[0].TableName = "Product";
-	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
-
-	// Product Details
-	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_PRD_DETAILS]");
-	ds.Tables[0].TableName = "ProductDatails";
-	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));	
 
 	// Product Category CPU
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_PRD_CAT_MAP]");
