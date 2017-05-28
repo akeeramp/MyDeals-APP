@@ -147,33 +147,33 @@
         vm.gridOptionsProduct = {
             dataSource: [{
                 ROW_NUMBER: 1,
-                USR_INPUT: "ci3",
+                USR_INPUT: "",
                 EXCLUDE: "",
                 FILTER: "",
-                START_DATE: "01/01/2010",
-                END_DATE: "01/01/2018"
+                START_DATE: "",
+                END_DATE: ""
             }, {
                 ROW_NUMBER: 2,
-                USR_INPUT: "5Y71",
+                USR_INPUT: "",
                 EXCLUDE: "",
                 FILTER: "",
-                START_DATE: "01/01/2010",
-                END_DATE: "01/01/2018"
+                START_DATE: "",
+                END_DATE: ""
             },
             {
                 ROW_NUMBER: 3,
-                USR_INPUT: "E2160",
+                USR_INPUT: "",
                 EXCLUDE: "",
                 FILTER: "",
-                START_DATE: "01/01/2010",
-                END_DATE: "01/01/2018"
+                START_DATE: "",
+                END_DATE: ""
             }, {
                 ROW_NUMBER: 4,
-                USR_INPUT: "E5-2690",
+                USR_INPUT: "",
                 EXCLUDE: "",
                 FILTER: "",
-                START_DATE: "01/01/2010",
-                END_DATE: "01/01/2018"
+                START_DATE: "",
+                END_DATE: ""
             },
             {
                 ROW_NUMBER: 5,
