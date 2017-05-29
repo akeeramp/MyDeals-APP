@@ -141,7 +141,8 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             model: {
                 fields: {
                     PRD_MBR_SID: {},
-                    DEAL_PRD_NM: {}
+                    DEAL_PRD_NM: {},
+                    MM_CUST_CUSTOMER: {}
                 }
             }
         },
@@ -166,6 +167,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         columns: [
             { field: "PRD_MBR_SID", template: " #= PRD_MBR_SID # ", title: "Product No", width: "200px" },
             { field: "DEAL_PRD_NM", title: "Product Name", width: "200px" },
+            { field: "MM_CUST_CUSTOMER", title: "MM Customer", width: "200px" },
         ]
     };
     function addProducts() {
@@ -173,7 +175,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
     }
     // Master Product(s) massaging
     var cookProducts = function (e) {
-        var result = false;
+        var result = false;        
         var data = GetProductCorrectorData;
         for (var key in data.ProdctTransformResults) {
             if (key == vm.currentRow) {
@@ -210,24 +212,18 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                     for (var j = 0; j < data.InValidProducts[vm.currentRow].length; j++) {
                         vm.invalidProducts.push({ "USR_INPUT": data.InValidProducts[vm.currentRow][j] });
                     }
-                    dataSource.read();
-
-                    //Caccling the Suggestion API for the first suggestion display
-                    if (!item) {
-                        item = { USR_INPUT: "" };
-                    }
-                    item.USR_INPUT = data.InValidProducts[vm.currentRow][0];
-                    productSuggestion(item);
-
+                    dataSource.read();                 
                 }
                 // Checking for Valid Product(s)
                 else if (!!data.ValidProducts[key]) {
                     vm.items = [];
                     for (var a = 0; a < data.ProdctTransformResults[key].length; a++) {
                         var value = data.ProdctTransformResults[key][a];
-                        for (var i = 0; i < data.ValidProducts[key][value].length; i++) {
-                            data.ValidProducts[key][value][i]["ROW_NUMBER"] = key;
-                            vm.addedProducts.push(data.ValidProducts[key][value][i]);
+                        if (!!data.ValidProducts[key][value]) {
+                            for (var i = 0; i < data.ValidProducts[key][value].length; i++) {
+                                data.ValidProducts[key][value][i]["ROW_NUMBER"] = key;
+                                vm.addedProducts.push(data.ValidProducts[key][value][i]);
+                            }
                         }
                     }
                 }
@@ -237,17 +233,23 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                 }
             }
         }
+
+        //productSuggestion(item);
+
     }
     //populating Valid product in Included list
     function includedListPopulation() {
+        vm.addedProducts = [];
         var data = GetProductCorrectorData;
         for (var key in data.ProdctTransformResults) {
             if (!!data.ValidProducts[key]) {
                 for (var a = 0; a < data.ProdctTransformResults[key].length; a++) {
                     var value = data.ProdctTransformResults[key][a];
-                    for (var i = 0; i < data.ValidProducts[key][value].length; i++) {
-                        data.ValidProducts[key][value][i]["ROW_NUMBER"] = key;
-                        vm.addedProducts.push(data.ValidProducts[key][value][i]);
+                    if (!!data.ValidProducts[key][value]) {
+                        for (var i = 0; i < data.ValidProducts[key][value].length; i++) {
+                            data.ValidProducts[key][value][i]["ROW_NUMBER"] = key;
+                            vm.addedProducts.push(data.ValidProducts[key][value][i]);
+                        }
                     }
                 }
             }
@@ -577,6 +579,8 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                     dataSourceSuggested.read();
                 }
                 else {
+                    vm.suggestedProduct = [];
+                    dataSourceSuggested.read();
                     logger.error("No suggestion found");
                 }
 
@@ -631,11 +635,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
 
             }
             GetProductCorrectorData.ValidProducts[vm.currentRow] = obj;
-
-            //obj[prodName] = vm.addedProducts;
-
-
-
+            
             if (vm.opMode == 'D') {
                 // Deleting User input from the Particular Row
                 delete GetProductCorrectorData.DuplicateProducts[vm.currentRow][vm.productName];

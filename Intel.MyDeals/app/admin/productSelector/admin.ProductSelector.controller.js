@@ -63,6 +63,7 @@
                 controller: 'ProductCorrectorModalController',
                 controllerAs: 'vm',
                 size: 'lg',
+                windowClass: 'prdCorrector-modal-window',
                 resolve: {
                     GetProductCorrectorData: angular.copy(vm.datSourceCorrector), //Product Master List
                     contractData: angular.copy($scope.contractData), // Contract data
@@ -535,23 +536,15 @@
                 if (!!data.ValidProducts[key]) {
                     for (var a = 0; a < data.ProdctTransformResults[key].length; a++) {
                         var value = data.ProdctTransformResults[key][a];
-                        for (var i = 0; i < data.ValidProducts[key][value].length; i++) {
-                            data.ValidProducts[key][value][i]["ROW_NUMBER"] = key;
-                            vm.validProducts.push(data.ValidProducts[key][value][i]);
+                        if (!!data.ValidProducts[key][value]) {
+                            for (var i = 0; i < data.ValidProducts[key][value].length; i++) {
+                                data.ValidProducts[key][value][i]["ROW_NUMBER"] = key;
+                                vm.validProducts.push(data.ValidProducts[key][value][i]);
+                            }
                         }
                     }
                 }
             }
-
-            //for (var key in GetProductCorrectorData.ProdctTransformResults) {
-            //    var dataSelectedProd = GetProductCorrectorData.ValidProducts[key];
-            //    angular.forEach(dataSelectedProd, function (value, key) {
-            //        //Duplicate check
-            //        if (!$filter("where")(vm.validProducts, { PRD_MBR_SID: value.PRD_MBR_SID }).length > 0) {
-            //            vm.validProducts.push(value);
-            //        }
-            //    });
-            //}
         }
     }
 })();
