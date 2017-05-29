@@ -175,7 +175,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
     }
     // Master Product(s) massaging
     var cookProducts = function (e) {
-        var result = false;        
+        var result = false;
         var data = GetProductCorrectorData;
         for (var key in data.ProdctTransformResults) {
             if (key == vm.currentRow) {
@@ -212,7 +212,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                     for (var j = 0; j < data.InValidProducts[vm.currentRow].length; j++) {
                         vm.invalidProducts.push({ "USR_INPUT": data.InValidProducts[vm.currentRow][j] });
                     }
-                    dataSource.read();                 
+                    dataSource.read();
                 }
                 // Checking for Valid Product(s)
                 else if (!!data.ValidProducts[key]) {
@@ -226,9 +226,8 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                             }
                         }
                     }
-                }
+                }                
                 if (!!data.ValidProducts[key]) {
-                    vm.items = [];
                     includedListPopulation();
                 }
             }
@@ -527,9 +526,10 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             });
 
             if (flag == 1) {
+                saveProducts();
                 logger.success("Product added for " + dataSelected["0"].FMLY_NM);
             }
-            else {
+            else {                
                 logger.error("Can not insert duplicate product " + dataSelected["0"].FMLY_NM);
             }
 
@@ -635,7 +635,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
 
             }
             GetProductCorrectorData.ValidProducts[vm.currentRow] = obj;
-            
+
             if (vm.opMode == 'D') {
                 // Deleting User input from the Particular Row
                 delete GetProductCorrectorData.DuplicateProducts[vm.currentRow][vm.productName];
