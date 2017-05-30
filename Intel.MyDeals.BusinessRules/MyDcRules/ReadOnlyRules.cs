@@ -176,6 +176,22 @@ namespace Intel.MyDeals.BusinessRules
                             Target = new[] {AttributeCodes.TRGT_RGN }
                         }
                     }
+                },
+                new MyOpRule
+                {
+                    Title="Readonly if Meet Comp is Price Performance",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnReadonly},
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.MEET_COMP_PRICE_QSTN) && de.AtrbValue != null && de.AtrbValue.ToString() != "Price").Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetReadOnly,
+                            Target = new[] {AttributeCodes.COMP_BENCH, AttributeCodes.IA_BENCH }
+                        }
+                    }
                 }
             };
         }

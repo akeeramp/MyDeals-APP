@@ -87,7 +87,16 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
 
         $scope.setBusy = function (msg, detail) {
             $timeout(function () {
-                $scope.isBusy = msg != undefined && msg !== "";
+                var newState = msg != undefined && msg !== "";
+
+                // if no change in state, simple update the text
+                if ($scope.isBusy === newState) {
+                    $scope.isBusyMsgTitle = msg;
+                    $scope.isBusyMsgDetail = !detail ? "" : detail;
+                    return;
+                }
+
+                $scope.isBusy = newState;
                 if ($scope.isBusy) {
                     $scope.isBusyMsgTitle = msg;
                     $scope.isBusyMsgDetail = !detail ? "" : detail;
@@ -97,7 +106,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                         $scope.isBusyMsgDetail = !detail ? "" : detail;
                     }, 500);
                 }
-            }, 10);
+            }, 0);
 
         }
         // populate the contract data upon entry... If multiple controller instances are called, reference the initial instance
@@ -1677,6 +1686,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
         }
     $scope.customAddPsValidate = function () {
             var isValid = true;
+            $scope.addStrategyDisabled = true;
 
             // Clear all values
             angular.forEach($scope.newStrategy,
@@ -1761,6 +1771,8 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
         objsetService.createPricingTable($scope.getCustId(), pt).then(
             function (data) {
                 $scope.updateResults(data.data.PRC_TBL, pt);
+                $scope.setBusy("Saved", "Redirecting you to the Contract Editor");
+                $scope._dirty = false;
 
                 // load the screen
                 $state.go('contract.manager.strategy', {
@@ -1768,6 +1780,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                     sid: pt.DC_PARENT_ID,
                     pid: pt.DC_ID
                 }, { reload: true }); // HACK: workaorund for the bug where the "view more options" button is unclickable after saving
+
             },
             function (response) {
                 $scope.addTableDisabled = false;
@@ -1864,6 +1877,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
 
     $scope.customAddPtValidate = function () {
         var isValid = true;
+        $scope.addTableDisabled = true;
 
             // Clear all values
             angular.forEach($scope.newPricingTable,

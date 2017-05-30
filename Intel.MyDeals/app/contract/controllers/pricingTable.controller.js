@@ -680,7 +680,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 	// On spreadsheet Render
 	function onRender(e) {
 	    if (root.spreadNeedsInitialization) {
-	        console.log("onRender");
+	        //console.log("onRender");
 
 			root.spreadNeedsInitialization = false;
 

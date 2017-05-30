@@ -52,6 +52,22 @@ namespace Intel.MyDeals.BusinessRules
                 },
                 new MyOpRule
                 {
+                    Title="Req if Meet Comp is Price Performance",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.MEET_COMP_PRICE_QSTN) && de.AtrbValue != null && de.AtrbValue.ToString() == "Price").Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetRequired,
+                            Target = new[] {AttributeCodes.COMP_BENCH, AttributeCodes.IA_BENCH }
+                        }
+                    }
+                },
+                new MyOpRule
+                {
                     Title="Required if Backdate Needed",
                     ActionRule = MyDcActions.BackdateRequired,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
