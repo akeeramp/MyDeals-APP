@@ -2,14 +2,14 @@
     .module('app.admin')
     .controller('ProductCorrectorModalController', ProductCorrectorModalController);
 
-ProductCorrectorModalController.$inject = ['$filter', '$scope', '$uibModalInstance', 'GetProductCorrectorData', 'ProductSelectorService', 'productCorrectorService', 'contractData', 'RowId','ProductRows', '$linq', '$timeout', 'logger'];
+ProductCorrectorModalController.$inject = ['$filter', '$scope', '$uibModalInstance', 'GetProductCorrectorData', 'ProductSelectorService', 'productCorrectorService', 'contractData', 'RowId', 'ProductRows', '$linq', '$timeout', 'logger'];
 
 function ProductCorrectorModalController($filter, $scope, $uibModalInstance, GetProductCorrectorData, ProductSelectorService, productCorrectorService, contractData, RowId, ProductRows, $linq, $timeout, logger) {
     var vm = this;
     vm.selectedPathParts = [];
     vm.invalidProducts = [];
     vm.suggestedProduct = [];
-    vm.items = []; // This will have Different dimension where conflicts arises 
+    vm.items = []; // This will have Different dimension where conflicts arises
     vm.addedProducts = []; // This will hold the product added by the User without conflict
     vm.hideSelection = false; // This will determine when to show Invalid Product(s) and when to show Multiple
     vm.nextRow = nextRow; // This method will help to navigate to next Rows
@@ -24,7 +24,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
     vm.isNextDisabled = false; // This will enable disable Next Navigation button
     vm.isPrevDisabled = false; // This will enable disable Previous Navigation button
     vm.productSuggestion = productSuggestion;
-    vm.saveProducts = saveProducts; // This method actually moved Multiple or invalid product to the Valid products    
+    vm.saveProducts = saveProducts; // This method actually moved Multiple or invalid product to the Valid products
     vm.addProductSuggested = addProductSuggested; //Added Product from the Suggestion List
     vm.opMode = ''; // To determine its a Duplicate product Ops or InValid Product ops
     vm.hideNavigation = false; // This ill determine when to hide the navigation
@@ -37,7 +37,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
     vm.rowNumber = 1;
     vm.resetAddedList = 1;
 
-    //Page number calculation and navigation 
+    //Page number calculation and navigation
     var generatePagination = function (e) {
         pageNumber = [];
         for (var key in GetProductCorrectorData.ProdctTransformResults) {
@@ -63,7 +63,6 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             else {
                 vm.currentRow = pageNumber[0];
             }
-
         }
 
         if (vm.rows <= 1) {
@@ -78,13 +77,10 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                 e.success(vm.invalidProducts);
             },
             update: function (e) {
-
             },
             destroy: function (e) {
-
             },
             create: function (e) {
-
             }
         },
         schema: {
@@ -120,7 +116,6 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         ]
     };
 
-
     // Suggested Product Grid
     // Invalid Product Grid/////
     var dataSourceSuggested = new kendo.data.DataSource({
@@ -129,13 +124,10 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                 e.success(vm.suggestedProduct);
             },
             update: function (e) {
-
             },
             destroy: function (e) {
-
             },
             create: function (e) {
-
             }
         },
         schema: {
@@ -167,13 +159,23 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         pageable: false,
         columns: [
             { field: "PRD_MBR_SID", template: " #= PRD_MBR_SID # ", title: "Product No", width: "200px" },
-            { field: "DEAL_PRD_NM", title: "Product Name", width: "200px" },
+            { field: "HIER_VAL_NM", title: "Product Name", width: "200px", template: "<div kendo-tooltip k-content='dataItem.HIER_NM_HASH'>{{dataItem.HIER_VAL_NM}}</div>" },
             { field: "MM_CUST_CUSTOMER", title: "MM Customer", width: "200px" },
         ]
     };
-    function addProducts() {
 
+    function toggleColumnsWhenEmpty(data) {
+        var grid = $("#suggestionProdGrid").data("kendoGrid");
+        angular.forEach(vm.gridOptionsSuggested.columns, function (item, key) {
+            var columnValue = $filter('unique')(data, item.field);
+            if (columnValue.length == 1 && item.field !== undefined && (columnValue[0][item.field] == "" || columnValue[0][item.field] == null )) {
+                grid.hideColumn(item.field);//hide column
+            } else {
+                grid.showColumn(item.field); //show column
+            }
+        });
     }
+
     // Master Product(s) massaging
     var cookProducts = function (e) {
         var result = false;
@@ -203,7 +205,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                         }
                     }
                 }
-                // Process invalid product(s) to make html to display
+                    // Process invalid product(s) to make html to display
                 else if (!!data.InValidProducts[key] && data.InValidProducts[vm.currentRow].length > 0) {
                     vm.invalidProducts = [];
                     vm.opMode = 'I';
@@ -215,7 +217,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                     }
                     dataSource.read();
                 }
-                // Checking for Valid Product(s)
+                    // Checking for Valid Product(s)
                 else if (!!data.ValidProducts[key]) {
                     vm.items = [];
                     for (var a = 0; a < data.ProdctTransformResults[key].length; a++) {
@@ -227,7 +229,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                             }
                         }
                     }
-                }                
+                }
                 if (!!data.ValidProducts[key]) {
                     includedListPopulation();
                 }
@@ -235,7 +237,6 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         }
 
         //productSuggestion(item);
-
     }
     //populating Valid product in Included list
     function includedListPopulation() {
@@ -255,7 +256,6 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             }
         }
     }
-
 
     // Checking for Conflict up to FAMILY LEVEL
     function cehckingConflict(data, _selectionLevel, item) {
@@ -296,7 +296,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                 }
             }
         }
-        //Checking for conflict in Category Name i.e. DT OR Mb or etc                               
+        //Checking for conflict in Category Name i.e. DT OR Mb or etc
         if (_selectionLevel == 1) {
             isConflict = $linq.Enumerable().From(data)
                 .Where(function (x) {
@@ -388,7 +388,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                 }
             }
         }
-        //Checking for conflict in Family Name i.e  Haswell, Kaby Lake, Skylake etc                         
+        //Checking for conflict in Family Name i.e  Haswell, Kaby Lake, Skylake etc
         if (_selectionLevel == 3) {
             isConflict = $linq.Enumerable().From(data)
                 .Where(function (x) {
@@ -466,10 +466,9 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         var data = GetProductCorrectorData; // assigning data to a local copy
         lastConflictedColumn = item.name;
 
-        var result = checkNextLevelOfConflict(item); // Checking for conflict       
+        var result = checkNextLevelOfConflict(item); // Checking for conflict
 
         if (result) {
-
         }
         else {
             var dataSelected = [];
@@ -481,7 +480,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                     })
                     .ToArray();
             }
-            // Checking PRODUCT CATEGORY NAME
+                // Checking PRODUCT CATEGORY NAME
             else if (_lastConflictedState == 2) {
                 dataSelected = $linq.Enumerable().From(vm.selectedDataSet)
                     .Where(function (x) {
@@ -489,7 +488,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                     })
                     .ToArray();
             }
-            // Checking BRAND NAME
+                // Checking BRAND NAME
             else if (_lastConflictedState == 3) {
                 dataSelected = $linq.Enumerable().From(vm.selectedDataSet)
                     .Where(function (x) {
@@ -497,7 +496,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                     })
                     .ToArray();
             }
-            // Checking FAMILY NAME
+                // Checking FAMILY NAME
             else if (_lastConflictedState == 4) {
                 dataSelected = $linq.Enumerable().From(vm.selectedDataSet)
                     .Where(function (x) {
@@ -505,7 +504,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                     })
                     .ToArray();
             }
-            // Checking PROCESSOR NUMBER
+                // Checking PROCESSOR NUMBER
             else if (_lastConflictedState == 5) {
                 dataSelected = $linq.Enumerable().From(vm.selectedDataSet)
                     .Where(function (x) {
@@ -517,7 +516,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
 
             // Adding Products to the Selected List
             angular.forEach(dataSelected, function (value, key) {
-                //Duplicate check                                
+                //Duplicate check
                 if (!$filter("where")(vm.addedProducts, { PRD_MBR_SID: value.PRD_MBR_SID }).length > 0) {
                     vm.addedProducts.push(value);
 
@@ -530,12 +529,10 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                 saveProducts();
                 logger.success("Product added for " + dataSelected["0"].FMLY_NM);
             }
-            else {                
+            else {
                 logger.error("Can not insert duplicate product " + dataSelected["0"].FMLY_NM);
             }
-
         }
-
     }
 
     //Go to Next ROW for conflict or Invalid Product
@@ -568,8 +565,15 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
 
     //Add suggestion to the suggestion product
     function productSuggestion(item) {
-        var row = ProductRows[vm.currentRow - 1];        
-        productCorrectorService.FindSuggestedProduct(item.USR_INPUT)
+        var row = ProductRows[vm.currentRow - 1];
+        var searchStringDTO = {
+            'prdEntered': item.USR_INPUT,
+            'returnMax': 5,
+            'startDate': row.START_DATE,
+            'endDate': row.END_DATE
+        }
+
+        ProductSelectorService.GetProductSuggestions(searchStringDTO)
             .then(function (response) {
                 if (response.data.length > 1) {
                     vm.suggestedProduct = [];
@@ -579,14 +583,15 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                         }
                     });
                     dataSourceSuggested.read();
+                    $timeout(function () {
+                        toggleColumnsWhenEmpty(vm.suggestedProduct);
+                    }, 1)
                 }
                 else {
                     vm.suggestedProduct = [];
                     dataSourceSuggested.read();
                     logger.error("No suggestion found");
                 }
-
-
             }, function (response) {
                 logger.error("Unable to run Suggest Product", response, response.statusText);
             });
@@ -606,9 +611,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
 
     // Dismiss the Modal popup by clicking Cancel button
     vm.cancel = function () {
-        //$uibModalInstance.dismiss();
         $uibModalInstance.close(GetProductCorrectorData);
-        //$scope.$emit('GetProductCorrectorData', GetProductCorrectorData);
     }
 
     // Save Selected product(s) for the Row
@@ -634,7 +637,6 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                 const prodName = selectedInput[m].USR_INPUT;
 
                 obj[prodName] = products;
-
             }
             GetProductCorrectorData.ValidProducts[vm.currentRow] = obj;
 
@@ -672,7 +674,6 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                     vm.invalidProducts = [];
                 }
                 else {
-
                 }
             }
 
@@ -701,14 +702,9 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             else {
                 vm.cancel();
             }
-
         }
         else {
             logger.error("No product selected");
         }
-
     }
-
-
-
 }

@@ -60,7 +60,7 @@ namespace Intel.MyDeals.IBusinessLogic
 
         List<PrdSelLevel> GetProdSelectionLevel(int OBJ_SET_TYPE_SID);
 
-        List<Product> SuggestProducts(string prdEntered, int? returnMax);
+        List<Product> SuggestProducts(string prdEntered, int? returnMax, IList<Product> prds = null);
 
         ProductSelectorWrapper GetProductSelectorWrapper();
 
@@ -70,5 +70,7 @@ namespace Intel.MyDeals.IBusinessLogic
                 int selectionLevel, string drillDownFilter4, string drillDownFilter5, int custSid, string geoSid);
 
         List<ProductCAPYCS2> GetProductCAPYCS2Data(List<ProductCAPYCS2Calc> productCAPCalc, string getAvailable, string priceCondition);
+
+        List<Product> SuggestProductsByDates(string prdEntered, int? returnMax, DateTime startDate, DateTime endDate);
     }
 }

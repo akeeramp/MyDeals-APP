@@ -4,9 +4,9 @@
        .module('app.admin') //TODO: once we integrate with contract manager change the module to contract
        .controller('ProductSelectorModalController', ProductSelectorModalController);
 
-    ProductSelectorModalController.$inject = ['$filter', '$scope', '$uibModal', '$uibModalInstance', 'productSelectionLevels', 'ProductSelectorService', 'contractData', '$timeout', 'logger', 'gridConstants'];
+    ProductSelectorModalController.$inject = ['$filter', '$scope', '$uibModal', '$uibModalInstance', 'productSelectionLevels', 'ProductSelectorService', 'contractData', 'pricingTableRow', '$timeout', 'logger', 'gridConstants'];
 
-    function ProductSelectorModalController($filter, $scope, $uibModal, $uibModalInstance, productSelectionLevels, ProductSelectorService, contractData, $timeout, logger, gridConstants) {
+    function ProductSelectorModalController($filter, $scope, $uibModal, $uibModalInstance, productSelectionLevels, ProductSelectorService, contractData, pricingTableRow, $timeout, logger, gridConstants) {
         var vm = this;
         // Non CPU verticals with drill down level 4
         var verticalsWithDrillDownLevel4 = ["EIA CPU", "EIA MISC"];
@@ -31,7 +31,7 @@
         vm.hideSelection = false;
         vm.selectedItems = [];
         vm.prdSelLvlAtrbsForCategory = [];
-
+        var selectionProcessed = false;
         // Get the drilldown items based on the selection level
         // The selection follows a pattern, if only single item present select it,
         // if the selected item is NA look for the alternate columns for values ex: GDM Family, NAND Famliy
@@ -208,13 +208,14 @@
             dataSourceProduct.read();
             var data = {
                 "searchHash": item.path,
-                "startDate": contractData.START_DT,
-                "endDate": contractData.END_DT,
+                "startDate": pricingTableRow.START_DT,
+                "endDate": pricingTableRow.END_DT,
                 "selectionLevel": selectionLevel,
                 "drillDownFilter4": null,
                 "drillDownFilter5": null,
-                "custSid": contractData.CUST_MBR_SID,
-                "geoSid": contractData.GEO_MBR_SID.toString()
+                "custSid": pricingTableRow.CUST_MBR_SID,
+                "geoSid": '1', //pricingTableRow.GEO_MBR_SID.toString()
+                //TODO: Make changes to proc to accept comma separated GEO's instead of GEO_MBR_SID's
             }
 
             // We need to send two special attributes for getting the data for non CPU products
@@ -393,7 +394,7 @@
                 {
                     field: "FMLY_NM_MM",
                     title: "EDW Family Name",
-                    template: "<div kendo-tooltip k-content='dataItem.EPM_NMFMLY_NM_MM'>{{dataItem.FMLY_NM_MM}}</div>",
+                    template: "<div kendo-tooltip k-content='dataItem.FMLY_NM_MM'>{{dataItem.FMLY_NM_MM}}</div>",
                     //template: "<div kendo-tooltip k-content='dataItem.FMLY_NM_MM'>{{(dataItem.FMLY_NM_MM | limitTo: 20) + (dataItem.FMLY_NM_MM.length > 20 ? '...' : '')}}</div>",
                     width: "150px"
                 },
@@ -474,11 +475,11 @@
 
         vm.getPrductDetails = function (dataItem, priceCondition) {
             return [{
-                'CUST_MBR_SID': contractData.CUST_MBR_SID,
+                'CUST_MBR_SID': pricingTableRow.CUST_MBR_SID,
                 'PRD_MBR_SID': dataItem.PRD_MBR_SID,
-                'GEO_MBR_SID': contractData.GEO_MBR_SID.toString(),
-                'DEAL_STRT_DT': contractData.START_DT,
-                'DEAL_END_DT': contractData.END_DT,
+                'GEO_MBR_SID': pricingTableRow.GEO_MBR_SID.toString(),
+                'DEAL_STRT_DT': pricingTableRow.START_DT,
+                'DEAL_END_DT': pricingTableRow.END_DT,
                 'getAvailable': 'N',
                 'priceCondition': priceCondition == null ? dataItem.CAP_PRC_COND : priceCondition
             }];
@@ -512,7 +513,7 @@
 
         vm.save = function () {
             logger.success("Products add successful");
-            $uibModalInstance.dismiss();
+            $uibModalInstance.close(vm.addedProducts);
         }
 
         // Load mark levels when coming from a blank cell
@@ -520,22 +521,25 @@
 
         // Called when user enters value into search box and hits enter
         vm.searchProduct = function (row) {
-            // TODO when Integrated make  remove this
-            row = 1;
-            if (vm.userInput == "") return;
-            var searchObject = [{
-                ROW_NUMBER: row,
-                USR_INPUT: vm.userInput,
-                EXCLUDE: "",
-                FILTER: "",
-                START_DATE: contractData.START_DT,
-                END_DATE: contractData.END_DT
-            }];
+            if (selectionProcessed) {
+                selectionProcessed = false;
+                return;
+            }
 
-            ProductSelectorService.TranslateProducts(searchObject, contractData.CUST_MBR_SID, contractData.GEO_MBR_SID.toString()).then(function (response) {
-                processProducts(response.data);
+            var searchStringDTO = {
+                'prdEntered': vm.userInput,
+                'returnMax': 500,
+                'startDate': pricingTableRow.START_DT,
+                'endDate': pricingTableRow.END_DT
+            }
+
+            ProductSelectorService.GetProductSuggestions(searchStringDTO).then(function (response) {
+                vm.productSuggestions = response.data;
+                vm.productDataSource.read();
+                var autocomplete = $("#productSearch").data("kendoAutoComplete");
+                autocomplete.search(vm.userInput);
             }, function (response) {
-                logger.error("Unable to get products.", response, response.statusText);
+                logger.error("Unable to get product suggestions.", response, response.statusText);
             });
         }
 
@@ -543,6 +547,45 @@
             vm.selectPath(0);
             vm.userInput = "";
         }
+
+        vm.productSuggestions = [];
+
+        vm.productDataSource = new kendo.data.DataSource({
+            transport: {
+                read: function (e) {
+                    e.success(vm.productSuggestions);
+                },
+            }
+        });
+
+        vm.productOptions = {
+            dataSource: vm.productDataSource,
+            dataTextField: "HIER_VAL_NM",
+            filter: "contains",
+            height: 300,
+            minLength: 2,
+            noDataTemplate: 'Press enter to search',
+            select: function (e) {
+                selectionProcessed = true;
+                // TODO when Integrated make  remove this
+                var data = {
+                    "searchHash": e.dataItem.HIER_NM_HASH,
+                    "startDate": pricingTableRow.START_DT,
+                    "endDate": pricingTableRow.END_DT,
+                    "selectionLevel": e.dataItem.PRD_ATRB_SID,
+                    "custSid": pricingTableRow.CUST_MBR_SID,
+                    "geoSid": '1', //pricingTableRow.GEO_MBR_SID.toString()
+                    //TODO: Make changes to proc to accept comma separated GEO's instead of GEO_MBR_SID's
+                }
+
+                ProductSelectorService.GetProductSelectionResults(data).then(function (response) {
+                    processProducts(response.data);
+                }, function (response) {
+                    logger.error("Unable to get products.", response, response.statusText);
+                });
+            },
+            template: '<div class="productSelector searchTemplate">#: HIER_VAL_NM #<div><small><b>Category:</b> #= PRD_CAT_NM #</small><small> |<b> Brand:</b> #= BRND_NM #</small><small> |<b> Family:</b> #= FMLY_NM #</small><small> |<b> Processor:</b> #= PCSR_NBR #</small><small> |<b> L4:</b> #= DEAL_PRD_NM #</small></div></div>',
+        };
 
         // Search functionality code, refine this further
         vm.productSearchValues = [];
@@ -554,20 +597,7 @@
             vm.showSearchResults = false; // Hide the grid
             vm.searchItems = []; // store conflict hierarchical levels, for user selection
 
-            var validProductMatches = data["ValidProducts"];
-            var products = validProductMatches[1];
-            if (products.length > 0) {
-                vm.productSearchValues = products;
-            }
-
-            // If empty look out for conflicts
-            if (vm.productSearchValues.length === 0) {
-                var multipleMatch = data["DuplicateProducts"];
-                var duplicateProducts = multipleMatch[1];
-                for (var key in duplicateProducts) {
-                    vm.productSearchValues = duplicateProducts[key];
-                }
-            }
+            vm.productSearchValues = data;
 
             vm.errorMessage = vm.productSearchValues.length == 0 ? "Unable to match with a valid product. Click on Select to find products" : "";
             var productCategories = $filter('unique')(vm.productSearchValues, 'PRD_CAT_NM');
@@ -620,6 +650,10 @@
                     { name: item.name }, { name: item.vertical, path: item.verticalPath }];
 
                 var brandNames = $filter('where')(vm.productSearchValues, { 'PRD_CAT_NM': item.vertical });
+                if (brandNames.length == 1 && brandNames[0].PRD_ATRB_SID == 7003) {
+                    vm.selectPath(vm.selectedPathParts.length + 1);
+                    return;
+                }
                 brandNames = $filter('unique')(brandNames, 'BRND_NM');
                 vm.searchItems = brandNames.map(function (i) {
                     return {
@@ -636,11 +670,16 @@
             }
             if (item.level == "Brand") {
                 vm.selectedPathParts.push(item);
+
                 var familyNames = $filter('where')(vm.productSearchValues,
                     { 'PRD_CAT_NM': item.vertical, 'BRND_NM': item.name });
 
-                var familyNames = $filter('unique')(familyNames, 'FMLY_NM');
+                if (familyNames.length == 1 && familyNames[0].PRD_ATRB_SID == 7004) {
+                    vm.selectPath(vm.selectedPathParts.length + 1);
+                    return;
+                }
 
+                var familyNames = $filter('unique')(familyNames, 'FMLY_NM');
                 vm.searchItems = familyNames.map(function (i) {
                     return {
                         name: i.FMLY_NM,
@@ -656,13 +695,32 @@
                 return;
             }
             if (item.level == "Family") {
+                vm.selectedPathParts.push({ name: item.name, path: item.path });
+
                 // Filter the search results based on the hierarchy
                 var products = $filter('where')(vm.productSearchValues,
                    { 'PRD_CAT_NM': item.vertical, 'FMLY_NM': item.name, 'BRND_NM': item.brand });
 
-                // Due to  bug in product translation will not be able to further drill down to next level,
-                // hence currently showing all L4 for the hierarchy
-                vm.selectedPathParts.push({ name: item.name, path: item.path });
+                if (products.length == 1 && products[0].PRD_ATRB_SID == 7005) {
+                    vm.selectPath(vm.selectedPathParts.length + 1);
+                    return;
+                }
+
+                if (products.length == 1 && products[0].PRD_ATRB_SID > 7006) {
+                    vm.selectedPathParts.push({
+                        name: products[0].PCSR_NBR, path: products[0].DEAL_PRD_TYPE + "/"
+                            + products[0].PRD_CAT_NM + "/" + products[0].BRND_NM + "/" + products[0].FMLY_NM + "/" + products[0].PCSR_NBR + "/"
+                    });
+                }
+
+                if (products.length == 1 && products[0].PRD_ATRB_SID > 7007) {
+                    vm.selectedPathParts.push({
+                        name: products[0].DEAL_PRD_NM, path: products[0].DEAL_PRD_TYPE + "/"
+                            + products[0].PRD_CAT_NM + "/" + products[0].BRND_NM + "/" + products[0].FMLY_NM + "/"
+                            + products[0].PCSR_NBR + "/" + products[0].DEAL_PRD_NM + "/"
+                    });
+                }
+
                 vm.gridData = products;
                 dataSourceProduct.read();
                 vm.searchItems = [];

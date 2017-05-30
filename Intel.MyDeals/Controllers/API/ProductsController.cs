@@ -414,6 +414,15 @@ namespace Intel.MyDeals.Controllers.API
             );
         }
 
+        [Route("SuggestProductsByDates")]
+        [HttpPost]
+        public List<Product> FindSuggestedProductByDates([FromBody]dynamic input)
+        {
+            return SafeExecutor(() => _productsLib.SuggestProductsByDates((string)input.prdEntered, (int?)input.returnMax, (DateTime)input.startDate, (DateTime)input.endDate)
+                , $"Unable to Suggest Products 3"
+            );
+        }
+
         /// <summary>
         /// Get Product selection levels
         /// </summary>

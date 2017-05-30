@@ -8,8 +8,8 @@
                 <img ng-if="loading" src="/Images/loadingSmall.gif" />
             </div>
             <div class="col-md-5 prodSelectorSearch">
-                <input type="search" ng-keyup="$event.keyCode == 13 ? vm.searchProduct() : null" class="form-control fl input-sm opUiElement"
-                       ng-model="vm.userInput" placeholder="Search for products:" />
+                <input id="productSearch" class="prod-autocomplete form-control fl input-sm opUiElement" ng-model="vm.userInput" ng-keyup="$event.keyCode == 13 ? vm.searchProduct() : null" type="text" kendo-autocomplete k-options="vm.productOptions"
+                       k-data-value-field="'PRD_MBR_SID'" />
                 <div class="err-Search" ng-if="vm.errorMessage.length > 0">
                     {{vm.errorMessage}}
                 </div>
@@ -102,8 +102,13 @@
     }
 
     .prodSelectorSearch {
-        padding-top: 8px;
+        padding-top: 9px;
         overflow: hidden;
+    }
+
+    .prodSelectorSearch .prod-autocomplete{
+        padding-top:0px;
+        padding-bottom:0px;
     }
 
     .textProdSelector {
@@ -333,5 +338,9 @@
 
     .prodSelector-grid.k-grid .k-grid-header th.k-header {
         vertical-align: middle;
+    }
+
+    .productSelector.searchTemplate{
+        border-bottom: 1px solid #ddd
     }
 </style>

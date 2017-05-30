@@ -61,6 +61,11 @@ namespace Intel.MyDeals.BusinessLogic
             return _dataCollectionsDataLib.GetProductData();
         }
 
+        public List<Product> GetProductsDetailsByDates(DateTime startDate, DateTime endDate)
+        {
+            return _dataCollectionsDataLib.GetProductData().Where(x => x.PRD_STRT_DTM <= endDate && x.PRD_END_DTM >= startDate).ToList();
+        }
+
         /// <summary>
         /// Get specific Product
         /// </summary>
@@ -89,9 +94,9 @@ namespace Intel.MyDeals.BusinessLogic
         {
             if (!getCachedResult)
             {
-                return GetProducts(getCachedResult).Where(c => c.PRD_CATGRY_NM.Contains(name)).ToList();
+                return GetProducts(getCachedResult).Where(c => c.PRD_CAT_NM.Contains(name)).ToList();
             }
-            return GetProducts().Where(c => c.PRD_CATGRY_NM.Contains(name)).ToList();
+            return GetProducts().Where(c => c.PRD_CAT_NM.Contains(name)).ToList();
         }
 
         /// <summary>
@@ -101,7 +106,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns>list of Product data matching specified Product category sid</returns>
         public List<Product> GetProductByCategorySid(int sid)
         {
-            return GetProducts().Where(c => c.PRD_CATGRY_NM_SID == sid).ToList();
+            return GetProducts().Where(c => c.PRD_CAT_NM_SID == sid).ToList();
         }
 
         /// <summary>
@@ -151,7 +156,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns>list of Product data containing specified Product Processor Number name</returns>
         public List<Product> GetProductByProcessorNumberName(string name)
         {
-            return GetProducts().Where(c => c.PRCSSR_NBR.Contains(name)).ToList();
+            return GetProducts().Where(c => c.PCSR_NBR.Contains(name)).ToList();
         }
 
         /// <summary>
@@ -161,7 +166,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns>list of Product data matching specified Product Processor Number sid</returns>
         public List<Product> GetProductByProcessorNumberSid(int sid)
         {
-            return GetProducts().Where(c => c.PRCSSR_NBR_SID == sid).ToList();
+            return GetProducts().Where(c => c.PCSR_NBR_SID == sid).ToList();
         }
 
         /// <summary>
@@ -382,10 +387,10 @@ namespace Intel.MyDeals.BusinessLogic
                 var validProducts = productMatchResults.Where(p => !duplicateProds.Contains(p.USR_INPUT)
                                                             && tranlatedProducts.Any(t => t.Equals(p.USR_INPUT, StringComparison.InvariantCultureIgnoreCase)));
 
-                var isConflictValid = from p in validProducts                                  
-                                        group p by p.USR_INPUT                                      
+                var isConflictValid = from p in validProducts
+                                      group p by p.USR_INPUT
                                         into d
-                                        select d.Key;
+                                      select d.Key;
                 if (isConflictValid.Any())
                 {
                     var validProduct = productMatchResults.FindAll(p => isConflictValid.Contains(p.USR_INPUT));
@@ -393,7 +398,6 @@ namespace Intel.MyDeals.BusinessLogic
                     isConflictValid.ToList().ForEach(d => validRecords[d] = new List<PRD_LOOKUP_RESULTS>());
                     validProduct.ForEach(r => validRecords[r.USR_INPUT].Add(r));
                     productLookup.ValidProducts[userProduct.Key] = validRecords;
-
                 }
 
                 productLookup.InValidProducts[userProduct.Key] = new List<string>();
@@ -446,7 +450,7 @@ namespace Intel.MyDeals.BusinessLogic
                 if (m.Groups[1].Value == "") return m.Groups[0].Value;
                 else return "~";
             });
-            
+
             // Replace comma product separator
             var replaceCommaRegex = new Regex(@"\([^\)]*\)|(,)");
             var replaceComma = replaceCommaRegex.Replace(replaceSlash, delegate (Match m)
@@ -630,7 +634,13 @@ namespace Intel.MyDeals.BusinessLogic
 
         #region Suggest Products
 
-        public List<Product> SuggestProducts(string prdEntered, int? returnMax)
+        /// <summary>
+        /// TODO: Remove this method once corrector also starts using this method for suggestion
+        /// </summary>
+        /// <param name="prdEntered"></param>
+        /// <param name="returnMax"></param>
+        /// <returns></returns>
+        public List<Product> SuggestProducts(string prdEntered, int? returnMax, IList<Product> prds = null)
         {
             const int defaultReturnedMaxRecords = 5;
 
@@ -644,43 +654,16 @@ namespace Intel.MyDeals.BusinessLogic
             Regex regex = new Regex(pattern, RegexOptions.IgnoreCase);
 
             // this takes time if it is the first time to load into cache
-            List<Product> prds = GetProductsDetails();
+            if (prds == null)
+            {
+                prds = GetProductsDetails();
+            }
 
             IEnumerable<ProductHash> hashPrds = from prd in prds
                                                 select new ProductHash
                                                 {
                                                     Id = prd.PRD_MBR_SID,
-                                                    HashName = prd.DEAL_PRD_TYPE
-                                                   + (prd.BRND_NM == string.Empty ? "" : " " + prd.BRND_NM)
-                                                   + (prd.CPU_CACHE == string.Empty ? "" : " " + prd.CPU_CACHE)
-                                                   + (prd.CPU_PACKAGE == string.Empty ? "" : " " + prd.CPU_PACKAGE)
-                                                   + (prd.CPU_PROCESSOR_NUMBER == string.Empty ? "" : " " + prd.CPU_PROCESSOR_NUMBER)
-                                                   + (prd.CPU_VOLTAGE_SEGMENT == string.Empty ? "" : " " + prd.CPU_VOLTAGE_SEGMENT)
-                                                   + (prd.CPU_WATTAGE == string.Empty ? "" : " " + prd.CPU_WATTAGE)
-                                                   + (prd.DEAL_PRD_NM == string.Empty ? "" : " " + prd.DEAL_PRD_NM)
-                                                   + (prd.DEAL_PRD_TYPE == string.Empty ? "" : " " + prd.DEAL_PRD_TYPE)
-                                                   + (prd.EFF_FR_DTM == string.Empty ? "" : " " + prd.EFF_FR_DTM)
-                                                   + (prd.EPM_NM == string.Empty ? "" : " " + prd.EPM_NM)
-                                                   + (prd.FMLY_NM == string.Empty ? "" : " " + prd.FMLY_NM)
-                                                   + (prd.FMLY_NM_MM == string.Empty ? "" : " " + prd.FMLY_NM_MM)
-                                                   + (prd.GDM_BRND_NM == string.Empty ? "" : " " + prd.GDM_BRND_NM)
-                                                   + (prd.GDM_FMLY_NM == string.Empty ? "" : " " + prd.GDM_FMLY_NM)
-                                                   + (prd.HIER_NM_HASH == string.Empty ? "" : " " + prd.HIER_NM_HASH)
-                                                   + (prd.HIER_VAL_NM == string.Empty ? "" : " " + prd.HIER_VAL_NM)
-                                                   + (prd.KIT_NM == string.Empty ? "" : " " + prd.KIT_NM)
-                                                   + (prd.MTRL_ID == string.Empty ? "" : " " + prd.MTRL_ID)
-                                                   + (prd.NAND_DENSITY == string.Empty ? "" : " " + prd.NAND_DENSITY)
-                                                   + (prd.NAND_FAMILY == string.Empty ? "" : " " + prd.NAND_FAMILY)
-                                                   + (prd.PRCSSR_NBR == string.Empty ? "" : " " + prd.PRCSSR_NBR)
-                                                   + (prd.PRD_ATRB_SID == prd.PRD_ATRB_SID)
-                                                   + (prd.PRD_CATGRY_NM == string.Empty ? "" : " " + prd.PRD_CATGRY_NM)
-                                                   + (prd.PRD_END_DTM == prd.PRD_END_DTM)
-                                                   + (prd.PRD_MBR_SID == prd.PRD_MBR_SID)
-                                                   + (prd.PRD_STRT_DTM == prd.PRD_STRT_DTM)
-                                                   + (prd.PRICE_SEGMENT == string.Empty ? "" : " " + prd.PRICE_SEGMENT)
-                                                   + (prd.SBS_NM == string.Empty ? "" : " " + prd.SBS_NM)
-                                                   + (prd.SKU_MARKET_SEGMENT == string.Empty ? "" : " " + prd.SKU_MARKET_SEGMENT)
-                                                   + (prd.SKU_NM == string.Empty ? "" : " " + prd.SKU_NM)
+                                                    HashName = prd.HIER_VAL_NM
                                                 };
 
             List<NodeMatch> myMatches = new List<NodeMatch>();
@@ -783,6 +766,22 @@ namespace Intel.MyDeals.BusinessLogic
         public List<ProductCAPYCS2> GetProductCAPYCS2Data(List<ProductCAPYCS2Calc> productCAPCalc, string getAvailable, string priceCondition)
         {
             return _productDataLib.GetProductCAPYCS2Data(productCAPCalc, getAvailable, priceCondition);
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="prdEntered"></param>
+        /// <param name="returnMax"></param>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <returns></returns>
+        public List<Product> SuggestProductsByDates(string prdEntered, int? returnMax, DateTime startDate, DateTime endDate)
+        {
+            var products = GetProductsDetailsByDates(startDate, endDate);
+            var productNameFromAlias = GetProductsFromAlias().Where(x => x.PRD_ALS_NM == prdEntered);
+            prdEntered = productNameFromAlias.Any() ? productNameFromAlias.FirstOrDefault().PRD_NM : prdEntered;
+            return SuggestProducts(prdEntered, returnMax, products);
         }
     }
 

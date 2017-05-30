@@ -17,7 +17,8 @@
             GetProductSelectorWrapper: GetProductSelectorWrapper,
             TranslateProducts: TranslateProducts,
             GetProductDetails: GetProductDetails,
-            GetProductSelectionResults: GetProductSelectionResults
+            GetProductSelectionResults: GetProductSelectionResults,
+            GetProductSuggestions: GetProductSuggestions
         }
 
         return service;
@@ -50,6 +51,10 @@
 
         function GetProductSelectionResults(prodSelectionLevels) {
             return dataService.post(apiBaseUrl + 'GetProductSelectionResults', prodSelectionLevels);
+        }
+
+        function GetProductSuggestions(searchStringDto) {
+            return dataService.post(apiBaseUrl + 'SuggestProductsByDates', searchStringDto);
         }
     }
 })();

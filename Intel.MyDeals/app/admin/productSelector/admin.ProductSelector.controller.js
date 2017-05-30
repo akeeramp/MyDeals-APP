@@ -13,6 +13,13 @@
 
         //Product Selector Modal opener
         vm.openProdSelector = function (row) {
+            var pricingTableRow = {
+                'START_DT': $scope.contractData.START_DT, // Assuming this will have values always
+                'END_DT': $scope.contractData.END_DT,
+                'CUST_MBR_SID': $scope.contractData.CUST_MBR_SID,
+                'GEO_MBR_SID': $scope.contractData.GEO_MBR_SID.toString(),
+            };
+
             var modal = $uibModal.open({
                 backdrop: 'static',
                 templateUrl: 'app/contract/productSelector/productSelector.html',
@@ -25,17 +32,10 @@
                         var dtoDateRange = { startDate: $scope.contractData.START_DT, endDate: $scope.contractData.END_DT };
                         return ProductSelectorService.GetProductSelectorWrapper(dtoDateRange);
                     }],
-                    contractData: angular.copy($scope.contractData)
+                    contractData: angular.copy($scope.contractData),
+                    pricingTableRow: angular.copy(pricingTableRow)
                 }
             });
-
-            modal.result.then(
-                //close
-                function () {
-                    toastr.success("Products updated successfully.");
-                },
-                function () {
-                });
         }
 
         vm.closeModal = function () {
@@ -443,7 +443,11 @@
                 { field: "BRND_NM", template: " #= BRND_NM # ", title: "Brand Name", width: "200px" },
                 { field: "FMLY_NM", template: " #= FMLY_NM # ", title: "Family Name", width: "200px" },
                 { field: "PCSR_NBR", template: " #= PCSR_NBR # ", title: "Processor No", width: "200px" },
-                { field: "KIT_NM", template: " #= KIT_NM # ", title: "KIT Name", width: "200px" },
+                {
+                    field: "MTRL_ID",
+                    title: "Material Id",
+                    width: "150px"
+                },
                 {
                     field: "MM_CUST_CUSTOMER",
                     title: "MM Customer Name",
