@@ -46,7 +46,7 @@ namespace Intel.MyDeals.BusinessLogic.Test
         {
             string name = "NAND"; //TODO: replace with test data value
             IEnumerable<Product> results = new ProductsLib().GetProductByCategoryName(name);
-            Assert.IsTrue(results.Any() && results.Where(r => r.PRD_CATGRY_NM.Contains(name)).Count() == results.Count());
+            Assert.IsTrue(results.Any() && results.Where(r => r.PRD_CAT_NM.Contains(name)).Count() == results.Count());
         }
 
         [TestCase]
@@ -54,7 +54,7 @@ namespace Intel.MyDeals.BusinessLogic.Test
         {
             int sid = 9; //TODO: replace with test data value
             IEnumerable<Product> results = new ProductsLib().GetProductByCategorySid(sid);
-            Assert.IsTrue(results.Any() && results.Where(r => r.PRD_CATGRY_NM_SID == sid).Count() == results.Count());
+            Assert.IsTrue(results.Any() && results.Where(r => r.PRD_CAT_NM_SID == sid).Count() == results.Count());
         }
 
         [TestCase]
@@ -94,7 +94,7 @@ namespace Intel.MyDeals.BusinessLogic.Test
         {
             string name = "i7-6700K"; //TODO: replace with test data value
             IEnumerable<Product> results = new ProductsLib().GetProductByProcessorNumberName(name);
-            Assert.IsTrue(results.Any() && results.Where(r => r.PRCSSR_NBR.Contains(name)).Count() == results.Count());
+            Assert.IsTrue(results.Any() && results.Where(r => r.PCSR_NBR.Contains(name)).Count() == results.Count());
         }
 
         [TestCase]
@@ -102,7 +102,7 @@ namespace Intel.MyDeals.BusinessLogic.Test
         {
             int sid = 56345; //TODO: replace with test data value
             IEnumerable<Product> results = new ProductsLib().GetProductByProcessorNumberSid(sid);
-            Assert.IsTrue(results.Any() && results.Where(r => r.PRCSSR_NBR_SID == sid).Count() == results.Count());
+            Assert.IsTrue(results.Any() && results.Where(r => r.PCSR_NBR_SID == sid).Count() == results.Count());
         }
 
         [TestCase]
