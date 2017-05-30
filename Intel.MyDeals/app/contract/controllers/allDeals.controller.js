@@ -214,9 +214,6 @@ function AllDealsController($scope, $state, $stateParams, $filter, objsetService
 		        },
 		        "BACK_DATE_RSN": {
 		            "Groups": ["Backdate"]
-		        },
-		        "BACK_DATE_RSN_TXT": {
-		            "Groups": ["Backdate"]
 		        }
 		    };
 

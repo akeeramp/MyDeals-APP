@@ -1,4 +1,18 @@
-﻿<div id="secContainerWrapper" ng-show="isAddStrategyHidden && isAddPricingTableHidden">
+﻿<div ng-show="isBusy" class="ss-loading-overlay">
+    <div class="ss-loading-panel" style="text-align: center;">
+        <div class="spinner">
+            <div class="rect1"></div>
+            <div class="rect2"></div>
+            <div class="rect3"></div>
+            <div class="rect4"></div>
+            <div class="rect5"></div>
+        </div>
+        <h2 ng-bind="isBusyMsgTitle"></h2>
+        <p ng-bind="isBusyMsgDetail"></p>
+    </div>
+</div>
+
+<div id="secContainerWrapper" ng-show="isAddStrategyHidden && isAddPricingTableHidden">
     <div id="secHeader">
         <div ng-show="curPricingTableId > 0" class="contractStratHeader col-md-11" style="padding-bottom: 5px;">
             <div class="fl textCircleMd valid_{{ curPricingTable.PASSED_VALIDATION }}">{{ curPricingTable.OBJ_SET_TYPE_CD | limitTo:1 }}</div>
@@ -27,16 +41,7 @@
 
             <div>
                 <div ui-view="pricingTableView" class="fullHeight">
-                    <div class="jumbotron">
-                        <div class="container">
-                            <h1><strong>My</strong>Deals</h1>
-                            <p class="lead">Contract Manager.</p>
-                            <p ng-bind="contractData.displayTitle">
-                            <p>
-                                Welcome, use the left navigation to manage pricing strategies and pricing tables.
-                            </p>
-                        </div>
-                    </div>
+                    <div ng-include="'app/contract/partials/info.html'" style="overflow: auto !important;"></div>
                 </div>
             </div>
 

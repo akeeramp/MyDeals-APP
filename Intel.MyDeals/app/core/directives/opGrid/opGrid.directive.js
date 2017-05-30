@@ -377,9 +377,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
                         $scope.grid.closeCell();
                     }
                 },
-                dataBound: function () {
+                dataBound: function (e, f) {
                     if ($scope.curGroup === "") {
                         $scope.selectFirstTab();
+                        $scope.validateGrid();
                     }
                 }
             };
@@ -640,6 +641,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
             });
 
             $scope.increaseBadgeCnt = function(key) {
+                if ($scope.opOptions.groupColumns[key] === undefined) return;
                 for (var i = 0; i < $scope.opOptions.groupColumns[key].Groups.length; i++) {
                     for (var g = 0; g < $scope.opOptions.groups.length; g++) {
                         if ($scope.opOptions.groups[g].name === $scope.opOptions.groupColumns[key].Groups[i] || $scope.opOptions.groups[g].name === "All") {
@@ -704,16 +706,20 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
                 }
 
                 if (valid) {
-                    op.notifyInfo("Initial check looks good.  Validating Data.", "Validation Results");
                     $scope.$parent.$parent.$parent.validateWipDeals();
                 } else {
+                    $scope.$parent.$parent.$parent.setBusy("Validation Failed", "Looks like there are items that need to be fixed.");
                     op.notifyWarning("Looks like there are items that need to be fixed.", "Validation Results");
+                    $timeout(function () {
+                        $scope.$parent.$parent.$parent.setBusy("", "");
+                    }, 4000);
+
                 }
             }
 
             $scope.validateRow = function (row, scope) {
                 var valid = true;
-                if (row._behaviors === undefined) return true;
+                if (row._behaviors === undefined || row._behaviors.isError === undefined) return true;
 
                 var beh = row._behaviors;
                 if (beh.isRequired === undefined) beh.isRequired = {};
@@ -721,8 +727,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
                 if (beh.isHidden === undefined) beh.isHidden = {};
 
                 // clear validation for this row
-                beh.isError = {};
-                beh.validMsg = {};
+                //beh.isError = {};
+                //beh.validMsg = {};
 
                 // check for required fields
                 //angular.forEach(beh.isRequired, function (value, key) {
@@ -741,6 +747,19 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
                 //        row["PASSED_VALIDATION"] = "Dirty";
                 //    }
                 //}, scope);
+
+                // check for errors
+                //debugger;
+                angular.forEach(beh.isError, function (value, key) {
+                    if ((beh.isReadOnly[key] === undefined || !beh.isReadOnly[key]) && (beh.isHidden[key] === undefined || !beh.isHidden[key])) {
+                        $scope.increaseBadgeCnt(key);
+                        valid = false;
+                        row["PASSED_VALIDATION"] = "Dirty";
+                    } else {
+                        beh.isError[key] = false;
+                        beh.validMsg[key] = false;
+                    }
+                }, scope);
 
                 return valid;
             }

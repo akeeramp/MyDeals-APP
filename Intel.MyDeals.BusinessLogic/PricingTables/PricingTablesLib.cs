@@ -36,7 +36,7 @@ namespace Intel.MyDeals.BusinessLogic
 
         public OpDataCollectorFlattenedDictList GetFullNestedPricingTable(int id)
         {
-            MyDealsData myDealsData = GetPricingTable(id, true);
+            MyDealsData myDealsData = GetPricingTable(id, true).FillInHolesFromAtrbTemplate();
 
             OpDataCollectorFlattenedDictList data = new OpDataCollectorFlattenedDictList();
 

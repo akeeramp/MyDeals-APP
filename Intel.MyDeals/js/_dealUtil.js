@@ -68,7 +68,6 @@ dealUtil.init = function () {
         HasFiles: { type: 'string' },
         AuditHistory: { type: 'string' },
         BACK_DATE_RSN: { type: 'string' },
-        BACK_DATE_RSN_TXT: { type: 'string' },
         REBATE_BILLING_END: { type: 'date' },
         REBATE_BILLING_START: { type: 'date' },
         C2A_DATA_C2A_ID: { type: 'string' },
@@ -152,7 +151,6 @@ dealUtil.init = function () {
         { field: "TRKR_NBR", title: "Tracker Number", group: "Deal Common", encoded: true, locked: false, sortable: true, filterable: true, hidden: false, width: 130, editable: false },
         { field: "MRKT_SEG_COMBINED", title: "Market Segment", group: "Deal Common", encoded: true, locked: false, sortable: true, filterable: true, hidden: false, width: 200, editable: true },
         { field: "BACK_DATE_RSN", title: "Backdate Reason", group: "BackDate / Consumption", encoded: true, locked: false, sortable: true, filterable: true, hidden: false, width: 140, editable: true, editor: dealUtil.lookupEditor },
-        { field: "BACK_DATE_RSN_TXT", title: "Backdate Reason Text", group: "BackDate / Consumption", encoded: true, locked: false, sortable: true, filterable: true, hidden: false, width: 140, editable: true },
         { field: "PRD_NM_COMBINED", title: "Products", group: "All Deals", encoded: true, locked: false, sortable: true, filterable: true, hidden: false, width: 200, editable: true },
 
         {

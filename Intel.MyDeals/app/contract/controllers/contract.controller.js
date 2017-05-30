@@ -13,7 +13,9 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
         $scope.templates = $scope.templates || templateData.data;
         $scope.constants = contractManagerConstants;
         $scope.isContractDetailsPage = $state.current.name === $scope.constants.ContractDetails;
-        $scope.isSaving = false;
+        $scope.isBusy = false;
+        $scope.isBusyMsgTitle = "";
+        $scope.isBusyMsgDetail = "";
         $scope.stealthMode = false;
         $scope.messages = [];
         $scope.colToLetter = {};
@@ -83,6 +85,21 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
         }
         $scope.removeDimKeyFromWipTemplates();
 
+        $scope.setBusy = function (msg, detail) {
+            $timeout(function () {
+                $scope.isBusy = msg != undefined && msg !== "";
+                if ($scope.isBusy) {
+                    $scope.isBusyMsgTitle = msg;
+                    $scope.isBusyMsgDetail = !detail ? "" : detail;
+                } else {
+                    $timeout(function () {
+                        $scope.isBusyMsgTitle = msg;
+                        $scope.isBusyMsgDetail = !detail ? "" : detail;
+                    }, 500);
+                }
+            }, 10);
+
+        }
         // populate the contract data upon entry... If multiple controller instances are called, reference the initial instance
         //
         $scope.contractData = $scope.contractData || $scope.initContract(contractData);
@@ -145,8 +162,6 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
             // In case of existing contract back date reason and text is captured display them
             $scope.contractData._behaviors.isRequired["BACK_DATE_RSN"] = $scope.contractData.BACK_DATE_RSN !== "";
             $scope.contractData._behaviors.isHidden["BACK_DATE_RSN"] = $scope.contractData.BACK_DATE_RSN === "";
-            $scope.contractData._behaviors.isRequired["BACK_DATE_RSN_TXT"] = $scope.contractData.BACK_DATE_RSN_TXT !== "";
-            $scope.contractData._behaviors.isHidden["BACK_DATE_RSN_TXT"] = $scope.contractData.BACK_DATE_RSN_TXT === "";
 
             // By default set the CUST_ACCPT to pending(99) if new contract
             $scope.contractData.CUST_ACCPT = $scope.contractData.CUST_ACCPT == "" ? 99 : $scope.contractData.CUST_ACCPT;
@@ -394,7 +409,6 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                 } else {
                     $scope.contractData._behaviors.isHidden["BACK_DATE_RSN"] = true;
                     $scope.contractData._behaviors.isRequired["BACK_DATE_RSN"] = false;
-                    $scope.contractData._behaviors.isHidden["BACK_DATE_RSN_TXT"] = true;
                     $scope.contractData.BACK_DATE_RSN = "";
                 }
             }
@@ -657,13 +671,6 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                     isDuplicateContractTitle(newValue["TITLE"]);
                 }
 
-                if (oldValue["BACK_DATE_RSN"] !== newValue["BACK_DATE_RSN"]) {
-                    // other(106) reason selected
-                    $scope.contractData._behaviors.isRequired["BACK_DATE_RSN_TXT"] = (newValue["BACK_DATE_RSN"] == 106);
-                    $scope.contractData._behaviors.isHidden["BACK_DATE_RSN_TXT"] = (newValue["BACK_DATE_RSN"] != 106);
-                    if (newValue["BACK_DATE_RSN"] != 106) $scope.contractData.BACK_DATE_RSN_TXT = "";
-                }
-
                 if (oldValue["CUST_ACCPT"] !== newValue["CUST_ACCPT"]) {
                     setCustAcceptanceRules(newValue["CUST_ACCPT"]);
                 }
@@ -861,7 +868,8 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
         }
 
 
-        $scope.actionPricingStrategy = function(ps, actn) {
+        $scope.actionPricingStrategy = function (ps, actn) {
+            $scope.setBusy("Updating Pricing Strategy...", "Please wait as we update the Pricing Strategy!");
             objsetService.actionPricingStrategy($scope.getCustId(), ps, actn).then(
                 function (data) {
                     $scope.messages = data.data.Messages;
@@ -870,15 +878,17 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                         $scope.$broadcast('refresh');
                         $("#wincontractMessages").data("kendoWindow").open();
                         if (ps !== undefined) $scope.refreshContractData(ps.DC_ID);
+                        $scope.setBusy("", "");
                     }, 50);
                 },
                 function(result) {
-                    debugger;
+                    $scope.setBusy("", "");
                 }
             );
         }
 
         $scope.actionPricingStrategies = function (data) {
+            $scope.setBusy("Updating Pricing Straties...", "Please wait as we update the Pricing Strategy!");
             objsetService.actionPricingStrategies($scope.getCustId(), data).then(
                 function (data) {
                     $scope.messages = data.data.Messages;
@@ -887,6 +897,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                         $scope.$broadcast('refresh');
                         $("#wincontractMessages").data("kendoWindow").open();
                         $scope.refreshContractData();
+                        $scope.setBusy("", "");
                     }, 50);
                 },
                 function (result) {
@@ -900,32 +911,39 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
         $scope.deletePricingStrategy = function(ps) {
             kendo.confirm("Are you sure that you want to delete this pricing strategy?").then(function() {
                 $scope.$apply(function() {
+                    $scope.setBusy("Deleting...", "Deleting the Pricing Strategy");
                     topbar.show();
                     // Remove from DB first... then remove from screen
                     objsetService.deletePricingStrategy($scope.getCustId(), ps).then(
                         function(data) {
                             if (data.data.MsgType !== 1) {
-                                logger.warning("Unable to Deleted the Pricing Strategy", ps, "Delete Failed");
+                                $scope.setBusy("Delete Failed", "Unable to Deleted the Pricing Strategy");
+                                $timeout(function () {
+                                    $scope.setBusy("", "");
+                                }, 4000);
                                 return;
                             }
 
-                        var deleteReload = false;
-                        if ($scope.curPricingTableId > 0) {
-                            deleteReload = true;
-                        }
+                            var deleteReload = false;
+                            if ($scope.curPricingTableId > 0) {
+                                deleteReload = true;
+                            }
 
-                        // might need to unmark the current selected item
-                        $scope.unmarkCurPricingStrategyIf(ps.DC_ID);
-                        $scope.unmarkCurPricingTableIf(ps.DC_ID);
+                            // might need to unmark the current selected item
+                            $scope.unmarkCurPricingStrategyIf(ps.DC_ID);
+                            $scope.unmarkCurPricingTableIf(ps.DC_ID);
 
                             // delete item
                             $scope.contractData.PRC_ST.splice($scope.contractData.PRC_ST.indexOf(ps), 1);
 
                         // hide PT defaults editor regardless of whether you deleted the one being edited - ideally we will only hide if deleting the one being edited but this behavior is fine for the time being
-                        $scope.hideEditPricingTableDefaults()
+                            $scope.hideEditPricingTableDefaults();
 
-                        logger.success("Deleted the Pricing Strategy", ps, "Delete Sucessful");
-                        topbar.hide();
+                            $scope.setBusy("Delete Successful", "Deleted the Pricing Strategy");
+                            $timeout(function () {
+                                $scope.setBusy("", "");
+                            }, 4000);
+                            topbar.hide();
 
                         // redirect if focused PT belongs to deleted PS
                         if (deleteReload) {
@@ -933,10 +951,12 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                                 cid: $scope.contractData.DC_ID
                             }, { reload: true });
                         }
+
                     },
                     function (result) {
                         logger.error("Could not delete the Pricing Strategy.", result, result.statusText);
                         topbar.hide();
+                        $scope.setBusy("", "");
                     }
                     );
                 });
@@ -946,16 +966,20 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
             kendo.confirm("Are you sure that you want to delete this pricing table?").then(function() {
                 $scope.$apply(function() {
                     topbar.show();
+                    $scope.setBusy("Deleting...", "Deleting the Pricing Table");
                     // Remove from DB first... then remove from screen
                     objsetService.deletePricingTable($scope.getCustId(), pt).then(
                         function(data) {
                             if (data.data.MsgType !== 1) {
-                                logger.warning("Unable to Deleted the Pricing Table", pt, "Delete Failed");
+                                $scope.setBusy("Delete Failed", "Unable to Deleted the Pricing Table");
+                                $timeout(function () {
+                                    $scope.setBusy("", "");
+                                }, 4000);
                                 return;
                             }
 
                             var deleteReload = false;
-                            if ($scope.curPricingTableId == pt.DC_ID) {
+                            if ($scope.curPricingTableId === pt.DC_ID) {
                                 deleteReload = true;
                             }
 
@@ -968,7 +992,10 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                             // hide PT defaults editor regardless of whether you deleted the one being edited - ideally we will only hide if deleting the one being edited but this behavior is fine for the time being
                             $scope.hideEditPricingTableDefaults();
 
-                            logger.success("Deleted the Pricing Table", pt, "Save Sucessful");
+                            $scope.setBusy("Delete Successful", "Deleted the Pricing Table");
+                            $timeout(function () {
+                                $scope.setBusy("", "");
+                            }, 4000);
                             topbar.hide();
 
                             // redirect if deleted the currently focused PT
@@ -1056,7 +1083,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                     }
 
                     for (var s = 0; s < sData.length; s++) {
-                        if (sData[s].DC_ID === null) sData[s].DC_ID = $scope.uid--;
+                        if (sData[s].DC_ID === null || sData[s].DC_ID === 0) sData[s].DC_ID = $scope.uid--;
                         sData[s].DC_PARENT_ID = curPricingTableData[0].DC_ID;
                         sData[s].dc_type = "PRC_TBL_ROW";
                         sData[s].dc_parent_type = curPricingTableData[0].dc_type;
@@ -1064,6 +1091,9 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
 
                         if (!sData[s].START_DT || sData[s].START_DT === "") sData[s].START_DT = $scope.contractData["START_DT"];
                         if (!sData[s].END_DT || sData[s].END_DT === "") sData[s].END_DT = $scope.contractData["END_DT"];
+
+                        // Let's store the backdate rns from the contract in the text field so we can leverage it in rules
+                        sData[s].BACK_DATE_RSN_TXT = $scope.contractData.BACK_DATE_RSN;
 
                         // fix date formats
                         for (var d = 0; d < dateFields.length; d++) {
@@ -1131,7 +1161,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                 if (gData !== undefined && gData !== null) {
                     for (var i = 0; i < gData.length; i++) {
                         // TODO... this should probably mimic Pricing Table Rows
-                        if (gData[i].DC_ID === null) gData[i].DC_ID = $scope.uid--;
+                        if (gData[i].DC_ID === null || gData[i].DC_ID === 0) gData[i].DC_ID = $scope.uid--;
                     }
                 }
             }
@@ -1176,7 +1206,6 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
             }
         }
         
-
         $scope.validateTitles = function () {
             var rtn = true;
 
@@ -1210,16 +1239,25 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
         // **** SAVE CONTRACT Methods ****
         //
         $scope.saveEntireContractBase = function (stateName, forceValidation, forcePublish, toState, toParams) {
-            // async save data
-            topbar.show();
+            // if save already started saving... exit
+            if (!!$scope.isBusyMsgTitle && $scope.isBusyMsgTitle !== "") return;
 
             if (forceValidation === undefined || forceValidation === null) forceValidation = false;
             if (forcePublish === undefined || forcePublish === null) forcePublish = false;
 
+            if (forceValidation) {
+                $scope.setBusy("Validation your data...", "Please wait as we validate your information!");
+            } else {
+                $scope.setBusy("Saving your data...", "Please wait as we save your information!");
+            }
+
+            // async save data
+            topbar.show();
+
             $scope.clearValidations();
 
             if (!$scope.validateTitles()) {
-                $scope.isSaving = false;
+                $scope.setBusy("", "");
                 topbar.hide();
 
                 var msg = [];
@@ -1235,17 +1273,15 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
             if (!!data.errors) {
                 logger.warning("Errors prevent anything from being saved", $scope.contractData, "Unable to Save");
                 $scope.syncCellsOnAllRows($scope.pricingTableData["PRC_TBL_ROW"]);
-                $scope.isSaving = false;
+                $scope.setBusy("", "");
                 topbar.hide();
                 return;
             }
             
-            $scope.isSaving = true;
-
             objsetService.updateContractAndCurPricingTable($scope.getCustId(), data, forceValidation, forcePublish).then(
                 function (results) {
-                    var i = 0;
-                    $scope.isSaving = false;
+                    var i;
+                    $scope.setBusy("Saving your data...Done", "Processing results now!");
 
                     var anyWarnings = false;
 
@@ -1268,20 +1304,32 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                     topbar.hide();
 
                     if (!anyWarnings) {
+                        $scope.setBusy("Save Successful", "Saved the contract");
                         $scope.resetDirty();
                         $scope.$broadcast('saveComplete', results);
-                        logger.success("Saved the contract", $scope.contractData, "Save Successful");
-                        if (toState !== undefined) $state.go(toState, toParams, { reload: true });
+                        if (toState !== undefined) {
+                            $state.go(toState, toParams, { reload: true });
+                        } else {
+                            $timeout(function () {
+                                $scope.setBusy("", "");
+                            }, 2000);
+                        }
                     } else {
-                        logger.warning("Didn't pass Validation", $scope.contractData, "Saved with warnings");
+                        $scope.setBusy("Saved with warnings", "Didn't pass Validation");
                         $scope.$broadcast('saveWithWarnings', results);
+                        $timeout(function () {
+                            $scope.setBusy("", "");
+                        }, 4000);
                     }
 
                 },
                 function(response) {
-                    $scope.isSaving = false; 
+                    $scope.setBusy("Error", "Could not save the contract.");
                     logger.error("Could not save the contract.", response, response.statusText);
                     topbar.hide();
+                    $timeout(function () {
+                        $scope.setBusy("", "");
+                    }, 2000);
                 }
             );
         }
@@ -1365,6 +1413,8 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
 
         $scope.clearValidations = function () {
             var spreadsheet = $("#pricingTableSpreadsheet").data("kendoSpreadsheet");
+            if (!spreadsheet) return;
+
             var sheet = spreadsheet.activeSheet();
             var rowsCount = sheet._rows._count;
 
@@ -1475,6 +1525,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
 
         $scope.saveContract = function() {
             topbar.show();
+            $scope.setBusy("Saving Contract", "Saving the Contract Information");
 
             // Contract Data
             var ct = $scope.contractData;
@@ -1489,12 +1540,15 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
 
                     //Check for errors
                     if (!$scope.checkForMessages(ct, "CNTRCT", data)) {
-                        logger.error("Could not create the contract.", data, "Save unsuccessful");
                         topbar.hide();
+                        $scope.setBusy("Save unsuccessful", "Could not create the contract");
+                        $timeout(function () {
+                            $scope.setBusy("", "");
+                        }, 4000);
                         return;
                     };
 
-                    logger.success("Saved the contract", ct, "Save Sucessful");
+                    $scope.setBusy("Save Successful", "Saved the contract");
                     topbar.hide();
 
                     if (hasUnSavedFiles) {
@@ -1509,9 +1563,11 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                                 { reload: true });
                         });
                     }
+                    $scope.setBusy("", "");
                 },
                 function(result) {
                     logger.error("Could not create the contract.", result, result.statusText);
+                    $scope.setBusy("", "");
                     topbar.hide();
                 }
             );
@@ -1583,6 +1639,9 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
     $scope.newStrategy = util.clone($scope.templates.ObjectTemplates.PRC_ST.ALL_TYPES);
     $scope.addPricingStrategy = function () {
         topbar.show();
+
+        $scope.setBusy("Saving...", "Saving the Pricing Strategy");
+
         var ct = $scope.contractData;
 
         // Clone base model and populate changesmod
@@ -1601,13 +1660,17 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                     $scope.contractData.PRC_ST.push(ps);
                     $scope.showAddPricingTable(ps);
                     $scope.addStrategyDisabled = false;
-                    logger.success("Added Pricing Strategy", ps, "Save Sucessful");
                     topbar.hide();
+                    $scope.setBusy("Save Successful", "Added Pricing Strategy");
+                    $timeout(function () {
+                        $scope.setBusy("", "");
+                    }, 2000);
                     $scope.newStrategy.TITLE = "";
                 },
                 function (result) {
                     $scope.addStrategyDisabled = false;
                     logger.error("Could not create the pricing strategy.", response, response.statusText);
+                    $scope.setBusy("", "");
                     topbar.hide();
                 }
             );
@@ -1665,6 +1728,8 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
     $scope.addPricingTable = function () {
         topbar.show();
 
+        $scope.setBusy("Saving...", "Saving Pricing Table");
+
         // Clone base model and populate changes
         var pt = util.clone($scope.templates.ObjectTemplates.PRC_TBL[$scope.newPricingTable.OBJ_SET_TYPE_CD]);
         pt.DC_ID = $scope.uid--;
@@ -1679,11 +1744,9 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                 }
             }
             for (var atrb in $scope.newPricingTable._defaultAtrbs) {
-                if ($scope.newPricingTable._defaultAtrbs
-                    .hasOwnProperty(atrb) &&
-                    pt
-                    .hasOwnProperty(atrb)) {
-//note: if in future we give these two objects overlapping properties, then we may get unwanted overwriting here.
+                if ($scope.newPricingTable._defaultAtrbs.hasOwnProperty(atrb) &&
+                    pt.hasOwnProperty(atrb)) {
+                    //note: if in future we give these two objects overlapping properties, then we may get unwanted overwriting here.
                     if (Array.isArray($scope.newPricingTable._defaultAtrbs[atrb].value)) {
                         //Array, Middle Tier expects a comma separated string
                         pt[atrb] = $scope.newPricingTable._defaultAtrbs[atrb].value.join();
@@ -1699,27 +1762,18 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
             function (data) {
                 $scope.updateResults(data.data.PRC_TBL, pt);
 
-                    //// NOTE: the below commented out code does nothing now because the #state.go's reload will reload the scope anyways
-                    //if ($scope.curPricingStrategy.PRC_TBL === undefined) $scope.curPricingStrategy.PRC_TBL = [];
-                    //$scope.curPricingStrategy.PRC_TBL.push(pt);
-                    //$scope.hideAddPricingTable();
-
-                    //$scope.curPricingTable = pt;
-                    //$scope.curPricingTableId = pt.DC_ID;
-
-                    logger.success("Added Pricing Table", pt, "Save Sucessful");
-                    $scope.addTableDisabled = false;
-                    topbar.hide();
-
                 // load the screen
                 $state.go('contract.manager.strategy', {
-                    cid: $scope.contractData.DC_ID, sid: pt.DC_PARENT_ID, pid: pt.DC_ID
+                    cid: $scope.contractData.DC_ID,
+                    sid: pt.DC_PARENT_ID,
+                    pid: pt.DC_ID
                 }, { reload: true }); // HACK: workaorund for the bug where the "view more options" button is unclickable after saving
             },
             function (response) {
                 $scope.addTableDisabled = false;
                 logger.error("Could not create the pricing table.", response, response.statusText);
                 topbar.hide();
+                $scope.setBusy("", "");
             }
         );
     }
@@ -1761,7 +1815,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                 //var seeme = $scope.curPricingTable
                 //$scope.curPricingTableId = pt.DC_ID;
 
-                logger.success("Edited Pricing Table", pt, "Save Sucessful");
+                logger.success("Edited Pricing Table", pt, "Save Successful");
                 topbar.hide();
             },
             function (response) {
@@ -1909,14 +1963,16 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
 			        newValue["PAYOUT_BASED_ON"].value = "Billings"; //TODO: typo- need to correct to "Billing" in db
 			        newValue["MEET_COMP_PRICE_QSTN"].value = "Price";
 			        newValue["PROGRAM_PAYMENT"].value = "Backend";
-			    } else {
+			        newValue["PROD_INCLDS"].value = "Tray";
+                } else {
 			        newValue["ECAP_TYPE"].value = $scope.currentPricingTable["ECAP_TYPE"];
 			        newValue[MRKT_SEG].value = $scope.currentPricingTable[MRKT_SEG].split(',');
 			        newValue[GEO].value = $scope.currentPricingTable[GEO].split(',');
 			        newValue["PAYOUT_BASED_ON"].value = $scope.currentPricingTable["PAYOUT_BASED_ON"];
 			        newValue["MEET_COMP_PRICE_QSTN"].value = $scope.currentPricingTable["MEET_COMP_PRICE_QSTN"];
 			        newValue["PROGRAM_PAYMENT"].value = $scope.currentPricingTable["PROGRAM_PAYMENT"];
-			    }
+			        newValue["PROD_INCLDS"].value = $scope.currentPricingTable["PROD_INCLDS"];
+                }
 			} else {
 				// TODO: Hook these up to service (add service into injection and physical files)
 				newValue[MRKT_SEG].value = MrktSegMultiSelectService.setMkrtSegMultiSelect(MRKT_SEG, (MRKT_SEG + "_MS"), newValue[MRKT_SEG].value, oldValue[MRKT_SEG].value);

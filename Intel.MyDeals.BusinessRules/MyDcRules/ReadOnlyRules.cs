@@ -91,6 +91,7 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.YCS2_END_DT,
                                 AttributeCodes.CAP_STRT_DT,
                                 AttributeCodes.CAP_END_DT,
+                                AttributeCodes.VOLUME,
                                 AttributeCodes.TERMS
                             }
                         }
@@ -98,17 +99,17 @@ namespace Intel.MyDeals.BusinessRules
                 },
                 new MyOpRule
                 {
-                    Title="Readonly if in the past",
+                    Title="Readonly backdate if in the past",
                     ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnReadonly},
                     InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
-                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.END_DT) && !de.IsDateInPast()).Any(),
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.START_DT) && !de.IsDateInPast()).Any(),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = BusinessLogicDeActions.SetReadOnly,
-                            Target = new[] {AttributeCodes.BACK_DATE_RSN, AttributeCodes.BACK_DATE_RSN_TXT}
+                            Target = new[] {AttributeCodes.BACK_DATE_RSN}
                         }
                     }
                 },

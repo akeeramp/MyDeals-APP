@@ -310,6 +310,17 @@ gridTools.prototype.getIndexById = function (id, source) {
     return null;
 }
 
+gridTools.prototype.getIndexByDcId = function (id, source) {
+    var l = source.length;
+
+    for (var j = 0; j < l; j++) {
+        if (source[j].DC_ID === id) {
+            return j;
+        }
+    }
+    return null;
+}
+
 gridTools.prototype.stripBlanks = function (data) {
     return data.filter(function (el) {
         return el.value !== "";
@@ -370,7 +381,7 @@ gridTools.prototype.createDataSource = function (parentSource, pageSize) {
                 // locate item in original datasource and update it
                 for (var i = 0; i < e.data.models.length; i++) {
                     var item = e.data.models[i];
-                    source[gTools.getIndexById(item.DC_ID, source)] = item;
+                    source[gTools.getIndexByDcId(item.DC_ID, source)] = item;
                 }
                 // on success
                 e.success();
@@ -381,7 +392,10 @@ gridTools.prototype.createDataSource = function (parentSource, pageSize) {
                 var source = parentSource;
 
                 // locate item in original datasource and remove it
-                source.splice(gTools.getIndexById(e.data.DC_ID, source), 1);
+                for (var i = 0; i < e.data.models.length; i++) {
+                    var item = e.data.models[i];
+                    source.splice(gTools.getIndexByDcId(item.DC_ID, source), 1);
+                }
                 // on success
                 e.success();
                 // on failure

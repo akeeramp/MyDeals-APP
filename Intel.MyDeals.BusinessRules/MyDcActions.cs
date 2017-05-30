@@ -54,7 +54,28 @@ namespace Intel.MyDeals.BusinessRules
                 item[AttributeCodes.REBATE_BILLING_END] = dcItemEn;
             }
 
+            // Additive
+            if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.DEAL_COMB_TYPE)))
+            {
+                item[AttributeCodes.DEAL_COMB_TYPE] = "Additive";
+            }
 
+            // Consumption Reason
+            if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.CONSUMPTION_REASON)))
+            {
+                item[AttributeCodes.CONSUMPTION_REASON] = "None";
+            }
+
+            // Check for backdate Reason
+            IOpDataElement deStr = r.Dc.GetDataElement(AttributeCodes.START_DT);
+            string dcPrevStStr = r.Dc.GetDataElement(AttributeCodes.START_DT).PrevAtrbValue.ToString();
+            string dcPrevSt = string.IsNullOrEmpty(dcPrevStStr) ? "" : DateTime.Parse(dcPrevStStr).ToString("MM/dd/yyyy");
+            if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.BACK_DATE_RSN)) && deStr.IsDateInPast() && dcPrevSt != dcSt)
+            {
+                IOpDataElement deContractRsn = r.Dc.GetDataElement(AttributeCodes.BACK_DATE_RSN);
+                string strContractRsn = item[AttributeCodes.BACK_DATE_RSN_TXT].ToString();
+                deContractRsn.AtrbValue = string.IsNullOrEmpty(strContractRsn) ? "NEEDED" : item[AttributeCodes.BACK_DATE_RSN_TXT];
+            }
 
             //r.Dc.ApplyActions(r.Dc.MeetsRuleCondition(r.Rule) ? r.Rule.OpRuleActions : r.Rule.OpRuleElseActions);
         }
@@ -248,6 +269,22 @@ namespace Intel.MyDeals.BusinessRules
                 BusinessLogicDeActions.AddValidationMessage(deEcapPrice, "ECAP Price must be a positive number.");
             }
         }
+        
+        public static void BackdateRequired(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
 
+            IOpDataElement deStarDate = r.Dc.GetDataElement(AttributeCodes.START_DT);
+            if (deStarDate == null || !deStarDate.IsDateInPast()) return;
+
+            IOpDataElement deBackDate = r.Dc.GetDataElement(AttributeCodes.BACK_DATE_RSN);
+            string backDateTxt = r.Dc.GetDataElementValue(AttributeCodes.BACK_DATE_RSN_TXT);
+
+            if (backDateTxt == "NEEDED")
+            {
+                deBackDate.IsRequired = true;
+            }
+        }
     }
 }

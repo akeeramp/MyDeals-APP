@@ -180,9 +180,6 @@
                     },
                     "BACK_DATE_RSN": {
                         "Groups": ["Backdate"]
-                    },
-                    "BACK_DATE_RSN_TXT": {
-                        "Groups": ["Backdate"]
                     }
                 };
 

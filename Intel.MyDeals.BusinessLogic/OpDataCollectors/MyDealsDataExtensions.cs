@@ -52,6 +52,9 @@ namespace Intel.MyDeals.BusinessLogic
             if (data == null) return myDealsData;
             OpDataPacket<OpDataElementType> dpDeals = myDealsData.GetOpType(opType);
 
+            List<int> foundIds = new List<int>();
+            List<int> wipIds = new List<int>();
+
             foreach (OpDataCollectorFlattenedItem items in data)
             {
                 if (!items.Any()) continue;
@@ -65,6 +68,15 @@ namespace Intel.MyDeals.BusinessLogic
 
                 if (opType == OpDataElementType.WIP_DEAL && id == 0)
                 {
+                    foundIds.Add(id);
+                }
+                else
+                {
+                    foundIds.Add(id);
+                }
+
+                if (opType == OpDataElementType.WIP_DEAL && id == 0)
+                {
                     OpDataElementTypeMapping elMapping = objSetType.OpDataElementTypeParentMapping(opType);
                     if (elMapping.TranslationType == OpTranslationType.OneDealPerProduct)
                     {
@@ -74,7 +86,14 @@ namespace Intel.MyDeals.BusinessLogic
                         List<OpDataCollector> myDcs = myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.Where(d => d.DcParentID == parentid).ToList();
                         foreach (OpDataCollector odc in myDcs)
                         {
-                            if (odc.GetDataElementValue(AttributeCodes.PTR_USER_PRD) == wipProd && odc.GetDataElementValue(AttributeCodes.PRODUCT_FILTER) == wipProdFilter) id = odc.DcID;
+                            if (odc.GetDataElementValue(AttributeCodes.PTR_USER_PRD) == wipProd
+                                && odc.GetDataElementValue(AttributeCodes.PRODUCT_FILTER) == wipProdFilter
+                                && odc.GetDataElementValue(AttributeCodes.GEO_COMBINED) == items[AttributeCodes.GEO_COMBINED].ToString())
+                            {
+                                id = odc.DcID;
+                                foundIds.Add(id);
+                            }
+                            wipIds.Add(odc.DcID);
                         }
                     }
                     else
@@ -108,6 +127,27 @@ namespace Intel.MyDeals.BusinessLogic
 
                 // Layer the passed items on top of the newly filled MyDealsData
                 dpDeals.Messages = dc.MergeDictionary(items);
+            }
+
+            // look for WIP deals to delete
+            if (opType == OpDataElementType.WIP_DEAL)
+            {
+                List<int> delIds = wipIds.Where(w => !foundIds.Contains(w)).Distinct().ToList();
+                if (delIds.Any())
+                {
+                    myDealsData[OpDataElementType.WIP_DEAL].Actions.Add(new MyDealsDataAction(DealSaveActionCodes.OBJ_DELETE, delIds, 30));
+                }
+            }
+
+            // look for PTRs to delete
+            if (opType == OpDataElementType.PRC_TBL_ROW)
+            {
+                List<int> ptrIds = myDealsData[OpDataElementType.PRC_TBL_ROW].AllDataCollectors.Select(p => p.DcID).ToList();
+                List<int> delIds = ptrIds.Where(w => !foundIds.Contains(w) && w > 0).Distinct().ToList();
+                if (delIds.Any())
+                {
+                    myDealsData[OpDataElementType.PRC_TBL_ROW].Actions.Add(new MyDealsDataAction(DealSaveActionCodes.OBJ_DELETE, delIds, 30));
+                }
             }
 
             return myDealsData;
@@ -167,6 +207,18 @@ namespace Intel.MyDeals.BusinessLogic
             return myDealsData;
         }
 
+        public static MyDealsData FillInHolesFromAtrbTemplate(this MyDealsData myDealsData)
+        {
+            foreach (KeyValuePair<OpDataElementType, OpDataPacket<OpDataElementType>> item in myDealsData)
+            {
+                foreach (OpDataCollector dc in item.Value.AllDataCollectors)
+                {
+                    dc.FillInHolesFromAtrbTemplate(OpDataElementSetTypeConverter.FromString(dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD)));
+                }
+            }
+
+            return myDealsData;
+        }
         #endregion
 
 
@@ -229,6 +281,8 @@ namespace Intel.MyDeals.BusinessLogic
             // Since this is a DB call, we don't want to do this for EVERY data collector individually
             if (opType == OpDataElementType.DEAL || opType == OpDataElementType.WIP_DEAL)
                 prdMaps = dpObjSet.GetProductMapping();
+
+            if (opType == OpDataElementType.WIP_DEAL) myDealsData.InjectParentStages(opType.ToString());
 
             // loop through deals and flatten each Data Collector
             data.AddRange(dpObjSet.AllDataCollectors.Select(dc => dc.ToOpDataCollectorFlattenedItem(opType, pivotMode, prdMaps, myDealsData, security)));
@@ -452,6 +506,8 @@ namespace Intel.MyDeals.BusinessLogic
             // Since PRC_TBL_ROW do nor have a stage, they rely on the PRC_ST's WF_STG_CD
             Dictionary<int, string> prcSt2StgMapping = new Dictionary<int, string>();
             Dictionary<int, string> prcSt2PrcTblMapping = new Dictionary<int, string>();
+            Dictionary<int, int> prcTblRow2PrcTblMapping = new Dictionary<int, int>();
+            
 
             if (!myDealsData.ContainsKey(OpDataElementType.PRC_TBL_ROW)) return;
 
@@ -459,10 +515,10 @@ namespace Intel.MyDeals.BusinessLogic
             List<int> atrbs = new List<int>
             {
                 Attributes.WF_STG_CD.ATRB_SID,
-                Attributes.TITLE.ATRB_SID
+                Attributes.OBJ_SET_TYPE_CD.ATRB_SID
             };
 
-            MyDealsData temp = OpDataElementType.PRC_TBL.GetByIDs(ids, new List<OpDataElementType> { OpDataElementType.PRC_ST, OpDataElementType.PRC_TBL }, atrbs);
+            MyDealsData temp = OpDataElementType.PRC_TBL.GetByIDs(ids, new List<OpDataElementType> { OpDataElementType.PRC_ST, OpDataElementType.PRC_TBL, OpDataElementType.PRC_TBL_ROW }, atrbs);
 
             if (temp.ContainsKey(OpDataElementType.PRC_ST))
             {
@@ -480,12 +536,20 @@ namespace Intel.MyDeals.BusinessLogic
                 }
             }
 
+            if (temp.ContainsKey(OpDataElementType.PRC_TBL_ROW))
+            {
+                foreach (var item in temp[OpDataElementType.PRC_TBL_ROW].AllDataElements)
+                {
+                    prcTblRow2PrcTblMapping[item.DcID] = item.DcParentID;
+                }
+            }
+
             foreach (OpDataElementType opDataElementType in Enum.GetValues(typeof(OpDataElementType)))
             {
                 if (!myDealsData.ContainsKey(opDataElementType) || ignoreTypes.Contains(opDataElementType)) continue;
                 foreach (OpDataCollector dc in myDealsData[opDataElementType].AllDataCollectors)
                 {
-                    if (opDataElementType != OpDataElementType.WIP_DEAL && opDataElementType != OpDataElementType.PRC_TBL_ROW) continue;
+                    if (opDataElementType != OpDataElementType.PRC_TBL_ROW && opDataElementType != OpDataElementType.WIP_DEAL) continue;
                     if (opDataElementType == OpDataElementType.PRC_TBL_ROW && prcSt2PrcTblMapping.ContainsKey(dc.DcParentID))
                     {
                         // We can add this because it is NOT part of the template.  It will naturally get stripped off on the save.  Until then, we will use this for security rules
@@ -497,6 +561,22 @@ namespace Intel.MyDeals.BusinessLogic
                             DcParentID = dc.DcParentID,
                             DcID = dc.DcID
                         });
+                    }
+                    if (opDataElementType == OpDataElementType.WIP_DEAL && prcTblRow2PrcTblMapping.ContainsKey(dc.DcParentID))
+                    {
+                        //!dc.DataElementDict.ContainsKey(AttributeCodes.WF_STG_CD + "_PRNT")
+                        if (dc.DataElements.All(d => d.AtrbCd != AttributeCodes.WF_STG_CD + "_PRNT"))
+                        {
+                            // We can add this because it is NOT part of the template.  It will naturally get stripped off on the save.  Until then, we will use this for security rules
+                            dc.DataElements.Add(new OpDataElement
+                            {
+                                AtrbCd = AttributeCodes.WF_STG_CD + "_PRNT",
+                                AtrbValue = prcSt2PrcTblMapping[prcTblRow2PrcTblMapping[dc.DcParentID]],
+                                AtrbID = -1,
+                                DcParentID = dc.DcParentID,
+                                DcID = dc.DcID
+                            });
+                        }
                     }
                 }
             }

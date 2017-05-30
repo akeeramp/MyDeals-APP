@@ -321,7 +321,6 @@ namespace Intel.MyDeals.BusinessLogic
             List<int> atrbs = new List<int>
             {
                 Attributes.BACK_DATE_RSN.ATRB_SID,
-                Attributes.BACK_DATE_RSN_TXT.ATRB_SID,
                 Attributes.CAP.ATRB_SID,
                 Attributes.CAP_END_DT.ATRB_SID,
                 Attributes.CAP_STRT_DT.ATRB_SID,

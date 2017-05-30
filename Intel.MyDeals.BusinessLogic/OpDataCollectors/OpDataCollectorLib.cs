@@ -123,7 +123,7 @@ namespace Intel.MyDeals.BusinessLogic
             newPacket.PacketType = opDataElementType; // Why wasn't this set in constructor??
 
             // Back to normal operations, clear out the messages and all.
-            newPacket.Actions.RemoveAll(r => r.ActionDirection == OpActionDirection.Inbound);
+            //newPacket.Actions.RemoveAll(r => r.ActionDirection == OpActionDirection.Inbound);
             //newPacket.Messages.Messages.RemoveAll(r => true);
 
             // Tack on the save action call now

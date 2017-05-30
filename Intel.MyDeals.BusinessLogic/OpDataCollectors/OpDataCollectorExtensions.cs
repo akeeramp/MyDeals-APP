@@ -246,7 +246,14 @@ namespace Intel.MyDeals.BusinessLogic
         {
 
             // Call all load triggered rules
-            if (security) dc.ApplyRules(MyRulesTrigger.OnLoad);
+            if (security)
+            {
+                dc.ApplyRules(MyRulesTrigger.OnLoad);
+                if (opType == OpDataElementType.WIP_DEAL)
+                {
+                    dc.ApplyRules(MyRulesTrigger.OnValidate);
+                }
+            }
 
             // Create the collection to return
             OpDataCollectorFlattenedItem objsetItem = new OpDataCollectorFlattenedItem();

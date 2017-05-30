@@ -21,7 +21,6 @@
             "C2A_DATA_C2A_ID": "",
             "CUST_ACCNT_DIV": "",
             "BACK_DATE_RSN": "",
-            "BACK_DATE_RSN_TXT": "",
             "CUST_ACCPT": "",
             "NOTES": "",
             "DC_ID": 0,

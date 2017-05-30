@@ -15,6 +15,7 @@
             <div class="fr">
                 <span class="hasMenuPs{{ ps.DC_ID }} ptBtn" title="View more options"><i class="intelicon-vertical-menu"></i></span>
                 <ul kendo-context-menu k-filter="'.hasMenuPs{{ ps.DC_ID }}'" k-show-on="'click'">
+                    <li role="presentation"><a tabindex="-1" role="menuitem" ng-click="toggleAddStrategy(); isCollapsed = false"><i class="intelicon-plus-max"></i> Add Pricing Strategy</a></li>
                     <li role="presentation"><a tabindex="-1" role="menuitem" ng-click="showAddPricingTable(ps); isCollapsed = false"><i class="intelicon-plus-max"></i> Add Pricing Table</a></li>
                     <li role="presentation"><a tabindex="-1" role="menuitem" ng-click="deletePricingStrategy(ps)"><i class="intelicon-trash-outlined"></i> Delete Pricing Strategy</a></li>
 
@@ -60,6 +61,8 @@
                     <div class="fr">
                         <span class="hasMenuPt{{ pt.DC_ID }} ptBtn" title="View more options"><i class="intelicon-vertical-menu"></i></span>
                         <ul kendo-context-menu k-filter="'.hasMenuPt{{ pt.DC_ID }}'" k-show-on="'click'">
+                            <li role="presentation"><a tabindex="-1" role="menuitem" ng-click="toggleAddStrategy(); isCollapsed = false"><i class="intelicon-plus-max"></i> Add Pricing Strategy</a></li>
+                            <li role="presentation"><a tabindex="-1" role="menuitem" ng-click="showAddPricingTable(ps); isCollapsed = false"><i class="intelicon-plus-max"></i> Add Pricing Table</a></li>
                             <li role="presentation"><a tabindex="-1" role="menuitem" ng-click="showEditPricingTableDefaults(pt)"><i class="intelicon-edit"></i> Edit Autofill Defaults</a></li>
                             <li role="presentation"><a tabindex="-1" role="menuitem" ng-click="deletePricingTable(ps, pt)"><i class="intelicon-trash-outlined"></i> Delete Pricing Table</a></li>
                         </ul>

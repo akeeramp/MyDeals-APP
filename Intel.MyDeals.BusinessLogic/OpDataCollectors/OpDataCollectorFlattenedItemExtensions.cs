@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Intel.MyDeals.BusinessRules;
 using Intel.MyDeals.Entities;
 using Intel.Opaque;
@@ -206,6 +207,8 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                 throw new Exception("Unable to parse the Products entered", ex);
             }
 
+            List<string> geos = GetGeos(opFlatItem["GEO_COMBINED"].ToString());
+
             switch (elMapping.TranslationType)
             {
                 case OpTranslationType.OneDealPerProduct:
@@ -214,7 +217,10 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                         var item = (List<ProdMapping>)kvp.Value;
                         foreach (ProdMapping pMap in item)
                         {
-                            retItems.CopyMatchingAttributes(opFlatItem, elMapping, singleDimAtrbs, multiDimAtrbs, kvp.Key, new List <ProdMapping> { pMap });
+                            foreach (string g in geos)
+                            {
+                                retItems.CopyMatchingAttributes(opFlatItem, elMapping, singleDimAtrbs, multiDimAtrbs, kvp.Key, new List<ProdMapping> { pMap }, g);
+                            }
                         }
                     }
                     break;
@@ -228,11 +234,20 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                         key = kvp.Key;
                         pMaps.AddRange((List<ProdMapping>)kvp.Value);
                     }
-                    retItems.CopyMatchingAttributes(opFlatItem, elMapping, singleDimAtrbs, multiDimAtrbs, key, pMaps);
+                    foreach (string g in geos)
+                    {
+                        retItems.CopyMatchingAttributes(opFlatItem, elMapping, singleDimAtrbs, multiDimAtrbs, key, pMaps, g);
+                    }
                     break;
             }
 
             return retItems;
+        }
+
+        public static List<string> GetGeos(string geoString)
+        {
+            return (from Match m in Regex.Matches(geoString, @"\[[^]]*]|\{[^}]*}|[^,]+")
+                    select m.Value.Replace("[", "").Replace("]", "")).ToList();
         }
 
         public static OpDataCollectorFlattenedList TranslateToPrcTbl(this OpDataCollectorFlattenedItem opFlatItem)
@@ -243,15 +258,13 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
             if (!opFlatItem.ContainsKey(AttributeCodes.dc_type) || opFlatItem[AttributeCodes.dc_type].ToString() != OpDataElementType.WIP_DEAL.ToString()) return retItems;
             if (!opFlatItem.ContainsKey(AttributeCodes.PTR_SYS_PRD) || opFlatItem[AttributeCodes.PTR_SYS_PRD].ToString() == "") return retItems;
 
-
-
             return retItems;
         }
 
 
 
         public static void CopyMatchingAttributes(this OpDataCollectorFlattenedList retItems, OpDataCollectorFlattenedItem opFlatItem, OpDataElementTypeMapping elMapping,
-            List<string> singleDimAtrbs, List<string> multiDimAtrbs, string userPrdNm, List<ProdMapping> pMaps)
+            List<string> singleDimAtrbs, List<string> multiDimAtrbs, string userPrdNm, List<ProdMapping> pMaps, string geo)
         {
             OpDataCollectorFlattenedItem newItem = new OpDataCollectorFlattenedItem();
 
@@ -287,6 +300,9 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
 #endif
                 }
             }
+
+            // Overwrite geo value
+            newItem[AttributeCodes.GEO_COMBINED] = geo;
 
             // not sure what to assign this to yet... if new, no id, if existing need the id.  We don't have access to that in this scope
             //newItem[AttributeCodes.DC_ID] = 0;

@@ -225,6 +225,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
                 Width = 100,
                 IsDefaultable = true,
+                Label = "Media",
                 UiType = "RADIOBUTTONGROUP",
                 LookupUrl = "/api/Dropdown/GetDropdowns/PROD_INCLDS",
                 LookupText = "DROP_DOWN",
@@ -427,6 +428,16 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
+                Id = 39,
+                AtrbCd = AttributeCodes.TERMS,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                Width = 200,
+                Label = "Additional Discounts",
+                DataType = "string",
+                IsRequired = false
+            });
+            items.Add(new UiTemplateContainerItem
+            {
                 Id = 41,
                 AtrbCd = AttributeCodes.PROD_INCLDS,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
@@ -436,17 +447,6 @@ namespace Intel.MyDeals.DataLibrary
                 LookupUrl = "/api/Dropdown/GetDropdowns/PROD_INCLDS",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
-            });
-
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 39,
-                AtrbCd = AttributeCodes.TERMS,
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                Width = 200,
-                Label = "Additional Discounts",
-                DataType = "string",
-                IsRequired = false
             });
 
 			#endregion
@@ -509,7 +509,6 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 29,
                 AtrbCd = "DC_PARENT_ID",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Template = "#=gridUtils.uiControlWrapper(data, 'DC_PARENT_ID')#",
                 Width = 90,
                 Label = "Prc Table Row ID",
                 IsReadOnly = true
@@ -1068,16 +1067,6 @@ namespace Intel.MyDeals.DataLibrary
                 LookupValue = "DROP_DOWN"
             });
 
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 29,
-                AtrbCd = AttributeCodes.BACK_DATE_RSN_TXT,
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Width = 240,
-                IsFilterable = true,
-                IsSortable = true,
-                Template = "#=gridUtils.uiControlWrapper(data, 'BACK_DATE_RSN_TXT')#"
-            });
 
 
             items.Add(new UiTemplateContainerItem
