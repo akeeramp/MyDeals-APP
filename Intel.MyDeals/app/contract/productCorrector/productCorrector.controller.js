@@ -575,7 +575,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
 
         ProductSelectorService.GetProductSuggestions(searchStringDTO)
             .then(function (response) {
-                if (response.data.length > 1) {
+                if (response.data.length > 0) {
                     vm.suggestedProduct = [];
                     angular.forEach(response.data, function (value, key) {
                         if (!$filter("where")(vm.suggestedProduct, { PRD_MBR_SID: value.PRD_MBR_SID }).length > 0) {

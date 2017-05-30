@@ -74,10 +74,6 @@
         background: #00aeef;
     }
 
-    #invalidProdGrid, #suggestionProdGrid {
-        height: 200px !important;
-        overflow: scroll;
-    }
     .productCorrect-grid.k-grid td {
         height: 30px !important;
         white-space: nowrap;
@@ -244,29 +240,16 @@
                 color: #1a3e6f;
             }
 
-    @media (max-height: 799px){
-        .prodSelected.ui-select-multiple.ui-select-bootstrap {
-            min-height: 140px !important;
-            max-height: 100px !important;
-            overflow-y: auto;
-            overflow-x: hidden;
-        }
-        #invalidProdGrid, #suggestionProdGrid {
-            height: 200px !important;
-            overflow: scroll;
-        }
+    .prodSelected.ui-select-multiple.ui-select-bootstrap {
+        min-height: 100px !important;
+        max-height: 100px !important;
+        overflow-y: auto;
+        overflow-x: hidden;
     }
-    @media (min-height: 800px) {
-        .prodSelected.ui-select-multiple.ui-select-bootstrap {
-            min-height: 200px !important;
-            max-height: 100px !important;
-            overflow-y: auto;
-            overflow-x: hidden;
-        }
-        #invalidProdGrid, #suggestionProdGrid {
-            height: 250px !important;
-            overflow: scroll;
-        }
+
+    #invalidProdGrid, #suggestionProdGrid {
+        height: calc(85vh - 400px) !important;
+        overflow: auto;
     }
 
     .err-Search {
@@ -297,7 +280,7 @@
     .prodSelector.modal-body {
         padding-top: 2px;
         padding-bottom: 0px;
-        min-height: calc(75vh - 370px);
+        min-height: calc(85vh - 370px);
         max-height: calc(805vh - 370px);
         overflow-y: auto;
     }
@@ -312,7 +295,7 @@
     }
 
     .prodSelector.kendoGridHeight {
-        height: calc(85vh - 400px);
+        height: calc(85vh - 400px) !important;
     }
 
     .prdCorrector-modal-window, .modal-dialog {
@@ -358,3 +341,4 @@
         border: 1.5px solid #01AEEF;
     }
 </style>
+
