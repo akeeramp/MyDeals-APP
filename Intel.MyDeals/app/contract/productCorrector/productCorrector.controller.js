@@ -2,9 +2,9 @@
     .module('app.admin')
     .controller('ProductCorrectorModalController', ProductCorrectorModalController);
 
-ProductCorrectorModalController.$inject = ['$filter', '$scope', '$uibModalInstance', 'GetProductCorrectorData', 'ProductSelectorService', 'productCorrectorService', 'contractData', 'RowId', '$linq', '$timeout', 'logger'];
+ProductCorrectorModalController.$inject = ['$filter', '$scope', '$uibModalInstance', 'GetProductCorrectorData', 'ProductSelectorService', 'productCorrectorService', 'contractData', 'RowId','ProductRows', '$linq', '$timeout', 'logger'];
 
-function ProductCorrectorModalController($filter, $scope, $uibModalInstance, GetProductCorrectorData, ProductSelectorService, productCorrectorService, contractData, RowId, $linq, $timeout, logger) {
+function ProductCorrectorModalController($filter, $scope, $uibModalInstance, GetProductCorrectorData, ProductSelectorService, productCorrectorService, contractData, RowId, ProductRows, $linq, $timeout, logger) {
     var vm = this;
     vm.selectedPathParts = [];
     vm.invalidProducts = [];
@@ -36,6 +36,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
     var pageNumber = [];
     vm.rowNumber = 1;
     vm.resetAddedList = 1;
+
     //Page number calculation and navigation 
     var generatePagination = function (e) {
         pageNumber = [];
@@ -567,6 +568,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
 
     //Add suggestion to the suggestion product
     function productSuggestion(item) {
+        var row = ProductRows[vm.currentRow - 1];        
         productCorrectorService.FindSuggestedProduct(item.USR_INPUT)
             .then(function (response) {
                 if (response.data.length > 1) {

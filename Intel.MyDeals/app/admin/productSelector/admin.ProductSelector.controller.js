@@ -54,9 +54,11 @@
         vm.addProducts = addProducts; // Method for Adding Valid products to the list
         vm.validProducts = []; // Contain Valid Product
         vm.currentRow = 1; // Will hold the clicked row Number. In case of Bulk it will hold 1
-
+        vm.gridData = [];
+        vm.selectedID = 3;
         //Product Corrector Modal opener
         vm.openProdCorrector = function (row) {
+            var gridData  = vm.gridData;
             var modal = $uibModal.open({
                 backdrop: 'static',
                 templateUrl: 'app/contract/productCorrector/productCorrector.html',
@@ -67,7 +69,10 @@
                 resolve: {
                     GetProductCorrectorData: angular.copy(vm.datSourceCorrector), //Product Master List
                     contractData: angular.copy($scope.contractData), // Contract data
-                    RowId: angular.copy(vm.currentRow) // Row ID which should be validated
+                    RowId: angular.copy(vm.currentRow), // Row ID which should be validated
+                    ProductRows: function () {
+                        return angular.copy(vm.gridData);
+                    }
                 }
             });
 
@@ -102,7 +107,7 @@
                                 $scope.IsVisible = $scope.IsHidden ? false : true;
                             }
                         };
-                        $scope.selectedIds = [0];
+                        $scope.selectedIds = [1];
                     }
                 },
                 function (response) {
@@ -296,7 +301,7 @@
                             .then(
                             function (response) {
                                 if (response.statusText == "OK") {
-                                    cookProducts(response.data);
+                                    cookProducts(response.data, dataSelect);
                                     vm.validProducts = [];
                                 }
                             },
@@ -343,7 +348,7 @@
                         .then(
                         function (response) {
                             if (response.statusText == "OK") {
-                                cookProducts(response.data);
+                                cookProducts(response.data, dataSelect);
                             }
                         },
                         function (response) {
@@ -494,9 +499,10 @@
         }
 
         // Master Product Massaging
-        function cookProducts(data) {
+        function cookProducts(data, gridData) {
             //reset();
             vm.datSourceCorrector = data;
+            vm.gridData = gridData;
             var isAllValidated = 1;
             var multipleMatch = false;
             for (var key in data.ProdctTransformResults) {
