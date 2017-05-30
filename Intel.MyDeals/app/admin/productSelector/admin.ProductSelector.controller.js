@@ -302,6 +302,7 @@
                             function (response) {
                                 if (response.statusText == "OK") {
                                     cookProducts(response.data, dataSelect);
+                                    vm.checked = false;
                                     vm.validProducts = [];
                                 }
                             },

@@ -2,10 +2,10 @@
     <div style="padding:15px;">
         <div class="prodSelector modal-header" style="margin-bottom:15px">
             <div class="row prodCorrectorHeader">
-                <div class="col-md-3" style="padding-left:0px">
+                <div class="col-md-4" style="padding-left:0px">
                     <p class="prodText">Product Corrector</p>
                 </div>
-                <div class="col-md-6 text-center">
+                <div class="col-md-4 text-center">
                     <span class="rowNavigation"><label style="font-weight:400">Row {{ vm.currentRow }}</label></span>
                     <span class="rowNavPanel" ng-hide="vm.hideNavigation">
                         <i role="button" title="Previous Row" class="intelicon-left-previous skyBlue" ng-click="vm.prevRow()" ng-disabled="vm.isPrevDisabled"></i>
@@ -32,38 +32,36 @@
             <div class="row">
                 <div class="col-md-6 insertAtRowsText" ng-hide="vm.isInvalidProduct">
                     <label class="text-left fl marginRight textProdSelector" ng-hide="vm.isInvalidProduct">Product Not Found: </label>
-                    <div id="invalidProdGrid" kendo-grid="grid" class="table prodSelected text-left" k-on-change="vm.handleChange(data, dataItem, columns)" expand-k-grid footer-offset="90" options="vm.gridOptions" style="height:250px"></div>
+                    <div id="invalidProdGrid" kendo-grid="grid" class="productCorrect-grid table prodSelected text-left" k-on-change="vm.handleChange(data, dataItem, columns)" expand-k-grid footer-offset="90" options="vm.gridOptions" style="height:250px"></div>
                 </div>
                 <div class="col-md-6 insertAtRowsText" ng-hide="vm.isInvalidProduct">
                     <label class="text-left fl marginRight textProdSelector">Product Suggestions: </label>
-                    <div id="suggestionProdGrid" kendo-grid="grid" class="table prodSelected text-left" expand-k-grid footer-offset="90" k-on-change="vm.addChange(data, dataItem, columns)" options="vm.gridOptionsSuggested"></div>
+                    <div id="suggestionProdGrid" kendo-grid="grid" class="productCorrect-grid table prodSelected text-left" expand-k-grid footer-offset="90" k-on-change="vm.addChange(data, dataItem, columns)" options="vm.gridOptionsSuggested"></div>
                 </div>
             </div>
 
         </div>
         <div class="prodSelector modal-footer">
             <div class="row" style="margin:0px">
-                <div class="col-md-6 text-left textProdSelector">
+                <div class="col-md-6 text-left textProdSelector" style="padding-left:0px">
                     <p>Valid and Selected Products<small>&nbsp;({{vm.addedProducts.length}})</small></p>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6" style="padding-right:0px">
                     <button class="btn btn-default prdBtn" ng-click="vm.clearProducts()" style="margin-left:2px;">Clear all products</button>
                 </div>
             </div>
-            <div class="col-md-12 addedProduct">
+            <div class="row addedProduct">
                 <ui-select allow-clear="true" onkeypress="return false;" class="prodSelected text-left"
                            tagging="true" multiple ng-model="vm.addedProducts" theme="bootstrap">
                     <ui-select-match><span kendo-tooltip k-content='$item.HIER_NM_HASH'>{{$item.HIER_VAL_NM}}</span></ui-select-match>
                     <ui-select-choices repeat="products in vm.selectedProducts">
                     </ui-select-choices>
                 </ui-select>
-            </div>
-
-            <br />
-            <div class="col-md-6 form-inline insertAtRowsText">
+            </div>            
+            <div class="col-md-6 form-inline insertAtRowsText" style="padding-left:0px">
                 <label class="text-left fl marginRight" style="font-weight:400!important">Not Correct? &nbsp;Try using <a style="color:#00AEEF;text-decoration:underline;cursor:pointer">Product Selector</a></label>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6" style="padding-right:0px">
                 <button class="btn btn-default prdBtn" ng-click="vm.cancel()" style="margin-left:2px;">Cancel</button>
                 <button class="btn btn-primary fr prdBtn" ng-click="vm.saveProducts()">Save</button>
             </div>
@@ -77,10 +75,13 @@
     }
 
     #invalidProdGrid, #suggestionProdGrid {
-        height: 250px !important;
+        height: 200px !important;
         overflow: scroll;
     }
-
+    .productCorrect-grid.k-grid td {
+        height: 30px !important;
+        white-space: nowrap;
+    }
     .prodCorrectorHeader {
         border-bottom: 1px solid #ffffff;
         margin-left: 0px;
@@ -116,8 +117,7 @@
 
     .addedProduct {
         padding-left: 15px;
-        padding-right: 15px;
-        height: 200px !important;
+        padding-right: 15px;        
         margin-bottom: 15px;
     }
 
@@ -243,12 +243,30 @@
                 color: #1a3e6f;
             }
 
-    .prodSelected.ui-select-multiple.ui-select-bootstrap {
-        min-height: 100px !important;
-        max-height: 100px !important;
-        overflow-y: auto;
-        overflow-x: hidden;
+    @media (max-height: 799px){
+        .prodSelected.ui-select-multiple.ui-select-bootstrap {
+            min-height: 140px !important;
+            max-height: 100px !important;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+        #invalidProdGrid, #suggestionProdGrid {
+            height: 200px !important;
+            overflow: scroll;
+        }
     }
+    @media (min-height: 800px) {
+        .prodSelected.ui-select-multiple.ui-select-bootstrap {
+            min-height: 200px !important;
+            max-height: 100px !important;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+        #invalidProdGrid, #suggestionProdGrid {
+            height: 250px !important;
+            overflow: scroll;
+        }
+    } 
 
     .err-Search {
         color: #FF6E77;
