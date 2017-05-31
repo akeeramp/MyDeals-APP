@@ -56,6 +56,11 @@ namespace Intel.MyDeals.BusinessLogic
             return GetCustomerDivisions().FirstOrDefault(c => c.CUST_MBR_SID == sid);
         }
 
+        public List<CustomerDivision> GetCustomerDivisionsByCustNmId(int sid)
+        {
+            return GetCustomerDivisions().Where(c => c.CUST_NM_SID == sid).ToList();
+        }
+
         /// <summary>
         /// Get All Active Customer Divisions
         /// </summary>

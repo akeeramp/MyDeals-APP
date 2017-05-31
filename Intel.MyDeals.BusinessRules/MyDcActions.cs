@@ -73,7 +73,7 @@ namespace Intel.MyDeals.BusinessRules
             if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.BACK_DATE_RSN)) && deStr.IsDateInPast() && dcPrevSt != dcSt)
             {
                 IOpDataElement deContractRsn = r.Dc.GetDataElement(AttributeCodes.BACK_DATE_RSN);
-                string strContractRsn = item[AttributeCodes.BACK_DATE_RSN_TXT].ToString();
+                string strContractRsn = item.ContainsKey("AttributeCodes.BACK_DATE_RSN_TXT]") ? item[AttributeCodes.BACK_DATE_RSN_TXT].ToString() : "";
                 deContractRsn.AtrbValue = string.IsNullOrEmpty(strContractRsn) ? "NEEDED" : item[AttributeCodes.BACK_DATE_RSN_TXT];
             }
 
@@ -156,7 +156,7 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     if (string.IsNullOrEmpty(prodMapping.PRD_MBR_SID))
                     {
-                        BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"User entered product ({kvp.Key}) is unable to locate product ({prodMapping.DISPLAY_NM})");
+                        BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"User entered product ({kvp.Key}) is unable to locate product ({prodMapping.HIER_VAL_NM})");
                     }
 
                     if (r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD) == OpDataElementSetType.ECAP.ToString())
@@ -177,16 +177,17 @@ namespace Intel.MyDeals.BusinessRules
                         //}
 
                         // IF CAP is not available at all then show as NO CAP.User can not create deals.
-                        if (cap <= 0)
-                        {
-                            BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"CAP is not available ({prodMapping.CAP}). You can not create deals with this product.");
-                        }
+                        // not true anymore... soft warning in grid now
+                        //if (cap <= 0)
+                        //{
+                        //    BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"CAP is not available ({prodMapping.CAP}). You can not create deals with this product.");
+                        //}
 
-                        if (!string.IsNullOrEmpty(prodMapping.PRD_START) && string.IsNullOrEmpty(prodMapping.CAP_START))
+                        if (!string.IsNullOrEmpty(prodMapping.PRD_STRT_DTM) && string.IsNullOrEmpty(prodMapping.CAP_START))
                         {
                             DateTime capStart = DateTime.Parse(prodMapping.CAP_START);
                             DateTime capEnd = DateTime.Parse(prodMapping.CAP_END);
-                            DateTime prdStart = DateTime.Parse(prodMapping.PRD_START);
+                            DateTime prdStart = DateTime.Parse(prodMapping.PRD_STRT_DTM);
 
                             // If the product start date is after the deal start date, then deal start date should match with product start date and back date would not apply.
                             if (prdStart > capStart)

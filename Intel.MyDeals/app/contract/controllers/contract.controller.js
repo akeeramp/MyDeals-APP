@@ -162,7 +162,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
 
             // Contract custom initializations and functions
             // Dummy attribute on the UI which will hold the array of customer divisions
-            $scope.contractData.CUST_ACCNT_DIV_UI = $scope.contractData["CUST_ACCNT_DIV"].split('/');
+            $scope.contractData.CUST_ACCNT_DIV_UI = !$scope.contractData["CUST_ACCNT_DIV"] ? "" : $scope.contractData["CUST_ACCNT_DIV"].split('/');
 
             $scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV_UI"] = true;
             $scope.contractData._behaviors.isRequired["CUST_ACCNT_DIV"] = false;
@@ -1974,7 +1974,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
 			        newValue[MRKT_SEG].value = ["All"];
 			        newValue[GEO].value = ["Worldwide"];
 			        newValue["PAYOUT_BASED_ON"].value = "Billings"; //TODO: typo- need to correct to "Billing" in db
-			        newValue["MEET_COMP_PRICE_QSTN"].value = "Price";
+			        newValue["MEET_COMP_PRICE_QSTN"].value = "Price / Performance";
 			        newValue["PROGRAM_PAYMENT"].value = "Backend";
 			        newValue["PROD_INCLDS"].value = "Tray";
                 } else {

@@ -19,7 +19,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// </summary>
         /// <param name="dc">OpDataCollector</param>
         /// <returns></returns>
-        public static CustomerDivision GetCustomerDivision(this OpDataCollector dc)
+        public static List<CustomerDivision> GetCustomerDivisions(this OpDataCollector dc)
         {
             string val = dc.GetDataElementValue(AttributeCodes.CUST_MBR_SID);
             if (string.IsNullOrEmpty(val))
@@ -27,7 +27,7 @@ namespace Intel.MyDeals.BusinessLogic
                 // TODO throw an error
                 val = "0";
             }
-            return new CustomerLib().GetCustomerDivision(Convert.ToInt32(val));
+            return new CustomerLib().GetCustomerDivisionsByCustNmId(Convert.ToInt32(val));
         }
 
         /// <summary>
@@ -268,7 +268,7 @@ namespace Intel.MyDeals.BusinessLogic
             objsetItem.MapMultiDim();
 
             // Apply rules directly to dictionary
-            if (security) dc.ApplyRules(MyRulesTrigger.OnOpCollectorConvert, null, objsetItem, dc.GetCustomerDivision());
+            if (security) dc.ApplyRules(MyRulesTrigger.OnOpCollectorConvert, null, objsetItem, dc.GetCustomerDivisions());
 
             // assign all messages
             if (security) objsetItem.ApplyMessages(myDealsData);

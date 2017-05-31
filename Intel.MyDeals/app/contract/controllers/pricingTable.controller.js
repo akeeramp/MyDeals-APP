@@ -99,10 +99,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 			root.pricingTableData.WIP_DEAL = [];
 		}
 
-		//$scope.dataGrid = root.pricingTableData.WIP_DEAL;
 
-		generateKendoSpreadheetOptions();
-	    generateKendoGridOptions();
+		if ($state.current.name === "contract.manager.strategy")
+	        generateKendoSpreadheetOptions();
+	    else
+	        generateKendoGridOptions();
 	}
 
 	// Generates options that kendo's html directives will use
@@ -120,7 +121,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 	    }
 
 	    root.spreadDs = ssTools.createDataSource(root.pricingTableData.PRC_TBL_ROW);
-	    
+
 		$scope.ptSpreadOptions = {
 			headerWidth: 0, /* Hide the Row numbers */
 			change: onChange,
@@ -142,7 +143,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					columns: columns
 				},
 				{
-					name: "DropdownValuesSheet", // COntains lists of data used for dropdowns
+					name: "DropdownValuesSheet" // COntains lists of data used for dropdowns
 				}
 			],
 			render: onRender
@@ -436,7 +437,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
 		                $timeout(function () {
 		                    var n = data.length + 2;
-		                    disableRange(sheet.range("C" + n + ":Z" + (n + numToDel - 1)));
+		                    disableRange(sheet.range("B" + n + ":B" + (n + numToDel - 1)));
+		                    disableRange(sheet.range("D" + n + ":Z" + (n + numToDel - 1)));
 		                }, 10);
 		            }
 
@@ -454,7 +456,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 				sheet.batch(function () {
 					var finalColLetter = String.fromCharCode(intA + (ptTemplate.columns.length - 1));
 					// Enable other cells
-					var range = sheet.range("B" + topLeftRowIndex + ":" + finalColLetter + bottomRightRowIndex);
+					var range = sheet.range("C" + topLeftRowIndex + ":" + finalColLetter + bottomRightRowIndex);
 					range.enable(true);
 					range.background(null);
 
@@ -636,7 +638,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
 	        if (isPtrSysPrdFlushed) {
 	            // TODO we will need to revisit.  There are cases where we CANNOT remove products and reload... active deals for example
-	            var range = sheet.range("C" + topLeftRowIndex + ":C" + bottomRightRowIndex);
+	            var range = sheet.range("D" + topLeftRowIndex + ":D" + bottomRightRowIndex);
 	            range.value("");
 
 	            arg.range.forEachCell(
@@ -700,6 +702,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 			vm.customDragDropAutoFill("#pricingTableSpreadsheet");
 			replaceUndoRedoBtns();
 
+			root.setBusy("","");
 			//e.sender.activeSheet(e.sender.sheetByName("DropdownValuesSheet"));
 		}
 	}

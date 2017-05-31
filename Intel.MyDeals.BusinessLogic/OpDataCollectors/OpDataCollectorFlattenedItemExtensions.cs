@@ -271,7 +271,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
             foreach (ProdMapping pMap in pMaps)
             {
                 opFlatItem[AttributeCodes.PRODUCT_FILTER] = pMap.PRD_MBR_SID;
-                opFlatItem[AttributeCodes.TITLE] = pMap.DISPLAY_NM;                
+                opFlatItem[AttributeCodes.TITLE] = pMap.HIER_VAL_NM;                
                 opFlatItem[AttributeCodes.PTR_USER_PRD] = userPrdNm;
                 opFlatItem[AttributeCodes.CAP] = pMap.CAP;
                 opFlatItem[AttributeCodes.CAP_STRT_DT] = pMap.CAP_START;
@@ -280,6 +280,11 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                 opFlatItem[AttributeCodes.YCS2_START_DT] = pMap.YCS2_START;
                 opFlatItem[AttributeCodes.YCS2_END_DT] = pMap.YCS2_END;
                 opFlatItem[AttributeCodes.PRD_COST] = pMap.PRD_COST;
+                opFlatItem[AttributeCodes.PRD_STRT_DTM] = pMap.PRD_STRT_DTM;
+                opFlatItem[AttributeCodes.PRD_END_DTM] = pMap.PRD_END_DTM;
+                opFlatItem[AttributeCodes.HAS_L1] = pMap.HAS_L1;
+                opFlatItem[AttributeCodes.HAS_L2] = pMap.HAS_L2;
+                opFlatItem[AttributeCodes.PRODUCT_CATEGORIES] = pMap.PRD_CAT_NM;
             }
 
             foreach (string key in opFlatItem.Keys.Where(k => k != AttributeCodes.dc_type && k != AttributeCodes.dc_parent_type))

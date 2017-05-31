@@ -3,7 +3,7 @@
     public class ProdMapping
     {
         public string PRD_MBR_SID { get; set; }
-        public string DISPLAY_NM { get; set; }
+        public string HIER_VAL_NM { get; set; }
         public string CAP { get; set; }
         public string CAP_START { get; set; }
         public string CAP_END { get; set; }
@@ -11,8 +11,12 @@
         public string YCS2_START { get; set; }
         public string YCS2_END { get; set; }
         public double PRD_COST { get; set; }
-        public string PRD_START { get; set; }
-        public string PRD_END { get; set; }
+        public string PRD_STRT_DTM { get; set; }
+        public string PRD_END_DTM { get; set; }
+        public string HAS_L1 { get; set; }
+        public string HAS_L2 { get; set; }
+        public string PRD_CAT_NM { get; set; }
+        
 
     }
 }

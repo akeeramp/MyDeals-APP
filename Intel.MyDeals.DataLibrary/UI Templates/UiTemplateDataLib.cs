@@ -251,6 +251,13 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem
             {
                 Id = 29,
+                AtrbCd = AttributeCodes.CUST_DIV_NM,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                Width = 120
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
                 AtrbCd = AttributeCodes.PTR_USER_PRD,
                 Label = "Contract Product",
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
@@ -268,18 +275,6 @@ namespace Intel.MyDeals.DataLibrary
 				//// This is how it should be set once the product selector is in place:
 				//IsReadOnly = true,
 				//IsHidden = true,
-			});
-			items.Add(new UiTemplateContainerItem
-			{
-				Id = 29,
-				AtrbCd = AttributeCodes.PRD_LEVEL,
-				Label = "Product Level",
-                Width = 100,
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-				UiType = "DROPDOWN",
-				LookupUrl = "/api/Dropdown/GetProductLevelDropdowns",
-				LookupText = "DROP_DOWN",
-				LookupValue = "DROP_DOWN"
 			});
             items.Add(new UiTemplateContainerItem
             {
@@ -434,6 +429,7 @@ namespace Intel.MyDeals.DataLibrary
                 DataType = "string",
                 Width = 100,
                 UiType = "DROPDOWN",
+                Label = "Media",
                 LookupUrl = "/api/Dropdown/GetDropdowns/PROD_INCLDS",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
