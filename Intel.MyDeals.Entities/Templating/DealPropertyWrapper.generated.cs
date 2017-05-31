@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 5/17/2017 10:22:06 PM
+File Updated: 5/30/2017 11:00:57 PM
 On: PWECKENR-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -1525,6 +1525,36 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
+		public static MyDealsAttribute HAS_L1 = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "HAS_L1",
+			ATRB_DESC = "Has L1 Product",
+			ATRB_LBL = "Has L1 Product",
+			ATRB_MAX_LEN = 1,
+			ATRB_SID = 3669,
+			DATA_TYPE_CD = "BIT",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Boolean",
+			FRMT_MSK = "{0}",
+			TGT_COL_TYPE = "INT",
+			UI_TYPE_CD = "CheckBox"
+		};
+		public static MyDealsAttribute HAS_L2 = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "HAS_L2",
+			ATRB_DESC = "Has L2 Product",
+			ATRB_LBL = "Has L2 Product",
+			ATRB_MAX_LEN = 1,
+			ATRB_SID = 3670,
+			DATA_TYPE_CD = "BIT",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Boolean",
+			FRMT_MSK = "{0}",
+			TGT_COL_TYPE = "INT",
+			UI_TYPE_CD = "CheckBox"
+		};
 		public static MyDealsAttribute HIER_NM_HASH = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "HIER_NM_HASH",
@@ -1584,6 +1614,156 @@ namespace Intel.MyDeals.Entities {
 			FRMT_MSK = "{0:c}",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "TextBox"
+		};
+		public static MyDealsAttribute IDMS_WRAP_ACCR_READ = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "IDMS_WRAP_ACCR_READ",
+			ATRB_DESC = "IDMS_WRAP_ACCR_READ Access Type",
+			ATRB_LBL = "IDMS_WRAP_ACCR_READ Access Type",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 113,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "SYS",
+			DIM_SID = 999,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute IDMS_WRAP_ACCR_WRITE = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "IDMS_WRAP_ACCR_WRITE",
+			ATRB_DESC = "IDMS_WRAP_ACCR_WRITE Access Type",
+			ATRB_LBL = "IDMS_WRAP_ACCR_WRITE Access Type",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 114,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "SYS",
+			DIM_SID = 999,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute IDMS_WRAP_ADMIN_READ = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "IDMS_WRAP_ADMIN_READ",
+			ATRB_DESC = "IDMS_WRAP_ADMIN_READ Access Type",
+			ATRB_LBL = "IDMS_WRAP_ADMIN_READ Access Type",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 117,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "SYS",
+			DIM_SID = 999,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute IDMS_WRAP_ADMIN_WRITE = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "IDMS_WRAP_ADMIN_WRITE",
+			ATRB_DESC = "IDMS_WRAP_ADMIN_WRITE Access Type",
+			ATRB_LBL = "IDMS_WRAP_ADMIN_WRITE Access Type",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 118,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "SYS",
+			DIM_SID = 999,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute IDMS_WRAP_CONS_WRITE = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "IDMS_WRAP_CONS_WRITE",
+			ATRB_DESC = "IDMS_WRAP_CONS_WRITE Access Type",
+			ATRB_LBL = "IDMS_WRAP_CONS_WRITE Access Type",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 115,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "SYS",
+			DIM_SID = 999,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute IDMS_WRAP_MAINT_READ = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "IDMS_WRAP_MAINT_READ",
+			ATRB_DESC = "IDMS_WRAP_MAINT_READ Access Type",
+			ATRB_LBL = "IDMS_WRAP_MAINT_READ Access Type",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 119,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "SYS",
+			DIM_SID = 999,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute IDMS_WRAP_MAINT_WRITE = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "IDMS_WRAP_MAINT_WRITE",
+			ATRB_DESC = "IDMS_WRAP_MAINT_WRITE Access Type",
+			ATRB_LBL = "IDMS_WRAP_MAINT_WRITE Access Type",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 120,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "SYS",
+			DIM_SID = 999,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute IDMS_WRAP_RBFC_READ = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "IDMS_WRAP_RBFC_READ",
+			ATRB_DESC = "IDMS_WRAP_RBFC_READ Access Type",
+			ATRB_LBL = "IDMS_WRAP_RBFC_READ Access Type",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 53,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "SYS",
+			DIM_SID = 999,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute IDMS_WRAP_RBFC_WRITE = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "IDMS_WRAP_RBFC_WRITE",
+			ATRB_DESC = "IDMS_WRAP_RBFC_WRITE Access Type",
+			ATRB_LBL = "IDMS_WRAP_RBFC_WRITE Access Type",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 112,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "SYS",
+			DIM_SID = 999,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute IDMS_WRAP_RPRT_READ = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "IDMS_WRAP_RPRT_READ",
+			ATRB_DESC = "IDMS_WRAP_RPRT_READ Access Type",
+			ATRB_LBL = "IDMS_WRAP_RPRT_READ Access Type",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 116,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "SYS",
+			DIM_SID = 999,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = default(System.String)
 		};
 		public static MyDealsAttribute INDUS_KEY_CD = new MyDealsAttribute()
 		{
@@ -2070,15 +2250,15 @@ namespace Intel.MyDeals.Entities {
 			ATRB_COL_NM = "PASSED_VALIDATION",
 			ATRB_DESC = "Passed Validation",
 			ATRB_LBL = "Passed Validation",
-			ATRB_MAX_LEN = 10,
+			ATRB_MAX_LEN = 1,
 			ATRB_SID = 3668,
-			DATA_TYPE_CD = "VARCHAR",
+			DATA_TYPE_CD = "BIT",
 			DIM_CD = "DEAL",
 			DIM_SID = 3,
-			DOT_NET_DATA_TYPE = "System.String",
+			DOT_NET_DATA_TYPE = "System.Boolean",
 			FRMT_MSK = "{0}",
-			TGT_COL_TYPE = "VARCHAR",
-			UI_TYPE_CD = "TextBox"
+			TGT_COL_TYPE = "INT",
+			UI_TYPE_CD = "CheckBox"
 		};
 		public static MyDealsAttribute PAYOUT_BASED_ON = new MyDealsAttribute()
 		{
@@ -2293,10 +2473,25 @@ namespace Intel.MyDeals.Entities {
 		public static MyDealsAttribute PROD_INCLDS = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "PROD_INCLDS",
-			ATRB_DESC = "Included Products",
-			ATRB_LBL = "Included Products",
+			ATRB_DESC = "CPU MM Media",
+			ATRB_LBL = "Media",
 			ATRB_MAX_LEN = 0,
 			ATRB_SID = 3662,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "ComboBox"
+		};
+		public static MyDealsAttribute PRODUCT_CATEGORIES = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "PRODUCT_CATEGORIES",
+			ATRB_DESC = "Product Catagories List",
+			ATRB_LBL = "Product Catagories Lis",
+			ATRB_MAX_LEN = 500,
+			ATRB_SID = 3671,
 			DATA_TYPE_CD = "VARCHAR",
 			DIM_CD = "DEAL",
 			DIM_SID = 3,

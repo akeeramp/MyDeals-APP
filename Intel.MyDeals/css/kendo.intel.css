@@ -4241,7 +4241,7 @@ span.k-colorpicker {
 }
 .k-textbox {
   background-color: #fafafa;
-  border-color: #f0f0f0;
+  /*border-color: #f0f0f0;*/
 }
 .k-combobox,
 .k-datepicker,

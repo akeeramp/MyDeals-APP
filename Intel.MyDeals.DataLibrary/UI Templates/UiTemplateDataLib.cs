@@ -428,16 +428,6 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
-                Id = 39,
-                AtrbCd = AttributeCodes.TERMS,
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                Width = 200,
-                Label = "Additional Discounts",
-                DataType = "string",
-                IsRequired = false
-            });
-            items.Add(new UiTemplateContainerItem
-            {
                 Id = 41,
                 AtrbCd = AttributeCodes.PROD_INCLDS,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
@@ -448,12 +438,22 @@ namespace Intel.MyDeals.DataLibrary
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
             });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 39,
+                AtrbCd = AttributeCodes.TERMS,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                Width = 200,
+                Label = "Additional Discounts",
+                DataType = "string",
+                IsRequired = false
+            });
 
-			#endregion
+            #endregion
 
-			#region  WIP DEAL
+            #region  WIP DEAL
 
-			items.Add(new UiTemplateContainerItem
+            items.Add(new UiTemplateContainerItem
             {
                 Id = 1,
                 AtrbCd = AttributeCodes.DC_ID,

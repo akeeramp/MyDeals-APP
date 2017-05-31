@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 5/17/2017 10:22:01 PM
+File Updated: 5/30/2017 11:00:27 PM
 On: PWECKENR-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -930,6 +930,24 @@ namespace Intel.MyDeals.Entities {
 		public const string GEO_NM = "GEO_NM";
 
 		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3669
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Boolean
+		///</summary>
+		public const string HAS_L1 = "HAS_L1";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3670
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Boolean
+		///</summary>
+		public const string HAS_L2 = "HAS_L2";
+
+		///<summary>
 		/// DIM_SID: 7
 		/// DIM_CD: PRD
 		/// ATRB_SID: 7091
@@ -964,6 +982,96 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Double
 		///</summary>
 		public const string IA_BENCH = "IA_BENCH";
+
+		///<summary>
+		/// DIM_SID: 999
+		/// DIM_CD: SYS
+		/// ATRB_SID: 113
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string IDMS_WRAP_ACCR_READ = "IDMS_WRAP_ACCR_READ";
+
+		///<summary>
+		/// DIM_SID: 999
+		/// DIM_CD: SYS
+		/// ATRB_SID: 114
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string IDMS_WRAP_ACCR_WRITE = "IDMS_WRAP_ACCR_WRITE";
+
+		///<summary>
+		/// DIM_SID: 999
+		/// DIM_CD: SYS
+		/// ATRB_SID: 117
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string IDMS_WRAP_ADMIN_READ = "IDMS_WRAP_ADMIN_READ";
+
+		///<summary>
+		/// DIM_SID: 999
+		/// DIM_CD: SYS
+		/// ATRB_SID: 118
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string IDMS_WRAP_ADMIN_WRITE = "IDMS_WRAP_ADMIN_WRITE";
+
+		///<summary>
+		/// DIM_SID: 999
+		/// DIM_CD: SYS
+		/// ATRB_SID: 115
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string IDMS_WRAP_CONS_WRITE = "IDMS_WRAP_CONS_WRITE";
+
+		///<summary>
+		/// DIM_SID: 999
+		/// DIM_CD: SYS
+		/// ATRB_SID: 119
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string IDMS_WRAP_MAINT_READ = "IDMS_WRAP_MAINT_READ";
+
+		///<summary>
+		/// DIM_SID: 999
+		/// DIM_CD: SYS
+		/// ATRB_SID: 120
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string IDMS_WRAP_MAINT_WRITE = "IDMS_WRAP_MAINT_WRITE";
+
+		///<summary>
+		/// DIM_SID: 999
+		/// DIM_CD: SYS
+		/// ATRB_SID: 53
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string IDMS_WRAP_RBFC_READ = "IDMS_WRAP_RBFC_READ";
+
+		///<summary>
+		/// DIM_SID: 999
+		/// DIM_CD: SYS
+		/// ATRB_SID: 112
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string IDMS_WRAP_RBFC_WRITE = "IDMS_WRAP_RBFC_WRITE";
+
+		///<summary>
+		/// DIM_SID: 999
+		/// DIM_CD: SYS
+		/// ATRB_SID: 116
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string IDMS_WRAP_RPRT_READ = "IDMS_WRAP_RPRT_READ";
 
 		///<summary>
 		/// DIM_SID: 2
@@ -1257,8 +1365,8 @@ namespace Intel.MyDeals.Entities {
 		/// DIM_SID: 3
 		/// DIM_CD: DEAL
 		/// ATRB_SID: 3668
-		/// TGT_COL_TYPE: VARCHAR
-		/// DOT_NET_DATA_TYPE: System.String
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Boolean
 		///</summary>
 		public const string PASSED_VALIDATION = "PASSED_VALIDATION";
 
@@ -1396,6 +1504,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.String
 		///</summary>
 		public const string PROD_INCLDS = "PROD_INCLDS";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3671
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string PRODUCT_CATEGORIES = "PRODUCT_CATEGORIES";
 
 		///<summary>
 		/// DIM_SID: 3
@@ -1881,6 +1998,7 @@ namespace Intel.MyDeals.Entities {
 		public const string DB_ERROR_CONTACT_EMAIL = "DB_ERROR_CONTACT_EMAIL";
 		public const string DB_LOGGING = "DB_LOGGING";
 		public const string EIA_DIV_NM = "EIA_DIV_NM";
+		public const string ENV = "ENV";
 		public const string ICOST_ERROR_CONTACTS_MYDL = "ICOST_ERROR_CONTACTS_MYDL";
 		public const string ICOST_ERROR_LOG_DAYS = "ICOST_ERROR_LOG_DAYS";
 		public const string ICOST_HIST_LOG_DAYS = "ICOST_HIST_LOG_DAYS";
@@ -1928,6 +2046,7 @@ namespace Intel.MyDeals.Entities {
 
 	public static class WorkFlowStages {
 		public const string Active = "Active";
+		public const string All_WF_Stages = "All WF Stages";
 		public const string Approved = "Approved";
 		public const string Cancelled = "Cancelled";
 		public const string Complete = "Complete";
@@ -1958,6 +2077,7 @@ namespace Intel.MyDeals.Entities {
 	//-- Security Actions ---------------------------------------------------------------------------------
 
 	public static class SecurityActns {
+		public const string WRAP_SECURITY = "WRAP_SECURITY";
 		public const string C_ACCOUNT_BASED = "C_ACCOUNT_BASED";
 		public const string C_GEO_BASED = "C_GEO_BASED";
 		public const string C_GLOBAL_BASED = "C_GLOBAL_BASED";

@@ -26,18 +26,20 @@
                              op-is-form="true"
                              op-ui-mode="'VERTICAL'"></div>
                     </div>
-
-                    <div class="col-md-11 row"
-                         op-control-flat
-                         ng-model="contractData"
-                         op-cd="'CUST_ACCNT_DIV_UI'"
-                         op-type="'MULTISELECT'"
-                         op-label="'Division:'"
-                         op-lookup-values="[]"
-                         op-lookup-text="'CUST_DIV_NM'"
-                         op-lookup-value="'CUST_DIV_NM'"
-                         op-is-form="true"
-                         op-ui-mode="'VERTICAL'"></div>
+                    
+                    <div class="col-md-11 row">
+                        <div op-control-flat
+                             ng-model="contractData"
+                             op-cd="'CUST_ACCNT_DIV_UI'"
+                             op-type="'MULTISELECT'"
+                             op-label="'Division:'"
+                             op-lookup-values="[]"
+                             op-lookup-text="'CUST_DIV_NM'"
+                             op-lookup-value="'CUST_DIV_NM'"
+                             op-is-form="true"
+                             op-ui-mode="'VERTICAL'"></div>
+                        <div class="description" ng-if="!contractData._behaviors.isHidden['CUST_ACCNT_DIV_UI']">Blank means that ALL divisions are included</div>
+                    </div>
                 </div>
                 <div class="col-md-6">
                     <div class="col-md-12 row">
@@ -51,7 +53,7 @@
                          op-label="''"
                          op-lookup-url="'api/Dropdown/GetDropdowns/CUST_ACCPT'"
                          op-lookup-text="'DROP_DOWN'"
-                         op-lookup-value="'ATRB_LKUP_SID'"
+                         op-lookup-value="'DROP_DOWN'"
                          op-is-form="true"
                          op-ui-mode="'VERTICAL'"></div>
                 </div>
@@ -147,7 +149,7 @@
                              op-label="'Back Date Reason:'"
                              op-lookup-url="'api/Dropdown/GetDropdowns/BACK_DATE_RSN'"
                              op-lookup-text="'DROP_DOWN'"
-                             op-lookup-value="'ATRB_LKUP_SID'"
+                             op-lookup-value="'DROP_DOWN'"
                              op-is-form="true"
                              op-ui-mode="'VERTICAL'"></div>
                     </div>
@@ -191,7 +193,7 @@
                                    k-remove="onFileRemove"
                                    k-async="fileUploadOptions" />
                         </div>
-                        <div ng-if="contractData.CUST_ACCPT != 99" class="description">{{constants.FileAttachementDesc}}</div>
+                        <div ng-if="contractData.CUST_ACCPT != 'Pending'" class="description">{{constants.FileAttachementDesc}}</div>
                         <div ng-if="contractData.AttachmentError" class="err-Control">* field is required.</div>
                     </div>
                     <div class="col-md-11 row" ng-if="!isNewContract">

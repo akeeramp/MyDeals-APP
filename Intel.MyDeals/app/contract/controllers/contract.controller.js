@@ -165,7 +165,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
             $scope.contractData.CUST_ACCNT_DIV_UI = $scope.contractData["CUST_ACCNT_DIV"].split('/');
 
             $scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV_UI"] = true;
-            $scope.contractData._behaviors.isRequired["CUST_ACCNT_DIV"] = true;
+            $scope.contractData._behaviors.isRequired["CUST_ACCNT_DIV"] = false;
             $scope.contractData._behaviors.isReadOnly["CUST_MBR_SID"] = !$scope.isNewContract;
 
             // In case of existing contract back date reason and text is captured display them
@@ -173,15 +173,15 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
             $scope.contractData._behaviors.isHidden["BACK_DATE_RSN"] = $scope.contractData.BACK_DATE_RSN === "";
 
             // By default set the CUST_ACCPT to pending(99) if new contract
-            $scope.contractData.CUST_ACCPT = $scope.contractData.CUST_ACCPT == "" ? 99 : $scope.contractData.CUST_ACCPT;
-            $scope.contractData._behaviors.isHidden["C2A_DATA_C2A_ID"] = ($scope.contractData.CUST_ACCPT == 99);
+            $scope.contractData.CUST_ACCPT = $scope.contractData.CUST_ACCPT === "" ? 'Pending' : $scope.contractData.CUST_ACCPT;
+            $scope.contractData._behaviors.isHidden["C2A_DATA_C2A_ID"] = ($scope.contractData.CUST_ACCPT === 'Pending');
 
             // Set customer acceptance rulesc
             var setCustAcceptanceRules = function(newValue) {
-                $scope.contractData._behaviors.isHidden["C2A_DATA_C2A_ID"] = (newValue == 99);
-                $scope.contractData._behaviors.isRequired["C2A_DATA_C2A_ID"] = (newValue != 99) && (!hasUnSavedFiles && !hasFiles);
-                $scope.contractData.C2A_DATA_C2A_ID = (newValue == 99) ? "" : $scope.contractData.C2A_DATA_C2A_ID;
-                $scope.contractData.IsAttachmentRequired = ($scope.contractData.C2A_DATA_C2A_ID === "") && (newValue != 99);
+                $scope.contractData._behaviors.isHidden["C2A_DATA_C2A_ID"] = (newValue === 'Pending');
+                $scope.contractData._behaviors.isRequired["C2A_DATA_C2A_ID"] = (newValue !== 'Pending') && (!hasUnSavedFiles && !hasFiles);
+                $scope.contractData.C2A_DATA_C2A_ID = (newValue === 'Pending') ? "" : $scope.contractData.C2A_DATA_C2A_ID;
+                $scope.contractData.IsAttachmentRequired = ($scope.contractData.C2A_DATA_C2A_ID === "") && (newValue !== 'Pending');
                 $scope.contractData.AttachmentError = $scope.contractData.AttachmentError &&
                     $scope.contractData.IsAttachmentRequired;
             }
@@ -212,7 +212,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                             $scope.contractData.CUST_ACCNT_DIV_UI = response.data[0].CUST_DIV_NM.toString();
                         } else {
                             $scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV_UI"] = false;
-                            $scope.contractData._behaviors.isRequired["CUST_ACCNT_DIV_UI"] = true;
+                            $scope.contractData._behaviors.isRequired["CUST_ACCNT_DIV_UI"] = false; // never required... blank now mean ALL
                         }
                         if (!!$("#CUST_ACCNT_DIV_UI").data("kendoMultiSelect")) {
                             $("#CUST_ACCNT_DIV_UI").data("kendoMultiSelect").dataSource.data(response.data);
@@ -685,10 +685,9 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                 }
 
                 if (oldValue["C2A_DATA_C2A_ID"] !== newValue["C2A_DATA_C2A_ID"]) {
-                    $scope.contractData
-                        .IsAttachmentRequired = (newValue["C2A_DATA_C2A_ID"] === "" &&
-                            $scope.contractData.CUST_ACCPT != 99);
-                    $scope.contractData.AttachmentError = ($scope.contractData.CUST_ACCPT != 99) &&
+                    $scope.contractData.IsAttachmentRequired = (newValue["C2A_DATA_C2A_ID"] === ""
+                        && $scope.contractData.CUST_ACCPT !== 'Pending');
+                    $scope.contractData.AttachmentError = ($scope.contractData.CUST_ACCPT !== 'Pending') &&
                         $scope.contractData.IsAttachmentRequired &&
                         (!hasUnSavedFiles && !hasFiles);
                 }
