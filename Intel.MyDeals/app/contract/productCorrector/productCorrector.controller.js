@@ -461,7 +461,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                 }
             }
         }
-        else if (_selectionLevel == 4) {
+        if (_selectionLevel == 4) {
             productHierarchy.push(item.name);
         }
         return result = false;
@@ -516,7 +516,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                 logger.success("Product added for " + dataSelected["0"].FMLY_NM);
             }
             else {
-                logger.error("Can not insert duplicate product " + dataSelected["0"].FMLY_NM);
+                logger.error("Can not insert duplicate product ");
             }
         }
     }
@@ -527,6 +527,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             vm.rowNumber = +vm.rowNumber + 1;
             vm.currentRow = pageNumber[vm.rowNumber - 1];
             vm.addedProducts = [];
+            productHierarchy = [];
             _selectionLevel = 0;
             cookProducts();
         }
@@ -541,6 +542,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             vm.rowNumber = vm.rowNumber - 1;
             vm.currentRow = +pageNumber[vm.rowNumber - 1];
             vm.addedProducts = [];
+            productHierarchy = [];
             _selectionLevel = 0;
             cookProducts();
         }
@@ -671,6 +673,11 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
 
             logger.success("Product added successfully");
             _selectionLevel = 0;
+
+            if (vm.rowNumber > 0) {
+                vm.rowNumber = vm.rowNumber - 1;
+            }
+            
             generatePagination();
 
             //Added List reset logic
@@ -683,10 +690,11 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
 
             if (vm.resetAddedList == 1) {
                 vm.addedProducts = [];
-            }
+            }                      
 
             if ((pageNumber.length + 1) == vm.rowNumber || (pageNumber.length == 1)) {
                 vm.rowNumber = 1;
+                vm.currentRow = pageNumber[0];
             }
             if (pageNumber.length != 0) {
                 cookProducts();
