@@ -55,7 +55,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                 }
             }
         }
-
+        
         if (pageNumber.length > 0) {
             vm.rows = pageNumber.length;
             if (pageNumber.length != 1) {
@@ -355,7 +355,8 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         if (_selectionLevel == 2) {
             isConflict = $linq.Enumerable().From(data)
                 .Where(function (x) {
-                    return (x.PRD_CAT_NM == item.name);
+                    return (x.PRD_CAT_NM == item.name &&
+                        x.DEAL_PRD_TYPE == productHierarchy[0] );
                 })
                 .GroupBy(function (x) {
                     return (x.BRND_NM);
@@ -364,7 +365,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             if (isConflict) {
                 var dataS = $linq.Enumerable().From(data)
                     .Where(function (x) {
-                        return (x.PRD_CAT_NM == item.name);
+                        return (x.PRD_CAT_NM == item.name && x.DEAL_PRD_TYPE == productHierarchy[0]);
                     })
                     .GroupBy(function (x) {
                         return (x.BRND_NM);
@@ -383,7 +384,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             else {
                 var dataS = $linq.Enumerable().From(data)
                     .Where(function (x) {
-                        return (x.PRD_CAT_NM == item.name);
+                        return (x.PRD_CAT_NM == item.name && x.DEAL_PRD_TYPE == productHierarchy[0]);
                     })
                     .GroupBy(function (x) {
                         return (x.BRND_NM);
@@ -401,7 +402,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         if (_selectionLevel == 3) {
             isConflict = $linq.Enumerable().From(data)
                 .Where(function (x) {
-                    return (x.BRND_NM == item.name);
+                    return (x.BRND_NM == item.name && x.DEAL_PRD_TYPE == productHierarchy[0] && x.PRD_CAT_NM == productHierarchy[1]);
                 })
                 .GroupBy(function (x) {
                     return (x.FMLY_NM);
@@ -410,7 +411,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             if (isConflict) {
                 var dataS = $linq.Enumerable().From(data)
                     .Where(function (x) {
-                        return (x.BRND_NM == item.name);
+                        return (x.BRND_NM == item.name && x.DEAL_PRD_TYPE == productHierarchy[0] && x.PRD_CAT_NM == productHierarchy[1]);
                     })
                     .GroupBy(function (x) {
                         return (x.FMLY_NM);
@@ -429,7 +430,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             else {
                 var dataS = $linq.Enumerable().From(data)
                     .Where(function (x) {
-                        return (x.BRND_NM == item.name);
+                        return (x.BRND_NM == item.name && x.DEAL_PRD_TYPE == productHierarchy[0] && x.PRD_CAT_NM == productHierarchy[1]);
                     })
                     .GroupBy(function (x) {
                         return (x.FMLY_NM);
@@ -677,8 +678,8 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             if (vm.rowNumber > 0) {
                 vm.rowNumber = vm.rowNumber - 1;
             }
-            
-            generatePagination();
+
+            generatePagination(); 
 
             //Added List reset logic
             for (var p = 0; p < pageNumber.length; p++) {
@@ -687,7 +688,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                     break;
                 }
             }
-
+            
             if (vm.resetAddedList == 1) {
                 vm.addedProducts = [];
             }                      
