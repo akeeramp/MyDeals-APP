@@ -242,12 +242,12 @@
                 pageSizes: gridConstants.pageSizes
             },
             columns: [
-                { field: "ROW_NUMBER", title: "Sl No", width: "50px", editor: RWNM },
+                { field: "ROW_NUMBER", title: " ", width: "30px", editor: RWNM },
                 { field: "USR_INPUT", title: "Product Name", width: "200px" },
-                { field: "EXCLUDE", title: "Exclude", width: "200px" },
-                { field: "FILTER", template: " #= FILTER # ", title: "Filter", width: "200px" },
-                { field: "START_DATE", template: "#=gridUtils.uiControlWrapper(data, 'START_DATE', \"date:'MM/dd/yyyy'\")#", title: "Start date", width: "200px", editor: dateTime },
-                { field: "END_DATE", template: "#=gridUtils.uiControlWrapper(data, 'END_DATE', \"date:'MM/dd/yyyy'\")#", title: "End Date", width: "200px", editor: dateTime }
+                { field: "FILTER", template: " #= FILTER # ", title: "Filter", width: "100px" },
+                { field: "EXCLUDE", title: "Exclude", width: "100px" },                
+                { field: "START_DATE", template: "#=gridUtils.uiControlWrapper(data, 'START_DATE', \"date:'MM/dd/yyyy'\")#", title: "Start date", width: "150px", editor: dateTime },
+                { field: "END_DATE", template: "#=gridUtils.uiControlWrapper(data, 'END_DATE', \"date:'MM/dd/yyyy'\")#", title: "End Date", width: "150px", editor: dateTime }
             ]
         };
 

@@ -57,21 +57,20 @@
              op-label="'Select end date:'"
              op-ui-mode="'VERTICAL'"></div>
     </div>
+    <div class="col-md-3" style="width:200px">
+        <a role="button" ng-click="vm.fetchProductDetails()" class="btn btn-primary prdBtn" ng-disabled="vm.checked" style="margin-top: 28px;margin-left: 25px;height: 40px;">Translate</a>
+    </div>
 </div>
 <div class="col-md-4" style="padding-top: 20px;">
 
 </div>
 <div class="col-md-12">
-    <div class="col-md-5">
+    <div class="col-md-6">
         <div id="prodGrid" kendo-grid="prodGrid" class="table table-bordered table-striped table-intel" expand-k-collapsible expand-k-grid options="vm.gridOptionsProduct" k-rebind="vm.gridOptions.selectable"
              ng-dblclick="vm.handleDoubleClick()"></div>
     </div>
 
-    <div class="col-md-2" style="padding-top: 250px;">
-        <a role="button" ng-click="vm.fetchProductDetails()" class="k-header k-button k-button-icontext" ng-disabled="vm.checked">Translate</a>
-    </div>
-
-    <div class="col-md-5">
+    <div class="col-md-6">
         <div id="prodSelectGrid" kendo-grid="grid" groupable="true" class="table" expand-k-grid footer-offset="90" options="vm.gridOptions"></div>
     </div>
 </div>
