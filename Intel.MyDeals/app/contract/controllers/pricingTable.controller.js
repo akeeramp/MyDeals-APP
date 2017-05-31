@@ -122,6 +122,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
 	    root.spreadDs = ssTools.createDataSource(root.pricingTableData.PRC_TBL_ROW);
 
+	    //var cc = CustomerDivisions;
+	    if (!root.contractData.CustomerDivisions || root.contractData.CustomerDivisions.length <= 1) {
+	        // hide Cust Div
+	        ptTemplate.columns[1].hidden = true;
+	    }
+
 		$scope.ptSpreadOptions = {
 			headerWidth: 0, /* Hide the Row numbers */
 			change: onChange,
