@@ -58,7 +58,7 @@
              op-ui-mode="'VERTICAL'"></div>
     </div>
     <div class="col-md-3" style="width:200px">
-        <a role="button" ng-click="vm.fetchProductDetails()" class="btn btn-primary prdBtn" ng-disabled="vm.checked" style="margin-top: 28px;margin-left: 25px;height: 40px;">Translate</a>
+        <a role="button" ng-click="vm.fetchProductDetails()" class="btn btn-primary prdBtn btnFetchProduct" ng-disabled="vm.checked" >Translate</a>
     </div>
 </div>
 <div class="col-md-4" style="padding-top: 20px;">
@@ -96,4 +96,9 @@
     .k-grid-add {
         display: none;
     }
+    .btnFetchProduct {
+        margin-top: 28px;
+        margin-left: 25px;
+        height: 40px;
+    } 
 </style>

@@ -36,6 +36,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
     var pageNumber = [];
     vm.rowNumber = 1;
     vm.resetAddedList = 1;
+    var productHierarchy = [];
 
     //Page number calculation and navigation
     var generatePagination = function (e) {
@@ -168,7 +169,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         var grid = $("#suggestionProdGrid").data("kendoGrid");
         angular.forEach(vm.gridOptionsSuggested.columns, function (item, key) {
             var columnValue = $filter('unique')(data, item.field);
-            if (columnValue.length == 1 && item.field !== undefined && (columnValue[0][item.field] == "" || columnValue[0][item.field] == null )) {
+            if (columnValue.length == 1 && item.field !== undefined && (columnValue[0][item.field] == "" || columnValue[0][item.field] == null)) {
                 grid.hideColumn(item.field);//hide column
             } else {
                 grid.showColumn(item.field); //show column
@@ -205,7 +206,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                         }
                     }
                 }
-                    // Process invalid product(s) to make html to display
+                // Process invalid product(s) to make html to display
                 else if (!!data.InValidProducts[key] && data.InValidProducts[vm.currentRow].length > 0) {
                     vm.invalidProducts = [];
                     vm.opMode = 'I';
@@ -217,7 +218,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                     }
                     dataSource.read();
                 }
-                    // Checking for Valid Product(s)
+                // Checking for Valid Product(s)
                 else if (!!data.ValidProducts[key]) {
                     vm.items = [];
                     for (var a = 0; a < data.ProdctTransformResults[key].length; a++) {
@@ -243,13 +244,15 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         vm.addedProducts = [];
         var data = GetProductCorrectorData;
         for (var key in data.ProdctTransformResults) {
-            if (!!data.ValidProducts[key]) {
-                for (var a = 0; a < data.ProdctTransformResults[key].length; a++) {
-                    var value = data.ProdctTransformResults[key][a];
-                    if (!!data.ValidProducts[key][value]) {
-                        for (var i = 0; i < data.ValidProducts[key][value].length; i++) {
-                            data.ValidProducts[key][value][i]["ROW_NUMBER"] = key;
-                            vm.addedProducts.push(data.ValidProducts[key][value][i]);
+            if (key == vm.currentRow) {
+                if (!!data.ValidProducts[key]) {
+                    for (var a = 0; a < data.ProdctTransformResults[key].length; a++) {
+                        var value = data.ProdctTransformResults[key][a];
+                        if (!!data.ValidProducts[key][value]) {
+                            for (var i = 0; i < data.ValidProducts[key][value].length; i++) {
+                                data.ValidProducts[key][value][i]["ROW_NUMBER"] = key;
+                                vm.addedProducts.push(data.ValidProducts[key][value][i]);
+                            }
                         }
                     }
                 }
@@ -257,9 +260,14 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         }
     }
 
+    
+    //productHierarchy.push("DEAL_PRD_TYPE");
     // Checking for Conflict up to FAMILY LEVEL
     function cehckingConflict(data, _selectionLevel, item) {
         // Checking for conflict in Deal Product Type i.e. CPU or EIA products
+        if (item.name && item.name.length > 0) {
+            productHierarchy.push(item.name);
+        }
         if (_selectionLevel == 0) {
             isConflict = $linq.Enumerable().From(data)
                 .GroupBy(function (x) {
@@ -275,6 +283,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                     })
                     .ToArray();
 
+                //vm.selectedDataSet = datas;
                 vm.items = []; // Reseting selected Items
 
                 for (var i = 0; i < dataS.length; i++) {
@@ -290,7 +299,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                         return { 'DEAL_PRD_TYPE': x.source[0].DEAL_PRD_TYPE };
                     })
                     .ToArray();
-
+                //vm.selectedDataSet = datas;
                 if (dataS.length > 0) {
                     item.name = dataS[0].DEAL_PRD_TYPE;
                 }
@@ -452,6 +461,9 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                 }
             }
         }
+        else if (_selectionLevel == 4) {
+            productHierarchy.push(item.name);
+        }
         return result = false;
     }
 
@@ -472,46 +484,20 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         }
         else {
             var dataSelected = [];
-            // Checking PRODUCT DEAL TYPE
-            if (_lastConflictedState == 1) {
-                dataSelected = $linq.Enumerable().From(vm.selectedDataSet)
-                    .Where(function (x) {
-                        return (x.DEAL_PRD_TYPE == lastConflictedColumn);
-                    })
-                    .ToArray();
-            }
-                // Checking PRODUCT CATEGORY NAME
-            else if (_lastConflictedState == 2) {
-                dataSelected = $linq.Enumerable().From(vm.selectedDataSet)
-                    .Where(function (x) {
-                        return (x.PRD_CAT_NM == lastConflictedColumn);
-                    })
-                    .ToArray();
-            }
-                // Checking BRAND NAME
-            else if (_lastConflictedState == 3) {
-                dataSelected = $linq.Enumerable().From(vm.selectedDataSet)
-                    .Where(function (x) {
-                        return (x.BRND_NM == lastConflictedColumn);
-                    })
-                    .ToArray();
-            }
-                // Checking FAMILY NAME
-            else if (_lastConflictedState == 4) {
-                dataSelected = $linq.Enumerable().From(vm.selectedDataSet)
-                    .Where(function (x) {
-                        return (x.FMLY_NM == lastConflictedColumn);
-                    })
-                    .ToArray();
-            }
-                // Checking PROCESSOR NUMBER
-            else if (_lastConflictedState == 5) {
-                dataSelected = $linq.Enumerable().From(vm.selectedDataSet)
-                    .Where(function (x) {
-                        return (x.PCSR_NBR == lastConflictedColumn);
-                    })
-                    .ToArray();
-            }
+
+            //Fetching All the valid product for the selected Hierarchy
+            dataSelected = $linq.Enumerable().From(vm.selectedDataSet)
+                            .Where(function (x) {
+                                return (x.DEAL_PRD_TYPE == productHierarchy[0] &&
+                                        x.PRD_CAT_NM == productHierarchy[1] && 
+                                        x.BRND_NM == productHierarchy[2] &&
+                                        x.FMLY_NM == productHierarchy[3]
+                                       );
+                            })
+                            .ToArray();
+
+            productHierarchy = [];
+            
             var flag = 0;
 
             // Adding Products to the Selected List
@@ -565,9 +551,15 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
 
     //Add suggestion to the suggestion product
     function productSuggestion(item) {
-        var row = ProductRows[vm.currentRow - 1];
+        if (ProductRows.length > 1) {
+            var row = ProductRows[vm.currentRow - 1];
+        }
+        else {
+            var row = ProductRows[0];
+        }
+        
         var searchStringDTO = {
-            'prdEntered': item.USR_INPUT,
+            'prdEntered': item.USR_INPUT.replace(/\*$/, ""),
             'returnMax': 5,
             'startDate': row.START_DATE,
             'endDate': row.END_DATE
