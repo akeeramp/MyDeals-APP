@@ -606,7 +606,7 @@
                 return {
                     name: i.PRD_CAT_NM,
                     level: "VERTICAL",
-                    path: i.DEAL_PRD_TYPE + "/" + i.PRD_CAT_NM + "/"
+                    path: i.DEAL_PRD_TYPE + " " + i.PRD_CAT_NM + " "
                 }
             });
             if (vm.searchItems.length == 1) {
@@ -660,7 +660,7 @@
                         name: i.BRND_NM,
                         level: "Brand",
                         vertical: item.vertical,
-                        path: i.DEAL_PRD_TYPE + "/" + i.PRD_CAT_NM + "/" + i.BRND_NM + "/"
+                        path: i.DEAL_PRD_TYPE + " " + i.PRD_CAT_NM + " " + i.BRND_NM + " "
                     }
                 });
                 if (vm.searchItems.length == 1) {
@@ -683,7 +683,7 @@
                 vm.searchItems = familyNames.map(function (i) {
                     return {
                         name: i.FMLY_NM,
-                        path: i.DEAL_PRD_TYPE + "/" + i.PRD_CAT_NM + "/" + i.BRND_NM + "/" + i.FMLY_NM + "/",
+                        path: i.DEAL_PRD_TYPE + " " + i.PRD_CAT_NM + " " + i.BRND_NM + " " + i.FMLY_NM + " ",
                         brand: i.BRND_NM,
                         vertical: i.PRD_CAT_NM,
                         level: 'Family'
@@ -708,16 +708,16 @@
 
                 if (products.length == 1 && products[0].PRD_ATRB_SID > 7006) {
                     vm.selectedPathParts.push({
-                        name: products[0].PCSR_NBR, path: products[0].DEAL_PRD_TYPE + "/"
-                            + products[0].PRD_CAT_NM + "/" + products[0].BRND_NM + "/" + products[0].FMLY_NM + "/" + products[0].PCSR_NBR + "/"
+                        name: products[0].PCSR_NBR, path: products[0].DEAL_PRD_TYPE + " "
+                            + products[0].PRD_CAT_NM + " " + products[0].BRND_NM + " " + products[0].FMLY_NM + " " + products[0].PCSR_NBR + " "
                     });
                 }
 
                 if (products.length == 1 && products[0].PRD_ATRB_SID > 7007) {
                     vm.selectedPathParts.push({
-                        name: products[0].DEAL_PRD_NM, path: products[0].DEAL_PRD_TYPE + "/"
-                            + products[0].PRD_CAT_NM + "/" + products[0].BRND_NM + "/" + products[0].FMLY_NM + "/"
-                            + products[0].PCSR_NBR + "/" + products[0].DEAL_PRD_NM + "/"
+                        name: products[0].DEAL_PRD_NM, path: products[0].DEAL_PRD_TYPE + " "
+                            + products[0].PRD_CAT_NM + " " + products[0].BRND_NM + " " + products[0].FMLY_NM + " "
+                            + products[0].PCSR_NBR + " " + products[0].DEAL_PRD_NM + " "
                     });
                 }
 

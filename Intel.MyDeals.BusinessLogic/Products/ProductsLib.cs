@@ -272,7 +272,7 @@ namespace Intel.MyDeals.BusinessLogic
 
                         var productAliasesSplit = (from p in prodNamesListSplit
                                                    join a in aliasMapping
-                                              on p.USR_INPUT equals a.PRD_ALS_NM into pa
+                                                   on p.USR_INPUT equals a.PRD_ALS_NM into pa
                                                    from t in pa.DefaultIfEmpty()
                                                    select new ProductEntryAttribute
                                                    {
@@ -281,7 +281,7 @@ namespace Intel.MyDeals.BusinessLogic
 
                         foreach (var pas in productAliasesSplit)
                         {
-                            finalProdName = finalProdName + '/' + pas.USR_INPUT.ToString();
+                            finalProdName = finalProdName + ' ' + pas.USR_INPUT.ToString();
                         }
                         finalProdName = finalProdName.Remove(0, 1);
                         int index = products.IndexOf(productName);
@@ -637,7 +637,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <summary>
         /// TODO: Remove this method once corrector also starts using this method for suggestion
         /// </summary>
-        /// <param name="prdEntered"></param>
+        /// <param name="prdEntered"></param>f
         /// <param name="returnMax"></param>
         /// <returns></returns>
         public List<Product> SuggestProducts(string prdEntered, int? returnMax, IList<Product> prds = null)
