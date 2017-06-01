@@ -253,7 +253,12 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 29,
                 AtrbCd = AttributeCodes.CUST_DIV_NM,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                Width = 120
+                Width = 120,
+                DataType = "string",
+                UiType = "MULTISELECT",
+                LookupUrl = "/api/Customers/GetCustomerDivisionsByCustNmSid/",
+                LookupText = "CUST_DIV_NM",
+                LookupValue = "CUST_DIV_NM",
             });
             items.Add(new UiTemplateContainerItem
             {

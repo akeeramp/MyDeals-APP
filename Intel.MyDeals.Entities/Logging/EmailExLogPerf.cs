@@ -57,7 +57,12 @@ namespace Intel.MyDeals.Entities.Logging
 			// construct message
 			string shortMsg = msg.Message.Truncate(50) + "...";  // Was string shortMsg = msg.Message.Truncate(50) + "...";
             string title = string.Format(EmailEmailSubject, env, shortMsg);
-			string body = OpLogPerfHelper.MachineDetails;
+
+		    string header = "";
+            header += "<b>User:</b> " + opUserToken.Usr.FullName + "</br>";
+            header += "<b>Role:</b> " + opUserToken.Role.RoleTypeCd + "</br></hr>";
+            
+            string body = header + OpLogPerfHelper.MachineDetails;
 			body += msg.Message;
 
 			// Send email

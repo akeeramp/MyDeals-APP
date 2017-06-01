@@ -54,8 +54,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 	vm.requiredStringColumns = {};
 	root.wipData;
 	root.wipOptions;
-    var ssTools;
-
+	var ssTools;
+    
 	function init() {
 		// force a resize event to format page
 		//$scope.resizeEvent();
@@ -122,7 +122,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
 	    root.spreadDs = ssTools.createDataSource(root.pricingTableData.PRC_TBL_ROW);
 
-	    //var cc = CustomerDivisions;
 	    if (!root.contractData.CustomerDivisions || root.contractData.CustomerDivisions.length <= 1) {
 	        // hide Cust Div
 	        ptTemplate.columns[1].hidden = true;
@@ -462,7 +461,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 				sheet.batch(function () {
 					var finalColLetter = String.fromCharCode(intA + (ptTemplate.columns.length - 1));
 					// Enable other cells
-					var range = sheet.range("C" + topLeftRowIndex + ":" + finalColLetter + bottomRightRowIndex);
+					var range = sheet.range("B" + topLeftRowIndex + ":" + finalColLetter + bottomRightRowIndex);
 					range.enable(true);
 					range.background(null);
 
@@ -555,6 +554,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             data[r]["DC_ID"] = 0;
                             data[r]["VOLUME"] = null;
                             data[r]["ECAP_PRICE"] = null;
+                            data[r]["CUST_DIV_NM"] = root.contractData.CUST_ACCNT_DIV;
                         }
 
 	                    for (var key in ptTemplate.model.fields) {
@@ -744,6 +744,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 		// disable right click menu options
 		$(".k-context-menu").remove();
 
+	    var isCorpDiv = (!!root.contractData.CustomerDivisions && root.contractData.CustomerDivisions.length > 1);
+
 	    sheet.batch(function() {
 
 	        var headerRange = sheet.range("1:1");
@@ -788,34 +790,38 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 	                        numRowsContainingData = root.pricingTableData.PRC_TBL_ROW.length + rowIndexOffset;
 	                    }
 	                    // Disable all cells except product and cells that are read-only from template
-	                    if (key != "PTR_USER_PRD") {
+	                    if (key !== "PTR_USER_PRD") {
 	                        disableRange(sheet.range(myColumnName + numRowsContainingData + ":" + myColumnName));
 	                    }
 	                }
 
+
 	                // Add validation dropdowns/multiselects onto the cells
-	                if (myFieldModel.opLookupText == "DROP_DOWN" || myFieldModel.opLookupText == "dropdownName") {
+	                if (myFieldModel.opLookupText === "DROP_DOWN" || myFieldModel.opLookupText === "dropdownName" || (myFieldModel.opLookupText === "CUST_DIV_NM" && isCorpDiv)) {
 	                    // Call API
+	                    if (myFieldModel.opLookupText === "CUST_DIV_NM") {
+	                        //debugger;
+	                        myFieldModel.opLookupUrl = "/api/Customers/GetCustomerDivisionsByCustNmSid/" + root.contractData.CUST_MBR_SID;
+	                    }
+
 	                    dataService.get(myFieldModel.opLookupUrl, null, null, true).then(function(response) {
 	                            dropdownValuesSheet.batch(function() {
 	                                for (var i = 0; i < response.data.length; i++) {
 	                                    var myKey = response.data[i].ATRB_CD;
 	                                    if (myKey === null || myKey === undefined) {
-	                                        myKey = response.data[i]
-	                                            .subAtrbValue;
-// HACK: this is for Product Level's atrb code because it pulls form a different dropdown sp
+	                                        myKey = response.data[i].subAtrbValue;
+	                                        // HACK: this is for Product Level's atrb code because it pulls form a different dropdown sp
 	                                    }
 
 	                                    // TODO: Why is ECAP_TYPE called PROGRAM_ECAP_TYPE and can we change that?
-	                                    if (response.data[i].ATRB_CD == "PROGRAM_ECAP_TYPE") {
+	                                    if (response.data[i].ATRB_CD === "PROGRAM_ECAP_TYPE") {
 	                                        myKey = "ECAP_TYPE";
 	                                    }
 	                                    // Add values onto the other sheet
 	                                    var dropdownValue = response.data[i].DROP_DOWN;
 	                                    if (dropdownValue === undefined || dropdownValue === null) {
-	                                        dropdownValue = response.data[i]
-	                                            .dropdownName;
-// HACK: this is for Product Level's atrb code because it pulls form a different dropdown sp
+	                                        dropdownValue = response.data[i].dropdownName;
+	                                        // HACK: this is for Product Level's atrb code because it pulls form a different dropdown sp
 	                                    }
 
 	                                    dropdownValuesSheet.range(root.colToLetter[myKey] + (i + 1)).value(dropdownValue);
@@ -825,8 +831,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 	                        function(error) {
 	                            logger.error("Unable to get dropdown data.", error, error.statusText);
 	                        });
-	                    if (myFieldModel.uiType == "RADIOBUTTONGROUP" || myFieldModel.uiType == "DROPDOWN") {
-	                        // MOVED TO MT VALIDATION AS MULTIPLE VALIDATIONS ARE NOT SUPPORTED AND MYDEALS_ERROR IS THE VALIDATION WE WILL USE
+	                    if (myFieldModel.uiType === "RADIOBUTTONGROUP" || myFieldModel.uiType === "DROPDOWN") {
 	                        sheet.range(myColumnName + ":" + myColumnName).validation({
 	                            dataType: "list",
 	                            showButton: true,
@@ -836,7 +841,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 	                            titleTemplate: "Invalid value",
 	                            messageTemplate: "Invalid value. Please use the dropdown for available options."
 	                        });
-	                    } else if (myFieldModel.uiType == "EMBEDDEDMULTISELECT" || myFieldModel.uiType == "MULTISELECT") {
+	                    } else if (myFieldModel.uiType === "EMBEDDEDMULTISELECT" || myFieldModel.uiType === "MULTISELECT") {
 	                        sheet.range(myColumnName + ":" + myColumnName).editor("multiSelectPopUpEditor");
 	                        // TODO: Add a better validator which makes sure the selected items are in the multiselect list
 	                        vm.requiredStringColumns[key] = true;
@@ -845,37 +850,37 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 	                    // Add validations based on column type
 	                    switch (myFieldModel.type) {
 	                        case "date":
-	                            var cellSelection = sheet.range(myColumnName + ":" + myColumnName);
-	                        //sheet.range(myColumnName + ":" + myColumnName).format("MM/dd/yyyy");								
-	                        cellSelection.editor("datePickerEditor");
+	                                var cellSelection = sheet.range(myColumnName + ":" + myColumnName);
+	                            //sheet.range(myColumnName + ":" + myColumnName).format("MM/dd/yyyy");								
+	                            cellSelection.editor("datePickerEditor");
 
-	                        vm.requiredStringColumns[key] = true;
-	                        break;
-	                    case "number":
-	                        if (!myFieldModel.nullable) {
-	                            // MOVED TO MT VALIDATION AS MULTIPLE VALIDATIONS ARE NOT SUPPORTED AND MYDEALS_ERROR IS THE VALIDATION WE WILL USE
-	                            //sheet.range(myColumnName + ":" + myColumnName).validation({
-	                            //    dataType: "number",
-	                            //    from: 0,
-	                            //    comparerType: "greaterThan",
-	                            //    allowNulls: false,
-	                            //    type: "warning",
-	                            //    messageTemplate: "Value must be positive number."
-	                            //});
-	                        }
-	                        // Money Formatting
-	                        if (myFieldModel.format == "{0:c}") {
-	                            sheet.range(myColumnName + ":" + myColumnName).format("$#,##0.00");
-	                        }
-	                        break;
-	                    case "string":
-	                        if (!myFieldModel.nullable) {
-	                            // TODO: find out how we do an isRequired on strings without LEN?
-	                            // Add required string columns to dictionay to add LEN validations onchange and later
 	                            vm.requiredStringColumns[key] = true;
-	                        }
-	                        break;
-	                    default:
+	                            break;
+	                        case "number":
+	                            if (!myFieldModel.nullable) {
+	                                // MOVED TO MT VALIDATION AS MULTIPLE VALIDATIONS ARE NOT SUPPORTED AND MYDEALS_ERROR IS THE VALIDATION WE WILL USE
+	                                //sheet.range(myColumnName + ":" + myColumnName).validation({
+	                                //    dataType: "number",
+	                                //    from: 0,
+	                                //    comparerType: "greaterThan",
+	                                //    allowNulls: false,
+	                                //    type: "warning",
+	                                //    messageTemplate: "Value must be positive number."
+	                                //});
+	                            }
+	                            // Money Formatting
+	                            if (myFieldModel.format == "{0:c}") {
+	                                sheet.range(myColumnName + ":" + myColumnName).format("$#,##0.00");
+	                            }
+	                            break;
+	                        case "string":
+	                            if (!myFieldModel.nullable) {
+	                                // TODO: find out how we do an isRequired on strings without LEN?
+	                                // Add required string columns to dictionay to add LEN validations onchange and later
+	                                vm.requiredStringColumns[key] = true;
+	                            }
+	                            break;
+	                        default:
 	                        break;
 	                    }
 	                }
@@ -1182,7 +1187,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 			var currColIndex = context.range._ref.col;
 
 			// Get column name out of selected cell
-			var colName = root.letterToCol[String.fromCharCode(intA + currColIndex)]
+		    var colName = root.letterToCol[String.fromCharCode(intA + currColIndex)];
 
 			// Get columnData (urls, name, etc) from column name
 			var colData = $scope.$parent.$parent.templates.ModelTemplates.PRC_TBL_ROW['ECAP'].model.fields[colName];
@@ -1199,6 +1204,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 				isBlendedGeo = (cellCurrVal.indexOf("[") >= 0);
 				// Remove brackets
 				cellCurrVal = cellCurrVal.replace(/\[(.*?)\]/g, "$1");
+
+				if (colName === "CUST_DIV_NM") {
+				    cellCurrVal = cellCurrVal.replace(/\//g, ",");
+                }
 
 				cellCurrVal = cellCurrVal.trim();
 				cellCurrVal = cellCurrVal.split(',');
@@ -1233,7 +1242,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 			}, function () { });
 		}
 	});
-
 
 
 	// NOTE: Thhis is a workaround because the bulit-in kendo spreadsheet datepicker causes major perfromance issues in IE

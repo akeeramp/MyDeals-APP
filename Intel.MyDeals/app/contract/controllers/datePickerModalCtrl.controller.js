@@ -1,6 +1,9 @@
-﻿angular
-    .module('app.contract')
-    .controller('DatePickerModalCtrl', DatePickerModalCtrl);
+﻿(function () {
+    'use strict';
+
+    angular
+        .module('app.contract')
+        .controller('DatePickerModalCtrl', DatePickerModalCtrl);
 
 DatePickerModalCtrl.$inject = ['$scope', '$uibModalInstance', 'cellCurrValues', 'colName', 'contractStartDate', 'contractEndDate'];
 
@@ -68,3 +71,5 @@ function DatePickerModalCtrl($scope, $uibModalInstance, cellCurrValues, colName,
 		}
 	}
 }
+
+})();

@@ -9,18 +9,20 @@
 				If blending, Worldwide will not be blended with any geos.
 			</span>
 		</p>
-		<div op-control-flat
-			 ng-model="$ctrl.popupResult"
-			 op-cd="'MultiSelectSelections'"
-			 op-type="$ctrl.multiSelectPopUpModel.uiType"
-			 op-label="''"
-			 op-lookup-url="$ctrl.multiSelectPopUpModel.opLookupUrl"
-			 op-lookup-text="$ctrl.multiSelectPopUpModel.opLookupText"
-			 op-lookup-value="$ctrl.multiSelectPopUpModel.opLookupValue"
-			 op-placeholder="$ctrl.placeholderText"
-			 op-is-form="true"
-			 op-ui-mode="'VERTICAL'">
-		</div>
+
+        <div op-control-flat
+                ng-model="$ctrl.popupResult"
+                op-cd="'MultiSelectSelections'"
+                op-type="$ctrl.multiSelectPopUpModel.uiType"
+                op-label="''"
+                op-lookup-url="$ctrl.multiSelectPopUpModel.opLookupUrl"
+                op-lookup-text="$ctrl.multiSelectPopUpModel.opLookupText"
+                op-lookup-value="$ctrl.multiSelectPopUpModel.opLookupValue"
+                op-placeholder="$ctrl.placeholderText"
+                op-is-form="true"
+                op-ui-mode="'VERTICAL'">
+        </div>
+
 		<br />
 		<p ng-if="$ctrl.isGeo">
 			<input type="checkbox" ng-model="$ctrl.isGeoBlend" /> <b>Blend</b>

@@ -7,7 +7,8 @@ MultiSelectModalCtrl.$inject = ['$scope', '$uibModalInstance', 'MrktSegMultiSele
 function MultiSelectModalCtrl($scope, $uibModalInstance, MrktSegMultiSelectService, items, cellCurrValues, colName, isBlendedGeo) {
 	var $ctrl = this;
 	var GEO = "GEO_COMBINED";
-    var MRKT_SEG = "MRKT_SEG";
+	var MRKT_SEG = "MRKT_SEG";
+	var CORP = "CUST_DIV_NM";
 
 	$ctrl.multiSelectPopUpModel = items;
 	$ctrl.popupResult = [];
@@ -15,9 +16,9 @@ function MultiSelectModalCtrl($scope, $uibModalInstance, MrktSegMultiSelectServi
 	$ctrl.colName = colName;
     $ctrl.placeholderText = "Click to Select...";
 
-	$ctrl.isGeo = (colName == GEO);
-	$ctrl.isGeoBlend = isBlendedGeo;
-
+    $ctrl.isGeo = (colName === GEO);
+    $ctrl.isCorp = (colName === CORP);
+    $ctrl.isGeoBlend = isBlendedGeo;
 	
 	$ctrl.ok = function () {
 		var returnVal = "";
@@ -38,12 +39,16 @@ function MultiSelectModalCtrl($scope, $uibModalInstance, MrktSegMultiSelectServi
 					
 					if (wwIndex > -1) {
 						if (returnVal.length !== 0) {
-							returnVal += ","
+						    returnVal += ",";
 						}
 						returnVal += "Worldwide";
 					}
 				}
 			}
+
+			if ($ctrl.isCorp) {
+			    returnVal = returnVal.join('/');
+            }
 		}
 		
 		$uibModalInstance.close(returnVal);
@@ -70,7 +75,7 @@ function MultiSelectModalCtrl($scope, $uibModalInstance, MrktSegMultiSelectServi
 			else {
 				// HACK: These get called twice because we set newValue via $ctrl.popupResult.MultiSelectSelections directly instead 
 				// of newValue. However, we need to do this otherwise the newValue will not neccessarly change  in the MrktSegMultiSelectService
-				if ($ctrl.colName == MRKT_SEG) {
+				if ($ctrl.colName === MRKT_SEG) {
 					$ctrl.popupResult.MultiSelectSelections = MrktSegMultiSelectService.setMkrtSegMultiSelect("MultiSelectSelections", "MultiSelectSelections_MS", newValue, oldValue);
 				} else if (($ctrl.isGeo) && (!$ctrl.isGeoBlend)) {
 					$ctrl.popupResult.MultiSelectSelections = MrktSegMultiSelectService.setGeoMultiSelect("MultiSelectSelections", newValue, oldValue);

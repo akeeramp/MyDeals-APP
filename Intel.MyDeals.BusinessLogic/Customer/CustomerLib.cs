@@ -82,7 +82,7 @@ namespace Intel.MyDeals.BusinessLogic
 
         public List<CustomerDivision> GetCustomerDivisionsByCustNmSid(int custNmSid)
         {
-            return GetCustomerDivisions().Where(c => c.CUST_NM_SID == custNmSid).ToList();
+            return GetCustomerDivisions().Where(c => c.CUST_NM_SID == custNmSid && c.CUST_DIV_NM != c.CUST_NM).ToList();
         }
 
         /// <summary>
