@@ -102,26 +102,6 @@ namespace Intel.MyDeals.DataLibrary
             return DataCollections.GetProductData();
         }
 
-        public List<RuleSet> GetRuleSets()
-        {
-            return DataCollections.GetRuleSets();
-        }
-
-        public List<RuleItem> GetRuleItems()
-        {
-            return DataCollections.GetRuleItems();
-        }
-
-        public List<RuleCondition> GetRuleConditions()
-        {
-            return DataCollections.GetRuleConditions();
-        }
-
-        public List<RuleTask> GetRuleTasks()
-        {
-            return DataCollections.GetRuleTasks();
-        }
-
         #region Security Attributes
 
         public SecurityWrapper GetSecurityWrapper()

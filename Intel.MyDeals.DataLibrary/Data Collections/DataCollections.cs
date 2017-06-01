@@ -457,50 +457,6 @@ namespace Intel.MyDeals.DataLibrary
             }
         }
 
-        #region Rules Engine
-
-        public static List<RuleSet> GetRuleSets()
-        {
-            lock (LOCK_OBJECT ?? new object())
-            {
-                return _getRuleSetData ?? (_getRuleSetData = new RuleEngineDataLib().GetRuleSets());
-            }
-        }
-
-        private static List<RuleSet> _getRuleSetData;
-
-        public static List<RuleItem> GetRuleItems()
-        {
-            lock (LOCK_OBJECT ?? new object())
-            {
-                return _getRuleItemData ?? (_getRuleItemData = new RuleEngineDataLib().GetRuleItems());
-            }
-        }
-
-        private static List<RuleItem> _getRuleItemData;
-
-        public static List<RuleCondition> GetRuleConditions()
-        {
-            lock (LOCK_OBJECT ?? new object())
-            {
-                return _getRuleConditionData ?? (_getRuleConditionData = new RuleEngineDataLib().GetRuleConditions());
-            }
-        }
-
-        private static List<RuleCondition> _getRuleConditionData;
-
-        public static List<RuleTask> GetRuleTasks()
-        {
-            lock (LOCK_OBJECT ?? new object())
-            {
-                return _getRuleTaskData ?? (_getRuleTaskData = new RuleEngineDataLib().GetRuleTasks());
-            }
-        }
-
-        private static List<RuleTask> _getRuleTaskData;
-
-        #endregion Rules Engine
-
         #region Product Categories
 
         public static List<ProductCategory> GetProductCategories()

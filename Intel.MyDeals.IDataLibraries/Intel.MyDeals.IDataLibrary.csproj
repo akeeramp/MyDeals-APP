@@ -61,7 +61,6 @@
     <Compile Include="Logging\ILoggingDataLib.cs" />
     <Compile Include="ProductCostTest\IProductCostTestDataLib.cs" />
     <Compile Include="ProductCategories\IProductCategoriesDataLib.cs" />
-    <Compile Include="Rule Engine\IRuleEngineDataLib.cs" />
     <Compile Include="Products\IProductDataLib.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SecurityAttributes\ISecurityAttributesDataLib.cs" />

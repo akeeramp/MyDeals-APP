@@ -26,15 +26,7 @@ namespace Intel.MyDeals.IDataLibrary
 
         UiTemplates GetUiTemplates();
 
-        List<Product> GetProductData();        
-
-        List<RuleSet> GetRuleSets();
-
-        List<RuleItem> GetRuleItems();
-
-        List<RuleCondition> GetRuleConditions();
-
-        List<RuleTask> GetRuleTasks();
+        List<Product> GetProductData(); 
 
         List<ProductCategory> GetProductCategories();
 
