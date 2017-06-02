@@ -221,6 +221,39 @@ namespace Intel.MyDeals.BusinessRules
 
         }
 
+        public static void CheckDropDownValues(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            List<string> eligableDropDowns = new List<string>
+            {
+                AttributeCodes.PAYOUT_BASED_ON,
+                AttributeCodes.PROGRAM_PAYMENT,
+                AttributeCodes.REBATE_TYPE,
+                AttributeCodes.MEET_COMP_PRICE_QSTN,
+                AttributeCodes.PROD_INCLDS
+            };
+
+            foreach (IOpDataElement de in r.Dc.GetDataElementsIn(eligableDropDowns))
+            {
+                List<string> dropDowns = DataCollections.GetBasicDropdowns().Where(d => d.ATRB_CD == de.AtrbCd).Select(d => d.DROP_DOWN).ToList();
+                string matchedValue = dropDowns.Where(d => d.ToUpper() == de.AtrbValue.ToString().ToUpper()).Select(d => d).FirstOrDefault();
+                if (string.IsNullOrEmpty(matchedValue))
+                {
+                    BusinessLogicDeActions.AddValidationMessage(de, "Please enter a valid value.");
+                }
+                else
+                {
+                    if (matchedValue != de.AtrbValue.ToString())
+                    {
+                        // strings match but case is different
+                        de.AtrbValue = matchedValue;
+                    }
+                }
+            }
+        }
+
         public static void CheckFrontendDates(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
@@ -253,11 +286,11 @@ namespace Intel.MyDeals.BusinessRules
                 return;
             }
 
-            IOpDataElement ecapType = r.Dc.GetDataElement(AttributeCodes.ECAP_TYPE);
+            IOpDataElement ecapType = r.Dc.GetDataElement(AttributeCodes.REBATE_TYPE);
             if (ecapType == null) return;
             if (ecapType.ToString() == string.Empty)
             {
-                BusinessLogicDeActions.AddValidationMessage(ecapType, "ECAP Type must be filled out.");
+                BusinessLogicDeActions.AddValidationMessage(ecapType, "Rebate Type must be filled out.");
                 return;
             }
 

@@ -116,7 +116,7 @@ function AllDealsController($scope, $state, $stateParams, $filter, objsetService
 		        "EXPIRE_YCS2": {
 		            "Groups": ["Deal Info"]
 		        },
-		        "ECAP_TYPE": {
+		        "REBATE_TYPE": {
 		            "Groups": ["Deal Info"]
 		        },
 		        "MRKT_SEG": {

@@ -679,7 +679,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
                 $scope._dirty = false;
             }
 
-            $scope.saveWipDeals = function() {
+            $scope.saveWipDeals = function () {
+                $scope.contractDs.sync();
                 $scope.$parent.$parent.$parent.saveEntireContract();
             }
 
@@ -704,6 +705,16 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
                 for (var d = 0; d < data.length; d++) {
                     if (!$scope.validateRow(data[d], $scope)) valid = false;
                 }
+
+                return valid;
+            }
+
+            $scope.saveAndValidateGrid = function () {
+                $scope.contractDs.sync();
+                $scope.$parent.$parent.$parent.validateWipDeals();
+                return;
+
+                var valid = $scope.validateGrid();
 
                 if (valid) {
                     $scope.$parent.$parent.$parent.validateWipDeals();
@@ -751,7 +762,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
                 // check for errors
                 //debugger;
                 angular.forEach(beh.isError, function (value, key) {
-                    if ((beh.isReadOnly[key] === undefined || !beh.isReadOnly[key]) && (beh.isHidden[key] === undefined || !beh.isHidden[key])) {
+                    if (beh.isError[key] && (beh.isReadOnly[key] === undefined || !beh.isReadOnly[key]) && (beh.isHidden[key] === undefined || !beh.isHidden[key])) {
                         $scope.increaseBadgeCnt(key);
                         valid = false;
                         row["PASSED_VALIDATION"] = "Dirty";

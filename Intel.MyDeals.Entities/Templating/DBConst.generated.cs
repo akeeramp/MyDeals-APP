@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 5/30/2017 11:00:27 PM
+File Updated: 6/2/2017 3:06:54 PM
 On: PWECKENR-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -1365,8 +1365,8 @@ namespace Intel.MyDeals.Entities {
 		/// DIM_SID: 3
 		/// DIM_CD: DEAL
 		/// ATRB_SID: 3668
-		/// TGT_COL_TYPE: INT
-		/// DOT_NET_DATA_TYPE: System.Boolean
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
 		///</summary>
 		public const string PASSED_VALIDATION = "PASSED_VALIDATION";
 
@@ -1526,15 +1526,6 @@ namespace Intel.MyDeals.Entities {
 		///<summary>
 		/// DIM_SID: 3
 		/// DIM_CD: DEAL
-		/// ATRB_SID: 18
-		/// TGT_COL_TYPE: VARCHAR
-		/// DOT_NET_DATA_TYPE: System.String
-		///</summary>
-		public const string PROGRAM_ECAP_TYPE = "PROGRAM_ECAP_TYPE";
-
-		///<summary>
-		/// DIM_SID: 3
-		/// DIM_CD: DEAL
 		/// ATRB_SID: 3495
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.String
@@ -1585,6 +1576,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Object
 		///</summary>
 		public const string REBATE_PROD_FLAG = "REBATE_PROD_FLAG";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 18
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string REBATE_TYPE = "REBATE_TYPE";
 
 		///<summary>
 		/// DIM_SID: 3

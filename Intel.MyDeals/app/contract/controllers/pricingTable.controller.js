@@ -260,7 +260,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 		        "EXPIRE_YCS2": {
 		            "Groups": ["Deal Info"]
 		        },
-		        "ECAP_TYPE": {
+		        "REBATE_TYPE": {
 		            "Groups": ["Deal Info"]
 		        },
 		        "MRKT_SEG": {
@@ -719,7 +719,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             if (!spreadsheet) return;
             var sheet = spreadsheet.activeSheet();
             var dropdownValuesSheet = spreadsheet.sheetByName("DropdownValuesSheet");
-            sheetBatchOnRender(sheet, dropdownValuesSheet);
+            //sheetBatchOnRender(sheet, dropdownValuesSheet);
         });
 
 	function replaceUndoRedoBtns() {
@@ -813,9 +813,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 	                                        // HACK: this is for Product Level's atrb code because it pulls form a different dropdown sp
 	                                    }
 
-	                                    // TODO: Why is ECAP_TYPE called PROGRAM_ECAP_TYPE and can we change that?
-	                                    if (response.data[i].ATRB_CD === "PROGRAM_ECAP_TYPE") {
-	                                        myKey = "ECAP_TYPE";
+	                                    if (response.data[i].ATRB_CD === "REBATE_TYPE") {
+	                                        myKey = "REBATE_TYPE";
 	                                    }
 	                                    // Add values onto the other sheet
 	                                    var dropdownValue = response.data[i].DROP_DOWN;

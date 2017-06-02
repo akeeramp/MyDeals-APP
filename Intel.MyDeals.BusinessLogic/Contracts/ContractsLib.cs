@@ -338,7 +338,7 @@ namespace Intel.MyDeals.BusinessLogic
                 Attributes.DEAL_COMB_TYPE.ATRB_SID,
                 Attributes.ECAP_FLR.ATRB_SID,
                 Attributes.ECAP_PRICE.ATRB_SID,
-                Attributes.ECAP_TYPE.ATRB_SID,
+                Attributes.REBATE_TYPE.ATRB_SID,
                 Attributes.END_DT.ATRB_SID,
                 Attributes.GEO_COMBINED.ATRB_SID,
                 Attributes.IA_BENCH.ATRB_SID,
@@ -594,7 +594,7 @@ namespace Intel.MyDeals.BusinessLogic
 				object val_END_DT = new object();
 				object val_PAYOUT_BASED_ON = new object();
 				object val_PROGRAM_PAYMENT = new object();
-				object val_ECAP_TYPE = new object();
+				object val_REBATE_TYPE = new object();
 				object val_MRKT_SEG = new object();
 				object val_GEO_COMBINED = new object();
 				object val_MEET_COMP_PRICE_QSTN = new object();
@@ -608,7 +608,7 @@ namespace Intel.MyDeals.BusinessLogic
 				row.TryGetValue("END_DT", out val_END_DT);
 				row.TryGetValue("PAYOUT_BASED_ON", out val_PAYOUT_BASED_ON);
 				row.TryGetValue("PROGRAM_PAYMENT", out val_PROGRAM_PAYMENT);
-				row.TryGetValue("ECAP_TYPE", out val_ECAP_TYPE);
+				row.TryGetValue("ECAP_TYPE", out val_REBATE_TYPE);
 				row.TryGetValue("MRKT_SEG", out val_MRKT_SEG);
 				row.TryGetValue("GEO_COMBINED", out val_GEO_COMBINED);
 				row.TryGetValue("MEET_COMP_PRICE_QSTN", out val_MEET_COMP_PRICE_QSTN);

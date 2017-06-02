@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 5/30/2017 11:00:57 PM
+File Updated: 6/2/2017 3:05:04 PM
 On: PWECKENR-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -2250,15 +2250,15 @@ namespace Intel.MyDeals.Entities {
 			ATRB_COL_NM = "PASSED_VALIDATION",
 			ATRB_DESC = "Passed Validation",
 			ATRB_LBL = "Passed Validation",
-			ATRB_MAX_LEN = 1,
+			ATRB_MAX_LEN = 25,
 			ATRB_SID = 3668,
-			DATA_TYPE_CD = "BIT",
+			DATA_TYPE_CD = "VARCHAR",
 			DIM_CD = "DEAL",
 			DIM_SID = 3,
-			DOT_NET_DATA_TYPE = "System.Boolean",
+			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			TGT_COL_TYPE = "INT",
-			UI_TYPE_CD = "CheckBox"
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "TextBox"
 		};
 		public static MyDealsAttribute PAYOUT_BASED_ON = new MyDealsAttribute()
 		{
@@ -2515,21 +2515,6 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "LINK_LABEL"
 		};
-		public static MyDealsAttribute PROGRAM_ECAP_TYPE = new MyDealsAttribute()
-		{
-			ATRB_COL_NM = "PROGRAM_ECAP_TYPE",
-			ATRB_DESC = "Object set types",
-			ATRB_LBL = "Deal Types",
-			ATRB_MAX_LEN = 50,
-			ATRB_SID = 18,
-			DATA_TYPE_CD = "VARCHAR",
-			DIM_CD = "DEAL",
-			DIM_SID = 3,
-			DOT_NET_DATA_TYPE = "System.String",
-			FRMT_MSK = "{0}",
-			TGT_COL_TYPE = "VARCHAR",
-			UI_TYPE_CD = default(System.String)
-		};
 		public static MyDealsAttribute PROGRAM_PAYMENT = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "PROGRAM_PAYMENT",
@@ -2616,6 +2601,21 @@ namespace Intel.MyDeals.Entities {
 			DIM_CD = "PRD",
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
+			FRMT_MSK = "{0}",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute REBATE_TYPE = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "REBATE_TYPE",
+			ATRB_DESC = "Type of Rebate",
+			ATRB_LBL = "Rebate Type",
+			ATRB_MAX_LEN = 50,
+			ATRB_SID = 18,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)

@@ -94,7 +94,7 @@ dealUtil.init = function () {
         REBATE_DISTI: { type: 'string' },
         DIVISION_APPROVED_LIMIT: { type: 'string' },
         ECAP_PRICE: { type: 'object' },
-        ECAP_TYPE: { type: 'string' },
+        REBATE_TYPE: { type: 'string' },
         END_CUSTOMER_RETAIL: { type: 'string' },
         END_DT: { type: 'date' },
         TRGT_RGN_CHK: { type: 'object' },

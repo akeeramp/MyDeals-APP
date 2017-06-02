@@ -68,7 +68,7 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.COST_TYPE_USED,
                                 AttributeCodes.ECAP_FLR,
                                 AttributeCodes.ECAP_PRICE,
-                                AttributeCodes.ECAP_TYPE,
+                                AttributeCodes.REBATE_TYPE,
                                 AttributeCodes.END_DT,
                                 AttributeCodes.GEO_COMBINED,
                                 AttributeCodes.MEETCOMP_TEST_RESULT,

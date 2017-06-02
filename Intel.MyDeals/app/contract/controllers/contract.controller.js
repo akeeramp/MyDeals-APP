@@ -1254,7 +1254,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
             if (forcePublish === undefined || forcePublish === null) forcePublish = false;
 
             if (forceValidation) {
-                $scope.setBusy("Validation your data...", "Please wait as we validate your information!");
+                $scope.setBusy("Validating your data...", "Please wait as we validate your information!");
             } else {
                 $scope.setBusy("Saving your data...", "Please wait as we save your information!");
             }
@@ -1285,7 +1285,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                 topbar.hide();
                 return;
             }
-            
+
             objsetService.updateContractAndCurPricingTable($scope.getCustId(), data, forceValidation, forcePublish).then(
                 function (results) {
                     var i;
@@ -1452,7 +1452,10 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
             };
         };
 
-        $scope.updateResults = function(data, source) {
+        $scope.renameMapping = {};
+
+        $scope.updateResults = function (data, source) {
+            $scope.renameMapping = {};
             var i, p;
             if (data !== undefined && data !== null) {
                 // look for actions -> this has to be first because remapping might happen
@@ -1479,9 +1482,11 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                         if (Array.isArray(source)) {
                             for (p = 0; p < source.length; p++) {
                                 if (data[i]["DC_ID"] === source[p]["DC_ID"]) $scope.mapProperty(source[p], data[i]);
+                                if (data[i]["DC_ID"] <= 0) data[i]["DC_ID"] = $scope.renameMapping[data[i]["DC_ID"]];
                             }
                         } else {
                             if (data[i]["DC_ID"] === source["DC_ID"]) $scope.mapProperty(source, data[i]);
+                            if (data[i]["DC_ID"] <= 0) data[i]["DC_ID"] = $scope.renameMapping[data[i]["DC_ID"]];
                         }
                     }
                 }
@@ -1497,12 +1502,13 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
             }
         }
         $scope.mapActionIdChange = function(src, action) {
-            if (src["DC_ID"] === action["DcID"])
+            if (src["DC_ID"] === action["DcID"]) {
+                $scope.renameMapping[src["DC_ID"]] = action["AltID"];
                 src["DC_ID"] = action["AltID"];
+            }
         }
 
         $scope.saveEntireContract = function() {
-            if (!$scope._dirty) return;
             $scope.saveEntireContractBase($state.current.name);
         }
         $scope.getCustId = function() {
@@ -1970,7 +1976,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
 			if (oldValue == null && newValue != null) {
 			    //initialize, hard coded for now, build into an admin page in future.
 			    if ($scope.currentPricingTable == null) {
-			        newValue["ECAP_TYPE"].value = "MCP";
+			        newValue["REBATE_TYPE"].value = "MCP";
 			        newValue[MRKT_SEG].value = ["All"];
 			        newValue[GEO].value = ["Worldwide"];
 			        newValue["PAYOUT_BASED_ON"].value = "Billings"; //TODO: typo- need to correct to "Billing" in db
@@ -1978,7 +1984,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
 			        newValue["PROGRAM_PAYMENT"].value = "Backend";
 			        newValue["PROD_INCLDS"].value = "Tray";
                 } else {
-			        newValue["ECAP_TYPE"].value = $scope.currentPricingTable["ECAP_TYPE"];
+			        newValue["REBATE_TYPE"].value = $scope.currentPricingTable["REBATE_TYPE"];
 			        newValue[MRKT_SEG].value = $scope.currentPricingTable[MRKT_SEG].split(',');
 			        newValue[GEO].value = $scope.currentPricingTable[GEO].split(',');
 			        newValue["PAYOUT_BASED_ON"].value = $scope.currentPricingTable["PAYOUT_BASED_ON"];

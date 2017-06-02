@@ -38,6 +38,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 29,
                 AtrbCd = AttributeCodes.PASSED_VALIDATION,
                 ObjType = new List<OpDataElementType> { OpDataElementType.CNTRCT },
+                DataType = "string",
                 Width = 40
             });
 
@@ -77,6 +78,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 29,
                 AtrbCd = AttributeCodes.PASSED_VALIDATION,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_ST },
+                DataType = "string",
                 Width = 40
             });
 
@@ -116,6 +118,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 29,
                 AtrbCd = AttributeCodes.PASSED_VALIDATION,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
+                DataType = "string",
                 Width = 40
             });
             items.Add(new UiTemplateContainerItem
@@ -145,14 +148,13 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem
             {
                 Id = 37,
-                AtrbCd = AttributeCodes.ECAP_TYPE,
+                AtrbCd = AttributeCodes.REBATE_TYPE,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
                 IsDefaultable = true,
-                Label = "ECAP Type",
                 DataType = "string",
                 UiType = "DROPDOWN",
-                LookupUrl = "/api/Dropdown/GetDropdowns/PROGRAM_ECAP_TYPE/ECAP",
+                LookupUrl = "/api/Dropdown/GetDropdowns/REBATE_TYPE/ECAP",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
             });
@@ -198,7 +200,7 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem
             {
                 Id = 29,
-                AtrbCd = "MEET_COMP_PRICE_QSTN",
+                AtrbCd = AttributeCodes.MEET_COMP_PRICE_QSTN,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
                 IsDefaultable = true,
                 UiType = "RADIOBUTTONGROUP",
@@ -352,15 +354,14 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem
             {
                 Id = 37,
-                AtrbCd = AttributeCodes.ECAP_TYPE,
+                AtrbCd = AttributeCodes.REBATE_TYPE,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
                 IsDefaultable = true,
-                Label = "ECAP Type",
                 Width = 100,
                 DataType = "string",
                 UiType = "DROPDOWN",
-                LookupUrl = "/api/Dropdown/GetDropdowns/PROGRAM_ECAP_TYPE/ECAP",
+                LookupUrl = "/api/Dropdown/GetDropdowns/REBATE_TYPE/ECAP",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN",
                 IsRequired = true
@@ -421,7 +422,7 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "Meet Comp Analysis",
                 Width = 120,
                 DataType = "string",
-                UiType = "RADIOBUTTONGROUP",
+                UiType = "DROPDOWN",
                 LookupUrl = "/api/Dropdown/GetDropdowns/MEET_COMP_PRICE_QSTN/ECAP",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
@@ -503,6 +504,7 @@ namespace Intel.MyDeals.DataLibrary
                 IsFilterable = true,
                 Label = "<i class='intelicon-protection-solid' style='color: #00AEEF; font-size: 20px;'></i>",
                 IsReadOnly = true,
+                DataType = "string",
                 Template = "<i class='valid-icon validf_{{ dataItem.PASSED_VALIDATION }} {{ (dataItem.PASSED_VALIDATION === undefined || dataItem.PASSED_VALIDATION === \"\") ? \"intelicon-protection-solid\" : (dataItem.PASSED_VALIDATION == \"Valid\" || dataItem.PASSED_VALIDATION == \"Complete\") ? \"intelicon-protection-checked-verified-solid\" : \"intelicon-protection-failed-solid\" }}' title='Validation: {{dataItem.PASSED_VALIDATION || \"Not validated yet\"}}' style='margin-left: 14px;'></i>"
             });
             items.Add(new UiTemplateContainerItem
@@ -1000,7 +1002,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 29,
                 AtrbCd = AttributeCodes.RETAIL_CYCLE,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Width = 110,
+                Width = 140,
                 IsFilterable = true,
                 IsSortable = true,
                 Template = "#=gridUtils.uiControlWrapper(data, 'RETAIL_CYCLE')#",
@@ -1143,12 +1145,12 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem
             {
                 Id = 37,
-                AtrbCd = AttributeCodes.ECAP_TYPE,
+                AtrbCd = AttributeCodes.REBATE_TYPE,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
                 Width = 180,
-                Template = "#=gridUtils.uiControlWrapper(data, 'ECAP_TYPE')#",
-                LookupUrl = "/api/Dropdown/GetDropdowns/PROGRAM_ECAP_TYPE/ECAP",
+                Template = "#=gridUtils.uiControlWrapper(data, 'REBATE_TYPE')#",
+                LookupUrl = "/api/Dropdown/GetDropdowns/REBATE_TYPE/ECAP",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN",
                 IsFilterable = true,
