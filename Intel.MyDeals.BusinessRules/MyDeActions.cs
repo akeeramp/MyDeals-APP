@@ -162,15 +162,18 @@ namespace Intel.MyDeals.BusinessRules
             //"NonCorp" check - // TODO: If Non Corp is chosen then user should not select a duplicate value outside of non corp selection.
             if (userMrktSegs.Contains("NON Corp"))
             {
-                //NONCORP is checked - make sure all NONCORP options are also included in user input
-                foreach (BasicDropdown mrkt in validMrktNonCorp)
-                {
-                    if (!userMrktSegs.Contains(mrkt.DROP_DOWN))
-                    {
-                        // user selected noncorp but did not include all noncorp options
-                        BusinessLogicDeActions.AddValidationMessage(de, "NonCorp Market Segment selected but " + mrkt.DROP_DOWN + " not included.");
-                    }
-                }
+                ////NONCORP is checked - make sure all NONCORP options are also included in user input
+                //foreach (BasicDropdown mrkt in validMrktNonCorp)
+                //{
+                //    if (!userMrktSegs.Contains(mrkt.DROP_DOWN))
+                //    {
+                //        // user selected noncorp but did not include all noncorp options
+                //        BusinessLogicDeActions.AddValidationMessage(de, "NonCorp Market Segment selected but " + mrkt.DROP_DOWN + " not included.");
+                //    }
+                //}
+
+                //New requirement: "NON Corp" should not be put into spreadsheet if selected in kendo tree view.  It should only include non corp market segments, not "Non Corp" itself
+                BusinessLogicDeActions.AddValidationMessage(de, "'Non Corp' should not be indivudally selectable.");
             }
 
             string newVal = string.Join(", ", userMrktSegs);

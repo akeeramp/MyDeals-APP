@@ -113,14 +113,33 @@
 			return a;
 		}
 
-		//returns a bool indicating whether a member of vm.nonCorpMrktSegments has been removed (i.e. present in oldVal, not present in newVal)
-		function removedNonCorpMemberNode(newVal, oldVal) {
-			for (var i = 0; i < vm.nonCorpMrktSegments.length; i++) {
-				if (newVal.indexOf(vm.nonCorpMrktSegments[i]) < 0 && oldVal.indexOf(vm.nonCorpMrktSegments[i]) > -1) {
-					return true;
-				}
-			}
-			return false;
+        //NOTE: helper function retured with requirement change, remove once 100% sure we do not need
+		////returns a bool indicating whether a member of vm.nonCorpMrktSegments has been removed (i.e. present in oldVal, not present in newVal)
+		//function removedNonCorpMemberNode(newVal, oldVal) {
+		//	for (var i = 0; i < vm.nonCorpMrktSegments.length; i++) {
+		//		if (newVal.indexOf(vm.nonCorpMrktSegments[i]) < 0 && oldVal.indexOf(vm.nonCorpMrktSegments[i]) > -1) {
+		//			return true;
+		//		}
+		//	}
+		//	return false;
+		//}
+
+		function setNonCorpCheckbox(msValues, treeView) {
+		    if (nonCorpAllSelected(msValues)) {
+		        treeView.dataItem(treeView.findByText(NONCORP)).set("checked", true);
+		    } else {
+		        treeView.dataItem(treeView.findByText(NONCORP)).set("checked", false);
+		    }
+		}
+
+		function nonCorpAllSelected(msValues) {
+		    for (var i = 0; i < vm.nonCorpMrktSegments.length; i++) {
+		        if (msValues.indexOf(vm.nonCorpMrktSegments[i]) < 0) {
+		            //if a noncorp market segment is not part of the multiselect's values array
+		            return false;
+		        }
+		    }
+		    return true;
 		}
 
 		function checkedEmbeddedSubSegment(newVal, oldVal, checkBool) {
@@ -175,23 +194,18 @@
 							treeView.dataItem(treeView.findByText(ALL)).set("checked", false);
 						}
 
-						//Logic for NonCorp
-						if (newValue.indexOf(NONCORP) > -1 && !(oldValue.indexOf(NONCORP) > -1)) {
-							//if user selects NonCorp, make sure all NonCorp nodes are checked
-						    newValue = arrayMergeUnique(newValue, vm.nonCorpMrktSegments);
+					    //Logic for NonCorp
+						debugger;
+						if (newValue.indexOf(NONCORP) > -1 && !(oldValue.indexOf(NONCORP) > -1)) { //treeView.dataItem(treeView.findByText(NONCORP)).checked instead?
+						    //if user selects NonCorp, make sure all NonCorp nodes are checked
 
-						    // New request... do NOT select NON Corp... just the non corp values
-						    newValue.shift();
-							//newValue.splice(newValue.indexOf(NONCORP), 1);
-
-						    multiSelect.value(newValue);
-							setAllNodes(getNonCorpNodes(treeView), true);
-						    if (treeView.dataItem(treeView.findByText(NONCORP)).checked == true) {
-						    	treeView.dataItem(treeView.findByText(NONCORP)).set("checked", false);
-						    	uncheckAllNC = false; //set NONCORP to unchecked, but do not want to uncheck all noncorp nodes on next sweep.
+						    if (newValue.length != oldValue.length || oldValue.length == 1) {
+						        //same length would have been special case where user deselects a noncorp node but because we keep noncorp checked it is being put into new value. in that case we would not want to set all noncorp nodes to true
+						        newValue = arrayMergeUnique(newValue, vm.nonCorpMrktSegments);
+						        setAllNodes(getNonCorpNodes(treeView), true);
 						    }
+						    multiSelect.value(newValue);
 
-						// New request... do NOT select NON Corp... just the non corp values
 						//} else if (newValue.indexOf(NONCORP) < 0 && oldValue.indexOf(NONCORP) > -1) {
 						//	//if user deselects NonCorp, make sure all NonCorp nodes are unchecked
 						//	if (uncheckAllNC) {
@@ -212,6 +226,12 @@
 						//	}
 						}
 
+                        //after all noncorp logic - noncorp can never be in multiselect. 
+						if (newValue.indexOf(NONCORP) != -1) {
+						    newValue.splice(newValue.indexOf(NONCORP), 1);
+						}
+						setNonCorpCheckbox(newValue, treeView); //evaluate whether noncorp treeview node should be checked - does not bind to multiselect result data
+
 						//Logic for Embedded
 						//getEmbeddedNodes
 						if (checkedEmbeddedSubSegment(newValue, oldValue, true)) {
@@ -226,8 +246,6 @@
 							multiSelect.value(newValue);
 							setAllNodes(getEmbeddedNodes(treeView.dataSource.view(), true), false);
 						}
-
-						//TODO: if select embedded, do not let them. is that possible? may need to disable checkchicldren
 					}
 				}
 			}
