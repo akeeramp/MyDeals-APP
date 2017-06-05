@@ -55,10 +55,10 @@
                                             </span>
                                         </div>
                                         <div style="max-height: 200px; overflow: auto;">
-                                            <div ng-repeat="(key, value) in ds.columns | filter:{title: columnSearchFilter}" class="chkColItem">
-                                                <input type='checkbox' checked='checked' class='check with-font' id="colChk{{value.field}}" ng-click="onColumnChange(value)" data-field='{{value.field}}' />
-                                                <label for="colChk{{value.field}}">
-                                                    <span ng-bind-html="value.title"></span>
+                                            <div ng-repeat="item in opOptions.columns | filter:{title: columnSearchFilter} | orderBy: 'title'" class="chkColItem">
+                                                <input type='checkbox' checked='checked' class='check with-font' id="colChk{{item.field}}" ng-click="onColumnChange(item)" data-field='{{item.field}}' />
+                                                <label for="colChk{{item.field}}">
+                                                    <span ng-bind-html="item.title"></span>
                                                 </label>
                                             </div>
                                         </div>
