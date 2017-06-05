@@ -183,7 +183,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
 
         if (vm.suggestedProd.length > 0) {
             vm.masterSuggestionList = {
-                [tempString]: vm.suggestedProd
+                tempString: vm.suggestedProd
             };
         }
     }
