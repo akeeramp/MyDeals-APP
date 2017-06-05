@@ -4,6 +4,7 @@
     {
         Dirty,
         Valid,
+        Finalizing,
         Complete
     }
 }

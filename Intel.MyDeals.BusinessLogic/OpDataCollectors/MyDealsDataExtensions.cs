@@ -263,13 +263,16 @@ namespace Intel.MyDeals.BusinessLogic
             // Get DataPacket
             OpDataPacket<OpDataElementType> dpObjSet = myDealsData[opType];
 
+            if (security || opType == OpDataElementType.WIP_DEAL)
+            {
+                myDealsData.InjectParentStages();
+            }
+
             if (security)
             {
                 if (dpObjSet.Actions.Any())
                     data.Add(new OpDataCollectorFlattenedItem { ["_actions"] = dpObjSet.Actions });
-
-                myDealsData.InjectParentStages();
-
+                
                 // TODO make this a rule
                 // Since this is a DB call, we don't want to do this for EVERY data collector individually
                 myDealsData.TagWithAttachments(dpObjSet);
@@ -281,8 +284,6 @@ namespace Intel.MyDeals.BusinessLogic
             // Since this is a DB call, we don't want to do this for EVERY data collector individually
             if (opType == OpDataElementType.DEAL || opType == OpDataElementType.WIP_DEAL)
                 prdMaps = dpObjSet.GetProductMapping();
-
-            if (opType == OpDataElementType.WIP_DEAL) myDealsData.InjectParentStages(opType.ToString());
 
             // loop through deals and flatten each Data Collector
             data.AddRange(dpObjSet.AllDataCollectors.Select(dc => dc.ToOpDataCollectorFlattenedItem(opType, pivotMode, prdMaps, myDealsData, security)));
@@ -499,6 +500,8 @@ namespace Intel.MyDeals.BusinessLogic
 
         public static void InjectParentStages(this MyDealsData myDealsData, string sourceEvent = null)
         {
+            if (!myDealsData.ContainsKey(OpDataElementType.PRC_TBL_ROW)) return;
+
             List<OpDataElementType> ignoreTypes = new List<OpDataElementType>();
             if (sourceEvent == OpDataElementType.PRC_TBL.ToString()) ignoreTypes.Add(OpDataElementType.WIP_DEAL);
             if (sourceEvent == OpDataElementType.WIP_DEAL.ToString()) ignoreTypes.Add(OpDataElementType.PRC_TBL);
@@ -507,9 +510,10 @@ namespace Intel.MyDeals.BusinessLogic
             Dictionary<int, string> prcSt2StgMapping = new Dictionary<int, string>();
             Dictionary<int, string> prcSt2PrcTblMapping = new Dictionary<int, string>();
             Dictionary<int, int> prcTblRow2PrcTblMapping = new Dictionary<int, int>();
-            
 
-            if (!myDealsData.ContainsKey(OpDataElementType.PRC_TBL_ROW)) return;
+            // Let's see if we already got the stages
+            var allDcs = myDealsData[OpDataElementType.PRC_TBL_ROW].AllDataCollectors.FirstOrDefault();
+            if (allDcs?.GetDataElement(AttributeCodes.WF_STG_CD) != null) return;
 
             List<int> ids = myDealsData[OpDataElementType.PRC_TBL_ROW].AllDataCollectors.Select(d => d.DcParentID).Distinct().ToList();
             List<int> atrbs = new List<int>
@@ -645,12 +649,18 @@ namespace Intel.MyDeals.BusinessLogic
                     if (validateIds.Any() && !dcHasErrors && (opDataElementType == OpDataElementType.PRC_TBL_ROW || opDataElementType == OpDataElementType.WIP_DEAL))
                     {
                         // only force publish to PTR
-                        PassedValidation passedValidation = forcePublish || opDataElementType == OpDataElementType.WIP_DEAL ? PassedValidation.Complete : PassedValidation.Valid;
-                        dc.SetDataElementValue(AttributeCodes.PASSED_VALIDATION, passedValidation.ToString());
+                        PassedValidation passedValidation = opDataElementType == OpDataElementType.WIP_DEAL 
+                            ? PassedValidation.Complete 
+                            : forcePublish ? PassedValidation.Finalizing : PassedValidation.Valid;
+                        dc.SetAtrb(AttributeCodes.PASSED_VALIDATION, passedValidation.ToString());
                     }
                     else if (dc.IsModified)
                     {
-                        dc.SetDataElementValue(AttributeCodes.PASSED_VALIDATION, PassedValidation.Dirty);
+                        dc.SetAtrb(AttributeCodes.PASSED_VALIDATION, PassedValidation.Dirty);
+                    }
+                    else if (!dc.IsModified && dcHasErrors && dc.GetDataElementValue(AttributeCodes.PASSED_VALIDATION) != PassedValidation.Dirty.ToString())
+                    {
+                        dc.SetAtrb(AttributeCodes.PASSED_VALIDATION, PassedValidation.Dirty);
                     }
                 }
             }

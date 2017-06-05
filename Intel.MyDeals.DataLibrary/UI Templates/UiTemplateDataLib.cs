@@ -203,6 +203,7 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.MEET_COMP_PRICE_QSTN,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
                 IsDefaultable = true,
+                Label = "Meet Comp Analysis",
                 UiType = "RADIOBUTTONGROUP",
                 LookupUrl = "/api/Dropdown/GetDropdowns/MEET_COMP_PRICE_QSTN",
                 LookupText = "DROP_DOWN",
@@ -505,7 +506,7 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "<i class='intelicon-protection-solid' style='color: #00AEEF; font-size: 20px;'></i>",
                 IsReadOnly = true,
                 DataType = "string",
-                Template = "<i class='valid-icon validf_{{ dataItem.PASSED_VALIDATION }} {{ (dataItem.PASSED_VALIDATION === undefined || dataItem.PASSED_VALIDATION === \"\") ? \"intelicon-protection-solid\" : (dataItem.PASSED_VALIDATION == \"Valid\" || dataItem.PASSED_VALIDATION == \"Complete\") ? \"intelicon-protection-checked-verified-solid\" : \"intelicon-protection-failed-solid\" }}' title='Validation: {{dataItem.PASSED_VALIDATION || \"Not validated yet\"}}' style='margin-left: 14px;'></i>"
+                Template = "<i class='valid-icon validf_{{ dataItem.PASSED_VALIDATION }} {{ (dataItem.PASSED_VALIDATION === undefined || dataItem.PASSED_VALIDATION === \"\") ? \"intelicon-protection-solid\" : (dataItem.PASSED_VALIDATION == \"Valid\" || dataItem.PASSED_VALIDATION == \"Finalizing\" || dataItem.PASSED_VALIDATION == \"Complete\") ? \"intelicon-protection-checked-verified-solid\" : \"intelicon-protection-failed-solid\" }}' title='Validation: {{dataItem.PASSED_VALIDATION || \"Not validated yet\"}}' style='margin-left: 14px;'></i>"
             });
             items.Add(new UiTemplateContainerItem
             {
@@ -514,6 +515,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 Width = 90,
                 Label = "Prc Table Row ID",
+                Template = "#=gridUtils.uiControlWrapper(data, 'DC_PARENT_ID')#",
                 IsReadOnly = true
             });
             items.Add(new UiTemplateContainerItem
@@ -565,6 +567,8 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 Template = "#=gridUtils.uiControlWrapper(data, 'PTR_USER_PRD')#",
                 DataType = "object",
+                IsFilterable = true,
+                IsSortable = true,
                 Width = 150
             });
             items.Add(new UiTemplateContainerItem
@@ -575,6 +579,8 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 Template = "#=gridUtils.uiControlWrapper(data, 'TITLE')#",
                 DataType = "object",
+                IsFilterable = true,
+                IsSortable = true,
                 Width = 150
             });
             items.Add(new UiTemplateContainerItem

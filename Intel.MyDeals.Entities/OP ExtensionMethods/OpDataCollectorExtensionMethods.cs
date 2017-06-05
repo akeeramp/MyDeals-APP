@@ -46,6 +46,17 @@ namespace Intel.MyDeals.Entities
             return de;
         }
 
+        public static void SetAtrb(this OpDataCollector dc, string atrbCd, object val)
+        {
+            OpDataElementAtrb de = dc.GetAtrb(atrbCd);
+            if (de != null)
+            {
+                de.AtrbValue = val;
+                de.State = OpDataElementState.Modified;
+            }
+
+        }
+
         /// <summary>
         /// Get first matching attribute
         /// </summary>
@@ -199,7 +210,7 @@ namespace Intel.MyDeals.Entities
 
             OpDataElementSetType objSetType = (OpDataElementSetType)Enum.Parse(typeof(OpDataElementSetType), dc.GetDataElementValue("OBJ_SET_TYPE_CD"));
 			string stg = dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
-            if (dcType == OpDataElementType.WIP_DEAL) stg = dc.GetDataElementValue(AttributeCodes.WF_STG_CD + "_PRNT");
+            if (string.IsNullOrEmpty(stg) && dcType == OpDataElementType.WIP_DEAL) stg = dc.GetDataElementValue(AttributeCodes.WF_STG_CD + "_PRNT");
             if (excludeList == null) excludeList = new string[] { };
 
             // For each element, apply metadata rules

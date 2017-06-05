@@ -466,27 +466,39 @@
         background: #00AEEF;
     }
 
+
+    /*Validation Styles*/
+
     .valid_Valid {
-        background: #C4D600;
+        background: #FFA300;
+    }
+    .valid_Finalizing {
+        background: #00AEEF;
+        color: #ffffff !important;
     }
     .valid_Complete {
-        background: #0071C5;
-        color: #ffffff;
+        background: #C4D600;
     }
-    .valid_, .valid_Dirty {
+    .valid_, .valid_0, .valid_Dirty {
         background: #cccccc;
     }
 
     .validf_Valid {
-        color: #C4D600;
+        color: #FFA300;
+    }
+    .validf_Finalizing {
+        color: #00AEEF;
     }
     .validf_Complete {
-        color: #0071C5;
+        color: #C4D600;
     }
-    .validf_, .validf_Dirty {
+    .validf_, .validf_0, .validf_Dirty {
         color: #cccccc;
     }
  
+
+
+    /*Navigation Styles*/
     .psNav {
         cursor: pointer;
         font-family: 'Intel Clear';

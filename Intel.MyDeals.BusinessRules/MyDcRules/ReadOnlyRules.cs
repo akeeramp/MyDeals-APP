@@ -63,12 +63,15 @@ namespace Intel.MyDeals.BusinessRules
                             Action = BusinessLogicDeActions.SetReadOnly,
                             Target = new[]
                             {
-                                AttributeCodes.CAP,
+                                AttributeCodes.BLLG_DT,
+                                AttributeCodes.CAP_END_DT,
+                                AttributeCodes.CAP_STRT_DT,
                                 AttributeCodes.COST_TEST_RESULT,
                                 AttributeCodes.COST_TYPE_USED,
+                                AttributeCodes.CREDIT_VOLUME,
+                                AttributeCodes.DEBIT_VOLUME,
                                 AttributeCodes.ECAP_FLR,
                                 AttributeCodes.ECAP_PRICE,
-                                AttributeCodes.REBATE_TYPE,
                                 AttributeCodes.END_DT,
                                 AttributeCodes.GEO_COMBINED,
                                 AttributeCodes.MEETCOMP_TEST_RESULT,
@@ -80,19 +83,17 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.PRODUCT_FILTER,
                                 AttributeCodes.PROGRAM_PAYMENT,
                                 AttributeCodes.PTR_USER_PRD,
+                                AttributeCodes.REBATE_TYPE,
                                 AttributeCodes.RETAIL_PULL,
                                 AttributeCodes.START_DT,
-                                AttributeCodes.WF_STG_CD,
-                                AttributeCodes.YCS2_PRC_IRBT,
-                                AttributeCodes.CREDIT_VOLUME,
-                                AttributeCodes.DEBIT_VOLUME,
-                                AttributeCodes.BLLG_DT,
-                                AttributeCodes.YCS2_START_DT,
-                                AttributeCodes.YCS2_END_DT,
-                                AttributeCodes.CAP_STRT_DT,
-                                AttributeCodes.CAP_END_DT,
+                                AttributeCodes.TERMS,
+                                AttributeCodes.TITLE,
                                 AttributeCodes.VOLUME,
-                                AttributeCodes.TERMS
+                                AttributeCodes.WF_STG_CD,
+                                AttributeCodes.YCS2_END_DT,
+                                AttributeCodes.YCS2_PRC_IRBT,
+                                AttributeCodes.YCS2_START_DT,
+                                AttributeCodes.CAP
                             }
                         }
                     }

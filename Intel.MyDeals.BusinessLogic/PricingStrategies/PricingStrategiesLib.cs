@@ -147,7 +147,7 @@ namespace Intel.MyDeals.BusinessLogic
                     continue;
                 }
 
-                dc.SetDataElementValue(AttributeCodes.WF_STG_CD, targetStage);
+                dc.SetAtrb(AttributeCodes.WF_STG_CD, targetStage);
                 opMsgQueue.Messages.Add(new OpMsg
                 {
                     Message = $"Pricing Strategy moved from {stageIn} to {targetStage}.",

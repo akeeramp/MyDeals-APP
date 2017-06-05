@@ -33,8 +33,9 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
             $scope.isGridVisible = false;
             $scope.curGroup = "";
             $scope._dirty = false;
+            $scope.searchFilter = "";
+            $scope.columnSearchFilter = "";
 
-            
             $scope.assignColSettings = function () {
                 if ($scope.opOptions.columns === undefined) return [];
 
@@ -73,6 +74,33 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
                     return a.indx - b.indx;
                 });
                 return cols;
+            }
+
+            $scope.columnMenu = {
+                openOnClick: true,
+                open: function () {
+                    var selector;
+                    $.each($scope.grid.columns, function () {
+                        if (this.hidden) {
+                            $("input[data-field='" + this.field + "']").prop("checked", false);
+                        }
+                    });
+                }
+            };
+
+            $scope.onColumnChange = function (val) {
+                var col = null;
+                for (var i = 0; i < $scope.grid.columns.length; i++)
+                    if ($scope.grid.columns[i]["field"] === val.field)
+                        col = $scope.grid.columns[i];
+
+                if (!col) return;
+
+                if (col.hidden) {
+                    $scope.grid.showColumn(val.field);
+                } else {
+                    $scope.grid.hideColumn(val.field);
+                }
             }
 
             $scope.cloneWithOrder = function (source) {
@@ -353,7 +381,6 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
                 filterable: true,
                 resizable: true,
                 reorderable: true,
-                columnMenu: true,
                 pageable: {
                     refresh: true,
                     pageSizes: [10, 25, 50, "all"],
@@ -709,6 +736,254 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
                 return valid;
             }
 
+            $scope.searchGrid = function () {
+                var searchValue = $scope.searchFilter;
+
+                if (searchValue.length < 3) {
+                    $scope.clearSearchGrid();
+                    return;
+                }
+
+                $scope.contractDs.filter({
+                    logic: "or",
+                    filters: [
+                        {
+                            field: "DC_ID",
+                            operator: "eq",
+                            value: searchValue
+                        }, {
+                            field: "DC_PARENT_ID",
+                            operator: "eq",
+                            value: searchValue
+                        }, {
+                            field: "PASSED_VALIDATION",
+                            operator: "contains",
+                            value: searchValue
+                        }, {
+                            field: "START_DT",
+                            operator: "eq",
+                            value: searchValue
+                        }, {
+                            field: "END_DT",
+                            operator: "eq",
+                            value: searchValue
+                        }, {
+                            field: "WF_STG_CD",
+                            operator: "contains",
+                            value: searchValue
+                        }, {
+                            field: "OBJ_SET_TYPE_CD",
+                            operator: "contains",
+                            value: searchValue
+                        }, {
+                            field: "PTR_USER_PRD",
+                            operator: "contains",
+                            value: searchValue
+                        }, {
+                            field: "TITLE",
+                            operator: "contains",
+                            value: searchValue
+                        }, {
+                            field: "PRODUCT_FILTER",
+                            operator: "contains",
+                            value: searchValue
+                        }, {
+                            field: "DEAL_COMB_TYPE",
+                            operator: "contains",
+                            value: searchValue
+                        }, {
+                            field: "ECAP_PRICE",
+                            operator: "eq",
+                            value: searchValue
+                        }, {
+                            field: "CAP_INFO",
+                            operator: "contains",
+                            value: searchValue
+                        }, {
+                            field: "CAP",
+                            operator: "eq",
+                            value: searchValue
+                        }, {
+                            field: "CAP_STRT_DT",
+                            operator: "eq",
+                            value: searchValue
+                        }, {
+                            field: "CAP_END_DT",
+                            operator: "eq",
+                            value: searchValue
+                        }, {
+                            field: "YCS2_INFO",
+                            operator: "contains",
+                            value: searchValue
+                        }, {
+                            field: "YCS2_PRC_IRBT",
+                            operator: "eq",
+                            value: searchValue
+                        }, {
+                            field: "YCS2_START_DT",
+                            operator: "eq",
+                            value: searchValue
+                        }, {
+                            field: "YCS2_END_DT",
+                            operator: "eq",
+                            value: searchValue
+                        }, {
+                            field: "VOLUME",
+                            operator: "eq",
+                            value: searchValue
+                        }, {
+                            field: "ON_ADD_DT",
+                            operator: "eq",
+                            value: searchValue
+                        }, {
+                            field: "DEAL_SOLD_TO_ID",
+                            operator: "contains",
+                            value: searchValue
+                        }, {
+                            field: "EXPIRE_YCS2",
+                            operator: "contains",
+                            value: searchValue
+                        }, {
+                            field: "REBATE_TYPE",
+                            operator: "contains",
+                            value: searchValue
+                        }, {
+                            field: "MRKT_SEG",
+                            operator: "contains",
+                            value: searchValue
+                        }, {
+                            field: "GEO_COMBINED",
+                            operator: "contains",
+                            value: searchValue
+                        }, {
+                            field: "TRGT_RGN",
+                            operator: "contains",
+                            value: searchValue
+                        }, {
+                            field: "PAYOUT_BASED_ON",
+                            operator: "contains",
+                            value: searchValue
+                        }, {
+                            field: "PROGRAM_PAYMENT",
+                            operator: "contains",
+                            value: searchValue
+                        }, {
+                            field: "TERMS",
+                            operator: "contains",
+                            value: searchValue
+                        }, {
+                            field: "REBATE_BILLING_START",
+                            operator: "eq",
+                            value: searchValue
+                        }, {
+                            field: "REBATE_BILLING_END",
+                            operator: "eq",
+                            value: searchValue
+                        }, {
+                            field: "CONSUMPTION_REASON",
+                            operator: "contains",
+                            value: searchValue
+                        }, {
+                            field: "CONSUMPTION_REASON_CMNT",
+                            operator: "contains",
+                            value: searchValue
+                        }, {
+                            field: "COST_TEST_RESULT",
+                            operator: "contains",
+                            value: searchValue
+                        }, {
+                            field: "PRD_COST",
+                            operator: "eq",
+                            value: searchValue
+                        }, {
+                            field: "COST_TYPE_USED",
+                            operator: "contains",
+                            value: searchValue
+                        }, {
+                            field: "COST_TEST_FAIL_OVERRIDE",
+                            operator: "contains",
+                            value: searchValue
+                        }, {
+                            field: "COST_TEST_FAIL_OVERRIDE_REASON",
+                            operator: "contains",
+                            value: searchValue
+                        }, {
+                            field: "YCS2_OVERLAP_OVERRIDE",
+                            operator: "contains",
+                            value: searchValue
+                        }, {
+                            field: "MEET_COMP_PRICE_QSTN",
+                            operator: "contains",
+                            value: searchValue
+                        }, {
+                            field: "COMP_SKU",
+                            operator: "contains",
+                            value: searchValue
+                        }, {
+                            field: "COMP_SKU_OTHR",
+                            operator: "contains",
+                            value: searchValue
+                        }, {
+                            field: "COMPETITIVE_PRICE",
+                            operator: "eq",
+                            value: searchValue
+                        }, {
+                            field: "COMP_BENCH",
+                            operator: "eq",
+                            value: searchValue
+                        }, {
+                            field: "IA_BENCH",
+                            operator: "eq",
+                            value: searchValue
+                        }, {
+                            field: "COMP_TARGET_SYSTEM_PRICE",
+                            operator: "eq",
+                            value: searchValue
+                        }, {
+                            field: "MEETCOMP_TEST_RESULT",
+                            operator: "contains",
+                            value: searchValue
+                        }, {
+                            field: "MEETCOMP_TEST_FAIL_OVERRIDE",
+                            operator: "contains",
+                            value: searchValue
+                        }, {
+                            field: "MEETCOMP_TEST_FAIL_OVERRIDE_REASON",
+                            operator: "contains",
+                            value: searchValue
+                        }, {
+                            field: "RETAIL_CYCLE",
+                            operator: "contains",
+                            value: searchValue
+                        }, {
+                            field: "RETAIL_PULL",
+                            operator: "eq",
+                            value: searchValue
+                        }, {
+                            field: "RETAIL_PULL_USR_DEF",
+                            operator: "contains",
+                            value: searchValue
+                        }, {
+                            field: "RETAIL_PULL_USR_DEF_CMNT",
+                            operator: "contains",
+                            value: searchValue
+                        }, {
+                            field: "ECAP_FLR",
+                            operator: "eq",
+                            value: searchValue
+                        }, {
+                            field: "BACK_DATE_RSN",
+                            operator: "contains",
+                            value: searchValue
+                        }
+                    ]
+                });
+            }
+
+            $scope.clearSearchGrid = function () {
+                $scope.contractDs.filter({});
+            }
+
             $scope.saveAndValidateGrid = function () {
                 $scope.contractDs.sync();
                 $scope.$parent.$parent.$parent.validateWipDeals();
@@ -762,7 +1037,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
                 // check for errors
                 //debugger;
                 angular.forEach(beh.isError, function (value, key) {
-                    if (beh.isError[key] && (beh.isReadOnly[key] === undefined || !beh.isReadOnly[key]) && (beh.isHidden[key] === undefined || !beh.isHidden[key])) {
+                    if (!!$scope.opOptions.model.fields[key] && beh.isError[key] && (beh.isReadOnly[key] === undefined || !beh.isReadOnly[key]) && (beh.isHidden[key] === undefined || !beh.isHidden[key])) {
                         $scope.increaseBadgeCnt(key);
                         valid = false;
                         row["PASSED_VALIDATION"] = "Dirty";

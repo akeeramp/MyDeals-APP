@@ -1068,7 +1068,16 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                 source = "PRC_TBL";
                 // sync all detail data sources into main grid datasource for a single save
                 if ($scope.spreadDs !== undefined) $scope.spreadDs.sync();
+
                 sData = $scope.spreadDs === undefined ? undefined : $scope.pricingTableData.PRC_TBL_ROW;
+
+                // Remove any lingering blank rows from the data
+                for (var n = sData.length - 1; n >= 0; n--) {
+                    if (sData[n].DC_ID === null && sData[n].PTR_USER_PRD === "") {
+                        sData.splice(n, 1);
+                    }
+                }
+
                 $scope.$broadcast('syncDs');
 
                 // Pricing Table Row
@@ -1121,6 +1130,8 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                                     var tblStartDate = sData[s][dateFields[d]];
                                     var endDate = $scope.contractData.END_DT;
                                     if (moment(tblStartDate).isAfter(endDate)) {
+                                        if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
+                                        if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
                                         sData[s]._behaviors.isError['START_DT'] = true;
                                         sData[s]._behaviors.validMsg['START_DT'] = "Start date cannot be greater than the Contract End Date (" + endDate + ")";
                                         if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
@@ -1131,6 +1142,8 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                                     var tblEndDate = sData[s][dateFields[d]];
                                     var startDate = $scope.contractData.START_DT;
                                     if (moment(tblEndDate).isBefore(startDate)) {
+                                        if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
+                                        if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
                                         sData[s]._behaviors.isError['END_DT'] = true;
                                         sData[s]._behaviors.validMsg['END_DT'] = "End date cannot be earlier than the Contract Start Date (" + startDate + ")";
                                         if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
@@ -1374,12 +1387,17 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                 var spreadsheet = $("#pricingTableSpreadsheet").data("kendoSpreadsheet");
                 var sheet = spreadsheet.activeSheet();
                 var rowsCount = sheet._rows._count;
+                var offset = 0;
+
+                if (!!data[0]._actions) {
+                    offset = 1;
+                }
 
                 sheet.batch(function () {
                     var ptTemplate = $scope.templates.ModelTemplates.PRC_TBL_ROW[$scope.curPricingTable.OBJ_SET_TYPE_CD];
                     if (ptTemplate !== undefined && ptTemplate !== null) {
                         for (var i = 0; i < rowsCount; i++) {
-                            $scope.syncCellsOnSingleRow(sheet, data[i], i);
+                            $scope.syncCellsOnSingleRow(sheet, data[i + offset], i);
                         }
                     }
                 });

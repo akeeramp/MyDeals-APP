@@ -15,19 +15,61 @@
             
             <div class="toolbar">
 
-                <button class="btn btn-sm btn-default" ng-class="{'disabled': !_dirty}" ng-click="saveWipDeals()">
-                    <i class="fa fa-floppy-o" style="font-size: 30px; vertical-align: middle; margin-right: 4px;" title="Save Deals"></i>
-                </button>
+                <div class="fl">
+                    <button class="btn btn-sm btn-default" ng-class="{'disabled': !_dirty}" ng-click="saveWipDeals()">
+                        <i class="fa fa-floppy-o" style="font-size: 30px; vertical-align: middle; margin-right: 4px;" title="Save Deals"></i>
+                    </button>
 
-                <button class="btn btn-sm btn-default" ng-click="backToPricingTable()">
-                    <i class="intelicon-import-all-outlined" style="font-size: 30px; vertical-align: middle;" title="Back to Pricing Table Editor"></i>
-                </button>
+                    <button class="btn btn-sm btn-default" ng-click="backToPricingTable()">
+                        <i class="intelicon-import-all-outlined" style="font-size: 30px; vertical-align: middle;" title="Back to Pricing Table Editor"></i>
+                    </button>
 
-                <button class="btn btn-sm btn-default" ng-click="saveAndValidateGrid()">
-                    <i class="intelicon-protection-checked-verified-outlined" style="font-size: 30px; vertical-align: middle;" title="Save and Validate Deals"></i>
-                </button>
+                    <button class="btn btn-sm btn-default" ng-click="saveAndValidateGrid()">
+                        <i class="intelicon-protection-checked-verified-outlined" style="font-size: 30px; vertical-align: middle;" title="Save and Validate Deals"></i>
+                    </button>
 
-                <div class="fr">
+                    <span class="k-textbox k-space-left" style="width: 300px;">
+                        <input type="search" ng-keyup="searchGrid()" placeholder="search..." ng-model="searchFilter" />
+                        <a ng-click="searchGrid()" class="k-icon"><i class="intelicon-search" style="font-size: 18px; color: #00AEEF;"></i></a>
+                    </span>
+
+                    <!--<button class="btn btn-sm btn-default" ng-click="searchGrid()">
+                        <i class="intelicon-filter-outlined" style="font-size: 30px; vertical-align: middle;" title="Search"></i>
+                    </button>
+                    <button class="btn btn-sm btn-default" ng-click="clearSearchGrid()">
+                        <i class="intelicon-cancel-filter-outlined" style="font-size: 30px; vertical-align: middle;" title="Clear Search"></i>
+                    </button>-->
+                </div>
+                
+                <div class="fl" style="margin-top: 6px; margin-left: 15px;">
+                    <ul kendo-menu k-options="columnMenu">
+                        <li>
+                            <i class="intelicon-view-by-columns" style="font-size: 22px !important;" title="Manage Columns"></i>
+                            <ul>
+                                <li>
+                                    <div style="padding: 0 10px;">
+                                        <div>
+                                            <span class="k-textbox k-space-left" style="width: 100%; margin-bottom: 10px;">
+                                                <input type="search" ng-model="columnSearchFilter" />
+                                                <a ng-click="searchGrid()" class="k-icon intelicon-search"></a>
+                                            </span>
+                                        </div>
+                                        <div style="max-height: 200px; overflow: auto;">
+                                            <div ng-repeat="(key, value) in ds.columns | filter:{title: columnSearchFilter}" class="chkColItem">
+                                                <input type='checkbox' checked='checked' class='check with-font' id="colChk{{value.field}}" ng-click="onColumnChange(value)" data-field='{{value.field}}' />
+                                                <label for="colChk{{value.field}}">
+                                                    <span ng-bind-html="value.title"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="fr" style="margin-top: 6px;">
                     <ul kendo-menu>
                         <li>
                             <i class="intelicon-settings-solid" style="font-size: 22px !important;" title="Manage Layout"></i>
@@ -247,6 +289,17 @@
         font-weight: 400;
     }
 
+    .op-grid.k-grid .k-grid-filter {
+        margin-right: -4px;
+    }
+    .op-grid.k-grid .k-grid-filter .k-icon.k-i-filter {
+        color: #00AEEF;
+        opacity: 1;
+    }
+    .op-grid.k-grid .k-grid-filter .k-icon.k-i-filter:hover {
+        color: #0071C5 !important;
+    }
+    
     .op-grid.k-grid .k-grid-header .k-header {
         white-space: normal;
     }
@@ -351,4 +404,61 @@
         margin-left: 6px;
     }
 
+    input[type=radio].with-font,
+    input[type=checkbox].with-font {
+        border: 0;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 1px;
+    }
+    
+    input[type=radio].with-font + label:before,
+    input[type=checkbox].with-font + label:before {
+        font-family: FontAwesome;
+        display: inline-block;
+        content: "\f096";
+        font-size: 20px;
+        letter-spacing: 8px;
+        color: #00AEEF;
+        margin-left: 10px;
+        margin-top: 2px;
+        vertical-align: text-bottom;
+    }
+    input[type=radio].with-font:hover + label:before,
+    input[type=checkbox].with-font:hover + label:before {
+        color: #003C71;
+        cursor: pointer;
+    }
+    input[type=radio].with-font.disabled + label:before,
+    input[type=checkbox].with-font.disabled + label:before {
+        color: #cccccc;
+        cursor: default;
+    }
+    
+    input[type=radio].with-font:checked + label:before,
+    input[type=checkbox].with-font:checked + label:before {
+        content: "\f046";
+        font-size: 20px;
+        letter-spacing: 5px;
+        color: #C4D600;
+        margin-left: 10px;
+        margin-top: 2px;
+        vertical-align: text-bottom;
+    }
+    input[type=radio].with-font:focus + label:before,
+    input[type=checkbox].with-font:focus + label:before {
+        font-weight: bold;
+        color:#C4D600;
+    }
+
+    .chkColItem {
+        cursor: pointer;
+    }
+    .chkColItem:hover {
+        background-color: #efefef;
+    }
 </style>

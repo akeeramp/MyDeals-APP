@@ -317,7 +317,8 @@ namespace Intel.MyDeals.BusinessRules
 
             if (backDateTxt == "NEEDED")
             {
-                deBackDate.IsRequired = true;
+                if (deBackDate != null)
+                    deBackDate.IsRequired = true;
             }
         }
     }
