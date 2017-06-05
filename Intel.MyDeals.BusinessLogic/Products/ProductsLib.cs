@@ -366,6 +366,16 @@ namespace Intel.MyDeals.BusinessLogic
                                      where d.Count() > 1
                                      select d.Key;
 
+                // Step 2.3: Get the products which are not matched
+                var productWithoutExactMatch = (from p in productMatchResults
+                                                join t in tranlatedProducts
+                                                on p.USR_INPUT equals t
+                                                where !p.EXACT_MATCH
+                                                select t).Distinct();
+                
+                // Get distinct user inputs where user interaction needed from UI, put them in Duplicate product bucket list
+                duplicateProds = duplicateProds.Union(productWithoutExactMatch).Distinct();
+
                 // If any duplicates found extract them
                 if (duplicateProds.Any())
                 {
