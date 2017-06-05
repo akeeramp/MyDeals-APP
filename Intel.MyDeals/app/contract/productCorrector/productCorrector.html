@@ -7,7 +7,7 @@
                 </div>
                 <div class="col-md-4 text-center">
                     <span class="rowNavigation"><label style="font-weight:400">Row {{ vm.currentRow }}</label></span>
-                    <span class="rowNavPanel" ng-hide="vm.hideNavigation">
+                    <span class="rowNavPanel" ng-if="!vm.hideNavigation">
                         <i role="button" title="Previous Row" class="intelicon-left-previous skyBlue" ng-click="vm.prevRow()" ng-disabled="vm.isPrevDisabled"></i>
                         <label> {{ vm.rowNumber }} of {{ vm.rows }} </label>
                         <i role="button" title="Next Row" class="intelicon-right-next skyBlue" ng-click="vm.nextRow()" ng-disabled="checked"></i>
@@ -19,27 +19,43 @@
             </div>
         </div>
         <div class="prodSelector modal-body">
-            <div class="row" style="margin:0px" ng-hide="vm.isMultipleProduct">
+            <div class="row" style="margin:0px" ng-if="!vm.isMultipleProduct">
                 <div ng-if="vm.items.length != 0">
-                    <label class="text-left fl marginRight textProdSelector" ng-hide="vm.isMultipleProduct">Multiple Product found for: {{ vm.productName }}</label>
+                    <label class="text-left fl marginRight textProdSelector" ng-if="!vm.isMultipleProduct">Multiple products found for: {{ vm.productName }}</label>
                     <div class="drillDown btn-group btn-group-justified" role="group" aria-label="...">
                         <div class="btn-group" ng-repeat="p in vm.items" role="group">
                             <button type="button" ng-class="{'noborder':$last}" ng-click="vm.selectsearchItem(p)" class="btn btn-default">{{::p.name}}</button>
                         </div>
                     </div>
                 </div>
+                <div ng-if="vm.showSearchResults">
+                    <label class="text-left fl marginRight textProdSelector" ng-if="!vm.isMultipleProduct">Multiple products found for: {{ vm.productName }}</label>
+                    <div class="btn-group btn-group-justified" role="group" aria-label="...">
+                        <div id="prodGrid" kendo-grid="prodGrid" kendo-grid-check-box k-grid-checkbox="vm" class="prodCorrector opUiContainer md kendoGridHeight prodCorrector-grid k-grid" k-options="vm.gridOptionsProduct" style="margin-top:10px"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin:0px">
+                <div ng-if="vm.suggestedProd.length != 0" class="suggestedProd">
+                    <label class="text-left fl marginRight textProdSelector" style="font-style: italic;">No suggestion found for "{{ vm.productName }}". Search instead for: </label>
+                    <a class="btn fr suggestionClose" ng-click="vm.clearSuggedtedProd()" style="color: #ffffff;text-decoration: none;font-size: 19px;"><i class="intelicon-close-max"></i></a>
+                    <div class="drillDown btn-group btn-group-justified" role="group" aria-label="...">
+                        <div class="btn-group" ng-repeat="p in vm.suggestedProd" role="group">
+                            <button type="button" ng-class="{'noborder':$last}" ng-click="vm.addToSuggestList(p)" class="btn btn-default">{{::p}}</button>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="row">
-                <div class="col-md-6 insertAtRowsText" ng-hide="vm.isInvalidProduct">
-                    <label class="text-left fl marginRight textProdSelector" ng-hide="vm.isInvalidProduct">Product Not Found: </label>
+                <div class="col-md-6 insertAtRowsText" ng-if="!vm.isInvalidProduct">
+                    <label class="text-left fl marginRight textProdSelector" ng-if="!vm.isInvalidProduct">Product Not Found: </label>
                     <div id="invalidProdGrid" kendo-grid="grid" class="productCorrect-grid table prodSelected text-left" k-on-change="vm.handleChange(data, dataItem, columns)" expand-k-grid footer-offset="90" options="vm.gridOptions" style="height:250px"></div>
                 </div>
-                <div class="col-md-6 insertAtRowsText" ng-hide="vm.isInvalidProduct">
+                <div class="col-md-6 insertAtRowsText" ng-if="!vm.isInvalidProduct">
                     <label class="text-left fl marginRight textProdSelector">Product Suggestions: </label>
                     <div id="suggestionProdGrid" kendo-grid="grid" class="productCorrect-grid table prodSelected text-left" expand-k-grid footer-offset="90" k-on-change="vm.addChange(data, dataItem, columns)" options="vm.gridOptionsSuggested"></div>
                 </div>
             </div>
-
         </div>
         <div class="prodSelector modal-footer">
             <div class="row" style="margin:0px">
@@ -48,6 +64,7 @@
                 </div>
                 <div class="col-md-6" style="padding-right:0px">
                     <button class="btn btn-default prdBtn" ng-click="vm.clearProducts()" style="margin-left:2px;">Clear all products</button>
+                    <button class="btn btn-primary fr prdBtn" ng-click="vm.addProducts()">Add Product(s)</button>
                 </div>
             </div>
             <div class="row addedProduct">
@@ -69,6 +86,17 @@
     </div>
 </div>
 <style>
+    .suggestedProd {
+        border: 1px solid rgba(190, 163, 163, 0.12);
+        padding: 5px;
+        background: #1a3e6f;
+        background-color: rgba(190, 163, 163, 0.12);
+        margin-bottom: 10px;
+    }
+    .suggestionClose{
+        color:yellow !important;
+        padding:0px !important;
+    }
     .k-grid tr.k-state-selected, .k-grid td.k-state-selected, .k-grid td.k-state-selected.k-state-focused, .k-grid tr.k-state-selected.k-state-hover, .k-grid td.k-state-selected.k-state-hover, .k-grid td.k-state-selected.k-state-focused.k-state-hover {
         background-color: transparent;
         background: #00aeef;
@@ -248,7 +276,7 @@
     }
 
     #invalidProdGrid, #suggestionProdGrid {
-        height: calc(85vh - 400px) !important;
+        height: calc(85vh - 540px) !important;
         overflow: auto;
     }
 
@@ -281,7 +309,7 @@
         padding-top: 2px;
         padding-bottom: 0px;
         min-height: calc(85vh - 370px);
-        max-height: calc(805vh - 370px);
+        max-height: calc(85vh - 370px);
         overflow-y: auto;
     }
 
@@ -294,8 +322,8 @@
         padding-bottom: 0px;
     }
 
-    .prodSelector.kendoGridHeight {
-        height: calc(85vh - 400px) !important;
+    .prodCorrector.kendoGridHeight {
+        height: calc(85vh - 450px);
     }
 
     .prdCorrector-modal-window, .modal-dialog {
@@ -340,5 +368,9 @@
     .checkbox-custom:hover + .checkbox-custom-label:before {
         border: 1.5px solid #01AEEF;
     }
-</style>
 
+    .prodCorrector-grid.k-grid td {
+        white-space: nowrap;
+        color: #000000;
+    }
+</style>

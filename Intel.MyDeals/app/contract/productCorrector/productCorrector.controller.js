@@ -2,9 +2,9 @@
     .module('app.admin')
     .controller('ProductCorrectorModalController', ProductCorrectorModalController);
 
-ProductCorrectorModalController.$inject = ['$filter', '$scope', '$uibModalInstance', 'GetProductCorrectorData', 'ProductSelectorService', 'productCorrectorService', 'contractData', 'RowId', 'ProductRows', '$linq', '$timeout', 'logger'];
+ProductCorrectorModalController.$inject = ['$filter', '$scope', '$uibModalInstance', 'GetProductCorrectorData', 'ProductSelectorService', 'productCorrectorService', 'contractData', 'RowId', 'ProductRows', '$linq', '$timeout', 'logger','gridConstants'];
 
-function ProductCorrectorModalController($filter, $scope, $uibModalInstance, GetProductCorrectorData, ProductSelectorService, productCorrectorService, contractData, RowId, ProductRows, $linq, $timeout, logger) {
+function ProductCorrectorModalController($filter, $scope, $uibModalInstance, GetProductCorrectorData, ProductSelectorService, productCorrectorService, contractData, RowId, ProductRows, $linq, $timeout, logger, gridConstants) {
     var vm = this;
     vm.selectedPathParts = [];
     vm.invalidProducts = [];
@@ -37,7 +37,11 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
     vm.rowNumber = 1;
     vm.resetAddedList = 1;
     var productHierarchy = [];
-
+    vm.showSearchResults = false; // Hide the grid
+    vm.selectedProducts = [];
+    vm.gridData = [];
+    vm.addProducts = addProducts; // This method will add products in Selected List
+    
     //Page number calculation and navigation
     var generatePagination = function (e) {
         pageNumber = [];
@@ -55,9 +59,12 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                 }
             }
         }
-        
+
         if (pageNumber.length > 0) {
             vm.rows = pageNumber.length;
+            if (vm.rows > vm.rowNumber) {
+
+            }
             if (pageNumber.length != 1) {
                 vm.currentRow = pageNumber[vm.rowNumber - 1];
             }
@@ -117,7 +124,252 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         ]
     };
 
+    vm.suggestedProd = [];
+    vm.masterSuggestionList = {
+        name : []
+    };
+    vm.suggestionNotFound = '';
+
+    // Further suggestion 
+    vm.selectSuggestion = function (dataItem) {
+        vm.suggestionNotFound = dataItem;
+        if (dataItem && dataItem.length > 0) {
+            var tempString = dataItem;
+            // Step 1: Taking first 4 character 
+            if (tempString.length > 3) {
+                if (tempString != tempString.substring(0, 4)) {
+                    vm.suggestedProd.push(tempString.substring(0, 4));
+                }
+                
+            }
+            //Step 2: Spliting by "/"
+            if (tempString.indexOf('/') != -1) {
+                var tempArr = tempString.split('/');
+                for (var i = 0; i < tempArr.length; i++) {
+                    if (tempString != tempArr[i].replace(/[^\w\s]/gi, '')) {
+                        vm.suggestedProd.push(tempArr[i].replace(/[^\w\s]/gi, ''));
+                    }
+                }
+
+            }
+
+            //Step 3: Spliting by " "
+            if (tempString.indexOf(' ') != -1) {
+                var tempArr = tempString.split(' ');
+                for (var i = 0; i < tempArr.length; i++) {
+                    if (tempString != tempArr[i].replace(/[^\w\s]/gi, '')) {
+                        vm.suggestedProd.push(tempArr[i].replace(/[^\w\s]/gi, ''));
+                    }
+                }
+
+            }
+
+            //Step 4: Spliting by "-"
+            if (tempString.indexOf('-') != -1) {
+                var tempArr = tempString.split('-');
+                for (var i = 0; i < tempArr.length; i++) {
+                    if (tempString != tempArr[i].replace(/[^\w\s]/gi, '')) {
+                        vm.suggestedProd.push(tempArr[i].replace(/[^\w\s]/gi, ''));
+                    }
+                }
+
+            }
+
+            //Step 5: Removing all special characters
+            if (tempString != tempString.replace(/[^\w\s]/gi, '')) {
+                vm.suggestedProd.push(tempString.replace(/[^\w\s]/gi, ''));
+            } 
+        }
+
+        if (vm.suggestedProd.length > 0) {
+            vm.masterSuggestionList = {
+                [tempString]: vm.suggestedProd
+            };
+        }
+    }
+    vm.clearSuggedtedProd = function (e) {
+        vm.suggestedProd = [];
+        delete vm.masterSuggestionList[vm.suggestionNotFound];
+    }
     // Suggested Product Grid
+    var dataSourceProduct = new kendo.data.DataSource({
+        transport: {
+            read: function (e) {
+                e.success(vm.gridData);
+            },
+        },
+        pageSize: 10,
+        schema: {
+            model: {
+                id: "PROD_MBR_SID"
+            }
+        },
+    });
+
+    vm.gridOptionsProduct = {
+        dataSource: dataSourceProduct,
+        filterable: gridConstants.filterable,
+        scrollable: true,
+        sortable: true,
+        resizable: true,
+        reorderable: true,
+        pageable: {
+            pageSizes: gridConstants.pageSizes,
+        },
+        enableHorizontalScrollbar: true,
+        columns: [
+            {
+                field: "PCSR_NBR",
+                title: "Processor Number",
+                template: "<a role='button' ng-if='dataItem.PRD_ATRB_SID == 7006' ng-click='vm.gridSelectItem(dataItem)'>#= PCSR_NBR #</a><div ng-if='dataItem.PRD_ATRB_SID != 7006'>#= PCSR_NBR #</div>",
+                width: "150px"
+            },
+            {
+                field: "DEAL_PRD_NM",
+                title: "Deal Product Name",
+                template: "<a role='button' ng-if='vm.allowMMSelection(dataItem)' ng-click='vm.gridSelectItem(dataItem)'>#= DEAL_PRD_NM #</a><div ng-if='!vm.allowMMSelection(dataItem)'>#= DEAL_PRD_NM #</div>",
+                width: "180px"
+            },
+            {
+                field: "MTRL_ID",
+                title: "Material Id",
+                width: "150px"
+            },
+            {
+                field: "PRD_STRT_DTM",
+                title: "Product Start Date",
+                type: "date",
+                template: "#= kendo.toString(new Date(PRD_STRT_DTM), 'M/d/yyyy') #",
+                width: "150px"
+            },
+            {
+                field: "CAP_START_DATE",
+                title: "CAP Availability date",
+                template: "<div>{{vm.getFormatedDate(dataItem.CAP_START_DATE)}}</div>",
+                width: "150px"
+            },
+            {
+                field: "CPU_PROCESSOR_NUMBER",
+                title: "CPU Processor number",
+                width: "150px"
+            },
+            {
+                field: "FMLY_NM_MM",
+                title: "EDW Family Name",
+                template: "<div kendo-tooltip k-content='dataItem.FMLY_NM_MM'>{{dataItem.FMLY_NM_MM}}</div>",
+                //template: "<div kendo-tooltip k-content='dataItem.FMLY_NM_MM'>{{(dataItem.FMLY_NM_MM | limitTo: 20) + (dataItem.FMLY_NM_MM.length > 20 ? '...' : '')}}</div>",
+                width: "150px"
+            },
+            {
+                field: "EPM_NM",
+                title: "EPM Name",
+                //TODO: Convert this a limitTo directive
+                template: "<div kendo-tooltip k-content='dataItem.EPM_NM'>{{dataItem.EPM_NM}}</div>",
+                //template: "<div kendo-tooltip k-content='dataItem.EPM_NM'>{{(dataItem.EPM_NM | limitTo: 20) + (dataItem.EPM_NM.length > 20 ? '...' : '')}}</div>",
+                width: "180px"
+            },
+            {
+                field: "SKU_NM",
+                title: "SKU Name",
+                template: "<div kendo-tooltip k-content='dataItem.SKU_NM'>{{dataItem.SKU_NM}}</div>",
+                //template: "<div kendo-tooltip k-content='dataItem.SKU_NM'>{{(dataItem.SKU_NM | limitTo: 20) + (dataItem.SKU_NM.length > 20 ? '...' : '')}}</div>",
+                width: "180px"
+            },
+            {
+                field: "NAND_FAMILY",
+                title: "NAND FAMILY",
+                width: "150px"
+            },
+            {
+                field: "NAND_Density",
+                title: "Nand Density",
+                width: "150px"
+            },
+            {
+                field: "CPU_CACHE",
+                title: "CPU CACHE",
+                width: "150px"
+            },
+            {
+                field: "CPU_PACKAGE",
+                title: "CPU PACKAGE",
+                width: "150px"
+            },
+            {
+                field: "CPU_WATTAGE",
+                title: "CPU WATTAGE",
+                width: "150px"
+            },
+            {
+                field: "CPU_VOLTAGE_SEGMENT",
+                title: "Voltage Segment",
+                width: "150px"
+            },
+            {
+                field: "PRICE_SEGMENT",
+                title: "Price Segment",
+                width: "150px"
+            },
+            {
+                field: "SBS_NM",
+                title: "SBS Name",
+                width: "150px"
+            },
+            {
+                field: "MM_CUST_CUSTOMER",
+                title: "MM Customer Name",
+                width: "150px"
+            },
+            {
+                field: "CAP",
+                title: "CAP Price",
+                width: "150px",
+                template: "<op-popover ng-click='vm.openCAPBreakOut(dataItem, null)' op-options='CAP' op-label='#= CAP #' op-data='vm.getPrductDetails(dataItem, null)' />"
+            },
+            {
+                field: "YCS2",
+                title: "YCS2",
+                width: "150px",
+                template: "<op-popover op-options='YCS2' op-label='#= YCS2 #' op-data='vm.getPrductDetails(dataItem, \"YCS2\")' />"
+            }
+        ]
+    }
+
+    //Getting CAP Product Details for Tooltip
+    vm.getPrductDetails = function (dataItem, priceCondition) {
+        return [{
+            'CUST_MBR_SID': contractData.CUST_MBR_SID,
+            'PRD_MBR_SID': dataItem.PRD_MBR_SID,
+            'GEO_MBR_SID': contractData.GEO_MBR_SID.toString(),
+            'DEAL_STRT_DT': contractData.START_DT,
+            'DEAL_END_DT': contractData.END_DT,
+            'getAvailable': 'N',
+            'priceCondition': priceCondition == null ? dataItem.CAP_PRC_COND : priceCondition
+        }];
+    }
+
+    // TODO remove once integrated in CM
+    vm.openCAPBreakOut = function (dataItem, priceCondition) {
+        var capModal = $uibModal.open({
+            backdrop: 'static',
+            templateUrl: 'app/contract/productCAPBreakout/productCAPBreakout.html',
+            controller: 'ProductCAPBreakoutController',
+            controllerAs: 'vm',
+            windowClass: 'cap-modal-window',
+            size: 'lg',
+            resolve: {
+                productData: angular.copy(dataItem),
+                contractData: angular.copy(contractData),
+            }
+        });
+
+        capModal.result.then(
+            function () {
+            },
+            function () {
+            });
+    }
+
     // Invalid Product Grid/////
     var dataSourceSuggested = new kendo.data.DataSource({
         transport: {
@@ -159,12 +411,13 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         editable: false,
         pageable: false,
         columns: [
-            { field: "PRD_MBR_SID", template: " #= PRD_MBR_SID # ", title: "Product No", width: "200px" },
-            { field: "HIER_VAL_NM", title: "Product Name", width: "200px", template: "<div kendo-tooltip k-content='dataItem.HIER_NM_HASH'>{{dataItem.HIER_VAL_NM}}</div>" },
-            { field: "MM_CUST_CUSTOMER", title: "MM Customer", width: "200px" },
+            { field: "PRD_MBR_SID", template: " #= PRD_MBR_SID # ", title: "Product No", width: "33%" },
+            { field: "HIER_VAL_NM", title: "Product Name", width: "33%", template: "<div kendo-tooltip k-content='dataItem.HIER_NM_HASH'>{{dataItem.HIER_VAL_NM}}</div>" },
+            { field: "MM_CUST_CUSTOMER", title: "MM Customer", width: "33%" },
         ]
     };
 
+    // Hide Column
     function toggleColumnsWhenEmpty(data) {
         var grid = $("#suggestionProdGrid").data("kendoGrid");
         angular.forEach(vm.gridOptionsSuggested.columns, function (item, key) {
@@ -177,6 +430,75 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         });
     }
 
+    function toggleColumnsWhenEmptyConflictGrid(data) {
+        var grid = $("#prodGrid").data("kendoGrid");
+        angular.forEach(vm.gridOptionsProduct.columns, function (item, key) {
+            var columnValue = $filter('unique')(data, item.field);
+            if (columnValue.length == 1 && item.field !== undefined && item.field != "CheckBox" && item.field != 'CAP' && item.field != 'YCS2' &&
+                (columnValue[0][item.field] == "" || columnValue[0][item.field] == null || columnValue[0][item.field] == 'NA')) {
+                grid.hideColumn(item.field);//hide column
+            } else {
+                grid.showColumn(item.field); //show column
+            }
+        });
+    }
+
+    // Click on Selected ITEM. Check Next Conflict or Show Product
+    vm.selectsearchItem = function (item) {
+        var data = GetProductCorrectorData; // assigning data to a local copy
+        lastConflictedColumn = item.name;
+
+        var result = checkNextLevelOfConflict(item); // Checking for conflict
+
+        if (result) {
+        }
+        else {
+            var dataSelected = [];
+
+            //Fetching All the valid product for the selected Hierarchy
+            dataSelected = $linq.Enumerable().From(vm.selectedDataSet)
+                .Where(function (x) {
+                    return (x.DEAL_PRD_TYPE == productHierarchy[0] &&
+                        x.PRD_CAT_NM == productHierarchy[1] &&
+                        x.BRND_NM == productHierarchy[2] &&
+                        x.FMLY_NM == productHierarchy[3]
+                    );
+                })
+                .ToArray();
+
+            productHierarchy = [];
+            vm.items = [];
+
+            var flag = 0;
+
+            // Adding Products to the Selected List
+            angular.forEach(dataSelected, function (value, key) {
+                //Duplicate check
+                vm.showSearchResults = true;
+                if (!$filter("where")(vm.gridData, { PRD_MBR_SID: value.PRD_MBR_SID }).length > 0) {
+                    vm.gridData.push(value);
+
+                    if (!flag)
+                        flag = 1;
+                }
+            });
+
+            dataSourceProduct.read();
+
+            $timeout(function () {
+                toggleColumnsWhenEmptyConflictGrid(vm.gridData);
+            });
+
+            if (flag == 1) {
+                //saveProducts();
+                logger.success("Product added for " + dataSelected["0"].FMLY_NM);
+            }
+            else {
+                logger.error("Can not insert duplicate product ");
+            }
+        }
+    }
+
     // Master Product(s) massaging
     var cookProducts = function (e) {
         var result = false;
@@ -186,8 +508,9 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                 // Process multiple match product(s) to make html to display
                 if (!!data.DuplicateProducts[key]) {
                     vm.opMode = 'D';
-                    vm.isInvalidProduct = true;;
+                    vm.isInvalidProduct = true;
                     vm.isMultipleProduct = false;
+                    
                     var object = { "Row": "", "Items": [] }; //Multiple Match Key Value pair
                     object.Row = key;
                     object.Items = !!data.DuplicateProducts[key] ? data.DuplicateProducts[key] : "";
@@ -201,8 +524,17 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                                 name: ""
                             };
                             result = checkNextLevelOfConflict();
-                            if (result)
+                            if (result) {
                                 break;
+                            }
+                            else if (!vm.selectedDataSet[0].EXACT_MATCH){
+                                var item = {
+                                    name: vm.selectedDataSet[0].FMLY_NM == null ? "" : vm.selectedDataSet[0].FMLY_NM
+                                }
+                                vm.selectsearchItem(item);
+
+                                break;
+                            }                            
                         }
                     }
                 }
@@ -260,8 +592,6 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         }
     }
 
-    
-    //productHierarchy.push("DEAL_PRD_TYPE");
     // Checking for Conflict up to FAMILY LEVEL
     function cehckingConflict(data, _selectionLevel, item) {
         // Checking for conflict in Deal Product Type i.e. CPU or EIA products
@@ -343,8 +673,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                         return (x.PRD_CAT_NM);
                     }).Select(function (x) {
                         return { 'PRD_CAT_NM': x.source[0].PRD_CAT_NM };
-                    })
-                    .ToArray();
+                    }).ToArray();
 
                 if (dataS.length > 0) {
                     item.name = dataS[0].PRD_CAT_NM;
@@ -356,7 +685,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             isConflict = $linq.Enumerable().From(data)
                 .Where(function (x) {
                     return (x.PRD_CAT_NM == item.name &&
-                        x.DEAL_PRD_TYPE == productHierarchy[0] );
+                        x.DEAL_PRD_TYPE == productHierarchy[0]);
                 })
                 .GroupBy(function (x) {
                     return (x.BRND_NM);
@@ -465,6 +794,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         if (_selectionLevel == 4) {
             productHierarchy.push(item.name);
         }
+        
         return result = false;
     }
 
@@ -474,53 +804,37 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
     //Master Product Data massaging
     cookProducts();
 
-    // Click on Selected ITEM. Check Next Conflict or Show Product
-    vm.selectsearchItem = function (item) {
-        var data = GetProductCorrectorData; // assigning data to a local copy
-        lastConflictedColumn = item.name;
+    //Add some suggestion for the searching
+    vm.addToSuggestList = function (item) {
+        var flagFound = 0;
+        for (var j = 0; j < vm.invalidProducts.length; j++) {
+            if (vm.invalidProducts == item)
+            {
+                flagFound = 1;
+                break;
+            }
+        }
+        if (flagFound == 0) {
+            var itemSuggested = {
+                USR_INPUT: item
+            };
 
-        var result = checkNextLevelOfConflict(item); // Checking for conflict
+            vm.invalidProducts.unshift(itemSuggested);
+            dataSource.read();
 
-        if (result) {
+            for (var z = 0; z < vm.suggestedProd.length; z++) {
+                if (vm.suggestedProd[z] == item) {
+                    vm.suggestedProd.splice(z,1);
+                }
+            }
         }
         else {
-            var dataSelected = [];
-
-            //Fetching All the valid product for the selected Hierarchy
-            dataSelected = $linq.Enumerable().From(vm.selectedDataSet)
-                            .Where(function (x) {
-                                return (x.DEAL_PRD_TYPE == productHierarchy[0] &&
-                                        x.PRD_CAT_NM == productHierarchy[1] && 
-                                        x.BRND_NM == productHierarchy[2] &&
-                                        x.FMLY_NM == productHierarchy[3]
-                                       );
-                            })
-                            .ToArray();
-
-            productHierarchy = [];
-            
-            var flag = 0;
-
-            // Adding Products to the Selected List
-            angular.forEach(dataSelected, function (value, key) {
-                //Duplicate check
-                if (!$filter("where")(vm.addedProducts, { PRD_MBR_SID: value.PRD_MBR_SID }).length > 0) {
-                    vm.addedProducts.push(value);
-
-                    if (!flag)
-                        flag = 1;
-                }
-            });
-
-            if (flag == 1) {
-                saveProducts();
-                logger.success("Product added for " + dataSelected["0"].FMLY_NM);
-            }
-            else {
-                logger.error("Can not insert duplicate product ");
-            }
+            logger.error("Same product name exist");
         }
+        
+        
     }
+    
 
     //Go to Next ROW for conflict or Invalid Product
     function nextRow() {
@@ -560,7 +874,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         else {
             var row = ProductRows[0];
         }
-        
+
         var searchStringDTO = {
             'prdEntered': item.USR_INPUT.replace(/\*$/, ""),
             'returnMax': 5,
@@ -583,6 +897,8 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                     }, 1)
                 }
                 else {
+                    vm.suggestedProd = [];
+                    vm.selectSuggestion(item.USR_INPUT);
                     vm.suggestedProduct = [];
                     dataSourceSuggested.read();
                     logger.error("No suggestion found");
@@ -609,6 +925,18 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         $uibModalInstance.close(GetProductCorrectorData);
     }
 
+    //Adding products to the selected list 
+    function addProducts() {
+        // Add them to box, check for duplicate prd_mbr_sid
+        angular.forEach(vm.selectedItems, function (value, key) {
+            if (!$filter("where")(vm.addedProducts, { PRD_MBR_SID: value.PRD_MBR_SID }).length > 0) {
+                vm.addedProducts.push(value);
+            }
+        });
+
+        vm.selectedItems = [];
+    }
+
     // Save Selected product(s) for the Row
     function saveProducts() {
         if (vm.addedProducts.length > 0) {
@@ -616,20 +944,36 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             for (var s = 0; s < vm.addedProducts.length; s++) {
                 vm.addedProducts[s]["ROW_NUMBER"] = vm.currentRow;
             }
+
             var selectedInput = $linq.Enumerable().From(vm.addedProducts)
                 .GroupBy(function (x) {
                     return (x.USR_INPUT);
                 }).Select(function (x) {
                     return { 'USR_INPUT': x.source[0].USR_INPUT };
                 }).ToArray();
+
             var obj = {};
+
             for (var m = 0; m < selectedInput.length; m++) {
+
                 var products = $linq.Enumerable().From(vm.addedProducts)
                     .Where(function (x) {
                         return (x.USR_INPUT == selectedInput[m].USR_INPUT);
-                    })
-                    .ToArray();
-                const prodName = selectedInput[m].USR_INPUT;
+                    }).ToArray();
+
+                var tempProdNm = selectedInput[m].USR_INPUT;
+
+                for (var keyProd in vm.masterSuggestionList) {
+                    if (!!vm.masterSuggestionList[keyProd]) {
+                        for (var c = 0; c < vm.masterSuggestionList[keyProd].length; c++) {
+                            if (vm.masterSuggestionList[keyProd][c] = selectedInput[m].USR_INPUT) {
+                                tempProdNm = keyProd;
+                            }
+                        }
+                    }
+                }
+
+                const prodName = tempProdNm;
 
                 obj[prodName] = products;
             }
@@ -656,11 +1000,26 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                         return (x.USR_INPUT);
                     }).Select(function (x) {
                         return { 'USR_INPUT': x.source[0].USR_INPUT };
-                    }).ToArray();
+                    }).ToArray();                
 
                 for (var j = 0; j < GetProductCorrectorData.InValidProducts[vm.currentRow].length; j++) {
                     for (var z = 0; z < dataSelected.length; z++) {
-                        if (GetProductCorrectorData.InValidProducts[vm.currentRow][j] == dataSelected[z].USR_INPUT) {
+                        var tempProductName = dataSelected[z].USR_INPUT;
+                        for (var keyProd in vm.masterSuggestionList) {
+                            if (!!vm.masterSuggestionList[keyProd]) {
+                                for (var c = 0; c < vm.masterSuggestionList[keyProd].length; c++) {
+                                    if (vm.masterSuggestionList[keyProd][c] = dataSelected[z].USR_INPUT) {
+                                        tempProductName = keyProd;
+                                    }
+                                }
+                            }
+                        }
+                        for (var d = 0; d < vm.invalidProducts; d++) {
+                            if (vm.invalidProducts[d] = tempProductName) {
+                                vm.invalidProducts.splice(d, 1);
+                            }
+                        }
+                        if (GetProductCorrectorData.InValidProducts[vm.currentRow][j] == tempProductName) {
                             GetProductCorrectorData.InValidProducts[vm.currentRow].splice(j, 1);
                         }
                     }
@@ -673,25 +1032,41 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             }
 
             logger.success("Product added successfully");
-            _selectionLevel = 0;
 
-            if (vm.rowNumber > 0) {
+            _selectionLevel = 0;
+            vm.items = [];
+            vm.gridData = [];
+            dataSourceProduct.read();
+            vm.showSearchResults = 0;
+
+            var previousPage = vm.currentRow;
+
+            if (vm.rowNumber == vm.rows) {
                 vm.rowNumber = vm.rowNumber - 1;
             }
+            else if (vm.rowNumber == 1 || vm.rowNumber == vm.rows) {
+                vm.rowNumber = vm.rowNumber;
+            }
+            else if (vm.rowNumber < vm.rows - 1) {
+                vm.rowNumber = vm.rowNumber + 1;
+            }
 
-            generatePagination(); 
+            // Reset Suggestion list
+            vm.clearSuggedtedProd();
+
+            generatePagination();
 
             //Added List reset logic
             for (var p = 0; p < pageNumber.length; p++) {
-                if (pageNumber[p] == vm.currentRow) {
+                if (pageNumber[p] == previousPage) {
                     vm.resetAddedList = 0;
                     break;
                 }
             }
-            
+
             if (vm.resetAddedList == 1) {
                 vm.addedProducts = [];
-            }                      
+            }
 
             if ((pageNumber.length + 1) == vm.rowNumber || (pageNumber.length == 1)) {
                 vm.rowNumber = 1;

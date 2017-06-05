@@ -421,7 +421,7 @@
             groupable: true,
             columnMenu: true,
             scrollable: true,
-            editable: false,
+            editable: { confirmation: false },
             pageable: true,
             dataBound: function () {
                 this.expandRow(this.tbody.find("tr.k-master-row").first());
@@ -435,12 +435,12 @@
                     title: " ",
                     width: "100px"
                 },
-                { field: "ROW_NUMBER", template: " #= ROW_NUMBER # ", title: "Row No", width: "200px", hidden: true },
-                { field: "USR_INPUT", template: " #= USR_INPUT # ", title: "User Input", width: "200px" },
-                { field: "PRD_MBR_SID", title: "Product No", width: "200px" },
-                { field: "DEAL_PRD_NM", template: " #= DEAL_PRD_NM # ", title: "Deal Prod Name", width: "200px" },
-                { field: "PRD_CAT_NM", template: " #= PRD_CAT_NM # ", title: "Category Name", width: "200px" },
-                { field: "BRND_NM", template: " #= BRND_NM # ", title: "Brand Name", width: "200px" },
+                { field: "ROW_NUMBER", template: " #= ROW_NUMBER # ", title: "Row No", width: "1500px", hidden: true },
+                { field: "USR_INPUT", template: " #= USR_INPUT # ", title: "User Input", width: "100px" },
+                { field: "PRD_MBR_SID", title: "Product No", width: "100px" },
+                { field: "DEAL_PRD_NM", template: " #= DEAL_PRD_NM # ", title: "Deal Prod Name", width: "100px" },
+                { field: "PRD_CAT_NM", template: " #= PRD_CAT_NM # ", title: "Category Name", width: "100px" },
+                { field: "BRND_NM", template: " #= BRND_NM # ", title: "Brand Name", width: "100px" },
                 { field: "FMLY_NM", template: " #= FMLY_NM # ", title: "Family Name", width: "200px" },
                 { field: "PCSR_NBR", template: " #= PCSR_NBR # ", title: "Processor No", width: "200px" },
                 {
