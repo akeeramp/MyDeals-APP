@@ -470,11 +470,10 @@
     /*Validation Styles*/
 
     .valid_Valid {
-        background: #FFA300;
+        background: #cccccc;
     }
     .valid_Finalizing {
-        background: #00AEEF;
-        color: #ffffff !important;
+        background: #cccccc;
     }
     .valid_Complete {
         background: #C4D600;
@@ -484,10 +483,10 @@
     }
 
     .validf_Valid {
-        color: #FFA300;
+        color: #cccccc;
     }
     .validf_Finalizing {
-        color: #00AEEF;
+        color: #cccccc;
     }
     .validf_Complete {
         color: #C4D600;
