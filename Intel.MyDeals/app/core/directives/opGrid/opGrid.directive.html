@@ -28,23 +28,12 @@
                         <i class="intelicon-protection-checked-verified-outlined" style="font-size: 30px; vertical-align: middle;" title="Save and Validate Deals"></i>
                     </button>
 
-                    <span class="k-textbox k-space-left" style="width: 300px;">
-                        <input type="search" ng-keyup="searchGrid()" placeholder="search..." ng-model="searchFilter" />
-                        <a ng-click="searchGrid()" class="k-icon"><i class="intelicon-search" style="font-size: 18px; color: #00AEEF;"></i></a>
-                    </span>
-
-                    <!--<button class="btn btn-sm btn-default" ng-click="searchGrid()">
-                        <i class="intelicon-filter-outlined" style="font-size: 30px; vertical-align: middle;" title="Search"></i>
-                    </button>
-                    <button class="btn btn-sm btn-default" ng-click="clearSearchGrid()">
-                        <i class="intelicon-cancel-filter-outlined" style="font-size: 30px; vertical-align: middle;" title="Clear Search"></i>
-                    </button>-->
                 </div>
                 
-                <div class="fl" style="margin-top: 6px; margin-left: 15px;">
+                <div class="fl" style="margin-top: 2px; margin-left: 4px;">
                     <ul kendo-menu k-options="columnMenu">
                         <li>
-                            <i class="intelicon-view-by-columns" style="font-size: 22px !important;" title="Manage Columns"></i>
+                            <i class="intelicon-view-by-columns" style="font-size: 30px !important;" title="Manage Columns"></i>
                             <ul>
                                 <li>
                                     <div style="padding: 0 10px;">
@@ -69,10 +58,10 @@
                     </ul>
                 </div>
 
-                <div class="fr" style="margin-top: 6px;">
+                <div class="fl" style="margin-top: 2px; margin-left: 8px;">
                     <ul kendo-menu>
                         <li>
-                            <i class="intelicon-settings-solid" style="font-size: 22px !important;" title="Manage Layout"></i>
+                            <i class="intelicon-settings-solid" style="font-size: 30px !important;" title="Manage Layout"></i>
                             <ul>
                                 <li ng-click="addGrp()">
                                     <i class="intelicon-plus-outlined" style="font-size: 18px;"></i> ADD GROUP
@@ -93,6 +82,21 @@
                         </li>
                     </ul>
                 </div>
+                
+                <div class="fr" style="margin-top: 2px;">
+                    <span class="k-textbox k-space-left" style="width: 300px; font-size: 16px">
+                        <input type="search" ng-keyup="searchGrid()" placeholder="search..." ng-model="searchFilter" />
+                        <a ng-click="searchGrid()" class="k-icon"><i class="intelicon-search" style="font-size: 18px; color: #00AEEF;"></i></a>
+                    </span>
+
+                    <!--<button class="btn btn-sm btn-default" ng-click="searchGrid()">
+                        <i class="intelicon-filter-outlined" style="font-size: 30px; vertical-align: middle;" title="Search"></i>
+                    </button>
+                    <button class="btn btn-sm btn-default" ng-click="clearSearchGrid()">
+                        <i class="intelicon-cancel-filter-outlined" style="font-size: 30px; vertical-align: middle;" title="Clear Search"></i>
+                    </button>-->
+                </div>
+
                 <div class="clearboth"></div>
             </div>
         </div>
