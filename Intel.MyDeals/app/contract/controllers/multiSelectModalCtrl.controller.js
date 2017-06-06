@@ -28,11 +28,11 @@ function MultiSelectModalCtrl($scope, $uibModalInstance, MrktSegMultiSelectServi
 			// Format geo
 			if ($ctrl.isGeo) {
 				var wwIndex = returnVal.indexOf("Worldwide");
-				if (wwIndex > -1) {
-					returnVal.splice(wwIndex, 1);
-				}
 
 				if ($ctrl.isGeoBlend) {
+					if (wwIndex > -1) {
+						returnVal.splice(wwIndex, 1);
+					}
 					if (returnVal.length > 0) {
 						returnVal = "[" + returnVal.join() + "]";
 					}

@@ -1115,8 +1115,8 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
 
                         // fix date formats
                         for (var d = 0; d < dateFields.length; d++) {
-                            sData[s][dateFields[d]] = moment(sData[s][dateFields[d]]).format("MM/DD/YYYY");
-                            if (sData[s][dateFields[d]] === "Invalid date") {
+                        	sData[s][dateFields[d]] = moment(sData[s][dateFields[d]]).format("MM/DD/YYYY");
+                        	if (sData[s][dateFields[d]] === "Invalid date") {
                                 if (!sData[s]._behaviors) sData[s]._behaviors = {};
                                 if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
                                 if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
@@ -1143,12 +1143,14 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                                     var tblEndDate = sData[s][dateFields[d]];
                                     var startDate = $scope.contractData.START_DT;
                                     if (moment(tblEndDate).isBefore(startDate)) {
-                                        if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
-                                        if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
-                                        sData[s]._behaviors.isError['END_DT'] = true;
-                                        sData[s]._behaviors.validMsg['END_DT'] = "End date cannot be earlier than the Contract Start Date (" + startDate + ")";
-                                        if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                        errs.PRC_TBL_ROW.push("End date cannot be earlier than the Contract Start Date (" + startDate + ")");
+                                    	if (sData[s]._behaviors !== null && sData[s]._behaviors !== undefined) {
+											if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
+											if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
+											sData[s]._behaviors.isError['END_DT'] = true;
+											sData[s]._behaviors.validMsg['END_DT'] = "End date cannot be earlier than the Contract Start Date (" + startDate + ")";
+											if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+											errs.PRC_TBL_ROW.push("End date cannot be earlier than the Contract Start Date (" + startDate + ")");
+                                    	}
                                     }
                                 }
 

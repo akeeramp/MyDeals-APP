@@ -825,14 +825,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 	                            dataType: "list",
 	                            showButton: true,
 	                            from: "DropdownValuesSheet!" + myColumnName + ":" + myColumnName,
-	                            allowNulls: myFieldModel.nullable,
+	                            allowNulls: true, //myFieldModel.nullable,
 	                            type: "warning",
 	                            titleTemplate: "Invalid value",
 	                            messageTemplate: "Invalid value. Please use the dropdown for available options."
 	                        });
 	                    } else if (myFieldModel.uiType === "EMBEDDEDMULTISELECT" || myFieldModel.uiType === "MULTISELECT") {
 	                        sheet.range(myColumnName + ":" + myColumnName).editor("multiSelectPopUpEditor");
-	                        // TODO: Add a better validator which makes sure the selected items are in the multiselect list
 	                        vm.requiredStringColumns[key] = true;
 	                    }
 	                } else {
@@ -1198,8 +1197,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 				    cellCurrVal = cellCurrVal.replace(/\//g, ",");
                 }
 
-				cellCurrVal = cellCurrVal.trim();
 				cellCurrVal = cellCurrVal.split(',');
+
+				// Trim the front space (if exists) so that the multiselect controls know the correct selection
+				// TODO: Figure out how to make pre-selected values non case-sensitive (harder han it sounds unfortunately)
+				for (var i = 0; i < cellCurrVal.length; i++) {
+					cellCurrVal[i] = cellCurrVal[i].trim();
+				}
 			}
 
 			var modalInstance = $uibModal.open({

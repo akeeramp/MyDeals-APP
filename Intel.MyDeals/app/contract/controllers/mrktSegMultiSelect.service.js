@@ -195,7 +195,6 @@
 						}
 
 					    //Logic for NonCorp
-						debugger;
 						if (newValue.indexOf(NONCORP) > -1 && !(oldValue.indexOf(NONCORP) > -1)) { //treeView.dataItem(treeView.findByText(NONCORP)).checked instead?
 						    //if user selects NonCorp, make sure all NonCorp nodes are checked
 
