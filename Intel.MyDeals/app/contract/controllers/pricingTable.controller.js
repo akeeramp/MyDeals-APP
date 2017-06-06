@@ -177,13 +177,19 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 		    root.wipOptions.default.groups = [
                 { "name": "Deal Info", "order": 0 },
                 { "name": "Consumption", "order": 1 },
-                { "name": "Meet Comp", "order": 2 },
-                { "name": "Retail Cycle", "order": 3 },
-                { "name": "Backdate", "order": 4 },
-                { "name": "Overlapping", "order": 5 },
-                { "name": "Cost Test", "order": 6 },
+                { "name": "Backdate", "order": 2 },
                 { "name": "All", "order": 99 }
 		    ];
+		    //root.wipOptions.default.groups = [
+            //    { "name": "Deal Info", "order": 0 },
+            //    { "name": "Consumption", "order": 1 },
+            //    { "name": "Meet Comp", "order": 2 },
+            //    { "name": "Retail Cycle", "order": 3 },
+            //    { "name": "Backdate", "order": 4 },
+            //    { "name": "Overlapping", "order": 5 },
+            //    { "name": "Cost Test", "order": 6 },
+            //    { "name": "All", "order": 99 }
+		    //];
 		    root.wipOptions.default.groupColumns = {
 		        "tools": {
 		            "Groups": ["Deal Info", "Consumption", "Cost Test", "Meet Comp", "Retail Cycle", "Backdate", "Overlapping"]
@@ -284,6 +290,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 		        "TERMS": {
 		            "Groups": ["Deal Info"]
 		        },
+		        "YCS2_OVERLAP_OVERRIDE": {
+		            "Groups": ["Deal Info"]
+		        },
 		        "REBATE_BILLING_START": {
 		            "Groups": ["Consumption"]
 		        },
@@ -296,69 +305,66 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 		        "CONSUMPTION_REASON_CMNT": {
 		            "Groups": ["Consumption"]
 		        },
-		        "COST_TEST_RESULT": {
-		            "Groups": ["Cost Test"]
-		        },
-		        "PRD_COST": {
-		            "Groups": ["Cost Test"]
-		        },
-		        "COST_TYPE_USED": {
-		            "Groups": ["Cost Test"]
-		        },
-		        "COST_TEST_FAIL_OVERRIDE": {
-		            "Groups": ["Cost Test"]
-		        },
-		        "COST_TEST_FAIL_OVERRIDE_REASON": {
-		            "Groups": ["Cost Test"]
-		        },
-		        "YCS2_OVERLAP_OVERRIDE": {
-		            "Groups": ["Cost Test"]
-		        },
-		        "MEET_COMP_PRICE_QSTN": {
-		            "Groups": ["Meet Comp"]
-		        },
-		        "COMP_SKU": {
-		            "Groups": ["Meet Comp"]
-		        },
-		        "COMP_SKU_OTHR": {
-		            "Groups": ["Meet Comp"]
-		        },
-		        "COMPETITIVE_PRICE": {
-		            "Groups": ["Meet Comp"]
-		        },
-		        "COMP_BENCH": {
-		            "Groups": ["Meet Comp"]
-		        },
-		        "IA_BENCH": {
-		            "Groups": ["Meet Comp"]
-		        },
-		        "COMP_TARGET_SYSTEM_PRICE": {
-		            "Groups": ["Meet Comp"]
-		        },
-		        "MEETCOMP_TEST_RESULT": {
-		            "Groups": ["Meet Comp"]
-		        },
-		        "MEETCOMP_TEST_FAIL_OVERRIDE": {
-		            "Groups": ["Meet Comp"]
-		        },
-		        "MEETCOMP_TEST_FAIL_OVERRIDE_REASON": {
-		            "Groups": ["Meet Comp"]
-		        },
-		        "RETAIL_CYCLE": {
-		            "Groups": ["Retail Cycle"]
-		        },
-		        "RETAIL_PULL": {
-		            "Groups": ["Retail Cycle"]
-		        },
-		        "RETAIL_PULL_USR_DEF": {
-		            "Groups": ["Retail Cycle"]
-		        },
-		        "RETAIL_PULL_USR_DEF_CMNT": {
-		            "Groups": ["Retail Cycle"]
-		        },
-		        "ECAP_FLR": {
-		            "Groups": ["Retail Cycle"]
-		        },
+		        //"COST_TEST_RESULT": {
+		        //    "Groups": ["Cost Test"]
+		        //},
+		        //"PRD_COST": {
+		        //    "Groups": ["Cost Test"]
+		        //},
+		        //"COST_TYPE_USED": {
+		        //    "Groups": ["Cost Test"]
+		        //},
+		        //"COST_TEST_FAIL_OVERRIDE": {
+		        //    "Groups": ["Cost Test"]
+		        //},
+		        //"COST_TEST_FAIL_OVERRIDE_REASON": {
+		        //    "Groups": ["Cost Test"]
+		        //},
+		        //"MEET_COMP_PRICE_QSTN": {
+		        //    "Groups": ["Meet Comp"]
+		        //},
+		        //"COMP_SKU": {
+		        //    "Groups": ["Meet Comp"]
+		        //},
+		        //"COMP_SKU_OTHR": {
+		        //    "Groups": ["Meet Comp"]
+		        //},
+		        //"COMPETITIVE_PRICE": {
+		        //    "Groups": ["Meet Comp"]
+		        //},
+		        //"COMP_BENCH": {
+		        //    "Groups": ["Meet Comp"]
+		        //},
+		        //"IA_BENCH": {
+		        //    "Groups": ["Meet Comp"]
+		        //},
+		        //"COMP_TARGET_SYSTEM_PRICE": {
+		        //    "Groups": ["Meet Comp"]
+		        //},
+		        //"MEETCOMP_TEST_RESULT": {
+		        //    "Groups": ["Meet Comp"]
+		        //},
+		        //"MEETCOMP_TEST_FAIL_OVERRIDE": {
+		        //    "Groups": ["Meet Comp"]
+		        //},
+		        //"MEETCOMP_TEST_FAIL_OVERRIDE_REASON": {
+		        //    "Groups": ["Meet Comp"]
+		        //},
+		        //"RETAIL_CYCLE": {
+		        //    "Groups": ["Retail Cycle"]
+		        //},
+		        //"RETAIL_PULL": {
+		        //    "Groups": ["Retail Cycle"]
+		        //},
+		        //"RETAIL_PULL_USR_DEF": {
+		        //    "Groups": ["Retail Cycle"]
+		        //},
+		        //"RETAIL_PULL_USR_DEF_CMNT": {
+		        //    "Groups": ["Retail Cycle"]
+		        //},
+		        //"ECAP_FLR": {
+		        //    "Groups": ["Retail Cycle"]
+		        //},
 		        "BACK_DATE_RSN": {
 		            "Groups": ["Backdate"]
 		        }

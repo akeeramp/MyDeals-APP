@@ -14,7 +14,7 @@
         </div>
 
 
-        <div class="sum-filter-bar">
+        <div class="sum-filter-bar" style="padding: 0 10px;">
             <table style="width: 100%;">
                 <tr>
                     <td style="width: 30px; height: 40px;" ng-click="toggleSum()" title="{{ isAllCollapsed ? 'Collapse All' : 'Expand All' }}" ng-class="{'rotate-90': !isAllCollapsed}">
@@ -23,20 +23,20 @@
                     <td style="width: 55px; text-align: center;" ng-show="canEdit">
                         <div style="font-size: 11px; line-height: 1em; margin-bottom: -5px;">All</div>
                         <input type="checkbox" name="allRadGrp"
-                                class="with-font" id="all_rad_approve"
-                                ng-click="clkAllRow($event, 'psCheck-Approve')" /><label for="all_rad_approve"></label>
+                               class="with-font" id="all_rad_approve"
+                               ng-click="clkAllRow($event, 'psCheck-Approve')" /><label for="all_rad_approve"></label>
                     </td>
                     <td style="width: 50px; text-align: center;" ng-show="canEdit">
                         <div style="font-size: 11px; line-height: 1em; margin-bottom: -5px;">All</div>
                         <input type="checkbox" name="allRadGrp"
-                                class="with-font" id="all_rad_revise"
-                                ng-click="clkAllRow($event, 'psCheck-Revise')" /><label for="all_rad_revise"></label>
+                               class="with-font" id="all_rad_revise"
+                               ng-click="clkAllRow($event, 'psCheck-Revise')" /><label for="all_rad_revise"></label>
                     </td>
                     <td style="width: 50px; text-align: center;" ng-show="canEdit">
                         <div style="font-size: 11px; line-height: 1em; margin-bottom: -5px;">All</div>
                         <input type="checkbox" name="allRadGrp"
-                                class="with-font" id="all_rad_cancel"
-                                ng-click="clkAllRow($event, 'psCheck-Cancel')" /><label for="all_rad_cancel"></label>
+                               class="with-font" id="all_rad_cancel"
+                               ng-click="clkAllRow($event, 'psCheck-Cancel')" /><label for="all_rad_cancel"></label>
                     </td>
                     <td style="width: 100px; text-align: center;">
                         <div class="btn-group">
@@ -70,21 +70,23 @@
                 </tr>
             </table>
         </div>
-        <table style="width: 100%;" class="tbl-header">
-            <tr>
-                <td style="width: 30px;">&nbsp;</td>
-                <td style="width: 60px; border-right: 1px solid #000000; text-align: center;" ng-show="canEdit">Approve</td>
-                <td style="width: 50px; border-right: 1px solid #000000; text-align: center;" ng-show="canEdit">Revise</td>
-                <td style="width: 50px; text-align: center;" ng-show="canEdit">Cancel</td>
-                <td style="width: 100px; text-align: center;">Status</td>
-                <td style="width: 50px; text-align: center;">Valid</td>
-                <td>Pricing Strategy Name | Table Name</td>
-                <td style="width: 80px; text-align: center;"># of Tables</td>
-                <td style="width: 80px; text-align: center;">Cost Test</td>
-                <td style="width: 80px; text-align: center;">Meet Comp</td>
-            </tr>
-        </table>
-        <hr />
+        <div style="padding: 0 10px;">
+            <table style="width: 100%;" class="tbl-header">
+                <tr>
+                    <td style="width: 30px;">&nbsp;</td>
+                    <td style="width: 60px; border-right: 1px solid #000000; text-align: center;" ng-show="canEdit">Approve</td>
+                    <td style="width: 50px; border-right: 1px solid #000000; text-align: center;" ng-show="canEdit">Revise</td>
+                    <td style="width: 50px; text-align: center;" ng-show="canEdit">Cancel</td>
+                    <td style="width: 100px; text-align: center;">Status</td>
+                    <td style="width: 50px; text-align: center;">Valid</td>
+                    <td>Pricing Strategy Name | Table Name</td>
+                    <td style="width: 80px; text-align: center;"># of Tables</td>
+                    <td style="width: 80px; text-align: center;">Cost Test</td>
+                    <td style="width: 80px; text-align: center;">Meet Comp</td>
+                </tr>
+            </table>
+            <hr />
+        </div>
     </div>
     <div id="sum-container" >
         <div class="sum-main-body">
@@ -154,7 +156,7 @@
                     </table>
 
                     <div uib-collapse="!isCollapsed" ng-repeat="pt in ps.PRC_TBL">
-                        <table style="width: 100%;">
+                        <table style="width: 100%; ">
                             <tr>
                                 <td style="width: 30px;" ng-show="canEdit"></td>
                                 <td style="width: 160px; height: 30px;" ng-click="isPtCollapsed = !isPtCollapsed; togglePt(pt)" ng-show="canEdit">
@@ -164,9 +166,10 @@
                                     <i class="chevron linkable" style="font-size: 20px; padding-left: 6px;" ng-class="{'intelicon-down': isPtCollapsed, 'intelicon-right-next': !isPtCollapsed}"></i>
                                 </td>
                                 <td style="width: 100px; padding-left: 40px; color: #000000; text-align: center;">
+                                </td>
+                                <td style="width: 50px; padding-left: 17px;">
                                     <div class="textCircle valid_{{ pt.PASSED_VALIDATION }}">{{ pt.OBJ_SET_TYPE_CD | limitTo:1 }}</div>
                                 </td>
-                                <td style="width: 50px;"></td>
                                 <td>
                                     <div ng-bind="pt.TITLE" class="bold linkable" ng-click="gotoContractEditor(ps,pt)" title="Click to open the Pricing Table in the Contract Editor"></div>
                                 </td>
