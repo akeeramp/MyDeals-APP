@@ -440,6 +440,22 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns></returns>
         public List<string> TransformProducts(string userProduct)
         {
+            string EPMString = "";
+            // Checking for any EPM name present inside "" and extracting the EPM name will add it at the END
+            if (userProduct.Contains('"'))
+            {
+                var empArr = userProduct.Split('"', '"');
+                if(empArr.Length > 0)
+                {
+                    EPMString = empArr[1];
+                }
+                userProduct = userProduct.Replace("\"", "");
+                int index = userProduct.IndexOf(EPMString);                
+                userProduct = (index < 0)
+                    ? userProduct
+                    : userProduct.Remove(index, EPMString.Length);
+            }
+
             //Getting value from Constant Table
             string charset = "";
             var charsetResult = _constantsLookupsLib.GetConstantsByName("PROD_REPLACE_CHARSET"); // NULL Check
@@ -511,6 +527,12 @@ namespace Intel.MyDeals.BusinessLogic
                 {
                     singleProducts.Add(item.Trim());
                 }
+            }
+            //Adding EPM name
+            if(EPMString.Length > 0)
+            {
+                singleProducts.Add(EPMString);
+                EPMString = "";
             }
             return singleProducts;
         }

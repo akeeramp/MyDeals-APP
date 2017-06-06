@@ -41,7 +41,10 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
     vm.selectedProducts = [];
     vm.gridData = [];
     vm.addProducts = addProducts; // This method will add products in Selected List
-    
+    vm.suggestedProd = [];
+    vm.masterSuggestionList = {
+        
+    };
     //Page number calculation and navigation
     var generatePagination = function (e) {
         pageNumber = [];
@@ -124,10 +127,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         ]
     };
 
-    vm.suggestedProd = [];
-    vm.masterSuggestionList = {
-        name : []
-    };
+    
     vm.suggestionNotFound = '';
 
     // Further suggestion 
@@ -180,11 +180,9 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                 vm.suggestedProd.push(tempString.replace(/[^\w\s]/gi, ''));
             } 
         }
-
+        
         if (vm.suggestedProd.length > 0) {
-            vm.masterSuggestionList = {
-                tempString: vm.suggestedProd
-            };
+            vm.masterSuggestionList[tempString] = vm.suggestedProd;           
         }
     }
     vm.clearSuggedtedProd = function (e) {
@@ -824,7 +822,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
 
             for (var z = 0; z < vm.suggestedProd.length; z++) {
                 if (vm.suggestedProd[z] == item) {
-                    vm.suggestedProd.splice(z,1);
+                    vm.suggestedProd = [];
                 }
             }
         }
@@ -876,7 +874,8 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         }
 
         var searchStringDTO = {
-            'prdEntered': item.USR_INPUT.replace(/\*$/, ""),
+            //.replace(/\*$/, "")
+            'prdEntered': item.USR_INPUT,
             'returnMax': 5,
             'startDate': row.START_DATE,
             'endDate': row.END_DATE
@@ -938,7 +937,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
     }
 
     // Save Selected product(s) for the Row
-    function saveProducts() {
+    function saveProducts() {        
         if (vm.addedProducts.length > 0) {
             var validObject = { "Row": "", "Items": [] }; //Multiple Match Key Value pair
             for (var s = 0; s < vm.addedProducts.length; s++) {
