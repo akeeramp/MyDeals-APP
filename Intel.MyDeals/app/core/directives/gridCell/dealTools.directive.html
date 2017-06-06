@@ -10,13 +10,13 @@
         <i class='intelicon-discussion-solid' style="font-size: 20px !important; cursor: pointer; color: #003C71;" title="{{dataItem.NOTES}}" ng-click="dialog.open()"></i>
     </div>
 
-    <div class='fl md-icon' ng-if="isEditable && (dataItem._parentCnt === undefined || dataItem._parentCnt <= 1)">
+    <!--<div class='fl md-icon' ng-if="isEditable && (dataItem._parentCnt === undefined || dataItem._parentCnt <= 1)">
         <a href='#'><i class='intelicon-trash-solid' style="font-size: 20px !important;" title="Click to Delete the deal"></i></a>
     </div>
     <div class='fl md-icon-disabled' ng-if="isEditable && (dataItem._parentCnt !== undefined && dataItem._parentCnt > 1)">
         <i class='intelicon-trash-solid' style="font-size: 20px !important; color: #e7e7e8;"
            title="This deal shares the same pricing table row as other deals.  You will need to delete the deal from the Pricing Table."></i>
-    </div>
+    </div>-->
 
     <div class='fl md-icon' ng-if="dataItem.HasFiles === undefined || !dataItem.HasFiles">
         <i class='intelicon-attach' style="font-size: 20px !important; color: #00AEEF; cursor: pointer;" title="Click to Add an Attachment"></i>

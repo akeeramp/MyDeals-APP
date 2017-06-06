@@ -37,8 +37,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 		textAlign: "center",
 		verticalAlign: "center",
 		color: "#003C71",
-		fontSize: 12,
-		fontWeight: "normal"
+		fontSize: 13,
+		fontWeight: "bold"
 	};
 
 	var intA = "A".charCodeAt(0);
@@ -102,9 +102,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
 
 		if ($state.current.name === "contract.manager.strategy")
-	        generateKendoSpreadheetOptions();
-	    else
-	        generateKendoGridOptions();
+		    generateKendoSpreadheetOptions();
+		else {
+		    generateKendoGridOptions();
+		    root.pageTitle = "Deal Editor";
+		}
 	}
 
 	// Generates options that kendo's html directives will use

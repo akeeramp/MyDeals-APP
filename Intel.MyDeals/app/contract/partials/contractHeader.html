@@ -2,7 +2,7 @@
     <div ng-if="!isNewContract" class="fr" ng-include="'app/contract/partials/lnavButtons.html'"></div>
     
     <div class="pricing-strategy-status-bar valid_{{ curPricingStrategy.PASSED_VALIDATION }}">
-        <div class="fl">Pricing Table Editor</div>
+        <div class="fl">{{ pageTitle }}</div>
         <div class="fr"><span style="opacity: 0.5;">Pricing Strategy:</span> {{ curPricingStrategy.WF_STG_CD }}</div>
     </div>
     <div style="padding-top: 3px;">

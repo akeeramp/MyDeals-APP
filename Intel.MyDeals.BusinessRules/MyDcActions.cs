@@ -35,6 +35,7 @@ namespace Intel.MyDeals.BusinessRules
 
             OpDataCollectorFlattenedItem item = ((object[])args[3])[0] as OpDataCollectorFlattenedItem;
             if (item == null) return;
+            if (!r.Dc.DataElements.Any()) return;
 
             // Deal Dates
             string dcStStr = r.Dc.GetDataElementValue(AttributeCodes.START_DT);

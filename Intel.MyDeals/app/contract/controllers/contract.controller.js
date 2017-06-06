@@ -21,6 +21,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
         $scope.colToLetter = {};
         $scope.letterToCol = {};
         var intA = "A".charCodeAt(0);
+        $scope.pageTitle = "Pricing Table Editor";
 
         // determine if the contract is existing or new... if new, look for pre-population attributes from the URL parameters
         //
