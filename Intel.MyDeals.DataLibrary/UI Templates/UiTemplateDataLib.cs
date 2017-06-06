@@ -846,166 +846,166 @@ namespace Intel.MyDeals.DataLibrary
                 Template = "#=gridUtils.uiControlWrapper(data, 'COST_TYPE_USED')#"
             });
 
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 29,
-                AtrbCd = AttributeCodes.COST_TEST_RESULT,
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Width = 100,
-                Label = "Cost Test Result",
-                IsFilterable = true,
-                IsSortable = true,
-                Template = "#=gridUtils.uiControlWrapper(data, 'COST_TEST_RESULT')#"
-            });
+            //items.Add(new UiTemplateContainerItem
+            //{
+            //    Id = 29,
+            //    AtrbCd = AttributeCodes.COST_TEST_RESULT,
+            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+            //    Width = 100,
+            //    Label = "Cost Test Result",
+            //    IsFilterable = true,
+            //    IsSortable = true,
+            //    Template = "#=gridUtils.uiControlWrapper(data, 'COST_TEST_RESULT')#"
+            //});
 
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 29,
-                AtrbCd = AttributeCodes.COST_TEST_FAIL_OVERRIDE,
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Width = 180,
-                Label = "Price Cost Test Analysis Override Comments",
-                IsFilterable = true,
-                IsSortable = true,
-                Template = "#=gridUtils.uiControlWrapper(data, 'COST_TEST_FAIL_OVERRIDE')#",
-                LookupUrl = "/api/Dropdown/GetDropdowns/COST_TEST_OVERRIDE",
-                LookupText = "DROP_DOWN",
-                LookupValue = "DROP_DOWN"
-            });
+            //items.Add(new UiTemplateContainerItem
+            //{
+            //    Id = 29,
+            //    AtrbCd = AttributeCodes.COST_TEST_FAIL_OVERRIDE,
+            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+            //    Width = 180,
+            //    Label = "Price Cost Test Analysis Override Comments",
+            //    IsFilterable = true,
+            //    IsSortable = true,
+            //    Template = "#=gridUtils.uiControlWrapper(data, 'COST_TEST_FAIL_OVERRIDE')#",
+            //    LookupUrl = "/api/Dropdown/GetDropdowns/COST_TEST_OVERRIDE",
+            //    LookupText = "DROP_DOWN",
+            //    LookupValue = "DROP_DOWN"
+            //});
 
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 29,
-                AtrbCd = AttributeCodes.COST_TEST_FAIL_OVERRIDE_REASON,
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Width = 180,
-                Label = "Price Cost Test Analysis Override",
-                IsFilterable = true,
-                IsSortable = true,
-                Template = "#=gridUtils.uiControlWrapper(data, 'COST_TEST_FAIL_OVERRIDE_REASON')#"
-            });
+            //items.Add(new UiTemplateContainerItem
+            //{
+            //    Id = 29,
+            //    AtrbCd = AttributeCodes.COST_TEST_FAIL_OVERRIDE_REASON,
+            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+            //    Width = 180,
+            //    Label = "Price Cost Test Analysis Override",
+            //    IsFilterable = true,
+            //    IsSortable = true,
+            //    Template = "#=gridUtils.uiControlWrapper(data, 'COST_TEST_FAIL_OVERRIDE_REASON')#"
+            //});
 
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 29,
-                AtrbCd = AttributeCodes.MEET_COMP_PRICE_QSTN,
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Width = 140,
-                Label = "Meet Comp Analysis",
-                IsFilterable = true,
-                IsSortable = true,
-                Template = "#=gridUtils.uiControlWrapper(data, 'MEET_COMP_PRICE_QSTN')#",
-                LookupUrl = "/api/Dropdown/GetDropdowns/MEET_COMP_PRICE_QSTN",
-                LookupText = "DROP_DOWN",
-                LookupValue = "DROP_DOWN"
-            });
+            //items.Add(new UiTemplateContainerItem
+            //{
+            //    Id = 29,
+            //    AtrbCd = AttributeCodes.MEET_COMP_PRICE_QSTN,
+            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+            //    Width = 140,
+            //    Label = "Meet Comp Analysis",
+            //    IsFilterable = true,
+            //    IsSortable = true,
+            //    Template = "#=gridUtils.uiControlWrapper(data, 'MEET_COMP_PRICE_QSTN')#",
+            //    LookupUrl = "/api/Dropdown/GetDropdowns/MEET_COMP_PRICE_QSTN",
+            //    LookupText = "DROP_DOWN",
+            //    LookupValue = "DROP_DOWN"
+            //});
 
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 29,
-                AtrbCd = AttributeCodes.COMP_SKU,
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Width = 110,
-                Label = "Comp Sku",
-                IsFilterable = true,
-                IsSortable = true,
-                Template = "#=gridUtils.uiControlWrapper(data, 'COMP_SKU')#"
-            });
+            //items.Add(new UiTemplateContainerItem
+            //{
+            //    Id = 29,
+            //    AtrbCd = AttributeCodes.COMP_SKU,
+            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+            //    Width = 110,
+            //    Label = "Comp Sku",
+            //    IsFilterable = true,
+            //    IsSortable = true,
+            //    Template = "#=gridUtils.uiControlWrapper(data, 'COMP_SKU')#"
+            //});
 
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 29,
-                AtrbCd = AttributeCodes.COMP_SKU_OTHR,
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Width = 100,
-                IsFilterable = true,
-                IsSortable = true,
-                Template = "#=gridUtils.uiControlWrapper(data, 'COMP_SKU_OTHR')#"
-            });
+            //items.Add(new UiTemplateContainerItem
+            //{
+            //    Id = 29,
+            //    AtrbCd = AttributeCodes.COMP_SKU_OTHR,
+            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+            //    Width = 100,
+            //    IsFilterable = true,
+            //    IsSortable = true,
+            //    Template = "#=gridUtils.uiControlWrapper(data, 'COMP_SKU_OTHR')#"
+            //});
 
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 29,
-                AtrbCd = AttributeCodes.COMPETITIVE_PRICE,
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Width = 110,
-                IsFilterable = true,
-                IsSortable = true,
-                Label = "Comp Price",
-                Template = "#=gridUtils.uiControlWrapper(data, 'COMPETITIVE_PRICE', 'currency')#"
-            });
+            //items.Add(new UiTemplateContainerItem
+            //{
+            //    Id = 29,
+            //    AtrbCd = AttributeCodes.COMPETITIVE_PRICE,
+            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+            //    Width = 110,
+            //    IsFilterable = true,
+            //    IsSortable = true,
+            //    Label = "Comp Price",
+            //    Template = "#=gridUtils.uiControlWrapper(data, 'COMPETITIVE_PRICE', 'currency')#"
+            //});
 
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 29,
-                AtrbCd = AttributeCodes.COMP_BENCH,
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Width = 120,
-                Label = "Comp Bench",
-                IsFilterable = true,
-                IsSortable = true,
-                Template = "#=gridUtils.uiControlWrapper(data, 'COMP_BENCH')#"
-            });
+            //items.Add(new UiTemplateContainerItem
+            //{
+            //    Id = 29,
+            //    AtrbCd = AttributeCodes.COMP_BENCH,
+            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+            //    Width = 120,
+            //    Label = "Comp Bench",
+            //    IsFilterable = true,
+            //    IsSortable = true,
+            //    Template = "#=gridUtils.uiControlWrapper(data, 'COMP_BENCH')#"
+            //});
 
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 29,
-                AtrbCd = AttributeCodes.IA_BENCH,
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Width = 100,
-                Label = "IA Bench",
-                IsFilterable = true,
-                IsSortable = true,
-                Template = "#=gridUtils.uiControlWrapper(data, 'IA_BENCH')#"
-            });
+            //items.Add(new UiTemplateContainerItem
+            //{
+            //    Id = 29,
+            //    AtrbCd = AttributeCodes.IA_BENCH,
+            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+            //    Width = 100,
+            //    Label = "IA Bench",
+            //    IsFilterable = true,
+            //    IsSortable = true,
+            //    Template = "#=gridUtils.uiControlWrapper(data, 'IA_BENCH')#"
+            //});
 
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 29,
-                AtrbCd = AttributeCodes.COMP_TARGET_SYSTEM_PRICE,
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Width = 140,
-                Label = "Comp Target System Price",
-                IsFilterable = true,
-                IsSortable = true,
-                Template = "#=gridUtils.uiControlWrapper(data, 'COMP_TARGET_SYSTEM_PRICE', 'currency')#"
-            });
+            //items.Add(new UiTemplateContainerItem
+            //{
+            //    Id = 29,
+            //    AtrbCd = AttributeCodes.COMP_TARGET_SYSTEM_PRICE,
+            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+            //    Width = 140,
+            //    Label = "Comp Target System Price",
+            //    IsFilterable = true,
+            //    IsSortable = true,
+            //    Template = "#=gridUtils.uiControlWrapper(data, 'COMP_TARGET_SYSTEM_PRICE', 'currency')#"
+            //});
 
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 29,
-                AtrbCd = AttributeCodes.MEETCOMP_TEST_RESULT,
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Width = 120,
-                Label = "Meet Comp Test Results",
-                IsFilterable = true,
-                IsSortable = true,
-                Template = "#=gridUtils.uiControlWrapper(data, 'MEETCOMP_TEST_RESULT')#"
-            });
+            //items.Add(new UiTemplateContainerItem
+            //{
+            //    Id = 29,
+            //    AtrbCd = AttributeCodes.MEETCOMP_TEST_RESULT,
+            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+            //    Width = 120,
+            //    Label = "Meet Comp Test Results",
+            //    IsFilterable = true,
+            //    IsSortable = true,
+            //    Template = "#=gridUtils.uiControlWrapper(data, 'MEETCOMP_TEST_RESULT')#"
+            //});
 
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 29,
-                AtrbCd = AttributeCodes.MEETCOMP_TEST_FAIL_OVERRIDE,
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Width = 160,
-                Label = "Meet Comp Analysis Override",
-                IsFilterable = true,
-                IsSortable = true,
-                Template = "#=gridUtils.uiControlWrapper(data, 'MEETCOMP_TEST_FAIL_OVERRIDE')#"
-            });
+            //items.Add(new UiTemplateContainerItem
+            //{
+            //    Id = 29,
+            //    AtrbCd = AttributeCodes.MEETCOMP_TEST_FAIL_OVERRIDE,
+            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+            //    Width = 160,
+            //    Label = "Meet Comp Analysis Override",
+            //    IsFilterable = true,
+            //    IsSortable = true,
+            //    Template = "#=gridUtils.uiControlWrapper(data, 'MEETCOMP_TEST_FAIL_OVERRIDE')#"
+            //});
 
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 29,
-                AtrbCd = AttributeCodes.MEETCOMP_TEST_FAIL_OVERRIDE_REASON,
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Width = 180,
-                Label = "Meet Comp Analysis Override Comments",
-                IsFilterable = true,
-                IsSortable = true,
-                Template = "#=gridUtils.uiControlWrapper(data, 'MEETCOMP_TEST_FAIL_OVERRIDE_REASON')#"
-            });
+            //items.Add(new UiTemplateContainerItem
+            //{
+            //    Id = 29,
+            //    AtrbCd = AttributeCodes.MEETCOMP_TEST_FAIL_OVERRIDE_REASON,
+            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+            //    Width = 180,
+            //    Label = "Meet Comp Analysis Override Comments",
+            //    IsFilterable = true,
+            //    IsSortable = true,
+            //    Template = "#=gridUtils.uiControlWrapper(data, 'MEETCOMP_TEST_FAIL_OVERRIDE_REASON')#"
+            //});
 
             items.Add(new UiTemplateContainerItem
             {

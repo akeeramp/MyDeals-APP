@@ -23,7 +23,6 @@
     //bool isAdmin = DataCollections.GetSecurityWrapper().ChkDealRules(OpDataElementType.Unknown, OpDataElementSetType.Unknown, null,"C_CAN_VIEW_ADMINTOOL");
     bool isDeveloper = opUserToken.IsDeveloper();
     bool isAdmin = true;
-    //bool isDeveloper = true;
 
 }
 
@@ -86,15 +85,18 @@
 
 
             <li><a href="@Url.Action("Index", "Home", new {Area = ""})" title="Home"><i class="intelicon-home-solid"></i><span class="hidden-xs"> Home</span></a></li>
-            <li><a href="/Dashboard#/portal" title="Dashboard"><i class="intelicon-line-chart-outlined"></i><span class="hidden-xs"> Dashboard</span></a></li>
-            <li><a href="@Url.Action("Index", "Home", new { Area = "" })" title="Settings"><i class="intelicon-settings-solid"></i><span class="hidden-xs"> Settings</span></a></li>
-
-            <li class="dropdown">
-                <a class="btn btn-primary" role="button" href="/" data-toggle="dropdown" data-target="#" title="Docs"><i class="intelicon-attach-document-solid"></i><span class="hidden-xs"> Docs </span><i class="intelicon-down"></i></a>
-                <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
-                    <li><a href="@Url.Action("Index", "CodingPractices", new { Area = "" })">Coding Practices</a></li>
-                </ul>
-            </li>
+            @*<li><a href="/Dashboard#/portal" title="Dashboard"><i class="intelicon-line-chart-outlined"></i><span class="hidden-xs"> Dashboard</span></a></li>*@
+            @*<li><a href="@Url.Action("Index", "Home", new { Area = "" })" title="Settings"><i class="intelicon-settings-solid"></i><span class="hidden-xs"> Settings</span></a></li>*@
+            
+            @if (isDeveloper)
+            {
+                <li class="dropdown">
+                    <a class="btn btn-primary" role="button" href="/" data-toggle="dropdown" data-target="#" title="Docs"><i class="intelicon-attach-document-solid"></i><span class="hidden-xs"> Docs </span><i class="intelicon-down"></i></a>
+                    <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+                        <li><a href="@Url.Action("Index", "CodingPractices", new { Area = "" })">Coding Practices</a></li>
+                    </ul>
+                </li>
+            }
 
             @*Instead of using href can use the ui-sref to translate routes,
             however as we want to retain the # routing to distinguish between MVC and angular routes hence using href*@

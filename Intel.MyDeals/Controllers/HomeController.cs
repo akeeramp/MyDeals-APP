@@ -16,6 +16,8 @@ namespace Intel.MyDeals.Controllers
 
             //OpUserToken uToken2 = op.HttpCall.Get<OpUserToken>("http://localhost:25942/api/v1/OpServer/Local/GetUserToken");
 
+            //return new RedirectResult(Url.Action("Index") + "#region");
+            //return Redirect($"{Url.RouteUrl(new { controller = "Dashboard", action = "Index" })}#/portal");
             return View(AppLib.AVM);
         }
 
