@@ -841,6 +841,13 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             vm.currentRow = pageNumber[vm.rowNumber - 1];
             vm.addedProducts = [];
             productHierarchy = [];
+            //reseting Grid
+            vm.gridData = [];            
+            dataSourceProduct.read();
+            vm.showSearchResults = false;
+            //Resetting Suggestion
+            vm.suggestedProd = [];
+            vm.masterSuggestionList = {};
             _selectionLevel = 0;
             cookProducts();
         }
@@ -856,6 +863,13 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             vm.currentRow = +pageNumber[vm.rowNumber - 1];
             vm.addedProducts = [];
             productHierarchy = [];
+            //reseting Grid
+            vm.gridData = [];
+            dataSourceProduct.read();
+            vm.showSearchResults = false;
+            //Resetting Suggestion
+            vm.suggestedProd = [];
+            vm.masterSuggestionList = {};
             _selectionLevel = 0;
             cookProducts();
         }
@@ -908,7 +922,8 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
     }
 
     // Add selected Products from the Product Suggestion
-    function addProductSuggested(item) {
+    function addProductSuggested(item) {       
+
         if (!$filter("where")(vm.addedProducts, { PRD_MBR_SID: item.PRD_MBR_SID }).length > 0) {
             vm.addedProducts.push(item);
         }
@@ -925,7 +940,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
     }
 
     //Adding products to the selected list 
-    function addProducts() {
+    function addProducts() {       
         // Add them to box, check for duplicate prd_mbr_sid
         angular.forEach(vm.selectedItems, function (value, key) {
             if (!$filter("where")(vm.addedProducts, { PRD_MBR_SID: value.PRD_MBR_SID }).length > 0) {
