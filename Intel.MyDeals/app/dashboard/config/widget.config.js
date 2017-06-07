@@ -2,11 +2,9 @@
 
 widgetConfig.widgets = {};
 widgetConfig.widgetLayouts = {};
-widgetConfig.generator = null;
 widgetConfig.objsetService = null;
 
-widgetConfig.getAllWidgets = function (generator, objsetService) {
-    widgetConfig.generator = generator;
+widgetConfig.getAllWidgets = function (objsetService) {
     widgetConfig.objsetService = objsetService;
     widgetConfig.configWidgets();
 

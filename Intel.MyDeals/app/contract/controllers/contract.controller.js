@@ -1107,8 +1107,8 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                         sData[s].dc_parent_type = curPricingTableData[0].dc_type;
                         sData[s].OBJ_SET_TYPE_CD = curPricingTableData[0].OBJ_SET_TYPE_CD;
 
-                        if (!sData[s].START_DT || sData[s].START_DT === "") sData[s].START_DT = $scope.contractData["START_DT"];
-                        if (!sData[s].END_DT || sData[s].END_DT === "") sData[s].END_DT = $scope.contractData["END_DT"];
+                        if (util.isValidDate(sData[s].START_DT)) sData[s].START_DT = $scope.contractData["START_DT"];
+                        if (util.isValidDate(sData[s].END_DT)) sData[s].END_DT = $scope.contractData["END_DT"];
 
                         // Let's store the backdate rns from the contract in the text field so we can leverage it in rules
                         sData[s].BACK_DATE_RSN_TXT = $scope.contractData.BACK_DATE_RSN;

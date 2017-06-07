@@ -91,6 +91,10 @@ util.formatMoney = function (val, defVal) {
     return kendo.format("{0:c}", val);
 }
 
+util.isValidDate = function(val) {
+    return !val || moment(val).format("MM/DD/YYYY") === "12/30/1899";
+}
+
 util.toJS = function (json) {
     return JSON.parse(kendo.stringify(json));
 }

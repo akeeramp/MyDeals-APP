@@ -26,13 +26,13 @@ function contractStatusBoard($compile, objsetService,colorDictionary) {
                 $scope.isLoaded = true;
             });
 
-            $scope.chartType = "pct";
+            $scope.chartType = "valid";
 
             $scope.getColor = function (k, c) {
                 if (colorDictionary[k] !== undefined && colorDictionary[k][c] !== undefined) {
                     return colorDictionary[k][c];
                 }
-                return "#aaaaaa";
+                return "#cccccc";
             }
             $scope.getColorType = function (d) {
                 return $scope.getColor('type', d.type);
@@ -42,6 +42,9 @@ function contractStatusBoard($compile, objsetService,colorDictionary) {
             }
             $scope.getColorPct = function (d) {
                 return $scope.getColor('pct', d.pct);
+            }
+            $scope.getColorValid = function (d) {
+                return $scope.getColor('valid', d.valid);
             }
             $scope.getColorMct = function (d) {
                 return $scope.getColor('mct', d.mct);
@@ -64,6 +67,7 @@ function contractStatusBoard($compile, objsetService,colorDictionary) {
                 data: [
                     { "value": "type", "text": "Deal Types" },
                     { "value": "stage", "text": "Stages" },
+                    { "value": "valid", "text": "Valid" },
                     { "value": "pct", "text": "Pricing Cost Test" },
                     { "value": "mct", "text": "Meet Comp Test" }
                 ]
@@ -111,6 +115,10 @@ function contractStatusBoard($compile, objsetService,colorDictionary) {
                     title: "Stage",
                     template: "<span><i class='intelicon-workflow-process-outlined' style='color: {{getColorStage(dataItem)}}'></i> {{dataItem.stage}}</span>"
                 }, {
+                    field: "valid",
+                    title: "Valid",
+                    template: "<span><i class='intelicon-protection-solid' style='color: {{getColorValid(dataItem)}}'></i> {{dataItem.valid}}</span>"
+                }, {
                     field: "pct",
                     title: "Price Cost Test",
                     template: "<span><i class='intelicon-bright-on' style='color: {{getColorPct(dataItem)}}'></i> {{dataItem.pct}}</span>"
@@ -121,49 +129,47 @@ function contractStatusBoard($compile, objsetService,colorDictionary) {
                 }]
             };
 
-            $scope.recurCalcData = function (data) {
+            $scope.recurCalcData = function (data, defStage) {
 
                 var ret = [];
 
                 for (var i = 0; i < data.length; i++) {
-                    var stages = ["Draft", "Requested", "Submitted", "Accepted"];
                     var results = ["PASS", "FAIL", "INCOMPLETE", "NA"];
                     var next = "";
                     var titleCd = "TITLE";
 
                     if (data[i]["dc_type"] === "CNTRCT") {
                         next = "PRC_ST";
-                        stages = ["Complete", "InComplete"];
+                        defStage = "InComplete";
 
                     } else if (data[i]["dc_type"] === "PRC_ST") {
                         next = "PRC_TBL";
-                        stages = ["Draft", "Requested", "Submitted", "Accepted"];
+                        defStage = "Draft";
 
                     } else if (data[i]["dc_type"] === "PRC_TBL") {
                         next = "PRC_TBL_ROW";
-                        stages = ["InProgress", "Processed"];
 
                     } else if (data[i]["dc_type"] === "PRC_TBL_ROW") {
                         next = "WIP_DEALS";
-                        stages = ["InProgress", "Processed"];
                         titleCd = "PTR_USER_PRD";
 
                     } else if (data[i]["dc_type"] === "WIP_DEALS") {
                         next = "REAL_DEALS";
-                        stages = ["Active", "Pending Bid", "Lost Bid"];
                         titleCd = "PTR_USER_PRD";
 
                     }
 
+                    var stg = !data[i]["WF_STG_CD"] ? defStage : data[i]["WF_STG_CD"];
                     ret.push({
                         "id": data[i]["DC_ID"],
                         "name": data[i][titleCd],
                         "obj": $scope.getObjType(data[i]["dc_type"]),
                         "type": data[i]["OBJ_SET_TYPE_CD"],
-                        "stage": stages[0], //stages[Math.floor(Math.random() * stages.length)], //TODO: hook up
-                        "mct": results[3], //results[Math.floor(Math.random() * results.length)], //TODO: hook up
-                        "pct": results[3], //results[Math.floor(Math.random() * results.length)], //TODO: hook up
-                        "children": data[i][next] === undefined ? [] : $scope.recurCalcData(data[i][next])
+                        "stage": stg,
+                        "valid": data[i]["PASSED_VALIDATION"],
+                        "mct": results[3],
+                        "pct": results[3],
+                        "children": data[i][next] === undefined ? [] : $scope.recurCalcData(data[i][next], stg)
                     });
                 }
 
@@ -181,7 +187,7 @@ function contractStatusBoard($compile, objsetService,colorDictionary) {
 
             $scope.init = function (responseData) {
 
-                var data = $scope.recurCalcData(responseData)[0];
+                var data = $scope.recurCalcData(responseData, "Incomplete")[0];
 
                 $scope.sbData = data;
 
@@ -206,6 +212,7 @@ function contractStatusBoard($compile, objsetService,colorDictionary) {
                             "obj": d.children[i].obj,
                             "type": d.children[i].type,
                             "stage": d.children[i].stage,
+                            "valid": d.children[i].valid,
                             "pct": d.children[i].pct,
                             "mct": d.children[i].mct
                         });

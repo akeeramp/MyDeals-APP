@@ -40,6 +40,7 @@ function gridStatusBoard($compile, objsetService, $timeout) {
                         id: "CNTRCT_OBJ_SID",
                         fields: {
                             WF_STG_CD: { type: "string" },
+                            PASSED_VALIDATION: { type: "string" },
                             TITLE: { type: "string" },
                             CUST_NM: { type: "string" },
                             STRT_DTM: { type: "date" },

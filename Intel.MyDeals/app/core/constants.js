@@ -50,6 +50,10 @@
                 "VOL_TIER": "#f3D54E",
                 "CAP_BAND": "#C4D600"
             },
+            "valid": {
+                "Dirty": "#cccccc",
+                "Complete": "#C4D600"
+            },
             "stage": {
                 "Complete": "#C4D600",
                 "InComplete": "#FC4C02",

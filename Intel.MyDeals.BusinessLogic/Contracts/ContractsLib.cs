@@ -87,7 +87,9 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 Attributes.TITLE.ATRB_SID,
                 Attributes.PTR_USER_PRD.ATRB_SID,
-                Attributes.OBJ_SET_TYPE_CD.ATRB_SID
+                Attributes.OBJ_SET_TYPE_CD.ATRB_SID,
+                Attributes.WF_STG_CD.ATRB_SID,
+                Attributes.PASSED_VALIDATION.ATRB_SID
             };
 
             return GetContract(id, new List<OpDataElementType>
