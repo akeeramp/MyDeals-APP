@@ -6,8 +6,9 @@
                         <div class="box-header">
                             <h3>{{ widget.name }}</h3>
                             <div class="box-header-btns pull-right">
-                                <a title="settings" ng-show="widget.hasConfig" ng-click="openSettings(widget)"><i class="glyphicon glyphicon-cog"></i></a>
-                                <a title="Remove widget" ng-click="remove(widget)"><i class="glyphicon glyphicon-trash"></i></a>
+                                <a title="Refresh Widget" ng-show="widget.hasConfig" ng-click="refresh(widget)"><i class="intelicon-refresh"></i></a>
+                                <a title="Widget Settings" ng-show="widget.hasConfig" ng-click="openSettings(widget)"><i class="intelicon-settings-solid"></i></a>
+                                <a title="Remove widget" ng-click="remove(widget)"><i class="intelicon-trash-outlined"></i></a>
                             </div>
                         </div>
                         <div class="box-content" ng-include="widget.template" style="overflow: auto !important;"></div>

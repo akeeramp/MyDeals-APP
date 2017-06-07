@@ -8,7 +8,7 @@
                     <li ng-repeat="group in opOptions.groups | orderBy:'order'" ng-click="showCols(group.name)">
                         <i class="intelicon-pin-outlined" ng-hide="{{ group.name == 'All'}}" title="Pin tab so it always shows in the grid" ng-click="clickPin($event, group.name)"></i> {{group.name}}
                         <span class="badge error" ng-show="group.numErrors > 0">{{group.numErrors}}</span>
-                        <i class="intelicon-close-solid closeGrp" ng-hide="{{ group.name == 'All'}}" title="Close tab" ng-click="removeGrp($event, group.name)"></i>
+                        <i class="intelicon-close-solid closeGrp" ng-hide="{{ group.name == 'All' || !isLayoutConfigurable}}" title="Close tab" ng-click="removeGrp($event, group.name)"></i>
                     </li>
                 </ul>
             </div>
@@ -16,21 +16,20 @@
             <div class="toolbar">
 
                 <div class="fl">
-                    <button class="btn btn-sm btn-default" ng-class="{'disabled': !_dirty}" ng-click="saveWipDeals()">
+                    <button class="btn btn-sm btn-default" ng-class="{'disabled': !_dirty}" ng-click="saveWipDeals()" ng-show="isEditable">
                         <i class="fa fa-floppy-o" style="font-size: 30px; vertical-align: middle; margin-right: 4px;" title="Save Deals"></i>
                     </button>
 
-                    <button class="btn btn-sm btn-default" ng-click="backToPricingTable()">
+                    <button class="btn btn-sm btn-default" ng-click="backToPricingTable()" ng-show="isPricingTableEnabled">
                         <i class="intelicon-import-all-outlined" style="font-size: 30px; vertical-align: middle;" title="Back to Pricing Table Editor"></i>
                     </button>
 
-                    <button class="btn btn-sm btn-default" ng-click="saveAndValidateGrid()">
+                    <button class="btn btn-sm btn-default" ng-click="saveAndValidateGrid()" ng-show="isEditable">
                         <i class="intelicon-protection-checked-verified-outlined" style="font-size: 30px; vertical-align: middle;" title="Save and Validate Deals"></i>
                     </button>
-
                 </div>
                 
-                <div class="fl" style="margin-top: 2px; margin-left: 4px;">
+                <div class="fl" style="margin-top: 2px; margin-left: 4px;" ng-show="isLayoutConfigurable">
                     <ul kendo-menu k-options="columnMenu">
                         <li>
                             <i class="intelicon-view-by-columns" style="font-size: 30px !important;" title="Manage Columns"></i>
@@ -58,7 +57,7 @@
                     </ul>
                 </div>
 
-                <div class="fl" style="margin-top: 2px; margin-left: 8px;">
+                <div class="fl" style="margin-top: 2px; margin-left: 8px;" ng-show="isLayoutConfigurable">
                     <ul kendo-menu>
                         <li>
                             <i class="intelicon-settings-solid" style="font-size: 30px !important;" title="Manage Layout"></i>

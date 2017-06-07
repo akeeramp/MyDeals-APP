@@ -21,6 +21,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
                 }, 10);
             }, 10);
 
+            $scope.assignVal = function(field, defval) {
+                var item = $scope.opOptions[field];
+                return !item ? defval : item;
+            }
 
             $scope.stages = [];
             $scope.initDsLoaded = false;
@@ -35,6 +39,9 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
             $scope._dirty = false;
             $scope.searchFilter = "";
             $scope.columnSearchFilter = "";
+            $scope.isLayoutConfigurable = $scope.assignVal("isLayoutConfigurable", false);
+            $scope.isPricingTableEnabled = $scope.assignVal("isPricingTableEnabled", false);
+            $scope.isEditable = $scope.assignVal("isEditable", false);
 
             $scope.assignColSettings = function () {
                 if ($scope.opOptions.columns === undefined) return [];
@@ -376,7 +383,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
                 columns: $scope.opOptions.columns,
                 scrollable: true,
                 sortable: true,
-                editable: true,
+                editable: $scope.isEditable,
                 navigatable: true,
                 filterable: true,
                 resizable: true,

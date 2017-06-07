@@ -89,7 +89,7 @@ function gridStatusBoard($compile, objsetService, $timeout) {
                         field: "WF_STG_CD",
                         title: "&nbsp;",
                         width: "20px",
-                        template: '<div class="status #:WF_STG_CD#">#:WF_STG_CD[0]#</div>'
+                        template: '<div class="status #:WF_STG_CD#" title="#:WF_STG_CD[0]#">#:WF_STG_CD[0]#</div>'
                     }, {
                         title: "% Complete",
                         field: "PERC_PRC_ST",

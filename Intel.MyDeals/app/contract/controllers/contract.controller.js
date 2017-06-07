@@ -1997,26 +1997,26 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
 			if (oldValue == null && newValue != null) {
 			    //initialize, hard coded for now, build into an admin page in future.
 			    if ($scope.currentPricingTable == null) {
-			        newValue["REBATE_TYPE"].value = "MCP";
-			        newValue[MRKT_SEG].value = ["All"];
-			        newValue[GEO].value = ["Worldwide"];
-			        newValue["PAYOUT_BASED_ON"].value = "Billings"; //TODO: typo- need to correct to "Billing" in db
-			        newValue["MEET_COMP_PRICE_QSTN"].value = "Price / Performance";
-			        newValue["PROGRAM_PAYMENT"].value = "Backend";
-			        newValue["PROD_INCLDS"].value = "Tray";
+			        if (!!newValue["REBATE_TYPE"]) newValue["REBATE_TYPE"].value = "MCP";
+			        if (!!newValue[MRKT_SEG]) newValue[MRKT_SEG].value = ["All"];
+			        if (!!newValue[GEO]) newValue[GEO].value = ["Worldwide"];
+			        if (!!newValue["PAYOUT_BASED_ON"]) newValue["PAYOUT_BASED_ON"].value = "Billings"; //TODO: typo- need to correct to "Billing" in db
+			        if (!!newValue["MEET_COMP_PRICE_QSTN"]) newValue["MEET_COMP_PRICE_QSTN"].value = "Price / Performance";
+			        if (!!newValue["PROGRAM_PAYMENT"]) newValue["PROGRAM_PAYMENT"].value = "Backend";
+			        if (!!newValue["PROD_INCLDS"]) newValue["PROD_INCLDS"].value = "Tray";
                 } else {
-			        newValue["REBATE_TYPE"].value = $scope.currentPricingTable["REBATE_TYPE"];
-			        newValue[MRKT_SEG].value = $scope.currentPricingTable[MRKT_SEG].split(',');
-			        newValue[GEO].value = $scope.currentPricingTable[GEO].split(',');
-			        newValue["PAYOUT_BASED_ON"].value = $scope.currentPricingTable["PAYOUT_BASED_ON"];
-			        newValue["MEET_COMP_PRICE_QSTN"].value = $scope.currentPricingTable["MEET_COMP_PRICE_QSTN"];
-			        newValue["PROGRAM_PAYMENT"].value = $scope.currentPricingTable["PROGRAM_PAYMENT"];
-			        newValue["PROD_INCLDS"].value = $scope.currentPricingTable["PROD_INCLDS"];
+			        if (!!newValue["REBATE_TYPE"]) newValue["REBATE_TYPE"].value = $scope.currentPricingTable["REBATE_TYPE"];
+			        if (!!newValue[MRKT_SEG]) newValue[MRKT_SEG].value = $scope.currentPricingTable[MRKT_SEG].split(',');
+			        if (!!newValue[GEO]) newValue[GEO].value = $scope.currentPricingTable[GEO].split(',');
+			        if (!!newValue["PAYOUT_BASED_ON"]) newValue["PAYOUT_BASED_ON"].value = $scope.currentPricingTable["PAYOUT_BASED_ON"];
+			        if (!!newValue["MEET_COMP_PRICE_QSTN"]) newValue["MEET_COMP_PRICE_QSTN"].value = $scope.currentPricingTable["MEET_COMP_PRICE_QSTN"];
+			        if (!!newValue["PROGRAM_PAYMENT"]) newValue["PROGRAM_PAYMENT"].value = $scope.currentPricingTable["PROGRAM_PAYMENT"];
+			        if (!!newValue["PROD_INCLDS"]) newValue["PROD_INCLDS"].value = $scope.currentPricingTable["PROD_INCLDS"];
                 }
 			} else {
 				// TODO: Hook these up to service (add service into injection and physical files)
-				newValue[MRKT_SEG].value = MrktSegMultiSelectService.setMkrtSegMultiSelect(MRKT_SEG, (MRKT_SEG + "_MS"), newValue[MRKT_SEG].value, oldValue[MRKT_SEG].value);
-				newValue[GEO].value = MrktSegMultiSelectService.setGeoMultiSelect(GEO, newValue[GEO].value, oldValue[GEO].value);
+			    if (!!newValue[MRKT_SEG]) newValue[MRKT_SEG].value = MrktSegMultiSelectService.setMkrtSegMultiSelect(MRKT_SEG, (MRKT_SEG + "_MS"), newValue[MRKT_SEG].value, oldValue[MRKT_SEG].value);
+			    if (!!newValue[GEO]) newValue[GEO].value = MrktSegMultiSelectService.setGeoMultiSelect(GEO, newValue[GEO].value, oldValue[GEO].value);
 				
 				//if (oldValue["ECAP_TYPE"].value != newValue["ECAP_TYPE"].value) {
 				//}

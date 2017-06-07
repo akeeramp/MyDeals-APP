@@ -276,15 +276,15 @@
 }
 
 .searchResultsTitle{
-    font-size:28px;
+    font-size:18px;
 }
 .searchResultsBack{
     cursor: pointer;
 }
 .searchResultsLoading{
     padding-top: 15px;
-    color: #00AEEF;
-    font-size: 22px;
+    color: #666666;
+    font-size: 18px;
 }
 .searchResultsCategory{
     padding-top: 15px;

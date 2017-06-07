@@ -94,10 +94,18 @@ function contractStatusBoard($compile, objsetService,colorDictionary) {
                 columns: [{
                     field: "id",
                     title: "&nbsp;",
-                    width: "20px",
+                    width: "30px",
                     sortable: false,
                     filterable: false,
-                    template: "<a href='\\#' ng-click='gotoContractManager(dataItem.id)' style='margin-left: 3px;' title='Click to open the Contract in the Contract Editor'><i class='intelicon-frame-template'></i></a>"
+                    template: "<a href='\\#' ng-click='gotoContractManager(dataItem.id)' style='margin-left: 3px;' title='Click to open the Contract in the Contract Editor'><i class='intelicon-frame-template' style='font-size: 20px;'></i></a>"
+                }, {
+                    field: "stage",
+                    title: "Stage",
+                    template: "<span><i class='intelicon-workflow-process-outlined' style='color: {{getColorStage(dataItem)}}; font-size: 20px;'></i> {{dataItem.stage}}</span>"
+                }, {
+                    field: "valid",
+                    title: "Valid",
+                    template: "<span><i class='intelicon-protection-solid' style='color: {{getColorValid(dataItem)}}; font-size: 20px;'></i> {{dataItem.valid}}</span>"
                 }, {
                     field: "name",
                     title: "Name",
@@ -109,23 +117,15 @@ function contractStatusBoard($compile, objsetService,colorDictionary) {
                 }, {
                     field: "type",
                     title: "Type",
-                    template: "<span><i class='intelicon-location' style='color: {{getColorType(dataItem)}}'></i> {{dataItem.type}}</span>"
-                }, {
-                    field: "stage",
-                    title: "Stage",
-                    template: "<span><i class='intelicon-workflow-process-outlined' style='color: {{getColorStage(dataItem)}}'></i> {{dataItem.stage}}</span>"
-                }, {
-                    field: "valid",
-                    title: "Valid",
-                    template: "<span><i class='intelicon-protection-solid' style='color: {{getColorValid(dataItem)}}'></i> {{dataItem.valid}}</span>"
+                    template: "<span><i class='intelicon-location' style='color: {{getColorType(dataItem)}}; font-size: 20px;'></i> {{dataItem.type}}</span>"
                 }, {
                     field: "pct",
                     title: "Price Cost Test",
-                    template: "<span><i class='intelicon-bright-on' style='color: {{getColorPct(dataItem)}}'></i> {{dataItem.pct}}</span>"
+                    template: "<span><i class='intelicon-bright-on' style='color: {{getColorPct(dataItem)}}; font-size: 20px;'></i> {{dataItem.pct}}</span>"
                 }, {
                     field: "mct",
                     title: "Meet Comp Test",
-                    template: "<span><i class='intelicon-bright-on' style='color: {{getColorMct(dataItem)}}'></i> {{dataItem.mct}}</span>"
+                    template: "<span><i class='intelicon-bright-on' style='color: {{getColorMct(dataItem)}}; font-size: 20px;'></i> {{dataItem.mct}}</span>"
                 }]
             };
 

@@ -15,19 +15,23 @@
 
     <div class="fl" style="margin: 5px 5px 0 15px; color: #aaaaaa;">Date Range:</div>
     <input kendo-date-picker ng-model="startDate" k-change="refreshWidgets" style="width: 110px;" class="opUiContainer md"/> - <input kendo-date-picker ng-model="endDate" k-change="refreshWidgets" style="width: 110px;" class="opUiContainer md"/>
-
-    <!--<a class="fr btn btn-default btn-sm" style="padding: 4px 6px;" ng-click="saveLayout()" kendo-tooltip k-content="'Save Layout'" k-position="'top'" k-width="'70'">
-        <i class="intelicon-save-solid"></i>
-    </a>
     
-    <a class="fr btn btn-default btn-sm" style="padding: 4px 6px;" ng-click="openAddWidget()" kendo-tooltip k-content="'Add Widget'" k-position="'top'" k-width="'70'">
-        <i class="intelicon-plus-max"></i>
+    <a class="btn btn-default btn-sm" style="padding: 5px 7px;" ng-click="refreshWidgets()" kendo-tooltip k-content="'Refresh Dashboard'" k-position="'top'" k-width="'70'">
+        <i class="intelicon-refresh"></i>
     </a>
 
-    <select class="form-control input-sm k-input fr"
-            ng-change="changeDashboard(scope, selectedDashboardId)"
-            ng-model="selectedDashboardId"
-            ng-options="d.id as d.name for d in dashboards | object2Array | orderBy:'id'"></select>-->
+        <!--<a class="fr btn btn-default btn-sm" style="padding: 4px 6px;" ng-click="saveLayout()" kendo-tooltip k-content="'Save Layout'" k-position="'top'" k-width="'70'">
+            <i class="intelicon-save-solid"></i>
+        </a>
+
+        <a class="fr btn btn-default btn-sm" style="padding: 4px 6px;" ng-click="openAddWidget()" kendo-tooltip k-content="'Add Widget'" k-position="'top'" k-width="'70'">
+            <i class="intelicon-plus-max"></i>
+        </a>
+
+        <select class="form-control input-sm k-input fr"
+                ng-change="changeDashboard(scope, selectedDashboardId)"
+                ng-model="selectedDashboardId"
+                ng-options="d.id as d.name for d in dashboards | object2Array | orderBy:'id'"></select>-->
 
 </div>
 

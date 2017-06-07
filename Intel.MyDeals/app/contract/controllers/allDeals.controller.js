@@ -33,11 +33,8 @@ function AllDealsController($scope, $state, $stateParams, $filter, objsetService
 		    root.wipOptions.default.groups = [
                 { "name": "Deal Info", "order": 0 },
                 { "name": "Consumption", "order": 1 },
-                { "name": "Meet Comp", "order": 2 },
-                { "name": "Retail Cycle", "order": 3 },
-                { "name": "Backdate", "order": 4 },
-                { "name": "Overlapping", "order": 5 },
-                { "name": "Cost Test", "order": 6 },
+                { "name": "Retail Cycle", "order": 2 },
+                { "name": "Backdate", "order": 3 },
                 { "name": "All", "order": 99 }
 		    ];
 		    root.wipOptions.default.groupColumns = {
@@ -148,54 +145,6 @@ function AllDealsController($scope, $state, $stateParams, $filter, objsetService
 		        },
 		        "CONSUMPTION_REASON_CMNT": {
 		            "Groups": ["Consumption"]
-		        },
-		        "COST_TEST_RESULT": {
-		            "Groups": ["Cost Test"]
-		        },
-		        "PRD_COST": {
-		            "Groups": ["Cost Test"]
-		        },
-		        "COST_TYPE_USED": {
-		            "Groups": ["Cost Test"]
-		        },
-		        "COST_TEST_FAIL_OVERRIDE": {
-		            "Groups": ["Cost Test"]
-		        },
-		        "COST_TEST_FAIL_OVERRIDE_REASON": {
-		            "Groups": ["Cost Test"]
-		        },
-		        "YCS2_OVERLAP_OVERRIDE": {
-		            "Groups": ["Cost Test"]
-		        },
-		        "MEET_COMP_PRICE_QSTN": {
-		            "Groups": ["Meet Comp"]
-		        },
-		        "COMP_SKU": {
-		            "Groups": ["Meet Comp"]
-		        },
-		        "COMP_SKU_OTHR": {
-		            "Groups": ["Meet Comp"]
-		        },
-		        "COMPETITIVE_PRICE": {
-		            "Groups": ["Meet Comp"]
-		        },
-		        "COMP_BENCH": {
-		            "Groups": ["Meet Comp"]
-		        },
-		        "IA_BENCH": {
-		            "Groups": ["Meet Comp"]
-		        },
-		        "COMP_TARGET_SYSTEM_PRICE": {
-		            "Groups": ["Meet Comp"]
-		        },
-		        "MEETCOMP_TEST_RESULT": {
-		            "Groups": ["Meet Comp"]
-		        },
-		        "MEETCOMP_TEST_FAIL_OVERRIDE": {
-		            "Groups": ["Meet Comp"]
-		        },
-		        "MEETCOMP_TEST_FAIL_OVERRIDE_REASON": {
-		            "Groups": ["Meet Comp"]
 		        },
 		        "RETAIL_CYCLE": {
 		            "Groups": ["Retail Cycle"]

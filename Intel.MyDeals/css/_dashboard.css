@@ -140,7 +140,7 @@
     }
 
     .dashboard .box-header-btns {
-        top: 9px;
+        top: 4px;
         right: 10px;
         cursor: pointer;
         position: absolute;
@@ -148,9 +148,15 @@
 
     .dashboard .box-header-btns a {
         color: transparent;
+        font-size: 18px;
+        text-decoration: none;
+        margin-left: 6px;
     }
     .dashboard .gridster-item:hover .box-header-btns a {
         color: #aaaaaa;
+    }
+    .dashboard .gridster-item:hover .box-header-btns a:hover {
+        color: #00AEEF;
     }
 
     .dashboard form {

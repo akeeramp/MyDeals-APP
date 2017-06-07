@@ -64,6 +64,7 @@ namespace Intel.MyDeals.BusinessLogic
                 int parentid = items.GetIntAtrb(AttributeCodes.DC_PARENT_ID);
                 int parentidtype = items.GetIntAtrbFromOpDataElementType(AttributeCodes.dc_parent_type);
 
+                
                 OpDataElementSetType objSetType = OpDataElementSetTypeConverter.FromString(items[AttributeCodes.OBJ_SET_TYPE_CD]);
 
                 if (opType == OpDataElementType.WIP_DEAL && id == 0)

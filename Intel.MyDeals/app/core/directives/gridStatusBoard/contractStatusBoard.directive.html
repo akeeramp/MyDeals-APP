@@ -4,7 +4,7 @@
     <img src="/images/032.gif"/> 
 </div>
 <div ng-show="isLoaded" class="contract-board">
-    <div class="left-pane" >
+    <div class="right-pane" >
         <div style="height: 20px; text-align: center;">
 
             <div class="opUiContainer md">
@@ -23,7 +23,7 @@
     <div class="center-pane">
         <div style="padding: 2px 6px;">
             <div class="ttl" ng-bind="Title"></div>
-            <kendo-grid options="mainGridOptions" style="height: 155px;"></kendo-grid>
+            <kendo-grid options="mainGridOptions" style="height: 150px;"></kendo-grid>
             <div class="legend" ng-show="breadcrumbs.length == 0">
                 <div class="fl">Legend: </div>
                 <div class="fl legendItem" ng-repeat="(key, value) in legend">
@@ -100,15 +100,15 @@
 
     .contract-board {
         margin-top: 0;
-        margin-left: 200px;
+        margin-right: 200px;
         height: 200px;
     }
-    .contract-board .left-pane {
+    .contract-board .right-pane {
         height: 100%;
-        float: left;
+        float: right;
         overflow: hidden;
         width: 200px;
-        margin-left: -200px;
+        margin-right: -200px;
         padding: 0;
     }
     .contract-board .center-pane {

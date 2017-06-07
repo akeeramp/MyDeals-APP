@@ -19,8 +19,8 @@ widgetConfig.getAllWidgets = function (objsetService) {
 widgetConfig.configWidgets = function () {
 
     widgetConfig.widgets["6"] = {
-        sizeX: 1,
-        sizeY: 1,
+        sizeX: 2,
+        sizeY: 2,
         name: "New Contracts",
         desc: "Link to add a new contract",
         icon: "intelicon-tools",
@@ -37,8 +37,8 @@ widgetConfig.configWidgets = function () {
     };
 
     widgetConfig.widgets["8"] = {
-        sizeX: 1,
-        sizeY: 1,
+        sizeX: 2,
+        sizeY: 2,
         name: "Search Contracts",
         desc: "Search for contracts, pricing strategies, or pricing tables by entering a name or id",
         icon: "intelicon-tools",
@@ -55,8 +55,8 @@ widgetConfig.configWidgets = function () {
     };
 
     widgetConfig.widgets["9"] = {
-        sizeX: 1,
-        sizeY: 1,
+        sizeX: 2,
+        sizeY: 2,
         name: "Open Contracts By Id",
         desc: "Quickly Navigate to a contract by entering its Id",
         icon: "intelicon-tools",
@@ -73,8 +73,8 @@ widgetConfig.configWidgets = function () {
     };
 
     widgetConfig.widgets["7"] = {
-        sizeX: 4,
-        sizeY: 2,
+        sizeX: 8,
+        sizeY: 4,
         name: "Contract Status",
         desc: "Quick view of status board",
         icon: "intelicon-grid",
@@ -109,16 +109,16 @@ widgetConfig.configLayouts = function () {
         widgets: [
             {
                 id: 6,
-                sizeX: 1,
+                sizeX: 3,
                 sizeY: 1
             }, {
                 id: 7,
-                sizeX: 5,
-                sizeY: 2
+                sizeX: 9,
+                sizeY: 4
             }, {
                 id: 8,
-                sizeX: 1,
-                sizeY: 1
+                sizeX: 3,
+                sizeY: 3
             }
         ]
     };
@@ -129,12 +129,12 @@ widgetConfig.configLayouts = function () {
         widgets: [
             {
                 id: 8,
-                sizeX: 1,
-                sizeY: 1
+                sizeX: 2,
+                sizeY: 2
             }, {
                 id: 7,
-                sizeX: 5,
-                sizeY: 2
+                sizeX: 10,
+                sizeY: 4
             }
         ]
     };
@@ -145,12 +145,12 @@ widgetConfig.configLayouts = function () {
         widgets: [
             {
                 id: 8,
-                sizeX: 1,
-                sizeY: 1
+                sizeX: 2,
+                sizeY: 2
             }, {
                 id: 7,
-                sizeX: 5,
-                sizeY: 2
+                sizeX: 10,
+                sizeY: 4
             }
         ]
     };

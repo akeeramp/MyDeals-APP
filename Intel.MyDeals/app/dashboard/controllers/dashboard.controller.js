@@ -19,7 +19,7 @@ function DashboardController($scope, $uibModal, $timeout, $window, objsetService
     // init dashboard
     $scope.selectedDashboardId = '1';
     $scope.startDate = "1/1/2017";
-    $scope.endDate = "8/2/2017";
+    $scope.endDate = "12/31/2017";
     $scope.selectedCustomerId;
 
 
@@ -75,7 +75,7 @@ function DashboardController($scope, $uibModal, $timeout, $window, objsetService
 
     $scope.gridsterOptions = {
         margins: [20, 20],
-        columns: 6,
+        columns: 12,
         mobileModeEnabled: true,
         draggable: {
             handle: 'h3'
@@ -160,12 +160,18 @@ function DashboardController($scope, $uibModal, $timeout, $window, objsetService
     });
 
     $scope.refreshWidgets = function () {
-        this.$angular_scope.broadcastRefresh(this.$angular_scope);
+        if (!this.$angular_scope)
+            this.broadcastRefresh(this);
+        else
+            this.$angular_scope.broadcastRefresh(this.$angular_scope);
     }
     $scope.broadcastRefresh = function (scope) {
         $timeout(function () {
             $scope.$broadcast('refresh', { "custId": scope.selectedCustomerId, "startDate": scope.startDate, "endDate": scope.endDate });
         }, 200);
+    }
+    $scope.refresh = function(widget) {
+        $scope.broadcastRefresh($scope);
     }
 
     $scope.changeDashboard = function (scope, key) {

@@ -170,7 +170,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 		gTools.assignColSettings();
 
 		$timeout(function () {
-		    root.wipOptions = {};
+		    root.wipOptions = {
+		        "isLayoutConfigurable": true,
+		        "isPricingTableEnabled": true,
+		        "isEditable": true
+		    };
 		    root.wipOptions.columns = wipTemplate.columns;
 		    root.wipOptions.model = wipTemplate.model;
 		    root.wipOptions.default = {};
