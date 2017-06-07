@@ -66,5 +66,6 @@ namespace Intel.MyDeals.Entities
         }
 
 
+
     }
 }

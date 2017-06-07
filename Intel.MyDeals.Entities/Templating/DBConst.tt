@@ -104,7 +104,7 @@
 	WriteLine("");
 
 	cmd = new SqlCommand(@"
-		select 
+		select
 			SECUR_ACTN_SID,
 			REPLACE(LTRIM(RTRIM(UPPER(ACTN_NM))),' ','_') AS [ACTN_NM],
 			ACTN_DESC,

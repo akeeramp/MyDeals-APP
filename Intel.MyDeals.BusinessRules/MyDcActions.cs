@@ -222,6 +222,64 @@ namespace Intel.MyDeals.BusinessRules
 
         }
 
+        //Mikes New Rule
+        public static void MeetCompMandatoryCheck(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            string deEcapTypeValue = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE);
+            string[] deProductCategoriesValue = r.Dc.GetDataElementValue(AttributeCodes.PRODUCT_CATEGORIES).Split(',');
+            string role = OpUserStack.MyOpUserToken.Role.RoleTypeCd;
+            bool IsL1Product = r.Dc.GetDataElementValue(AttributeCodes.HAS_L1) == "1"? true: false;
+
+            List<string> mandatoryMeetCompFields = new List<string>
+            {
+                AttributeCodes.MEET_COMP_PRICE_QSTN,
+                AttributeCodes.MEETCOMP_TEST_FAIL_OVERRIDE,
+                AttributeCodes.MEETCOMP_TEST_FAIL_OVERRIDE_REASON,
+                AttributeCodes.MEETCOMP_TEST_RESULT
+            };
+
+            // US52971 - If ECAP Type=MCP or pull in MCP then user(FSE) has to enter the Meet comp related information Mandatory for CPU and CS products .Mandatory for GA for all other cases.
+            if ( (deEcapTypeValue == "MCP" || deEcapTypeValue == "PULL-IN MCP") 
+                && (deProductCategoriesValue.Contains("CPU") || deProductCategoriesValue.Contains("CS"))
+                && role == RoleTypes.FSE )
+            {
+                foreach (IOpDataElement de in r.Dc.GetDataElementsIn(mandatoryMeetCompFields))
+                {
+                    de.IsRequired = true;
+                }
+            }
+
+            // US52971 - if it is not MCP nor pull in MCP and if product is L1, then system would not ask as mandatory for FSE, But GA has to fill it as mandatory.If not filled.give a message' Meetcomp info is required '.If meetcomp fails then GA can not submit the deal.
+            if ((deEcapTypeValue != "MCP" || deEcapTypeValue != "PULL-IN MCP")
+                && IsL1Product 
+                && role == RoleTypes.GA )
+            {
+                foreach (IOpDataElement de in r.Dc.GetDataElementsIn(mandatoryMeetCompFields))
+                {
+                    de.IsRequired = true;
+                }
+            }
+        }
+
+        public static void ShowServerDealType(params object[] args)
+        {
+            // US53204 - 15 - If product selected is of SvrWS then enable the 'Server Deal Type' Column in kendo grid ,otherwise do not show it.
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            string[] deProductCategoriesValue = r.Dc.GetDataElementValue(AttributeCodes.PRODUCT_CATEGORIES).Split(',');
+            
+            if (deProductCategoriesValue.Contains("SvrWS"))
+            {
+                IOpDataElement deServerDealType = r.Dc.GetDataElement(AttributeCodes.SERVER_DEAL_TYPE);
+                deServerDealType.IsHidden = false;
+            }
+        }
+
+
         public static void CheckDropDownValues(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);

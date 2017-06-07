@@ -34,38 +34,47 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }
                 },
-                //new MyOpRule
-                //{
-                //    Title="Required if Market Segment",
-                //    ActionRule = MyDcActions.ExecuteActions,
-                //    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
-                //    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
-                //    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.MRKT_SEG) && de.AtrbValue != null && (de.AtrbValue.ToString().ToUpper().Contains("ALL") || de.AtrbValue.ToString().ToUpper().Contains("RETAIL"))).Any(),
-                //    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
-                //    {
-                //        new OpRuleAction<IOpDataElement>
-                //        {
-                //            Action = BusinessLogicDeActions.SetRequired,
-                //            Target = new[] {AttributeCodes.RETAIL_CYCLE }
-                //        }
-                //    }
-                //},
-                //new MyOpRule
-                //{
-                //    Title="Req if Meet Comp is Price Performance",
-                //    ActionRule = MyDcActions.ExecuteActions,
-                //    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
-                //    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
-                //    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.MEET_COMP_PRICE_QSTN) && de.AtrbValue != null && de.AtrbValue.ToString() == "Price / Performance").Any(),
-                //    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
-                //    {
-                //        new OpRuleAction<IOpDataElement>
-                //        {
-                //            Action = BusinessLogicDeActions.SetRequired,
-                //            Target = new[] {AttributeCodes.COMP_BENCH, AttributeCodes.IA_BENCH }
-                //        }
-                //    }
-                //},
+                new MyOpRule
+                {
+                    Title="Required if Market Segment",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.MRKT_SEG) && de.AtrbValue != null && (de.AtrbValue.ToString().ToUpper().Contains("ALL") || de.AtrbValue.ToString().ToUpper().Contains("RETAIL"))).Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetRequired,
+                            Target = new[] {AttributeCodes.RETAIL_CYCLE }
+                        }
+                    }
+                },
+                new MyOpRule
+                {
+                    Title="Req if Meet Comp is Price Performance",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.MEET_COMP_PRICE_QSTN) && de.AtrbValue != null && de.AtrbValue.ToString() == "Price / Performance").Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetRequired,
+                            Target = new[] {AttributeCodes.COMP_BENCH, AttributeCodes.IA_BENCH }
+                        }
+                    }
+                },
+
+                new MyOpRule
+                {
+                    Title="Required if MCP or PullIn and CPU ior CS",
+                    ActionRule = MyDcActions.MeetCompMandatoryCheck,
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnRequired }
+                },
+
                 new MyOpRule
                 {
                     Title="Required if Backdate Needed",
