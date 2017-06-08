@@ -50,6 +50,11 @@ widgetConfig.configWidgets = function () {
             data: [],
             api: {}
         },
+        refreshEvent: function (widget) {
+            setTimeout(function () {
+                $("#bynResetSearch").click();
+            }, 1000);
+        },
         resizeEvent: function (widget) {
         }
     };
@@ -83,6 +88,10 @@ widgetConfig.configWidgets = function () {
         template: 'app/dashboard/widgets/contractStatusBoard.html',
         widgetConfig: {},
         resizeEvent: function (widget) {
+            var grid = $("#gridContractStatus");
+            grid.data("kendoGrid").resize();
+        },
+        refreshEvent: function (widget) {
             var grid = $("#gridContractStatus");
             grid.data("kendoGrid").resize();
         }
@@ -129,11 +138,11 @@ widgetConfig.configLayouts = function () {
         widgets: [
             {
                 id: 8,
-                sizeX: 2,
+                sizeX: 3,
                 sizeY: 2
             }, {
                 id: 7,
-                sizeX: 10,
+                sizeX: 9,
                 sizeY: 4
             }
         ]
@@ -145,11 +154,11 @@ widgetConfig.configLayouts = function () {
         widgets: [
             {
                 id: 8,
-                sizeX: 2,
+                sizeX: 3,
                 sizeY: 2
             }, {
                 id: 7,
-                sizeX: 10,
+                sizeX: 9,
                 sizeY: 4
             }
         ]

@@ -81,7 +81,7 @@
 
                 //press enter key to search as well
                 $("#searchField").keyup(function (event) {
-                    if (event.keyCode == 13) {
+                    if (event.keyCode === 13) {
                         $("#searchButton").click();
                     }
                 });
@@ -89,6 +89,20 @@
                 //for dictionary size check
                 scope.isEmpty = function (obj) {
                     return Object.keys(obj).length === 0;
+                }
+
+                scope.resetSearch = function() {
+                    scope.searchResultItems = [];
+                    scope.searchResultContracts = {};
+                    scope.searchResultPricingStrategies = {};
+                    scope.searchResultPricingTables = {};
+
+                    scope.showResults = false;
+                    scope.showLoading = false;
+                    //scope.searchText = "";
+
+                    scope.showLoading = true;
+                    scope.searchAll();
                 }
             }
         }

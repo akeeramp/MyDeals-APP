@@ -295,13 +295,11 @@
 }
 .searchResultsContent{
     font-size: 12px;
-    padding-left: 25px;
-    padding-right: 25px;
-
-    margin-bottom: 5px;
-    
-    border-style: solid;
-    border-color: lightgrey;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-bottom: 4px;
+    background-color: #f4f4f4;
+    border: 1px solid #f6f6f6;
 }
 
 .btn-pending {

@@ -172,6 +172,7 @@ function DashboardController($scope, $uibModal, $timeout, $window, objsetService
     }
     $scope.refresh = function(widget) {
         $scope.broadcastRefresh($scope);
+        widget.refreshEvent(widget);
     }
 
     $scope.changeDashboard = function (scope, key) {

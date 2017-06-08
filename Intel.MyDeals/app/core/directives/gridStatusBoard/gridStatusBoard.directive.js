@@ -34,6 +34,7 @@ function gridStatusBoard($compile, objsetService, $timeout) {
                         }
                     }
                 },
+                sort: { field: "CNTRCT_OBJ_SID", dir: "desc" },
                 pageSize: 25,
                 schema: {
                     model: {

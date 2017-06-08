@@ -1,9 +1,11 @@
 ﻿<div class="container-fluid widget-container" style="overflow: auto;">
     <div id="searchWidget" style="width: 100%; text-align: center;">
         <div style="margin: 6px 0;">
-            <i class="intelicon-search" style="font-size: 26px; color: #FFA300; margin-right: 10px;"></i>
-            <input id="searchField" placeholder="Name or Number" style="border-color: #b1babf; width: 160px; padding: 2px; height: 36px;" class="k-textbox" ng-model="searchText">
-            <button id="searchButton" ng-click="showLoading=true; searchAll();" class="btn btn-default" type="button" style="padding: 3px 5px; margin-left: 6px;">Search</button>
+            <input id="searchField" placeholder="Search for contract name or number" style="border-color: #b1babf; width: 80%; padding: 2px; height: 36px;" class="k-textbox" ng-model="searchText">
+            <button id="searchButton" class="btn btn-default" type="button" ng-click="showLoading=true; searchAll();" style="padding: 2px 8px 0 8px; border: 1px solid transparent;">
+                <i class="intelicon-search-stack-solid" style="font-size: 30px;"></i>
+            </button>
+            <button id="bynResetSearch" ng-click="resetSearch()" style="display: none;">Reset</button>
         </div>
 
         <div ng-show="showLoading && !showResults" class="searchResultsLoading">
@@ -27,15 +29,8 @@
                 </div>
                 <div ng-repeat="item in value">
                     <div class="searchResultsContent">
-                        <div>
-                            Contract Name: {{item.TITLE}}
-                        </div>
-                        <div>
-                            Contract ID: {{item.OBJ_SID}}
-                        </div>
-                        <div>
-                            Link: <a href="/Contract#/manager/{{item.OBJ_HIER}}" target="_blank">Open Contract</a>
-                        </div>
+                        <div style="font-weight: bold; color: #003C71;">#{{item.OBJ_SID}}</div>
+                        <div style="color: #00AEEF;"><a href="/Contract#/manager/{{item.OBJ_HIER}}" target="_blank">{{item.TITLE}}</a></div>
                     </div>
                 </div>
             </div>
@@ -51,15 +46,8 @@
                 </div>
                 <div ng-repeat="item in value">
                     <div class="searchResultsContent">
-                        <div>
-                            Strategy Name: {{item.TITLE}}
-                        </div>
-                        <div>
-                            Strategy ID: {{item.OBJ_SID}}
-                        </div>
-                        <div>
-                            Link: <a href="/Contract#/manager/{{item.OBJ_HIER}}" target="_blank">Open Pricing Strategy's Contract</a>
-                        </div>
+                        <div style="font-weight: bold; color: #003C71;">#{{item.OBJ_SID}}</div>
+                        <div style="color: #00AEEF;"><a href="/Contract#/manager/{{item.OBJ_HIER}}" target="_blank">{{item.TITLE}}</a></div>
                     </div>
                 </div>
             </div>
@@ -75,15 +63,8 @@
                 </div>
                 <div ng-repeat="item in value">
                     <div class="searchResultsContent">
-                        <div>
-                            Table Name: {{item.TITLE}}
-                        </div>
-                        <div>
-                            Table ID: {{item.OBJ_SID}}
-                        </div>
-                        <div>
-                            Link: <a href="/Contract#/manager/{{item.OBJ_HIER}}" target="_blank">Open Pricing Table</a>
-                        </div>
+                        <div style="font-weight: bold; color: #003C71;">#{{item.OBJ_SID}}</div>
+                        <div style="color: #00AEEF;"><a href="/Contract#/manager/{{item.OBJ_HIER}}" target="_blank">{{item.TITLE}}</a></div>
                     </div>
                 </div>
             </div>

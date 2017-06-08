@@ -729,8 +729,11 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
             $(window).trigger('resize');
             $scope.resizeEvent();
         }
-        $scope.resizeEvent = function() {
-            $timeout(function() {
+        $scope.refreshEvent = function () {
+            debugger;
+        }
+        $scope.resizeEvent = function () {
+            $timeout(function () {
                 var evt = $window.document.createEvent('UIEvents');
                 evt.initUIEvent('resize', true, false, window, 200);
                 evt.initUIEvent('resize', true, false, window, 200);
