@@ -587,7 +587,7 @@ namespace Intel.MyDeals.BusinessLogic
             }
         }
 
-        public static bool ValidationApplyRules(this MyDealsData myDealsData, List<int> validateIds, bool forcePublish, string sourceEvent)
+        public static bool ValidationApplyRules(this MyDealsData myDealsData, List<int> validateIds, bool forcePublish, string sourceEvent, int custId)
         {
             // Apply rules to save packets here.  If validations are hit, append them to the DC and packet message lists.
             bool dataHasValidationErrors = false;
@@ -614,12 +614,12 @@ namespace Intel.MyDeals.BusinessLogic
                         if (opDataElementType == OpDataElementType.WIP_DEAL || opDataElementType == OpDataElementType.PRC_TBL_ROW) {
                             if (validateIds.Contains(dc.DcID))
                             {
-                                dc.ApplyRules(MyRulesTrigger.OnValidate);
+                                dc.ApplyRules(MyRulesTrigger.OnValidate, null, custId);
                             }
                         }
                         else
                         {
-                            dc.ApplyRules(MyRulesTrigger.OnValidate);
+                            dc.ApplyRules(MyRulesTrigger.OnValidate, null, custId);
                         }
                     }
 

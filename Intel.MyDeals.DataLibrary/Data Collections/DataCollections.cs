@@ -5,7 +5,6 @@ using Intel.MyDeals.Entities;
 using Intel.Opaque;
 using Intel.Opaque.Data;
 using AttributeCollection = Intel.MyDeals.Entities.AttributeCollection;
-using Intel.RulesEngine;
 
 namespace Intel.MyDeals.DataLibrary
 {

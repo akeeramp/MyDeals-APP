@@ -253,7 +253,7 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem
             {
                 Id = 29,
-                AtrbCd = AttributeCodes.CUST_DIV_NM,
+                AtrbCd = AttributeCodes.CUST_ACCNT_DIV,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 Width = 120,
                 DataType = "string",
@@ -440,7 +440,7 @@ namespace Intel.MyDeals.DataLibrary
                 DataType = "string",
                 Width = 100,
                 UiType = "DROPDOWN",
-                Label = "Media",
+                Label = "Media *",
                 LookupUrl = "/api/Dropdown/GetDropdowns/PROD_INCLDS",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"

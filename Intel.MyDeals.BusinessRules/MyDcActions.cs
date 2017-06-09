@@ -222,6 +222,52 @@ namespace Intel.MyDeals.BusinessRules
 
         }
 
+        public static void CheckCustDivValues(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+            if (!r.HasExtraArgs) return;
+            char delim = ',';
+
+            //return 
+
+            IOpDataElement deUserCustDivs = r.Dc.GetDataElement(AttributeCodes.CUST_ACCNT_DIV);
+
+            int custId = (int)r.ExtraArgs[0];
+
+            if (deUserCustDivs == null) return;
+
+            //int custId = Convert.ToInt32(strCustId);
+            var custs = DataCollections.GetCustomerDivisions().Where(c => c.CUST_NM_SID == custId).ToList();
+            List<string> matchedDivs = new List<string>();
+            bool foundMisMatch = false;
+
+            List<string> custList = deUserCustDivs.AtrbValue.ToString().Split(delim).ToList();
+            foreach (string divNm in custList)
+            {
+                string matchedValue = custs.Where(d => d.CUST_DIV_NM.ToUpper() == divNm.ToString().ToUpper()).Select(d => d.CUST_DIV_NM).FirstOrDefault();
+                if (string.IsNullOrEmpty(matchedValue))
+                {
+                    foundMisMatch = true;
+                    matchedDivs.Add(divNm);
+                }
+                else
+                {
+                    matchedDivs.Add(matchedValue);
+                }
+            }
+
+            string newList = string.Join(delim.ToString(), matchedDivs.OrderBy(m => m));
+            if (newList != deUserCustDivs.AtrbValue.ToString())
+            {
+                deUserCustDivs.AtrbValue = newList;
+                deUserCustDivs.State = OpDataElementState.Modified;
+            }
+
+            if (foundMisMatch)
+                BusinessLogicDeActions.AddValidationMessage(deUserCustDivs, "Please enter a valid value.");
+        }
+
         //Mikes New Rule
         public static void MeetCompMandatoryCheck(params object[] args)
         {

@@ -115,7 +115,6 @@
     		}
     	};
     	vm.dropDownOptions.attrAction = {
-    		optionLabel: "Default (ATRB_REQUIRED)",
     		autoBind: false,
     		dataTextField: "dropdownName",
     		//dataValueField: "dropdownID",
@@ -146,8 +145,9 @@
     				create: function (e) {
     					e.preventDefault();
 
-    				},
-    			}
+    				}
+    			},
+    			sort: { field: "ATRB_COL_NM", dir: "asc" }
     		}
     	};
     	vm.dropDownOptions.dealAction = {
@@ -166,7 +166,6 @@
     		}
     	};
     	vm.dropDownOptions.objType = {
-    		optionLabel: "Default (CNTRACT)",
     		autoBind: false,
     		select: vm.onObjTypeChange,
     		dataTextField: "Alias",

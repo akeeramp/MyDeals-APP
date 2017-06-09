@@ -52,6 +52,10 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
             return c;
         }
 
+        $scope.removeBlanks = function(val) {
+            return val.replace(/_/g, ' ');
+        }
+
         $scope.removeDimKeyFromWipTemplates = function() {
             if ($scope.templates === undefined) return;
             if ($scope.templates.ModelTemplates === undefined) return;

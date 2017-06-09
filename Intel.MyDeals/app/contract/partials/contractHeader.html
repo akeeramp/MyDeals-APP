@@ -6,17 +6,31 @@
         <div class="fr"><span style="opacity: 0.5;">Pricing Strategy:</span> {{ curPricingStrategy.WF_STG_CD }}</div>
     </div>
     <div style="padding-top: 3px;">
-        <div class="contractHeader" style="margin: 0 10px 0 -13px; line-height: 1.2em; font-size: 18px;">
-            <div class="myDealsControl"
-                 op-control-flat
-                 ng-model="curPricingStrategy"
-                 op-cd="'TITLE'"
-                 op-type="'TEXTBOX'"
-                 op-label="''"
-                 op-ui-mode="'HORIZONTAL'"
-                 op-class="'transparentInput fntLg noBottomBorder col-md-11'" 
-                 op-style="'color: #000000; width: 100%;'"
-            ></div>
+        <div class="contractHeader" style="margin: 0 10px 0 0px; line-height: 1.2em; font-size: 18px;">
+            <table style="width: 100%;">
+                <tr>
+                    <td>
+                        <div title="{{ curPricingStrategy.PASSED_VALIDATION || 'Not validated yet' }}" style="margin: 0 0 0 10px; line-height: 1em; font-size: 26px;">
+                            <i class="intelicon-protection-solid bigIcon validf_{{curPricingStrategy.PASSED_VALIDATION}}" ng-show="curPricingStrategy.PASSED_VALIDATION === 'Complete'" title="{{curPricingStrategy.PASSED_VALIDATION}}"></i>
+                            <i class="intelicon-protection-outlined bigIcon validf_{{curPricingStrategy.PASSED_VALIDATION}}" ng-show="curPricingStrategy.PASSED_VALIDATION === 'Finalizing'" title="{{curPricingStrategy.PASSED_VALIDATION}}"></i>
+                            <i class="intelicon-protection-outlined bigIcon validf_{{curPricingStrategy.PASSED_VALIDATION}}" ng-show="curPricingStrategy.PASSED_VALIDATION === 'Valid'" title="{{curPricingStrategy.PASSED_VALIDATION}}"></i>
+                            <i class="intelicon-protection-outlined bigIcon validf_{{curPricingStrategy.PASSED_VALIDATION}}" ng-show="curPricingStrategy.PASSED_VALIDATION === 'Dirty'" title="{{curPricingStrategy.PASSED_VALIDATION}}"></i>
+                            <i class="intelicon-protection-outlined bigIcon validf_{{curPricingStrategy.PASSED_VALIDATION}}" ng-show="curPricingStrategy.PASSED_VALIDATION !== 'Valid' && curPricingStrategy.PASSED_VALIDATION !== 'Dirty' && curPricingStrategy.PASSED_VALIDATION !== 'Complete' && curPricingStrategy.PASSED_VALIDATION !== 'Finalizing'" title="{{curPricingStrategy.PASSED_VALIDATION || 'Not validated yet'}}"></i>
+                        </div>
+                    </td>
+                    <td style="width: 100%;">
+                        <div class="myDealsControl"
+                             op-control-flat
+                             ng-model="curPricingStrategy"
+                             op-cd="'TITLE'"
+                             op-type="'TEXTBOX'"
+                             op-label="''"
+                             op-ui-mode="'HORIZONTAL'"
+                             op-class="'transparentInput fntLg noBottomBorder'"
+                             op-style="'color: #000000; width: 100%;'"></div>
+                    </td>
+                </tr>
+            </table>
         </div>
     </div>
     

@@ -51,7 +51,8 @@
                         <div class="fl" style="padding: 4px 10px;">
                             <i class="intelicon-pin-solid ssmIconBtn" onclick="closeSplitter()"></i>
                         </div>
-                        <div class="fl" style="padding: 4px 0px;">Additional Discounts & Requirements</div>
+                        <div class="fl" style="padding: 4px 0;">Additional Discounts & Requirements</div>
+                        <div class="fl" style="padding: 6px 10px 0 10px; color: #aaaaaa; font-style: italic; font-size: 12px;">**Note that any updates made here are copied on all tables under this Pricing Strategy</div>
                         <div class="clearboth"></div>
                     </div>
                     <div id="subContainer">
@@ -107,4 +108,10 @@
         $("#divTabTerms").hide();
         $("#k-splitter").data("kendoSplitter").resize();
     }
+
+    setTimeout(function () {
+        closeSplitter();
+    }, 2000);
+
+
 </script>

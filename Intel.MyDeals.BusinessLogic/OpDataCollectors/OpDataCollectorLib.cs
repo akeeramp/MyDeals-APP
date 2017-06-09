@@ -80,7 +80,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             // RUN RULES HERE - If there are validation errors... stop... but we need to save the validation status
             MyDealsData myDealsDataWithErrors = null;
-            bool hasErrors = myDealsData.ValidationApplyRules(validateIds, forcePublish, sourceEvent);
+            bool hasErrors = myDealsData.ValidationApplyRules(validateIds, forcePublish, sourceEvent, custId);
             if (hasErrors)
             {
                 // "Clone" to object...
