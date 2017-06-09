@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 6/2/2017 3:05:04 PM
-On: PWECKENR-MOBL
+File Updated: 6/7/2017 9:19:49 AM
+On: MBIRADAR-MOBL1
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
 
@@ -1119,21 +1119,6 @@ namespace Intel.MyDeals.Entities {
 			FRMT_MSK = "{0:c}",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "TextBox"
-		};
-		public static MyDealsAttribute ECAP_TYPE = new MyDealsAttribute()
-		{
-			ATRB_COL_NM = "ECAP_TYPE",
-			ATRB_DESC = "ECAP type code",
-			ATRB_LBL = "ECAP Type",
-			ATRB_MAX_LEN = 100,
-			ATRB_SID = 3331,
-			DATA_TYPE_CD = "VARCHAR",
-			DIM_CD = "DEAL",
-			DIM_SID = 3,
-			DOT_NET_DATA_TYPE = "System.String",
-			FRMT_MSK = "{0}",
-			TGT_COL_TYPE = "VARCHAR",
-			UI_TYPE_CD = "ComboBox"
 		};
 		public static MyDealsAttribute EMP_ADM_ACCESS = new MyDealsAttribute()
 		{
@@ -2530,6 +2515,21 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
+		public static MyDealsAttribute PTR_SYS_INVLD_PRD = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "PTR_SYS_INVLD_PRD",
+			ATRB_DESC = " UnProcessed Product List",
+			ATRB_LBL = "UnProcessed Product List",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 7093,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "TextBox"
+		};
 		public static MyDealsAttribute PTR_SYS_PRD = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "PTR_SYS_PRD",
@@ -2610,7 +2610,7 @@ namespace Intel.MyDeals.Entities {
 			ATRB_COL_NM = "REBATE_TYPE",
 			ATRB_DESC = "Type of Rebate",
 			ATRB_LBL = "Rebate Type",
-			ATRB_MAX_LEN = 50,
+			ATRB_MAX_LEN = 100,
 			ATRB_SID = 18,
 			DATA_TYPE_CD = "VARCHAR",
 			DIM_CD = "DEAL",
@@ -2618,7 +2618,7 @@ namespace Intel.MyDeals.Entities {
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
 			TGT_COL_TYPE = "VARCHAR",
-			UI_TYPE_CD = default(System.String)
+			UI_TYPE_CD = "ComboBox"
 		};
 		public static MyDealsAttribute RETAIL_CYCLE = new MyDealsAttribute()
 		{

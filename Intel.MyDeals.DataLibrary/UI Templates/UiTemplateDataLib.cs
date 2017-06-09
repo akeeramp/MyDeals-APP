@@ -52,7 +52,7 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 150
             });
 
-            #endregion
+            #endregion CONTRACT
 
             #region PRICING STRATEGIES
 
@@ -92,7 +92,7 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 150
             });
 
-            #endregion
+            #endregion PRICING STRATEGIES
 
             #region PRICING TABLE
 
@@ -234,8 +234,7 @@ namespace Intel.MyDeals.DataLibrary
                 LookupValue = "DROP_DOWN"
             });
 
-
-            #endregion
+            #endregion PRICING TABLE
 
             #region PRICING TABLE ROW
 
@@ -274,15 +273,28 @@ namespace Intel.MyDeals.DataLibrary
             {
                 Id = 29,
                 AtrbCd = AttributeCodes.PTR_SYS_PRD,
-				Label = "Json String (will be hidden)",
+                Label = "Json String (will be hidden)",
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 IsReadOnly = false, // need to set to true after product selector is in place
                 IsHidden = false,
-				Width = 220
-				//// This is how it should be set once the product selector is in place:
-				//IsReadOnly = true,
-				//IsHidden = true,
-			});
+                Width = 220
+                //// This is how it should be set once the product selector is in place:
+                //IsReadOnly = true,
+                //IsHidden = true,
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
+                AtrbCd = AttributeCodes.PTR_SYS_INVLD_PRD,
+                Label = "Invalid Json String (will be hidden)",
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                IsReadOnly = false, // need to set to true after product selector is in place
+                IsHidden = false,
+                Width = 220
+                //// This is how it should be set once the product selector is in place:
+                //IsReadOnly = true,
+                //IsHidden = true,
+            });
             items.Add(new UiTemplateContainerItem
             {
                 Id = 29,
@@ -456,9 +468,9 @@ namespace Intel.MyDeals.DataLibrary
                 IsRequired = false
             });
 
-            #endregion
+            #endregion PRICING TABLE ROW
 
-            #region  WIP DEAL
+            #region WIP DEAL
 
             items.Add(new UiTemplateContainerItem
             {
@@ -780,7 +792,6 @@ namespace Intel.MyDeals.DataLibrary
                 Template = "#=gridUtils.uiControlWrapper(data, 'VOLUME')#"
             });
 
-
             items.Add(new UiTemplateContainerItem
             {
                 Id = 29,
@@ -824,7 +835,6 @@ namespace Intel.MyDeals.DataLibrary
                 IsSortable = true,
                 Template = "#=gridUtils.uiControlWrapper(data, 'CONSUMPTION_REASON_CMNT')#"
             });
-
 
             items.Add(new UiTemplateContainerItem
             {
@@ -1082,8 +1092,6 @@ namespace Intel.MyDeals.DataLibrary
                 LookupValue = "DROP_DOWN"
             });
 
-
-
             items.Add(new UiTemplateContainerItem
             {
                 Id = 29,
@@ -1110,7 +1118,6 @@ namespace Intel.MyDeals.DataLibrary
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
             });
-
 
             items.Add(new UiTemplateContainerItem
             {
@@ -1177,16 +1184,7 @@ namespace Intel.MyDeals.DataLibrary
                 Template = "#=gridUtils.uiControlWrapper(data, 'TERMS')#"
             });
 
-
-
-            #endregion
-
-
-
-
-
-
-
+            #endregion WIP DEAL
 
             return FillInGapsFromT4(items);
         }
@@ -1222,12 +1220,16 @@ namespace Intel.MyDeals.DataLibrary
                 case "INT":
                 case "MONEY":
                     return "number";
+
                 case "VARCHAR":
                     return "string";
+
                 case "CUSTOM":
                     return "object";
+
                 case "DATETIME":
                     return "date";
+
                 case "BIT":
                     return "boolean";
             }

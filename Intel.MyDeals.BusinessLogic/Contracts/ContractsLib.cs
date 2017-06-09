@@ -13,22 +13,21 @@ using System.Text.RegularExpressions;
 using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.IDataLibrary;
 
-
 namespace Intel.MyDeals.BusinessLogic
 {
     public class ContractsLib : IContractsLib
     {
         private readonly IOpDataCollectorLib _dataCollectorLib;
-		private readonly IUiTemplateLib _uiTemplateLib;
-		private readonly IDropdownLib _dropdownLib;
+        private readonly IUiTemplateLib _uiTemplateLib;
+        private readonly IDropdownLib _dropdownLib;
 
-		public ContractsLib(IOpDataCollectorLib dataCollectorLib, IUiTemplateLib uiTemplateLib, IDropdownLib dropdownLib)
+        public ContractsLib(IOpDataCollectorLib dataCollectorLib, IUiTemplateLib uiTemplateLib, IDropdownLib dropdownLib)
         {
             _dataCollectorLib = dataCollectorLib;
-			_uiTemplateLib = uiTemplateLib;
-			_dropdownLib = dropdownLib;
-		}
-		
+            _uiTemplateLib = uiTemplateLib;
+            _dropdownLib = dropdownLib;
+        }
+
         /// <summary>
         /// Get a Contract by ID
         /// </summary>
@@ -64,6 +63,7 @@ namespace Intel.MyDeals.BusinessLogic
         {
             return OpDataElementType.CNTRCT.GetByIDs(new List<int> { id }, opDataElementTypes ?? new List<OpDataElementType> { OpDataElementType.CNTRCT });
         }
+
         public MyDealsData GetContract(int id, List<OpDataElementType> opDataElementTypes, IEnumerable<int> atrbs)
         {
             return OpDataElementType.CNTRCT.GetByIDs(new List<int> { id }, opDataElementTypes ?? new List<OpDataElementType> { OpDataElementType.CNTRCT }, atrbs);
@@ -103,12 +103,11 @@ namespace Intel.MyDeals.BusinessLogic
                 .ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted, false)
                 .ToHierarchialList(OpDataElementType.CNTRCT);
         }
-        
+
         public OpDataCollectorFlattenedDictList GetFullContract(int id)
         {
             return GetContract(id, true).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
         }
-
 
         /// <summary>
         /// Save a contract header
@@ -264,7 +263,6 @@ namespace Intel.MyDeals.BusinessLogic
             return new OpDataCollectorValidationDataLib().IsDuplicateTitle(OpDataElementType.CNTRCT, dcId, 0, title);
         }
 
-
         public dynamic GetContractsStatus(DashboardFilter dashboardFilter)
         {
             Random r = new Random();
@@ -289,8 +287,8 @@ namespace Intel.MyDeals.BusinessLogic
             };
             List<string> approver = new List<string> { "Trang Van", "Tom Pope", "Tom Hanks", "Tim Burton" };
             List<string> custaccept = new List<string> { "Yes", "No", "Pending" };
-            
-            var rtn = new List<Dictionary<string,string>>();
+
+            var rtn = new List<Dictionary<string, string>>();
 
             for (var i = 0; i < 200; i++)
             {
@@ -375,80 +373,80 @@ namespace Intel.MyDeals.BusinessLogic
             return OpDataElementType.CNTRCT.GetByIDs(new List<int> { id }, opDataElementTypes, atrbs).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted, true);
         }
 
-
-		/// <summary>
-		/// Validates Pricing Table Rows by OBJ_SET_TYPE
-		/// </summary>
-		/// <param name="contractAndPricingTable">A ContractTransferPacket containing the related Contract, PricingTable, and its rows</param>
-		/// <returns>PtrValidationContainer - consisting of </returns>
-		public PtrValidationContainer ValidatePricingTableRows(ContractTransferPacket contractAndPricingTable)
-		{
-			if (contractAndPricingTable.PricingTable.Count <= 0 || contractAndPricingTable.PricingTableRow.Count <= 0)
-			{
-			    PtrValidationContainer myContainer = new PtrValidationContainer
-			    {
-			        ColumnErrors = new Dictionary<int, Dictionary<string, List<string>>>
-			        {
-			            [0] = new Dictionary<string, List<string>>()
-			        }
-			    };
-			    if (!myContainer.ColumnErrors[0].ContainsKey("general")) myContainer.ColumnErrors[0]["general"] = new List<string>();
+        /// <summary>
+        /// Validates Pricing Table Rows by OBJ_SET_TYPE
+        /// </summary>
+        /// <param name="contractAndPricingTable">A ContractTransferPacket containing the related Contract, PricingTable, and its rows</param>
+        /// <returns>PtrValidationContainer - consisting of </returns>
+        public PtrValidationContainer ValidatePricingTableRows(ContractTransferPacket contractAndPricingTable)
+        {
+            if (contractAndPricingTable.PricingTable.Count <= 0 || contractAndPricingTable.PricingTableRow.Count <= 0)
+            {
+                PtrValidationContainer myContainer = new PtrValidationContainer
+                {
+                    ColumnErrors = new Dictionary<int, Dictionary<string, List<string>>>
+                    {
+                        [0] = new Dictionary<string, List<string>>()
+                    }
+                };
+                if (!myContainer.ColumnErrors[0].ContainsKey("general")) myContainer.ColumnErrors[0]["general"] = new List<string>();
 
                 myContainer.ColumnErrors[0]["general"].Add("No Pricing Table or Rows were found to check validations against.");
 
-				return myContainer;
-			}
+                return myContainer;
+            }
 
-			// TODO: this assumes we only get one contract which might not always true in the future? -- look at DC_PARENT_ID and DC_ID to get associated Pt, contracts, and ptrs
-		    var opDataCollectorFlattenedItem = contractAndPricingTable.PricingTable.FirstOrDefault();
-		    if (opDataCollectorFlattenedItem != null && (string)opDataCollectorFlattenedItem["OBJ_SET_TYPE_CD"] == ObjSetTypeCodes.ECAP.ToString())
-			{
-				return ValidateEcapPricingTableRows(contractAndPricingTable);
-			}
-			else
-			{
-				return null;
-			}
-		}
+            // TODO: this assumes we only get one contract which might not always true in the future? -- look at DC_PARENT_ID and DC_ID to get associated Pt, contracts, and ptrs
+            var opDataCollectorFlattenedItem = contractAndPricingTable.PricingTable.FirstOrDefault();
+            if (opDataCollectorFlattenedItem != null && (string)opDataCollectorFlattenedItem["OBJ_SET_TYPE_CD"] == ObjSetTypeCodes.ECAP.ToString())
+            {
+                return ValidateEcapPricingTableRows(contractAndPricingTable);
+            }
+            else
+            {
+                return null;
+            }
+        }
 
-		public PtrValidationContainer AddErrorToPtrValidationContainer(PtrValidationContainer myContainer, int rowIndex, string myKey, string errMsg)
-		{
-			if (myContainer.ColumnErrors[rowIndex].ContainsKey(myKey))
-			{
-				myContainer.ColumnErrors[rowIndex][myKey].Add(errMsg);
-			}
-			else
-			{
-				myContainer.ColumnErrors[rowIndex][myKey] = new List<string>() { errMsg };
-			}
-			return myContainer;
-		}
+        public PtrValidationContainer AddErrorToPtrValidationContainer(PtrValidationContainer myContainer, int rowIndex, string myKey, string errMsg)
+        {
+            if (myContainer.ColumnErrors[rowIndex].ContainsKey(myKey))
+            {
+                myContainer.ColumnErrors[rowIndex][myKey].Add(errMsg);
+            }
+            else
+            {
+                myContainer.ColumnErrors[rowIndex][myKey] = new List<string>() { errMsg };
+            }
+            return myContainer;
+        }
 
-		private PtrValidationContainer ValidateEcapPricingTableRows(ContractTransferPacket contractAndPricingTable)
-		{
-			//DropdownLib _dropdownLib = new DropdownLib();
+        private PtrValidationContainer ValidateEcapPricingTableRows(ContractTransferPacket contractAndPricingTable)
+        {
+            //DropdownLib _dropdownLib = new DropdownLib();
 
-			PtrValidationContainer myContainer = new PtrValidationContainer();
-			UiTemplates uiTemplate = _uiTemplateLib.GetUiTemplates();
+            PtrValidationContainer myContainer = new PtrValidationContainer();
+            UiTemplates uiTemplate = _uiTemplateLib.GetUiTemplates();
 
-			List<BasicDropdown> VALID_MRKT_SEG = _dropdownLib.GetDropdowns(AttributeCodes.MRKT_SEG).ToList();
-			List<BasicDropdown> VALID_MRKT_NON_CORP = _dropdownLib.GetDropdowns(AttributeCodes.MRKT_SEG_NON_CORP).ToList();
-			List<BasicDropdown> VALID_MRKT_EMB_SUBSEG = _dropdownLib.GetDropdowns(AttributeCodes.MRKT_SUB_SEGMENT).ToList();
+            List<BasicDropdown> VALID_MRKT_SEG = _dropdownLib.GetDropdowns(AttributeCodes.MRKT_SEG).ToList();
+            List<BasicDropdown> VALID_MRKT_NON_CORP = _dropdownLib.GetDropdowns(AttributeCodes.MRKT_SEG_NON_CORP).ToList();
+            List<BasicDropdown> VALID_MRKT_EMB_SUBSEG = _dropdownLib.GetDropdowns(AttributeCodes.MRKT_SUB_SEGMENT).ToList();
 
-			// Hard coded values :C
-			string worldWide = "Worldwide";
-			string colName_ecapPrice = "ECAP_PRICE";
-			string colName_geo = "GEO_COMBINED";
-			string colName_startDate = "START_DT";
-			string colName_contract_startDate = "START_DT";
-			string colName_contract_endDate = "END_DT";
-			string colName_userPrd = "PTR_USER_PRD";
-			string colName_mrktSeg = "MRKT_SEG";
+            // Hard coded values :C
+            string worldWide = "Worldwide";
+            string colName_ecapPrice = "ECAP_PRICE";
+            string colName_geo = "GEO_COMBINED";
+            string colName_startDate = "START_DT";
+            string colName_contract_startDate = "START_DT";
+            string colName_contract_endDate = "END_DT";
+            string colName_userPrd = "PTR_USER_PRD";
+            string colName_mrktSeg = "MRKT_SEG";
 
-			// TODO: remove the below json-converter rows in favor of hooking up to   _productsLib.TranslateProducts when that's finished
-			#region JSON String - TODO: rmeove when no longer needed
-			string jsonString = @"{
+            // TODO: remove the below json-converter rows in favor of hooking up to   _productsLib.TranslateProducts when that's finished
 
+            #region JSON String - TODO: rmeove when no longer needed
+
+            string jsonString = @"{
 	'ProdctTransformResults': {
         '1': ['e3200'],
         '2': ['t7100']
@@ -551,7 +549,6 @@ namespace Intel.MyDeals.BusinessLogic
 
 				'DEAL_START_DATE' : '2016-01-01',
 				'DEAL_END_DATE' : '2017-12-12'
-
             }
         ]
     },
@@ -560,326 +557,336 @@ namespace Intel.MyDeals.BusinessLogic
         '2': []
     }
 }";
-			#endregion
-			JObject jObject = JObject.Parse(jsonString);
-			ProductLookup_tempWithCAP prodLookup = JsonConvert.DeserializeObject<ProductLookup_tempWithCAP>(jsonString);
-			myContainer.ProductLookup = prodLookup;
 
-			// TODO: uncomment the below rows after Product Translate is completed	
-			//Int32 CUST_MBR_SID = 2; // TODO: get actual cust id
-			//var GEO_MBR_SID = 5; // TODO: get actual cust id		
-			//// Make the product
-			//List<ProductEntryAttribute> userInput = contractAndPricingTable.PricingTableRow.Select(x => new ProductEntryAttribute
-			//{
-			//	USR_INPUT = x["PTR_USER_PRD"].ToString()
-			//	, EXCLUDE = ""
-			//	, FILTER = ""
-			//	, START_DATE = x["START_DT"].ToString()
-			//	, END_DATE = x["END_DT"].ToString()
-			//}).ToList();
-			// _productsLib.TranslateProducts(userInput, CUST_MBR_SID, GEO_MBR_SID);
+            #endregion JSON String - TODO: rmeove when no longer needed
 
-			// Pricing Table Validation logic
-			for (int i = 0; i < contractAndPricingTable.PricingTableRow.Count; i++)
-			{
-				// TODO: we may need ot change the below after product translate is completed maybe.
-				int rowIndex = i + 1; // NOTE: this is to sync up with the Product Translate's row numbering.
+            JObject jObject = JObject.Parse(jsonString);
+            ProductLookup_tempWithCAP prodLookup = JsonConvert.DeserializeObject<ProductLookup_tempWithCAP>(jsonString);
+            myContainer.ProductLookup = prodLookup;
 
-				OpDataCollectorFlattenedItem row = contractAndPricingTable.PricingTableRow[i];
-				myContainer.ColumnErrors = ((myContainer.ColumnErrors == null) ? new Dictionary<int, Dictionary<string, List<string>>>() : myContainer.ColumnErrors);
-				myContainer.ColumnErrors[rowIndex] = new Dictionary<string, List<string>>();
+            // TODO: uncomment the below rows after Product Translate is completed
+            //Int32 CUST_MBR_SID = 2; // TODO: get actual cust id
+            //var GEO_MBR_SID = 5; // TODO: get actual cust id
+            //// Make the product
+            //List<ProductEntryAttribute> userInput = contractAndPricingTable.PricingTableRow.Select(x => new ProductEntryAttribute
+            //{
+            //	USR_INPUT = x["PTR_USER_PRD"].ToString()
+            //	, EXCLUDE = ""
+            //	, FILTER = ""
+            //	, START_DATE = x["START_DT"].ToString()
+            //	, END_DATE = x["END_DT"].ToString()
+            //}).ToList();
+            // _productsLib.TranslateProducts(userInput, CUST_MBR_SID, GEO_MBR_SID);
 
-				#region PricingTableRow fields
-				object val_PTR_USER_PRD = new object();
-				object val_ECAP_PRICE = new object();
-				object val_START_DT = new object();
-				object val_END_DT = new object();
-				object val_PAYOUT_BASED_ON = new object();
-				object val_PROGRAM_PAYMENT = new object();
-				object val_REBATE_TYPE = new object();
-				object val_MRKT_SEG = new object();
-				object val_GEO_COMBINED = new object();
-				object val_MEET_COMP_PRICE_QSTN = new object();
-				object val_TERMS = new object();
-				object val_PROD_INCLDS = new object();
-				object val_OBJ_SET_TYPE_CD = new object();
+            // Pricing Table Validation logic
+            for (int i = 0; i < contractAndPricingTable.PricingTableRow.Count; i++)
+            {
+                // TODO: we may need ot change the below after product translate is completed maybe.
+                int rowIndex = i + 1; // NOTE: this is to sync up with the Product Translate's row numbering.
 
-				row.TryGetValue("PTR_USER_PRD", out val_PTR_USER_PRD);
-				row.TryGetValue("ECAP_PRICE", out val_ECAP_PRICE);
-				row.TryGetValue("START_DT", out val_START_DT);
-				row.TryGetValue("END_DT", out val_END_DT);
-				row.TryGetValue("PAYOUT_BASED_ON", out val_PAYOUT_BASED_ON);
-				row.TryGetValue("PROGRAM_PAYMENT", out val_PROGRAM_PAYMENT);
-				row.TryGetValue("ECAP_TYPE", out val_REBATE_TYPE);
-				row.TryGetValue("MRKT_SEG", out val_MRKT_SEG);
-				row.TryGetValue("GEO_COMBINED", out val_GEO_COMBINED);
-				row.TryGetValue("MEET_COMP_PRICE_QSTN", out val_MEET_COMP_PRICE_QSTN);
-				row.TryGetValue("TERMS", out val_TERMS);
-				row.TryGetValue("PROD_INCLDS", out val_PROD_INCLDS);
-				row.TryGetValue("OBJ_SET_TYPE_CD", out val_OBJ_SET_TYPE_CD);
-				#endregion
+                OpDataCollectorFlattenedItem row = contractAndPricingTable.PricingTableRow[i];
+                myContainer.ColumnErrors = ((myContainer.ColumnErrors == null) ? new Dictionary<int, Dictionary<string, List<string>>>() : myContainer.ColumnErrors);
+                myContainer.ColumnErrors[rowIndex] = new Dictionary<string, List<string>>();
 
-				// Check if the row has invalid or duplicate products
-				if ((prodLookup.InValidProducts.ContainsKey(rowIndex.ToString())) && (prodLookup.InValidProducts[rowIndex.ToString()].Count > 0) || (prodLookup.DuplicateProducts.Count > 0))
-				{
-					myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, "PTR_USER_PRD", "Product " + val_PTR_USER_PRD.ToString() + " was invalid. Please use product corrector to select product.");
-					// Don't do any other validation logic on this row if there is an invalid product. User needs to fix this first.
-					continue;
-				}
-				// Get the valid product details
-				else if (prodLookup.ValidProducts.Count == 0)
-				{
-					// This shouldn't hit, but just in case, if there is no valid product, then go to next iteration
-					continue;
-				}
-				else // we have valid products for this row
-				{
-					List<PRD_LOOKUP_RESULTS_tempWithCAP> myProducts = new List<PRD_LOOKUP_RESULTS_tempWithCAP>();
-					prodLookup.ValidProducts.TryGetValue(rowIndex.ToString(), out myProducts);
+                #region PricingTableRow fields
 
-					// Required fields Validation
-					foreach (KeyValuePair<string, UiFieldItem> col in uiTemplate.ModelTemplates["PRC_TBL_ROW"]["ECAP"].model.fields)
-					{
-						// do something with entry.Value or entry.Key
-						if (!col.Value.nullable) // NOTE: PTR_USER_PRD needs to be not required for the UI to consume
-						{
-							object colVal = new object();
-							row.TryGetValue(col.Key, out colVal);
+                object val_PTR_USER_PRD = new object();
+                object val_ECAP_PRICE = new object();
+                object val_START_DT = new object();
+                object val_END_DT = new object();
+                object val_PAYOUT_BASED_ON = new object();
+                object val_PROGRAM_PAYMENT = new object();
+                object val_REBATE_TYPE = new object();
+                object val_MRKT_SEG = new object();
+                object val_GEO_COMBINED = new object();
+                object val_MEET_COMP_PRICE_QSTN = new object();
+                object val_TERMS = new object();
+                object val_PROD_INCLDS = new object();
+                object val_OBJ_SET_TYPE_CD = new object();
 
-							if (colVal == null || String.IsNullOrEmpty(colVal.ToString()))
-							{
-								myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, col.Key, col.Value.label + " is required.");
-							}
-						}
+                row.TryGetValue("PTR_USER_PRD", out val_PTR_USER_PRD);
+                row.TryGetValue("ECAP_PRICE", out val_ECAP_PRICE);
+                row.TryGetValue("START_DT", out val_START_DT);
+                row.TryGetValue("END_DT", out val_END_DT);
+                row.TryGetValue("PAYOUT_BASED_ON", out val_PAYOUT_BASED_ON);
+                row.TryGetValue("PROGRAM_PAYMENT", out val_PROGRAM_PAYMENT);
+                row.TryGetValue("REBATE_TYPE", out val_REBATE_TYPE);
+                row.TryGetValue("MRKT_SEG", out val_MRKT_SEG);
+                row.TryGetValue("GEO_COMBINED", out val_GEO_COMBINED);
+                row.TryGetValue("MEET_COMP_PRICE_QSTN", out val_MEET_COMP_PRICE_QSTN);
+                row.TryGetValue("TERMS", out val_TERMS);
+                row.TryGetValue("PROD_INCLDS", out val_PROD_INCLDS);
+                row.TryGetValue("OBJ_SET_TYPE_CD", out val_OBJ_SET_TYPE_CD);
 
-						// TODO: we need validation to make sure the user picks form the dropdwon for dropdown values
-						if (col.Value.opLookupText == "DROP_DOWN")
-						{
-							// TODO: maybe use these to try getting the correct dropdown values from the dropdown api?
-							var testfjeghre = col.Value.field;
-							var tesgrhgrehtfjeghre = col.Value.label;
-						}
-					}
+                #endregion PricingTableRow fields
 
-					// ECAP Price cannot be zero
-					if (val_ECAP_PRICE == null || Int32.Parse(val_ECAP_PRICE.ToString()) <= 0)
-					{
-						myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_ecapPrice, "ECAP Price must be greater than $0.00");
-					}
+                // Check if the row has invalid or duplicate products
+                if ((prodLookup.InValidProducts.ContainsKey(rowIndex.ToString())) && (prodLookup.InValidProducts[rowIndex.ToString()].Count > 0) || (prodLookup.DuplicateProducts.Count > 0))
+                {
+                    myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, "PTR_USER_PRD", "Product " + val_PTR_USER_PRD.ToString() + " was invalid. Please use product corrector to select product.");
+                    // Don't do any other validation logic on this row if there is an invalid product. User needs to fix this first.
+                    continue;
+                }
+                // Get the valid product details
+                else if (prodLookup.ValidProducts.Count == 0)
+                {
+                    // This shouldn't hit, but just in case, if there is no valid product, then go to next iteration
+                    continue;
+                }
+                else // we have valid products for this row
+                {
+                    List<PRD_LOOKUP_RESULTS_tempWithCAP> myProducts = new List<PRD_LOOKUP_RESULTS_tempWithCAP>();
+                    prodLookup.ValidProducts.TryGetValue(rowIndex.ToString(), out myProducts);
 
+                    // Required fields Validation
+                    foreach (KeyValuePair<string, UiFieldItem> col in uiTemplate.ModelTemplates["PRC_TBL_ROW"]["ECAP"].model.fields)
+                    {
+                        // do something with entry.Value or entry.Key
+                        if (!col.Value.nullable) // NOTE: PTR_USER_PRD needs to be not required for the UI to consume
+                        {
+                            object colVal = new object();
+                            row.TryGetValue(col.Key, out colVal);
 
-					#region Market Segment Validations
+                            if (colVal == null || String.IsNullOrEmpty(colVal.ToString()))
+                            {
+                                myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, col.Key, col.Value.label + " is required.");
+                            }
+                        }
 
-					if (!(val_MRKT_SEG == null))
-					{
-						string[] user_mrkt_segs = val_MRKT_SEG.ToString().ToUpper().Split(',').Select(mrkt => mrkt.Trim()).ToArray(); //TODO: we trim each comma separated value of white space for validation, but the trimmed white space will still be saved in the db.  Is that ok?  Need to clarify with SA/BA.
+                        // TODO: we need validation to make sure the user picks form the dropdwon for dropdown values
+                        if (col.Value.opLookupText == "DROP_DOWN")
+                        {
+                            // TODO: maybe use these to try getting the correct dropdown values from the dropdown api?
+                            var testfjeghre = col.Value.field;
+                            var tesgrhgrehtfjeghre = col.Value.label;
+                        }
+                    }
 
-						//"ALL" check
-						if (user_mrkt_segs.Length > 1 && Array.IndexOf(user_mrkt_segs, "ALL") >= 0)
-						{
-							myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_mrktSeg, "Market Segment ALL cannot be blended with any other Market Segment");
-						}
+                    // ECAP Price cannot be zero
+                    if (val_ECAP_PRICE == null || Int32.Parse(val_ECAP_PRICE.ToString()) <= 0)
+                    {
+                        myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_ecapPrice, "ECAP Price must be greater than $0.00");
+                    }
 
-						//"Embedded" check
-						if (user_mrkt_segs.Length > 1)
-						{
-							for (int j = 0; j < user_mrkt_segs.Length; j++)
-							{
-								if (VALID_MRKT_EMB_SUBSEG.FirstOrDefault(mrkt => mrkt.DROP_DOWN.ToUpper() == user_mrkt_segs[j]) != null)
-								{
-									//encountered an embedded sub segment that is blended with other market seg inputs
-									myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_mrktSeg, "Embedded Market Segments cannot be blended with any other market segment.");
-								}
-							}
-						}
+                    #region Market Segment Validations
 
-						//"NonCorp" check - // TODO: If Non Corp is chosen then user should not select a duplicate value outside of non corp selection.
-						if (Array.IndexOf(user_mrkt_segs, "NON CORP") >= 0)
-						{
-							//NONCORP is checked - make sure all NONCORP options are also included in user input
-							foreach (BasicDropdown mrkt in VALID_MRKT_NON_CORP)
-							{
-								if (Array.IndexOf(user_mrkt_segs, mrkt.DROP_DOWN.ToUpper()) < 0)
-								{
-									// user selected noncorp but did not include all noncorp options
-									myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_mrktSeg, "NonCorp Market Segment selected but " + mrkt.DROP_DOWN + " not included.");
-								}
-							}
-						}
+                    if (!(val_MRKT_SEG == null))
+                    {
+                        string[] user_mrkt_segs = val_MRKT_SEG.ToString().ToUpper().Split(',').Select(mrkt => mrkt.Trim()).ToArray(); //TODO: we trim each comma separated value of white space for validation, but the trimmed white space will still be saved in the db.  Is that ok?  Need to clarify with SA/BA.
 
-						// Valid Name Mrkt Seg Check
-						for (int j = 0; j < user_mrkt_segs.Length; j++)
-						{
-							if (VALID_MRKT_EMB_SUBSEG.FirstOrDefault(mrkt => mrkt.DROP_DOWN.ToUpper() == user_mrkt_segs[j]) == null &&
-								VALID_MRKT_SEG.FirstOrDefault(mrkt => mrkt.DROP_DOWN.ToUpper() == user_mrkt_segs[j]) == null)
-							{
-								// user inputed mrkt seg value does not match with any allowed mrkt seg or mrkt seg embedded values (mrkt seg includes mrkt noncorp)
-								myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_mrktSeg, user_mrkt_segs[j] + " is not a valid Market Segment.");
-							}
-						}
-					}
-					#endregion
+                        //"ALL" check
+                        if (user_mrkt_segs.Length > 1 && Array.IndexOf(user_mrkt_segs, "ALL") >= 0)
+                        {
+                            myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_mrktSeg, "Market Segment ALL cannot be blended with any other Market Segment");
+                        }
 
-					#region GEO Validations
-					if (val_GEO_COMBINED != null)
-					{
-						List<string> geosList = new List<string>();
-						string geoString = val_GEO_COMBINED.ToString();
-						string newGeoString = geoString;
-						bool isBlendedGeo = geoString.Contains("[");
+                        //"Embedded" check
+                        if (user_mrkt_segs.Length > 1)
+                        {
+                            for (int j = 0; j < user_mrkt_segs.Length; j++)
+                            {
+                                if (VALID_MRKT_EMB_SUBSEG.FirstOrDefault(mrkt => mrkt.DROP_DOWN.ToUpper() == user_mrkt_segs[j]) != null)
+                                {
+                                    //encountered an embedded sub segment that is blended with other market seg inputs
+                                    myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_mrktSeg, "Embedded Market Segments cannot be blended with any other market segment.");
+                                }
+                            }
+                        }
 
-						// Format geo string to make into an array
-						newGeoString = newGeoString.Replace("[", "");
-						newGeoString = newGeoString.Replace("]", "");
-						newGeoString = newGeoString.Replace(" ", "");
+                        //"NonCorp" check - // TODO: If Non Corp is chosen then user should not select a duplicate value outside of non corp selection.
+                        if (Array.IndexOf(user_mrkt_segs, "NON CORP") >= 0)
+                        {
+                            //NONCORP is checked - make sure all NONCORP options are also included in user input
+                            foreach (BasicDropdown mrkt in VALID_MRKT_NON_CORP)
+                            {
+                                if (Array.IndexOf(user_mrkt_segs, mrkt.DROP_DOWN.ToUpper()) < 0)
+                                {
+                                    // user selected noncorp but did not include all noncorp options
+                                    myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_mrktSeg, "NonCorp Market Segment selected but " + mrkt.DROP_DOWN + " not included.");
+                                }
+                            }
+                        }
 
-						geosList = newGeoString.Split(',').ToList();
+                        // Valid Name Mrkt Seg Check
+                        for (int j = 0; j < user_mrkt_segs.Length; j++)
+                        {
+                            if (VALID_MRKT_EMB_SUBSEG.FirstOrDefault(mrkt => mrkt.DROP_DOWN.ToUpper() == user_mrkt_segs[j]) == null &&
+                                VALID_MRKT_SEG.FirstOrDefault(mrkt => mrkt.DROP_DOWN.ToUpper() == user_mrkt_segs[j]) == null)
+                            {
+                                // user inputed mrkt seg value does not match with any allowed mrkt seg or mrkt seg embedded values (mrkt seg includes mrkt noncorp)
+                                myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_mrktSeg, user_mrkt_segs[j] + " is not a valid Market Segment.");
+                            }
+                        }
+                    }
 
-						// Check that thse geos are valid
-						List<Dropdown> validGeoValues = _dropdownLib.GetGeosDropdown();
-						for (int g = 0; g < geosList.Count; g++)
-						{
-							string geo = geosList[g];
-							if (validGeoValues.Where(x => x.dropdownName == geo).Select(x => x.dropdownName).FirstOrDefault() == null)
-							{
-								myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_geo, (geo + " is not a valid Geo."));
-							}
-						}
+                    #endregion Market Segment Validations
 
-						// Blended GEO, can not mix WW and other Geo
-						if (isBlendedGeo)
-						{
-							// Is "WorldWide" inside brackets?
-							string wwRegex = @"\[((.*)" + worldWide + @"(.*))\]";
-							bool isWorldWideInsideBlended = Regex.IsMatch(geoString, wwRegex);
+                    #region GEO Validations
 
-							if (isWorldWideInsideBlended)
-							{
-								myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_geo, "Worldwide cannot be mixed with other geos in a blend geo.");
-							}
-						}
-					}
-					#endregion
+                    if (val_GEO_COMBINED != null)
+                    {
+                        List<string> geosList = new List<string>();
+                        string geoString = val_GEO_COMBINED.ToString();
+                        string newGeoString = geoString;
+                        bool isBlendedGeo = geoString.Contains("[");
 
-					#region Media Validations
-					// TODO: Media - It would always pull 'Tray' products for CPU.If box product is available then user could have a option to select those.
-					#endregion
+                        // Format geo string to make into an array
+                        newGeoString = newGeoString.Replace("[", "");
+                        newGeoString = newGeoString.Replace("]", "");
+                        newGeoString = newGeoString.Replace(" ", "");
 
-					#region date valiations   
-					if (val_START_DT == null || val_END_DT == null)
-					{
-						// NOTE: we are assuming that the required flag will catch when the strat and end dates are null
-						continue;
-					}
+                        geosList = newGeoString.Split(',').ToList();
 
-					DateTime startDate;
-					DateTime endDate;
-					DateTime today = DateTime.UtcNow;
-					try
-					{
-						startDate = DateTime.Parse(val_START_DT.ToString());
-						endDate = DateTime.Parse(val_END_DT.ToString());
-					}
-					catch
-					{
-						myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_startDate, "Start or End date formatting is incorrect. Try formatting as mm/dd/yyyy.");
-						continue;
-					}
+                        // Check that thse geos are valid
+                        List<Dropdown> validGeoValues = _dropdownLib.GetGeosDropdown();
+                        for (int g = 0; g < geosList.Count; g++)
+                        {
+                            string geo = geosList[g];
+                            if (validGeoValues.Where(x => x.dropdownName == geo).Select(x => x.dropdownName).FirstOrDefault() == null)
+                            {
+                                myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_geo, (geo + " is not a valid Geo."));
+                            }
+                        }
 
-					// Deal end date should not be before deal start date
-					if (startDate > endDate)
-					{
-						myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_startDate, "Deal end date should not be before deal start date.");
-					}
-					#endregion
+                        // Blended GEO, can not mix WW and other Geo
+                        if (isBlendedGeo)
+                        {
+                            // Is "WorldWide" inside brackets?
+                            string wwRegex = @"\[((.*)" + worldWide + @"(.*))\]";
+                            bool isWorldWideInsideBlended = Regex.IsMatch(geoString, wwRegex);
 
-					// Product validations
-					// TODO: maybe push this out into a reusable function to be used by the product corrector?
-					#region Product/CAP relaed validations
-					if (myProducts != null)
-					{
-						foreach (PRD_LOOKUP_RESULTS_tempWithCAP prod in myProducts)
-						{
-							// When ECAP Price is greater than CAP, UI validation check on deal creation and system should give a soft warning. 
-							if (val_ECAP_PRICE != null && prod.CAP > Int32.Parse(val_ECAP_PRICE.ToString()))
-							{
-								myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_ecapPrice, "CAP price (" + prod.CAP + ") is greater than ECAP Price.");
-							}
+                            if (isWorldWideInsideBlended)
+                            {
+                                myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_geo, "Worldwide cannot be mixed with other geos in a blend geo.");
+                            }
+                        }
+                    }
 
-							// If the product start date is after the deal start date, then deal start date should match with product start date and back date would not apply.
-							if (prod.PRD_STRT_DTM > prod.CAP_START_DATE)
-							{
-								myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_startDate, "If the product start date is after the deal start date, then deal start date should match with product start date and back date would not apply. TODO: code this in the UI from the corrector.");
-								// TODO: code this in the UI from the corrector
-							}
+                    #endregion GEO Validations
 
-							// Additional validation-for program payment=Front end, the deal st. date can not be past, it should be >= current date 
-							if ((val_PROGRAM_PAYMENT != null) && (val_PROGRAM_PAYMENT.ToString().Contains("rontend")) && (startDate < today))
-							{
-								myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_startDate, "The deal start date must be greater or equal to the current date if program payment is Frontend.");
-							}
+                    #region Media Validations
 
-							#region CAP Validations
-							// IF CAP is not available at all then show as NO CAP.User can not create deals.
-							if (prod.CAP == null || prod.CAP <= 0)
-							{
-								myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_userPrd, "CAP is not available (NO CAP). You can not create deals with this product.");
-							}
+                    // TODO: Media - It would always pull 'Tray' products for CPU.If box product is available then user could have a option to select those.
 
-							// if a product entered does not have CAP within the deal start date and end date then (CAP is not overlapping deal start and end date)
-							if (!((prod.CAP_START_DATE < endDate) && (startDate < prod.CAP_END_DATE)))
-							{
-								// show a message that the product does not have CAP in these date range.
-								myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_userPrd, "Product entered does not have CAP within the Deal's start date and end date");
-							}
-							// Then if CAP exists in future outside of deal end date 
-							if (prod.CAP_START_DATE > endDate)
-							{
-								// Show to user the CAP start date and CAP end date  
-								myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_startDate, "The CAP start date (" + prod.CAP_START_DATE.ToString() + ") and end date (" + prod.CAP_END_DATE.ToString() + ") exists in future outside of deal end date. Please change the deal start date to match the CAP start date.");
-								// TODO:  code this in the UI from the corrector. In the UI: ask user whether to change the deal start date and if user say yes then change the deal start date to CAP start date
-							}
-							#endregion
+                    #endregion Media Validations
 
+                    #region date valiations
 
-							#region contract related validations
-							DateTime contractStartDate;
-							DateTime contractEndDate;
-							try
-							{
-								// TODO: this assumes we only get one contract which might not always true in the future? -- look at DC_PARENT_ID and DC_ID to get associated Pt, contracts, and ptrs
-								contractStartDate = DateTime.Parse(contractAndPricingTable.Contract.FirstOrDefault()[colName_contract_startDate].ToString());
-								contractEndDate = DateTime.Parse(contractAndPricingTable.Contract.FirstOrDefault()[colName_contract_endDate].ToString());
-							}
-							catch
-							{
-								myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_startDate, "The Contract's Start or End date formatting is incorrect. Please check contract details and change accordingly.");
-								continue;
-							}
+                    if (val_START_DT == null || val_END_DT == null)
+                    {
+                        // NOTE: we are assuming that the required flag will catch when the strat and end dates are null
+                        continue;
+                    }
 
-							if (contractStartDate == null || contractEndDate == null)
-							{
-								myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_startDate, "Warning: contract start and/or end dates not found.");
-							}
-							else if (!((contractStartDate < endDate) && (startDate < contractEndDate)))
-							{
-								// Deal date range should be touching the contract start date end date (Deal dates must be overlapping contract dates)
-								myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_startDate, "Deal date range should be touching the contract start date (" + contractStartDate.ToString() + ") and contract end date (" + contractEndDate.ToString() + ").");
-							}
-							#endregion
+                    DateTime startDate;
+                    DateTime endDate;
+                    DateTime today = DateTime.UtcNow;
+                    try
+                    {
+                        startDate = DateTime.Parse(val_START_DT.ToString());
+                        endDate = DateTime.Parse(val_END_DT.ToString());
+                    }
+                    catch
+                    {
+                        myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_startDate, "Start or End date formatting is incorrect. Try formatting as mm/dd/yyyy.");
+                        continue;
+                    }
 
-						}
-						#endregion
-					}
-				}
+                    // Deal end date should not be before deal start date
+                    if (startDate > endDate)
+                    {
+                        myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_startDate, "Deal end date should not be before deal start date.");
+                    }
 
-			}
+                    #endregion date valiations
 
-			return myContainer;
-		}
+                    // Product validations
+                    // TODO: maybe push this out into a reusable function to be used by the product corrector?
 
+                    #region Product/CAP relaed validations
 
+                    if (myProducts != null)
+                    {
+                        foreach (PRD_LOOKUP_RESULTS_tempWithCAP prod in myProducts)
+                        {
+                            // When ECAP Price is greater than CAP, UI validation check on deal creation and system should give a soft warning.
+                            if (val_ECAP_PRICE != null && prod.CAP > Int32.Parse(val_ECAP_PRICE.ToString()))
+                            {
+                                myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_ecapPrice, "CAP price (" + prod.CAP + ") is greater than ECAP Price.");
+                            }
 
+                            // If the product start date is after the deal start date, then deal start date should match with product start date and back date would not apply.
+                            if (prod.PRD_STRT_DTM > prod.CAP_START_DATE)
+                            {
+                                myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_startDate, "If the product start date is after the deal start date, then deal start date should match with product start date and back date would not apply. TODO: code this in the UI from the corrector.");
+                                // TODO: code this in the UI from the corrector
+                            }
 
-	}
+                            // Additional validation-for program payment=Front end, the deal st. date can not be past, it should be >= current date
+                            if ((val_PROGRAM_PAYMENT != null) && (val_PROGRAM_PAYMENT.ToString().Contains("rontend")) && (startDate < today))
+                            {
+                                myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_startDate, "The deal start date must be greater or equal to the current date if program payment is Frontend.");
+                            }
+
+                            #region CAP Validations
+
+                            // IF CAP is not available at all then show as NO CAP.User can not create deals.
+                            if (prod.CAP == null || prod.CAP <= 0)
+                            {
+                                myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_userPrd, "CAP is not available (NO CAP). You can not create deals with this product.");
+                            }
+
+                            // if a product entered does not have CAP within the deal start date and end date then (CAP is not overlapping deal start and end date)
+                            if (!((prod.CAP_START_DATE < endDate) && (startDate < prod.CAP_END_DATE)))
+                            {
+                                // show a message that the product does not have CAP in these date range.
+                                myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_userPrd, "Product entered does not have CAP within the Deal's start date and end date");
+                            }
+                            // Then if CAP exists in future outside of deal end date
+                            if (prod.CAP_START_DATE > endDate)
+                            {
+                                // Show to user the CAP start date and CAP end date
+                                myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_startDate, "The CAP start date (" + prod.CAP_START_DATE.ToString() + ") and end date (" + prod.CAP_END_DATE.ToString() + ") exists in future outside of deal end date. Please change the deal start date to match the CAP start date.");
+                                // TODO:  code this in the UI from the corrector. In the UI: ask user whether to change the deal start date and if user say yes then change the deal start date to CAP start date
+                            }
+
+                            #endregion CAP Validations
+
+                            #region contract related validations
+
+                            DateTime contractStartDate;
+                            DateTime contractEndDate;
+                            try
+                            {
+                                // TODO: this assumes we only get one contract which might not always true in the future? -- look at DC_PARENT_ID and DC_ID to get associated Pt, contracts, and ptrs
+                                contractStartDate = DateTime.Parse(contractAndPricingTable.Contract.FirstOrDefault()[colName_contract_startDate].ToString());
+                                contractEndDate = DateTime.Parse(contractAndPricingTable.Contract.FirstOrDefault()[colName_contract_endDate].ToString());
+                            }
+                            catch
+                            {
+                                myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_startDate, "The Contract's Start or End date formatting is incorrect. Please check contract details and change accordingly.");
+                                continue;
+                            }
+
+                            if (contractStartDate == null || contractEndDate == null)
+                            {
+                                myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_startDate, "Warning: contract start and/or end dates not found.");
+                            }
+                            else if (!((contractStartDate < endDate) && (startDate < contractEndDate)))
+                            {
+                                // Deal date range should be touching the contract start date end date (Deal dates must be overlapping contract dates)
+                                myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_startDate, "Deal date range should be touching the contract start date (" + contractStartDate.ToString() + ") and contract end date (" + contractEndDate.ToString() + ").");
+                            }
+
+                            #endregion contract related validations
+                        }
+
+                        #endregion Product/CAP relaed validations
+                    }
+                }
+            }
+
+            return myContainer;
+        }
+    }
 }

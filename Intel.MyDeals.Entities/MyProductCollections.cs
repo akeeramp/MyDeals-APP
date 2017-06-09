@@ -1,33 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 
+/// <summary>
+/// TODO: Mahesh Cleanup this file unnecessary classes
+/// </summary>
 namespace Intel.MyDeals.Entities
 {
-    class MyProductCollections
+    internal class MyProductCollections
     {
-
     }
-        
-    ///<summary>
-    /// Class created via template - Do Not Modify!
-    /// To modify this code, re-execute the template, or extend as partial.
-    /// on SAURAVKU-MOBL
-    /// by sauravku
-    /// at 3/21/2017 3:02:38 PM
-    ///</summary>
 
     [DataContract]
     public partial class ProductAttributeSelected
     {
         [DataMember]
         public System.String ATRB_SID_INC { set; get; }
+
         [DataMember]
         public System.String ATRB_SID_EXC { set; get; }
     }
+
     public class ProductIncExcAttributeSelector
     {
         public List<IncExcAttributeMaster> IncExcAttributeMaster { get; set; }
@@ -41,8 +33,8 @@ namespace Intel.MyDeals.Entities
         public System.Int32 ROW_NUMBER { set; get; }
 
         [DataMember]
-        public System.String USR_INPUT { set; get; }     
-                
+        public System.String USR_INPUT { set; get; }
+
         [DataMember]
         public System.String EXCLUDE { set; get; }
 
@@ -52,38 +44,19 @@ namespace Intel.MyDeals.Entities
         [DataMember]
         public System.String START_DATE { set; get; }
 
-
         [DataMember]
         public System.String END_DATE { set; get; }
 
+        [DataMember]
+        public System.String GEO_COMBINED { set; get; }
 
-        /*
-        private static List<WorkFlowAttribute> WorkFlowAttributeFromReader(SqlDataReader rdr){
-        // This helper method is template generated.
-        // Refer to that template for details to modify this code.
-
-        var ret = new List<WorkFlowAttribute>();
-        int IDX_COL_NM = DB.GetReaderOrdinal(rdr, "COL_NM");
-        int IDX_Key = DB.GetReaderOrdinal(rdr, "Key");
-        int IDX_Value = DB.GetReaderOrdinal(rdr, "Value");
-
-        while (rdr.Read()){
-        ret.Add(new WorkFlowAttribute {
-        COL_NM = (IDX_COL_NM < 0 || rdr.IsDBNull(IDX_COL_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_COL_NM),
-        Key = (IDX_Key < 0 || rdr.IsDBNull(IDX_Key)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Key),
-        Value = (IDX_Value < 0 || rdr.IsDBNull(IDX_Value)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Value)
-        });
-        } // while
-        return ret;
-        }
-        */
-
-    } // End of class WorkFlowAttribute
+        [DataMember]
+        public System.String PROGRAM_PAYMENT { set; get; }
+    }
 
     [DataContract]
     public partial class ProductIEValues
     {
-
         [DataMember]
         public System.String PROD_NAMES { set; get; }
 
@@ -99,33 +72,9 @@ namespace Intel.MyDeals.Entities
         [DataMember]
         public System.String START_DATE { set; get; }
 
-
         [DataMember]
         public System.String END_DATE { set; get; }
-
-
-        /*
-        private static List<WorkFlowAttribute> WorkFlowAttributeFromReader(SqlDataReader rdr){
-        // This helper method is template generated.
-        // Refer to that template for details to modify this code.
-
-        var ret = new List<WorkFlowAttribute>();
-        int IDX_COL_NM = DB.GetReaderOrdinal(rdr, "COL_NM");
-        int IDX_Key = DB.GetReaderOrdinal(rdr, "Key");
-        int IDX_Value = DB.GetReaderOrdinal(rdr, "Value");
-
-        while (rdr.Read()){
-        ret.Add(new WorkFlowAttribute {
-        COL_NM = (IDX_COL_NM < 0 || rdr.IsDBNull(IDX_COL_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_COL_NM),
-        Key = (IDX_Key < 0 || rdr.IsDBNull(IDX_Key)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Key),
-        Value = (IDX_Value < 0 || rdr.IsDBNull(IDX_Value)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_Value)
-        });
-        } // while
-        return ret;
-        }
-        */
-
-    } // End of class WorkFlowAttribute
+    }
 
     [DataContract]
     public partial class ProductIncExcAttribute
@@ -144,5 +93,4 @@ namespace Intel.MyDeals.Entities
 
         public System.String PROD_NAMES { set; get; }
     }
-
 }

@@ -16,8 +16,8 @@
 <#@ Assembly Name="$(SolutionDir)\Intel.MyDeals.DataAccessLib\bin\Debug\Intel.Opaque.Templating.dll" #>
 
 <#
-	
-	// DEVELOPER: Change this to be the namespace to create the SP classes in 
+
+	// DEVELOPER: Change this to be the namespace to create the SP classes in
 	const string outputNameSpace = "Intel.MyDeals.Entities";
 	const string TAB = "\t";
 	SqlConnection conn;
@@ -88,7 +88,7 @@
 			WriteLine(@"/// DOT_NET_DATA_TYPE: {0}", rdr["DOT_NET_DATA_TYPE"]);
 			WriteLine(@"///</summary>");
 			WriteLine(@"public const string {0} = ""{0}"";", rdr["ATRB_CD"]);
-		} 
+		}
     }
 
 	PopIndent();
@@ -130,7 +130,7 @@
 			WriteLine(@"///</summary>");
 			WriteLine(@"public const string {0} = ""{0}"";", rdr["ACTN_NM"]);
 			WriteLine("");
-		} 
+		}
     }
 
 	PopIndent();
@@ -159,11 +159,11 @@
 	{
 		while(rdr.Read())
 		{
-			WriteLine(@"public const string {0} = ""{1}"";", 
+			WriteLine(@"public const string {0} = ""{1}"";",
 				TemplateTools.CSharpIfyName(String.Format("{0}", rdr["cnst_nm"])),
 				rdr["cnst_nm"]
 			);
-		} 
+		}
     }
 
 	PopIndent();
@@ -188,7 +188,7 @@
 		while(rdr.Read())
 		{
 			WriteLine(@"public const string {0} = ""{1}"";", rdr["ROLE_NM"].ToString().Replace(" ","_"), rdr["ROLE_NM"]);
-		} 
+		}
     }
 
 
@@ -198,7 +198,7 @@
 		while(rdr.Read())
 		{
 			WriteLine(@"[""{0}""] = ""{1}"",", rdr["ROLE_NM"].ToString().Replace(" ","_"), rdr["ROLE_TIER_NM"].ToString());
-		} 
+		}
     }
 	WriteLine(@"};");
 
@@ -224,7 +224,7 @@
 		while(rdr.Read())
 		{
 			WriteLine(@"public const string {0} = ""{1}"";", rdr["WFSTG_NM"].ToString().Replace(" ","_"), rdr["WFSTG_NM"]);
-		} 
+		}
     }
 
 	PopIndent();
@@ -249,13 +249,13 @@
 		while(rdr.Read())
 		{
 			WriteLine(@"public const string {0} = ""{1}"";", rdr["WFSTG_ACTN_NM"].ToString().Replace(" ","_"), rdr["WFSTG_ACTN_NM"]);
-		} 
+		}
     }
 
 	PopIndent();
 	WriteLine("}"); // class
 
-	
+
 
 
 
@@ -275,13 +275,13 @@
 		while(rdr.Read())
 		{
 			WriteLine(@"public const string {0} = ""{1}"";", rdr["ACTN_NM"].ToString().Replace(" ","_"), rdr["ACTN_NM"]);
-		} 
+		}
     }
 
 	PopIndent();
 	WriteLine("}"); // class
 
-	
+
 
 
 
@@ -429,18 +429,18 @@
 	Dictionary<string, List<string>> ops = new Dictionary<string, List<string>>();
 	foreach (DataRow drg in dt_objsObjToDeals.Rows)
     {
-		if (!ops.ContainsKey(drg["OBJ_TYPE"].ToString())) 
+		if (!ops.ContainsKey(drg["OBJ_TYPE"].ToString()))
 		{
 			ops[drg["OBJ_TYPE"].ToString()] = new List<string>();
 		}
 		ops[drg["OBJ_TYPE"].ToString()].Add("OpDataElementSetType." + drg["OBJ_SET_TYPE"].ToString());
 	}
-	
+
 	foreach (var op in ops)
 	{
 		WriteLine("[OpDataElementType." + op.Key + "] = new List<OpDataElementSetType> { " + string.Join(",", op.Value) + " },");
 	}
-	
+
 	PopIndent();
 	WriteLine("}");
 
@@ -482,7 +482,7 @@
 
 //	foreach(DataRow drg in dt_atrb.DefaultView.ToTable(true, "ATRB_CD","ATRB_SID").Rows)
 //	{
-//		
+//
 //		string SafeAtrbCd = TemplateTools.CSharpIfyName(String.Format("{0}", drg["ATRB_CD"]));
 //		var atrb_rows = dt_atrb.Select(String.Format("[ATRB_CD] = '{0}' AND [ATRB_ITEM_VALUE] <> ''", drg["ATRB_CD"]));
 //
@@ -497,7 +497,7 @@
 //
 //			foreach(var dra in atrb_rows)
 //			{
-//				WriteLine("public const int {0} = {1};", 
+//				WriteLine("public const int {0} = {1};",
 //					TemplateTools.CSharpIfyName(string.Format("{0}", dra["ATRB_ITEM_VALUE"])).ToUpper(),
 //					dra["ATRB_ITEM_SID"]
 //				);
@@ -509,7 +509,7 @@
 //
 //		if(atrb_rows.Any())
 //		{
-//		
+//
 //			WriteLine("");
 //			WriteLine(@"///<summary>");
 //			WriteLine(@"/// ATRB_SID: {0}", drg["ATRB_SID"]);
@@ -523,7 +523,7 @@
 //					WriteLine(@"///<summary>");
 //					WriteLine(@"/// ID: {0}", dra["ATRB_ITEM_SID"]);
 //					WriteLine(@"///</summary>");
-//					WriteLine("public const string {0} = @\"{1}\";", 
+//					WriteLine("public const string {0} = @\"{1}\";",
 //						TemplateTools.CSharpIfyName(string.Format("{0}", dra["ATRB_ITEM_VALUE"])).ToUpper(),
 //						String.Format("{0}", dra["ATRB_ITEM_VALUE"]).Replace("\"","\"\"")
 //					);
@@ -533,7 +533,7 @@
 //				WriteLine(@"///<summary>");
 //				WriteLine(@"/// All values associated with this lookup");
 //				WriteLine(@"///</summary>");
-//				WriteLine("public static readonly string[] Values = {{@\"{0}\"}};", 
+//				WriteLine("public static readonly string[] Values = {{@\"{0}\"}};",
 //					String.Join("\",@\"", atrb_rows.Select(dra => String.Format("{0}", dra["ATRB_ITEM_VALUE"]).Replace("\"","\"\"")).OrderBy(s => s.ToLower()))
 //				);
 //
@@ -544,7 +544,7 @@
 //				WriteLine("public static readonly Dictionary<int, string> Dict = new Dictionary<int, string>(){");
 //					PushIndent(TAB);
 //					WriteLine(String.Join(
-//						"," + Environment.NewLine, 
+//						"," + Environment.NewLine,
 //						atrb_rows.Select(dra => String.Format("{{{0}, @\"{1}\"}}", dra["ATRB_ITEM_SID"], String.Format("{0}", dra["ATRB_ITEM_VALUE"]).Replace("\"","\"\"")))
 //					));
 //					PopIndent();
@@ -583,7 +583,7 @@
 //
 //        } // if(atrb_rows.Any())
 //    }
-	
+
 //	PopIndent();
 //	WriteLine("}"); // namespace
 
@@ -595,5 +595,5 @@
 
 	PopIndent();
 	WriteLine("}"); // namespace
-	
+
 #>

@@ -28,6 +28,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                     case OpMsg.MessageType.Info:
                         infoMsgs.Add(msg.Message.Replace("\r\n", ""));
                         break;
+
                     case OpMsg.MessageType.Warning:
                         warnMsgs.Add(msg.Message.Replace("\r\n", ""));
                         break;
@@ -73,18 +74,17 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
             objsetItem.SetBehavior("isHidden", de.AtrbCd, de.IsHidden);
             objsetItem.SetBehavior("isError", de.AtrbCd, de.ValidationMessage != string.Empty);
             objsetItem.SetBehavior("validMsg", de.AtrbCd, de.ValidationMessage);
-
         }
 
         public static int GetIntAtrb(this OpDataCollectorFlattenedItem items, string atrbCd)
         {
             return !items.ContainsKey(atrbCd) || items[atrbCd] == null ? 0 : Convert.ToInt32(items[atrbCd].ToString());
         }
+
         public static int GetIntAtrbFromOpDataElementType(this OpDataCollectorFlattenedItem items, string atrbCd)
         {
             return !items.ContainsKey(atrbCd) || items[atrbCd] == null ? 0 : OpDataElementTypeConverter.FromString(items[atrbCd]).ToId();
         }
-
 
         private static void SetBehavior<T>(this OpDataCollectorFlattenedItem objsetItem, string behaveType, string name, T value)
         {
@@ -94,11 +94,11 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
             if (!behav.ContainsKey(behaveType)) behav[behaveType] = new OpDataCollectorFlattenedItem();
             if (value.GetType().Name == "Boolean")
             {
-                if (bool.Parse(value.ToString())) ((OpDataCollectorFlattenedItem) behav[behaveType])[name] = true;
+                if (bool.Parse(value.ToString())) ((OpDataCollectorFlattenedItem)behav[behaveType])[name] = true;
             }
             else
             {
-                if (value.ToString()!= string.Empty) ((OpDataCollectorFlattenedItem)behav[behaveType])[name] = value;
+                if (value.ToString() != string.Empty) ((OpDataCollectorFlattenedItem)behav[behaveType])[name] = value;
             }
         }
 
@@ -108,7 +108,6 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
             string pivotName = EN.OBJDIM.PIVOT;
             string pivotKeyName = EN.OBJDIM._PIVOTKEY;
             string titleKeyName = EN.OBJDIM.TITLE;
-
 
             // setup _pivot
             if (!objsetItem.ContainsKey(pivotKeyName))
@@ -130,7 +129,6 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                 case ObjSetPivotMode.Pivoted:
                     if (!objsetItem.ContainsKey(dimName)) objsetItem[dimName] = new Dictionary<string, OpDataCollectorFlattenedItem>();
                     Dictionary<string, OpDataCollectorFlattenedItem> collection = (Dictionary<string, OpDataCollectorFlattenedItem>)objsetItem[dimName];
-
 
                     if (!collection.ContainsKey(strDimKey)) collection[strDimKey] = new OpDataCollectorFlattenedItem();
 
@@ -168,12 +166,11 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
 
                     foreach (IOpDataElement item in dc.GetDataElements(de.AtrbCd))
                     {
-                        objsetItem[item.AtrbCd + item.DimKeyString.AtrbCdDimKeySafe()] = item.AtrbValue.ToString();                        
+                        objsetItem[item.AtrbCd + item.DimKeyString.AtrbCdDimKeySafe()] = item.AtrbValue.ToString();
                     }
 
                     break;
             }
-
         }
 
         public static OpDataCollectorFlattenedList TranslateToWip(this OpDataCollectorFlattenedItem opFlatItem)
@@ -183,7 +180,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
 
             // check that this is the correct OpDataElementType and has products
             if (!opFlatItem.ContainsKey(AttributeCodes.dc_type) || opFlatItem[AttributeCodes.dc_type].ToString() != OpDataElementType.PRC_TBL_ROW.ToString()) return retItems;
-            if (!opFlatItem.ContainsKey(AttributeCodes.PTR_SYS_PRD) || opFlatItem[AttributeCodes.PTR_SYS_PRD] == null|| opFlatItem[AttributeCodes.PTR_SYS_PRD].ToString() == string.Empty) return retItems;
+            if (!opFlatItem.ContainsKey(AttributeCodes.PTR_SYS_PRD) || opFlatItem[AttributeCodes.PTR_SYS_PRD] == null || opFlatItem[AttributeCodes.PTR_SYS_PRD].ToString() == string.Empty) return retItems;
 
             OpDataElementType opType = OpDataElementTypeConverter.FromString(opFlatItem[AttributeCodes.dc_type]);
             OpDataElementSetType opSetType = OpDataElementSetTypeConverter.FromString(opFlatItem[AttributeCodes.OBJ_SET_TYPE_CD]);
@@ -193,7 +190,6 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
 
             List<string> singleDimAtrbs = template.Where(t => t.DimID == 0 && !t.DimKey.Any()).Select(t => t.AtrbCd).Distinct().ToList();
             List<string> multiDimAtrbs = template.Where(t => t.DimID != 0 || t.DimKey.Any()).Select(t => t.AtrbCd + t.DimKeyString.AtrbCdDimKeySafe()).Distinct().ToList();
-
 
             // Get Product string already approved by Product Entry.  We should be able to trust these values
             string products = opFlatItem[AttributeCodes.PTR_SYS_PRD].ToString();
@@ -261,8 +257,6 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
             return retItems;
         }
 
-
-
         public static void CopyMatchingAttributes(this OpDataCollectorFlattenedList retItems, OpDataCollectorFlattenedItem opFlatItem, OpDataElementTypeMapping elMapping,
             List<string> singleDimAtrbs, List<string> multiDimAtrbs, string userPrdNm, List<ProdMapping> pMaps, string geo)
         {
@@ -271,8 +265,9 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
             foreach (ProdMapping pMap in pMaps)
             {
                 opFlatItem[AttributeCodes.PRODUCT_FILTER] = pMap.PRD_MBR_SID;
-                opFlatItem[AttributeCodes.TITLE] = pMap.HIER_VAL_NM;                
-                opFlatItem[AttributeCodes.PTR_USER_PRD] = userPrdNm;
+                opFlatItem[AttributeCodes.TITLE] = pMap.HIER_VAL_NM;
+                // Commented line overriding the comma separated user input with collections last product HIER_VAL_NM
+                //opFlatItem[AttributeCodes.PTR_USER_PRD] = userPrdNm;
                 opFlatItem[AttributeCodes.CAP] = pMap.CAP;
                 opFlatItem[AttributeCodes.CAP_STRT_DT] = pMap.CAP_START;
                 opFlatItem[AttributeCodes.CAP_END_DT] = pMap.CAP_END;

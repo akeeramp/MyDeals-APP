@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 6/2/2017 3:06:54 PM
-On: PWECKENR-MOBL
+File Updated: 6/7/2017 9:19:01 AM
+On: MBIRADAR-MOBL1
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
 using System;
@@ -685,15 +685,6 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Double
 		///</summary>
 		public const string ECAP_PRICE = "ECAP_PRICE";
-
-		///<summary>
-		/// DIM_SID: 3
-		/// DIM_CD: DEAL
-		/// ATRB_SID: 3331
-		/// TGT_COL_TYPE: VARCHAR
-		/// DOT_NET_DATA_TYPE: System.String
-		///</summary>
-		public const string ECAP_TYPE = "ECAP_TYPE";
 
 		///<summary>
 		/// DIM_SID: 50
@@ -1535,6 +1526,15 @@ namespace Intel.MyDeals.Entities {
 		///<summary>
 		/// DIM_SID: 3
 		/// DIM_CD: DEAL
+		/// ATRB_SID: 7093
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string PTR_SYS_INVLD_PRD = "PTR_SYS_INVLD_PRD";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
 		/// ATRB_SID: 3659
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.String
@@ -2030,13 +2030,13 @@ namespace Intel.MyDeals.Entities {
 		public const string DEV = "DEV";
 		public static Dictionary<string, string> Tiers = new Dictionary<string, string> {
 		["CBA"] = "Tier_2",
-		["DA"] = "Tier_3",
+		["DA"] = "Tier_4",
 		["Finance"] = "Tier_0",
 		["FSE"] = "Tier_1",
 		["GA"] = "Tier_2",
 		["Legal"] = "Tier_0",
 		["RA"] = "Tier_1",
-		["SA"] = "Tier_3",
+		["SA"] = "Tier_4",
 		["DEV"] = "Tier_0",
 		};
 	}

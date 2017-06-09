@@ -235,7 +235,8 @@ namespace Intel.MyDeals.BusinessLogic
         /// </summary>
         /// <param name="products"></param>
         /// <returns></returns>
-        public ProductLookup TranslateProducts(List<ProductEntryAttribute> prodNames, int CUST_MBR_SID, string GEO_MBR_SID)
+
+        public ProductLookup TranslateProducts(List<ProductEntryAttribute> prodNames, int CUST_MBR_SID)
         {
             //var prodNames = new List<string>();
             var userProducts = prodNames.Select(l => l.USR_INPUT).ToList();
@@ -299,6 +300,8 @@ namespace Intel.MyDeals.BusinessLogic
                     pea.END_DATE = userProduct.END_DATE.ToString();
                     pea.EXCLUDE = userProduct.EXCLUDE;
                     pea.FILTER = userProduct.FILTER;
+                    pea.GEO_COMBINED = userProduct.GEO_COMBINED;
+                    pea.PROGRAM_PAYMENT = userProduct.PROGRAM_PAYMENT;
                     prodNamesList.Add(pea);
                 }
                 var productAliases = (from p in prodNamesList
@@ -312,7 +315,9 @@ namespace Intel.MyDeals.BusinessLogic
                                           EXCLUDE = p.EXCLUDE,
                                           FILTER = p.FILTER,
                                           END_DATE = p.END_DATE,
-                                          START_DATE = p.START_DATE
+                                          START_DATE = p.START_DATE,
+                                          GEO_COMBINED = p.GEO_COMBINED,
+                                          PROGRAM_PAYMENT = p.PROGRAM_PAYMENT
                                       }).Distinct();
 
                 productsTodb.AddRange(productAliases);
@@ -321,7 +326,7 @@ namespace Intel.MyDeals.BusinessLogic
             }
 
             //  Product match master list
-            var productMatchResults = GetProductDetails(productsTodb, CUST_MBR_SID, GEO_MBR_SID);
+            var productMatchResults = GetProductDetails(productsTodb, CUST_MBR_SID);
             // Get duplicate and Valid Products
             ExtractValidandDuplicateProducts(productLookup, productMatchResults);
 
@@ -372,7 +377,7 @@ namespace Intel.MyDeals.BusinessLogic
                                                 on p.USR_INPUT equals t
                                                 where !p.EXACT_MATCH
                                                 select t).Distinct();
-                
+
                 // Get distinct user inputs where user interaction needed from UI, put them in Duplicate product bucket list
                 duplicateProds = duplicateProds.Union(productWithoutExactMatch).Distinct();
 
@@ -418,19 +423,9 @@ namespace Intel.MyDeals.BusinessLogic
             }
         }
 
-        /// <summary>
-        /// Get the product match results
-        /// </summary>
-        /// <param name="productsToMatch"></param>
-        /// <returns></returns>
-        public List<PRD_LOOKUP_RESULTS> FindProductMatch(List<ProductEntryAttribute> productsToMatch)
+        public List<PRD_LOOKUP_RESULTS> GetProductDetails(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID)
         {
-            return _productDataLib.FindProductMatch(productsToMatch);
-        }
-
-        public List<PRD_LOOKUP_RESULTS> GetProductDetails(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID, string GEO_MBR_SID)
-        {
-            return _productDataLib.GetProductDetails(productsToMatch, CUST_MBR_SID, GEO_MBR_SID);
+            return _productDataLib.GetProductDetails(productsToMatch, CUST_MBR_SID);
         }
 
         /// <summary>
@@ -445,12 +440,12 @@ namespace Intel.MyDeals.BusinessLogic
             if (userProduct.Contains('"'))
             {
                 var empArr = userProduct.Split('"', '"');
-                if(empArr.Length > 0)
+                if (empArr.Length > 0)
                 {
                     EPMString = empArr[1];
                 }
                 userProduct = userProduct.Replace("\"", "");
-                int index = userProduct.IndexOf(EPMString);                
+                int index = userProduct.IndexOf(EPMString);
                 userProduct = (index < 0)
                     ? userProduct
                     : userProduct.Remove(index, EPMString.Length);
@@ -529,7 +524,7 @@ namespace Intel.MyDeals.BusinessLogic
                 }
             }
             //Adding EPM name
-            if(EPMString.Length > 0)
+            if (EPMString.Length > 0)
             {
                 singleProducts.Add(EPMString);
                 EPMString = "";
@@ -678,6 +673,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             int returnMaxRecords = returnMax ?? defaultReturnedMaxRecords;
 
+            prdEntered = prdEntered.Trim('*'); // Remove trailing *
             prdEntered = prdEntered.Replace("?", "."); // Replace any single character wildcards with regex single character token (?)
             List<string> words = prdEntered.Split('*').ToList(); // Break into list on wildcard characters (*)
 

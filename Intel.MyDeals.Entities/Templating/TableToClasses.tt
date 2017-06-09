@@ -176,7 +176,7 @@ using System.Collections.Generic;
 
 
 	// Product Selector(Lookup)
-	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_TRANSLT_PRD_ENTRY] @CUST_MBR_SID=1, @GEO_MBR_SID=1");
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_TRANSLT_PRD_ENTRY] @CUST_MBR_SID=1");
 	ds.Tables[0].TableName = "PRD_LOOKUP_RESULTS";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 

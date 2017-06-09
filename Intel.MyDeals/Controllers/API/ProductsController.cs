@@ -334,30 +334,12 @@ namespace Intel.MyDeals.Controllers.API
              );
         }
 
-        [Route("TranslateProducts/{CUST_MBR_SID}/{GEO_MBR_SID}")]
+        [Route("TranslateProducts/{CUST_MBR_SID}")]
         [HttpPost]
-        public ProductLookup TranslateProducts(List<ProductEntryAttribute> userInput, Int32 CUST_MBR_SID, string GEO_MBR_SID)
+        public ProductLookup TranslateProducts(List<ProductEntryAttribute> userInput, int CUST_MBR_SID)
         {
-            return SafeExecutor(() => _productsLib.TranslateProducts(userInput, CUST_MBR_SID, GEO_MBR_SID)
-                , $"Unable to translate {"userInput"}"
-            );
-        }
-
-        [Route("GetProductDetails")]
-        [HttpPost]
-        public ProductLookup GetProductDetails(List<ProductEntryAttribute> userInput, Int32 CUST_MBR_SID, string GEO_MBR_SID)
-        {
-            return SafeExecutor(() => _productsLib.TranslateProducts(userInput, CUST_MBR_SID, GEO_MBR_SID)
+            return SafeExecutor(() => _productsLib.TranslateProducts(userInput, CUST_MBR_SID)
                 , $"Unable to get product {"details"}"
-            );
-        }
-
-        [Route("FetchProducts")]
-        [HttpPost]
-        public ProductLookup FetchProducts(List<ProductIEValues> userInput)
-        {
-            return SafeExecutor(() => _productsLib.FetchProducts(userInput)
-                , $"Unable to get {"product"}"
             );
         }
 
@@ -402,15 +384,6 @@ namespace Intel.MyDeals.Controllers.API
         {
             return SafeExecutor(() => _productsLib.GetProdSelectionLevel(OBJ_SET_TYPE_SID)
                 , $"Unable to get {"selection level"}"
-            );
-        }
-
-        [Route("FindSuggestedProduct/{prdEntered}")]
-        [HttpPost]
-        public List<Product> FindSuggestedProduct(string prdEntered)
-        {
-            return SafeExecutor(() => _productsLib.SuggestProducts(prdEntered, null)
-                , $"Unable to Suggest Products 3"
             );
         }
 

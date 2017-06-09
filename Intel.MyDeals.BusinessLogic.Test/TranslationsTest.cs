@@ -28,7 +28,7 @@ namespace Intel.MyDeals.BusinessLogic.Test
                 [AttributeCodes.dc_parent_type] = OpDataElementType.PRC_TBL.ToString(),
                 [AttributeCodes.OBJ_SET_TYPE_CD] = OpDataElementSetType.ECAP,
                 [AttributeCodes.PTR_SYS_PRD] = "[{\"Prod 1\": 123},{\"Prod 2\": 234}]",
-                [AttributeCodes.ECAP_TYPE] = "MCP",
+                [AttributeCodes.REBATE_TYPE] = "MCP",
                 [AttributeCodes.START_DT] = "1/1/2015",
                 [AttributeCodes.END_DT] = "1/1/2018",
                 [AttributeCodes.CUST_ACCNT_DIV] = "div1,div2,div3",
@@ -43,8 +43,6 @@ namespace Intel.MyDeals.BusinessLogic.Test
             item[AttributeCodes.OBJ_SET_TYPE_CD] = OpDataElementSetType.VOL_TIER;
             OpDataCollectorFlattenedList volTierItems = item.TranslateToWip();
             Assert.IsTrue(volTierItems.Count == 1);
-
         }
-
     }
 }

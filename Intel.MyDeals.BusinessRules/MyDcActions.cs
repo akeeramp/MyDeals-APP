@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Intel.MyDeals.BusinessRules
 {
     /// <summary>
-    /// Place all MyDeals specific actions here.  
+    /// Place all MyDeals specific actions here.
     /// Most of the actions used will come from BusinessLogicDcActions
     /// This class will let you define MyDeals specific actions that might need to be performed
     /// </summary>
@@ -132,6 +132,7 @@ namespace Intel.MyDeals.BusinessRules
 
             IOpDataElement dePrdUsr = r.Dc.GetDataElement(AttributeCodes.PTR_USER_PRD);
             string prdJson = r.Dc.GetDataElementValue(AttributeCodes.PTR_SYS_PRD);
+            string prdJsonIvalid = r.Dc.GetDataElementValue(AttributeCodes.PTR_SYS_INVLD_PRD);
             if (string.IsNullOrEmpty(prdJson)) return;
 
             ProdMappings items = null;
@@ -151,6 +152,12 @@ namespace Intel.MyDeals.BusinessRules
                 return;
             }
 
+            if (!string.IsNullOrEmpty(prdJsonIvalid))
+            {
+                BusinessLogicDeActions.AddValidationMessage(dePrdUsr, "Product select has some invalid products.");
+                return;
+            }
+
             foreach (KeyValuePair<string, IEnumerable<ProdMapping>> kvp in items)
             {
                 foreach (ProdMapping prodMapping in kvp.Value)
@@ -162,7 +169,6 @@ namespace Intel.MyDeals.BusinessRules
 
                     if (r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD) == OpDataElementSetType.ECAP.ToString())
                     {
-
                         #region CAP Validations
 
                         double cap;
@@ -170,7 +176,7 @@ namespace Intel.MyDeals.BusinessRules
                         if (!double.TryParse(prodMapping.CAP, out cap)) cap = 0;
                         if (!double.TryParse(r.Dc.GetDataElementValue(AttributeCodes.ECAP_PRICE), out ecap)) ecap = 0;
 
-                        // When ECAP Price is greater than CAP, UI validation check on deal creation and system should give a soft warning. 
+                        // When ECAP Price is greater than CAP, UI validation check on deal creation and system should give a soft warning.
                         // TODO... put this as a soft warning on the grid
                         //if (ecap > 0 && cap > ecap)
                         //{
@@ -210,16 +216,12 @@ namespace Intel.MyDeals.BusinessRules
                                     BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"The CAP start date ({capStart:mm/dd/yyyy}) and end date ({capEnd:mm/dd/yyyy}) exists in future outside of deal end date. Please change the deal start date to match the CAP start date.");
                                 }
                             }
-
                         }
 
-                        #endregion
-
+                        #endregion CAP Validations
                     }
                 }
             }
-
-
         }
 
         public static void CheckCustDivValues(params object[] args)
@@ -277,7 +279,7 @@ namespace Intel.MyDeals.BusinessRules
             string deEcapTypeValue = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE);
             string[] deProductCategoriesValue = r.Dc.GetDataElementValue(AttributeCodes.PRODUCT_CATEGORIES).Split(',');
             string role = OpUserStack.MyOpUserToken.Role.RoleTypeCd;
-            bool IsL1Product = r.Dc.GetDataElementValue(AttributeCodes.HAS_L1) == "1"? true: false;
+            bool IsL1Product = r.Dc.GetDataElementValue(AttributeCodes.HAS_L1) == "1" ? true : false;
 
             List<string> mandatoryMeetCompFields = new List<string>
             {
@@ -288,9 +290,9 @@ namespace Intel.MyDeals.BusinessRules
             };
 
             // US52971 - If ECAP Type=MCP or pull in MCP then user(FSE) has to enter the Meet comp related information Mandatory for CPU and CS products .Mandatory for GA for all other cases.
-            if ( (deEcapTypeValue == "MCP" || deEcapTypeValue == "PULL-IN MCP") 
+            if ((deEcapTypeValue == "MCP" || deEcapTypeValue == "PULL-IN MCP")
                 && (deProductCategoriesValue.Contains("CPU") || deProductCategoriesValue.Contains("CS"))
-                && role == RoleTypes.FSE )
+                && role == RoleTypes.FSE)
             {
                 foreach (IOpDataElement de in r.Dc.GetDataElementsIn(mandatoryMeetCompFields))
                 {
@@ -300,8 +302,8 @@ namespace Intel.MyDeals.BusinessRules
 
             // US52971 - if it is not MCP nor pull in MCP and if product is L1, then system would not ask as mandatory for FSE, But GA has to fill it as mandatory.If not filled.give a message' Meetcomp info is required '.If meetcomp fails then GA can not submit the deal.
             if ((deEcapTypeValue != "MCP" || deEcapTypeValue != "PULL-IN MCP")
-                && IsL1Product 
-                && role == RoleTypes.GA )
+                && IsL1Product
+                && role == RoleTypes.GA)
             {
                 foreach (IOpDataElement de in r.Dc.GetDataElementsIn(mandatoryMeetCompFields))
                 {
@@ -317,14 +319,13 @@ namespace Intel.MyDeals.BusinessRules
             if (!r.IsValid) return;
 
             string[] deProductCategoriesValue = r.Dc.GetDataElementValue(AttributeCodes.PRODUCT_CATEGORIES).Split(',');
-            
+
             if (deProductCategoriesValue.Contains("SvrWS"))
             {
                 IOpDataElement deServerDealType = r.Dc.GetDataElement(AttributeCodes.SERVER_DEAL_TYPE);
                 deServerDealType.IsHidden = false;
             }
         }
-
 
         public static void CheckDropDownValues(params object[] args)
         {
@@ -371,7 +372,7 @@ namespace Intel.MyDeals.BusinessRules
             DateTime startDate = DateTime.Parse(deStart.AtrbValue.ToString());
             DateTime today = DateTime.UtcNow;
 
-            // Additional validation-for program payment=Front end, the deal st. date can not be past, it should be >= current date 
+            // Additional validation-for program payment=Front end, the deal st. date can not be past, it should be >= current date
             if (progPayment.Contains("rontend") && startDate < today)
             {
                 BusinessLogicDeActions.AddValidationMessage(deStart, "The deal start date must be greater or equal to the current date if program payment is Frontend.");
@@ -408,7 +409,7 @@ namespace Intel.MyDeals.BusinessRules
                 BusinessLogicDeActions.AddValidationMessage(deEcapPrice, "ECAP Price must be a positive number.");
             }
         }
-        
+
         public static void BackdateRequired(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);

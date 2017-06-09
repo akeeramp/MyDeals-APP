@@ -16,7 +16,7 @@
 <#@ Assembly Name="$(SolutionDir)\Intel.MyDeals.DataAccessLib\bin\Debug\Intel.Opaque.Templating.dll" #>
 
 <#
-	// DEVELOPER: Change this to be the namespace to create the SP classes in 
+	// DEVELOPER: Change this to be the namespace to create the SP classes in
 	const string outputNameSpace = "Intel.MyDeals.Entities";
 	const string TAB = "\t";
 	SqlConnection conn;
@@ -166,7 +166,7 @@
 //	PushIndent(TAB);
 //	WriteLine("");
 //
-//		Dictionary<int,string> md_dim_atrbs = new Dictionary<int,string>();		
+//		Dictionary<int,string> md_dim_atrbs = new Dictionary<int,string>();
 //		Dictionary<int,string> md_prop_atrbs = new Dictionary<int,string>();
 //
 //		// Get Distinct attribute values that we can use here and later on
@@ -190,7 +190,7 @@
 //        }
 //
 //
-//		
+//
 //	WriteLine("");
 //	PopIndent();
 //	WriteLine("} // KeyWraperConst");
@@ -215,7 +215,7 @@
 //			WriteLine("public {0}(OpDataElementAtrb atrb)", wrapper_class_name);
 //			WriteLine("{");
 //				PushIndent(TAB);
-//            
+//
 //				WriteLine("if (atrb == null || atrb.DimKey == null){");
 //					PushIndent(TAB);
 //					WriteLine("throw new NullReferenceException(\"Invalid attribute for use with multi-dimensional wrapper.\");");
@@ -285,11 +285,11 @@
 //				sbVAL.Append(string.Format("{0},", TemplateTools.CSharpIfyName(r["MTX_ATRB_CD"].ToString())));
 //            }
 //
-//			WriteLine("return String.Format(\"{0}\", {1});", 
+//			WriteLine("return String.Format(\"{0}\", {1});",
 //				sbFMT.ToString().TrimEnd('/'),
 //				sbVAL.ToString().TrimEnd(',')
 //				);
-//			
+//
 //		PopIndent();
 //		WriteLine("}");
 //
@@ -306,7 +306,7 @@
 //		WriteLine("");
 //    }
 //
-//	
+//
 //
 //	WriteLine("");
 //	WriteLine("//------------------------------------------------------------------------------------------------");
@@ -344,7 +344,7 @@
 //		WriteLine("Caching = caching;");
 //		PopIndent();
 //	WriteLine("}");
-//	
+//
 //	// Value to reset in if the clear cache method is called
 //	Dictionary<string, string> ResetFields = new Dictionary<string, string>();
 //
@@ -365,12 +365,12 @@
 //			WriteLine("/// Format: {0}", ar["FRMT_MSK"]);
 //			WriteLine("///</summary>");
 //        }
-//		
+//
 //		string clear_template = "";
 //		string get_template = "";
 //
 //		// On set: What do we do if the set value is null?!  We technically should remove the atrb...
-//		// On set: What do we do if the atrb is null?  Plan B would be to new up the attribute and add 
+//		// On set: What do we do if the atrb is null?  Plan B would be to new up the attribute and add
 //		// it here, which is a good option, but it was complex enough that I was afraid to try.  Phil... thoughts?
 //		string set_template = @"
 //set
@@ -388,7 +388,7 @@
 //		switch(col.DotNetDataType.ToString())
 //		{
 //			// --------------------------------------------------------------------------------------------------------------
-//			case "Int16":	
+//			case "Int16":
 //			case "Int32":
 //			case "UInt16":
 //			case "UInt32":
@@ -410,7 +410,7 @@
 //			}} else {{
 //				_{0} = default(int);
 //			}}
-//                    
+//
 //        }}
 //        return (int)_{0};
 //    }}
@@ -444,7 +444,7 @@
 //			}} else {{
 //				_{0} = default(decimal);
 //			}}
-//                    
+//
 //        }}
 //        return (decimal)_{0};
 //    }}
@@ -474,7 +474,7 @@
 //			}} else {{
 //				_{0} = OpaqueConst.SQL_MIN_DATE;
 //			}}
-//                    
+//
 //        }}
 //        return (DateTime)_{0};
 //    }}
@@ -563,7 +563,7 @@
 //
 //	/*
 //
-//	
+//
 //
 //	*/
 //
@@ -578,7 +578,7 @@
 //		WriteLine("public void ResetCache(params string[] fields)");
 //		WriteLine("{");
 //			PushIndent(TAB);
-//			
+//
 //			WriteLine("if(fields == null || !fields.Any(s=>!String.IsNullOrEmpty(s)))");
 //			WriteLine("{");
 //				PushIndent(TAB);
@@ -602,7 +602,7 @@
 //				WriteLine("}");
 //				PopIndent();
 //			WriteLine("}");
-//	
+//
 //			PopIndent();
 //		WriteLine("}");
 //    }
@@ -654,9 +654,9 @@
 //	var matched_columns = from rc in cols
 //			join pn in typeof(MyDealsAttribute).GetProperties().Where(pi => pi.CanRead && pi.CanWrite)
  //           on rc.ColumnName equals pn.Name.Trim().ToUpper()
- //           select new 
-//			{ 
-//				col = rc, 
+ //           select new
+//			{
+//				col = rc,
  //               pifo = pn
   //          };
 
@@ -686,7 +686,7 @@
 			if(string.IsNullOrEmpty(value))
 			{
 				value = String.Format("default({0})", data_type);
-			} 
+			}
 			else if (col.ColumnName == "DOT_NET_DATA_TYPE")
 			{
 				ValueMap[col.ColumnName] = String.Format("\"{0}\"", value.Replace(@"""", @"\"""));
@@ -710,7 +710,7 @@
             param_constructor_values.Add(String.Format("{0} = {1}",
 				col.ColumnName,
 				ValueMap[col.ColumnName]
-			));			
+			));
         }
 
 		WriteLine("public static MyDealsAttribute {0} = new MyDealsAttribute()", TemplateTools.CSharpIfyName(String.Format("{0}", dr["ATRB_COL_NM"])));
