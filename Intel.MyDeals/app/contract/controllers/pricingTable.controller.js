@@ -564,7 +564,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 		                        data[r]["DC_ID"] = $scope.uid--;
 		                        data[r]["VOLUME"] = null;
 		                        data[r]["ECAP_PRICE"] = null;
-		                        data[r]["CUST_DIV_NM"] = root.contractData.CUST_ACCNT_DIV;
+		                        data[r]["CUST_ACCNT_DIV"] = root.contractData.CUST_ACCNT_DIV;
 
 		                        for (var key in ptTemplate.model.fields) {
 		                            if (ptTemplate.model.fields.hasOwnProperty(key)) {
@@ -829,9 +829,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
 
 	                // Add validation dropdowns/multiselects onto the cells
-	                if (myFieldModel.opLookupText === "DROP_DOWN" || myFieldModel.opLookupText === "dropdownName" || (myFieldModel.opLookupText === "CUST_DIV_NM" && isCorpDiv)) {
+	                if (myFieldModel.opLookupText === "DROP_DOWN" || myFieldModel.opLookupText === "dropdownName" || (myFieldModel.opLookupText === "CUST_ACCNT_DIV" && isCorpDiv)) {
 	                    // Call API
-	                    if (myFieldModel.opLookupText === "CUST_DIV_NM") {
+	                    if (myFieldModel.opLookupText === "CUST_ACCNT_DIV") {
 	                        //debugger;
 	                        myFieldModel.opLookupUrl = "/api/Customers/GetCustomerDivisionsByCustNmSid/" + root.contractData.CUST_MBR_SID;
 	                    }
@@ -1235,7 +1235,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 				// Remove brackets
 				cellCurrVal = cellCurrVal.replace(/\[(.*?)\]/g, "$1");
 
-				if (colName === "CUST_DIV_NM") {
+				if (colName === "CUST_ACCNT_DIV") {
 				    cellCurrVal = cellCurrVal.replace(/\//g, ",");
                 }
 
