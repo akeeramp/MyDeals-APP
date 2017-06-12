@@ -80,6 +80,15 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }
                 },
+
+                new MyOpRule
+                {
+                    //US 53204 - 8 - On add date-If Market segment is Consumer retail or ALL, then default to current quarter first date, other wise Blank. user can edit.
+                    Title="On Ad Validation Set Default",
+                    ActionRule = MyDcActions.ExecuteOnAd,
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate}
+                },
                 // Removed since it was a dummy test for date in past check.  Will bring back when real rule is needed.
                 //new MyOpRule
                 //{

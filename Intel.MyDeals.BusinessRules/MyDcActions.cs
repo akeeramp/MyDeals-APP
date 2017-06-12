@@ -312,6 +312,26 @@ namespace Intel.MyDeals.BusinessRules
                 }
             }
         }
+        public static void ExecuteOnAd(params object[] args)
+        {
+            //US 53204 - 8 - On add date-If Market segment is Consumer retail or ALL, then default to current quarter first date, other wise Blank. user can edit.
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            string mrktSegValue = r.Dc.GetDataElement(AttributeCodes.MRKT_SEG).AtrbValue.ToString();
+            IOpDataElement deOnAdDate = r.Dc.GetDataElement(AttributeCodes.ON_ADD_DT);
+            if (!r.HasExtraArgs) return;
+            int custId = (int)r.ExtraArgs[0];
+
+            if ((mrktSegValue == "Consumer Retail Pull" || mrktSegValue == "All") && deOnAdDate.AtrbValue.ToString() == "")
+            {
+                var customerQuarterDetails = new CustomerCalendarDataLib().GetCustomerQuarterDetails(custId, DateTime.Today, null, null);
+                deOnAdDate.AtrbValue = customerQuarterDetails.QTR_STRT.Date;
+            }
+
+            r.Dc.ApplyActions(r.Dc.MeetsRuleCondition(r.Rule) ? r.Rule.OpRuleActions : r.Rule.OpRuleElseActions);
+        }
+
 
         public static void ShowServerDealType(params object[] args)
         {

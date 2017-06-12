@@ -88,6 +88,10 @@
       <Project>{AE1A3978-08EF-4A15-82CD-7BA6192A9B52}</Project>
       <Name>Intel.MyDeals.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Intel.MyDeals.IDataLibraries\Intel.MyDeals.IDataLibrary.csproj">
+      <Project>{3E9B9F0A-9C92-404E-AFDF-75AD67AC76D8}</Project>
+      <Name>Intel.MyDeals.IDataLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
