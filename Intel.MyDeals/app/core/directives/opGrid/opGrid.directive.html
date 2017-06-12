@@ -16,20 +16,48 @@
             <div class="toolbar">
 
                 <div class="fl">
-                    <button class="btn btn-sm btn-default" ng-class="{'disabled': !_dirty}" ng-click="saveWipDeals()" ng-show="isEditable">
-                        <i class="fa fa-floppy-o" style="font-size: 30px; vertical-align: middle; margin-right: 4px;" title="Save Deals"></i>
+                    <button class="btn btn-sm ssToolbarBtn" ng-class="{'disabled': !_dirty}" ng-click="saveWipDeals()" ng-show="isEditable" title="Save Deals">
+                        <table>
+                            <tr>
+                                <td>
+                                    <i class="fa fa-floppy-o" aria-hidden="true" style="font-size: 30px"></i>
+                                </td>
+                                <td style="padding-left: 5px; text-align: left; color: #00AEEF;">
+                                    Save <br />Deals
+                                </td>
+                            </tr>
+                        </table>
                     </button>
 
-                    <button class="btn btn-sm btn-default" ng-click="backToPricingTable()" ng-show="isPricingTableEnabled">
-                        <i class="intelicon-import-all-outlined" style="font-size: 30px; vertical-align: middle;" title="Back to Pricing Table Editor"></i>
+                    <button class="btn btn-sm ssToolbarBtn" ng-click="saveAndValidateGrid()" ng-show="isEditable" title="Save and Validate Deals">
+                        <table>
+                            <tr>
+                                <td>
+                                    <i class="intelicon-protection-checked-verified-outlined" aria-hidden="true" style="font-size: 30px"></i>
+                                </td>
+                                <td style="padding-left: 5px; text-align: left; color: #00AEEF;">
+                                    Validate <br/>Deals
+                                </td>
+                            </tr>
+                        </table>
+                    </button>
+                    
+                    <button class="btn btn-sm ssToolbarBtn" ng-click="toggleTerms()" title="Show/Hide Additional Discounts and Requirements.">
+                        <table>
+                            <tr>
+                                <td>
+                                    <i class="intelicon-legal skyBlue" aria-hidden="true" style="font-size: 30px"></i>
+                                </td>
+                                <td style="padding-left: 5px; text-align: left; color: #00AEEF;">
+                                    Show/Hide<br />Additional Discounts
+                                </td>
+                            </tr>
+                        </table>
                     </button>
 
-                    <button class="btn btn-sm btn-default" ng-click="saveAndValidateGrid()" ng-show="isEditable">
-                        <i class="intelicon-protection-checked-verified-outlined" style="font-size: 30px; vertical-align: middle;" title="Save and Validate Deals"></i>
-                    </button>
                 </div>
                 
-                <div class="fl" style="margin-top: 2px; margin-left: 4px;" ng-show="isLayoutConfigurable">
+                <div class="fr" style="margin-top: 2px; margin-left: 4px;" ng-show="isLayoutConfigurable">
                     <ul kendo-menu k-options="columnMenu">
                         <li>
                             <i class="intelicon-view-by-columns" style="font-size: 30px !important;" title="Manage Columns"></i>
@@ -57,7 +85,7 @@
                     </ul>
                 </div>
 
-                <div class="fl" style="margin-top: 2px; margin-left: 8px;" ng-show="isLayoutConfigurable">
+                <div class="fr" style="margin-top: 2px; margin-left: 8px;" ng-show="isLayoutConfigurable">
                     <ul kendo-menu>
                         <li>
                             <i class="intelicon-settings-solid" style="font-size: 30px !important;" title="Manage Layout"></i>
@@ -128,7 +156,6 @@
         background: -webkit-linear-gradient(top,  #fdfdfd 0%,#d9d9d9 100%); /* Chrome10-25,Safari5.1-6 */
         background: linear-gradient(to bottom,  #fdfdfd 0%,#d9d9d9 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fdfdfd', endColorstr='#d9d9d9',GradientType=0 ); /* IE6-9 */
-        border-top: 1px solid #f2f2f2;
         border-bottom: 0 solid transparent;
         height: 37px;
         font-size: 14px;
@@ -232,6 +259,7 @@
 
     .gradTab .badge {
         vertical-align: top;
+        padding-top: 2px;
     }
     .gradTab .badge.error {
         background-color: #FC4C02;

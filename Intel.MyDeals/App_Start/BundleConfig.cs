@@ -37,7 +37,8 @@ namespace Intel.MyDeals
                 "~/Scripts/angular-gridster.min.js",
                 "~/Scripts/d3/d3.min.js",
                 "~/Scripts/angular-nvd3.min.js",
-                "~/Scripts/nv.d3.min.js"
+                "~/Scripts/nv.d3.min.js",
+                "~/Scripts/angular-confirm.min.js"
                 ));
 
             bundles.Add(new ScriptBundle("~/bundles/angular").Include(

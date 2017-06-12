@@ -35,15 +35,15 @@
 
     #lnavContainerWrapper {
         height: 100%;
-        padding: 79px 0 0 0;
+        padding: 112px 0 0 0;
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
         box-sizing: border-box;
         overflow: hidden;
     }
     #lnavHeader {
-        height: 79px;
-        margin-top: -79px;
+        height: 112px;
+        margin-top: -112px;
         padding: 0;
         font-size: 14px;
         font-family: "Intel Clear";
@@ -96,7 +96,6 @@
     #contractHeader {
         height: 46px;
         margin-top: -46px;
-        border-bottom: 1px solid #eeeeee;
         font-size: 14px;
         font-family: "Intel Clear";
         font-weight: 200;
@@ -145,20 +144,20 @@
     }
     #secContainerWrapper {
         height: 100%;
-        padding: 33px 0 0 0;
+        padding: 68px 0 0 0;
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
         box-sizing: border-box;
     }
     #secHeader {
-        height: 33px;
-        margin-top: -33px;
+        height: 68px;
+        margin-top: -68px;
         font-size: 14px;
         padding: 5px 16px 3px 0;
         font-family: "Intel Clear";
         font-weight: 200;
         font-style: normal;
-
+        border-bottom: 2px solid #bcbcbc;
         background-color: #ffffff;
         color: #c1c1c1;
     }
@@ -198,6 +197,7 @@
     #subContainer {
         height: 100%;
         overflow: hidden;
+        min-height: 50px;
     }
 
     .flip-horizontal {
@@ -710,7 +710,7 @@
 		position: relative;
 	}
 	.k-tabstrip-wrapper{
-		background-color: #f2f2f2;
+		background-color: #ffffff;
 		border-bottom: 1px solid #e7e7e8;
 		height: 39px;
 	}
@@ -962,8 +962,7 @@
 	
 	/* Spreadsheet Custom Toolbar */
 	.ssToolbarBtn {
-		background-color: #f2f2f2;
-		border-right: 1px solid #d2dade;
+		background-color: #ffffff;
 		border-radius: 0px;
 		color:#1A3E6F;
 		font-size: 11px;
@@ -972,7 +971,7 @@
 		padding: 3px 10px;
 	}
 	.ssToolbarBtn:hover {
-		background-color: #fafafa;
+		background-color: #f2f2f2;
 		color: #0071c5;
 	}
 
@@ -986,7 +985,7 @@
 
 	/* Undo / redo buttons */
 	.k-spreadsheet .k-spreadsheet-quick-access-toolbar{
-		margin-left:55px;
+		margin-left:120px;
 	}
 	.k-spreadsheet .k-spreadsheet-quick-access-toolbar .k-button
 	, .k-spreadsheet .k-spreadsheet-sheets-bar .k-button {
@@ -1115,13 +1114,12 @@
         height: 16px;
     }
     .contract-title-container {
-        padding: 4px 8px; 
+        padding: 9px 8px; 
         overflow: hidden; 
         text-overflow: ellipsis; 
-        height: 30px; 
+        height: 40px; 
         white-space: nowrap; 
         width: 300px;
-        border-bottom: 1px solid #e8eaec;
     }
     .stage_, .stage_InComplete {
         background-color: #e8eaec; 

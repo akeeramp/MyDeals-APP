@@ -69,13 +69,14 @@ namespace Intel.MyDeals.BusinessRules
 
             // Check for backdate Reason
             IOpDataElement deStr = r.Dc.GetDataElement(AttributeCodes.START_DT);
-            string dcPrevStStr = r.Dc.GetDataElement(AttributeCodes.START_DT).PrevAtrbValue.ToString();
-            string dcPrevSt = string.IsNullOrEmpty(dcPrevStStr) ? "" : DateTime.Parse(dcPrevStStr).ToString("MM/dd/yyyy");
-            if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.BACK_DATE_RSN)) && deStr.IsDateInPast() && dcPrevSt != dcSt)
+            if (string.IsNullOrEmpty(deStr.AtrbValue.ToString())) return;
+
+            string dcPrevSt = DateTime.Parse(deStr.AtrbValue.ToString()).ToString("MM/dd/yyyy");
+            if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.BACK_DATE_RSN)) && deStr.IsDateInPast() && dcPrevSt != dcItemSt)
             {
-                IOpDataElement deContractRsn = r.Dc.GetDataElement(AttributeCodes.BACK_DATE_RSN);
-                string strContractRsn = item.ContainsKey("AttributeCodes.BACK_DATE_RSN_TXT]") ? item[AttributeCodes.BACK_DATE_RSN_TXT].ToString() : "";
-                deContractRsn.AtrbValue = string.IsNullOrEmpty(strContractRsn) ? "NEEDED" : item[AttributeCodes.BACK_DATE_RSN_TXT];
+                IOpDataElement deContractRsnTxt = r.Dc.GetDataElement(AttributeCodes.BACK_DATE_RSN_TXT);
+                string strContractRsn = item.ContainsKey(AttributeCodes.BACK_DATE_RSN_TXT) ? item[AttributeCodes.BACK_DATE_RSN_TXT].ToString() : "";
+                deContractRsnTxt.AtrbValue = string.IsNullOrEmpty(strContractRsn) ? "NEEDED" : item[AttributeCodes.BACK_DATE_RSN_TXT];
             }
 
             //r.Dc.ApplyActions(r.Dc.MeetsRuleCondition(r.Rule) ? r.Rule.OpRuleActions : r.Rule.OpRuleElseActions);
@@ -190,7 +191,7 @@ namespace Intel.MyDeals.BusinessRules
                         //    BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"CAP is not available ({prodMapping.CAP}). You can not create deals with this product.");
                         //}
 
-                        if (!string.IsNullOrEmpty(prodMapping.PRD_STRT_DTM) && string.IsNullOrEmpty(prodMapping.CAP_START))
+                        if (!string.IsNullOrEmpty(prodMapping.PRD_STRT_DTM) && !string.IsNullOrEmpty(prodMapping.CAP_START))
                         {
                             DateTime capStart = DateTime.Parse(prodMapping.CAP_START);
                             DateTime capEnd = DateTime.Parse(prodMapping.CAP_END);
@@ -237,7 +238,7 @@ namespace Intel.MyDeals.BusinessRules
 
             int custId = (int)r.ExtraArgs[0];
 
-            if (deUserCustDivs == null) return;
+            if (deUserCustDivs == null || deUserCustDivs.AtrbValue.ToString() == "") return;
 
             //int custId = Convert.ToInt32(strCustId);
             var custs = DataCollections.GetCustomerDivisions().Where(c => c.CUST_NM_SID == custId).ToList();

@@ -718,6 +718,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
                 $scope.$parent.$parent.$parent.saveEntireContract();
             }
 
+            $scope.toggleTerms = function() {
+                $scope.$parent.$parent.$parent.toggleTerms();
+            }
+
             $scope.backToPricingTable = function () {
                 $scope.$parent.$parent.$parent.backToPricingTable();
             }

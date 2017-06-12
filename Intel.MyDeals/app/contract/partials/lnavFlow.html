@@ -1,0 +1,27 @@
+﻿<div style="height: 23px; margin: 0 2px; border-bottom: 1px solid #e8eaec;">
+    <div class="fl flowBtn" ng-class="{inactive: flowMode != 'Deal Entry'}" ng-click="gotoDealEntry()">Deal Entry</div>
+    <div class="fl flowBtn" ng-class="{inactive: flowMode != 'Compliance'}" ng-click="gotoCompliance()">Compliance</div>
+    <div class="fl flowBtn" ng-class="{inactive: flowMode != 'Manage'}" ng-click="gotoManage()">Manage</div>
+    <div class="clearboth"></div>
+</div>
+
+<style>
+    .flowBtn {
+        background-color: #003C71;
+        padding: 2px;
+        font-size: 12px;
+        font-weight: 600;
+        width: 94px;
+        margin: 0 2px;
+        color: #ffffff;
+        text-align: center;
+        cursor: default;
+    }
+    .flowBtn.inactive {
+        background-color: #00AEEF;
+        cursor: pointer;
+    }
+    .flowBtn.inactive:hover {
+        background-color: #003C71;
+    }
+</style>

@@ -7,21 +7,27 @@ angular
 
 ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'isNewContract', 'templateData', 'objsetService', 'templatesService', 'logger', '$uibModal', '$timeout', '$window', '$location', '$rootScope', 'confirmationModal', 'dataService', 'customerService', 'contractManagerConstants', 'MrktSegMultiSelectService', '$compile'];
 
-    function ContractController($scope, $state, $filter, contractData, isNewContract, templateData, objsetService, templatesService, logger, $uibModal, $timeout, $window, $location, $rootScope, confirmationModal, dataService, customerService, contractManagerConstants, MrktSegMultiSelectService, $compile) {
-        // store template information
-        //
-        $scope.templates = $scope.templates || templateData.data;
-        $scope.constants = contractManagerConstants;
-        $scope.isContractDetailsPage = $state.current.name === $scope.constants.ContractDetails;
-        $scope.isBusy = false;
-        $scope.isBusyMsgTitle = "";
-        $scope.isBusyMsgDetail = "";
-        $scope.stealthMode = false;
-        $scope.messages = [];
-        $scope.colToLetter = {};
-        $scope.letterToCol = {};
-        var intA = "A".charCodeAt(0);
-        $scope.pageTitle = "Pricing Table Editor";
+function ContractController($scope, $state, $filter, contractData, isNewContract, templateData, objsetService, templatesService, logger, $uibModal, $timeout, $window, $location, $rootScope, confirmationModal, dataService, customerService, contractManagerConstants, MrktSegMultiSelectService, $compile) {
+    // store template information
+    //
+    $scope.templates = $scope.templates || templateData.data;
+    $scope.constants = contractManagerConstants;
+    $scope.isContractDetailsPage = $state.current.name === $scope.constants.ContractDetails;
+    $scope.isBusy = false;
+    $scope.isBusyMsgTitle = "";
+    $scope.isBusyMsgDetail = "";
+    $scope.stealthMode = false;
+    $scope.messages = [];
+    $scope.colToLetter = {};
+    $scope.letterToCol = {};
+    var intA = "A".charCodeAt(0);
+    $scope.pageTitle = "Pricing Table Editor";
+    $scope.isPtr = false;
+    $scope.isWip = false;
+
+    $scope.flowMode = "Deal Entry";
+    if ($state.current.name.indexOf("contract.compliance") >= 0) $scope.flowMode = "Compliance";
+    if ($state.current.name.indexOf("contract.summary") >= 0) $scope.flowMode = "Manage";
 
         // determine if the contract is existing or new... if new, look for pre-population attributes from the URL parameters
         //
@@ -587,11 +593,42 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
 
                 var saveStates = ["contract.manager.strategy", "contract.manager.strategy.wip", "contract.details"];
                 if ((saveStates.indexOf(fromState.name) >= 0) && $scope._dirty) {
-                    // stop the state change... need to save
-                    event.preventDefault();
+                    //debugger;
+                    if (confirm('Would you like to save your changes?')) {
+                        event.preventDefault();
+                        // async save data
+                        $scope.saveEntireContractBase(fromState.name, false, false, toState.name, toParams);
+                    }
 
-                    // async save data
-                    $scope.saveEntireContractBase(fromState.name, false, false, toState.name, toParams);
+                    //var modalOptions = {
+                    //    closeButtonText: 'Leave Anyway',
+                    //    actionButtonText: 'Save',
+                    //    hasActionButton: true,
+                    //    headerText: 'Unsaved Data',
+                    //    bodyText: 'Would you like to save your changes?'
+                    //};
+
+                    //confirmationModal.showModal({}, modalOptions).then(function (result) {
+                    //            event.preventDefault();
+                    //            // async save data
+                    //            $scope.saveEntireContractBase(fromState.name, false, false, toState.name, toParams);
+                    //}, function (response) {
+                    //});
+
+                    //$confirm({ text: 'Would you like to save your changes?', title: 'Unsaved Data', ok: 'Save', cancel: 'Leave Anyway' })
+                    //    .then(function () {
+                    //        event.preventDefault();
+                    //        // async save data
+                    //        $scope.saveEntireContractBase(fromState.name, false, false, toState.name, toParams);
+                    //    });
+                    //if (confirm("Would you like to save your changes?")) {
+                    //    event.preventDefault();
+                    //    // async save data
+                    //    $scope.saveEntireContractBase(fromState.name, false, false, toState.name, toParams);
+                    //} else {
+                    //    $scope._dirty = false;
+                    //}
+
                 }
             });
 
@@ -1343,7 +1380,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                         } else {
                             $timeout(function () {
                                 $scope.setBusy("", "");
-                            }, 2000);
+                            }, 1000);
                         }
                     } else {
                         $scope.setBusy("Saved with warnings", "Didn't pass Validation");
@@ -1706,7 +1743,7 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
                     $scope.setBusy("Save Successful", "Added Pricing Strategy");
                     $timeout(function () {
                         $scope.setBusy("", "");
-                    }, 2000);
+                    }, 1000);
                     $scope.newStrategy.TITLE = "";
                 },
                 function (result) {
@@ -2088,9 +2125,13 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
 
 
         $scope.publishWipDeals = function () {
+            if ($scope.isWip) return;
+            $scope.setBusy("Loading...", "Loading the Deal Editor");
             $scope.saveEntireContractBase($state.current.name, true, true, 'contract.manager.strategy.wip', { cid: $scope.contractData.DC_ID, sid: $scope.curPricingStrategyId, pid: $scope.curPricingTableId });
         }
         $scope.backToPricingTable = function() {
+            if ($scope.isPtr) return;
+            $scope.setBusy("Loading...", "Loading the Pricing Table Editor");
             $scope.spreadNeedsInitialization = true;
             $state.go('contract.manager.strategy',
                 {
@@ -2103,6 +2144,32 @@ ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'is
 
         $scope.validateWipDeals = function () {
             $scope.saveEntireContractBase($state.current.name, true);
+        }
+
+        $scope.toggleTerms = function () {
+            var splitter = $("#k-splitter").data("kendoSplitter");
+            if (splitter.options.panes[1].collapsed) {
+                splitter.expand(".k-pane:last");
+            } else {
+                splitter.collapse(".k-pane:last");
+            }
+            splitter.resize();
+        }
+
+        $scope.gotoDealEntry = function () {
+            if ($scope.flowMode === "Deal Entry") return;
+            $scope.flowMode = "Deal Entry";
+            $state.go('contract.manager', { cid: $scope.contractData.DC_ID });
+        }
+        $scope.gotoCompliance = function () {
+            if ($scope.flowMode === "Compliance") return;
+            $scope.flowMode = "Compliance";
+            $state.go('contract.compliance', { cid: $scope.contractData.DC_ID });
+        }
+        $scope.gotoManage = function () {
+            if ($scope.flowMode === "Manage") return;
+            $scope.flowMode = "Manage";
+            $state.go('contract.summary', { cid: $scope.contractData.DC_ID });
         }
 
         topbar.hide();

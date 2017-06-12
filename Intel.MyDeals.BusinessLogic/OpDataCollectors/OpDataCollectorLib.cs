@@ -45,7 +45,7 @@ namespace Intel.MyDeals.BusinessLogic
                 MyDealsData secondaryMyDealsData = secondaryOpTypeGrp.GetByIDs(secondaryIds, secondaryOpDataElementTypes, data);
                 foreach (KeyValuePair<OpDataElementType, OpDataPacket<OpDataElementType>> kvp in secondaryMyDealsData)
                 {
-                    myDealsData[kvp.Key] = kvp.Value;
+                    if (kvp.Value.AllDataElements.Any()) myDealsData[kvp.Key] = kvp.Value;
                 }
             }
 

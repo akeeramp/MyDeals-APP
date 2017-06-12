@@ -312,6 +312,8 @@
     <Content Include="app\contract\controllers\datePickerModalCtrl.controller.js" />
     <Content Include="app\contract\controllers\multiSelectModalCtrl.controller.js" />
     <Content Include="app\contract\controllers\allDeals.controller.js" />
+    <Content Include="app\contract\partials\contractCompliance.html" />
+    <Content Include="app\contract\partials\contractComplianceHeader.html" />
     <Content Include="app\contract\partials\contractSummaryDeals.html" />
     <Content Include="app\contract\partials\datePickerModal.html" />
     <Content Include="app\contract\partials\contractSummaryPct.html" />
@@ -322,6 +324,14 @@
     <Content Include="app\contract\controllers\mrktSegMultiSelect.service.js" />
     <Content Include="app\contract\controllers\pricingTable.controller.js" />
     <Content Include="app\contract\partials\info.html" />
+    <Content Include="app\contract\partials\lnavCompliance.html" />
+    <Content Include="app\contract\partials\lnavComplianceMainMenu.html" />
+    <Content Include="app\contract\partials\lnavComplianceMenu.html" />
+    <Content Include="app\contract\partials\lnavComplianceMenuMini.html" />
+    <Content Include="app\contract\partials\lnavContractHeader.html" />
+    <Content Include="app\contract\partials\lnavFlow.html" />
+    <Content Include="app\contract\partials\lnavSummaryMainMenu.html" />
+    <Content Include="app\contract\partials\lnavSummaryMenuMini.html" />
     <Content Include="app\contract\productCAPBreakout\productCAPBreakout.controller.js" />
     <Content Include="app\contract\productCAPBreakout\productCAPBreakout.html" />
     <Content Include="app\contract\productCorrector\productCorrector.controller.js" />
@@ -1055,6 +1065,7 @@
     <Content Include="js\_util.js" />
     <Content Include="js\_utils.js" />
     <Content Include="Scripts\angular-bootstrap-toggle.js" />
+    <Content Include="Scripts\angular-confirm.min.js" />
     <Content Include="Scripts\angular-gridster.min.js" />
     <Content Include="Scripts\angular-nvd3.js" />
     <Content Include="Scripts\angular-nvd3.min.js" />

@@ -13,8 +13,8 @@
 </div>
 
 <div id="secContainerWrapper" ng-show="isAddStrategyHidden && isAddPricingTableHidden">
-    <div id="secHeader">
-        <div ng-show="curPricingTableId > 0" class="contractStratHeader col-md-11" style="padding-bottom: 5px;">
+    <div id="secHeader" ng-class="{'noborders': !isPrt && !isWip}">
+        <div ng-show="curPricingTableId > 0" class="contractStratHeader col-md-11">
             <div class="fl textCircleMd valid_{{ curPricingTable.PASSED_VALIDATION }}">{{ curPricingTable.OBJ_SET_TYPE_CD | limitTo:1 }}</div>
             <div class="myDealsControl"
                  op-control-flat
@@ -27,14 +27,16 @@
                  op-style="'color: #000000; width: 100%;'"></div>
             <div class="clearboth"></div>
         </div>
+        <div style="height: 37px; padding-left: 10px; border-bottom: 2px solid #bcbcbc;" ng-if="isPtr || isWip">
+            <div class="fl editorTab" ng-class="{'inactive': !isPtr}" ng-click="backToPricingTable()">Pricing Table Editor</div>
+            <div class="fl editorTab" ng-class="{'inactive': !isWip}" ng-click="publishWipDeals()">Deal Editor</div>
+            <div class="clearboth"></div>
+        </div>
     </div>
 
     <div id="secContainer">
-        <div class="smTabTitle smTabShowTerms" id="divTabTerms" style="display: none;" onclick="openSplitter()">
-            <i class="intelicon-pin-solid ssmIconBtn"></i> Show Additional Discounts & Requirements
-        </div>
         <div kendo-splitter
-             k-panes="[null, { collapsible: true, min: '235px', size: '235px' }]"
+             k-panes="[null, { collapsible: true, collapsed: true, min: '235px', size: '235px' }]"
              k-orientation="'vertical'"
              id="k-splitter"
              style="height: 100%; border: 0 solid transparent;">
@@ -80,9 +82,7 @@
     }
 
     .contractStratHeader .opUiContainer input.k-textbox, .contractStratHeader .opUiContainer input.k-textbox:hover {
-        border-top-color: transparent;
-        border-right-color: transparent;
-        border-left-color: transparent;
+        border-color: transparent;
         height: 30px;
         width: 100%;
     }
@@ -95,22 +95,54 @@
         float: left;
         width: 100%;
     }
+
+    .editorTab {
+        border-top: 1px solid #d7d7d7;
+        border-left: 1px solid #d7d7d7;
+        border-right: 1px solid #d7d7d7;
+        margin-right: 5px;
+        color: #00AEEF;
+        height: 36px;
+        padding: 6px 15px;
+        background-color: #ffffff;
+        cursor: default;
+    }
+    .editorTab.inactive {
+        background: #fdfdfd; /* Old browsers */
+        background: -moz-linear-gradient(top,  #fdfdfd 0%, #d9d9d9 100%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(top,  #fdfdfd 0%,#d9d9d9 100%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to bottom,  #fdfdfd 0%,#d9d9d9 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fdfdfd', endColorstr='#d9d9d9',GradientType=0 ); /* IE6-9 */
+        color: #003C71;
+        border-bottom: 2px solid #bcbcbc;
+        cursor: pointer;
+    }
+    .editorTab.inactive:hover {
+        background: #fdfdfd; /* Old browsers */
+        background: -moz-linear-gradient(top,  #d9d9d9 0%, #fdfdfd 100%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(top,  #d9d9d9 0%,#fdfdfd 100%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to bottom,  #d9d9d9 0%,#fdfdfd 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d9d9d9', endColorstr='#fdfdfd',GradientType=0 ); /* IE6-9 */
+        color: #00AEEF;
+    }
+
+    .noborders {
+        border: 0 solid transparent !important;
+    }
 </style>
 
 <script>
     function closeSplitter() {
         $("#k-splitter").data("kendoSplitter").collapse(".k-pane:last");
-        $("#divTabTerms").show();
         $("#k-splitter").data("kendoSplitter").resize();
     }
     function openSplitter() {
         $("#k-splitter").data("kendoSplitter").expand(".k-pane:last");
-        $("#divTabTerms").hide();
         $("#k-splitter").data("kendoSplitter").resize();
     }
 
     setTimeout(function () {
-        closeSplitter();
+        $("#k-splitter").data("kendoSplitter").resize();
     }, 2000);
 
 

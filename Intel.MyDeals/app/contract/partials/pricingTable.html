@@ -1,21 +1,6 @@
 ﻿<div ui-view="wipDealView" class="fullHeight">
-	<!--<div class="row">
-		<div class="col-md-11" style="padding-bottom: 5px;">
-			<div class="fl textCircleMd valid_{{ curPricingTable.PCT_RESULT }}">{{ curPricingTable.OBJ_SET_TYPE_CD | limitTo:1 }}</div>
-			<input type="text" ng-model="curPricingTable.TITLE" class="transparentInput fntLg noBottomBorder col-md-11" />
-		</div>
-	</div>-->
-
-	<!--<div class="k-tabstrip-wrapper" style=" background rgba(255,55,244, 0.5);
-		 width 100%;
-		 z-index 1000;
-		 position absolute;
-		 top 0px;">
-	</div>-->
-
-
-
-	<div style="position:absolute; left: 5px; z-index: 900;">
+    
+    <div style="position:absolute; left: 5px; z-index: 900;">
 		<!-- Save Button -->
 		<button class="btn btn-sm ssToolbarBtn" ng-class="{'disabled': !_dirty}" ng-click="saveEntireContract()" title="Save Pricing Table">
 			<table>
@@ -23,23 +8,26 @@
 					<td>
 						<i class="fa fa-floppy-o skyBlue" aria-hidden="true" ng-class="{'fa-disabled': !_dirty}" style="font-size: 29px; margin-top: 2px;"></i>
 					</td>
+                    <td style="padding-left: 5px; color: #00AEEF; text-align: left;">
+                        Save <br />Pricing Table
+                    </td>
 				</tr>
 			</table>
 		</button>
 	</div>
 
-	<div style="position:absolute; left: 140px; z-index: 900;">
+	<div style="position:absolute; left: 200px; z-index: 900;">
 		<table style="height: 37px;">
 			<tr>
 				<td style="padding: 1px 2px 0 10px;">
 					<!-- Product Selector Button -->
-					<button class="btn btn-sm ssToolbarBtn" ng-click="openProductSelector()" style="border-left: 1px solid #d2dade;" title="Open Product Selector">
+					<button class="btn btn-sm ssToolbarBtn" ng-click="openProductSelector()" title="Open Product Selector">
 						<table>
 							<tr>
 								<td>
 									<i class="fa fa-mouse-pointer skyBlue" aria-hidden="true" style="font-size: 26px"></i>
 								</td>
-								<td style="padding-left: 5px">
+								<td style="padding-left: 5px; color: #00AEEF;">
 									Product <br />Selector
 								</td>
 							</tr>
@@ -53,21 +41,20 @@
 								<td>
 									<i class="intelicon-protection-checked-verified-outlined skyBlue" aria-hidden="true" style="font-size: 30px"></i>
 								</td>
-								<td style="padding-left: 5px">
+								<td style="padding-left: 5px; color: #00AEEF;">
 									Validate
 								</td>
 							</tr>
 						</table>
 					</button>
-					<!-- view WIP grid Button -->
-					<button class="btn btn-sm ssToolbarBtn" ng-click="validateSavepublishWipDeals()" title="Generate Deals.  This will Save and Validate the Pricing Table and Generate Deals.">
+					<button class="btn btn-sm ssToolbarBtn" ng-click="toggleTerms()" title="Show/Hide Additional Discounts and Requirements.">
 						<table>
 							<tr>
 								<td>
-									<i class="intelicon-export-solid skyBlue" aria-hidden="true" style="font-size: 30px"></i>
+									<i class="intelicon-legal skyBlue" aria-hidden="true" style="font-size: 30px"></i>
 								</td>
-								<td style="padding-left: 5px; text-align: left;">
-									Generate<br />Deals
+								<td style="padding-left: 5px; text-align: left; color: #00AEEF;">
+									Show/Hide<br />Additional Discounts
 								</td>
 							</tr>
 						</table>

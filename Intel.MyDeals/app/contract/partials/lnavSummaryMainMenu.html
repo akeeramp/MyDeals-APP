@@ -1,0 +1,58 @@
+﻿<div ng-hide="isPricingStrategiesHidden" style="margin-top: 10px; ">
+
+    <div class="lnav-sum-container">
+
+        <h4>Contract Manager</h4>
+
+        <div class="lnav-sum-menu-item">
+            <a ui-sref="contract.summary" ui-sref-opts="{reload: true}"><div id="approvalDiv">Approval View</div></a>
+            <a ui-sref="contract.summary.dealtype" ui-sref-opts="{reload: true}"><div id="dealTypeDiv">Deal Type</div></a>
+            <a ui-sref="contract.pct" ui-sref-opts="{reload: true}"><div id="pctDiv">Cost Test</div></a>
+            <a ui-sref="contract.deals" ui-sref-opts="{reload: true}"><div id="dealsDiv">All Deals</div></a>
+        </div>
+
+    </div>
+
+</div>
+
+<style>
+    .lnav-sum-container {
+        margin-left: 15px;
+        margin-right: 15px;
+    }
+
+        .lnav-sum-container h4 {
+            font-size: 18px;
+            border-bottom: 2px solid #ffffff;
+            margin-top: 20px;
+        }
+
+    .lnav-sum-menu-item {
+        color: #ffffff;
+    }
+
+        .lnav-sum-menu-item div {
+            color: #ffffff;
+            cursor: pointer;
+            margin: 1px 0 1px 10px;
+            padding: 4px;
+            font-size: 14px;
+        }
+
+            .lnav-sum-menu-item div:hover {
+                background-color: #00AEEF;
+            }
+
+            .lnav-sum-menu-item div.active {
+                background-color: #0071C5;
+                font-weight: 600;
+            }
+
+                .lnav-sum-menu-item div.active:hover {
+                    background-color: #0071C5;
+                }
+
+        .lnav-sum-menu-item a:hover {
+            text-decoration: none;
+        }
+</style>
