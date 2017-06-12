@@ -13,7 +13,7 @@
 </div>
 
 <div id="secContainerWrapper" ng-show="isAddStrategyHidden && isAddPricingTableHidden">
-    <div id="secHeader" ng-class="{'noborders': !isPrt && !isWip}">
+    <div id="secHeader" ng-class="{'noborders': !isPtr && !isWip}">
         <div ng-show="curPricingTableId > 0" class="contractStratHeader col-md-11">
             <div class="fl textCircleMd valid_{{ curPricingTable.PASSED_VALIDATION }}">{{ curPricingTable.OBJ_SET_TYPE_CD | limitTo:1 }}</div>
             <div class="myDealsControl"
