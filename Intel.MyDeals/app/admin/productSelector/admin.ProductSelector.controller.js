@@ -245,7 +245,7 @@
                 { field: "ROW_NUMBER", title: " ", width: "30px", editor: RWNM },
                 { field: "USR_INPUT", title: "Product Name", width: "200px" },
                 { field: "FILTER", template: " #= FILTER # ", title: "Filter", width: "100px" },
-                { field: "EXCLUDE", title: "Exclude", width: "100px" },                
+                { field: "EXCLUDE", title: "Exclude", width: "100px" },
                 { field: "START_DATE", template: "#=gridUtils.uiControlWrapper(data, 'START_DATE', \"date:'MM/dd/yyyy'\")#", title: "Start date", width: "150px", editor: dateTime },
                 { field: "END_DATE", template: "#=gridUtils.uiControlWrapper(data, 'END_DATE', \"date:'MM/dd/yyyy'\")#", title: "End Date", width: "150px", editor: dateTime }
             ]
@@ -297,7 +297,7 @@
                     }
                     if (resultData.length > 0) {
                         vm.checked = true;
-                        ProductSelectorService.TranslateProducts(dataSelect, CUST_CD, GEO_MBR_SID)
+                        ProductSelectorService.TranslateProducts(dataSelect, CUST_CD)
                             .then(
                             function (response) {
                                 if (response.statusText == "OK") {
@@ -345,7 +345,7 @@
                 dataSelect.push(sendObj);
 
                 if (dataSelect.length > 0) {
-                    ProductSelectorService.TranslateProducts(dataSelect, CUST_CD, GEO_MBR_SID)
+                    ProductSelectorService.TranslateProducts(dataSelect, CUST_CD)
                         .then(
                         function (response) {
                             if (response.statusText == "OK") {

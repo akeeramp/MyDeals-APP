@@ -4,9 +4,9 @@
        .module('app.admin') //TODO: once we integrate with contract manager change the module to contract
        .controller('ProductSelectorModalController', ProductSelectorModalController);
 
-    ProductSelectorModalController.$inject = ['$filter', '$scope', '$uibModal', '$uibModalInstance', 'productSelectionLevels', 'ProductSelectorService', 'contractData', 'pricingTableRow', '$timeout', 'logger', 'gridConstants'];
+    ProductSelectorModalController.$inject = ['$filter', '$scope', '$uibModal', '$uibModalInstance', 'productSelectionLevels', 'enableSplitProducts', 'ProductSelectorService', 'pricingTableRow', '$timeout', 'logger', 'gridConstants'];
 
-    function ProductSelectorModalController($filter, $scope, $uibModal, $uibModalInstance, productSelectionLevels, ProductSelectorService, contractData, pricingTableRow, $timeout, logger, gridConstants) {
+    function ProductSelectorModalController($filter, $scope, $uibModal, $uibModalInstance, productSelectionLevels, enableSplitProducts, ProductSelectorService, pricingTableRow, $timeout, logger, gridConstants) {
         var vm = this;
         // Non CPU verticals with drill down level 4
         var verticalsWithDrillDownLevel4 = ["EIA CPU", "EIA MISC"];
@@ -31,7 +31,28 @@
         vm.hideSelection = false;
         vm.selectedItems = [];
         vm.prdSelLvlAtrbsForCategory = [];
+        vm.enableSplitProducts = enableSplitProducts;
+        vm.splitProducts = false;
+        vm.openCAPBreakOut = openCAPBreakOut;
+        vm.showSingleProductHeirarchy = showSingleProductHeirarchy;
         var selectionProcessed = false;
+
+        function populateValidProducts() {
+            if (pricingTableRow.PTR_SYS_PRD == "") {
+                return;
+            }
+            var sysProducts = JSON.parse(pricingTableRow.PTR_SYS_PRD);
+            for (var key in sysProducts) {
+                if (sysProducts.hasOwnProperty(key)) {
+                    angular.forEach(sysProducts[key], function (item) {
+                        vm.addedProducts.push(item);
+                    });
+                }
+            }
+        }
+
+        populateValidProducts();
+
         // Get the drilldown items based on the selection level
         // The selection follows a pattern, if only single item present select it,
         // if the selected item is NA look for the alternate columns for values ex: GDM Family, NAND Famliy
@@ -214,8 +235,7 @@
                 "drillDownFilter4": null,
                 "drillDownFilter5": null,
                 "custSid": pricingTableRow.CUST_MBR_SID,
-                "geoSid": '1', //pricingTableRow.GEO_MBR_SID.toString()
-                //TODO: Make changes to proc to accept comma separated GEO's instead of GEO_MBR_SID's
+                "geoSid": pricingTableRow.GEO_COMBINED.toString()
             }
 
             // We need to send two special attributes for getting the data for non CPU products
@@ -381,10 +401,22 @@
                     width: "150px"
                 },
                 {
-                    field: "CAP_START_DATE",
+                    field: "CAP_START",
                     title: "CAP Availability date",
-                    template: "<div>{{vm.getFormatedDate(dataItem.CAP_START_DATE)}}</div>",
+                    template: "<div>{{vm.getFormatedDate(dataItem.CAP_START)}}</div>",
                     width: "150px"
+                },
+                {
+                    field: "CAP",
+                    title: "CAP Price",
+                    width: "150px",
+                    template: "<op-popover ng-click='vm.openCAPBreakOut(dataItem, \"CAP\")' op-options='CAP' op-label='#= CAP #' op-data='vm.getPrductDetails(dataItem, \"CAP\")' />"
+                },
+                {
+                    field: "YCS2",
+                    title: "YCS2",
+                    width: "150px",
+                    template: "<op-popover op-options='YCS2' op-label='#= YCS2 #' op-data='vm.getPrductDetails(dataItem, \"YCS2\")' />"
                 },
                 {
                     field: "CPU_PROCESSOR_NUMBER",
@@ -395,22 +427,18 @@
                     field: "FMLY_NM_MM",
                     title: "EDW Family Name",
                     template: "<div kendo-tooltip k-content='dataItem.FMLY_NM_MM'>{{dataItem.FMLY_NM_MM}}</div>",
-                    //template: "<div kendo-tooltip k-content='dataItem.FMLY_NM_MM'>{{(dataItem.FMLY_NM_MM | limitTo: 20) + (dataItem.FMLY_NM_MM.length > 20 ? '...' : '')}}</div>",
                     width: "150px"
                 },
                 {
                     field: "EPM_NM",
                     title: "EPM Name",
-                    //TODO: Convert this a limitTo directive
                     template: "<div kendo-tooltip k-content='dataItem.EPM_NM'>{{dataItem.EPM_NM}}</div>",
-                    //template: "<div kendo-tooltip k-content='dataItem.EPM_NM'>{{(dataItem.EPM_NM | limitTo: 20) + (dataItem.EPM_NM.length > 20 ? '...' : '')}}</div>",
                     width: "180px"
                 },
                 {
                     field: "SKU_NM",
                     title: "SKU Name",
                     template: "<div kendo-tooltip k-content='dataItem.SKU_NM'>{{dataItem.SKU_NM}}</div>",
-                    //template: "<div kendo-tooltip k-content='dataItem.SKU_NM'>{{(dataItem.SKU_NM | limitTo: 20) + (dataItem.SKU_NM.length > 20 ? '...' : '')}}</div>",
                     width: "180px"
                 },
                 {
@@ -457,18 +485,6 @@
                     field: "MM_CUST_CUSTOMER",
                     title: "MM Customer Name",
                     width: "150px"
-                },
-                {
-                    field: "CAP",
-                    title: "CAP Price",
-                    width: "150px",
-                    template: "<op-popover ng-click='vm.openCAPBreakOut(dataItem, null)' op-options='CAP' op-label='#= CAP #' op-data='vm.getPrductDetails(dataItem, null)' />"
-                },
-                {
-                    field: "YCS2",
-                    title: "YCS2",
-                    width: "150px",
-                    template: "<op-popover op-options='YCS2' op-label='#= YCS2 #' op-data='vm.getPrductDetails(dataItem, \"YCS2\")' />"
                 }
             ]
         }
@@ -477,16 +493,25 @@
             return [{
                 'CUST_MBR_SID': pricingTableRow.CUST_MBR_SID,
                 'PRD_MBR_SID': dataItem.PRD_MBR_SID,
-                'GEO_MBR_SID': pricingTableRow.GEO_MBR_SID.toString(),
+                'GEO_MBR_SID': pricingTableRow.GEO_COMBINED,
                 'DEAL_STRT_DT': pricingTableRow.START_DT,
                 'DEAL_END_DT': pricingTableRow.END_DT,
                 'getAvailable': 'N',
-                'priceCondition': priceCondition == null ? dataItem.CAP_PRC_COND : priceCondition
+                'priceCondition': priceCondition
             }];
         }
 
         // TODO remove once integrated in CM
-        vm.openCAPBreakOut = function (dataItem, priceCondition) {
+        function openCAPBreakOut(dataItem, priceCondition) {
+            var productData = {
+                'CUST_MBR_SID': pricingTableRow.CUST_MBR_SID,
+                'PRD_MBR_SID': dataItem.PRD_MBR_SID,
+                'GEO_MBR_SID': pricingTableRow.GEO_COMBINED,
+                'DEAL_STRT_DT': pricingTableRow.START_DT,
+                'DEAL_END_DT': pricingTableRow.END_DT,
+                'getAvailable': 'N',
+                'priceCondition': priceCondition
+            }
             var capModal = $uibModal.open({
                 backdrop: 'static',
                 templateUrl: 'app/contract/productCAPBreakout/productCAPBreakout.html',
@@ -495,8 +520,7 @@
                 windowClass: 'cap-modal-window',
                 size: 'lg',
                 resolve: {
-                    productData: angular.copy(dataItem),
-                    contractData: angular.copy(contractData),
+                    productData: angular.copy(productData),
                 }
             });
 
@@ -513,7 +537,17 @@
 
         vm.save = function () {
             logger.success("Products add successful");
-            $uibModalInstance.close(vm.addedProducts);
+
+            var pricingTableSysProducts = {};
+            angular.forEach(vm.addedProducts, function (item, key) {
+                if (!pricingTableSysProducts.hasOwnProperty(item.USR_INPUT)) {
+                    pricingTableSysProducts[item.USR_INPUT] = [item]
+                } else {
+                    pricingTableSysProducts[item.USR_INPUT].push(item);
+                }
+            });
+            var productSelectorOutput = { 'splitProducts': vm.splitProducts, 'validateSelectedProducts': pricingTableSysProducts };
+            $uibModalInstance.close(productSelectorOutput);
         }
 
         // Load mark levels when coming from a blank cell
@@ -567,15 +601,15 @@
             noDataTemplate: 'Press enter to search',
             select: function (e) {
                 selectionProcessed = true;
-                // TODO when Integrated make  remove this
                 var data = {
                     "searchHash": e.dataItem.HIER_NM_HASH,
                     "startDate": pricingTableRow.START_DT,
                     "endDate": pricingTableRow.END_DT,
                     "selectionLevel": e.dataItem.PRD_ATRB_SID,
+                    "drillDownFilter4": null,
+                    "drillDownFilter5": null,
                     "custSid": pricingTableRow.CUST_MBR_SID,
-                    "geoSid": '1', //pricingTableRow.GEO_MBR_SID.toString()
-                    //TODO: Make changes to proc to accept comma separated GEO's instead of GEO_MBR_SID's
+                    "geoSid": pricingTableRow.GEO_COMBINED.toString()
                 }
 
                 ProductSelectorService.GetProductSelectionResults(data).then(function (response) {
@@ -586,6 +620,25 @@
             },
             template: '<div class="productSelector searchTemplate">#: HIER_VAL_NM #<div><small><b>Category:</b> #= PRD_CAT_NM #</small><small> |<b> Brand:</b> #= BRND_NM #</small><small> |<b> Family:</b> #= FMLY_NM #</small><small> |<b> Processor:</b> #= PCSR_NBR #</small><small> |<b> L4:</b> #= DEAL_PRD_NM #</small></div></div>',
         };
+
+        function showSingleProductHeirarchy(product) {
+            var data = {
+                "searchHash": product.HIER_NM_HASH,
+                "startDate": pricingTableRow.START_DT,
+                "endDate": pricingTableRow.END_DT,
+                "selectionLevel": product.PRD_ATRB_SID,
+                "drillDownFilter4": null,
+                "drillDownFilter5": null,
+                "custSid": pricingTableRow.CUST_MBR_SID,
+                "geoSid": pricingTableRow.GEO_COMBINED.toString()
+            }
+
+            ProductSelectorService.GetProductSelectionResults(data).then(function (response) {
+                processProducts(response.data);
+            }, function (response) {
+                logger.error("Unable to get products.", response, response.statusText);
+            });
+        }
 
         // Search functionality code, refine this further
         vm.productSearchValues = [];

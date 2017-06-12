@@ -244,8 +244,8 @@ namespace Intel.MyDeals.BusinessLogic
             var productLookup = new ProductLookup
             {
                 ProdctTransformResults = new Dictionary<string, List<string>>(),
-                DuplicateProducts = new Dictionary<string, Dictionary<string, List<PRD_LOOKUP_RESULTS>>>(),
-                ValidProducts = new Dictionary<string, Dictionary<string, List<PRD_LOOKUP_RESULTS>>>(),
+                DuplicateProducts = new Dictionary<string, Dictionary<string, List<PRD_TRANSLATION_RESULTS>>>(),
+                ValidProducts = new Dictionary<string, Dictionary<string, List<PRD_TRANSLATION_RESULTS>>>(),
                 InValidProducts = new Dictionary<string, List<string>>()
             };
 
@@ -342,7 +342,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// </summary>
         /// <param name="productLookup">Result object</param>
         /// <param name="productMatchResults">Master Product match list</param>
-        private static void ExtractValidandDuplicateProducts(ProductLookup productLookup, List<PRD_LOOKUP_RESULTS> productMatchResults)
+        private static void ExtractValidandDuplicateProducts(ProductLookup productLookup, List<PRD_TRANSLATION_RESULTS> productMatchResults)
         {
             foreach (var userProduct in productLookup.ProdctTransformResults)
             {
@@ -386,9 +386,9 @@ namespace Intel.MyDeals.BusinessLogic
                 {
                     var duplicateRecords = productMatchResults.FindAll(p => duplicateProds.Contains(p.USR_INPUT));
 
-                    var records = new Dictionary<string, List<PRD_LOOKUP_RESULTS>>();
+                    var records = new Dictionary<string, List<PRD_TRANSLATION_RESULTS>>();
 
-                    duplicateProds.ToList().ForEach(d => records[d] = new List<PRD_LOOKUP_RESULTS>());
+                    duplicateProds.ToList().ForEach(d => records[d] = new List<PRD_TRANSLATION_RESULTS>());
 
                     duplicateRecords.ForEach(r => records[r.USR_INPUT].Add(r));
 
@@ -409,8 +409,8 @@ namespace Intel.MyDeals.BusinessLogic
                 if (isConflictValid.Any())
                 {
                     var validProduct = productMatchResults.FindAll(p => isConflictValid.Contains(p.USR_INPUT));
-                    var validRecords = new Dictionary<string, List<PRD_LOOKUP_RESULTS>>();
-                    isConflictValid.ToList().ForEach(d => validRecords[d] = new List<PRD_LOOKUP_RESULTS>());
+                    var validRecords = new Dictionary<string, List<PRD_TRANSLATION_RESULTS>>();
+                    isConflictValid.ToList().ForEach(d => validRecords[d] = new List<PRD_TRANSLATION_RESULTS>());
                     validProduct.ForEach(r => validRecords[r.USR_INPUT].Add(r));
                     productLookup.ValidProducts[userProduct.Key] = validRecords;
                 }
@@ -423,7 +423,7 @@ namespace Intel.MyDeals.BusinessLogic
             }
         }
 
-        public List<PRD_LOOKUP_RESULTS> GetProductDetails(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID)
+        public List<PRD_TRANSLATION_RESULTS> GetProductDetails(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID)
         {
             return _productDataLib.GetProductDetails(productsToMatch, CUST_MBR_SID);
         }
@@ -543,8 +543,8 @@ namespace Intel.MyDeals.BusinessLogic
             var productLookup = new ProductLookup
             {
                 ProdctTransformResults = new Dictionary<string, List<string>>(),
-                DuplicateProducts = new Dictionary<string, Dictionary<string, List<PRD_LOOKUP_RESULTS>>>(),
-                ValidProducts = new Dictionary<string, Dictionary<string, List<PRD_LOOKUP_RESULTS>>>(),
+                DuplicateProducts = new Dictionary<string, Dictionary<string, List<PRD_TRANSLATION_RESULTS>>>(),
+                ValidProducts = new Dictionary<string, Dictionary<string, List<PRD_TRANSLATION_RESULTS>>>(),
                 InValidProducts = new Dictionary<string, List<string>>()
             };
             return productLookup;

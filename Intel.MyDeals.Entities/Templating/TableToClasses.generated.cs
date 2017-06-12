@@ -24,227 +24,227 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:21:28 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class AtrbMstr {
-	
+
 	[DataMember]
 	public Nullable<System.Int32> ACTV_IND {set;get;}
-	
-	
+
+
 	[DataMember]
 	public Nullable<System.Boolean> ATRB_ACTV_IND {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String ATRB_CD {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String ATRB_COL_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String ATRB_DESC {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String ATRB_EXT_PRO {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String ATRB_FK_TBL_DSPLY_COL_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String ATRB_FK_TBL_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String ATRB_FK_TBL_PK_COL_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String ATRB_FK_TBL_SCHMA {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String ATRB_LBL {set;get;}
-	
-	
+
+
 	[DataMember]
 	public Nullable<System.Int32> ATRB_MAX_LEN {set;get;}
-	
-	
+
+
 	[DataMember]
 	public Nullable<System.Int32> ATRB_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String ATRB_SRC_TBL_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String ATRB_SRC_TBL_SCHMA {set;get;}
-	
-	
+
+
 	[DataMember]
 	public Nullable<System.Int32> ATRB_SRT_ORD {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String ATRB_TGT_COL {set;get;}
-	
-	
+
+
 	[DataMember]
 	public Nullable<System.Boolean> ATRB_UNIQ_IND {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String ATRB_UNIQ_LEVELS {set;get;}
-	
-	
+
+
 	[DataMember]
 	public Nullable<System.DateTime> CHG_DTM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public Nullable<System.Int32> CHG_EMP_WWID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public Nullable<System.Boolean> COST_TST_SCRN_FLAG {set;get;}
-	
-	
+
+
 	[DataMember]
 	public Nullable<System.DateTime> CRE_DTM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public Nullable<System.Int32> CRE_EMP_WWID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public Nullable<System.Boolean> DATA_TYPE_ACTV_IND {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String DATA_TYPE_CD {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String DATA_TYPE_DESC {set;get;}
-	
-	
+
+
 	[DataMember]
 	public Nullable<System.Int32> DATA_TYPE_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public Nullable<System.Boolean> DIM_ACTV_IND {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String DIM_ATRB_COL_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String DIM_CD {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String DIM_DATA_COL_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String DIM_DFLT_ROOT_ATRB_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String DIM_INTRFC_TBL_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String DIM_INTRFC_TBL_SCHMA {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String DIM_MAT_VW_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String DIM_MAT_VW_SCHMA {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String DIM_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public Nullable<System.Int16> DIM_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String DIM_TBL_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String DIM_TBL_SCHMA {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String DOT_NET_DATA_TYPE {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String FRMT_MSK {set;get;}
-	
-	
+
+
 	[DataMember]
 	public Nullable<System.Boolean> IS_IDX {set;get;}
-	
-	
+
+
 	[DataMember]
 	public Nullable<System.Int32> KEY_AT_ATRB_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String LEGACY_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public Nullable<System.Int32> LKUP_ROOT_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public Nullable<System.Int32> PIVOT_MSK {set;get;}
-	
-	
+
+
 	[DataMember]
 	public Nullable<System.Boolean> POST_PRCSS_FLAG {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String SQL_DATA_TYPE {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String SQL_DATA_TYPE_FQ {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String TGT_COL_TYPE {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String UI_TYPE_CD {set;get;}
-	
-	
+
+
 	/*
 	private static List<AtrbMstr> AtrbMstrFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<AtrbMstr>();
 	int IDX_ACTV_IND = DB.GetReaderOrdinal(rdr, "ACTV_IND");
 	int IDX_ATRB_ACTV_IND = DB.GetReaderOrdinal(rdr, "ATRB_ACTV_IND");
@@ -299,7 +299,7 @@ namespace Intel.MyDeals.Entities {
 	int IDX_SQL_DATA_TYPE_FQ = DB.GetReaderOrdinal(rdr, "SQL_DATA_TYPE_FQ");
 	int IDX_TGT_COL_TYPE = DB.GetReaderOrdinal(rdr, "TGT_COL_TYPE");
 	int IDX_UI_TYPE_CD = DB.GetReaderOrdinal(rdr, "UI_TYPE_CD");
-	
+
 	while (rdr.Read()){
 	ret.Add(new AtrbMstr {
 	ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(Nullable<System.Int32>) : rdr.GetFieldValue<Nullable<System.Int32>>(IDX_ACTV_IND),
@@ -360,7 +360,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class AtrbMstr
 
 	///<summary>
@@ -370,42 +370,42 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:21:28 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class AdminConstant {
-	
+
 	[DataMember]
 	public System.String CNST_DESC {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String CNST_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 CNST_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String CNST_VAL_TXT {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Boolean UI_UPD_FLG {set;get;}
-	
-	
+
+
 	/*
 	private static List<AdminConstant> AdminConstantFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<AdminConstant>();
 	int IDX_CNST_DESC = DB.GetReaderOrdinal(rdr, "CNST_DESC");
 	int IDX_CNST_NM = DB.GetReaderOrdinal(rdr, "CNST_NM");
 	int IDX_CNST_SID = DB.GetReaderOrdinal(rdr, "CNST_SID");
 	int IDX_CNST_VAL_TXT = DB.GetReaderOrdinal(rdr, "CNST_VAL_TXT");
 	int IDX_UI_UPD_FLG = DB.GetReaderOrdinal(rdr, "UI_UPD_FLG");
-	
+
 	while (rdr.Read()){
 	ret.Add(new AdminConstant {
 	CNST_DESC = (IDX_CNST_DESC < 0 || rdr.IsDBNull(IDX_CNST_DESC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CNST_DESC),
@@ -418,7 +418,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class AdminConstant
 
 	///<summary>
@@ -428,51 +428,51 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:21:29 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class AdminApplications {
-	
+
 	[DataMember]
 	public System.Boolean ACTV_IND {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String APP_DESC {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String APP_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 APP_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String APP_SUITE {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime CHG_DTM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 CHG_EMP_WWID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime CRE_DTM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 CRE_EMP_WWID {set;get;}
-	
-	
+
+
 	/*
 	private static List<AdminApplications> AdminApplicationsFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<AdminApplications>();
 	int IDX_ACTV_IND = DB.GetReaderOrdinal(rdr, "ACTV_IND");
 	int IDX_APP_DESC = DB.GetReaderOrdinal(rdr, "APP_DESC");
@@ -483,7 +483,7 @@ namespace Intel.MyDeals.Entities {
 	int IDX_CHG_EMP_WWID = DB.GetReaderOrdinal(rdr, "CHG_EMP_WWID");
 	int IDX_CRE_DTM = DB.GetReaderOrdinal(rdr, "CRE_DTM");
 	int IDX_CRE_EMP_WWID = DB.GetReaderOrdinal(rdr, "CRE_EMP_WWID");
-	
+
 	while (rdr.Read()){
 	ret.Add(new AdminApplications {
 	ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_ACTV_IND),
@@ -500,7 +500,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class AdminApplications
 
 	///<summary>
@@ -510,67 +510,67 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:21:29 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class AdminDealType {
-	
+
 	[DataMember]
 	public System.Boolean ACTV_IND {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Boolean ALL_TYPE_FLG {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime CHG_DTM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 CHG_EMP_WWID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime CRE_DTM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 CRE_EMP_WWID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 OBJ_ATRB_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String OBJ_SET_TYPE_CD {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String OBJ_SET_TYPE_DESC {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 OBJ_SET_TYPE_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 TEMPLT_DEAL_NBR {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 TEMPLT_DEAL_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String TRKR_NBR_DT_LTR {set;get;}
-	
-	
+
+
 	/*
 	private static List<AdminDealType> AdminDealTypeFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<AdminDealType>();
 	int IDX_ACTV_IND = DB.GetReaderOrdinal(rdr, "ACTV_IND");
 	int IDX_ALL_TYPE_FLG = DB.GetReaderOrdinal(rdr, "ALL_TYPE_FLG");
@@ -585,7 +585,7 @@ namespace Intel.MyDeals.Entities {
 	int IDX_TEMPLT_DEAL_NBR = DB.GetReaderOrdinal(rdr, "TEMPLT_DEAL_NBR");
 	int IDX_TEMPLT_DEAL_SID = DB.GetReaderOrdinal(rdr, "TEMPLT_DEAL_SID");
 	int IDX_TRKR_NBR_DT_LTR = DB.GetReaderOrdinal(rdr, "TRKR_NBR_DT_LTR");
-	
+
 	while (rdr.Read()){
 	ret.Add(new AdminDealType {
 	ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_ACTV_IND),
@@ -606,7 +606,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class AdminDealType
 
 	///<summary>
@@ -616,63 +616,63 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:21:29 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class AdminRoleType {
-	
+
 	[DataMember]
 	public System.Boolean ACTV_IND {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 APP_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime CHG_DTM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 CHG_EMP_WWID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime CRE_DTM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 CRE_EMP_WWID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Boolean IS_SNGL_SLCT {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String ROLE_DESC {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String ROLE_DSPLY_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String ROLE_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 ROLE_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String ROLE_TIER_NM {set;get;}
-	
-	
+
+
 	/*
 	private static List<AdminRoleType> AdminRoleTypeFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<AdminRoleType>();
 	int IDX_ACTV_IND = DB.GetReaderOrdinal(rdr, "ACTV_IND");
 	int IDX_APP_SID = DB.GetReaderOrdinal(rdr, "APP_SID");
@@ -686,7 +686,7 @@ namespace Intel.MyDeals.Entities {
 	int IDX_ROLE_NM = DB.GetReaderOrdinal(rdr, "ROLE_NM");
 	int IDX_ROLE_SID = DB.GetReaderOrdinal(rdr, "ROLE_SID");
 	int IDX_ROLE_TIER_NM = DB.GetReaderOrdinal(rdr, "ROLE_TIER_NM");
-	
+
 	while (rdr.Read()){
 	ret.Add(new AdminRoleType {
 	ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_ACTV_IND),
@@ -706,7 +706,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class AdminRoleType
 
 	///<summary>
@@ -716,51 +716,51 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:21:31 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class SecurityActions {
-	
+
 	[DataMember]
 	public System.String ACTN_CAT_CD {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String ACTN_DESC {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String ACTN_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime CHG_DTM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 CHG_EMP_WWID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime CRE_DTM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 CRE_EMP_WWID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 SECUR_ACTN_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 SRT_ORD {set;get;}
-	
-	
+
+
 	/*
 	private static List<SecurityActions> SecurityActionsFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<SecurityActions>();
 	int IDX_ACTN_CAT_CD = DB.GetReaderOrdinal(rdr, "ACTN_CAT_CD");
 	int IDX_ACTN_DESC = DB.GetReaderOrdinal(rdr, "ACTN_DESC");
@@ -771,7 +771,7 @@ namespace Intel.MyDeals.Entities {
 	int IDX_CRE_EMP_WWID = DB.GetReaderOrdinal(rdr, "CRE_EMP_WWID");
 	int IDX_SECUR_ACTN_SID = DB.GetReaderOrdinal(rdr, "SECUR_ACTN_SID");
 	int IDX_SRT_ORD = DB.GetReaderOrdinal(rdr, "SRT_ORD");
-	
+
 	while (rdr.Read()){
 	ret.Add(new SecurityActions {
 	ACTN_CAT_CD = (IDX_ACTN_CAT_CD < 0 || rdr.IsDBNull(IDX_ACTN_CAT_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ACTN_CAT_CD),
@@ -788,7 +788,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class SecurityActions
 
 	///<summary>
@@ -798,27 +798,27 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:21:34 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class LogConfig {
-	
+
 	[DataMember]
 	public System.Boolean IsActive {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String MsgSrc {set;get;}
-	
-	
+
+
 	/*
 	private static List<LogConfig> LogConfigFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<LogConfig>();
 	int IDX_IsActive = DB.GetReaderOrdinal(rdr, "IsActive");
 	int IDX_MsgSrc = DB.GetReaderOrdinal(rdr, "MsgSrc");
-	
+
 	while (rdr.Read()){
 	ret.Add(new LogConfig {
 	IsActive = (IDX_IsActive < 0 || rdr.IsDBNull(IDX_IsActive)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_IsActive),
@@ -828,7 +828,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class LogConfig
 
 	///<summary>
@@ -838,51 +838,51 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:21:34 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class CustomerDivision {
-	
+
 	[DataMember]
 	public System.Boolean ACTV_IND {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String CUST_CAT {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String CUST_DIV_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 CUST_DIV_NM_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 CUST_MBR_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String CUST_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 CUST_NM_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String CUST_TYPE {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String HOSTED_GEO {set;get;}
-	
-	
+
+
 	/*
 	private static List<CustomerDivision> CustomerDivisionFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<CustomerDivision>();
 	int IDX_ACTV_IND = DB.GetReaderOrdinal(rdr, "ACTV_IND");
 	int IDX_CUST_CAT = DB.GetReaderOrdinal(rdr, "CUST_CAT");
@@ -893,7 +893,7 @@ namespace Intel.MyDeals.Entities {
 	int IDX_CUST_NM_SID = DB.GetReaderOrdinal(rdr, "CUST_NM_SID");
 	int IDX_CUST_TYPE = DB.GetReaderOrdinal(rdr, "CUST_TYPE");
 	int IDX_HOSTED_GEO = DB.GetReaderOrdinal(rdr, "HOSTED_GEO");
-	
+
 	while (rdr.Read()){
 	ret.Add(new CustomerDivision {
 	ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_ACTV_IND),
@@ -910,7 +910,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class CustomerDivision
 
 	///<summary>
@@ -920,59 +920,59 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:21:35 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class UserVitalsRole {
-	
+
 	[DataMember]
 	public System.String APP_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 APP_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String EMAIL_ADDR {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 EMP_WWID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String FRST_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String IDSID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String LST_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String MI {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String ROLE_DSPLY_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String ROLE_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 ROLE_SID {set;get;}
-	
-	
+
+
 	/*
 	private static List<UserVitalsRole> UserVitalsRoleFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<UserVitalsRole>();
 	int IDX_APP_NM = DB.GetReaderOrdinal(rdr, "APP_NM");
 	int IDX_APP_SID = DB.GetReaderOrdinal(rdr, "APP_SID");
@@ -985,7 +985,7 @@ namespace Intel.MyDeals.Entities {
 	int IDX_ROLE_DSPLY_NM = DB.GetReaderOrdinal(rdr, "ROLE_DSPLY_NM");
 	int IDX_ROLE_NM = DB.GetReaderOrdinal(rdr, "ROLE_NM");
 	int IDX_ROLE_SID = DB.GetReaderOrdinal(rdr, "ROLE_SID");
-	
+
 	while (rdr.Read()){
 	ret.Add(new UserVitalsRole {
 	APP_NM = (IDX_APP_NM < 0 || rdr.IsDBNull(IDX_APP_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_APP_NM),
@@ -1004,7 +1004,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class UserVitalsRole
 
 	///<summary>
@@ -1014,37 +1014,37 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:21:35 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class UserVitalsSecurityAction {
-	
+
 	[DataMember]
 	public System.Int64 ATRB_BIT {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String ATRB_CD {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int64 ATRB_MAGNITUDE {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 ATRB_SID {set;get;}
-	
-	
+
+
 	/*
 	private static List<UserVitalsSecurityAction> UserVitalsSecurityActionFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<UserVitalsSecurityAction>();
 	int IDX_ATRB_BIT = DB.GetReaderOrdinal(rdr, "ATRB_BIT");
 	int IDX_ATRB_CD = DB.GetReaderOrdinal(rdr, "ATRB_CD");
 	int IDX_ATRB_MAGNITUDE = DB.GetReaderOrdinal(rdr, "ATRB_MAGNITUDE");
 	int IDX_ATRB_SID = DB.GetReaderOrdinal(rdr, "ATRB_SID");
-	
+
 	while (rdr.Read()){
 	ret.Add(new UserVitalsSecurityAction {
 	ATRB_BIT = (IDX_ATRB_BIT < 0 || rdr.IsDBNull(IDX_ATRB_BIT)) ? default(System.Int64) : rdr.GetFieldValue<System.Int64>(IDX_ATRB_BIT),
@@ -1056,7 +1056,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class UserVitalsSecurityAction
 
 	///<summary>
@@ -1066,55 +1066,55 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:21:35 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class UserVitalsSecurityMask {
-	
+
 	[DataMember]
 	public System.String ACTN_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String OBJ_SET_TYPE_CD {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 OBJ_SET_TYPE_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 OBJ_TYPE_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String PERMISSION_MASK {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String ROLE_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 ROLE_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 SECUR_ACTN_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 WFSTG_MBR_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String WFSTG_NM {set;get;}
-	
-	
+
+
 	/*
 	private static List<UserVitalsSecurityMask> UserVitalsSecurityMaskFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<UserVitalsSecurityMask>();
 	int IDX_ACTN_NM = DB.GetReaderOrdinal(rdr, "ACTN_NM");
 	int IDX_OBJ_SET_TYPE_CD = DB.GetReaderOrdinal(rdr, "OBJ_SET_TYPE_CD");
@@ -1126,7 +1126,7 @@ namespace Intel.MyDeals.Entities {
 	int IDX_SECUR_ACTN_SID = DB.GetReaderOrdinal(rdr, "SECUR_ACTN_SID");
 	int IDX_WFSTG_MBR_SID = DB.GetReaderOrdinal(rdr, "WFSTG_MBR_SID");
 	int IDX_WFSTG_NM = DB.GetReaderOrdinal(rdr, "WFSTG_NM");
-	
+
 	while (rdr.Read()){
 	ret.Add(new UserVitalsSecurityMask {
 	ACTN_NM = (IDX_ACTN_NM < 0 || rdr.IsDBNull(IDX_ACTN_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ACTN_NM),
@@ -1144,7 +1144,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class UserVitalsSecurityMask
 
 	///<summary>
@@ -1154,27 +1154,27 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:21:35 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class UserVitalsVerticals {
-	
+
 	[DataMember]
 	public System.Int32 VERTICAL {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String VERTICAL_NM {set;get;}
-	
-	
+
+
 	/*
 	private static List<UserVitalsVerticals> UserVitalsVerticalsFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<UserVitalsVerticals>();
 	int IDX_VERTICAL = DB.GetReaderOrdinal(rdr, "VERTICAL");
 	int IDX_VERTICAL_NM = DB.GetReaderOrdinal(rdr, "VERTICAL_NM");
-	
+
 	while (rdr.Read()){
 	ret.Add(new UserVitalsVerticals {
 	VERTICAL = (IDX_VERTICAL < 0 || rdr.IsDBNull(IDX_VERTICAL)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_VERTICAL),
@@ -1184,7 +1184,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class UserVitalsVerticals
 
 	///<summary>
@@ -1194,22 +1194,22 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:21:35 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class UserVitalsSuper {
-	
+
 	[DataMember]
 	public System.String SUPER_SA {set;get;}
-	
-	
+
+
 	/*
 	private static List<UserVitalsSuper> UserVitalsSuperFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<UserVitalsSuper>();
 	int IDX_SUPER_SA = DB.GetReaderOrdinal(rdr, "SUPER_SA");
-	
+
 	while (rdr.Read()){
 	ret.Add(new UserVitalsSuper {
 	SUPER_SA = (IDX_SUPER_SA < 0 || rdr.IsDBNull(IDX_SUPER_SA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_SUPER_SA)
@@ -1218,7 +1218,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class UserVitalsSuper
 
 	///<summary>
@@ -1228,63 +1228,63 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:21:36 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class DashboardContractSummary {
-	
+
 	[DataMember]
 	public System.Int32 CNTRCT_OBJ_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String COST_TEST_RESULT {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 CUST_MBR_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String CUST_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime END_DTM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String MEETCOMP_TEST_RESULT {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String NOTES {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 NUM_APPRV_PRC_ST {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 NUM_PRC_ST {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime STRT_DTM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String TITLE {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String WF_STG_CD {set;get;}
-	
-	
+
+
 	/*
 	private static List<DashboardContractSummary> DashboardContractSummaryFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<DashboardContractSummary>();
 	int IDX_CNTRCT_OBJ_SID = DB.GetReaderOrdinal(rdr, "CNTRCT_OBJ_SID");
 	int IDX_COST_TEST_RESULT = DB.GetReaderOrdinal(rdr, "COST_TEST_RESULT");
@@ -1298,7 +1298,7 @@ namespace Intel.MyDeals.Entities {
 	int IDX_STRT_DTM = DB.GetReaderOrdinal(rdr, "STRT_DTM");
 	int IDX_TITLE = DB.GetReaderOrdinal(rdr, "TITLE");
 	int IDX_WF_STG_CD = DB.GetReaderOrdinal(rdr, "WF_STG_CD");
-	
+
 	while (rdr.Read()){
 	ret.Add(new DashboardContractSummary {
 	CNTRCT_OBJ_SID = (IDX_CNTRCT_OBJ_SID < 0 || rdr.IsDBNull(IDX_CNTRCT_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CNTRCT_OBJ_SID),
@@ -1318,7 +1318,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class DashboardContractSummary
 
 	///<summary>
@@ -1328,59 +1328,59 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:21:37 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class MyCustomersInformation {
-	
+
 	[DataMember]
 	public System.Int32 ACCESS_TYPE {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Boolean ACTV_IND {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String CUST_CHNL {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String CUST_DIV_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 CUST_DIV_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 CUST_LVL_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String CUST_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 CUST_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 DEAL_FLG {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String DISP_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String HOST_GEO {set;get;}
-	
-	
+
+
 	/*
 	private static List<MyCustomersInformation> MyCustomersInformationFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<MyCustomersInformation>();
 	int IDX_ACCESS_TYPE = DB.GetReaderOrdinal(rdr, "ACCESS_TYPE");
 	int IDX_ACTV_IND = DB.GetReaderOrdinal(rdr, "ACTV_IND");
@@ -1393,7 +1393,7 @@ namespace Intel.MyDeals.Entities {
 	int IDX_DEAL_FLG = DB.GetReaderOrdinal(rdr, "DEAL_FLG");
 	int IDX_DISP_NM = DB.GetReaderOrdinal(rdr, "DISP_NM");
 	int IDX_HOST_GEO = DB.GetReaderOrdinal(rdr, "HOST_GEO");
-	
+
 	while (rdr.Read()){
 	ret.Add(new MyCustomersInformation {
 	ACCESS_TYPE = (IDX_ACCESS_TYPE < 0 || rdr.IsDBNull(IDX_ACCESS_TYPE)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ACCESS_TYPE),
@@ -1412,7 +1412,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class MyCustomersInformation
 
 	///<summary>
@@ -1422,39 +1422,39 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:21:37 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class MyCustomersSoldTo {
-	
+
 	[DataMember]
 	public System.Int32 CUST_DIV_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String CUST_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 CUST_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String DISP_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String GEO_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String SOLD_TO_ID {set;get;}
-	
-	
+
+
 	/*
 	private static List<MyCustomersSoldTo> MyCustomersSoldToFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<MyCustomersSoldTo>();
 	int IDX_CUST_DIV_SID = DB.GetReaderOrdinal(rdr, "CUST_DIV_SID");
 	int IDX_CUST_NM = DB.GetReaderOrdinal(rdr, "CUST_NM");
@@ -1462,7 +1462,7 @@ namespace Intel.MyDeals.Entities {
 	int IDX_DISP_NM = DB.GetReaderOrdinal(rdr, "DISP_NM");
 	int IDX_GEO_NM = DB.GetReaderOrdinal(rdr, "GEO_NM");
 	int IDX_SOLD_TO_ID = DB.GetReaderOrdinal(rdr, "SOLD_TO_ID");
-	
+
 	while (rdr.Read()){
 	ret.Add(new MyCustomersSoldTo {
 	CUST_DIV_SID = (IDX_CUST_DIV_SID < 0 || rdr.IsDBNull(IDX_CUST_DIV_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_DIV_SID),
@@ -1476,7 +1476,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class MyCustomersSoldTo
 
 	///<summary>
@@ -1486,42 +1486,42 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:21:37 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class CustomerQuarterDetails {
-	
+
 	[DataMember]
 	public System.Int32 CUST_MBR_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime QTR_END {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int16 QTR_NBR {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime QTR_STRT {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int16 YR_NBR {set;get;}
-	
-	
+
+
 	/*
 	private static List<CustomerQuarterDetails> CustomerQuarterDetailsFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<CustomerQuarterDetails>();
 	int IDX_CUST_MBR_SID = DB.GetReaderOrdinal(rdr, "CUST_MBR_SID");
 	int IDX_QTR_END = DB.GetReaderOrdinal(rdr, "QTR_END");
 	int IDX_QTR_NBR = DB.GetReaderOrdinal(rdr, "QTR_NBR");
 	int IDX_QTR_STRT = DB.GetReaderOrdinal(rdr, "QTR_STRT");
 	int IDX_YR_NBR = DB.GetReaderOrdinal(rdr, "YR_NBR");
-	
+
 	while (rdr.Read()){
 	ret.Add(new CustomerQuarterDetails {
 	CUST_MBR_SID = (IDX_CUST_MBR_SID < 0 || rdr.IsDBNull(IDX_CUST_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_MBR_SID),
@@ -1534,7 +1534,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class CustomerQuarterDetails
 
 	///<summary>
@@ -1544,51 +1544,51 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:21:38 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class GeoDimension {
-	
+
 	[DataMember]
 	public System.Boolean ACTV_IND {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String CTRY_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 CTRY_NM_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 GEO_ATRB_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 GEO_MBR_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String GEO_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 GEO_NM_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String RGN_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 RGN_NM_SID {set;get;}
-	
-	
+
+
 	/*
 	private static List<GeoDimension> GeoDimensionFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<GeoDimension>();
 	int IDX_ACTV_IND = DB.GetReaderOrdinal(rdr, "ACTV_IND");
 	int IDX_CTRY_NM = DB.GetReaderOrdinal(rdr, "CTRY_NM");
@@ -1599,7 +1599,7 @@ namespace Intel.MyDeals.Entities {
 	int IDX_GEO_NM_SID = DB.GetReaderOrdinal(rdr, "GEO_NM_SID");
 	int IDX_RGN_NM = DB.GetReaderOrdinal(rdr, "RGN_NM");
 	int IDX_RGN_NM_SID = DB.GetReaderOrdinal(rdr, "RGN_NM_SID");
-	
+
 	while (rdr.Read()){
 	ret.Add(new GeoDimension {
 	ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_ACTV_IND),
@@ -1616,7 +1616,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class GeoDimension
 
 	///<summary>
@@ -1626,175 +1626,175 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:21:58 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class Product {
-	
+
 	[DataMember]
 	public System.Boolean ACTV_IND {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String ALL_PRD_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 ALL_PRD_NM_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String BRND_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 BRND_NM_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String CPU_CACHE {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String CPU_PACKAGE {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String CPU_PROCESSOR_NUMBER {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String CPU_VOLTAGE_SEGMENT {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String CPU_WATTAGE {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String DEAL_PRD_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 DEAL_PRD_NM_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String DEAL_PRD_TYPE {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 DEAL_PRD_TYPE_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String EPM_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String FMLY_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String FMLY_NM_MM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 FMLY_NM_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String GDM_BRND_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String GDM_FMLY_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String HIER_NM_HASH {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String HIER_VAL_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String MM_CUST_CUSTOMER {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String MTRL_ID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 MTRL_ID_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String NAND_DENSITY {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String NAND_FAMILY {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String PCSR_NBR {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 PCSR_NBR_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 PRD_ATRB_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String PRD_CAT_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 PRD_CAT_NM_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime PRD_END_DTM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 PRD_MBR_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime PRD_STRT_DTM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String PRICE_SEGMENT {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String SBS_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String SKU_MARKET_SEGMENT {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String SKU_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String USR_INPUT {set;get;}
-	
-	
+
+
 	/*
 	private static List<Product> ProductFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<Product>();
 	int IDX_ACTV_IND = DB.GetReaderOrdinal(rdr, "ACTV_IND");
 	int IDX_ALL_PRD_NM = DB.GetReaderOrdinal(rdr, "ALL_PRD_NM");
@@ -1836,7 +1836,7 @@ namespace Intel.MyDeals.Entities {
 	int IDX_SKU_MARKET_SEGMENT = DB.GetReaderOrdinal(rdr, "SKU_MARKET_SEGMENT");
 	int IDX_SKU_NM = DB.GetReaderOrdinal(rdr, "SKU_NM");
 	int IDX_USR_INPUT = DB.GetReaderOrdinal(rdr, "USR_INPUT");
-	
+
 	while (rdr.Read()){
 	ret.Add(new Product {
 	ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_ACTV_IND),
@@ -1884,7 +1884,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class Product
 
 	///<summary>
@@ -1894,55 +1894,55 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:21:59 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class ProductCategory {
-	
+
 	[DataMember]
 	public System.Boolean ACTV_IND {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime CHG_DTM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String CHG_EMP_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String DEAL_PRD_TYPE {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String DIV_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String GDM_PRD_TYPE_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String GDM_VRT_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String OP_CD {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 PRD_CAT_MAP_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String PRD_CAT_NM {set;get;}
-	
-	
+
+
 	/*
 	private static List<ProductCategory> ProductCategoryFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<ProductCategory>();
 	int IDX_ACTV_IND = DB.GetReaderOrdinal(rdr, "ACTV_IND");
 	int IDX_CHG_DTM = DB.GetReaderOrdinal(rdr, "CHG_DTM");
@@ -1954,7 +1954,7 @@ namespace Intel.MyDeals.Entities {
 	int IDX_OP_CD = DB.GetReaderOrdinal(rdr, "OP_CD");
 	int IDX_PRD_CAT_MAP_SID = DB.GetReaderOrdinal(rdr, "PRD_CAT_MAP_SID");
 	int IDX_PRD_CAT_NM = DB.GetReaderOrdinal(rdr, "PRD_CAT_NM");
-	
+
 	while (rdr.Read()){
 	ret.Add(new ProductCategory {
 	ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_ACTV_IND),
@@ -1972,7 +1972,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class ProductCategory
 
 	///<summary>
@@ -1982,51 +1982,51 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:21:59 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class Dropdown {
-	
+
 	[DataMember]
 	public System.Int32 active {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 allDealFlag {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String dropdownCategory {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 dropdownID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String dropdownName {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String parntAtrbCd {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String subAtrbCd {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String subAtrbValue {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String subCategory {set;get;}
-	
-	
+
+
 	/*
 	private static List<Dropdown> DropdownFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<Dropdown>();
 	int IDX_active = DB.GetReaderOrdinal(rdr, "active");
 	int IDX_allDealFlag = DB.GetReaderOrdinal(rdr, "allDealFlag");
@@ -2037,7 +2037,7 @@ namespace Intel.MyDeals.Entities {
 	int IDX_subAtrbCd = DB.GetReaderOrdinal(rdr, "subAtrbCd");
 	int IDX_subAtrbValue = DB.GetReaderOrdinal(rdr, "subAtrbValue");
 	int IDX_subCategory = DB.GetReaderOrdinal(rdr, "subCategory");
-	
+
 	while (rdr.Read()){
 	ret.Add(new Dropdown {
 	active = (IDX_active < 0 || rdr.IsDBNull(IDX_active)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_active),
@@ -2054,7 +2054,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class Dropdown
 
 	///<summary>
@@ -2064,63 +2064,63 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:21:59 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class BasicDropdown {
-	
+
 	[DataMember]
 	public System.Boolean ACTV_IND {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String ATRB_CD {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String ATRB_LKUP_DESC {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 ATRB_LKUP_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String ATRB_LKUP_TTIP {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 ATRB_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String CUST_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 DFLT_FLG {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String DROP_DOWN {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String OBJ_SET_TYPE_CD {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 OBJ_SET_TYPE_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 ORD {set;get;}
-	
-	
+
+
 	/*
 	private static List<BasicDropdown> BasicDropdownFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<BasicDropdown>();
 	int IDX_ACTV_IND = DB.GetReaderOrdinal(rdr, "ACTV_IND");
 	int IDX_ATRB_CD = DB.GetReaderOrdinal(rdr, "ATRB_CD");
@@ -2134,7 +2134,7 @@ namespace Intel.MyDeals.Entities {
 	int IDX_OBJ_SET_TYPE_CD = DB.GetReaderOrdinal(rdr, "OBJ_SET_TYPE_CD");
 	int IDX_OBJ_SET_TYPE_SID = DB.GetReaderOrdinal(rdr, "OBJ_SET_TYPE_SID");
 	int IDX_ORD = DB.GetReaderOrdinal(rdr, "ORD");
-	
+
 	while (rdr.Read()){
 	ret.Add(new BasicDropdown {
 	ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_ACTV_IND),
@@ -2154,7 +2154,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class BasicDropdown
 
 	///<summary>
@@ -2164,71 +2164,71 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:22:00 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class WorkFlows {
-	
+
 	[DataMember]
 	public System.String OBJ_SET_TYPE_CD {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 OBJ_SET_TYPE_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String OBJ_TYPE {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 OBJ_TYPE_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String ROLE_TIER_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Boolean TRKR_NBR_UPD {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String WF_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 WF_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String WFSTG_ACTN_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 WFSTG_ACTN_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String WFSTG_CD_DEST {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String WFSTG_CD_SRC {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 WFSTG_DEST_MBR_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 WFSTG_MBR_SID {set;get;}
-	
-	
+
+
 	/*
 	private static List<WorkFlows> WorkFlowsFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<WorkFlows>();
 	int IDX_OBJ_SET_TYPE_CD = DB.GetReaderOrdinal(rdr, "OBJ_SET_TYPE_CD");
 	int IDX_OBJ_SET_TYPE_SID = DB.GetReaderOrdinal(rdr, "OBJ_SET_TYPE_SID");
@@ -2244,7 +2244,7 @@ namespace Intel.MyDeals.Entities {
 	int IDX_WFSTG_CD_SRC = DB.GetReaderOrdinal(rdr, "WFSTG_CD_SRC");
 	int IDX_WFSTG_DEST_MBR_SID = DB.GetReaderOrdinal(rdr, "WFSTG_DEST_MBR_SID");
 	int IDX_WFSTG_MBR_SID = DB.GetReaderOrdinal(rdr, "WFSTG_MBR_SID");
-	
+
 	while (rdr.Read()){
 	ret.Add(new WorkFlows {
 	OBJ_SET_TYPE_CD = (IDX_OBJ_SET_TYPE_CD < 0 || rdr.IsDBNull(IDX_OBJ_SET_TYPE_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_SET_TYPE_CD),
@@ -2266,7 +2266,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class WorkFlows
 
 	///<summary>
@@ -2276,59 +2276,59 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:22:00 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class WorkFlowStg {
-	
+
 	[DataMember]
 	public System.Boolean ALLW_REDEAL {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime CHG_DTM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 CHG_EMP_WWID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime CRE_DTM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 CRE_EMP_WWID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String ROLE_TIER_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String WFSTG_DESC {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String WFSTG_LOC {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 WFSTG_MBR_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String WFSTG_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String WFSTG_ORD {set;get;}
-	
-	
+
+
 	/*
 	private static List<WorkFlowStg> WorkFlowStgFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<WorkFlowStg>();
 	int IDX_ALLW_REDEAL = DB.GetReaderOrdinal(rdr, "ALLW_REDEAL");
 	int IDX_CHG_DTM = DB.GetReaderOrdinal(rdr, "CHG_DTM");
@@ -2341,7 +2341,7 @@ namespace Intel.MyDeals.Entities {
 	int IDX_WFSTG_MBR_SID = DB.GetReaderOrdinal(rdr, "WFSTG_MBR_SID");
 	int IDX_WFSTG_NM = DB.GetReaderOrdinal(rdr, "WFSTG_NM");
 	int IDX_WFSTG_ORD = DB.GetReaderOrdinal(rdr, "WFSTG_ORD");
-	
+
 	while (rdr.Read()){
 	ret.Add(new WorkFlowStg {
 	ALLW_REDEAL = (IDX_ALLW_REDEAL < 0 || rdr.IsDBNull(IDX_ALLW_REDEAL)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_ALLW_REDEAL),
@@ -2360,7 +2360,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class WorkFlowStg
 
 	///<summary>
@@ -2370,32 +2370,32 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:22:00 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class WorkFlowAttribute {
-	
+
 	[DataMember]
 	public System.String COL_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String Key {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String Value {set;get;}
-	
-	
+
+
 	/*
 	private static List<WorkFlowAttribute> WorkFlowAttributeFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<WorkFlowAttribute>();
 	int IDX_COL_NM = DB.GetReaderOrdinal(rdr, "COL_NM");
 	int IDX_Key = DB.GetReaderOrdinal(rdr, "Key");
 	int IDX_Value = DB.GetReaderOrdinal(rdr, "Value");
-	
+
 	while (rdr.Read()){
 	ret.Add(new WorkFlowAttribute {
 	COL_NM = (IDX_COL_NM < 0 || rdr.IsDBNull(IDX_COL_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_COL_NM),
@@ -2406,7 +2406,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class WorkFlowAttribute
 
 	///<summary>
@@ -2416,43 +2416,43 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:22:00 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class ProductAlias {
-	
+
 	[DataMember]
 	public System.DateTime CHG_DTM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 CHG_EMP_WWID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime CRE_DTM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 CRE_EMP_WWID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String PRD_ALS_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 PRD_ALS_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String PRD_NM {set;get;}
-	
-	
+
+
 	/*
 	private static List<ProductAlias> ProductAliasFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<ProductAlias>();
 	int IDX_CHG_DTM = DB.GetReaderOrdinal(rdr, "CHG_DTM");
 	int IDX_CHG_EMP_WWID = DB.GetReaderOrdinal(rdr, "CHG_EMP_WWID");
@@ -2461,7 +2461,7 @@ namespace Intel.MyDeals.Entities {
 	int IDX_PRD_ALS_NM = DB.GetReaderOrdinal(rdr, "PRD_ALS_NM");
 	int IDX_PRD_ALS_SID = DB.GetReaderOrdinal(rdr, "PRD_ALS_SID");
 	int IDX_PRD_NM = DB.GetReaderOrdinal(rdr, "PRD_NM");
-	
+
 	while (rdr.Read()){
 	ret.Add(new ProductAlias {
 	CHG_DTM = (IDX_CHG_DTM < 0 || rdr.IsDBNull(IDX_CHG_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CHG_DTM),
@@ -2476,7 +2476,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class ProductAlias
 
 	///<summary>
@@ -2486,51 +2486,51 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:22:03 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class ObjectTypeTemplate {
-	
+
 	[DataMember]
 	public System.String ATRB_COL_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String ATRB_MTX_HASH {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 ATRB_MTX_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 ATRB_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String ATRB_VAL {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String OBJ_SET_TYPE {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 OBJ_SET_TYPE_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String OBJ_TYPE {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 OBJ_TYPE_SID {set;get;}
-	
-	
+
+
 	/*
 	private static List<ObjectTypeTemplate> ObjectTypeTemplateFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<ObjectTypeTemplate>();
 	int IDX_ATRB_COL_NM = DB.GetReaderOrdinal(rdr, "ATRB_COL_NM");
 	int IDX_ATRB_MTX_HASH = DB.GetReaderOrdinal(rdr, "ATRB_MTX_HASH");
@@ -2541,7 +2541,7 @@ namespace Intel.MyDeals.Entities {
 	int IDX_OBJ_SET_TYPE_SID = DB.GetReaderOrdinal(rdr, "OBJ_SET_TYPE_SID");
 	int IDX_OBJ_TYPE = DB.GetReaderOrdinal(rdr, "OBJ_TYPE");
 	int IDX_OBJ_TYPE_SID = DB.GetReaderOrdinal(rdr, "OBJ_TYPE_SID");
-	
+
 	while (rdr.Read()){
 	ret.Add(new ObjectTypeTemplate {
 	ATRB_COL_NM = (IDX_ATRB_COL_NM < 0 || rdr.IsDBNull(IDX_ATRB_COL_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_COL_NM),
@@ -2558,7 +2558,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class ObjectTypeTemplate
 
 	///<summary>
@@ -2568,55 +2568,55 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:22:03 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class CustomerCal {
-	
+
 	[DataMember]
 	public System.Int32 CUST_MBR_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String CUST_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime END_DT {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime PREV_END_DT {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int16 PREV_QTR_NBR {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime PREV_START_DT {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int16 PREV_YR_NBR {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int16 QTR_NBR {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime START_DT {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int16 YR_NBR {set;get;}
-	
-	
+
+
 	/*
 	private static List<CustomerCal> CustomerCalFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<CustomerCal>();
 	int IDX_CUST_MBR_SID = DB.GetReaderOrdinal(rdr, "CUST_MBR_SID");
 	int IDX_CUST_NM = DB.GetReaderOrdinal(rdr, "CUST_NM");
@@ -2628,7 +2628,7 @@ namespace Intel.MyDeals.Entities {
 	int IDX_QTR_NBR = DB.GetReaderOrdinal(rdr, "QTR_NBR");
 	int IDX_START_DT = DB.GetReaderOrdinal(rdr, "START_DT");
 	int IDX_YR_NBR = DB.GetReaderOrdinal(rdr, "YR_NBR");
-	
+
 	while (rdr.Read()){
 	ret.Add(new CustomerCal {
 	CUST_MBR_SID = (IDX_CUST_MBR_SID < 0 || rdr.IsDBNull(IDX_CUST_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_MBR_SID),
@@ -2646,7 +2646,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class CustomerCal
 
 	///<summary>
@@ -2656,183 +2656,184 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:22:07 PM
 	///</summary>
-	
+
 	[DataContract]
-	public partial class PRD_LOOKUP_RESULTS {
-	
+	public partial class PRD_LOOKUP_RESULTS
+    {
+
 	[DataMember]
 	public System.String BRND_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String CAP {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime CAP_END {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String CAP_PRC_COND {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime CAP_START {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String CPU_CACHE {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String CPU_PACKAGE {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String CPU_PROCESSOR_NUMBER {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String CPU_VOLTAGE_SEGMENT {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String CPU_WATTAGE {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime DEAL_END_DT {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String DEAL_PRD_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String DEAL_PRD_TYPE {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime DEAL_STRT_DT {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String EPM_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Boolean EXACT_MATCH {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String FMLY_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String FMLY_NM_MM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String GDM_BRND_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String GDM_FMLY_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 HAS_L1 {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 HAS_L2 {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String HIER_NM_HASH {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String HIER_VAL_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String MM_CUST_CUSTOMER {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String MTRL_ID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String NAND_Density {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String NAND_FAMILY {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String PCSR_NBR {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 PRD_ATRB_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String PRD_CAT_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime PRD_END_DTM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 PRD_MBR_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime PRD_STRT_DTM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String PRICE_SEGMENT {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String SBS_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String SKU_MARKET_SEGMENT {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String SKU_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String USR_INPUT {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String YCS2 {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime YCS2_END {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime YCS2_START {set;get;}
-	
-	
+
+
 	/*
 	private static List<PRD_LOOKUP_RESULTS> PRD_LOOKUP_RESULTSFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<PRD_LOOKUP_RESULTS>();
 	int IDX_BRND_NM = DB.GetReaderOrdinal(rdr, "BRND_NM");
 	int IDX_CAP = DB.GetReaderOrdinal(rdr, "CAP");
@@ -2876,7 +2877,7 @@ namespace Intel.MyDeals.Entities {
 	int IDX_YCS2 = DB.GetReaderOrdinal(rdr, "YCS2");
 	int IDX_YCS2_END = DB.GetReaderOrdinal(rdr, "YCS2_END");
 	int IDX_YCS2_START = DB.GetReaderOrdinal(rdr, "YCS2_START");
-	
+
 	while (rdr.Read()){
 	ret.Add(new PRD_LOOKUP_RESULTS {
 	BRND_NM = (IDX_BRND_NM < 0 || rdr.IsDBNull(IDX_BRND_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_BRND_NM),
@@ -2926,7 +2927,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class PRD_LOOKUP_RESULTS
 
 	///<summary>
@@ -2936,47 +2937,47 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:22:07 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class ProductCostTestRules {
-	
+
 	[DataMember]
 	public System.String CONDITION {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String COST_TEST_TYPE {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String CRITERIA {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String DEAL_PRD_TYPE {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 DEAL_PRD_TYPE_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String JSON_TXT {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String PRD_CAT_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 PRD_CAT_NM_SID {set;get;}
-	
-	
+
+
 	/*
 	private static List<ProductCostTestRules> ProductCostTestRulesFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<ProductCostTestRules>();
 	int IDX_CONDITION = DB.GetReaderOrdinal(rdr, "CONDITION");
 	int IDX_COST_TEST_TYPE = DB.GetReaderOrdinal(rdr, "COST_TEST_TYPE");
@@ -2986,7 +2987,7 @@ namespace Intel.MyDeals.Entities {
 	int IDX_JSON_TXT = DB.GetReaderOrdinal(rdr, "JSON_TXT");
 	int IDX_PRD_CAT_NM = DB.GetReaderOrdinal(rdr, "PRD_CAT_NM");
 	int IDX_PRD_CAT_NM_SID = DB.GetReaderOrdinal(rdr, "PRD_CAT_NM_SID");
-	
+
 	while (rdr.Read()){
 	ret.Add(new ProductCostTestRules {
 	CONDITION = (IDX_CONDITION < 0 || rdr.IsDBNull(IDX_CONDITION)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CONDITION),
@@ -3002,7 +3003,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class ProductCostTestRules
 
 	///<summary>
@@ -3012,37 +3013,37 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:22:08 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class ProductTypeMappings {
-	
+
 	[DataMember]
 	public System.String PRD_TYPE {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 PRD_TYPE_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String VERTICAL {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 VERTICAL_SID {set;get;}
-	
-	
+
+
 	/*
 	private static List<ProductTypeMappings> ProductTypeMappingsFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<ProductTypeMappings>();
 	int IDX_PRD_TYPE = DB.GetReaderOrdinal(rdr, "PRD_TYPE");
 	int IDX_PRD_TYPE_SID = DB.GetReaderOrdinal(rdr, "PRD_TYPE_SID");
 	int IDX_VERTICAL = DB.GetReaderOrdinal(rdr, "VERTICAL");
 	int IDX_VERTICAL_SID = DB.GetReaderOrdinal(rdr, "VERTICAL_SID");
-	
+
 	while (rdr.Read()){
 	ret.Add(new ProductTypeMappings {
 	PRD_TYPE = (IDX_PRD_TYPE < 0 || rdr.IsDBNull(IDX_PRD_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_TYPE),
@@ -3054,7 +3055,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class ProductTypeMappings
 
 	///<summary>
@@ -3064,37 +3065,37 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:22:09 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class ProductAttributeValues {
-	
+
 	[DataMember]
 	public System.String ATRB_COL_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String ATRB_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String DISPLAYNAME {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String VALUE {set;get;}
-	
-	
+
+
 	/*
 	private static List<ProductAttributeValues> ProductAttributeValuesFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<ProductAttributeValues>();
 	int IDX_ATRB_COL_NM = DB.GetReaderOrdinal(rdr, "ATRB_COL_NM");
 	int IDX_ATRB_SID = DB.GetReaderOrdinal(rdr, "ATRB_SID");
 	int IDX_DISPLAYNAME = DB.GetReaderOrdinal(rdr, "DISPLAYNAME");
 	int IDX_VALUE = DB.GetReaderOrdinal(rdr, "VALUE");
-	
+
 	while (rdr.Read()){
 	ret.Add(new ProductAttributeValues {
 	ATRB_COL_NM = (IDX_ATRB_COL_NM < 0 || rdr.IsDBNull(IDX_ATRB_COL_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_COL_NM),
@@ -3106,7 +3107,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class ProductAttributeValues
 
 	///<summary>
@@ -3116,37 +3117,37 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:22:09 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class SecurityAttribute {
-	
+
 	[DataMember]
 	public System.Int64 ATRB_BIT {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String ATRB_CD {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int64 ATRB_MAGNITUDE {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 ATRB_SID {set;get;}
-	
-	
+
+
 	/*
 	private static List<SecurityAttribute> SecurityAttributeFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<SecurityAttribute>();
 	int IDX_ATRB_BIT = DB.GetReaderOrdinal(rdr, "ATRB_BIT");
 	int IDX_ATRB_CD = DB.GetReaderOrdinal(rdr, "ATRB_CD");
 	int IDX_ATRB_MAGNITUDE = DB.GetReaderOrdinal(rdr, "ATRB_MAGNITUDE");
 	int IDX_ATRB_SID = DB.GetReaderOrdinal(rdr, "ATRB_SID");
-	
+
 	while (rdr.Read()){
 	ret.Add(new SecurityAttribute {
 	ATRB_BIT = (IDX_ATRB_BIT < 0 || rdr.IsDBNull(IDX_ATRB_BIT)) ? default(System.Int64) : rdr.GetFieldValue<System.Int64>(IDX_ATRB_BIT),
@@ -3158,7 +3159,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class SecurityAttribute
 
 	///<summary>
@@ -3168,55 +3169,55 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:22:09 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class SecurityMask {
-	
+
 	[DataMember]
 	public System.String ACTN_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String OBJ_SET_TYPE_CD {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 OBJ_SET_TYPE_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 OBJ_TYPE_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String PERMISSION_MASK {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String ROLE_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 ROLE_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 SECUR_ACTN_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 WFSTG_MBR_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String WFSTG_NM {set;get;}
-	
-	
+
+
 	/*
 	private static List<SecurityMask> SecurityMaskFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<SecurityMask>();
 	int IDX_ACTN_NM = DB.GetReaderOrdinal(rdr, "ACTN_NM");
 	int IDX_OBJ_SET_TYPE_CD = DB.GetReaderOrdinal(rdr, "OBJ_SET_TYPE_CD");
@@ -3228,7 +3229,7 @@ namespace Intel.MyDeals.Entities {
 	int IDX_SECUR_ACTN_SID = DB.GetReaderOrdinal(rdr, "SECUR_ACTN_SID");
 	int IDX_WFSTG_MBR_SID = DB.GetReaderOrdinal(rdr, "WFSTG_MBR_SID");
 	int IDX_WFSTG_NM = DB.GetReaderOrdinal(rdr, "WFSTG_NM");
-	
+
 	while (rdr.Read()){
 	ret.Add(new SecurityMask {
 	ACTN_NM = (IDX_ACTN_NM < 0 || rdr.IsDBNull(IDX_ACTN_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ACTN_NM),
@@ -3246,7 +3247,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class SecurityMask
 
 	///<summary>
@@ -3256,39 +3257,39 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:22:10 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class SecurityAttributesDropDown {
-	
+
 	[DataMember]
 	public System.String ATRB_COL_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 ATRB_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String OBJ_SET_TYPE {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 OBJ_SET_TYPE_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String OBJ_TYPE {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 OBJ_TYPE_SID {set;get;}
-	
-	
+
+
 	/*
 	private static List<SecurityAttributesDropDown> SecurityAttributesDropDownFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<SecurityAttributesDropDown>();
 	int IDX_ATRB_COL_NM = DB.GetReaderOrdinal(rdr, "ATRB_COL_NM");
 	int IDX_ATRB_SID = DB.GetReaderOrdinal(rdr, "ATRB_SID");
@@ -3296,7 +3297,7 @@ namespace Intel.MyDeals.Entities {
 	int IDX_OBJ_SET_TYPE_SID = DB.GetReaderOrdinal(rdr, "OBJ_SET_TYPE_SID");
 	int IDX_OBJ_TYPE = DB.GetReaderOrdinal(rdr, "OBJ_TYPE");
 	int IDX_OBJ_TYPE_SID = DB.GetReaderOrdinal(rdr, "OBJ_TYPE_SID");
-	
+
 	while (rdr.Read()){
 	ret.Add(new SecurityAttributesDropDown {
 	ATRB_COL_NM = (IDX_ATRB_COL_NM < 0 || rdr.IsDBNull(IDX_ATRB_COL_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_COL_NM),
@@ -3310,7 +3311,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class SecurityAttributesDropDown
 
 	///<summary>
@@ -3320,27 +3321,27 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:22:10 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class DuplicateTitlesCheck {
-	
+
 	[DataMember]
 	public System.Int32 OBJ_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 OBJ_TYPE_SID {set;get;}
-	
-	
+
+
 	/*
 	private static List<DuplicateTitlesCheck> DuplicateTitlesCheckFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<DuplicateTitlesCheck>();
 	int IDX_OBJ_SID = DB.GetReaderOrdinal(rdr, "OBJ_SID");
 	int IDX_OBJ_TYPE_SID = DB.GetReaderOrdinal(rdr, "OBJ_TYPE_SID");
-	
+
 	while (rdr.Read()){
 	ret.Add(new DuplicateTitlesCheck {
 	OBJ_SID = (IDX_OBJ_SID < 0 || rdr.IsDBNull(IDX_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_SID),
@@ -3350,7 +3351,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class DuplicateTitlesCheck
 
 	///<summary>
@@ -3360,71 +3361,71 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:22:10 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class FileAttachment {
-	
+
 	[DataMember]
 	public System.Int32 ATTCH_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime CHG_DTM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 CHG_EMP_WWID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String CNTN_TYPE {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime CRE_DTM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 CRE_EMP_WWID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 CUST_MBR_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 FILE_DATA_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String FILE_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Boolean IS_COMPRS {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 OBJ_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 OBJ_TYPE_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 SZ_COMPRS {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 SZ_ORIG {set;get;}
-	
-	
+
+
 	/*
 	private static List<FileAttachment> FileAttachmentFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<FileAttachment>();
 	int IDX_ATTCH_SID = DB.GetReaderOrdinal(rdr, "ATTCH_SID");
 	int IDX_CHG_DTM = DB.GetReaderOrdinal(rdr, "CHG_DTM");
@@ -3440,7 +3441,7 @@ namespace Intel.MyDeals.Entities {
 	int IDX_OBJ_TYPE_SID = DB.GetReaderOrdinal(rdr, "OBJ_TYPE_SID");
 	int IDX_SZ_COMPRS = DB.GetReaderOrdinal(rdr, "SZ_COMPRS");
 	int IDX_SZ_ORIG = DB.GetReaderOrdinal(rdr, "SZ_ORIG");
-	
+
 	while (rdr.Read()){
 	ret.Add(new FileAttachment {
 	ATTCH_SID = (IDX_ATTCH_SID < 0 || rdr.IsDBNull(IDX_ATTCH_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ATTCH_SID),
@@ -3462,7 +3463,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class FileAttachment
 
 	///<summary>
@@ -3472,42 +3473,42 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:22:11 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class FileAttachmentData {
-	
+
 	[DataMember]
 	public System.String CNTN_TYPE {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Byte[] FILE_DATA {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String FILE_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Boolean IS_COMPRS {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 SZ_ORIG {set;get;}
-	
-	
+
+
 	/*
 	private static List<FileAttachmentData> FileAttachmentDataFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<FileAttachmentData>();
 	int IDX_CNTN_TYPE = DB.GetReaderOrdinal(rdr, "CNTN_TYPE");
 	int IDX_FILE_DATA = DB.GetReaderOrdinal(rdr, "FILE_DATA");
 	int IDX_FILE_NM = DB.GetReaderOrdinal(rdr, "FILE_NM");
 	int IDX_IS_COMPRS = DB.GetReaderOrdinal(rdr, "IS_COMPRS");
 	int IDX_SZ_ORIG = DB.GetReaderOrdinal(rdr, "SZ_ORIG");
-	
+
 	while (rdr.Read()){
 	ret.Add(new FileAttachmentData {
 	CNTN_TYPE = (IDX_CNTN_TYPE < 0 || rdr.IsDBNull(IDX_CNTN_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CNTN_TYPE),
@@ -3520,7 +3521,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class FileAttachmentData
 
 	///<summary>
@@ -3530,27 +3531,27 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:22:11 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class IncExcAttributeMaster {
-	
+
 	[DataMember]
 	public System.String ATRB_DESC {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 ATRB_SID {set;get;}
-	
-	
+
+
 	/*
 	private static List<IncExcAttributeMaster> IncExcAttributeMasterFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<IncExcAttributeMaster>();
 	int IDX_ATRB_DESC = DB.GetReaderOrdinal(rdr, "ATRB_DESC");
 	int IDX_ATRB_SID = DB.GetReaderOrdinal(rdr, "ATRB_SID");
-	
+
 	while (rdr.Read()){
 	ret.Add(new IncExcAttributeMaster {
 	ATRB_DESC = (IDX_ATRB_DESC < 0 || rdr.IsDBNull(IDX_ATRB_DESC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ATRB_DESC),
@@ -3560,7 +3561,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class IncExcAttributeMaster
 
 	///<summary>
@@ -3570,27 +3571,27 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:22:11 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class PrdDealType {
-	
+
 	[DataMember]
 	public System.String OBJ_SET_TYPE_CD {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 OBJ_SET_TYPE_SID {set;get;}
-	
-	
+
+
 	/*
 	private static List<PrdDealType> PrdDealTypeFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<PrdDealType>();
 	int IDX_OBJ_SET_TYPE_CD = DB.GetReaderOrdinal(rdr, "OBJ_SET_TYPE_CD");
 	int IDX_OBJ_SET_TYPE_SID = DB.GetReaderOrdinal(rdr, "OBJ_SET_TYPE_SID");
-	
+
 	while (rdr.Read()){
 	ret.Add(new PrdDealType {
 	OBJ_SET_TYPE_CD = (IDX_OBJ_SET_TYPE_CD < 0 || rdr.IsDBNull(IDX_OBJ_SET_TYPE_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_SET_TYPE_CD),
@@ -3600,7 +3601,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class PrdDealType
 
 	///<summary>
@@ -3610,27 +3611,27 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:22:11 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class PrdSelLevel {
-	
+
 	[DataMember]
 	public System.String PRD_ATRB_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String PRD_SELC_LVL {set;get;}
-	
-	
+
+
 	/*
 	private static List<PrdSelLevel> PrdSelLevelFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<PrdSelLevel>();
 	int IDX_PRD_ATRB_SID = DB.GetReaderOrdinal(rdr, "PRD_ATRB_SID");
 	int IDX_PRD_SELC_LVL = DB.GetReaderOrdinal(rdr, "PRD_SELC_LVL");
-	
+
 	while (rdr.Read()){
 	ret.Add(new PrdSelLevel {
 	PRD_ATRB_SID = (IDX_PRD_ATRB_SID < 0 || rdr.IsDBNull(IDX_PRD_ATRB_SID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_ATRB_SID),
@@ -3640,7 +3641,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class PrdSelLevel
 
 	///<summary>
@@ -3650,95 +3651,95 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:22:15 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class ProductSelectionLevels {
-	
+
 	[DataMember]
 	public System.String BRND_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 BRND_NM_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String DEAL_PRD_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String DEAL_PRD_TYPE {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 DEAL_PRD_TYPE_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String FMLY_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String HIER_NM_HASH {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String HIER_VAL_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String MRK_LVL1 {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String MRK_LVL2 {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String MTRL_ID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String NAND_Density {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String PCSR_NBR {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 PRD_ATRB_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String PRD_CAT_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 PRD_CAT_NM_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime PRD_END_DTM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 PRD_MBR_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 PRD_MRK_MBR_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime PRD_STRT_DTM {set;get;}
-	
-	
+
+
 	/*
 	private static List<ProductSelectionLevels> ProductSelectionLevelsFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<ProductSelectionLevels>();
 	int IDX_BRND_NM = DB.GetReaderOrdinal(rdr, "BRND_NM");
 	int IDX_BRND_NM_SID = DB.GetReaderOrdinal(rdr, "BRND_NM_SID");
@@ -3760,7 +3761,7 @@ namespace Intel.MyDeals.Entities {
 	int IDX_PRD_MBR_SID = DB.GetReaderOrdinal(rdr, "PRD_MBR_SID");
 	int IDX_PRD_MRK_MBR_SID = DB.GetReaderOrdinal(rdr, "PRD_MRK_MBR_SID");
 	int IDX_PRD_STRT_DTM = DB.GetReaderOrdinal(rdr, "PRD_STRT_DTM");
-	
+
 	while (rdr.Read()){
 	ret.Add(new ProductSelectionLevels {
 	BRND_NM = (IDX_BRND_NM < 0 || rdr.IsDBNull(IDX_BRND_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_BRND_NM),
@@ -3788,7 +3789,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class ProductSelectionLevels
 
 	///<summary>
@@ -3798,43 +3799,43 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:22:15 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class ProductSelectionLevelsAttributes {
-	
+
 	[DataMember]
 	public System.String GDM_BRND_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String GDM_FMLY_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String NAND_FAMILY {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String PRD_CAT_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime PRD_END_DTM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String PRD_FMLY_TXT {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime PRD_STRT_DTM {set;get;}
-	
-	
+
+
 	/*
 	private static List<ProductSelectionLevelsAttributes> ProductSelectionLevelsAttributesFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<ProductSelectionLevelsAttributes>();
 	int IDX_GDM_BRND_NM = DB.GetReaderOrdinal(rdr, "GDM_BRND_NM");
 	int IDX_GDM_FMLY_NM = DB.GetReaderOrdinal(rdr, "GDM_FMLY_NM");
@@ -3843,7 +3844,7 @@ namespace Intel.MyDeals.Entities {
 	int IDX_PRD_END_DTM = DB.GetReaderOrdinal(rdr, "PRD_END_DTM");
 	int IDX_PRD_FMLY_TXT = DB.GetReaderOrdinal(rdr, "PRD_FMLY_TXT");
 	int IDX_PRD_STRT_DTM = DB.GetReaderOrdinal(rdr, "PRD_STRT_DTM");
-	
+
 	while (rdr.Read()){
 	ret.Add(new ProductSelectionLevelsAttributes {
 	GDM_BRND_NM = (IDX_GDM_BRND_NM < 0 || rdr.IsDBNull(IDX_GDM_BRND_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_GDM_BRND_NM),
@@ -3858,7 +3859,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class ProductSelectionLevelsAttributes
 
 	///<summary>
@@ -3868,171 +3869,171 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:22:18 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class ProductSelectionResults {
-	
+
 	[DataMember]
 	public System.String BRND_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String CAP {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime CAP_END {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime CAP_START {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String CPU_CACHE {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String CPU_PACKAGE {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String CPU_PROCESSOR_NUMBER {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String CPU_VOLTAGE_SEGMENT {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String CPU_WATTAGE {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String DEAL_PRD_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String DEAL_PRD_TYPE {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String EPM_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String FMLY_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String FMLY_NM_MM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String GDM_BRND_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String GDM_FMLY_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Boolean HAS_L1 {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Boolean HAS_L2 {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String HIER_NM_HASH {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String HIER_VAL_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String MM_CUST_CUSTOMER {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String MTRL_ID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String NAND_Density {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String NAND_FAMILY {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String PCSR_NBR {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 PRD_ATRB_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String PRD_CAT_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime PRD_END_DTM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String PRD_Fmly_Txt {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 PRD_MBR_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime PRD_STRT_DTM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String PRICE_SEGMENT {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String SBS_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String SKU_MARKET_SEGMENT {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String SKU_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String USR_INPUT {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String YCS2 {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime YCS2_END {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime YCS2_START {set;get;}
-	
-	
+
+
 	/*
 	private static List<ProductSelectionResults> ProductSelectionResultsFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<ProductSelectionResults>();
 	int IDX_BRND_NM = DB.GetReaderOrdinal(rdr, "BRND_NM");
 	int IDX_CAP = DB.GetReaderOrdinal(rdr, "CAP");
@@ -4073,7 +4074,7 @@ namespace Intel.MyDeals.Entities {
 	int IDX_YCS2 = DB.GetReaderOrdinal(rdr, "YCS2");
 	int IDX_YCS2_END = DB.GetReaderOrdinal(rdr, "YCS2_END");
 	int IDX_YCS2_START = DB.GetReaderOrdinal(rdr, "YCS2_START");
-	
+
 	while (rdr.Read()){
 	ret.Add(new ProductSelectionResults {
 	BRND_NM = (IDX_BRND_NM < 0 || rdr.IsDBNull(IDX_BRND_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_BRND_NM),
@@ -4120,7 +4121,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class ProductSelectionResults
 
 	///<summary>
@@ -4130,43 +4131,43 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:22:21 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class SearchResults {
-	
+
 	[DataMember]
 	public System.Int32 CUST_MBR_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String CUSTOMER {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String OBJ_HIER {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 OBJ_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String OBJ_TYPE {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 OBJ_TYPE_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String TITLE {set;get;}
-	
-	
+
+
 	/*
 	private static List<SearchResults> SearchResultsFromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<SearchResults>();
 	int IDX_CUST_MBR_SID = DB.GetReaderOrdinal(rdr, "CUST_MBR_SID");
 	int IDX_CUSTOMER = DB.GetReaderOrdinal(rdr, "CUSTOMER");
@@ -4175,7 +4176,7 @@ namespace Intel.MyDeals.Entities {
 	int IDX_OBJ_TYPE = DB.GetReaderOrdinal(rdr, "OBJ_TYPE");
 	int IDX_OBJ_TYPE_SID = DB.GetReaderOrdinal(rdr, "OBJ_TYPE_SID");
 	int IDX_TITLE = DB.GetReaderOrdinal(rdr, "TITLE");
-	
+
 	while (rdr.Read()){
 	ret.Add(new SearchResults {
 	CUST_MBR_SID = (IDX_CUST_MBR_SID < 0 || rdr.IsDBNull(IDX_CUST_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_MBR_SID),
@@ -4190,7 +4191,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class SearchResults
 
 	///<summary>
@@ -4200,67 +4201,67 @@ namespace Intel.MyDeals.Entities {
 	/// by mbiradar
 	/// at 6/9/2017 8:22:22 PM
 	///</summary>
-	
+
 	[DataContract]
 	public partial class ProductCAPYCS2 {
-	
+
 	[DataMember]
 	public System.String CAP {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime CAP_END {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String CAP_PRC_COND {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime CAP_START {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 CUST_MBR_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String FLAG_PICK {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String GEO_MBR_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String HIER_VAL_NM {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 PRD_MBR_SID {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.Int32 RowNumber {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.String YCS2 {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime YCS2_END {set;get;}
-	
-	
+
+
 	[DataMember]
 	public System.DateTime YCS2_START {set;get;}
-	
-	
+
+
 	/*
 	private static List<ProductCAPYCS2> ProductCAPYCS2FromReader(SqlDataReader rdr){
 	// This helper method is template generated.
 	// Refer to that template for details to modify this code.
-	
+
 	var ret = new List<ProductCAPYCS2>();
 	int IDX_CAP = DB.GetReaderOrdinal(rdr, "CAP");
 	int IDX_CAP_END = DB.GetReaderOrdinal(rdr, "CAP_END");
@@ -4275,7 +4276,7 @@ namespace Intel.MyDeals.Entities {
 	int IDX_YCS2 = DB.GetReaderOrdinal(rdr, "YCS2");
 	int IDX_YCS2_END = DB.GetReaderOrdinal(rdr, "YCS2_END");
 	int IDX_YCS2_START = DB.GetReaderOrdinal(rdr, "YCS2_START");
-	
+
 	while (rdr.Read()){
 	ret.Add(new ProductCAPYCS2 {
 	CAP = (IDX_CAP < 0 || rdr.IsDBNull(IDX_CAP)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CAP),
@@ -4296,7 +4297,7 @@ namespace Intel.MyDeals.Entities {
 	return ret;
 	}
 	*/
-	
+
 	} // End of class ProductCAPYCS2
 
 }

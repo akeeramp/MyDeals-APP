@@ -10,7 +10,7 @@ using Intel.Opaque.DBAccess;
 namespace Intel.MyDeals.Entities
 {
     [DataContract]
-    public partial class PRD_LOOKUP_RESULTS_tempWithCAP : PRD_LOOKUP_RESULTS
+    public partial class PRD_LOOKUP_RESULTS_tempWithCAP : PRD_TRANSLATION_RESULTS
     {
         //[DataMember]
         //public System.Int32 PRD_MBR_SID { get; set; }
@@ -2080,4 +2080,76 @@ public partial class DealTemplateDataGram
     //    [DataMember]
     //    public System.String Value { set; get; }
     //}
+
+    public partial class PRD_TRANSLATION_RESULTS
+    {
+        [DataMember]
+        public System.String BRND_NM { set; get; }
+
+        [DataMember]
+        public System.String CAP { set; get; }
+
+        [DataMember]
+        public System.DateTime CAP_END { set; get; }
+
+        [DataMember]
+        public System.DateTime CAP_START { set; get; }
+
+        [DataMember]
+        public System.String DEAL_PRD_NM { set; get; }
+
+        [DataMember]
+        public System.String DEAL_PRD_TYPE { set; get; }
+
+        [DataMember]
+        public System.Boolean EXACT_MATCH { set; get; }
+
+        [DataMember]
+        public System.String FMLY_NM { set; get; }
+
+        [DataMember]
+        public System.Int32 HAS_L1 { set; get; }
+
+        [DataMember]
+        public System.Int32 HAS_L2 { set; get; }
+
+        [DataMember]
+        public System.String HIER_NM_HASH { set; get; }
+
+        [DataMember]
+        public System.String HIER_VAL_NM { set; get; }
+
+        [DataMember]
+        public System.String MTRL_ID { set; get; }
+
+        [DataMember]
+        public System.String PCSR_NBR { set; get; }
+
+        [DataMember]
+        public System.Int32 PRD_ATRB_SID { set; get; }
+
+        [DataMember]
+        public System.String PRD_CAT_NM { set; get; }
+
+        [DataMember]
+        public System.DateTime PRD_END_DTM { set; get; }
+
+        [DataMember]
+        public System.Int32 PRD_MBR_SID { set; get; }
+
+        [DataMember]
+        public System.DateTime PRD_STRT_DTM { set; get; }
+
+        [DataMember]
+        public System.String USR_INPUT { set; get; }
+
+        [DataMember]
+        public System.String YCS2 { set; get; }
+
+        [DataMember]
+        public System.DateTime YCS2_END { set; get; }
+
+        [DataMember]
+        public System.DateTime YCS2_START { set; get; }
+    }
 }

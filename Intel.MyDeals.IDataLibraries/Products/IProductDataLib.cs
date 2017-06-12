@@ -12,7 +12,7 @@ namespace Intel.MyDeals.IDataLibrary
 
         List<ProductAlias> GetProductsFromAlias();
 
-        List<PRD_LOOKUP_RESULTS> GetProductDetails(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID);
+        List<PRD_TRANSLATION_RESULTS> GetProductDetails(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID);
 
         List<ProductIncExcAttribute> SetIncludeExclude(List<ProductIncExcAttribute> data, string opsType);
 

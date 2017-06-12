@@ -17,9 +17,8 @@
 
         return service;
 
-        function FindSuggestedProduct(data) {            
-            return dataService.post(apiBaseUrl + 'FindSuggestedProduct/' + data);
+        function FindSuggestedProduct(data) {
+            return []//;dataService.post(apiBaseUrl + 'FindSuggestedProduct/' + data);
         }
-
-      }
+    }
 })();

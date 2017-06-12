@@ -78,17 +78,15 @@
         <div class="row" style="padding-left:15px;padding-right:15px;">
             <ui-select allow-clear="true" onkeypress="return false;" class="prodSelected text-left"
                        tagging="true" multiple ng-model="vm.addedProducts" theme="bootstrap">
-                <ui-select-match><span kendo-tooltip k-content='$item.HIER_NM_HASH'>{{$item.HIER_VAL_NM}}</span></ui-select-match>
+                <ui-select-match><span ng-click="vm.showSingleProductHeirarchy($item)" kendo-tooltip k-content='$item.HIER_NM_HASH'>{{$item.HIER_VAL_NM}}</span></ui-select-match>
                 <ui-select-choices repeat="products in vm.selectedProducts">
                 </ui-select-choices>
             </ui-select>
         </div>
         <br />
         <div class="form-inline insertAtRowsText">
-            <label class="text-left fl marginRight">Insert at row(s):</label>
-            <input class="form-control fl marginRight input-sm" placeholder="" style="width:200px;" type="text" />
-            <span class="fl">
-                <input id="separateProduct" class="checkbox-custom" name="checkbox-3" type="checkbox">
+            <span ng-if="vm.enableSplitProducts">
+                <input id="separateProduct" class="checkbox-custom" ng-model="vm.splitProducts" name="separateroducts" type="checkbox">
                 <label for="separateProduct" class="checkbox-custom-label" style="padding-bottom:5px;margin-top:0px;">&nbsp;Separate product in rows</label>
             </span>
             <button class="btn btn-primary fr prdBtn" ng-click="vm.save()">Save</button>
@@ -119,6 +117,7 @@
     .insertAtRowsText {
         color: white;
         font-size: 16px;
+        text-align:right;
     }
 
     .prodHeader {

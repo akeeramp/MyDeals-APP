@@ -18,15 +18,15 @@ function opPopover($compile, dataService, $timeout, logger) {
         link: function (scope, element, attrs) {
             var capColumns = [
                   { field: "CAP", title: "CAP" },
-                  { field: "CAP_START_DATE", title: "Start Date", template: "#= kendo.toString(new Date(CAP_START_DATE), 'M/d/yyyy') #" },
-                  { field: "CAP_END_DATE", title: "End Date", template: " #= kendo.toString(new Date(CAP_END_DATE), 'M/d/yyyy') #" },
+                  { field: "CAP_START", title: "Start Date", template: "#= kendo.toString(new Date(CAP_START), 'M/d/yyyy') #" },
+                  { field: "CAP_END", title: "End Date", template: " #= kendo.toString(new Date(CAP_END), 'M/d/yyyy') #" },
             ];
 
             var ycs2Columns = [
                   { field: "YCS2", title: "YCS2" },
                   { field: "GEO_MBR_SID", title: "GEO" },
-                  { field: "YCS2_START_DATE", title: "Start Date", template: "#= kendo.toString(new Date(YCS2_START_DATE), 'M/d/yyyy') #" },
-                  { field: "YCS2_END_DATE", title: "End Date", template: " #= kendo.toString(new Date(YCS2_END_DATE), 'M/d/yyyy') #" },
+                  { field: "YCS2_START", title: "Start Date", template: "#= kendo.toString(new Date(YCS2_START), 'M/d/yyyy') #" },
+                  { field: "YCS2_END", title: "End Date", template: " #= kendo.toString(new Date(YCS2_END), 'M/d/yyyy') #" },
             ];
 
             scope.gridData = [];

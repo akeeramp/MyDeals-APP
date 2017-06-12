@@ -4,22 +4,14 @@
        .module('app.admin') //TODO: once we integrate with contract manager change the module to contract
        .controller('ProductCAPBreakoutController', ProductCAPBreakoutController);
 
-    ProductCAPBreakoutController.$inject = ['$filter', '$scope', '$uibModalInstance', 'productData', 'dataService', 'contractData', 'logger'];
+    ProductCAPBreakoutController.$inject = ['$filter', '$scope', '$uibModalInstance', 'productData', 'dataService', 'logger'];
 
-    function ProductCAPBreakoutController($filter, $scope, $uibModalInstance, productData, dataService, contractData, logger) {
+    function ProductCAPBreakoutController($filter, $scope, $uibModalInstance, productData, dataService, logger) {
         var vm = this;
         vm.productData = productData;
-        vm.contractData = contractData;
 
-        var data = [{
-            'CUST_MBR_SID': vm.contractData.CUST_MBR_SID,
-            'PRD_MBR_SID': vm.productData.PRD_MBR_SID,
-            'GEO_MBR_SID': vm.contractData.GEO_MBR_SID.toString(),
-            'DEAL_STRT_DT': vm.contractData.START_DT,
-            'DEAL_END_DT': vm.contractData.END_DT,
-            'getAvailable': 'N',
-            'priceCondition': vm.productData.CAP_PRC_COND
-        }];
+        var data = [];
+        data.push(productData);
 
         vm.dataSource = new kendo.data.DataSource({
             transport: {
@@ -28,7 +20,7 @@
                         data[0].priceCondition, data).then(function (response) {
                             e.success(response.data);
                         }, function (response) {
-                            logger.error("Unable to get data.", response, response.statusText);
+                            logger.error("Unable to get CAP Breakout data.", response, response.statusText);
                         });
                 }
             }
@@ -41,7 +33,7 @@
             resizable: true,
             columns: [
                   { field: "HIER_VAL_NM", title: "Product" },
-                  { field: "CAP_START_DATE", title: "Date Range", width: '24%', template: "#= kendo.toString(new Date(CAP_START_DATE), 'M/d/yyyy') # - #= kendo.toString(new Date(CAP_END_DATE), 'M/d/yyyy') #" },
+                  { field: "CAP_START", title: "Date Range", width: '24%', template: "#= kendo.toString(new Date(CAP_START), 'M/d/yyyy') # - #= kendo.toString(new Date(CAP_END), 'M/d/yyyy') #" },
                   { field: "GEO_MBR_SID", title: "GEO" },
                   { field: "CUST_MBR_SID1", title: "SOLD TO" },
                   { field: "CAP", title: "CAP" },

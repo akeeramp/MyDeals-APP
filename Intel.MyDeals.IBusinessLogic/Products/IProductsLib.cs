@@ -46,7 +46,7 @@ namespace Intel.MyDeals.IBusinessLogic
 
         ProductLookup TranslateProducts(List<ProductEntryAttribute> products, int CUST_MBR_SID);
 
-        List<PRD_LOOKUP_RESULTS> GetProductDetails(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID);
+        List<PRD_TRANSLATION_RESULTS> GetProductDetails(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID);
 
         List<ProductIncExcAttribute> SetIncludeAttibute(List<ProductIncExcAttribute> prodNames);
 

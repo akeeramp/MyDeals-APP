@@ -12,23 +12,17 @@
         //var apiBaseUrl = "api/WorkFlow/";
         var apiBaseUrl = "api/Products/";
         var service = {
-            FetchProducts: FetchProducts,
             GetProdDealType: GetProdDealType,
             GetProductSelectorWrapper: GetProductSelectorWrapper,
             TranslateProducts: TranslateProducts,
-            GetProductDetails: GetProductDetails,
             GetProductSelectionResults: GetProductSelectionResults,
             GetProductSuggestions: GetProductSuggestions
         }
 
         return service;
 
-        function TranslateProducts(products, CUST_CD, GEO_MBR_SID) {
-            return dataService.post(apiBaseUrl + 'TranslateProducts/' + CUST_CD + "/" + GEO_MBR_SID, products);
-        }
-
-        function FetchProducts(products) {
-            return dataService.post(apiBaseUrl + 'FetchProducts', products);
+        function TranslateProducts(products, CUST_CD) {
+            return dataService.post(apiBaseUrl + 'TranslateProducts/' + CUST_CD, products);
         }
 
         function GetProdDealType(isForceReGet) {
@@ -39,10 +33,6 @@
 
         function GetProdSelectionLevel(OBJ_SET_TYPE_SID) {
             return dataService.get(apiBaseUrl + 'GetProdSelectionLevel/' + OBJ_SET_TYPE_SID);
-        }
-
-        function GetProductDetails(products, CUST_CD) {
-            return dataService.post(apiBaseUrl + 'GetProductDetails/' + CUST_CD, products);
         }
 
         function GetProductSelectorWrapper(dto) {
