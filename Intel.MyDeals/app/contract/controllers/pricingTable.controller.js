@@ -1332,7 +1332,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
     function ValidateProducts(currentPricingTableRowData, publishWipDeals, currentRowNumber) {
         var currentPricingTableRowData = currentPricingTableRowData.map(function (row, index) {
-            return Object.assign({}, row, { 'ROW_NUMBER': index + 1 });
+            return $.extend({}, row, { 'ROW_NUMBER': index + 1 });
         });
 
        // if row number is passed then its translation for single row
@@ -1397,7 +1397,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             data = buildTranslatorOutputObject(invalidProductJSONRows, data);
             cookProducts(currentRowNumber, data, currentPricingTableRowData, publishWipDeals);
         } else { // No products to validate, call the Validate and Save from contract manager
-            if (publishWipDeals) {
+            if (!publishWipDeals) {
                 root.validatePricingTable();
             } else {
                 root.publishWipDeals();
@@ -1440,7 +1440,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         if (isAllValidated) {
             // If current row is undefined its clicked from top bar validate button
             if (!currentRow) {
-                if (publishWipDeals) {
+                if (!publishWipDeals) {
                     root.validatePricingTable();
                 } else {
                     root.publishWipDeals();
@@ -1491,7 +1491,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     root.spreadDs.sync();
                     if (!currentRow) { // If current row is undefined its clicked from top bar validate button
                         if (!currentRow) {
-                            if (publishWipDeals) {
+                            if (!publishWipDeals) {
                                 root.validatePricingTable();
                             } else {
                                 root.publishWipDeals();
