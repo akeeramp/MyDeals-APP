@@ -675,7 +675,7 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = "CAP_INFO",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 Width = 130,
-                Template = "#=gridUtils.uiMoneyDatesControlWrapper(data, 'CAP', 'CAP_STRT_DT', 'CAP_END_DT')#",
+                Template = "<op-popover ng-click='openCAPBreakOut(dataItem, \"CAP\")' op-options='CAP' op-label='' op-data='getPrductDetails(dataItem, \"CAP\")'>#=gridUtils.uiMoneyDatesControlWrapper(data, 'CAP', 'CAP_STRT_DT', 'CAP_END_DT')#</op-popover>",
                 Label = "CAP Info",
                 DataType = "object",
                 IsFilterable = true,
@@ -728,7 +728,7 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "YCS2 Info",
                 IsFilterable = true,
                 IsSortable = true,
-                Template = "#=gridUtils.uiMoneyDatesControlWrapper(data, 'YCS2_PRC_IRBT', 'YCS2_START_DT', 'YCS2_END_DT')#"
+                Template = "<op-popover op-options='YCS2' op-data='getPrductDetails(dataItem, \"YCS2\")'>#=gridUtils.uiMoneyDatesControlWrapper(data, 'YCS2_PRC_IRBT', 'YCS2_START_DT', 'YCS2_END_DT')#</op-popover>",
             });
             items.Add(new UiTemplateContainerItem
             {

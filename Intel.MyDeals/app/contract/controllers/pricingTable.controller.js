@@ -395,7 +395,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             'START_DT': contract.START_DT,
             'END_DT': contract.END_DT,
             'CUST_MBR_SID': contract.CUST_MBR_SID,
-            'GEO_MBR_SID': root.curPricingTable["GEO_COMBINED"],
+            'GEO_COMBINED': root.curPricingTable["GEO_COMBINED"],
             'PTR_SYS_PRD': "",
             'PTR_SYS_INVLD_PRD': "",
             'PROGRAM_PAYMENT': root.curPricingTable["PROGRAM_PAYMENT"],
@@ -548,20 +548,24 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 		    }
 
 		    if (isPtrSysPrdFlushed) {
-		        // TODO we will need to revisit.  There are cases where we CANNOT remove products and reload... active deals for example
-		        sheet.range("D" + topLeftRowIndex + ":E" + bottomRightRowIndex).value("");
+		        if (!systemModifiedProductInclude) {
+		            // TODO we will need to revisit.  There are cases where we CANNOT remove products and reload... active deals for example
+		            sheet.range("D" + topLeftRowIndex + ":E" + bottomRightRowIndex).value("");
 
-		        arg.range.forEachCell(
-                    function (rowIndex, colIndex, value) {
-                        if (colIndex === productColIndex) { // Product Col changed
-                            // Re-disable specific cells that are readOnly
-                            var rowInfo = root.pricingTableData.PRC_TBL_ROW[(rowIndex - 1)]; // This is -1 to account for the 0th rows in the spreadsheet
-                            if (rowInfo != undefined) { // The row was pre-existing
-                                disableIndividualReadOnlyCells(sheet, rowInfo, rowIndex, 1);
+		            arg.range.forEachCell(
+                        function (rowIndex, colIndex, value) {
+                            if (colIndex === productColIndex) { // Product Col changed
+                                // Re-disable specific cells that are readOnly
+                                var rowInfo = root.pricingTableData.PRC_TBL_ROW[(rowIndex - 1)]; // This is -1 to account for the 0th rows in the spreadsheet
+                                if (rowInfo != undefined) { // The row was pre-existing
+                                    disableIndividualReadOnlyCells(sheet, rowInfo, rowIndex, 1);
+                                }
+
                             }
-
-                        }
-                    });
+                        });
+		        } else {
+		            systemModifiedProductInclude = false;
+		        }
 		    }
 
             if (isProductColumnIncludedInChanges && arg.range.value() !== null) {
@@ -609,10 +613,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         for (var r = 0; r < data.length; r++) {
                             if (data[r]["DC_ID"] !== null && data[r]["DC_ID"] !== undefined) continue;
 
-		                        data[r]["DC_ID"] = $scope.uid--;
-		                        data[r]["VOLUME"] = null;
-		                        data[r]["ECAP_PRICE"] = null;
-		                        data[r]["CUST_ACCNT_DIV"] = root.contractData.CUST_ACCNT_DIV;
+                            data[r]["DC_ID"] = $scope.uid--;
+                            data[r]["VOLUME"] = null;
+                            data[r]["ECAP_PRICE"] = null;
+                            data[r]["CUST_ACCNT_DIV"] = root.contractData.CUST_ACCNT_DIV;
 
                             for (var key in ptTemplate.model.fields) {
                                 if (ptTemplate.model.fields.hasOwnProperty(key)) {
@@ -896,7 +900,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 	                    switch (myFieldModel.type) {
 	                        case "date":
 	                                var cellSelection = sheet.range(myColumnName + ":" + myColumnName);
-	                            //sheet.range(myColumnName + ":" + myColumnName).format("MM/dd/yyyy");								
+	                            //sheet.range(myColumnName + ":" + myColumnName).format("MM/dd/yyyy");
 	                            cellSelection.editor("datePickerEditor");
 
                                 vm.requiredStringColumns[key] = true;
@@ -967,8 +971,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                 //root.syncCellsOnSingleRow(sheet, rowInfo, rowIndex);
 
-				//for (var key in ptTemplate.model.fields) { 
-				//	// Required string validation via columns 
+				//for (var key in ptTemplate.model.fields) {
+				//	// Required string validation via columns
 				//	// NOTE: LEN validation means that we need to put validation on ecah individual cell rather than bulk
 	            //    if ((root.colToLetter[key] !== undefined) && (vm.requiredStringColumns.hasOwnProperty(key))) {
 				//        // MOVED TO MT VALIDATION AS MULTIPLE VALIDATIONS ARE NOT SUPPORTED AND MYDEALS_ERROR IS THE VALIDATION WE WILL USE
@@ -1351,7 +1355,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             return $.extend({}, row, { 'ROW_NUMBER': index + 1 });
         });
 
-       // if row number is passed then its translation for single row
+        // if row number is passed then its translation for single row
         if (!!currentRowNumber) {
             currentPricingTableRowData = currentPricingTableRowData.filter(function (x) {
                 return x.ROW_NUMBER == currentRowNumber;
@@ -1565,8 +1569,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 // Remove brackets
                 cellCurrVal = cellCurrVal.replace(/\[(.*?)\]/g, "$1");
 
-				if (colName === "CUST_ACCNT_DIV") {
-				    cellCurrVal = cellCurrVal.replace(/\//g, ",");
+                if (colName === "CUST_ACCNT_DIV") {
+                    cellCurrVal = cellCurrVal.replace(/\//g, ",");
                 }
 
                 cellCurrVal = cellCurrVal.split(',');
@@ -1672,6 +1676,47 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             }, function () { });
         }
     });
+
+    function getPrductDetails(dataItem, priceCondition) {
+        return [{
+            'CUST_MBR_SID': $scope.contractData.CUST_MBR_SID,
+            'PRD_MBR_SID': dataItem.PRODUCT_FILTER,
+            'GEO_MBR_SID': dataItem.GEO_COMBINED,
+            'DEAL_STRT_DT': dataItem.START_DT,
+            'DEAL_END_DT': dataItem.END_DT,
+            'getAvailable': 'N',
+            'priceCondition': priceCondition
+        }];
+    }
+
+    function openCAPBreakOut(dataItem, priceCondition) {
+        var productData = {
+            'CUST_MBR_SID': $scope.contractData.CUST_MBR_SID,
+            'PRD_MBR_SID': dataItem.PRODUCT_FILTER,
+            'GEO_MBR_SID': dataItem.GEO_COMBINED,
+            'DEAL_STRT_DT': dataItem.START_DT,
+            'DEAL_END_DT': dataItem.END_DT,
+            'getAvailable': 'N',
+            'priceCondition': priceCondition
+        }
+        var capModal = $uibModal.open({
+            backdrop: 'static',
+            templateUrl: 'app/contract/productCAPBreakout/productCAPBreakout.html',
+            controller: 'ProductCAPBreakoutController',
+            controllerAs: 'vm',
+            windowClass: 'cap-modal-window',
+            size: 'lg',
+            resolve: {
+                productData: angular.copy(productData),
+            }
+        });
+
+        capModal.result.then(
+            function () {
+            },
+            function () {
+            });
+    }
 
     init();
 }

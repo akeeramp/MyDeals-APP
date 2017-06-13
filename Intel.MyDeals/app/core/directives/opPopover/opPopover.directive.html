@@ -1,6 +1,7 @@
-﻿<div>
-    <a popover-hoverable="true" popover-class="increase-popover-width" popover-is-open="dynamicPopover.isOpen" popover-placement="left"
-       uib-popover-template="dynamicPopover.templateUrl">{{opLabel}}</a>
+﻿<div class="opPopOver">
+    <ng-transclude />
+    <a popover-hoverable="true" popover-class="increase-popover-width" popover-is-open="dynamicPopover.isOpen" popover-placement="auto"
+       uib-popover-template="dynamicPopover.templateUrl" popover-append-to-body="true"></a>
 
     <script type="text/ng-template" id="capPopoverTemplate.html">
         <div>
@@ -15,6 +16,9 @@
     .increase-popover-width {
         max-width: 400px;
         min-width: 400px;
+    }
+    .opPopOver{
+        cursor:pointer;
     }
 </style>
 

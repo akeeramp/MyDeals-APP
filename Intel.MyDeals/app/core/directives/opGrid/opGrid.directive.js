@@ -2,9 +2,9 @@
     .module('app.core')
     .directive('opGrid', opGrid);
 
-opGrid.$inject = ['$compile', 'objsetService', '$timeout', 'colorDictionary'];
+opGrid.$inject = ['$compile', 'objsetService', '$timeout', 'colorDictionary', '$uibModal'];
 
-function opGrid($compile, objsetService, $timeout, colorDictionary) {
+function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
     return {
         scope: {
             opData: '=',
@@ -13,7 +13,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
         restrict: 'AE',
         templateUrl: '/app/core/directives/opGrid/opGrid.directive.html',
         controller: ['$scope', '$http', function ($scope, $http) {
-            
+
             $timeout(function () {
                 $scope.tabStripDelay = true;
                 $timeout(function () {
@@ -42,6 +42,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
             $scope.isLayoutConfigurable = $scope.assignVal("isLayoutConfigurable", false);
             $scope.isPricingTableEnabled = $scope.assignVal("isPricingTableEnabled", false);
             $scope.isEditable = $scope.assignVal("isEditable", false);
+            $scope.openCAPBreakOut = openCAPBreakOut;
+            $scope.getPrductDetails = getPrductDetails;
 
             $scope.assignColSettings = function () {
                 if ($scope.opOptions.columns === undefined) return [];
@@ -169,7 +171,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
                         grps[g].order = 99;
                     } else {
                         grps[g].order = tabstrip.tabGroup.find(':contains("' + grps[g].name + '")').index();
-                        // if we can't find the tab... it is probably a new one being added and not rendered yet. 
+                        // if we can't find the tab... it is probably a new one being added and not rendered yet.
                         if (grps[g].order === -1) grps[g].order = 50;
                     }
                 }
@@ -200,10 +202,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
                     }
                 }
             }
-            
+
             $scope.restoreLayout = function () {
                 $scope.opOptions.groups = [];
-                
+
                 $timeout(function () {
                     $scope.cloneWithOrder("default");
 
@@ -265,7 +267,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
                     // cancel
                 });
             }
-            
+
             $scope.renameGrp = function () {
                 kendo.prompt("Please, change the group name:", $scope.curGroup).then(function (data) {
                     if (data === "") return;
@@ -328,7 +330,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
                         for (var j = 0; j < $scope.opData.length; j++) {
                             $scope.opData[j]["_parentCnt"] = childParent[$scope.opData[j].DC_PARENT_ID];
                         }
-                        
+
                         var source = $scope.opData;
 
                         // on success
@@ -488,7 +490,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
                         });
                 }
             }
-            
+
             $scope.multiDimEditor = function(container, options) {
                 var field = $(container).closest("[data-role=grid]").data("kendoGrid").dataSource.options.schema.model.fields[options.field];
                 var cols = $(container).closest("[data-role=grid]").data("kendoGrid").columns;
@@ -515,15 +517,15 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
                     el += '<input k-ng-model="dataItem.' + field + '[\'' + dimKey + '\']" style="width: 100%;" />';
 
                 } else if (type === "ComboBox") {
-                    
+
                 } else if (type === "DropDown") {
-                    
+
                 } else if (type === "DatePicker") {
-                    
+
                 } else if (type === "Label") {
-                    
+
                 } else if (type === "CheckBox") {
-                    
+
                 } else if (type === "NumericTextBox") {
                     el += '<input kendo-numeric-text-box k-ng-model="dataItem.' + field + '[\'' + dimKey + '\']" style="width: 100%;" />';
 
@@ -692,7 +694,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
                 }
                 return null;
             }
-            
+
             $scope.$on('syncDs', function (event, args) {
                 event.currentScope.contractDs.sync();
             });
@@ -1062,6 +1064,47 @@ function opGrid($compile, objsetService, $timeout, colorDictionary) {
             }
 
             $scope.opOptions.columns = $scope.assignColSettings();
+
+            function getPrductDetails(dataItem, priceCondition) {
+                return [{
+                    'CUST_MBR_SID': $scope.$parent.$parent.getCustId(),
+                    'PRD_MBR_SID': dataItem.PRODUCT_FILTER,
+                    'GEO_MBR_SID': dataItem.GEO_COMBINED,
+                    'DEAL_STRT_DT': dataItem.START_DT,
+                    'DEAL_END_DT': dataItem.END_DT,
+                    'getAvailable': 'N',
+                    'priceCondition': priceCondition
+                }];
+            }
+
+            function openCAPBreakOut(dataItem, priceCondition) {
+                var productData = {
+                    'CUST_MBR_SID': $scope.$parent.$parent.getCustId(),
+                    'PRD_MBR_SID': dataItem.PRODUCT_FILTER,
+                    'GEO_MBR_SID': dataItem.GEO_COMBINED,
+                    'DEAL_STRT_DT': dataItem.START_DT,
+                    'DEAL_END_DT': dataItem.END_DT,
+                    'getAvailable': 'N', // If sent as 'Y' gets the current CAP info
+                    'priceCondition': priceCondition // CAP or YCS2
+                }
+                var capModal = $uibModal.open({
+                    backdrop: 'static',
+                    templateUrl: 'app/contract/productCAPBreakout/productCAPBreakout.html',
+                    controller: 'ProductCAPBreakoutController',
+                    controllerAs: 'vm',
+                    windowClass: 'cap-modal-window',
+                    size: 'lg',
+                    resolve: {
+                        productData: angular.copy(productData),
+                    }
+                });
+
+                capModal.result.then(
+                    function () {
+                    },
+                    function () {
+                    });
+            }
         }],
         link: function (scope, element, attr) {
             scope.elGrid = element;

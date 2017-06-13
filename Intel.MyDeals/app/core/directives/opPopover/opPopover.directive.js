@@ -7,11 +7,11 @@ opPopover.$inject = ['$compile', 'dataService', '$timeout', 'logger'];
 function opPopover($compile, dataService, $timeout, logger) {
     return {
         scope: {
-            opLabel: '@',
             opData: '&',
             opOptions: '@',
         },
         restrict: 'AE',
+        transclude: true,
         templateUrl: '/app/core/directives/opPopover/opPopover.directive.html',
         controller: ['$scope', 'dataService', function ($scope, dataService) {
         }],
@@ -46,16 +46,19 @@ function opPopover($compile, dataService, $timeout, logger) {
 
             scope.getData = function () {
                 var data = scope.opData();
-                scope.loading = true;
-                dataService.post("api/Products/GetProductCAPYCS2Data/" + data[0].getAvailable + "/" + data[0].priceCondition, data).then(function (response) {
-                    scope.loading = false;
-                    scope.dataSource.read();
-                    scope.gridData = response.data;
-                    return scope.gridData;
-                },
-                 function (response) {
-                     logger.error("Unable to get data", response, response.statusText);
-                 });
+                // Fail silently
+                if (data.length == 1) {
+                    scope.loading = true;
+                    dataService.post("api/Products/GetProductCAPYCS2Data/" + data[0].getAvailable + "/" + data[0].priceCondition, data).then(function (response) {
+                        scope.loading = false;
+                        scope.dataSource.read();
+                        scope.gridData = response.data;
+                        return scope.gridData;
+                    },
+                     function (response) {
+                         logger.error("Unable to get data", response, response.statusText);
+                     });
+                }
             }
 
             scope.insidePopover = false;

@@ -35,6 +35,7 @@
         vm.splitProducts = false;
         vm.openCAPBreakOut = openCAPBreakOut;
         vm.showSingleProductHeirarchy = showSingleProductHeirarchy;
+        vm.getVerticalsUnderMarkLevel = getVerticalsUnderMarkLevel;
         var selectionProcessed = false;
 
         function populateValidProducts() {
@@ -49,6 +50,18 @@
                     });
                 }
             }
+        }
+
+        function getVerticalsUnderMarkLevel(markLevelName) {
+            var productCategories = $filter('unique')(vm.productSelectionLevels, 'PRD_CAT_NM');
+            var markLevel = vm.selectedPathParts.length == 0 ? 'MRK_LVL1' : 'MRK_LVL2';
+            var varticals = productCategories.filter(function (x) {
+                    return x[markLevel] == markLevelName
+                }).map(function(elem){
+                    return elem.PRD_CAT_NM;
+                }).join(" | ");
+
+            return varticals;
         }
 
         populateValidProducts();
@@ -410,13 +423,13 @@
                     field: "CAP",
                     title: "CAP Price",
                     width: "150px",
-                    template: "<op-popover ng-click='vm.openCAPBreakOut(dataItem, \"CAP\")' op-options='CAP' op-label='#= CAP #' op-data='vm.getPrductDetails(dataItem, \"CAP\")' />"
+                    template: "<op-popover ng-click='vm.openCAPBreakOut(dataItem, \"CAP\")' op-options='CAP' op-data='vm.getPrductDetails(dataItem, \"CAP\")'>#= CAP #</op-popover>"
                 },
                 {
                     field: "YCS2",
                     title: "YCS2",
                     width: "150px",
-                    template: "<op-popover op-options='YCS2' op-label='#= YCS2 #' op-data='vm.getPrductDetails(dataItem, \"YCS2\")' />"
+                    template: "<op-popover op-options='YCS2' op-data='vm.getPrductDetails(dataItem, \"YCS2\")'>#= YCS2 #</op-popover>"
                 },
                 {
                     field: "CPU_PROCESSOR_NUMBER",
