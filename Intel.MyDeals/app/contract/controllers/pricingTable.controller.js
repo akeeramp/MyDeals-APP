@@ -18,7 +18,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     vm.customDragDropAutoFill = customDragDropAutoFill;
     vm.resetDirty = resetDirty;
     vm.getColumns = getColumns;
-    vm.openProdCorrector = openProdCorrector
+    vm.openProdCorrector = openProdCorrector;
     $scope.openProductSelector = openProductSelector;
     $scope.openInfoDialog = openInfoDialog;
     $scope.validatePricingTableProducts = validatePricingTableProducts;
@@ -569,196 +569,116 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 		    }
 
             if (isProductColumnIncludedInChanges && arg.range.value() !== null) {
-                // Now lets sync all values.
-                // This is a performance boost
-                // Instead of batch and cell manipulation, we will
-                //   1) dump the spreadsheet to a datasource
-                //   2) update the datasource array
-                //   3) reapply it to the datasource
-                //   4) sync it to the spreadsheet
-                //
-                //  Doesn't make sense why this is faster, but it is and it also doesn't look values as they are applied
-
-                $timeout(function () {
-                    if (root.spreadDs !== undefined) {
-                        var data = root.spreadDs.data();
-
-                        // Remove any lingering blank rows from the data
-                        for (var n = data.length - 1; n >= 0; n--) {
-                            if (data[n].DC_ID === null && data[n].PTR_USER_PRD === "") {
-                                data.splice(n, 1);
-                            }
-                        }
-
-                        var rowStart = topLeftRowIndex - 2;
-                        var rowStop = bottomRightRowIndex - 2;
-
-                        // look for skipped lines
-                        var insertNumRows = rowStart + 1 - data.length;
-                        //for (var n = 0; n < insertNumRows; n++) {
-                        //    data.splice(data.length - 1,
-                        //        0,
-                        //        {
-                        //            "DC_ID": $scope.uid--,
-                        //            "uid": util.generateUUID(),
-                        //            "PTR_USER_PRD": null,
-                        //            "ECAP_PRICE": null,
-                        //            "VOLUME": null,
-                        //            "START_DT": null,
-                        //            "END_DT": null
-                        //        });
-                        //}
-                        //debugger;
-
-                        for (var r = 0; r < data.length; r++) {
-                            if (data[r]["DC_ID"] !== null && data[r]["DC_ID"] !== undefined) continue;
-
-                            data[r]["DC_ID"] = $scope.uid--;
-                            data[r]["VOLUME"] = null;
-                            data[r]["ECAP_PRICE"] = null;
-                            data[r]["CUST_ACCNT_DIV"] = root.contractData.CUST_ACCNT_DIV;
-
-                            for (var key in ptTemplate.model.fields) {
-                                if (ptTemplate.model.fields.hasOwnProperty(key)) {
-                                    // Auto-fill default values from Contract level
-                                    if ((root.contractData[key] !== undefined) &&
-                                        (root.contractData[key] !== null) &&
-                                        (root.colToLetter[key] != undefined) &&
-                                        key !== "DC_ID"
-                                    ) {
-                                        var fillValue = root.contractData[key];
-                                        if (ptTemplate.model.fields[key].type === "date") {
-                                            fillValue = new Date(root.contractData[key]);
-                                        }
-                                        data[r][key] = fillValue;
-                                    }
-
-                                    // Auto-fill default values from Pricing Strategy level
-                                    if ((root.curPricingTable[key] !== undefined) &&
-                                        (root.curPricingTable[key] !== null) &&
-                                        (root.colToLetter[key] != undefined) &&
-                                        key !== "DC_ID"
-                                    ) {
-                                        data[r][key] = root.curPricingTable[key];
-                                    }
-                                }
-                            }
-                        }
-
-                        // now apply array to Datasource... one event triggered
-                        root.spreadDs.sync();
-
-                        // If we skipped spaces, we already collapsed, so remove the extra data outside the range
-                        var st = data.length + 2;
-                        var en = bottomRightRowIndex;
-                        var numBlanks = en - st + 1;
-                        if (numBlanks > 0) {
-                            stealthOnChangeMode = true;
-                            sheet.range("A" + st + ":Z" + en).value("");
-                            stealthOnChangeMode = false;
-                        }
-
-                        sheet.batch(function () {
-                            var finalColLetter = String.fromCharCode(intA + (ptTemplate.columns.length - 1));
-                            // Enable other cells
-                            var range = sheet.range("B" +
-                                (topLeftRowIndex - numBlanks) +
-                                ":" +
-                                finalColLetter +
-                                (bottomRightRowIndex - numBlanks));
-                            range.enable(true);
-                            range.background(null);
-
-		                        // Re-disable columns that are readOnly
-		                        for (var key in vm.readOnlyColLetters) {
-		                            if (vm.readOnlyColLetters.hasOwnProperty(key)) {
-		                                disableRange(sheet.range(key +
-		                                    (topLeftRowIndex - numBlanks) +
-		                                    ":" +
-		                                    key +
-		                                    (bottomRightRowIndex - numBlanks)));
-		                            }
-		                        }
-
-		                        for (var key in ptTemplate.model.fields) {
-
-		                            var myColumnName = root.colToLetter[key];
-		                            var myFieldModel = ptTemplate.model.fields[key];
-
-		                            if (ptTemplate.model.fields.hasOwnProperty(key) && myColumnName !== undefined) {
-		                                if (myFieldModel.opLookupText === "DROP_DOWN" || myFieldModel.opLookupText === "dropdownName" ) {
-		                                    applyDropDowns(sheet, myFieldModel, myColumnName);
-		                                }
-		                            }
-		                        }
-		                    });
-		                }
-		            },
-		            10);
-
-                //arg.range.forEachCell(
-                //    function (rowIndex, colIndex, value) {
-                //        if (colIndex === productColIndex) { // Product Col changed
-                //            for (var key in ptTemplate.model.fields) {
-                //                var hasExistingCellValue = (sheet.range(root.colToLetter[key] + (rowIndex + 1)).value()) === "" || (sheet.range(root.colToLetter[key] + (rowIndex + 1)).value() == null); // don't override existing values for autofill
-
-                //                // Auto-fill default values from Contract level
-                //                if ((root.contractData[key] !== undefined)
-                //                        && (root.contractData[key] !== null)
-                //                        && (root.colToLetter[key] != undefined)
-                //                        && (hasExistingCellValue)
-                //                    ) {
-                //                    var fillValue = root.contractData[key];
-                //                    if (ptTemplate.model.fields[key].type == "date") {
-                //                        fillValue = new Date(root.contractData[key]);
-                //                    }
-                //                    sheet.range(root.colToLetter[key] + (rowIndex + 1)).value(fillValue);
-                //                }
-                //                // Auto-fill default values from Pricing Strategy level
-                //                if ((root.curPricingTable[key] !== undefined)
-                //                        && (root.curPricingTable[key] !== null)
-                //                        && (root.colToLetter[key] != undefined)
-                //                        && (hasExistingCellValue)
-                //                    ) {
-                //                    sheet.range(root.colToLetter[key] + (rowIndex + 1)).value(root.curPricingTable[key]);
-                //                }
-                //            }
-
-                //        }
-                //    });
+                syncSpreadRows(sheet, topLeftRowIndex, bottomRightRowIndex);
             }
-            //} else {
-            //sheet.batch(function () {
-            //    // need to see if an item changed that would cause the PTR_SYS_PRD to be cleared out
-            //    var isPtrSysPrdFlushed = false;
-            //    for (var f = 0; f < flushSysPrdFields.length; f++) {
-            //        var colIndx = root.colToLetter[flushSysPrdFields[f]].charCodeAt(0) - intA;
-            //        if (arg.range._ref.topLeft.col <= colIndx && arg.range._ref.bottomRight.col >= colIndx) isPtrSysPrdFlushed = true;
-            //    }
-
-            //    if (isPtrSysPrdFlushed) {
-            //        // TODO we will need to revisit.  There are cases where we CANNOT remove products and reload... active deals for example
-            //        var range = sheet.range("D" + topLeftRowIndex + ":D" + bottomRightRowIndex);
-            //        range.value("");
-
-            //        arg.range.forEachCell(
-            //            function (rowIndex, colIndex, value) {
-            //                if (colIndex === productColIndex) { // Product Col changed
-            //                    // Re-disable specific cells that are readOnly
-            //                    var rowInfo = root.pricingTableData.PRC_TBL_ROW[(rowIndex - 1)]; // This is -1 to account for the 0th rows in the spreadsheet
-            //                    if (rowInfo != undefined) { // The row was pre-existing
-            //                        disableIndividualReadOnlyCells(sheet, rowInfo, rowIndex, 1);
-            //                    }
-
-            //                }
-            //            });
-            //    }
-            //});
         }
 
         if (!root._dirty) {
             root._dirty = true;
         }
+    }
+
+    function syncSpreadRows(sheet, topLeftRowIndex, bottomRightRowIndex) {
+        // Now lets sync all values.
+        // This is a performance boost
+        // Instead of batch and cell manipulation, we will
+        //   1) dump the spreadsheet to a datasource
+        //   2) update the datasource array
+        //   3) reapply it to the datasource
+        //   4) sync it to the spreadsheet
+        //
+        //  Doesn't make sense why this is faster, but it is and it also doesn't look values as they are applied
+
+        $timeout(function () {
+            if (root.spreadDs !== undefined) {
+                var data = root.spreadDs.data();
+
+                // Remove any lingering blank rows from the data
+                for (var n = data.length - 1; n >= 0; n--) {
+                    if (data[n].DC_ID === null && data[n].PTR_USER_PRD === "") {
+                        data.splice(n, 1);
+                    }
+                }
+
+                for (var r = 0; r < data.length; r++) {
+                    if (data[r]["DC_ID"] !== null && data[r]["DC_ID"] !== undefined) continue;
+
+                    data[r]["DC_ID"] = $scope.uid--;
+                    data[r]["VOLUME"] = null;
+                    data[r]["ECAP_PRICE"] = null;
+                    data[r]["CUST_ACCNT_DIV"] = root.contractData.CUST_ACCNT_DIV;
+
+                    for (var key in ptTemplate.model.fields) {
+                        if (ptTemplate.model.fields.hasOwnProperty(key)) {
+                            // Auto-fill default values from Contract level
+                            if ((root.contractData[key] !== undefined) &&
+                                (root.contractData[key] !== null) &&
+                                (root.colToLetter[key] != undefined) &&
+                                key !== "DC_ID"
+                            ) {
+                                var fillValue = root.contractData[key];
+                                if (ptTemplate.model.fields[key].type === "date") {
+                                    fillValue = new Date(root.contractData[key]);
+                                }
+                                data[r][key] = fillValue;
+                            }
+
+                            // Auto-fill default values from Pricing Strategy level
+                            if ((root.curPricingTable[key] !== undefined) &&
+                                (root.curPricingTable[key] !== null) &&
+                                (root.colToLetter[key] != undefined) &&
+                                key !== "DC_ID"
+                            ) {
+                                data[r][key] = root.curPricingTable[key];
+                            }
+                        }
+                    }
+                }
+
+                // now apply array to Datasource... one event triggered
+                root.spreadDs.sync();
+
+                // If we skipped spaces, we already collapsed, so remove the extra data outside the range
+                var st = data.length + 2;
+                var en = bottomRightRowIndex;
+                var numBlanks = en - st + 1;
+                if (numBlanks > 0) {
+                    stealthOnChangeMode = true;
+                    sheet.range("A" + st + ":Z" + en).value("");
+                    stealthOnChangeMode = false;
+                }
+
+                sheet.batch(function () {
+                    var finalColLetter = String.fromCharCode(intA + (ptTemplate.columns.length - 1));
+                    // Enable other cells
+                    var range = sheet.range("B" + (topLeftRowIndex - numBlanks) + ":" + finalColLetter + (bottomRightRowIndex - numBlanks));
+                    range.enable(true);
+                    range.background(null);
+
+                    // Re-disable columns that are readOnly
+                    for (var key in vm.readOnlyColLetters) {
+                        if (vm.readOnlyColLetters.hasOwnProperty(key)) {
+                            disableRange(sheet.range(key + (topLeftRowIndex - numBlanks) + ":" + key + (bottomRightRowIndex - numBlanks)));
+                        }
+                    }
+
+                    for (var key in ptTemplate.model.fields) {
+
+                        var myColumnName = root.colToLetter[key];
+                        var myFieldModel = ptTemplate.model.fields[key];
+
+                        if (ptTemplate.model.fields.hasOwnProperty(key) && myColumnName !== undefined) {
+                            if (myFieldModel.opLookupText === "DROP_DOWN" || myFieldModel.opLookupText === "dropdownName") {
+                                if (myFieldModel.uiType === "RADIOBUTTONGROUP" || myFieldModel.uiType === "DROPDOWN") {
+                                    applyDropDowns(sheet, myFieldModel, myColumnName);
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }, 10);
+
     }
 
     function disableIndividualReadOnlyCells(sheet, rowInfo, rowIndex, rowIndexOffset) {
@@ -1321,7 +1241,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             systemModifiedProductInclude = true;
                             context.callback(contractProducts); // Change event is triggered
                         } else {
-                            var row = context.range._ref.row + 1;
+                            var initRow = context.range._ref.row + 1;
+                            var row = initRow;
 
                             // Updating current row values other than through context callback not triggering the spreadsheet change function
                             // Store at the first iteration of loop and update end of the call, not ideal though :(
@@ -1340,6 +1261,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 }
                             }
                             systemModifiedProductInclude = true;
+                            syncSpreadRows(context.range._sheet, initRow+1, row);
                             context.callback(currentRowValue); // Change event is triggered
                         }
                     },
@@ -1525,12 +1447,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     }
 
     function validatePricingTableProducts() {
-        var data = root.spreadDs.data()
+        var data = root.spreadDs.data();
         ValidateProducts(data, false);
     }
 
     function validateSavepublishWipDeals() {
-        var data = root.spreadDs.data()
+        var data = root.spreadDs.data();
         ValidateProducts(data, true);
     }
 

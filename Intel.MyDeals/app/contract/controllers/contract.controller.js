@@ -995,7 +995,7 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                             $scope.setBusy("Delete Successful", "Deleted the Pricing Strategy");
                             $timeout(function () {
                                 $scope.setBusy("", "");
-                            }, 4000);
+                            }, 2000);
                             topbar.hide();
 
                         // redirect if focused PT belongs to deleted PS
@@ -2016,14 +2016,14 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                 $scope.addTableDisabled = false;
             }
         }
-        $scope.newPricingTableExtraLength = function() {
-            if ($scope.newPricingTable === undefined || $scope.newPricingTable._extraAtrbs === undefined) return 0;
-            return Object.keys($scope.newPricingTable._extraAtrbs).length;
-        }
-        $scope.newPricingTableDefaultLength = function() {
-            if ($scope.newPricingTable === undefined || $scope.newPricingTable._defaultAtrbs === undefined) return 0;
-            return Object.keys($scope.newPricingTable._defaultAtrbs).length;
-        }
+    $scope.newPricingTableExtraLength = function() {
+        if ($scope.newPricingTable === undefined || $scope.newPricingTable._extraAtrbs === undefined) return 0;
+        return Object.keys($scope.newPricingTable._extraAtrbs).length;
+    }
+    $scope.newPricingTableDefaultLength = function() {
+        if ($scope.newPricingTable === undefined || $scope.newPricingTable._defaultAtrbs === undefined) return 0;
+        return Object.keys($scope.newPricingTable._defaultAtrbs).length;
+    }
 
 
         //setting a few constants for the strings that occur a lot
@@ -2045,7 +2045,7 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
 			        if (!!newValue[MRKT_SEG]) newValue[MRKT_SEG].value = ["All"];
 			        if (!!newValue[GEO]) newValue[GEO].value = ["Worldwide"];
 			        if (!!newValue["PAYOUT_BASED_ON"]) newValue["PAYOUT_BASED_ON"].value = "Billings"; //TODO: typo- need to correct to "Billing" in db
-			        if (!!newValue["MEET_COMP_PRICE_QSTN"]) newValue["MEET_COMP_PRICE_QSTN"].value = "Price / Performance";
+			        if (!!newValue["MEET_COMP_PRICE_QSTN"]) newValue["MEET_COMP_PRICE_QSTN"].value = "Price Only";
 			        if (!!newValue["PROGRAM_PAYMENT"]) newValue["PROGRAM_PAYMENT"].value = "Backend";
 			        if (!!newValue["PROD_INCLDS"]) newValue["PROD_INCLDS"].value = "Tray";
                 } else {
@@ -2083,51 +2083,33 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
 
         $scope.validatePricingTable = function (stateName) {
             $scope.saveEntireContractBase($state.current.name, true, false);
-
-            return;
-            var data = createEntireContractBase('contract.manager.strategy', $scope._dirtyContractOnly);
-
-            debugger;
-            objsetService.validatePricingTableRow(data)
-				.then(function (response) {
-				    // TODO: Put the data into the Processed Product list column?
-				    console.log(response.data);
-
-				    var errStr = "";
-				    // Format the error data
-				    if (response.data.ColumnErrors !== undefined && response.data.ColumnErrors !== null) {
-				        for (var rowIndex in response.data.ColumnErrors) {
-				            if (response.data.ColumnErrors.hasOwnProperty(rowIndex)) {
-				                var rowErrorsList = response.data.ColumnErrors[rowIndex];
-				                for (var colName in rowErrorsList) {
-				                    if (rowErrorsList.hasOwnProperty(colName)) {
-				                        if (rowErrorsList[colName] !== null && rowErrorsList[colName].length > 0) {
-				                            for (var i = 0; i < rowErrorsList[colName].length; i++) {
-				                                var myErrMsg = rowErrorsList[colName][i];
-				                                errStr += "\n - Row #" + rowIndex + " (" + colName + ")     " + myErrMsg;
-				                            }
-				                        }
-				                    }
-				                }
-				            }
-				        }
-				    }
-				    // TODO: put these errors in the product corrector or something
-				    alert("Errors found: (TODO: put the err object into product corrector) \n" + errStr);
-
-				}, function (response) {
-				    console.log(response.data);
-				    alert("Errors found - TODO: Do something with the translated product response. Check the console for translated data.");
-				    logger.error("Unable to translate products.", response, response.statusText);
-				}
-			);
         }
-
 
         $scope.publishWipDeals = function () {
             if ($scope.isWip) return;
+
+            if ($scope.spreadDs.data().length === 0) {
+                $scope.setBusy("No Products Found", "Please add products.");
+                $timeout(function () {
+                    $scope.setBusy("", "");
+                }, 2000);
+                return;
+            }
+
             $scope.setBusy("Loading...", "Loading the Deal Editor");
-            $scope.saveEntireContractBase($state.current.name, true, true, 'contract.manager.strategy.wip', { cid: $scope.contractData.DC_ID, sid: $scope.curPricingStrategyId, pid: $scope.curPricingTableId });
+
+            var valid = $scope.curPricingStrategy.PASSED_VALIDATION;
+            if (!$scope._dirty && (valid === "Complete" || valid === "Finalizing")) {
+                $state.go('contract.manager.strategy.wip',
+                {
+                    cid: $scope.contractData.DC_ID,
+                    sid: $scope.curPricingStrategyId,
+                    pid: $scope.curPricingTableId
+                },
+                { reload: true });
+            } else {
+                $scope.saveEntireContractBase($state.current.name, true, true, 'contract.manager.strategy.wip', { cid: $scope.contractData.DC_ID, sid: $scope.curPricingStrategyId, pid: $scope.curPricingTableId });
+            }
         }
         $scope.backToPricingTable = function() {
             if ($scope.isPtr) return;

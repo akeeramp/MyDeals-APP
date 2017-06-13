@@ -1,7 +1,11 @@
-﻿<div style="height: 23px; margin: 0 2px; border-bottom: 1px solid #e8eaec;">
+﻿<div style="height: 23px; margin: 0 2px; border-bottom: 1px solid #e8eaec; width: 280px; overflow: hidden;">
     <div class="fl flowBtn" ng-class="{inactive: flowMode != 'Deal Entry'}" ng-click="gotoDealEntry()">Deal Entry</div>
+    <div class="fl flowBtn disabled">Compliance</div>
+    <div class="fr flowBtn disabled">Manage</div>
+    <!--
     <div class="fl flowBtn" ng-class="{inactive: flowMode != 'Compliance'}" ng-click="gotoCompliance()">Compliance</div>
-    <div class="fl flowBtn" ng-class="{inactive: flowMode != 'Manage'}" ng-click="gotoManage()">Manage</div>
+    <div class="fr flowBtn" ng-class="{inactive: flowMode != 'Manage'}" ng-click="gotoManage()">Manage</div>
+        -->
     <div class="clearboth"></div>
 </div>
 
@@ -11,10 +15,15 @@
         padding: 2px;
         font-size: 12px;
         font-weight: 600;
-        width: 94px;
+        width: 88px;
         margin: 0 2px;
         color: #ffffff;
         text-align: center;
+        cursor: default;
+    }
+    .flowBtn.disabled {
+        background-color: #cccccc;
+        color: #999999;
         cursor: default;
     }
     .flowBtn.inactive {

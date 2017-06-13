@@ -1,10 +1,15 @@
 ﻿<div style="margin: 0;">
     <div ng-if="!isNewContract" class="fr" ng-include="'app/contract/partials/lnavButtons.html'"></div>
     
-    <div class="pricing-strategy-status-bar valid_{{ curPricingStrategy.PASSED_VALIDATION }}">
+    <!--<div class="pricing-strategy-status-bar valid_{{ curPricingStrategy.PASSED_VALIDATION }}">
         <div class="fl">{{ pageTitle }}</div>
         <div class="fr"><span style="opacity: 0.5;">Pricing Strategy:</span> {{ curPricingStrategy.WF_STG_CD }}</div>
+    </div>-->
+    <div class="pricing-strategy-status-bar valid_{{ curPricingStrategy.PASSED_VALIDATION }}">
+        <div class="fl"></div>
+        <div class="fr"><span style="opacity: 0.5;"></span> </div>
     </div>
+
     <div style="padding-top: 3px;" ng-if="isPtr || isWip">
         <div class="contractHeader" style="margin: 0 10px 0 0; line-height: 1.2em; font-size: 18px;">
             <table style="width: 100%;">

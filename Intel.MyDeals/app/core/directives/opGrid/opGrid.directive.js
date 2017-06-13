@@ -626,6 +626,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 dataItem._behaviors.isDirty[newField] = true;
                 dataItem._dirty = true;
                 $scope._dirty = true;
+                $scope.$broadcast('dirtyOpGrid');
             }
 
             $scope.$on('refresh', function (event, args) {
@@ -713,6 +714,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 }
 
                 $scope._dirty = false;
+                $scope.$broadcast('dirtyOpGrid');
             }
 
             $scope.saveWipDeals = function () {
