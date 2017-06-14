@@ -361,10 +361,10 @@ namespace Intel.MyDeals.BusinessRules
 
             string[] deProductCategoriesValue = r.Dc.GetDataElementValue(AttributeCodes.PRODUCT_CATEGORIES).Split(',');
 
-            if (deProductCategoriesValue.Contains("SvrWS"))
+            if (!deProductCategoriesValue.Contains("SvrWS"))
             {
                 IOpDataElement deServerDealType = r.Dc.GetDataElement(AttributeCodes.SERVER_DEAL_TYPE);
-                deServerDealType.IsHidden = false;
+                if (deServerDealType != null) deServerDealType.IsHidden = true;
             }
         }
 
@@ -488,12 +488,13 @@ namespace Intel.MyDeals.BusinessRules
             if (deStarDate == null || !deStarDate.IsDateInPast()) return;
 
             IOpDataElement deBackDate = r.Dc.GetDataElement(AttributeCodes.BACK_DATE_RSN);
+            if (deBackDate == null) return;
+
             string backDateTxt = r.Dc.GetDataElementValue(AttributeCodes.BACK_DATE_RSN_TXT);
 
             if (backDateTxt == "NEEDED" || !string.IsNullOrEmpty(deBackDate.AtrbValue.ToString()))
             {
-                if (deBackDate != null)
-                    deBackDate.IsRequired = true;
+                deBackDate.IsRequired = true;
             }
         }
     }
