@@ -6,7 +6,7 @@
                     <p class="prodText">Product Corrector</p>
                 </div>
                 <div class="col-md-4 text-center">
-                    <span class="rowNavigation"><label style="font-weight:400">Row ID {{ vm.rowDCId }}</label></span>
+                    <span class="rowNavigation"><label style="font-weight:400">ROW ({{ vm.rowDCId }})</label></span>
                     <span class="rowNavPanel" ng-if="!vm.hideNavigation">
                         <i role="button" title="Previous Row" class="intelicon-left-previous skyBlue" ng-click="vm.prevRow()" ng-disabled="vm.isPrevDisabled"></i>
                         <label> {{ vm.rowNumber }} of {{ vm.rows }} </label>
@@ -29,15 +29,13 @@
             </div>
             <div class="row" style="margin:0px" ng-if="!vm.isMultipleProduct">
                 <div ng-if="vm.items.length != 0">
-                    <!--<label class="text-left fl marginRight textProdSelector" ng-if="!vm.isMultipleProduct">Multiple products found for: {{ vm.productName }}</label>-->
                     <div class="drillDown btn-group btn-group-justified" role="group" aria-label="...">
                         <div class="btn-group" ng-repeat="p in vm.items" role="group">
-                            <button type="button" ng-class="{'noborder':$last}" ng-click="vm.selectsearchItem(p)" class="btn btn-default">{{::p.name}}</button>
+                            <button type="button" ng-class="{'noborder':$last}" title="{{p.name}}" ng-click="vm.selectsearchItem(p)" class="btn btn-default">{{::p.name}}</button>
                         </div>
                     </div>
                 </div>
                 <div ng-if="vm.showSearchResults">
-                    <!--<label class="text-left fl marginRight textProdSelector" ng-if="!vm.isMultipleProduct">Multiple products found for: {{ vm.productName }}</label>-->
                     <div class="btn-group btn-group-justified" role="group" aria-label="...">
                         <div id="prodGrid" kendo-grid="prodGrid" kendo-grid-check-box k-grid-checkbox="vm" class="prodCorrector opUiContainer md kendoGridHeight prodCorrector-grid k-grid" k-options="vm.gridOptionsProduct" style="margin-top:10px"></div>
                     </div>
@@ -123,7 +121,7 @@
 
     .rowNavigation {
         color: yellow;
-        font-size: 32px;
+        font-size: 28px;
     }
 
     .prodText {
@@ -133,7 +131,7 @@
 
     .rowNavPanel {
         color: white;
-        font-size: 32px;
+        font-size: 28px;
         padding-top: 12px;
         padding-left: 20px;
     }
@@ -219,6 +217,8 @@
         color: white; /* White text */
         cursor: pointer; /* Pointer/hand icon */
         float: left; /* Float the buttons side by side */
+        text-overflow: ellipsis;
+        overflow: hidden;
     }
 
     .drillDown {

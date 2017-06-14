@@ -129,18 +129,25 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             else {
                 vm.currentRow = pageNumber[0];
             }
+
+            updateRowDCID()
         }
 
-        if (ProductRows.length > 1) {
-            var currentPricingTableRow = ProductRows[vm.currentRow - 1];
-        }
-        else {
-            var currentPricingTableRow = ProductRows[0];
-        }
-        vm.rowDCId = currentPricingTableRow.DC_ID;
         if (vm.rows <= 1) {
             vm.hideNavigation = true;
         }
+    }
+
+    function updateRowDCID() {
+        $timeout(function () {
+            if (ProductRows.length > 1) {
+                var currentPricingTableRow = ProductRows[vm.currentRow - 1];
+            }
+            else {
+                var currentPricingTableRow = ProductRows[0];
+            }
+            vm.rowDCId = currentPricingTableRow.DC_ID;
+        }, 10);
     }
 
     // Invalid Product Grid/////
@@ -980,6 +987,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         if (vm.rowNumber < vm.rows) {
             vm.rowNumber = +vm.rowNumber + 1;
             vm.currentRow = pageNumber[vm.rowNumber - 1];
+            updateRowDCID();
             vm.addedProducts = [];
             productHierarchy = [];
             //Reset Bread cum
@@ -1005,6 +1013,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         if (vm.rowNumber > 1) {
             vm.rowNumber = vm.rowNumber - 1;
             vm.currentRow = +pageNumber[vm.rowNumber - 1];
+            updateRowDCID();
             vm.addedProducts = [];
             productHierarchy = [];
             //Reset Bread cum
