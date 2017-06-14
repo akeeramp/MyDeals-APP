@@ -181,7 +181,7 @@ namespace Intel.MyDeals.BusinessLogic
             }
 
             // Don't check for ANY becuase we might have to delete the last item
-            if (pricingTableRows != null)
+            if (pricingTableRows != null && pricingTableRows.Any())
             {
                 data[OpDataElementType.PRC_TBL_ROW] = pricingTableRows;
                 secondaryOpDataElementTypes.Add(OpDataElementType.PRC_TBL_ROW);
