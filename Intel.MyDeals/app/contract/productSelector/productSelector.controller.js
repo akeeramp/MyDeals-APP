@@ -54,15 +54,19 @@
         }
 
         function getVerticalsUnderMarkLevel(markLevelName) {
-            var productCategories = $filter('unique')(vm.productSelectionLevels, 'PRD_CAT_NM');
+            debugger;
             var markLevel = vm.selectedPathParts.length == 0 ? 'MRK_LVL1' : 'MRK_LVL2';
-            var varticals = productCategories.filter(function (x) {
-                return x[markLevel] == markLevelName
-            }).map(function (elem) {
+            var verticals = vm.productSelectionLevels.filter(function (x) {
+                return x[markLevel] == markLevelName && x['PRD_CAT_NM'] != null && x['PRD_CAT_NM'] != ""
+            });
+
+            verticals = $filter('unique')(verticals, 'PRD_CAT_NM');
+
+            verticals = verticals.map(function (elem) {
                 return elem.PRD_CAT_NM;
             }).join(" | ");
 
-            return varticals;
+            return verticals;
         }
 
         populateValidProducts();
@@ -844,7 +848,7 @@
 
             var errorMessage = "";
 
-            if (moment(prodStartDate).isAfter(capStart)) {
+            if (moment(prodStartDate).isAfter(dealStart)) {
                 errorMessage += "If the product start date is after the deal start date, then deal start date should match with product start date and back date would not apply.<br/>";
             }
             if (!((moment(dealEnd).isAfter(capStart)) && (moment(capEnd).isAfter(dealStart)))) {

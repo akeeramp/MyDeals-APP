@@ -233,7 +233,7 @@ namespace Intel.MyDeals.BusinessRules
                             }
 
                             // If the product start date is after the deal start date, then deal start date should match with product start date and back date would not apply.
-                            if (prdStart > dealStart)
+                            if (dealStart > prdStart)
                             {
                                 BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"If the product start date is after the deal start date, then deal start date should match with product start date and back date would not apply.");
                             }
