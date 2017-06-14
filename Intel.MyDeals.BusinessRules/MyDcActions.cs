@@ -192,10 +192,10 @@ namespace Intel.MyDeals.BusinessRules
                     {
                         #region CAP Validations
 
-                        double cap;
-                        double ecap;
-                        if (!double.TryParse(prodMapping.CAP, out cap)) cap = 0;
-                        if (!double.TryParse(r.Dc.GetDataElementValue(AttributeCodes.ECAP_PRICE), out ecap)) ecap = 0;
+                        //double cap;
+                        //double ecap;
+                        //if (!double.TryParse(prodMapping.CAP, out cap)) cap = 0;
+                        //if (!double.TryParse(r.Dc.GetDataElementValue(AttributeCodes.ECAP_PRICE), out ecap)) ecap = 0;
 
                         // When ECAP Price is greater than CAP, UI validation check on deal creation and system should give a soft warning.
                         // TODO... put this as a soft warning on the grid
@@ -211,33 +211,33 @@ namespace Intel.MyDeals.BusinessRules
                         //    BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"CAP is not available ({prodMapping.CAP}). You can not create deals with this product.");
                         //}
 
-                        if (!string.IsNullOrEmpty(prodMapping.PRD_STRT_DTM) && !string.IsNullOrEmpty(prodMapping.CAP_START))
-                        {
-                            DateTime capStart = DateTime.Parse(prodMapping.CAP_START);
-                            DateTime capEnd = DateTime.Parse(prodMapping.CAP_END);
-                            DateTime prdStart = DateTime.Parse(prodMapping.PRD_STRT_DTM);
+                        //if (!string.IsNullOrEmpty(prodMapping.PRD_STRT_DTM) && !string.IsNullOrEmpty(prodMapping.CAP_START))
+                        //{
+                        //    DateTime capStart = DateTime.Parse(prodMapping.CAP_START);
+                        //    DateTime capEnd = DateTime.Parse(prodMapping.CAP_END);
+                        //    DateTime prdStart = DateTime.Parse(prodMapping.PRD_STRT_DTM);
 
-                            DateTime dealStart;
-                            DateTime dealEnd;
-                            if (DateTime.TryParse(r.Dc.GetDataElementValue(AttributeCodes.START_DT), out dealStart) && DateTime.TryParse(r.Dc.GetDataElementValue(AttributeCodes.END_DT), out dealEnd))
-                            {
-                                if (!(capStart < dealEnd && dealStart < capEnd))
-                                {
-                                    BusinessLogicDeActions.AddValidationMessage(dePrdUsr, "Product entered does not have CAP within the Deal's start date and end date");
-                                }
+                        //    DateTime dealStart;
+                        //    DateTime dealEnd;
+                        //    if (DateTime.TryParse(r.Dc.GetDataElementValue(AttributeCodes.START_DT), out dealStart) && DateTime.TryParse(r.Dc.GetDataElementValue(AttributeCodes.END_DT), out dealEnd))
+                        //    {
+                        //        if (!(capStart < dealEnd && dealStart < capEnd))
+                        //        {
+                        //            BusinessLogicDeActions.AddValidationMessage(dePrdUsr, "Product entered does not have CAP within the Deal's start date and end date");
+                        //        }
 
-                                if (capStart > dealEnd)
-                                {
-                                    BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"The CAP start date ({capStart:mm/dd/yyyy}) and end date ({capEnd:mm/dd/yyyy}) exists in future outside of deal end date. Please change the deal start date to match the CAP start date.");
-                                }
-                            }
+                        //        if (capStart > dealEnd)
+                        //        {
+                        //            BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"The CAP start date ({capStart:mm/dd/yyyy}) and end date ({capEnd:mm/dd/yyyy}) exists in future outside of deal end date. Please change the deal start date to match the CAP start date.");
+                        //        }
+                        //    }
 
-                            // If the product start date is after the deal start date, then deal start date should match with product start date and back date would not apply.
-                            if (dealStart > prdStart)
-                            {
-                                BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"If the product start date is after the deal start date, then deal start date should match with product start date and back date would not apply.");
-                            }
-                        }
+                        //    // If the product start date is after the deal start date, then deal start date should match with product start date and back date would not apply.
+                        //    if (prdStart > dealStart)
+                        //    {
+                        //        BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"If the product start date is after the deal start date, then deal start date should match with product start date and back date would not apply.");
+                        //    }
+                        //}
 
                         #endregion CAP Validations
                     }
@@ -250,7 +250,7 @@ namespace Intel.MyDeals.BusinessRules
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
             if (!r.HasExtraArgs) return;
-            char delim = ',';
+            char delim = '/';
 
             //return
 

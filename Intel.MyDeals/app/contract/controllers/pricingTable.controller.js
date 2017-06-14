@@ -844,7 +844,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     }
 
                     // Add validation dropdowns/multiselects onto the cells
-                    if (myFieldModel.opLookupText === "DROP_DOWN" || myFieldModel.opLookupText === "dropdownName" || (myFieldModel.opLookupText === "CUST_ACCNT_DIV" && isCorpDiv)) {
+                    if (myFieldModel.opLookupText === "DROP_DOWN" || myFieldModel.opLookupText === "dropdownName" || (myFieldModel.opLookupText === "CUST_DIV_NM" && isCorpDiv)) {
                         applyDropDownsData(sheet, myFieldModel, myColumnName, dropdownValuesSheet);
 
                         if (myFieldModel.uiType === "RADIOBUTTONGROUP" || myFieldModel.uiType === "DROPDOWN") {
@@ -949,7 +949,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
     function applyDropDownsData(sheet, myFieldModel, myColumnName, dropdownValuesSheet) {
         // Call API
-        if (myFieldModel.opLookupText === "CUST_ACCNT_DIV") {
+        if (myFieldModel.opLookupText === "CUST_DIV_NM") {
             //debugger;
             myFieldModel.opLookupUrl = "/api/Customers/GetCustomerDivisionsByCustNmSid/" + root.contractData.CUST_MBR_SID;
         }

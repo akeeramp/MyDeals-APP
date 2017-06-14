@@ -8,7 +8,7 @@ function MultiSelectModalCtrl($scope, $uibModalInstance, MrktSegMultiSelectServi
 	var $ctrl = this;
 	var GEO = "GEO_COMBINED";
 	var MRKT_SEG = "MRKT_SEG";
-	var CORP = "CUST_DIV_NM";
+	var CORP = "CUST_ACCNT_DIV";
 
 	$ctrl.multiSelectPopUpModel = items;
 	$ctrl.popupResult = [];
