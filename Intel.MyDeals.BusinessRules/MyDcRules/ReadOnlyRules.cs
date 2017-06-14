@@ -50,6 +50,32 @@ namespace Intel.MyDeals.BusinessRules
                     }
                 },
 
+                new MyOpRule // Set to read only if Frontend
+                {
+                    Title="Readonly if Frontend",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnReadonly},
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PROGRAM_PAYMENT) && de.HasValue() && de.AtrbValue.ToString() != "Backend").Any(), 
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetReadOnly,
+                            Target = new[]
+                            {
+                                AttributeCodes.DEAL_COMB_TYPE,
+                                AttributeCodes.ON_ADD_DT,
+                                AttributeCodes.TRGT_RGN,
+                                AttributeCodes.CONSUMPTION_REASON,
+                                AttributeCodes.CONSUMPTION_REASON_CMNT,
+                                AttributeCodes.REBATE_BILLING_START,
+                                AttributeCodes.REBATE_BILLING_END,
+                                AttributeCodes.BACK_DATE_RSN
+                            } // Items to set readonly
+                        }
+                    }
+                },
+
                 new MyOpRule
                 {
                     Title="Readonly ALWAYS",

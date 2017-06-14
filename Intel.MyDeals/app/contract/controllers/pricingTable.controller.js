@@ -554,10 +554,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             disableRange(sheet.range("D" + n + ":Z" + (n + numToDel - 1)));
                         }, 10);
 
-                        root.saveEntireContract();
-                    }
-                }, 10);
-            },
+		                root.saveEntireContract(true);
+		            }
+
+		        }, 10);
+		    },
             function () { });
         }
         else {

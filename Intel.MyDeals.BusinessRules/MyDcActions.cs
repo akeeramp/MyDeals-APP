@@ -44,6 +44,7 @@ namespace Intel.MyDeals.BusinessRules
             string dcEn = DateTime.Parse(dcEnStr == "" ? item[AttributeCodes.END_DT].ToString() : dcEnStr).ToString("MM/dd/yyyy");
             string dcItemSt = DateTime.Parse(item[AttributeCodes.START_DT].ToString()).ToString("MM/dd/yyyy");
             string dcItemEn = DateTime.Parse(item[AttributeCodes.END_DT].ToString()).ToString("MM/dd/yyyy");
+            string payoutBasedOn = item[AttributeCodes.PAYOUT_BASED_ON].ToString();
 
             // Billing Dates
             if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.REBATE_BILLING_START)) || dcSt != dcItemSt)
@@ -55,29 +56,50 @@ namespace Intel.MyDeals.BusinessRules
                 item[AttributeCodes.REBATE_BILLING_END] = dcItemEn;
             }
 
-            // Additive
-            if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.DEAL_COMB_TYPE)))
-            {
-                item[AttributeCodes.DEAL_COMB_TYPE] = "Additive";
-            }
-
             // Consumption Reason
             if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.CONSUMPTION_REASON)))
             {
                 item[AttributeCodes.CONSUMPTION_REASON] = "None";
             }
 
+            // Additive
+            if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.DEAL_COMB_TYPE)))
+            {
+                item[AttributeCodes.DEAL_COMB_TYPE] = "Non Additive";
+                //item[AttributeCodes.DEAL_COMB_TYPE] = payoutBasedOn == "Consumption" ? "Non Additive" : "Additive";
+            }
+
             // Check for backdate Reason
             IOpDataElement deStr = r.Dc.GetDataElement(AttributeCodes.START_DT);
-            if (string.IsNullOrEmpty(deStr.AtrbValue.ToString())) return;
-
-            string dcPrevSt = DateTime.Parse(deStr.AtrbValue.ToString()).ToString("MM/dd/yyyy");
-            if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.BACK_DATE_RSN)) && deStr.IsDateInPast() && dcPrevSt != dcItemSt)
+            if (!string.IsNullOrEmpty(dcSt))
             {
-                IOpDataElement deContractRsnTxt = r.Dc.GetDataElement(AttributeCodes.BACK_DATE_RSN_TXT);
-                string strContractRsn = item.ContainsKey(AttributeCodes.BACK_DATE_RSN_TXT) ? item[AttributeCodes.BACK_DATE_RSN_TXT].ToString() : "";
-                deContractRsnTxt.AtrbValue = string.IsNullOrEmpty(strContractRsn) ? "NEEDED" : item[AttributeCodes.BACK_DATE_RSN_TXT];
+                string dcPrevSt = string.IsNullOrEmpty(deStr.AtrbValue.ToString()) ? "" : DateTime.Parse(deStr.AtrbValue.ToString()).ToString("MM/dd/yyyy");
+                if (string.IsNullOrEmpty(deStr.AtrbValue.ToString())) deStr.AtrbValue = dcSt;
+                if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.BACK_DATE_RSN)) && deStr.IsDateInPast() && dcPrevSt != dcItemSt)
+                {
+                    IOpDataElement deContractRsn = r.Dc.GetDataElement(AttributeCodes.BACK_DATE_RSN);
+                    IOpDataElement deContractRsnTxt = r.Dc.GetDataElement(AttributeCodes.BACK_DATE_RSN_TXT);
+                    string strContractRsn = item.ContainsKey(AttributeCodes.BACK_DATE_RSN_TXT) ? item[AttributeCodes.BACK_DATE_RSN_TXT].ToString() : "";
+                    if (string.IsNullOrEmpty(strContractRsn))
+                    {
+                        deContractRsnTxt.AtrbValue = "NEEDED";
+                        deContractRsnTxt.State = OpDataElementState.Modified;
+                    }
+                    else
+                    {
+                        deContractRsn.AtrbValue = item[AttributeCodes.BACK_DATE_RSN_TXT];
+                        deContractRsn.State = OpDataElementState.Modified;
+                    }
+                }
             }
+
+            // Frontend -> PROGRAM_PAYMENT
+            if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.PAYOUT_BASED_ON)) && item[AttributeCodes.PROGRAM_PAYMENT].ToString() != "Backend")
+            {
+                item[AttributeCodes.PAYOUT_BASED_ON] = "Billings";
+            }
+
+
 
             //r.Dc.ApplyActions(r.Dc.MeetsRuleCondition(r.Rule) ? r.Rule.OpRuleActions : r.Rule.OpRuleElseActions);
         }
@@ -381,6 +403,34 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void CheckBillingDates(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement deStart = r.Dc.GetDataElement(AttributeCodes.START_DT);
+            IOpDataElement deEnd = r.Dc.GetDataElement(AttributeCodes.END_DT);
+            IOpDataElement deBllgStart = r.Dc.GetDataElement(AttributeCodes.REBATE_BILLING_START);
+            IOpDataElement deBllgEnd = r.Dc.GetDataElement(AttributeCodes.REBATE_BILLING_END);
+
+            if (string.IsNullOrEmpty(deStart?.AtrbValue.ToString()) || string.IsNullOrEmpty(deEnd?.AtrbValue.ToString())) return;
+            if (string.IsNullOrEmpty(deBllgStart?.AtrbValue.ToString()) || string.IsNullOrEmpty(deBllgEnd?.AtrbValue.ToString())) return;
+
+            DateTime dcSt = DateTime.Parse(deStart.AtrbValue.ToString());
+            DateTime dcEn = DateTime.Parse(deEnd.AtrbValue.ToString());
+
+            if (string.IsNullOrEmpty(deBllgStart.AtrbValue.ToString()) || DateTime.Parse(deBllgStart.AtrbValue.ToString()) > dcSt)
+            {
+                deBllgStart.AtrbValue = deStart.AtrbValue;
+                deBllgStart.State = OpDataElementState.Modified;
+            }
+            if (string.IsNullOrEmpty(deBllgEnd.AtrbValue.ToString()) || DateTime.Parse(deBllgEnd.AtrbValue.ToString()) > dcEn)
+            {
+                deBllgEnd.AtrbValue = deEnd.AtrbValue;
+                deBllgEnd.State = OpDataElementState.Modified;
+            }
+        }
+
         public static void CheckFrontendDates(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
@@ -442,7 +492,7 @@ namespace Intel.MyDeals.BusinessRules
             IOpDataElement deBackDate = r.Dc.GetDataElement(AttributeCodes.BACK_DATE_RSN);
             string backDateTxt = r.Dc.GetDataElementValue(AttributeCodes.BACK_DATE_RSN_TXT);
 
-            if (backDateTxt == "NEEDED")
+            if (backDateTxt == "NEEDED" || !string.IsNullOrEmpty(deBackDate.AtrbValue.ToString()))
             {
                 if (deBackDate != null)
                     deBackDate.IsRequired = true;

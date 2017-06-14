@@ -181,6 +181,13 @@ namespace Intel.MyDeals.BusinessRules
                 },
                 new MyOpRule
                 {
+                    Title="Billing Date Validations",
+                    ActionRule = MyDcActions.CheckBillingDates,
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate}
+                },
+                new MyOpRule
+                {
                     Title="DropDown Value Validations",
                     ActionRule = MyDcActions.CheckDropDownValues,
                     InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW},

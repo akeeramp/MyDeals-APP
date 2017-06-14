@@ -179,11 +179,14 @@ namespace Intel.MyDeals.BusinessLogic
                 secondaryIds = pricingTables.Where(items => items.ContainsKey(AttributeCodes.DC_ID))
                         .Select(items => int.Parse(items[AttributeCodes.DC_ID].ToString())).ToList();
             }
-            if (pricingTableRows != null && pricingTableRows.Any())
+
+            // Don't check for ANY becuase we might have to delete the last item
+            if (pricingTableRows != null)
             {
                 data[OpDataElementType.PRC_TBL_ROW] = pricingTableRows;
                 secondaryOpDataElementTypes.Add(OpDataElementType.PRC_TBL_ROW);
             }
+
             if (wipDeals != null && wipDeals.Any())
             {
                 data[OpDataElementType.WIP_DEAL] = wipDeals;
@@ -809,18 +812,18 @@ namespace Intel.MyDeals.BusinessLogic
                     {
                         foreach (PRD_LOOKUP_RESULTS_tempWithCAP prod in myProducts)
                         {
-                            // When ECAP Price is greater than CAP, UI validation check on deal creation and system should give a soft warning.
-                            if (val_ECAP_PRICE != null && prod.CAP > Int32.Parse(val_ECAP_PRICE.ToString()))
-                            {
-                                myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_ecapPrice, "CAP price (" + prod.CAP + ") is greater than ECAP Price.");
-                            }
+                            //// When ECAP Price is greater than CAP, UI validation check on deal creation and system should give a soft warning.
+                            //if (val_ECAP_PRICE != null && prod.CAP > Int32.Parse(val_ECAP_PRICE.ToString()))
+                            //{
+                            //    myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_ecapPrice, "CAP price (" + prod.CAP + ") is greater than ECAP Price.");
+                            //}
 
-                            // If the product start date is after the deal start date, then deal start date should match with product start date and back date would not apply.
-                            if (prod.PRD_STRT_DTM > prod.CAP_START_DATE)
-                            {
-                                myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_startDate, "If the product start date is after the deal start date, then deal start date should match with product start date and back date would not apply. TODO: code this in the UI from the corrector.");
-                                // TODO: code this in the UI from the corrector
-                            }
+                            //// If the product start date is after the deal start date, then deal start date should match with product start date and back date would not apply.
+                            //if (prod.PRD_STRT_DTM > prod.CAP_START_DATE)
+                            //{
+                            //    myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_startDate, "If the product start date is after the deal start date, then deal start date should match with product start date and back date would not apply. TODO: code this in the UI from the corrector.");
+                            //    // TODO: code this in the UI from the corrector
+                            //}
 
                             // Additional validation-for program payment=Front end, the deal st. date can not be past, it should be >= current date
                             if ((val_PROGRAM_PAYMENT != null) && (val_PROGRAM_PAYMENT.ToString().Contains("rontend")) && (startDate < today))
@@ -830,25 +833,25 @@ namespace Intel.MyDeals.BusinessLogic
 
                             #region CAP Validations
 
-                            // IF CAP is not available at all then show as NO CAP.User can not create deals.
-                            if (prod.CAP == null || prod.CAP <= 0)
-                            {
-                                myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_userPrd, "CAP is not available (NO CAP). You can not create deals with this product.");
-                            }
+                            //// IF CAP is not available at all then show as NO CAP.User can not create deals.
+                            //if (prod.CAP == null || prod.CAP <= 0)
+                            //{
+                            //    myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_userPrd, "CAP is not available (NO CAP). You can not create deals with this product.");
+                            //}
 
-                            // if a product entered does not have CAP within the deal start date and end date then (CAP is not overlapping deal start and end date)
-                            if (!((prod.CAP_START_DATE < endDate) && (startDate < prod.CAP_END_DATE)))
-                            {
-                                // show a message that the product does not have CAP in these date range.
-                                myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_userPrd, "Product entered does not have CAP within the Deal's start date and end date");
-                            }
-                            // Then if CAP exists in future outside of deal end date
-                            if (prod.CAP_START_DATE > endDate)
-                            {
-                                // Show to user the CAP start date and CAP end date
-                                myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_startDate, "The CAP start date (" + prod.CAP_START_DATE.ToString() + ") and end date (" + prod.CAP_END_DATE.ToString() + ") exists in future outside of deal end date. Please change the deal start date to match the CAP start date.");
-                                // TODO:  code this in the UI from the corrector. In the UI: ask user whether to change the deal start date and if user say yes then change the deal start date to CAP start date
-                            }
+                            //// if a product entered does not have CAP within the deal start date and end date then (CAP is not overlapping deal start and end date)
+                            //if (!((prod.CAP_START_DATE < endDate) && (startDate < prod.CAP_END_DATE)))
+                            //{
+                            //    // show a message that the product does not have CAP in these date range.
+                            //    myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_userPrd, "Product entered does not have CAP within the Deal's start date and end date");
+                            //}
+                            //// Then if CAP exists in future outside of deal end date
+                            //if (prod.CAP_START_DATE > endDate)
+                            //{
+                            //    // Show to user the CAP start date and CAP end date
+                            //    myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, colName_startDate, "The CAP start date (" + prod.CAP_START_DATE.ToString() + ") and end date (" + prod.CAP_END_DATE.ToString() + ") exists in future outside of deal end date. Please change the deal start date to match the CAP start date.");
+                            //    // TODO:  code this in the UI from the corrector. In the UI: ask user whether to change the deal start date and if user say yes then change the deal start date to CAP start date
+                            //}
 
                             #endregion CAP Validations
 

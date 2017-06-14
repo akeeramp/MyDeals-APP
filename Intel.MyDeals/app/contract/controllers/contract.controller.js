@@ -1227,6 +1227,7 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                             }
                         }
                     }
+
                 }
             }
 
@@ -1583,7 +1584,7 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
             }
         }
 
-        $scope.saveEntireContract = function() {
+        $scope.saveEntireContract = function(isDeleting) {
             $scope.saveEntireContractBase($state.current.name);
         }
         $scope.getCustId = function() {
