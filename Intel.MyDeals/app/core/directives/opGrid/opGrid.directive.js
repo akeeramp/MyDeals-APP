@@ -449,6 +449,18 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 return null;
             }
 
+            function formatDate(date) { // HACK: format date hack so js datetime would be readable for C# API
+            	var day = date.getDate();
+            	var month = date.getMonth() + 1; 
+            	var year = date.getFullYear();
+            	var hour = date.getHours();
+            	var minute = date.getMinutes();
+            	var second = date.getSeconds(); 
+
+            	return (month + "/" + day + "/" + year + " " + hour + ':' + minute + ':' + second);
+            }
+
+
             $scope.lookupEditor = function (container, options) {
                 var field = $(container).closest("[data-role=grid]").data("kendoGrid").dataSource.options.schema.model.fields[options.field];
                 var cols = $(container).closest("[data-role=grid]").data("kendoGrid").columns;
@@ -457,73 +469,109 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 for (var c = 0; c < cols.length; c++) {
                     if (cols[c].field === options.field) col = cols[c];
                 }
-                if (col.uiType === "ComboBox") {
-                    $('<input required name="' + options.field + '"/>')
-                        .appendTo(container)
-                        .kendoComboBox({
-                            autoBind: false,
-                            valuePrimitive: true,
-                            dataTextField: field.opLookupText,
-                            dataValueField: field.opLookupValue,
-                            dataSource: {
-                                type: "json",
-                                transport: {
-                                    read: field.opLookupUrl
-                                }
-                            }
-                        });
-                } else if (col.uiType.toUpperCase() === "MULTISELECT") {
-                    $('<input required name="' + options.field + '"/>')
-                        .appendTo(container)
-                        .kendoMultiSelect({
-                            autoBind: false,
-                            valuePrimitive: true,
-                            dataTextField: field.opLookupText,
-                            dataValueField: field.opLookupValue,
-                            dataSource: {
-                                type: "json",
-                                transport: {
-                                    read: field.opLookupUrl
-                                }
-                            }
-                        });
-                } else if (col.uiType.toUpperCase() === "EMBEDDEDMULTISELECT") {
-                    //I feel like this should have somehow connected to all the template partials we have been making...
-                    ////maybe just default bind to a kendo listview?
-                    console.log(col.uiType) //EMBEDDEDMULTISELECT
-                    console.log(options.field) //TRGT_RGN
-                    console.log(container) //one item array?: td.k-edit-cell
-                    console.log(angular.element(container).scope().dataItem.GEO_COMBINED)
+                if (col.uiType === "ComboBox" || col.uiType == "DROPDOWN") {
 
-                    var compiled;
-                    //JeffThought: we shouldnt put TRGT_RGN specific logic here, but if not here then where? template too generic and this is where we call it...
-                    //JeffThought: need 3 ways to represent the data - 1: the multiselect array item for treeview consumption 2: the concatinated string for user readonly 3: the detailed geo/region/cntry string for database save
-                    if (options.field.toUpperCase() === "TRGT_RGN") {
-                        compiled = $compile('<div class="myDealsControl" op-control-flat ng-model="dataItem.TRGT_RGN" op-cd="\'EMBEDDEDMULTISELECT\'" op-type="\'EMBEDDEDMULTISELECT\'" op-lookup-url="\'' + col.lookupUrl + angular.element(container).scope().dataItem.GEO_COMBINED + '\'" op-lookup-text="\'DROP_DOWN\'" op-lookup-value="\'DROP_DOWN\'" op-ui-mode="\'VERTICAL\'"></div>')(angular.element(container).scope());
-                    } else {
-                        compiled = $compile('<div>not the append</div><div class="myDealsControl" op-control-flat ng-model="dataItem.TRGT_RGN" op-cd="\'DROPDOWN\'" op-type="\'DROPDOWN\'" op-lookup-url="\'' + col.lookupUrl + '\'" op-lookup-text="\'DROP_DOWN\'" op-lookup-value="\'DROP_DOWN\'" op-ui-mode="\'VERTICAL\'"></div>')(angular.element(container).scope());
-                        //compiled = $compile('<div>not the append</div><div class="myDealsControl" op-control-flat ng-model="dataItem.TRGT_RGN" op-cd="\'DROPDOWN\'" op-type="\'DROPDOWN\'" op-lookup-url="\'/api/Dropdown/GetDropdowns/MRKT_SEG_NON_CORP\'" op-lookup-text="\'DROP_DOWN\'" op-lookup-value="\'DROP_DOWN\'" op-ui-mode="\'VERTICAL\'"></div>')(angular.element(container).scope());
-                    }
-                    
-                    //$("#d").append(compiled); 
-                    //compiled.appendTo(container);
-                    $(container).append(compiled)
-                    
+                	// Note: we shouldnt put TRGT_RGN specific logic here, but if not here then where? template too generic and this is where we call it...
+                	if (col.field == "RETAIL_CYCLE") {
+
+                		var retailPullParams = {
+                			PRD_MBR_SID: options.model["PRODUCT_FILTER"],
+                			DealStartDate: formatDate(options.model["START_DT"]),
+                			DealEndDate: formatDate(options.model["END_DT"])
+                		};
+
+                		$('<input required name="' + options.field + '"/>')
+							.appendTo(container)
+							.kendoComboBox({
+								autoBind: false,
+								valuePrimitive: true,
+								dataTextField: field.opLookupText,
+								dataValueField: field.opLookupValue,
+								chnage: function(e){
+									// TODO: if value is not null, then we need to update the $scope so the red flag leaves :(
+								},
+								dataSource: {
+									type: "json",
+									transport: {
+										read: {
+											url: field.opLookupUrl,
+											dataType: 'json',
+											type: "POST",
+											data: retailPullParams,
+										}
+									}
+								}
+							});
+                	} else {
+
+                		$('<input required name="' + options.field + '"/>')
+							.appendTo(container)
+							.kendoComboBox({
+								autoBind: false,
+								valuePrimitive: true,
+								dataTextField: field.opLookupText,
+								dataValueField: field.opLookupValue,
+								dataSource: {
+									type: "json",
+									transport: {
+										read: field.opLookupUrl
+									}
+								}
+							});
+                	}
+                } else if (col.uiType.toUpperCase() === "MULTISELECT") {
+
+                	$('<select data-bind="value:' + options.field + '" required name="' + options.field + '"/>')
+						.appendTo(container)
+						.kendoMultiSelect({
+							autoBind: false,
+							valuePrimitive: true,
+							dataTextField: field.opLookupText,
+							dataValueField: field.opLookupValue,
+							dataSource: {
+								type: "json",
+								transport: {
+									read: field.opLookupUrl
+								}
+							}
+						});
+                } else if (col.uiType.toUpperCase() === "EMBEDDEDMULTISELECT") {
+                	//I feel like this should have somehow connected to all the template partials we have been making...
+                	////maybe just default bind to a kendo listview?
+                	console.log(col.uiType) //EMBEDDEDMULTISELECT
+                	console.log(options.field) //TRGT_RGN
+                	console.log(container) //one item array?: td.k-edit-cell
+                	console.log(angular.element(container).scope().dataItem.GEO_COMBINED)
+
+                	var compiled;
+                	//JeffThought: we shouldnt put TRGT_RGN specific logic here, but if not here then where? template too generic and this is where we call it...
+                	//JeffThought: need 3 ways to represent the data - 1: the multiselect array item for treeview consumption 2: the concatinated string for user readonly 3: the detailed geo/region/cntry string for database save
+                	if (options.field.toUpperCase() === "TRGT_RGN") {
+                		compiled = $compile('<div class="myDealsControl" op-control-flat ng-model="dataItem.TRGT_RGN" op-cd="\'EMBEDDEDMULTISELECT\'" op-type="\'EMBEDDEDMULTISELECT\'" op-lookup-url="\'' + col.lookupUrl + angular.element(container).scope().dataItem.GEO_COMBINED + '\'" op-lookup-text="\'DROP_DOWN\'" op-lookup-value="\'DROP_DOWN\'" op-ui-mode="\'VERTICAL\'"></div>')(angular.element(container).scope());
+                	} else {
+                		compiled = $compile('<div>not the append</div><div class="myDealsControl" op-control-flat ng-model="dataItem.TRGT_RGN" op-cd="\'DROPDOWN\'" op-type="\'DROPDOWN\'" op-lookup-url="\'' + col.lookupUrl + '\'" op-lookup-text="\'DROP_DOWN\'" op-lookup-value="\'DROP_DOWN\'" op-ui-mode="\'VERTICAL\'"></div>')(angular.element(container).scope());
+                		//compiled = $compile('<div>not the append</div><div class="myDealsControl" op-control-flat ng-model="dataItem.TRGT_RGN" op-cd="\'DROPDOWN\'" op-type="\'DROPDOWN\'" op-lookup-url="\'/api/Dropdown/GetDropdowns/MRKT_SEG_NON_CORP\'" op-lookup-text="\'DROP_DOWN\'" op-lookup-value="\'DROP_DOWN\'" op-ui-mode="\'VERTICAL\'"></div>')(angular.element(container).scope());
+                	}
+
+                	//$("#d").append(compiled); 
+                	//compiled.appendTo(container);
+                	$(container).append(compiled)
+
                 } else {
-                    $('<input required name="' + options.field + '"/>')
-                        .appendTo(container)
-                        .kendoDropDownList({
-                            autoBind: false,
-                            valuePrimitive: true,
-                            dataTextField: field.opLookupText,
-                            dataValueField: field.opLookupValue,
-                            dataSource: {
-                                type: "json",
-                                transport: {
-                                    read: field.opLookupUrl
-                                }
-                            }
-                        });
+                	$('<input required name="' + options.field + '"/>')
+						.appendTo(container)
+						.kendoDropDownList({
+							autoBind: false,
+							valuePrimitive: true,
+							dataTextField: field.opLookupText,
+							dataValueField: field.opLookupValue,
+							dataSource: {
+								type: "json",
+								transport: {
+									read: field.opLookupUrl
+								}
+							}
+						});
                 }
             }
 

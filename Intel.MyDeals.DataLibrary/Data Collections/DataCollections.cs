@@ -492,6 +492,17 @@ namespace Intel.MyDeals.DataLibrary
 
         private static List<Dropdown> _getDropdowns;
 
-        #endregion Dropdowns
-    }
+		#endregion Dropdowns
+
+
+		public static List<RetailPull> GetRetailPullList()
+		{
+			lock (LOCK_OBJECT ?? new object())
+			{
+				return _getRetailPullList ?? (_getRetailPullList = new RetailPullDataLib().GetRetailPullList());
+			}
+		}
+
+		private static List<RetailPull> _getRetailPullList;
+	}
 }

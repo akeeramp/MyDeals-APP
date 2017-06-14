@@ -34,6 +34,8 @@ namespace Intel.MyDeals.IDataLibrary
 
         List<BasicDropdown> GetBasicDropdowns();
 
+		List<RetailPull> GetRetailPullList();
+
         List<Dropdown> GetDropdowns();
 
         #region Security Attributes

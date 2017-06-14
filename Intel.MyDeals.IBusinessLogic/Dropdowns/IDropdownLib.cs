@@ -33,5 +33,7 @@ namespace Intel.MyDeals.IBusinessLogic
 
         bool DeleteBasicDropdowns(int id);
 
-    }
+		List<Dropdown> GetRetailPullDropdown(RetailPullParams filterData);
+
+	}
 }

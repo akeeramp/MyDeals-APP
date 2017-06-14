@@ -19,7 +19,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// </summary>
         public DropdownLib()
         {
-            _dropdownDataLib = new DropdownDataLib();
+			_dropdownDataLib = new DropdownDataLib();
         }
 
         public DropdownLib(IDropdownDataLib dropdownDataLib, IDataCollectionsDataLib dataCollectionsDataLib)
@@ -249,5 +249,22 @@ namespace Intel.MyDeals.BusinessLogic
         {
             return _dropdownDataLib.DeleteBasicDropdown(id);
         }
-    }
+				
+		public List<Dropdown> GetRetailPullDropdown(RetailPullParams filterData)
+		{
+			List<Dropdown> result = new List<Dropdown>();
+			List<RetailPull> retailPullList = _dataCollectionsDataLib.GetRetailPullList();
+						
+			List<Dropdown> myList = retailPullList.Where(r =>
+				r.PRD_MBR_SID == filterData.PRD_MBR_SID // TODO: we need this to be replaced with DEAL_PRD_NM because users might enter 7008 instead of 7007
+				&& (filterData.DealStartDate < r.CURR_END_DT)
+				&& filterData.DealEndDate > r.CURR_STRT_DT 
+			)
+			.OrderBy(dd => dd.PRD_MBR_SID)
+			.Select(x => new Dropdown { dropdownName = x.CYCLE_NM }).ToList<Dropdown>();
+			
+			return myList;
+		}
+
+	}
 }

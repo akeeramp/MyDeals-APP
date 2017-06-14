@@ -22,7 +22,8 @@ namespace Intel.MyDeals.DataLibrary
             registerService.RegisterType<IProductCategoriesDataLib, ProductCategoriesDataLib>();
             registerService.RegisterType<IProductCostTestDataLib, ProductCostTestDataLib>();
             registerService.RegisterType<IProductDataLib, ProductDataLib>();
-            registerService.RegisterType<ISearchDataLib, SearchDataLib>();
+			registerService.RegisterType<IRetailPullDataLib, RetailPullDataLib>();
+			registerService.RegisterType<ISearchDataLib, SearchDataLib>();
             registerService.RegisterType<ISecurityAttributesDataLib, SecurityAttributesDataLib>();
             registerService.RegisterType<IUiTemplateDataLib, UiTemplateDataLib>();
             registerService.RegisterType<IWorkFlowDataLib, WorkFlowDataLib>();

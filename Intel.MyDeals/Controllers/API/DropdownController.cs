@@ -132,6 +132,18 @@ namespace Intel.MyDeals.Controllers.API
             return SafeExecutor(() => _dropdownLib.DeleteBasicDropdowns(id)
                 , $"Unable to delete basic dropdown"
             );
-        }
-    }
+		}
+
+		[Authorize]
+		[Route("GetRetailPull")]
+		[HttpPost]
+		public List<Dropdown> GetRetailPull(RetailPullParams filterData)
+		{
+			var id = filterData.PRD_MBR_SID;
+			return SafeExecutor(() => _dropdownLib.GetRetailPullDropdown(filterData)
+				, $"Unable to get Retail Pull for product"
+			);
+		}
+
+	}
 }

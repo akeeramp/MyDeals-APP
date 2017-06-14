@@ -634,10 +634,14 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem
             {
                 Id = 20,
-                AtrbCd = AttributeCodes.DEAL_SOLD_TO_ID,
+                AtrbCd = AttributeCodes.DEAL_SOLD_TO_ID, 
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+				UiType = "MULTISELECT",
                 Template = "#=gridUtils.uiControlWrapper(data, 'DEAL_SOLD_TO_ID')#",
-                IsFilterable = true,
+				LookupUrl = "/api/Dropdown/SoldToIds", // TODO
+				LookupText = "dropdownName",
+				LookupValue = "dropdownName",
+				IsFilterable = true,
                 IsSortable = true,
                 Width = 150
             });
@@ -1018,7 +1022,7 @@ namespace Intel.MyDeals.DataLibrary
             //    IsSortable = true,
             //    Template = "#=gridUtils.uiControlWrapper(data, 'MEETCOMP_TEST_FAIL_OVERRIDE_REASON')#"
             //});
-
+			
             items.Add(new UiTemplateContainerItem
             {
                 Id = 29,
@@ -1027,22 +1031,23 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 140,
                 IsFilterable = true,
                 IsSortable = true,
-                Template = "#=gridUtils.uiControlWrapper(data, 'RETAIL_CYCLE')#",
-                LookupUrl = "/api/Dropdown/GetDropdowns/RETAIL_CYCLE",
-                LookupText = "DROP_DOWN",
-                LookupValue = "DROP_DOWN"
-            });
+				UiType = "ComboBox",
+				Template = "#=gridUtils.uiControlWrapper(data, 'RETAIL_CYCLE')#",
+                LookupUrl = "api/Dropdown/GetRetailPull", //"/api/Contracts/v1/GetRetailPull/", 
+				LookupText = "dropdownName",
+				LookupValue = "dropdownName",
+			});
 
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 29,
-                AtrbCd = AttributeCodes.RETAIL_PULL,
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Width = 120,
-                IsFilterable = true,
-                IsSortable = true,
-                Template = "#=gridUtils.uiControlWrapper(data, 'RETAIL_PULL', 'currency')#"
-            });
+            //items.Add(new UiTemplateContainerItem
+            //{
+            //    Id = 29,
+            //    AtrbCd = AttributeCodes.RETAIL_PULL,
+            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+            //    Width = 120,
+            //    IsFilterable = true,
+            //    IsSortable = true,
+            //    Template = "#=gridUtils.uiControlWrapper(data, 'RETAIL_PULL', 'currency')#"
+            //});
 
             items.Add(new UiTemplateContainerItem
             {

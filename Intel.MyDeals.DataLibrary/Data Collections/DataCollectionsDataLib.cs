@@ -159,6 +159,10 @@ namespace Intel.MyDeals.DataLibrary
         public List<Dropdown> GetDropdowns()
         {
             return DataCollections.GetDropdowns();
-        }
-    }
+		}
+		public List<RetailPull> GetRetailPullList()
+		{
+			return DataCollections.GetRetailPullList();
+		}
+	}
 }

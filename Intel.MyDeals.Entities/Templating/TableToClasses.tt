@@ -255,9 +255,14 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "SearchResults";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
-
+	
 	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_CAP_YCS2_CALC] @PrcCond='YCS2', @FlagPick='N'");
 	ds.Tables[0].TableName = "ProductCAPYCS2";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
+	// Retail Pull from SDM
+	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MYDL_GET_SDM_RTL_PULL");
+	ds.Tables[0].TableName = "RetailPull";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	PopIndent();
