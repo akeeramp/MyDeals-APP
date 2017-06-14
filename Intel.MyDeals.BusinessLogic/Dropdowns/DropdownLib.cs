@@ -108,6 +108,64 @@ namespace Intel.MyDeals.BusinessLogic
         }
 
         /// <summary>
+        /// Returns a dropdown hierarchy object for GEOs using the provided parent(s) name.
+        /// </summary>
+        /// <returns>dropdown hierarchy</returns>
+        public DropdownHierarchy[] GetGeoDropdownHierarchy(string prnt)
+        {
+            IEnumerable<GeoDimension> geodim = _dataCollectionsDataLib.GetGeoData().Where(geo => geo.ACTV_IND == true);
+
+            List<DropdownHierarchy> ret = new List<DropdownHierarchy>();
+
+            //check if comma exists in provided string
+            string[] geoCombined = prnt.Split(',');
+
+            //for each parent geo, build a dropdown hierarchy
+            for (int i = 0; i < geoCombined.Length; i++)
+            {
+                //create basic dropdown from provided geo
+                BasicDropdown newBD_Geo = new BasicDropdown();
+                newBD_Geo.DROP_DOWN = geoCombined[i];
+
+                //using created basic dropdown, use that to seed a new dropdownhierarchy
+                DropdownHierarchy newDH_Geo = new DropdownHierarchy(newBD_Geo);
+                newDH_Geo.expanded = true;
+
+                //create this geo's regions/country hierarchies
+                List<DropdownHierarchy> regions = new List<DropdownHierarchy>();
+                IEnumerable<GeoDimension> geo_regions = geodim.Where(geo => geo.GEO_NM.ToUpper() == newDH_Geo.DROP_DOWN.ToUpper() && (geo.RGN_NM != null && geo.RGN_NM != "") && (geo.CTRY_NM == null || geo.CTRY_NM == ""));
+                foreach (GeoDimension region in geo_regions)
+                {
+                    //rinse and repeat like above, but for regions instead of geos
+                    BasicDropdown newBD_Region = new BasicDropdown();
+                    newBD_Region.DROP_DOWN = region.RGN_NM;
+                    DropdownHierarchy newDH_Region = new DropdownHierarchy(newBD_Region);
+                    newDH_Region.expanded = true;
+                    List<DropdownHierarchy> countries = new List<DropdownHierarchy>();
+                    IEnumerable<GeoDimension> region_countries = geodim.Where(geo => geo.GEO_NM.ToUpper() == geoCombined[i].ToUpper() && geo.RGN_NM == newDH_Region.DROP_DOWN && (geo.CTRY_NM != null && geo.CTRY_NM != ""));
+                    foreach (GeoDimension country in region_countries)
+                    {
+                        //rinse and repeat like above, but for countries instead of regions
+                        BasicDropdown newBD_Country = new BasicDropdown();
+                        newBD_Country.DROP_DOWN = country.CTRY_NM;
+                        DropdownHierarchy newDH_Country = new DropdownHierarchy(newBD_Country);
+                        newDH_Country.expanded = true;
+
+                        countries.Add(newDH_Country);
+                    }
+                    newDH_Region.items = countries.ToArray();
+
+                    regions.Add(newDH_Region);
+                }
+                newDH_Geo.items = regions.ToArray();
+
+                ret.Add(newDH_Geo);
+            }
+            
+            return ret.ToArray();
+        }
+
+        /// <summary>
 		/// Get All Deal Types Dropdowns
 		/// </summary>
 		/// <returns>list of Deal Types Dropdowns</returns>

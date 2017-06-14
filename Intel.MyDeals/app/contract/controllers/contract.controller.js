@@ -816,6 +816,7 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
             $scope.isAddStrategyHidden = true;
             $scope.isAddStrategyBtnHidden = true;
             $scope.isSearchHidden = true;
+            $scope.clearNptTemplate();
             $scope.isEditPricingTableDefaultsHidden = false;
             $scope.curPricingStrategy = ps;
         }
@@ -898,6 +899,15 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
             $scope.newPricingTable["OBJ_SET_TYPE_CD"] = pt.OBJ_SET_TYPE_CD;
             $scope.newPricingTable["_extraAtrbs"] = ptTemplate.extraAtrbs;
             $scope.newPricingTable["_defaultAtrbs"] = ptTemplate.defaultAtrbs;
+        }
+        $scope.clearNptTemplate = function () {
+            $scope.currentPricingTable = null;
+            angular.forEach($scope.templates.ModelTemplates.PRC_TBL,
+                function (value, key) {
+                    value._custom._active = false;
+                });
+            $scope.newPricingTable = util.clone($scope.templates.ObjectTemplates.PRC_TBL.CAP_BAND);
+            $scope.newPricingTable["OBJ_SET_TYPE_CD"] = "";
         }
         $scope.addCustomToTemplates();
 
@@ -1843,7 +1853,7 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                 $scope.updateResults(data.data.PRC_TBL, pt);
                 $scope.setBusy("Saved", "Redirecting you to the Contract Editor");
                 $scope._dirty = false;
-
+                $scope.addTableDisabled = false;
                 // load the screen
                 $state.go('contract.manager.strategy', {
                     cid: $scope.contractData.DC_ID,
@@ -1911,6 +1921,7 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
 
     $scope.customEditPtValidate = function () {
         var isValid = true;
+        $scope.addTableDisabled = true;
 
         // Check required
         angular.forEach($scope.newPricingTable,

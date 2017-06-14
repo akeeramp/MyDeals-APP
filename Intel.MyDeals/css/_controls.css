@@ -452,6 +452,11 @@
     cursor: pointer;
 }
 
+/* removes 'x's from fake multiselect, perhaps we can find a better way to select that css? */
+.isReadOnlyFaux > .k-multiselect-wrap > .k-reset > .k-button > .k-select > .k-i-close {
+    visibility: hidden;
+}
+
 /* grid cell controls */
 .gridCellStatus {
     width: 100%; height: 12px;

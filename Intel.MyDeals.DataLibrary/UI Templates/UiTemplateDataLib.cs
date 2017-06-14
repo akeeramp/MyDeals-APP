@@ -1153,11 +1153,10 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.TRGT_RGN,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 Width = 180,
-                UiType = "MULTISELECT",
-                Template = "#=gridUtils.uiControlWrapper(data, 'TRGT_RGN')#",
-                LookupUrl = "/api/Dropdown/GetGeosDropdowns",
-                LookupText = "dropdownName",
-                LookupValue = "dropdownName",
+                UiType = "EMBEDDEDMULTISELECT",
+                LookupUrl = "/api/Dropdown/GetGeoDropdownHierarchy/",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN",
                 IsFilterable = true,
                 IsSortable = true
             });

@@ -97,6 +97,15 @@ namespace Intel.MyDeals.Controllers.API
             );
         }
 
+        [Authorize]
+        [Route("GetGeoDropdownHierarchy/{prnt}")]
+        public DropdownHierarchy[] GetGeoDropdownHierarchy(string prnt)
+        {
+            return SafeExecutor(() => _dropdownLib.GetGeoDropdownHierarchy(prnt)
+                , $"Unable to get Dropdown Hierarchy for {prnt}"
+            );
+        }
+
         [HttpPut]
         [Route("UpdateBasicDropdowns")]
         public BasicDropdown UpdateBasicDropdowns(BasicDropdown data)

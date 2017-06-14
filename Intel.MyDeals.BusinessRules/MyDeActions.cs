@@ -126,20 +126,20 @@ namespace Intel.MyDeals.BusinessRules
             allSegs.AddRange(validMrktNonCorp);
             allSegs.AddRange(validMrktSeg);
 
+            //check to ensure user entries are valid market segments and set to db's stored value capitalization syntax
             for (var s=0; s<userMrktSegs.Count; s++)
             {
                 BasicDropdown dbSeg = allSegs.FirstOrDefault(m => m.DROP_DOWN.ToUpper() == userMrktSegs[s].ToUpper());
-                if (dbSeg == null)
+                if (dbSeg == null)  //no match
                     BusinessLogicDeActions.AddValidationMessage(de, userMrktSegs[s] + " is not a valid Market Segment.");
                 else
                 {
-                    if (dbSeg.DROP_DOWN != null && userMrktSegs[s] != dbSeg.DROP_DOWN)
+                    if (dbSeg.DROP_DOWN != null && userMrktSegs[s] != dbSeg.DROP_DOWN) //if we found a match but the user input is spelled punctuated differently (no ToUpper())
                     {
-                        userMrktSegs[s] = dbSeg.DROP_DOWN;
+                        userMrktSegs[s] = dbSeg.DROP_DOWN; //set user input to how we have mrkt seg defined in system
                     }
                 }
             }
-
 
             //"ALL" check
             if (userMrktSegs.Count > 1 && userMrktSegs.Contains("All"))
@@ -173,7 +173,7 @@ namespace Intel.MyDeals.BusinessRules
                 //}
 
                 //New requirement: "NON Corp" should not be put into spreadsheet if selected in kendo tree view.  It should only include non corp market segments, not "Non Corp" itself
-                BusinessLogicDeActions.AddValidationMessage(de, "'Non Corp' should not be indivudally selectable.");
+                BusinessLogicDeActions.AddValidationMessage(de, "'Non Corp' should not be individually selectable.");
             }
 
             string newVal = string.Join(", ", userMrktSegs);
