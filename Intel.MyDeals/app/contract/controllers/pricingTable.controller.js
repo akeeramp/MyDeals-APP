@@ -419,7 +419,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     var dtoDateRange = {
                         startDate: pricingTableRow.START_DT, endDate: pricingTableRow.END_DT
                     };
-                    return ProductSelectorService.GetProductSelectorWrapper(dtoDateRange);
+                    root.setBusy("Please wait", "");
+                    return ProductSelectorService.GetProductSelectorWrapper(dtoDateRange).then(function (response) {
+                        root.setBusy("", "");
+                        return response;
+                    });
                 }],
                 pricingTableRow: angular.copy(pricingTableRow),
                 suggestedProduct: function () {
@@ -427,7 +431,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 },
                 enableSplitProducts: function () {
                     return true;
-                }                
+                }
             }
         });
 
@@ -554,11 +558,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             disableRange(sheet.range("D" + n + ":Z" + (n + numToDel - 1)));
                         }, 10);
 
-		                root.saveEntireContract(true);
-		            }
-
-		        }, 10);
-		    },
+                        root.saveEntireContract(true);
+                    }
+                }, 10);
+            },
             function () { });
         }
         else {
@@ -1254,7 +1257,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             var dtoDateRange = {
                                 startDate: pricingTableRow.START_DT, endDate: pricingTableRow.END_DT
                             };
-                            return ProductSelectorService.GetProductSelectorWrapper(dtoDateRange);
+                            root.setBusy("Please wait", "");
+                            return ProductSelectorService.GetProductSelectorWrapper(dtoDateRange).then(function (response) {
+                                root.setBusy("", "");
+                                return response;
+                            });
                         }],
                         pricingTableRow: angular.copy(pricingTableRow),
                         suggestedProduct: function () {

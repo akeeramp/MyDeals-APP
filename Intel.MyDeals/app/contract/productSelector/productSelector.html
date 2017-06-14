@@ -40,7 +40,7 @@
                             {{::vm.checkForBlank(p.name)}}
                         </button>
                         <button popover-class="selector popover" ng-if="vm.selectedPathParts.length < 2" uib-popover="{{::vm.getVerticalsUnderMarkLevel(p.name)}}"
-                                popover-trigger="'mouseenter'" popover-placement="bottom" popover-popup-delay=200
+                                popover-trigger="'mouseenter'" popover-placement="bottom"
                                 popover-append-to-body="true" type="button" ng-class="{'noborder':$last}" ng-click="vm.selectItem(p)" class="btn btn-default">
                             {{::vm.checkForBlank(p.name)}}
                         </button>

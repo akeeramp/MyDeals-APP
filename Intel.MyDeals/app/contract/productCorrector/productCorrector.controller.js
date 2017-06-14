@@ -79,11 +79,15 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                     var dtoDateRange = {
                         startDate: pricingTableRow.START_DT, endDate: pricingTableRow.END_DT
                     };
-                    return ProductSelectorService.GetProductSelectorWrapper(dtoDateRange);
+                    root.setBusy("Please wait", "");
+                    return ProductSelectorService.GetProductSelectorWrapper(dtoDateRange).then(function (response) {
+                        root.setBusy("", "");
+                        return response;
+                    });
                 }],
                 pricingTableRow: angular.copy(pricingTableRow),
                 enableSplitProducts: function () {
-                    return true;
+                    return false;
                 },
                 suggestedProduct: angular.copy(suggestedProduct)
             }
@@ -677,15 +681,15 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         }
         if (_selectionLevel == 0) {
             isConflict = $linq.Enumerable().From(data)
-                .GroupBy(function(x) {
+                .GroupBy(function (x) {
                     return (x.DEAL_PRD_TYPE);
                 }).ToArray().length > 1;
 
             if (isConflict) {
                 var dataS = $linq.Enumerable().From(data)
-                    .GroupBy(function(x) {
+                    .GroupBy(function (x) {
                         return (x.DEAL_PRD_TYPE);
-                    }).Select(function(x) {
+                    }).Select(function (x) {
                         return { 'DEAL_PRD_TYPE': x.source[0].DEAL_PRD_TYPE };
                     })
                     .ToArray();
@@ -700,9 +704,9 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             }
             else {
                 var dataS = $linq.Enumerable().From(data)
-                    .GroupBy(function(x) {
+                    .GroupBy(function (x) {
                         return (x.DEAL_PRD_TYPE);
-                    }).Select(function(x) {
+                    }).Select(function (x) {
                         return { 'DEAL_PRD_TYPE': x.source[0].DEAL_PRD_TYPE };
                     })
                     .ToArray();
@@ -715,21 +719,21 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         //Checking for conflict in Category Name i.e. DT OR Mb or etc
         if (_selectionLevel == 1) {
             isConflict = $linq.Enumerable().From(data)
-                .Where(function(x) {
+                .Where(function (x) {
                     return (x.DEAL_PRD_TYPE == item.name);
                 })
-                .GroupBy(function(x) {
+                .GroupBy(function (x) {
                     return (x.PRD_CAT_NM);
                 }).ToArray().length > 1;
 
             if (isConflict) {
                 var dataS = $linq.Enumerable().From(data)
-                    .Where(function(x) {
+                    .Where(function (x) {
                         return (x.DEAL_PRD_TYPE == item.name);
                     })
-                    .GroupBy(function(x) {
+                    .GroupBy(function (x) {
                         return (x.PRD_CAT_NM);
-                    }).Select(function(x) {
+                    }).Select(function (x) {
                         return { 'PRD_CAT_NM': x.source[0].PRD_CAT_NM };
                     })
                     .ToArray();
@@ -743,12 +747,12 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             }
             else {
                 var dataS = $linq.Enumerable().From(data)
-                    .Where(function(x) {
+                    .Where(function (x) {
                         return (x.DEAL_PRD_TYPE == item.name);
                     })
-                    .GroupBy(function(x) {
+                    .GroupBy(function (x) {
                         return (x.PRD_CAT_NM);
-                    }).Select(function(x) {
+                    }).Select(function (x) {
                         return { 'PRD_CAT_NM': x.source[0].PRD_CAT_NM };
                     }).ToArray();
 
@@ -760,22 +764,22 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         //Checking for conflict in Brand Name i.e. ci3 or ci5, ci7 etc
         if (_selectionLevel == 2) {
             isConflict = $linq.Enumerable().From(data)
-                .Where(function(x) {
+                .Where(function (x) {
                     return (x.PRD_CAT_NM == item.name &&
                         x.DEAL_PRD_TYPE == productHierarchy[0]);
                 })
-                .GroupBy(function(x) {
+                .GroupBy(function (x) {
                     return (x.BRND_NM);
                 }).ToArray().length > 1;
 
             if (isConflict) {
                 var dataS = $linq.Enumerable().From(data)
-                    .Where(function(x) {
+                    .Where(function (x) {
                         return (x.PRD_CAT_NM == item.name && x.DEAL_PRD_TYPE == productHierarchy[0]);
                     })
-                    .GroupBy(function(x) {
+                    .GroupBy(function (x) {
                         return (x.BRND_NM);
-                    }).Select(function(x) {
+                    }).Select(function (x) {
                         return { 'BRND_NM': x.source[0].BRND_NM };
                     })
                     .ToArray();
@@ -789,12 +793,12 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             }
             else {
                 var dataS = $linq.Enumerable().From(data)
-                    .Where(function(x) {
+                    .Where(function (x) {
                         return (x.PRD_CAT_NM == item.name && x.DEAL_PRD_TYPE == productHierarchy[0]);
                     })
-                    .GroupBy(function(x) {
+                    .GroupBy(function (x) {
                         return (x.BRND_NM);
-                    }).Select(function(x) {
+                    }).Select(function (x) {
                         return { 'BRND_NM': x.source[0].BRND_NM };
                     })
                     .ToArray();
@@ -807,21 +811,21 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         //Checking for conflict in Family Name i.e  Haswell, Kaby Lake, Skylake etc
         if (_selectionLevel == 3) {
             isConflict = $linq.Enumerable().From(data)
-                .Where(function(x) {
+                .Where(function (x) {
                     return (x.BRND_NM == item.name && x.DEAL_PRD_TYPE == productHierarchy[0] && x.PRD_CAT_NM == productHierarchy[1]);
                 })
-                .GroupBy(function(x) {
+                .GroupBy(function (x) {
                     return (x.FMLY_NM);
                 }).ToArray().length > 1;
 
             if (isConflict) {
                 var dataS = $linq.Enumerable().From(data)
-                    .Where(function(x) {
+                    .Where(function (x) {
                         return (x.BRND_NM == item.name && x.DEAL_PRD_TYPE == productHierarchy[0] && x.PRD_CAT_NM == productHierarchy[1]);
                     })
-                    .GroupBy(function(x) {
+                    .GroupBy(function (x) {
                         return (x.FMLY_NM);
-                    }).Select(function(x) {
+                    }).Select(function (x) {
                         return { 'FMLY_NM': x.source[0].FMLY_NM };
                     })
                     .ToArray();
@@ -835,12 +839,12 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             }
             else {
                 var dataS = $linq.Enumerable().From(data)
-                    .Where(function(x) {
+                    .Where(function (x) {
                         return (x.BRND_NM == item.name && x.DEAL_PRD_TYPE == productHierarchy[0] && x.PRD_CAT_NM == productHierarchy[1]);
                     })
-                    .GroupBy(function(x) {
+                    .GroupBy(function (x) {
                         return (x.FMLY_NM);
-                    }).Select(function(x) {
+                    }).Select(function (x) {
                         return { 'FMLY_NM': x.source[0].FMLY_NM };
                     })
                     .ToArray();
@@ -854,7 +858,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
 
     // Loop to drill down for Conflict up to FAMILY LEVEL
     function checkNextLevelOfConflict(item) {
-        if(_selectionLevel > - 1 && _selectionLevel < 4) {
+        if (_selectionLevel > -1 && _selectionLevel < 4) {
             for (var cnt = _selectionLevel; cnt < 4; cnt++) {
                 if (!item) {
                     item = { name: "" };
@@ -891,7 +895,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
 
             //Resetting Suggestion
             vm.suggestedProd = [];
-            vm.masterSuggestionList = { };
+            vm.masterSuggestionList = {};
 
             //Removing Element from BreadCrumb Array
             vm.selectedPathParts.splice(item, vm.selectedPathParts.length);
@@ -922,7 +926,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             vm.showSearchResults = false;
             //Resetting Suggestion
             vm.suggestedProd = [];
-            vm.masterSuggestionList = { };
+            vm.masterSuggestionList = {};
             vm.selectedPathParts = [];
 
             var result = checkNextLevelOfConflict();//calling to regenerate the hierarchy
@@ -932,9 +936,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                 }
                 vm.selectsearchItem(item);
             }
-
         }
-
     }
     vm.selectPat = function (item) {
         alert(item);
@@ -975,8 +977,8 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
 
     //Go to Next ROW for conflict or Invalid Product
     function nextRow() {
-        if(vm.rowNumber < vm.rows) {
-            vm.rowNumber = + vm.rowNumber + 1;
+        if (vm.rowNumber < vm.rows) {
+            vm.rowNumber = +vm.rowNumber + 1;
             vm.currentRow = pageNumber[vm.rowNumber - 1];
             vm.addedProducts = [];
             productHierarchy = [];
@@ -989,7 +991,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             vm.showSearchResults = false;
             //Resetting Suggestion
             vm.suggestedProd = [];
-            vm.masterSuggestionList = { };
+            vm.masterSuggestionList = {};
             _selectionLevel = 0;
             cookProducts();
         }
@@ -1000,9 +1002,9 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
 
     //Go to Previous ROW for conflict or Invalid Product
     function prevRow() {
-        if(vm.rowNumber > 1) {
+        if (vm.rowNumber > 1) {
             vm.rowNumber = vm.rowNumber - 1;
-            vm.currentRow = + pageNumber[vm.rowNumber - 1];
+            vm.currentRow = +pageNumber[vm.rowNumber - 1];
             vm.addedProducts = [];
             productHierarchy = [];
             //Reset Bread cum
@@ -1014,7 +1016,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             vm.showSearchResults = false;
             //Resetting Suggestion
             vm.suggestedProd = [];
-            vm.masterSuggestionList = { };
+            vm.masterSuggestionList = {};
             _selectionLevel = 0;
             cookProducts();
         }
@@ -1025,7 +1027,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
 
     //Add suggestion to the suggestion product
     function productSuggestion(item) {
-        var row = { };
+        var row = {};
         if (ProductRows.length > 1) {
             row = ProductRows[vm.currentRow - 1];
         }
@@ -1040,16 +1042,16 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         }
 
         ProductSelectorService.GetProductSuggestions(searchStringDTO)
-            .then(function(response) {
-                if(response.data.length > 0) {
+            .then(function (response) {
+                if (response.data.length > 0) {
                     vm.suggestedProduct = [];
                     angular.forEach(response.data, function (value, key) {
-                        if(!$filter("where") (vm.suggestedProduct, { PRD_MBR_SID: value.PRD_MBR_SID }).length > 0) {
+                        if (!$filter("where")(vm.suggestedProduct, { PRD_MBR_SID: value.PRD_MBR_SID }).length > 0) {
                             vm.suggestedProduct.push(value);
                         }
                     });
                     dataSourceSuggested.read();
-                    $timeout(function() {
+                    $timeout(function () {
                         toggleColumnsWhenEmpty(vm.suggestedProduct);
                     }, 1)
                 }
@@ -1067,13 +1069,13 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
 
     // Add selected Products from the Product Suggestion
     function addProductSuggested(item) {
-        if(item.PRD_ATRB_SID <= 7005) {
+        if (item.PRD_ATRB_SID <= 7005) {
             logger.error("Unable to add. Deals can be created at Processor, L4 or Material ID level");
             return;
         }
 
         //Fetch CAP values
-        var row = { };
+        var row = {};
         if (ProductRows.length > 1) {
             row = ProductRows[vm.currentRow - 1];
         }
@@ -1092,36 +1094,36 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         }
 
         ProductSelectorService.GetCAPForProduct(data)
-            .then(function(response) {
+            .then(function (response) {
                 //Create a new object for selected
-                var selectedObject = { };
+                var selectedObject = {};
 
-                selectedObject["BRND_NM"]= item.BRND_NM;
-                selectedObject["CAP"]= !!response.data[0]? response.data[0].CAP: "No CAP";
-                selectedObject["CAP_START"]= !!response.data[0]? response.data[0].CAP_START: "1/1/0001";
-                selectedObject["CAP_END"]= !!response.data[0]? response.data[0].CAP_END: "1/1/0001";
-                selectedObject["DEAL_PRD_NM"]= item.DEAL_PRD_NM;
-                selectedObject["DEAL_PRD_TYPE"]= item.DEAL_PRD_TYPE;
-                selectedObject["EXACT_MATCH"]= false;
-                selectedObject["FMLY_NM"]= item.FMLY_NM;
-                selectedObject["HAS_L1"]= false;
-                selectedObject["HAS_L2"]= false;
-                selectedObject["HIER_NM_HASH"]= item.HIER_NM_HASH;
-                selectedObject["HIER_VAL_NM"]= item.HIER_VAL_NM;
-                selectedObject["MTRL_ID"]= item.MTRL_ID;
-                selectedObject["PCSR_NBR"]= item.PCSR_NBR;
-                selectedObject["PRD_ATRB_SID"]= item.PRD_ATRB_SID;
-                selectedObject["PRD_CAT_NM"]= item.PRD_CAT_NM;
-                selectedObject["PRD_END_DTM"]= item.PRD_END_DTM;
-                selectedObject["PRD_MBR_SID"]= item.PRD_MBR_SID;
-                selectedObject["PRD_STRT_DTM"]= item.PRD_STRT_DTM;
-                selectedObject["USR_INPUT"]= item.USR_INPUT;
-                selectedObject["CAP_PRC_COND"]= !!response.data[0]? response.data[0].CAP_PRC_COND: "";
-                selectedObject["YCS2"]= !!response.data[0]? response.data[0].YCS2: "No YCS2";
-                selectedObject["YCS2_END"]= !!response.data[0]? response.data[0].YCS2_END: "1/1/0001";;
-                selectedObject["YCS2_START"]= !!response.data[0]? response.data[0].YCS2_START: "1/1/0001";
+                selectedObject["BRND_NM"] = item.BRND_NM;
+                selectedObject["CAP"] = !!response.data[0] ? response.data[0].CAP : "No CAP";
+                selectedObject["CAP_START"] = !!response.data[0] ? response.data[0].CAP_START : "1/1/0001";
+                selectedObject["CAP_END"] = !!response.data[0] ? response.data[0].CAP_END : "1/1/0001";
+                selectedObject["DEAL_PRD_NM"] = item.DEAL_PRD_NM;
+                selectedObject["DEAL_PRD_TYPE"] = item.DEAL_PRD_TYPE;
+                selectedObject["EXACT_MATCH"] = false;
+                selectedObject["FMLY_NM"] = item.FMLY_NM;
+                selectedObject["HAS_L1"] = false;
+                selectedObject["HAS_L2"] = false;
+                selectedObject["HIER_NM_HASH"] = item.HIER_NM_HASH;
+                selectedObject["HIER_VAL_NM"] = item.HIER_VAL_NM;
+                selectedObject["MTRL_ID"] = item.MTRL_ID;
+                selectedObject["PCSR_NBR"] = item.PCSR_NBR;
+                selectedObject["PRD_ATRB_SID"] = item.PRD_ATRB_SID;
+                selectedObject["PRD_CAT_NM"] = item.PRD_CAT_NM;
+                selectedObject["PRD_END_DTM"] = item.PRD_END_DTM;
+                selectedObject["PRD_MBR_SID"] = item.PRD_MBR_SID;
+                selectedObject["PRD_STRT_DTM"] = item.PRD_STRT_DTM;
+                selectedObject["USR_INPUT"] = item.USR_INPUT;
+                selectedObject["CAP_PRC_COND"] = !!response.data[0] ? response.data[0].CAP_PRC_COND : "";
+                selectedObject["YCS2"] = !!response.data[0] ? response.data[0].YCS2 : "No YCS2";
+                selectedObject["YCS2_END"] = !!response.data[0] ? response.data[0].YCS2_END : "1/1/0001";;
+                selectedObject["YCS2_START"] = !!response.data[0] ? response.data[0].YCS2_START : "1/1/0001";
 
-                if (!$filter("where") (vm.addedProducts, { PRD_MBR_SID: item.PRD_MBR_SID }).length > 0) {
+                if (!$filter("where")(vm.addedProducts, { PRD_MBR_SID: item.PRD_MBR_SID }).length > 0) {
                     vm.addedProducts.push(selectedObject);
                 }
             }, function (response) {
@@ -1142,7 +1144,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
     function addProducts() {
         // Add them to box, check for duplicate prd_mbr_sid
         angular.forEach(vm.selectedItems, function (value, key) {
-            if(!$filter("where") (vm.addedProducts, { PRD_MBR_SID: value.PRD_MBR_SID }).length > 0) {
+            if (!$filter("where")(vm.addedProducts, { PRD_MBR_SID: value.PRD_MBR_SID }).length > 0) {
                 vm.addedProducts.push(value);
             }
         });
@@ -1152,24 +1154,24 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
 
     // Save Selected product(s) for the Row
     function saveProducts() {
-        if(vm.addedProducts.length > 0) {
-            var validObject = { "Row": "", "Items": []}; //Multiple Match Key Value pair
+        if (vm.addedProducts.length > 0) {
+            var validObject = { "Row": "", "Items": [] }; //Multiple Match Key Value pair
             for (var s = 0; s < vm.addedProducts.length; s++) {
-                vm.addedProducts[s]["ROW_NUMBER"]= vm.currentRow;
+                vm.addedProducts[s]["ROW_NUMBER"] = vm.currentRow;
             }
 
             var selectedInput = $linq.Enumerable().From(vm.addedProducts)
-                .GroupBy(function(x) {
+                .GroupBy(function (x) {
                     return (x.USR_INPUT);
-                }).Select(function(x) {
+                }).Select(function (x) {
                     return { 'USR_INPUT': x.source[0].USR_INPUT };
                 }).ToArray();
 
-            var obj = { };
+            var obj = {};
 
             for (var m = 0; m < selectedInput.length; m++) {
                 var products = $linq.Enumerable().From(vm.addedProducts)
-                    .Where(function(x) {
+                    .Where(function (x) {
                         return (x.USR_INPUT == selectedInput[m].USR_INPUT);
                     }).ToArray();
 
@@ -1178,7 +1180,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                 for (var keyProd in vm.masterSuggestionList) {
                     if (!!vm.masterSuggestionList[keyProd]) {
                         for (var c = 0; c < vm.masterSuggestionList[keyProd].length; c++) {
-                            if (vm.masterSuggestionList[keyProd][c]= selectedInput[m].USR_INPUT) {
+                            if (vm.masterSuggestionList[keyProd][c] = selectedInput[m].USR_INPUT) {
                                 tempProdNm = keyProd;
                             }
                         }
@@ -1187,9 +1189,9 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
 
                 const prodName = tempProdNm;
 
-                obj[prodName]= products;
+                obj[prodName] = products;
             }
-            GetProductCorrectorData.ValidProducts[vm.currentRow]= obj;
+            GetProductCorrectorData.ValidProducts[vm.currentRow] = obj;
 
             if (vm.opMode == 'D') {
                 // Deleting User input from the Particular Row
@@ -1197,9 +1199,9 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
 
                 // Deleting Complete Row fromDuplicate Product
                 var flag = 0;
-                var object = { "Row": "", "Items": []}; //Multiple Match Key Value pair
+                var object = { "Row": "", "Items": [] }; //Multiple Match Key Value pair
                 object.Row = vm.currentRow;
-                object.Items = !!GetProductCorrectorData.DuplicateProducts[vm.currentRow]? GetProductCorrectorData.DuplicateProducts[vm.currentRow]: "";
+                object.Items = !!GetProductCorrectorData.DuplicateProducts[vm.currentRow] ? GetProductCorrectorData.DuplicateProducts[vm.currentRow] : "";
                 for (var prod in object.Items) {
                     flag = 1;
                 }
@@ -1208,9 +1210,9 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             }
             else {
                 var dataSelected = $linq.Enumerable().From(vm.addedProducts)
-                    .GroupBy(function(x) {
+                    .GroupBy(function (x) {
                         return (x.USR_INPUT);
-                    }).Select(function(x) {
+                    }).Select(function (x) {
                         return { 'USR_INPUT': x.source[0].USR_INPUT };
                     }).ToArray();
 
@@ -1220,14 +1222,14 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                         for (var keyProd in vm.masterSuggestionList) {
                             if (!!vm.masterSuggestionList[keyProd]) {
                                 for (var c = 0; c < vm.masterSuggestionList[keyProd].length; c++) {
-                                    if (vm.masterSuggestionList[keyProd][c]= dataSelected[z].USR_INPUT) {
+                                    if (vm.masterSuggestionList[keyProd][c] = dataSelected[z].USR_INPUT) {
                                         tempProductName = keyProd;
                                     }
                                 }
                             }
                         }
                         for (var d = 0; d < vm.invalidProducts; d++) {
-                            if (vm.invalidProducts[d]= tempProductName) {
+                            if (vm.invalidProducts[d] = tempProductName) {
                                 vm.invalidProducts.splice(d, 1);
                             }
                         }
