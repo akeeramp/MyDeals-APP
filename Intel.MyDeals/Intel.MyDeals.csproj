@@ -1599,6 +1599,10 @@
     <None Include="Web.itt.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
+    <None Include="Web.perf.config">
+      <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Web.utt.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1662,6 +1666,15 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'cons|AnyCPU'">
     <OutputPath>bin\</OutputPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'perf|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
@@ -1701,6 +1714,8 @@
     <TransformXml Source="Web.config" Transform="Web.utt.config" Destination="$(WebProjectOutputDir)\EnvConfig\utt\Web.config" />
     <MakeDir Directories="$(WebProjectOutputDir)\EnvConfig\cons\" />
     <TransformXml Source="Web.config" Transform="Web.cons.config" Destination="$(WebProjectOutputDir)\EnvConfig\cons\Web.config" />
+    <MakeDir Directories="$(WebProjectOutputDir)\EnvConfig\perf\" />
+    <TransformXml Source="Web.config" Transform="Web.perf.config" Destination="$(WebProjectOutputDir)\EnvConfig\cons\Web.config" />
     <Delete Files="@(DeleteAfterBuild)" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
