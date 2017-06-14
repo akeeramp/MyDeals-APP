@@ -51,7 +51,6 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
 
     //Product Selector Modal opener
     vm.openProdSelector = function (row) {
-
         var pricingTableRow = {
             'START_DT': ProductRows["0"].START_DT,
             'END_DT': ProductRows["0"].END_DT,
@@ -451,8 +450,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         schema: {
             model: {
                 fields: {
-                    PRD_MBR_SID: {},
-                    DEAL_PRD_NM: {},
+                    HIER_VAL_NM: {},
                     MM_CUST_CUSTOMER: {}
                 }
             }
@@ -464,6 +462,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
     vm.addChange = function (data, dataItem, columns) {
         addProductSuggested(dataItem);
     };
+
     vm.gridOptionsSuggested = {
         dataSource: dataSourceSuggested,
         filterable: false,
@@ -476,36 +475,39 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         editable: false,
         pageable: false,
         columns: [
-            { field: "PRD_MBR_SID", template: " #= PRD_MBR_SID # ", title: "Product No", width: "33%" },
-            { field: "HIER_VAL_NM", title: "Product Name", width: "33%", template: "<div kendo-tooltip k-content='dataItem.HIER_NM_HASH'>{{dataItem.HIER_VAL_NM}}</div>" },
-            { field: "MM_CUST_CUSTOMER", title: "MM Customer", width: "33%" },
+            { field: "HIER_VAL_NM", title: "Product", template: "<div kendo-tooltip k-content='dataItem.HIER_NM_HASH'>{{dataItem.HIER_VAL_NM}}</div>" },
+            { field: "MM_CUST_CUSTOMER", title: "MM Customer" },
         ]
     };
 
     // Hide Column
     function toggleColumnsWhenEmpty(data) {
         var grid = $("#suggestionProdGrid").data("kendoGrid");
-        angular.forEach(vm.gridOptionsSuggested.columns, function (item, key) {
-            var columnValue = $filter('unique')(data, item.field);
-            if (columnValue.length == 1 && item.field == undefined && (columnValue[0][item.field] == "" || columnValue[0][item.field] == null)) {
-                grid.hideColumn(item.field);//hide column
-            } else {
-                grid.showColumn(item.field); //show column
-            }
-        });
+        if (!!grid) {
+            angular.forEach(vm.gridOptionsSuggested.columns, function (item, key) {
+                var columnValue = $filter('unique')(data, item.field);
+                if (columnValue.length == 1 && item.field == undefined && (columnValue[0][item.field] == "" || columnValue[0][item.field] == null)) {
+                    grid.hideColumn(item.field);//hide column
+                } else {
+                    grid.showColumn(item.field); //show column
+                }
+            });
+        }
     }
 
     function toggleColumnsWhenEmptyConflictGrid(data) {
         var grid = $("#prodGrid").data("kendoGrid");
-        angular.forEach(vm.gridOptionsProduct.columns, function (item, key) {
-            var columnValue = $filter('unique')(data, item.field);
-            if (columnValue.length == 1 && item.field !== undefined && item.field != "CheckBox" && item.field != 'CAP' && item.field != 'YCS2' &&
-                (columnValue[0][item.field] == "" || columnValue[0][item.field] == null || columnValue[0][item.field] == 'NA')) {
-                grid.hideColumn(item.field);//hide column
-            } else {
-                grid.showColumn(item.field); //show column
-            }
-        });
+        if (!!grid) {
+            angular.forEach(vm.gridOptionsProduct.columns, function (item, key) {
+                var columnValue = $filter('unique')(data, item.field);
+                if (columnValue.length == 1 && item.field !== undefined && item.field != "CheckBox" && item.field != 'CAP' && item.field != 'YCS2' &&
+                    (columnValue[0][item.field] == "" || columnValue[0][item.field] == null || columnValue[0][item.field] == 'NA')) {
+                    grid.hideColumn(item.field);//hide column
+                } else {
+                    grid.showColumn(item.field); //show column
+                }
+            });
+        }
     }
 
     // Click on Selected ITEM. Check Next Conflict or Show Product
@@ -520,7 +522,6 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             vm.selectedPathParts.push(tempItem);
         }
         else {
-
         }
 
         lastConflictedColumn = item.name;
@@ -593,7 +594,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                     }
                     dataSource.read();
                 }
-                // Process multiple match product(s) to make html to display
+                    // Process multiple match product(s) to make html to display
                 else if (!!data.DuplicateProducts[key]) {
                     vm.opMode = 'D';
                     vm.isInvalidProduct = true;
@@ -626,7 +627,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                         }
                     }
                 }
-                // Checking for Valid Product(s)
+                    // Checking for Valid Product(s)
                 else if (!!data.ValidProducts[key]) {
                     vm.items = [];
                     for (var a = 0; a < data.ProdctTransformResults[key].length; a++) {
@@ -675,7 +676,6 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             if (productHierarchy.indexOf(item.name) == -1) {
                 productHierarchy.push(item.name);
             }
-
         }
         if (_selectionLevel == 0) {
             isConflict = $linq.Enumerable().From(data)
@@ -940,7 +940,6 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
 
             checkNextLevelOfConflict();//calling to regerate the hierarchy
         }
-
     }
     vm.selectPat = function (item) {
         alert(item);
@@ -1064,6 +1063,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                     vm.selectSuggestion(item.USR_INPUT);
                     vm.suggestedProduct = [];
                     dataSourceSuggested.read();
+                    logger.warning("Unable to get suggestions, please check the global filters selected.");
                 }
             }, function (response) {
                 logger.error("Unable to run Suggest Product", response, response.statusText);
@@ -1072,6 +1072,11 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
 
     // Add selected Products from the Product Suggestion
     function addProductSuggested(item) {
+        if (item.PRD_ATRB_SID <= 7005) {
+            logger.error("Unable to add. Deals can be created at Processor, L4 or Material ID level");
+            return;
+        }
+
         //Fetch CAP values
         var row = {};
         if (ProductRows.length > 1) {
@@ -1126,7 +1131,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                 }
             }, function (response) {
                 logger.error("Unable to get CAP for the product", response, response.statusText);
-            });        
+            });
     }
     // Clear all the selected Product from the Selected BOX
     function clearProducts() {

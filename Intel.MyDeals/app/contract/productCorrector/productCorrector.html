@@ -6,7 +6,7 @@
                     <p class="prodText">Product Corrector</p>
                 </div>
                 <div class="col-md-4 text-center">
-                    <span class="rowNavigation"><label style="font-weight:400">Row ID - {{ vm.rowDCId }}</label></span>
+                    <span class="rowNavigation"><label style="font-weight:400">Row ID {{ vm.rowDCId }}</label></span>
                     <span class="rowNavPanel" ng-if="!vm.hideNavigation">
                         <i role="button" title="Previous Row" class="intelicon-left-previous skyBlue" ng-click="vm.prevRow()" ng-disabled="vm.isPrevDisabled"></i>
                         <label> {{ vm.rowNumber }} of {{ vm.rows }} </label>

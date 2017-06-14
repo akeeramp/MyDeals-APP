@@ -99,8 +99,6 @@ namespace Intel.MyDeals.BusinessRules
                 item[AttributeCodes.PAYOUT_BASED_ON] = "Billings";
             }
 
-
-
             //r.Dc.ApplyActions(r.Dc.MeetsRuleCondition(r.Rule) ? r.Rule.OpRuleActions : r.Rule.OpRuleElseActions);
         }
 

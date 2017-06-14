@@ -1715,7 +1715,7 @@
     <MakeDir Directories="$(WebProjectOutputDir)\EnvConfig\cons\" />
     <TransformXml Source="Web.config" Transform="Web.cons.config" Destination="$(WebProjectOutputDir)\EnvConfig\cons\Web.config" />
     <MakeDir Directories="$(WebProjectOutputDir)\EnvConfig\perf\" />
-    <TransformXml Source="Web.config" Transform="Web.perf.config" Destination="$(WebProjectOutputDir)\EnvConfig\cons\Web.config" />
+    <TransformXml Source="Web.config" Transform="Web.perf.config" Destination="$(WebProjectOutputDir)\EnvConfig\perf\Web.config" />
     <Delete Files="@(DeleteAfterBuild)" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
