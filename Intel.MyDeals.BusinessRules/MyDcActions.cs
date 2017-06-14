@@ -219,12 +219,6 @@ namespace Intel.MyDeals.BusinessRules
                             DateTime capEnd = DateTime.Parse(prodMapping.CAP_END);
                             DateTime prdStart = DateTime.Parse(prodMapping.PRD_STRT_DTM);
 
-                            // If the product start date is after the deal start date, then deal start date should match with product start date and back date would not apply.
-                            if (prdStart > capStart)
-                            {
-                                BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"If the product start date is after the deal start date, then deal start date should match with product start date and back date would not apply.");
-                            }
-
                             DateTime dealStart;
                             DateTime dealEnd;
                             if (DateTime.TryParse(r.Dc.GetDataElementValue(AttributeCodes.START_DT), out dealStart) && DateTime.TryParse(r.Dc.GetDataElementValue(AttributeCodes.END_DT), out dealEnd))
@@ -238,6 +232,12 @@ namespace Intel.MyDeals.BusinessRules
                                 {
                                     BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"The CAP start date ({capStart:mm/dd/yyyy}) and end date ({capEnd:mm/dd/yyyy}) exists in future outside of deal end date. Please change the deal start date to match the CAP start date.");
                                 }
+                            }
+
+                            // If the product start date is after the deal start date, then deal start date should match with product start date and back date would not apply.
+                            if (prdStart > dealStart)
+                            {
+                                BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"If the product start date is after the deal start date, then deal start date should match with product start date and back date would not apply.");
                             }
                         }
 
