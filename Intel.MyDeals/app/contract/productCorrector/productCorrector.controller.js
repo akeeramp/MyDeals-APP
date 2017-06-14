@@ -95,7 +95,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                 for (var key in validateSelectedProducts) {
                     vm.addedProducts.push(validateSelectedProducts[key]["0"]);
                 }
-       });
+            });
     }
 
     //Page number calculation and navigation
@@ -314,22 +314,18 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                 field: "FMLY_NM_MM",
                 title: "EDW Family Name",
                 template: "<div kendo-tooltip k-content='dataItem.FMLY_NM_MM'>{{dataItem.FMLY_NM_MM}}</div>",
-                //template: "<div kendo-tooltip k-content='dataItem.FMLY_NM_MM'>{{(dataItem.FMLY_NM_MM | limitTo: 20) + (dataItem.FMLY_NM_MM.length > 20 ? '...' : '')}}</div>",
                 width: "150px"
             },
             {
                 field: "EPM_NM",
                 title: "EPM Name",
-                //TODO: Convert this a limitTo directive
                 template: "<div kendo-tooltip k-content='dataItem.EPM_NM'>{{dataItem.EPM_NM}}</div>",
-                //template: "<div kendo-tooltip k-content='dataItem.EPM_NM'>{{(dataItem.EPM_NM | limitTo: 20) + (dataItem.EPM_NM.length > 20 ? '...' : '')}}</div>",
                 width: "180px"
             },
             {
                 field: "SKU_NM",
                 title: "SKU Name",
                 template: "<div kendo-tooltip k-content='dataItem.SKU_NM'>{{dataItem.SKU_NM}}</div>",
-                //template: "<div kendo-tooltip k-content='dataItem.SKU_NM'>{{(dataItem.SKU_NM | limitTo: 20) + (dataItem.SKU_NM.length > 20 ? '...' : '')}}</div>",
                 width: "180px"
             },
             {
@@ -500,7 +496,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
     }
 
     function toggleColumnsWhenEmptyConflictGrid(data) {
-        var grid = $("#prodGrid").data("kendoGrid");        
+        var grid = $("#prodGrid").data("kendoGrid");
         angular.forEach(vm.gridOptionsProduct.columns, function (item, key) {
             var columnValue = $filter('unique')(data, item.field);
             if (columnValue.length == 1 && item.field !== undefined && item.field != "CheckBox" && item.field != 'CAP' && item.field != 'YCS2' &&
@@ -1090,10 +1086,9 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             "startDate": row.START_DT,
             "endDate": row.END_DT,
             "custSid": CustSid,
-            "geoSid": row.GEO_COMBINED, //pricingTableRow.GEO_MBR_SID.toString()
+            "geoSid": row.GEO_COMBINED,
             "getAvailable": 'Y',
-            "priceCondition": item.CAP_PRC_COND
-            //TODO: Make changes to proc to accept comma separated GEO's instead of GEO_MBR_SID's
+            "priceCondition": "",
         }
 
         ProductSelectorService.GetCAPForProduct(data)
@@ -1101,41 +1096,37 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                 //Create a new object for selected
                 var selectedObject = {};
 
-                if (!!response.data[0]) {
-                    selectedObject["BRND_NM"] = item.BRND_NM;
-                    selectedObject["CAP"] = response.data[0].CAP;
-                    selectedObject["CAP_START"] = response.data[0].CAP_START;
-                    selectedObject["CAP_END"] = response.data[0].CAP_END;
-                    selectedObject["DEAL_PRD_NM"] = item.DEAL_PRD_NM;
-                    selectedObject["DEAL_PRD_TYPE"] = item.DEAL_PRD_TYPE;
-                    selectedObject["EXACT_MATCH"] = item.EXACT_MATCH;
-                    selectedObject["FMLY_NM"] = item.FMLY_NM;
-                    selectedObject["HAS_L1"] = item.HAS_L1;
-                    selectedObject["HAS_L2"] = item.HAS_L2;
-                    selectedObject["HIER_NM_HASH"] = item.HIER_NM_HASH;
-                    selectedObject["HIER_VAL_NM"] = item.HIER_VAL_NM;
-                    selectedObject["MTRL_ID"] = item.MTRL_ID;
-                    selectedObject["PCSR_NBR"] = item.PCSR_NBR;
-                    selectedObject["PRD_ATRB_SID"] = item.PRD_ATRB_SID;
-                    selectedObject["PRD_CAT_NM"] = item.PRD_CAT_NM;
-                    selectedObject["PRD_END_DTM"] = item.PRD_END_DTM;
-                    selectedObject["PRD_MBR_SID"] = item.PRD_MBR_SID;
-                    selectedObject["PRD_STRT_DTM"] = item.PRD_STRT_DTM;
-                    selectedObject["USR_INPUT"] = item.USR_INPUT;
-                    selectedObject["CAP_PRC_COND"] = response.data[0].CAP_PRC_COND;
-                    selectedObject["YCS2"] = response.data[0].YCS2;
-                    selectedObject["YCS2_END_DATE"] = response.data[0].YCS2_END_DATE;
-                    selectedObject["YCS2_START_DATE"] = response.data[0].YCS2_START_DATE;
-                }
+                selectedObject["BRND_NM"] = item.BRND_NM;
+                selectedObject["CAP"] = !!response.data[0] ? response.data[0].CAP : "No CAP";
+                selectedObject["CAP_START"] = !!response.data[0] ? response.data[0].CAP_START : "1/1/0001";
+                selectedObject["CAP_END"] = !!response.data[0] ? response.data[0].CAP_END : "1/1/0001";
+                selectedObject["DEAL_PRD_NM"] = item.DEAL_PRD_NM;
+                selectedObject["DEAL_PRD_TYPE"] = item.DEAL_PRD_TYPE;
+                selectedObject["EXACT_MATCH"] = false;
+                selectedObject["FMLY_NM"] = item.FMLY_NM;
+                selectedObject["HAS_L1"] = false;
+                selectedObject["HAS_L2"] = false;
+                selectedObject["HIER_NM_HASH"] = item.HIER_NM_HASH;
+                selectedObject["HIER_VAL_NM"] = item.HIER_VAL_NM;
+                selectedObject["MTRL_ID"] = item.MTRL_ID;
+                selectedObject["PCSR_NBR"] = item.PCSR_NBR;
+                selectedObject["PRD_ATRB_SID"] = item.PRD_ATRB_SID;
+                selectedObject["PRD_CAT_NM"] = item.PRD_CAT_NM;
+                selectedObject["PRD_END_DTM"] = item.PRD_END_DTM;
+                selectedObject["PRD_MBR_SID"] = item.PRD_MBR_SID;
+                selectedObject["PRD_STRT_DTM"] = item.PRD_STRT_DTM;
+                selectedObject["USR_INPUT"] = item.USR_INPUT;
+                selectedObject["CAP_PRC_COND"] = !!response.data[0] ? response.data[0].CAP_PRC_COND : "";
+                selectedObject["YCS2"] = !!response.data[0] ? response.data[0].YCS2 : "No YCS2";
+                selectedObject["YCS2_END"] = !!response.data[0] ? response.data[0].YCS2_END : "1/1/0001";;
+                selectedObject["YCS2_START"] = !!response.data[0] ? response.data[0].YCS2_START : "1/1/0001";
 
                 if (!$filter("where")(vm.addedProducts, { PRD_MBR_SID: item.PRD_MBR_SID }).length > 0) {
                     vm.addedProducts.push(selectedObject);
                 }
             }, function (response) {
                 logger.error("Unable to get CAP for the product", response, response.statusText);
-            });
-
-        // TODO: DELETE the Invalid product and add to Valid Logic
+            });        
     }
     // Clear all the selected Product from the Selected BOX
     function clearProducts() {
