@@ -439,5 +439,14 @@ namespace Intel.MyDeals.Controllers.API
                 , $"Unable to get Product CAP and YCS2 values"
             );
         }
+
+        [Route("GetCAPForProduct")]
+        [HttpPost]
+        public List<ProductCAPYCS2> GetCAPForProduct([FromBody]dynamic product)
+        {            
+            return SafeExecutor(() => _productsLib.GetCAPForProduct((int)product.productsid, (int)product.custSid, (string)product.geoSid, (DateTime)product.startDate, (DateTime)product.endDate)
+                , $"Unable to get Product CAP and YCS2 values"
+            );
+        }
     }
 }

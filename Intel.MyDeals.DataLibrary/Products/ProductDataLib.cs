@@ -406,7 +406,7 @@ namespace Intel.MyDeals.DataLibrary
                 Procs.dbo.PR_MYDL_TRANSLT_PRD_ENTRY cmd = new Procs.dbo.PR_MYDL_TRANSLT_PRD_ENTRY
                 {
                     CUST_MBR_SID = CUST_MBR_SID,
-                    tvt_HIER_VAL_NM = dt
+                    tvt_HIER_VAL_NM = dt                    
                 };
 
                 using (var rdr = DataAccess.ExecuteReader(cmd))
@@ -721,6 +721,68 @@ namespace Intel.MyDeals.DataLibrary
                 // Make datatable
                 in_t_prd_cap_calc dt = new in_t_prd_cap_calc();
                 dt.AddRows(productCAPCalc);
+
+                Procs.dbo.PR_MYDL_CAP_YCS2_CALC cmd = new Procs.dbo.PR_MYDL_CAP_YCS2_CALC
+                {
+                    DealProductCustomer = dt,
+                    PrcCond = priceCondition,
+                    FlagPick = getAvailable
+                };
+
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    int IDX_CAP = DB.GetReaderOrdinal(rdr, "CAP");
+                    int IDX_CAP_END = DB.GetReaderOrdinal(rdr, "CAP_END");
+                    int IDX_CAP_PRC_COND = DB.GetReaderOrdinal(rdr, "CAP_PRC_COND");
+                    int IDX_CAP_START = DB.GetReaderOrdinal(rdr, "CAP_START");
+                    int IDX_CUST_MBR_SID = DB.GetReaderOrdinal(rdr, "CUST_MBR_SID");
+                    int IDX_FLAG_PICK = DB.GetReaderOrdinal(rdr, "FLAG_PICK");
+                    int IDX_GEO_MBR_SID = DB.GetReaderOrdinal(rdr, "GEO_MBR_SID");
+                    int IDX_HIER_VAL_NM = DB.GetReaderOrdinal(rdr, "HIER_VAL_NM");
+                    int IDX_PRD_MBR_SID = DB.GetReaderOrdinal(rdr, "PRD_MBR_SID");
+                    int IDX_RowNumber = DB.GetReaderOrdinal(rdr, "RowNumber");
+                    int IDX_YCS2 = DB.GetReaderOrdinal(rdr, "YCS2");
+                    int IDX_YCS2_END = DB.GetReaderOrdinal(rdr, "YCS2_END");
+                    int IDX_YCS2_START = DB.GetReaderOrdinal(rdr, "YCS2_START");
+
+                    while (rdr.Read())
+                    {
+                        ret.Add(new ProductCAPYCS2
+                        {
+                            CAP = (IDX_CAP < 0 || rdr.IsDBNull(IDX_CAP)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CAP),
+                            CAP_END = (IDX_CAP_END < 0 || rdr.IsDBNull(IDX_CAP_END)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CAP_END),
+                            CAP_PRC_COND = (IDX_CAP_PRC_COND < 0 || rdr.IsDBNull(IDX_CAP_PRC_COND)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CAP_PRC_COND),
+                            CAP_START = (IDX_CAP_START < 0 || rdr.IsDBNull(IDX_CAP_START)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CAP_START),
+                            CUST_MBR_SID = (IDX_CUST_MBR_SID < 0 || rdr.IsDBNull(IDX_CUST_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_MBR_SID),
+                            FLAG_PICK = (IDX_FLAG_PICK < 0 || rdr.IsDBNull(IDX_FLAG_PICK)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_FLAG_PICK),
+                            GEO_MBR_SID = (IDX_GEO_MBR_SID < 0 || rdr.IsDBNull(IDX_GEO_MBR_SID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_GEO_MBR_SID),
+                            HIER_VAL_NM = (IDX_HIER_VAL_NM < 0 || rdr.IsDBNull(IDX_HIER_VAL_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_HIER_VAL_NM),
+                            PRD_MBR_SID = (IDX_PRD_MBR_SID < 0 || rdr.IsDBNull(IDX_PRD_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRD_MBR_SID),
+                            RowNumber = (IDX_RowNumber < 0 || rdr.IsDBNull(IDX_RowNumber)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_RowNumber),
+                            YCS2 = (IDX_YCS2 < 0 || rdr.IsDBNull(IDX_YCS2)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_YCS2),
+                            YCS2_END = (IDX_YCS2_END < 0 || rdr.IsDBNull(IDX_YCS2_END)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_YCS2_END),
+                            YCS2_START = (IDX_YCS2_START < 0 || rdr.IsDBNull(IDX_YCS2_START)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_YCS2_START)
+                        });
+                    } // while
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+            return ret;
+        }
+
+        public List<ProductCAPYCS2> GetCAPForProduct(List<ProductCAPYCS2Calc> product, string getAvailable, string priceCondition)
+        {
+            OpLogPerf.Log("GetProductCAPYCS2Data");
+            var ret = new List<ProductCAPYCS2>();
+            try
+            {
+                // Make datatable
+                in_t_prd_cap_calc dt = new in_t_prd_cap_calc();                
+                dt.AddRows(product);
 
                 Procs.dbo.PR_MYDL_CAP_YCS2_CALC cmd = new Procs.dbo.PR_MYDL_CAP_YCS2_CALC
                 {

@@ -69,6 +69,8 @@ namespace Intel.MyDeals.IBusinessLogic
 
         List<ProductCAPYCS2> GetProductCAPYCS2Data(List<ProductCAPYCS2Calc> productCAPCalc, string getAvailable, string priceCondition);
 
+        List<ProductCAPYCS2> GetCAPForProduct(int product, int CUST_CD, string GEO_MBR_SID, DateTime START_DT, DateTime END_DT);
+
         List<Product> SuggestProductsByDates(string prdEntered, int? returnMax, DateTime startDate, DateTime endDate);
     }
 }

@@ -2,9 +2,9 @@
     .module('app.admin')
     .controller('ProductCorrectorModalController', ProductCorrectorModalController);
 
-ProductCorrectorModalController.$inject = ['$filter', '$scope', '$uibModalInstance', 'GetProductCorrectorData', 'ProductSelectorService', 'productCorrectorService', 'contractData', 'RowId', 'ProductRows', '$linq', '$timeout', 'logger', 'gridConstants'];
+ProductCorrectorModalController.$inject = ['$filter', '$scope', '$uibModalInstance', 'GetProductCorrectorData', 'ProductSelectorService', 'productCorrectorService', 'contractData', 'RowId', 'ProductRows', '$linq', '$timeout', 'logger', 'gridConstants', '$uibModal', 'CustSid'];
 
-function ProductCorrectorModalController($filter, $scope, $uibModalInstance, GetProductCorrectorData, ProductSelectorService, productCorrectorService, contractData, RowId, ProductRows, $linq, $timeout, logger, gridConstants) {
+function ProductCorrectorModalController($filter, $scope, $uibModalInstance, GetProductCorrectorData, ProductSelectorService, productCorrectorService, contractData, RowId, ProductRows, $linq, $timeout, logger, gridConstants, $uibModal, CustSid) {
     var vm = this;
     vm.selectedPathParts = [];
     vm.invalidProducts = [];
@@ -37,14 +37,67 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
     vm.rowNumber = 1;
     vm.resetAddedList = 1;
     var productHierarchy = [];
+    vm.breadCumLevel = [];
     vm.showSearchResults = false; // Hide the grid
     vm.selectedProducts = [];
     vm.gridData = [];
     vm.addProducts = addProducts; // This method will add products in Selected List
     vm.suggestedProd = [];
     vm.openCAPBreakOut = openCAPBreakOut;
+    vm.selectPath = selectPath; // Click on bread cum
+    vm.rowDCId = "";
     vm.masterSuggestionList = {
     };
+
+    //Product Selector Modal opener
+    vm.openProdSelector = function (row) {
+
+        var pricingTableRow = {
+            'START_DT': ProductRows["0"].START_DT,
+            'END_DT': ProductRows["0"].END_DT,
+            'CUST_MBR_SID': CustSid,
+            'GEO_COMBINED': ProductRows["0"].GEO_COMBINED,
+            'PTR_SYS_PRD': "",
+            'PTR_SYS_INVLD_PRD': "",
+            'PROGRAM_PAYMENT': ProductRows["0"].PROGRAM_PAYMENT,
+            'PROD_INCLDS': ProductRows["0"].PROD_INCLDS
+        };
+
+        var suggestedProduct = {
+            'mode': 'auto',
+            'prodname': vm.productName
+        };
+
+        var modal = $uibModal.open({
+            backdrop: 'static',
+            templateUrl: 'app/contract/productSelector/productSelector.html',
+            controller: 'ProductSelectorModalController',
+            controllerAs: 'vm',
+            size: 'lg',
+            windowClass: 'prdSelector-modal-window',
+            resolve: {
+                productSelectionLevels: ['ProductSelectorService', function (ProductSelectorService) {
+                    var dtoDateRange = {
+                        startDate: pricingTableRow.START_DT, endDate: pricingTableRow.END_DT
+                    };
+                    return ProductSelectorService.GetProductSelectorWrapper(dtoDateRange);
+                }],
+                pricingTableRow: angular.copy(pricingTableRow),
+                enableSplitProducts: function () {
+                    return true;
+                },
+                suggestedProduct: angular.copy(suggestedProduct)
+            }
+        });
+        modal.result.then(
+            function (productSelectorOutput) {
+                var validateSelectedProducts = productSelectorOutput.validateSelectedProducts;
+                for (var key in validateSelectedProducts) {
+                    vm.addedProducts.push(validateSelectedProducts[key]["0"]);
+                }
+       });
+    }
+
     //Page number calculation and navigation
     var generatePagination = function (e) {
         pageNumber = [];
@@ -75,6 +128,13 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             }
         }
 
+        if (ProductRows.length > 1) {
+            var currentPricingTableRow = ProductRows[vm.currentRow - 1];
+        }
+        else {
+            var currentPricingTableRow = ProductRows[0];
+        }
+        vm.rowDCId = currentPricingTableRow.DC_ID;
         if (vm.rows <= 1) {
             vm.hideNavigation = true;
         }
@@ -206,13 +266,13 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             {
                 field: "PCSR_NBR",
                 title: "Processor Number",
-                template: "<a role='button' ng-if='dataItem.PRD_ATRB_SID == 7006' ng-click='vm.gridSelectItem(dataItem)'>#= PCSR_NBR #</a><div ng-if='dataItem.PRD_ATRB_SID != 7006'>#= PCSR_NBR #</div>",
+                template: "#= PCSR_NBR #",
                 width: "150px"
             },
             {
                 field: "DEAL_PRD_NM",
                 title: "Deal Product Name",
-                template: "<a role='button' ng-if='vm.allowMMSelection(dataItem)' ng-click='vm.gridSelectItem(dataItem)'>#= DEAL_PRD_NM #</a><div ng-if='!vm.allowMMSelection(dataItem)'>#= DEAL_PRD_NM #</div>",
+                template: "#= DEAL_PRD_NM #",
                 width: "180px"
             },
             {
@@ -431,7 +491,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         var grid = $("#suggestionProdGrid").data("kendoGrid");
         angular.forEach(vm.gridOptionsSuggested.columns, function (item, key) {
             var columnValue = $filter('unique')(data, item.field);
-            if (columnValue.length == 1 && item.field !== undefined && (columnValue[0][item.field] == "" || columnValue[0][item.field] == null)) {
+            if (columnValue.length == 1 && item.field == undefined && (columnValue[0][item.field] == "" || columnValue[0][item.field] == null)) {
                 grid.hideColumn(item.field);//hide column
             } else {
                 grid.showColumn(item.field); //show column
@@ -440,7 +500,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
     }
 
     function toggleColumnsWhenEmptyConflictGrid(data) {
-        var grid = $("#prodGrid").data("kendoGrid");
+        var grid = $("#prodGrid").data("kendoGrid");        
         angular.forEach(vm.gridOptionsProduct.columns, function (item, key) {
             var columnValue = $filter('unique')(data, item.field);
             if (columnValue.length == 1 && item.field !== undefined && item.field != "CheckBox" && item.field != 'CAP' && item.field != 'YCS2' &&
@@ -455,6 +515,18 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
     // Click on Selected ITEM. Check Next Conflict or Show Product
     vm.selectsearchItem = function (item) {
         var data = GetProductCorrectorData; // assigning data to a local copy
+
+        if (vm.selectedPathParts.indexOf(item.name) == -1) {
+            vm.breadCumLevel[_selectionLevel] = item.name; // Generating Tree View
+            var tempItem = {
+                name: item.name
+            }
+            vm.selectedPathParts.push(tempItem);
+        }
+        else {
+
+        }
+
         lastConflictedColumn = item.name;
 
         var result = checkNextLevelOfConflict(item); // Checking for conflict
@@ -499,8 +571,6 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             });
 
             if (flag == 1) {
-                //saveProducts();
-                logger.success("Product added for " + dataSelected["0"].FMLY_NM);
             }
             else {
                 logger.error("Can not insert duplicate product ");
@@ -512,10 +582,23 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
     var cookProducts = function (e) {
         var result = false;
         var data = GetProductCorrectorData;
+
         for (var key in data.ProdctTransformResults) {
             if (key == vm.currentRow) {
+                // Process invalid product(s) to make html to display
+                if (!!data.InValidProducts[key] && data.InValidProducts[vm.currentRow].length > 0) {
+                    vm.invalidProducts = [];
+                    vm.opMode = 'I';
+                    vm.isInvalidProduct = false;
+                    vm.isMultipleProduct = true;
+                    vm.productName = data.InValidProducts[vm.currentRow]["0"];
+                    for (var j = 0; j < data.InValidProducts[vm.currentRow].length; j++) {
+                        vm.invalidProducts.push({ "USR_INPUT": data.InValidProducts[vm.currentRow][j] });
+                    }
+                    dataSource.read();
+                }
                 // Process multiple match product(s) to make html to display
-                if (!!data.DuplicateProducts[key]) {
+                else if (!!data.DuplicateProducts[key]) {
                     vm.opMode = 'D';
                     vm.isInvalidProduct = true;
                     vm.isMultipleProduct = false;
@@ -547,19 +630,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                         }
                     }
                 }
-                    // Process invalid product(s) to make html to display
-                else if (!!data.InValidProducts[key] && data.InValidProducts[vm.currentRow].length > 0) {
-                    vm.invalidProducts = [];
-                    vm.opMode = 'I';
-                    vm.isInvalidProduct = false;
-                    vm.isMultipleProduct = true;
-                    vm.productName = data.InValidProducts[vm.currentRow]["0"];
-                    for (var j = 0; j < data.InValidProducts[vm.currentRow].length; j++) {
-                        vm.invalidProducts.push({ "USR_INPUT": data.InValidProducts[vm.currentRow][j] });
-                    }
-                    dataSource.read();
-                }
-                    // Checking for Valid Product(s)
+                // Checking for Valid Product(s)
                 else if (!!data.ValidProducts[key]) {
                     vm.items = [];
                     for (var a = 0; a < data.ProdctTransformResults[key].length; a++) {
@@ -605,7 +676,10 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
     function cehckingConflict(data, _selectionLevel, item) {
         // Checking for conflict in Deal Product Type i.e. CPU or EIA products
         if (item.name && item.name.length > 0) {
-            productHierarchy.push(item.name);
+            if (productHierarchy.indexOf(item.name) == -1) {
+                productHierarchy.push(item.name);
+            }
+
         }
         if (_selectionLevel == 0) {
             isConflict = $linq.Enumerable().From(data)
@@ -807,6 +881,74 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         return result = false;
     }
 
+    //Click Breadcum
+    function selectPath(item) {
+        if (vm.breadCumLevel.indexOf(item.name) > 0) {
+            _selectionLevel = vm.breadCumLevel.indexOf(item.name);
+            //reseting Grid
+            if (_selectionLevel < 4) {
+                var tempItem = {
+                    name: item
+                }
+                vm.gridData = [];
+                dataSourceProduct.read();
+                vm.showSearchResults = false;
+                //Resetting Suggestion
+                vm.suggestedProd = [];
+                vm.masterSuggestionList = {};
+                var tempSelectionLevel = _selectionLevel;
+                _selectionLevel = 0;
+                var vartempitem = { name: "" };
+                //Removing rest item from bread cum
+                var tempBreadcum = vm.selectedPathParts;
+                vm.selectedPathParts = [];
+                if (tempBreadcum.length > 0) {
+                    for (var z = 0; z < tempBreadcum.length; z++) {
+                        if (tempBreadcum[z].name != item.name) {
+                            var tempItem = {
+                                name: item.name
+                            }
+                            vm.selectedPathParts.push(tempItem);
+                        }
+                        else if (tempBreadcum[z].name == item.name) {
+                            break;
+                        }
+                    }
+                }
+                var tempItem = {
+                    name: item.name
+                }
+                vm.selectedPathParts.push(tempItem);
+                for (var cnt = _selectionLevel; cnt < tempSelectionLevel; cnt++) {
+                    if (!item) {
+                        item = { name: "" };
+                    }
+                    var result = cehckingConflict(vm.selectedDataSet, _selectionLevel, vartempitem);
+                    _selectionLevel = cnt + 1;
+                    if (result) {
+                        _lastConflictedState = _selectionLevel;
+                        return result;
+                    }
+                }
+            }
+        }
+        else if (item == 0) {
+            _selectionLevel = 0;
+            vm.gridData = [];
+            dataSourceProduct.read();
+            vm.showSearchResults = false;
+            //Resetting Suggestion
+            vm.suggestedProd = [];
+            vm.masterSuggestionList = {};
+            vm.selectedPathParts = [];
+
+            checkNextLevelOfConflict();//calling to regerate the hierarchy
+        }
+
+    }
+    vm.selectPat = function (item) {
+        alert(item);
+    }
     //Calling for generating number of Rows
     generatePagination();
 
@@ -848,6 +990,9 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             vm.currentRow = pageNumber[vm.rowNumber - 1];
             vm.addedProducts = [];
             productHierarchy = [];
+            //Reset Bread cum
+            vm.breadCumLevel = [];
+            vm.selectedPathParts = [];
             //reseting Grid
             vm.gridData = [];
             dataSourceProduct.read();
@@ -870,6 +1015,9 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             vm.currentRow = +pageNumber[vm.rowNumber - 1];
             vm.addedProducts = [];
             productHierarchy = [];
+            //Reset Bread cum
+            vm.breadCumLevel = [];
+            vm.selectedPathParts = [];
             //reseting Grid
             vm.gridData = [];
             dataSourceProduct.read();
@@ -920,7 +1068,6 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                     vm.selectSuggestion(item.USR_INPUT);
                     vm.suggestedProduct = [];
                     dataSourceSuggested.read();
-                    logger.error("No suggestion found");
                 }
             }, function (response) {
                 logger.error("Unable to run Suggest Product", response, response.statusText);
@@ -929,9 +1076,65 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
 
     // Add selected Products from the Product Suggestion
     function addProductSuggested(item) {
-        if (!$filter("where")(vm.addedProducts, { PRD_MBR_SID: item.PRD_MBR_SID }).length > 0) {
-            vm.addedProducts.push(item);
+        //Fetch CAP values
+        var row = {};
+        if (ProductRows.length > 1) {
+            row = ProductRows[vm.currentRow - 1];
         }
+        else {
+            row = ProductRows[0];
+        }
+
+        var data = {
+            "productsid": item.PRD_MBR_SID,
+            "startDate": row.START_DT,
+            "endDate": row.END_DT,
+            "custSid": CustSid,
+            "geoSid": row.GEO_COMBINED, //pricingTableRow.GEO_MBR_SID.toString()
+            "getAvailable": 'Y',
+            "priceCondition": item.CAP_PRC_COND
+            //TODO: Make changes to proc to accept comma separated GEO's instead of GEO_MBR_SID's
+        }
+
+        ProductSelectorService.GetCAPForProduct(data)
+            .then(function (response) {
+                //Create a new object for selected
+                var selectedObject = {};
+
+                if (!!response.data[0]) {
+                    selectedObject["BRND_NM"] = item.BRND_NM;
+                    selectedObject["CAP"] = response.data[0].CAP;
+                    selectedObject["CAP_START"] = response.data[0].CAP_START;
+                    selectedObject["CAP_END"] = response.data[0].CAP_END;
+                    selectedObject["DEAL_PRD_NM"] = item.DEAL_PRD_NM;
+                    selectedObject["DEAL_PRD_TYPE"] = item.DEAL_PRD_TYPE;
+                    selectedObject["EXACT_MATCH"] = item.EXACT_MATCH;
+                    selectedObject["FMLY_NM"] = item.FMLY_NM;
+                    selectedObject["HAS_L1"] = item.HAS_L1;
+                    selectedObject["HAS_L2"] = item.HAS_L2;
+                    selectedObject["HIER_NM_HASH"] = item.HIER_NM_HASH;
+                    selectedObject["HIER_VAL_NM"] = item.HIER_VAL_NM;
+                    selectedObject["MTRL_ID"] = item.MTRL_ID;
+                    selectedObject["PCSR_NBR"] = item.PCSR_NBR;
+                    selectedObject["PRD_ATRB_SID"] = item.PRD_ATRB_SID;
+                    selectedObject["PRD_CAT_NM"] = item.PRD_CAT_NM;
+                    selectedObject["PRD_END_DTM"] = item.PRD_END_DTM;
+                    selectedObject["PRD_MBR_SID"] = item.PRD_MBR_SID;
+                    selectedObject["PRD_STRT_DTM"] = item.PRD_STRT_DTM;
+                    selectedObject["USR_INPUT"] = item.USR_INPUT;
+                    selectedObject["CAP_PRC_COND"] = response.data[0].CAP_PRC_COND;
+                    selectedObject["YCS2"] = response.data[0].YCS2;
+                    selectedObject["YCS2_END_DATE"] = response.data[0].YCS2_END_DATE;
+                    selectedObject["YCS2_START_DATE"] = response.data[0].YCS2_START_DATE;
+                }
+
+                if (!$filter("where")(vm.addedProducts, { PRD_MBR_SID: item.PRD_MBR_SID }).length > 0) {
+                    vm.addedProducts.push(selectedObject);
+                }
+            }, function (response) {
+                logger.error("Unable to get CAP for the product", response, response.statusText);
+            });
+
         // TODO: DELETE the Invalid product and add to Valid Logic
     }
     // Clear all the selected Product from the Selected BOX
@@ -1049,8 +1252,6 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                 }
             }
 
-            logger.success("Product added successfully");
-
             _selectionLevel = 0;
             vm.items = [];
             vm.gridData = [];
@@ -1071,6 +1272,10 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
 
             // Reset Suggestion list
             vm.clearSuggedtedProd();
+
+            //Reset Bread cum
+            vm.breadCumLevel = [];
+            vm.selectedPathParts = [];
 
             generatePagination();
 

@@ -389,6 +389,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
     function openProductSelector(currentPricingTableRow, enableSplitProducts) {
         var contract = $scope.$parent.$parent.contractData;
+
+        //selection mode
+        var suggestedProd = {
+            'mode': 'manual',
+            'prodname': ""
+        };
+
         var pricingTableRow = {
             'START_DT': contract.START_DT,
             'END_DT': contract.END_DT,
@@ -415,9 +422,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     return ProductSelectorService.GetProductSelectorWrapper(dtoDateRange);
                 }],
                 pricingTableRow: angular.copy(pricingTableRow),
+                suggestedProduct: function () {
+                    return suggestedProd;
+                },
                 enableSplitProducts: function () {
                     return true;
-                }
+                }                
             }
         });
 
@@ -1226,6 +1236,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     'PROD_INCLDS': !currentPricingTableRowData ? root.curPricingTable.PROD_INCLDS : currentPricingTableRowData.PROD_INCLDS,
                 };
 
+                var suggestedProduct = {
+                    'mode': 'manual',
+                    'prodname': ""
+                };
+
                 var modal = $uibModal.open({
                     backdrop: 'static',
                     templateUrl: 'app/contract/productSelector/productSelector.html',
@@ -1241,6 +1256,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             return ProductSelectorService.GetProductSelectorWrapper(dtoDateRange);
                         }],
                         pricingTableRow: angular.copy(pricingTableRow),
+                        suggestedProduct: function () {
+                            return suggestedProduct;
+                        },
                         enableSplitProducts: function () {
                             return enableSplitProducts;
                         }
@@ -1391,6 +1409,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 GetProductCorrectorData: angular.copy(transformResults), //Product Master List
                 contractData: angular.copy($scope.contractData), // Contract data
                 RowId: currentRow, // Row ID which should be validated
+                CustSid: function () {
+                    return root.getCustId();
+                },
                 ProductRows: function () {
                     return angular.copy(rowData);
                 }

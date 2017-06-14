@@ -796,6 +796,25 @@ namespace Intel.MyDeals.BusinessLogic
             return _productDataLib.GetProductCAPYCS2Data(productCAPCalc, getAvailable, priceCondition);
         }
 
+        public List<ProductCAPYCS2> GetCAPForProduct(int PRD_MBR_SID, int CUST_CD, string GEO_MBR_SID, DateTime START_DT, DateTime END_DT)
+        {
+            string getAvailable = "Y";
+            string priceCondition = "";
+            
+            ProductCAPYCS2Calc pCap = new ProductCAPYCS2Calc();
+            pCap.PRD_MBR_SID = PRD_MBR_SID; 
+            pCap.CUST_MBR_SID = CUST_CD;
+            pCap.GEO_MBR_SID = GEO_MBR_SID; 
+            pCap.DEAL_STRT_DT = START_DT;
+            pCap.DEAL_END_DT = END_DT;
+
+            List<ProductCAPYCS2Calc> lpCap = new List<ProductCAPYCS2Calc>();
+            lpCap.Add(pCap);
+
+            List<ProductCAPYCS2> capResult = _productDataLib.GetCAPForProduct(lpCap, getAvailable, priceCondition);
+            return capResult;            
+        }
+
         /// <summary>
         ///
         /// </summary>

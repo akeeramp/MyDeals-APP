@@ -28,5 +28,7 @@ namespace Intel.MyDeals.IDataLibrary
                 int selectionLevel, string drillDownFilter4, string drillDownFilter5, int custSid, string geoSid);
 
         List<ProductCAPYCS2> GetProductCAPYCS2Data(List<ProductCAPYCS2Calc> productCAPCalc, string getAvailable, string priceCondition);
+
+        List<ProductCAPYCS2> GetCAPForProduct(List<ProductCAPYCS2Calc> product, string getAvailable, string priceCondition);
     }
 }

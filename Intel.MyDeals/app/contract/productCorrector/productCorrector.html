@@ -6,7 +6,7 @@
                     <p class="prodText">Product Corrector</p>
                 </div>
                 <div class="col-md-4 text-center">
-                    <span class="rowNavigation"><label style="font-weight:400">Row {{ vm.currentRow }}</label></span>
+                    <span class="rowNavigation"><label style="font-weight:400">Row ID - {{ vm.rowDCId }}</label></span>
                     <span class="rowNavPanel" ng-if="!vm.hideNavigation">
                         <i role="button" title="Previous Row" class="intelicon-left-previous skyBlue" ng-click="vm.prevRow()" ng-disabled="vm.isPrevDisabled"></i>
                         <label> {{ vm.rowNumber }} of {{ vm.rows }} </label>
@@ -18,10 +18,18 @@
                 </span>
             </div>
         </div>
-        <div class="prodSelector modal-body">
+        <div class="prodCorrector modal-body">
+            <div class="row breadCrumbWrapper" ng-if="!vm.isMultipleProduct">
+                <ul class="productpath breadcrumb">
+                    <li>Multiple products found for: <a role="button" class="prdAnchor" ng-click="vm.selectPath(0)"> {{ vm.productName }}</a></li>
+                    <li ng-repeat="p in vm.selectedPathParts | unique:'name'" >
+                        <a role="button" class="prdAnchor" ng-click="vm.selectPath(p)">{{:: p.name }}</a>
+                    </li>
+                </ul>
+            </div>
             <div class="row" style="margin:0px" ng-if="!vm.isMultipleProduct">
                 <div ng-if="vm.items.length != 0">
-                    <label class="text-left fl marginRight textProdSelector" ng-if="!vm.isMultipleProduct">Multiple products found for: {{ vm.productName }}</label>
+                    <!--<label class="text-left fl marginRight textProdSelector" ng-if="!vm.isMultipleProduct">Multiple products found for: {{ vm.productName }}</label>-->
                     <div class="drillDown btn-group btn-group-justified" role="group" aria-label="...">
                         <div class="btn-group" ng-repeat="p in vm.items" role="group">
                             <button type="button" ng-class="{'noborder':$last}" ng-click="vm.selectsearchItem(p)" class="btn btn-default">{{::p.name}}</button>
@@ -29,7 +37,7 @@
                     </div>
                 </div>
                 <div ng-if="vm.showSearchResults">
-                    <label class="text-left fl marginRight textProdSelector" ng-if="!vm.isMultipleProduct">Multiple products found for: {{ vm.productName }}</label>
+                    <!--<label class="text-left fl marginRight textProdSelector" ng-if="!vm.isMultipleProduct">Multiple products found for: {{ vm.productName }}</label>-->
                     <div class="btn-group btn-group-justified" role="group" aria-label="...">
                         <div id="prodGrid" kendo-grid="prodGrid" kendo-grid-check-box k-grid-checkbox="vm" class="prodCorrector opUiContainer md kendoGridHeight prodCorrector-grid k-grid" k-options="vm.gridOptionsProduct" style="margin-top:10px"></div>
                     </div>
@@ -62,7 +70,7 @@
                 <div class="col-md-6 text-left textProdSelector" style="padding-left:0px">
                     <p>Valid and Selected Products<small>&nbsp;({{vm.addedProducts.length}})</small></p>
                 </div>
-                <div class="col-md-6" style="padding-right:0px">
+                <div class="col-md-6" style="padding-right:0px" ng-if="!vm.isMultipleProduct">
                     <button class="btn btn-default prdBtn" ng-click="vm.clearProducts()" style="margin-left:2px;">Clear all products</button>
                     <button class="btn btn-primary fr prdBtn" ng-click="vm.addProducts()">Add Product(s)</button>
                 </div>
@@ -76,7 +84,7 @@
                 </ui-select>
             </div>
             <div class="col-md-6 form-inline insertAtRowsText" style="padding-left:0px">
-                <label class="text-left fl marginRight" style="font-weight:400!important">Not Correct? &nbsp;Try using <a style="color:#00AEEF;text-decoration:underline;cursor:pointer">Product Selector</a></label>
+                <label class="text-left fl marginRight" style="font-weight:400!important">Not Correct? &nbsp;Try using <a style="color:#00AEEF;text-decoration:underline;cursor:pointer" ng-click="vm.openProdSelector()">Product Selector</a></label>
             </div>
             <div class="col-md-6" style="padding-right:0px">
                 <button class="btn btn-default prdBtn" ng-click="vm.cancel()" style="margin-left:2px;">Cancel</button>
@@ -116,7 +124,6 @@
     .rowNavigation {
         color: yellow;
         font-size: 32px;
-        text-transform: uppercase;
     }
 
     .prodText {
@@ -188,8 +195,10 @@
     .productpath.breadcrumb {
         color: white;
         background-color: #1a3e6f;
-        padding: 10px;
+        padding: 0px;
         margin-bottom: 0px;
+        padding-bottom: 10px;
+        padding-left: 5px;
     }
 
     a.prdAnchor {
@@ -305,7 +314,7 @@
                 background-color: #01AEEF;
             }
 
-    .prodSelector.modal-body {
+    .prodCorrector.modal-body {
         padding-top: 2px;
         padding-bottom: 0px;
         min-height: calc(85vh - 340px);
