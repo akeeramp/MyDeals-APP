@@ -591,11 +591,19 @@
         		vm.drilledDownAttributes = vm.dropDownDatasource.attributes[e.dataItem.Alias];
         	}
 			
+        	vm.drilledDownAttributes = vm.drilledDownAttributes.sort(function (a, b) {
+        	    if (a.ATRB_COL_NM < b.ATRB_COL_NM)
+        	        return -1;
+        	    if (a.ATRB_COL_NM > b.ATRB_COL_NM)
+        	        return 1;
+        	    return 0;
+        	});
+
             // Update ObjSetType dropdown Datasource
             vm.dropDown.objSetType.setDataSource(vm.drilledDownDealTypes);
             vm.dropDown.wfStage.setDataSource(vm.drilledDownStages);
             vm.dropDown.attributes.setDataSource(vm.drilledDownAttributes);
-			
+
         	// Clear selected
             $scope.$apply( function() {
 				vm.selected.dealTypes = [];
