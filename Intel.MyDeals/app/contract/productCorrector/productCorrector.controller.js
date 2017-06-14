@@ -544,7 +544,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                 })
                 .ToArray();
 
-            productHierarchy = [];
+            //productHierarchy = [];
             vm.items = [];
 
             var flag = 0;
@@ -676,6 +676,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             if (productHierarchy.indexOf(item.name) == -1) {
                 productHierarchy.push(item.name);
             }
+
         }
         if (_selectionLevel == 0) {
             isConflict = $linq.Enumerable().From(data)
@@ -851,7 +852,6 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                 }
             }
         }
-
         return isConflict;
     }
 
@@ -879,56 +879,46 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
 
     //Click Breadcum
     function selectPath(item) {
-        if (vm.breadCumLevel.indexOf(item.name) > 0) {
-            _selectionLevel = vm.breadCumLevel.indexOf(item.name);
-            //reseting Grid
-            if (_selectionLevel < 4) {
-                var tempItem = {
-                    name: item
+        var nextConflictedLevel = '';
+        if (item > 0) {
+            nextConflictedLevel = vm.selectedPathParts[item - 1].name;
+        }
+        _selectionLevel = vm.breadCumLevel.indexOf(nextConflictedLevel); // Fetching Next conflicted level
+
+        if (_selectionLevel < 4 && _selectionLevel > 0) {
+            //Reset Grid
+            vm.gridData = [];
+            dataSourceProduct.read();
+            
+            vm.showSearchResults = false;
+
+            //Resetting Suggestion
+            vm.suggestedProd = [];
+            vm.masterSuggestionList = {};
+
+            //Removing Element from BreadCrumb Array 
+            vm.selectedPathParts.splice(item, vm.selectedPathParts.length);            
+
+            productHierarchy.splice(item, productHierarchy.length);
+
+            var tempSelectionLevel = item;            
+            var vartempitem = { name: nextConflictedLevel };
+
+            //Checking conflict
+            for (var cnt = _selectionLevel; cnt < 4 ; cnt++) {
+                if (item == 0) {
+                    item = { name: "" };
                 }
-                vm.gridData = [];
-                dataSourceProduct.read();
-                vm.showSearchResults = false;
-                //Resetting Suggestion
-                vm.suggestedProd = [];
-                vm.masterSuggestionList = {};
-                var tempSelectionLevel = _selectionLevel;
-                _selectionLevel = 0;
-                var vartempitem = { name: "" };
-                //Removing rest item from bread cum
-                var tempBreadcum = vm.selectedPathParts;
-                vm.selectedPathParts = [];
-                if (tempBreadcum.length > 0) {
-                    for (var z = 0; z < tempBreadcum.length; z++) {
-                        if (tempBreadcum[z].name != item.name) {
-                            var tempItem = {
-                                name: item.name
-                            }
-                            vm.selectedPathParts.push(tempItem);
-                        }
-                        else if (tempBreadcum[z].name == item.name) {
-                            break;
-                        }
-                    }
+                var result = cehckingConflict(vm.selectedDataSet, _selectionLevel, vartempitem);
+                _selectionLevel = cnt + 1;
+                if (result) {
+                    _lastConflictedState = _selectionLevel;
+                    return result;
                 }
-                var tempItem = {
-                    name: item.name
-                }
-                vm.selectedPathParts.push(tempItem);
-                for (var cnt = _selectionLevel; cnt < tempSelectionLevel; cnt++) {
-                    if (!item) {
-                        item = { name: "" };
-                    }
-                    var result = cehckingConflict(vm.selectedDataSet, _selectionLevel, vartempitem);
-                    _selectionLevel = cnt + 1;
-                    if (result) {
-                        _lastConflictedState = _selectionLevel;
-                        return result;
-                    }
-                }
-            }
+            }            
         }
         else if (item == 0) {
+            productHierarchy = [];
             _selectionLevel = 0;
             vm.gridData = [];
             dataSourceProduct.read();
@@ -938,8 +928,16 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             vm.masterSuggestionList = {};
             vm.selectedPathParts = [];
 
-            checkNextLevelOfConflict();//calling to regerate the hierarchy
-        }
+            var result = checkNextLevelOfConflict();//calling to regenerate the hierarchy
+            if (!result) {
+                var item = {
+                    name: productHierarchy[3]
+                }
+                vm.selectsearchItem(item);
+            }
+
+        }      
+
     }
     vm.selectPat = function (item) {
         alert(item);
@@ -990,7 +988,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             vm.selectedPathParts = [];
             //reseting Grid
             vm.gridData = [];
-            dataSourceProduct.read();
+            dataSourceProduct.read();            
             vm.showSearchResults = false;
             //Resetting Suggestion
             vm.suggestedProd = [];
@@ -1015,7 +1013,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             vm.selectedPathParts = [];
             //reseting Grid
             vm.gridData = [];
-            dataSourceProduct.read();
+            dataSourceProduct.read();            
             vm.showSearchResults = false;
             //Resetting Suggestion
             vm.suggestedProd = [];
@@ -1249,22 +1247,14 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             }
 
             _selectionLevel = 0;
+            productHierarchy = [];
             vm.items = [];
             vm.gridData = [];
             dataSourceProduct.read();
+            
             vm.showSearchResults = 0;
 
-            var previousPage = vm.currentRow;
-
-            if (vm.rowNumber == vm.rows) {
-                vm.rowNumber = vm.rowNumber - 1;
-            }
-            else if (vm.rowNumber == 1 || vm.rowNumber == vm.rows) {
-                vm.rowNumber = vm.rowNumber;
-            }
-            else if (vm.rowNumber < vm.rows - 1) {
-                vm.rowNumber = vm.rowNumber + 1;
-            }
+            var previousPage = vm.currentRow;            
 
             // Reset Suggestion list
             vm.clearSuggedtedProd();
@@ -1281,6 +1271,19 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                     vm.resetAddedList = 0;
                     break;
                 }
+                else {
+                    vm.resetAddedList = 1;
+                }
+            }
+
+            if (vm.rowNumber == vm.rows && vm.resetAddedList == 1) {
+                vm.rowNumber = vm.rowNumber - 1;
+            }
+            else if ((vm.rowNumber == 1 || vm.rowNumber == vm.rows) && vm.resetAddedList == 1) {
+                vm.rowNumber = vm.rowNumber;
+            }
+            else if (vm.rowNumber < vm.rows - 1 && vm.resetAddedList == 1) {
+                vm.rowNumber = vm.rowNumber + 1;
             }
 
             if (vm.resetAddedList == 1) {

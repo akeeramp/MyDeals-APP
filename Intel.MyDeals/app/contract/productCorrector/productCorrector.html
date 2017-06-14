@@ -23,7 +23,7 @@
                 <ul class="productpath breadcrumb">
                     <li>Multiple products found for: <a role="button" class="prdAnchor" ng-click="vm.selectPath(0)"> {{ vm.productName }}</a></li>
                     <li ng-repeat="p in vm.selectedPathParts | unique:'name'" >
-                        <a role="button" class="prdAnchor" ng-click="vm.selectPath(p)">{{:: p.name }}</a>
+                        <a role="button" class="prdAnchor" ng-click="vm.selectPath($index + 1)">{{:: p.name }}</a>
                     </li>
                 </ul>
             </div>
