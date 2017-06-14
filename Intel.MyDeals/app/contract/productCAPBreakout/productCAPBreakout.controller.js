@@ -29,7 +29,6 @@
         vm.gridOptionsCAP = {
             dataSource: vm.dataSource,
             sortable: true,
-            filterable: true,
             resizable: true,
             columns: [
                   { field: "HIER_VAL_NM", title: "Product" },

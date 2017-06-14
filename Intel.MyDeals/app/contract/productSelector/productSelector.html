@@ -39,8 +39,8 @@
                         <button ng-if="!(vm.selectedPathParts.length < 2)" title="{{p.name}}" type="button" ng-class="{'noborder':$last}" ng-click="vm.selectItem(p)" class="btn btn-default">
                             {{::vm.checkForBlank(p.name)}}
                         </button>
-                        <button popover-class="selector popover" ng-if="vm.selectedPathParts.length < 2" popover-title="Product Categories" uib-popover="{{::vm.getVerticalsUnderMarkLevel(p.name)}}"
-                                popover-trigger="'mouseenter'" popover-placement="bottom"
+                        <button popover-class="selector popover" ng-if="vm.selectedPathParts.length < 2" uib-popover="{{::vm.getVerticalsUnderMarkLevel(p.name)}}"
+                                popover-trigger="'mouseenter'" popover-placement="bottom" popover-popup-delay=200
                                 popover-append-to-body="true" type="button" ng-class="{'noborder':$last}" ng-click="vm.selectItem(p)" class="btn btn-default">
                             {{::vm.checkForBlank(p.name)}}
                         </button>
@@ -85,7 +85,8 @@
         <div class="row" style="padding-left:15px;padding-right:15px;">
             <ui-select allow-clear="true" onkeypress="return false;" class="prodSelected text-left"
                        tagging="true" multiple ng-model="vm.addedProducts" theme="bootstrap">
-                <ui-select-match><span ng-click="vm.showSingleProductHeirarchy($item)" kendo-tooltip k-content='$item.HIER_NM_HASH'>{{$item.HIER_VAL_NM}}</span></ui-select-match>
+                <ui-select-match><span ng-class="::{'text-danger': vm.isValidCapDetails($item)}" ng-click="vm.showSingleProductHeirarchy($item)"
+                                       kendo-tooltip k-content='::vm.isValidCapDetails($item, true)'>{{$item.HIER_VAL_NM}}</span></ui-select-match>
                 <ui-select-choices repeat="products in vm.selectedProducts">
                 </ui-select-choices>
             </ui-select>
@@ -96,7 +97,7 @@
                 <input id="separateProduct" class="checkbox-custom" ng-model="vm.splitProducts" name="separateroducts" type="checkbox">
                 <label for="separateProduct" class="checkbox-custom-label" style="padding-bottom:5px;margin-top:0px;">&nbsp;Separate product in rows</label>
             </span>
-            <button class="btn btn-primary fr prdBtn" ng-click="vm.save()">Save</button>
+            <button class="btn btn-primary fr prdBtn" ng-disabled="vm.addedProducts.length == 0" ng-click="vm.save()">Save</button>
             <button class="btn btn-default fr prdBtn" ng-click="vm.cancel()" style="margin-right:4px;">Cancel</button>
         </div>
     </div>

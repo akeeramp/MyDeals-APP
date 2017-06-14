@@ -36,6 +36,7 @@
         vm.openCAPBreakOut = openCAPBreakOut;
         vm.showSingleProductHeirarchy = showSingleProductHeirarchy;
         vm.getVerticalsUnderMarkLevel = getVerticalsUnderMarkLevel;
+        vm.isValidCapDetails = isValidCapDetails;
         var selectionProcessed = false;
 
         function populateValidProducts() {
@@ -56,10 +57,10 @@
             var productCategories = $filter('unique')(vm.productSelectionLevels, 'PRD_CAT_NM');
             var markLevel = vm.selectedPathParts.length == 0 ? 'MRK_LVL1' : 'MRK_LVL2';
             var varticals = productCategories.filter(function (x) {
-                    return x[markLevel] == markLevelName
-                }).map(function(elem){
-                    return elem.PRD_CAT_NM;
-                }).join(" | ");
+                return x[markLevel] == markLevelName
+            }).map(function (elem) {
+                return elem.PRD_CAT_NM;
+            }).join(" | ");
 
             return varticals;
         }
@@ -344,10 +345,10 @@
         function addProducts() {
             // Add them to box, check for duplicate prd_mbr_sid
             angular.forEach(vm.selectedItems, function (value, key) {
-                if (!$filter("where")(vm.addedProducts, { PRD_MBR_SID: value.PRD_MBR_SID }).length > 0) {
-                    vm.addedProducts.push(value);
-                }
+                // Add validations here
+                vm.addedProducts.push(value);
             });
+            vm.addedProducts = $filter("unique")(vm.addedProducts, 'PRD_MBR_SID');
         }
 
         // Grid ddiplay helper functions
@@ -549,8 +550,32 @@
         }
 
         vm.save = function () {
-            logger.success("Products add successful");
-
+            vm.addedProducts = vm.addedProducts.map(function (x) {
+                return {
+                    BRND_NM: x.BRND_NM,
+                    CAP: x.CAP,
+                    CAP_END: x.CAP_END,
+                    CAP_START: x.CAP_START,
+                    DEAL_PRD_NM: x.DEAL_PRD_NM,
+                    DEAL_PRD_TYPE: x.DEAL_PRD_TYPE,
+                    FMLY_NM: x.FMLY_NM,
+                    HAS_L1: x.HAS_L1,
+                    HAS_L2: x.HAS_L2,
+                    HIER_NM_HASH: x.HIER_NM_HASH,
+                    HIER_VAL_NM: x.HIER_VAL_NM,
+                    MTRL_ID: x.MTRL_ID,
+                    PCSR_NBR: x.PCSR_NBR,
+                    PRD_ATRB_SID: x.PRD_ATRB_SID,
+                    PRD_CAT_NM: x.PRD_CAT_NM,
+                    PRD_END_DTM: x.PRD_END_DTM,
+                    PRD_MBR_SID: x.PRD_MBR_SID,
+                    PRD_STRT_DTM: x.PRD_STRT_DTM,
+                    USR_INPUT: x.USR_INPUT,
+                    YCS2: x.YCS2,
+                    YCS2_END: x.YCS2_END,
+                    YCS2_START: x.YCS2_START
+                }
+            });
             var pricingTableSysProducts = {};
             angular.forEach(vm.addedProducts, function (item, key) {
                 if (!pricingTableSysProducts.hasOwnProperty(item.USR_INPUT)) {
@@ -794,6 +819,35 @@
                 $timeout(function () {
                     toggleColumnsWhenEmpty(vm.gridData);
                 });
+            }
+        }
+
+        // These validation rules are taken from MT CAP Validations. Both the places rules should be in sync
+        function isValidCapDetails(productJson, showErrorMesssage) {
+            // Product data
+            var prodStartDate = moment(productJson.PRD_STRT_DTM).format('l');
+            var capStart = moment(productJson.CAP_START).format('l');
+            var capEnd = moment(productJson.CAP_END).format('l');
+
+            //Deal data
+            var dealStart = moment(pricingTableRow.START_DT).format('l');
+            var dealEnd = moment(pricingTableRow.END_DT).format('l');
+
+            var errorMessage = "";
+
+            if (moment(prodStartDate).isAfter(capStart)) {
+                errorMessage += "If the product start date is after the deal start date, then deal start date should match with product start date and back date would not apply.<br/>";
+            }
+            if (!((moment(dealEnd).isAfter(capStart)) && (moment(capEnd).isAfter(dealStart)))) {
+                errorMessage += "Product entered does not have CAP within the Deal's start date and end date.<br/>";
+            }
+            if (moment(capStart).isAfter(dealEnd)) {
+                errorMessage += "The CAP start date (" + capStart + ") and end date (" + capEnd + ") exists in future outside of deal end date. Please change the deal start date to match the CAP start date.<br/>";
+            }
+            if (!showErrorMesssage) {
+                return errorMessage == "" ? false : true;
+            } else {
+                return errorMessage == "" ? productJson.HIER_NM_HASH : errorMessage;
             }
         }
     }

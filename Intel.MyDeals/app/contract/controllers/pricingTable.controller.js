@@ -46,27 +46,27 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         fontWeight: "bold"
     };
 
-	var intA = "A".charCodeAt(0);
-	var ptTemplate = null;
-	var columns = null;
-	var gTools = null;
-	var ssTools = null;
-	var wipTemplate = null;
-	var productLevel = null;
-	root.colToLetter = {}; // Contains "dictionary" of  (Key : Value) as (Db Column Name : Column Letter)
-	root.letterToCol = {};
-	vm.readOnlyColLetters = [];
-	vm.requiredStringColumns = {};
-	root.wipData;
-	root.wipOptions;
-	var ssTools;
-	var stealthOnChangeMode = false;
-	root.isPtr = $state.current.name === "contract.manager.strategy";
-	root.isWip = $state.current.name === "contract.manager.strategy.wip";
+    var intA = "A".charCodeAt(0);
+    var ptTemplate = null;
+    var columns = null;
+    var gTools = null;
+    var ssTools = null;
+    var wipTemplate = null;
+    var productLevel = null;
+    root.colToLetter = {}; // Contains "dictionary" of  (Key : Value) as (Db Column Name : Column Letter)
+    root.letterToCol = {};
+    vm.readOnlyColLetters = [];
+    vm.requiredStringColumns = {};
+    root.wipData;
+    root.wipOptions;
+    var ssTools;
+    var stealthOnChangeMode = false;
+    root.isPtr = $state.current.name === "contract.manager.strategy";
+    root.isWip = $state.current.name === "contract.manager.strategy.wip";
 
-	function init() {
-		// force a resize event to format page
-		//$scope.resizeEvent();
+    function init() {
+        // force a resize event to format page
+        //$scope.resizeEvent();
 
         topbar.hide();
 
@@ -107,14 +107,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             root.pricingTableData.WIP_DEAL = [];
         }
 
-
-		if (root.isPtr)
-		    generateKendoSpreadheetOptions();
-		else {
-		    generateKendoGridOptions();
-		    root.pageTitle = "Deal Editor";
-		}
-	}
+        if (root.isPtr)
+            generateKendoSpreadheetOptions();
+        else {
+            generateKendoGridOptions();
+            root.pageTitle = "Deal Editor";
+        }
+    }
 
     // Generates options that kendo's html directives will use
     function generateKendoSpreadheetOptions() {
@@ -388,9 +387,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         }, 10);
     }
 
-    function openProductSelector() {
+    function openProductSelector(currentPricingTableRow, enableSplitProducts) {
         var contract = $scope.$parent.$parent.contractData;
-
         var pricingTableRow = {
             'START_DT': contract.START_DT,
             'END_DT': contract.END_DT,
@@ -424,18 +422,51 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         });
 
         modal.result.then(
-            function (validateSelectedProducts) {
-                var modalOptions = {
-                    closeButtonText: 'Close',
-                    hasActionButton: false,
-                    headerText: 'Product selector',
-                    bodyText: 'TODO:Insert values into spreadsheet'
-                };
-                confirmationModal.showModal({}, modalOptions);
+            function (productSelectorOutput) {
+                // Available blank row from the spreadsheet
+                var rowStart = root.spreadDs._data.length + 2;
+                var spreadsheet = $("#pricingTableSpreadsheet").data("kendoSpreadsheet");
+                var sheet = spreadsheet.activeSheet();
+                updateSpreadSheetFromSelector(productSelectorOutput, sheet, rowStart);
             },
             function () {
                 // Do Nothing on cancel
             });
+    }
+
+    function updateSpreadSheetFromSelector(productSelectorOutput, sheet, rowStart) {
+        var validateSelectedProducts = productSelectorOutput.validateSelectedProducts;
+        if (!productSelectorOutput.splitProducts) {
+            var contractProducts = "";
+            for (var key in validateSelectedProducts) {
+                if (validateSelectedProducts.hasOwnProperty(key)) {
+                    contractProducts = contractProducts == "" ? key : contractProducts + "," + key;
+                }
+            }
+            sheet.range(root.colToLetter['PTR_SYS_PRD'] + (rowStart))
+                .value(JSON.stringify(validateSelectedProducts));
+            systemModifiedProductInclude = true;
+            sheet.range(root.colToLetter['PTR_USER_PRD'] + (rowStart))
+                                    .value(contractProducts);
+            syncSpreadRows(sheet, rowStart, rowStart);
+        } else {
+            var initRow = rowStart;
+            var row = initRow;
+
+            for (var key in validateSelectedProducts) {
+                if (validateSelectedProducts.hasOwnProperty(key)) {
+                    var validJSON = {};
+                    validJSON[key] = validateSelectedProducts[key];
+                    sheet.range(root.colToLetter['PTR_SYS_PRD'] + (row))
+                        .value(JSON.stringify(validJSON));
+                    systemModifiedProductInclude = true;
+                    sheet.range(root.colToLetter['PTR_USER_PRD'] + (row)).
+                        value(key);
+                    row++;
+                }
+            }
+            syncSpreadRows(sheet, initRow, row - 1);
+        }
     }
 
     function openInfoDialog() {
@@ -507,17 +538,16 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         // now apply array to Datasource... one event triggered
                         root.spreadDs.sync();
 
-		                $timeout(function () {
-		                    var n = data.length + 2;
-		                    disableRange(sheet.range("B" + n + ":B" + (n + numToDel - 1)));
-		                    disableRange(sheet.range("D" + n + ":Z" + (n + numToDel - 1)));
-		                }, 10);
+                        $timeout(function () {
+                            var n = data.length + 2;
+                            disableRange(sheet.range("B" + n + ":B" + (n + numToDel - 1)));
+                            disableRange(sheet.range("D" + n + ":Z" + (n + numToDel - 1)));
+                        }, 10);
 
-		                root.saveEntireContract();
-		            }
-
-		        }, 10);
-		    },
+                        root.saveEntireContract();
+                    }
+                }, 10);
+            },
             function () { });
         }
         else {
@@ -540,19 +570,19 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             //	}
             //});
 
-		    // need to see if an item changed that would cause the PTR_SYS_PRD to be cleared out
-		    var isPtrSysPrdFlushed = false;
-		    for (var f = 0; f < flushSysPrdFields.length; f++) {
-		        var colIndx = root.colToLetter[flushSysPrdFields[f]].charCodeAt(0) - intA;
-		        if (arg.range._ref.topLeft.col <= colIndx && arg.range._ref.bottomRight.col >= colIndx) isPtrSysPrdFlushed = true;
-		    }
+            // need to see if an item changed that would cause the PTR_SYS_PRD to be cleared out
+            var isPtrSysPrdFlushed = false;
+            for (var f = 0; f < flushSysPrdFields.length; f++) {
+                var colIndx = root.colToLetter[flushSysPrdFields[f]].charCodeAt(0) - intA;
+                if (arg.range._ref.topLeft.col <= colIndx && arg.range._ref.bottomRight.col >= colIndx) isPtrSysPrdFlushed = true;
+            }
 
-		    if (isPtrSysPrdFlushed) {
-		        if (!systemModifiedProductInclude) {
-		            // TODO we will need to revisit.  There are cases where we CANNOT remove products and reload... active deals for example
-		            sheet.range("D" + topLeftRowIndex + ":E" + bottomRightRowIndex).value("");
+            if (isPtrSysPrdFlushed) {
+                if (!systemModifiedProductInclude) {
+                    // TODO we will need to revisit.  There are cases where we CANNOT remove products and reload... active deals for example
+                    sheet.range("D" + topLeftRowIndex + ":E" + bottomRightRowIndex).value("");
 
-		            arg.range.forEachCell(
+                    arg.range.forEachCell(
                         function (rowIndex, colIndex, value) {
                             if (colIndex === productColIndex) { // Product Col changed
                                 // Re-disable specific cells that are readOnly
@@ -560,13 +590,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 if (rowInfo != undefined) { // The row was pre-existing
                                     disableIndividualReadOnlyCells(sheet, rowInfo, rowIndex, 1);
                                 }
-
                             }
                         });
-		        } else {
-		            systemModifiedProductInclude = false;
-		        }
-		    }
+                } else {
+                    systemModifiedProductInclude = false;
+                }
+            }
 
             if (isProductColumnIncludedInChanges && arg.range.value() !== null) {
                 syncSpreadRows(sheet, topLeftRowIndex, bottomRightRowIndex);
@@ -663,7 +692,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     }
 
                     for (var key in ptTemplate.model.fields) {
-
                         var myColumnName = root.colToLetter[key];
                         var myFieldModel = ptTemplate.model.fields[key];
 
@@ -678,7 +706,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 });
             }
         }, 10);
-
     }
 
     function disableIndividualReadOnlyCells(sheet, rowInfo, rowIndex, rowIndexOffset) {
@@ -802,26 +829,23 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         }
                     }
 
+                    // Add validation dropdowns/multiselects onto the cells
+                    if (myFieldModel.opLookupText === "DROP_DOWN" || myFieldModel.opLookupText === "dropdownName" || (myFieldModel.opLookupText === "CUST_ACCNT_DIV" && isCorpDiv)) {
+                        applyDropDownsData(sheet, myFieldModel, myColumnName, dropdownValuesSheet);
 
-	                // Add validation dropdowns/multiselects onto the cells
-	                if (myFieldModel.opLookupText === "DROP_DOWN" || myFieldModel.opLookupText === "dropdownName" || (myFieldModel.opLookupText === "CUST_ACCNT_DIV" && isCorpDiv)) {
-
-	                    applyDropDownsData(sheet, myFieldModel, myColumnName, dropdownValuesSheet);
-
-
-	                    if (myFieldModel.uiType === "RADIOBUTTONGROUP" || myFieldModel.uiType === "DROPDOWN") {
-	                        applyDropDowns(sheet, myFieldModel, myColumnName);
-	                    } else if (myFieldModel.uiType === "EMBEDDEDMULTISELECT" || myFieldModel.uiType === "MULTISELECT") {
-	                        sheet.range(myColumnName + ":" + myColumnName).editor("multiSelectPopUpEditor");
-	                        vm.requiredStringColumns[key] = true;
-	                    }
-	                } else {
-	                    // Add validations based on column type
-	                    switch (myFieldModel.type) {
-	                        case "date":
-	                                var cellSelection = sheet.range(myColumnName + ":" + myColumnName);
-	                            //sheet.range(myColumnName + ":" + myColumnName).format("MM/dd/yyyy");
-	                            cellSelection.editor("datePickerEditor");
+                        if (myFieldModel.uiType === "RADIOBUTTONGROUP" || myFieldModel.uiType === "DROPDOWN") {
+                            applyDropDowns(sheet, myFieldModel, myColumnName);
+                        } else if (myFieldModel.uiType === "EMBEDDEDMULTISELECT" || myFieldModel.uiType === "MULTISELECT") {
+                            sheet.range(myColumnName + ":" + myColumnName).editor("multiSelectPopUpEditor");
+                            vm.requiredStringColumns[key] = true;
+                        }
+                    } else {
+                        // Add validations based on column type
+                        switch (myFieldModel.type) {
+                            case "date":
+                                var cellSelection = sheet.range(myColumnName + ":" + myColumnName);
+                                //sheet.range(myColumnName + ":" + myColumnName).format("MM/dd/yyyy");
+                                cellSelection.editor("datePickerEditor");
 
                                 vm.requiredStringColumns[key] = true;
                                 break;
@@ -891,71 +915,70 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                 //root.syncCellsOnSingleRow(sheet, rowInfo, rowIndex);
 
-				//for (var key in ptTemplate.model.fields) {
-				//	// Required string validation via columns
-				//	// NOTE: LEN validation means that we need to put validation on ecah individual cell rather than bulk
-	            //    if ((root.colToLetter[key] !== undefined) && (vm.requiredStringColumns.hasOwnProperty(key))) {
-				//        // MOVED TO MT VALIDATION AS MULTIPLE VALIDATIONS ARE NOT SUPPORTED AND MYDEALS_ERROR IS THE VALIDATION WE WILL USE
-	            //	    //sheet.range(root.colToLetter[key] + (rowIndex + rowIndexOffset)).validation({
-				//		//	dataType: "custom",
-	            //		//	from: "LEN(" + root.colToLetter[key] + (rowIndex + rowIndexOffset) + ")>0",
-				//		//	allowNulls: false,
-				//		//	type: "warning",
-				//		//	messageTemplate: "This field is required."
-				//		//});
-				//	}
-				//}
-	        }
+                //for (var key in ptTemplate.model.fields) {
+                //	// Required string validation via columns
+                //	// NOTE: LEN validation means that we need to put validation on ecah individual cell rather than bulk
+                //    if ((root.colToLetter[key] !== undefined) && (vm.requiredStringColumns.hasOwnProperty(key))) {
+                //        // MOVED TO MT VALIDATION AS MULTIPLE VALIDATIONS ARE NOT SUPPORTED AND MYDEALS_ERROR IS THE VALIDATION WE WILL USE
+                //	    //sheet.range(root.colToLetter[key] + (rowIndex + rowIndexOffset)).validation({
+                //		//	dataType: "custom",
+                //		//	from: "LEN(" + root.colToLetter[key] + (rowIndex + rowIndexOffset) + ")>0",
+                //		//	allowNulls: false,
+                //		//	type: "warning",
+                //		//	messageTemplate: "This field is required."
+                //		//});
+                //	}
+                //}
+            }
+        });
+    }
 
-	    });
-	}
+    function applyDropDownsData(sheet, myFieldModel, myColumnName, dropdownValuesSheet) {
+        // Call API
+        if (myFieldModel.opLookupText === "CUST_ACCNT_DIV") {
+            //debugger;
+            myFieldModel.opLookupUrl = "/api/Customers/GetCustomerDivisionsByCustNmSid/" + root.contractData.CUST_MBR_SID;
+        }
 
-	function applyDropDownsData(sheet, myFieldModel, myColumnName, dropdownValuesSheet) {
-	    // Call API
-	    if (myFieldModel.opLookupText === "CUST_ACCNT_DIV") {
-	        //debugger;
-	        myFieldModel.opLookupUrl = "/api/Customers/GetCustomerDivisionsByCustNmSid/" + root.contractData.CUST_MBR_SID;
-	    }
+        dataService.get(myFieldModel.opLookupUrl, null, null, true).then(function (response) {
+            dropdownValuesSheet.batch(function () {
+                for (var i = 0; i < response.data.length; i++) {
+                    var myKey = response.data[i].ATRB_CD;
+                    if (myKey === null || myKey === undefined) {
+                        myKey = response.data[i].subAtrbValue;
+                        // HACK: this is for Product Level's atrb code because it pulls form a different dropdown sp
+                    }
 
-	    dataService.get(myFieldModel.opLookupUrl, null, null, true).then(function (response) {
-	        dropdownValuesSheet.batch(function () {
-	            for (var i = 0; i < response.data.length; i++) {
-	                var myKey = response.data[i].ATRB_CD;
-	                if (myKey === null || myKey === undefined) {
-	                    myKey = response.data[i].subAtrbValue;
-	                    // HACK: this is for Product Level's atrb code because it pulls form a different dropdown sp
-	                }
+                    if (response.data[i].ATRB_CD === "REBATE_TYPE") {
+                        myKey = "REBATE_TYPE";
+                    }
+                    // Add values onto the other sheet
+                    var dropdownValue = response.data[i].DROP_DOWN;
+                    if (dropdownValue === undefined || dropdownValue === null) {
+                        dropdownValue = response.data[i].dropdownName;
+                        // HACK: this is for Product Level's atrb code because it pulls form a different dropdown sp
+                    }
 
-	                if (response.data[i].ATRB_CD === "REBATE_TYPE") {
-	                    myKey = "REBATE_TYPE";
-	                }
-	                // Add values onto the other sheet
-	                var dropdownValue = response.data[i].DROP_DOWN;
-	                if (dropdownValue === undefined || dropdownValue === null) {
-	                    dropdownValue = response.data[i].dropdownName;
-	                    // HACK: this is for Product Level's atrb code because it pulls form a different dropdown sp
-	                }
-
-	                dropdownValuesSheet.range(root.colToLetter[myKey] + (i + 1)).value(dropdownValue);
-	            }
-	        });
-	    },
+                    dropdownValuesSheet.range(root.colToLetter[myKey] + (i + 1)).value(dropdownValue);
+                }
+            });
+        },
         function (error) {
             logger.error("Unable to get dropdown data.", error, error.statusText);
         });
-	}
+    }
 
-	function applyDropDowns(sheet, myFieldModel, myColumnName) {
-	    sheet.range(myColumnName + ":" + myColumnName).validation({
-	        dataType: "list",
-	        showButton: true,
-	        from: "DropdownValuesSheet!" + myColumnName + ":" + myColumnName,
-	        allowNulls: true, //myFieldModel.nullable,
-	        type: "warning",
-	        titleTemplate: "Invalid value",
-	        messageTemplate: "Invalid value. Please use the dropdown for available options."
-	    });
-	}
+    function applyDropDowns(sheet, myFieldModel, myColumnName) {
+        sheet.range(myColumnName + ":" + myColumnName).validation({
+            dataType: "list",
+            showButton: true,
+            from: "DropdownValuesSheet!" + myColumnName + ":" + myColumnName,
+            allowNulls: true, //myFieldModel.nullable,
+            type: "warning",
+            titleTemplate: "Invalid value",
+            messageTemplate: "Invalid value. Please use the dropdown for available options."
+        });
+    }
 
     function disableRange(range) {
         range.enable(false);
@@ -1189,12 +1212,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 var data = root.spreadDs.data();
                 ValidateProducts(data, false, currentRow + 1);
             }
-            else { // open the translator
+            else { // open the selector
                 var currentPricingTableRowData = context.range._sheet.dataSource._data[currentRow];
-
                 var enableSplitProducts = context.range._sheet.dataSource._data.length <= context.range._ref.row;
 
-                //TODO Move this mapping to selector controller
                 var pricingTableRow = {
                     'START_DT': !currentPricingTableRowData ? contractStartDate : currentPricingTableRowData.START_DT,
                     'END_DT': !currentPricingTableRowData ? contractEndDate : currentPricingTableRowData.END_DT,
@@ -1228,42 +1249,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                 modal.result.then(
                     function (productSelectorOutput) {
-                        var validateSelectedProducts = productSelectorOutput.validateSelectedProducts;
-                        if (!productSelectorOutput.splitProducts) {
-                            var contractProducts = "";
-                            for (var key in validateSelectedProducts) {
-                                if (validateSelectedProducts.hasOwnProperty(key)) {
-                                    contractProducts = contractProducts == "" ? key : contractProducts + "," + key;
-                                }
-                            }
-                            context.range._sheet.range(root.colToLetter['PTR_SYS_PRD'] + (context.range._ref.row + 1))
-                                .value(JSON.stringify(validateSelectedProducts));
-                            systemModifiedProductInclude = true;
-                            context.callback(contractProducts); // Change event is triggered
-                        } else {
-                            var initRow = context.range._ref.row + 1;
-                            var row = initRow;
-
-                            // Updating current row values other than through context callback not triggering the spreadsheet change function
-                            // Store at the first iteration of loop and update end of the call, not ideal though :(
-                            var currentRowValue = "";
-                            for (var key in validateSelectedProducts) {
-                                if (validateSelectedProducts.hasOwnProperty(key)) {
-                                    var validJSON = {};
-                                    currentRowValue = currentRowValue === "" ? key : currentRowValue;
-
-                                    validJSON[key] = validateSelectedProducts[key];
-                                    context.range._sheet.range(root.colToLetter['PTR_SYS_PRD'] + (row))
-                                        .value(JSON.stringify(validJSON));
-                                    context.range._sheet.range(root.colToLetter['PTR_USER_PRD'] + (row)).
-                                        value(key);
-                                    row++;
-                                }
-                            }
-                            systemModifiedProductInclude = true;
-                            syncSpreadRows(context.range._sheet, initRow+1, row);
-                            context.callback(currentRowValue); // Change event is triggered
-                        }
+                        var rowStart = context.range._ref.row + 1;
+                        var sheet = context.range._sheet;
+                        updateSpreadSheetFromSelector(productSelectorOutput, sheet, rowStart);
                     },
                     function () {
                         // Do Nothing on cancel

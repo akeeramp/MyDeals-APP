@@ -207,7 +207,7 @@ namespace Intel.MyDeals.BusinessRules
                             DateTime dealEnd;
                             if (DateTime.TryParse(r.Dc.GetDataElementValue(AttributeCodes.START_DT), out dealStart) && DateTime.TryParse(r.Dc.GetDataElementValue(AttributeCodes.END_DT), out dealEnd))
                             {
-                                if (capStart < dealEnd && dealStart < capEnd)
+                                if (!(capStart < dealEnd && dealStart < capEnd))
                                 {
                                     BusinessLogicDeActions.AddValidationMessage(dePrdUsr, "Product entered does not have CAP within the Deal's start date and end date");
                                 }
@@ -232,7 +232,7 @@ namespace Intel.MyDeals.BusinessRules
             if (!r.HasExtraArgs) return;
             char delim = ',';
 
-            //return 
+            //return
 
             IOpDataElement deUserCustDivs = r.Dc.GetDataElement(AttributeCodes.CUST_ACCNT_DIV);
 
@@ -312,6 +312,7 @@ namespace Intel.MyDeals.BusinessRules
                 }
             }
         }
+
         public static void ExecuteOnAd(params object[] args)
         {
             //US 53204 - 8 - On add date-If Market segment is Consumer retail or ALL, then default to current quarter first date, other wise Blank. user can edit.
@@ -331,7 +332,6 @@ namespace Intel.MyDeals.BusinessRules
 
             r.Dc.ApplyActions(r.Dc.MeetsRuleCondition(r.Rule) ? r.Rule.OpRuleActions : r.Rule.OpRuleElseActions);
         }
-
 
         public static void ShowServerDealType(params object[] args)
         {
