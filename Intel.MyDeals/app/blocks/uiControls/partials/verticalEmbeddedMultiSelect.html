@@ -16,13 +16,14 @@
                     k-value-primitive="true"
                     k-auto-close="false"
 					k-placeholder="opPlaceholder"
-                    k-ng-readonly="true"
+                    k-ng-readonly="false"
                     style="width: 100%;"
                     ng-class="{isHidden: opIsHidden, isReadOnlyFaux: true, isError: opIsError, isSaved: opIsSaved, isDirty: opIsDirty}">
             </select>
         </div>
 
-        <div class="fl opUiElement opUiTreeView" style="margin-bottom: 0 !important;" ng-show="showTreeView">
+        <div class="msPopup opUiElement opUiTreeView" ng-show="showTreeView">
+            <div ng-click="onEmbeddedMultiSelectClick()" class="msClsBtn"><i class="intelicon-up"></i></div>
             <div id="{{opCd}}"
                  kendo-tree-view
                  class="fl opUiElement"
@@ -33,7 +34,7 @@
                  k-on-check="onCheckFunction()"
                  k-on-select="onSelectFunction()"
                  ng-class="{isHidden: opIsHidden, isReadOnly: opIsReadOnly, isError: opIsError}"
-                 style="overflow: hidden">
+                 style="overflow: hidden;">
             </div>
         </div>
     </div>
@@ -42,3 +43,32 @@
     <div ng-if="opIsError && opIsForm" class="err-Control">{{opValidMsg}}</div>
 </div>
 
+<style>
+     .msPopup {
+         margin-bottom: 0 !important;
+         position: absolute;
+         width: 220px;
+         max-height: 200px;
+         max-width: 280px;
+         margin-top: 36px;
+         font-size: 12px;
+         border: 1px solid #cccccc;
+         box-shadow: 2px 2px 4px #000000;
+         overflow: auto;
+         z-index: 1000;
+     }
+
+    .msClsBtn {
+        text-align: right; 
+        margin-right: 5px; 
+        margin-top: -3px; 
+        color: #cccccc;
+        cursor: pointer;
+        font-size: 20px;
+        float: right;
+    }
+
+    .msClsBtn:hover {
+        color: #ED1C24;
+    }
+</style>

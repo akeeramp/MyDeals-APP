@@ -541,13 +541,14 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                     //JeffThought: we shouldnt put TRGT_RGN specific logic here, but if not here then where? template too generic and this is where we call it...
                     //JeffThought: need 3 ways to represent the data - 1: the multiselect array item for treeview consumption 2: the concatinated string for user readonly 3: the detailed geo/region/cntry string for database save
                     if (options.field.toUpperCase() === "TRGT_RGN") {
-                        compiled = $compile('<div class="myDealsControl" op-control-flat ng-model="dataItem.TRGT_RGN" op-cd="\'EMBEDDEDMULTISELECT\'" op-type="\'EMBEDDEDMULTISELECT\'" op-lookup-url="\'' + col.lookupUrl + angular.element(container).scope().dataItem.GEO_COMBINED + '\'" op-lookup-text="\'DROP_DOWN\'" op-lookup-value="\'DROP_DOWN\'" op-ui-mode="\'VERTICAL\'"></div>')(angular.element(container).scope());
+                        //compiled = $compile('<div class="myDealsControl" op-control-flat ng-model="dataItem.TRGT_RGN" op-cd="\'EMBEDDEDMULTISELECT\'" op-type="\'EMBEDDEDMULTISELECT\'" op-lookup-url="\'' + col.lookupUrl + angular.element(container).scope().dataItem.GEO_COMBINED + '\'" op-lookup-text="\'DROP_DOWN\'" op-lookup-value="\'DROP_DOWN\'" op-ui-mode="\'VERTICAL\'"></div>')(angular.element(container).scope());
+                        compiled = $compile('<div class="myDealsControl" op-control-flat ng-model="dataItem" op-cd="\'TRGT_RGN\'" op-type="\'EMBEDDEDMULTISELECT\'" op-lookup-url="\'' + col.lookupUrl + angular.element(container).scope().dataItem.GEO_COMBINED + '\'" op-lookup-text="\'DROP_DOWN\'" op-lookup-value="\'DROP_DOWN\'" op-ui-mode="\'VERTICAL\'"></div>')(angular.element(container).scope());
                     } else {
                         compiled = $compile('<div class="myDealsControl" op-control-flat ng-model="dataItem.TRGT_RGN" op-cd="\'DROPDOWN\'" op-type="\'DROPDOWN\'" op-lookup-url="\'' + col.lookupUrl + '\'" op-lookup-text="\'DROP_DOWN\'" op-lookup-value="\'DROP_DOWN\'" op-ui-mode="\'VERTICAL\'"></div>')(angular.element(container).scope());
                     }
-                    
-                    $(container).append(compiled)
-                    
+
+                    $(container).append(compiled);
+
                 } else {
                 	$('<input required name="' + options.field + '"/>')
 						.appendTo(container)

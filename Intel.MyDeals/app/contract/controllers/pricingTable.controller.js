@@ -13,6 +13,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     // If this controller gets called twice, 2 scopes are instanciated and Datasource syncing gets confused producing not data to save.
     if ($scope.$parent.$parent.spreadDs !== undefined) return;
 
+
     // Functions
     vm.initCustomPaste = initCustomPaste;
     vm.customDragDropAutoFill = customDragDropAutoFill;
@@ -64,6 +65,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     root.isPtr = $state.current.name === "contract.manager.strategy";
     root.isWip = $state.current.name === "contract.manager.strategy.wip";
 
+
     function init() {
         // force a resize event to format page
         //$scope.resizeEvent();
@@ -108,7 +110,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         }
 
         if (root.isPtr)
-            generateKendoSpreadheetOptions();
+            generateKendoSpreadSheetOptions();
         else {
             generateKendoGridOptions();
             root.pageTitle = "Deal Editor";
@@ -116,7 +118,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     }
 
     // Generates options that kendo's html directives will use
-    function generateKendoSpreadheetOptions() {
+    function generateKendoSpreadSheetOptions() {
         ptTemplate = root.templates.ModelTemplates.PRC_TBL_ROW[root.curPricingTable.OBJ_SET_TYPE_CD];
         columns = vm.getColumns(ptTemplate);
 
@@ -376,7 +378,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     "Groups": ["Backdate"]
                 }
             };
+
             root.wipData = root.pricingTableData.WIP_DEAL;
+
+
             root.setBusy("Drawing Grid", "Applying security to the grid.");
             $timeout(function () {
                 root.setBusy("", "");

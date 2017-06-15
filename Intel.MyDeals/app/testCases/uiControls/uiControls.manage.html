@@ -216,6 +216,19 @@
                     <div class="myDealsControl"
                          op-control-flat
                          ng-model="flat"
+                         op-cd="'MULTISELECTV'"
+                         op-type="'EMBEDDEDMULTISELECT'"
+                         op-label="'Embedded Multiselect Sample:'"
+                         op-lookup-url="'/api/Dropdown/GetDropdowns/MRKT_SEG_NON_CORP'"
+                         op-lookup-text="'DROP_DOWN'"
+                         op-lookup-value="'DROP_DOWN'"
+                         op-selected-object="'ComboboxSelected'"
+                         op-ui-mode="'VERTICAL'"
+                         op-is-form="true"
+                         style="width: 250px;"></div>
+                    <div class="myDealsControl"
+                         op-control-flat
+                         ng-model="flat"
                          op-cd="'TEXTAREA'"
                          op-type="'TEXTAREA'"
                          op-label="'Textarea:'"

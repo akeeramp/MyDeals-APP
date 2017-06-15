@@ -1241,6 +1241,9 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                     for (var i = 0; i < gData.length; i++) {
                         // TODO... this should probably mimic Pricing Table Rows
                         if (gData[i].DC_ID === null || gData[i].DC_ID === 0) gData[i].DC_ID = $scope.uid--;
+
+                        // Kindof a lame hack... should make it more dynamic, but for now let's see if we can get this working
+                        if (Array.isArray(gData[i].TRGT_RGN)) gData[i].TRGT_RGN = gData[i].TRGT_RGN.join();
                     }
                 }
             }

@@ -61,10 +61,9 @@ gridUtils.uiMoneyDatesControlWrapper = function (passedData, field, startDt, end
     return tmplt;
 }
 gridUtils.uiMultiselectArrayControlWrapper = function (passedData, field) {
-    var displayStr = "";
-    if (passedData[field].EMBEDDEDMULTISELECT !== undefined) {
-        displayStr = passedData[field].EMBEDDEDMULTISELECT.join();
-    }
+    var displayStr = (Array.isArray(passedData[field]) || Object.prototype.toString.call(passedData[field]) === "[object Object]")
+        ? passedData[field].join()
+        : passedData[field];
 
     //TODO: various copy pasted validation flags, need to confirm if they work or actually do anything
     var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
@@ -72,7 +71,8 @@ gridUtils.uiMultiselectArrayControlWrapper = function (passedData, field) {
     tmplt += '     ng-class="{isHiddenCell: dataItem._behaviors.isHidden.' + field + ', isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ',';
     tmplt += '     isRequiredCell: dataItem._behaviors.isRequired.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + ', isSavedCell: dataItem._behaviors.isSaved.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + '}">';
     tmplt += '    <div>';
-    tmplt += '          ' + displayStr + ' '
+    tmplt += '          ' + displayStr + ' ';
+//    tmplt += '    <span class="ng-binding" ng-bind="(dataItem.' + field + ')"></span>';
     tmplt += '    </div>';
     tmplt += '</div>';
 

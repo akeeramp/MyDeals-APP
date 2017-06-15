@@ -92,7 +92,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
                                     dataBound: function (e) {
                                         var treeview = $("#" + scope.opCd).data("kendoTreeView");
                                         // collapse all items
-                                        treeview.collapse(".k-item");
+                                        if (!!treeview) treeview.collapse(".k-item");
                                     }
                                 };
 
@@ -119,11 +119,22 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
             }
         }
 
+        if (scope.opType === 'MULTISELECT') {
+
+            if (!!scope.value && !Array.isArray(scope.value)) {
+                scope.value = scope.value.split(",");
+            }
+        }
+
         if (scope.opType === 'EMBEDDEDMULTISELECT') {
+
+            if (!!scope.value && !Array.isArray(scope.value)) {
+                scope.value = scope.value.split(",");
+            }
 
             //when user clicks multiselect to open treeview, ensure that treeview's checked values match to those of the multiselect.
             var updateTreeView = function () {
-                if (scope.showTreeView == true) {
+                if (scope.showTreeView === true) {
                     var msValues = $("#" + scope.opCd + "_MS").data("kendoMultiSelect").value();
                     var treeview = $("#" + scope.opCd).data("kendoTreeView");
 
@@ -134,11 +145,13 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
             }
 
         	// Onclick event for embedded Multiselects
-        	scope.onEmbeddedMultiSelectClick = function () {
+            scope.onEmbeddedMultiSelectClick = function () {
+                $(".k-animation-container").last().css("display", "none");
         	    scope.showTreeView = !scope.showTreeView;
         	    updateTreeView();
         	}
-            scope.onCheckFunction = function () {
+            scope.onCheckFunction = function (e) {
+                debugger;
                 var treeview = $("#" + scope.opCd).data("kendoTreeView");
                 var checkedNodes = [];
 
@@ -200,9 +213,11 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
         //    element.replaceWith($compile(element.html())(scope));
         //});
         loader.success(function (html) {
+            if (element.html() !== "") return;
+            if (element.parent().find(".opUiElement").length > 0) return;
             html = html.replace(/id="{{opCd}}"/g, 'id="' + scope.opCd + '"');
             var x = angular.element(html);
-            element.append(x);
+            element.html(x);
             $compile(x)(scope);
         });
 
@@ -211,6 +226,8 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
                 if (oldValue === newValue) return;
                 el.opIsDirty = true;
                 el.$parent.$parent.opIsDirty = true;
+                el.$parent.$parent.$parent._dirty = true;
+                if (!!el.$parent.$parent.dataItem) el.$parent.$parent.dataItem.dirty = true;
 
                 if (el.$parent.opValue !== undefined) {
                     el.$parent.opValue._dirty = true;
