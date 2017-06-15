@@ -30,26 +30,27 @@ namespace Intel.MyDeals.BusinessRules
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = BusinessLogicDeActions.SetReadOnly,
-                            Target = new[] {AttributeCodes.TRGT_RGN, AttributeCodes.GEO_COMBINED, AttributeCodes.SOLD_TO_ID}
+                            Target = new[] {AttributeCodes.TRGT_RGN, AttributeCodes.GEO_COMBINED, AttributeCodes.DEAL_SOLD_TO_ID }
                         }
                     }
                 },
-                new MyOpRule // Set to read only if you have a DEAL NUMBER
+                new MyOpRule
                 {
-                    Title="Readonly if Has Positive Deal number",
+                    // US52971 -  If Program Payment = Front end then user need to enter the sold to ID-not mandatory (sold to ID should be pulled by system for that customer div and Geo and multi select)-if left blank then it means all 
+                    Title="Hidden if Backend Deal",
                     ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnReadonly},
-                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.DC_ID) && de.IsPositive()).Any(), // If it has a deal number and it is positive
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PROGRAM_PAYMENT) && de.AtrbValue != null && de.AtrbValue.ToString() == "Backend").Any(),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = BusinessLogicDeActions.SetReadOnly,
-                            Target = new[] { AttributeCodes.SOLD_TO_ID} // Items to set readonly
+                            Target = new[] {AttributeCodes.DEAL_SOLD_TO_ID }
                         }
                     }
                 },
-
                 new MyOpRule // Set to read only if Frontend
                 {
                     Title="Readonly if Frontend",

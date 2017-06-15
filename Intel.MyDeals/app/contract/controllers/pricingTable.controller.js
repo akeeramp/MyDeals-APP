@@ -234,9 +234,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 "TITLE": {
                     "Groups": ["Deal Info"]
                 },
-                "PRODUCT_FILTER": {
-                    "Groups": ["Deal Info"]
-                },
                 "DEAL_COMB_TYPE": {
                     "Groups": ["Deal Info"]
                 },
@@ -650,6 +647,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     data[r]["VOLUME"] = null;
                     data[r]["ECAP_PRICE"] = null;
                     data[r]["CUST_ACCNT_DIV"] = root.contractData.CUST_ACCNT_DIV;
+                    data[r]["CUST_MBR_SID"] = root.contractData.CUST_MBR_SID;
 
                     for (var key in ptTemplate.model.fields) {
                         if (ptTemplate.model.fields.hasOwnProperty(key)) {

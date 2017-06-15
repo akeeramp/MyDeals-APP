@@ -45,6 +45,7 @@ namespace Intel.MyDeals.BusinessRules
             string dcItemSt = DateTime.Parse(item[AttributeCodes.START_DT].ToString()).ToString("MM/dd/yyyy");
             string dcItemEn = DateTime.Parse(item[AttributeCodes.END_DT].ToString()).ToString("MM/dd/yyyy");
             string payoutBasedOn = item[AttributeCodes.PAYOUT_BASED_ON].ToString();
+            string mrktSegValue = item[AttributeCodes.MRKT_SEG].ToString();
 
             // Billing Dates
             if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.REBATE_BILLING_START)) || dcSt != dcItemSt)
@@ -55,6 +56,22 @@ namespace Intel.MyDeals.BusinessRules
             {
                 item[AttributeCodes.REBATE_BILLING_END] = dcItemEn;
             }
+
+            // On Ad Date
+            if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.ON_ADD_DT)))
+            {
+                //US 53204 - 8 - On add date-If Market segment is Consumer retail or ALL, then default to current quarter first date, other wise Blank. user can edit.
+                //int custId = (int)r.ExtraArgs[0];
+
+                //if (mrktSegValue == "Consumer Retail Pull" || mrktSegValue == "All")
+                //{
+                //    var customerQuarterDetails = new CustomerCalendarDataLib().GetCustomerQuarterDetails(custId, DateTime.Today, null, null);
+                //    item[AttributeCodes.ON_ADD_DT] = customerQuarterDetails.QTR_STRT.Date; 
+                //}
+            }
+
+
+
 
             // Consumption Reason
             if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.CONSUMPTION_REASON)))
@@ -335,22 +352,21 @@ namespace Intel.MyDeals.BusinessRules
 
         public static void ExecuteOnAd(params object[] args)
         {
-            //US 53204 - 8 - On add date-If Market segment is Consumer retail or ALL, then default to current quarter first date, other wise Blank. user can edit.
-            MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
+            ////US 53204 - 8 - On add date-If Market segment is Consumer retail or ALL, then default to current quarter first date, other wise Blank. user can edit.
+            //MyOpRuleCore r = new MyOpRuleCore(args);
+            //if (!r.IsValid) return;
 
-            string mrktSegValue = r.Dc.GetDataElement(AttributeCodes.MRKT_SEG).AtrbValue.ToString();
-            IOpDataElement deOnAdDate = r.Dc.GetDataElement(AttributeCodes.ON_ADD_DT);
-            if (!r.HasExtraArgs) return;
-            int custId = (int)r.ExtraArgs[0];
+            //string mrktSegValue = r.Dc.GetDataElement(AttributeCodes.MRKT_SEG).AtrbValue.ToString();
+            //IOpDataElement deOnAdDate = r.Dc.GetDataElement(AttributeCodes.ON_ADD_DT);
+            //if (!r.HasExtraArgs) return;
+            //int custId = (int)r.ExtraArgs[0];
 
-            if ((mrktSegValue == "Consumer Retail Pull" || mrktSegValue == "All") && deOnAdDate.AtrbValue.ToString() == "")
-            {
-                var customerQuarterDetails = new CustomerCalendarDataLib().GetCustomerQuarterDetails(custId, DateTime.Today, null, null);
-                deOnAdDate.AtrbValue = customerQuarterDetails.QTR_STRT.Date;
-            }
-
-            r.Dc.ApplyActions(r.Dc.MeetsRuleCondition(r.Rule) ? r.Rule.OpRuleActions : r.Rule.OpRuleElseActions);
+            //if ((mrktSegValue == "Consumer Retail Pull" || mrktSegValue == "All") && deOnAdDate.AtrbValue.ToString() == "")
+            //{
+            //    var customerQuarterDetails = new CustomerCalendarDataLib().GetCustomerQuarterDetails(custId, DateTime.Today, null, null);
+            //    deOnAdDate.AtrbValue = customerQuarterDetails.QTR_STRT.Date;
+            //    deOnAdDate.State=OpDataElementState.Modified;
+            //}
         }
 
         public static void ShowServerDealType(params object[] args)
@@ -419,13 +435,11 @@ namespace Intel.MyDeals.BusinessRules
 
             if (string.IsNullOrEmpty(deBllgStart.AtrbValue.ToString()) || DateTime.Parse(deBllgStart.AtrbValue.ToString()) > dcSt)
             {
-                deBllgStart.AtrbValue = deStart.AtrbValue;
-                deBllgStart.State = OpDataElementState.Modified;
+                BusinessLogicDeActions.AddValidationMessage(deBllgStart, "The Billing Start Date must be on or earlier than the Deal Start Date.");
             }
             if (string.IsNullOrEmpty(deBllgEnd.AtrbValue.ToString()) || DateTime.Parse(deBllgEnd.AtrbValue.ToString()) > dcEn)
             {
-                deBllgEnd.AtrbValue = deEnd.AtrbValue;
-                deBllgEnd.State = OpDataElementState.Modified;
+                BusinessLogicDeActions.AddValidationMessage(deBllgEnd, "The Billing End Date must be on or earlier than the Deal End Date.");
             }
         }
 

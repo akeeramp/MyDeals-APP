@@ -467,6 +467,16 @@ namespace Intel.MyDeals.DataLibrary
                 DataType = "string",
                 IsRequired = false
             });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 39,
+                AtrbCd = AttributeCodes.CUST_MBR_SID,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                Width = 50,
+                Label = "Customer",
+                IsRequired = false,
+                IsHidden = true
+            });
 
             #endregion PRICING TABLE ROW
 
@@ -536,10 +546,22 @@ namespace Intel.MyDeals.DataLibrary
             });
             items.Add(new UiTemplateContainerItem
             {
+                Id = 50,
+                AtrbCd = AttributeCodes.CUST_MBR_SID,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Template = "#=gridUtils.uiControlWrapper(data, 'CUST_MBR_SID')#",
+                Label = "Customer",
+                IsFilterable = true,
+                IsSortable = true,
+                Width = 100
+            });
+            items.Add(new UiTemplateContainerItem
+            {
                 Id = 20,
                 AtrbCd = AttributeCodes.START_DT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 Template = "#=gridUtils.uiControlWrapper(data, 'START_DT', \"date:'MM/dd/yyyy'\")#",
+                Label = "Deal Start Date",
                 IsFilterable = true,
                 IsSortable = true,
                 Width = 100
@@ -550,6 +572,7 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.END_DT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 Template = "#=gridUtils.uiControlWrapper(data, 'END_DT', \"date:'MM/dd/yyyy'\")#",
+                Label = "Deal End Date",
                 IsFilterable = true,
                 IsSortable = true,
                 Width = 100
@@ -597,15 +620,6 @@ namespace Intel.MyDeals.DataLibrary
                 DataType = "object",
                 IsFilterable = true,
                 IsSortable = true,
-                Width = 150
-            });
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 20,
-                AtrbCd = AttributeCodes.PRODUCT_FILTER,
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Template = "#=gridUtils.uiControlWrapper(data, 'PRODUCT_FILTER')#",
-                DataType = "object",
                 Width = 150
             });
             items.Add(new UiTemplateContainerItem
@@ -1146,6 +1160,7 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 180,
                 UiType = "MULTISELECT",
                 Template = "#=gridUtils.uiControlWrapper(data, 'GEO_COMBINED')#",
+                Label = "Geo",
                 LookupUrl = "/api/Dropdown/GetGeosDropdowns",
                 LookupText = "dropdownName",
                 LookupValue = "dropdownName",
@@ -1185,6 +1200,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 29,
                 AtrbCd = AttributeCodes.TERMS,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Label = "Additional Discounts",
                 Width = 180,
                 Template = "#=gridUtils.uiControlWrapper(data, 'TERMS')#"
             });
