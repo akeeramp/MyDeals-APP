@@ -464,7 +464,14 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             systemModifiedProductInclude = true;
             sheet.range(root.colToLetter['PTR_USER_PRD'] + (rowStart))
                                     .value(contractProducts);
+            sheet.range(root.colToLetter['PTR_SYS_INVLD_PRD'] + (rowStart))
+                                                .value("");
+
             syncSpreadRows(sheet, rowStart, rowStart);
+
+            $timeout(function () {
+                validateSingleRowProducts(sheet.dataSource._data[rowStart - 2], rowStart);
+            }, 50)
         } else {
             var initRow = rowStart;
             var row = initRow;
@@ -478,6 +485,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     systemModifiedProductInclude = true;
                     sheet.range(root.colToLetter['PTR_USER_PRD'] + (row)).
                         value(key);
+                    sheet.range(root.colToLetter['PTR_SYS_INVLD_PRD'] + (row))
+                                                                    .value("");
                     row++;
                 }
             }
@@ -1289,6 +1298,30 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         }
     });
 
+    function validateSingleRowProducts(sData, row) {
+        if (!sData._behaviors) sData._behaviors = {};
+        if (!sData._behaviors) sData._behaviors = {};
+        if (!sData._behaviors.isError) sData._behaviors.isError = {};
+        if (!sData._behaviors.validMsg) sData._behaviors.validMsg = {};
+
+        if ((sData.PTR_USER_PRD !== "" && sData.PTR_USER_PRD !== null) && ((sData.PTR_SYS_PRD != "" && sData.PTR_SYS_PRD != null) ?
+            ((sData.PTR_SYS_INVLD_PRD != "" && sData.PTR_SYS_INVLD_PRD != null) ? true : false) : true)) {
+            sData._behaviors.isError["PTR_USER_PRD"] = true;
+            sData._behaviors.validMsg["PTR_USER_PRD"] = "Product Translator needs to run.";
+        } else {
+            sData._behaviors.isError["PTR_USER_PRD"] = false;
+            sData._behaviors.validMsg["PTR_USER_PRD"] = "";
+        }
+        var spreadsheet = $("#pricingTableSpreadsheet").data("kendoSpreadsheet");
+        var sheet = spreadsheet.activeSheet();
+        var beh = sData._behaviors;
+        if (!beh) beh = {};
+        var isError = !!beh.isError["PTR_USER_PRD"];
+        var msg = isError ? beh.validMsg["PTR_USER_PRD"] : "";
+
+        sheet.range(root.colToLetter['PTR_USER_PRD'] + (row + 1)).validation(root.myDealsValidation(isError, msg, false));
+    }
+
     function ValidateProducts(currentPricingTableRowData, publishWipDeals, currentRowNumber) {
         var currentPricingTableRowData = currentPricingTableRowData.map(function (row, index) {
             return $.extend({}, row, { 'ROW_NUMBER': index + 1 });
@@ -1347,8 +1380,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 }
             }, function (response) {
                 topbar.hide();
-                root.setBusy("", "");
-                logger.error("Unable to translate Product.", response, response.statusText);
+                root.setBusy("Validating products...", "Error in translating products");
+                $timeout(function () {
+                    root.setBusy("", "");
+                }, 300);
             });
         } // Products where client side has invalid and duplicate product information
         else if (invalidProductJSONRows.length > 0) {
@@ -1452,13 +1487,16 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     }
                     root.spreadDs.sync();
                     if (!currentRow) { // If current row is undefined its clicked from top bar validate button
-                        if (!currentRow) {
-                            if (!publishWipDeals) {
-                                root.validatePricingTable();
-                            } else {
-                                root.publishWipDeals();
-                            } // Call Save and Validate API from Contract Manager
-                        }
+                        if (!publishWipDeals) {
+                            root.validatePricingTable();
+                        } else {
+                            root.publishWipDeals();
+                        } // Call Save and Validate API from Contract Manager
+                    } else {
+                        $timeout(function () {
+                            validateSingleRowProducts(data[currentRow - 1], currentRow);
+                        }, 10)
+
                     }
                 },
             function () {

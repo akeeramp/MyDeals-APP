@@ -54,7 +54,6 @@
         }
 
         function getVerticalsUnderMarkLevel(markLevelName) {
-            debugger;
             var markLevel = vm.selectedPathParts.length == 0 ? 'MRK_LVL1' : 'MRK_LVL2';
             var verticals = vm.productSelectionLevels.filter(function (x) {
                 return x[markLevel] == markLevelName && x['PRD_CAT_NM'] != null && x['PRD_CAT_NM'] != ""

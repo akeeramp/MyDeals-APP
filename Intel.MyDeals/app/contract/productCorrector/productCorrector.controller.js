@@ -79,9 +79,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                     var dtoDateRange = {
                         startDate: pricingTableRow.START_DT, endDate: pricingTableRow.END_DT
                     };
-                    root.setBusy("Please wait", "");
                     return ProductSelectorService.GetProductSelectorWrapper(dtoDateRange).then(function (response) {
-                        root.setBusy("", "");
                         return response;
                     });
                 }],
