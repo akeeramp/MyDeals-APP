@@ -61,13 +61,18 @@ namespace Intel.MyDeals.BusinessRules
             if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.ON_ADD_DT)))
             {
                 //US 53204 - 8 - On add date-If Market segment is Consumer retail or ALL, then default to current quarter first date, other wise Blank. user can edit.
-                //int custId = (int)r.ExtraArgs[0];
+                string strCust = item[AttributeCodes.CUST_MBR_SID]?.ToString();
+                if (!string.IsNullOrEmpty(strCust))
+                {
+                    int custId = Convert.ToInt32(strCust);
+                    if (mrktSegValue.IndexOf("Consumer Retail Pull") >=0 || mrktSegValue == "All")
+                    {
+                        var customerQuarterDetails = new CustomerCalendarDataLib().GetCustomerQuarterDetails(custId, DateTime.Today, null, null);
+                        item[AttributeCodes.ON_ADD_DT] = customerQuarterDetails.QTR_STRT.Date; 
+                    }
+                }
 
-                //if (mrktSegValue == "Consumer Retail Pull" || mrktSegValue == "All")
-                //{
-                //    var customerQuarterDetails = new CustomerCalendarDataLib().GetCustomerQuarterDetails(custId, DateTime.Today, null, null);
-                //    item[AttributeCodes.ON_ADD_DT] = customerQuarterDetails.QTR_STRT.Date; 
-                //}
+
             }
 
 
