@@ -151,7 +151,6 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
         	    updateTreeView();
         	}
             scope.onCheckFunction = function (e) {
-                debugger;
                 var treeview = $("#" + scope.opCd).data("kendoTreeView");
                 var checkedNodes = [];
 
