@@ -406,7 +406,7 @@ namespace Intel.MyDeals.DataLibrary
                 Procs.dbo.PR_MYDL_TRANSLT_PRD_ENTRY cmd = new Procs.dbo.PR_MYDL_TRANSLT_PRD_ENTRY
                 {
                     CUST_MBR_SID = CUST_MBR_SID,
-                    tvt_HIER_VAL_NM = dt                    
+                    tvt_HIER_VAL_NM = dt
                 };
 
                 using (var rdr = DataAccess.ExecuteReader(cmd))
@@ -630,6 +630,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_HIER_VAL_NM = DB.GetReaderOrdinal(rdr, "HIER_VAL_NM");
                     int IDX_MM_CUST_CUSTOMER = DB.GetReaderOrdinal(rdr, "MM_CUST_CUSTOMER");
                     int IDX_MTRL_ID = DB.GetReaderOrdinal(rdr, "MTRL_ID");
+                    int IDX_MM_MEDIA_CD = DB.GetReaderOrdinal(rdr, "MM_MEDIA_CD");
                     int IDX_NAND_Density = DB.GetReaderOrdinal(rdr, "NAND_Density");
                     int IDX_NAND_FAMILY = DB.GetReaderOrdinal(rdr, "NAND_FAMILY");
                     int IDX_PCSR_NBR = DB.GetReaderOrdinal(rdr, "PCSR_NBR");
@@ -673,6 +674,7 @@ namespace Intel.MyDeals.DataLibrary
                             HIER_NM_HASH = (IDX_HIER_NM_HASH < 0 || rdr.IsDBNull(IDX_HIER_NM_HASH)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_HIER_NM_HASH),
                             HIER_VAL_NM = (IDX_HIER_VAL_NM < 0 || rdr.IsDBNull(IDX_HIER_VAL_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_HIER_VAL_NM),
                             MM_CUST_CUSTOMER = (IDX_MM_CUST_CUSTOMER < 0 || rdr.IsDBNull(IDX_MM_CUST_CUSTOMER)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MM_CUST_CUSTOMER),
+                            MM_MEDIA_CD = (IDX_MM_MEDIA_CD < 0 || rdr.IsDBNull(IDX_MM_MEDIA_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MM_MEDIA_CD),
                             MTRL_ID = (IDX_MTRL_ID < 0 || rdr.IsDBNull(IDX_MTRL_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MTRL_ID),
                             NAND_Density = (IDX_NAND_Density < 0 || rdr.IsDBNull(IDX_NAND_Density)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_NAND_Density),
                             NAND_FAMILY = (IDX_NAND_FAMILY < 0 || rdr.IsDBNull(IDX_NAND_FAMILY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_NAND_FAMILY),
@@ -781,7 +783,7 @@ namespace Intel.MyDeals.DataLibrary
             try
             {
                 // Make datatable
-                in_t_prd_cap_calc dt = new in_t_prd_cap_calc();                
+                in_t_prd_cap_calc dt = new in_t_prd_cap_calc();
                 dt.AddRows(product);
 
                 Procs.dbo.PR_MYDL_CAP_YCS2_CALC cmd = new Procs.dbo.PR_MYDL_CAP_YCS2_CALC

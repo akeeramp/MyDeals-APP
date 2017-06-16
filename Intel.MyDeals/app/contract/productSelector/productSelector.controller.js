@@ -10,6 +10,7 @@
         var vm = this;
         // Non CPU verticals with drill down level 4
         var verticalsWithDrillDownLevel4 = ["EIA CPU", "EIA MISC"];
+        var productTypeToApplyMediaCode = ["EIA CPU", "CPU", "EIA MISC"];
         var verticalsWithNoMMSelection = ["CS", "WC"];
         var verticalsWithGDMFamlyAsDrillLevel5 = ["CS", "EIA CS", "EIA CPU", 'EIA MISC']
         vm.productSelectionLevels = productSelectionLevels.data.ProductSelectionLevels;
@@ -235,7 +236,7 @@
         // TODO: Move this to util.js
         function arrayContainsString(array, string) {
             var newArr = array.filter(function (el) {
-                return el === string;
+                return el.trim().toUpperCase() === string.trim().toUpperCase();
             });
             return newArr.length > 0;
         }
@@ -275,6 +276,23 @@
                     dataSourceProduct.read();
                 }
             });
+        }
+
+        function validateMediaCode(data, mediaCode) {
+            var gridData = angular.copy(data);
+            if (mediaCode == "ALL") return gridData;
+            for (var p = 0; p < data.length; p++) {
+                if (arrayContainsString(productTypeToApplyMediaCode, data[p].DEAL_PRD_TYPE)) {
+                    if (data[p].MM_MEDIA_CD) {
+                        if (!arrayContainsString(data[p].MM_MEDIA_CD.split(','), mediaCode)) {
+                            gridData.splice(p, 1);
+                        }
+                    } else {
+                        gridData.splice(p, gridData.length);
+                    }
+                }
+            }
+            return gridData;
         }
 
         function toggleColumnsWhenEmpty(data) {
@@ -329,6 +347,7 @@
         var dataSourceProduct = new kendo.data.DataSource({
             transport: {
                 read: function (e) {
+                    vm.gridData = validateMediaCode(vm.gridData, pricingTableRow.PROD_INCLDS);
                     e.success(vm.gridData);
                 },
             },
@@ -438,6 +457,11 @@
                 {
                     field: "CPU_PROCESSOR_NUMBER",
                     title: "CPU Processor number",
+                    width: "150px"
+                },
+                {
+                    field: "MM_MEDIA_CD",
+                    title: "Media Code",
                     width: "150px"
                 },
                 {
@@ -617,7 +641,7 @@
                 logger.error("Unable to get product suggestions.", response, response.statusText);
             });
         }
-        
+
         vm.clearSearch = function () {
             vm.selectPath(0);
             vm.userInput = "";
