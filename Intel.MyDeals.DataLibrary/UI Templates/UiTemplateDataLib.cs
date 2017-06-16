@@ -1037,20 +1037,20 @@ namespace Intel.MyDeals.DataLibrary
             //    Template = "#=gridUtils.uiControlWrapper(data, 'MEETCOMP_TEST_FAIL_OVERRIDE_REASON')#"
             //});
 			
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 29,
-                AtrbCd = AttributeCodes.RETAIL_CYCLE,
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Width = 140,
-                IsFilterable = true,
-                IsSortable = true,
-				UiType = "ComboBox",
-				Template = "#=gridUtils.uiControlWrapper(data, 'RETAIL_CYCLE')#",
-                LookupUrl = "api/Dropdown/GetRetailPull", //"/api/Contracts/v1/GetRetailPull/", 
-				LookupText = "dropdownName",
-				LookupValue = "dropdownName",
-			});
+   //         items.Add(new UiTemplateContainerItem
+   //         {
+   //             Id = 29,
+   //             AtrbCd = AttributeCodes.RETAIL_CYCLE,
+   //             ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+   //             Width = 140,
+   //             IsFilterable = true,
+   //             IsSortable = true,
+			//	UiType = "ComboBox",
+			//	Template = "#=gridUtils.uiControlWrapper(data, 'RETAIL_CYCLE')#",
+   //             LookupUrl = "api/Dropdown/GetRetailPull", // TODO: uncomment the GetRetailPull function in the API or remove it
+			//	LookupText = "dropdownName",
+			//	LookupValue = "dropdownName",
+			//});
 
             //items.Add(new UiTemplateContainerItem
             //{

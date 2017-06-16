@@ -34,7 +34,8 @@ namespace Intel.MyDeals.IDataLibrary
 
         List<BasicDropdown> GetBasicDropdowns();
 
-		List<RetailPull> GetRetailPullList();
+		//// TODO: Either uncomment the below out or remove it once we re-add Retail Cycle in
+		//List<RetailPull> GetRetailPullSDMList();
 
 		List<SoldToIds> GetSoldToIdList();
 

@@ -20,7 +20,7 @@ namespace Intel.MyDeals.DataLibrary
 		/// <summary>
 		/// Get Retail Pull Cycle and associated Retail Pull $'s 
 		/// </summary>
-		public List<RetailPull> GetRetailPullList()
+		public List<RetailPull> GetRetailPullFromSDMList()
         {
             var ret = new List<RetailPull>();
             Procs.dbo.PR_MYDL_GET_SDM_RTL_PULL cmd = new Procs.dbo.PR_MYDL_GET_SDM_RTL_PULL();

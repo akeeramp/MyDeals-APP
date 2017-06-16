@@ -33,7 +33,8 @@ namespace Intel.MyDeals.IBusinessLogic
 
         bool DeleteBasicDropdowns(int id);
 
-		List<Dropdown> GetRetailPullDropdown(RetailPullParams filterData);
+		//// TODO: Either uncomment the below out or remove it once we re-add Retail Cycle in
+		//List<Dropdown> GetRetailPullSDMDropdown(RetailPullParams filterData);
 
 		List<Dropdown> GetSoldToIdDropdown(int custId);
 

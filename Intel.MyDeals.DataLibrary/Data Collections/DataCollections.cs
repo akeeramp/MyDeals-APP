@@ -495,15 +495,16 @@ namespace Intel.MyDeals.DataLibrary
 		#endregion Dropdowns
 
 
-		public static List<RetailPull> GetRetailPullList()
-		{
-			lock (LOCK_OBJECT ?? new object())
-			{
-				return _getRetailPullList ?? (_getRetailPullList = new RetailPullDataLib().GetRetailPullList());
-			}
-		}
+		//// TODO: Either uncomment the below out or remove it once we re-add Retail Cycle in
+		//public static List<RetailPull> GetRetailPullList()
+		//{
+		//	lock (LOCK_OBJECT ?? new object())
+		//	{
+		//		return _getRetailPullList ?? (_getRetailPullList = new RetailPullDataLib().GetRetailPullFromSDMList());
+		//	}
+		//}
 
-		private static List<RetailPull> _getRetailPullList;
+		//private static List<RetailPull> _getRetailPullList;
 
 		
 		public static List<SoldToIds> GetSoldToIdList()

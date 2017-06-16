@@ -134,15 +134,16 @@ namespace Intel.MyDeals.Controllers.API
             );
 		}
 
-		[Authorize]
-		[Route("GetRetailPull")]
-		[HttpPost]
-		public List<Dropdown> GetRetailPull(RetailPullParams filterData)
-		{
-			return SafeExecutor(() => _dropdownLib.GetRetailPullDropdown(filterData)
-				, $"Unable to get Retail Pull for product"
-			);
-		}
+		//// TODO: Either uncomment the below out or remove it once we re-add Retail Cycle in
+		//[Authorize]
+		//[Route("GetRetailPull")]
+		//[HttpPost]
+		//public List<Dropdown> GetRetailPullFromSDM(RetailPullParams filterData)
+		//{
+		//	return SafeExecutor(() => _dropdownLib.GetRetailPullSDMDropdown(filterData)
+		//		, $"Unable to get Retail Pull for product"
+		//	);
+		//}
 
 		[Authorize]
 		[Route("GetSoldToIds/{custId}")]

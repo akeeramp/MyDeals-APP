@@ -5,6 +5,6 @@ namespace Intel.MyDeals.IDataLibrary
 {
 	public interface IRetailPullDataLib
 	{
-		List<RetailPull> GetRetailPullList();
+		List<RetailPull> GetRetailPullFromSDMList();
     }
 }

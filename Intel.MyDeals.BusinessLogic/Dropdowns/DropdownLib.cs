@@ -250,21 +250,22 @@ namespace Intel.MyDeals.BusinessLogic
             return _dropdownDataLib.DeleteBasicDropdown(id);
         }
 				
-		public List<Dropdown> GetRetailPullDropdown(RetailPullParams filterData)
-		{
-			List<Dropdown> result = new List<Dropdown>();
-			List<RetailPull> retailPullList = _dataCollectionsDataLib.GetRetailPullList();
+		//// TODO: Either uncomment the below out or remove it once we re-add Retail Cycle in
+		//public List<Dropdown> GetRetailPullSDMDropdown(RetailPullParams filterData)
+		//{
+		//	List<Dropdown> result = new List<Dropdown>();
+		//	List<RetailPull> retailPullSDMList = _dataCollectionsDataLib.GetRetailPullSDMList();
 						
-			List<Dropdown> myList = retailPullList.Where(r =>
-				r.PRD_MBR_SID == filterData.PRD_MBR_SID // TODO: we need this to be replaced with DEAL_PRD_NM because users might enter 7008 instead of 7007
-				&& (filterData.DealStartDate < r.CURR_END_DT)
-				&& filterData.DealEndDate > r.CURR_STRT_DT 
-			)
-			.OrderBy(dd => dd.PRD_MBR_SID)
-			.Select(x => new Dropdown { dropdownName = x.CYCLE_NM }).ToList<Dropdown>();
+		//	List<Dropdown> myList = retailPullSDMList.Where(r =>
+		//		r.PRD_MBR_SID == filterData.PRD_MBR_SID // TODO: we need this to be replaced with DEAL_PRD_NM because users might enter 7008 instead of 7007
+		//		&& (filterData.DealStartDate < r.CURR_END_DT)
+		//		&& filterData.DealEndDate > r.CURR_STRT_DT 
+		//	)
+		//	.OrderBy(dd => dd.PRD_MBR_SID)
+		//	.Select(x => new Dropdown { dropdownName = x.CYCLE_NM }).ToList<Dropdown>();
 			
-			return myList;
-		}
+		//	return myList;
+		//}
 		
 		public List<Dropdown> GetSoldToIdDropdown(int custId)
 		{

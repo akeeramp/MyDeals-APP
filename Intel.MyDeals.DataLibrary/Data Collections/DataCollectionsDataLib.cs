@@ -160,10 +160,10 @@ namespace Intel.MyDeals.DataLibrary
         {
             return DataCollections.GetDropdowns();
 		}
-		public List<RetailPull> GetRetailPullList()
-		{
-			return DataCollections.GetRetailPullList();
-		}
+		//public List<RetailPull> GetRetailPullSDMList()
+		//{
+		//	return DataCollections.GetRetailPullList();
+		//}
 		public List<SoldToIds> GetSoldToIdList()
 		{
 			return DataCollections.GetSoldToIdList();
