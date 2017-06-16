@@ -533,10 +533,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             return;
         }
 
-        if (Object.prototype.toString.call(arg.range._ref) === "[object Object]") {
-            arg.preventDefault();
-            return;
-        }
+        //if (Object.prototype.toString.call(arg.range._ref) === "[object Object]") {
+        //    arg.preventDefault();
+        //    return;
+        //}
 
         var sheet = arg.sender.activeSheet();
         var flushSysPrdFields = ["PTR_USER_PRD", "START_DT", "END_DT", "GEO_COMBINED", "PROD_INCLDS", "PROGRAM_PAYMENT"];
