@@ -61,6 +61,8 @@ namespace Intel.MyDeals.BusinessRules
             if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.ON_ADD_DT)))
             {
                 //US 53204 - 8 - On add date-If Market segment is Consumer retail or ALL, then default to current quarter first date, other wise Blank. user can edit.
+                if (!item.ContainsKey(AttributeCodes.CUST_MBR_SID)) return;
+
                 string strCust = item[AttributeCodes.CUST_MBR_SID]?.ToString();
                 if (!string.IsNullOrEmpty(strCust))
                 {
@@ -71,12 +73,7 @@ namespace Intel.MyDeals.BusinessRules
                         item[AttributeCodes.ON_ADD_DT] = customerQuarterDetails.QTR_STRT.Date; 
                     }
                 }
-
-
             }
-
-
-
 
             // Consumption Reason
             if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.CONSUMPTION_REASON)))
@@ -445,6 +442,21 @@ namespace Intel.MyDeals.BusinessRules
             if (string.IsNullOrEmpty(deBllgEnd.AtrbValue.ToString()) || DateTime.Parse(deBllgEnd.AtrbValue.ToString()) > dcEn)
             {
                 BusinessLogicDeActions.AddValidationMessage(deBllgEnd, "The Billing End Date must be on or earlier than the Deal End Date.");
+            }
+        }
+
+        public static void CheckFrontendConsumption(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            string payout = r.Dc.GetDataElementValue(AttributeCodes.PAYOUT_BASED_ON);
+            string progPayment = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT);
+            IOpDataElement deProgPayment = r.Dc.GetDataElement(AttributeCodes.PROGRAM_PAYMENT);
+
+            if (payout != "Billings" && progPayment != "Backend")
+            {
+                BusinessLogicDeActions.AddValidationMessage(deProgPayment, "Frontend Deals cannot be Consumption.");
             }
         }
 
