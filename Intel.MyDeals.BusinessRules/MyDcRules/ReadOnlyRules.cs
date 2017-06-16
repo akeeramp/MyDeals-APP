@@ -111,7 +111,6 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.PROGRAM_PAYMENT,
                                 AttributeCodes.PTR_USER_PRD,
                                 AttributeCodes.REBATE_TYPE,
-                                AttributeCodes.RETAIL_PULL,
                                 AttributeCodes.START_DT,
                                 AttributeCodes.TERMS,
                                 AttributeCodes.TITLE,

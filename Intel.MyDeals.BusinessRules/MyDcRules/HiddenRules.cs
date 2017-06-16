@@ -58,8 +58,46 @@ namespace Intel.MyDeals.BusinessRules
 							Target = new[] {AttributeCodes.RETAIL_CYCLE }
 						}
 					}
-				}
-			};
+				},
+                new MyOpRule
+                {
+                    Title="Hidden BECAUSE REMOVED FROM WIP GRID",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnHidden},
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetHidden,
+                            Target = new[]
+                            {
+                                AttributeCodes.RETAIL_CYCLE,
+                                AttributeCodes.RETAIL_PULL,
+                                AttributeCodes.RETAIL_PULL_USR_DEF,
+                                AttributeCodes.RETAIL_PULL_USR_DEF_CMNT,
+                                AttributeCodes.MEETCOMP_TEST_FAIL_OVERRIDE,
+                                AttributeCodes.MEETCOMP_TEST_FAIL_OVERRIDE_REASON,
+                                AttributeCodes.MEETCOMP_TEST_RESULT,
+                                AttributeCodes.MEET_COMP_PRICE_QSTN,
+                                AttributeCodes.COST_TEST_FAIL_OVERRIDE,
+                                AttributeCodes.COST_TEST_FAIL_OVERRIDE_REASON,
+                                AttributeCodes.COST_TEST_OVERRIDE,
+                                AttributeCodes.COST_TEST_RESULT,
+                                AttributeCodes.COST_TYPE_USED,
+                                AttributeCodes.COMP_SKU,
+                                AttributeCodes.COMP_SKU_OTHR,
+                                AttributeCodes.COMPETITIVE_PRICE,
+                                AttributeCodes.COMP_BENCH,
+                                AttributeCodes.IA_BENCH,
+                                AttributeCodes.COMP_TARGET_SYSTEM_PRICE,
+                                AttributeCodes.PRD_COST,
+                                AttributeCodes.YCS2_OVERLAP_OVERRIDE
+                            }
+                        }
+                    }
+                }
+            };
         }
     }
 

@@ -187,8 +187,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             root.wipOptions.default.groups = [
                 { "name": "Deal Info", "order": 0 },
                 { "name": "Consumption", "order": 1 },
-                { "name": "Retail Cycle", "order": 2 },
-                { "name": "Backdate", "order": 3 },
+                { "name": "Backdate", "order": 2 },
                 { "name": "All", "order": 99 }
             ];
             //root.wipOptions.default.groups = [
@@ -202,10 +201,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             //];
             root.wipOptions.default.groupColumns = {
                 "tools": {
-                    "Groups": ["Deal Info", "Consumption", "Cost Test", "Meet Comp", "Retail Cycle", "Backdate", "Overlapping"]
+                    "Groups": ["Deal Info", "Consumption", "Cost Test", "Meet Comp", "Backdate", "Overlapping"]
                 },
                 "details": {
-                    "Groups": ["Consumption", "Cost Test", "Meet Comp", "Retail Cycle", "Backdate", "Overlapping"]
+                    "Groups": ["Consumption", "Cost Test", "Meet Comp", "Backdate", "Overlapping"]
                 },
                 "DC_ID": {
                     "Groups": ["Deal Info"]
@@ -357,21 +356,21 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 //"MEETCOMP_TEST_FAIL_OVERRIDE_REASON": {
                 //    "Groups": ["Meet Comp"]
                 //},
-                "RETAIL_CYCLE": {
-                    "Groups": ["Retail Cycle"]
-                },
-                "RETAIL_PULL": {
-                    "Groups": ["Retail Cycle"]
-                },
-                "RETAIL_PULL_USR_DEF": {
-                    "Groups": ["Retail Cycle"]
-                },
-                "RETAIL_PULL_USR_DEF_CMNT": {
-                    "Groups": ["Retail Cycle"]
-                },
-                "ECAP_FLR": {
-                    "Groups": ["Retail Cycle"]
-                },
+                //"RETAIL_CYCLE": {
+                //    "Groups": ["Retail Cycle"]
+                //},
+                //"RETAIL_PULL": {
+                //    "Groups": ["Retail Cycle"]
+                //},
+                //"RETAIL_PULL_USR_DEF": {
+                //    "Groups": ["Retail Cycle"]
+                //},
+                //"RETAIL_PULL_USR_DEF_CMNT": {
+                //    "Groups": ["Retail Cycle"]
+                //},
+                //"ECAP_FLR": {
+                //    "Groups": ["Retail Cycle"]
+                //},
                 "BACK_DATE_RSN": {
                     "Groups": ["Backdate"]
                 }
