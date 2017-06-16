@@ -5,6 +5,9 @@
                 <div class="col-md-4 cursorArea" style="padding-left:0px">
                     <p class="prodText">Product Corrector</p>
                 </div>
+                <div class="col-md-1" style="padding-top:15px;">
+                    <img ng-if="loading" src="/Images/loadingSmall.gif" />
+                </div>
                 <div class="col-md-4 text-center">
                     <span class="rowNavigation"><label style="font-weight:400">ROW ({{ vm.rowDCId }})</label></span>
                     <span class="rowNavPanel" ng-if="!vm.hideNavigation">
@@ -37,7 +40,7 @@
                 </div>
                 <div ng-if="vm.showSearchResults">
                     <div class="btn-group btn-group-justified" role="group" aria-label="...">
-                        <div id="prodGrid" kendo-grid="prodGrid" kendo-grid-check-box k-grid-checkbox="vm" class="prodCorrector opUiContainer md kendoGridHeight prodCorrector-grid k-grid" k-options="vm.gridOptionsProduct" style="margin-top:10px"></div>
+                        <div id="prodGrid" kendo-grid="prodGrid" kendo-grid-check-box k-grid-checkbox="vm" class="prodCorrector opUiContainer md kendoGridHeight prodCorrector-grid k-grid" k-options="vm.gridOptionsProduct" style="margin-top:10px" ></div>
                     </div>
                 </div>
             </div>

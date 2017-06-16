@@ -390,13 +390,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     }
 
     function openProductSelector(currentPricingTableRow, enableSplitProducts) {
-        var contract = $scope.$parent.$parent.contractData;
-
-        //selection mode
-        var suggestedProd = {
-            'mode': 'manual',
-            'prodname': ""
-        };
+        var contract = $scope.$parent.$parent.contractData;        
 
         var pricingTableRow = {
             'START_DT': contract.START_DT,
@@ -427,10 +421,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         return response;
                     });
                 }],
-                pricingTableRow: angular.copy(pricingTableRow),
-                suggestedProduct: function () {
-                    return suggestedProd;
-                },
+                pricingTableRow: angular.copy(pricingTableRow),                
                 enableSplitProducts: function () {
                     return true;
                 }
@@ -1256,12 +1247,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     'PROGRAM_PAYMENT': !currentPricingTableRowData ? root.curPricingTable.PROGRAM_PAYMENT : currentPricingTableRowData.PROGRAM_PAYMENT,
                     'PROD_INCLDS': !currentPricingTableRowData ? root.curPricingTable.PROD_INCLDS : currentPricingTableRowData.PROD_INCLDS,
                 };
-
-                var suggestedProduct = {
-                    'mode': 'manual',
-                    'prodname': ""
-                };
-
+                
                 var modal = $uibModal.open({
                     backdrop: 'static',
                     templateUrl: 'app/contract/productSelector/productSelector.html',
@@ -1280,10 +1266,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 return response;
                             });
                         }],
-                        pricingTableRow: angular.copy(pricingTableRow),
-                        suggestedProduct: function () {
-                            return suggestedProduct;
-                        },
+                        pricingTableRow: angular.copy(pricingTableRow),                        
                         enableSplitProducts: function () {
                             return enableSplitProducts;
                         }

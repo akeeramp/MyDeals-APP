@@ -46,6 +46,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
     vm.openCAPBreakOut = openCAPBreakOut;
     vm.selectPath = selectPath; // Click on bread cum
     vm.rowDCId = "";
+    vm.invalidSuggestionProd = '';    
     vm.masterSuggestionList = {
     };
 
@@ -61,12 +62,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             'PROGRAM_PAYMENT': ProductRows["0"].PROGRAM_PAYMENT,
             'PROD_INCLDS': ProductRows["0"].PROD_INCLDS
         };
-
-        var suggestedProduct = {
-            'mode': 'auto',
-            'prodname': vm.productName
-        };
-
+        
         var modal = $uibModal.open({
             backdrop: 'static',
             templateUrl: 'app/contract/productSelector/productSelector.html',
@@ -86,8 +82,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                 pricingTableRow: angular.copy(pricingTableRow),
                 enableSplitProducts: function () {
                     return false;
-                },
-                suggestedProduct: angular.copy(suggestedProduct)
+                }
             }
         });
         modal.result.then(
@@ -205,7 +200,10 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                 var tempArr = tempString.split('/');
                 for (var i = 0; i < tempArr.length; i++) {
                     if (tempString != tempArr[i].replace(/[^\w\s]/gi, '')) {
-                        vm.suggestedProd.push(tempArr[i].replace(/[^\w\s]/gi, ''));
+                        if (vm.suggestedProd.indexOf(tempArr[i].replace(/[^\w\s]/gi, '')) == -1) {
+                            vm.suggestedProd.push(tempArr[i].replace(/[^\w\s]/gi, ''));
+                        }
+                        
                     }
                 }
             }
@@ -215,7 +213,9 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                 var tempArr = tempString.split(' ');
                 for (var i = 0; i < tempArr.length; i++) {
                     if (tempString != tempArr[i].replace(/[^\w\s]/gi, '')) {
-                        vm.suggestedProd.push(tempArr[i].replace(/[^\w\s]/gi, ''));
+                        if (vm.suggestedProd.indexOf(tempArr[i].replace(/[^\w\s]/gi, '')) == -1) {
+                            vm.suggestedProd.push(tempArr[i].replace(/[^\w\s]/gi, ''));
+                        }
                     }
                 }
             }
@@ -225,14 +225,31 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                 var tempArr = tempString.split('-');
                 for (var i = 0; i < tempArr.length; i++) {
                     if (tempString != tempArr[i].replace(/[^\w\s]/gi, '')) {
-                        vm.suggestedProd.push(tempArr[i].replace(/[^\w\s]/gi, ''));
+                        if (vm.suggestedProd.indexOf(tempArr[i].replace(/[^\w\s]/gi, '')) == -1) {
+                            vm.suggestedProd.push(tempArr[i].replace(/[^\w\s]/gi, ''));
+                        }
                     }
                 }
+                if (tempArr.length > 0) {
+                    if (vm.suggestedProd.indexOf(tempArr[0] + "-" + tempArr[1].replace(/[^\d-]/gi, '')) == -1) {
+                        vm.suggestedProd.push(tempArr[0] + "-" + tempArr[1].replace(/[^\d-]/gi, ''));
+                    }
+                }
+                
             }
 
             //Step 5: Removing all special characters
             if (tempString != tempString.replace(/[^\w\s]/gi, '')) {
-                vm.suggestedProd.push(tempString.replace(/[^\w\s]/gi, ''));
+                if (vm.suggestedProd.indexOf(tempString.replace(/[^\w\s]/gi, '')) == -1) {
+                    vm.suggestedProd.push(tempString.replace(/[^\w\s]/gi, ''));
+                }
+            }
+
+            //Step 6 : Remove alphabet from the string
+            if (tempString != tempString.replace(/[^\d-]/gi, '')) {
+                if (vm.suggestedProd.indexOf(tempString.replace(/[^\d-]/gi, '')) == -1) {
+                    vm.suggestedProd.push(tempString.replace(/[^\d-]/gi, ''));
+                }
             }
         }
 
@@ -891,7 +908,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         }
         _selectionLevel = vm.breadCumLevel.indexOf(nextConflictedLevel); // Fetching Next conflicted level
 
-        if (_selectionLevel < 4 && _selectionLevel > 0) {
+        if (_selectionLevel < 4 && _selectionLevel > 1) {
             //Reset Grid
             vm.gridData = [];
             dataSourceProduct.read();
@@ -943,9 +960,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             }
         }
     }
-    vm.selectPat = function (item) {
-        alert(item);
-    }
+    
     //Calling for generating number of Rows
     generatePagination();
 
@@ -954,14 +969,31 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
 
     //Add some suggestion for the searching
     vm.addToSuggestList = function (item) {
-        var flagFound = 0;
-        for (var j = 0; j < vm.invalidProducts.length; j++) {
-            if (vm.invalidProducts == item) {
-                flagFound = 1;
-                break;
+        
+        for (var key in vm.masterSuggestionList) {
+            var suggestedIndex = vm.masterSuggestionList[key].indexOf(item);
+            if (suggestedIndex != -1) {                
+                
+                for (var mm = 0; mm < vm.invalidProducts.length; mm++) {
+                    if (vm.invalidProducts[mm].USR_INPUT == key) {
+                        vm.invalidProducts.splice(mm, 1);                        
+                    }
+                }
+                
+                if (GetProductCorrectorData.InValidProducts[vm.currentRow].indexOf(key) != -1) {
+                    var invalidIndex = GetProductCorrectorData.InValidProducts[vm.currentRow].indexOf(key);
+                    var transformIndex = GetProductCorrectorData.ProdctTransformResults[vm.currentRow].indexOf(key);
+                    GetProductCorrectorData.InValidProducts[vm.currentRow].splice(invalidIndex, 1);
+                    GetProductCorrectorData.ProdctTransformResults[vm.currentRow].splice(transformIndex, 1);
+                    GetProductCorrectorData.InValidProducts[vm.currentRow].push(item);
+                    GetProductCorrectorData.ProdctTransformResults[vm.currentRow].push(item);
+                }
             }
         }
-        if (flagFound == 0) {
+        
+        var flagFound = vm.invalidProducts.indexOf(item);
+        
+        if (flagFound == -1) {
             var itemSuggested = {
                 USR_INPUT: item
             };
@@ -1034,7 +1066,8 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
 
     //Add suggestion to the suggestion product
     function productSuggestion(item) {
-        var row = {};
+        vm.invalidSuggestionProd = item.USR_INPUT;        
+        var row = { };
         if (ProductRows.length > 1) {
             row = ProductRows[vm.currentRow - 1];
         }
@@ -1049,7 +1082,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         }
 
         ProductSelectorService.GetProductSuggestions(searchStringDTO)
-            .then(function (response) {
+            .then(function (response) {                
                 if (response.data.length > 0) {
                     vm.suggestedProduct = [];
                     angular.forEach(response.data, function (value, key) {
@@ -1075,8 +1108,8 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
     }
 
     // Add selected Products from the Product Suggestion
-    function addProductSuggested(item) {
-        if (item.PRD_ATRB_SID <= 7005) {
+    function addProductSuggested(item) {         
+        if(item.PRD_ATRB_SID <= 7005) {
             logger.error("Unable to add. Deals can be created at Processor, L4 or Material ID level");
             return;
         }
@@ -1102,7 +1135,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
 
         ProductSelectorService.GetCAPForProduct(data)
             .then(function (response) {
-                //Create a new object for selected
+                //Create a new object for selected                
                 var selectedObject = {};
 
                 selectedObject["BRND_NM"] = item.BRND_NM;
@@ -1183,17 +1216,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                     }).ToArray();
 
                 var tempProdNm = selectedInput[m].USR_INPUT;
-
-                for (var keyProd in vm.masterSuggestionList) {
-                    if (!!vm.masterSuggestionList[keyProd]) {
-                        for (var c = 0; c < vm.masterSuggestionList[keyProd].length; c++) {
-                            if (vm.masterSuggestionList[keyProd][c] = selectedInput[m].USR_INPUT) {
-                                tempProdNm = keyProd;
-                            }
-                        }
-                    }
-                }
-
+                
                 const prodName = tempProdNm;
 
                 obj[prodName] = products;
@@ -1222,27 +1245,26 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                     }).Select(function (x) {
                         return { 'USR_INPUT': x.source[0].USR_INPUT };
                     }).ToArray();
-
+                var tempProductName = vm.invalidSuggestionProd;
                 for (var j = 0; j < GetProductCorrectorData.InValidProducts[vm.currentRow].length; j++) {
                     for (var z = 0; z < dataSelected.length; z++) {
-                        var tempProductName = dataSelected[z].USR_INPUT;
-                        for (var keyProd in vm.masterSuggestionList) {
-                            if (!!vm.masterSuggestionList[keyProd]) {
-                                for (var c = 0; c < vm.masterSuggestionList[keyProd].length; c++) {
-                                    if (vm.masterSuggestionList[keyProd][c] = dataSelected[z].USR_INPUT) {
-                                        tempProductName = keyProd;
-                                    }
-                                }
+                        if (dataSelected[z].USR_INPUT == tempProductName) {
+                            var transfromIndex = GetProductCorrectorData.ProdctTransformResults[vm.currentRow].indexOf(tempProductName);
+                            GetProductCorrectorData.ProdctTransformResults[vm.currentRow][transfromIndex] = dataSelected[z].USR_INPUT;
+
+                            var invalidIndex = GetProductCorrectorData.InValidProducts[vm.currentRow].indexOf(tempProductName);
+                            if (invalidIndex != -1) {
+                                GetProductCorrectorData.InValidProducts[vm.currentRow].splice(invalidIndex, 1);
+                            } 
+                        }
+
+                        //Removing From invalid item;
+                        for (var d = 0; d < vm.invalidProducts.length; d++) {
+                            if (vm.invalidProducts[d].USR_INPUT == dataSelected[z].USR_INPUT) {
+                                vm.invalidProducts.splice(d, 1);                                
                             }
                         }
-                        for (var d = 0; d < vm.invalidProducts; d++) {
-                            if (vm.invalidProducts[d] = tempProductName) {
-                                vm.invalidProducts.splice(d, 1);
-                            }
-                        }
-                        if (GetProductCorrectorData.InValidProducts[vm.currentRow][j] == tempProductName) {
-                            GetProductCorrectorData.InValidProducts[vm.currentRow].splice(j, 1);
-                        }
+                        
                     }
                 }
                 if (GetProductCorrectorData.InValidProducts[vm.currentRow].length == 0) {
@@ -1257,6 +1279,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             vm.items = [];
             vm.gridData = [];
             dataSourceProduct.read();
+            dataSource.read();
 
             vm.showSearchResults = 0;
 
