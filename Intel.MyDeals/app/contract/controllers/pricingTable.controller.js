@@ -13,7 +13,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     // If this controller gets called twice, 2 scopes are instanciated and Datasource syncing gets confused producing not data to save.
     if ($scope.$parent.$parent.spreadDs !== undefined) return;
 
-
     // Functions
     vm.initCustomPaste = initCustomPaste;
     vm.customDragDropAutoFill = customDragDropAutoFill;
@@ -64,7 +63,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     var stealthOnChangeMode = false;
     root.isPtr = $state.current.name === "contract.manager.strategy";
     root.isWip = $state.current.name === "contract.manager.strategy.wip";
-
 
     function init() {
         // force a resize event to format page
@@ -381,7 +379,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
             root.wipData = root.pricingTableData.WIP_DEAL;
 
-
             root.setBusy("Drawing Grid", "Applying security to the grid.");
             $timeout(function () {
                 root.setBusy("", "");
@@ -390,7 +387,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     }
 
     function openProductSelector(currentPricingTableRow, enableSplitProducts) {
-        var contract = $scope.$parent.$parent.contractData;        
+        var contract = $scope.$parent.$parent.contractData;
 
         var pricingTableRow = {
             'START_DT': contract.START_DT,
@@ -421,7 +418,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         return response;
                     });
                 }],
-                pricingTableRow: angular.copy(pricingTableRow),                
+                pricingTableRow: angular.copy(pricingTableRow),
                 enableSplitProducts: function () {
                     return true;
                 }
@@ -1247,7 +1244,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     'PROGRAM_PAYMENT': !currentPricingTableRowData ? root.curPricingTable.PROGRAM_PAYMENT : currentPricingTableRowData.PROGRAM_PAYMENT,
                     'PROD_INCLDS': !currentPricingTableRowData ? root.curPricingTable.PROD_INCLDS : currentPricingTableRowData.PROD_INCLDS,
                 };
-                
+
                 var modal = $uibModal.open({
                     backdrop: 'static',
                     templateUrl: 'app/contract/productSelector/productSelector.html',
@@ -1266,7 +1263,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 return response;
                             });
                         }],
-                        pricingTableRow: angular.copy(pricingTableRow),                        
+                        pricingTableRow: angular.copy(pricingTableRow),
                         enableSplitProducts: function () {
                             return enableSplitProducts;
                         }
@@ -1306,7 +1303,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         if (!beh) beh = {};
         var isError = !!beh.isError["PTR_USER_PRD"];
         var msg = isError ? beh.validMsg["PTR_USER_PRD"] : "";
-
         sheet.range(root.colToLetter['PTR_USER_PRD'] + (row + 1)).validation(root.myDealsValidation(isError, msg, false));
     }
 
@@ -1428,6 +1424,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     root.publishWipDeals();
                 } // Call Save and Validate API from Contract Manager
             }
+            else {
+                $timeout(function () {
+                    validateSingleRowProducts(data[currentRow - 1], currentRow);
+                }, 10)
+            }
         }
     }
 
@@ -1484,7 +1485,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         $timeout(function () {
                             validateSingleRowProducts(data[currentRow - 1], currentRow);
                         }, 10)
-
                     }
                 },
             function () {
