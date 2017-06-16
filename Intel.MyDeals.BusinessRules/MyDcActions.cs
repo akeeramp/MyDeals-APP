@@ -453,10 +453,11 @@ namespace Intel.MyDeals.BusinessRules
             string payout = r.Dc.GetDataElementValue(AttributeCodes.PAYOUT_BASED_ON);
             string progPayment = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT);
             IOpDataElement deProgPayment = r.Dc.GetDataElement(AttributeCodes.PROGRAM_PAYMENT);
+            IOpDataElement de = r.Dc.GetDataElement(AttributeCodes.DC_ID);
 
             if (payout != "Billings" && progPayment != "Backend")
             {
-                BusinessLogicDeActions.AddValidationMessage(deProgPayment, "Frontend Deals cannot be Consumption.");
+                BusinessLogicDeActions.AddValidationMessage(de, "Frontend Deals cannot be Consumption.");
             }
         }
 

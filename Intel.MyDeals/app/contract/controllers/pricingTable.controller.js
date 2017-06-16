@@ -859,17 +859,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 vm.requiredStringColumns[key] = true;
                                 break;
                             case "number":
-                                if (!myFieldModel.nullable) {
-                                    // MOVED TO MT VALIDATION AS MULTIPLE VALIDATIONS ARE NOT SUPPORTED AND MYDEALS_ERROR IS THE VALIDATION WE WILL USE
-                                    //sheet.range(myColumnName + ":" + myColumnName).validation({
-                                    //    dataType: "number",
-                                    //    from: 0,
-                                    //    comparerType: "greaterThan",
-                                    //    allowNulls: false,
-                                    //    type: "warning",
-                                    //    messageTemplate: "Value must be positive number."
-                                    //});
-                                }
                                 // Money Formatting
                                 if (myFieldModel.format == "{0:c}") {
                                     sheet.range(myColumnName + ":" + myColumnName).format("$#,##0.00");
@@ -900,44 +889,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             for (var rowIndex = 0; rowIndex < root.pricingTableData.PRC_TBL_ROW.length; rowIndex++) {
                 var rowInfo = root.pricingTableData.PRC_TBL_ROW[rowIndex];
 
-                // Required cells
-                //if (!!rowInfo._behaviors) {
-                //    for (var property in rowInfo._behaviors.isRequired) {
-                //        if (rowInfo._behaviors.isRequired.hasOwnProperty(property)) {
-                //            var colLetter = root.colToLetter[property];
-                //            if (colLetter != null) {
-                //                // MOVED TO MT VALIDATION AS MULTIPLE VALIDATIONS ARE NOT SUPPORTED AND MYDEALS_ERROR IS THE VALIDATION WE WILL USE
-                //                //sheet.range(colLetter + (rowIndex + rowIndexOffset)).validation({
-                //                //    dataType: "custom",
-                //                //    from: "LEN(" + colLetter + (rowIndex + rowIndexOffset) + ")>0",
-                //                //    allowNulls: false,
-                //                //    type: "warning",
-                //                //    messageTemplate: "This field is required."
-                //                //});
-                //            }
-                //        }
-                //    }
-                //}
-
                 // Read Only cells
                 disableIndividualReadOnlyCells(sheet, rowInfo, rowIndex, rowIndexOffset);
-
-                //root.syncCellsOnSingleRow(sheet, rowInfo, rowIndex);
-
-                //for (var key in ptTemplate.model.fields) {
-                //	// Required string validation via columns
-                //	// NOTE: LEN validation means that we need to put validation on ecah individual cell rather than bulk
-                //    if ((root.colToLetter[key] !== undefined) && (vm.requiredStringColumns.hasOwnProperty(key))) {
-                //        // MOVED TO MT VALIDATION AS MULTIPLE VALIDATIONS ARE NOT SUPPORTED AND MYDEALS_ERROR IS THE VALIDATION WE WILL USE
-                //	    //sheet.range(root.colToLetter[key] + (rowIndex + rowIndexOffset)).validation({
-                //		//	dataType: "custom",
-                //		//	from: "LEN(" + root.colToLetter[key] + (rowIndex + rowIndexOffset) + ")>0",
-                //		//	allowNulls: false,
-                //		//	type: "warning",
-                //		//	messageTemplate: "This field is required."
-                //		//});
-                //	}
-                //}
             }
         });
     }

@@ -5,7 +5,7 @@
         public static class VARIABLES
         {
             public static int NEW_UNIQ_ID = -1000;
-            public const string PRIMARY_DIMKEY = "_____10___0";
+            public const string PRIMARY_DIMKEY = "_____20___0";
         }
 
         public static class OPUSERTOKEN
