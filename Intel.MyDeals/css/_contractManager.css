@@ -1024,9 +1024,9 @@
 
 	/* SpreadSheet validation */
 	.k-spreadsheet-cell .k-dirty {
-		width: 100%;
+		/*width: 100%;
 		height: 100%;
-		border-width: 0px;
+		border-width: 0px;*/
 	}
 	.k-spreadsheet-cell.k-dirty-cell {
 		border:1px solid red;
