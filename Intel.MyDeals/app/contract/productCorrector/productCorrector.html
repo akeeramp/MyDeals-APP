@@ -4,10 +4,7 @@
             <div class="row prodCorrectorHeader">
                 <div class="col-md-4 cursorArea" style="padding-left:0px">
                     <p class="prodText">Product Corrector</p>
-                </div>
-                <div class="col-md-1" style="padding-top:15px;">
-                    <img ng-if="loading" src="/Images/loadingSmall.gif" />
-                </div>
+                </div>                
                 <div class="col-md-4 text-center">
                     <span class="rowNavigation"><label style="font-weight:400">ROW ({{ vm.rowDCId }})</label></span>
                     <span class="rowNavPanel" ng-if="!vm.hideNavigation">
@@ -87,7 +84,10 @@
             <div class="col-md-6 form-inline insertAtRowsText" style="padding-left:0px">
                 <label class="text-left fl marginRight" style="font-weight:400!important">Not Correct? &nbsp;Try using <a style="color:#00AEEF;text-decoration:underline;cursor:pointer" ng-click="vm.openProdSelector()">Product Selector</a></label>
             </div>
-            <div class="col-md-6" style="padding-right:0px">
+            <div class="col-md-1" style="padding-top:15px;">
+                <img ng-if="loading" src="/Images/loadingSmall.gif" />
+            </div>
+            <div class="col-md-5" style="padding-right:0px">
                 <button class="btn btn-default prdBtn" ng-click="vm.cancel()" style="margin-left:2px;">Cancel</button>
                 <button class="btn btn-primary fr prdBtn" ng-click="vm.saveProducts()">Save</button>
             </div>
