@@ -458,7 +458,7 @@ namespace Intel.MyDeals.BusinessRules
             if (string.IsNullOrEmpty(progPayment) || string.IsNullOrEmpty(deStart?.AtrbValue.ToString())) return;
 
             DateTime startDate = DateTime.Parse(deStart.AtrbValue.ToString());
-            DateTime today = DateTime.UtcNow;
+            DateTime today = DateTime.Now.Date;
 
             // Additional validation-for program payment=Front end, the deal st. date can not be past, it should be >= current date
             if (progPayment.Contains("rontend") && startDate < today)
