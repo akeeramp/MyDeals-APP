@@ -236,7 +236,7 @@
         // TODO: Move this to util.js
         function arrayContainsString(array, string) {
             var newArr = array.filter(function (el) {
-                return el.trim().toUpperCase() === string.trim().toUpperCase();
+                return el.toString().trim().toUpperCase() === string.toString().trim().toUpperCase();
             });
             return newArr.length > 0;
         }
@@ -279,20 +279,24 @@
         }
 
         function validateMediaCode(data, mediaCode) {
-            var gridData = angular.copy(data);
-            if (mediaCode == "ALL") return gridData;
+            if (mediaCode == "ALL") return data;
+            var prdIdToremove = [];
             for (var p = 0; p < data.length; p++) {
                 if (arrayContainsString(productTypeToApplyMediaCode, data[p].DEAL_PRD_TYPE)) {
                     if (data[p].MM_MEDIA_CD) {
                         if (!arrayContainsString(data[p].MM_MEDIA_CD.split(','), mediaCode)) {
-                            gridData.splice(p, 1);
+                            prdIdToremove.push(data[p].PRD_MBR_SID);
                         }
                     } else {
-                        gridData.splice(p, gridData.length);
+                        prdIdToremove.push(data[p].PRD_MBR_SID);
                     }
                 }
             }
-            return gridData;
+            data = data.filter(function (x) {
+                return !arrayContainsString(prdIdToremove, x.PRD_MBR_SID);
+            });
+
+            return data;
         }
 
         function toggleColumnsWhenEmpty(data) {
