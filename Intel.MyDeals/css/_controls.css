@@ -457,6 +457,10 @@
     visibility: hidden;
 }
 
+.isReadOnlyFaux > .k-multiselect-wrap > .k-clear-value {
+    visibility: hidden;
+}
+
 /* grid cell controls */
 .gridCellStatus {
     width: 100%; height: 12px;

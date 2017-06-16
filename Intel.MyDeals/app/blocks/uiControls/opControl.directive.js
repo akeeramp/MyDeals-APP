@@ -92,7 +92,11 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
                                     dataBound: function (e) {
                                         var treeview = $("#" + scope.opCd).data("kendoTreeView");
                                         // collapse all items
-                                        if (!!treeview) treeview.collapse(".k-item");
+                                        if (!!treeview) {
+                                            //treeview sometimes tries to dynamically load information and waits until user expands to get data.  in our case that creates a bug where some nodes are not rendered after expanding, causing the tree to bug out and minimize. hence we force an expand as a round-about way to fix it
+                                            treeview.expand(".k-item");
+                                            treeview.collapse(".k-item");
+                                        }
                                     }
                                 };
 
