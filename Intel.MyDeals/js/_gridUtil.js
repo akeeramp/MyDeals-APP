@@ -387,11 +387,11 @@ gridTools.prototype.createDataSource = function (parentSource, pageSize) {
                     // save data item to the original datasource
                     source.push(item);
 
-                    // on success
-                    e.success(item);
-                    // on failure
-                    //e.error("XHR response", "E501", "INT value must by greater than 0");
                 }
+                // on success
+                e.success();
+                // on failure
+                //e.error("XHR response", "E501", "INT value must by greater than 0");
             },
             update: function (e) {
                 var source = parentSource;

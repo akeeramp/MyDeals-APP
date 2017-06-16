@@ -570,23 +570,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         }
         else {
             // Trigger only if the changed range contains the product column
-            // NOTE: The below condition assumes that a dragged range is dragged from top-to-bottom, left-to-right. If that ever
-            // changes (i.e. we move the products column so it's not the first editable column), then we should change this logic to accomodate that.
-
-            //sheet.batch(function () {
-            //	var finalColLetter = String.fromCharCode(intA + (ptTemplate.columns.length - 1));
-            //	// Enable other cells
-            //	var range = sheet.range("B" + topLeftRowIndex + ":" + finalColLetter + bottomRightRowIndex);
-            //	range.enable(true);
-            //	range.background(null);
-
-            //	// Re-disable columns that are readOnly
-            //	for (var key in vm.readOnlyColLetters) {
-            //		if (vm.readOnlyColLetters.hasOwnProperty(key)) {
-            //			disableRange(sheet.range(key + topLeftRowIndex + ":" + key + bottomRightRowIndex));
-            //		}
-            //	}
-            //});
 
             // need to see if an item changed that would cause the PTR_SYS_PRD to be cleared out
             var isPtrSysPrdFlushed = false;
@@ -639,10 +622,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         $timeout(function () {
             if (root.spreadDs !== undefined) {
                 var data = root.spreadDs.data();
+                var newItems = 0;
 
                 // Remove any lingering blank rows from the data
                 for (var n = data.length - 1; n >= 0; n--) {
-                    if (data[n].DC_ID === null && data[n].PTR_USER_PRD === "") {
+                    if (data[n].DC_ID === null && (data[n].PTR_USER_PRD === null || data[n].PTR_USER_PRD === "")) {
                         data.splice(n, 1);
                     }
                 }
@@ -650,6 +634,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 for (var r = 0; r < data.length; r++) {
                     if (data[r]["DC_ID"] !== null && data[r]["DC_ID"] !== undefined) continue;
 
+                    newItems++;
                     data[r]["DC_ID"] = $scope.uid--;
                     data[r]["VOLUME"] = null;
                     data[r]["ECAP_PRICE"] = null;
@@ -686,42 +671,47 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 // now apply array to Datasource... one event triggered
                 root.spreadDs.sync();
 
-                // If we skipped spaces, we already collapsed, so remove the extra data outside the range
-                var st = data.length + 2;
-                var en = bottomRightRowIndex;
-                var numBlanks = en - st + 1;
-                if (numBlanks > 0) {
-                    stealthOnChangeMode = true;
-                    sheet.range("A" + st + ":Z" + en).value("");
-                    stealthOnChangeMode = false;
-                }
-
                 sheet.batch(function () {
+                    // If we skipped spaces, we already collapsed, so remove the extra data outside the range
                     var finalColLetter = String.fromCharCode(intA + (ptTemplate.columns.length - 1));
+                    var st = data.length + 1;
+                    var en = bottomRightRowIndex;
+                    var numBlanks = en - st;
+                    if (numBlanks > 0) {
+                        stealthOnChangeMode = true;
+                        sheet.range("A" + (data.length + 2) + ":" + finalColLetter + (bottomRightRowIndex + numBlanks)).value("");
+                        topLeftRowIndex -= numBlanks;
+                        bottomRightRowIndex -= numBlanks;
+                        stealthOnChangeMode = false;
+                    } else {
+                        //topLeftRowIndex = data.length;
+                        //bottomRightRowIndex = topLeftRowIndex + newItems;
+                    }
+                    
                     // Enable other cells
-                    var range = sheet.range("B" + (topLeftRowIndex - numBlanks) + ":" + finalColLetter + (bottomRightRowIndex - numBlanks));
+                    var range = sheet.range("B" + topLeftRowIndex + ":" + finalColLetter + bottomRightRowIndex);
                     range.enable(true);
                     range.background(null);
 
                     // Re-disable columns that are readOnly
-                    for (var key in vm.readOnlyColLetters) {
-                        if (vm.readOnlyColLetters.hasOwnProperty(key)) {
-                            disableRange(sheet.range(key + (topLeftRowIndex - numBlanks) + ":" + key + (bottomRightRowIndex - numBlanks)));
-                        }
-                    }
+                    //for (var key in vm.readOnlyColLetters) {
+                    //    if (vm.readOnlyColLetters.hasOwnProperty(key)) {
+                    //        disableRange(sheet.range(key + topLeftRowIndex + ":" + key + bottomRightRowIndex));
+                    //    }
+                    //}
 
-                    for (var key in ptTemplate.model.fields) {
-                        var myColumnName = root.colToLetter[key];
-                        var myFieldModel = ptTemplate.model.fields[key];
+                    //for (var key in ptTemplate.model.fields) {
+                    //    var myColumnName = root.colToLetter[key];
+                    //    var myFieldModel = ptTemplate.model.fields[key];
 
-                        if (ptTemplate.model.fields.hasOwnProperty(key) && myColumnName !== undefined) {
-                            if (myFieldModel.opLookupText === "DROP_DOWN" || myFieldModel.opLookupText === "dropdownName") {
-                                if (myFieldModel.uiType === "RADIOBUTTONGROUP" || myFieldModel.uiType === "DROPDOWN") {
-                                    applyDropDowns(sheet, myFieldModel, myColumnName);
-                                }
-                            }
-                        }
-                    }
+                    //    if (ptTemplate.model.fields.hasOwnProperty(key) && myColumnName !== undefined) {
+                    //        if (myFieldModel.opLookupText === "DROP_DOWN" || myFieldModel.opLookupText === "dropdownName") {
+                    //            if (myFieldModel.uiType === "RADIOBUTTONGROUP" || myFieldModel.uiType === "DROPDOWN") {
+                    //                applyDropDowns(sheet, myFieldModel, myColumnName);
+                    //            }
+                    //        }
+                    //    }
+                    //}
                 });
             }
         }, 10);
