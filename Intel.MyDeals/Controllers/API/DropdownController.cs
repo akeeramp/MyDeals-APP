@@ -139,11 +139,19 @@ namespace Intel.MyDeals.Controllers.API
 		[HttpPost]
 		public List<Dropdown> GetRetailPull(RetailPullParams filterData)
 		{
-			var id = filterData.PRD_MBR_SID;
 			return SafeExecutor(() => _dropdownLib.GetRetailPullDropdown(filterData)
 				, $"Unable to get Retail Pull for product"
 			);
 		}
 
-	}
+		[Authorize]
+		[Route("GetSoldToIds/{custId}")]
+		public List<Dropdown> GetSoldToIds(int custId)
+		{
+			return SafeExecutor(() => _dropdownLib.GetSoldToIdDropdown(custId)
+				, $"Unable to get Sold To Ids for the contract's customer"
+			);
+		}
+
+}
 }

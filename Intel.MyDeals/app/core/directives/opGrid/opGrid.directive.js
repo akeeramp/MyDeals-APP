@@ -521,6 +521,9 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 	}
                 } else if (col.uiType.toUpperCase() === "MULTISELECT") {
 
+                	var id = "";
+                	if (col.field == "DEAL_SOLD_TO_ID") { id = options.model["CUST_MBR_SID"] } // TODO:change to dynamic
+
                 	$('<select data-bind="value:' + options.field + '" required name="' + options.field + '"/>')
 						.appendTo(container)
 						.kendoMultiSelect({
@@ -531,7 +534,11 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
 							dataSource: {
 								type: "json",
 								transport: {
-									read: field.opLookupUrl
+									read: {
+										url: field.opLookupUrl + "/" + id,
+										dataType: 'json',
+										type: "GET",
+									}
 								}
 							}
 						});

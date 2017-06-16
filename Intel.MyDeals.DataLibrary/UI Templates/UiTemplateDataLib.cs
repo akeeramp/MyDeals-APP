@@ -652,7 +652,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
 				UiType = "MULTISELECT",
                 Template = "#=gridUtils.uiControlWrapper(data, 'DEAL_SOLD_TO_ID')#",
-				LookupUrl = "/api/Dropdown/SoldToIds", // TODO
+				LookupUrl = "/api/Dropdown/GetSoldToIds", // TODO
 				LookupText = "dropdownName",
 				LookupValue = "dropdownName",
 				IsFilterable = true,

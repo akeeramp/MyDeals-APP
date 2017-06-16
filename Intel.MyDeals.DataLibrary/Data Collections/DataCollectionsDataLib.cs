@@ -164,5 +164,9 @@ namespace Intel.MyDeals.DataLibrary
 		{
 			return DataCollections.GetRetailPullList();
 		}
+		public List<SoldToIds> GetSoldToIdList()
+		{
+			return DataCollections.GetSoldToIdList();
+		}
 	}
 }

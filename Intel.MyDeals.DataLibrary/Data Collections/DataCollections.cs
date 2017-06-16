@@ -504,5 +504,17 @@ namespace Intel.MyDeals.DataLibrary
 		}
 
 		private static List<RetailPull> _getRetailPullList;
+
+		
+		public static List<SoldToIds> GetSoldToIdList()
+		{
+			lock (LOCK_OBJECT ?? new object())
+			{
+				return _getSoldToIdList ?? (_getSoldToIdList = new SoldToIdDataLib().GetSoldToIdList());
+			}
+		}
+
+		private static List<SoldToIds> _getSoldToIdList;
+
 	}
 }

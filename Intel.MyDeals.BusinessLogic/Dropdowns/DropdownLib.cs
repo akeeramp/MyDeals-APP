@@ -265,6 +265,20 @@ namespace Intel.MyDeals.BusinessLogic
 			
 			return myList;
 		}
+		
+		public List<Dropdown> GetSoldToIdDropdown(int custId)
+		{
+			List<Dropdown> result = new List<Dropdown>();
+			List<SoldToIds> soldToIdList = _dataCollectionsDataLib.GetSoldToIdList();
 
+			List<Dropdown> myList = soldToIdList.Where(r =>
+				r.CUST_NM_SID == custId
+				&& r.ACTV_IND
+			)
+			.OrderBy(dd => dd.SOLD_TO_ID)
+			.Select(x => new Dropdown { dropdownName = x.SOLD_TO_ID }).ToList<Dropdown>();
+
+			return myList;
+		}
 	}
 }

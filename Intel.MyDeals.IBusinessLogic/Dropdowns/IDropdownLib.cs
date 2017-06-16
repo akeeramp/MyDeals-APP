@@ -35,5 +35,7 @@ namespace Intel.MyDeals.IBusinessLogic
 
 		List<Dropdown> GetRetailPullDropdown(RetailPullParams filterData);
 
+		List<Dropdown> GetSoldToIdDropdown(int custId);
+
 	}
 }

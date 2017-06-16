@@ -65,6 +65,7 @@
     <Compile Include="Products\IProductDataLib.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SecurityAttributes\ISecurityAttributesDataLib.cs" />
+    <Compile Include="SoldToId\ISoldToIdDataLib.cs" />
     <Compile Include="UI Templates\IUiTemplateDataLib.cs" />
     <Compile Include="Workflow\IWorkFlowDataLib.cs" />
   </ItemGroup>

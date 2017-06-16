@@ -265,6 +265,12 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "RetailPull";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
+	// Sold To Ids
+	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MYDL_GET_CUST_SOLD_TO_ID");
+	ds.Tables[0].TableName = "SoldToIds";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
+
 	PopIndent();
 	WriteLine("}"); // End NameSpace
 
