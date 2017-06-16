@@ -81,6 +81,22 @@ namespace Intel.MyDeals.BusinessRules
                     ActionRule = MyDcActions.BackdateRequired,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
                     InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL}
+                },
+                new MyOpRule
+                {
+                    Title="MUST BE LAST RULE: Fix Required if readonly or hidden",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
+                    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.IsRequired && (de.IsHidden || de.IsReadOnly) ).Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetNotRequired,
+                            Where = de => de.IsRequired && (de.IsHidden || de.IsReadOnly)
+                        }
+                    }
                 }
             };
         }

@@ -24,9 +24,9 @@ namespace Intel.MyDeals.BusinessRules
                 if (_attrbRules != null && _attrbRules.Any()) return _attrbRules;
 
                 _attrbRules = new List<MyOpRule>();
+                _attrbRules.AddRange(AllRules.GetHiddenRules());
                 _attrbRules.AddRange(AllRules.GetReadOnlyRules());
                 _attrbRules.AddRange(AllRules.GetRequiredRules());
-                _attrbRules.AddRange(AllRules.GetHiddenRules());
                 _attrbRules.AddRange(AllRules.GetBasicValidationRules());
                 _attrbRules.AddRange(AllRules.GetAutomatedTestingRules());
                 _attrbRules.AddRange(AllRules.GetOpCollectorToDictRules());
