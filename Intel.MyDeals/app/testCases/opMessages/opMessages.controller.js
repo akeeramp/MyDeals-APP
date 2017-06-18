@@ -70,7 +70,7 @@
         }
 
         var createContract = function () {
-            objsetService.createContract($scope.contractData.CUST_MBR_SID, $scope.contractData).then(function (data) {
+            objsetService.createContract($scope.contractData.CUST_MBR_SID, $scope.contractData.DC_ID, $scope.contractData).then(function (data) {
                 $scope.checkForMessages($scope.contractData, 'CNTRCT', data);
             });
         }

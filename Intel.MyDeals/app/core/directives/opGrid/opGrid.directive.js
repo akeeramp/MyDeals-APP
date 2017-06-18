@@ -709,7 +709,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 dataItem._behaviors.isDirty[newField] = true;
                 dataItem._dirty = true;
                 $scope._dirty = true;
-                $scope.$broadcast('dirtyOpGrid');
+                $scope.$parent.$parent.$parent.$parent.$parent._dirty = true;
             }
 
             $scope.$on('refresh', function (event, args) {
@@ -797,7 +797,6 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 }
 
                 $scope._dirty = false;
-                $scope.$broadcast('dirtyOpGrid');
             }
 
             $scope.saveWipDeals = function () {
@@ -986,88 +985,12 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                             operator: "contains",
                             value: searchValue
                         }, {
-                            field: "COST_TEST_RESULT",
-                            operator: "contains",
-                            value: searchValue
-                        }, {
                             field: "PRD_COST",
                             operator: "eq",
                             value: searchValue
                         }, {
-                            field: "COST_TYPE_USED",
-                            operator: "contains",
-                            value: searchValue
-                        }, {
-                            field: "COST_TEST_FAIL_OVERRIDE",
-                            operator: "contains",
-                            value: searchValue
-                        }, {
-                            field: "COST_TEST_FAIL_OVERRIDE_REASON",
-                            operator: "contains",
-                            value: searchValue
-                        }, {
-                            field: "YCS2_OVERLAP_OVERRIDE",
-                            operator: "contains",
-                            value: searchValue
-                        }, {
                             field: "MEET_COMP_PRICE_QSTN",
                             operator: "contains",
-                            value: searchValue
-                        }, {
-                            field: "COMP_SKU",
-                            operator: "contains",
-                            value: searchValue
-                        }, {
-                            field: "COMP_SKU_OTHR",
-                            operator: "contains",
-                            value: searchValue
-                        }, {
-                            field: "COMPETITIVE_PRICE",
-                            operator: "eq",
-                            value: searchValue
-                        }, {
-                            field: "COMP_BENCH",
-                            operator: "eq",
-                            value: searchValue
-                        }, {
-                            field: "IA_BENCH",
-                            operator: "eq",
-                            value: searchValue
-                        }, {
-                            field: "COMP_TARGET_SYSTEM_PRICE",
-                            operator: "eq",
-                            value: searchValue
-                        }, {
-                            field: "MEETCOMP_TEST_RESULT",
-                            operator: "contains",
-                            value: searchValue
-                        }, {
-                            field: "MEETCOMP_TEST_FAIL_OVERRIDE",
-                            operator: "contains",
-                            value: searchValue
-                        }, {
-                            field: "MEETCOMP_TEST_FAIL_OVERRIDE_REASON",
-                            operator: "contains",
-                            value: searchValue
-                        }, {
-                            field: "RETAIL_CYCLE",
-                            operator: "contains",
-                            value: searchValue
-                        }, {
-                            field: "RETAIL_PULL",
-                            operator: "eq",
-                            value: searchValue
-                        }, {
-                            field: "RETAIL_PULL_USR_DEF",
-                            operator: "contains",
-                            value: searchValue
-                        }, {
-                            field: "RETAIL_PULL_USR_DEF_CMNT",
-                            operator: "contains",
-                            value: searchValue
-                        }, {
-                            field: "ECAP_FLR",
-                            operator: "eq",
                             value: searchValue
                         }, {
                             field: "BACK_DATE_RSN",

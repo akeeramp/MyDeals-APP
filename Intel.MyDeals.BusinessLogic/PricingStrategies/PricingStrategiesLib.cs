@@ -40,15 +40,15 @@ namespace Intel.MyDeals.BusinessLogic
             return GetPricingStrategy(id, true).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
         }
 
-        public OpDataCollectorFlattenedDictList SavePricingStrategy(OpDataCollectorFlattenedList data, int custId)
+        public OpDataCollectorFlattenedDictList SavePricingStrategy(OpDataCollectorFlattenedList data, ContractToken contractToken)
         {
             return _dataCollectorLib.SavePackets(new OpDataCollectorFlattenedDictList
             {
                 [OpDataElementType.PRC_ST] = data
-            }, custId, new List<int>(), false, "").ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
+            }, contractToken, new List<int>(), false, "").ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
         }
 
-        public OpDataCollectorFlattenedDictList SavePricingStrategy(OpDataCollectorFlattenedList pricingStrategies, OpDataCollectorFlattenedList pricingTables, OpDataCollectorFlattenedList pricingTableRows, OpDataCollectorFlattenedList wipDeals, int custId)
+        public OpDataCollectorFlattenedDictList SavePricingStrategy(OpDataCollectorFlattenedList pricingStrategies, OpDataCollectorFlattenedList pricingTables, OpDataCollectorFlattenedList pricingTableRows, OpDataCollectorFlattenedList wipDeals, ContractToken contractToken)
         {
             OpDataCollectorFlattenedDictList data = new OpDataCollectorFlattenedDictList();
 
@@ -57,26 +57,26 @@ namespace Intel.MyDeals.BusinessLogic
             if (pricingTableRows != null && pricingTableRows.Any()) data[OpDataElementType.PRC_TBL_ROW] = pricingTableRows;
             if (wipDeals != null && wipDeals.Any()) data[OpDataElementType.WIP_DEAL] = wipDeals;
 
-            return _dataCollectorLib.SavePackets(data, custId, new List<int>(), false, "").ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
+            return _dataCollectorLib.SavePackets(data, contractToken, new List<int>(), false, "").ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
         }
 
-        public OpDataCollectorFlattenedDictList SaveFullPricingStrategy(int custId, OpDataCollectorFlattenedDictList fullpricingStrategies)
+        public OpDataCollectorFlattenedDictList SaveFullPricingStrategy(ContractToken contractToken, OpDataCollectorFlattenedDictList fullpricingStrategies)
         {
             return SavePricingStrategy(
                 fullpricingStrategies.ContainsKey(OpDataElementType.PRC_ST) ? fullpricingStrategies[OpDataElementType.PRC_ST] : new OpDataCollectorFlattenedList(),
                 fullpricingStrategies.ContainsKey(OpDataElementType.PRC_TBL) ? fullpricingStrategies[OpDataElementType.PRC_TBL] : new OpDataCollectorFlattenedList(),
                 fullpricingStrategies.ContainsKey(OpDataElementType.PRC_TBL_ROW) ? fullpricingStrategies[OpDataElementType.PRC_TBL_ROW] : new OpDataCollectorFlattenedList(),
                 fullpricingStrategies.ContainsKey(OpDataElementType.WIP_DEAL) ? fullpricingStrategies[OpDataElementType.WIP_DEAL] : new OpDataCollectorFlattenedList(),
-                custId);
+                contractToken);
         }
 
 
-        public OpMsg DeletePricingStrategy(int custId, OpDataCollectorFlattenedList pricingStrategies)
+        public OpMsg DeletePricingStrategy(ContractToken contractToken, OpDataCollectorFlattenedList pricingStrategies)
         {
-            return pricingStrategies.DeleteByIds(OpDataElementType.PRC_ST, custId, _dataCollectorLib);
+            return pricingStrategies.DeleteByIds(OpDataElementType.PRC_ST, contractToken, _dataCollectorLib);
         }
 
-        public OpMsgQueue ActionPricingStrategies(int custId, Dictionary<string, List<WfActnItem>> actnPs)
+        public OpMsgQueue ActionPricingStrategies(ContractToken contractToken, Dictionary<string, List<WfActnItem>> actnPs)
         {
             OpMsgQueue opMsgQueue = new OpMsgQueue();
 
@@ -174,7 +174,7 @@ namespace Intel.MyDeals.BusinessLogic
 
 
             myDealsData.EnsureBatchIDs();
-            myDealsData.Save(custId);
+            myDealsData.Save(contractToken);
 
             return opMsgQueue;
         }

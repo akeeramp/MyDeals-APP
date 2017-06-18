@@ -24,10 +24,17 @@
         <!-- PRICING TABLE TEMPLATES -->
         <div class="ptLnavtmpltContainer">
             <div style="color: #FF6E77;">{{ newPricingTable._behaviors.validMsg.OBJ_SET_TYPE_CD }}</div>
-            <div ng-repeat="(key, value) in templates.ModelTemplates.PRC_TBL" class="fl circleWithText" ng-click="selectPtTemplateIcon(value)" ng-class="{active: value._custom._active}">
-                <div class="fl textCircle blueBg">{{ value._custom.ltr }}</div>
-                <div class="fl textName">{{ removeBlanks(value.name) }}</div>
-                <div class="clearboth"></div>
+            <div ng-repeat="(key, value) in templates.ModelTemplates.PRC_TBL">
+                <div ng-if="value.name == 'ECAP'" class="fl circleWithText" ng-click="selectPtTemplateIcon(value)" ng-class="{active: value._custom._active}">
+                    <div class="fl textCircle blueBg">{{ value._custom.ltr }}</div>
+                    <div class="fl textName">{{ removeBlanks(value.name) }}</div>
+                    <div class="clearboth"></div>
+                </div>
+                <div ng-if="value.name != 'ECAP'" class="fl circleWithText" style="cursor: not-allowed;">
+                    <div class="fl textCircle" style="background-color: #cccccc;">{{ value._custom.ltr }}</div>
+                    <div class="fl textName" style="color: #cccccc;">{{ removeBlanks(value.name) }}</div>
+                    <div class="clearboth"></div>
+                </div>
             </div>
             <div class="clearboth"></div>
         </div>

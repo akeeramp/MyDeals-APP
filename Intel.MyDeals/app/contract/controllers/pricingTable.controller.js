@@ -30,6 +30,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     // Variables
     var root = $scope.$parent.$parent;	// Access to parent scope
     root.setBusy("Loading Deals", "Gathering deals and security settings.");
+    root.child = $scope;
+
     var cellStyle = {
         textAlign: "left",
         verticalAlign: "center",
@@ -439,26 +441,27 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
     function updateSpreadSheetFromSelector(productSelectorOutput, sheet, rowStart) {
         var validateSelectedProducts = productSelectorOutput.validateSelectedProducts;
+
         if (!productSelectorOutput.splitProducts) {
             var contractProducts = "";
             for (var key in validateSelectedProducts) {
                 if (validateSelectedProducts.hasOwnProperty(key)) {
-                    contractProducts = contractProducts == "" ? key : contractProducts + "," + key;
+                    contractProducts = contractProducts === "" ? key : contractProducts + "," + key;
                 }
             }
-            sheet.range(root.colToLetter['PTR_SYS_PRD'] + (rowStart))
-                .value(JSON.stringify(validateSelectedProducts));
+
+            sheet.range(root.colToLetter['PTR_SYS_PRD'] + (rowStart)).value(JSON.stringify(validateSelectedProducts));
             systemModifiedProductInclude = true;
-            sheet.range(root.colToLetter['PTR_USER_PRD'] + (rowStart))
-                                    .value(contractProducts);
-            sheet.range(root.colToLetter['PTR_SYS_INVLD_PRD'] + (rowStart))
-                                                .value("");
+            sheet.range(root.colToLetter['PTR_USER_PRD'] + (rowStart)).value(contractProducts);
+            sheet.range(root.colToLetter['PTR_SYS_INVLD_PRD'] + (rowStart)).value("");
 
             syncSpreadRows(sheet, rowStart, rowStart);
 
-            $timeout(function () {
-                validateSingleRowProducts(sheet.dataSource._data[rowStart - 2], rowStart);
-            }, 50)
+            root._dirty = true;
+
+            $timeout(function() {
+                    validateSingleRowProducts(sheet.dataSource._data[rowStart - 2], rowStart);
+                },50);
         } else {
             var initRow = rowStart;
             var row = initRow;
@@ -467,18 +470,16 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 if (validateSelectedProducts.hasOwnProperty(key)) {
                     var validJSON = {};
                     validJSON[key] = validateSelectedProducts[key];
-                    sheet.range(root.colToLetter['PTR_SYS_PRD'] + (row))
-                        .value(JSON.stringify(validJSON));
+                    sheet.range(root.colToLetter['PTR_SYS_PRD'] + (row)).value(JSON.stringify(validJSON));
                     systemModifiedProductInclude = true;
-                    sheet.range(root.colToLetter['PTR_USER_PRD'] + (row)).
-                        value(key);
-                    sheet.range(root.colToLetter['PTR_SYS_INVLD_PRD'] + (row))
-                                                                    .value("");
+                    sheet.range(root.colToLetter['PTR_USER_PRD'] + (row)).value(key);
+                    sheet.range(root.colToLetter['PTR_SYS_INVLD_PRD'] + (row)).value("");
                     row++;
                 }
             }
             syncSpreadRows(sheet, initRow, row - 1);
         }
+
     }
 
     function openInfoDialog() {
@@ -607,6 +608,17 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         }
     }
 
+    function cleanupData(data) {
+        // Remove any lingering blank rows from the data
+        for (var n = data.length - 1; n >= 0; n--) {
+            if (data[n].DC_ID === null && (data[n].PTR_USER_PRD === null || data[n].PTR_USER_PRD === "")) {
+                data.splice(n, 1);
+            }
+        }
+        return data;
+    }
+
+
     function syncSpreadRows(sheet, topLeftRowIndex, bottomRightRowIndex) {
         // Now lets sync all values.
         // This is a performance boost
@@ -623,12 +635,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 var data = root.spreadDs.data();
                 var newItems = 0;
 
-                // Remove any lingering blank rows from the data
-                for (var n = data.length - 1; n >= 0; n--) {
-                    if (data[n].DC_ID === null && (data[n].PTR_USER_PRD === null || data[n].PTR_USER_PRD === "")) {
-                        data.splice(n, 1);
-                    }
-                }
+                cleanupData(data);
 
                 for (var r = 0; r < data.length; r++) {
                     if (data[r]["DC_ID"] !== null && data[r]["DC_ID"] !== undefined) continue;
@@ -930,7 +937,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     }
 
     function applyDropDowns(sheet, myFieldModel, myColumnName) {
-        sheet.range(myColumnName + ":" + myColumnName).validation({
+        sheet.range(myColumnName + "2:" + myColumnName + "200").validation({
             dataType: "list",
             showButton: true,
             from: "DropdownValuesSheet!" + myColumnName + ":" + myColumnName,
@@ -1255,9 +1262,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         // if row number is passed then its translation for single row
         if (!!currentRowNumber) {
-            currentPricingTableRowData = currentPricingTableRowData.filter(function (x) {
+            currentPricingTableRowData = currentPricingTableRowData.filter(function(x) {
                 return x.ROW_NUMBER == currentRowNumber;
-            })
+            });
         }
 
         // Pricing table rows products to be translated
@@ -1299,8 +1306,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             ProductSelectorService.TranslateProducts(translationInputToSend, $scope.contractData.CUST_MBR_SID) //Once the database is fixed remove the hard coded geo_mbr_sid
             .then(function (response) {
                 topbar.hide();
-                root.setBusy("", "");
-                if (response.statusText == "OK") {
+                if (currentRowNumber) root.setBusy("", "");
+                if (response.statusText === "OK") {
                     response.data = buildTranslatorOutputObject(invalidProductJSONRows, response.data);
                     cookProducts(currentRowNumber, response.data, currentPricingTableRowData, publishWipDeals);
                 }
@@ -1320,7 +1327,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             if (!publishWipDeals) {
                 root.validatePricingTable();
             } else {
-                root.publishWipDeals();
+                root.publishWipDealsBase();
             }
         }
     }
@@ -1361,9 +1368,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             // If current row is undefined its clicked from top bar validate button
             if (!currentRow) {
                 if (!publishWipDeals) {
-                    root.validatePricingTable();
+                    root.validatePricingTable(true);
                 } else {
-                    root.publishWipDeals();
+                    root.publishWipDealsBase();
                 } // Call Save and Validate API from Contract Manager
             }
             else {
@@ -1413,6 +1420,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             data[r].PTR_SYS_INVLD_PRD = "";
                             sourceData[r].PTR_SYS_INVLD_PRD = data[r].PTR_SYS_INVLD_PRD;
                         }
+
                         data[r].PTR_SYS_PRD = !!transformResult.ValidProducts[key] ? JSON.stringify(transformResult.ValidProducts[key]) : "";
                         sourceData[r].PTR_SYS_PRD = data[r].PTR_SYS_PRD;
                     }
@@ -1421,26 +1429,25 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         if (!publishWipDeals) {
                             root.validatePricingTable();
                         } else {
-                            root.publishWipDeals();
+                            root.publishWipDealsBase();
                         } // Call Save and Validate API from Contract Manager
                     } else {
-                        $timeout(function () {
+                        $timeout(function() {
                             validateSingleRowProducts(data[currentRow - 1], currentRow);
-                        }, 10)
+                        },10);
                     }
                 },
-            function () {
-            });
+            function () {});
             }, 10);
     }
 
     function validatePricingTableProducts() {
-        var data = root.spreadDs.data();
+        var data = cleanupData(root.spreadDs.data());
         ValidateProducts(data, false);
     }
 
     function validateSavepublishWipDeals() {
-        var data = root.spreadDs.data();
+        var data = cleanupData(root.spreadDs.data());
         ValidateProducts(data, true);
     }
 

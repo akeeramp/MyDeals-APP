@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Intel.MyDeals.BusinessLogic.DataCollectors;
-using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.MyDeals.IDataLibrary;
@@ -24,7 +23,7 @@ namespace Intel.MyDeals.BusinessLogic
         }
 
 
-        public MyDealsData SavePackets(OpDataCollectorFlattenedDictList data, int custId, List<int> validateIds, bool forcePublish, string sourceEvent,
+        public MyDealsData SavePackets(OpDataCollectorFlattenedDictList data, ContractToken contractToken, List<int> validateIds, bool forcePublish, string sourceEvent,
             List<int> ids, List<OpDataElementType> opDataElementTypes, OpDataElementType opTypeGrp,
             List<int> secondaryIds, List<OpDataElementType> secondaryOpDataElementTypes, OpDataElementType secondaryOpTypeGrp)
         {
@@ -49,10 +48,10 @@ namespace Intel.MyDeals.BusinessLogic
                 }
             }
 
-            return SavePacketsBase(data, custId, myDealsData, validateIds, forcePublish, sourceEvent);
+            return SavePacketsBase(data, contractToken, myDealsData, validateIds, forcePublish, sourceEvent);
         }
 
-        public MyDealsData SavePackets(OpDataCollectorFlattenedDictList data, int custId, List<int> validateIds, bool forcePublish, string sourceEvent)
+        public MyDealsData SavePackets(OpDataCollectorFlattenedDictList data, ContractToken contractToken, List<int> validateIds, bool forcePublish, string sourceEvent)
         {
             List<int> ids;
             List<OpDataElementType> opDataElementTypes;
@@ -64,11 +63,11 @@ namespace Intel.MyDeals.BusinessLogic
             // Get the data from the DB, data is the data passed from the UI, it is then merged together down below.
             MyDealsData myDealsData = opTypeGrp.GetByIDs(ids, opDataElementTypes, data);
 
-            return SavePacketsBase(data, custId, myDealsData, validateIds, forcePublish, sourceEvent);
+            return SavePacketsBase(data, contractToken, myDealsData, validateIds, forcePublish, sourceEvent);
         }
 
 
-        public MyDealsData SavePacketsBase(OpDataCollectorFlattenedDictList data, int custId, MyDealsData myDealsData, List<int> validateIds, bool forcePublish, string sourceEvent)
+        public MyDealsData SavePacketsBase(OpDataCollectorFlattenedDictList data, ContractToken contractToken, MyDealsData myDealsData, List<int> validateIds, bool forcePublish, string sourceEvent)
         {
             // Save Data Cycle: Point 9
 
@@ -80,7 +79,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             // RUN RULES HERE - If there are validation errors... stop... but we need to save the validation status
             MyDealsData myDealsDataWithErrors = null;
-            bool hasErrors = myDealsData.ValidationApplyRules(validateIds, forcePublish, sourceEvent, custId);
+            bool hasErrors = myDealsData.ValidationApplyRules(validateIds, forcePublish, sourceEvent, contractToken);
             if (hasErrors)
             {
                 // "Clone" to object...
@@ -95,7 +94,7 @@ namespace Intel.MyDeals.BusinessLogic
                 SavePacketByDictionary(data[opDataElementType], myDealsData, opDataElementType, Guid.NewGuid());
             }
 
-            MyDealsData myDealsDataResults = PerformTasks(OpActionType.Save, myDealsData, custId);  // execute all save perform task items now
+            MyDealsData myDealsDataResults = PerformTasks(OpActionType.Save, myDealsData, contractToken);  // execute all save perform task items now
 
             if (hasErrors) TransferActions(myDealsDataResults, myDealsDataWithErrors);
             return hasErrors ? myDealsDataWithErrors : myDealsDataResults;
@@ -166,7 +165,7 @@ namespace Intel.MyDeals.BusinessLogic
         //    // This is replacing the packet with the changes only.
         //}
 
-        private MyDealsData PerformTasks(OpActionType? actionToRun, MyDealsData myDealsData, int custId)
+        private MyDealsData PerformTasks(OpActionType? actionToRun, MyDealsData myDealsData, ContractToken contractToken)
         {
             // Save Data Cycle: Point 14
 
@@ -177,7 +176,7 @@ namespace Intel.MyDeals.BusinessLogic
             switch (actionToRun)
             {
                 case OpActionType.Save:
-                    saveResponseSet = myDealsData.Save(custId);
+                    saveResponseSet = myDealsData.Save(contractToken);
                     // Save Data Cycle: Point 21 (END)
                     break;
                 case OpActionType.SyncDeal:

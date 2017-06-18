@@ -10,8 +10,6 @@ using Intel.Opaque.Data;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Text.RegularExpressions;
-using Intel.MyDeals.DataLibrary;
-using Intel.MyDeals.IDataLibrary;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -113,18 +111,17 @@ namespace Intel.MyDeals.BusinessLogic
         /// Save a contract header
         /// </summary>
         /// <param name="data"></param>
-        /// <param name="custId">Must pass the customer id to prevent blocking</param>
         /// <param name="validateIds"></param>
         /// <param name="forcePublish"></param>
         /// <param name="sourceEvent"></param>
         /// <returns>MyDealsData</returns>
-        public OpDataCollectorFlattenedDictList SaveContract(OpDataCollectorFlattenedList data, int custId, List<int> validateIds, bool forcePublish, string sourceEvent)
+        public OpDataCollectorFlattenedDictList SaveContract(OpDataCollectorFlattenedList data, ContractToken contractToken, List<int> validateIds, bool forcePublish, string sourceEvent)
         {
             // Save Data Cycle: Point 1
             return _dataCollectorLib.SavePackets(new OpDataCollectorFlattenedDictList
             {
                 [OpDataElementType.CNTRCT] = data
-            }, custId, validateIds, forcePublish, sourceEvent).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
+            }, contractToken, validateIds, forcePublish, sourceEvent).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
         }
 
         /// <summary>
@@ -135,7 +132,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <param name="pricingTables">Pricing Table collection</param>
         /// <param name="pricingTableRows">Pricing table Row collection</param>
         /// <param name="wipDeals">Wip Deals collection</param>
-        /// <param name="custId">Must pass the customer id to prevent blocking</param>
+        /// <param name="contractToken"></param>
         /// <param name="validateIds"></param>
         /// <param name="forcePublish"></param>
         /// <param name="sourceEvent"></param>
@@ -146,7 +143,7 @@ namespace Intel.MyDeals.BusinessLogic
             OpDataCollectorFlattenedList pricingTables,
             OpDataCollectorFlattenedList pricingTableRows,
             OpDataCollectorFlattenedList wipDeals,
-            int custId,
+            ContractToken contractToken,
             List<int> validateIds,
             bool forcePublish,
             string sourceEvent)
@@ -181,7 +178,7 @@ namespace Intel.MyDeals.BusinessLogic
             }
 
             // Don't check for ANY becuase we might have to delete the last item
-            if (pricingTableRows != null && pricingTableRows.Any())
+            if (pricingTableRows != null && (contractToken.DelPtr || pricingTableRows.Any()))
             {
                 data[OpDataElementType.PRC_TBL_ROW] = pricingTableRows;
                 secondaryOpDataElementTypes.Add(OpDataElementType.PRC_TBL_ROW);
@@ -194,12 +191,12 @@ namespace Intel.MyDeals.BusinessLogic
             }
 
             return _dataCollectorLib.SavePackets(
-                data, custId, validateIds, forcePublish, sourceEvent,
+                data, contractToken, validateIds, forcePublish, sourceEvent,
                 primaryIds, primaryOpDataElementTypes, OpDataElementType.CNTRCT,
                 secondaryIds, secondaryOpDataElementTypes, OpDataElementType.PRC_TBL);
         }
 
-        public OpDataCollectorFlattenedDictList SaveFullContract(int custId, OpDataCollectorFlattenedDictList fullContracts, List<int> validateIds, bool forcePublish, string sourceEvent)
+        public OpDataCollectorFlattenedDictList SaveFullContract(ContractToken contractToken, OpDataCollectorFlattenedDictList fullContracts, List<int> validateIds, bool forcePublish, string sourceEvent)
         {
             return SaveContract(
                 fullContracts.ContainsKey(OpDataElementType.CNTRCT) ? fullContracts[OpDataElementType.CNTRCT] : new OpDataCollectorFlattenedList(),
@@ -207,10 +204,10 @@ namespace Intel.MyDeals.BusinessLogic
                 fullContracts.ContainsKey(OpDataElementType.PRC_TBL) ? fullContracts[OpDataElementType.PRC_TBL] : new OpDataCollectorFlattenedList(),
                 fullContracts.ContainsKey(OpDataElementType.PRC_TBL_ROW) ? fullContracts[OpDataElementType.PRC_TBL_ROW] : new OpDataCollectorFlattenedList(),
                 fullContracts.ContainsKey(OpDataElementType.WIP_DEAL) ? fullContracts[OpDataElementType.WIP_DEAL] : new OpDataCollectorFlattenedList(),
-                custId, validateIds, forcePublish, sourceEvent).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
+                contractToken, validateIds, forcePublish, sourceEvent).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
         }
 
-        public OpDataCollectorFlattenedDictList SaveContractAndPricingTable(int custId, ContractTransferPacket contractAndStrategy, bool forceValidation, bool forcePublish)
+        public OpDataCollectorFlattenedDictList SaveContractAndPricingTable(ContractToken contractToken, ContractTransferPacket contractAndStrategy, bool forceValidation, bool forcePublish)
         {
             OpDataCollectorFlattenedList translatedFlattenedList = new OpDataCollectorFlattenedList();
 
@@ -249,7 +246,7 @@ namespace Intel.MyDeals.BusinessLogic
                 contractAndStrategy.PricingTable,
                 isWipDealSource ? translatedFlattenedList : contractAndStrategy.PricingTableRow, //
                 isPrcTblSource ? translatedFlattenedList : contractAndStrategy.WipDeals,
-                custId,
+                contractToken,
                 validationIds,
                 forcePublish,
                 contractAndStrategy.EventSource).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);

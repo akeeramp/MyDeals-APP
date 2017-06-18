@@ -46,6 +46,7 @@ namespace Intel.MyDeals.BusinessRules
             string dcItemEn = DateTime.Parse(item[AttributeCodes.END_DT].ToString()).ToString("MM/dd/yyyy");
             string payoutBasedOn = item[AttributeCodes.PAYOUT_BASED_ON].ToString();
             string mrktSegValue = item[AttributeCodes.MRKT_SEG].ToString();
+            DateTime dcItemStDt = DateTime.Parse(item[AttributeCodes.START_DT].ToString());
 
             // Billing Dates
             if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.REBATE_BILLING_START)) || dcSt != dcItemSt)
@@ -94,7 +95,7 @@ namespace Intel.MyDeals.BusinessRules
             {
                 string dcPrevSt = string.IsNullOrEmpty(deStr.AtrbValue.ToString()) ? "" : DateTime.Parse(deStr.AtrbValue.ToString()).ToString("MM/dd/yyyy");
                 if (string.IsNullOrEmpty(deStr.AtrbValue.ToString())) deStr.AtrbValue = dcSt;
-                if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.BACK_DATE_RSN)) && deStr.IsDateInPast() && dcPrevSt != dcItemSt)
+                if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.BACK_DATE_RSN)) && dcItemStDt < DateTime.Now.Date && dcPrevSt != dcItemSt)
                 {
                     IOpDataElement deContractRsn = r.Dc.GetDataElement(AttributeCodes.BACK_DATE_RSN);
                     IOpDataElement deContractRsnTxt = r.Dc.GetDataElement(AttributeCodes.BACK_DATE_RSN_TXT);
@@ -432,14 +433,14 @@ namespace Intel.MyDeals.BusinessRules
             if (string.IsNullOrEmpty(deStart?.AtrbValue.ToString()) || string.IsNullOrEmpty(deEnd?.AtrbValue.ToString())) return;
             if (string.IsNullOrEmpty(deBllgStart?.AtrbValue.ToString()) || string.IsNullOrEmpty(deBllgEnd?.AtrbValue.ToString())) return;
 
-            DateTime dcSt = DateTime.Parse(deStart.AtrbValue.ToString());
-            DateTime dcEn = DateTime.Parse(deEnd.AtrbValue.ToString());
+            DateTime dcSt = DateTime.Parse(deStart.AtrbValue.ToString()).Date;
+            DateTime dcEn = DateTime.Parse(deEnd.AtrbValue.ToString()).Date;
 
-            if (string.IsNullOrEmpty(deBllgStart.AtrbValue.ToString()) || DateTime.Parse(deBllgStart.AtrbValue.ToString()) > dcSt)
+            if (string.IsNullOrEmpty(deBllgStart.AtrbValue.ToString()) || DateTime.Parse(deBllgStart.AtrbValue.ToString()).Date > dcSt)
             {
                 BusinessLogicDeActions.AddValidationMessage(deBllgStart, "The Billing Start Date must be on or earlier than the Deal Start Date.");
             }
-            if (string.IsNullOrEmpty(deBllgEnd.AtrbValue.ToString()) || DateTime.Parse(deBllgEnd.AtrbValue.ToString()) > dcEn)
+            if (string.IsNullOrEmpty(deBllgEnd.AtrbValue.ToString()) || DateTime.Parse(deBllgEnd.AtrbValue.ToString()).Date > dcEn)
             {
                 BusinessLogicDeActions.AddValidationMessage(deBllgEnd, "The Billing End Date must be on or earlier than the Deal End Date.");
             }

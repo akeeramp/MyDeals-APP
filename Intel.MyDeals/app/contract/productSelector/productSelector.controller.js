@@ -610,7 +610,7 @@
             var pricingTableSysProducts = {};
             angular.forEach(vm.addedProducts, function (item, key) {
                 if (!pricingTableSysProducts.hasOwnProperty(item.USR_INPUT)) {
-                    pricingTableSysProducts[item.USR_INPUT] = [item]
+                    pricingTableSysProducts[item.USR_INPUT] = [item];
                 } else {
                     pricingTableSysProducts[item.USR_INPUT].push(item);
                 }

@@ -47,42 +47,54 @@ namespace Intel.MyDeals.Controllers.API
 
 
         [Authorize]
-        [Route("SavePricingStrategy/{custId}")]
+        [Route("SavePricingStrategy/{custId}/{contractId}")]
         [HttpPost]
-        public OpDataCollectorFlattenedDictList SavePricingStrategy(int custId, OpDataCollectorFlattenedList pricingStrategies)
+        public OpDataCollectorFlattenedDictList SavePricingStrategy(int custId, int contractId, OpDataCollectorFlattenedList pricingStrategies)
         {
-            return SafeExecutor(() => _pricingStrategiesLib.SavePricingStrategy(pricingStrategies, custId), 
+            return SafeExecutor(() => _pricingStrategiesLib.SavePricingStrategy(pricingStrategies, new ContractToken
+            {
+                CustId = custId,
+                ContractId = contractId
+            }), 
                 "Unable to save the Pricing Strategy"
             );
         }
 
 
         [Authorize]
-        [Route("SaveFullPricingStrategy/{custId}")]
+        [Route("SaveFullPricingStrategy/{custId}/{contractId}")]
         [HttpPost]
-        public OpDataCollectorFlattenedDictList SaveFullPricingStrategy(int custId, OpDataCollectorFlattenedDictList fullpricingStrategies)
+        public OpDataCollectorFlattenedDictList SaveFullPricingStrategy(int custId, int contractId, OpDataCollectorFlattenedDictList fullpricingStrategies)
         {
-            return SafeExecutor(() => _pricingStrategiesLib.SaveFullPricingStrategy(custId, fullpricingStrategies),
+            return SafeExecutor(() => _pricingStrategiesLib.SaveFullPricingStrategy(new ContractToken
+            {
+                CustId = custId,
+                ContractId = contractId
+            }, fullpricingStrategies),
                 "Unable to save the Pricing Strategy"
             );
         }
 
 
         [Authorize]
-        [Route("DeletePricingStrategy/{custId}")]
+        [Route("DeletePricingStrategy/{custId}/{contractId}")]
         [HttpPost]
-        public OpMsg DeletePricingStrategy(int custId, OpDataCollectorFlattenedList pricingStrategies)
+        public OpMsg DeletePricingStrategy(int custId, int contractId, OpDataCollectorFlattenedList pricingStrategies)
         {
-            return SafeExecutor(() => _pricingStrategiesLib.DeletePricingStrategy(custId, pricingStrategies)
+            return SafeExecutor(() => _pricingStrategiesLib.DeletePricingStrategy(new ContractToken
+            {
+                CustId = custId,
+                ContractId = contractId
+            }, pricingStrategies)
                 , "Unable to delete the Pricing Strategy {id}"
             );
         }
 
 
         [Authorize]
-        [Route("ActionPricingStrategy/{custId}/{actn}")]
+        [Route("ActionPricingStrategy/{custId}/{contractId}/{actn}")]
         [HttpPost]
-        public OpMsgQueue ActionPricingStrategy(int custId, string actn, OpDataCollectorFlattenedList pricingStrategies)
+        public OpMsgQueue ActionPricingStrategy(int custId, int contractId, string actn, OpDataCollectorFlattenedList pricingStrategies)
         {
             Dictionary<string, List<WfActnItem>> actnPs = new Dictionary<string, List<WfActnItem>>
             {
@@ -93,17 +105,21 @@ namespace Intel.MyDeals.Controllers.API
                 }).ToList()
             };
 
-            return SafeExecutor(() => ActionPricingStrategies(custId, actnPs)
+            return SafeExecutor(() => ActionPricingStrategies(custId, contractId, actnPs)
                 , "Unable to action the Pricing Strategy {id}"
             );
         }
 
         [Authorize]
-        [Route("ActionPricingStrategies/{custId}")]
+        [Route("ActionPricingStrategies/{custId}/{contractId}")]
         [HttpPost]
-        public OpMsgQueue ActionPricingStrategies(int custId, Dictionary<string, List<WfActnItem>> actnPs)
+        public OpMsgQueue ActionPricingStrategies(int custId, int contractId, Dictionary<string, List<WfActnItem>> actnPs)
         {
-            return SafeExecutor(() => _pricingStrategiesLib.ActionPricingStrategies(custId, actnPs)
+            return SafeExecutor(() => _pricingStrategiesLib.ActionPricingStrategies(new ContractToken
+                {
+                    CustId = custId,
+                    ContractId = contractId
+                }, actnPs)
                 , "Unable to action the Pricing Strategy {id}"
             );
         }

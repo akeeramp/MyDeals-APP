@@ -252,8 +252,8 @@
 
     .navIconLnk.lnavBtnDisabled, .navIconLnk.lnavBtnDisabled:hover {
         color: #cccccc;
-        cursor: default;
         background-color: #ffffff;
+        cursor: not-allowed;
     }
 
     .lnavBtn:hover, .lnavBtnDrp:hover {
@@ -470,29 +470,29 @@
     /*Validation Styles*/
 
     .valid_Valid {
-        background: #cccccc;
+        background: #e8eaec;
     }
     .valid_Finalizing {
-        background: #cccccc;
+        background: #e8eaec;
     }
     .valid_Complete {
         background: #C4D600;
     }
     .valid_, .valid_0, .valid_Dirty {
-        background: #cccccc;
+        background: #e8eaec;
     }
 
     .validf_Valid {
-        color: #cccccc;
+        color: #e8eaec;
     }
     .validf_Finalizing {
-        color: #cccccc;
+        color: #e8eaec;
     }
     .validf_Complete {
         color: #C4D600;
     }
     .validf_, .validf_0, .validf_Dirty {
-        color: #cccccc;
+        color: #e8eaec;
     }
  
 

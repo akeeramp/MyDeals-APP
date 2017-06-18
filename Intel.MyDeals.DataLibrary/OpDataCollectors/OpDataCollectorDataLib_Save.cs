@@ -15,7 +15,7 @@ namespace Intel.MyDeals.DataLibrary
 {
     public partial class OpDataCollectorDataLib : IOpDataCollectorDataLib
     {
-        public MyDealsData SaveMyDealsData(MyDealsData packets, int custId, bool batchMode)
+        public MyDealsData SaveMyDealsData(MyDealsData packets, ContractToken contractToken, bool batchMode)
         {
             // Save Data Cycle: Point 15
             try
@@ -60,7 +60,7 @@ namespace Intel.MyDeals.DataLibrary
                 var orderedPackets = GetPacketsInOrder(packets.Values);
 
                 // Write them to dbo.MYDL_CL_WIP_ATRB
-                ImportOpDataPackets(orderedPackets, OpUserStack.MyOpUserToken.Usr.WWID, custId);
+                ImportOpDataPackets(orderedPackets, OpUserStack.MyOpUserToken.Usr.WWID, contractToken.CustId);
 
                 OpLogPerf.Log("DcsDealLib.SaveMyDealsData - Exit ImportOpDataPackets.");
 
@@ -77,6 +77,13 @@ namespace Intel.MyDeals.DataLibrary
                     firstPacket?.Messages.Merge(LogMessages);
                 }
 #endif
+
+                // Call Proc to update PASSED_VALIDATION
+                Procs.dbo.PR_MYDL_CNTRCT_OBJ_VAL_ROLLUP cmd = new Procs.dbo.PR_MYDL_CNTRCT_OBJ_VAL_ROLLUP
+                {
+                    contractID = contractToken.ContractId
+                };
+                DataAccess.ExecuteDataSet(cmd);
 
                 return ret;
             }

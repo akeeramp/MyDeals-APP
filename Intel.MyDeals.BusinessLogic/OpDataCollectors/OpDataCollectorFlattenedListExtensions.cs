@@ -31,7 +31,7 @@ namespace Intel.MyDeals.BusinessLogic
         }
 
 
-        public static OpMsg DeleteByIds(this OpDataCollectorFlattenedList opFlatList, OpDataElementType opDataElementType, int custId, IOpDataCollectorLib dataCollectorLib)
+        public static OpMsg DeleteByIds(this OpDataCollectorFlattenedList opFlatList, OpDataElementType opDataElementType, ContractToken contractToken, IOpDataCollectorLib dataCollectorLib)
         {
             List<int> deleteIds = new List<int>();
             List<int> deletedIds = new List<int>();
@@ -55,7 +55,7 @@ namespace Intel.MyDeals.BusinessLogic
             };
 
             OpDataCollectorFlattenedDictList opFlatDictList = dataCollectorLib
-                .SavePackets(data, custId, new List<int>(), false, "")
+                .SavePackets(data, contractToken, new List<int>(), false, "")
                 .ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
 
             foreach (OpDataCollectorFlattenedItem item in opFlatDictList[opDataElementType])

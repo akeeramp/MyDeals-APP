@@ -59,14 +59,17 @@ namespace Intel.MyDeals.Entities.Logging
             string title = string.Format(EmailEmailSubject, env, shortMsg);
 
 		    string header = "";
+		    header += "<style>BODY,P,DIV { font-size: 10px; font-family: arial; }</style><div>";
             header += "<b>User:</b> " + opUserToken.Usr.FullName + "</br>";
-            header += "<b>Role:</b> " + opUserToken.Role.RoleTypeCd + "</br></hr>";
+            header += "<b>Role:</b> " + opUserToken.Role.RoleTypeCd + "</br></hr></div>";
             
             string body = header + OpLogPerfHelper.MachineDetails;
-			body += msg.Message;
+			body += "<div>" + msg.Message + "</div>";
 
-			// Send email
-			SendEmail(title, body);
+		    body = body.Replace("\r\n", "</br>");
+
+            // Send email
+            SendEmail(title, body);
 		}
 		
 		#region Email

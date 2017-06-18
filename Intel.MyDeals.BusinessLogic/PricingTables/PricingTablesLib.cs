@@ -56,15 +56,15 @@ namespace Intel.MyDeals.BusinessLogic
         }
 
 
-        public OpDataCollectorFlattenedDictList SavePricingTable(OpDataCollectorFlattenedList data, int custId)
+        public OpDataCollectorFlattenedDictList SavePricingTable(OpDataCollectorFlattenedList data, ContractToken contractToken)
         {
             return _dataCollectorLib.SavePackets(new OpDataCollectorFlattenedDictList
             {
                 [OpDataElementType.PRC_TBL] = data
-            }, custId, new List<int>(), false, "").ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
+            }, contractToken, new List<int>(), false, "").ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
         }
 
-        public OpDataCollectorFlattenedDictList SavePricingTable(OpDataCollectorFlattenedList pricingTables, OpDataCollectorFlattenedList pricingTableRows, OpDataCollectorFlattenedList wipDeals, int custId)
+        public OpDataCollectorFlattenedDictList SavePricingTable(OpDataCollectorFlattenedList pricingTables, OpDataCollectorFlattenedList pricingTableRows, OpDataCollectorFlattenedList wipDeals, ContractToken contractToken)
         {
             OpDataCollectorFlattenedDictList data = new OpDataCollectorFlattenedDictList();
 
@@ -72,26 +72,26 @@ namespace Intel.MyDeals.BusinessLogic
             if (pricingTableRows != null && pricingTableRows.Any()) data[OpDataElementType.PRC_TBL_ROW] = pricingTableRows;
             if (wipDeals != null && wipDeals.Any()) data[OpDataElementType.WIP_DEAL] = wipDeals;
 
-            return _dataCollectorLib.SavePackets(data, custId, new List<int>(), false, "").ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
+            return _dataCollectorLib.SavePackets(data, contractToken, new List<int>(), false, "").ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
         }
 
-        public OpDataCollectorFlattenedDictList SaveFullPricingTable(OpDataCollectorFlattenedDictList fullpricingTables, int custId)
+        public OpDataCollectorFlattenedDictList SaveFullPricingTable(OpDataCollectorFlattenedDictList fullpricingTables, ContractToken contractToken)
         {
             return SavePricingTable(
                 fullpricingTables.ContainsKey(OpDataElementType.PRC_TBL) ? fullpricingTables[OpDataElementType.PRC_TBL] : new OpDataCollectorFlattenedList(),
                 fullpricingTables.ContainsKey(OpDataElementType.PRC_TBL_ROW) ? fullpricingTables[OpDataElementType.PRC_TBL_ROW] : new OpDataCollectorFlattenedList(),
                 fullpricingTables.ContainsKey(OpDataElementType.WIP_DEAL) ? fullpricingTables[OpDataElementType.WIP_DEAL] : new OpDataCollectorFlattenedList(),
-                custId);
+                contractToken);
         }
 
-        public OpMsg DeletePricingTable(int custId, OpDataCollectorFlattenedList pricingTables)
+        public OpMsg DeletePricingTable(ContractToken contractToken, OpDataCollectorFlattenedList pricingTables)
         {
-            return pricingTables.DeleteByIds(OpDataElementType.PRC_TBL, custId, _dataCollectorLib);
+            return pricingTables.DeleteByIds(OpDataElementType.PRC_TBL, contractToken, _dataCollectorLib);
         }
 
-        public OpMsg DeletePricingTableRow(int custId, OpDataCollectorFlattenedList pricingTableRows)
+        public OpMsg DeletePricingTableRow(ContractToken contractToken, OpDataCollectorFlattenedList pricingTableRows)
         {
-            return pricingTableRows.DeleteByIds(OpDataElementType.PRC_TBL_ROW, custId, _dataCollectorLib);
+            return pricingTableRows.DeleteByIds(OpDataElementType.PRC_TBL_ROW, contractToken, _dataCollectorLib);
         }
 
     }

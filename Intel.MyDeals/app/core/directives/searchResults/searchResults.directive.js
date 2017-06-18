@@ -12,7 +12,9 @@
             scope: {
                 custId: '@',
                 startDt: '@',
-                endDt: '@'
+                endDt: '@',
+                value: '@',
+                hideSearch: '@'
             },
             transclude: true,
             templateUrl: '/app/core/directives/searchResults/searchResults.directive.html',
@@ -24,7 +26,9 @@
 
                 scope.showResults = false;
                 scope.showLoading = false;
-                scope.searchText = "";
+                scope.searchText = scope.value;
+                //scope.hideSearch = false;
+                //scope.hideSearch = !!scope.hideSearch;
 
                 //scope.$watch("searchText", function (newValue, oldValue) {
                 //    //This gets called when data changes.
@@ -104,6 +108,7 @@
                     scope.showLoading = true;
                     scope.searchAll();
                 }
+
             }
         }
     }

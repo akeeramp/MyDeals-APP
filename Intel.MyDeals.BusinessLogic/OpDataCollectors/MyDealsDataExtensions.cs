@@ -344,11 +344,10 @@ namespace Intel.MyDeals.BusinessLogic
         /// Save MyDealsData to the Database
         /// </summary>
         /// <param name="myDealsData">MyDealsData</param>
-        /// <param name="custId">Customer Id</param>
         /// <returns></returns>
-        public static MyDealsData Save(this MyDealsData myDealsData, int custId)
+        public static MyDealsData Save(this MyDealsData myDealsData, ContractToken contractToken)
         {
-            return Save(myDealsData, custId, true);
+            return Save(myDealsData, contractToken, true);
         }
 
         /// <summary>
@@ -358,9 +357,9 @@ namespace Intel.MyDeals.BusinessLogic
         /// <param name="custId">Customer Id</param>
         /// <param name="batchMode">Run in batch mode?</param>
         /// <returns></returns>
-        public static MyDealsData Save(this MyDealsData myDealsData, int custId, bool batchMode)
+        public static MyDealsData Save(this MyDealsData myDealsData, ContractToken contractToken, bool batchMode)
         {
-            return new OpDataCollectorDataLib().SaveMyDealsData(myDealsData, custId, batchMode);
+            return new OpDataCollectorDataLib().SaveMyDealsData(myDealsData, contractToken, batchMode);
         }
 
         #endregion
@@ -587,7 +586,7 @@ namespace Intel.MyDeals.BusinessLogic
             }
         }
 
-        public static bool ValidationApplyRules(this MyDealsData myDealsData, List<int> validateIds, bool forcePublish, string sourceEvent, int custId)
+        public static bool ValidationApplyRules(this MyDealsData myDealsData, List<int> validateIds, bool forcePublish, string sourceEvent, ContractToken contractToken)
         {
             // Apply rules to save packets here.  If validations are hit, append them to the DC and packet message lists.
             bool dataHasValidationErrors = false;
@@ -600,6 +599,8 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 myDealsData.InjectParentStages(sourceEvent);
             }
+
+            List<int> dirtyPtrs = new List<int>();
 
             foreach (OpDataElementType opDataElementType in Enum.GetValues(typeof(OpDataElementType)))
             {
@@ -614,12 +615,12 @@ namespace Intel.MyDeals.BusinessLogic
                         if (opDataElementType == OpDataElementType.WIP_DEAL || opDataElementType == OpDataElementType.PRC_TBL_ROW) {
                             if (validateIds.Contains(dc.DcID))
                             {
-                                dc.ApplyRules(MyRulesTrigger.OnValidate, null, custId);
+                                dc.ApplyRules(MyRulesTrigger.OnValidate, null, contractToken.CustId);
                             }
                         }
                         else
                         {
-                            dc.ApplyRules(MyRulesTrigger.OnValidate, null, custId);
+                            dc.ApplyRules(MyRulesTrigger.OnValidate, null, contractToken.CustId);
                         }
                     }
 
@@ -653,14 +654,26 @@ namespace Intel.MyDeals.BusinessLogic
                         PassedValidation passedValidation = opDataElementType == OpDataElementType.WIP_DEAL 
                             ? PassedValidation.Complete 
                             : forcePublish ? PassedValidation.Finalizing : PassedValidation.Valid;
-                        dc.SetAtrb(AttributeCodes.PASSED_VALIDATION, passedValidation.ToString());
+
+                        if (opDataElementType == OpDataElementType.PRC_TBL_ROW && passedValidation != PassedValidation.Complete)
+                        {
+                            dirtyPtrs.Add(dc.DcID);
+                        }
+
+                        // if WIP and PTR is NOT finalizing... set WIP to dirty
+                        if (opDataElementType == OpDataElementType.WIP_DEAL && dirtyPtrs.Contains(dc.DcParentID))
+                        {
+                            dc.SetAtrb(AttributeCodes.PASSED_VALIDATION, PassedValidation.Dirty.ToString());
+                        }
+                        else
+                        {
+                            dc.SetAtrb(AttributeCodes.PASSED_VALIDATION, passedValidation.ToString());
+                        }
+
                     }
-                    else if (dc.IsModified)
+                    else if (dc.IsModified || !dc.IsModified && dcHasErrors && dc.GetDataElementValue(AttributeCodes.PASSED_VALIDATION) != PassedValidation.Dirty.ToString())
                     {
-                        dc.SetAtrb(AttributeCodes.PASSED_VALIDATION, PassedValidation.Dirty);
-                    }
-                    else if (!dc.IsModified && dcHasErrors && dc.GetDataElementValue(AttributeCodes.PASSED_VALIDATION) != PassedValidation.Dirty.ToString())
-                    {
+                        if (opDataElementType == OpDataElementType.PRC_TBL_ROW) dirtyPtrs.Add(dc.DcID);
                         dc.SetAtrb(AttributeCodes.PASSED_VALIDATION, PassedValidation.Dirty);
                     }
                 }

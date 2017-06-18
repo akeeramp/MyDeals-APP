@@ -42,31 +42,43 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("SavePricingTable/{custId}")]
+        [Route("SavePricingTable/{custId}/{contractId}")]
         [HttpPost]
-        public OpDataCollectorFlattenedDictList SavePricingTable(int custId, OpDataCollectorFlattenedList pricingTables)
+        public OpDataCollectorFlattenedDictList SavePricingTable(int custId, int contractId, OpDataCollectorFlattenedList pricingTables)
         {
-            return SafeExecutor(() => _pricingTablesLib.SavePricingTable(pricingTables, custId)
+            return SafeExecutor(() => _pricingTablesLib.SavePricingTable(pricingTables, new ContractToken
+            {
+                CustId = custId,
+                ContractId = contractId
+            })
                 , "Unable to save the Pricing Table"
             );
         }
 
         [Authorize]
-        [Route("SaveFullPricingTable/{custId}")]
+        [Route("SaveFullPricingTable/{custId}/{contractId}")]
         [HttpPost]
-        public OpDataCollectorFlattenedDictList SaveFullPricingTable(int custId, OpDataCollectorFlattenedDictList fullpricingTables)
+        public OpDataCollectorFlattenedDictList SaveFullPricingTable(int custId, int contractId, OpDataCollectorFlattenedDictList fullpricingTables)
         {
-            return SafeExecutor(() => _pricingTablesLib.SaveFullPricingTable(fullpricingTables, custId)
+            return SafeExecutor(() => _pricingTablesLib.SaveFullPricingTable(fullpricingTables, new ContractToken
+            {
+                CustId = custId,
+                ContractId = contractId
+            })
                 , "Unable to save the Pricing Table"
             );
         }
 
         [Authorize]
-        [Route("DeletePricingTable/{custId}")]
+        [Route("DeletePricingTable/{custId}/{contractId}")]
         [HttpPost]
-        public OpMsg DeletePricingTable(int custId, OpDataCollectorFlattenedList pricingTables)
+        public OpMsg DeletePricingTable(int custId, int contractId, OpDataCollectorFlattenedList pricingTables)
         {
-            return SafeExecutor(() => _pricingTablesLib.DeletePricingTable(custId, pricingTables)
+            return SafeExecutor(() => _pricingTablesLib.DeletePricingTable(new ContractToken
+            {
+                CustId = custId,
+                ContractId = contractId
+            }, pricingTables)
                 , "Unable to delete the Pricing Table {id}"
             );
         }
