@@ -467,6 +467,7 @@ namespace Intel.MyDeals.BusinessRules
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
+            string progPayment = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT);
             IOpDataElement de = r.Dc.GetDataElement(AttributeCodes.VOLUME);
             if (de == null) return;
 
@@ -474,7 +475,16 @@ namespace Intel.MyDeals.BusinessRules
             if (!int.TryParse(de.AtrbValue.ToString(), out vol))
             {
                 BusinessLogicDeActions.AddValidationMessage(de, "Volume must be a valid non-decimal number.");
+                return;
             }
+
+            if (vol >= 0 && progPayment != "Backend")
+            {
+                BusinessLogicDeActions.AddValidationMessage(de, "Volume cannot be set for Frontend Deals.");
+                return;
+            }
+
+
         }
 
         public static void CheckFrontendDates(params object[] args)
