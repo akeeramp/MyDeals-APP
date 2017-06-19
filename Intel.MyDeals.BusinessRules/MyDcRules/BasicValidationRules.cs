@@ -174,6 +174,13 @@ namespace Intel.MyDeals.BusinessRules
                 },
                 new MyOpRule
                 {
+                    Title="Volume Validation",
+                    ActionRule = MyDcActions.CheckVolume,
+                    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW},
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate}
+                },
+                new MyOpRule
+                {
                     Title="Frontend Start Date Validation",
                     ActionRule = MyDcActions.CheckFrontendDates,
                     InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW},

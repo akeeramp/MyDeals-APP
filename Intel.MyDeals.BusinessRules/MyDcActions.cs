@@ -462,6 +462,21 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void CheckVolume(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement de = r.Dc.GetDataElement(AttributeCodes.VOLUME);
+            if (de == null) return;
+
+            int vol;
+            if (!int.TryParse(de.AtrbValue.ToString(), out vol))
+            {
+                BusinessLogicDeActions.AddValidationMessage(de, "Volume must be a value number.");
+            }
+        }
+
         public static void CheckFrontendDates(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
