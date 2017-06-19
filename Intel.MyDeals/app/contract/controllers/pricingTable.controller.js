@@ -693,7 +693,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         //topLeftRowIndex = data.length;
                         //bottomRightRowIndex = topLeftRowIndex + newItems;
                     }
-                    
+
                     // Enable other cells
                     var range = sheet.range("B" + topLeftRowIndex + ":" + finalColLetter + bottomRightRowIndex);
                     range.enable(true);
@@ -1305,11 +1305,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             root.setBusy("Validating products...", "Please wait as we find your products!");
             ProductSelectorService.TranslateProducts(translationInputToSend, $scope.contractData.CUST_MBR_SID) //Once the database is fixed remove the hard coded geo_mbr_sid
             .then(function (response) {
+                root.setBusy("", "");
                 topbar.hide();
-                if (currentRowNumber) root.setBusy("", "");
                 if (response.statusText === "OK") {
                     response.data = buildTranslatorOutputObject(invalidProductJSONRows, response.data);
-                    cookProducts(currentRowNumber, response.data, currentPricingTableRowData, publishWipDeals);
+                    $timeout(function () {
+                        cookProducts(currentRowNumber, response.data, currentPricingTableRowData, publishWipDeals);
+                    }, 300);
                 }
             }, function (response) {
                 topbar.hide();
