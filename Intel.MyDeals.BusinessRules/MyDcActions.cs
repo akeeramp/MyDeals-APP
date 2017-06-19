@@ -473,7 +473,7 @@ namespace Intel.MyDeals.BusinessRules
             int vol;
             if (!int.TryParse(de.AtrbValue.ToString(), out vol))
             {
-                BusinessLogicDeActions.AddValidationMessage(de, "Volume must be a value number.");
+                BusinessLogicDeActions.AddValidationMessage(de, "Volume must be a valid non-decimal number.");
             }
         }
 
