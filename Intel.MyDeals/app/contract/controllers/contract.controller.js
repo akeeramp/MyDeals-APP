@@ -1295,28 +1295,49 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
         $scope.validateTitles = function () {
             var rtn = true;
 
+            var isPsUnique = $scope.IsUniqueInList($scope.contractData.PRC_ST, $scope.curPricingStrategy["TITLE"], "TITLE", true);
+            var isPtUnique = $scope.IsUniqueInList($scope.curPricingStrategy.PRC_TBL, $scope.curPricingTable["TITLE"], "TITLE", true);
+			
             if ($scope.curPricingTable._behaviors === undefined) $scope.curPricingTable._behaviors = {};
             if ($scope.curPricingTable._behaviors.validMsg === undefined) $scope.curPricingTable._behaviors.validMsg = {};
             if ($scope.curPricingTable._behaviors.isError === undefined) $scope.curPricingTable._behaviors.isError = {};
 
-            if ($scope.curPricingTable !== undefined && $scope.curPricingTable.TITLE === "") {
-                $scope.curPricingTable._behaviors.validMsg["TITLE"] = "The Pricing Table needs a Title.";
-                $scope.curPricingTable._behaviors.isError["TITLE"] = true;
-                rtn = false;
-            } else {
-                $scope.curPricingTable._behaviors.isError["TITLE"] = false;
+        	// Pricing Table
+            if ($scope.curPricingTable._behaviors.isDirty === undefined || $scope.curPricingTable._behaviors.isDirty.TITLE) {
+            	if ($scope.curPricingTable !== undefined && $scope.curPricingTable.TITLE === "") {
+            		$scope.curPricingTable._behaviors.validMsg["TITLE"] = "The Pricing Table needs a Title.";
+            		$scope.curPricingTable._behaviors.isError["TITLE"] = true;
+            		rtn = false;
+            	}
+            	else if (!isPtUnique) {
+            		$scope.curPricingTable._behaviors.validMsg["TITLE"] = "The Pricing Table must have unique name within contract.";
+            		$scope.curPricingTable._behaviors.isError["TITLE"] = true;
+            		rtn = false;
+            	}
+            	else {
+            		$scope.curPricingTable._behaviors.isError["TITLE"] = false;
+            	}
             }
 
-            if ($scope.curPricingStrategy._behaviors === undefined) $scope.curPricingStrategy._behaviors = {};
-            if ($scope.curPricingStrategy._behaviors.validMsg === undefined) $scope.curPricingStrategy._behaviors.validMsg = {};
-            if ($scope.curPricingStrategy._behaviors.isError === undefined) $scope.curPricingStrategy._behaviors.isError = {};
+        	// Pricing Strategy
+            if ($scope.curPricingStrategy._behaviors.isDirty === undefined || $scope.curPricingStrategy._behaviors.isDirty.TITLE) {
+            	if ($scope.curPricingStrategy._behaviors === undefined) $scope.curPricingStrategy._behaviors = {};
+            	if ($scope.curPricingStrategy._behaviors.validMsg === undefined) $scope.curPricingStrategy._behaviors.validMsg = {};
+            	if ($scope.curPricingStrategy._behaviors.isError === undefined) $scope.curPricingStrategy._behaviors.isError = {};
 
-            if ($scope.curPricingStrategy !== undefined && $scope.curPricingStrategy.TITLE === "") {
-                $scope.curPricingStrategy._behaviors.validMsg["TITLE"] = "The Pricing Strategy needs a Title.";
-                $scope.curPricingStrategy._behaviors.isError["TITLE"] = true;
-                rtn = false;
-            } else {
-                $scope.curPricingStrategy._behaviors.isError["TITLE"] = false;
+            	if ($scope.curPricingStrategy !== undefined && $scope.curPricingStrategy.TITLE === "") {
+            		$scope.curPricingStrategy._behaviors.validMsg["TITLE"] = "The Pricing Strategy needs a Title.";
+            		$scope.curPricingStrategy._behaviors.isError["TITLE"] = true;
+            		rtn = false;
+            	}
+            	else if (!isPsUnique) {
+            		$scope.curPricingStrategy._behaviors.validMsg["TITLE"] = "The Pricing Strategy must have unique name within strategy.";
+            		$scope.curPricingStrategy._behaviors.isError["TITLE"] = true;
+            		rtn = false;
+            	}
+            	else {
+            		$scope.curPricingStrategy._behaviors.isError["TITLE"] = false;
+            	}
             }
 
             return rtn;
@@ -1341,7 +1362,7 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
             } else {
                 $scope.setBusy("Saving your data...", "Please wait as we save your information!");
             }
-
+			
             // async save data
             topbar.show();
 
@@ -1354,7 +1375,7 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                 var msg = [];
                 if ($scope.curPricingTable._behaviors.isError["TITLE"]) msg.push("Pricing Table");
                 if ($scope.curPricingStrategy._behaviors.isError["TITLE"]) msg.push("Pricing Strategy");
-                kendo.alert("The " + msg.join(" and ") + " needs a title.");
+                kendo.alert("The " + msg.join(" and ") + " either needs a title or needs a unique name.");
                 return;
             }
 
@@ -1806,20 +1827,16 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                 });
 
             // Check unique name
-            angular.forEach($scope.newStrategy,
-                function(value, key) {
-                    if (key === "TITLE") {
-                        if ($scope.contractData.PRC_ST === undefined) $scope.contractData.PRC_ST = [];
-                        for (var i = 0; i < $scope.contractData.PRC_ST.length; i++) {
-                            if (value.toLowerCase() == $scope.contractData.PRC_ST[i].TITLE.toLowerCase()) {
-                                $scope.newStrategy._behaviors.validMsg[key] = "* must have unique name within contract";
-                                $scope.newStrategy._behaviors.isError[key] = true;
-                                isValid = false;
-                                break;
-                            }
-                        }
-                    }
-                });
+            if ($scope.contractData.PRC_ST === undefined) {
+            	$scope.contractData.PRC_ST = [];
+            }
+            var isUnique = $scope.IsUniqueInList($scope.contractData.PRC_ST, $scope.newStrategy["TITLE"], "TITLE", false);
+            if (!isUnique) {
+            	$scope.newStrategy._behaviors.validMsg["TITLE"] = "* must have unique name within contract";
+            	$scope.newStrategy._behaviors.isError["TITLE"] = true;
+            	isValid = false; 
+            }
+
 
             if (isValid) {
                 $scope.addPricingStrategy();
@@ -1827,6 +1844,26 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                 $scope.addStrategyDisabled = false;
             }
         }
+
+
+    $scope.IsUniqueInList = function (listToCheck, value, keyToCompare, checkForDouble) {
+    	// Check unique name
+    	var count = 0;
+		for (var i = 0; i < listToCheck.length; i++) {
+			if (value.toLowerCase() == listToCheck[i][keyToCompare].toLowerCase()) {
+				if (checkForDouble) { // having one in he list is okay, but 2 is a no
+					count += 1;
+					if (count >= 2) {
+						return false;
+					}
+				} else {
+					// not checking doubles, so any if there is any in the list, then return false
+					return false;
+				}
+			}
+		}
+    	return true;
+    }
 
     // **** NEW/EDIT PRICING TABLE Methods ****
     //
@@ -2002,24 +2039,21 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                         isValid = false;
                     }
                 });
+		
+    		// Check unique name within ps 
+            if (!!$scope.curPricingStrategy) {
+				if ($scope.curPricingStrategy.PRC_TBL === undefined) {
+            		$scope.curPricingStrategy.PRC_TBL = [];
+				}
+				var isUnique = $scope.IsUniqueInList($scope.curPricingStrategy.PRC_TBL, $scope.newPricingTable["TITLE"], "TITLE", false);
 
-            // Check unique name within ps
-            angular.forEach($scope.newPricingTable,
-                function(value, key) {
-                    if (key === "TITLE" && !!$scope.curPricingStrategy) {
-                        if ($scope.curPricingStrategy.PRC_TBL === undefined) $scope.curPricingStrategy.PRC_TBL = [];
-                        for (var i = 0; i < $scope.curPricingStrategy.PRC_TBL.length; i++) {
-                            if (value.toLowerCase() == $scope.curPricingStrategy.PRC_TBL[i].TITLE.toLowerCase()) {
-                                $scope.newPricingTable._behaviors
-                                    .validMsg[key] = "* must have unique name within strategy";
-                                $scope.newPricingTable._behaviors.isError[key] = true;
-                                isValid = false;
-                                break;
-                            }
-                        }
-                    }
-                });
-
+				if (!isUnique) {
+            		$scope.newPricingTable._behaviors.validMsg["TITLE"] = "* must have unique name within strategy";
+            		$scope.newPricingTable._behaviors.isError["TITLE"] = true;
+            		isValid = false;
+				}
+			}
+		
             // Check Extra atribs
             angular.forEach($scope.newPricingTable["_extraAtrbs"],
                 function(value, key) {
@@ -2032,17 +2066,12 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                     }
                 });
 
-            // Check if selected deal type
-            angular.forEach($scope.newPricingTable,
-                function(value, key) {
-                    if (key === "OBJ_SET_TYPE_CD") {
-                        if ($scope.newPricingTable.OBJ_SET_TYPE_CD == "") {
-                            $scope.newPricingTable._behaviors.validMsg[key] = "* please select a deal type";
-                            $scope.newPricingTable._behaviors.isError[key] = true;
-                            isValid = false;
-                        }
-                    }
-                });
+    		// Check if selected deal type
+            if ($scope.newPricingTable.OBJ_SET_TYPE_CD == "") {
+            	$scope.newPricingTable._behaviors.validMsg["OBJ_SET_TYPE_CD"] = "* please select a deal type";
+            	$scope.newPricingTable._behaviors.isError["OBJ_SET_TYPE_CD"] = true;
+            	isValid = false;
+            }
 
             if (isValid) {
                 $scope.addPricingTable();
