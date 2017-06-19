@@ -3,9 +3,9 @@
     .directive('opControl', opControl);
 
 // Minification safe dependency injection
-opControl.$inject = ['$http', 'lookupsService', '$compile', '$templateCache', 'logger', '$q', 'dataService', '$filter'];
+opControl.$inject = ['$http', 'lookupsService', '$compile', '$templateCache', 'logger', '$q', 'dataService', '$filter', '$timeout'];
 
-function opControl($http, lookupsService, $compile, $templateCache, logger, $q, dataService, $filter) {
+function opControl($http, lookupsService, $compile, $templateCache, logger, $q, dataService, $filter, $timeout) {
     var getTemplate = function (controlType) {
         var baseUrl = 'app/blocks/uiControls/partials/';
         var templateMap = {
@@ -148,8 +148,40 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
                 }
             }
 
+            scope.onOpen = function () {
+                $timeout(function () {
+                    $(".k-animation-container").last().css("display", "none");
+                    //$(".k-animation-container").last().css("opacity", "0");
+                    //$(".k-animation-container").last().css("z-index", "0");
+                }, 10);
+                scope.showTreeView = true;
+                updateTreeView();
+            }
+
+            scope.onClose = function () {
+                scope.showTreeView = false;
+                updateTreeView();
+            }
+
+            scope.onDeselect = function (e) {
+                var item = e.item[0].innerText.toUpperCase();
+                var treeview = $("#" + scope.opCd).data("kendoTreeView");
+                var ds = treeview.dataSource.data();
+
+                for (var d = 0; d < ds.length; d++) {
+                    if (ds[d].DROP_DOWN.toUpperCase() === item) {
+                        ds[d].set('checked', false);
+                    }
+                }
+
+                scope.value = scope.value.filter(function (el) {
+                    return el.toUpperCase() !== item;
+                });
+            }
+
         	// Onclick event for embedded Multiselects
             scope.onEmbeddedMultiSelectClick = function () {
+                return;
                 $(".k-animation-container").last().css("display", "none");
         	    scope.showTreeView = !scope.showTreeView;
         	    updateTreeView();

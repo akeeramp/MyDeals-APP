@@ -1999,7 +1999,7 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
             // Check unique name within ps
             angular.forEach($scope.newPricingTable,
                 function(value, key) {
-                    if (key === "TITLE") {
+                    if (key === "TITLE" && !!$scope.curPricingStrategy) {
                         if ($scope.curPricingStrategy.PRC_TBL === undefined) $scope.curPricingStrategy.PRC_TBL = [];
                         for (var i = 0; i < $scope.curPricingStrategy.PRC_TBL.length; i++) {
                             if (value.toLowerCase() == $scope.curPricingStrategy.PRC_TBL[i].TITLE.toLowerCase()) {

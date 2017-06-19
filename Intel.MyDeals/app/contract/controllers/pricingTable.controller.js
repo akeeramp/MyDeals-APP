@@ -1247,6 +1247,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             sData._behaviors.validMsg["PTR_USER_PRD"] = "";
         }
         var spreadsheet = $("#pricingTableSpreadsheet").data("kendoSpreadsheet");
+        if (!spreadsheet) return;
+
         var sheet = spreadsheet.activeSheet();
         var beh = sData._behaviors;
         if (!beh) beh = {};

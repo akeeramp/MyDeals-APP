@@ -61,7 +61,7 @@ namespace Intel.MyDeals.Entities.Logging
 		    string header = "";
 		    header += "<style>BODY,P,DIV { font-size: 10px; font-family: arial; }</style><div>";
             header += "<b>User:</b> " + opUserToken.Usr.FullName + "</br>";
-            header += "<b>Role:</b> " + opUserToken.Role.RoleTypeCd + "</br></hr></div>";
+            header += "<b>Role:</b> " + opUserToken.Role.RoleTypeCd + "</hr></div>";
             
             string body = header + OpLogPerfHelper.MachineDetails;
 			body += "<div>" + msg.Message + "</div>";

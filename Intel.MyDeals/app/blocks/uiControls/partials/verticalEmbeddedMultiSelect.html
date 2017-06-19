@@ -15,6 +15,8 @@
                     k-data-value-field="opLookupValue"
                     k-value-primitive="true"
                     k-auto-close="false"
+                    k-open="onOpen"
+                    k-deselect="onDeselect"
 					k-placeholder="opPlaceholder"
                     k-ng-readonly="false"
                     style="width: 100%;"
@@ -22,20 +24,22 @@
             </select>
         </div>
 
-        <div class="msPopup opUiElement opUiTreeView" ng-show="showTreeView">
-            <div ng-click="onEmbeddedMultiSelectClick()" class="msClsBtn"><i class="intelicon-up"></i></div>
-            <div id="{{opCd}}"
-                 kendo-tree-view
-                 class="fl opUiElement"
-                 k-options="opHierarchicalDataSource"
-                 k-data-text-field="opLookupText"
-                 k-checkboxes="{checkChildren: true}"
-                 k-selectable="'multiple'"
-                 k-on-check="onCheckFunction()"
-                 k-on-select="onSelectFunction()"
-                 ng-class="{isHidden: opIsHidden, isReadOnly: opIsReadOnly, isError: opIsError}"
-                 style="overflow: hidden;">
+        <div class="msPopup opUiElement opUiTreeView" ng-show="showTreeView" ng-blur="onClose">
+            <div style="height: 170px; overflow: auto;">
+                <div id="{{opCd}}"
+                     kendo-tree-view
+                     class="fl opUiElement"
+                     k-options="opHierarchicalDataSource"
+                     k-data-text-field="opLookupText"
+                     k-checkboxes="{checkChildren: true}"
+                     k-selectable="'multiple'"
+                     k-on-check="onCheckFunction()"
+                     k-on-select="onSelectFunction()"
+                     ng-class="{isHidden: opIsHidden, isReadOnly: opIsReadOnly, isError: opIsError}"
+                     style="overflow: hidden;">
+                </div>
             </div>
+            <div ng-click="onClose()" class="msClsBtn">OK</div>
         </div>
     </div>
 
@@ -50,7 +54,7 @@
          width: 220px;
          max-height: 200px;
          max-width: 280px;
-         margin-top: 36px;
+         margin-top:36px;
          font-size: 12px;
          border: 1px solid #cccccc;
          box-shadow: 2px 2px 4px #000000;
@@ -59,16 +63,17 @@
      }
 
     .msClsBtn {
-        text-align: right; 
-        margin-right: 5px; 
-        margin-top: -3px; 
-        color: #cccccc;
+        background-color: #00AEEF;
+        color: #ffffff;
         cursor: pointer;
-        font-size: 20px;
-        float: right;
+        font-size: 14px;
+        padding: 4px;
+        text-transform: uppercase;
+        text-align: center;
+        height: 28px;
     }
 
     .msClsBtn:hover {
-        color: #ED1C24;
+        background-color: #0071C5;
     }
 </style>
