@@ -93,8 +93,6 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
                                         var treeview = $("#" + scope.opCd).data("kendoTreeView");
                                         // collapse all items
                                         if (!!treeview) {
-                                            //treeview sometimes tries to dynamically load information and waits until user expands to get data.  in our case that creates a bug where some nodes are not rendered after expanding, causing the tree to bug out and minimize. hence we force an expand as a round-about way to fix it
-                                            treeview.expand(".k-item");
                                             treeview.collapse(".k-item");
                                         }
                                     }
@@ -143,7 +141,14 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
                     var treeview = $("#" + scope.opCd).data("kendoTreeView");
 
                     for (var i = 0; i < msValues.length; i++) {
-                        treeview.dataItem(treeview.findByText(msValues[i])).set("checked", true);
+                        var matches = treeview.findByText(msValues[i]);
+                        if (matches.length > 1) {
+                            //quickfix for Region having same name as Country - however this will become an issue if a geo/blended geo ends up having 2 different regions with the same country name
+                            //for now we select the deepest level node, aka the last one found by jquery in the treeview.findByText call
+                            treeview.dataItem(treeview.findByText(msValues[i])[matches.length - 1]).set("checked", true);
+                        } else {
+                            treeview.dataItem(treeview.findByText(msValues[i])).set("checked", true);
+                        }
                     }
                 }
             }
@@ -182,9 +187,9 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
         	// Onclick event for embedded Multiselects
             scope.onEmbeddedMultiSelectClick = function () {
                 return;
-                $(".k-animation-container").last().css("display", "none");
-        	    scope.showTreeView = !scope.showTreeView;
-        	    updateTreeView();
+                //$(".k-animation-container").last().css("display", "none");
+        	    //scope.showTreeView = !scope.showTreeView;
+        	    //updateTreeView();
         	}
             scope.onCheckFunction = function (e) {
                 var treeview = $("#" + scope.opCd).data("kendoTreeView");

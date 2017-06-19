@@ -14,6 +14,8 @@
                     k-data-text-field="opLookupText"
                     k-data-value-field="opLookupValue"
                     k-value-primitive="true"
+                    k-clear-button="false"
+                    k-height="0"
                     k-auto-close="false"
                     k-open="onOpen"
                     k-deselect="onDeselect"
@@ -35,6 +37,7 @@
                      k-selectable="'multiple'"
                      k-on-check="onCheckFunction()"
                      k-on-select="onSelectFunction()"
+                     k-load-on-demand="false"
                      ng-class="{isHidden: opIsHidden, isReadOnly: opIsReadOnly, isError: opIsError}"
                      style="overflow: hidden;">
                 </div>
