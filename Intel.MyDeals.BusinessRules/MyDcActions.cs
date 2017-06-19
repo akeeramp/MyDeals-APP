@@ -469,13 +469,12 @@ namespace Intel.MyDeals.BusinessRules
 
             string progPayment = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT);
             IOpDataElement de = r.Dc.GetDataElement(AttributeCodes.VOLUME);
-            if (de == null) return;
+            if (de == null || de.AtrbValue.ToString() == "") return;
 
             int vol;
             if (!int.TryParse(de.AtrbValue.ToString(), out vol))
             {
                 BusinessLogicDeActions.AddValidationMessage(de, "Volume must be a valid non-decimal number.");
-                return;
             }
 
             if (vol >= 0 && progPayment != "Backend")

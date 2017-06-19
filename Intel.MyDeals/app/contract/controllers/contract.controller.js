@@ -1839,6 +1839,13 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
 
         // Clone base model and populate changes
         var pt = util.clone($scope.templates.ObjectTemplates.PRC_TBL[$scope.newPricingTable.OBJ_SET_TYPE_CD]);
+        if (!pt) {
+            $scope.addTableDisabled = false;
+            logger.error("Could not create the pricing table.","Error");
+            topbar.hide();
+            $scope.setBusy("", "");
+            return;
+        }
         pt.DC_ID = $scope.uid--;
         pt.DC_PARENT_ID = $scope.curPricingStrategy.DC_ID;
         pt.OBJ_SET_TYPE_CD = $scope.newPricingTable.OBJ_SET_TYPE_CD;
