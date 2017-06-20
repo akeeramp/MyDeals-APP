@@ -1855,7 +1855,7 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
     	// Check unique name
     	var count = 0;
 		for (var i = 0; i < listToCheck.length; i++) {
-			if (value.toLowerCase() == listToCheck[i][keyToCompare].toLowerCase()) {
+		    if (!!listToCheck[i][keyToCompare] && value.toLowerCase() === listToCheck[i][keyToCompare].toLowerCase()) { //!! is same as checking undefined
 				if (checkForDouble) { // having one in he list is okay, but 2 is a no
 					count += 1;
 					if (count >= 2) {
