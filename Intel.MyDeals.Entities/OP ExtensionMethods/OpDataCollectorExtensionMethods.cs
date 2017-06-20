@@ -49,7 +49,7 @@ namespace Intel.MyDeals.Entities
         public static void SetAtrb(this OpDataCollector dc, string atrbCd, object val)
         {
             OpDataElementAtrb de = dc.GetAtrb(atrbCd);
-            if (de != null)
+            if (de != null && (de.AtrbValue == null || val == null || de.AtrbValue.ToString() != val.ToString()))
             {
                 de.AtrbValue = val;
                 de.State = OpDataElementState.Modified;

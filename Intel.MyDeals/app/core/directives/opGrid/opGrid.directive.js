@@ -524,24 +524,27 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 	var id = "";
                 	if (col.field == "DEAL_SOLD_TO_ID") { id = options.model["CUST_MBR_SID"] } // TODO:change to dynamic
 
-                	$('<select data-bind="value:' + options.field + '" required name="' + options.field + '"/>')
-						.appendTo(container)
-						.kendoMultiSelect({
-							autoBind: false,
-							valuePrimitive: true,
-							dataTextField: field.opLookupText,
-							dataValueField: field.opLookupValue,
-							dataSource: {
-								type: "json",
-								transport: {
-									read: {
-										url: field.opLookupUrl + "/" + id,
-										dataType: 'json',
-										type: "GET",
-									}
-								}
-							}
-						});
+                	//$('<select data-bind="value:' + options.field + '" name="' + options.field + '"/>')
+					//	.appendTo(container)
+					//	.kendoMultiSelect({
+					//		autoBind: false,
+					//		valuePrimitive: true,
+					//		dataTextField: field.opLookupText,
+					//		dataValueField: field.opLookupValue,
+					//		dataSource: {
+					//			type: "json",
+					//			transport: {
+					//				read: {
+					//					url: field.opLookupUrl + "/" + id,
+					//					dataType: 'json',
+					//					type: "GET",
+					//				}
+					//			}
+					//		}
+					//	});
+                	var multiCompiled = $compile('<div class="myDealsControl" op-control-flat ng-model="dataItem" op-cd="\'' + options.field + '\'" op-type="\'MULTISELECT\'" op-lookup-url="\'' + field.opLookupUrl + '/' + id + '\'" op-lookup-text="\'' + field.opLookupText + '\'" op-lookup-value="\'' + field.opLookupValue + '\'" op-ui-mode="\'VERTICAL\'"></div>')(angular.element(container).scope());
+                	$(container).append(multiCompiled);
+
                 } else if (col.uiType.toUpperCase() === "EMBEDDEDMULTISELECT") {
 
                     var compiled;

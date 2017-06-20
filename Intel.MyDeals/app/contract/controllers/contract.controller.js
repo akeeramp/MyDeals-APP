@@ -1165,8 +1165,8 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                         sData[s].dc_parent_type = curPricingTableData[0].dc_type;
                         sData[s].OBJ_SET_TYPE_CD = curPricingTableData[0].OBJ_SET_TYPE_CD;
 
-                        if (util.isValidDate(sData[s].START_DT)) sData[s].START_DT = $scope.contractData["START_DT"];
-                        if (util.isValidDate(sData[s].END_DT)) sData[s].END_DT = $scope.contractData["END_DT"];
+                        if (util.isInvalidDate(sData[s].START_DT)) sData[s].START_DT = $scope.contractData["START_DT"];
+                        if (util.isInvalidDate(sData[s].END_DT)) sData[s].END_DT = $scope.contractData["END_DT"];
 
                         // Let's store the backdate rns from the contract in the text field so we can leverage it in rules
                         sData[s].BACK_DATE_RSN_TXT = $scope.contractData.BACK_DATE_RSN;
@@ -1854,9 +1854,11 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
 
     $scope.IsUniqueInList = function (listToCheck, value, keyToCompare, checkForDouble) {
     	// Check unique name
-    	var count = 0;
-		for (var i = 0; i < listToCheck.length; i++) {
-		    if (!!listToCheck[i][keyToCompare] && value.toLowerCase() === listToCheck[i][keyToCompare].toLowerCase()) { //!! is same as checking undefined
+        var count = 0;
+        if (!listToCheck) return true;
+
+    	for (var i = 0; i < listToCheck.length; i++) {
+		    if (!!listToCheck[i][keyToCompare] && !!value && value.toLowerCase() === listToCheck[i][keyToCompare].toLowerCase()) { //!! is same as checking undefined
 				if (checkForDouble) { // having one in he list is okay, but 2 is a no
 					count += 1;
 					if (count >= 2) {

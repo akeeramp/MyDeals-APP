@@ -15,19 +15,19 @@ namespace Intel.MyDeals.Entities
 
         public static bool IsSuper(this OpUserToken opUserToken)
         {
-            return opUserToken != null && ObjToBool(opUserToken.Properties[EN.OPUSERTOKEN.IS_SUPER] ?? false);
+            return opUserToken != null && opUserToken.Properties.ContainsKey(EN.OPUSERTOKEN.IS_SUPER) && ObjToBool(opUserToken.Properties[EN.OPUSERTOKEN.IS_SUPER] ?? false);
         }
         public static bool IsSuperSa(this OpUserToken opUserToken)
         {
-            return opUserToken != null && ObjToBool(opUserToken.Properties[EN.OPUSERTOKEN.IS_SUPER_SA] ?? false);
+            return opUserToken != null && opUserToken.Properties.ContainsKey(EN.OPUSERTOKEN.IS_SUPER_SA) && ObjToBool(opUserToken.Properties[EN.OPUSERTOKEN.IS_SUPER_SA] ?? false);
         }
         public static bool IsDeveloper(this OpUserToken opUserToken)
         {
-            return opUserToken != null && ObjToBool(opUserToken.Properties[EN.OPUSERTOKEN.IS_DEVELOPER] ?? false);
+            return opUserToken != null && opUserToken.Properties.ContainsKey(EN.OPUSERTOKEN.IS_DEVELOPER) && ObjToBool(opUserToken.Properties[EN.OPUSERTOKEN.IS_DEVELOPER] ?? false);
         }
         public static bool IsTester(this OpUserToken opUserToken)
         {
-            return opUserToken != null && ObjToBool(opUserToken.Properties[EN.OPUSERTOKEN.IS_TESTER] ?? false);
+            return opUserToken != null && opUserToken.Properties.ContainsKey(EN.OPUSERTOKEN.IS_TESTER) && ObjToBool(opUserToken.Properties[EN.OPUSERTOKEN.IS_TESTER] ?? false);
         }
 
         public static bool IsInvalidUser(this OpUserToken opUserToken)

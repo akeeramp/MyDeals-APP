@@ -113,6 +113,7 @@ namespace Intel.MyDeals.BusinessLogic
         public void SavePacketByDictionary(OpDataCollectorFlattenedList data, MyDealsData myDealsData, OpDataElementType opDataElementType, Guid myWbBatchId)
         {
             // Save Data Cycle: Point 10
+            if (!myDealsData.ContainsKey(opDataElementType)) return;
 
             //myDealsData.Merge(opDataElementType, data);
             OpDataPacket<OpDataElementType> newPacket = myDealsData[opDataElementType].GetChanges(); // Goes through the collection and passes only changes after rules.
