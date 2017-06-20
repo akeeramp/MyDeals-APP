@@ -1,11 +1,11 @@
 ﻿<div class="container-fluid widget-container" style="overflow: auto;">
     <div id="searchWidget" style="width: 100%;">
         <div style="margin: 6px 0;" ng-hide="hideSearch">
-            <input id="searchField" placeholder="Search for contract name or number" style="border-color: #b1babf; width: 80%; padding: 2px; height: 36px;" class="k-textbox" ng-model="searchText">
-            <button id="searchButton" class="btn btn-default" type="button" ng-click="showLoading=true; searchAll();" style="padding: 2px 8px 0 8px; border: 1px solid transparent;">
+            <input id="searchField" placeholder="Search for contract name or number" ng-keyup="onKeyUp($event)" style="border-color: #b1babf; width: 80%; padding: 2px; height: 36px;" class="k-textbox" ng-model="searchText">
+            <button id="searchButton" class="btn btn-default" type="button" ng-click="searchAll();" style="padding: 2px 8px 0 8px; border: 1px solid transparent;">
                 <i class="intelicon-search-stack-solid" style="font-size: 30px;"></i>
             </button>
-            <button id="bynResetSearch" ng-click="resetSearch()" style="display: none;">Reset</button>
+            <button ng-click="resetSearch()" style="display: none;">Reset</button>
         </div>
 
         <div ng-show="showLoading && !showResults" class="searchResultsLoading">

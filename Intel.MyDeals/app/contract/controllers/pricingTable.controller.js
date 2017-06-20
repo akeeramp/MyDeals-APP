@@ -613,6 +613,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         for (var n = data.length - 1; n >= 0; n--) {
             if (data[n].DC_ID === null && (data[n].PTR_USER_PRD === null || data[n].PTR_USER_PRD === "")) {
                 data.splice(n, 1);
+            } else {
+                if (!util.isValidDate(data[n].START_DT)) data[n].START_DT = root.contractData["START_DT"];
+                if (!util.isValidDate(data[n].END_DT)) data[n].END_DT = root.contractData["END_DT"];
             }
         }
         return data;

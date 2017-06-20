@@ -43,6 +43,7 @@
 
                 scope.searchAll = function () {
                     //clear any previous search data
+                    scope.showLoading = true;
                     scope.searchResultItems = [];
                     scope.searchResultContracts = {};
                     scope.searchResultPricingStrategies = {};
@@ -83,12 +84,12 @@
                     });
                 }
 
-                //press enter key to search as well
-                $("#searchField").keyup(function (event) {
+                scope.onKeyUp = function (event) {
                     if (event.keyCode === 13) {
-                        $("#searchButton").click();
+                        scope.searchAll();
+                        //$("#searchButton").click();
                     }
-                });
+                }
 
                 //for dictionary size check
                 scope.isEmpty = function (obj) {
@@ -105,7 +106,6 @@
                     scope.showLoading = false;
                     //scope.searchText = "";
 
-                    scope.showLoading = true;
                     scope.searchAll();
                 }
 

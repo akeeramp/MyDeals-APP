@@ -1797,6 +1797,7 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                     $scope.setBusy("", "");
                 }, 1000);
                 $scope.newStrategy.TITLE = "";
+                $scope.curPricingStrategy = ps;
                 $scope.curPricingStrategyId = ps.DC_ID;
                 $scope.refreshContractData($scope.curPricingStrategyId);
             },
