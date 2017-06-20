@@ -56,7 +56,7 @@ namespace Intel.MyDeals.Entities
         /// <summary>
         /// Get the authenticated user's OpUserToken
         /// </summary>
-        public static OpUserToken MyOpUserToken => MySettings.UserToken;
+        public static OpUserToken MyOpUserToken => MySettings.UserToken ?? new OpUserToken().EnsurePopulated();
 
         /// <summary>
         /// Emulate the Unit Tester account
