@@ -62,6 +62,11 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             'PROGRAM_PAYMENT': ProductRows["0"].PROGRAM_PAYMENT,
             'PROD_INCLDS': ProductRows["0"].PROD_INCLDS
         };
+
+        var suggestedProduct = {
+            'mode': 'auto',
+            'prodname': vm.productName
+        };
         
         var modal = $uibModal.open({
             backdrop: 'static',
@@ -82,7 +87,8 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                 pricingTableRow: angular.copy(pricingTableRow),
                 enableSplitProducts: function () {
                     return false;
-                }
+                },
+                suggestedProduct: angular.copy(suggestedProduct)
             }
         });
         modal.result.then(
@@ -170,7 +176,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         selectable: "row",
         resizable: false,
         groupable: false,
-        columnMenu: false,
+        columnMenu: true,
         scrollable: false,
         editable: false,
         pageable: false,
@@ -178,11 +184,34 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             e.sender.select("tr:eq(1)");
         },
         columns: [
+            {
+                command: [
+                    { name: "destroy", template: "<a class='k-grid-destroy' ng-click='vm.deleteInvalid(dataItem)' style='margin-right: 6px;cursor:pointer'><span class='k-icon k-i-close'></span></a>" }
+
+                ],
+                title: " ",
+                width: "20%"
+            },
             { field: "USR_INPUT", template: "#= USR_INPUT #", title: "User Entered Prduct", width: "200px" },
         ]
     };
 
     vm.suggestionNotFound = '';
+
+    //Delete item from the InValid List
+    vm.deleteInvalid = function (dataItem) {
+        for (var j = 0; j < GetProductCorrectorData.InValidProducts[vm.currentRow].length; j++) {
+            if (GetProductCorrectorData.InValidProducts[vm.currentRow][j] == dataItem.USR_INPUT) {
+                GetProductCorrectorData.InValidProducts[vm.currentRow].splice(j, 1);
+            }
+        }
+        for (var d = 0; d < vm.invalidProducts.length; d++) {
+            if (vm.invalidProducts[d].USR_INPUT == dataItem.USR_INPUT) {
+                vm.invalidProducts.splice(d, 1);
+            }
+        }
+        dataSource.read();
+    }
 
     // Further suggestion
     vm.selectSuggestion = function (dataItem) {
@@ -246,8 +275,8 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             }
 
             //Step 6 : Remove alphabet from the string
-            if (tempString != tempString.replace(/[^\d-]/gi, '')) {
-                if (vm.suggestedProd.indexOf(tempString.replace(/[^\d-]/gi, '')) == -1) {
+            if (tempString != tempString.replace(/[^\d-]/gi, '') && tempString.replace(/[^\d-]/gi, '').length > 0) {
+                if (vm.suggestedProd.indexOf(tempString.replace(/[^\d-]/gi, '')) == -1) { 
                     vm.suggestedProd.push(tempString.replace(/[^\d-]/gi, ''));
                 }
             }

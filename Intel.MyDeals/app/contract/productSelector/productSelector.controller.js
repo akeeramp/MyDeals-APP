@@ -4,9 +4,9 @@
        .module('app.admin') //TODO: once we integrate with contract manager change the module to contract
        .controller('ProductSelectorModalController', ProductSelectorModalController);
 
-    ProductSelectorModalController.$inject = ['$filter', '$scope', '$uibModal', '$uibModalInstance', 'productSelectionLevels', 'enableSplitProducts', 'ProductSelectorService', 'pricingTableRow', '$timeout', 'logger', 'gridConstants'];
+    ProductSelectorModalController.$inject = ['$filter', '$scope', '$uibModal', '$uibModalInstance', 'productSelectionLevels', 'enableSplitProducts', 'ProductSelectorService', 'pricingTableRow', '$timeout', 'logger', 'gridConstants','suggestedProduct'];
 
-    function ProductSelectorModalController($filter, $scope, $uibModal, $uibModalInstance, productSelectionLevels, enableSplitProducts, ProductSelectorService, pricingTableRow, $timeout, logger, gridConstants) {
+    function ProductSelectorModalController($filter, $scope, $uibModal, $uibModalInstance, productSelectionLevels, enableSplitProducts, ProductSelectorService, pricingTableRow, $timeout, logger, gridConstants, suggestedProduct) {
         var vm = this;
         // Non CPU verticals with drill down level 4
         var verticalsWithDrillDownLevel4 = ["EIA CPU", "EIA MISC"];
@@ -645,6 +645,18 @@
                 logger.error("Unable to get product suggestions.", response, response.statusText);
             });
         }
+
+        function autoSearchForSuggestion() {
+            if (suggestedProduct.mode == "auto") {
+                vm.userInput = suggestedProduct.prodname;
+                setTimeout(function () {
+                    vm.searchProduct();
+                }, 2000);
+                
+            }
+        }
+
+        autoSearchForSuggestion();
 
         vm.clearSearch = function () {
             vm.selectPath(0);

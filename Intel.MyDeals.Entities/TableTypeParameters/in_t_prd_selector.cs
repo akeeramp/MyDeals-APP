@@ -25,6 +25,7 @@ namespace Intel.MyDeals.Entities
             this.Columns.Add("END_DATE", typeof(string));
             this.Columns.Add("GEO_COMBINED", typeof(string));
             this.Columns.Add("PROGRAM_PAYMENT", typeof(string));
+            this.Columns.Add("COLUMN_TYPE", typeof(int));
         }
 
         /// <summary>
@@ -41,6 +42,7 @@ namespace Intel.MyDeals.Entities
             r["END_DATE"] = itm.END_DATE;
             r["GEO_COMBINED"] = itm.GEO_COMBINED;
             r["PROGRAM_PAYMENT"] = itm.PROGRAM_PAYMENT;
+            r["COLUMN_TYPE"] = itm.COLUMN_TYPE;
             this.Rows.Add(r);
         }
 
@@ -61,6 +63,7 @@ namespace Intel.MyDeals.Entities
                 r["END_DATE"] = itm.END_DATE;
                 r["GEO_COMBINED"] = itm.GEO_COMBINED;
                 r["PROGRAM_PAYMENT"] = itm.PROGRAM_PAYMENT;
+                r["COLUMN_TYPE"] = itm.COLUMN_TYPE;
                 this.Rows.Add(r);
             }
         }

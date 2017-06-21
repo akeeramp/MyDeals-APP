@@ -52,6 +52,9 @@ namespace Intel.MyDeals.Entities
 
         [DataMember]
         public System.String PROGRAM_PAYMENT { set; get; }
+
+        [DataMember]
+        public System.Boolean COLUMN_TYPE { set; get; }
     }
 
     [DataContract]

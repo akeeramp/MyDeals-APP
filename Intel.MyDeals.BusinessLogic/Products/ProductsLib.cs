@@ -294,14 +294,17 @@ namespace Intel.MyDeals.BusinessLogic
                 foreach (var product in products)
                 {
                     ProductEntryAttribute pea = new ProductEntryAttribute();
+                    string tempProdName = product.ToString().Contains("~~**~~**~~") == true ? product.ToString().Remove(product.ToString().IndexOf("~~**~~**~~"), 10) : product.ToString(); // unique combination checking
                     pea.ROW_NUMBER = userProduct.ROW_NUMBER;
-                    pea.USR_INPUT = product.ToString();
+                    pea.USR_INPUT = tempProdName;
                     pea.START_DATE = userProduct.START_DATE.ToString();
                     pea.END_DATE = userProduct.END_DATE.ToString();
                     pea.EXCLUDE = userProduct.EXCLUDE;
                     pea.FILTER = userProduct.FILTER;
                     pea.GEO_COMBINED = userProduct.GEO_COMBINED;
                     pea.PROGRAM_PAYMENT = userProduct.PROGRAM_PAYMENT;
+                    pea.COLUMN_TYPE = product.ToString().Contains("~~**~~**~~") == true ? true : false; // unique combination checking
+
                     prodNamesList.Add(pea);
                 }
                 var productAliases = (from p in prodNamesList
@@ -317,7 +320,8 @@ namespace Intel.MyDeals.BusinessLogic
                                           END_DATE = p.END_DATE,
                                           START_DATE = p.START_DATE,
                                           GEO_COMBINED = p.GEO_COMBINED,
-                                          PROGRAM_PAYMENT = p.PROGRAM_PAYMENT
+                                          PROGRAM_PAYMENT = p.PROGRAM_PAYMENT,
+                                          COLUMN_TYPE = p.COLUMN_TYPE
                                       }).Distinct();
 
                 productsTodb.AddRange(productAliases);
@@ -435,21 +439,69 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns></returns>
         public List<string> TransformProducts(string userProduct)
         {
+            Boolean flag = false;
             string EPMString = "";
+            var EPMList = new List<string>();
+            string tempProdNM = userProduct;
+
+            tempProdNM = Regex.Replace(tempProdNM, " OR ", @"~", RegexOptions.IgnoreCase); // Replace OR with ~
+            tempProdNM = tempProdNM.Replace("&", "~"); // Replace & with ~
+
             // Checking for any EPM name present inside "" and extracting the EPM name will add it at the END
-            if (userProduct.Contains('"'))
+            if (tempProdNM.Contains('"'))
             {
-                var empArr = userProduct.Split('"', '"');
-                if (empArr.Length > 0)
+                do
                 {
-                    EPMString = empArr[1];
-                }
-                userProduct = userProduct.Replace("\"", "");
-                int index = userProduct.IndexOf(EPMString);
-                userProduct = (index < 0)
-                    ? userProduct
-                    : userProduct.Remove(index, EPMString.Length);
+                    if (tempProdNM.Contains('"'))
+                    {
+                        int lastIndex = tempProdNM.LastIndexOf('"');
+                        int secodnLast = lastIndex > 0 ? tempProdNM.LastIndexOf('"', tempProdNM.LastIndexOf('"') - 1) : -1;
+                        if (secodnLast > -1 && lastIndex > -1)
+                        {
+                            var empArr = tempProdNM.Substring(secodnLast, lastIndex - secodnLast);//Extract string inside double quote
+
+                            var tempString = (lastIndex < 0)
+                                ? tempProdNM
+                                : tempProdNM.Remove(secodnLast, tempProdNM.Length - secodnLast);
+
+                            EPMString = empArr.Replace("\"", "");
+
+                            int index = tempProdNM.IndexOf("\"" + EPMString + "\"");
+
+                            tempProdNM = (index < 0)
+                                ? tempProdNM
+                                : tempProdNM.Remove(index, ("\"" + EPMString + "\"").Length);
+
+
+                            var lastOperatorIndex = tempString.LastIndexOfAny(new char[] { ',', '~', '/' });
+
+                            var GDM_NM = tempString.Substring(lastOperatorIndex + 1, tempString.Length - lastOperatorIndex - 1);
+
+                            if (lastOperatorIndex == -1 && tempString.Length > 0)
+                            {
+                                lastOperatorIndex = 0;
+                            }
+
+                            tempProdNM = (lastOperatorIndex < 0)
+                                ? tempProdNM
+                                : tempProdNM.Remove(lastOperatorIndex > 0 ? lastOperatorIndex + 1 : lastOperatorIndex = 0, GDM_NM.Length);
+
+                            EPMList.Add((GDM_NM + EPMString + "~~**~~**~~").Trim()); // to avoid any character presence in EPM i am adding this unique combination
+                            flag = true;
+                        }
+                        else
+                        {
+                            flag = false;
+                        }
+                    }
+                    else
+                    {
+                        flag = false;
+                    }
+                } while (flag);
             }
+
+            userProduct = tempProdNM;
 
             //Getting value from Constant Table
             string charset = "";
@@ -500,7 +552,7 @@ namespace Intel.MyDeals.BusinessLogic
                         }
                         else
                         {
-                            strRep = item;
+                            strRep = item.Trim();
                         }
                     }
 
@@ -515,20 +567,28 @@ namespace Intel.MyDeals.BusinessLogic
 
                     foreach (var character in innerItems.Where(i => !string.IsNullOrEmpty(i)))
                     {
-                        singleProducts.Add(productNames[0] + character.Trim());
+                        if ((productNames[0] + character.Trim()).Trim().Length > 0)
+                        {
+                            singleProducts.Add(productNames[0] + character.Trim());
+                        }
                     }
                 }
                 else
                 {
-                    singleProducts.Add(item.Trim());
+                    if (item.Trim().Length > 0)
+                    {
+                        singleProducts.Add(item.Trim());
+                    }
+
                 }
             }
+
             //Adding EPM name
-            if (EPMString.Length > 0)
+            foreach (var item in EPMList)
             {
-                singleProducts.Add(EPMString);
-                EPMString = "";
+                singleProducts.Add(item);
             }
+
             return singleProducts;
         }
 

@@ -401,6 +401,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             'PROD_INCLDS': root.curPricingTable["PROD_INCLDS"]
         };
 
+        var suggestedProduct = {
+            'mode': 'auto',
+            'prodname': vm.productName
+        };
+
         var modal = $uibModal.open({
             backdrop: 'static',
             templateUrl: 'app/contract/productSelector/productSelector.html',
@@ -420,6 +425,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     });
                 }],
                 pricingTableRow: angular.copy(pricingTableRow),
+                suggestedProduct: function () {
+                    return suggestedProd;
+                },
                 enableSplitProducts: function () {
                     return true;
                 }
@@ -1197,6 +1205,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     'PROD_INCLDS': !currentPricingTableRowData ? root.curPricingTable.PROD_INCLDS : currentPricingTableRowData.PROD_INCLDS,
                 };
 
+                var suggestedProduct = {
+                    'mode': 'manual',
+                    'prodname': ""
+                };
+
                 var modal = $uibModal.open({
                     backdrop: 'static',
                     templateUrl: 'app/contract/productSelector/productSelector.html',
@@ -1216,6 +1229,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             });
                         }],
                         pricingTableRow: angular.copy(pricingTableRow),
+                        suggestedProduct: function () {
+                            return suggestedProd;
+                        },
                         enableSplitProducts: function () {
                             return enableSplitProducts;
                         }

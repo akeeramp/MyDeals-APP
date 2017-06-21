@@ -1,5 +1,5 @@
 ﻿<div class="modal-content" moveablemodal style="height:85vh;background-color:#1a3e6f;overflow-y:auto;overflow-x:hidden;border-left:none;border-right:none;">
-    <div style="padding:15px;">
+    <div style="padding:10px;">
         <div class="prodSelector modal-header" style="margin-bottom:15px">
             <div class="row prodCorrectorHeader">
                 <div class="col-md-4 cursorArea" style="padding-left:0px">
@@ -21,7 +21,7 @@
         <div class="prodCorrector modal-body">
             <div class="row breadCrumbWrapper" ng-if="!vm.isMultipleProduct">
                 <ul class="productpath breadcrumb">
-                    <li>Multiple products found for: <a role="button" class="prdAnchor" ng-click="vm.selectPath(0)"> {{ vm.productName }}</a></li>
+                    <li>Product(s) found for: <a role="button" class="prdAnchor" ng-click="vm.selectPath(0)"> {{ vm.productName }}</a></li>
                     <li ng-repeat="p in vm.selectedPathParts | unique:'name'" >
                         <a role="button" class="prdAnchor" ng-click="vm.selectPath($index + 1)">{{:: p.name }}</a>
                     </li>
