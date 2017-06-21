@@ -176,7 +176,6 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         selectable: "row",
         resizable: false,
         groupable: false,
-        columnMenu: true,
         scrollable: false,
         editable: false,
         pageable: false,
@@ -186,13 +185,13 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         columns: [
             {
                 command: [
-                    { name: "destroy", template: "<a class='k-grid-destroy' ng-click='vm.deleteInvalid(dataItem)' style='margin-right: 6px;cursor:pointer'><span class='k-icon k-i-close'></span></a>" }
+                    { name: "destroy", template: "<a class='k-grid-delete deleteOnHover' ng-click='vm.deleteInvalid(dataItem)' title='Click to delete invalid product. Please save changes to prceeed to next product.' style='margin-right: 6px;cursor:pointer'><span class='k-icon k-i-close'></span></a>" }
 
                 ],
-                title: " ",
-                width: "20%"
+                title: "",
+                width: "10%"
             },
-            { field: "USR_INPUT", template: "#= USR_INPUT #", title: "User Entered Prduct", width: "200px" },
+            { field: "USR_INPUT", template: "#= USR_INPUT #", title: "User Entered Product" },
         ]
     };
 
@@ -529,22 +528,23 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         pageable: false,
         columns: [
             { field: "HIER_VAL_NM", title: "Product", template: "<div kendo-tooltip k-content='dataItem.HIER_NM_HASH'>{{dataItem.HIER_VAL_NM}}</div>" },
-            { field: "MM_CUST_CUSTOMER", title: "MM Customer" },
+            { field: "MM_CUST_CUSTOMER", title: "MM Customer", hidden: true },
         ]
     };
 
     // Hide Column
     function toggleColumnsWhenEmpty(data) {
         var grid = $("#suggestionProdGrid").data("kendoGrid");
+        debugger;
         if (!!grid) {
-            angular.forEach(vm.gridOptionsSuggested.columns, function (item, key) {
-                var columnValue = $filter('unique')(data, item.field);
-                if (columnValue.length == 1 && item.field == undefined && (columnValue[0][item.field] == "" || columnValue[0][item.field] == null)) {
-                    grid.hideColumn(item.field);//hide column
-                } else {
-                    grid.showColumn(item.field); //show column
-                }
+            var isNANDProduct = data.filter(function (x) {
+                x.PRD_CAT_NM == 'NAND' || x.PRD_CAT_NM == "NAND (SSD)"
             });
+            if (isNANDProduct.length == 0) {
+                grid.hideColumn("MM_CUST_CUSTOMER");//hide column
+            } else {
+                grid.showColumn("MM_CUST_CUSTOMER"); //show column
+            }
         }
     }
 
@@ -1219,6 +1219,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
 
     // Save Selected product(s) for the Row
     function saveProducts() {
+        debugger;
         if (vm.addedProducts.length > 0) {
             var validObject = { "Row": "", "Items": [] }; //Multiple Match Key Value pair
             for (var s = 0; s < vm.addedProducts.length; s++) {
@@ -1355,7 +1356,8 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             }
         }
         else {
-            logger.error("No product selected");
+            /// When user deletes the product and clicks save move to next item
+            cookProducts();
         }
     }
 }
