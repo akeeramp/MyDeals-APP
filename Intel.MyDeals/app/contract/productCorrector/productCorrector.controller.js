@@ -535,7 +535,6 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
     // Hide Column
     function toggleColumnsWhenEmpty(data) {
         var grid = $("#suggestionProdGrid").data("kendoGrid");
-        debugger;
         if (!!grid) {
             var isNANDProduct = data.filter(function (x) {
                 x.PRD_CAT_NM == 'NAND' || x.PRD_CAT_NM == "NAND (SSD)"
@@ -1219,7 +1218,6 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
 
     // Save Selected product(s) for the Row
     function saveProducts() {
-        debugger;
         if (vm.addedProducts.length > 0) {
             var validObject = { "Row": "", "Items": [] }; //Multiple Match Key Value pair
             for (var s = 0; s < vm.addedProducts.length; s++) {
