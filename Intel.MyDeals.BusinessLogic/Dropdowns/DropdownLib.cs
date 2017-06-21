@@ -126,6 +126,7 @@ namespace Intel.MyDeals.BusinessLogic
                 //create basic dropdown from provided geo
                 BasicDropdown newBD_Geo = new BasicDropdown();
                 newBD_Geo.DROP_DOWN = geoCombined[i];
+                newBD_Geo.ATRB_LKUP_DESC = "GEO";
 
                 //using created basic dropdown, use that to seed a new dropdownhierarchy
                 DropdownHierarchy newDH_Geo = new DropdownHierarchy(newBD_Geo);
@@ -139,8 +140,11 @@ namespace Intel.MyDeals.BusinessLogic
                     //rinse and repeat like above, but for regions instead of geos
                     BasicDropdown newBD_Region = new BasicDropdown();
                     newBD_Region.DROP_DOWN = region.RGN_NM;
+                    newBD_Region.ATRB_LKUP_DESC = "REGION";
+
                     DropdownHierarchy newDH_Region = new DropdownHierarchy(newBD_Region);
                     newDH_Region.expanded = true;
+
                     List<DropdownHierarchy> countries = new List<DropdownHierarchy>();
                     IEnumerable<GeoDimension> region_countries = geodim.Where(geo => geo.GEO_NM.ToUpper() == geoCombined[i].ToUpper() && geo.RGN_NM == newDH_Region.DROP_DOWN && (geo.CTRY_NM != null && geo.CTRY_NM != ""));
                     foreach (GeoDimension country in region_countries)
@@ -148,6 +152,8 @@ namespace Intel.MyDeals.BusinessLogic
                         //rinse and repeat like above, but for countries instead of regions
                         BasicDropdown newBD_Country = new BasicDropdown();
                         newBD_Country.DROP_DOWN = country.CTRY_NM;
+                        newBD_Country.ATRB_LKUP_DESC = "COUNTRY";
+
                         DropdownHierarchy newDH_Country = new DropdownHierarchy(newBD_Country);
                         newDH_Country.expanded = true;
 
