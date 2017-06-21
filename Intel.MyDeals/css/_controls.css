@@ -66,6 +66,12 @@
     }
 
 
+    .isSoftWarnCell {
+        color: #444 !important;
+        background-color: #f3D54E !important;
+    }
+
+
     /*.elOnBlue .isRequired {
         color: #ffffff !important;
     }*/

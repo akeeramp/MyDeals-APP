@@ -47,16 +47,36 @@ gridUtils.uiDimControlWrapper = function (passedData, field, dim, format) {
 }
 gridUtils.uiMoneyDatesControlWrapper = function (passedData, field, startDt, endDt) {
 
-    var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
-    tmplt += '<div class="uiControlDiv" style="line-height: 1em; font-family: arial; text-align: center;"';
-    tmplt += '     ng-class="{isHiddenCell: dataItem._behaviors.isHidden.' + field + ', isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ',';
-    tmplt += '     isRequiredCell: dataItem._behaviors.isRequired.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + ', isSavedCell: dataItem._behaviors.isSaved.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + '}">';
-    tmplt += '    <span class="ng-binding" ng-bind="(dataItem.' + field + ' ' + gridUtils.getFormat(field, 'currency') + ')" style="font-weight: bold;"></span>';
-    tmplt += '    <div>';
-    tmplt += '    <span class="ng-binding" ng-bind="(dataItem.' + startDt + ' | date:\'MM/dd/yy\')"></span> - ';
-    tmplt += '    <span class="ng-binding" ng-bind="(dataItem.' + endDt + ' ' + gridUtils.getFormat(field, "date:'MM/dd/yy'") + ')"></span>';
-    tmplt += '    </div>';
-    tmplt += '</div>';
+    var msg = "";
+    var msgClass = "";
+    var tmplt = '';
+
+    if (field === "CAP" && passedData[field] === "No CAP") {
+        tmplt += '<div class="uiControlDiv isSoftWarnCell" style="font-family: arial; text-align: center; color: white;">';
+        tmplt += '    No CAP';
+        tmplt += '</div>';
+    } else {
+
+        if (field === "CAP") {
+            var cap = parseFloat(passedData.CAP).toFixed(2);
+            var ecap = parseFloat(passedData.ECAP_PRICE).toFixed(2);
+            if (ecap > cap) {
+                msg = "title = 'ECAP ($" + ecap + ") is greater than the CAP ($" + cap + ")'";
+                msgClass = "isSoftWarnCell";
+            }
+        }
+
+        tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
+        tmplt += '<div class="uiControlDiv ' + msgClass + '" style="line-height: 1em; font-family: arial; text-align: center;" ' + msg;
+        tmplt += '     ng-class="{isHiddenCell: dataItem._behaviors.isHidden.' + field + ', isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ',';
+        tmplt += '     isRequiredCell: dataItem._behaviors.isRequired.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + ', isSavedCell: dataItem._behaviors.isSaved.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + '}">';
+        tmplt += '    <span class="ng-binding" ng-bind="(dataItem.' + field + ' ' + gridUtils.getFormat(field, 'currency') + ')" style="font-weight: bold;"></span>';
+        tmplt += '    <div>';
+        tmplt += '    <span class="ng-binding" ng-bind="(dataItem.' + startDt + ' | date:\'MM/dd/yy\')"></span> - ';
+        tmplt += '    <span class="ng-binding" ng-bind="(dataItem.' + endDt + ' ' + gridUtils.getFormat(field, "date:'MM/dd/yy'") + ')"></span>';
+        tmplt += '    </div>';
+        tmplt += '</div>';
+    }
 
     return tmplt;
 }

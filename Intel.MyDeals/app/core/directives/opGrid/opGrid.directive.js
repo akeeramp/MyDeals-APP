@@ -44,6 +44,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
             $scope.isEditable = $scope.assignVal("isEditable", false);
             $scope.openCAPBreakOut = openCAPBreakOut;
             $scope.getPrductDetails = getPrductDetails;
+            $scope.numSoftWarn = $scope.opOptions.numSoftWarn;
+            $scope.msgSoftWarn = $scope.opOptions.msgSoftWarn;
 
             $scope.assignColSettings = function () {
                 if ($scope.opOptions.columns === undefined) return [];
@@ -504,7 +506,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
 							});
                 	} else {
 
-                		$('<input required name="' + options.field + '"/>')
+                		$('<input name="' + options.field + '"/>')
 							.appendTo(container)
 							.kendoComboBox({
 								autoBind: false,
@@ -518,11 +520,11 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
 									}
 								}
 							});
-                	}
+                    }
                 } else if (col.uiType.toUpperCase() === "MULTISELECT") {
 
                 	var id = "";
-                	if (col.field == "DEAL_SOLD_TO_ID") { id = options.model["CUST_MBR_SID"] } // TODO:change to dynamic
+                	if (col.field === "DEAL_SOLD_TO_ID") { id = options.model["CUST_MBR_SID"] } // TODO:change to dynamic
 
                 	//$('<select data-bind="value:' + options.field + '" name="' + options.field + '"/>')
 					//	.appendTo(container)

@@ -630,7 +630,7 @@ namespace Intel.MyDeals.DataLibrary
                 Template = "#=gridUtils.uiControlWrapper(data, 'DEAL_COMB_TYPE')#",
                 IsFilterable = true,
                 IsSortable = true,
-                Width = 100,
+                Width = 140,
                 LookupUrl = "/api/Dropdown/GetDropdowns/DEAL_COMB_TYPE",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"

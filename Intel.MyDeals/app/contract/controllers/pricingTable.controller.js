@@ -378,6 +378,32 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 }
             };
 
+            // check for soft warnings
+            var numWarn = 0;
+            var noCapMsg = [];
+            var noCapEcapMsg = [];
+            var msgSoftWarn = "";
+            for (var w = 0; w < root.pricingTableData.WIP_DEAL.length; w++) {
+                if (!!root.pricingTableData.WIP_DEAL[w]["CAP"]) {
+                    if (root.pricingTableData.WIP_DEAL[w]["CAP"] === "No CAP") {
+                        numWarn++;
+                        noCapMsg.push("<TR><TD>" + root.pricingTableData.WIP_DEAL[w]["DC_ID"] + "</TD><TD>" + root.pricingTableData.WIP_DEAL[w]["TITLE"] + "</TD></tr>");
+                    }
+                    var cap = parseFloat(root.pricingTableData.WIP_DEAL[w]["CAP"]).toFixed(2);
+                    var ecap = parseFloat(root.pricingTableData.WIP_DEAL[w]["ECAP_PRICE"]).toFixed(2);
+                    if (ecap > cap) {
+                        numWarn++;
+                        noCapEcapMsg.push("<TR><TD>" + root.pricingTableData.WIP_DEAL[w]["DC_ID"] + "</TD><TD>$" + ecap + "</TD><TD>$" + cap + "</TD></tr>");
+                    }
+                }
+            }
+
+            if (noCapMsg.length > 0) msgSoftWarn += "<div>NO CAP</div><TABLE style='width: 400px;'><TR><TH>Deal</TH><TH>ECAP</TH><TH>CAP</TH></TR>" + noCapMsg.join("") + "</TABLE>";
+            if (noCapEcapMsg.length > 0) msgSoftWarn += "<div>ECAP > CAP</div><TABLE style='width: 400px;'><TR><TH>Deal</TH><TH>ECAP</TH><TH>CAP</TH></TR>" + noCapEcapMsg.join("") + "</TABLE>";
+
+            root.wipOptions.numSoftWarn = numWarn;
+            root.wipOptions.msgSoftWarn = "<DIV style='width: 100%; background-color: yellow;'>" + msgSoftWarn + "</DIV>";
+
             root.wipData = root.pricingTableData.WIP_DEAL;
 
             root.setBusy("Drawing Grid", "Applying security to the grid.");

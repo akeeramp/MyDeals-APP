@@ -41,7 +41,7 @@
                             </tr>
                         </table>
                     </button>
-                    
+
                     <button class="btn btn-sm ssToolbarBtn" ng-click="toggleTerms()" title="Show/Hide Additional Discounts and Requirements.">
                         <table>
                             <tr>
@@ -55,8 +55,16 @@
                         </table>
                     </button>
 
+                    <button class="btn btn-sm ssToolbarBtn" ng-click="winSoftWarn.open()" title="There are {{numSoftWarn}} soft warnings.">
+                        <span class="soft-warn">
+                            <i class="intelicon-information-outlined" aria-hidden="true" style="font-size: 30px; vertical-align: middle; margin-right: -10px;"></i>
+                            <span class="badge">{{numSoftWarn}}</span>
+                        </span>
+                    </button>
+                    <div kendo-window="winSoftWarn" k-title="'Soft Warnings'" k-visible="false" ng-bind-html="msgSoftWarn"></div>
+                    
                 </div>
-                
+                                
                 <div class="fr" style="margin-top: 2px; margin-left: 4px;" ng-show="isLayoutConfigurable">
                     <ul kendo-menu k-options="columnMenu">
                         <li>
@@ -263,6 +271,14 @@
     }
     .gradTab .badge.error {
         background-color: #FC4C02;
+    }
+
+    .soft-warn {
+        color: #00AEEF;
+    }
+    .soft-warn .badge {
+        background-color: #f3D54E;
+        vertical-align: super;
     }
 
     .toolbar {

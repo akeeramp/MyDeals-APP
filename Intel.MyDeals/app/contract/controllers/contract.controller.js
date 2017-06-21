@@ -304,12 +304,10 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
         }
 
         // Update start date and end date based on the quarter selection
-        var updateDateByQuarter = function(qtrType, qtrValue, yearValue) {
-            var customerMemberSid = $scope.contractData
-                .CUST_MBR_SID ==
-                ""
-                ? null
-                : $scope.contractData.CUST_MBR_SID;
+        var updateDateByQuarter = function (qtrType, qtrValue, yearValue) {
+            if (!qtrValue && !yearValue) return;
+
+            var customerMemberSid = $scope.contractData.CUST_MBR_SID === "" ? null : $scope.contractData.CUST_MBR_SID;
             var quarterDetails = customerService.getCustomerCalendar(customerMemberSid, null, qtrValue, yearValue)
                 .then(function(response) {
                         if (qtrType == 'START_DATE') {
@@ -889,10 +887,10 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
             $scope.newPricingTable["_extraAtrbs"] = ptTmplt.extraAtrbs;
             $scope.newPricingTable["_defaultAtrbs"] = ptTmplt.defaultAtrbs;
 
-            // Maybe don't do this...
-            //if (util.isEmpty(ptTmplt.extraAtrbs)) {
-            //    $scope.customAddPtValidate();
-            //}
+            if (ptTmplt.name !== "" && !!$scope.newPricingTable._behaviors && !!$scope.newPricingTable._behaviors.isError) {
+                $scope.newPricingTable._behaviors.isError["OBJ_SET_TYPE_CD"] = false;
+                $scope.newPricingTable._behaviors.validMsg["OBJ_SET_TYPE_CD"] = "";
+            }
         }
         $scope.setNptTemplate = function (pt) {
             $scope.currentPricingTable = pt;
@@ -1850,7 +1848,6 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                 $scope.addStrategyDisabled = false;
             }
         }
-
 
     $scope.IsUniqueInList = function (listToCheck, value, keyToCompare, checkForDouble) {
     	// Check unique name

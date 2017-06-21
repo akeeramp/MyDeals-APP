@@ -212,9 +212,13 @@ namespace Intel.MyDeals.BusinessRules
                     {
                         #region CAP Validations
 
-                        //double cap;
+                        double cap;
+                        if (!double.TryParse(prodMapping.CAP, out cap) && prodMapping.CAP.IndexOf("-") >= 0)
+                        {
+                            BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"CAP price ({prodMapping.CAP}) cannot be a range.");
+                        }
+
                         //double ecap;
-                        //if (!double.TryParse(prodMapping.CAP, out cap)) cap = 0;
                         //if (!double.TryParse(r.Dc.GetDataElementValue(AttributeCodes.ECAP_PRICE), out ecap)) ecap = 0;
 
                         // When ECAP Price is greater than CAP, UI validation check on deal creation and system should give a soft warning.
