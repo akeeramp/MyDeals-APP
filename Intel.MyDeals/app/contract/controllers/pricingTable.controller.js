@@ -428,7 +428,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         };
 
         var suggestedProduct = {
-            'mode': 'auto',
+            'mode': 'manual',
             'prodname': vm.productName
         };
 

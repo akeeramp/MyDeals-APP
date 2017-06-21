@@ -268,7 +268,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             }
 
             //Step 5: Removing all special characters
-            if (tempString != tempString.replace(/[^\w\s]/gi, '')) {
+            if (tempString != tempString.replace(/[^\w\s]/gi, '') && tempString.replace(/[^\w\s]/gi, '').length > 0) {
                 if (vm.suggestedProd.indexOf(tempString.replace(/[^\w\s]/gi, '')) == -1) {
                     vm.suggestedProd.push(tempString.replace(/[^\w\s]/gi, ''));
                 }
