@@ -92,7 +92,7 @@ util.formatMoney = function (val, defVal) {
 }
 
 util.isInvalidDate = function (val) {
-    return !val || moment(val).format("MM/DD/YYYY") === "12/30/1899";
+    return !val || moment(val).toString() === "Invalid date" || moment(val).format("MM/DD/YYYY") === "12/30/1899";
 }
 
 util.toJS = function (json) {

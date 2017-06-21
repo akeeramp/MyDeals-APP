@@ -648,8 +648,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             if (data[n].DC_ID === null && (data[n].PTR_USER_PRD === null || data[n].PTR_USER_PRD === "")) {
                 data.splice(n, 1);
             } else {
-                if (util.isInvalidDate(data[n].START_DT)) data[n].START_DT = root.contractData["START_DT"];
-                if (util.isInvalidDate(data[n].END_DT)) data[n].END_DT = root.contractData["END_DT"];
+                if (util.isInvalidDate(data[n].START_DT)) data[n].START_DT = moment(root.contractData["START_DT"]).format("MM/DD/YYYY");
+                if (util.isInvalidDate(data[n].END_DT)) data[n].END_DT = moment(root.contractData["END_DT"]).format("MM/DD/YYYY");
             }
         }
         return data;
@@ -1327,7 +1327,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 USR_INPUT: row.PTR_USER_PRD,
                 EXCLUDE: "",
                 FILTER: row.PROD_INCLDS,
-                START_DATE: row.START_DT,
+                START_DATE:  row.START_DT,
                 END_DATE: row.END_DT,
                 GEO_COMBINED: row.GEO_COMBINED,
                 PROGRAM_PAYMENT: row.PROGRAM_PAYMENT,
@@ -1335,6 +1335,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 SendToTranslation: !(row.PTR_SYS_INVLD_PRD != null && row.PTR_SYS_INVLD_PRD != "")
             }
         });
+        //if (util.isInvalidDate(data[n].START_DT)) data[n].START_DT = root.contractData["START_DT"]
 
         var translationInputToSend = translationInput.filter(function (x) {
             // If we already have the invalid JSON don't translate the products again

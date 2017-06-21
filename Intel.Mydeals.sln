@@ -73,6 +73,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intel.MyDeals.IBusinessLogic", "Intel.MyDeals.IBusinessLogic\Intel.MyDeals.IBusinessLogic.csproj", "{A9AF9B92-17BA-4050-B5A7-F5F652AECDF9}"
 EndProject
 Global
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		dev|Any CPU = dev|Any CPU
@@ -256,7 +259,7 @@ Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 16
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://tfs-fm-04.devtools.intel.com/tfs/defaultcollection
+		SccTeamFoundationServer = http://source.intel.com:8080/tfs/defaultcollection
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = Intel.MyDeals.DataAccessLib\\Intel.MyDeals.DataAccessLib.csproj
 		SccProjectTopLevelParentUniqueName1 = Intel.Mydeals.sln
