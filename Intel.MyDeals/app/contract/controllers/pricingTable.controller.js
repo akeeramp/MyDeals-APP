@@ -452,7 +452,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 }],
                 pricingTableRow: angular.copy(pricingTableRow),
                 suggestedProduct: function () {
-                    return suggestedProd;
+                    return suggestedProduct;
                 },
                 enableSplitProducts: function () {
                     return true;
@@ -1256,7 +1256,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         }],
                         pricingTableRow: angular.copy(pricingTableRow),
                         suggestedProduct: function () {
-                            return suggestedProd;
+                            return suggestedProduct;
                         },
                         enableSplitProducts: function () {
                             return enableSplitProducts;
