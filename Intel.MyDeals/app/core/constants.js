@@ -6,7 +6,7 @@
         .module('app.core')
         .constant('toastr', toastr)
         .constant('gridConstants', {
-            pageSizes: [25, 50, 100],
+            pageSizes: [10, 25, 50, 100],
             filterable: {
                 extra: false,
                 operators: {

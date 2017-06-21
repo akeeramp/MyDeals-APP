@@ -14,6 +14,8 @@ namespace Intel.MyDeals.IDataLibrary
 
         List<PRD_TRANSLATION_RESULTS> GetProductDetails(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID);
 
+        List<PRD_LOOKUP_RESULTS> SearchProduct(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID);
+
         List<ProductIncExcAttribute> SetIncludeExclude(List<ProductIncExcAttribute> data, string opsType);
 
         ProductIncExcAttributeSelector GetProductIncludeExcludeAttribute();

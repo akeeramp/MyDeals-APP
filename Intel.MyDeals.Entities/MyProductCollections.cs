@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Runtime.Serialization;
 
 /// <summary>
@@ -95,5 +96,64 @@ namespace Intel.MyDeals.Entities
         public System.String DEAL_PRD_NM { set; get; }
 
         public System.String PROD_NAMES { set; get; }
+    }
+
+    public class SearchString
+    {
+        /// <summary>
+        /// Search string name
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Type of search string, EPM name, GDM Family Name etc..
+        /// </summary>
+        public string Type { get; set; }
+
+        /// <summary>
+        /// Type of search string, EPM name, GDM Family Name etc..
+        /// </summary>
+        public string DisplayType { get; set; }
+    }
+
+    /// <summary>
+    /// These enums hold the attributes against which user can do search
+    /// </summary>
+    public enum ProductHierarchyLevelsEnum
+    {
+        None = 0,
+
+        [Description("Product Type")]
+        DEAL_PRD_TYPE = 7002,
+
+        [Description("Product Category")]
+        PRD_CAT_NM = 7003,
+
+        [Description("Brand")]
+        BRND_NM = 7004,
+
+        [Description("Family")]
+        FMLY_NM = 7005,
+
+        [Description("Processor")]
+        PCSR_NBR = 7006,
+
+        [Description("L4")]
+        DEAL_PRD_NM = 7007,
+
+        [Description("Material Id")]
+        MTRL_ID = 7008,
+
+        [Description("EPM Name")]
+        EPM_NM = 1,
+
+        [Description("Family")]
+        GDM_FMLY_NM = 2,
+
+        [Description("NAND Family")]
+        NAND_FAMILY = 3,
+
+        [Description("NAND Density")]
+        NAND_DENSITY = 4
     }
 }

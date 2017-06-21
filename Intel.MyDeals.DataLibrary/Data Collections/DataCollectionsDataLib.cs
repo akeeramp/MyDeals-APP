@@ -2,6 +2,7 @@
 using Intel.MyDeals.IDataLibrary;
 using Intel.RulesEngine;
 using System.Collections.Generic;
+using System;
 
 namespace Intel.MyDeals.DataLibrary
 {
@@ -159,14 +160,24 @@ namespace Intel.MyDeals.DataLibrary
         public List<Dropdown> GetDropdowns()
         {
             return DataCollections.GetDropdowns();
-		}
-		//public List<RetailPull> GetRetailPullSDMList()
-		//{
-		//	return DataCollections.GetRetailPullList();
-		//}
-		public List<SoldToIds> GetSoldToIdList()
-		{
-			return DataCollections.GetSoldToIdList();
-		}
-	}
+        }
+
+        //public List<RetailPull> GetRetailPullSDMList()
+        //{
+        //	return DataCollections.GetRetailPullList();
+        //}
+        public List<SoldToIds> GetSoldToIdList()
+        {
+            return DataCollections.GetSoldToIdList();
+        }
+
+        /// <summary>
+        /// Get Search string
+        /// </summary>
+        /// <returns></returns>
+        public IList<SearchString> GetSearchString()
+        {
+            return DataCollections.GetSearchString();
+        }
+    }
 }

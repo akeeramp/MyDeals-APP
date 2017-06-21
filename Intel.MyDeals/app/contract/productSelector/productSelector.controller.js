@@ -4,7 +4,7 @@
        .module('app.admin') //TODO: once we integrate with contract manager change the module to contract
        .controller('ProductSelectorModalController', ProductSelectorModalController);
 
-    ProductSelectorModalController.$inject = ['$filter', '$scope', '$uibModal', '$uibModalInstance', 'productSelectionLevels', 'enableSplitProducts', 'ProductSelectorService', 'pricingTableRow', '$timeout', 'logger', 'gridConstants','suggestedProduct'];
+    ProductSelectorModalController.$inject = ['$filter', '$scope', '$uibModal', '$uibModalInstance', 'productSelectionLevels', 'enableSplitProducts', 'ProductSelectorService', 'pricingTableRow', '$timeout', 'logger', 'gridConstants', 'suggestedProduct'];
 
     function ProductSelectorModalController($filter, $scope, $uibModal, $uibModalInstance, productSelectionLevels, enableSplitProducts, ProductSelectorService, pricingTableRow, $timeout, logger, gridConstants, suggestedProduct) {
         var vm = this;
@@ -38,7 +38,7 @@
         vm.showSingleProductHeirarchy = showSingleProductHeirarchy;
         vm.getVerticalsUnderMarkLevel = getVerticalsUnderMarkLevel;
         vm.isValidCapDetails = isValidCapDetails;
-        var selectionProcessed = false;
+        var searchProcessed = false;
 
         function populateValidProducts() {
             if (pricingTableRow.PTR_SYS_PRD == "") {
@@ -279,7 +279,7 @@
         }
 
         function validateMediaCode(data, mediaCode) {
-            if (mediaCode == "ALL") return data;
+            if (mediaCode.toUpperCase() == "ALL") return data;
             var prdIdToremove = [];
             for (var p = 0; p < data.length; p++) {
                 if (arrayContainsString(productTypeToApplyMediaCode, data[p].DEAL_PRD_TYPE)) {
@@ -351,7 +351,11 @@
         var dataSourceProduct = new kendo.data.DataSource({
             transport: {
                 read: function (e) {
-                    vm.gridData = validateMediaCode(vm.gridData, pricingTableRow.PROD_INCLDS);
+                    // Dont apply media code filter if its coming from searched results, as the filter applied on server side
+                    if (!searchProcessed) {
+                        vm.gridData = validateMediaCode(vm.gridData, pricingTableRow.PROD_INCLDS);
+                    }
+                    searchProcessed = false;
                     e.success(vm.gridData);
                 },
             },
@@ -623,26 +627,24 @@
         getItems();
 
         // Called when user enters value into search box and hits enter
-        vm.searchProduct = function (row) {
-            if (selectionProcessed) {
-                selectionProcessed = false;
-                return;
-            }
+        vm.searchProduct = function (userInput) {
+            userInput = !userInput ? vm.userInput : userInput;
+            if (userInput == "") return [];
+            var data = [{
+                ROW_NUMBER: 1, // By default pass one as user will select only one value from popup
+                USR_INPUT: userInput,
+                EXCLUDE: "",
+                FILTER: pricingTableRow.PROD_INCLDS,
+                START_DATE: pricingTableRow.START_DT,
+                END_DATE: pricingTableRow.END_DT,
+                GEO_COMBINED: pricingTableRow.GEO_COMBINED,
+                PROGRAM_PAYMENT: pricingTableRow.PROGRAM_PAYMENT,
+            }];
 
-            var searchStringDTO = {
-                'prdEntered': vm.userInput,
-                'returnMax': 500,
-                'startDate': pricingTableRow.START_DT,
-                'endDate': pricingTableRow.END_DT
-            }
-
-            ProductSelectorService.GetProductSuggestions(searchStringDTO).then(function (response) {
-                vm.productSuggestions = response.data;
-                vm.productDataSource.read();
-                var autocomplete = $("#productSearch").data("kendoAutoComplete");
-                autocomplete.search(vm.userInput);
+            ProductSelectorService.GetProductDetails(data, pricingTableRow.CUST_MBR_SID).then(function (response) {
+                processProducts(response.data);
             }, function (response) {
-                logger.error("Unable to get product suggestions.", response, response.statusText);
+                logger.error("Unable to get products.", response, response.statusText);
             });
         }
 
@@ -652,7 +654,6 @@
                 setTimeout(function () {
                     vm.searchProduct();
                 }, 2000);
-                
             }
         }
 
@@ -674,32 +675,39 @@
         });
 
         vm.productOptions = {
-            dataSource: vm.productDataSource,
-            dataTextField: "HIER_VAL_NM",
-            filter: "contains",
-            height: 300,
-            minLength: 2,
-            noDataTemplate: 'Press enter to search',
-            select: function (e) {
-                selectionProcessed = true;
-                var data = {
-                    "searchHash": e.dataItem.HIER_NM_HASH,
-                    "startDate": pricingTableRow.START_DT,
-                    "endDate": pricingTableRow.END_DT,
-                    "selectionLevel": e.dataItem.PRD_ATRB_SID,
-                    "drillDownFilter4": null,
-                    "drillDownFilter5": null,
-                    "custSid": pricingTableRow.CUST_MBR_SID,
-                    "geoSid": pricingTableRow.GEO_COMBINED.toString()
+            dataSource: {
+                serverFiltering: true,
+                transport: {
+                    read: function (e) {
+                        var param = e.data.filter.filters[0].value;
+                        if (param === "") {
+                            e.success([]);
+                        } else {
+                            ProductSelectorService.GetSearchString(param).then(function (response) {
+                                e.success(response.data);
+                            }, function (response) {
+                                logger.error("Unable to get product suggestions.", response, response.statusText);
+                            });
+                        }
+                    },
+                    parameterMap: function (data, action) {
+                        var newParams = {
+                            filter: data.filter.filters[0].value
+                        };
+                        return newParams;
+                    }
                 }
-
-                ProductSelectorService.GetProductSelectionResults(data).then(function (response) {
-                    processProducts(response.data);
-                }, function (response) {
-                    logger.error("Unable to get products.", response, response.statusText);
-                });
             },
-            template: '<div class="productSelector searchTemplate">#: HIER_VAL_NM #<div><small><b>Category:</b> #= PRD_CAT_NM #</small><small> |<b> Brand:</b> #= BRND_NM #</small><small> |<b> Family:</b> #= FMLY_NM #</small><small> |<b> Processor:</b> #= PCSR_NBR #</small><small> |<b> L4:</b> #= DEAL_PRD_NM #</small></div></div>',
+            dataTextField: "Name",
+            serverFiltering: true,
+            filter: "startsWith",
+            height: 300,
+            delay: 700,
+            minLength: 2,
+            select: function (e) {
+                vm.searchProduct(e.dataItem.Name);
+            },
+            //template: '<div class="productSelector searchTemplate">#: Name #<div><small><b>Type:</b> #= Type #</small></div></div>',
         };
 
         function showSingleProductHeirarchy(product) {
@@ -733,7 +741,7 @@
 
             vm.productSearchValues = data;
 
-            vm.errorMessage = vm.productSearchValues.length == 0 ? "Unable to match with a valid product. Click on Select to find products" : "";
+            vm.errorMessage = vm.productSearchValues.length == 0 ? "Unable to find a valid product for selected global filters." : "";
             var productCategories = $filter('unique')(vm.productSearchValues, 'PRD_CAT_NM');
 
             vm.searchItems = productCategories.map(function (i) {
@@ -856,6 +864,7 @@
                 }
 
                 vm.gridData = products;
+                searchProcessed = true;
                 dataSourceProduct.read();
                 vm.searchItems = [];
                 vm.showSearchResults = true;

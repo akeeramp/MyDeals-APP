@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -140,6 +141,50 @@ namespace Intel.MyDeals.DataLibrary
             lock (LOCK_OBJECT ?? new object())
             {
                 return _getToolConstants ?? (_getToolConstants = new ConstantLookupDataLib().GetAdminConstants());
+            }
+        }
+
+        private static List<SearchString> _getSearchString;
+
+        public static List<SearchString> GetSearchString()
+        {
+            // Keeping this call out of lock statement, get products cache
+            var products = GetProductData();
+            lock (LOCK_OBJECT ?? new object())
+            {
+                if (_getSearchString == null)
+                {
+                    _getSearchString = new List<SearchString>();
+                    var searchHierColumns = products.Where(x => !string.IsNullOrEmpty(x.HIER_VAL_NM) &&
+                        x.PRD_ATRB_SID <= (int)ProductHierarchyLevelsEnum.MTRL_ID
+                        && x.PRD_ATRB_SID >= (int)ProductHierarchyLevelsEnum.DEAL_PRD_TYPE)
+                        .Select(x => new SearchString { Name = x.HIER_VAL_NM, Type = ((ProductHierarchyLevelsEnum)x.PRD_ATRB_SID).ToString() });
+
+                    var searchGDMFamily = products.Where(x => !string.IsNullOrEmpty(x.GDM_FMLY_NM)).
+                            Select(x => new SearchString { Name = x.GDM_FMLY_NM, Type = ProductHierarchyLevelsEnum.GDM_FMLY_NM.ToString() });
+
+                    var searchNandFamily = products.Where(x => !string.IsNullOrEmpty(x.NAND_FAMILY) && x.PRD_ATRB_SID == 7008).
+                                       Select(x => new SearchString { Name = x.NAND_FAMILY, Type = ProductHierarchyLevelsEnum.NAND_FAMILY.ToString() });
+
+                    var searchNandDensity = products.Where(x => !string.IsNullOrEmpty(x.NAND_DENSITY) && x.PRD_ATRB_SID == 7008).
+                                       Select(x => new SearchString { Name = x.NAND_DENSITY, Type = ProductHierarchyLevelsEnum.NAND_DENSITY.ToString() });
+
+                    var searchEPM = products.Where(x => !string.IsNullOrEmpty(x.NAND_FAMILY) && x.PRD_ATRB_SID == 7008).
+                                       Select(x => new SearchString { Name = x.GDM_FMLY_NM, Type = ProductHierarchyLevelsEnum.GDM_FMLY_NM.ToString() });
+
+                    _getSearchString.AddRange(searchHierColumns);
+                    _getSearchString.AddRange(searchGDMFamily);
+                    _getSearchString.AddRange(searchNandFamily);
+                    _getSearchString.AddRange(searchNandDensity);
+                    _getSearchString.AddRange(searchEPM);
+
+                    return _getSearchString = _getSearchString.GroupBy(item => item.Name)
+                                .Select(item => item.First()).Distinct().ToList();
+                }
+                else
+                {
+                    return _getSearchString;
+                }
             }
         }
 
@@ -418,7 +463,7 @@ namespace Intel.MyDeals.DataLibrary
         }
 
         private static List<Product> _getProductData;
-        
+
         public static List<ProductAlias> GetProductsFromAlias()
         {
             lock (LOCK_OBJECT ?? new object())
@@ -492,30 +537,27 @@ namespace Intel.MyDeals.DataLibrary
 
         private static List<Dropdown> _getDropdowns;
 
-		#endregion Dropdowns
+        #endregion Dropdowns
 
+        //// TODO: Either uncomment the below out or remove it once we re-add Retail Cycle in
+        //public static List<RetailPull> GetRetailPullList()
+        //{
+        //	lock (LOCK_OBJECT ?? new object())
+        //	{
+        //		return _getRetailPullList ?? (_getRetailPullList = new RetailPullDataLib().GetRetailPullFromSDMList());
+        //	}
+        //}
 
-		//// TODO: Either uncomment the below out or remove it once we re-add Retail Cycle in
-		//public static List<RetailPull> GetRetailPullList()
-		//{
-		//	lock (LOCK_OBJECT ?? new object())
-		//	{
-		//		return _getRetailPullList ?? (_getRetailPullList = new RetailPullDataLib().GetRetailPullFromSDMList());
-		//	}
-		//}
+        //private static List<RetailPull> _getRetailPullList;
 
-		//private static List<RetailPull> _getRetailPullList;
+        public static List<SoldToIds> GetSoldToIdList()
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                return _getSoldToIdList ?? (_getSoldToIdList = new SoldToIdDataLib().GetSoldToIdList());
+            }
+        }
 
-		
-		public static List<SoldToIds> GetSoldToIdList()
-		{
-			lock (LOCK_OBJECT ?? new object())
-			{
-				return _getSoldToIdList ?? (_getSoldToIdList = new SoldToIdDataLib().GetSoldToIdList());
-			}
-		}
-
-		private static List<SoldToIds> _getSoldToIdList;
-
-	}
+        private static List<SoldToIds> _getSoldToIdList;
+    }
 }

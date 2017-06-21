@@ -46,7 +46,7 @@ namespace Intel.MyDeals.IBusinessLogic
 
         ProductLookup TranslateProducts(List<ProductEntryAttribute> products, int CUST_MBR_SID);
 
-        List<PRD_TRANSLATION_RESULTS> GetProductDetails(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID);
+        List<PRD_LOOKUP_RESULTS> SearchProduct(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID);
 
         List<ProductIncExcAttribute> SetIncludeAttibute(List<ProductIncExcAttribute> prodNames);
 
@@ -72,5 +72,7 @@ namespace Intel.MyDeals.IBusinessLogic
         List<ProductCAPYCS2> GetCAPForProduct(int product, int CUST_CD, string GEO_MBR_SID, DateTime START_DT, DateTime END_DT);
 
         List<Product> SuggestProductsByDates(string prdEntered, int? returnMax, DateTime startDate, DateTime endDate);
+
+        IList<SearchString> GetSearchString(string searchText);
     }
 }

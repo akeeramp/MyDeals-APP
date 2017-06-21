@@ -9,21 +9,27 @@
     ProductSelectorService.$inject = ['$http', 'dataService', 'logger', '$q'];
 
     function ProductSelectorService($http, dataService, logger, $q) {
-        //var apiBaseUrl = "api/WorkFlow/";
         var apiBaseUrl = "api/Products/";
         var service = {
             GetProdDealType: GetProdDealType,
             GetProductSelectorWrapper: GetProductSelectorWrapper,
             TranslateProducts: TranslateProducts,
+            GetProductDetails: GetProductDetails,
             GetProductSelectionResults: GetProductSelectionResults,
             GetProductSuggestions: GetProductSuggestions,
-            GetCAPForProduct: GetCAPForProduct
+            GetCAPForProduct: GetCAPForProduct,
+            GetSearchString: GetSearchString
         }
 
         return service;
 
         function TranslateProducts(products, CUST_CD) {
             return dataService.post(apiBaseUrl + 'TranslateProducts/' + CUST_CD, products);
+        }
+
+        // This method skips all the translator logic (product split, duplicate and invalid etc etc..) and hits the database
+        function GetProductDetails(products, CUST_CD) {
+            return dataService.post(apiBaseUrl + 'SearchProduct/' + CUST_CD, products);
         }
 
         function GetProdDealType(isForceReGet) {
@@ -47,8 +53,13 @@
         function GetProductSuggestions(searchStringDto) {
             return dataService.post(apiBaseUrl + 'SuggestProductsByDates', searchStringDto);
         }
+
         function GetCAPForProduct(product) {
             return dataService.post(apiBaseUrl + 'GetCAPForProduct', product);
+        }
+
+        function GetSearchString(dto) {
+            return dataService.get(apiBaseUrl + 'GetSearchString/' + dto);
         }
     }
 })();

@@ -8,6 +8,8 @@ using System.Text.RegularExpressions;
 using System;
 using System.Collections.Specialized;
 using System.Data;
+using System.ComponentModel;
+using Newtonsoft.Json.Linq;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -430,6 +432,27 @@ namespace Intel.MyDeals.BusinessLogic
         public List<PRD_TRANSLATION_RESULTS> GetProductDetails(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID)
         {
             return _productDataLib.GetProductDetails(productsToMatch, CUST_MBR_SID);
+        }
+
+        /// <summary>
+        /// Here only alias replace will happen
+        /// </summary>
+        /// <param name="productsToMatch"></param>
+        /// <param name="CUST_MBR_SID"></param>
+        /// <returns></returns>
+        public List<PRD_LOOKUP_RESULTS> SearchProduct(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID)
+        {
+            var aliasMapping = GetProductsFromAlias();
+            var productAliasesSplit = (from p in productsToMatch
+                                       join a in aliasMapping
+                                       on p.USR_INPUT equals a.PRD_ALS_NM into pa
+                                       from t in pa.DefaultIfEmpty()
+                                       select new ProductEntryAttribute
+                                       {
+                                           USR_INPUT = t == null ? p.USR_INPUT : t.PRD_NM
+                                       }).Distinct();
+
+            return _productDataLib.SearchProduct(productsToMatch, CUST_MBR_SID);
         }
 
         /// <summary>
@@ -860,11 +883,11 @@ namespace Intel.MyDeals.BusinessLogic
         {
             string getAvailable = "Y";
             string priceCondition = "";
-            
+
             ProductCAPYCS2Calc pCap = new ProductCAPYCS2Calc();
-            pCap.PRD_MBR_SID = PRD_MBR_SID; 
+            pCap.PRD_MBR_SID = PRD_MBR_SID;
             pCap.CUST_MBR_SID = CUST_CD;
-            pCap.GEO_MBR_SID = GEO_MBR_SID; 
+            pCap.GEO_MBR_SID = GEO_MBR_SID;
             pCap.DEAL_STRT_DT = START_DT;
             pCap.DEAL_END_DT = END_DT;
 
@@ -872,7 +895,7 @@ namespace Intel.MyDeals.BusinessLogic
             lpCap.Add(pCap);
 
             List<ProductCAPYCS2> capResult = _productDataLib.GetCAPForProduct(lpCap, getAvailable, priceCondition);
-            return capResult;            
+            return capResult;
         }
 
         /// <summary>
@@ -889,6 +912,61 @@ namespace Intel.MyDeals.BusinessLogic
             var productNameFromAlias = GetProductsFromAlias().Where(x => x.PRD_ALS_NM == prdEntered);
             prdEntered = productNameFromAlias.Any() ? productNameFromAlias.FirstOrDefault().PRD_NM : prdEntered;
             return SuggestProducts(prdEntered, returnMax, products);
+        }
+
+        /// <summary>
+        /// Get search string
+        /// </summary>
+        /// <param name="searchText"></param>
+        /// <returns></returns>
+        public IList<SearchString> GetSearchString(string searchText)
+        {
+            var searchString = GetSearchString();
+            string pattern = string.Join("|", searchText);
+            Regex regex = new Regex(pattern, RegexOptions.IgnoreCase);
+
+            List<NodeMatch> myMatches = new List<NodeMatch>();
+            foreach (SearchString searchVal in searchString)
+            {
+                MatchCollection matches = regex.Matches(searchVal.Name.ToUpper());
+                if (matches.Count > 0)
+                {
+                    int matchesLength = 0;
+                    string matchVal = "";
+                    foreach (Match match in matches)
+                    {
+                        matchesLength += match.Length;
+                        matchVal += match.Value;
+                    }
+
+                    float weight = ((float)matchesLength / (float)searchVal.Name.Length) * 100;
+
+                    NodeMatch newMatch = new NodeMatch
+                    {
+                        Value = searchVal.Name,
+                        MatchVal = matchVal,
+                        MatchLen = matchesLength,
+                        MatchCount = matches.Count,
+                        Weight = weight
+                    };
+                    myMatches.Add(newMatch);
+                }
+            }
+
+            var sortedList = myMatches.OrderByDescending(o => o.MatchLen).ThenByDescending(o => o.Weight);
+            var matchedNames = sortedList.Take(50).Select(p => p.Value);
+            var rtn = searchString.Where(p => matchedNames.Contains(p.Name)).ToList();
+
+            return rtn;
+        }
+
+        /// <summary>
+        /// Bring in the search string object from cache
+        /// </summary>
+        /// <returns></returns>
+        public IList<SearchString> GetSearchString()
+        {
+            return _dataCollectionsDataLib.GetSearchString();
         }
     }
 

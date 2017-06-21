@@ -26,7 +26,7 @@ namespace Intel.MyDeals.IDataLibrary
 
         UiTemplates GetUiTemplates();
 
-        List<Product> GetProductData(); 
+        List<Product> GetProductData();
 
         List<ProductCategory> GetProductCategories();
 
@@ -34,12 +34,12 @@ namespace Intel.MyDeals.IDataLibrary
 
         List<BasicDropdown> GetBasicDropdowns();
 
-		//// TODO: Either uncomment the below out or remove it once we re-add Retail Cycle in
-		//List<RetailPull> GetRetailPullSDMList();
+        //// TODO: Either uncomment the below out or remove it once we re-add Retail Cycle in
+        //List<RetailPull> GetRetailPullSDMList();
 
-		List<SoldToIds> GetSoldToIdList();
+        List<SoldToIds> GetSoldToIdList();
 
-		List<Dropdown> GetDropdowns();
+        List<Dropdown> GetDropdowns();
 
         #region Security Attributes
 
@@ -56,5 +56,7 @@ namespace Intel.MyDeals.IDataLibrary
         List<SecurityAttributesDropDown> GetSecurityAttributesDropDownData();
 
         ProductSelectorWrapper GetProductSelectorWrapper();
+
+        IList<SearchString> GetSearchString();
     }
 }
