@@ -169,18 +169,23 @@ namespace Intel.MyDeals.App
 
         public static List<MyCustomersInformation> GetMyCustomerDivsByCustNmSid(int custNmSid)
         {
-            //return UserSettings[OpUserStack.MyOpUserToken.Usr.Idsid.ToUpper()].AllMyCustomers.CustomerInfo.Where(c => c.cust_lvl_id == 2003 && c.cdms_cust_id == custNmSid).ToList();
-            return UserSettings[OpUserStack.MyOpUserToken.Usr.Idsid.ToUpper()].AllMyCustomers.CustomerInfo.Where(c => c.CUST_SID == custNmSid).ToList();
+            return UserSettings[OpUserStack.MyOpUserToken.Usr.Idsid.ToUpper()] == null 
+                ? new List<MyCustomersInformation>() 
+                : UserSettings[OpUserStack.MyOpUserToken.Usr.Idsid.ToUpper()].AllMyCustomers.CustomerInfo.Where(c => c.CUST_SID == custNmSid).ToList();
         }
 
         public static List<MyCustomersInformation> GetMyCustomersInfo()
         {
-            return UserSettings[OpUserStack.MyOpUserToken.Usr.Idsid.ToUpper()].AllMyCustomers.CustomerInfo;
+            return UserSettings[OpUserStack.MyOpUserToken.Usr.Idsid.ToUpper()] == null 
+                ? new List<MyCustomersInformation>() 
+                : UserSettings[OpUserStack.MyOpUserToken.Usr.Idsid.ToUpper()].AllMyCustomers.CustomerInfo;
         }
 
         public static List<MyCustomersSoldTo> GetMyCustomersSoldTo()
         {
-            return UserSettings[OpUserStack.MyOpUserToken.Usr.Idsid.ToUpper()].AllMyCustomers.CustomerSoldTo;
+            return UserSettings[OpUserStack.MyOpUserToken.Usr.Idsid.ToUpper()] == null 
+                ? new List<MyCustomersSoldTo>() 
+                : UserSettings[OpUserStack.MyOpUserToken.Usr.Idsid.ToUpper()].AllMyCustomers.CustomerSoldTo;
         }
 
 
