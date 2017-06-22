@@ -1322,10 +1322,11 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
 
             // Pricing Strategy
             if (!!$scope.curPricingStrategy) {
+                if (!$scope.curPricingStrategy._behaviors) $scope.curPricingStrategy._behaviors = {};
+                if (!$scope.curPricingStrategy._behaviors.validMsg) $scope.curPricingStrategy._behaviors.validMsg = {};
+                if (!$scope.curPricingStrategy._behaviors.isError) $scope.curPricingStrategy._behaviors.isError = {};
+
                 if (!$scope.curPricingStrategy._behaviors.isDirty || $scope.curPricingStrategy._behaviors.isDirty.TITLE) {
-                    if (!$scope.curPricingStrategy._behaviors) $scope.curPricingStrategy._behaviors = {};
-                    if (!$scope.curPricingStrategy._behaviors.validMsg) $scope.curPricingStrategy._behaviors.validMsg = {};
-                    if (!$scope.curPricingStrategy._behaviors.isError) $scope.curPricingStrategy._behaviors.isError = {};
 
                     if ($scope.curPricingStrategy !== undefined && $scope.curPricingStrategy.TITLE === "") {
                         $scope.curPricingStrategy._behaviors.validMsg["TITLE"] = "The Pricing Strategy needs a Title.";
