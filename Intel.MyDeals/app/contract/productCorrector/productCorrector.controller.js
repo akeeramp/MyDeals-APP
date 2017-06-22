@@ -1244,7 +1244,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         angular.forEach(vm.selectedItems, function (value, key) {
             if (!$filter("where")(vm.addedProducts, { PRD_MBR_SID: value.PRD_MBR_SID }).length > 0) {
                 vm.addedProducts.push(value);
-                var addedProducts = vm.addedProducts.map(function (x) {
+                vm.addedProducts = vm.addedProducts.map(function (x) {
                     return {
                         BRND_NM: x.BRND_NM,
                         CAP: x.CAP,
