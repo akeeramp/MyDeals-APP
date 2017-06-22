@@ -280,17 +280,19 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                     }
                 }
                 if (tempArr.length > 0) {
-                    if (vm.suggestedProd.indexOf(tempArr[0] + "-" + tempArr[1].replace(/[^\d-]/gi, '')) == -1) {
-                        vm.suggestedProd.push(tempArr[0] + "-" + tempArr[1].replace(/[^\d-]/gi, ''));
+                    if (tempString != tempArr[0] + "-" + tempArr[1].replace(/[^\d-]/gi, '')) {
+                        if (vm.suggestedProd.indexOf(tempArr[0] + "-" + tempArr[1].replace(/[^\d-]/gi, '')) == -1) {
+                            vm.suggestedProd.push(tempArr[0] + "-" + tempArr[1].replace(/[^\d-]/gi, ''));
+                        }
                     }
                 }
             }
 
             //Step 5: Removing all special characters
-            if (tempString != tempString.replace(/[^\w\s]/gi, '') && tempString.replace(/[^\w\s]/gi, '').length > 0) {
+            if (tempString != tempString.replace(/[^\w\s]/gi, '') && tempString.replace(/[^\w\s]/gi, '').length > 0) {                
                 if (vm.suggestedProd.indexOf(tempString.replace(/[^\w\s]/gi, '')) == -1) {
                     vm.suggestedProd.push(tempString.replace(/[^\w\s]/gi, ''));
-                }
+                }             
             }
 
             //Step 6 : Remove alphabet from the string

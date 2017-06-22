@@ -879,6 +879,15 @@ namespace Intel.MyDeals.BusinessLogic
             return _productDataLib.GetProductCAPYCS2Data(productCAPCalc, getAvailable, priceCondition);
         }
 
+        /// <summary>
+        /// Return CAP values for the Product
+        /// </summary>
+        /// <param name="PRD_MBR_SID"></param>
+        /// <param name="CUST_CD"></param>
+        /// <param name="GEO_MBR_SID"></param>
+        /// <param name="START_DT"></param>
+        /// <param name="END_DT"></param>
+        /// <returns></returns>
         public List<ProductCAPYCS2> GetCAPForProduct(int PRD_MBR_SID, int CUST_CD, string GEO_MBR_SID, DateTime START_DT, DateTime END_DT)
         {
             string getAvailable = "Y";
@@ -898,6 +907,11 @@ namespace Intel.MyDeals.BusinessLogic
             return capResult;
         }
 
+        /// <summary>
+        /// Get all the attribute values for the product
+        /// </summary>
+        /// <param name="product"></param>
+        /// <returns></returns>
         public List<PRD_LOOKUP_RESULTS> GetProductAttributes(List<PRD_LOOKUP_RESULTS> product = null)
         {
             List<Product> prds = GetProductsDetails();
