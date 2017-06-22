@@ -741,26 +741,47 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
             el._dirty = true;
             el._dirtyContractOnly = true;
         }
-
-}, true);
+    }, true);
 
     $scope.keyContractItemchanged = function (oldValue, newValue) {
         function purgeBehaviors(lData) {
             lData._behaviors = {};
+            lData._actions = {};
+            lData._settings = {};
+            lData.infoMessages = [];
+            lData.warningMessages = [];
+            lData.displayTitle = "";
+            lData.CUST_ACCNT_DIV_UI = "";
+            lData.PASSED_VALIDATION = "";
+
             if (!!lData.PRC_ST) {
                 for (var s = 0; s < lData.PRC_ST.length; s++) {
                     var item = lData.PRC_ST[s];
                     item._behaviors = {};
+                    item._actions = {};
+                    item._settings = {};
+                    item.infoMessages = [];
+                    item.warningMessages = [];
+                    item.PASSED_VALIDATION = "";
                     if (!!item.PRC_TBL) {
                         for (var t = 0; t < item.PRC_TBL.length; t++) {
                             item.PRC_TBL[t]._behaviors = {};
+                            item.PRC_TBL[t]._behaviors = {};
+                            item.PRC_TBL[t]._actions = {};
+                            item.PRC_TBL[t]._settings = {};
+                            item.PRC_TBL[t].infoMessages = [];
+                            item.PRC_TBL[t].warningMessages = [];
+                            item.PRC_TBL[t].PASSED_VALIDATION = "";
                         }
                     }
                 }
             }
-            return kendo.stringify(lData);
+            return kendo.stringify(lData).replace(/,"CUST_ACCNT_DIV_UI":""/g, '').replace(/,"displayTitle":""/g, '').replace(/,"PASSED_VALIDATION":""/g, '');
         }
-        return purgeBehaviors(JSON.parse(kendo.stringify(oldValue))) !== purgeBehaviors(JSON.parse(kendo.stringify(newValue)));
+
+        var rtn = purgeBehaviors(JSON.parse(kendo.stringify(oldValue))) !== purgeBehaviors(JSON.parse(kendo.stringify(newValue)));
+        //if (rtn) debugger;
+        return rtn;
     }
 
     // **** LEFT NAVIGATION Methods ****

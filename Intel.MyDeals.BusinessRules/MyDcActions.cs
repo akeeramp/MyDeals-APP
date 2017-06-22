@@ -553,7 +553,7 @@ namespace Intel.MyDeals.BusinessRules
 
             string backDateTxt = r.Dc.GetDataElementValue(AttributeCodes.BACK_DATE_RSN_TXT);
 
-            if (backDateTxt == "NEEDED" || !string.IsNullOrEmpty(deBackDate.AtrbValue.ToString()))
+            if (backDateTxt != "" || !string.IsNullOrEmpty(deBackDate.AtrbValue.ToString()))
             {
                 deBackDate.IsRequired = true;
             }

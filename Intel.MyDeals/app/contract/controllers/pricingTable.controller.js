@@ -190,6 +190,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 { "name": "Deal Info", "order": 0 },
                 { "name": "Consumption", "order": 1 },
                 { "name": "Backdate", "order": 2 },
+                { "name": "CAP Info", "order": 98 },
                 { "name": "All", "order": 99 }
             ];
             //root.wipOptions.default.groups = [
@@ -203,10 +204,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             //];
             root.wipOptions.default.groupColumns = {
                 "tools": {
-                    "Groups": ["Deal Info", "Consumption", "Cost Test", "Meet Comp", "Backdate", "Overlapping"]
+                    "Groups": ["Deal Info", "Consumption", "Cost Test", "Meet Comp", "Backdate", "Overlapping", "CAP Info"]
                 },
                 "details": {
-                    "Groups": ["Consumption", "Cost Test", "Meet Comp", "Backdate", "Overlapping"]
+                    "Groups": ["Consumption", "Cost Test", "Meet Comp", "Backdate", "Overlapping", "CAP Info"]
                 },
                 "DC_ID": {
                     "Groups": ["Deal Info"]
@@ -239,19 +240,19 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     "Groups": ["Deal Info"]
                 },
                 "ECAP_PRICE": {
-                    "Groups": ["Deal Info"]
+                    "Groups": ["Deal Info", "CAP Info"]
                 },
                 "CAP_INFO": {
-                    "Groups": ["Deal Info"]
+                    "Groups": ["Deal Info", "CAP Info"]
                 },
                 "CAP": {
-                    "Groups": ["All"]
+                    "Groups": ["All", "CAP Info"]
                 },
                 "CAP_STRT_DT": {
-                    "Groups": ["All"]
+                    "Groups": ["All", "CAP Info"]
                 },
                 "CAP_END_DT": {
-                    "Groups": ["All"]
+                    "Groups": ["All", "CAP Info"]
                 },
                 "YCS2_INFO": {
                     "Groups": ["Deal Info"]
@@ -380,29 +381,20 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
             // check for soft warnings
             var numWarn = 0;
-            var noCapMsg = [];
-            var noCapEcapMsg = [];
-            var msgSoftWarn = "";
             for (var w = 0; w < root.pricingTableData.WIP_DEAL.length; w++) {
                 if (!!root.pricingTableData.WIP_DEAL[w]["CAP"]) {
                     if (root.pricingTableData.WIP_DEAL[w]["CAP"] === "No CAP") {
                         numWarn++;
-                        noCapMsg.push("<TR><TD>" + root.pricingTableData.WIP_DEAL[w]["DC_ID"] + "</TD><TD>" + root.pricingTableData.WIP_DEAL[w]["TITLE"] + "</TD></tr>");
                     }
-                    var cap = parseFloat(root.pricingTableData.WIP_DEAL[w]["CAP"]).toFixed(2);
-                    var ecap = parseFloat(root.pricingTableData.WIP_DEAL[w]["ECAP_PRICE"]).toFixed(2);
+                    var cap = parseFloat(root.pricingTableData.WIP_DEAL[w]["CAP"]);
+                    var ecap = parseFloat(root.pricingTableData.WIP_DEAL[w]["ECAP_PRICE"]);
                     if (ecap > cap) {
                         numWarn++;
-                        noCapEcapMsg.push("<TR><TD>" + root.pricingTableData.WIP_DEAL[w]["DC_ID"] + "</TD><TD>$" + ecap + "</TD><TD>$" + cap + "</TD></tr>");
                     }
                 }
             }
 
-            if (noCapMsg.length > 0) msgSoftWarn += "<div>NO CAP</div><TABLE style='width: 400px;'><TR><TH>Deal</TH><TH>ECAP</TH><TH>CAP</TH></TR>" + noCapMsg.join("") + "</TABLE>";
-            if (noCapEcapMsg.length > 0) msgSoftWarn += "<div>ECAP > CAP</div><TABLE style='width: 400px;'><TR><TH>Deal</TH><TH>ECAP</TH><TH>CAP</TH></TR>" + noCapEcapMsg.join("") + "</TABLE>";
-
             root.wipOptions.numSoftWarn = numWarn;
-            root.wipOptions.msgSoftWarn = "<DIV style='width: 100%; background-color: yellow;'>" + msgSoftWarn + "</DIV>";
 
             root.wipData = root.pricingTableData.WIP_DEAL;
 

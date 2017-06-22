@@ -45,7 +45,6 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
             $scope.openCAPBreakOut = openCAPBreakOut;
             $scope.getPrductDetails = getPrductDetails;
             $scope.numSoftWarn = $scope.opOptions.numSoftWarn;
-            $scope.msgSoftWarn = $scope.opOptions.msgSoftWarn;
 
             $scope.assignColSettings = function () {
                 if ($scope.opOptions.columns === undefined) return [];
@@ -171,6 +170,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 for (var g = 0; g < grps.length; g++) {
                     if (grps[g].name === "All") {
                         grps[g].order = 99;
+                    } else if (grps[g].name === "CAP Info") {
+                        grps[g].order = 98;
                     } else {
                         grps[g].order = tabstrip.tabGroup.find(':contains("' + grps[g].name + '")').index();
                         // if we can't find the tab... it is probably a new one being added and not rendered yet.

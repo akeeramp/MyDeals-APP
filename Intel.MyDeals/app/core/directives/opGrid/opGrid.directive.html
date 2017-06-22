@@ -6,9 +6,10 @@
             <div id="tabstrip" kendo-tab-strip class="gradTab" k-ng-delay="tabStripDelay" ng-show="tabStripDelay">
                 <ul>
                     <li ng-repeat="group in opOptions.groups | orderBy:'order'" ng-click="showCols(group.name)">
-                        <i class="intelicon-pin-outlined" ng-hide="{{ group.name == 'All'}}" title="Pin tab so it always shows in the grid" ng-click="clickPin($event, group.name)"></i> {{group.name}}
-                        <span class="badge error" ng-show="group.numErrors > 0">{{group.numErrors}}</span>
-                        <i class="intelicon-close-solid closeGrp" ng-hide="{{ group.name == 'All' || !isLayoutConfigurable}}" title="Close tab" ng-click="removeGrp($event, group.name)"></i>
+                        <i class="intelicon-pin-outlined" ng-hide="{{ group.name == 'All' || group.name == 'CAP Info' }}" title="Pin tab so it always shows in the grid" ng-click="clickPin($event, group.name)"></i> {{group.name}}
+                        <span class="badge error" ng-show="{{ group.numErrors > 0 }}">{{group.numErrors}}</span>
+                        <span class="badge warning" ng-show="{{ group.name == 'CAP Info' && numSoftWarn > 0 }}">{{numSoftWarn}}</span>
+                        <i class="intelicon-close-solid closeGrp" ng-hide="{{ group.name == 'All' || group.name == 'CAP Info' || !isLayoutConfigurable}}" title="Close tab" ng-click="removeGrp($event, group.name)"></i>
                     </li>
                 </ul>
             </div>
@@ -55,14 +56,6 @@
                         </table>
                     </button>
 
-                    <button class="btn btn-sm ssToolbarBtn" ng-click="winSoftWarn.open()" title="There are {{numSoftWarn}} soft warnings.">
-                        <span class="soft-warn">
-                            <i class="intelicon-information-outlined" aria-hidden="true" style="font-size: 30px; vertical-align: middle; margin-right: -10px;"></i>
-                            <span class="badge">{{numSoftWarn}}</span>
-                        </span>
-                    </button>
-                    <div kendo-window="winSoftWarn" k-title="'Soft Warnings'" k-visible="false" ng-bind-html="msgSoftWarn"></div>
-                    
                 </div>
                                 
                 <div class="fr" style="margin-top: 2px; margin-left: 4px;" ng-show="isLayoutConfigurable">
@@ -271,6 +264,9 @@
     }
     .gradTab .badge.error {
         background-color: #FC4C02;
+    }
+    .gradTab .badge.warning {
+        background-color: #f3D54E;
     }
 
     .soft-warn {

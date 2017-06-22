@@ -58,10 +58,10 @@ gridUtils.uiMoneyDatesControlWrapper = function (passedData, field, startDt, end
     } else {
 
         if (field === "CAP") {
-            var cap = parseFloat(passedData.CAP).toFixed(2);
-            var ecap = parseFloat(passedData.ECAP_PRICE).toFixed(2);
+            var cap = parseFloat(passedData.CAP);
+            var ecap = parseFloat(passedData.ECAP_PRICE);
             if (ecap > cap) {
-                msg = "title = 'ECAP ($" + ecap + ") is greater than the CAP ($" + cap + ")'";
+                msg = "title = 'ECAP ($" + ecap.toFixed(2) + ") is greater than the CAP ($" + cap.toFixed(2) + ")'";
                 msgClass = "isSoftWarnCell";
             }
         }
