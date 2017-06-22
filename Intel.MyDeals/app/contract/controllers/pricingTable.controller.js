@@ -485,9 +485,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
             root._dirty = true;
 
-            $timeout(function() {
-                    validateSingleRowProducts(sheet.dataSource._data[rowStart - 2], rowStart);
-                },50);
+            $timeout(function () {
+                validateSingleRowProducts(sheet.dataSource._data[rowStart - 2], rowStart);
+            }, 50);
         } else {
             var initRow = rowStart;
             var row = initRow;
@@ -1178,8 +1178,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     kendo.spreadsheet.registerEditor("cellProductSelector", function () {
         var context, dlg, model;
 
-        var contractStartDate = $scope.$parent.$parent.contractData["START_DT"];
-        var contractEndDate = $scope.$parent.$parent.contractData["END_DT"];
+        var contract = $scope.$parent.$parent.contractData;
         // Further delay the initialization of the UI until the `edit` method is
         // actually called, so here just return the object with the required API.
 
@@ -1212,16 +1211,30 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             else { // open the selector
                 var currentPricingTableRowData = context.range._sheet.dataSource._data[currentRow];
                 var enableSplitProducts = context.range._sheet.dataSource._data.length <= context.range._ref.row;
-
-                var pricingTableRow = {
-                    'START_DT': !currentPricingTableRowData ? contractStartDate : currentPricingTableRowData.START_DT,
-                    'END_DT': !currentPricingTableRowData ? contractEndDate : currentPricingTableRowData.END_DT,
-                    'CUST_MBR_SID': $scope.contractData.CUST_MBR_SID,
-                    'GEO_COMBINED': !currentPricingTableRowData ? root.curPricingTable.GEO_COMBINED : currentPricingTableRowData.GEO_COMBINED,
-                    'PTR_SYS_PRD': !currentPricingTableRowData ? "" : currentPricingTableRowData.PTR_SYS_PRD,
-                    'PROGRAM_PAYMENT': !currentPricingTableRowData ? root.curPricingTable.PROGRAM_PAYMENT : currentPricingTableRowData.PROGRAM_PAYMENT,
-                    'PROD_INCLDS': !currentPricingTableRowData ? root.curPricingTable.PROD_INCLDS : currentPricingTableRowData.PROD_INCLDS,
-                };
+                if (!!currentPricingTableRowData && currentPricingTableRowData.PROGRAM_PAYMENT !== null
+                        && currentPricingTableRowData.PROGRAM_PAYMENT !== "" && currentPricingTableRowData.PROD_INCLDS != null && currentPricingTableRowData.PROD_INCLDS !== ""
+                        && currentPricingTableRowData.GEO_COMBINED != null && currentPricingTableRowData.GEO_COMBINED !== "") {
+                    var pricingTableRow = {
+                        'START_DT': currentPricingTableRowData.START_DT,
+                        'END_DT': currentPricingTableRowData.END_DT,
+                        'CUST_MBR_SID': $scope.contractData.CUST_MBR_SID,
+                        'GEO_COMBINED': currentPricingTableRowData.GEO_COMBINED,
+                        'PTR_SYS_PRD': currentPricingTableRowData.PTR_SYS_PRD,
+                        'PROGRAM_PAYMENT': currentPricingTableRowData.PROGRAM_PAYMENT,
+                        'PROD_INCLDS': currentPricingTableRowData.PROD_INCLDS,
+                    };
+                } else {
+                    var pricingTableRow = {
+                        'START_DT': contract.START_DT,
+                        'END_DT': contract.END_DT,
+                        'CUST_MBR_SID': contract.CUST_MBR_SID,
+                        'GEO_COMBINED': root.curPricingTable["GEO_COMBINED"],
+                        'PTR_SYS_PRD': "",
+                        'PTR_SYS_INVLD_PRD': "",
+                        'PROGRAM_PAYMENT': root.curPricingTable["PROGRAM_PAYMENT"],
+                        'PROD_INCLDS': root.curPricingTable["PROD_INCLDS"]
+                    };
+                }
 
                 var suggestedProduct = {
                     'mode': 'manual',
@@ -1301,7 +1314,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         // if row number is passed then its translation for single row
         if (!!currentRowNumber) {
-            currentPricingTableRowData = currentPricingTableRowData.filter(function(x) {
+            currentPricingTableRowData = currentPricingTableRowData.filter(function (x) {
                 return x.ROW_NUMBER == currentRowNumber;
             });
         }
@@ -1474,12 +1487,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             root.publishWipDealsBase();
                         } // Call Save and Validate API from Contract Manager
                     } else {
-                        $timeout(function() {
+                        $timeout(function () {
                             validateSingleRowProducts(data[currentRow - 1], currentRow);
-                        },10);
+                        }, 10);
                     }
                 },
-            function () {});
+            function () { });
             }, 10);
     }
 
