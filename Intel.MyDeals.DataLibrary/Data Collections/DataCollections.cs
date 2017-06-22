@@ -166,8 +166,8 @@ namespace Intel.MyDeals.DataLibrary
                     var searchNandFamily = products.Where(x => !string.IsNullOrEmpty(x.NAND_FAMILY) && x.PRD_ATRB_SID == 7008).
                                        Select(x => new SearchString { Name = x.NAND_FAMILY, Type = ProductHierarchyLevelsEnum.NAND_FAMILY.ToString() });
 
-                    var searchNandDensity = products.Where(x => !string.IsNullOrEmpty(x.NAND_DENSITY) && x.PRD_ATRB_SID == 7008).
-                                       Select(x => new SearchString { Name = x.NAND_DENSITY, Type = ProductHierarchyLevelsEnum.NAND_DENSITY.ToString() });
+                    var searchNandDensity = products.Where(x => !string.IsNullOrEmpty(x.NAND_Density) && x.PRD_ATRB_SID == 7008).
+                                       Select(x => new SearchString { Name = x.NAND_Density, Type = ProductHierarchyLevelsEnum.NAND_DENSITY.ToString() });
 
                     var searchEPM = products.Where(x => !string.IsNullOrEmpty(x.NAND_FAMILY) && x.PRD_ATRB_SID == 7008).
                                        Select(x => new SearchString { Name = x.GDM_FMLY_NM, Type = ProductHierarchyLevelsEnum.GDM_FMLY_NM.ToString() });

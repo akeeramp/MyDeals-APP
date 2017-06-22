@@ -458,7 +458,7 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetCAPForProduct")]
         [HttpPost]
         public List<ProductCAPYCS2> GetCAPForProduct([FromBody]dynamic product)
-        {
+        {            
             return SafeExecutor(() => _productsLib.GetCAPForProduct((int)product.productsid, (int)product.custSid, (string)product.geoSid, (DateTime)product.startDate, (DateTime)product.endDate)
                 , $"Unable to get Product CAP and YCS2 values"
             );
@@ -475,6 +475,15 @@ namespace Intel.MyDeals.Controllers.API
             return SafeExecutor(() => _productsLib.GetSearchString(filter)
                , $"Unable to get Product search results"
            );
+        }
+
+        [Route("GetProductAttributes")]
+        [HttpPost]
+        public List<PRD_LOOKUP_RESULTS> GetProductAttributes(List<PRD_LOOKUP_RESULTS> products)
+        {
+            return SafeExecutor(() => _productsLib.GetProductAttributes(products)
+                , $"Unable to get Product details"
+            );
         }
     }
 }

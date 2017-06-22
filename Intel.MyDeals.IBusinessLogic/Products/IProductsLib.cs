@@ -71,6 +71,8 @@ namespace Intel.MyDeals.IBusinessLogic
 
         List<ProductCAPYCS2> GetCAPForProduct(int product, int CUST_CD, string GEO_MBR_SID, DateTime START_DT, DateTime END_DT);
 
+        List<PRD_LOOKUP_RESULTS> GetProductAttributes(List<PRD_LOOKUP_RESULTS> product);
+
         List<Product> SuggestProductsByDates(string prdEntered, int? returnMax, DateTime startDate, DateTime endDate);
 
         IList<SearchString> GetSearchString(string searchText);

@@ -898,6 +898,60 @@ namespace Intel.MyDeals.BusinessLogic
             return capResult;
         }
 
+        public List<PRD_LOOKUP_RESULTS> GetProductAttributes(List<PRD_LOOKUP_RESULTS> product = null)
+        {
+            List<Product> prds = GetProductsDetails();
+
+            List<PRD_LOOKUP_RESULTS> prdResult = (from r in prds
+                            join d in product
+                            on r.PRD_MBR_SID equals d.PRD_MBR_SID
+                            select new PRD_LOOKUP_RESULTS(){
+                                BRND_NM = r.BRND_NM,
+                                CAP = d.CAP,
+                                CAP_END = d.CAP_END,
+                                CAP_PRC_COND = d.CAP_PRC_COND,
+                                CAP_START = d.CAP_START,
+                                CPU_CACHE = r.CPU_CACHE,
+                                CPU_PACKAGE = r.CPU_PACKAGE,
+                                CPU_PROCESSOR_NUMBER = r.CPU_PROCESSOR_NUMBER,
+                                CPU_VOLTAGE_SEGMENT = r.CPU_VOLTAGE_SEGMENT,
+                                CPU_WATTAGE = r.CPU_WATTAGE,
+                                DEAL_END_DT = d.DEAL_END_DT,
+                                DEAL_PRD_NM = r.DEAL_PRD_NM,
+                                DEAL_PRD_TYPE = r.DEAL_PRD_TYPE,
+                                DEAL_STRT_DT = d.DEAL_STRT_DT,
+                                EPM_NM = r.EPM_NM,
+                                EXACT_MATCH = d.EXACT_MATCH,
+                                FMLY_NM = r.FMLY_NM,
+                                HAS_L1 = r.HAS_L1,
+                                HAS_L2 = r.HAS_L2,
+                                FMLY_NM_MM = r.FMLY_NM_MM,
+                                GDM_BRND_NM = r.GDM_BRND_NM,
+                                GDM_FMLY_NM = r.GDM_FMLY_NM,
+                                HIER_NM_HASH = r.HIER_NM_HASH,
+                                HIER_VAL_NM = r.HIER_VAL_NM,
+                                MM_CUST_CUSTOMER = r.MM_CUST_CUSTOMER,
+                                MTRL_ID = r.MTRL_ID,
+                                NAND_Density = r.NAND_Density,
+                                NAND_FAMILY = r.NAND_FAMILY,
+                                PCSR_NBR = r.PCSR_NBR,
+                                PRD_ATRB_SID = r.PRD_ATRB_SID,
+                                PRD_CAT_NM = r.PRD_CAT_NM,
+                                PRD_END_DTM = r.PRD_END_DTM,
+                                PRD_MBR_SID = r.PRD_MBR_SID,
+                                PRD_STRT_DTM = r.PRD_STRT_DTM,
+                                PRICE_SEGMENT = r.PRICE_SEGMENT,
+                                SBS_NM = r.SBS_NM,
+                                SKU_MARKET_SEGMENT = r.SKU_MARKET_SEGMENT,
+                                SKU_NM = r.SKU_NM,
+                                USR_INPUT = d.USR_INPUT,
+                                YCS2 = d.YCS2,
+                                YCS2_END = d.YCS2_END,
+                                YCS2_START = d.YCS2_START                                
+                            }).ToList();
+            return prdResult;
+        }
+
         /// <summary>
         ///
         /// </summary>

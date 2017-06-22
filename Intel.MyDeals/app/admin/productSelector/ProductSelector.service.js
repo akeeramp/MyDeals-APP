@@ -18,7 +18,8 @@
             GetProductSelectionResults: GetProductSelectionResults,
             GetProductSuggestions: GetProductSuggestions,
             GetCAPForProduct: GetCAPForProduct,
-            GetSearchString: GetSearchString
+            GetSearchString: GetSearchString,
+            GetProductAttributes: GetProductAttributes
         }
 
         return service;
@@ -60,6 +61,10 @@
 
         function GetSearchString(dto) {
             return dataService.get(apiBaseUrl + 'GetSearchString/' + dto);
+        }
+
+        function GetProductAttributes(products) {
+            return dataService.post(apiBaseUrl + 'GetProductAttributes', products);
         }
     }
 })();

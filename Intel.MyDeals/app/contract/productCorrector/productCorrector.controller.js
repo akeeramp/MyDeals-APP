@@ -130,7 +130,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                 vm.currentRow = pageNumber[0];
             }
 
-            updateRowDCID()
+            updateRowDCID();
         }
 
         if (vm.rows <= 1) {
@@ -210,7 +210,28 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                 vm.invalidProducts.splice(d, 1);
             }
         }
+        if (vm.invalidProducts.length == 0) {
+            _selectionLevel = 0;
+            productHierarchy = [];
+            vm.items = []; // Clear Hierarchy Values
+            vm.gridData = [];  // Clear all the GRID data      
+
+            // Reset Suggestion list
+            vm.clearSuggedtedProd();
+
+            //Reset Bread cum
+            vm.breadCumLevel = [];
+            vm.selectedPathParts = [];
+
+            generatePagination(); // Regenerate Pagination
+
+            vm.showSearchResults = 0;
+
+            cookProducts(); // Calling Cook Product to go to next available product
+        }        
+
         dataSource.read();
+
     }
 
     // Further suggestion
@@ -596,35 +617,45 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                     );
                 })
                 .ToArray();
+            
+            //Calling WEb APi for the Product details...
+            ProductSelectorService.GetProductAttributes(dataSelected)
+                .then(function (response) {
+                    dataSelected = response.data.length > 0 ? response.data : dataSelected;
 
-            //productHierarchy = [];
-            vm.items = [];
+                    vm.items = [];
 
-            var flag = 0;
+                    var flag = 0;
 
-            // Adding Products to the Selected List
-            angular.forEach(dataSelected, function (value, key) {
-                //Duplicate check
-                vm.showSearchResults = true;
-                if (!$filter("where")(vm.gridData, { PRD_MBR_SID: value.PRD_MBR_SID }).length > 0) {
-                    vm.gridData.push(value);
+                    // Adding Products to the Selected List
+                    angular.forEach(dataSelected, function (value, key) {
+                        //Duplicate check
+                        vm.showSearchResults = true;
+                        if (!$filter("where")(vm.gridData, { PRD_MBR_SID: value.PRD_MBR_SID }).length > 0) {
+                            vm.gridData.push(value);
 
-                    if (!flag)
-                        flag = 1;
-                }
-            });
+                            if (!flag)
+                                flag = 1;
+                        }
+                    });
 
-            dataSourceProduct.read();
+                    dataSourceProduct.read();
 
-            $timeout(function () {
-                toggleColumnsWhenEmptyConflictGrid(vm.gridData);
-            });
+                    $timeout(function () {
+                        toggleColumnsWhenEmptyConflictGrid(vm.gridData);
+                    });
 
-            if (flag == 1) {
-            }
-            else {
-                logger.error("Can not insert duplicate product ");
-            }
+                    if (flag == 1) {
+                    }
+                    else {
+                        logger.error("Can not insert duplicate product ");
+                    }
+
+                }, function (response) {
+                    logger.error("Unable to get product details", response, response.statusText);
+                });
+
+            
         }
     }
 
@@ -672,7 +703,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                             else if (!vm.selectedDataSet[0].EXACT_MATCH) {
                                 var item = {
                                     name: vm.selectedDataSet[0].FMLY_NM == null ? "" : vm.selectedDataSet[0].FMLY_NM
-                                }
+                                };
                                 vm.selectsearchItem(item);
 
                                 break;
@@ -927,7 +958,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         return result = false;
     }
 
-    //Click Breadcum
+    //Click Breadcrumb
     function selectPath(item) {
         var nextConflictedLevel = '';
         if (item > 0) {
@@ -1211,6 +1242,33 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         angular.forEach(vm.selectedItems, function (value, key) {
             if (!$filter("where")(vm.addedProducts, { PRD_MBR_SID: value.PRD_MBR_SID }).length > 0) {
                 vm.addedProducts.push(value);
+                var addedProducts = vm.addedProducts.map(function (x) {
+                    return {
+                        BRND_NM: x.BRND_NM,
+                        CAP: x.CAP,
+                        CAP_END: x.CAP_END,
+                        CAP_START: x.CAP_START,
+                        DEAL_PRD_NM: x.DEAL_PRD_NM,
+                        DEAL_PRD_TYPE: x.DEAL_PRD_TYPE,
+                        FMLY_NM: x.FMLY_NM,
+                        HAS_L1: x.HAS_L1,
+                        HAS_L2: x.HAS_L2,
+                        HIER_NM_HASH: x.HIER_NM_HASH,
+                        HIER_VAL_NM: x.HIER_VAL_NM,
+                        MTRL_ID: x.MTRL_ID,
+                        PCSR_NBR: x.PCSR_NBR,
+                        PRD_ATRB_SID: x.PRD_ATRB_SID,
+                        PRD_CAT_NM: x.PRD_CAT_NM,
+                        PRD_END_DTM: x.PRD_END_DTM,
+                        PRD_MBR_SID: x.PRD_MBR_SID,
+                        PRD_STRT_DTM: x.PRD_STRT_DTM,
+                        USR_INPUT: x.USR_INPUT,
+                        YCS2: x.YCS2,
+                        YCS2_END: x.YCS2_END,
+                        YCS2_START: x.YCS2_START
+                    }
+                });
+                
             }
         });
 
@@ -1355,8 +1413,8 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             }
         }
         else {
-            /// When user deletes the product and clicks save move to next item
-            cookProducts();
+            logger.error("No product selected");
+            /// When user deletes the product and clicks save move to next item            
         }
     }
 
