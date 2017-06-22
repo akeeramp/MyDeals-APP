@@ -449,10 +449,18 @@ namespace Intel.MyDeals.BusinessLogic
                                        from t in pa.DefaultIfEmpty()
                                        select new ProductEntryAttribute
                                        {
-                                           USR_INPUT = t == null ? p.USR_INPUT : t.PRD_NM
-                                       }).Distinct();
+                                           USR_INPUT = t == null ? p.USR_INPUT : t.PRD_NM,
+                                           COLUMN_TYPE = p.COLUMN_TYPE,
+                                           END_DATE = p.END_DATE,
+                                           EXCLUDE = p.EXCLUDE,
+                                           FILTER = p.FILTER,
+                                           GEO_COMBINED = p.GEO_COMBINED,
+                                           PROGRAM_PAYMENT = p.PROGRAM_PAYMENT,
+                                           ROW_NUMBER = p.ROW_NUMBER,
+                                           START_DATE = p.START_DATE
+                                       }).Distinct().ToList();
 
-            return _productDataLib.SearchProduct(productsToMatch, CUST_MBR_SID);
+            return _productDataLib.SearchProduct(productAliasesSplit, CUST_MBR_SID);
         }
 
         /// <summary>
@@ -494,7 +502,6 @@ namespace Intel.MyDeals.BusinessLogic
                             tempProdNM = (index < 0)
                                 ? tempProdNM
                                 : tempProdNM.Remove(index, ("\"" + EPMString + "\"").Length);
-
 
                             var lastOperatorIndex = tempString.LastIndexOfAny(new char[] { ',', '~', '/' });
 
@@ -602,7 +609,6 @@ namespace Intel.MyDeals.BusinessLogic
                     {
                         singleProducts.Add(item.Trim());
                     }
-
                 }
             }
 
