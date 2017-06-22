@@ -876,25 +876,13 @@
 
         // These validation rules are taken from MT CAP Validations. Both the places rules should be in sync
         function isValidCapDetails(productJson, showErrorMesssage) {
-            // Product data
-            var prodStartDate = moment(productJson.PRD_STRT_DTM).format('l');
-            var capStart = moment(productJson.CAP_START).format('l');
-            var capEnd = moment(productJson.CAP_END).format('l');
-
-            //Deal data
-            var dealStart = moment(pricingTableRow.START_DT).format('l');
-            var dealEnd = moment(pricingTableRow.END_DT).format('l');
-
             var errorMessage = "";
-
-            if (moment(prodStartDate).isAfter(dealStart)) {
-                errorMessage += "If the product start date is after the deal start date, then deal start date should match with product start date and back date would not apply.<br/>";
+            var cap = productJson.CAP.toString();
+            if (cap.toUpperCase() == "NO CAP") {
+                errorMessage = "Product entered does not have CAP within the Deal's start date and end date.";
             }
-            if (!((moment(dealEnd).isAfter(capStart)) && (moment(capEnd).isAfter(dealStart)))) {
-                errorMessage += "Product entered does not have CAP within the Deal's start date and end date.<br/>";
-            }
-            if (moment(capStart).isAfter(dealEnd)) {
-                errorMessage += "The CAP start date (" + capStart + ") and end date (" + capEnd + ") exists in future outside of deal end date. Please change the deal start date to match the CAP start date.<br/>";
+            if (cap.indexOf('-') > -1) {
+                errorMessage = "CAP price " + cap + " cannot be a range.";
             }
             if (!showErrorMesssage) {
                 return errorMessage == "" ? false : true;

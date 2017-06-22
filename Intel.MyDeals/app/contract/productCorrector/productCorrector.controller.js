@@ -46,6 +46,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
     vm.openCAPBreakOut = openCAPBreakOut;
     vm.selectPath = selectPath; // Click on bread cum
     vm.rowDCId = "";
+    vm.isValidCapDetails = isValidCapDetails;
     vm.invalidSuggestionProd = '';
     vm.masterSuggestionList = {
     };
@@ -1356,6 +1357,23 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         else {
             /// When user deletes the product and clicks save move to next item
             cookProducts();
+        }
+    }
+
+    // These validation rules are taken from MT CAP Validations. Both the places rules should be in sync
+    function isValidCapDetails(productJson, showErrorMesssage) {
+        var errorMessage = "";
+        var cap = productJson.CAP.toString();
+        if (cap.toUpperCase() == "NO CAP") {
+            errorMessage = "Product entered does not have CAP within the Deal's start date and end date.";
+        }
+        if (cap.indexOf('-') > -1) {
+            errorMessage = "CAP price " + cap + " cannot be a range.";
+        }
+        if (!showErrorMesssage) {
+            return errorMessage == "" ? false : true;
+        } else {
+            return errorMessage == "" ? productJson.HIER_NM_HASH : errorMessage;
         }
     }
 }

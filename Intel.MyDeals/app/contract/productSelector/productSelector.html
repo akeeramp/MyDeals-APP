@@ -85,8 +85,10 @@
         <div class="row" style="padding-left:15px;padding-right:15px;">
             <ui-select allow-clear="true" onkeypress="return false;" class="prodSelected text-left"
                        tagging="true" multiple ng-model="vm.addedProducts" theme="bootstrap">
-                <ui-select-match><span ng-click="vm.showSingleProductHeirarchy($item)"
-                                       kendo-tooltip k-content='$item.HIER_NM_HASH'>{{$item.HIER_VAL_NM}}</span></ui-select-match>
+                <ui-select-match>
+                    <span ng-class="{'text-danger': vm.isValidCapDetails($item)}" ng-click="vm.showSingleProductHeirarchy($item)"
+                          title="{{vm.isValidCapDetails($item, true)}}">{{$item.HIER_VAL_NM}}</span>
+                </ui-select-match>
                 <ui-select-choices repeat="products in vm.selectedProducts">
                 </ui-select-choices>
             </ui-select>
