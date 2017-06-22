@@ -1267,6 +1267,7 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
 
                         // Kindof a lame hack... should make it more dynamic, but for now let's see if we can get this working
                         if (Array.isArray(gData[i].TRGT_RGN)) gData[i].TRGT_RGN = gData[i].TRGT_RGN.join();
+                        if (Array.isArray(gData[i].DEAL_SOLD_TO_ID)) gData[i].DEAL_SOLD_TO_ID = gData[i].DEAL_SOLD_TO_ID.join();
                     }
                 }
             }
