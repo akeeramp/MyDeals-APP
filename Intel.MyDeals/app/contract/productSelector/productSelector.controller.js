@@ -39,6 +39,9 @@
         vm.getVerticalsUnderMarkLevel = getVerticalsUnderMarkLevel;
         vm.isValidCapDetails = isValidCapDetails;
         var searchProcessed = false;
+        if (pricingTableRow.PROD_INCLDS == undefined || pricingTableRow.PROD_INCLDS == null || pricingTableRow.PROD_INCLDS == "") {
+            pricingTableRow.PROD_INCLDS = 'All';
+        }
 
         function populateValidProducts() {
             if (pricingTableRow.PTR_SYS_PRD == "") {
