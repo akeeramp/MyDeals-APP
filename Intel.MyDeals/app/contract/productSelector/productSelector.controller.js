@@ -890,5 +890,69 @@
                 return errorMessage == "" ? productJson.HIER_NM_HASH : errorMessage;
             }
         }
+
+        function getProductHeirarrchy(products) {
+            products.map(function (a) {
+                a.HIER_HASH = a.PRD_CAT_NM + ((a.BRND_NM == "" || a.BRND_NM == 'NA') ? "" : "|" + a.BRND_NM)
+                    + ((a.FMLY_NM == "" || a.FMLY_NM == 'NA') ? "" : "|" + a.FMLY_NM)
+                    + ((a.PCSR_NBR == "" || a.PCSR_NBR == 'NA') ? "" : "|" + a.PCSR_NBR)
+                    + ((a.DEAL_PRD_NM == "" || a.DEAL_PRD_NM == 'NA') ? "" : "|" + a.DEAL_PRD_NM)
+                    + ((a.MTRL_ID == "" || a.MTRL_ID == 'NA') ? "" : "|" + a.MTRL_ID);
+                return a;
+            });
+
+            var heirarchy = [];
+            for (var i = 0; i < products.length; i++) {
+                var chain = products[i].HIER_HASH.split("|");
+                var currentNode = heirarchy;
+                for (var j = 0; j < chain.length; j++) {
+                    var wantedNode = chain[j];
+                    var lastNode = currentNode;
+                    for (var k = 0; k < currentNode.length; k++) {
+                        if (currentNode[k].name == wantedNode) {
+                            currentNode = currentNode[k].items;
+                            break;
+                        }
+                    }
+                    // If we couldn't find an item in this list of children
+                    // that has the right name, create one:
+                    if (lastNode == currentNode) {
+                        var newNode = currentNode[k] = { name: wantedNode, items: [] };
+                        currentNode = newNode.items;
+                    }
+                }
+            }
+
+            return heirarchy;
+        };
+
+        vm.showTree = false;
+        vm.treeData = [];
+        vm.showHeirarrchyTree = function () {
+            if (vm.addedProducts.length === 0) return;
+            if (!vm.showTree) {
+                vm.selectPath(0);
+                vm.treeData.data = getProductHeirarrchy(vm.addedProducts),
+                vm.tree.dataSource = vm.treeData;
+            }
+            vm.showTree = !vm.showTree;
+        }
+
+        vm.treeData = {
+            data: getProductHeirarrchy(vm.addedProducts),
+            schema: {
+                model: {
+                    children: "items",
+                    hasChildren: function (e) {
+                        var test = e.items.length;
+                        return test > 0;
+                    }
+                }
+            }
+        }
+
+        vm.tree = {
+            dataSource: {}
+        };
     }
 })();

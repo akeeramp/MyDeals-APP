@@ -22,7 +22,7 @@
                 <i role="button" title="Close" class="intelicon-close-max" ng-click="vm.cancel()"></i>
             </span>
         </div>
-        <div class="row breadCrumbWrapper">
+        <div ng-if="!vm.showTree" class="row breadCrumbWrapper">
             <ul class="productpath breadcrumb">
                 <li><a role="button" class="prdAnchor" ng-click="vm.selectPath(0)">Select</a></li>
                 <li ng-repeat="p in vm.selectedPathParts | unique:'name'" ng-if="p.name != 'NA'">
@@ -30,52 +30,64 @@
                 </li>
             </ul>
         </div>
+        <div ng-if="vm.showTree" class="textProdSelector" style="margin-bottom:17px;margin-top:4px;">
+            Selected Products:
+        </div>
     </div>
     <div class="prodSelector modal-body">
-        <div ng-if="!vm.hideSelection" ng-switch="vm.getDisplayTemplate()">
-            <div ng-switch-when="btnGroup" class="row" style="padding-left:10px;padding-right:10px;font-size:16px;">
-                <div class="drillDown btn-group btn-group-justified" role="group" aria-label="...">
-                    <div class="btn-group" ng-repeat="p in vm.items | orderBy:'name'" role="group">
-                        <button ng-if="!(vm.selectedPathParts.length < 2)" title="{{p.name}}" type="button" ng-class="{'noborder':$last}" ng-click="vm.selectItem(p)" class="btn btn-default">
-                            {{::vm.checkForBlank(p.name)}}
-                        </button>
-                        <button popover-class="selector popover" ng-if="vm.selectedPathParts.length < 2" uib-popover="{{::vm.getVerticalsUnderMarkLevel(p.name)}}"
-                                popover-trigger="'mouseenter'" popover-placement="bottom"
-                                popover-append-to-body="true" type="button" ng-class="{'noborder':$last}" ng-click="vm.selectItem(p)" class="btn btn-default">
-                            {{::vm.checkForBlank(p.name)}}
-                        </button>
-                    </div>
+        <div ng-if="vm.showTree">
+            <div class="k-treelist product" kendo-tree-view k-options="vm.tree">
+                <div k-template>
+                    {{dataItem.name}}
                 </div>
-            </div>
-            <div ng-switch-when="btnGrid" class="row" style="margin:2px;">
-                <div ng-repeat="p in vm.items | orderBy:'name'">
-                    <div class="clearfix" ng-if="$index % 4 == 0"></div>
-                    <div class="col-sm-3 prodDrillDownLarge" title="{{::vm.checkForBlank(p.name)}}" ng-class="{'noLeftBorder':$index % 4 == 0}">
-                        <p role="button"  ng-click="vm.selectItem(p)">{{::vm.checkForBlank(p.name)}}</p>
-                    </div>
-                </div>
-            </div>
-            <div ng-switch-default="ng-switch-default">
-                <div id="prodGrid" kendo-grid="prodGrid" kendo-grid-check-box k-grid-checkbox="vm" class="prodSelector opUiContainer md prodSelector-grid k-grid kendoGridHeight" k-options="vm.gridOptionsProduct"></div>
             </div>
         </div>
-        <div ng-if="vm.hideSelection">
-            <div class="row" ng-if="vm.searchItems.length > 0" style="padding-left:10px;padding-right:10px;font-size:16px;">
-                <div class="drillDown btn-group btn-group-justified" role="group" aria-label="...">
-                    <div class="btn-group" ng-repeat="p in vm.searchItems | orderBy:'name' " role="group">
-                        <button type="button" ng-class="{'noborder':$last}" ng-click="vm.selectsearchItem(p)" class="btn btn-default">{{::p.name}}</button>
+        <div ng-if="!vm.showTree">
+            <div ng-if="!vm.hideSelection" ng-switch="vm.getDisplayTemplate()">
+                <div ng-switch-when="btnGroup" class="row" style="padding-left:10px;padding-right:10px;font-size:16px;">
+                    <div class="drillDown btn-group btn-group-justified" role="group" aria-label="...">
+                        <div class="btn-group" ng-repeat="p in vm.items | orderBy:'name'" role="group">
+                            <button ng-if="!(vm.selectedPathParts.length < 2)" title="{{p.name}}" type="button" ng-class="{'noborder':$last}" ng-click="vm.selectItem(p)" class="btn btn-default">
+                                {{::vm.checkForBlank(p.name)}}
+                            </button>
+                            <button popover-class="selector popover" ng-if="vm.selectedPathParts.length < 2" uib-popover="{{::vm.getVerticalsUnderMarkLevel(p.name)}}"
+                                    popover-trigger="'mouseenter'" popover-placement="bottom"
+                                    popover-append-to-body="true" type="button" ng-class="{'noborder':$last}" ng-click="vm.selectItem(p)" class="btn btn-default">
+                                {{::vm.checkForBlank(p.name)}}
+                            </button>
+                        </div>
                     </div>
                 </div>
+                <div ng-switch-when="btnGrid" class="row" style="margin:2px;">
+                    <div ng-repeat="p in vm.items | orderBy:'name'">
+                        <div class="clearfix" ng-if="$index % 4 == 0"></div>
+                        <div class="col-sm-3 prodDrillDownLarge" title="{{::vm.checkForBlank(p.name)}}" ng-class="{'noLeftBorder':$index % 4 == 0}">
+                            <p role="button" ng-click="vm.selectItem(p)">{{::vm.checkForBlank(p.name)}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div ng-switch-default="ng-switch-default">
+                    <div id="prodGrid" kendo-grid="prodGrid" kendo-grid-check-box k-grid-checkbox="vm" class="prodSelector opUiContainer md prodSelector-grid k-grid kendoGridHeight" k-options="vm.gridOptionsProduct"></div>
+                </div>
             </div>
-            <div ng-if="vm.showSearchResults">
-                <div id="prodGrid" kendo-grid="prodGrid" kendo-grid-check-box k-grid-checkbox="vm" class="prodSelector opUiContainer md prodSelector-grid k-grid kendoGridHeight" k-options="vm.gridOptionsProduct"></div>
+            <div ng-if="vm.hideSelection">
+                <div class="row" ng-if="vm.searchItems.length > 0" style="padding-left:10px;padding-right:10px;font-size:16px;">
+                    <div class="drillDown btn-group btn-group-justified" role="group" aria-label="...">
+                        <div class="btn-group" ng-repeat="p in vm.searchItems | orderBy:'name' " role="group">
+                            <button type="button" ng-class="{'noborder':$last}" ng-click="vm.selectsearchItem(p)" class="btn btn-default">{{::p.name}}</button>
+                        </div>
+                    </div>
+                </div>
+                <div ng-if="vm.showSearchResults">
+                    <div id="prodGrid" kendo-grid="prodGrid" kendo-grid-check-box k-grid-checkbox="vm" class="prodSelector opUiContainer md prodSelector-grid k-grid kendoGridHeight" k-options="vm.gridOptionsProduct"></div>
+                </div>
             </div>
         </div>
     </div>
     <div class="prodSelector modal-footer">
         <div class="row">
             <div class="col-md-6 text-left textProdSelector">
-                <p>Selected Products<small>&nbsp;({{vm.addedProducts.length}})</small></p>
+                <p>Selected Products<small role="button" ng-click="vm.showHeirarrchyTree()">&nbsp;({{vm.addedProducts.length}})</small></p>
             </div>
             <div class="col-md-6">
                 <button class="btn btn-default prdBtn" ng-click="vm.clearProducts()" style="margin-left:2px;">Clear all products</button>
@@ -236,7 +248,7 @@
             color: #fff;
             text-overflow: ellipsis;
             overflow: hidden;
-            white-space:nowrap;
+            white-space: nowrap;
         }
 
             .prodDrillDownLarge p:hover {
@@ -355,8 +367,49 @@
     .productSelector.searchTemplate {
         border-bottom: 1px solid #ddd;
     }
-    .selector.popover{
-        font-size:12px;
+
+    .selector.popover {
+        font-size: 12px;
     }
 
+    .k-treelist.product {
+        color: #fff;
+        font-size: 14px;
+        font-weight: 400;
+        font-family: 'Intel Clear';
+    }
+
+    .k-treelist .k-template {
+        color: #fff;
+        font-size: 14px;
+        font-weight: 400;
+        font-family: 'Intel Clear';
+    }
+
+    .k-treeview .k-icon.k-i-collapse {
+        color: #fff;
+        font-size: 14px;
+    }
+
+    .k-treeview .k-icon.k-i-expand {
+        color: #fff;
+        font-size: 14px;
+    }
+
+    .k-treeview .k-in.k-state-hover {
+        background: #01AEEF;
+        color: #fff;
+    }
+
+    .k-treeview .k-in {
+        color: white;
+    }
+
+        .k-treeview .k-in.k-state-selected.k-state-focused {
+            background: #01AEEF;
+        }
+
+    .k-treeview .k-state-focused {
+        background: #01AEEF;
+    }
 </style>
