@@ -7,7 +7,7 @@
                 <ul>
                     <li ng-repeat="group in opOptions.groups | orderBy:'order'" ng-click="showCols(group.name)">
                         <i class="intelicon-pin-outlined" ng-hide="{{ group.name == 'All' || group.name == 'CAP Info' }}" title="Pin tab so it always shows in the grid" ng-click="clickPin($event, group.name)"></i> {{group.name}}
-                        <span class="badge error" ng-show="{{ group.numErrors > 0 }}">{{group.numErrors}}</span>
+                        <span class="badge error" ng-show="group.numErrors > 0">{{group.numErrors}}</span>
                         <span class="badge warning" ng-show="{{ group.name == 'CAP Info' && numSoftWarn > 0 }}">{{numSoftWarn}}</span>
                         <i class="intelicon-close-solid closeGrp" ng-hide="{{ group.name == 'All' || group.name == 'CAP Info' || !isLayoutConfigurable}}" title="Close tab" ng-click="removeGrp($event, group.name)"></i>
                     </li>

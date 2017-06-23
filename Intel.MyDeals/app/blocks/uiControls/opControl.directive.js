@@ -122,7 +122,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
         }
 
         if (scope.opType === 'MULTISELECT') {
-
+              
             if (!!scope.value && !Array.isArray(scope.value) && !(typeof scope.value === "object")) {
                 scope.value = scope.value.split(",");
             }

@@ -770,6 +770,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                             }
                         }
                     }
+
+                    $scope.validateGrid();
                 }
 
             });
@@ -1078,7 +1080,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                         row["PASSED_VALIDATION"] = "Dirty";
                     } else {
                         beh.isError[key] = false;
-                        beh.validMsg[key] = false;
+                        beh.validMsg[key] = "";
                     }
                 }, scope);
 
