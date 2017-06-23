@@ -97,6 +97,7 @@ function objsetService($http, dataService, logger, $q) {
 
     function updateContractAndCurPricingTable(custId, contractId, data, forceValidation, forcePublish, delPtr) {
         if (!delPtr) delPtr = false;
+
         if (forceValidation && forcePublish) {
             return dataService.post(apiBaseContractUrl + "SaveAndValidateAndPublishContractAndPricingTable/" + custId + '/' + contractId + '/' + delPtr, data);
         } else if (forceValidation) {

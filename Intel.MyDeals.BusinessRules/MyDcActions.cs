@@ -509,6 +509,20 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void CompressJson(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            //List<string> atrbs = new List<string> {AttributeCodes.PTR_SYS_PRD, AttributeCodes.PTR_SYS_INVLD_PRD};
+            //foreach (IOpDataElement de in r.Dc.GetDataElementsIn(atrbs))
+            //{
+            //    if (de.HasValueChanged)
+            //        de.AtrbValue = de.AtrbValue.ToString();
+            //}
+
+        }
+
         public static void ValidateEcapPrice(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);

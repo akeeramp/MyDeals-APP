@@ -14,6 +14,13 @@ namespace Intel.MyDeals.BusinessRules
             {
                 new MyOpRule
                 {
+                    Title="Compress Product Json",
+                    ActionRule = MyDcActions.CompressJson,
+                    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW},
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnSave}
+                },
+                new MyOpRule
+                {
                     Title="Must have a positive value",
                     ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnSave},

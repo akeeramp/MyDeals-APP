@@ -1079,7 +1079,6 @@
     <Content Include="Scripts\Angular\angular-linq.min.js" />
     <Content Include="Scripts\Angular\select.min.js" />
     <Content Include="Scripts\Angular\ui-bootstrap-tpls-2.2.0.min.js" />
-    <Content Include="Scripts\base64-string.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\d3\d3.js" />
@@ -1389,7 +1388,6 @@
     <Content Include="Scripts\kendo\2017.R1\kendo.web.min.js" />
     <Content Include="Scripts\kendo\2017.R1\kendo.window.min.js" />
     <Content Include="Scripts\kendo\2017.R1\pako_deflate.min.js" />
-    <Content Include="Scripts\lz-string.min.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\nv.d3.js" />
     <Content Include="Scripts\nv.d3.min.js" />

@@ -36,6 +36,10 @@ util.waitMsg = function (msg, iconClass) {
     }
 }
 
+util.deepClone = function(obj) {
+    return JSON.parse(kendo.stringify(obj));
+}
+
 util.isEmpty = function(map)
 {
     for (var key in map) {

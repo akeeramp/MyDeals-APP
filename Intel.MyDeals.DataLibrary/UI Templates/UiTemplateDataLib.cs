@@ -276,7 +276,7 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "Json String (will be hidden)",
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 IsReadOnly = false, // need to set to true after product selector is in place
-                IsHidden = false,
+                IsHidden = true,
                 Width = 220
                 //// This is how it should be set once the product selector is in place:
                 //IsReadOnly = true,
@@ -289,7 +289,7 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "Invalid Json String (will be hidden)",
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 IsReadOnly = false, // need to set to true after product selector is in place
-                IsHidden = false,
+                IsHidden = true,
                 Width = 220
                 //// This is how it should be set once the product selector is in place:
                 //IsReadOnly = true,
