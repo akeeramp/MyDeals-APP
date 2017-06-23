@@ -363,7 +363,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             },
             {
                 field: "PRD_END_DTM",
-                title: "Product Start Date",
+                title: "Product End Date",
                 type: "date",
                 template: "#= kendo.toString(new Date(PRD_END_DTM), 'M/d/yyyy') #",
                 width: "150px"
