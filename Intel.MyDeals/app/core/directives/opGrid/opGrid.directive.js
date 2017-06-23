@@ -470,8 +470,17 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 var col = { field: options.field };
 
                 for (var c = 0; c < cols.length; c++) {
-                    if (cols[c].field === options.field) col = cols[c];
+                	if (cols[c].field === options.field) {
+                		col = cols[c];
+                		break;
+                	}
                 }
+
+				// col is Read-only
+                if (options.model._behaviors.isReadOnly[col.field]) { 
+                	return;
+                }
+
                 if (col.uiType === "ComboBox" || col.uiType == "DROPDOWN") {
 
                 	// Note: we shouldnt put atrb specific logic here, but if not here then where? template too generic and this is where we call it...
