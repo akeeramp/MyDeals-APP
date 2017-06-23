@@ -376,7 +376,7 @@
     <Content Include="app\core\directives\expandKendogrid.directive.js" />
     <Content Include="app\blocks\uiControls\focusOnShow.directive.js" />
     <Content Include="app\blocks\uiControls\opControl.directive.js" />
-    <Content Include="app\blocks\uiControls\opcontrolDataElement.directive.js" />
+    <Content Include="app\blocks\uiControls\opControlDataElement.directive.js" />
     <Content Include="app\blocks\uiControls\opControlFlat.directive.js" />
     <Content Include="app\contract\partials\contract.html" />
     <Content Include="app\contract\partials\contractBody.html" />

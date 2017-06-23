@@ -11,7 +11,7 @@ namespace Intel.MyDeals.Entities
         public DropdownHierarchy[] items { get; set; }
 
         [JsonProperty(TypeNameHandling = TypeNameHandling.Objects)]
-        public bool expanded { get; set; }
+        public bool expanded { get; set; }      //determines whether this particular hierarchy node is expanded by default
 
         public DropdownHierarchy() {
             this.items = null; // new List<BasicDropdown>();

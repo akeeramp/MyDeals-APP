@@ -129,14 +129,20 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
         }
 
         if (scope.opType === 'EMBEDDEDMULTISELECT') {
-
             if (!!scope.value && !Array.isArray(scope.value) && !(typeof scope.value === "object")) {
                 scope.value = scope.value.split(",");
             }
 
+            if (scope.opExpanded !== undefined) {
+                scope.showTreeView = scope.opExpanded;
+            }
+
+            var msDataBound = false;
+            var tvDataBound = false;
+
             //when user clicks multiselect to open treeview, ensure that treeview's checked values match to those of the multiselect.
             var updateTreeView = function () {
-                if (scope.showTreeView === true) {
+                if (scope.showTreeView === true && msDataBound === true && tvDataBound) {
                     var msValues = $("#" + scope.opCd + "_MS").data("kendoMultiSelect").value();
                     var treeview = $("#" + scope.opCd).data("kendoTreeView");
 
@@ -144,13 +150,28 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
                         var matches = treeview.findByText(msValues[i]);
                         if (matches.length > 1) {
                             //quickfix for Region having same name as Country - however this will become an issue if a geo/blended geo ends up having 2 different regions with the same country name
-                            //for now we select the deepest level node, aka the last one found by jquery in the treeview.findByText call
-                            treeview.dataItem(treeview.findByText(msValues[i])[matches.length - 1]).set("checked", true);
+                            //for now we select the deepest level node, aka the childless nodes
+                            
+                            for (var j = 0; j < matches.length; j++) {
+                                var dataItem = treeview.dataItem(matches[j]);
+                                if (!dataItem.hasChildren) {    //only check nodes that are childless (base level leaf nodes)
+                                    treeview.dataItem(matches[j]).set("checked", true);
+                                }
+                            }
                         } else {
-                            treeview.dataItem(treeview.findByText(msValues[i])).set("checked", true);
+                            treeview.dataItem(matches).set("checked", true);  //only one match, let's check it regardless
                         }
                     }
                 }
+            }
+
+            scope.onMSDataBound = function () {
+                msDataBound = true;
+                updateTreeView();
+            }
+            scope.onTVDataBound = function () {
+                tvDataBound = true;
+                updateTreeView();
             }
 
             scope.onOpen = function () {
@@ -165,22 +186,27 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
 
             scope.onClose = function () {
                 scope.showTreeView = false;
-                updateTreeView();
+                //updateTreeView(); we are hiding the treeview, why do we need to update it?
             }
 
             scope.onDeselect = function (e) {
-                var item = e.item[0].innerText.toUpperCase();
+                var item = e.dataItem.DROP_DOWN;
                 var treeview = $("#" + scope.opCd).data("kendoTreeView");
-                var ds = treeview.dataSource.data();
 
-                for (var d = 0; d < ds.length; d++) {
-                    if (ds[d].DROP_DOWN.toUpperCase() === item) {
-                        ds[d].set('checked', false);
+                var matches = treeview.findByText(item);
+                if (matches.length > 1) {
+                    for (var i = 0; i < matches.length; i++) {
+                        var dataItem = treeview.dataItem(matches[i]);
+                        if (!dataItem.hasChildren) {    //only uncheck nodes that are childless (base level leaf nodes)
+                            treeview.dataItem(matches[i]).set("checked", false);
+                        }
                     }
+                } else {
+                    treeview.dataItem(matches).set("checked", false);  //only one match, let's uncheck it regardless
                 }
 
-                scope.value = scope.value.filter(function (el) {
-                    return el.toUpperCase() !== item;
+                scope.value = scope.value.filter(function (el) {    //update bound multiselect value as well
+                    return el.toUpperCase() !== item.toUpperCase();
                 });
             }
 
@@ -344,6 +370,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
             opValidMsg: '=',
             opHelpMsg: '=',
             opIsForm: '=',
+            opExpanded: '=',
             opClass: '=',
             opStyle: '=',
             opPlaceholder: '='

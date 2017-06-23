@@ -19,6 +19,7 @@
                     k-auto-close="false"
                     k-open="onOpen"
                     k-deselect="onDeselect"
+                    k-data-bound="onMSDataBound"
 					k-placeholder="opPlaceholder"
                     k-ng-readonly="false"
                     style="width: 100%;"
@@ -37,6 +38,7 @@
                      k-selectable="'multiple'"
                      k-on-check="onCheckFunction()"
                      k-on-select="onSelectFunction()"
+                     k-data-bound="onTVDataBound"
                      k-load-on-demand="false"
                      ng-class="{isHidden: opIsHidden, isReadOnly: opIsReadOnly, isError: opIsError}"
                      style="overflow: hidden;">

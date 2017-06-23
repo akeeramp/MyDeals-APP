@@ -100,7 +100,7 @@ namespace Intel.MyDeals.BusinessLogic
                 if (bd.DROP_DOWN.ToUpper() == chldDropdown.subAtrbValue.ToUpper())
                 {
                     newDH.items = sub.ToArray();
-                    newDH.expanded = true; //this sets dropdown items with children nodes to be expanded/notexpanded by default
+                    //newDH.expanded = true; //this sets dropdown items with children nodes to be expanded/notexpanded by default
                 }
                 ret.Add(newDH);
             }
@@ -130,7 +130,7 @@ namespace Intel.MyDeals.BusinessLogic
 
                 //using created basic dropdown, use that to seed a new dropdownhierarchy
                 DropdownHierarchy newDH_Geo = new DropdownHierarchy(newBD_Geo);
-                newDH_Geo.expanded = true;
+                //newDH_Geo.expanded = true;
 
                 //create this geo's regions/country hierarchies
                 List<DropdownHierarchy> regions = new List<DropdownHierarchy>();
@@ -143,7 +143,7 @@ namespace Intel.MyDeals.BusinessLogic
                     newBD_Region.ATRB_LKUP_DESC = "REGION";
 
                     DropdownHierarchy newDH_Region = new DropdownHierarchy(newBD_Region);
-                    newDH_Region.expanded = true;
+                    //newDH_Region.expanded = true;
 
                     List<DropdownHierarchy> countries = new List<DropdownHierarchy>();
                     IEnumerable<GeoDimension> region_countries = geodim.Where(geo => geo.GEO_NM.ToUpper() == geoCombined[i].ToUpper() && geo.RGN_NM == newDH_Region.DROP_DOWN && (geo.CTRY_NM != null && geo.CTRY_NM != ""));
@@ -155,7 +155,7 @@ namespace Intel.MyDeals.BusinessLogic
                         newBD_Country.ATRB_LKUP_DESC = "COUNTRY";
 
                         DropdownHierarchy newDH_Country = new DropdownHierarchy(newBD_Country);
-                        newDH_Country.expanded = true;
+                        //newDH_Country.expanded = true;
 
                         countries.Add(newDH_Country);
                     }

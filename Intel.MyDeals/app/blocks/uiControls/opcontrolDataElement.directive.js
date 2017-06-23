@@ -32,6 +32,7 @@ function opControlDataElement($http, lookupsService, $compile, $templateCache, l
         el += ' op-min-value="' + scope.opMinValue + '"';
         el += ' op-max-value="' + scope.opMaxValue + '"';
         el += ' op-is-form="' + scope.opIsForm + '"';
+        el += ' op-expanded="' + scope.opExpanded + '"';
         el += ' op-class="\'' + scope.opClass + '\'"';
         el += ' op-style="\'' + scope.opStyle + '\'"';
         el += ' op-placeholder="\'' + placeholder + '\'"';
@@ -70,8 +71,9 @@ function opControlDataElement($http, lookupsService, $compile, $templateCache, l
             opIsForm: "=",
             opClass: "=",
             opStyle: "=",
-            opPlaceholder: '='
-    },
+            opPlaceholder: '=',
+            opExpanded: '='
+        },
         link: linker
     }
 }
