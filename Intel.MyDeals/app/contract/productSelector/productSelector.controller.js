@@ -445,9 +445,29 @@
                     width: "150px"
                 },
                 {
+                    field: "PRD_STRT_DTM",
+                    title: "Product Start Date",
+                    type: "date",
+                    template: "#= kendo.toString(new Date(PRD_STRT_DTM), 'M/d/yyyy') #",
+                    width: "150px"
+                },
+                {
+                    field: "PRD_END_DTM",
+                    title: "Product Start Date",
+                    type: "date",
+                    template: "#= kendo.toString(new Date(PRD_END_DTM), 'M/d/yyyy') #",
+                    width: "150px"
+                },
+                {
                     field: "CAP_START",
-                    title: "CAP Availability date",
+                    title: "CAP Availability Date",
                     template: "<div>{{vm.getFormatedDate(dataItem.CAP_START)}}</div>",
+                    width: "150px"
+                },
+                {
+                    field: "CAP_END",
+                    title: "CAP End Date",
+                    template: "<div>{{vm.getFormatedDate(dataItem.CAP_END)}}</div>",
                     width: "150px"
                 },
                 {

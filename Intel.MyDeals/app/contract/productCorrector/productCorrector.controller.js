@@ -214,7 +214,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             _selectionLevel = 0;
             productHierarchy = [];
             vm.items = []; // Clear Hierarchy Values
-            vm.gridData = [];  // Clear all the GRID data      
+            vm.gridData = [];  // Clear all the GRID data
 
             // Reset Suggestion list
             vm.clearSuggedtedProd();
@@ -228,10 +228,9 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             vm.showSearchResults = 0;
 
             cookProducts(); // Calling Cook Product to go to next available product
-        }        
+        }
 
         dataSource.read();
-
     }
 
     // Further suggestion
@@ -289,10 +288,10 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             }
 
             //Step 5: Removing all special characters
-            if (tempString != tempString.replace(/[^\w\s]/gi, '') && tempString.replace(/[^\w\s]/gi, '').length > 0) {                
+            if (tempString != tempString.replace(/[^\w\s]/gi, '') && tempString.replace(/[^\w\s]/gi, '').length > 0) {
                 if (vm.suggestedProd.indexOf(tempString.replace(/[^\w\s]/gi, '')) == -1) {
                     vm.suggestedProd.push(tempString.replace(/[^\w\s]/gi, ''));
-                }             
+                }
             }
 
             //Step 6 : Remove alphabet from the string
@@ -363,9 +362,22 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                 width: "150px"
             },
             {
+                field: "PRD_END_DTM",
+                title: "Product Start Date",
+                type: "date",
+                template: "#= kendo.toString(new Date(PRD_END_DTM), 'M/d/yyyy') #",
+                width: "150px"
+            },
+            {
                 field: "CAP_START",
-                title: "CAP Availability date",
+                title: "CAP Availability Date",
                 template: "<div>{{vm.getFormatedDate(dataItem.CAP_START)}}</div>",
+                width: "150px"
+            },
+            {
+                field: "CAP_END",
+                title: "CAP End Date",
+                template: "<div>{{vm.getFormatedDate(dataItem.CAP_END)}}</div>",
                 width: "150px"
             },
             {
@@ -383,6 +395,11 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             {
                 field: "CPU_PROCESSOR_NUMBER",
                 title: "CPU Processor number",
+                width: "150px"
+            },
+            {
+                field: "GDM_FMLY_NM",
+                title: "Family Name",
                 width: "150px"
             },
             {
@@ -619,7 +636,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                     );
                 })
                 .ToArray();
-            
+
             //Calling WEb APi for the Product details...
             ProductSelectorService.GetProductAttributes(dataSelected)
                 .then(function (response) {
@@ -652,12 +669,9 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                     else {
                         logger.error("Can not insert duplicate product ");
                     }
-
                 }, function (response) {
                     logger.error("Unable to get product details", response, response.statusText);
                 });
-
-            
         }
     }
 
@@ -1270,7 +1284,6 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                         YCS2_START: x.YCS2_START
                     }
                 });
-                
             }
         });
 
@@ -1416,7 +1429,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         }
         else {
             logger.error("No product selected");
-            /// When user deletes the product and clicks save move to next item            
+            /// When user deletes the product and clicks save move to next item
         }
     }
 
