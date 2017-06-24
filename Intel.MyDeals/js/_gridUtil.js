@@ -419,7 +419,7 @@ gridTools.prototype.createDataSource = function (parentSource, pageSize) {
                 // locate item in original datasource and update it
                 for (var i = 0; i < e.data.models.length; i++) {
                     var item = e.data.models[i];
-                    source[gTools.getIndexByDcId(item.DC_ID, source)] = item;
+                    if (!!item.DC_ID ) source[gTools.getIndexByDcId(item.DC_ID, source)] = item;
                 }
                 // on success
                 e.success();

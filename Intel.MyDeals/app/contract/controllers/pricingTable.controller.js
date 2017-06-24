@@ -32,6 +32,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     root.setBusy("Loading Deals", "Gathering deals and security settings.");
     root.child = $scope;
 
+    root.uncompressJson(pricingTableData.data.PRC_TBL_ROW);
+
     var cellStyle = {
         textAlign: "left",
         verticalAlign: "center",
@@ -486,10 +488,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 }
             }
 
-            sheet.range(root.colToLetter['PTR_SYS_PRD'] + (rowStart)).value(JSON.stringify(validateSelectedProducts));
+            //debugger;
+            //PTR_SYS_PRD
+            sheet.range('D' + (rowStart)).value(JSON.stringify(validateSelectedProducts));
             systemModifiedProductInclude = true;
             sheet.range(root.colToLetter['PTR_USER_PRD'] + (rowStart)).value(contractProducts);
-            sheet.range(root.colToLetter['PTR_SYS_INVLD_PRD'] + (rowStart)).value("");
+            // can't use colToLetter for PTR_SYS_INVLD_PRD because it is hidden
+            sheet.range('E' + (rowStart)).value("");
 
             syncSpreadRows(sheet, rowStart, rowStart);
 
@@ -506,10 +511,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 if (validateSelectedProducts.hasOwnProperty(key)) {
                     var validJSON = {};
                     validJSON[key] = validateSelectedProducts[key];
-                    sheet.range(root.colToLetter['PTR_SYS_PRD'] + (row)).value(JSON.stringify(validJSON));
+                    // can't use colToLetter for PTR_SYS_PRD because it is hidden
+                    sheet.range('D' + (row)).value(JSON.stringify(validJSON));
                     systemModifiedProductInclude = true;
                     sheet.range(root.colToLetter['PTR_USER_PRD'] + (row)).value(key);
-                    sheet.range(root.colToLetter['PTR_SYS_INVLD_PRD'] + (row)).value("");
+                    // can't use colToLetter for PTR_SYS_INVLD_PRD because it is hidden
+                    sheet.range('E' + (row)).value("");
                     row++;
                 }
             }
@@ -576,32 +583,55 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var isProductColumnIncludedInChanges = (arg.range._ref.topLeft.col >= productColIndex) && (arg.range._ref.bottomRight.col <= productColIndex);
 
         if (isProductColumnIncludedInChanges && arg.range.value() === null) {
-            kendo.confirm("Are you sure you want to delete this product and the matching deal?").then(function () {
-                $timeout(function () {
-                    if (root.spreadDs !== undefined) {
-                        var data = root.spreadDs.data();
+            if (root.spreadDs !== undefined) {
+                var data = root.spreadDs.data();
 
-                        var rowStart = topLeftRowIndex - 2;
-                        var rowStop = bottomRightRowIndex - 2;
+                var rowStart = topLeftRowIndex - 2;
+                var rowStop = bottomRightRowIndex - 2;
 
-                        // look for skipped lines
+                if (hasDataOrPurge(data, rowStart, rowStop)) {
+                    kendo.confirm("Are you sure you want to delete this product and the matching deal?")
+                        .then(function() {
+                                $timeout(function() {
+                                        if (root.spreadDs !== undefined) {
+
+                                            // look for skipped lines
+                                            var numToDel = rowStop + 1 - rowStart;
+                                            data.splice(rowStart, numToDel);
+
+                                            // now apply array to Datasource... one event triggered
+                                            root.spreadDs.sync();
+
+                                            $timeout(function () {
+                                                var n = data.length + 2;
+                                                disableRange(sheet.range("B" + n + ":B" + (n + numToDel + numToDel)));
+                                                disableRange(sheet.range("D" + n + ":Z" + (n + numToDel + numToDel)));
+                                            },10);
+
+                                            root.saveEntireContract(true);
+                                        }
+                                    },
+                                    10);
+                            },
+                            function() {});
+                } else {
+                    cleanupData(data);
+                    root.spreadDs.sync();
+                    $timeout(function () {
+                        var cnt = 0;
+                        for (var c = 0; c < data.length; c++) {
+                            if (data[c].DC_ID !== null) cnt++;
+                        }
                         var numToDel = rowStop + 1 - rowStart;
-                        data.splice(rowStart, numToDel);
+                        cnt = cnt + 2;
+                        //debugger;
+                        disableRange(sheet.range("B" + cnt + ":B" + (cnt + numToDel - 1)));
+                        disableRange(sheet.range("D" + cnt + ":Z" + (cnt + numToDel - 1)));
+                    }, 10);
 
-                        // now apply array to Datasource... one event triggered
-                        root.spreadDs.sync();
+                }
+            }
 
-                        $timeout(function () {
-                            var n = data.length + 2;
-                            disableRange(sheet.range("B" + n + ":B" + (n + numToDel - 1)));
-                            disableRange(sheet.range("D" + n + ":Z" + (n + numToDel - 1)));
-                        }, 10);
-
-                        root.saveEntireContract(true);
-                    }
-                }, 10);
-            },
-            function () { });
         }
         else {
             // Trigger only if the changed range contains the product column
@@ -654,6 +684,20 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             }
         }
         return data;
+    }
+
+    function hasDataOrPurge(data, rowStart, rowStop) {
+        if (data.length === 0) return false;
+        for (var n = rowStop; n >= rowStart; n--) {
+            if (!!data[n]) {
+                if (data[n].DC_ID !== null && data[n].DC_ID > 0) {
+                    return true;
+                } else if (data[n].DC_ID !== null && data[n].DC_ID < 0) {
+                    data.splice(n, 1);
+                }
+            }
+        }
+        return false;
     }
 
     function syncSpreadRows(sheet, topLeftRowIndex, bottomRightRowIndex) {

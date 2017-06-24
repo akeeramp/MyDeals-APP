@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
+using Intel.MyDeals.Entities.Helpers;
 using Intel.Opaque.Data;
 using Intel.Opaque.Rules;
 using Newtonsoft.Json;
@@ -172,8 +173,8 @@ namespace Intel.MyDeals.BusinessRules
             if (!r.IsValid) return;
 
             IOpDataElement dePrdUsr = r.Dc.GetDataElement(AttributeCodes.PTR_USER_PRD);
-            string prdJson = r.Dc.GetDataElementValue(AttributeCodes.PTR_SYS_PRD);
-            string prdJsonIvalid = r.Dc.GetDataElementValue(AttributeCodes.PTR_SYS_INVLD_PRD);
+            string prdJson = LZString.decompressFromBase64(r.Dc.GetDataElementValue(AttributeCodes.PTR_SYS_PRD)) ?? "";
+            string prdJsonIvalid = LZString.decompressFromBase64(r.Dc.GetDataElementValue(AttributeCodes.PTR_SYS_INVLD_PRD)) ?? "";
             if (string.IsNullOrEmpty(prdJson)) return;
 
             ProdMappings items = null;
@@ -514,13 +515,28 @@ namespace Intel.MyDeals.BusinessRules
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
-            //List<string> atrbs = new List<string> {AttributeCodes.PTR_SYS_PRD, AttributeCodes.PTR_SYS_INVLD_PRD};
-            //foreach (IOpDataElement de in r.Dc.GetDataElementsIn(atrbs))
-            //{
-            //    if (de.HasValueChanged)
-            //        de.AtrbValue = de.AtrbValue.ToString();
-            //}
+            List<string> atrbs = new List<string> {AttributeCodes.PTR_SYS_PRD, AttributeCodes.PTR_SYS_INVLD_PRD};
+            foreach (IOpDataElement de in r.Dc.GetDataElementsIn(atrbs))
+            {
+                if (de.HasValueChanged && string.IsNullOrEmpty(de.AtrbValue.ToString()))
+                    de.AtrbValue = CompressHelpers.EncodeTo64(de.AtrbValue.ToString());
+            }
+        }
 
+        public static void UnCompressJson(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            List<string> atrbs = new List<string> { AttributeCodes.PTR_SYS_PRD, AttributeCodes.PTR_SYS_INVLD_PRD };
+            foreach (IOpDataElement de in r.Dc.GetDataElementsIn(atrbs))
+            {
+                string val = de.AtrbValue.ToString();
+                if (!string.IsNullOrEmpty(val) && val.IsBase64String())
+                {
+                    de.AtrbValue = CompressHelpers.DecodeFrom64(val);
+                }
+            }
         }
 
         public static void ValidateEcapPrice(params object[] args)

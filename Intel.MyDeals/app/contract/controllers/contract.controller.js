@@ -996,6 +996,7 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
             kendo.confirm("Are you sure that you want to delete this pricing strategy?").then(function() {
                 $scope.$apply(function() {
                     $scope.setBusy("Deleting...", "Deleting the Pricing Strategy");
+                    $scope._dirty = false;
                     topbar.show();
                     // Remove from DB first... then remove from screen
                     objsetService.deletePricingStrategy($scope.getCustId(), $scope.contractData.DC_ID, ps).then(
@@ -1049,8 +1050,10 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
         $scope.deletePricingTable = function(ps, pt) {
             kendo.confirm("Are you sure that you want to delete this pricing table?").then(function() {
                 $scope.$apply(function() {
-                    topbar.show();
                     $scope.setBusy("Deleting...", "Deleting the Pricing Table");
+                    $scope._dirty = false;
+                    topbar.show();
+
                     // Remove from DB first... then remove from screen
                     objsetService.deletePricingTable($scope.getCustId(), $scope.contractData.DC_ID, pt).then(
                         function(data) {
@@ -1417,7 +1420,10 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
 
             $scope.setBusy("Saving your data...", "Please wait while saving data.");
 
-            objsetService.updateContractAndCurPricingTable($scope.getCustId(), $scope.contractData.DC_ID, data, forceValidation, forcePublish, delPtr).then(
+            var copyData = util.deepClone(data);
+            $scope.compressJson(copyData);
+
+            objsetService.updateContractAndCurPricingTable($scope.getCustId(), $scope.contractData.DC_ID, copyData, forceValidation, forcePublish, delPtr).then(
                 function (results) {
                     var i;
                     $scope.setBusy("Saving your data...Done", "Processing results now!");
@@ -1426,6 +1432,7 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
 
                     if (!!results.data.PRC_TBL_ROW) {
                         for (i = 0; i < results.data.PRC_TBL_ROW.length; i++) {
+                            if (!!results.data.PRC_TBL_ROW[i].PTR_SYS_PRD) results.data.PRC_TBL_ROW[i].PTR_SYS_PRD = $scope.uncompress(results.data.PRC_TBL_ROW[i].PTR_SYS_PRD);
                             if (results.data.PRC_TBL_ROW[i].warningMessages !== undefined && results.data.PRC_TBL_ROW[i].warningMessages.length > 0) anyWarnings = true;
                         }
                         $scope.updateResults(results.data.PRC_TBL_ROW, $scope.pricingTableData.PRC_TBL_ROW);
@@ -1579,6 +1586,27 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
 
         }
 
+        $scope.compressJson = function (data) {
+            if (!data.PricingTableRow) return;
+            for (var d = 0; d < data.PricingTableRow.length; d++) {
+                data.PricingTableRow[d].PTR_SYS_INVLD_PRD = "";
+                data.PricingTableRow[d].PTR_SYS_PRD = $scope.compress(data.PricingTableRow[d].PTR_SYS_PRD);
+            }
+        }
+        $scope.compress = function (data) {
+            if (data === "" || data[0] !== "{") return data;
+            return LZString.compressToBase64(data);
+        }
+        $scope.uncompress = function (data) {
+            if (!data || data === "" || data[0] === "{") return data;
+            return LZString.decompressFromBase64(data);
+        }
+        $scope.uncompressJson = function(data) {
+            if (!data) return;
+            for (var d = 0; d < data.length; d++) {
+                data[d].PTR_SYS_PRD = $scope.uncompress(data[d].PTR_SYS_PRD);
+            }
+        }
 
         $scope.myDealsValidation = function (isError, msg, isReq) {
             return {
