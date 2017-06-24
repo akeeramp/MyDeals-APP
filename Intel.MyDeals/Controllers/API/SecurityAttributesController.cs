@@ -35,8 +35,6 @@ namespace Intel.MyDeals.Controllers.API
 		[Route("GetSecurityDropdownData")]
 		public SecurityDropdownData GetSecurityDropdownData()
 		{
-		    var t =  _dropdownLib.GetSecurityActionsDropdown().OrderBy(x => x.dropdownName).ToList();
-
             List <Dropdown> securityActions = SafeExecutor(() => _dropdownLib.GetSecurityActionsDropdown().OrderBy(x => x.dropdownName).ToList()
 				, $"Unable to get Security Actions"
 			);
