@@ -26,7 +26,14 @@ namespace Intel.MyDeals.BusinessRules
 					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate }
 				},
 
-				new MyOpRule
+                new MyOpRule
+                {
+                    Title="Show Expire YCS2 if frontend deal is active",
+                    ActionRule = MyDcActions.ShowExpireYCS2,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate }
+                },
+
+                new MyOpRule
 				{
 					Title="Hidden if NOT Consumption",
 					ActionRule = MyDcActions.ExecuteActions,
