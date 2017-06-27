@@ -448,13 +448,6 @@
                     width: "150px"
                 },
                 {
-                    field: "PRD_STRT_DTM",
-                    title: "Product Start Date",
-                    type: "date",
-                    template: "#= kendo.toString(new Date(PRD_STRT_DTM), 'M/d/yyyy') #",
-                    width: "150px"
-                },
-                {
                     field: "PRD_END_DTM",
                     title: "Product End Date",
                     type: "date",
