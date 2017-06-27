@@ -1,0 +1,604 @@
+﻿<div class="modal-content" moveablemodal style="height:85vh;background-color:#1a3e6f;overflow-y:auto;overflow-x:hidden;border-left:none;border-right:none;">
+    <div style="padding:10px;">
+        <div class="prodSelector modal-header" style="margin-bottom:15px">
+            <div class="row prodCorrectorHeader">
+                <div class="col-md-4 cursorArea" style="padding-left:0px">
+                    <p class="prodText">Product Corrector</p>
+                </div>                
+                <div class="col-md-7 text-center headerMsg">
+                    <span ng-if="vm.issueRowKeys.length <= 1">
+                        MyDeals needs help with your entered product
+                    </span>
+                    <span ng-if="vm.issueRowKeys.length > 1">
+                        MyDeals needs help with <span class="yellow">{{ vm.numIssueRows }}</span> of your <span class="yellow">{{ vm.totRows }}</span> entered products
+                    </span>
+                </div>
+                <span class="rowNavPanel">
+                    <i role="button" title="Close" class="intelicon-close-max fr" ng-click="vm.cancel()"></i>
+                </span>
+            </div>
+        </div>
+        
+        
+
+        <div class="prodCorrector modal-body">
+            <div class="row subHeaderMsg">
+                Please select option(s) below to move into the valid products box or use the <a ng-click="vm.openProdSelector()">Product Selector</a>
+            </div>
+            <div class="row subHeaderNavContainer">
+                <div class="fl miniNav" ng-if="vm.issueRowKeys.length > 1">
+                    <div class="text-center">({{ vm.curRowIndx }} of {{ vm.numIssueRows }} rows)</div>
+                    <div>
+                        <button class="btn btn-xs btn-primary prdBtn" ng-click="vm.prevRow()" ng-disabled="vm.curRowIndx <= 1">Back</button>
+                        <button class="btn btn-xs btn-primary prdBtn" ng-click="vm.nextRow()" ng-disabled="vm.curRowIndx >= vm.numIssueRows">Next</button>
+                    </div>
+                </div>
+                <div class="fl miniProdNav">
+                    <div>Product(s) not found for Row {{ vm.rowDCId }}</div>
+                    <div>
+                        <ul class="productpath breadcrumb">
+                            <li ng-repeat="p in vm.curRowProds | unique:'name'">
+                                <a role="button" class="prdAnchor {{p.status}}" title="{{p.reason}}">{{:: p.name }}</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="clearboth"></div>
+            </div>
+            <div class="row" style="margin: 10px 0 0 0;">
+                <table style="width: 100%; height: 100%;">
+                    <tr>
+                        <td>
+                            <div class="lnavFilter">
+                                <div class="filterTitle">Refine By</div>
+                                
+                                
+                                <div class="filterGrp">
+                                    <div ng-click="vm.isPrdCollapsed = !vm.isPrdCollapsed" style="cursor: pointer;">
+                                        <i ng-class="{'intelicon-down': vm.isPrdCollapsed, 'intelicon-right-next': !vm.isPrdCollapsed}"></i> Products Entered
+                                    </div>
+                                    <div class="filterContainer" uib-collapse="vm.isPrdCollapsed">
+                                        <div ng-repeat="item in vm.curRowIssues | orderBy: 'name'" style="max-height: 20px;">
+                                            <div ng-if="item.cnt > 0">
+                                                <input type='checkbox' ng-click="vm.clickFilter()" ng-model="item.selected" class='check ckSm with-font' id="fltrPrdChk{{item.id}}" />
+                                                <label for="fltrPrdChk{{item.id}}">
+                                                    <span ng-bind-html="item.name"></span>
+                                                    <span class="badge upperBadge" ng-if="item.status == 'Issue'">{{ item.cnt == 0 ? "?" : item.cnt }}</span>
+                                                </label>
+                                            </div>
+                                            <div ng-if="item.cnt <= 0" class="srchContainer" title="Click to find a possible match">
+                                                <i class="intelicon-search ckSm"></i>
+                                                <span ng-bind-html="item.name"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="filterGrp" ng-if="vm.isCatCollapsed.length > 0">
+                                    <div ng-click="vm.isCatCollapsed = !vm.isCatCollapsed" style="cursor: pointer;">
+                                        <i ng-class="{'intelicon-down': vm.isCatCollapsed, 'intelicon-right-next': !vm.isCatCollapsed}"></i> Product Category
+                                    </div>
+                                    <div class="filterContainer" uib-collapse="vm.isCatCollapsed">
+                                        <div ng-repeat="item in vm.curRowCategories | orderBy: 'name'" style="max-height: 20px;">
+                                            <!-- checked='checked' ng-click="onColumnChange(item)" -->
+                                            <input type='checkbox' ng-click="vm.clickFilter()" ng-model="item.selected" class='check ckSm with-font' id="fltrCatChk{{item.id}}" />
+                                            <label for="fltrCatChk{{item.id}}">
+                                                <span ng-bind-html="item.name"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="filterGrp" ng-if="vm.curRowLvl.length > 0">
+                                    <div ng-click="vm.isLvlCollapsed = !vm.isLvlCollapsed" style="cursor: pointer;">
+                                        <i ng-class="{'intelicon-down': vm.isLvlCollapsed, 'intelicon-right-next': !vm.isLvlCollapsed}"></i> Product Level
+                                    </div>
+                                    <div class="filterContainer" uib-collapse="vm.isLvlCollapsed">
+                                        <div ng-repeat="item in vm.curRowLvl | orderBy: 'name'" style="max-height: 20px;">
+                                            <!-- checked='checked' ng-click="onColumnChange(item)" -->
+                                            <input type='checkbox' ng-click="vm.clickFilter()" ng-model="item.selected" class='check ckSm with-font' id="fltrLvlChk{{item.id}}" />                                            
+                                            <label for="fltrLvlChk{{item.id}}">
+                                                <span ng-bind-html="item.name"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td style="width: 100%">
+                            <div id="prodGrid" kendo-grid="prodGrid" class="prodCorrector opUiContainer md kendoGridHeight prodCorrector-grid k-grid" k-options="vm.gridOptionsPotential"></div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="prodSelector modal-footer">
+            <div class="col-md-5" style="margin-left: -15px;">
+                <button class="btn btn-default prdBtn" ng-click="vm.cancel()" style="margin-right:2px;">Cancel</button>
+                <button class="btn btn-primary prdBtn" ng-click="vm.saveProducts()">Save & Close</button>
+            </div>
+            <div class="col-md-1" style="padding-top:15px;">
+                <img ng-if="loading" src="/Images/loadingSmall.gif" />
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    
+    .badge.upperBadge {
+        font-size: 10px;
+        padding: 2px 4px;
+        background-color: #fff;
+        color: #666;
+        vertical-align: text-top;
+        font-weight: 200;
+        margin-left: 6px;
+    }
+
+    .lnavFilter {
+        background-color: #e7e7e8;
+        width: 200px;
+        height: 100%;
+        padding: 4px;
+        overflow: auto;
+    }
+
+    .filterGrp {
+        font-family: arial;
+        font-weight: 600;
+        font-size: 11px;
+        margin: 5px 5px 5px 10px;
+    }
+
+    .filterTitle {
+        margin: 5px;
+        font-size: 20px;
+        color: #aeaeae;
+    }
+
+    .filterGrp .filterContainer {
+        font-weight: 200;
+        margin-bottom: 20px;
+    }
+
+    .filterGrp .filterContainer label {
+        font-weight: 200;
+        margin-left: 5px;
+        cursor: pointer;
+    }
+
+    .filterGrp .srchContainer {
+        margin: 3px 0 0 15px;
+        cursor: pointer;
+        line-height: 1em;
+    }
+    .filterGrp .srchContainer:hover i {
+        color: #003C71;
+    }
+    .filterGrp .srchContainer i {
+        color: #00AEEF;
+        font-size: 14px;
+        margin-right: 5px;
+    }
+
+    .headerMsg {
+        margin-top: 6px;
+        font-size: 18px;
+        color: #ffffff;
+    }
+    .subHeaderMsg {
+        margin: 0 0 4px 0;
+        font-size: 18px;
+        color: #ffffff;        
+    }
+    .subHeaderMsg a {
+        color:#00AEEF;
+        text-decoration:underline;
+        cursor: pointer;
+    }
+    .subHeaderMsg a:hover {
+        color: #f3D54E;
+    }
+    .subHeaderNavContainer {
+        color: #003C71;
+        background-color: #f4f4f4;
+        font-size: 16px;
+        border-radius: 4px;
+        padding: 4px;
+        margin: 0 8px 0 0;
+        width: 100%;
+        height: 60px;
+    }
+    .miniNav {
+        padding: 0 15px;
+        margin-right: 10px;
+        border-right: 2px solid #aeaeae;
+        font-weight: 600;
+    }
+    .miniNav button {
+        width: 60px;
+    }
+    .miniNav button[disabled], .miniNav button[disabled]:hover {
+        color: #00AEEF;
+        background-color: #003C71;
+    }
+    .miniProdNav {
+        padding: 0 15px;
+        margin-right: 10px;
+        font-weight: 600;
+    }
+    .yellow {
+        color: #f3D54E;
+    }
+
+
+
+
+     .suggestedProd {
+         border: 1px solid rgba(190, 163, 163, 0.12);
+         padding: 5px;
+         background: #1a3e6f;
+         background-color: rgba(190, 163, 163, 0.12);
+         margin-bottom: 10px;
+     }
+    .suggestionClose{
+        color:yellow !important;
+        padding:0px !important;
+    }
+    .k-grid tr.k-state-selected, .k-grid td.k-state-selected, .k-grid td.k-state-selected.k-state-focused, .k-grid tr.k-state-selected.k-state-hover, .k-grid td.k-state-selected.k-state-hover, .k-grid td.k-state-selected.k-state-focused.k-state-hover {
+        background-color: transparent;
+        background: #00aeef;
+    }
+
+    .productCorrect-grid.k-grid td {
+        height: 30px !important;
+        white-space: nowrap;
+    }
+
+    .prodCorrectorHeader {
+        border-bottom: 1px solid #ffffff;
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+
+    .rowNavigation {
+        color: yellow;
+        font-size: 28px;
+    }
+
+    .prodText {
+        color: white;
+        font-size: 32px
+    }
+
+    .rowNavPanel {
+        color: white;
+        font-size: 28px;
+        padding-top: 12px;
+        padding-left: 20px;
+    }
+
+    .marginRight {
+        margin-right: 10px;
+    }
+
+    .prodSelectorSearch {
+        padding-top: 8px;
+        overflow: hidden;
+    }
+
+    .addedProduct {
+        padding-left: 15px;
+        padding-right: 15px;
+        margin-bottom: 15px;
+    }
+
+    .textProdSelector {
+        font-size: 19px;
+        color: white;
+        font-weight: 400;
+        font-style: normal;
+    }
+
+    .insertAtRowsText {
+        color: white;
+        font-weight: 400 !important;
+        font-style: normal;
+        font-size: 19px;
+    }
+
+    .prodHeader {
+        color: white;
+        font-size: 32px;
+    }
+
+    .breadCrumbWrapper {
+        padding-left: 10px;
+        padding-right: 10px;
+        font-size: 21px;
+    }
+
+    .modalCloseIcon {
+        color: white;
+        font-size: 32px;
+        padding-top: 12px;
+        padding-left: 20px;
+    }
+
+    .productpath {
+        margin: 0;
+        padding: 4px 0;
+        background-color: transparent;
+        color: #003C71;
+    }
+
+    .productpath.breadcrumb > li + li:before {
+        padding: 0 5px 0 0;
+        content: ",";
+        font-size: 16px;
+    }
+
+    .productpath.breadcrumb {
+        padding: 0px;
+        margin-bottom: 0px;
+        padding-bottom: 10px;
+        padding-left: 5px;
+    }
+
+    a.prdAnchor {
+        color: #003C71;
+    }
+    a.prdAnchor.Warning {
+        color: #FFA300;
+    }
+    a.prdAnchor.Issue {
+        color: #FC4C02;
+    }
+    a.prdAnchor.Good {
+        color: #C4D600;
+    }
+
+    a.prdAnchor:hover {
+        color: #01AEEF;
+        text-decoration: none;
+    }
+
+
+
+    .drillDown.btn-group button {
+        background-color: #01AEEF;
+        border-left: none;
+        border-top: none;
+        border-bottom: none;
+        border-right: 1px solid white;
+        color: white; /* White text */
+        cursor: pointer; /* Pointer/hand icon */
+        float: left; /* Float the buttons side by side */
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    .drillDown {
+        background-color: #01AEEF;
+    }
+
+    .drillDown.btn-group {
+        padding-top: 3px;
+        padding-bottom: 3px;
+    }
+
+    .drillDown.btn-group.btn {
+        white-space: normal !important;
+        word-wrap: break-word;
+    }
+
+    .drillDown.btn-group button:not(:last-child) {
+        border-right: none; /* Prevent double borders */
+    }
+
+    .drillDown.btn-group button.noborder {
+        border-right: none;
+    }
+
+    /* Add a background color on hover */
+    .drillDown.btn-group button:hover {
+        background-color: #01AEEF;
+        color: #1a3e6f;
+    }
+
+    .drillDown.btn-group button:focus, .button:active {
+        outline: none !important;
+        background-color: #01AEEF;
+    }
+
+    .noLeftBorder {
+        border-left: none !important;
+    }
+
+    .prodDrillDownLarge {
+        background-color: #01AEEF;
+        border-bottom: 2px solid #1a3e6f;
+        border-left: 1px solid #ffffff;
+        border-right: none;
+        border-top: none;
+        text-align: center;
+    }
+
+    .prodDrillDownLarge p {
+        font-size: 13px;
+        margin-top: 11px;
+        color: #fff;
+    }
+
+    .prodDrillDownLarge p:hover {
+        color: #1a3e6f;
+    }
+
+    .prodSelected.ui-select-multiple.ui-select-bootstrap {
+        min-height: 100px !important;
+        max-height: 100px !important;
+             overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    #invalidProdGrid, #suggestionProdGrid {
+        height: calc(85vh - 400px) !important;
+        overflow: auto;
+    }
+
+    .err-Search {
+        color: #FF6E77;
+        font-size: 12px !important;
+        padding-left: 1px !important;
+        padding-top: 2px !important;
+    }
+
+    .prdBtn {
+        font-size: 13px;
+    }
+
+    .prdBtn.btn-primary {
+        background-color: #01AEEF;
+    }
+
+    .prdBtn.btn-primary:hover {
+        background-color: #01AEEF;
+        color: #1a3e6f;
+    }
+
+    .prdBtn.btn-primary:focus, .btn-primary:active {
+        outline: none !important;
+        background-color: #01AEEF;
+    }
+
+    .prodCorrector.modal-body {
+        padding-top: 2px;
+        padding-bottom: 0;
+        min-height: calc(85vh - 160px);
+        max-height: calc(85vh - 160px);
+        overflow-y: auto;
+    }
+
+    .prodSelector.modal-footer {
+        border-top: none;
+        padding-bottom: 0;
+        text-align: left;
+    }
+
+    .prodSelector.modal-header {
+        border-bottom: none;
+        padding-bottom: 0px;
+    }
+
+    .prodCorrector.kendoGridHeight {
+        height: calc(85vh - 275px);
+    }
+
+    .prdCorrector-modal-window, .modal-dialog {
+        width: 85%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .checkbox-custom {
+        opacity: 0;
+        position: absolute;
+    }
+
+    .checkbox-custom, .checkbox-custom-label {
+        display: inline-block;
+        vertical-align: middle;
+        margin: 5px;
+        cursor: pointer;
+    }
+
+    .checkbox-custom-label {
+        position: relative;
+    }
+
+    .checkbox-custom + .checkbox-custom-label:before {
+        content: '';
+        background: #fff;
+        border: 1.5px solid #eee;
+        border-radius: 4px;
+        display: inline-block;
+        vertical-align: middle;
+        width: 22px;
+        height: 20px;
+        padding: 2px;
+        text-align: center;
+    }
+
+    .checkbox-custom:checked + .checkbox-custom-label:before {
+        background: #01AEEF;
+    }
+
+    .checkbox-custom:hover + .checkbox-custom-label:before {
+        border: 1.5px solid #01AEEF;
+    }
+
+    .prodCorrector-grid.k-grid td {
+        white-space: nowrap;
+        color: #000000;
+    }
+
+
+
+
+
+    input[type=checkbox].with-font {
+        border: 0;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 1px;
+    }
+    
+    input[type=checkbox].with-font + label:before {
+        font-family: FontAwesome;
+        display: inline-block;
+        content: "\f096";
+        font-size: 22px;
+        letter-spacing: 5px;
+        color: #00AEEF;
+        margin-left: 10px;
+        margin-top: 2px;
+        vertical-align: middle;
+    }
+    
+    input[type=checkbox].with-font.ckSm + label:before {
+        font-size: 16px;
+    }
+    
+    input[type=checkbox].with-font:hover + label:before {
+        color: #003C71;
+        cursor: pointer;
+    }
+    input[type=checkbox].with-font.disabled + label:before {
+        color: #cccccc;
+        cursor: default;
+    }
+    
+    input[type=checkbox].with-font:checked + label:before {
+        content: "\f046";
+        font-size: 22px;
+        letter-spacing: 5px;
+        color: #C4D600;
+        margin-left: 10px;
+        margin-top: 2px;
+        vertical-align: middle;
+    }
+    input[type=checkbox].with-font.ckSm:checked + label:before {
+        font-size: 16px;
+    }
+    input[type=checkbox].with-font:focus + label:before {
+        font-weight: bold;
+        color:#C4D600;
+    }
+</style>
