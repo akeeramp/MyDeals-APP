@@ -348,12 +348,16 @@ namespace Intel.MyDeals.BusinessLogic
         /// </summary>
         /// <param name="productLookup">Result object</param>
         /// <param name="productMatchResults">Master Product match list</param>
-        private static void ExtractValidandDuplicateProducts(ProductLookup productLookup, List<PRD_TRANSLATION_RESULTS> productMatchResults)
+        private static void ExtractValidandDuplicateProducts(ProductLookup productLookup, List<PRD_TRANSLATION_RESULTS> productMatchResultsMaster)
         {
             foreach (var userProduct in productLookup.ProdctTransformResults)
             {
                 // Step 1: Get matching products for a particular row from master match list
                 var tranlatedProducts = productLookup.ProdctTransformResults[userProduct.Key];
+
+                var productMatchResults = (from p in productMatchResultsMaster
+                                           where p.ROW_NM.ToString() == userProduct.Key
+                                               select p).ToList();
 
                 //Step 2.1: Checking for Conflict upto Family Name
                 var isConflict = (from p in productMatchResults
@@ -361,12 +365,14 @@ namespace Intel.MyDeals.BusinessLogic
                                   on p.USR_INPUT equals t
                                   group p by new
                                   {
+                                      p.ROW_NM,
                                       p.USR_INPUT,
                                       p.DEAL_PRD_TYPE,
                                       p.PRD_CAT_NM,
                                       p.BRND_NM,
                                       p.FMLY_NM
                                   }
+                                  
                                      into d
                                   select d.Key).ToList();
 
@@ -374,7 +380,7 @@ namespace Intel.MyDeals.BusinessLogic
                 var duplicateProds = from p in isConflict
                                      group p by p.USR_INPUT
                                      into d
-                                     where d.Count() > 1
+                                     where d.Count() > 1 
                                      select d.Key;
 
                 // Step 2.3: Get the products which are not matched

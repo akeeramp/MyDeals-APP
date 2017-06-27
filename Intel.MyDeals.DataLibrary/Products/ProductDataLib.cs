@@ -417,6 +417,7 @@ namespace Intel.MyDeals.DataLibrary
 
                 using (var rdr = DataAccess.ExecuteReader(cmd))
                 {
+                    int IDX_ROW_NM = DB.GetReaderOrdinal(rdr, "ROW_NM");
                     int IDX_BRND_NM = DB.GetReaderOrdinal(rdr, "BRND_NM");
                     int IDX_CAP = DB.GetReaderOrdinal(rdr, "CAP");
                     int IDX_CAP_END = DB.GetReaderOrdinal(rdr, "CAP_END");
@@ -445,6 +446,7 @@ namespace Intel.MyDeals.DataLibrary
                     {
                         ret.Add(new PRD_TRANSLATION_RESULTS
                         {
+                            ROW_NM = (IDX_ROW_NM < 0 || rdr.IsDBNull(IDX_ROW_NM)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ROW_NM),                            
                             BRND_NM = (IDX_BRND_NM < 0 || rdr.IsDBNull(IDX_BRND_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_BRND_NM),
                             CAP = (IDX_CAP < 0 || rdr.IsDBNull(IDX_CAP)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CAP),
                             CAP_END = (IDX_CAP_END < 0 || rdr.IsDBNull(IDX_CAP_END)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CAP_END),

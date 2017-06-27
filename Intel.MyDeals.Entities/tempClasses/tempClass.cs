@@ -2084,6 +2084,9 @@ public partial class DealTemplateDataGram
     public partial class PRD_TRANSLATION_RESULTS
     {
         [DataMember]
+        public System.Int32 ROW_NM { set; get; }
+
+        [DataMember]
         public System.String BRND_NM { set; get; }
 
         [DataMember]

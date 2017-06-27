@@ -17,7 +17,7 @@ namespace Intel.MyDeals.Entities
 
         protected override void Init()
         {
-            //// This order must match EXACTLY the order as it appears in the TYPE definition (lame!)
+            //// This order must match EXACTLY the order as it appears in the TYPE definition (lame!)            
             this.Columns.Add("USR_INPUT", typeof(string));
             this.Columns.Add("EXCLUDE", typeof(string));
             this.Columns.Add("FILTER", typeof(string));
@@ -26,6 +26,7 @@ namespace Intel.MyDeals.Entities
             this.Columns.Add("GEO_COMBINED", typeof(string));
             this.Columns.Add("PROGRAM_PAYMENT", typeof(string));
             this.Columns.Add("COLUMN_TYPE", typeof(int));
+            this.Columns.Add("ROW_NM", typeof(int));
         }
 
         /// <summary>
@@ -34,7 +35,7 @@ namespace Intel.MyDeals.Entities
         public void AddRow(ProductEntryAttribute itm)
         {
             if (itm == null) { return; }
-            var r = this.NewRow();
+            var r = this.NewRow();            
             r["USR_INPUT"] = itm.USR_INPUT;
             r["EXCLUDE"] = itm.EXCLUDE;
             r["FILTER"] = itm.FILTER;
@@ -43,6 +44,7 @@ namespace Intel.MyDeals.Entities
             r["GEO_COMBINED"] = itm.GEO_COMBINED;
             r["PROGRAM_PAYMENT"] = itm.PROGRAM_PAYMENT;
             r["COLUMN_TYPE"] = itm.COLUMN_TYPE;
+            r["ROW_NM"] = itm.ROW_NUMBER;
             this.Rows.Add(r);
         }
 
@@ -55,7 +57,7 @@ namespace Intel.MyDeals.Entities
 
             foreach (var itm in itms)
             {
-                var r = this.NewRow();
+                var r = this.NewRow();                
                 r["USR_INPUT"] = itm.USR_INPUT;
                 r["EXCLUDE"] = itm.EXCLUDE;
                 r["FILTER"] = itm.FILTER;
@@ -64,6 +66,7 @@ namespace Intel.MyDeals.Entities
                 r["GEO_COMBINED"] = itm.GEO_COMBINED;
                 r["PROGRAM_PAYMENT"] = itm.PROGRAM_PAYMENT;
                 r["COLUMN_TYPE"] = itm.COLUMN_TYPE;
+                r["ROW_NM"] = itm.ROW_NUMBER;
                 this.Rows.Add(r);
             }
         }

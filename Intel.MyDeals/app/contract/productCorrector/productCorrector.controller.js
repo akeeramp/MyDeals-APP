@@ -170,6 +170,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
     vm.handleChange = function (data, dataItem, columns) {
         productSuggestion(dataItem);
     };
+
     vm.gridOptions = {
         dataSource: dataSource,
         filterable: false,
@@ -214,7 +215,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             _selectionLevel = 0;
             productHierarchy = [];
             vm.items = []; // Clear Hierarchy Values
-            vm.gridData = [];  // Clear all the GRID data
+            vm.gridData = [];  // Clear all the GRID data      
 
             // Reset Suggestion list
             vm.clearSuggedtedProd();
@@ -228,9 +229,10 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             vm.showSearchResults = 0;
 
             cookProducts(); // Calling Cook Product to go to next available product
-        }
+        }        
 
         dataSource.read();
+
     }
 
     // Further suggestion
@@ -288,10 +290,10 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             }
 
             //Step 5: Removing all special characters
-            if (tempString != tempString.replace(/[^\w\s]/gi, '') && tempString.replace(/[^\w\s]/gi, '').length > 0) {
+            if (tempString != tempString.replace(/[^\w\s]/gi, '') && tempString.replace(/[^\w\s]/gi, '').length > 0) {                
                 if (vm.suggestedProd.indexOf(tempString.replace(/[^\w\s]/gi, '')) == -1) {
                     vm.suggestedProd.push(tempString.replace(/[^\w\s]/gi, ''));
-                }
+                }             
             }
 
             //Step 6 : Remove alphabet from the string
@@ -310,6 +312,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         vm.suggestedProd = [];
         delete vm.masterSuggestionList[vm.suggestionNotFound];
     }
+
     // Suggested Product Grid
     var dataSourceProduct = new kendo.data.DataSource({
         transport: {
@@ -552,6 +555,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         serverPaging: true,
         serverSorting: true
     });
+
     vm.addChange = function (data, dataItem, columns) {
         addProductSuggested(dataItem);
     };
@@ -588,6 +592,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         }
     }
 
+    //Column toggling logic
     function toggleColumnsWhenEmptyConflictGrid(data) {
         var grid = $("#prodGrid").data("kendoGrid");
         if (!!grid) {
@@ -636,7 +641,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                     );
                 })
                 .ToArray();
-
+            
             //Calling WEb APi for the Product details...
             ProductSelectorService.GetProductAttributes(dataSelected)
                 .then(function (response) {
@@ -669,9 +674,12 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                     else {
                         logger.error("Can not insert duplicate product ");
                     }
+
                 }, function (response) {
                     logger.error("Unable to get product details", response, response.statusText);
                 });
+
+            
         }
     }
 
@@ -694,7 +702,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                     }
                     dataSource.read();
                 }
-                    // Process multiple match product(s) to make html to display
+                // Process multiple match product(s) to make html to display
                 else if (!!data.DuplicateProducts[key]) {
                     vm.opMode = 'D';
                     vm.isInvalidProduct = true;
@@ -713,21 +721,23 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                                 name: ""
                             };
                             result = checkNextLevelOfConflict();
+                            //Result = true means we have found some conflict in the hierarchy
                             if (result) {
                                 break;
                             }
-                            else if (!vm.selectedDataSet[0].EXACT_MATCH) {
+                            //This section will determine There is no conflict but its not a direct match.
+                            else { //if (!vm.selectedDataSet[0].EXACT_MATCH) 
                                 var item = {
                                     name: vm.selectedDataSet[0].FMLY_NM == null ? "" : vm.selectedDataSet[0].FMLY_NM
                                 };
+                                //Dynamically clicking on the FMLY_NM
                                 vm.selectsearchItem(item);
-
                                 break;
                             }
                         }
                     }
                 }
-                    // Checking for Valid Product(s)
+                // Checking for Valid Product(s)
                 else if (!!data.ValidProducts[key]) {
                     vm.items = [];
                     for (var a = 0; a < data.ProdctTransformResults[key].length; a++) {
@@ -748,6 +758,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
 
         //productSuggestion(item);
     }
+
     //populating Valid product in Included list
     function includedListPopulation() {
         vm.addedProducts = [];
@@ -1089,21 +1100,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         if (vm.rowNumber < vm.rows) {
             vm.rowNumber = +vm.rowNumber + 1;
             vm.currentRow = pageNumber[vm.rowNumber - 1];
-            updateRowDCID();
-            vm.addedProducts = [];
-            productHierarchy = [];
-            //Reset Bread cum
-            vm.breadCumLevel = [];
-            vm.selectedPathParts = [];
-            //reseting Grid
-            vm.gridData = [];
-            dataSourceProduct.read();
-            vm.showSearchResults = false;
-            //Resetting Suggestion
-            vm.suggestedProd = [];
-            vm.masterSuggestionList = {};
-            _selectionLevel = 0;
-            cookProducts();
+            reset();
         }
         if (vm.rowNumber == vm.rows) {
             vm.isNextDisabled = true;
@@ -1115,25 +1112,31 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         if (vm.rowNumber > 1) {
             vm.rowNumber = vm.rowNumber - 1;
             vm.currentRow = +pageNumber[vm.rowNumber - 1];
-            updateRowDCID();
-            vm.addedProducts = [];
-            productHierarchy = [];
-            //Reset Bread cum
-            vm.breadCumLevel = [];
-            vm.selectedPathParts = [];
-            //reseting Grid
-            vm.gridData = [];
-            dataSourceProduct.read();
-            vm.showSearchResults = false;
-            //Resetting Suggestion
-            vm.suggestedProd = [];
-            vm.masterSuggestionList = {};
-            _selectionLevel = 0;
-            cookProducts();
+            reset();
         }
         if (vm.rowNumber == 1) {
             vm.isPrevDisabled = true;
         }
+    }
+
+    function reset() {
+        updateRowDCID();
+        vm.addedProducts = [];
+        productHierarchy = [];
+        //Reset Bread cum
+        vm.breadCumLevel = [];
+        vm.selectedPathParts = [];
+        //reseting Grid
+        vm.gridData = [];
+        dataSourceProduct.read();
+        vm.showSearchResults = false;
+        //Resetting Suggestion
+        vm.suggestedProd = [];
+        vm.masterSuggestionList = {};
+        //Resetting Selection Level
+        _selectionLevel = 0;
+        //Checking for next conflict or invalid item
+        cookProducts();
     }
 
     //Add suggestion to the suggestion product
@@ -1242,6 +1245,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                 logger.error("Unable to get CAP for the product", response, response.statusText);
             });
     }
+
     // Clear all the selected Product from the Selected BOX
     function clearProducts() {
         vm.addedProducts = [];
@@ -1257,33 +1261,34 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         // Add them to box, check for duplicate prd_mbr_sid
         angular.forEach(vm.selectedItems, function (value, key) {
             if (!$filter("where")(vm.addedProducts, { PRD_MBR_SID: value.PRD_MBR_SID }).length > 0) {
-                vm.addedProducts.push(value);
-                vm.addedProducts = vm.addedProducts.map(function (x) {
-                    return {
-                        BRND_NM: x.BRND_NM,
-                        CAP: x.CAP,
-                        CAP_END: x.CAP_END,
-                        CAP_START: x.CAP_START,
-                        DEAL_PRD_NM: x.DEAL_PRD_NM,
-                        DEAL_PRD_TYPE: x.DEAL_PRD_TYPE,
-                        FMLY_NM: x.FMLY_NM,
-                        HAS_L1: x.HAS_L1,
-                        HAS_L2: x.HAS_L2,
-                        HIER_NM_HASH: x.HIER_NM_HASH,
-                        HIER_VAL_NM: x.HIER_VAL_NM,
-                        MTRL_ID: x.MTRL_ID,
-                        PCSR_NBR: x.PCSR_NBR,
-                        PRD_ATRB_SID: x.PRD_ATRB_SID,
-                        PRD_CAT_NM: x.PRD_CAT_NM,
-                        PRD_END_DTM: x.PRD_END_DTM,
-                        PRD_MBR_SID: x.PRD_MBR_SID,
-                        PRD_STRT_DTM: x.PRD_STRT_DTM,
-                        USR_INPUT: x.USR_INPUT,
-                        YCS2: x.YCS2,
-                        YCS2_END: x.YCS2_END,
-                        YCS2_START: x.YCS2_START
-                    }
-                });
+                vm.addedProducts.push(value);               
+            }
+        });
+
+        vm.addedProducts = vm.addedProducts.map(function (x) {
+            return {
+                BRND_NM: x.BRND_NM,
+                CAP: x.CAP,
+                CAP_END: x.CAP_END,
+                CAP_START: x.CAP_START,
+                DEAL_PRD_NM: x.DEAL_PRD_NM,
+                DEAL_PRD_TYPE: x.DEAL_PRD_TYPE,
+                FMLY_NM: x.FMLY_NM,
+                HAS_L1: x.HAS_L1,
+                HAS_L2: x.HAS_L2,
+                HIER_NM_HASH: x.HIER_NM_HASH,
+                HIER_VAL_NM: x.HIER_VAL_NM,
+                MTRL_ID: x.MTRL_ID,
+                PCSR_NBR: x.PCSR_NBR,
+                PRD_ATRB_SID: x.PRD_ATRB_SID,
+                PRD_CAT_NM: x.PRD_CAT_NM,
+                PRD_END_DTM: x.PRD_END_DTM,
+                PRD_MBR_SID: x.PRD_MBR_SID,
+                PRD_STRT_DTM: x.PRD_STRT_DTM,
+                USR_INPUT: x.USR_INPUT,
+                YCS2: x.YCS2,
+                YCS2_END: x.YCS2_END,
+                YCS2_START: x.YCS2_START
             }
         });
 
@@ -1294,10 +1299,13 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
     function saveProducts() {
         if (vm.addedProducts.length > 0) {
             var validObject = { "Row": "", "Items": [] }; //Multiple Match Key Value pair
+
+            //Adding ROW_NUMBER
             for (var s = 0; s < vm.addedProducts.length; s++) {
                 vm.addedProducts[s]["ROW_NUMBER"] = vm.currentRow;
             }
 
+            //Getting all the selected INPUT
             var selectedInput = $linq.Enumerable().From(vm.addedProducts)
                 .GroupBy(function (x) {
                     return (x.USR_INPUT);
@@ -1305,8 +1313,9 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                     return { 'USR_INPUT': x.source[0].USR_INPUT };
                 }).ToArray();
 
-            var obj = {};
+            var obj = {}; // Local Object
 
+            //Going through all the selected values one by one and building the object to add in the Valid Product List
             for (var m = 0; m < selectedInput.length; m++) {
                 var products = $linq.Enumerable().From(vm.addedProducts)
                     .Where(function (x) {
@@ -1317,11 +1326,15 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
 
                 const prodName = tempProdNm;
 
+                //Creating the object to add it to Valid list
                 obj[prodName] = products;
             }
+
+            //Adding all the validated product(s) into Valid Product List
             GetProductCorrectorData.ValidProducts[vm.currentRow] = obj;
 
-            if (vm.opMode == 'D') {
+            //
+            if (vm.opMode == 'D') { //This means We have resolved one Duplicate
                 // Deleting User input from the Particular Row
                 delete GetProductCorrectorData.DuplicateProducts[vm.currentRow][vm.productName];
 
@@ -1333,17 +1346,22 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                 for (var prod in object.Items) {
                     flag = 1;
                 }
+
+                //Nothing left in this particular ROW. So remove the NODE
                 if (flag == 0)
                     delete GetProductCorrectorData.DuplicateProducts[vm.currentRow];
             }
-            else {
+            else { // This means We have validated one InValid product
+                
                 var dataSelected = $linq.Enumerable().From(vm.addedProducts)
                     .GroupBy(function (x) {
                         return (x.USR_INPUT);
                     }).Select(function (x) {
                         return { 'USR_INPUT': x.source[0].USR_INPUT };
                     }).ToArray();
+
                 var tempProductName = vm.invalidSuggestionProd;
+
                 for (var j = 0; j < GetProductCorrectorData.InValidProducts[vm.currentRow].length; j++) {
                     for (var z = 0; z < dataSelected.length; z++) {
                         if (dataSelected[z].USR_INPUT == tempProductName) {
@@ -1429,7 +1447,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
         }
         else {
             logger.error("No product selected");
-            /// When user deletes the product and clicks save move to next item
+            /// When user deletes the product and clicks save move to next item            
         }
     }
 
