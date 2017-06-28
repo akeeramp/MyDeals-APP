@@ -24,6 +24,7 @@ namespace Intel.MyDeals.Entities
             this.Columns.Add("PRD_MBR_SID", typeof(int));
             this.Columns.Add("DEAL_STRT_DT", typeof(DateTime));
             this.Columns.Add("DEAL_END_DT", typeof(DateTime));
+            this.Columns.Add("ROW_NM", typeof(int));
         }
 
         /// <summary>
@@ -38,6 +39,7 @@ namespace Intel.MyDeals.Entities
             r["PRD_MBR_SID"] = itm.PRD_MBR_SID;
             r["DEAL_STRT_DT"] = itm.DEAL_STRT_DT;
             r["DEAL_END_DT"] = itm.DEAL_END_DT;
+            r["ROW_NM"] = itm.ROW_NM;
 
             this.Rows.Add(r);
         }
@@ -57,6 +59,7 @@ namespace Intel.MyDeals.Entities
                 r["PRD_MBR_SID"] = itm.PRD_MBR_SID;
                 r["DEAL_STRT_DT"] = itm.DEAL_STRT_DT;
                 r["DEAL_END_DT"] = itm.DEAL_END_DT;
+                r["ROW_NM"] = itm.ROW_NM;
 
                 this.Rows.Add(r);
             }

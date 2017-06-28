@@ -133,9 +133,6 @@
     <Compile Include="TableTypeParameters\in_t_prd_cap_calc.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="TableTypeParameters\in_t_prd_entry.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="TableTypeParameters\in_t_prd_IncExc.cs">
       <SubType>Component</SubType>
     </Compile>
