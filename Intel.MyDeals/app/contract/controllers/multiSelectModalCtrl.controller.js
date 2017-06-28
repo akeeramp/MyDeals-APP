@@ -50,6 +50,12 @@ function MultiSelectModalCtrl($scope, $uibModalInstance, MrktSegMultiSelectServi
 			    returnVal = returnVal.join('/');
             }
 		}
+
+		// Turn returnVal into a string rather than an array to prevent Kendo's drag-to-copy spreadsheet errors
+		if (Array.isArray(returnVal)) {
+			returnVal = returnVal.toString();
+		}
+
 		
 		$uibModalInstance.close(returnVal);
 	};
