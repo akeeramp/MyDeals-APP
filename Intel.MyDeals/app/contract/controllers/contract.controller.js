@@ -90,7 +90,6 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                         } else {
                             wipModel[fKey] = fields[fKey];
                         }
-
                     }
                 }
                 wipTemplates[key].model.fields = wipModel;
@@ -121,7 +120,6 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                 }, 500);
             }
         }, 0);
-
     }
     // populate the contract data upon entry... If multiple controller instances are called, reference the initial instance
     //
@@ -631,7 +629,6 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                 //} else {
                 //    $scope._dirty = false;
                 //}
-
             }
         });
 
@@ -652,7 +649,6 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
         }
         return isValid;
     }
-
 
     // Watch for any changes to contract data to set a dirty bit
     //
@@ -735,7 +731,6 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                 $scope.contractData.IsAttachmentRequired &&
                 (!hasUnSavedFiles && !hasFiles);
         }
-
 
         if ($scope.keyContractItemchanged(oldValue, newValue)) {
             el._dirty = true;
@@ -946,12 +941,10 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                 $scope.curPricingTable !== null &&
                 $scope.curPricingTable.DC_PARENT_ID === id) {
                 $scope.curPricingTable = {
-
                 };
                 $scope.curPricingTableId = 0;
             }
         }
-
 
         $scope.actionPricingStrategy = function (ps, actn) {
             $scope.setBusy("Updating Pricing Strategy...", "Please wait as we update the Pricing Strategy!");
@@ -1036,7 +1029,6 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                                 cid: $scope.contractData.DC_ID
                             }, { reload: true });
                         }
-
                     },
                     function (result) {
                         logger.error("Could not delete the Pricing Strategy.", result, result.statusText);
@@ -1135,7 +1127,6 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                         modPs.push(mPs);
                     }
                 }
-
             }
 
             // Pricing Table Header
@@ -1143,7 +1134,6 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
 
             // Pricing Table Rows
             if (stateName === "contract.manager.strategy") {
-
                 source = "PRC_TBL";
                 // sync all detail data sources into main grid datasource for a single save
                 if ($scope.spreadDs !== undefined) $scope.spreadDs.sync();
@@ -1157,13 +1147,11 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                             sData.splice(n, 1);
                         }
                     }
-
                 }
                 $scope.$broadcast('syncDs');
 
                 // Pricing Table Row
                 if (curPricingTableData.length > 0 && sData != undefined) {
-
                     // Only save if a product has been filled out
                     sData = sData.filter(function (obj) {
                         return obj.PTR_USER_PRD !== undefined && obj.PTR_USER_PRD !== null && obj.PTR_USER_PRD !== "";
@@ -1205,7 +1193,6 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                                 if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                 errs.PRC_TBL_ROW.push("Date is invalid or formated improperly. Try formatting as mm/dd/yyyy.");
                             } else {
-
                                 // check dates against contract
                                 if (dateFields[d] === "START_DT") {
                                     var tblStartDate = sData[s][dateFields[d]];
@@ -1233,7 +1220,6 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                                     	}
                                     }
                                 }
-
                             }
                         }
 
@@ -1253,7 +1239,6 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                             }
                         }
                     }
-
                 }
             }
 
@@ -1274,7 +1259,6 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                     }
                 }
             }
-
 
     	    //// Check PricingTableRow validations before we submit to the API
             //if (sData !== undefined) {
@@ -1318,7 +1302,6 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
         $scope.validateTitles = function () {
             var rtn = true;
 
-
             var isPsUnique = $scope.IsUniqueInList($scope.contractData.PRC_ST, $scope.curPricingStrategy["TITLE"], "TITLE", true);
             var isPtUnique = $scope.IsUniqueInList($scope.curPricingStrategy.PRC_TBL, $scope.curPricingTable["TITLE"], "TITLE", true);
 
@@ -1352,7 +1335,6 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                 if (!$scope.curPricingStrategy._behaviors.isError) $scope.curPricingStrategy._behaviors.isError = {};
 
                 if (!$scope.curPricingStrategy._behaviors.isDirty || $scope.curPricingStrategy._behaviors.isDirty.TITLE) {
-
                     if ($scope.curPricingStrategy !== undefined && $scope.curPricingStrategy.TITLE === "") {
                         $scope.curPricingStrategy._behaviors.validMsg["TITLE"] = "The Pricing Strategy needs a Title.";
                         $scope.curPricingStrategy._behaviors.isError["TITLE"] = true;
@@ -1384,7 +1366,6 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
         }
 
         $scope.saveEntireContractRoot = function (stateName, forceValidation, forcePublish, toState, toParams, delPtr) {
-
             if (forceValidation === undefined || forceValidation === null) forceValidation = false;
             if (forcePublish === undefined || forcePublish === null) forcePublish = false;
 
@@ -1414,7 +1395,7 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
 
             // If there are critical errors like bad dates, we need to stop immediately and have the user fix them
             if (!!data.errors) {
-                logger.warning("Errors prevent anything from being saved", $scope.contractData, "Unable to Save");
+                logger.warning("Please fix Validation errors before saving", $scope.contractData, "Unable to Save");
                 $scope.syncCellsOnAllRows($scope.pricingTableData["PRC_TBL_ROW"]);
                 $scope.setBusy("", "");
                 topbar.hide();
@@ -1532,9 +1513,7 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                         }
                     }
                 });
-
             }, 10);
-
         }
 
         $scope.syncCellsOnSingleRow = function (sheet, dataItem, row) {
@@ -1565,7 +1544,6 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                     }
                 });
             }
-
         }
 
         $scope.clearValidations = function () {
@@ -1586,7 +1564,6 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                     }
                 }
             });
-
         }
 
         $scope.compressJson = function (data) {
@@ -1896,7 +1873,6 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
             	isValid = false;
             }
 
-
             if (isValid) {
                 $scope.addPricingStrategy();
             } else {
@@ -2075,8 +2051,6 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
         }
     }
 
-
-
     $scope.customAddPtValidate = function () {
         var isValid = true;
         $scope.addTableDisabled = true;
@@ -2149,14 +2123,12 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
         return Object.keys($scope.newPricingTable._defaultAtrbs).length;
     }
 
-
     //setting a few constants for the strings that occur a lot
     var GEO = "GEO_COMBINED";
     var MRKT_SEG = "MRKT_SEG";
 
     //watch for user changing global auto-fill default values
     $scope.$watch('newPricingTable._defaultAtrbs', function(newValue, oldValue, el) {
-
         if (oldValue === newValue) return;
 
         if (oldValue != null && newValue == null) return;
@@ -2197,7 +2169,6 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                 //if (oldValue["PROGRAM_PAYMENT"] != newValue["PROGRAM_PAYMENT"]) {
                 //}
             }
-
         },
         true);
 
@@ -2263,7 +2234,6 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
             $scope.$broadcast('syncDs');
             $scope.saveEntireContractBase($state.current.name, false, false, 'contract.manager.strategy', { cid: $scope.contractData.DC_ID, sid: $scope.curPricingStrategyId, pid: $scope.curPricingTableId });
         }
-
     }
 
     $scope.validateWipDeals = function () {
@@ -2298,5 +2268,4 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
 
     topbar.hide();
 }
-
 })();

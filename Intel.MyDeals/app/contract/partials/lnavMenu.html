@@ -2,7 +2,8 @@
     <div class="fr navIconLnk" title="Hide Panel" ng-click="toggleLnav()" style="border-left: 1px solid #e8eaec !important;">
         <i class="intelicon-shrink flip-horizontal"></i>
     </div>
-    <div class="fl navIconLnk" title="Save Entire Contract" ng-click="saveEntireContract()" ng-show="isExistingContract()" ng-class="{'lnavBtnDisabled': !_dirty}">
+    <div class="fl navIconLnk" title="Save Entire Contract" ng-click="saveEntireContract()" ng-show="isExistingContract()"
+         ng-class="{'lnavBtnDisabled': ('contract.details' | isState) ? true : !_dirty }">
         <i class="intelicon-save-outlined"></i>
     </div>
     <div class="fl navIconLnk" title="Add Pricing Strategy" ng-click="toggleAddStrategy()" ng-class="{'active': !isAddStrategyHidden}" ng-show="isExistingContract()">
@@ -11,13 +12,13 @@
     <div class="fl navIconLnk" title="Filter contract" ng-click="toggleSearch()" ng-class="{'active': !isSearchHidden}" ng-show="isExistingContract()">
         <i class="intelicon-search"></i>
     </div>
-    <div class="fl navIconLnk" title="{{ strategyTreeCollapseAll ? 'Collapse All' : 'Expand All' }}" 
-         ng-click="toggleStrategyTree()" 
-         ng-show="isExistingContract()" >
+    <div class="fl navIconLnk" title="{{ strategyTreeCollapseAll ? 'Collapse All' : 'Expand All' }}"
+         ng-click="toggleStrategyTree()"
+         ng-show="isExistingContract()">
         <div ng-class="{'rotate-90': !strategyTreeCollapseAll}">
             <i class="intelicon-fast-forward"></i>
         </div>
     </div>
-    
+
     <div class="clearboth"></div>
 </div>
