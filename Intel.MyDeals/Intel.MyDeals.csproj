@@ -334,6 +334,8 @@
     <Content Include="app\contract\partials\lnavSummaryMenuMini.html" />
     <Content Include="app\contract\productCAPBreakout\productCAPBreakout.controller.js" />
     <Content Include="app\contract\productCAPBreakout\productCAPBreakout.html" />
+    <Content Include="app\contract\productCorrector\productCorrectorBeta.html" />
+    <Content Include="app\contract\productCorrector\productCorrectorBeta.controller.js" />
     <Content Include="app\contract\productCorrector\productCorrector.controller.js" />
     <Content Include="app\contract\productCorrector\productCorrector.html" />
     <Content Include="app\contract\productCorrector\productCorrector.service.js" />

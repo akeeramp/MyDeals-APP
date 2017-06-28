@@ -147,6 +147,7 @@ namespace Intel.MyDeals
                 , "~/app/contract/controllers/pricingTable.controller.js"
                 , "~/app/contract/productSelector/productSelector.controller.js"
                 , "~/app/contract/productCorrector/productCorrector.controller.js"
+                , "~/app/contract/productCorrector/productCorrectorBeta.controller.js"
                 , "~/app/contract/productCorrector/productCorrector.service.js"
                 , "~/app/contract/productSelector/kendoGridCheckBox.directive.js"
                 , "~/app/contract/productCAPBreakout/productCAPBreakout.controller.js"

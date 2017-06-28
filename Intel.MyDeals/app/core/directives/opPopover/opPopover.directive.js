@@ -48,7 +48,7 @@ function opPopover($compile, dataService, $timeout, logger) {
             scope.getData = function () {
                 var data = scope.opData();
                 // Fail silently
-                if (data.length == 1) {
+                if (!!data && data.length == 1) {
                     scope.loading = true;
                     dataService.post("api/Products/GetProductCAPYCS2Data/" + data[0].getAvailable + "/" + data[0].priceCondition, data).then(function (response) {
                         scope.loading = false;

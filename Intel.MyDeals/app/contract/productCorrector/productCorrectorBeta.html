@@ -10,7 +10,7 @@
                         MyDeals needs help with your entered product
                     </span>
                     <span ng-if="vm.issueRowKeys.length > 1">
-                        MyDeals needs help with <span class="yellow">{{ vm.numIssueRows }}</span> of your <span class="yellow">{{ vm.totRows }}</span> entered products
+                        MyDeals needs help with <span class="yellow">{{ vm.numIssueRows }}</span> of <span class="yellow">{{ vm.totRows }}</span> rows
                     </span>
                 </div>
                 <span class="rowNavPanel">
@@ -38,7 +38,8 @@
                     <div>
                         <ul class="productpath breadcrumb">
                             <li ng-repeat="p in vm.curRowProds | unique:'name'">
-                                <a role="button" class="prdAnchor {{p.status}}" title="{{p.reason}}">{{:: p.name }}</a>
+                                <a role="button" class="prdAnchor {{p.status}}" ng-class="{'strike': p.matchId != ''}" ng-click="vm.clkPrdUsrNm(p)" title="{{p.reason}}">{{:: p.name }}</a>
+                                <div class="newProd">&nbsp;<span ng-show="p.matchId">{{p.matchName}}</span></div>
                             </li>
                         </ul>
                     </div>
@@ -51,7 +52,6 @@
                         <td>
                             <div class="lnavFilter">
                                 <div class="filterTitle">Refine By</div>
-                                
                                 
                                 <div class="filterGrp">
                                     <div ng-click="vm.isPrdCollapsed = !vm.isPrdCollapsed" style="cursor: pointer;">
@@ -66,7 +66,7 @@
                                                     <span class="badge upperBadge" ng-if="item.status == 'Issue'">{{ item.cnt == 0 ? "?" : item.cnt }}</span>
                                                 </label>
                                             </div>
-                                            <div ng-if="item.cnt <= 0" class="srchContainer" title="Click to find a possible match">
+                                            <div ng-if="item.cnt <= 0" class="srchContainer" title="Click to find a possible match" ng-click="vm.gotoSelector(item)">
                                                 <i class="intelicon-search ckSm"></i>
                                                 <span ng-bind-html="item.name"></span>
                                             </div>
@@ -74,7 +74,21 @@
                                     </div>
                                 </div>
 
-                                <div class="filterGrp" ng-if="vm.isCatCollapsed.length > 0">
+                                <div class="filterGrp" ng-if="vm.curRowLvl.length > 1">
+                                    <div ng-click="vm.isLvlCollapsed = !vm.isLvlCollapsed" style="cursor: pointer;">
+                                        <i ng-class="{'intelicon-down': vm.isLvlCollapsed, 'intelicon-right-next': !vm.isLvlCollapsed}"></i> Product Level
+                                    </div>
+                                    <div class="filterContainer" uib-collapse="vm.isLvlCollapsed">
+                                        <div ng-repeat="item in vm.curRowLvl | orderBy: 'name'" style="max-height: 20px;">
+                                            <input type='checkbox' ng-click="vm.clickFilter()" ng-model="item.selected" class='check ckSm with-font' id="fltrLvlChk{{item.id}}" />                                            
+                                            <label for="fltrLvlChk{{item.id}}">
+                                                <span ng-bind-html="item.name"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="filterGrp" ng-if="vm.curRowCategories.length > 1">
                                     <div ng-click="vm.isCatCollapsed = !vm.isCatCollapsed" style="cursor: pointer;">
                                         <i ng-class="{'intelicon-down': vm.isCatCollapsed, 'intelicon-right-next': !vm.isCatCollapsed}"></i> Product Category
                                     </div>
@@ -89,20 +103,6 @@
                                     </div>
                                 </div>
 
-                                <div class="filterGrp" ng-if="vm.curRowLvl.length > 0">
-                                    <div ng-click="vm.isLvlCollapsed = !vm.isLvlCollapsed" style="cursor: pointer;">
-                                        <i ng-class="{'intelicon-down': vm.isLvlCollapsed, 'intelicon-right-next': !vm.isLvlCollapsed}"></i> Product Level
-                                    </div>
-                                    <div class="filterContainer" uib-collapse="vm.isLvlCollapsed">
-                                        <div ng-repeat="item in vm.curRowLvl | orderBy: 'name'" style="max-height: 20px;">
-                                            <!-- checked='checked' ng-click="onColumnChange(item)" -->
-                                            <input type='checkbox' ng-click="vm.clickFilter()" ng-model="item.selected" class='check ckSm with-font' id="fltrLvlChk{{item.id}}" />                                            
-                                            <label for="fltrLvlChk{{item.id}}">
-                                                <span ng-bind-html="item.name"></span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </td>
                         <td style="width: 100%">
@@ -137,6 +137,12 @@
         font-weight: 200;
         margin-left: 6px;
     }
+
+    .newProd {
+        font-size: 11px; 
+        color: #0071C5;
+    }
+
 
     .lnavFilter {
         background-color: #e7e7e8;
@@ -333,6 +339,7 @@
         padding: 4px 0;
         background-color: transparent;
         color: #003C71;
+        line-height: 0.9em;
     }
 
     .productpath.breadcrumb > li + li:before {
@@ -340,7 +347,9 @@
         content: ",";
         font-size: 16px;
     }
-
+    .productpath.breadcrumb > li + li div {
+        padding-left: 10px;
+    }
     .productpath.breadcrumb {
         padding: 0px;
         margin-bottom: 0px;
@@ -360,10 +369,12 @@
     a.prdAnchor.Good {
         color: #C4D600;
     }
-
     a.prdAnchor:hover {
-        color: #01AEEF;
         text-decoration: none;
+        color: #01AEEF;
+    }
+    a.prdAnchor.strike {
+        text-decoration: line-through;
     }
 
 
@@ -494,7 +505,7 @@
     }
 
     .prodCorrector.kendoGridHeight {
-        height: calc(85vh - 275px);
+        height: calc(85vh - 270px);
     }
 
     .prdCorrector-modal-window, .modal-dialog {

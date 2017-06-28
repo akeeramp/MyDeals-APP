@@ -40,6 +40,14 @@ util.deepClone = function(obj) {
     return JSON.parse(kendo.stringify(obj));
 }
 
+util.findInArrayWhere = function(myArray, field, val){
+    for (var i=0; i < myArray.length; i++) {
+        if (myArray[i][field] === val) {
+            return myArray[i];
+        }
+    }
+    return null;
+}
 util.isEmpty = function(map)
 {
     for (var key in map) {
