@@ -448,7 +448,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     var dtoDateRange = {
                         startDate: pricingTableRow.START_DT, endDate: pricingTableRow.END_DT
                     };
-                    root.setBusy("Please wait", "");
+                    root.setBusy("Please wait...", "");
                     return ProductSelectorService.GetProductSelectorWrapper(dtoDateRange).then(function (response) {
                         root.setBusy("", "");
                         return response;
@@ -591,29 +591,28 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                 if (hasDataOrPurge(data, rowStart, rowStop)) {
                     kendo.confirm("Are you sure you want to delete this product and the matching deal?")
-                        .then(function() {
-                                $timeout(function() {
-                                        if (root.spreadDs !== undefined) {
+                        .then(function () {
+                            $timeout(function () {
+                                if (root.spreadDs !== undefined) {
+                                    // look for skipped lines
+                                    var numToDel = rowStop + 1 - rowStart;
+                                    data.splice(rowStart, numToDel);
 
-                                            // look for skipped lines
-                                            var numToDel = rowStop + 1 - rowStart;
-                                            data.splice(rowStart, numToDel);
+                                    // now apply array to Datasource... one event triggered
+                                    root.spreadDs.sync();
 
-                                            // now apply array to Datasource... one event triggered
-                                            root.spreadDs.sync();
+                                    $timeout(function () {
+                                        var n = data.length + 2;
+                                        disableRange(sheet.range("B" + n + ":B" + (n + numToDel + numToDel)));
+                                        disableRange(sheet.range("D" + n + ":Z" + (n + numToDel + numToDel)));
+                                    }, 10);
 
-                                            $timeout(function () {
-                                                var n = data.length + 2;
-                                                disableRange(sheet.range("B" + n + ":B" + (n + numToDel + numToDel)));
-                                                disableRange(sheet.range("D" + n + ":Z" + (n + numToDel + numToDel)));
-                                            },10);
-
-                                            root.saveEntireContract(true);
-                                        }
-                                    },
-                                    10);
+                                    root.saveEntireContract(true);
+                                }
                             },
-                            function() {});
+                                10);
+                        },
+                            function () { });
                 } else {
                     cleanupData(data);
                     root.spreadDs.sync();
@@ -628,10 +627,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         disableRange(sheet.range("B" + cnt + ":B" + (cnt + numToDel - 1)));
                         disableRange(sheet.range("D" + cnt + ":Z" + (cnt + numToDel - 1)));
                     }, 10);
-
                 }
             }
-
         }
         else {
             // Trigger only if the changed range contains the product column
@@ -1407,16 +1404,15 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         // Products that needs server side attention
         if (translationInputToSend.length > 0) {
             topbar.show();
-            root.setBusy("Validating products...", "Please wait as we find your products!");
+
+            //Note: When changing the message here, also change the condition in $scope.saveEntireContractBase method in contract.controller.js
+            root.setBusy("Validating your data...", "Please wait as we find your products!");
             ProductSelectorService.TranslateProducts(translationInputToSend, $scope.contractData.CUST_MBR_SID) //Once the database is fixed remove the hard coded geo_mbr_sid
             .then(function (response) {
-                root.setBusy("", "");
                 topbar.hide();
                 if (response.statusText === "OK") {
                     response.data = buildTranslatorOutputObject(invalidProductJSONRows, response.data);
-                    $timeout(function () {
-                        cookProducts(currentRowNumber, response.data, currentPricingTableRowData, publishWipDeals);
-                    }, 300);
+                    cookProducts(currentRowNumber, response.data, currentPricingTableRowData, publishWipDeals);
                 }
             }, function (response) {
                 topbar.hide();
@@ -1465,6 +1461,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             //  sync not working hence this line..:(
             sourceData[r].PTR_SYS_PRD = data[r].PTR_SYS_PRD;
             if ((!!transformResults.InValidProducts[key] && transformResults.InValidProducts[key].length > 0) || !!transformResults.DuplicateProducts[key]) {
+                root.setBusy("", "");
                 vm.openProdCorrector(currentRow, transformResults, rowData, publishWipDeals);
                 isAllValidated = false;
                 break;
@@ -1481,6 +1478,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 } // Call Save and Validate API from Contract Manager
             }
             else {
+                root.setBusy("", "");
                 $timeout(function () {
                     validateSingleRowProducts(data[currentRow - 1], currentRow);
                 }, 10)

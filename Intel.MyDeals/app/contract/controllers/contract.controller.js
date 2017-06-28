@@ -822,7 +822,7 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
     //
         $scope.isSearchHidden = true;
         $scope.isSummaryHidden = true;
-        
+
         $scope.isAddPricingTableHidden = true;
         $scope.isEditPricingTableDefaultsHidden = true;
         $scope.toggleSearch = function () {
@@ -946,7 +946,7 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                 $scope.curPricingTable !== null &&
                 $scope.curPricingTable.DC_PARENT_ID === id) {
                 $scope.curPricingTable = {
-            
+
                 };
                 $scope.curPricingTableId = 0;
             }
@@ -1205,7 +1205,7 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                                 if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
                                 errs.PRC_TBL_ROW.push("Date is invalid or formated improperly. Try formatting as mm/dd/yyyy.");
                             } else {
-                                
+
                                 // check dates against contract
                                 if (dateFields[d] === "START_DT") {
                                     var tblStartDate = sData[s][dateFields[d]];
@@ -1314,14 +1314,14 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                 "EventSource": source
             }
         }
-        
+
         $scope.validateTitles = function () {
             var rtn = true;
 
 
             var isPsUnique = $scope.IsUniqueInList($scope.contractData.PRC_ST, $scope.curPricingStrategy["TITLE"], "TITLE", true);
             var isPtUnique = $scope.IsUniqueInList($scope.curPricingStrategy.PRC_TBL, $scope.curPricingTable["TITLE"], "TITLE", true);
-			
+
             // Pricing Table
             if (!!$scope.curPricingTable) {
                 if (!$scope.curPricingTable._behaviors) $scope.curPricingTable._behaviors = {};
@@ -1375,7 +1375,10 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
         //
         $scope.saveEntireContractBase = function (stateName, forceValidation, forcePublish, toState, toParams, delPtr) {
             // if save already started saving... exit
-            if (!!$scope.isBusyMsgTitle && $scope.isBusyMsgTitle !== "") return;
+            // if validate triggers from product translation continue..validating data
+            if ($scope.isBusyMsgTitle !== "Validating your data...") {
+                if (!!$scope.isBusyMsgTitle && $scope.isBusyMsgTitle !== "") return;
+            }
 
             $scope.saveEntireContractRoot(stateName, forceValidation, forcePublish, toState, toParams, delPtr);
         }
@@ -1390,7 +1393,7 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
             } else {
                 $scope.setBusy("Saving your data...", "Please wait as we save your information!");
             }
-			
+
             // async save data
             topbar.show();
 
@@ -1506,7 +1509,7 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
         }
 
         $scope.syncCellsOnAllRows = function (data) {
-            // kind of annoying, but layering validations tends to stall all validations. 
+            // kind of annoying, but layering validations tends to stall all validations.
             // so... before applying any validations, we are cleaning all existing validations
 
             $timeout(function () {
@@ -1562,7 +1565,7 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                     }
                 });
             }
-            
+
         }
 
         $scope.clearValidations = function () {
@@ -1890,7 +1893,7 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
             if (!isUnique) {
             	$scope.newStrategy._behaviors.validMsg["TITLE"] = "* must have unique name within contract";
             	$scope.newStrategy._behaviors.isError["TITLE"] = true;
-            	isValid = false; 
+            	isValid = false;
             }
 
 
@@ -2022,7 +2025,7 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
 
                 $scope.hideEditPricingTableDefaults();
                 $scope.addTableDisabled = false;
-                //$scope.curPricingTable = pt; 
+                //$scope.curPricingTable = pt;
                 //var seeme = $scope.curPricingTable
                 //$scope.curPricingTableId = pt.DC_ID;
 
@@ -2097,8 +2100,8 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
                         isValid = false;
                     }
                 });
-		
-    		// Check unique name within ps 
+
+    		// Check unique name within ps
             if (!!$scope.curPricingStrategy) {
 				if ($scope.curPricingStrategy.PRC_TBL === undefined) {
             		$scope.curPricingStrategy.PRC_TBL = [];
@@ -2111,7 +2114,7 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
             		isValid = false;
 				}
 			}
-		
+
             // Check Extra atribs
             angular.forEach($scope.newPricingTable["_extraAtrbs"],
                 function(value, key) {
@@ -2181,10 +2184,10 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
 			// TODO: Hook these up to service (add service into injection and physical files)
 			if (!!newValue[MRKT_SEG]) newValue[MRKT_SEG].value = MrktSegMultiSelectService.setMkrtSegMultiSelect(MRKT_SEG, (MRKT_SEG + "_MS"), newValue[MRKT_SEG].value, oldValue[MRKT_SEG].value);
 			if (!!newValue[GEO]) newValue[GEO].value = MrktSegMultiSelectService.setGeoMultiSelect(GEO, newValue[GEO].value, oldValue[GEO].value);
-				
+
 			//if (oldValue["ECAP_TYPE"].value != newValue["ECAP_TYPE"].value) {
 			//}
-				
+
 			//if (oldValue["PAYOUT_BASED_ON"] != newValue["PAYOUT_BASED_ON"]) {
 			//}
 
