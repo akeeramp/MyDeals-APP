@@ -490,26 +490,24 @@ namespace Intel.MyDeals.BusinessRules
 
         public static void CheckVolume(params object[] args)
         {
+            // DE28830 - Deal Ceiling Validation message issue in case of Front End Deal fix
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
             string progPayment = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT);
             IOpDataElement de = r.Dc.GetDataElement(AttributeCodes.VOLUME);
             if (de == null || de.AtrbValue.ToString() == "") return;
+            if (de.AtrbValue.ToString() != "" && progPayment != "Backend")
+            {
+                BusinessLogicDeActions.AddValidationMessage(de, "Volume cannot be set for Frontend Deals.");
+                return;
+            }
 
             int vol;
             if (!int.TryParse(de.AtrbValue.ToString(), out vol))
             {
                 BusinessLogicDeActions.AddValidationMessage(de, "Volume must be a valid non-decimal number.");
             }
-
-            if (vol >= 0 && progPayment != "Backend")
-            {
-                BusinessLogicDeActions.AddValidationMessage(de, "Volume cannot be set for Frontend Deals.");
-                return;
-            }
-
-
         }
 
         public static void CheckFrontendDates(params object[] args)
