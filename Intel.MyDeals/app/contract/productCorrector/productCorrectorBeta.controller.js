@@ -18,6 +18,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
     vm.isPrdCollapsed = false;
     vm.isCalCollapsed = false;
     vm.isLvlCollapsed = false;
+    vm.invalidProdName = '';
     vm.ProductCorrectorData = util.deepClone(GetProductCorrectorData);
 
     vm.suggestionActions = [
@@ -364,11 +365,12 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
     }
 
     vm.openProdSelector = function (dataItem, rowId) {
+
         if (ProductRows.length > 1) {
-            currentPricingTableRow = ProductRows[rowId - 1];
+            var currentPricingTableRow = ProductRows[rowId - 1];
         }
         else {
-            currentPricingTableRow = ProductRows[0];
+            var currentPricingTableRow = ProductRows[0];
         }
 
         var pricingTableRow = {
@@ -383,7 +385,10 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
         };
 
         if (!dataItem) {
-            dataItem = "";
+            vm.invalidProdName = "";
+        }
+        else {
+            vm.invalidProdName = dataItem;
         }
 
         var suggestedProduct = {
@@ -422,12 +427,32 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
                 for (var key in validateSelectedProducts) {
                     const prodName = key;
                     if (!vm.ProductCorrectorData.ValidProducts[vm.curRowId]) {
-                        obj[prodName] = validateSelectedProducts[key];
-                        vm.ProductCorrectorData.ValidProducts[vm.curRowId] = obj;
+                        vm.ProductCorrectorData.ValidProducts[vm.curRowId] = {};
                     }
-                    else {
-                        vm.ProductCorrectorData.ValidProducts[vm.curRowId][prodName] = validateSelectedProducts[key];
+                    vm.ProductCorrectorData.ValidProducts[vm.curRowId][prodName] = validateSelectedProducts[key];     
+
+                    //Remove from Invalid List
+                    var invalidIndex = vm.ProductCorrectorData.InValidProducts[vm.curRowId].indexOf(vm.invalidProdName);
+                    if (invalidIndex > -1) {
+                        vm.ProductCorrectorData.InValidProducts[vm.curRowId].splice(invalidIndex, 1);
                     }
+
+                    if (vm.ProductCorrectorData.InValidProducts[vm.curRowId].length == 0) {
+                        delete vm.ProductCorrectorData.InValidProducts[vm.curRowId];
+                    }
+
+                    for (var m = 0; m < vm.curRowProds.length; m++) {
+                        if (vm.curRowProds[m].name == vm.invalidProdName) {
+                            vm.curRowProds[m].name = key;
+                            vm.curRowProds[m].status = "Good";
+                            vm.curRowProds[m].reason = "Found the Product"; 
+                        }
+                    }
+
+                    vm.invalidProdName = '';                    
+                    vm.initProducts();
+                    vm.selectRow(vm.curRowId);
+                    
                 }
             });
     }
@@ -494,6 +519,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
     vm.launchSelector = function (prdNm) {
         var rowDcId = vm.rowDCId;
         var key = vm.curRowId;
+
         //alert('TODO: display popup for ' + prdNm + ':\n1) Exact match but with errors like prod outside deal range.\n2) Top 10 or 15 possible matches... maybe.');
         vm.openProdSelector(prdNm, key);
     }
