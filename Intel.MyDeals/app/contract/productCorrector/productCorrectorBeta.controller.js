@@ -465,7 +465,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
 
 
     function onProductSelector(e) {
-        vm.gotoSelector(vm.suggestItem.name);
+        vm.launchSelector(vm.suggestItem.name);
     }
     function onDeleteProduct(e) {
         vm.removeProd(vm.suggestItem.name);
@@ -477,8 +477,11 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
 
     vm.gotoSelector = function(prdNm) {
         kendo.confirm("Unable to locate the product (" + prdNm + ").\nWould you like to look for it in the Product Selector?").then(function () {
-            alert('TODO: display popup for ' + prdNm + ':\n1) Exact match but with errors like prod outside deal range.\n2) Top 10 or 15 possible matches... maybe.');
+            vm.launchSelector(prdNm);
         });
+    }
+    vm.launchSelector = function(prdNm) {
+        alert('TODO: display popup for ' + prdNm + ':\n1) Exact match but with errors like prod outside deal range.\n2) Top 10 or 15 possible matches... maybe.');
     }
 
     vm.removeProd = function (prdNm) {
