@@ -363,16 +363,23 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
         }
     }
 
-    vm.openProdSelector = function (dataItem) {
+    vm.openProdSelector = function (dataItem, rowId) {
+        if (ProductRows.length > 1) {
+            currentPricingTableRow = ProductRows[rowId - 1];
+        }
+        else {
+            currentPricingTableRow = ProductRows[0];
+        }
+
         var pricingTableRow = {
-            'START_DT': ProductRows["0"].START_DT,
-            'END_DT': ProductRows["0"].END_DT,
+            'START_DT': currentPricingTableRow.START_DT,
+            'END_DT': currentPricingTableRow.END_DT,
             'CUST_MBR_SID': CustSid,
-            'GEO_COMBINED': ProductRows["0"].GEO_COMBINED,
+            'GEO_COMBINED': currentPricingTableRow.GEO_COMBINED,
             'PTR_SYS_PRD': "",
             'PTR_SYS_INVLD_PRD': "",
-            'PROGRAM_PAYMENT': ProductRows["0"].PROGRAM_PAYMENT,
-            'PROD_INCLDS': ProductRows["0"].PROD_INCLDS
+            'PROGRAM_PAYMENT': currentPricingTableRow.PROGRAM_PAYMENT,
+            'PROD_INCLDS': currentPricingTableRow.PROD_INCLDS
         };
 
         if (!dataItem) {
@@ -488,7 +495,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
         var rowDcId = vm.rowDCId;
         var key = vm.curRowId;
         //alert('TODO: display popup for ' + prdNm + ':\n1) Exact match but with errors like prod outside deal range.\n2) Top 10 or 15 possible matches... maybe.');
-        vm.openProdSelector(prdNm);
+        vm.openProdSelector(prdNm, key);
     }
 
     vm.removeProd = function (prdNm) {
