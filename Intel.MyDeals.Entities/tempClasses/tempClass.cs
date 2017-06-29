@@ -2123,6 +2123,9 @@ public partial class DealTemplateDataGram
         public System.String HIER_VAL_NM { set; get; }
 
         [DataMember]
+        public System.String MM_MEDIA_CD { set; get; }
+
+        [DataMember]
         public System.String MTRL_ID { set; get; }
 
         [DataMember]

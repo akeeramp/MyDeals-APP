@@ -614,6 +614,7 @@
                     HAS_L2: x.HAS_L2,
                     HIER_NM_HASH: x.HIER_NM_HASH,
                     HIER_VAL_NM: x.HIER_VAL_NM,
+                    MM_MEDIA_CD:x.MM_MEDIA_CD,
                     MTRL_ID: x.MTRL_ID,
                     PCSR_NBR: x.PCSR_NBR,
                     PRD_ATRB_SID: x.PRD_ATRB_SID,

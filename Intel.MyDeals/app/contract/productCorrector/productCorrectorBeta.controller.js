@@ -44,7 +44,6 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
         }, 10);
     }
 
-
     vm.selectRow = function (indx) {
         var x;
 
@@ -121,7 +120,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
             }
         }
 
-        // Build filters        
+        // Build filters
         for (x = 0; x < vm.curRowProds.length; x++) {
             if (vm.curRowProds[x].status === "Issue") {
                 vm.curRowIssues.push({
@@ -159,7 +158,6 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
     }
 
     vm.applyFilterAndGrouping = function () {
-
         function buildFilterGroup(field, masterFilters, data) {
             var filters = [];
             var filterItem = $linq.Enumerable().From(data).Where(function (x) { return (x.selected); }).ToArray();
@@ -173,7 +171,6 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
                 logic: "or",
                 filters: filters
             });
-
         }
 
         // Now apply grouping
@@ -186,7 +183,6 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
         //}
         vm.gridOptionsPotential.dataSource.group(group);
 
-
         // Now apply filtering
         var filters = [];
         buildFilterGroup("USR_INPUT", filters, vm.curRowIssues);
@@ -196,7 +192,6 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
 
         // Refresh Datasource
         vm.gridOptionsPotential.dataSource.read();
-
 
         $timeout(function () {
             $("#prodGrid").data("kendoGrid").resize();
@@ -237,7 +232,6 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
 
         vm.numIssueRows = issueRowIds.length;
         vm.totRows = Object.keys(data.ProdctTransformResults).length;
-
     }
 
     vm.dataSourceProduct = new kendo.data.DataSource({
@@ -325,12 +319,16 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
                 title: "CAP Info",
                 template: "<op-popover ng-click='vm.openCAPBreakOut(dataItem, \"CAP\")' op-options='CAP' op-label='' op-data='vm.getPrductDetails(dataItem, \"CAP\")'>#=gridUtils.uiMoneyDatesControlWrapper(data, 'CAP', 'CAP_START', 'CAP_END')#</op-popover>",
                 width: "150px"
-            }
+            },
+            {
+                field: "MM_MEDIA_CD",
+                title: "Media Code",
+                width: "120px"
+            },
         ]
     }
 
     vm.clickProd = function (id, lookup, name) {
-
         var item = util.findInArrayWhere(vm.curRowProds, "name", lookup);
         if (!item) return;
 
@@ -429,7 +427,6 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
 
     vm.clkPrdUsrNm = function (dataItem) {
         if (dataItem.matchId === "") {
-
             // clear filters
             angular.forEach(vm.curRowIssues, function (value, key) {
                 key.selected = false;
@@ -446,9 +443,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
 
             // perform filter
             vm.applyFilterAndGrouping();
-
         } else {
-
             // remove matched settings
             dataItem.matchId = "";
             dataItem.matchName = "";
@@ -458,7 +453,6 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
 
             vm.selectRow(vm.curRowIndx);
         }
-
     }
 
     vm.suggestItem = {};
@@ -475,7 +469,6 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
         return date;
     }
 
-
     function onProductSelector(e) {
         vm.launchSelector(vm.suggestItem.name);
     }
@@ -486,7 +479,6 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
         vm.suggestProd(vm.suggestItem.name);
     }
 
-
     vm.gotoSelector = function (prdNm) {
         kendo.confirm("Unable to locate the product (" + prdNm + ").\nWould you like to look for it in the Product Selector?").then(function () {
             vm.launchSelector(prdNm);
@@ -495,8 +487,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
     vm.launchSelector = function (prdNm) {
         var rowDcId = vm.rowDCId;
         var key = vm.curRowId;
-
-        alert('TODO: display popup for ' + prdNm + ':\n1) Exact match but with errors like prod outside deal range.\n2) Top 10 or 15 possible matches... maybe.');
+        //alert('TODO: display popup for ' + prdNm + ':\n1) Exact match but with errors like prod outside deal range.\n2) Top 10 or 15 possible matches... maybe.');
         vm.openProdSelector(prdNm);
     }
 
@@ -528,7 +519,6 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
     vm.cancel = function () {
         $uibModalInstance.close(vm.ProductCorrectorData);
     }
-
 
     //Getting CAP Product Details for Tooltip
     vm.getPrductDetails = function (dataItem, priceCondition) {
@@ -590,7 +580,6 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
 
     //// NOT DONE
     vm.saveProducts = function () {
-
         // This might not be working
 
         GetProductCorrectorData = vm.ProductCorrectorData;
@@ -613,24 +602,16 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
                     }
                     if (!foundItems)
                         delete GetProductCorrectorData.DuplicateProducts[key];
-
                 }
             }
         }
 
         $uibModalInstance.close(GetProductCorrectorData);
-
     }
-
-
-
-
-
 
     //Master Product Data massaging
     $timeout(function () {
         vm.initProducts();
         vm.selectRow(1);
     }, 1);
-
 }
