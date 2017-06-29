@@ -481,6 +481,9 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
         });
     }
     vm.launchSelector = function(prdNm) {
+        var rowDcId = vm.rowDCId;
+        var key = vm.curRowId;
+
         alert('TODO: display popup for ' + prdNm + ':\n1) Exact match but with errors like prod outside deal range.\n2) Top 10 or 15 possible matches... maybe.');
     }
 
