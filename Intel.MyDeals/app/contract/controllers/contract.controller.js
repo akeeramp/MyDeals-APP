@@ -749,6 +749,17 @@
                 lData.CUST_ACCNT_DIV_UI = "";
                 lData.PASSED_VALIDATION = "";
 
+                lData.MinYear = "";
+                lData.MaxYear = "";
+                lData.START_QTR = "";
+                lData.END_QTR = "";
+                lData.START_YR = "";
+                lData.END_YR = "";
+                lData.C2A_DATA_C2A_ID = "";
+                lData.IsAttachmentRequired = "";
+                lData.AttachmentError = "";
+                lData._dirty = {};
+
                 if (!!lData.PRC_ST) {
                     for (var s = 0; s < lData.PRC_ST.length; s++) {
                         var item = lData.PRC_ST[s];
@@ -758,6 +769,7 @@
                         item.infoMessages = [];
                         item.warningMessages = [];
                         item.PASSED_VALIDATION = "";
+
                         if (!!item.PRC_TBL) {
                             for (var t = 0; t < item.PRC_TBL.length; t++) {
                                 item.PRC_TBL[t]._behaviors = {};
@@ -1306,8 +1318,9 @@
         $scope.validateTitles = function () {
             var rtn = true;
 
+            if (!$scope.curPricingStrategy) return true;
             var isPsUnique = $scope.IsUniqueInList($scope.contractData.PRC_ST, $scope.curPricingStrategy["TITLE"], "TITLE", true);
-            var isPtUnique = $scope.IsUniqueInList($scope.curPricingStrategy.PRC_TBL, $scope.curPricingTable["TITLE"], "TITLE", true);
+            var isPtUnique = !$scope.curPricingTable ? true: $scope.IsUniqueInList($scope.curPricingStrategy.PRC_TBL, $scope.curPricingTable["TITLE"], "TITLE", true);
 
             // Pricing Table
             if (!!$scope.curPricingTable) {
