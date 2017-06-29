@@ -118,7 +118,7 @@
                         $scope.isBusyMsgDetail = !detail ? "" : detail;
                     }, 500);
                 }
-            }, 0);
+            });
         }
         // populate the contract data upon entry... If multiple controller instances are called, reference the initial instance
         //
@@ -1362,7 +1362,7 @@
         $scope.saveEntireContractBase = function (stateName, forceValidation, forcePublish, toState, toParams, delPtr) {
             // if save already started saving... exit
             // if validate triggers from product translation continue..validating data
-            if ($scope.isBusyMsgTitle !== "Validating your data...") {
+            if ($scope.isBusyMsgTitle !== "Validating your data..." && $scope.isBusyMsgTitle !== "Saving your data..") {
                 if (!!$scope.isBusyMsgTitle && $scope.isBusyMsgTitle !== "") return;
             }
 

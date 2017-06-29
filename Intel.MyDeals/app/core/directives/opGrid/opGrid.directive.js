@@ -57,7 +57,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
 
                 var cols = $scope.opOptions.columns;
                 for (var c = 0; c < cols.length; c++) {
-                    
+
                     if (cols[c].editor !== undefined) {
                         if (cols[c].editor === "multiDimEditor") {
                             cols[c].editor = $scope.multiDimEditor;
@@ -454,11 +454,11 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
 
             function formatDate(date) { // HACK: format date hack so js datetime would be readable for C# API
             	var day = date.getDate();
-            	var month = date.getMonth() + 1; 
+            	var month = date.getMonth() + 1;
             	var year = date.getFullYear();
             	var hour = date.getHours();
             	var minute = date.getMinutes();
-            	var second = date.getSeconds(); 
+            	var second = date.getSeconds();
 
             	return (month + "/" + day + "/" + year + " " + hour + ':' + minute + ':' + second);
             }
@@ -477,7 +477,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 }
 
 				// col is Read-only
-                if (options.model._behaviors.isReadOnly[col.field]) { 
+                if (options.model._behaviors.isReadOnly[col.field]) {
                 	return;
                 }
 
@@ -816,8 +816,11 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
             }
 
             $scope.saveWipDeals = function () {
-                $scope.contractDs.sync();
-                $scope.$parent.$parent.$parent.saveEntireContract();
+                $scope.$parent.$parent.setBusy("Saving your data..", "Please wait while saving data.");
+                $timeout(function () {
+                    $scope.contractDs.sync();
+                    $scope.$parent.$parent.$parent.saveEntireContract();
+                }, 100);
             }
 
             $scope.toggleTerms = function() {
@@ -1022,8 +1025,12 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
             }
 
             $scope.saveAndValidateGrid = function () {
-                $scope.contractDs.sync();
-                $scope.$parent.$parent.$parent.validateWipDeals();
+                $scope.$parent.$parent.setBusy("Validating your data...", "Please wait as we validate your information!1");
+                $timeout(function () {
+                    $scope.contractDs.sync();
+                    $scope.$parent.$parent.$parent.validateWipDeals();
+                }, 100);
+
                 return;
 
                 var valid = $scope.validateGrid();
