@@ -1373,6 +1373,10 @@
         // **** SAVE CONTRACT Methods ****
         //
         $scope.saveEntireContractBase = function (stateName, forceValidation, forcePublish, toState, toParams, delPtr) {
+        	if (!$scope._dirty && !forceValidation) {
+        		return;
+        	}
+
             // if save already started saving... exit
             // if validate triggers from product translation continue..validating data
             if ($scope.isBusyMsgTitle !== "Validating your data..." && $scope.isBusyMsgTitle !== "Saving your data..") {
@@ -1430,7 +1434,7 @@
                     $scope.setBusy("Saving your data...Done", "Processing results now!");
 
                     var anyWarnings = false;
-
+					
                     if (!!results.data.PRC_TBL_ROW) {
                         for (i = 0; i < results.data.PRC_TBL_ROW.length; i++) {
                             if (!!results.data.PRC_TBL_ROW[i].PTR_SYS_PRD) results.data.PRC_TBL_ROW[i].PTR_SYS_PRD = $scope.uncompress(results.data.PRC_TBL_ROW[i].PTR_SYS_PRD);
@@ -1438,7 +1442,7 @@
                         }
                         $scope.updateResults(results.data.PRC_TBL_ROW, $scope.pricingTableData.PRC_TBL_ROW);
                         $scope.spreadDs.read();
-                        $scope.syncCellsOnAllRows(results.data.PRC_TBL_ROW);
+                        $scope.syncCellsOnAllRows($scope.pricingTableData.PRC_TBL_ROW); //results.data.PRC_TBL_ROW
                     }
                     if (!!results.data.WIP_DEAL) {
                         for (i = 0; i < results.data.WIP_DEAL.length; i++) {
@@ -1461,7 +1465,7 @@
                             }, 1000);
                         }
                     } else {
-                        $scope.setBusy("Saved with warnings", "Didn't pass Validation");
+                    	$scope.setBusy("Saved with warnings", "Didn't pass Validation");
                         $scope.$broadcast('saveWithWarnings', results);
                         $timeout(function () {
                             $scope.setBusy("", "");
@@ -1522,45 +1526,67 @@
                     offset = 1;
                 }
 
+                var firstUntouchedRowFinder = 0; // when this == 1, then it will add the rest of the dropdown validation back in (in the for loop below) It can also turn into 3, which will do nothing
                 sheet.batch(function () {
                     var ptTemplate = $scope.templates.ModelTemplates.PRC_TBL_ROW[$scope.curPricingTable.OBJ_SET_TYPE_CD];
                     if (ptTemplate !== undefined && ptTemplate !== null) {
                         for (var i = 0; i < rowsCount; i++) {
-                            $scope.syncCellsOnSingleRow(sheet, data[i + offset], i);
+                        	firstUntouchedRowFinder += $scope.syncCellsOnSingleRow(sheet, data[i + offset], i, firstUntouchedRowFinder);
                         }
                     }
                 });
             }, 10);
         }
 
-        $scope.syncCellsOnSingleRow = function (sheet, dataItem, row) {
-            var ptTemplate = $scope.templates.ModelTemplates.PRC_TBL_ROW[$scope.curPricingTable.OBJ_SET_TYPE_CD];
-            $scope.columns = $scope.getColumns(ptTemplate);
-            var c = 0;
-            if (!!dataItem) {
-                var beh = dataItem._behaviors;
-                if (!beh) beh = {};
+        $scope.syncCellsOnSingleRow = function (sheet, dataItem, row, isTheFirstUntouchedRowIfEqualsToOne) {
+        	var ptTemplate = $scope.templates.ModelTemplates.PRC_TBL_ROW[$scope.curPricingTable.OBJ_SET_TYPE_CD];
+        	$scope.columns = $scope.getColumns(ptTemplate);
+        	var c = 0;
+        	if (!!dataItem) {
+        		var beh = dataItem._behaviors;
+        		if (!beh) beh = {};
 
-                angular.forEach(ptTemplate.columns, function (value, key) {
-                    var isError = !!beh.isError && !!beh.isError[value.field];
-                    var isRequired = !!beh.isRequired && !!beh.isRequired[value.field];
-                    var msg = isError ? beh.validMsg[value.field] : (isRequired) ? "This field is required." : "UNKNOWN";
+        		angular.forEach(ptTemplate.model.fields, function (value, key) {
+        			var isError = !!beh.isError && !!beh.isError[value.field];
+        			var isRequired = !!beh.isRequired && !!beh.isRequired[value.field];
+        			var msg = isError ? beh.validMsg[value.field] : (isRequired) ? "This field is required." : "UNKNOWN";
 
-                    if (value.uiType === "DROPDOWN") {
-                        sheet.range(row + 1, c++).validation({
-                            dataType: "list",
-                            showButton: true,
-                            from: "DropdownValuesSheet!" + $scope.colToLetter[value.field] + ":" + $scope.colToLetter[value.field],
-                            allowNulls: value.nullable,
-                            type: "warning",
-                            titleTemplate: "Invalid value",
-                            messageTemplate: "Invalid value. Please use the dropdown for available options."
-                        });
-                    } else {
-                        sheet.range(row + 1, c++).validation($scope.myDealsValidation(isError, msg, isRequired));
-                    }
-                });
-            }
+        			var isRequiredDropdown = value.nullable;
+
+        			// re-add dropdwwns back into existing rows (dataItem only contains existing rows) Note that re-adding all the validation to the entire column will show unneccessary red flags
+        			if (value.uiType === "DROPDOWN") {
+        				var myRange = sheet.range(row + 1, c++);
+        				reapplyDropdowns(myRange, false, value.field);
+        			} else {
+        				sheet.range(row + 1, c++).validation($scope.myDealsValidation(isError, msg, isRequired));
+        			}
+        		});
+        	} else if (isTheFirstUntouchedRowIfEqualsToOne === 0) {
+        		return 1;   		        	
+        	} else if (isTheFirstUntouchedRowIfEqualsToOne === 1) {
+        		// HACK: This is so whe get the dropdowns back on the untouched rows without red flags!
+        		// re-add dropwons into untouched rows
+        		angular.forEach(ptTemplate.model.fields, function (value, key) {
+        			if (value.uiType === "DROPDOWN") {
+        				var myRange = sheet.range($scope.colToLetter[value.field] + (row + 1) + ":" + $scope.colToLetter[value.field] + "200");
+        				reapplyDropdowns(myRange, true, value.field);
+        			}
+        		});
+        		return 2; 
+			}
+			return 0;
+        }
+
+        function reapplyDropdowns(sheetRange, allowNulls, valueField) {
+        	sheetRange.validation({
+        		dataType: "list",
+        		showButton: true,
+        		from: "DropdownValuesSheet!" + $scope.colToLetter[valueField] + ":" + $scope.colToLetter[valueField],
+        		allowNulls: allowNulls,
+        		type: "warning",
+        		titleTemplate: "Invalid value",
+        		messageTemplate: "Invalid value. Please use the dropdown for available options."
+        	});
         }
 
         $scope.clearValidations = function () {
