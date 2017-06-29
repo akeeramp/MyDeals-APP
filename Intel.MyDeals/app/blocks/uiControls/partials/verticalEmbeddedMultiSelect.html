@@ -4,7 +4,7 @@
     <div class="clearboth"></div>
     <div kendo-tooltip k-content="tooltipMsg" k-position="'top'" ng-show="opIsError" class="err-bit-el"></div>
 
-    <div class="k-content">
+    <div class="k-content" style="position: relative">
         <div ng-click="onEmbeddedMultiSelectClick()">
             <select id="{{opCd + '_MS'}}"
                     kendo-multi-select 
@@ -56,6 +56,7 @@
      .msPopup {
          margin-bottom: 0 !important;
          position: absolute;
+         top: 0;
          width: 220px;
          max-height: 200px;
          max-width: 280px;

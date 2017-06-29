@@ -142,24 +142,33 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
 
             //when user clicks multiselect to open treeview, ensure that treeview's checked values match to those of the multiselect.
             var updateTreeView = function () {
-                if (scope.showTreeView === true && msDataBound === true && tvDataBound) {
-                    var msValues = $("#" + scope.opCd + "_MS").data("kendoMultiSelect").value();
+                if (scope.showTreeView === true && msDataBound === true && tvDataBound === true) {
+                    var multiselect = $("#" + scope.opCd + "_MS").data("kendoMultiSelect");
                     var treeview = $("#" + scope.opCd).data("kendoTreeView");
 
-                    for (var i = 0; i < msValues.length; i++) {
-                        var matches = treeview.findByText(msValues[i]);
-                        if (matches.length > 1) {
-                            //quickfix for Region having same name as Country - however this will become an issue if a geo/blended geo ends up having 2 different regions with the same country name
-                            //for now we select the deepest level node, aka the childless nodes
+                    if (multiselect == null || treeview == null) {
+                        //TODO: for some reason on IE, the initial click to open the editor for TRGT_RGN causes this code to trigger, i.e. both kendo editors finished databinding but the multiselect remains un-rendered
+                        //whats more, it even triggers a whopping 9 times (why?)
+                        //FIXME: for now we fail silently and users will likely think they just misclicked the first time, but this does need to be addressed eventually.
+                        //console.log("ouch")
+                    } else {
+                        var msValues = multiselect.value();
+
+                        for (var i = 0; i < msValues.length; i++) {
+                            var matches = treeview.findByText(msValues[i]);
+                            if (matches.length > 1) {
+                                //quickfix for Region having same name as Country - however this will become an issue if a geo/blended geo ends up having 2 different regions with the same country name
+                                //for now we select the deepest level node, aka the childless nodes
                             
-                            for (var j = 0; j < matches.length; j++) {
-                                var dataItem = treeview.dataItem(matches[j]);
-                                if (!dataItem.hasChildren) {    //only check nodes that are childless (base level leaf nodes)
-                                    treeview.dataItem(matches[j]).set("checked", true);
+                                for (var j = 0; j < matches.length; j++) {
+                                    var dataItem = treeview.dataItem(matches[j]);
+                                    if (!dataItem.hasChildren) {    //only check nodes that are childless (base level leaf nodes)
+                                        treeview.dataItem(matches[j]).set("checked", true);
+                                    }
                                 }
+                            } else {
+                                treeview.dataItem(matches).set("checked", true);  //only one match, let's check it regardless
                             }
-                        } else {
-                            treeview.dataItem(matches).set("checked", true);  //only one match, let's check it regardless
                         }
                     }
                 }
@@ -371,6 +380,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
             opHelpMsg: '=',
             opIsForm: '=',
             opExpanded: '=',
+            opBlend: '=',
             opClass: '=',
             opStyle: '=',
             opPlaceholder: '='
