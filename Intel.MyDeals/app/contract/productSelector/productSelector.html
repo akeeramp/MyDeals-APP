@@ -23,7 +23,7 @@
             </span>
         </div>
         <div ng-if="!vm.showTree" class="row breadCrumbWrapper">
-            <ul class="productpath breadcrumb">
+            <ul class="productSelectorpath breadcrumb">
                 <li><a role="button" class="prdAnchor" ng-click="vm.selectPath(0)">Select</a></li>
                 <li ng-repeat="p in vm.selectedPathParts | unique:'name'" ng-if="p.name != 'NA'">
                     <a role="button" class="prdAnchor" ng-click="vm.selectPath($index + 1)">{{:: p.name }}</a>
@@ -90,8 +90,8 @@
                 <p>Selected Products<small role="button" ng-click="vm.showHeirarrchyTree()">&nbsp;({{vm.addedProducts.length}})</small></p>
             </div>
             <div class="col-md-6">
-                <button class="btn btn-default prdBtn" ng-click="vm.clearProducts()" style="margin-left:2px;">Clear all products</button>
-                <button class="btn btn-primary fr prdBtn" ng-click="vm.addProducts()">Add Product(s)</button>
+                <button class="btn btn-primary fr prdBtn" ng-click="vm.addProducts()" style="margin-left:10px;">Add Product(s)</button>
+                <button class="btn btn-default fr prdBtn" ng-click="vm.clearProducts()" style="margin-left:2px;">Clear all products</button>                
             </div>
         </div>
         <div class="row" style="padding-left:15px;padding-right:15px;">
@@ -160,14 +160,14 @@
         padding-left: 20px;
     }
 
-    .productpath.breadcrumb > li + li:before {
+    .productSelectorpath.breadcrumb > li + li:before {
         padding: 0 5px;
         color: white;
         content: ">";
         font-size: 16px;
     }
 
-    .productpath.breadcrumb {
+    .productSelectorpath.breadcrumb {
         color: white;
         background-color: #1a3e6f;
         padding: 10px;
@@ -290,8 +290,8 @@
     .prodSelector.modal-body {
         padding-top: 2px;
         padding-bottom: 0px;
-        min-height: calc(85vh - 370px);
-        max-height: calc(85vh - 370px);
+        min-height: calc(85vh - 365px);
+        max-height: calc(85vh - 365px);
         overflow-y: auto;
     }
 
@@ -305,7 +305,7 @@
     }
 
     .prodSelector.kendoGridHeight {
-        height: calc(85vh - 400px);
+        height: calc(85vh - 350px);
     }
 
     .prdSelector-modal-window, .modal-dialog {

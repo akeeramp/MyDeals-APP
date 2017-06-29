@@ -25,7 +25,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
         { text: 'Delete Product', action: onDeleteProduct },
         { text: 'Show Suggestions', action: onShowSuggestions }
     ];
-    
+
     function prdLvlDecoder(indx) {
         if (indx === 7003) return "Product Category";
         if (indx === 7004) return "Brand";
@@ -45,7 +45,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
     }
 
 
-    vm.selectRow = function(indx) {
+    vm.selectRow = function (indx) {
         var x;
 
         vm.curRowIndx = indx;
@@ -266,7 +266,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
                     "PRD_STRT_DTM": {
                         type: "string"
                     },
-                    "CAP": {                    
+                    "CAP": {
                         type: "object"
                     }
                 }
@@ -289,7 +289,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
             {
                 field: "USR_INPUT",
                 title: "User Entered",
-                groupHeaderTemplate: "#= value #  <i class='intelicon-arrow-back-left skyblue pl10'></i> <span class='grpDesc'>Can't find what you are looking for?  <span class='or'>Use the</span> </span><span class='lnk' ng-click='vm.gotoSelector(\"#=value#\")'>Product Selector</span><span class='or'>OR</span><span class='lnk' ng-click='vm.removeProd(\"#=value#\")'>Remove Product</span>",
+                groupHeaderTemplate: "#= value #  <i class='intelicon-arrow-back-left skyblue pl10'></i> <span class='grpDesc'>Can't find what you are looking for?  <span class='or'>Use the</span> </span><span class='lnk' ng-click='vm.gotoSelector(\"#=value#\")'>Product Selector</span><span class='or'> OR </span><span class='lnk' ng-click='vm.removeProd(\"#=value#\")'>Remove Product</span>",
                 hidden: true
             },
             {
@@ -352,7 +352,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
         vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][item.name] = {};
 
         vm.applyFilterAndGrouping();
-        
+
         var allMatched = true;
         for (var m = 0; m < vm.curRowProds.length; m++) {
             if (vm.curRowProds[m].matchId === "" && vm.curRowProds[m].status === "Issue") allMatched = false;
@@ -365,7 +365,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
         }
     }
 
-    vm.openProdSelector = function (row) {
+    vm.openProdSelector = function (dataItem) {
         var pricingTableRow = {
             'START_DT': ProductRows["0"].START_DT,
             'END_DT': ProductRows["0"].END_DT,
@@ -377,9 +377,13 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
             'PROD_INCLDS': ProductRows["0"].PROD_INCLDS
         };
 
+        if (!dataItem) {
+            dataItem = "";
+        }
+
         var suggestedProduct = {
             'mode': 'auto',
-            'prodname': vm.productName
+            'prodname': dataItem
         };
 
         var modal = $uibModal.open({
@@ -408,11 +412,14 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
         modal.result.then(
             function (productSelectorOutput) {
                 var validateSelectedProducts = productSelectorOutput.validateSelectedProducts;
-                for (var key in validateSelectedProducts) {
-                    vm.addedProducts.push(validateSelectedProducts[key]["0"]);
-                }
-            });
+                var obj = {}; // Local Object
 
+                for (var key in validateSelectedProducts) {
+                    const prodName = key;
+                    obj[prodName] = validateSelectedProducts[key];
+                }
+                vm.ProductCorrectorData.ValidProducts[vm.curRowId] = obj;
+            });
     }
 
     vm.clkPrdUsrNm = function (dataItem) {
@@ -431,7 +438,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
                 return;
             }
             scope.$parent.item.selected = true;
-            
+
             // perform filter
             vm.applyFilterAndGrouping();
 
@@ -475,16 +482,17 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
     }
 
 
-    vm.gotoSelector = function(prdNm) {
+    vm.gotoSelector = function (prdNm) {
         kendo.confirm("Unable to locate the product (" + prdNm + ").\nWould you like to look for it in the Product Selector?").then(function () {
             vm.launchSelector(prdNm);
         });
     }
-    vm.launchSelector = function(prdNm) {
+    vm.launchSelector = function (prdNm) {
         var rowDcId = vm.rowDCId;
         var key = vm.curRowId;
 
         alert('TODO: display popup for ' + prdNm + ':\n1) Exact match but with errors like prod outside deal range.\n2) Top 10 or 15 possible matches... maybe.');
+        vm.openProdSelector(prdNm);
     }
 
     vm.removeProd = function (prdNm) {
@@ -494,7 +502,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
     }
 
     vm.suggestProd = function (prdNm) {
-        kendo.confirm("This is where we would suggest results for " + prdNm + "?").then(function () {});
+        kendo.confirm("This is where we would suggest results for " + prdNm.name + "?").then(function () { });
     }
 
     //Go to Next ROW for conflict or Invalid Product
@@ -505,7 +513,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
     }
 
     //Go to Previous ROW for conflict or Invalid Product
-    vm.prevRow = function() {
+    vm.prevRow = function () {
         var indx = vm.curRowIndx - 1;
         if (indx < 1) return;
         vm.selectRow(indx);
@@ -515,8 +523,8 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
     vm.cancel = function () {
         $uibModalInstance.close(vm.ProductCorrectorData);
     }
-    
-    
+
+
     //Getting CAP Product Details for Tooltip
     vm.getPrductDetails = function (dataItem, priceCondition) {
         var currentPricingTableRow = [];
@@ -576,7 +584,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
     }
 
     //// NOT DONE
-    vm.saveProducts = function() {
+    vm.saveProducts = function () {
 
         // This might not be working
 
@@ -600,7 +608,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
                     }
                     if (!foundItems)
                         delete GetProductCorrectorData.DuplicateProducts[key];
-                    
+
                 }
             }
         }
