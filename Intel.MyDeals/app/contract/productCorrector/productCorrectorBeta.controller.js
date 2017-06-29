@@ -416,9 +416,14 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
 
                 for (var key in validateSelectedProducts) {
                     const prodName = key;
-                    obj[prodName] = validateSelectedProducts[key];
+                    if (!vm.ProductCorrectorData.ValidProducts[vm.curRowId]) {
+                        obj[prodName] = validateSelectedProducts[key];
+                        vm.ProductCorrectorData.ValidProducts[vm.curRowId] = obj;
+                    }
+                    else {
+                        vm.ProductCorrectorData.ValidProducts[vm.curRowId][prodName] = validateSelectedProducts[key];
+                    }
                 }
-                vm.ProductCorrectorData.ValidProducts[vm.curRowId] = obj;
             });
     }
 
