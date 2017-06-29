@@ -2,10 +2,10 @@
     <div style="padding:10px;">
         <div class="prodSelector modal-header" style="margin-bottom:15px">
             <div class="row prodCorrectorHeader">
-                <div class="col-md-4 cursorArea" style="padding-left:0px">
+                <div class="col-sm-5 cursorArea" style="padding-left:0px">
                     <p class="prodText">Product Corrector</p>
                 </div>                
-                <div class="col-md-7 text-center headerMsg">
+                <div class="col-sm-6 text-center headerMsg">
                     <span ng-if="vm.issueRowKeys.length <= 1">
                         MyDeals needs help with your entered product
                     </span>
@@ -19,32 +19,39 @@
             </div>
         </div>
         
-        
+        <div kendo-dialog="dialog" k-title="'Unable to find this product'" k-width="500" k-actions="vm.suggestionActions" k-modal="true">
+            <p>It is possible the product is outside the date range of the deal or there is a typo in the product name.</p>
+            <p>How would you like to proceed?</p>
+        </div>
 
         <div class="prodCorrector modal-body">
             <div class="row subHeaderMsg">
-                Please select option(s) below to move into the valid products box or use the <a ng-click="vm.openProdSelector()">Product Selector</a>
+                Please select option(s) below to move into the valid products box or use the <span class="yellow">Product Selector</span>
             </div>
             <div class="row subHeaderNavContainer">
-                <div class="fl miniNav" ng-if="vm.issueRowKeys.length > 1">
+                <div class="mini-left miniNav" ng-if="vm.issueRowKeys.length > 1">
                     <div class="text-center">({{ vm.curRowIndx }} of {{ vm.numIssueRows }} rows)</div>
                     <div>
                         <button class="btn btn-xs btn-primary prdBtn" ng-click="vm.prevRow()" ng-disabled="vm.curRowIndx <= 1">Back</button>
                         <button class="btn btn-xs btn-primary prdBtn" ng-click="vm.nextRow()" ng-disabled="vm.curRowIndx >= vm.numIssueRows">Next</button>
                     </div>
                 </div>
-                <div class="fl miniProdNav">
+                <div class="mini-right miniProdNav">
                     <div>Product(s) not found for Row {{ vm.rowDCId }}</div>
                     <div>
                         <ul class="productpath breadcrumb">
                             <li ng-repeat="p in vm.curRowProds | unique:'name'">
-                                <a role="button" class="prdAnchor {{p.status}}" ng-class="{'strike': p.matchId != ''}" ng-click="vm.clkPrdUsrNm(p)" title="{{p.reason}}">{{:: p.name }}</a>
-                                <div class="newProd">&nbsp;<span ng-show="p.matchId">{{p.matchName}}</span></div>
+                                <span ng-class="{'strike': p.matchId != ''}">
+                                    <span class="prdAnchor {{p.status}}" ng-click="vm.clkPrdUsrNm(p)" title="{{p.reason}}">{{:: p.name }}</span>
+                                </span>
+                                <div class="newProd">
+                                    <span ng-show="p.matchId">{{p.matchName}}</span>
+                                    &nbsp;
+                                </div>
                             </li>
                         </ul>
                     </div>
                 </div>
-                <div class="clearboth"></div>
             </div>
             <div class="row" style="margin: 10px 0 0 0;">
                 <table style="width: 100%; height: 100%;">
@@ -66,8 +73,8 @@
                                                     <span class="badge upperBadge" ng-if="item.status == 'Issue'">{{ item.cnt == 0 ? "?" : item.cnt }}</span>
                                                 </label>
                                             </div>
-                                            <div ng-if="item.cnt <= 0" class="srchContainer" title="Click to find a possible match" ng-click="vm.gotoSelector(item)">
-                                                <i class="intelicon-search ckSm"></i>
+                                            <div ng-if="item.cnt <= 0" class="srchContainer" title="Click to find a possible match" ng-click="vm.suggestAction(item)">
+                                                <i class="intelicon-help-outlined ckSm"></i>
                                                 <span ng-bind-html="item.name"></span>
                                             </div>
                                         </div>
@@ -236,12 +243,45 @@
         margin-right: 10px;
         font-weight: 600;
     }
+    .mini-right {
+        overflow: hidden;
+        height: 60px;
+    }
+    .mini-left {
+        float: left;
+        width: 160px;
+    }
+
     .yellow {
         color: #f3D54E;
     }
 
+    .skyblue {
+        color: #00AEEF;
+    }
+    .pl10 {
+        padding-left: 10px;
+    }
+    .or {
+        padding: 0 10px;
+    }
+    .lnk {
+        cursor: pointer;
+        color: #ffffff;
+        border-radius: 4px;
+        background-color: #00AEEF;
+        padding: 0 5px;
+    }
+    .lnk:hover {
+        background-color: #0071C5;
+    }
+    .grpDesc {
+        color: #666666;
+    }
 
-
+    .prodCorrector-grid.k-grid .k-grouping-row td p {
+        padding: 5px;
+    }
 
      .suggestedProd {
          border: 1px solid rgba(190, 163, 163, 0.12);
@@ -258,6 +298,7 @@
         background-color: transparent;
         background: #00aeef;
     }
+
 
     .productCorrect-grid.k-grid td {
         height: 30px !important;
@@ -357,24 +398,28 @@
         padding-left: 5px;
     }
 
-    a.prdAnchor {
+    span.prdAnchor {
         color: #003C71;
     }
-    a.prdAnchor.Warning {
+    span.prdAnchor.Warning {
         color: #FFA300;
     }
-    a.prdAnchor.Issue {
+    span.prdAnchor.Issue {
         color: #FC4C02;
     }
-    a.prdAnchor.Good {
+    span.prdAnchor.Good {
         color: #C4D600;
     }
-    a.prdAnchor:hover {
+    span.prdAnchor:hover {
         text-decoration: none;
         color: #01AEEF;
     }
-    a.prdAnchor.strike {
-        text-decoration: line-through;
+    .strike {
+        text-decoration: line-through !important;
+        cursor: pointer;
+    }
+    .strike span {
+        color: #01AEEF;
     }
 
 

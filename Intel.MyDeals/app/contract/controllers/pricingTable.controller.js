@@ -23,6 +23,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     $scope.openInfoDialog = openInfoDialog;
     $scope.validatePricingTableProducts = validatePricingTableProducts;
     $scope.validateSavepublishWipDeals = validateSavepublishWipDeals;
+    $scope.pcVer = "Beta";
 
     // If product corrector or selector modifies the product column do not clear PRD_SYS
     var systemModifiedProductInclude = false;
@@ -137,7 +138,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         if (!root.contractData.CustomerDivisions || root.contractData.CustomerDivisions.length <= 1) {
             // hide Cust Div
-            ptTemplate.columns[1].hidden = true;
+            ptTemplate.columns[3].hidden = true;
         }
 
         $scope.ptSpreadOptions = {
@@ -490,11 +491,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
             //debugger;
             //PTR_SYS_PRD
-            sheet.range('D' + (rowStart)).value(JSON.stringify(validateSelectedProducts));
+            sheet.range('B' + (rowStart)).value(JSON.stringify(validateSelectedProducts));
             systemModifiedProductInclude = true;
             sheet.range(root.colToLetter['PTR_USER_PRD'] + (rowStart)).value(contractProducts);
             // can't use colToLetter for PTR_SYS_INVLD_PRD because it is hidden
-            sheet.range('E' + (rowStart)).value("");
+            sheet.range('C' + (rowStart)).value("");
 
             syncSpreadRows(sheet, rowStart, rowStart);
 
@@ -512,11 +513,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     var validJSON = {};
                     validJSON[key] = validateSelectedProducts[key];
                     // can't use colToLetter for PTR_SYS_PRD because it is hidden
-                    sheet.range('D' + (row)).value(JSON.stringify(validJSON));
+                    sheet.range('B' + (row)).value(JSON.stringify(validJSON));
                     systemModifiedProductInclude = true;
                     sheet.range(root.colToLetter['PTR_USER_PRD'] + (row)).value(key);
                     // can't use colToLetter for PTR_SYS_INVLD_PRD because it is hidden
-                    sheet.range('E' + (row)).value("");
+                    sheet.range('C' + (row)).value("");
                     row++;
                 }
             }
@@ -603,8 +604,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                                     $timeout(function () {
                                         var n = data.length + 2;
-                                        disableRange(sheet.range("B" + n + ":B" + (n + numToDel + numToDel)));
-                                        disableRange(sheet.range("D" + n + ":Z" + (n + numToDel + numToDel)));
+                                        disableRange(sheet.range("D" + n + ":D" + (n + numToDel + numToDel)));
+                                        disableRange(sheet.range("F" + n + ":Z" + (n + numToDel + numToDel)));
                                     }, 10);
 
                                     root.saveEntireContract(true);
@@ -624,8 +625,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         var numToDel = rowStop + 1 - rowStart;
                         cnt = cnt + 2;
                         //debugger;
-                        disableRange(sheet.range("B" + cnt + ":B" + (cnt + numToDel - 1)));
-                        disableRange(sheet.range("D" + cnt + ":Z" + (cnt + numToDel - 1)));
+                        disableRange(sheet.range("D" + cnt + ":D" + (cnt + numToDel - 1)));
+                        disableRange(sheet.range("F" + cnt + ":Z" + (cnt + numToDel - 1)));
                     }, 10);
                 }
             }
@@ -643,7 +644,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             if (isPtrSysPrdFlushed) {
                 if (!systemModifiedProductInclude) {
                     // TODO we will need to revisit.  There are cases where we CANNOT remove products and reload... active deals for example
-                    sheet.range("D" + topLeftRowIndex + ":E" + bottomRightRowIndex).value("");
+                    sheet.range("B" + topLeftRowIndex + ":C" + bottomRightRowIndex).value("");
 
                     arg.range.forEachCell(
                         function (rowIndex, colIndex, value) {
@@ -773,7 +774,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     }
 
                     // Enable other cells
-                    var range = sheet.range("B" + topLeftRowIndex + ":" + finalColLetter + bottomRightRowIndex);
+                    var range = sheet.range("D" + topLeftRowIndex + ":" + finalColLetter + bottomRightRowIndex);
                     range.enable(true);
                     range.background(null);
 
@@ -1489,8 +1490,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     function openProdCorrector(currentRow, transformResults, rowData, publishWipDeals) {
         var modal = $uibModal.open({
             backdrop: 'static',
-            templateUrl: 'app/contract/productCorrector/productCorrector.html',
-            controller: 'ProductCorrectorModalController',
+            templateUrl: 'app/contract/productCorrector/productCorrector' + $scope.pcVer + '.html',
+            controller: 'ProductCorrector' + $scope.pcVer + 'ModalController',
             controllerAs: 'vm',
             size: 'lg',
             windowClass: 'prdCorrector-modal-window',

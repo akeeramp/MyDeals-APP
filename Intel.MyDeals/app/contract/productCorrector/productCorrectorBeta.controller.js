@@ -20,8 +20,12 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
     vm.isLvlCollapsed = false;
     vm.ProductCorrectorData = util.deepClone(GetProductCorrectorData);
 
-
-
+    vm.suggestionActions = [
+        { text: 'Product Selector', primary: true, action: onProductSelector },
+        { text: 'Delete Product', action: onDeleteProduct },
+        { text: 'Show Suggestions', action: onShowSuggestions }
+    ];
+    
     function prdLvlDecoder(indx) {
         if (indx === 7003) return "Product Category";
         if (indx === 7004) return "Brand";
@@ -66,7 +70,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
                 status = "Issue";
                 cnt += vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][item].length;
             }
-            if (vm.ProductCorrectorData.InValidProducts[vm.curRowId].indexOf(item) >= 0) {
+            if (!!vm.ProductCorrectorData.InValidProducts[vm.curRowId] && vm.ProductCorrectorData.InValidProducts[vm.curRowId].indexOf(item) >= 0) {
                 reason = "Unable to locate the product";
                 status = "Issue";
             }
@@ -245,7 +249,27 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
         pageSize: 50,
         schema: {
             model: {
-                id: "PROD_MBR_SID"
+                id: "PROD_MBR_SID",
+                fields: {
+                    "USR_INPUT": {
+                        type: "string"
+                    },
+                    "HIER_VAL_NM": {
+                        type: "string"
+                    },
+                    "PRD_CAT_NM": {
+                        type: "string"
+                    },
+                    "HIER_NM_HASH": {
+                        type: "string"
+                    },
+                    "PRD_STRT_DTM": {
+                        type: "string"
+                    },
+                    "CAP": {                    
+                        type: "object"
+                    }
+                }
             }
         }
     });
@@ -265,7 +289,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
             {
                 field: "USR_INPUT",
                 title: "User Entered",
-                groupHeaderTemplate: "#= value #",
+                groupHeaderTemplate: "#= value #  <i class='intelicon-arrow-back-left skyblue pl10'></i> <span class='grpDesc'>Can't find what you are looking for?  <span class='or'>Use the</span> </span><span class='lnk' ng-click='vm.gotoSelector(\"#=value#\")'>Product Selector</span><span class='or'>OR</span><span class='lnk' ng-click='vm.removeProd(\"#=value#\")'>Remove Product</span>",
                 hidden: true
             },
             {
@@ -289,19 +313,17 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
             },
             {
                 field: "HIER_NM_HASH",
-                title: "Product Details",
-                width: "200px"
+                title: "Product Details"
             },
             {
                 field: "PRD_STRT_DTM",
                 title: "Product Effective Date",
-                template: "#= kendo.toString(new Date(PRD_STRT_DTM), 'M/d/yyyy') + ' - ' + kendo.toString(new Date(PRD_END_DTM), 'M/d/yyyy') #",
-                width: "150px"
+                template: "#= kendo.toString(new Date(PRD_STRT_DTM), 'M/d/yyyy') + ' - ' + kendo.toString(new Date(PRD_END_DTM), 'M/d/yyyy') #"
             },
             {
                 field: "CAP",
                 title: "CAP Info",
-                template: "<op-popover ng-click='openCAPBreakOut(dataItem, \"CAP\")' op-options='CAP' op-label='' op-data='getPrductDetails(dataItem, \"CAP\")'>#=gridUtils.uiMoneyDatesControlWrapper(data, 'CAP', 'CAP_START', 'CAP_END')#</op-popover>",
+                template: "<op-popover ng-click='vm.openCAPBreakOut(dataItem, \"CAP\")' op-options='CAP' op-label='' op-data='vm.getPrductDetails(dataItem, \"CAP\")'>#=gridUtils.uiMoneyDatesControlWrapper(data, 'CAP', 'CAP_START', 'CAP_END')#</op-popover>",
                 width: "150px"
             }
         ]
@@ -327,6 +349,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
 
         // remove
         delete vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][item.name];
+        vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][item.name] = {};
 
         vm.applyFilterAndGrouping();
         
@@ -404,7 +427,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
             var scope = angular.element(document.getElementById('fltrPrdChk' + dataItem.id)).scope();
             if (!scope) {
                 // go to product selector
-                vm.gotoSelector(dataItem);
+                vm.gotoSelector(dataItem.name);
                 return;
             }
             scope.$parent.item.selected = true;
@@ -425,21 +448,49 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
         }
 
     }
-    
+
+    vm.suggestItem = {};
+    vm.suggestAction = function (dataItem) {
+        vm.suggestItem = dataItem;
+        $scope.dialog.open();
+    }
+
     vm.getFormatedDate = function (datVal) {
         var date = kendo.toString(new Date(datVal), 'M/d/yyyy');
-        if (date == '1/1/0001') {
+        if (date === '1/1/0001') {
             return '';
         }
         return date;
     }
 
-    vm.gotoSelector = function(dataItem) {
-        kendo.confirm("Unable to locate this product.\nWould you like to look for it in the Product Selector?").then(function () {
-            alert('TODO: display popup for:\n1) Exact match but with errors like prod outside deal range.\n2) Top 10 or 15 possible matches... maybe.');
+
+    function onProductSelector(e) {
+        vm.gotoSelector(vm.suggestItem.name);
+    }
+    function onDeleteProduct(e) {
+        vm.removeProd(vm.suggestItem.name);
+    }
+    function onShowSuggestions(e) {
+        vm.suggestProd(vm.suggestItem.name);
+    }
+
+
+    vm.gotoSelector = function(prdNm) {
+        kendo.confirm("Unable to locate the product (" + prdNm + ").\nWould you like to look for it in the Product Selector?").then(function () {
+            alert('TODO: display popup for ' + prdNm + ':\n1) Exact match but with errors like prod outside deal range.\n2) Top 10 or 15 possible matches... maybe.');
         });
     }
-        
+
+    vm.removeProd = function (prdNm) {
+        kendo.confirm("This will remove product (" + prdNm + ") from the <b>Product Corrector</b> AND from the <b>Pricing Table</b>?<br/>Would you like to delete this product?").then(function () {
+            alert('TODO: delete from corrector and spreadsheet');
+        });
+    }
+
+    vm.suggestProd = function (prdNm) {
+        kendo.confirm("This is where we would suggest results for " + prdNm + "?").then(function () {});
+    }
+
     //Go to Next ROW for conflict or Invalid Product
     vm.nextRow = function () {
         var indx = vm.curRowIndx + 1;
@@ -459,18 +510,38 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
         $uibModalInstance.close(vm.ProductCorrectorData);
     }
     
-
-    //// NOT DONE
-    function openCAPBreakOut(dataItem, priceCondition) {
+    
+    //Getting CAP Product Details for Tooltip
+    vm.getPrductDetails = function (dataItem, priceCondition) {
         var currentPricingTableRow = [];
         if (ProductRows.length > 1) {
-            currentPricingTableRow = ProductRows[vm.currentRow - 1];
+            currentPricingTableRow = ProductRows[vm.issueRowKeys[vm.curRowIndx - 1] - 1];
+        }
+        else {
+            currentPricingTableRow = ProductRows[0];
+        }
+        return [{
+            'CUST_MBR_SID': CustSid,
+            'PRD_MBR_SID': dataItem.PRD_MBR_SID,
+            'GEO_MBR_SID': currentPricingTableRow.GEO_COMBINED,
+            'DEAL_STRT_DT': currentPricingTableRow.START_DT,
+            'DEAL_END_DT': currentPricingTableRow.END_DT,
+            'getAvailable': 'N',
+            'priceCondition': priceCondition
+        }];
+    }
+
+    //// NOT DONE
+    vm.openCAPBreakOut = function (dataItem, priceCondition) {
+        var currentPricingTableRow = [];
+        if (ProductRows.length > 1) {
+            currentPricingTableRow = ProductRows[vm.issueRowKeys[vm.curRowIndx - 1] - 1];
         }
         else {
             currentPricingTableRow = ProductRows[0];
         }
 
-        productData = {
+        var productData = {
             'CUST_MBR_SID': CustSid,
             'PRD_MBR_SID': dataItem.PRD_MBR_SID,
             'GEO_MBR_SID': currentPricingTableRow.GEO_COMBINED,
@@ -487,7 +558,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
             windowClass: 'cap-modal-window',
             size: 'lg',
             resolve: {
-                productData: angular.copy(productData),
+                productData: angular.copy(productData)
             }
         });
 
@@ -512,8 +583,19 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
                 delete GetProductCorrectorData.InValidProducts[key];
             }
 
-            if (!!GetProductCorrectorData.DuplicateProducts[key] && Object.keys(GetProductCorrectorData.DuplicateProducts[key]).length === 0) {
-                delete GetProductCorrectorData.DuplicateProducts[key];
+            if (!!GetProductCorrectorData.DuplicateProducts[key]) {
+                if (Object.keys(GetProductCorrectorData.DuplicateProducts[key]).length === 0) {
+                    delete GetProductCorrectorData.DuplicateProducts[key];
+                } else {
+                    var foundItems = false;
+                    for (var k in GetProductCorrectorData.DuplicateProducts[key]) {
+                        var item = GetProductCorrectorData.DuplicateProducts[key][k];
+                        if (Array.isArray(item) && item.length > 0) foundItems = true;
+                    }
+                    if (!foundItems)
+                        delete GetProductCorrectorData.DuplicateProducts[key];
+                    
+                }
             }
         }
 

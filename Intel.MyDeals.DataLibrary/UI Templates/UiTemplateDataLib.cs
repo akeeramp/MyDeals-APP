@@ -252,26 +252,6 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem
             {
                 Id = 29,
-                AtrbCd = AttributeCodes.CUST_ACCNT_DIV,
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                Width = 120,
-                DataType = "string",
-                UiType = "MULTISELECT",
-                LookupUrl = "/api/Customers/GetCustomerDivisionsByCustNmSid/",
-                LookupText = "CUST_DIV_NM",
-                LookupValue = "CUST_DIV_NM",
-            });
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 29,
-                AtrbCd = AttributeCodes.PTR_USER_PRD,
-                Label = "Contract Product *",
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                Width = 220
-            });
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 29,
                 AtrbCd = AttributeCodes.PTR_SYS_PRD,
                 Label = "Json String (will be hidden)",
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
@@ -294,6 +274,26 @@ namespace Intel.MyDeals.DataLibrary
                 //// This is how it should be set once the product selector is in place:
                 //IsReadOnly = true,
                 //IsHidden = true,
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
+                AtrbCd = AttributeCodes.CUST_ACCNT_DIV,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                Width = 120,
+                DataType = "string",
+                UiType = "MULTISELECT",
+                LookupUrl = "/api/Customers/GetCustomerDivisionsByCustNmSid/",
+                LookupText = "CUST_DIV_NM",
+                LookupValue = "CUST_DIV_NM",
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
+                AtrbCd = AttributeCodes.PTR_USER_PRD,
+                Label = "Contract Product *",
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                Width = 220
             });
             items.Add(new UiTemplateContainerItem
             {

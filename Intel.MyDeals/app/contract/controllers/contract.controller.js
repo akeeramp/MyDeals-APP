@@ -127,6 +127,7 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
     $scope.isNewContract = isNewContract;
     $scope.contractData.displayTitle = "";
 
+
     var updateDisplayTitle = function() {
         $scope.contractData.displayTitle = isNewContract
             ? $scope.contractData.TITLE
@@ -877,6 +878,10 @@ function ContractController($scope, $state, $filter, contractData, isNewContract
             $scope.isEditPricingTableDefaultsHidden = true;
         }
         $scope.addStrategyDisabled = false;
+
+        if (!$scope.contractData.PRC_ST) {
+            $scope.toggleAddStrategy();
+        }
 
         // **** PRICING TABLE Methods ****
         //

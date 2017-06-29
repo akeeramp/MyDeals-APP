@@ -5,10 +5,11 @@
 opPopover.$inject = ['$compile', 'dataService', '$timeout', 'logger'];
 
 function opPopover($compile, dataService, $timeout, logger) {
+    kendo.culture("en-US");
     return {
         scope: {
             opData: '&',
-            opOptions: '@',
+            opOptions: '@'
         },
         restrict: 'AE',
         transclude: true,
@@ -17,17 +18,17 @@ function opPopover($compile, dataService, $timeout, logger) {
         }],
         link: function (scope, element, attrs) {
             var capColumns = [
-                  { field: "CAP", title: "CAP" },
+                  { field: "CAP", title: "CAP", template: "#= isNaN(CAP) ? CAP : kendo.toString(parseFloat(CAP), 'c') #" },
                   { field: "GEO_MBR_SID", title: "GEO" },
                   { field: "CAP_START", title: "Start Date", template: "#= kendo.toString(new Date(CAP_START), 'M/d/yyyy') #" },
-                  { field: "CAP_END", title: "End Date", template: " #= kendo.toString(new Date(CAP_END), 'M/d/yyyy') #" },
+                  { field: "CAP_END", title: "End Date", template: " #= kendo.toString(new Date(CAP_END), 'M/d/yyyy') #" }
             ];
 
             var ycs2Columns = [
-                  { field: "YCS2", title: "YCS2" },
+                  { field: "YCS2", title: "YCS2", template: "#= isNaN(YCS2) ? YCS2 : kendo.toString(parseFloat(YCS2), 'c') #" },
                   { field: "GEO_MBR_SID", title: "GEO" },
                   { field: "YCS2_START", title: "Start Date", template: "#= kendo.toString(new Date(YCS2_START), 'M/d/yyyy') #" },
-                  { field: "YCS2_END", title: "End Date", template: " #= kendo.toString(new Date(YCS2_END), 'M/d/yyyy') #" },
+                  { field: "YCS2_END", title: "End Date", template: " #= kendo.toString(new Date(YCS2_END), 'M/d/yyyy') #" }
             ];
 
             scope.gridData = [];
@@ -48,7 +49,7 @@ function opPopover($compile, dataService, $timeout, logger) {
             scope.getData = function () {
                 var data = scope.opData();
                 // Fail silently
-                if (!!data && data.length == 1) {
+                if (!!data && data.length === 1) {
                     scope.loading = true;
                     dataService.post("api/Products/GetProductCAPYCS2Data/" + data[0].getAvailable + "/" + data[0].priceCondition, data).then(function (response) {
                         scope.loading = false;
@@ -65,7 +66,7 @@ function opPopover($compile, dataService, $timeout, logger) {
             scope.insidePopover = false;
 
             scope.dynamicPopover = {
-                templateUrl: 'capPopoverTemplate.html',
+                templateUrl: 'capPopoverTemplate.html'
             };
 
             scope.$watch('insidePopover', function (insidePopover) {
@@ -91,7 +92,7 @@ function opPopover($compile, dataService, $timeout, logger) {
                 if (scope.dynamicPopover.isOpen) {
                     return;
                 }
-                if (scope.gridData.length == 0) {
+                if (scope.gridData.length === 0) {
                     scope.getData();
                 }
                 scope.dynamicPopover.isOpen = true;
@@ -122,6 +123,43 @@ function opPopover($compile, dataService, $timeout, logger) {
                 $(document).unbind('mouseenter');
                 $(document).unbind('mouseout');
             });
+
+            scope.openCAPBreakOut = function (dataItem, priceCondition) {
+                var currentPricingTableRow = [];
+                if (ProductRows.length > 1) {
+                    currentPricingTableRow = ProductRows[vm.currentRow - 1];
+                }
+                else {
+                    currentPricingTableRow = ProductRows[0];
+                }
+
+                var productData = {
+                    'CUST_MBR_SID': CustSid,
+                    'PRD_MBR_SID': dataItem.PRD_MBR_SID,
+                    'GEO_MBR_SID': currentPricingTableRow.GEO_COMBINED,
+                    'DEAL_STRT_DT': currentPricingTableRow.START_DT,
+                    'DEAL_END_DT': currentPricingTableRow.END_DT,
+                    'getAvailable': 'N',
+                    'priceCondition': priceCondition
+                }
+                var capModal = $uibModal.open({
+                    backdrop: 'static',
+                    templateUrl: 'app/contract/productCAPBreakout/productCAPBreakout.html',
+                    controller: 'ProductCAPBreakoutController',
+                    controllerAs: 'vm',
+                    windowClass: 'cap-modal-window',
+                    size: 'lg',
+                    resolve: {
+                        productData: angular.copy(productData)
+                    }
+                });
+
+                capModal.result.then(
+                    function () {
+                    },
+                    function () {
+                    });
+            }
 
             function inside(target) {
                 return insideTrigger(target) || insidePopover(target);
