@@ -1009,7 +1009,7 @@ namespace Intel.MyDeals.BusinessLogic
             List<NodeMatch> myMatches = new List<NodeMatch>();
             foreach (var searchVal in searchString)
             {
-                MatchCollection matches = regex.Matches(searchVal.Key.ToUpper());
+                MatchCollection matches = regex.Matches(FuzzySearch.StripUnicodeCharactersFromString(searchVal.Key.ToUpper()));
                 if (matches.Count > 0)
                 {
                     int matchesLength = 0;

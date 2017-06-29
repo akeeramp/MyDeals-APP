@@ -458,7 +458,7 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetCAPForProduct")]
         [HttpPost]
         public List<ProductCAPYCS2> GetCAPForProduct([FromBody]dynamic product)
-        {            
+        {
             return SafeExecutor(() => _productsLib.GetCAPForProduct((int)product.productsid, (int)product.custSid, (string)product.geoSid, (DateTime)product.startDate, (DateTime)product.endDate)
                 , $"Unable to get Product CAP and YCS2 values"
             );
@@ -469,10 +469,11 @@ namespace Intel.MyDeals.Controllers.API
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        [Route("GetSearchString/{filter}")]
-        public IList<SearchString> GetSearchString(string filter)
+        [Route("GetSearchString")]
+        [HttpPost]
+        public IList<SearchString> GetSearchString([FromBody]dynamic input)
         {
-            return SafeExecutor(() => _productsLib.GetSearchString(filter)
+            return SafeExecutor(() => _productsLib.GetSearchString((string)input.filter)
                , $"Unable to get Product search results"
            );
         }

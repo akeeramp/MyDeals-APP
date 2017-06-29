@@ -60,7 +60,8 @@
         }
 
         function GetSearchString(dto) {
-            return dataService.get(apiBaseUrl + 'GetSearchString/' + dto);
+            var postObject = { filter: dto }
+            return dataService.post(apiBaseUrl + 'GetSearchString', postObject);
         }
 
         function GetProductAttributes(products) {

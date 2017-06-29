@@ -643,7 +643,7 @@
         getItems();
 
         // Called when user enters value into search box and hits enter
-        vm.searchProduct = function (userInput) {
+        vm.searchProduct = function (userInput, columnType) {
             userInput = !userInput ? vm.userInput : userInput;
             if (userInput == "") return [];
             var data = [{
@@ -655,6 +655,8 @@
                 END_DATE: pricingTableRow.END_DT,
                 GEO_COMBINED: pricingTableRow.GEO_COMBINED,
                 PROGRAM_PAYMENT: pricingTableRow.PROGRAM_PAYMENT,
+                COLUMN_TYPE: !!columnType ? (columnType == "EPM_NM" ? 1 : 0) : 0,
+                // Send 1 if EPM_NM
             }];
 
             ProductSelectorService.GetProductDetails(data, pricingTableRow.CUST_MBR_SID).then(function (response) {
@@ -721,7 +723,7 @@
             delay: 700,
             minLength: 2,
             select: function (e) {
-                vm.searchProduct(e.dataItem.Name);
+                vm.searchProduct(e.dataItem.Name, e.dataItem.Type);
             },
             //template: '<div class="productSelector searchTemplate">#: Name #<div><small><b>Type:</b> #= Type #</small></div></div>',
         };
