@@ -175,7 +175,7 @@ namespace Intel.MyDeals.DataLibrary
         /// Get Search string
         /// </summary>
         /// <returns></returns>
-        public IList<SearchString> GetSearchString()
+        public Dictionary<string, string> GetSearchString()
         {
             return DataCollections.GetSearchString();
         }

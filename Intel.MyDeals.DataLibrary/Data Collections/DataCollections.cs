@@ -144,9 +144,9 @@ namespace Intel.MyDeals.DataLibrary
             }
         }
 
-        private static List<SearchString> _getSearchString;
+        private static Dictionary<string, string> _getSearchString;
 
-        public static List<SearchString> GetSearchString()
+        public static Dictionary<string, string> GetSearchString()
         {
             // Keeping this call out of lock statement, get products cache
             var products = GetProductData();
@@ -154,7 +154,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 if (_getSearchString == null)
                 {
-                    _getSearchString = new List<SearchString>();
+                    var _getSearchStringList = new List<SearchString>();
                     var searchHierColumns = products.Where(x => !string.IsNullOrEmpty(x.HIER_VAL_NM) &&
                         x.PRD_ATRB_SID <= (int)ProductHierarchyLevelsEnum.MTRL_ID
                         && x.PRD_ATRB_SID >= (int)ProductHierarchyLevelsEnum.DEAL_PRD_TYPE)
@@ -169,17 +169,24 @@ namespace Intel.MyDeals.DataLibrary
                     var searchNandDensity = products.Where(x => !string.IsNullOrEmpty(x.NAND_Density) && x.PRD_ATRB_SID == 7008).
                                        Select(x => new SearchString { Name = x.NAND_Density, Type = ProductHierarchyLevelsEnum.NAND_DENSITY.ToString() });
 
-                    var searchEPM = products.Where(x => !string.IsNullOrEmpty(x.NAND_FAMILY) && x.PRD_ATRB_SID == 7008).
-                                       Select(x => new SearchString { Name = x.GDM_FMLY_NM, Type = ProductHierarchyLevelsEnum.GDM_FMLY_NM.ToString() });
+                    var searchEPM = products.Where(x => !string.IsNullOrEmpty(x.EPM_NM) && x.PRD_ATRB_SID == 7008).
+                                       Select(x => new SearchString { Name = x.EPM_NM, Type = ProductHierarchyLevelsEnum.EPM_NM.ToString() });
 
-                    _getSearchString.AddRange(searchHierColumns);
-                    _getSearchString.AddRange(searchGDMFamily);
-                    _getSearchString.AddRange(searchNandFamily);
-                    _getSearchString.AddRange(searchNandDensity);
-                    _getSearchString.AddRange(searchEPM);
+                    _getSearchStringList.AddRange(searchHierColumns);
+                    _getSearchStringList.AddRange(searchGDMFamily);
+                    _getSearchStringList.AddRange(searchNandFamily);
+                    _getSearchStringList.AddRange(searchNandDensity);
+                    _getSearchStringList.AddRange(searchEPM);
 
-                    return _getSearchString = _getSearchString.GroupBy(item => item.Name)
-                                .Select(item => item.First()).Distinct().ToList();
+                    _getSearchString = new Dictionary<string, string>();
+
+                    foreach (var searchString in _getSearchStringList)
+                    {
+                        if (!_getSearchString.Keys.Contains(searchString.Name))
+                            _getSearchString.Add(searchString.Name, searchString.Type);
+                    }
+
+                    return _getSearchString;
                 }
                 else
                 {

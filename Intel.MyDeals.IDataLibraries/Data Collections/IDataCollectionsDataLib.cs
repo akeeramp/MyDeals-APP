@@ -57,6 +57,6 @@ namespace Intel.MyDeals.IDataLibrary
 
         ProductSelectorWrapper GetProductSelectorWrapper();
 
-        IList<SearchString> GetSearchString();
+        Dictionary<string, string> GetSearchString();
     }
 }
