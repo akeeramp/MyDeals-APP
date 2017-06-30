@@ -196,7 +196,8 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
 
             try
             {
-                items = JsonConvert.DeserializeObject<ProdMappings>(LZString.decompressFromBase64(products));
+                //items = JsonConvert.DeserializeObject<ProdMappings>(LZString.decompressFromBase64(products));
+                items = JsonConvert.DeserializeObject<ProdMappings>(products);
             }
             catch (Exception ex)
             {

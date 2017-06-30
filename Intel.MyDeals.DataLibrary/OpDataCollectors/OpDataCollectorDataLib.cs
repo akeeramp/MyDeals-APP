@@ -300,6 +300,7 @@ namespace Intel.MyDeals.DataLibrary
             int IDX_ATRB_MTX_HASH = DB.GetReaderOrdinal(rdr, "ATRB_MTX_HASH"); // Attribute Matrix Hash, ex. "4:6/10:4"
 
             int IDX_ATRB_VAL = DB.GetReaderOrdinal(rdr, "ATRB_VAL"); // Atrb val combined
+            int IDX_ATRB_VAL_MAX = DB.GetReaderOrdinal(rdr, "ATRB_VAL_MAX"); // Atrb val Max
 
             int IDX_ATRB_RVS_NBR = DB.GetReaderOrdinal(rdr, "ATRB_RVS_NBR"); // Revision number
 
@@ -357,7 +358,8 @@ namespace Intel.MyDeals.DataLibrary
                     };
                 }
 
-                var value = rdr.GetTypedValue<string>(IDX_ATRB_VAL);
+                var valueMax = rdr.GetTypedValue<string>(IDX_ATRB_VAL_MAX);
+                var value = valueMax ?? rdr.GetTypedValue<string>(IDX_ATRB_VAL);     
 
                 string dndt = rdr.GetTypedValue<string>(IDX_DOT_NET_DATA_TYPE);
 
@@ -809,6 +811,7 @@ namespace Intel.MyDeals.DataLibrary
 
             // The table name must match 1:1 to the import table name...
             dt.TableName = TableName.MYDL_CL_WIP_ATRB_TMP;
+            List<string> varMaxAtrbs = new List<string> { AttributeCodes.PTR_SYS_PRD, AttributeCodes.PTR_SYS_INVLD_PRD };
 
             #region Get Ordinal Indexes
             int IDX_BTCH_ID = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ATRB_TMP.BTCH_ID, typeof(Guid)).Ordinal;
@@ -821,7 +824,8 @@ namespace Intel.MyDeals.DataLibrary
             int IDX_PARNT_OBJ_SID = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ATRB_TMP.PARNT_OBJ_SID, typeof(object)).Ordinal;
 
             int IDX_ATRB_SID = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ATRB_TMP.ATRB_SID, typeof(int)).Ordinal;
-            int IDX_ATRB_VAL = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ATRB_TMP.ATRB_VAL, typeof(object)).Ordinal;
+            int IDX_ATRB_VAL = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ATRB_TMP.ATRB_VAL, typeof(object)).Ordinal; 
+            int IDX_ATRB_VAL_MAX = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ATRB_TMP.ATRB_VAL_MAX, typeof(object)).Ordinal; // public const string ATRB_VAL_MAX = "ATRB_VAL_MAX";
 
             int IDX_DEAL_ATRB_MTX_SID = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ATRB_TMP.ATRB_MTX_SID, typeof(int)).Ordinal;
             int IDX_DEAL_ATRB_MTX_HASH = dt.Columns.Add(Entities.deal.MYDL_CL_WIP_ATRB_TMP.ATRB_MTX_HASH, typeof(string)).Ordinal;
@@ -868,7 +872,16 @@ namespace Intel.MyDeals.DataLibrary
                     {
                         r[IDX_DEAL_ATRB_MTX_HASH] = de.DimKey.HashPairs;
                     }
-                    r[IDX_ATRB_VAL] = de.AtrbValue;
+
+                    if (!varMaxAtrbs.Contains(de.AtrbCd)) // Then it is a std else max
+                    {
+                        r[IDX_ATRB_VAL] = de.AtrbValue; // STD value
+                    }
+                    else
+                    {
+                        r[IDX_ATRB_VAL_MAX] = de.AtrbValue; // MAX value
+                    }
+
                     r[IDX_MDX_CD] = OpDataElementStateConverter.ToString(de.State);
                     r[IDX_CHG_EMP_WWID] = chgWwid;
                     //r[IDX_CHG_DTM] = typeof(int)).Ordinal;

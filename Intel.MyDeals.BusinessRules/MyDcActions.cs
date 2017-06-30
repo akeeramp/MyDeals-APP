@@ -72,7 +72,7 @@ namespace Intel.MyDeals.BusinessRules
                     if (mrktSegValue.IndexOf("Consumer Retail Pull") >=0 || mrktSegValue == "All")
                     {
                         var customerQuarterDetails = new CustomerCalendarDataLib().GetCustomerQuarterDetails(custId, DateTime.Today, null, null);
-                        item[AttributeCodes.ON_ADD_DT] = customerQuarterDetails.QTR_STRT.Date; 
+                        item[AttributeCodes.ON_ADD_DT] = customerQuarterDetails.QTR_STRT.Date;
                     }
                 }
             }

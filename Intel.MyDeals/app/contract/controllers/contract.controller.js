@@ -1617,10 +1617,12 @@
             }
         }
         $scope.compress = function (data) {
+            return data;
             if (!data || data === "" || data[0] !== "{") return data;
             return LZString.compressToBase64(data);
         }
         $scope.uncompress = function (data) {
+            return data;
             if (!data || data === "" || data[0] === "{") return data;
             return LZString.decompressFromBase64(data);
         }

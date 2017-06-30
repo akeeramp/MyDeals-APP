@@ -257,13 +257,13 @@ namespace Intel.MyDeals.BusinessRules
                             Where = de => de.AtrbCdIn(new List<string> {AttributeCodes.GEO_COMBINED})
                         }
                     }
-                },
-                new MyOpRule
-                {
-                    Title="Validate Product Json",
-                    ActionRule = MyDcActions.CheckProductJson,
-                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
-                    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW}
+                //},
+                //new MyOpRule
+                //{
+                //    Title="Validate Product Json",
+                //    ActionRule = MyDcActions.CheckProductJson,
+                //    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
+                //    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW}
                 }
                 
             };
