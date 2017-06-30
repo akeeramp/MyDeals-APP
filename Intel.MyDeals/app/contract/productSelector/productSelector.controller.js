@@ -250,8 +250,8 @@
             dataSourceProduct.read();
             var data = {
                 "searchHash": item.path,
-                "startDate": pricingTableRow.START_DT,
-                "endDate": pricingTableRow.END_DT,
+                "startDate": moment(pricingTableRow.START_DT).format("l"),
+                "endDate": moment(pricingTableRow.END_DT).format("l"),
                 "selectionLevel": selectionLevel,
                 "drillDownFilter4": null,
                 "drillDownFilter5": null,
@@ -559,8 +559,8 @@
                 'CUST_MBR_SID': pricingTableRow.CUST_MBR_SID,
                 'PRD_MBR_SID': dataItem.PRD_MBR_SID,
                 'GEO_MBR_SID': pricingTableRow.GEO_COMBINED,
-                'DEAL_STRT_DT': pricingTableRow.START_DT,
-                'DEAL_END_DT': pricingTableRow.END_DT,
+                'DEAL_STRT_DT': moment(pricingTableRow.START_DT).format("l"),
+                'DEAL_END_DT': moment(pricingTableRow.END_DT).format("l"),
                 'getAvailable': 'N',
                 'priceCondition': priceCondition
             }];
@@ -572,8 +572,8 @@
                 'CUST_MBR_SID': pricingTableRow.CUST_MBR_SID,
                 'PRD_MBR_SID': dataItem.PRD_MBR_SID,
                 'GEO_MBR_SID': pricingTableRow.GEO_COMBINED,
-                'DEAL_STRT_DT': pricingTableRow.START_DT,
-                'DEAL_END_DT': pricingTableRow.END_DT,
+                'DEAL_STRT_DT': moment(pricingTableRow.START_DT).format("l"),
+                'DEAL_END_DT': moment(pricingTableRow.END_DT).format("l"),
                 'getAvailable': 'N',
                 'priceCondition': priceCondition
             }
@@ -732,8 +732,8 @@
         function showSingleProductHeirarchy(product) {
             var data = {
                 "searchHash": product.HIER_NM_HASH,
-                "startDate": pricingTableRow.START_DT,
-                "endDate": pricingTableRow.END_DT,
+                "startDate": moment(pricingTableRow.START_DT).format("l"),
+                "endDate": moment(pricingTableRow.END_DT).format("l"),
                 "selectionLevel": product.PRD_ATRB_SID,
                 "drillDownFilter4": null,
                 "drillDownFilter5": null,

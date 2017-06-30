@@ -1101,8 +1101,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                     'CUST_MBR_SID': $scope.$parent.$parent.getCustId(),
                     'PRD_MBR_SID': dataItem.PRODUCT_FILTER,
                     'GEO_MBR_SID': dataItem.GEO_COMBINED,
-                    'DEAL_STRT_DT': dataItem.START_DT,
-                    'DEAL_END_DT': dataItem.END_DT,
+                    'DEAL_STRT_DT': moment(dataItem.START_DT).format("l"),
+                    'DEAL_END_DT': moment(dataItem.END_DT).format("l"),
                     'getAvailable': 'N',
                     'priceCondition': priceCondition
                 }];
@@ -1113,8 +1113,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                     'CUST_MBR_SID': $scope.$parent.$parent.getCustId(),
                     'PRD_MBR_SID': dataItem.PRODUCT_FILTER,
                     'GEO_MBR_SID': dataItem.GEO_COMBINED,
-                    'DEAL_STRT_DT': dataItem.START_DT,
-                    'DEAL_END_DT': dataItem.END_DT,
+                    'DEAL_STRT_DT': moment(dataItem.START_DT).format("l"),
+                    'DEAL_END_DT': moment(dataItem.END_DT).format("l"),
                     'getAvailable': 'N', // If sent as 'Y' gets the current CAP info
                     'priceCondition': priceCondition // CAP or YCS2
                 }

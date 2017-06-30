@@ -422,8 +422,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var contract = $scope.$parent.$parent.contractData;
 
         var pricingTableRow = {
-            'START_DT': contract.START_DT,
-            'END_DT': contract.END_DT,
+            'START_DT': moment(contract.START_DT).format("l"),
+            'END_DT': moment(contract.END_DT).format("l"),
             'CUST_MBR_SID': contract.CUST_MBR_SID,
             'GEO_COMBINED': getFormatedGeos(root.curPricingTable["GEO_COMBINED"]),
             'PTR_SYS_PRD': "",
@@ -1265,8 +1265,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         && currentPricingTableRowData.PROGRAM_PAYMENT !== "" && currentPricingTableRowData.PROD_INCLDS != null && currentPricingTableRowData.PROD_INCLDS !== ""
                         && currentPricingTableRowData.GEO_COMBINED != null && currentPricingTableRowData.GEO_COMBINED !== "") {
                     var pricingTableRow = {
-                        'START_DT': currentPricingTableRowData.START_DT,
-                        'END_DT': currentPricingTableRowData.END_DT,
+                        'START_DT': moment(currentPricingTableRowData.START_DT).format("l"),
+                        'END_DT': moment(currentPricingTableRowData.END_DT).format("l"),
                         'CUST_MBR_SID': $scope.contractData.CUST_MBR_SID,
                         'GEO_COMBINED': getFormatedGeos(currentPricingTableRowData.GEO_COMBINED),
                         'PTR_SYS_PRD': currentPricingTableRowData.PTR_SYS_PRD,
@@ -1275,8 +1275,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     };
                 } else {
                     var pricingTableRow = {
-                        'START_DT': contract.START_DT,
-                        'END_DT': contract.END_DT,
+                        'START_DT': moment(contract.START_DT).format("l"),
+                        'END_DT': moment(contract.END_DT).format("l"),
                         'CUST_MBR_SID': contract.CUST_MBR_SID,
                         'GEO_COMBINED': getFormatedGeos(root.curPricingTable["GEO_COMBINED"]),
                         'PTR_SYS_PRD': "",
@@ -1382,8 +1382,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 USR_INPUT: row.PTR_USER_PRD,
                 EXCLUDE: "",
                 FILTER: row.PROD_INCLDS,
-                START_DATE: row.START_DT,
-                END_DATE: row.END_DT,
+                START_DATE: moment(row.START_DT).format("l"),
+                END_DATE: moment(row.END_DT).format("l"),
                 GEO_COMBINED: getFormatedGeos(row.GEO_COMBINED),
                 PROGRAM_PAYMENT: row.PROGRAM_PAYMENT,
                 CUST_MBR_SID: $scope.contractData.CUST_MBR_SID,
