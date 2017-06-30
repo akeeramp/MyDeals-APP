@@ -1612,8 +1612,8 @@
         $scope.compressJson = function (data) {
             if (!data.PricingTableRow) return;
             for (var d = 0; d < data.PricingTableRow.length; d++) {
-                data.PricingTableRow[d].PTR_SYS_INVLD_PRD = "";
                 data.PricingTableRow[d].PTR_SYS_PRD = $scope.compress(data.PricingTableRow[d].PTR_SYS_PRD);
+                data.PricingTableRow[d].PTR_SYS_INVLD_PRD = $scope.compress(data.PricingTableRow[d].PTR_SYS_INVLD_PRD);
             }
         }
         $scope.compress = function (data) {
@@ -1629,7 +1629,8 @@
         $scope.uncompressJson = function (data) {
             if (!data) return;
             for (var d = 0; d < data.length; d++) {
-                data[d].PTR_SYS_PRD = $scope.uncompress(data[d].PTR_SYS_PRD);
+                data[d].PTR_SYS_PRD = $scope.uncompress(data[d].PTR_SYS_PRD); 
+                data[d].PTR_SYS_INVLD_PRD = $scope.uncompress(data[d].PTR_SYS_INVLD_PRD);
             }
         }
 

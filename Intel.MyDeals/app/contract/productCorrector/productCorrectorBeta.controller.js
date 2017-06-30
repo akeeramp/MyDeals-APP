@@ -381,6 +381,8 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
 
         vm.applyFilterAndGrouping();
 
+        vm.selectRow(vm.curRowIndx);
+
         var allMatched = true;
         for (var m = 0; m < vm.curRowProds.length; m++) {
             if (vm.curRowProds[m].matchName === "" && vm.curRowProds[m].status === "Issue") allMatched = false;
@@ -391,8 +393,6 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
                 // no more work to do
                 vm.allDone = true;
             }
-        } else {
-            vm.selectRow(vm.curRowIndx);
         }
     }
 
@@ -451,8 +451,10 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
                 suggestedProduct: angular.copy(suggestedProduct)
             }
         });
+
         modal.result.then(
             function (productSelectorOutput) {
+
                 var validateSelectedProducts = productSelectorOutput.validateSelectedProducts;
 
                 for (var key in validateSelectedProducts) {
@@ -623,7 +625,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
 
     // Dismiss the Modal popup by clicking Cancel button
     vm.cancel = function () {
-        $uibModalInstance.close(vm.ProductCorrectorData);
+        $uibModalInstance.close(GetProductCorrectorData);
     }
 
     //Getting CAP Product Details for Tooltip
@@ -695,31 +697,29 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
 
         }
 
-        GetProductCorrectorData = vm.ProductCorrectorData;
-
         for (var r = 0; r < vm.numIssueRows; r++) {
             var key = vm.issueRowKeys[r];
 
-            if (!!GetProductCorrectorData.InValidProducts[key] && GetProductCorrectorData.InValidProducts[key].length === 0) {
-                delete GetProductCorrectorData.InValidProducts[key];
+            if (!!vm.ProductCorrectorData.InValidProducts[key] && vm.ProductCorrectorData.InValidProducts[key].length === 0) {
+                delete vm.ProductCorrectorData.InValidProducts[key];
             }
 
-            if (!!GetProductCorrectorData.DuplicateProducts[key]) {
-                if (Object.keys(GetProductCorrectorData.DuplicateProducts[key]).length === 0) {
-                    delete GetProductCorrectorData.DuplicateProducts[key];
+            if (!!vm.ProductCorrectorData.DuplicateProducts[key]) {
+                if (Object.keys(vm.ProductCorrectorData.DuplicateProducts[key]).length === 0) {
+                    delete vm.ProductCorrectorData.DuplicateProducts[key];
                 } else {
                     var foundItems = false;
-                    for (var k in GetProductCorrectorData.DuplicateProducts[key]) {
-                        var item = GetProductCorrectorData.DuplicateProducts[key][k];
+                    for (var k in vm.ProductCorrectorData.DuplicateProducts[key]) {
+                        var item = vm.ProductCorrectorData.DuplicateProducts[key][k];
                         if (Array.isArray(item) && item.length > 0) foundItems = true;
                     }
                     if (!foundItems)
-                        delete GetProductCorrectorData.DuplicateProducts[key];
+                        delete vm.ProductCorrectorData.DuplicateProducts[key];
                 }
             }
         }
 
-        $uibModalInstance.close(GetProductCorrectorData);
+        $uibModalInstance.close(vm.ProductCorrectorData);
     }
 
     //Master Product Data massaging

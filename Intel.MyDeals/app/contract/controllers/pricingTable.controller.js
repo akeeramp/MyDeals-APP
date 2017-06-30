@@ -1512,23 +1512,25 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 $timeout(function () {
                     var data = root.spreadDs.data();
                     var sourceData = root.pricingTableData.PRC_TBL_ROW;
-                    for (var key in transformResult.ProdctTransformResults) {
-                        var r = key - 1;
-                        // SAve Valid and InValid JSO into spreadsheet hidden columns
-                        if ((!!transformResult.InValidProducts[key] && transformResult.InValidProducts[key].length > 0) || !!transformResult.DuplicateProducts[key]) {
-                            var invalidJSON = {
-                                'ProdctTransformResults': transformResult.ProdctTransformResults[key],
-                                'InValidProducts': transformResult.InValidProducts[key], 'DuplicateProducts': transformResult.DuplicateProducts[key]
+                    if (!!transformResult && !!transformResult.ProdctTransformResults) {
+                        for (var key in transformResult.ProdctTransformResults) {
+                            var r = key - 1;
+                            // SAve Valid and InValid JSO into spreadsheet hidden columns
+                            if ((!!transformResult.InValidProducts[key] && transformResult.InValidProducts[key].length > 0) || !!transformResult.DuplicateProducts[key]) {
+                                var invalidJSON = {
+                                    'ProdctTransformResults': transformResult.ProdctTransformResults[key],
+                                    'InValidProducts': transformResult.InValidProducts[key], 'DuplicateProducts': transformResult.DuplicateProducts[key]
+                                }
+                                data[r].PTR_SYS_INVLD_PRD = JSON.stringify(invalidJSON);
+                                sourceData[r].PTR_SYS_INVLD_PRD = data[r].PTR_SYS_INVLD_PRD;
+                            } else {
+                                data[r].PTR_SYS_INVLD_PRD = "";
+                                sourceData[r].PTR_SYS_INVLD_PRD = data[r].PTR_SYS_INVLD_PRD;
                             }
-                            data[r].PTR_SYS_INVLD_PRD = JSON.stringify(invalidJSON);
-                            sourceData[r].PTR_SYS_INVLD_PRD = data[r].PTR_SYS_INVLD_PRD;
-                        } else {
-                            data[r].PTR_SYS_INVLD_PRD = "";
-                            sourceData[r].PTR_SYS_INVLD_PRD = data[r].PTR_SYS_INVLD_PRD;
-                        }
 
-                        data[r].PTR_SYS_PRD = !!transformResult.ValidProducts[key] ? JSON.stringify(transformResult.ValidProducts[key]) : "";
-                        sourceData[r].PTR_SYS_PRD = data[r].PTR_SYS_PRD;
+                            data[r].PTR_SYS_PRD = !!transformResult.ValidProducts[key] ? JSON.stringify(transformResult.ValidProducts[key]) : "";
+                            sourceData[r].PTR_SYS_PRD = data[r].PTR_SYS_PRD;
+                        }
                     }
                     root.spreadDs.sync();
                     if (!currentRow) { // If current row is undefined its clicked from top bar validate button
