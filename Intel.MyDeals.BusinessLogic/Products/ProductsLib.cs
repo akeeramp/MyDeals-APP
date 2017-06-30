@@ -455,7 +455,7 @@ namespace Intel.MyDeals.BusinessLogic
                                        from t in pa.DefaultIfEmpty()
                                        select new ProductEntryAttribute
                                        {
-                                           USR_INPUT = t == null ? p.USR_INPUT : t.PRD_NM,
+                                           USR_INPUT = t == null ? Regex.Replace(p.USR_INPUT, @"\s+", " ") : t.PRD_NM,
                                            COLUMN_TYPE = p.COLUMN_TYPE,
                                            END_DATE = p.END_DATE,
                                            EXCLUDE = p.EXCLUDE,
@@ -1002,8 +1002,33 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns></returns>
         public IList<SearchString> GetSearchString(string searchText)
         {
+            searchText = searchText.Trim();
             var searchString = GetSearchString();
-            string pattern = string.Join("|", searchText);
+
+            // Get the matching product
+            var matchingProducts = GetMatchingProduct(searchText, searchString);
+
+            // If no match found and product has space in it split the product and search
+            if (!matchingProducts.Any() && searchText.Contains(" "))
+            {
+                // Replace space with "*" regex inside this method will split the product
+                matchingProducts = GetMatchingProduct(searchText.Replace(" ", "*"), searchString);
+            }
+
+            // Still if there are no matches get the auto correct matches
+            if (!matchingProducts.Any())
+            {
+                matchingProducts = GetMatchingProduct(searchText, searchString, true);
+            }
+
+            return matchingProducts;
+        }
+
+        private IList<SearchString> GetMatchingProduct(string searchValue, Dictionary<string, string> searchString)
+        {
+            var searchText = searchValue.Split('*').ToList();
+
+            string pattern = string.Join("|", searchText.Select(Regex.Escape));
             Regex regex = new Regex(pattern, RegexOptions.IgnoreCase);
 
             List<NodeMatch> myMatches = new List<NodeMatch>();
@@ -1036,7 +1061,30 @@ namespace Intel.MyDeals.BusinessLogic
 
             var sortedList = myMatches.OrderByDescending(o => o.MatchLen).ThenByDescending(o => o.Weight);
             var matchedNames = sortedList.Take(30).Select(p => p.Value);
-            var rtn = matchedNames.Where(x => searchString.ContainsKey(x)).Select(x => new SearchString { Name = x, Type = searchString[x] });
+            return matchedNames.Where(x => searchString.ContainsKey(x)).Select(x => new SearchString { Name = x, Type = searchString[x] }).ToList();
+        }
+
+        /// <summary>
+        /// Get search string
+        /// </summary>
+        /// <param name="searchText"></param>
+        /// <returns></returns>
+        public IList<SearchString> GetMatchingProduct(string searchText, Dictionary<string, string> searchString, bool getAutocorrectSuggestions)
+        {
+            var suggestions = new Dictionary<string, int>();
+
+            List<NodeMatch> myMatches = new List<NodeMatch>();
+            int threshold = searchText.Length / 2;
+            searchText = searchText.Trim().ToUpper();
+            foreach (KeyValuePair<string, string> searchVal in searchString)
+            {
+                var numberOfEdits = FuzzySearch.DamerauLevenshteinDistance(searchText, searchVal.Key.ToUpper(), threshold);
+                if (!suggestions.Keys.Contains(searchVal.Key) && numberOfEdits <= threshold)
+                    suggestions.Add(searchVal.Key, numberOfEdits);
+            }
+
+            var sortedList = suggestions.OrderBy(o => o.Value).Take(7);
+            var rtn = sortedList.Select(x => new SearchString { Name = x.Key });
 
             return rtn.ToList();
         }
