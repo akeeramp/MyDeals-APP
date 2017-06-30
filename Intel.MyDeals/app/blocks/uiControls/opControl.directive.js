@@ -167,7 +167,10 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
                                     }
                                 }
                             } else {
-                                treeview.dataItem(matches).set("checked", true);  //only one match, let's check it regardless
+                                var node = treeview.dataItem(matches);
+                                if (typeof node != 'undefined' && node !== null) {    //for reason yet unknown to me, this for loop is executed multiple times and the first time findbytext does not detect children node at the country level and will sometimes thus error out - this fixes it but is only a hacky bandaid - figuring out why it does multiple calls may optimize runtime
+                                    treeview.dataItem(matches).set("checked", true);  //only one match, let's check it regardless
+                                }
                             }
                         }
                     }
