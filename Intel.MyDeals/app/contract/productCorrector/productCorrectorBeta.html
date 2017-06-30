@@ -41,11 +41,11 @@
                     <div>
                         <ul class="productpath breadcrumb">
                             <li ng-repeat="p in vm.curRowProds | unique:'name'">
-                                <span ng-class="{'strike': p.matchId != ''}">
+                                <span ng-class="{'strike': p.matchName != ''}">
                                     <span class="prdAnchor {{p.status}}" ng-click="vm.clkPrdUsrNm(p)" title="{{p.reason}}">{{:: p.name }}</span>
                                 </span>
                                 <div class="newProd">
-                                    <span ng-show="p.matchId">{{p.matchName}}</span>
+                                    <span ng-show="p.matchName">{{p.matchName}}</span>
                                     &nbsp;
                                 </div>
                             </li>
@@ -53,13 +53,13 @@
                     </div>
                 </div>
             </div>
-            <div class="row" style="margin: 10px 0 0 0;">
+            <div class="row" style="margin: 10px 0 0 0;" ng-show="!vm.allDone">
                 <table style="width: 100%; height: 100%;">
                     <tr>
                         <td>
                             <div class="lnavFilter">
                                 <div class="filterTitle">Refine By</div>
-                                
+
                                 <div class="filterGrp">
                                     <div ng-click="vm.isPrdCollapsed = !vm.isPrdCollapsed" style="cursor: pointer;">
                                         <i ng-class="{'intelicon-down': vm.isPrdCollapsed, 'intelicon-right-next': !vm.isPrdCollapsed}"></i> Products Entered
@@ -87,7 +87,7 @@
                                     </div>
                                     <div class="filterContainer" uib-collapse="vm.isLvlCollapsed">
                                         <div ng-repeat="item in vm.curRowLvl | orderBy: 'name'" style="max-height: 20px;">
-                                            <input type='checkbox' ng-click="vm.clickFilter()" ng-model="item.selected" class='check ckSm with-font' id="fltrLvlChk{{item.id}}" />                                            
+                                            <input type='checkbox' ng-click="vm.clickFilter()" ng-model="item.selected" class='check ckSm with-font' id="fltrLvlChk{{item.id}}" />
                                             <label for="fltrLvlChk{{item.id}}">
                                                 <span ng-bind-html="item.name"></span>
                                             </label>
@@ -118,6 +118,25 @@
                     </tr>
                 </table>
             </div>
+            <div class="row allDone" style="margin: 10px 0 0 0;" ng-show="vm.allDone">
+                <table style="width: 100%; height: 100%;">
+                    <tr>
+                        <td style="width: 100%;">
+                            <i class="intelicon-passed-completed-solid"></i>
+
+                            <div class="done-title">You are Done!</div>
+                            <div class="done-body">All the products have been matched.</div>
+                            <div class="done-confirm">
+                                Would you like to apply the changes to your Pricing Table?
+                            </div>
+                            <div>
+                                <button class="btn btn-default prdBtn" ng-click="vm.cancel()" style="margin-right:20px; font-size: 16px;">Cancel</button>
+                                <button class="btn btn-primary prdBtn" ng-click="vm.saveProducts()" style="font-size: 16px;">YES, Please Save & Close</button>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
 
         <div class="prodSelector modal-footer">
@@ -125,7 +144,7 @@
                 <button class="btn btn-default prdBtn" ng-click="vm.cancel()" style="margin-right:2px;">Cancel</button>
                 <button class="btn btn-primary prdBtn" ng-click="vm.saveProducts()">Save & Close</button>
             </div>
-            <div class="col-md-1" style="padding-top:15px;">
+            <div class="col-md-1">
                 <img ng-if="loading" src="/Images/loadingSmall.gif" />
             </div>
         </div>
@@ -195,6 +214,31 @@
         color: #00AEEF;
         font-size: 14px;
         margin-right: 5px;
+    }
+
+    .allDone {
+        background-color: #ffffff;
+        border-radius: 4px;
+        margin: 10px 0 0 0;
+        height: calc(100vh - 450px);
+        text-align: center;
+    }
+    .allDone i {
+        font-size: 60px;
+        color: #C4D600;
+        margin-right: 25px;
+    }
+    .done-title {
+        font-size: 30px;
+    }
+    .done-body {
+        font-size: 12px;
+    }
+    .done-confirm {
+        font-size: 16px;
+        text-align: center;
+        width: 100%;
+        padding: 25px 0;
     }
 
     .headerMsg {
@@ -403,9 +447,11 @@
     }
     span.prdAnchor.Warning {
         color: #FFA300;
+        cursor: pointer;
     }
     span.prdAnchor.Issue {
         color: #FC4C02;
+        cursor: pointer;
     }
     span.prdAnchor.Good {
         color: #C4D600;
@@ -601,6 +647,10 @@
         color: #000000;
     }
 
+    .grpTitle {
+        font-size: 18px;
+        font-weight: 600;
+    }
 
 
 
@@ -645,7 +695,6 @@
         content: "\f046";
         font-size: 22px;
         letter-spacing: 5px;
-        color: #C4D600;
         margin-left: 10px;
         margin-top: 2px;
         vertical-align: middle;
@@ -655,6 +704,5 @@
     }
     input[type=checkbox].with-font:focus + label:before {
         font-weight: bold;
-        color:#C4D600;
     }
 </style>

@@ -1617,7 +1617,7 @@
             }
         }
         $scope.compress = function (data) {
-            if (data === "" || data[0] !== "{") return data;
+            if (!data || data === "" || data[0] !== "{") return data;
             return LZString.compressToBase64(data);
         }
         $scope.uncompress = function (data) {

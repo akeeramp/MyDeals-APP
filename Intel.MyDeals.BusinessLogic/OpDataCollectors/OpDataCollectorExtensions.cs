@@ -219,7 +219,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             // Now check for changes to see if the PASSED_VALIDATION flag needs to be reset
             IOpDataElement dePassValid = dc.GetDataElement(AttributeCodes.PASSED_VALIDATION);
-            if (dePassValid != null && dc.ModifiedDataElements.Any())
+            if (dePassValid != null && dc.ModifiedDataElements.Any(d => d.AtrbCd != AttributeCodes.PASSED_VALIDATION))
             {
                 dePassValid.AtrbValue = PassedValidation.Dirty;
             }

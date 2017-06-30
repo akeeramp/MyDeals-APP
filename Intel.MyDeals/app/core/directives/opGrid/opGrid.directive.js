@@ -852,6 +852,11 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 return valid;
             }
 
+            $scope.clkSearchGrid = function (e) {
+                if (e.keyCode === 13)
+                    $scope.searchGrid();
+            }
+
             $scope.searchGrid = function () {
                 var searchValue = $scope.searchFilter;
 
@@ -868,27 +873,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                             operator: "eq",
                             value: searchValue
                         }, {
-                            field: "DC_PARENT_ID",
-                            operator: "eq",
-                            value: searchValue
-                        }, {
-                            field: "PASSED_VALIDATION",
-                            operator: "contains",
-                            value: searchValue
-                        }, {
-                            field: "START_DT",
-                            operator: "eq",
-                            value: searchValue
-                        }, {
-                            field: "END_DT",
-                            operator: "eq",
-                            value: searchValue
-                        }, {
                             field: "WF_STG_CD",
-                            operator: "contains",
-                            value: searchValue
-                        }, {
-                            field: "OBJ_SET_TYPE_CD",
                             operator: "contains",
                             value: searchValue
                         }, {
@@ -900,119 +885,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                             operator: "contains",
                             value: searchValue
                         }, {
-                            field: "PRODUCT_FILTER",
-                            operator: "contains",
-                            value: searchValue
-                        }, {
-                            field: "DEAL_COMB_TYPE",
-                            operator: "contains",
-                            value: searchValue
-                        }, {
-                            field: "ECAP_PRICE",
-                            operator: "eq",
-                            value: searchValue
-                        }, {
-                            field: "CAP_INFO",
-                            operator: "contains",
-                            value: searchValue
-                        }, {
-                            field: "CAP",
-                            operator: "eq",
-                            value: searchValue
-                        }, {
-                            field: "CAP_STRT_DT",
-                            operator: "eq",
-                            value: searchValue
-                        }, {
-                            field: "CAP_END_DT",
-                            operator: "eq",
-                            value: searchValue
-                        }, {
-                            field: "YCS2_INFO",
-                            operator: "contains",
-                            value: searchValue
-                        }, {
-                            field: "YCS2_PRC_IRBT",
-                            operator: "eq",
-                            value: searchValue
-                        }, {
-                            field: "YCS2_START_DT",
-                            operator: "eq",
-                            value: searchValue
-                        }, {
-                            field: "YCS2_END_DT",
-                            operator: "eq",
-                            value: searchValue
-                        }, {
-                            field: "VOLUME",
-                            operator: "eq",
-                            value: searchValue
-                        }, {
-                            field: "ON_ADD_DT",
-                            operator: "eq",
-                            value: searchValue
-                        }, {
-                            field: "DEAL_SOLD_TO_ID",
-                            operator: "contains",
-                            value: searchValue
-                        }, {
-                            field: "EXPIRE_YCS2",
-                            operator: "contains",
-                            value: searchValue
-                        }, {
-                            field: "REBATE_TYPE",
-                            operator: "contains",
-                            value: searchValue
-                        }, {
-                            field: "MRKT_SEG",
-                            operator: "contains",
-                            value: searchValue
-                        }, {
-                            field: "GEO_COMBINED",
-                            operator: "contains",
-                            value: searchValue
-                        }, {
-                            field: "TRGT_RGN",
-                            operator: "contains",
-                            value: searchValue
-                        }, {
-                            field: "PAYOUT_BASED_ON",
-                            operator: "contains",
-                            value: searchValue
-                        }, {
-                            field: "PROGRAM_PAYMENT",
-                            operator: "contains",
-                            value: searchValue
-                        }, {
-                            field: "TERMS",
-                            operator: "contains",
-                            value: searchValue
-                        }, {
-                            field: "REBATE_BILLING_START",
-                            operator: "eq",
-                            value: searchValue
-                        }, {
-                            field: "REBATE_BILLING_END",
-                            operator: "eq",
-                            value: searchValue
-                        }, {
-                            field: "CONSUMPTION_REASON",
-                            operator: "contains",
-                            value: searchValue
-                        }, {
-                            field: "CONSUMPTION_REASON_CMNT",
-                            operator: "contains",
-                            value: searchValue
-                        }, {
-                            field: "PRD_COST",
-                            operator: "eq",
-                            value: searchValue
-                        }, {
-                            field: "MEET_COMP_PRICE_QSTN",
-                            operator: "contains",
-                            value: searchValue
-                        }, {
-                            field: "BACK_DATE_RSN",
+                            field: "NOTES",
                             operator: "contains",
                             value: searchValue
                         }

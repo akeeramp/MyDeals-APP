@@ -590,7 +590,7 @@ namespace Intel.MyDeals.BusinessLogic
         {
             // Apply rules to save packets here.  If validations are hit, append them to the DC and packet message lists.
             bool dataHasValidationErrors = false;
-            
+            bool tblModifiedTrigger = false;
             List<OpDataElementType> ignoreTypes = new List<OpDataElementType>();
             if (sourceEvent == OpDataElementType.PRC_TBL.ToString()) ignoreTypes.Add(OpDataElementType.WIP_DEAL);
             if (sourceEvent == OpDataElementType.WIP_DEAL.ToString()) ignoreTypes.Add(OpDataElementType.PRC_TBL);
@@ -598,6 +598,11 @@ namespace Intel.MyDeals.BusinessLogic
             if (validateIds.Any() && sourceEvent == OpDataElementType.PRC_TBL.ToString() && myDealsData.ContainsKey(OpDataElementType.PRC_TBL_ROW))
             {
                 myDealsData.InjectParentStages(sourceEvent);
+            }
+
+            if (myDealsData.ContainsKey(OpDataElementType.PRC_TBL_ROW) && myDealsData[OpDataElementType.PRC_TBL_ROW].AllDataElements.Any(d => d.State == OpDataElementState.Modified && d.AtrbCd != AttributeCodes.PASSED_VALIDATION && d.AtrbCd != AttributeCodes.WF_STG_CD))
+            {
+                tblModifiedTrigger = true;
             }
 
             List<int> dirtyPtrs = new List<int>();
@@ -663,7 +668,8 @@ namespace Intel.MyDeals.BusinessLogic
                         // if WIP and PTR is NOT finalizing... set WIP to dirty
                         if (opDataElementType == OpDataElementType.WIP_DEAL && dirtyPtrs.Contains(dc.DcParentID))
                         {
-                            dc.SetAtrb(AttributeCodes.PASSED_VALIDATION, PassedValidation.Dirty.ToString());
+                            if (tblModifiedTrigger)
+                                dc.SetAtrb(AttributeCodes.PASSED_VALIDATION, PassedValidation.Dirty.ToString());
                         }
                         else
                         {
