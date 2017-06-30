@@ -1,0 +1,295 @@
+    .marginRight {
+        margin-right: 10px;
+    }
+
+    .prodSelectorSearch {
+        padding-top: 9px;
+        overflow: hidden;
+    }
+
+        .prodSelectorSearch .prod-autocomplete {
+            padding-top: 0px;
+            padding-bottom: 0px;
+        }
+
+    .textProdSelector {
+        font-size: 19px;
+        color: white;
+    }
+
+    .insertAtRowsText {
+        color: white;
+        font-size: 16px;
+        text-align: right;
+    }
+
+    .prodHeader {
+        color: white;
+        font-size: 32px;
+    }
+
+    .breadCrumbWrapper {
+        padding-left: 10px;
+        padding-right: 10px;
+        font-size: 21px;
+    }
+
+    .modalCloseIcon {
+        color: white;
+        font-size: 32px;
+        padding-top: 12px;
+        padding-left: 20px;
+    }
+
+    .productSelectorpath.breadcrumb > li + li:before {
+        padding: 0 5px;
+        color: white;
+        content: ">";
+        font-size: 16px;
+    }
+
+    .productSelectorpath.breadcrumb {
+        color: white;
+        background-color: #1a3e6f;
+        padding: 10px;
+        margin-bottom: 0px;
+    }
+
+    a.prdAnchor {
+        color: white;
+    }
+
+        a.prdAnchor:hover {
+            color: #01AEEF;
+            text-decoration: none;
+        }
+
+    .drillDown.btn-group button {
+        background-color: #01AEEF;
+        border-left: none;
+        border-top: none;
+        border-bottom: none;
+        border-right: 1px solid white;
+        color: white; /* White text */
+        cursor: pointer; /* Pointer/hand icon */
+        float: left; /* Float the buttons side by side */
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    .drillDown {
+        background-color: #01AEEF;
+    }
+
+        .drillDown.btn-group {
+            padding-top: 3px;
+            padding-bottom: 3px;
+        }
+
+            .drillDown.btn-group.btn {
+                white-space: normal !important;
+                word-wrap: break-word;
+            }
+
+            .drillDown.btn-group button:not(:last-child) {
+                border-right: none; /* Prevent double borders */
+            }
+
+            .drillDown.btn-group button.noborder {
+                border-right: none;
+            }
+
+            /* Add a background color on hover */
+            .drillDown.btn-group button:hover {
+                background-color: #01AEEF;
+                color: #1a3e6f;
+            }
+
+            .drillDown.btn-group button:focus, .button:active {
+                outline: none !important;
+                background-color: #01AEEF;
+            }
+
+    .noLeftBorder {
+        border-left: none !important;
+    }
+
+    .prodDrillDownLarge {
+        background-color: #01AEEF;
+        border-bottom: 2px solid #1a3e6f;
+        border-left: 1px solid #ffffff;
+        border-right: none;
+        border-top: none;
+        text-align: center;
+    }
+
+        .prodDrillDownLarge p {
+            font-size: 13px;
+            margin-top: 11px;
+            color: #fff;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+            .prodDrillDownLarge p:hover {
+                color: #1a3e6f;
+            }
+
+    .prodSelected.ui-select-multiple.ui-select-bootstrap {
+        min-height: 100px !important;
+        max-height: 100px !important;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .err-Search {
+        color: #FF6E77;
+        font-size: 12px !important;
+        padding-left: 1px !important;
+        padding-top: 2px !important;
+    }
+
+    .prdBtn {
+        font-size: 13px;
+    }
+
+        .prdBtn.btn-primary {
+            background-color: #01AEEF;
+        }
+
+            .prdBtn.btn-primary:hover {
+                background-color: #01AEEF;
+                color: #1a3e6f;
+            }
+
+            .prdBtn.btn-primary:focus, .btn-primary:active {
+                outline: none !important;
+                background-color: #01AEEF;
+            }
+
+    .prodSelector.modal-body {
+        padding-top: 2px;
+        padding-bottom: 0px;
+        min-height: calc(85vh - 365px);
+        max-height: calc(85vh - 365px);
+        overflow-y: auto;
+    }
+
+    .prodSelector.modal-footer {
+        border-top: none;
+    }
+
+    .prodSelector.modal-header {
+        border-bottom: none;
+        padding-bottom: 0px;
+    }
+
+    .prodSelector.kendoGridHeight {
+        height: calc(85vh - 400px);
+    }
+
+    .prdSelector-modal-window, .modal-dialog {
+        width: 85%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .checkbox-custom {
+        opacity: 0;
+        position: absolute;
+    }
+
+    .checkbox-custom, .checkbox-custom-label {
+        display: inline-block;
+        vertical-align: middle;
+        margin: 5px;
+        cursor: pointer;
+    }
+
+    .checkbox-custom-label {
+        position: relative;
+    }
+
+    .checkbox-custom + .checkbox-custom-label:before {
+        content: '';
+        background: #fff;
+        border: 1.5px solid #eee;
+        border-radius: 4px;
+        display: inline-block;
+        vertical-align: middle;
+        width: 22px;
+        height: 20px;
+        padding: 2px;
+        text-align: center;
+    }
+
+    .checkbox-custom:checked + .checkbox-custom-label:before {
+        background: #01AEEF;
+    }
+
+    .checkbox-custom:hover + .checkbox-custom-label:before {
+        border: 1.5px solid #01AEEF;
+    }
+
+    .prodSelector-grid.k-grid td {
+        white-space: nowrap;
+        color: #000000;
+    }
+
+    .prodSelector-grid.k-grid tr.k-alt {
+        background-color: transparent;
+    }
+
+    .prodSelector-grid.k-grid .k-grid-header th.k-header {
+        vertical-align: middle;
+    }
+
+    .productSelector.searchTemplate {
+        border-bottom: 1px solid #ddd;
+    }
+
+    .selector.popover {
+        font-size: 12px;
+    }
+
+    .k-treelist.product {
+        color: #fff;
+        font-size: 14px;
+        font-weight: 400;
+        font-family: 'Intel Clear';
+    }
+
+    .k-treelist .k-template {
+        color: #fff;
+        font-size: 14px;
+        font-weight: 400;
+        font-family: 'Intel Clear';
+    }
+
+    .k-treeview .k-icon.k-i-collapse {
+        color: #fff;
+        font-size: 14px;
+    }
+
+    .k-treeview .k-icon.k-i-expand {
+        color: #fff;
+        font-size: 14px;
+    }
+
+    .k-treeview .k-in.k-state-hover {
+        background: #01AEEF;
+        color: #fff;
+    }
+
+    .k-treeview .k-in {
+        color: white;
+    }
+
+        .k-treeview .k-in.k-state-selected.k-state-focused {
+            background: #01AEEF;
+        }
+
+    .k-treeview .k-state-focused {
+        background: #01AEEF;
+    }

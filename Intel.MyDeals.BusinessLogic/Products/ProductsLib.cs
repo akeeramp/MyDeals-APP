@@ -333,6 +333,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             //  Product match master list
             var productMatchResults = GetProductDetails(productsTodb, CUST_MBR_SID);
+
             // Get duplicate and Valid Products
             ExtractValidandDuplicateProducts(productLookup, productMatchResults);
 
@@ -455,7 +456,7 @@ namespace Intel.MyDeals.BusinessLogic
                                        from t in pa.DefaultIfEmpty()
                                        select new ProductEntryAttribute
                                        {
-                                           USR_INPUT = t == null ? Regex.Replace(p.USR_INPUT, @"\s+", " ") : t.PRD_NM,
+                                           USR_INPUT = t == null ? p.USR_INPUT : t.PRD_NM,
                                            COLUMN_TYPE = p.COLUMN_TYPE,
                                            END_DATE = p.END_DATE,
                                            EXCLUDE = p.EXCLUDE,
@@ -1007,13 +1008,6 @@ namespace Intel.MyDeals.BusinessLogic
 
             // Get the matching product
             var matchingProducts = GetMatchingProduct(searchText, searchString);
-
-            // If no match found and product has space in it split the product and search
-            if (!matchingProducts.Any() && searchText.Contains(" "))
-            {
-                // Replace space with "*" regex inside this method will split the product
-                matchingProducts = GetMatchingProduct(searchText.Replace(" ", "*"), searchString);
-            }
 
             // Still if there are no matches get the auto correct matches
             if (!matchingProducts.Any())

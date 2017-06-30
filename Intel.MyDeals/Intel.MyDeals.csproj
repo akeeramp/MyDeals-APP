@@ -837,6 +837,7 @@
     <Content Include="css\angular-gridster.css" />
     <Content Include="css\nv.d3.css" />
     <Content Include="css\nv.d3.min.css" />
+    <Content Include="css\productselector.css" />
     <Content Include="css\select.min.css" />
     <Content Include="css\select2.min.css" />
     <Content Include="Content\Site.css" />
