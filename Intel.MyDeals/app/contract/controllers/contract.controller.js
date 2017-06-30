@@ -1441,8 +1441,8 @@
                             if (results.data.PRC_TBL_ROW[i].warningMessages !== undefined && results.data.PRC_TBL_ROW[i].warningMessages.length > 0) anyWarnings = true;
                         }
                         $scope.updateResults(results.data.PRC_TBL_ROW, $scope.pricingTableData.PRC_TBL_ROW);
-                        $scope.spreadDs.read();
-                        $scope.syncCellsOnAllRows($scope.pricingTableData.PRC_TBL_ROW); //results.data.PRC_TBL_ROW
+                        $scope.spreadDs.read();    
+                        $scope.syncCellsOnAllRows(results.data.PRC_TBL_ROW);
                     }
                     if (!!results.data.WIP_DEAL) {
                         for (i = 0; i < results.data.WIP_DEAL.length; i++) {
