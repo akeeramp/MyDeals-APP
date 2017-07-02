@@ -99,7 +99,14 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.IA_BENCH,
                                 AttributeCodes.COMP_TARGET_SYSTEM_PRICE,
                                 AttributeCodes.PRD_COST,
-                                AttributeCodes.YCS2_OVERLAP_OVERRIDE
+                                AttributeCodes.YCS2_OVERLAP_OVERRIDE,
+                                AttributeCodes.CUST_MBR_SID,
+                                AttributeCodes.ECAP_FLR,
+                                AttributeCodes.YCS2_OVERLAP_OVERRIDE,
+                                AttributeCodes.PRD_COST,
+                                AttributeCodes.COST_TYPE_USED,
+                                AttributeCodes.RETAIL_PULL,
+                                AttributeCodes.RETAIL_PULL_USR_DEF
                             }
                         }
                     }

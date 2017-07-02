@@ -34,6 +34,7 @@ namespace Intel.MyDeals
                 "~/Scripts/angular-bootstrap-toggle.js",
                 "~/Scripts/Angular/select.min.js",
                 "~/Scripts/Angular/angular-linq.min.js",
+                "~/Scripts/Angular/ngStorage.min.js",
                 "~/Scripts/angular-gridster.min.js",
                 "~/Scripts/d3/d3.min.js",
                 "~/Scripts/angular-nvd3.min.js",

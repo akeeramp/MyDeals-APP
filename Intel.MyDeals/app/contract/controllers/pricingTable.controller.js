@@ -231,7 +231,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     "Groups": ["Deal Info"]
                 },
                 "OBJ_SET_TYPE_CD": {
-                    "Groups": ["Deal Info"]
+                    "Groups": ["All"]
                 },
                 "PTR_USER_PRD": {
                     "Groups": ["Deal Info"]
@@ -860,6 +860,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             for (var key in data) {
                 if (data.hasOwnProperty(key) && !data[key]._actions) {
                     if (!!data[key].DC_ID && data[key].DC_ID !== "") {
+
+                        // Validation Check
                         var item = data[key].PASSED_VALIDATION;
                         if (!!item) {
                             if (item === "Finalizing" || item === "Valid") {
@@ -873,6 +875,19 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         } else if (item === 0) {
                             sheet.range("A" + row + ":A" + row).background("#FC4C02").color("#FFFFFF");
                         }
+
+                        // Product Status
+                        if (!!data[key].PTR_SYS_INVLD_PRD) { // validated and failed
+                            sheet.range("E" + row + ":E" + row).color("#FC4C02").bold(true);
+                            //sheet.range("E" + row + ":E" + row).borderLeft({ size: 6, color: "#FC4C02" });
+                        } else if (!!data[key].PTR_SYS_PRD) { // validated and passed
+                            sheet.range("E" + row + ":E" + row).color("#C4D600").bold(false);
+                            //sheet.range("E" + row + ":E" + row).borderLeft({ size: 6, color: "#C4D600" });
+                        } else { // not validated
+                            sheet.range("E" + row + ":E" + row).color("#000000").bold(false);
+                            //sheet.range("E" + row + ":E" + row).borderLeft({ size: 6, color: "transparent" });
+                        }
+
                     } else {
                         sheet.range("A" + row + ":A" + row).background("#eeeeee").color("#003C71");
                     }
@@ -1571,6 +1586,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         }
                     }
                     root.spreadDs.sync();
+
+                    root.child.setRowIdStyle(data);
                     if (!currentRow) { // If current row is undefined its clicked from top bar validate button
                         if (!publishWipDeals) {
                             root.validatePricingTable();

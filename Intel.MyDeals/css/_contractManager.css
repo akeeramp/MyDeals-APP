@@ -985,7 +985,7 @@
 
 	/* Undo / redo buttons */
 	.k-spreadsheet .k-spreadsheet-quick-access-toolbar{
-		margin-left:120px;
+		margin-left: 135px;
 	}
 	.k-spreadsheet .k-spreadsheet-quick-access-toolbar .k-button
 	, .k-spreadsheet .k-spreadsheet-sheets-bar .k-button {

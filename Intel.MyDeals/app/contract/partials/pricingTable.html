@@ -1,8 +1,22 @@
 ﻿<div ui-view="wipDealView" class="fullHeight">
     
     <div style="position:absolute; left: 5px; z-index: 900;">
+        <!-- Validate Products Button -->
+        <button class="btn btn-sm ssToolbarBtn" ng-click="validatePricingTableProducts()" title="Save and Validate the Pricing Table.">
+            <table>
+                <tr>
+                    <td>
+                        <i class="fa fa-floppy-o skyBlue" aria-hidden="true" style="font-size: 30px"></i>
+                    </td>
+                    <td style="padding-left: 5px; color: #00AEEF;">
+                        Save & Validate<br/>
+                        Pricing Table
+                    </td>
+                </tr>
+            </table>
+        </button>
 		<!-- Save Button -->
-		<button class="btn btn-sm ssToolbarBtn" ng-class="{'disabled': !_dirty}" ng-click="saveEntireContract()" title="Save Pricing Table">
+		<!--<button class="btn btn-sm ssToolbarBtn" ng-class="{'disabled': !_dirty}" ng-click="saveEntireContract()" title="Save Pricing Table">
 			<table>
 				<tr>
 					<td>
@@ -13,10 +27,10 @@
                     </td>
 				</tr>
 			</table>
-		</button>
+		</button>-->
 	</div>
 
-	<div style="position:absolute; left: 200px; z-index: 900;">
+	<div style="position:absolute; left: 215px; z-index: 900;">
 		<table style="height: 37px;">
 			<tr>
 				<td style="padding: 1px 2px 0 10px;">
@@ -34,19 +48,6 @@
 						</table>
 					</button>
 
-					<!-- Validate Products Button -->
-					<button class="btn btn-sm ssToolbarBtn" ng-click="validatePricingTableProducts()" title="Validate the Spreadsheet.  This will also Save the Pricing Table.">
-						<table>
-							<tr>
-								<td>
-									<i class="intelicon-protection-checked-verified-outlined skyBlue" aria-hidden="true" style="font-size: 30px"></i>
-								</td>
-								<td style="padding-left: 5px; color: #00AEEF;">
-									Validate
-								</td>
-							</tr>
-						</table>
-					</button>
 					<button class="btn btn-sm ssToolbarBtn" ng-click="toggleTerms()" title="Show/Hide Additional Discounts and Requirements.">
 						<table>
 							<tr>

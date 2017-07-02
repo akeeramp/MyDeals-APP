@@ -45,6 +45,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
             $scope.openCAPBreakOut = openCAPBreakOut;
             $scope.getPrductDetails = getPrductDetails;
             $scope.numSoftWarn = $scope.opOptions.numSoftWarn;
+            $scope.dealTypes = [];
+            $scope.dealCnt = 0;
 
             $scope.assignColSettings = function () {
                 if ($scope.opOptions.columns === undefined) return [];
@@ -318,6 +320,9 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 $scope.selectFirstTab();
             }
 
+            $scope.displayDealTypes = function() {
+                return !!$scope.dealTypes ? $scope.dealCnt + " " + $scope.dealTypes.join() + ($scope.dealCnt === 1 ? " Deal" : " Deals") : "";
+            }
             $scope.contractDs = new kendo.data.DataSource({
                 transport: {
                     read: function (e) {
@@ -327,7 +332,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                             if (item.isLinked === undefined) item.isLinked = false;
                             if (childParent[item.DC_PARENT_ID] === undefined) childParent[item.DC_PARENT_ID] = 0;
                             childParent[item.DC_PARENT_ID]++;
+                            if ($scope.dealTypes.indexOf(item.OBJ_SET_TYPE_CD) < 0) $scope.dealTypes.push(item.OBJ_SET_TYPE_CD);
                         }
+
+                        $scope.dealCnt = $scope.opData.length;
 
                         // now set total values
                         for (var j = 0; j < $scope.opData.length; j++) {
@@ -380,7 +388,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 schema: {
                     model: $scope.opOptions.model
                 },
-                pageSize: 25
+                pageSize: 50
             });
 
             $scope.ds = {
@@ -395,7 +403,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 reorderable: true,
                 pageable: {
                     refresh: true,
-                    pageSizes: [10, 25, 50, "all"],
+                    pageSizes: [25, 50, 100],
                     buttonCount: 5
                 },
                 save: function (e) {
@@ -416,7 +424,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                         $scope.grid.closeCell();
                     }
                 },
-                dataBound: function (e, f) {
+                dataBound: function (e) {
                     if ($scope.curGroup === "") {
                         $scope.selectFirstTab();
                         $scope.validateGrid();
@@ -462,7 +470,6 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
 
             	return (month + "/" + day + "/" + year + " " + hour + ':' + minute + ':' + second);
             }
-
 
             $scope.lookupEditor = function (container, options) {
                 var field = $(container).closest("[data-role=grid]").data("kendoGrid").dataSource.options.schema.model.fields[options.field];

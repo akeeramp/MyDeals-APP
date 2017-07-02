@@ -87,19 +87,19 @@
 
         <div ng-if="isAddPricingTableHidden">
             <div style="text-align: right;">
-                <button ng-show="!addTableDisabled" class="btn btn-sm btn-primary" ng-click="hideEditPricingTableDefaults()">Cancel</button>
-                <button ng-show="addTableDisabled" class="btn btn-sm btn-primary btn-pending" ng-click="hideEditPricingTableDefaults()">Cancel</button>
-                <button ng-show="!addTableDisabled" class="btn btn-sm btn-primary" ng-click="customEditPtValidate()" type="submit">Save Defaults</button>
-                <button ng-show="addTableDisabled" class="btn btn-sm btn-primary btn-pending">Save Defaults</button>
+                <button ng-show="!addTableDisabled" class="btn btn-sm btn-primary" ng-click="hideEditPricingTableDefaults()" style="background-color: #00AEEF;">Cancel</button>
+                <button ng-show="addTableDisabled" class="btn btn-sm btn-primary btn-pending" ng-click="hideEditPricingTableDefaults()" style="background-color: #00AEEF;">Cancel</button>
+                <button ng-show="!addTableDisabled" class="btn btn-sm btn-primary" ng-click="customEditPtValidate()" type="submit" style="background-color: #00AEEF;">Save Defaults</button>
+                <button ng-show="addTableDisabled" class="btn btn-sm btn-primary btn-pending" style="background-color: #00AEEF;">Save Defaults</button>
             </div>
         </div>
 
         <div ng-if="!isAddPricingTableHidden">
             <div style="text-align: right;">
-                <button ng-show="!addTableDisabled"class="btn btn-sm btn-primary" ng-click="hideAddPricingTable()">Cancel</button>
-                <button ng-show="addTableDisabled" class="btn btn-sm btn-primary btn-pending" ng-click="hideAddPricingTable()">Cancel</button>
-                <button ng-show="!addTableDisabled" class="btn btn-sm btn-primary" ng-click="customAddPtValidate()" type="submit">Add</button>
-                <button ng-show="addTableDisabled" class="btn btn-sm btn-primary btn-pending">Add</button>
+                <button ng-show="!addTableDisabled"class="btn btn-sm btn-primary" ng-click="hideAddPricingTable()" style="background-color: #00AEEF;">Cancel</button>
+                <button ng-show="addTableDisabled" class="btn btn-sm btn-primary btn-pending" ng-click="hideAddPricingTable()" style="background-color: #00AEEF;">Cancel</button>
+                <button ng-show="!addTableDisabled" class="btn btn-sm btn-primary" ng-click="customAddPtValidate()" type="submit" style="background-color: #00AEEF;">Add</button>
+                <button ng-show="addTableDisabled" class="btn btn-sm btn-primary btn-pending" style="background-color: #00AEEF;">Add</button>
             </div>
         </div>
 

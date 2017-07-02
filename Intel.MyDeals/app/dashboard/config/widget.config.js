@@ -19,7 +19,7 @@ widgetConfig.getAllWidgets = function (objsetService) {
 widgetConfig.configWidgets = function () {
 
     widgetConfig.widgets["6"] = {
-        sizeX: 2,
+        sizeX: 3,
         sizeY: 2,
         name: "New Contracts",
         desc: "Link to add a new contract",
@@ -37,8 +37,8 @@ widgetConfig.configWidgets = function () {
     };
 
     widgetConfig.widgets["8"] = {
-        sizeX: 2,
-        sizeY: 2,
+        sizeX: 3,
+        sizeY: 4,
         name: "Search Contracts",
         desc: "Search for contracts, pricing strategies, or pricing tables by entering a name or id",
         icon: "intelicon-tools",
@@ -118,16 +118,16 @@ widgetConfig.configLayouts = function () {
         widgets: [
             {
                 id: 6,
-                sizeX: 3,
-                sizeY: 1
+                sizeX: 5,
+                sizeY: 2
             }, {
                 id: 7,
-                sizeX: 9,
-                sizeY: 4
+                sizeX: 13,
+                sizeY: 7
             }, {
                 id: 8,
-                sizeX: 3,
-                sizeY: 3
+                sizeX: 5,
+                sizeY: 5
             }
         ]
     };

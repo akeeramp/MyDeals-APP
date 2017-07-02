@@ -4,7 +4,7 @@
         <div class="op-grid-header" ng-show="isToolbarVisible">
             
             <div id="tabstrip" kendo-tab-strip class="gradTab" k-ng-delay="tabStripDelay" ng-show="tabStripDelay">
-                <ul>
+                <ul class="fl">
                     <li ng-repeat="group in opOptions.groups | orderBy:'order'" ng-click="showCols(group.name)">
                         <i class="intelicon-pin-outlined" ng-hide="{{ group.name == 'All' || group.name == 'CAP Info' }}" title="Pin tab so it always shows in the grid" ng-click="clickPin($event, group.name)"></i> {{group.name}}
                         <span class="badge error" ng-show="group.numErrors > 0">{{group.numErrors}}</span>
@@ -12,32 +12,23 @@
                         <i class="intelicon-close-solid closeGrp" ng-hide="{{ group.name == 'All' || group.name == 'CAP Info' || !isLayoutConfigurable}}" title="Close tab" ng-click="removeGrp($event, group.name)"></i>
                     </li>
                 </ul>
+                <div class="fr dealTag" ng-if="dealCnt">
+                    {{displayDealTypes()}}
+                </div>
+                <div class="clearboth"></div>
             </div>
             
             <div class="toolbar">
 
                 <div class="fl">
-                    <button class="btn btn-sm ssToolbarBtn" ng-class="{'disabled': !_dirty}" ng-click="saveWipDeals()" ng-show="isEditable" title="Save Deals">
+                    <button class="btn btn-sm ssToolbarBtn" ng-click="saveAndValidateGrid()" ng-show="isEditable" title="Save and Validate Deals">
                         <table>
                             <tr>
                                 <td>
                                     <i class="fa fa-floppy-o" aria-hidden="true" style="font-size: 30px"></i>
                                 </td>
                                 <td style="padding-left: 5px; text-align: left; color: #00AEEF;">
-                                    Save <br />Deals
-                                </td>
-                            </tr>
-                        </table>
-                    </button>
-
-                    <button class="btn btn-sm ssToolbarBtn" ng-click="saveAndValidateGrid()" ng-show="isEditable" title="Save and Validate Deals">
-                        <table>
-                            <tr>
-                                <td>
-                                    <i class="intelicon-protection-checked-verified-outlined" aria-hidden="true" style="font-size: 30px"></i>
-                                </td>
-                                <td style="padding-left: 5px; text-align: left; color: #00AEEF;">
-                                    Validate <br/>Deals
+                                    Save & Validate <br/>Deals
                                 </td>
                             </tr>
                         </table>
@@ -50,7 +41,7 @@
                                     <i class="intelicon-legal skyBlue" aria-hidden="true" style="font-size: 30px"></i>
                                 </td>
                                 <td style="padding-left: 5px; text-align: left; color: #00AEEF;">
-                                    Show/Hide<br />Additional Discounts
+                                    Show/Hide<br/>Additional Discounts
                                 </td>
                             </tr>
                         </table>
@@ -58,22 +49,24 @@
 
                 </div>
                                 
-                <div class="fr" style="margin-top: 2px; margin-left: 4px;" ng-show="isLayoutConfigurable">
+                <div class="fl" style="margin-top: 2px; margin-left: 4px;" ng-show="isLayoutConfigurable">
                     <ul kendo-menu k-options="columnMenu">
                         <li>
-                            <i class="intelicon-view-by-columns" style="font-size: 30px !important;" title="Manage Columns"></i>
+                            <i class="fl intelicon-view-by-columns" style="font-size: 30px !important; vertical-align: text-top;" title="Manage Columns"></i>
+                            <span class="fl" style="font-size: 12px; line-height: 1em; padding: 4px;">Manage<br/>Columns</span>
+                            <i style="font-size: 40px !important; width: 1px !important;"></i>
                             <ul>
                                 <li>
                                     <div style="padding: 0 10px;">
                                         <div>
                                             <span class="k-textbox k-space-left" style="width: 100%; margin-bottom: 10px;">
-                                                <input type="search" ng-model="columnSearchFilter" />
+                                                <input type="search" ng-model="columnSearchFilter"/>
                                                 <a ng-click="searchGrid()" class="k-icon intelicon-search"></a>
                                             </span>
                                         </div>
                                         <div style="max-height: 200px; overflow: auto;">
                                             <div ng-repeat="item in opOptions.columns | filter:{title: columnSearchFilter} | orderBy: 'title'" class="chkColItem">
-                                                <input type='checkbox' checked='checked' class='check with-font' id="colChk{{item.field}}" ng-click="onColumnChange(item)" data-field='{{item.field}}' />
+                                                <input type='checkbox' checked='checked' class='check with-font' id="colChk{{item.field}}" ng-click="onColumnChange(item)" data-field='{{item.field}}'/>
                                                 <label for="colChk{{item.field}}">
                                                     <span ng-bind-html="item.title"></span>
                                                 </label>
@@ -86,10 +79,12 @@
                     </ul>
                 </div>
 
-                <div class="fr" style="margin-top: 2px; margin-left: 8px;" ng-show="isLayoutConfigurable">
+                <div class="fl" style="margin-top: 2px; margin-left: 8px;" ng-show="isLayoutConfigurable">
                     <ul kendo-menu>
                         <li>
-                            <i class="intelicon-settings-solid" style="font-size: 30px !important;" title="Manage Layout"></i>
+                            <i class="fl intelicon-settings-solid" style="font-size: 30px !important; vertical-align: text-top;" title="Manage Columns"></i>
+                            <span class="fl" style="font-size: 12px; line-height: 1em; padding: 4px;">Manage<br />Preferences</span>
+                            <i style="font-size: 40px !important; width: 1px !important;"></i>
                             <ul>
                                 <li ng-click="addGrp()">
                                     <i class="intelicon-plus-outlined" style="font-size: 18px;"></i> ADD GROUP
@@ -505,5 +500,14 @@
     }
     .chkColItem:hover {
         background-color: #efefef;
+    }
+
+    .dealTag {
+        font-weight: 600;
+        padding: 10px 20px !important;
+        color: #ffffff !important;
+        background-color: #bcbcbc !important;
+        height: 15px !important;
+        line-height: 1em !important;        
     }
 </style>

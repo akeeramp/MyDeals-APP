@@ -6,6 +6,7 @@
          * Angular modules
          */
         'ngAnimate'
+        , 'ngStorage'
 		, 'ngSanitize'
 		, 'ui.router'
 		, 'kendo.directives'

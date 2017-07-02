@@ -6,21 +6,29 @@
     .controller('WidgetSettingsCtrl', WidgetSettingsCtrl)
     .filter('object2Array', object2Array);
 
-DashboardController.$inject = ['$scope', '$uibModal', '$timeout', '$window', 'objsetService'];
+DashboardController.$inject = ['$scope', '$uibModal', '$timeout', '$window', '$localStorage', 'objsetService'];
 AddWidgetCtrl.$inject = ['$scope', '$timeout'];
 CustomWidgetCtrl.$inject = ['$scope', '$uibModal'];
 WidgetSettingsCtrl.$inject = ['$scope', '$timeout', '$rootScope', 'widget'];
 object2Array.$inject = [];
 
 
-function DashboardController($scope, $uibModal, $timeout, $window, objsetService) {
+function DashboardController($scope, $uibModal, $timeout, $window, $localStorage, objsetService) {
     $scope.scope = $scope;
+    $scope.$storage = $localStorage;
+
+    $scope.$storage = $localStorage.$default({
+        selectedDashboardId: '1',
+        startDate: "1/1/2017",
+        endDate: "12/31/2017",
+        selectedCustomerId: ''
+    });
 
     // init dashboard
-    $scope.selectedDashboardId = '1';
-    $scope.startDate = "1/1/2017";
-    $scope.endDate = "12/31/2017";
-    $scope.selectedCustomerId;
+    $scope.selectedDashboardId = $scope.$storage.selectedDashboardId;
+    $scope.startDate = $scope.$storage.startDate;
+    $scope.endDate = $scope.$storage.endDate;
+    $scope.selectedCustomerId = $scope.$storage.selectedCustomerId;
 
 
     // **** Customer Methods ****
@@ -75,7 +83,7 @@ function DashboardController($scope, $uibModal, $timeout, $window, objsetService
 
     $scope.gridsterOptions = {
         margins: [20, 20],
-        columns: 12,
+        columns: 18,
         mobileModeEnabled: true,
         draggable: {
             handle: 'h3'
@@ -167,6 +175,12 @@ function DashboardController($scope, $uibModal, $timeout, $window, objsetService
     }
     $scope.broadcastRefresh = function (scope) {
         $timeout(function () {
+            // Save settings to local storage
+            $scope.$storage.selectedDashboardId = scope.selectedDashboardId;
+            $scope.$storage.startDate = scope.startDate;
+            $scope.$storage.endDate = scope.endDate;
+            $scope.$storage.selectedCustomerId = scope.selectedCustomerId;
+
             $scope.$broadcast('refresh', { "custId": scope.selectedCustomerId, "startDate": scope.startDate, "endDate": scope.endDate });
         }, 200);
     }

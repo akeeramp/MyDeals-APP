@@ -5,9 +5,9 @@
         .module('app.contract')
         .controller('ContractController', ContractController);
 
-    ContractController.$inject = ['$scope', '$state', '$filter', 'contractData', 'isNewContract', 'templateData', 'objsetService', 'templatesService', 'logger', '$uibModal', '$timeout', '$window', '$location', '$rootScope', 'confirmationModal', 'dataService', 'customerService', 'contractManagerConstants', 'MrktSegMultiSelectService', '$compile'];
+    ContractController.$inject = ['$scope', '$state', '$filter', '$localStorage', 'contractData', 'isNewContract', 'templateData', 'objsetService', 'templatesService', 'logger', '$uibModal', '$timeout', '$window', '$location', '$rootScope', 'confirmationModal', 'dataService', 'customerService', 'contractManagerConstants', 'MrktSegMultiSelectService', '$compile'];
 
-    function ContractController($scope, $state, $filter, contractData, isNewContract, templateData, objsetService, templatesService, logger, $uibModal, $timeout, $window, $location, $rootScope, confirmationModal, dataService, customerService, contractManagerConstants, MrktSegMultiSelectService, $compile) {
+    function ContractController($scope, $state, $filter, $localStorage, contractData, isNewContract, templateData, objsetService, templatesService, logger, $uibModal, $timeout, $window, $location, $rootScope, confirmationModal, dataService, customerService, contractManagerConstants, MrktSegMultiSelectService, $compile) {
         // store template information
         //
         $scope.templates = $scope.templates || templateData.data;
@@ -26,6 +26,7 @@
         $scope.isWip = false;
         $scope.child = null;
         $scope.isAutoSaving = false;
+        $scope.defCust = $localStorage.selectedCustomerId;
 
         $scope.flowMode = "Deal Entry";
         if ($state.current.name.indexOf("contract.compliance") >= 0) $scope.flowMode = "Compliance";
@@ -171,6 +172,10 @@
 
             $scope.contractData.MinYear = parseInt(moment().format("YYYY")) - 5;
             $scope.contractData.MaxYear = parseInt(moment().format("YYYY")) + 10;
+
+            // If new contract... default customer to the last customer used on the dashboard
+            if (!$scope.contractData.CUST_MBR_SID && !!$scope.defCust)
+                $scope.contractData.CUST_MBR_SID = $scope.defCust;
 
             // Contract custom initializations and functions
             // Dummy attribute on the UI which will hold the array of customer divisions

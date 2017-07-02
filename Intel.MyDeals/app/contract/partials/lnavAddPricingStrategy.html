@@ -15,8 +15,8 @@
                        maxlength="250"
                        ng-model="newStrategy.TITLE"
                        ng-class="{isError: newStrategy._behaviors.isError.TITLE}"/>
-                <button ng-show="!addStrategyDisabled" class="btn btn-sm btn-primary" type="submit" style="font-size: 12px; margin-left: 6px;" ng-click="customAddPsValidate()">Add</button>
-                <button ng-show="addStrategyDisabled" class="btn btn-sm btn-primary btn-pending" style="font-size: 12px; margin-left: 6px;" >Add</button>
+                <button ng-show="!addStrategyDisabled" class="btn btn-sm btn-primary" type="submit" style="font-size: 12px; margin-left: 6px; background-color: #00AEEF; padding: 7px 10px;" ng-click="customAddPsValidate()">Add</button>
+                <button ng-show="addStrategyDisabled" class="btn btn-sm btn-primary btn-pending" style="font-size: 12px; margin-left: 6px; background-color: #00AEEF; padding: 7px 10px;" >Add</button>
                 <div class="clearboth"></div>
                 <div style="color: #F3D54E;">{{ newStrategy._behaviors.validMsg.TITLE }}</div>
             </div>

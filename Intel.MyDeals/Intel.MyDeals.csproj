@@ -1080,6 +1080,7 @@
     <Content Include="Scripts\Angular\1.5.8\angular.min.js" />
     <Content Include="Scripts\Angular\angular-filter.min.js" />
     <Content Include="Scripts\Angular\angular-linq.min.js" />
+    <Content Include="Scripts\Angular\ngStorage.min.js" />
     <Content Include="Scripts\Angular\select.min.js" />
     <Content Include="Scripts\Angular\ui-bootstrap-tpls-2.2.0.min.js" />
     <Content Include="Scripts\base64-string.js" />
