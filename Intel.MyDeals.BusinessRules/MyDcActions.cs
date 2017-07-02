@@ -96,9 +96,9 @@ namespace Intel.MyDeals.BusinessRules
             {
                 string dcPrevSt = string.IsNullOrEmpty(deStr.AtrbValue.ToString()) ? "" : DateTime.Parse(deStr.AtrbValue.ToString()).ToString("MM/dd/yyyy");
                 if (string.IsNullOrEmpty(deStr.AtrbValue.ToString())) deStr.AtrbValue = dcSt;
+                IOpDataElement deContractRsn = r.Dc.GetDataElement(AttributeCodes.BACK_DATE_RSN);
                 if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.BACK_DATE_RSN)) && dcItemStDt < DateTime.Now.Date && dcPrevSt != dcItemSt)
                 {
-                    IOpDataElement deContractRsn = r.Dc.GetDataElement(AttributeCodes.BACK_DATE_RSN);
                     IOpDataElement deContractRsnTxt = r.Dc.GetDataElement(AttributeCodes.BACK_DATE_RSN_TXT);
                     string strContractRsn = item.ContainsKey(AttributeCodes.BACK_DATE_RSN_TXT) ? item[AttributeCodes.BACK_DATE_RSN_TXT].ToString() : "";
                     if (string.IsNullOrEmpty(strContractRsn))
@@ -111,6 +111,11 @@ namespace Intel.MyDeals.BusinessRules
                         deContractRsn.AtrbValue = item[AttributeCodes.BACK_DATE_RSN_TXT];
                         deContractRsn.State = OpDataElementState.Modified;
                     }
+                }
+                else if (!string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.BACK_DATE_RSN)) && dcItemStDt >= DateTime.Now.Date)
+                {
+                    deContractRsn.AtrbValue = "";
+                    deContractRsn.State = OpDataElementState.Modified;
                 }
             }
 
