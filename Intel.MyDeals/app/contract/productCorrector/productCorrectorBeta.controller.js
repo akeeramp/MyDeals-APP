@@ -188,9 +188,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
 
         // Now apply grouping
         var group = [];
-        if (vm.curRowPrdCnt > 1) {
-            group.push({ field: "USR_INPUT", dir: "asc" });
-        }
+        group.push({ field: "USR_INPUT", dir: "asc" });
         //if (vm.curRowCategories.length > 1) {
         //    group.push({ field: "PRD_CAT_NM", dir: "asc" });
         //}
@@ -297,7 +295,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
                 field: "USR_INPUT",
                 title: "User Entered",
                 groupHeaderTemplate: "<span class=\"grpTitle\">#= value #</span>  <i class='intelicon-arrow-back-left skyblue pl10'></i> <span class='grpDesc'>Can't find what you are looking for?  <span class='or'>Use the</span> </span><span class='lnk' ng-click='vm.launchSelector(\"#=value#\")'>Product Selector</span><span class='or'> OR </span><span class='lnk' ng-click='vm.removeProd(\"#=value#\")'>Remove Product</span>",
-                hidden: true
+                hidden: false
             },
             {
                 field: "selected",
@@ -686,16 +684,6 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
     }
 
     vm.saveProducts = function() {
-
-        // This might not be working
-        var pRows = ProductRows;
-        for (var d = 0; d < vm.productsToDeleteUponSave.length; d++) {
-            var dItem = vm.productsToDeleteUponSave[d];
-            var usrPrd = pRows[dItem.rowIndx - 1].PTR_USER_PRD;
-            usrPrd += "---";
-            debugger;
-
-        }
 
         for (var r = 0; r < vm.numIssueRows; r++) {
             var key = vm.issueRowKeys[r];

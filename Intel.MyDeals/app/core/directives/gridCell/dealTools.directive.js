@@ -24,12 +24,7 @@ function dealTools() {
                 {
                     text: 'OK',
                     action: function () {
-                        $scope.$apply(function () {
-                            var dataItem = $scope.dataItem;
-                            if (dataItem._behaviors.isDirty === undefined) dataItem._behaviors.isDirty = {};
-                            dataItem._behaviors.isDirty['NOTES'] = true;
-                            dataItem._dirty = true;
-                        });
+                        if ($scope.dataItem._dirty) $scope.$parent.$parent.saveCell($scope.dataItem, "NOTES");
                     }
                 }
             ];

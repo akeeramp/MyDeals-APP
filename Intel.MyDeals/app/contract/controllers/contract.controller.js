@@ -247,6 +247,9 @@
             initiateCustDivCombobox();
 
             var setDefaultContractTitle = function (custDiv) {
+                // UFT feedback... remove auto title
+                return;
+
                 // if user has touched the Title do not set the title
                 if ($scope.contractData.DC_ID <= 0 &&
                     custDiv !== "" &&

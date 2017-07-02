@@ -816,6 +816,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
             }
 
             $scope.saveWipDeals = function () {
+                if (!$scope._dirty) return;
+
                 $scope.$parent.$parent.setBusy("Saving your data..", "Please wait while saving data.");
                 $timeout(function () {
                     $scope.contractDs.sync();

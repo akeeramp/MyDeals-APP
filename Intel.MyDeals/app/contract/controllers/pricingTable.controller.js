@@ -133,7 +133,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 return obj.DC_ID !== undefined && obj.DC_ID !== null;
             });
         }
-
+        
         root.spreadDs = ssTools.createDataSource(root.pricingTableData.PRC_TBL_ROW);
 
         if (!root.contractData.CustomerDivisions || root.contractData.CustomerDivisions.length <= 1) {
@@ -725,6 +725,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     data[r]["ECAP_PRICE"] = null;
                     data[r]["CUST_ACCNT_DIV"] = root.contractData.CUST_ACCNT_DIV;
                     data[r]["CUST_MBR_SID"] = root.contractData.CUST_MBR_SID;
+                    //if (data[r]["PASSED_VALIDATION"] === "")
 
                     for (var key in ptTemplate.model.fields) {
                         if (ptTemplate.model.fields.hasOwnProperty(key)) {
@@ -841,17 +842,54 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             replaceUndoRedoBtns();
 
             root.setBusy("", "");
+
+            $scope.setRowIdStyle(root.pricingTableData.PRC_TBL_ROW);
             //e.sender.activeSheet(e.sender.sheetByName("DropdownValuesSheet"));
         }
     }
 
+    $scope.setRowIdStyle = function (data) {
+        if (!data) return;
+        var spreadsheet = $("#pricingTableSpreadsheet").data("kendoSpreadsheet");
+        if (!spreadsheet) return;
+        var sheet = spreadsheet.activeSheet();
+
+        sheet.batch(function () {
+
+            var row = 2;
+            for (var key in data) {
+                if (data.hasOwnProperty(key) && !data[key]._actions) {
+                    if (!!data[key].DC_ID && data[key].DC_ID !== "") {
+                        var item = data[key].PASSED_VALIDATION;
+                        if (!!item) {
+                            if (item === "Finalizing" || item === "Valid") {
+                                //sheet.range("A" + row + ":A" + row).background("#C4D600").color("#000000");
+                                sheet.range("A" + row + ":A" + row).background("#eeeeee").color("#003C71");
+                            } else if (item === "Dirty") {
+                                sheet.range("A" + row + ":A" + row).background("#FC4C02").color("#FFFFFF");
+                            } else {
+                                sheet.range("A" + row + ":A" + row).background("#eeeeee").color("#003C71");
+                            }
+                        } else if (item === 0) {
+                            sheet.range("A" + row + ":A" + row).background("#FC4C02").color("#FFFFFF");
+                        }
+                    } else {
+                        sheet.range("A" + row + ":A" + row).background("#eeeeee").color("#003C71");
+                    }
+                    row++;
+                }
+            }
+        }, { layout: true });
+
+    }
+
     $scope.$on('saveWithWarnings',
         function (event, args) {
-            var spreadsheet = $("#pricingTableSpreadsheet").data("kendoSpreadsheet");
-            if (!spreadsheet) return;
-            var sheet = spreadsheet.activeSheet();
-            var dropdownValuesSheet = spreadsheet.sheetByName("DropdownValuesSheet");
-            //sheetBatchOnRender(sheet, dropdownValuesSheet);
+            $scope.setRowIdStyle(args.data.PRC_TBL_ROW);
+        });
+    $scope.$on('saveComplete',
+        function (event, args) {
+            $scope.setRowIdStyle(args.data.PRC_TBL_ROW);
         });
 
     function replaceUndoRedoBtns() {
@@ -883,8 +921,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             // disable first row
             headerRange.enable(false); //("A0:ZZ0")
 
-            // freeze first row
+            // freeze first row and column
             sheet.frozenRows(1);
+            sheet.frozenColumns(1);
 
             // Stylize header row
             headerRange.bold(true);
@@ -898,8 +937,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             headerRange.verticalAlign(headerStyle.verticalAlign);
 
             // Add product selector editor on Product cells
-            sheet.range(root.colToLetter["PTR_USER_PRD"] + ":" + root.colToLetter["PTR_USER_PRD"])
-	            .editor("cellProductSelector");
+            sheet.range(root.colToLetter["PTR_USER_PRD"] + ":" + root.colToLetter["PTR_USER_PRD"]).editor("cellProductSelector");
 
             for (var key in ptTemplate.model.fields) {
                 var myColumnName = root.colToLetter[key];

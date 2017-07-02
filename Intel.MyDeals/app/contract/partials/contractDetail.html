@@ -40,7 +40,17 @@
                              op-ui-mode="'VERTICAL'"></div>
                         <div class="description" ng-if="!contractData._behaviors.isHidden['CUST_ACCNT_DIV_UI']">Blank means that ALL divisions are included</div>
                     </div>
+
+                    <div class="col-md-11 row"
+                         op-control-flat
+                         ng-model="contractData"
+                         op-cd="'TITLE'"
+                         op-type="'TEXTBOX'"
+                         op-label="'Contract Name:'"
+                         op-is-form="true"
+                         op-ui-mode="'VERTICAL'"></div>
                 </div>
+
                 <div class="col-md-6">
                     <div class="col-md-12 row">
                         <h6>Customer Acceptance of Contract is...<span kendo-tooltip k-content="constants.helptipMsgCustAccpt" k-position="'top'" class="opElementHelpIcon intelicon-information-outlined"></span></h6>
@@ -160,15 +170,6 @@
                         <h6>Information</h6>
                     </div>
 
-                    <div class="col-md-11 row"
-                         op-control-flat
-                         ng-model="contractData"
-                         op-cd="'TITLE'"
-                         op-type="'TEXTBOX'"
-                         op-label="'Contract Name:'"
-                         op-is-form="true"
-                         op-ui-mode="'VERTICAL'"></div>
-
                     <div class="col-md-11 row C2ALabel">
                         <div op-control-flat
                              ng-model="contractData"
@@ -202,6 +203,7 @@
                                 <div id="fileAttachmentGrid" kendo-grid k-ng-delay="status.isOpen" style="height:150px;"
                                      footer-offset="500" options="fileAttachmentGridOptions"></div>
                             </div>
+                        </uib-accordion>
                     </div>
                 </div>
             </div>
