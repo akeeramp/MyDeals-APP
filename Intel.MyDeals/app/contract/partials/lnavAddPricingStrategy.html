@@ -13,6 +13,7 @@
                 <input type="text" class="k-textbox fl" placeholder=""
                        style="width: 228px; color: black;"
                        maxlength="250"
+                       id="inptPrcTitle"
                        ng-model="newStrategy.TITLE"
                        ng-class="{isError: newStrategy._behaviors.isError.TITLE}"/>
                 <button ng-show="!addStrategyDisabled" class="btn btn-sm btn-primary" type="submit" style="font-size: 12px; margin-left: 6px; background-color: #00AEEF; padding: 7px 10px;" ng-click="customAddPsValidate()">Add</button>
@@ -23,4 +24,29 @@
 
         </form>
     </div>
+    
+    <div class="help-add-ps" id="divHelpAddPs">
+        <div>
+            <i class="intelicon-arrow-up"></i>
+        </div>
+        Start by adding a<br/>Pricing Strategy
+    </div>
+
 </div>
+
+<style>
+    .help-add-ps {
+        position: absolute;
+        top: calc(90vh);
+        left: 30px;
+        width: 200px; 
+        padding: 0 20px; 
+        font-size: 18px;
+        opacity: 0;
+        color: #f3D54E;
+    }
+    .help-add-ps i {
+        font-size: 40px;
+        color: #f3D54E;
+    }
+</style>

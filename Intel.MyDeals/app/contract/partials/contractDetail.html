@@ -10,7 +10,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="col-md-12 row">
-                        <h6>Customer Information</h6>
+                        <h6>Contract Information</h6>
                     </div>
 
                     <div class="col-md-11 row">
@@ -79,17 +79,18 @@
                              ng-model="contractData"
                              op-cd="'START_DT'"
                              op-type="'DATEPICKER'"
-                             op-label="'Select start date:'"
+                             op-label="'Select Start Date:'"
                              op-is-form="true"
                              op-ui-mode="'HORIZONTAL'"></div>
                     </div>
                     <div class="clearboth orLabel">OR</div>
                     <div class="row">
                         <div class="col-md-3 dateRangeLabel">
-                            Select range
+                            Select Quarter Range
                         </div>
                         <div class="col-md-4">
                             <div class="col-md-11 row"
+                                 id="StartSlider"
                                  style="width: 200px;"
                                  op-control-flat
                                  ng-model="contractData"
@@ -117,17 +118,18 @@
                              ng-model="contractData"
                              op-cd="'END_DT'"
                              op-type="'DATEPICKER'"
-                             op-label="'Select end date:'"
+                             op-label="'Select End Date:'"
                              op-is-form="true"
                              op-ui-mode="'HORIZONTAL'"></div>
                     </div>
                     <div class="clearboth orLabel">OR</div>
                     <div class="row">
                         <div class="col-md-3 dateRangeLabel">
-                            Select range
+                            Select Quarter Range
                         </div>
                         <div class="col-md-4">
                             <div class="col-md-11 row"
+                                 id="EndSlider"
                                  style="width: 200px;"
                                  op-control-flat
                                  ng-model="contractData"
@@ -242,3 +244,4 @@
         overflow: auto !important;
     }
 </style>
+

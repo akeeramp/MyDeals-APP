@@ -53,7 +53,7 @@
                     <ul kendo-menu k-options="columnMenu">
                         <li>
                             <i class="fl intelicon-view-by-columns" style="font-size: 30px !important; vertical-align: text-top;" title="Manage Columns"></i>
-                            <span class="fl" style="font-size: 12px; line-height: 1em; padding: 4px;">Manage<br/>Columns</span>
+                            <span class="fl" style="font-size: 12px; line-height: 1em; padding: 4px;">Column<br/>Options</span>
                             <i style="font-size: 40px !important; width: 1px !important;"></i>
                             <ul>
                                 <li>
@@ -83,7 +83,7 @@
                     <ul kendo-menu>
                         <li>
                             <i class="fl intelicon-settings-solid" style="font-size: 30px !important; vertical-align: text-top;" title="Manage Columns"></i>
-                            <span class="fl" style="font-size: 12px; line-height: 1em; padding: 4px;">Manage<br />Preferences</span>
+                            <span class="fl" style="font-size: 12px; line-height: 1em; padding: 4px;">Grid<br />Settings</span>
                             <i style="font-size: 40px !important; width: 1px !important;"></i>
                             <ul>
                                 <li ng-click="addGrp()">
@@ -502,12 +502,17 @@
         background-color: #efefef;
     }
 
-    .dealTag {
+    .dealTag, .dealTag:hover {
         font-weight: 600;
         padding: 10px 20px !important;
-        color: #ffffff !important;
-        background-color: #bcbcbc !important;
-        height: 15px !important;
-        line-height: 1em !important;        
+        color: #003C71 !important;
+        background: #fdfdfd; /* Old browsers */
+        background: -moz-linear-gradient(top,  #fdfdfd 0%, #d9d9d9 100%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(top,  #fdfdfd 0%,#d9d9d9 100%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to bottom,  #fdfdfd 0%,#d9d9d9 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fdfdfd', endColorstr='#d9d9d9',GradientType=0 ); /* IE6-9 */
+        height: 17px !important;
+        line-height: 1em !important;
+        margin-top: -1px !important;
     }
 </style>

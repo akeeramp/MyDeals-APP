@@ -76,6 +76,6 @@
             "FileAttachementDesc": "Either an attachment to deal request is uploaded or C2A id or link is enter above.",
             "C2AIdDesc": "Either C2A id or link is entered or an attachment to deal request is uploaded below.",
             "ContractDetails": 'contract.details',
-            "uplodaFileHelpText": "Save contract to upload files."
+            "uplodaFileHelpText": "Your attachments will upload after clicking the Save Contract button."
         });
 })();

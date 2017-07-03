@@ -21,7 +21,7 @@ widgetConfig.configWidgets = function () {
     widgetConfig.widgets["6"] = {
         sizeX: 3,
         sizeY: 2,
-        name: "New Contracts",
+        name: "New MyDeals Contracts",
         desc: "Link to add a new contract",
         icon: "intelicon-tools",
         type: 'newContract',
@@ -39,7 +39,7 @@ widgetConfig.configWidgets = function () {
     widgetConfig.widgets["8"] = {
         sizeX: 3,
         sizeY: 4,
-        name: "Search Contracts",
+        name: "Search MyDeals Contracts",
         desc: "Search for contracts, pricing strategies, or pricing tables by entering a name or id",
         icon: "intelicon-tools",
         type: 'searchContracts',

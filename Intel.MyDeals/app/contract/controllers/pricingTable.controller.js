@@ -30,6 +30,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
     // Variables
     var root = $scope.$parent.$parent;	// Access to parent scope
+    $scope.root = root;
     root.setBusy("Loading Deals", "Gathering deals and security settings.");
     root.child = $scope;
 
@@ -845,7 +846,41 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
             $scope.setRowIdStyle(root.pricingTableData.PRC_TBL_ROW);
             //e.sender.activeSheet(e.sender.sheetByName("DropdownValuesSheet"));
+
+            showHelp();
         }
+    }
+
+    function showHelp() {
+        $timeout(function () {
+
+            if (!root.pricingTableData.PRC_TBL_ROW && root.pricingTableData.PRC_TBL_ROW.length > 0) return;
+
+            var item = null;
+            var items = $(".k-spreadsheet-cell");
+            for (var c = 0; c < items.length; c++) {
+                if ($(items[c]).text() === "Contract Product *") {
+                    item = $(items[c]);
+                    c = items.length;
+                }
+            }
+
+            if (!item || item.length === 0) return;
+
+            var t = 115;
+            $("#divHelpAddProd").css("left", item.offset().left - 300);
+            $("#divHelpAddProd").animate({
+                opacity: 1,
+                top: t
+            }, 2000, function () {
+                $timeout(function () {
+                    $("#divHelpAddProd").animate({
+                        opacity: 0
+                    }, 2000);
+                }, 4000);
+            });
+        }, 2000);
+
     }
 
     $scope.setRowIdStyle = function (data) {

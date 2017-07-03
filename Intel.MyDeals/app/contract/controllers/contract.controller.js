@@ -469,6 +469,31 @@
             }
         };
 
+        $scope.$on("kendoRendered",
+            function (e) {
+                applyQuarters("StartSlider");
+                applyQuarters("EndSlider");
+            });
+
+        function applyQuarters(id) {
+            var slider = $("#" + id + " .k-slider");
+            if (slider.length <= 0) return;
+
+            var sliderItems = slider.find(".k-slider-items");
+            var steps = {};
+            steps[0] = "Q1";
+            steps[1] = "Q2";
+            steps[2] = "Q3";
+            steps[3] = "Q4";
+
+            $.each(steps,
+                function (index, value) {
+                    var item = sliderItems.find("li:eq(" + (index) + ")");
+                    item.attr("title", value);
+                    item.find("span").text(value);
+                });
+        }
+
         $scope.onFileSelect = function (e) {
             // Hide default kendo upload and clear buttons as contract is not generated at this point. Upload files after contract id is generated.
             // TODO: Do we want to show them in edit scenario ?
@@ -900,6 +925,36 @@
 
         if (!$scope.contractData.PRC_ST) {
             $scope.toggleAddStrategy();
+            $timeout(function () {
+
+                var inpt = $("#inptPrcTitle");
+                var t = inpt.position().top + inpt.height() + 4;
+                $("#divHelpAddPs").animate({
+                    opacity: 1,
+                    top: t
+                }, 2000, function () {
+                    $("#navIconAddPs").animate({
+                        backgroundColor: "#f3D54E"
+                    }, 500, function() {
+                        $("#navIconAddPs").animate({
+                            backgroundColor: "#0071C5"
+                        }, 2000, function() {
+                            $("#inptPrcTitle").animate({
+                                backgroundColor: "#f3D54E"
+                            }, 500, function () {
+                                $("#inptPrcTitle").animate({
+                                    backgroundColor: "#ffffff"
+                                }, 2000);
+                            });
+                        });
+                    });
+                    $timeout(function () {
+                        $("#divHelpAddPs").animate({
+                            opacity: 0
+                        }, 2000);
+                    }, 6000);
+                });
+            }, 2000);
         }
 
         // **** PRICING TABLE Methods ****
@@ -1793,7 +1848,17 @@
             var ct = $scope.contractData;
 
             // If user has clicked on save, that means he has accepted the default contract name set, make it dirty to avoid any changes to dates making a change to contract name.
+            if (!$scope.contractData._behaviors) $scope.contractData._behaviors = {};
             $scope.contractData._behaviors.isDirty['TITLE'] = true;
+
+            if (!$scope.contractData.CUST_MBR_SID) {
+                $scope.contractData._behaviors.validMsg["CUST_MBR_SID"] = "Please select a valid customer";
+                $scope.contractData._behaviors.isError["CUST_MBR_SID"] = true;
+                $scope.isValid = false;
+            } else {
+                $scope.contractData._behaviors.validMsg["CUST_MBR_SID"] = "";
+                $scope.contractData._behaviors.isError["CUST_MBR_SID"] = false;
+            }
 
             // Clear all values
             angular.forEach($scope.contractData,
@@ -1808,6 +1873,7 @@
                         // Special handling for CUST_MBR_SID only field where user can make it null by clearing combobox
                     }
                 });
+
 
             // Check required
             angular.forEach($scope.contractData,

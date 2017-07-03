@@ -1,13 +1,11 @@
 ﻿<div class="container-fluid widget-container" style="overflow: auto; text-align: center; display: table;">
-    <div>
-        <div style="font-size: 16px; text-align: center; padding: 0 20px 10px 20px;">
-            To start creating Deals,<br/> first create a MyDeals contract
+    <div style="padding: 20px 0 0 0;">
+        <div class="fl" style="font-size: 40px; margin: -10px 10px 0 0; height: 20px">
+            <i class="intelicon-new-document-solid text-warning"></i>
         </div>
-        <div class="clearboth"></div>
-        <div class="fl" style="font-size: 40px; margin: -8px 10px; height: 20px"><i class="intelicon-new-document-solid text-warning"></i>
-        </div>
-        <div class="fl">
-            <button class="btn btn-default" type="button" onclick="newCntrct()">Create New Contract</button>
+        <div class="fl btn-mock" onclick="newCntrct()">
+            <div class="btn-ttl">Create a MyDeals Contract</div>
+            <div class="btn-desc">To get started, first create a MyDeals contract</div>
         </div>
         <div class="clearboth"></div>
     </div>
@@ -18,3 +16,22 @@
         document.location.href = "/Contract#/manager/0/details";
     }
 </script>
+
+<style>
+    .btn-mock {
+        cursor: pointer;
+        text-align: left;
+    }
+    .btn-mock:hover .btn-ttl {
+        color: #003C71;
+    }
+    .btn-ttl {
+        color: #00AEEF;
+        font-size: 20px;
+        line-height: 1em;
+    }
+    .btn-desc {
+        font-size: 12px;
+        line-height: 1em;
+    }
+</style>

@@ -1,12 +1,25 @@
-﻿<div style="height: 23px; margin: 0 2px; border-bottom: 1px solid #e8eaec; width: 280px; overflow: hidden;">
-    <div class="fl flowBtn" ng-class="{inactive: flowMode != 'Deal Entry'}" ng-click="gotoDealEntry()">Deal Entry</div>
+﻿<div style="height: 23px; border-bottom: 1px solid #e8eaec; overflow: hidden;">
+    <!--<div class="fl flowBtn" ng-class="{inactive: flowMode != 'Deal Entry'}" ng-click="gotoDealEntry()">Deal Entry</div>
     <div class="fl flowBtn disabled">Compliance</div>
-    <div class="fr flowBtn disabled">Manage</div>
+    <div class="fr flowBtn disabled">Manage</div>-->
     <!--
     <div class="fl flowBtn" ng-class="{inactive: flowMode != 'Compliance'}" ng-click="gotoCompliance()">Compliance</div>
     <div class="fr flowBtn" ng-class="{inactive: flowMode != 'Manage'}" ng-click="gotoManage()">Manage</div>
         -->
-    <div class="clearboth"></div>
+    <!--<div class="clearboth"></div>-->
+    <table style="width: 100%;">
+        <tr>
+            <td style="width: 33%;">
+                <div class="flowBtn" ng-class="{inactive: flowMode != 'Deal Entry'}" ng-click="gotoDealEntry()">Deal Entry</div>
+            </td>
+            <td style="width: 34%; padding: 0 4px;">
+                <div class="fl flowBtn disabled">Compliance</div>
+            </td>
+            <td style="width: 33%">
+                <div class="fr flowBtn disabled">Manage</div>
+            </td>
+        </tr>
+    </table>
 </div>
 
 <style>
@@ -15,8 +28,7 @@
         padding: 2px;
         font-size: 12px;
         font-weight: 600;
-        width: 88px;
-        margin: 0 2px;
+        width: 100%;
         color: #ffffff;
         text-align: center;
         cursor: default;
