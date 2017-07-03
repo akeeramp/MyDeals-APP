@@ -9,7 +9,7 @@
                 <img ng-if="loading" src="/Images/loadingSmall.gif" />
             </div>
             <div class="col-md-5 prodSelectorSearch">
-                <input id="productSearch" class="prod-autocomplete form-control fl input-sm opUiElement" ng-model="vm.userInput" ng-keyup="$event.keyCode == 13 ? vm.searchProduct() : null" type="text" kendo-autocomplete k-options="vm.productOptions"
+                <input id="productSearch" class="prod-autocomplete form-control fl input-sm" ng-model="vm.userInput" ng-keyup="$event.keyCode == 13 ? vm.searchProduct() : null" type="text" kendo-autocomplete k-options="vm.productOptions"
                        k-data-value-field="'PRD_MBR_SID'" />
                 <div class="err-Search" ng-if="vm.errorMessage.length > 0">
                     {{vm.errorMessage}}
@@ -39,11 +39,14 @@
         <div ng-if="vm.showSuggestions" class="productSelector subHeaderNavContainer mini-right miniProdNav">
             <div>No product found for {{ vm.userInput }}. Search instead for:</div>
             <div style="padding-top:5px;">
-                <ul class="productSelector productpath breadcrumb">
+                <ul ng-if="vm.suggestedProducts.length !== 0" class="productSelector productpath breadcrumb">
                     <li ng-repeat="p in vm.suggestedProducts | unique:'Name'">
-                        <span class="productSelector prdAnchor Good" role="button" ng-click="vm.searchProduct(p.Name)">{{:: p.Name }}</span>
+                        <span class="productSelector prdAnchor Good" role="button" ng-click="vm.searchProduct(p.Name, p.Type)">{{:: p.Name }}</span>
                     </li>
                 </ul>
+                <div ng-if="vm.suggestedProducts.length === 0">
+                    Unable to find any suggestions for {{vm.userInput}}
+                </div>
             </div>
         </div>
         <div ng-if="vm.showTree && !vm.showSuggestions">
@@ -61,9 +64,8 @@
                             <button ng-if="!(vm.selectedPathParts.length < 2)" title="{{p.name}}" type="button" ng-class="{'noborder':$last}" ng-click="vm.selectItem(p)" class="btn btn-default">
                                 {{::vm.checkForBlank(p.name)}}
                             </button>
-                            <button popover-class="selector popover" ng-if="vm.selectedPathParts.length < 2" uib-popover="{{::vm.getVerticalsUnderMarkLevel(p.name)}}"
-                                    popover-trigger="'mouseenter'" popover-placement="bottom"
-                                    popover-append-to-body="true" type="button" ng-class="{'noborder':$last}" ng-click="vm.selectItem(p)" class="btn btn-default">
+                            <button ng-if="(vm.selectedPathParts.length < 2)" kendo-tooltip k-content="vm.getVerticalsUnderMarkLevel(p.name)"
+                                    type="button" ng-class="{'noborder':$last}" ng-click="vm.selectItem(p)" class="btn btn-default">
                                 {{::vm.checkForBlank(p.name)}}
                             </button>
                         </div>

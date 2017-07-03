@@ -1088,7 +1088,7 @@ namespace Intel.MyDeals.BusinessLogic
             }
 
             var sortedList = suggestions.Where(o => o.Value <= threshold).OrderBy(o => o.Value).Take(7);
-            var rtn = sortedList.Select(x => new SearchString { Name = x.Key });
+            var rtn = sortedList.Select(x => new SearchString { Name = x.Key, Type = searchString[x.Key] });
 
             return rtn.ToList();
         }
