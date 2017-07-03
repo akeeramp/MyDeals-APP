@@ -64,6 +64,14 @@
             text-decoration: none;
         }
 
+    .productSelector.Warning {
+        color: #FFA300;
+    }
+
+    .productSelector.Issue {
+         color: #FC4C02;
+    }
+
     .drillDown.btn-group button {
         background-color: #01AEEF;
         border-left: none;

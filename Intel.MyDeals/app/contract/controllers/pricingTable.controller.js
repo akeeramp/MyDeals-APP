@@ -495,6 +495,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             sheet.range('B' + (rowStart)).value(JSON.stringify(validateSelectedProducts));
             systemModifiedProductInclude = true;
             sheet.range(root.colToLetter['PTR_USER_PRD'] + (rowStart)).value(contractProducts);
+            systemModifiedProductInclude = false;
             // can't use colToLetter for PTR_SYS_INVLD_PRD because it is hidden
             sheet.range('C' + (rowStart)).value("");
 
@@ -517,6 +518,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     sheet.range('B' + (row)).value(JSON.stringify(validJSON));
                     systemModifiedProductInclude = true;
                     sheet.range(root.colToLetter['PTR_USER_PRD'] + (row)).value(key);
+                    systemModifiedProductInclude = false;
                     // can't use colToLetter for PTR_SYS_INVLD_PRD because it is hidden
                     sheet.range('C' + (row)).value("");
                     row++;
@@ -1391,7 +1393,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             var dtoDateRange = {
                                 startDate: pricingTableRow.START_DT, endDate: pricingTableRow.END_DT
                             };
-                            root.setBusy("Please wait", "");
+                            root.setBusy("Please wait...", "");
                             return ProductSelectorService.GetProductSelectorWrapper(dtoDateRange).then(function (response) {
                                 root.setBusy("", "");
                                 return response;
@@ -1634,7 +1636,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                     }
                                 }
                                 data[r].PTR_USER_PRD = contractProducts;
-                                sourceData[r].PTR_SYS_PRD = contractProducts;
+                                sourceData[r].PTR_USER_PRD = contractProducts;
                             }
                         }
                     }

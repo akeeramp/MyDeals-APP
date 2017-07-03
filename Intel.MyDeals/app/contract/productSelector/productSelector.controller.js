@@ -40,6 +40,7 @@
         vm.showSingleProductHeirarchy = showSingleProductHeirarchy;
         vm.getVerticalsUnderMarkLevel = getVerticalsUnderMarkLevel;
         vm.isValidCapDetails = isValidCapDetails;
+        vm.drillDownPrd = "Select";
         var searchProcessed = false;
         if (pricingTableRow.PROD_INCLDS == undefined || pricingTableRow.PROD_INCLDS == null || pricingTableRow.PROD_INCLDS == "") {
             pricingTableRow.PROD_INCLDS = 'All';
@@ -339,10 +340,21 @@
             vm.hideSelection = false;
             vm.showSuggestions = false;
             vm.errorMessage = "";
+            if (index === 0) {
+                updateDrillDownPrd();
+            }
             vm.selectedPathParts.splice(index, vm.selectedPathParts.length);
             var item = vm.selectedPathParts.length > 0 ? vm.selectedPathParts[vm.selectedPathParts.length - 1]
                 : newItem();
             getItems(item);
+        }
+
+        function updateDrillDownPrd() {
+            if (vm.drillDownPrd !== "Select" && vm.suggestedProducts.length > 0) {
+                vm.drillDownPrd = "Select";
+                vm.showSuggestions = true;
+                vm.hideSelection = true;
+            }
         }
 
         var newItem = function () {
@@ -647,9 +659,12 @@
         getItems();
 
         // Called when user enters value into search box and hits enter
-        vm.searchProduct = function (userInput, columnType) {
+        vm.searchProduct = function (userInput, columnType, isSuggestProduct) {
             userInput = !userInput ? vm.userInput : userInput;
             if (userInput == "") return [];
+            if (isSuggestProduct) {
+                vm.drillDownPrd = userInput;
+            }
             var data = [{
                 ROW_NUMBER: 1, // By default pass one as user will select only one value from popup
                 USR_INPUT: userInput.replace(/\s\s+/g, ' '),
@@ -773,7 +788,10 @@
         vm.productSearchValues = [];
         function processProducts(data) {
             vm.hideSelection = true;
+
             vm.errorMessage = "";
+            vm.showSuggestions = false;
+
             vm.productSearchValues = [];
             vm.selectedPathParts = []; // Reset the breadcrumb
             vm.showSearchResults = false; // Hide the grid
@@ -781,7 +799,10 @@
 
             vm.productSearchValues = data;
 
-            vm.errorMessage = vm.productSearchValues.length == 0 ? "Unable to find a valid product for selected global filters." : "";
+            vm.errorMessage = vm.productSearchValues.length == 0 ? "Unable to find this product. It is possible the product is outside the date range of the deal or global filters." : "";
+            if (vm.errorMessage != "") {
+                vm.showSuggestions = true;
+            }
             var productCategories = $filter('unique')(vm.productSearchValues, 'PRD_CAT_NM');
 
             vm.searchItems = productCategories.map(function (i) {

@@ -11,9 +11,6 @@
             <div class="col-md-5 prodSelectorSearch">
                 <input id="productSearch" class="prod-autocomplete form-control fl input-sm" ng-model="vm.userInput" ng-keyup="$event.keyCode == 13 ? vm.searchProduct() : null" type="text" kendo-autocomplete k-options="vm.productOptions"
                        k-data-value-field="'PRD_MBR_SID'" />
-                <div class="err-Search" ng-if="vm.errorMessage.length > 0">
-                    {{vm.errorMessage}}
-                </div>
             </div>
             <div class="col-md-2" style="padding-left:0px;padding-top:8px">
                 <button class="btn btn-primary prdBtn" ng-click="vm.searchProduct()">Search</button>
@@ -25,7 +22,7 @@
         </div>
         <div ng-if="!vm.showTree" class="row breadCrumbWrapper">
             <ul class="productSelectorpath breadcrumb">
-                <li><a role="button" class="prdAnchor" ng-click="vm.selectPath(0)">Select</a></li>
+                <li><a role="button" class="prdAnchor" ng-click="vm.selectPath(0)">{{vm.drillDownPrd}}</a></li>
                 <li ng-repeat="p in vm.selectedPathParts | unique:'name'" ng-if="p.name != 'NA'">
                     <a role="button" class="prdAnchor" ng-click="vm.selectPath($index + 1)">{{:: p.name }}</a>
                 </li>
@@ -37,16 +34,21 @@
     </div>
     <div class="prodSelector modal-body">
         <div ng-if="vm.showSuggestions" class="productSelector subHeaderNavContainer mini-right miniProdNav">
-            <div>No product found for {{ vm.userInput }}. Search instead for:</div>
-            <div style="padding-top:5px;">
-                <ul ng-if="vm.suggestedProducts.length !== 0" class="productSelector productpath breadcrumb">
-                    <li ng-repeat="p in vm.suggestedProducts | unique:'Name'">
-                        <span class="productSelector prdAnchor Good" role="button" ng-click="vm.searchProduct(p.Name, p.Type)">{{:: p.Name }}</span>
-                    </li>
-                </ul>
-                <div ng-if="vm.suggestedProducts.length === 0">
-                    Unable to find any suggestions for {{vm.userInput}}
+            <div ng-if="!(vm.errorMessage.length > 0)">
+                <div>No product found for "{{ ::vm.userInput }}". Search instead for:</div>
+                <div style="padding-top:5px;">
+                    <ul ng-if="vm.suggestedProducts.length !== 0" class="productSelector productpath breadcrumb">
+                        <li ng-repeat="p in vm.suggestedProducts | unique:'Name'">
+                            <span class="productSelector prdAnchor Good" role="button" ng-click="vm.searchProduct(p.Name, p.Type, true)">{{:: p.Name }}</span>
+                        </li>
+                    </ul>
+                    <div class="productSelector Warning" ng-if="vm.suggestedProducts.length === 0">
+                        Unable to find any suggestions for "{{vm.userInput}}."
+                    </div>
                 </div>
+            </div>
+            <div class="productSelector Issue" ng-if="vm.errorMessage.length > 0">
+                {{vm.errorMessage}}
             </div>
         </div>
         <div ng-if="vm.showTree && !vm.showSuggestions">
