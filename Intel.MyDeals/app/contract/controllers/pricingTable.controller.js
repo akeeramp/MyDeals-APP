@@ -134,7 +134,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 return obj.DC_ID !== undefined && obj.DC_ID !== null;
             });
         }
-        
+
         root.spreadDs = ssTools.createDataSource(root.pricingTableData.PRC_TBL_ROW);
 
         if (!root.contractData.CustomerDivisions || root.contractData.CustomerDivisions.length <= 1) {
@@ -490,7 +490,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 }
             }
 
-            //debugger;
+            //debugger;ope
             //PTR_SYS_PRD
             sheet.range('B' + (rowStart)).value(JSON.stringify(validateSelectedProducts));
             systemModifiedProductInclude = true;
@@ -1603,6 +1603,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     if (!!transformResult && !!transformResult.ProdctTransformResults) {
                         for (var key in transformResult.ProdctTransformResults) {
                             var r = key - 1;
+                            var allIssuesDone = false;
                             // SAve Valid and InValid JSO into spreadsheet hidden columns
                             if ((!!transformResult.InValidProducts[key] && transformResult.InValidProducts[key].length > 0) || !!transformResult.DuplicateProducts[key]) {
                                 var invalidJSON = {
@@ -1614,10 +1615,27 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             } else {
                                 data[r].PTR_SYS_INVLD_PRD = "";
                                 sourceData[r].PTR_SYS_INVLD_PRD = data[r].PTR_SYS_INVLD_PRD;
+                                allIssuesDone = true;
                             }
 
                             data[r].PTR_SYS_PRD = !!transformResult.ValidProducts[key] ? JSON.stringify(transformResult.ValidProducts[key]) : "";
                             sourceData[r].PTR_SYS_PRD = data[r].PTR_SYS_PRD;
+
+                            // Update user input if all the issues are done
+                            if (allIssuesDone && !!transformResult.ValidProducts[key]) {
+                                var contractProducts = "";
+                                for (var prd in transformResult.ValidProducts[key]) {
+                                    if (transformResult.ValidProducts[key].hasOwnProperty(prd)) {
+                                        var userInput = $filter('unique')(transformResult.ValidProducts[key][prd], 'USR_INPUT')
+                                        userInput = userInput.map(function (elem) {
+                                            return elem.USR_INPUT;
+                                        }).join(",")
+                                        contractProducts = contractProducts === "" ? userInput : contractProducts + "," + userInput;
+                                    }
+                                }
+                                data[r].PTR_USER_PRD = contractProducts;
+                                sourceData[r].PTR_SYS_PRD = contractProducts;
+                            }
                         }
                     }
                     root.spreadDs.sync();

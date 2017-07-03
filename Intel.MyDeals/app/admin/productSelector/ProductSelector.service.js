@@ -19,7 +19,9 @@
             GetProductSuggestions: GetProductSuggestions,
             GetCAPForProduct: GetCAPForProduct,
             GetSearchString: GetSearchString,
-            GetProductAttributes: GetProductAttributes
+            GetProductAttributes: GetProductAttributes,
+            IsProductExistsInMydeals: IsProductExistsInMydeals,
+            GetAutoCorrectedProduct: GetAutoCorrectedProduct
         }
 
         return service;
@@ -62,6 +64,16 @@
         function GetSearchString(dto) {
             var postObject = { filter: dto }
             return dataService.post(apiBaseUrl + 'GetSearchString', postObject);
+        }
+
+        function IsProductExistsInMydeals(dto) {
+            var postObject = { filter: dto }
+            return dataService.post(apiBaseUrl + 'IsProductExistsInMydeals', postObject);
+        }
+
+        function GetAutoCorrectedProduct(dto) {
+            var postObject = { filter: dto }
+            return dataService.post(apiBaseUrl + 'GetAutoCorrectedProduct', postObject);
         }
 
         function GetProductAttributes(products) {

@@ -1065,7 +1065,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns></returns>
         public IList<SearchString> GetMatchingProduct(string searchText, Dictionary<string, string> searchString, bool getAutocorrectSuggestions)
         {
-            var suggestions = new Dictionary<string, int>();
+            var suggestions = new Dictionary<string, int>(StringComparer.InvariantCultureIgnoreCase);
 
             List<NodeMatch> myMatches = new List<NodeMatch>();
             int threshold = searchText.Length / 2;
@@ -1073,11 +1073,21 @@ namespace Intel.MyDeals.BusinessLogic
             foreach (KeyValuePair<string, string> searchVal in searchString)
             {
                 var numberOfEdits = FuzzySearch.DamerauLevenshteinDistance(searchText, searchVal.Key.ToUpper(), threshold);
-                if (!suggestions.Keys.Contains(searchVal.Key) && numberOfEdits <= threshold)
+                if (!suggestions.Keys.Contains(searchVal.Key))
                     suggestions.Add(searchVal.Key, numberOfEdits);
             }
 
-            var sortedList = suggestions.OrderBy(o => o.Value).Take(7);
+            // if word contains a space see split the word and see if there are any direct matches exist
+            var wordList = searchText.Split(' ');
+            foreach (var word in wordList)
+            {
+                if (suggestions.ContainsKey(word.Trim()))
+                {
+                    suggestions[word.Trim()] = 0;
+                }
+            }
+
+            var sortedList = suggestions.Where(o => o.Value <= threshold).OrderBy(o => o.Value).Take(7);
             var rtn = sortedList.Select(x => new SearchString { Name = x.Key });
 
             return rtn.ToList();
@@ -1090,6 +1100,28 @@ namespace Intel.MyDeals.BusinessLogic
         public Dictionary<string, string> GetSearchString()
         {
             return _dataCollectionsDataLib.GetSearchString();
+        }
+
+        /// <summary>
+        /// Check product exists in Mydeals (without any filter, for quick check. Performance matters)
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public bool IsProductExistsInMydeals(string searchText)
+        {
+            var searchString = GetSearchString();
+            return searchString.ContainsKey(searchText.Trim());
+        }
+
+        /// <summary>
+        /// Get auto corrected product suggestions
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public IList<SearchString> GetAutoCorrectedProduct(string searchText)
+        {
+            var searchString = GetSearchString();
+            return GetMatchingProduct(searchText.Trim(), searchString, true);
         }
     }
 

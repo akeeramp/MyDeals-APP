@@ -256,7 +256,7 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "Json String (will be hidden)",
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 IsReadOnly = false, // need to set to true after product selector is in place
-                IsHidden = true,
+                IsHidden = false,
                 Width = 220
                 //// This is how it should be set once the product selector is in place:
                 //IsReadOnly = true,
@@ -269,7 +269,7 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "Invalid Json String (will be hidden)",
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 IsReadOnly = false, // need to set to true after product selector is in place
-                IsHidden = true,
+                IsHidden = false,
                 Width = 220
                 //// This is how it should be set once the product selector is in place:
                 //IsReadOnly = true,
@@ -648,14 +648,14 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem
             {
                 Id = 20,
-                AtrbCd = AttributeCodes.DEAL_SOLD_TO_ID, 
+                AtrbCd = AttributeCodes.DEAL_SOLD_TO_ID,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-				UiType = "MULTISELECT",
+                UiType = "MULTISELECT",
                 Template = "#=gridUtils.uiMultiselectArrayControlWrapper(data, 'DEAL_SOLD_TO_ID')#",
-				LookupUrl = "/api/Dropdown/GetSoldToIds", // TODO
-				LookupText = "dropdownName",
-				LookupValue = "dropdownName",
-				IsFilterable = true,
+                LookupUrl = "/api/Dropdown/GetSoldToIds", // TODO
+                LookupText = "dropdownName",
+                LookupValue = "dropdownName",
+                IsFilterable = true,
                 IsSortable = true,
                 Width = 150
             });
@@ -1036,21 +1036,21 @@ namespace Intel.MyDeals.DataLibrary
             //    IsSortable = true,
             //    Template = "#=gridUtils.uiControlWrapper(data, 'MEETCOMP_TEST_FAIL_OVERRIDE_REASON')#"
             //});
-			
-   //         items.Add(new UiTemplateContainerItem
-   //         {
-   //             Id = 29,
-   //             AtrbCd = AttributeCodes.RETAIL_CYCLE,
-   //             ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-   //             Width = 140,
-   //             IsFilterable = true,
-   //             IsSortable = true,
-			//	UiType = "ComboBox",
-			//	Template = "#=gridUtils.uiControlWrapper(data, 'RETAIL_CYCLE')#",
-   //             LookupUrl = "api/Dropdown/GetRetailPull", // TODO: uncomment the GetRetailPull function in the API or remove it
-			//	LookupText = "dropdownName",
-			//	LookupValue = "dropdownName",
-			//});
+
+            //         items.Add(new UiTemplateContainerItem
+            //         {
+            //             Id = 29,
+            //             AtrbCd = AttributeCodes.RETAIL_CYCLE,
+            //             ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+            //             Width = 140,
+            //             IsFilterable = true,
+            //             IsSortable = true,
+            //	UiType = "ComboBox",
+            //	Template = "#=gridUtils.uiControlWrapper(data, 'RETAIL_CYCLE')#",
+            //             LookupUrl = "api/Dropdown/GetRetailPull", // TODO: uncomment the GetRetailPull function in the API or remove it
+            //	LookupText = "dropdownName",
+            //	LookupValue = "dropdownName",
+            //});
 
             //items.Add(new UiTemplateContainerItem
             //{

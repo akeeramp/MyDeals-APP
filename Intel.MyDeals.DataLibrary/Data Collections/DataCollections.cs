@@ -178,7 +178,7 @@ namespace Intel.MyDeals.DataLibrary
                     _getSearchStringList.AddRange(searchNandDensity);
                     _getSearchStringList.AddRange(searchEPM);
 
-                    _getSearchString = new Dictionary<string, string>();
+                    _getSearchString = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
 
                     foreach (var searchString in _getSearchStringList)
                     {

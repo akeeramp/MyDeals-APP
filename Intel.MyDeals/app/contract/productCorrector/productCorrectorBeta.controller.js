@@ -82,7 +82,6 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
             if (!!vm.ProductCorrectorData.ValidProducts[vm.curRowId] && !!vm.ProductCorrectorData.ValidProducts[vm.curRowId][item] && !!vm.ProductCorrectorData.ValidProducts[vm.curRowId][item][0]) {
                 // recently fixed item
                 if (status === "Issue") {
-
                     var name = [];
                     var pItem = vm.ProductCorrectorData.ValidProducts[vm.curRowId][item];
                     for (var n = 0; n < pItem.length; n++) {
@@ -90,7 +89,6 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
                     }
                     matchName = name.length === 0 ? "" : name.length === 1 ? name[0] : name.length + " products";
                 }
-
             }
 
             vm.curRowProds.push({
@@ -356,7 +354,6 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
         vm.ProductCorrectorData.ValidProducts[vm.curRowId][item.name].push(foundItem);
 
         vm.removeAndFilter(item.name);
-
     }
 
     vm.removeAndFilter = function (prdName) {
@@ -395,7 +392,6 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
     }
 
     vm.openProdSelector = function (dataItem, rowId) {
-
         if (ProductRows.length > 1) {
             var currentPricingTableRow = ProductRows[rowId - 1];
         }
@@ -452,7 +448,6 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
 
         modal.result.then(
             function (productSelectorOutput) {
-
                 var validateSelectedProducts = productSelectorOutput.validateSelectedProducts;
 
                 for (var key in validateSelectedProducts) {
@@ -463,14 +458,13 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
                         vm.ProductCorrectorData.ValidProducts[vm.curRowId][vm.invalidProdName] = [];
 
                     vm.ProductCorrectorData.ValidProducts[vm.curRowId][vm.invalidProdName].push(validateSelectedProducts[key][0]);
-
                 }
 
                 //vm.initProducts();
                 vm.removeAndFilter(vm.invalidProdName);
+
                 //vm.selectRow(vm.curRowId);
                 vm.invalidProdName = '';
-
             });
     }
 
@@ -599,7 +593,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
 
     vm.nextAvailRow = function () {
         for (var r = 0; r < vm.issueRowKeys.length; r++) {
-            vm.selectRow(r+1);
+            vm.selectRow(r + 1);
             if (!vm.curRowDone) {
                 return true;
             }
@@ -683,8 +677,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
             });
     }
 
-    vm.saveProducts = function() {
-
+    vm.saveProducts = function () {
         for (var r = 0; r < vm.numIssueRows; r++) {
             var key = vm.issueRowKeys[r];
 
@@ -703,6 +696,28 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
                     }
                     if (!foundItems)
                         delete vm.ProductCorrectorData.DuplicateProducts[key];
+                }
+            }
+
+            //TODO:Check with Phil, if this fix not required comment these lines
+            // If valid products contains invalid product name remove from  invalid product
+            if (!!vm.ProductCorrectorData.InValidProducts[key]) {
+                for (var j = 0; j < vm.ProductCorrectorData.InValidProducts[key].length; j++) {
+                    var foundItems = false;
+                    prodName = vm.ProductCorrectorData.InValidProducts[key][j];
+                    if (!!vm.ProductCorrectorData.ValidProducts[key]) {
+                        var item = vm.ProductCorrectorData.ValidProducts[key][prodName];
+                        if (Array.isArray(item) && item.length > 0) foundItems = true;
+                        if (foundItems) {
+                            // delete from invalid if exists
+                            var delItem = vm.ProductCorrectorData.InValidProducts[key];
+                            for (var i = 0; i < delItem.length; i++) {
+                                if (delItem[i] === prodName) {
+                                    delItem.splice(i, 1);
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

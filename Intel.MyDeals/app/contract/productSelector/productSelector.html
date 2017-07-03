@@ -36,14 +36,24 @@
         </div>
     </div>
     <div class="prodSelector modal-body">
-        <div ng-if="vm.showTree">
+        <div ng-if="vm.showSuggestions" class="productSelector subHeaderNavContainer mini-right miniProdNav">
+            <div>No product found for {{ vm.userInput }}. Search instead for:</div>
+            <div style="padding-top:5px;">
+                <ul class="productSelector productpath breadcrumb">
+                    <li ng-repeat="p in vm.suggestedProducts | unique:'Name'">
+                        <span class="productSelector prdAnchor Good" role="button" ng-click="vm.searchProduct(p.Name)">{{:: p.Name }}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div ng-if="vm.showTree && !vm.showSuggestions">
             <div class="k-treelist product" kendo-tree-view k-options="vm.tree">
                 <div k-template>
                     {{dataItem.name}}
                 </div>
             </div>
         </div>
-        <div ng-if="!vm.showTree">
+        <div ng-if="!vm.showTree && !vm.showSuggestions">
             <div ng-if="!vm.hideSelection" ng-switch="vm.getDisplayTemplate()">
                 <div ng-switch-when="btnGroup" class="row" style="padding-left:10px;padding-right:10px;font-size:16px;">
                     <div class="drillDown btn-group btn-group-justified" role="group" aria-label="...">

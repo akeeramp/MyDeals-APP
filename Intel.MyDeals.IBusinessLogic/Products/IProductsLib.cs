@@ -76,5 +76,9 @@ namespace Intel.MyDeals.IBusinessLogic
         List<Product> SuggestProductsByDates(string prdEntered, int? returnMax, DateTime startDate, DateTime endDate);
 
         IList<SearchString> GetSearchString(string searchText);
+
+        bool IsProductExistsInMydeals(string filter);
+
+        IList<SearchString> GetAutoCorrectedProduct(string filter);
     }
 }

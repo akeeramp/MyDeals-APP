@@ -486,5 +486,34 @@ namespace Intel.MyDeals.Controllers.API
                 , $"Unable to get Product details"
             );
         }
+
+        /// <summary>
+        /// Check product exists in Mydeals (without any filter, for quick check. Performance matters)
+        /// Note : Going with POST operation instead of GET as product name contains special characters.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [Route("IsProductExistsInMydeals")]
+        [HttpPost]
+        public bool IsProductExistsInMydeals([FromBody]dynamic input)
+        {
+            return SafeExecutor(() => _productsLib.IsProductExistsInMydeals((string)input.filter)
+                , $"Unable to check if product exists in MyDeals"
+            );
+        }
+
+        /// <summary>
+        /// Get auto corrected product suggestions
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [Route("GetAutoCorrectedProduct")]
+        [HttpPost]
+        public IList<SearchString> GetAutoCorrectedProduct([FromBody]dynamic input)
+        {
+            return SafeExecutor(() => _productsLib.GetAutoCorrectedProduct((string)input.filter)
+                            , $"Unable to get auto corrected Product suggestions"
+                        );
+        }
     }
 }

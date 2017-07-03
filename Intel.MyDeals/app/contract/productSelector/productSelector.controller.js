@@ -17,6 +17,8 @@
         vm.productSelectionLevelsAttributes = productSelectionLevels.data.ProductSelectionLevelsAttributes;
 
         // Variables with vm are binded to HTML
+        vm.showSuggestions = false;
+        vm.suggestedProducts = [];
         vm.selectedPathParts = [];
         vm.items = [];
         vm.gridData = [];
@@ -335,6 +337,7 @@
         // When user clicks on the breadcrumb
         function selectPath(index) {
             vm.hideSelection = false;
+            vm.showSuggestions = false;
             vm.errorMessage = "";
             vm.selectedPathParts.splice(index, vm.selectedPathParts.length);
             var item = vm.selectedPathParts.length > 0 ? vm.selectedPathParts[vm.selectedPathParts.length - 1]
@@ -661,6 +664,7 @@
             }];
 
             ProductSelectorService.GetProductDetails(data, pricingTableRow.CUST_MBR_SID).then(function (response) {
+                vm.showSuggestions = false;
                 processProducts(response.data);
             }, function (response) {
                 logger.error("Unable to get products.", response, response.statusText);
@@ -670,10 +674,27 @@
         function autoSearchForSuggestion() {
             if (suggestedProduct.mode == "auto") {
                 vm.userInput = suggestedProduct.prodname;
-                setTimeout(function () {
-                    vm.searchProduct();
-                }, 2000);
+                ProductSelectorService.IsProductExistsInMydeals(vm.userInput).then(function (response) {
+                    if (response.data) {
+                        setTimeout(function () {
+                            vm.searchProduct();
+                        }, 1500);
+                    } else {
+                        showAutocorrectedSuggestions(vm.userInput)
+                    }
+                }, function (response) {
+                    logger.error("Unable to get check if product exists in MyDeals.", response, response.statusText);
+                });
             }
+        }
+
+        function showAutocorrectedSuggestions(userInput) {
+            ProductSelectorService.GetAutoCorrectedProduct(userInput).then(function (response) {
+                vm.suggestedProducts = response.data;
+                vm.showSuggestions = true;
+            }, function (response) {
+                logger.error("Unable to get auto-corrected product suggestions.", response, response.statusText);
+            });
         }
 
         autoSearchForSuggestion();
