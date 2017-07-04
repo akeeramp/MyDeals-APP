@@ -881,6 +881,19 @@
             $scope.clearNptTemplate();
             $scope.isEditPricingTableDefaultsHidden = false;
             $scope.curPricingStrategy = ps;
+            if (!!$scope.curPricingStrategy && !$scope.curPricingStrategy.PRC_TBL) {
+                // default Pricing Table title to Pricing Strategy title
+                $scope.newPricingTable.TITLE = $scope.curPricingStrategy.TITLE;
+            } else {
+                // look for the title in existing titles
+                var defTitle = $scope.curPricingStrategy.TITLE;
+                for (var t = 0; t < $scope.curPricingStrategy.PRC_TBL.length; t++) {
+                    if ($scope.curPricingStrategy.PRC_TBL[t].TITLE === defTitle) {
+                        defTitle = "";
+                    }
+                }
+                $scope.newPricingTable.TITLE = defTitle;
+            }
         }
         $scope.showEditPricingTableDefaults = function (pt) {
             $scope.isAddPricingTableHidden = true;
