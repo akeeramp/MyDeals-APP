@@ -346,7 +346,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
         if (!vm.ProductCorrectorData.DuplicateProducts[vm.curRowId]) return;
         if (!vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][item.name]) return;
 
-        var foundItem = util.findInArrayWhere(vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][item.name], "HIER_VAL_NM", item.matchName);
+        var foundItem = util.findInArrayWhere(vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][item.name], "PRD_MBR_SID", id);
         if (!foundItem) return;
 
         if (!vm.ProductCorrectorData.ValidProducts[vm.curRowId]) vm.ProductCorrectorData.ValidProducts[vm.curRowId] = {};
