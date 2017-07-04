@@ -951,7 +951,11 @@
                     $timeout(function () {
                         $("#divHelpAddPs").animate({
                             opacity: 0
-                        }, 2000);
+                        }, 2000, function() {
+                            $("#divHelpAddPs").css({
+                                display: "none"
+                            });
+                        });
                     }, 6000);
                 });
             }, 2000);

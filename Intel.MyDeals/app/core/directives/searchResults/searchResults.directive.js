@@ -67,6 +67,7 @@
                                         if (scope.searchResultPricingStrategies[data.data[i].CUSTOMER] == null) {
                                             scope.searchResultPricingStrategies[data.data[i].CUSTOMER] = [];
                                         }
+                                        data.data[i].OBJ_HIER = data.data[i].OBJ_HIER.split("/")[0];
                                         scope.searchResultPricingStrategies[data.data[i].CUSTOMER].push(data.data[i]);
                                         break;
                                     case 3: //PRICING TABLE

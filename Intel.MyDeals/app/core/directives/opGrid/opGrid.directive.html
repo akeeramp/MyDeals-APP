@@ -2,8 +2,11 @@
 <div class="op-grid-container-wrapper">
         
         <div class="op-grid-header" ng-show="isToolbarVisible">
-            
+            <div class="dealTag" ng-if="dealCnt" style="position: absolute; top: 0; right: 0; z-index: 100; font-size: 16px;">
+                {{displayDealTypes()}}
+            </div>
             <div id="tabstrip" kendo-tab-strip class="gradTab" k-ng-delay="tabStripDelay" ng-show="tabStripDelay">
+                
                 <ul class="fl">
                     <li ng-repeat="group in opOptions.groups | orderBy:'order'" ng-click="showCols(group.name)">
                         <i class="intelicon-pin-outlined" ng-hide="{{ group.name == 'All' || group.name == 'CAP Info' }}" title="Pin tab so it always shows in the grid" ng-click="clickPin($event, group.name)"></i> {{group.name}}
@@ -12,10 +15,10 @@
                         <i class="intelicon-close-solid closeGrp" ng-hide="{{ group.name == 'All' || group.name == 'CAP Info' || !isLayoutConfigurable}}" title="Close tab" ng-click="removeGrp($event, group.name)"></i>
                     </li>
                 </ul>
-                <div class="fr dealTag" ng-if="dealCnt">
+                <!--<div class="fr dealTag" ng-if="dealCnt">
                     {{displayDealTypes()}}
                 </div>
-                <div class="clearboth"></div>
+                <div class="clearboth"></div>-->
             </div>
             
             <div class="toolbar">
