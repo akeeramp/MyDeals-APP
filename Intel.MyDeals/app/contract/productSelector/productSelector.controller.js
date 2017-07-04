@@ -664,7 +664,13 @@
             if (userInput == "") return [];
             if (isSuggestProduct) {
                 vm.drillDownPrd = userInput;
+                vm.userInput = userInput;
             }
+
+            if (userInput.indexOf('"') >= 0) {
+                columnType = "EPM_NM";
+            }
+
             var data = [{
                 ROW_NUMBER: 1, // By default pass one as user will select only one value from popup
                 USR_INPUT: userInput.replace(/\s\s+/g, ' '),
@@ -738,6 +744,7 @@
                         if (param === "") {
                             e.success([]);
                         } else {
+                            param.replace(/["]/g, "");
                             ProductSelectorService.GetSearchString(param).then(function (response) {
                                 e.success(response.data);
                             }, function (response) {
