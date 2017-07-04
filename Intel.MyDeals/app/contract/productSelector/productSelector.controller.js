@@ -669,6 +669,7 @@
 
             if (userInput.indexOf('"') >= 0) {
                 columnType = "EPM_NM";
+                userInput = userInput.replace(/["]/g, "");
             }
 
             var data = [{
