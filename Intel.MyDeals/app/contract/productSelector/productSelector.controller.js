@@ -744,7 +744,7 @@
                         if (param === "") {
                             e.success([]);
                         } else {
-                            param.replace(/["]/g, "");
+                            param = param.replace(/["]/g, "");
                             ProductSelectorService.GetSearchString(param).then(function (response) {
                                 e.success(response.data);
                             }, function (response) {
