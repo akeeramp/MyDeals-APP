@@ -669,6 +669,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             }
         }
 
+
         if (!root._dirty) {
             root._dirty = true;
         }
@@ -802,6 +803,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     //    }
                     //}
                 });
+
+                root.child.setRowIdStyle(data);
             }
         }, 10);
     }
