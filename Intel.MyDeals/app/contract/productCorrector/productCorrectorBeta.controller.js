@@ -459,7 +459,9 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
                     if (!vm.ProductCorrectorData.ValidProducts[vm.curRowId][vm.invalidProdName])
                         vm.ProductCorrectorData.ValidProducts[vm.curRowId][vm.invalidProdName] = [];
 
-                    vm.ProductCorrectorData.ValidProducts[vm.curRowId][vm.invalidProdName] = validateSelectedProducts[key];
+                    angular.forEach(validateSelectedProducts[key], function (product) {
+                        vm.ProductCorrectorData.ValidProducts[vm.curRowId][vm.invalidProdName].push(product);
+                    });
                 }
 
                 //vm.initProducts();

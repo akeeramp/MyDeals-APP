@@ -660,6 +660,10 @@
 
         // Called when user enters value into search box and hits enter
         vm.searchProduct = function (userInput, columnType, isSuggestProduct) {
+            var autocomplete = $("#productSearch").data("kendoAutoComplete");
+            if (!!autocomplete) {
+                autocomplete.close();
+            }
             userInput = !userInput ? vm.userInput : userInput;
             if (userInput == "") return [];
             if (isSuggestProduct) {
