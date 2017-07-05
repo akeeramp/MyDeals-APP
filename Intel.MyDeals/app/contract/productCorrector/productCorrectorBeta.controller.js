@@ -457,7 +457,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
                     if (!vm.ProductCorrectorData.ValidProducts[vm.curRowId][vm.invalidProdName])
                         vm.ProductCorrectorData.ValidProducts[vm.curRowId][vm.invalidProdName] = [];
 
-                    vm.ProductCorrectorData.ValidProducts[vm.curRowId][vm.invalidProdName].push(validateSelectedProducts[key][0]);
+                    vm.ProductCorrectorData.ValidProducts[vm.curRowId][vm.invalidProdName] = validateSelectedProducts[key];
                 }
 
                 //vm.initProducts();
