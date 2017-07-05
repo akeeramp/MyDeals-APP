@@ -52,7 +52,10 @@
 
         $scope.vm.toggleSelectAll = function (ev) {
             var grid = $(ev.target).closest("[kendo-grid]").data("kendoGrid");
-            var items = grid.dataSource.data();
+            var data = grid.dataSource.data();
+            var filters = grid.dataSource.filter();
+            var query = new kendo.data.Query(data);
+            var items = query.filter(filters).data;
             items.forEach(function (item) {
                 item.selected = ev.target.checked;
                 if (ev.target.checked) {

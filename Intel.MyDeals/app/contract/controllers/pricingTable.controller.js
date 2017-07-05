@@ -454,6 +454,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     return ProductSelectorService.GetProductSelectorWrapper(dtoDateRange).then(function (response) {
                         root.setBusy("", "");
                         return response;
+                    }, function (response) {
+                        root.setBusy("", "");
+                        logger.error("Unable to launch product selector.", response, response.statusText);
                     });
                 }],
                 pricingTableRow: angular.copy(pricingTableRow),
@@ -669,7 +672,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             }
         }
 
-
         if (!root._dirty) {
             root._dirty = true;
         }
@@ -858,7 +860,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
     function showHelp() {
         $timeout(function () {
-
             if (!root.pricingTableData.PRC_TBL_ROW && root.pricingTableData.PRC_TBL_ROW.length > 0) return;
 
             var item = null;
@@ -885,7 +886,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 }, 4000);
             });
         }, 2000);
-
     }
 
     $scope.setRowIdStyle = function (data) {
@@ -895,12 +895,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var sheet = spreadsheet.activeSheet();
 
         sheet.batch(function () {
-
             var row = 2;
             for (var key in data) {
                 if (data.hasOwnProperty(key) && !data[key]._actions) {
                     if (!!data[key].DC_ID && data[key].DC_ID !== "") {
-
                         // Validation Check
                         var item = data[key].PASSED_VALIDATION;
                         if (!!item) {
@@ -927,7 +925,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             sheet.range("E" + row + ":E" + row).color("#000000").bold(false);
                             //sheet.range("E" + row + ":E" + row).borderLeft({ size: 6, color: "transparent" });
                         }
-
                     } else {
                         sheet.range("A" + row + ":A" + row).background("#eeeeee").color("#003C71");
                     }
@@ -935,7 +932,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 }
             }
         }, { layout: true });
-
     }
 
     $scope.$on('saveWithWarnings',
@@ -1400,6 +1396,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             return ProductSelectorService.GetProductSelectorWrapper(dtoDateRange).then(function (response) {
                                 root.setBusy("", "");
                                 return response;
+                            }, function (response) {
+                                root.setBusy("", "");
+                                logger.error("Unable to launch product selector.", response, response.statusText);
                             });
                         }],
                         pricingTableRow: angular.copy(pricingTableRow),

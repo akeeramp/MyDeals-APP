@@ -436,6 +436,8 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
                     };
                     return ProductSelectorService.GetProductSelectorWrapper(dtoDateRange).then(function (response) {
                         return response;
+                    }, function (response) {
+                        logger.error("Unable to launch product selector.", response, response.statusText);
                     });
                 }],
                 pricingTableRow: angular.copy(pricingTableRow),
