@@ -746,6 +746,7 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "YCS2 Info",
                 IsFilterable = true,
                 IsSortable = true,
+                IsReadOnly = true,
                 Template = "<op-popover op-options='YCS2' op-data='getPrductDetails(dataItem, \"YCS2\")'>#=gridUtils.uiMoneyDatesControlWrapper(data, 'YCS2_PRC_IRBT', 'YCS2_START_DT', 'YCS2_END_DT')#</op-popover>",
             });
             items.Add(new UiTemplateContainerItem
