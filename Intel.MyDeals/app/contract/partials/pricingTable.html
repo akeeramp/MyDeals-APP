@@ -1,93 +1,102 @@
 ﻿<div ui-view="wipDealView" class="fullHeight">
-    
-    <div style="position:absolute; left: 5px; z-index: 900;">
-        <!-- Save Button -->
-        <button class="btn btn-sm ssToolbarBtn" ng-class="{'disabled': !_dirty}" ng-click="saveEntireContract()" title="Save Pricing Table">
-            <table>
-                <tr>
-                    <td>
-                        <i class="fa fa-floppy-o skyBlue" aria-hidden="true" ng-class="{'fa-disabled': !_dirty}" style="font-size: 29px; margin-top: 2px;"></i>
-                    </td>
-                    <td style="padding-left: 5px; color: #00AEEF; text-align: left;">
-                        Save <br />Pricing Table
-                    </td>
-                </tr>
-            </table>
-        </button>
 
-    </div>
+	<div style="position:absolute; left: 5px; z-index: 900;  padding-top: 2px;">
+		<!-- Save Button -->
+		<button class="btn btn-sm ssToolbarBtn" ng-class="{'disabled': !_dirty}" ng-click="saveEntireContract()" title="Save Pricing Table">
+			<table>
+				<tr>
+					<td>
+						<i class="fa fa-floppy-o skyBlue" aria-hidden="true" ng-class="{'fa-disabled': !_dirty}" style="font-size: 29px;"></i>
+					</td>
+					<td style="padding-left: 5px; color: #00AEEF; text-align: left;">
+						Save <br />Pricing Table
+					</td>
+				</tr>
+			</table>
+		</button>
+		<!-- Custom Undo Button -->
+		<button class="btn btn-sm ssToolbarBtn" ng-class="{'disabled': (undoCounter <= 0)}" ng-click="customUndo()" title="Undo" style="padding: 3px 8px;">
+			<table>
+				<tr>
+					<td>
+						<i class="fa fa-reply skyBlue" aria-hidden="true" ng-class="{'fa-disabled': (undoCounter <= 0)}" style="font-size: 23px; margin-top: 2px;"></i>
+					</td>
+				</tr>
+			</table>
+		</button>
+		<!-- Custom Redo Button -->
+		<button class="btn btn-sm ssToolbarBtn" ng-class="{'disabled': (redoCounter <= 0)}" ng-click="customRedo()" title="Redo" style="padding: 3px 8px;">
+			<table>
+				<tr>
+					<td>
+						<i class="fa fa-share skyBlue" aria-hidden="true" ng-class="{'fa-disabled': (redoCounter <= 0)}" style="font-size: 23px; margin-top: 2px;"></i>
+					</td>
+				</tr>
+			</table>
+		</button>		<!-- Validate Products Button -->
+		<button class="btn btn-sm ssToolbarBtn" ng-click="validatePricingTableProducts()" title="Validate the Pricing Table.  This will also perform a save.">
+			<table>
+				<tr>
+					<td>
+						<i class="intelicon-protection-checked-verified-outlined skyBlue" aria-hidden="true" style="font-size: 30px"></i>
+					</td>
+					<td style="padding-left: 5px; color: #00AEEF;">
+						Save & Validate<br />
+						Pricing Table
+					</td>
+				</tr>
+			</table>
+		</button>
 
-    <div style="position:absolute; left: 205px; z-index: 900;">
-        <table style="height: 37px;">
-            <tr>
-                <td style="padding: 1px 2px 0 10px;">
-                    <!-- Validate Products Button -->
-                    <button class="btn btn-sm ssToolbarBtn" ng-click="validatePricingTableProducts()" title="Validate the Pricing Table.  This will also perform a save.">
-                        <table>
-                            <tr>
-                                <td>
-                                    <i class="intelicon-protection-checked-verified-outlined skyBlue" aria-hidden="true" style="font-size: 30px"></i>
-                                </td>
-                                <td style="padding-left: 5px; color: #00AEEF;">
-                                    Save & Validate<br />
-                                    Pricing Table
-                                </td>
-                            </tr>
-                        </table>
-                    </button>
+		<!-- Product Selector Button -->
+		<button class="btn btn-sm ssToolbarBtn" ng-click="openProductSelector()" title="Open Product Selector">
+			<table>
+				<tr>
+					<td>
+						<i class="fa fa-mouse-pointer skyBlue" aria-hidden="true" style="font-size: 26px"></i>
+					</td>
+					<td style="padding-left: 5px; color: #00AEEF;">
+						Product <br />Selector
+					</td>
+				</tr>
+			</table>
+		</button>
 
-                    <!-- Product Selector Button -->
-                    <button class="btn btn-sm ssToolbarBtn" ng-click="openProductSelector()" title="Open Product Selector">
-                        <table>
-                            <tr>
-                                <td>
-                                    <i class="fa fa-mouse-pointer skyBlue" aria-hidden="true" style="font-size: 26px"></i>
-                                </td>
-                                <td style="padding-left: 5px; color: #00AEEF;">
-                                    Product <br />Selector
-                                </td>
-                            </tr>
-                        </table>
-                    </button>
+		<button class="btn btn-sm ssToolbarBtn" ng-click="toggleTerms()" title="Show/Hide Additional Discounts and Requirements.">
+			<table>
+				<tr>
+					<td>
+						<i class="intelicon-legal skyBlue" aria-hidden="true" style="font-size: 30px"></i>
+					</td>
+					<td style="padding-left: 5px; text-align: left; color: #00AEEF;">
+						Show/Hide<br />Additional Discounts
+					</td>
+				</tr>
+			</table>
+		</button>
+	</div>
 
-                    <button class="btn btn-sm ssToolbarBtn" ng-click="toggleTerms()" title="Show/Hide Additional Discounts and Requirements.">
-                        <table>
-                            <tr>
-                                <td>
-                                    <i class="intelicon-legal skyBlue" aria-hidden="true" style="font-size: 30px"></i>
-                                </td>
-                                <td style="padding-left: 5px; text-align: left; color: #00AEEF;">
-                                    Show/Hide<br />Additional Discounts
-                                </td>
-                            </tr>
-                        </table>
-                    </button>
-                </td>
-            </tr>
-        </table>
-    </div>
+	<div style="position:absolute; float: right; right: 5px; z-index: 900;">
+		<!-- Info Button -->
+		<button class="btn btn-sm ssToolbarBtn" ng-click="openInfoDialog()" title="Info">
+			<table>
+				<tr>
+					<td>
+						<i class="fa fa-info-circle skyBlue" aria-hidden="true" style="font-size: 29px; margin-top: 2px;"></i>
+					</td>
+				</tr>
+			</table>
+		</button>
+	</div>
 
-    <div style="position:absolute; float: right; right: 5px; z-index: 900;">
-        <!-- Save Button -->
-        <button class="btn btn-sm ssToolbarBtn" ng-click="openInfoDialog()" title="Info">
-            <table>
-                <tr>
-                    <td>
-                        <i class="fa fa-info-circle skyBlue" aria-hidden="true" style="font-size: 29px; margin-top: 2px;"></i>
-                    </td>
-                </tr>
-            </table>
-        </button>
-    </div>
+	<div kendo-spreadsheet id="pricingTableSpreadsheet" style="width: 100%; height: 100%; margin-top: -3px; margin-left: -2px;" k-options="ptSpreadOptions" k-scope-field="spreadsheet" class="noFormula"></div>
 
-    <div kendo-spreadsheet id="pricingTableSpreadsheet" style="width: 100%; height: 100%; margin-top: -3px; margin-left: -2px;" k-options="ptSpreadOptions" k-scope-field="spreadsheet" class="noFormula"></div>
-    
-    <div class="help-add-prod" id="divHelpAddProd" ng-if="root.pricingTableData.PRC_TBL_ROW.length === 0">
-        <div>
-            <i class="intelicon-arrow-up"></i>
-        </div>
-        Start by adding <br />Products Here
-    </div>
+	<div class="help-add-prod" id="divHelpAddProd" ng-if="root.pricingTableData.PRC_TBL_ROW.length === 0">
+		<div>
+			<i class="intelicon-arrow-up"></i>
+		</div>
+		Start by adding <br />Products Here
+	</div>
 </div>
 
 
@@ -96,29 +105,29 @@
 <div ng-include="'app/contract/partials/multiSelectPopUpModal.html'"></div>
 
 <script>
-    kendo.spreadsheet.defineFunction("MYDEALS_ERROR", function (val) {
-        return val !== true;
-    }).args([
+	kendo.spreadsheet.defineFunction("MYDEALS_ERROR", function (val) {
+		return val !== true;
+	}).args([
         ['*value', 'anything!']
-    ]);
+	]);
 </script>
 
 <style>
-    .help-add-prod {
-        position: absolute;
-        top: calc(60vh);
-        left: 100px;
-        z-index: 100;
-        width: 200px;
-        padding: 0 20px;
-        font-size: 18px;
-        opacity: 0;
-        color: #0071C5;
-        background-color: transparent;
-    }
+	.help-add-prod {
+		position: absolute;
+		top: calc(60vh);
+		left: 100px;
+		z-index: 100;
+		width: 200px;
+		padding: 0 20px;
+		font-size: 18px;
+		opacity: 0;
+		color: #0071C5;
+		background-color: transparent;
+	}
 
-    .help-add-prod i {
-        font-size: 40px;
-        color: #0071C5;
-    }
+		.help-add-prod i {
+			font-size: 40px;
+			color: #0071C5;
+		}
 </style>

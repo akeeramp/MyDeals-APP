@@ -907,10 +907,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
             }
 
             $scope.saveAndValidateGrid = function () {
-                $scope.$parent.$parent.setBusy("Validating your data...", "Please wait as we validate your information!1");
+                $scope.$parent.$parent.setBusy("Validating your data...", "Please wait as we validate your information!");
                 $timeout(function () {
                     $scope.contractDs.sync();
-                    $scope.$parent.$parent.$parent.validateWipDeals();
+                    $scope.$parent.$parent.$parent.validateWipDeals(); 
                 }, 100);
 
                 return;

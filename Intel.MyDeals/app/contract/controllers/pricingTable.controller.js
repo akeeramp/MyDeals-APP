@@ -410,6 +410,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     }
 
     function getFormatedGeos(geos) {
+    	if (geos == null) { return null; }
         var isBlendedGeo = (geos.indexOf('[') > -1) ? true : false;
         if (isBlendedGeo) {
             geos = geos.replace('[', '');
@@ -562,13 +563,15 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         }
         return cols;
     }
-
+	
     // On Spreadsheet change
     function onChange(arg) {
         if (stealthOnChangeMode) {
             //stealthOnChangeMode = false;
             return;
         }
+
+        syncUndoRedoCounters();
 
         //if (Object.prototype.toString.call(arg.range._ref) === "[object Object]") {
         //    arg.preventDefault();
@@ -614,6 +617,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                         disableRange(sheet.range("F" + n + ":Z" + (n + numToDel + numToDel)));
                                     }, 10);
 
+                                    clearUndoHistory();
                                     root.saveEntireContract(true);
                                 }
                             },
@@ -633,6 +637,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         //debugger;
                         disableRange(sheet.range("D" + cnt + ":D" + (cnt + numToDel - 1)));
                         disableRange(sheet.range("F" + cnt + ":Z" + (cnt + numToDel - 1)));
+                        clearUndoHistory();
                     }, 10);
                 }
             }
@@ -785,23 +790,15 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     range.enable(true);
                     range.background(null);
 
-                    // Re-disable columns that are readOnly
-                    //for (var key in vm.readOnlyColLetters) {
-                    //    if (vm.readOnlyColLetters.hasOwnProperty(key)) {
-                    //        disableRange(sheet.range(key + topLeftRowIndex + ":" + key + bottomRightRowIndex));
-                    //    }
-                    //}
-
+					// Re-add dropdowns on new product add to work around save-then-dropdwons-not-showing bug
                     //for (var key in ptTemplate.model.fields) {
                     //    var myColumnName = root.colToLetter[key];
                     //    var myFieldModel = ptTemplate.model.fields[key];
 
                     //    if (ptTemplate.model.fields.hasOwnProperty(key) && myColumnName !== undefined) {
-                    //        if (myFieldModel.opLookupText === "DROP_DOWN" || myFieldModel.opLookupText === "dropdownName") {
-                    //            if (myFieldModel.uiType === "RADIOBUTTONGROUP" || myFieldModel.uiType === "DROPDOWN") {
-                    //                applyDropDowns(sheet, myFieldModel, myColumnName);
-                    //            }
-                    //        }
+                    //    	if (myFieldModel.uiType === "RADIOBUTTONGROUP" || myFieldModel.uiType === "DROPDOWN") {
+                    //    		applyDropDowns(sheet, myFieldModel, myColumnName);
+                    //    	}
                     //    }
                     //}
                 });
@@ -943,16 +940,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             $scope.setRowIdStyle(args.data.PRC_TBL_ROW);
         });
 
-    function replaceUndoRedoBtns() {
-        var redoBtn = $('.k-i-redo');
-        redoBtn.addClass('fa fa-share ssUndoButton');
-        redoBtn.removeClass('k-i-redo k-icon');
-
-        var undoBtn = $('.k-i-undo');
-        undoBtn.addClass('fa fa-reply ssUndoButton');
-        undoBtn.removeClass('k-i-undo k-icon');
-    }
-
+	
     // TDOO: This needs major perfromance refactoring because it makes things slow for poeple with bad computer specs :<
     // Initiates in a batch call (which may make the spreadsheet load faster
     function sheetBatchOnRender(sheet, dropdownValuesSheet) {
@@ -1425,6 +1413,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     });
 
     function validateSingleRowProducts(sData, row) {
+    	if (sData === undefined) { return; }
         if (!sData._behaviors) sData._behaviors = {};
         if (!sData._behaviors) sData._behaviors = {};
         if (!sData._behaviors.isError) sData._behaviors.isError = {};
@@ -1855,5 +1844,84 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             });
     }
 
+
+
+	/*
+	 * -------------------------------------------
+	 * CUSTOM UNDO / REDO 
+	 * -------------------------------------------
+	 */
+
+    $scope.undoCounter = 0;
+    $scope.redoCounter = 0;
+    var isFirstUndo = true;
+    var clearedUndoCount = 0; // Keep cleared counter so that syncUndo$scope.redoCounters does not allow for cleared history to still be undo'ed
+    var clearedRedoCount = 0;
+
+
+    function replaceUndoRedoBtns() {
+    	// Hide the default undo/red buttons in favor of the custom undo/redo buttons
+    	// But note that our custom undo/redo solution requires these buttons to still be in the page
+
+    	var redoBtn = $('.k-i-redo');
+    	redoBtn.addClass('hidden'); // fa fa-share ssUndoButton
+    	redoBtn.removeClass('k-i-redo k-icon');
+
+    	var undoBtn = $('.k-i-undo');
+    	undoBtn.addClass('hidden'); // fa fa-reply ssUndoButton
+    	undoBtn.removeClass('k-i-undo k-icon');
+    }
+
+    $scope.customUndo = function () {
+    	if ($scope.undoCounter > 0) {
+    		$(".k-button[title=Undo]").click();
+    		syncUndoRedoCounters();
+    	}
+    }
+
+    $scope.customRedo = function () {
+    	// NOTE: Redo calls the onChange event (but undo does not), so there is no need to call syncUndo$scope.redoCounters() here
+    	if ($scope.redoCounter > 0) {
+    		$(".k-button[title=Redo]").click();
+    	}
+    }
+
+	// Reset the undo/redo counters. Doesn't actually clear Kendo's undo/redo stack
+    function clearUndoHistory() {
+    	clearedUndoCount += $scope.undoCounter;
+    	clearedRedoCount += $scope.redoCounter - 1;
+    	$scope.undoCounter = 0;
+    	$scope.redoCounter = 0;
+    }
+
+	// Capture Ctrl Z and Ctrl Y then sync undo/redo counters
+    $(document).keydown(function (e) {
+    	// Ctrl Z
+    	if (e.ctrlKey && e.keyCode == 90) {
+    		syncUndoRedoCounters();
+    	}
+    	// Ctrl Y
+    	else if (e.ctrlKey && e.keyCode == 89) {
+    		syncUndoRedoCounters();
+    	}
+    });
+
+	// Sync undo/redo counters with Kendo's built-in undo/redo stack and our custom cleared undo/redo history counters
+    function syncUndoRedoCounters() {
+    	var undoRedoStack = $('#pricingTableSpreadsheet').data("kendoSpreadsheet")._workbook.undoRedoStack;
+    	var currentCommandIndex = (undoRedoStack.currentCommandIndex + 1);
+
+    	$scope.undoCounter = currentCommandIndex - clearedUndoCount;
+    	$scope.redoCounter = undoRedoStack.stack.length - currentCommandIndex - clearedRedoCount;
+
+    	if (isFirstUndo) { // Workaround because for some reason Kendo's undo/redo stack is 1 off on first available undo (but not 2nd onwards)
+    		$scope.undoCounter += 1;
+    		isFirstUndo = false;
+    	}
+    }
+
+
+	
     init();
 }
+

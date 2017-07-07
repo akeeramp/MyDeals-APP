@@ -1230,7 +1230,12 @@
 
             // Pricing Table Rows
             if (stateName === "contract.manager.strategy") {
-                source = "PRC_TBL";
+            	source = "PRC_TBL";
+
+            	////// $scope.spreadDs._data has 2 rows...we should fix that
+            	////// so after delete? or after save? why 2 rows?
+            	var test = $scope.pricingTableData.PRC_TBL_ROW;
+
                 // sync all detail data sources into main grid datasource for a single save
                 if ($scope.spreadDs !== undefined) $scope.spreadDs.sync();
 
