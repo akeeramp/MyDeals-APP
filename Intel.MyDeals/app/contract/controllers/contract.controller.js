@@ -33,7 +33,7 @@
         if ($state.current.name.indexOf("contract.summary") >= 0) $scope.flowMode = "Manage";
 
         // determine if the contract is existing or new... if new, look for pre-population attributes from the URL parameters
-        //
+
         $scope.initContract = function (contractData) {
             // New contract template
             var c = util.clone($scope.templates.ObjectTemplates.CNTRCT.ALL_TYPES);
@@ -620,12 +620,12 @@
         }
         $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
             // if Pricing Strategy or Pricing Table was being edited, save it
-            //debugger;
+            debugger;
 
             var saveStates = ["contract.manager.strategy", "contract.manager.strategy.wip", "contract.details"];
             if ((saveStates.indexOf(fromState.name) >= 0) && $scope._dirty && !$scope.isAutoSaving) {
                 $scope.isAutoSaving = true;
-                //debugger;
+
                 if (confirm('Would you like to save your changes?')) {
                     event.preventDefault();
                     // async save data
@@ -773,25 +773,22 @@
 
         $scope.keyContractItemchanged = function (oldValue, newValue) {
             function purgeBehaviors(lData) {
+
+                var remItems = [
+                    "IsAttachmentRequired", "MinYear", "MaxYear", "END_QTR", "END_YR", "START_QTR", "START_YR",
+                    "C2A_DATA_C2A_ID", "AttachmentError", "displayTitle", "CUST_ACCNT_DIV_UI", "PASSED_VALIDATION"
+                ];
+
                 lData._behaviors = {};
                 lData._actions = {};
                 lData._settings = {};
                 lData.infoMessages = [];
                 lData.warningMessages = [];
-                lData.displayTitle = "";
-                lData.CUST_ACCNT_DIV_UI = "";
-                lData.PASSED_VALIDATION = "";
-
-                lData.MinYear = "";
-                lData.MaxYear = "";
-                lData.START_QTR = "";
-                lData.END_QTR = "";
-                lData.START_YR = "";
-                lData.END_YR = "";
-                lData.C2A_DATA_C2A_ID = "";
-                lData.IsAttachmentRequired = "";
-                lData.AttachmentError = "";
                 lData._dirty = {};
+
+                for (var d = 0; d < remItems.length; d++) {
+                    lData[remItems[d]] = "";
+                }
 
                 if (!!lData.PRC_ST) {
                     for (var s = 0; s < lData.PRC_ST.length; s++) {
@@ -816,11 +813,23 @@
                         }
                     }
                 }
-                return kendo.stringify(lData).replace(/,"CUST_ACCNT_DIV_UI":""/g, '').replace(/,"displayTitle":""/g, '').replace(/,"PASSED_VALIDATION":""/g, '');
+                var str = kendo.stringify(lData);
+
+                for (var d = 0; d < remItems.length; d++) {
+                    var find = ',"' + remItems[d] + '":""';
+                    var regex = new RegExp(find, "g");
+                    str = str.replace(regex, "");
+                }
+
+                return str;
+                //return kendo.stringify(lData).replace(/,"CUST_ACCNT_DIV_UI":""/g, '').replace(/,"displayTitle":""/g, '').replace(/,"PASSED_VALIDATION":""/g, '')
+                //.replace(/,"IsAttachmentRequired":""/g, '').replace(/,"MinYear":""/g, '').replace(/,"MaxYear":""/g, '')
+                //.replace(/,"END_QTR":""/g, '').replace(/,"END_YR":""/g, '').replace(/,"START_QTR":""/g, '')
+                //.replace(/,"START_YR":""/g, '').replace(/,"C2A_DATA_C2A_ID":""/g, '').replace(/,"AttachmentError":""/g, '');
             }
 
             var rtn = purgeBehaviors(util.deepClone(oldValue)) !== purgeBehaviors(util.deepClone(newValue));
-            //if (rtn) debugger;
+            if (rtn) debugger;
             return rtn;
         }
 

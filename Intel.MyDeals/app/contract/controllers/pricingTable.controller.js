@@ -171,6 +171,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         // Define Kendo Main Grid options
         gridUtils.onDataValueChange = function (e) {
+            debugger;
             root._dirty = true;
         }
     }
@@ -505,6 +506,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
             syncSpreadRows(sheet, rowStart, rowStart);
 
+            debugger;
             root._dirty = true;
 
             $timeout(function () {
@@ -678,6 +680,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         }
 
         if (!root._dirty) {
+            debugger;
             root._dirty = true;
         }
     }

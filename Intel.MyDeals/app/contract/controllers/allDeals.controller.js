@@ -16,6 +16,7 @@ function AllDealsController($scope, $state, $stateParams, $filter, objsetService
     root.wipData = [];
 
     gridUtils.onDataValueChange = function (e) {
+        debugger;
         root._dirty = true;
     }
 

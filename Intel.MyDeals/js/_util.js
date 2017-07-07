@@ -37,7 +37,8 @@ util.waitMsg = function (msg, iconClass) {
 }
 
 util.deepClone = function(obj) {
-    return JSON.parse(kendo.stringify(obj));
+    //return JSON.parse(kendo.stringify(obj));
+    return angular.fromJson(angular.toJson(obj));
 }
 
 util.findInArrayWhere = function(myArray, field, val){

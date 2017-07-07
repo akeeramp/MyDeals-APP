@@ -43,12 +43,14 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
         if (scope.opCd === "_dirty") {
             return;
         }
+
         if (scope.opIsReadOnly === undefined) scope.opIsReadOnly = false;
         if (scope.opIsRequired === undefined) scope.opIsRequired = false;
         if (scope.opIsHidden === undefined) scope.opIsHidden = false;
         if (scope.opIsDirty === undefined) scope.opIsDirty = false;
         if (scope.opIsError === undefined) scope.opIsError = false;
         if (scope.opIsSaved === undefined) scope.opIsSaved = false;
+        if (scope.opIsStealth === undefined) scope.opIsStealth = false;
         if (scope.opValidMsg === undefined) scope.opValidMsg = "";
         if (scope.opHelpMsg === undefined) scope.opHelpMsg = "";
 
@@ -302,36 +304,46 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
         scope.$watch('value',
             function (newValue, oldValue, el) {
                 if (oldValue === newValue) return;
-                el.opIsDirty = true;
-                el.$parent.$parent.opIsDirty = true;
-                el.$parent.$parent.$parent._dirty = true;
-                if (!!el.$parent.$parent.dataItem) el.$parent.$parent.dataItem.dirty = true;
+                if (!el.opIsStealth) {
 
-                if (el.$parent.opValue !== undefined) {
-                    el.$parent.opValue._dirty = true;
-                    if (!!scope.opSelectedObject) el.$parent.opValue[scope.opSelectedObject] = updateSeletedObject();
-                }
+                    el.opIsDirty = true;
+                    el.$parent.$parent.opIsDirty = true;
+                    el.$parent.$parent.$parent._dirty = true;
+                    if (!!el.$parent.$parent.dataItem) el.$parent.$parent.dataItem.dirty = true;
 
-                if (el.$parent.value !== undefined) {
-                    el.$parent.value._dirty = true;
-                    if (!!scope.opSelectedObject) el.$parent.value[scope.opSelectedObject] = updateSeletedObject();
-                }
-
-                // if the field is required and user has entered a value(OpIsDirty = true), remove the required field error message.
-                if (el.opIsDirty) {
                     if (el.$parent.opValue !== undefined) {
-                        if (el.$parent.opValue[el.opCd] !== null && el.$parent.opValue[el.opCd] !== undefined
-                                && el.$parent.opValue[el.opCd] !== "" && el.opIsRequired === true && el.opValidMsg === "* field is required") {
-                            el.opIsError = false;
-                            el.opValidMsg = "";
-                        }
+                        el.$parent.opValue._dirty = true;
+                        if (!!scope.opSelectedObject)
+                            el.$parent.opValue[scope.opSelectedObject] = updateSeletedObject();
                     }
 
                     if (el.$parent.value !== undefined) {
-                        if (el.$parent.value[el.opCd] !== null && el.$parent.value[el.opCd] !== undefined
-                                && el.$parent.value[el.opCd] !== "" && el.opIsRequired && el.opValidMsg === "* field is required") {
-                            el.opIsError = false;
-                            el.opValidMsg = "";
+                        el.$parent.value._dirty = true;
+                        if (!!scope.opSelectedObject) el.$parent.value[scope.opSelectedObject] = updateSeletedObject();
+                    }
+
+                    // if the field is required and user has entered a value(OpIsDirty = true), remove the required field error message.
+                    if (el.opIsDirty) {
+                        if (el.$parent.opValue !== undefined) {
+                            if (el.$parent.opValue[el.opCd] !== null &&
+                                el.$parent.opValue[el.opCd] !== undefined &&
+                                el.$parent.opValue[el.opCd] !== "" &&
+                                el.opIsRequired === true &&
+                                el.opValidMsg === "* field is required") {
+                                el.opIsError = false;
+                                el.opValidMsg = "";
+                            }
+                        }
+
+                        if (el.$parent.value !== undefined) {
+                            if (el.$parent.value[el.opCd] !== null &&
+                                el.$parent.value[el.opCd] !== undefined &&
+                                el.$parent.value[el.opCd] !== "" &&
+                                el.opIsRequired &&
+                                el.opValidMsg === "* field is required") {
+                                el.opIsError = false;
+                                el.opValidMsg = "";
+                            }
                         }
                     }
                 }
@@ -369,6 +381,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
             opIsHidden: '=',
             opIsError: '=',
             opIsSaved: '=',
+            opIsStealth: '=?',
             opLookupUrl: '=',
             opLookupText: '=',
             opLookupValue: '=',

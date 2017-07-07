@@ -40,6 +40,7 @@ function opControlDataElement($http, lookupsService, $compile, $templateCache, l
         el += ' op-help-msg="opValue.' + scope.opCd + '.helpMsg"';
         el += ' op-is-error="opValue.' + scope.opCd + '.isError"';
         el += ' op-is-saved="opValue.' + scope.opCd + '.isSaved"';
+        el += ' op-is-stealth="' + (!!scope.opIsStealth ? scope.opIsStealth : false) + '"';
         el += ' op-is-dirty="opValue.' + scope.opCd + '.isDirty"';
         el += ' op-is-required="opValue.' + scope.opCd + '.isRequired"';
         el += ' op-is-read-only="opValue.' + scope.opCd + '.isReadOnly"';
@@ -69,6 +70,7 @@ function opControlDataElement($http, lookupsService, $compile, $templateCache, l
             opMinValue: '=',
             opMaxValue: '=',
             opIsForm: "=",
+            opIsStealth: "=?",
             opClass: "=",
             opStyle: "=",
             opPlaceholder: '=',
