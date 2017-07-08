@@ -24,6 +24,9 @@ namespace Intel.MyDeals.Entities
         public string editor { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public bool isDimKey { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public bool isRequired { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

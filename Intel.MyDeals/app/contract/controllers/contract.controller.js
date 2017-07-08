@@ -620,7 +620,6 @@
         }
         $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
             // if Pricing Strategy or Pricing Table was being edited, save it
-            debugger;
 
             var saveStates = ["contract.manager.strategy", "contract.manager.strategy.wip", "contract.details"];
             if ((saveStates.indexOf(fromState.name) >= 0) && $scope._dirty && !$scope.isAutoSaving) {
@@ -813,8 +812,7 @@
                         }
                     }
                 }
-                var str = kendo.stringify(lData);
-
+                var str = kendo.stringify(lData).replace(',"undefined":[]', '');
                 for (var d = 0; d < remItems.length; d++) {
                     var find = ',"' + remItems[d] + '":""';
                     var regex = new RegExp(find, "g");
@@ -822,10 +820,6 @@
                 }
 
                 return str;
-                //return kendo.stringify(lData).replace(/,"CUST_ACCNT_DIV_UI":""/g, '').replace(/,"displayTitle":""/g, '').replace(/,"PASSED_VALIDATION":""/g, '')
-                //.replace(/,"IsAttachmentRequired":""/g, '').replace(/,"MinYear":""/g, '').replace(/,"MaxYear":""/g, '')
-                //.replace(/,"END_QTR":""/g, '').replace(/,"END_YR":""/g, '').replace(/,"START_QTR":""/g, '')
-                //.replace(/,"START_YR":""/g, '').replace(/,"C2A_DATA_C2A_ID":""/g, '').replace(/,"AttachmentError":""/g, '');
             }
 
             var rtn = purgeBehaviors(util.deepClone(oldValue)) !== purgeBehaviors(util.deepClone(newValue));
@@ -2243,12 +2237,14 @@
             // Check Extra atribs
             angular.forEach($scope.newPricingTable["_extraAtrbs"],
                 function (value, key) {
-                    if (value.isRequired === true && (value.value === undefined || value.value === "")) {
-                        value.validMsg = "* field is required";
-                        value.isError = true;
-                        isValid = false;
-                    } else {
-                        value.isError = false;
+                    if (key !== "_dirty") {
+                        if (value.isRequired === true && (value.value === undefined || value.value === "")) {
+                            value.validMsg = "* field is required";
+                            value.isError = true;
+                            isValid = false;
+                        } else {
+                            value.isError = false;
+                        }
                     }
                 });
 

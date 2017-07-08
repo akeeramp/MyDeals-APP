@@ -79,7 +79,7 @@ namespace Intel.MyDeals.BusinessRules
 
                 new MyOpRule
                 {
-                    Title="Readonly ALWAYS",
+                    Title="Readonly WIP/Deal ALWAYS",
                     ActionRule = MyDcActions.ExecuteActions,
                     InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL, OpDataElementType.DEAL},
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnReadonly},
@@ -120,6 +120,25 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.YCS2_PRC_IRBT,
                                 AttributeCodes.YCS2_START_DT,
                                 AttributeCodes.CAP
+                            }
+                        }
+                    }
+                },
+                new MyOpRule
+                {
+                    Title="Readonly PTR ALWAYS",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW},
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnReadonly},
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetReadOnly,
+                            Target = new[]
+                            {
+                                AttributeCodes.DC_ID,
+                                AttributeCodes.TIER_NM
                             }
                         }
                     }

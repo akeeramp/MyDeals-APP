@@ -960,6 +960,14 @@
 		display: none;
 	}
 	
+    .k-spreadsheet-cell.k-state-disabled.k-spreadsheet-merged-cell {
+        background-color: #f0f0f0;
+        opacity: 1 !important;
+    }
+    .k-spreadsheet-editor-button span {
+        height: 100%;    
+    }
+
 	/* Spreadsheet Custom Toolbar */
 	.ssToolbarBtn {
 		background-color: #ffffff;

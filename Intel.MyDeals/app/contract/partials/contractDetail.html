@@ -23,6 +23,7 @@
                              op-lookup-text="'CUST_NM'"
                              op-lookup-value="'CUST_SID'"
                              op-selected-object="'Customer'"
+                             op-is-stealth="true"
                              op-is-form="true"
                              op-ui-mode="'VERTICAL'"></div>
                     </div>
@@ -36,6 +37,7 @@
                              op-lookup-values="[]"
                              op-lookup-text="'CUST_DIV_NM'"
                              op-lookup-value="'CUST_DIV_NM'"
+                             op-is-stealth="true"
                              op-is-form="true"
                              op-ui-mode="'VERTICAL'"></div>
                         <div class="description" ng-if="!contractData._behaviors.isHidden['CUST_ACCNT_DIV_UI']">Blank means that ALL divisions are included</div>
@@ -183,6 +185,7 @@
                              op-type="'TEXTBOX'"
                              op-label="'C2A# or link to contract:'"
                              op-is-form="true"
+                             op-is-stealth="true"
                              op-ui-mode="'VERTICAL'"></div>
                         <div ng-if="!contractData._behaviors.isHidden['C2A_DATA_C2A_ID']" class="description">{{constants.C2AIdDesc}}</div>
                     </div>

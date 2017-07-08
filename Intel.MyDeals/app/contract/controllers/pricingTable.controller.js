@@ -24,6 +24,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     $scope.validatePricingTableProducts = validatePricingTableProducts;
     $scope.validateSavepublishWipDeals = validateSavepublishWipDeals;
     $scope.pcVer = "Beta";
+    $scope.numTiers = 1;
 
     // If product corrector or selector modifies the product column do not clear PRD_SYS
     var systemModifiedProductInclude = false;
@@ -121,9 +122,28 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         }
     }
 
+    function getMergedCells(numTiers) {
+        //return [];
+        var mergedCells = [];
+        var rowNum = 2;
+        while (rowNum < 200) {
+            for (var c = 0; c < ptTemplate.columns.length; c++) {
+                var letter = String.fromCharCode(intA + c);
+                if (!ptTemplate.columns[c].isDimKey) {
+                    mergedCells.push(letter + rowNum + ":" + letter + (rowNum + numTiers - 1));
+                }
+            }
+            rowNum += numTiers;
+        }
+        return mergedCells;
+    }
+
     // Generates options that kendo's html directives will use
     function generateKendoSpreadSheetOptions() {
+        var mergedCells = [];
+        $scope.numTiers = 1;
         ptTemplate = root.templates.ModelTemplates.PRC_TBL_ROW[root.curPricingTable.OBJ_SET_TYPE_CD];
+
         columns = vm.getColumns(ptTemplate);
 
         ssTools = new gridTools(ptTemplate.model, ptTemplate.columns);
@@ -142,6 +162,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             ptTemplate.columns[3].hidden = true;
         }
 
+        if (!!root.curPricingTable.NUM_OF_TIERS) {
+            $scope.numTiers = parseInt(root.curPricingTable.NUM_OF_TIERS);
+            mergedCells = getMergedCells($scope.numTiers);
+        }
+
         $scope.ptSpreadOptions = {
             headerWidth: 0, /* Hide the Row numbers */
             change: onChange,
@@ -149,7 +174,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             sheetsbar: false,
             defaultCellStyle: {
                 fontSize: cellStyle.fontSize,
-                fontFamily: cellStyle.fontfamily
+                fontFamily: cellStyle.fontfamily,
                 //background: cellStyle.background, // Adding this will hide the validation. Don't add this
             },
             toolbar: {
@@ -160,6 +185,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             sheets: [
 				{
 				    name: "Main",
+				    mergedCells: mergedCells,
 				    columns: columns
 				},
 				{
@@ -582,19 +608,25 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         var sheet = arg.sender.activeSheet();
         var flushSysPrdFields = ["PTR_USER_PRD", "START_DT", "END_DT", "GEO_COMBINED", "PROD_INCLDS", "PROGRAM_PAYMENT"];
+        var range = arg.range;
 
         // Don't do onchange events for any sheet other than the Main one
-        if (arg.range._sheet._sheetName !== "Main" || arg.range._ref.topLeft === undefined) {
+        if (range._sheet._sheetName !== "Main" || range._ref.topLeft === undefined) {
             return;
         }
 
         var productColIndex = (root.colToLetter["PTR_USER_PRD"].charCodeAt(0) - intA);
-        var topLeftRowIndex = (arg.range._ref.topLeft.row + 1);
-        var bottomRightRowIndex = (arg.range._ref.bottomRight.row + 1);
+        var topLeftRowIndex = (range._ref.topLeft.row + 1);
+        var bottomRightRowIndex = (range._ref.bottomRight.row + (range._ref.bottomRight.row % root.child.numTiers) + 1);
 
-        var isProductColumnIncludedInChanges = (arg.range._ref.topLeft.col >= productColIndex) && (arg.range._ref.bottomRight.col <= productColIndex);
+        // check for selections in te middle of a merge
+        //if (range._ref.bottomRight.row % root.child.numTiers > 0) {
+        //    range = sheet.range(String.fromCharCode(intA + range._ref.topLeft.col) + (range._ref.topLeft.row + 1) + ":" + String.fromCharCode(intA + range._ref.bottomRight.col) + (range._ref.bottomRight.row + (range._ref.bottomRight.row % root.child.numTiers) + 2));
+        //}
 
-        if (isProductColumnIncludedInChanges && arg.range.value() === null) {
+        var isProductColumnIncludedInChanges = (range._ref.topLeft.col >= productColIndex) && (range._ref.bottomRight.col <= productColIndex);
+
+        if (isProductColumnIncludedInChanges && range.value() === null) {
             if (root.spreadDs !== undefined) {
                 var data = root.spreadDs.data();
 
@@ -651,7 +683,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             var isPtrSysPrdFlushed = false;
             for (var f = 0; f < flushSysPrdFields.length; f++) {
                 var colIndx = root.colToLetter[flushSysPrdFields[f]].charCodeAt(0) - intA;
-                if (arg.range._ref.topLeft.col <= colIndx && arg.range._ref.bottomRight.col >= colIndx) isPtrSysPrdFlushed = true;
+                if (range._ref.topLeft.col <= colIndx && range._ref.bottomRight.col >= colIndx) isPtrSysPrdFlushed = true;
             }
 
             if (isPtrSysPrdFlushed) {
@@ -659,7 +691,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     // TODO we will need to revisit.  There are cases where we CANNOT remove products and reload... active deals for example
                     sheet.range("B" + topLeftRowIndex + ":C" + bottomRightRowIndex).value("");
 
-                    arg.range.forEachCell(
+                    range.forEachCell(
                         function (rowIndex, colIndex, value) {
                             if (colIndex === productColIndex) { // Product Col changed
                                 // Re-disable specific cells that are readOnly
@@ -674,7 +706,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 }
             }
 
-            if (isProductColumnIncludedInChanges && arg.range.value() !== null) {
+            if (isProductColumnIncludedInChanges && range.value() !== null) {
                 syncSpreadRows(sheet, topLeftRowIndex, bottomRightRowIndex);
             }
         }
@@ -695,6 +727,19 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 if (util.isInvalidDate(data[n].END_DT)) data[n].END_DT = moment(root.contractData["END_DT"]).format("MM/DD/YYYY");
             }
         }
+
+        // fix merge issues
+        if (data.length > 0) {
+            var lastItem = data[data.length - 1];
+            var numTier = root.child.numTiers;
+            var offset = data.length % numTier;
+            if (offset > 0) {
+                for (var a = 0; a < numTier - offset; a++) {
+                    data.push(util.deepClone(lastItem));
+                }
+            }
+        }
+
         return data;
     }
 
@@ -722,6 +767,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         //   4) sync it to the spreadsheet
         //
         //  Doesn't make sense why this is faster, but it is and it also doesn't look values as they are applied
+        var range;
 
         $timeout(function () {
             if (root.spreadDs !== undefined) {
@@ -734,11 +780,17 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     if (data[r]["DC_ID"] !== null && data[r]["DC_ID"] !== undefined) continue;
 
                     newItems++;
-                    data[r]["DC_ID"] = $scope.uid--;
+                    data[r]["DC_ID"] = ((r+1) % root.child.numTiers === 0) ? $scope.uid-- : $scope.uid;
                     data[r]["VOLUME"] = null;
                     data[r]["ECAP_PRICE"] = null;
                     data[r]["CUST_ACCNT_DIV"] = root.contractData.CUST_ACCNT_DIV;
                     data[r]["CUST_MBR_SID"] = root.contractData.CUST_MBR_SID;
+
+                    if (!root.curPricingTable || !!root.curPricingTable.NUM_OF_TIERS) {
+                        if (!data[r]["TIER_NM"] || data[r]["TIER_NM"] === "") {
+                            data[r]["TIER_NM"] = (r % root.child.numTiers) + 1;
+                        }
+                    }
                     //if (data[r]["PASSED_VALIDATION"] === "")
 
                     for (var key in ptTemplate.model.fields) {
@@ -788,10 +840,25 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         //bottomRightRowIndex = topLeftRowIndex + newItems;
                     }
 
+                    // check merge issues
+                    var offset = ((bottomRightRowIndex - 1) % root.child.numTiers);
+                    if (offset > 0) {
+                        bottomRightRowIndex += root.child.numTiers - offset;
+                    }
+
                     // Enable other cells
-                    var range = sheet.range("D" + topLeftRowIndex + ":" + finalColLetter + bottomRightRowIndex);
-                    range.enable(true);
-                    range.background(null);
+                    if (!!ptTemplate.model.fields["TIER_NM"]) {
+                        range = sheet.range("D" + topLeftRowIndex + ":J" + bottomRightRowIndex);
+                        range.enable(true);
+                        range.background(null);
+                        range = sheet.range("L" + topLeftRowIndex + ":" + finalColLetter + bottomRightRowIndex);
+                        range.enable(true);
+                        range.background(null);
+                    } else {
+                        range = sheet.range("D" + topLeftRowIndex + ":" + finalColLetter + bottomRightRowIndex);
+                        range.enable(true);
+                        range.background(null);
+                    }
 
 					// Re-add dropdowns on new product add to work around save-then-dropdwons-not-showing bug
                     //for (var key in ptTemplate.model.fields) {
@@ -873,7 +940,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
             if (!item || item.length === 0) return;
 
-            var t = 115;
+            var t = 95 + (20 * $scope.numTiers);
             $("#divHelpAddProd").css("left", item.offset().left - 300);
             $("#divHelpAddProd").animate({
                 opacity: 1,
@@ -882,7 +949,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 $timeout(function () {
                     $("#divHelpAddProd").animate({
                         opacity: 0
-                    }, 2000);
+                    }, 2000, function() {
+                        $("#divHelpAddProd").css({
+                            display: "none"
+                        });
+                    });
                 }, 4000);
             });
         }, 2000);
@@ -977,6 +1048,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             headerRange.fontSize(headerStyle.fontSize);
             headerRange.textAlign(headerStyle.textAlign);
             headerRange.verticalAlign(headerStyle.verticalAlign);
+
+            sheet.range("A2:Z200").verticalAlign("center");
 
             // Add product selector editor on Product cells
             sheet.range(root.colToLetter["PTR_USER_PRD"] + ":" + root.colToLetter["PTR_USER_PRD"]).editor("cellProductSelector");
@@ -1163,7 +1236,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 this.getState();
                 this._clipboard.parse();
                 var status = this._clipboard.canPaste();
-                if (!status.canPaste) {
+
+                // total HACK here.  there must be a better way, but trying to POC options
+                // pasting accross merged cells is not allowed, so need to bypass it
+                if (!status.canPaste && !root.child.numTiers) {
                     if (status.menuInvoked) {
                         return {
                             reason: 'error',
@@ -1197,6 +1273,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                 if (preventDefault) {
                     this._event.preventDefault();
+                } else if (!!root.child.numTiers) {
+                    this.customMergedPaste();
+                    //range._adjustRowHeight();
                 } else {
                     this.customPaste();
                     range._adjustRowHeight();
@@ -1255,6 +1334,83 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                 // set paste data to Kendo cell (default Kendo code)
                 var pasteRef = clip.pasteRef();
+                sheet.range(pasteRef).setState(state, clip);
+                sheet.triggerChange({
+                    recalc: true,
+                    ref: pasteRef
+                });
+            },
+            customMergedPaste: function () {
+                // 
+                // Modified paste for ONLY merged cells... VERY propiatary to 
+                //
+                var row;
+                var clip = this._clipboard;
+                var state = clip._content;
+                var sheet = clip.workbook.activeSheet();
+                var newData = [];
+
+                if (clip.isExternal()) {
+                    clip.origin = state.origRef;
+                }
+
+                // IDEA:
+                // Maybe get the clipboard data and modify it (pad by tier num) and allow the paste to continue
+                var numTiers = root.child.numTiers;
+                for (row = 0; row < state.data.length; row++) {
+                    for (var t = 0; t < numTiers; t++) {
+                        newData.push(util.deepClone(state.data[row]));
+                    }
+                }
+                state.data = newData;
+
+                // Non-default Kendo code for paste event
+                for (row = 0; row < state.data.length; row++) {
+                    // Prevent error when user only pastes 2+ merged cells that expand mulpitle rows
+                    if (state.data[row] == null) { continue; }
+
+                    for (var col = 0; col < state.data[row].length; col++) {
+                        var cellData = state.data[row][col];
+
+                        // Prevent the user form pasting in new cell styles
+                        cellData.background = null;
+                        cellData.bold = null;
+                        cellData.borderBottom = null;
+                        cellData.borderLeft = null;
+                        cellData.borderRight = null;
+                        cellData.borderTop = null;
+                        cellData.color = cellStyle.color;
+                        cellData.fontFamily = cellStyle.fontfamily;
+                        cellData.fontSize = cellStyle.fontSize;
+                        cellData.italic = null;
+                        cellData.link = null;
+                        cellData.textAlign = cellStyle.textAlign;
+                        cellData.underline = null;
+                        cellData.verticalAlign = cellStyle.verticalAlign;
+                        cellData.wrap = null;
+
+                        // Get the current cell
+                        var myRow = sheet.activeCell().topLeft.row + row;
+                        var myCol = sheet.activeCell().topLeft.col + col;
+
+                        // Workround to prevent Kendo bug where users can copy/paste another cell's validation onto a new cell
+                        var originalCellState = sheet.range(myRow, myCol).getState().data[0][0];
+                        if (originalCellState != null) {
+                            cellData.validation = originalCellState.validation;
+                            cellData.editor = originalCellState.editor;
+                        }
+                    }
+                }
+
+                // Prevent user from pasting merged cells
+                state.mergedCells = null;
+
+                // set paste data to Kendo cell (default Kendo code)
+                var pasteRef = clip.pasteRef();
+
+                // need to padd range ref
+                pasteRef.bottomRight.row = newData.length;
+
                 sheet.range(pasteRef).setState(state, clip);
                 sheet.triggerChange({
                     recalc: true,

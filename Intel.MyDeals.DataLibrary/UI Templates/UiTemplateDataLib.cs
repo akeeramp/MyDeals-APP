@@ -387,18 +387,44 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem
             {
                 Id = 36,
-                AtrbCd = AttributeCodes.NUM_OF_TIERS,
+                AtrbCd = AttributeCodes.TIER_NM,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.CAP_BAND },
-                IsExtra = true,
-                Label = "Tiers *",
-                IsRequired = true,
-                DataType = "string",
-                UiType = "DROPDOWN",
-                LookupUrl = "/api/Dropdown/GetNumTiersDropdowns",
-                LookupText = "dropdownName",
-                LookupValue = "dropdownID"
+                IsDimKey = true,
+                IsReadOnly = true,
+                Label = "Tier",
             });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 36,
+                AtrbCd = "START_VOL",
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
+                IsDimKey = true,
+                Width = 100,
+                Label = "Start Vol",
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 36,
+                AtrbCd = "END_VOL",
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
+                IsDimKey = true,
+                Width = 100,
+                Label = "End Vol",
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 36,
+                AtrbCd = "RATE",
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
+                IsDimKey = true,
+                Width = 100,
+                Label = "Rate",
+            });
+
             items.Add(new UiTemplateContainerItem
             {
                 Id = 38,

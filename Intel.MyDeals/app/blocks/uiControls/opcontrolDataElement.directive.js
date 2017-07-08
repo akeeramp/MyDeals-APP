@@ -17,6 +17,8 @@ function opControlDataElement($http, lookupsService, $compile, $templateCache, l
 			label = scope.opLabel;
 		}
 
+		if (scope.opIsStealth === undefined) scope.opIsStealth = false;
+
         var el = "";
         el += '<div op-control';
         el += ' ng-model="opValue.' + scope.opCd + '.value"';
@@ -40,7 +42,7 @@ function opControlDataElement($http, lookupsService, $compile, $templateCache, l
         el += ' op-help-msg="opValue.' + scope.opCd + '.helpMsg"';
         el += ' op-is-error="opValue.' + scope.opCd + '.isError"';
         el += ' op-is-saved="opValue.' + scope.opCd + '.isSaved"';
-        el += ' op-is-stealth="' + (!!scope.opIsStealth ? scope.opIsStealth : false) + '"';
+        el += ' op-is-stealth="' + scope.opIsStealth + '"';
         el += ' op-is-dirty="opValue.' + scope.opCd + '.isDirty"';
         el += ' op-is-required="opValue.' + scope.opCd + '.isRequired"';
         el += ' op-is-read-only="opValue.' + scope.opCd + '.isReadOnly"';

@@ -17,6 +17,8 @@ function opControlFlat($http, lookupsService, $compile, $templateCache, logger, 
 			label = scope.opLabel;
 		}
 
+		if (scope.opIsStealth === undefined) scope.opIsStealth = false;
+
 		var el = "";
 		el += '<div op-control';
 		el += ' ng-model="value.' + scope.opCd + '"';
@@ -41,7 +43,7 @@ function opControlFlat($http, lookupsService, $compile, $templateCache, logger, 
         el += ' op-is-error="value._behaviors.isError.' + scope.opCd + '"';
         el += ' op-is-dirty="value._behaviors.isDirty.' + scope.opCd + '"';
         el += ' op-is-saved="value._behaviors.isSaved.' + scope.opCd + '"';
-        el += ' op-is-stealth="' + (!!scope.opIsStealth?scope.opIsStealth:false) + '"';
+        el += ' op-is-stealth="' + scope.opIsStealth + '"';
         el += ' op-is-required="value._behaviors.isRequired.' + scope.opCd + '"';
         el += ' op-is-read-only="value._behaviors.isReadOnly.' + scope.opCd + '"';
         el += ' op-is-hidden="value._behaviors.isHidden.' + scope.opCd + '">';

@@ -304,50 +304,52 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
         scope.$watch('value',
             function (newValue, oldValue, el) {
                 if (oldValue === newValue) return;
-                if (!el.opIsStealth) {
 
-                    el.opIsDirty = true;
-                    el.$parent.$parent.opIsDirty = true;
+                el.opIsDirty = true;
+                el.$parent.$parent.opIsDirty = true;
+
+                if (!el.opIsStealth) {
+                    debugger;
                     el.$parent.$parent.$parent._dirty = true;
                     if (!!el.$parent.$parent.dataItem) el.$parent.$parent.dataItem.dirty = true;
 
+                }
+
+                if (el.$parent.opValue !== undefined) {
+                    el.$parent.opValue._dirty = true;
+                    if (!!scope.opSelectedObject)
+                        el.$parent.opValue[scope.opSelectedObject] = updateSeletedObject();
+                }
+
+                if (el.$parent.value !== undefined) {
+                    el.$parent.value._dirty = true;
+                    if (!!scope.opSelectedObject) el.$parent.value[scope.opSelectedObject] = updateSeletedObject();
+                }
+
+                // if the field is required and user has entered a value(OpIsDirty = true), remove the required field error message.
+                if (el.opIsDirty) {
                     if (el.$parent.opValue !== undefined) {
-                        el.$parent.opValue._dirty = true;
-                        if (!!scope.opSelectedObject)
-                            el.$parent.opValue[scope.opSelectedObject] = updateSeletedObject();
+                        if (el.$parent.opValue[el.opCd] !== null &&
+                            el.$parent.opValue[el.opCd] !== undefined &&
+                            el.$parent.opValue[el.opCd] !== "" &&
+                            el.opIsRequired === true &&
+                            el.opValidMsg === "* field is required") {
+                            el.opIsError = false;
+                            el.opValidMsg = "";
+                        }
                     }
 
                     if (el.$parent.value !== undefined) {
-                        el.$parent.value._dirty = true;
-                        if (!!scope.opSelectedObject) el.$parent.value[scope.opSelectedObject] = updateSeletedObject();
-                    }
-
-                    // if the field is required and user has entered a value(OpIsDirty = true), remove the required field error message.
-                    if (el.opIsDirty) {
-                        if (el.$parent.opValue !== undefined) {
-                            if (el.$parent.opValue[el.opCd] !== null &&
-                                el.$parent.opValue[el.opCd] !== undefined &&
-                                el.$parent.opValue[el.opCd] !== "" &&
-                                el.opIsRequired === true &&
-                                el.opValidMsg === "* field is required") {
-                                el.opIsError = false;
-                                el.opValidMsg = "";
-                            }
-                        }
-
-                        if (el.$parent.value !== undefined) {
-                            if (el.$parent.value[el.opCd] !== null &&
-                                el.$parent.value[el.opCd] !== undefined &&
-                                el.$parent.value[el.opCd] !== "" &&
-                                el.opIsRequired &&
-                                el.opValidMsg === "* field is required") {
-                                el.opIsError = false;
-                                el.opValidMsg = "";
-                            }
+                        if (el.$parent.value[el.opCd] !== null &&
+                            el.$parent.value[el.opCd] !== undefined &&
+                            el.$parent.value[el.opCd] !== "" &&
+                            el.opIsRequired &&
+                            el.opValidMsg === "* field is required") {
+                            el.opIsError = false;
+                            el.opValidMsg = "";
                         }
                     }
                 }
-
             });
 
         // Kendo tooltip content doesn't observe binding data changes, work around it to observe changes.
