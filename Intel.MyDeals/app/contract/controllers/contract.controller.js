@@ -823,7 +823,7 @@
             }
 
             var rtn = purgeBehaviors(util.deepClone(oldValue)) !== purgeBehaviors(util.deepClone(newValue));
-            if (rtn) debugger;
+            if (rtn) //debugger;
             return rtn;
         }
 
@@ -836,7 +836,7 @@
             $scope.resizeEvent();
         }
         $scope.refreshEvent = function () {
-            debugger;
+            //debugger;
         }
         $scope.resizeEvent = function () {
             $timeout(function () {
@@ -1235,11 +1235,10 @@
             if (stateName === "contract.manager.strategy") {
             	source = "PRC_TBL";
 
-            	////// $scope.spreadDs._data has 2 rows...we should fix that
-            	////// so after delete? or after save? why 2 rows?
-            	var test = $scope.pricingTableData.PRC_TBL_ROW;
+            	// sync all detail data sources into main grid datasource for a single save
+            	var data = cleanupData($scope.spreadDs._data); // Note: this is a workaround for the "Zero dollar appeaing on product selection then save" bug, which introduces a blank row into $scope.spreadDs._data (the culprit of the bug).
+            	$scope.spreadDs.data(data);
 
-                // sync all detail data sources into main grid datasource for a single save
                 if ($scope.spreadDs !== undefined) $scope.spreadDs.sync();
 
                 sData = $scope.spreadDs === undefined ? undefined : $scope.pricingTableData.PRC_TBL_ROW;
@@ -1402,7 +1401,7 @@
                 "EventSource": source
             }
         }
-
+		
         $scope.validateTitles = function () {
             var rtn = true;
 
@@ -1652,11 +1651,11 @@
         	} else if (isTheFirstUntouchedRowIfEqualsToOne === 0) {
         		return 1;   		        	
         	} else if (isTheFirstUntouchedRowIfEqualsToOne === 1) {
-        		// HACK: This is so whe get the dropdowns back on the untouched rows without red flags!
+        		// HACK: This is so we get the dropdowns back on the untouched rows without red flags!
         		// re-add dropwons into untouched rows
         		angular.forEach(ptTemplate.model.fields, function (value, key) {
         			if (value.uiType === "DROPDOWN") {
-        				var myRange = sheet.range($scope.colToLetter[value.field] + (row + 1) + ":" + $scope.colToLetter[value.field] + "200");
+        				var myRange = sheet.range($scope.colToLetter[value.field] + (row + 1) + ":" + $scope.colToLetter[value.field] + $scope.ptRowCount);
         				reapplyDropdowns(myRange, true, value.field);
         			}
         		});
@@ -2414,5 +2413,33 @@
         }
 
         topbar.hide();
+
+		function cleanupData(data) {
+    		// Remove any lingering blank rows from the data
+    		for (var n = data.length - 1; n >= 0; n--) {
+    			if (data[n].DC_ID === null && (data[n].PTR_USER_PRD === null || data[n].PTR_USER_PRD === "")) {
+    				data.splice(n, 1);
+    			} else {
+    				if (util.isInvalidDate(data[n].START_DT)) data[n].START_DT = moment($scope.contractData["START_DT"]).format("MM/DD/YYYY");
+    				if (util.isInvalidDate(data[n].END_DT)) data[n].END_DT = moment($scope.contractData["END_DT"]).format("MM/DD/YYYY");
+    			}
+    		}
+
+    		// fix merge issues
+    		if (data.length > 0) {
+    			var lastItem = data[data.length - 1];
+    			var numTier = $scope.child.numTiers;
+    			var offset = data.length % numTier;
+    			if (offset > 0) {
+    				for (var a = 0; a < numTier - offset; a++) {
+    					data.push(util.deepClone(lastItem));
+    				}
+    			}
+    		}
+
+    		return data;
+		}
     }
+
+
 })();

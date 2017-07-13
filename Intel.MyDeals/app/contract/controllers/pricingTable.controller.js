@@ -35,6 +35,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     root.setBusy("Loading Deals", "Gathering deals and security settings.");
     root.child = $scope;
 
+    $scope.root.ptRowCount = 200;
+
     root.uncompressJson(pricingTableData.data.PRC_TBL_ROW);
 
     var cellStyle = {
@@ -126,7 +128,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         //return [];
         var mergedCells = [];
         var rowNum = 2;
-        while (rowNum < 200) {
+        while (rowNum < $scope.root.ptRowCount) {
             for (var c = 0; c < ptTemplate.columns.length; c++) {
                 var letter = String.fromCharCode(intA + c);
                 if (!ptTemplate.columns[c].isDimKey) {
@@ -197,7 +199,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         // Define Kendo Main Grid options
         gridUtils.onDataValueChange = function (e) {
-            debugger;
+            //debugger;
             root._dirty = true;
         }
     }
@@ -532,7 +534,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
             syncSpreadRows(sheet, rowStart, rowStart);
 
-            debugger;
+            //debugger;
             root._dirty = true;
 
             $timeout(function () {
@@ -659,8 +661,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         },
                             function () { });
                 } else {
-                    cleanupData(data);
-                    root.spreadDs.sync();
+                	cleanupData(data);
+                	root.spreadDs.sync();
                     $timeout(function () {
                         var cnt = 0;
                         for (var c = 0; c < data.length; c++) {
@@ -712,7 +714,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         }
 
         if (!root._dirty) {
-            debugger;
+            //debugger;
             root._dirty = true;
         }
     }
@@ -1049,7 +1051,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             headerRange.textAlign(headerStyle.textAlign);
             headerRange.verticalAlign(headerStyle.verticalAlign);
 
-            sheet.range("A2:Z200").verticalAlign("center");
+            sheet.range("A2:Z" + $scope.root.ptRowCount).verticalAlign("center");
 
             // Add product selector editor on Product cells
             sheet.range(root.colToLetter["PTR_USER_PRD"] + ":" + root.colToLetter["PTR_USER_PRD"]).editor("cellProductSelector");
@@ -1169,7 +1171,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     }
 
     function applyDropDowns(sheet, myFieldModel, myColumnName) {
-        sheet.range(myColumnName + "2:" + myColumnName + "200").validation({
+    	sheet.range(myColumnName + "2:" + myColumnName + $scope.root.ptRowCount).validation({
             dataType: "list",
             showButton: true,
             from: "DropdownValuesSheet!" + myColumnName + ":" + myColumnName,
