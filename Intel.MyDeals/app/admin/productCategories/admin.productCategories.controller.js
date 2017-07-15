@@ -140,7 +140,7 @@
             navigatable: true,
             resizable: true,
             reorderable: true,
-            columnMenu: true,
+            columnMenu: false,
             sort: function (e) { gridUtils.cancelChanges(e); },
             filter: function (e) { gridUtils.cancelChanges(e); },
             toolbar: gridUtils.clearAllFiltersToolbar(),
@@ -217,6 +217,7 @@
 				type: "date",
 				template: "#= kendo.toString(new Date(CHG_DTM), 'M/d/yyyy hh:mm tt') #",
 				filterable: {
+                    extra: false,
 					ui: "datepicker"
 				}
 			}
