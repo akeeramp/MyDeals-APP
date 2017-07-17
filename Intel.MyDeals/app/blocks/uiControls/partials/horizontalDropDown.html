@@ -2,7 +2,7 @@
     <div class="fl opUiLabel" ng-class="{isRequired: opIsRequired}">{{opLabel}}</div>
     <div style="overflow: hidden;">
         <div kendo-tooltip k-content="tooltipMsg" k-position="'top'" ng-show="opIsError" class="err-bit-el k-tip"></div>
-        <select kendo-drop-down-list class="fl opUiElement"
+        <select id="{{opCd}}" kendo-drop-down-list class="fl opUiElement"
                 k-ng-model="value"
                 k-ng-readonly="opIsReadOnly"
                 k-data-source="values"

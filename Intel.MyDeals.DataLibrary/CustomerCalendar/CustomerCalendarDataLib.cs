@@ -14,7 +14,6 @@ namespace Intel.MyDeals.DataLibrary
     /// </summary>
     public class CustomerCalendarDataLib : ICustomerCalendarDataLib
     {
-
         /// <summary>
         /// GetCustomerQuarterDetails
         /// </summary>
@@ -51,6 +50,8 @@ namespace Intel.MyDeals.DataLibrary
             using (var rdr = DataAccess.ExecuteReader(cmd))
             {
                 int IDX_CUST_MBR_SID = DB.GetReaderOrdinal(rdr, "CUST_MBR_SID");
+                int IDX_MIN_END = DB.GetReaderOrdinal(rdr, "MIN_END");
+                int IDX_MIN_STRT = DB.GetReaderOrdinal(rdr, "MIN_STRT");
                 int IDX_QTR_END = DB.GetReaderOrdinal(rdr, "QTR_END");
                 int IDX_QTR_NBR = DB.GetReaderOrdinal(rdr, "QTR_NBR");
                 int IDX_QTR_STRT = DB.GetReaderOrdinal(rdr, "QTR_STRT");
@@ -61,6 +62,8 @@ namespace Intel.MyDeals.DataLibrary
                     return new CustomerQuarterDetails
                     {
                         CUST_MBR_SID = (IDX_CUST_MBR_SID < 0 || rdr.IsDBNull(IDX_CUST_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_MBR_SID),
+                        MIN_END = (IDX_MIN_END < 0 || rdr.IsDBNull(IDX_MIN_END)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_MIN_END),
+                        MIN_STRT = (IDX_MIN_STRT < 0 || rdr.IsDBNull(IDX_MIN_STRT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_MIN_STRT),
                         QTR_END = (IDX_QTR_END < 0 || rdr.IsDBNull(IDX_QTR_END)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_QTR_END),
                         QTR_NBR = (IDX_QTR_NBR < 0 || rdr.IsDBNull(IDX_QTR_NBR)) ? default(System.Int16) : rdr.GetFieldValue<System.Int16>(IDX_QTR_NBR),
                         QTR_STRT = (IDX_QTR_STRT < 0 || rdr.IsDBNull(IDX_QTR_STRT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_QTR_STRT),

@@ -127,13 +127,12 @@
         $scope.isNewContract = isNewContract;
         $scope.contractData.displayTitle = "";
 
-
-    var updateDisplayTitle = function() {
-        $scope.contractData.displayTitle = isNewContract
-            ? $scope.contractData.TITLE
-            : "#" + $scope.contractData.DC_ID + " - " + $scope.contractData.TITLE;
-    }
-    updateDisplayTitle();
+        var updateDisplayTitle = function () {
+            $scope.contractData.displayTitle = isNewContract
+                ? $scope.contractData.TITLE
+                : "#" + $scope.contractData.DC_ID + " - " + $scope.contractData.TITLE;
+        }
+        updateDisplayTitle();
 
         $scope.refreshContractData = function (id) {
             objsetService.readContract($scope.contractData.DC_ID).then(function (data) {
@@ -170,8 +169,14 @@
         if ($scope.isContractDetailsPage) {
             var today = moment().format('l');
 
-            $scope.contractData.MinYear = parseInt(moment().format("YYYY")) - 5;
-            $scope.contractData.MaxYear = parseInt(moment().format("YYYY")) + 10;
+            // Set dates Max and Min Values for numeric text box
+            // Setting MinDate to (Today - 5 years + 1) | +1 to accommodate HP dates, Q4 2017 spreads across two years 2017 and 2018
+            $scope.contractData.MinYear = parseInt(moment().format("YYYY")) - 6;
+            $scope.contractData.MaxYear = parseInt(moment().format("YYYY")) + 21;
+
+            // Set the initial Max and Min date, actual dates will be updated as per the selected customer
+            $scope.contractData.MinDate = moment().subtract(6, 'years').format('l');
+            $scope.contractData.MaxDate = moment().add(21, 'years').format('l');
 
             // If new contract... default customer to the last customer used on the dashboard
             if (!$scope.contractData.CUST_MBR_SID && !!$scope.defCust)
@@ -192,6 +197,10 @@
             // By default set the CUST_ACCPT to pending(99) if new contract
             $scope.contractData.CUST_ACCPT = $scope.contractData.CUST_ACCPT === "" ? 'Pending' : $scope.contractData.CUST_ACCPT;
             $scope.contractData._behaviors.isHidden["C2A_DATA_C2A_ID"] = ($scope.contractData.CUST_ACCPT === 'Pending');
+
+            // No End Date Checks
+            $scope.contractData["NO_END_DT_RSN"] = ""; // TODO: Remove this once attribute added in Contract Template
+            $scope.contractData["NO_END_DT"] = $scope.contractData.NO_END_DT_RSN !== "";
 
             // Set customer acceptance rulesc
             var setCustAcceptanceRules = function (newValue) {
@@ -291,19 +300,19 @@
                 var endDate = $scope.contractData.END_DT;
 
                 if (dateType == 'START_DT') {
-                    if (moment(startDate).isAfter(endDate) || moment(startDate).year() < $scope.contractData.MinYear) {
+                    if (moment(startDate).isAfter(endDate) || moment(startDate).isBefore($scope.contractData.MinDate)) {
                         $scope.contractData._behaviors.isError['START_DT'] = true;
                         $scope.contractData._behaviors
-                            .validMsg['START_DT'] = moment(startDate).year() < $scope.contractData.MinYear
-                            ? "Start date cannot be less than year " + $scope.contractData.MinYear
+                            .validMsg['START_DT'] = moment(startDate).isBefore($scope.contractData.MinDate)
+                            ? "Start date cannot be less than - " + $scope.contractData.MinDate
                             : "Start date cannot be greater than End Date";
                     }
                 } else {
-                    if (moment(endDate).isBefore(startDate) || moment(endDate).year() > $scope.contractData.MaxYear) {
+                    if (moment(endDate).isBefore(startDate) || moment(endDate).isAfter($scope.contractData.MaxDate)) {
                         $scope.contractData._behaviors.isError['END_DT'] = true;
                         $scope.contractData._behaviors
-                            .validMsg['END_DT'] = moment(endDate).year() > $scope.contractData.MaxYear
-                            ? "End date cannot be greater than year " + $scope.contractData.MaxYear
+                            .validMsg['END_DT'] = moment(endDate).isAfter($scope.contractData.MaxDate)
+                            ? "End date cannot be greater than - " + $scope.contractData.MaxDate
                             : "End date cannot be less than Start Date";
                     }
                 }
@@ -330,6 +339,23 @@
                             errInGettingDates(response);
                         });
             }
+
+            var noEndDateChanged = function (noEndDate, updateEndDate) {
+                $scope.contractData._behaviors.isReadOnly["END_DT"] = noEndDate;
+                $scope.contractData._behaviors.isReadOnly["END_QTR"] = noEndDate;
+                $scope.contractData._behaviors.isReadOnly["END_YR"] = noEndDate;
+                $scope.contractData._behaviors.isHidden["NO_END_DT_RSN"] = !noEndDate;
+                $scope.contractData._behaviors.isRequired["NO_END_DT_RSN"] = noEndDate;
+                $scope.contractData.NO_END_DT_RSN = noEndDate ? $scope.contractData.NO_END_DT_RSN : "";
+                if (!!$("#NO_END_DT_RSN").data("kendoDropDownList")) {
+                    $("#NO_END_DT_RSN").data("kendoDropDownList").text($scope.contractData.NO_END_DT_RSN);
+                }
+                if (noEndDate && updateEndDate) {
+                    $scope.contractData.END_DT = $scope.contractData.MaxDate;
+                }
+            }
+
+            noEndDateChanged($scope.contractData.NO_END_DT, false);
 
             var resetQtrYrDirty = function () {
                 // When loading quarter and year from date user never makes changes to Quarter and Year we just load them
@@ -376,6 +402,8 @@
                     : $scope.contractData.CUST_MBR_SID;
                 var quarterDetails = customerService.getCustomerCalendar(customerMemberSid, new Date, null, null)
                     .then(function (response) {
+                        $scope.contractData.MinDate = moment(response.data.MIN_STRT).format('l');
+                        $scope.contractData.MaxDate = moment(response.data.MIN_END).format('l');
                         $scope.contractData.START_QTR = $scope.contractData.END_QTR = response.data.QTR_NBR;
                         $scope.contractData.START_YR = $scope.contractData.END_YR = response.data.YR_NBR;
 
@@ -690,6 +718,8 @@
             if (oldValue["CUST_MBR_SID"] != newValue["CUST_MBR_SID"]) {
                 $scope.contractData.CUST_ACCNT_DIV_UI = "";
                 $scope.updateCorpDivision(newValue["CUST_MBR_SID"]);
+                $scope.contractData.NO_END_DT = false;
+                noEndDateChanged($scope.contractData.NO_END_DT, false);
                 getCurrentQuarterDetails();
             }
 
@@ -764,6 +794,10 @@
                     (!hasUnSavedFiles && !hasFiles);
             }
 
+            if (oldValue["NO_END_DT"] !== newValue["NO_END_DT"]) {
+                noEndDateChanged(newValue["NO_END_DT"], true);
+            }
+
             if ($scope.keyContractItemchanged(oldValue, newValue)) {
                 el._dirty = true;
                 el._dirtyContractOnly = true;
@@ -772,7 +806,6 @@
 
         $scope.keyContractItemchanged = function (oldValue, newValue) {
             function purgeBehaviors(lData) {
-
                 var remItems = [
                     "IsAttachmentRequired", "MinYear", "MaxYear", "END_QTR", "END_YR", "START_QTR", "START_YR",
                     "C2A_DATA_C2A_ID", "AttachmentError", "displayTitle", "CUST_ACCNT_DIV_UI", "PASSED_VALIDATION"
@@ -824,7 +857,7 @@
 
             var rtn = purgeBehaviors(util.deepClone(oldValue)) !== purgeBehaviors(util.deepClone(newValue));
             if (rtn) //debugger;
-            return rtn;
+                return rtn;
         }
 
         // **** LEFT NAVIGATION Methods ****
@@ -942,7 +975,6 @@
         if (!$scope.contractData.PRC_ST) {
             $scope.toggleAddStrategy();
             $timeout(function () {
-
                 var inpt = $("#inptPrcTitle");
                 var t = inpt.position().top + inpt.height() + 4;
                 $("#divHelpAddPs").animate({
@@ -951,10 +983,10 @@
                 }, 2000, function () {
                     $("#navIconAddPs").animate({
                         backgroundColor: "#f3D54E"
-                    }, 500, function() {
+                    }, 500, function () {
                         $("#navIconAddPs").animate({
                             backgroundColor: "#0071C5"
-                        }, 2000, function() {
+                        }, 2000, function () {
                             $("#inptPrcTitle").animate({
                                 backgroundColor: "#f3D54E"
                             }, 500, function () {
@@ -967,7 +999,7 @@
                     $timeout(function () {
                         $("#divHelpAddPs").animate({
                             opacity: 0
-                        }, 2000, function() {
+                        }, 2000, function () {
                             $("#divHelpAddPs").css({
                                 display: "none"
                             });
@@ -1233,11 +1265,11 @@
 
             // Pricing Table Rows
             if (stateName === "contract.manager.strategy") {
-            	source = "PRC_TBL";
+                source = "PRC_TBL";
 
-            	// sync all detail data sources into main grid datasource for a single save
-            	var data = cleanupData($scope.spreadDs._data); // Note: this is a workaround for the "Zero dollar appeaing on product selection then save" bug, which introduces a blank row into $scope.spreadDs._data (the culprit of the bug).
-            	$scope.spreadDs.data(data);
+                // sync all detail data sources into main grid datasource for a single save
+                var data = cleanupData($scope.spreadDs._data); // Note: this is a workaround for the "Zero dollar appeaing on product selection then save" bug, which introduces a blank row into $scope.spreadDs._data (the culprit of the bug).
+                $scope.spreadDs.data(data);
 
                 if ($scope.spreadDs !== undefined) $scope.spreadDs.sync();
 
@@ -1401,13 +1433,13 @@
                 "EventSource": source
             }
         }
-		
+
         $scope.validateTitles = function () {
             var rtn = true;
 
             if (!$scope.curPricingStrategy) return true;
             var isPsUnique = $scope.IsUniqueInList($scope.contractData.PRC_ST, $scope.curPricingStrategy["TITLE"], "TITLE", true);
-            var isPtUnique = !$scope.curPricingTable ? true: $scope.IsUniqueInList($scope.curPricingStrategy.PRC_TBL, $scope.curPricingTable["TITLE"], "TITLE", true);
+            var isPtUnique = !$scope.curPricingTable ? true : $scope.IsUniqueInList($scope.curPricingStrategy.PRC_TBL, $scope.curPricingTable["TITLE"], "TITLE", true);
 
             // Pricing Table
             if (!!$scope.curPricingTable) {
@@ -1460,9 +1492,9 @@
         // **** SAVE CONTRACT Methods ****
         //
         $scope.saveEntireContractBase = function (stateName, forceValidation, forcePublish, toState, toParams, delPtr) {
-        	if (!$scope._dirty && !forceValidation) {
-        		return;
-        	}
+            if (!$scope._dirty && !forceValidation) {
+                return;
+            }
 
             // if save already started saving... exit
             // if validate triggers from product translation continue..validating data
@@ -1521,14 +1553,14 @@
                     $scope.setBusy("Saving your data...Done", "Processing results now!");
 
                     var anyWarnings = false;
-					
+
                     if (!!results.data.PRC_TBL_ROW) {
                         for (i = 0; i < results.data.PRC_TBL_ROW.length; i++) {
                             if (!!results.data.PRC_TBL_ROW[i].PTR_SYS_PRD) results.data.PRC_TBL_ROW[i].PTR_SYS_PRD = $scope.uncompress(results.data.PRC_TBL_ROW[i].PTR_SYS_PRD);
                             if (results.data.PRC_TBL_ROW[i].warningMessages !== undefined && results.data.PRC_TBL_ROW[i].warningMessages.length > 0) anyWarnings = true;
                         }
                         $scope.updateResults(results.data.PRC_TBL_ROW, $scope.pricingTableData.PRC_TBL_ROW);
-                        $scope.spreadDs.read();    
+                        $scope.spreadDs.read();
                         $scope.syncCellsOnAllRows(results.data.PRC_TBL_ROW);
                     }
                     if (!!results.data.WIP_DEAL) {
@@ -1552,7 +1584,7 @@
                             }, 1000);
                         }
                     } else {
-                    	$scope.setBusy("Saved with warnings", "Didn't pass Validation");
+                        $scope.setBusy("Saved with warnings", "Didn't pass Validation");
                         $scope.$broadcast('saveWithWarnings', results);
                         $timeout(function () {
                             $scope.setBusy("", "");
@@ -1618,7 +1650,7 @@
                     var ptTemplate = $scope.templates.ModelTemplates.PRC_TBL_ROW[$scope.curPricingTable.OBJ_SET_TYPE_CD];
                     if (ptTemplate !== undefined && ptTemplate !== null) {
                         for (var i = 0; i < rowsCount; i++) {
-                        	firstUntouchedRowFinder += $scope.syncCellsOnSingleRow(sheet, data[i + offset], i, firstUntouchedRowFinder);
+                            firstUntouchedRowFinder += $scope.syncCellsOnSingleRow(sheet, data[i + offset], i, firstUntouchedRowFinder);
                         }
                     }
                 });
@@ -1626,54 +1658,54 @@
         }
 
         $scope.syncCellsOnSingleRow = function (sheet, dataItem, row, isTheFirstUntouchedRowIfEqualsToOne) {
-        	var ptTemplate = $scope.templates.ModelTemplates.PRC_TBL_ROW[$scope.curPricingTable.OBJ_SET_TYPE_CD];
-        	$scope.columns = $scope.getColumns(ptTemplate);
-        	var c = 0;
-        	if (!!dataItem) {
-        		var beh = dataItem._behaviors;
-        		if (!beh) beh = {};
+            var ptTemplate = $scope.templates.ModelTemplates.PRC_TBL_ROW[$scope.curPricingTable.OBJ_SET_TYPE_CD];
+            $scope.columns = $scope.getColumns(ptTemplate);
+            var c = 0;
+            if (!!dataItem) {
+                var beh = dataItem._behaviors;
+                if (!beh) beh = {};
 
-        		angular.forEach(ptTemplate.model.fields, function (value, key) {
-        			var isError = !!beh.isError && !!beh.isError[value.field];
-        			var isRequired = !!beh.isRequired && !!beh.isRequired[value.field];
-        			var msg = isError ? beh.validMsg[value.field] : (isRequired) ? "This field is required." : "UNKNOWN";
+                angular.forEach(ptTemplate.model.fields, function (value, key) {
+                    var isError = !!beh.isError && !!beh.isError[value.field];
+                    var isRequired = !!beh.isRequired && !!beh.isRequired[value.field];
+                    var msg = isError ? beh.validMsg[value.field] : (isRequired) ? "This field is required." : "UNKNOWN";
 
-        			var isRequiredDropdown = value.nullable;
+                    var isRequiredDropdown = value.nullable;
 
-        			// re-add dropdwwns back into existing rows (dataItem only contains existing rows) Note that re-adding all the validation to the entire column will show unneccessary red flags
-        			if (value.uiType === "DROPDOWN") {
-        				var myRange = sheet.range(row + 1, c++);
-        				reapplyDropdowns(myRange, false, value.field);
-        			} else {
-        				sheet.range(row + 1, c++).validation($scope.myDealsValidation(isError, msg, isRequired));
-        			}
-        		});
-        	} else if (isTheFirstUntouchedRowIfEqualsToOne === 0) {
-        		return 1;   		        	
-        	} else if (isTheFirstUntouchedRowIfEqualsToOne === 1) {
-        		// HACK: This is so we get the dropdowns back on the untouched rows without red flags!
-        		// re-add dropwons into untouched rows
-        		angular.forEach(ptTemplate.model.fields, function (value, key) {
-        			if (value.uiType === "DROPDOWN") {
-        				var myRange = sheet.range($scope.colToLetter[value.field] + (row + 1) + ":" + $scope.colToLetter[value.field] + $scope.ptRowCount);
-        				reapplyDropdowns(myRange, true, value.field);
-        			}
-        		});
-        		return 2; 
-			}
-			return 0;
+                    // re-add dropdwwns back into existing rows (dataItem only contains existing rows) Note that re-adding all the validation to the entire column will show unneccessary red flags
+                    if (value.uiType === "DROPDOWN") {
+                        var myRange = sheet.range(row + 1, c++);
+                        reapplyDropdowns(myRange, false, value.field);
+                    } else {
+                        sheet.range(row + 1, c++).validation($scope.myDealsValidation(isError, msg, isRequired));
+                    }
+                });
+            } else if (isTheFirstUntouchedRowIfEqualsToOne === 0) {
+                return 1;
+            } else if (isTheFirstUntouchedRowIfEqualsToOne === 1) {
+                // HACK: This is so we get the dropdowns back on the untouched rows without red flags!
+                // re-add dropwons into untouched rows
+                angular.forEach(ptTemplate.model.fields, function (value, key) {
+                    if (value.uiType === "DROPDOWN") {
+                        var myRange = sheet.range($scope.colToLetter[value.field] + (row + 1) + ":" + $scope.colToLetter[value.field] + $scope.ptRowCount);
+                        reapplyDropdowns(myRange, true, value.field);
+                    }
+                });
+                return 2;
+            }
+            return 0;
         }
 
         function reapplyDropdowns(sheetRange, allowNulls, valueField) {
-        	sheetRange.validation({
-        		dataType: "list",
-        		showButton: true,
-        		from: "DropdownValuesSheet!" + $scope.colToLetter[valueField] + ":" + $scope.colToLetter[valueField],
-        		allowNulls: allowNulls,
-        		type: "warning",
-        		titleTemplate: "Invalid value",
-        		messageTemplate: "Invalid value. Please use the dropdown for available options."
-        	});
+            sheetRange.validation({
+                dataType: "list",
+                showButton: true,
+                from: "DropdownValuesSheet!" + $scope.colToLetter[valueField] + ":" + $scope.colToLetter[valueField],
+                allowNulls: allowNulls,
+                type: "warning",
+                titleTemplate: "Invalid value",
+                messageTemplate: "Invalid value. Please use the dropdown for available options."
+            });
         }
 
         $scope.clearValidations = function () {
@@ -1716,7 +1748,7 @@
         $scope.uncompressJson = function (data) {
             if (!data) return;
             for (var d = 0; d < data.length; d++) {
-                data[d].PTR_SYS_PRD = $scope.uncompress(data[d].PTR_SYS_PRD); 
+                data[d].PTR_SYS_PRD = $scope.uncompress(data[d].PTR_SYS_PRD);
                 data[d].PTR_SYS_INVLD_PRD = $scope.uncompress(data[d].PTR_SYS_INVLD_PRD);
             }
         }
@@ -1897,7 +1929,6 @@
                         // Special handling for CUST_MBR_SID only field where user can make it null by clearing combobox
                     }
                 });
-
 
             // Check required
             angular.forEach($scope.contractData,
@@ -2414,32 +2445,30 @@
 
         topbar.hide();
 
-		function cleanupData(data) {
-    		// Remove any lingering blank rows from the data
-    		for (var n = data.length - 1; n >= 0; n--) {
-    			if (data[n].DC_ID === null && (data[n].PTR_USER_PRD === null || data[n].PTR_USER_PRD === "")) {
-    				data.splice(n, 1);
-    			} else {
-    				if (util.isInvalidDate(data[n].START_DT)) data[n].START_DT = moment($scope.contractData["START_DT"]).format("MM/DD/YYYY");
-    				if (util.isInvalidDate(data[n].END_DT)) data[n].END_DT = moment($scope.contractData["END_DT"]).format("MM/DD/YYYY");
-    			}
-    		}
+        function cleanupData(data) {
+            // Remove any lingering blank rows from the data
+            for (var n = data.length - 1; n >= 0; n--) {
+                if (data[n].DC_ID === null && (data[n].PTR_USER_PRD === null || data[n].PTR_USER_PRD === "")) {
+                    data.splice(n, 1);
+                } else {
+                    if (util.isInvalidDate(data[n].START_DT)) data[n].START_DT = moment($scope.contractData["START_DT"]).format("MM/DD/YYYY");
+                    if (util.isInvalidDate(data[n].END_DT)) data[n].END_DT = moment($scope.contractData["END_DT"]).format("MM/DD/YYYY");
+                }
+            }
 
-    		// fix merge issues
-    		if (data.length > 0) {
-    			var lastItem = data[data.length - 1];
-    			var numTier = $scope.child.numTiers;
-    			var offset = data.length % numTier;
-    			if (offset > 0) {
-    				for (var a = 0; a < numTier - offset; a++) {
-    					data.push(util.deepClone(lastItem));
-    				}
-    			}
-    		}
+            // fix merge issues
+            if (data.length > 0) {
+                var lastItem = data[data.length - 1];
+                var numTier = $scope.child.numTiers;
+                var offset = data.length % numTier;
+                if (offset > 0) {
+                    for (var a = 0; a < numTier - offset; a++) {
+                        data.push(util.deepClone(lastItem));
+                    }
+                }
+            }
 
-    		return data;
-		}
+            return data;
+        }
     }
-
-
 })();
