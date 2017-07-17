@@ -439,7 +439,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     }
 
     function getFormatedGeos(geos) {
-    	if (geos == null) { return null; }
+        if (geos == null) { return null; }
         var isBlendedGeo = (geos.indexOf('[') > -1) ? true : false;
         if (isBlendedGeo) {
             geos = geos.replace('[', '');
@@ -538,7 +538,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             root._dirty = true;
 
             $timeout(function () {
-                validateSingleRowProducts(sheet.dataSource._data[rowStart - 2], rowStart);
+                validateSingleRowProducts(sheet.dataSource._data[rowStart - 2], rowStart - 1);
             }, 50);
         } else {
             var initRow = rowStart;
@@ -593,7 +593,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         }
         return cols;
     }
-	
+
     // On Spreadsheet change
     function onChange(arg) {
         if (stealthOnChangeMode) {
@@ -670,7 +670,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         }
                         var numToDel = rowStop + 1 - rowStart;
                         cnt = cnt + 2;
-                        //debugger;
                         disableRange(sheet.range("D" + cnt + ":D" + (cnt + numToDel - 1)));
                         disableRange(sheet.range("F" + cnt + ":Z" + (cnt + numToDel - 1)));
                         clearUndoHistory();
@@ -782,7 +781,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     if (data[r]["DC_ID"] !== null && data[r]["DC_ID"] !== undefined) continue;
 
                     newItems++;
-                    data[r]["DC_ID"] = ((r+1) % root.child.numTiers === 0) ? $scope.uid-- : $scope.uid;
+                    data[r]["DC_ID"] = ((r + 1) % root.child.numTiers === 0) ? $scope.uid-- : $scope.uid;
                     data[r]["VOLUME"] = null;
                     data[r]["ECAP_PRICE"] = null;
                     data[r]["CUST_ACCNT_DIV"] = root.contractData.CUST_ACCNT_DIV;
@@ -826,6 +825,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 root.spreadDs.sync();
 
                 sheet.batch(function () {
+                    debugger;
                     // If we skipped spaces, we already collapsed, so remove the extra data outside the range
                     var finalColLetter = String.fromCharCode(intA + (ptTemplate.columns.length - 1));
                     var st = data.length + 1;
@@ -862,7 +862,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         range.background(null);
                     }
 
-					// Re-add dropdowns on new product add to work around save-then-dropdwons-not-showing bug
+                    // Re-add dropdowns on new product add to work around save-then-dropdwons-not-showing bug
                     //for (var key in ptTemplate.model.fields) {
                     //    var myColumnName = root.colToLetter[key];
                     //    var myFieldModel = ptTemplate.model.fields[key];
@@ -951,7 +951,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 $timeout(function () {
                     $("#divHelpAddProd").animate({
                         opacity: 0
-                    }, 2000, function() {
+                    }, 2000, function () {
                         $("#divHelpAddProd").css({
                             display: "none"
                         });
@@ -1016,7 +1016,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             $scope.setRowIdStyle(args.data.PRC_TBL_ROW);
         });
 
-	
+
     // TDOO: This needs major perfromance refactoring because it makes things slow for poeple with bad computer specs :<
     // Initiates in a batch call (which may make the spreadsheet load faster
     function sheetBatchOnRender(sheet, dropdownValuesSheet) {
@@ -1343,8 +1343,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 });
             },
             customMergedPaste: function () {
-                // 
-                // Modified paste for ONLY merged cells... VERY propiatary to 
+                //
+                // Modified paste for ONLY merged cells... VERY propiatary to
                 //
                 var row;
                 var clip = this._clipboard;
@@ -1574,7 +1574,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     });
 
     function validateSingleRowProducts(sData, row) {
-    	if (sData === undefined) { return; }
+        if (sData === undefined) { return; }
         if (!sData._behaviors) sData._behaviors = {};
         if (!sData._behaviors) sData._behaviors = {};
         if (!sData._behaviors.isError) sData._behaviors.isError = {};
@@ -2007,9 +2007,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
 
 
-	/*
+    /*
 	 * -------------------------------------------
-	 * CUSTOM UNDO / REDO 
+	 * CUSTOM UNDO / REDO
 	 * -------------------------------------------
 	 */
 
@@ -2021,68 +2021,68 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
 
     function replaceUndoRedoBtns() {
-    	// Hide the default undo/red buttons in favor of the custom undo/redo buttons
-    	// But note that our custom undo/redo solution requires these buttons to still be in the page
+        // Hide the default undo/red buttons in favor of the custom undo/redo buttons
+        // But note that our custom undo/redo solution requires these buttons to still be in the page
 
-    	var redoBtn = $('.k-i-redo');
-    	redoBtn.addClass('hidden'); // fa fa-share ssUndoButton
-    	redoBtn.removeClass('k-i-redo k-icon');
+        var redoBtn = $('.k-i-redo');
+        redoBtn.addClass('hidden'); // fa fa-share ssUndoButton
+        redoBtn.removeClass('k-i-redo k-icon');
 
-    	var undoBtn = $('.k-i-undo');
-    	undoBtn.addClass('hidden'); // fa fa-reply ssUndoButton
-    	undoBtn.removeClass('k-i-undo k-icon');
+        var undoBtn = $('.k-i-undo');
+        undoBtn.addClass('hidden'); // fa fa-reply ssUndoButton
+        undoBtn.removeClass('k-i-undo k-icon');
     }
 
     $scope.customUndo = function () {
-    	if ($scope.undoCounter > 0) {
-    		$(".k-button[title=Undo]").click();
-    		syncUndoRedoCounters();
-    	}
+        if ($scope.undoCounter > 0) {
+            $(".k-button[title=Undo]").click();
+            syncUndoRedoCounters();
+        }
     }
 
     $scope.customRedo = function () {
-    	// NOTE: Redo calls the onChange event (but undo does not), so there is no need to call syncUndo$scope.redoCounters() here
-    	if ($scope.redoCounter > 0) {
-    		$(".k-button[title=Redo]").click();
-    	}
+        // NOTE: Redo calls the onChange event (but undo does not), so there is no need to call syncUndo$scope.redoCounters() here
+        if ($scope.redoCounter > 0) {
+            $(".k-button[title=Redo]").click();
+        }
     }
 
-	// Reset the undo/redo counters. Doesn't actually clear Kendo's undo/redo stack
+    // Reset the undo/redo counters. Doesn't actually clear Kendo's undo/redo stack
     function clearUndoHistory() {
-    	clearedUndoCount += $scope.undoCounter;
-    	clearedRedoCount += $scope.redoCounter - 1;
-    	$scope.undoCounter = 0;
-    	$scope.redoCounter = 0;
+        clearedUndoCount += $scope.undoCounter;
+        clearedRedoCount += $scope.redoCounter - 1;
+        $scope.undoCounter = 0;
+        $scope.redoCounter = 0;
     }
 
-	// Capture Ctrl Z and Ctrl Y then sync undo/redo counters
+    // Capture Ctrl Z and Ctrl Y then sync undo/redo counters
     $(document).keydown(function (e) {
-    	// Ctrl Z
-    	if (e.ctrlKey && e.keyCode == 90) {
-    		syncUndoRedoCounters();
-    	}
-    	// Ctrl Y
-    	else if (e.ctrlKey && e.keyCode == 89) {
-    		syncUndoRedoCounters();
-    	}
+        // Ctrl Z
+        if (e.ctrlKey && e.keyCode == 90) {
+            syncUndoRedoCounters();
+        }
+            // Ctrl Y
+        else if (e.ctrlKey && e.keyCode == 89) {
+            syncUndoRedoCounters();
+        }
     });
 
-	// Sync undo/redo counters with Kendo's built-in undo/redo stack and our custom cleared undo/redo history counters
+    // Sync undo/redo counters with Kendo's built-in undo/redo stack and our custom cleared undo/redo history counters
     function syncUndoRedoCounters() {
-    	var undoRedoStack = $('#pricingTableSpreadsheet').data("kendoSpreadsheet")._workbook.undoRedoStack;
-    	var currentCommandIndex = (undoRedoStack.currentCommandIndex + 1);
+        var undoRedoStack = $('#pricingTableSpreadsheet').data("kendoSpreadsheet")._workbook.undoRedoStack;
+        var currentCommandIndex = (undoRedoStack.currentCommandIndex + 1);
 
-    	$scope.undoCounter = currentCommandIndex - clearedUndoCount;
-    	$scope.redoCounter = undoRedoStack.stack.length - currentCommandIndex - clearedRedoCount;
+        $scope.undoCounter = currentCommandIndex - clearedUndoCount;
+        $scope.redoCounter = undoRedoStack.stack.length - currentCommandIndex - clearedRedoCount;
 
-    	if (isFirstUndo) { // Workaround because for some reason Kendo's undo/redo stack is 1 off on first available undo (but not 2nd onwards)
-    		$scope.undoCounter += 1;
-    		isFirstUndo = false;
-    	}
+        if (isFirstUndo) { // Workaround because for some reason Kendo's undo/redo stack is 1 off on first available undo (but not 2nd onwards)
+            $scope.undoCounter += 1;
+            isFirstUndo = false;
+        }
     }
 
 
-	
+
     init();
 }
 

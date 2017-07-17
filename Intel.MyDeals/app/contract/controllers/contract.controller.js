@@ -198,9 +198,9 @@
             $scope.contractData.CUST_ACCPT = $scope.contractData.CUST_ACCPT === "" ? 'Pending' : $scope.contractData.CUST_ACCPT;
             $scope.contractData._behaviors.isHidden["C2A_DATA_C2A_ID"] = ($scope.contractData.CUST_ACCPT === 'Pending');
 
-            // No End Date Checks
-            $scope.contractData["NO_END_DT_RSN"] = ""; // TODO: Remove this once attribute added in Contract Template
-            $scope.contractData["NO_END_DT"] = $scope.contractData.NO_END_DT_RSN !== "";
+            // TODO: Ideally undefined check should be removed, once we run the DBConst.tt and DealPropertyWrapper.tt we can remove this
+            // Not running now I see many new Attributes added for VOL_TIER
+            $scope.contractData["NO_END_DT"] = ($scope.contractData.NO_END_DT_RSN !== "" && $scope.contractData.NO_END_DT_RSN !== undefined);
 
             // Set customer acceptance rulesc
             var setCustAcceptanceRules = function (newValue) {
@@ -1268,9 +1268,6 @@
                 source = "PRC_TBL";
 
                 // sync all detail data sources into main grid datasource for a single save
-                var data = cleanupData($scope.spreadDs._data); // Note: this is a workaround for the "Zero dollar appeaing on product selection then save" bug, which introduces a blank row into $scope.spreadDs._data (the culprit of the bug).
-                $scope.spreadDs.data(data);
-
                 if ($scope.spreadDs !== undefined) $scope.spreadDs.sync();
 
                 sData = $scope.spreadDs === undefined ? undefined : $scope.pricingTableData.PRC_TBL_ROW;
@@ -2444,31 +2441,5 @@
         }
 
         topbar.hide();
-
-        function cleanupData(data) {
-            // Remove any lingering blank rows from the data
-            for (var n = data.length - 1; n >= 0; n--) {
-                if (data[n].DC_ID === null && (data[n].PTR_USER_PRD === null || data[n].PTR_USER_PRD === "")) {
-                    data.splice(n, 1);
-                } else {
-                    if (util.isInvalidDate(data[n].START_DT)) data[n].START_DT = moment($scope.contractData["START_DT"]).format("MM/DD/YYYY");
-                    if (util.isInvalidDate(data[n].END_DT)) data[n].END_DT = moment($scope.contractData["END_DT"]).format("MM/DD/YYYY");
-                }
-            }
-
-            // fix merge issues
-            if (data.length > 0) {
-                var lastItem = data[data.length - 1];
-                var numTier = $scope.child.numTiers;
-                var offset = data.length % numTier;
-                if (offset > 0) {
-                    for (var a = 0; a < numTier - offset; a++) {
-                        data.push(util.deepClone(lastItem));
-                    }
-                }
-            }
-
-            return data;
-        }
     }
 })();
