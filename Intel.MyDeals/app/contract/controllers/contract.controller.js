@@ -658,7 +658,7 @@
                     // async save data
                     $scope.setBusy("Saving your data...", "Please wait as we save your information!");
 
-                    $scope.saveEntireContractRoot(fromState.name, false, false, toState.name, toParams);
+                    $scope.saveEntireContractRoot(fromState.name, false, false, toState.name, toParams, null, true);
                 }
 
                 //var modalOptions = {
@@ -947,7 +947,7 @@
             $scope.newPricingTable = util.clone($scope.templates.ObjectTemplates.PRC_TBL.CAP_BAND);
             $scope.newPricingTable.OBJ_SET_TYPE_CD = ""; //reset new PT deal type
             $scope.clearPtTemplateIcons();
-            $scope.curPricingStrategy = {}; //clears curPricingStrategy
+           // $scope.curPricingStrategy = {}; //clears curPricingStrategy
         }
         $scope.hideEditPricingTableDefaults = function () {
             $scope.isAddPricingTableHidden = true;
@@ -1267,12 +1267,14 @@
             if (stateName === "contract.manager.strategy") {
                 source = "PRC_TBL";
 
-                // sync all detail data sources into main grid datasource for a single save
-                var data = cleanupData($scope.spreadDs._data); // Note: this is a workaround for the "Zero dollar appeaing on product selection then save" bug, which introduces a blank row into $scope.spreadDs._data (the culprit of the bug).
-                $scope.spreadDs.data(data);
+                if ($scope.spreadDs !== undefined) {
+                	// sync all detail data sources into main grid datasource for a single save
+                	var data = cleanupData($scope.spreadDs._data); // Note: this is a workaround for the "Zero dollar appeaing on product selection then save" bug, which introduces a blank row into $scope.spreadDs._data (the culprit of the bug).
+                	$scope.spreadDs.data(data);
 
-                // sync all detail data sources into main grid datasource for a single save
-                if ($scope.spreadDs !== undefined) $scope.spreadDs.sync();
+                	// sync all detail data sources into main grid datasource for a single save
+                	$scope.spreadDs.sync();
+                }
 
                 sData = $scope.spreadDs === undefined ? undefined : $scope.pricingTableData.PRC_TBL_ROW;
 
@@ -1522,14 +1524,16 @@
             $scope.clearValidations();
 
             if (!$scope.validateTitles()) {
-                $scope.setBusy("", "");
-                topbar.hide();
+            	$scope.setBusy("", "");
+            	topbar.hide();
+            	$scope.isAutoSaving = false;
 
-                var msg = [];
-                if ($scope.curPricingTable._behaviors.isError["TITLE"]) msg.push("Pricing Table");
-                if ($scope.curPricingStrategy._behaviors.isError["TITLE"]) msg.push("Pricing Strategy");
-                kendo.alert("The " + msg.join(" and ") + " either needs a title or needs a unique name.");
-                return;
+				var msg = [];
+            	if ($scope.curPricingTable._behaviors.isError["TITLE"]) msg.push("Pricing Table");
+            	if ($scope.curPricingStrategy._behaviors.isError["TITLE"]) msg.push("Pricing Strategy");
+
+            	kendo.alert("The " + msg.join(" and ") + " either must have a title or needs a unique name in order to save.");
+            	return;
             }
 
             var data = createEntireContractBase(stateName, $scope._dirtyContractOnly, forceValidation);
@@ -1544,7 +1548,7 @@
             }
 
             $scope.setBusy("Saving your data...", "Please wait while saving data.");
-
+			
             var copyData = util.deepClone(data);
             $scope.compressJson(copyData);
 
