@@ -4,7 +4,7 @@
             <div class="row prodCorrectorHeader">
                 <div class="col-sm-5 cursorArea" style="padding-left:0px">
                     <p class="prodText">Product Corrector</p>
-                </div>                
+                </div>
                 <div class="col-sm-6 text-center headerMsg">
                     <span ng-if="vm.issueRowKeys.length <= 1">
                         MyDeals needs help with your entered product
@@ -18,7 +18,7 @@
                 </span>
             </div>
         </div>
-        
+
         <div kendo-dialog="dialog" k-title="'Unable to find this product'" k-width="500" k-actions="vm.suggestionActions" k-modal="true">
             <p>It is possible the product is outside the date range of the deal or there is a typo in the product name.</p>
             <p>How would you like to proceed?</p>
@@ -153,7 +153,7 @@
 
 
 <style>
-    
+
     .badge.upperBadge {
         font-size: 10px;
         padding: 2px 4px;
@@ -165,7 +165,7 @@
     }
 
     .newProd {
-        font-size: 11px; 
+        font-size: 11px;
         color: #0071C5;
     }
 
@@ -249,7 +249,7 @@
     .subHeaderMsg {
         margin: 0 0 4px 0;
         font-size: 18px;
-        color: #ffffff;        
+        color: #ffffff;
     }
     .subHeaderMsg a {
         color:#00AEEF;
@@ -605,43 +605,6 @@
         margin-right: auto;
     }
 
-    .checkbox-custom {
-        opacity: 0;
-        position: absolute;
-    }
-
-    .checkbox-custom, .checkbox-custom-label {
-        display: inline-block;
-        vertical-align: middle;
-        margin: 5px;
-        cursor: pointer;
-    }
-
-    .checkbox-custom-label {
-        position: relative;
-    }
-
-    .checkbox-custom + .checkbox-custom-label:before {
-        content: '';
-        background: #fff;
-        border: 1.5px solid #eee;
-        border-radius: 4px;
-        display: inline-block;
-        vertical-align: middle;
-        width: 22px;
-        height: 20px;
-        padding: 2px;
-        text-align: center;
-    }
-
-    .checkbox-custom:checked + .checkbox-custom-label:before {
-        background: #01AEEF;
-    }
-
-    .checkbox-custom:hover + .checkbox-custom-label:before {
-        border: 1.5px solid #01AEEF;
-    }
-
     .prodCorrector-grid.k-grid td {
         white-space: nowrap;
         color: #000000;
@@ -651,9 +614,6 @@
         font-size: 18px;
         font-weight: 600;
     }
-
-
-
 
     input[type=checkbox].with-font {
         border: 0;
@@ -665,7 +625,7 @@
         position: absolute;
         width: 1px;
     }
-    
+
     input[type=checkbox].with-font + label:before {
         font-family: FontAwesome;
         display: inline-block;
@@ -677,11 +637,11 @@
         margin-top: 2px;
         vertical-align: middle;
     }
-    
+
     input[type=checkbox].with-font.ckSm + label:before {
         font-size: 16px;
     }
-    
+
     input[type=checkbox].with-font:hover + label:before {
         color: #003C71;
         cursor: pointer;
@@ -690,7 +650,7 @@
         color: #cccccc;
         cursor: default;
     }
-    
+
     input[type=checkbox].with-font:checked + label:before {
         content: "\f046";
         font-size: 22px;

@@ -6,10 +6,7 @@ using System.Linq;
 using Intel.MyDeals.IBusinessLogic;
 using System.Text.RegularExpressions;
 using System;
-using System.Collections.Specialized;
 using System.Data;
-using System.ComponentModel;
-using Newtonsoft.Json.Linq;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -61,11 +58,6 @@ namespace Intel.MyDeals.BusinessLogic
                 _productDataLib.GetProducts();
             }
             return _dataCollectionsDataLib.GetProductData();
-        }
-
-        public List<Product> GetProductsDetailsByDates(DateTime startDate, DateTime endDate)
-        {
-            return _dataCollectionsDataLib.GetProductData().Where(x => x.PRD_STRT_DTM <= endDate && x.PRD_END_DTM >= startDate).ToList();
         }
 
         /// <summary>
@@ -275,7 +267,7 @@ namespace Intel.MyDeals.BusinessLogic
 
                         var productAliasesSplit = (from p in prodNamesListSplit
                                                    join a in aliasMapping
-                                                   on p.USR_INPUT equals a.PRD_ALS_NM into pa
+                                                   on p.USR_INPUT.ToLower() equals a.PRD_ALS_NM.ToLower() into pa
                                                    from t in pa.DefaultIfEmpty()
                                                    select new ProductEntryAttribute
                                                    {
@@ -311,7 +303,7 @@ namespace Intel.MyDeals.BusinessLogic
                 }
                 var productAliases = (from p in prodNamesList
                                       join a in aliasMapping
-                                      on p.USR_INPUT equals a.PRD_ALS_NM into pa
+                                      on p.USR_INPUT.ToLower() equals a.PRD_ALS_NM.ToLower() into pa
                                       from t in pa.DefaultIfEmpty()
                                       select new ProductEntryAttribute
                                       {
@@ -363,7 +355,7 @@ namespace Intel.MyDeals.BusinessLogic
                 //Step 2.1: Checking for Conflict upto Family Name
                 var isConflict = (from p in productMatchResults
                                   join t in tranlatedProducts
-                                  on p.USR_INPUT equals t
+                                  on p.USR_INPUT.ToLower() equals t.ToLower()
                                   group p by new
                                   {
                                       p.ROW_NM,
@@ -387,7 +379,7 @@ namespace Intel.MyDeals.BusinessLogic
                 // Step 2.3: Get the products which are not matched
                 var productWithoutExactMatch = (from p in productMatchResults
                                                 join t in tranlatedProducts
-                                                on p.USR_INPUT equals t
+                                                on p.USR_INPUT.ToLower() equals t.ToLower()
                                                 where !p.EXACT_MATCH
                                                 select t).Distinct();
 
@@ -452,7 +444,7 @@ namespace Intel.MyDeals.BusinessLogic
             var aliasMapping = GetProductsFromAlias();
             var productAliasesSplit = (from p in productsToMatch
                                        join a in aliasMapping
-                                       on p.USR_INPUT equals a.PRD_ALS_NM into pa
+                                       on p.USR_INPUT.ToLower() equals a.PRD_ALS_NM.ToLower() into pa
                                        from t in pa.DefaultIfEmpty()
                                        select new ProductEntryAttribute
                                        {
@@ -629,35 +621,6 @@ namespace Intel.MyDeals.BusinessLogic
         }
 
         /// <summary>
-        /// Translate user entered products into valid products
-        /// ex: i5-2400(s) --> i5-2400, i5-2400s
-        /// </summary>
-        /// <param name="products"></param>
-        /// <returns></returns>
-        public ProductLookup FetchProducts(List<ProductIEValues> prodNames)
-        {
-            var productLookup = new ProductLookup
-            {
-                ProdctTransformResults = new Dictionary<string, List<string>>(),
-                DuplicateProducts = new Dictionary<string, Dictionary<string, List<PRD_TRANSLATION_RESULTS>>>(),
-                ValidProducts = new Dictionary<string, Dictionary<string, List<PRD_TRANSLATION_RESULTS>>>(),
-                InValidProducts = new Dictionary<string, List<string>>()
-            };
-            return productLookup;
-        }
-
-        /// <summary>
-        /// Translate user entered products into valid products
-        /// ex: i5-2400(s) --> i5-2400, i5-2400s
-        /// </summary>
-        /// <param name="products"></param>
-        /// <returns></returns>
-        //public List<ProductIncExcAttribute> SetIncludeExclude(CrudModes mode, ProductIncExcAttribute data)
-        //{
-        //    return _productDataLib.SetProductAlias(mode, data);
-        //}
-
-        /// <summary>
         /// Get include attribute list for product
         /// </summary>
         /// <param type="List<ProductIncExcAttribute>" name="prodNames"></param>
@@ -754,87 +717,6 @@ namespace Intel.MyDeals.BusinessLogic
         }
 
         #endregion ProductAlias
-
-        #region Suggest Products
-
-        /// <summary>
-        /// TODO: Remove this method once corrector also starts using this method for suggestion
-        /// </summary>
-        /// <param name="prdEntered"></param>f
-        /// <param name="returnMax"></param>
-        /// <returns></returns>
-        public List<Product> SuggestProducts(string prdEntered, int? returnMax, IList<Product> prds = null)
-        {
-            const int defaultReturnedMaxRecords = 5;
-
-            int returnMaxRecords = returnMax ?? defaultReturnedMaxRecords;
-
-            prdEntered = prdEntered.Trim('*'); // Remove trailing *
-            prdEntered = prdEntered.Replace("?", "."); // Replace any single character wildcards with regex single character token (?)
-            List<string> words = prdEntered.Split('*').ToList(); // Break into list on wildcard characters (*)
-
-            //List<string> words = new List<string> { "(e4400)", "(80..7)" };
-            string pattern = string.Join("|", words);
-            Regex regex = new Regex(pattern, RegexOptions.IgnoreCase);
-
-            // this takes time if it is the first time to load into cache
-            if (prds == null)
-            {
-                prds = GetProductsDetails();
-            }
-
-            IEnumerable<ProductHash> hashPrds = from prd in prds
-                                                select new ProductHash
-                                                {
-                                                    Id = prd.PRD_MBR_SID,
-                                                    HashName = prd.HIER_VAL_NM
-                                                };
-
-            List<NodeMatch> myMatches = new List<NodeMatch>();
-            foreach (ProductHash productHash in hashPrds)
-            {
-                MatchCollection matches = regex.Matches(productHash.HashName.ToUpper());
-                if (matches.Count > 0)
-                {
-                    int matchesLength = 0;
-                    string matchVal = "";
-                    foreach (Match match in matches)
-                    {
-                        matchesLength += match.Length;
-                        matchVal += match.Value;
-                    }
-
-                    float weight = ((float)matchesLength / (float)productHash.HashName.Length) * 100;
-
-                    NodeMatch newMatch = new NodeMatch
-                    {
-                        ID = productHash.Id,
-                        Value = productHash.HashName,
-                        MatchVal = matchVal,
-                        MatchLen = matchesLength,
-                        MatchCount = matches.Count,
-                        Weight = weight
-                    };
-                    myMatches.Add(newMatch);
-                }
-            }
-
-            List<NodeMatch> SortedList = myMatches.OrderByDescending(o => o.MatchLen).ThenByDescending(o => o.Weight).ToList();
-            List<int> matchedIDs = SortedList.Take(returnMaxRecords).Select(p => p.ID).ToList();
-            List<Product> rtn = prds.Where(p => matchedIDs.Contains(p.PRD_MBR_SID)).ToList();
-
-            foreach (var p in rtn)
-            {
-                p.USR_INPUT = prdEntered;
-            }
-
-            List<Product> Final = new List<Product>();
-            Final.AddRange(rtn);
-
-            return Final;
-        }
-
-        #endregion Suggest Products
 
         /// <summary>
         /// Get product selection levels
@@ -981,30 +863,16 @@ namespace Intel.MyDeals.BusinessLogic
         }
 
         /// <summary>
-        ///
-        /// </summary>
-        /// <param name="prdEntered"></param>
-        /// <param name="returnMax"></param>
-        /// <param name="startDate"></param>
-        /// <param name="endDate"></param>
-        /// <returns></returns>
-        public List<Product> SuggestProductsByDates(string prdEntered, int? returnMax, DateTime startDate, DateTime endDate)
-        {
-            var products = GetProductsDetailsByDates(startDate, endDate);
-            var productNameFromAlias = GetProductsFromAlias().Where(x => x.PRD_ALS_NM == prdEntered);
-            prdEntered = productNameFromAlias.Any() ? productNameFromAlias.FirstOrDefault().PRD_NM : prdEntered;
-            return SuggestProducts(prdEntered, returnMax, products);
-        }
-
-        /// <summary>
         /// Get search string
         /// </summary>
         /// <param name="searchText"></param>
         /// <returns></returns>
-        public IList<SearchString> GetSearchString(string searchText)
+        public IList<SearchString> GetSearchString(string searchText, string mediaCode,
+            DateTime startDate, DateTime endDate, bool getWithFilters = true)
         {
             searchText = searchText.Trim();
-            var searchString = GetSearchString();
+
+            var searchString = FilterProducts(mediaCode, startDate, endDate, getWithFilters);
 
             // Get the matching product
             var matchingProducts = GetMatchingProduct(searchText, searchString);
@@ -1012,10 +880,64 @@ namespace Intel.MyDeals.BusinessLogic
             // Still if there are no matches get the auto correct matches
             if (!matchingProducts.Any())
             {
-                matchingProducts = GetMatchingProduct(searchText, searchString, true);
+                matchingProducts = GetAutcorrectedSugestions(searchText, searchString);
             }
 
             return matchingProducts;
+        }
+
+        private Dictionary<string, string> FilterProducts(string mediaCode, DateTime startDate, DateTime endDate, bool getWithFilters)
+        {
+            var applyMediaFilter = new[] { "CPU", "EIA CPU", "EIA MISC" };
+
+            var products = GetProducts();
+
+            if (getWithFilters)
+            {
+                products = products.Where(x => x.PRD_STRT_DTM <= endDate && x.PRD_END_DTM >= startDate).ToList();
+                if (mediaCode.ToUpper() != "ALL")
+                {
+                    var p = products.Where(x => applyMediaFilter.Contains(x.DEAL_PRD_TYPE.ToUpper())
+                    && !x.MM_MEDIA_CD.ToUpper().Contains(mediaCode.ToUpper()));
+
+                    products = products.Except(p).ToList();
+                }
+            }
+
+            var _getSearchStringList = new List<SearchString>();
+
+            var searchHierColumns = products.Where(x => !string.IsNullOrEmpty(x.HIER_VAL_NM) &&
+                x.PRD_ATRB_SID <= (int)ProductHierarchyLevelsEnum.MTRL_ID
+                && x.PRD_ATRB_SID >= (int)ProductHierarchyLevelsEnum.DEAL_PRD_TYPE)
+                .Select(x => new SearchString { Name = x.HIER_VAL_NM, Type = ((ProductHierarchyLevelsEnum)x.PRD_ATRB_SID).ToString() });
+
+            var searchGDMFamily = products.Where(x => !string.IsNullOrEmpty(x.GDM_FMLY_NM)).
+                    Select(x => new SearchString { Name = x.GDM_FMLY_NM, Type = ProductHierarchyLevelsEnum.GDM_FMLY_NM.ToString() });
+
+            var searchNandFamily = products.Where(x => !string.IsNullOrEmpty(x.NAND_FAMILY) && x.PRD_ATRB_SID == 7008).
+                               Select(x => new SearchString { Name = x.NAND_FAMILY, Type = ProductHierarchyLevelsEnum.NAND_FAMILY.ToString() });
+
+            var searchNandDensity = products.Where(x => !string.IsNullOrEmpty(x.NAND_Density) && x.PRD_ATRB_SID == 7008).
+                               Select(x => new SearchString { Name = x.NAND_Density, Type = ProductHierarchyLevelsEnum.NAND_DENSITY.ToString() });
+
+            var searchEPM = products.Where(x => !string.IsNullOrEmpty(x.EPM_NM) && x.PRD_ATRB_SID == 7008).
+                               Select(x => new SearchString { Name = x.EPM_NM, Type = ProductHierarchyLevelsEnum.EPM_NM.ToString() });
+
+            _getSearchStringList.AddRange(searchHierColumns);
+            _getSearchStringList.AddRange(searchGDMFamily);
+            _getSearchStringList.AddRange(searchNandFamily);
+            _getSearchStringList.AddRange(searchNandDensity);
+            _getSearchStringList.AddRange(searchEPM);
+
+            var _getSearchString = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+
+            foreach (var s in _getSearchStringList)
+            {
+                if (!_getSearchString.Keys.Contains(s.Name))
+                    _getSearchString.Add(s.Name, s.Type);
+            }
+
+            return _getSearchString;
         }
 
         private IList<SearchString> GetMatchingProduct(string searchValue, Dictionary<string, string> searchString)
@@ -1063,7 +985,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// </summary>
         /// <param name="searchText"></param>
         /// <returns></returns>
-        public IList<SearchString> GetMatchingProduct(string searchText, Dictionary<string, string> searchString, bool getAutocorrectSuggestions)
+        public IList<SearchString> GetAutcorrectedSugestions(string searchText, Dictionary<string, string> searchString)
         {
             var suggestions = new Dictionary<string, int>(StringComparer.InvariantCultureIgnoreCase);
 
@@ -1103,25 +1025,30 @@ namespace Intel.MyDeals.BusinessLogic
         }
 
         /// <summary>
-        /// Check product exists in Mydeals (without any filter, for quick check. Performance matters)
+        /// Get Suggestions
         /// </summary>
-        /// <param name="input"></param>
+        /// <param name="userInputs"></param>
+        /// <param name="custId"></param>
         /// <returns></returns>
-        public bool IsProductExistsInMydeals(string searchText)
+        public IList<PRD_TRANSLATION_RESULTS> GetSuggestions(ProductEntryAttribute userInput, int custId)
         {
-            var searchString = GetSearchString();
-            return searchString.ContainsKey(searchText.Trim());
-        }
+            var suggestions = GetSearchString(userInput.USR_INPUT, userInput.FILTER, DateTime.Parse(userInput.START_DATE),
+                DateTime.Parse(userInput.END_DATE), true).Take(5);
 
-        /// <summary>
-        /// Get auto corrected product suggestions
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        public IList<SearchString> GetAutoCorrectedProduct(string searchText)
-        {
-            var searchString = GetSearchString();
-            return GetMatchingProduct(searchText.Trim(), searchString, true);
+            var productsToTranslate = suggestions.Select(t => new ProductEntryAttribute
+            {
+                ROW_NUMBER = 1,
+                USR_INPUT = t.Name,
+                EXCLUDE = userInput.EXCLUDE,
+                FILTER = userInput.FILTER,
+                END_DATE = userInput.END_DATE,
+                START_DATE = userInput.START_DATE,
+                GEO_COMBINED = userInput.GEO_COMBINED,
+                PROGRAM_PAYMENT = userInput.PROGRAM_PAYMENT,
+                COLUMN_TYPE = (t.Name == "EPM_NM")
+            }).ToList();
+
+            return productsToTranslate.Any() ? GetProductDetails(productsToTranslate, custId) : new List<PRD_TRANSLATION_RESULTS>();
         }
     }
 

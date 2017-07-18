@@ -292,7 +292,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
             {
                 field: "USR_INPUT",
                 title: "User Entered",
-                groupHeaderTemplate: "<span class=\"grpTitle\">#= value #</span>  <i class='intelicon-arrow-back-left skyblue pl10'></i> <span class='grpDesc'>Can't find what you are looking for?  <span class='or'>Use the</span> </span><span class='lnk' ng-click='vm.launchSelector(\"#=value#\")'>Product Selector</span><span class='or'> OR </span><span class='lnk' ng-click='vm.removeProd(\"#=value#\")'>Remove Product</span>",
+                groupHeaderTemplate: "<span class=\"grpTitle\">#= value #</span>  <i class='intelicon-arrow-back-left skyblue pl10'></i> <span class='grpDesc'>Can't find what you are looking for?  <span class='or'>Use the</span> </span><span class='lnk' ng-click='vm.launchSelector(\"#=value#\", true)'>Product Selector</span><span class='or'> OR </span><span class='lnk' ng-click='vm.removeProd(\"#=value#\")'>Remove Product</span>",
                 hidden: false
             },
             {
@@ -391,7 +391,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
         }
     }
 
-    vm.openProdSelector = function (dataItem, rowId) {
+    vm.openProdSelector = function (dataItem, rowId, productExists) {
         if (ProductRows.length > 1) {
             var currentPricingTableRow = ProductRows[rowId - 1];
         }
@@ -419,7 +419,8 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
 
         var suggestedProduct = {
             'mode': 'auto',
-            'prodname': dataItem
+            'prodname': dataItem,
+            'productExists': productExists
         };
 
         var modal = $uibModal.open({
@@ -534,12 +535,12 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
             vm.launchSelector(prdNm);
         });
     }
-    vm.launchSelector = function (prdNm) {
+    vm.launchSelector = function (prdNm, productExist) {
         var rowDcId = vm.rowDCId;
         var key = vm.curRowId;
 
         //alert('TODO: display popup for ' + prdNm + ':\n1) Exact match but with errors like prod outside deal range.\n2) Top 10 or 15 possible matches... maybe.');
-        vm.openProdSelector(prdNm, key);
+        vm.openProdSelector(prdNm, key, productExist);
     }
 
     vm.removeProd = function (prdNm) {

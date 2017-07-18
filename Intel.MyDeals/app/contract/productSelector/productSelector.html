@@ -35,13 +35,64 @@
     <div class="prodSelector modal-body">
         <div ng-if="vm.showSuggestions" class="productSelector subHeaderNavContainer mini-right miniProdNav">
             <div ng-if="!(vm.errorMessage.length > 0)">
-                <div>No product found for "{{ ::vm.userInput }}". Search instead for:</div>
+                <div>No product found for "{{ ::vm.userInput }}". Search resulted following products:</div>
                 <div style="padding-top:5px;">
-                    <ul ng-if="vm.suggestedProducts.length !== 0" class="productSelector productpath breadcrumb">
-                        <li ng-repeat="p in vm.suggestedProducts | unique:'Name'">
-                            <span class="productSelector prdAnchor Good" role="button" ng-click="vm.searchProduct(p.Name, p.Type, true)">{{:: p.Name }}</span>
-                        </li>
-                    </ul>
+                    <table ng-if="vm.suggestedProducts.length !== 0" style="width: 100%; height: 100%;">
+                        <tr>
+                            <td>
+                                <div class="lnavFilter">
+                                    <div class="">Refine By</div>
+                                    <div class="filterGrp">
+                                        <div ng-click="vm.isPrdCollapsed = !vm.isPrdCollapsed" style="cursor: pointer;">
+                                            <i ng-class="{'intelicon-down': vm.isPrdCollapsed, 'intelicon-right-next': !vm.isPrdCollapsed}"></i> Suggested Products
+                                        </div>
+                                        <div class="filterContainer" uib-collapse="vm.isPrdCollapsed">
+                                            <div ng-repeat="item in vm.curRowIssues | orderBy: 'name'" style="max-height: 20px;">
+                                                <div ng-if="item.cnt > 0">
+                                                    <input type='checkbox' ng-click="vm.clickFilter()" ng-model="item.selected" class='check ckSm with-font' id="fltrPrdChk{{item.id}}" />
+                                                    <label for="fltrPrdChk{{item.id}}">
+                                                        <span ng-bind-html="item.name"></span>
+                                                        <span class="badge upperBadge" ng-if="item.status == 'Issue'">{{ item.cnt == 0 ? "?" : item.cnt }}</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="filterGrp" ng-if="vm.curRowLvl.length > 1">
+                                        <div ng-click="vm.isLvlCollapsed = !vm.isLvlCollapsed" style="cursor: pointer;">
+                                            <i ng-class="{'intelicon-down': vm.isLvlCollapsed, 'intelicon-right-next': !vm.isLvlCollapsed}"></i> Product Level
+                                        </div>
+                                        <div class="filterContainer" uib-collapse="vm.isLvlCollapsed">
+                                            <div ng-repeat="item in vm.curRowLvl | orderBy: 'name'" style="max-height: 20px;">
+                                                <input type='checkbox' ng-click="vm.clickFilter()" ng-model="item.selected" class='check ckSm with-font' id="fltrLvlChk{{item.id}}" />
+                                                <label for="fltrLvlChk{{item.id}}">
+                                                    <span ng-bind-html="item.name"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="filterGrp" ng-if="vm.curRowCategories.length > 1">
+                                        <div ng-click="vm.isCatCollapsed = !vm.isCatCollapsed" style="cursor: pointer;">
+                                            <i ng-class="{'intelicon-down': vm.isCatCollapsed, 'intelicon-right-next': !vm.isCatCollapsed}"></i> Product Category
+                                        </div>
+                                        <div class="filterContainer" uib-collapse="vm.isCatCollapsed">
+                                            <div ng-repeat="item in vm.curRowCategories | orderBy: 'name'" style="max-height: 20px;">
+                                                <!-- checked='checked' ng-click="onColumnChange(item)" -->
+                                                <input type='checkbox' ng-click="vm.clickFilter()" ng-model="item.selected" class='check ckSm with-font' id="fltrCatChk{{item.id}}" />
+                                                <label for="fltrCatChk{{item.id}}">
+                                                    <span ng-bind-html="item.name"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </td>
+                            <td style="width: 100%">
+                                <div id="prodSuggestions" kendo-grid-check-box k-grid-checkbox="vm" kendo-grid="prodSuggestions" class="productSuggestion opUiContainer md kendoGridHeight prodCorrector-grid k-grid" k-options="vm.gridOptionsSuggestions"></div>
+                            </td>
+                        </tr>
+                    </table>
                     <div class="productSelector Warning" ng-if="vm.suggestedProducts.length === 0">
                         Unable to find any suggestions for "{{vm.userInput}}."
                     </div>

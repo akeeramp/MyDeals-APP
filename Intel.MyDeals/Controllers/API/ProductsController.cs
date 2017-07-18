@@ -402,15 +402,6 @@ namespace Intel.MyDeals.Controllers.API
             );
         }
 
-        [Route("SuggestProductsByDates")]
-        [HttpPost]
-        public List<Product> FindSuggestedProductByDates([FromBody]dynamic input)
-        {
-            return SafeExecutor(() => _productsLib.SuggestProductsByDates((string)input.prdEntered, (int?)input.returnMax, (DateTime)input.startDate, (DateTime)input.endDate)
-                , $"Unable to Suggest Products 3"
-            );
-        }
-
         /// <summary>
         /// Get Product selection levels
         /// </summary>
@@ -473,9 +464,19 @@ namespace Intel.MyDeals.Controllers.API
         [HttpPost]
         public IList<SearchString> GetSearchString([FromBody]dynamic input)
         {
-            return SafeExecutor(() => _productsLib.GetSearchString((string)input.filter)
+            return SafeExecutor(() => _productsLib.GetSearchString((string)input.filter, (string)input.mediaCode,
+                (DateTime)input.startDate, (DateTime)input.endDate, (bool)input.getWithFilters)
                , $"Unable to get Product search results"
            );
+        }
+
+        [Route("GetSuggestions/{custId}")]
+        [HttpPost]
+        public IList<PRD_TRANSLATION_RESULTS> GetSuggestions(ProductEntryAttribute userInput, int custId)
+        {
+            return SafeExecutor(() => _productsLib.GetSuggestions(userInput, custId)
+                , $"Unable to get product {"details"}"
+            );
         }
 
         [Route("GetProductAttributes")]
@@ -485,35 +486,6 @@ namespace Intel.MyDeals.Controllers.API
             return SafeExecutor(() => _productsLib.GetProductAttributes(products)
                 , $"Unable to get Product details"
             );
-        }
-
-        /// <summary>
-        /// Check product exists in Mydeals (without any filter, for quick check. Performance matters)
-        /// Note : Going with POST operation instead of GET as product name contains special characters.
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        [Route("IsProductExistsInMydeals")]
-        [HttpPost]
-        public bool IsProductExistsInMydeals([FromBody]dynamic input)
-        {
-            return SafeExecutor(() => _productsLib.IsProductExistsInMydeals((string)input.filter)
-                , $"Unable to check if product exists in MyDeals"
-            );
-        }
-
-        /// <summary>
-        /// Get auto corrected product suggestions
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        [Route("GetAutoCorrectedProduct")]
-        [HttpPost]
-        public IList<SearchString> GetAutoCorrectedProduct([FromBody]dynamic input)
-        {
-            return SafeExecutor(() => _productsLib.GetAutoCorrectedProduct((string)input.filter)
-                            , $"Unable to get auto corrected Product suggestions"
-                        );
         }
     }
 }

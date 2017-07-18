@@ -29,7 +29,7 @@
                         '<label for="{{dataItem.PRD_MBR_SID}}" class="checkbox-custom-label"></label>',
                     headerTemplate: '<input id="header-chbx" ng-click="vm.toggleSelectAll($event)" class="checkbox-custom" type="checkbox">' +
                         '<label style="margin:0px" for="header-chbx" class="checkbox-custom-label"></label>',
-                    width: 90,
+                    width: 60,
                     sortable:false,
                     field: "CheckBox",
                     filterable: false,

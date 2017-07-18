@@ -58,8 +58,6 @@ namespace Intel.MyDeals.IBusinessLogic
 
         List<PrdSelLevel> GetProdSelectionLevel(int OBJ_SET_TYPE_SID);
 
-        List<Product> SuggestProducts(string prdEntered, int? returnMax, IList<Product> prds = null);
-
         ProductSelectorWrapper GetProductSelectorWrapper();
 
         ProductSelectorWrapper GetProductSelectorWrapperByDates(DateTime startDate, DateTime endDate);
@@ -73,12 +71,8 @@ namespace Intel.MyDeals.IBusinessLogic
 
         List<PRD_LOOKUP_RESULTS> GetProductAttributes(List<PRD_LOOKUP_RESULTS> product);
 
-        List<Product> SuggestProductsByDates(string prdEntered, int? returnMax, DateTime startDate, DateTime endDate);
+        IList<SearchString> GetSearchString(string searchText, string mediaCode, DateTime startDate, DateTime endDate, bool getWithFilters = true);
 
-        IList<SearchString> GetSearchString(string searchText);
-
-        bool IsProductExistsInMydeals(string filter);
-
-        IList<SearchString> GetAutoCorrectedProduct(string filter);
+        IList<PRD_TRANSLATION_RESULTS> GetSuggestions(ProductEntryAttribute userInput, int custId);
     }
 }

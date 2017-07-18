@@ -4,9 +4,9 @@
        .module('app.admin') //TODO: once we integrate with contract manager change the module to contract
        .controller('ProductSelectorModalController', ProductSelectorModalController);
 
-    ProductSelectorModalController.$inject = ['$filter', '$scope', '$uibModal', '$uibModalInstance', 'productSelectionLevels', 'enableSplitProducts', 'ProductSelectorService', 'pricingTableRow', '$timeout', 'logger', 'gridConstants', 'suggestedProduct'];
+    ProductSelectorModalController.$inject = ['$filter', '$scope', '$uibModal', '$uibModalInstance', '$linq', 'productSelectionLevels', 'enableSplitProducts', 'ProductSelectorService', 'pricingTableRow', '$timeout', 'logger', 'gridConstants', 'suggestedProduct'];
 
-    function ProductSelectorModalController($filter, $scope, $uibModal, $uibModalInstance, productSelectionLevels, enableSplitProducts, ProductSelectorService, pricingTableRow, $timeout, logger, gridConstants, suggestedProduct) {
+    function ProductSelectorModalController($filter, $scope, $uibModal, $uibModalInstance, $linq, productSelectionLevels, enableSplitProducts, ProductSelectorService, pricingTableRow, $timeout, logger, gridConstants, suggestedProduct) {
         var vm = this;
         // Non CPU verticals with drill down level 4
         var verticalsWithDrillDownLevel4 = ["EIA CPU", "EIA MISC"];
@@ -700,24 +700,32 @@
         function autoSearchForSuggestion() {
             if (suggestedProduct.mode == "auto") {
                 vm.userInput = suggestedProduct.prodname;
-                ProductSelectorService.IsProductExistsInMydeals(vm.userInput).then(function (response) {
-                    if (response.data) {
-                        setTimeout(function () {
-                            vm.searchProduct();
-                        }, 1500);
-                    } else {
-                        showAutocorrectedSuggestions(vm.userInput)
-                    }
-                }, function (response) {
-                    logger.error("Unable to get check if product exists in MyDeals.", response, response.statusText);
-                });
+                if (!!suggestedProduct.productExists) {
+                    setTimeout(function () {
+                        vm.searchProduct();
+                    });
+                } else {
+                    showAutocorrectedSuggestions(vm.userInput)
+                }
             }
         }
 
         function showAutocorrectedSuggestions(userInput) {
-            ProductSelectorService.GetAutoCorrectedProduct(userInput).then(function (response) {
+            var dto = {
+                USR_INPUT: userInput,
+                EXCLUDE: "",
+                FILTER: pricingTableRow.PROD_INCLDS,
+                START_DATE: pricingTableRow.START_DT,
+                END_DATE: pricingTableRow.END_DT,
+                GEO_COMBINED: pricingTableRow.GEO_COMBINED,
+                PROGRAM_PAYMENT: pricingTableRow.PROGRAM_PAYMENT,
+            };
+            ProductSelectorService.GetSuggestions(dto, pricingTableRow.CUST_MBR_SID).then(function (response) {
                 vm.suggestedProducts = response.data;
                 vm.showSuggestions = true;
+                if (response.data.length > 0) {
+                    initSuggestionGrid();
+                }
             }, function (response) {
                 logger.error("Unable to get auto-corrected product suggestions.", response, response.statusText);
             });
@@ -750,7 +758,14 @@
                             e.success([]);
                         } else {
                             param = param.replace(/["]/g, "");
-                            ProductSelectorService.GetSearchString(param).then(function (response) {
+                            var dto = {
+                                filter: param,
+                                mediaCode: pricingTableRow.PROD_INCLDS,
+                                startDate: pricingTableRow.START_DT,
+                                endDate: pricingTableRow.END_DT,
+                                getWithFilters: true
+                            };
+                            ProductSelectorService.GetSearchString(dto).then(function (response) {
                                 e.success(response.data);
                             }, function (response) {
                                 logger.error("Unable to get product suggestions.", response, response.statusText);
@@ -861,8 +876,12 @@
 
                 var markLevel1 = markLevel1s[0].MRK_LVL1;
 
-                vm.selectedPathParts = [{ name: markLevel1 },
-                    { name: item.name }, { name: item.vertical, path: item.verticalPath }];
+                vm.selectedPathParts = [{
+                    name: markLevel1
+                },
+                    {
+                        name: item.name
+                    }, { name: item.vertical, path: item.verticalPath }];
 
                 var brandNames = $filter('where')(vm.productSearchValues, { 'PRD_CAT_NM': item.vertical });
                 if (brandNames.length == 1 && brandNames[0].PRD_ATRB_SID == 7003) {
@@ -990,7 +1009,9 @@
                     // If we couldn't find an item in this list of children
                     // that has the right name, create one:
                     if (lastNode == currentNode) {
-                        var newNode = currentNode[k] = { name: wantedNode, items: [] };
+                        var newNode = currentNode[k] = {
+                            name: wantedNode, items: []
+                        };
                         currentNode = newNode.items;
                     }
                 }
@@ -1027,5 +1048,181 @@
         vm.tree = {
             dataSource: {}
         };
+
+        //----------------------------- Suggestion grid--------------------------------------------------
+        vm.dataSourceProduct = new kendo.data.DataSource({
+            transport: {
+                read: function (e) {
+                    e.success(vm.suggestedProducts);
+                }
+            },
+            pageSize: 50,
+            schema: {
+                model: {
+                    id: "PROD_MBR_SID",
+                    fields: {
+                        "USR_INPUT": {
+                            type: "string"
+                        },
+                        "HIER_VAL_NM": {
+                            type: "string"
+                        },
+                        "PRD_CAT_NM": {
+                            type: "string"
+                        },
+                        "HIER_NM_HASH": {
+                            type: "string"
+                        },
+                        "PRD_STRT_DTM": {
+                            type: "string"
+                        },
+                        "CAP": {
+                            type: "object"
+                        }
+                    }
+                }
+            }
+        });
+
+        vm.gridOptionsSuggestions = {
+            dataSource: vm.dataSourceProduct,
+            filterable: gridConstants.filterable,
+            scrollable: true,
+            sortable: true,
+            resizable: true,
+            reorderable: true,
+            pageable: {
+                pageSizes: gridConstants.pageSizes
+            },
+            enableHorizontalScrollbar: true,
+            columns: [
+                {
+                    field: "USR_INPUT",
+                    title: "User Entered",
+                    groupHeaderTemplate: "<span class=\"grpTitle\">#= value #</span>",
+                    hidden: false
+                },
+                {
+                    field: "HIER_VAL_NM",
+                    title: "Product",
+                    width: "150px"
+                },
+                {
+                    field: "PRD_CAT_NM",
+                    title: "Product Category",
+                    width: "80px",
+                    groupHeaderTemplate: "#= value #"
+                },
+                {
+                    field: "HIER_NM_HASH",
+                    title: "Product Details"
+                },
+                {
+                    field: "PRD_STRT_DTM",
+                    title: "Product Effective Date",
+                    template: "#= kendo.toString(new Date(PRD_STRT_DTM), 'M/d/yyyy') + ' - ' + kendo.toString(new Date(PRD_END_DTM), 'M/d/yyyy') #"
+                },
+                {
+                    field: "CAP",
+                    title: "CAP Info",
+                    template: "<op-popover ng-click='vm.openCAPBreakOut(dataItem, \"CAP\")' op-options='CAP' op-label='' op-data='vm.getPrductDetails(dataItem, \"CAP\")'>#=gridUtils.uiMoneyDatesControlWrapper(data, 'CAP', 'CAP_START', 'CAP_END')#</op-popover>",
+                    width: "150px"
+                },
+                {
+                    field: "MM_MEDIA_CD",
+                    title: "Media Code",
+                    width: "120px"
+                },
+            ]
+        }
+
+        vm.applyFilterAndGrouping = function () {
+            function buildFilterGroup(field, masterFilters, data) {
+                var filters = [];
+                var filterItem = $linq.Enumerable().From(data).Where(function (x) { return (x.selected); }).ToArray();
+                for (var f = 0; f < filterItem.length; f++) {
+                    filters.push({ field: field, operator: "eq", value: filterItem[f].value });
+                }
+
+                if (filters.length === 0) return;
+
+                masterFilters.push({
+                    logic: "or",
+                    filters: filters
+                });
+            }
+
+            // Now apply grouping
+            var group = [];
+            group.push({ field: "USR_INPUT", dir: "asc" });
+
+            vm.gridOptionsSuggestions.dataSource.group(group);
+
+            // Now apply filtering
+            var filters = [];
+            buildFilterGroup("USR_INPUT", filters, vm.curRowIssues);
+            buildFilterGroup("PRD_CAT_NM", filters, vm.curRowCategories);
+            buildFilterGroup("PRD_ATRB_SID", filters, vm.curRowLvl);
+            vm.gridOptionsSuggestions.dataSource.filter(filters);
+
+            // Refresh Datasource
+            vm.gridOptionsSuggestions.dataSource.read();
+        }
+
+        vm.curRowIssues = [];
+        vm.curRowCategories = [];
+        vm.curRowLvl = [];
+        vm.isPrdCollapsed = false;
+        vm.isCalCollapsed = false;
+        vm.isLvlCollapsed = false;
+
+        function prdLvlDecoder(indx) {
+            if (indx === 7003) return "Product Category";
+            if (indx === 7004) return "Brand";
+            if (indx === 7005) return "Family";
+            if (indx === 7006) return "Processor #";
+            if (indx === 7007) return "L4";
+            if (indx === 7008) return "Material Id";
+            return "";
+        }
+
+        function initSuggestionGrid() {
+            var suggestions = $filter('unique')(vm.suggestedProducts, 'USR_INPUT');
+            for (var x = 0; x < suggestions.length; x++) {
+                var prods = $filter('where')(vm.suggestedProducts, { 'USR_INPUT': suggestions[x].USR_INPUT });
+                var cnt = prods.length;
+                vm.curRowIssues.push({
+                    "id": x,
+                    "name": suggestions[x].USR_INPUT,
+                    "value": suggestions[x].USR_INPUT,
+                    "selected": false,
+                    "status": 'Issue',
+                    "cnt": cnt
+                });
+            }
+            var curRowCategories = $filter('unique')(vm.suggestedProducts, 'PRD_CAT_NM');
+            for (var x = 0; x < curRowCategories.length; x++) {
+                vm.curRowCategories.push({
+                    "id": x,
+                    "name": curRowCategories[x].PRD_CAT_NM,
+                    "value": curRowCategories[x].PRD_CAT_NM,
+                    "selected": false
+                });
+            }
+            var curRowLvl = $filter('unique')(vm.suggestedProducts, 'PRD_ATRB_SID');
+            for (x = 0; x < curRowLvl.length; x++) {
+                vm.curRowLvl.push({
+                    "id": x,
+                    "name": prdLvlDecoder(curRowLvl[x].PRD_ATRB_SID),
+                    "value": curRowLvl[x].PRD_ATRB_SID,
+                    "selected": false
+                });
+            }
+            vm.applyFilterAndGrouping();
+        }
+
+        vm.clickFilter = function () {
+            vm.applyFilterAndGrouping();
+        }
     }
 })();

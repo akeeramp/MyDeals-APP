@@ -204,6 +204,10 @@ a.prdAnchor {
     height: calc(85vh - 398px);
 }
 
+.productSuggestion.kendoGridHeight {
+    height: calc(85vh - 415px);
+}
+
 .prdSelector-modal-window, .modal-dialog {
     width: 85%;
     margin-left: auto;
@@ -330,5 +334,5 @@ span.productSelector.prdAnchor:hover {
     padding: 4px;
     margin: 0 8px 0 0;
     width: 100%;
-    height: 60px;
+    height:100%;
 }
