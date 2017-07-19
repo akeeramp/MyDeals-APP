@@ -97,8 +97,13 @@ namespace Intel.MyDeals.BusinessLogic
                             wipIds.Add(odc.DcID);
                         }
                     }
-                    else
+                    else if (elMapping.TranslationType == OpTranslationType.OneDealPerRow)
                     {
+                        int i = 0;
+                        //string wipProd = items[AttributeCodes.PTR_USER_PRD].ToString();
+                        //string wipProdFilter = items[AttributeCodes.PRODUCT_FILTER].ToString();
+                        //List<OpDataCollector> myDcs = myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.Where(d => d.DcParentID == parentid).ToList();
+                        int j = 0;
                         // TODO for all except ECAP
                     }
                 }

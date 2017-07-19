@@ -138,7 +138,7 @@ namespace Intel.MyDeals.BusinessRules
                             Target = new[]
                             {
                                 AttributeCodes.DC_ID,
-                                AttributeCodes.TIER_NM
+                                AttributeCodes.TIER_NBR
                             }
                         }
                     }

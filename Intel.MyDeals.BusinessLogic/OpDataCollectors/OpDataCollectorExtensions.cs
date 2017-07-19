@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Intel.MyDeals.BusinessLogic.DataCollectors;
@@ -133,6 +134,7 @@ namespace Intel.MyDeals.BusinessLogic
                 string dimKey = de.DimKeyString;
                 string uniqDimKey = dimKey.AtrbCdDimKeySafe();
 
+                //dimKey = "";
                 if (string.IsNullOrEmpty(dimKey))
                 {
                     if (!items.ContainsKey(de.AtrbCd)) continue;
@@ -244,34 +246,48 @@ namespace Intel.MyDeals.BusinessLogic
             MyDealsData myDealsData,
             bool security = true)
         {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            Debug.WriteLine("ToOpDataCollectorFlattenedItem [{0}] - Started", dc.DcID);
 
             // Call all load triggered rules
             if (security)
             {
                 dc.ApplyRules(MyRulesTrigger.OnLoad);
+                Debug.WriteLine("    Rules OnLoad [{1}] (ms): {0}", stopwatch.Elapsed.TotalMilliseconds, dc.DcID);
                 if (opType == OpDataElementType.WIP_DEAL)
                 {
                     dc.ApplyRules(MyRulesTrigger.OnValidate);
+                    Debug.WriteLine("    Rules OnValidate [{1}] (ms): {0}", stopwatch.Elapsed.TotalMilliseconds, dc.DcID);
                 }
             }
+            Debug.WriteLine("    Rules [{1}] (ms): {0}", stopwatch.Elapsed.TotalMilliseconds, dc.DcID);
 
             // Create the collection to return
             OpDataCollectorFlattenedItem objsetItem = new OpDataCollectorFlattenedItem();
 
             // Add DataElements to the Dictionary
             dc.DataElements.ForEach(de => objsetItem.ApplySingleAndMultiDim(de, dc, pivotMode));
+            Debug.WriteLine("    ForEach [{1}] (ms): {0}", stopwatch.Elapsed.TotalMilliseconds, dc.DcID);
 
             // After converting to dictionary, need to update the ids
             objsetItem.EnsureBasicIds(dc.DcID, dc.DcType, dc.DcParentID, dc.DcParentType);
+            Debug.WriteLine("    EnsureBasicIds [{1}] (ms): {0}", stopwatch.Elapsed.TotalMilliseconds, dc.DcID);
 
             // Don't forget about multi dimensional items
             objsetItem.MapMultiDim();
+            Debug.WriteLine("    MapMultiDim [{1}] (ms): {0}", stopwatch.Elapsed.TotalMilliseconds, dc.DcID);
 
             // Apply rules directly to dictionary
             if (security) dc.ApplyRules(MyRulesTrigger.OnOpCollectorConvert, null, objsetItem, dc.GetCustomerDivisions());
+            Debug.WriteLine("    ApplyRules [{1}] (ms): {0}", stopwatch.Elapsed.TotalMilliseconds, dc.DcID);
 
             // assign all messages
             if (security) objsetItem.ApplyMessages(myDealsData);
+            Debug.WriteLine("    ApplyMessages [{1}] (ms): {0}", stopwatch.Elapsed.TotalMilliseconds, dc.DcID);
+
+            stopwatch.Stop();
+            Debug.WriteLine("ToOpDataCollectorFlattenedItem [{1}] (ms): {0}", stopwatch.Elapsed.TotalMilliseconds, dc.DcID);
 
             return objsetItem;
         }

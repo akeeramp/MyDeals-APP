@@ -309,7 +309,6 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
                 el.$parent.$parent.opIsDirty = true;
 
                 if (!el.opIsStealth) {
-                    debugger;
                     el.$parent.$parent.$parent._dirty = true;
                     if (!!el.$parent.$parent.dataItem) el.$parent.$parent.dataItem.dirty = true;
 

@@ -856,8 +856,8 @@
             }
 
             var rtn = purgeBehaviors(util.deepClone(oldValue)) !== purgeBehaviors(util.deepClone(newValue));
-            if (rtn) //debugger;
-                return rtn;
+            //if (rtn) debugger;
+            return rtn;
         }
 
         // **** LEFT NAVIGATION Methods ****
@@ -944,7 +944,7 @@
             $scope.isAddStrategyBtnHidden = false;
             $scope.isSearchHidden = true;
             $scope.isEditPricingTableDefaultsHidden = true;
-            $scope.newPricingTable = util.clone($scope.templates.ObjectTemplates.PRC_TBL.CAP_BAND);
+            $scope.newPricingTable = util.clone($scope.templates.ObjectTemplates.PRC_TBL.ECAP);
             $scope.newPricingTable.OBJ_SET_TYPE_CD = ""; //reset new PT deal type
             $scope.clearPtTemplateIcons();
            // $scope.curPricingStrategy = {}; //clears curPricingStrategy
@@ -954,7 +954,7 @@
             $scope.isAddStrategyHidden = true;
             $scope.isSearchHidden = true;
             $scope.isEditPricingTableDefaultsHidden = true;
-            $scope.newPricingTable = util.clone($scope.templates.ObjectTemplates.PRC_TBL.CAP_BAND);
+            $scope.newPricingTable = util.clone($scope.templates.ObjectTemplates.PRC_TBL.ECAP);
             $scope.newPricingTable.OBJ_SET_TYPE_CD = ""; //reset new PT deal type
             $scope.currentPricingTable = null;
         }
@@ -1041,8 +1041,8 @@
         }
         $scope.setNptTemplate = function (pt) {
             $scope.currentPricingTable = pt;
-            var ptTemplate = $scope.templates.ModelTemplates.PRC_TBL[pt.OBJ_SET_TYPE_CD]
-            //$scope.newPricingTable = util.clone($scope.templates.ObjectTemplates.PRC_TBL.CAP_BAND); //TODO: replace with existing/current rather than new...? -> clone curPT rather than template? - keep it same as "new" pricing table and copy it over later, todo rename "new"pt variable
+            var ptTemplate = $scope.templates.ModelTemplates.PRC_TBL[pt.OBJ_SET_TYPE_CD];
+            //$scope.newPricingTable = util.clone($scope.templates.ObjectTemplates.PRC_TBL.ECAP); //TODO: replace with existing/current rather than new...? -> clone curPT rather than template? - keep it same as "new" pricing table and copy it over later, todo rename "new"pt variable
             $scope.newPricingTable = util.clone(pt);
             $scope.newPricingTable["OBJ_SET_TYPE_CD"] = pt.OBJ_SET_TYPE_CD;
             $scope.newPricingTable["_extraAtrbs"] = ptTemplate.extraAtrbs;
@@ -1054,7 +1054,7 @@
                 function (value, key) {
                     value._custom._active = false;
                 });
-            $scope.newPricingTable = util.clone($scope.templates.ObjectTemplates.PRC_TBL.CAP_BAND);
+            $scope.newPricingTable = util.clone($scope.templates.ObjectTemplates.PRC_TBL.ECAP);
             $scope.newPricingTable["OBJ_SET_TYPE_CD"] = "";
         }
         $scope.addCustomToTemplates();
@@ -1377,6 +1377,9 @@
                             }
                         }
                     }
+
+                    sData = $scope.deNormalizeData(util.deepClone(sData));
+
                 }
             }
 
@@ -1560,8 +1563,12 @@
                     var anyWarnings = false;
 
                     if (!!results.data.PRC_TBL_ROW) {
+                        results.data.PRC_TBL_ROW = $scope.pivotData(results.data.PRC_TBL_ROW);
                         for (i = 0; i < results.data.PRC_TBL_ROW.length; i++) {
-                            if (!!results.data.PRC_TBL_ROW[i].PTR_SYS_PRD) results.data.PRC_TBL_ROW[i].PTR_SYS_PRD = $scope.uncompress(results.data.PRC_TBL_ROW[i].PTR_SYS_PRD);
+                            if (!!results.data.PRC_TBL_ROW[i].PTR_SYS_PRD) {
+                                // check for pivots
+                                results.data.PRC_TBL_ROW[i].PTR_SYS_PRD = $scope.uncompress(results.data.PRC_TBL_ROW[i].PTR_SYS_PRD);
+                            }
                             if (results.data.PRC_TBL_ROW[i].warningMessages !== undefined && results.data.PRC_TBL_ROW[i].warningMessages.length > 0) anyWarnings = true;
                         }
                         $scope.updateResults(results.data.PRC_TBL_ROW, $scope.pricingTableData.PRC_TBL_ROW);
@@ -1645,8 +1652,8 @@
                 var sheet = spreadsheet.activeSheet();
                 var rowsCount = sheet._rows._count;
                 var offset = 0;
-
-                if (!!data[0]._actions) {
+                
+                if (!!data[0] && !!data[0]._actions) {
                     offset = 1;
                 }
 
@@ -1758,6 +1765,57 @@
             }
         }
 
+
+        $scope.pivotData = function (data) {
+            if (!!$scope.curPricingTable && !!$scope.curPricingTable.NUM_OF_TIERS) {
+                var numTiers = $scope.curPricingTable.NUM_OF_TIERS;
+                if (numTiers <= 0) return data;
+                var newData = [];
+
+                for (var d = 0; d < data.length; d++) {
+                    for (var t = 1; t <= numTiers; t++) {
+                        var lData = util.deepClone(data[d]);
+                        lData.STRT_VOL = lData["STRT_VOL_____10___" + t];
+                        lData.END_VOL = lData["END_VOL_____10___" + t];
+                        lData.RATE = lData["RATE_____10___" + t];
+                        lData.TIER_NBR = lData["TIER_NBR_____10___" + t];
+                        newData.push(lData);
+                    }
+                }
+
+                return newData;
+            }
+            return data;
+        }
+        $scope.deNormalizeData = function (data) {
+            if (!!$scope.curPricingTable && !!$scope.curPricingTable.NUM_OF_TIERS) {
+                var a;
+                var numTiers = $scope.curPricingTable.NUM_OF_TIERS;
+                if (numTiers <= 0) return data;
+                var newData = [];
+                var lData = {};
+                var tierDimKey = "_____10___";
+                var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"];
+
+                for (var d = 0; d < data.length; d) {
+                    for (var t = 1; t <= numTiers; t++) {
+                        if (t === 1) lData = data[d];
+                        for (a = 0; a < tierAtrbs.length; a++)
+                            lData[tierAtrbs[a] + tierDimKey + t] = data[d][tierAtrbs[a]];
+                        if (t === numTiers - 1) {
+                            for (a = 0; a < tierAtrbs.length; a++)
+                                delete lData[tierAtrbs[a]];
+                            newData.push(lData);
+                        }
+                        d++;
+                    }
+                }
+
+                return newData;
+            }
+            return data;
+        }
+
         $scope.myDealsValidation = function (isError, msg, isReq) {
             return {
                 comparerType: "custom",
@@ -1810,11 +1868,21 @@
             }
         }
         $scope.mapProperty = function (src, data) {
-            if (src["DC_ID"] === data["DC_ID"]) {
-                var arItems = data;
-                for (var key in arItems) {
-                    if (arItems.hasOwnProperty(key) && key[0] !== '_' && data[key] !== undefined)
-                        src[key] = data[key];
+            if (!!$scope.curPricingTable.NUM_OF_TIERS) {
+                if (src["DC_ID"] === data["DC_ID"] && (!src.TIER_NBR && data.TIER_NBR === "1" || src.TIER_NBR === data.TIER_NBR)) {
+                    var arItems = data;
+                    for (var key in arItems) {
+                        if (arItems.hasOwnProperty(key) && key[0] !== '_' && data[key] !== undefined)
+                            src[key] = data[key];
+                    }
+                }
+            } else {
+                if (src["DC_ID"] === data["DC_ID"]) {
+                    var arItems = data;
+                    for (var key in arItems) {
+                        if (arItems.hasOwnProperty(key) && key[0] !== '_' && data[key] !== undefined)
+                            src[key] = data[key];
+                    }
                 }
             }
         }
@@ -2083,7 +2151,7 @@
 
         // **** NEW/EDIT PRICING TABLE Methods ****
         //
-        $scope.newPricingTable = util.clone($scope.templates.ObjectTemplates.PRC_TBL.CAP_BAND);
+        $scope.newPricingTable = util.clone($scope.templates.ObjectTemplates.PRC_TBL.ECAP);
         $scope.newPricingTable.OBJ_SET_TYPE_CD = ""; //reset new PT deal type so it does not inherit from clone
         $scope.addPricingTable = function () {
             topbar.show();

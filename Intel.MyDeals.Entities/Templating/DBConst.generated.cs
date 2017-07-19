@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 6/7/2017 9:19:01 AM
-On: MBIRADAR-MOBL1
+File Updated: 7/7/2017 11:53:21 PM
+On: PWECKENR-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
 using System;
@@ -739,6 +739,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.DateTime
 		///</summary>
 		public const string END_DT = "END_DT";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 6
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Int32
+		///</summary>
+		public const string END_VOL = "END_VOL";
 
 		///<summary>
 		/// DIM_SID: 7
@@ -1553,6 +1562,15 @@ namespace Intel.MyDeals.Entities {
 		///<summary>
 		/// DIM_SID: 3
 		/// DIM_CD: DEAL
+		/// ATRB_SID: 56
+		/// TGT_COL_TYPE: MONEY
+		/// DOT_NET_DATA_TYPE: System.Double
+		///</summary>
+		public const string RATE = "RATE";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
 		/// ATRB_SID: 3571
 		/// TGT_COL_TYPE: DATETIME
 		/// DOT_NET_DATA_TYPE: System.DateTime
@@ -1722,6 +1740,15 @@ namespace Intel.MyDeals.Entities {
 		public const string START_DT = "START_DT";
 
 		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 20
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Int32
+		///</summary>
+		public const string STRT_VOL = "STRT_VOL";
+
+		///<summary>
 		/// DIM_SID: 7
 		/// DIM_CD: PRD
 		/// ATRB_SID: 7028
@@ -1747,6 +1774,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.String
 		///</summary>
 		public const string TERMS = "TERMS";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 21
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Int32
+		///</summary>
+		public const string TIER_NBR = "TIER_NBR";
 
 		///<summary>
 		/// DIM_SID: 10
@@ -2087,6 +2123,7 @@ namespace Intel.MyDeals.Entities {
 		public const string C_REJECT_DEAL = "C_REJECT_DEAL";
 		public const string C_UPDATE_DEAL = "C_UPDATE_DEAL";
 		public const string C_VIEW_ATTACHMENTS = "C_VIEW_ATTACHMENTS";
+		public const string DEAL_READ_ONLY = "DEAL_READ_ONLY";
 		public const string ATRB_HIDDEN = "ATRB_HIDDEN";
 		public const string ATRB_READ_ONLY = "ATRB_READ_ONLY";
 		public const string ATRB_REQUIRED = "ATRB_REQUIRED";

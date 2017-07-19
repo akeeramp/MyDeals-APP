@@ -213,13 +213,13 @@ namespace Intel.MyDeals.Entities
             if (string.IsNullOrEmpty(stg) && dcType == OpDataElementType.WIP_DEAL) stg = dc.GetDataElementValue(AttributeCodes.WF_STG_CD + "_PRNT");
             if (excludeList == null) excludeList = new string[] { };
 
+            var prop = "IsReadOnly";
+            if (atrbAction == "ATRB_REQUIRED") prop = "IsRequired";
+            if (atrbAction == "ATRB_HIDDEN") prop = "IsHidden";
+
             // For each element, apply metadata rules
             foreach (OpDataElement de in dc.DataElements)
             {
-                var prop = "IsReadOnly";
-                if (atrbAction == "ATRB_REQUIRED") prop = "IsRequired";
-                if (atrbAction == "ATRB_HIDDEN") prop = "IsHidden";
-
                 var result = !excludeList.Contains(de.AtrbCd) && securityWrapper.ChkAtrbRules(
                     dcType,
 					objSetType,

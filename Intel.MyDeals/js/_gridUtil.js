@@ -9,7 +9,7 @@ gridUtils.formatValue = function (dataValue, dataFormat) {
     return dataValue;
 }
 gridUtils.uiControlWrapper = function (passedData, field, format) {
-
+    
     // This is nicer, but slower... rendering template on large data is slower
     //var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.#=field#" kendo-tooltip k-content="dataItem._behaviors.validMsg.#=field#"></div>';
     //tmplt += '<div class="uiControlDiv"';
@@ -29,7 +29,7 @@ gridUtils.uiControlWrapper = function (passedData, field, format) {
     tmplt += '<div class="uiControlDiv"';
     tmplt += '     ng-class="{isHiddenCell: dataItem._behaviors.isHidden.' + field + ', isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ',';
     tmplt += '     isRequiredCell: dataItem._behaviors.isRequired.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + ', isSavedCell: dataItem._behaviors.isSaved.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + '}">';
-    tmplt += '    <span class="ng-binding" ng-bind="(dataItem.' + field + ' ' + gridUtils.getFormat(field, format) + ')"></span>';
+    tmplt += '    <div class="ng-binding vert-center" ng-bind="(dataItem.' + field + ' ' + gridUtils.getFormat(field, format) + ')"></div>';
     tmplt += '</div>';
 
     return tmplt;
@@ -40,8 +40,36 @@ gridUtils.uiDimControlWrapper = function (passedData, field, dim, format) {
     tmplt += '<div class="uiControlDiv"';
     tmplt += '     ng-class="{isHiddenCell: dataItem._behaviors.isHidden.' + field + ', isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ',';
     tmplt += '     isRequiredCell: dataItem._behaviors.isRequired.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + ', isSavedCell: dataItem._behaviors.isSaved.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + '}">';
-    tmplt += '    <span class="ng-binding" ng-bind="(dataItem.' + field + '[\'' + dim + '\'] ' + gridUtils.getFormat(field, format) + ')"></span>';
+    tmplt += '    <div class="ng-binding  vert-center" ng-bind="(dataItem.' + field + '[\'' + dim + '\'] ' + gridUtils.getFormat(field, format) + ')"></div>';
     tmplt += '</div>';
+
+    return tmplt;
+}
+gridUtils.uiControlScheduleWrapper = function (passedData) {
+    //debugger;
+    var tmplt = '<table>';
+    var fields = [
+        { "title": "Tier", "field": "TIER_NBR", "format": "", "align": "left" },
+        { "title": "Start Vol", "field": "STRT_VOL", "format": "", "align": "right" },
+        { "title": "End Vol", "field": "END_VOL", "format": "", "align": "right" },
+        { "title": "Rate", "field": "RATE", "format": "currency", "align": "right" }
+    ];
+
+    tmplt += '<tr style="height: 15px;">';
+    for (var t = 0; t < fields.length; t++) {
+        tmplt += '<th style="padding: 0 4px; font-weight: 400; text-transform: uppercase; font-size: 10px; background: #eeeeee; text-align: center;">' + fields[t].title + '</th>';
+    }
+    tmplt += '</tr>';
+
+    for (var d = 1; d <= 3; d++) {
+        var dim = "10___" + d;
+        tmplt += '<tr style="height: 25px;">';
+        for (var f = 0; f < fields.length; f++) {
+            tmplt += '<td style="text-align: ' + fields[f].align + ';"><span class="ng-binding" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + '\'] ' + gridUtils.getFormat(fields[f].field, fields[f].format) + ')"></span></td>';
+        }
+        tmplt += '</tr>';
+    }
+    tmplt += '</table>';
 
     return tmplt;
 }
@@ -70,10 +98,12 @@ gridUtils.uiMoneyDatesControlWrapper = function (passedData, field, startDt, end
         tmplt += '<div class="uiControlDiv ' + msgClass + '" style="line-height: 1em; font-family: arial; text-align: center;" ' + msg;
         tmplt += '     ng-class="{isHiddenCell: dataItem._behaviors.isHidden.' + field + ', isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ',';
         tmplt += '     isRequiredCell: dataItem._behaviors.isRequired.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + ', isSavedCell: dataItem._behaviors.isSaved.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + '}">';
+        tmplt += '    <div class="vert-center">';
         tmplt += '    <span class="ng-binding" ng-bind="(dataItem.' + field + ' ' + gridUtils.getFormat(field, 'currency') + ')" style="font-weight: bold;"></span>';
         tmplt += '    <div>';
         tmplt += '    <span class="ng-binding" ng-bind="(dataItem.' + startDt + ' | date:\'MM/dd/yy\')"></span> - ';
         tmplt += '    <span class="ng-binding" ng-bind="(dataItem.' + endDt + ' ' + gridUtils.getFormat(field, "date:'MM/dd/yy'") + ')"></span>';
+        tmplt += '    </div>';
         tmplt += '    </div>';
         tmplt += '</div>';
     }
@@ -81,6 +111,7 @@ gridUtils.uiMoneyDatesControlWrapper = function (passedData, field, startDt, end
     return tmplt;
 }
 gridUtils.uiMultiselectArrayControlWrapper = function (passedData, field) {
+
     var displayStr = (Array.isArray(passedData[field]) || Object.prototype.toString.call(passedData[field]) === "[object Object]")
         ? passedData[field].join()
         : passedData[field];
@@ -90,7 +121,7 @@ gridUtils.uiMultiselectArrayControlWrapper = function (passedData, field) {
     tmplt += '<div class="uiControlDiv" style="line-height: 1em; font-family: arial; text-align: center;"';
     tmplt += '     ng-class="{isHiddenCell: dataItem._behaviors.isHidden.' + field + ', isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ',';
     tmplt += '     isRequiredCell: dataItem._behaviors.isRequired.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + ', isSavedCell: dataItem._behaviors.isSaved.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + '}">';
-    tmplt += '    <div>';
+    tmplt += '    <div class="vert-center">';
     tmplt += '          ' + displayStr + ' ';
 //    tmplt += '    <span class="ng-binding" ng-bind="(dataItem.' + field + ')"></span>';
     tmplt += '    </div>';
@@ -119,7 +150,7 @@ gridUtils.uiIconWrapper = function (passedData, field, format) {
     return tmplt;
 }
 gridUtils.getFormat = function (lType, lFormat) {
-    return lFormat === undefined ? "" : "| " + lFormat;
+    return !lFormat ? "" : "| " + lFormat;
 }
 
 gridUtils.onDataValueChange = function (e) {
@@ -419,7 +450,20 @@ gridTools.prototype.createDataSource = function (parentSource, pageSize) {
                 // locate item in original datasource and update it
                 for (var i = 0; i < e.data.models.length; i++) {
                     var item = e.data.models[i];
-                    if (!!item.DC_ID ) source[gTools.getIndexByDcId(item.DC_ID, source)] = item;
+                    if (!!item.DC_ID) {
+                        if (!!item["TIER_NBR"]) {
+                            var indx = item["TIER_NBR"] - 1;
+
+                            for (var j = 0; j < source.length; j++) {
+                                if (source[j].DC_ID === item.DC_ID && indx === (source[j]["TIER_NBR"] - 1)) {
+                                    source[j] = item;
+                                }
+                            }
+
+                        } else {
+                            source[gTools.getIndexByDcId(item.DC_ID, source)] = item;
+                        }
+                    }
                 }
                 // on success
                 e.success();

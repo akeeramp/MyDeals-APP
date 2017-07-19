@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
@@ -17,6 +18,8 @@ namespace Intel.MyDeals.BusinessRules
     /// </summary>
     public static partial class MyDcActions
     {
+        public static Dictionary<string, bool> SecurityActionCache { get; set; }
+
         /// <summary>
         /// Execute the appropiate action based on the condition statement
         /// </summary>
@@ -138,8 +141,9 @@ namespace Intel.MyDeals.BusinessRules
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
-
-            r.Dc.ApplySecurityAttributes(actionCode, DataCollections.GetSecurityWrapper(), new string[] { }, r.Security);
+            
+            if (SecurityActionCache == null) SecurityActionCache=new Dictionary<string, bool>();
+            r.Dc.ApplySecurityAttributes(actionCode, DataCollections.GetSecurityWrapper(), new string[] { }, SecurityActionCache);
 
             // Now apply all rules
             r.Dc.ApplyRules(myRulesTrigger, r.Security);

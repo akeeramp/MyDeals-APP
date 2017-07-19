@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 6/7/2017 9:19:49 AM
-On: MBIRADAR-MOBL1
+File Updated: 7/7/2017 11:53:31 PM
+On: PWECKENR-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
 
@@ -1209,6 +1209,21 @@ namespace Intel.MyDeals.Entities {
 			FRMT_MSK = "{0:MM/dd/yyyy HH:mm:ss.fff}",
 			TGT_COL_TYPE = "DATETIME",
 			UI_TYPE_CD = "DatePicker"
+		};
+		public static MyDealsAttribute END_VOL = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "END_VOL",
+			ATRB_DESC = "End Volume",
+			ATRB_LBL = "End Vol",
+			ATRB_MAX_LEN = 1,
+			ATRB_SID = 6,
+			DATA_TYPE_CD = "INT",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Int32",
+			FRMT_MSK = "{0:d}",
+			TGT_COL_TYPE = "INT",
+			UI_TYPE_CD = "TextBox"
 		};
 		public static MyDealsAttribute EPM_NM = new MyDealsAttribute()
 		{
@@ -2560,6 +2575,21 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
+		public static MyDealsAttribute RATE = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "RATE",
+			ATRB_DESC = "Rate",
+			ATRB_LBL = "Rate",
+			ATRB_MAX_LEN = 1,
+			ATRB_SID = 56,
+			DATA_TYPE_CD = "MONEY",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Double",
+			FRMT_MSK = "{0:c}",
+			TGT_COL_TYPE = "MONEY",
+			UI_TYPE_CD = "TextBox"
+		};
 		public static MyDealsAttribute REBATE_BILLING_END = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "REBATE_BILLING_END",
@@ -2845,6 +2875,21 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "DATETIME",
 			UI_TYPE_CD = "DatePicker"
 		};
+		public static MyDealsAttribute STRT_VOL = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "STRT_VOL",
+			ATRB_DESC = "Start Volume",
+			ATRB_LBL = "Start Vol",
+			ATRB_MAX_LEN = 1,
+			ATRB_SID = 20,
+			DATA_TYPE_CD = "INT",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Int32",
+			FRMT_MSK = "{0:d}",
+			TGT_COL_TYPE = "INT",
+			UI_TYPE_CD = "TextBox"
+		};
 		public static MyDealsAttribute SUB_VERTICAL = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "SUB_VERTICAL",
@@ -2888,6 +2933,21 @@ namespace Intel.MyDeals.Entities {
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
 			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "TextBox"
+		};
+		public static MyDealsAttribute TIER_NBR = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "TIER_NBR",
+			ATRB_DESC = "Tier Number	Tier",
+			ATRB_LBL = "Tier",
+			ATRB_MAX_LEN = 1,
+			ATRB_SID = 21,
+			DATA_TYPE_CD = "INT",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Int32",
+			FRMT_MSK = "{0:d}",
+			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "TextBox"
 		};
 		public static MyDealsAttribute TIER_NM = new MyDealsAttribute()

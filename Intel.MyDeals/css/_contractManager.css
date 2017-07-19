@@ -1199,3 +1199,11 @@
 .ss-loading-overlay.ng-hide {
     opacity: 0;
 }
+
+
+
+.vert-center {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}

@@ -4,9 +4,9 @@
 
 // logger :Injected logger service to for loging to remote database or throwing error on the ui
 // dataService :Application level service, to be used for common api calls, eg: user token, department etc
-PricingTableController.$inject = ['$scope', '$state', '$stateParams', '$filter', 'confirmationModal', 'dataService', 'logger', 'pricingTableData', 'ProductSelectorService', 'MrktSegMultiSelectService', '$uibModal', '$timeout'];
+PricingTableController.$inject = ['$scope', '$state', '$stateParams', '$filter', 'confirmationModal', 'dataService', 'logger', 'pricingTableData', 'ProductSelectorService', 'MrktSegMultiSelectService', '$uibModal', '$timeout', 'opGridTemplate'];
 
-function PricingTableController($scope, $state, $stateParams, $filter, confirmationModal, dataService, logger, pricingTableData, ProductSelectorService, MrktSegMultiSelectService, $uibModal, $timeout) {
+function PricingTableController($scope, $state, $stateParams, $filter, confirmationModal, dataService, logger, pricingTableData, ProductSelectorService, MrktSegMultiSelectService, $uibModal, $timeout, opGridTemplate) {
     var vm = this;
 
     // HACK: Not sure why this controller gets called twice.  This is to see if it is already started and exit.
@@ -142,6 +142,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
     // Generates options that kendo's html directives will use
     function generateKendoSpreadSheetOptions() {
+
+        pricingTableData.data.PRC_TBL_ROW = root.pivotData(pricingTableData.data.PRC_TBL_ROW);
+
         var mergedCells = [];
         $scope.numTiers = 1;
         ptTemplate = root.templates.ModelTemplates.PRC_TBL_ROW[root.curPricingTable.OBJ_SET_TYPE_CD];
@@ -199,7 +202,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         // Define Kendo Main Grid options
         gridUtils.onDataValueChange = function (e) {
-            //debugger;
             root._dirty = true;
         }
     }
@@ -219,13 +221,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             root.wipOptions.columns = wipTemplate.columns;
             root.wipOptions.model = wipTemplate.model;
             root.wipOptions.default = {};
-            root.wipOptions.default.groups = [
-                { "name": "Deal Info", "order": 0 },
-                { "name": "Consumption", "order": 1 },
-                { "name": "Backdate", "order": 2 },
-                { "name": "CAP Info", "order": 98 },
-                { "name": "All", "order": 99 }
-            ];
+            root.wipOptions.default.groups = opGridTemplate.groups[root.curPricingTable.OBJ_SET_TYPE_CD];
+            root.wipOptions.default.groupColumns = opGridTemplate.templates[root.curPricingTable.OBJ_SET_TYPE_CD];
+
             //root.wipOptions.default.groups = [
             //    { "name": "Deal Info", "order": 0 },
             //    { "name": "Consumption", "order": 1 },
@@ -235,182 +233,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             //    { "name": "Cost Test", "order": 6 },
             //    { "name": "All", "order": 99 }
             //];
-            root.wipOptions.default.groupColumns = {
-                "tools": {
-                    "Groups": ["Deal Info", "Consumption", "Cost Test", "Meet Comp", "Backdate", "Overlapping", "CAP Info"]
-                },
-                "details": {
-                    "Groups": ["Consumption", "Cost Test", "Meet Comp", "Backdate", "Overlapping", "CAP Info"]
-                },
-                "DC_ID": {
-                    "Groups": ["Deal Info"]
-                },
-                "DC_PARENT_ID": {
-                    "Groups": ["Deal Info"]
-                },
-                "PASSED_VALIDATION": {
-                    "Groups": ["Deal Info"]
-                },
-                "START_DT": {
-                    "Groups": ["Deal Info"]
-                },
-                "END_DT": {
-                    "Groups": ["Deal Info"]
-                },
-                "WF_STG_CD": {
-                    "Groups": ["Deal Info"]
-                },
-                "OBJ_SET_TYPE_CD": {
-                    "Groups": ["All"]
-                },
-                "PTR_USER_PRD": {
-                    "Groups": ["Deal Info"]
-                },
-                "TITLE": {
-                    "Groups": ["Deal Info"]
-                },
-                "DEAL_COMB_TYPE": {
-                    "Groups": ["Deal Info"]
-                },
-                "ECAP_PRICE": {
-                    "Groups": ["Deal Info", "CAP Info"]
-                },
-                "CAP_INFO": {
-                    "Groups": ["Deal Info", "CAP Info"]
-                },
-                "CAP": {
-                    "Groups": ["All", "CAP Info"]
-                },
-                "CAP_STRT_DT": {
-                    "Groups": ["All", "CAP Info"]
-                },
-                "CAP_END_DT": {
-                    "Groups": ["All", "CAP Info"]
-                },
-                "YCS2_INFO": {
-                    "Groups": ["Deal Info"]
-                },
-                "YCS2_PRC_IRBT": {
-                    "Groups": ["All"]
-                },
-                "YCS2_START_DT": {
-                    "Groups": ["All"]
-                },
-                "YCS2_END_DT": {
-                    "Groups": ["All"]
-                },
-                "VOLUME": {
-                    "Groups": ["Deal Info"]
-                },
-                "ON_ADD_DT": {
-                    "Groups": ["Deal Info"]
-                },
-                "DEAL_SOLD_TO_ID": {
-                    "Groups": ["Deal Info"]
-                },
-                "EXPIRE_YCS2": {
-                    "Groups": ["Deal Info"]
-                },
-                "REBATE_TYPE": {
-                    "Groups": ["Deal Info"]
-                },
-                "MRKT_SEG": {
-                    "Groups": ["Deal Info"]
-                },
-                "GEO_COMBINED": {
-                    "Groups": ["Deal Info"]
-                },
-                "TRGT_RGN": {
-                    "Groups": ["Deal Info"]
-                },
-                "PAYOUT_BASED_ON": {
-                    "Groups": ["Deal Info"]
-                },
-                "PROGRAM_PAYMENT": {
-                    "Groups": ["Deal Info"]
-                },
-                "TERMS": {
-                    "Groups": ["Deal Info"]
-                },
-                //"YCS2_OVERLAP_OVERRIDE": {
-                //    "Groups": ["Deal Info"]
-                //},
-                "REBATE_BILLING_START": {
-                    "Groups": ["Consumption"]
-                },
-                "REBATE_BILLING_END": {
-                    "Groups": ["Consumption"]
-                },
-                "CONSUMPTION_REASON": {
-                    "Groups": ["Consumption"]
-                },
-                "CONSUMPTION_REASON_CMNT": {
-                    "Groups": ["Consumption"]
-                },
-                //"COST_TEST_RESULT": {
-                //    "Groups": ["Cost Test"]
-                //},
-                //"PRD_COST": {
-                //    "Groups": ["Cost Test"]
-                //},
-                //"COST_TYPE_USED": {
-                //    "Groups": ["Cost Test"]
-                //},
-                //"COST_TEST_FAIL_OVERRIDE": {
-                //    "Groups": ["Cost Test"]
-                //},
-                //"COST_TEST_FAIL_OVERRIDE_REASON": {
-                //    "Groups": ["Cost Test"]
-                //},
-                //"MEET_COMP_PRICE_QSTN": {
-                //    "Groups": ["Meet Comp"]
-                //},
-                //"COMP_SKU": {
-                //    "Groups": ["Meet Comp"]
-                //},
-                //"COMP_SKU_OTHR": {
-                //    "Groups": ["Meet Comp"]
-                //},
-                //"COMPETITIVE_PRICE": {
-                //    "Groups": ["Meet Comp"]
-                //},
-                //"COMP_BENCH": {
-                //    "Groups": ["Meet Comp"]
-                //},
-                //"IA_BENCH": {
-                //    "Groups": ["Meet Comp"]
-                //},
-                //"COMP_TARGET_SYSTEM_PRICE": {
-                //    "Groups": ["Meet Comp"]
-                //},
-                //"MEETCOMP_TEST_RESULT": {
-                //    "Groups": ["Meet Comp"]
-                //},
-                //"MEETCOMP_TEST_FAIL_OVERRIDE": {
-                //    "Groups": ["Meet Comp"]
-                //},
-                //"MEETCOMP_TEST_FAIL_OVERRIDE_REASON": {
-                //    "Groups": ["Meet Comp"]
-                //},
-                //"RETAIL_CYCLE": {
-                //    "Groups": ["Retail Cycle"]
-                //},
-                //"RETAIL_PULL": {
-                //    "Groups": ["Retail Cycle"]
-                //},
-                //"RETAIL_PULL_USR_DEF": {
-                //    "Groups": ["Retail Cycle"]
-                //},
-                //"RETAIL_PULL_USR_DEF_CMNT": {
-                //    "Groups": ["Retail Cycle"]
-                //},
-                //"ECAP_FLR": {
-                //    "Groups": ["Retail Cycle"]
-                //},
-                "BACK_DATE_RSN": {
-                    "Groups": ["Backdate"]
-                }
-            };
 
             // check for soft warnings
             var numWarn = 0;
@@ -534,7 +356,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
             syncSpreadRows(sheet, rowStart, rowStart);
 
-            //debugger;
             root._dirty = true;
 
             $timeout(function () {
@@ -713,7 +534,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         }
 
         if (!root._dirty) {
-            //debugger;
             root._dirty = true;
         }
     }
@@ -788,8 +608,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     data[r]["CUST_MBR_SID"] = root.contractData.CUST_MBR_SID;
 
                     if (!root.curPricingTable || !!root.curPricingTable.NUM_OF_TIERS) {
-                        if (!data[r]["TIER_NM"] || data[r]["TIER_NM"] === "") {
-                            data[r]["TIER_NM"] = (r % root.child.numTiers) + 1;
+                        if (!data[r]["TIER_NBR"] || data[r]["TIER_NBR"] === "") {
+                            data[r]["TIER_NBR"] = (r % root.child.numTiers) + 1;
                         }
                     }
                     //if (data[r]["PASSED_VALIDATION"] === "")
@@ -849,7 +669,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     }
 
                     // Enable other cells
-                    if (!!ptTemplate.model.fields["TIER_NM"]) {
+                    if (!!ptTemplate.model.fields["TIER_NBR"]) {
                         range = sheet.range("D" + topLeftRowIndex + ":J" + bottomRightRowIndex);
                         range.enable(true);
                         range.background(null);
@@ -1351,20 +1171,32 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 var state = clip._content;
                 var sheet = clip.workbook.activeSheet();
                 var newData = [];
+                var padNumRows = 0;
+                var nonMergedCols = [10,11,12,13];
+
+                // set paste data to Kendo cell (default Kendo code)
+                var pasteRef = clip.pasteRef();
 
                 if (clip.isExternal()) {
                     clip.origin = state.origRef;
-                }
 
-                // IDEA:
-                // Maybe get the clipboard data and modify it (pad by tier num) and allow the paste to continue
-                var numTiers = root.child.numTiers;
-                for (row = 0; row < state.data.length; row++) {
-                    for (var t = 0; t < numTiers; t++) {
-                        newData.push(util.deepClone(state.data[row]));
+                    // IDEA:
+                    // Maybe get the clipboard data and modify it (pad by tier num) and allow the paste to continue
+                    var numTiers = root.child.numTiers;
+                    var colNum = pasteRef.topLeft.col;
+                    if (nonMergedCols.indexOf(colNum) < 0) {
+                        debugger;
+                        for (row = 0; row < state.data.length; row++) {
+                            for (var t = 0; t < numTiers; t++) {
+                                newData.push(util.deepClone(state.data[row]));
+                            }
+                            padNumRows += numTiers - 1;
+                        }
+                        state.data = newData;
                     }
                 }
-                state.data = newData;
+
+                //debugger;
 
                 // Non-default Kendo code for paste event
                 for (row = 0; row < state.data.length; row++) {
@@ -1407,11 +1239,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 // Prevent user from pasting merged cells
                 state.mergedCells = null;
 
-                // set paste data to Kendo cell (default Kendo code)
-                var pasteRef = clip.pasteRef();
 
-                // need to padd range ref
-                pasteRef.bottomRight.row = newData.length;
+                // need to pad range ref
+                pasteRef.bottomRight.row += padNumRows;
 
                 sheet.range(pasteRef).setState(state, clip);
                 sheet.triggerChange({

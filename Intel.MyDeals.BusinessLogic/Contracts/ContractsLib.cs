@@ -240,7 +240,7 @@ namespace Intel.MyDeals.BusinessLogic
                 }
             }
 
-            return SaveContract(
+            MyDealsData myDealsData = SaveContract(
                 contractAndStrategy.Contract,
                 contractAndStrategy.PricingStrategy,
                 contractAndStrategy.PricingTable,
@@ -249,7 +249,19 @@ namespace Intel.MyDeals.BusinessLogic
                 contractToken,
                 validationIds,
                 forcePublish,
-                contractAndStrategy.EventSource).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
+                contractAndStrategy.EventSource);
+            //.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Nested);
+
+            OpDataCollectorFlattenedDictList data = new OpDataCollectorFlattenedDictList();
+
+            foreach (OpDataElementType opDataElementType in myDealsData.Keys)
+            {
+                data[opDataElementType] = myDealsData.ToOpDataCollectorFlattenedDictList(opDataElementType,
+                    opDataElementType == OpDataElementType.PRC_TBL_ROW ? ObjSetPivotMode.UniqueKey : ObjSetPivotMode.Nested);
+            }
+
+            return data;
+            // == OpDataElementType.PRC_TBL_ROW ? ObjSetPivotMode.UniqueKey : ObjSetPivotMode.Nested
         }
 
         public OpMsg DeleteContract(int id)

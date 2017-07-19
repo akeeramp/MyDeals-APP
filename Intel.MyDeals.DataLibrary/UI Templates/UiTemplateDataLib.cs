@@ -387,7 +387,7 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem
             {
                 Id = 36,
-                AtrbCd = AttributeCodes.TIER_NM,
+                AtrbCd = AttributeCodes.TIER_NBR,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.CAP_BAND },
                 IsDimKey = true,
@@ -397,7 +397,7 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem
             {
                 Id = 36,
-                AtrbCd = "START_VOL",
+                AtrbCd = AttributeCodes.STRT_VOL,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
                 IsDimKey = true,
@@ -407,7 +407,7 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem
             {
                 Id = 36,
-                AtrbCd = "END_VOL",
+                AtrbCd = AttributeCodes.END_VOL,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
                 IsDimKey = true,
@@ -417,7 +417,7 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem
             {
                 Id = 36,
-                AtrbCd = "RATE",
+                AtrbCd = AttributeCodes.RATE,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
                 IsDimKey = true,
@@ -520,7 +520,7 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "Deal Id",
                 Width = 90,
                 IsReadOnly = true,
-                Template = "<div class='dealLnk'><a href=''>#=DC_ID#</a></div>"
+                Template = "<div class='dealLnk' style='padding: 0 4px;'>#=DC_ID#</div>"
             });
             items.Add(new UiTemplateContainerItem
             {
@@ -674,8 +674,20 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem
             {
                 Id = 20,
+                AtrbCd = AttributeCodes.TIER_NBR,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
+                Template = "#=gridUtils.uiControlScheduleWrapper(data)#",
+                DataType = "object",
+                Label = "Rate Breakout",
+                Width = 300
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 20,
                 AtrbCd = AttributeCodes.DEAL_SOLD_TO_ID,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
                 UiType = "MULTISELECT",
                 Template = "#=gridUtils.uiMultiselectArrayControlWrapper(data, 'DEAL_SOLD_TO_ID')#",
                 LookupUrl = "/api/Dropdown/GetSoldToIds", // TODO
