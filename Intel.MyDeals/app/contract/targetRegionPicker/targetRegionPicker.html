@@ -1,0 +1,81 @@
+﻿<div class="modal-content" moveablemodal style="background-color:#1a3e6f;overflow-y:auto;overflow-x:hidden;border-left:none;border-right:none;">
+    <div class="target-region-picker modal-header">
+        <div class="row">
+            <div class="cursorArea col-md-6 trgtRgnHeader">
+                <p class="">Target Region Picker</p>
+            </div>
+            <div class="col-md-1" style="padding-top:15px;">
+                <img ng-if="loading" src="/Images/loadingSmall.gif" />
+            </div>
+            <span class="rgnmodalCloseIcon fr">
+                <i role="button" title="Close" class="intelicon-close-max" ng-click="vm.close()"></i>
+            </span>
+        </div>
+    </div>
+    <div class="target-region-picker modal-body">
+        <div style="width:100%">
+            <div class="myDealsControl" 
+                 op-control-flat 
+                 ng-model="vm.targetRegionData" 
+                 op-cd="'TRGT_RGN'" 
+                 op-type="'EMBEDDEDMULTISELECT'" 
+                 op-lookup-url="vm.lookupURLWithGeo" 
+                 op-lookup-text="'DROP_DOWN'" 
+                 op-lookup-value="'DROP_DOWN'" 
+                 op-ui-mode="'VERTICAL'" 
+                 op-expanded="false"
+                 op-extra="false"
+                 style="width:100%">
+            </div>
+        </div>
+    </div>
+    <div ng-click="vm.ok()" class="rgnClsBtn">Add To Grid</div>
+</div>
+<style>
+    .trgtRgnHeader {
+        color: white;
+        font-size: 26px;
+    }
+
+    .rgnmodalCloseIcon {
+        color: white;
+        font-size: 26px;
+        padding-right: 20px;
+    }
+
+    .target-region-picker.modal-header {
+        border-bottom: none;
+        padding-bottom: 0px;
+    }
+    .cap-modal-window, .modal-dialog {
+        width: 60%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .target-region-picker.modal-body {
+        padding-top: 2px;
+        padding-bottom: 0px;
+        min-height: calc(30vh);
+        max-height: calc(30vh);
+        overflow-y: auto;
+    }
+    .rgnClsBtn {
+        background-color: #00AEEF;
+        color: #ffffff;
+        cursor: pointer;
+        font-size: 14px;
+        padding: 4px;
+        text-transform: uppercase;
+        text-align: center;
+        height: 28px;
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        margin: 1em;
+    }
+
+    .rgnClsBtn:hover {
+        background-color: #0071C5;
+    }
+</style>

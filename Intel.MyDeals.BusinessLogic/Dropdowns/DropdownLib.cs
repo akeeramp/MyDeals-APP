@@ -130,11 +130,11 @@ namespace Intel.MyDeals.BusinessLogic
 
                 //using created basic dropdown, use that to seed a new dropdownhierarchy
                 DropdownHierarchy newDH_Geo = new DropdownHierarchy(newBD_Geo);
-                //newDH_Geo.expanded = true;
+                newDH_Geo.expanded = true;
 
                 //create this geo's regions/country hierarchies
                 List<DropdownHierarchy> regions = new List<DropdownHierarchy>();
-                IEnumerable<GeoDimension> geo_regions = geodim.Where(geo => geo.GEO_NM.ToUpper() == newDH_Geo.DROP_DOWN.ToUpper() && (geo.RGN_NM != null && geo.RGN_NM != "") && (geo.CTRY_NM == null || geo.CTRY_NM == ""));
+                IEnumerable<GeoDimension> geo_regions = geodim.Where(geo => geo.GEO_NM.ToUpper() == newDH_Geo.DROP_DOWN.ToUpper() && (geo.RGN_NM != null && geo.RGN_NM != "") && (geo.CTRY_NM == null || geo.CTRY_NM == "")).OrderBy(geo => geo.RGN_NM);
                 foreach (GeoDimension region in geo_regions)
                 {
                     //rinse and repeat like above, but for regions instead of geos
@@ -146,7 +146,7 @@ namespace Intel.MyDeals.BusinessLogic
                     //newDH_Region.expanded = true;
 
                     List<DropdownHierarchy> countries = new List<DropdownHierarchy>();
-                    IEnumerable<GeoDimension> region_countries = geodim.Where(geo => geo.GEO_NM.ToUpper() == geoCombined[i].ToUpper() && geo.RGN_NM == newDH_Region.DROP_DOWN && (geo.CTRY_NM != null && geo.CTRY_NM != ""));
+                    IEnumerable<GeoDimension> region_countries = geodim.Where(geo => geo.GEO_NM.ToUpper() == geoCombined[i].ToUpper() && geo.RGN_NM == newDH_Region.DROP_DOWN && (geo.CTRY_NM != null && geo.CTRY_NM != "")).OrderBy(geo => geo.CTRY_NM);
                     foreach (GeoDimension country in region_countries)
                     {
                         //rinse and repeat like above, but for countries instead of regions

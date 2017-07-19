@@ -1,10 +1,10 @@
-﻿<div class="opUiContainer {{opClass}}" style="{{opStyle}}" ng-class="{isHidden: opIsHidden, isErrorWrapper: opIsError, isSavedWrapper: opIsSaved, isDirtyWrapper: opIsDirty}">
+﻿<div class="opUiContainer {{opClass}}" style="{{opStyle}}; width:100%" ng-class="{isHidden: opIsHidden, isErrorWrapper: opIsError, isSavedWrapper: opIsSaved, isDirtyWrapper: opIsDirty}">
     <div class="fl opUiLabel" ng-class="{isRequired: opIsRequired}">{{opLabel}}</div>
     <div kendo-tooltip k-content="helptipMsg" k-position="'top'" ng-show="opHelpMsg" class="fr opElementHelpIcon intelicon-information-outlined"></div>
     <div class="clearboth"></div>
     <div kendo-tooltip k-content="tooltipMsg" k-position="'top'" ng-show="opIsError" class="err-bit-el"></div>
 
-    <div class="k-content">
+    <div class="k-content" style="position:relative; width:100%">
         <div ng-click="onEmbeddedMultiSelectClick()">
             <select id="{{opCd + '_MS'}}"
                     kendo-multi-select 
@@ -56,9 +56,9 @@
      .msPopup {
          margin-bottom: 0 !important;
          position: absolute;
-         width: 220px;
+         width: 100%;
          max-height: 200px;
-         max-width: 280px;
+         /*max-width: 280px;*/
          margin-top:36px;
          font-size: 12px;
          border: 1px solid #cccccc;

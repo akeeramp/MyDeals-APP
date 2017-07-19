@@ -332,6 +332,8 @@
     <Content Include="app\contract\partials\lnavFlow.html" />
     <Content Include="app\contract\partials\lnavSummaryMainMenu.html" />
     <Content Include="app\contract\partials\lnavSummaryMenuMini.html" />
+    <Content Include="app\contract\targetRegionPicker\targetRegionPicker.controller.js" />
+    <Content Include="app\contract\targetRegionPicker\targetRegionPicker.html" />
     <Content Include="app\contract\productCAPBreakout\productCAPBreakout.controller.js" />
     <Content Include="app\contract\productCAPBreakout\productCAPBreakout.html" />
     <Content Include="app\contract\productCorrector\productCorrectorBeta.html" />

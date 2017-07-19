@@ -388,13 +388,16 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 schema: {
                     model: $scope.opOptions.model
                 },
-                pageSize: 50
+                pageSize: 25
             });
 
             $scope.ds = {
                 dataSource: $scope.contractDs,
                 columns: $scope.opOptions.columns,
                 scrollable: true,
+                //scrollable: {
+                //    virtual: true // <--- Test to improve performance, loads slightly faster but messes up scrolling quickly through large data, virtualization can't keep up with out large set
+                //},
                 sortable: true,
                 editable: $scope.isEditable,
                 navigatable: true,
@@ -570,12 +573,14 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                     //note: as this is a reusable directive we probably shouldnt put TRGT_RGN specific logic here, but if not here then where?
                     if (options.field.toUpperCase() === "TRGT_RGN") {
                         //compiled = $compile('<div class="myDealsControl" op-control-flat ng-model="dataItem.TRGT_RGN" op-cd="\'EMBEDDEDMULTISELECT\'" op-type="\'EMBEDDEDMULTISELECT\'" op-lookup-url="\'' + col.lookupUrl + angular.element(container).scope().dataItem.GEO_COMBINED + '\'" op-lookup-text="\'DROP_DOWN\'" op-lookup-value="\'DROP_DOWN\'" op-ui-mode="\'VERTICAL\'"></div>')(angular.element(container).scope());
-                        compiled = $compile('<div class="myDealsControl" op-control-flat ng-model="dataItem" op-cd="\'TRGT_RGN\'" op-type="\'EMBEDDEDMULTISELECT\'" op-lookup-url="\'' + col.lookupUrl + angular.element(container).scope().dataItem.GEO_COMBINED + '\'" op-lookup-text="\'DROP_DOWN\'" op-lookup-value="\'DROP_DOWN\'" op-ui-mode="\'VERTICAL\'" op-expanded="true"></div>')(angular.element(container).scope());
-                    } else {
-                        compiled = $compile('<div class="myDealsControl" op-control-flat ng-model="dataItem.TRGT_RGN" op-cd="\'DROPDOWN\'" op-type="\'DROPDOWN\'" op-lookup-url="\'' + col.lookupUrl + '\'" op-lookup-text="\'DROP_DOWN\'" op-lookup-value="\'DROP_DOWN\'" op-ui-mode="\'VERTICAL\'" op-expanded="true"></div>')(angular.element(container).scope());
-                    }
-
-                    $(container).append(compiled);
+                        //compiled = $compile('<div class="myDealsControl" op-control-flat ng-model="dataItem" op-cd="\'TRGT_RGN\'" op-type="\'EMBEDDEDMULTISELECT\'" op-lookup-url="\'' + col.lookupUrl + angular.element(container).scope().dataItem.GEO_COMBINED + '\'" op-lookup-text="\'DROP_DOWN\'" op-lookup-value="\'DROP_DOWN\'" op-ui-mode="\'VERTICAL\'" op-expanded="true"></div>')(angular.element(container).scope());
+                        openTargetRegionModal(container, col.lookupUrl)
+                    } //else {
+                        //compiled = $compile('<div class="myDealsControl" op-control-flat ng-model="dataItem.TRGT_RGN" op-cd="\'DROPDOWN\'" op-type="\'DROPDOWN\'" op-lookup-url="\'' + col.lookupUrl + '\'" op-lookup-text="\'DROP_DOWN\'" op-lookup-value="\'DROP_DOWN\'" op-ui-mode="\'VERTICAL\'" op-expanded="true"></div>')(angular.element(container).scope());
+                    //}
+                    //console.log(angular.element(container).scope());
+                    
+                    //$(container).append(compiled);
 
                 } else {
                 	$('<input required name="' + options.field + '"/>')
@@ -1014,6 +1019,34 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
 
                 capModal.result.then(
                     function () {
+                    },
+                    function () {
+                    });
+            }
+
+            function openTargetRegionModal(container, lookupURL) {
+                var containerDataItem = angular.element(container).scope().dataItem;
+
+                var targetRegionData = {
+                    'TRGT_RGN': containerDataItem.TRGT_RGN,
+                    'GEO_MBR_SID': containerDataItem.GEO_COMBINED,
+                    'LOOKUPURL': lookupURL
+                }
+                var trgtRgnModal = $uibModal.open({
+                    backdrop: 'static',
+                    templateUrl: 'app/contract/targetRegionPicker/targetRegionPicker.html',
+                    controller: 'TargetRegionPickerController',
+                    controllerAs: 'vm',
+                    windowClass: 'cap-modal-window',
+                    size: 'md',
+                    resolve: {
+                        targetRegionData: targetRegionData
+                    }
+                });
+
+                trgtRgnModal.result.then(
+                    function (targetRegions) {
+                        containerDataItem.TRGT_RGN = targetRegions;
                     },
                     function () {
                     });
