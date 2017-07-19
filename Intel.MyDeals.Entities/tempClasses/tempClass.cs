@@ -2150,6 +2150,9 @@ public partial class DealTemplateDataGram
         public System.String USR_INPUT { set; get; }
 
         [DataMember]
+        public System.Boolean WITHOUT_FILTER { set; get; }
+
+        [DataMember]
         public System.String YCS2 { set; get; }
 
         [DataMember]

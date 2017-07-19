@@ -316,7 +316,8 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
             },
             {
                 field: "HIER_NM_HASH",
-                title: "Product Details"
+                title: "Product Details",
+                template: "<div kendo-tooltip k-content='dataItem.HIER_NM_HASH'>{{dataItem.HIER_NM_HASH}}</div>"
             },
             {
                 field: "PRD_STRT_DTM",

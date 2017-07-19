@@ -20,6 +20,7 @@
         vm.showSuggestions = false;
         vm.suggestedProducts = [];
         vm.selectedPathParts = [];
+        vm.disableSelection = false;
         vm.items = [];
         vm.gridData = [];
         vm.selectedProducts = [];
@@ -339,6 +340,7 @@
         function selectPath(index) {
             vm.hideSelection = false;
             vm.showSuggestions = false;
+            vm.disableSelection = false;
             vm.errorMessage = "";
             if (index === 0) {
                 updateDrillDownPrd();
@@ -690,8 +692,16 @@
             }];
 
             ProductSelectorService.GetProductDetails(data, pricingTableRow.CUST_MBR_SID).then(function (response) {
-                vm.showSuggestions = false;
-                processProducts(response.data);
+                vm.disableSelection = false;
+                if (!!response.data[0] && response.data[0].WITHOUT_FILTER) {
+                    vm.suggestedProducts = response.data;
+                    vm.disableSelection = true;
+                    vm.showSuggestions = true;
+                    initSuggestionGrid();
+                } else {
+                    vm.showSuggestions = false;
+                    processProducts(response.data);
+                }
             }, function (response) {
                 logger.error("Unable to get products.", response, response.statusText);
             });
@@ -705,7 +715,17 @@
                         vm.searchProduct();
                     });
                 } else {
-                    showAutocorrectedSuggestions(vm.userInput)
+                    ProductSelectorService.IsProductExistsInMydeals(vm.userInput).then(function (response) {
+                        if (response.data) {
+                            setTimeout(function () {
+                                vm.searchProduct();
+                            });
+                        } else {
+                            showAutocorrectedSuggestions(vm.userInput)
+                        }
+                    }, function (response) {
+                        logger.error("Unable to get check if product exists in MyDeals.", response, response.statusText);
+                    });
                 }
             }
         }
@@ -722,6 +742,7 @@
             };
             ProductSelectorService.GetSuggestions(dto, pricingTableRow.CUST_MBR_SID).then(function (response) {
                 vm.suggestedProducts = response.data;
+                vm.disableSelection = response.data[0].WITHOUT_FILTER;
                 vm.showSuggestions = true;
                 if (response.data.length > 0) {
                     initSuggestionGrid();
@@ -818,6 +839,7 @@
 
             vm.errorMessage = "";
             vm.showSuggestions = false;
+            vm.disableSelection = false;
 
             vm.productSearchValues = [];
             vm.selectedPathParts = []; // Reset the breadcrumb
@@ -1115,7 +1137,8 @@
                 },
                 {
                     field: "HIER_NM_HASH",
-                    title: "Product Details"
+                    title: "Product Details",
+                    template: "<div kendo-tooltip k-content='dataItem.HIER_NM_HASH'>{{dataItem.HIER_NM_HASH}}</div>"
                 },
                 {
                     field: "PRD_STRT_DTM",

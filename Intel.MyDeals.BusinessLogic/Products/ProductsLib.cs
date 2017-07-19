@@ -434,12 +434,23 @@ namespace Intel.MyDeals.BusinessLogic
         }
 
         /// <summary>
+        /// Check product exists in Mydeals (without any filter, for quick check. Performance matters)
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public bool IsProductExistsInMydeals(string searchText)
+        {
+            var searchString = GetSearchString();
+            return searchString.ContainsKey(searchText.Trim());
+        }
+
+        /// <summary>
         /// Here only alias replace will happen
         /// </summary>
         /// <param name="productsToMatch"></param>
         /// <param name="CUST_MBR_SID"></param>
         /// <returns></returns>
-        public List<PRD_LOOKUP_RESULTS> SearchProduct(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID)
+        public List<PRD_LOOKUP_RESULTS> SearchProduct(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID, bool getWithoutFilters)
         {
             var aliasMapping = GetProductsFromAlias();
             var productAliasesSplit = (from p in productsToMatch
@@ -459,7 +470,7 @@ namespace Intel.MyDeals.BusinessLogic
                                            START_DATE = p.START_DATE
                                        }).Distinct().ToList();
 
-            return _productDataLib.SearchProduct(productAliasesSplit, CUST_MBR_SID);
+            return _productDataLib.SearchProduct(productAliasesSplit, CUST_MBR_SID, getWithoutFilters);
         }
 
         /// <summary>

@@ -492,7 +492,7 @@ namespace Intel.MyDeals.DataLibrary
         /// <param name="productsToMatch"></param>
         /// <param name="CUST_MBR_SID"></param>
         /// <returns></returns>
-        public List<PRD_LOOKUP_RESULTS> SearchProduct(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID)
+        public List<PRD_LOOKUP_RESULTS> SearchProduct(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID, bool getWithoutFilters)
         {
             OpLogPerf.Log("FindProductMatch");
             var ret = new List<PRD_LOOKUP_RESULTS>();
@@ -505,7 +505,8 @@ namespace Intel.MyDeals.DataLibrary
                 Procs.dbo.PR_MYDL_TRANSLT_PRD_ENTRY cmd = new Procs.dbo.PR_MYDL_TRANSLT_PRD_ENTRY
                 {
                     CUST_MBR_SID = CUST_MBR_SID,
-                    tvt_HIER_VAL_NM = dt
+                    tvt_HIER_VAL_NM = dt,
+                    OutsideRange = getWithoutFilters
                 };
 
                 using (var rdr = DataAccess.ExecuteReader(cmd))
@@ -550,6 +551,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_SKU_MARKET_SEGMENT = DB.GetReaderOrdinal(rdr, "SKU_MARKET_SEGMENT");
                     int IDX_SKU_NM = DB.GetReaderOrdinal(rdr, "SKU_NM");
                     int IDX_USR_INPUT = DB.GetReaderOrdinal(rdr, "USR_INPUT");
+                    int IDX_WITHOUT_FILTER = DB.GetReaderOrdinal(rdr, "WITHOUT_FILTER");
                     int IDX_YCS2 = DB.GetReaderOrdinal(rdr, "YCS2");
                     int IDX_YCS2_END = DB.GetReaderOrdinal(rdr, "YCS2_END");
                     int IDX_YCS2_START = DB.GetReaderOrdinal(rdr, "YCS2_START");
@@ -598,6 +600,7 @@ namespace Intel.MyDeals.DataLibrary
                             SKU_MARKET_SEGMENT = (IDX_SKU_MARKET_SEGMENT < 0 || rdr.IsDBNull(IDX_SKU_MARKET_SEGMENT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_SKU_MARKET_SEGMENT),
                             SKU_NM = (IDX_SKU_NM < 0 || rdr.IsDBNull(IDX_SKU_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_SKU_NM),
                             USR_INPUT = (IDX_USR_INPUT < 0 || rdr.IsDBNull(IDX_USR_INPUT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_USR_INPUT),
+                            WITHOUT_FILTER = (IDX_WITHOUT_FILTER < 0 || rdr.IsDBNull(IDX_WITHOUT_FILTER)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_WITHOUT_FILTER),
                             YCS2 = (IDX_YCS2 < 0 || rdr.IsDBNull(IDX_YCS2)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_YCS2),
                             YCS2_END = (IDX_YCS2_END < 0 || rdr.IsDBNull(IDX_YCS2_END)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_YCS2_END),
                             YCS2_START = (IDX_YCS2_START < 0 || rdr.IsDBNull(IDX_YCS2_START)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_YCS2_START)

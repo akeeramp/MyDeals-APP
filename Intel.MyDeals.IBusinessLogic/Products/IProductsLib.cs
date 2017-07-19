@@ -46,7 +46,7 @@ namespace Intel.MyDeals.IBusinessLogic
 
         ProductLookup TranslateProducts(List<ProductEntryAttribute> products, int CUST_MBR_SID);
 
-        List<PRD_LOOKUP_RESULTS> SearchProduct(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID);
+        List<PRD_LOOKUP_RESULTS> SearchProduct(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID, bool getWithoutFilters);
 
         List<ProductIncExcAttribute> SetIncludeAttibute(List<ProductIncExcAttribute> prodNames);
 
@@ -74,5 +74,7 @@ namespace Intel.MyDeals.IBusinessLogic
         IList<SearchString> GetSearchString(string searchText, string mediaCode, DateTime startDate, DateTime endDate, bool getWithFilters = true);
 
         IList<PRD_TRANSLATION_RESULTS> GetSuggestions(ProductEntryAttribute userInput, int custId);
+
+        bool IsProductExistsInMydeals(string filter);
     }
 }

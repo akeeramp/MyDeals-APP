@@ -20,7 +20,8 @@
             GetCAPForProduct: GetCAPForProduct,
             GetSearchString: GetSearchString,
             GetSuggestions: GetSuggestions,
-            GetProductAttributes: GetProductAttributes
+            GetProductAttributes: GetProductAttributes,
+            IsProductExistsInMydeals: IsProductExistsInMydeals,
         }
 
         return service;
@@ -31,7 +32,7 @@
 
         // This method skips all the translator logic (product split, duplicate and invalid etc etc..) and hits the database
         function GetProductDetails(products, CUST_CD) {
-            return dataService.post(apiBaseUrl + 'SearchProduct/' + CUST_CD, products);
+            return dataService.post(apiBaseUrl + 'SearchProduct/' + CUST_CD + '/true', products);
         }
 
         function GetProdDealType(isForceReGet) {
@@ -70,6 +71,11 @@
 
         function GetProductAttributes(products) {
             return dataService.post(apiBaseUrl + 'GetProductAttributes', products);
+        }
+
+        function IsProductExistsInMydeals(dto) {
+            var postObject = { filter: dto }
+            return dataService.post(apiBaseUrl + 'IsProductExistsInMydeals', postObject);
         }
     }
 })();

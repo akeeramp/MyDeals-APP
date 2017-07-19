@@ -349,11 +349,11 @@ namespace Intel.MyDeals.Controllers.API
         /// <param name="userInput"></param>
         /// <param name="CUST_MBR_SID"></param>
         /// <returns></returns>
-        [Route("SearchProduct/{CUST_MBR_SID}")]
+        [Route("SearchProduct/{CUST_MBR_SID}/{getWithoutFilters}")]
         [HttpPost]
-        public List<PRD_LOOKUP_RESULTS> SearchProduct(List<ProductEntryAttribute> userInput, int CUST_MBR_SID)
+        public List<PRD_LOOKUP_RESULTS> SearchProduct(List<ProductEntryAttribute> userInput, int CUST_MBR_SID, bool getWithoutFilters)
         {
-            return SafeExecutor(() => _productsLib.SearchProduct(userInput, CUST_MBR_SID)
+            return SafeExecutor(() => _productsLib.SearchProduct(userInput, CUST_MBR_SID, getWithoutFilters)
                 , $"Unable to get product {"details"}"
             );
         }
@@ -468,6 +468,21 @@ namespace Intel.MyDeals.Controllers.API
                 (DateTime)input.startDate, (DateTime)input.endDate, (bool)input.getWithFilters)
                , $"Unable to get Product search results"
            );
+        }
+
+        /// <summary>
+        /// Check product exists in Mydeals (without any filter, for quick check. Performance matters)
+        /// Note : Going with POST operation instead of GET as product name contains special characters.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [Route("IsProductExistsInMydeals")]
+        [HttpPost]
+        public bool IsProductExistsInMydeals([FromBody]dynamic input)
+        {
+            return SafeExecutor(() => _productsLib.IsProductExistsInMydeals((string)input.filter)
+                , $"Unable to check if product exists in MyDeals"
+            );
         }
 
         [Route("GetSuggestions/{custId}")]
