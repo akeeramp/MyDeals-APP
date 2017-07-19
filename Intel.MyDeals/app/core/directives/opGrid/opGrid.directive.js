@@ -572,15 +572,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                     var compiled;
                     //note: as this is a reusable directive we probably shouldnt put TRGT_RGN specific logic here, but if not here then where?
                     if (options.field.toUpperCase() === "TRGT_RGN") {
-                        //compiled = $compile('<div class="myDealsControl" op-control-flat ng-model="dataItem.TRGT_RGN" op-cd="\'EMBEDDEDMULTISELECT\'" op-type="\'EMBEDDEDMULTISELECT\'" op-lookup-url="\'' + col.lookupUrl + angular.element(container).scope().dataItem.GEO_COMBINED + '\'" op-lookup-text="\'DROP_DOWN\'" op-lookup-value="\'DROP_DOWN\'" op-ui-mode="\'VERTICAL\'"></div>')(angular.element(container).scope());
-                        //compiled = $compile('<div class="myDealsControl" op-control-flat ng-model="dataItem" op-cd="\'TRGT_RGN\'" op-type="\'EMBEDDEDMULTISELECT\'" op-lookup-url="\'' + col.lookupUrl + angular.element(container).scope().dataItem.GEO_COMBINED + '\'" op-lookup-text="\'DROP_DOWN\'" op-lookup-value="\'DROP_DOWN\'" op-ui-mode="\'VERTICAL\'" op-expanded="true"></div>')(angular.element(container).scope());
                         openTargetRegionModal(container, col.lookupUrl)
-                    } //else {
-                        //compiled = $compile('<div class="myDealsControl" op-control-flat ng-model="dataItem.TRGT_RGN" op-cd="\'DROPDOWN\'" op-type="\'DROPDOWN\'" op-lookup-url="\'' + col.lookupUrl + '\'" op-lookup-text="\'DROP_DOWN\'" op-lookup-value="\'DROP_DOWN\'" op-ui-mode="\'VERTICAL\'" op-expanded="true"></div>')(angular.element(container).scope());
-                    //}
-                    //console.log(angular.element(container).scope());
-                    
-                    //$(container).append(compiled);
+                    }
 
                 } else {
                 	$('<input required name="' + options.field + '"/>')

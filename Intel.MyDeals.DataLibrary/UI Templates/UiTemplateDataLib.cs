@@ -1213,7 +1213,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 Width = 180,
                 UiType = "EMBEDDEDMULTISELECT",
-                Template = "#=gridUtils.uiMultiselectArrayControlWrapper(data, 'TRGT_RGN')#",
+                Template = "#=gridUtils.uiControlWrapper(data, 'TRGT_RGN')#",
                 LookupUrl = "/api/Dropdown/GetGeoDropdownHierarchy/",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN",
