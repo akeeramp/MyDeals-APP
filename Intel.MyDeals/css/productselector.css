@@ -176,36 +176,94 @@ a.prdAnchor {
             background-color: #01AEEF;
         }
 
-.prodSelector.modal-body {
-    padding-top: 2px;
-    padding-bottom: 0px;
-    min-height: calc(85vh - 365px);
-    max-height: calc(85vh - 365px);
-    overflow-y: auto;
+.prodSelector .lnavFilter {
+    background-color: #e7e7e8;
+    width: 200px;
+    height: 100%;
+    padding: 4px;
+    overflow: auto;
 }
 
-.prodSelector.modal-footer {
-    border-top: none;
-    /*position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    padding: 1rem;
-    background-color: #efefef;
-    text-align: center;*/
+.prodSelector .badge.upperBadge {
+    font-size: 10px;
+    padding: 2px 4px;
+    background-color: #fff;
+    color: #666;
+    vertical-align: text-top;
+    font-weight: 200;
+    margin-left: 6px;
 }
+
+.prodSelector .miniProdNav {
+    padding: 0 15px;
+    margin-right: 10px;
+    font-weight: 600;
+}
+
+.prodSelector .filterGrp {
+    font-family: arial;
+    font-weight: 600;
+    font-size: 11px;
+    margin: 5px 5px 5px 10px;
+}
+
+    .prodSelector .filterGrp .filterContainer {
+        font-weight: 200;
+        margin-bottom: 20px;
+    }
+
+        .prodSelector .filterGrp .filterContainer label {
+            font-weight: 200;
+            margin-left: 5px;
+            cursor: pointer;
+        }
+
+    .prodSelector .filterGrp .srchContainer {
+        margin: 3px 0 0 15px;
+        cursor: pointer;
+        line-height: 1em;
+    }
+
+        .prodSelector .filterGrp .srchContainer:hover i {
+            color: #003C71;
+        }
+
+        .prodSelector.filterGrp .srchContainer i {
+            color: #00AEEF;
+            font-size: 14px;
+            margin-right: 5px;
+        }
 
 .prodSelector.modal-header {
     border-bottom: none;
     padding-bottom: 0px;
 }
 
-.prodSelector.kendoGridHeight {
-    height: calc(85vh - 398px);
+.prodSelector.modal-body {
+    padding-top: 2px;
+    padding-bottom: 0px;
+    min-height: 300px;
+    max-height: calc(85vh - 365px);
+    height: calc(85vh - 365px);
+    overflow-y: auto;
 }
 
-.productSuggestion.kendoGridHeight {
-    height: calc(85vh - 415px);
+.prodSelector .k-grid-content {
+    height: calc(85vh - 480px);
+    min-height: 200px;
+    max-height: calc(85vh - 385px);
+}
+
+.prodSelector .productSuggestion .k-grid-content {
+    height: calc(85vh - 500px) !important;
+    min-height: 180px !important;
+    max-height: calc(85vh - 500px) !important;
+}
+
+#productSuggestion.k-grid-content {
+    height: calc(85vh - 480px);
+    min-height: 600px;
+    max-height: calc(85vh - 385px);
 }
 
 .prdSelector-modal-window, .modal-dialog {
@@ -254,6 +312,15 @@ a.prdAnchor {
 .prodSelector-grid.k-grid td {
     white-space: nowrap;
     color: #000000;
+}
+
+.grpTitle {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.productSuggestion-grid.k-grid td {
+    white-space: nowrap;
 }
 
 .prodSelector-grid.k-grid tr.k-alt {
@@ -334,5 +401,59 @@ span.productSelector.prdAnchor:hover {
     padding: 4px;
     margin: 0 8px 0 0;
     width: 100%;
-    height:100%;
+    height: 100%;
 }
+
+input[type=checkbox].with-font {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
+    input[type=checkbox].with-font + label:before {
+        font-family: FontAwesome;
+        display: inline-block;
+        content: "\f096";
+        font-size: 22px;
+        letter-spacing: 5px;
+        color: #00AEEF;
+        margin-left: 10px;
+        margin-top: 2px;
+        vertical-align: middle;
+    }
+
+    input[type=checkbox].with-font.ckSm + label:before {
+        font-size: 16px;
+    }
+
+    input[type=checkbox].with-font:hover + label:before {
+        color: #003C71;
+        cursor: pointer;
+    }
+
+    input[type=checkbox].with-font.disabled + label:before {
+        color: #cccccc;
+        cursor: default;
+    }
+
+    input[type=checkbox].with-font:checked + label:before {
+        content: "\f046";
+        font-size: 22px;
+        letter-spacing: 5px;
+        margin-left: 10px;
+        margin-top: 2px;
+        vertical-align: middle;
+    }
+
+    input[type=checkbox].with-font.ckSm:checked + label:before {
+        font-size: 16px;
+    }
+
+    input[type=checkbox].with-font:focus + label:before {
+        font-weight: bold;
+    }

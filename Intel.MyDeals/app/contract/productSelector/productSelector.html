@@ -1,5 +1,5 @@
 ﻿<link href="css/productselector.css" rel="stylesheet" />
-<div class="modal-content" moveablemodal style="height:85vh;background-color:#1a3e6f;overflow-y:auto;overflow-x:hidden;border-left:none;border-right:none;">
+<div class="product-selector modal-content" moveablemodal style="height:85vh;background-color:#1a3e6f;overflow-y:auto;overflow-x:hidden;border-left:none;border-right:none;">
     <div class="prodSelector modal-header">
         <div class="row">
             <div class="col-md-3">
@@ -32,154 +32,156 @@
             Selected Products:
         </div>
     </div>
-    <div class="prodSelector modal-body">
-        <div ng-if="vm.showSuggestions" class="productSelector subHeaderNavContainer mini-right miniProdNav">
-            <div ng-if="!(vm.errorMessage.length > 0)">
-                <div ng-if="!vm.disableSelection">No product found for "{{ ::vm.userInput }}". Search resulted following products:</div>
-                <div class="productSelector Issue" ng-if="vm.disableSelection">Product(s) does not match the global filter criteria or is not active within the deal date range.</div>
-                <div style="padding-top:5px;">
-                    <table ng-if="vm.suggestedProducts.length !== 0" style="width: 100%; height: 100%;">
-                        <tr>
-                            <td>
-                                <div class="lnavFilter">
-                                    <div class="">Refine By</div>
-                                    <div class="filterGrp">
-                                        <div ng-click="vm.isPrdCollapsed = !vm.isPrdCollapsed" style="cursor: pointer;">
-                                            <i ng-class="{'intelicon-down': vm.isPrdCollapsed, 'intelicon-right-next': !vm.isPrdCollapsed}"></i> Suggested Products
+    <div style="height:80%">
+        <div class="prodSelector modal-body">
+            <div ng-if="vm.showSuggestions" class="productSelector subHeaderNavContainer mini-right miniProdNav">
+                <div ng-if="!(vm.errorMessage.length > 0)">
+                    <div ng-if="!vm.disableSelection">No product found for "{{ ::vm.userInput }}". Search resulted following products:</div>
+                    <div class="productSelector Issue" ng-if="vm.disableSelection">Product(s) does not match the global filter criteria or is not active within the deal date range.</div>
+                    <div style="padding-top:5px;">
+                        <table ng-if="vm.suggestedProducts.length !== 0" style="width: 100%; height: 100%;">
+                            <tr>
+                                <td>
+                                    <div class="lnavFilter">
+                                        <div class="">Refine By</div>
+                                        <div class="filterGrp">
+                                            <div ng-click="vm.isPrdCollapsed = !vm.isPrdCollapsed" style="cursor: pointer;">
+                                                <i ng-class="{'intelicon-down': vm.isPrdCollapsed, 'intelicon-right-next': !vm.isPrdCollapsed}"></i> Products Found
+                                            </div>
+                                            <div class="filterContainer" uib-collapse="vm.isPrdCollapsed">
+                                                <div ng-repeat="item in vm.curRowIssues | orderBy: 'name'" style="max-height: 20px;">
+                                                    <div ng-if="item.cnt > 0">
+                                                        <input type='checkbox' ng-click="vm.clickFilter()" ng-model="item.selected" class='check ckSm with-font' id="fltrPrdChk{{item.id}}" />
+                                                        <label for="fltrPrdChk{{item.id}}">
+                                                            <span ng-bind-html="item.name"></span>
+                                                            <span class="badge upperBadge" ng-if="item.status == 'Issue'">{{ item.cnt == 0 ? "?" : item.cnt }}</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="filterContainer" uib-collapse="vm.isPrdCollapsed">
-                                            <div ng-repeat="item in vm.curRowIssues | orderBy: 'name'" style="max-height: 20px;">
-                                                <div ng-if="item.cnt > 0">
-                                                    <input type='checkbox' ng-click="vm.clickFilter()" ng-model="item.selected" class='check ckSm with-font' id="fltrPrdChk{{item.id}}" />
-                                                    <label for="fltrPrdChk{{item.id}}">
+                                        <div class="filterGrp" ng-if="vm.curRowLvl.length > 1">
+                                            <div ng-click="vm.isLvlCollapsed = !vm.isLvlCollapsed" style="cursor: pointer;">
+                                                <i ng-class="{'intelicon-down': vm.isLvlCollapsed, 'intelicon-right-next': !vm.isLvlCollapsed}"></i> Product Level
+                                            </div>
+                                            <div class="filterContainer" uib-collapse="vm.isLvlCollapsed">
+                                                <div ng-repeat="item in vm.curRowLvl | orderBy: 'name'" style="max-height: 20px;">
+                                                    <input type='checkbox' ng-click="vm.clickFilter()" ng-model="item.selected" class='check ckSm with-font' id="fltrLvlChk{{item.id}}" />
+                                                    <label for="fltrLvlChk{{item.id}}">
                                                         <span ng-bind-html="item.name"></span>
-                                                        <span class="badge upperBadge" ng-if="item.status == 'Issue'">{{ item.cnt == 0 ? "?" : item.cnt }}</span>
                                                     </label>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="filterGrp" ng-if="vm.curRowLvl.length > 1">
-                                        <div ng-click="vm.isLvlCollapsed = !vm.isLvlCollapsed" style="cursor: pointer;">
-                                            <i ng-class="{'intelicon-down': vm.isLvlCollapsed, 'intelicon-right-next': !vm.isLvlCollapsed}"></i> Product Level
-                                        </div>
-                                        <div class="filterContainer" uib-collapse="vm.isLvlCollapsed">
-                                            <div ng-repeat="item in vm.curRowLvl | orderBy: 'name'" style="max-height: 20px;">
-                                                <input type='checkbox' ng-click="vm.clickFilter()" ng-model="item.selected" class='check ckSm with-font' id="fltrLvlChk{{item.id}}" />
-                                                <label for="fltrLvlChk{{item.id}}">
-                                                    <span ng-bind-html="item.name"></span>
-                                                </label>
+                                        <div class="filterGrp" ng-if="vm.curRowCategories.length > 1">
+                                            <div ng-click="vm.isCatCollapsed = !vm.isCatCollapsed" style="cursor: pointer;">
+                                                <i ng-class="{'intelicon-down': vm.isCatCollapsed, 'intelicon-right-next': !vm.isCatCollapsed}"></i> Product Category
+                                            </div>
+                                            <div class="filterContainer" uib-collapse="vm.isCatCollapsed">
+                                                <div ng-repeat="item in vm.curRowCategories | orderBy: 'name'" style="max-height: 20px;">
+                                                    <!-- checked='checked' ng-click="onColumnChange(item)" -->
+                                                    <input type='checkbox' ng-click="vm.clickFilter()" ng-model="item.selected" class='check ckSm with-font' id="fltrCatChk{{item.id}}" />
+                                                    <label for="fltrCatChk{{item.id}}">
+                                                        <span ng-bind-html="item.name"></span>
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="filterGrp" ng-if="vm.curRowCategories.length > 1">
-                                        <div ng-click="vm.isCatCollapsed = !vm.isCatCollapsed" style="cursor: pointer;">
-                                            <i ng-class="{'intelicon-down': vm.isCatCollapsed, 'intelicon-right-next': !vm.isCatCollapsed}"></i> Product Category
-                                        </div>
-                                        <div class="filterContainer" uib-collapse="vm.isCatCollapsed">
-                                            <div ng-repeat="item in vm.curRowCategories | orderBy: 'name'" style="max-height: 20px;">
-                                                <!-- checked='checked' ng-click="onColumnChange(item)" -->
-                                                <input type='checkbox' ng-click="vm.clickFilter()" ng-model="item.selected" class='check ckSm with-font' id="fltrCatChk{{item.id}}" />
-                                                <label for="fltrCatChk{{item.id}}">
-                                                    <span ng-bind-html="item.name"></span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
 
-                                </div>
-                            </td>
-                            <td style="width: 100%">
-                                <div id="prodSuggestions" kendo-grid-check-box k-grid-checkbox="vm" kendo-grid="prodSuggestions" class="productSuggestion opUiContainer md kendoGridHeight prodCorrector-grid k-grid" k-options="vm.gridOptionsSuggestions"></div>
-                            </td>
-                        </tr>
-                    </table>
-                    <div class="productSelector Warning" ng-if="vm.suggestedProducts.length === 0">
-                        Unable to find any suggestions for "{{vm.userInput}}."
-                    </div>
-                </div>
-            </div>
-            <div class="productSelector Issue" ng-if="vm.errorMessage.length > 0">
-                {{vm.errorMessage}}
-            </div>
-        </div>
-        <div ng-if="vm.showTree && !vm.showSuggestions">
-            <div class="k-treelist product" kendo-tree-view k-options="vm.tree">
-                <div k-template>
-                    {{dataItem.name}}
-                </div>
-            </div>
-        </div>
-        <div ng-if="!vm.showTree && !vm.showSuggestions">
-            <div ng-if="!vm.hideSelection" ng-switch="vm.getDisplayTemplate()">
-                <div ng-switch-when="btnGroup" class="row" style="padding-left:10px;padding-right:10px;font-size:16px;">
-                    <div class="drillDown btn-group btn-group-justified" role="group" aria-label="...">
-                        <div class="btn-group" ng-repeat="p in vm.items | orderBy:'name'" role="group">
-                            <button ng-if="!(vm.selectedPathParts.length < 2)" title="{{p.name}}" type="button" ng-class="{'noborder':$last}" ng-click="vm.selectItem(p)" class="btn btn-default">
-                                {{::vm.checkForBlank(p.name)}}
-                            </button>
-                            <button ng-if="(vm.selectedPathParts.length < 2)" kendo-tooltip k-content="vm.getVerticalsUnderMarkLevel(p.name)"
-                                    type="button" ng-class="{'noborder':$last}" ng-click="vm.selectItem(p)" class="btn btn-default">
-                                {{::vm.checkForBlank(p.name)}}
-                            </button>
+                                    </div>
+                                </td>
+                                <td style="width: 100%">
+                                    <div id="prodSuggestions" kendo-grid-check-box k-grid-checkbox="vm" kendo-grid="prodSuggestions" class="productSuggestion opUiContainer md kendoGridHeight productSuggestion-grid k-grid" k-options="vm.gridOptionsSuggestions"></div>
+                                </td>
+                            </tr>
+                        </table>
+                        <div class="productSelector Warning" ng-if="vm.suggestedProducts.length === 0">
+                            Unable to find any suggestions for "{{vm.userInput}}."
                         </div>
                     </div>
                 </div>
-                <div ng-switch-when="btnGrid" class="row" style="margin:2px;">
-                    <div ng-repeat="p in vm.items | orderBy:'name'">
-                        <div class="clearfix" ng-if="$index % 4 == 0"></div>
-                        <div class="col-sm-3 prodDrillDownLarge" title="{{::vm.checkForBlank(p.name)}}" ng-class="{'noLeftBorder':$index % 4 == 0}">
-                            <p role="button" ng-click="vm.selectItem(p)">{{::vm.checkForBlank(p.name)}}</p>
-                        </div>
+                <div class="productSelector Issue" ng-if="vm.errorMessage.length > 0">
+                    {{vm.errorMessage}}
+                </div>
+            </div>
+            <div ng-if="vm.showTree && !vm.showSuggestions">
+                <div class="k-treelist product" kendo-tree-view k-options="vm.tree">
+                    <div k-template>
+                        {{dataItem.name}}
                     </div>
                 </div>
-                <div ng-switch-default="ng-switch-default">
-                    <div id="prodGrid" kendo-grid="prodGrid" kendo-grid-check-box k-grid-checkbox="vm" class="prodSelector opUiContainer md prodSelector-grid k-grid kendoGridHeight" k-options="vm.gridOptionsProduct"></div>
-                </div>
             </div>
-            <div ng-if="vm.hideSelection">
-                <div class="row" ng-if="vm.searchItems.length > 0" style="padding-left:10px;padding-right:10px;font-size:16px;">
-                    <div class="drillDown btn-group btn-group-justified" role="group" aria-label="...">
-                        <div class="btn-group" ng-repeat="p in vm.searchItems | orderBy:'name' " role="group">
-                            <button type="button" ng-class="{'noborder':$last}" ng-click="vm.selectsearchItem(p)" class="btn btn-default">{{::p.name}}</button>
+            <div ng-if="!vm.showTree && !vm.showSuggestions">
+                <div ng-if="!vm.hideSelection" ng-switch="vm.getDisplayTemplate()">
+                    <div ng-switch-when="btnGroup" class="row" style="padding-left:10px;padding-right:10px;font-size:16px;">
+                        <div class="drillDown btn-group btn-group-justified" role="group" aria-label="...">
+                            <div class="btn-group" ng-repeat="p in vm.items | orderBy:'name'" role="group">
+                                <button ng-if="!(vm.selectedPathParts.length < 2)" title="{{p.name}}" type="button" ng-class="{'noborder':$last}" ng-click="vm.selectItem(p)" class="btn btn-default">
+                                    {{::vm.checkForBlank(p.name)}}
+                                </button>
+                                <button ng-if="(vm.selectedPathParts.length < 2)" kendo-tooltip k-content="vm.getVerticalsUnderMarkLevel(p.name)"
+                                        type="button" ng-class="{'noborder':$last}" ng-click="vm.selectItem(p)" class="btn btn-default">
+                                    {{::vm.checkForBlank(p.name)}}
+                                </button>
+                            </div>
                         </div>
                     </div>
+                    <div ng-switch-when="btnGrid" class="row" style="margin:2px;">
+                        <div ng-repeat="p in vm.items | orderBy:'name'">
+                            <div class="clearfix" ng-if="$index % 4 == 0"></div>
+                            <div class="col-sm-3 prodDrillDownLarge" title="{{::vm.checkForBlank(p.name)}}" ng-class="{'noLeftBorder':$index % 4 == 0}">
+                                <p role="button" ng-click="vm.selectItem(p)">{{::vm.checkForBlank(p.name)}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-switch-default="ng-switch-default">
+                        <div id="prodGrid" kendo-grid="prodGrid" kendo-grid-check-box k-grid-checkbox="vm" class="prodSelector opUiContainer md prodSelector-grid k-grid kendoGridHeight" k-options="vm.gridOptionsProduct"></div>
+                    </div>
                 </div>
-                <div ng-if="vm.showSearchResults">
-                    <div id="prodGrid" kendo-grid="prodGrid" kendo-grid-check-box k-grid-checkbox="vm" class="prodSelector opUiContainer md prodSelector-grid k-grid kendoGridHeight" k-options="vm.gridOptionsProduct"></div>
+                <div ng-if="vm.hideSelection">
+                    <div class="row" ng-if="vm.searchItems.length > 0" style="padding-left:10px;padding-right:10px;font-size:16px;">
+                        <div class="drillDown btn-group btn-group-justified" role="group" aria-label="...">
+                            <div class="btn-group" ng-repeat="p in vm.searchItems | orderBy:'name' " role="group">
+                                <button type="button" ng-class="{'noborder':$last}" ng-click="vm.selectsearchItem(p)" class="btn btn-default">{{::p.name}}</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-if="vm.showSearchResults">
+                        <div id="prodGrid" kendo-grid="prodGrid" kendo-grid-check-box k-grid-checkbox="vm" class="prodSelector opUiContainer md prodSelector-grid k-grid kendoGridHeight" k-options="vm.gridOptionsProduct"></div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="prodSelector modal-footer">
-        <div class="row">
-            <div class="col-md-6 text-left textProdSelector">
-                <p>Selected Products<small role="button" ng-click="vm.showHeirarrchyTree()">&nbsp;({{vm.addedProducts.length}})</small></p>
+        <div style="padding:15px;">
+            <div class="row">
+                <div class="col-md-6 text-left textProdSelector">
+                    <p>Selected Products<small role="button" ng-click="vm.showHeirarrchyTree()">&nbsp;({{vm.addedProducts.length}})</small></p>
+                </div>
+                <div class="col-md-6">
+                    <button class="btn btn-primary fr prdBtn" ng-disabled="vm.disableSelection" ng-click="vm.addProducts()" style="margin-left:10px;">Add Product(s)</button>
+                    <button class="btn btn-default fr prdBtn" ng-click="vm.clearProducts()" style="margin-left:2px;">Clear all products</button>
+                </div>
             </div>
-            <div class="col-md-6">
-                <button class="btn btn-primary fr prdBtn" ng-disabled="vm.disableSelection" ng-click="vm.addProducts()" style="margin-left:10px;">Add Product(s)</button>
-                <button class="btn btn-default fr prdBtn" ng-click="vm.clearProducts()" style="margin-left:2px;">Clear all products</button>
+            <div class="row" style="padding-left:15px;padding-right:15px;">
+                <ui-select allow-clear="true" onkeypress="return false;" class="prodSelected text-left"
+                           tagging="true" multiple ng-model="vm.addedProducts" theme="bootstrap">
+                    <ui-select-match>
+                        <span ng-class="{'text-danger': vm.isValidCapDetails($item)}" ng-click="vm.showSingleProductHeirarchy($item)"
+                              title="{{vm.isValidCapDetails($item, true)}}">{{$item.HIER_VAL_NM}}</span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="products in vm.selectedProducts">
+                    </ui-select-choices>
+                </ui-select>
             </div>
-        </div>
-        <div class="row" style="padding-left:15px;padding-right:15px;">
-            <ui-select allow-clear="true" onkeypress="return false;" class="prodSelected text-left"
-                       tagging="true" multiple ng-model="vm.addedProducts" theme="bootstrap">
-                <ui-select-match>
-                    <span ng-class="{'text-danger': vm.isValidCapDetails($item)}" ng-click="vm.showSingleProductHeirarchy($item)"
-                          title="{{vm.isValidCapDetails($item, true)}}">{{$item.HIER_VAL_NM}}</span>
-                </ui-select-match>
-                <ui-select-choices repeat="products in vm.selectedProducts">
-                </ui-select-choices>
-            </ui-select>
-        </div>
-        <br />
-        <div class="form-inline insertAtRowsText">
-            <span ng-if="vm.enableSplitProducts">
-                <input id="separateProduct" class="checkbox-custom" ng-model="vm.splitProducts" name="separateroducts" type="checkbox">
-                <label for="separateProduct" class="checkbox-custom-label" style="padding-bottom:5px;margin-top:0px;">&nbsp;Separate product in rows</label>
-            </span>
-            <button class="btn btn-primary fr prdBtn" ng-disabled="vm.addedProducts.length == 0" ng-click="vm.save()">Save</button>
-            <button class="btn btn-default fr prdBtn" ng-click="vm.cancel()" style="margin-right:4px;">Cancel</button>
+            <br />
+            <div class="form-inline insertAtRowsText">
+                <span ng-if="vm.enableSplitProducts">
+                    <input id="separateProduct" class="checkbox-custom" ng-model="vm.splitProducts" name="separateroducts" type="checkbox">
+                    <label for="separateProduct" class="checkbox-custom-label" style="padding-bottom:5px;margin-top:0px;">&nbsp;Separate product in rows</label>
+                </span>
+                <button class="btn btn-primary fr prdBtn" ng-disabled="vm.addedProducts.length == 0" ng-click="vm.save()">Save</button>
+                <button class="btn btn-default fr prdBtn" ng-click="vm.cancel()" style="margin-right:4px;">Cancel</button>
+            </div>
         </div>
     </div>
 </div>

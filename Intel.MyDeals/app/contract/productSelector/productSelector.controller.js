@@ -308,15 +308,17 @@
 
         function toggleColumnsWhenEmpty(data) {
             var grid = $("#prodGrid").data("kendoGrid");
-            angular.forEach(vm.gridOptionsProduct.columns, function (item, key) {
-                var columnValue = $filter('unique')(data, item.field);
-                if (columnValue.length == 1 && item.field !== undefined && item.field != "CheckBox" && item.field != 'CAP' && item.field != 'YCS2' &&
-                    (columnValue[0][item.field] == "" || columnValue[0][item.field] == null || columnValue[0][item.field] == 'NA')) {
-                    grid.hideColumn(item.field);//hide column
-                } else {
-                    grid.showColumn(item.field); //show column
-                }
-            });
+            if (!!grid) {
+                angular.forEach(vm.gridOptionsProduct.columns, function (item, key) {
+                    var columnValue = $filter('unique')(data, item.field);
+                    if (columnValue.length == 1 && item.field !== undefined && item.field != "CheckBox" && item.field != 'CAP' && item.field != 'YCS2' &&
+                        (columnValue[0][item.field] == "" || columnValue[0][item.field] == null || columnValue[0][item.field] == 'NA')) {
+                        grid.hideColumn(item.field);//hide column
+                    } else {
+                        grid.showColumn(item.field); //show column
+                    }
+                });
+            }
         }
 
         // When user clicks on the drill down levels
@@ -342,6 +344,7 @@
             vm.showSuggestions = false;
             vm.disableSelection = false;
             vm.errorMessage = "";
+            vm.userInput = "";
             if (index === 0) {
                 updateDrillDownPrd();
             }
@@ -742,7 +745,7 @@
             };
             ProductSelectorService.GetSuggestions(dto, pricingTableRow.CUST_MBR_SID).then(function (response) {
                 vm.suggestedProducts = response.data;
-                vm.disableSelection = response.data[0].WITHOUT_FILTER;
+                vm.disableSelection = !!response.data[0].WITHOUT_FILTER ? response.data[0].WITHOUT_FILTER : false;
                 vm.showSuggestions = true;
                 if (response.data.length > 0) {
                     initSuggestionGrid();
@@ -1210,6 +1213,9 @@
         }
 
         function initSuggestionGrid() {
+            vm.curRowIssues = [];
+            vm.curRowCategories = [];
+            vm.curRowLvl = [];
             var suggestions = $filter('unique')(vm.suggestedProducts, 'USR_INPUT');
             for (var x = 0; x < suggestions.length; x++) {
                 var prods = $filter('where')(vm.suggestedProducts, { 'USR_INPUT': suggestions[x].USR_INPUT });

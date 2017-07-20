@@ -373,6 +373,8 @@
                     : $scope.contractData.CUST_MBR_SID;
                 var quarterDetails = customerService.getCustomerCalendar(customerMemberSid, value, null, null)
                     .then(function (response) {
+                        $scope.contractData.MinDate = moment(response.data.MIN_STRT).format('l');
+                        $scope.contractData.MaxDate = moment(response.data.MIN_END).format('l');
                         if (dateType == 'START_DT') {
                             $scope.contractData.START_QTR = response.data.QTR_NBR;
                             $scope.contractData.START_YR = response.data.YR_NBR;
@@ -1551,7 +1553,7 @@
             }
 
             $scope.setBusy("Saving your data...", "Please wait while saving data.");
-			
+
             var copyData = util.deepClone(data);
             $scope.compressJson(copyData);
 
