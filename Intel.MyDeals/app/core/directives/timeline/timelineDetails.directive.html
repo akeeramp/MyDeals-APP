@@ -1,0 +1,61 @@
+﻿<link href="css/timeline.css" rel="stylesheet" />
+<div ng-if="timelineData.length > 0" class="col-md-12 row row" style="height:490px;overflow:auto">
+    <uib-accordion close-others="oneAtATime">
+        <div uib-accordion-group class="panel-default accordion-panel" heading="Filters" is-open="false" style="margin-bottom:0px;margin-left: 25px;">            
+            
+                <span ng-if="isFilterApplied" class="clearFilter"><a ng-click="removeFilter()" class="btnClearFilter intelicon-cancel-filter-outlined"></a></span>
+            
+            <div style="height:85px;">
+                <div class="col-md-4">
+                    <label class="opUiLabel">Approver List:</label>
+                    <select id="approverList" kendo-drop-down-list
+                            k-ng-model="selectedApprover"
+                            k-data-text-field="'NAME'"
+                            k-data-value-field="'CHG_EMP_WWID'"
+                            k-data-source="approverList"
+                            k-on-change="approverChange(selectedApprover)"
+                            style="width: 100%;"></select>
+                </div>
+                <div class="col-md-4">
+                    <label class="opUiLabel">Start Date:</label>
+                    <input id="startDatePicker" kendo-date-picker
+                           k-ng-model="startDate"
+                           k-on-change="changeStartDate(startDate)"
+                           style="width: 100%;height:36px" />
+                </div>
+
+                <div class="col-md-4">
+                    <label class="opUiLabel">End Date:</label>
+                    <input id="endDatePicker" kendo-date-picker
+                           k-ng-model="endDate"
+                           k-on-change="changeEndDate(endDate)"
+                           style="width: 100%;height:36px" />
+                </div>
+                
+
+            </div>
+        </div>
+    </uib-accordion>  
+
+    <div ng-repeat="tm in selectedObj | limitTo : numberOfRecrods " class="item">
+        <div class="image">
+            <div id="listEmployeeImage">
+                <img src="https://photos.intel.com/images/{{tm.CHG_EMP_WWID}}.jpg" title="{{tm.FRST_NM + ' ' + tm.LST_NM}}({{tm.USR_ROLES}})" />
+
+            </div>
+        </div>
+        <div class="details">
+            <div>
+                <h1>{{tm.ATRB_DESC + " " +tm.FLAG}} - <span>{{tm.HIST_EFF_FR_DTM | date:'dd-MMM-yyyy @ h:mma'}}</span></h1>
+                <p>{{tm.ATRB_VAL}} - <b>{{tm.FRST_NM + ' ' + tm.LST_NM}}({{tm.USR_ROLES}})</b></p>
+            </div>
+        </div>
+    </div>
+    <div ng-if="selectedObj.length == 0">
+        <span>No data selected. Please choose other filter</span>
+    </div>
+    <a ng-if="selectedObj.length > 5" ng-click="showAll()" class="showMore" title="Show more">....</a>
+</div>
+
+
+

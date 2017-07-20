@@ -199,6 +199,7 @@
     <Folder Include="ViewModels\" />
     <Folder Include="Views\Base\" />
     <Folder Include="Views\FileUpload\" />
+    <Folder Include="Views\Timeline\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionFilters\ApiAuthorizeAttribute.cs" />
@@ -232,6 +233,7 @@
     <Compile Include="Controllers\API\SearchController.cs" />
     <Compile Include="Controllers\API\TemplatesController.cs" />
     <Compile Include="Controllers\API\CustomersController.cs" />
+    <Compile Include="Controllers\API\TimelineController.cs" />
     <Compile Include="Controllers\API\WorkFlowController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CodingPracticesController.cs" />
@@ -417,6 +419,8 @@
     <Content Include="app\core\directives\searchResults\searchResults.directive.js" />
     <Content Include="app\core\directives\opPopover\opPopover.directive.html" />
     <Content Include="app\core\directives\opPopover\opPopover.directive.js" />
+    <Content Include="app\core\directives\timeline\timelineDetails.directive.html" />
+    <Content Include="app\core\directives\timeline\timelineDetails.directive.js" />
     <Content Include="app\dashboard\config\widget.config.js" />
     <Content Include="app\dashboard\controllers\dashboard.controller.js" />
     <Content Include="app\dashboard\views\addWidget.html" />
@@ -839,6 +843,7 @@
     <Content Include="css\angular-gridster.css" />
     <Content Include="css\nv.d3.css" />
     <Content Include="css\nv.d3.min.css" />
+    <Content Include="css\timeline.css" />
     <Content Include="css\productselector.css" />
     <Content Include="css\select.min.css" />
     <Content Include="css\select2.min.css" />

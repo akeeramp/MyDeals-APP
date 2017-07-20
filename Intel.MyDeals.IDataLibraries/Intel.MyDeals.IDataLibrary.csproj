@@ -66,6 +66,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SecurityAttributes\ISecurityAttributesDataLib.cs" />
     <Compile Include="SoldToId\ISoldToIdDataLib.cs" />
+    <Compile Include="Timeline\ITimelineDataLib.cs" />
     <Compile Include="UI Templates\IUiTemplateDataLib.cs" />
     <Compile Include="Workflow\IWorkFlowDataLib.cs" />
   </ItemGroup>

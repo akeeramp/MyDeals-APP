@@ -86,6 +86,7 @@ namespace Intel.MyDeals
                 , "~/app/core/directives/messageBoard/messageBoard.directive.js"
                 , "~/app/core/directives/opGrid/opGrid.directive.js"
                 , "~/app/core/directives/opPopover/opPopover.directive.js"
+                , "~/app/core/directives/timeline/timelineDetails.directive.js"
                 , "~/app/core/directives/searchResults/searchResults.directive.js"
                 , "~/app/blocks/util.js"
                 ));

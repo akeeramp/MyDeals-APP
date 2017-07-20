@@ -110,6 +110,7 @@
     <Compile Include="Rule Engine\RuleEngineLib.cs" />
     <Compile Include="Search\SearchLib.cs" />
     <Compile Include="Security Attributes\SecurityAttributesLib.cs" />
+    <Compile Include="Timeline\TimelineLib.cs" />
     <Compile Include="UI Templates\UiTemplateLib.cs" />
     <Compile Include="WorkFlow\WorkFlowLib.cs" />
   </ItemGroup>
