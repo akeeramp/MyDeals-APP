@@ -883,7 +883,7 @@ namespace Intel.MyDeals.BusinessLogic
         {
             searchText = searchText.Trim();
 
-            var searchString = FilterProducts(mediaCode, startDate, endDate, getWithFilters);
+            var searchString = getWithFilters ? FilterProducts(mediaCode, startDate, endDate) : GetSearchString();
 
             // Get the matching product
             var matchingProducts = GetMatchingProduct(searchText, searchString);
@@ -897,22 +897,19 @@ namespace Intel.MyDeals.BusinessLogic
             return matchingProducts;
         }
 
-        private Dictionary<string, string> FilterProducts(string mediaCode, DateTime startDate, DateTime endDate, bool getWithFilters)
+        private Dictionary<string, string> FilterProducts(string mediaCode, DateTime startDate, DateTime endDate)
         {
             var applyMediaFilter = new[] { "CPU", "EIA CPU", "EIA MISC" };
 
             var products = GetProducts();
 
-            if (getWithFilters)
+            products = products.Where(x => x.PRD_STRT_DTM <= endDate && x.PRD_END_DTM >= startDate).ToList();
+            if (mediaCode.ToUpper() != "ALL")
             {
-                products = products.Where(x => x.PRD_STRT_DTM <= endDate && x.PRD_END_DTM >= startDate).ToList();
-                if (mediaCode.ToUpper() != "ALL")
-                {
-                    var p = products.Where(x => applyMediaFilter.Contains(x.DEAL_PRD_TYPE.ToUpper())
-                    && !x.MM_MEDIA_CD.ToUpper().Contains(mediaCode.ToUpper()));
+                var p = products.Where(x => applyMediaFilter.Contains(x.DEAL_PRD_TYPE.ToUpper())
+                && !x.MM_MEDIA_CD.ToUpper().Contains(mediaCode.ToUpper()));
 
-                    products = products.Except(p).ToList();
-                }
+                products = products.Except(p).ToList();
             }
 
             var _getSearchStringList = new List<SearchString>();

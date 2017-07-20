@@ -9,8 +9,13 @@
                 <img ng-if="loading" src="/Images/loadingSmall.gif" />
             </div>
             <div class="col-md-5 prodSelectorSearch">
-                <input id="productSearch" class="prod-autocomplete form-control fl input-sm" ng-model="vm.userInput" ng-keyup="$event.keyCode == 13 ? vm.searchProduct() : null" type="text" kendo-autocomplete k-options="vm.productOptions"
-                       k-data-value-field="'PRD_MBR_SID'" />
+                <div class="input-group">
+                    <input id="productSearch" class="prod-autocomplete form-control fl input-sm" ng-model="vm.userInput" ng-keyup="$event.keyCode == 13 ? vm.searchProduct() : null" type="text" kendo-autocomplete k-options="vm.productOptions"
+                           k-data-value-field="'PRD_MBR_SID'" />
+                    <span class="input-group-addon">
+                        <input role="button" type="checkbox" title="Show suggestions within the global filters" ng-model="vm.searchWithinFilters">
+                    </span>
+                </div>
             </div>
             <div class="col-md-2" style="padding-left:0px;padding-top:8px">
                 <button class="btn btn-primary prdBtn" ng-click="vm.searchProduct()">Search</button>
@@ -142,7 +147,7 @@
                     <div class="row" ng-if="vm.searchItems.length > 0" style="padding-left:10px;padding-right:10px;font-size:16px;">
                         <div class="drillDown btn-group btn-group-justified" role="group" aria-label="...">
                             <div class="btn-group" ng-repeat="p in vm.searchItems | orderBy:'name' " role="group">
-                                <button type="button" ng-class="{'noborder':$last}" ng-click="vm.selectsearchItem(p)" class="btn btn-default">{{::p.name}}</button>
+                                <button type="button" title="{{p.name}}" ng-class="{'noborder':$last}" ng-click="vm.selectsearchItem(p)" class="btn btn-default">{{::p.name}}</button>
                             </div>
                         </div>
                     </div>

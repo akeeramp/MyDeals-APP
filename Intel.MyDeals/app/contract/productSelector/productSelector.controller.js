@@ -42,6 +42,7 @@
         vm.getVerticalsUnderMarkLevel = getVerticalsUnderMarkLevel;
         vm.isValidCapDetails = isValidCapDetails;
         vm.drillDownPrd = "Select";
+        vm.searchWithinFilters = true;
         var searchProcessed = false;
         if (pricingTableRow.PROD_INCLDS == undefined || pricingTableRow.PROD_INCLDS == null || pricingTableRow.PROD_INCLDS == "") {
             pricingTableRow.PROD_INCLDS = 'All';
@@ -787,7 +788,7 @@
                                 mediaCode: pricingTableRow.PROD_INCLDS,
                                 startDate: pricingTableRow.START_DT,
                                 endDate: pricingTableRow.END_DT,
-                                getWithFilters: true
+                                getWithFilters: vm.searchWithinFilters
                             };
                             ProductSelectorService.GetSearchString(dto).then(function (response) {
                                 e.success(response.data);
