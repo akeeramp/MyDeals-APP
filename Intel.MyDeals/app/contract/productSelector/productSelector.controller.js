@@ -745,7 +745,7 @@
             };
             ProductSelectorService.GetSuggestions(dto, pricingTableRow.CUST_MBR_SID).then(function (response) {
                 vm.suggestedProducts = response.data;
-                vm.disableSelection = !!response.data[0].WITHOUT_FILTER ? response.data[0].WITHOUT_FILTER : false;
+                vm.disableSelection = (!!response.data[0] && !!response.data[0].WITHOUT_FILTER) ? response.data[0].WITHOUT_FILTER : false;
                 vm.showSuggestions = true;
                 if (response.data.length > 0) {
                     initSuggestionGrid();

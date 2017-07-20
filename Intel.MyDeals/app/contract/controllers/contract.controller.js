@@ -191,8 +191,8 @@
             $scope.contractData._behaviors.isReadOnly["CUST_MBR_SID"] = !$scope.isNewContract;
 
             // In case of existing contract back date reason and text is captured display them
-            $scope.contractData._behaviors.isRequired["BACK_DATE_RSN"] = $scope.contractData.BACK_DATE_RSN !== "";
-            $scope.contractData._behaviors.isHidden["BACK_DATE_RSN"] = $scope.contractData.BACK_DATE_RSN === "";
+            $scope.contractData._behaviors.isRequired["BACK_DATE_RSN"] = $scope.contractData.BACK_DATE_RSN !== "" && $scope.contractData.NO_END_DT_RSN !== undefined;
+            $scope.contractData._behaviors.isHidden["BACK_DATE_RSN"] = !$scope.contractData._behaviors.isRequired["BACK_DATE_RSN"];
 
             // By default set the CUST_ACCPT to pending(99) if new contract
             $scope.contractData.CUST_ACCPT = $scope.contractData.CUST_ACCPT === "" ? 'Pending' : $scope.contractData.CUST_ACCPT;
@@ -949,7 +949,7 @@
             $scope.newPricingTable = util.clone($scope.templates.ObjectTemplates.PRC_TBL.ECAP);
             $scope.newPricingTable.OBJ_SET_TYPE_CD = ""; //reset new PT deal type
             $scope.clearPtTemplateIcons();
-           // $scope.curPricingStrategy = {}; //clears curPricingStrategy
+            // $scope.curPricingStrategy = {}; //clears curPricingStrategy
         }
         $scope.hideEditPricingTableDefaults = function () {
             $scope.isAddPricingTableHidden = true;
@@ -1270,12 +1270,12 @@
                 source = "PRC_TBL";
 
                 if ($scope.spreadDs !== undefined) {
-                	// sync all detail data sources into main grid datasource for a single save
-                	var data = cleanupData($scope.spreadDs._data); // Note: this is a workaround for the "Zero dollar appeaing on product selection then save" bug, which introduces a blank row into $scope.spreadDs._data (the culprit of the bug).
-                	$scope.spreadDs.data(data);
+                    // sync all detail data sources into main grid datasource for a single save
+                    var data = cleanupData($scope.spreadDs._data); // Note: this is a workaround for the "Zero dollar appeaing on product selection then save" bug, which introduces a blank row into $scope.spreadDs._data (the culprit of the bug).
+                    $scope.spreadDs.data(data);
 
-                	// sync all detail data sources into main grid datasource for a single save
-                	$scope.spreadDs.sync();
+                    // sync all detail data sources into main grid datasource for a single save
+                    $scope.spreadDs.sync();
                 }
 
                 sData = $scope.spreadDs === undefined ? undefined : $scope.pricingTableData.PRC_TBL_ROW;
@@ -1381,7 +1381,6 @@
                     }
 
                     sData = $scope.deNormalizeData(util.deepClone(sData));
-
                 }
             }
 
@@ -1529,16 +1528,16 @@
             $scope.clearValidations();
 
             if (!$scope.validateTitles()) {
-            	$scope.setBusy("", "");
-            	topbar.hide();
-            	$scope.isAutoSaving = false;
+                $scope.setBusy("", "");
+                topbar.hide();
+                $scope.isAutoSaving = false;
 
-				var msg = [];
-            	if ($scope.curPricingTable._behaviors.isError["TITLE"]) msg.push("Pricing Table");
-            	if ($scope.curPricingStrategy._behaviors.isError["TITLE"]) msg.push("Pricing Strategy");
+                var msg = [];
+                if ($scope.curPricingTable._behaviors.isError["TITLE"]) msg.push("Pricing Table");
+                if ($scope.curPricingStrategy._behaviors.isError["TITLE"]) msg.push("Pricing Strategy");
 
-            	kendo.alert("The " + msg.join(" and ") + " either must have a title or needs a unique name in order to save.");
-            	return;
+                kendo.alert("The " + msg.join(" and ") + " either must have a title or needs a unique name in order to save.");
+                return;
             }
 
             var data = createEntireContractBase(stateName, $scope._dirtyContractOnly, forceValidation);
@@ -1654,7 +1653,7 @@
                 var sheet = spreadsheet.activeSheet();
                 var rowsCount = sheet._rows._count;
                 var offset = 0;
-                
+
                 if (!!data[0] && !!data[0]._actions) {
                     offset = 1;
                 }
@@ -1766,7 +1765,6 @@
                 data[d].PTR_SYS_INVLD_PRD = $scope.uncompress(data[d].PTR_SYS_INVLD_PRD);
             }
         }
-
 
         $scope.pivotData = function (data) {
             if (!!$scope.curPricingTable && !!$scope.curPricingTable.NUM_OF_TIERS) {
