@@ -191,7 +191,7 @@
             $scope.contractData._behaviors.isReadOnly["CUST_MBR_SID"] = !$scope.isNewContract;
 
             // In case of existing contract back date reason and text is captured display them
-            $scope.contractData._behaviors.isRequired["BACK_DATE_RSN"] = $scope.contractData.BACK_DATE_RSN !== "" && $scope.contractData.NO_END_DT_RSN !== undefined;
+            $scope.contractData._behaviors.isRequired["BACK_DATE_RSN"] = $scope.contractData.BACK_DATE_RSN !== "" && $scope.contractData.BACK_DATE_RSN !== undefined;
             $scope.contractData._behaviors.isHidden["BACK_DATE_RSN"] = !$scope.contractData._behaviors.isRequired["BACK_DATE_RSN"];
 
             // By default set the CUST_ACCPT to pending(99) if new contract
