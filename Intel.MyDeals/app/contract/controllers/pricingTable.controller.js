@@ -256,7 +256,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             root.setBusy("Drawing Grid", "Applying security to the grid.");
             $timeout(function () {
                 root.setBusy("", "");
-            }, 2000);
+            }, 1500);
         }, 10);
     }
 
@@ -345,7 +345,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 }
             }
 
-            //debugger;ope
             //PTR_SYS_PRD
             sheet.range('B' + (rowStart)).value(JSON.stringify(validateSelectedProducts));
             systemModifiedProductInclude = true;
@@ -448,15 +447,20 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         //}
 
         var isProductColumnIncludedInChanges = (range._ref.topLeft.col >= productColIndex) && (range._ref.bottomRight.col <= productColIndex);
+       
+        var isRangeValueEmptyString = (range.value() !== null && range.value().toString().replace(/\s/g, "").length === 0);
 
-        if (isProductColumnIncludedInChanges && range.value() === null) {
-            if (root.spreadDs !== undefined) {
-                var data = root.spreadDs.data();
+		if (isProductColumnIncludedInChanges && (range.value() === null || isRangeValueEmptyString)) {
+
+        	if (root.spreadDs !== undefined) {
+                var data = root.spreadDs.data(); 
 
                 var rowStart = topLeftRowIndex - 2;
                 var rowStop = bottomRightRowIndex - 2;
 
                 if (hasDataOrPurge(data, rowStart, rowStop)) {
+					stealthOnChangeMode = true; // NOTE: We need this here otherwise 2 pop-ups will show on top on one another when we input spaces to delete.
+                	
                     kendo.confirm("Are you sure you want to delete this product and the matching deal?")
                         .then(function () {
                             $timeout(function () {
@@ -478,9 +482,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                     root.saveEntireContract(true);
                                 }
                             },
-                                10);
+                            10);
                         },
-                            function () { });
+                        function () { });
+					stealthOnChangeMode = false;
                 } else {
                 	cleanupData(data);
                 	root.spreadDs.sync();
@@ -501,7 +506,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         else {
             // Trigger only if the changed range contains the product column
 
-            // need to see if an item changed that would cause the PTR_SYS_PRD to be cleared out
+        	// check for empty strings
+        	if (isRangeValueEmptyString) {
+        		return;
+			}
+
+        	// need to see if an item changed that would cause the PTR_SYS_PRD to be cleared out
             var isPtrSysPrdFlushed = false;
             for (var f = 0; f < flushSysPrdFields.length; f++) {
                 var colIndx = root.colToLetter[flushSysPrdFields[f]].charCodeAt(0) - intA;
@@ -541,7 +551,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     function cleanupData(data) {
         // Remove any lingering blank rows from the data
         for (var n = data.length - 1; n >= 0; n--) {
-            if (data[n].DC_ID === null && (data[n].PTR_USER_PRD === null || data[n].PTR_USER_PRD === "")) {
+        	if (data[n].DC_ID === null && (data[n].PTR_USER_PRD === null || data[n].PTR_USER_PRD.toString().replace(/\s/g, "").length === 0)) {
                 data.splice(n, 1);
             } else {
                 if (util.isInvalidDate(data[n].START_DT)) data[n].START_DT = moment(root.contractData["START_DT"]).format("MM/DD/YYYY");
@@ -645,7 +655,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 root.spreadDs.sync();
 
                 sheet.batch(function () {
-                    debugger;
                     // If we skipped spaces, we already collapsed, so remove the extra data outside the range
                     var finalColLetter = String.fromCharCode(intA + (ptTemplate.columns.length - 1));
                     var st = data.length + 1;
@@ -958,7 +967,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     function applyDropDownsData(sheet, myFieldModel, myColumnName, dropdownValuesSheet) {
         // Call API
         if (myFieldModel.opLookupText === "CUST_DIV_NM") {
-            //debugger;
             myFieldModel.opLookupUrl = "/api/Customers/GetCustomerDivisionsByCustNmSid/" + root.contractData.CUST_MBR_SID;
         }
 
@@ -1185,7 +1193,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     var numTiers = root.child.numTiers;
                     var colNum = pasteRef.topLeft.col;
                     if (nonMergedCols.indexOf(colNum) < 0) {
-                        debugger;
                         for (row = 0; row < state.data.length; row++) {
                             for (var t = 0; t < numTiers; t++) {
                                 newData.push(util.deepClone(state.data[row]));
@@ -1195,8 +1202,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         state.data = newData;
                     }
                 }
-
-                //debugger;
 
                 // Non-default Kendo code for paste event
                 for (row = 0; row < state.data.length; row++) {
