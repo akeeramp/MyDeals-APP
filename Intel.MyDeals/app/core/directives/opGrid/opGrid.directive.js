@@ -569,7 +569,6 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
 
                 } else if (col.uiType.toUpperCase() === "EMBEDDEDMULTISELECT") {
 
-                    var compiled;
                     //note: as this is a reusable directive we probably shouldnt put TRGT_RGN specific logic here, but if not here then where?
                     if (options.field.toUpperCase() === "TRGT_RGN") {
                         openTargetRegionModal(container, col.lookupUrl)
@@ -1021,8 +1020,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 var containerDataItem = angular.element(container).scope().dataItem;
 
                 var targetRegionData = {
-                    'TRGT_RGN': containerDataItem.TRGT_RGN,
-                    'GEO_MBR_SID': containerDataItem.GEO_COMBINED,
+                    'TRGT_RGN': angular.element(container).scope().dataItem.TRGT_RGN,
+                    'GEO_MBR_SID': angular.element(container).scope().dataItem.GEO_COMBINED,
                     'LOOKUPURL': lookupURL
                 }
                 var trgtRgnModal = $uibModal.open({
@@ -1033,13 +1032,16 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                     windowClass: 'cap-modal-window',
                     size: 'md',
                     resolve: {
-                        targetRegionData: targetRegionData
+                        targetRegionData: angular.copy(targetRegionData),
                     }
                 });
 
                 trgtRgnModal.result.then(
-                    function (targetRegions) {
-                        containerDataItem.TRGT_RGN = targetRegions;
+                    function (targetRegions) { //returns as an array
+                        angular.element(container).scope().dataItem.TRGT_RGN = targetRegions.join();
+                        //for some reason I can't get the grid to flag these cells as dirty when changing it via modal, so we manually do it below
+                        angular.element(container).scope().dataItem.dirty = true;
+                        $scope.saveCell(angular.element(container).scope().dataItem, "TRGT_RGN")
                     },
                     function () {
                     });

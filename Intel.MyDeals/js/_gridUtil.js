@@ -121,7 +121,7 @@ gridUtils.uiMultiselectArrayControlWrapper = function (passedData, field) {
     tmplt += '     isRequiredCell: dataItem._behaviors.isRequired.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + ', isSavedCell: dataItem._behaviors.isSaved.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + '}">';
     tmplt += '    <div class="vert-center">';
     tmplt += '          ' + displayStr + ' ';
-//    tmplt += '    <span class="ng-binding" ng-bind="(dataItem.' + field + ')"></span>';
+    //tmplt += '    <span class="ng-binding" ng-bind="(dataItem.' + field + ')"></span>';
     tmplt += '    </div>';
     tmplt += '</div>';
 
