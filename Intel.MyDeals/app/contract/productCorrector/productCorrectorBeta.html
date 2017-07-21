@@ -45,7 +45,7 @@
                                     <span class="prdAnchor {{p.status}}" ng-click="vm.clkPrdUsrNm(p)" title="{{p.reason}}">{{:: p.name }}</span>
                                 </span>
                                 <div class="newProd">
-                                    <span ng-show="p.matchName">{{p.matchName}}</span>
+                                    <span id="selectedProducts" ng-show="p.matchName.length > 0" >{{p.matchName.length > 1 ? p.matchName.length + " products" : p.matchName[0]}}</span>
                                     &nbsp;
                                 </div>
                             </li>
@@ -150,7 +150,6 @@
         </div>
     </div>
 </div>
-
 
 <style>
 

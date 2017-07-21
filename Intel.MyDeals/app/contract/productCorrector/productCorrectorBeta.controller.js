@@ -23,7 +23,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
     vm.ProductCorrectorData = util.deepClone(GetProductCorrectorData);
     vm.allDone = false;
     vm.curRowDone = false;
-
+    
     vm.suggestionActions = [
         { text: 'Use Product Selector', primary: true, action: onProductSelector },
         { text: 'Delete Product', action: onDeleteProduct }
@@ -65,7 +65,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
             var item = vm.ProductCorrectorData.ProdctTransformResults[vm.curRowId][p];
             var reason = "Found the Product";
             var status = "Good";
-            var matchName = "";
+            var matchName = [];
             var cnt = 0;
 
             if (!!vm.ProductCorrectorData.DuplicateProducts[vm.curRowId] && !!vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][item]) {
@@ -87,7 +87,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
                     for (var n = 0; n < pItem.length; n++) {
                         name.push(pItem[n].HIER_VAL_NM);
                     }
-                    matchName = name.length === 0 ? "" : name.length === 1 ? name[0] : name.length + " products";
+                    matchName.push(name.length === 0 ? "" : name.length === 1 ? name[0] : name.length + " products");
                 }
             }
 
@@ -100,7 +100,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
                 "matchName": matchName
             });
 
-            if (matchName === "" && status === "Issue") isDirty = true;
+            if (matchName.length === 0 && status === "Issue") isDirty = true;
         }
 
         //Build Datasource
@@ -112,13 +112,31 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
         var curRowLvl = [];
         vm.curRowPrdCnt = 0;
         if (!!vm.ProductCorrectorData.DuplicateProducts[vm.curRowId]) {
+            var flag = false;
             var dataitem = vm.ProductCorrectorData.DuplicateProducts[vm.curRowId];
+            var validDataItem = vm.ProductCorrectorData.ValidProducts[vm.curRowId];
             for (var k in dataitem) {
                 if (dataitem.hasOwnProperty(k)) {
                     vm.curRowPrdCnt++;
                     if (!!dataitem[k]) {
                         for (var r = 0; r < dataitem[k].length; r++) {
+                            if (!!vm.ProductCorrectorData.ValidProducts[vm.curRowId]) {
+                                if (!!vm.ProductCorrectorData.ValidProducts[vm.curRowId][k] && !!vm.ProductCorrectorData.ValidProducts[vm.curRowId][k].length > 0) {                                    
+                                    var result = [];
+                                    result = validDataItem[k].filter(function (value) {
+                                        return value.PRD_MBR_SID == dataitem[k][r].PRD_MBR_SID;
+                                    });
+                                    if (result.length > 0) {
+                                        var flag = true;
+                                        dataitem[k][r]["IS_SEL"] = 'true';
+                                    }                                    
+                                }
+                            }
+                            if (flag == false) {
+                                dataitem[k][r]["IS_SEL"] = false;
+                            }
                             vm.curRowData.push(dataitem[k][r]);
+                            flag = false;
                             if (curRowCategories.indexOf(dataitem[k][r].PRD_CAT_NM) < 0)
                                 curRowCategories.push(dataitem[k][r].PRD_CAT_NM);
                             if (curRowLvl.indexOf(dataitem[k][r].PRD_ATRB_SID) < 0)
@@ -250,12 +268,19 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
             }
         },
         pageSize: 50,
+        sort: {
+            field: "IS_SEL",
+            dir: "desc"
+        },
         schema: {
             model: {
                 id: "PROD_MBR_SID",
                 fields: {
                     "USR_INPUT": {
                         type: "string"
+                    },
+                    "IS_SEL": {
+                        type: "boolean"
                     },
                     "HIER_VAL_NM": {
                         type: "string"
@@ -296,12 +321,14 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
                 hidden: false
             },
             {
-                field: "selected",
+                field: "IS_SEL",
                 filterable: false,
-                sortable: false,
+                sortable: {
+                    initialDirection: "desc"
+                },
                 width: "50px",
                 headerTemplate: "&nbsp;",
-                template: '<input type=\'checkbox\' ng-click="vm.clickProd(#=data.PRD_MBR_SID#, \'#=data.USR_INPUT#\', \'#=data.HIER_VAL_NM#\')" ng-model="selected" class=\'check with-font\' id="prdChk#=data.PRD_MBR_SID#" /><label for="prdChk#=data.PRD_MBR_SID#"></label>'
+                template: '<input type=\'checkbox\' ng-click="vm.clickProd(#=data.PRD_MBR_SID#, \'#=data.USR_INPUT#\', \'#=data.HIER_VAL_NM#\',$event)" ng-model="IS_SEL" class=\'check with-font\' id="prdChk#=data.PRD_MBR_SID#" ng-checked="#=IS_SEL#" checked ="#=IS_SEL#"/><label for="prdChk#=data.PRD_MBR_SID#"></label>'
             },
             {
                 field: "HIER_VAL_NM",
@@ -338,56 +365,130 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
         ]
     }
 
-    vm.clickProd = function (id, lookup, name) {
+    vm.clickProd = function (id, lookup, name, event) {        
         var item = util.findInArrayWhere(vm.curRowProds, "name", lookup);
-        if (!item) return;
+        if (!item) return;    
+        
+        var allMatched = true;
+        var isChecked = event.target.checked;
+        if (isChecked) {
+            //Item added from the selected List
+            item.matchName.push(name);
 
-        item.matchName = name;
+            if (!vm.ProductCorrectorData.DuplicateProducts[vm.curRowId]) return;
+            if (!vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][item.name]) return;
 
-        if (!vm.ProductCorrectorData.DuplicateProducts[vm.curRowId]) return;
-        if (!vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][item.name]) return;
+            var foundItem = util.findInArrayWhere(vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][item.name], "PRD_MBR_SID", id);
+            if (!foundItem) return;
 
-        var foundItem = util.findInArrayWhere(vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][item.name], "PRD_MBR_SID", id);
-        if (!foundItem) return;
+            if (!vm.ProductCorrectorData.ValidProducts[vm.curRowId]) vm.ProductCorrectorData.ValidProducts[vm.curRowId] = {};
+            if (!vm.ProductCorrectorData.ValidProducts[vm.curRowId][item.name]) vm.ProductCorrectorData.ValidProducts[vm.curRowId][item.name] = [];
+            vm.ProductCorrectorData.ValidProducts[vm.curRowId][item.name].push(foundItem);
 
-        if (!vm.ProductCorrectorData.ValidProducts[vm.curRowId]) vm.ProductCorrectorData.ValidProducts[vm.curRowId] = {};
-        if (!vm.ProductCorrectorData.ValidProducts[vm.curRowId][item.name]) vm.ProductCorrectorData.ValidProducts[vm.curRowId][item.name] = [];
-        vm.ProductCorrectorData.ValidProducts[vm.curRowId][item.name].push(foundItem);
+            //vm.curRowData = vm.curRowData.filter(function (obj) {
+            //    return obj.PRD_MBR_SID != foundItem.PRD_MBR_SID;
+            //});
 
-        vm.removeAndFilter(item.name);
+            //foundItem.IS_SEL = true;
+            //vm.curRowData.unshift(foundItem);
+            vm.curRowData.forEach(function (item) {
+                if (item.PRD_MBR_SID == foundItem.PRD_MBR_SID) {
+                    item.IS_SEL = true;
+                }
+            });  
+
+            for (var m = 0; m < vm.curRowProds.length; m++) {
+                if (vm.curRowProds[m].name == lookup && vm.curRowProds[m].matchName.length == 0) {
+                    vm.curRowProds[m].status = "Good";
+                    vm.curRowProds[m].reason = "Found the Product";
+                }
+            }
+
+            if (!!vm.ProductCorrectorData.DuplicateProducts[vm.curRowId]) {
+                if (!!vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][lookup]) {
+                    if (vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][lookup].length == 1) {
+                        vm.removeAndFilter(item.name,"VALID");
+                    }
+                }
+            }
+        }
+        else {
+            //Item deleted from the selected List
+            var delIndex = item.matchName.indexOf(name);
+            item.matchName.splice(delIndex, 1);
+
+            if (!vm.ProductCorrectorData.DuplicateProducts[vm.curRowId]) return;
+            if (!vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][item.name]) return;
+
+            var foundItem = util.findInArrayWhere(vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][item.name], "PRD_MBR_SID", id);
+            if (!foundItem) return;
+
+            if (!vm.ProductCorrectorData.ValidProducts[vm.curRowId]) vm.ProductCorrectorData.ValidProducts[vm.curRowId] = {};
+            if (!vm.ProductCorrectorData.ValidProducts[vm.curRowId][item.name]) vm.ProductCorrectorData.ValidProducts[vm.curRowId][item.name] = [];
+
+            vm.ProductCorrectorData.ValidProducts[vm.curRowId][item.name] = vm.ProductCorrectorData.ValidProducts[vm.curRowId][item.name].filter(function (obj) {
+                return obj.USR_INPUT != lookup;
+            });
+
+            vm.curRowData.forEach(function (item) {
+                if (item.PRD_MBR_SID == foundItem.PRD_MBR_SID) {
+                    item.IS_SEL = false;
+                }
+            });
+
+            for (var m = 0; m < vm.curRowProds.length; m++) {
+                if (vm.curRowProds[m].name == lookup && vm.curRowProds[m].matchName.length == 0) {
+                    vm.curRowProds[m].status = "Issue";
+                    vm.curRowProds[m].reason = "Found multiple matches";
+                }
+            }
+        }
+        //vm.selectRow(vm.curRowIndx);
     }
 
-    vm.removeAndFilter = function (prdName) {
-        // remove
-        if (!!vm.ProductCorrectorData.DuplicateProducts[vm.curRowId]) {
-            delete vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][prdName];
-            vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][prdName] = {};
-        }
-
+    vm.removeAndFilter = function (prdName,mode) {       
+        
         var isEmpty = true;
         for (var r = 0; r < vm.curRowIssues.length; r++) {
-            if (vm.curRowIssues[r].name === prdName) vm.curRowIssues[r].cnt = NaN;
+            if (mode == "INVALID") {
+                if (vm.curRowIssues[r].name === prdName) vm.curRowIssues[r].cnt = NaN;
+            }
+            else {
+                if (vm.curRowIssues[r].name === prdName) vm.curRowIssues[r].cnt = 1;
+            }
             if (!isNaN(vm.curRowIssues[r].cnt) && vm.curRowIssues[r].cnt > 0) isEmpty = false;
         }
 
         // let's purge the local storage if all products are matched
         if (isEmpty) {
             vm.curRowData = [];
+        }        
+        if (mode == "INVALID") {
+            vm.applyFilterAndGrouping();
+
+            vm.selectRow(vm.curRowIndx);
         }
-
-        vm.applyFilterAndGrouping();
-
-        vm.selectRow(vm.curRowIndx);
+        
+        if (mode == "INVALID") {
+            if (!!vm.ProductCorrectorData.InValidProducts[vm.curRowId]) {
+                var inxInvalid = vm.ProductCorrectorData.InValidProducts[vm.curRowId].indexOf(prdName);
+                if (inxInvalid > -1) {
+                    vm.ProductCorrectorData.InValidProducts[vm.curRowId].splice(inxInvalid, 1);
+                }
+            }
+        }
 
         var allMatched = true;
         for (var m = 0; m < vm.curRowProds.length; m++) {
-            if (vm.curRowProds[m].matchName === "" && vm.curRowProds[m].status === "Issue") allMatched = false;
+            if (vm.curRowProds[m].matchName.length == 0 && vm.curRowProds[m].status === "Issue") allMatched = false;
         }
 
         if (allMatched && vm.curRowIndx <= vm.numIssueRows) {
             if (!vm.nextAvailRow()) {
                 // no more work to do
                 vm.allDone = true;
+                vm.curRowData = [];
+                vm.curRowProds = [];
             }
         }
     }
@@ -434,7 +535,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
             resolve: {
                 productSelectionLevels: ['ProductSelectorService', function (ProductSelectorService) {
                     var dtoDateRange = {
-                        startDate: pricingTableRow.START_DT, endDate: pricingTableRow.END_DT
+                        startDate: moment(pricingTableRow.START_DT).format("l"), endDate: moment(pricingTableRow.END_DT).format("l")
                     };
                     return ProductSelectorService.GetProductSelectorWrapper(dtoDateRange).then(function (response) {
                         return response;
@@ -463,19 +564,18 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
 
                     angular.forEach(validateSelectedProducts[key], function (product) {
                         vm.ProductCorrectorData.ValidProducts[vm.curRowId][vm.invalidProdName].push(product);
+                        //vm.curRowProds[m].matchName.push(product.HIER_VAL_NM);
                     });
                 }
-
-                //vm.initProducts();
-                vm.removeAndFilter(vm.invalidProdName);
-
-                //vm.selectRow(vm.curRowId);
+                
+                vm.removeAndFilter(vm.invalidProdName,"INVALID");
+                
                 vm.invalidProdName = '';
             });
     }
 
     vm.clkPrdUsrNm = function (dataItem) {
-        if (dataItem.matchName === "") {
+        if (dataItem.matchName.length == 0) {
             // clear filters
             angular.forEach(vm.curRowIssues, function (value, key) {
                 key.selected = false;
@@ -494,7 +594,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
             vm.applyFilterAndGrouping();
         } else {
             // remove matched settings
-            dataItem.matchName = "";
+            dataItem.matchName = [];
 
             vm.allDone = false;
 
@@ -623,6 +723,8 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
 
     // Dismiss the Modal popup by clicking Cancel button
     vm.cancel = function () {
+        vm.curRowData = [];
+        vm.curRowProds = [];
         $uibModalInstance.close(GetProductCorrectorData);
     }
 
@@ -697,6 +799,15 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
                 } else {
                     var foundItems = false;
                     for (var k in vm.ProductCorrectorData.DuplicateProducts[key]) {
+                        //If any Item present in Valid List Delete from Duplicate
+                        if (!!vm.ProductCorrectorData.ValidProducts[key]) {
+                            if (!!vm.ProductCorrectorData.ValidProducts[key][k]) {
+                                if (vm.ProductCorrectorData.ValidProducts[key][k].length > 0) {
+                                    delete vm.ProductCorrectorData.DuplicateProducts[key][k];
+                                }                                
+                            }                            
+                        }
+                        
                         var item = vm.ProductCorrectorData.DuplicateProducts[key][k];
                         if (Array.isArray(item) && item.length > 0) foundItems = true;
                     }
@@ -707,10 +818,23 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
 
             //TODO:Check with Phil, if this fix not required comment these lines
             // If valid products contains invalid product name remove from  invalid product
+            //var cntIterator = vm.ProductCorrectorData.InValidProducts[key].length;
             if (!!vm.ProductCorrectorData.InValidProducts[key]) {
-                for (var j = 0; j < vm.ProductCorrectorData.InValidProducts[key].length; j++) {
+                for (var j = 0; j < vm.ProductCorrectorData.InValidProducts[key].length; j++) {                   
+
                     var foundItems = false;
                     prodName = vm.ProductCorrectorData.InValidProducts[key][j];
+                    ////If any Item present in Valid List Delete from Duplicate
+                    //if (!!vm.ProductCorrectorData.ValidProducts[key]) {
+                    //    if (!!vm.ProductCorrectorData.ValidProducts[key][prodName]) {
+                    //        if (vm.ProductCorrectorData.ValidProducts[key][prodName].length > 0) {
+                    //            var inxInvalid = vm.ProductCorrectorData.InValidProducts[key].indexOf(prodName);
+                    //            if (inxInvalid > -1) {
+                    //                vm.ProductCorrectorData.InValidProducts[key].splice(inxInvalid, 1);
+                    //            }                                
+                    //        }
+                    //    }
+                    //}
                     if (!!vm.ProductCorrectorData.ValidProducts[key]) {
                         var item = vm.ProductCorrectorData.ValidProducts[key][prodName];
                         if (Array.isArray(item) && item.length > 0) foundItems = true;
