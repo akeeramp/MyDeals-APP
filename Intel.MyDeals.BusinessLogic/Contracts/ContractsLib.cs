@@ -659,7 +659,7 @@ namespace Intel.MyDeals.BusinessLogic
                             object colVal = new object();
                             row.TryGetValue(col.Key, out colVal);
 
-                            if (colVal == null || String.IsNullOrEmpty(colVal.ToString()))
+                            if (colVal == null || String.IsNullOrWhiteSpace(colVal.ToString()))
                             {
                                 myContainer = AddErrorToPtrValidationContainer(myContainer, rowIndex, col.Key, col.Value.label + " is required.");
                             }

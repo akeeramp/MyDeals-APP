@@ -71,7 +71,7 @@ namespace Intel.MyDeals.Controllers.API
 		{
 			foreach(ProductCategory category in categoriesList)
 			{
-				if (category.ACTV_IND && (String.IsNullOrEmpty(category.DEAL_PRD_TYPE) || String.IsNullOrEmpty(category.PRD_CAT_NM)))
+				if (category.ACTV_IND && (String.IsNullOrWhiteSpace(category.DEAL_PRD_TYPE) || String.IsNullOrWhiteSpace(category.PRD_CAT_NM)))
 				{
 					throw new HttpResponseException(HttpStatusCode.InternalServerError);  // responds with a simple status code for ajax call to consume.
 				}

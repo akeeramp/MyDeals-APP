@@ -273,7 +273,7 @@
         	var isValid = true;
 			
         	if (dataItem['ACTV_IND'] == true){				
-        		if (dataItem['DEAL_PRD_TYPE'] == "") {
+        		if (dataItem['DEAL_PRD_TYPE'].toString().replace(/\s/g, "").length === 0) {
         			// Display custom validation message
         			flagBehavior(dataItem, "isError", "DEAL_PRD_TYPE", true);        			
         			isValid = false;
@@ -281,7 +281,7 @@
 					// Hide flag in case it was invalid previously
         			flagBehavior(dataItem, "isError", "DEAL_PRD_TYPE", false);
 				}
-        		if (dataItem['PRD_CAT_NM'] == "") {
+        		if (dataItem['PRD_CAT_NM'].toString().replace(/\s/g, "").length === 0) {
         			// Display custom validation message
         			flagBehavior(dataItem, "isError", "PRD_CAT_NM", true);
         			isValid = false;
@@ -295,14 +295,14 @@
 
 
 		// HACK: Updates the model with the correct _behavior flag for depandant cell validation hack
-        function flagBehavior(dataItem, $event, field, isTrue) {
+        function flagBehavior(dataItem, $event, field, isError) {
         	if (dataItem._behaviors === undefined) {
         		dataItem._behaviors = {};
         	}
         	if (dataItem._behaviors['isError'] === undefined) {
         		dataItem._behaviors['isError'] = {};
         	}
-        	dataItem._behaviors["isError"][field] = isTrue;
+        	dataItem._behaviors["isError"][field] = isError;
 		}
 
 
@@ -315,7 +315,7 @@
     	// even if that cell becomes valid through another cell's update. Retriggering validation within the dependee
     	// cell's validation method will also not work as Kendo will not update the dependee's value in model until 
         // after the dependee cell is validated.
-
+		 
 		// <param> Input: the input element being altered 
 		// <returns> True if the column is valid, false if it is invalid
         function showValidationFlags(input, e)
@@ -327,16 +327,16 @@
 			if ((dataItem.ACTV_IND && !input.is("[name='ACTV_IND']")) || (input.is("[name='ACTV_IND']") && input[0].checked)) {
 				// Deal Prodct Type
 				if (input.is("[name='DEAL_PRD_TYPE']")) {
-					flagBehavior(dataItem, "isError", "DEAL_PRD_TYPE", (input.val() == ""));
+					flagBehavior(dataItem, "isError", "DEAL_PRD_TYPE", (input.val().toString().replace(/\s/g, "").length === 0));
 				}
 				// Product Category Name
 				else if (input.is("[name='PRD_CAT_NM']")) {
-					flagBehavior(dataItem, "isError", "PRD_CAT_NM", (input.val() == ""));
+					flagBehavior(dataItem, "isError", "PRD_CAT_NM", (input.val().toString().replace(/\s/g, "").length === 0));
 				}
 				// Active Indicator
 				else if (input.is("[name='ACTV_IND']") && input[0].checked) {
-					flagBehavior(dataItem, "isError", "DEAL_PRD_TYPE", (dataItem.DEAL_PRD_TYPE == ""));
-					flagBehavior(dataItem, "isError", "PRD_CAT_NM", (dataItem.PRD_CAT_NM == ""));
+					flagBehavior(dataItem, "isError", "DEAL_PRD_TYPE", (dataItem.DEAL_PRD_TYPE.toString().replace(/\s/g, "").length === 0));
+					flagBehavior(dataItem, "isError", "PRD_CAT_NM", (dataItem.PRD_CAT_NM.toString().replace(/\s/g, "").length === 0));
 				} 
 			} else {
 				// Clear flags
