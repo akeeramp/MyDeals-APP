@@ -82,7 +82,7 @@ function DashboardController($scope, $uibModal, $timeout, $window, $localStorage
     }
 
     $scope.gridsterOptions = {
-        margins: [20, 20],
+        margins: [20, 10], // TODO: the resize bug will show in browser resoltuions of around 1558x742. We still need to fix this
         columns: 18,
         mobileModeEnabled: true,
         draggable: {
