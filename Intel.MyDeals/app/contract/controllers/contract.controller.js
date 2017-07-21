@@ -2521,7 +2521,7 @@
         function cleanupData(data) {
             // Remove any lingering blank rows from the data
             for (var n = data.length - 1; n >= 0; n--) {
-                if (data[n].DC_ID === null && (data[n].PTR_USER_PRD === null || data[n].PTR_USER_PRD === "")) {
+            	if (data[n].DC_ID === null && (data[n].PTR_USER_PRD === null || data[n].PTR_USER_PRD.toString().replace(/\s/g, "").length === 0)) {
                     data.splice(n, 1);
                 } else {
                     if (util.isInvalidDate(data[n].START_DT)) data[n].START_DT = moment($scope.contractData["START_DT"]).format("MM/DD/YYYY");
