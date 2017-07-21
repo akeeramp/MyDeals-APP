@@ -696,6 +696,7 @@
             }];
 
             ProductSelectorService.GetProductDetails(data, pricingTableRow.CUST_MBR_SID).then(function (response) {
+                vm.selectPath(0);
                 vm.disableSelection = false;
                 if (!!response.data[0] && response.data[0].WITHOUT_FILTER) {
                     vm.suggestedProducts = response.data;
