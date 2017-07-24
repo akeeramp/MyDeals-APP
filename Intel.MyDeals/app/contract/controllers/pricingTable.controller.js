@@ -478,7 +478,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                         disableRange(sheet.range("F" + n + ":Z" + (n + numToDel + numToDel)));
                                     }, 10);
 
-                                    clearUndoHistory();
+                                    clearUndoHistory(); 
                                     root.saveEntireContract(true);
                                 }
                             },
@@ -821,7 +821,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             sheet.range("E" + row + ":E" + row).color("#FC4C02").bold(true);
                             //sheet.range("E" + row + ":E" + row).borderLeft({ size: 6, color: "#FC4C02" });
                         } else if (!!data[key].PTR_SYS_PRD) { // validated and passed
-                            sheet.range("E" + row + ":E" + row).color("#C4D600").bold(false);
+                        	sheet.range("E" + row + ":E" + row).color("#9bc600").bold(true);
                             //sheet.range("E" + row + ":E" + row).borderLeft({ size: 6, color: "#C4D600" });
                         } else { // not validated
                             sheet.range("E" + row + ":E" + row).color("#000000").bold(false);
