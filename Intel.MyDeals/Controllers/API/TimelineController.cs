@@ -25,7 +25,7 @@ namespace Intel.MyDeals.Controllers.API
         public List<Timeline> GetTimelineDetails(int ID, int OBJ_TYPE)
         {
             return SafeExecutor(() => _timelineLib.GetTimelineDetails(ID, OBJ_TYPE)
-                , $"Unable to get Contract {ID}"
+                , $"Unable to get Contract Timeline {ID}"
             );            
         }
     }

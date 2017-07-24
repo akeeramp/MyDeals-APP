@@ -1,14 +1,20 @@
 .showMore {
     cursor: pointer;
-    font-size: 32px;
+    font-size: 12px;
     font-weight: 800;
     width: 105px;
     text-align: center;
-    margin-top: -28px;
     position: absolute;
+    padding: 3px 6px;
+    background: #00AEEF;
+    color: #ffffff;
+    margin-top: 5px;
 }
 .clearFilter > a:hover{
     text-decoration:none;
+}
+.showMore:hover {
+    text-decoration: none;
 }
 .panel-group {
     margin-bottom: 0px;
@@ -34,10 +40,6 @@
         -webkit-transition: all 0.8s ease-in-out 0s;*/
     border-radius: 5px;
 }
-#secContainer {
-    overflow: auto !important;
-}
-
 .item {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -80,30 +82,74 @@
     -webkit-box-flex: 1;
     -ms-flex-positive: 1;
     flex-grow: 1;
-    padding-bottom: 10px;
-    padding-top: 10px;
+    padding-bottom: 5px;
+    padding-top: 5px;
 }
 .item .details > div {
-    border: 1px solid #232b50;
+    border: 2px solid #cccccc;
     border-radius: 0.5em;
     padding: 0.3em;
+    float: left;
+    width: 100%;
 }
 .item .details > div h1 {
-    color: #ffffff;
-    font-size: 12px;
+    color: #003C71;
+    font-size: 14px;
     font-weight: 800;
     margin: 0;
     padding: 0.2em 0 0.2em 0;
-    letter-spacing: 0.1em;
     margin-top: 5px;
-    background: #0071c5;
-    transform: skew(-20deg);
+    float: left;
+    width: 50%;
+    text-align: left;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.timelineText {
+    color: #003C71;
+    font-size: 16px;
+    font-weight: 800;
+    margin: 0;
+    padding: 0.2em 0 0.2em 0;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.timelineText a {
+    color: #00AEEF !important;
+}
+.capitalize {
+    text-transform: capitalize;
+}
+.timelineText > a {
+    cursor: pointer;
+}
+.updateBy {
+    color: #0071c5;
+    font-size: 12px;
+    font-weight: 800;
+    margin: 0;
+    margin-top: 5px;
+    float: right;
+    width: 50%;
+    text-align: right;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 .item .details > div p {
     margin: 0;
     padding: 0;
     line-height: 150%;
     margin-top: 5px;
+    margin: 0;
+    padding: 0;
+    line-height: 150%;
+    margin-top: 5px;
+    color: rgb(0, 113, 197);
+    font-weight: 800;
+    font-size: 12px;
 }
 .item .details::before {
     content: '';
@@ -114,4 +160,20 @@
     top: 0;
     left: -4.35em;
     z-index: -1;
+}
+.atbrDetails {
+    float: left;
+    width: 60%;
+    text-align: left;
+}
+.atbrDate {
+    float: right;
+    width: 40%;
+    text-align: right;
+    color: #0071c5;
+    font-size: 12px;
+    font-weight: 800;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }

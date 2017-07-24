@@ -19,6 +19,7 @@ function timelineDetails($compile, dataService, $timeout, logger, $linq) {
             $scope.timelineData = [];
             $scope.approverList = [];
             $scope.selectedObj = [];
+            $scope.btnText = 'Show more ';
             $scope.numberOfRecrods = 5;
             if (!!$scope.opId) {
                 $scope.loading = true;
@@ -49,8 +50,16 @@ function timelineDetails($compile, dataService, $timeout, logger, $linq) {
                     });
             }
 
-            $scope.showAll = function () {
-                $scope.numberOfRecrods = $scope.timelineData.length;
+            $scope.showAll = function (recordCnt) {
+                if (recordCnt == 5 && $scope.timelineData.length > 5) {
+                    $scope.btnText = 'Show less ';
+                    $scope.numberOfRecrods = $scope.timelineData.length;
+                }
+                else {
+                    $scope.btnText = 'Show more ';
+                    $scope.numberOfRecrods = 5;
+                }                    
+                
             }
 
             $scope.approverChange = function (data) {
