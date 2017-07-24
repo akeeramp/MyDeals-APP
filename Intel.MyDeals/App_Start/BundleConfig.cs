@@ -83,7 +83,8 @@ namespace Intel.MyDeals
                 , "~/app/core/directives/gridCell/percentBar.directive.js"
                 , "~/app/core/directives/gridStatusBoard/contractStatusBoard.directive.js"
                 , "~/app/core/directives/gridStatusBoard/gridStatusBoard.directive.js"
-                , "~/app/core/directives/messageBoard/messageBoard.directive.js"
+				, "~/app/core/directives/loadingPanel/loadingPanel.directive.js"
+				, "~/app/core/directives/messageBoard/messageBoard.directive.js"
                 , "~/app/core/directives/opGrid/opGrid.directive.js"
                 , "~/app/core/directives/opPopover/opPopover.directive.js"
                 , "~/app/core/directives/timeline/timelineDetails.directive.js"
@@ -209,6 +210,7 @@ namespace Intel.MyDeals
                 "~/Content/styles.css",
                 "~/css/_controls.css",
                 "~/css/_contractManager.css",
+				"~/app/core/directives/loadingPanel/loadingPanel.directive.css",
                 "~/css/_dashboard.css"
                 ));
         }

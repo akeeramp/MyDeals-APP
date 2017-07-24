@@ -15,6 +15,7 @@ function gridStatusBoard($compile, objsetService, $timeout) {
         templateUrl: '/app/core/directives/gridStatusBoard/gridStatusBoard.directive.html',
         controller: ['$scope', '$http', function ($scope, $http) {
 
+        	$scope.isLoaded = false;
             $scope.stages = [];
             $scope.initDsLoaded = false;
             $scope.stageCnt = 0;
@@ -76,6 +77,7 @@ function gridStatusBoard($compile, objsetService, $timeout) {
                     $scope.$apply();
 
                     $scope.initDsLoaded = true;
+                    $scope.isLoaded = true;
                 }
 
             });
