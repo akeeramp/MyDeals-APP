@@ -410,6 +410,7 @@
     <Content Include="app\core\directives\gridStatusBoard\contractStatusBoard.directive.js" />
     <Content Include="app\core\directives\gridStatusBoard\gridStatusBoard.directive.html" />
     <Content Include="app\core\directives\gridStatusBoard\gridStatusBoard.directive.js" />
+    <Content Include="css\_loadingPanel.directive.css" />
     <Content Include="app\core\directives\messageBoard\messageBoard.directive.html" />
     <Content Include="app\core\directives\messageBoard\messageBoard.directive.js" />
     <Content Include="app\core\directives\moveablemodal.directive.js" />
@@ -421,6 +422,7 @@
     <Content Include="app\core\directives\opPopover\opPopover.directive.js" />
     <Content Include="app\core\directives\timeline\timelineDetails.directive.html" />
     <Content Include="app\core\directives\timeline\timelineDetails.directive.js" />
+    <Content Include="app\core\directives\loadingPanel\loadingPanel.directive.html" />
     <Content Include="app\dashboard\config\widget.config.js" />
     <Content Include="app\dashboard\controllers\dashboard.controller.js" />
     <Content Include="app\dashboard\views\addWidget.html" />
@@ -1263,6 +1265,7 @@
     <Content Include="egg\mb\Content\fonts\Super Mario Bros.ttf" />
     <Content Include="app\dashboard\views\portal.html" />
     <Content Include="nvd3.license.md" />
+    <Content Include="app\core\directives\loadingPanel\loadingPanel.directive.js" />
     <None Include="Properties\PublishProfiles\Dev.pubxml" />
     <Content Include="Scripts\Angular\1.5.8\angular.min.js.map" />
     <Content Include="Scripts\d3\LICENSE" />
