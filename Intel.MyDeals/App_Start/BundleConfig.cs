@@ -210,7 +210,7 @@ namespace Intel.MyDeals
                 "~/Content/styles.css",
                 "~/css/_controls.css",
                 "~/css/_contractManager.css",
-				"~/app/core/directives/loadingPanel/loadingPanel.directive.css",
+				"~/css/_loadingPanel.directive.css",
                 "~/css/_dashboard.css"
                 ));
         }
