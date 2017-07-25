@@ -2,9 +2,9 @@
     .module('app.admin')
     .controller('ProductCorrectorBetaModalController', ProductCorrectorBetaModalController);
 
-ProductCorrectorBetaModalController.$inject = ['$filter', '$scope', '$uibModalInstance', 'GetProductCorrectorData', 'ProductSelectorService', 'productCorrectorService', 'contractData', 'RowId', 'ProductRows', '$linq', '$timeout', 'logger', 'gridConstants', '$uibModal', 'CustSid'];
+ProductCorrectorBetaModalController.$inject = ['$compile', '$filter', '$scope', '$uibModalInstance', 'GetProductCorrectorData', 'ProductSelectorService', 'productCorrectorService', 'contractData', 'RowId', 'ProductRows', '$linq', '$timeout', 'logger', 'gridConstants', '$uibModal', 'CustSid'];
 
-function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance, GetProductCorrectorData, ProductSelectorService, productCorrectorService, contractData, RowId, ProductRows, $linq, $timeout, logger, gridConstants, $uibModal, CustSid) {
+function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModalInstance, GetProductCorrectorData, ProductSelectorService, productCorrectorService, contractData, RowId, ProductRows, $linq, $timeout, logger, gridConstants, $uibModal, CustSid) {
     var vm = this;
     vm.totRows = 0;
     vm.curRowIndx = 0;
@@ -23,7 +23,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
     vm.ProductCorrectorData = util.deepClone(GetProductCorrectorData);
     vm.allDone = false;
     vm.curRowDone = false;
-    
+
     vm.suggestionActions = [
         { text: 'Use Product Selector', primary: true, action: onProductSelector },
         { text: 'Delete Product', action: onDeleteProduct }
@@ -121,7 +121,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
                     if (!!dataitem[k]) {
                         for (var r = 0; r < dataitem[k].length; r++) {
                             if (!!vm.ProductCorrectorData.ValidProducts[vm.curRowId]) {
-                                if (!!vm.ProductCorrectorData.ValidProducts[vm.curRowId][k] && !!vm.ProductCorrectorData.ValidProducts[vm.curRowId][k].length > 0) {                                    
+                                if (!!vm.ProductCorrectorData.ValidProducts[vm.curRowId][k] && !!vm.ProductCorrectorData.ValidProducts[vm.curRowId][k].length > 0) {
                                     var result = [];
                                     result = validDataItem[k].filter(function (value) {
                                         return value.PRD_MBR_SID == dataitem[k][r].PRD_MBR_SID;
@@ -129,7 +129,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
                                     if (result.length > 0) {
                                         var flag = true;
                                         dataitem[k][r]["IS_SEL"] = 'true';
-                                    }                                    
+                                    }
                                 }
                             }
                             if (flag == false) {
@@ -182,7 +182,16 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
         if (!bypassFilter) vm.applyFilterAndGrouping();
     }
 
-    vm.clickFilter = function () {
+    vm.invalidItem = "";
+    vm.clickFilter = function (item) {
+        vm.invalidItem = "";
+        if (!!item && item.cnt <= 0) {
+            angular.forEach(vm.curRowIssues, function (value, key) {
+                value.selected = false;
+            });
+            item.selected = true;
+            vm.invalidItem = item.name;
+        }
         vm.applyFilterAndGrouping();
     }
 
@@ -302,6 +311,21 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
         }
     });
 
+    function gridDataBound(e) {
+        var grid = e.sender;
+        var data = grid.dataSource.data();
+        var filters = grid.dataSource.filter();
+        var query = new kendo.data.Query(data);
+        var items = query.filter(filters).data;
+        if (items.length === 0 && vm.invalidItem !== "") {
+            var colCount = grid.columns.length;
+            var el = $(e.sender.wrapper)
+                .find('tbody')
+                .append("<tr class='kendo-data-row'><td colspan=" + colCount + " class='no-data'><span class=\"grpTitle\">{{vm.invalidItem}}</span>  <i class='intelicon-arrow-back-left skyblue pl10'></i> <span class='grpDesc'>Can't find what you are looking for?  <span class='or'>Use the</span> </span><span class='lnk' ng-click='vm.launchSelector(vm.invalidItem, false)'>Product Selector</span><span class='or'> OR </span><span class='lnk' ng-click='vm.removeProd(vm.invalidItem)'>Remove Product</span></td></tr>");
+            $compile(el)($scope);
+        }
+    };
+
     vm.gridOptionsPotential = {
         dataSource: vm.dataSourceProduct,
         filterable: gridConstants.filterable,
@@ -312,6 +336,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
         pageable: {
             pageSizes: gridConstants.pageSizes
         },
+        dataBound: gridDataBound,
         enableHorizontalScrollbar: true,
         columns: [
             {
@@ -365,10 +390,10 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
         ]
     }
 
-    vm.clickProd = function (id, lookup, name, event) {        
+    vm.clickProd = function (id, lookup, name, event) {
         var item = util.findInArrayWhere(vm.curRowProds, "name", lookup);
-        if (!item) return;    
-        
+        if (!item) return;
+
         var allMatched = true;
         var isChecked = event.target.checked;
         if (isChecked) {
@@ -395,7 +420,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
                 if (item.PRD_MBR_SID == foundItem.PRD_MBR_SID) {
                     item.IS_SEL = true;
                 }
-            });  
+            });
 
             for (var m = 0; m < vm.curRowProds.length; m++) {
                 if (vm.curRowProds[m].name == lookup && vm.curRowProds[m].matchName.length == 0) {
@@ -407,7 +432,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
             if (!!vm.ProductCorrectorData.DuplicateProducts[vm.curRowId]) {
                 if (!!vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][lookup]) {
                     if (vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][lookup].length == 1) {
-                        vm.removeAndFilter(item.name,"VALID");
+                        vm.removeAndFilter(item.name, "VALID");
                     }
                 }
             }
@@ -446,8 +471,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
         //vm.selectRow(vm.curRowIndx);
     }
 
-    vm.removeAndFilter = function (prdName,mode) {       
-        
+    vm.removeAndFilter = function (prdName, mode) {
         var isEmpty = true;
         for (var r = 0; r < vm.curRowIssues.length; r++) {
             if (mode == "INVALID") {
@@ -462,13 +486,13 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
         // let's purge the local storage if all products are matched
         if (isEmpty) {
             vm.curRowData = [];
-        }        
+        }
         if (mode == "INVALID") {
             vm.applyFilterAndGrouping();
 
             vm.selectRow(vm.curRowIndx);
         }
-        
+
         if (mode == "INVALID") {
             if (!!vm.ProductCorrectorData.InValidProducts[vm.curRowId]) {
                 var inxInvalid = vm.ProductCorrectorData.InValidProducts[vm.curRowId].indexOf(prdName);
@@ -567,28 +591,27 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
                         //vm.curRowProds[m].matchName.push(product.HIER_VAL_NM);
                     });
                 }
-                
-                vm.removeAndFilter(vm.invalidProdName,"INVALID");
-                
+
+                vm.removeAndFilter(vm.invalidProdName, "INVALID");
+
                 vm.invalidProdName = '';
             });
     }
 
     vm.clkPrdUsrNm = function (dataItem) {
+        if (dataItem.status === "Good") return;
+        vm.invalidItem = "";
+        if (!!dataItem && dataItem.cnt <= 0) {
+            vm.invalidItem = dataItem.name;
+        }
         if (dataItem.matchName.length == 0) {
             // clear filters
             angular.forEach(vm.curRowIssues, function (value, key) {
-                key.selected = false;
+                value.selected = false;
+                if (dataItem.name == value.name) {
+                    value.selected = true;
+                }
             });
-
-            // filter this product
-            var scope = angular.element(document.getElementById('fltrPrdChk' + dataItem.id)).scope();
-            if (!scope) {
-                // go to product selector
-                vm.suggestAction(dataItem);
-                return;
-            }
-            scope.$parent.item.selected = true;
 
             // perform filter
             vm.applyFilterAndGrouping();
@@ -658,6 +681,11 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
                 delete vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][prdNm];
             }
 
+            // delete from valid if exists
+            if (!!vm.ProductCorrectorData.ValidProducts[vm.curRowId] && !!vm.ProductCorrectorData.ValidProducts[vm.curRowId][prdNm]) {
+                delete vm.ProductCorrectorData.ValidProducts[vm.curRowId][prdNm];
+            }
+
             // delete from invalid if exists
             var delItem = vm.ProductCorrectorData.InValidProducts[vm.curRowId];
             for (var i = 0; i < delItem.length; i++) {
@@ -688,8 +716,6 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
             }
 
             vm.selectRow(vm.curRowIndx);
-
-            //alert('TODO: delete from corrector and spreadsheet');
         });
     }
 
@@ -804,10 +830,10 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
                             if (!!vm.ProductCorrectorData.ValidProducts[key][k]) {
                                 if (vm.ProductCorrectorData.ValidProducts[key][k].length > 0) {
                                     delete vm.ProductCorrectorData.DuplicateProducts[key][k];
-                                }                                
-                            }                            
+                                }
+                            }
                         }
-                        
+
                         var item = vm.ProductCorrectorData.DuplicateProducts[key][k];
                         if (Array.isArray(item) && item.length > 0) foundItems = true;
                     }
@@ -820,8 +846,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
             // If valid products contains invalid product name remove from  invalid product
             //var cntIterator = vm.ProductCorrectorData.InValidProducts[key].length;
             if (!!vm.ProductCorrectorData.InValidProducts[key]) {
-                for (var j = 0; j < vm.ProductCorrectorData.InValidProducts[key].length; j++) {                   
-
+                for (var j = 0; j < vm.ProductCorrectorData.InValidProducts[key].length; j++) {
                     var foundItems = false;
                     prodName = vm.ProductCorrectorData.InValidProducts[key][j];
                     ////If any Item present in Valid List Delete from Duplicate
@@ -831,7 +856,7 @@ function ProductCorrectorBetaModalController($filter, $scope, $uibModalInstance,
                     //            var inxInvalid = vm.ProductCorrectorData.InValidProducts[key].indexOf(prodName);
                     //            if (inxInvalid > -1) {
                     //                vm.ProductCorrectorData.InValidProducts[key].splice(inxInvalid, 1);
-                    //            }                                
+                    //            }
                     //        }
                     //    }
                     //}

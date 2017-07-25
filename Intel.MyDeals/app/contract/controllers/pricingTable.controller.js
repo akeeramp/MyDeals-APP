@@ -142,7 +142,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
     // Generates options that kendo's html directives will use
     function generateKendoSpreadSheetOptions() {
-
         pricingTableData.data.PRC_TBL_ROW = root.pivotData(pricingTableData.data.PRC_TBL_ROW);
 
         var mergedCells = [];
@@ -335,18 +334,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     }
 
     function updateSpreadSheetFromSelector(productSelectorOutput, sheet, rowStart) {
-        var validateSelectedProducts = productSelectorOutput.validateSelectedProducts;
-
+        var validatedSelectedProducts = productSelectorOutput.validateSelectedProducts;
         if (!productSelectorOutput.splitProducts) {
-            var contractProducts = "";
-            for (var key in validateSelectedProducts) {
-                if (validateSelectedProducts.hasOwnProperty(key)) {
-                    contractProducts = contractProducts === "" ? key : contractProducts + "," + key;
-                }
-            }
+            var contractProducts = updateUserInput(validatedSelectedProducts);
 
             //PTR_SYS_PRD
-            sheet.range('B' + (rowStart)).value(JSON.stringify(validateSelectedProducts));
+            sheet.range('B' + (rowStart)).value(JSON.stringify(validatedSelectedProducts));
             systemModifiedProductInclude = true;
             sheet.range(root.colToLetter['PTR_USER_PRD'] + (rowStart)).value(contractProducts);
             systemModifiedProductInclude = false;
@@ -363,11 +356,20 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         } else {
             var initRow = rowStart;
             var row = initRow;
-
-            for (var key in validateSelectedProducts) {
-                if (validateSelectedProducts.hasOwnProperty(key)) {
+            var singleProductJSON = {}
+            for (var key in validatedSelectedProducts) {
+                if (validatedSelectedProducts[key].length > 1) {
+                    angular.forEach(validatedSelectedProducts[key], function (value, i) {
+                        singleProductJSON[value.HIER_VAL_NM] = value;
+                    });
+                } else {
+                    singleProductJSON[validatedSelectedProducts[key].HIER_VAL_NM] = validatedSelectedProducts[key];
+                }
+            }
+            for (var key in singleProductJSON) {
+                if (singleProductJSON.hasOwnProperty(key)) {
                     var validJSON = {};
-                    validJSON[key] = validateSelectedProducts[key];
+                    validJSON[key] = singleProductJSON[key];
                     // can't use colToLetter for PTR_SYS_PRD because it is hidden
                     sheet.range('B' + (row)).value(JSON.stringify(validJSON));
                     systemModifiedProductInclude = true;
@@ -447,20 +449,19 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         //}
 
         var isProductColumnIncludedInChanges = (range._ref.topLeft.col >= productColIndex) && (range._ref.bottomRight.col <= productColIndex);
-       
+
         var isRangeValueEmptyString = (range.value() !== null && range.value().toString().replace(/\s/g, "").length === 0);
 
-		if (isProductColumnIncludedInChanges && (range.value() === null || isRangeValueEmptyString)) {
-
-        	if (root.spreadDs !== undefined) {
-                var data = root.spreadDs.data(); 
+        if (isProductColumnIncludedInChanges && (range.value() === null || isRangeValueEmptyString)) {
+            if (root.spreadDs !== undefined) {
+                var data = root.spreadDs.data();
 
                 var rowStart = topLeftRowIndex - 2;
                 var rowStop = bottomRightRowIndex - 2;
 
                 if (hasDataOrPurge(data, rowStart, rowStop)) {
-					stealthOnChangeMode = true; // NOTE: We need this here otherwise 2 pop-ups will show on top on one another when we input spaces to delete.
-                	
+                    stealthOnChangeMode = true; // NOTE: We need this here otherwise 2 pop-ups will show on top on one another when we input spaces to delete.
+
                     kendo.confirm("Are you sure you want to delete this product and the matching deal?")
                         .then(function () {
                             $timeout(function () {
@@ -485,10 +486,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             10);
                         },
                         function () { });
-					stealthOnChangeMode = false;
+                    stealthOnChangeMode = false;
                 } else {
-                	cleanupData(data);
-                	root.spreadDs.sync();
+                    cleanupData(data);
+                    root.spreadDs.sync();
                     $timeout(function () {
                         var cnt = 0;
                         for (var c = 0; c < data.length; c++) {
@@ -506,12 +507,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         else {
             // Trigger only if the changed range contains the product column
 
-        	// check for empty strings
-        	if (isRangeValueEmptyString) {
-        		return;
-			}
+            // check for empty strings
+            if (isRangeValueEmptyString) {
+                return;
+            }
 
-        	// need to see if an item changed that would cause the PTR_SYS_PRD to be cleared out
+            // need to see if an item changed that would cause the PTR_SYS_PRD to be cleared out
             var isPtrSysPrdFlushed = false;
             for (var f = 0; f < flushSysPrdFields.length; f++) {
                 var colIndx = root.colToLetter[flushSysPrdFields[f]].charCodeAt(0) - intA;
@@ -551,7 +552,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     function cleanupData(data) {
         // Remove any lingering blank rows from the data
         for (var n = data.length - 1; n >= 0; n--) {
-        	if (data[n].DC_ID === null && (data[n].PTR_USER_PRD === null || data[n].PTR_USER_PRD.toString().replace(/\s/g, "").length === 0)) {
+            if (data[n].DC_ID === null && (data[n].PTR_USER_PRD === null || data[n].PTR_USER_PRD.toString().replace(/\s/g, "").length === 0)) {
                 data.splice(n, 1);
             } else {
                 if (util.isInvalidDate(data[n].START_DT)) data[n].START_DT = moment(root.contractData["START_DT"]).format("MM/DD/YYYY");
@@ -845,7 +846,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             $scope.setRowIdStyle(args.data.PRC_TBL_ROW);
         });
 
-
     // TDOO: This needs major perfromance refactoring because it makes things slow for poeple with bad computer specs :<
     // Initiates in a batch call (which may make the spreadsheet load faster
     function sheetBatchOnRender(sheet, dropdownValuesSheet) {
@@ -999,7 +999,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     }
 
     function applyDropDowns(sheet, myFieldModel, myColumnName) {
-    	sheet.range(myColumnName + "2:" + myColumnName + $scope.root.ptRowCount).validation({
+        sheet.range(myColumnName + "2:" + myColumnName + $scope.root.ptRowCount).validation({
             dataType: "list",
             showButton: true,
             from: "DropdownValuesSheet!" + myColumnName + ":" + myColumnName,
@@ -1180,7 +1180,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 var sheet = clip.workbook.activeSheet();
                 var newData = [];
                 var padNumRows = 0;
-                var nonMergedCols = [10,11,12,13];
+                var nonMergedCols = [10, 11, 12, 13];
 
                 // set paste data to Kendo cell (default Kendo code)
                 var pasteRef = clip.pasteRef();
@@ -1243,7 +1243,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                 // Prevent user from pasting merged cells
                 state.mergedCells = null;
-
 
                 // need to pad range ref
                 pasteRef.bottomRight.row += padNumRows;
@@ -1535,18 +1534,24 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             var r = key - 1;
             // If no duplicate or invalid add valid JSON
             data[r].PTR_SYS_PRD = !!transformResults.ValidProducts[key] ? JSON.stringify(transformResults.ValidProducts[key]) : "";
-
-            //  sync not working hence this line..:(
             sourceData[r].PTR_SYS_PRD = data[r].PTR_SYS_PRD;
+
             if ((!!transformResults.InValidProducts[key] && transformResults.InValidProducts[key].length > 0) || !!transformResults.DuplicateProducts[key]) {
                 root.setBusy("", "");
                 vm.openProdCorrector(currentRow, transformResults, rowData, publishWipDeals);
                 isAllValidated = false;
                 break;
             }
+
+            if (isAllValidated) {
+                var contractProducts = updateUserInput(transformResults.ValidProducts[key]);
+                data[r].PTR_USER_PRD = contractProducts;
+                sourceData[r].PTR_USER_PRD = contractProducts;
+            }
         }
         root.spreadDs.sync();
         if (isAllValidated) {
+            root.child.setRowIdStyle(data);
             // If current row is undefined its clicked from top bar validate button
             if (!currentRow) {
                 if (!publishWipDeals) {
@@ -1593,7 +1598,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         for (var key in transformResult.ProdctTransformResults) {
                             var r = key - 1;
                             var allIssuesDone = false;
-                            // SAve Valid and InValid JSO into spreadsheet hidden columns
+                            // Save Valid and InValid JSO into spreadsheet hidden columns
                             if ((!!transformResult.InValidProducts[key] && transformResult.InValidProducts[key].length > 0) || !!transformResult.DuplicateProducts[key]) {
                                 var invalidJSON = {
                                     'ProdctTransformResults': transformResult.ProdctTransformResults[key],
@@ -1612,16 +1617,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                             // Update user input if all the issues are done
                             if (allIssuesDone && !!transformResult.ValidProducts[key]) {
-                                var contractProducts = "";
-                                for (var prd in transformResult.ValidProducts[key]) {
-                                    if (transformResult.ValidProducts[key].hasOwnProperty(prd)) {
-                                        var userInput = $filter('unique')(transformResult.ValidProducts[key][prd], 'USR_INPUT')
-                                        userInput = userInput.map(function (elem) {
-                                            return elem.USR_INPUT;
-                                        }).join(",")
-                                        contractProducts = contractProducts === "" ? userInput : contractProducts + "," + userInput;
-                                    }
-                                }
+                                var contractProducts = updateUserInput(transformResult.ValidProducts[key]);
                                 data[r].PTR_USER_PRD = contractProducts;
                                 sourceData[r].PTR_USER_PRD = contractProducts;
                             }
@@ -1644,6 +1640,34 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 },
             function () { });
             }, 10);
+    }
+
+    function updateUserInput(validProducts) {
+        var contractProducts = "";
+        for (var prd in validProducts) {
+            if (validProducts.hasOwnProperty(prd)) {
+                var userInput = $filter('unique')(validProducts[prd], 'USR_INPUT');
+                var inputtedValue = userInput[0].USR_INPUT.toLowerCase();
+                var isUserInputAtLowerLevel = validProducts[prd].filter(function (x) {
+                    return (x.PCSR_NBR !== "" && inputtedValue.indexOf(x.PCSR_NBR.toLowerCase()) > -1)
+                        || (x.DEAL_PRD_NM !== "" && inputtedValue.indexOf(x.DEAL_PRD_NM.toLowerCase()) > -1)
+                        || (x.MTRL_ID !== "" && inputtedValue.indexOf(x.MTRL_ID.toLowerCase()) > -1);
+                });
+                if (isUserInputAtLowerLevel.length > 0) {
+                    var userInput = $filter('unique')(validProducts[prd], 'HIER_VAL_NM');
+                    userInput = userInput.map(function (elem) {
+                        return elem.HIER_VAL_NM;
+                    }).join(",");
+                }
+                else {
+                    userInput = userInput.map(function (elem) {
+                        return elem.USR_INPUT;
+                    }).join(",");
+                }
+                contractProducts = contractProducts === "" ? userInput : contractProducts + "," + userInput;
+            }
+        }
+        return contractProducts;
     }
 
     function validatePricingTableProducts() {
@@ -1840,8 +1864,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             });
     }
 
-
-
     /*
 	 * -------------------------------------------
 	 * CUSTOM UNDO / REDO
@@ -1853,7 +1875,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     var isFirstUndo = true;
     var clearedUndoCount = 0; // Keep cleared counter so that syncUndo$scope.redoCounters does not allow for cleared history to still be undo'ed
     var clearedRedoCount = 0;
-
 
     function replaceUndoRedoBtns() {
         // Hide the default undo/red buttons in favor of the custom undo/redo buttons
@@ -1916,8 +1937,5 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         }
     }
 
-
-
     init();
 }
-

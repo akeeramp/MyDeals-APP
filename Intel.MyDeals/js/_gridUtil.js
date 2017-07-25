@@ -9,7 +9,7 @@ gridUtils.formatValue = function (dataValue, dataFormat) {
     return dataValue;
 }
 gridUtils.uiControlWrapper = function (passedData, field, format) {
-    
+
     // This is nicer, but slower... rendering template on large data is slower
     //var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.#=field#" kendo-tooltip k-content="dataItem._behaviors.validMsg.#=field#"></div>';
     //tmplt += '<div class="uiControlDiv"';
@@ -93,12 +93,18 @@ gridUtils.uiMoneyDatesControlWrapper = function (passedData, field, startDt, end
                 msgClass = "isSoftWarnCell";
             }
         }
+        var capText = '<span class="ng-binding" ng-bind="(dataItem.' + field + ' ' + gridUtils.getFormat(field, 'currency') + ')" style="font-weight: bold;"></span>';
+        if (passedData[field].indexOf("-") > -1) {
+            msg = "CAP price " + passedData[field] + " cannot be a range.";
+            msgClass = "isSoftWarnCell";
+            capText = '<span class="ng-binding" ng-bind="(dataItem.' + field + ')" style="font-weight: bold;"></span>';
+        }
 
         tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
         tmplt += '<div class="uiControlDiv ' + msgClass + '" style="line-height: 1em; font-family: arial; text-align: center;" ' + msg;
         tmplt += '     ng-class="{isHiddenCell: dataItem._behaviors.isHidden.' + field + ', isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ',';
         tmplt += '     isRequiredCell: dataItem._behaviors.isRequired.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + ', isSavedCell: dataItem._behaviors.isSaved.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + '}">';
-        tmplt += '    <span class="ng-binding" ng-bind="(dataItem.' + field + ' ' + gridUtils.getFormat(field, 'currency') + ')" style="font-weight: bold;"></span>';
+        tmplt += capText;
         tmplt += '    <div>';
         tmplt += '    <span class="ng-binding" ng-bind="(dataItem.' + startDt + ' | date:\'MM/dd/yy\')"></span> - ';
         tmplt += '    <span class="ng-binding" ng-bind="(dataItem.' + endDt + ' ' + gridUtils.getFormat(field, "date:'MM/dd/yy'") + ')"></span>';
@@ -155,7 +161,7 @@ gridUtils.onDataValueChange = function (e) {
     return null;
 }
 
-gridUtils.cancelChanges = function(e) {
+gridUtils.cancelChanges = function (e) {
     $(e.sender.table).closest(".k-grid").data('kendoGrid').dataSource.cancelChanges();
 }
 
@@ -230,7 +236,7 @@ gridUtils.lookupEditor = function (container, options) {
 }
 
 
-gridUtils.msgIcon = function(dataItem) {
+gridUtils.msgIcon = function (dataItem) {
     if (dataItem.MsgType === 1) {
         return "<i class='intelicon-information-solid' style='font-size: 16px; color: #C4D600;'></i>";
     }
@@ -240,7 +246,7 @@ gridUtils.msgIcon = function(dataItem) {
     return dataItem.MsgType;
 }
 
-gridUtils.dialogShow = function() {
+gridUtils.dialogShow = function () {
     dialog.open();
 }
 

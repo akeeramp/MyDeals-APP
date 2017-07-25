@@ -41,11 +41,12 @@
                     <div>
                         <ul class="productpath breadcrumb">
                             <li ng-repeat="p in vm.curRowProds | unique:'name'">
-                                <span ng-class="{'strike': p.matchName != ''}">
+                                <span ng-class="{'strike': p.matchName != ''}" class="btn btn-default btn-xs">
                                     <span class="prdAnchor {{p.status}}" ng-click="vm.clkPrdUsrNm(p)" title="{{p.reason}}">{{:: p.name }}</span>
+                                    <span title="Remove Product" class="close" ng-click="vm.removeProd(p.name)">&nbsp;×</span>
                                 </span>
                                 <div class="newProd">
-                                    <span id="selectedProducts" ng-show="p.matchName.length > 0" >{{p.matchName.length > 1 ? p.matchName.length + " products" : p.matchName[0]}}</span>
+                                    <span id="selectedProducts" ng-show="p.matchName.length > 0">{{p.matchName.length > 1 ? p.matchName.length + " products" : p.matchName[0]}}</span>
                                     &nbsp;
                                 </div>
                             </li>
@@ -59,7 +60,6 @@
                         <td>
                             <div class="lnavFilter">
                                 <div class="filterTitle">Refine By</div>
-
                                 <div class="filterGrp">
                                     <div ng-click="vm.isPrdCollapsed = !vm.isPrdCollapsed" style="cursor: pointer;">
                                         <i ng-class="{'intelicon-down': vm.isPrdCollapsed, 'intelicon-right-next': !vm.isPrdCollapsed}"></i> Products Entered
@@ -73,7 +73,7 @@
                                                     <span class="badge upperBadge" ng-if="item.status == 'Issue'">{{ item.cnt == 0 ? "?" : item.cnt }}</span>
                                                 </label>
                                             </div>
-                                            <div ng-if="item.cnt <= 0" class="srchContainer" title="Click to find a possible match" ng-click="vm.suggestAction(item)">
+                                            <div ng-if="item.cnt <= 0" class="srchContainer" title="Click to find a possible match" ng-click="vm.clickFilter(item)">
                                                 <i class="intelicon-help-outlined ckSm"></i>
                                                 <span ng-bind-html="item.name"></span>
                                             </div>
@@ -152,7 +152,6 @@
 </div>
 
 <style>
-
     .badge.upperBadge {
         font-size: 10px;
         padding: 2px 4px;
@@ -166,6 +165,7 @@
     .newProd {
         font-size: 11px;
         color: #0071C5;
+        padding-left:5px;
     }
 
 
@@ -195,25 +195,27 @@
         margin-bottom: 20px;
     }
 
-    .filterGrp .filterContainer label {
-        font-weight: 200;
-        margin-left: 5px;
-        cursor: pointer;
-    }
+        .filterGrp .filterContainer label {
+            font-weight: 200;
+            margin-left: 5px;
+            cursor: pointer;
+        }
 
     .filterGrp .srchContainer {
         margin: 3px 0 0 15px;
         cursor: pointer;
         line-height: 1em;
     }
-    .filterGrp .srchContainer:hover i {
-        color: #003C71;
-    }
-    .filterGrp .srchContainer i {
-        color: #00AEEF;
-        font-size: 14px;
-        margin-right: 5px;
-    }
+
+        .filterGrp .srchContainer:hover i {
+            color: #003C71;
+        }
+
+        .filterGrp .srchContainer i {
+            color: #00AEEF;
+            font-size: 14px;
+            margin-right: 5px;
+        }
 
     .allDone {
         background-color: #ffffff;
@@ -222,17 +224,21 @@
         height: calc(100vh - 450px);
         text-align: center;
     }
-    .allDone i {
-        font-size: 60px;
-        color: #C4D600;
-        margin-right: 25px;
-    }
+
+        .allDone i {
+            font-size: 60px;
+            color: #C4D600;
+            margin-right: 25px;
+        }
+
     .done-title {
         font-size: 30px;
     }
+
     .done-body {
         font-size: 12px;
     }
+
     .done-confirm {
         font-size: 16px;
         text-align: center;
@@ -245,19 +251,23 @@
         font-size: 18px;
         color: #ffffff;
     }
+
     .subHeaderMsg {
         margin: 0 0 4px 0;
         font-size: 18px;
         color: #ffffff;
     }
-    .subHeaderMsg a {
-        color:#00AEEF;
-        text-decoration:underline;
-        cursor: pointer;
-    }
-    .subHeaderMsg a:hover {
-        color: #f3D54E;
-    }
+
+        .subHeaderMsg a {
+            color: #00AEEF;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+            .subHeaderMsg a:hover {
+                color: #f3D54E;
+            }
+
     .subHeaderNavContainer {
         color: #003C71;
         background-color: #f4f4f4;
@@ -266,30 +276,36 @@
         padding: 4px;
         margin: 0 8px 0 0;
         width: 100%;
-        height: 60px;
+        height: 65px;
     }
+
     .miniNav {
         padding: 0 15px;
         margin-right: 10px;
         border-right: 2px solid #aeaeae;
         font-weight: 600;
     }
-    .miniNav button {
-        width: 60px;
-    }
-    .miniNav button[disabled], .miniNav button[disabled]:hover {
-        color: #00AEEF;
-        background-color: #003C71;
-    }
+
+        .miniNav button {
+            width: 60px;
+        }
+
+            .miniNav button[disabled], .miniNav button[disabled]:hover {
+                color: #00AEEF;
+                background-color: #003C71;
+            }
+
     .miniProdNav {
         padding: 0 15px;
         margin-right: 10px;
         font-weight: 600;
     }
+
     .mini-right {
         overflow: hidden;
         height: 60px;
     }
+
     .mini-left {
         float: left;
         width: 160px;
@@ -302,12 +318,15 @@
     .skyblue {
         color: #00AEEF;
     }
+
     .pl10 {
         padding-left: 10px;
     }
+
     .or {
         padding: 0 10px;
     }
+
     .lnk {
         cursor: pointer;
         color: #ffffff;
@@ -315,9 +334,11 @@
         background-color: #00AEEF;
         padding: 0 5px;
     }
-    .lnk:hover {
-        background-color: #0071C5;
-    }
+
+        .lnk:hover {
+            background-color: #0071C5;
+        }
+
     .grpDesc {
         color: #666666;
     }
@@ -326,17 +347,19 @@
         padding: 5px;
     }
 
-     .suggestedProd {
-         border: 1px solid rgba(190, 163, 163, 0.12);
-         padding: 5px;
-         background: #1a3e6f;
-         background-color: rgba(190, 163, 163, 0.12);
-         margin-bottom: 10px;
-     }
-    .suggestionClose{
-        color:yellow !important;
-        padding:0px !important;
+    .suggestedProd {
+        border: 1px solid rgba(190, 163, 163, 0.12);
+        padding: 5px;
+        background: #1a3e6f;
+        background-color: rgba(190, 163, 163, 0.12);
+        margin-bottom: 10px;
     }
+
+    .suggestionClose {
+        color: yellow !important;
+        padding: 0px !important;
+    }
+
     .k-grid tr.k-state-selected, .k-grid td.k-state-selected, .k-grid td.k-state-selected.k-state-focused, .k-grid tr.k-state-selected.k-state-hover, .k-grid td.k-state-selected.k-state-hover, .k-grid td.k-state-selected.k-state-focused.k-state-hover {
         background-color: transparent;
         background: #00aeef;
@@ -361,7 +384,7 @@
 
     .prodText {
         color: white;
-        font-size: 32px
+        font-size: 32px;
     }
 
     .rowNavPanel {
@@ -426,46 +449,54 @@
         line-height: 0.9em;
     }
 
-    .productpath.breadcrumb > li + li:before {
-        padding: 0 5px 0 0;
-        content: ",";
-        font-size: 16px;
-    }
-    .productpath.breadcrumb > li + li div {
-        padding-left: 10px;
-    }
-    .productpath.breadcrumb {
-        padding: 0px;
-        margin-bottom: 0px;
-        padding-bottom: 10px;
-        padding-left: 5px;
-    }
+        .productpath.breadcrumb > li + li:before {
+            padding: 0 5px 0 0;
+            content: ",";
+            font-size: 16px;
+        }
+
+        .productpath.breadcrumb > li + li div {
+            padding-left: 10px;
+        }
+
+        .productpath.breadcrumb {
+            padding: 0px;
+            margin-bottom: 0px;
+            padding-bottom: 10px;
+            padding-left: 5px;
+        }
 
     span.prdAnchor {
         color: #003C71;
     }
-    span.prdAnchor.Warning {
-        color: #FFA300;
-        cursor: pointer;
-    }
-    span.prdAnchor.Issue {
-        color: #FC4C02;
-        cursor: pointer;
-    }
-    span.prdAnchor.Good {
-        color: #C4D600;
-    }
-    span.prdAnchor:hover {
-        text-decoration: none;
-        color: #01AEEF;
-    }
+
+        span.prdAnchor.Warning {
+            color: #FFA300;
+            cursor: pointer;
+        }
+
+        span.prdAnchor.Issue {
+            color: #FC4C02;
+            cursor: pointer;
+        }
+
+        span.prdAnchor.Good {
+            color: #9bc600;
+        }
+
+        span.prdAnchor:hover {
+            text-decoration: none;
+            color: #01AEEF;
+        }
+
     .strike {
         text-decoration: line-through !important;
         cursor: pointer;
     }
-    .strike span {
-        color: #01AEEF;
-    }
+
+        .strike span {
+            color: #01AEEF;
+        }
 
 
 
@@ -486,34 +517,34 @@
         background-color: #01AEEF;
     }
 
-    .drillDown.btn-group {
-        padding-top: 3px;
-        padding-bottom: 3px;
-    }
+        .drillDown.btn-group {
+            padding-top: 3px;
+            padding-bottom: 3px;
+        }
 
-    .drillDown.btn-group.btn {
-        white-space: normal !important;
-        word-wrap: break-word;
-    }
+            .drillDown.btn-group.btn {
+                white-space: normal !important;
+                word-wrap: break-word;
+            }
 
-    .drillDown.btn-group button:not(:last-child) {
-        border-right: none; /* Prevent double borders */
-    }
+            .drillDown.btn-group button:not(:last-child) {
+                border-right: none; /* Prevent double borders */
+            }
 
-    .drillDown.btn-group button.noborder {
-        border-right: none;
-    }
+            .drillDown.btn-group button.noborder {
+                border-right: none;
+            }
 
-    /* Add a background color on hover */
-    .drillDown.btn-group button:hover {
-        background-color: #01AEEF;
-        color: #1a3e6f;
-    }
+            /* Add a background color on hover */
+            .drillDown.btn-group button:hover {
+                background-color: #01AEEF;
+                color: #1a3e6f;
+            }
 
-    .drillDown.btn-group button:focus, .button:active {
-        outline: none !important;
-        background-color: #01AEEF;
-    }
+            .drillDown.btn-group button:focus, .button:active {
+                outline: none !important;
+                background-color: #01AEEF;
+            }
 
     .noLeftBorder {
         border-left: none !important;
@@ -528,20 +559,20 @@
         text-align: center;
     }
 
-    .prodDrillDownLarge p {
-        font-size: 13px;
-        margin-top: 11px;
-        color: #fff;
-    }
+        .prodDrillDownLarge p {
+            font-size: 13px;
+            margin-top: 11px;
+            color: #fff;
+        }
 
-    .prodDrillDownLarge p:hover {
-        color: #1a3e6f;
-    }
+            .prodDrillDownLarge p:hover {
+                color: #1a3e6f;
+            }
 
     .prodSelected.ui-select-multiple.ui-select-bootstrap {
         min-height: 100px !important;
         max-height: 100px !important;
-             overflow-y: auto;
+        overflow-y: auto;
         overflow-x: hidden;
     }
 
@@ -561,19 +592,19 @@
         font-size: 13px;
     }
 
-    .prdBtn.btn-primary {
-        background-color: #01AEEF;
-    }
+        .prdBtn.btn-primary {
+            background-color: #01AEEF;
+        }
 
-    .prdBtn.btn-primary:hover {
-        background-color: #01AEEF;
-        color: #1a3e6f;
-    }
+            .prdBtn.btn-primary:hover {
+                background-color: #01AEEF;
+                color: #1a3e6f;
+            }
 
-    .prdBtn.btn-primary:focus, .btn-primary:active {
-        outline: none !important;
-        background-color: #01AEEF;
-    }
+            .prdBtn.btn-primary:focus, .btn-primary:active {
+                outline: none !important;
+                background-color: #01AEEF;
+            }
 
     .prodCorrector.modal-body {
         padding-top: 2px;
@@ -625,43 +656,55 @@
         width: 1px;
     }
 
-    input[type=checkbox].with-font + label:before {
-        font-family: FontAwesome;
-        display: inline-block;
-        content: "\f096";
-        font-size: 22px;
-        letter-spacing: 5px;
-        color: #00AEEF;
-        margin-left: 10px;
-        margin-top: 2px;
-        vertical-align: middle;
+        input[type=checkbox].with-font + label:before {
+            font-family: FontAwesome;
+            display: inline-block;
+            content: "\f096";
+            font-size: 22px;
+            letter-spacing: 5px;
+            color: #00AEEF;
+            margin-left: 10px;
+            margin-top: 2px;
+            vertical-align: middle;
+        }
+
+        input[type=checkbox].with-font.ckSm + label:before {
+            font-size: 16px;
+        }
+
+        input[type=checkbox].with-font:hover + label:before {
+            color: #003C71;
+            cursor: pointer;
+        }
+
+        input[type=checkbox].with-font.disabled + label:before {
+            color: #cccccc;
+            cursor: default;
+        }
+
+        input[type=checkbox].with-font:checked + label:before {
+            content: "\f046";
+            font-size: 22px;
+            letter-spacing: 5px;
+            margin-left: 10px;
+            margin-top: 2px;
+            vertical-align: middle;
+        }
+
+        input[type=checkbox].with-font.ckSm:checked + label:before {
+            font-size: 16px;
+        }
+
+        input[type=checkbox].with-font:focus + label:before {
+            font-weight: bold;
+        }
+
+    .breadcrumb .close {
+        float: right;
+        font-size: 18px;
     }
 
-    input[type=checkbox].with-font.ckSm + label:before {
-        font-size: 16px;
-    }
-
-    input[type=checkbox].with-font:hover + label:before {
-        color: #003C71;
-        cursor: pointer;
-    }
-    input[type=checkbox].with-font.disabled + label:before {
-        color: #cccccc;
-        cursor: default;
-    }
-
-    input[type=checkbox].with-font:checked + label:before {
-        content: "\f046";
-        font-size: 22px;
-        letter-spacing: 5px;
-        margin-left: 10px;
-        margin-top: 2px;
-        vertical-align: middle;
-    }
-    input[type=checkbox].with-font.ckSm:checked + label:before {
-        font-size: 16px;
-    }
-    input[type=checkbox].with-font:focus + label:before {
-        font-weight: bold;
+    .breadcrumb .btn-default{
+        font-weight:600;
     }
 </style>

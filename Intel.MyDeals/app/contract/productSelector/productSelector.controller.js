@@ -280,7 +280,7 @@
                     vm.gridSelectItem(response.data[0]);
                 } else {
                     vm.gridData = response.data;
-                    toggleColumnsWhenEmpty(vm.gridData);
+                    toggleColumnsWhenEmpty(vm.gridData, 'prodGrid');
                     dataSourceProduct.read();
                 }
             });
@@ -307,10 +307,10 @@
             return data;
         }
 
-        function toggleColumnsWhenEmpty(data) {
-            var grid = $("#prodGrid").data("kendoGrid");
+        function toggleColumnsWhenEmpty(data, prodGrid) {
+            var grid = $("#" + prodGrid).data("kendoGrid");
             if (!!grid) {
-                angular.forEach(vm.gridOptionsProduct.columns, function (item, key) {
+                angular.forEach(grid.columns, function (item, key) {
                     var columnValue = $filter('unique')(data, item.field);
                     if (columnValue.length == 1 && item.field !== undefined && item.field != "CheckBox" && item.field != 'CAP' && item.field != 'YCS2' &&
                         (columnValue[0][item.field] == "" || columnValue[0][item.field] == null || columnValue[0][item.field] == 'NA')) {
@@ -482,16 +482,10 @@
                     width: "150px"
                 },
                 {
-                    field: "CAP_END",
-                    title: "CAP End Date",
-                    template: "<div>{{vm.getFormatedDate(dataItem.CAP_END)}}</div>",
-                    width: "150px"
-                },
-                {
                     field: "CAP",
-                    title: "CAP Price",
-                    width: "150px",
-                    template: "<op-popover ng-click='vm.openCAPBreakOut(dataItem, \"CAP\")' op-options='CAP' op-data='vm.getPrductDetails(dataItem, \"CAP\")'>#= CAP #</op-popover>"
+                    title: "CAP Info",
+                    template: "<op-popover ng-click='vm.openCAPBreakOut(dataItem, \"CAP\")' op-options='CAP' op-label='' op-data='vm.getPrductDetails(dataItem, \"CAP\")'>#=gridUtils.uiMoneyDatesControlWrapper(data, 'CAP', 'CAP_START', 'CAP_END')#</op-popover>",
+                    width: "150px"
                 },
                 {
                     field: "YCS2",
@@ -507,6 +501,11 @@
                 {
                     field: "MM_MEDIA_CD",
                     title: "Media Code",
+                    width: "150px"
+                },
+                {
+                    field: "MM_CUST_CUSTOMER",
+                    title: "MM Customer Name",
                     width: "150px"
                 },
                 {
@@ -567,11 +566,6 @@
                     title: "SBS Name",
                     width: "150px"
                 },
-                {
-                    field: "MM_CUST_CUSTOMER",
-                    title: "MM Customer Name",
-                    width: "150px"
-                }
             ]
         }
 
@@ -988,7 +982,7 @@
                 vm.searchItems = [];
                 vm.showSearchResults = true;
                 $timeout(function () {
-                    toggleColumnsWhenEmpty(vm.gridData);
+                    toggleColumnsWhenEmpty(vm.gridData, 'prodGrid');
                 });
             }
         }
@@ -1195,6 +1189,9 @@
 
             // Refresh Datasource
             vm.gridOptionsSuggestions.dataSource.read();
+            $timeout(function () {
+                //toggleColumnsWhenEmpty(vm.suggestedProducts, 'prodSuggestions');
+            });
         }
 
         vm.curRowIssues = [];
