@@ -141,24 +141,24 @@ function AllDealsController($scope, $state, $stateParams, $filter, objsetService
 		        "REBATE_BILLING_END": {
 		            "Groups": ["Consumption"]
 		        },
-		        "CONSUMPTION_REASON": {
-		            "Groups": ["Consumption"]
-		        },
-		        "CONSUMPTION_REASON_CMNT": {
-		            "Groups": ["Consumption"]
-		        },
+		        //"CONSUMPTION_REASON": {
+		        //    "Groups": ["Consumption"]
+		        //},
+		        //"CONSUMPTION_REASON_CMNT": {
+		        //    "Groups": ["Consumption"]
+		        //},
 		        "RETAIL_CYCLE": {
 		            "Groups": ["Retail Cycle"]
 		        },
-		        "RETAIL_PULL": {
-		            "Groups": ["Retail Cycle"]
-		        },
-		        "RETAIL_PULL_USR_DEF": {
-		            "Groups": ["Retail Cycle"]
-		        },
-		        "RETAIL_PULL_USR_DEF_CMNT": {
-		            "Groups": ["Retail Cycle"]
-		        },
+		        //"RETAIL_PULL": {
+		        //    "Groups": ["Retail Cycle"]
+		        //},
+		        //"RETAIL_PULL_USR_DEF": {
+		        //    "Groups": ["Retail Cycle"]
+		        //},
+		        //"RETAIL_PULL_USR_DEF_CMNT": {
+		        //    "Groups": ["Retail Cycle"]
+		        //},
 		        "ECAP_FLR": {
 		            "Groups": ["Retail Cycle"]
 		        },

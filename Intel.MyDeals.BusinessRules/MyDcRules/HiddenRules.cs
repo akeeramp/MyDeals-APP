@@ -33,22 +33,22 @@ namespace Intel.MyDeals.BusinessRules
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate }
                 },
 
-                new MyOpRule
-				{
-					Title="Hidden if NOT Consumption",
-					ActionRule = MyDcActions.ExecuteActions,
-					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnHidden},
-					InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
-					AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PAYOUT_BASED_ON) && de.AtrbValue != null && de.AtrbValue.ToString() != "Consumption").Any(),
-					OpRuleActions = new List<OpRuleAction<IOpDataElement>>
-					{
-						new OpRuleAction<IOpDataElement>
-						{
-							Action = BusinessLogicDeActions.SetHidden,
-							Target = new[] {AttributeCodes.CONSUMPTION_REASON, AttributeCodes.CONSUMPTION_REASON_CMNT }
-						}
-					}
-				},
+    //            new MyOpRule
+				//{
+				//	Title="Hidden if NOT Consumption",
+				//	ActionRule = MyDcActions.ExecuteActions,
+				//	Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnHidden},
+				//	InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+				//	AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PAYOUT_BASED_ON) && de.AtrbValue != null && de.AtrbValue.ToString() != "Consumption").Any(),
+				//	OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+				//	{
+				//		new OpRuleAction<IOpDataElement>
+				//		{
+				//			Action = BusinessLogicDeActions.SetHidden,
+				//			Target = new[] {AttributeCodes.CONSUMPTION_REASON, AttributeCodes.CONSUMPTION_REASON_CMNT }
+				//		}
+				//	}
+				//},
 				//new MyOpRule
 				//{
 				//	Title="Read-only Retail Cycle if not correct market segment",
@@ -80,9 +80,9 @@ namespace Intel.MyDeals.BusinessRules
                             Target = new[]
                             {
                                 AttributeCodes.RETAIL_CYCLE,
-                                AttributeCodes.RETAIL_PULL,
-                                AttributeCodes.RETAIL_PULL_USR_DEF,
-                                AttributeCodes.RETAIL_PULL_USR_DEF_CMNT,
+                                //AttributeCodes.RETAIL_PULL,
+                                //AttributeCodes.RETAIL_PULL_USR_DEF,
+                                //AttributeCodes.RETAIL_PULL_USR_DEF_CMNT,
                                 AttributeCodes.MEETCOMP_TEST_FAIL_OVERRIDE,
                                 AttributeCodes.MEETCOMP_TEST_FAIL_OVERRIDE_REASON,
                                 AttributeCodes.MEETCOMP_TEST_RESULT,
@@ -92,21 +92,21 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.COST_TEST_OVERRIDE,
                                 AttributeCodes.COST_TEST_RESULT,
                                 AttributeCodes.COST_TYPE_USED,
-                                AttributeCodes.COMP_SKU,
-                                AttributeCodes.COMP_SKU_OTHR,
-                                AttributeCodes.COMPETITIVE_PRICE,
-                                AttributeCodes.COMP_BENCH,
+                                //AttributeCodes.COMP_SKU,
+                                //AttributeCodes.COMP_SKU_OTHR,
+                                //AttributeCodes.COMPETITIVE_PRICE,
+                                //AttributeCodes.COMP_BENCH,
                                 AttributeCodes.IA_BENCH,
-                                AttributeCodes.COMP_TARGET_SYSTEM_PRICE,
-                                AttributeCodes.PRD_COST,
+                                //AttributeCodes.COMP_TARGET_SYSTEM_PRICE,
+                                //AttributeCodes.PRD_COST,
                                 AttributeCodes.YCS2_OVERLAP_OVERRIDE,
                                 AttributeCodes.CUST_MBR_SID,
                                 AttributeCodes.ECAP_FLR,
                                 AttributeCodes.YCS2_OVERLAP_OVERRIDE,
-                                AttributeCodes.PRD_COST,
+                                //AttributeCodes.PRD_COST,
                                 AttributeCodes.COST_TYPE_USED,
-                                AttributeCodes.RETAIL_PULL,
-                                AttributeCodes.RETAIL_PULL_USR_DEF
+                                //AttributeCodes.RETAIL_PULL,
+                                //AttributeCodes.RETAIL_PULL_USR_DEF
                             }
                         }
                     }

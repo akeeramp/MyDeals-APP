@@ -275,7 +275,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                 opFlatItem[AttributeCodes.YCS2_PRC_IRBT] = pMap.YCS2;
                 opFlatItem[AttributeCodes.YCS2_START_DT] = pMap.YCS2_START;
                 opFlatItem[AttributeCodes.YCS2_END_DT] = pMap.YCS2_END;
-                opFlatItem[AttributeCodes.PRD_COST] = pMap.PRD_COST;
+                //opFlatItem[AttributeCodes.PRD_COST] = pMap.PRD_COST;
                 opFlatItem[AttributeCodes.PRD_STRT_DTM] = pMap.PRD_STRT_DTM;
                 opFlatItem[AttributeCodes.PRD_END_DTM] = pMap.PRD_END_DTM;
                 opFlatItem[AttributeCodes.HAS_L1] = pMap.HAS_L1;

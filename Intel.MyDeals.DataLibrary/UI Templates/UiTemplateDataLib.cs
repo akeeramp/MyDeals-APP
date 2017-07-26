@@ -869,40 +869,40 @@ namespace Intel.MyDeals.DataLibrary
                 IsSortable = true,
                 Template = "#=gridUtils.uiControlWrapper(data, 'REBATE_BILLING_END', \"date:'MM/dd/yyyy'\")#"
             });
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 29,
-                AtrbCd = AttributeCodes.CONSUMPTION_REASON,
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Width = 150,
-                IsFilterable = true,
-                IsSortable = true,
-                Template = "#=gridUtils.uiControlWrapper(data, 'CONSUMPTION_REASON')#",
-                LookupUrl = "/api/Dropdown/GetDropdowns/CONSUMPTION_REASON",
-                LookupText = "DROP_DOWN",
-                LookupValue = "DROP_DOWN"
-            });
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 29,
-                AtrbCd = AttributeCodes.CONSUMPTION_REASON_CMNT,
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Width = 150,
-                IsFilterable = true,
-                IsSortable = true,
-                Template = "#=gridUtils.uiControlWrapper(data, 'CONSUMPTION_REASON_CMNT')#"
-            });
+            //items.Add(new UiTemplateContainerItem
+            //{
+            //    Id = 29,
+            //    AtrbCd = AttributeCodes.CONSUMPTION_REASON,
+            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+            //    Width = 150,
+            //    IsFilterable = true,
+            //    IsSortable = true,
+            //    Template = "#=gridUtils.uiControlWrapper(data, 'CONSUMPTION_REASON')#",
+            //    LookupUrl = "/api/Dropdown/GetDropdowns/CONSUMPTION_REASON",
+            //    LookupText = "DROP_DOWN",
+            //    LookupValue = "DROP_DOWN"
+            //});
+            //items.Add(new UiTemplateContainerItem
+            //{
+            //    Id = 29,
+            //    AtrbCd = AttributeCodes.CONSUMPTION_REASON_CMNT,
+            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+            //    Width = 150,
+            //    IsFilterable = true,
+            //    IsSortable = true,
+            //    Template = "#=gridUtils.uiControlWrapper(data, 'CONSUMPTION_REASON_CMNT')#"
+            //});
 
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 29,
-                AtrbCd = AttributeCodes.PRD_COST,
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Width = 100,
-                IsFilterable = true,
-                IsSortable = true,
-                Template = "#=gridUtils.uiControlWrapper(data, 'PRD_COST', 'currency')#"
-            });
+            //items.Add(new UiTemplateContainerItem
+            //{
+            //    Id = 29,
+            //    AtrbCd = AttributeCodes.PRD_COST,
+            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+            //    Width = 100,
+            //    IsFilterable = true,
+            //    IsSortable = true,
+            //    Template = "#=gridUtils.uiControlWrapper(data, 'PRD_COST', 'currency')#"
+            //});
 
             items.Add(new UiTemplateContainerItem
             {
@@ -1102,28 +1102,28 @@ namespace Intel.MyDeals.DataLibrary
             //    Template = "#=gridUtils.uiControlWrapper(data, 'RETAIL_PULL', 'currency')#"
             //});
 
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 29,
-                AtrbCd = AttributeCodes.RETAIL_PULL_USR_DEF,
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Width = 120,
-                IsFilterable = true,
-                IsSortable = true,
-                Template = "#=gridUtils.uiControlWrapper(data, 'RETAIL_PULL_USR_DEF', 'currency')#"
-            });
+            //items.Add(new UiTemplateContainerItem
+            //{
+            //    Id = 29,
+            //    AtrbCd = AttributeCodes.RETAIL_PULL_USR_DEF,
+            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+            //    Width = 120,
+            //    IsFilterable = true,
+            //    IsSortable = true,
+            //    Template = "#=gridUtils.uiControlWrapper(data, 'RETAIL_PULL_USR_DEF', 'currency')#"
+            //});
 
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 29,
-                AtrbCd = AttributeCodes.RETAIL_PULL_USR_DEF_CMNT,
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Width = 160,
-                Label = "Retail Pull$ User Defined Comments",
-                IsFilterable = true,
-                IsSortable = true,
-                Template = "#=gridUtils.uiControlWrapper(data, 'RETAIL_PULL_USR_DEF_CMNT')#"
-            });
+            //items.Add(new UiTemplateContainerItem
+            //{
+            //    Id = 29,
+            //    AtrbCd = AttributeCodes.RETAIL_PULL_USR_DEF_CMNT,
+            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+            //    Width = 160,
+            //    Label = "Retail Pull$ User Defined Comments",
+            //    IsFilterable = true,
+            //    IsSortable = true,
+            //    Template = "#=gridUtils.uiControlWrapper(data, 'RETAIL_PULL_USR_DEF_CMNT')#"
+            //});
 
             items.Add(new UiTemplateContainerItem
             {

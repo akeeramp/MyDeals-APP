@@ -207,12 +207,12 @@
                     "REBATE_BILLING_END": {
                         "Groups": ["Consumption"]
                     },
-                    "CONSUMPTION_REASON": {
-                        "Groups": ["Consumption"]
-                    },
-                    "CONSUMPTION_REASON_CMNT": {
-                        "Groups": ["Consumption"]
-                    },
+                    //"CONSUMPTION_REASON": {
+                    //    "Groups": ["Consumption"]
+                    //},
+                    //"CONSUMPTION_REASON_CMNT": {
+                    //    "Groups": ["Consumption"]
+                    //},
                     //"COST_TEST_RESULT": {
                     //    "Groups": ["Cost Test"]
                     //},
@@ -344,12 +344,12 @@
                     "REBATE_BILLING_END": {
                         "Groups": ["Consumption"]
                     },
-                    "CONSUMPTION_REASON": {
-                        "Groups": ["Consumption"]
-                    },
-                    "CONSUMPTION_REASON_CMNT": {
-                        "Groups": ["Consumption"]
-                    },
+                    //"CONSUMPTION_REASON": {
+                    //    "Groups": ["Consumption"]
+                    //},
+                    //"CONSUMPTION_REASON_CMNT": {
+                    //    "Groups": ["Consumption"]
+                    //},
                     "BACK_DATE_RSN": {
                         "Groups": ["Backdate"]
                     }
@@ -421,12 +421,12 @@
                     "REBATE_BILLING_END": {
                         "Groups": ["Consumption"]
                     },
-                    "CONSUMPTION_REASON": {
-                        "Groups": ["Consumption"]
-                    },
-                    "CONSUMPTION_REASON_CMNT": {
-                        "Groups": ["Consumption"]
-                    },
+                    //"CONSUMPTION_REASON": {
+                    //    "Groups": ["Consumption"]
+                    //},
+                    //"CONSUMPTION_REASON_CMNT": {
+                    //    "Groups": ["Consumption"]
+                    //},
                     //"COST_TEST_RESULT": {
                     //    "Groups": ["Cost Test"]
                     //},

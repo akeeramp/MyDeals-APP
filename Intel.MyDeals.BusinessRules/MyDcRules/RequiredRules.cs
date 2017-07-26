@@ -18,22 +18,22 @@ namespace Intel.MyDeals.BusinessRules
                     ActionRule = MyDcActions.SyncRequiredItems,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate }
                 },
-                new MyOpRule
-                {
-                    Title="Required if Consumption",
-                    ActionRule = MyDcActions.ExecuteActions,
-                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
-                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
-                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PAYOUT_BASED_ON) && de.AtrbValue != null && de.AtrbValue.ToString() != "Consumption").Any(),
-                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
-                    {
-                        new OpRuleAction<IOpDataElement>
-                        {
-                            Action = BusinessLogicDeActions.SetRequired,
-                            Target = new[] {AttributeCodes.CONSUMPTION_REASON }
-                        }
-                    }
-                },
+                //new MyOpRule
+                //{
+                //    Title="Required if Consumption",
+                //    ActionRule = MyDcActions.ExecuteActions,
+                //    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
+                //    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+                //    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PAYOUT_BASED_ON) && de.AtrbValue != null && de.AtrbValue.ToString() != "Consumption").Any(),
+                //    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                //    {
+                //        new OpRuleAction<IOpDataElement>
+                //        {
+                //            Action = BusinessLogicDeActions.SetRequired,
+                //            Target = new[] {AttributeCodes.CONSUMPTION_REASON }
+                //        }
+                //    }
+                //},
                 //new MyOpRule
                 //{
                 //    Title="Required if Market Segment",

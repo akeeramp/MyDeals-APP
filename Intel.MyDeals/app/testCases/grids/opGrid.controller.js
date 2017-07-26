@@ -118,9 +118,9 @@
                     "YCS2_OVERLAP_OVERRIDE": {
                         "Groups": ["Price Info"]
                     },
-                    "PRD_COST": {
-                        "Groups": ["Cost Test"]
-                    },
+                    //"PRD_COST": {
+                    //    "Groups": ["Cost Test"]
+                    //},
                     "COST_TYPE_USED": {
                         "Groups": ["Cost Test"]
                     },
@@ -136,24 +136,24 @@
                     "MEET_COMP_PRICE_QSTN": {
                         "Groups": ["Meet Comp"]
                     },
-                    "COMP_SKU": {
-                        "Groups": ["Meet Comp"]
-                    },
-                    "COMP_SKU_OTHR": {
-                        "Groups": ["Meet Comp"]
-                    },
-                    "COMPETITIVE_PRICE": {
-                        "Groups": ["Meet Comp"]
-                    },
-                    "COMP_BENCH": {
-                        "Groups": ["Meet Comp"]
-                    },
+                    //"COMP_SKU": {
+                    //    "Groups": ["Meet Comp"]
+                    //},
+                    //"COMP_SKU_OTHR": {
+                    //    "Groups": ["Meet Comp"]
+                    //},
+                    //"COMPETITIVE_PRICE": {
+                    //    "Groups": ["Meet Comp"]
+                    //},
+                    //"COMP_BENCH": {
+                    //    "Groups": ["Meet Comp"]
+                    //},
                     "IA_BENCH": {
                         "Groups": ["Meet Comp"]
                     },
-                    "COMP_TARGET_SYSTEM_PRICE": {
-                        "Groups": ["Meet Comp"]
-                    },
+                    //"COMP_TARGET_SYSTEM_PRICE": {
+                    //    "Groups": ["Meet Comp"]
+                    //},
                     "MEETCOMP_TEST_RESULT": {
                         "Groups": ["Meet Comp"]
                     },
@@ -166,15 +166,15 @@
                     "RETAIL_CYCLE": {
                         "Groups": ["Retail Cycle"]
                     },
-                    "RETAIL_PULL": {
-                        "Groups": ["Retail Cycle"]
-                    },
-                    "RETAIL_PULL_USR_DEF": {
-                        "Groups": ["Retail Cycle"]
-                    },
-                    "RETAIL_PULL_USR_DEF_CMNT": {
-                        "Groups": ["Retail Cycle"]
-                    },
+                    //"RETAIL_PULL": {
+                    //    "Groups": ["Retail Cycle"]
+                    //},
+                    //"RETAIL_PULL_USR_DEF": {
+                    //    "Groups": ["Retail Cycle"]
+                    //},
+                    //"RETAIL_PULL_USR_DEF_CMNT": {
+                    //    "Groups": ["Retail Cycle"]
+                    //},
                     "ECAP_FLR": {
                         "Groups": ["Retail Cycle"]
                     },
