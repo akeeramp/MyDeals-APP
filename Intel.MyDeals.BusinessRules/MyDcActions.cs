@@ -72,7 +72,7 @@ namespace Intel.MyDeals.BusinessRules
                 if (!string.IsNullOrEmpty(strCust))
                 {
                     int custId = Convert.ToInt32(strCust);
-                    if (mrktSegValue.IndexOf("Consumer Retail Pull") >=0 || mrktSegValue == "All")
+                    if (mrktSegValue.IndexOf("Consumer Retail Pull") >= 0 || mrktSegValue == "All")
                     {
                         var customerQuarterDetails = new CustomerCalendarDataLib().GetCustomerQuarterDetails(custId, DateTime.Today, null, null);
                         item[AttributeCodes.ON_ADD_DT] = customerQuarterDetails.QTR_STRT.Date;
@@ -141,8 +141,8 @@ namespace Intel.MyDeals.BusinessRules
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
-            
-            if (SecurityActionCache == null) SecurityActionCache=new Dictionary<string, bool>();
+
+            if (SecurityActionCache == null) SecurityActionCache = new Dictionary<string, bool>();
             r.Dc.ApplySecurityAttributes(actionCode, DataCollections.GetSecurityWrapper(), new string[] { }, SecurityActionCache);
 
             // Now apply all rules
@@ -182,8 +182,8 @@ namespace Intel.MyDeals.BusinessRules
             if (!r.IsValid) return;
 
             IOpDataElement dePrdUsr = r.Dc.GetDataElement(AttributeCodes.PTR_USER_PRD);
-            string prdJson = LZString.decompressFromBase64(r.Dc.GetDataElementValue(AttributeCodes.PTR_SYS_PRD)) ?? "";
-            string prdJsonIvalid = LZString.decompressFromBase64(r.Dc.GetDataElementValue(AttributeCodes.PTR_SYS_INVLD_PRD)) ?? "";
+            string prdJson = (r.Dc.GetDataElementValue(AttributeCodes.PTR_SYS_PRD)) ?? "";
+            string prdJsonIvalid = (r.Dc.GetDataElementValue(AttributeCodes.PTR_SYS_INVLD_PRD)) ?? "";
             if (string.IsNullOrEmpty(prdJson)) return;
 
             ProdMappings items = null;
@@ -225,7 +225,7 @@ namespace Intel.MyDeals.BusinessRules
                         double cap;
                         if (!double.TryParse(prodMapping.CAP, out cap) && prodMapping.CAP.IndexOf("-") >= 0)
                         {
-                            BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"CAP price ({prodMapping.CAP}) cannot be a range.");
+                            BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"Product ({prodMapping.HIER_VAL_NM}) CAP price ({prodMapping.CAP}) cannot be a range.");
                         }
 
                         //double ecap;
@@ -421,7 +421,6 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
-
         public static void CheckDropDownValues(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
@@ -543,7 +542,7 @@ namespace Intel.MyDeals.BusinessRules
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
-            List<string> atrbs = new List<string> {AttributeCodes.PTR_SYS_PRD, AttributeCodes.PTR_SYS_INVLD_PRD};
+            List<string> atrbs = new List<string> { AttributeCodes.PTR_SYS_PRD, AttributeCodes.PTR_SYS_INVLD_PRD };
             foreach (IOpDataElement de in r.Dc.GetDataElementsIn(atrbs))
             {
                 if (de.HasValueChanged && string.IsNullOrEmpty(de.AtrbValue.ToString()))

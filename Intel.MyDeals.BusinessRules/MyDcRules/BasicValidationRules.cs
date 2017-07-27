@@ -126,7 +126,7 @@ namespace Intel.MyDeals.BusinessRules
                     Title="Title already exists check",
                     ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnSave},
-                    InObjType = new List<OpDataElementType> {OpDataElementType.CNTRCT, OpDataElementType.PRC_ST}, 
+                    InObjType = new List<OpDataElementType> {OpDataElementType.CNTRCT, OpDataElementType.PRC_ST},
                     AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.TITLE) && de.HasValueChanged && de.HasValue()).Any(),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
@@ -137,7 +137,6 @@ namespace Intel.MyDeals.BusinessRules
                             Target = new[] {AttributeCodes.TITLE}
                         }
                     }
-
                 },
                 new MyOpRule
                 {
@@ -257,15 +256,14 @@ namespace Intel.MyDeals.BusinessRules
                             Where = de => de.AtrbCdIn(new List<string> {AttributeCodes.GEO_COMBINED})
                         }
                     }
-                //},
-                //new MyOpRule
-                //{
-                //    Title="Validate Product Json",
-                //    ActionRule = MyDcActions.CheckProductJson,
-                //    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
-                //    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW}
+                },
+                new MyOpRule
+                {
+                    Title="Validate Product Json",
+                    ActionRule = MyDcActions.CheckProductJson,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
+                    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW}
                 }
-                
             };
         }
     }

@@ -1121,7 +1121,8 @@
                     field: "USR_INPUT",
                     title: "User Entered",
                     groupHeaderTemplate: "<span class=\"grpTitle\">#= value #</span>",
-                    hidden: false
+                    hidden: false,
+                    width: "150px"
                 },
                 {
                     field: "HIER_VAL_NM",
@@ -1137,12 +1138,14 @@
                 {
                     field: "HIER_NM_HASH",
                     title: "Product Details",
-                    template: "<div kendo-tooltip k-content='dataItem.HIER_NM_HASH'>{{dataItem.HIER_NM_HASH}}</div>"
+                    template: "<div kendo-tooltip k-content='dataItem.HIER_NM_HASH'>{{dataItem.HIER_NM_HASH}}</div>",
+                    width: "120px"
                 },
                 {
                     field: "PRD_STRT_DTM",
                     title: "Product Effective Date",
-                    template: "#= kendo.toString(new Date(PRD_STRT_DTM), 'M/d/yyyy') + ' - ' + kendo.toString(new Date(PRD_END_DTM), 'M/d/yyyy') #"
+                    template: "#= kendo.toString(new Date(PRD_STRT_DTM), 'M/d/yyyy') + ' - ' + kendo.toString(new Date(PRD_END_DTM), 'M/d/yyyy') #",
+                    width: "120px"
                 },
                 {
                     field: "CAP",
@@ -1155,6 +1158,80 @@
                     title: "Media Code",
                     width: "120px"
                 },
+                {
+                    field: "YCS2",
+                    title: "YCS2",
+                    template: "<op-popover op-options='YCS2' op-data='vm.getPrductDetails(dataItem, \"YCS2\")'>#= YCS2 #</op-popover>",
+                    width: "120px"
+                },
+                {
+                    field: "CPU_PROCESSOR_NUMBER",
+                    title: "CPU Processor number",
+                    width: "150px"
+                },
+                {
+                    field: "MM_CUST_CUSTOMER",
+                    title: "MM Customer Name",
+                    width: "150px"
+                },
+                {
+                    field: "FMLY_NM_MM",
+                    title: "EDW Family Name",
+                    template: "<div kendo-tooltip k-content='dataItem.FMLY_NM_MM'>{{dataItem.FMLY_NM_MM}}</div>",
+                    width: "150px"
+                },
+                {
+                    field: "EPM_NM",
+                    title: "EPM Name",
+                    template: "<div kendo-tooltip k-content='dataItem.EPM_NM'>{{dataItem.EPM_NM}}</div>",
+                    width: "180px"
+                },
+                {
+                    field: "SKU_NM",
+                    title: "SKU Name",
+                    template: "<div kendo-tooltip k-content='dataItem.SKU_NM'>{{dataItem.SKU_NM}}</div>",
+                    width: "180px"
+                },
+                {
+                    field: "NAND_FAMILY",
+                    title: "NAND FAMILY",
+                    width: "150px"
+                },
+                {
+                    field: "NAND_Density",
+                    title: "Nand Density",
+                    width: "150px"
+                },
+                {
+                    field: "CPU_CACHE",
+                    title: "CPU CACHE",
+                    width: "150px"
+                },
+                {
+                    field: "CPU_PACKAGE",
+                    title: "CPU PACKAGE",
+                    width: "150px"
+                },
+                {
+                    field: "CPU_WATTAGE",
+                    title: "CPU WATTAGE",
+                    width: "150px"
+                },
+                {
+                    field: "CPU_VOLTAGE_SEGMENT",
+                    title: "Voltage Segment",
+                    width: "150px"
+                },
+                {
+                    field: "PRICE_SEGMENT",
+                    title: "Price Segment",
+                    width: "150px"
+                },
+                {
+                    field: "SBS_NM",
+                    title: "SBS Name",
+                    width: "150px"
+                }
             ]
         }
 
@@ -1190,7 +1267,7 @@
             // Refresh Datasource
             vm.gridOptionsSuggestions.dataSource.read();
             $timeout(function () {
-                //toggleColumnsWhenEmpty(vm.suggestedProducts, 'prodSuggestions');
+                toggleColumnsWhenEmpty(vm.suggestedProducts, 'prodSuggestions');
             });
         }
 

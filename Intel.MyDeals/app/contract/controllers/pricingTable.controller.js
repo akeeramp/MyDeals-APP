@@ -479,7 +479,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                         disableRange(sheet.range("F" + n + ":Z" + (n + numToDel + numToDel)));
                                     }, 10);
 
-                                    clearUndoHistory(); 
+                                    clearUndoHistory();
                                     root.saveEntireContract(true);
                                 }
                             },
@@ -822,7 +822,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             sheet.range("E" + row + ":E" + row).color("#FC4C02").bold(true);
                             //sheet.range("E" + row + ":E" + row).borderLeft({ size: 6, color: "#FC4C02" });
                         } else if (!!data[key].PTR_SYS_PRD) { // validated and passed
-                        	sheet.range("E" + row + ":E" + row).color("#9bc600").bold(true);
+                            sheet.range("E" + row + ":E" + row).color("#9bc600").bold(true);
                             //sheet.range("E" + row + ":E" + row).borderLeft({ size: 6, color: "#C4D600" });
                         } else { // not validated
                             sheet.range("E" + row + ":E" + row).color("#000000").bold(false);
@@ -1648,20 +1648,30 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             if (validProducts.hasOwnProperty(prd)) {
                 var userInput = $filter('unique')(validProducts[prd], 'USR_INPUT');
                 var inputtedValue = userInput[0].USR_INPUT.toLowerCase();
+                // Check if user input is at lower level  e.g i3-2400, Ci3 i3-2400
                 var isUserInputAtLowerLevel = validProducts[prd].filter(function (x) {
                     return (x.PCSR_NBR !== "" && inputtedValue.indexOf(x.PCSR_NBR.toLowerCase()) > -1)
                         || (x.DEAL_PRD_NM !== "" && inputtedValue.indexOf(x.DEAL_PRD_NM.toLowerCase()) > -1)
                         || (x.MTRL_ID !== "" && inputtedValue.indexOf(x.MTRL_ID.toLowerCase()) > -1);
                 });
-                if (isUserInputAtLowerLevel.length > 0) {
-                    var userInput = $filter('unique')(validProducts[prd], 'HIER_VAL_NM');
-                    userInput = userInput.map(function (elem) {
-                        return elem.HIER_VAL_NM;
+
+                // Even if the user input is not at lower level check if it is at higher level, this would take care replacing NAND Family inputs e.g p3700
+                var isUserInputAtHigherLevel = validProducts[prd].filter(function (x) {
+                    return (x.DEAL_PRD_TYPE !== "" && inputtedValue.indexOf(x.DEAL_PRD_TYPE.toLowerCase()) > -1)
+                        || (x.PRD_CAT_NM !== "" && inputtedValue.indexOf(x.PRD_CAT_NM.toLowerCase()) > -1)
+                        || (x.BRND_NM !== "" && inputtedValue.indexOf(x.BRND_NM.toLowerCase()) > -1)
+                        || (x.FMLY_NM !== "" && inputtedValue.indexOf(x.FMLY_NM.toLowerCase()) > -1)
+                });
+
+                if (isUserInputAtLowerLevel.length === 0 && isUserInputAtHigherLevel.length > 0) {
+                    var userInput = userInput.map(function (elem) {
+                        return elem.USR_INPUT;
                     }).join(",");
                 }
                 else {
+                    var userInput = $filter('unique')(validProducts[prd], 'HIER_VAL_NM');
                     userInput = userInput.map(function (elem) {
-                        return elem.USR_INPUT;
+                        return elem.HIER_VAL_NM;
                     }).join(",");
                 }
                 contractProducts = contractProducts === "" ? userInput : contractProducts + "," + userInput;
