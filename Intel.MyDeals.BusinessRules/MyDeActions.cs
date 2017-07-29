@@ -31,9 +31,10 @@ namespace Intel.MyDeals.BusinessRules
 
             string role = OpUserStack.MyOpUserToken.Role.RoleTypeCd;
 
-            if (de.DcID > 0 || de.AtrbValue.ToString() != string.Empty) return;
-
             string opDeType = de.DcType.IdToOpDataElementTypeString().ToString();
+
+            if (de.AtrbValue.ToString() != string.Empty || opDeType == OpDataElementType.PRC_TBL.ToString() || opDeType == OpDataElementType.PRC_TBL_ROW.ToString()) return;
+
             string newStage = string.Empty;
 
             if (opDeType == OpDataElementType.CNTRCT.ToString())
@@ -47,7 +48,7 @@ namespace Intel.MyDeals.BusinessRules
             }
             else if (opDeType == OpDataElementType.WIP_DEAL.ToString())
             {
-                newStage = WorkFlowStages.Draft;
+                newStage = WorkFlowStages.Draft; // There are only 2 stages, Draft and Active
             }
             else if (opDeType == OpDataElementType.DEAL.ToString())
             {
