@@ -631,11 +631,13 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
     vm.removeProd = function (prdNm) {
         kendo.confirm("This will remove product (" + prdNm + ") from the <b>Product Corrector</b> AND from the <b>Pricing Table</b>?<br/>Would you like to delete this product?").then(function () {
             // record what we need to delete from the spreadsheet json
-            vm.productsToDeleteUponSave.push({
+            vm.productsToDeleteUponSave.push({ 
                 "name": prdNm,
                 "rowId": vm.curRowId,
                 "rowIndx": vm.curRowIndx
             });
+
+            vm.ProductCorrectorData.productsToDeleteUponSave = vm.productsToDeleteUponSave;
 
             // delete from duplicates if exists
             if (!!vm.ProductCorrectorData.DuplicateProducts[vm.curRowId] && !!vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][prdNm]) {
@@ -649,11 +651,13 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
 
             // delete from invalid if exists
             var delItem = vm.ProductCorrectorData.InValidProducts[vm.curRowId];
-            for (var i = 0; i < delItem.length; i++) {
-                if (delItem[i] === prdNm) {
-                    delItem.splice(i, 1);
-                    //delete delItem[i];
-                }
+            if (!!delItem) {
+            	for (var i = 0; i < delItem.length; i++) {
+            		if (delItem[i] === prdNm) {
+            			delItem.splice(i, 1);
+            			//delete delItem[i];
+            		}
+            	}
             }
 
             //Delete fromProdctTransformResults
@@ -663,8 +667,8 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
             var transItem = vm.ProductCorrectorData.ProdctTransformResults[vm.curRowId];
             for (var t = 0; t < transItem.length; t++) {
                 if (transItem[t] === prdNm) {
-                    transItem.splice(t, 1);
-                    //delete transItem[t];
+                	transItem.splice(t, 1);
+                	//delete transItem[t];  
                 }
             }
 

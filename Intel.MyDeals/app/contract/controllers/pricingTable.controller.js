@@ -619,11 +619,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     data[r]["CUST_MBR_SID"] = root.contractData.CUST_MBR_SID;
 
                     if (!root.curPricingTable || !!root.curPricingTable.NUM_OF_TIERS) {
-                        if (!data[r]["TIER_NBR"] || data[r]["TIER_NBR"] === "") {
-                            data[r]["TIER_NBR"] = (r % root.child.numTiers) + 1;
+                    	if (!data[r]["TIER_NBR"] || data[r]["TIER_NBR"] === "") {
+                    		data[r]["TIER_NBR"] = (r % root.child.numTiers) + 1;
                         }
                     }
-                    //if (data[r]["PASSED_VALIDATION"] === "")
 
                     for (var key in ptTemplate.model.fields) {
                         if (ptTemplate.model.fields.hasOwnProperty(key)) {
@@ -1595,34 +1594,52 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     var data = root.spreadDs.data();
                     var sourceData = root.pricingTableData.PRC_TBL_ROW;
                     if (!!transformResult && !!transformResult.ProdctTransformResults) {
-                        for (var key in transformResult.ProdctTransformResults) {
-                            var r = key - 1;
-                            var allIssuesDone = false;
-                            // Save Valid and InValid JSO into spreadsheet hidden columns
-                            if ((!!transformResult.InValidProducts[key] && transformResult.InValidProducts[key].length > 0) || !!transformResult.DuplicateProducts[key]) {
-                                var invalidJSON = {
-                                    'ProdctTransformResults': transformResult.ProdctTransformResults[key],
-                                    'InValidProducts': transformResult.InValidProducts[key], 'DuplicateProducts': transformResult.DuplicateProducts[key]
-                                }
-                                data[r].PTR_SYS_INVLD_PRD = JSON.stringify(invalidJSON);
-                                sourceData[r].PTR_SYS_INVLD_PRD = data[r].PTR_SYS_INVLD_PRD;
-                            } else {
-                                data[r].PTR_SYS_INVLD_PRD = "";
-                                sourceData[r].PTR_SYS_INVLD_PRD = data[r].PTR_SYS_INVLD_PRD;
-                                allIssuesDone = true;
-                            }
+                    	for (var key in transformResult.ProdctTransformResults) {
+                    		var r = key - 1;
+                    		var allIssuesDone = false;
+                    		// Save Valid and InValid JSO into spreadsheet hidden columns
+                    		if ((!!transformResult.InValidProducts[key] && transformResult.InValidProducts[key].length > 0) || !!transformResult.DuplicateProducts[key]) {
+                    			var invalidJSON = {
+                    				'ProdctTransformResults': transformResult.ProdctTransformResults[key],
+                    				'InValidProducts': transformResult.InValidProducts[key], 'DuplicateProducts': transformResult.DuplicateProducts[key]
+                    			}
+                    			data[r].PTR_SYS_INVLD_PRD = JSON.stringify(invalidJSON);
+                    			sourceData[r].PTR_SYS_INVLD_PRD = data[r].PTR_SYS_INVLD_PRD;
+                    		} else {
+                    			data[r].PTR_SYS_INVLD_PRD = "";
+                    			sourceData[r].PTR_SYS_INVLD_PRD = data[r].PTR_SYS_INVLD_PRD;
+                    			allIssuesDone = true;
+                    		}
 
-                            data[r].PTR_SYS_PRD = !!transformResult.ValidProducts[key] ? JSON.stringify(transformResult.ValidProducts[key]) : "";
-                            sourceData[r].PTR_SYS_PRD = data[r].PTR_SYS_PRD;
+                    		data[r].PTR_SYS_PRD = !!transformResult.ValidProducts[key] ? JSON.stringify(transformResult.ValidProducts[key]) : "";
+                    		sourceData[r].PTR_SYS_PRD = data[r].PTR_SYS_PRD;
 
-                            // Update user input if all the issues are done
-                            if (allIssuesDone && !!transformResult.ValidProducts[key]) {
-                                var contractProducts = updateUserInput(transformResult.ValidProducts[key]);
-                                data[r].PTR_USER_PRD = contractProducts;
-                                sourceData[r].PTR_USER_PRD = contractProducts;
-                            }
-                        }
+                    		// Update user input if all the issues are done
+                    		if (allIssuesDone && !!transformResult.ValidProducts[key]) {
+                    			var contractProducts = updateUserInput(transformResult.ValidProducts[key]);
+                    			data[r].PTR_USER_PRD = contractProducts;
+                    			sourceData[r].PTR_USER_PRD = contractProducts;
+                    		}
+                    	}
+                    	if (!!transformResult.productsToDeleteUponSave) {
+                    		// Remove Deleted products from PTR_USER_PRD text
+                    		for (var i = 0; i < transformResult.productsToDeleteUponSave.length; i++) {
+                    			var toDelete = transformResult.productsToDeleteUponSave[i];
+                    			var rowIndex = toDelete.rowIndx - 1;
+
+                    			var usrInputStr = data[rowIndex].PTR_USER_PRD;
+                    			var usrInputArr = usrInputStr.split(", ");
+                    			for (var j = 0; j < usrInputArr.length; j++) {
+                    				if (usrInputArr[j] == toDelete.name) {
+                    					usrInputArr.splice(j, 1);
+                    				}
+                    			}
+                    			data[rowIndex].PTR_USER_PRD = usrInputArr.join(", ");
+                    			sourceData[rowIndex].PTR_USER_PRD = data[rowIndex].PTR_USER_PRD;
+                    		}
+                    	}
                     }
+
                     root.spreadDs.sync();
 
                     root.child.setRowIdStyle(data);
