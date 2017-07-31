@@ -312,8 +312,9 @@
             if (!!grid) {
                 angular.forEach(grid.columns, function (item, key) {
                     var columnValue = $filter('unique')(data, item.field);
-                    if (columnValue.length == 1 && item.field !== undefined && item.field != "CheckBox" && item.field != 'CAP' && item.field != 'YCS2' &&
-                        (columnValue[0][item.field] == "" || columnValue[0][item.field] == null || columnValue[0][item.field] == 'NA')) {
+                    if (columnValue.length == 1 && item.field !== undefined && item.field != "CheckBox" && item.field != 'MM_MEDIA_CD'
+                        && item.field != 'CAP' && item.field != 'YCS2' && (columnValue[0][item.field] == "" || columnValue[0][item.field] == null
+                        || columnValue[0][item.field] == 'NA')) {
                         grid.hideColumn(item.field);//hide column
                     } else {
                         grid.showColumn(item.field); //show column
@@ -951,7 +952,6 @@
             }
             if (item.level == "Family") {
                 vm.selectedPathParts.push({ name: item.name, path: item.path });
-
                 // Filter the search results based on the hierarchy
                 var products = $filter('where')(vm.productSearchValues,
                    { 'PRD_CAT_NM': item.vertical, 'FMLY_NM': item.name, 'BRND_NM': item.brand });

@@ -24,11 +24,6 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
     vm.allDone = false;
     vm.curRowDone = false;
 
-    vm.suggestionActions = [
-        { text: 'Use Product Selector', primary: true, action: onProductSelector },
-        { text: 'Delete Product', action: onDeleteProduct }
-    ];
-
     function prdLvlDecoder(indx) {
         if (indx === 7003) return "Product Category";
         if (indx === 7004) return "Brand";
@@ -353,7 +348,8 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                 },
                 width: "50px",
                 headerTemplate: "&nbsp;",
-                template: '<input type=\'checkbox\' ng-click="vm.clickProd(#=data.PRD_MBR_SID#, \'#=data.USR_INPUT#\', \'#=data.HIER_VAL_NM#\',$event)" ng-model="IS_SEL" class=\'check with-font\' id="prdChk#=data.PRD_MBR_SID#" ng-checked="#=IS_SEL#" checked ="#=IS_SEL#"/><label for="prdChk#=data.PRD_MBR_SID#"></label>'
+                template: '<div ng-if="!(dataItem.CAP.indexOf(\'-\') > -1)"><input type=\'checkbox\' ng-click="vm.clickProd(#=data.PRD_MBR_SID#, \'#=data.USR_INPUT#\', \'#=data.HIER_VAL_NM#\',$event)" ng-model="IS_SEL" class=\'check with-font\' id="prdChk#=data.PRD_MBR_SID#" ng-checked="#=IS_SEL#" checked ="#=IS_SEL#"/><label for="prdChk#=data.PRD_MBR_SID#"></label></div>' +
+                          '<div ng-if="dataItem.CAP.indexOf(\'-\') > -1"><input type=\'checkbox\' title="CAP price cannot be a range." ng-disabled="true" ng-click="vm.clickProd(#=data.PRD_MBR_SID#, \'#=data.USR_INPUT#\', \'#=data.HIER_VAL_NM#\',$event)" ng-model="IS_SEL" class=\'check with-font\' id="prdChk#=data.PRD_MBR_SID#" ng-checked="#=IS_SEL#" checked ="#=IS_SEL#"/><label title="CAP price cannot be a range." ng-disabled="true" for="prdChk#=data.PRD_MBR_SID#"></label></div>'
             },
             {
                 field: "HIER_VAL_NM",
@@ -422,17 +418,10 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                 }
             });
 
-            for (var m = 0; m < vm.curRowProds.length; m++) {
-                if (vm.curRowProds[m].name == lookup && vm.curRowProds[m].matchName.length == 0) {
-                    vm.curRowProds[m].status = "Good";
-                    vm.curRowProds[m].reason = "Found the Product";
-                }
-            }
-
             if (!!vm.ProductCorrectorData.DuplicateProducts[vm.curRowId]) {
                 if (!!vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][lookup]) {
                     if (vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][lookup].length == 1) {
-                        vm.removeAndFilter(item.name, "VALID");
+                        vm.removeAndFilter(item.name);
                     }
                 }
             }
@@ -460,26 +449,20 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                     item.IS_SEL = false;
                 }
             });
-
-            for (var m = 0; m < vm.curRowProds.length; m++) {
-                if (vm.curRowProds[m].name == lookup && vm.curRowProds[m].matchName.length == 0) {
-                    vm.curRowProds[m].status = "Issue";
-                    vm.curRowProds[m].reason = "Found multiple matches";
-                }
-            }
         }
         //vm.selectRow(vm.curRowIndx);
     }
 
-    vm.removeAndFilter = function (prdName, mode) {
+    vm.removeAndFilter = function (prdName) {
+        // remove
+        if (!!vm.ProductCorrectorData.DuplicateProducts[vm.curRowId]) {
+            delete vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][prdName];
+            vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][prdName] = {};
+        }
+
         var isEmpty = true;
         for (var r = 0; r < vm.curRowIssues.length; r++) {
-            if (mode == "INVALID") {
-                if (vm.curRowIssues[r].name === prdName) vm.curRowIssues[r].cnt = NaN;
-            }
-            else {
-                if (vm.curRowIssues[r].name === prdName) vm.curRowIssues[r].cnt = 1;
-            }
+            if (vm.curRowIssues[r].name === prdName) vm.curRowIssues[r].cnt = NaN;
             if (!isNaN(vm.curRowIssues[r].cnt) && vm.curRowIssues[r].cnt > 0) isEmpty = false;
         }
 
@@ -487,20 +470,10 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
         if (isEmpty) {
             vm.curRowData = [];
         }
-        if (mode == "INVALID") {
-            vm.applyFilterAndGrouping();
 
-            vm.selectRow(vm.curRowIndx);
-        }
+        vm.applyFilterAndGrouping();
 
-        if (mode == "INVALID") {
-            if (!!vm.ProductCorrectorData.InValidProducts[vm.curRowId]) {
-                var inxInvalid = vm.ProductCorrectorData.InValidProducts[vm.curRowId].indexOf(prdName);
-                if (inxInvalid > -1) {
-                    vm.ProductCorrectorData.InValidProducts[vm.curRowId].splice(inxInvalid, 1);
-                }
-            }
-        }
+        vm.selectRow(vm.curRowIndx);
 
         var allMatched = true;
         for (var m = 0; m < vm.curRowProds.length; m++) {
@@ -511,8 +484,6 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
             if (!vm.nextAvailRow()) {
                 // no more work to do
                 vm.allDone = true;
-                vm.curRowData = [];
-                vm.curRowProds = [];
             }
         }
     }
@@ -588,11 +559,10 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
 
                     angular.forEach(validateSelectedProducts[key], function (product) {
                         vm.ProductCorrectorData.ValidProducts[vm.curRowId][vm.invalidProdName].push(product);
-                        //vm.curRowProds[m].matchName.push(product.HIER_VAL_NM);
                     });
                 }
 
-                vm.removeAndFilter(vm.invalidProdName, "INVALID");
+                vm.removeAndFilter(vm.invalidProdName);
 
                 vm.invalidProdName = '';
             });
@@ -600,15 +570,15 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
 
     vm.clkPrdUsrNm = function (dataItem) {
         if (dataItem.status === "Good") return;
-        vm.invalidItem = "";
-        if (!!dataItem && dataItem.cnt <= 0) {
-            vm.invalidItem = dataItem.name;
-        }
         if (dataItem.matchName.length == 0) {
+            if (!!dataItem && dataItem.cnt <= 0) {
+                vm.launchSelector(dataItem.name);
+                return;
+            }
             // clear filters
             angular.forEach(vm.curRowIssues, function (value, key) {
                 value.selected = false;
-                if (dataItem.name == value.name) {
+                if (dataItem.name == value.name && value.cnt > 0) {
                     value.selected = true;
                 }
             });
@@ -622,6 +592,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
             vm.allDone = false;
 
             vm.ProductCorrectorData.ValidProducts[vm.curRowId][dataItem.name] = [];
+            delete vm.ProductCorrectorData.ValidProducts[vm.curRowId][dataItem.name]
 
             if (!!vm.ProductCorrectorData.DuplicateProducts[vm.curRowId])
                 vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][dataItem.name] = GetProductCorrectorData.DuplicateProducts[vm.curRowId][dataItem.name];
@@ -650,20 +621,10 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
     function onDeleteProduct(e) {
         vm.removeProd(vm.suggestItem.name);
     }
-    function onShowSuggestions(e) {
-        vm.suggestProd(vm.suggestItem.name);
-    }
 
-    vm.gotoSelector = function (prdNm) {
-        kendo.confirm("Unable to locate the product (" + prdNm + ").\nWould you like to look for it in the Product Selector?").then(function () {
-            vm.launchSelector(prdNm);
-        });
-    }
     vm.launchSelector = function (prdNm, productExist) {
         var rowDcId = vm.rowDCId;
         var key = vm.curRowId;
-
-        //alert('TODO: display popup for ' + prdNm + ':\n1) Exact match but with errors like prod outside deal range.\n2) Top 10 or 15 possible matches... maybe.');
         vm.openProdSelector(prdNm, key, productExist);
     }
 
@@ -717,10 +678,6 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
 
             vm.selectRow(vm.curRowIndx);
         });
-    }
-
-    vm.suggestProd = function (prdNm) {
-        kendo.confirm("This is where we would suggest results for " + prdNm.name + "?").then(function () { });
     }
 
     vm.nextAvailRow = function () {
@@ -842,38 +799,26 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                 }
             }
 
-            //TODO:Check with Phil, if this fix not required comment these lines
-            // If valid products contains invalid product name remove from  invalid product
-            //var cntIterator = vm.ProductCorrectorData.InValidProducts[key].length;
             if (!!vm.ProductCorrectorData.InValidProducts[key]) {
+                var invalidCopy = angular.copy(vm.ProductCorrectorData.InValidProducts[key]);
                 for (var j = 0; j < vm.ProductCorrectorData.InValidProducts[key].length; j++) {
                     var foundItems = false;
                     prodName = vm.ProductCorrectorData.InValidProducts[key][j];
-                    ////If any Item present in Valid List Delete from Duplicate
-                    //if (!!vm.ProductCorrectorData.ValidProducts[key]) {
-                    //    if (!!vm.ProductCorrectorData.ValidProducts[key][prodName]) {
-                    //        if (vm.ProductCorrectorData.ValidProducts[key][prodName].length > 0) {
-                    //            var inxInvalid = vm.ProductCorrectorData.InValidProducts[key].indexOf(prodName);
-                    //            if (inxInvalid > -1) {
-                    //                vm.ProductCorrectorData.InValidProducts[key].splice(inxInvalid, 1);
-                    //            }
-                    //        }
-                    //    }
-                    //}
                     if (!!vm.ProductCorrectorData.ValidProducts[key]) {
                         var item = vm.ProductCorrectorData.ValidProducts[key][prodName];
                         if (Array.isArray(item) && item.length > 0) foundItems = true;
                         if (foundItems) {
                             // delete from invalid if exists
-                            var delItem = vm.ProductCorrectorData.InValidProducts[key];
+                            var delItem = invalidCopy;
                             for (var i = 0; i < delItem.length; i++) {
                                 if (delItem[i] === prodName) {
-                                    delItem.splice(i, 1);
+                                    invalidCopy.splice(i, 1);
                                 }
                             }
                         }
                     }
                 }
+                vm.ProductCorrectorData.InValidProducts[key] = invalidCopy;
             }
         }
 

@@ -19,11 +19,6 @@
             </div>
         </div>
 
-        <div kendo-dialog="dialog" k-title="'Unable to find this product'" k-width="500" k-actions="vm.suggestionActions" k-modal="true">
-            <p>It is possible the product is outside the date range of the deal or there is a typo in the product name.</p>
-            <p>How would you like to proceed?</p>
-        </div>
-
         <div class="prodCorrector modal-body">
             <div class="row subHeaderMsg">
                 Please select option(s) below to move into the valid products box or use the <span class="yellow">Product Selector</span>
@@ -676,6 +671,11 @@
         input[type=checkbox].with-font:hover + label:before {
             color: #003C71;
             cursor: pointer;
+        }
+
+        input[type=checkbox].with-font[disabled]:hover + label:before {
+            color: red;
+            cursor: no-drop;
         }
 
         input[type=checkbox].with-font.disabled + label:before {

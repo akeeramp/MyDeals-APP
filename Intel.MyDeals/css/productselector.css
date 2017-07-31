@@ -247,11 +247,12 @@ a.prdAnchor {
     overflow-y: auto;
 }
 
-.prodSelector .k-grid-content {
+.prodSelector .prodSelector-grid .k-grid-content {
     height: calc(85vh - 480px);
     min-height: 200px;
     max-height: calc(85vh - 385px);
 }
+
 
 .prodSelector .productSuggestion .k-grid-content {
     height: calc(85vh - 500px) !important;
@@ -308,13 +309,18 @@ a.prdAnchor {
     border: 1.5px solid #01AEEF;
 }
 
+.checkbox-custom[disabled]:hover + .checkbox-custom-label[disabled]:before {
+    border: 1.5px solid red;
+    cursor:no-drop;
+}
+
 .prodSelector-grid.k-grid td {
     white-space: nowrap;
     color: #000000;
 }
 
-.grpTitle {
-    font-size: 18px;
+.prodSelector .grpTitle {
+    font-size: 16px;
     font-weight: 600;
 }
 
