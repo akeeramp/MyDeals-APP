@@ -69,7 +69,7 @@
                                         </div>
                                         <div style="max-height: 200px; overflow: auto;">
                                             <div ng-repeat="item in opOptions.columns | filter:{title: columnSearchFilter} | orderBy: 'title'" class="chkColItem">
-                                                <input type='checkbox' checked='checked' class='check with-font' id="colChk{{item.field}}" ng-click="onColumnChange(item)" data-field='{{item.field}}'/>
+                                                <input type='checkbox' checked='checked' class='check with-myfont' id="colChk{{item.field}}" ng-click="onColumnChange(item)" data-field='{{item.field}}'/>
                                                 <label for="colChk{{item.field}}">
                                                     <span ng-bind-html="item.title"></span>
                                                 </label>
@@ -455,8 +455,8 @@
         margin-left: 6px;
     }
 
-    input[type=radio].with-font,
-    input[type=checkbox].with-font {
+    input[type=radio].with-myfont,
+    input[type=checkbox].with-myfont {
         border: 0;
         clip: rect(0 0 0 0);
         height: 1px;
@@ -467,8 +467,8 @@
         width: 1px;
     }
     
-    input[type=radio].with-font + label:before,
-    input[type=checkbox].with-font + label:before {
+    input[type=radio].with-myfont + label:before,
+    input[type=checkbox].with-myfont + label:before {
         font-family: FontAwesome;
         display: inline-block;
         content: "\f096";
@@ -479,19 +479,19 @@
         margin-top: 2px;
         vertical-align: text-bottom;
     }
-    input[type=radio].with-font:hover + label:before,
-    input[type=checkbox].with-font:hover + label:before {
+    input[type=radio].with-myfont:hover + label:before,
+    input[type=checkbox].with-myfont:hover + label:before {
         color: #003C71;
         cursor: pointer;
     }
-    input[type=radio].with-font.disabled + label:before,
-    input[type=checkbox].with-font.disabled + label:before {
+    input[type=radio].with-myfont.disabled + label:before,
+    input[type=checkbox].with-myfont.disabled + label:before {
         color: #cccccc;
         cursor: default;
     }
     
-    input[type=radio].with-font:checked + label:before,
-    input[type=checkbox].with-font:checked + label:before {
+    input[type=radio].with-myfont:checked + label:before,
+    input[type=checkbox].with-myfont:checked + label:before {
         content: "\f046";
         font-size: 20px;
         letter-spacing: 5px;
@@ -501,8 +501,8 @@
         margin-right: 2px;
         vertical-align: text-bottom;
     }
-    input[type=radio].with-font:focus + label:before,
-    input[type=checkbox].with-font:focus + label:before {
+    input[type=radio].with-myfont:focus + label:before,
+    input[type=checkbox].with-myfont:focus + label:before {
         font-weight: bold;
         color:#C4D600;
     }

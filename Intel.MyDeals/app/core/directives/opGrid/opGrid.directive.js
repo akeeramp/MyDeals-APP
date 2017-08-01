@@ -56,7 +56,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 angular.forEach($scope.opOptions.groupColumns, function (value, key) {
                     this[key] = cnt++;
                 }, indxs);
-
+                
                 var cols = $scope.opOptions.columns;
                 for (var c = 0; c < cols.length; c++) {
 
@@ -104,6 +104,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
 
             $scope.onColumnChange = function (val) {
                 var col = null;
+
                 for (var i = 0; i < $scope.grid.columns.length; i++)
                     if ($scope.grid.columns[i]["field"] === val.field)
                         col = $scope.grid.columns[i];
@@ -147,7 +148,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 $scope.cloneWithOrder("default");
             }
 
-            $scope.configureSortableTab = function() {
+            $scope.configureSortableTab = function () {
                 $("#tabstrip ul.k-tabstrip-items").kendoSortable({
                     filter: "li.k-item",
                     axis: "x",
@@ -168,7 +169,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 });
             }
 
-            $scope.alignGroupOrder = function() {
+            $scope.alignGroupOrder = function () {
                 var tabstrip = $("#tabstrip").data("kendoTabStrip");
                 var grps = $scope.opOptions.groups;
                 for (var g = 0; g < grps.length; g++) {
@@ -693,7 +694,6 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
             $scope.showCols = function (grpName) {
                 var c;
                 var colNames = [];
-
                 $scope.curGroup = grpName;
 
                 for (var g = 0; g < $scope.opOptions.groups.length; g++) {
@@ -727,7 +727,6 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                             $scope.grid.showColumn(colNames[c]);
                         }
                     }
-
                     $scope.grid.resize();
                 } else {
                     // CSS WAY... faster... not seeing any side effects yet
