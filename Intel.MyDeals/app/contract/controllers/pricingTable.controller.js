@@ -363,7 +363,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         singleProductJSON[value.HIER_VAL_NM] = value;
                     });
                 } else {
-                    singleProductJSON[validatedSelectedProducts[key].HIER_VAL_NM] = validatedSelectedProducts[key];
+                    singleProductJSON[validatedSelectedProducts[key][0].HIER_VAL_NM] = validatedSelectedProducts[key];
                 }
             }
             for (var key in singleProductJSON) {

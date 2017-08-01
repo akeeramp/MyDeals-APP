@@ -255,9 +255,9 @@ a.prdAnchor {
 
 
 .prodSelector .productSuggestion .k-grid-content {
-    height: calc(85vh - 500px) !important;
-    min-height: 180px !important;
-    max-height: calc(85vh - 500px) !important;
+    height: calc(85vh - 500px);
+    min-height: 180px;
+    max-height: calc(85vh - 500px);
 }
 
 #productSuggestion.k-grid-content {
