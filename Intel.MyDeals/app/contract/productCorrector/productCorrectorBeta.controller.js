@@ -23,6 +23,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
     vm.ProductCorrectorData = util.deepClone(GetProductCorrectorData);
     vm.allDone = false;
     vm.curRowDone = false;
+    vm.isValidCapDetails = isValidCapDetails;
 
     function prdLvlDecoder(indx) {
         if (indx === 7003) return "Product Category";
@@ -354,6 +355,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
             {
                 field: "HIER_VAL_NM",
                 title: "Product",
+                template: '<div ng-class="{\'text-danger\': vm.isValidCapDetails(dataItem)}" title="{{vm.isValidCapDetails(dataItem, true)}}">#= HIER_VAL_NM #</div>',
                 width: "150px"
             },
             {
@@ -631,7 +633,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
     vm.removeProd = function (prdNm) {
         kendo.confirm("This will remove product (" + prdNm + ") from the <b>Product Corrector</b> AND from the <b>Pricing Table</b>?<br/>Would you like to delete this product?").then(function () {
             // record what we need to delete from the spreadsheet json
-            vm.productsToDeleteUponSave.push({ 
+            vm.productsToDeleteUponSave.push({
                 "name": prdNm,
                 "rowId": vm.curRowId,
                 "rowIndx": vm.curRowIndx
@@ -652,12 +654,12 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
             // delete from invalid if exists
             var delItem = vm.ProductCorrectorData.InValidProducts[vm.curRowId];
             if (!!delItem) {
-            	for (var i = 0; i < delItem.length; i++) {
-            		if (delItem[i] === prdNm) {
-            			delItem.splice(i, 1);
-            			//delete delItem[i];
-            		}
-            	}
+                for (var i = 0; i < delItem.length; i++) {
+                    if (delItem[i] === prdNm) {
+                        delItem.splice(i, 1);
+                        //delete delItem[i];
+                    }
+                }
             }
 
             //Delete fromProdctTransformResults
@@ -667,8 +669,8 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
             var transItem = vm.ProductCorrectorData.ProdctTransformResults[vm.curRowId];
             for (var t = 0; t < transItem.length; t++) {
                 if (transItem[t] === prdNm) {
-                	transItem.splice(t, 1);
-                	//delete transItem[t];  
+                    transItem.splice(t, 1);
+                    //delete transItem[t];
                 }
             }
 
@@ -827,6 +829,22 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
         }
 
         $uibModalInstance.close(vm.ProductCorrectorData);
+    }
+
+    function isValidCapDetails(productJson, showErrorMesssage) {
+        var errorMessage = "";
+        var cap = productJson.CAP.toString();
+        if (cap.toUpperCase() == "NO CAP") {
+            errorMessage = "Product entered does not have CAP within the Deal's start date and end date.";
+        }
+        if (cap.indexOf('-') > -1) {
+            errorMessage = "CAP price " + cap + " cannot be a range.";
+        }
+        if (!showErrorMesssage) {
+            return errorMessage == "" ? false : true;
+        } else {
+            return errorMessage == "" ? productJson.HIER_NM_HASH : errorMessage;
+        }
     }
 
     //Master Product Data massaging
