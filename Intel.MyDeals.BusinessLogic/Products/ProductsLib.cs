@@ -1038,7 +1038,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <param name="userInputs"></param>
         /// <param name="custId"></param>
         /// <returns></returns>
-        public IList<PRD_TRANSLATION_RESULTS> GetSuggestions(ProductEntryAttribute userInput, int custId)
+        public IList<PRD_LOOKUP_RESULTS> GetSuggestions(ProductEntryAttribute userInput, int custId)
         {
             var suggestions = GetSearchString(userInput.USR_INPUT, userInput.FILTER, DateTime.Parse(userInput.START_DATE),
                 DateTime.Parse(userInput.END_DATE), true).Take(5);
@@ -1056,7 +1056,7 @@ namespace Intel.MyDeals.BusinessLogic
                 COLUMN_TYPE = (t.Name == "EPM_NM")
             }).ToList();
 
-            return productsToTranslate.Any() ? GetProductDetails(productsToTranslate, custId) : new List<PRD_TRANSLATION_RESULTS>();
+            return productsToTranslate.Any() ? SearchProduct(productsToTranslate, custId, false) : new List<PRD_LOOKUP_RESULTS>();
         }
     }
 

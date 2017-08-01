@@ -487,7 +487,7 @@ namespace Intel.MyDeals.Controllers.API
 
         [Route("GetSuggestions/{custId}")]
         [HttpPost]
-        public IList<PRD_TRANSLATION_RESULTS> GetSuggestions(ProductEntryAttribute userInput, int custId)
+        public IList<PRD_LOOKUP_RESULTS> GetSuggestions(ProductEntryAttribute userInput, int custId)
         {
             return SafeExecutor(() => _productsLib.GetSuggestions(userInput, custId)
                 , $"Unable to get product {"details"}"

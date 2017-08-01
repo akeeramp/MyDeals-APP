@@ -73,7 +73,7 @@ namespace Intel.MyDeals.IBusinessLogic
 
         IList<SearchString> GetSearchString(string searchText, string mediaCode, DateTime startDate, DateTime endDate, bool getWithFilters = true);
 
-        IList<PRD_TRANSLATION_RESULTS> GetSuggestions(ProductEntryAttribute userInput, int custId);
+        IList<PRD_LOOKUP_RESULTS> GetSuggestions(ProductEntryAttribute userInput, int custId);
 
         bool IsProductExistsInMydeals(string filter);
     }
