@@ -5,9 +5,9 @@
         .module('app.contract')
         .controller('ContractController', ContractController);
 
-    ContractController.$inject = ['$scope', '$state', '$filter', '$localStorage', 'contractData', 'isNewContract', 'templateData', 'objsetService', 'templatesService', 'logger', '$uibModal', '$timeout', '$window', '$location', '$rootScope', 'confirmationModal', 'dataService', 'customerService', 'contractManagerConstants', 'MrktSegMultiSelectService', '$compile'];
+    ContractController.$inject = ['$scope', '$state', '$filter', '$localStorage', 'contractData', 'isNewContract', 'templateData', 'objsetService', 'securityService', 'templatesService', 'logger', '$uibModal', '$timeout', '$window', '$location', '$rootScope', 'confirmationModal', 'dataService', 'customerService', 'contractManagerConstants', 'MrktSegMultiSelectService', '$compile'];
 
-    function ContractController($scope, $state, $filter, $localStorage, contractData, isNewContract, templateData, objsetService, templatesService, logger, $uibModal, $timeout, $window, $location, $rootScope, confirmationModal, dataService, customerService, contractManagerConstants, MrktSegMultiSelectService, $compile) {
+    function ContractController($scope, $state, $filter, $localStorage, contractData, isNewContract, templateData, objsetService, securityService, templatesService, logger, $uibModal, $timeout, $window, $location, $rootScope, confirmationModal, dataService, customerService, contractManagerConstants, MrktSegMultiSelectService, $compile) {
         // store template information
         //
         $scope.templates = $scope.templates || templateData.data;
@@ -27,10 +27,18 @@
         $scope.child = null;
         $scope.isAutoSaving = false;
         $scope.defCust = $localStorage.selectedCustomerId;
+        $scope.switchingTabs = false;
 
         $scope.flowMode = "Deal Entry";
         if ($state.current.name.indexOf("contract.compliance") >= 0) $scope.flowMode = "Compliance";
         if ($state.current.name.indexOf("contract.summary") >= 0) $scope.flowMode = "Manage";
+
+
+        //var s1 = securityService.chkAtrbRules('ATRB_READ_ONLY', 'SA', 'WIP_DEAL', 'ECAP', 'Draft', 'BACK_DATE_RSN');
+        //var s2 = securityService.chkAtrbRules('ATRB_READ_ONLY', 'SA', 'WIP_DEAL', 'ECAP', 'Draft', 'ECAP_FLR');
+        //var s3 = securityService.chkAtrbRules('ATRB_READ_ONLY', 'SA', 'DEAL', 'ECAP', 'Draft', 'BACK_DATE_RSN');
+        //var s4 = securityService.chkAtrbRules('ATRB_READ_ONLY', 'SA', 'DEAL', 'ECAP', 'Draft', 'ECAP_FLR');
+        //debugger;
 
         // determine if the contract is existing or new... if new, look for pre-population attributes from the URL parameters
 
@@ -134,7 +142,7 @@
         }
         updateDisplayTitle();
 
-        $scope.refreshContractData = function (id) {
+        $scope.refreshContractData = function (id, ptId) {
             objsetService.readContract($scope.contractData.DC_ID).then(function (data) {
                 $scope.contractData = $scope.initContract(data);
                 $scope.contractData.CUST_ACCNT_DIV_UI = "";
@@ -142,6 +150,9 @@
                 // if the current strategy was changed, update it
                 if (id != undefined && $scope.curPricingStrategyId === id) {
                     $scope.curPricingStrategy = util.findInArray($scope.contractData.PRC_ST, id);
+                    if (id != undefined && $scope.curPricingTableId === ptId) {
+                        $scope.curPricingTable = util.findInArray($scope.curPricingStrategy.PRC_TBL, ptId);
+                    }
                 }
 
                 $timeout(function () {
@@ -652,7 +663,7 @@
             // if Pricing Strategy or Pricing Table was being edited, save it
 
             var saveStates = ["contract.manager.strategy", "contract.manager.strategy.wip", "contract.details"];
-            if ((saveStates.indexOf(fromState.name) >= 0) && $scope._dirty && !$scope.isAutoSaving) {
+            if (!$scope.switchingTabs && (saveStates.indexOf(fromState.name) >= 0) && $scope._dirty && !$scope.isAutoSaving) {
                 $scope.isAutoSaving = true;
 
                 if (confirm('Would you like to save your changes?')) {
@@ -1098,7 +1109,7 @@
             );
         }
         $scope.actionPricingStrategies = function (data) {
-            $scope.setBusy("Updating Pricing Straties...", "Please wait as we update the Pricing Strategy!");
+            $scope.setBusy("Updating Pricing Strategies...", "Please wait as we update the Pricing Strategy!");
             objsetService.actionPricingStrategies($scope.getCustId(), $scope.contractData.DC_ID, data).then(
                 function (data) {
                     $scope.messages = data.data.Messages;
@@ -1107,6 +1118,42 @@
                         $scope.$broadcast('refresh');
                         $("#wincontractMessages").data("kendoWindow").open();
                         $scope.refreshContractData();
+                        $scope.setBusy("", "");
+                    }, 50);
+                },
+                function (result) {
+                    debugger;
+                }
+            );
+        }
+        $scope.actionWipDeal = function (wip, actn) {
+            $scope.setBusy("Updating Wip Deal...", "Please wait as we update the Wip Deal!");
+            objsetService.actionWipDeal($scope.getCustId(), $scope.contractData.DC_ID, wip, actn).then(
+                function (data) {
+                    $scope.messages = data.data.Messages;
+
+                    $timeout(function () {
+                        $scope.$broadcast('refresh');
+                        $("#wincontractMessages").data("kendoWindow").open();
+                        if (wip !== undefined) $scope.refreshContractData(wip.DC_ID);
+                        $scope.setBusy("", "");
+                    }, 50);
+                },
+                function (result) {
+                    $scope.setBusy("", "");
+                }
+            );
+        }
+        $scope.actionWipDeals = function (data) {
+            $scope.setBusy("Updating Wip Deals...", "Please wait as we update the Wip Deals!");
+            objsetService.actionWipDeals($scope.getCustId(), $scope.contractData.DC_ID, data).then(
+                function (data) {
+                    $scope.messages = data.data.Messages;
+
+                    $timeout(function () {
+                        //$scope.$broadcast('refresh');
+                        //$("#wincontractMessages").data("kendoWindow").open();
+                        //$scope.refreshContractData();
                         $scope.setBusy("", "");
                     }, 50);
                 },
@@ -1225,6 +1272,40 @@
                 });
             });
         }
+        $scope.deletePricingTableRow = function (wip) {
+            $scope.$apply(function () {
+                $scope.setBusy("Deleting...", "Deleting the Pricing Table Row and Deal");
+                $scope._dirty = false;
+                topbar.show();
+
+                // Remove from DB first... then remove from screen
+                objsetService.deletePricingTableRow(wip.CUST_MBR_SID, $scope.contractData.DC_ID, wip.DC_PARENT_ID).then(
+                    function (data) {
+                        if (data.data.MsgType !== 1) {
+                            $scope.setBusy("Delete Failed", "Unable to Deleted the Pricing Table");
+                            $timeout(function () {
+                                $scope.setBusy("", "");
+                            }, 4000);
+                            return;
+                        }
+
+                        $scope.$broadcast('removeRow', wip.DC_PARENT_ID);
+
+                        $scope.setBusy("Delete Successful", "Deleted the Pricing Table Row and Deal");
+                        $timeout(function () {
+                            $scope.setBusy("", "");
+                        }, 4000);
+                        topbar.hide();
+
+                    },
+                    function (response) {
+                        logger.error("Could not delete the Pricing Table.", response, response.statusText);
+                        topbar.hide();
+                    }
+                );
+            });
+        }
+
 
         // **** SAVE CONTRACT Methods ****
         //
@@ -1573,14 +1654,18 @@
                             if (results.data.PRC_TBL_ROW[i].warningMessages !== undefined && results.data.PRC_TBL_ROW[i].warningMessages.length > 0) anyWarnings = true;
                         }
                         $scope.updateResults(results.data.PRC_TBL_ROW, $scope.pricingTableData.PRC_TBL_ROW);
-                        $scope.spreadDs.read();
-                        $scope.syncCellsOnAllRows(results.data.PRC_TBL_ROW);
+                        if (!!$scope.spreadDs) {
+                            $scope.spreadDs.read();
+                            $scope.syncCellsOnAllRows(results.data.PRC_TBL_ROW);
+                        }
                     }
                     if (!!results.data.WIP_DEAL) {
-                        for (i = 0; i < results.data.WIP_DEAL.length; i++) {
-                            if (results.data.WIP_DEAL[i].warningMessages !== undefined && results.data.WIP_DEAL[i].warningMessages.length > 0) anyWarnings = true;
+                        if (!$scope.switchingTabs) {
+                            for (i = 0; i < results.data.WIP_DEAL.length; i++) {
+                                if (results.data.WIP_DEAL[i].warningMessages !== undefined && results.data.WIP_DEAL[i].warningMessages.length > 0) anyWarnings = true;
+                            }
+                            $scope.updateResults(results.data.WIP_DEAL, $scope.pricingTableData === undefined ? [] : $scope.pricingTableData.WIP_DEAL);
                         }
-                        $scope.updateResults(results.data.WIP_DEAL, $scope.pricingTableData === undefined ? [] : $scope.pricingTableData.WIP_DEAL);
                     }
 
                     topbar.hide();
@@ -1589,7 +1674,9 @@
                         $scope.setBusy("Save Successful", "Saved the contract");
                         $scope.resetDirty();
                         $scope.$broadcast('saveComplete', results);
+
                         if (!!toState) {
+                            if ($scope.switchingTabs) toState = toState.replace(/.wip/g,'');
                             $state.go(toState, toParams, { reload: true });
                         } else {
                             $timeout(function () {
@@ -1604,9 +1691,10 @@
                         }, 2000);
                     }
 
-                    $scope.refreshContractData($scope.curPricingStrategyId);
+                    $scope.refreshContractData($scope.curPricingStrategyId, $scope.curPricingTableId);
 
                     $scope.isAutoSaving = false;
+
                 },
                 function (response) {
                     $scope.setBusy("Error", "Could not save the contract.");
@@ -2102,7 +2190,7 @@
                 function (value, key) {
                     if (key[0] !== '_' &&
                         !Array.isArray(value) &&
-                        (!isNaN(value) || value === undefined || value === null || value.trim() === "") &&
+                        (value === undefined || value === null || value.trim() === "") &&
                         $scope.newStrategy._behaviors.isRequired[key] === true) {
                         $scope.newStrategy._behaviors.validMsg[key] = "* field is required";
                         $scope.newStrategy._behaviors.isError[key] = true;
@@ -2271,7 +2359,7 @@
             // Check required
             angular.forEach($scope.newPricingTable,
                 function (value, key) {
-                    if (key[0] !== '_' && !Array.isArray(value) && (!isNaN(value) || value === undefined || value === null || value.trim() === "") && $scope.newPricingTable._behaviors.isRequired[key] === true) {
+                    if (key[0] !== '_' && !Array.isArray(value) && (value === undefined || value === null || value.trim() === "") && $scope.newPricingTable._behaviors.isRequired[key] === true) {
                         $scope.newPricingTable._behaviors.validMsg[key] = "* field is required";
                         $scope.newPricingTable._behaviors.isError[key] = true;
                         isValid = false;
@@ -2467,27 +2555,36 @@
             $scope.setBusy("Loading...", "Loading the Deal Editor");
             $scope.saveEntireContractRoot($state.current.name, true, true, 'contract.manager.strategy.wip', { cid: $scope.contractData.DC_ID, sid: $scope.curPricingStrategyId, pid: $scope.curPricingTableId });
         }
+        $scope.gotoToPricingTable = function () {
+            $scope.setBusy("Loading...", "Loading the Pricing Table Editor");
+            $scope.spreadNeedsInitialization = true;
+            $state.go('contract.manager.strategy',
+                {
+                    cid: $scope.contractData.DC_ID,
+                    sid: $scope.curPricingStrategyId,
+                    pid: $scope.curPricingTableId
+                },
+                { reload: true });
+        }
         $scope.backToPricingTable = function () {
             if ($scope.isPtr) return;
 
             if (!$scope._dirty) {
-                $scope.setBusy("Loading...", "Loading the Pricing Table Editor");
-                $scope.spreadNeedsInitialization = true;
-                $state.go('contract.manager.strategy',
-                    {
-                        cid: $scope.contractData.DC_ID,
-                        sid: $scope.curPricingStrategyId,
-                        pid: $scope.curPricingTableId
-                    },
-                    { reload: true });
+                $scope.gotoToPricingTable();
             } else {
+                $scope.switchingTabs = true;
                 $scope.$broadcast('syncDs');
-                $scope.saveEntireContractBase($state.current.name, false, false, 'contract.manager.strategy', { cid: $scope.contractData.DC_ID, sid: $scope.curPricingStrategyId, pid: $scope.curPricingTableId });
+                $scope.saveEntireContractBase($state.current.name, true, true, 'contract.manager.strategy', { cid: $scope.contractData.DC_ID, sid: $scope.curPricingStrategyId, pid: $scope.curPricingTableId });
+                //$scope.setBusy("Loading...", "Loading the Deal Editor");
+                //$scope.saveEntireContractRoot($state.current.name, true, true, 'contract.manager.strategy', { cid: $scope.contractData.DC_ID, sid: $scope.curPricingStrategyId, pid: $scope.curPricingTableId });
+                //$scope.publishWipDealsBase();
+                //$scope.$broadcast('syncDs');
+                //$scope.saveEntireContractBase($state.current.name, false, false, 'contract.manager.strategy', { cid: $scope.contractData.DC_ID, sid: $scope.curPricingStrategyId, pid: $scope.curPricingTableId });
             }
         }
 
         $scope.validateWipDeals = function () {
-            $scope.saveEntireContractBase($state.current.name, true);
+            $scope.saveEntireContractBase($state.current.name, true, true);
         }
 
         $scope.toggleTerms = function () {

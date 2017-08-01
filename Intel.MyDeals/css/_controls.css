@@ -254,6 +254,11 @@
         -webkit-transform: rotate(90deg);
         transform: rotate(90deg);
     }
+    .rotate-270 {
+        -ms-transform: rotate(270deg);
+        -webkit-transform: rotate(270deg);
+        transform: rotate(270deg);
+    }
 
     .lookupDesc{
         font-size:11px;

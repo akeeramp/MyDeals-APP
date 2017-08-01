@@ -105,13 +105,36 @@
                     }
                 }
             }, {
-                state: 'contract.summary.dealtype',
+                state: 'contract.overlapping',
                 config: {
-                    url: '/dealtype',
+                    url: '/overlapping',
                     views: {
-                        'summaryContentView': {
-                            templateUrl: '/app/contract/partials/contractSummaryDealType.html',
-                            controller: 'managerDealTypeController'
+                        'lnavView': {
+                            templateUrl: '/app/contract/partials/lnavSummary.html'
+                        },
+                        'contractHeaderView': {
+                            templateUrl: '/app/contract/partials/contractSummaryHeader.html'
+                        },
+                        'contractWrapperView': {
+                            templateUrl: '/app/contract/partials/contractSummaryOverlapping.html',
+                            controller: 'managerOverlappingController'
+                        }
+                    }   
+                }
+            }, {
+                state: 'contract.timeline',
+                config: {
+                    url: '/timeline',
+                    views: {
+                        'lnavView': {
+                            templateUrl: '/app/contract/partials/lnavSummary.html'
+                        },
+                        'contractHeaderView': {
+                            templateUrl: '/app/contract/partials/contractSummaryHeader.html'
+                        },
+                        'contractWrapperView': {
+                            templateUrl: '/app/contract/partials/contractSummaryTimeline.html',
+                            controller: 'managerTimelineController'
                         }
                     }
                 }

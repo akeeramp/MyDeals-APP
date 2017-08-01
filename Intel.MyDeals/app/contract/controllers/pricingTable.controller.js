@@ -34,8 +34,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     $scope.root = root;
     root.setBusy("Loading Deals", "Gathering deals and security settings.");
     root.child = $scope;
-
-    $scope.root.ptRowCount = 200;
+    root.ptRowCount = 200;
+    root.swichingTabs = false;
 
     root.uncompressJson(pricingTableData.data.PRC_TBL_ROW);
 
@@ -839,10 +839,15 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     $scope.$on('saveWithWarnings',
         function (event, args) {
             $scope.setRowIdStyle(args.data.PRC_TBL_ROW);
+            $scope.root.swichingTabs = false;
         });
     $scope.$on('saveComplete',
         function (event, args) {
+            if ($scope.root.isWip && $scope.root.swichingTabs) {
+                $scope.root.gotoToPricingTable();
+            }
             $scope.setRowIdStyle(args.data.PRC_TBL_ROW);
+            $scope.root.swichingTabs = false;
         });
 
     // TDOO: This needs major perfromance refactoring because it makes things slow for poeple with bad computer specs :<

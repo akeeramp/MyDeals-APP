@@ -6,6 +6,7 @@ using Intel.MyDeals.BusinessLogic.DataCollectors;
 using Intel.MyDeals.BusinessRules;
 using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
+using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque;
 using Intel.Opaque.Data;
 using Newtonsoft.Json.Linq;
@@ -63,8 +64,6 @@ namespace Intel.MyDeals.BusinessLogic
                 int idtype = items.GetIntAtrbFromOpDataElementType(AttributeCodes.dc_type);
                 int parentid = items.GetIntAtrb(AttributeCodes.DC_PARENT_ID);
                 int parentidtype = items.GetIntAtrbFromOpDataElementType(AttributeCodes.dc_parent_type);
-
-                
                 OpDataElementSetType objSetType = OpDataElementSetTypeConverter.FromString(items[AttributeCodes.OBJ_SET_TYPE_CD]);
 
                 if (opType == OpDataElementType.WIP_DEAL && id == 0)
@@ -76,15 +75,17 @@ namespace Intel.MyDeals.BusinessLogic
                     foundIds.Add(id);
                 }
 
+                // Look for WIP Deals that need to be mapped to Parent
                 if (opType == OpDataElementType.WIP_DEAL && id == 0)
                 {
                     OpDataElementTypeMapping elMapping = objSetType.OpDataElementTypeParentMapping(opType);
+                    List<OpDataCollector> myDcs = myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.Where(d => d.DcParentID == parentid).ToList();
+
                     if (elMapping.TranslationType == OpTranslationType.OneDealPerProduct)
                     {
                         //string wipProd = items[AttributeCodes.PTR_USER_PRD + EN.VARIABLES.PRIMARY_DIMKEY].ToString();
                         string wipProd = items[AttributeCodes.PTR_USER_PRD].ToString();
                         string wipProdFilter = items[AttributeCodes.PRODUCT_FILTER].ToString();
-                        List<OpDataCollector> myDcs = myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.Where(d => d.DcParentID == parentid).ToList();
                         foreach (OpDataCollector odc in myDcs)
                         {
                             if (odc.GetDataElementValue(AttributeCodes.PTR_USER_PRD) == wipProd
@@ -99,15 +100,32 @@ namespace Intel.MyDeals.BusinessLogic
                     }
                     else if (elMapping.TranslationType == OpTranslationType.OneDealPerRow)
                     {
-                        int i = 0;
-                        //string wipProd = items[AttributeCodes.PTR_USER_PRD].ToString();
-                        //string wipProdFilter = items[AttributeCodes.PRODUCT_FILTER].ToString();
-                        //List<OpDataCollector> myDcs = myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.Where(d => d.DcParentID == parentid).ToList();
-                        int j = 0;
-                        // TODO for all except ECAP
+                        foreach (OpDataCollector odc in myDcs)
+                        {
+                            if (odc.GetDataElementValue(AttributeCodes.GEO_COMBINED) == items[AttributeCodes.GEO_COMBINED].ToString())
+                            {
+                                id = odc.DcID;
+                                foundIds.Add(id);
+                            }
+                            wipIds.Add(odc.DcID);
+                        }
                     }
                 }
-                
+
+                if (opType == OpDataElementType.PRC_TBL_ROW && parentid == 0)
+                {
+                    List<OpDataCollector> myDcs = myDealsData[OpDataElementType.PRC_TBL_ROW].AllDataCollectors.Where(d => d.DcID == id).ToList();
+
+                    foreach (OpDataCollector odc in myDcs)
+                    {
+                        items[AttributeCodes.DC_PARENT_ID] = odc.DcParentID;
+                        items[AttributeCodes.dc_parent_type] = odc.DcParentType;
+                        foundIds.Add(id);
+                        //wipIds.Add(odc.DcID);
+                    }
+
+                }
+
 
                 // Handle multi dim items
                 if (items.ContainsKey(EN.OBJDIM._MULTIDIM))
@@ -665,7 +683,7 @@ namespace Intel.MyDeals.BusinessLogic
                             ? PassedValidation.Complete 
                             : forcePublish ? PassedValidation.Finalizing : PassedValidation.Valid;
 
-                        if (opDataElementType == OpDataElementType.PRC_TBL_ROW && passedValidation != PassedValidation.Complete)
+                        if (opDataElementType == OpDataElementType.PRC_TBL_ROW && passedValidation != PassedValidation.Finalizing)
                         {
                             dirtyPtrs.Add(dc.DcID);
                         }
@@ -734,6 +752,55 @@ namespace Intel.MyDeals.BusinessLogic
         }
 
         #endregion
+
+
+        public static OpMsg UpGroupPricingTableRow(this MyDealsData myDealsData, ContractToken contractToken, IOpDataCollectorLib dataCollectorLib)
+        {
+            return null;
+
+            //List<int> deleteIds = new List<int>();
+            //List<int> deletedIds = new List<int>();
+
+            //foreach (OpDataCollectorFlattenedItem item in opFlatList)
+            //{
+            //    var ids = new List<int> { int.Parse(item[AttributeCodes.DC_ID].ToString()) };
+            //    item["_actions"] = new OpDataCollectorFlattenedItem
+            //    {
+            //        ["_deleteTargetIds"] = ids
+            //    };
+            //    deleteIds.AddRange(ids);
+            //}
+
+            //OpDataCollectorFlattenedDictList data = new OpDataCollectorFlattenedDictList
+            //{
+            //    [OpDataElementType.PRC_ST] = opDataElementType == OpDataElementType.PRC_ST ? opFlatList : new OpDataCollectorFlattenedList(),
+            //    [OpDataElementType.PRC_TBL] = opDataElementType == OpDataElementType.PRC_TBL ? opFlatList : new OpDataCollectorFlattenedList(),
+            //    [OpDataElementType.PRC_TBL_ROW] = opDataElementType == OpDataElementType.PRC_TBL_ROW ? opFlatList : new OpDataCollectorFlattenedList(),
+            //    [OpDataElementType.WIP_DEAL] = opDataElementType == OpDataElementType.WIP_DEAL ? opFlatList : new OpDataCollectorFlattenedList()
+            //};
+
+            //OpDataCollectorFlattenedDictList opFlatDictList = dataCollectorLib
+            //    .SavePackets(data, contractToken, new List<int>(), false, "")
+            //    .ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
+
+            //foreach (OpDataCollectorFlattenedItem item in opFlatDictList[opDataElementType])
+            //{
+            //    foreach (OpDataAction opDataAction in (List<OpDataAction>)item["_actions"])
+            //    {
+            //        int id = opDataAction.DcID ?? 0;
+            //        if (opDataAction.Action != "OBJ_DELETED" || !deleteIds.Contains(id)) continue;
+
+            //        deleteIds.Remove(id);
+            //        deletedIds.Add(id);
+            //    }
+            //}
+
+            //// TODO replace with Delete call
+            //return deleteIds.Any()
+            //    ? new OpMsg(OpMsg.MessageType.Warning, "Unable to delete Ids {0}.", string.Join(",", deleteIds))
+            //    : new OpMsg(OpMsg.MessageType.Info, "Deleted Ids {0}.", string.Join(",", deletedIds));
+
+        }
 
     }
 }

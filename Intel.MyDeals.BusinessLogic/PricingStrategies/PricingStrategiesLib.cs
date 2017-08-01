@@ -82,9 +82,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             List<OpDataElementType> opDataElementTypes = new List<OpDataElementType>
             {
-                OpDataElementType.PRC_ST,
-                OpDataElementType.PRC_TBL_ROW,
-                OpDataElementType.WIP_DEAL
+                OpDataElementType.PRC_ST
             };
 
             List<int> atrbs = new List<int>

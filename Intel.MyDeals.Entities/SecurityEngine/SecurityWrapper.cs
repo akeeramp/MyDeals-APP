@@ -104,4 +104,11 @@ namespace Intel.MyDeals.Entities
                     select el.PERMISSION_MASK).Any();
         }
     }
+
+    public class SecurityItems
+    {
+        public List<SecurityAttribute> SecurityAttributes { get; set; }
+        public List<SecurityMask> SecurityMasks { get; set; }
+
+    }
 }

@@ -1,5 +1,4 @@
-﻿<!--<div class="contract-status-bar stage_{{ contractData.WF_STG_CD }}"><span style="opacity: 0.5;">Contract:</span> {{ contractData.WF_STG_CD }}</div>-->
-<div class="contract-status-bar stage_" ng-if="!('contract.details' | isState)"><span style="opacity: 0.5;"></span> </div>
+﻿<div class="contract-status-bar stage_{{ contractData.WF_STG_CD }}" ng-if="!('contract.details' | isState)"><span style="opacity: 0.5;">Contract:</span>{{ contractData.WF_STG_CD }}</div>
 <div class="contract-title-container" title="View Contract Details">
     <a ng-if="!('contract.details' | isState)" ui-sref="contract.details({cid:contractData.DC_ID})" ui-sref-opts="{ reload: true }">
         <small class="contractHeaderId">#{{ contractData.DC_ID }}</small> <small>{{contractData.TITLE}}</small>

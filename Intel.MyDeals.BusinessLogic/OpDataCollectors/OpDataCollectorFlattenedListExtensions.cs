@@ -23,10 +23,7 @@ namespace Intel.MyDeals.BusinessLogic
         public static OpDataCollectorFlattenedList TranslateToPrcTbl(this OpDataCollectorFlattenedList opFlatList)
         {
             OpDataCollectorFlattenedList retFlatList = new OpDataCollectorFlattenedList();
-            foreach (OpDataCollectorFlattenedItem item in opFlatList)
-            {
-                retFlatList.AddRange(item.TranslateToPrcTbl());
-            }
+            retFlatList.AddRange(opFlatList.Select(item => item.TranslateToPrcTbl()));
             return retFlatList;
         }
 

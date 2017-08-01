@@ -38,9 +38,15 @@ namespace Intel.MyDeals.BusinessRules
                 Role = opUserToken.Role.RoleTypeCd
             };
 
+            var t = DataCollections.GetWorkFlowItems()
+                .Where(w =>
+                    w.WF_NM == "General WF" &&
+                    w.OBJ_TYPE == opDataElementType.ToDesc() &&
+                w.WFSTG_CD_SRC == stage &&
+                    w.OBJ_SET_TYPE_CD == objSetType);
 
             // load actions
-            List<string> actions = DataCollections.GetWorkFlowItems()
+            List <string> actions = DataCollections.GetWorkFlowItems()
                 .Where(w =>
                 w.WF_NM == "General WF" &&
                 w.OBJ_TYPE == opDataElementType.ToDesc() &&

@@ -13,10 +13,10 @@
                 <div class="flowBtn" ng-class="{inactive: flowMode != 'Deal Entry'}" ng-click="gotoDealEntry()">Deal Entry</div>
             </td>
             <td style="width: 34%; padding: 0 4px;">
-                <div class="fl flowBtn disabled">Compliance</div>
+                <div class="flowBtn"ng-class="{inactive: flowMode != 'Compliance'}" ng-click="gotoCompliance()">Meet Comp</div>
             </td>
             <td style="width: 33%">
-                <div class="fr flowBtn disabled">Manage</div>
+                <div class="flowBtn"ng-class="{inactive: Manage != 'Compliance'}" ng-click="gotoManage()">Manage</div>
             </td>
         </tr>
     </table>

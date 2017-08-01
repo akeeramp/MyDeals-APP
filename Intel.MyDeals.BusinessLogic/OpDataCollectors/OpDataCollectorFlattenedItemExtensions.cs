@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Intel.MyDeals.BusinessRules;
 using Intel.MyDeals.Entities;
 using Intel.Opaque;
 using Intel.Opaque.Data;
@@ -247,13 +246,48 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                     select m.Value.Replace("[", "").Replace("]", "")).ToList();
         }
 
-        public static OpDataCollectorFlattenedList TranslateToPrcTbl(this OpDataCollectorFlattenedItem opFlatItem)
+        public static OpDataCollectorFlattenedItem TranslateToPrcTbl(this OpDataCollectorFlattenedItem opFlatItem)
         {
-            OpDataCollectorFlattenedList retItems = new OpDataCollectorFlattenedList();
+            OpDataCollectorFlattenedItem retItems = new OpDataCollectorFlattenedItem();
 
-            // check that this is the correct OpDataElementType
-            if (!opFlatItem.ContainsKey(AttributeCodes.dc_type) || opFlatItem[AttributeCodes.dc_type].ToString() != OpDataElementType.WIP_DEAL.ToString()) return retItems;
-            if (!opFlatItem.ContainsKey(AttributeCodes.PTR_SYS_PRD) || opFlatItem[AttributeCodes.PTR_SYS_PRD].ToString() == "") return retItems;
+            // check that this is the correct OpDataElementType and has products
+            if (!opFlatItem.ContainsKey(AttributeCodes.dc_type) || !opFlatItem.ContainsKey(AttributeCodes.OBJ_SET_TYPE_CD) || opFlatItem[AttributeCodes.dc_type].ToString() != OpDataElementType.WIP_DEAL.ToString()) return retItems;
+
+            OpDataElementType opType = OpDataElementTypeConverter.FromString(opFlatItem[AttributeCodes.dc_type]);
+            OpDataElementSetType opSetType = OpDataElementSetTypeConverter.FromString(opFlatItem[AttributeCodes.OBJ_SET_TYPE_CD]);
+
+            OpDataElementTypeMapping elMapping = opSetType.OpDataElementTypeParentMapping(opType);
+            OpDataElementAtrbTemplate template = OpDataElementUiExtensions.GetAtrbTemplate(elMapping.ParentOpDataElementType, elMapping.ParentOpDataElementSetType);
+
+            List<string> singleDimAtrbs = template.Where(t => t.DimID == 0 && !t.DimKey.Any()).Select(t => t.AtrbCd).Distinct().ToList();
+            List<string> multiDimAtrbs = template.Where(t => t.DimID != 0 || t.DimKey.Any()).Select(t => t.AtrbCd + t.DimKeyString.AtrbCdDimKeySafe()).Distinct().ToList();
+
+
+            foreach (string key in opFlatItem.Keys.Where(k => k != AttributeCodes.dc_type && k != AttributeCodes.dc_parent_type))
+            {
+                if (singleDimAtrbs.Contains(key))
+                {
+                    retItems[key] = opFlatItem[key];
+                }
+                else if (multiDimAtrbs.Contains(key))
+                {
+                    // TODO: need to get multi dims working once we have multi dim in the system
+                    retItems[key] = opFlatItem[key];
+                }
+                else
+                {
+#if DEBUG
+                    System.Diagnostics.Debug.WriteLine($"Attribute NOT MAPPED during TranslateToWip: {key}");
+#endif
+                }
+            }
+
+            retItems[AttributeCodes.DC_ID] = opFlatItem[AttributeCodes.DC_PARENT_ID];
+            retItems[AttributeCodes.dc_type] = elMapping.ParentOpDataElementType;
+            retItems[AttributeCodes.OBJ_SET_TYPE_CD] = elMapping.ParentOpDataElementSetType;
+
+            retItems[AttributeCodes.DC_PARENT_ID] = 0;
+            retItems[AttributeCodes.dc_parent_type] = elMapping.ParentOpDataElementType;
 
             return retItems;
         }
@@ -263,25 +297,54 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
         {
             OpDataCollectorFlattenedItem newItem = new OpDataCollectorFlattenedItem();
 
-            foreach (ProdMapping pMap in pMaps)
+            switch (elMapping.TranslationType)
             {
-                opFlatItem[AttributeCodes.PRODUCT_FILTER] = pMap.PRD_MBR_SID;
-                opFlatItem[AttributeCodes.TITLE] = pMap.HIER_VAL_NM;
-                // Commented line overriding the comma separated user input with collections last product HIER_VAL_NM
-                //opFlatItem[AttributeCodes.PTR_USER_PRD] = userPrdNm;
-                opFlatItem[AttributeCodes.CAP] = pMap.CAP;
-                opFlatItem[AttributeCodes.CAP_STRT_DT] = pMap.CAP_START;
-                opFlatItem[AttributeCodes.CAP_END_DT] = pMap.CAP_END;
-                opFlatItem[AttributeCodes.YCS2_PRC_IRBT] = pMap.YCS2;
-                opFlatItem[AttributeCodes.YCS2_START_DT] = pMap.YCS2_START;
-                opFlatItem[AttributeCodes.YCS2_END_DT] = pMap.YCS2_END;
-                //opFlatItem[AttributeCodes.PRD_COST] = pMap.PRD_COST;
-                opFlatItem[AttributeCodes.PRD_STRT_DTM] = pMap.PRD_STRT_DTM;
-                opFlatItem[AttributeCodes.PRD_END_DTM] = pMap.PRD_END_DTM;
-                opFlatItem[AttributeCodes.HAS_L1] = pMap.HAS_L1;
-                opFlatItem[AttributeCodes.HAS_L2] = pMap.HAS_L2;
-                opFlatItem[AttributeCodes.PRODUCT_CATEGORIES] = pMap.PRD_CAT_NM;
+                case OpTranslationType.OneDealPerProduct:
+
+                    foreach (ProdMapping pMap in pMaps)
+                    {
+                        opFlatItem[AttributeCodes.PRODUCT_FILTER] = pMap.PRD_MBR_SID;
+                        opFlatItem[AttributeCodes.TITLE] = pMap.HIER_VAL_NM;
+                        opFlatItem[AttributeCodes.CAP] = pMap.CAP;
+                        opFlatItem[AttributeCodes.CAP_STRT_DT] = pMap.CAP_START;
+                        opFlatItem[AttributeCodes.CAP_END_DT] = pMap.CAP_END;
+                        opFlatItem[AttributeCodes.YCS2_PRC_IRBT] = pMap.YCS2;
+                        opFlatItem[AttributeCodes.YCS2_START_DT] = pMap.YCS2_START;
+                        opFlatItem[AttributeCodes.YCS2_END_DT] = pMap.YCS2_END;
+                        opFlatItem[AttributeCodes.PRD_COST] = pMap.PRD_COST;
+                        opFlatItem[AttributeCodes.PRD_STRT_DTM] = pMap.PRD_STRT_DTM;
+                        opFlatItem[AttributeCodes.PRD_END_DTM] = pMap.PRD_END_DTM;
+                        opFlatItem[AttributeCodes.HAS_L1] = pMap.HAS_L1;
+                        opFlatItem[AttributeCodes.HAS_L2] = pMap.HAS_L2;
+                        opFlatItem[AttributeCodes.PRODUCT_CATEGORIES] = pMap.PRD_CAT_NM;
+                    }
+                    break;
+
+                case OpTranslationType.OneDealPerRow:
+
+                    List<string> pTitle = new List<string>();
+                    List<string> pCat = new List<string>();
+                    bool pHasL1 = false;
+                    bool pHasL2 = false;
+
+                    foreach (ProdMapping pMap in pMaps)
+                    {
+                        opFlatItem[AttributeCodes.PRODUCT_FILTER] = pMap.PRD_MBR_SID;
+                        pTitle.Add(pMap.HIER_VAL_NM);
+                        pCat.Add(pMap.PRD_CAT_NM);
+                        bool l1, l2;
+                        if (bool.TryParse(pMap.HAS_L1, out l1)) pHasL1 = true;
+                        if (bool.TryParse(pMap.HAS_L2, out l2)) pHasL2 = true;
+                    }
+
+                    opFlatItem[AttributeCodes.HAS_L1] = pHasL1;
+                    opFlatItem[AttributeCodes.HAS_L2] = pHasL2;
+                    opFlatItem[AttributeCodes.TITLE] = string.Join(",", pTitle);
+                    opFlatItem[AttributeCodes.PRODUCT_CATEGORIES] = string.Join(",", pCat);
+
+                    break;
             }
+
 
             foreach (string key in opFlatItem.Keys.Where(k => k != AttributeCodes.dc_type && k != AttributeCodes.dc_parent_type))
             {

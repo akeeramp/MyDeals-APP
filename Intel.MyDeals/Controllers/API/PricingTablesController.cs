@@ -1,4 +1,6 @@
-﻿using System.Web.Http;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Web.Http;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque;
@@ -82,5 +84,54 @@ namespace Intel.MyDeals.Controllers.API
                 , "Unable to delete the Pricing Table {id}"
             );
         }
+
+        [Authorize]
+        [Route("DeletePricingTableRow/{custId}/{contractId}/{ptrId}")]
+        [HttpGet]
+        public OpMsg DeletePricingTableRow(int custId, int contractId, int ptrId)
+        {
+            return SafeExecutor(() => _pricingTablesLib.DeletePricingTableRowById(new ContractToken
+            {
+                CustId = custId,
+                ContractId = contractId
+            }, ptrId)
+                , "Unable to delete the Pricing Table Row {id}"
+            );
+        }
+
+
+        [Authorize]
+        [Route("ActionWipDeal/{custId}/{contractId}/{actn}")]
+        [HttpPost]
+        public OpMsgQueue ActionWipDeal(int custId, int contractId, string actn, OpDataCollectorFlattenedList wipDeals)
+        {
+            Dictionary<string, List<WfActnItem>> actnPs = new Dictionary<string, List<WfActnItem>>
+            {
+                [actn] = wipDeals.Select(item => new WfActnItem
+                {
+                    DC_ID = int.Parse(item[AttributeCodes.DC_ID].ToString()),
+                    WF_STG_CD = item[AttributeCodes.WF_STG_CD].ToString()
+                }).ToList()
+            };
+
+            return SafeExecutor(() => ActionWipDeals(custId, contractId, actnPs)
+                , "Unable to action the Wip Deal {id}"
+            );
+        }
+
+        [Authorize]
+        [Route("ActionWipDeals/{custId}/{contractId}")]
+        [HttpPost]
+        public OpMsgQueue ActionWipDeals(int custId, int contractId, Dictionary<string, List<WfActnItem>> actnPs)
+        {
+            return SafeExecutor(() => _pricingTablesLib.ActionWipDeals(new ContractToken
+            {
+                CustId = custId,
+                ContractId = contractId
+            }, actnPs)
+                , "Unable to action the Wip Deal {id}"
+            );
+        }
     }
+
 }

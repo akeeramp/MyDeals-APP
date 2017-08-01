@@ -308,15 +308,19 @@
     <Content Include="app\app.module.js" />
     <Content Include="app\blocks\uiControls\partials\horizontalEmbeddedMultiSelect.html" />
     <Content Include="app\blocks\uiControls\partials\verticalEmbeddedMultiSelect.html" />
+    <Content Include="app\contract\controllers\managerOverlapping.controller.js" />
     <Content Include="app\contract\controllers\managerPct.controller.js" />
     <Content Include="app\contract\controllers\managerDealType.controller.js" />
     <Content Include="app\contract\controllers\manager.controller.js" />
     <Content Include="app\contract\controllers\datePickerModalCtrl.controller.js" />
+    <Content Include="app\contract\controllers\managerTimeline.controller.js" />
     <Content Include="app\contract\controllers\multiSelectModalCtrl.controller.js" />
     <Content Include="app\contract\controllers\allDeals.controller.js" />
     <Content Include="app\contract\partials\contractCompliance.html" />
     <Content Include="app\contract\partials\contractComplianceHeader.html" />
     <Content Include="app\contract\partials\contractSummaryDeals.html" />
+    <Content Include="app\contract\partials\contractSummaryOverlapping.html" />
+    <Content Include="app\contract\partials\contractSummaryTimeline.html" />
     <Content Include="app\contract\partials\datePickerModal.html" />
     <Content Include="app\contract\partials\contractSummaryPct.html" />
     <Content Include="app\contract\partials\contractSummaryDealType.html" />
@@ -410,6 +414,8 @@
     <Content Include="app\core\directives\gridStatusBoard\contractStatusBoard.directive.js" />
     <Content Include="app\core\directives\gridStatusBoard\gridStatusBoard.directive.html" />
     <Content Include="app\core\directives\gridStatusBoard\gridStatusBoard.directive.js" />
+    <Content Include="app\core\directives\securityLoader\securityLoader.directive.js" />
+    <Content Include="app\shared\services\security.service.js" />
     <Content Include="css\_loadingPanel.directive.css" />
     <Content Include="app\core\directives\messageBoard\messageBoard.directive.html" />
     <Content Include="app\core\directives\messageBoard\messageBoard.directive.js" />
@@ -1266,6 +1272,7 @@
     <Content Include="app\dashboard\views\portal.html" />
     <Content Include="nvd3.license.md" />
     <Content Include="app\core\directives\loadingPanel\loadingPanel.directive.js" />
+    <Content Include="app\core\directives\securityLoader\securityLoader.directive.html" />
     <None Include="Properties\PublishProfiles\Dev.pubxml" />
     <Content Include="Scripts\Angular\1.5.8\angular.min.js.map" />
     <Content Include="Scripts\d3\LICENSE" />

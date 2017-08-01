@@ -540,12 +540,12 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 DataType = "object",
                 Label = "Deal Tools",
-                Width = 130,
+                Width = 170,
                 IsSortable = false,
                 IsFilterable = false,
                 IsReadOnly = true,
                 Template = "<deal-tools ng-model='dataItem' is-editable='true'></deal-tools>",
-                HeaderTemplate = "<input type='checkbox' style='margin: 0px 6px 0px 13px;' ng-click='clkAllItems()' id='chkDealTools' />Deal Tools"
+                HeaderTemplate = "<input type='checkbox' ng-click='clkAllItems()' class='with-font' id='chkDealTools' /><label for='chkDealTools' style='margin: 5px 0 0 5px;'>Deal Tools</label>"
             });
             items.Add(new UiTemplateContainerItem
             {
@@ -678,6 +678,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
                 Template = "#=gridUtils.uiControlScheduleWrapper(data)#",
+                Editor = "scheduleEditor",
                 DataType = "object",
                 Label = "Rate Breakout",
                 Width = 300

@@ -24,8 +24,9 @@ namespace Intel.MyDeals.IBusinessLogic
         List<SecurityActions> GetSecurityActions();
 
         SecurityWrapper GetSecurityMasks();
+        SecurityItems GetMySecurityMasks();
 
-		List<SecurityAttributesDropDown> GetSecurityAttributesDropDownData();
+        List<SecurityAttributesDropDown> GetSecurityAttributesDropDownData();
 
 		Dictionary<string, Dictionary<string, Dictionary<string, List<string>>>> GetObjAtrbs();
 

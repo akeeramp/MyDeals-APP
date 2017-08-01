@@ -1,4 +1,5 @@
-﻿
+﻿<loading-panel show="isBusy" header="isBusyMsgTitle" description="isBusyMsgDetail"></loading-panel>
+
 <div id="sum-wrapper">
     <div id="sum-header">
         <div ui-view="summaryContentView"></div>
@@ -38,6 +39,12 @@
                                class="with-font" id="all_rad_cancel"
                                ng-click="clkAllRow($event, 'psCheck-Cancel')" /><label for="all_rad_cancel"></label>
                     </td>
+                    <td style="width: 50px; text-align: center;" ng-show="canEdit">
+                        <div style="font-size: 11px; line-height: 1em; margin-bottom: -5px;">All</div>
+                        <input type="checkbox" name="allRadGrp"
+                               class="with-font" id="all_rad_hold"
+                               ng-click="clkAllRow($event, 'psCheck-Hold')" /><label for="all_rad_hold"></label>
+                    </td>
                     <td style="width: 100px; text-align: center;">
                         <div class="btn-group">
                             <button class="btn btn-sm btn-skyblue" type="button" ng-click="clearFilter()" title="Click to clear the filter" style="padding: 5px 10px 4px 10px; margin-right: 1px; margin-top: -2px; border-right: 1px solid #0071C5">
@@ -76,7 +83,8 @@
                     <td style="width: 30px;">&nbsp;</td>
                     <td style="width: 60px; border-right: 1px solid #000000; text-align: center;" ng-show="canEdit">Approve</td>
                     <td style="width: 50px; border-right: 1px solid #000000; text-align: center;" ng-show="canEdit">Revise</td>
-                    <td style="width: 50px; text-align: center;" ng-show="canEdit">Cancel</td>
+                    <td style="width: 50px; border-right: 1px solid #000000; text-align: center;" ng-show="canEdit">Cancel</td>
+                    <td style="width: 50px; text-align: center;" ng-show="canEdit">Hold</td>
                     <td style="width: 100px; text-align: center;">Status</td>
                     <td style="width: 50px; text-align: center;">Valid</td>
                     <td>Pricing Strategy Name | Table Name</td>
@@ -98,7 +106,7 @@
                                 <i class="chevron linkable" ng-class="{'intelicon-down': isCollapsed, 'intelicon-right-next': !isCollapsed}"></i>
                             </td>
                             <td style="width: 60px; text-align: center;" ng-show="canEdit">
-                                <div ng-show="ps._actions['Approve'] !== undefined && ps._actions['Approve'] === true">
+                                <div ng-if="ps._actions['Approve'] !== undefined && ps._actions['Approve'] === true">
                                     <input type="checkbox" name="radGrp{{ps.DC_ID}}" dcId="{{ps.DC_ID}}"
                                            ng-class="{'disabled': ps.PASSED_VALIDATION != 'Complete'}"
                                            ng-disabled="ps.PASSED_VALIDATION != 'Complete'"
@@ -107,7 +115,7 @@
                                 </div>
                             </td>
                             <td style="width: 50px; text-align: center;" ng-show="canEdit">
-                                <div ng-show="ps._actions['Revise'] !== undefined && ps._actions['Revise'] === true">
+                                <div ng-if="ps._actions['Revise'] !== undefined && ps._actions['Revise'] === true">
                                     <input type="checkbox" name="radGrp{{ps.DC_ID}}" dcId="{{ps.DC_ID}}"
                                            ng-class="{'disabled': ps.PASSED_VALIDATION != 'Complete'}"
                                            ng-disabled="ps.PASSED_VALIDATION != 'Complete'"
@@ -116,10 +124,17 @@
                                 </div>
                             </td>
                             <td style="width: 50px; text-align: center;" ng-show="canEdit">
-                                <div ng-show="ps._actions['Cancel'] !== undefined && ps._actions['Cancel'] === true">
+                                <div ng-if="ps._actions['Cancel'] !== undefined && ps._actions['Cancel'] === true">
                                     <input type="checkbox" name="radGrp{{ps.DC_ID}}" dcId="{{ps.DC_ID}}"
                                            class="with-font psCheck psCheck-Cancel" id="rad_cancel_{{ps.DC_ID}}"
                                            ng-click="clkRow($event)" /><label for="rad_cancel_{{ps.DC_ID}}"></label>
+                                </div>
+                            </td>
+                            <td style="width: 50px; text-align: center;" ng-show="canEdit">
+                                <div ng-if="ps._actions['Hold'] !== undefined && ps._actions['Hold'] === true">
+                                    <input type="checkbox" name="radGrp{{ps.DC_ID}}" dcId="{{ps.DC_ID}}"
+                                           class="with-font psCheck psCheck-Hold" id="rad_hold_{{ps.DC_ID}}"
+                                           ng-click="clkRow($event)" /><label for="rad_hold_{{ps.DC_ID}}"></label>
                                 </div>
                             </td>
                             <td style="width: 100px; text-align: center;">
@@ -132,7 +147,7 @@
                                 <i class="intelicon-protection-checked-verified-solid bigIcon validf_{{ps.PASSED_VALIDATION}}" ng-show="ps.PASSED_VALIDATION === 'Finalizing'" title="{{ps.PASSED_VALIDATION}}"></i>
                                 <i class="intelicon-protection-checked-verified-solid bigIcon validf_{{ps.PASSED_VALIDATION}}" ng-show="ps.PASSED_VALIDATION === 'Valid'" title="{{ps.PASSED_VALIDATION}}"></i>
                                 <i class="intelicon-protection-failed-solid bigIcon validf_{{ps.PASSED_VALIDATION}}" ng-show="ps.PASSED_VALIDATION === 'Dirty'" title="{{ps.PASSED_VALIDATION}}"></i>
-                                <i class="intelicon-protection-solid bigIcon validf_{{ps.PASSED_VALIDATION}}" ng-show="ps.PASSED_VALIDATION !== 'Valid' && ps.PASSED_VALIDATION !== 'Dirty' && ps.PASSED_VALIDATION !== 'Complete'" title="{{ps.PASSED_VALIDATION || 'Not validated yet'}}"></i>
+                                <i class="intelicon-protection-solid bigIcon validf_{{ps.PASSED_VALIDATION}}" ng-show="ps.PASSED_VALIDATION !== 'Valid' && ps.PASSED_VALIDATION !== 'Dirty' && ps.PASSED_VALIDATION !== 'Complete' && ps.PASSED_VALIDATION !== 'Finalizing'" title="{{ps.PASSED_VALIDATION || 'Not validated yet'}}"></i>
                             </td>
                             <td>
                                 <div ng-bind="ps.TITLE" class="bolder linkable" ng-click="gotoContractEditor(ps)" title="Click to open the Pricing Strategy in the Contract Editor"></div>
@@ -159,7 +174,7 @@
                         <table style="width: 100%; ">
                             <tr>
                                 <td style="width: 30px;" ng-show="canEdit"></td>
-                                <td style="width: 160px; height: 30px;" ng-click="isPtCollapsed = !isPtCollapsed; togglePt(pt)" ng-show="canEdit">
+                                <td style="width: 210px; height: 30px;" ng-click="isPtCollapsed = !isPtCollapsed; togglePt(pt)" ng-show="canEdit">
                                     <i class="chevron linkable" style="font-size: 20px; padding-left: 6px;" ng-class="{'intelicon-down': isPtCollapsed, 'intelicon-right-next': !isPtCollapsed}"></i>
                                 </td>
                                 <td style="width: 30px; height: 30px;" ng-click="isPtCollapsed = !isPtCollapsed; togglePt(pt)" ng-hide="canEdit">

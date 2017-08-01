@@ -61,14 +61,20 @@ gridUtils.uiControlScheduleWrapper = function (passedData) {
     }
     tmplt += '</tr>';
 
-    for (var d = 1; d <= 3; d++) {
-        var dim = "10___" + d;
-        tmplt += '<tr style="height: 25px;">';
-        for (var f = 0; f < fields.length; f++) {
-            tmplt += '<td style="text-align: ' + fields[f].align + ';"><span class="ng-binding" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + '\'] ' + gridUtils.getFormat(fields[f].field, fields[f].format) + ')"></span></td>';
+    var numTiers = 0;
+    var tiers = passedData.TIER_NBR;
+    for (var key in tiers) {
+        if (tiers.hasOwnProperty(key) &&key.indexOf("___") >=0) {
+            numTiers++;
+            var dim = "10___" + numTiers;
+            tmplt += '<tr style="height: 25px;">';
+            for (var f = 0; f < fields.length; f++) {
+                tmplt += '<td style="text-align: ' + fields[f].align + ';"><span class="ng-binding" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + '\'] ' + gridUtils.getFormat(fields[f].field, fields[f].format) + ')"></span></td>';
+            }
+            tmplt += '</tr>';
         }
-        tmplt += '</tr>';
     }
+
     tmplt += '</table>';
 
     return tmplt;
@@ -94,7 +100,7 @@ gridUtils.uiMoneyDatesControlWrapper = function (passedData, field, startDt, end
             }
         }
         var capText = '<span class="ng-binding" ng-bind="(dataItem.' + field + ' ' + gridUtils.getFormat(field, 'currency') + ')" style="font-weight: bold;"></span>';
-        if (passedData[field].indexOf("-") > -1) {
+        if (!!passedData[field] && passedData[field].indexOf("-") > -1) {
             msg = "CAP price " + passedData[field] + " cannot be a range.";
             msgClass = "isSoftWarnCell";
             capText = '<span class="ng-binding" ng-bind="(dataItem.' + field + ')" style="font-weight: bold;"></span>';
@@ -191,7 +197,6 @@ gridUtils.boolViewer = function (field) {
 gridUtils.boolEditor = function (container, options) {
     $("<toggle size='btn-sm' field='" + options.field + "' ng-model='dataItem." + options.field + "' ></toggle>").appendTo(container);
 }
-
 gridUtils.lookupEditor = function (container, options) {
     var field = $(container).closest("[data-role=grid]").data("kendoGrid").dataSource.options.schema.model.fields[options.field];
     var cols = $(container).closest("[data-role=grid]").data("kendoGrid").columns;

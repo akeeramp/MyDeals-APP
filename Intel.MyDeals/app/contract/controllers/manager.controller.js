@@ -17,7 +17,8 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
     $scope.$parent.isSummaryHidden = false;
 
     $timeout(function () {
-        $("#dealTypeDiv").removeClass("active");
+        $("#timelineDiv").removeClass("active");
+        $("#overlappingDiv").removeClass("active");
         $("#pctDiv").removeClass("active");
         $("#approvalDiv").addClass("active");
         $scope.$apply();

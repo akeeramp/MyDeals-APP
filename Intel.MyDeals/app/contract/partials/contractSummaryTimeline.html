@@ -1,0 +1,98 @@
+﻿
+<div id="sum-wrapper">
+    <div id="sum-header">
+        <div ui-view="summaryContentView"></div>
+        <h4>Timeline</h4>
+        <hr />
+    </div>
+
+    <div id="sum-container">
+        <div class="sum-main-body">
+            <div class="sum-main-container">
+                body info here
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<style>
+    #sum-wrapper {
+        height: 100%;
+        padding: 50px 0 0 0;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+    #sum-header {
+        height: 50px;
+        margin-top: -50px;
+        font-size: 14px;
+        font-family: "Intel Clear";
+        font-weight: 200;
+        font-style: normal;
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-top: 10px;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+        #sum-header h4 {
+            margin: 0;
+        }
+
+    #sum-container {
+        height: 100%;
+        overflow: auto;
+    }
+
+    .sum-main-body {
+        margin: 5px 10px;
+        padding: 0 10px;
+    }
+
+    .sum-main-container {
+        height: 100%;
+        overflow: auto;
+    }
+
+    .sum-main-body .tbl-header {
+        margin-top: 6px;
+    }
+
+    #sum-header hr {
+        height: 1px;
+        margin: 6px 0;
+        color: #e4e4e4;
+    }
+
+    .sum-main-body .bold {
+        color: #00AEEF;
+        font-weight: bold;
+        font-size: 14px;
+        line-height: 1em;
+    }
+
+    .sum-main-body .bolder {
+        color: #00AEEF;
+        font-weight: bold;
+        font-size: 16px;
+        line-height: 1em;
+    }
+
+    .sum-main-body label {
+        margin-bottom: 0;
+    }
+
+    .sum-main-body .stage {
+        text-align: center;
+    }
+
+        .sum-main-body .stage div {
+            margin: 0 10px;
+            padding: 4px 4px;
+        }
+</style>

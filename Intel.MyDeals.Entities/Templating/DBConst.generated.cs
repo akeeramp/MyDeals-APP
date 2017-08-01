@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 7/7/2017 11:53:21 PM
+File Updated: 7/28/2017 9:08:54 PM
 On: PWECKENR-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -401,6 +401,15 @@ namespace Intel.MyDeals.Entities {
 		///<summary>
 		/// DIM_SID: 3
 		/// DIM_CD: DEAL
+		/// ATRB_SID: 3510
+		/// TGT_COL_TYPE: MONEY
+		/// DOT_NET_DATA_TYPE: System.Double
+		///</summary>
+		public const string CREDIT_AMT = "CREDIT_AMT";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
 		/// ATRB_SID: 3488
 		/// TGT_COL_TYPE: INT
 		/// DOT_NET_DATA_TYPE: System.Int32
@@ -604,6 +613,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.String
 		///</summary>
 		public const string DEAL_STG_CD = "DEAL_STG_CD";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3511
+		/// TGT_COL_TYPE: MONEY
+		/// DOT_NET_DATA_TYPE: System.Double
+		///</summary>
+		public const string DEBIT_AMT = "DEBIT_AMT";
 
 		///<summary>
 		/// DIM_SID: 3
@@ -1301,6 +1319,15 @@ namespace Intel.MyDeals.Entities {
 		///<summary>
 		/// DIM_SID: 3
 		/// DIM_CD: DEAL
+		/// ATRB_SID: 20003
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string NO_END_DT_RSN = "NO_END_DT_RSN";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
 		/// ATRB_SID: 3661
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.String
@@ -1567,6 +1594,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Double
 		///</summary>
 		public const string RATE = "RATE";
+
+		///<summary>
+		/// DIM_SID: 999
+		/// DIM_CD: SYS
+		/// ATRB_SID: 62
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.Object
+		///</summary>
+		public const string RBFC_ROLE_ACCESS = "RBFC_ROLE_ACCESS";
 
 		///<summary>
 		/// DIM_SID: 3
@@ -2028,6 +2064,8 @@ namespace Intel.MyDeals.Entities {
 	public static class ToolConstantName {
 		public const string ADMIN_MESSAGE = "ADMIN_MESSAGE";
 		public const string BATCH_LOG = "BATCH_LOG";
+		public const string CAP_MSP_CUTOFF_DAYS_BTCH = "CAP_MSP_CUTOFF_DAYS_BTCH";
+		public const string CHNL_CUST_FLTR = "CHNL_CUST_FLTR";
 		public const string COST_TEST_TYPES = "COST_TEST_TYPES";
 		public const string CSL_WWID_EXCEPTIONS = "CSL_WWID_EXCEPTIONS ";
 		public const string CUTOFF_DATE = "CUTOFF_DATE";
@@ -2040,6 +2078,7 @@ namespace Intel.MyDeals.Entities {
 		public const string ICOST_HIST_LOG_DAYS = "ICOST_HIST_LOG_DAYS";
 		public const string iCOST_PRODUCTS = "iCOST_PRODUCTS";
 		public const string INCL_GDM_PCSR_HIER = "INCL_GDM_PCSR_HIER";
+		public const string LAST_BTCH_RUN = "LAST_BTCH_RUN";
 		public const string MISC_MM_LIST = "MISC_MM_LIST";
 		public const string PROD_REPLACE_CHARSET = "PROD_REPLACE_CHARSET";
 		public const string PRODUCT_SELECTION_LEVEL = "PRODUCT_SELECTION_LEVEL";
@@ -2066,13 +2105,13 @@ namespace Intel.MyDeals.Entities {
 		public const string DEV = "DEV";
 		public static Dictionary<string, string> Tiers = new Dictionary<string, string> {
 		["CBA"] = "Tier_2",
-		["DA"] = "Tier_4",
+		["DA"] = "Tier_3",
 		["Finance"] = "Tier_0",
 		["FSE"] = "Tier_1",
 		["GA"] = "Tier_2",
 		["Legal"] = "Tier_0",
 		["RA"] = "Tier_1",
-		["SA"] = "Tier_4",
+		["SA"] = "Tier_3",
 		["DEV"] = "Tier_0",
 		};
 	}

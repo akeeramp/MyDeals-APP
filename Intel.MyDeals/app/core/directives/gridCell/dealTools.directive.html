@@ -1,7 +1,14 @@
 ﻿
 <div class="dealTools">
     <div class='fl gridStatusMarker {{dataItem.WF_STG_CD}}' title='{{dataItem.WF_STG_CD}}'>{{stgOneChar()}}</div>
-    <div class='fl' ng-if="isEditable"><input type="checkbox" style="margin: 8px 2px 4px 8px;" ng-model="dataItem.isLinked" /></div>
+
+    <div class='fl' ng-if="isEditable && (dataItem._parentCnt === undefined || dataItem._parentCnt <= 1)">
+        <input type="checkbox" ng-model="dataItem.isLinked" class="with-font" id="lnkChk_{{dataItem.DC_PARENT_ID}}" /><label for="lnkChk_{{dataItem.DC_PARENT_ID}}" style="margin: 5px 0 0 0;" title="Check to apply changes to all rows checked"></label>
+    </div>
+
+    <div class='fl md-icon rotate-270' ng-if="isEditable && (dataItem._parentCnt === undefined || dataItem._parentCnt > 1)">
+        <i class="intelicon-org-chart" style="font-size: 20px !important; cursor: pointer; color: #00AEEF; margin-right: 9px;" ng-click="groupDialog.open()"></i>
+    </div>
 
     <div class='fl md-icon' ng-if="dataItem.NOTES === undefined || dataItem.NOTES === ''">
         <i class='intelicon-discussion-solid' style="font-size: 20px !important; cursor: pointer; color: #00AEEF;" title="Add a Comment" ng-click="dialog.open()"></i>
@@ -10,19 +17,27 @@
         <i class='intelicon-discussion-solid' style="font-size: 20px !important; cursor: pointer; color: #003C71;" title="{{dataItem.NOTES}}" ng-click="dialog.open()"></i>
     </div>
 
-    <!--<div class='fl md-icon' ng-if="isEditable && (dataItem._parentCnt === undefined || dataItem._parentCnt <= 1)">
-        <a href='#'><i class='intelicon-trash-solid' style="font-size: 20px !important;" title="Click to Delete the deal"></i></a>
-    </div>
-    <div class='fl md-icon-disabled' ng-if="isEditable && (dataItem._parentCnt !== undefined && dataItem._parentCnt > 1)">
-        <i class='intelicon-trash-solid' style="font-size: 20px !important; color: #e7e7e8;"
-           title="This deal shares the same pricing table row as other deals.  You will need to delete the deal from the Pricing Table."></i>
-    </div>-->
-
     <div class='fl md-icon' ng-if="dataItem.HasFiles === undefined || !dataItem.HasFiles">
         <i class='intelicon-attach' style="font-size: 20px !important; color: #00AEEF; cursor: pointer;" title="Click to Add an Attachment"></i>
     </div>
     <div class='fl md-icon' ng-if="dataItem.HasFiles !== undefined && dataItem.HasFiles">
         <i class='intelicon-attach' style="font-size: 20px !important; color: #003C71;" title="Click to view or add attachments"></i>
+    </div>
+
+    <div class='fl md-icon' ng-if="isEditable && (dataItem._parentCnt === undefined || dataItem._parentCnt <= 1)">
+        <i class='intelicon-trash-solid' style="font-size: 20px !important; cursor: pointer;" title="Click to Delete the deal" ng-click="deleteDialog.open()"></i>
+    </div>
+    <div class='fl md-icon-disabled' ng-if="isEditable && (dataItem._parentCnt !== undefined && dataItem._parentCnt > 1)">
+        <i class='intelicon-trash-solid' style="font-size: 20px !important; color: #e7e7e8;"
+           title="This deal shares the same pricing table row as other deals.  You will need to split the group or delete the deal from the Pricing Table."></i>
+    </div>
+    
+    <div class='fl md-icon' ng-if="isEditable && (dataItem._parentCnt === undefined || dataItem._parentCnt <= 1)">
+        <i class='fa fa-hand-paper-o' style="font-size: 20px !important; cursor: pointer;" title="Click to place the deal on hold" ng-click="holdDialog.open()"></i>
+    </div>
+    <div class='fl md-icon-disabled' ng-if="isEditable && (dataItem._parentCnt !== undefined && dataItem._parentCnt > 1)">
+        <i class='fa fa-hand-paper-o' style="font-size: 20px !important; color: #e7e7e8;"
+           title="This deal shares the same pricing table row as other deals.  You will need to split the group before you can place this on hold."></i>
     </div>
 
     <div class='clearboth'></div>
@@ -39,6 +54,27 @@
          op-ui-mode="'VERTICAL'"></div>
 </div>
 
+<div class="groupDialog" kendo-dialog="groupDialog" k-visible="false" k-modal="true" k-actions="groupActions" k-width="400" k-height="250">
+    <h4>Would you like to split the group?</h4>
+    <p>
+        This will allow you to make changes in the Deal Editor.<br/>Please note a new Row ID will be assigned for your reference.
+    </p>
+</div>
+
+<div class="groupDialog" kendo-dialog="deleteDialog" k-visible="false" k-modal="true" k-actions="deleteActions" k-width="400" k-height="250">
+    <h4>Would you like to delete the deal?</h4>
+    <p>
+        This will remove the deal from the Pricing Editor also.
+    </p>
+</div>
+
+<div class="groupDialog" kendo-dialog="holdDialog" k-visible="false" k-modal="true" k-actions="holdActions" k-width="400" k-height="250">
+    <h4>Would you like to place the deal on hold?</h4>
+    <p>
+        This will keep the deal in the Pricing Table, but it will not get promoted to active or get a tracker number for payment.
+    </p>
+</div>
+
 <style>
     
     .k-dialog .noteDialog.k-content textarea {
@@ -49,7 +85,26 @@
         margin-top: -30px;
     }
 
-    
+    .k-dialog .groupDialog {
+        text-align: center;
+        padding: 10px 0 0 0;
+    }
+    .k-dialog .groupDialog h4 {
+        color: #003C71;
+        font-size: 18px;
+        font-weight: 600;
+        margin-top: 0;
+    }
+    .k-dialog .groupDialog p {
+        font-size: 12px;
+        padding: 10px 20px;
+    }
+
+    .rotate90 {
+        -ms-transform: rotate(90deg);
+        -webkit-transform: rotate(90deg);
+        transform: rotate(90deg);
+    }
 
     .dealTools {
         line-height: 1.8em;
@@ -108,4 +163,57 @@
     .md-icon-disabled i {
         color: #00AEEF;
     }
+
+    .dealTools input[type=radio].with-font,
+    .dealTools input[type=checkbox].with-font {
+        border: 0;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 1px;
+    }
+    
+    .dealTools input[type=radio].with-font + label:before,
+    .dealTools input[type=checkbox].with-font + label:before {
+        font-family: FontAwesome;
+        display: inline-block;
+        content: "\f096";
+        font-size: 20px;
+        letter-spacing: 10px;
+        color: #00AEEF;
+        margin-left: 10px;
+    }
+    .dealTools input[type=radio].with-font:hover + label:before,
+    .dealTools input[type=checkbox].with-font:hover + label:before {
+        color: #003C71;
+        cursor: pointer;
+    }
+    .dealTools input[type=radio].with-font.disabled + label:before,
+    .dealTools input[type=checkbox].with-font.disabled + label:before {
+        color: #cccccc;
+        cursor: default;
+    }
+    
+    .dealTools input[type=radio].with-font:checked + label:before,
+    .dealTools input[type=checkbox].with-font:checked + label:before {
+        content: "\f046";
+        font-size: 20px;
+        letter-spacing: 5px;
+        color: #C4D600;
+        margin-left: 10px;
+    }
+    .dealTools input[type=radio].with-font:focus + label:before,
+    .dealTools input[type=checkbox].with-font:focus + label:before {
+        font-weight: bold;
+        color: #00AEEF;
+    }
+    .dealTools input[type=radio].with-font:checked:focus + label:before,
+    .dealTools input[type=checkbox].with-font:checked:focus + label:before {
+        font-weight: bold;
+        color: #C4D600;
+    }
+
 </style>

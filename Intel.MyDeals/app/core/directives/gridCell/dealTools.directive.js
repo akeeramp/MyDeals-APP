@@ -29,6 +29,46 @@ function dealTools() {
                 }
             ];
 
+            $scope.groupActions = [
+                {
+                    text: 'Cancel',
+                    action: function () {}
+                },
+                {
+                    text: 'Yes, Split',
+                    primary: true,
+                    action: function () {}
+                }
+            ];
+
+            $scope.deleteActions = [
+                {
+                    text: 'Cancel',
+                    action: function() {}
+                },
+                {
+                    text: 'Yes, Delete',
+                    primary: true,
+                    action: function () {
+                        $scope.$parent.$parent.deletePricingTableRow($scope.dataItem);
+                    }
+                }
+            ];
+
+            $scope.holdActions = [
+                {
+                    text: 'Cancel',
+                    action: function() {}
+                },
+                {
+                    text: 'Yes, Hold',
+                    primary: true,
+                    action: function () {
+                        $scope.$parent.$parent.holdPricingTableRow($scope.dataItem);
+                    }
+                }
+            ];
+
             $scope.dialogShow = function() {
 
             }

@@ -63,6 +63,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                     if (cols[c].editor !== undefined) {
                         if (cols[c].editor === "multiDimEditor") {
                             cols[c].editor = $scope.multiDimEditor;
+                        } else if (cols[c].editor === "scheduleEditor") {
+                            cols[c].editor = $scope.scheduleEditor;
                         }
                     } else if (cols[c].lookupUrl !== undefined && cols[c].lookupUrl !== "") {
                         cols[c].editor = $scope.lookupEditor;
@@ -320,8 +322,12 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 $scope.selectFirstTab();
             }
 
-            $scope.displayDealTypes = function() {
-                return !!$scope.dealTypes ? $scope.dealCnt + " " + $scope.dealTypes.join() + ($scope.dealCnt === 1 ? " Deal" : " Deals") : "";
+            $scope.displayDealTypes = function () {
+                var modDealTypes = [];
+                for (var i = 0; i < $scope.dealTypes.length; i++) {
+                    if (!!$scope.dealTypes[i]) modDealTypes.push($scope.dealTypes[i].replace(/_/g,' '));
+                }
+                return modDealTypes.length > 0 ? $scope.dealCnt + " " + modDealTypes.join() + ($scope.dealCnt === 1 ? " Deal" : " Deals") : "";
             }
             $scope.contractDs = new kendo.data.DataSource({
                 transport: {
@@ -361,7 +367,6 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                     },
                     update: function (e) {
                         var source = $scope.opData;
-
                         // locate item in original datasource and update it
                         for (var i = 0; i < e.data.models.length; i++) {
                             var item = e.data.models[i];
@@ -415,6 +420,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
 
                     if (e.model.isLinked !== undefined && e.model.isLinked) {
                         $scope.syncLinked(newField, e.values[newField]);
+                    }
+
+                    if (e.model._parentCnt !== undefined && e.model._parentCnt > 1) {
+                        $scope.syncGrouped(newField, e.values[newField], e.model);
                     }
 
                     gridUtils.onDataValueChange(e);
@@ -509,9 +518,6 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
 								valuePrimitive: true,
 								dataTextField: field.opLookupText,
 								dataValueField: field.opLookupValue,
-								chnage: function(e){
-									// TODO: if value is not null, then we need to update the $scope so the red flag leaves :(
-								},
 								dataSource: {
 									type: "json",
 									transport: {
@@ -590,6 +596,43 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
 							}
 						});
                 }
+            }
+
+            $scope.scheduleEditor = function (container, options) {
+                var numTiers = $scope.$parent.$parent.$parent.$parent.$parent.curPricingTable.NUM_OF_TIERS;
+
+                var tmplt = '<table>';
+                var fields = [
+                    { "title": "Tier", "field": "TIER_NBR", "format": "", "align": "left" },
+                    { "title": "Start Vol", "field": "STRT_VOL", "format": "", "align": "right" },
+                    { "title": "End Vol", "field": "END_VOL", "format": "", "align": "right" },
+                    { "title": "Rate", "field": "RATE", "format": "currency", "align": "right" }
+                ];
+
+                tmplt += '<tr style="height: 15px;">';
+                for (var t = 0; t < fields.length; t++) {
+                    var w = t===0 ? "width: 50px;": "";
+                    tmplt += '<th style="padding: 0 4px; font-weight: 400; text-transform: uppercase; font-size: 10px; background: #eeeeee; text-align: center;' + w + '">' + fields[t].title + '</th>';
+                }
+                tmplt += '</tr>';
+
+                for (var d = 1; d <= numTiers; d++) {
+                    var dim = "10___" + d;
+                    tmplt += '<tr style="height: 25px;">';
+                    for (var f = 0; f < fields.length; f++) {
+                        if (f === 0) {
+                            tmplt += '<td style="margin: 0; padding: 0; text-align: ' + fields[f].align + ';"><span class="ng-binding" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + '\'] ' + gridUtils.getFormat(fields[f].field, fields[f].format) + ')"></span></td>';
+                        } else {
+                            tmplt += '<td style="margin: 0; padding: 0;"><input kendo-numeric-text-box k-min="0" k-decimals="0" k-format="\'n0\'" k-ng-model="dataItem.' + fields[f].field + '[\'' + dim + '\']" style="max-width: 100%; margin:0;" /></td>';
+                        }
+                    }
+                    tmplt += '</tr>';
+                }
+                tmplt += '</table>';
+
+                var compiled = $compile(tmplt)(angular.element(container).scope());
+                $(container).append(compiled);
+
             }
 
             $scope.multiDimEditor = function(container, options) {
@@ -708,18 +751,34 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 for (var v = 0; v < data.length; v++) {
                     var dataItem = data[v];
                     if (dataItem.isLinked !== undefined && dataItem.isLinked) {
-                        if (dataItem._behaviors === undefined) dataItem._behaviors = {};
-                        if (dataItem._behaviors.isReadOnly === undefined) dataItem._behaviors.isReadOnly = {};
-                        if (dataItem._behaviors.isReadOnly[newField] === undefined || dataItem._behaviors.isReadOnly[newField] === false) {
-                            if (dataItem._behaviors.isHidden === undefined) dataItem._behaviors.isHidden = {};
-                            if (dataItem._behaviors.isHidden[newField] === undefined || dataItem._behaviors.isHidden[newField] === false) {
-                                dataItem.set(newField, newValue);
-                                $scope.saveCell(dataItem, newField);
-                            }
-                        }
+                        $scope.applySaveCell(dataItem, newField, newValue);
                     }
                 }
             }
+
+            $scope.syncGrouped = function (newField, newValue, model) {
+                var data = $scope.contractDs.data();  // must be data instead of view.  This MUST cross paging
+                var groupId = model.DC_PARENT_ID;
+                for (var v = 0; v < data.length; v++) {
+                    var dataItem = data[v];
+                    if (dataItem.DC_PARENT_ID === groupId) {
+                        $scope.applySaveCell(dataItem, newField, newValue);
+                    }
+                }
+            }
+
+            $scope.applySaveCell = function (dataItem, newField, newValue) {
+                if (dataItem._behaviors === undefined) dataItem._behaviors = {};
+                if (dataItem._behaviors.isReadOnly === undefined) dataItem._behaviors.isReadOnly = {};
+                if (dataItem._behaviors.isReadOnly[newField] === undefined || dataItem._behaviors.isReadOnly[newField] === false) {
+                    if (dataItem._behaviors.isHidden === undefined) dataItem._behaviors.isHidden = {};
+                    if (dataItem._behaviors.isHidden[newField] === undefined || dataItem._behaviors.isHidden[newField] === false) {
+                        dataItem.set(newField, newValue);
+                        $scope.saveCell(dataItem, newField);
+                    }
+                }
+            }
+
 
             $scope.saveCell = function (dataItem, newField) {
                 if (dataItem._behaviors === undefined) dataItem._behaviors = {};
@@ -730,8 +789,17 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 $scope.$parent.$parent.$parent.$parent.$parent._dirty = true;
             }
 
-            $scope.$on('refresh', function (event, args) {
+            $scope.deletePricingTableRow = function (dataItem) {
+                var rootScope = $scope.$parent.$parent.$parent.$parent.$parent;
+                rootScope.deletePricingTableRow(dataItem);
+            }
 
+            $scope.holdPricingTableRow = function(dataItem) {
+                var rootScope = $scope.$parent.$parent.$parent.$parent.$parent;
+                rootScope.actionWipDeal(dataItem, 'Hold');
+            }
+
+            $scope.$on('refresh', function (event, args) {
             });
 
             $scope.$on('saveComplete', function (event, args) {
@@ -800,6 +868,16 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
             }
 
             $scope.$on('syncDs', function (event, args) {
+                event.currentScope.contractDs.sync();
+            });
+
+            $scope.$on('removeRow', function (event, ptrId) {
+                var row = null;
+                var data = $scope.contractDs.data();
+                for (var d = 0; d < data.length; d++) {
+                    if (data[d].DC_PARENT_ID === ptrId) row = data[d];
+                }
+                if (!!row) data.splice(data.indexOf(row), 1);
                 event.currentScope.contractDs.sync();
             });
 

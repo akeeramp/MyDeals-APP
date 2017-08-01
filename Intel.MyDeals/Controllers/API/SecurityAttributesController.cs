@@ -30,8 +30,15 @@ namespace Intel.MyDeals.Controllers.API
 		{
 			return _securityAttributesLib.GetSecurityMasks();
 		}
+        
+        [HttpGet]
+        [Route("GetMySecurityMasks")]
+        public SecurityItems GetMySecurityMasks()
+        {
+            return _securityAttributesLib.GetMySecurityMasks();
+        }
 
-		[HttpGet]
+        [HttpGet]
 		[Route("GetSecurityDropdownData")]
 		public SecurityDropdownData GetSecurityDropdownData()
 		{

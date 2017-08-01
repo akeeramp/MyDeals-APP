@@ -105,12 +105,25 @@ namespace Intel.MyDeals.BusinessLogic
 		public SecurityWrapper GetSecurityMasks()
 		{
 			return DataCollections.GetSecurityWrapper();
-		}		
-		#endregion
-		
-		#region SecurityActions
+		}
 
-		public List<SecurityActions> GetSecurityActions()
+        public SecurityItems GetMySecurityMasks()
+        {
+            OpUserToken opUserToken = OpUserStack.MyOpUserToken;
+
+            SecurityWrapper sw = DataCollections.GetSecurityWrapper();
+            return new SecurityItems
+            {
+                SecurityAttributes = sw.SecurityAttributes,
+                SecurityMasks = sw.SecurityMasks.Where(s => s.ROLE_NM == opUserToken.Role.RoleTypeCd).ToList()
+            };
+        }
+
+        #endregion
+
+        #region SecurityActions
+
+        public List<SecurityActions> GetSecurityActions()
 		{
 			return _dataCollectionsDataLib.GetSecurityActions();
 		}
