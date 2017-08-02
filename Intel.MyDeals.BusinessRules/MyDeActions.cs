@@ -33,24 +33,25 @@ namespace Intel.MyDeals.BusinessRules
 
             string opDeType = de.DcType.IdToOpDataElementTypeString().ToString();
 
-            if (de.AtrbValue.ToString() != string.Empty || opDeType == OpDataElementType.PRC_TBL.ToString() || opDeType == OpDataElementType.PRC_TBL_ROW.ToString()) return;
+            // If this is an old object or a non-stage object, skip - unknown objects seem to be PS for some reason.
+            if (opDeType == OpDataElementType.PRC_TBL.ToString() || opDeType == OpDataElementType.PRC_TBL_ROW.ToString() || opDeType == OpDataElementType.Unknown.ToString()) return; 
 
             string newStage = string.Empty;
 
-            if (opDeType == OpDataElementType.CNTRCT.ToString())
+            if (opDeType == OpDataElementType.CNTRCT.ToString() && de.DcID <= 0) // New contract, set value, else keep value
             {
                 newStage = WorkFlowStages.InComplete;
             }
-            else if (opDeType == OpDataElementType.PRC_ST.ToString())
+            else if (opDeType == OpDataElementType.PRC_ST.ToString()) // Never really makes it here because PS comes in as unknown for some reason...
             {
                 newStage = WorkFlowStages.Draft;
                 if (role == RoleTypes.GA) newStage = WorkFlowStages.Requested;
             }
-            else if (opDeType == OpDataElementType.WIP_DEAL.ToString())
+            else if (opDeType == OpDataElementType.WIP_DEAL.ToString() && de.AtrbValue.ToString() != WorkFlowStages.Active) // Set to draft if it comes in as anything but active
             {
                 newStage = WorkFlowStages.Draft; // There are only 2 stages, Draft and Active
             }
-            else if (opDeType == OpDataElementType.DEAL.ToString())
+            else if (opDeType == OpDataElementType.DEAL.ToString()) // Might have to set conditions here
             {
                 newStage = WorkFlowStages.Offer;
             }
