@@ -2094,6 +2094,7 @@
             // Check required
             angular.forEach($scope.contractData,
                 function (value, key) {
+                    debugger;
                     if (key[0] !== '_' &&
                         value !== undefined &&
                         value !== null &&
@@ -2188,9 +2189,10 @@
             // Check required
             angular.forEach($scope.newStrategy,
                 function (value, key) {
+                    debugger;
                     if (key[0] !== '_' &&
                         !Array.isArray(value) &&
-                        (value === undefined || value === null || value.trim() === "") &&
+                        (value === undefined || value === null || (isNaN(value) && value.trim() === "")) &&
                         $scope.newStrategy._behaviors.isRequired[key] === true) {
                         $scope.newStrategy._behaviors.validMsg[key] = "* field is required";
                         $scope.newStrategy._behaviors.isError[key] = true;
@@ -2359,7 +2361,8 @@
             // Check required
             angular.forEach($scope.newPricingTable,
                 function (value, key) {
-                    if (key[0] !== '_' && !Array.isArray(value) && (value === undefined || value === null || value.trim() === "") && $scope.newPricingTable._behaviors.isRequired[key] === true) {
+                    debugger;
+                    if (key[0] !== '_' && !Array.isArray(value) && (value === undefined || value === null || (isNaN(value) && value.trim() === "")) && $scope.newPricingTable._behaviors.isRequired[key] === true) {
                         $scope.newPricingTable._behaviors.validMsg[key] = "* field is required";
                         $scope.newPricingTable._behaviors.isError[key] = true;
                         isValid = false;
@@ -2401,9 +2404,10 @@
             // Check required
             angular.forEach($scope.newPricingTable,
                 function (value, key) {
+                    debugger;
                     if (key[0] !== '_' &&
                         !Array.isArray(value) &&
-                        (!isNaN(value) || value === undefined || value === null || value.trim() === "") &&
+                        (!isNaN(value) || value === undefined || value === null || (isNaN(value) && value.trim() === "")) &&
                         $scope.newPricingTable._behaviors.isRequired[key] === true) {
                         $scope.newPricingTable._behaviors.validMsg[key] = "* field is required";
                         $scope.newPricingTable._behaviors.isError[key] = true;
