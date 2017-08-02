@@ -289,8 +289,10 @@ namespace Intel.MyDeals.BusinessLogic
                 {
                     ProductEntryAttribute pea = new ProductEntryAttribute();
                     string tempProdName = product.ToString().Contains("~~**~~**~~") == true ? product.ToString().Remove(product.ToString().IndexOf("~~**~~**~~"), 10) : product.ToString(); // unique combination checking
+                    string finalProdName = CheckBogusProduct(tempProdName);
                     pea.ROW_NUMBER = userProduct.ROW_NUMBER;
                     pea.USR_INPUT = tempProdName;
+                    pea.MOD_USR_INPUT = finalProdName;
                     pea.START_DATE = userProduct.START_DATE.ToString();
                     pea.END_DATE = userProduct.END_DATE.ToString();
                     pea.EXCLUDE = userProduct.EXCLUDE;
@@ -309,6 +311,7 @@ namespace Intel.MyDeals.BusinessLogic
                                       {
                                           ROW_NUMBER = p.ROW_NUMBER,
                                           USR_INPUT = t == null ? p.USR_INPUT : t.PRD_NM,
+                                          MOD_USR_INPUT = p.MOD_USR_INPUT,
                                           EXCLUDE = p.EXCLUDE,
                                           FILTER = p.FILTER,
                                           END_DATE = p.END_DATE,
@@ -330,6 +333,52 @@ namespace Intel.MyDeals.BusinessLogic
             ExtractValidandDuplicateProducts(productLookup, productMatchResults);
 
             return productLookup;
+        }
+
+        private string CheckBogusProduct(string tempProdName)
+        {
+            string finalProdName = string.Empty;
+            int counter = 4;
+            if (tempProdName.Contains(" "))
+            {
+                bool isValid = IsProductExistsInMydeals(tempProdName);
+                if (!isValid)
+                {
+                    var splitedProd = tempProdName.Trim().Split(' ');
+                    int cnt = splitedProd.Length > counter ? counter : splitedProd.Length;
+                    for (int i = 1; i < cnt; i++)
+                    {
+                        if (splitedProd.Length > 0)
+                        {
+                            int offset = splitedProd.Length - i;
+                            var newArray = splitedProd.Skip(offset).Take(splitedProd.Length - offset).ToArray();
+                            string tempProductName = string.Join(" ", newArray);
+                            bool tempisValid = IsProductExistsInMydeals(tempProductName);
+                            if (!tempisValid)
+                            {
+                                var newTmpArray = splitedProd.Skip(offset - 1).Take(splitedProd.Length - offset + 1).ToArray();
+                                string tempProductNameLocal = string.Join(" ", newTmpArray);
+                                tempisValid = IsProductExistsInMydeals(tempProductNameLocal);
+                                if (!tempisValid)
+                                {
+                                    break;
+                                }
+                                else
+                                {
+                                    finalProdName = tempProductNameLocal;
+                                    i++;
+                                }
+                            }
+                            else
+                            {
+                                finalProdName = tempProductName;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return finalProdName;
         }
 
         /// <summary>
@@ -453,24 +502,19 @@ namespace Intel.MyDeals.BusinessLogic
         public List<PRD_LOOKUP_RESULTS> SearchProduct(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID, bool getWithoutFilters)
         {
             var aliasMapping = GetProductsFromAlias();
-            var productAliasesSplit = (from p in productsToMatch
-                                       join a in aliasMapping
-                                       on p.USR_INPUT.ToLower() equals a.PRD_ALS_NM.ToLower() into pa
-                                       from t in pa.DefaultIfEmpty()
-                                       select new ProductEntryAttribute
-                                       {
-                                           USR_INPUT = t == null ? p.USR_INPUT : t.PRD_NM,
-                                           COLUMN_TYPE = p.COLUMN_TYPE,
-                                           END_DATE = p.END_DATE,
-                                           EXCLUDE = p.EXCLUDE,
-                                           FILTER = p.FILTER,
-                                           GEO_COMBINED = p.GEO_COMBINED,
-                                           PROGRAM_PAYMENT = p.PROGRAM_PAYMENT,
-                                           ROW_NUMBER = p.ROW_NUMBER,
-                                           START_DATE = p.START_DATE
-                                       }).Distinct().ToList();
+            var productsSplit = productsToMatch.FirstOrDefault().USR_INPUT.Split(' ');
 
-            return _productDataLib.SearchProduct(productAliasesSplit, CUST_MBR_SID, getWithoutFilters);
+            var productAliasesSplit = (from p in productsSplit
+                                       join a in aliasMapping
+                                       on p.ToLower() equals a.PRD_ALS_NM.ToLower() into pa
+                                       from t in pa.DefaultIfEmpty()
+                                       select t == null ? p : t.PRD_NM).Distinct().ToList();
+
+            productsToMatch.FirstOrDefault().USR_INPUT = String.Join(" ", productAliasesSplit.ToArray());
+
+            productsToMatch.FirstOrDefault().MOD_USR_INPUT = CheckBogusProduct(productsToMatch.FirstOrDefault().USR_INPUT);
+
+            return _productDataLib.SearchProduct(productsToMatch, CUST_MBR_SID, getWithoutFilters);
         }
 
         /// <summary>

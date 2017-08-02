@@ -19,7 +19,6 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
     vm.isCalCollapsed = false;
     vm.isLvlCollapsed = false;
     vm.invalidProdName = '';
-    vm.productsToDeleteUponSave = [];
     vm.ProductCorrectorData = util.deepClone(GetProductCorrectorData);
     vm.allDone = false;
     vm.curRowDone = false;
@@ -632,15 +631,6 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
 
     vm.removeProd = function (prdNm) {
         kendo.confirm("This will remove product (" + prdNm + ") from the <b>Product Corrector</b> AND from the <b>Pricing Table</b>?<br/>Would you like to delete this product?").then(function () {
-            // record what we need to delete from the spreadsheet json
-            vm.productsToDeleteUponSave.push({
-                "name": prdNm,
-                "rowId": vm.curRowId,
-                "rowIndx": vm.curRowIndx
-            });
-
-            vm.ProductCorrectorData.productsToDeleteUponSave = vm.productsToDeleteUponSave;
-
             // delete from duplicates if exists
             if (!!vm.ProductCorrectorData.DuplicateProducts[vm.curRowId] && !!vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][prdNm]) {
                 delete vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][prdNm];

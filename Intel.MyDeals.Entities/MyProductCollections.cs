@@ -56,6 +56,9 @@ namespace Intel.MyDeals.Entities
 
         [DataMember]
         public System.Boolean COLUMN_TYPE { set; get; }
+
+        [DataMember]
+        public System.String MOD_USR_INPUT { set; get; }
     }
 
     [DataContract]

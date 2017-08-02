@@ -18,7 +18,7 @@ namespace Intel.MyDeals.Entities
         protected override void Init()
         {
             //// This order must match EXACTLY the order as it appears in the TYPE definition (lame!)            
-            this.Columns.Add("USR_INPUT", typeof(string));
+            this.Columns.Add("USR_INPUT", typeof(string));            
             this.Columns.Add("EXCLUDE", typeof(string));
             this.Columns.Add("FILTER", typeof(string));
             this.Columns.Add("START_DATE", typeof(string));
@@ -27,6 +27,7 @@ namespace Intel.MyDeals.Entities
             this.Columns.Add("PROGRAM_PAYMENT", typeof(string));
             this.Columns.Add("COLUMN_TYPE", typeof(int));
             this.Columns.Add("ROW_NM", typeof(int));
+            this.Columns.Add("MOD_USR_INPUT", typeof(string));
         }
 
         /// <summary>
@@ -36,7 +37,7 @@ namespace Intel.MyDeals.Entities
         {
             if (itm == null) { return; }
             var r = this.NewRow();            
-            r["USR_INPUT"] = itm.USR_INPUT;
+            r["USR_INPUT"] = itm.USR_INPUT;                
             r["EXCLUDE"] = itm.EXCLUDE;
             r["FILTER"] = itm.FILTER;
             r["START_DATE"] = itm.START_DATE;
@@ -45,6 +46,7 @@ namespace Intel.MyDeals.Entities
             r["PROGRAM_PAYMENT"] = itm.PROGRAM_PAYMENT;
             r["COLUMN_TYPE"] = itm.COLUMN_TYPE;
             r["ROW_NM"] = itm.ROW_NUMBER;
+            r["MOD_USR_INPUT"] = itm.MOD_USR_INPUT;
             this.Rows.Add(r);
         }
 
@@ -58,7 +60,7 @@ namespace Intel.MyDeals.Entities
             foreach (var itm in itms)
             {
                 var r = this.NewRow();                
-                r["USR_INPUT"] = itm.USR_INPUT;
+                r["USR_INPUT"] = itm.USR_INPUT;                
                 r["EXCLUDE"] = itm.EXCLUDE;
                 r["FILTER"] = itm.FILTER;
                 r["START_DATE"] = itm.START_DATE;
@@ -67,6 +69,7 @@ namespace Intel.MyDeals.Entities
                 r["PROGRAM_PAYMENT"] = itm.PROGRAM_PAYMENT;
                 r["COLUMN_TYPE"] = itm.COLUMN_TYPE;
                 r["ROW_NM"] = itm.ROW_NUMBER;
+                r["MOD_USR_INPUT"] = itm.MOD_USR_INPUT;
                 this.Rows.Add(r);
             }
         }
