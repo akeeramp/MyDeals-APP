@@ -69,7 +69,7 @@
                                         </div>
                                         <div style="max-height: 200px; overflow: auto;">
                                             <div ng-repeat="item in opOptions.columns | filter:{title: columnSearchFilter} | orderBy: 'title'" class="chkColItem">
-                                                <input type='checkbox' checked='checked' class='check with-myfont' id="colChk{{item.field}}" ng-click="onColumnChange(item)" data-field='{{item.field}}'/>
+                                                <input type='checkbox' checked='checked' class='sub-menu-checkbox check with-font' id="colChk{{item.field}}" ng-click="onColumnChange(item)" data-field='{{item.field}}'/>
                                                 <label for="colChk{{item.field}}">
                                                     <span ng-bind-html="item.title"></span>
                                                 </label>

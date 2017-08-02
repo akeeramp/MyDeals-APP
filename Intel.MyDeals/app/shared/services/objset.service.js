@@ -32,6 +32,7 @@ function objsetService($http, dataService, logger, $q) {
 
         validatePricingTableRow: validatePricingTableRow,
         deletePricingTableRow: deletePricingTableRow,
+        unGroupPricingTableRow: unGroupPricingTableRow,
 
         updateContractAndCurPricingTable: updateContractAndCurPricingTable,
         readContractStatus: readContractStatus,
@@ -99,6 +100,9 @@ function objsetService($http, dataService, logger, $q) {
     }
     function deletePricingTableRow(custId, contractId, ptrId) {
         return dataService.get(apiBasePricingTableUrl + 'DeletePricingTableRow/' + custId + '/' + contractId + '/' + ptrId);
+    }
+    function unGroupPricingTableRow(custId, contractId, ptrId) {
+        return dataService.get(apiBasePricingTableUrl + 'UnGroupPricingTableRow/' + custId + '/' + contractId + '/' + ptrId);
     }
 
     // #### CONTRACT CRUD ####

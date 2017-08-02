@@ -9,6 +9,7 @@ using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque;
 using Intel.Opaque.Data;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Intel.MyDeals.BusinessLogic
@@ -754,51 +755,82 @@ namespace Intel.MyDeals.BusinessLogic
         #endregion
 
 
-        public static OpMsg UpGroupPricingTableRow(this MyDealsData myDealsData, ContractToken contractToken, IOpDataCollectorLib dataCollectorLib)
+        public static OpMsgQueue UpGroupPricingTableRow(this MyDealsData myDealsData, ContractToken contractToken, IOpDataCollectorLib dataCollectorLib)
         {
-            return null;
+            //   1) Get DC_ID
+            //   2) Get all WIP with the parent of DC_ID
+            //   3) For each deal
+            //       1) Get Product
+            //       2) Copy PTR matching deal
+            //       3) Split JSON to be ONLY the product
 
-            //List<int> deleteIds = new List<int>();
-            //List<int> deletedIds = new List<int>();
+            OpMsgQueue opMsgQueue = new OpMsgQueue();
+            int newId = -100;
 
-            //foreach (OpDataCollectorFlattenedItem item in opFlatList)
-            //{
-            //    var ids = new List<int> { int.Parse(item[AttributeCodes.DC_ID].ToString()) };
-            //    item["_actions"] = new OpDataCollectorFlattenedItem
-            //    {
-            //        ["_deleteTargetIds"] = ids
-            //    };
-            //    deleteIds.AddRange(ids);
-            //}
+            if (!myDealsData.ContainsKey(OpDataElementType.PRC_TBL_ROW) || !myDealsData.ContainsKey(OpDataElementType.WIP_DEAL)) return opMsgQueue;
 
-            //OpDataCollectorFlattenedDictList data = new OpDataCollectorFlattenedDictList
-            //{
-            //    [OpDataElementType.PRC_ST] = opDataElementType == OpDataElementType.PRC_ST ? opFlatList : new OpDataCollectorFlattenedList(),
-            //    [OpDataElementType.PRC_TBL] = opDataElementType == OpDataElementType.PRC_TBL ? opFlatList : new OpDataCollectorFlattenedList(),
-            //    [OpDataElementType.PRC_TBL_ROW] = opDataElementType == OpDataElementType.PRC_TBL_ROW ? opFlatList : new OpDataCollectorFlattenedList(),
-            //    [OpDataElementType.WIP_DEAL] = opDataElementType == OpDataElementType.WIP_DEAL ? opFlatList : new OpDataCollectorFlattenedList()
-            //};
+            List<OpDataCollector> allPtrs = myDealsData[OpDataElementType.PRC_TBL_ROW].AllDataCollectors.ToList();
+            List<OpDataCollector> allWips = myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.ToList();
 
-            //OpDataCollectorFlattenedDictList opFlatDictList = dataCollectorLib
-            //    .SavePackets(data, contractToken, new List<int>(), false, "")
-            //    .ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
+            // look at each PTR seperately
+            foreach (OpDataCollector dcPtr in allPtrs)
+            {
+                int ptrId = dcPtr.DcID;
+                string ptrJson = dcPtr.GetDataElementValue(AttributeCodes.PTR_SYS_PRD);
 
-            //foreach (OpDataCollectorFlattenedItem item in opFlatDictList[opDataElementType])
-            //{
-            //    foreach (OpDataAction opDataAction in (List<OpDataAction>)item["_actions"])
-            //    {
-            //        int id = opDataAction.DcID ?? 0;
-            //        if (opDataAction.Action != "OBJ_DELETED" || !deleteIds.Contains(id)) continue;
+                if (string.IsNullOrEmpty(ptrJson)) continue;
 
-            //        deleteIds.Remove(id);
-            //        deletedIds.Add(id);
-            //    }
-            //}
+                ProdMappings items = null;
+                try
+                {
+                    items = JsonConvert.DeserializeObject<ProdMappings>(ptrJson);
+                }
+                catch (Exception ex)
+                {
+                    opMsgQueue.Messages.Add(new OpMsg
+                    {
+                        Message = $"Unable to parse Product Json for {ptrId}"
+                    });
+                    continue;
+                }
 
-            //// TODO replace with Delete call
-            //return deleteIds.Any()
-            //    ? new OpMsg(OpMsg.MessageType.Warning, "Unable to delete Ids {0}.", string.Join(",", deleteIds))
-            //    : new OpMsg(OpMsg.MessageType.Info, "Deleted Ids {0}.", string.Join(",", deletedIds));
+                //foreach (KeyValuePair<string, IEnumerable<ProdMapping>> kvp in items)
+                //{
+                //    foreach (ProdMapping prodMapping in kvp.Value)
+                //    {
+                //        if (string.IsNullOrEmpty(prodMapping.PRD_MBR_SID))
+                //        {
+                //        }
+                //    }
+                //}
+
+                // find all children wip deals and start splitting PTR
+                foreach (OpDataCollector dcWip in allWips.Where(w => w.DcParentID == ptrId))
+                {
+                    OpDataCollector dcSplit = dcPtr.Clone();
+                    dcSplit.DcID = newId--;
+                }
+            }
+
+
+
+
+            //myDealsData[OpDataElementType.WIP_DEAL].BatchID = Guid.NewGuid();
+            //myDealsData[OpDataElementType.WIP_DEAL].GroupID = -101; // Whatever the real ID of this object is
+
+            //// Back to normal operations, clear out the messages and all.
+            //myDealsData[OpDataElementType.WIP_DEAL].Actions.RemoveAll(r => r.ActionDirection == OpActionDirection.Inbound);
+            //myDealsData[OpDataElementType.WIP_DEAL].Messages.Messages.RemoveAll(r => true);
+
+            //// Tack on the save action call now
+            //myDealsData[OpDataElementType.WIP_DEAL].AddSaveActions();
+
+
+            //myDealsData.EnsureBatchIDs();
+            //myDealsData.Save(contractToken);
+
+
+            return opMsgQueue;
 
         }
 

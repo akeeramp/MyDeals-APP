@@ -122,7 +122,7 @@ namespace Intel.MyDeals.BusinessLogic
             return pricingTableRows.DeleteByIds(OpDataElementType.PRC_TBL_ROW, contractToken, _dataCollectorLib);
         }
 
-        public OpMsg UnGroupPricingTableRowById(ContractToken contractToken, int ptrId)
+        public OpMsgQueue UnGroupPricingTableRowById(ContractToken contractToken, int ptrId)
         {
             MyDealsData myDealsData = GetPricingTableRowAndWip(ptrId);
             return myDealsData.UpGroupPricingTableRow(contractToken, _dataCollectorLib);

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Intel.Opaque.Data;
+using Newtonsoft.Json;
 
 namespace Intel.MyDeals.Entities
 {
@@ -230,6 +231,13 @@ namespace Intel.MyDeals.Entities
 
                 if (result) typeof(OpDataElement).GetProperty(prop).SetValue(de, true);
             }
+        }
+
+        public static OpDataCollector Clone(this OpDataCollector dc)
+        {
+            string dcJson = JsonConvert.SerializeObject(dc);
+            OpDataCollector dcClone = JsonConvert.DeserializeObject<OpDataCollector>(dcJson);
+            return dcClone;
         }
     }
 }

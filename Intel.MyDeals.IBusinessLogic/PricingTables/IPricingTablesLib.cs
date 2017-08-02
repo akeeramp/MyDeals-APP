@@ -18,5 +18,8 @@ namespace Intel.MyDeals.IBusinessLogic
         OpMsg DeletePricingTableRow(ContractToken contractToken, OpDataCollectorFlattenedList pricingTableRows);
         OpMsgQueue ActionWipDeals(ContractToken contractToken, Dictionary<string, List<WfActnItem>> actns);
 
+        OpMsgQueue UnGroupPricingTableRowById(ContractToken contractToken, int ptrId);
+        
+
     }
 }

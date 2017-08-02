@@ -99,6 +99,20 @@ namespace Intel.MyDeals.Controllers.API
             );
         }
 
+        [Authorize]
+        [Route("UnGroupPricingTableRow/{custId}/{contractId}/{ptrId}")]
+        [HttpGet]
+        public OpMsgQueue UnGroupPricingTableRow(int custId, int contractId, int ptrId)
+        {
+            return SafeExecutor(() => _pricingTablesLib.UnGroupPricingTableRowById(new ContractToken
+            {
+                CustId = custId,
+                ContractId = contractId
+            }, ptrId)
+                , "Unable to split the Pricing Table Row {id}"
+            );
+        }
+
 
         [Authorize]
         [Route("ActionWipDeal/{custId}/{contractId}/{actn}")]

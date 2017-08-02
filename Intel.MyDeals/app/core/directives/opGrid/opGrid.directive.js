@@ -788,6 +788,11 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 $scope.$parent.$parent.$parent.$parent.$parent._dirty = true;
             }
 
+            $scope.unGroupPricingTableRow = function (dataItem) {
+                var rootScope = $scope.$parent.$parent.$parent.$parent.$parent;
+                rootScope.unGroupPricingTableRow(dataItem);
+            }
+
             $scope.deletePricingTableRow = function (dataItem) {
                 var rootScope = $scope.$parent.$parent.$parent.$parent.$parent;
                 rootScope.deletePricingTableRow(dataItem);
@@ -804,6 +809,12 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
             $scope.$on('saveComplete', function (event, args) {
                 // need to clean out all flags... dirty, error, validMsg
                 $scope.cleanFlags();
+
+                // clear out checkboxes
+                $.each($scope.grid.columns, function () {
+                    $("input.grid-link-checkbox").prop("checked", false);
+                });
+
 
                 if (!!args.data.WIP_DEAL) {
                     for (var i = 0; i < args.data.WIP_DEAL.length; i++) {

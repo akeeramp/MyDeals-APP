@@ -3,7 +3,7 @@
     <div class='fl gridStatusMarker {{dataItem.WF_STG_CD}}' title='{{dataItem.WF_STG_CD}}'>{{stgOneChar()}}</div>
 
     <div class='fl' ng-if="isEditable && (dataItem._parentCnt === undefined || dataItem._parentCnt <= 1)">
-        <input type="checkbox" ng-model="dataItem.isLinked" class="with-font" id="lnkChk_{{dataItem.DC_PARENT_ID}}" /><label for="lnkChk_{{dataItem.DC_PARENT_ID}}" style="margin: 5px 0 0 0;" title="Check to apply changes to all rows checked"></label>
+        <input type="checkbox" ng-model="dataItem.isLinked" class="grid-link-checkbox with-font" id="lnkChk_{{dataItem.DC_PARENT_ID}}" /><label for="lnkChk_{{dataItem.DC_PARENT_ID}}" style="margin: 5px 0 0 0;" title="Check to apply changes to all rows checked"></label>
     </div>
 
     <div class='fl md-icon rotate-270' ng-if="isEditable && (dataItem._parentCnt === undefined || dataItem._parentCnt > 1)">

@@ -1306,6 +1306,42 @@
             });
         }
 
+        
+        // **** UNGROUP Methods ****
+        //
+        $scope.unGroupPricingTableRow = function (wip) {
+            $scope.$apply(function () {
+                $scope.setBusy("Splitting Deals...", "Splitting the Grouped Pricing Table Row into seperate deals");
+                $scope._dirty = false;
+                topbar.show();
+
+                // Remove from DB first... then remove from screen
+                objsetService.unGroupPricingTableRow(wip.CUST_MBR_SID, $scope.contractData.DC_ID, wip.DC_PARENT_ID).then(
+                    function (data) {
+                        if (data.data.MsgType !== 1) {
+                            $scope.setBusy("Splitting Failed", "Unable to Split the Pricing Table Row");
+                            $timeout(function () {
+                                $scope.setBusy("", "");
+                            }, 4000);
+                            return;
+                        }
+
+                        //$scope.$broadcast('removeRow', wip.DC_PARENT_ID);
+
+                        $scope.setBusy("Split Successful", "Split the Pricing Table Row into single Deals");
+                        $timeout(function () {
+                            $scope.setBusy("", "");
+                        }, 4000);
+                        topbar.hide();
+
+                    },
+                    function (response) {
+                        logger.error("Could not split the Pricing Table Row.", response, response.statusText);
+                        topbar.hide();
+                    }
+                );
+            });
+        }
 
         // **** SAVE CONTRACT Methods ****
         //

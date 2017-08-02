@@ -37,7 +37,9 @@ function dealTools() {
                 {
                     text: 'Yes, Split',
                     primary: true,
-                    action: function () {}
+                    action: function() {
+                        $scope.$parent.$parent.unGroupPricingTableRow($scope.dataItem);
+                    }
                 }
             ];
 
