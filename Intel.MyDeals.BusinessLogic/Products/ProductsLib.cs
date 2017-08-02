@@ -1087,20 +1087,42 @@ namespace Intel.MyDeals.BusinessLogic
             var suggestions = GetSearchString(userInput.USR_INPUT, userInput.FILTER, DateTime.Parse(userInput.START_DATE),
                 DateTime.Parse(userInput.END_DATE), true).Take(5);
 
-            var productsToTranslate = suggestions.Select(t => new ProductEntryAttribute
-            {
-                ROW_NUMBER = 1,
-                USR_INPUT = t.Name,
-                EXCLUDE = userInput.EXCLUDE,
-                FILTER = userInput.FILTER,
-                END_DATE = userInput.END_DATE,
-                START_DATE = userInput.START_DATE,
-                GEO_COMBINED = userInput.GEO_COMBINED,
-                PROGRAM_PAYMENT = userInput.PROGRAM_PAYMENT,
-                COLUMN_TYPE = (t.Name == "EPM_NM")
-            }).ToList();
+            List<ProductEntryAttribute> productsToTranslate = new List<ProductEntryAttribute>();
 
-            return productsToTranslate.Any() ? SearchProduct(productsToTranslate, custId, false) : new List<PRD_LOOKUP_RESULTS>();
+            if (suggestions.Any())
+            {
+                productsToTranslate = suggestions.Select(t => new ProductEntryAttribute
+                {
+                    ROW_NUMBER = 1,
+                    USR_INPUT = t.Name,
+                    EXCLUDE = userInput.EXCLUDE,
+                    MOD_USR_INPUT = "",
+                    FILTER = userInput.FILTER,
+                    END_DATE = userInput.END_DATE,
+                    START_DATE = userInput.START_DATE,
+                    GEO_COMBINED = userInput.GEO_COMBINED,
+                    PROGRAM_PAYMENT = userInput.PROGRAM_PAYMENT,
+                    COLUMN_TYPE = (t.Name == "EPM_NM")
+                }).ToList();
+            }
+            else
+            {
+                productsToTranslate.Add(new ProductEntryAttribute()
+                {
+                    ROW_NUMBER = 1,
+                    USR_INPUT = userInput.USR_INPUT,
+                    EXCLUDE = userInput.EXCLUDE,
+                    MOD_USR_INPUT = CheckBogusProduct(userInput.USR_INPUT),
+                    FILTER = userInput.FILTER,
+                    END_DATE = userInput.END_DATE,
+                    START_DATE = userInput.START_DATE,
+                    GEO_COMBINED = userInput.GEO_COMBINED,
+                    PROGRAM_PAYMENT = userInput.PROGRAM_PAYMENT,
+                    COLUMN_TYPE = false
+                });
+            }
+
+            return SearchProduct(productsToTranslate, custId, true);
         }
     }
 
