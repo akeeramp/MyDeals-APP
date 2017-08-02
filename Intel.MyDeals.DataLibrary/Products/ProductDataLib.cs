@@ -20,7 +20,7 @@ namespace Intel.MyDeals.DataLibrary
             OpLogPerf.Log("GetProducts");
 
             var ret = new List<Product>();
-            var cmd = new Procs.dbo.PR_MYDL_GET_PRD_DTL_MABIRA { };
+            var cmd = new Procs.dbo.PR_MYDL_GET_PRD_DTL { };
 
             try
             {
