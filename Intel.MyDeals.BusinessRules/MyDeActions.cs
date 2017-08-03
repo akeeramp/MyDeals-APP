@@ -33,21 +33,20 @@ namespace Intel.MyDeals.BusinessRules
 
             string opDeType = de.DcType.IdToOpDataElementTypeString().ToString();
 
-            // If this is an old object or a non-stage object, skip - unknown objects seem to be PS for some reason.
-            if (opDeType == OpDataElementType.PRC_TBL.ToString() || opDeType == OpDataElementType.PRC_TBL_ROW.ToString() || opDeType == OpDataElementType.Unknown.ToString()) return; 
+            if (de.DcID > 0 || opDeType == OpDataElementType.PRC_TBL.ToString() || opDeType == OpDataElementType.PRC_TBL_ROW.ToString() || opDeType == OpDataElementType.Unknown.ToString()) return; 
 
             string newStage = string.Empty;
 
-            if (opDeType == OpDataElementType.CNTRCT.ToString() && de.DcID <= 0) // New contract, set value, else keep value
+            if (opDeType == OpDataElementType.CNTRCT.ToString()) 
             {
                 newStage = WorkFlowStages.InComplete;
             }
-            else if (opDeType == OpDataElementType.PRC_ST.ToString()) // Never really makes it here because PS comes in as unknown for some reason...
+            else if (opDeType == OpDataElementType.PRC_ST.ToString()) 
             {
                 newStage = WorkFlowStages.Draft;
                 if (role == RoleTypes.GA) newStage = WorkFlowStages.Requested;
             }
-            else if (opDeType == OpDataElementType.WIP_DEAL.ToString() && de.AtrbValue.ToString() != WorkFlowStages.Active) // Set to draft if it comes in as anything but active
+            else if (opDeType == OpDataElementType.WIP_DEAL.ToString()) 
             {
                 newStage = WorkFlowStages.Draft; // There are only 2 stages, Draft and Active
             }

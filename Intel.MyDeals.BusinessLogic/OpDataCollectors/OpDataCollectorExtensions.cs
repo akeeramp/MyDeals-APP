@@ -131,6 +131,8 @@ namespace Intel.MyDeals.BusinessLogic
 
             foreach (OpDataElement de in dc.DataElements)
             {
+                if (de.AtrbCd == AttributeCodes.WF_STG_CD) continue; // bail out if this is a stage
+
                 string dimKey = de.DimKeyString;
                 string uniqDimKey = dimKey.AtrbCdDimKeySafe();
 
