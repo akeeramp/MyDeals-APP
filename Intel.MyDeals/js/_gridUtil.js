@@ -1,5 +1,4 @@
-﻿
-// Independant static style functions
+﻿// Independant static style functions
 function gridUtils() { }
 gridUtils.formatValue = function (dataValue, dataFormat) {
     if (dataFormat !== undefined && dataFormat !== "") {
@@ -9,7 +8,6 @@ gridUtils.formatValue = function (dataValue, dataFormat) {
     return dataValue;
 }
 gridUtils.uiControlWrapper = function (passedData, field, format) {
-
     // This is nicer, but slower... rendering template on large data is slower
     //var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.#=field#" kendo-tooltip k-content="dataItem._behaviors.validMsg.#=field#"></div>';
     //tmplt += '<div class="uiControlDiv"';
@@ -35,7 +33,6 @@ gridUtils.uiControlWrapper = function (passedData, field, format) {
     return tmplt;
 }
 gridUtils.uiDimControlWrapper = function (passedData, field, dim, format) {
-
     var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
     tmplt += '<div class="uiControlDiv"';
     tmplt += '     ng-class="{isHiddenCell: dataItem._behaviors.isHidden.' + field + ', isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ',';
@@ -64,7 +61,7 @@ gridUtils.uiControlScheduleWrapper = function (passedData) {
     var numTiers = 0;
     var tiers = passedData.TIER_NBR;
     for (var key in tiers) {
-        if (tiers.hasOwnProperty(key) &&key.indexOf("___") >=0) {
+        if (tiers.hasOwnProperty(key) && key.indexOf("___") >= 0) {
             numTiers++;
             var dim = "10___" + numTiers;
             tmplt += '<tr style="height: 25px;">';
@@ -80,17 +77,18 @@ gridUtils.uiControlScheduleWrapper = function (passedData) {
     return tmplt;
 }
 gridUtils.uiMoneyDatesControlWrapper = function (passedData, field, startDt, endDt) {
-
     var msg = "";
     var msgClass = "";
     var tmplt = '';
 
     if (field === "CAP" && passedData[field] === "No CAP") {
         tmplt += '<div class="uiControlDiv isSoftWarnCell" style="font-family: arial; text-align: center; color: white;">';
-        tmplt += '    No CAP';
+        tmplt += '<div style="line-height: 1em; font-family: arial; text-align: center;font-weight:600">No CAP</div>';
+        if (kendo.toString(new Date(passedData[startDt]), 'MM/dd/yy') != '01/01/01') {
+            tmplt += '<div>Availability:<span class="ng-binding" ng-bind="(dataItem.' + startDt + ' | date:\'MM/dd/yy\')"></span><span></div>';
+        }
         tmplt += '</div>';
     } else {
-
         if (field === "CAP") {
             var cap = parseFloat(passedData.CAP);
             var ecap = parseFloat(passedData.ECAP_PRICE);
@@ -121,7 +119,6 @@ gridUtils.uiMoneyDatesControlWrapper = function (passedData, field, startDt, end
     return tmplt;
 }
 gridUtils.uiMultiselectArrayControlWrapper = function (passedData, field) {
-
     var displayStr = (Array.isArray(passedData[field]) || Object.prototype.toString.call(passedData[field]) === "[object Object]")
         ? passedData[field].join()
         : passedData[field];
@@ -141,7 +138,6 @@ gridUtils.uiMultiselectArrayControlWrapper = function (passedData, field) {
 }
 
 gridUtils.uiIconWrapper = function (passedData, field, format) {
-
     // This is nicer, but slower... rendering template on large data is slower
     //var tmplt = '<div class="isDirtyIconGridContainer">';
     //tmplt += '<i class="intelicon-upload-solid" style="font-size: 20px; margin-left: 10px;" ng-class="{isDirtyIcon: dataItem.#=field#}"></i>';
@@ -240,7 +236,6 @@ gridUtils.lookupEditor = function (container, options) {
     }
 }
 
-
 gridUtils.msgIcon = function (dataItem) {
     if (dataItem.MsgType === 1) {
         return "<i class='intelicon-information-solid' style='font-size: 16px; color: #C4D600;'></i>";
@@ -254,16 +249,6 @@ gridUtils.msgIcon = function (dataItem) {
 gridUtils.dialogShow = function () {
     dialog.open();
 }
-
-
-
-
-
-
-
-
-
-
 
 function gridTools(model, cols) {
     this.model = model;
@@ -408,7 +393,6 @@ gridTools.prototype.stripBlanks = function (data) {
 gridTools.prototype.assignColSettings = function () {
     var cols = this.cols;
     for (var c = 0; c < cols.length; c++) {
-
         if (cols[c].editor !== undefined && cols[c].editor === "gridUtils.lookupEditor") {
             cols[c].editor = gridUtils.lookupEditor;
         }
@@ -446,7 +430,6 @@ gridTools.prototype.createDataSource = function (parentSource, pageSize) {
                     //item.DC_ID = gTools.nextId--;
                     // save data item to the original datasource
                     source.push(item);
-
                 }
                 // on success
                 e.success();
@@ -468,7 +451,6 @@ gridTools.prototype.createDataSource = function (parentSource, pageSize) {
                                     source[j] = item;
                                 }
                             }
-
                         } else {
                             source[gTools.getIndexByDcId(item.DC_ID, source)] = item;
                         }
@@ -505,22 +487,9 @@ gridTools.prototype.createDataSource = function (parentSource, pageSize) {
     });
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
 Array.prototype.indexOfField = function (propertyName, value) {
     for (var i = 0; i < this.length; i++)
         if (this[i][propertyName] === value)
             return i;
     return -1;
 }
-
