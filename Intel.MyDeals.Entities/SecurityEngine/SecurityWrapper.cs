@@ -58,7 +58,7 @@ namespace Intel.MyDeals.Entities
 			(from el in SecurityMasks
 						where (el.ACTN_NM == null || el.ACTN_NM == "0" || el.ACTN_NM.Trim() == actionCd)
 							  && (el.OBJ_TYPE_SID == 0 || el.OBJ_TYPE_SID == opDataElementTypeId)
-							  && (el.OBJ_SET_TYPE_CD == "" || el.OBJ_SET_TYPE_CD == opDataElementSetType.ToString())
+							  && (el.OBJ_SET_TYPE_CD == "ALL_TYPES" || el.OBJ_SET_TYPE_CD == opDataElementSetType.ToString())
 							  && (el.ROLE_SID == 0 || el.ROLE_NM == opUserToken.Role.RoleTypeCd)
 							  && (el.WFSTG_MBR_SID == 0 || el.WFSTG_NM == wfStage)
 							select el.PERMISSION_MASK
