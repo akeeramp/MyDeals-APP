@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 7/28/2017 9:08:54 PM
-On: PWECKENR-MOBL
+File Updated: 8/4/2017 4:46:52 PM
+On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
 using System;
@@ -1128,6 +1128,15 @@ namespace Intel.MyDeals.Entities {
 		public const string IS_SUPER_USER = "IS_SUPER_USER";
 
 		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3465
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string KIT_CHK = "KIT_CHK";
+
+		///<summary>
 		/// DIM_SID: 7
 		/// DIM_CD: PRD
 		/// ATRB_SID: 7065
@@ -1978,6 +1987,14 @@ namespace Intel.MyDeals.Entities {
 
 
 		///<summary>
+		/// ACTN_SID: 225
+		/// SRT_ORD: 800
+		/// UI Generated Change Parent Key Request
+		///</summary>
+		public const string CHG_PARENT_KEY = "CHG_PARENT_KEY";
+
+
+		///<summary>
 		/// ACTN_SID: 210
 		/// SRT_ORD: 1200
 		/// Roll the deal details back to the last valid active tracker state
@@ -2123,7 +2140,6 @@ namespace Intel.MyDeals.Entities {
 		public const string Active = "Active";
 		public const string All_WF_Stages = "All WF Stages";
 		public const string Approved = "Approved";
-		public const string Cancelled = "Cancelled";
 		public const string Complete = "Complete";
 		public const string Draft = "Draft";
 		public const string Expired = "Expired";
@@ -2146,6 +2162,7 @@ namespace Intel.MyDeals.Entities {
 		public const string Cancel = "Cancel";
 		public const string Redeal = "Redeal";
 		public const string Expire = "Expire";
+		public const string Hold = "Hold";
 	}
 
 
@@ -2157,10 +2174,10 @@ namespace Intel.MyDeals.Entities {
 		public const string C_GEO_BASED = "C_GEO_BASED";
 		public const string C_GLOBAL_BASED = "C_GLOBAL_BASED";
 		public const string C_ADD_ATTACHMENTS = "C_ADD_ATTACHMENTS";
-		public const string C_APPROVE_ = "C_APPROVE ";
-		public const string C_CANCEL_DEAL = "C_CANCEL_DEAL";
-		public const string C_REJECT_DEAL = "C_REJECT_DEAL";
-		public const string C_UPDATE_DEAL = "C_UPDATE_DEAL";
+		public const string C_DELETE_ATTACHMENTS = "C_DELETE_ATTACHMENTS";
+		public const string C_DELETE_CONTRACT = "C_DELETE_CONTRACT";
+		public const string C_CREATE_CONTRACT = "C_CREATE_CONTRACT";
+		public const string C_EDIT_CONTRACT = "C_EDIT_CONTRACT";
 		public const string C_VIEW_ATTACHMENTS = "C_VIEW_ATTACHMENTS";
 		public const string DEAL_READ_ONLY = "DEAL_READ_ONLY";
 		public const string ATRB_HIDDEN = "ATRB_HIDDEN";
@@ -2179,6 +2196,7 @@ namespace Intel.MyDeals.Entities {
 		public const string RUN_COST_TEST = "RUN_COST_TEST";
 		public const string SAVE = "SAVE";
 		public const string SNAPSHOT = "SNAPSHOT";
+		public const string CHG_PARENT_KEY = "CHG_PARENT_KEY";
 		public const string CAN_VIEW_COST_TEST = "CAN_VIEW_COST_TEST";
 		public const string CAN_VIEW_MEET_COMP = "CAN_VIEW_MEET_COMP";
 		public const string C_VERTCL_BASED = "C_VERTCL_BASED";
@@ -2250,10 +2268,10 @@ namespace Intel.MyDeals.Entities {
 			{
 				[OpDataElementType.CNTRCT] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES },
 				[OpDataElementType.PRC_ST] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES },
-				[OpDataElementType.PRC_TBL] = new List<OpDataElementSetType> { OpDataElementSetType.ECAP,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER,OpDataElementSetType.CAP_BAND },
-				[OpDataElementType.PRC_TBL_ROW] = new List<OpDataElementSetType> { OpDataElementSetType.ECAP,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER,OpDataElementSetType.CAP_BAND },
-				[OpDataElementType.WIP_DEAL] = new List<OpDataElementSetType> { OpDataElementSetType.ECAP,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER,OpDataElementSetType.CAP_BAND },
-				[OpDataElementType.DEAL] = new List<OpDataElementSetType> { OpDataElementSetType.ECAP,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER,OpDataElementSetType.CAP_BAND },
+				[OpDataElementType.PRC_TBL] = new List<OpDataElementSetType> { OpDataElementSetType.ECAP,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER,OpDataElementSetType.CAP_BAND,OpDataElementSetType.ALL_TYPES },
+				[OpDataElementType.PRC_TBL_ROW] = new List<OpDataElementSetType> { OpDataElementSetType.ECAP,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER,OpDataElementSetType.CAP_BAND,OpDataElementSetType.ALL_TYPES },
+				[OpDataElementType.WIP_DEAL] = new List<OpDataElementSetType> { OpDataElementSetType.ECAP,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER,OpDataElementSetType.CAP_BAND,OpDataElementSetType.ALL_TYPES },
+				[OpDataElementType.DEAL] = new List<OpDataElementSetType> { OpDataElementSetType.ECAP,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER,OpDataElementSetType.CAP_BAND,OpDataElementSetType.ALL_TYPES },
 			}
 		);
 	}

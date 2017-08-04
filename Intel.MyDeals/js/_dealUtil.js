@@ -892,7 +892,7 @@ dealUtil.CanEditAtrb = function (atrbCd, dataItem) {
     var doEdit = ["COMMENTS"];
 
     try {
-//        if (!dataItem._settings["C_UPDATE_DEAL"] && !doEdit.contains(atrbCd)) return false;
+//        if (!dataItem._settings["C_EDIT_CONTRACT"] && !doEdit.contains(atrbCd)) return false;
 //        if (dataItem.saving !== undefined && dataItem.saving !== null && dataItem.saving === true) return false;
 
         if (atrbCd[0] === '_' || doNotEdit.indexOf(atrbCd) >= 0) return false;

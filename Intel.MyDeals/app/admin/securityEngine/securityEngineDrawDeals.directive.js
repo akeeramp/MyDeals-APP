@@ -84,7 +84,7 @@ function securityEngineDrawDeals($http, lookupsService, $compile, $templateCache
 		var atrbKey = atrbCd + "/" + vm.filtered.objType.Id + "/" + dealType + "/" + role + "/" + stgName;
 
 		// Deal Read Only
-		if (mappingKey === "ATRB_READ_ONLY" && (vm.secAtrbUtil.securityMappings["C_UPDATE_DEAL"] === undefined || vm.secAtrbUtil.securityMappings["C_UPDATE_DEAL"][atrbKey.replace(atrbCd, dummyAttrName)] === undefined)) {
+		if (mappingKey === "ATRB_READ_ONLY" && (vm.secAtrbUtil.securityMappings["C_EDIT_CONTRACT"] === undefined || vm.secAtrbUtil.securityMappings["C_EDIT_CONTRACT"][atrbKey.replace(atrbCd, dummyAttrName)] === undefined)) {
 			isClickable = true;
 			title += "Deal is Read Only\n";
 			// TODO: add icons in once rules are implemented
