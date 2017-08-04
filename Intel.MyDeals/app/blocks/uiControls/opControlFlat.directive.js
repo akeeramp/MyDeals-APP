@@ -35,6 +35,7 @@ function opControlFlat($http, lookupsService, $compile, $templateCache, logger, 
 		el += ' op-max-value="' + scope.opMaxValue + '"';
 		el += ' op-is-form="' + scope.opIsForm + '"';
 		el += ' op-expanded="' + scope.opExpanded + '"';
+		el += ' op-extra="' + scope.opExtra + '"';
 		el += ' op-class="\'' + scope.opClass + '\'"';
 		el += ' op-style="\'' + scope.opStyle + '\'"';
 		el += ' op-placeholder="\'' + placeholder + '\'"';
@@ -76,7 +77,8 @@ function opControlFlat($http, lookupsService, $compile, $templateCache, logger, 
             opClass: '=',
             opStyle: '=',
             opPlaceholder: '=',
-            opExpanded: '='
+            opExpanded: '=',
+            opExtra: '='
         },
         link: linker
     }

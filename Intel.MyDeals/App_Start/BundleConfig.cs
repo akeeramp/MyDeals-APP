@@ -159,6 +159,7 @@ namespace Intel.MyDeals
                 , "~/app/contract/productSelector/kendoGridCheckBox.directive.js"
                 , "~/app/contract/productCAPBreakout/productCAPBreakout.controller.js"
                 , "~/app/contract/targetRegionPicker/targetRegionPicker.controller.js"
+                , "~/app/contract/autofillSettings/autofillSettings.controller.js"
                 , "~/app/costTest/costtest.module.js"
                 , "~/app/costTest/costtest.route.js"
                 , "~/app/dashboard/dashboard.module.js"

@@ -20,6 +20,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
             'VERTICAL_CHECKBOX': 'verticalCheckBox.html',
             'VERTICAL_SLIDER': 'verticalSlider.html',
             'VERTICAL_RADIOBUTTONGROUP': 'verticalRadioButtonGroup.html',
+            'HORIZONTAL_BUTTONGROUP': 'horizontalButtonGroup.html',
             'HORIZONTAL_TEXTBOX': 'horizontalTextBox.html',
             'HORIZONTAL_TEXTAREA': 'horizontalTextArea.html',
             'HORIZONTAL_DATEPICKER': 'horizontalDatePicker.html',
@@ -113,13 +114,85 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
             }
         }
 
-        if (scope.opType === 'RADIOBUTTONGROUP') {
+        if (scope.opType === 'RADIOBUTTONGROUP' || scope.opType === 'BUTTONGROUP') {
             if (scope.opLookupUrl !== undefined && scope.opLookupUrl !== "undefined") {
                 dataService.get(scope.opLookupUrl, null, null, true).then(function (response) {
                     scope.values = response.data;
                 }, function (response) {
                     logger.error("Unable to get lookup values.", response, response.statusText);
                 });
+            }
+
+            scope.blend = {
+                //checkboxes refuse to ng-bind to bool primitives...
+                blended: (scope.value.indexOf("[") > -1)
+            };
+
+            scope.getWidth = function (length) {
+                ret = { 'width': 100.00 / length + '%' }
+                return ret;
+            }
+
+            scope.updateBlend = function () {
+                if (scope.blend.blended) {
+                    scope.value = convertToBlend(scope.value);
+                } else {
+                    scope.value = convertFromBlend(scope.value);
+                }
+            }
+
+            var convertToBlend = function (geos) {  //geos is array
+                if (geos.indexOf("Worldwide") > -1) {    //contains WW
+                    if (geos.length > 1) {   //contains an item other than WW
+                        geos.splice(geos.indexOf("Worldwide"), 1);
+                        geos = "[" + geos.join() + "],Worldwide";
+                    }
+                } else {
+                    if (geos.length > 0) {   //does not contain geo and is not empty
+                        geos = "[" + scope.value.join() + "]";
+                    }
+                }
+                return geos;
+            }
+
+            var convertFromBlend = function (geos) {    //geos is blend string
+                if (geos.length > 1) {
+                    return geos.replace('[', '').replace(']', '').split(',');
+                } else {
+                    return geos;
+                }
+            }
+            
+            scope.setValue = function (val) {
+                if (!!scope.opExtra) {
+                    //if extra, scope.value should be an array unless blended
+                    if (scope.blend.blended) scope.value = convertFromBlend(scope.value); //convert to unblended format for calculations
+                    
+                    if (scope.value.indexOf(val) > -1) {
+                        //already in values, deselect
+                        scope.value.splice(scope.value.indexOf(val), 1);
+                    } else {
+                        //not in values, add
+                        scope.value.push(val);
+                        scope.value.sort();
+                    }
+
+                    if (scope.blend.blended) scope.value = convertToBlend(scope.value); //convert back to blended format
+                    
+                } else {
+                    scope.value = val;
+                }
+            }
+
+            scope.isSelected = function (lookupVal) { //todo: add boolean to check differently if it is an array
+                if (!!scope.opExtra) {
+                    if (scope.blend.blended) scope.value = convertFromBlend(scope.value); //convert to unblended format for calculations
+                    var ret = (scope.value.indexOf(lookupVal) > -1);
+                    if (scope.blend.blended) scope.value = convertToBlend(scope.value); //convert back to blended format
+                    return ret;
+                } else {
+                    return (scope.value == lookupVal);
+                }
             }
         }
 
@@ -397,7 +470,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
             opHelpMsg: '=',
             opIsForm: '=',
             opExpanded: '=',
-            opBlend: '=',
+            opExtra: '=',
             opClass: '=',
             opStyle: '=',
             opPlaceholder: '='

@@ -306,6 +306,7 @@
     <Content Include="app\admin\workflow\workflow.html" />
     <Content Include="app\admin\workflow\workflow.service.js" />
     <Content Include="app\app.module.js" />
+    <Content Include="app\blocks\uiControls\partials\horizontalButtonGroup.html" />
     <Content Include="app\blocks\uiControls\partials\horizontalEmbeddedMultiSelect.html" />
     <Content Include="app\blocks\uiControls\partials\verticalEmbeddedMultiSelect.html" />
     <Content Include="app\contract\controllers\managerOverlapping.controller.js" />
@@ -338,6 +339,8 @@
     <Content Include="app\contract\partials\lnavFlow.html" />
     <Content Include="app\contract\partials\lnavSummaryMainMenu.html" />
     <Content Include="app\contract\partials\lnavSummaryMenuMini.html" />
+    <Content Include="app\contract\autofillSettings\autofillSettings.controller.js" />
+    <Content Include="app\contract\autofillSettings\autofillSettings.html" />
     <Content Include="app\contract\targetRegionPicker\targetRegionPicker.controller.js" />
     <Content Include="app\contract\targetRegionPicker\targetRegionPicker.html" />
     <Content Include="app\contract\productCAPBreakout\productCAPBreakout.controller.js" />
@@ -353,7 +356,6 @@
     <Content Include="app\contract\productSelector\kendoGridCheckBox.directive.js" />
     <Content Include="app\contract\productSelector\productSelector.controller.js" />
     <Content Include="app\contract\productSelector\productSelector.html" />
-    <Content Include="app\contract\partials\lnavEditPricingTableDefaults.html" />
     <Content Include="app\core\directives\adminBanner\adminBanner.directive.js" />
     <Content Include="app\core\directives\adminBanner\adminBanner.directive.html" />
     <Content Include="app\blocks\exception\exception-handler.provider.js" />

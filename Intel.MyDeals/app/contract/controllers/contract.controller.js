@@ -913,13 +913,11 @@
         $scope.isSummaryHidden = true;
 
         $scope.isAddPricingTableHidden = true;
-        $scope.isEditPricingTableDefaultsHidden = true;
         $scope.toggleSearch = function () {
             $scope.isSearchHidden = !$scope.isSearchHidden;
             $scope.isAddStrategyHidden = true;
             $scope.isAddStrategyBtnHidden = false;
             $scope.isAddPricingTableHidden = true;
-            $scope.isEditPricingTableDefaultsHidden = true;
         }
 
         $scope.showAddPricingTable = function (ps) {
@@ -928,7 +926,6 @@
             $scope.isAddStrategyBtnHidden = true;
             $scope.isSearchHidden = true;
             $scope.clearNptTemplate();
-            $scope.isEditPricingTableDefaultsHidden = false;
             $scope.curPricingStrategy = ps;
             if (!!$scope.curPricingStrategy && !$scope.curPricingStrategy.PRC_TBL) {
                 // default Pricing Table title to Pricing Strategy title
@@ -945,31 +942,17 @@
             }
         }
         $scope.showEditPricingTableDefaults = function (pt) {
-            $scope.isAddPricingTableHidden = true;
-            $scope.isAddStrategyHidden = true;
-            $scope.isSearchHidden = true;
-            $scope.isEditPricingTableDefaultsHidden = false;
-            $scope.setNptTemplate(pt);
+            openAutofillModal(pt);
         }
         $scope.hideAddPricingTable = function () {
             $scope.isAddPricingTableHidden = true;
             $scope.isAddStrategyHidden = true;
             $scope.isAddStrategyBtnHidden = false;
             $scope.isSearchHidden = true;
-            $scope.isEditPricingTableDefaultsHidden = true;
             $scope.newPricingTable = util.clone($scope.templates.ObjectTemplates.PRC_TBL.ECAP);
             $scope.newPricingTable.OBJ_SET_TYPE_CD = ""; //reset new PT deal type
             $scope.clearPtTemplateIcons();
             // $scope.curPricingStrategy = {}; //clears curPricingStrategy
-        }
-        $scope.hideEditPricingTableDefaults = function () {
-            $scope.isAddPricingTableHidden = true;
-            $scope.isAddStrategyHidden = true;
-            $scope.isSearchHidden = true;
-            $scope.isEditPricingTableDefaultsHidden = true;
-            $scope.newPricingTable = util.clone($scope.templates.ObjectTemplates.PRC_TBL.ECAP);
-            $scope.newPricingTable.OBJ_SET_TYPE_CD = ""; //reset new PT deal type
-            $scope.currentPricingTable = null;
         }
 
         // **** PRICING STRATEGY Methods ****
@@ -981,7 +964,6 @@
             $scope.isAddStrategyBtnHidden = !$scope.isAddStrategyHidden;
             $scope.isSearchHidden = true;
             $scope.isAddPricingTableHidden = true;
-            $scope.isEditPricingTableDefaultsHidden = true;
         }
         $scope.addStrategyDisabled = false;
 
@@ -1022,6 +1004,69 @@
             }, 2000);
         }
 
+        // **** AUTODILL DEFAULTS Methods ****
+        //
+        function openAutofillModal(pt) {
+
+            if (pt != null) {
+                $scope.setNptTemplate(pt);
+                //if pt not null, need to also update the nPT default atrb values
+                updateNPTDefaultValues(pt);
+            }
+
+            var autofillData = {
+                'DEALTYPE': $scope.newPricingTable["OBJ_SET_TYPE_CD"],
+                'EXTRA': $scope.newPricingTable["_extraAtrbs"],             //may not be needed, extras are a one time set thing such as num tiers that we may choose to keep in the LNAV
+                'DEFAULT': $scope.newPricingTable["_defaultAtrbs"]
+            }
+
+            var autofillModal = $uibModal.open({
+                backdrop: 'static',
+                templateUrl: 'app/contract/autofillSettings/autofillSettings.html',
+                controller: 'AutofillSettingsController',
+                controllerAs: 'vm',
+                windowClass: 'autofill-modal-window',
+                size: 'lg',
+                resolve: {
+                    autofillData: autofillData,
+                }
+            });
+
+            autofillModal.result.then(
+                function (autofills) {
+                    $scope.newPricingTable["_defaultAtrbs"] = autofills;
+
+                    if (pt != null) { //pt is null when not yet created
+                        //need to trigger a save if it is an existing pricing table, otherwise it will save when user clicks add
+                        $scope.customEditPtValidate();
+                    }
+                },
+                function () {
+                });
+        }
+
+        function updateNPTDefaultValues(pt) {
+            var nptDefaults = $scope.newPricingTable["_defaultAtrbs"];
+
+            //note: copy pasted from the watch function far below, slight modificaitons, can probably be compressed to 1 function call for reusability?
+            if (!!nptDefaults["REBATE_TYPE"]) nptDefaults["REBATE_TYPE"].value = pt["REBATE_TYPE"];
+            if (!!nptDefaults[MRKT_SEG]) nptDefaults[MRKT_SEG].value = pt[MRKT_SEG].split(',');
+            if (!!nptDefaults[GEO]) {
+                if (pt[GEO].indexOf('[') > -1) {
+                    nptDefaults[GEO].value = pt[GEO];
+                } else {
+                    nptDefaults[GEO].value = pt[GEO].split(',');
+                }
+            }
+            if (!!nptDefaults["PAYOUT_BASED_ON"]) nptDefaults["PAYOUT_BASED_ON"].value = pt["PAYOUT_BASED_ON"];
+            if (!!nptDefaults["MEET_COMP_PRICE_QSTN"]) nptDefaults["MEET_COMP_PRICE_QSTN"].value = pt["MEET_COMP_PRICE_QSTN"];
+            if (!!nptDefaults["PROGRAM_PAYMENT"]) nptDefaults["PROGRAM_PAYMENT"].value = pt["PROGRAM_PAYMENT"];
+            if (!!nptDefaults["PROD_INCLDS"]) nptDefaults["PROD_INCLDS"].value = pt["PROD_INCLDS"];
+
+            //not sure if necessary, javascript pass by value/reference always throwin' me off. :(
+            $scope.newPricingTable["_defaultAtrbs"] = nptDefaults
+        }
+
         // **** PRICING TABLE Methods ****
         //
         $scope.addTableDisabled = false;
@@ -1051,6 +1096,10 @@
                 $scope.newPricingTable._behaviors.isError["OBJ_SET_TYPE_CD"] = false;
                 $scope.newPricingTable._behaviors.validMsg["OBJ_SET_TYPE_CD"] = "";
             }
+
+            //Jeffnote: do we need to clear user autofill defaults selection when they select a different deal type? is that stored in the above or was that elsewhere?
+            //debugger;
+            openAutofillModal(null);
         }
         $scope.setNptTemplate = function (pt) {
             $scope.currentPricingTable = pt;
@@ -1194,9 +1243,6 @@
                             // delete item
                             $scope.contractData.PRC_ST.splice($scope.contractData.PRC_ST.indexOf(ps), 1);
 
-                            // hide PT defaults editor regardless of whether you deleted the one being edited - ideally we will only hide if deleting the one being edited but this behavior is fine for the time being
-                            $scope.hideEditPricingTableDefaults();
-
                             $scope.setBusy("Delete Successful", "Deleted the Pricing Strategy");
                             $timeout(function () {
                                 $scope.setBusy("", "");
@@ -1247,9 +1293,6 @@
 
                             // delete item
                             ps.PRC_TBL.splice(ps.PRC_TBL.indexOf(pt), 1);
-
-                            // hide PT defaults editor regardless of whether you deleted the one being edited - ideally we will only hide if deleting the one being edited but this behavior is fine for the time being
-                            $scope.hideEditPricingTableDefaults();
 
                             $scope.setBusy("Delete Successful", "Deleted the Pricing Table");
                             $timeout(function () {
@@ -2343,6 +2386,8 @@
         $scope.editPricingTable = function () {
             topbar.show();
 
+            $scope.setBusy("Saving...", "Saving Pricing Table");
+
             // Clone base model and populate changes
             var pt = util.clone($scope.currentPricingTable);
 
@@ -2371,7 +2416,6 @@
                 function (data) {
                     $scope.updateResults(data.data.PRC_TBL, pt); //?? needed?
 
-                    $scope.hideEditPricingTableDefaults();
                     $scope.addTableDisabled = false;
                     //$scope.curPricingTable = pt;
                     //var seeme = $scope.curPricingTable
@@ -2379,11 +2423,13 @@
 
                     logger.success("Edited Pricing Table", pt, "Save Successful");
                     topbar.hide();
+                    $scope.setBusy("", "");
                 },
                 function (response) {
                     $scope.addTableDisabled = false;
                     logger.error("Could not edit the pricing table.", response, response.statusText);
                     topbar.hide();
+                    $scope.setBusy("", "");
                 }
             );
         }
@@ -2520,7 +2566,13 @@
                 } else {
                     if (!!newValue["REBATE_TYPE"]) newValue["REBATE_TYPE"].value = $scope.currentPricingTable["REBATE_TYPE"];
                     if (!!newValue[MRKT_SEG]) newValue[MRKT_SEG].value = $scope.currentPricingTable[MRKT_SEG].split(',');
-                    if (!!newValue[GEO]) newValue[GEO].value = $scope.currentPricingTable[GEO].split(',');
+                    if (!!newValue[GEO]) {
+                        if ($scope.currentPricingTable[GEO].indexOf('[') > -1) {
+                            newValue[GEO].value = $scope.currentPricingTable[GEO];
+                        } else {
+                            newValue[GEO].value = $scope.currentPricingTable[GEO].split(',');
+                        }
+                    }
                     if (!!newValue["PAYOUT_BASED_ON"]) newValue["PAYOUT_BASED_ON"].value = $scope.currentPricingTable["PAYOUT_BASED_ON"];
                     if (!!newValue["MEET_COMP_PRICE_QSTN"]) newValue["MEET_COMP_PRICE_QSTN"].value = $scope.currentPricingTable["MEET_COMP_PRICE_QSTN"];
                     if (!!newValue["PROGRAM_PAYMENT"]) newValue["PROGRAM_PAYMENT"].value = $scope.currentPricingTable["PROGRAM_PAYMENT"];

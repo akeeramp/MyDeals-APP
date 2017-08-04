@@ -152,7 +152,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
                 IsDefaultable = true,
                 DataType = "string",
-                UiType = "DROPDOWN",
+                UiType = "BUTTONGROUP",
                 LookupUrl = "/api/Dropdown/GetDropdowns/REBATE_TYPE/ECAP",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
@@ -169,7 +169,7 @@ namespace Intel.MyDeals.DataLibrary
                 LookupUrl = "/api/Dropdown/GetDropdownHierarchy/MRKT_SEG",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN",
-                HelpText = "You cannot mix ALL & other market segments.\n\nNon Corp selects: Consumer retail pull, Education, Government, &SMB",
+                HelpText = "You cannot mix ALL & other market segments.\n\nNon Corp selects: Consumer retail pull, Education, Government, & SMB",
             });
             items.Add(new UiTemplateContainerItem
             {
@@ -179,7 +179,7 @@ namespace Intel.MyDeals.DataLibrary
                 IsDefaultable = true,
                 Label = "Geo",
                 DataType = "string",
-                UiType = "MULTISELECT",
+                UiType = "BUTTONGROUP",
                 LookupUrl = "/api/Dropdown/GetGeosDropdowns",
                 LookupText = "dropdownName",
                 LookupValue = "dropdownName"
@@ -191,7 +191,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
                 Width = 100,
                 IsDefaultable = true,
-                UiType = "RADIOBUTTONGROUP",
+                UiType = "BUTTONGROUP",
                 LookupUrl = "/api/Dropdown/GetDropdowns/PAYOUT_BASED_ON",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
@@ -203,7 +203,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
                 IsDefaultable = true,
                 Label = "Meet Comp Analysis",
-                UiType = "RADIOBUTTONGROUP",
+                UiType = "BUTTONGROUP",
                 LookupUrl = "/api/Dropdown/GetDropdowns/MEET_COMP_PRICE_QSTN",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
@@ -215,7 +215,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
                 Width = 100,
                 IsDefaultable = true,
-                UiType = "RADIOBUTTONGROUP",
+                UiType = "BUTTONGROUP",
                 LookupUrl = "/api/Dropdown/GetDropdowns/PROGRAM_PAYMENT",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
@@ -228,7 +228,7 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 100,
                 IsDefaultable = true,
                 Label = "Media",
-                UiType = "RADIOBUTTONGROUP",
+                UiType = "BUTTONGROUP",
                 LookupUrl = "/api/Dropdown/GetDropdowns/PROD_INCLDS",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"

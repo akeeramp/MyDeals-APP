@@ -455,7 +455,6 @@
     margin-top: -13px;
     border-top-style: solid;
     border-top-color: lightgrey;
-    height: 250px;
     width: 100%;
 }
 
@@ -472,3 +471,190 @@
     line-height: 1em !important;
 }
 
+/* CSS for horizontal button group */
+.buttongroup {
+    width: 100%;
+}
+
+.buttongroupControl {
+    width: 100%;
+}
+
+.buttongroup-btn {
+    width: 100%;
+    display: block;
+    background-color: #777777;
+    color: #ffffff;
+    cursor: pointer;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-transform: uppercase;
+    text-align: center;
+    border-color: white;
+    border-right-style: solid;
+    font-size: 12px;
+}
+
+    .buttongroup-btn:hover {
+        background-color: #0071C5;
+    }
+
+.buttongroup-btn-first {
+    border-radius: 10px 0 0 10px;
+}
+
+.buttongroup-btn-last {
+    border-radius: 0 10px 10px 0;
+}
+
+.buttongroup-btn.isSelected {
+    background-color: #00AEEF;
+}
+
+    .buttongroup-btn.isSelected:hover {
+        background-color: #0071C5;
+    }
+
+/* CSS for Vertical Embedded Multiselect */
+.msPopup {
+    margin-bottom: 0 !important;
+    position: relative;
+    width: 100%;
+    font-size: 12px;
+    border: 1px solid #cccccc;
+    box-shadow: 2px 2px 4px #000000;
+    overflow: hidden;
+    z-index: 1000;
+}
+
+.msClsBtn {
+    background-color: #00AEEF;
+    color: #ffffff;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 4px;
+    text-transform: uppercase;
+    text-align: center;
+    height: 28px;
+}
+
+    .msClsBtn:hover {
+        background-color: #0071C5;
+    }
+
+.opUiContainer.intel {
+    color: black;
+}
+
+/* CSS for autofill defaults modal */
+.autofill-header-title {
+    color: #1a3e6f;
+    font-size: 28px;
+    text-align: center;
+}
+
+.autofill-header-tip {
+    color: white;
+    font-size: 20px;
+    text-align: center;
+    background-color: #00AEEF;
+    border-radius: 8px;
+}
+
+.autofill-settings .modal-header {
+    border-bottom: none;
+    padding-bottom: 0px;
+}
+
+.autofill-settings .modal-body {
+    padding-top: 2px;
+    padding-bottom: 30px;
+    /*height: 300px;*/
+    overflow-y: auto;
+}
+
+.afBtn {
+    cursor: pointer;
+    font-size: 14px;
+    padding: 5px;
+    text-transform: uppercase;
+    text-align: center;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: 1em;
+    border-radius: 5px;
+}
+
+    .afBtn:hover {
+        background-color: #0071C5;
+        color: #ffffff;
+    }
+
+.afSaveBtn {
+    background-color: #00AEEF;
+    color: #ffffff;
+}
+
+.afClsBtn {
+    background-color: #DDDDDD;
+    color: #000000;
+    border-style: solid;
+    border-color: #000000;
+    border-width: 1px;
+}
+
+.autofill-modal-window, .modal-dialog {
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.opUiLabel {
+    font-size: 18px;
+    font-weight: bold;
+    color: #1a3e6f;
+}
+
+/* CSS for target region picker */
+.trgtRgnHeader {
+    color: white;
+    font-size: 26px;
+}
+
+.rgnmodalCloseIcon {
+    color: white;
+    font-size: 26px;
+    padding-right: 20px;
+}
+
+.target-region-picker.modal-header {
+    border-bottom: none;
+    padding-bottom: 0px;
+}
+
+.target-region-picker.modal-body {
+    padding-top: 2px;
+    padding-bottom: 0px;
+    overflow-y: auto;
+}
+
+.rgnClsBtn {
+    background-color: #00AEEF;
+    color: #ffffff;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 4px;
+    text-transform: uppercase;
+    text-align: center;
+    position: relative;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: 1em;
+}
+
+.rgnClsBtn:hover {
+    background-color: #0071C5;
+}

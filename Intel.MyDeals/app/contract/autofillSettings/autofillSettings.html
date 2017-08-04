@@ -1,0 +1,66 @@
+﻿<div class="modal-content" moveablemodal style="background-color:white;overflow-y:auto;overflow-x:hidden;border-left:none;border-right:none;padding:15px;">
+    <div class="autofill-settings modal-header">
+        <div class="row">
+            <div class="cursorArea autofillHeader">
+                <p class="autofill-header-title">{{vm.autofillData.DEALTYPE}} Pricing Table Autofill Settings</p>
+                <p class="autofill-header-tip">Use the selections below to auto-populate your deal table, you may also overwrite the autofill selections made here in the grid</p>
+            </div>
+        </div>
+    </div>
+    <div class="autofill-settings modal-body">
+        <div class="row" style="padding-bottom:50px">
+            <div class="col-md-6">
+                <div ng-repeat="(key, value) in vm.autofillData.DEFAULT">
+                    <div ng-if="value.type == 'BUTTONGROUP'">
+
+                        <div op-control-data-element
+                             op-class="'md intel'"
+                             ng-model="vm.autofillData.DEFAULT"
+                             op-cd="key"
+                             op-type="value.type"
+                             op-label="value.label"
+                             op-lookup-url="value.opLookupUrl"
+                             op-lookup-text="value.opLookupText"
+                             op-lookup-value="value.opLookupValue"
+                             op-is-form="true"
+                             op-extra="value.extra"
+                             op-ui-mode="'HORIZONTAL'"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div ng-repeat="(key, value) in vm.autofillData.DEFAULT">
+                    <div ng-if="value.type == 'EMBEDDEDMULTISELECT'">
+                        <div op-control-data-element
+                             op-class="'md intel'"
+                             ng-model="vm.autofillData.DEFAULT"
+                             op-cd="key"
+                             op-type="value.type"
+                             op-label="value.label"
+                             op-lookup-url="value.opLookupUrl"
+                             op-lookup-text="value.opLookupText"
+                             op-lookup-value="value.opLookupValue"
+                             op-is-form="true"
+                             op-extra="value.extra"
+                             op-ui-mode="'VERTICAL'"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="row" style="width:100%">
+        <div class="col-md-8">
+            <!--EMPTY SPACE-->
+        </div>
+        <div class="col-md-2">
+            <div ng-click="vm.close()" class="afBtn afClsBtn">Cancel</div>
+        </div>
+        <div class="col-md-2">
+            <div ng-click="vm.ok()" class="afBtn afSaveBtn">Save & Close</div>
+        </div>
+    </div>
+
+</div>

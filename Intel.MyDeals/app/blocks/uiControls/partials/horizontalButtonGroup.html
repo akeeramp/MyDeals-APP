@@ -1,0 +1,52 @@
+﻿<div class="opUiContainer {{opClass}}" style="{{opStyle}}" ng-class="{isHidden: opIsHidden, isErrorWrapper: opIsError, isSavedWrapper: opIsSaved, isDirtyWrapper: opIsDirty}">
+    <div class="opUiLabel" style="width:100%" ng-class="{isRequired: opIsRequired}">
+        <span>
+            {{opLabel}}
+        </span>
+        <span style="float:right" ng-if="opExtra">
+            <input ng-model="blend.blended" ng-change="updateBlend()" type="checkbox" /> Blend Geos
+        </span>
+    </div>
+
+    <div class="clearboth"></div>
+    <div style="overflow: hidden;">
+        <div ng-repeat="item in values" class="fl" ng-style="getWidth(values.length)">
+            <div class="buttongroup">
+
+                <label class="buttongroupControl">
+                    <span name="{{item[opLookupValue]}}"
+                          class="buttongroup-btn buttongroup-btn-first"
+                          ng-disabled="opIsReadOnly"
+                          ng-if="$first"
+                          ng-click="setValue(item[opLookupText])"
+                          ng-class="{isSelected:isSelected(item[opLookupValue]), isHidden: opIsHidden, isReadOnly: opIsReadOnly, isError: opIsError, isSaved: opIsSaved, isDirty: opIsDirty}">
+                        {{item[opLookupText]}}
+                    </span>
+
+                    <span name="{{item[opLookupValue]}}"
+                          class="buttongroup-btn"
+                          ng-disabled="opIsReadOnly"
+                          ng-if="$middle"
+                          ng-click="setValue(item[opLookupText])"
+                          ng-class="{isSelected:isSelected(item[opLookupValue]), isHidden: opIsHidden, isReadOnly: opIsReadOnly, isError: opIsError, isSaved: opIsSaved, isDirty: opIsDirty}">
+                        {{item[opLookupText]}}
+                    </span>
+
+                    <span name="{{item[opLookupValue]}}"
+                          class="buttongroup-btn  buttongroup-btn-last"
+                          ng-disabled="opIsReadOnly"
+                          ng-if="$last"
+                          ng-click="setValue(item[opLookupText])"
+                          ng-class="{isSelected:isSelected(item[opLookupValue]), isHidden: opIsHidden, isReadOnly: opIsReadOnly, isError: opIsError, isSaved: opIsSaved, isDirty: opIsDirty}">
+                        {{item[opLookupText]}}
+                    </span>
+                </label>
+
+            </div>
+
+        </div>
+        <div class="clearboth"></div>
+    </div>
+    <div class="clearboth"></div>
+
+</div>
