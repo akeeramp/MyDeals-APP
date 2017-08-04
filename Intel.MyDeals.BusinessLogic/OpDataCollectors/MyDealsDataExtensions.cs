@@ -766,6 +766,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             OpMsgQueue opMsgQueue = new OpMsgQueue();
             int newId = -100;
+            Dictionary<int, int> childToParentIdMapping = new Dictionary<int, int>();
 
             if (!myDealsData.ContainsKey(OpDataElementType.PRC_TBL_ROW) || !myDealsData.ContainsKey(OpDataElementType.WIP_DEAL)) return opMsgQueue;
 
@@ -779,7 +780,7 @@ namespace Intel.MyDeals.BusinessLogic
                 string ptrJson = dcPtr.GetDataElementValue(AttributeCodes.PTR_SYS_PRD);
 
                 if (string.IsNullOrEmpty(ptrJson)) continue;
-
+                
                 ProdMappings items = null;
                 try
                 {
@@ -794,40 +795,80 @@ namespace Intel.MyDeals.BusinessLogic
                     continue;
                 }
 
-                //foreach (KeyValuePair<string, IEnumerable<ProdMapping>> kvp in items)
-                //{
-                //    foreach (ProdMapping prodMapping in kvp.Value)
-                //    {
-                //        if (string.IsNullOrEmpty(prodMapping.PRD_MBR_SID))
-                //        {
-                //        }
-                //    }
-                //}
 
                 // find all children wip deals and start splitting PTR
                 foreach (OpDataCollector dcWip in allWips.Where(w => w.DcParentID == ptrId))
                 {
-                    OpDataCollector dcSplit = dcPtr.Clone();
-                    dcSplit.DcID = newId--;
+                    OpDataCollector dcSplit = dcPtr.Clone(newId);
+                    childToParentIdMapping[dcWip.DcID] = newId--;
+                    //foreach (OpDataElement de in dcWip.DataElements)
+                    //{
+                    //    de.DcParentID = newId;
+                    //    de.State = OpDataElementState.Modified;
+                    //}
+                    //dcWip.DcParentID = newId--;
+
+                    string prodTitle = dcWip.GetDataElementValue(AttributeCodes.TITLE);
+                    dcSplit.SetDataElementValue(AttributeCodes.PTR_USER_PRD, prodTitle);
+                    //dcWip.SetDataElementValue(AttributeCodes.PTR_USER_PRD, prodTitle);
+
+                    
+                    // manage products
+                    List<ProdMapping> prdMappings = items[dcWip.GetDataElementValue(AttributeCodes.TITLE)].ToList();
+                    string strPrdMappings = JsonConvert.SerializeObject(new Dictionary<string, List<ProdMapping>> { [prodTitle] = prdMappings });
+                    dcSplit.SetDataElementValue(AttributeCodes.PTR_SYS_PRD, strPrdMappings);
+
+                    // manage Geos
+                    string strGeos = dcWip.GetDataElementValue(AttributeCodes.GEO_COMBINED);
+                    if (strGeos.IndexOf(',') >= 0) strGeos = "[" + strGeos + "]";
+                    dcSplit.SetDataElementValue(AttributeCodes.GEO_COMBINED, strGeos);
+
+                    myDealsData[OpDataElementType.PRC_TBL_ROW].Data.Add(dcSplit);
+                }
+            }
+
+            myDealsData[OpDataElementType.PRC_TBL_ROW].BatchID = Guid.NewGuid();
+            myDealsData[OpDataElementType.PRC_TBL_ROW].GroupID = -101; // Whatever the real ID of this object is
+            myDealsData[OpDataElementType.PRC_TBL_ROW].AddSaveActions();
+            myDealsData.EnsureBatchIDs();
+            var res = myDealsData.Save(contractToken);
+
+            foreach (var actn in res[OpDataElementType.PRC_TBL_ROW].Actions)
+            {
+                if (actn.Action != "ID_CHANGE" || actn.DcID == null || actn.AltID == null) continue;
+                int id = childToParentIdMapping.Where(c => c.Value == (int)actn.DcID).Select(c => c.Key).FirstOrDefault();
+                childToParentIdMapping[id] = (int)actn.AltID;
+            }
+
+            // Now map the WIP parents to the new PTR numbers
+            foreach (OpDataCollector dcPtr in allPtrs)
+            {
+                int ptrId = dcPtr.DcID;
+                foreach (OpDataCollector dcWip in allWips.Where(w => w.DcParentID == ptrId))
+                {
+                    foreach (OpDataElement de in dcWip.DataElements)
+                    {
+                        de.DcParentID = childToParentIdMapping[dcWip.DcID];
+                        de.State = OpDataElementState.Modified;
+                    }
+                    dcWip.DcParentID = childToParentIdMapping[dcWip.DcID];
+                    dcWip.SetDataElementValue(AttributeCodes.PTR_USER_PRD, dcWip.GetDataElementValue(AttributeCodes.TITLE));
                 }
             }
 
 
+            //myDealsData.Remove(OpDataElementType.PRC_TBL_ROW);
+            myDealsData[OpDataElementType.WIP_DEAL].BatchID = Guid.NewGuid();
+            myDealsData[OpDataElementType.WIP_DEAL].GroupID = -101; // Whatever the real ID of this object is
+            myDealsData[OpDataElementType.WIP_DEAL].AddSaveActions();
+            myDealsData[OpDataElementType.WIP_DEAL].AddParentIdActions(childToParentIdMapping);
 
+            myDealsData[OpDataElementType.PRC_TBL_ROW].Data = new OpDataCollectorDict();
+            myDealsData[OpDataElementType.PRC_TBL_ROW].Actions.Clear();
+            myDealsData[OpDataElementType.PRC_TBL_ROW].AddDeleteActions(allPtrs.Select(x => x.DcID).ToList());
 
-            //myDealsData[OpDataElementType.WIP_DEAL].BatchID = Guid.NewGuid();
-            //myDealsData[OpDataElementType.WIP_DEAL].GroupID = -101; // Whatever the real ID of this object is
-
-            //// Back to normal operations, clear out the messages and all.
-            //myDealsData[OpDataElementType.WIP_DEAL].Actions.RemoveAll(r => r.ActionDirection == OpActionDirection.Inbound);
-            //myDealsData[OpDataElementType.WIP_DEAL].Messages.Messages.RemoveAll(r => true);
-
-            //// Tack on the save action call now
-            //myDealsData[OpDataElementType.WIP_DEAL].AddSaveActions();
-
-
-            //myDealsData.EnsureBatchIDs();
-            //myDealsData.Save(contractToken);
+            myDealsData.EnsureBatchIDs();
+            var res2 = myDealsData.Save(contractToken);
 
 
             return opMsgQueue;

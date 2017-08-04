@@ -40,6 +40,10 @@
         //var s4 = securityService.chkAtrbRules('ATRB_READ_ONLY', 'SA', 'DEAL', 'ECAP', 'Draft', 'ECAP_FLR');
         //debugger;
 
+        //var d1 = securityService.chkDealRules('C_ADD_ATTACHMENTS', 'SA', 'DEAL', null, null);
+        //var d2 = securityService.chkDealRules('C_ADD_ATTACHMENTS', 'FSE', 'DEAL', null, null);
+        //debugger;
+
         // determine if the contract is existing or new... if new, look for pre-population attributes from the URL parameters
 
         $scope.initContract = function (contractData) {

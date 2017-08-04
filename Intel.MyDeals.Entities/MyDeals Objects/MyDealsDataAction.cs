@@ -94,6 +94,15 @@ namespace Intel.MyDeals.Entities
         {
         }
 
+        public MyDealsDataAction(string action, int dcId, int altId, int sort)
+            : this(String.Empty, String.Empty, null)
+        {
+            Action = action;
+            DcID = dcId;
+            TargetDcIDs = new List<int> {altId};
+            Sort = sort;
+        }
+
         public MyDealsDataAction(string action, string subAction, List<int> targetDcIDs)
             : this(action, subAction, targetDcIDs, DEFAULT_SORT) { }
         

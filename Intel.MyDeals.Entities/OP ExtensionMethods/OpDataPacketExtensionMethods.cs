@@ -19,6 +19,19 @@ namespace Intel.MyDeals.Entities
             packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.SAVE, 20)); // Set action - save it.
         }
 
+        public static void AddParentIdActions(this OpDataPacket<OpDataElementType> packet, Dictionary<int, int> data)
+        {
+            foreach (KeyValuePair<int, int> kvp in data)
+            {
+                packet.Actions.Add(new MyDealsDataAction("CHG_PARENT_KEY", kvp.Key, kvp.Value, 25));
+            }
+        }
+
+        public static void AddDeleteActions(this OpDataPacket<OpDataElementType> packet, List<int> delIds)
+        {
+            packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.OBJ_DELETE, delIds, 30));
+        }
+
         public static void AddDeleteActions(this OpDataPacket<OpDataElementType> packet, OpDataCollectorFlattenedList data)
         {
             foreach (OpDataCollectorFlattenedItem item in data)

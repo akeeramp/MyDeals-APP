@@ -43,8 +43,12 @@ function securityService($http, dataService) {
         securityMasks = masks;
     }
 
-    function chkDealRules(action, role, itemType, stage) {
-        return chkAtrbRules(action, role, itemType, stage, null);
+    function chkToolRules(action, role) {
+        return chkAtrbRules(action, role, null, null, null, null);
+    }
+
+    function chkDealRules(action, role, itemType, itemSetType, stage) {
+        return chkAtrbRules(action, role, itemType, itemSetType, stage, null);
     }
 
     function chkAtrbRules(action, role, itemType, itemSetType, stage, attrb) {
@@ -61,11 +65,14 @@ function securityService($http, dataService) {
         if (itemType === 'WIP_DEAL') itemTypeId = 5;
         if (itemType === 'DEAL') itemTypeId = 6;
 
+        debugger;
+
         var secActionObj = securityAttributes.filter(function (item) {
             return ((item.ATRB_CD === undefined || item.ATRB_CD === null) ? "" : item.ATRB_CD.trim().toUpperCase()) === ((attrb === undefined || attrb === null) ? "" : attrb.trim().toUpperCase());
         });
         if (secActionObj === undefined || secActionObj === null || secActionObj.length <= 0) return false;
 
+        debugger;
         var localSecurityMasks = securityMasks.filter(function (item) {
             return item.ACTN_NM === action
                 && (role === null || item.ROLE_NM === null || item.ROLE_NM.trim().toUpperCase() === role.trim().toUpperCase())

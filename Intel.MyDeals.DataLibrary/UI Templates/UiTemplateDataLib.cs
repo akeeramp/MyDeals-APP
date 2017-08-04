@@ -720,7 +720,6 @@ namespace Intel.MyDeals.DataLibrary
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
                 Width = 130,
                 Template = "#=gridUtils.uiControlWrapper(data, 'ECAP_PRICE', 'currency')#",
-                DataType = "object",
                 IsFilterable = true,
                 IsSortable = true,
                 Format = "{0:c}"
@@ -870,29 +869,29 @@ namespace Intel.MyDeals.DataLibrary
                 IsSortable = true,
                 Template = "#=gridUtils.uiControlWrapper(data, 'REBATE_BILLING_END', \"date:'MM/dd/yyyy'\")#"
             });
-            //items.Add(new UiTemplateContainerItem
-            //{
-            //    Id = 29,
-            //    AtrbCd = AttributeCodes.CONSUMPTION_REASON,
-            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-            //    Width = 150,
-            //    IsFilterable = true,
-            //    IsSortable = true,
-            //    Template = "#=gridUtils.uiControlWrapper(data, 'CONSUMPTION_REASON')#",
-            //    LookupUrl = "/api/Dropdown/GetDropdowns/CONSUMPTION_REASON",
-            //    LookupText = "DROP_DOWN",
-            //    LookupValue = "DROP_DOWN"
-            //});
-            //items.Add(new UiTemplateContainerItem
-            //{
-            //    Id = 29,
-            //    AtrbCd = AttributeCodes.CONSUMPTION_REASON_CMNT,
-            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-            //    Width = 150,
-            //    IsFilterable = true,
-            //    IsSortable = true,
-            //    Template = "#=gridUtils.uiControlWrapper(data, 'CONSUMPTION_REASON_CMNT')#"
-            //});
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
+                AtrbCd = AttributeCodes.CONSUMPTION_REASON,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Width = 150,
+                IsFilterable = true,
+                IsSortable = true,
+                Template = "#=gridUtils.uiControlWrapper(data, 'CONSUMPTION_REASON')#",
+                LookupUrl = "/api/Dropdown/GetDropdowns/CONSUMPTION_REASON",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
+                AtrbCd = AttributeCodes.CONSUMPTION_REASON_CMNT,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Width = 150,
+                IsFilterable = true,
+                IsSortable = true,
+                Template = "#=gridUtils.uiControlWrapper(data, 'CONSUMPTION_REASON_CMNT')#"
+            });
 
             //items.Add(new UiTemplateContainerItem
             //{

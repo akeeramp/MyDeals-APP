@@ -233,11 +233,25 @@ namespace Intel.MyDeals.Entities
             }
         }
 
-        public static OpDataCollector Clone(this OpDataCollector dc)
+        public static OpDataCollector Clone(this OpDataCollector dc, int dcId)
         {
             string dcJson = JsonConvert.SerializeObject(dc);
             OpDataCollector dcClone = JsonConvert.DeserializeObject<OpDataCollector>(dcJson);
+            dcClone.DcID = dcId;
+            foreach (OpDataElement de in dcClone.DataElements)
+            {
+                de.DcID = dcId;
+                de.State = OpDataElementState.Modified;
+            }
             return dcClone;
+        }
+
+        public static void MarkAllModified(this OpDataCollector dc)
+        {
+            foreach (OpDataElement de in dc.DataElements)
+            {
+                de.State = OpDataElementState.Modified;
+            }
         }
     }
 }
