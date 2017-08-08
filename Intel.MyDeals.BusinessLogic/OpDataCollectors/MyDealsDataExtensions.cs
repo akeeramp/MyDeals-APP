@@ -773,27 +773,41 @@ namespace Intel.MyDeals.BusinessLogic
             List<OpDataCollector> allPtrs = myDealsData[OpDataElementType.PRC_TBL_ROW].AllDataCollectors.ToList();
             List<OpDataCollector> allWips = myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors.ToList();
 
+            OpDataElementTypeMapping elMapping = null;
+
             // look at each PTR seperately
             foreach (OpDataCollector dcPtr in allPtrs)
             {
-                int ptrId = dcPtr.DcID;
-                string ptrJson = dcPtr.GetDataElementValue(AttributeCodes.PTR_SYS_PRD);
-
-                if (string.IsNullOrEmpty(ptrJson)) continue;
-                
                 ProdMappings items = null;
-                try
+                int ptrId = dcPtr.DcID;
+
+                if (elMapping == null)
                 {
-                    items = JsonConvert.DeserializeObject<ProdMappings>(ptrJson);
+                    string strObjSetType = dcPtr.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
+                    OpDataElementSetType objSetType = OpDataElementSetTypeConverter.FromString(strObjSetType);
+                    elMapping = objSetType.OpDataElementTypeParentMapping(OpDataElementType.WIP_DEAL);
                 }
-                catch (Exception ex)
+
+                if (elMapping.TranslationType == OpTranslationType.OneDealPerProduct)
                 {
-                    opMsgQueue.Messages.Add(new OpMsg
+                    string ptrJson = dcPtr.GetDataElementValue(AttributeCodes.PTR_SYS_PRD);
+
+                    if (string.IsNullOrEmpty(ptrJson)) continue;
+
+                    try
                     {
-                        Message = $"Unable to parse Product Json for {ptrId}"
-                    });
-                    continue;
+                        items = JsonConvert.DeserializeObject<ProdMappings>(ptrJson);
+                    }
+                    catch (Exception ex)
+                    {
+                        opMsgQueue.Messages.Add(new OpMsg
+                        {
+                            Message = $"Unable to parse Product Json for {ptrId}"
+                        });
+                        continue;
+                    }
                 }
+                
 
 
                 // find all children wip deals and start splitting PTR
@@ -801,22 +815,18 @@ namespace Intel.MyDeals.BusinessLogic
                 {
                     OpDataCollector dcSplit = dcPtr.Clone(newId);
                     childToParentIdMapping[dcWip.DcID] = newId--;
-                    //foreach (OpDataElement de in dcWip.DataElements)
-                    //{
-                    //    de.DcParentID = newId;
-                    //    de.State = OpDataElementState.Modified;
-                    //}
-                    //dcWip.DcParentID = newId--;
 
                     string prodTitle = dcWip.GetDataElementValue(AttributeCodes.TITLE);
                     dcSplit.SetDataElementValue(AttributeCodes.PTR_USER_PRD, prodTitle);
-                    //dcWip.SetDataElementValue(AttributeCodes.PTR_USER_PRD, prodTitle);
+                    dcSplit.GetDataElement(AttributeCodes.PTR_USER_PRD).State = OpDataElementState.Modified;
 
-                    
-                    // manage products
-                    List<ProdMapping> prdMappings = items[dcWip.GetDataElementValue(AttributeCodes.TITLE)].ToList();
-                    string strPrdMappings = JsonConvert.SerializeObject(new Dictionary<string, List<ProdMapping>> { [prodTitle] = prdMappings });
-                    dcSplit.SetDataElementValue(AttributeCodes.PTR_SYS_PRD, strPrdMappings);
+                    if (elMapping.TranslationType == OpTranslationType.OneDealPerProduct)
+                    {
+                        // manage products
+                        List<ProdMapping> prdMappings = items[dcWip.GetDataElementValue(AttributeCodes.TITLE)].ToList();
+                        string strPrdMappings = JsonConvert.SerializeObject(new Dictionary<string, List<ProdMapping>> { [prodTitle] = prdMappings });
+                        dcSplit.SetDataElementValue(AttributeCodes.PTR_SYS_PRD, strPrdMappings);
+                    }
 
                     // manage Geos
                     string strGeos = dcWip.GetDataElementValue(AttributeCodes.GEO_COMBINED);
@@ -852,7 +862,11 @@ namespace Intel.MyDeals.BusinessLogic
                         de.State = OpDataElementState.Modified;
                     }
                     dcWip.DcParentID = childToParentIdMapping[dcWip.DcID];
-                    dcWip.SetDataElementValue(AttributeCodes.PTR_USER_PRD, dcWip.GetDataElementValue(AttributeCodes.TITLE));
+
+                    if (elMapping != null && elMapping.TranslationType == OpTranslationType.OneDealPerProduct)
+                    {
+                        dcWip.SetDataElementValue(AttributeCodes.PTR_USER_PRD, dcWip.GetDataElementValue(AttributeCodes.TITLE));
+                    }
                 }
             }
 
@@ -870,6 +884,16 @@ namespace Intel.MyDeals.BusinessLogic
             myDealsData.EnsureBatchIDs();
             var res2 = myDealsData.Save(contractToken);
 
+            foreach (KeyValuePair<int, int> kvp in childToParentIdMapping)
+            {
+                opMsgQueue.Messages.Add(new OpMsg()
+                {
+                    Message = $"Parent ID Changed from {kvp.Key} to {kvp.Value}",
+                    MsgType = OpMsg.MessageType.Info,
+                    ExtraDetails = kvp.Key,
+                    KeyIdentifiers = new[] { kvp.Key, kvp.Value }
+                });
+            }
 
             return opMsgQueue;
 

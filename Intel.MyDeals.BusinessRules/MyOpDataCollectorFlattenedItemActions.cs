@@ -38,19 +38,12 @@ namespace Intel.MyDeals.BusinessRules
                 Role = opUserToken.Role.RoleTypeCd
             };
 
-            var t = DataCollections.GetWorkFlowItems()
-                .Where(w =>
-                    w.WF_NM == "General WF" &&
-                    w.OBJ_TYPE == opDataElementType.ToDesc() &&
-                w.WFSTG_CD_SRC == stage &&
-                    w.OBJ_SET_TYPE_CD == objSetType);
-
             // load actions
             List <string> actions = DataCollections.GetWorkFlowItems()
                 .Where(w =>
                 w.WF_NM == "General WF" &&
-                w.OBJ_TYPE == opDataElementType.ToDesc() &&
-                w.OBJ_SET_TYPE_CD == objSetType &&
+                (w.OBJ_TYPE == opDataElementType.ToDesc() || w.OBJ_TYPE == "ALL_TYPES") &&
+                (w.OBJ_SET_TYPE_CD == objSetType || w.OBJ_SET_TYPE_CD == "ALL_TYPES") &&
                 w.WFSTG_CD_SRC == stage &&
                 w.ROLE_TIER_NM == opUserToken.Role.RoleTier).Select(w => w.WFSTG_ACTN_NM).ToList();
 
@@ -63,6 +56,7 @@ namespace Intel.MyDeals.BusinessRules
             List<string> possibleSettings = new List<string>
             {
                 SecurityActns.C_EDIT_CONTRACT,
+                SecurityActns.C_DELETE_CONTRACT,
                 SecurityActns.C_VIEW_QUOTE_LETTER,
                 SecurityActns.C_ADD_ATTACHMENTS,
                 SecurityActns.C_VIEW_ATTACHMENTS,

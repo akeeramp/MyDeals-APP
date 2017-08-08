@@ -61,6 +61,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MyDcRules\PostActionRules.cs" />
     <Compile Include="MyDcRules\RequiredRules.cs" />
     <Compile Include="MyDcRules\MergeRules.cs" />
     <Compile Include="MyDcRules\HiddenRules.cs" />

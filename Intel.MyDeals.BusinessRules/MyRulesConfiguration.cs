@@ -32,6 +32,8 @@ namespace Intel.MyDeals.BusinessRules
                 _attrbRules.AddRange(AllRules.GetOpCollectorToDictRules());
                 _attrbRules.AddRange(AllRules.GetMergeRules());
 
+                _attrbRules.AddRange(AllRules.GetPostActionRules());
+
                 return _attrbRules;
             }
         }

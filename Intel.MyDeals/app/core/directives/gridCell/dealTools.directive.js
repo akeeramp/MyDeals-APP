@@ -71,6 +71,20 @@ function dealTools() {
                 }
             ];
 
+            $scope.unHoldActions = [
+                {
+                    text: 'Cancel',
+                    action: function () { }
+                },
+                {
+                    text: 'Yes, Take off Hold',
+                    primary: true,
+                    action: function () {
+                        $scope.$parent.$parent.unHoldPricingTableRow($scope.dataItem);
+                    }
+                }
+            ];
+
             $scope.dialogShow = function() {
 
             }

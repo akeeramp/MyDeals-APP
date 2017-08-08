@@ -21,7 +21,7 @@ namespace Intel.MyDeals.BusinessRules
                     Title="Apply Actions [_actions] and Settings [_settings]",
                     ActionRule = MyOpDataCollectorFlattenedItemActions.ApplyActionsAndSettings,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnOpCollectorConvert },
-                    InObjType = new List<OpDataElementType> { OpDataElementType.CNTRCT, OpDataElementType.PRC_ST }
+                    InObjType = new List<OpDataElementType> { OpDataElementType.CNTRCT, OpDataElementType.PRC_ST, OpDataElementType.WIP_DEAL, OpDataElementType.DEAL }
                 },
                 new MyOpRule
                 {

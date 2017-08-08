@@ -282,6 +282,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         getActionItems(data, "Approve");
         getActionItems(data, "Revise");
         getActionItems(data, "Cancel");
+        getActionItems(data, "Hold");
 
         if (Object.keys(data).length === 0) {
             kendo.alert("No Pricing Strategies were selected.");

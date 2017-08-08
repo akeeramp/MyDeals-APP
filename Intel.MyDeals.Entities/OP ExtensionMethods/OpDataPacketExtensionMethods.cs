@@ -23,7 +23,7 @@ namespace Intel.MyDeals.Entities
         {
             foreach (KeyValuePair<int, int> kvp in data)
             {
-                packet.Actions.Add(new MyDealsDataAction("CHG_PARENT_KEY", kvp.Key, kvp.Value, 25));
+                packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.CHG_PARENT_KEY, kvp.Key, kvp.Value, 25));
             }
         }
 

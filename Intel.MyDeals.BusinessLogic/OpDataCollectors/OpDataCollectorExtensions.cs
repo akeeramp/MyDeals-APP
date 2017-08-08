@@ -317,11 +317,13 @@ namespace Intel.MyDeals.BusinessLogic
             return DataCollections.GetWorkFlowItems()
                 .Where(w =>
                 w.WF_NM == "General WF" &&
-                w.OBJ_TYPE == opDataElementType.ToDesc() &&
-                w.OBJ_SET_TYPE_CD == objSetType &&
+                (w.OBJ_TYPE == opDataElementType.ToDesc() || w.OBJ_TYPE == "ALL_TYPES") &&
+                (w.OBJ_SET_TYPE_CD == objSetType || w.OBJ_SET_TYPE_CD == "ALL_TYPES") &&
                 w.WFSTG_CD_SRC == stage &&
                 w.WFSTG_ACTN_NM == actn &&
                 w.ROLE_TIER_NM == opUserToken.Role.RoleTier)
+                .OrderBy(w => w.OBJ_TYPE == "ALL_TYPES" ? 1 : 0)
+                .ThenBy(w => w.OBJ_SET_TYPE_CD == "ALL_TYPES" ? 1 : 0)
                 .Select(w => w.WFSTG_CD_DEST).FirstOrDefault();
         }
     }

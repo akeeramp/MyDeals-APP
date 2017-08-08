@@ -2,40 +2,47 @@
 <div class="dealTools">
     <div class='fl gridStatusMarker {{dataItem.WF_STG_CD}}' title='{{dataItem.WF_STG_CD}}'>{{stgOneChar()}}</div>
 
-    <div class='fl' ng-if="isEditable && (dataItem._parentCnt === undefined || dataItem._parentCnt <= 1)">
+    <div class='fl' ng-if="isEditable && (!dataItem._parentCnt || dataItem._parentCnt <= 1)">
         <input type="checkbox" ng-model="dataItem.isLinked" class="grid-link-checkbox with-font" id="lnkChk_{{dataItem.DC_PARENT_ID}}" /><label for="lnkChk_{{dataItem.DC_PARENT_ID}}" style="margin: 5px 0 0 0;" title="Check to apply changes to all rows checked"></label>
     </div>
 
-    <div class='fl md-icon rotate-270' ng-if="isEditable && (dataItem._parentCnt === undefined || dataItem._parentCnt > 1)">
+    <div class='fl md-icon rotate-270' ng-if="isEditable && (!dataItem._parentCnt || dataItem._parentCnt > 1)">
         <i class="intelicon-org-chart" style="font-size: 20px !important; cursor: pointer; color: #00AEEF; margin-right: 9px;" ng-click="groupDialog.open()"></i>
     </div>
 
-    <div class='fl md-icon' ng-if="dataItem.NOTES === undefined || dataItem.NOTES === ''">
+    <div class='fl md-icon' ng-if="!dataItem.NOTES || dataItem.NOTES === ''">
         <i class='intelicon-discussion-solid' style="font-size: 20px !important; cursor: pointer; color: #00AEEF;" title="Add a Comment" ng-click="dialog.open()"></i>
     </div>
-    <div class='fl md-icon' ng-if="dataItem.NOTES !== undefined && dataItem.NOTES !== ''">
+    <div class='fl md-icon' ng-if="!!dataItem.NOTES && dataItem.NOTES !== ''">
         <i class='intelicon-discussion-solid' style="font-size: 20px !important; cursor: pointer; color: #003C71;" title="{{dataItem.NOTES}}" ng-click="dialog.open()"></i>
     </div>
 
-    <div class='fl md-icon' ng-if="dataItem.HasFiles === undefined || !dataItem.HasFiles">
+    <div class='fl md-icon' ng-if="!dataItem.HasFiles">
         <i class='intelicon-attach' style="font-size: 20px !important; color: #00AEEF; cursor: pointer;" title="Click to Add an Attachment"></i>
     </div>
-    <div class='fl md-icon' ng-if="dataItem.HasFiles !== undefined && dataItem.HasFiles">
+    <div class='fl md-icon' ng-if="!!dataItem.HasFiles && dataItem.HasFiles">
         <i class='intelicon-attach' style="font-size: 20px !important; color: #003C71;" title="Click to view or add attachments"></i>
     </div>
 
     <div class='fl md-icon' ng-if="isEditable && (dataItem._parentCnt === undefined || dataItem._parentCnt <= 1)">
         <i class='intelicon-trash-solid' style="font-size: 20px !important; cursor: pointer;" title="Click to Delete the deal" ng-click="deleteDialog.open()"></i>
     </div>
-    <div class='fl md-icon-disabled' ng-if="isEditable && (dataItem._parentCnt !== undefined && dataItem._parentCnt > 1)">
+    <div class='fl md-icon-disabled' ng-if="isEditable && (!!dataItem._parentCnt && dataItem._parentCnt > 1)">
         <i class='intelicon-trash-solid' style="font-size: 20px !important; color: #e7e7e8;"
            title="This deal shares the same pricing table row as other deals.  You will need to split the group or delete the deal from the Pricing Table."></i>
     </div>
     
     <div class='fl md-icon' ng-if="isEditable && (dataItem._parentCnt === undefined || dataItem._parentCnt <= 1)">
-        <i class='fa fa-hand-paper-o' style="font-size: 20px !important; cursor: pointer;" title="Click to place the deal on hold" ng-click="holdDialog.open()"></i>
+        <i ng-if="(!dataItem._actions || !dataItem._actions.Hold) && dataItem.WF_STG_CD !== 'Hold'" class='fa fa-hand-paper-o' style="font-size: 20px !important; color: #e7e7e8;" 
+           title="Unable to place a hold on the deal at this stage."></i>
+        <i ng-if="(!dataItem._actions || !dataItem._actions.Hold) && dataItem.WF_STG_CD === 'Hold'" class='fa fa-hand-paper-o' style="font-size: 20px !important; color: #FC4C02; cursor: pointer;" 
+           title="Click to take the deal off hold" ng-click="unHoldDialog.open()"></i>
+        <i ng-if="!!dataItem._actions && !!dataItem._actions.Hold && dataItem._actions.Hold && dataItem.WF_STG_CD !== 'Hold'" class='fa fa-hand-paper-o' style="font-size: 20px !important; cursor: pointer;" 
+           title="Click to place the deal on hold" ng-click="holdDialog.open()"></i>
+        <i ng-if="!!dataItem._actions && !!dataItem._actions.Hold && dataItem._actions.Hold && dataItem.WF_STG_CD === 'Hold'" class='fa fa-hand-paper-o' style="font-size: 20px !important; color: #FC4C02; cursor: pointer;" 
+           title="Click to take the deal off hold" ng-click="unHoldDialog.open()"></i>
     </div>
-    <div class='fl md-icon-disabled' ng-if="isEditable && (dataItem._parentCnt !== undefined && dataItem._parentCnt > 1)">
+    <div class='fl md-icon-disabled' ng-if="isEditable && (!!dataItem._parentCnt && dataItem._parentCnt > 1)">
         <i class='fa fa-hand-paper-o' style="font-size: 20px !important; color: #e7e7e8;"
            title="This deal shares the same pricing table row as other deals.  You will need to split the group before you can place this on hold."></i>
     </div>
@@ -72,6 +79,13 @@
     <h4>Would you like to place the deal on hold?</h4>
     <p>
         This will keep the deal in the Pricing Table, but it will not get promoted to active or get a tracker number for payment.
+    </p>
+</div>
+
+<div class="groupDialog" kendo-dialog="unHoldDialog" k-visible="false" k-modal="true" k-actions="unHoldActions" k-width="400" k-height="250">
+    <h4>Would you like to take the deal off hold?</h4>
+    <p>
+        This will enable the deal in the Pricing Table and will enable it to get approved.
     </p>
 </div>
 

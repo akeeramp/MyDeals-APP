@@ -1186,7 +1186,13 @@
                     $scope.messages = data.data.Messages;
 
                     $timeout(function () {
+                        if (wip.WF_STG_CD === "Hold" && $scope.messages[0].ShortMessage !== "Hold") {
+                            if (!wip._actions) wip._actions = {};
+                            wip._actions["Hold"] = true;
+                        }
+                        wip.WF_STG_CD = $scope.messages[0].ShortMessage;
                         $scope.$broadcast('refresh');
+                        $scope.$broadcast('refreshStage', wip);
                         $("#wincontractMessages").data("kendoWindow").open();
                         if (wip !== undefined) $scope.refreshContractData(wip.DC_ID);
                         $scope.setBusy("", "");
@@ -1365,7 +1371,7 @@
                 // Remove from DB first... then remove from screen
                 objsetService.unGroupPricingTableRow(wip.CUST_MBR_SID, $scope.contractData.DC_ID, wip.DC_PARENT_ID).then(
                     function (data) {
-                        if (data.data.MsgType !== 1) {
+                        if (!!data.data.MsgType && data.data.MsgType !== 1) {
                             $scope.setBusy("Splitting Failed", "Unable to Split the Pricing Table Row");
                             $timeout(function () {
                                 $scope.setBusy("", "");
@@ -1373,7 +1379,7 @@
                             return;
                         }
 
-                        //$scope.$broadcast('removeRow', wip.DC_PARENT_ID);
+                       $scope.$broadcast('updateGroup', data.data.Messages);
 
                         $scope.setBusy("Split Successful", "Split the Pricing Table Row into single Deals");
                         $timeout(function () {

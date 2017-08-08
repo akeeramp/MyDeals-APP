@@ -566,6 +566,21 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void ClearValidateForHold(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IEnumerable<IOpDataElement> des = r.Dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.WF_STG_CD) && de.HasValue("Hold"));
+            if (!des.Any()) return;
+
+            foreach (IOpDataElement de in r.Dc.GetDataElementsWhere(d => !string.IsNullOrEmpty(d.ValidationMessage)))
+            {
+                de.ValidationMessage = string.Empty;
+                if (de.IsRequired) de.IsRequired = false;
+            }
+        }
+
         public static void ValidateEcapPrice(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);

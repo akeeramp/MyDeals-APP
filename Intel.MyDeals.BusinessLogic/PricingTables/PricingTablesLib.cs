@@ -201,6 +201,7 @@ namespace Intel.MyDeals.BusinessLogic
                 opMsgQueue.Messages.Add(new OpMsg
                 {
                     Message = $"Wip Deal moved from {stageIn} to {targetStage}.",
+                    ShortMessage = targetStage,
                     MsgType = OpMsg.MessageType.Info,
                     ExtraDetails = dc.DcType,
                     KeyIdentifiers = new[] { dc.DcID }

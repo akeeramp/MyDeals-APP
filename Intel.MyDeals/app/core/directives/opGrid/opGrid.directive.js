@@ -803,7 +803,19 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 rootScope.actionWipDeal(dataItem, 'Hold');
             }
 
+            $scope.unHoldPricingTableRow = function (dataItem) {
+                var rootScope = $scope.$parent.$parent.$parent.$parent.$parent;
+                rootScope.actionWipDeal(dataItem, 'Approve');
+            }
+
             $scope.$on('refresh', function (event, args) {
+            });
+
+            $scope.$on('refreshStage', function (event, args) {
+                if (!!args) {
+                    var dataItem = $scope.findDataItemById(args["DC_ID"]);
+                    dataItem["WF_STG_CD"] = args["WF_STG_CD"];
+                }
             });
 
             $scope.$on('saveComplete', function (event, args) {
@@ -814,7 +826,6 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 $.each($scope.grid.columns, function () {
                     $("input.grid-link-checkbox").prop("checked", false);
                 });
-
 
                 if (!!args.data.WIP_DEAL) {
                     for (var i = 0; i < args.data.WIP_DEAL.length; i++) {
@@ -890,6 +901,22 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 if (!!row) data.splice(data.indexOf(row), 1);
                 event.currentScope.contractDs.sync();
             });
+
+            $scope.$on('updateGroup', function (event, msgs) {
+                if (!msgs) return;
+                var data = $scope.contractDs.data();
+
+                for (var m = 0; m < msgs.length; m++) {
+                    var dcId = msgs[m].KeyIdentifiers[0];
+                    var dcParentId = msgs[m].KeyIdentifiers[1];
+
+                    for (var d = 0; d < data.length; d++) {
+                        if (data[d].DC_ID === dcId) data[d].DC_PARENT_ID = dcParentId;
+                    }
+                }
+
+            });
+
 
             $scope.cleanFlags = function () {
                 $scope.clearBadges();
