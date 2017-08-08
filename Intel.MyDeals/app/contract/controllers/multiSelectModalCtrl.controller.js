@@ -10,7 +10,7 @@ function MultiSelectModalCtrl($scope, $uibModalInstance, MrktSegMultiSelectServi
 	var MRKT_SEG = "MRKT_SEG";
 	var CORP = "CUST_ACCNT_DIV";
 
-	$ctrl.multiSelectPopUpModel = items;
+	$ctrl.multiSelectPopUpModal = items;
 	$ctrl.popupResult = [];
 	$ctrl.popupResult.MultiSelectSelections = cellCurrValues;
 	$ctrl.colName = colName;

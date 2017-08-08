@@ -39,14 +39,7 @@
             </div>
             <div class="clearboth"></div>
         </div>
-
-        <div style="text-align: right;">
-            <button ng-show="!addTableDisabled" class="btn btn-sm btn-primary" ng-click="hideAddPricingTable()" style="background-color: #00AEEF;">Cancel</button>
-            <button ng-show="addTableDisabled" class="btn btn-sm btn-primary btn-pending" ng-click="hideAddPricingTable()" style="background-color: #00AEEF;">Cancel</button>
-            <button ng-show="!addTableDisabled" class="btn btn-sm btn-primary" ng-click="customAddPtValidate()" type="submit" style="background-color: #00AEEF;">Add</button>
-            <button ng-show="addTableDisabled" class="btn btn-sm btn-primary btn-pending" style="background-color: #00AEEF;">Add</button>
-        </div>
-
+        
         <!-- EXTRA ATTRIBUTES -->
         <div ng-show="newPricingTableExtraLength()">
 
@@ -86,11 +79,12 @@
             </div>
         </div>
 
-
-
-
-
-
+        <div style="text-align: right;">
+            <button ng-show="!addTableDisabled" class="btn btn-sm btn-primary" ng-click="hideAddPricingTable()" style="background-color: #00AEEF;">Cancel</button>
+            <button ng-show="addTableDisabled" class="btn btn-sm btn-primary btn-pending" ng-click="hideAddPricingTable()" style="background-color: #00AEEF;">Cancel</button>
+            <button ng-show="!addTableDisabled" class="btn btn-sm btn-primary" ng-click="customAddPtValidate()" type="submit" style="background-color: #00AEEF;">Add</button>
+            <button ng-show="addTableDisabled" class="btn btn-sm btn-primary btn-pending" style="background-color: #00AEEF;">Add</button>
+        </div>
 
     </form>
 </div>

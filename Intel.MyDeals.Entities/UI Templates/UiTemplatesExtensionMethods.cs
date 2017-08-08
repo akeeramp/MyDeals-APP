@@ -401,6 +401,7 @@ namespace Intel.MyDeals.Entities.UI_Templates
                     type = item.UiType ?? "",
                     isRequired = item.IsRequired,
                     isError = false,
+                    isHidden = item.IsHidden,
                     opLookupUrl = item.LookupUrl ?? "",
                     opLookupText = item.LookupText ?? "",
                     opLookupValue = item.LookupValue ?? "",

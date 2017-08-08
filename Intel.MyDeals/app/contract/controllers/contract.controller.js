@@ -1045,7 +1045,11 @@
                         $scope.customEditPtValidate();
                     }
                 },
-                function () {
+                function (type) {
+                    var title = $scope.newPricingTable["TITLE"];    //preserve user title, if any
+                    $scope.newPricingTable = util.clone($scope.templates.ObjectTemplates.PRC_TBL[type]);
+                    $scope.newPricingTable["TITLE"] = title;
+                    $scope.clearPtTemplateIcons();
                 });
         }
 
@@ -1092,6 +1096,9 @@
         $scope.selectPtTemplateIcon = function (ptTmplt) {
             $scope.clearPtTemplateIcons();
             ptTmplt._custom._active = true;
+            var title = $scope.newPricingTable["TITLE"];    //preserve, if any
+            $scope.newPricingTable = util.clone($scope.templates.ObjectTemplates.PRC_TBL[ptTmplt.name]);
+            $scope.newPricingTable["TITLE"] = title;
             $scope.newPricingTable["OBJ_SET_TYPE_CD"] = ptTmplt.name;
             $scope.newPricingTable["_extraAtrbs"] = ptTmplt.extraAtrbs;
             $scope.newPricingTable["_defaultAtrbs"] = ptTmplt.defaultAtrbs;
@@ -1101,8 +1108,6 @@
                 $scope.newPricingTable._behaviors.validMsg["OBJ_SET_TYPE_CD"] = "";
             }
 
-            //Jeffnote: do we need to clear user autofill defaults selection when they select a different deal type? is that stored in the above or was that elsewhere?
-            //debugger;
             openAutofillModal(null);
         }
         $scope.setNptTemplate = function (pt) {
@@ -2458,20 +2463,19 @@
                     }
                 });
 
-            // Check Extra atribs
-            angular.forEach($scope.newPricingTable["_extraAtrbs"],
-            function (value, key) {
-                if (value.isRequired === true && (value.value === undefined || value.value === "")) {
-                    value.validMsg = "* field is required";
-                    value.isError = true;
-                    isValid = false;
-                } else {
-                    value.isError = false;
-                }
-            });
+            //// No Extra Atrb check (like num_of_tiers) because once set it cannot be edited.
+            //angular.forEach($scope.newPricingTable["_extraAtrbs"],
+            //function (value, key) {
+            //    if (value.isRequired === true && (value.value === undefined || value.value === "")) {
+            //        value.validMsg = "* field is required";
+            //        value.isError = true;
+            //        isValid = false;
+            //    } else {
+            //        value.isError = false;
+            //    }
+            //});
 
             // No check for defaultatribs because they are optional
-
             if (isValid) {
                 $scope.editPricingTable();
             } else {

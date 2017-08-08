@@ -1765,9 +1765,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 //animation: $ctrl.animationsEnabled,
                 ariaLabelledBy: 'modal-title',
                 ariaDescribedBy: 'modal-body',
-                templateUrl: 'multiSelectPopUpModel',
+                templateUrl: 'multiSelectPopUpModal',
                 controller: 'MultiSelectModalCtrl',
                 controllerAs: '$ctrl',
+                windowClass: 'multiselect-modal-window',
                 size: 'md',
                 resolve: {
                     items: function () {

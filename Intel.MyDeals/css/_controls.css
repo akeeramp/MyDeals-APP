@@ -605,7 +605,7 @@
     border-width: 1px;
 }
 
-.autofill-modal-window, .modal-dialog {
+.autofill-modal-window .modal-dialog {
     width: 90%;
     margin-left: auto;
     margin-right: auto;
@@ -657,4 +657,11 @@
 
 .rgnClsBtn:hover {
     background-color: #0071C5;
+}
+
+/* multiselect modal window */
+.multiselect-modal-window .modal-dialog {
+    width: 40%;
+    margin-left: auto;
+    margin-right: auto;
 }

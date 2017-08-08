@@ -15,7 +15,7 @@
             autofillData.DEFAULT.GEO_COMBINED["extra"] = true;
         }
 
-        vm.autofillData.DEALTYPE = vm.autofillData.DEALTYPE.replace("_", "").toUpperCase();
+        vm.autofillData.DEALTYPE_DISPLAY = vm.autofillData.DEALTYPE.replace("_", "").toUpperCase();
         
         vm.ok = function () {
             var returnVal = vm.autofillData.DEFAULT;
@@ -23,7 +23,7 @@
         };
 
         vm.close = function () {
-            $uibModalInstance.dismiss();
+            $uibModalInstance.dismiss(autofillData.DEALTYPE);
         }
     }
 })();

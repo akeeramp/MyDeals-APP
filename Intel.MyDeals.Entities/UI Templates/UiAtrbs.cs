@@ -9,6 +9,7 @@ namespace Intel.MyDeals.Entities
         public string type { get; set; }
         public bool isRequired { get; set; }
         public bool isError { get; set; }
+        public bool isHidden { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string opLookupUrl { get; set; }

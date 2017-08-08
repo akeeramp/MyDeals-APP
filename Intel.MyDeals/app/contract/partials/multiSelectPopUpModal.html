@@ -1,10 +1,10 @@
-﻿<script type="text/ng-template" id="multiSelectPopUpModel">
+﻿<script type="text/ng-template" id="multiSelectPopUpModal">
 	<div class="modal-header">
-		<h3 class="modal-title" id="modal-title">Select {{$ctrl.multiSelectPopUpModel.label}}</h3>
+		<h3 class="modal-title" id="modal-title">Select {{$ctrl.multiSelectPopUpModal.label}}</h3>
 	</div>
 	<div class="modal-body" id="modal-body">
 		<p>
-			Select which {{$ctrl.multiSelectPopUpModel.label}}(s) to apply below: <br />
+			Select which {{$ctrl.multiSelectPopUpModal.label}}(s) to apply below: <br />
 			<span ng-if="$ctrl.isGeo">
 				If blending, Worldwide will not be blended with any geos.
 			</span>
@@ -13,11 +13,11 @@
         <div op-control-flat
                 ng-model="$ctrl.popupResult"
                 op-cd="'MultiSelectSelections'"
-                op-type="$ctrl.multiSelectPopUpModel.uiType"
+                op-type="$ctrl.multiSelectPopUpModal.uiType"
                 op-label="''"
-                op-lookup-url="$ctrl.multiSelectPopUpModel.opLookupUrl"
-                op-lookup-text="$ctrl.multiSelectPopUpModel.opLookupText"
-                op-lookup-value="$ctrl.multiSelectPopUpModel.opLookupValue"
+                op-lookup-url="$ctrl.multiSelectPopUpModal.opLookupUrl"
+                op-lookup-text="$ctrl.multiSelectPopUpModal.opLookupText"
+                op-lookup-value="$ctrl.multiSelectPopUpModal.opLookupValue"
                 op-placeholder="$ctrl.placeholderText"
                 op-is-form="true"
                 op-ui-mode="'VERTICAL'">
