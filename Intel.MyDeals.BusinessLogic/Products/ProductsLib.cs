@@ -488,8 +488,28 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns></returns>
         public bool IsProductNamePartiallyExists(string searchText, bool isEPMserach)
         {
-            var searchString = isEPMserach == false ? GetSearchString().Where(d => d.Value != ProductHierarchyLevelsEnum.EPM_NM.ToString()).ToDictionary(d => d.Key, d => d.Value) : GetSearchString();
-            return searchString.Keys.Where(currentKey => currentKey.ToLower().Contains(searchText.ToLower())).Any();
+            List<Product> prds = GetProductsDetails();
+            var resultMEDIA = (from p in prds
+                          group p by p.MM_MEDIA_CD 
+                          into g
+                          select new { MM_MEDIA_CD = g.Key}).Distinct();
+            var isMEDIA = resultMEDIA.Where(p => p.MM_MEDIA_CD.ToLower() == searchText.ToLower()).Any();
+
+            var resultVERTICAL = (from p in prds
+                                  group p by p.SUB_VERTICAL
+                                  into g
+                                  select new { SUB_VERTICAL = g.Key }).Distinct();
+            var isVERTICAL = resultVERTICAL.Where(p => p.SUB_VERTICAL.ToLower() == searchText.ToLower()).Any();
+
+            if (!isMEDIA && !isVERTICAL)
+            {
+                var searchString = isEPMserach == false ? GetSearchString().Where(d => d.Value != ProductHierarchyLevelsEnum.EPM_NM.ToString()).ToDictionary(d => d.Key, d => d.Value) : GetSearchString();
+                return searchString.Keys.Where(currentKey => currentKey.ToLower().Contains(searchText.ToLower())).Any();
+            }
+            else
+            {
+                return false;
+            }
         }
 
         /// <summary>

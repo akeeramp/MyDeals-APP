@@ -21,6 +21,7 @@ namespace Intel.MyDeals.DataLibrary
 
             var ret = new List<Product>();
             var cmd = new Procs.dbo.PR_MYDL_GET_PRD_DTL { };
+            //var cmd = new Procs.dbo.PR_MYDL_GET_PRD_DTL_MABIRA { };
 
             try
             {
@@ -69,6 +70,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_SBS_NM = DB.GetReaderOrdinal(rdr, "SBS_NM");
                     int IDX_SKU_MARKET_SEGMENT = DB.GetReaderOrdinal(rdr, "SKU_MARKET_SEGMENT");
                     int IDX_SKU_NM = DB.GetReaderOrdinal(rdr, "SKU_NM");
+                    int IDX_SUB_VERTICAL = DB.GetReaderOrdinal(rdr, "SUB_VERTICAL");
                     int IDX_USR_INPUT = DB.GetReaderOrdinal(rdr, "USR_INPUT");
 
                     while (rdr.Read())
@@ -118,6 +120,7 @@ namespace Intel.MyDeals.DataLibrary
                             SBS_NM = (IDX_SBS_NM < 0 || rdr.IsDBNull(IDX_SBS_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_SBS_NM),
                             SKU_MARKET_SEGMENT = (IDX_SKU_MARKET_SEGMENT < 0 || rdr.IsDBNull(IDX_SKU_MARKET_SEGMENT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_SKU_MARKET_SEGMENT),
                             SKU_NM = (IDX_SKU_NM < 0 || rdr.IsDBNull(IDX_SKU_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_SKU_NM),
+                            SUB_VERTICAL = (IDX_SUB_VERTICAL < 0 || rdr.IsDBNull(IDX_SUB_VERTICAL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_SUB_VERTICAL),
                             USR_INPUT = (IDX_USR_INPUT < 0 || rdr.IsDBNull(IDX_USR_INPUT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_USR_INPUT)
                         });
                     }
