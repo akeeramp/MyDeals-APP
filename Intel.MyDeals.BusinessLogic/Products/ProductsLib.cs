@@ -289,7 +289,7 @@ namespace Intel.MyDeals.BusinessLogic
                 {
                     ProductEntryAttribute pea = new ProductEntryAttribute();
                     string tempProdName = product.ToString().Contains("~~**~~**~~") == true ? product.ToString().Remove(product.ToString().IndexOf("~~**~~**~~"), 10) : product.ToString(); // unique combination checking
-                    string finalProdName = CheckBogusProduct(tempProdName);
+                    string finalProdName = CheckBogusProduct(tempProdName, product.ToString().Contains("~~**~~**~~") == true ? true : false);
                     pea.ROW_NUMBER = userProduct.ROW_NUMBER;
                     pea.USR_INPUT = tempProdName;
                     pea.MOD_USR_INPUT = finalProdName;
@@ -335,47 +335,46 @@ namespace Intel.MyDeals.BusinessLogic
             return productLookup;
         }
 
-        private string CheckBogusProduct(string tempProdName)
+        private string CheckBogusProduct(string tempProdName, bool isEPMserach)
         {
             string finalProdName = string.Empty;
             int counter = 4;
+            int firstValidIndex = -1;
             if (tempProdName.Contains(" "))
             {
-                bool isValid = IsProductExistsInMydeals(tempProdName);
+                bool isValid = IsProductNamePartiallyExists(tempProdName, isEPMserach);
                 if (!isValid)
                 {
                     var splitedProd = tempProdName.Trim().Split(' ');
                     int cnt = splitedProd.Length > counter ? counter : splitedProd.Length;
-                    for (int i = 1; i < cnt; i++)
+                    for (int i = 1; i <= cnt; i++)
                     {
                         if (splitedProd.Length > 0)
                         {
                             int offset = splitedProd.Length - i;
-                            var newArray = splitedProd.Skip(offset).Take(splitedProd.Length - offset).ToArray();
+                            int noOfItem = firstValidIndex == -1 ? 1 : (firstValidIndex - offset) + 1;
+                            var newArray = splitedProd.Skip(offset).Take(noOfItem).ToArray();
                             string tempProductName = string.Join(" ", newArray);
-                            bool tempisValid = IsProductExistsInMydeals(tempProductName);
-                            if (!tempisValid)
+                            if (tempProductName.Length > 2)
                             {
-                                var newTmpArray = splitedProd.Skip(offset - 1).Take(splitedProd.Length - offset + 1).ToArray();
-                                string tempProductNameLocal = string.Join(" ", newTmpArray);
-                                tempisValid = IsProductExistsInMydeals(tempProductNameLocal);
-                                if (!tempisValid)
+                                bool tempisValid = IsProductNamePartiallyExists(tempProductName, isEPMserach);
+                                if (tempisValid)
+                                {
+                                    firstValidIndex = offset;
+                                    finalProdName = tempProductName;
+                                }
+                                if(!string.IsNullOrEmpty(finalProdName) && !tempisValid)
                                 {
                                     break;
                                 }
-                                else
-                                {
-                                    finalProdName = tempProductNameLocal;
-                                    i++;
-                                }
-                            }
-                            else
-                            {
-                                finalProdName = tempProductName;
                             }
                         }
                     }
                 }
+            }
+            else
+            {
+                finalProdName = tempProdName;
             }
 
             return finalProdName;
@@ -487,6 +486,17 @@ namespace Intel.MyDeals.BusinessLogic
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
+        public bool IsProductNamePartiallyExists(string searchText, bool isEPMserach)
+        {
+            var searchString = isEPMserach == false ? GetSearchString().Where(d => d.Value != ProductHierarchyLevelsEnum.EPM_NM.ToString()).ToDictionary(d => d.Key, d => d.Value) : GetSearchString();
+            return searchString.Keys.Where(currentKey => currentKey.Contains(searchText)).Any();
+        }
+
+        /// <summary>
+        /// Check product exists in Mydeals (without any filter, for quick check. Performance matters)
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public bool IsProductExistsInMydeals(string searchText)
         {
             var searchString = GetSearchString();
@@ -512,7 +522,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             productsToMatch.FirstOrDefault().USR_INPUT = String.Join(" ", productAliasesSplit.ToArray());
 
-            productsToMatch.FirstOrDefault().MOD_USR_INPUT = CheckBogusProduct(productsToMatch.FirstOrDefault().USR_INPUT);
+            productsToMatch.FirstOrDefault().MOD_USR_INPUT = CheckBogusProduct(productsToMatch.FirstOrDefault().USR_INPUT, true);
 
             return _productDataLib.SearchProduct(productsToMatch, CUST_MBR_SID, getWithoutFilters);
         }
@@ -1112,7 +1122,7 @@ namespace Intel.MyDeals.BusinessLogic
                     ROW_NUMBER = 1,
                     USR_INPUT = userInput.USR_INPUT,
                     EXCLUDE = userInput.EXCLUDE,
-                    MOD_USR_INPUT = CheckBogusProduct(userInput.USR_INPUT),
+                    MOD_USR_INPUT = CheckBogusProduct(userInput.USR_INPUT, true),
                     FILTER = userInput.FILTER,
                     END_DATE = userInput.END_DATE,
                     START_DATE = userInput.START_DATE,
