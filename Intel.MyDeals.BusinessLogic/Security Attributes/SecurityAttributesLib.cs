@@ -53,8 +53,9 @@ namespace Intel.MyDeals.BusinessLogic
             foreach (KeyValuePair<OpDataElementType, List<OpDataElementSetType>> objKey in objDict)
 			{
 				OpDataElementTypeItem objTypeKey = objTypeList.Find(x => x.OpDeType == objKey.Key);
+			    if (objTypeKey == null) continue;
 
-				foreach (OpDataElementSetType objsetTypeKey in objKey.Value)
+                foreach (OpDataElementSetType objsetTypeKey in objKey.Value)
 				{
 					// TODO: All_Types should not be hard-coded 
 					List<string> atrbList = attributesList.Where(x => x.OBJ_TYPE_SID == objTypeKey.Id && (x.OBJ_SET_TYPE == objsetTypeKey.ToString() || x.OBJ_SET_TYPE == "ALL_TYPES")).Select(x => x.ATRB_COL_NM).Distinct().ToList();

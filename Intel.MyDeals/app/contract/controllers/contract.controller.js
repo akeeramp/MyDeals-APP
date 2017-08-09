@@ -35,7 +35,11 @@
         if ($state.current.name.indexOf("contract.compliance") >= 0) $scope.flowMode = "Compliance";
         if ($state.current.name.indexOf("contract.summary") >= 0) $scope.flowMode = "Manage";
 
-
+        //var s1 = securityService.chkAtrbRules('ATRB_READ_ONLY', 'SA', 'CNTRCT', 'ALL_TYPES', 'InComplete', 'TITLE');
+        //var s2 = securityService.chkAtrbRules('ATRB_READ_ONLY', 'GA', 'CNTRCT', 'ALL_TYPES', 'InComplete', 'TITLE');
+        //var s3 = securityService.chkAtrbRules('ATRB_READ_ONLY', 'SA', 'CNTRCT', 'ECAP', 'InComplete', 'TITLE');
+        //var s4 = securityService.chkAtrbRules('ATRB_READ_ONLY', 'GA', 'CNTRCT', 'ECAP', 'InComplete', 'TITLE');
+        //debugger;
         //var s1 = securityService.chkAtrbRules('ATRB_READ_ONLY', 'SA', 'WIP_DEAL', 'ECAP', 'Draft', 'BACK_DATE_RSN');
         //var s2 = securityService.chkAtrbRules('ATRB_READ_ONLY', 'SA', 'WIP_DEAL', 'ECAP', 'Draft', 'ECAP_FLR');
         //var s3 = securityService.chkAtrbRules('ATRB_READ_ONLY', 'SA', 'DEAL', 'ECAP', 'Draft', 'BACK_DATE_RSN');
@@ -55,7 +59,7 @@
             // contract exists
             if (contractData !== null && contractData !== undefined) {
                 if (contractData.data[0] !== undefined) {
-                    contractData.data[0]._behaviors = c._behaviors;
+                    //contractData.data[0]._behaviors = c._behaviors; // DE29422 - This was resetting passed behaviors with an override of what the new contract required should be.
                     return contractData.data[0];
                 }
                 // Could not find the contract
