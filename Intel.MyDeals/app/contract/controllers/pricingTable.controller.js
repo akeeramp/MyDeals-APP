@@ -448,7 +448,40 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         //    range = sheet.range(String.fromCharCode(intA + range._ref.topLeft.col) + (range._ref.topLeft.row + 1) + ":" + String.fromCharCode(intA + range._ref.bottomRight.col) + (range._ref.bottomRight.row + (range._ref.bottomRight.row % root.child.numTiers) + 2));
         //}
 
-        var isProductColumnIncludedInChanges = (range._ref.topLeft.col >= productColIndex) && (range._ref.bottomRight.col <= productColIndex);
+        var isProductColumnIncludedInChanges = (range._ref.topLeft.col <= productColIndex) && (range._ref.bottomRight.col >= productColIndex);
+		
+		// On End_vol col change
+        if (root.colToLetter["END_VOL"] != null) {
+        	var endVolIndex = (root.colToLetter["END_VOL"].charCodeAt(0) - intA);
+        	var isEndVolColChanged = (range._ref.topLeft.col <= endVolIndex) && (range._ref.bottomRight.col >= endVolIndex);
+
+        	if (isEndVolColChanged) {
+        		console.log("WELP");
+        		var data = root.spreadDs.data();
+        		var sourceData = root.pricingTableData.PRC_TBL_ROW;
+
+        		$timeout(function () {
+        			range.forEachCell(
+						function (rowIndex, colIndex, value) {
+							if (colIndex === endVolIndex) { // End_Vol Col changed
+								var myRow = data[(rowIndex - 1)];
+
+								// If this vol tier isn't the last of its vol tier rows
+								if (myRow != undefined && myRow.TIER_NBR != root.pricingTableData.PRC_TBL[0].NUM_OF_TIERS) {								
+										//var nextRow = data[(range._ref.topLeft.row)];
+										var nextRow = data[(rowIndex)];
+										// Calculate next start vol using end vol
+										nextRow.STRT_VOL = (value.value + 1);
+										myRow.END_VOL = value.value;
+								}
+							}
+						}
+					);
+        			root.spreadDs.sync();
+				});
+        	} 
+        }
+
 
         var isRangeValueEmptyString = (range.value() !== null && range.value().toString().replace(/\s/g, "").length === 0);
 
@@ -619,8 +652,22 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     data[r]["CUST_MBR_SID"] = root.contractData.CUST_MBR_SID;
 
                     if (!root.curPricingTable || !!root.curPricingTable.NUM_OF_TIERS) {
-                        if (!data[r]["TIER_NBR"] || data[r]["TIER_NBR"] === "") {
-                            data[r]["TIER_NBR"] = (r % root.child.numTiers) + 1;
+                    	if (!data[r]["TIER_NBR"] || data[r]["TIER_NBR"] === "") {
+                    		var tierNumVal =  (r % root.child.numTiers) + 1;
+                        	data[r]["TIER_NBR"] = tierNumVal;
+
+                        	// disable non-first start vols
+                        	if (tierNumVal != 1) {
+                        		if (!data[r]._behaviors) {
+                        			data[r]._behaviors = {};
+                        		}
+                        		if (!data[r]._behaviors.isReadOnly) {
+                        			data[r]._behaviors.isReadOnly = {};
+                        		}
+                        		// Flag start vol cols to disable
+                        		var rowInfo = data[r];
+                        		data[r]._behaviors.isReadOnly["STRT_VOL"] = true;
+                        	}
                         }
                     }
 
@@ -651,6 +698,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     }
                 }
 
+
+                //root.updateResults(data, $scope.pricingTableData.PRC_TBL_ROW)
                 // now apply array to Datasource... one event triggered
                 root.spreadDs.sync();
 
@@ -676,15 +725,39 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     if (offset > 0) {
                         bottomRightRowIndex += root.child.numTiers - offset;
                     }
-
+					
                     // Enable other cells
                     if (!!ptTemplate.model.fields["TIER_NBR"]) {
-                        range = sheet.range("D" + topLeftRowIndex + ":J" + bottomRightRowIndex);
+						// Find tier nbr col
+						var tierColIndex = (root.colToLetter["TIER_NBR"]).charCodeAt(0);
+						var letterAfterTierCol = String.fromCharCode(tierColIndex + 1);
+						var letterBeforeTierCol = String.fromCharCode(tierColIndex - 1);
+
+                    	// Find Strt_vol col
+						var startVolIndex = (root.colToLetter["STRT_VOL"]).charCodeAt(0);
+
+						// Enable cols except voltier
+						range = sheet.range("D" + topLeftRowIndex + ":" + letterBeforeTierCol + bottomRightRowIndex);
                         range.enable(true);
                         range.background(null);
-                        range = sheet.range("L" + topLeftRowIndex + ":" + finalColLetter + bottomRightRowIndex);
+                        range = sheet.range(letterAfterTierCol + topLeftRowIndex + ":" + finalColLetter + bottomRightRowIndex);
                         range.enable(true);
                         range.background(null);
+
+                    	// Disable flagged Start Vol cols
+                        var startVolLetter = root.colToLetter["STRT_VOL"]
+                        var spreadData = root.spreadDs.data();
+                        range = sheet.range(startVolLetter + topLeftRowIndex + ":" + startVolLetter + bottomRightRowIndex);
+                        range.forEachCell(
+							function (rowIndex, colIndex, value) {
+								// Re-disable specific cells that are readOnly
+								var rowInfo = spreadData[(rowIndex - 1)]; // This is -1 to account for the 0th rows in the spreadsheet
+								if (rowInfo != undefined) { // The row was pre-existing
+									disableIndividualReadOnlyCells(sheet, rowInfo, rowIndex, 1);
+								}
+							}
+						);
+
                     } else {
                         range = sheet.range("D" + topLeftRowIndex + ":" + finalColLetter + bottomRightRowIndex);
                         range.enable(true);

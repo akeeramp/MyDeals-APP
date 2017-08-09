@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System;
 using System.Linq;
 using Intel.MyDeals.Entities;
 using Intel.Opaque.Data;
@@ -26,7 +27,7 @@ namespace Intel.MyDeals.BusinessRules
                 //    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW},
                 //    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad}
                 //},
-                new MyOpRule
+				new MyOpRule
                 {
                     Title="Must have a positive value",
                     ActionRule = MyDcActions.ExecuteActions,
@@ -68,10 +69,54 @@ namespace Intel.MyDeals.BusinessRules
                             Action = BusinessLogicDeActions.AddValidationMessage,
                             Args = new object[] {"{0} must be positive"},
                             Where = de => de.AtrbCdIn(new List<string> { AttributeCodes.VOLUME }) && de.HasValue() && de.IsNegativeOrZero()
-                        }
+						}
                     }
                 },
-                new MyOpRule
+				new MyOpRule
+				{
+					Title="Rate must have a positive value",
+					//ActionRule = MyDcActions.ExecuteActions,
+                    ActionRule = MyDcActions.ValidateTierRate,
+					InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW},
+					InObjSetType = new List<string> {OpDataElementSetType.VOL_TIER.ToString()},
+					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
+					AtrbCondIf = dc => dc.IsNegative(AttributeCodes.RATE)
+				},
+				new MyOpRule
+				{
+					Title="Must be greater than 0",
+					ActionRule = MyDcActions.ValidateTierStartVol,
+					InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW},
+					InObjSetType = new List<string> {OpDataElementSetType.VOL_TIER.ToString()},
+					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
+					AtrbCondIf = dc => dc.IsNegativeOrZero(AttributeCodes.STRT_VOL)
+				},
+				new MyOpRule
+				{
+					Title="Must be greater than 0",
+                    ActionRule = MyDcActions.ValidateTierEndVol,
+					InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW},
+					InObjSetType = new List<string> {OpDataElementSetType.VOL_TIER.ToString()},
+					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
+					AtrbCondIf = dc => dc.IsNegativeOrZero(AttributeCodes.END_VOL)
+				},
+				//new MyOpRule
+				//{
+				//	Title="End Volume must be greater than Start volume",
+				//	ActionRule = MyDcActions.ExecuteActions,
+				//	Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
+    //                AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.END_VOL) && de.HasValue()).Any(),
+				//	OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+				//	{
+				//		new OpRuleAction<IOpDataElement>
+				//		{
+				//			Action = MyDeActions.IsGreaterThan,
+				//			Where = de => de.AtrbCdIn(new List<string> {AttributeCodes.END_VOL}) || de.AtrbCdIn(new List<string> {AttributeCodes.STRT_VOL}),
+				//			Args = new object[] {"{0} must be positive"},
+				//		}
+				//	}
+				//},
+				new MyOpRule
                 {
                     Title="Validate ECAP Price",
                     ActionRule = MyDcActions.ValidateEcapPrice,

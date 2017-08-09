@@ -29,6 +29,8 @@
         $scope.defCust = $localStorage.selectedCustomerId;
         $scope.switchingTabs = false;
 
+        var tieredCols = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"];
+
         $scope.flowMode = "Deal Entry";
         if ($state.current.name.indexOf("contract.compliance") >= 0) $scope.flowMode = "Compliance";
         if ($state.current.name.indexOf("contract.summary") >= 0) $scope.flowMode = "Manage";
@@ -1835,9 +1837,12 @@
                 var sheet = spreadsheet.activeSheet();
                 var rowsCount = sheet._rows._count;
                 var offset = 0;
-
-                if (!!data[0] && !!data[0]._actions) {
-                    offset = 1;
+				
+            	// Offset detects which data[i] are actions (ID_CHNAGE, etc.) rather than actual data for adding validations to each row
+                for (var i = 0; i < data.length; i++) { // NOTE: We can have multiple offsets because of vol-tier
+                	if (!!data[i] && !!data[i]._actions) {
+                		offset += 1;
+                	}
                 }
 
                 var firstUntouchedRowFinder = 0; // when this == 1, then it will add the rest of the dropdown validation back in (in the for loop below) It can also turn into 3, which will do nothing
@@ -1879,7 +1884,7 @@
                 return 1;
             } else if (isTheFirstUntouchedRowIfEqualsToOne === 1) {
                 // HACK: This is so we get the dropdowns back on the untouched rows without red flags!
-                // re-add dropwons into untouched rows
+                // re-add dropdowns into untouched rows
                 angular.forEach(ptTemplate.model.fields, function (value, key) {
                     if (value.uiType === "DROPDOWN") {
                         var myRange = sheet.range($scope.colToLetter[value.field] + (row + 1) + ":" + $scope.colToLetter[value.field] + $scope.ptRowCount);
@@ -1951,21 +1956,50 @@
         $scope.pivotData = function (data) {
             if (!!$scope.curPricingTable && !!$scope.curPricingTable.NUM_OF_TIERS) {
                 var numTiers = $scope.curPricingTable.NUM_OF_TIERS;
-                if (numTiers <= 0) return data;
+                if (numTiers <= 0) {
+                	return data;
+                }
                 var newData = [];
 
                 for (var d = 0; d < data.length; d++) {
                     for (var t = 1; t <= numTiers; t++) {
-                        var lData = util.deepClone(data[d]);
-                        lData.STRT_VOL = lData["STRT_VOL_____10___" + t];
-                        lData.END_VOL = lData["END_VOL_____10___" + t];
-                        lData.RATE = lData["RATE_____10___" + t];
-                        lData.TIER_NBR = lData["TIER_NBR_____10___" + t];
+                		var lData = util.deepClone(data[d]);
+                    	// Vol-tier specific cols with tiers
+                    	for (var i = 0; i < tieredCols.length; i++) {
+                    		var tieredItem = tieredCols[i];
+                    		lData[tieredItem] = lData[tieredItem + "_____10___" + t];
+
+                    		// Tie warning message (valid message and red highlight) to its specific tier
+                    		// NOTE: this expects that tiered errors come in the form of a Dictionary<tier, message>
+                    		if (!!data[d]._behaviors && !!data[d]._behaviors.validMsg && !jQuery.isEmptyObject(data[d]._behaviors.validMsg)) {
+                    			if (data[d]._behaviors.validMsg[tieredItem] != null) {
+                    				// Parse the Dictionary json
+                    				var jsonTierMsg = JSON.parse(data[d]._behaviors.validMsg[tieredItem]);
+
+                    				if (jsonTierMsg[t] != null && jsonTierMsg[t] != undefined) {
+                    					// Set the validation message
+                    					lData._behaviors.validMsg[tieredItem] = jsonTierMsg[t];
+                    				} else {
+                    					// Delete the tier-specific validation if it doesn't tie to this specific tier
+                    					delete lData._behaviors.validMsg[tieredItem];
+                    					delete lData._behaviors.isError[tieredItem];
+                    				}
+                    			}
+                    		}
+                    	}
+						// Disable all Start vols excpet the first
+                    	if (t != 1 && !!data[d]._behaviors) {
+                    		if (!data[d]._behaviors.isReadOnly) {
+                    			data[d]._behaviors.isReadOnly = {};
+                    		}
+                    		lData._behaviors.isReadOnly["STRT_VOL"] = true;
+                    	}
+
                         newData.push(lData);
                     }
                 }
 
-                return newData;
+                return newData;     
             }
             return data;
         }
@@ -2089,7 +2123,7 @@
                     if (data.data[key][i].DC_ID !== undefined &&
                         data.data[key][i].DC_ID === collection.DC_ID &&
                         data.data[key][i].warningMessages.length > 0) {
-                        angular.forEach(data.data[key][i]._behaviors.validMsg,
+                        angular.forEach(data.data[key][i]._behaviors.validMsg,            
                             function (value, key) {
                                 collection._behaviors.validMsg[key] = value;
                                 collection._behaviors.isError[key] = value !== "";

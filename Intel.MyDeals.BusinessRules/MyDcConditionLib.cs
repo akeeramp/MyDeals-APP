@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System;
 using Intel.MyDeals.Entities;
 using Intel.Opaque;
 using Intel.Opaque.Data;
@@ -71,9 +72,15 @@ namespace Intel.MyDeals.BusinessRules
         public static bool IsNegativeOrZero(this OpDataCollector dc, string atrbCd)
         {
             IOpDataElement de = dc.GetDataElement(atrbCd);
-            if (de == null || de.AtrbValue.ToString() == string.Empty) return true;
-            return OpConvertSafe.ToDouble(de.AtrbValue.ToString().Replace("$", "")) <= 0;
+            if (de == null || string.IsNullOrWhiteSpace(de.AtrbValue.ToString())) return true;			
+			return OpConvertSafe.ToDouble(de.AtrbValue.ToString().Replace("$", ""), 0, false) <= 0;
         }
+		public static bool IsNegative(this OpDataCollector dc, string atrbCd)
+		{
+			IOpDataElement de = dc.GetDataElement(atrbCd);
+			if (de == null || string.IsNullOrWhiteSpace(de.AtrbValue.ToString())) return true;
+			return OpConvertSafe.ToDouble(de.AtrbValue.ToString().Replace("$", ""), 0, false) < 0;
+		}
 
-    }
+	}
 }

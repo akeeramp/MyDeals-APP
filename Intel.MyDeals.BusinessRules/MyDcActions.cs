@@ -5,6 +5,7 @@ using System.Linq;
 using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.Entities.Helpers;
+using Intel.Opaque;
 using Intel.Opaque.Data;
 using Intel.Opaque.Rules;
 using Newtonsoft.Json;
@@ -17,8 +18,8 @@ namespace Intel.MyDeals.BusinessRules
     /// This class will let you define MyDeals specific actions that might need to be performed
     /// </summary>
     public static partial class MyDcActions
-    {
-        public static Dictionary<string, bool> SecurityActionCache { get; set; }
+	{
+		public static Dictionary<string, bool> SecurityActionCache { get; set; }
 
         /// <summary>
         /// Execute the appropiate action based on the condition statement
@@ -564,7 +565,7 @@ namespace Intel.MyDeals.BusinessRules
                     de.AtrbValue = CompressHelpers.DecodeFrom64(val);
                 }
             }
-        }
+		}
 
         public static void ClearValidateForHold(params object[] args)
         {
@@ -630,5 +631,82 @@ namespace Intel.MyDeals.BusinessRules
                 deBackDate.IsRequired = true;
             }
         }
-    }
+
+
+
+		#region Voltier Validations
+
+		private static bool IsGreaterThanZero(double attrb)
+		{
+			return (attrb > 0);
+		}
+		private static bool IsGreaterOrEqualToZero(double attrb)
+		{
+			return (attrb >= 0);
+		}
+
+		public static void ValidateTierRate(params object[] args)
+		{
+			MyOpRuleCore r = new MyOpRuleCore(args);
+			if (!r.IsValid) return; 
+			ValidateTieredAttribute(AttributeCodes.RATE.ToString(), "Rate must have a positive value.", IsGreaterOrEqualToZero, r);
+		}
+		public static void ValidateTierStartVol(params object[] args)
+		{
+			MyOpRuleCore r = new MyOpRuleCore(args);
+			if (!r.IsValid) return;
+			ValidateTieredAttribute(AttributeCodes.STRT_VOL.ToString(), "Start Volume must be greater than 0.", IsGreaterThanZero, r);
+		}
+		public static void ValidateTierEndVol(params object[] args)
+		{
+			MyOpRuleCore r = new MyOpRuleCore(args);
+			if (!r.IsValid) return;
+			ValidateTieredAttribute(AttributeCodes.END_VOL.ToString(), "End Volume must be greater than 0.", IsGreaterThanZero, r);
+		}
+		
+		public static void ValidateTieredAttribute(string myAtrbCd, string validationMessage, Func<double, bool> validationCondition, MyOpRuleCore r)
+		{
+			IEnumerable<IOpDataElement> atrbs = r.Dc.GetDataElementsWhere(de => de.AtrbCd == myAtrbCd); // NOTE: "10" is the Tier's dim key. In thoery this shouldn't need to change
+			IOpDataElement atrbWithValidation = atrbs.FirstOrDefault(); // We need to pick only one of the tiered attributes to set validation on, else we'd keep overriding the message value per tier
+
+			// Validate and set validation message if applicable on each tier
+			foreach (IOpDataElement atrb in atrbs)
+			{
+				if (string.IsNullOrWhiteSpace(atrb.AtrbValue.ToString()))
+				{
+					continue;
+				}
+				else if (!validationCondition(Double.Parse(atrb.AtrbValue.ToString())))
+				{
+					if (atrb.DimKey.Count() > 0)
+					{
+						int tier = atrb.DimKey.FirstOrDefault().AtrbItemId;
+						AddTierValidationMessage(atrbWithValidation, validationMessage, tier);
+					}
+				}
+			}
+		}
+
+		private static void AddTierValidationMessage(IOpDataElement de, string msg, int tier = 1, params object[] args)
+		{
+			Dictionary<int, string> tieredValidationMsgs = new Dictionary<int, string>();
+
+			// Previous tier validations exist, so we need to append them together
+			if (!string.IsNullOrWhiteSpace(de.ValidationMessage))
+			{
+				tieredValidationMsgs = OpSerializeHelper.FromJsonString<Dictionary<int, string>>(de.ValidationMessage);
+			}
+
+			// Turn the new validation into an object
+			tieredValidationMsgs[tier] = msg;
+
+			// Format into JSON
+			string jsonMsg = OpSerializeHelper.ToJsonString(tieredValidationMsgs);
+
+			de.ValidationMessage = jsonMsg;
+			//BusinessLogicDeActions.AddJsonValidationMessage(de, jsonMsg);
+		}
+
+		#endregion
+	}
 }

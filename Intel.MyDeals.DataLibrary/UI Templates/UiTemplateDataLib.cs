@@ -453,17 +453,19 @@ namespace Intel.MyDeals.DataLibrary
                 IsDimKey = true,
                 Width = 100,
                 Label = "Start Vol",
-            });
+				IsRequired = true
+			});
             items.Add(new UiTemplateContainerItem
             {
                 Id = 36,
-                AtrbCd = AttributeCodes.END_VOL,
+                AtrbCd = AttributeCodes.END_VOL,   
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
                 IsDimKey = true,
                 Width = 100,
                 Label = "End Vol",
-            });
+				IsRequired = true
+			});
             items.Add(new UiTemplateContainerItem
             {
                 Id = 36,
@@ -473,7 +475,8 @@ namespace Intel.MyDeals.DataLibrary
                 IsDimKey = true,
                 Width = 100,
                 Label = "Rate",
-            });
+				IsRequired = true
+			});
 
             items.Add(new UiTemplateContainerItem
             {
@@ -640,8 +643,9 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "Deal Start Date",
                 IsFilterable = true,
                 IsSortable = true,
-                Width = 100
-            });
+                Width = 100,
+				IsRequired = true
+			});
             items.Add(new UiTemplateContainerItem
             {
                 Id = 20,
@@ -651,8 +655,9 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "Deal End Date",
                 IsFilterable = true,
                 IsSortable = true,
-                Width = 100
-            });
+                Width = 100,
+				IsRequired = true
+			});
             items.Add(new UiTemplateContainerItem
             {
                 Id = 20,
