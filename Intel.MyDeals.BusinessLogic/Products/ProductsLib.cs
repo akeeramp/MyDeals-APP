@@ -489,7 +489,7 @@ namespace Intel.MyDeals.BusinessLogic
         public bool IsProductNamePartiallyExists(string searchText, bool isEPMserach)
         {
             var searchString = isEPMserach == false ? GetSearchString().Where(d => d.Value != ProductHierarchyLevelsEnum.EPM_NM.ToString()).ToDictionary(d => d.Key, d => d.Value) : GetSearchString();
-            return searchString.Keys.Where(currentKey => currentKey.Contains(searchText)).Any();
+            return searchString.Keys.Where(currentKey => currentKey.ToLower().Contains(searchText.ToLower())).Any();
         }
 
         /// <summary>
