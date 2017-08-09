@@ -522,7 +522,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             productsToMatch.FirstOrDefault().USR_INPUT = String.Join(" ", productAliasesSplit.ToArray());
 
-            productsToMatch.FirstOrDefault().MOD_USR_INPUT = CheckBogusProduct(productsToMatch.FirstOrDefault().USR_INPUT, true);
+            productsToMatch.FirstOrDefault().MOD_USR_INPUT = CheckBogusProduct(productsToMatch.FirstOrDefault().USR_INPUT, productsToMatch.FirstOrDefault().COLUMN_TYPE);
 
             return _productDataLib.SearchProduct(productsToMatch, CUST_MBR_SID, getWithoutFilters);
         }
