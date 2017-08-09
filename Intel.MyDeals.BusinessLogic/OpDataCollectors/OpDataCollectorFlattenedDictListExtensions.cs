@@ -22,7 +22,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
         {
             ids = new List<int>();
             opDataElementTypes = new List<OpDataElementType>();
-            opTypeGrp = OpDataElementType.Unknown;
+            opTypeGrp = OpDataElementType.ALL_OBJ_TYPE;
 
             foreach (OpDataElementType opDataElementType in Enum.GetValues(typeof(OpDataElementType)))
             {
@@ -84,7 +84,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
         {
             Dictionary<int, OpDataCollectorFlattenedList> rtn = new Dictionary<int, OpDataCollectorFlattenedList>();
             OpDataElementType opDataElementType = parentOpDataElementType.GetFirstChild();
-            if (opDataElementType == OpDataElementType.Unknown || !data.ContainsKey(opDataElementType)) return rtn;
+            if (opDataElementType == OpDataElementType.ALL_OBJ_TYPE || !data.ContainsKey(opDataElementType)) return rtn;
 
             foreach (OpDataCollectorFlattenedItem opDataCollectorFlattenedItem in data[opDataElementType])
             {

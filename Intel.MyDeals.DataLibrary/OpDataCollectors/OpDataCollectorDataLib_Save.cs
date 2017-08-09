@@ -39,7 +39,7 @@ namespace Intel.MyDeals.DataLibrary
                         select new KeyValuePair<Guid, int>
                         (
                             g.Key,
-                            g.Select(itm => itm?.PacketType ?? OpDataElementType.Unknown).Distinct().Count()
+                            g.Select(itm => itm?.PacketType ?? OpDataElementType.ALL_OBJ_TYPE).Distinct().Count()
                         )
                     )
                     .Where(grp => grp.Value > 1);
@@ -276,7 +276,7 @@ namespace Intel.MyDeals.DataLibrary
                     string ACTN_NM = $"{rdr[Entities.deal.MYDL_CL_WIP_ACTN.ACTN_NM]}".ToUpper();
                     OpDataElementType objSet = int.Parse(rdr[Entities.deal.MYDL_CL_WIP_ACTN.OBJ_TYPE_SID].ToString()).IdToOpDataElementTypeString();
 
-                    if (objSet == OpDataElementType.Unknown || string.IsNullOrEmpty(ACTN_NM)) { continue; }
+                    if (objSet == OpDataElementType.ALL_OBJ_TYPE || string.IsNullOrEmpty(ACTN_NM)) { continue; }
 
                     switch (ACTN_NM)
                     {

@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 8/4/2017 10:49:07 PM
-On: PWECKENR-MOBL
+File Updated: 8/8/2017 9:43:07 AM
+On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
 using System;
@@ -19,6 +19,15 @@ namespace Intel.MyDeals.Entities {
 		public const string DC_PARENT_ID = "DC_PARENT_ID";
 		public const string dc_type = "dc_type";
 		public const string dc_parent_type = "dc_parent_type";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 1
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string ACTIVE = "ACTIVE";
 
 		///<summary>
 		/// DIM_SID: 20
@@ -2140,6 +2149,7 @@ namespace Intel.MyDeals.Entities {
 		public const string Active = "Active";
 		public const string All_WF_Stages = "All WF Stages";
 		public const string Approved = "Approved";
+		public const string Cancelled = "Cancelled";
 		public const string Complete = "Complete";
 		public const string Draft = "Draft";
 		public const string Expired = "Expired";
@@ -2213,7 +2223,7 @@ namespace Intel.MyDeals.Entities {
 		PRC_TBL_ROW = 4,
 		WIP_DEAL = 5,
 		DEAL = 6,
-		Unknown = 0
+		ALL_OBJ_TYPE = 0
 	}
 
 	public static class OpDataElementTypeRepository
@@ -2266,6 +2276,7 @@ namespace Intel.MyDeals.Entities {
 
 			new Dictionary<OpDataElementType, List<OpDataElementSetType>>
 			{
+				[OpDataElementType.ALL_OBJ_TYPE] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES },
 				[OpDataElementType.CNTRCT] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES },
 				[OpDataElementType.PRC_ST] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES },
 				[OpDataElementType.PRC_TBL] = new List<OpDataElementSetType> { OpDataElementSetType.ECAP,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER,OpDataElementSetType.CAP_BAND,OpDataElementSetType.ALL_TYPES },

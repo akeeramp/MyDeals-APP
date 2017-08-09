@@ -310,7 +310,8 @@
     {
 		WriteLine(drg["OBJ_TYPE"] + " = " + drg["OBJ_TYPE_SID"] + ",");
     }
-	WriteLine("Unknown = 0");
+	//WriteLine("Unknown = 0");
+	WriteLine("ALL_OBJ_TYPE = 0");
 
     PopIndent();
 	WriteLine("}"); // class
@@ -388,6 +389,7 @@
 		WriteLine(drg["OBJ_SET_TYPE_CD"] + " = " + drg["OBJ_SET_TYPE_SID"] + ",");
     }
 	WriteLine("Unknown = 0");
+	//WriteLine("ALL_OBJ_TYPE = 0");
 
     PopIndent();
 	WriteLine("}"); // class

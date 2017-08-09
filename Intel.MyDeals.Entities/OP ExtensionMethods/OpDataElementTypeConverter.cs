@@ -18,7 +18,7 @@ namespace Intel.MyDeals.Entities
                 return (OpDataElementType)strType;
             }
 
-            return OpDataElementTypeRepository.OpDetCollection.Items.FirstOrDefault(o => o.OpDeType.ToString() == $"{strType}" || o.Alias == $"{strType}")?.OpDeType ?? OpDataElementType.Unknown;
+            return OpDataElementTypeRepository.OpDetCollection.Items.FirstOrDefault(o => o.OpDeType.ToString() == $"{strType}" || o.Alias == $"{strType}")?.OpDeType ?? OpDataElementType.ALL_OBJ_TYPE;
         }
 
 
@@ -38,7 +38,7 @@ namespace Intel.MyDeals.Entities
 
         public static OpDataElementType IdToOpDataElementTypeString(this int packetId)
         {
-            return OpDataElementTypeRepository.OpDetCollection.Items.FirstOrDefault(o => o.Id == packetId)?.OpDeType ?? OpDataElementType.Unknown;
+            return OpDataElementTypeRepository.OpDetCollection.Items.FirstOrDefault(o => o.Id == packetId)?.OpDeType ?? OpDataElementType.ALL_OBJ_TYPE;
         }
 
         public static int StringToId(string packetName)

@@ -6,14 +6,14 @@
     .controller('WidgetSettingsCtrl', WidgetSettingsCtrl)
     .filter('object2Array', object2Array);
 
-DashboardController.$inject = ['$scope', '$uibModal', '$timeout', '$window', '$localStorage', 'objsetService'];
+DashboardController.$inject = ['$scope', '$uibModal', '$timeout', '$window', '$localStorage', 'objsetService', 'securityService'];
 AddWidgetCtrl.$inject = ['$scope', '$timeout'];
 CustomWidgetCtrl.$inject = ['$scope', '$uibModal'];
 WidgetSettingsCtrl.$inject = ['$scope', '$timeout', '$rootScope', 'widget'];
 object2Array.$inject = [];
 
 
-function DashboardController($scope, $uibModal, $timeout, $window, $localStorage, objsetService) {
+function DashboardController($scope, $uibModal, $timeout, $window, $localStorage, objsetService, securityService) {
     $scope.scope = $scope;
     $scope.$storage = $localStorage;
 
@@ -30,6 +30,7 @@ function DashboardController($scope, $uibModal, $timeout, $window, $localStorage
     $scope.endDate = $scope.$storage.endDate;
     $scope.selectedCustomerId = $scope.$storage.selectedCustomerId;
 
+    $scope.C_CREATE_CONTRACT = securityService.chkDealRules('C_CREATE_CONTRACT', window.usrRole, null, null, null);
 
     // **** Customer Methods ****
     //

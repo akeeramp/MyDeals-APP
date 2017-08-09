@@ -58,6 +58,7 @@ function securityService($http, dataService) {
         if (!!itemSetType) itemSetType = itemSetType.replace(/ /g, '_');
 
         // need a better way of doing this, but for now we will stick it here
+        if (itemType === 'ALL_OBJ_TYPE') itemTypeId = 0;
         if (itemType === 'CNTRCT') itemTypeId = 1;
         if (itemType === 'PRC_ST') itemTypeId = 2;
         if (itemType === 'PRC_TBL') itemTypeId = 3;
@@ -65,14 +66,14 @@ function securityService($http, dataService) {
         if (itemType === 'WIP_DEAL') itemTypeId = 5;
         if (itemType === 'DEAL') itemTypeId = 6;
 
-        debugger;
+        if (!itemSetType) itemSetType = 'ALL_TYPES';
+        if (!stage) stage = 'All WF Stages';
 
         var secActionObj = securityAttributes.filter(function (item) {
-            return ((item.ATRB_CD === undefined || item.ATRB_CD === null) ? "" : item.ATRB_CD.trim().toUpperCase()) === ((attrb === undefined || attrb === null) ? "" : attrb.trim().toUpperCase());
+            return ((item.ATRB_CD === undefined || item.ATRB_CD === null) ? "" : item.ATRB_CD.trim().toUpperCase()) === ((attrb === undefined || attrb === null) ? "ACTIVE" : attrb.trim().toUpperCase());
         });
         if (secActionObj === undefined || secActionObj === null || secActionObj.length <= 0) return false;
 
-        debugger;
         var localSecurityMasks = securityMasks.filter(function (item) {
             return item.ACTN_NM === action
                 && (role === null || item.ROLE_NM === null || item.ROLE_NM.trim().toUpperCase() === role.trim().toUpperCase())

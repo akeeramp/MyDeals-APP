@@ -33,7 +33,7 @@ namespace Intel.MyDeals.BusinessRules
 
             string opDeType = de.DcType.IdToOpDataElementTypeString().ToString();
 
-            if (de.DcID > 0 || opDeType == OpDataElementType.PRC_TBL.ToString() || opDeType == OpDataElementType.PRC_TBL_ROW.ToString() || opDeType == OpDataElementType.Unknown.ToString()) return; 
+            if (de.DcID > 0 || opDeType == OpDataElementType.PRC_TBL.ToString() || opDeType == OpDataElementType.PRC_TBL_ROW.ToString() || opDeType == OpDataElementType.ALL_OBJ_TYPE.ToString()) return; 
 
             string newStage = string.Empty;
 
