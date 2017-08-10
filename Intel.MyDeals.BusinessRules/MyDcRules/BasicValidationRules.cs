@@ -27,7 +27,7 @@ namespace Intel.MyDeals.BusinessRules
                 //    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW},
                 //    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad}
                 //},
-				new MyOpRule
+                new MyOpRule
                 {
                     Title="Must have a positive value",
                     ActionRule = MyDcActions.ExecuteActions,

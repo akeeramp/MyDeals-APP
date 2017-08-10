@@ -79,6 +79,24 @@
             return c;
         }
 
+        $scope.ApplyTitlesToChildren = function () {
+            if (!!$scope.contractData.PRC_ST) {
+                for (var x = 0; x < $scope.contractData.PRC_ST.length; x++) {
+                    var prnt = $scope.contractData.PRC_ST[x];
+                    if (!!prnt._behaviors && !!prnt._behaviors.isReadOnly && !!prnt._behaviors.isReadOnly.TITLE) {
+                        if (!!prnt.PRC_TBL) {
+                            for (var c = 0; c < prnt.PRC_TBL.length; c++) {
+                                var child = prnt.PRC_TBL[c];
+                                if (!child._behaviors) child._behaviors = {};
+                                if (!child._behaviors.isReadOnly) child._behaviors.isReadOnly = {};
+                                child._behaviors.isReadOnly.TITLE = prnt._behaviors.isReadOnly.TITLE;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         $scope.removeBlanks = function (val) {
             return val.replace(/_/g, ' ');
         }
@@ -144,6 +162,7 @@
         $scope.contractData = $scope.contractData || $scope.initContract(contractData);
         $scope.isNewContract = isNewContract;
         $scope.contractData.displayTitle = "";
+        $scope.ApplyTitlesToChildren();
 
         var updateDisplayTitle = function () {
             $scope.contractData.displayTitle = isNewContract
@@ -160,7 +179,7 @@
                 // if the current strategy was changed, update it
                 if (id != undefined && $scope.curPricingStrategyId === id) {
                     $scope.curPricingStrategy = util.findInArray($scope.contractData.PRC_ST, id);
-                    if (id != undefined && $scope.curPricingTableId === ptId) {
+                    if (id != undefined && $scope.curPricingTableId === ptId && !!$scope.curPricingStrategy) {
                         $scope.curPricingTable = util.findInArray($scope.curPricingStrategy.PRC_TBL, ptId);
                     }
                 }

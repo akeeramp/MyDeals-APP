@@ -640,6 +640,7 @@ namespace Intel.MyDeals.BusinessRules
 		{
 			return (attrb > 0);
 		}
+
 		private static bool IsGreaterOrEqualToZero(double attrb)
 		{
 			return (attrb >= 0);
@@ -651,12 +652,14 @@ namespace Intel.MyDeals.BusinessRules
 			if (!r.IsValid) return; 
 			ValidateTieredAttribute(AttributeCodes.RATE.ToString(), "Rate must have a positive value.", IsGreaterOrEqualToZero, r);
 		}
-		public static void ValidateTierStartVol(params object[] args)
+
+        public static void ValidateTierStartVol(params object[] args)
 		{
 			MyOpRuleCore r = new MyOpRuleCore(args);
 			if (!r.IsValid) return;
 			ValidateTieredAttribute(AttributeCodes.STRT_VOL.ToString(), "Start Volume must be greater than 0.", IsGreaterThanZero, r);
 		}
+
 		public static void ValidateTierEndVol(params object[] args)
 		{
 			MyOpRuleCore r = new MyOpRuleCore(args);
