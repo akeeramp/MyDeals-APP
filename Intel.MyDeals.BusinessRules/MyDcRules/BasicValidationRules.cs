@@ -120,7 +120,7 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     Title="Validate ECAP Price",
                     ActionRule = MyDcActions.ValidateEcapPrice,
-                    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW},
+                    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
                     InObjSetType = new List<string> {OpDataElementSetType.ECAP.ToString()},
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate}
                 },
@@ -234,21 +234,21 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     Title="Volume Validation",
                     ActionRule = MyDcActions.CheckVolume,
-                    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW},
+                    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate}
                 },
                 new MyOpRule
                 {
                     Title="Frontend Start Date Validation",
                     ActionRule = MyDcActions.CheckFrontendDates,
-                    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW},
+                    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate}
                 },
                 new MyOpRule
                 {
                     Title="Frontend can't be consumption",
                     ActionRule = MyDcActions.CheckFrontendConsumption,
-                    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW},
+                    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate}
                 },
                 new MyOpRule

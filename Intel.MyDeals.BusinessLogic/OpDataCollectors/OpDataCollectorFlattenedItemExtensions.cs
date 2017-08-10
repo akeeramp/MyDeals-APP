@@ -260,8 +260,8 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
             OpDataElementAtrbTemplate template = OpDataElementUiExtensions.GetAtrbTemplate(elMapping.ParentOpDataElementType, elMapping.ParentOpDataElementSetType);
 
             List<string> singleDimAtrbs = template.Where(t => t.DimID == 0 && !t.DimKey.Any()).Select(t => t.AtrbCd).Distinct().ToList();
-            List<string> multiDimAtrbs = template.Where(t => t.DimID != 0 || t.DimKey.Any()).Select(t => t.AtrbCd + t.DimKeyString.AtrbCdDimKeySafe()).Distinct().ToList();
-
+            //List<string> multiDimAtrbs = template.Where(t => t.DimID != 0 || t.DimKey.Any()).Select(t => t.AtrbCd + t.DimKeyString.AtrbCdDimKeySafe()).Distinct().ToList();
+            List<string> multiDimAtrbs = template.Where(t => t.DimID != 0 || t.DimKey.Any()).Select(t => t.AtrbCd).Distinct().ToList();
 
             foreach (string key in opFlatItem.Keys.Where(k => k != AttributeCodes.dc_type && k != AttributeCodes.dc_parent_type))
             {
@@ -271,8 +271,11 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                 }
                 else if (multiDimAtrbs.Contains(key))
                 {
-                    // TODO: need to get multi dims working once we have multi dim in the system
-                    retItems[key] = opFlatItem[key];
+                    OpDataCollectorFlattenedItem item = JsonConvert.DeserializeObject<OpDataCollectorFlattenedItem>(opFlatItem[key].ToString());
+                    foreach (KeyValuePair<string, object> kvp in item)
+                    {
+                        retItems[key + "_____" + kvp.Key] = kvp.Value;
+                    }
                 }
                 else
                 {
@@ -303,7 +306,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
 
                     foreach (ProdMapping pMap in pMaps)
                     {
-                        opFlatItem[AttributeCodes.PRODUCT_FILTER] = pMap.PRD_MBR_SID;
+                        opFlatItem[AttributeCodes.PRODUCT_FILTER + "_____7___" + pMap.PRD_MBR_SID + "____20___0"] = pMap.PRD_MBR_SID;
                         opFlatItem[AttributeCodes.TITLE] = pMap.HIER_VAL_NM;
                         opFlatItem[AttributeCodes.CAP] = pMap.CAP;
                         opFlatItem[AttributeCodes.CAP_STRT_DT] = pMap.CAP_START;
@@ -329,7 +332,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
 
                     foreach (ProdMapping pMap in pMaps)
                     {
-                        opFlatItem[AttributeCodes.PRODUCT_FILTER] = pMap.PRD_MBR_SID;
+                        opFlatItem[AttributeCodes.PRODUCT_FILTER + "_____7___" + pMap.PRD_MBR_SID + "____20___0"] = pMap.PRD_MBR_SID;
                         pTitle.Add(pMap.HIER_VAL_NM);
                         pCat.Add(pMap.PRD_CAT_NM);
                         bool l1, l2;
@@ -340,7 +343,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                     opFlatItem[AttributeCodes.HAS_L1] = pHasL1;
                     opFlatItem[AttributeCodes.HAS_L2] = pHasL2;
                     opFlatItem[AttributeCodes.TITLE] = string.Join(",", pTitle);
-                    opFlatItem[AttributeCodes.PRODUCT_CATEGORIES] = string.Join(",", pCat);
+                    opFlatItem[AttributeCodes.PRODUCT_CATEGORIES] = string.Join(",", pCat.Distinct());
 
                     break;
             }
@@ -352,7 +355,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                 {
                     newItem[key] = opFlatItem[key];
                 }
-                else if (multiDimAtrbs.Contains(key))
+                else if (multiDimAtrbs.IndexOf(key) >= 0 || key.IndexOf(AttributeCodes.PRODUCT_FILTER) == 0)
                 {
                     // TODO: need to get multi dims working once we have multi dim in the system
                     newItem[key] = opFlatItem[key];

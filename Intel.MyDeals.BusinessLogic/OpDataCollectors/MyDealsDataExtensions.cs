@@ -84,9 +84,17 @@ namespace Intel.MyDeals.BusinessLogic
 
                     if (elMapping.TranslationType == OpTranslationType.OneDealPerProduct)
                     {
-                        //string wipProd = items[AttributeCodes.PTR_USER_PRD + EN.VARIABLES.PRIMARY_DIMKEY].ToString();
                         string wipProd = items[AttributeCodes.PTR_USER_PRD].ToString();
-                        string wipProdFilter = items[AttributeCodes.PRODUCT_FILTER].ToString();
+                        string wipProdFilter = "";
+
+                        foreach (KeyValuePair<string, object> kvp in items)
+                        {
+                            if (kvp.Key.IndexOf(AttributeCodes.PRODUCT_FILTER) == 0)
+                            {
+                                wipProdFilter = kvp.Value.ToString();
+                            }
+                        }
+
                         foreach (OpDataCollector odc in myDcs)
                         {
                             if (odc.GetDataElementValue(AttributeCodes.PTR_USER_PRD) == wipProd
@@ -101,6 +109,15 @@ namespace Intel.MyDeals.BusinessLogic
                     }
                     else if (elMapping.TranslationType == OpTranslationType.OneDealPerRow)
                     {
+                        string wipProd = items[AttributeCodes.PTR_USER_PRD].ToString();
+                        List<string> wipProdFilter = new List<string>();
+
+                        var prds = items.Where(i => i.Key.IndexOf(AttributeCodes.PRODUCT_FILTER) == 0).ToList();
+                        foreach (KeyValuePair<string, object> kvp in prds)
+                        {
+                            wipProdFilter.Add(kvp.Value.ToString());
+                        }
+
                         foreach (OpDataCollector odc in myDcs)
                         {
                             if (odc.GetDataElementValue(AttributeCodes.GEO_COMBINED) == items[AttributeCodes.GEO_COMBINED].ToString())
@@ -898,6 +915,106 @@ namespace Intel.MyDeals.BusinessLogic
             return opMsgQueue;
 
         }
+
+
+
+
+
+        public static MyDealsData SavePacketsBase(this MyDealsData myDealsData, OpDataCollectorFlattenedDictList data, ContractToken contractToken, List<int> validateIds, bool forcePublish, string sourceEvent)
+        {
+            // Save Data Cycle: Point 9
+
+            // How this should work:
+            // Step 1 - get all of the related DEs for each object given a set of object levels (OpDataElementType) and IDs
+            // Step 2 - For each OpDataElementType, Merge changes, then validate
+
+
+
+            // RUN RULES HERE - If there are validation errors... stop... but we need to save the validation status
+            MyDealsData myDealsDataWithErrors = null;
+            bool hasErrors = myDealsData.ValidationApplyRules(validateIds, forcePublish, sourceEvent, contractToken);
+            if (hasErrors)
+            {
+                // "Clone" to object...
+                string json = JsonConvert.SerializeObject(myDealsData);
+                myDealsDataWithErrors = JsonConvert.DeserializeObject<MyDealsData>(json);
+            }
+
+            // Note to self..  This does take order values into account.
+            foreach (OpDataElementType opDataElementType in Enum.GetValues(typeof(OpDataElementType)))
+            {
+                if (!data.ContainsKey(opDataElementType)) continue;
+                myDealsData.SavePacketByDictionary(data[opDataElementType], opDataElementType, Guid.NewGuid());
+            }
+
+            MyDealsData myDealsDataResults = myDealsData.PerformTasks(OpActionType.Save, contractToken);  // execute all save perform task items now
+
+            if (hasErrors) TransferActions(myDealsDataResults, myDealsDataWithErrors);
+            return hasErrors ? myDealsDataWithErrors : myDealsDataResults;
+        }
+
+        private static void TransferActions(this MyDealsData myDealsDataResults, MyDealsData myDealsDataWithErrors)
+        {
+            foreach (KeyValuePair<OpDataElementType, OpDataPacket<OpDataElementType>> kvp in myDealsDataResults)
+            {
+                if (myDealsDataResults[kvp.Key].Actions == null || !myDealsDataResults[kvp.Key].Actions.Any()) continue;
+                if (!myDealsDataWithErrors.ContainsKey(kvp.Key)) myDealsDataWithErrors[kvp.Key] = new OpDataPacket<OpDataElementType>();
+                myDealsDataWithErrors[kvp.Key].Actions = myDealsDataResults[kvp.Key].Actions;
+            }
+        }
+
+        public static void SavePacketByDictionary(this MyDealsData myDealsData, OpDataCollectorFlattenedList data, OpDataElementType opDataElementType, Guid myWbBatchId)
+        {
+            // Save Data Cycle: Point 10
+            if (!myDealsData.ContainsKey(opDataElementType)) return;
+
+            //myDealsData.Merge(opDataElementType, data);
+            OpDataPacket<OpDataElementType> newPacket = myDealsData[opDataElementType].GetChanges(); // Goes through the collection and passes only changes after rules.
+
+            newPacket.BatchID = myWbBatchId;
+            newPacket.GroupID = -101; // Whatever the real ID of this object is
+            newPacket.PacketType = opDataElementType; // Why wasn't this set in constructor??
+
+            // Back to normal operations, clear out the messages and all.
+            //newPacket.Actions.RemoveAll(r => r.ActionDirection == OpActionDirection.Inbound);
+            //newPacket.Messages.Messages.RemoveAll(r => true);
+
+            // Tack on the save action call now
+            newPacket.AddSaveActions();
+            newPacket.AddDeleteActions(data);
+
+            myDealsData[opDataElementType] = newPacket;
+        }
+
+
+
+        private static MyDealsData PerformTasks(this MyDealsData myDealsData, OpActionType? actionToRun, ContractToken contractToken)
+        {
+            // Save Data Cycle: Point 14
+
+            //return new MyDealsData();
+            MyDealsData saveResponseSet = new MyDealsData();
+            myDealsData.EnsureBatchIDs();
+
+            switch (actionToRun)
+            {
+                case OpActionType.Save:
+                    saveResponseSet = myDealsData.Save(contractToken);
+                    // Save Data Cycle: Point 21 (END)
+                    break;
+                case OpActionType.SyncDeal:
+                    ////        LimitRecords(myDealsData, new List<string> { "PREP2DEAL" }); // SYNCDEAL
+                    ////        saveResponseSet = new DealDataLib().SaveDeals(myDealsData, OpUserStack.MyOpUserToken);
+                    break;
+                case OpActionType.Action:
+                    ////        LimitRecords(myDealsData, new List<string> { "PREP2DEAL", "CALC_MSP", "GEN_TRACKER", "DEAL_ROLLBACK_TO_ACTIVE", "SNAPSHOT" }); // SYNCDEAL - DEAL_DELETE is not here, remove those elements since they might cause ghost deals
+                    ////        saveResponseSet = new DealDataLib().SaveDeals(myDealsData, opUserToken);
+                    break;
+            }
+            return saveResponseSet;
+        }
+
+
 
     }
 }

@@ -330,6 +330,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 }
                 return modDealTypes.length > 0 ? $scope.dealCnt + " " + modDealTypes.join() + ($scope.dealCnt === 1 ? " Deal" : " Deals") : "";
             }
+
             $scope.contractDs = new kendo.data.DataSource({
                 transport: {
                     read: function (e) {
@@ -466,7 +467,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 var l = source.length;
 
                 for (var j = 0; j < l; j++) {
-                    if (source[j].ID === id) {
+                    if (source[j].ID === id || source[j].DC_ID === id) {
                         return j;
                     }
                 }
@@ -624,7 +625,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                         if (f === 0) {
                             tmplt += '<td style="margin: 0; padding: 0; text-align: ' + fields[f].align + ';"><span class="ng-binding" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + '\'] ' + gridUtils.getFormat(fields[f].field, fields[f].format) + ')"></span></td>';
                         } else {
-                            tmplt += '<td style="margin: 0; padding: 0;"><input kendo-numeric-text-box k-min="0" k-decimals="0" k-format="\'n0\'" k-ng-model="dataItem.' + fields[f].field + '[\'' + dim + '\']" style="max-width: 100%; margin:0;" /></td>';
+                            tmplt += '<td style="margin: 0; padding: 0;"><input kendo-numeric-text-box k-min="0" k-decimals="0" k-format="\'n0\'" k-ng-model="dataItem.' + fields[f].field + '[\'' + dim + '\']" k-on-change="updateDirty(dataItem)" style="max-width: 100%; margin:0;" /></td>';
                         }
                     }
                     tmplt += '</tr>';
@@ -634,6 +635,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 var compiled = $compile(tmplt)(angular.element(container).scope());
                 $(container).append(compiled);
 
+            }
+
+            $scope.updateDirty = function (dataItem) {
+                dataItem.dirty = true;
             }
 
             $scope.multiDimEditor = function(container, options) {
@@ -1020,10 +1025,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
 
             $scope.saveAndValidateGrid = function () {
                 $scope.$parent.$parent.setBusy("Validating your data...", "Please wait as we validate your information!");
-                $timeout(function () {
+                //$timeout(function () {
                     $scope.contractDs.sync();
                     $scope.$parent.$parent.$parent.validateWipDeals(); 
-                }, 100);
+                //}, 100);
 
                 return;
 

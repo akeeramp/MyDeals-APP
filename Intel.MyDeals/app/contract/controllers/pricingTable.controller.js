@@ -66,8 +66,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     root.letterToCol = {};
     vm.readOnlyColLetters = [];
     vm.requiredStringColumns = {};
-    root.wipData;
-    root.wipOptions;
+    //root.wipData;
+    //root.wipOptions;
     var ssTools;
     var stealthOnChangeMode = false;
     root.isPtr = $state.current.name === "contract.manager.strategy";

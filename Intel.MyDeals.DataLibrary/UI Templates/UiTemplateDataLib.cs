@@ -1280,7 +1280,6 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 37,
                 AtrbCd = AttributeCodes.REBATE_TYPE,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
                 Width = 180,
                 Template = "#=gridUtils.uiControlWrapper(data, 'REBATE_TYPE')#",
                 LookupUrl = "/api/Dropdown/GetDropdowns/REBATE_TYPE/ECAP",

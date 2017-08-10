@@ -12,7 +12,7 @@ namespace Intel.MyDeals.Entities
             RoleTypes = opRoleTypes;
             SecurityAttributes = securityAttributes;
 			SecurityMasks = securityMasks;
-		}
+        }
 
         public List<OpRoleType> RoleTypes { get; set; }
         public List<SecurityAttribute> SecurityAttributes { get; set; }
@@ -70,38 +70,44 @@ namespace Intel.MyDeals.Entities
 				return false;
             }
 						
-			bool result = (
-				from s in localSecurityMasks
-				select s.Split('.').Reverse().ToArray()
-				into aPermissionMask
-
-				select aPermissionMask[sa.ATRB_MAGNITUDE]
-                into hexVal
-
-				select Convert.ToString(Convert.ToInt32(hexVal, 16), 2)
-                into binVal
-
-				let revBinVal = binVal.ToCharArray().Reverse().ToArray()
-				where revBinVal.Length > sa.ATRB_BIT
-
-				select binVal
-				)
-				.Any(binVal => binVal.ToCharArray().Reverse().ElementAt((int)sa.ATRB_BIT) == '1');
-
+			bool result = BitShiftCheck(localSecurityMasks, sa);
 			
 			securityActionCache[secBaseKey] = result;
             return result;
         }
 
         public bool ChkDealRules(OpDataElementType opDataElementType, OpDataElementSetType opDataElementSetType, string wfStage, string actionCd)
-		{
-			return (from el in SecurityMasks
-                    where (el.ACTN_NM == null || el.SECUR_ACTN_SID == 0 || el.ACTN_NM.Trim() == actionCd)
-						  && (el.OBJ_TYPE_SID == 0 || el.OBJ_TYPE_SID == (int)opDataElementType)
-                          && (el.OBJ_SET_TYPE_SID == 0 || el.OBJ_SET_TYPE_SID == (int)opDataElementSetType)
-                          && (el.ROLE_SID == 0 || el.ROLE_SID == OpUserStack.MyOpUserToken.Role.RoleTypeId)
-                          && (el.WFSTG_MBR_SID == 0 || el.WFSTG_NM == wfStage)
-                    select el.PERMISSION_MASK).Any();
+        {
+            IEnumerable<string> localSecurityMasks = from el in SecurityMasks
+                where (el.ACTN_NM == null || el.SECUR_ACTN_SID == 0 || el.ACTN_NM.Trim() == actionCd)
+                      && (el.OBJ_TYPE_SID == 0 || el.OBJ_TYPE_SID == (int) opDataElementType)
+                      && (el.OBJ_SET_TYPE_SID == 0 || el.OBJ_SET_TYPE_SID == (int) opDataElementSetType)
+                      && (el.ROLE_SID == 0 || el.ROLE_SID == OpUserStack.MyOpUserToken.Role.RoleTypeId)
+                      && (el.WFSTG_MBR_SID == 0 || el.WFSTG_NM == wfStage)
+                select el.PERMISSION_MASK;
+
+            return localSecurityMasks.Any();
+        }
+
+        private bool BitShiftCheck(IEnumerable<string> localSecurityMasks, SecurityAttribute sa)
+        {
+            return (
+                from s in localSecurityMasks
+                select s.Split('.').Reverse().ToArray()
+                into aPermissionMask
+
+                select aPermissionMask[sa.ATRB_MAGNITUDE]
+                into hexVal
+
+                select Convert.ToString(Convert.ToInt32(hexVal, 16), 2)
+                into binVal
+
+                let revBinVal = binVal.ToCharArray().Reverse().ToArray()
+                where revBinVal.Length > sa.ATRB_BIT
+
+                select binVal
+                )
+                .Any(binVal => binVal.ToCharArray().Reverse().ElementAt((int)sa.ATRB_BIT) == '1');
         }
     }
 

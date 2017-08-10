@@ -129,12 +129,41 @@ namespace Intel.MyDeals.BusinessLogic
             // Apply merge rules before overlaying the changes to the source in order to capture modification flags
             dc.ApplyRules(MyRulesTrigger.OnMerge, null, items);
 
-            foreach (OpDataElement de in dc.DataElements)
+            // for products, we will take the base dataelement and create new products that need to ba added to the
+            List<OpDataElement> deProds = dc.DataElements.Where(d => d.AtrbCd == AttributeCodes.PRODUCT_FILTER).ToList();
+            if (deProds.Any())
+            {
+                var prds = items.Where(p => p.Key.IndexOf(AttributeCodes.PRODUCT_FILTER) == 0).ToList();
+                foreach (KeyValuePair<string, object> kvp in prds)
+                {
+                    OpDataElement deProd = dc.DataElements.FirstOrDefault(d => d.AtrbCd == AttributeCodes.PRODUCT_FILTER && d.AtrbCd + d.DimKeyString.AtrbCdDimKeySafe() == kvp.Key);
+                    if (deProd == null)
+                    {
+                        int prdId = 0;
+                        if (int.TryParse(kvp.Value.ToString(), out prdId))
+                        {
+                            OpDataElement deBaseProd = dc.DataElements.FirstOrDefault(d => d.AtrbCd == AttributeCodes.PRODUCT_FILTER && d.DimKey[7].ToString() == "7:0");
+
+                            OpDataElement newDe = deBaseProd.Clone();
+
+                            newDe.SetDimKey("7:" + prdId + "/20:0");
+                            newDe.AtrbKey = newDe.AtrbCd + "|" + newDe.DimKeyString;
+                            newDe.AtrbValue = prdId;
+
+                            dc.DataElements.Add(newDe);
+                        }
+                    }
+                }                
+            }
+
+
+            foreach (OpDataElement de in dc.DataElements.Where(d => d.AtrbCd != AttributeCodes.PRODUCT_FILTER))
             {
                 if (de.AtrbCd == AttributeCodes.WF_STG_CD) continue; // bail out if this is a stage
 
                 string dimKey = de.DimKeyString;
                 string uniqDimKey = dimKey.AtrbCdDimKeySafe();
+                string uniqDimBaseKey = uniqDimKey.Replace("_____", "");
 
                 //dimKey = "";
                 if (string.IsNullOrEmpty(dimKey))
@@ -174,14 +203,14 @@ namespace Intel.MyDeals.BusinessLogic
                 else if (items.ContainsKey(de.AtrbCd) && items[de.AtrbCd] != null)
                 {
                     OpDataCollectorFlattenedItem dictValues = OpSerializeHelper.FromJsonString<OpDataCollectorFlattenedItem>(items[de.AtrbCd].ToString());
-                    if (dictValues != null && dictValues.ContainsKey(dimKey))
+                    if (dictValues != null && dictValues.ContainsKey(uniqDimBaseKey))
                     {
-                        if (dictValues.ContainsKey(dimKey))
+                        if (dictValues.ContainsKey(uniqDimBaseKey))
                         {
                             if (de.DataType == "System.DateTime" &&
                                 !String.IsNullOrEmpty(dictValues[dimKey].ToString().Replace("Invalid date", "")))
-                                dictValues[dimKey] = Convert.ToDateTime(dictValues[dimKey]);
-                            de.AtrbValue = dictValues[dimKey];
+                                dictValues[uniqDimBaseKey] = Convert.ToDateTime(dictValues[uniqDimBaseKey]);
+                            de.AtrbValue = dictValues[uniqDimBaseKey];
                         }
                     }
                     else
