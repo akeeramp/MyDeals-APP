@@ -20,6 +20,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
     vm.isLvlCollapsed = false;
     vm.invalidProdName = '';
     vm.ProductCorrectorData = util.deepClone(GetProductCorrectorData);
+    vm.ProductCorrectorData.AutoValidatedProducts = util.deepClone(GetProductCorrectorData.ValidProducts);
     vm.allDone = false;
     vm.curRowDone = false;
     vm.isValidCapDetails = isValidCapDetails;

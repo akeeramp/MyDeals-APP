@@ -399,8 +399,10 @@
 
         function addProducts() {
             // Add them to box, check for duplicate prd_mbr_sid
-            angular.forEach(vm.selectedItems, function (value, key) {
+            var selectedItems = angular.copy(vm.selectedItems);
+            angular.forEach(selectedItems, function (value, key) {
                 // Add validations here
+                value.USR_INPUT = value.HIER_VAL_NM;
                 vm.addedProducts.push(value);
             });
             vm.addedProducts = $filter("unique")(vm.addedProducts, 'PRD_MBR_SID');

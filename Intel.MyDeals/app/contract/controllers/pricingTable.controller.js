@@ -337,7 +337,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var validatedSelectedProducts = productSelectorOutput.validateSelectedProducts;
         if (!productSelectorOutput.splitProducts) {
             var contractProducts = updateUserInput(validatedSelectedProducts);
-
             //PTR_SYS_PRD
             sheet.range('B' + (rowStart)).value(JSON.stringify(validatedSelectedProducts));
             systemModifiedProductInclude = true;
@@ -449,11 +448,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         //}
 
         var isProductColumnIncludedInChanges = (range._ref.topLeft.col <= productColIndex) && (range._ref.bottomRight.col >= productColIndex);
-		
-		// On End_vol col change
+
+        // On End_vol col change
         if (root.colToLetter["END_VOL"] != null) {
-        	var endVolIndex = (root.colToLetter["END_VOL"].charCodeAt(0) - intA);
-        	var isEndVolColChanged = (range._ref.topLeft.col <= endVolIndex) && (range._ref.bottomRight.col >= endVolIndex);
+            var endVolIndex = (root.colToLetter["END_VOL"].charCodeAt(0) - intA);
+            var isEndVolColChanged = (range._ref.topLeft.col <= endVolIndex) && (range._ref.bottomRight.col >= endVolIndex);
 
         	if (isEndVolColChanged) {
         		var data = root.spreadDs.data();
@@ -653,22 +652,22 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     data[r]["CUST_MBR_SID"] = root.contractData.CUST_MBR_SID;
 
                     if (!root.curPricingTable || !!root.curPricingTable.NUM_OF_TIERS) {
-                    	if (!data[r]["TIER_NBR"] || data[r]["TIER_NBR"] === "") {
-                    		var tierNumVal =  (r % root.child.numTiers) + 1;
-                        	data[r]["TIER_NBR"] = tierNumVal;
+                        if (!data[r]["TIER_NBR"] || data[r]["TIER_NBR"] === "") {
+                            var tierNumVal = (r % root.child.numTiers) + 1;
+                            data[r]["TIER_NBR"] = tierNumVal;
 
-                        	// disable non-first start vols
-                        	if (tierNumVal != 1) {
-                        		if (!data[r]._behaviors) {
-                        			data[r]._behaviors = {};
-                        		}
-                        		if (!data[r]._behaviors.isReadOnly) {
-                        			data[r]._behaviors.isReadOnly = {};
-                        		}
-                        		// Flag start vol cols to disable
-                        		var rowInfo = data[r];
-                        		data[r]._behaviors.isReadOnly["STRT_VOL"] = true;
-                        	}
+                            // disable non-first start vols
+                            if (tierNumVal != 1) {
+                                if (!data[r]._behaviors) {
+                                    data[r]._behaviors = {};
+                                }
+                                if (!data[r]._behaviors.isReadOnly) {
+                                    data[r]._behaviors.isReadOnly = {};
+                                }
+                                // Flag start vol cols to disable
+                                var rowInfo = data[r];
+                                data[r]._behaviors.isReadOnly["STRT_VOL"] = true;
+                            }
                         }
                     }
 
@@ -724,36 +723,36 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     if (offset > 0) {
                         bottomRightRowIndex += root.child.numTiers - offset;
                     }
-					
+
                     // Enable other cells
                     if (!!ptTemplate.model.fields["TIER_NBR"]) {
-						// Find tier nbr col
-						var tierColIndex = (root.colToLetter["TIER_NBR"]).charCodeAt(0);
-						var letterAfterTierCol = String.fromCharCode(tierColIndex + 1);
-						var letterBeforeTierCol = String.fromCharCode(tierColIndex - 1);
+                        // Find tier nbr col
+                        var tierColIndex = (root.colToLetter["TIER_NBR"]).charCodeAt(0);
+                        var letterAfterTierCol = String.fromCharCode(tierColIndex + 1);
+                        var letterBeforeTierCol = String.fromCharCode(tierColIndex - 1);
 
-                    	// Find Strt_vol col
-						var startVolIndex = (root.colToLetter["STRT_VOL"]).charCodeAt(0);
+                        // Find Strt_vol col
+                        var startVolIndex = (root.colToLetter["STRT_VOL"]).charCodeAt(0);
 
-						// Enable cols except voltier
-						range = sheet.range("D" + topLeftRowIndex + ":" + letterBeforeTierCol + bottomRightRowIndex);
+                        // Enable cols except voltier
+                        range = sheet.range("D" + topLeftRowIndex + ":" + letterBeforeTierCol + bottomRightRowIndex);
                         range.enable(true);
                         range.background(null);
                         range = sheet.range(letterAfterTierCol + topLeftRowIndex + ":" + finalColLetter + bottomRightRowIndex);
                         range.enable(true);
                         range.background(null);
 
-                    	// Disable flagged Start Vol cols
+                        // Disable flagged Start Vol cols
                         var startVolLetter = root.colToLetter["STRT_VOL"]
                         var spreadData = root.spreadDs.data();
                         range = sheet.range(startVolLetter + topLeftRowIndex + ":" + startVolLetter + bottomRightRowIndex);
                         range.forEachCell(
 							function (rowIndex, colIndex, value) {
-								// Re-disable specific cells that are readOnly
-								var rowInfo = spreadData[(rowIndex - 1)]; // This is -1 to account for the 0th rows in the spreadsheet
-								if (rowInfo != undefined) { // The row was pre-existing
-									disableIndividualReadOnlyCells(sheet, rowInfo, rowIndex, 1);
-								}
+							    // Re-disable specific cells that are readOnly
+							    var rowInfo = spreadData[(rowIndex - 1)]; // This is -1 to account for the 0th rows in the spreadsheet
+							    if (rowInfo != undefined) { // The row was pre-existing
+							        disableIndividualReadOnlyCells(sheet, rowInfo, rowIndex, 1);
+							    }
 							}
 						);
 
@@ -1693,7 +1692,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                             // Update user input if all the issues are done
                             if (allIssuesDone) {
-                                var contractProducts = updateUserInput(transformResult.ValidProducts[key]);
+                                var contractProducts = updateUserInputFromCorrector(transformResult.ValidProducts[key], transformResult.AutoValidatedProducts[key]);
                                 data[r].PTR_USER_PRD = contractProducts;
                                 sourceData[r].PTR_USER_PRD = contractProducts;
                                 data[r].DC_ID = contractProducts === "" ? null : data[r].DC_ID;
@@ -1743,32 +1742,80 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             if (validProducts.hasOwnProperty(prd)) {
                 var userInput = $filter('unique')(validProducts[prd], 'USR_INPUT');
                 var inputtedValue = userInput[0].USR_INPUT.toLowerCase();
-                // Check if user input is at lower level  e.g i3-2400, Ci3 i3-2400
-                var isUserInputAtLowerLevel = validProducts[prd].filter(function (x) {
-                    return (x.PCSR_NBR !== "" && inputtedValue.indexOf(x.PCSR_NBR.toLowerCase()) > -1)
-                        || (x.DEAL_PRD_NM !== "" && inputtedValue.indexOf(x.DEAL_PRD_NM.toLowerCase()) > -1)
-                        || (x.MTRL_ID !== "" && inputtedValue.indexOf(x.MTRL_ID.toLowerCase()) > -1);
-                });
-
-                // Even if the user input is not at lower level check if it is at higher level, this would take care replacing NAND Family inputs e.g p3700
-                var isUserInputAtHigherLevel = validProducts[prd].filter(function (x) {
-                    return (x.DEAL_PRD_TYPE !== "" && inputtedValue.indexOf(x.DEAL_PRD_TYPE.toLowerCase()) > -1)
-                        || (x.PRD_CAT_NM !== "" && inputtedValue.indexOf(x.PRD_CAT_NM.toLowerCase()) > -1)
-                        || (x.BRND_NM !== "" && inputtedValue.indexOf(x.BRND_NM.toLowerCase()) > -1)
-                        || (x.FMLY_NM !== "" && inputtedValue.indexOf(x.FMLY_NM.toLowerCase()) > -1)
-                });
-
-                if (isUserInputAtLowerLevel.length === 0 && isUserInputAtHigherLevel.length > 0) {
-                    var userInput = userInput.map(function (elem) {
+                for (var i = 0; i < validProducts[prd].length; i++) {
+                    var userInput = "";
+                    if (validProducts[prd][i].DEAL_PRD_TYPE.toLowerCase().indexOf(inputtedValue) > -1) {
+                        userInput = validProducts[prd][i].DEAL_PRD_TYPE;
+                    }
+                    if (userInput !== "") {
+                        break;
+                    }
+                    if (validProducts[prd][i].PRD_CAT_NM.toLowerCase().indexOf(inputtedValue) > -1) {
+                        userInput = validProducts[prd][i].PRD_CAT_NM;
+                    }
+                    if (userInput !== "") {
+                        break;
+                    }
+                    if (validProducts[prd][i].BRND_NM.toLowerCase().indexOf(inputtedValue) > -1) {
+                        userInput = validProducts[prd][i].BRND_NM;
+                    }
+                    if (userInput !== "") {
+                        break;
+                    }
+                    if (validProducts[prd][i].FMLY_NM.toLowerCase().indexOf(inputtedValue) > -1) {
+                        userInput = validProducts[prd][i].FMLY_NM;
+                    }
+                    if (userInput !== "") {
+                        break;
+                    }
+                    if (validProducts[prd][i].PCSR_NBR.toLowerCase().indexOf(inputtedValue) > -1) {
+                        userInput = validProducts[prd][i].PCSR_NBR;
+                    }
+                    if (userInput !== "") {
+                        break;
+                    }
+                    if (validProducts[prd][i].DEAL_PRD_NM.toLowerCase().indexOf(inputtedValue) > -1) {
+                        userInput = validProducts[prd][i].DEAL_PRD_NM;
+                    }
+                    if (userInput !== "") {
+                        break;
+                    }
+                    if (validProducts[prd][i].DEAL_PRD_NM.toLowerCase().indexOf(inputtedValue) > -1) {
+                        userInput = validProducts[prd][i].DEAL_PRD_NM;
+                    }
+                    if (userInput !== "") {
+                        break;
+                    }
+                }
+                if (userInput === "") {
+                    var userInput = $filter('unique')(validProducts[prd], 'USR_INPUT');
+                    userInput = userInput.map(function (elem) {
                         return elem.USR_INPUT;
                     }).join(",");
                 }
-                else {
-                    var userInput = $filter('unique')(validProducts[prd], 'HIER_VAL_NM');
-                    userInput = userInput.map(function (elem) {
-                        return elem.HIER_VAL_NM;
-                    }).join(",");
+            }
+            contractProducts = contractProducts === "" ? userInput : contractProducts + "," + userInput;
+        }
+        return contractProducts;
+    }
+
+    function updateUserInputFromCorrector(validProducts, autoValidatedProducts) {
+        if (!validProducts) {
+            return "";
+        }
+        var contractProducts = "";
+        for (var prd in validProducts) {
+            if (!!autoValidatedProducts && autoValidatedProducts.hasOwnProperty(prd)) {
+                var autoValidProd = updateUserInput(autoValidatedProducts);
+                if (autoValidProd !== "") {
+                    contractProducts = contractProducts === "" ? autoValidProd : contractProducts + "," + autoValidProd;
                 }
+            }
+            else if (validProducts.hasOwnProperty(prd)) {
+                var userInput = $filter('unique')(validProducts[prd], 'HIER_VAL_NM');
+                userInput = userInput.map(function (elem) {
+                    return elem.HIER_VAL_NM;
+                }).join(",");
                 contractProducts = contractProducts === "" ? userInput : contractProducts + "," + userInput;
             }
         }
