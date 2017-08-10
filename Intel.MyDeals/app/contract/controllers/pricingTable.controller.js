@@ -456,32 +456,33 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         	var isEndVolColChanged = (range._ref.topLeft.col <= endVolIndex) && (range._ref.bottomRight.col >= endVolIndex);
 
         	if (isEndVolColChanged) {
-        		console.log("WELP");
         		var data = root.spreadDs.data();
         		var sourceData = root.pricingTableData.PRC_TBL_ROW;
 
-        		$timeout(function () {
-        			range.forEachCell(
-						function (rowIndex, colIndex, value) {
-							if (colIndex === endVolIndex) { // End_Vol Col changed
-								var myRow = data[(rowIndex - 1)];
+        		range.forEachCell(
+					function (rowIndex, colIndex, value) {
+						var myRow = data[(rowIndex - 1)];
+						if (colIndex === endVolIndex) { // End_Vol Col changed
 
-								// If this vol tier isn't the last of its vol tier rows
-								if (myRow != undefined && myRow.TIER_NBR != root.pricingTableData.PRC_TBL[0].NUM_OF_TIERS) {								
-										//var nextRow = data[(range._ref.topLeft.row)];
-										var nextRow = data[(rowIndex)];
-										// Calculate next start vol using end vol
-										nextRow.STRT_VOL = (value.value + 1);
-										myRow.END_VOL = value.value;
+							// If this vol tier isn't the last of its vol tier rows
+							if (myRow != undefined && myRow.TIER_NBR != root.pricingTableData.PRC_TBL[0].NUM_OF_TIERS && myRow.DC_ID != undefined) {
+								var nextRow = data[(rowIndex)];
+								// Calculate next start vol using end vol
+								if (nextRow !== undefined) {
+									nextRow.STRT_VOL = (value.value + 1);
+									sourceData[(rowIndex)].STRT_VOL = nextRow.STRT_VOL;
 								}
 							}
 						}
-					);
-        			root.spreadDs.sync();
-				});
+						var myColLetter = String.fromCharCode(intA + (colIndex));
+						var colName = root.letterToCol[myColLetter];
+						myRow[colName] = value.value;
+						sourceData[(rowIndex - 1)][colName] = value.value;
+					}
+				);
+        		root.spreadDs.sync(); 
         	} 
         }
-
 
         var isRangeValueEmptyString = (range.value() !== null && range.value().toString().replace(/\s/g, "").length === 0);
 
@@ -698,8 +699,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     }
                 }
 
-
-                //root.updateResults(data, $scope.pricingTableData.PRC_TBL_ROW)
                 // now apply array to Datasource... one event triggered
                 root.spreadDs.sync();
 
