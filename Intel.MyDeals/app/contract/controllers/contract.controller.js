@@ -2611,7 +2611,7 @@
                     if (!!newValue["REBATE_TYPE"]) newValue["REBATE_TYPE"].value = "MCP";
                     if (!!newValue[MRKT_SEG]) newValue[MRKT_SEG].value = ["All"];
                     if (!!newValue[GEO]) newValue[GEO].value = ["Worldwide"];
-                    if (!!newValue["PAYOUT_BASED_ON"]) newValue["PAYOUT_BASED_ON"].value = "Billings"; //TODO: typo- need to correct to "Billing" in db
+                    if (!!newValue["PAYOUT_BASED_ON"]) newValue["PAYOUT_BASED_ON"].value = "Consumption"; //TODO: typo- need to correct to "Billing" in db
                     if (!!newValue["MEET_COMP_PRICE_QSTN"]) newValue["MEET_COMP_PRICE_QSTN"].value = "Price Only";
                     if (!!newValue["PROGRAM_PAYMENT"]) newValue["PROGRAM_PAYMENT"].value = "Backend";
                     if (!!newValue["PROD_INCLDS"]) newValue["PROD_INCLDS"].value = "Tray";
