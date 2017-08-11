@@ -335,10 +335,12 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
         for (item in data) {
             if (data[item].PRD_MBR_SID == 0) {
                 grid.tbody.find("tr[data-uid=" + data[item].uid + "]").hide();
-                grid.tbody.find("tr[data-uid=" + data[item].uid + "]").closest("tr").prev().find("a").on("click", function (e) {
+                var expandLink = grid.tbody.find("tr[data-uid=" + data[item].uid + "]").closest("tr").prev().find("a");
+                expandLink.on("click", function (e) {
                     e.preventDefault();
                     e.stopPropagation();
                 });
+                expandLink.css({ 'opacity': '0', 'cursor': 'default' });
             }
         }
     };
