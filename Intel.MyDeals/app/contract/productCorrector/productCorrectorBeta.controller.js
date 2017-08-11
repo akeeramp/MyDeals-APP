@@ -175,19 +175,41 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
 
         vm.curRowDone = !isDirty;
 
+        for (var key in vm.curRowIssues) {
+            if (vm.curRowIssues.hasOwnProperty(key) && vm.curRowIssues[key].cnt == 0) {
+                var emptyData = {
+                    BRND_NM: "",
+                    CAP: "",
+                    CAP_END: "01/01/0001",
+                    CAP_START: "01/01/001",
+                    DEAL_PRD_NM: "",
+                    DEAL_PRD_TYPE: "",
+                    FMLY_NM: "",
+                    HAS_L1: "",
+                    HAS_L2: "",
+                    HIER_NM_HASH: "",
+                    HIER_VAL_NM: "",
+                    MM_MEDIA_CD: "",
+                    MTRL_ID: "",
+                    PCSR_NBR: "",
+                    PRD_ATRB_SID: "",
+                    PRD_CAT_NM: "",
+                    PRD_END_DTM: "01/01/0001",
+                    PRD_MBR_SID: 0,
+                    PRD_STRT_DTM: "01/01/0001",
+                    USR_INPUT: vm.curRowIssues[key].name,
+                    YCS2: "",
+                    YCS2_END: "",
+                    YCS2_START: ""
+                }
+                vm.curRowData.push(emptyData);
+            }
+        }
+
         if (!bypassFilter) vm.applyFilterAndGrouping();
     }
 
-    vm.invalidItem = "";
-    vm.clickFilter = function (item) {
-        vm.invalidItem = "";
-        if (!!item && item.cnt <= 0) {
-            angular.forEach(vm.curRowIssues, function (value, key) {
-                value.selected = false;
-            });
-            item.selected = true;
-            vm.invalidItem = item.name;
-        }
+    vm.clickFilter = function () {
         vm.applyFilterAndGrouping();
     }
 
@@ -310,15 +332,13 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
     function gridDataBound(e) {
         var grid = e.sender;
         var data = grid.dataSource.data();
-        var filters = grid.dataSource.filter();
-        var query = new kendo.data.Query(data);
-        var items = query.filter(filters).data;
-        if (items.length === 0 && vm.invalidItem !== "") {
-            var colCount = grid.columns.length;
-            var el = $(e.sender.wrapper)
-                .find('tbody')
-                .append("<tr class='kendo-data-row'><td colspan=" + colCount + " class='no-data'><span class=\"grpTitle\">{{vm.invalidItem}}</span>  <i class='intelicon-arrow-back-left skyblue pl10'></i> <span class='grpDesc'>Can't find what you are looking for?  <span class='or'>Use the</span> </span><span class='lnk' ng-click='vm.launchSelector(vm.invalidItem, false)'>Product Selector</span><span class='or'> OR </span><span class='lnk' ng-click='vm.removeProd(vm.invalidItem)'>Remove Product</span></td></tr>");
-            $compile(el)($scope);
+        for (item in data) {
+            if (data[item].PRD_MBR_SID == 0) {
+                grid.tbody.find("tr[data-uid=" + data[item].uid + "]").hide();
+                grid.tbody.find("tr[data-uid=" + data[item].uid + "]").closest("tr").prev().find("a").on("click", function (e) {
+                    e.stopPropagation();
+                });
+            }
         }
     };
 
@@ -338,7 +358,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
             {
                 field: "USR_INPUT",
                 title: "User Entered",
-                groupHeaderTemplate: "<span class=\"grpTitle\">#= value #</span>  <i class='intelicon-arrow-back-left skyblue pl10'></i> <span class='grpDesc'>Can't find what you are looking for?  <span class='or'>Use the</span> </span><span class='lnk' ng-click='vm.launchSelector(\"#=value#\", true)'>Product Selector</span><span class='or'> OR </span><span class='lnk' ng-click='vm.removeProd(\"#=value#\")'>Remove Product</span>",
+                groupHeaderTemplate: "<span class=\"grpTitle\">#= value #</span>  <i class='intelicon-arrow-back-left skyblue pl10'></i> <span class='grpDesc'>Can't find what you are looking for?  <span class='or'>Use the</span> </span><span class='lnk' ng-click='vm.launchSelector(\"#=value#\")'>Product Selector</span><span class='or'> OR </span><span class='lnk' ng-click='vm.removeProd(\"#=value#\")'>Remove Product</span>",
                 hidden: false
             },
             {
@@ -490,7 +510,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
         }
     }
 
-    vm.openProdSelector = function (dataItem, rowId, productExists) {
+    vm.openProdSelector = function (dataItem, rowId) {
         if (ProductRows.length > 1) {
             var currentPricingTableRow = ProductRows[rowId - 1];
         }
@@ -516,10 +536,15 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
             vm.invalidProdName = dataItem;
         }
 
+        // If the product name has mbr_sid as 0, it is invalid product
+        var isProductExists = vm.curRowData.filter(function (x) {
+            return x.USR_INPUT === dataItem && x.PRD_MBR_SID == 0
+        }).length === 0;
+
         var suggestedProduct = {
             'mode': 'auto',
             'prodname': dataItem,
-            'productExists': productExists
+            'productExists': isProductExists
         };
 
         var modal = $uibModal.open({

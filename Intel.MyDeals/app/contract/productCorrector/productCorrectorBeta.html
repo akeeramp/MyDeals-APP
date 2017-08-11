@@ -68,9 +68,12 @@
                                                     <span class="badge upperBadge" ng-if="item.status == 'Issue'">{{ item.cnt == 0 ? "?" : item.cnt }}</span>
                                                 </label>
                                             </div>
-                                            <div ng-if="item.cnt <= 0" class="srchContainer" title="Click to find a possible match" ng-click="vm.clickFilter(item)">
-                                                <i class="intelicon-help-outlined ckSm"></i>
-                                                <span ng-bind-html="item.name"></span>
+                                            <div ng-if="item.cnt <= 0" title="Click to find a possible match">
+                                                <input type='checkbox' ng-click="vm.clickFilter()" ng-model="item.selected" class='check ckSm with-font' id="fltrPrdChk{{item.id}}" />
+                                                <label for="fltrPrdChk{{item.id}}">
+                                                    <span ng-bind-html="item.name"></span>
+                                                    <i class="intelicon-help-outlined ckSm"></i>
+                                                </label>
                                             </div>
                                         </div>
                                     </div>
