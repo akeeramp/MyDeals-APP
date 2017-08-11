@@ -646,6 +646,51 @@ namespace Intel.MyDeals.BusinessRules
 			return (attrb >= 0);
 		}
 
+		public static void CompareStartEndVol(params object[] args)
+		{
+			MyOpRuleCore r = new MyOpRuleCore(args);
+			if (!r.IsValid) return;
+
+			IEnumerable<IOpDataElement> endVolAtrbs = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.END_VOL); // NOTE: "10" is the Tier's dim key. In thoery this shouldn't need to change
+			IOpDataElement atrbWithValidation = endVolAtrbs.FirstOrDefault(); // We need to pick only one of the tiered attributes to set validation on, else we'd keep overriding the message value per tier
+
+			// Make dictionary of <tier, start vol>
+			var startVols = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.STRT_VOL).Select(x => new {
+				Key = x.DimKey.FirstOrDefault().AtrbItemId,
+				Value = x.AtrbValue.ToString()
+			});
+			Dictionary<int, string> startVolDict = startVols.ToDictionary( pair => pair.Key, pair => pair.Value );
+
+			// Validate and set validation message if applicable on each tier
+			foreach (IOpDataElement atrb in endVolAtrbs)
+			{
+				if (string.IsNullOrWhiteSpace(atrb.AtrbValue.ToString()) || atrb.DimKey.Count() == 0)
+				{
+					continue;
+				}
+				double startVol = 0;
+				double endVol = 0;
+				int tier = atrb.DimKey.FirstOrDefault().AtrbItemId;
+				string relatedStartVol = "";
+
+				// Find the related start vol (in the same tier)
+				if (startVolDict.ContainsKey(tier))
+				{
+					relatedStartVol = startVolDict[tier];
+				}
+
+				// Parse the double values
+				Double.TryParse(atrb.AtrbValue.ToString(), out endVol);
+				Double.TryParse(relatedStartVol, out startVol);
+
+				// Compare
+				if (startVol >= endVol)
+				{
+					AddTierValidationMessage(atrbWithValidation, "End volume must be greater than start volume.", tier);
+				}
+			}
+
+		}
 		public static void ValidateTierRate(params object[] args)
 		{
 			MyOpRuleCore r = new MyOpRuleCore(args);
@@ -672,18 +717,26 @@ namespace Intel.MyDeals.BusinessRules
 			IEnumerable<IOpDataElement> atrbs = r.Dc.GetDataElementsWhere(de => de.AtrbCd == myAtrbCd); // NOTE: "10" is the Tier's dim key. In thoery this shouldn't need to change
 			IOpDataElement atrbWithValidation = atrbs.FirstOrDefault(); // We need to pick only one of the tiered attributes to set validation on, else we'd keep overriding the message value per tier
 
+			IOpDataElement test = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.NUM_OF_TIERS).FirstOrDefault();
+			int numOfTiers = Int32.Parse(test.AtrbValue.ToString());
+
 			// Validate and set validation message if applicable on each tier
 			foreach (IOpDataElement atrb in atrbs)
 			{
-				if (string.IsNullOrWhiteSpace(atrb.AtrbValue.ToString()))
+				double safeParse = 0;
+				int tier = atrb.DimKey.FirstOrDefault().AtrbItemId;
+
+				if (tier <= numOfTiers)
 				{
-					continue;
-				}
-				else if (!validationCondition(Double.Parse(atrb.AtrbValue.ToString())))
-				{
-					if (atrb.DimKey.Count() > 0)
+					if (string.IsNullOrWhiteSpace(atrb.AtrbValue.ToString()))
 					{
-						int tier = atrb.DimKey.FirstOrDefault().AtrbItemId;
+						AddTierValidationMessage(atrbWithValidation, validationMessage, tier);
+						continue;
+					}
+
+					Double.TryParse(atrb.AtrbValue.ToString(), out safeParse);
+					if (!validationCondition(safeParse))
+					{
 						AddTierValidationMessage(atrbWithValidation, validationMessage, tier);
 					}
 				}

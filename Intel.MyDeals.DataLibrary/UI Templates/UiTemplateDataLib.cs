@@ -387,22 +387,40 @@ namespace Intel.MyDeals.DataLibrary
                 LookupValue = "DROP_DOWN",
                 IsRequired = true
             });
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 29,
-                AtrbCd = AttributeCodes.PROGRAM_PAYMENT,
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                Width = 130,
-                Template = "#=gridUtils.uiIconWrapper(data, 'PROGRAM_PAYMENT')#",
-                IsDefaultable = true,
-                Label = "Program Payment *",
-                UiType = "DROPDOWN",
-                LookupUrl = "/api/Dropdown/GetDropdowns/PROGRAM_PAYMENT/ECAP",
-                LookupText = "DROP_DOWN",
-                LookupValue = "DROP_DOWN",
-                IsRequired = true
-            });
-            items.Add(new UiTemplateContainerItem
+			items.Add(new UiTemplateContainerItem
+			{
+				Id = 29,
+				AtrbCd = AttributeCodes.PROGRAM_PAYMENT,
+				ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+				ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
+				Width = 130,
+				Template = "#=gridUtils.uiIconWrapper(data, 'PROGRAM_PAYMENT')#",
+				IsDefaultable = true,
+				Label = "Program Payment *",
+				UiType = "DROPDOWN",
+				LookupUrl = "/api/Dropdown/GetDropdowns/PROGRAM_PAYMENT/ECAP",
+				LookupText = "DROP_DOWN",
+				LookupValue = "DROP_DOWN",
+				IsRequired = true
+			});
+			items.Add(new UiTemplateContainerItem
+			{
+				Id = 29,
+				AtrbCd = AttributeCodes.PROGRAM_PAYMENT,
+				ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+				ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
+				Width = 130,
+				Template = "#=gridUtils.uiIconWrapper(data, 'PROGRAM_PAYMENT')#",
+				IsDefaultable = true,
+				Label = "Program Payment *",
+				UiType = "DROPDOWN",
+				LookupUrl = "/api/Dropdown/GetDropdowns/PROGRAM_PAYMENT/ECAP",
+				LookupText = "DROP_DOWN",
+				LookupValue = "DROP_DOWN",
+				IsRequired = true,
+				IsReadOnly = true // the difference between ECAP and VOL TIER
+			});
+			items.Add(new UiTemplateContainerItem
             {
                 Id = 37,
                 AtrbCd = AttributeCodes.REBATE_TYPE,
@@ -434,7 +452,7 @@ namespace Intel.MyDeals.DataLibrary
                 LookupValue = "DROP_DOWN",
                 IsRequired = true
             });
-            items.Add(new UiTemplateContainerItem
+			items.Add(new UiTemplateContainerItem
             {
                 Id = 36,
                 AtrbCd = AttributeCodes.TIER_NBR,

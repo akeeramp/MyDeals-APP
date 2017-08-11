@@ -200,7 +200,7 @@ namespace Intel.MyDeals.BusinessLogic
                         if (de.AtrbID <= 2) de.State = OpDataElementState.Unchanged;
                     }
                 }
-                else if (items.ContainsKey(de.AtrbCd) && items[de.AtrbCd] != null)
+                else if (items.ContainsKey(de.AtrbCd) && items[de.AtrbCd] != null) 
                 {
                     OpDataCollectorFlattenedItem dictValues = OpSerializeHelper.FromJsonString<OpDataCollectorFlattenedItem>(items[de.AtrbCd].ToString());
                     if (dictValues != null && dictValues.ContainsKey(uniqDimBaseKey))
@@ -218,7 +218,9 @@ namespace Intel.MyDeals.BusinessLogic
                         opMsgQueue.Messages.Add(new OpMsg(OpMsg.MessageType.Warning, "Unable to locate attrb ({0}) in deal {1}", dimKey, de.DcID));
                     }
                 }
-                else if (items.ContainsKey(de.AtrbCd + uniqDimKey) && items[de.AtrbCd + uniqDimKey] != null)
+                else if (items.ContainsKey(de.AtrbCd + uniqDimKey) /*&& items[de.AtrbCd + uniqDimKey] != null*/) // NOTE: Commented out because in PT spreadsheet, if a user deletes a cell value of an existing product then the 
+																												 // spreadsheet will turn the value to NULL. We need the user-nulled out value to exec the inside of the if condition
+																												 // to properly validate our DC rules against, else a user-cleared out value will validate against the old db value.
                 {
                     //OpDataCollectorFlattenedItem dictValues = OpSerializeHelper.FromJsonString<OpDataCollectorFlattenedItem>(items[de.AtrbCd].ToString());
 

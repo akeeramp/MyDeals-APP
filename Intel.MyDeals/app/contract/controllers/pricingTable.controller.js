@@ -455,31 +455,35 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             var isEndVolColChanged = (range._ref.topLeft.col <= endVolIndex) && (range._ref.bottomRight.col >= endVolIndex);
 
         	if (isEndVolColChanged) {
-        		var data = root.spreadDs.data();
-        		var sourceData = root.pricingTableData.PRC_TBL_ROW;
+        			var data = root.spreadDs.data();
+        			var sourceData = root.pricingTableData.PRC_TBL_ROW;
 
-        		range.forEachCell(
-					function (rowIndex, colIndex, value) {
-						var myRow = data[(rowIndex - 1)];
-						if (colIndex === endVolIndex) { // End_Vol Col changed
+        			range.forEachCell(
+						function (rowIndex, colIndex, value) {
+							var myRow = data[(rowIndex - 1)];
+							if (myRow != undefined && myRow.DC_ID != undefined) {
+								if (colIndex === endVolIndex) { // End_Vol Col changed
 
-							// If this vol tier isn't the last of its vol tier rows
-							if (myRow != undefined && myRow.TIER_NBR != root.pricingTableData.PRC_TBL[0].NUM_OF_TIERS && myRow.DC_ID != undefined) {
-								var nextRow = data[(rowIndex)];
-								// Calculate next start vol using end vol
-								if (nextRow !== undefined) {
-									nextRow.STRT_VOL = (value.value + 1);
-									sourceData[(rowIndex)].STRT_VOL = nextRow.STRT_VOL;
+									// If this vol tier isn't the last of its vol tier rows
+									if (myRow.TIER_NBR != root.pricingTableData.PRC_TBL[0].NUM_OF_TIERS) {
+										var nextRow = data[(rowIndex)];
+										// Calculate next start vol using end vol
+										if (nextRow !== undefined) {
+											nextRow.STRT_VOL = (value.value + 1);
+											sourceData[(rowIndex)].STRT_VOL = nextRow.STRT_VOL;
+										}
+									}
+									myRow.END_VOL = value.value;
+									sourceData[(rowIndex - 1)].END_VOL = myRow.END_VOL;
 								}
+								var myColLetter = String.fromCharCode(intA + (colIndex));
+								var colName = root.letterToCol[myColLetter];
+								myRow[colName] = value.value;
+								sourceData[(rowIndex - 1)][colName] = value.value;
 							}
 						}
-						var myColLetter = String.fromCharCode(intA + (colIndex));
-						var colName = root.letterToCol[myColLetter];
-						myRow[colName] = value.value;
-						sourceData[(rowIndex - 1)][colName] = value.value;
-					}
-				);
-        		root.spreadDs.sync(); 
+					);				
+        			root.spreadDs.sync(); 
         	} 
         }
 
@@ -668,13 +672,18 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 // Flag start vol cols to disable
                                 var rowInfo = data[r];
                                 data[r]._behaviors.isReadOnly["STRT_VOL"] = true;
+
+                                if (tierNumVal == parseInt(root.curPricingTable.NUM_OF_TIERS)){
+                            		// default last end vol to "unlimited"
+                                	data[r]["END_VOL"] = 999999999999;
+								}
                             }
                         }
                     }
 
                     for (var key in ptTemplate.model.fields) {
                         if (ptTemplate.model.fields.hasOwnProperty(key)) {
-                            // Auto-fill default values from Contract level
+                            // Autofill default values from Contract level
                             if ((root.contractData[key] !== undefined) &&
                                 (root.contractData[key] !== null) &&
                                 (root.colToLetter[key] != undefined) &&
@@ -687,7 +696,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 data[r][key] = fillValue;
                             }
 
-                            // Auto-fill default values from Pricing Strategy level
+                            // Auto fill default values from Pricing Strategy level
                             if ((root.curPricingTable[key] !== undefined) &&
                                 (root.curPricingTable[key] !== null) &&
                                 (root.colToLetter[key] != undefined) &&

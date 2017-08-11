@@ -94,11 +94,19 @@ namespace Intel.MyDeals.BusinessRules
 				new MyOpRule
 				{
 					Title="Must be greater than 0",
-                    ActionRule = MyDcActions.ValidateTierEndVol,
-					InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW},
+					ActionRule = MyDcActions.ValidateTierEndVol,
+					InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
 					InObjSetType = new List<string> {OpDataElementSetType.VOL_TIER.ToString()},
 					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
 					AtrbCondIf = dc => dc.IsNegativeOrZero(AttributeCodes.END_VOL)
+				},
+				new MyOpRule
+				{
+					Title="End Vol must be greater than start vol",
+					ActionRule = MyDcActions.CompareStartEndVol,
+					InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW},
+					InObjSetType = new List<string> {OpDataElementSetType.VOL_TIER.ToString()},
+					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate}
 				},
 				//new MyOpRule
 				//{
