@@ -1097,7 +1097,7 @@
             if (!!nptDefaults["PROD_INCLDS"]) nptDefaults["PROD_INCLDS"].value = pt["PROD_INCLDS"];
 
             //not sure if necessary, javascript pass by value/reference always throwin' me off. :(
-            $scope.newPricingTable["_defaultAtrbs"] = nptDefaults
+            $scope.newPricingTable["_defaultAtrbs"] = nptDefaults;
         }
 
         // **** PRICING TABLE Methods ****
@@ -1410,6 +1410,7 @@
                         }
 
                        $scope.$broadcast('updateGroup', data.data.Messages);
+                       if (wip !== undefined) $scope.refreshContractData(wip.DC_ID);
 
                         $scope.setBusy("Split Successful", "Split the Pricing Table Row into single Deals");
                         $timeout(function () {
@@ -2729,6 +2730,7 @@
             if ($scope.isPtr) return;
 
             if (!$scope._dirty) {
+                $scope.switchingTabs = true;
                 $scope.gotoToPricingTable();
             } else {
                 $scope.switchingTabs = true;

@@ -128,6 +128,7 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     Title="Does not exceed max character limit",
                     ActionRule = MyDcActions.ExecuteActions,
+                    InObjType = new List<OpDataElementType> {OpDataElementType.CNTRCT, OpDataElementType.PRC_ST, OpDataElementType.PRC_TBL},
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnSave},
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {

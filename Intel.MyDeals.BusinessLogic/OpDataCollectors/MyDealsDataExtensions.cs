@@ -840,9 +840,12 @@ namespace Intel.MyDeals.BusinessLogic
                     if (elMapping.TranslationType == OpTranslationType.OneDealPerProduct)
                     {
                         // manage products
-                        List<ProdMapping> prdMappings = items[dcWip.GetDataElementValue(AttributeCodes.TITLE)].ToList();
-                        string strPrdMappings = JsonConvert.SerializeObject(new Dictionary<string, List<ProdMapping>> { [prodTitle] = prdMappings });
-                        dcSplit.SetDataElementValue(AttributeCodes.PTR_SYS_PRD, strPrdMappings);
+                        if (items.ContainsKey(dcWip.GetDataElementValue(AttributeCodes.TITLE)))
+                        {
+                            List<ProdMapping> prdMappings = items[dcWip.GetDataElementValue(AttributeCodes.TITLE)].ToList();
+                            string strPrdMappings = JsonConvert.SerializeObject(new Dictionary<string, List<ProdMapping>> { [prodTitle] = prdMappings });
+                            dcSplit.SetDataElementValue(AttributeCodes.PTR_SYS_PRD, strPrdMappings);
+                        }
                     }
 
                     // manage Geos

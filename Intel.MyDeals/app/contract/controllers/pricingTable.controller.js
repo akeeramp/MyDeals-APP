@@ -35,7 +35,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     root.setBusy("Loading Deals", "Gathering deals and security settings.");
     root.child = $scope;
     root.ptRowCount = 200;
-    root.swichingTabs = false;
+    root.switchingTabs = false;
 
     root.uncompressJson(pricingTableData.data.PRC_TBL_ROW);
 
@@ -655,6 +655,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         if (!data[r]["TIER_NBR"] || data[r]["TIER_NBR"] === "") {
                             var tierNumVal = (r % root.child.numTiers) + 1;
                             data[r]["TIER_NBR"] = tierNumVal;
+                            data[r]["NUM_OF_TIERS"] = root.curPricingTable.NUM_OF_TIERS;
 
                             // disable non-first start vols
                             if (tierNumVal != 1) {
@@ -694,6 +695,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             ) {
                                 data[r][key] = root.curPricingTable[key];
                             }
+
                         }
                     }
                 }
@@ -910,15 +912,15 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     $scope.$on('saveWithWarnings',
         function (event, args) {
             $scope.setRowIdStyle(args.data.PRC_TBL_ROW);
-            $scope.root.swichingTabs = false;
+            $scope.root.switchingTabs = false;
         });
     $scope.$on('saveComplete',
         function (event, args) {
-            if ($scope.root.isWip && $scope.root.swichingTabs) {
+            if ($scope.root.isWip && $scope.root.switchingTabs) {
                 $scope.root.gotoToPricingTable();
             }
             $scope.setRowIdStyle(args.data.PRC_TBL_ROW);
-            $scope.root.swichingTabs = false;
+            $scope.root.switchingTabs = false;
         });
 
     // TDOO: This needs major perfromance refactoring because it makes things slow for poeple with bad computer specs :<

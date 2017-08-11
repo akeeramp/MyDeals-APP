@@ -295,10 +295,17 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
             return retItems;
         }
 
-        public static void CopyMatchingAttributes(this OpDataCollectorFlattenedList retItems, OpDataCollectorFlattenedItem opFlatItem, OpDataElementTypeMapping elMapping,
+        public static void CopyMatchingAttributes(this OpDataCollectorFlattenedList retItems, OpDataCollectorFlattenedItem opFlatItemLocal, OpDataElementTypeMapping elMapping,
             List<string> singleDimAtrbs, List<string> multiDimAtrbs, string userPrdNm, List<ProdMapping> pMaps, string geo)
         {
             OpDataCollectorFlattenedItem newItem = new OpDataCollectorFlattenedItem();
+
+            // make a copy so we don't cross-contaminate records
+            OpDataCollectorFlattenedItem opFlatItem = new OpDataCollectorFlattenedItem();
+            foreach (KeyValuePair<string, object> kvp in opFlatItemLocal)
+            {
+                opFlatItem[kvp.Key] = kvp.Value;
+            }
 
             switch (elMapping.TranslationType)
             {

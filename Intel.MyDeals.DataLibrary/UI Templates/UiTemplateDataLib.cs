@@ -556,6 +556,14 @@ namespace Intel.MyDeals.DataLibrary
                 IsRequired = false,
                 IsHidden = true
             });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 36,
+                AtrbCd = AttributeCodes.NUM_OF_TIERS,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
+                IsHidden = true
+            });
 
             #endregion PRICING TABLE ROW
 
@@ -1296,6 +1304,14 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "Additional Discounts",
                 Width = 180,
                 Template = "#=gridUtils.uiControlWrapper(data, 'TERMS')#"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 36,
+                AtrbCd = AttributeCodes.NUM_OF_TIERS,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
+                IsHidden = true
             });
 
             #endregion WIP DEAL

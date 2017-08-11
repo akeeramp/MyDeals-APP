@@ -835,7 +835,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 if (!!args.data.WIP_DEAL) {
                     for (var i = 0; i < args.data.WIP_DEAL.length; i++) {
                         var dataItem = $scope.findDataItemById(args.data.WIP_DEAL[i]["DC_ID"]);
-                        dataItem["PASSED_VALIDATION"] = args.data.WIP_DEAL[i]["PASSED_VALIDATION"];
+                        if (!!dataItem) dataItem["PASSED_VALIDATION"] = args.data.WIP_DEAL[i]["PASSED_VALIDATION"];
                     }
                 }
             });
@@ -916,7 +916,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                     var dcParentId = msgs[m].KeyIdentifiers[1];
 
                     for (var d = 0; d < data.length; d++) {
-                        if (data[d].DC_ID === dcId) data[d].DC_PARENT_ID = dcParentId;
+                        if (data[d].DC_ID === dcId) {
+                            data[d].DC_PARENT_ID = dcParentId;
+                            data[d]._parentCnt = 1;
+                        }
                     }
                 }
 
