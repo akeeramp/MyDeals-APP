@@ -332,7 +332,10 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
     function gridDataBound(e) {
         var grid = e.sender;
         var data = grid.dataSource.data();
-        for (item in data) {
+        if (!data.length) {
+            return;
+        }
+        for (var item in data) {
             if (data[item].PRD_MBR_SID == 0) {
                 grid.tbody.find("tr[data-uid=" + data[item].uid + "]").hide();
                 var expandLink = grid.tbody.find("tr[data-uid=" + data[item].uid + "]").closest("tr").prev().find("a");
