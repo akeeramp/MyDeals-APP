@@ -336,6 +336,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
             if (data[item].PRD_MBR_SID == 0) {
                 grid.tbody.find("tr[data-uid=" + data[item].uid + "]").hide();
                 grid.tbody.find("tr[data-uid=" + data[item].uid + "]").closest("tr").prev().find("a").on("click", function (e) {
+                    e.preventDefault();
                     e.stopPropagation();
                 });
             }
