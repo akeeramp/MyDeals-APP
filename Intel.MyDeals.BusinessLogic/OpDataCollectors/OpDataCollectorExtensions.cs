@@ -14,7 +14,6 @@ namespace Intel.MyDeals.BusinessLogic
 {
     public static class OpDataCollectorExtensions
     {
-
         /// <summary>
         /// Get the customer division based on the customer defined in the data collector
         /// </summary>
@@ -67,7 +66,6 @@ namespace Intel.MyDeals.BusinessLogic
 
             dc.FillInHolesFromAtrbTemplate(template, applyDefaults);
         }
-
 
         /// <summary>
         /// Fill in the holes from the attribute template
@@ -143,19 +141,20 @@ namespace Intel.MyDeals.BusinessLogic
                         if (int.TryParse(kvp.Value.ToString(), out prdId))
                         {
                             OpDataElement deBaseProd = dc.DataElements.FirstOrDefault(d => d.AtrbCd == AttributeCodes.PRODUCT_FILTER && d.DimKey[7].ToString() == "7:0");
+                            if (deBaseProd != null)
+                            {
+                                OpDataElement newDe = deBaseProd.Clone();
 
-                            OpDataElement newDe = deBaseProd.Clone();
+                                newDe.SetDimKey("7:" + prdId + "/20:0");
+                                newDe.AtrbKey = newDe.AtrbCd + "|" + newDe.DimKeyString;
+                                newDe.AtrbValue = prdId;
 
-                            newDe.SetDimKey("7:" + prdId + "/20:0");
-                            newDe.AtrbKey = newDe.AtrbCd + "|" + newDe.DimKeyString;
-                            newDe.AtrbValue = prdId;
-
-                            dc.DataElements.Add(newDe);
+                                dc.DataElements.Add(newDe);
+                            }
                         }
                     }
-                }                
+                }
             }
-
 
             foreach (OpDataElement de in dc.DataElements.Where(d => d.AtrbCd != AttributeCodes.PRODUCT_FILTER))
             {
@@ -190,7 +189,6 @@ namespace Intel.MyDeals.BusinessLogic
                                 string atrbdate = string.IsNullOrEmpty(de.AtrbValue.ToString()) ? "" : DateTime.Parse(de.AtrbValue.ToString()).ToString("MM/dd/yyyy");
                                 if (atrbdate != date.ToString("MM/dd/yyyy"))
                                     de.AtrbValue = items[de.AtrbCd];
-
                             }
                         }
                     }
@@ -200,7 +198,7 @@ namespace Intel.MyDeals.BusinessLogic
                         if (de.AtrbID <= 2) de.State = OpDataElementState.Unchanged;
                     }
                 }
-                else if (items.ContainsKey(de.AtrbCd) && items[de.AtrbCd] != null) 
+                else if (items.ContainsKey(de.AtrbCd) && items[de.AtrbCd] != null)
                 {
                     OpDataCollectorFlattenedItem dictValues = OpSerializeHelper.FromJsonString<OpDataCollectorFlattenedItem>(items[de.AtrbCd].ToString());
                     if (dictValues != null && dictValues.ContainsKey(uniqDimBaseKey))
@@ -218,9 +216,9 @@ namespace Intel.MyDeals.BusinessLogic
                         opMsgQueue.Messages.Add(new OpMsg(OpMsg.MessageType.Warning, "Unable to locate attrb ({0}) in deal {1}", dimKey, de.DcID));
                     }
                 }
-                else if (items.ContainsKey(de.AtrbCd + uniqDimKey) /*&& items[de.AtrbCd + uniqDimKey] != null*/) // NOTE: Commented out because in PT spreadsheet, if a user deletes a cell value of an existing product then the 
-																												 // spreadsheet will turn the value to NULL. We need the user-nulled out value to exec the inside of the if condition
-																												 // to properly validate our DC rules against, else a user-cleared out value will validate against the old db value.
+                else if (items.ContainsKey(de.AtrbCd + uniqDimKey) /*&& items[de.AtrbCd + uniqDimKey] != null*/) // NOTE: Commented out because in PT spreadsheet, if a user deletes a cell value of an existing product then the
+                                                                                                                 // spreadsheet will turn the value to NULL. We need the user-nulled out value to exec the inside of the if condition
+                                                                                                                 // to properly validate our DC rules against, else a user-cleared out value will validate against the old db value.
                 {
                     //OpDataCollectorFlattenedItem dictValues = OpSerializeHelper.FromJsonString<OpDataCollectorFlattenedItem>(items[de.AtrbCd].ToString());
 
@@ -228,8 +226,6 @@ namespace Intel.MyDeals.BusinessLogic
                     {
                         de.AtrbValue = items[de.AtrbCd + uniqDimKey];
                     }
-
-
 
                     //if (dictValues.ContainsKey(dimKey))
                     //{
