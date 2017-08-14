@@ -454,37 +454,36 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             var endVolIndex = (root.colToLetter["END_VOL"].charCodeAt(0) - intA);
             var isEndVolColChanged = (range._ref.topLeft.col <= endVolIndex) && (range._ref.bottomRight.col >= endVolIndex);
 
-        	if (isEndVolColChanged) {
-        			var data = root.spreadDs.data();
-        			var sourceData = root.pricingTableData.PRC_TBL_ROW;
+            if (isEndVolColChanged) {
+                var data = root.spreadDs.data();
+                var sourceData = root.pricingTableData.PRC_TBL_ROW;
 
-        			range.forEachCell(
-						function (rowIndex, colIndex, value) {
-							var myRow = data[(rowIndex - 1)];
-							if (myRow != undefined && myRow.DC_ID != undefined) {
-								if (colIndex === endVolIndex) { // End_Vol Col changed
-
-									// If this vol tier isn't the last of its vol tier rows
-									if (myRow.TIER_NBR != root.pricingTableData.PRC_TBL[0].NUM_OF_TIERS) {
-										var nextRow = data[(rowIndex)];
-										// Calculate next start vol using end vol
-										if (nextRow !== undefined) {
-											nextRow.STRT_VOL = (value.value + 1);
-											sourceData[(rowIndex)].STRT_VOL = nextRow.STRT_VOL;
-										}
-									}
-									myRow.END_VOL = value.value;
-									sourceData[(rowIndex - 1)].END_VOL = myRow.END_VOL;
-								}
-								var myColLetter = String.fromCharCode(intA + (colIndex));
-								var colName = root.letterToCol[myColLetter];
-								myRow[colName] = value.value;
-								sourceData[(rowIndex - 1)][colName] = value.value;
-							}
-						}
-					);				
-        			root.spreadDs.sync(); 
-        	} 
+                range.forEachCell(
+                    function (rowIndex, colIndex, value) {
+                        var myRow = data[(rowIndex - 1)];
+                        if (myRow != undefined && myRow.DC_ID != undefined) {
+                            if (colIndex === endVolIndex) { // End_Vol Col changed
+                                // If this vol tier isn't the last of its vol tier rows
+                                if (myRow.TIER_NBR != root.pricingTableData.PRC_TBL[0].NUM_OF_TIERS) {
+                                    var nextRow = data[(rowIndex)];
+                                    // Calculate next start vol using end vol
+                                    if (nextRow !== undefined) {
+                                        nextRow.STRT_VOL = (value.value + 1);
+                                        sourceData[(rowIndex)].STRT_VOL = nextRow.STRT_VOL;
+                                    }
+                                }
+                                myRow.END_VOL = value.value;
+                                sourceData[(rowIndex - 1)].END_VOL = myRow.END_VOL;
+                            }
+                            var myColLetter = String.fromCharCode(intA + (colIndex));
+                            var colName = root.letterToCol[myColLetter];
+                            myRow[colName] = value.value;
+                            sourceData[(rowIndex - 1)][colName] = value.value;
+                        }
+                    }
+                );
+                root.spreadDs.sync();
+            }
         }
 
         var isRangeValueEmptyString = (range.value() !== null && range.value().toString().replace(/\s/g, "").length === 0);
@@ -673,10 +672,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 var rowInfo = data[r];
                                 data[r]._behaviors.isReadOnly["STRT_VOL"] = true;
 
-                                if (tierNumVal == parseInt(root.curPricingTable.NUM_OF_TIERS)){
-                            		// default last end vol to "unlimited"
-                                	data[r]["END_VOL"] = 999999999999;
-								}
+                                if (tierNumVal == parseInt(root.curPricingTable.NUM_OF_TIERS)) {
+                                    // default last end vol to "unlimited"
+                                    data[r]["END_VOL"] = 999999999999;
+                                }
                             }
                         }
                     }
@@ -704,7 +703,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             ) {
                                 data[r][key] = root.curPricingTable[key];
                             }
-
                         }
                     }
                 }
@@ -766,7 +764,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 							    }
 							}
 						);
-
                     } else {
                         range = sheet.range("D" + topLeftRowIndex + ":" + finalColLetter + bottomRightRowIndex);
                         range.enable(true);
@@ -1751,51 +1748,49 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var contractProducts = "";
         for (var prd in validProducts) {
             if (validProducts.hasOwnProperty(prd)) {
-                var userInput = $filter('unique')(validProducts[prd], 'USR_INPUT');
-                var inputtedValue = userInput[0].USR_INPUT.toLowerCase();
-                for (var i = 0; i < validProducts[prd].length; i++) {
+                var uniqueUserInput = $filter('unique')(validProducts[prd], 'USR_INPUT');
+                var inputtedValue = uniqueUserInput[0].USR_INPUT.toLowerCase();
+                for (var i = 0; i < uniqueUserInput.length; i++) {
                     var userInput = "";
                     if (validProducts[prd][i].DEAL_PRD_TYPE.toLowerCase().indexOf(inputtedValue) > -1) {
                         userInput = validProducts[prd][i].DEAL_PRD_TYPE;
-                    }
-                    if (userInput !== "") {
-                        break;
+                        if (userInput !== "") break;
                     }
                     if (validProducts[prd][i].PRD_CAT_NM.toLowerCase().indexOf(inputtedValue) > -1) {
                         userInput = validProducts[prd][i].PRD_CAT_NM;
-                    }
-                    if (userInput !== "") {
-                        break;
+                        if (userInput !== "") break;
                     }
                     if (validProducts[prd][i].BRND_NM.toLowerCase().indexOf(inputtedValue) > -1) {
                         userInput = validProducts[prd][i].BRND_NM;
-                    }
-                    if (userInput !== "") {
-                        break;
+                        if (userInput !== "") break;
                     }
                     if (validProducts[prd][i].FMLY_NM.toLowerCase().indexOf(inputtedValue) > -1) {
                         userInput = validProducts[prd][i].FMLY_NM;
-                    }
-                    if (userInput !== "") {
-                        break;
+                        if (userInput !== "") break;
                     }
                     if (validProducts[prd][i].PCSR_NBR.toLowerCase().indexOf(inputtedValue) > -1) {
                         userInput = validProducts[prd][i].PCSR_NBR;
-                    }
-                    if (userInput !== "") {
-                        break;
+                        if (userInput !== "") break;
                     }
                     if (validProducts[prd][i].DEAL_PRD_NM.toLowerCase().indexOf(inputtedValue) > -1) {
                         userInput = validProducts[prd][i].DEAL_PRD_NM;
+                        if (userInput !== "") break;
                     }
-                    if (userInput !== "") {
-                        break;
+                    if (validProducts[prd][i].MTRL_ID.toLowerCase().indexOf(inputtedValue) > -1) {
+                        userInput = validProducts[prd][i].MTRL_ID;
+                        if (userInput !== "") break;
                     }
-                    if (validProducts[prd][i].DEAL_PRD_NM.toLowerCase().indexOf(inputtedValue) > -1) {
-                        userInput = validProducts[prd][i].DEAL_PRD_NM;
-                    }
-                    if (userInput !== "") {
-                        break;
+                    if (inputtedValue.indexOf(" ") > -1) {
+                        var hierarchy = validProducts[prd][i].HIER_NM_HASH.split(" ");
+                        for (var j = 0; j < hierarchy.length; j++) {
+                            if (inputtedValue.indexOf(hierarchy[j].toLowerCase()) > -1) {
+                                userInput = validProducts[prd][i].HIER_NM_HASH;
+                                break;
+                            }
+                        }
+                        if (userInput !== "") {
+                            break;
+                        }
                     }
                 }
                 if (userInput === "") {
