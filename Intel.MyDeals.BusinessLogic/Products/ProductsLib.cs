@@ -7,6 +7,7 @@ using Intel.MyDeals.IBusinessLogic;
 using System.Text.RegularExpressions;
 using System;
 using System.Data;
+using System.Text;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -233,6 +234,7 @@ namespace Intel.MyDeals.BusinessLogic
         public ProductLookup TranslateProducts(List<ProductEntryAttribute> prodNames, int CUST_MBR_SID)
         {
             //var prodNames = new List<string>();
+            Dictionary<string, string> mediaSubverticalResult = GetVerticalandMedia();
             var userProducts = prodNames.Select(l => l.USR_INPUT).ToList();
             var productsTodb = new List<ProductEntryAttribute>();
             var productLookup = new ProductLookup
@@ -288,18 +290,20 @@ namespace Intel.MyDeals.BusinessLogic
                 foreach (var product in products)
                 {
                     ProductEntryAttribute pea = new ProductEntryAttribute();
-                    string tempProdName = product.ToString().Contains("~~**~~**~~") == true ? product.ToString().Remove(product.ToString().IndexOf("~~**~~**~~"), 10) : product.ToString(); // unique combination checking
-                    string finalProdName = CheckBogusProduct(tempProdName, product.ToString().Contains("~~**~~**~~") == true ? true : false);
+                    var isEPMName = product.ToString().Contains("~~**~~**~~") == true ? true : false;
+                    string tempProdName = isEPMName ? product.ToString().Remove(product.ToString().IndexOf("~~**~~**~~"), 10) : product.ToString(); // unique combination checking
+                    string afterMediaRemoval = RemoveVerticalAndMedia(tempProdName, mediaSubverticalResult, isEPMName);
+                    string userInput = CheckBogusProduct(afterMediaRemoval, isEPMName);
                     pea.ROW_NUMBER = userProduct.ROW_NUMBER;
-                    pea.USR_INPUT = tempProdName;
-                    pea.MOD_USR_INPUT = finalProdName;
+                    pea.USR_INPUT = afterMediaRemoval;
+                    pea.MOD_USR_INPUT = userInput;
                     pea.START_DATE = userProduct.START_DATE.ToString();
                     pea.END_DATE = userProduct.END_DATE.ToString();
                     pea.EXCLUDE = userProduct.EXCLUDE;
                     pea.FILTER = userProduct.FILTER;
                     pea.GEO_COMBINED = userProduct.GEO_COMBINED;
                     pea.PROGRAM_PAYMENT = userProduct.PROGRAM_PAYMENT;
-                    pea.COLUMN_TYPE = product.ToString().Contains("~~**~~**~~") == true ? true : false; // unique combination checking
+                    pea.COLUMN_TYPE = isEPMName; // unique combination checking
 
                     prodNamesList.Add(pea);
                 }
@@ -335,6 +339,46 @@ namespace Intel.MyDeals.BusinessLogic
             return productLookup;
         }
 
+        private Dictionary<string, string> GetVerticalandMedia()
+        {
+            List<Product> prds = GetProductsDetails();
+            var resultMEDIA = (from p in prds
+                               group p by p.MM_MEDIA_CD
+                          into g
+                               select new { g.Key }).Distinct();
+
+            var resultVERTICAL = (from p in prds
+                                  group p by p.SUB_VERTICAL
+                                  into g
+                                  select new { g.Key }).Distinct();
+
+            return resultMEDIA.Union(resultVERTICAL).Distinct().ToDictionary(d => d.Key, d => d.Key);
+        }
+        private string RemoveVerticalAndMedia(string tempProdName, Dictionary<string, string> mediaResult, bool isEPMserach)
+        {
+            string tempName = tempProdName;
+            if (!isEPMserach)
+            {
+                var splitedProd = tempName.Trim().Split(' ');
+
+                var isMediaPresent = (from md in mediaResult
+                                      join s in splitedProd on md.Key.ToLower() equals s.ToLower()
+                                      select new { md.Key });
+
+                if (isMediaPresent.Any())
+                {
+                    foreach (var k in isMediaPresent)
+                    {
+                        tempName = Regex.Replace(tempName, k.Key, @"", RegexOptions.IgnoreCase); // Replace OR with nothing                        
+                    }
+
+                    tempName = Regex.Replace(tempName, @"\s+", " ");
+                }
+            }
+
+            return tempName.Trim().Length == 0 ? tempProdName : tempName.Trim(); 
+        }
+
         private string CheckBogusProduct(string tempProdName, bool isEPMserach)
         {
             string finalProdName = string.Empty;
@@ -342,10 +386,12 @@ namespace Intel.MyDeals.BusinessLogic
             int firstValidIndex = -1;
             if (tempProdName.Contains(" "))
             {
+                var splitedProd = tempProdName.Trim().Split(' ');
+
                 bool isValid = IsProductNamePartiallyExists(tempProdName, isEPMserach);
                 if (!isValid)
                 {
-                    var splitedProd = tempProdName.Trim().Split(' ');
+
                     int cnt = splitedProd.Length > counter ? counter : splitedProd.Length;
                     for (int i = 1; i <= cnt; i++)
                     {
@@ -363,11 +409,12 @@ namespace Intel.MyDeals.BusinessLogic
                                     firstValidIndex = offset;
                                     finalProdName = tempProductName;
                                 }
-                                if(!string.IsNullOrEmpty(finalProdName) && !tempisValid)
+                                if (!string.IsNullOrEmpty(finalProdName) && !tempisValid)
                                 {
                                     break;
                                 }
                             }
+
                         }
                     }
                 }
@@ -488,28 +535,9 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns></returns>
         public bool IsProductNamePartiallyExists(string searchText, bool isEPMserach)
         {
-            List<Product> prds = GetProductsDetails();
-            var resultMEDIA = (from p in prds
-                          group p by p.MM_MEDIA_CD 
-                          into g
-                          select new { MM_MEDIA_CD = g.Key}).Distinct();
-            var isMEDIA = resultMEDIA.Where(p => p.MM_MEDIA_CD.ToLower() == searchText.ToLower()).Any();
+            var searchString = isEPMserach == false ? GetSearchString().Where(d => d.Value != ProductHierarchyLevelsEnum.EPM_NM.ToString()).ToDictionary(d => d.Key, d => d.Value) : GetSearchString();
+            return searchString.Keys.Where(currentKey => currentKey.ToLower().Contains(searchText.ToLower())).Any();
 
-            var resultVERTICAL = (from p in prds
-                                  group p by p.SUB_VERTICAL
-                                  into g
-                                  select new { SUB_VERTICAL = g.Key }).Distinct();
-            var isVERTICAL = resultVERTICAL.Where(p => p.SUB_VERTICAL.ToLower() == searchText.ToLower()).Any();
-
-            if (!isMEDIA && !isVERTICAL)
-            {
-                var searchString = isEPMserach == false ? GetSearchString().Where(d => d.Value != ProductHierarchyLevelsEnum.EPM_NM.ToString()).ToDictionary(d => d.Key, d => d.Value) : GetSearchString();
-                return searchString.Keys.Where(currentKey => currentKey.ToLower().Contains(searchText.ToLower())).Any();
-            }
-            else
-            {
-                return false;
-            }
         }
 
         /// <summary>
@@ -533,6 +561,7 @@ namespace Intel.MyDeals.BusinessLogic
         {
             var aliasMapping = GetProductsFromAlias();
             var productsSplit = productsToMatch.FirstOrDefault().USR_INPUT.Split(' ');
+            Dictionary<string, string> mediaSubverticalResult = GetVerticalandMedia();
 
             var productAliasesSplit = (from p in productsSplit
                                        join a in aliasMapping
@@ -542,7 +571,11 @@ namespace Intel.MyDeals.BusinessLogic
 
             productsToMatch.FirstOrDefault().USR_INPUT = String.Join(" ", productAliasesSplit.ToArray());
 
-            productsToMatch.FirstOrDefault().MOD_USR_INPUT = CheckBogusProduct(productsToMatch.FirstOrDefault().USR_INPUT, productsToMatch.FirstOrDefault().COLUMN_TYPE);
+            productsToMatch.FirstOrDefault().USR_INPUT = RemoveVerticalAndMedia(productsToMatch.FirstOrDefault().USR_INPUT, mediaSubverticalResult,
+                productsToMatch.FirstOrDefault().COLUMN_TYPE);
+
+            productsToMatch.FirstOrDefault().MOD_USR_INPUT = CheckBogusProduct(productsToMatch.FirstOrDefault().USR_INPUT,
+                productsToMatch.FirstOrDefault().COLUMN_TYPE);
 
             return _productDataLib.SearchProduct(productsToMatch, CUST_MBR_SID, getWithoutFilters);
         }
@@ -1137,6 +1170,8 @@ namespace Intel.MyDeals.BusinessLogic
             }
             else
             {
+                Dictionary<string, string> mediaSubverticalResult = GetVerticalandMedia();
+                userInput.USR_INPUT = RemoveVerticalAndMedia(userInput.USR_INPUT, mediaSubverticalResult, false);
                 productsToTranslate.Add(new ProductEntryAttribute()
                 {
                     ROW_NUMBER = 1,
