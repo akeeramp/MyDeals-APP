@@ -140,7 +140,7 @@ namespace Intel.MyDeals.BusinessLogic
                         int prdId = 0;
                         if (int.TryParse(kvp.Value.ToString(), out prdId))
                         {
-                            OpDataElement deBaseProd = dc.DataElements.FirstOrDefault(d => d.AtrbCd == AttributeCodes.PRODUCT_FILTER && d.DimKey[7].ToString() == "7:0");
+                            OpDataElement deBaseProd = dc.DataElements.FirstOrDefault(d => d.AtrbCd == AttributeCodes.PRODUCT_FILTER && d.DimKey[7].ToString() == "7:1");
                             if (deBaseProd != null)
                             {
                                 OpDataElement newDe = deBaseProd.Clone();
@@ -333,25 +333,7 @@ namespace Intel.MyDeals.BusinessLogic
 
         public static string GetNextStage(this OpDataCollector dc, string actn)
         {
-            OpUserToken opUserToken = OpUserStack.MyOpUserToken;
-
-            string stage = dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
-            string objSetType = dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
-
-            OpDataElementType opDataElementType = OpDataElementTypeConverter.FromString(dc.DcType);
-
-            // load actions
-            return DataCollections.GetWorkFlowItems()
-                .Where(w =>
-                w.WF_NM == "General WF" &&
-                (w.OBJ_TYPE == opDataElementType.ToDesc() || w.OBJ_TYPE == "ALL_TYPES") &&
-                (w.OBJ_SET_TYPE_CD == objSetType || w.OBJ_SET_TYPE_CD == "ALL_TYPES") &&
-                w.WFSTG_CD_SRC == stage &&
-                w.WFSTG_ACTN_NM == actn &&
-                w.ROLE_TIER_NM == opUserToken.Role.RoleTier)
-                .OrderBy(w => w.OBJ_TYPE == "ALL_TYPES" ? 1 : 0)
-                .ThenBy(w => w.OBJ_SET_TYPE_CD == "ALL_TYPES" ? 1 : 0)
-                .Select(w => w.WFSTG_CD_DEST).FirstOrDefault();
+            return dc.GetNextStage(actn, DataCollections.GetWorkFlowItems());
         }
     }
 }

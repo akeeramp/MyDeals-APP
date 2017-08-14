@@ -50,6 +50,19 @@
         //var d2 = securityService.chkDealRules('C_ADD_ATTACHMENTS', 'FSE', 'DEAL', null, null);
         //debugger;
 
+        $scope.CAN_VIEW_COST_TEST = securityService.chkDealRules('CAN_VIEW_COST_TEST', window.usrRole, null, null, null);
+        $scope.CAN_EDIT_COST_TEST = securityService.chkDealRules('CAN_EDIT_COST_TEST', window.usrRole, null, null, null);
+        $scope.CAN_VIEW_MEET_COMP = securityService.chkDealRules('CAN_VIEW_MEET_COMP', window.usrRole, null, null, null);
+        $scope.CAN_EDIT_MEET_COMP = securityService.chkDealRules('CAN_EDIT_MEET_COMP', window.usrRole, null, null, null);
+        $scope.C_ADD_PRICING_STRATEGY = securityService.chkDealRules('C_ADD_PRICING_STRATEGY', window.usrRole, null, null, null);
+        $scope.C_DEL_PRICING_STRATEGY = securityService.chkDealRules('C_DEL_PRICING_STRATEGY', window.usrRole, null, null, null);
+        $scope.C_ADD_ATTACHMENTS = securityService.chkDealRules('C_ADD_ATTACHMENTS', window.usrRole, null, null, null);
+        $scope.C_VIEW_ATTACHMENTS = securityService.chkDealRules('C_VIEW_ATTACHMENTS', window.usrRole, null, null, null);
+
+        // Hard code for now until security is put in place
+        $scope.C_ADD_PRICING_STRATEGY = true;
+
+
         // determine if the contract is existing or new... if new, look for pre-population attributes from the URL parameters
 
         $scope.initContract = function (contractData) {
@@ -1224,7 +1237,7 @@
                         $scope.$broadcast('refresh');
                         $scope.$broadcast('refreshStage', wip);
                         $("#wincontractMessages").data("kendoWindow").open();
-                        if (wip !== undefined) $scope.refreshContractData(wip.DC_ID);
+                        //if (wip !== undefined) $scope.refreshContractData(wip.DC_ID);
                         $scope.setBusy("", "");
                     }, 50);
                 },
@@ -1826,6 +1839,14 @@
                     $scope.isAutoSaving = false;
                 }
             );
+        }
+
+        $scope.saveCell = function (dataItem, newField) {
+            if (dataItem._behaviors === undefined) dataItem._behaviors = {};
+            if (dataItem._behaviors.isDirty === undefined) dataItem._behaviors.isDirty = {};
+            dataItem._behaviors.isDirty[newField] = true;
+            dataItem._dirty = true;
+            $scope._dirty = true;
         }
 
         $scope.getColumns = function (ptTemplate) {

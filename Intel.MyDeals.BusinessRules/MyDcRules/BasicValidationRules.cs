@@ -127,6 +127,13 @@ namespace Intel.MyDeals.BusinessRules
 				new MyOpRule
                 {
                     Title="Validate ECAP Price",
+                    ActionRule = MyDcActions.MajorChangeCheck,
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnFinalizeSave}
+                },
+                new MyOpRule
+                {
+                    Title="Validate ECAP Price",
                     ActionRule = MyDcActions.ValidateEcapPrice,
                     InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
                     InObjSetType = new List<string> {OpDataElementSetType.ECAP.ToString()},

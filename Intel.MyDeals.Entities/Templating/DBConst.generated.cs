@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 8/8/2017 9:43:07 AM
-On: MHTIPPIN-MOBL
+File Updated: 8/12/2017 1:56:42 AM
+On: PWECKENR-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
 using System;
@@ -2188,8 +2188,14 @@ namespace Intel.MyDeals.Entities {
 		public const string C_DELETE_CONTRACT = "C_DELETE_CONTRACT";
 		public const string C_CREATE_CONTRACT = "C_CREATE_CONTRACT";
 		public const string C_EDIT_CONTRACT = "C_EDIT_CONTRACT";
+		public const string C_ADD_PRICING_STRATEGY = "C_ADD_PRICING_STRATEGY";
 		public const string C_VIEW_ATTACHMENTS = "C_VIEW_ATTACHMENTS";
-		public const string DEAL_READ_ONLY = "DEAL_READ_ONLY";
+		public const string C_DEL_PRICING_STRATEGY = "C_DEL_PRICING_STRATEGY";
+		public const string C_ADD_PRICING_TABLE = "C_ADD_PRICING_TABLE";
+		public const string C_DEL_PRICING_TABLE = "C_DEL_PRICING_TABLE";
+		public const string C_EDIT_COST_TEST = "C_EDIT_COST_TEST";
+		public const string C_EDIT_MEET_COMP = "C_EDIT_MEET_COMP";
+		public const string CONTRACT_READ_ONLY = "CONTRACT_READ_ONLY";
 		public const string ATRB_HIDDEN = "ATRB_HIDDEN";
 		public const string ATRB_READ_ONLY = "ATRB_READ_ONLY";
 		public const string ATRB_REQUIRED = "ATRB_REQUIRED";

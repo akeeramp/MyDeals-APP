@@ -16,6 +16,12 @@ function dealTools() {
 
             if (!!$scope.isEditable) $scope.isEditable = false;
 
+            var prntRoot = $scope.$parent.$parent;
+            var rootScope = $scope.$parent;
+            if (!$scope.$parent.contractData) {
+                rootScope = $scope.$parent.$parent.$parent.$parent.$parent;
+            }
+
             $scope.stgOneChar = function () {
                 return $scope.dataItem.WF_STG_CD === undefined ? "&nbsp;" : $scope.dataItem.WF_STG_CD[0];
             }
@@ -24,7 +30,10 @@ function dealTools() {
                 {
                     text: 'OK',
                     action: function () {
-                        if ($scope.dataItem._dirty) $scope.$parent.$parent.saveCell($scope.dataItem, "NOTES");
+                        if ($scope.dataItem._dirty) {
+                            $scope._dirty = true;
+                            prntRoot.saveCell($scope.dataItem, "NOTES");
+                        }
                     }
                 }
             ];
@@ -38,7 +47,7 @@ function dealTools() {
                     text: 'Yes, Split',
                     primary: true,
                     action: function() {
-                        $scope.$parent.$parent.unGroupPricingTableRow($scope.dataItem);
+                        rootScope.unGroupPricingTableRow($scope.dataItem);
                     }
                 }
             ];
@@ -52,7 +61,7 @@ function dealTools() {
                     text: 'Yes, Delete',
                     primary: true,
                     action: function () {
-                        $scope.$parent.$parent.deletePricingTableRow($scope.dataItem);
+                        rootScope.deletePricingTableRow($scope.dataItem);
                     }
                 }
             ];
@@ -66,7 +75,7 @@ function dealTools() {
                     text: 'Yes, Hold',
                     primary: true,
                     action: function () {
-                        $scope.$parent.$parent.holdPricingTableRow($scope.dataItem);
+                        rootScope.actionWipDeal($scope.dataItem, 'Hold');
                     }
                 }
             ];
@@ -80,7 +89,7 @@ function dealTools() {
                     text: 'Yes, Take off Hold',
                     primary: true,
                     action: function () {
-                        $scope.$parent.$parent.unHoldPricingTableRow($scope.dataItem);
+                        rootScope.actionWipDeal($scope.dataItem, 'Approve');
                     }
                 }
             ];

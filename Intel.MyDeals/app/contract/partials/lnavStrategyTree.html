@@ -18,15 +18,14 @@
                 <div ng-click="isCollapsed = !isCollapsed" ng-hide="isEditable" class="w100">{{ ps.TITLE }}</div>
             </div>
 
-            <div class="fr">
+            <div class="fr" ng-if="C_ADD_PRICING_STRATEGY || ps._settings.C_ADD_PRICING_TABLE || ps._settings.C_DEL_PRICING_TABLE">
                 <span class="hasMenuPs{{ ps.DC_ID }} ptBtn" title="View more options"><i class="intelicon-vertical-menu"></i></span>
                 <ul kendo-context-menu k-filter="'.hasMenuPs{{ ps.DC_ID }}'" k-show-on="'click'">
-                    <li role="presentation"><a tabindex="-1" role="menuitem" ng-click="toggleAddStrategy(); isCollapsed = false"><i class="intelicon-plus-max"></i> Add Pricing Strategy</a></li>
-                    <li role="presentation"><a tabindex="-1" role="menuitem" ng-click="showAddPricingTable(ps); isCollapsed = false"><i class="intelicon-plus-max"></i> Add Pricing Table</a></li>
-                    <li role="presentation"><a tabindex="-1" role="menuitem" ng-click="deletePricingStrategy(ps)"><i class="intelicon-trash-outlined"></i> Delete Pricing Strategy</a></li>
+                    <li role="presentation" ng-show="C_ADD_PRICING_STRATEGY"><a tabindex="-1" role="menuitem" ng-click="toggleAddStrategy(); isCollapsed = false"><i class="intelicon-plus-max"></i> Add Pricing Strategy</a></li>
+                    <li role="presentation" ng-show="ps._settings.C_ADD_PRICING_TABLE"><a tabindex="-1" role="menuitem" ng-click="showAddPricingTable(ps); isCollapsed = false"><i class="intelicon-plus-max"></i> Add Pricing Table</a></li>
+                    <li role="presentation" ng-show="ps._settings.C_ADD_PRICING_TABLE"><a tabindex="-1" role="menuitem" ng-click="deletePricingStrategy(ps)"><i class="intelicon-trash-outlined"></i> Delete Pricing Strategy</a></li>
 
                     <!-- TODO need to check for valid pricing strategy before actions -->                    
-                    <!--
                     <li role="presentation" ng-show="ps._actions['Approve'] !== undefined && ps._actions['Approve'] === true">
                         <a tabindex="-1" role="menuitem" ng-click="actionPricingStrategy(ps,'Approve')"><i class="intelicon-arrow-forward-right"></i> Approve</a>
                     </li>
@@ -39,7 +38,6 @@
                     <li role="presentation" ng-show="ps._actions['Cancel'] !== undefined && ps._actions['Cancel'] === true">
                         <a tabindex="-1" role="menuitem" ng-click="actionPricingStrategy(ps,'Cancel')"><i class="intelicon-arrow-down"></i> Cancel</a>
                     </li>
-                    -->
 
                 </ul>
             </div>
@@ -66,13 +64,13 @@
                         </div>
                     </div>
 
-                    <div class="fr">
+                    <div class="fr" ng-if="C_ADD_PRICING_STRATEGY || ps._settings.C_ADD_PRICING_TABLE || ps._settings.C_DEL_PRICING_TABLE">
                         <span class="hasMenuPt{{ pt.DC_ID }} ptBtn" title="View more options"><i class="intelicon-vertical-menu"></i></span>
                         <ul kendo-context-menu k-filter="'.hasMenuPt{{ pt.DC_ID }}'" k-show-on="'click'">
-                            <li role="presentation"><a tabindex="-1" role="menuitem" ng-click="toggleAddStrategy(); isCollapsed = false"><i class="intelicon-plus-max"></i> Add Pricing Strategy</a></li>
-                            <li role="presentation"><a tabindex="-1" role="menuitem" ng-click="showAddPricingTable(ps); isCollapsed = false"><i class="intelicon-plus-max"></i> Add Pricing Table</a></li>
-                            <li role="presentation"><a tabindex="-1" role="menuitem" ng-click="showEditPricingTableDefaults(pt)"><i class="intelicon-edit"></i> Edit Autofill Defaults</a></li>
-                            <li role="presentation"><a tabindex="-1" role="menuitem" ng-click="deletePricingTable(ps, pt)"><i class="intelicon-trash-outlined"></i> Delete Pricing Table</a></li>
+                            <li role="presentation" ng-show="C_ADD_PRICING_STRATEGY"><a tabindex="-1" role="menuitem" ng-click="toggleAddStrategy(); isCollapsed = false"><i class="intelicon-plus-max"></i> Add Pricing Strategy</a></li>
+                            <li role="presentation" ng-show="ps._settings.C_ADD_PRICING_TABLE"><a tabindex="-1" role="menuitem" ng-click="showAddPricingTable(ps); isCollapsed = false"><i class="intelicon-plus-max"></i> Add Pricing Table</a></li>
+                            <li role="presentation" ng-show="ps._settings.C_ADD_PRICING_TABLE"><a tabindex="-1" role="menuitem" ng-click="showEditPricingTableDefaults(pt)"><i class="intelicon-edit"></i> Edit Autofill Defaults</a></li>
+                            <li role="presentation" ng-show="ps._settings.C_DEL_PRICING_TABLE"><a tabindex="-1" role="menuitem" ng-click="deletePricingTable(ps, pt)"><i class="intelicon-trash-outlined"></i> Delete Pricing Table</a></li>
                         </ul>
                     </div>
 

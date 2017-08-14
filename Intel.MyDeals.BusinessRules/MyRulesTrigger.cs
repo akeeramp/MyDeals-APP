@@ -7,6 +7,7 @@
     {
         OnLoad,
         OnSave,
+        OnFinalizeSave,
         OnValidate,
         OnAction,
         OnOpCollectorConvert,

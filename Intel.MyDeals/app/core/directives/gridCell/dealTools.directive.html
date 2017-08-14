@@ -32,7 +32,7 @@
            title="This deal shares the same pricing table row as other deals.  You will need to split the group or delete the deal from the Pricing Table."></i>
     </div>
     
-    <div class='fl md-icon' ng-if="isEditable && (dataItem._parentCnt === undefined || dataItem._parentCnt <= 1)">
+    <div class='fl md-icon' ng-if="(dataItem._parentCnt === undefined || dataItem._parentCnt <= 1)">
         <i ng-if="(!dataItem._actions || !dataItem._actions.Hold) && dataItem.WF_STG_CD !== 'Hold'" class='fa fa-hand-paper-o' style="font-size: 20px !important; color: #e7e7e8;" 
            title="Unable to place a hold on the deal at this stage."></i>
         <i ng-if="(!dataItem._actions || !dataItem._actions.Hold) && dataItem.WF_STG_CD === 'Hold'" class='fa fa-hand-paper-o' style="font-size: 20px !important; color: #FC4C02; cursor: pointer;" 
@@ -42,7 +42,7 @@
         <i ng-if="!!dataItem._actions && !!dataItem._actions.Hold && dataItem._actions.Hold && dataItem.WF_STG_CD === 'Hold'" class='fa fa-hand-paper-o' style="font-size: 20px !important; color: #FC4C02; cursor: pointer;" 
            title="Click to take the deal off hold" ng-click="unHoldDialog.open()"></i>
     </div>
-    <div class='fl md-icon-disabled' ng-if="isEditable && (!!dataItem._parentCnt && dataItem._parentCnt > 1)">
+    <div class='fl md-icon-disabled' ng-if="(!!dataItem._parentCnt && dataItem._parentCnt > 1)">
         <i class='fa fa-hand-paper-o' style="font-size: 20px !important; color: #e7e7e8;"
            title="This deal shares the same pricing table row as other deals.  You will need to split the group before you can place this on hold."></i>
     </div>

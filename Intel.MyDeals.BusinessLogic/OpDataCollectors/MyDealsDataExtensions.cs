@@ -640,6 +640,10 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 myDealsData.InjectParentStages(sourceEvent);
             }
+            if (validateIds.Any() && sourceEvent == OpDataElementType.WIP_DEAL.ToString() && myDealsData.ContainsKey(OpDataElementType.PRC_TBL) && myDealsData.ContainsKey(OpDataElementType.WIP_DEAL))
+            {
+                myDealsData.InjectParentStages(sourceEvent);
+            }
 
             if (myDealsData.ContainsKey(OpDataElementType.PRC_TBL_ROW) && myDealsData[OpDataElementType.PRC_TBL_ROW].AllDataElements.Any(d => d.State == OpDataElementState.Modified && d.AtrbCd != AttributeCodes.PASSED_VALIDATION && d.AtrbCd != AttributeCodes.WF_STG_CD))
             {
@@ -722,6 +726,23 @@ namespace Intel.MyDeals.BusinessLogic
                     {
                         if (opDataElementType == OpDataElementType.PRC_TBL_ROW) dirtyPtrs.Add(dc.DcID);
                         dc.SetAtrb(AttributeCodes.PASSED_VALIDATION, PassedValidation.Dirty);
+                    }
+
+                    if (validateIds.Any() && !dcHasErrors && opDataElementType == OpDataElementType.WIP_DEAL)
+                    {
+                        // Before finalize rules... need to make sure the PRC_ST exists
+                        if (!myDealsData.ContainsKey(OpDataElementType.PRC_ST))
+                        {
+                            MyDealsData prcSts = OpDataElementType.CNTRCT.GetByIDs(
+                                new List<int> { contractToken.ContractId }, 
+                                new List<OpDataElementType> { OpDataElementType.PRC_ST },
+                                new List<int> { Attributes.WF_STG_CD.ATRB_SID }
+                                );
+                            myDealsData[OpDataElementType.PRC_ST] = prcSts[OpDataElementType.PRC_ST];
+                        }
+
+                        // apply finalize save rules (things like major change checks)
+                        dc.ApplyRules(MyRulesTrigger.OnFinalizeSave, null, myDealsData);
                     }
                 }
             }

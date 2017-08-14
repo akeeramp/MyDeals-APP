@@ -1115,8 +1115,13 @@
     }
 
 
-.vert-center {
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
-}
+    .vert-center {
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+
+    .k-animation-container UL {
+        min-width: 200px;
+    }

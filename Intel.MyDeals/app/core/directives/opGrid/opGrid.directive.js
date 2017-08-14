@@ -334,23 +334,27 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
             $scope.contractDs = new kendo.data.DataSource({
                 transport: {
                     read: function (e) {
+                        var data = $scope.opData;
+                        for (var i = 0; i < data.length; i++) {
+                            if ($scope.dealTypes.indexOf(data[i].OBJ_SET_TYPE_CD) < 0) $scope.dealTypes.push(data[i].OBJ_SET_TYPE_CD);
+                        }
+
                         var childParent = {};
-                        for (var i = 0; i < $scope.opData.length; i++) {
-                            var item = $scope.opData[i];
+                        for (var i = 0; i < data.length; i++) {
+                            var item = data[i];
                             if (item.isLinked === undefined) item.isLinked = false;
                             if (childParent[item.DC_PARENT_ID] === undefined) childParent[item.DC_PARENT_ID] = 0;
                             childParent[item.DC_PARENT_ID]++;
-                            if ($scope.dealTypes.indexOf(item.OBJ_SET_TYPE_CD) < 0) $scope.dealTypes.push(item.OBJ_SET_TYPE_CD);
                         }
 
-                        $scope.dealCnt = $scope.opData.length;
+                        $scope.dealCnt = data.length;
 
                         // now set total values
-                        for (var j = 0; j < $scope.opData.length; j++) {
-                            $scope.opData[j]["_parentCnt"] = childParent[$scope.opData[j].DC_PARENT_ID];
+                        for (var j = 0; j < data.length; j++) {
+                            data[j]["_parentCnt"] = childParent[data[j].DC_PARENT_ID];
                         }
 
-                        var source = $scope.opData;
+                        var source = data;
 
                         // on success
                         e.success(source);
@@ -418,7 +422,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 },
                 save: function (e) {
                     var newField = util.getFirstKey(e.values);
-                    $scope.saveCell(e.model, newField);
+                    $scope.$parent.$parent.$parent.$parent.$parent.saveCell(e.model, newField);
 
                     if (e.model.isLinked !== undefined && e.model.isLinked) {
                         $scope.syncLinked(newField, e.values[newField]);
@@ -778,40 +782,40 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                     if (dataItem._behaviors.isHidden === undefined) dataItem._behaviors.isHidden = {};
                     if (dataItem._behaviors.isHidden[newField] === undefined || dataItem._behaviors.isHidden[newField] === false) {
                         dataItem.set(newField, newValue);
-                        $scope.saveCell(dataItem, newField);
+                        $scope.$parent.$parent.$parent.$parent.$parent.saveCell(dataItem, newField);
                     }
                 }
             }
 
 
-            $scope.saveCell = function (dataItem, newField) {
-                if (dataItem._behaviors === undefined) dataItem._behaviors = {};
-                if (dataItem._behaviors.isDirty === undefined) dataItem._behaviors.isDirty = {};
-                dataItem._behaviors.isDirty[newField] = true;
-                dataItem._dirty = true;
-                $scope._dirty = true;
-                $scope.$parent.$parent.$parent.$parent.$parent._dirty = true;
-            }
+            //$scope.saveCell = function (dataItem, newField) {
+            //    if (dataItem._behaviors === undefined) dataItem._behaviors = {};
+            //    if (dataItem._behaviors.isDirty === undefined) dataItem._behaviors.isDirty = {};
+            //    dataItem._behaviors.isDirty[newField] = true;
+            //    dataItem._dirty = true;
+            //    $scope._dirty = true;
+            //    $scope.$parent.$parent.$parent.$parent.$parent._dirty = true;
+            //}
 
-            $scope.unGroupPricingTableRow = function (dataItem) {
-                var rootScope = $scope.$parent.$parent.$parent.$parent.$parent;
-                rootScope.unGroupPricingTableRow(dataItem);
-            }
+            //$scope.unGroupPricingTableRow = function (dataItem) {
+            //    var rootScope = $scope.$parent.$parent.$parent.$parent.$parent;
+            //    rootScope.unGroupPricingTableRow(dataItem);
+            //}
 
-            $scope.deletePricingTableRow = function (dataItem) {
-                var rootScope = $scope.$parent.$parent.$parent.$parent.$parent;
-                rootScope.deletePricingTableRow(dataItem);
-            }
+            //$scope.deletePricingTableRow = function (dataItem) {
+            //    var rootScope = $scope.$parent.$parent.$parent.$parent.$parent;
+            //    rootScope.deletePricingTableRow(dataItem);
+            //}
 
-            $scope.holdPricingTableRow = function(dataItem) {
-                var rootScope = $scope.$parent.$parent.$parent.$parent.$parent;
-                rootScope.actionWipDeal(dataItem, 'Hold');
-            }
+            //$scope.holdPricingTableRow = function(dataItem) {
+            //    var rootScope = $scope.$parent.$parent.$parent.$parent.$parent;
+            //    rootScope.actionWipDeal(dataItem, 'Hold');
+            //}
 
-            $scope.unHoldPricingTableRow = function (dataItem) {
-                var rootScope = $scope.$parent.$parent.$parent.$parent.$parent;
-                rootScope.actionWipDeal(dataItem, 'Approve');
-            }
+            //$scope.unHoldPricingTableRow = function (dataItem) {
+            //    var rootScope = $scope.$parent.$parent.$parent.$parent.$parent;
+            //    rootScope.actionWipDeal(dataItem, 'Approve');
+            //}
 
             $scope.$on('refresh', function (event, args) {
             });
@@ -1164,7 +1168,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                         angular.element(container).scope().dataItem.TRGT_RGN = targetRegions.join();
                         //for some reason I can't get the grid to flag these cells as dirty when changing it via modal, so we manually do it below
                         angular.element(container).scope().dataItem.dirty = true;
-                        $scope.saveCell(angular.element(container).scope().dataItem, "TRGT_RGN")
+                        $scope.$parent.$parent.$parent.$parent.$parent.saveCell(angular.element(container).scope().dataItem, "TRGT_RGN");
                     },
                     function () {
                     });

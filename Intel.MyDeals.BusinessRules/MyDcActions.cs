@@ -8,6 +8,7 @@ using Intel.MyDeals.Entities.Helpers;
 using Intel.Opaque;
 using Intel.Opaque.Data;
 using Intel.Opaque.Rules;
+using Intel.Opaque.Tools;
 using Newtonsoft.Json;
 
 namespace Intel.MyDeals.BusinessRules
@@ -582,12 +583,42 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+	    public static void MajorChangeCheck(params object[] args)
+	    {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            bool isMajorChange = false; 
+
+	        List<string> onChangeItems = new List<string> {AttributeCodes.START_DT, AttributeCodes.END_DT, AttributeCodes.TITLE, AttributeCodes.RATE, AttributeCodes.STRT_VOL, AttributeCodes.END_VOL, AttributeCodes.ON_ADD_DT};
+
+            string stage = r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD + "_PRNT");
+            var futureStage = r.Dc.GetNextStage("Redeal", DataCollections.GetWorkFlowItems(), stage, OpDataElementType.PRC_ST);
+
+	        var myDealsData = (MyDealsData) r.ExtraArgs[0];
+
+            List<IOpDataElement> changedDes = r.Dc.GetDataElementsWhere(d => onChangeItems.Contains(d.AtrbCd) && d.HasValueChanged).ToList();
+	        if (changedDes.Any()) isMajorChange = true;
+
+            if (isMajorChange) // go to redeal stage
+	        {
+                r.Dc.SetDataElementValue(AttributeCodes.WF_STG_CD, WorkFlowStages.Draft);
+
+                OpDataCollector dcRow = myDealsData[OpDataElementType.PRC_TBL_ROW].Data[r.Dc.DcParentID];
+                OpDataCollector dcTbl = myDealsData[OpDataElementType.PRC_TBL].Data[dcRow.DcParentID];
+                OpDataCollector dcSt = myDealsData[OpDataElementType.PRC_ST].Data[dcTbl.DcParentID];
+                dcSt.SetDataElementValue(AttributeCodes.WF_STG_CD, futureStage);
+            }
+        }
+
         public static void ValidateEcapPrice(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
             IOpDataElement deEcapPrice = r.Dc.GetDataElement(AttributeCodes.ECAP_PRICE);
+            if (deEcapPrice == null) return;
+
             double price;
             if (!double.TryParse(deEcapPrice.AtrbValue.ToString(), out price))
             {

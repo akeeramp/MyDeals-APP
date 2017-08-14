@@ -55,8 +55,8 @@ namespace Intel.MyDeals.BusinessRules
             // load settings
             List<string> possibleSettings = new List<string>
             {
-                SecurityActns.C_EDIT_CONTRACT,
-                SecurityActns.C_DELETE_CONTRACT,
+                SecurityActns.C_ADD_PRICING_TABLE,
+                SecurityActns.C_DEL_PRICING_TABLE,
                 SecurityActns.C_VIEW_QUOTE_LETTER,
                 SecurityActns.C_ADD_ATTACHMENTS,
                 SecurityActns.C_VIEW_ATTACHMENTS,

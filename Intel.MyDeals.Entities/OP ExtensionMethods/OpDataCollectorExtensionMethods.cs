@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Intel.Opaque;
 using Intel.Opaque.Data;
 using Newtonsoft.Json;
 
@@ -252,6 +253,29 @@ namespace Intel.MyDeals.Entities
             {
                 de.State = OpDataElementState.Modified;
             }
+        }
+
+        public static string GetNextStage(this OpDataCollector dc, string actn, List<WorkFlows> workflows, string stage = null, OpDataElementType opDataElementType = OpDataElementType.ALL_OBJ_TYPE)
+        {
+            OpUserToken opUserToken = OpUserStack.MyOpUserToken;
+
+            if (string.IsNullOrEmpty(stage)) stage = dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
+            string objSetType = dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
+
+            if (opDataElementType == OpDataElementType.ALL_OBJ_TYPE) opDataElementType = OpDataElementTypeConverter.FromString(dc.DcType);
+            
+            // load actions
+            return workflows
+                .Where(w =>
+                w.WF_NM == "General WF" &&
+                (w.OBJ_TYPE == opDataElementType.ToDesc() || w.OBJ_TYPE == "ALL_TYPES") &&
+                (w.OBJ_SET_TYPE_CD == objSetType || w.OBJ_SET_TYPE_CD == "ALL_TYPES") &&
+                w.WFSTG_CD_SRC == stage &&
+                w.WFSTG_ACTN_NM == actn &&
+                w.ROLE_TIER_NM == opUserToken.Role.RoleTier)
+                .OrderBy(w => w.OBJ_TYPE == "ALL_TYPES" ? 1 : 0)
+                .ThenBy(w => w.OBJ_SET_TYPE_CD == "ALL_TYPES" ? 1 : 0)
+                .Select(w => w.WFSTG_CD_DEST).FirstOrDefault();
         }
     }
 }

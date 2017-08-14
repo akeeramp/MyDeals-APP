@@ -454,6 +454,22 @@ namespace Intel.MyDeals.DataLibrary
             });
 			items.Add(new UiTemplateContainerItem
             {
+                Id = 37,
+                AtrbCd = AttributeCodes.REBATE_TYPE,
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM },
+                IsDefaultable = true,
+                Label = "Rebate Type *",
+                Width = 100,
+                DataType = "string",
+                UiType = "DROPDOWN",
+                LookupUrl = "/api/Dropdown/GetDropdowns/REBATE_TYPE/PROGRAM",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN",
+                IsRequired = true
+            });
+            items.Add(new UiTemplateContainerItem
+            {
                 Id = 36,
                 AtrbCd = AttributeCodes.TIER_NBR,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },

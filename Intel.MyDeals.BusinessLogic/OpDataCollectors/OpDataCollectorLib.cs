@@ -42,7 +42,19 @@ namespace Intel.MyDeals.BusinessLogic
                 MyDealsData secondaryMyDealsData = secondaryOpTypeGrp.GetByIDs(secondaryIds, secondaryOpDataElementTypes, data);
                 foreach (KeyValuePair<OpDataElementType, OpDataPacket<OpDataElementType>> kvp in secondaryMyDealsData)
                 {
-                    if (kvp.Value.AllDataElements.Any()) myDealsData[kvp.Key] = kvp.Value;
+                    if (kvp.Value.AllDataElements.Any())
+                    {
+                        myDealsData[kvp.Key] = kvp.Value;
+                        foreach (OpDataCollector dc in myDealsData[kvp.Key].AllDataCollectors)
+                        {
+                            if (dc.DcParentID == 0 && dc.DcParentType == dc.DcType)
+                            {
+                                // reset parent
+                                dc.DcParentID = dc.DataElements.First().DcParentID;
+                                dc.DcParentType = dc.DcParentType;
+                            }
+                        }
+                    }
                 }
             }
 
