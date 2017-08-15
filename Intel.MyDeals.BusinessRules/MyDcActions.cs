@@ -597,7 +597,7 @@ namespace Intel.MyDeals.BusinessRules
 
 	        var myDealsData = (MyDealsData) r.ExtraArgs[0];
 
-            List<IOpDataElement> changedDes = r.Dc.GetDataElementsWhere(d => onChangeItems.Contains(d.AtrbCd) && d.HasValueChanged).ToList();
+            List<IOpDataElement> changedDes = r.Dc.GetDataElementsWhere(d => onChangeItems.Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged).ToList();
 	        if (changedDes.Any()) isMajorChange = true;
 
             if (isMajorChange) // go to redeal stage

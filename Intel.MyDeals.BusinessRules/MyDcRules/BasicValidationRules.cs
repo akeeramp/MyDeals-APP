@@ -126,7 +126,7 @@ namespace Intel.MyDeals.BusinessRules
 				//},
 				new MyOpRule
                 {
-                    Title="Validate ECAP Price",
+                    Title="Check for Major Changes",
                     ActionRule = MyDcActions.MajorChangeCheck,
                     InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnFinalizeSave}
