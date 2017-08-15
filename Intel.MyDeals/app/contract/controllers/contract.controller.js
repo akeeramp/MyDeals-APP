@@ -1803,7 +1803,7 @@
 
                     topbar.hide();
 
-                    if (!anyWarnings) {
+                    if (!anyWarnings || !forceValidation) {
                         $scope.setBusy("Save Successful", "Saved the contract");
                         $scope.resetDirty();
                         $scope.$broadcast('saveComplete', results);
@@ -2051,7 +2051,7 @@
         $scope.deNormalizeData = function (data) {
             if (!!$scope.curPricingTable && !!$scope.curPricingTable.NUM_OF_TIERS) {
                 var a;
-                var numTiers = $scope.curPricingTable.NUM_OF_TIERS;
+                var numTiers = parseInt($scope.curPricingTable.NUM_OF_TIERS);
                 if (numTiers <= 0) return data;
                 var newData = [];
                 var lData = {};
@@ -2063,7 +2063,7 @@
                         if (t === 1) lData = data[d];
                         for (a = 0; a < tierAtrbs.length; a++)
                             lData[tierAtrbs[a] + tierDimKey + t] = data[d][tierAtrbs[a]];
-                        if (t === numTiers - 1) {
+                        if (t === numTiers) {
                             for (a = 0; a < tierAtrbs.length; a++)
                                 delete lData[tierAtrbs[a]];
                             newData.push(lData);
