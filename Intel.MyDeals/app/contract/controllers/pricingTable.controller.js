@@ -472,6 +472,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     		if (colIndex === endVolIndex || colIndex === strtVolIndex || colIndex === rateIndex) {
                     			value.value = parseInt(value.value) || 0; // HACK: To make sure End vol has a numerical value so that validations work and show on these cells
                     		}
+
+							// Transform negative numbers into positive
+                    		if (value.value < 0){
+                    			value.value = Math.abs(value.value);
+                    		}
+
                     		// End_Vol Col changed	
                             if (colIndex === endVolIndex) {
                                 // If this vol tier isn't the last of its vol tier rows
@@ -673,10 +679,16 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             data[r]["TIER_NBR"] = tierNumVal;
                             data[r]["NUM_OF_TIERS"] = root.curPricingTable.NUM_OF_TIERS;
 
+                        	// Default to 0
+                            data[r]["RATE"] = 0;
+
 							if (tierNumVal == parseInt(root.curPricingTable.NUM_OF_TIERS)) {
 								// default last end vol to "unlimited"
 								data[r]["END_VOL"]= 999999999999;
-                            }
+							} else {
+								// Default to 0
+								data[r]["END_VOL"] = 0;
+							}
                             // disable non-first start vols
                             if (tierNumVal != 1) {
                                 if (!data[r]._behaviors) {
@@ -688,6 +700,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 // Flag start vol cols to disable
                                 var rowInfo = data[r];
                                 data[r]._behaviors.isReadOnly["STRT_VOL"] = true;
+								// Default to 0
+                                data[r]["STRT_VOL"] = 0;
 
                             } else {
                             	// 1st tier row
