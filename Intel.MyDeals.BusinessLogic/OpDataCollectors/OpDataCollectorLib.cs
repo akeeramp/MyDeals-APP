@@ -47,7 +47,7 @@ namespace Intel.MyDeals.BusinessLogic
                         myDealsData[kvp.Key] = kvp.Value;
                         foreach (OpDataCollector dc in myDealsData[kvp.Key].AllDataCollectors)
                         {
-                            if (dc.DcParentID == 0 && dc.DcParentType == dc.DcType)
+                            if (dc.DcParentID == 0 && dc.DcParentType == dc.DcType && dc.DataElements.Any())
                             {
                                 // reset parent
                                 dc.DcParentID = dc.DataElements.First().DcParentID;

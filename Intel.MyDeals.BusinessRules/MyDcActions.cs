@@ -595,6 +595,9 @@ namespace Intel.MyDeals.BusinessRules
             string stage = r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD + "_PRNT");
             var futureStage = r.Dc.GetNextStage("Redeal", DataCollections.GetWorkFlowItems(), stage, OpDataElementType.PRC_ST);
 
+            // if there isn't a future stage, then it isn't redealable
+	        if (futureStage == null) return;
+
 	        var myDealsData = (MyDealsData) r.ExtraArgs[0];
 
             List<IOpDataElement> changedDes = r.Dc.GetDataElementsWhere(d => onChangeItems.Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged).ToList();
