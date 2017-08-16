@@ -546,6 +546,20 @@
     color: black;
 }
 
+.opUiLabel {
+    font-size: 18px;
+    font-weight: bold;
+    color: #1a3e6f;
+}
+
+.opUiLabel.fl {
+    color: white;
+}
+
+.opUiLabel.fl.msLabel {
+    color: #1a3e6f;
+}
+
 /* CSS for autofill defaults modal */
 .autofill-header-title {
     color: #1a3e6f;
@@ -609,12 +623,6 @@
     width: 90%;
     margin-left: auto;
     margin-right: auto;
-}
-
-.opUiLabel {
-    font-size: 18px;
-    font-weight: bold;
-    color: #1a3e6f;
 }
 
 /* CSS for target region picker */
