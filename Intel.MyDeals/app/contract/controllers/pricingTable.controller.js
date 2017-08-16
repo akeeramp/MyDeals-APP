@@ -443,42 +443,42 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         var productColIndex = (root.colToLetter["PTR_USER_PRD"].charCodeAt(0) - intA);
         var isProductColumnIncludedInChanges = (range._ref.topLeft.col <= productColIndex) && (range._ref.bottomRight.col >= productColIndex);
-		
+
         // check for selections in te middle of a merge
         //if (range._ref.bottomRight.row % root.child.numTiers > 0) {
         //    range = sheet.range(String.fromCharCode(intA + range._ref.topLeft.col) + (range._ref.topLeft.row + 1) + ":" + String.fromCharCode(intA + range._ref.bottomRight.col) + (range._ref.bottomRight.row + (range._ref.bottomRight.row % root.child.numTiers) + 2));
         //}
 
-		// VOL-TIER
+        // VOL-TIER
         if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD == "VOL_TIER") {
-        	var endVolIndex = (root.colToLetter["END_VOL"].charCodeAt(0) - intA);
-        	var strtVolIndex = (root.colToLetter["STRT_VOL"].charCodeAt(0) - intA);
-        	var rateIndex = (root.colToLetter["RATE"].charCodeAt(0) - intA);
+            var endVolIndex = (root.colToLetter["END_VOL"].charCodeAt(0) - intA);
+            var strtVolIndex = (root.colToLetter["STRT_VOL"].charCodeAt(0) - intA);
+            var rateIndex = (root.colToLetter["RATE"].charCodeAt(0) - intA);
 
-        	var isEndVolColChanged = (range._ref.topLeft.col <= endVolIndex) && (range._ref.bottomRight.col >= endVolIndex);
-        	var isStrtVolColChanged = (range._ref.topLeft.col <= strtVolIndex) && (range._ref.bottomRight.col >= strtVolIndex);
-        	var isRateColChanged = (range._ref.topLeft.col <= rateIndex) && (range._ref.bottomRight.col >= rateIndex);
-			
-			// On End_vol col change
-        	if (isEndVolColChanged || isStrtVolColChanged || isRateColChanged) {
+            var isEndVolColChanged = (range._ref.topLeft.col <= endVolIndex) && (range._ref.bottomRight.col >= endVolIndex);
+            var isStrtVolColChanged = (range._ref.topLeft.col <= strtVolIndex) && (range._ref.bottomRight.col >= strtVolIndex);
+            var isRateColChanged = (range._ref.topLeft.col <= rateIndex) && (range._ref.bottomRight.col >= rateIndex);
+
+            // On End_vol col change
+            if (isEndVolColChanged || isStrtVolColChanged || isRateColChanged) {
                 var data = root.spreadDs.data();
                 var sourceData = root.pricingTableData.PRC_TBL_ROW;
 
                 range.forEachCell(
                     function (rowIndex, colIndex, value) {
-                    	var myRow = data[(rowIndex - 1)];
-                    	if (myRow != undefined && myRow.DC_ID != undefined && myRow.DC_ID != null) {
-							// Start vol, end vol, or rate changed
-                    		if (colIndex === endVolIndex || colIndex === strtVolIndex || colIndex === rateIndex) {
-                    			value.value = parseInt(value.value) || 0; // HACK: To make sure End vol has a numerical value so that validations work and show on these cells
-                    		}
+                        var myRow = data[(rowIndex - 1)];
+                        if (myRow != undefined && myRow.DC_ID != undefined && myRow.DC_ID != null) {
+                            // Start vol, end vol, or rate changed
+                            if (colIndex === endVolIndex || colIndex === strtVolIndex || colIndex === rateIndex) {
+                                value.value = parseInt(value.value) || 0; // HACK: To make sure End vol has a numerical value so that validations work and show on these cells
+                            }
 
-							// Transform negative numbers into positive
-                    		if (value.value < 0){
-                    			value.value = Math.abs(value.value);
-                    		}
+                            // Transform negative numbers into positive
+                            if (value.value < 0) {
+                                value.value = Math.abs(value.value);
+                            }
 
-                    		// End_Vol Col changed	
+                            // End_Vol Col changed
                             if (colIndex === endVolIndex) {
                                 // If this vol tier isn't the last of its vol tier rows
                                 if (myRow.TIER_NBR != root.pricingTableData.PRC_TBL[0].NUM_OF_TIERS) {
@@ -492,7 +492,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 myRow.END_VOL = value.value;
                                 sourceData[(rowIndex - 1)].END_VOL = myRow.END_VOL;
                             }
-							// HACK: Set the other columns' values in our data and source data to value else they will not change to our newly expected values
+                            // HACK: Set the other columns' values in our data and source data to value else they will not change to our newly expected values
                             var myColLetter = String.fromCharCode(intA + (colIndex));
                             var colName = root.letterToCol[myColLetter];
                             myRow[colName] = value.value;
@@ -679,16 +679,16 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             data[r]["TIER_NBR"] = tierNumVal;
                             data[r]["NUM_OF_TIERS"] = root.curPricingTable.NUM_OF_TIERS;
 
-                        	// Default to 0
+                            // Default to 0
                             data[r]["RATE"] = 0;
 
-							if (tierNumVal == parseInt(root.curPricingTable.NUM_OF_TIERS)) {
-								// default last end vol to "unlimited"
-								data[r]["END_VOL"]= 999999999999;
-							} else {
-								// Default to 0
-								data[r]["END_VOL"] = 0;
-							}
+                            if (tierNumVal == parseInt(root.curPricingTable.NUM_OF_TIERS)) {
+                                // default last end vol to "unlimited"
+                                data[r]["END_VOL"] = 999999999999;
+                            } else {
+                                // Default to 0
+                                data[r]["END_VOL"] = 0;
+                            }
                             // disable non-first start vols
                             if (tierNumVal != 1) {
                                 if (!data[r]._behaviors) {
@@ -700,12 +700,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 // Flag start vol cols to disable
                                 var rowInfo = data[r];
                                 data[r]._behaviors.isReadOnly["STRT_VOL"] = true;
-								// Default to 0
+                                // Default to 0
                                 data[r]["STRT_VOL"] = 0;
-
                             } else {
-                            	// 1st tier row
-                            	data[r]["STRT_VOL"] = 1;
+                                // 1st tier row
+                                data[r]["STRT_VOL"] = 1;
                             }
                         }
                     }
@@ -782,7 +781,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         range.enable(true);
                         range.background(null);
 
-                    	// Disable Program Payment col
+                        // Disable Program Payment col
                         var programPaymentLetter = root.colToLetter["PROGRAM_PAYMENT"];
                         range = sheet.range(programPaymentLetter + topLeftRowIndex + ":" + programPaymentLetter + bottomRightRowIndex);
                         disableRange(range);
@@ -1817,10 +1816,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     }
                     if (inputtedValue.indexOf(" ") > -1) {
                         var hierarchy = validProducts[prd][i].HIER_NM_HASH.split(" ");
-                        for (var j = 0; j < hierarchy.length; j++) {
-                            if (inputtedValue.indexOf(hierarchy[j].toLowerCase()) > -1) {
-                                userInput = validProducts[prd][i].HIER_NM_HASH;
-                                break;
+                        if (validProducts[prd].length === 1) {
+                            for (var j = 0; j < hierarchy.length; j++) {
+                                if (inputtedValue.indexOf(hierarchy[j].toLowerCase()) > -1) {
+                                    userInput = validProducts[prd][i].HIER_NM_HASH;
+                                    break;
+                                }
                             }
                         }
                         if (userInput !== "") {
