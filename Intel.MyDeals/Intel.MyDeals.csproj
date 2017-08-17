@@ -1251,7 +1251,7 @@
     <Content Include="Content\fonts\glyphs\WebComponentsIcons.eot" />
     <Content Include="Content\fonts\glyphs\WebComponentsIcons.ttf" />
     <Content Include="Content\fonts\glyphs\WebComponentsIcons.woff" />
-    <Content Include="app\shared\services\customer.service.js" />
+    <Content Include="app\shared\services\customerCalendar.service.js" />
     <Content Include="egg\mb\Content\audio\coin.ogg" />
     <Content Include="egg\mb\Content\audio\die.ogg" />
     <Content Include="egg\mb\Content\audio\editor.ogg" />

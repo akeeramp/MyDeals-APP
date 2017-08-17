@@ -5,9 +5,9 @@
         .module('app.contract')
         .controller('ContractController', ContractController);
 
-    ContractController.$inject = ['$scope', '$state', '$filter', '$localStorage', 'contractData', 'isNewContract', 'templateData', 'objsetService', 'securityService', 'templatesService', 'logger', '$uibModal', '$timeout', '$window', '$location', '$rootScope', 'confirmationModal', 'dataService', 'customerService', 'contractManagerConstants', 'MrktSegMultiSelectService', '$compile'];
+    ContractController.$inject = ['$scope', '$state', '$filter', '$localStorage', 'contractData', 'isNewContract', 'templateData', 'objsetService', 'securityService', 'templatesService', 'logger', '$uibModal', '$timeout', '$window', '$location', '$rootScope', 'confirmationModal', 'dataService', 'customerCalendarService', 'contractManagerConstants', 'MrktSegMultiSelectService', '$compile'];
 
-    function ContractController($scope, $state, $filter, $localStorage, contractData, isNewContract, templateData, objsetService, securityService, templatesService, logger, $uibModal, $timeout, $window, $location, $rootScope, confirmationModal, dataService, customerService, contractManagerConstants, MrktSegMultiSelectService, $compile) {
+    function ContractController($scope, $state, $filter, $localStorage, contractData, isNewContract, templateData, objsetService, securityService, templatesService, logger, $uibModal, $timeout, $window, $location, $rootScope, confirmationModal, dataService, customerCalendarService, contractManagerConstants, MrktSegMultiSelectService, $compile) {
         // store template information
         //
         $scope.templates = $scope.templates || templateData.data;
@@ -376,7 +376,7 @@
                 if (!qtrValue && !yearValue) return;
 
                 var customerMemberSid = $scope.contractData.CUST_MBR_SID === "" ? null : $scope.contractData.CUST_MBR_SID;
-                var quarterDetails = customerService.getCustomerCalendar(customerMemberSid, null, qtrValue, yearValue)
+                var quarterDetails = customerCalendarService.getCustomerCalendar(customerMemberSid, null, qtrValue, yearValue)
                     .then(function (response) {
                         if (qtrType == 'START_DATE') {
                             $scope.contractData.START_DT = moment(response.data.QTR_STRT).format('l');
@@ -424,7 +424,7 @@
                     ""
                     ? null
                     : $scope.contractData.CUST_MBR_SID;
-                var quarterDetails = customerService.getCustomerCalendar(customerMemberSid, value, null, null)
+                var quarterDetails = customerCalendarService.getCustomerCalendar(customerMemberSid, value, null, null)
                     .then(function (response) {
                         $scope.contractData.MinDate = moment(response.data.MIN_STRT).format('l');
                         $scope.contractData.MaxDate = moment(response.data.MIN_END).format('l');
@@ -455,7 +455,7 @@
                     ""
                     ? null
                     : $scope.contractData.CUST_MBR_SID;
-                var quarterDetails = customerService.getCustomerCalendar(customerMemberSid, new Date, null, null)
+                var quarterDetails = customerCalendarService.getCustomerCalendar(customerMemberSid, new Date, null, null)
                     .then(function (response) {
                         $scope.contractData.MinDate = moment(response.data.MIN_STRT).format('l');
                         $scope.contractData.MaxDate = moment(response.data.MIN_END).format('l');

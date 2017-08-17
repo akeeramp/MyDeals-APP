@@ -170,7 +170,7 @@ namespace Intel.MyDeals
                 , "~/app/blocks/uiControls/opControlFlat.directive.js"
                 , "~/app/blocks/uiControls/opControlDataElement.directive.js"
                 , "~/app/shared/services/lookups.service.js"
-                , "~/app/shared/services/customer.service.js"
+                , "~/app/shared/services/customerCalendar.service.js"
                 , "~/app/shared/services/objset.service.js"
                 , "~/app/shared/services/security.service.js"
                 , "~/app/shared/services/templates.service.js"

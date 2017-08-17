@@ -1,11 +1,11 @@
 ﻿angular
     .module('app.contract')
-    .factory('customerService', customerService);
+    .factory('customerCalendarService', customerCalendarService);
 
 // Minification safe dependency injection
-customerService.$inject = ['dataService'];
+customerCalendarService.$inject = ['dataService'];
 
-function customerService(dataService) {
+function customerCalendarService(dataService) {
     // defining the base url on top, subsequent calls in the service
     // Bring in all the customer related calls for contract manager in here
     var apiBaseLookupUrl = "api/CustomerCalendar/";
