@@ -495,9 +495,9 @@
     font-size: 12px;
 }
 
-    .buttongroup-btn:hover {
-        background-color: #0071C5;
-    }
+.buttongroup-btn:hover {
+    background-color: #0071C5;
+}
 
 .buttongroup-btn-first {
     border-radius: 10px 0 0 10px;
@@ -511,9 +511,9 @@
     background-color: #00AEEF;
 }
 
-    .buttongroup-btn.isSelected:hover {
-        background-color: #0071C5;
-    }
+.buttongroup-btn.isSelected:hover {
+    background-color: #0071C5;
+}
 
 /* CSS for Vertical Embedded Multiselect */
 .msPopup {
@@ -538,22 +538,19 @@
     height: 28px;
 }
 
-    .msClsBtn:hover {
-        background-color: #0071C5;
-    }
-
-.opUiContainer.intel {
-    color: black;
+.msClsBtn:hover {
+    background-color: #0071C5;
 }
 
-.opUiLabel {
-    font-size: 18px;
+.opUiContainer.md .opUiLabel.msLabel {
+    font-size: 14px;
     font-weight: bold;
     color: #1a3e6f;
 }
 
-
-.opUiLabel.fl.msLabel {
+.opUiContainer.md .opUiLabel.buttonGroupLabel {
+    font-size: 14px;
+    font-weight: bold;
     color: #1a3e6f;
 }
 
