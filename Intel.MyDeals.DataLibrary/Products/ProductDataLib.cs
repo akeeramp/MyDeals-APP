@@ -429,6 +429,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_CAP_START = DB.GetReaderOrdinal(rdr, "CAP_START");
                     int IDX_DEAL_PRD_NM = DB.GetReaderOrdinal(rdr, "DEAL_PRD_NM");
                     int IDX_DEAL_PRD_TYPE = DB.GetReaderOrdinal(rdr, "DEAL_PRD_TYPE");
+                    int IDX_DERIVED_USR_INPUT = DB.GetReaderOrdinal(rdr, "DERIVED_USR_INPUT");
                     int IDX_EXACT_MATCH = DB.GetReaderOrdinal(rdr, "EXACT_MATCH");
                     int IDX_FMLY_NM = DB.GetReaderOrdinal(rdr, "FMLY_NM");
                     int IDX_HAS_L1 = DB.GetReaderOrdinal(rdr, "HAS_L1");
@@ -459,6 +460,7 @@ namespace Intel.MyDeals.DataLibrary
                             CAP_START = (IDX_CAP_START < 0 || rdr.IsDBNull(IDX_CAP_START)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CAP_START),
                             DEAL_PRD_NM = (IDX_DEAL_PRD_NM < 0 || rdr.IsDBNull(IDX_DEAL_PRD_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_PRD_NM),
                             DEAL_PRD_TYPE = (IDX_DEAL_PRD_TYPE < 0 || rdr.IsDBNull(IDX_DEAL_PRD_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_PRD_TYPE),
+                            DERIVED_USR_INPUT = (IDX_DERIVED_USR_INPUT < 0 || rdr.IsDBNull(IDX_DERIVED_USR_INPUT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DERIVED_USR_INPUT),
                             EXACT_MATCH = (IDX_EXACT_MATCH < 0 || rdr.IsDBNull(IDX_EXACT_MATCH)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_EXACT_MATCH),
                             FMLY_NM = (IDX_FMLY_NM < 0 || rdr.IsDBNull(IDX_FMLY_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_FMLY_NM),
                             HAS_L1 = (IDX_HAS_L1 < 0 || rdr.IsDBNull(IDX_HAS_L1)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_HAS_L1),
@@ -528,6 +530,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_DEAL_PRD_NM = DB.GetReaderOrdinal(rdr, "DEAL_PRD_NM");
                     int IDX_DEAL_PRD_TYPE = DB.GetReaderOrdinal(rdr, "DEAL_PRD_TYPE");
                     int IDX_DEAL_STRT_DT = DB.GetReaderOrdinal(rdr, "DEAL_STRT_DT");
+                    int IDX_DERIVED_USR_INPUT = DB.GetReaderOrdinal(rdr, "DERIVED_USR_INPUT");
                     int IDX_EPM_NM = DB.GetReaderOrdinal(rdr, "EPM_NM");
                     int IDX_EXACT_MATCH = DB.GetReaderOrdinal(rdr, "EXACT_MATCH");
                     int IDX_FMLY_NM = DB.GetReaderOrdinal(rdr, "FMLY_NM");
@@ -577,6 +580,7 @@ namespace Intel.MyDeals.DataLibrary
                             DEAL_PRD_NM = (IDX_DEAL_PRD_NM < 0 || rdr.IsDBNull(IDX_DEAL_PRD_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_PRD_NM),
                             DEAL_PRD_TYPE = (IDX_DEAL_PRD_TYPE < 0 || rdr.IsDBNull(IDX_DEAL_PRD_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_PRD_TYPE),
                             DEAL_STRT_DT = (IDX_DEAL_STRT_DT < 0 || rdr.IsDBNull(IDX_DEAL_STRT_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_DEAL_STRT_DT),
+                            DERIVED_USR_INPUT = (IDX_DERIVED_USR_INPUT < 0 || rdr.IsDBNull(IDX_DERIVED_USR_INPUT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DERIVED_USR_INPUT),
                             EPM_NM = (IDX_EPM_NM < 0 || rdr.IsDBNull(IDX_EPM_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_EPM_NM),
                             EXACT_MATCH = (IDX_EXACT_MATCH < 0 || rdr.IsDBNull(IDX_EXACT_MATCH)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_EXACT_MATCH),
                             FMLY_NM = (IDX_FMLY_NM < 0 || rdr.IsDBNull(IDX_FMLY_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_FMLY_NM),
