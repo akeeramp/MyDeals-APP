@@ -1783,57 +1783,16 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         for (var prd in validProducts) {
             if (validProducts.hasOwnProperty(prd)) {
                 var uniqueUserInput = $filter('unique')(validProducts[prd], 'USR_INPUT');
-                var inputtedValue = uniqueUserInput[0].USR_INPUT.toLowerCase();
-                for (var i = 0; i < uniqueUserInput.length; i++) {
-                    var userInput = "";
-                    if (validProducts[prd][i].DEAL_PRD_TYPE.toLowerCase().indexOf(inputtedValue) > -1) {
-                        userInput = validProducts[prd][i].DEAL_PRD_TYPE;
-                        if (userInput !== "") break;
+                var derivedUserInput = $filter('unique')(validProducts[prd], 'DERIVED_USR_INPUT');
+                var userInput = "";
+                if (validProducts[prd].length === 1) {
+                    if (derivedUserInput[0].DERIVED_USR_INPUT.trim().toLowerCase() == derivedUserInput[0].HIER_NM_HASH.trim().toLowerCase()) {
+                        userInput = derivedUserInput[0].HIER_VAL_NM;
+                    } else {
+                        userInput = derivedUserInput[0].DERIVED_USR_INPUT;
                     }
-                    if (validProducts[prd][i].PRD_CAT_NM.toLowerCase().indexOf(inputtedValue) > -1) {
-                        userInput = validProducts[prd][i].PRD_CAT_NM;
-                        if (userInput !== "") break;
-                    }
-                    if (validProducts[prd][i].BRND_NM.toLowerCase().indexOf(inputtedValue) > -1) {
-                        userInput = validProducts[prd][i].BRND_NM;
-                        if (userInput !== "") break;
-                    }
-                    if (validProducts[prd][i].FMLY_NM.toLowerCase().indexOf(inputtedValue) > -1) {
-                        userInput = validProducts[prd][i].FMLY_NM;
-                        if (userInput !== "") break;
-                    }
-                    if (validProducts[prd][i].PCSR_NBR.toLowerCase().indexOf(inputtedValue) > -1) {
-                        userInput = validProducts[prd][i].PCSR_NBR;
-                        if (userInput !== "") break;
-                    }
-                    if (validProducts[prd][i].DEAL_PRD_NM.toLowerCase().indexOf(inputtedValue) > -1) {
-                        userInput = validProducts[prd][i].DEAL_PRD_NM;
-                        if (userInput !== "") break;
-                    }
-                    if (validProducts[prd][i].MTRL_ID.toLowerCase().indexOf(inputtedValue) > -1) {
-                        userInput = validProducts[prd][i].MTRL_ID;
-                        if (userInput !== "") break;
-                    }
-                    if (inputtedValue.indexOf(" ") > -1) {
-                        var hierarchy = validProducts[prd][i].HIER_NM_HASH.split(" ");
-                        if (validProducts[prd].length === 1) {
-                            for (var j = 0; j < hierarchy.length; j++) {
-                                if (inputtedValue.indexOf(hierarchy[j].toLowerCase()) > -1) {
-                                    userInput = validProducts[prd][i].HIER_NM_HASH;
-                                    break;
-                                }
-                            }
-                        }
-                        if (userInput !== "") {
-                            break;
-                        }
-                    }
-                }
-                if (userInput === "") {
-                    var userInput = $filter('unique')(validProducts[prd], 'USR_INPUT');
-                    userInput = userInput.map(function (elem) {
-                        return elem.USR_INPUT;
-                    }).join(",");
+                } else {
+                    userInput = derivedUserInput[0].DERIVED_USR_INPUT;
                 }
             }
             contractProducts = contractProducts === "" ? userInput : contractProducts + "," + userInput;
@@ -1848,7 +1807,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var contractProducts = "";
         for (var prd in validProducts) {
             if (!!autoValidatedProducts && autoValidatedProducts.hasOwnProperty(prd)) {
-                var autoValidProd = updateUserInput(autoValidatedProducts);
+                var autoTranslated = {};
+                autoTranslated[prd] = autoValidatedProducts[prd];
+                var autoValidProd = updateUserInput(autoTranslated);
                 if (autoValidProd !== "") {
                     contractProducts = contractProducts === "" ? autoValidProd : contractProducts + "," + autoValidProd;
                 }

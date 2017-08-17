@@ -2105,6 +2105,9 @@ public partial class DealTemplateDataGram
         public System.String DEAL_PRD_TYPE { set; get; }
 
         [DataMember]
+        public System.String DERIVED_USR_INPUT { set; get; }
+
+        [DataMember]
         public System.Boolean EXACT_MATCH { set; get; }
 
         [DataMember]

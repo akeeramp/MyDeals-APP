@@ -402,6 +402,7 @@
             var selectedItems = angular.copy(vm.selectedItems);
             angular.forEach(selectedItems, function (value, key) {
                 // Add validations here
+                value.DERIVED_USR_INPUT = value.HIER_VAL_NM;
                 value.USR_INPUT = value.HIER_VAL_NM;
                 vm.addedProducts.push(value);
             });
@@ -627,6 +628,7 @@
                     CAP_START: x.CAP_START,
                     DEAL_PRD_NM: x.DEAL_PRD_NM,
                     DEAL_PRD_TYPE: x.DEAL_PRD_TYPE,
+                    DERIVED_USR_INPUT: x.DERIVED_USR_INPUT,
                     FMLY_NM: x.FMLY_NM,
                     HAS_L1: x.HAS_L1,
                     HAS_L2: x.HAS_L2,

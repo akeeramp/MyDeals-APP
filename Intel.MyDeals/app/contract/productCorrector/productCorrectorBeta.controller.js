@@ -294,7 +294,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                 e.success(vm.curRowData);
             }
         },
-        pageSize: 50,
+        pageSize: 25,
         sort: {
             field: "IS_SEL",
             dir: "desc"
