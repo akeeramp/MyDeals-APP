@@ -18,7 +18,7 @@
             	//if (scope.$root.securityAttributes === null) {
 					//// NOTE: the below code has been commented out because js session caching is causing bugs when users switch roles because we can't clear the session cache on the user's machine.
                 	//var securityAttributes = sessionStorage.getItem('securityAttributes');
-                	//var securityMasks = sessionStorage.getItem('securityMasks');
+                	//var securityMasks = sessionStorage.getItem('securityMasks'); //
 
                     //if (!securityAttributes) {
                         securityService.getSecurityData().then(function(data) {
@@ -26,8 +26,8 @@
                                 scope.$root.securityAttributes = data.data.SecurityAttributes;
                                 scope.$root.securityMasks = data.data.SecurityMasks;
 
-                                sessionStorage.setItem('securityAttributes', JSON.stringify(scope.$root.securityAttributes));
-                                sessionStorage.setItem('securityMasks', JSON.stringify(scope.$root.securityMasks));
+                                //sessionStorage.setItem('securityAttributes', JSON.stringify(scope.$root.securityAttributes));
+                                //sessionStorage.setItem('securityMasks', JSON.stringify(scope.$root.securityMasks));
 
                                 securityService.setSecurityData(data.data.SecurityAttributes, data.data.SecurityMasks);
                             }
