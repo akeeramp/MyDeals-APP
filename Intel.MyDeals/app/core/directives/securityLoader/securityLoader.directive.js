@@ -15,11 +15,12 @@
             link: function (scope, element, attrs) {
 
                 scope.$root.securityAttributes = null;
-                if (scope.$root.securityAttributes === null) {
-                    var securityAttributes = sessionStorage.getItem('securityAttributes');
-                    var securityMasks = sessionStorage.getItem('securityMasks');
+            	//if (scope.$root.securityAttributes === null) {
+					//// NOTE: the below code has been commented out because js session caching is causing bugs when users switch roles because we can't clear the session cache on the user's machine.
+                	//var securityAttributes = sessionStorage.getItem('securityAttributes');
+                	//var securityMasks = sessionStorage.getItem('securityMasks');
 
-                    if (!securityAttributes) {
+                    //if (!securityAttributes) {
                         securityService.getSecurityData().then(function(data) {
                             if (!!data.data) {
                                 scope.$root.securityAttributes = data.data.SecurityAttributes;
@@ -31,12 +32,12 @@
                                 securityService.setSecurityData(data.data.SecurityAttributes, data.data.SecurityMasks);
                             }
                         });
-                    } else {
-                        securityService.setSecurityData(JSON.parse(securityAttributes), JSON.parse(securityMasks));
-                    }
-                } else {
-                    securityService.setSecurityData(scope.$root.securityAttributes, scope.$root.securityMasks);
-                }
+                    //} else {
+                    //    securityService.setSecurityData(JSON.parse(securityAttributes), JSON.parse(securityMasks));
+                    //}
+                //} else {
+                //    securityService.setSecurityData(scope.$root.securityAttributes, scope.$root.securityMasks);
+                //}
 
             }
         }
