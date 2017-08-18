@@ -414,7 +414,7 @@ namespace Intel.MyDeals.DataLibrary
 				IsDefaultable = true,
 				Label = "Program Payment *",
 				UiType = "DROPDOWN",
-				LookupUrl = "/api/Dropdown/GetDropdowns/PROGRAM_PAYMENT/ECAP",
+				LookupUrl = "/api/Dropdown/GetDropdowns/PROGRAM_PAYMENT/VOL_TIER",
 				LookupText = "DROP_DOWN",
 				LookupValue = "DROP_DOWN",
 				IsRequired = true,
@@ -486,8 +486,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
                 IsDimKey = true,
                 Width = 100,
-                Label = "Start Vol",
-				IsRequired = true
+                Label = "Start Vol"
 			});
             items.Add(new UiTemplateContainerItem
             {
@@ -497,8 +496,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
                 IsDimKey = true,
                 Width = 100,
-                Label = "End Vol",
-				IsRequired = true
+                Label = "End Vol"
 			});
             items.Add(new UiTemplateContainerItem
             {
@@ -508,8 +506,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
                 IsDimKey = true,
                 Width = 100,
-                Label = "Rate",
-				IsRequired = true
+                Label = "Rate"
 			});
 
             items.Add(new UiTemplateContainerItem

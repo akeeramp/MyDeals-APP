@@ -470,7 +470,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         if (myRow != undefined && myRow.DC_ID != undefined && myRow.DC_ID != null) {
                             // Start vol, end vol, or rate changed
                             if (colIndex === endVolIndex || colIndex === strtVolIndex || colIndex === rateIndex) {
-                                value.value = parseInt(value.value) || 0; // HACK: To make sure End vol has a numerical value so that validations work and show on these cells
+                                value.value = parseFloat(value.value) || 0; // HACK: To make sure End vol has a numerical value so that validations work and show on these cells
                             }
 
                             // Transform negative numbers into positive
@@ -684,7 +684,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                             if (tierNumVal == parseInt(root.curPricingTable.NUM_OF_TIERS)) {
                                 // default last end vol to "unlimited"
-                                data[r]["END_VOL"] = 999999999999;
+                                data[r]["END_VOL"] = 999999999;
                             } else {
                                 // Default to 0
                                 data[r]["END_VOL"] = 0;

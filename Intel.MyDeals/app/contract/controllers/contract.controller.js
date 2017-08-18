@@ -29,7 +29,7 @@
         $scope.defCust = $localStorage.selectedCustomerId;
         $scope.switchingTabs = false;
 
-        var tieredCols = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"];
+        var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"];
 
         $scope.flowMode = "Deal Entry";
         if ($state.current.name.indexOf("contract.compliance") >= 0) $scope.flowMode = "Compliance";
@@ -2010,8 +2010,8 @@
                     for (var t = 1; t <= numTiers; t++) {
                 		var lData = util.deepClone(data[d]);
                     	// Vol-tier specific cols with tiers
-                    	for (var i = 0; i < tieredCols.length; i++) {
-                    		var tieredItem = tieredCols[i];
+                    	for (var i = 0; i < tierAtrbs.length; i++) {
+                    		var tieredItem = tierAtrbs[i];
                     		lData[tieredItem] = lData[tieredItem + "_____10___" + t];
 
                     		// Tie warning message (valid message and red highlight) to its specific tier
@@ -2032,7 +2032,7 @@
                     			}
                     		}
                     	}
-						// Disable all Start vols excpet the first
+						// Disable all Start vols except the first
                     	if (t != 1 && !!data[d]._behaviors) {
                     		if (!data[d]._behaviors.isReadOnly) {
                     			data[d]._behaviors.isReadOnly = {};
@@ -2056,7 +2056,6 @@
                 var newData = [];
                 var lData = {};
                 var tierDimKey = "_____10___";
-                var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"];
 
                 for (var d = 0; d < data.length; d) {
                     for (var t = 1; t <= numTiers; t++) {
@@ -2064,8 +2063,9 @@
                         for (a = 0; a < tierAtrbs.length; a++)
                             lData[tierAtrbs[a] + tierDimKey + t] = data[d][tierAtrbs[a]];
                         if (t === numTiers) {
-                            for (a = 0; a < tierAtrbs.length; a++)
-                                delete lData[tierAtrbs[a]];
+                        	for (a = 0; a < tierAtrbs.length; a++){
+                        	delete lData[tierAtrbs[a]];
+							}
                             newData.push(lData);
                         }
                         d++;
