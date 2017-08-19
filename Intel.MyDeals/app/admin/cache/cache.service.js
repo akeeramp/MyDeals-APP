@@ -23,7 +23,8 @@
             viewStaticCacheByName: viewStaticCacheByName,
             getApiCacheStatus: getApiCacheStatus,
             clearApiCache: clearApiCache,
-            clearApiCacheByName: clearApiCacheByName
+            clearApiCacheByName: clearApiCacheByName,
+            getSessionComparisonHash: getSessionComparisonHash
         }
 
         return service;
@@ -62,6 +63,9 @@
 
         function clearApiCacheByName() {
             return dataService.post(apiBaseUrl + 'ClearApiCache', data);
+        }
+        function getSessionComparisonHash() {
+        	return dataService.get(apiBaseUrl + 'GetSessionComparisonHash');
         }
     }
 })();

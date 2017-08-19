@@ -20,5 +20,7 @@ namespace Intel.MyDeals.IBusinessLogic
         bool LoadCache(string fieldName);
 
         object ViewCache(string fieldName);
-    }
+
+		int GetSessionComparisonHash();
+	}
 }

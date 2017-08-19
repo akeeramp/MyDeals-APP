@@ -136,7 +136,24 @@ namespace Intel.MyDeals.DataLibrary
 
         #endregion Cache Functions
 
-        public static List<AdminConstant> GetToolConstants()
+		public static int GetSessionComparisonHash()
+		{
+			lock (LOCK_OBJECT ?? new object())
+			{
+				if (_getSessionComparisonHash == 0)
+				{
+					_getSessionComparisonHash = Guid.NewGuid().GetHashCode();
+					return _getSessionComparisonHash;
+				}
+				else
+				{
+					return _getSessionComparisonHash;
+				}
+			}
+		}
+		private static int _getSessionComparisonHash;
+
+		public static List<AdminConstant> GetToolConstants()
         {
             lock (LOCK_OBJECT ?? new object())
             {

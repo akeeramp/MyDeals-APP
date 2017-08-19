@@ -58,5 +58,8 @@ namespace Intel.MyDeals.IDataLibrary
         ProductSelectorWrapper GetProductSelectorWrapper();
 
         Dictionary<string, string> GetSearchString();
-    }
+
+		int GetSessionComparisonHash();
+
+	}
 }

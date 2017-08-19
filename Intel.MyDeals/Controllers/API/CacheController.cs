@@ -113,5 +113,17 @@ namespace Intel.MyDeals.Controllers.API
 
             return false;
         }
+
+		/// <summary>
+		/// Gets the random hash we generate each time we have cached data. 
+		/// We use this to check against whether or not to refresh the javascript sessionStorage.
+		/// </summary>
+		/// <returns>A random hash</returns>
+		[Route("api/Cache/v1/GetSessionComparisonHash")]
+		[HttpGet]
+		public int GetSessionComparisonHash() // TODO: rename this maybe because I'm really bad at naming
+		{
+			return _cacheLib.GetSessionComparisonHash();
+		}
     }
 }

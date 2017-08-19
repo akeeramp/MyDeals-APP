@@ -71,9 +71,20 @@ namespace Intel.MyDeals.DataLibrary
             return DataCollections.ViewCache(fieldName);
         }
 
-        #endregion Cache Functions
+		/// <summary>
+		/// Gets the random hash we generate each time we have cached data. 
+		/// We use this to check against whether or not to refresh the javascript sessionStorage.
+		/// </summary>
+		/// <param name="cacheKey"></param>
+		/// <returns>A random hash</returns>
+		public int GetSessionComparisonHash()
+		{
+			return DataCollections.GetSessionComparisonHash();
+		}
 
-        public List<AdminConstant> GetToolConstants()
+		#endregion Cache Functions
+
+		public List<AdminConstant> GetToolConstants()
         {
             return DataCollections.GetToolConstants();
         }
