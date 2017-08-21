@@ -60,7 +60,7 @@
         $scope.C_VIEW_ATTACHMENTS = securityService.chkDealRules('C_VIEW_ATTACHMENTS', window.usrRole, null, null, null);
 
         // Hard code for now until security is put in place
-        $scope.C_ADD_PRICING_STRATEGY = true;
+        // $scope.C_ADD_PRICING_STRATEGY = true;
 
 
         // determine if the contract is existing or new... if new, look for pre-population attributes from the URL parameters
