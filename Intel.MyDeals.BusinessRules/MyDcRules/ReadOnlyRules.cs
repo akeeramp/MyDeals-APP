@@ -100,7 +100,7 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.ECAP_FLR,
                                 //AttributeCodes.ECAP_PRICE,
                                 //AttributeCodes.END_DT,
-                                //AttributeCodes.GEO_COMBINED,
+                                AttributeCodes.GEO_COMBINED,
                                 AttributeCodes.MEETCOMP_TEST_RESULT,
                                 //AttributeCodes.MEET_COMP_PRICE_QSTN,
                                 //AttributeCodes.MRKT_SEG,

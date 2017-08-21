@@ -1247,6 +1247,20 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem
             {
                 Id = 29,
+                AtrbCd = AttributeCodes.SERVER_DEAL_TYPE,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Width = 110,
+                IsFilterable = true,
+                IsSortable = true,
+                Template = "#=gridUtils.uiControlWrapper(data, 'SERVER_DEAL_TYPE')#",
+                LookupUrl = "/api/Dropdown/GetDropdowns/PAYOUT_BASED_ON", //TODO: change to SERVER_DEAL_TYPE and make sure it actually exists
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN"
+            });
+
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
                 AtrbCd = AttributeCodes.PAYOUT_BASED_ON,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 Width = 110,

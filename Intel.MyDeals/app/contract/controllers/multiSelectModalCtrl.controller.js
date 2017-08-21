@@ -12,7 +12,7 @@ function MultiSelectModalCtrl($scope, $uibModalInstance, MrktSegMultiSelectServi
 
 	$ctrl.multiSelectPopUpModal = items;
 	$ctrl.popupResult = [];
-	$ctrl.popupResult.MultiSelectSelections = cellCurrValues;
+	$ctrl.popupResult.MultiSelectSelections = (cellCurrValues === null) ? "" : cellCurrValues;
 	$ctrl.colName = colName;
     $ctrl.placeholderText = "Click to Select...";
 

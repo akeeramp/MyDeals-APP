@@ -422,15 +422,18 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 },
                 save: function (e) {
                     var newField = util.getFirstKey(e.values);
-                    $scope.$parent.$parent.$parent.$parent.$parent.saveCell(e.model, newField);
 
-                    if (e.model.isLinked !== undefined && e.model.isLinked) {
-                        $scope.syncLinked(newField, e.values[newField]);
-                    }
+                    $scope.saveFunctions(e.model, newField, e.values[newField]);
 
-                    if (e.model._parentCnt !== undefined && e.model._parentCnt > 1) {
-                        $scope.syncGrouped(newField, e.values[newField], e.model);
-                    }
+                    //$scope.$parent.$parent.$parent.$parent.$parent.saveCell(e.model, newField);
+
+                    //if (e.model.isLinked !== undefined && e.model.isLinked) {
+                    //    $scope.syncLinked(newField, e.values[newField]);
+                    //}
+
+                    //if (e.model._parentCnt !== undefined && e.model._parentCnt > 1) {
+                    //    $scope.syncGrouped(newField, e.values[newField], e.model);
+                    //}
 
                     gridUtils.onDataValueChange(e);
 
@@ -583,7 +586,11 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
 
                     //note: as this is a reusable directive we probably shouldnt put TRGT_RGN specific logic here, but if not here then where?
                     if (options.field.toUpperCase() === "TRGT_RGN") {
-                        openTargetRegionModal(container, col.lookupUrl)
+                        openTargetRegionModal(container, col)
+                    }
+
+                    if (options.field.toUpperCase() === "MRKT_SEG") {
+                        openMarketSegmentModal(container, col)
                     }
 
                 } else {
@@ -752,6 +759,19 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                     }
                 }
 
+            }
+
+            $scope.saveFunctions = function (model, col, newVal) {
+
+                $scope.$parent.$parent.$parent.$parent.$parent.saveCell(model, col);
+
+                if (model.isLinked !== undefined && model.isLinked) {
+                    $scope.syncLinked(col, newVal);
+                }
+
+                if (model._parentCnt !== undefined && model._parentCnt > 1) {
+                    $scope.syncGrouped(col, newVal, model);
+                }
             }
 
             $scope.syncLinked = function (newField, newValue) {
@@ -1143,13 +1163,13 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                     });
             }
 
-            function openTargetRegionModal(container, lookupURL) {
+            function openTargetRegionModal(container, col) {
                 var containerDataItem = angular.element(container).scope().dataItem;
 
                 var targetRegionData = {
-                    'TRGT_RGN': angular.element(container).scope().dataItem.TRGT_RGN,
-                    'GEO_MBR_SID': angular.element(container).scope().dataItem.GEO_COMBINED,
-                    'LOOKUPURL': lookupURL
+                    'TRGT_RGN': containerDataItem.TRGT_RGN,
+                    'GEO_MBR_SID': containerDataItem.GEO_COMBINED,
+                    'LOOKUPURL': col.lookupUrl
                 }
                 var trgtRgnModal = $uibModal.open({
                     backdrop: 'static',
@@ -1165,10 +1185,64 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
 
                 trgtRgnModal.result.then(
                     function (targetRegions) { //returns as an array
-                        angular.element(container).scope().dataItem.TRGT_RGN = targetRegions.join();
+                        containerDataItem.TRGT_RGN = targetRegions.join();
+                        containerDataItem.dirty = true;
+
+                        $scope.$parent.$parent.$parent.$parent.$parent.saveCell(containerDataItem, "TRGT_RGN");
+                        //Note: we do not call the below because we do not want target region to update all linked rows.  If we did, uncomment the below line and comment out the one above
+                        //$scope.saveFunctions(containerDataItem, "TRGT_RGN", containerDataItem.TRGT_RGN)
+                    },
+                    function () {
+                    });
+            }
+
+            function openMarketSegmentModal(container, col) {
+                var containerDataItem = angular.element(container).scope().dataItem;
+                console.log(col)
+
+                var mrktSegModal = $uibModal.open({
+                    backdrop: 'static',
+                    templateUrl: 'multiSelectPopUpModal',
+                    controller: 'MultiSelectModalCtrl',
+                    controllerAs: '$ctrl',
+                    windowClass: 'multiselect-modal-window',
+                    size: 'md',
+
+                    resolve: {
+                        items: function () {
+                            return {
+                                'label': col.title,
+                                'uiType': col.uiType,
+                                'opLookupUrl': col.lookupUrl,
+                                'opLookupText': col.lookupText,
+                                'opLookupValue': col.lookupValue
+                            };
+                        },
+                        cellCurrValues: function () {
+                            if (typeof containerDataItem.MRKT_SEG == "string") {
+                                return containerDataItem.MRKT_SEG.split(",").map((item) => item.trim());
+                            } else {
+                                return containerDataItem.MRKT_SEG.map((item) => item.trim());
+                            }
+                            
+                        },
+                        colName: function () {
+                            return "MRKT_SEG";
+                        },
+                        isBlendedGeo: function () {
+                            return false;
+                        }
+                    }
+                });
+
+                mrktSegModal.result.then(
+                    function (marketSegments) { //returns as an array
+                        containerDataItem.MRKT_SEG = marketSegments;
                         //for some reason I can't get the grid to flag these cells as dirty when changing it via modal, so we manually do it below
-                        angular.element(container).scope().dataItem.dirty = true;
-                        $scope.$parent.$parent.$parent.$parent.$parent.saveCell(angular.element(container).scope().dataItem, "TRGT_RGN");
+                        containerDataItem.dirty = true;
+                        //$scope.$parent.$parent.$parent.$parent.$parent.saveCell(containerDataItem, "MRKT_SEG");
+
+                        $scope.saveFunctions(containerDataItem, "MRKT_SEG", containerDataItem.MRKT_SEG)
                     },
                     function () {
                     });
