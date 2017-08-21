@@ -736,6 +736,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
     vm.cancel = function () {
         vm.curRowData = [];
         vm.curRowProds = [];
+        GetProductCorrectorData.AutoValidatedProducts = util.deepClone(GetProductCorrectorData.ValidProducts);
         $uibModalInstance.close(GetProductCorrectorData);
     }
 
