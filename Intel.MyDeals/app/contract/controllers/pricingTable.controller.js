@@ -36,6 +36,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     root.child = $scope;
     root.ptRowCount = 200;
     root.switchingTabs = false;
+    var unlimitedVal = "Unlimited"; // TODO: Hook up to default from db maybe?
 
     root.uncompressJson(pricingTableData.data.PRC_TBL_ROW);
 
@@ -468,23 +469,37 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     function (rowIndex, colIndex, value) {
                         var myRow = data[(rowIndex - 1)];
                         if (myRow != undefined && myRow.DC_ID != undefined && myRow.DC_ID != null) {
-                            // Start vol, end vol, or rate changed
-                            if (colIndex === endVolIndex || colIndex === strtVolIndex || colIndex === rateIndex) {
-                                value.value = parseFloat(value.value) || 0; // HACK: To make sure End vol has a numerical value so that validations work and show on these cells
-                            }
 
-                            // Transform negative numbers into positive
-                            if (value.value < 0) {
-                                value.value = Math.abs(value.value);
-                            }
+                        	var isEndVolUnlimited = false;
+                        	var numOfTiers = parseInt(root.pricingTableData.PRC_TBL[0].NUM_OF_TIERS);
+
+                        	if (value.value.toString().toUpperCase() == unlimitedVal.toUpperCase() && colIndex === endVolIndex && myRow.TIER_NBR === numOfTiers) {
+                        		isEndVolUnlimited = true;
+							}
+
+                        	// Start vol, end vol, or rate changed
+                        	if (!isEndVolUnlimited) {
+
+                        		if (colIndex === endVolIndex || colIndex === strtVolIndex) {
+                        			value.value = parseInt(value.value) || 0; // HACK: To make sure End vol has a numerical value so that validations work and show on these cells
+                        		}
+                        		else if (colIndex === rateIndex) {
+                        			value.value = parseFloat(value.value) || 0; // HACK: To make sure End vol has a numerical value so that validations work and show on these cells
+                        		}
+
+								// Transform negative numbers into positive
+								if (value.value < 0) {
+									value.value = Math.abs(value.value);
+								}
+							}
 
                             // End_Vol Col changed
                             if (colIndex === endVolIndex) {
                                 // If this vol tier isn't the last of its vol tier rows
-                                if (myRow.TIER_NBR != root.pricingTableData.PRC_TBL[0].NUM_OF_TIERS) {
+                            	if (myRow.TIER_NBR != numOfTiers) {
                                     var nextRow = data[(rowIndex)];
                                     // Calculate next start vol using end vol
-                                    if (nextRow !== undefined) {
+                                    if (nextRow !== undefined && !isEndVolUnlimited) {
                                         nextRow.STRT_VOL = (value.value + 1);
                                         sourceData[(rowIndex)].STRT_VOL = nextRow.STRT_VOL;
                                     }
@@ -684,7 +699,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                             if (tierNumVal == parseInt(root.curPricingTable.NUM_OF_TIERS)) {
                                 // default last end vol to "unlimited"
-                                data[r]["END_VOL"] = 999999999;
+                            	data[r]["END_VOL"] = unlimitedVal; 
                             } else {
                                 // Default to 0
                                 data[r]["END_VOL"] = 0;

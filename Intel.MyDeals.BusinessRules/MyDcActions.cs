@@ -714,8 +714,14 @@ namespace Intel.MyDeals.BusinessRules
 				}
 
 				// Parse the double values
-				Double.TryParse(atrb.AtrbValue.ToString(), out endVol);
-				Double.TryParse(relatedStartVol, out startVol);
+				bool isEndDateANumber = Double.TryParse(atrb.AtrbValue.ToString(), out endVol);
+				bool isStrtDateANumber = Double.TryParse(relatedStartVol, out startVol);
+
+				// End Vol is unlimited
+				if (!isEndDateANumber && atrb.AtrbValue.ToString().Equals("UNLIMITED", StringComparison.InvariantCultureIgnoreCase))
+				{
+					continue;
+				}
 
 				// Compare
 				if (startVol >= endVol)
@@ -743,10 +749,10 @@ namespace Intel.MyDeals.BusinessRules
 		{
 			MyOpRuleCore r = new MyOpRuleCore(args);
 			if (!r.IsValid) return;
-			ValidateTieredAttribute(AttributeCodes.END_VOL.ToString(), "End Volume must be greater than 0.", IsGreaterThanZero, r);
+			ValidateTieredAttribute(AttributeCodes.END_VOL.ToString(), "End Volume must be greater than 0.", IsGreaterThanZero, r, true);
 		}
 		
-		public static void ValidateTieredAttribute(string myAtrbCd, string validationMessage, Func<double, bool> validationCondition, MyOpRuleCore r)
+		public static void ValidateTieredAttribute(string myAtrbCd, string validationMessage, Func<double, bool> validationCondition, MyOpRuleCore r, bool isEndVol=false)
 		{
 			IEnumerable<IOpDataElement> atrbs = r.Dc.GetDataElementsWhere(de => de.AtrbCd == myAtrbCd); // NOTE: "10" is the Tier's dim key. In thoery this shouldn't need to change
 			IOpDataElement atrbWithValidation = atrbs.FirstOrDefault(); // We need to pick only one of the tiered attributes to set validation on, else we'd keep overriding the message value per tier
@@ -768,8 +774,20 @@ namespace Intel.MyDeals.BusinessRules
 						continue;
 					}
 
-					Double.TryParse(atrb.AtrbValue.ToString(), out safeParse);
-					if (!validationCondition(safeParse))
+						bool teklklst = atrb.AtrbValue.ToString().Equals("UNLIMITED", StringComparison.InvariantCultureIgnoreCase);
+					// unlimited end vol
+					if (isEndVol && (tier == numOfTiers) && atrb.AtrbValue.ToString().Equals("UNLIMITED", StringComparison.InvariantCultureIgnoreCase))
+					{
+						continue;
+					}
+
+					bool isNumber = Double.TryParse(atrb.AtrbValue.ToString(), out safeParse);
+
+					if (!isNumber)
+					{
+						AddTierValidationMessage(atrbWithValidation, "Must be a number.", tier);
+					}
+					else if (!validationCondition(safeParse))
 					{
 						AddTierValidationMessage(atrbWithValidation, validationMessage, tier);
 					}

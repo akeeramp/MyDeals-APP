@@ -1217,12 +1217,12 @@ namespace Intel.MyDeals.Entities {
 			ATRB_LBL = "End Vol",
 			ATRB_MAX_LEN = 1,
 			ATRB_SID = 6,
-			DATA_TYPE_CD = "INT",
+			DATA_TYPE_CD = "VARCHAR",
 			DIM_CD = "DEAL",
 			DIM_SID = 3,
-			DOT_NET_DATA_TYPE = "System.Int32",
+			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0:d}",
-			TGT_COL_TYPE = "INT",
+			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
 		public static MyDealsAttribute EPM_NM = new MyDealsAttribute()
