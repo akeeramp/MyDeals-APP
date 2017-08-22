@@ -16,7 +16,7 @@ function dealTools() {
 
             if (!!$scope.isEditable) $scope.isEditable = false;
 
-            var prntRoot = $scope.$parent.$parent;
+            var prntRoot = $scope.$parent.$parent.$parent.$parent.$parent.$parent.$parent;
             var rootScope = $scope.$parent;
             if (!$scope.$parent.contractData) {
                 rootScope = $scope.$parent.$parent.$parent.$parent.$parent;
