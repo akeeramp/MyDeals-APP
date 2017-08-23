@@ -37,7 +37,7 @@ gridUtils.uiDimControlWrapper = function (passedData, field, dim, format) {
     tmplt += '<div class="uiControlDiv"';
     tmplt += '     ng-class="{isHiddenCell: dataItem._behaviors.isHidden.' + field + ', isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ',';
     tmplt += '     isRequiredCell: dataItem._behaviors.isRequired.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + ', isSavedCell: dataItem._behaviors.isSaved.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + '}">';
-    tmplt += '    <div class="ng-binding  vert-center" ng-bind="(dataItem.' + field + '[\'' + dim + '\'] ' + gridUtils.getFormat(field, format) + ')"></div>';
+    tmplt += '    <div class="ng-binding vert-center" ng-bind="(dataItem.' + field + '[\'' + dim + '\'] ' + gridUtils.getFormat(field, format) + ')"></div>';
     tmplt += '</div>';
 
     return tmplt;
@@ -76,42 +76,72 @@ gridUtils.uiControlScheduleWrapper = function (passedData) {
 
     return tmplt;
 }
-gridUtils.uiMoneyDatesControlWrapper = function (passedData, field, startDt, endDt) {
+gridUtils.uiMoneyDatesControlWrapper = function (passedData, field, startDt, endDt, dimKey) {
     var msg = "";
     var msgClass = "";
     var tmplt = '';
 
-    if (field === "CAP" && passedData[field] === "No CAP") {
+    if (!dimKey) dimKey = "";
+    var dimKeyWrapper = dimKey === "" ? dimKey : "[\'" + dimKey + "\']";
+
+    var fieldVal = (dimKey !== "")
+        ? !!passedData[field] && !!passedData[field][dimKey] ? passedData[field][dimKey] : ""
+        : !!passedData[field] && !!passedData[field] ? passedData[field] : "";
+
+    var startVal = (dimKey !== "")
+        ? !!passedData[startDt] && !!passedData[startDt][dimKey] ? passedData[startDt][dimKey] : ""
+        : !!passedData[startDt] && !!passedData[startDt] ? passedData[startDt] : "";
+
+    if (field === "CAP" && fieldVal === "No CAP") {
         tmplt += '<div class="uiControlDiv isSoftWarnCell" style="font-family: arial; text-align: center; color: white;">';
         tmplt += '<div style="line-height: 1em; font-family: arial; text-align: center;font-weight:600">No CAP</div>';
-        if (kendo.toString(new Date(passedData[startDt]), 'MM/dd/yy') != '01/01/01') {
-            tmplt += '<div>Availability:<span class="ng-binding" ng-bind="(dataItem.' + startDt + ' | date:\'MM/dd/yy\')"></span><span></div>';
+        if (startVal !== "" && kendo.toString(new Date(startVal), 'MM/dd/yy') !== '01/01/01') {
+            tmplt += '<div>Availability:<span class="ng-binding" ng-bind="(dataItem.' + startDt + dimKeyWrapper + ' | date:\'MM/dd/yy\')"></span><span></div>';
         }
         tmplt += '</div>';
+
+    } else if (field === "YCS2_PRC_IRBT" && fieldVal === "No YCS2") {
+        tmplt += '<div class="uiControlDiv isSoftWarnCell" style="font-family: arial; text-align: center; color: white;">';
+        tmplt += '<div style="line-height: 1em; font-family: arial; text-align: center;font-weight:600">No YCS2</div>';
+        if (startVal !== "" && kendo.toString(new Date(startVal), 'MM/dd/yy') !== '01/01/01') {
+            tmplt += '<div>Availability:<span class="ng-binding" ng-bind="(dataItem.' + startDt + dimKeyWrapper + ' | date:\'MM/dd/yy\')"></span><span></div>';
+        }
+        tmplt += '</div>';
+
     } else {
         if (field === "CAP") {
-            var cap = parseFloat(passedData.CAP);
-            var ecap = parseFloat(passedData.ECAP_PRICE);
+            var cap = (dimKey !== "")
+                ? !!passedData[startDt] && !!passedData.CAP[dimKey] ? parseFloat(passedData.CAP[dimKey]) : ""
+                : !!passedData[startDt] && !!passedData.CAP ? parseFloat(passedData.CAP) : "";
+
+            var ecap = (dimKey !== "")
+                ? !!passedData[startDt] && !!passedData.ECAP_PRICE[dimKey] ? parseFloat(passedData.ECAP_PRICE[dimKey]) : ""
+                : !!passedData[startDt] && !!passedData.ECAP_PRICE ? parseFloat(passedData.ECAP_PRICE) : "";
+
             if (ecap > cap) {
                 msg = "title = 'ECAP ($" + ecap.toFixed(2) + ") is greater than the CAP ($" + cap.toFixed(2) + ")'";
                 msgClass = "isSoftWarnCell";
             }
         }
-        var capText = '<span class="ng-binding" ng-bind="(dataItem.' + field + ' ' + gridUtils.getFormat(field, 'currency') + ')" style="font-weight: bold;"></span>';
-        if (!!passedData[field] && passedData[field].indexOf("-") > -1) {
-            msg = "CAP price " + passedData[field] + " cannot be a range.";
+        var capText = '<span class="ng-binding" ng-bind="(dataItem.' + field + dimKeyWrapper + ' ' + gridUtils.getFormat(field, 'currency') + ')" style="font-weight: bold;"></span>';
+
+        if (fieldVal !== "" && fieldVal.indexOf("-") > -1) {
+            msg = "CAP price " + fieldVal + " cannot be a range.";
             msgClass = "isSoftWarnCell";
-            capText = '<span class="ng-binding" ng-bind="(dataItem.' + field + ')" style="font-weight: bold;"></span>';
+            capText = '<span class="ng-binding" ng-bind="(dataItem.' + field + dimKeyWrapper + ')" style="font-weight: bold;"></span>';
         }
 
         tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
         tmplt += '<div class="uiControlDiv ' + msgClass + '" style="line-height: 1em; font-family: arial; text-align: center;" ' + msg;
         tmplt += '     ng-class="{isHiddenCell: dataItem._behaviors.isHidden.' + field + ', isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ',';
-        tmplt += '     isRequiredCell: dataItem._behaviors.isRequired.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + ', isSavedCell: dataItem._behaviors.isSaved.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + '}">';
+        tmplt += '     isRequiredCell: dataItem._behaviors.isRequired.' + field + ', ';
+        tmplt += '     isErrorCell: dataItem._behaviors.isError.' + field + ', ';
+        tmplt += '     isSavedCell: dataItem._behaviors.isSaved.' + field + ', ';
+        tmplt += '     isDirtyCell: dataItem._behaviors.isDirty.' + field + '}">';
         tmplt += capText;
         tmplt += '    <div>';
-        tmplt += '    <span class="ng-binding" ng-bind="(dataItem.' + startDt + ' | date:\'MM/dd/yy\')"></span> - ';
-        tmplt += '    <span class="ng-binding" ng-bind="(dataItem.' + endDt + ' ' + gridUtils.getFormat(field, "date:'MM/dd/yy'") + ')"></span>';
+        tmplt += '    <span class="ng-binding" ng-bind="(dataItem.' + startDt + dimKeyWrapper + ' | date:\'MM/dd/yy\')"></span> - ';
+        tmplt += '    <span class="ng-binding" ng-bind="(dataItem.' + endDt + dimKeyWrapper + ' ' + gridUtils.getFormat(field, "date:'MM/dd/yy'") + ')"></span>';
         tmplt += '    </div>';
         tmplt += '</div>';
     }

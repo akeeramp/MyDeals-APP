@@ -298,6 +298,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
         public static void CopyMatchingAttributes(this OpDataCollectorFlattenedList retItems, OpDataCollectorFlattenedItem opFlatItemLocal, OpDataElementTypeMapping elMapping,
             List<string> singleDimAtrbs, List<string> multiDimAtrbs, string userPrdNm, List<ProdMapping> pMaps, string geo)
         {
+            string baseEcapDimKey = "_____7___1____20___0";
             OpDataCollectorFlattenedItem newItem = new OpDataCollectorFlattenedItem();
 
             // make a copy so we don't cross-contaminate records
@@ -315,12 +316,12 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                     {
                         opFlatItem[AttributeCodes.PRODUCT_FILTER + "_____7___" + pMap.PRD_MBR_SID + "____20___0"] = pMap.PRD_MBR_SID;
                         opFlatItem[AttributeCodes.TITLE] = pMap.HIER_VAL_NM;
-                        opFlatItem[AttributeCodes.CAP] = pMap.CAP;
-                        opFlatItem[AttributeCodes.CAP_STRT_DT] = pMap.CAP_START;
-                        opFlatItem[AttributeCodes.CAP_END_DT] = pMap.CAP_END;
-                        opFlatItem[AttributeCodes.YCS2_PRC_IRBT] = pMap.YCS2;
-                        opFlatItem[AttributeCodes.YCS2_START_DT] = pMap.YCS2_START;
-                        opFlatItem[AttributeCodes.YCS2_END_DT] = pMap.YCS2_END;
+                        opFlatItem[AttributeCodes.CAP + baseEcapDimKey] = pMap.CAP;
+                        opFlatItem[AttributeCodes.CAP_STRT_DT + baseEcapDimKey] = pMap.CAP == "No CAP" ? "" : pMap.CAP_START;
+                        opFlatItem[AttributeCodes.CAP_END_DT + baseEcapDimKey] = pMap.CAP == "No CAP" ? "" : pMap.CAP_END;
+                        opFlatItem[AttributeCodes.YCS2_PRC_IRBT + baseEcapDimKey] = pMap.YCS2;
+                        opFlatItem[AttributeCodes.YCS2_START_DT + baseEcapDimKey] = pMap.YCS2 == "No YCS2" ? "" : pMap.YCS2_START;
+                        opFlatItem[AttributeCodes.YCS2_END_DT + baseEcapDimKey] = pMap.YCS2 == "No YCS2" ? "" : pMap.YCS2_END;
                         opFlatItem[AttributeCodes.PRD_COST] = pMap.PRD_COST;
                         opFlatItem[AttributeCodes.PRD_STRT_DTM] = pMap.PRD_STRT_DTM;
                         opFlatItem[AttributeCodes.PRD_END_DTM] = pMap.PRD_END_DTM;
@@ -362,10 +363,16 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                 {
                     newItem[key] = opFlatItem[key];
                 }
-                else if (multiDimAtrbs.IndexOf(key) >= 0 || key.IndexOf(AttributeCodes.PRODUCT_FILTER) == 0)
+                else if (multiDimAtrbs.IndexOf(key) >= 0 || key.IndexOf(AttributeCodes.PRODUCT_FILTER) == 0 || key.IndexOf(AttributeCodes.ECAP_PRICE) == 0)
                 {
-                    // TODO: need to get multi dims working once we have multi dim in the system
-                    newItem[key] = opFlatItem[key];
+                    if (key.IndexOf(AttributeCodes.ECAP_PRICE) == 0)
+                    {
+                        newItem[key + baseEcapDimKey] = opFlatItem[key];
+                    }
+                    else
+                    {
+                        newItem[key] = opFlatItem[key];
+                    }
                 }
                 else
                 {
