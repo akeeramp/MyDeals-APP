@@ -56,7 +56,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 angular.forEach($scope.opOptions.groupColumns, function (value, key) {
                     this[key] = cnt++;
                 }, indxs);
-                
+
                 var cols = $scope.opOptions.columns;
                 for (var c = 0; c < cols.length; c++) {
 
@@ -1054,7 +1054,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 $scope.$parent.$parent.setBusy("Validating your data...", "Please wait as we validate your information!");
                 //$timeout(function () {
                     $scope.contractDs.sync();
-                    $scope.$parent.$parent.$parent.validateWipDeals(); 
+                    $scope.$parent.$parent.$parent.validateWipDeals();
                 //}, 100);
 
                 return;
@@ -1220,11 +1220,14 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                         },
                         cellCurrValues: function () {
                             if (typeof containerDataItem.MRKT_SEG == "string") {
-                                return containerDataItem.MRKT_SEG.split(",").map((item) => item.trim());
+                                return containerDataItem.MRKT_SEG.split(",").map(function (item) {
+                                    return item.trim();
+                                });
                             } else {
-                                return containerDataItem.MRKT_SEG.map((item) => item.trim());
+                                return containerDataItem.MRKT_SEG.map(function (item) {
+                                    return item.trim();
+                                });
                             }
-                            
                         },
                         colName: function () {
                             return "MRKT_SEG";
