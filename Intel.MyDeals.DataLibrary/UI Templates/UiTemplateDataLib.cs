@@ -499,18 +499,18 @@ namespace Intel.MyDeals.DataLibrary
                 Width = 100,
                 Label = "End Vol"
 			});
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 36,
-                AtrbCd = AttributeCodes.RATE,
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
-                IsDimKey = true,
-                Width = 100,
-                Label = "Rate"
+			items.Add(new UiTemplateContainerItem
+			{
+				Id = 36,
+				AtrbCd = AttributeCodes.RATE,
+				ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+				ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
+				IsDimKey = true,
+				Width = 100,
+				Label = "Rate"
 			});
 
-            items.Add(new UiTemplateContainerItem
+			items.Add(new UiTemplateContainerItem
             {
                 Id = 38,
                 AtrbCd = AttributeCodes.MRKT_SEG,
@@ -596,12 +596,21 @@ namespace Intel.MyDeals.DataLibrary
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
                 IsHidden = true
             });
+			items.Add(new UiTemplateContainerItem
+			{
+				Id = 36,
+				AtrbCd = AttributeCodes.TITLE,
+				ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+				ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
+				Width = 100,
+				Label = "Deal Description"
+			});
 
-            #endregion PRICING TABLE ROW
+			#endregion PRICING TABLE ROW
 
-            #region WIP DEAL
+			#region WIP DEAL
 
-            items.Add(new UiTemplateContainerItem
+			items.Add(new UiTemplateContainerItem
             {
                 Id = 1,
                 AtrbCd = AttributeCodes.DC_ID,

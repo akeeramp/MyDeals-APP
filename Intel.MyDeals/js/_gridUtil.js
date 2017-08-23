@@ -65,8 +65,11 @@ gridUtils.uiControlScheduleWrapper = function (passedData) {
             numTiers++;
             var dim = "10___" + numTiers;
             tmplt += '<tr style="height: 25px;">';
-            for (var f = 0; f < fields.length; f++) {
-                tmplt += '<td style="text-align: ' + fields[f].align + ';"><span class="ng-binding" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + '\'] ' + gridUtils.getFormat(fields[f].field, fields[f].format) + ')"></span></td>';
+            for (var f = 0; f < fields.length; f++) { 
+            	tmplt += '<td style="text-align: ' + fields[f].align + ';">';
+            	tmplt += '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + fields[f].field +'_'+ dim + '" kendo-tooltip="" k-content="dataItem._behaviors.validMsg.' + fields[f].field +'_'+ dim + '" style="" data-role="tooltip"></div>';
+            	tmplt += '<span class="ng-binding" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + '\'] ' + gridUtils.getFormat(fields[f].field, fields[f].format) + ')"></span>'
+            	tmplt += '</td>';
             }
             tmplt += '</tr>';
         }

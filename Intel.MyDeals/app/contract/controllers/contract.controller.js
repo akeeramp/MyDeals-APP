@@ -1794,10 +1794,20 @@
                     }
                     if (!!results.data.WIP_DEAL) {
                         if (!$scope.switchingTabs) {
-                            for (i = 0; i < results.data.WIP_DEAL.length; i++) {
-                                if (results.data.WIP_DEAL[i].warningMessages !== undefined && results.data.WIP_DEAL[i].warningMessages.length > 0) anyWarnings = true;
-                            }
-                            $scope.updateResults(results.data.WIP_DEAL, $scope.pricingTableData === undefined ? [] : $scope.pricingTableData.WIP_DEAL);
+                        	for (i = 0; i < results.data.WIP_DEAL.length; i++) {
+                        		var dataItem = results.data.WIP_DEAL[i];
+                        		if (dataItem.warningMessages !== undefined && dataItem.warningMessages.length > 0) anyWarnings = true;
+
+                        		if (anyWarnings) {
+                        			// map tiered warnings
+                        			for (var t = 1; t <= dataItem.NUM_OF_TIERS; t++) {
+                        				for (var a = 0; a < tierAtrbs.length; a++) {
+                        					mapTieredWarnings(dataItem, dataItem, tierAtrbs[a], (tierAtrbs[a] + "_10___" + t), t); // NOTE: 10___ is the dim defined in _gridUtil.js
+                        				}
+                        			}
+                        		}
+                        	}
+                        $scope.updateResults(results.data.WIP_DEAL, $scope.pricingTableData === undefined ? [] : $scope.pricingTableData.WIP_DEAL);
                         }
                     }
 
@@ -1998,6 +2008,27 @@
             }
         }
 
+        function mapTieredWarnings(dataItem, dataToTieTo, atrbName, atrbToSetErrorTo, tierNumber) {
+        	// Tie warning message (valid message and red highlight) to its specific tier
+        	// NOTE: this expects that tiered errors come in the form of a Dictionary<tier, message>
+        	if (!!dataItem._behaviors && !!dataItem._behaviors.validMsg && !jQuery.isEmptyObject(dataItem._behaviors.validMsg)) {
+        		if (dataItem._behaviors.validMsg[atrbName] != null) {
+        			// Parse the Dictionary json
+        			var jsonTierMsg = JSON.parse(dataItem._behaviors.validMsg[atrbName]);
+
+        			if (jsonTierMsg[tierNumber] != null && jsonTierMsg[tierNumber] != undefined) {
+        				// Set the validation message
+        				dataToTieTo._behaviors.validMsg[atrbToSetErrorTo] = jsonTierMsg[tierNumber];
+        				dataToTieTo._behaviors.isError[atrbToSetErrorTo] = true;
+        			} else {
+        				// Delete the tier-specific validation if it doesn't tie to this specific tier
+        				delete dataToTieTo._behaviors.validMsg[atrbToSetErrorTo];
+        				delete dataToTieTo._behaviors.isError[atrbToSetErrorTo];
+        			}
+        		}
+        	}
+		}
+
         $scope.pivotData = function (data) {
             if (!!$scope.curPricingTable && !!$scope.curPricingTable.NUM_OF_TIERS) {
                 var numTiers = $scope.curPricingTable.NUM_OF_TIERS;
@@ -2013,24 +2044,8 @@
                     	for (var i = 0; i < tierAtrbs.length; i++) {
                     		var tieredItem = tierAtrbs[i];
                     		lData[tieredItem] = lData[tieredItem + "_____10___" + t];
-
-                    		// Tie warning message (valid message and red highlight) to its specific tier
-                    		// NOTE: this expects that tiered errors come in the form of a Dictionary<tier, message>
-                    		if (!!data[d]._behaviors && !!data[d]._behaviors.validMsg && !jQuery.isEmptyObject(data[d]._behaviors.validMsg)) {
-                    			if (data[d]._behaviors.validMsg[tieredItem] != null) {
-                    				// Parse the Dictionary json
-                    				var jsonTierMsg = JSON.parse(data[d]._behaviors.validMsg[tieredItem]);
-
-                    				if (jsonTierMsg[t] != null && jsonTierMsg[t] != undefined) {
-                    					// Set the validation message
-                    					lData._behaviors.validMsg[tieredItem] = jsonTierMsg[t];
-                    				} else {
-                    					// Delete the tier-specific validation if it doesn't tie to this specific tier
-                    					delete lData._behaviors.validMsg[tieredItem];
-                    					delete lData._behaviors.isError[tieredItem];
-                    				}
-                    			}
-                    		}
+                    		
+                    		mapTieredWarnings(data[d], lData, tieredItem, tieredItem, t);
                     	}
 						// Disable all Start vols except the first
                     	if (t != 1 && !!data[d]._behaviors) {

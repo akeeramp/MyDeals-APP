@@ -101,7 +101,7 @@ namespace Intel.MyDeals.Controllers.API
         [HttpPost]
         public OpDataCollectorFlattenedDictList SaveContractAndPricingTable(int custId, int contractId, bool delPtr, ContractTransferPacket contractAndPricingTable)
         {
-            return SafeExecutor(() => _contractsLib.SaveContractAndPricingTable(new ContractToken
+			OpDataCollectorFlattenedDictList result =  SafeExecutor(() => _contractsLib.SaveContractAndPricingTable(new ContractToken
             {
                 CustId = custId,
                 ContractId = contractId,
@@ -109,6 +109,8 @@ namespace Intel.MyDeals.Controllers.API
             }, contractAndPricingTable, false, false)
                 , "Unable to save the Contract"
             );
+
+			return result;
         }
 
         [Authorize]
@@ -116,7 +118,8 @@ namespace Intel.MyDeals.Controllers.API
 		[HttpPost]
 		public OpDataCollectorFlattenedDictList SaveAndValidateContractAndPricingTable(int custId, int contractId, bool delPtr, ContractTransferPacket contractAndPricingTable)
 		{
-            return SafeExecutor(() => _contractsLib.SaveContractAndPricingTable(new ContractToken
+
+			OpDataCollectorFlattenedDictList result = SafeExecutor(() => _contractsLib.SaveContractAndPricingTable(new ContractToken
             {
                 CustId = custId,
                 ContractId = contractId,
@@ -125,20 +128,23 @@ namespace Intel.MyDeals.Controllers.API
                 , "Unable to save the Contract"
             );
 
-        }
+			return result;
+		}
 
         [Authorize]
         [Route("SaveAndValidateAndPublishContractAndPricingTable/{custId}/{contractId}/{delPtr}")]
         [HttpPost]
         public OpDataCollectorFlattenedDictList SaveAndValidateAndPublishContractAndPricingTable(int custId, int contractId, ContractTransferPacket contractAndPricingTable)
         {
-            return SafeExecutor(() => _contractsLib.SaveContractAndPricingTable(new ContractToken
+			OpDataCollectorFlattenedDictList result =  SafeExecutor(() => _contractsLib.SaveContractAndPricingTable(new ContractToken
             {
                 CustId = custId,
                 ContractId = contractId
             }, contractAndPricingTable, true, true)
                 , "Unable to save the Contract"
             );
+
+			return result;
         }
 
         [Authorize]

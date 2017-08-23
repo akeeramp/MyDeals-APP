@@ -5,6 +5,7 @@
 opGrid.$inject = ['$compile', 'objsetService', '$timeout', 'colorDictionary', '$uibModal'];
 
 function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
+
     return {
         scope: {
             opData: '=',
@@ -13,6 +14,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
         restrict: 'AE',
         templateUrl: '/app/core/directives/opGrid/opGrid.directive.html',
         controller: ['$scope', '$http', function ($scope, $http) {
+
+        	var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"];
 
             $timeout(function () {
                 $scope.tabStripDelay = true;
@@ -633,7 +636,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                     var dim = "10___" + d;
                     tmplt += '<tr style="height: 25px;">';
                     for (var f = 0; f < fields.length; f++) {
-                        if (f === 0) {
+                    	if (f === 0) {
                             tmplt += '<td style="margin: 0; padding: 0; text-align: ' + fields[f].align + ';"><span class="ng-binding" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + '\'] ' + gridUtils.getFormat(fields[f].field, fields[f].format) + ')"></span></td>';
                         } else {
                             tmplt += '<td style="margin: 0; padding: 0;"><input kendo-numeric-text-box k-min="0" k-decimals="0" k-format="\'n0\'" k-ng-model="dataItem.' + fields[f].field + '[\'' + dim + '\']" k-on-change="updateDirty(dataItem)" style="max-width: 100%; margin:0;" /></td>';
@@ -868,7 +871,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 // need to clean out all flags... dirty, error, validMsg
                 $scope.cleanFlags();
 
-                // need to set all flags... dirty, error, validMsg
+                // need to set all flags... dirty, error, validMsg  
                 if (!!args.data.WIP_DEAL) {
                     for (var i = 0; i < args.data.WIP_DEAL.length; i++) {
                         var dataItem = $scope.findDataItemById(args.data.WIP_DEAL[i]["DC_ID"]);
@@ -881,14 +884,19 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                             if (beh.validMsg === undefined) beh.validMsg = {};
 
                             if (dataItem != null) {
-                                Object.keys(beh.isError).forEach(function(key, index) {
+                                Object.keys(beh.isError).forEach(function(key, index) {                         
+                                	if (tierAtrbs.contains(key) && !!dataItem.NUM_OF_TIERS) {
+                                		// Is a Rate Breakout column, so set to the parent attribute so that validations badge increments correctly because tiered attirbutes are not in the model
+                                		var tempKey = "TIER_NBR";
+                                		dataItem._behaviors.isError[tempKey] = true;
+                                	} else {
+                                		dataItem._behaviors.isError[key] = beh.isError[key];
+                                		dataItem._behaviors.validMsg[key] = beh.validMsg[key];
+									}
+                                	$scope.increaseBadgeCnt(key); 
 
-                                        dataItem._behaviors.isError[key] = beh.isError[key];
-                                        dataItem._behaviors.validMsg[key] = beh.validMsg[key];
-                                        $scope.increaseBadgeCnt(key);
-
-                                    },
-                                    beh.isError);
+                                },
+								beh.isError);
                             }
                         }
                     }
@@ -1109,11 +1117,14 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 angular.forEach(beh.isError, function (value, key) {
                     if (!!$scope.opOptions.model.fields[key] && beh.isError[key] && (beh.isReadOnly[key] === undefined || !beh.isReadOnly[key]) && (beh.isHidden[key] === undefined || !beh.isHidden[key])) {
                         $scope.increaseBadgeCnt(key);
-                        valid = false;
+                        valid = false; 
                         row["PASSED_VALIDATION"] = "Dirty";
                     } else {
-                        beh.isError[key] = false;
-                        beh.validMsg[key] = "";
+                    	//// NOTE: the below is commented out to allow us to add validations to inidividual cells on tiered attributes in Rate Breakout.
+                    	//// Rate Breakout is TIER_NUM. Al tiered attributes (END_VOL, STRT_VOL, and RATE) masquerade as TIER_NUM and are therefore not in the model.
+						//// If you need to uncomment the below, make sure to alter tiered attribute validations as well.
+                        //beh.isError[key] = false;
+                        //beh.validMsg[key] = "";
                     }
                 }, scope);
 

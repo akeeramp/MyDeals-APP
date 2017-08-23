@@ -77,7 +77,7 @@ namespace Intel.MyDeals.BusinessRules
 					Title="Rate must have a positive value",
 					//ActionRule = MyDcActions.ExecuteActions,
                     ActionRule = MyDcActions.ValidateTierRate,
-					InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW},
+					InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
 					InObjSetType = new List<string> {OpDataElementSetType.VOL_TIER.ToString()},
 					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
 					AtrbCondIf = dc => dc.IsNegative(AttributeCodes.RATE)
@@ -86,7 +86,7 @@ namespace Intel.MyDeals.BusinessRules
 				{
 					Title="Must be greater than 0",
 					ActionRule = MyDcActions.ValidateTierStartVol,
-					InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW},
+					InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
 					InObjSetType = new List<string> {OpDataElementSetType.VOL_TIER.ToString()},
 					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
 					AtrbCondIf = dc => dc.IsNegativeOrZero(AttributeCodes.STRT_VOL)
@@ -95,7 +95,7 @@ namespace Intel.MyDeals.BusinessRules
 				{
 					Title="Must be greater than 0",
 					ActionRule = MyDcActions.ValidateTierEndVol,
-					InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+					InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
 					InObjSetType = new List<string> {OpDataElementSetType.VOL_TIER.ToString()},
 					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
 					AtrbCondIf = dc => dc.IsNegativeOrZero(AttributeCodes.END_VOL)
@@ -104,7 +104,7 @@ namespace Intel.MyDeals.BusinessRules
 				{
 					Title="End Vol must be greater than start vol",
 					ActionRule = MyDcActions.CompareStartEndVol,
-					InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW},
+					InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
 					InObjSetType = new List<string> {OpDataElementSetType.VOL_TIER.ToString()},
 					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate}
 				},
