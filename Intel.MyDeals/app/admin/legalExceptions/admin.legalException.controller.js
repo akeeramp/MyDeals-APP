@@ -82,7 +82,7 @@
                 model: {
                     id: "MYDL_PCT_LGL_EXCPT_SID",
                     fields: {
-                        ACTV_IND: { editable: true, defaultValue: true }
+                        ACTV_IND: { editable: true, defaultValue: true, type:"boolean" }
                         , INTEL_PRD: {
                             type: "string", validation: {
                                 required: { message: "* field is required" }
@@ -408,6 +408,10 @@
 
         function isInvalidateRow(e, mode) {
             vm.validationMessage = "";
+            if (moment(moment(e.data.models[0].PCT_LGL_EXCPT_END_DT).format('l')).isBefore(moment().format('l'))) {
+                e.data.models[0].ACTV_IND = false;
+            }
+
             if (mode === "create") {
                 if (e.data.models[0].ACTV_IND == false) {
                     $scope.$apply(function () {
