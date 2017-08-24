@@ -4,7 +4,7 @@ using Intel.MyDeals.BusinessLogic;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.Entities.Logging;
 using Intel.Opaque;
-
+ 
 namespace Intel.MyDeals
 {
     public static class OpAppConfig
