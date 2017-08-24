@@ -275,7 +275,7 @@ using System.Collections.Generic;
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	// Meet Comp data
-	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MYDL_GET_MEET_COMP @MODE='SELECT'");
+	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MYDL_UPD_MEET_COMP @MODE='SELECT', @MEET_COMP_SID = 0, @ACTV_IND = true, @CHG_EMP_WWID = 11637989, @CHG_DTM = '2017-12-31'");
 	ds.Tables[0].TableName = "MeetComp";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 	
