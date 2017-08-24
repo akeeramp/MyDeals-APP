@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 8/12/2017 1:56:42 AM
-On: PWECKENR-MOBL
+File Updated: 8/23/2017 3:23:35 PM
+On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
 using System;
@@ -1877,6 +1877,15 @@ namespace Intel.MyDeals.Entities {
 		///<summary>
 		/// DIM_SID: 3
 		/// DIM_CD: DEAL
+		/// ATRB_SID: 100
+		/// TGT_COL_TYPE: DATETIME
+		/// DOT_NET_DATA_TYPE: System.DateTime
+		///</summary>
+		public const string TRKR_END_DT = "TRKR_END_DT";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
 		/// ATRB_SID: 24
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.String
@@ -1900,6 +1909,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Object
 		///</summary>
 		public const string TRKR_NBR_VRT_LTR = "TRKR_NBR_VRT_LTR";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 99
+		/// TGT_COL_TYPE: DATETIME
+		/// DOT_NET_DATA_TYPE: System.DateTime
+		///</summary>
+		public const string TRKR_START_DT = "TRKR_START_DT";
 
 		///<summary>
 		/// DIM_SID: 7
@@ -2106,6 +2124,7 @@ namespace Intel.MyDeals.Entities {
 		public const string INCL_GDM_PCSR_HIER = "INCL_GDM_PCSR_HIER";
 		public const string LAST_BTCH_RUN = "LAST_BTCH_RUN";
 		public const string MISC_MM_LIST = "MISC_MM_LIST";
+		public const string PCT_LGL_EXCPT_ROLES = "PCT_LGL_EXCPT_ROLES";
 		public const string PROD_REPLACE_CHARSET = "PROD_REPLACE_CHARSET";
 		public const string PRODUCT_SELECTION_LEVEL = "PRODUCT_SELECTION_LEVEL";
 		public const string santhoshi = "santhoshi";
@@ -2215,6 +2234,7 @@ namespace Intel.MyDeals.Entities {
 		public const string CHG_PARENT_KEY = "CHG_PARENT_KEY";
 		public const string CAN_VIEW_COST_TEST = "CAN_VIEW_COST_TEST";
 		public const string CAN_VIEW_MEET_COMP = "CAN_VIEW_MEET_COMP";
+		public const string C_EDIT_PRODUCT = "C_EDIT_PRODUCT";
 		public const string C_VERTCL_BASED = "C_VERTCL_BASED";
 		public const string C_IS_DEV = "C_IS_DEV";
 	}

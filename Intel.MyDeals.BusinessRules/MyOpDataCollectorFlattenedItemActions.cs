@@ -60,6 +60,7 @@ namespace Intel.MyDeals.BusinessRules
                 SecurityActns.C_VIEW_QUOTE_LETTER,
                 SecurityActns.C_ADD_ATTACHMENTS,
                 SecurityActns.C_VIEW_ATTACHMENTS,
+                SecurityActns.C_EDIT_PRODUCT,
                 SecurityActns.CAN_VIEW_COST_TEST,
                 SecurityActns.CAN_VIEW_MEET_COMP
             };
