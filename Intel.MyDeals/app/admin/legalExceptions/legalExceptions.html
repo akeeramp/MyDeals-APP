@@ -1,0 +1,22 @@
+﻿<div class="col-md-12">
+    <h2>Cost Test Legal Exceptions</h2>
+</div>
+<div class="col-md-12" style="padding-top: 10px;">
+    <div class="alert alert-danger" ng-if="vm.validationMessage != ''">
+        {{vm.validationMessage}}
+    </div>
+</div>
+<div class="col-md-12">
+    <div ng-if="vm.hasAccess" id="grid" kendo-grid="grid" class="" expand-k-grid options="vm.gridOptions"></div>
+</div>
+
+<style>
+    .k-calendar {
+        font-size: 12px;
+    }
+
+    #grid .k-grid-header th.k-header {
+        overflow: visible;
+        white-space: normal;
+    }
+</style>

@@ -280,6 +280,9 @@
     <Content Include="app\admin\meetComp\admin.meetComp.controller.js" />
     <Content Include="app\admin\meetComp\meetComp.html" />
     <Content Include="app\admin\meetComp\meetComp.service.js" />
+    <Content Include="app\admin\legalExceptions\admin.legalException.controller.js" />
+    <Content Include="app\admin\legalExceptions\legalExceptions.html" />
+    <Content Include="app\admin\legalExceptions\legalExceptions.service.js" />
     <Content Include="app\admin\productAlias\admin.productAlias.controller.js" />
     <Content Include="app\admin\productAlias\productAlias.html" />
     <Content Include="app\admin\productAlias\productAlias.service.js" />

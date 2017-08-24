@@ -26,7 +26,6 @@
 
 }
 
-
 <div id="smbWindow"></div>
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
@@ -88,7 +87,7 @@
             <li><a href="@Url.Action("Index", "Home", new {Area = ""})" title="Home"><i class="intelicon-home-solid"></i><span class="hidden-xs"> Home</span></a></li>
             @*<li><a href="/Dashboard#/portal" title="Dashboard"><i class="intelicon-line-chart-outlined"></i><span class="hidden-xs"> Dashboard</span></a></li>*@
             @*<li><a href="@Url.Action("Index", "Home", new { Area = "" })" title="Settings"><i class="intelicon-settings-solid"></i><span class="hidden-xs"> Settings</span></a></li>*@
-            
+
             @if (isDeveloper)
             {
                 <li class="dropdown">
@@ -112,12 +111,13 @@
                         <li><a href="Admin#/constants">Constants</a></li>
                         <li><a href="Admin#/customers">Customer</a></li>
                         <li><a href="Admin#/geo">Geo</a></li>
-                        <li><a href="Admin#/meetcomp">Meet Comp</a></li>                       
-                        
+                        <li><a href="Admin#/meetcomp">Meet Comp</a></li>
+
                         <li class="dropdown-submenu">
                             <a tabindex="-1">Products</a>
                             <ul class="dropdown-menu">
                                 <li><a href="CostTest#/CostTest/icostproducts">Legal Classification</a></li>
+                                <li><a href="Admin#/legalexceptions">Legal Exceptions</a></li>
                                 <li><a href="Admin#/productAlias">Product Alias</a></li>
                                 @*<li><a href="Admin#/productSelector">Product Entry</a></li>
                                 <li><a href="Admin#/productEntryIncExc">Prod Include Exclude</a></li>*@
@@ -185,7 +185,7 @@
 
 <style>
     .menu-bar {
-        background-color: #0071C5; 
+        background-color: #0071C5;
         padding: 0 6px 6px 6px;
     }
 
@@ -221,6 +221,7 @@
 
     window.usrRole = "@usrRole";
     window.usrName = "@usrName";
+    window.usrWwid = "@usrWwid";
 </script>
 
 

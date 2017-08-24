@@ -1,10 +1,6 @@
 ﻿using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 
 namespace Intel.MyDeals.Controllers.API
@@ -94,6 +90,57 @@ namespace Intel.MyDeals.Controllers.API
         {
             return SafeExecutor(() => _productCostTestLib.DeletePCTRule(input)
               , $"Unable to create product cost test rule"
+          );
+        }
+
+        /// <summary>
+        /// Get Product Cost Test LegalExceptions
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetLegalExceptions")]
+        public List<PCTLegalException> GetLegalExceptions()
+        {
+            return SafeExecutor(() => _productCostTestLib.GetLegalExceptions()
+               , $"Unable to get Price Cost Test Rules"
+           );
+        }
+
+        /// <summary>
+        /// Create LegalException
+        /// </summary>
+        /// <returns></returns>
+        [Route("CreateLegalException")]
+        [HttpPost]
+        public PCTLegalException CreateLegalException([FromBody]PCTLegalException input)
+        {
+            return SafeExecutor(() => _productCostTestLib.CreateLegalException(input)
+              , $"Unable to create Legal Exception"
+          );
+        }
+
+        /// <summary>
+        /// Update LegalException
+        /// </summary>
+        /// <returns></returns>
+        [Route("UpdateLegalException")]
+        [HttpPost]
+        public PCTLegalException UpdateLegalException([FromBody]PCTLegalException input)
+        {
+            return SafeExecutor(() => _productCostTestLib.UpdateLegalException(input)
+              , $"Unable to update Legal Exception"
+          );
+        }
+
+        /// <summary>
+        /// Delete LegalException
+        /// </summary>
+        /// <returns></returns>
+        [Route("DeleteLegalException")]
+        [HttpPost]
+        public PCTLegalException DeleteLegalException([FromBody]PCTLegalException input)
+        {
+            return SafeExecutor(() => _productCostTestLib.DeleteLegalException(input)
+              , $"Unable to delete Legal Exception"
           );
         }
     }

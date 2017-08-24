@@ -71,7 +71,27 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns></returns>
         public List<ProductCostTestRules> DeletePCTRule(ProductCostTestRules pctRules)
         {
-            return _productCostTestDataLib.SetPCTRules(CrudModes.Delete, pctRules);
+            return _productCostTestDataLib.SetPCTRules(CrudModes.Update, pctRules);
+        }
+
+        public PCTLegalException DeleteLegalException(PCTLegalException input)
+        {
+            return _productCostTestDataLib.SetPCTlegalException(CrudModes.Delete, input);
+        }
+
+        public PCTLegalException UpdateLegalException(PCTLegalException input)
+        {
+            return _productCostTestDataLib.SetPCTlegalException(CrudModes.Update, input);
+        }
+
+        public PCTLegalException CreateLegalException(PCTLegalException input)
+        {
+            return _productCostTestDataLib.SetPCTlegalException(CrudModes.Insert, input);
+        }
+
+        public List<PCTLegalException> GetLegalExceptions()
+        {
+            return _productCostTestDataLib.GetLegalExceptions();
         }
     }
 }

@@ -131,6 +131,9 @@
     <Compile Include="SecurityEngine\SecurityDropdownData.cs" />
     <Compile Include="SecurityEngine\SecurityWrapper.cs" />
     <Compile Include="SecurityEngine\SecurityMapSave.cs" />
+    <Compile Include="TableTypeParameters\in_t_pct_lgl_excpt.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="TableTypeParameters\in_t_prd_cap_calc.cs">
       <SubType>Component</SubType>
     </Compile>

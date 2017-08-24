@@ -16,5 +16,13 @@ namespace Intel.MyDeals.IBusinessLogic
         List<ProductCostTestRules> UpdatePCTRule(ProductCostTestRules pctRules);
 
         List<ProductCostTestRules> DeletePCTRule(ProductCostTestRules pctRules);
+
+        PCTLegalException DeleteLegalException(PCTLegalException input);
+
+        PCTLegalException UpdateLegalException(PCTLegalException input);
+
+        PCTLegalException CreateLegalException(PCTLegalException input);
+
+        List<PCTLegalException> GetLegalExceptions();
     }
 }

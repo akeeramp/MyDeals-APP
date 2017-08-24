@@ -341,12 +341,14 @@
         }
 
         // When user clicks on the breadcrumb
-        function selectPath(index) {
+        function selectPath(index, dontClearSearch) {
             vm.hideSelection = false;
             vm.showSuggestions = false;
             vm.disableSelection = false;
             vm.errorMessage = "";
-            vm.userInput = "";
+            if (!!dontClearSearch && dontClearSearch) {
+                vm.userInput = "";
+            }
             if (index === 0) {
                 updateDrillDownPrd();
             }
@@ -695,7 +697,7 @@
             }];
 
             ProductSelectorService.GetProductDetails(data, pricingTableRow.CUST_MBR_SID).then(function (response) {
-                vm.selectPath(0);
+                vm.selectPath(0, true);
                 vm.disableSelection = false;
                 if (!!response.data[0] && response.data[0].WITHOUT_FILTER) {
                     vm.suggestedProducts = response.data;
@@ -759,8 +761,7 @@
         autoSearchForSuggestion();
 
         vm.clearSearch = function () {
-            vm.selectPath(0);
-            vm.userInput = "";
+            vm.selectPath(0, false);
         }
 
         vm.productSuggestions = [];

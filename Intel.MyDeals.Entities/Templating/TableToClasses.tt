@@ -278,7 +278,12 @@ using System.Collections.Generic;
 	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MYDL_UPD_MEET_COMP @MODE='SELECT', @MEET_COMP_SID = 0, @ACTV_IND = true, @CHG_EMP_WWID = 11637989, @CHG_DTM = '2017-12-31'");
 	ds.Tables[0].TableName = "MeetComp";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
-	
+
+	// Legal exception
+	ds = dbobjects.ExecuteDataSet("exec dbo.[PR_MYDL_UPD_PCT_LGL_EXCPT] @MODE='SELECT', @EMP_WWID='99999999'");
+	ds.Tables[0].TableName = "PCTLegalException";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
 	PopIndent();
 	WriteLine("}"); // End NameSpace
 

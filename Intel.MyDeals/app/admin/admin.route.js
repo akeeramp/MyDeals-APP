@@ -64,7 +64,7 @@
                     url: 'meetcomp',
                     controller: 'meetCompController as vm',
                 }
-            },            
+            },
             {
                 state: 'admin.customers',
                 abstract: false,
@@ -147,7 +147,7 @@
             {
                 state: 'admin.costtest.icostproducts.manage',
                 config: {
-					url: ''
+                    url: ''
                     , views: {
                         'addNewRules': {
                             templateUrl: 'app/admin/iCostProducts/iCostProducts.manage.html'
@@ -205,13 +205,13 @@
 			    }
 			},
 			{
-				state: 'admin.securityEngine',
-				abstract: false,
-				config: {
-					templateUrl: 'app/admin/securityEngine/securityEngine.html'
+			    state: 'admin.securityEngine',
+			    abstract: false,
+			    config: {
+			        templateUrl: 'app/admin/securityEngine/securityEngine.html'
 					, url: 'SecurityEngine'
 					, controller: 'securityEngineController as vm'
-				}
+			    }
 			},
             {
                 state: 'admin.dropdowns',
@@ -220,6 +220,20 @@
                     templateUrl: 'app/admin/dropdowns/dropdowns.html'
                     , url: 'dropdowns'
 					, controller: 'DropdownsController as vm'
+                }
+            },
+            {
+                state: 'admin.legalexceptions',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/legalExceptions/legalExceptions.html'
+                    , url: 'legalexceptions'
+					, controller: 'legalExceptionsController as vm'
+                    , resolve: {
+                        hasAccess: ['legalExceptionService', function (legalExceptionService) {
+                            return legalExceptionService.userHasAccess();
+                        }],
+                    }
                 }
             }
         ];

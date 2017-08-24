@@ -83,7 +83,7 @@ namespace Intel.MyDeals
                 , "~/app/core/directives/gridCell/percentBar.directive.js"
                 , "~/app/core/directives/gridStatusBoard/contractStatusBoard.directive.js"
                 , "~/app/core/directives/gridStatusBoard/gridStatusBoard.directive.js"
-				, "~/app/core/directives/loadingPanel/loadingPanel.directive.js"
+                , "~/app/core/directives/loadingPanel/loadingPanel.directive.js"
                 , "~/app/core/directives/messageBoard/messageBoard.directive.js"
                 , "~/app/core/directives/opGrid/opGrid.directive.js"
                 , "~/app/core/directives/opPopover/opPopover.directive.js"
@@ -110,6 +110,8 @@ namespace Intel.MyDeals
                 , "~/app/admin/iCostProducts/directive/pct.queryBuilder.directive.js"
                 , "~/app/admin/iCostProducts/admin.iCostProduct.service.js"
                 , "~/app/admin/iCostProducts/admin.iCostProducts.controller.js"
+                , "~/app/admin/legalExceptions/legalExceptions.service.js"
+                , "~/app/admin/legalExceptions/admin.legalException.controller.js"
                 , "~/app/admin/productCategories/admin.productCategories.controller.js"
                 , "~/app/admin/productCategories/productCategories.service.js"
                 , "~/app/admin/products/admin.products.controller.js"
@@ -157,7 +159,7 @@ namespace Intel.MyDeals
                 , "~/app/contract/productCorrector/productCorrector.controller.js"
                 , "~/app/contract/productCorrector/productCorrectorBeta.controller.js"
                 , "~/app/contract/productCorrector/productCorrector.service.js"
-                , "~/app/contract/productCorrector/productCorrectorBeta.controller.js"                
+                , "~/app/contract/productCorrector/productCorrectorBeta.controller.js"
                 , "~/app/contract/productSelector/kendoGridCheckBox.directive.js"
                 , "~/app/contract/productCAPBreakout/productCAPBreakout.controller.js"
                 , "~/app/contract/targetRegionPicker/targetRegionPicker.controller.js"
@@ -217,7 +219,7 @@ namespace Intel.MyDeals
                 "~/Content/styles.css",
                 "~/css/_controls.css",
                 "~/css/_contractManager.css",
-				"~/css/_loadingPanel.directive.css",
+                "~/css/_loadingPanel.directive.css",
                 "~/css/_dashboard.css"
                 ));
         }

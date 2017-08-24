@@ -12,5 +12,9 @@ namespace Intel.MyDeals.IDataLibrary
         List<ProductAttributeValues> GetProductAttributeValues(int verticalId);
 
         List<ProductCostTestRules> SetPCTRules(CrudModes mode, ProductCostTestRules pctRules);
+
+        List<PCTLegalException> GetLegalExceptions();
+
+        PCTLegalException SetPCTlegalException(CrudModes update, PCTLegalException input);
     }
 }
