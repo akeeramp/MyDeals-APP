@@ -71,15 +71,15 @@
                 });
             },
             columns: [               
-                { field: "CUST_NM", title: "Customer", width: "9%", filterable: { multi: true, search: true, search: true } },
-                { field: "PRD_CAT_NM", title: "Vertical", width: "6%", filterable: { multi: true, search: true, search: true } },
-                { field: "HIER_VAL_NM", title: "Product", width: "9%", filterable: { multi: true, search: true, search: true } },
-                { field: "ACTV_IND", title: "Activate/Deactivate", width: "6%", template: "<toggle ng-click='vm.gridSelectItem(dataItem,$event)' size='btn-sm' ng-model='dataItem.ACTV_IND'></toggle>", editor: activateDeactivate, attributes: { style: "text-align: center;" }, filterable: { multi: true, search: true, search: true }, groupable: false },
-                { field: "MEET_COMP_PRD", title: "Meet Comp SKU", width: "9%", filterable: { multi: true, search: true, search: true }, groupable: false },
+                { field: "CUST_NM", title: "Customer", width: "9%", filterable: { multi: true, search: true } },
+                { field: "PRD_CAT_NM", title: "Vertical", width: "6%", filterable: { multi: true, search: true } },
+                { field: "HIER_VAL_NM", title: "Product", width: "9%", filterable: { multi: true, search: true } },
+                { field: "ACTV_IND", title: "Activate/Deactivate", width: "6%", template: "<toggle ng-click='vm.gridSelectItem(dataItem,$event)' size='btn-sm' ng-model='dataItem.ACTV_IND'></toggle>", editor: activateDeactivate, attributes: { style: "text-align: center;" }, filterable: { multi: true, search: true}, groupable: false },
+                { field: "MEET_COMP_PRD", title: "Meet Comp SKU", width: "9%", filterable: { multi: true, search: true }, groupable: false },
                 { field: "MEET_COMP_PRC", title: "Meet Comp Price", width: "9%", format: "{0:c}", groupable: false },
                 { field: "IA_BNCH", title: "IA Bench", width: "8%", groupable: false },
                 { field: "COMP_BNCH", title: "Comp Bench", width: "8%", groupable: false },
-                { field: "CRE_EMP_NM", title: "Created By", width: "11%", filterable: { multi: true, search: true, search: true }, groupable: false },
+                { field: "CRE_EMP_NM", title: "Created By", width: "11%", filterable: { multi: true, search: true }, groupable: false },
                 {
                     field: "CRE_DTM", title: "Created Date", width: "11%", type: "date",
                     template: "#= kendo.toString(new Date(CRE_DTM), 'M/d/yyyy') #",
@@ -89,7 +89,7 @@
                     },
                     groupable: false
                 },
-                { field: "CHG_EMP_NM", title: "Last Modified By", width: "11%", filterable: { multi: true, search: true, search: true }, groupable: false },
+                { field: "CHG_EMP_NM", title: "Last Modified By", width: "11%", filterable: { multi: true, search: true }, groupable: false },
                 {
                     field: "CHG_DTM", title: "Last Modified Date", width: "11%", type: "date",
                     template: "#= kendo.toString(new Date(CHG_DTM), 'M/d/yyyy') #",
