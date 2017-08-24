@@ -1264,11 +1264,26 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 29,
                 AtrbCd = AttributeCodes.SERVER_DEAL_TYPE,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
                 Width = 110,
                 IsFilterable = true,
                 IsSortable = true,
                 Template = "#=gridUtils.uiControlWrapper(data, 'SERVER_DEAL_TYPE')#",
-                LookupUrl = "/api/Dropdown/GetDropdowns/PAYOUT_BASED_ON", //TODO: change to SERVER_DEAL_TYPE and make sure it actually exists
+                LookupUrl = "/api/Dropdown/GetDropdowns/SERVER_DEAL_TYPE/ECAP",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
+                AtrbCd = AttributeCodes.SERVER_DEAL_TYPE,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
+                Width = 110,
+                IsFilterable = true,
+                IsSortable = true,
+                Template = "#=gridUtils.uiControlWrapper(data, 'SERVER_DEAL_TYPE')#",
+                LookupUrl = "/api/Dropdown/GetDropdowns/SERVER_DEAL_TYPE/VOL_TIER",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
             });
@@ -1348,9 +1363,24 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 37,
                 AtrbCd = AttributeCodes.REBATE_TYPE,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
                 Width = 180,
                 Template = "#=gridUtils.uiControlWrapper(data, 'REBATE_TYPE')#",
                 LookupUrl = "/api/Dropdown/GetDropdowns/REBATE_TYPE/ECAP",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN",
+                IsFilterable = true,
+                IsSortable = true
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 37,
+                AtrbCd = AttributeCodes.REBATE_TYPE,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
+                Width = 180,
+                Template = "#=gridUtils.uiControlWrapper(data, 'REBATE_TYPE')#",
+                LookupUrl = "/api/Dropdown/GetDropdowns/REBATE_TYPE/VOL_TIER",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN",
                 IsFilterable = true,
