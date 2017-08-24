@@ -85,8 +85,8 @@
                              op-is-form="true"
                              op-ui-mode="'HORIZONTAL'"></div>
                     </div>
-                    <div class="clearboth orLabel">OR</div>
-                    <div class="row">
+                    <div class="clearboth orLabel" ng_hide="initialStartDateReadOnly">OR</div>
+                    <div class="row" ng_hide="initialStartDateReadOnly">
                         <div class="col-md-3 dateRangeLabel">
                             Select Quarter Range
                         </div>
@@ -117,7 +117,7 @@
                                  op-ui-mode="'VERTICAL'"></div>
                         </div>
                     </div>
-                    <div class="col-md-11 row mb5">
+                    <div class="col-md-11 row mb5" ng-class="{'padTop30': initialStartDateReadOnly}">
                         <div op-control-flat
                              ng-model="contractData"
                              op-cd="'END_DT'"
@@ -126,8 +126,8 @@
                              op-is-form="true"
                              op-ui-mode="'HORIZONTAL'"></div>
                     </div>
-                    <div class="clearboth orLabel">OR</div>
-                    <div class="row">
+                    <div class="clearboth orLabel" ng_hide="initialEndDateReadOnly">OR</div>
+                    <div class="row" ng_hide="initialEndDateReadOnly">
                         <div class="col-md-3 dateRangeLabel">
                             Select Quarter Range
                         </div>
@@ -147,6 +147,7 @@
                         </div>
                         <div class="col-md-4">
                             <div class="col-md-11 row"
+
                                  op-control-flat
                                  ng-model="contractData"
                                  op-cd="'END_YR'"
@@ -158,7 +159,7 @@
                                  op-ui-mode="'VERTICAL'"></div>
                         </div>
                     </div>
-                    <div class="col-md-11 row"
+                    <div class="col-md-11 row" ng_hide="initialEndDateReadOnly"
                          op-control-flat
                          ng-model="contractData"
                          op-cd="'NO_END_DT'"
@@ -167,7 +168,7 @@
                          op-is-form="true"
                          op-ui-mode="'HORIZONTAL'">
                     </div>
-                    <div class="col-md-11 row"
+                    <div class="col-md-11 row" ng_hide="initialEndDateReadOnly"
                          op-control-flat
                          ng-model="contractData"
                          op-cd="'NO_END_DT_RSN'"
@@ -269,6 +270,10 @@
 <style type="text/css">
     #secContainer {
         overflow: auto !important;
+    }
+
+    .padTop30 {
+        padding-top: 30px;
     }
 </style>
 

@@ -177,6 +177,8 @@
         $scope.isNewContract = isNewContract;
         $scope.contractData.displayTitle = "";
         $scope.ApplyTitlesToChildren();
+        $scope.initialEndDateReadOnly = !!$scope.contractData._behaviors && !!$scope.contractData._behaviors.isReadOnly && !!$scope.contractData._behaviors.isReadOnly["END_DT"] && $scope.contractData._behaviors.isReadOnly["END_DT"];
+        $scope.initialStartDateReadOnly = !!$scope.contractData._behaviors && !!$scope.contractData._behaviors.isReadOnly && !!$scope.contractData._behaviors.isReadOnly["START_DT"] && $scope.contractData._behaviors.isReadOnly["START_DT"];
 
         var updateDisplayTitle = function () {
             $scope.contractData.displayTitle = isNewContract
@@ -395,6 +397,7 @@
             }
 
             var noEndDateChanged = function (noEndDate, updateEndDate) {
+
                 $scope.contractData._behaviors.isReadOnly["END_DT"] = noEndDate;
                 $scope.contractData._behaviors.isReadOnly["END_QTR"] = noEndDate;
                 $scope.contractData._behaviors.isReadOnly["END_YR"] = noEndDate;
@@ -409,7 +412,9 @@
                 }
             }
 
-            noEndDateChanged($scope.contractData.NO_END_DT, false);
+            if (!$scope.initialEndDateReadOnly) {
+                noEndDateChanged($scope.contractData.NO_END_DT, false);
+            }
 
             var resetQtrYrDirty = function () {
                 // When loading quarter and year from date user never makes changes to Quarter and Year we just load them
@@ -775,7 +780,9 @@
                 $scope.contractData.CUST_ACCNT_DIV_UI = "";
                 $scope.updateCorpDivision(newValue["CUST_MBR_SID"]);
                 $scope.contractData.NO_END_DT = false;
-                noEndDateChanged($scope.contractData.NO_END_DT, false);
+                if (!$scope.initialEndDateReadOnly) {
+                    noEndDateChanged($scope.contractData.NO_END_DT, false);
+                }
                 getCurrentQuarterDetails();
             }
 
