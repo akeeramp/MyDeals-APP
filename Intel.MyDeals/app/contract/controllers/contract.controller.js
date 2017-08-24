@@ -1896,80 +1896,89 @@
             $timeout(function () {
                 $scope.clearValidations();
 
-                var spreadsheet = $("#pricingTableSpreadsheet").data("kendoSpreadsheet");
-                var sheet = spreadsheet.activeSheet();
-                var rowsCount = sheet._rows._count;
-                var offset = 0;
+                //var spreadsheet = $("#pricingTableSpreadsheet").data("kendoSpreadsheet");
+                //var sheet = spreadsheet.activeSheet();
+                //var rowsCount = sheet._rows._count;
+                //var offset = 0;
 				
-            	// Offset detects which data[i] are actions (ID_CHNAGE, etc.) rather than actual data for adding validations to each row
-                for (var i = 0; i < data.length; i++) { // NOTE: We can have multiple offsets because of vol-tier
-                	if (!!data[i] && !!data[i]._actions) {
-                		offset += 1;
-                	}
-                }
 
-                var firstUntouchedRowFinder = 0; // when this == 1, then it will add the rest of the dropdown validation back in (in the for loop below) It can also turn into 3, which will do nothing
-                sheet.batch(function () {
-                    var ptTemplate = $scope.templates.ModelTemplates.PRC_TBL_ROW[$scope.curPricingTable.OBJ_SET_TYPE_CD];
-                    if (ptTemplate !== undefined && ptTemplate !== null) {
-                        for (var i = 0; i < rowsCount; i++) {
-                            firstUntouchedRowFinder += $scope.syncCellsOnSingleRow(sheet, data[i + offset], i, firstUntouchedRowFinder);
-                        }
-                    }
-                });
+            	//// TODO: In the future. Dropdowns do work, but their (red highlighting) validations do not allow us to ignore case-sensitivity. 
+            	//// If we can figure out how to ignore case-sesitive, we can put these dropdwons back in
+            	//// Offset detects which data[i] are actions (ID_CHNAGE, etc.) rather than actual data for adding validations to each row
+                //for (var i = 0; i < data.length; i++) { // NOTE: We can have multiple offsets because of vol-tier
+                //	if (!!data[i] && !!data[i]._actions) {
+                //		offset += 1;
+                //	}
+                //}
+
+            	//// TODO: In the future. Dropdowns do work, but their (red highlighting) validations do not allow us to ignore case-sensitivity. 
+            	//// If we can figure out how to ignore case-sesitive, we can put these dropdwons back in
+                //var firstUntouchedRowFinder = 0; // when this == 1, then it will add the rest of the dropdown validation back in (in the for loop below) It can also turn into 3, which will do nothing
+                //sheet.batch(function () {
+                //    var ptTemplate = $scope.templates.ModelTemplates.PRC_TBL_ROW[$scope.curPricingTable.OBJ_SET_TYPE_CD];
+                //    if (ptTemplate !== undefined && ptTemplate !== null) {
+                //        for (var i = 0; i < rowsCount; i++) {
+                //            firstUntouchedRowFinder += $scope.syncCellsOnSingleRow(sheet, data[i + offset], i, firstUntouchedRowFinder);
+                //        }
+                //    }
+                //});
             }, 10);
         }
 
-        $scope.syncCellsOnSingleRow = function (sheet, dataItem, row, isTheFirstUntouchedRowIfEqualsToOne) {
-            var ptTemplate = $scope.templates.ModelTemplates.PRC_TBL_ROW[$scope.curPricingTable.OBJ_SET_TYPE_CD];
-            $scope.columns = $scope.getColumns(ptTemplate);
-            var c = 0;
-            if (!!dataItem) {
-                var beh = dataItem._behaviors;
-                if (!beh) beh = {};
+    	//// TODO: In the future. Dropdowns do work, but their (red highlighting) validations do not allow us to ignore case-sensitivity. 
+    	//// If we can figure out how to ignore case-sesitive, we can put these dropdwons back in
+        //$scope.syncCellsOnSingleRow = function (sheet, dataItem, row, isTheFirstUntouchedRowIfEqualsToOne) {
+        //    var ptTemplate = $scope.templates.ModelTemplates.PRC_TBL_ROW[$scope.curPricingTable.OBJ_SET_TYPE_CD];
+        //    $scope.columns = $scope.getColumns(ptTemplate);
+        //    var c = 0;
+        //    if (!!dataItem) {
+        //        var beh = dataItem._behaviors;
+        //        if (!beh) beh = {};
 
-                angular.forEach(ptTemplate.model.fields, function (value, key) {
-                    var isError = !!beh.isError && !!beh.isError[value.field];
-                    var isRequired = !!beh.isRequired && !!beh.isRequired[value.field];
-                    var msg = isError ? beh.validMsg[value.field] : (isRequired) ? "This field is required." : "UNKNOWN";
+        //        angular.forEach(ptTemplate.model.fields, function (value, key) {
+        //            var isError = !!beh.isError && !!beh.isError[value.field];
+        //            var isRequired = !!beh.isRequired && !!beh.isRequired[value.field];
+        //            var msg = isError ? beh.validMsg[value.field] : (isRequired) ? "This field is required." : "UNKNOWN";
 
-                    var isRequiredDropdown = value.nullable;
+        //            var isRequiredDropdown = value.nullable;
 
-                    // re-add dropdwwns back into existing rows (dataItem only contains existing rows) Note that re-adding all the validation to the entire column will show unneccessary red flags
-                    if (value.uiType === "DROPDOWN") {
-                        var myRange = sheet.range(row + 1, c++);
-                        reapplyDropdowns(myRange, false, value.field);
-                    } else {
-                        sheet.range(row + 1, c++).validation($scope.myDealsValidation(isError, msg, isRequired));
-                    }
-                });
-            } else if (isTheFirstUntouchedRowIfEqualsToOne === 0) {
-                return 1;
-            } else if (isTheFirstUntouchedRowIfEqualsToOne === 1) {
-                // HACK: This is so we get the dropdowns back on the untouched rows without red flags!
-                // re-add dropdowns into untouched rows
-                angular.forEach(ptTemplate.model.fields, function (value, key) {
-                    if (value.uiType === "DROPDOWN") {
-                        var myRange = sheet.range($scope.colToLetter[value.field] + (row + 1) + ":" + $scope.colToLetter[value.field] + $scope.ptRowCount);
-                        reapplyDropdowns(myRange, true, value.field);
-                    }
-                });
-                return 2;
-            }
-            return 0;
-        }
+        //            // re-add dropdwwns back into existing rows (dataItem only contains existing rows) Note that re-adding all the validation to the entire column will show unneccessary red flags
+        //            if (value.uiType === "DROPDOWN") {
+        //                var myRange = sheet.range(row + 1, c++);
+        //                reapplyDropdowns(myRange, false, value.field);
+        //            } else {
+        //                sheet.range(row + 1, c++).validation($scope.myDealsValidation(isError, msg, isRequired));
+        //            }
+        //        });
+        //    } else if (isTheFirstUntouchedRowIfEqualsToOne === 0) {
+        //        return 1;
+        //    } else if (isTheFirstUntouchedRowIfEqualsToOne === 1) {
+        //        // HACK: This is so we get the dropdowns back on the untouched rows without red flags!
+        //        // re-add dropdowns into untouched rows
+        //        angular.forEach(ptTemplate.model.fields, function (value, key) {
+        //            if (value.uiType === "DROPDOWN") {
+        //                var myRange = sheet.range($scope.colToLetter[value.field] + (row + 1) + ":" + $scope.colToLetter[value.field] + $scope.ptRowCount);
+        //                reapplyDropdowns(myRange, true, value.field);
+        //            }
+        //        });
+        //        return 2;
+        //    }
+        //    return 0;
+        //}
 
-        function reapplyDropdowns(sheetRange, allowNulls, valueField) {
-            sheetRange.validation({
-                dataType: "list",
-                showButton: true,
-                from: "DropdownValuesSheet!" + $scope.colToLetter[valueField] + ":" + $scope.colToLetter[valueField],
-                allowNulls: allowNulls,
-                type: "warning",
-                titleTemplate: "Invalid value",
-                messageTemplate: "Invalid value. Please use the dropdown for available options."
-            });
-        }
+    	//// TODO: In the future. Dropdowns do work, but their (red highlighting) validations do not allow us to ignore case-sensitivity. 
+    	//// If we can figure out how to ignore case-sesitive, we can put these dropdwons back in
+        //function reapplyDropdowns(sheetRange, allowNulls, valueField) {
+        //    sheetRange.validation({
+        //        dataType: "list",
+        //        showButton: true,
+        //        from: "DropdownValuesSheet!" + $scope.colToLetter[valueField] + ":" + $scope.colToLetter[valueField],
+        //        allowNulls: allowNulls,
+        //        type: "warning",
+        //        titleTemplate: "Invalid value",
+        //        messageTemplate: "Invalid value. Please use the dropdown for available options."
+        //    });
+        //}
 
         $scope.clearValidations = function () {
             var spreadsheet = $("#pricingTableSpreadsheet").data("kendoSpreadsheet");

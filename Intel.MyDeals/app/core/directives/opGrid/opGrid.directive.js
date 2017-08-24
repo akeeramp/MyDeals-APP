@@ -1213,7 +1213,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
 
                 var mrktSegModal = $uibModal.open({
                     backdrop: 'static',
-                    templateUrl: 'multiSelectPopUpModal',
+                    templateUrl: 'multiSelectModal',
                     controller: 'MultiSelectModalCtrl',
                     controllerAs: '$ctrl',
                     windowClass: 'multiselect-modal-window',

@@ -1,0 +1,36 @@
+﻿<script type="text/ng-template" id="dropdownModal">
+	<div class="modal-header">
+		<h3 class="modal-title" id="modal-title">Select {{$ctrl.colData.label}}</h3>
+	</div>
+	<div class="modal-body" id="modal-body">
+		<p>
+			Select which {{$ctrl.colData.label}}(s) to apply below: <br />
+		</p>
+
+		<div op-control-flat
+			 ng-model="$ctrl.popupResult"
+			 op-cd="'DropdownSelections'"
+			 op-type="$ctrl.colData.uiType"
+			 op-label="''"
+			 op-lookup-url="$ctrl.colData.opLookupUrl"
+			 op-lookup-text="$ctrl.colData.opLookupText"
+			 op-lookup-value="$ctrl.colData.opLookupValue"
+			 op-placeholder="$ctrl.placeholderText"
+			 op-is-form="true"
+			 op-expanded="true"
+			 op-ui-mode="'VERTICAL'">
+		</div>
+
+		<br />
+
+		<div class="row">
+			<div class="col-md-12">
+				<div class="fr">
+					<button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
+					<button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">Add to grid</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--<div class="modal-footer">	</div>-->
+</script>

@@ -478,7 +478,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 							}
 
                         	// Start vol, end vol, or rate changed
-                        	if (!isEndVolUnlimited) {
+                        	if (!isEndVolUnlimited) {  
 
                         		if (colIndex === endVolIndex || colIndex === strtVolIndex) {
                         			value.value = parseInt(value.value) || 0; // HACK: To make sure End vol has a numerical value so that validations work and show on these cells
@@ -1044,7 +1044,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     	applyDropDownsData(sheet, myFieldModel, myColumnName, dropdownValuesSheet);
 
                         if (myFieldModel.uiType === "RADIOBUTTONGROUP" || myFieldModel.uiType === "DROPDOWN") {
-                            applyDropDowns(sheet, myFieldModel, myColumnName);
+                    		sheet.range(myColumnName + ":" + myColumnName).editor("dropdownEditor");
+                            //applyDropDowns(sheet, myFieldModel, myColumnName);
                         } else if (myFieldModel.uiType === "EMBEDDEDMULTISELECT" || myFieldModel.uiType === "MULTISELECT") {
                             sheet.range(myColumnName + ":" + myColumnName).editor("multiSelectPopUpEditor");
                             vm.requiredStringColumns[key] = true;
@@ -1062,8 +1063,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             case "number":
                                 // Money Formatting
                                 if (myFieldModel.format == "{0:c}") {
-                                    sheet.range(myColumnName + ":" + myColumnName).format("$#,##0.00");
-                                }
+                                    sheet.range(myColumnName + ":" + myColumnName).format("$##,#0.00");
+                                } 
                                 break;
                             case "string":
                                 if (!myFieldModel.nullable) {
@@ -1097,50 +1098,54 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     }
 
     function applyDropDownsData(sheet, myFieldModel, myColumnName, dropdownValuesSheet) {
-        // Call API
-        if (myFieldModel.opLookupText === "CUST_DIV_NM") {
-            myFieldModel.opLookupUrl = "/api/Customers/GetCustomerDivisionsByCustNmSid/" + root.contractData.CUST_MBR_SID; 
-        }
+    	// Call API
+    	if (myFieldModel.opLookupText === "CUST_DIV_NM") {
+    		myFieldModel.opLookupUrl = "/api/Customers/GetCustomerDivisionsByCustNmSid/" + root.contractData.CUST_MBR_SID;
+    	}
 
-        dataService.get(myFieldModel.opLookupUrl, null, null, true).then(function (response) {
-            dropdownValuesSheet.batch(function () {
-                for (var i = 0; i < response.data.length; i++) {
-                    var myKey = response.data[i].ATRB_CD;
-                    if (myKey === null || myKey === undefined) {
-                        myKey = response.data[i].subAtrbValue;
-                        // HACK: this is for Product Level's atrb code because it pulls form a different dropdown sp
-                    }
+    	//// TODO: In the future. Dropdowns do work, but their (red highlighting) validations do not allow us to ignore case-sensitivity. 
+    	//// If we can figure out how to ignore case-sesitive, we can put these dropdwons back in
+        //dataService.get(myFieldModel.opLookupUrl, null, null, true).then(function (response) {
+        //    dropdownValuesSheet.batch(function () {
+        //        for (var i = 0; i < response.data.length; i++) {
+        //            var myKey = response.data[i].ATRB_CD;
+        //            if (myKey === null || myKey === undefined) {
+        //                myKey = response.data[i].subAtrbValue;
+        //                // HACK: this is for Product Level's atrb code because it pulls form a different dropdown sp
+        //            }
 
-                    if (response.data[i].ATRB_CD === "REBATE_TYPE") {
-                        myKey = "REBATE_TYPE";
-                    }
-                    // Add values onto the other sheet
-                    var dropdownValue = response.data[i].DROP_DOWN;
-                    if (dropdownValue === undefined || dropdownValue === null) {
-                        dropdownValue = response.data[i].dropdownName;
-                        // HACK: this is for Product Level's atrb code because it pulls form a different dropdown sp
-                    }
+        //            if (response.data[i].ATRB_CD === "REBATE_TYPE") {
+        //                myKey = "REBATE_TYPE";
+        //            }
+        //            // Add values onto the other sheet
+        //            var dropdownValue = response.data[i].DROP_DOWN;
+        //            if (dropdownValue === undefined || dropdownValue === null) {
+        //                dropdownValue = response.data[i].dropdownName;
+        //                // HACK: this is for Product Level's atrb code because it pulls form a different dropdown sp
+        //            }
 
-                    dropdownValuesSheet.range(root.colToLetter[myKey] + (i + 1)).value(dropdownValue);
-                }
-            });
-        },
-        function (error) {
-            logger.error("Unable to get dropdown data.", error, error.statusText);
-        });
+        //            dropdownValuesSheet.range(root.colToLetter[myKey] + (i + 1)).value(dropdownValue);
+        //        }
+        //    });
+        //},
+        //function (error) {
+        //    logger.error("Unable to get dropdown data.", error, error.statusText);
+        //});
     }
 
-    function applyDropDowns(sheet, myFieldModel, myColumnName) {
-        sheet.range(myColumnName + "2:" + myColumnName + $scope.root.ptRowCount).validation({
-            dataType: "list",
-            showButton: true,
-            from: "DropdownValuesSheet!" + myColumnName + ":" + myColumnName,
-            allowNulls: true, //myFieldModel.nullable,
-            type: "warning",
-            titleTemplate: "Invalid value",
-            messageTemplate: "Invalid value. Please use the dropdown for available options."
-        });
-    }
+	//// TODO: In the future. Dropdowns do work, but their (red highlighting) validations do not allow us to ignore case-sensitivity. 
+	//// If we can figure out how to ignore case-sesitive, we can put these dropdwons back in
+    //function applyDropDowns(sheet, myFieldModel, myColumnName) {
+    //    sheet.range(myColumnName + "2:" + myColumnName + $scope.root.ptRowCount).validation({
+    //        dataType: "list",
+    //        showButton: true,
+    //        from: "DropdownValuesSheet!" + myColumnName + ":" + myColumnName,
+    //        allowNulls: true, //myFieldModel.nullable,
+    //        type: "warning",
+    //        titleTemplate: "Invalid value",
+    //        messageTemplate: "Invalid value. Please use the dropdown for available options."
+    //    });
+    //}
 
     function disableRange(range) {
         range.enable(false);
@@ -1848,8 +1853,62 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     function validateSavepublishWipDeals() {
         var data = cleanupData(root.spreadDs.data());
         ValidateProducts(data, true);
-    }
-	
+    } 
+
+	// NOTE: Thhis is a workaround because the bulit-in kendo spreadsheet datepicker causes major perfromance issues in IE
+    kendo.spreadsheet.registerEditor("dropdownEditor", function () {
+    	var context;
+
+    	// Further delay the initialization of the UI until the `edit` method is
+    	// actually called, so here just return the object with the required API.
+    	return {
+    		edit: function (options) {
+    			context = options;
+    			open();
+    		},
+    		icon: "fa fa-check ssEditorBtn"
+    	};
+		
+    	function open() {
+    		// Get selected cell
+    		var currColIndex = context.range._ref.col;
+    		var cellCurrVal = context.range.value();
+
+    		// Get column name out of selected cell
+    		var colName = root.letterToCol[String.fromCharCode(intA + currColIndex)]
+
+    		// Get columnData (urls, name, etc) from column name
+            var dealType = $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD;
+    		var colData = $scope.$parent.$parent.templates.ModelTemplates.PRC_TBL_ROW[dealType].model.fields[colName];
+			
+    		var modalInstance = $uibModal.open({
+    			//animation: $ctrl.animationsEnabled,
+    			ariaLabelledBy: 'modal-title',
+    			ariaDescribedBy: 'modal-body',
+    			templateUrl: 'dropdownModal',
+    			controller: 'DropdownModalCtrl',
+    			controllerAs: '$ctrl',
+    			size: 'md',
+    			resolve: {
+    				cellCurrValues: function () {
+    					return cellCurrVal;
+    				},
+    				colData: function () {
+    					return colData;
+    				},
+    				colName: function () {
+    					return colName;
+    				}
+    			}
+    		});
+
+    		modalInstance.result.then(function (selectedItem) {
+    			context.callback(selectedItem);
+    		}, function () { });
+    	}
+    });
+
+
     kendo.spreadsheet.registerEditor("multiSelectPopUpEditor", function () {
         var context;
 
@@ -1903,7 +1962,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 //animation: $ctrl.animationsEnabled,
                 ariaLabelledBy: 'modal-title',
                 ariaDescribedBy: 'modal-body',
-                templateUrl: 'multiSelectPopUpModal',
+                templateUrl: 'multiSelectModal',
                 controller: 'MultiSelectModalCtrl',
                 controllerAs: '$ctrl',
                 windowClass: 'multiselect-modal-window',
