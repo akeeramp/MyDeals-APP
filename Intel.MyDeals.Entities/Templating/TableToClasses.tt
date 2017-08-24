@@ -274,7 +274,11 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "Timeline";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
-
+	// Meet Comp data
+	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MYDL_GET_MEET_COMP @MODE='SELECT'");
+	ds.Tables[0].TableName = "MeetComp";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+	
 	PopIndent();
 	WriteLine("}"); // End NameSpace
 

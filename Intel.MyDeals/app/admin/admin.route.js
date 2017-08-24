@@ -57,6 +57,15 @@
                 }
             },
             {
+                state: 'admin.meetcomp',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/meetComp/meetComp.html',
+                    url: 'meetcomp',
+                    controller: 'meetCompController as vm',
+                }
+            },            
+            {
                 state: 'admin.customers',
                 abstract: false,
                 config: {

@@ -31,6 +31,7 @@ namespace Intel.MyDeals.BusinessLogic
             registerService.RegisterType<IUiTemplateLib, UiTemplateLib>();
             registerService.RegisterType<IWorkFlowLib, WorkFlowLib>();
             registerService.RegisterType<ITimelineLib, TimelineLib>();
+            registerService.RegisterType<IMeetCompLib, MeetCompLib>();
         }
     }
 }

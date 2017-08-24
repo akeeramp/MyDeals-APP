@@ -234,6 +234,7 @@
     <Compile Include="Controllers\API\TemplatesController.cs" />
     <Compile Include="Controllers\API\CustomersController.cs" />
     <Compile Include="Controllers\API\TimelineController.cs" />
+    <Compile Include="Controllers\API\MeetCompController.cs" />
     <Compile Include="Controllers\API\WorkFlowController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CodingPracticesController.cs" />
@@ -276,6 +277,9 @@
     <Content Include="app\admin\geo\geo.service.js" />
     <Content Include="app\admin\iCostProducts\directive\pct.queryBuilder.directive.html" />
     <Content Include="app\admin\iCostProducts\directive\pct.queryBuilder.directive.js" />
+    <Content Include="app\admin\meetComp\admin.meetComp.controller.js" />
+    <Content Include="app\admin\meetComp\meetComp.html" />
+    <Content Include="app\admin\meetComp\meetComp.service.js" />
     <Content Include="app\admin\productAlias\admin.productAlias.controller.js" />
     <Content Include="app\admin\productAlias\productAlias.html" />
     <Content Include="app\admin\productAlias\productAlias.service.js" />
@@ -341,12 +345,12 @@
     <Content Include="app\contract\partials\lnavSummaryMenuMini.html" />
     <Content Include="app\contract\autofillSettings\autofillSettings.controller.js" />
     <Content Include="app\contract\autofillSettings\autofillSettings.html" />
+    <Content Include="app\contract\productCorrector\productCorrectorBeta.controller.js" />
+    <Content Include="app\contract\productCorrector\productCorrectorBeta.html" />
     <Content Include="app\contract\targetRegionPicker\targetRegionPicker.controller.js" />
     <Content Include="app\contract\targetRegionPicker\targetRegionPicker.html" />
     <Content Include="app\contract\productCAPBreakout\productCAPBreakout.controller.js" />
     <Content Include="app\contract\productCAPBreakout\productCAPBreakout.html" />
-    <Content Include="app\contract\productCorrector\productCorrectorBeta.html" />
-    <Content Include="app\contract\productCorrector\productCorrectorBeta.controller.js" />
     <Content Include="app\contract\productCorrector\productCorrector.controller.js" />
     <Content Include="app\contract\productCorrector\productCorrector.html" />
     <Content Include="app\contract\productCorrector\productCorrector.service.js" />
