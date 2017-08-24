@@ -1041,7 +1041,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                     // Add validation dropdowns/multiselects onto the cells
                     if (myFieldModel.opLookupText === "DROP_DOWN" || myFieldModel.opLookupText === "dropdownName" || (myFieldModel.opLookupText === "CUST_DIV_NM" && isCorpDiv)) {
-                        applyDropDownsData(sheet, myFieldModel, myColumnName, dropdownValuesSheet);
+                    	applyDropDownsData(sheet, myFieldModel, myColumnName, dropdownValuesSheet);
 
                         if (myFieldModel.uiType === "RADIOBUTTONGROUP" || myFieldModel.uiType === "DROPDOWN") {
                             applyDropDowns(sheet, myFieldModel, myColumnName);
@@ -1099,7 +1099,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     function applyDropDownsData(sheet, myFieldModel, myColumnName, dropdownValuesSheet) {
         // Call API
         if (myFieldModel.opLookupText === "CUST_DIV_NM") {
-            myFieldModel.opLookupUrl = "/api/Customers/GetCustomerDivisionsByCustNmSid/" + root.contractData.CUST_MBR_SID;
+            myFieldModel.opLookupUrl = "/api/Customers/GetCustomerDivisionsByCustNmSid/" + root.contractData.CUST_MBR_SID; 
         }
 
         dataService.get(myFieldModel.opLookupUrl, null, null, true).then(function (response) {
@@ -1849,7 +1849,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var data = cleanupData(root.spreadDs.data());
         ValidateProducts(data, true);
     }
-
+	
     kendo.spreadsheet.registerEditor("multiSelectPopUpEditor", function () {
         var context;
 
@@ -1870,8 +1870,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             // Get column name out of selected cell
             var colName = root.letterToCol[String.fromCharCode(intA + currColIndex)];
 
-            // Get columnData (urls, name, etc) from column name
-            var colData = $scope.$parent.$parent.templates.ModelTemplates.PRC_TBL_ROW['ECAP'].model.fields[colName];
+        	// Get columnData (urls, name, etc) from column name
+            var dealType = $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD;
+            var colData = $scope.$parent.$parent.templates.ModelTemplates.PRC_TBL_ROW[dealType].model.fields[colName];
 
             // We have a "generic" variable in the scope to be the model. Then we replace the generic with a copy of the columnData
             // Inside the script tag, we have a ng-if equals column name then use whichever multiselct.
@@ -1956,8 +1957,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             // Get column name out of selected cell
             var colName = root.letterToCol[String.fromCharCode(intA + currColIndex)]
 
-            // Get columnData (urls, name, etc) from column name
-            var colData = $scope.$parent.$parent.templates.ModelTemplates.PRC_TBL_ROW['ECAP'].model.fields[colName];
+        	// Get columnData (urls, name, etc) from column name
+            var dealType = $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD;
+            var colData = $scope.$parent.$parent.templates.ModelTemplates.PRC_TBL_ROW[dealType].model.fields[colName];
 
             var cellDate = fromOaDate(context.range.value());
 
