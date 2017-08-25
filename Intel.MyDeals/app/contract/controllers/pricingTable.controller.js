@@ -1013,6 +1013,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             headerRange.verticalAlign(headerStyle.verticalAlign);
 
             sheet.range("A2:Z" + $scope.root.ptRowCount).verticalAlign("center");
+            sheet.range("A2:Z" + $scope.root.ptRowCount).textAlign(cellStyle.textAlign);
 
             // Add product selector editor on Product cells
             sheet.range(root.colToLetter["PTR_USER_PRD"] + ":" + root.colToLetter["PTR_USER_PRD"]).editor("cellProductSelector");
@@ -1036,6 +1037,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         // Disable all cells except product and cells that are read-only from template
                         if (key !== "PTR_USER_PRD") {
                             disableRange(sheet.range(myColumnName + numRowsContainingData + ":" + myColumnName));
+                        } else {
+                            if (!root.curPricingStrategy._settings || !root.curPricingStrategy._settings.C_EDIT_PRODUCT) {
+                                disableRange(sheet.range(myColumnName + numRowsContainingData + ":" + myColumnName));
+                            }
                         }
                     }
 

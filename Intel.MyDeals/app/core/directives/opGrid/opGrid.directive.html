@@ -8,7 +8,7 @@
             <div id="tabstrip" kendo-tab-strip class="gradTab" k-ng-delay="tabStripDelay" ng-show="tabStripDelay">
                 
                 <ul class="fl">
-                    <li ng-repeat="group in opOptions.groups | orderBy:'order'" ng-click="showCols(group.name)">
+                    <li ng-repeat="group in opOptions.groups | orderBy:'order'" ng-click="showCols(group.name)" ng-hide="group.isHidden">
                         <i class="intelicon-pin-outlined" ng-hide="{{ group.name == 'All' || group.name == 'CAP Info' }}" title="Pin tab so it always shows in the grid" ng-click="clickPin($event, group.name)"></i> {{group.name}}
                         <span class="badge error" ng-show="group.numErrors > 0">{{group.numErrors}}</span>
                         <span class="badge warning" ng-show="{{ group.name == 'CAP Info' && numSoftWarn > 0 }}">{{numSoftWarn}}</span>

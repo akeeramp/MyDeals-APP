@@ -206,7 +206,7 @@ namespace Intel.MyDeals.BusinessLogic
                         if (dictValues.ContainsKey(uniqDimBaseKey))
                         {
                             if (de.DataType == "System.DateTime" &&
-                                !String.IsNullOrEmpty(dictValues[dimKey].ToString().Replace("Invalid date", "")))
+                                !String.IsNullOrEmpty(dictValues[uniqDimBaseKey].ToString().Replace("Invalid date", "")))
                                 dictValues[uniqDimBaseKey] = Convert.ToDateTime(dictValues[uniqDimBaseKey]);
                             de.AtrbValue = dictValues[uniqDimBaseKey];
                         }

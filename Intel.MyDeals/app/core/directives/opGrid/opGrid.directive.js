@@ -151,6 +151,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 $scope.cloneWithOrder("default");
             }
 
+
             $scope.configureSortableTab = function () {
                 $("#tabstrip ul.k-tabstrip-items").kendoSortable({
                     filter: "li.k-item",
@@ -337,13 +338,50 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
             $scope.contractDs = new kendo.data.DataSource({
                 transport: {
                     read: function (e) {
+                        var i,r,g,group;
                         var data = $scope.opData;
-                        for (var i = 0; i < data.length; i++) {
-                            if ($scope.dealTypes.indexOf(data[i].OBJ_SET_TYPE_CD) < 0) $scope.dealTypes.push(data[i].OBJ_SET_TYPE_CD);
+
+                        var hideIfAll = [];
+
+                        // init all rules
+                        for (g = 0; g < $scope.opOptions.default.groups.length; g++) {
+                            group = $scope.opOptions.default.groups[g];
+                            if (!!group.rules) {
+                                for (r = 0; r < group.rules.length; r++) {
+                                    if (group.rules[r].logical === "HideIfAll") {
+                                        group.rules[r].name = group.name;
+                                        group.rules[r].show = false;
+                                        hideIfAll.push(group.rules[r]);
+                                    }
+                                }
+                            }
                         }
 
+
+                        for (i = 0; i < data.length; i++) {
+                            if ($scope.dealTypes.indexOf(data[i].OBJ_SET_TYPE_CD) < 0) $scope.dealTypes.push(data[i].OBJ_SET_TYPE_CD);
+
+                            for (r = 0; r < hideIfAll.length; r++) {
+                                if (!!data[i][hideIfAll[r].atrb] && data[i][hideIfAll[r].atrb] !== hideIfAll[r].value) {
+                                    hideIfAll[r].show = true;
+                                }
+                            }
+                        }
+
+                        for (r = 0; r <= hideIfAll.length; r++) {
+                            for (g = 0; g < $scope.opOptions.groups.length; g++) {
+                                group = $scope.opOptions.groups[g];
+                                if (!!group && hideIfAll[r] && group.name === hideIfAll[r].name) {
+                                    group.isHidden = !hideIfAll[r].show;
+                                //} else {
+                                //    group.isHidden = false;
+                                }
+                            }
+                        }
+//                        debugger;
+
                         var childParent = {};
-                        for (var i = 0; i < data.length; i++) {
+                        for (i = 0; i < data.length; i++) {
                             var item = data[i];
                             if (item.isLinked === undefined) item.isLinked = false;
                             if (childParent[item.DC_PARENT_ID] === undefined) childParent[item.DC_PARENT_ID] = 0;

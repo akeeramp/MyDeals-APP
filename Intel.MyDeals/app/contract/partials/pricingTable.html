@@ -34,7 +34,7 @@
 				</tr>
 			</table>
 		</button>		<!-- Validate Products Button -->
-		<button class="btn btn-sm ssToolbarBtn" ng-click="validatePricingTableProducts()" title="Validate the Pricing Table.  This will also perform a save.">
+		<button class="btn btn-sm ssToolbarBtn" ng-class="{'disabled': !_dirty}" ng-click="validatePricingTableProducts()" title="Validate the Pricing Table.  This will also perform a save.">
 			<table>
 				<tr>
 					<td>
@@ -49,7 +49,7 @@
 		</button>
 
 		<!-- Product Selector Button -->
-		<button class="btn btn-sm ssToolbarBtn" ng-click="openProductSelector()" title="Open Product Selector">
+		<button class="btn btn-sm ssToolbarBtn" ng-show="ps._settings.C_EDIT_PRODUCT" ng-click="openProductSelector()" title="Open Product Selector">
 			<table>
 				<tr>
 					<td>
@@ -75,7 +75,7 @@
 			</table>
 		</button>
 
-        <button class="btn btn-sm ssToolbarBtn" ng-click="showEditPricingTableDefaults(root.curPricingTable)" title="Autofill Defaults">
+        <button class="btn btn-sm ssToolbarBtn" ng-show="ps._settings.C_ADD_PRICING_TABLE" ng-click="showEditPricingTableDefaults(root.curPricingTable)" title="Autofill Defaults">
             <table>
                 <tr>
                     <td>

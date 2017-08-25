@@ -82,20 +82,20 @@
             "groups": {
                 "ECAP": [
                     { "name": "Deal Info", "order": 0 },
-                    { "name": "Consumption", "order": 1 },
+                    { "name": "Consumption", "order": 1, "rules": [{ "logical": "HideIfAll", "atrb": "PAYOUT_BASED_ON", "value": "Billings" }] },
                     { "name": "Backdate", "order": 2 },
                     { "name": "CAP Info", "order": 98 },
                     { "name": "All", "order": 99 }
                 ],
                 "VOL_TIER": [
                     { "name": "Deal Info", "order": 0 },
-                    { "name": "Consumption", "order": 1 },
+                    { "name": "Consumption", "order": 1, "rules": [{ "logical": "HideIfAll", "atrb": "PAYOUT_BASED_ON", "value": "Billings" }] },
                     { "name": "Backdate", "order": 2 },
                     { "name": "All", "order": 99 }
                 ],
                 "PROGRAM": [
                     { "name": "Deal Info", "order": 0 },
-                    { "name": "Consumption", "order": 1 },
+                    { "name": "Consumption", "order": 1, "rules": [{ "logical": "HideIfAll", "atrb": "PAYOUT_BASED_ON", "value": "Billings" }] },
                     { "name": "Backdate", "order": 2 },
                     { "name": "All", "order": 99 }
                 ]
