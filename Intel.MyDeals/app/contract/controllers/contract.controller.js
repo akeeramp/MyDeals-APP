@@ -60,6 +60,7 @@
         $scope.C_VIEW_ATTACHMENTS = securityService.chkDealRules('C_VIEW_ATTACHMENTS', window.usrRole, null, null, null);
         $scope.C_EDIT_PRODUCT = securityService.chkDealRules('C_EDIT_PRODUCT', window.usrRole, null, null, null);
 
+        debugger;
         // Hard code for now until security is put in place
         // $scope.C_ADD_PRICING_STRATEGY = true;
 

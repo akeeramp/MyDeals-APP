@@ -49,7 +49,7 @@
 		</button>
 
 		<!-- Product Selector Button -->
-		<button class="btn btn-sm ssToolbarBtn" ng-show="ps._settings.C_EDIT_PRODUCT" ng-click="openProductSelector()" title="Open Product Selector">
+		<button class="btn btn-sm ssToolbarBtn" ng-show="curPricingStrategy._settings.C_EDIT_PRODUCT" ng-click="openProductSelector()" title="Open Product Selector">
 			<table>
 				<tr>
 					<td>
@@ -61,7 +61,6 @@
 				</tr>
 			</table>
 		</button>
-
 		<button class="btn btn-sm ssToolbarBtn" ng-click="toggleTerms()" title="Show/Hide Additional Discounts and Requirements.">
 			<table>
 				<tr>
@@ -75,7 +74,7 @@
 			</table>
 		</button>
 
-        <button class="btn btn-sm ssToolbarBtn" ng-show="ps._settings.C_ADD_PRICING_TABLE" ng-click="showEditPricingTableDefaults(root.curPricingTable)" title="Autofill Defaults">
+        <button class="btn btn-sm ssToolbarBtn" ng-show="curPricingStrategy._settings.C_ADD_PRICING_TABLE" ng-click="showEditPricingTableDefaults(root.curPricingTable)" title="Autofill Defaults">
             <table>
                 <tr>
                     <td>
