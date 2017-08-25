@@ -473,7 +473,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         	var isEndVolUnlimited = false;
                         	var numOfTiers = parseInt(root.pricingTableData.PRC_TBL[0].NUM_OF_TIERS);
 
-                        	if (value.value.toString().toUpperCase() == unlimitedVal.toUpperCase() && colIndex === endVolIndex && myRow.TIER_NBR === numOfTiers) {
+                        	if (value.value !== null && value.value !== undefined && value.value.toString().toUpperCase() == unlimitedVal.toUpperCase() && colIndex === endVolIndex && myRow.TIER_NBR === numOfTiers) {
                         		isEndVolUnlimited = true;
 							}
 
