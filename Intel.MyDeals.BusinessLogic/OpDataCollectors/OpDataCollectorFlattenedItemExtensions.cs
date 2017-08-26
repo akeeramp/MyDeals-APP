@@ -298,7 +298,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
         public static void CopyMatchingAttributes(this OpDataCollectorFlattenedList retItems, OpDataCollectorFlattenedItem opFlatItemLocal, OpDataElementTypeMapping elMapping,
             List<string> singleDimAtrbs, List<string> multiDimAtrbs, string userPrdNm, List<ProdMapping> pMaps, string geo)
         {
-            string baseEcapDimKey = "_____7___1____20___0";
+            string baseEcapDimKey = "_____20___0";
             OpDataCollectorFlattenedItem newItem = new OpDataCollectorFlattenedItem();
 
             // make a copy so we don't cross-contaminate records
