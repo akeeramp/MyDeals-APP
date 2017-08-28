@@ -175,6 +175,22 @@ namespace Intel.MyDeals.BusinessRules
                         }
                     }                
                 },
+                new MyOpRule // DE30320 - Consumption Reason and Consumption Reason Comment fields should not be editable when Pay Out Based On = Billing : Error found in US53631: VOL TIER DEAL::Kendo Grid Validation
+                {
+                    Title="Readonly if Consumption is Billing",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnReadonly},
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PAYOUT_BASED_ON) && de.AtrbValue != null && de.AtrbValue.ToString() == "Billing").Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetReadOnly,
+                            Target = new[] {AttributeCodes.CONSUMPTION_REASON, AttributeCodes.CONSUMPTION_REASON_CMNT }
+                        }
+                    }
+                },
                 new MyOpRule
                 {
                     Title="Readonly if Not Backend",
