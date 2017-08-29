@@ -522,57 +522,67 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         var isRangeValueEmptyString = (range.value() !== null && range.value().toString().replace(/\s/g, "").length === 0);
 
-        if (isProductColumnIncludedInChanges && (range.value() === null || isRangeValueEmptyString)) {
-            if (root.spreadDs !== undefined) {
-                var data = root.spreadDs.data();
 
-                var rowStart = topLeftRowIndex - 2;
-                var rowStop = bottomRightRowIndex - 2;
+        var hasValueInAtLeastOneCell = false;
 
-                if (hasDataOrPurge(data, rowStart, rowStop)) {
-                    stealthOnChangeMode = true; // NOTE: We need this here otherwise 2 pop-ups will show on top on one another when we input spaces to delete.
+        range.forEachCell(
+			function (rowIndex, colIndex, value) {
+				if (value.value !== null && value.value !== undefined && value.value.toString().replace(/\s/g, "").length !== 0) { // Product Col changed
+					hasValueInAtLeastOneCell = true;
+				}
+			}
+		);
 
-                    kendo.confirm("Are you sure you want to delete this product and the matching deal?")
-                        .then(function () {
-                            $timeout(function () {
-                                if (root.spreadDs !== undefined) {
-                                    // look for skipped lines
-                                    var numToDel = rowStop + 1 - rowStart;
-                                    data.splice(rowStart, numToDel);
+        if (isProductColumnIncludedInChanges && (!hasValueInAtLeastOneCell || isRangeValueEmptyString)) { // Delete row			
+        	var rowStart = topLeftRowIndex - 2;
+        	var rowStop = bottomRightRowIndex - 2;
+        	if (root.spreadDs !== undefined) {
+        		var data = root.spreadDs.data();
 
-                                    // now apply array to Datasource... one event triggered
-                                    root.spreadDs.sync();
+        		if (hasDataOrPurge(data, rowStart, rowStop)) {
+        			stealthOnChangeMode = true; // NOTE: We need this here otherwise 2 pop-ups will show on top on one another when we input spaces to delete.
 
-                                    $timeout(function () {
-                                        var n = data.length + 2;
-                                        disableRange(sheet.range("D" + n + ":D" + (n + numToDel + numToDel)));
-                                        disableRange(sheet.range("F" + n + ":Z" + (n + numToDel + numToDel)));
-                                    }, 10);
+        			kendo.confirm("Are you sure you want to delete this product and the matching deal?")
+						.then(function () {
+							$timeout(function () {
+								if (root.spreadDs !== undefined) {
+									// look for skipped lines
+									var numToDel = rowStop + 1 - rowStart;
+									data.splice(rowStart, numToDel);
 
-                                    clearUndoHistory();
-                                    root.saveEntireContract(true);
-                                }
-                            },
-                            10);
-                        },
-                        function () { });
-                    stealthOnChangeMode = false;
-                } else {
-                    cleanupData(data);
-                    root.spreadDs.sync();
-                    $timeout(function () {
-                        var cnt = 0;
-                        for (var c = 0; c < data.length; c++) {
-                            if (data[c].DC_ID !== null) cnt++;
-                        }
-                        var numToDel = rowStop + 1 - rowStart;
-                        cnt = cnt + 2;
-                        disableRange(sheet.range("D" + cnt + ":D" + (cnt + numToDel - 1)));
-                        disableRange(sheet.range("F" + cnt + ":Z" + (cnt + numToDel - 1)));
-                        clearUndoHistory();
-                    }, 10);
-                }
-            }
+									// now apply array to Datasource... one event triggered
+									root.spreadDs.sync();
+
+									$timeout(function () {
+										var n = data.length + 2;
+										disableRange(sheet.range("D" + n + ":D" + (n + numToDel + numToDel)));
+										disableRange(sheet.range("F" + n + ":Z" + (n + numToDel + numToDel)));
+									}, 10);
+
+									clearUndoHistory();
+									root.saveEntireContract(true);
+								}
+							},
+							10);
+						},
+						function () { });
+        			stealthOnChangeMode = false;
+        		} else {
+        			cleanupData(data);
+        			root.spreadDs.sync();
+        			$timeout(function () {
+        				var cnt = 0;
+        				for (var c = 0; c < data.length; c++) {
+        					if (data[c].DC_ID !== null) cnt++;
+        				}
+        				var numToDel = rowStop + 1 - rowStart;
+        				cnt = cnt + 2;
+        				disableRange(sheet.range("D" + cnt + ":D" + (cnt + numToDel - 1)));
+        				disableRange(sheet.range("F" + cnt + ":Z" + (cnt + numToDel - 1)));
+        				clearUndoHistory();
+        			}, 10);
+        		}
+        	}
         }
         else {
             // Trigger only if the changed range contains the product column
@@ -592,7 +602,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             if (isPtrSysPrdFlushed) {
                 if (!systemModifiedProductInclude) {
                     // TODO we will need to revisit.  There are cases where we CANNOT remove products and reload... active deals for example
-                    sheet.range("B" + topLeftRowIndex + ":C" + bottomRightRowIndex).value("");
+                	sheet.batch(function () {
+                		sheet.range("B" + topLeftRowIndex + ":C" + bottomRightRowIndex).value("");
 
                     range.forEachCell(
                         function (rowIndex, colIndex, value) {
@@ -600,16 +611,17 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 // Re-disable specific cells that are readOnly
                                 var rowInfo = root.pricingTableData.PRC_TBL_ROW[(rowIndex - 1)]; // This is -1 to account for the 0th rows in the spreadsheet
                                 if (rowInfo != undefined) { // The row was pre-existing
-                                    disableIndividualReadOnlyCells(sheet, rowInfo, rowIndex, 1);
+                                	disableIndividualReadOnlyCells(sheet, rowInfo, rowIndex, 1);
                                 }
                             }
                         });
+                    });
                 } else {
                     systemModifiedProductInclude = false;
                 }
             }
 
-            if (isProductColumnIncludedInChanges && range.value() !== null) {
+            if (isProductColumnIncludedInChanges && hasValueInAtLeastOneCell) {
                 syncSpreadRows(sheet, topLeftRowIndex, bottomRightRowIndex);
             }
         }
@@ -622,7 +634,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     function cleanupData(data) {
         // Remove any lingering blank rows from the data
         for (var n = data.length - 1; n >= 0; n--) {
-            if (data[n].DC_ID === null && (data[n].PTR_USER_PRD === null || data[n].PTR_USER_PRD.toString().replace(/\s/g, "").length === 0)) {
+        	if (data[n].DC_ID === null && (data[n].PTR_USER_PRD === null || data[n].PTR_USER_PRD.toString().replace(/\s/g, "").length === 0)) {
                 data.splice(n, 1);
             } else {
                 if (util.isInvalidDate(data[n].START_DT)) data[n].START_DT = moment(root.contractData["START_DT"]).format("MM/DD/YYYY");
@@ -764,6 +776,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         stealthOnChangeMode = true;
                         sheet.range("A" + (data.length + 2) + ":" + finalColLetter + (bottomRightRowIndex + numBlanks)).value("");
                         topLeftRowIndex -= numBlanks;
+                        if (topLeftRowIndex < 2) { // prevent topLeftRowIndex from becoming negative to prevent out of bounds errors. It is "2" to account for the headers.
+                        	topLeftRowIndex = 2;
+                        }
                         bottomRightRowIndex -= numBlanks;
                         stealthOnChangeMode = false;
                     } else {
