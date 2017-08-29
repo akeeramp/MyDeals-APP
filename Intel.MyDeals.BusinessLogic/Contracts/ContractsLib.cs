@@ -59,7 +59,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns>MyDealsData</returns>
         public MyDealsData GetContract(int id, List<OpDataElementType> opDataElementTypes = null)
         {
-            return OpDataElementType.CNTRCT.GetByIDs(new List<int> { id }, opDataElementTypes ?? new List<OpDataElementType> { OpDataElementType.CNTRCT });
+            return OpDataElementType.CNTRCT.GetByIDs(new List<int> { id }, opDataElementTypes ?? new List<OpDataElementType> { OpDataElementType.CNTRCT }).FillInHolesFromAtrbTemplate();
         }
 
         public MyDealsData GetContract(int id, List<OpDataElementType> opDataElementTypes, IEnumerable<int> atrbs)
