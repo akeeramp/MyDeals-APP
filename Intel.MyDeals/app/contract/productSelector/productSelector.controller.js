@@ -1166,14 +1166,7 @@
                     width: "80px",
                     groupHeaderTemplate: "#= value #",
                     filterable: { multi: true, search: true }
-                },
-                {
-                    field: "HIER_NM_HASH",
-                    title: "Product Details",
-                    template: "<div kendo-tooltip k-content='dataItem.HIER_NM_HASH'>{{dataItem.HIER_NM_HASH}}</div>",
-                    width: "120px",
-                    filterable: { multi: true, search: true }
-                },
+                },                
                 {
                     field: "PRD_STRT_DTM",
                     title: "Product Effective Date",
