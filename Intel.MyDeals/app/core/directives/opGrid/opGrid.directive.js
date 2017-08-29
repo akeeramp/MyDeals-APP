@@ -716,7 +716,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
             $scope.createEditEl = function (field, type, dimKey, format) {
                 var el = '<div class="dimKey">' + $scope.translateDimKey(dimKey) + ':</div>';
                 if (type === "TextBox") {
-                    el += '<input k-ng-model="dataItem.' + field + '[\'' + dimKey + '\']" style="width: 100%;" />';
+                    el += '<input ng-model="dataItem.' + field + '[\'' + dimKey + '\']" k-on-change="updateDirty(dataItem)" style="width: 100%;" />';
 
                 } else if (type === "ComboBox") {
 
@@ -729,22 +729,22 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 } else if (type === "CheckBox") {
 
                 } else if (type === "NumericTextBox") {
-                    el += '<input kendo-numeric-text-box k-ng-model="dataItem.' + field + '[\'' + dimKey + '\']" style="width: 100%;" />';
+                    el += '<input kendo-numeric-text-box k-min="0" k-decimals="0" k-format="\'n0\'" k-ng-model="dataItem.' + field + '[\'' + dimKey + '\']" k-on-change="updateDirty(dataItem)" style="max-width: 100%; margin:0;" />';
 
                 } else {
-                    el += '<input k-ng-model="dataItem.' + field + '[\'' + dimKey + '\']" style="width: 100%;" />';
+                    el += '<input ng-model="dataItem.' + field + '[\'' + dimKey + '\']" k-on-change="updateDirty(dataItem)" style="width: 100%;" />';
                 }
 
                 return el;
             }
 
             $scope.translateDimKey = function(key) {
-                if (key === "10___0") return "Primary";
-                if (key === "10____1") return "Kit";
-                if (key === "10___1") return "Secondary 1";
-                if (key === "10___2") return "Secondary 2";
-                if (key === "10___3") return "Secondary 3";
-                if (key === "10___4") return "Secondary 4";
+                if (key === "20___0") return "Primary";
+                if (key === "20____1") return "Kit";
+                if (key === "20___1") return "Secondary 1";
+                if (key === "20___2") return "Secondary 2";
+                if (key === "20___3") return "Secondary 3";
+                if (key === "20___4") return "Secondary 4";
                 return "";
             }
 

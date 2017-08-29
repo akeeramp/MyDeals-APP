@@ -267,7 +267,15 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
             {
                 if (singleDimAtrbs.Contains(key))
                 {
-                    retItems[key] = opFlatItem[key];
+                    if (key == AttributeCodes.ECAP_PRICE)
+                    {
+                        var items = JsonConvert.DeserializeObject<Dictionary<string,float>>(opFlatItem[key].ToString());
+                        retItems[key] = items["20___0"];
+                    }
+                    else
+                    {
+                        retItems[key] = opFlatItem[key];
+                    }
                 }
                 else if (multiDimAtrbs.Contains(key))
                 {

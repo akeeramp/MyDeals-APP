@@ -827,7 +827,9 @@ namespace Intel.MyDeals.DataLibrary
                 DataType = "object",
                 IsFilterable = true,
                 IsSortable = true,
-                Format = "{0:c}"
+                Format = "{0:c}",
+                UiType = "NumericTextBox",
+                Editor = "multiDimEditor"
             });
 
             items.Add(new UiTemplateContainerItem
