@@ -399,7 +399,7 @@ namespace Intel.MyDeals.BusinessRules
             if (!deProductCategoriesValue.Contains("SvrWS"))
             {
                 IOpDataElement deServerDealType = r.Dc.GetDataElement(AttributeCodes.SERVER_DEAL_TYPE);
-                if (deServerDealType != null) deServerDealType.IsHidden = true;
+                if (deServerDealType != null) deServerDealType.IsReadOnly = true;
             }
         }
 

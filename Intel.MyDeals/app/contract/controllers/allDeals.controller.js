@@ -127,7 +127,7 @@ function AllDealsController($scope, $state, $stateParams, $filter, objsetService
 		            "Groups": ["Deal Info"]
 		        },
 		        "PAYOUT_BASED_ON": {
-		            "Groups": ["Deal Info"]
+		            "Groups": ["Deal Info", "Consumption"]
 		        },
 		        "PROGRAM_PAYMENT": {
 		            "Groups": ["Deal Info"]

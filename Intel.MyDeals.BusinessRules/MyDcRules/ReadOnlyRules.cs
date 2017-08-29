@@ -36,6 +36,12 @@ namespace Intel.MyDeals.BusinessRules
                 },
                 new MyOpRule
                 {
+                    Title="Server Deal Type Read Only if Product is not SvrWS",
+                    ActionRule = MyDcActions.ShowServerDealType,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate }
+                },
+                new MyOpRule
+                {
                     // US52971 -  If Program Payment = Front end then user need to enter the sold to ID-not mandatory (sold to ID should be pulled by system for that customer div and Geo and multi select)-if left blank then it means all 
                     Title="Hidden if Backend Deal",
                     ActionRule = MyDcActions.ExecuteActions,

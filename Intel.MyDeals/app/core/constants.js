@@ -135,6 +135,9 @@
                     "TITLE": {
                         "Groups": ["Deal Info"]
                     },
+                    "SERVER_DEAL_TYPE": {
+                        "Groups": ["All"]
+                    },
                     "DEAL_COMB_TYPE": {
                         "Groups": ["Deal Info"]
                     },
@@ -190,7 +193,7 @@
                         "Groups": ["Deal Info"]
                     },
                     "PAYOUT_BASED_ON": {
-                        "Groups": ["Deal Info"]
+                        "Groups": ["Deal Info", "Consumption"]
                     },
                     "PROGRAM_PAYMENT": {
                         "Groups": ["Deal Info"]
@@ -311,6 +314,9 @@
                     "TITLE": {
                         "Groups": ["Deal Info"]
                     },
+                    "SERVER_DEAL_TYPE": {
+                        "Groups": ["All"]
+                    },
                     "DEAL_COMB_TYPE": {
                         "Groups": ["Deal Info"]
                     },
@@ -330,7 +336,7 @@
                         "Groups": ["Deal Info"]
                     },
                     "PAYOUT_BASED_ON": {
-                        "Groups": ["Deal Info"]
+                        "Groups": ["Deal Info", "Consumption"]
                     },
                     "PROGRAM_PAYMENT": {
                         "Groups": ["Deal Info"]
@@ -388,6 +394,9 @@
                     "TITLE": {
                         "Groups": ["Deal Info"]
                     },
+                    "SERVER_DEAL_TYPE": {
+                        "Groups": ["All"]
+                    },
                     "DEAL_COMB_TYPE": {
                         "Groups": ["Deal Info"]
                     },
@@ -404,7 +413,7 @@
                         "Groups": ["Deal Info"]
                     },
                     "PAYOUT_BASED_ON": {
-                        "Groups": ["Deal Info"]
+                        "Groups": ["Deal Info", "Consumption"]
                     },
                     "PROGRAM_PAYMENT": {
                         "Groups": ["Deal Info"]

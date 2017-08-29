@@ -66,15 +66,16 @@ gridUtils.uiControlScheduleWrapper = function (passedData) {
             var dim = "10___" + numTiers;
             tmplt += '<tr style="height: 25px;">';
             for (var f = 0; f < fields.length; f++) { 
-            	tmplt += '<td style="text-align: ' + fields[f].align + ';">';
-            	tmplt += '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + fields[f].field +'_'+ dim + '" kendo-tooltip="" k-content="dataItem._behaviors.validMsg.' + fields[f].field +'_'+ dim + '" style="" data-role="tooltip"></div>';
-            	tmplt += '<span class="ng-binding" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + '\'] ' + gridUtils.getFormat(fields[f].field, fields[f].format) + ')"></span>'
+                tmplt += '<td style="text-align: ' + fields[f].align + ';"';
+                tmplt += ' ng-class="{isHiddenCell: dataItem._behaviors.isHidden.' + fields[f].field + ', isReadOnlyCell: dataItem._behaviors.isReadOnly.' + fields[f].field + ', isRequiredCell: dataItem._behaviors.isRequired.' + fields[f].field + ', isErrorCell: dataItem._behaviors.isError.' + fields[f].field + ', isSavedCell: dataItem._behaviors.isSaved.' + fields[f].field + ', isDirtyCell: dataItem._behaviors.isDirty.' + fields[f].field + '}">';
+                tmplt += '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + fields[f].field + '_' + dim + '" kendo-tooltip="" k-content="dataItem._behaviors.validMsg.' + fields[f].field + '_' + dim + '" style="" data-role="tooltip"></div>';
+                tmplt += '<span class="ng-binding" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + '\'] ' + gridUtils.getFormat(fields[f].field, fields[f].format) + ')"></span>';
             	tmplt += '</td>';
             }
             tmplt += '</tr>';
         }
     }
-
+    
     tmplt += '</table>';
 
     return tmplt;

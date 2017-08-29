@@ -19,13 +19,6 @@ namespace Intel.MyDeals.BusinessRules
 					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate }
 				},
 
-				new MyOpRule
-				{
-					Title="Show Server Deal Type if Product is SvrWS",
-					ActionRule = MyDcActions.ShowServerDealType,
-					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate }
-				},
-
                 new MyOpRule
                 {
                     Title="Show Expire YCS2 if frontend deal is active",

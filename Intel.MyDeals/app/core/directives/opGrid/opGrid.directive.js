@@ -466,6 +466,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
 
                     $scope.saveFunctions(e.model, newField, e.values[newField]);
 
+                    //below lines moved to saveFunctions()
                     //$scope.$parent.$parent.$parent.$parent.$parent.saveCell(e.model, newField);
 
                     //if (e.model.isLinked !== undefined && e.model.isLinked) {
@@ -676,8 +677,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                     for (var f = 0; f < fields.length; f++) {
                     	if (f === 0) {
                             tmplt += '<td style="margin: 0; padding: 0; text-align: ' + fields[f].align + ';"><span class="ng-binding" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + '\'] ' + gridUtils.getFormat(fields[f].field, fields[f].format) + ')"></span></td>';
+                        } else if (f === fields.length - 1) {
+                            tmplt += '<td style="margin: 0; padding: 0;"><input kendo-numeric-text-box k-min="0" k-decimals="2" k-format="\'n2\'" k-ng-model="dataItem.' + fields[f].field + '[\'' + dim + '\']" k-on-change="updateDirty(dataItem, \'' + fields[f].field + '\')" style="max-width: 100%; margin:0;" /></td>';
                         } else {
-                            tmplt += '<td style="margin: 0; padding: 0;"><input kendo-numeric-text-box k-min="0" k-decimals="0" k-format="\'n0\'" k-ng-model="dataItem.' + fields[f].field + '[\'' + dim + '\']" k-on-change="updateDirty(dataItem)" style="max-width: 100%; margin:0;" /></td>';
+                            tmplt += '<td style="margin: 0; padding: 0;"><input kendo-numeric-text-box k-min="0" k-decimals="0" k-format="\'n0\'" k-ng-model="dataItem.' + fields[f].field + '[\'' + dim + '\']" k-on-change="updateDirty(dataItem, \'' + fields[f].field + '\')" style="max-width: 100%; margin:0;" /></td>';
                         }
                     }
                     tmplt += '</tr>';
@@ -689,8 +692,13 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
 
             }
 
-            $scope.updateDirty = function (dataItem) {
-                dataItem.dirty = true;
+            $scope.updateDirty = function (dataItem, field) {
+                $scope.saveFunctions(dataItem, field, dataItem[field])
+                //$scope.$parent.$parent.$parent.$parent.$parent.saveCell(dataItem, "TIER_NBR");
+                //JEFFNOTE: kendo numeric text box saving as ints, but reading in data from spreadsheet as strings.  will this be an issue?
+
+                //TODO: rename function to be rate breakout specific name
+                //TODO: force adjacency?  if change, then also change relevant start/end vols?
             }
 
             $scope.multiDimEditor = function(container, options) {
