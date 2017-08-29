@@ -482,6 +482,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                         		if (colIndex === endVolIndex || colIndex === strtVolIndex) {
                         			value.value = parseInt(value.value) || 0; // HACK: To make sure End vol has a numerical value so that validations work and show on these cells
+                        			//value.format = "##,#"; // TODO: fomatting the end vol (a string with number possibilities) does not work. Figure out why.
                         		}
                         		else if (colIndex === rateIndex) {
                         			value.value = parseFloat(value.value) || 0; // HACK: To make sure End vol has a numerical value so that validations work and show on these cells
@@ -1084,7 +1085,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 // Money Formatting
                                 if (myFieldModel.format == "{0:c}") {
                                     sheet.range(myColumnName + ":" + myColumnName).format("$##,#0.00");
-                                } 
+                                } else {
+                                	sheet.range(myColumnName + ":" + myColumnName).format("##,#");
+                                }
                                 break;
                             case "string":
                                 if (!myFieldModel.nullable) {
@@ -1403,6 +1406,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                 // need to pad range ref
                 pasteRef.bottomRight.row += padNumRows;
+				
+                var i = state.data.length;
+                while (i--) {
+                	if (state.data[i] === undefined) {
+                		state.data.splice(i,1);
+                	}
+                }
 
                 sheet.range(pasteRef).setState(state, clip);
                 sheet.triggerChange({
