@@ -1,38 +1,47 @@
 ﻿<!-- Add Pricing Strategy -->
-<div ng-show="isExistingContract()">
     <!--<button class="addPsBtn btn btn-sm btn-primary" ng-hide="isAddStrategyBtnHidden" ng-click="toggleAddStrategy()">
         <i class="intelicon-plus-max"></i> New Pricing Strategies
     </button>-->
-    <div style="padding: 10px; background-color: #0071C5;" ng-hide="isAddStrategyHidden">
-        <form name="addNewPsForm" ng-submit="submitForm(CustomAddPsValidate())" novalidate>
-            <!-- novalidate prevents HTML5 validation since we will be validating ourselves -->
-            <div class="fl ptLnavTitle">Enter Pricing Strategy Name</div>
-            <div class="clearboth"></div>
-            <div class="bgBlueContainer" ng-class="{isErrorWrapper: newStrategy._behaviors.isError.TITLE}">
-                <div kendo-tooltip k-content="newStrategy._behaviors.validMsg.TITLE" k-position="'top'" ng-show="newStrategy._behaviors.isError.TITLE" class="err-bit-el"></div>
-                <input type="text" class="k-textbox fl" placeholder=""
-                       style="width: 228px; color: black;"
-                       maxlength="250"
-                       id="inptPrcTitle"
-                       ng-model="newStrategy.TITLE"
-                       ng-class="{isError: newStrategy._behaviors.isError.TITLE}"/>
-                <button ng-show="!addStrategyDisabled" class="btn btn-sm btn-primary" type="submit" style="font-size: 12px; margin-left: 6px; background-color: #00AEEF; padding: 7px 10px;" ng-click="customAddPsValidate()">Add</button>
-                <button ng-show="addStrategyDisabled" class="btn btn-sm btn-primary btn-pending" style="font-size: 12px; margin-left: 6px; background-color: #00AEEF; padding: 7px 10px;" >Add</button>
+        <div style="padding: 10px; background-color: #0071C5;" ng-hide="isAddStrategyHidden">
+            <form name="addNewPsForm" ng-submit="submitForm(CustomAddPsValidate())" novalidate>
+                <!-- novalidate prevents HTML5 validation since we will be validating ourselves -->
+                <div class="fl ptLnavTitle">Enter Pricing Strategy Name</div>
                 <div class="clearboth"></div>
-                <div style="color: #F3D54E;">{{ newStrategy._behaviors.validMsg.TITLE }}</div>
-            </div>
+                <div class="bgBlueContainer" ng-if="C_ADD_PRICING_STRATEGY" ng-class="{isErrorWrapper: newStrategy._behaviors.isError.TITLE}">
+                    <div kendo-tooltip k-content="newStrategy._behaviors.validMsg.TITLE" k-position="'top'" ng-show="newStrategy._behaviors.isError.TITLE" class="err-bit-el"></div>
+                    <input type="text" class="k-textbox fl" placeholder=""
+                           style="width: 228px; color: black;"
+                           maxlength="250"
+                           id="inptPrcTitle"
+                           ng-model="newStrategy.TITLE"
+                           ng-class="{isError: newStrategy._behaviors.isError.TITLE}" />
+                    <button ng-show="!addStrategyDisabled" class="btn btn-sm btn-primary" type="submit" style="font-size: 12px; margin-left: 6px; background-color: #00AEEF; padding: 7px 10px;" ng-click="customAddPsValidate()">Add</button>
+                    <button ng-show="addStrategyDisabled" class="btn btn-sm btn-primary btn-pending" style="font-size: 12px; margin-left: 6px; background-color: #00AEEF; padding: 7px 10px;">Add</button>
+                    <div class="clearboth"></div>
+                    <div style="color: #F3D54E;">{{ newStrategy._behaviors.validMsg.TITLE }}</div>
+                </div>
+                <div ng-if="!C_ADD_PRICING_STRATEGY">
+                    <div kendo-tooltip k-content="newStrategy._behaviors.validMsg.TITLE" k-position="'top'" ng-show="newStrategy._behaviors.isError.TITLE" class="err-bit-el"></div>
+                    <input type="text" class="k-textbox fl" placeholder=""
+                           style="width: 228px; color: black;"
+                           maxlength="250"
+                           disabled
+                           id="inptPrcTitle"
+                           ng-model="newStrategy.TITLE"
+                           ng-class="{isError: newStrategy._behaviors.isError.TITLE}" />
+                    <div class="clearboth"></div>
+                    <div style="color: #F3D54E;"><h3></h3>Sorry, you cannot add new Strategies</h3></div>
+                </div>
 
-        </form>
-    </div>
-    
-    <div class="help-add-ps" id="divHelpAddPs">
-        <div>
-            <i class="intelicon-arrow-up"></i>
+            </form>
         </div>
-        Start by adding a<br/>Pricing Strategy
-    </div>
 
-</div>
+        <div class="help-add-ps" id="divHelpAddPs" ng-if="C_ADD_PRICING_STRATEGY">
+            <div>
+                <i class="intelicon-arrow-up"></i>
+            </div>
+            Start by adding a<br />Pricing Strategy
+        </div>
 
 <style>
     .help-add-ps {
