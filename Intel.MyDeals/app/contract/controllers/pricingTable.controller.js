@@ -1674,6 +1674,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var isAllValidated = true;
         for (var key in transformResults.ProdctTransformResults) {
             var r = key - 1;
+
+            //Trimming unwanted Property to make JSON light
+            if (!!transformResults.ValidProducts[key]) {
+                transformResults = massagingObjectsForJSON(key, transformResults);
+            }
+
             // If no duplicate or invalid add valid JSON
             data[r].PTR_SYS_PRD = !!transformResults.ValidProducts[key] ? JSON.stringify(transformResults.ValidProducts[key]) : "";
             sourceData[r].PTR_SYS_PRD = data[r].PTR_SYS_PRD;
@@ -1739,13 +1745,19 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     if (!!transformResult && !!transformResult.ProdctTransformResults) {
                         for (var key in transformResult.ProdctTransformResults) {
                             var r = key - 1;
-                            var allIssuesDone = false;
+                            var allIssuesDone = false; 
+
+                            //Trimming unwanted Property to make JSON light
+                            if (!!transformResult.ValidProducts[key]) {
+                                transformResult = massagingObjectsForJSON(key, transformResult);
+                            }                            
+
                             // Save Valid and InValid JSO into spreadsheet hidden columns
                             if ((!!transformResult.InValidProducts[key] && transformResult.InValidProducts[key].length > 0) || !!transformResult.DuplicateProducts[key]) {
                                 var invalidJSON = {
                                     'ProdctTransformResults': transformResult.ProdctTransformResults[key],
                                     'InValidProducts': transformResult.InValidProducts[key], 'DuplicateProducts': transformResult.DuplicateProducts[key]
-                                }
+                                }                                
                                 data[r].PTR_SYS_INVLD_PRD = JSON.stringify(invalidJSON);
                                 sourceData[r].PTR_SYS_INVLD_PRD = data[r].PTR_SYS_INVLD_PRD;
                             } else {
@@ -1784,6 +1796,41 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 },
             function () { });
             }, 10);
+    }
+
+    //Trimming unwanted Property to make JSON light
+    function massagingObjectsForJSON(key, transformResult) {
+        for (var validKey in transformResult.ValidProducts[key]) {
+            transformResult.ValidProducts[key][validKey] = transformResult.ValidProducts[key][validKey].map(function (x) {
+                return {
+                    BRND_NM: x.BRND_NM,
+                    CAP: x.CAP,
+                    CAP_END: x.CAP_END,
+                    CAP_START: x.CAP_START,
+                    DEAL_PRD_NM: x.DEAL_PRD_NM,
+                    DEAL_PRD_TYPE: x.DEAL_PRD_TYPE,
+                    DERIVED_USR_INPUT: x.DERIVED_USR_INPUT,
+                    FMLY_NM: x.FMLY_NM,
+                    HAS_L1: x.HAS_L1,
+                    HAS_L2: x.HAS_L2,
+                    HIER_NM_HASH: x.HIER_NM_HASH,
+                    HIER_VAL_NM: x.HIER_VAL_NM,
+                    MM_MEDIA_CD: x.MM_MEDIA_CD,
+                    MTRL_ID: x.MTRL_ID,
+                    PCSR_NBR: x.PCSR_NBR,
+                    PRD_ATRB_SID: x.PRD_ATRB_SID,
+                    PRD_CAT_NM: x.PRD_CAT_NM,
+                    PRD_END_DTM: x.PRD_END_DTM,
+                    PRD_MBR_SID: x.PRD_MBR_SID,
+                    PRD_STRT_DTM: x.PRD_STRT_DTM,
+                    USR_INPUT: x.USR_INPUT,
+                    YCS2: x.YCS2,
+                    YCS2_END: x.YCS2_END,
+                    YCS2_START: x.YCS2_START
+                }
+            });
+        }
+        return transformResult;
     }
 
     function deleteRowFromCorrector(data) {

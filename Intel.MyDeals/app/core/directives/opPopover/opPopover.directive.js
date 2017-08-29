@@ -100,7 +100,13 @@ function opPopover($compile, dataService, $timeout, logger) {
 
             function hidePopover() {
                 scope.dynamicPopover.isOpen = false;
+                scope.insidePopover = false;                
+            }
+
+            scope.closePopover = function(event){
                 scope.insidePopover = false;
+                scope.dynamicPopover.isOpen = false;                
+                event.stopPropagation();
             }
 
             $(document).bind('mouseover', function (e) {

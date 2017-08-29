@@ -32,7 +32,7 @@
                             editable: false, nullable: true
                         },
                         HIER_VAL_NM: { validation: { required: true } },
-                        ACTV_IND: { validation: { required: true } },
+                        ACTV_IND: { validation: { required: true }, type:"boolean" },
                         MEET_COMP_PRD: { editable: false, validation: { required: false } },
                         MEET_COMP_PRC: { editable: false, validation: { required: true }, type: "number" },
                         COMP_BNCH: { editable: false, validation: { required: true }, type: "number" },

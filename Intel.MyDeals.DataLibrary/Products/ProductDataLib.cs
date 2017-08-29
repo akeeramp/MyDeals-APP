@@ -432,6 +432,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_DERIVED_USR_INPUT = DB.GetReaderOrdinal(rdr, "DERIVED_USR_INPUT");
                     int IDX_EXACT_MATCH = DB.GetReaderOrdinal(rdr, "EXACT_MATCH");
                     int IDX_FMLY_NM = DB.GetReaderOrdinal(rdr, "FMLY_NM");
+                    int IDX_GDM_FMLY_NM = DB.GetReaderOrdinal(rdr, "GDM_FMLY_NM");
                     int IDX_HAS_L1 = DB.GetReaderOrdinal(rdr, "HAS_L1");
                     int IDX_HAS_L2 = DB.GetReaderOrdinal(rdr, "HAS_L2");
                     int IDX_HIER_NM_HASH = DB.GetReaderOrdinal(rdr, "HIER_NM_HASH");
@@ -463,6 +464,7 @@ namespace Intel.MyDeals.DataLibrary
                             DERIVED_USR_INPUT = (IDX_DERIVED_USR_INPUT < 0 || rdr.IsDBNull(IDX_DERIVED_USR_INPUT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DERIVED_USR_INPUT),
                             EXACT_MATCH = (IDX_EXACT_MATCH < 0 || rdr.IsDBNull(IDX_EXACT_MATCH)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_EXACT_MATCH),
                             FMLY_NM = (IDX_FMLY_NM < 0 || rdr.IsDBNull(IDX_FMLY_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_FMLY_NM),
+                            GDM_FMLY_NM = (IDX_GDM_FMLY_NM < 0 || rdr.IsDBNull(IDX_GDM_FMLY_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_GDM_FMLY_NM),
                             HAS_L1 = (IDX_HAS_L1 < 0 || rdr.IsDBNull(IDX_HAS_L1)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_HAS_L1),
                             HAS_L2 = (IDX_HAS_L2 < 0 || rdr.IsDBNull(IDX_HAS_L2)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_HAS_L2),
                             HIER_NM_HASH = (IDX_HIER_NM_HASH < 0 || rdr.IsDBNull(IDX_HIER_NM_HASH)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_HIER_NM_HASH),

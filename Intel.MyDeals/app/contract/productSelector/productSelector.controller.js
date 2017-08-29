@@ -454,18 +454,28 @@
                     field: "PCSR_NBR",
                     title: "Processor Number",
                     template: "<a role='button' ng-if='dataItem.PRD_ATRB_SID == 7006' ng-click='vm.gridSelectItem(dataItem)'>#= PCSR_NBR #</a><div ng-if='dataItem.PRD_ATRB_SID != 7006'>#= PCSR_NBR #</div>",
-                    width: "150px"
+                    width: "150px",
+                    filterable: { multi: true, search: true }
                 },
                 {
                     field: "DEAL_PRD_NM",
                     title: "Deal Product Name",
                     template: "<a role='button' ng-if='vm.allowMMSelection(dataItem)' ng-click='vm.gridSelectItem(dataItem)'>#= DEAL_PRD_NM #</a><div ng-if='!vm.allowMMSelection(dataItem)'>#= DEAL_PRD_NM #</div>",
-                    width: "180px"
+                    width: "180px",
+                    filterable: { multi: true, search: true }
+                },
+                {
+                    field: "GDM_FMLY_NM",
+                    title: "GDM Family Name",
+                    template: "<div kendo-tooltip k-content='dataItem.GDM_FMLY_NM'>{{dataItem.GDM_FMLY_NM}}</div>",
+                    width: "150px",
+                    filterable: { multi: true, search: true }
                 },
                 {
                     field: "MTRL_ID",
                     title: "Material Id",
-                    width: "150px"
+                    width: "150px",
+                    filterable: { multi: true, search: true }
                 },
                 {
                     field: "PRD_STRT_DTM",
@@ -502,24 +512,28 @@
                 {
                     field: "CPU_PROCESSOR_NUMBER",
                     title: "CPU Processor number",
-                    width: "150px"
+                    width: "150px",
+                    filterable: { multi: true, search: true }
                 },
                 {
                     field: "MM_MEDIA_CD",
                     title: "Media Code",
-                    width: "150px"
+                    width: "150px",
+                    filterable: { multi: true, search: true }
                 },
                 {
                     field: "MM_CUST_CUSTOMER",
                     title: "MM Customer Name",
-                    width: "150px"
+                    width: "150px",
+                    filterable: { multi: true, search: true }
                 },
                 {
                     field: "FMLY_NM_MM",
                     title: "EDW Family Name",
                     template: "<div kendo-tooltip k-content='dataItem.FMLY_NM_MM'>{{dataItem.FMLY_NM_MM}}</div>",
-                    width: "150px"
-                },
+                    width: "150px",
+                    filterable: { multi: true, search: true }
+                },                
                 {
                     field: "EPM_NM",
                     title: "EPM Name",
@@ -530,47 +544,56 @@
                     field: "SKU_NM",
                     title: "SKU Name",
                     template: "<div kendo-tooltip k-content='dataItem.SKU_NM'>{{dataItem.SKU_NM}}</div>",
-                    width: "180px"
+                    width: "180px",
+                    filterable: { multi: true, search: true }
                 },
                 {
                     field: "NAND_FAMILY",
                     title: "NAND FAMILY",
-                    width: "150px"
+                    width: "150px",
+                    filterable: { multi: true, search: true }
                 },
                 {
                     field: "NAND_Density",
                     title: "Nand Density",
-                    width: "150px"
+                    width: "150px",
+                    filterable: { multi: true, search: true }
                 },
                 {
                     field: "CPU_CACHE",
                     title: "CPU CACHE",
-                    width: "150px"
+                    width: "150px",
+                    filterable: { multi: true, search: true }
                 },
                 {
                     field: "CPU_PACKAGE",
                     title: "CPU PACKAGE",
-                    width: "150px"
+                    width: "150px",
+                    filterable: { multi: true, search: true }
                 },
                 {
                     field: "CPU_WATTAGE",
                     title: "CPU WATTAGE",
-                    width: "150px"
+                    width: "150px",
+                    filterable: { multi: true, search: true }
                 },
                 {
                     field: "CPU_VOLTAGE_SEGMENT",
                     title: "Voltage Segment",
-                    width: "150px"
+                    width: "150px",
+                    filterable: { multi: true, search: true }
                 },
                 {
                     field: "PRICE_SEGMENT",
                     title: "Price Segment",
-                    width: "150px"
+                    width: "150px",
+                    filterable: { multi: true, search: true }
                 },
                 {
                     field: "SBS_NM",
                     title: "SBS Name",
-                    width: "150px"
+                    width: "150px",
+                    filterable: { multi: true, search: true }
                 },
             ]
         }
@@ -1127,24 +1150,28 @@
                     title: "User Entered",
                     groupHeaderTemplate: "<span class=\"grpTitle\">#= value #</span>",
                     hidden: false,
-                    width: "150px"
+                    width: "150px",
+                    filterable: { multi: true, search: true }
                 },
                 {
                     field: "HIER_VAL_NM",
                     title: "Product",
-                    width: "150px"
+                    width: "150px",
+                    filterable: { multi: true, search: true }
                 },
                 {
                     field: "PRD_CAT_NM",
                     title: "Product Category",
                     width: "80px",
-                    groupHeaderTemplate: "#= value #"
+                    groupHeaderTemplate: "#= value #",
+                    filterable: { multi: true, search: true }
                 },
                 {
                     field: "HIER_NM_HASH",
                     title: "Product Details",
                     template: "<div kendo-tooltip k-content='dataItem.HIER_NM_HASH'>{{dataItem.HIER_NM_HASH}}</div>",
-                    width: "120px"
+                    width: "120px",
+                    filterable: { multi: true, search: true }
                 },
                 {
                     field: "PRD_STRT_DTM",
@@ -1161,7 +1188,8 @@
                 {
                     field: "MM_MEDIA_CD",
                     title: "Media Code",
-                    width: "120px"
+                    width: "120px",
+                    filterable: { multi: true, search: true }
                 },
                 {
                     field: "YCS2",
@@ -1172,18 +1200,21 @@
                 {
                     field: "CPU_PROCESSOR_NUMBER",
                     title: "CPU Processor number",
-                    width: "150px"
+                    width: "150px",
+                    filterable: { multi: true, search: true }
                 },
                 {
                     field: "MM_CUST_CUSTOMER",
                     title: "MM Customer Name",
-                    width: "150px"
+                    width: "150px",
+                    filterable: { multi: true, search: true }
                 },
                 {
                     field: "FMLY_NM_MM",
                     title: "EDW Family Name",
                     template: "<div kendo-tooltip k-content='dataItem.FMLY_NM_MM'>{{dataItem.FMLY_NM_MM}}</div>",
-                    width: "150px"
+                    width: "150px",
+                    filterable: { multi: true, search: true }
                 },
                 {
                     field: "EPM_NM",
@@ -1195,47 +1226,56 @@
                     field: "SKU_NM",
                     title: "SKU Name",
                     template: "<div kendo-tooltip k-content='dataItem.SKU_NM'>{{dataItem.SKU_NM}}</div>",
-                    width: "180px"
+                    width: "180px",
+                    filterable: { multi: true, search: true }
                 },
                 {
                     field: "NAND_FAMILY",
                     title: "NAND FAMILY",
-                    width: "150px"
+                    width: "150px",
+                    filterable: { multi: true, search: true }
                 },
                 {
                     field: "NAND_Density",
                     title: "Nand Density",
-                    width: "150px"
+                    width: "150px",
+                    filterable: { multi: true, search: true }
                 },
                 {
                     field: "CPU_CACHE",
                     title: "CPU CACHE",
-                    width: "150px"
+                    width: "150px",
+                    filterable: { multi: true, search: true }
                 },
                 {
                     field: "CPU_PACKAGE",
                     title: "CPU PACKAGE",
-                    width: "150px"
+                    width: "150px",
+                    filterable: { multi: true, search: true }
                 },
                 {
                     field: "CPU_WATTAGE",
                     title: "CPU WATTAGE",
-                    width: "150px"
+                    width: "150px",
+                    filterable: { multi: true, search: true }
                 },
                 {
                     field: "CPU_VOLTAGE_SEGMENT",
                     title: "Voltage Segment",
-                    width: "150px"
+                    width: "150px",
+                    filterable: { multi: true, search: true }
                 },
                 {
                     field: "PRICE_SEGMENT",
                     title: "Price Segment",
-                    width: "150px"
+                    width: "150px",
+                    filterable: { multi: true, search: true }
                 },
                 {
                     field: "SBS_NM",
                     title: "SBS Name",
-                    width: "150px"
+                    width: "150px",
+                    filterable: { multi: true, search: true }
                 }
             ]
         }

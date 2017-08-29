@@ -286,7 +286,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
 
         vm.numIssueRows = issueRowIds.length;
         vm.totRows = Object.keys(data.ProdctTransformResults).length;
-    }
+    }    
 
     vm.dataSourceProduct = new kendo.data.DataSource({
         transport: {
@@ -315,6 +315,12 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                     "PRD_CAT_NM": {
                         type: "string"
                     },
+                    "DEAL_PRD_NM": {
+                        type: "string"
+                    },
+                    "GDM_FMLY_NM": {
+                        type: "string"
+                    },  
                     "HIER_NM_HASH": {
                         type: "string"
                     },
@@ -365,7 +371,8 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                 field: "USR_INPUT",
                 title: "User Entered",
                 groupHeaderTemplate: "<span class=\"grpTitle\">#= value #</span>  <i class='intelicon-arrow-back-left skyblue pl10'></i> <span class='grpDesc'>Can't find what you are looking for?  <span class='or'>Use the</span> </span><span class='lnk' ng-click='vm.launchSelector(\"#=value#\")'>Product Selector</span><span class='or'> OR </span><span class='lnk' ng-click='vm.removeProd(\"#=value#\")'>Remove Product</span>",
-                hidden: false
+                hidden: false,
+                filterable: { multi: true, search: true }
             },
             {
                 field: "IS_SEL",
@@ -382,19 +389,28 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                 field: "HIER_VAL_NM",
                 title: "Product",
                 template: '<div ng-class="{\'text-danger\': vm.isValidCapDetails(dataItem)}" title="{{vm.isValidCapDetails(dataItem, true)}}">#= HIER_VAL_NM #</div>',
-                width: "150px"
+                width: "150px",
+                filterable: { multi: true, search: true }
             },
             {
                 field: "PRD_CAT_NM",
                 title: "Product Category",
                 width: "80px",
-                groupHeaderTemplate: "#= value #"
-            },
+                groupHeaderTemplate: "#= value #",
+                filterable: { multi: true, search: true }
+            },            
+            {
+                field: "GDM_FMLY_NM",
+                title: "GDM Family Name",
+                template: "<div kendo-tooltip k-content='dataItem.GDM_FMLY_NM'>{{dataItem.GDM_FMLY_NM}}</div>",
+                filterable: { multi: true, search: true }
+            },            
             {
                 field: "HIER_NM_HASH",
-                title: "Product Details",
-                template: "<div kendo-tooltip k-content='dataItem.HIER_NM_HASH'>{{dataItem.HIER_NM_HASH}}</div>"
-            },
+                title: "Product Description",
+                template: "<div kendo-tooltip k-content='dataItem.HIER_NM_HASH'>{{dataItem.HIER_NM_HASH}}</div>",
+                hidden: true
+            },             
             {
                 field: "PRD_STRT_DTM",
                 title: "Product Effective Date",
@@ -409,7 +425,8 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
             {
                 field: "MM_MEDIA_CD",
                 title: "Media Code",
-                width: "120px"
+                width: "120px",
+                filterable: { multi: true, search: true }
             },
         ]
     }
@@ -428,18 +445,12 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
             if (!vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][item.name]) return;
 
             var foundItem = util.findInArrayWhere(vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][item.name], "PRD_MBR_SID", id);
-            if (!foundItem) return;
+            if (!foundItem) return;            
 
             if (!vm.ProductCorrectorData.ValidProducts[vm.curRowId]) vm.ProductCorrectorData.ValidProducts[vm.curRowId] = {};
             if (!vm.ProductCorrectorData.ValidProducts[vm.curRowId][item.name]) vm.ProductCorrectorData.ValidProducts[vm.curRowId][item.name] = [];
             vm.ProductCorrectorData.ValidProducts[vm.curRowId][item.name].push(foundItem);
-
-            //vm.curRowData = vm.curRowData.filter(function (obj) {
-            //    return obj.PRD_MBR_SID != foundItem.PRD_MBR_SID;
-            //});
-
-            //foundItem.IS_SEL = true;
-            //vm.curRowData.unshift(foundItem);
+            
             vm.curRowData.forEach(function (item) {
                 if (item.PRD_MBR_SID == foundItem.PRD_MBR_SID) {
                     item.IS_SEL = true;
@@ -477,8 +488,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                     item.IS_SEL = false;
                 }
             });
-        }
-        //vm.selectRow(vm.curRowIndx);
+        }        
     }
 
     vm.removeAndFilter = function (prdName) {
@@ -849,7 +859,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                 }
                 vm.ProductCorrectorData.InValidProducts[key] = invalidCopy;
             }
-        }
+        }        
 
         $uibModalInstance.close(vm.ProductCorrectorData);
     }

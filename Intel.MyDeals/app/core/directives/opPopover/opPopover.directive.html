@@ -1,12 +1,16 @@
 ﻿<div class="opPopOver">
     <ng-transclude />
+    
     <a popover-hoverable="true" popover-class="increase-popover-width" popover-is-open="dynamicPopover.isOpen" popover-placement="auto"
        uib-popover-template="dynamicPopover.templateUrl"></a>
-
+    
     <script type="text/ng-template" id="capPopoverTemplate.html">
         <div>
             <div ng-if="loading" class="text-center">
                 <img src="/Images/loading022.gif" />
+            </div>
+            <div data-role="view">
+                <a id="closePopover" data-role="button" ng-click="closePopover($event)" ><i style="font-size:18px !important" class="intelicon-close-max"></i></a>
             </div>
             <div ng-if="!loading" kendo-grid class="table" options="gridOptions"></div>
         </div>
@@ -27,4 +31,7 @@
             height: auto !important;
             min-height: inherit !important;
         }
+    #closePopover{
+        margin-left:96% !important;
+    }
 </style>
