@@ -22,6 +22,7 @@
             GetSuggestions: GetSuggestions,
             GetProductAttributes: GetProductAttributes,
             IsProductExistsInMydeals: IsProductExistsInMydeals,
+            GetLegalExceptionProducts: GetLegalExceptionProducts
         }
 
         return service;
@@ -63,6 +64,10 @@
 
         function GetSearchString(dto) {
             return dataService.post(apiBaseUrl + 'GetSearchString', dto);
+        }
+
+        function GetLegalExceptionProducts(dto) {
+            return dataService.post(apiBaseUrl + 'GetLegalExceptionProducts', dto);
         }
 
         function GetSuggestions(dto, custId) {

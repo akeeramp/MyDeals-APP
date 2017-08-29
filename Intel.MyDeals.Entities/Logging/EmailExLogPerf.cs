@@ -8,7 +8,12 @@ namespace Intel.MyDeals.Entities.Logging
 {
     public class EmailExLogPerf : IOpLogPerf
     {
+#if DEBUG
+        private static string ToEmailList = OpUserStack.MyOpUserToken.Usr.Email;
+#else
         private static string ToEmailList = "josephine.a.juang@intel.com, philip.w.eckenroth@intel.com, michael.h.tipping@intel.com, jeffrey.j.yeh@intel.com,mahesh.biradar@intel.com,saurav.kundu@intel.com"; // TODO: this shoud be read from an environment aware constants config setup. The from email might also be from a config file or constant. Mike prefers constants
+#endif
+
         private static string FromEmail = "MyDealsSupport@intel.com";
         public string EmailEmailSubject = "MyDeals Error [{0}] - {1}";
 

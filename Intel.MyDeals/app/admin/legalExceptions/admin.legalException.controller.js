@@ -4,9 +4,9 @@
         .module('app.admin')
         .controller('legalExceptionsController', legalExceptionsController);
 
-    legalExceptionsController.$inject = ['legalExceptionService', 'hasAccess', '$scope', 'logger', 'confirmationModal', 'gridConstants', '$linq'];
+    legalExceptionsController.$inject = ['legalExceptionService', 'hasAccess', '$scope', 'logger', 'confirmationModal', 'gridConstants', '$linq', 'ProductSelectorService'];
 
-    function legalExceptionsController(legalExceptionService, hasAccess, $scope, logger, confirmationModal, gridConstants, $linq) {
+    function legalExceptionsController(legalExceptionService, hasAccess, $scope, logger, confirmationModal, gridConstants, $linq, ProductSelectorService) {
         var vm = this;
         vm.hasAccess = hasAccess;
         vm.validationMessage = "";
@@ -82,10 +82,10 @@
                 model: {
                     id: "MYDL_PCT_LGL_EXCPT_SID",
                     fields: {
-                        ACTV_IND: { editable: true, defaultValue: true, type:"boolean" }
+                        ACTV_IND: { editable: true, defaultValue: true, type: "boolean" }
                         , INTEL_PRD: {
-                            type: "string", validation: {
-                                required: { message: "* field is required" }
+                            validation: {
+                                required: { message: "* field is required" },
                             }
                         }
 						, SCPE: {
@@ -233,7 +233,8 @@
                 field: "INTEL_PRD",
                 headerTemplate: "<div class='isRequired'> Intel Product </div>",
                 title: "Intel Product",
-                width: 170,
+                width: 240,
+                editor: productEditor,
                 filterable: { multi: true, search: true }
             },
             {
@@ -428,7 +429,52 @@
                 return true;
             }
 
+            e.data.models[0].PCT_LGL_EXCPT_STRT_DT = moment(e.data.models[0].PCT_LGL_EXCPT_STRT_DT).format("l");
+            e.data.models[0].PCT_LGL_EXCPT_END_DT = moment(e.data.models[0].PCT_LGL_EXCPT_END_DT).format("l");
+            e.data.models[0].DT_APRV = moment(e.data.models[0].DT_APRV).format("l");
+
             return false;
+        }
+
+        function productEditor(container, options) {
+            $('<input id="productEditor" validationMessage="* field is required" placeholder="Enter Products.."' +
+                'required name="' + options.field + '" data-text-field="Name" data-value-field="Name" data-bind="value:' + options.field + '" />').appendTo(container)
+                .kendoComboBox({
+                    dataSource: {
+                        serverFiltering: true,
+                        transport: {
+                            type: "json",
+                            read: function (e) {
+                                var param = e.data.filter.filters[0].value;
+                                if (param === "") {
+                                    e.success([]);
+                                } else {
+                                    var dto = {
+                                        filter: param
+                                    };
+                                    ProductSelectorService.GetLegalExceptionProducts(dto).then(function (response) {
+                                        e.success(response.data);
+                                    }, function (response) {
+                                        logger.error("Unable to get product suggestions.", response, response.statusText);
+                                    });
+                                }
+                            },
+                        }
+                    },
+                    autoBind: false,
+                    serverFiltering: true,
+                    filter: "startsWith",
+                    height: 300,
+                    delay: 700,
+                    minLength: 2,
+                    change: function (e) {
+                        if (this.selectedIndex == -1) {
+                            this.text("");
+                        }
+                    }
+                });
+
+            $('<span class="k-invalid-msg" data-for="' + options.field + '"></span>').appendTo(container);
         }
     }
 })();

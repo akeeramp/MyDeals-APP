@@ -76,5 +76,7 @@ namespace Intel.MyDeals.IBusinessLogic
         IList<PRD_LOOKUP_RESULTS> GetSuggestions(ProductEntryAttribute userInput, int custId);
 
         bool IsProductExistsInMydeals(string filter);
+
+        IList<SearchString> GetLegalExceptionProducts(string filter);
     }
 }

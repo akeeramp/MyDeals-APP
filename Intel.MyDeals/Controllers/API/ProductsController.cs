@@ -502,5 +502,14 @@ namespace Intel.MyDeals.Controllers.API
                 , $"Unable to get Product details"
             );
         }
+
+        [Route("GetLegalExceptionProducts")]
+        [HttpPost]
+        public IList<SearchString> GetLegalExceptionProducts([FromBody]dynamic input)
+        {
+            return SafeExecutor(() => _productsLib.GetLegalExceptionProducts((string)input.filter)
+                , $"Unable to get Product details"
+            );
+        }
     }
 }

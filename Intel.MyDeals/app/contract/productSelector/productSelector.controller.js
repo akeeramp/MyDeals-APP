@@ -346,7 +346,7 @@
             vm.showSuggestions = false;
             vm.disableSelection = false;
             vm.errorMessage = "";
-            if (!!dontClearSearch && dontClearSearch) {
+            if (dontClearSearch !== undefined && !dontClearSearch) {
                 vm.userInput = "";
             }
             if (index === 0) {
@@ -495,13 +495,14 @@
                     field: "CAP_START",
                     title: "CAP Availability Date",
                     template: "<div>{{vm.getFormatedDate(dataItem.CAP_START)}}</div>",
-                    width: "150px"
+                    width: "150px",
                 },
                 {
                     field: "CAP",
                     title: "CAP Info",
                     template: "<op-popover ng-click='vm.openCAPBreakOut(dataItem, \"CAP\")' op-options='CAP' op-label='' op-data='vm.getPrductDetails(dataItem, \"CAP\")'>#=gridUtils.uiMoneyDatesControlWrapper(data, 'CAP', 'CAP_START', 'CAP_END')#</op-popover>",
-                    width: "150px"
+                    width: "150px",
+                    filterable: false
                 },
                 {
                     field: "YCS2",
@@ -538,7 +539,7 @@
                     field: "EPM_NM",
                     title: "EPM Name",
                     template: "<div kendo-tooltip k-content='dataItem.EPM_NM'>{{dataItem.EPM_NM}}</div>",
-                    width: "180px"
+                    width: "180px",
                 },
                 {
                     field: "SKU_NM",
@@ -1183,7 +1184,8 @@
                     field: "CAP",
                     title: "CAP Info",
                     template: "<op-popover ng-click='vm.openCAPBreakOut(dataItem, \"CAP\")' op-options='CAP' op-label='' op-data='vm.getPrductDetails(dataItem, \"CAP\")'>#=gridUtils.uiMoneyDatesControlWrapper(data, 'CAP', 'CAP_START', 'CAP_END')#</op-popover>",
-                    width: "150px"
+                    width: "150px",
+                    filterable: false
                 },
                 {
                     field: "MM_MEDIA_CD",

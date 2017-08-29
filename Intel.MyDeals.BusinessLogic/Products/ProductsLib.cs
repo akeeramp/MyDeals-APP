@@ -354,6 +354,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             return resultMEDIA.Union(resultVERTICAL).Distinct().ToDictionary(d => d.Key, d => d.Key);
         }
+
         private string RemoveVerticalAndMedia(string tempProdName, Dictionary<string, string> mediaResult, bool isEPMserach)
         {
             string tempName = tempProdName;
@@ -369,14 +370,14 @@ namespace Intel.MyDeals.BusinessLogic
                 {
                     foreach (var k in isMediaPresent)
                     {
-                        tempName = Regex.Replace(tempName, k.Key, @"", RegexOptions.IgnoreCase); // Replace OR with nothing                        
+                        tempName = Regex.Replace(tempName, k.Key, @"", RegexOptions.IgnoreCase); // Replace OR with nothing
                     }
 
                     tempName = Regex.Replace(tempName, @"\s+", " ");
                 }
             }
 
-            return tempName.Trim().Length == 0 ? tempProdName : tempName.Trim(); 
+            return tempName.Trim().Length == 0 ? tempProdName : tempName.Trim();
         }
 
         private string CheckBogusProduct(string tempProdName, bool isEPMserach)
@@ -391,7 +392,6 @@ namespace Intel.MyDeals.BusinessLogic
                 bool isValid = IsProductNamePartiallyExists(tempProdName, isEPMserach);
                 if (!isValid)
                 {
-
                     int cnt = splitedProd.Length > counter ? counter : splitedProd.Length;
                     for (int i = 1; i <= cnt; i++)
                     {
@@ -414,7 +414,6 @@ namespace Intel.MyDeals.BusinessLogic
                                     break;
                                 }
                             }
-
                         }
                     }
                 }
@@ -537,7 +536,6 @@ namespace Intel.MyDeals.BusinessLogic
         {
             var searchString = isEPMserach == false ? GetSearchString().Where(d => d.Value != ProductHierarchyLevelsEnum.EPM_NM.ToString()).ToDictionary(d => d.Key, d => d.Value) : GetSearchString();
             return searchString.Keys.Where(currentKey => currentKey.ToLower().Contains(searchText.ToLower())).Any();
-
         }
 
         /// <summary>
@@ -1188,6 +1186,32 @@ namespace Intel.MyDeals.BusinessLogic
             }
 
             return SearchProduct(productsToTranslate, custId, true);
+        }
+
+        /// <summary>
+        /// Get Products for Legal Exception Admin screen
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        public IList<SearchString> GetLegalExceptionProducts(string filter)
+        {
+            var products = GetProducts();
+
+            // Get L1 and L2 CPU processors
+            // Get L1 and L2 non CPU Level4's
+            var legalproducts = products.Where(p => (p.HAS_L1 == 1 || p.HAS_L2 == 1) &&
+                                    ((p.DEAL_PRD_TYPE.ToUpper() == "CPU" && p.PRD_ATRB_SID == 7006) || (p.DEAL_PRD_TYPE != "CPU" && p.PRD_ATRB_SID == 7007)))
+                                    .Select(x => new SearchString { Name = x.HIER_VAL_NM });
+
+            var _getSearchString = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+
+            foreach (var s in legalproducts)
+            {
+                if (!_getSearchString.Keys.Contains(s.Name))
+                    _getSearchString.Add(s.Name, s.Type);
+            }
+
+            return GetMatchingProduct(filter, _getSearchString);
         }
     }
 
