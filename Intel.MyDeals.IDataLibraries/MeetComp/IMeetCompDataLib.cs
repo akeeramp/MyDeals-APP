@@ -8,6 +8,6 @@ namespace Intel.MyDeals.IDataLibrary
     {
         List<MeetComp> GetMeetCompData();
 
-        List<MeetComp> ActivateDeactivateMeetComp(int MEET_COMP_SID, bool ACTV_IND, DateTime CHG_DTM);
+        List<MeetComp> ActivateDeactivateMeetComp(int MEET_COMP_SID, bool ACTV_IND);
     }
 }

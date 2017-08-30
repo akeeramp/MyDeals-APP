@@ -31,10 +31,10 @@ namespace Intel.MyDeals.BusinessLogic
         /// <param name="MEET_COMP_SID"></param>
         /// <param name="ACTV_IND"></param>
         /// <returns></returns>
-        public List<MeetComp> ActivateDeactivateMeetComp(int MEET_COMP_SID, bool ACTV_IND, DateTime CHG_DTM)
+        public List<MeetComp> ActivateDeactivateMeetComp(int MEET_COMP_SID, bool ACTV_IND)
         {
             // TODO :Later need to decide caching will be apply or not
-            return _meetCompCollectorLib.ActivateDeactivateMeetComp(MEET_COMP_SID, ACTV_IND, CHG_DTM);
+            return _meetCompCollectorLib.ActivateDeactivateMeetComp(MEET_COMP_SID, ACTV_IND);
         }
 
     }

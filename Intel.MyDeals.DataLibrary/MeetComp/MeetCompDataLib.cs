@@ -76,7 +76,7 @@ namespace Intel.MyDeals.DataLibrary
             return ret;            
         }
 
-        public List<MeetComp> ActivateDeactivateMeetComp(int MEET_COMP_SID, bool ACTV_IND, DateTime CHG_DTM)
+        public List<MeetComp> ActivateDeactivateMeetComp(int MEET_COMP_SID, bool ACTV_IND)
         {
             OpLogPerf.Log("UpdateMeetComp");
 
@@ -90,16 +90,17 @@ namespace Intel.MyDeals.DataLibrary
                     @MODE = "UPDATE",
                     @MEET_COMP_SID = MEET_COMP_SID,
                     @ACTV_IND = ACTV_IND,
-                    @CHG_EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID,
-                    @CHG_DTM = CHG_DTM
+                    @CHG_EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID                    
                 }))
                 {
+                    int IDX_CHG_DTM = DB.GetReaderOrdinal(rdr, "CHG_DTM");
                     int IDX_MEET_COMP_SID = DB.GetReaderOrdinal(rdr, "MEET_COMP_SID");
 
                     while (rdr.Read())
                     {
                         ret.Add(new MeetComp
                         {
+                            CHG_DTM = (IDX_CHG_DTM < 0 || rdr.IsDBNull(IDX_CHG_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CHG_DTM),
                             MEET_COMP_SID = (IDX_MEET_COMP_SID < 0 || rdr.IsDBNull(IDX_MEET_COMP_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_MEET_COMP_SID)
                         });
                     } // while

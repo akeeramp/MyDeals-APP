@@ -108,11 +108,11 @@
         }
 
         //Activate/Deactivate Meet Comp Record
-        vm.gridSelectItem = function (dataItem, event) {
-            var CHG_DTM = moment(new Date()).format("l");            
+        vm.gridSelectItem = function (dataItem, event) {                       
             meetCompService.activateDeactivateMeetComp(dataItem.MEET_COMP_SID, dataItem.ACTV_IND)
                 .then(function (response) {
                     if (response.data[0].MEET_COMP_SID > 0) {
+                        var CHG_DTM = moment(response.data[0].CHG_DTM).format("l"); 
                         dataItem.CHG_EMP_NM = usrName;
                         dataItem.CHG_DTM = CHG_DTM;
                         $("#grid").find("tr[data-uid='" + dataItem.uid + "'] td:eq(14)").text(CHG_DTM);                        

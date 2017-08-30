@@ -45,7 +45,7 @@ namespace Intel.MyDeals.Controllers.API
         [HttpPost]
         public List<MeetComp> ActivateDeactivateMeetComp(int MEET_COMP_SID, bool ACTV_IND)
         {
-            return SafeExecutor(() => _meetCompLib.ActivateDeactivateMeetComp(MEET_COMP_SID, ACTV_IND, DateTime.Now.Date)
+            return SafeExecutor(() => _meetCompLib.ActivateDeactivateMeetComp(MEET_COMP_SID, ACTV_IND)
                 , $"Unable to {"Activate Deactivate Meet Comp"}"
             );
         }
