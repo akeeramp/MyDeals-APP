@@ -22,8 +22,10 @@
     //  TODO HARD CODE AGAIN UNTIL MASTER DATA IS RETURNED
     //bool isAdmin = DataCollections.GetSecurityWrapper().ChkDealRules(OpDataElementType.Unknown, OpDataElementSetType.Unknown, null,"C_CAN_VIEW_ADMINTOOL");
     bool isDeveloper = opUserToken.IsDeveloper();
+    bool isTester = opUserToken.IsTester();
     bool isAdmin = true;
 
+    // TODO Add IsAdmin to the DB??  Remove the above??
 }
 
 <div id="smbWindow"></div>
@@ -126,7 +128,10 @@
                             </ul>
                         </li>
                         @*<li><a href="Admin#/rules">Rules</a></li>*@
-                        <li><a href="Admin#/SecurityEngine">Security Engine</a></li>
+                        @if (isDeveloper)
+                        {
+                            <li><a href="Admin#/SecurityEngine">Security Engine</a></li>
+                        }
                         <li class="dropdown-submenu">
                             <a tabindex="-1">Security Attributes</a>
                             <ul class="dropdown-menu">

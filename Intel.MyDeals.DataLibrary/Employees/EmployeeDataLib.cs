@@ -252,12 +252,16 @@ namespace Intel.MyDeals.DataLibrary
                 using (var rdr = DataAccess.ExecuteReader(cmd))
                 {
                     //TABLE 1
+                    var ret = new List<UserVitalsRole>();
                     int IDX_APP_NM = DB.GetReaderOrdinal(rdr, "APP_NM");
                     int IDX_APP_SID = DB.GetReaderOrdinal(rdr, "APP_SID");
                     int IDX_EMAIL_ADDR = DB.GetReaderOrdinal(rdr, "EMAIL_ADDR");
                     int IDX_EMP_WWID = DB.GetReaderOrdinal(rdr, "EMP_WWID");
                     int IDX_FRST_NM = DB.GetReaderOrdinal(rdr, "FRST_NM");
                     int IDX_IDSID = DB.GetReaderOrdinal(rdr, "IDSID");
+                    int IDX_IS_DEVELOPER = DB.GetReaderOrdinal(rdr, "IS_DEVELOPER");
+                    int IDX_IS_SUPER = DB.GetReaderOrdinal(rdr, "IS_SUPER");
+                    int IDX_IS_TESTER = DB.GetReaderOrdinal(rdr, "IS_TESTER");
                     int IDX_LST_NM = DB.GetReaderOrdinal(rdr, "LST_NM");
                     int IDX_MI = DB.GetReaderOrdinal(rdr, "MI");
                     int IDX_ROLE_DSPLY_NM = DB.GetReaderOrdinal(rdr, "ROLE_DSPLY_NM");
@@ -274,6 +278,9 @@ namespace Intel.MyDeals.DataLibrary
                             EMP_WWID = (IDX_EMP_WWID < 0 || rdr.IsDBNull(IDX_EMP_WWID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_EMP_WWID),
                             FRST_NM = (IDX_FRST_NM < 0 || rdr.IsDBNull(IDX_FRST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_FRST_NM),
                             IDSID = (IDX_IDSID < 0 || rdr.IsDBNull(IDX_IDSID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_IDSID),
+                            IS_DEVELOPER = (IDX_IS_DEVELOPER < 0 || rdr.IsDBNull(IDX_IS_DEVELOPER)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_IS_DEVELOPER),
+                            IS_SUPER = (IDX_IS_SUPER < 0 || rdr.IsDBNull(IDX_IS_SUPER)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_IS_SUPER),
+                            IS_TESTER = (IDX_IS_TESTER < 0 || rdr.IsDBNull(IDX_IS_TESTER)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_IS_TESTER),
                             LST_NM = (IDX_LST_NM < 0 || rdr.IsDBNull(IDX_LST_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_LST_NM),
                             MI = (IDX_MI < 0 || rdr.IsDBNull(IDX_MI)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MI),
                             ROLE_DSPLY_NM = (IDX_ROLE_DSPLY_NM < 0 || rdr.IsDBNull(IDX_ROLE_DSPLY_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ROLE_DSPLY_NM),
@@ -354,17 +361,6 @@ namespace Intel.MyDeals.DataLibrary
 
                     //TABLE 6
                     rdr.NextResult();
-
-                    //TABLE 7
-                    int IDX_SUPER_SA = DB.GetReaderOrdinal(rdr, "SUPER_SA");
-
-                    while (rdr.Read())
-                    {
-                        tempUserVitalsSuper.Add(new UserVitalsSuper
-                        {
-                            SUPER_SA = (IDX_SUPER_SA < 0 || rdr.IsDBNull(IDX_SUPER_SA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_SUPER_SA)
-                        });
-                    } // while
                 }
             }
             catch (Exception ex)
@@ -386,6 +382,10 @@ namespace Intel.MyDeals.DataLibrary
                 Email = tempUserVitalsRole.First().EMAIL_ADDR,
                 AppId = tempUserVitalsRole.First().APP_SID
             };
+            // Set Basic SuperBits here that aren't dependant upon roles.  Role based SuperBits are down a few lines.
+            opUserToken.Properties[EN.OPUSERTOKEN.IS_SUPER] = tempUserVitalsRole.First().IS_SUPER == 1? true: false;
+            opUserToken.Properties[EN.OPUSERTOKEN.IS_TESTER] = tempUserVitalsRole.First().IS_TESTER == 1 ? true : false;
+            opUserToken.Properties[EN.OPUSERTOKEN.IS_DEVELOPER] = tempUserVitalsRole.First().IS_DEVELOPER == 1 ? true : false;
 
             opUserToken.Role = new OpRoleType
             {
@@ -424,6 +424,9 @@ namespace Intel.MyDeals.DataLibrary
                 if (sm.ACTN_NM != null) settings.SecurityMasks.Add(sm);
             }
 
+            // Set IsSuperSA here because you need to have a role to check against as well.
+            opUserToken.Properties[EN.OPUSERTOKEN.IS_SUPER_SA] = (tempUserVitalsRole.First().IS_SUPER == 1 && opUserToken.Role.RoleTypeCd == RoleTypes.SA) ? true : false;
+
             ////// Table 4 contains Verticals
             foreach (UserVitalsVerticals vitalsVertical in tempUserVitalsVerticals)
             {
@@ -436,8 +439,8 @@ namespace Intel.MyDeals.DataLibrary
                 if (vsi.Id != 0) settings.VerticalSecurity.Add(vsi);
             }
 
-            ////// Table 6 contains SuperSa Record
-            settings.SuperSa = tempUserVitalsSuper.First().SUPER_SA == "YES";
+            ////// Table 1 contains Super Record, to get SuperSA, must merge with Role = SA
+            settings.SuperSa = tempUserVitalsRole.First().IS_SUPER == 1 && opUserToken.Role.RoleTypeCd == RoleTypes.SA;
 
             return settings;
         }
