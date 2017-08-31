@@ -30,7 +30,9 @@ namespace Intel.MyDeals.App
                 AVM = null;
                 OpUserStack.Clear();
                 UserSettings[OpUserStack.GetMyKey()] = null;
-                OpAuthenticationExtensions.ClearCache();
+
+                // Clear user cache of current user not all the users who are already authenticated
+                op.ClearUserCache("MyDeals", GetEnvironment());
             }
 
             OpUserToken user = null;
@@ -50,8 +52,8 @@ namespace Intel.MyDeals.App
                 PopulateUserSettings(user);
                 return user;
             }
-			
-			OpLogPerf.Log("Initializing AVM");
+
+            OpLogPerf.Log("Initializing AVM");
 
             AVM = new ApplicationViewModel
             {
@@ -77,9 +79,9 @@ namespace Intel.MyDeals.App
         public static string GetEnvironment()
         {
             return BusinessLogic.BusinessLogic.GetEnvironment();
-		}
+        }
 
-		public static void SetEnvName()
+        public static void SetEnvName()
         {
             AVM.AppEnv = (OpLog.OpAppToken == null || OpLog.OpAppToken.OpEnvironment == null ||
                           OpLog.OpAppToken.OpEnvironment.EnvLoc == null)
@@ -120,8 +122,6 @@ namespace Intel.MyDeals.App
             return (UserSettings[idsid].UserPreferences).ToList();
         }
 
-
-
         public static UserSetting GetUserSetting(OpUserToken opUserToken)
         {
             string key = opUserToken.Usr.Idsid.ToUpper();
@@ -152,50 +152,46 @@ namespace Intel.MyDeals.App
             //var cdmsCustIds = fullList.Select(c => c.cdms_cust_id).Distinct();
 
             List<MyCustomersInformation> customersOnly = (from cust in fullList
-                select new MyCustomersInformation
-                {
-                    CUST_NM = cust.CUST_NM,
-                    CUST_LVL_SID = cust.CUST_LVL_SID,
-                    CUST_CHNL = cust.CUST_CHNL,
-                    CUST_SID = cust.CUST_SID,
-                    ACCESS_TYPE = cust.ACCESS_TYPE,
-                    ACTV_IND = cust.ACTV_IND,
-                    DEAL_FLG = cust.DEAL_FLG,
-                    HOST_GEO = cust.HOST_GEO
-                }).Distinct().ToList();
+                                                          select new MyCustomersInformation
+                                                          {
+                                                              CUST_NM = cust.CUST_NM,
+                                                              CUST_LVL_SID = cust.CUST_LVL_SID,
+                                                              CUST_CHNL = cust.CUST_CHNL,
+                                                              CUST_SID = cust.CUST_SID,
+                                                              ACCESS_TYPE = cust.ACCESS_TYPE,
+                                                              ACTV_IND = cust.ACTV_IND,
+                                                              DEAL_FLG = cust.DEAL_FLG,
+                                                              HOST_GEO = cust.HOST_GEO
+                                                          }).Distinct().ToList();
 
             return customersOnly.GroupBy(x => x.CUST_SID).Select(x => x.First()).ToList();
         }
 
         public static List<MyCustomersInformation> GetMyCustomerDivsByCustNmSid(int custNmSid)
         {
-            return UserSettings[OpUserStack.MyOpUserToken.Usr.Idsid.ToUpper()] == null 
-                ? new List<MyCustomersInformation>() 
+            return UserSettings[OpUserStack.MyOpUserToken.Usr.Idsid.ToUpper()] == null
+                ? new List<MyCustomersInformation>()
                 : UserSettings[OpUserStack.MyOpUserToken.Usr.Idsid.ToUpper()].AllMyCustomers.CustomerInfo.Where(c => c.CUST_SID == custNmSid).ToList();
         }
 
         public static List<MyCustomersInformation> GetMyCustomersInfo()
         {
-            return UserSettings[OpUserStack.MyOpUserToken.Usr.Idsid.ToUpper()] == null 
-                ? new List<MyCustomersInformation>() 
+            return UserSettings[OpUserStack.MyOpUserToken.Usr.Idsid.ToUpper()] == null
+                ? new List<MyCustomersInformation>()
                 : UserSettings[OpUserStack.MyOpUserToken.Usr.Idsid.ToUpper()].AllMyCustomers.CustomerInfo;
         }
 
         public static List<MyCustomersSoldTo> GetMyCustomersSoldTo()
         {
-            return UserSettings[OpUserStack.MyOpUserToken.Usr.Idsid.ToUpper()] == null 
-                ? new List<MyCustomersSoldTo>() 
+            return UserSettings[OpUserStack.MyOpUserToken.Usr.Idsid.ToUpper()] == null
+                ? new List<MyCustomersSoldTo>()
                 : UserSettings[OpUserStack.MyOpUserToken.Usr.Idsid.ToUpper()].AllMyCustomers.CustomerSoldTo;
         }
-
 
         public static void ClearCache()
         {
             OpAuthenticationExtensions.ClearCache();
             UserSettings?.Clear();
         }
-
-
-
     }
 }
