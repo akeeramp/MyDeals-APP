@@ -678,10 +678,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                     	if (f === 0) {
                             tmplt += '<td style="margin: 0; padding: 0; text-align: ' + fields[f].align + ';"><span class="ng-binding" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + '\'] ' + gridUtils.getFormat(fields[f].field, fields[f].format) + ')"></span></td>';
                     	} else if (f === fields.length - 1) { //rate
-                    	    tmplt += '<td style="margin: 0; padding: 0;"><input kendo-numeric-text-box k-min="0" k-decimals="2" k-format="\'n2\'" k-ng-model="dataItem.' + fields[f].field + '[\'' + dim + '\']" k-on-change="updateScheduleEditor(dataItem, \'' + fields[f].field + '\')" style="max-width: 100%; margin:0;" /></td>';
+                    	    tmplt += '<td style="margin: 0; padding: 0;"><input kendo-numeric-text-box k-min="0" k-decimals="2" k-format="\'n2\'" k-ng-model="dataItem.' + fields[f].field + '[\'' + dim + '\']" k-on-change="updateScheduleEditor(dataItem, \'' + fields[f].field + '\', ' + d + ')" style="max-width: 100%; margin:0;" /></td>';
                     	} else {
                     	    if (f === 2 || d === 1) {   //if end vol or if it is the very first tier, allow editable
-                    	        tmplt += '<td style="margin: 0; padding: 0;"><input kendo-numeric-text-box k-min="0" k-max="999999999" k-decimals="0" k-format="\'n0\'" k-ng-model="dataItem.' + fields[f].field + '[\'' + dim + '\']" k-on-change="updateScheduleEditor(dataItem, \'' + fields[f].field + '\')" style="max-width: 100%; margin:0;" /></td>';
+                    	        tmplt += '<td style="margin: 0; padding: 0;"><input kendo-numeric-text-box k-min="0" k-max="999999999" k-decimals="0" k-format="\'n0\'" k-ng-model="dataItem.' + fields[f].field + '[\'' + dim + '\']" k-on-change="updateScheduleEditor(dataItem, \'' + fields[f].field + '\', ' + d + ')" style="max-width: 100%; margin:0;" /></td>';
                     	    } else { //else disabled
                     	        tmplt += '<td style="margin: 0; padding: 0;"><span class="ng-binding" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + '\'] ' + gridUtils.getFormat(fields[f].field, fields[f].format) + ')"></span></td>';
                     	    }
@@ -701,8 +701,31 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 $scope.saveFunctions(dataItem, field, dataItem[field])
             }
 
-            $scope.updateScheduleEditor = function (dataItem, field) {
+            $scope.updateScheduleEditor = function (dataItem, field, row) {
+                //if empty or max value, set to "Unlimited"
+                if (field === "STRT_VOL" || field === "END_VOL") {
+                    if (dataItem[field]["10___" + row] === null || dataItem[field]["10___" + row] == 999999999 || dataItem[field]["10___" + row] == "999999999") {
+                        dataItem[field]["10___" + row] = "Unlimited";
+                    }
+                }
+
+                //save primary column and propogate changes if necessary
                 $scope.saveFunctions(dataItem, field, dataItem[field])
+
+                if (field === "END_VOL") {
+                    //if there is a next row/tier
+                    if (!!dataItem["STRT_VOL"]["10___" + (row + 1)]) {
+                        if (dataItem[field]["10___" + row] === "Unlimited") {
+                            //if end vol is "Unlimited", then also set next start vol to "Unlimited" as well
+                            dataItem["STRT_VOL"]["10___" + (row + 1)] = "Unlimited";
+                        } else {
+                            //if end vol is a number, then set next start vol to that number + 1
+                            dataItem["STRT_VOL"]["10___" + (row + 1)] = parseInt(dataItem[field]["10___" + row]) + 1;
+                        }
+
+                        $scope.saveFunctions(dataItem, "STRT_VOL", dataItem["STRT_VOL"])
+                    }
+                }
                 //$scope.$parent.$parent.$parent.$parent.$parent.saveCell(dataItem, "TIER_NBR");
                 //JEFFNOTE: kendo numeric text box saving as ints, but reading in data from spreadsheet as strings.  will this be an issue?
 
