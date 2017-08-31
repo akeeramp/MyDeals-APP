@@ -112,7 +112,7 @@ namespace Intel.MyDeals.BusinessLogic
 
         public OpMsg DeletePricingTableRowById(ContractToken contractToken, int ptrId)
         {
-            OpDataCollectorFlattenedDictList opDcDict = GetPricingTableRow(ptrId).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
+            OpDataCollectorFlattenedDictList opDcDict = GetPricingTableRow(ptrId).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Nested);
             OpDataCollectorFlattenedList pricingTableRows = opDcDict[OpDataElementType.PRC_TBL_ROW];
             return pricingTableRows.DeleteByIds(OpDataElementType.PRC_TBL_ROW, contractToken, _dataCollectorLib);
         }

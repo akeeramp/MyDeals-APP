@@ -29,6 +29,7 @@ namespace Intel.MyDeals.Controllers
             ViewBag.AppToken = op.AppToken;
             ViewBag.IsDeveloper = user.IsDeveloper();
             ViewBag.IsSuper = user.IsSuper();
+            ViewBag.IsAdmin = user.IsAdmin();
             ViewBag.IsSuperSa = user.IsSuperSa();
             ViewBag.IsTester = user.IsTester();
         }

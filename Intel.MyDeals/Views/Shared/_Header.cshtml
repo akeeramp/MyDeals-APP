@@ -23,7 +23,7 @@
     //bool isAdmin = DataCollections.GetSecurityWrapper().ChkDealRules(OpDataElementType.Unknown, OpDataElementSetType.Unknown, null,"C_CAN_VIEW_ADMINTOOL");
     bool isDeveloper = opUserToken.IsDeveloper();
     bool isTester = opUserToken.IsTester();
-    bool isAdmin = true;
+    bool isAdmin = opUserToken.IsAdmin();
 
     // TODO Add IsAdmin to the DB??  Remove the above??
 }

@@ -1378,6 +1378,7 @@
         }
         $scope.deletePricingTableRow = function (wip) {
             $scope.$apply(function () {
+                debugger;
                 $scope.setBusy("Deleting...", "Deleting the Pricing Table Row and Deal");
                 $scope._dirty = false;
                 topbar.show();

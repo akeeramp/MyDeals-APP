@@ -13,6 +13,10 @@ namespace Intel.MyDeals.Entities
             return false;
         }
 
+        public static bool IsAdmin(this OpUserToken opUserToken)
+        {
+            return opUserToken != null && opUserToken.Properties.ContainsKey(EN.OPUSERTOKEN.IS_ADMIN) && ObjToBool(opUserToken.Properties[EN.OPUSERTOKEN.IS_ADMIN] ?? false);
+        }
         public static bool IsSuper(this OpUserToken opUserToken)
         {
             return opUserToken != null && opUserToken.Properties.ContainsKey(EN.OPUSERTOKEN.IS_SUPER) && ObjToBool(opUserToken.Properties[EN.OPUSERTOKEN.IS_SUPER] ?? false);

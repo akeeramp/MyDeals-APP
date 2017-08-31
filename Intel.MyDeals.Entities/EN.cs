@@ -10,6 +10,7 @@
 
         public static class OPUSERTOKEN
         {
+            public const string IS_ADMIN = "IsAdmin";
             public const string IS_SUPER = "IsSuper";
             public const string IS_SUPER_SA = "IsSuperSa";
             public const string IS_DEVELOPER = "IsDeveloper";
