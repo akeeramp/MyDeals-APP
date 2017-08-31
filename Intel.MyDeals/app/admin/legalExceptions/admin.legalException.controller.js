@@ -234,7 +234,6 @@
                 headerTemplate: "<div class='isRequired'> Intel Product </div>",
                 title: "Intel Product",
                 width: 240,
-                editor: productEditor,
                 filterable: { multi: true, search: true }
             },
             {
