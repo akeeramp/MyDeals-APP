@@ -42,6 +42,7 @@
 		"ATRB_SRT_ORD",
 		"ATRB_MAX_LEN",
 		"PIVOT_MSK", //"PVT_MSK",
+		"MJR_MNR_CHG",
 		"ARTB_ACTV_IND",
 		"ACTV_IND",
 		"FRMT_MSK"

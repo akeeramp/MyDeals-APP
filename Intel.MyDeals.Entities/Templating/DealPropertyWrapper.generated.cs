@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 7/7/2017 11:53:31 PM
-On: PWECKENR-MOBL
+File Updated: 9/1/2017 9:36:41 AM
+On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
 
@@ -10,6 +10,22 @@ namespace Intel.MyDeals.Entities {
 	public static class Attributes
 	{
 
+		public static MyDealsAttribute ACTIVE = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "ACTIVE",
+			ATRB_DESC = "Object Security Generic Attribute",
+			ATRB_LBL = "Active",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 1,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "CheckBox"
+		};
 		public static MyDealsAttribute ALL_BCKT_NM = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "ALL_BCKT_NM",
@@ -22,6 +38,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 20,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -37,6 +54,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 2,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -52,6 +70,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 4,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -67,6 +86,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -82,6 +102,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 10,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -97,6 +118,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -112,6 +134,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -127,6 +150,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "Label"
 		};
@@ -142,6 +166,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
@@ -157,6 +182,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -172,6 +198,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 20,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -187,6 +214,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Boolean",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "CheckBox"
 		};
@@ -202,6 +230,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.DateTime",
 			FRMT_MSK = "{0:MM/dd/yyyy HH:mm:ss.fff}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "DATETIME",
 			UI_TYPE_CD = "Label"
 		};
@@ -217,6 +246,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -232,6 +262,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -247,6 +278,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -262,6 +294,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -277,6 +310,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -292,6 +326,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "CheckBox"
 		};
@@ -307,6 +342,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "Label"
 		};
@@ -322,6 +358,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.DateTime",
 			FRMT_MSK = "{0:MM/dd/yyyy HH:mm:ss.fff}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "DATETIME",
 			UI_TYPE_CD = "DatePicker"
 		};
@@ -337,6 +374,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 999,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -352,6 +390,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.DateTime",
 			FRMT_MSK = "{0:MM/dd/yyyy HH:mm:ss.fff}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "DATETIME",
 			UI_TYPE_CD = "DatePicker"
 		};
@@ -367,6 +406,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -382,6 +422,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -397,6 +438,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "CMNT_HIST"
 		};
@@ -412,6 +454,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -427,6 +470,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -442,6 +486,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -457,6 +502,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
@@ -472,6 +518,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -487,6 +534,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -502,6 +550,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -517,6 +566,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -532,6 +582,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
@@ -547,6 +598,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -562,6 +614,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "Label"
 		};
@@ -577,6 +630,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -592,6 +646,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -607,6 +662,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -622,6 +678,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -637,8 +694,25 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute CREDIT_AMT = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "CREDIT_AMT",
+			ATRB_DESC = "Credit Amount",
+			ATRB_LBL = "Credit Amount",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3510,
+			DATA_TYPE_CD = "MONEY",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Double",
+			FRMT_MSK = "{0:c}",
+			MJR_MNR_CHG = "Minor",
+			TGT_COL_TYPE = "MONEY",
+			UI_TYPE_CD = "Label"
 		};
 		public static MyDealsAttribute CREDIT_VOLUME = new MyDealsAttribute()
 		{
@@ -652,6 +726,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Int32",
 			FRMT_MSK = "{0:d}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "Label"
 		};
@@ -667,6 +742,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
@@ -682,6 +758,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
@@ -697,6 +774,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 50,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -712,6 +790,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -727,6 +806,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 2,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -742,6 +822,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 4,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -757,6 +838,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
@@ -772,6 +854,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
@@ -787,6 +870,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 2,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -802,6 +886,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 2,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -817,6 +902,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Int32",
 			FRMT_MSK = "{0:d}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -832,6 +918,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 2,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -847,6 +934,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 2,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -862,6 +950,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -877,6 +966,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
@@ -892,6 +982,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "Label"
 		};
@@ -907,6 +998,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "Label"
 		};
@@ -922,6 +1014,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -937,6 +1030,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -952,6 +1046,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Int32",
 			FRMT_MSK = "{0:d}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "Label"
 		};
@@ -967,6 +1062,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "SoldToPicker"
 		};
@@ -982,7 +1078,24 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "Label"
+		};
+		public static MyDealsAttribute DEBIT_AMT = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "DEBIT_AMT",
+			ATRB_DESC = "Debit Amount",
+			ATRB_LBL = "Debit Amount",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3511,
+			DATA_TYPE_CD = "MONEY",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Double",
+			FRMT_MSK = "{0:c}",
+			MJR_MNR_CHG = "Minor",
+			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "Label"
 		};
 		public static MyDealsAttribute DEBIT_VOLUME = new MyDealsAttribute()
@@ -997,6 +1110,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Int32",
 			FRMT_MSK = "{0:d}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "Label"
 		};
@@ -1012,6 +1126,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -1027,6 +1142,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -1042,6 +1158,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -1057,6 +1174,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "Label"
 		};
@@ -1072,6 +1190,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
@@ -1087,6 +1206,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Int32",
 			FRMT_MSK = "{0:d}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -1102,6 +1222,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -1117,23 +1238,9 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "TextBox"
-		};
-		public static MyDealsAttribute EMP_ADM_ACCESS = new MyDealsAttribute()
-		{
-			ATRB_COL_NM = "EMP_ADM_ACCESS",
-			ATRB_DESC = "Employee Admin Access Assignment",
-			ATRB_LBL = "Employee Admin Access Assignment",
-			ATRB_MAX_LEN = 0,
-			ATRB_SID = 5085,
-			DATA_TYPE_CD = "BIT",
-			DIM_CD = "SECUR",
-			DIM_SID = 50,
-			DOT_NET_DATA_TYPE = "System.Boolean",
-			FRMT_MSK = "{0}",
-			TGT_COL_TYPE = "INT",
-			UI_TYPE_CD = "CheckBox"
 		};
 		public static MyDealsAttribute EMP_CUST_ASGN = new MyDealsAttribute()
 		{
@@ -1147,6 +1254,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 50,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -1162,6 +1270,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 50,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -1177,6 +1286,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 50,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -1192,6 +1302,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -1207,6 +1318,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.DateTime",
 			FRMT_MSK = "{0:MM/dd/yyyy HH:mm:ss.fff}",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "DATETIME",
 			UI_TYPE_CD = "DatePicker"
 		};
@@ -1217,12 +1329,13 @@ namespace Intel.MyDeals.Entities {
 			ATRB_LBL = "End Vol",
 			ATRB_MAX_LEN = 1,
 			ATRB_SID = 6,
-			DATA_TYPE_CD = "VARCHAR",
+			DATA_TYPE_CD = "INT",
 			DIM_CD = "DEAL",
 			DIM_SID = 3,
-			DOT_NET_DATA_TYPE = "System.String",
+			DOT_NET_DATA_TYPE = "System.Int32",
 			FRMT_MSK = "{0:d}",
-			TGT_COL_TYPE = "VARCHAR",
+			MJR_MNR_CHG = "Minor",
+			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "TextBox"
 		};
 		public static MyDealsAttribute EPM_NM = new MyDealsAttribute()
@@ -1237,6 +1350,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -1252,6 +1366,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -1267,6 +1382,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
@@ -1282,6 +1398,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -1297,6 +1414,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -1312,6 +1430,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -1327,6 +1446,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -1342,6 +1462,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -1357,6 +1478,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -1372,6 +1494,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "Label"
 		};
@@ -1387,6 +1510,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -1402,6 +1526,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 2,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -1417,6 +1542,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -1432,6 +1558,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -1447,6 +1574,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -1462,6 +1590,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 2,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -1477,6 +1606,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -1492,6 +1622,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "Label"
 		};
@@ -1507,6 +1638,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "MultiGeoSelector"
 		};
@@ -1522,6 +1654,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 4,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -1537,6 +1670,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Boolean",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = default(System.String),
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "CheckBox"
 		};
@@ -1552,6 +1686,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Boolean",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = default(System.String),
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "CheckBox"
 		};
@@ -1567,6 +1702,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -1582,6 +1718,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -1597,6 +1734,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 2,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -1612,6 +1750,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -1627,6 +1766,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 999,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -1642,6 +1782,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 999,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -1657,6 +1798,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 999,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -1672,6 +1814,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 999,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -1687,6 +1830,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 999,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -1702,6 +1846,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 999,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -1717,6 +1862,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 999,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -1732,6 +1878,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 999,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -1747,6 +1894,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 999,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -1762,6 +1910,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 999,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -1777,8 +1926,25 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 2,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute IS_ADMIN = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "IS_ADMIN",
+			ATRB_DESC = "employee is system administrator user",
+			ATRB_LBL = "System Administrator",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 5085,
+			DATA_TYPE_CD = "BIT",
+			DIM_CD = "SECUR",
+			DIM_SID = 50,
+			DOT_NET_DATA_TYPE = "System.Boolean",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
+			TGT_COL_TYPE = "INT",
+			UI_TYPE_CD = "CheckBox"
 		};
 		public static MyDealsAttribute IS_CHKOUT_USER = new MyDealsAttribute()
 		{
@@ -1792,6 +1958,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 50,
 			DOT_NET_DATA_TYPE = "System.Boolean",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "CheckBox"
 		};
@@ -1807,6 +1974,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 50,
 			DOT_NET_DATA_TYPE = "System.Boolean",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "CheckBox"
 		};
@@ -1822,8 +1990,25 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 50,
 			DOT_NET_DATA_TYPE = "System.Boolean",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "CheckBox"
+		};
+		public static MyDealsAttribute KIT_CHK = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "KIT_CHK",
+			ATRB_DESC = "Kit Indicator",
+			ATRB_LBL = "Standalone or KIT or Mixed or Extended",
+			ATRB_MAX_LEN = 100,
+			ATRB_SID = 3465,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = default(System.String),
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "ComboBox"
 		};
 		public static MyDealsAttribute KIT_IND = new MyDealsAttribute()
 		{
@@ -1837,6 +2022,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -1852,6 +2038,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -1867,6 +2054,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "Label"
 		};
@@ -1882,6 +2070,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
@@ -1897,6 +2086,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -1912,6 +2102,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -1927,6 +2118,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -1942,6 +2134,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -1957,6 +2150,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -1972,6 +2166,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -1987,6 +2182,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -2002,6 +2198,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "MultiMSSelector"
 		};
@@ -2017,6 +2214,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -2032,6 +2230,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -2047,6 +2246,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 999,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -2062,6 +2262,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -2077,6 +2278,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -2092,6 +2294,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 999,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -2107,6 +2310,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -2122,6 +2326,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -2137,8 +2342,25 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute NO_END_DT_RSN = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "NO_END_DT_RSN",
+			ATRB_DESC = "No End Date Reason",
+			ATRB_LBL = "No End Date Reason",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 20003,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "ComboBox"
 		};
 		public static MyDealsAttribute NOTES = new MyDealsAttribute()
 		{
@@ -2152,6 +2374,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -2167,6 +2390,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Int32",
 			FRMT_MSK = "{0:d}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "ComboBox"
 		};
@@ -2182,6 +2406,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "Label"
 		};
@@ -2197,6 +2422,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Int32",
 			FRMT_MSK = "{0:d}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "Label"
 		};
@@ -2212,6 +2438,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -2227,6 +2454,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.DateTime",
 			FRMT_MSK = "{0:MM/dd/yyyy HH:mm:ss.fff}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "DATETIME",
 			UI_TYPE_CD = "DatePicker"
 		};
@@ -2242,6 +2470,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -2257,6 +2486,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -2272,6 +2502,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
@@ -2287,6 +2518,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -2302,6 +2534,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 2,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -2317,6 +2550,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -2332,6 +2566,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -2347,6 +2582,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -2362,6 +2598,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -2377,6 +2614,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -2392,6 +2630,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -2407,6 +2646,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -2422,6 +2662,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -2437,6 +2678,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -2452,6 +2694,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -2467,6 +2710,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -2482,6 +2726,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
@@ -2497,6 +2742,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = default(System.String),
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -2512,6 +2758,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "LINK_LABEL"
 		};
@@ -2527,6 +2774,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
@@ -2542,6 +2790,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -2557,6 +2806,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -2572,6 +2822,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -2587,8 +2838,25 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "TextBox"
+		};
+		public static MyDealsAttribute RBFC_ROLE_ACCESS = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "RBFC_ROLE_ACCESS",
+			ATRB_DESC = "Rebate Forecast Role Acess Type Definition",
+			ATRB_LBL = "Rebate Forecast Role Acess Type Definition",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 62,
+			DATA_TYPE_CD = "CUSTOM",
+			DIM_CD = "SYS",
+			DIM_SID = 999,
+			DOT_NET_DATA_TYPE = "System.Object",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = default(System.String)
 		};
 		public static MyDealsAttribute REBATE_BILLING_END = new MyDealsAttribute()
 		{
@@ -2602,6 +2870,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.DateTime",
 			FRMT_MSK = "{0:MM/dd/yyyy HH:mm:ss.fff}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "DATETIME",
 			UI_TYPE_CD = "DatePicker"
 		};
@@ -2617,6 +2886,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.DateTime",
 			FRMT_MSK = "{0:MM/dd/yyyy HH:mm:ss.fff}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "DATETIME",
 			UI_TYPE_CD = "DatePicker"
 		};
@@ -2632,6 +2902,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -2647,6 +2918,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
@@ -2662,6 +2934,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
@@ -2677,6 +2950,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -2692,6 +2966,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -2707,6 +2982,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -2722,6 +2998,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "Label"
 		};
@@ -2737,6 +3014,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 4,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -2752,6 +3030,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -2767,6 +3046,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 50,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -2782,6 +3062,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
@@ -2797,6 +3078,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -2812,6 +3094,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -2827,6 +3110,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 2,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -2842,6 +3126,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 2,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -2857,6 +3142,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -2872,6 +3158,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.DateTime",
 			FRMT_MSK = "{0:MM/dd/yyyy HH:mm:ss.fff}",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "DATETIME",
 			UI_TYPE_CD = "DatePicker"
 		};
@@ -2887,6 +3174,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Int32",
 			FRMT_MSK = "{0:d}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -2902,6 +3190,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -2917,6 +3206,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -2932,13 +3222,14 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
 		public static MyDealsAttribute TIER_NBR = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "TIER_NBR",
-			ATRB_DESC = "Tier Number	Tier",
+			ATRB_DESC = "Tier Number",
 			ATRB_LBL = "Tier",
 			ATRB_MAX_LEN = 1,
 			ATRB_SID = 21,
@@ -2947,6 +3238,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Int32",
 			FRMT_MSK = "{0:d}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -2962,6 +3254,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 10,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -2977,6 +3270,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -2992,6 +3286,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -3007,8 +3302,25 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TargetRegionPicker"
+		};
+		public static MyDealsAttribute TRKR_END_DT = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "TRKR_END_DT",
+			ATRB_DESC = "Tracker End Date",
+			ATRB_LBL = "Trkr End Dt",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 100,
+			DATA_TYPE_CD = "DATE",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.DateTime",
+			FRMT_MSK = "{0:MM/dd/yyyy}",
+			MJR_MNR_CHG = "Minor",
+			TGT_COL_TYPE = "DATETIME",
+			UI_TYPE_CD = "Label"
 		};
 		public static MyDealsAttribute TRKR_NBR = new MyDealsAttribute()
 		{
@@ -3022,6 +3334,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "Tracker"
 		};
@@ -3037,6 +3350,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 4,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -3052,8 +3366,25 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute TRKR_START_DT = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "TRKR_START_DT",
+			ATRB_DESC = "Tracker Start Date",
+			ATRB_LBL = "Trkr Start Dt",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 99,
+			DATA_TYPE_CD = "DATE",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.DateTime",
+			FRMT_MSK = "{0:MM/dd/yyyy}",
+			MJR_MNR_CHG = "Minor",
+			TGT_COL_TYPE = "DATETIME",
+			UI_TYPE_CD = "Label"
 		};
 		public static MyDealsAttribute UI_DSPLY_ATRB_SID = new MyDealsAttribute()
 		{
@@ -3067,6 +3398,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -3082,6 +3414,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Int32",
 			FRMT_MSK = "{0:d}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -3097,6 +3430,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 7,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -3112,6 +3446,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "WorkFlow"
 		};
@@ -3127,6 +3462,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.DateTime",
 			FRMT_MSK = "{0:MM/dd/yyyy HH:mm:ss.fff}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "DATETIME",
 			UI_TYPE_CD = "LINK_LABEL"
 		};
@@ -3142,6 +3478,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
@@ -3157,6 +3494,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -3172,6 +3510,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.DateTime",
 			FRMT_MSK = "{0:MM/dd/yyyy HH:mm:ss.fff}",
+			MJR_MNR_CHG = "Minor",
 			TGT_COL_TYPE = "DATETIME",
 			UI_TYPE_CD = "LINK_LABEL"
 		};

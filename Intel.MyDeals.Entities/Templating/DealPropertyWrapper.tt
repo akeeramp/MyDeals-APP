@@ -644,7 +644,8 @@
 			[UI_TYPE_CD],
 			[DOT_NET_DATA_TYPE],
 			[FRMT_MSK],
-			[TGT_COL_TYPE]
+			[TGT_COL_TYPE],
+			[MJR_MNR_CHG]
 		FROM dbo.VW_ATRB_MSTR (nolock)
 		ORDER BY ATRB_CD
 	").Tables[0];
