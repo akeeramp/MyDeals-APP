@@ -20,7 +20,12 @@
                         'bodyView': {
                             templateUrl: '/app/dashboard/views/portal.html',
                             controller: 'DashboardController',
-                            controllerAs: 'dashboard'
+                            controllerAs: 'dashboard',
+                            resolve: {
+                                securityLoaded: ['securityService', function (securityService) {
+                                    return securityService.loadSecurityData();
+                                }],
+                            }
                         }
                     }
                 }

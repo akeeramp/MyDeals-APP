@@ -31,7 +31,10 @@
                                     return templatesService.readTemplates();
                                 }],isNewContract: ['$stateParams', function ($stateParams) {
                                     return $stateParams.cid <= 0;
-                                }]
+                                }],
+                                securityLoaded: ['securityService', function (securityService) {
+                                    return securityService.loadSecurityData();
+                                }],
                             }
                         }
                     }
@@ -119,7 +122,7 @@
                             templateUrl: '/app/contract/partials/contractSummaryOverlapping.html',
                             controller: 'managerOverlappingController'
                         }
-                    }   
+                    }
                 }
             }, {
                 state: 'contract.timeline',

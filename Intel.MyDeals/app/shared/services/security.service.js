@@ -3,32 +3,30 @@
     .factory('securityService', securityService);
 
 // Minification safe dependency injection
-securityService.$inject = ['$http', 'dataService'];
+securityService.$inject = ['$http', 'dataService', 'cacheService', '$rootScope'];
 
-function securityService($http, dataService) {
+function securityService($http, dataService, cacheService, $rootScope) {
     // defining the base url on top, subsequent calls in the service
     // will be action methods under this controller
     var apiBaseUrl = "/api/SecurityAttributes/";
 
-    //var securityAttributes = sessionStorage.getItem('securityAttributes');
-    //var securityMasks = sessionStorage.getItem('securityMasks');
-
-    //if (securityAttributes === null) {
-    //    dataService.get(apiBaseUrl + 'GetMySecurityMasks').then(function (data) {
-    //        if (!!data.data) {
-    //            securityAttributes = data.data.SecurityAttributes;
-    //            securityMasks = data.data.SecurityMasks;
-    //        }
-    //    });
-    //}
     var securityAttributes = [];
     var securityMasks = [];
 
+    function getSecurityDataFromSession() {
+        securityAttributes = sessionStorage.getItem('securityAttributes');
+        securityMasks = sessionStorage.getItem('securityMasks');
+        securityAttributes = securityAttributes == null ? [] : JSON.parse(securityAttributes);
+        securityMasks = securityMasks == null ? [] : JSON.parse(securityMasks);
+    }
+
+    getSecurityDataFromSession();
+
     var service = {
         getSecurityData: getSecurityData,
-        setSecurityData: setSecurityData,
         chkDealRules: chkDealRules,
-        chkAtrbRules: chkAtrbRules
+        chkAtrbRules: chkAtrbRules,
+        loadSecurityData: loadSecurityData
     }
 
     return service;
@@ -36,11 +34,6 @@ function securityService($http, dataService) {
 
     function getSecurityData() {
         return dataService.get(apiBaseUrl + 'GetMySecurityMasks');
-    }
-
-    function setSecurityData(attributes, masks) {
-        securityAttributes = attributes;
-        securityMasks = masks;
     }
 
     function chkToolRules(action, role) {
@@ -52,6 +45,7 @@ function securityService($http, dataService) {
     }
 
     function chkAtrbRules(action, role, itemType, itemSetType, stage, attrb) {
+        getSecurityDataFromSession();
         var itemTypeId = 0;
 
         if (!!itemType) itemType = itemType.replace(/ /g, '_');
@@ -116,6 +110,45 @@ function securityService($http, dataService) {
 
         var val = convertBase(hex).from(16).to(2);
         return (base + val).slice(-1 * base.length);
+    }
+
+    //  We need to call this function in every route.js file we create, in the parent state of that route.
+    //  This will make sure child routes will have security data loaded. No more race around
+    function loadSecurityData() {
+        var securityAttributes = sessionStorage.getItem('securityAttributes');
+        var securityMasks = sessionStorage.getItem('securityMasks');
+        var sessionComparisonHash = sessionStorage.getItem('sessionComparisonHash');
+        function initSetSecurityData() {
+            return getSecurityData().then(function (data) {
+                if (!!data.data) {
+                    console.log('security-loaded');
+                    $rootScope.securityAttributes = data.data.SecurityAttributes;
+                    $rootScope.securityMasks = data.data.SecurityMasks;
+
+                    sessionStorage.setItem('securityAttributes', JSON.stringify($rootScope.securityAttributes));
+                    sessionStorage.setItem('securityMasks', JSON.stringify($rootScope.securityMasks));
+                }
+                return true;
+            });
+        }
+
+        // TODDO: We could move this check to API layer
+        // Client to send the GUID if the GUID is found valid, send authenticated security details back,
+        // else clear out cache for the user and re authenticate user.
+        return cacheService.getSessionComparisonHash().then(function (data) {
+            // check if user's session hash is the same as the server's session hash
+            if (data.data.toString() !== sessionComparisonHash) {
+                sessionStorage.setItem('sessionComparisonHash', data.data);
+                return initSetSecurityData();
+            }
+        });
+
+        if (!securityAttributes) {
+            return initSetSecurityData();
+        } else {
+            getSecurityDataFromSession();
+            return true;
+        }
     }
 
 }

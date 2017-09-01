@@ -1,4 +1,5 @@
-﻿(function () {
+﻿//TODO : Delete this once service method is approved
+(function () {
     'use strict';
 
     angular

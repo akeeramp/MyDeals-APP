@@ -17,7 +17,12 @@
                 config: {
                     abstract: false,
                     template: '<div ui-view></div>',
-                    url: '/'
+                    url: '/',
+                    resolve: {
+                        securityLoaded: ['securityService', function (securityService) {
+                            return securityService.loadSecurityData();
+                        }],
+                    }
                 }
             },
             {
