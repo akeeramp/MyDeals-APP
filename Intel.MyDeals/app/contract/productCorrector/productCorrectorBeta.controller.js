@@ -341,7 +341,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
         if (!!grid) {
             angular.forEach(grid.columns, function (item, key) {
                 var columnValue = $filter('unique')(data, item.field);
-                if (columnValue.length == 1 && item.field !== undefined && item.field != "CheckBox" && item.field != "IS_SEL" && item.field != 'CAP' && item.field != 'YCS2' &&
+                if (columnValue.length == 1 && item.field !== undefined && item.field != "CheckBox" && item.field != "IS_SEL" && item.field != "USR_INPUT" && item.field != 'CAP' && item.field != 'YCS2' &&
                     (columnValue[0][item.field] == "" || columnValue[0][item.field] == null || columnValue[0][item.field] == 'NA')) {
                     grid.hideColumn(item.field);//hide column
                 } else {
@@ -386,6 +386,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
             {
                 field: "USR_INPUT",
                 title: "User Entered",
+                width: "150px",
                 groupHeaderTemplate: "<span class=\"grpTitle\">#= value #</span>  <i class='intelicon-arrow-back-left skyblue pl10'></i> <span class='grpDesc'>Can't find what you are looking for?  <span class='or'>Use the</span> </span><span class='lnk' ng-click='vm.launchSelector(\"#=value#\")'>Product Selector</span><span class='or'> OR </span><span class='lnk' ng-click='vm.removeProd(\"#=value#\")'>Remove Product</span>",
                 hidden: false,
                 filterable: { multi: true, search: true }
@@ -403,18 +404,11 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
             },  
             {
                 field: "HIER_VAL_NM",
-                title: "Deal Product Name",
+                title: "Product",
                 template: '<div ng-class="{\'text-danger\': vm.isValidCapDetails(dataItem)}" title="{{vm.isValidCapDetails(dataItem, true)}}">#= HIER_VAL_NM #</div>',
                 width: "150px",
                 filterable: { multi: true, search: true }
-            },
-            {
-                field: "GDM_FMLY_NM",
-                title: "GDM Family Name",
-                template: "<div kendo-tooltip k-content='dataItem.GDM_FMLY_NM'>{{dataItem.GDM_FMLY_NM}}</div>",
-                width: "150px",
-                filterable: { multi: true, search: true }
-            },    
+            },              
             {
                 field: "PRD_CAT_NM",
                 title: "Product Category",
@@ -435,17 +429,24 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                 width: "150px"
             },
             {
-                field: "CAP_START",
-                title: "CAP Availability Date",
-                template: "<div>{{vm.getFormatedDate(dataItem.CAP_START)}}</div>",
-                width: "150px",
+                field: "MM_MEDIA_CD",
+                title: "Media Code",
+                width: "120px",
+                filterable: { multi: true, search: true }
             },
             {
                 field: "YCS2",
                 title: "YCS2",
                 width: "150px",
                 template: "<op-popover op-options='YCS2' op-data='vm.getPrductDetails(dataItem, \"YCS2\")'>#= YCS2 #</op-popover>"
-            },            
+            }, 
+            {
+                field: "GDM_FMLY_NM",
+                title: "GDM Family Name",
+                template: "<div kendo-tooltip k-content='dataItem.GDM_FMLY_NM'>{{dataItem.GDM_FMLY_NM}}</div>",
+                width: "150px",
+                filterable: { multi: true, search: true }
+            },        
             {
                 field: "HIER_NM_HASH",
                 title: "Product Description",
@@ -457,13 +458,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                 title: "CPU Processor number",
                 width: "150px",
                 filterable: { multi: true, search: true }
-            },
-            {
-                field: "MM_MEDIA_CD",
-                title: "Media Code",
-                width: "120px",
-                filterable: { multi: true, search: true }
-            },
+            },            
             {
                 field: "MM_CUST_CUSTOMER",
                 title: "MM Customer Name",
