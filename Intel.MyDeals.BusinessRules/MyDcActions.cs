@@ -590,7 +590,7 @@ namespace Intel.MyDeals.BusinessRules
 
             bool isMajorChange = false; 
 
-	        List<string> onChangeItems = new List<string> {AttributeCodes.START_DT, AttributeCodes.END_DT, AttributeCodes.TITLE, AttributeCodes.RATE, AttributeCodes.STRT_VOL, AttributeCodes.END_VOL, AttributeCodes.ON_ADD_DT};
+	        List<string> onChangeItems = new List<string> {AttributeCodes.START_DT, AttributeCodes.END_DT, AttributeCodes.TITLE, AttributeCodes.RATE, AttributeCodes.STRT_VOL, AttributeCodes.END_VOL, AttributeCodes.ON_ADD_DT, AttributeCodes.ECAP_PRICE};
 
             string stage = r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD + "_PRNT");
             var futureStage = r.Dc.GetNextStage("Redeal", DataCollections.GetWorkFlowItems(), stage, OpDataElementType.PRC_ST);

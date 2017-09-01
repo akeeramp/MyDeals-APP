@@ -23,7 +23,51 @@ namespace Intel.MyDeals.BusinessLogic
         public static OpDataCollectorFlattenedList TranslateToPrcTbl(this OpDataCollectorFlattenedList opFlatList)
         {
             OpDataCollectorFlattenedList retFlatList = new OpDataCollectorFlattenedList();
+
+
+            //// need to look for DC_PARENT_ID and see if they are duplicates that need to be merged
+            //List<string> parentIds = opFlatList.Select(d => d[AttributeCodes.DC_PARENT_ID].ToString()).Distinct().ToList();
+            //foreach (string parentId in parentIds)
+            //{
+
+            //    List<OpDataCollectorFlattenedItem> items = opFlatList.Where(d => d[AttributeCodes.DC_PARENT_ID].ToString() == parentId).ToList();
+            //    if (items.Count == 1)
+            //    {
+            //        retFlatList.AddRange(items);
+            //    }
+            //    else
+            //    {
+            //        OpDataElementType opType = OpDataElementTypeConverter.FromString(items.First()[AttributeCodes.dc_type]);
+            //        OpDataElementSetType opSetType = OpDataElementSetTypeConverter.FromString(items.First()[AttributeCodes.OBJ_SET_TYPE_CD]);
+
+            //        // merge items based on product and geo
+            //        string geo = string.Join(",", items.Select(d => d[AttributeCodes.GEO_COMBINED]));
+            //        string prodsSys = "";
+            //        string prodsUsr = "";
+
+            //        OpDataElementTypeMapping elMapping = opSetType.OpDataElementTypeParentMapping(opType);
+            //        switch (elMapping.TranslationType)
+            //        {
+            //            case OpTranslationType.OneDealPerProduct:
+            //                int i = 0;
+            //                //prodsSys = string.Join(",", items.Select(d => d[AttributeCodes.PTR_SYS_PRD]));
+            //                //prodsUsr = string.Join(",", items.Select(d => d[AttributeCodes.PTR_USER_PRD]));
+            //                break;
+
+            //            case OpTranslationType.OneDealPerRow:
+            //                prodsSys = items.First()[AttributeCodes.PTR_SYS_PRD].ToString();
+            //                prodsUsr = items.First()[AttributeCodes.PTR_USER_PRD].ToString();
+            //                break;
+            //        }
+
+            //    }
+            //}
+
+            //retFlatList.AddRange(opFlatList.Select(item => item.TranslateToPrcTbl()));
+
             retFlatList.AddRange(opFlatList.Select(item => item.TranslateToPrcTbl()));
+
+
             return retFlatList;
         }
 

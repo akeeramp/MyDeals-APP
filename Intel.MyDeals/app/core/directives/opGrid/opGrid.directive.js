@@ -939,7 +939,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 if (!!args.data.WIP_DEAL) {
                     for (var i = 0; i < args.data.WIP_DEAL.length; i++) {
                         var dataItem = $scope.findDataItemById(args.data.WIP_DEAL[i]["DC_ID"]);
-                        if (!!dataItem) dataItem["PASSED_VALIDATION"] = args.data.WIP_DEAL[i]["PASSED_VALIDATION"];
+                        if (!!dataItem) {
+                            dataItem["PASSED_VALIDATION"] = args.data.WIP_DEAL[i]["PASSED_VALIDATION"];
+                            dataItem["WF_STG_CD"] = args.data.WIP_DEAL[i]["WF_STG_CD"];
+                        }
                     }
                 }
             });

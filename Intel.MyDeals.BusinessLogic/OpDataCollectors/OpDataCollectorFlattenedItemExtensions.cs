@@ -272,6 +272,11 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                         var items = JsonConvert.DeserializeObject<Dictionary<string,float>>(opFlatItem[key].ToString());
                         retItems[key] = items["20___0"];
                     }
+                    else if (key == AttributeCodes.GEO_COMBINED)
+                    {
+                        // let's leave this and let the DB version take control
+                        //retItems[key] = opFlatItem[key].ToString().IndexOf(",") >= 0 ? $"[{opFlatItem[key]}]": retItems[key] = opFlatItem[key];
+                    }
                     else
                     {
                         retItems[key] = opFlatItem[key];
