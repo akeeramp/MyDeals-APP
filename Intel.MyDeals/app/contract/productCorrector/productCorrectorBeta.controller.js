@@ -142,7 +142,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                 }
             }
         }
-
+        
         // Build filters
         for (x = 0; x < vm.curRowProds.length; x++) {
             if (vm.curRowProds[x].status === "Issue") {
@@ -308,7 +308,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                     },
                     "IS_SEL": {
                         type: "boolean"
-                    },
+                    },                    
                     "HIER_VAL_NM": {
                         type: "string"
                     },
@@ -334,6 +334,22 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
             }
         }
     });
+
+    //Column toggling logic
+    function toggleColumnsWhenEmptyConflictGrid(data) {
+        var grid = $("#prodGrid").data("kendoGrid");
+        if (!!grid) {
+            angular.forEach(grid.columns, function (item, key) {
+                var columnValue = $filter('unique')(data, item.field);
+                if (columnValue.length == 1 && item.field !== undefined && item.field != "CheckBox" && item.field != "IS_SEL" && item.field != 'CAP' && item.field != 'YCS2' &&
+                    (columnValue[0][item.field] == "" || columnValue[0][item.field] == null || columnValue[0][item.field] == 'NA')) {
+                    grid.hideColumn(item.field);//hide column
+                } else {
+                    grid.showColumn(item.field); //show column
+                }
+            });
+        }
+    }
 
     function gridDataBound(e) {
         var grid = e.sender;
@@ -384,38 +400,34 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                 headerTemplate: "&nbsp;",
                 template: '<div ng-if="!(dataItem.CAP.indexOf(\'-\') > -1)"><input type=\'checkbox\' ng-click="vm.clickProd(#=data.PRD_MBR_SID#, \'#=data.USR_INPUT#\', \'#=data.HIER_VAL_NM#\',$event)" ng-model="IS_SEL" class=\'check with-font\' id="prdChk#=data.PRD_MBR_SID#" ng-checked="#=IS_SEL#" checked ="#=IS_SEL#"/><label for="prdChk#=data.PRD_MBR_SID#"></label></div>' +
                           '<div ng-if="dataItem.CAP.indexOf(\'-\') > -1"><input type=\'checkbox\' title="CAP price cannot be a range." ng-disabled="true" ng-click="vm.clickProd(#=data.PRD_MBR_SID#, \'#=data.USR_INPUT#\', \'#=data.HIER_VAL_NM#\',$event)" ng-model="IS_SEL" class=\'check with-font\' id="prdChk#=data.PRD_MBR_SID#" ng-checked="#=IS_SEL#" checked ="#=IS_SEL#"/><label title="CAP price cannot be a range." ng-disabled="true" for="prdChk#=data.PRD_MBR_SID#"></label></div>'
-            },
+            },  
             {
                 field: "HIER_VAL_NM",
-                title: "Product",
+                title: "Deal Product Name",
                 template: '<div ng-class="{\'text-danger\': vm.isValidCapDetails(dataItem)}" title="{{vm.isValidCapDetails(dataItem, true)}}">#= HIER_VAL_NM #</div>',
                 width: "150px",
                 filterable: { multi: true, search: true }
             },
+            {
+                field: "GDM_FMLY_NM",
+                title: "GDM Family Name",
+                template: "<div kendo-tooltip k-content='dataItem.GDM_FMLY_NM'>{{dataItem.GDM_FMLY_NM}}</div>",
+                width: "150px",
+                filterable: { multi: true, search: true }
+            },    
             {
                 field: "PRD_CAT_NM",
                 title: "Product Category",
                 width: "80px",
                 groupHeaderTemplate: "#= value #",
                 filterable: { multi: true, search: true }
-            },            
-            {
-                field: "GDM_FMLY_NM",
-                title: "GDM Family Name",
-                template: "<div kendo-tooltip k-content='dataItem.GDM_FMLY_NM'>{{dataItem.GDM_FMLY_NM}}</div>",
-                filterable: { multi: true, search: true }
-            },            
-            {
-                field: "HIER_NM_HASH",
-                title: "Product Description",
-                template: "<div kendo-tooltip k-content='dataItem.HIER_NM_HASH'>{{dataItem.HIER_NM_HASH}}</div>",
-                hidden: true
-            },             
+            },
             {
                 field: "PRD_STRT_DTM",
                 title: "Product Effective Date",
-                template: "#= kendo.toString(new Date(PRD_STRT_DTM), 'M/d/yyyy') + ' - ' + kendo.toString(new Date(PRD_END_DTM), 'M/d/yyyy') #"
-            },
+                template: "#= kendo.toString(new Date(PRD_STRT_DTM), 'M/d/yyyy') + ' - ' + kendo.toString(new Date(PRD_END_DTM), 'M/d/yyyy') #",
+                width: "120px"
+            },                            
             {
                 field: "CAP",
                 title: "CAP Info",
@@ -423,9 +435,107 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                 width: "150px"
             },
             {
+                field: "CAP_START",
+                title: "CAP Availability Date",
+                template: "<div>{{vm.getFormatedDate(dataItem.CAP_START)}}</div>",
+                width: "150px",
+            },
+            {
+                field: "YCS2",
+                title: "YCS2",
+                width: "150px",
+                template: "<op-popover op-options='YCS2' op-data='vm.getPrductDetails(dataItem, \"YCS2\")'>#= YCS2 #</op-popover>"
+            },            
+            {
+                field: "HIER_NM_HASH",
+                title: "Product Description",
+                template: "<div kendo-tooltip k-content='dataItem.HIER_NM_HASH'>{{dataItem.HIER_NM_HASH}}</div>",
+                hidden: true
+            },  
+            {
+                field: "CPU_PROCESSOR_NUMBER",
+                title: "CPU Processor number",
+                width: "150px",
+                filterable: { multi: true, search: true }
+            },
+            {
                 field: "MM_MEDIA_CD",
                 title: "Media Code",
                 width: "120px",
+                filterable: { multi: true, search: true }
+            },
+            {
+                field: "MM_CUST_CUSTOMER",
+                title: "MM Customer Name",
+                width: "150px",
+                filterable: { multi: true, search: true }
+            },
+            {
+                field: "FMLY_NM_MM",
+                title: "EDW Family Name",
+                template: "<div kendo-tooltip k-content='dataItem.FMLY_NM_MM'>{{dataItem.FMLY_NM_MM}}</div>",
+                width: "150px",
+                filterable: { multi: true, search: true }
+            },
+            {
+                field: "EPM_NM",
+                title: "EPM Name",
+                template: "<div kendo-tooltip k-content='dataItem.EPM_NM'>{{dataItem.EPM_NM}}</div>",
+                width: "180px",
+            },
+            {
+                field: "SKU_NM",
+                title: "SKU Name",
+                template: "<div kendo-tooltip k-content='dataItem.SKU_NM'>{{dataItem.SKU_NM}}</div>",
+                width: "180px",
+                filterable: { multi: true, search: true }
+            },
+            {
+                field: "NAND_FAMILY",
+                title: "NAND FAMILY",
+                width: "150px",
+                filterable: { multi: true, search: true }
+            },
+            {
+                field: "NAND_Density",
+                title: "Nand Density",
+                width: "150px",
+                filterable: { multi: true, search: true }
+            },
+            {
+                field: "CPU_CACHE",
+                title: "CPU CACHE",
+                width: "150px",
+                filterable: { multi: true, search: true }
+            },
+            {
+                field: "CPU_PACKAGE",
+                title: "CPU PACKAGE",
+                width: "150px",
+                filterable: { multi: true, search: true }
+            },
+            {
+                field: "CPU_WATTAGE",
+                title: "CPU WATTAGE",
+                width: "150px",
+                filterable: { multi: true, search: true }
+            },
+            {
+                field: "CPU_VOLTAGE_SEGMENT",
+                title: "Voltage Segment",
+                width: "150px",
+                filterable: { multi: true, search: true }
+            },
+            {
+                field: "PRICE_SEGMENT",
+                title: "Price Segment",
+                width: "150px",
+                filterable: { multi: true, search: true }
+            },
+            {
+                field: "SBS_NM",
+                title: "SBS Name",
+                width: "150px",
                 filterable: { multi: true, search: true }
             },
         ]
@@ -489,7 +599,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                 }
             });
         }        
-    }
+    }   
 
     vm.removeAndFilter = function (prdName) {
         // remove
@@ -628,6 +738,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
 
             // perform filter
             vm.applyFilterAndGrouping();
+            
         } else {
             // remove matched settings
             dataItem.matchName = [];
@@ -641,7 +752,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                 vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][dataItem.name] = GetProductCorrectorData.DuplicateProducts[vm.curRowId][dataItem.name];
 
             vm.selectRow(vm.curRowIndx);
-        }
+        }        
     }
 
     vm.suggestItem = {};
@@ -884,5 +995,6 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
     $timeout(function () {
         vm.initProducts();
         vm.selectRow(1);
+        toggleColumnsWhenEmptyConflictGrid(vm.curRowData);
     }, 1);
 }
