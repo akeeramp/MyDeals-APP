@@ -130,6 +130,18 @@ namespace Intel.MyDeals.BusinessRules
                 item[AttributeCodes.PAYOUT_BASED_ON] = "Billings";
             }
 
+            // Clear out consumption if the user sets payout based on = billings.  DE30320
+            if (item[AttributeCodes.PAYOUT_BASED_ON].ToString() == "Billings")
+            {
+                item[AttributeCodes.CONSUMPTION_REASON] = "";
+                item[AttributeCodes.CONSUMPTION_REASON_CMNT] = "";
+            }
+
+            if (item[AttributeCodes.PRODUCT_CATEGORIES].ToString().IndexOf("SvrWS") < 0)
+            {
+                item[AttributeCodes.SERVER_DEAL_TYPE] = "";
+            }
+
             //r.Dc.ApplyActions(r.Dc.MeetsRuleCondition(r.Rule) ? r.Rule.OpRuleActions : r.Rule.OpRuleElseActions);
         }
 
