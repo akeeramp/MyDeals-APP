@@ -593,7 +593,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 return;
             }
 
-            // need to see if an item changed that would cause the PTR_SYS_PRD to be cleared out
+            // need to see if an item changed that would cause the PTR_SYS_PRD to be cleared out 
             var isPtrSysPrdFlushed = false;
             for (var f = 0; f < flushSysPrdFields.length; f++) {
                 var colIndx = root.colToLetter[flushSysPrdFields[f]].charCodeAt(0) - intA;
@@ -603,8 +603,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             if (isPtrSysPrdFlushed) {
                 if (!systemModifiedProductInclude) {
                     // TODO we will need to revisit.  There are cases where we CANNOT remove products and reload... active deals for example
-                	sheet.batch(function () {
-                		sheet.range("B" + topLeftRowIndex + ":C" + bottomRightRowIndex).value("");
+					// NOTE: do not wrap the below in a sheet.batch call! We need it to recall the onChange event to clear out old valid and invalid products when the product column changes
+                	sheet.range("B" + topLeftRowIndex + ":C" + bottomRightRowIndex).value("");
 
                     range.forEachCell(
                         function (rowIndex, colIndex, value) {
@@ -615,15 +615,14 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 	disableIndividualReadOnlyCells(sheet, rowInfo, rowIndex, 1);
                                 }
                             }
-                        });
-                    });
+                        });                    
                 } else {
                     systemModifiedProductInclude = false;
                 }
             }
 
             if (isProductColumnIncludedInChanges && hasValueInAtLeastOneCell) {
-                syncSpreadRows(sheet, topLeftRowIndex, bottomRightRowIndex);
+            	syncSpreadRows(sheet, topLeftRowIndex, bottomRightRowIndex);
             }
         }
 
@@ -764,7 +763,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     }
                 }
 
-                // now apply array to Datasource... one event triggered
+            	// now apply array to Datasource... one event triggered
                 root.spreadDs.sync();
 
                 sheet.batch(function () {
