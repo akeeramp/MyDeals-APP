@@ -768,7 +768,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 } else if (type === "CheckBox") {
 
                 } else if (type === "NumericTextBox") {
-                    el += '<input kendo-numeric-text-box k-min="0" k-decimals="0" k-format="\'n0\'" k-ng-model="dataItem.' + field + '[\'' + dimKey + '\']" k-on-change="updateDirty(dataItem, \'' + field + '\')" style="max-width: 100%; margin:0;" />';
+                    el += '<input kendo-numeric-text-box k-min="0" k-decimals="2" k-format="\'n0\'" k-ng-model="dataItem.' + field + '[\'' + dimKey + '\']" k-on-change="updateDirty(dataItem, \'' + field + '\')" style="max-width: 100%; margin:0;" />';
 
                 } else {
                     el += '<input ng-model="dataItem.' + field + '[\'' + dimKey + '\']" k-on-change="updateDirty(dataItem, \'' + field + '\')" style="width: 100%;" />';

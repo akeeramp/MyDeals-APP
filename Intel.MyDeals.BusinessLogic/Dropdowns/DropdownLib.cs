@@ -113,6 +113,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns>dropdown hierarchy</returns>
         public DropdownHierarchy[] GetGeoDropdownHierarchy(string prnt)
         {
+            //Note: would it make more sense to just cache all the possible geo/target regions?
             IEnumerable<GeoDimension> geodim = _dataCollectionsDataLib.GetGeoData().Where(geo => geo.ACTV_IND == true);
 
             List<DropdownHierarchy> ret = new List<DropdownHierarchy>();
@@ -139,19 +140,19 @@ namespace Intel.MyDeals.BusinessLogic
                 {
                     //rinse and repeat like above, but for regions instead of geos
                     BasicDropdown newBD_Region = new BasicDropdown();
-                    newBD_Region.DROP_DOWN = region.RGN_NM;
+                    newBD_Region.DROP_DOWN = geoCombined[i] + "/" + region.RGN_NM;
                     newBD_Region.ATRB_LKUP_DESC = "REGION";
 
                     DropdownHierarchy newDH_Region = new DropdownHierarchy(newBD_Region);
                     //newDH_Region.expanded = true;
 
                     List<DropdownHierarchy> countries = new List<DropdownHierarchy>();
-                    IEnumerable<GeoDimension> region_countries = geodim.Where(geo => geo.GEO_NM.ToUpper() == geoCombined[i].ToUpper() && geo.RGN_NM == newDH_Region.DROP_DOWN && (geo.CTRY_NM != null && geo.CTRY_NM != "")).OrderBy(geo => geo.CTRY_NM);
+                    IEnumerable<GeoDimension> region_countries = geodim.Where(geo => geo.GEO_NM.ToUpper() == geoCombined[i].ToUpper() && geo.RGN_NM == region.RGN_NM && (geo.CTRY_NM != null && geo.CTRY_NM != "")).OrderBy(geo => geo.CTRY_NM);
                     foreach (GeoDimension country in region_countries)
                     {
                         //rinse and repeat like above, but for countries instead of regions
                         BasicDropdown newBD_Country = new BasicDropdown();
-                        newBD_Country.DROP_DOWN = country.CTRY_NM;
+                        newBD_Country.DROP_DOWN = geoCombined[i] + "/" + region.RGN_NM + "/" + country.CTRY_NM;
                         newBD_Country.ATRB_LKUP_DESC = "COUNTRY";
 
                         DropdownHierarchy newDH_Country = new DropdownHierarchy(newBD_Country);
