@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 9/1/2017 9:36:41 AM
+File Updated: 9/1/2017 9:49:22 AM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -134,7 +134,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -150,7 +150,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "Label"
 		};
@@ -166,7 +166,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
@@ -182,7 +182,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -214,7 +214,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Boolean",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "CheckBox"
 		};
@@ -230,7 +230,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.DateTime",
 			FRMT_MSK = "{0:MM/dd/yyyy HH:mm:ss.fff}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "DATETIME",
 			UI_TYPE_CD = "Label"
 		};
@@ -326,7 +326,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "CheckBox"
 		};
@@ -342,7 +342,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "Label"
 		};
@@ -358,7 +358,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.DateTime",
 			FRMT_MSK = "{0:MM/dd/yyyy HH:mm:ss.fff}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "DATETIME",
 			UI_TYPE_CD = "DatePicker"
 		};
@@ -390,7 +390,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.DateTime",
 			FRMT_MSK = "{0:MM/dd/yyyy HH:mm:ss.fff}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "DATETIME",
 			UI_TYPE_CD = "DatePicker"
 		};
@@ -406,7 +406,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -422,7 +422,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -438,7 +438,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "CMNT_HIST"
 		};
@@ -454,7 +454,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -470,7 +470,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -486,7 +486,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -502,7 +502,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
@@ -518,7 +518,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -534,7 +534,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -550,7 +550,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -566,7 +566,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -582,7 +582,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
@@ -598,7 +598,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -614,7 +614,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "Label"
 		};
@@ -710,7 +710,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "Label"
 		};
@@ -726,7 +726,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Int32",
 			FRMT_MSK = "{0:d}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "Label"
 		};
@@ -742,7 +742,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
@@ -758,7 +758,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
@@ -838,7 +838,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
@@ -902,7 +902,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Int32",
 			FRMT_MSK = "{0:d}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -966,7 +966,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
@@ -982,7 +982,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "Label"
 		};
@@ -998,7 +998,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "Label"
 		};
@@ -1046,7 +1046,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Int32",
 			FRMT_MSK = "{0:d}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "Label"
 		};
@@ -1062,7 +1062,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "SoldToPicker"
 		};
@@ -1078,7 +1078,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "Label"
 		};
@@ -1094,7 +1094,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "Label"
 		};
@@ -1110,7 +1110,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Int32",
 			FRMT_MSK = "{0:d}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "Label"
 		};
@@ -1174,7 +1174,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "Label"
 		};
@@ -1190,7 +1190,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
@@ -1206,7 +1206,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Int32",
 			FRMT_MSK = "{0:d}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -1222,7 +1222,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -1238,7 +1238,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MAJOR",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -1302,7 +1302,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -1318,7 +1318,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.DateTime",
 			FRMT_MSK = "{0:MM/dd/yyyy HH:mm:ss.fff}",
-			MJR_MNR_CHG = "MINOR",
+			MJR_MNR_CHG = "MAJOR",
 			TGT_COL_TYPE = "DATETIME",
 			UI_TYPE_CD = "DatePicker"
 		};
@@ -1334,7 +1334,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Int32",
 			FRMT_MSK = "{0:d}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MAJOR",
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -1382,7 +1382,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
@@ -1494,7 +1494,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "Label"
 		};
@@ -1622,7 +1622,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "Label"
 		};
@@ -1638,7 +1638,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MAJOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "MultiGeoSelector"
 		};
@@ -1670,7 +1670,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Boolean",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = default(System.String),
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "CheckBox"
 		};
@@ -1686,7 +1686,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Boolean",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = default(System.String),
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "CheckBox"
 		};
@@ -1750,7 +1750,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -2006,7 +2006,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = default(System.String),
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
@@ -2038,7 +2038,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -2054,7 +2054,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "Label"
 		};
@@ -2070,7 +2070,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
@@ -2086,7 +2086,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -2102,7 +2102,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -2118,7 +2118,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -2198,7 +2198,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "MINOR",
+			MJR_MNR_CHG = "MAJOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "MultiMSSelector"
 		};
@@ -2374,7 +2374,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -2390,7 +2390,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Int32",
 			FRMT_MSK = "{0:d}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "ComboBox"
 		};
@@ -2406,7 +2406,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "Label"
 		};
@@ -2422,7 +2422,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Int32",
 			FRMT_MSK = "{0:d}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "Label"
 		};
@@ -2454,7 +2454,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.DateTime",
 			FRMT_MSK = "{0:MM/dd/yyyy HH:mm:ss.fff}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "DATETIME",
 			UI_TYPE_CD = "DatePicker"
 		};
@@ -2502,7 +2502,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MAJOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
@@ -2598,7 +2598,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -2630,7 +2630,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -2662,7 +2662,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -2694,7 +2694,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -2726,7 +2726,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
@@ -2742,7 +2742,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = default(System.String),
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -2758,7 +2758,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "LINK_LABEL"
 		};
@@ -2774,7 +2774,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
@@ -2790,7 +2790,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -2806,7 +2806,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -2822,7 +2822,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -2838,7 +2838,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MAJOR",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -2870,7 +2870,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.DateTime",
 			FRMT_MSK = "{0:MM/dd/yyyy HH:mm:ss.fff}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "DATETIME",
 			UI_TYPE_CD = "DatePicker"
 		};
@@ -2886,7 +2886,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.DateTime",
 			FRMT_MSK = "{0:MM/dd/yyyy HH:mm:ss.fff}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "DATETIME",
 			UI_TYPE_CD = "DatePicker"
 		};
@@ -2934,7 +2934,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
@@ -2950,7 +2950,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -2966,7 +2966,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -2982,7 +2982,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -2998,7 +2998,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "Label"
 		};
@@ -3062,7 +3062,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
@@ -3158,7 +3158,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.DateTime",
 			FRMT_MSK = "{0:MM/dd/yyyy HH:mm:ss.fff}",
-			MJR_MNR_CHG = "MINOR",
+			MJR_MNR_CHG = "MAJOR",
 			TGT_COL_TYPE = "DATETIME",
 			UI_TYPE_CD = "DatePicker"
 		};
@@ -3174,7 +3174,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Int32",
 			FRMT_MSK = "{0:d}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MAJOR",
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -3222,7 +3222,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -3238,7 +3238,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Int32",
 			FRMT_MSK = "{0:d}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -3270,7 +3270,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "MINOR",
+			MJR_MNR_CHG = "MAJOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -3302,7 +3302,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TargetRegionPicker"
 		};
@@ -3318,7 +3318,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.DateTime",
 			FRMT_MSK = "{0:MM/dd/yyyy}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "DATETIME",
 			UI_TYPE_CD = "Label"
 		};
@@ -3334,7 +3334,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "Tracker"
 		};
@@ -3382,7 +3382,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.DateTime",
 			FRMT_MSK = "{0:MM/dd/yyyy}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "DATETIME",
 			UI_TYPE_CD = "Label"
 		};
@@ -3414,7 +3414,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Int32",
 			FRMT_MSK = "{0:d}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MAJOR_INCREASE",
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -3462,7 +3462,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.DateTime",
 			FRMT_MSK = "{0:MM/dd/yyyy HH:mm:ss.fff}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "DATETIME",
 			UI_TYPE_CD = "LINK_LABEL"
 		};
@@ -3478,7 +3478,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
@@ -3494,7 +3494,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = default(System.String)
 		};
@@ -3510,7 +3510,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.DateTime",
 			FRMT_MSK = "{0:MM/dd/yyyy HH:mm:ss.fff}",
-			MJR_MNR_CHG = "Minor",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "DATETIME",
 			UI_TYPE_CD = "LINK_LABEL"
 		};
