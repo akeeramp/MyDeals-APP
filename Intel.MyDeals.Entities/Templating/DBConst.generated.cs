@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 9/3/2017 2:59:18 PM
-On: PWECKENR-MOBL
+File Updated: 9/6/2017 9:54:10 AM
+On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
 using System;
@@ -127,6 +127,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Object
 		///</summary>
 		public const string BCKT_NM = "BCKT_NM";
+
+		///<summary>
+		/// DIM_SID: 30
+		/// DIM_CD: OVLP
+		/// ATRB_SID: 30004
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.Object
+		///</summary>
+		public const string BE_HARD_STOP = "BE_HARD_STOP";
 
 		///<summary>
 		/// DIM_SID: 3
@@ -795,6 +804,15 @@ namespace Intel.MyDeals.Entities {
 		public const string EXPIRE_YCS2 = "EXPIRE_YCS2";
 
 		///<summary>
+		/// DIM_SID: 30
+		/// DIM_CD: OVLP
+		/// ATRB_SID: 30003
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.Object
+		///</summary>
+		public const string FE_HARD_STOP = "FE_HARD_STOP";
+
+		///<summary>
 		/// DIM_SID: 7
 		/// DIM_CD: PRD
 		/// ATRB_SID: 7045
@@ -919,6 +937,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Object
 		///</summary>
 		public const string GDM_VRT_NM = "GDM_VRT_NM";
+
+		///<summary>
+		/// DIM_SID: 30
+		/// DIM_CD: OVLP
+		/// ATRB_SID: 30002
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.Object
+		///</summary>
+		public const string GEN_OVLP = "GEN_OVLP";
 
 		///<summary>
 		/// DIM_SID: 3
@@ -1749,6 +1776,15 @@ namespace Intel.MyDeals.Entities {
 		public const string SECURITY_ACCOUNT_ROLE_ASGN = "SECURITY_ACCOUNT_ROLE_ASGN";
 
 		///<summary>
+		/// DIM_SID: 30
+		/// DIM_CD: OVLP
+		/// ATRB_SID: 30001
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.Object
+		///</summary>
+		public const string SELF_OVLP = "SELF_OVLP";
+
+		///<summary>
 		/// DIM_SID: 3
 		/// DIM_CD: DEAL
 		/// ATRB_SID: 3347
@@ -2016,7 +2052,7 @@ namespace Intel.MyDeals.Entities {
 	public static class DealSaveActionCodes {
 
 		///<summary>
-		/// ACTN_SID: 41402
+		/// ACTN_SID: 226
 		/// SRT_ORD: 1500
 		/// Add Message to Timeline
 		///</summary>
@@ -2064,9 +2100,9 @@ namespace Intel.MyDeals.Entities {
 
 
 		///<summary>
-		/// ACTN_SID: 41403
-		/// SRT_ORD: 1500
-		/// Add Message to Timeline
+		/// ACTN_SID: 227
+		/// SRT_ORD: 1550
+		/// Generate a Quote Letter
 		///</summary>
 		public const string GENERATE_QUOTE = "GENERATE_QUOTE";
 
@@ -2206,7 +2242,6 @@ namespace Intel.MyDeals.Entities {
 		public const string Cancelled = "Cancelled";
 		public const string Complete = "Complete";
 		public const string Draft = "Draft";
-		public const string Expired = "Expired";
 		public const string Hold = "Hold";
 		public const string InComplete = "InComplete";
 		public const string LostBid = "LostBid";
@@ -2225,7 +2260,6 @@ namespace Intel.MyDeals.Entities {
 		public const string Revise = "Revise";
 		public const string Cancel = "Cancel";
 		public const string Redeal = "Redeal";
-		public const string Expire = "Expire";
 		public const string Hold = "Hold";
 	}
 
@@ -2267,13 +2301,13 @@ namespace Intel.MyDeals.Entities {
 		public const string SAVE = "SAVE";
 		public const string SNAPSHOT = "SNAPSHOT";
 		public const string CHG_PARENT_KEY = "CHG_PARENT_KEY";
+		public const string ADD_TO_TIMELINE = "ADD_TO_TIMELINE";
+		public const string GENERATE_QUOTE = "GENERATE_QUOTE";
 		public const string CAN_VIEW_COST_TEST = "CAN_VIEW_COST_TEST";
 		public const string CAN_VIEW_MEET_COMP = "CAN_VIEW_MEET_COMP";
 		public const string C_EDIT_PRODUCT = "C_EDIT_PRODUCT";
 		public const string C_VERTCL_BASED = "C_VERTCL_BASED";
 		public const string C_IS_DEV = "C_IS_DEV";
-		public const string ADD_TO_TIMELINE = "ADD_TO_TIMELINE";
-		public const string GENERATE_QUOTE = "GENERATE_QUOTE";
 	}
 
 

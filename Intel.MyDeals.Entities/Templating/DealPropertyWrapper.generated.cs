@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 9/1/2017 9:49:22 AM
+File Updated: 9/6/2017 9:55:45 AM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -196,6 +196,22 @@ namespace Intel.MyDeals.Entities {
 			DATA_TYPE_CD = "CUSTOM",
 			DIM_CD = "BCKT",
 			DIM_SID = 20,
+			DOT_NET_DATA_TYPE = "System.Object",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute BE_HARD_STOP = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "BE_HARD_STOP",
+			ATRB_DESC = "Two Overlapping Backend Billing deals",
+			ATRB_LBL = "Two Overlapping Backend Billing deals",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 30004,
+			DATA_TYPE_CD = "CUSTOM",
+			DIM_CD = "OVLP",
+			DIM_SID = 30,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
 			MJR_MNR_CHG = "na",
@@ -1386,6 +1402,22 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
+		public static MyDealsAttribute FE_HARD_STOP = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "FE_HARD_STOP",
+			ATRB_DESC = "Two Overlapping Frontend YCS2 deals",
+			ATRB_LBL = "Two Overlapping Frontend YCS2 deals",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 30003,
+			DATA_TYPE_CD = "CUSTOM",
+			DIM_CD = "OVLP",
+			DIM_SID = 30,
+			DOT_NET_DATA_TYPE = "System.Object",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = default(System.String)
+		};
 		public static MyDealsAttribute FG_MTRL_STS_CD = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "FG_MTRL_STS_CD",
@@ -1604,6 +1636,22 @@ namespace Intel.MyDeals.Entities {
 			DATA_TYPE_CD = "CUSTOM",
 			DIM_CD = "PRD",
 			DIM_SID = 7,
+			DOT_NET_DATA_TYPE = "System.Object",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute GEN_OVLP = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "GEN_OVLP",
+			ATRB_DESC = "General Overlap, no special process",
+			ATRB_LBL = "General Overlap, no special process",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 30002,
+			DATA_TYPE_CD = "CUSTOM",
+			DIM_CD = "OVLP",
+			DIM_SID = 30,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
 			MJR_MNR_CHG = "na",
@@ -2025,6 +2073,38 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute LAST_REDEAL_BY = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "LAST_REDEAL_BY",
+			ATRB_DESC = "Redeal Created By",
+			ATRB_LBL = "Redeal By",
+			ATRB_MAX_LEN = 10,
+			ATRB_SID = 3672,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "TextBox"
+		};
+		public static MyDealsAttribute LAST_REDEAL_DT = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "LAST_REDEAL_DT",
+			ATRB_DESC = "Redeal On Date",
+			ATRB_LBL = "Redeal Date",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3673,
+			DATA_TYPE_CD = "DATE",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.DateTime",
+			FRMT_MSK = "{0:MM/dd/yyyy}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "DATETIME",
+			UI_TYPE_CD = "Label"
 		};
 		public static MyDealsAttribute LOWEST_NET_PRC = new MyDealsAttribute()
 		{
@@ -3045,6 +3125,22 @@ namespace Intel.MyDeals.Entities {
 			DIM_CD = "SECUR",
 			DIM_SID = 50,
 			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute SELF_OVLP = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "SELF_OVLP",
+			ATRB_DESC = "Deal Overlap itself",
+			ATRB_LBL = "Deal Overlap itself",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 30001,
+			DATA_TYPE_CD = "CUSTOM",
+			DIM_CD = "OVLP",
+			DIM_SID = 30,
+			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
 			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
