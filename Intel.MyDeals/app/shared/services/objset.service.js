@@ -126,11 +126,11 @@ function objsetService($http, dataService, logger, $q) {
     }
 
 
-    function actionPricingStrategy(custId, contractId, pt, actn) {
-        return dataService.post(apiBasePricingStrategyUrl + 'ActionPricingStrategy/' + custId + '/' + contractId + '/' + actn, [pt]);
+    function actionPricingStrategy(custId, contractId, contractCustAccpt, pt, actn) {
+        return dataService.post(apiBasePricingStrategyUrl + 'ActionPricingStrategy/' + custId + '/' + contractId + '/' + contractCustAccpt + '/' + actn, [pt]);
     }
-    function actionPricingStrategies(custId, contractId, data) {
-        return dataService.post(apiBasePricingStrategyUrl + 'ActionPricingStrategies/' + custId + '/' + contractId, data);
+    function actionPricingStrategies(custId, contractId, contractCustAccpt, data) {
+        return dataService.post(apiBasePricingStrategyUrl + 'ActionPricingStrategies/' + custId + '/' + contractId + '/' + contractCustAccpt, data);
     }
 
     function actionWipDeal(custId, contractId, wip, actn) {

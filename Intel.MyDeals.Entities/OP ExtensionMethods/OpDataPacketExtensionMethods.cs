@@ -17,6 +17,7 @@ namespace Intel.MyDeals.Entities
         public static void AddSaveActions(this OpDataPacket<OpDataElementType> packet)
         {
             packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.SAVE, 20)); // Set action - save it.
+            packet.AddSyncActions();
         }
 
         public static void AddParentIdActions(this OpDataPacket<OpDataElementType> packet, Dictionary<int, int> data)
@@ -27,10 +28,32 @@ namespace Intel.MyDeals.Entities
             }
         }
 
+        public static void AddSyncActions(this OpDataPacket<OpDataElementType> packet)
+        {
+            if (packet.PacketType != OpDataElementType.WIP_DEAL) return;
+
+            List<int> dealIds = packet.AllDataElements.Where(d => d.AtrbCdIs(AttributeCodes.WF_STG_CD) && d.AtrbHasValue(WorkFlowStages.Active)).Select(d => d.DcID).ToList();
+            if (dealIds.Any())
+            {
+                packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.SYNC_DEALS, dealIds, 20)); // Set action - save it.
+            }
+        }
+
         public static void AddDeleteActions(this OpDataPacket<OpDataElementType> packet, List<int> delIds)
         {
             packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.OBJ_DELETE, delIds, 30));
         }
+
+        public static void AddGoingActiveActions(this OpDataPacket<OpDataElementType> packet, List<int> dealIds)
+        {
+            if (!dealIds.Any()) return;
+
+            packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.GEN_TRACKER, dealIds, 30));
+            packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.SYNC_DEALS, dealIds, 40));
+            packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.SNAPSHOT, dealIds, 50));
+            packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.GENERATE_QUOTE, dealIds, 60));
+        }
+
 
         public static void AddDeleteActions(this OpDataPacket<OpDataElementType> packet, OpDataCollectorFlattenedList data)
         {

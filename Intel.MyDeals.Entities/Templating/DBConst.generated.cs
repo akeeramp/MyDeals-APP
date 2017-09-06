@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 8/23/2017 3:23:35 PM
-On: MHTIPPIN-MOBL
+File Updated: 9/3/2017 2:59:18 PM
+On: PWECKENR-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
 using System;
@@ -716,15 +716,6 @@ namespace Intel.MyDeals.Entities {
 		///<summary>
 		/// DIM_SID: 50
 		/// DIM_CD: SECUR
-		/// ATRB_SID: 5085
-		/// TGT_COL_TYPE: INT
-		/// DOT_NET_DATA_TYPE: System.Boolean
-		///</summary>
-		public const string EMP_ADM_ACCESS = "EMP_ADM_ACCESS";
-
-		///<summary>
-		/// DIM_SID: 50
-		/// DIM_CD: SECUR
 		/// ATRB_SID: 5028
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.Object
@@ -1112,6 +1103,15 @@ namespace Intel.MyDeals.Entities {
 		///<summary>
 		/// DIM_SID: 50
 		/// DIM_CD: SECUR
+		/// ATRB_SID: 5085
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Boolean
+		///</summary>
+		public const string IS_ADMIN = "IS_ADMIN";
+
+		///<summary>
+		/// DIM_SID: 50
+		/// DIM_CD: SECUR
 		/// ATRB_SID: 5042
 		/// TGT_COL_TYPE: INT
 		/// DOT_NET_DATA_TYPE: System.Boolean
@@ -1153,6 +1153,24 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Object
 		///</summary>
 		public const string KIT_IND = "KIT_IND";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3672
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string LAST_REDEAL_BY = "LAST_REDEAL_BY";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3673
+		/// TGT_COL_TYPE: DATETIME
+		/// DOT_NET_DATA_TYPE: System.DateTime
+		///</summary>
+		public const string LAST_REDEAL_DT = "LAST_REDEAL_DT";
 
 		///<summary>
 		/// DIM_SID: 3
@@ -1998,6 +2016,14 @@ namespace Intel.MyDeals.Entities {
 	public static class DealSaveActionCodes {
 
 		///<summary>
+		/// ACTN_SID: 41402
+		/// SRT_ORD: 1500
+		/// Add Message to Timeline
+		///</summary>
+		public const string ADD_TO_TIMELINE = "ADD_TO_TIMELINE";
+
+
+		///<summary>
 		/// ACTN_SID: 195
 		/// SRT_ORD: 3300
 		/// DB Returned Action that a given attribute should be deleted
@@ -2035,6 +2061,14 @@ namespace Intel.MyDeals.Entities {
 		/// Generate a tracker number
 		///</summary>
 		public const string GEN_TRACKER = "GEN_TRACKER";
+
+
+		///<summary>
+		/// ACTN_SID: 41403
+		/// SRT_ORD: 1500
+		/// Add Message to Timeline
+		///</summary>
+		public const string GENERATE_QUOTE = "GENERATE_QUOTE";
 
 
 		///<summary>
@@ -2133,6 +2167,7 @@ namespace Intel.MyDeals.Entities {
 		public const string Test = "Test";
 		public const string Test2 = "Test2";
 		public const string TestCosntant = "TestCosntant";
+		public const string TRKR_GEN_CUTOFF = "TRKR_GEN_CUTOFF";
 	}
 
 
@@ -2237,6 +2272,8 @@ namespace Intel.MyDeals.Entities {
 		public const string C_EDIT_PRODUCT = "C_EDIT_PRODUCT";
 		public const string C_VERTCL_BASED = "C_VERTCL_BASED";
 		public const string C_IS_DEV = "C_IS_DEV";
+		public const string ADD_TO_TIMELINE = "ADD_TO_TIMELINE";
+		public const string GENERATE_QUOTE = "GENERATE_QUOTE";
 	}
 
 
@@ -2294,8 +2331,8 @@ namespace Intel.MyDeals.Entities {
 			new List<OpDataElementSetTypeItem>
 			{
 				new OpDataElementSetTypeItem {Id = 3, OpDeSetType = OpDataElementSetType.ECAP, Alias = "ECAP", Description = "ECAP Deal Type", TemplateDealNumber = -1, TrackerDtLetter = "E", Order = 3 },
-				new OpDataElementSetTypeItem {Id = 4, OpDeSetType = OpDataElementSetType.PROGRAM, Alias = "PROGRAM", Description = "PROGRAM Deal Type", TemplateDealNumber = -3, TrackerDtLetter = "L", Order = 4 },
-				new OpDataElementSetTypeItem {Id = 5, OpDeSetType = OpDataElementSetType.VOL_TIER, Alias = "VOL_TIER", Description = "VOL TIER Deal Type", TemplateDealNumber = -2, TrackerDtLetter = "T", Order = 5 },
+				new OpDataElementSetTypeItem {Id = 4, OpDeSetType = OpDataElementSetType.PROGRAM, Alias = "PROGRAM", Description = "PROGRAM Deal Type", TemplateDealNumber = -3, TrackerDtLetter = "P", Order = 4 },
+				new OpDataElementSetTypeItem {Id = 5, OpDeSetType = OpDataElementSetType.VOL_TIER, Alias = "VOL_TIER", Description = "VOL TIER Deal Type", TemplateDealNumber = -2, TrackerDtLetter = "V", Order = 5 },
 				new OpDataElementSetTypeItem {Id = 7, OpDeSetType = OpDataElementSetType.CAP_BAND, Alias = "CAP_BAND", Description = "CAP BAND Deal Type", TemplateDealNumber = -4, TrackerDtLetter = "C", Order = 7 },
 				new OpDataElementSetTypeItem {Id = 9, OpDeSetType = OpDataElementSetType.ALL_TYPES, Alias = "ALL_TYPES", Description = "ALL Object set types", TemplateDealNumber = 0, TrackerDtLetter = "", Order = 9 },
 			},

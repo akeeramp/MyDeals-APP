@@ -967,8 +967,8 @@ namespace Intel.MyDeals.BusinessLogic
             // Note to self..  This does take order values into account.
             foreach (OpDataElementType opDataElementType in Enum.GetValues(typeof(OpDataElementType)))
             {
-                if (!data.ContainsKey(opDataElementType)) continue;
-                myDealsData.SavePacketByDictionary(data[opDataElementType], opDataElementType, Guid.NewGuid());
+                if (!data.ContainsKey(opDataElementType) && !myDealsData.ContainsKey(opDataElementType)) continue;
+                myDealsData.SavePacketByDictionary(data.ContainsKey(opDataElementType) ? data[opDataElementType] : null, opDataElementType, Guid.NewGuid());
             }
 
             MyDealsData myDealsDataResults = myDealsData.PerformTasks(OpActionType.Save, contractToken);  // execute all save perform task items now
@@ -1005,7 +1005,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             // Tack on the save action call now
             newPacket.AddSaveActions();
-            newPacket.AddDeleteActions(data);
+            if (data != null) newPacket.AddDeleteActions(data);
 
             myDealsData[opDataElementType] = newPacket;
         }

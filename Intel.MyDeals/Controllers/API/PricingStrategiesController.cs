@@ -92,9 +92,9 @@ namespace Intel.MyDeals.Controllers.API
 
 
         [Authorize]
-        [Route("ActionPricingStrategy/{custId}/{contractId}/{actn}")]
+        [Route("ActionPricingStrategy/{custId}/{contractId}/{contractCustAccpt}/{actn}")]
         [HttpPost]
-        public OpMsgQueue ActionPricingStrategy(int custId, int contractId, string actn, OpDataCollectorFlattenedList pricingStrategies)
+        public OpMsgQueue ActionPricingStrategy(int custId, int contractId, string contractCustAccpt, string actn, OpDataCollectorFlattenedList pricingStrategies)
         {
             Dictionary<string, List<WfActnItem>> actnPs = new Dictionary<string, List<WfActnItem>>
             {
@@ -105,21 +105,22 @@ namespace Intel.MyDeals.Controllers.API
                 }).ToList()
             };
 
-            return SafeExecutor(() => ActionPricingStrategies(custId, contractId, actnPs)
+            return SafeExecutor(() => ActionPricingStrategies(custId, contractId, contractCustAccpt, actnPs)
                 , "Unable to action the Pricing Strategy {id}"
             );
         }
 
         [Authorize]
-        [Route("ActionPricingStrategies/{custId}/{contractId}")]
+        [Route("ActionPricingStrategies/{custId}/{contractId}/{contractCustAccpt}")]
         [HttpPost]
-        public OpMsgQueue ActionPricingStrategies(int custId, int contractId, Dictionary<string, List<WfActnItem>> actnPs)
+        public OpMsgQueue ActionPricingStrategies(int custId, int contractId, string contractCustAccpt, Dictionary<string, List<WfActnItem>> actnPs)
         {
             return SafeExecutor(() => _pricingStrategiesLib.ActionPricingStrategies(new ContractToken
                 {
                     CustId = custId,
-                    ContractId = contractId
-                }, actnPs)
+                    ContractId = contractId,
+                    CustAccpt = contractCustAccpt
+                } , actnPs)
                 , "Unable to action the Pricing Strategy {id}"
             );
         }

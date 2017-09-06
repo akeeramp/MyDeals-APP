@@ -328,6 +328,44 @@ namespace Intel.MyDeals.Entities
         }
 
 
+        public static bool IsValueIncreasedFromOrig(this IOpDataElement obj, AttributeCollection attributeCollection)
+        {
+            if (obj == null) { return false; }
+
+            object testValue = obj.AtrbValue;
+            var oav = obj.OrigAtrbValue;
+
+            if (oav == null || testValue == null)
+            {
+                return false;
+            }
+
+            var atrb = ((OpDataElement)obj).GetAttribute(attributeCollection);
+
+            try
+            {
+                switch (atrb.DATA_TYPE_CD)
+                {
+                    case "MONEY":
+                    case "INT":
+                        return float.Parse(atrb.GetValueStronglyTyped(testValue, false).ToString()) > float.Parse(atrb.GetValueStronglyTyped(oav, false).ToString());
+                    case "DATETIME":
+                        return (DateTime)atrb.GetValueStronglyTyped(testValue, false) > (DateTime)atrb.GetValueStronglyTyped(oav, false);
+                    case "VARCHAR":
+                    case "BIT":
+                        return false;
+                }
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                OpLogPerf.Log(ex);
+#endif
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// Get the Attribue Value as a specific type.
         /// Returns default(t) on error.

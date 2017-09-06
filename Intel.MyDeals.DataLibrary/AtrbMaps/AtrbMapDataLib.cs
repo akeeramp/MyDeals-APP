@@ -227,6 +227,7 @@ namespace Intel.MyDeals.DataLibrary
                     ATRB_SID = atrbMstr.ATRB_SID ?? 0,
                     ATRB_SRT_ORD = atrbMstr.ATRB_SRT_ORD ?? 0,
                     DIM_SID = atrbMstr.DIM_SID ?? short.MinValue,
+                    MJR_MNR_CHG = atrbMstr.MJR_MNR_CHG,
                     //IS_FACT = atrbMstr.IS_FACT ?? false,
                     PIVOT_MSK = atrbMstr.PIVOT_MSK ?? 0
                 };
@@ -297,12 +298,14 @@ namespace Intel.MyDeals.DataLibrary
             int IDX_KEY_AT_ATRB_SID = DB.GetReaderOrdinal(rdr, "KEY_AT_ATRB_SID");
             int IDX_LEGACY_NM = DB.GetReaderOrdinal(rdr, "LEGACY_NM");
             int IDX_LKUP_ROOT_SID = DB.GetReaderOrdinal(rdr, "LKUP_ROOT_SID");
+            int IDX_MJR_MNR_CHG = DB.GetReaderOrdinal(rdr, "MJR_MNR_CHG");
             int IDX_PIVOT_MSK = DB.GetReaderOrdinal(rdr, "PIVOT_MSK");
             int IDX_POST_PRCSS_FLAG = DB.GetReaderOrdinal(rdr, "POST_PRCSS_FLAG");
             int IDX_SQL_DATA_TYPE = DB.GetReaderOrdinal(rdr, "SQL_DATA_TYPE");
             int IDX_SQL_DATA_TYPE_FQ = DB.GetReaderOrdinal(rdr, "SQL_DATA_TYPE_FQ");
             int IDX_TGT_COL_TYPE = DB.GetReaderOrdinal(rdr, "TGT_COL_TYPE");
             int IDX_UI_TYPE_CD = DB.GetReaderOrdinal(rdr, "UI_TYPE_CD");
+
 
             while (rdr.Read())
             {
@@ -355,6 +358,7 @@ namespace Intel.MyDeals.DataLibrary
                     KEY_AT_ATRB_SID = (IDX_KEY_AT_ATRB_SID < 0 || rdr.IsDBNull(IDX_KEY_AT_ATRB_SID)) ? default(Nullable<System.Int32>) : rdr.GetFieldValue<Nullable<System.Int32>>(IDX_KEY_AT_ATRB_SID),
                     LEGACY_NM = (IDX_LEGACY_NM < 0 || rdr.IsDBNull(IDX_LEGACY_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_LEGACY_NM),
                     LKUP_ROOT_SID = (IDX_LKUP_ROOT_SID < 0 || rdr.IsDBNull(IDX_LKUP_ROOT_SID)) ? default(Nullable<System.Int32>) : rdr.GetFieldValue<Nullable<System.Int32>>(IDX_LKUP_ROOT_SID),
+                    MJR_MNR_CHG = (IDX_MJR_MNR_CHG < 0 || rdr.IsDBNull(IDX_MJR_MNR_CHG)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MJR_MNR_CHG),
                     PIVOT_MSK = (IDX_PIVOT_MSK < 0 || rdr.IsDBNull(IDX_PIVOT_MSK)) ? default(Nullable<System.Int32>) : rdr.GetFieldValue<Nullable<System.Int32>>(IDX_PIVOT_MSK),
                     POST_PRCSS_FLAG = (IDX_POST_PRCSS_FLAG < 0 || rdr.IsDBNull(IDX_POST_PRCSS_FLAG)) ? default(Nullable<System.Boolean>) : rdr.GetFieldValue<Nullable<System.Boolean>>(IDX_POST_PRCSS_FLAG),
                     SQL_DATA_TYPE = (IDX_SQL_DATA_TYPE < 0 || rdr.IsDBNull(IDX_SQL_DATA_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_SQL_DATA_TYPE),

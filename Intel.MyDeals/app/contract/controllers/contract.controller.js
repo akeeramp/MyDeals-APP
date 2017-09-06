@@ -1196,7 +1196,7 @@
 
         $scope.actionPricingStrategy = function (ps, actn) {
             $scope.setBusy("Updating Pricing Strategy...", "Please wait as we update the Pricing Strategy!");
-            objsetService.actionPricingStrategy($scope.getCustId(), $scope.contractData.DC_ID, ps, actn).then(
+            objsetService.actionPricingStrategy($scope.getCustId(), $scope.contractData.DC_ID, $scope.contractData.CUST_ACCPT, ps, actn).then(
                 function (data) {
                     $scope.messages = data.data.Messages;
 
@@ -1214,7 +1214,7 @@
         }
         $scope.actionPricingStrategies = function (data) {
             $scope.setBusy("Updating Pricing Strategies...", "Please wait as we update the Pricing Strategy!");
-            objsetService.actionPricingStrategies($scope.getCustId(), $scope.contractData.DC_ID, data).then(
+            objsetService.actionPricingStrategies($scope.getCustId(), $scope.contractData.DC_ID, $scope.contractData.CUST_ACCPT, data).then(
                 function (data) {
                     $scope.messages = data.data.Messages;
 
@@ -1245,7 +1245,7 @@
                         $scope.$broadcast('refresh');
                         $scope.$broadcast('refreshStage', wip);
                         $("#wincontractMessages").data("kendoWindow").open();
-                        //if (wip !== undefined) $scope.refreshContractData(wip.DC_ID);
+                        $scope.refreshContractData($scope.curPricingStrategyId, $scope.curPricingTableId);
                         $scope.setBusy("", "");
                     }, 50);
                 },
@@ -1378,7 +1378,6 @@
         }
         $scope.deletePricingTableRow = function (wip) {
             $scope.$apply(function () {
-                debugger;
                 $scope.setBusy("Deleting...", "Deleting the Pricing Table Row and Deal");
                 $scope._dirty = false;
                 topbar.show();

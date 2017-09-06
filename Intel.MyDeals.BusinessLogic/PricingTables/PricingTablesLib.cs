@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque;
@@ -131,6 +132,7 @@ namespace Intel.MyDeals.BusinessLogic
         public OpMsgQueue ActionWipDeals(ContractToken contractToken, Dictionary<string, List<WfActnItem>> actns)
         {
             OpMsgQueue opMsgQueue = new OpMsgQueue();
+            List<int> dealsOffHold = new List<int>();
 
             List<OpDataElementType> opDataElementTypes = new List<OpDataElementType>
             {
@@ -197,6 +199,11 @@ namespace Intel.MyDeals.BusinessLogic
                     continue;
                 }
 
+                if (stageIn == WorkFlowStages.Hold && actn == "Approve")
+                {
+                    dealsOffHold.Add(dc.DcID);
+                }
+
                 dc.SetAtrb(AttributeCodes.WF_STG_CD, targetStage);
                 opMsgQueue.Messages.Add(new OpMsg
                 {
@@ -223,6 +230,39 @@ namespace Intel.MyDeals.BusinessLogic
             // Tack on the save action call now
             myDealsData[OpDataElementType.WIP_DEAL].AddSaveActions();
 
+
+            if (dealsOffHold.Any())
+            {
+                bool needRedeal = false;
+                MyDealsData myDealsPsData = OpDataElementType.WIP_DEAL.GetByIDs(dealsOffHold
+                    , new List<OpDataElementType> { OpDataElementType.PRC_ST }
+                    , new List<int> { Attributes.WF_STG_CD.ATRB_SID });
+                myDealsData[OpDataElementType.PRC_ST] = myDealsPsData[OpDataElementType.PRC_ST];
+
+                foreach (OpDataCollector dc in myDealsPsData[OpDataElementType.PRC_ST].AllDataCollectors)
+                {
+                    var psStage = dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
+                    var futureStage = dc.GetNextStage("Redeal", DataCollections.GetWorkFlowItems(), psStage, OpDataElementType.PRC_ST);
+                    if (futureStage != null)
+                    {
+                        needRedeal = true;
+                        dc.SetDataElementValue(AttributeCodes.WF_STG_CD, futureStage);
+                    }                    
+                }
+
+                if (needRedeal)
+                {
+                    myDealsData[OpDataElementType.PRC_ST].BatchID = Guid.NewGuid();
+                    myDealsData[OpDataElementType.PRC_ST].GroupID = -102; // Whatever the real ID of this object is
+
+                    // Back to normal operations, clear out the messages and all.
+                    myDealsData[OpDataElementType.PRC_ST].Actions.RemoveAll(r => r.ActionDirection == OpActionDirection.Inbound);
+                    myDealsData[OpDataElementType.PRC_ST].Messages.Messages.RemoveAll(r => true);
+
+                    // Tack on the save action call now
+                    myDealsData[OpDataElementType.PRC_ST].AddSaveActions();
+                }
+            }
 
             myDealsData.EnsureBatchIDs();
             myDealsData.Save(contractToken);

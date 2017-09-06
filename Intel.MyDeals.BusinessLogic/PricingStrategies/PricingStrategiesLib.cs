@@ -79,6 +79,7 @@ namespace Intel.MyDeals.BusinessLogic
         public OpMsgQueue ActionPricingStrategies(ContractToken contractToken, Dictionary<string, List<WfActnItem>> actnPs)
         {
             OpMsgQueue opMsgQueue = new OpMsgQueue();
+            List<int> psGoingActive = new List<int>();
 
             List<OpDataElementType> opDataElementTypes = new List<OpDataElementType>
             {
@@ -145,6 +146,20 @@ namespace Intel.MyDeals.BusinessLogic
                     continue;
                 }
 
+
+                // Check for pending stage... might need to bypass it
+                if (targetStage == WorkFlowStages.Pending && contractToken.CustAccpt != "Pending")
+                {
+                    targetStage = WorkFlowStages.Approved;
+                }
+
+                // Check to see if we are passing the Approved threshold and need to pass actions
+                if (targetStage == WorkFlowStages.Approved)
+                {
+                    psGoingActive.Add(dc.DcID);
+                }
+
+
                 dc.SetAtrb(AttributeCodes.WF_STG_CD, targetStage);
                 opMsgQueue.Messages.Add(new OpMsg
                 {
@@ -158,6 +173,31 @@ namespace Intel.MyDeals.BusinessLogic
                 // This should probably be a rule item
             }
 
+            List<int> dealIds = new List<int>();
+            if (psGoingActive.Any())
+            {
+                List<OpDataElementType> opDataElementTypesActive = new List<OpDataElementType>
+                {
+                    OpDataElementType.WIP_DEAL
+                };
+
+                List<int> atrbsActive = new List<int>
+                {
+                    Attributes.WF_STG_CD.ATRB_SID
+                };
+
+                var myDealsDataPs = OpDataElementType.PRC_ST.GetByIDs(psGoingActive, opDataElementTypesActive, atrbsActive);
+
+                myDealsData[OpDataElementType.WIP_DEAL] = myDealsDataPs[OpDataElementType.WIP_DEAL];
+                List<OpDataElement> deals = myDealsDataPs[OpDataElementType.WIP_DEAL].AllDataElements.Where(d => d.AtrbHasValue(AttributeCodes.WF_STG_CD, WorkFlowStages.Draft)).ToList();
+
+                foreach (OpDataElement de in deals)
+                {
+                    de.SetAtrbValue(WorkFlowStages.Active);
+                }
+
+                dealIds = deals.Select(d => d.DcID).ToList();
+            }
 
 
             myDealsData[OpDataElementType.PRC_ST].BatchID = Guid.NewGuid();
@@ -169,7 +209,21 @@ namespace Intel.MyDeals.BusinessLogic
 
             // Tack on the save action call now
             myDealsData[OpDataElementType.PRC_ST].AddSaveActions();
+            myDealsData[OpDataElementType.PRC_ST].AddGoingActiveActions(dealIds);
 
+            if (dealIds.Any())
+            {
+                myDealsData[OpDataElementType.WIP_DEAL].BatchID = Guid.NewGuid();
+                myDealsData[OpDataElementType.WIP_DEAL].GroupID = -102; // Whatever the real ID of this object is
+
+                // Back to normal operations, clear out the messages and all.
+                myDealsData[OpDataElementType.WIP_DEAL].Actions.RemoveAll(r => r.ActionDirection == OpActionDirection.Inbound);
+                myDealsData[OpDataElementType.WIP_DEAL].Messages.Messages.RemoveAll(r => true);
+
+                // Tack on the save action call now
+                myDealsData[OpDataElementType.WIP_DEAL].AddSaveActions();
+                myDealsData[OpDataElementType.WIP_DEAL].AddGoingActiveActions(dealIds); // not sure if we need it in both places or just the PS
+            }
 
             myDealsData.EnsureBatchIDs();
             myDealsData.Save(contractToken);

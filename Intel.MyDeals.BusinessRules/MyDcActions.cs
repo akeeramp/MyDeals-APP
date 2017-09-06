@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.Entities.Helpers;
 using Intel.Opaque;
 using Intel.Opaque.Data;
-using Intel.Opaque.Rules;
-using Intel.Opaque.Tools;
 using Newtonsoft.Json;
 
 namespace Intel.MyDeals.BusinessRules
@@ -600,25 +597,55 @@ namespace Intel.MyDeals.BusinessRules
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
-            bool isMajorChange = false; 
-
-	        List<string> onChangeItems = new List<string> {AttributeCodes.START_DT, AttributeCodes.END_DT, AttributeCodes.TITLE, AttributeCodes.RATE, AttributeCodes.STRT_VOL, AttributeCodes.END_VOL, AttributeCodes.ON_ADD_DT, AttributeCodes.ECAP_PRICE};
-
-            string stage = r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD + "_PRNT");
-            var futureStage = r.Dc.GetNextStage("Redeal", DataCollections.GetWorkFlowItems(), stage, OpDataElementType.PRC_ST);
+            string wipStage = r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
+            string ptrStage = r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD + "_PRNT");
+            var futureStage = r.Dc.GetNextStage("Redeal", DataCollections.GetWorkFlowItems(), ptrStage, OpDataElementType.PRC_ST);
 
             // if there isn't a future stage, then it isn't redealable
-	        if (futureStage == null) return;
+	        if (futureStage == null && wipStage != WorkFlowStages.Active) return;
 
-	        var myDealsData = (MyDealsData) r.ExtraArgs[0];
+            AttributeCollection atrbMstr = DataCollections.GetAttributeData();
+            List<MyDealsAttribute> onChangeItems = atrbMstr.All.Where(a => a.MJR_MNR_CHG == "MAJOR").ToList();
+            List<MyDealsAttribute> onChangeIncreaseItems = atrbMstr.All.Where(a => a.MJR_MNR_CHG == "MAJOR_INCREASE").ToList();
 
-            List<IOpDataElement> changedDes = r.Dc.GetDataElementsWhere(d => onChangeItems.Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged).ToList();
-	        if (changedDes.Any()) isMajorChange = true;
+            var myDealsData = (MyDealsData) r.ExtraArgs[0];
 
-            if (isMajorChange) // go to redeal stage
+            List<IOpDataElement> changedDes = r.Dc.GetDataElementsWhere(d => onChangeItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged).ToList();
+            List<IOpDataElement> changedIncreaseDes = r.Dc.GetDataElementsWhere(d => onChangeIncreaseItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged && d.IsValueIncreasedFromOrig(atrbMstr)).ToList();
+
+            // if not a major change... exit
+	        if (!changedDes.Any() && !changedIncreaseDes.Any()) return;
+
+            // Define redeal reason
+	        var reason = "Redeal due to major change: \n";
+            foreach (IOpDataElement de in changedDes.Union(changedIncreaseDes))
+            {
+                MyDealsAttribute atrb = onChangeItems.Union(onChangeIncreaseItems).FirstOrDefault(a => a.ATRB_COL_NM == de.AtrbCd);
+                if (atrb.DATA_TYPE_CD == "DATETIME")
+                {
+                    reason += $"{atrb.ATRB_LBL} changed from {DateTime.Parse(de.OrigAtrbValue.ToString()):MM/dd/yyyy} to {DateTime.Parse(de.AtrbValue.ToString()):MM/dd/yyyy} \n";
+                }
+                else
+                {
+                    reason += $"{atrb.ATRB_LBL} changed from {de.OrigAtrbValue} to {de.AtrbValue} \n";
+                }
+            }
+
+            myDealsData[OpDataElementType.WIP_DEAL].Actions.Add(new MyDealsDataAction(DealSaveActionCodes.ADD_TO_TIMELINE, reason, 30));
+
+
+            // NOTE: We need to set the WIP and the PS stage
+            // WIP always is "Draft" and PS depends on the users workflow
+            // NOTE 2: We do not set the Contract stage.  We will rely on the SP to sync that stage
+
+            // set WIP Attributes
+            r.Dc.SetDataElementValue(AttributeCodes.WF_STG_CD, WorkFlowStages.Draft);
+	        r.Dc.SetDataElementValue(AttributeCodes.LAST_REDEAL_BY, OpUserStack.MyOpUserToken.Usr.WWID);
+	        r.Dc.SetDataElementValue(AttributeCodes.LAST_REDEAL_DT, DateTime.Now.Date);
+
+            // Locate and set Parent PS Attributes
+	        if (futureStage != null)
 	        {
-                r.Dc.SetDataElementValue(AttributeCodes.WF_STG_CD, WorkFlowStages.Draft);
-
                 OpDataCollector dcRow = myDealsData[OpDataElementType.PRC_TBL_ROW].Data[r.Dc.DcParentID];
                 OpDataCollector dcTbl = myDealsData[OpDataElementType.PRC_TBL].Data[dcRow.DcParentID];
                 OpDataCollector dcSt = myDealsData[OpDataElementType.PRC_ST].Data[dcTbl.DcParentID];
