@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 9/6/2017 9:54:10 AM
+File Updated: 9/6/2017 4:57:08 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -865,6 +865,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Object
 		///</summary>
 		public const string FRCST_DVC_NM = "FRCST_DVC_NM";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3603
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Int32
+		///</summary>
+		public const string FRCST_VOL = "FRCST_VOL";
 
 		///<summary>
 		/// DIM_SID: 3
@@ -1758,6 +1767,15 @@ namespace Intel.MyDeals.Entities {
 		public const string RGN_NM = "RGN_NM";
 
 		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3614
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string RPU_OVERRIDE_CMNT = "RPU_OVERRIDE_CMNT";
+
+		///<summary>
 		/// DIM_SID: 7
 		/// DIM_CD: PRD
 		/// ATRB_SID: 7079
@@ -1981,6 +1999,24 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Object
 		///</summary>
 		public const string UI_DSPLY_ATRB_SID = "UI_DSPLY_ATRB_SID";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3674
+		/// TGT_COL_TYPE: MONEY
+		/// DOT_NET_DATA_TYPE: System.Double
+		///</summary>
+		public const string USER_AVG_RPU = "USER_AVG_RPU";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3675
+		/// TGT_COL_TYPE: MONEY
+		/// DOT_NET_DATA_TYPE: System.Double
+		///</summary>
+		public const string USER_MAX_RPU = "USER_MAX_RPU";
 
 		///<summary>
 		/// DIM_SID: 3

@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 9/6/2017 9:55:45 AM
+File Updated: 9/6/2017 4:58:40 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -1512,6 +1512,22 @@ namespace Intel.MyDeals.Entities {
 			FRMT_MSK = "{0}",
 			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute FRCST_VOL = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "FRCST_VOL",
+			ATRB_DESC = "Forecasted Volume",
+			ATRB_LBL = "Frcst Vol",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3603,
+			DATA_TYPE_CD = "INT",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Int32",
+			FRMT_MSK = "{0:d}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = default(System.String)
 		};
 		public static MyDealsAttribute FSE_APPROVED_PRICE = new MyDealsAttribute()
@@ -3098,6 +3114,22 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
+		public static MyDealsAttribute RPU_OVERRIDE_CMNT = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "RPU_OVERRIDE_CMNT",
+			ATRB_DESC = "RPU Override Comment",
+			ATRB_LBL = "RPU Override Comment",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3614,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = default(System.String)
+		};
 		public static MyDealsAttribute SBS_NM = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "SBS_NM",
@@ -3497,6 +3529,38 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute USER_AVG_RPU = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "USER_AVG_RPU",
+			ATRB_DESC = "User Defined Avg RPU",
+			ATRB_LBL = "User Defined Avg RPU",
+			ATRB_MAX_LEN = 100,
+			ATRB_SID = 3674,
+			DATA_TYPE_CD = "MONEY",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Double",
+			FRMT_MSK = "{0:c}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "MONEY",
+			UI_TYPE_CD = "Label"
+		};
+		public static MyDealsAttribute USER_MAX_RPU = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "USER_MAX_RPU",
+			ATRB_DESC = "User Defined Max RPU",
+			ATRB_LBL = "User Defined Max RPU",
+			ATRB_MAX_LEN = 100,
+			ATRB_SID = 3675,
+			DATA_TYPE_CD = "MONEY",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Double",
+			FRMT_MSK = "{0:c}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "MONEY",
+			UI_TYPE_CD = "Label"
 		};
 		public static MyDealsAttribute VOLUME = new MyDealsAttribute()
 		{
