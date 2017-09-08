@@ -681,7 +681,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                     	    tmplt += '<td style="margin: 0; padding: 0;"><input kendo-numeric-text-box k-min="0" k-decimals="2" k-format="\'n2\'" k-ng-model="dataItem.' + fields[f].field + '[\'' + dim + '\']" k-on-change="updateScheduleEditor(dataItem, \'' + fields[f].field + '\', ' + d + ')" style="max-width: 100%; margin:0;" /></td>';
                     	} else {
                     	    if (f === 2 || d === 1) {   //if end vol or if it is the very first tier, allow editable
-                    	        tmplt += '<td style="margin: 0; padding: 0;"><input kendo-numeric-text-box k-min="0" k-max="999999999" k-decimals="0" k-format="\'n0\'" k-ng-model="dataItem.' + fields[f].field + '[\'' + dim + '\']" k-on-change="updateScheduleEditor(dataItem, \'' + fields[f].field + '\', ' + d + ')" style="max-width: 100%; margin:0;" /></td>';
+                    	        tmplt += '<td style="margin: 0; padding: 0;"><input kendo-numeric-text-box k-min="1" k-max="999999999" k-decimals="0" k-format="\'n0\'" k-ng-model="dataItem.' + fields[f].field + '[\'' + dim + '\']" k-on-change="updateScheduleEditor(dataItem, \'' + fields[f].field + '\', ' + d + ')" style="max-width: 100%; margin:0;" /></td>';
                     	    } else { //else disabled
                     	        tmplt += '<td style="margin: 0; padding: 0;"><span class="ng-binding" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + '\'] ' + gridUtils.getFormat(fields[f].field, fields[f].format) + ')"></span></td>';
                     	    }

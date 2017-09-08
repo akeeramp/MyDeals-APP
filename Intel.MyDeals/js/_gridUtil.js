@@ -46,9 +46,9 @@ gridUtils.uiControlScheduleWrapper = function (passedData) {
     //debugger;
     var tmplt = '<table>';
     var fields = [
-        { "title": "Tier", "field": "TIER_NBR", "format": "", "align": "left" },
-        { "title": "Start Vol", "field": "STRT_VOL", "format": "", "align": "right" },
-        { "title": "End Vol", "field": "END_VOL", "format": "", "align": "right" },
+        { "title": "Tier", "field": "TIER_NBR", "format": "number", "align": "right" },
+        { "title": "Start Vol", "field": "STRT_VOL", "format": "number", "align": "right" },
+        { "title": "End Vol", "field": "END_VOL", "format": "number", "align": "right" }, //TODO: inject angular $filter with new textOrNumber filter and use it as format, then we can avoid the double ng-if duplicate in the tmplt below, removing the ng-if all together
         { "title": "Rate", "field": "RATE", "format": "currency", "align": "right" }
     ];
 
@@ -69,7 +69,8 @@ gridUtils.uiControlScheduleWrapper = function (passedData) {
                 tmplt += '<td style="text-align: ' + fields[f].align + ';"';
                 tmplt += ' ng-class="{isHiddenCell: dataItem._behaviors.isHidden.' + fields[f].field + ', isReadOnlyCell: dataItem._behaviors.isReadOnly.' + fields[f].field + ', isRequiredCell: dataItem._behaviors.isRequired.' + fields[f].field + ', isErrorCell: dataItem._behaviors.isError.' + fields[f].field + ', isSavedCell: dataItem._behaviors.isSaved.' + fields[f].field + ', isDirtyCell: dataItem._behaviors.isDirty.' + fields[f].field + '}">';
                 tmplt += '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + fields[f].field + '_' + dim + '" kendo-tooltip="" k-content="dataItem._behaviors.validMsg.' + fields[f].field + '_' + dim + '" style="" data-role="tooltip"></div>';
-                tmplt += '<span class="ng-binding" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + '\'] ' + gridUtils.getFormat(fields[f].field, fields[f].format) + ')"></span>';
+                tmplt += '<span class="ng-binding" ng-if="dataItem.' + fields[f].field + '[\'' + dim + '\'] == \'Unlimited\'" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + '\'] ' + gridUtils.getFormat(fields[f].field, "") + ')"></span>';
+                tmplt += '<span class="ng-binding" ng-if="dataItem.' + fields[f].field + '[\'' + dim + '\'] != \'Unlimited\'" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + '\'] ' + gridUtils.getFormat(fields[f].field, fields[f].format) + ')"></span>';
             	tmplt += '</td>';
             }
             tmplt += '</tr>';

@@ -91,12 +91,14 @@
                     { "name": "Deal Info", "order": 0 },
                     { "name": "Consumption", "order": 1, "rules": [{ "logical": "HideIfAll", "atrb": "PAYOUT_BASED_ON", "value": "Billings" }] },
                     { "name": "Backdate", "order": 2 },
+                    { "name": "RPU", "order": 3 },
                     { "name": "All", "order": 99 }
                 ],
                 "PROGRAM": [
                     { "name": "Deal Info", "order": 0 },
                     { "name": "Consumption", "order": 1, "rules": [{ "logical": "HideIfAll", "atrb": "PAYOUT_BASED_ON", "value": "Billings" }] },
                     { "name": "Backdate", "order": 2 },
+                    { "name": "RPU", "order": 3 },
                     { "name": "All", "order": 99 }
                 ]
             },
@@ -282,10 +284,10 @@
                 },
                 "VOL_TIER": {
                     "tools": {
-                        "Groups": ["Deal Info", "Consumption", "Cost Test", "Meet Comp", "Backdate", "Overlapping"]
+                        "Groups": ["Deal Info", "Consumption", "Cost Test", "Meet Comp", "Backdate", "Overlapping", "RPU"]
                     },
                     "details": {
-                        "Groups": ["Consumption", "Cost Test", "Meet Comp", "Backdate", "Overlapping"]
+                        "Groups": ["Consumption", "Cost Test", "Meet Comp", "Backdate", "Overlapping", "RPU"]
                     },
                     "DC_ID": {
                         "Groups": ["Deal Info"]
@@ -309,10 +311,10 @@
                         "Groups": ["All"]
                     },
                     "PTR_USER_PRD": {
-                        "Groups": ["Deal Info"]
+                        "Groups": ["Deal Info", "RPU"]
                     },
                     "TITLE": {
-                        "Groups": ["Deal Info"]
+                        "Groups": ["Deal Info", "RPU"]
                     },
                     "SERVER_DEAL_TYPE": {
                         "Groups": ["All"]
@@ -358,14 +360,32 @@
                     },
                     "BACK_DATE_RSN": {
                         "Groups": ["Backdate"]
+                    },
+                    "FRCST_VOL": {
+                        "Groups": ["RPU"]
+                    },
+                    "MAX_RPU": {
+                        "Groups": ["RPU"]
+                    },
+                    "USER_MAX_RPU": {
+                        "Groups": ["RPU"]
+                    },
+                    "AVG_RPU": {
+                        "Groups": ["RPU"]
+                    },
+                    "USER_AVG_RPU": {
+                        "Groups": ["RPU"]
+                    },
+                    "RPU_OVERRIDE_CMNT": {
+                        "Groups": ["RPU"]
                     }
                 },
                 "PROGRAM": {
                     "tools": {
-                        "Groups": ["Deal Info", "Consumption", "Cost Test", "Meet Comp", "Backdate", "Overlapping"]
+                        "Groups": ["Deal Info", "Consumption", "Cost Test", "Meet Comp", "Backdate", "Overlapping", "RPU"]
                     },
                     "details": {
-                        "Groups": ["Consumption", "Cost Test", "Meet Comp", "Backdate", "Overlapping"]
+                        "Groups": ["Consumption", "Cost Test", "Meet Comp", "Backdate", "Overlapping", "RPU"]
                     },
                     "DC_ID": {
                         "Groups": ["Deal Info"]
@@ -389,10 +409,10 @@
                         "Groups": ["All"]
                     },
                     "PTR_USER_PRD": {
-                        "Groups": ["Deal Info"]
+                        "Groups": ["Deal Info", "RPU"]
                     },
                     "TITLE": {
-                        "Groups": ["Deal Info"]
+                        "Groups": ["Deal Info", "RPU"]
                     },
                     "SERVER_DEAL_TYPE": {
                         "Groups": ["All"]
@@ -498,6 +518,24 @@
                     //},
                     "BACK_DATE_RSN": {
                         "Groups": ["Backdate"]
+                    },
+                    "FRCST_VOL": {
+                        "Groups": ["RPU"]
+                    },
+                    "MAX_RPU": {
+                        "Groups": ["RPU"]
+                    },
+                    "USER_MAX_RPU": {
+                        "Groups": ["RPU"]
+                    },
+                    "AVG_RPU": {
+                        "Groups": ["RPU"]
+                    },
+                    "USER_AVG_RPU": {
+                        "Groups": ["RPU"]
+                    },
+                    "RPU_OVERRIDE_CMNT": {
+                        "Groups": ["RPU"]
                     }
                 }
             }

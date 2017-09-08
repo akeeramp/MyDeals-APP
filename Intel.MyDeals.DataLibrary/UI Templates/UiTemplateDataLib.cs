@@ -1405,6 +1405,78 @@ namespace Intel.MyDeals.DataLibrary
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER },
                 IsHidden = true
             });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 37,
+                AtrbCd = AttributeCodes.FRCST_VOL,
+                Label = "Forecast Volume",
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
+                Width = 180,
+                Template = "#=gridUtils.uiControlWrapper(data, 'FRCST_VOL')#",
+                IsFilterable = true,
+                IsSortable = true
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 37,
+                AtrbCd = AttributeCodes.MAX_RPU,
+                Label = "Max RPU",
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
+                Width = 180,
+                Template = "#=gridUtils.uiControlWrapper(data, 'MAX_RPU')#",
+                IsFilterable = true,
+                IsSortable = true
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 37,
+                AtrbCd = AttributeCodes.USER_MAX_RPU,
+                Label = "User Defined Max RPU",
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
+                Width = 180,
+                Template = "#=gridUtils.uiControlWrapper(data, 'USER_MAX_RPU')#",
+                IsFilterable = true,
+                IsSortable = true
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 37,
+                AtrbCd = AttributeCodes.AVG_RPU,
+                Label = "Average RPU",
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
+                Width = 180,
+                Template = "#=gridUtils.uiControlWrapper(data, 'AVG_RPU')#",
+                IsFilterable = true,
+                IsSortable = true
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 37,
+                AtrbCd = AttributeCodes.USER_AVG_RPU,
+                Label = "User Defined Average RPU",
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
+                Width = 180,
+                Template = "#=gridUtils.uiControlWrapper(data, 'USER_AVG_RPU')#",
+                IsFilterable = true,
+                IsSortable = true
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 37,
+                AtrbCd = AttributeCodes.RPU_OVERRIDE_CMNT,
+                Label = "User Defined RPU Override Comment",
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
+                Width = 180,
+                Template = "#=gridUtils.uiControlWrapper(data, 'RPU_OVERRIDE_CMNT')#",
+                IsFilterable = true,
+                IsSortable = true
+            });
 
             #endregion WIP DEAL
 
