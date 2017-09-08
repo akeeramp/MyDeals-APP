@@ -63,6 +63,9 @@
         // Hard code for now until security is put in place
         // $scope.C_ADD_PRICING_STRATEGY = true;
 
+        $scope.swapUnderscore = function (str) {
+            return str.replace(/_/g,' ');
+        }
 
         // determine if the contract is existing or new... if new, look for pre-population attributes from the URL parameters
 
@@ -1430,8 +1433,26 @@
                             return;
                         }
 
-                       $scope.$broadcast('updateGroup', data.data.Messages);
-                       if (wip !== undefined) $scope.refreshContractData(wip.DC_ID);
+                        // notify opGrid of the change
+                        $scope.$broadcast('updateGroup', data.data.Messages);
+
+                        // update local data with new ids to prevent the need to refresh the screen
+                        if (!!data.data.Messages) {
+                            for (var m = 0; m < data.data.Messages.length; m++) {
+                                var dcId = data.data.Messages[m].KeyIdentifiers[0];
+                                var dcParentId = data.data.Messages[m].KeyIdentifiers[1];
+
+                                for (var d = 0; d < $scope.wipData.length; d++) {
+                                    if ($scope.wipData[d].DC_ID === dcId) {
+                                        $scope.wipData[d].DC_PARENT_ID = dcParentId;
+                                        $scope.wipData[d]._parentCnt = 1;
+                                    }
+                                }
+                            }
+                        }
+
+                        // refresh upper contract
+                        if (wip !== undefined) $scope.refreshContractData(wip.DC_ID);
 
                         $scope.setBusy("Split Successful", "Split the Pricing Table Row into single Deals");
                         $timeout(function () {

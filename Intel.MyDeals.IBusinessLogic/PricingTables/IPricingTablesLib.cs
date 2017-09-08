@@ -19,7 +19,7 @@ namespace Intel.MyDeals.IBusinessLogic
         OpMsgQueue ActionWipDeals(ContractToken contractToken, Dictionary<string, List<WfActnItem>> actns);
 
         OpMsgQueue UnGroupPricingTableRowById(ContractToken contractToken, int ptrId);
-        
 
+        OpDataCollectorFlattenedList GetPctDetails(int id);
     }
 }

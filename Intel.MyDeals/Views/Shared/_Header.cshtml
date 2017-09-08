@@ -20,13 +20,18 @@
     OpUserToken opUserToken = (OpUserToken)ViewBag.UserToken;
 
     string extraUserPrivs = "";
+    string superPrefix = "";
     List<string> extraUserPrivsDetail = new List<string>();
     bool isDeveloper = opUserToken.IsDeveloper();
     bool isTester = opUserToken.IsTester();
     bool isSuper = opUserToken.IsSuper();
     bool isAdmin = opUserToken.IsAdmin();
 
-    if (isSuper) { extraUserPrivs += "S"; extraUserPrivsDetail.Add("Super User"); }
+    if (isSuper)
+    {
+        superPrefix = "SUPER ";
+        //extraUserPrivs += "S"; extraUserPrivsDetail.Add("Super User"); // for now leave this out as end users will actually have Super powers
+    }
     if (isTester) { extraUserPrivs += "T"; extraUserPrivsDetail.Add("Tester User"); }
     if (isDeveloper) { extraUserPrivs += "D"; extraUserPrivsDetail.Add("Developer User"); }
     if (extraUserPrivs == "STD") { extraUserPrivs = "STuD";} // we practice SAFE CODING on this project
@@ -59,7 +64,7 @@
                         </div>
                         <div class="fl hidden-sm" style="margin-top: 7px; margin-right: 10px;">
                             <div style="font-size: 12px; color: #ffffff; line-height: 1em;" id="divUsrName">@usrName</div>
-                            <div style="font-size: 9px; color: #ffffff; line-height: 1em;" id="divUsrRole">@usrRole <span class='yellow' title='@string.Join(",", extraUserPrivsDetail)'>@extraUserPrivs</span></div>
+                            <div style="font-size: 9px; color: #ffffff; line-height: 1em;" id="divUsrRole">@superPrefix @usrRole <span class='yellow' title='@string.Join(",", extraUserPrivsDetail)'>@extraUserPrivs</span></div>
                         </div>
                         <div class="fl">
                             <i class="intelicon-down" style="color: #ffffff; margin-top: 5px;"></i>

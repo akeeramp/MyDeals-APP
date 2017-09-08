@@ -106,7 +106,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
                     type: "json",
                     transport: {
                         read: {
-                            url: "/api/Dashboard/GetWipSummary/" + pt.DC_ID,
+                            url: "/api/PricingTables/v1/GetPctDetails/" + pt.DC_ID,
                             type: "GET",
                             dataType: "json"
                         }

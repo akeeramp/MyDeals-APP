@@ -52,6 +52,43 @@ namespace Intel.MyDeals.BusinessLogic
             //return GetPricingTable(id, true).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
         }
 
+        public OpDataCollectorFlattenedList GetPctDetails(int id)
+        {
+            List<OpDataElementType> opDataElementTypes = new List<OpDataElementType> { OpDataElementType.WIP_DEAL };
+
+            // Not all of these attributes will be deal attributes.  The data will have to be merged into this collection
+            List<int> atrbs = new List<int>
+            {
+                Attributes.OBJ_SET_TYPE_CD.ATRB_SID,
+                Attributes.PASSED_VALIDATION.ATRB_SID,
+                Attributes.COST_TEST_RESULT.ATRB_SID,
+                Attributes.MEETCOMP_TEST_RESULT.ATRB_SID,
+                Attributes.WF_STG_CD.ATRB_SID,
+                Attributes.START_DT.ATRB_SID,
+                Attributes.END_DT.ATRB_SID,
+                Attributes.NOTES.ATRB_SID,
+                Attributes.TRKR_NBR.ATRB_SID,
+                Attributes.TITLE.ATRB_SID,
+                Attributes.AVG_NET_PRC.ATRB_SID,
+                Attributes.MEETCOMP_TEST_FAIL_OVERRIDE.ATRB_SID,
+                Attributes.MEETCOMP_TEST_FAIL_OVERRIDE_REASON.ATRB_SID,
+                Attributes.LOWEST_NET_PRC.ATRB_SID,
+                Attributes.AVG_RPU.ATRB_SID,
+                Attributes.MAX_RPU.ATRB_SID,
+                Attributes.PRD_COST.ATRB_SID,
+                Attributes.COST_TEST_FAIL_OVERRIDE.ATRB_SID,
+                Attributes.COST_TEST_FAIL_OVERRIDE_REASON.ATRB_SID,
+                Attributes.RETAIL_CYCLE.ATRB_SID,
+                Attributes.RETAIL_PULL.ATRB_SID,
+                Attributes.ECAP_FLR.ATRB_SID
+            };
+
+            OpDataCollectorFlattenedDictList data = OpDataElementType.PRC_TBL.GetByIDs(new List<int> { id }, opDataElementTypes, atrbs)
+                .ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Nested, false);
+
+            return data[OpDataElementType.WIP_DEAL];
+        }
+
         public OpDataCollectorFlattenedDictList GetFullPricingTable(int id)
         {
             return GetPricingTable(id, true).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);

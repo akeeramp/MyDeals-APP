@@ -67,14 +67,15 @@ namespace Intel.MyDeals.BusinessLogic
                 int parentidtype = items.GetIntAtrbFromOpDataElementType(AttributeCodes.dc_parent_type);
                 OpDataElementSetType objSetType = OpDataElementSetTypeConverter.FromString(items[AttributeCodes.OBJ_SET_TYPE_CD]);
 
-                if (opType == OpDataElementType.WIP_DEAL && id == 0)
-                {
-                    foundIds.Add(id);
-                }
-                else
-                {
-                    foundIds.Add(id);
-                }
+                //if (opType == OpDataElementType.WIP_DEAL && id == 0)
+                //{
+                //    foundIds.Add(id);
+                //}
+                //else
+                //{
+                //    foundIds.Add(id);
+                //}
+                foundIds.Add(id);
 
                 // Look for WIP Deals that need to be mapped to Parent
                 if (opType == OpDataElementType.WIP_DEAL && id == 0)
@@ -805,6 +806,7 @@ namespace Intel.MyDeals.BusinessLogic
             OpMsgQueue opMsgQueue = new OpMsgQueue();
             int newId = -100;
             Dictionary<int, int> childToParentIdMapping = new Dictionary<int, int>();
+            Dictionary<int, int> childToOrigParentIdMapping = new Dictionary<int, int>();
 
             if (!myDealsData.ContainsKey(OpDataElementType.PRC_TBL_ROW) || !myDealsData.ContainsKey(OpDataElementType.WIP_DEAL)) return opMsgQueue;
 
@@ -853,6 +855,7 @@ namespace Intel.MyDeals.BusinessLogic
                 {
                     OpDataCollector dcSplit = dcPtr.Clone(newId);
                     childToParentIdMapping[dcWip.DcID] = newId--;
+                    childToOrigParentIdMapping[dcWip.DcID] = dcWip.DcParentID;
 
                     string prodTitle = dcWip.GetDataElementValue(AttributeCodes.TITLE);
                     dcSplit.SetDataElementValue(AttributeCodes.PTR_USER_PRD, prodTitle);
@@ -929,10 +932,10 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 opMsgQueue.Messages.Add(new OpMsg()
                 {
-                    Message = $"Parent ID Changed from {kvp.Key} to {kvp.Value}",
+                    Message = $"Parent ID Changed from {childToOrigParentIdMapping[kvp.Key]} to {kvp.Value}",
                     MsgType = OpMsg.MessageType.Info,
                     ExtraDetails = kvp.Key,
-                    KeyIdentifiers = new[] { kvp.Key, kvp.Value }
+                    KeyIdentifiers = new[] { kvp.Key, kvp.Value, childToOrigParentIdMapping[kvp.Key] }
                 });
             }
 

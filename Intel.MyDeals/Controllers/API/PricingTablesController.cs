@@ -146,6 +146,17 @@ namespace Intel.MyDeals.Controllers.API
                 , "Unable to action the Wip Deal {id}"
             );
         }
+
+
+        [Authorize]
+        [Route("GetPctDetails/{ptId}")]
+        [HttpGet]
+        public OpDataCollectorFlattenedList GetPctDetails(int ptId)
+        {
+            return SafeExecutor(() => _pricingTablesLib.GetPctDetails(ptId)
+                , "Unable to get the Pricing Table PCT details for {id}"
+            );
+        }
     }
 
 }
