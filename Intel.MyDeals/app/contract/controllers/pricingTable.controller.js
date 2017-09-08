@@ -478,7 +478,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 							}
 
                         	// Start vol, end vol, or rate changed
-                        	if (!isEndVolUnlimited) {  
+                        	if (!isEndVolUnlimited) {
 
                         		if (colIndex === endVolIndex || colIndex === strtVolIndex) {
                         			value.value = parseInt(value.value) || 0; // HACK: To make sure End vol has a numerical value so that validations work and show on these cells
@@ -534,7 +534,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 			}
 		);
 
-        if (isProductColumnIncludedInChanges && (!hasValueInAtLeastOneCell || isRangeValueEmptyString)) { // Delete row			
+        if (isProductColumnIncludedInChanges && (!hasValueInAtLeastOneCell || isRangeValueEmptyString)) { // Delete row
         	var rowStart = topLeftRowIndex - 2;
         	var rowStop = bottomRightRowIndex - 2;
         	if (root.spreadDs !== undefined) {
@@ -593,7 +593,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 return;
             }
 
-            // need to see if an item changed that would cause the PTR_SYS_PRD to be cleared out 
+            // need to see if an item changed that would cause the PTR_SYS_PRD to be cleared out
             var isPtrSysPrdFlushed = false;
             for (var f = 0; f < flushSysPrdFields.length; f++) {
                 var colIndx = root.colToLetter[flushSysPrdFields[f]].charCodeAt(0) - intA;
@@ -615,7 +615,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 	disableIndividualReadOnlyCells(sheet, rowInfo, rowIndex, 1);
                                 }
                             }
-                        });                    
+                        });
                 } else {
                     systemModifiedProductInclude = false;
                 }
@@ -711,7 +711,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                             if (tierNumVal == parseInt(root.curPricingTable.NUM_OF_TIERS)) {
                                 // default last end vol to "unlimited"
-                            	data[r]["END_VOL"] = unlimitedVal; 
+                            	data[r]["END_VOL"] = unlimitedVal;
                             } else {
                                 // Default to 0
                                 data[r]["END_VOL"] = 0;
@@ -1125,7 +1125,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     		myFieldModel.opLookupUrl = "/api/Customers/GetCustomerDivisionsByCustNmSid/" + root.contractData.CUST_MBR_SID;
     	}
 
-    	//// TODO: In the future. Dropdowns do work, but their (red highlighting) validations do not allow us to ignore case-sensitivity. 
+    	//// TODO: In the future. Dropdowns do work, but their (red highlighting) validations do not allow us to ignore case-sensitivity.
     	//// If we can figure out how to ignore case-sesitive, we can put these dropdwons back in
         //dataService.get(myFieldModel.opLookupUrl, null, null, true).then(function (response) {
         //    dropdownValuesSheet.batch(function () {
@@ -1155,7 +1155,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         //});
     }
 
-	//// TODO: In the future. Dropdowns do work, but their (red highlighting) validations do not allow us to ignore case-sensitivity. 
+	//// TODO: In the future. Dropdowns do work, but their (red highlighting) validations do not allow us to ignore case-sensitivity.
 	//// If we can figure out how to ignore case-sesitive, we can put these dropdwons back in
     //function applyDropDowns(sheet, myFieldModel, myColumnName) {
     //    sheet.range(myColumnName + "2:" + myColumnName + $scope.root.ptRowCount).validation({
@@ -1405,7 +1405,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                 // need to pad range ref
                 pasteRef.bottomRight.row += padNumRows;
-				
+
                 var i = state.data.length;
                 while (i--) {
                 	if (state.data[i] === undefined) {
@@ -1769,19 +1769,19 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     if (!!transformResult && !!transformResult.ProdctTransformResults) {
                         for (var key in transformResult.ProdctTransformResults) {
                             var r = key - 1;
-                            var allIssuesDone = false; 
+                            var allIssuesDone = false;
 
                             //Trimming unwanted Property to make JSON light
                             if (!!transformResult.ValidProducts[key]) {
                                 transformResult = massagingObjectsForJSON(key, transformResult);
-                            }                            
+                            }
 
                             // Save Valid and InValid JSO into spreadsheet hidden columns
                             if ((!!transformResult.InValidProducts[key] && transformResult.InValidProducts[key].length > 0) || !!transformResult.DuplicateProducts[key]) {
                                 var invalidJSON = {
                                     'ProdctTransformResults': transformResult.ProdctTransformResults[key],
                                     'InValidProducts': transformResult.InValidProducts[key], 'DuplicateProducts': transformResult.DuplicateProducts[key]
-                                }                                
+                                }
                                 data[r].PTR_SYS_INVLD_PRD = JSON.stringify(invalidJSON);
                                 sourceData[r].PTR_SYS_INVLD_PRD = data[r].PTR_SYS_INVLD_PRD;
                             } else {
@@ -1805,6 +1805,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     }
                     deleteRowFromCorrector(data);
                     root.spreadDs.sync();
+                    if (root.spreadDs.data().length === 0) {
+                        root.setBusy("No Products Found", "Please add products.");
+                        $timeout(function () {
+                            root.setBusy("", "");
+                        }, 2000);
+                        return;
+                    }
                     root.child.setRowIdStyle(data);
                     if (!currentRow) { // If current row is undefined its clicked from top bar validate button
                         if (!publishWipDeals) {
@@ -1929,7 +1936,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     function validateSavepublishWipDeals() {
         var data = cleanupData(root.spreadDs.data());
         ValidateProducts(data, true);
-    } 
+    }
 
 	// NOTE: Thhis is a workaround because the bulit-in kendo spreadsheet datepicker causes major perfromance issues in IE
     kendo.spreadsheet.registerEditor("dropdownEditor", function () {
@@ -1944,7 +1951,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     		},
     		icon: "fa fa-check ssEditorBtn"
     	};
-		
+
     	function open() {
     		// Get selected cell
     		var currColIndex = context.range._ref.col;
@@ -1956,7 +1963,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     		// Get columnData (urls, name, etc) from column name
             var dealType = $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD;
     		var colData = $scope.$parent.$parent.templates.ModelTemplates.PRC_TBL_ROW[dealType].model.fields[colName];
-			
+
     		var modalInstance = $uibModal.open({
     			//animation: $ctrl.animationsEnabled,
     			ariaLabelledBy: 'modal-title',
