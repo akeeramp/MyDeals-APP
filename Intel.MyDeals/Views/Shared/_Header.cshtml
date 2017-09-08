@@ -34,7 +34,9 @@
     }
     if (isTester) { extraUserPrivs += "T"; extraUserPrivsDetail.Add("Tester User"); }
     if (isDeveloper) { extraUserPrivs += "D"; extraUserPrivsDetail.Add("Developer User"); }
-    if (extraUserPrivs == "STD") { extraUserPrivs = "STuD";} // we practice SAFE CODING on this project
+    if (isAdmin) { extraUserPrivs += "A"; extraUserPrivsDetail.Add("Admin User"); }
+    if (extraUserPrivs == "STD") { extraUserPrivs = "STuD";} // We practice SAFE CODING on this project
+    if (extraUserPrivs == "STDA") { extraUserPrivs = "A STuD"; } // Is something special, and much safer.
     if (extraUserPrivs != "") { extraUserPrivs = "- " + extraUserPrivs; }
 }
 

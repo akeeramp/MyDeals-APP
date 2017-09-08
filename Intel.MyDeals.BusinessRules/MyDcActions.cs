@@ -638,10 +638,18 @@ namespace Intel.MyDeals.BusinessRules
             // WIP always is "Draft" and PS depends on the users workflow
             // NOTE 2: We do not set the Contract stage.  We will rely on the SP to sync that stage
 
-            // set WIP Attributes
+            // set WIP Stages for a redeal
             r.Dc.SetDataElementValue(AttributeCodes.WF_STG_CD, WorkFlowStages.Draft);
-	        r.Dc.SetDataElementValue(AttributeCodes.LAST_REDEAL_BY, OpUserStack.MyOpUserToken.Usr.WWID);
-	        r.Dc.SetDataElementValue(AttributeCodes.LAST_REDEAL_DT, DateTime.Now.Date);
+            if (wipStage == WorkFlowStages.Active) // WIP Object, Set redeal date only if this came from active since it will drive the tracker effective from/to date calc.
+            {
+                r.Dc.SetDataElementValue(AttributeCodes.LAST_REDEAL_BY, OpUserStack.MyOpUserToken.Usr.WWID);
+                r.Dc.SetDataElementValue(AttributeCodes.LAST_REDEAL_DT, DateTime.Now.Date);
+                string tracker = r.Dc.GetDataElementValue(AttributeCodes.TRKR_NBR);
+                if (!string.IsNullOrEmpty(tracker)) // If there is a tracker number, put the WIP version in redeal visual state
+                {
+                    r.Dc.SetDataElementValue(AttributeCodes.TRKR_NBR, tracker + "*");
+                }
+            }
 
             // Locate and set Parent PS Attributes
 	        if (futureStage != null)

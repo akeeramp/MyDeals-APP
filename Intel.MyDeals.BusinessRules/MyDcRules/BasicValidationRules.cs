@@ -128,7 +128,7 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     Title="Check for Major Changes",
                     ActionRule = MyDcActions.MajorChangeCheck,
-                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL, OpDataElementType.PRC_TBL_ROW},
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnFinalizeSave}
                 },
                 new MyOpRule

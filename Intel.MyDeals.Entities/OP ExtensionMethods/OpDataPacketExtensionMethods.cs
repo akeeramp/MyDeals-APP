@@ -30,6 +30,7 @@ namespace Intel.MyDeals.Entities
 
         public static void AddSyncActions(this OpDataPacket<OpDataElementType> packet)
         {
+            // This must happen *after* the major/minor check.  Sync deals must happen only if a deal goes active or is already active.
             if (packet.PacketType != OpDataElementType.WIP_DEAL) return;
 
             List<int> dealIds = packet.AllDataElements.Where(d => d.AtrbCdIs(AttributeCodes.WF_STG_CD) && d.AtrbHasValue(WorkFlowStages.Active)).Select(d => d.DcID).ToList();

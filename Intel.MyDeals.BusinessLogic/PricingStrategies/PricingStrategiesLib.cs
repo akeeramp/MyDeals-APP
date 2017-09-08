@@ -209,7 +209,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             // Tack on the save action call now
             myDealsData[OpDataElementType.PRC_ST].AddSaveActions();
-            myDealsData[OpDataElementType.PRC_ST].AddGoingActiveActions(dealIds);
+            //myDealsData[OpDataElementType.PRC_ST].AddGoingActiveActions(dealIds); // Don't know if this is a messup or not.  Sync actions should be WIP level.
 
             if (dealIds.Any())
             {
