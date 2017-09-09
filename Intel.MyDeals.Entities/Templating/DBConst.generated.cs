@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 9/6/2017 4:57:08 PM
-On: MHTIPPIN-MOBL
+File Updated: 9/8/2017 4:02:40 PM
+On: JAJUANG-MOBL3
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
 using System;
@@ -28,6 +28,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.String
 		///</summary>
 		public const string ACTIVE = "ACTIVE";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3560
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Int32
+		///</summary>
+		public const string ADJ_ECAP_UNIT = "ADJ_ECAP_UNIT";
 
 		///<summary>
 		/// DIM_SID: 20
@@ -771,8 +780,8 @@ namespace Intel.MyDeals.Entities {
 		/// DIM_SID: 3
 		/// DIM_CD: DEAL
 		/// ATRB_SID: 6
-		/// TGT_COL_TYPE: INT
-		/// DOT_NET_DATA_TYPE: System.Int32
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
 		///</summary>
 		public const string END_VOL = "END_VOL";
 
@@ -1463,6 +1472,15 @@ namespace Intel.MyDeals.Entities {
 		///<summary>
 		/// DIM_SID: 3
 		/// DIM_CD: DEAL
+		/// ATRB_SID: 3559
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string ORIG_ECAP_TRKR_NBR = "ORIG_ECAP_TRKR_NBR";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
 		/// ATRB_SID: 3668
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.String
@@ -1929,6 +1947,15 @@ namespace Intel.MyDeals.Entities {
 		public const string TITLE = "TITLE";
 
 		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 22
+		/// TGT_COL_TYPE: MONEY
+		/// DOT_NET_DATA_TYPE: System.Double
+		///</summary>
+		public const string TOTAL_DOLLAR_AMOUNT = "TOTAL_DOLLAR_AMOUNT";
+
+		///<summary>
 		/// DIM_SID: 7
 		/// DIM_CD: PRD
 		/// ATRB_SID: 7080
@@ -2223,6 +2250,7 @@ namespace Intel.MyDeals.Entities {
 		public const string DB_LOGGING = "DB_LOGGING";
 		public const string EIA_DIV_NM = "EIA_DIV_NM";
 		public const string ENV = "ENV";
+		public const string EXPIRE_CUTOFF_DAYS = "EXPIRE_CUTOFF_DAYS";
 		public const string ICOST_ERROR_CONTACTS_MYDL = "ICOST_ERROR_CONTACTS_MYDL";
 		public const string ICOST_ERROR_LOG_DAYS = "ICOST_ERROR_LOG_DAYS";
 		public const string ICOST_HIST_LOG_DAYS = "ICOST_HIST_LOG_DAYS";
@@ -2387,6 +2415,7 @@ namespace Intel.MyDeals.Entities {
 	//-- Build ObjectSet Data -----------------------------------------------------------------------------
 
 	public enum OpDataElementSetType {
+		TENDER = 2,
 		ECAP = 3,
 		PROGRAM = 4,
 		VOL_TIER = 5,
@@ -2400,6 +2429,7 @@ namespace Intel.MyDeals.Entities {
 		public static readonly OpDataElementSetTypeCollection  OpDestCollection  = new OpDataElementSetTypeCollection(
 			new List<OpDataElementSetTypeItem>
 			{
+				new OpDataElementSetTypeItem {Id = 2, OpDeSetType = OpDataElementSetType.TENDER, Alias = "TENDER", Description = "Tender Deal Type", TemplateDealNumber = -6, TrackerDtLetter = "T", Order = 2 },
 				new OpDataElementSetTypeItem {Id = 3, OpDeSetType = OpDataElementSetType.ECAP, Alias = "ECAP", Description = "ECAP Deal Type", TemplateDealNumber = -1, TrackerDtLetter = "E", Order = 3 },
 				new OpDataElementSetTypeItem {Id = 4, OpDeSetType = OpDataElementSetType.PROGRAM, Alias = "PROGRAM", Description = "PROGRAM Deal Type", TemplateDealNumber = -3, TrackerDtLetter = "P", Order = 4 },
 				new OpDataElementSetTypeItem {Id = 5, OpDeSetType = OpDataElementSetType.VOL_TIER, Alias = "VOL_TIER", Description = "VOL TIER Deal Type", TemplateDealNumber = -2, TrackerDtLetter = "V", Order = 5 },

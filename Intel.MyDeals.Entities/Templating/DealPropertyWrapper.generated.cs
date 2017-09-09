@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 9/6/2017 4:58:40 PM
-On: MHTIPPIN-MOBL
+File Updated: 9/7/2017 4:01:11 PM
+On: JAJUANG-MOBL3
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
 
@@ -1345,13 +1345,13 @@ namespace Intel.MyDeals.Entities {
 			ATRB_LBL = "End Vol",
 			ATRB_MAX_LEN = 1,
 			ATRB_SID = 6,
-			DATA_TYPE_CD = "INT",
+			DATA_TYPE_CD = "VARCHAR",
 			DIM_CD = "DEAL",
 			DIM_SID = 3,
-			DOT_NET_DATA_TYPE = "System.Int32",
-			FRMT_MSK = "{0:d}",
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
 			MJR_MNR_CHG = "MAJOR",
-			TGT_COL_TYPE = "INT",
+			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
 		public static MyDealsAttribute EPM_NM = new MyDealsAttribute()

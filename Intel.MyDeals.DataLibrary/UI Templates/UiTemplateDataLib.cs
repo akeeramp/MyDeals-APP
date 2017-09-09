@@ -258,7 +258,6 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 29,
                 AtrbCd = AttributeCodes.PROD_INCLDS,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.VOL_TIER },
                 Width = 100,
                 IsDefaultable = true,
                 Label = "Media",
@@ -268,11 +267,10 @@ namespace Intel.MyDeals.DataLibrary
                 LookupValue = "DROP_DOWN"
             });
 
-            #endregion PRICING TABLE
+			#endregion PRICING TABLE
 
-            #region PRICING TABLE ROW
-
-            items.Add(new UiTemplateContainerItem
+			#region PRICING TABLE ROW
+			items.Add(new UiTemplateContainerItem
             {
                 Id = 20,
                 AtrbCd = AttributeCodes.DC_ID,
@@ -393,7 +391,6 @@ namespace Intel.MyDeals.DataLibrary
 				Id = 29,
 				AtrbCd = AttributeCodes.PROGRAM_PAYMENT,
 				ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-				ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
 				Width = 130,
 				Template = "#=gridUtils.uiIconWrapper(data, 'PROGRAM_PAYMENT')#",
 				IsDefaultable = true,
@@ -1410,7 +1407,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 37,
                 AtrbCd = AttributeCodes.FRCST_VOL,
                 Label = "Forecast Volume",
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL, OpDataElementType.DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
                 Width = 180,
                 Template = "#=gridUtils.uiControlWrapper(data, 'FRCST_VOL')#",
@@ -1422,7 +1419,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 37,
                 AtrbCd = AttributeCodes.MAX_RPU,
                 Label = "Max RPU",
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL, OpDataElementType.DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
                 Width = 180,
                 Template = "#=gridUtils.uiControlWrapper(data, 'MAX_RPU')#",
@@ -1434,7 +1431,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 37,
                 AtrbCd = AttributeCodes.USER_MAX_RPU,
                 Label = "User Defined Max RPU",
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL, OpDataElementType.DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
                 Width = 180,
                 Template = "#=gridUtils.uiControlWrapper(data, 'USER_MAX_RPU')#",
@@ -1446,7 +1443,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 37,
                 AtrbCd = AttributeCodes.AVG_RPU,
                 Label = "Average RPU",
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL, OpDataElementType.DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
                 Width = 180,
                 Template = "#=gridUtils.uiControlWrapper(data, 'AVG_RPU')#",
@@ -1458,7 +1455,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 37,
                 AtrbCd = AttributeCodes.USER_AVG_RPU,
                 Label = "User Defined Average RPU",
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL, OpDataElementType.DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
                 Width = 180,
                 Template = "#=gridUtils.uiControlWrapper(data, 'USER_AVG_RPU')#",
@@ -1470,7 +1467,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 37,
                 AtrbCd = AttributeCodes.RPU_OVERRIDE_CMNT,
                 Label = "User Defined RPU Override Comment",
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL, OpDataElementType.DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
                 Width = 180,
                 Template = "#=gridUtils.uiControlWrapper(data, 'RPU_OVERRIDE_CMNT')#",
@@ -1478,9 +1475,42 @@ namespace Intel.MyDeals.DataLibrary
                 IsSortable = true
             });
 
-            #endregion WIP DEAL
+			items.Add(new UiTemplateContainerItem
+			{
+				Id = 20,
+				AtrbCd = AttributeCodes.TOTAL_DOLLAR_AMOUNT,
+				ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL, OpDataElementType.DEAL },
+				ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM },
+				Width = 100,
+				Label = "Total Dollar Amount",
+				Format = "{0:c}",
+				IsRequired = true
+			});
+			items.Add(new UiTemplateContainerItem
+			{
+				Id = 20,
+				AtrbCd = AttributeCodes.ORIG_ECAP_TRKR_NBR,
+				ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL, OpDataElementType.DEAL },
+				ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM },
+				DataType = "number",
+				Label = "Original Tracker #",
+				Width = 100,
+				IsReadOnly = true
+			});
+			items.Add(new UiTemplateContainerItem
+			{
+				Id = 20,
+				AtrbCd = AttributeCodes.ADJ_ECAP_UNIT,
+				ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL, OpDataElementType.DEAL },
+				ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM },
+				Width = 100,
+				Label = "Adjustment Ecap Unit",
+				Format = "{0:c}",
+				IsRequired = true
+			});
+			#endregion WIP DEAL
 
-            return FillInGapsFromT4(items);
+			return FillInGapsFromT4(items);
         }
 
         public UiTemplates GetUiTemplates()

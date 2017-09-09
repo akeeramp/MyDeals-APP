@@ -21,7 +21,7 @@
 	const string TAB = "\t";
 	SqlConnection conn;
 	SqlCommand cmd;
-
+	
 	conn = new SqlConnection(
 		@"Database=MYDEALS;Server=EG1RDMDBDEV01\DEALSDEV,3180;integrated security=SSPI;"
 		);
