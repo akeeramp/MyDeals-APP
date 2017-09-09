@@ -178,7 +178,7 @@ namespace Intel.MyDeals.BusinessLogic
                 List<int> delIds = wipIds.Where(w => !foundIds.Contains(w)).Distinct().ToList();
                 if (delIds.Any())
                 {
-                    myDealsData[OpDataElementType.WIP_DEAL].Actions.Add(new MyDealsDataAction(DealSaveActionCodes.OBJ_DELETE, delIds, 30));
+                    myDealsData[OpDataElementType.WIP_DEAL].Actions.Add(new MyDealsDataAction(DealSaveActionCodes.OBJ_DELETE, delIds, 40));
                 }
             }
 
@@ -189,7 +189,7 @@ namespace Intel.MyDeals.BusinessLogic
                 List<int> delIds = ptrIds.Where(w => !foundIds.Contains(w) && w > 0).Distinct().ToList();
                 if (delIds.Any())
                 {
-                    myDealsData[OpDataElementType.PRC_TBL_ROW].Actions.Add(new MyDealsDataAction(DealSaveActionCodes.OBJ_DELETE, delIds, 30));
+                    myDealsData[OpDataElementType.PRC_TBL_ROW].Actions.Add(new MyDealsDataAction(DealSaveActionCodes.OBJ_DELETE, delIds, 40));
                 }
             }
 
