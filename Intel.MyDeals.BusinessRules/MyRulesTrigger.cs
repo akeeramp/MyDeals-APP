@@ -15,7 +15,8 @@
         OnHidden,
         OnRequired,
         OnAutomatedTesting,
-        OnMerge
+        OnMerge,
+        OnMergeComplete
     }
 
 }

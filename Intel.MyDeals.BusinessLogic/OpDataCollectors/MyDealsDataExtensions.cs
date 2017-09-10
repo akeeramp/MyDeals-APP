@@ -172,6 +172,16 @@ namespace Intel.MyDeals.BusinessLogic
                 dpDeals.Messages = dc.MergeDictionary(items);
             }
 
+            // if WIP, check for merge complete rules
+            if (opType == OpDataElementType.WIP_DEAL)
+            {
+                myDealsData.InjectParentStages();
+                foreach (OpDataCollector dc in myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors)
+                {
+                    dc.ApplyRules(MyRulesTrigger.OnMergeComplete);
+                }
+            }
+
             // look for WIP deals to delete
             if (opType == OpDataElementType.WIP_DEAL)
             {
@@ -192,6 +202,7 @@ namespace Intel.MyDeals.BusinessLogic
                     myDealsData[OpDataElementType.PRC_TBL_ROW].Actions.Add(new MyDealsDataAction(DealSaveActionCodes.OBJ_DELETE, delIds, 40));
                 }
             }
+
 
             return myDealsData;
         }
