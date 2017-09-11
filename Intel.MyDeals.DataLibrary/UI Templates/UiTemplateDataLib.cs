@@ -158,7 +158,20 @@ namespace Intel.MyDeals.DataLibrary
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
             });
-            items.Add(new UiTemplateContainerItem
+			items.Add(new UiTemplateContainerItem
+			{
+				Id = 37,
+				AtrbCd = AttributeCodes.REBATE_TYPE,
+				ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
+				ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM },
+				IsDefaultable = true,
+				DataType = "string",
+				UiType = "BUTTONGROUP",
+				LookupUrl = "/api/Dropdown/GetDropdowns/REBATE_TYPE/PROGRAM",
+				LookupText = "DROP_DOWN",
+				LookupValue = "DROP_DOWN"
+			});
+			items.Add(new UiTemplateContainerItem
             {
                 Id = 37,
                 AtrbCd = AttributeCodes.REBATE_TYPE,
@@ -176,7 +189,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 38,
                 AtrbCd = AttributeCodes.MRKT_SEG,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.VOL_TIER },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
                 IsDefaultable = true,
                 Label = "Market Segment",
                 DataType = "string",
@@ -191,7 +204,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 39,
                 AtrbCd = AttributeCodes.GEO_COMBINED,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.VOL_TIER },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
                 IsDefaultable = true,
                 Label = "Geo",
                 DataType = "string",
@@ -205,7 +218,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 29,
                 AtrbCd = AttributeCodes.PAYOUT_BASED_ON,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.VOL_TIER },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
                 Width = 100,
                 IsDefaultable = true,
                 UiType = "BUTTONGROUP",
@@ -218,7 +231,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 29,
                 AtrbCd = AttributeCodes.MEET_COMP_PRICE_QSTN,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.VOL_TIER },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
                 IsDefaultable = true,
                 Label = "Meet Comp Analysis",
                 UiType = "BUTTONGROUP",
@@ -231,7 +244,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 29,
                 AtrbCd = AttributeCodes.PROGRAM_PAYMENT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP},
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.PROGRAM },
                 Width = 100,
                 IsDefaultable = true,
                 UiType = "BUTTONGROUP",
@@ -356,7 +369,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 30,
                 AtrbCd = AttributeCodes.START_DT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                Label = "Deal Start Date *",
+				Label = "Deal Start Date *",
                 Width = 90,
                 Template = "#=gridUtils.uiIconWrapper(data, 'START_DT')#",
                 IsRequired = true
@@ -391,12 +404,29 @@ namespace Intel.MyDeals.DataLibrary
 				Id = 29,
 				AtrbCd = AttributeCodes.PROGRAM_PAYMENT,
 				ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+				ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
 				Width = 130,
 				Template = "#=gridUtils.uiIconWrapper(data, 'PROGRAM_PAYMENT')#",
 				IsDefaultable = true,
 				Label = "Program Payment *",
 				UiType = "DROPDOWN",
 				LookupUrl = "/api/Dropdown/GetDropdowns/PROGRAM_PAYMENT/ECAP",
+				LookupText = "DROP_DOWN",
+				LookupValue = "DROP_DOWN",
+				IsRequired = true
+			});
+			items.Add(new UiTemplateContainerItem
+			{
+				Id = 29,
+				AtrbCd = AttributeCodes.PROGRAM_PAYMENT,
+				ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+				ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM },
+				Width = 130,
+				Template = "#=gridUtils.uiIconWrapper(data, 'PROGRAM_PAYMENT')#",
+				IsDefaultable = true,
+				Label = "Program Payment *",
+				UiType = "DROPDOWN",
+				LookupUrl = "/api/Dropdown/GetDropdowns/PROGRAM_PAYMENT/PROGRAM",
 				LookupText = "DROP_DOWN",
 				LookupValue = "DROP_DOWN",
 				IsRequired = true
