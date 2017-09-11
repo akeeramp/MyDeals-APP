@@ -1410,7 +1410,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL, OpDataElementType.DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
                 Width = 180,
-                Template = "#=gridUtils.uiControlWrapper(data, 'FRCST_VOL')#",
+                Template = "#=gridUtils.uiControlWrapper(data, 'FRCST_VOL', 'number')#",
                 IsFilterable = true,
                 IsSortable = true
             });
