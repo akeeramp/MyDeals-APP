@@ -6,14 +6,13 @@
     .controller('WidgetSettingsCtrl', WidgetSettingsCtrl)
     .filter('object2Array', object2Array);
 
-DashboardController.$inject = ['$scope', '$uibModal', '$timeout', '$window', '$localStorage', 'objsetService', 'securityService'];
+DashboardController.$inject = ['$scope', '$uibModal', '$timeout', '$window', '$localStorage', 'objsetService', 'securityService', 'userPreferencesService', 'logger'];
 AddWidgetCtrl.$inject = ['$scope', '$timeout'];
 CustomWidgetCtrl.$inject = ['$scope', '$uibModal'];
 WidgetSettingsCtrl.$inject = ['$scope', '$timeout', '$rootScope', 'widget'];
 object2Array.$inject = [];
 
-
-function DashboardController($scope, $uibModal, $timeout, $window, $localStorage, objsetService, securityService) {
+function DashboardController($scope, $uibModal, $timeout, $window, $localStorage, objsetService, securityService, userPreferencesService, logger) {
     $scope.scope = $scope;
     $scope.$storage = $localStorage;
 
@@ -78,8 +77,17 @@ function DashboardController($scope, $uibModal, $timeout, $window, $localStorage
         });
     }
 
-    $scope.saveLayout = function() {
-        alert("This is where save will happen");
+    $scope.saveLayout = function () {
+        // Save the current widget settings (size, position, etc.).
+        userPreferencesService.updateAction(
+                "Dashboard", // CATEGORY
+                "Widgets", // SUBCATEGORY
+                $scope.selectedDashboardId, // ID
+                JSON.stringify($scope.dashboardData.currentWidgets)) // VALUE
+            .then(function (response) {
+            }, function (response) {
+                logger.error("Unable to update User Preferences.", response, response.statusText);
+            });
     }
 
     $scope.gridsterOptions = {
@@ -110,9 +118,9 @@ function DashboardController($scope, $uibModal, $timeout, $window, $localStorage
         }
     };
 
-    $scope.dashboarddata = {
-        "widgets": widgetConfig.getAllWidgets(objsetService),
-        "current": []
+    $scope.dashboardData = {
+        "allWidgets": widgetConfig.getAllWidgets(objsetService),
+        "currentWidgets": []
     };
    
     // widget events
@@ -138,11 +146,11 @@ function DashboardController($scope, $uibModal, $timeout, $window, $localStorage
 
     // grid manipulation
     $scope.clear = function () {
-        $scope.dashboarddata.current = [];
+        $scope.dashboardData.currentWidgets = [];
     };
 
     $scope.addWidget = function () {
-        $scope.dashboarddata.current.push({
+        $scope.dashboardData.currentWidgets.push({
             name: "New Widget",
             sizeX: 1,
             sizeY: 1
@@ -193,19 +201,71 @@ function DashboardController($scope, $uibModal, $timeout, $window, $localStorage
     $scope.changeDashboard = function (scope, key) {
         $scope.addWidgetByKey(scope, key);
     }
+
+    $scope.getSavedWidgetSettings = function (scope, key) {
+        $scope.savedWidgetSettings = null;
+
+        userPreferencesService.getActions("Dashboard", "Widgets")
+            .then(function (response) {
+                if (response.data && response.data.length > 0) {
+                    // Get the saved widget settings for the specified key (user role).
+                    var savedWidgetSettingsForSpecifiedRole = response.data.filter(function (obj) {
+                        return obj.PRFR_KEY == key;
+                    });
+
+                    if (savedWidgetSettingsForSpecifiedRole && savedWidgetSettingsForSpecifiedRole.length > 0) {
+                        $scope.savedWidgetSettings = JSON.parse(savedWidgetSettingsForSpecifiedRole[0].PRFR_VAL);
+                    }
+                }
+            }, function (response) {
+                logger.error("Unable to get User Preferences.", response, response.statusText);
+            });
+    }
+
     $scope.addWidgetByKey = function (scope, key) {
-        scope.clear();
+        $scope.clear();
+
+        // Get any widget settings that were previously saved to the database for the specified key (user role).
+        $scope.getSavedWidgetSettings(scope, key);
 
         $timeout(function () {
-            var widgets = scope.dashboards[key].widgets;
-            for (var i = 0; i < widgets.length; i++) {
-                var widget = util.clone($scope.dashboarddata.widgets[widgets[i].id]);
-                if (widgets[i].sizeX !== undefined) widget.sizeX = widgets[i].sizeX;
-                if (widgets[i].sizeY !== undefined) widget.sizeY = widgets[i].sizeY;
-                if (widgets[i].row !== undefined) widget.row = widgets[i].row;
-                if (widgets[i].col !== undefined) widget.col = widgets[i].col;
-                if (widgets[i].name !== undefined) widget.name = widgets[i].name;
-                scope.dashboarddata.current.push(widget);
+            if ($scope.savedWidgetSettings && $scope.savedWidgetSettings.length > 0) {
+                // There are saved widget settings, so use them.
+                
+                var widgets = $scope.dashboardData.allWidgets;
+
+                Object.keys($scope.dashboardData.allWidgets).forEach(function (key) {
+                    var widget = util.clone($scope.dashboardData.allWidgets[key]);
+
+                    // Get the saved settings for the current widget.
+                    var currentWidgetSavedSetting = $scope.savedWidgetSettings.filter(function(obj) {
+                        return obj.id == widget.id;
+                    });
+
+                    // If there is a saved settings for the current widget, use it to set the size and position of the widget.  If there isn't any
+                    // saved settings for the current widget, it means that the widget should stay hidden by default.
+                    if (currentWidgetSavedSetting && currentWidgetSavedSetting.length > 0) {
+                        widget.size = currentWidgetSavedSetting[0].size;
+                        widget.position = currentWidgetSavedSetting[0].position;
+                        widget.name = currentWidgetSavedSetting[0].name;
+
+                        $scope.dashboardData.currentWidgets.push(widget);
+                    }
+                });
+            } else {
+                // There are no saved widget settings, so use the default widget settings.
+
+                var widgets = $scope.dashboards[key].widgets;
+
+                for (var i = 0; i < widgets.length; i++) {
+                    var widget = util.clone($scope.dashboardData.allWidgets[widgets[i].id]);
+
+                    if (widgets[i].defaultSize !== undefined) widget.size = widgets[i].defaultSize;
+                    if (widgets[i].defaultPosition !== undefined) widget.position = widgets[i].defaultPosition;
+                    if (widgets[i].name !== undefined) widget.name = widgets[i].name;
+
+                    $scope.dashboardData.currentWidgets.push(widget);
+                }
             }
         }, 600);
     }
@@ -213,14 +273,16 @@ function DashboardController($scope, $uibModal, $timeout, $window, $localStorage
 
 function AddWidgetCtrl($scope, $timeout, $rootScope) {
 
-    $scope.widgets = $scope.$parent.dashboarddata.widgets;
+    $scope.widgets = $scope.$parent.dashboardData.allWidgets;
 
     $scope.dismiss = function () {
         $scope.$parent.modalInstance.dismiss();
     };
 
     $scope.add = function (widget) {
-        $scope.$parent.dashboarddata.current.push(util.clone(widget));
+        var widgetToAdd = util.clone(widget);
+        widgetToAdd.position = null; // Don't set a position, so that the widget will be added "smartly" whereever space is available.
+        $scope.$parent.dashboardData.currentWidgets.push(widgetToAdd);
         $scope.$parent.modalInstance.close();
     };
 
@@ -229,7 +291,7 @@ function AddWidgetCtrl($scope, $timeout, $rootScope) {
 function CustomWidgetCtrl($scope, $uibModal) {
 
     $scope.remove = function (widget) {
-        $scope.dashboarddata.current.splice($scope.dashboarddata.current.indexOf(widget), 1);
+        $scope.dashboardData.currentWidgets.splice($scope.dashboardData.currentWidgets.indexOf(widget), 1);
     };
 
     $scope.openSettings = function (widget) {

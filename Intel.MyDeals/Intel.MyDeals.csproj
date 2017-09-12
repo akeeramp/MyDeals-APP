@@ -28,6 +28,7 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <TargetFrameworkProfile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -233,6 +234,7 @@
     <Compile Include="Controllers\API\SearchController.cs" />
     <Compile Include="Controllers\API\TemplatesController.cs" />
     <Compile Include="Controllers\API\CustomersController.cs" />
+    <Compile Include="Controllers\API\UserPreferencesController.cs" />
     <Compile Include="Controllers\API\TimelineController.cs" />
     <Compile Include="Controllers\API\MeetCompController.cs" />
     <Compile Include="Controllers\API\WorkFlowController.cs" />
@@ -426,6 +428,7 @@
     <Content Include="app\core\directives\gridStatusBoard\gridStatusBoard.directive.html" />
     <Content Include="app\core\directives\gridStatusBoard\gridStatusBoard.directive.js" />
     <Content Include="app\core\directives\securityLoader\securityLoader.directive.js" />
+    <Content Include="app\shared\services\userPreferences.service.js" />
     <Content Include="app\shared\services\security.service.js" />
     <Content Include="css\_loadingPanel.directive.css" />
     <Content Include="app\core\directives\messageBoard\messageBoard.directive.html" />

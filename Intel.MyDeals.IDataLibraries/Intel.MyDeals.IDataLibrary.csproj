@@ -52,6 +52,7 @@
     <Compile Include="CustomerCalendar\ICustomerCalendarDataLib.cs" />
     <Compile Include="Customer\ICustomerDataLib.cs" />
     <Compile Include="Data Collections\IDataCollectionsDataLib.cs" />
+    <Compile Include="UserPreferences\IUserPreferencesDataLib.cs" />
     <Compile Include="MeetComp\IMeetCompDataLib.cs" />
     <Compile Include="RetailPull\IRetailPullDataLib.cs" />
     <Compile Include="Search\ISearchDataLib.cs" />

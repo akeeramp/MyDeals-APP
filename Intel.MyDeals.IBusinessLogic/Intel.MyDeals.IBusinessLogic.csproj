@@ -75,6 +75,7 @@
     <Compile Include="SecurityAttributes\ISecurityAttributesLib.cs" />
     <Compile Include="Timeline\ITimelineLib.cs" />
     <Compile Include="UI Templates\IUiTemplateLib.cs" />
+    <Compile Include="UserPreferences\IUserPreferences.cs" />
     <Compile Include="Workflow\IWorkFlowLib.cs" />
   </ItemGroup>
   <ItemGroup>

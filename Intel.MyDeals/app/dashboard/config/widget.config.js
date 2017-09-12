@@ -19,8 +19,9 @@ widgetConfig.getAllWidgets = function (objsetService) {
 widgetConfig.configWidgets = function () {
 
     widgetConfig.widgets["6"] = {
-        sizeX: 3,
-        sizeY: 2,
+        id: '6',
+        size: { x: 5, y: 2 },
+        position: { row: 0, col: 0 },
         name: "New MyDeals Contracts",
         desc: "Link to add a new contract",
         icon: "intelicon-tools",
@@ -36,9 +37,31 @@ widgetConfig.configWidgets = function () {
         }
     };
 
+    widgetConfig.widgets["7"] = {
+        id: '7',
+        size: { x: 13, y: 8 },
+        position: { row: 0, col: 0 },
+        name: "Contract Status",
+        desc: "Quick view of status board",
+        icon: "intelicon-grid",
+        type: 'contractStatusBoard',
+        hasConfig: true,
+        template: 'app/dashboard/widgets/contractStatusBoard.html',
+        widgetConfig: {},
+        resizeEvent: function (widget) {
+            var grid = $("#gridContractStatus");
+            grid.data("kendoGrid").resize();
+        },
+        refreshEvent: function (widget) {
+            var grid = $("#gridContractStatus");
+            grid.data("kendoGrid").resize();
+        }
+    };
+
     widgetConfig.widgets["8"] = {
-        sizeX: 3,
-        sizeY: 4,
+        id: '8',
+        size: { x: 5, y: 2 },
+        position: { row: 0, col: 0 },
         name: "Search MyDeals Contracts",
         desc: "Search for contracts, pricing strategies, or pricing tables by entering a name or id",
         icon: "intelicon-tools",
@@ -60,8 +83,9 @@ widgetConfig.configWidgets = function () {
     };
 
     widgetConfig.widgets["9"] = {
-        sizeX: 2,
-        sizeY: 2,
+        id: '9',
+        size: { x: 5, y: 3 },
+        position: { row: 0, col: 0 },
         name: "Open Contracts By Id",
         desc: "Quickly Navigate to a contract by entering its Id",
         icon: "intelicon-tools",
@@ -74,26 +98,6 @@ widgetConfig.configWidgets = function () {
             api: {}
         },
         resizeEvent: function (widget) {
-        }
-    };
-
-    widgetConfig.widgets["7"] = {
-        sizeX: 8,
-        sizeY: 4,
-        name: "Contract Status",
-        desc: "Quick view of status board",
-        icon: "intelicon-grid",
-        type: 'contractStatusBoard',
-        hasConfig: true,
-        template: 'app/dashboard/widgets/contractStatusBoard.html',
-        widgetConfig: {},
-        resizeEvent: function (widget) {
-            var grid = $("#gridContractStatus");
-            grid.data("kendoGrid").resize();
-        },
-        refreshEvent: function (widget) {
-            var grid = $("#gridContractStatus");
-            grid.data("kendoGrid").resize();
         }
     };
 
@@ -118,16 +122,16 @@ widgetConfig.configLayouts = function () {
         widgets: [
             {
                 id: 6,
-                sizeX: 5,
-                sizeY: 2
+                defaultSize: { x: 5, y: 2 },
+                defaultPosition: { row: 2, col: 0 }
             }, {
                 id: 7,
-                sizeX: 13,
-                sizeY: 7
+                defaultSize: { x: 13, y: 8 },
+                defaultPosition: { row: 0, col: 5 }
             }, {
                 id: 8,
-                sizeX: 5,
-                sizeY: 5
+                defaultSize: { x: 5, y: 2 },
+                defaultPosition: { row: 0, col: 0 }
             }
         ]
     };
@@ -137,13 +141,13 @@ widgetConfig.configLayouts = function () {
         name: 'Approver',
         widgets: [
             {
-                id: 8,
-                sizeX: 3,
-                sizeY: 2
-            }, {
                 id: 7,
-                sizeX: 9,
-                sizeY: 4
+                defaultSize: { x: 13, y: 8 },
+                defaultPosition: { row: 0, col: 5 }
+            }, {
+                id: 8,
+                defaultSize: { x: 5, y: 2 },
+                defaultPosition: { row: 0, col: 0 }
             }
         ]
     };
@@ -153,13 +157,13 @@ widgetConfig.configLayouts = function () {
         name: 'Viewer',
         widgets: [
             {
-                id: 8,
-                sizeX: 3,
-                sizeY: 2
-            }, {
                 id: 7,
-                sizeX: 9,
-                sizeY: 4
+                defaultSize: { x: 13, y: 8 },
+                defaultPosition: { row: 0, col: 5 }
+            }, {
+                id: 8,
+                defaultSize: { x: 5, y: 2 },
+                defaultPosition: { row: 0, col: 0 }
             }
         ]
     };

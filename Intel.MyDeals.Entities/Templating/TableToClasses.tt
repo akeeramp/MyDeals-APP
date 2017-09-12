@@ -284,6 +284,11 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "PCTLegalException";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
+	// User preferences
+	ds = dbobjects.ExecuteDataSet("[dbo].[PR_MYDL_GET_USR_PRFR]  @in_emp_wwid=10548414, @in_prfr_cat='', @in_prfr_sub_cat=''");
+	ds.Tables[0].TableName = "UserPreferences";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
 	PopIndent();
 	WriteLine("}"); // End NameSpace
 

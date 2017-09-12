@@ -79,6 +79,7 @@
     <Compile Include="Constants Lookups\ConstantLookupDataLib.cs" />
     <Compile Include="Dashboard\DashboardDataLib.cs" />
     <Compile Include="MeetComp\MeetCompDataLib.cs" />
+    <Compile Include="UserPreferences\UserPreferencesDataLib.cs" />
     <Compile Include="RetailPull\RetailPullDataLib.cs" />
     <Compile Include="Files\FilesDataLib.cs" />
     <Compile Include="JMS\JmsQueue.cs" />

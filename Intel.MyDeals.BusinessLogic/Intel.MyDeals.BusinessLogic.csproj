@@ -113,6 +113,7 @@
     <Compile Include="Security Attributes\SecurityAttributesLib.cs" />
     <Compile Include="Timeline\TimelineLib.cs" />
     <Compile Include="UI Templates\UiTemplateLib.cs" />
+    <Compile Include="UserPreferences\UserPreferencesLib.cs" />
     <Compile Include="WorkFlow\WorkFlowLib.cs" />
   </ItemGroup>
   <ItemGroup>

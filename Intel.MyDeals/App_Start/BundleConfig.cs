@@ -179,6 +179,7 @@ namespace Intel.MyDeals
                 , "~/app/shared/services/objset.service.js"
                 , "~/app/shared/services/security.service.js"
                 , "~/app/shared/services/templates.service.js"
+                , "~/app/shared/services/userPreferences.service.js"
                 , "~/app/testCases/testCases.module.js"
                 , "~/app/testCases/testCases.route.js"
                 , "~/app/testCases/grids/basic.controller.js"

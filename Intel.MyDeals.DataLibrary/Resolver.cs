@@ -30,6 +30,7 @@ namespace Intel.MyDeals.DataLibrary
             registerService.RegisterType<IWorkFlowDataLib, WorkFlowDataLib>();
             registerService.RegisterType<ITimelineDataLib, TimelineDataLib>();
             registerService.RegisterType<IMeetCompDataLib, MeetCompDataLib>();
+            registerService.RegisterType<IUserPreferencesDataLib, UserPreferencesDataLib>();
         }
     }
 }
