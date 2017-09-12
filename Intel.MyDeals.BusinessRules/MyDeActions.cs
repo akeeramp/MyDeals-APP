@@ -113,6 +113,26 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void CheckTargetRegions(this IOpDataElement de, params object[] args)
+        {
+            string[] t_regions = de.AtrbValue.ToString().Split(',');
+            List<string> geos = new List<string>();
+            string geo;
+
+            for (int i = 0; i < t_regions.Length; i++)
+            {
+                geo = t_regions[i].Split('/')[0].Trim();
+                if (geos.Contains(geo))
+                {
+                    BusinessLogicDeActions.AddValidationMessage(de, geo + " can only have one associated target region.");
+                }
+                else
+                {
+                    geos.Add(geo);
+                }
+            }
+        }
+
         public static void CheckMarketSegment(this IOpDataElement de, params object[] args)
         {
             if (de == null) return;

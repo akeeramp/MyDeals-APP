@@ -69,20 +69,20 @@ namespace Intel.MyDeals.BusinessRules
                             Action = BusinessLogicDeActions.AddValidationMessage,
                             Args = new object[] {"{0} must be positive"},
                             Where = de => de.AtrbCdIn(new List<string> { AttributeCodes.VOLUME }) && de.HasValue() && de.IsNegativeOrZero()
-						}
+                        }
                     }
                 },
-				new MyOpRule
-				{
-					Title="Rate must have a positive value",
+                new MyOpRule
+                {
+                    Title="Rate must have a positive value",
 					//ActionRule = MyDcActions.ExecuteActions,
                     ActionRule = MyDcActions.ValidateTierRate,
-					InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
-					InObjSetType = new List<string> {OpDataElementSetType.VOL_TIER.ToString()},
-					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
-					AtrbCondIf = dc => dc.IsNegative(AttributeCodes.RATE)
-				},
-				new MyOpRule
+                    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
+                    InObjSetType = new List<string> {OpDataElementSetType.VOL_TIER.ToString()},
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
+                    AtrbCondIf = dc => dc.IsNegative(AttributeCodes.RATE)
+                },
+                new MyOpRule
 				{
 					Title="Must be greater than 0",
 					ActionRule = MyDcActions.ValidateTierStartVol,
@@ -315,6 +315,21 @@ namespace Intel.MyDeals.BusinessRules
                         {
                             Action = MyDeActions.CheckGeos,
                             Where = de => de.AtrbCdIn(new List<string> {AttributeCodes.GEO_COMBINED})
+                        }
+                    }
+                },
+                new MyOpRule
+                {
+                    Title="Validate Target Regions",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.TRGT_RGN) && de.HasValue()).Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = MyDeActions.CheckTargetRegions,
+                            Where = de => de.AtrbCdIn(new List<string> {AttributeCodes.TRGT_RGN})
                         }
                     }
                 },
