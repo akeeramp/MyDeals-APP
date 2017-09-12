@@ -9,7 +9,7 @@
         <div class="modal-body">
             <div style="width: 100%; height: 300px;">
                 <div style="height: 100%; overflow: auto; background-color: #fafafa;">
-                    <div ng-repeat="widget in widgets" class="widget-wrapper" ng-click="add(widget)">
+                    <div ng-repeat="widget in widgets" class="widget-wrapper" ng-class="widget.canAdd==true ? 'widget-enabled' : 'widget-disabled'" ng-click="add(widget)">
                         <div class="fl">
                             <i class="{{widget.icon}}"></i>
                         </div>
@@ -32,15 +32,21 @@
         margin-top: 2px !important;
         float: left;
     }
+
     .add-widget-container .modal-body {
         padding: 0;
     }
+
+    .add-widget-container .widget-wrapper {
+        padding: 6px;
+        font-family: 'Intel Clear';
+        font-weight: 200;
+        font-size: 14px;
+    }
+
     .add-widget-container .widget-wrapper .ttl {
         margin-top: 3px; 
         line-height: 1.1em;
-    }
-    .add-widget-container .widget-wrapper:hover .ttl {
-        color: #ffffff;
     }
 
     .add-widget-container .widget-wrapper .dsc {
@@ -48,28 +54,35 @@
         color: #aaaaaa; 
         line-height: 1.1em;
     }
-    .add-widget-container .widget-wrapper:hover .dsc {
-        color: #003C71;
-    }
-
-    .add-widget-container .widget-wrapper {
-        padding: 6px; 
-        font-family: 'Intel Clear'; 
-        font-weight: 200; 
-        font-size: 14px; 
-        cursor: pointer;
-    }
-    .add-widget-container .widget-wrapper:hover {
-        background-color: #00AEEF;
-    }
 
     .add-widget-container .widget-wrapper i {
         font-size: 34px;
         margin-right: 10px;
         color: #0071C5;
     }
-    .add-widget-container .widget-wrapper:hover i {
+
+    .add-widget-container .widget-enabled:hover {
+        background-color: #00AEEF;
+    }
+
+    .add-widget-container .widget-enabled:hover .ttl {
         color: #ffffff;
     }
 
+    .add-widget-container .widget-enabled:hover .dsc {
+        color: #003C71;
+    }
+    
+    .add-widget-container .widget-enabled:hover i {
+        color: #ffffff;
+    }
+
+    .add-widget-container .widget-enabled {
+        cursor: pointer;
+    }
+
+    .add-widget-container .widget-disabled {
+        opacity: .25;
+        cursor: not-allowed;
+    }
 </style>

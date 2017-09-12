@@ -27,6 +27,7 @@ widgetConfig.configWidgets = function () {
         icon: "intelicon-tools",
         type: 'newContract',
         hasConfig: true,
+        canAdd: true,
         template: 'app/dashboard/widgets/newContract.html',
         widgetConfig: {
             options: {},
@@ -46,6 +47,7 @@ widgetConfig.configWidgets = function () {
         icon: "intelicon-grid",
         type: 'contractStatusBoard',
         hasConfig: true,
+        canAdd: true,
         template: 'app/dashboard/widgets/contractStatusBoard.html',
         widgetConfig: {},
         resizeEvent: function (widget) {
@@ -67,6 +69,7 @@ widgetConfig.configWidgets = function () {
         icon: "intelicon-tools",
         type: 'searchContracts',
         hasConfig: true,
+        canAdd: true,
         template: 'app/dashboard/widgets/searchContract.html',
         widgetConfig: {
             options: {},
@@ -91,6 +94,7 @@ widgetConfig.configWidgets = function () {
         icon: "intelicon-tools",
         type: 'openContracts',
         hasConfig: true,
+        canAdd: true,
         template: 'app/dashboard/widgets/openContract.html',
         widgetConfig: {
             options: {},

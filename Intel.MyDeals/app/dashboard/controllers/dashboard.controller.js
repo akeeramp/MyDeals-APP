@@ -272,18 +272,31 @@ function DashboardController($scope, $uibModal, $timeout, $window, $localStorage
 }
 
 function AddWidgetCtrl($scope, $timeout, $rootScope) {
-
+    // All widgets are shown in the add dialog, but if the widget is already being shown in the dashboard, then
+    // canAdd will be set to false so that it can be disabled in the add dialog.
     $scope.widgets = $scope.$parent.dashboardData.allWidgets;
+    Object.keys($scope.widgets).forEach(function (key) {
+        $scope.widgets[key].canAdd = true;
+        for (var i = 0; i < $scope.$parent.dashboardData.currentWidgets.length; i++) {
+            if ($scope.$parent.dashboardData.currentWidgets[i].id == $scope.widgets[key].id) {
+                $scope.widgets[key].canAdd = false;
+                break;
+            }
+        }
+    });
 
     $scope.dismiss = function () {
         $scope.$parent.modalInstance.dismiss();
     };
 
     $scope.add = function (widget) {
-        var widgetToAdd = util.clone(widget);
-        widgetToAdd.position = null; // Don't set a position, so that the widget will be added "smartly" whereever space is available.
-        $scope.$parent.dashboardData.currentWidgets.push(widgetToAdd);
-        $scope.$parent.modalInstance.close();
+        if (widget.canAdd) {
+            var widgetToAdd = util.clone(widget);
+            widgetToAdd.position = null; // Don't set a position, so that the widget will be added "smartly" wherever space is available.
+            $scope.$parent.dashboardData.currentWidgets.push(widgetToAdd);
+
+            $scope.$parent.modalInstance.close();
+        }
     };
 
 }
