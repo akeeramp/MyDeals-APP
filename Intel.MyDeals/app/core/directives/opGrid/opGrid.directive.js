@@ -726,10 +726,6 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                         $scope.saveFunctions(dataItem, "STRT_VOL", dataItem["STRT_VOL"])
                     }
                 }
-                //$scope.$parent.$parent.$parent.$parent.$parent.saveCell(dataItem, "TIER_NBR");
-                //JEFFNOTE: kendo numeric text box saving as ints, but reading in data from spreadsheet as strings.  will this be an issue?
-
-                //TODO: force adjacency?  if change, then also change relevant start/end vols?
             }
 
             $scope.multiDimEditor = function(container, options) {
@@ -842,6 +838,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
             }
 
             $scope.saveFunctions = function (model, col, newVal) {
+
+                model.dirty = true;
 
                 $scope.$parent.$parent.$parent.$parent.$parent.saveCell(model, col);
 
@@ -1333,7 +1331,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                     function (marketSegments) { //returns as an array
                         containerDataItem.MRKT_SEG = marketSegments;
                         //for some reason I can't get the grid to flag these cells as dirty when changing it via modal, so we manually do it below
-                        containerDataItem.dirty = true;
+                        //containerDataItem.dirty = true;
                         //$scope.$parent.$parent.$parent.$parent.$parent.saveCell(containerDataItem, "MRKT_SEG");
 
                         $scope.saveFunctions(containerDataItem, "MRKT_SEG", containerDataItem.MRKT_SEG)
