@@ -32,7 +32,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_EMP_WWID = DB.GetReaderOrdinal(rdr, "EMP_WWID");
                     int IDX_PRFR_CAT = DB.GetReaderOrdinal(rdr, "PRFR_CAT");
                     int IDX_PRFR_KEY = DB.GetReaderOrdinal(rdr, "PRFR_KEY");
-                    int IDX_PRFR_SID = DB.GetReaderOrdinal(rdr, "PRFR_SID");
+                    //int IDX_PRFR_SID = DB.GetReaderOrdinal(rdr, "PRFR_SID");
                     int IDX_PRFR_SUB_CAT = DB.GetReaderOrdinal(rdr, "PRFR_SUB_CAT");
                     int IDX_PRFR_VAL = DB.GetReaderOrdinal(rdr, "PRFR_VAL");
 
@@ -47,7 +47,7 @@ namespace Intel.MyDeals.DataLibrary
                             EMP_WWID = (IDX_EMP_WWID < 0 || rdr.IsDBNull(IDX_EMP_WWID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_EMP_WWID),
                             PRFR_CAT = (IDX_PRFR_CAT < 0 || rdr.IsDBNull(IDX_PRFR_CAT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRFR_CAT),
                             PRFR_KEY = (IDX_PRFR_KEY < 0 || rdr.IsDBNull(IDX_PRFR_KEY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRFR_KEY),
-                            PRFR_SID = (IDX_PRFR_SID < 0 || rdr.IsDBNull(IDX_PRFR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRFR_SID),
+                            //PRFR_SID = (IDX_PRFR_SID < 0 || rdr.IsDBNull(IDX_PRFR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRFR_SID),
                             PRFR_SUB_CAT = (IDX_PRFR_SUB_CAT < 0 || rdr.IsDBNull(IDX_PRFR_SUB_CAT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRFR_SUB_CAT),
                             PRFR_VAL = (IDX_PRFR_VAL < 0 || rdr.IsDBNull(IDX_PRFR_VAL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRFR_VAL)
                         });
@@ -87,7 +87,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_EMP_WWID = DB.GetReaderOrdinal(rdr, "EMP_WWID");
                     int IDX_PRFR_CAT = DB.GetReaderOrdinal(rdr, "PRFR_CAT");
                     int IDX_PRFR_KEY = DB.GetReaderOrdinal(rdr, "PRFR_KEY");
-                    int IDX_PRFR_SID = DB.GetReaderOrdinal(rdr, "PRFR_SID");
+                    //int IDX_PRFR_SID = DB.GetReaderOrdinal(rdr, "PRFR_SID");
                     int IDX_PRFR_SUB_CAT = DB.GetReaderOrdinal(rdr, "PRFR_SUB_CAT");
                     int IDX_PRFR_VAL = DB.GetReaderOrdinal(rdr, "PRFR_VAL");
 
@@ -102,7 +102,7 @@ namespace Intel.MyDeals.DataLibrary
                             EMP_WWID = (IDX_EMP_WWID < 0 || rdr.IsDBNull(IDX_EMP_WWID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_EMP_WWID),
                             PRFR_CAT = (IDX_PRFR_CAT < 0 || rdr.IsDBNull(IDX_PRFR_CAT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRFR_CAT),
                             PRFR_KEY = (IDX_PRFR_KEY < 0 || rdr.IsDBNull(IDX_PRFR_KEY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRFR_KEY),
-                            PRFR_SID = (IDX_PRFR_SID < 0 || rdr.IsDBNull(IDX_PRFR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRFR_SID),
+                            //PRFR_SID = (IDX_PRFR_SID < 0 || rdr.IsDBNull(IDX_PRFR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRFR_SID),
                             PRFR_SUB_CAT = (IDX_PRFR_SUB_CAT < 0 || rdr.IsDBNull(IDX_PRFR_SUB_CAT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRFR_SUB_CAT),
                             PRFR_VAL = (IDX_PRFR_VAL < 0 || rdr.IsDBNull(IDX_PRFR_VAL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRFR_VAL)
                         });
