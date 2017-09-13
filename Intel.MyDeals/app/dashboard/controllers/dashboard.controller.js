@@ -233,39 +233,40 @@ function DashboardController($scope, $uibModal, $timeout, $window, $localStorage
             if (useSavedWidgetSettings && $scope.savedWidgetSettings && $scope.savedWidgetSettings.length > 0) {
                 // There are saved widget settings, so use them.
 
-                var widgets = $scope.dashboardData.allWidgets;
+                var widgetArr = $scope.dashboardData.allWidgets;
 
-                Object.keys($scope.dashboardData.allWidgets).forEach(function (key) {
-                    var widget = util.clone($scope.dashboardData.allWidgets[key]);
+                Object.keys(widgetArr).forEach(function (key) {
+                    var widgetToAdd = util.clone(widgetArr[key]);
 
                     // Get the saved settings for the current widget.
                     var currentWidgetSavedSetting = $scope.savedWidgetSettings.filter(function (obj) {
-                        return obj.id == widget.id;
+                        return obj.id == widgetToAdd.id;
                     });
 
                     // If there is a saved settings for the current widget, use it to set the size and position of the widget.  If there isn't any
                     // saved settings for the current widget, it means that the widget should stay hidden by default.
                     if (currentWidgetSavedSetting && currentWidgetSavedSetting.length > 0) {
-                        widget.size = currentWidgetSavedSetting[0].size;
-                        widget.position = currentWidgetSavedSetting[0].position;
-                        widget.name = currentWidgetSavedSetting[0].name;
+                        widgetToAdd.size = currentWidgetSavedSetting[0].size;
+                        widgetToAdd.position = currentWidgetSavedSetting[0].position;
+                        widgetToAdd.name = currentWidgetSavedSetting[0].name;
 
-                        $scope.dashboardData.currentWidgets.push(widget);
+                        $scope.dashboardData.currentWidgets.push(widgetToAdd);
                     }
                 });
             } else {
-                // There are no saved widget settings, so use the default widget settings.
+                // There are no saved widget settings, so use the layout (default) widget settings.
 
-                var widgets = $scope.dashboards[key].widgets;
+                var widgetLayoutArr = $scope.dashboards[key].widgets;
 
-                for (var i = 0; i < widgets.length; i++) {
-                    var widget = util.clone($scope.dashboardData.allWidgets[widgets[i].id]);
+                for (var i = 0; i < widgetLayoutArr.length; i++) {
+                    var widgetLayout = util.clone(widgetLayoutArr[i]);
+                    var widgetToAdd = util.clone($scope.dashboardData.allWidgets[widgetLayout.id]);
 
-                    if (widgets[i].defaultSize !== undefined) widget.size = widgets[i].defaultSize;
-                    if (widgets[i].defaultPosition !== undefined) widget.position = widgets[i].defaultPosition;
-                    if (widgets[i].name !== undefined) widget.name = widgets[i].name;
+                    if (widgetLayout.defaultSize !== undefined) widgetToAdd.size = widgetLayout.defaultSize;
+                    if (widgetLayout.defaultPosition !== undefined) widgetToAdd.position = widgetLayout.defaultPosition;
+                    if (widgetLayout.name !== undefined) widgetToAdd.name = widgetLayout.name;
 
-                    $scope.dashboardData.currentWidgets.push(widget);
+                    $scope.dashboardData.currentWidgets.push(widgetToAdd);
                 }
             }
         }, 600);
