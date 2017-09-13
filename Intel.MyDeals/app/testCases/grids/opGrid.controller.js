@@ -11,7 +11,7 @@
         $scope.data = [];
         $scope.options = {};
 
-        $q.all([templatesService.readTemplates(), objsetService.readPricingTable(270)])
+        $q.all([templatesService.readTemplates(), objsetService.readPricingTable(1011)])
             .then(function (responses) {
             
                 $scope.templateData = responses[0].data;

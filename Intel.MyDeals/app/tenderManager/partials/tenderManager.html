@@ -1,0 +1,136 @@
+﻿<loading-panel show="isBusy" header="isBusyMsgTitle" description="isBusyMsgDetail"></loading-panel>
+
+<div id="secContainerWrapper">
+    <div id="secHeader">
+        <div style="height: 37px; padding-left: 10px; margin-top: 10px; border-bottom: 1px solid #bcbcbc;">
+            <div class="fl tenderTab" ng-class="{'inactive': !isAll}" ng-click="backToPricingTable()">All Tenders</div>
+            <div class="fl tenderTab" ng-class="{'inactive': !isApproval}" ng-click="publishWipDeals()">Approval Status</div>
+            <div class="clearboth"></div>
+        </div>
+        
+        <div class="toolbarBasic">
+            <span class="k-textbox k-space-left" style="width: 330px; margin-top: -4px; margin-right: 20px;">
+                <input type="text" placeholder="enter search criteria" />
+                <i class="k-icon intelicon-search" style="font-size: 26px; color: #00AEEF; margin-top: -12px;"></i>
+            </span>
+            <button class="btn btn-sm btn-skyblue" type="button" ng-click="create('ECAP')" style="margin-top: -3px; margin-right: 10px;">
+                <i class="intelicon-plus-max" aria-hidden="true"></i> Create ECAP Tender
+            </button>
+            <button class="btn btn-sm btn-skyblue" type="button" ng-click="create('KIT')" style="margin-top: -3px; margin-right: 10px;">
+                <i class="fa fa-plus" aria-hidden="true"></i> Create KIT Tender
+            </button>
+            <button class="btn btn-sm btn-skyblue" type="button" ng-click="loadData()" style="margin-top: -3px; margin-right: 10px;">
+                <i class="fa fa-plus" aria-hidden="true"></i> Load Data
+            </button>
+        </div>
+    </div>
+    
+    <!--ng-if="data.length > 0"-->
+    <div id="secContainer">
+        <div op-grid style="height: 100%;" op-data="data" op-options="options" ng-if="data.length > 0"></div>
+    </div>
+
+</div>
+
+
+
+<style>
+    /*.op-grid-header {
+        height: 0;
+        margin-top: 0;
+    }
+    .op-grid-container-wrapper { 
+        padding: 0 0 0 0;
+    }*/
+
+    .toolbarBasic {
+        padding: 10px 10px;
+    }
+
+    #secContainerWrapper {
+        height: 100%;
+        padding: 100px 0 0 0;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        font-size: 12px;
+        font-family: "Intel Clear";
+    }
+    #secHeader {
+        height: 100px;
+        margin-top: -100px;
+        font-size: 14px;
+        padding: 5px 0 3px 0;
+        font-family: "Intel Clear";
+        font-weight: 200;
+        font-style: normal;
+        background-color: #ffffff;
+        border-bottom: 0 solid transparent;
+    }
+    #secHeader .col-md-11 {
+        padding-left: 4px;
+    }
+    #secContainer {
+        height: 100%;
+        overflow: auto;
+    }
+
+
+    .btn-skyblue {
+        background-color: #00AEEF;
+        border: 1px solid  #00AEEF;
+        color: #ffffff;
+        border-radius: 4px;
+    }
+    .btn-skyblue:hover {
+        background-color: #0071C5;
+        border: 1px solid  #0071C5;
+        color: #ffffff;
+    }
+    .btn-skyblue i {
+        font-size: 14px;
+        margin-right: 6px;
+    }
+
+
+    .tenderTab {
+        border-top: 1px solid #d7d7d7;
+        border-left: 1px solid #d7d7d7;
+        border-right: 1px solid #d7d7d7;
+        margin-right: 5px;
+        margin-bottom: -1px;
+        color: #00AEEF;
+        height: 36px;
+        padding: 6px 15px;
+        background-color: #ffffff;
+        font-size: 14px;
+        font-weight: 200;
+        font-style: normal;
+        font-family: "Intel Clear";
+        cursor: default;
+        position: relative;
+        top: 1px;
+    }
+    .tenderTab.inactive {
+        background: #fdfdfd; /* Old browsers */
+        background: -moz-linear-gradient(top,  #fdfdfd 0%, #d9d9d9 100%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(top,  #fdfdfd 0%,#d9d9d9 100%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to bottom,  #fdfdfd 0%,#d9d9d9 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fdfdfd', endColorstr='#d9d9d9',GradientType=0 ); /* IE6-9 */
+        color: #003C71;
+        cursor: pointer;
+    }
+    .tenderTab.inactive:hover {
+        background: #fdfdfd; /* Old browsers */
+        background: -moz-linear-gradient(top,  #d9d9d9 0%, #fdfdfd 100%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(top,  #d9d9d9 0%,#fdfdfd 100%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to bottom,  #d9d9d9 0%,#fdfdfd 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d9d9d9', endColorstr='#fdfdfd',GradientType=0 ); /* IE6-9 */
+        color: #00AEEF;
+    }
+
+    .noborders {
+        border: 0 solid transparent !important;
+    }
+
+</style>

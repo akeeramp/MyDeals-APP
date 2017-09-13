@@ -242,6 +242,7 @@
     <Compile Include="Controllers\CodingPracticesController.cs" />
     <Compile Include="Controllers\API\SecurityAttributesController.cs" />
     <Compile Include="Controllers\ConstantsController.cs" />
+    <Compile Include="Controllers\TenderManagerController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\CostTestController.cs" />
     <Compile Include="Controllers\DocsController.cs" />
@@ -430,6 +431,10 @@
     <Content Include="app\core\directives\securityLoader\securityLoader.directive.js" />
     <Content Include="app\shared\services\userPreferences.service.js" />
     <Content Include="app\shared\services\security.service.js" />
+    <Content Include="app\tenderManager\controllers\tenderManager.controller.js" />
+    <Content Include="app\tenderManager\partials\tenderManager.html" />
+    <Content Include="app\tenderManager\tenderManager.module.js" />
+    <Content Include="app\tenderManager\tenderManager.route.js" />
     <Content Include="css\_loadingPanel.directive.css" />
     <Content Include="app\core\directives\messageBoard\messageBoard.directive.html" />
     <Content Include="app\core\directives\messageBoard\messageBoard.directive.js" />
@@ -1626,6 +1631,7 @@
     <Content Include="Scripts\kendo\2017.R1\kendo.window.min.js.map" />
     <Content Include="Views\CodingPractices\UnitTesting.cshtml" />
     <Content Include="Views\Shared\_Footer.cshtml" />
+    <Content Include="Views\TenderManager\Index.cshtml" />
     <None Include="Web.cons.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -608,7 +608,7 @@ namespace Intel.MyDeals.BusinessRules
             List<MyDealsAttribute> onChangeItems = atrbMstr.All.Where(a => a.MJR_MNR_CHG == "MAJOR").ToList();
             List<MyDealsAttribute> onChangeIncreaseItems = atrbMstr.All.Where(a => a.MJR_MNR_CHG == "MAJOR_INCREASE").ToList();
 
-            if (!r.ExtraArgs.Any()) return;
+	        if (!r.ExtraArgs.Any()) return;
 
             var myDealsData = (MyDealsData) r.ExtraArgs[0];
 

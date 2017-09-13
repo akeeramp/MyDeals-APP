@@ -22,6 +22,7 @@
         'app.contract',
         'app.costtest',
         'app.dashboard',
+        'app.tenderManager',
         'app.testCases'
     ]);
 

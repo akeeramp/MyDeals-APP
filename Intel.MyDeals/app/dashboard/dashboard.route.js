@@ -24,7 +24,7 @@
                             resolve: {
                                 securityLoaded: ['securityService', function (securityService) {
                                     return securityService.loadSecurityData();
-                                }],
+                                }]
                             }
                         }
                     }

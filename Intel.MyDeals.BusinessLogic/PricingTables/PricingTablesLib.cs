@@ -38,7 +38,7 @@ namespace Intel.MyDeals.BusinessLogic
 
         public OpDataCollectorFlattenedDictList GetFullNestedPricingTable(int id)
         {
-            MyDealsData myDealsData = GetPricingTable(id, true).FillInHolesFromAtrbTemplate();
+            MyDealsData myDealsData = GetPricingTable(id, true).AddParentPS(id).FillInHolesFromAtrbTemplate();
 
             OpDataCollectorFlattenedDictList data = new OpDataCollectorFlattenedDictList();
 
@@ -46,6 +46,12 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 data[opDataElementType] = myDealsData.ToOpDataCollectorFlattenedDictList(opDataElementType, 
                     opDataElementType == OpDataElementType.PRC_TBL_ROW ? ObjSetPivotMode.UniqueKey : ObjSetPivotMode.Nested);
+            }
+
+            var prntActions = data[OpDataElementType.PRC_ST][0]["_actions"];
+            foreach (OpDataCollectorFlattenedItem item in data[OpDataElementType.WIP_DEAL])
+            {
+                item["_actionsPS"] = prntActions;
             }
 
             return data;

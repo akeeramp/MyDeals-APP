@@ -586,6 +586,16 @@
                 });
         }
 
+        $scope.filterDealTypes = function(items) {
+            var result = {};
+            angular.forEach(items, function (value, key) {
+                if (value.name !== 'CAP_BAND' && value.name !== 'ALL_TYPES') {
+                    result[key] = value;
+                }
+            });
+            return result;
+        }
+
         $scope.onFileSelect = function (e) {
             // Hide default kendo upload and clear buttons as contract is not generated at this point. Upload files after contract id is generated.
             // TODO: Do we want to show them in edit scenario ?

@@ -45,7 +45,9 @@ namespace Intel.MyDeals.BusinessLogic
                 Attributes.TITLE.ATRB_SID
             };
 
-            OpDataCollectorFlattenedDictList opDcFlatDictList = OpDataElementType.PRC_TBL.GetByIDs(new List<int> { ptId }, opDataElementTypes, atrbs).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
+            OpDataCollectorFlattenedDictList opDcFlatDictList = OpDataElementType.PRC_TBL.GetByIDs(new List<int> { ptId }, opDataElementTypes, atrbs).AddParentPS(ptId).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
+
+            var prntActions = opDcFlatDictList[OpDataElementType.PRC_ST][0]["_actions"];
 
             OpDataCollectorFlattenedList data = opDcFlatDictList[OpDataElementType.WIP_DEAL];
 
@@ -56,6 +58,7 @@ namespace Intel.MyDeals.BusinessLogic
                 if (!item.ContainsKey("isLinked")) item["isLinked"] = false;
                 if (!childParent.ContainsKey(dcPrntId)) childParent[dcPrntId] = 0;
                 childParent[dcPrntId]++;
+                item["_actionsPS"] = prntActions;
             }
 
             // now set total values

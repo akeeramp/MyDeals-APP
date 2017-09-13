@@ -210,6 +210,37 @@ namespace Intel.MyDeals.BusinessLogic
         #endregion
 
 
+        public static MyDealsData AddParentPS(this MyDealsData myDealsData, int id)
+        {
+            MyDealsData myDealsUpperData = myDealsData.GetParentPS(id);
+            if (myDealsUpperData != null)
+            {
+                myDealsData[OpDataElementType.PRC_ST] = myDealsUpperData[OpDataElementType.PRC_ST];
+            }
+            return myDealsData;
+        }
+
+        public static MyDealsData GetParentPS(this MyDealsData myDealsData, int id)
+        {
+            if (myDealsData.ContainsKey(OpDataElementType.PRC_TBL))
+            {
+                OpDataCollector dc = myDealsData[OpDataElementType.PRC_TBL].AllDataCollectors.FirstOrDefault(d => d.DcID == id);
+                if (dc == null) return null;
+
+                int prntId = dc.DcParentID;
+                return OpDataElementType.PRC_ST.GetByIDs(new List<int> { prntId }, new List<OpDataElementType>
+                {
+                    OpDataElementType.PRC_ST
+                });
+            }
+
+            // if here... PRC_TBL doesn't exist... lets look up in DB
+            return OpDataElementType.PRC_TBL.GetByIDs(new List<int> { id }, new List<OpDataElementType>
+            {
+                OpDataElementType.PRC_ST
+            });
+        }
+
 
         #region FillInHolesFromAtrbAtrbTemplate
 
@@ -589,7 +620,8 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 foreach (var item in temp[OpDataElementType.PRC_TBL].AllDataElements)
                 {
-                    prcSt2PrcTblMapping[item.DcID] = prcSt2StgMapping[item.DcParentID];
+                    if (prcSt2StgMapping.ContainsKey(item.DcParentID))
+                        prcSt2PrcTblMapping[item.DcID] = prcSt2StgMapping[item.DcParentID];
                 }
             }
 

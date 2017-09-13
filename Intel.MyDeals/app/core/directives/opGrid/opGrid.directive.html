@@ -1,12 +1,10 @@
-﻿
-<div class="op-grid-container-wrapper">
-        
-        <div class="op-grid-header" ng-show="isToolbarVisible">
+﻿    <div class='op-grid-container-wrapper'>
+        <div ng-show="isToolbarVisible && !hideToolbar" class='op-grid-header'>
             <div class="dealTag" ng-if="dealCnt" style="position: absolute; top: 0; right: 0; z-index: 100; font-size: 16px;">
                 {{displayDealTypes()}}
             </div>
             <div id="tabstrip" kendo-tab-strip class="gradTab" k-ng-delay="tabStripDelay" ng-show="tabStripDelay">
-                
+
                 <ul class="fl">
                     <li ng-repeat="group in opOptions.groups | orderBy:'order'" ng-click="showCols(group.name)" ng-hide="group.isHidden">
                         <i class="intelicon-pin-outlined" ng-hide="{{ group.name == 'All' || group.name == 'CAP Info' }}" title="Pin tab so it always shows in the grid" ng-click="clickPin($event, group.name)"></i> {{group.name}}
@@ -15,12 +13,8 @@
                         <i class="intelicon-close-solid closeGrp" ng-hide="{{ group.name == 'All' || group.name == 'CAP Info' || !isLayoutConfigurable}}" title="Close tab" ng-click="removeGrp($event, group.name)"></i>
                     </li>
                 </ul>
-                <!--<div class="fr dealTag" ng-if="dealCnt">
-                    {{displayDealTypes()}}
-                </div>
-                <div class="clearboth"></div>-->
             </div>
-            
+
             <div class="toolbar">
 
                 <div class="fl">
@@ -51,7 +45,7 @@
                     </button>
 
                 </div>
-                                
+
                 <div class="fl" style="margin-top: 2px; margin-left: 4px;" ng-show="isLayoutConfigurable">
                     <ul kendo-menu k-options="columnMenu">
                         <li>
@@ -86,7 +80,7 @@
                     <ul kendo-menu>
                         <li>
                             <i class="fl intelicon-settings-solid" style="font-size: 30px !important; vertical-align: text-top;" title="Manage Columns"></i>
-                            <span class="fl" style="font-size: 12px; line-height: 1em; padding: 4px;">Grid<br />Settings</span>
+                            <span class="fl" style="font-size: 12px; line-height: 1em; padding: 4px;">Grid<br/>Settings</span>
                             <i style="font-size: 40px !important; width: 1px !important;"></i>
                             <ul>
                                 <li ng-click="addGrp()">
@@ -108,10 +102,10 @@
                         </li>
                     </ul>
                 </div>
-                
+
                 <div class="fr" style="margin-top: 2px;">
                     <span class="k-textbox k-space-left" style="width: 300px; font-size: 16px">
-                        <input type="search" ng-keyup="clkSearchGrid($event)" placeholder="search..." ng-model="searchFilter" />
+                        <input type="search" ng-keyup="clkSearchGrid($event)" placeholder="search..." ng-model="searchFilter"/>
                         <a ng-click="searchGrid()" class="k-icon" style="width: 30px; margin-left: -3px; margin-top: -12px; height: 25px;">
                             <i class="intelicon-search" style="font-size: 18px; color: #00AEEF;"></i>
                         </a>
@@ -400,6 +394,7 @@
         font-weight: 200;
         font-style: normal;
     }
+
     .op-grid-container {
         height: 100%;
         /*width: 100%;  This causes the grid to loose it's vertical scrollbar'*/
