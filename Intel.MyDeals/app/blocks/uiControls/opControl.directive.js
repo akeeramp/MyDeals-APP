@@ -219,6 +219,7 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
             var updateTreeView = function () {
                 if (scope.showTreeView === true && msDataBound === true && tvDataBound === true) {
                     var multiselect = $("#" + scope.opCd + "_MS").data("kendoMultiSelect");
+                    multiselect.input.attr("readonly", true);
                     var treeview = $("#" + scope.opCd).data("kendoTreeView");
 
                     if (multiselect == null || treeview == null) {
@@ -271,10 +272,6 @@ function opControl($http, lookupsService, $compile, $templateCache, logger, $q, 
                 updateTreeView();
             }
 
-            scope.onClose = function () {
-                scope.showTreeView = false;
-                //updateTreeView(); we are hiding the treeview, why do we need to update it?
-            }
 
             scope.onDeselect = function (e) {
                 var item = e.dataItem.DROP_DOWN;

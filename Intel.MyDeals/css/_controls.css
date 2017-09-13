@@ -527,7 +527,7 @@
     z-index: 1000;
 }
 
-.msClsBtn {
+/*.msClsBtn {
     background-color: #00AEEF;
     color: #ffffff;
     cursor: pointer;
@@ -536,11 +536,11 @@
     text-transform: uppercase;
     text-align: center;
     height: 28px;
-}
+}*/
 
-.msClsBtn:hover {
+/*.msClsBtn:hover {
     background-color: #0071C5;
-}
+}*/
 
 .opUiContainer.md .opUiLabel.msLabel {
     font-size: 14px;
