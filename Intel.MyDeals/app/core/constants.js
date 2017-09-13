@@ -128,6 +128,9 @@
                     "WF_STG_CD": {
                         "Groups": ["Deal Info"]
                     },
+                    "TRKR_NBR": {
+                        "Groups": ["Deal Info"]
+                    },
                     "OBJ_SET_TYPE_CD": {
                         "Groups": ["All"]
                     },
@@ -307,6 +310,9 @@
                     "WF_STG_CD": {
                         "Groups": ["Deal Info"]
                     },
+                    "TRKR_NBR": {
+                        "Groups": ["Deal Info"]
+                    },
                     "OBJ_SET_TYPE_CD": {
                         "Groups": ["All"]
                     },
@@ -403,6 +409,9 @@
                         "Groups": ["Deal Info"]
                     },
                     "WF_STG_CD": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "TRKR_NBR": {
                         "Groups": ["Deal Info"]
                     },
                     "OBJ_SET_TYPE_CD": {

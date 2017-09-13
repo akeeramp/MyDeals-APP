@@ -710,6 +710,21 @@ namespace Intel.MyDeals.DataLibrary
                 IsSortable = true,
                 Width = 100
             });
+
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
+                AtrbCd = AttributeCodes.TRKR_NBR,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Width = 130,
+                Template = "#=gridUtils.uiDimControlWrapper(data, 'TRKR_NBR', '20___0')#",
+                DataType = "object",
+                IsFilterable = true,
+                IsSortable = true
+                //Format = "{0:c}",
+                //UiType = "NumericTextBox",
+                //Editor = "multiDimEditor"
+            });
             items.Add(new UiTemplateContainerItem
             {
                 Id = 20,
