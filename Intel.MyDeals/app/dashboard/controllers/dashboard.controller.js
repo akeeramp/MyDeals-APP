@@ -165,14 +165,19 @@ function DashboardController($scope, $uibModal, $timeout, $window, $localStorage
         });
     };
 
+    $scope.defaultLayout = function () {
+    	// By setting the third parameter to 'false', any saved widget settings will
+	// not be used.  So, we will get the default widget settings.
+        $scope.addWidgetByKey($scope, $scope.selectedDashboardId, false);
+    };    
 
     $scope.dashboards = widgetConfig.getAllWidgetLayouts();
 
     $scope.$watch('selectedDashboardId', function (newVal, oldVal) {
         if (newVal !== oldVal) {
-            $scope.addWidgetByKey($scope, $scope.selectedDashboardId);
+            $scope.addWidgetByKey($scope, $scope.selectedDashboardId, true);
         } else {
-            $scope.addWidgetByKey($scope, $scope.selectedDashboardId);
+            $scope.addWidgetByKey($scope, $scope.selectedDashboardId, true);
         }
     });
 
@@ -199,7 +204,7 @@ function DashboardController($scope, $uibModal, $timeout, $window, $localStorage
     }
 
     $scope.changeDashboard = function (scope, key) {
-        $scope.addWidgetByKey(scope, key);
+        $scope.addWidgetByKey(scope, key, true);
     }
 
     $scope.getSavedWidgetSettings = function (scope, key) {
@@ -222,14 +227,14 @@ function DashboardController($scope, $uibModal, $timeout, $window, $localStorage
             });
     }
 
-    $scope.addWidgetByKey = function (scope, key) {
+    $scope.addWidgetByKey = function (scope, key, useSavedWidgetSettings) {
         $scope.clear();
 
         // Get any widget settings that were previously saved to the database for the specified key (user role).
         $scope.getSavedWidgetSettings(scope, key);
 
         $timeout(function () {
-            if ($scope.savedWidgetSettings && $scope.savedWidgetSettings.length > 0) {
+            if (useSavedWidgetSettings && $scope.savedWidgetSettings && $scope.savedWidgetSettings.length > 0) {
                 // There are saved widget settings, so use them.
                 
                 var widgets = $scope.dashboardData.allWidgets;
