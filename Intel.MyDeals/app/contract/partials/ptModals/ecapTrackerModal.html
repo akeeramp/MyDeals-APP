@@ -1,0 +1,37 @@
+﻿<script type="text/ng-template" id="ecapTrackerModal">
+	<div class="modal-header">
+		<h3 class="modal-title" id="modal-title">Select {{$ctrl.colData.label}}</h3>
+	</div>
+	<div class="modal-body" id="modal-body">
+		<div ng-show="!$ctrl.isDropdownsLoaded">
+			<div class="spinner">
+				<div class="rect1"></div>
+				<div class="rect2"></div>
+				<div class="rect3"></div>
+				<div class="rect4"></div>
+				<div class="rect5"></div>
+			</div>
+			<p style="text-align:center">Please wait as we fetch your possible tracker numbers.</p>
+		</div>
+
+
+		<div ng-show="$ctrl.isDropdownsLoaded">
+			<p>
+				Select which {{$ctrl.colData.label}} to apply below: <br />
+			</p>
+
+			<select kendo-drop-down-list style="width: 160px;" k-options="$ctrl.dropDownOptions" k-ng-model="$ctrl.popupResult" k-ng-delay="$ctrl.isDropdownsLoaded"></select>
+		</div>
+		<br />
+
+		<div class="row">
+			<div class="col-md-12">
+				<div class="fr">
+					<button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
+					<button ng-show="$ctrl.isDropdownsLoaded" class="btn btn-primary" type="button" ng-click="$ctrl.ok()">Add to grid</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--<div class="modal-footer">	</div>-->
+</script>

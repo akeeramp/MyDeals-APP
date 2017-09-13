@@ -805,9 +805,8 @@ namespace Intel.MyDeals.BusinessRules
 		{
 			IEnumerable<IOpDataElement> atrbs = r.Dc.GetDataElementsWhere(de => de.AtrbCd == myAtrbCd); // NOTE: "10" is the Tier's dim key. In thoery this shouldn't need to change
 			IOpDataElement atrbWithValidation = atrbs.FirstOrDefault(); // We need to pick only one of the tiered attributes to set validation on, else we'd keep overriding the message value per tier
-
-			IOpDataElement test = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.NUM_OF_TIERS).FirstOrDefault();
-			int numOfTiers = Int32.Parse(test.AtrbValue.ToString());
+			
+			int numOfTiers = Int32.Parse(r.Dc.GetDataElement(AttributeCodes.NUM_OF_TIERS).AtrbValue.ToString());
 
 			// Validate and set validation message if applicable on each tier
 			foreach (IOpDataElement atrb in atrbs)
@@ -822,8 +821,7 @@ namespace Intel.MyDeals.BusinessRules
 						AddTierValidationMessage(atrbWithValidation, validationMessage, tier);
 						continue;
 					}
-
-						bool teklklst = atrb.AtrbValue.ToString().Equals("UNLIMITED", StringComparison.InvariantCultureIgnoreCase);
+					
 					// unlimited end vol
 					if (isEndVol && (tier == numOfTiers) && atrb.AtrbValue.ToString().Equals("UNLIMITED", StringComparison.InvariantCultureIgnoreCase))
 					{
@@ -863,7 +861,34 @@ namespace Intel.MyDeals.BusinessRules
 			de.ValidationMessage = jsonMsg;
 			//BusinessLogicDeActions.AddJsonValidationMessage(de, jsonMsg);
 		}
-
 		#endregion
+
+
+		public static void CheckTotalDollarAmount(params object[] args)
+		{
+			MyOpRuleCore r = new MyOpRuleCore(args);
+			if (!r.IsValid) return;
+
+			IOpDataElement myRebateType = r.Dc.GetDataElement(AttributeCodes.REBATE_TYPE);
+			IOpDataElement totalDollarObj = r.Dc.GetDataElement(AttributeCodes.TOTAL_DOLLAR_AMOUNT);
+			double totalDollarAmount = 0;			
+			Double.TryParse(totalDollarObj.AtrbValue.ToString(), out totalDollarAmount);
+
+			if (myRebateType.AtrbValue.ToString().Equals("DEBIT MEMO", StringComparison.OrdinalIgnoreCase))
+			{
+				if (totalDollarAmount >= 0)
+				{
+					BusinessLogicDeActions.AddValidationMessage(totalDollarObj, "Total dollar amount must be negative for debit memos.");
+				}
+			}
+			else
+			{
+				if (totalDollarAmount <= 0)
+				{
+					BusinessLogicDeActions.AddValidationMessage(totalDollarObj, "Total dollar amount must be positive for non-debit memos.");
+				}
+			}
+		}
+
 	}
 }

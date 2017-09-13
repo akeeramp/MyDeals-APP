@@ -1059,11 +1059,15 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         }
                     }
 
-                    // Add validation dropdowns/multiselects onto the cells
-                    if (myFieldModel.opLookupText === "DROP_DOWN" || myFieldModel.opLookupText === "dropdownName" || (myFieldModel.opLookupText === "CUST_DIV_NM" && isCorpDiv)) {
+                    if (myFieldModel.field === "ORIG_ECAP_TRKR_NBR") {
+                    	// ecap tracker number
+                    	sheet.range(myColumnName + ":" + myColumnName).editor("ecapAdjTracker");
+                    } 
+                    else if (myFieldModel.opLookupText === "DROP_DOWN" || myFieldModel.opLookupText === "dropdownName" || (myFieldModel.opLookupText === "CUST_DIV_NM" && isCorpDiv)) {
+						// Add validation dropdowns/multiselects onto the cells
                     	applyDropDownsData(sheet, myFieldModel, myColumnName, dropdownValuesSheet);
 
-                        if (myFieldModel.uiType === "RADIOBUTTONGROUP" || myFieldModel.uiType === "DROPDOWN") {
+						if (myFieldModel.uiType === "RADIOBUTTONGROUP" || myFieldModel.uiType === "DROPDOWN") {
                     		sheet.range(myColumnName + ":" + myColumnName).editor("dropdownEditor");
                             //applyDropDowns(sheet, myFieldModel, myColumnName);
                         } else if (myFieldModel.uiType === "EMBEDDEDMULTISELECT" || myFieldModel.uiType === "MULTISELECT") {
@@ -1072,21 +1076,19 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         }
                     } else {
                         // Add validations based on column type
-                        switch (myFieldModel.type) {
-                            case "date":
-                                var cellSelection = sheet.range(myColumnName + ":" + myColumnName);
-                                //sheet.range(myColumnName + ":" + myColumnName).format("MM/dd/yyyy");
-                                cellSelection.editor("datePickerEditor");
-
-                                vm.requiredStringColumns[key] = true;
-                                break;
-                            case "number":
-                                // Money Formatting
-                                if (myFieldModel.format == "{0:c}") {
-                                    sheet.range(myColumnName + ":" + myColumnName).format("$##,#0.00");
-                                } else {
-                                	sheet.range(myColumnName + ":" + myColumnName).format("##,#");
-                                }
+                    	switch (myFieldModel.type) {
+                    		case "date":
+                    			sheet.range(myColumnName + ":" + myColumnName).editor("datePickerEditor");
+                    			//sheet.range(myColumnName + ":" + myColumnName).format("MM/dd/yyyy");   
+                    			vm.requiredStringColumns[key] = true;
+                    			break;
+                    		case "number":	
+                    			// Money Formatting
+								if (myFieldModel.format == "{0:c}") {
+                    				sheet.range(myColumnName + ":" + myColumnName).format("$##,#0.00");
+                    			} else {
+                    				sheet.range(myColumnName + ":" + myColumnName).format("##,#");
+                    			}
                                 break;
                             case "string":
                                 if (!myFieldModel.nullable) {
@@ -2136,6 +2138,74 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 context.callback(new Date(selectedItem));
             }, function () { });
         }
+    });
+
+
+	// NOTE: Thhis is a workaround because the bulit-in kendo spreadsheet datepicker causes major perfromance issues in IE
+    kendo.spreadsheet.registerEditor("ecapAdjTracker", function () {
+    	var context;
+
+    	// Further delay the initialization of the UI until the `edit` method is
+    	// actually called, so here just return the object with the required API.
+    	return {
+    		edit: function (options) {
+    			context = options;
+    			open();
+    		},
+    		icon: "fa fa-check ssEditorBtn"
+    	};
+
+    	function open() {
+    		// Get selected cell
+    		var currColIndex = context.range._ref.col;
+    		var cellCurrVal = context.range.value();
+
+    		// Get column name out of selected cell
+    		var colName = root.letterToCol[String.fromCharCode(intA + currColIndex)]
+
+    		// Get columnData (urls, name, etc) from column name
+            var dealType = $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD;
+    		var colData = $scope.$parent.$parent.templates.ModelTemplates.PRC_TBL_ROW[dealType].model.fields[colName];
+			
+    		var currRowData = root.pricingTableData.PRC_TBL_ROW[context.range._ref.row - 1]; // minus one to account for index
+
+    		// Get data to filter ECAP numbers against
+    		/////// TODO: exact start date, end date, geo, cust product
+    		var filterData = {
+    			'DEAL_STRT_DT': currRowData.START_DT,
+    			'DEAL_END_DT': currRowData.END_DT,
+    			'GEO_MBR_SID': currRowData.GEO_COMBINED,
+    			'CUST_MBR_SID': currRowData.CUST_MBR_SID,
+    			'PRD_MBR_SID': currRowData.PTR_USER_PRD
+    		};
+
+    		var modalInstance = $uibModal.open({
+    			ariaLabelledBy: 'modal-title',
+    			ariaDescribedBy: 'modal-body',
+    			templateUrl: 'ecapTrackerModal',
+    			controller: 'EcapTrackerModalCtrl',
+    			controllerAs: '$ctrl',
+    			size: 'md',
+    			resolve: {
+    				cellCurrValues: function () {
+    					return cellCurrVal;
+    				},
+    				colData: function () {
+    					return colData;
+    				},
+    				colName: function () {
+    					return colName;
+    				},
+    				filterData: function () {
+    					return filterData;
+    				}
+    			}
+    		});
+
+    		modalInstance.result.then(function (selectedItem) {
+    			context.callback(selectedItem);
+    		}, function () { });
+    	}
     });
 
     function getPrductDetails(dataItem, priceCondition) {

@@ -353,7 +353,43 @@ namespace Intel.MyDeals.DataLibrary
                 IsDimKey = true,
                 IsRequired = true
             });
-            items.Add(new UiTemplateContainerItem
+			items.Add(new UiTemplateContainerItem
+			{
+				Id = 20,
+				AtrbCd = AttributeCodes.TOTAL_DOLLAR_AMOUNT,
+				ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+				ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM },
+				Width = 100,
+				Label = "Total Dollar Amount",
+				Format = "{0:c}",
+				IsRequired = true
+			});
+
+			items.Add(new UiTemplateContainerItem
+			{
+				Id = 20,
+				AtrbCd = AttributeCodes.ORIG_ECAP_TRKR_NBR,
+				ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+				ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM },
+				DataType = "number",
+				Label = "Original Tracker #",
+				LookupUrl = "/api/Dropdown/GetEcapTrackerList/",
+				LookupText = "DROP_DOWN",
+				LookupValue = "DROP_DOWN",
+				Width = 100,
+			});
+			items.Add(new UiTemplateContainerItem
+			{
+				Id = 20,
+				AtrbCd = AttributeCodes.ADJ_ECAP_UNIT,
+				ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+				ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM },
+				Width = 100,
+				Label = "Adjustment Ecap Unit",
+				DataType = "number",
+				IsRequired = true
+			});
+			items.Add(new UiTemplateContainerItem
             {
                 Id = 29,
                 AtrbCd = AttributeCodes.VOLUME,
@@ -1523,35 +1559,43 @@ namespace Intel.MyDeals.DataLibrary
 			items.Add(new UiTemplateContainerItem
 			{
 				Id = 20,
-				AtrbCd = AttributeCodes.TOTAL_DOLLAR_AMOUNT,
-				ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL, OpDataElementType.DEAL },
+				AtrbCd = AttributeCodes.ORIG_ECAP_TRKR_NBR, 
+				Label = "Original Tracker #",
+				ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL, OpDataElementType.DEAL },
 				ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM },
+				DataType = "number",
+				UiType = "MULTISELECT", // TODO: Change this to ECAP Tracker type
 				Width = 100,
-				Label = "Total Dollar Amount",
-				Format = "{0:c}",
-				IsRequired = true
+				Template = "#=gridUtils.uiControlWrapper(data, 'ORIG_ECAP_TRKR_NBR')#",
+                LookupUrl = "/api/Dropdown/GetEcapTrackerList/",
+				LookupText = "DROP_DOWN",
+				LookupValue = "DROP_DOWN",
+				IsFilterable = true,
+				IsSortable = true
 			});
 			items.Add(new UiTemplateContainerItem
 			{
 				Id = 20,
-				AtrbCd = AttributeCodes.ORIG_ECAP_TRKR_NBR,
-				ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL, OpDataElementType.DEAL },
+				AtrbCd = AttributeCodes.TOTAL_DOLLAR_AMOUNT,
+				Label = "Total Dollar Amount",
+				ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL, OpDataElementType.DEAL },
 				ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM },
-				DataType = "number",
-				Label = "Original Tracker #",
 				Width = 100,
-				IsReadOnly = true
+				Template = "#=gridUtils.uiControlWrapper(data, 'TOTAL_DOLLAR_AMOUNT')#",
+				IsFilterable = true,
+				IsSortable = true
 			});
 			items.Add(new UiTemplateContainerItem
 			{
 				Id = 20,
 				AtrbCd = AttributeCodes.ADJ_ECAP_UNIT,
-				ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL, OpDataElementType.DEAL },
+				Label = "Adjustment Ecap Unit",
+				ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL, OpDataElementType.DEAL },
 				ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM },
 				Width = 100,
-				Label = "Adjustment Ecap Unit",
-				Format = "{0:c}",
-				IsRequired = true
+				Template = "#=gridUtils.uiControlWrapper(data, 'ADJ_ECAP_UNIT')#",
+				IsFilterable = true,
+				IsSortable = true
 			});
 			#endregion WIP DEAL
 

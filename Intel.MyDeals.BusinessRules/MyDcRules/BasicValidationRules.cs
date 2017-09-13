@@ -339,8 +339,34 @@ namespace Intel.MyDeals.BusinessRules
                     ActionRule = MyDcActions.CheckProductJson,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
                     InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW}
-                }
-            };
+                },
+				new MyOpRule
+				{
+					Title="Forcast Volume must be positive", //REBATE_TYPE
+					ActionRule = MyDcActions.ExecuteActions,
+					InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
+					InObjSetType = new List<string> {OpDataElementSetType.PROGRAM.ToString()},
+					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
+					AtrbCondIf = dc => dc.IsNegativeOrZero(AttributeCodes.FRCST_VOL),
+					OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+					{
+						new OpRuleAction<IOpDataElement>
+						{
+							Action = BusinessLogicDeActions.AddValidationMessage,
+							Args = new object[] {"Forcast volume must be positive"},
+							Where = de => de.AtrbCdIn(new List<string> { AttributeCodes.FRCST_VOL }) && de.HasValue() && de.IsNegativeOrZero()
+						}
+					}
+				},
+				new MyOpRule
+				{
+					Title="Total dollar amount must be positive for non-debit memos but negative for debit memos",
+                    ActionRule = MyDcActions.CheckTotalDollarAmount,
+					InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
+					InObjSetType = new List<string> {OpDataElementSetType.PROGRAM.ToString()},
+					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate}
+				}				
+			};
         }
     }
 }

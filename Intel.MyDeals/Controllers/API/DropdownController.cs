@@ -154,5 +154,21 @@ namespace Intel.MyDeals.Controllers.API
 			);
 		}
 
-}
+		// TODO
+		[HttpPost]
+		[Route("GetEcapTrackerList")]
+		public IEnumerable<BasicDropdown> GetEcapTrackerList(EcapTrackerFilter filterData)
+		{
+			// TODO: get geo id from string
+			// TODO: get product id from string
+
+			int test = 0;
+			return GetDropdowns("MRKT_SEG_NON_CORP");
+			//// TODO
+			//return SafeExecutor(() => _contractsLib.GetEcapTrackerList(id)
+			//	, $"Unable to get WIP Deals {id}"
+			//);
+		}
+
+	}
 }
