@@ -1,23 +1,27 @@
-﻿    <div class="dashboard">
-        <div gridster="gridsterOptions">
-            <ul>
-                <li gridster-item row="widget.position.row" col="widget.position.col" size-x="widget.size.x" size-y="widget.size.y" ng-repeat="widget in dashboardData.currentWidgets">
-                    <div class="box" ng-controller="CustomWidgetCtrl">
-                        <div class="box-header">
-                            <h3>{{ widget.name }}</h3>
-                            <div class="box-header-btns pull-right">
-                                <a title="Refresh Widget" ng-show="widget.hasConfig" ng-click="refresh(widget)"><i class="intelicon-refresh"></i></a>
-                                <a title="Widget Settings" ng-show="widget.hasConfig" ng-click="openSettings(widget)"><i class="intelicon-settings-solid"></i></a>
-                                <a title="Remove widget" ng-click="remove(widget)"><i class="intelicon-trash-outlined"></i></a>
-                            </div>
+﻿<div class="dashboard" ng-if="dashboardData.currentWidgets.length > 0">
+    <div gridster="gridsterOptions">
+        <ul>
+            <li gridster-item row="widget.position.row" col="widget.position.col" size-x="widget.size.x" size-y="widget.size.y" ng-repeat="widget in dashboardData.currentWidgets">
+                <div class="box" ng-controller="CustomWidgetCtrl">
+                    <div class="box-header">
+                        <h3>{{ widget.name }}</h3>
+                        <div class="box-header-btns pull-right">
+                            <a title="Refresh Widget" ng-show="widget.hasConfig" ng-click="refresh(widget)"><i class="intelicon-refresh"></i></a>
+                            <a title="Widget Settings" ng-show="widget.hasConfig" ng-click="openSettings(widget)"><i class="intelicon-settings-solid"></i></a>
+                            <a title="Remove widget" ng-click="remove(widget)"><i class="intelicon-trash-outlined"></i></a>
                         </div>
-                        <div class="box-content" ng-include="widget.template" style="overflow: auto !important;"></div>
                     </div>
-                </li>
-            </ul>
-        </div>
+                    <div class="box-content" ng-include="widget.template" style="overflow: auto !important;"></div>
+                </div>
+            </li>
+        </ul>
     </div>
+</div>
 
+<div ng-if="dashboardData.currentWidgets.length == 0">
+    <p style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size:16px; margin-bottom:30px">No widgets are being shown.</p>
+    <p style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size:16px; margin-top:30px"><a href="#" ng-click="openAddWidget()">Click to add a widget</a></p>
+</div>
 
 <script type="text/x-kendo-tmpl" id="templateWbDealPie">
     #
