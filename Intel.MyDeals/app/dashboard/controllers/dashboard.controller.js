@@ -80,10 +80,10 @@ function DashboardController($scope, $uibModal, $timeout, $window, $localStorage
     $scope.saveLayout = function () {
         // Save the current widget settings (size, position, etc.).
         userPreferencesService.updateAction(
-                "Dashboard", // CATEGORY
-                "Widgets", // SUBCATEGORY
-                $scope.selectedDashboardId, // ID
-                JSON.stringify($scope.dashboardData.currentWidgets)) // VALUE
+            	"Dashboard", // CATEGORY
+            	"Widgets", // SUBCATEGORY
+            	$scope.selectedDashboardId, // ID
+            	JSON.stringify($scope.dashboardData.currentWidgets)) // VALUE
             .then(function (response) {
             }, function (response) {
                 logger.error("Unable to update User Preferences.", response, response.statusText);
@@ -122,7 +122,7 @@ function DashboardController($scope, $uibModal, $timeout, $window, $localStorage
         "allWidgets": widgetConfig.getAllWidgets(objsetService),
         "currentWidgets": []
     };
-   
+
     // widget events
     $scope.events = {
         resize: function (e, scope) {
@@ -166,19 +166,15 @@ function DashboardController($scope, $uibModal, $timeout, $window, $localStorage
     };
 
     $scope.defaultLayout = function () {
-    	// By setting the third parameter to 'false', any saved widget settings will
-	// not be used.  So, we will get the default widget settings.
+        // By setting the third parameter to 'false', any saved widget settings will
+        // not be used.  So, we will get the default widget settings.
         $scope.addWidgetByKey($scope, $scope.selectedDashboardId, false);
-    };    
+    };
 
     $scope.dashboards = widgetConfig.getAllWidgetLayouts();
 
     $scope.$watch('selectedDashboardId', function (newVal, oldVal) {
-        if (newVal !== oldVal) {
-            $scope.addWidgetByKey($scope, $scope.selectedDashboardId, true);
-        } else {
-            $scope.addWidgetByKey($scope, $scope.selectedDashboardId, true);
-        }
+        $scope.addWidgetByKey($scope, $scope.selectedDashboardId, true);
     });
 
     $scope.refreshWidgets = function () {
@@ -198,7 +194,7 @@ function DashboardController($scope, $uibModal, $timeout, $window, $localStorage
             $scope.$broadcast('refresh', { "custId": scope.selectedCustomerId, "startDate": scope.startDate, "endDate": scope.endDate });
         }, 200);
     }
-    $scope.refresh = function(widget) {
+    $scope.refresh = function (widget) {
         $scope.broadcastRefresh($scope);
         widget.refreshEvent(widget);
     }
@@ -236,14 +232,14 @@ function DashboardController($scope, $uibModal, $timeout, $window, $localStorage
         $timeout(function () {
             if (useSavedWidgetSettings && $scope.savedWidgetSettings && $scope.savedWidgetSettings.length > 0) {
                 // There are saved widget settings, so use them.
-                
+
                 var widgets = $scope.dashboardData.allWidgets;
 
                 Object.keys($scope.dashboardData.allWidgets).forEach(function (key) {
                     var widget = util.clone($scope.dashboardData.allWidgets[key]);
 
                     // Get the saved settings for the current widget.
-                    var currentWidgetSavedSetting = $scope.savedWidgetSettings.filter(function(obj) {
+                    var currentWidgetSavedSetting = $scope.savedWidgetSettings.filter(function (obj) {
                         return obj.id == widget.id;
                     });
 
@@ -353,6 +349,3 @@ function object2Array() {
         return out;
     }
 }
-
-
-
