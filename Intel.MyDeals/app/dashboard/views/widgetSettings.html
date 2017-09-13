@@ -17,7 +17,7 @@
 
         <div class="modal-footer">
             <a ng-click="dismiss()" class="btn btn-default" tabindex="-1"><i class="glyphicon glyphicon-remove"></i> Cancel</a>
-            <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-ok"></i> Save</button>
+            <button type="submit" class="btn btn-primary" ng-disabled="form.name.trim().length == 0"><i class="glyphicon glyphicon-ok"></i> Save</button>
         </div>
     </form>
 </div>
