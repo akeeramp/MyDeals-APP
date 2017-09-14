@@ -95,25 +95,30 @@ function DashboardController($scope, $uibModal, $timeout, $window, $localStorage
         columns: 18,
         mobileModeEnabled: true,
         draggable: {
-            handle: 'h3'
+            handle: 'h3',
+            // callback fired when item is finished dragging
+            stop: function (event, $element, widget) {
+                $scope.saveLayout(); // Persist the current grid settings to the DB.
+            } 
         },
         resizable: {
             enabled: true,
             handles: ['ne', 'se', 'sw', 'nw'],
 
-            // optional callback fired when resize is started
+            // callback fired when resize is started
             start: function (event, $element, widget) { },
 
-            // optional callback fired when item is resized,
+            // callback fired when item is resized,
             resize: function (event, $element, widget) {
                 if (widget.resizeEvent !== undefined) widget.resizeEvent(widget);
             },
 
-            // optional callback fired when item is finished resizing
+            // callback fired when item is finished resizing
             stop: function (event, $element, widget) {
                 $timeout(function () {
                     if (widget.resizeEvent !== undefined) widget.resizeEvent(widget);
                 }, 400);
+                $scope.saveLayout(); // Persist the current grid settings to the DB.
             }
         }
     };
@@ -169,6 +174,7 @@ function DashboardController($scope, $uibModal, $timeout, $window, $localStorage
         // By setting the third parameter to 'false', any saved widget settings will
         // not be used.  So, we will get the default widget settings.
         $scope.addWidgetByKey($scope, $scope.selectedDashboardId, false);
+        $scope.saveLayout(); // Persist the current grid settings to the DB.
     };
 
     $scope.dashboards = widgetConfig.getAllWidgetLayouts();
@@ -298,6 +304,8 @@ function AddWidgetCtrl($scope, $timeout, $rootScope) {
             $scope.$parent.dashboardData.currentWidgets.push(widgetToAdd);
 
             $scope.$parent.modalInstance.close();
+
+            $scope.saveLayout(); // Persist the current grid settings to the DB.
         }
     };
 
@@ -306,7 +314,8 @@ function AddWidgetCtrl($scope, $timeout, $rootScope) {
 function CustomWidgetCtrl($scope, $uibModal) {
 
     $scope.remove = function (widget) {
-        $scope.dashboardData.currentWidgets.splice($scope.dashboardData.currentWidgets.indexOf(widget), 1);
+        $scope.dashboardData.currentWidgets.splice($scope.dashboardData.currentWidgets.indexOf(widget), 1);        
+        $scope.saveLayout(); // Persist the current grid settings to the DB.
     };
 
     $scope.openSettings = function (widget) {
@@ -338,6 +347,7 @@ function WidgetSettingsCtrl($scope, $timeout, $rootScope, widget) {
     $scope.submit = function () {
         angular.extend(widget, $scope.form);
         $scope.$parent.modalInstance.close(widget);
+        $scope.saveLayout(); // Persist the current grid settings to the DB.
     };
 }
 
