@@ -105,10 +105,10 @@
             "templates": {
                 "ECAP": {
                     "tools": {
-                        "Groups": ["Deal Info", "Consumption", "Cost Test", "Meet Comp", "Backdate", "Overlapping", "CAP Info"]
+                        "Groups": ["Deal Info", "Consumption", "Cost Test", "Meet Comp", "Backdate", "CAP Info"]
                     },
                     "details": {
-                        "Groups": ["Consumption", "Cost Test", "Meet Comp", "Backdate", "Overlapping", "CAP Info"]
+                        "Groups": ["Consumption", "Cost Test", "Meet Comp", "Backdate", "CAP Info"]
                     },
                     "DC_ID": {
                         "Groups": ["Deal Info"]
@@ -287,10 +287,10 @@
                 },
                 "VOL_TIER": {
                     "tools": {
-                        "Groups": ["Deal Info", "Consumption", "Cost Test", "Meet Comp", "Backdate", "Overlapping", "RPU"]
+                        "Groups": ["Deal Info", "Consumption", "Cost Test", "Meet Comp", "Backdate", "RPU"]
                     },
                     "details": {
-                        "Groups": ["Consumption", "Cost Test", "Meet Comp", "Backdate", "Overlapping", "RPU"]
+                        "Groups": ["Consumption", "Cost Test", "Meet Comp", "Backdate", "RPU"]
                     },
                     "DC_ID": {
                         "Groups": ["Deal Info"]

@@ -1475,6 +1475,29 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 grps[indx].numErrors = rowCount.length;
             }
 
+            //Remove Overlap TAB
+            $scope.removeOverlapTab = function () {
+                var grps = $scope.opOptions.groups;
+                var indx = grps.findIndex(item => item.name == 'Overlapping');
+
+                if (indx > -1) {
+                    $scope.opOptions.groups.splice(indx, 1);                    
+                }   
+
+                var tabData = $scope.opOptions.groupColumns.tools.Groups;
+                var indxTab = tabData.indexOf('Overlapping');
+                if (indx > -1) {
+                    $scope.opOptions.groupColumns.tools.Groups.splice(indxTab, 1);
+
+                    $scope.$applyAsync();
+
+                    $timeout(function () {
+                        $("#tabstrip").kendoTabStrip().data("kendoTabStrip").reload();
+                        $scope.configureSortableTab();
+                    }, 100);
+                }                
+            }
+
             $scope.saveAndValidateGrid = function () {
 
                 var dealType = $scope.dealTypes[0];
@@ -1491,8 +1514,6 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                 if (response.data.length > 0) {
                                     $scope.isOverlapping = true;
                                     
-                                    //$scope.opOptions.columns = keys;
-
                                     //Checking TAB already exist or not
                                     $scope.addTabRequired();
 
@@ -1516,9 +1537,19 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                     $scope.ovlpDataSource.read();
 
                                     //Hiding Column Preference and Grid Preferences
-                                    $scope.isLayoutConfigurable = false;
+                                    $scope.isLayoutConfigurable = false;                                    
                                 }
                                 else {
+                                    //Remove overlapping tab
+                                    $scope.removeOverlapTab();
+                                    var tabStrip = $("#tabstrip").kendoTabStrip().data("kendoTabStrip");
+                                    if (!!tabStrip) {
+                                        tabStrip.select(0);
+                                        if ($scope.opOptions.groups !== undefined) {
+                                            $scope.showCols($scope.opOptions.groupColumns.tools.Groups[0]);
+                                        }
+                                    }
+
                                     $scope.$parent.$parent.setBusy("Validating your data...", "Please wait as we validate your information!");
                                     //$timeout(function () {
                                     $scope.contractDs.sync();
