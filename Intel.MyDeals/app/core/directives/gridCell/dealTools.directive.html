@@ -2,11 +2,11 @@
 <div class="dealTools">
     <div class='fl gridStatusMarker {{dataItem.WF_STG_CD}}' title='{{dataItem.WF_STG_CD}}'>{{stgOneChar()}}</div>
 
-    <div class='fl' ng-if="isEditable && (!dataItem._parentCnt || dataItem._parentCnt <= 1)">
+    <div class='fl' ng-if="(editable === true) && (!dataItem._parentCnt || dataItem._parentCnt <= 1)">
         <input type="checkbox" ng-model="dataItem.isLinked" class="grid-link-checkbox with-font" id="lnkChk_{{dataItem.DC_PARENT_ID}}" /><label for="lnkChk_{{dataItem.DC_PARENT_ID}}" style="margin: 5px 0 0 0;" title="Check to apply changes to all rows checked"></label>
     </div>
 
-    <div class='fl md-icon rotate-270' ng-if="isEditable && (!dataItem._parentCnt || dataItem._parentCnt > 1)">
+    <div class='fl md-icon rotate-270' ng-if="(editable === true) &&(!dataItem._parentCnt || dataItem._parentCnt > 1)">
         <i class="intelicon-org-chart" style="font-size: 20px !important; cursor: pointer; color: #00AEEF; margin-right: 9px;" ng-click="groupDialog.open()"></i>
     </div>
 
@@ -24,10 +24,10 @@
         <i class='intelicon-attach' style="font-size: 20px !important; color: #003C71;" title="Click to view or add attachments"></i>
     </div>
 
-    <div class='fl md-icon' ng-if="isEditable && (dataItem._parentCnt === undefined || dataItem._parentCnt <= 1)">
+    <div class='fl md-icon' ng-if="editable === true && (dataItem._parentCnt === undefined || dataItem._parentCnt <= 1)">
         <i class='intelicon-trash-solid' style="font-size: 20px !important; cursor: pointer;" title="Click to Delete the deal" ng-click="deleteDialog.open()"></i>
     </div>
-    <div class='fl md-icon-disabled' ng-if="isEditable && (!!dataItem._parentCnt && dataItem._parentCnt > 1)">
+    <div class='fl md-icon-disabled' ng-if="editable === true && (!!dataItem._parentCnt && dataItem._parentCnt > 1)">
         <i class='intelicon-trash-solid' style="font-size: 20px !important; color: #e7e7e8;"
            title="This deal shares the same pricing table row as other deals.  You will need to split the group or delete the deal from the Pricing Table."></i>
     </div>

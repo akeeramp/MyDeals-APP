@@ -20,6 +20,9 @@ namespace Intel.MyDeals.IBusinessLogic
 
         OpMsgQueue UnGroupPricingTableRowById(ContractToken contractToken, int ptrId);
 
-        OpDataCollectorFlattenedList GetPctDetails(int id);
+        List<Overlapping> GetOverlappingDeals(int ID);
+
+        List<Overlapping> UpdateOverlappingDeals(int ID);
+
     }
 }

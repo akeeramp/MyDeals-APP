@@ -6,6 +6,7 @@ using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque;
 using Intel.Opaque.Data;
+using Intel.MyDeals.DataLibrary;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -311,6 +312,18 @@ namespace Intel.MyDeals.BusinessLogic
             myDealsData.Save(contractToken);
 
             return opMsgQueue;
+        }
+
+        public List<Overlapping> GetOverlappingDeals(int ID)
+        {
+            OpDataCollectorDataLib OD = new OpDataCollectorDataLib();
+            return OD.GetOverlappingDeals(ID);
+        }
+
+        public List<Overlapping> UpdateOverlappingDeals(int ID)
+        {
+            OpDataCollectorDataLib OD = new OpDataCollectorDataLib();
+            return OD.UpdateOverlappingDeals(ID);
         }
     }
 

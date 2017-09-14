@@ -41,7 +41,9 @@ function objsetService($http, dataService, logger, $q) {
         actionPricingStrategy: actionPricingStrategy,
         actionPricingStrategies: actionPricingStrategies,
         actionWipDeal: actionWipDeal,
-        actionWipDeals: actionWipDeals
+        actionWipDeals: actionWipDeals,
+        getOverlappingDeals: getOverlappingDeals,
+        updateOverlappingDeals: updateOverlappingDeals
     }
 
     return service;
@@ -139,5 +141,14 @@ function objsetService($http, dataService, logger, $q) {
     function actionWipDeals(custId, contractId, data) {
         return dataService.post(apiBasePricingTableUrl + 'actionWipDeals/' + custId + '/' + contractId, data);
     }
+
+    // #### Overlapping CRUD operation ####
+    function getOverlappingDeals(ID) {
+        return dataService.get(apiBasePricingTableUrl + 'GetOverlappingDeals/' + ID);
+    }
+
+    function updateOverlappingDeals(ID) {
+        return dataService.post(apiBasePricingTableUrl + 'UpdateOverlappingDeals/' + ID);
+    }   
 
 }

@@ -147,15 +147,23 @@ namespace Intel.MyDeals.Controllers.API
             );
         }
 
-
         [Authorize]
-        [Route("GetPctDetails/{ptId}")]
-        [HttpGet]
-        public OpDataCollectorFlattenedList GetPctDetails(int ptId)
+        [Route("GetOverlappingDeals/{ID}")]
+        public List<Overlapping> GetOverlappingDeals(int ID)     //Get all Product with Alias from ProductAlias
         {
-            return SafeExecutor(() => _pricingTablesLib.GetPctDetails(ptId)
-                , "Unable to get the Pricing Table PCT details for {id}"
-            );
+            return SafeExecutor(() => _pricingTablesLib.GetOverlappingDeals(ID)
+                , $"Unable to get {"Product Alias"}"
+             );
+        }
+
+        [HttpPost]
+        [Authorize]
+        [Route("UpdateOverlappingDeals/{ID}")]
+        public List<Overlapping> UpdateOverlappingDeals(int ID)     //Get all Product with Alias from ProductAlias
+        {
+            return SafeExecutor(() => _pricingTablesLib.UpdateOverlappingDeals(ID)
+                , $"Unable to get {"Product Alias"}"
+             );
         }
     }
 

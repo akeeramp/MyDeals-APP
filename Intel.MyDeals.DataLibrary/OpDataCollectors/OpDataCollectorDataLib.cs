@@ -1025,7 +1025,129 @@ namespace Intel.MyDeals.DataLibrary
             }
             return dt;
         }
+        
+        public List<Overlapping> GetOverlappingDeals(int ID)
+        {
+            //List<Overlapping> fake = new List<Overlapping>();
+            //fake.Add(new Overlapping { OVLP_CD = "SELF_OVLP", CONTRACTNUMBER = 464, PROGRAM_PAYMENT = "Frontend", WIP_DEAL_OBJ_SID = 4200, PRICE_STRATEGY = 100, PRICING_TABLES = 1034, WF_STG_CD = "Draft", CUST_ACCNT_DIV = "Test", PRODUCT_NM = "P3700", GEO_COMBINED = "Worldwide", SOLD_TO_ID = "", START_DT = "5/1/2017 12:12:00", END_DT = "5/1/2018 12:01:00", ECAP_PRICE = 1.00m, DEAL_COMB_TYPE = "cOMB tYPE", ECAP_TYPE = "MCP", MRKT_SEG = "M" });
+            //fake.Add(new Overlapping { OVLP_CD = "BE_HARD_STOP", CONTRACTNUMBER = 464, PROGRAM_PAYMENT = "Frontend", WIP_DEAL_OBJ_SID = 4200, PRICE_STRATEGY = 100, PRICING_TABLES = 1034, WF_STG_CD = "Active", CUST_ACCNT_DIV = "Test", PRODUCT_NM = "P3700", GEO_COMBINED = "Worldwide", SOLD_TO_ID = "", START_DT = "2017/01/01 12:12:00", END_DT = "12/31/2017 12:01:00", ECAP_PRICE = 1.00m, DEAL_COMB_TYPE = "cOMB tYPE", ECAP_TYPE = "MCP", MRKT_SEG = "M" });
+            //fake.Add(new Overlapping { OVLP_CD = "BE_HARD_STOP", CONTRACTNUMBER = 464, PROGRAM_PAYMENT = "Frontend", WIP_DEAL_OBJ_SID = 4200, PRICE_STRATEGY = 100, PRICING_TABLES = 1034, WF_STG_CD = "Active", CUST_ACCNT_DIV = "Test", PRODUCT_NM = "P3700", GEO_COMBINED = "Worldwide", SOLD_TO_ID = "", START_DT = "1/1/2018 12:12:00", END_DT = "12/31/2018 12:01:00", ECAP_PRICE = 1.00m, DEAL_COMB_TYPE = "cOMB tYPE", ECAP_TYPE = "MCP", MRKT_SEG = "M" });
+            //return fake;
 
+            OpLogPerf.Log("GetOverlappingDeals");
+
+            var ret = new List<Overlapping>();
+            var cmd = new Procs.dbo.PR_MYDL_UI_GET_OVRLP
+            {
+                @ID = ID,
+                @MODE = "SELECT",
+            };
+
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    int IDX_CONTRACT = DB.GetReaderOrdinal(rdr, "CONTRACT");
+                    int IDX_CONTRACT_NBR = DB.GetReaderOrdinal(rdr, "CONTRACT_NBR");
+                    int IDX_CONTRACT_NM = DB.GetReaderOrdinal(rdr, "CONTRACT_NM");
+                    int IDX_CUST_ACCNT_DIV = DB.GetReaderOrdinal(rdr, "CUST_ACCNT_DIV");
+                    int IDX_DEAL_COMB_TYPE = DB.GetReaderOrdinal(rdr, "DEAL_COMB_TYPE");
+                    int IDX_ECAP_PRICE = DB.GetReaderOrdinal(rdr, "ECAP_PRICE");
+                    int IDX_ECAP_TYPE = DB.GetReaderOrdinal(rdr, "ECAP_TYPE");
+                    int IDX_END_DT = DB.GetReaderOrdinal(rdr, "END_DT");
+                    int IDX_GEO_COMBINED = DB.GetReaderOrdinal(rdr, "GEO_COMBINED");
+                    int IDX_MRKT_SEG = DB.GetReaderOrdinal(rdr, "MRKT_SEG");
+                    int IDX_OVLP_CD = DB.GetReaderOrdinal(rdr, "OVLP_CD");
+                    int IDX_OVLP_DEAL_OBJ_SID = DB.GetReaderOrdinal(rdr, "OVLP_DEAL_OBJ_SID");
+                    int IDX_OVLP_DESC = DB.GetReaderOrdinal(rdr, "OVLP_DESC");
+                    int IDX_PAYOUT_BASED_ON = DB.GetReaderOrdinal(rdr, "PAYOUT_BASED_ON");
+                    int IDX_PRICE_STRATEGY = DB.GetReaderOrdinal(rdr, "PRICE_STRATEGY");
+                    int IDX_PRICE_STRATEGY_NM = DB.GetReaderOrdinal(rdr, "PRICE_STRATEGY_NM");
+                    int IDX_PRICING_TABLES = DB.GetReaderOrdinal(rdr, "PRICING_TABLES");
+                    int IDX_PRICING_TABLES_NM = DB.GetReaderOrdinal(rdr, "PRICING_TABLES_NM");
+                    int IDX_PRODUCT_NM = DB.GetReaderOrdinal(rdr, "PRODUCT_NM");
+                    int IDX_PROGRAM_PAYMENT = DB.GetReaderOrdinal(rdr, "PROGRAM_PAYMENT");
+                    int IDX_SOLD_TO_ID = DB.GetReaderOrdinal(rdr, "SOLD_TO_ID");
+                    int IDX_START_DT = DB.GetReaderOrdinal(rdr, "START_DT");
+                    int IDX_WF_STG_CD = DB.GetReaderOrdinal(rdr, "WF_STG_CD");
+                    int IDX_WIP_DEAL_OBJ_SID = DB.GetReaderOrdinal(rdr, "WIP_DEAL_OBJ_SID");
+                    int IDX_YCS2_OVERLAP_OVERRIDE = DB.GetReaderOrdinal(rdr, "YCS2_OVERLAP_OVERRIDE");
+
+                    while (rdr.Read())
+                    {
+                        ret.Add(new Overlapping
+                        {
+                            CONTRACT = (IDX_CONTRACT < 0 || rdr.IsDBNull(IDX_CONTRACT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CONTRACT),
+                            CONTRACT_NBR = (IDX_CONTRACT_NBR < 0 || rdr.IsDBNull(IDX_CONTRACT_NBR)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CONTRACT_NBR),
+                            CONTRACT_NM = (IDX_CONTRACT_NM < 0 || rdr.IsDBNull(IDX_CONTRACT_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CONTRACT_NM),
+                            CUST_ACCNT_DIV = (IDX_CUST_ACCNT_DIV < 0 || rdr.IsDBNull(IDX_CUST_ACCNT_DIV)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_ACCNT_DIV),
+                            DEAL_COMB_TYPE = (IDX_DEAL_COMB_TYPE < 0 || rdr.IsDBNull(IDX_DEAL_COMB_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_COMB_TYPE),
+                            ECAP_PRICE = (IDX_ECAP_PRICE < 0 || rdr.IsDBNull(IDX_ECAP_PRICE)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_ECAP_PRICE),
+                            ECAP_TYPE = (IDX_ECAP_TYPE < 0 || rdr.IsDBNull(IDX_ECAP_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ECAP_TYPE),
+                            END_DT = (IDX_END_DT < 0 || rdr.IsDBNull(IDX_END_DT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_END_DT),
+                            GEO_COMBINED = (IDX_GEO_COMBINED < 0 || rdr.IsDBNull(IDX_GEO_COMBINED)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_GEO_COMBINED),
+                            MRKT_SEG = (IDX_MRKT_SEG < 0 || rdr.IsDBNull(IDX_MRKT_SEG)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MRKT_SEG),
+                            OVLP_CD = (IDX_OVLP_CD < 0 || rdr.IsDBNull(IDX_OVLP_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OVLP_CD),
+                            OVLP_DEAL_OBJ_SID = (IDX_OVLP_DEAL_OBJ_SID < 0 || rdr.IsDBNull(IDX_OVLP_DEAL_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OVLP_DEAL_OBJ_SID),
+                            OVLP_DESC = (IDX_OVLP_DESC < 0 || rdr.IsDBNull(IDX_OVLP_DESC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OVLP_DESC),
+                            PAYOUT_BASED_ON = (IDX_PAYOUT_BASED_ON < 0 || rdr.IsDBNull(IDX_PAYOUT_BASED_ON)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PAYOUT_BASED_ON),
+                            PRICE_STRATEGY = (IDX_PRICE_STRATEGY < 0 || rdr.IsDBNull(IDX_PRICE_STRATEGY)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRICE_STRATEGY),
+                            PRICE_STRATEGY_NM = (IDX_PRICE_STRATEGY_NM < 0 || rdr.IsDBNull(IDX_PRICE_STRATEGY_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRICE_STRATEGY_NM),
+                            PRICING_TABLES = (IDX_PRICING_TABLES < 0 || rdr.IsDBNull(IDX_PRICING_TABLES)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRICING_TABLES),
+                            PRICING_TABLES_NM = (IDX_PRICING_TABLES_NM < 0 || rdr.IsDBNull(IDX_PRICING_TABLES_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRICING_TABLES_NM),
+                            PRODUCT_NM = (IDX_PRODUCT_NM < 0 || rdr.IsDBNull(IDX_PRODUCT_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRODUCT_NM),
+                            PROGRAM_PAYMENT = (IDX_PROGRAM_PAYMENT < 0 || rdr.IsDBNull(IDX_PROGRAM_PAYMENT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PROGRAM_PAYMENT),
+                            SOLD_TO_ID = (IDX_SOLD_TO_ID < 0 || rdr.IsDBNull(IDX_SOLD_TO_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_SOLD_TO_ID),
+                            START_DT = (IDX_START_DT < 0 || rdr.IsDBNull(IDX_START_DT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_START_DT),
+                            WF_STG_CD = (IDX_WF_STG_CD < 0 || rdr.IsDBNull(IDX_WF_STG_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_WF_STG_CD),
+                            WIP_DEAL_OBJ_SID = (IDX_WIP_DEAL_OBJ_SID < 0 || rdr.IsDBNull(IDX_WIP_DEAL_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WIP_DEAL_OBJ_SID),
+                            YCS2_OVERLAP_OVERRIDE = (IDX_YCS2_OVERLAP_OVERRIDE < 0 || rdr.IsDBNull(IDX_YCS2_OVERLAP_OVERRIDE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_YCS2_OVERLAP_OVERRIDE)
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+            return ret;
+        }
+
+        public List<Overlapping> UpdateOverlappingDeals(int ID)
+        {
+            OpLogPerf.Log("UpdateOverlappingDeals");
+
+            var ret = new List<Overlapping>();
+            var cmd = new Procs.dbo.PR_MYDL_UI_GET_OVRLP { };
+
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_MYDL_UI_GET_OVRLP
+                {
+                    @ID = ID,
+                    @MODE = "UPDATE",
+                    @USR_WWID = OpUserStack.MyOpUserToken.Usr.WWID
+                }))
+                {
+                    int IDX_WIP_DEAL_OBJ_SID = DB.GetReaderOrdinal(rdr, "WIP_DEAL_OBJ_SID");
+
+                    while (rdr.Read())
+                    {
+                        ret.Add(new Overlapping
+                        {
+                            WIP_DEAL_OBJ_SID = (IDX_WIP_DEAL_OBJ_SID < 0 || rdr.IsDBNull(IDX_WIP_DEAL_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WIP_DEAL_OBJ_SID)
+                        });
+                    } // while
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+            return ret;
+        }
 
 
     }

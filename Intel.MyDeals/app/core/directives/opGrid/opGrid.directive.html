@@ -124,13 +124,28 @@
         </div>
 
         <div class="op-grid-container">
-            <kendo-grid options="ds" class="opUiContainer dashboard md op-grid" style="height: 100%;"></kendo-grid>
+            <kendo-grid ng-hide="isOverlapping" id="dealEditor" options="ds" class="opUiContainer dashboard md op-grid" style="height: 100%;"></kendo-grid>
+            <kendo-grid ng-if="isOverlapping" id="overLapping" options="ovlp" class="opUiContainer md dashboard op-grid" style="height: 100%;"></kendo-grid>
         </div>
 
     </div>
 
 
 <style>
+    .k-grid-content > table > tbody > tr > td{
+        padding-left:5px !important;
+    }
+    #overLapping .op-grid.k-grid tr td {
+        padding-left: 5px !important;
+    }
+    .lnk {
+        background: #00AEEF;
+        color: white;
+        padding-left: 5px;
+        padding-right: 5px;
+        border-radius: 3px;
+        cursor: pointer;
+    }
     .k-dialog.k-alert .k-dialog-titlebar, .k-dialog.k-confirm .k-dialog-titlebar, .k-dialog.k-prompt .k-dialog-titlebar {
         display: none;
     }
@@ -367,6 +382,14 @@
         font-weight: 600;
     }
     .op-grid.k-grid tr td {
+        padding-left: 5px !important;
+        padding-right: 0px !important;
+        border-right: 1px solid #e6e6e6;
+    }
+    .dealTools{
+        margin-left: -5px !important;
+    } 
+    .op-grid.k-grid tr td:first-child {
         padding-left: 0 !important;
         padding-right: 0 !important;
         border-right: 1px solid #e6e6e6;

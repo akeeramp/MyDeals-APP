@@ -14,9 +14,16 @@ function dealTools() {
         templateUrl: '/app/core/directives/gridCell/dealTools.directive.html',
         controller: ['$scope', '$http', function ($scope, $http) {
 
+            if ($scope.isEditable == "false" || $scope.isEditable == false) {
+                $scope.editable = (1 === 2);
+            }
+            else {
+                $scope.editable = (1 === 1);;
+            }
+
             if (!!$scope.isEditable) $scope.isEditable = false;
 
-            //var prntRoot = $scope.$parent.$parent.$parent.$parent.$parent.$parent.$parent;
+            var prntRoot = $scope.$parent.$parent.$parent.$parent.$parent.$parent.$parent;
             var rootScope = $scope.$parent;
             if (!$scope.$parent.contractData) {
                 rootScope = $scope.$parent.$parent.$parent.$parent.$parent;

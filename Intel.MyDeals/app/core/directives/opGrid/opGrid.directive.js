@@ -2,9 +2,9 @@
     .module('app.core')
     .directive('opGrid', opGrid);
 
-opGrid.$inject = ['$compile', 'objsetService', '$timeout', 'colorDictionary', '$uibModal'];
+opGrid.$inject = ['$compile', 'objsetService', '$timeout', 'colorDictionary', '$uibModal', '$filter'];
 
-function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
+function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $filter) {
 
     return {
         scope: {
@@ -17,8 +17,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
         templateUrl: '/app/core/directives/opGrid/opGrid.directive.html',
         controller: ['$scope', '$http', function ($scope, $http) {
 
-        	var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"];
-
+            var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"];
+            $scope.isOverlapping = false;
+            $scope.isOvlpAccess = false;
+            $scope.ovlpErrorCount = [];
             $timeout(function () {
                 $scope.tabStripDelay = true;
                 $timeout(function () {
@@ -26,11 +28,12 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 }, 10);
             }, 10);
 
-            $scope.assignVal = function(field, defval) {
+            $scope.assignVal = function (field, defval) {
                 var item = $scope.opOptions[field];
                 return !item ? defval : item;
             }
 
+            $scope.ovlpData = [];
             $scope.stages = [];
             $scope.initDsLoaded = false;
             $scope.stageCnt = 0;
@@ -96,7 +99,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                     }
                 }
                 // now sort the columns based on the group settings
-                cols.sort(function(a, b) {
+                cols.sort(function (a, b) {
                     return a.indx - b.indx;
                 });
                 return cols;
@@ -271,29 +274,16 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
             $scope.addGrp = function () {
                 kendo.prompt("Please, enter your new group name:", "").then(function (data) {
                     if (data === "") data = "New Group";
-                    $scope.opOptions.groups.push({ "name": data, "order": 50 });
-
-                    // Add Tools
-                    if ($scope.opOptions.groupColumns.tools.Groups === undefined) $scope.opOptions.groupColumns.tools.Groups = [];
-                    $scope.opOptions.groupColumns.tools.Groups.push(data);
-
-                    // Add Deal Details
-                    if ($scope.opOptions.groupColumns.details.Groups === undefined) $scope.opOptions.groupColumns.details.Groups = [];
-                    $scope.opOptions.groupColumns.details.Groups.push(data);
-
-                    $scope.alignGroupOrder();
-                    $scope.$apply();
-                    $("#tabstrip").kendoTabStrip().data("kendoTabStrip").reload();
-                    $scope.configureSortableTab();
+                    $scope.addToTab(data);
                 },
-                function () {
-                    // cancel
-                });
+                    function () {
+                        // cancel
+                    });
             }
 
             $scope.renameGrp = function () {
                 kendo.prompt("Please, change the group name:", $scope.curGroup).then(function (data) {
-                    if (data === "") return;
+                    if (data === "" || data.toLowerCase() == "overlapping") return;
 
                     for (var g = 0; g < $scope.opOptions.groups.length; g++) {
                         if ($scope.opOptions.groups[g].name === $scope.curGroup) {
@@ -315,9 +305,9 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                     $("#tabstrip").kendoTabStrip().data("kendoTabStrip").reload();
                     $scope.configureSortableTab();
                 },
-                function () {
-                    // cancel
-                });
+                    function () {
+                        // cancel
+                    });
             }
 
             $scope.removeGrp = function (e, grpName) {
@@ -341,7 +331,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
             $scope.displayDealTypes = function () {
                 var modDealTypes = [];
                 for (var i = 0; i < $scope.dealTypes.length; i++) {
-                    if (!!$scope.dealTypes[i]) modDealTypes.push($scope.dealTypes[i].replace(/_/g,' '));
+                    if (!!$scope.dealTypes[i]) modDealTypes.push($scope.dealTypes[i].replace(/_/g, ' '));
                 }
                 return modDealTypes.length > 0 ? $scope.dealCnt + " " + modDealTypes.join() + ($scope.dealCnt === 1 ? " Deal" : " Deals") : "";
             }
@@ -349,7 +339,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
             $scope.contractDs = new kendo.data.DataSource({
                 transport: {
                     read: function (e) {
-                        var i,r,g,group;
+                        var i, r, g, group;
                         var data = $scope.opData;
 
                         var hideIfAll = [];
@@ -384,12 +374,12 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                                 group = $scope.opOptions.groups[g];
                                 if (!!group && hideIfAll[r] && group.name === hideIfAll[r].name) {
                                     group.isHidden = !hideIfAll[r].show;
-                                //} else {
-                                //    group.isHidden = false;
+                                    //} else {
+                                    //    group.isHidden = false;
                                 }
                             }
                         }
-//                        debugger;
+                        //                        debugger;
 
                         var childParent = {};
                         for (i = 0; i < data.length; i++) {
@@ -525,14 +515,14 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
             }
 
             function formatDate(date) { // HACK: format date hack so js datetime would be readable for C# API
-            	var day = date.getDate();
-            	var month = date.getMonth() + 1;
-            	var year = date.getFullYear();
-            	var hour = date.getHours();
-            	var minute = date.getMinutes();
-            	var second = date.getSeconds();
+                var day = date.getDate();
+                var month = date.getMonth() + 1;
+                var year = date.getFullYear();
+                var hour = date.getHours();
+                var minute = date.getMinutes();
+                var second = date.getSeconds();
 
-            	return (month + "/" + day + "/" + year + " " + hour + ':' + minute + ':' + second);
+                return (month + "/" + day + "/" + year + " " + hour + ':' + minute + ':' + second);
             }
 
             $scope.lookupEditor = function (container, options) {
@@ -541,89 +531,89 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 var col = { field: options.field };
 
                 for (var c = 0; c < cols.length; c++) {
-                	if (cols[c].field === options.field) {
-                		col = cols[c];
-                		break;
-                	}
+                    if (cols[c].field === options.field) {
+                        col = cols[c];
+                        break;
+                    }
                 }
 
-				// col is Read-only
+                // col is Read-only
                 if (options.model._behaviors.isReadOnly[col.field]) {
-                	return;
+                    return;
                 }
 
                 if (col.uiType === "ComboBox" || col.uiType == "DROPDOWN") {
 
-                	// Note: we shouldnt put atrb specific logic here, but if not here then where? template too generic and this is where we call it...
-                	if (col.field == "RETAIL_CYCLE") {
+                    // Note: we shouldnt put atrb specific logic here, but if not here then where? template too generic and this is where we call it...
+                    if (col.field == "RETAIL_CYCLE") {
 
-                		var retailPullParams = {
-                			PRD_MBR_SID: options.model["PRODUCT_FILTER"],
-                			DealStartDate: formatDate(options.model["START_DT"]),
-                			DealEndDate: formatDate(options.model["END_DT"])
-                		};
+                        var retailPullParams = {
+                            PRD_MBR_SID: options.model["PRODUCT_FILTER"],
+                            DealStartDate: formatDate(options.model["START_DT"]),
+                            DealEndDate: formatDate(options.model["END_DT"])
+                        };
 
-                		$('<input required name="' + options.field + '"/>')
-							.appendTo(container)
-							.kendoComboBox({
-								autoBind: false,
-								valuePrimitive: true,
-								dataTextField: field.opLookupText,
-								dataValueField: field.opLookupValue,
-								dataSource: {
-									type: "json",
-									transport: {
-										read: {
-											url: field.opLookupUrl,
-											dataType: 'json',
-											type: "POST",
-											data: retailPullParams,
-										}
-									}
-								}
-							});
-                	} else {
+                        $('<input required name="' + options.field + '"/>')
+                            .appendTo(container)
+                            .kendoComboBox({
+                                autoBind: false,
+                                valuePrimitive: true,
+                                dataTextField: field.opLookupText,
+                                dataValueField: field.opLookupValue,
+                                dataSource: {
+                                    type: "json",
+                                    transport: {
+                                        read: {
+                                            url: field.opLookupUrl,
+                                            dataType: 'json',
+                                            type: "POST",
+                                            data: retailPullParams,
+                                        }
+                                    }
+                                }
+                            });
+                    } else {
 
-                		$('<input name="' + options.field + '"/>')
-							.appendTo(container)
-							.kendoComboBox({
-								autoBind: false,
-								valuePrimitive: true,
-								dataTextField: field.opLookupText,
-								dataValueField: field.opLookupValue,
-								dataSource: {
-									type: "json",
-									transport: {
-										read: field.opLookupUrl
-									}
-								}
-							});
+                        $('<input name="' + options.field + '"/>')
+                            .appendTo(container)
+                            .kendoComboBox({
+                                autoBind: false,
+                                valuePrimitive: true,
+                                dataTextField: field.opLookupText,
+                                dataValueField: field.opLookupValue,
+                                dataSource: {
+                                    type: "json",
+                                    transport: {
+                                        read: field.opLookupUrl
+                                    }
+                                }
+                            });
                     }
                 } else if (col.uiType.toUpperCase() === "MULTISELECT") {
 
-                	var id = "";
-                	if (col.field === "DEAL_SOLD_TO_ID") { id = options.model["CUST_MBR_SID"] } // TODO:change to dynamic
+                    var id = "";
+                    if (col.field === "DEAL_SOLD_TO_ID") { id = options.model["CUST_MBR_SID"] } // TODO:change to dynamic
 
-                	//$('<select data-bind="value:' + options.field + '" name="' + options.field + '"/>')
-					//	.appendTo(container)
-					//	.kendoMultiSelect({
-					//		autoBind: false,
-					//		valuePrimitive: true,
-					//		dataTextField: field.opLookupText,
-					//		dataValueField: field.opLookupValue,
-					//		dataSource: {
-					//			type: "json",
-					//			transport: {
-					//				read: {
-					//					url: field.opLookupUrl + "/" + id,
-					//					dataType: 'json',
-					//					type: "GET",
-					//				}
-					//			}
-					//		}
-					//	});
-                	var multiCompiled = $compile('<div class="myDealsControl" op-control-flat ng-model="dataItem" op-cd="\'' + options.field + '\'" op-type="\'MULTISELECT\'" op-lookup-url="\'' + field.opLookupUrl + '/' + id + '\'" op-lookup-text="\'' + field.opLookupText + '\'" op-lookup-value="\'' + field.opLookupValue + '\'" op-ui-mode="\'VERTICAL\'"></div>')(angular.element(container).scope());
-                	$(container).append(multiCompiled);
+                    //$('<select data-bind="value:' + options.field + '" name="' + options.field + '"/>')
+                    //	.appendTo(container)
+                    //	.kendoMultiSelect({
+                    //		autoBind: false,
+                    //		valuePrimitive: true,
+                    //		dataTextField: field.opLookupText,
+                    //		dataValueField: field.opLookupValue,
+                    //		dataSource: {
+                    //			type: "json",
+                    //			transport: {
+                    //				read: {
+                    //					url: field.opLookupUrl + "/" + id,
+                    //					dataType: 'json',
+                    //					type: "GET",
+                    //				}
+                    //			}
+                    //		}
+                    //	});
+                    var multiCompiled = $compile('<div class="myDealsControl" op-control-flat ng-model="dataItem" op-cd="\'' + options.field + '\'" op-type="\'MULTISELECT\'" op-lookup-url="\'' + field.opLookupUrl + '/' + id + '\'" op-lookup-text="\'' + field.opLookupText + '\'" op-lookup-value="\'' + field.opLookupValue + '\'" op-ui-mode="\'VERTICAL\'"></div>')(angular.element(container).scope());
+                    $(container).append(multiCompiled);
 
                 } else if (col.uiType.toUpperCase() === "EMBEDDEDMULTISELECT") {
 
@@ -637,20 +627,20 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                     }
 
                 } else {
-                	$('<input required name="' + options.field + '"/>')
-						.appendTo(container)
-						.kendoDropDownList({
-							autoBind: false,
-							valuePrimitive: true,
-							dataTextField: field.opLookupText,
-							dataValueField: field.opLookupValue,
-							dataSource: {
-								type: "json",
-								transport: {
-									read: field.opLookupUrl
-								}
-							}
-						});
+                    $('<input required name="' + options.field + '"/>')
+                        .appendTo(container)
+                        .kendoDropDownList({
+                            autoBind: false,
+                            valuePrimitive: true,
+                            dataTextField: field.opLookupText,
+                            dataValueField: field.opLookupValue,
+                            dataSource: {
+                                type: "json",
+                                transport: {
+                                    read: field.opLookupUrl
+                                }
+                            }
+                        });
                 }
             }
 
@@ -667,7 +657,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
 
                 tmplt += '<tr style="height: 15px;">';
                 for (var t = 0; t < fields.length; t++) {
-                    var w = t===0 ? "width: 50px;": "";
+                    var w = t === 0 ? "width: 50px;" : "";
                     tmplt += '<th style="padding: 0 4px; font-weight: 400; text-transform: uppercase; font-size: 10px; background: #eeeeee; text-align: center;' + w + '">' + fields[t].title + '</th>';
                 }
                 tmplt += '</tr>';
@@ -676,7 +666,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                     var dim = "10___" + d;
                     tmplt += '<tr style="height: 25px;">';
                     for (var f = 0; f < fields.length; f++) {
-                    	if (f === 0) {
+                        if (f === 0) {
                             tmplt += '<td style="margin: 0; padding: 0; text-align: ' + fields[f].align + ';"><span class="ng-binding" style="padding: 0 4px;" ng-bind="(dataItem.' + fields[f].field + '[\'' + dim + '\'] ' + gridUtils.getFormat(fields[f].field, fields[f].format) + ')"></span></td>';
                     	} else if (f === fields.length - 1) { //rate
                     	    tmplt += '<td style="margin: 0; padding: 0;"><input kendo-numeric-text-box k-min="0" k-decimals="2" k-format="\'n2\'" k-ng-model="dataItem.' + fields[f].field + '[\'' + dim + '\']" k-on-change="updateScheduleEditor(dataItem, \'' + fields[f].field + '\', ' + d + ')" style="max-width: 100%; margin:0;" /></td>';
@@ -729,7 +719,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 }
             }
 
-            $scope.multiDimEditor = function(container, options) {
+            $scope.multiDimEditor = function (container, options) {
                 var field = $(container).closest("[data-role=grid]").data("kendoGrid").dataSource.options.schema.model.fields[options.field];
                 var cols = $(container).closest("[data-role=grid]").data("kendoGrid").columns;
                 var col = { field: options.field };
@@ -774,7 +764,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 return el;
             }
 
-            $scope.translateDimKey = function(key) {
+            $scope.translateDimKey = function (key) {
                 if (key === "20___0") return "Primary";
                 if (key === "20____1") return "Kit";
                 if (key === "20___1") return "Secondary 1";
@@ -785,6 +775,14 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
             }
 
             $scope.showCols = function (grpName) {
+                if (grpName.toLowerCase() == "overlapping") {
+                    $scope.isOverlapping = true;
+                    $scope.isLayoutConfigurable = false;
+                }
+                else {
+                    $scope.isOverlapping = false;
+                    $scope.isLayoutConfigurable = true;
+                }
                 var c;
                 var colNames = [];
                 $scope.curGroup = grpName;
@@ -935,19 +933,19 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                             if (beh.validMsg === undefined) beh.validMsg = {};
 
                             if (dataItem != null) {
-                                Object.keys(beh.isError).forEach(function(key, index) {                         
-                                	if (tierAtrbs.contains(key) && !!dataItem.NUM_OF_TIERS) {
-                                		// Is a Rate Breakout column, so set to the parent attribute so that validations badge increments correctly because tiered attirbutes are not in the model
-                                		var tempKey = "TIER_NBR";
-                                		dataItem._behaviors.isError[tempKey] = true;
-                                	} else {
-                                		dataItem._behaviors.isError[key] = beh.isError[key];
-                                		dataItem._behaviors.validMsg[key] = beh.validMsg[key];
-									}
-                                	$scope.increaseBadgeCnt(key); 
+                                Object.keys(beh.isError).forEach(function (key, index) {
+                                    if (tierAtrbs.contains(key) && !!dataItem.NUM_OF_TIERS) {
+                                        // Is a Rate Breakout column, so set to the parent attribute so that validations badge increments correctly because tiered attirbutes are not in the model
+                                        var tempKey = "TIER_NBR";
+                                        dataItem._behaviors.isError[tempKey] = true;
+                                    } else {
+                                        dataItem._behaviors.isError[key] = beh.isError[key];
+                                        dataItem._behaviors.validMsg[key] = beh.validMsg[key];
+                                    }
+                                    $scope.increaseBadgeCnt(key);
 
                                 },
-								beh.isError);
+                                    beh.isError);
                             }
                         }
                     }
@@ -957,7 +955,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
 
             });
 
-            $scope.increaseBadgeCnt = function(key) {
+            $scope.increaseBadgeCnt = function (key) {
                 if ($scope.opOptions.groupColumns[key] === undefined) return;
                 for (var i = 0; i < $scope.opOptions.groupColumns[key].Groups.length; i++) {
                     for (var g = 0; g < $scope.opOptions.groups.length; g++) {
@@ -1043,7 +1041,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 $scope.root.backToPricingTable();
             }
 
-            $scope.clearBadges = function() {
+            $scope.clearBadges = function () {
                 var grps = $scope.opOptions.groups;
                 angular.forEach(grps, function (value, key) {
                     grps[key].numErrors = 0;
@@ -1109,12 +1107,432 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 $scope.contractDs.filter({});
             }
 
+            $scope.addToTab = function (data) {
+                $scope.opOptions.groups.push({ "name": data, "order": 50, "numErrors": 0 });
+
+                // Add Tools
+                if ($scope.opOptions.groupColumns.tools.Groups === undefined) $scope.opOptions.groupColumns.tools.Groups = [];
+                $scope.opOptions.groupColumns.tools.Groups.push(data);
+
+                // Add Deal Details
+                if ($scope.opOptions.groupColumns.details.Groups === undefined) $scope.opOptions.groupColumns.details.Groups = [];
+                $scope.opOptions.groupColumns.details.Groups.push(data);
+
+                $scope.alignGroupOrder();
+
+                $scope.$applyAsync();
+
+                $timeout(function () {
+                    $("#tabstrip").kendoTabStrip().data("kendoTabStrip").reload();
+                    $scope.configureSortableTab();
+                }, 100);
+            }
+
+            $scope.selectOverlappingTab = function () {
+                $timeout(function () {
+                    // select the Overlapping column
+                    var tabStrip = $("#tabstrip").kendoTabStrip().data("kendoTabStrip");                    
+                    tabStrip.select("li:contains('Overlapping')");                    
+                }, 10);
+            }
+            
+            //Select
+            $scope.acceptOvlp = function (data) {
+                var tempdata = $scope.ovlpData;
+                var START_DT = '';
+                var END_DT = '';
+                for (var i = 0; i < tempdata.length; i++) {
+                    if (tempdata[i].WIP_DEAL_OBJ_SID == data && tempdata[i].WF_STG_CD == "Draft" && tempdata[i].OVLP_CD == "SELF_OVLP") {
+                        START_DT = tempdata[i].START_DT;
+                        END_DT = tempdata[i].END_DT;
+                    }
+                }
+                for (var i = 0; i < tempdata.length; i++) {
+                    if (tempdata[i].WIP_DEAL_OBJ_SID == data && tempdata[i].WF_STG_CD == "Active" && tempdata[i].OVLP_CD == "FE_HARD_STOP") {
+                        var d = new Date(START_DT);
+                        d.setDate(d.getDate() - 1);                      
+                        if (d >= new Date(tempdata[i].START_DT)) {
+                            var tempEND_DT = d.getMonth("MM") + 1 + "/" + d.getDate() + "/" + d.getFullYear();
+                            $scope.ovlpData[i].END_DT = "<span style='color:red'> " + tempEND_DT + " - Pending </span>";
+                        }
+                        else {
+                            var dO = new Date(END_DT);
+                            dO.setDate(dO.getDate() + 1);
+                            var tempSTART_DT = dO.getMonth("MM") + 1 + "/" + dO.getDate() + "/" + dO.getFullYear();
+                            $scope.ovlpData[i].START_DT = "<span style='color:red'> " + tempSTART_DT + " - Pending </span>";
+                        }                        
+                    }
+                }
+                $scope.ovlpDataSource.read();
+
+                objsetService.updateOverlappingDeals(data)
+                    .then(function (response) {
+                        if (response.data) {
+                            if ($scope.ovlpErrorCount.indexOf(data) > -1) {
+                                $scope.ovlpErrorCount.splice($scope.ovlpErrorCount.indexOf(data), 1);
+                            }
+                            var grps = $scope.opOptions.groups;
+                            var indx = grps.findIndex(item => item.name == 'Overlapping');
+                            grps[indx].numErrors = $scope.ovlpErrorCount.length;
+                            $scope.ovlpDataSource.read();
+                        } else {
+                            return false;
+                        }
+                    });
+            }
+
+            //Reject 
+            $scope.rejectOvlp = function () {
+                kendo.alert("Please <b>edit</b> and <b>re-validate</b> your deal to avoid overlapping with other deals");
+                $scope.selectFirstTab();
+            }
+
+            //Overlapping GRID
+            $scope.ovlpDataSource = new kendo.data.DataSource({
+                transport: {
+                    read: function (e) {
+                        e.success($scope.ovlpData);
+                    },
+                },
+                error: function (e) {
+                    // handle data operation error
+                    alert("Status: " + e.status + "; Error message: " + e.errorThrown);
+                },
+                schema: {
+                    model: {
+                        id: "CONTRACTNUMBER",
+                        fields: {
+                            "PROGRAM_PAYMENT": {
+                                type: "string"
+                            },
+                            "CONTRACTNUMBER": {
+                                type: "number"
+                            },
+                            "WIP_DEAL_OBJ_SID": {
+                                type: "number",
+                                editable: false
+                            },
+                            "WF_STG_CD": {
+                                type: "string",
+                                editable: false
+                            },
+                            "CUST_ACCNT_DIV": {
+                                type: "string",
+                                editable: false
+                            },
+                            "PRODUCT_NM": {
+                                type: "string",
+                                editable: false
+                            },
+                            "GEO_COMBINED": {
+                                type: "string",
+                                editable: false
+                            },
+                            "SOLD_TO_ID": {
+                                type: "string",
+                                editable: false
+                            },
+                            "START_DT": {
+                                type: "stirng",
+                                editable: false
+                            },
+                            "END_DT": {
+                                type: "string",
+                                editable: false
+                            },
+                            "ECAP_PRICE": {
+                                type: "number",
+                                editable: false
+                            },
+                            "DEAL_COMB_TYPE": {
+                                type: "string",
+                                editable: false
+                            },
+                            "ECAP_TYPE": {
+                                type: "string",
+                                editable: false
+                            },
+                            "MRKT_SEG": {
+                                type: "string",
+                                editable: false
+                            },
+                            "OVLP_CD": {
+                                type: "string",
+                                editable: false
+                            }
+                        }
+                    }
+                },
+                pageSize: 25,
+                group: [{ field: "PROGRAM_PAYMENT" }, { field: "WIP_DEAL_OBJ_SID", aggregates: [{ field: "WIP_DEAL_OBJ_SID", aggregate: "count" }] }]
+            });
+
+            $scope.ovlp = {
+                dataSource: $scope.ovlpDataSource,
+                scrollable: true,
+                sortable: true,
+                editable: false,
+                navigatable: true,
+                filterable: true,
+                resizable: true,
+                reorderable: true,
+                pageable: {
+                    refresh: true,
+                    pageSizes: [25, 50, 100],
+                    buttonCount: 5
+                },
+                columns: [
+                    {
+                        field: "tools",
+                        filterable: false,
+                        //headerTemplate: "<input type='checkbox' ng-click='clkAllItems()' class='with-font' id='chkDealTools' /><label for='chkDealTools' style='margin: 5px 0 0 5px;'>Deal Tools</label>",
+                        template: "<deal-tools ng-model='dataItem' is-editable='false'></deal-tools>",
+                        title: "Deal Tools",
+                        width: "150px"
+                    },
+                    {
+                        field: "PROGRAM_PAYMENT",
+                        title: "Type",                        
+                        width: "120px",
+                        filterable: { multi: true, search: true },                        
+                        groupHeaderTemplate: function (e) {
+                            if (e.value == "Frontend YCS2") {
+                                return "<span style='font-weight:bold;font-size:13px; color: red;letter-spacing:0.07em '>Front End Overlap</span>";
+                            }
+                            else {
+                                return "<span style='font-weight:bold;font-size:13px; color: red;letter-spacing:0.07em '>Billings Overlap</span>";
+                            }
+                        },
+                        hidden:true                        
+                    },
+                    {
+                        field: "WIP_DEAL_OBJ_SID",
+                        title: "Contract",
+                        width: "120px",
+                        groupHeaderTemplate: function (e) {
+                            //TODO: Check for the Role security... 
+                            var hasResolved = false;
+                            var cnt = 0;
+                            var groupRow = $filter("where")($scope.ovlpDataSource._data, { 'WIP_DEAL_OBJ_SID': e.value, 'PROGRAM_PAYMENT': 'Frontend YCS2' });
+                            if (groupRow.length > 1) {
+                                
+                                if ($filter("where")(groupRow, { 'WF_STG_CD': 'Draft' }).length > 1) {
+                                    cnt = groupRow.length;
+                                }
+                                else if ($filter("where")(groupRow, { 'WF_STG_CD': 'Draft' }).length == 1) {
+                                    cnt = 1;
+                                }
+                                else {
+                                    cnt = 2;
+                                }
+
+                            }
+                            if ($scope.ovlpErrorCount.indexOf(e.value) > -1) {
+                                hasResolved = true;
+                            }
+
+                            if (hasResolved && cnt > 0 && cnt == 1 && $scope.isOvlpAccess) {
+                                return "<span class=\"grpTitle\">" + e.value + " </span><i class='intelicon-arrow-back-left skyblue pl10'></i> <span class='grpDesc' style='font-weight:bold;'>An overlap was found with an Active or Draft deal, in order you create this new deal would you like the System to change the End date of the deal?</span>&nbsp;<span class='lnk' ng-click='acceptOvlp(" + e.value + ")' > Yes </span > <span class='or'>&nbsp;OR&nbsp;</span> <span class='lnk' ng-click='rejectOvlp()'>No</span>"
+                            }
+                            else if (hasResolved && cnt > 1 && $scope.isOvlpAccess) {
+                                return "<span class=\"grpTitle\">" + e.value + " </span><i class='intelicon-arrow-back-left skyblue pl10'></i> <span class='grpDesc' style='font-weight:bold;'>An overlap was found with another Draft deal, please correct and revalidate.</span>&nbsp;<span class='lnk' ng-click='rejectOvlp()'>Yes</span>"
+                            }  
+                            else if (!hasResolved){
+                                return "<span class=\"grpTitle\">" + e.value + " </span><i class='intelicon-arrow-back-left skyblue pl10'></i> <span class='grpDesc' style='font-weight:bold;'>An overlap was found with an Active or Draft deal, in order you create this new deal would you like the System to change the End date of the deal?</span>&nbsp;"
+                            }
+                            else {
+                                return "<span class=\"grpTitle\">" + e.value + " </span> <i class='intelicon-arrow-back-left skyblue pl10'></i> <span class='grpDesc' style='font-weight:bold;letter-spacing:0.07em '>Please correct and revalidate</span>"
+                            }
+
+                        },
+                        filterable: { multi: true, search: true },
+                        hidden:true
+                    },
+                    {
+                        field: "OVLP_DEAL_OBJ_SID",
+                        title: "Deal #",
+                        template: "#= OVLP_DEAL_OBJ_SID #",
+                        width: "80px",
+                        filterable: { multi: true, search: true }
+                    },                    
+                    {
+                        field: "CONTRACT_NBR",
+                        title: "Contract",
+                        template: "<div title='#= CONTRACT_NM # ( #= CONTRACT_NBR # )'>#= CONTRACT_NM # ( #= CONTRACT_NBR # )</div>",
+                        width: "120px",
+                        filterable: { multi: true, search: true }
+                    },
+                    {
+                        field: "PRICE_STRATEGY",
+                        title: "Pricing Strategy",
+                        template: "<div title='#= PRICE_STRATEGY_NM # ( #= PRICE_STRATEGY # )'>#= PRICE_STRATEGY_NM # ( #= PRICE_STRATEGY # )</div>",
+                        width: "120px",
+                        filterable: { multi: true, search: true }
+                    },
+                    {
+                        field: "PRICING_TABLES",
+                        title: "Pricing Table",
+                        template: "<div title='#= PRICING_TABLES_NM # ( #= PRICING_TABLES # )'>#= PRICING_TABLES_NM # ( #= PRICING_TABLES # )</div>",
+                        width: "120px",
+                        filterable: { multi: true, search: true }
+                    },
+                    {
+                        field: "WF_STG_CD",
+                        title: "Stage",
+                        width: "80px",
+                        filterable: { multi: true, search: true }
+                    },
+                    {
+                        field: "CUST_ACCNT_DIV",
+                        title: "Customer Division",
+                        width: "120px",
+                        filterable: { multi: true, search: true }
+                    },
+                    {
+                        field: "PRODUCT_NM",
+                        title: "MyDeals Product",
+                        width: "120px",
+                        template: "<div title='#= PRODUCT_NM #'>#= PRODUCT_NM #</div>",
+                        filterable: { multi: true, search: true }
+                    },
+                    {
+                        field: "GEO_COMBINED",
+                        title: "Geo",
+                        width: "100px",
+                        filterable: { multi: true, search: true }
+                    },
+                    {
+                        field: "SOLD_TO_ID",
+                        title: "Sold To ID",
+                        width: "120px",
+                        filterable: { multi: true, search: true }
+                    },
+                    {
+                        field: "START_DT",
+                        title: "Deal Start Date",
+                        width: "120px", 
+                        template: "#= kendo.toString(START_DT) #",
+                        groupable: false
+                    },
+                    {
+                        field: "END_DT",
+                        title: "Deal End Date",
+                        width: "120px",
+                        template: "#= kendo.toString(END_DT) #",
+                        groupable: false
+                    },
+                    {
+                        field: "ECAP_PRICE",
+                        title: "ECAP Price",
+                        width: "120px",
+                        format: "{0:c}",
+                        filterable: { multi: true, search: true }
+                    },
+                    {
+                        field: "DEAL_COMB_TYPE",
+                        title: "Additive",
+                        width: "120px",
+                        filterable: { multi: true, search: true }
+                    },
+                    {
+                        field: "ECAP_TYPE",
+                        title: "ECAP Type",
+                        width: "150px",
+                        filterable: { multi: true, search: true }
+                    },
+                    {
+                        field: "MRKT_SEG",
+                        title: "Market Segment",
+                        width: "150px",
+                        filterable: { multi: true, search: true }
+                    }
+                ]
+            };
+
+            $scope.addTabRequired = function () {
+                var data = "Overlapping";
+                var tabItems = $scope.opOptions.groups;
+                var tabFound = false;
+                for (var j = 0; j < tabItems.length; j++) {
+                    if (tabItems[j].name == data) {
+                        tabFound = true;
+                        break;
+                    }
+                }
+                if (!tabFound) {
+                    $scope.addToTab(data);
+                }
+                $scope.selectOverlappingTab();
+            }
+
+            $scope.ovlpErrorCounter = function (data) {
+                var grps = $scope.opOptions.groups;
+                var rowCount = $filter('unique')(data, 'WIP_DEAL_OBJ_SID');
+                for (var z = 0; z < rowCount.length; z++) {
+                    $scope.ovlpErrorCount.push(rowCount[z].WIP_DEAL_OBJ_SID);
+                }
+                var indx = grps.findIndex(item => item.name == 'Overlapping');
+                grps[indx].numErrors = rowCount.length;
+            }
+
             $scope.saveAndValidateGrid = function () {
-                $scope.parentRoot.setBusy("Validating your data...", "Please wait as we validate your information!");
-                //$timeout(function () {
-                    $scope.contractDs.sync();
-                    $scope.root.validateWipDeals();
-                //}, 100);
+
+                var dealType = $scope.dealTypes[0];
+                if (dealType.toUpperCase() == "ECAP") {
+                    if (usrRole == "GA" || usrRole == "FSE") {
+                        $scope.isOvlpAccess = true;
+                    }
+                    //Fetch Overlapping Data
+                    var pricingTableID = $scope.$parent.$parent.$parent.$parent.$parent.curPricingTable.DC_ID;
+
+                    objsetService.getOverlappingDeals(pricingTableID)
+                        .then(function (response) {
+                            if (response.data) {
+                                if (response.data.length > 0) {
+                                    $scope.isOverlapping = true;
+                                    
+                                    //$scope.opOptions.columns = keys;
+
+                                    //Checking TAB already exist or not
+                                    $scope.addTabRequired();
+
+                                    //Calculate Error count
+                                    $scope.ovlpErrorCounter(response.data);
+
+                                    //Assigning Data to Overlapping GRID
+                                    $scope.ovlpData = response.data;
+
+                                    //Data massaging for END_DT
+                                    for (var i = 0; i < $scope.ovlpData.length; i++) {
+                                        //START DT massaging
+                                        var d = new Date($scope.ovlpData[i].START_DT);
+                                        $scope.ovlpData[i].START_DT = d.getMonth() + 1 + "/" + d.getDate() + "/" + d.getFullYear();
+
+                                        //END DT massaging
+                                        var d = new Date($scope.ovlpData[i].END_DT);
+                                        $scope.ovlpData[i].END_DT = d.getMonth() + 1 + "/" + d.getDate() + "/" + d.getFullYear();
+                                    }
+
+                                    $scope.ovlpDataSource.read();
+
+                                    //Hiding Column Preference and Grid Preferences
+                                    $scope.isLayoutConfigurable = false;
+                                }
+                                else {
+                                    $scope.$parent.$parent.setBusy("Validating your data...", "Please wait as we validate your information!");
+                                    //$timeout(function () {
+                                    $scope.contractDs.sync();
+                                    $scope.$parent.$parent.$parent.validateWipDeals();
+                                    //}, 100);
+                                }
+
+                            } else {
+                                return false;
+                            }
+                        });
+
+
+                }
 
                 return;
 
@@ -1168,12 +1586,12 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal) {
                 angular.forEach(beh.isError, function (value, key) {
                     if (!!$scope.opOptions.model.fields[key] && beh.isError[key] && (beh.isReadOnly[key] === undefined || !beh.isReadOnly[key]) && (beh.isHidden[key] === undefined || !beh.isHidden[key])) {
                         $scope.increaseBadgeCnt(key);
-                        valid = false; 
+                        valid = false;
                         row["PASSED_VALIDATION"] = "Dirty";
                     } else {
-                    	//// NOTE: the below is commented out to allow us to add validations to inidividual cells on tiered attributes in Rate Breakout.
-                    	//// Rate Breakout is TIER_NUM. Al tiered attributes (END_VOL, STRT_VOL, and RATE) masquerade as TIER_NUM and are therefore not in the model.
-						//// If you need to uncomment the below, make sure to alter tiered attribute validations as well.
+                        //// NOTE: the below is commented out to allow us to add validations to inidividual cells on tiered attributes in Rate Breakout.
+                        //// Rate Breakout is TIER_NUM. Al tiered attributes (END_VOL, STRT_VOL, and RATE) masquerade as TIER_NUM and are therefore not in the model.
+                        //// If you need to uncomment the below, make sure to alter tiered attribute validations as well.
                         //beh.isError[key] = false;
                         //beh.validMsg[key] = "";
                     }
