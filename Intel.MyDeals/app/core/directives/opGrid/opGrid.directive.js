@@ -30,7 +30,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
             $scope.assignVal = function (field, defval) {
                 var item = $scope.opOptions[field];
-                return !item ? defval : item;
+                return (item === undefined || item === null) ? defval : item;
             }
 
             $scope.ovlpData = [];
@@ -50,6 +50,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.columnSearchFilter = "";
             $scope.isLayoutConfigurable = $scope.assignVal("isLayoutConfigurable", false);
             $scope.isPricingTableEnabled = $scope.assignVal("isPricingTableEnabled", false);
+            $scope.isCustomToolbarEnabled = $scope.assignVal("isCustomToolbarEnabled", false);
+            $scope.isPinEnabled = $scope.assignVal("isPinEnabled", true);
             $scope.isEditable = $scope.assignVal("isEditable", false);
             $scope.openCAPBreakOut = openCAPBreakOut;
             $scope.getPrductDetails = getPrductDetails;
@@ -139,7 +141,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 var newArray = [];
                 var grps = $scope.opOptions[source].groups;
                 for (var i = 0; i < grps.length; i++) {
-                    newArray.push({ "name": grps[i].name, "order": grps[i].order, "isPinned": grps[i].isPinned });
+                    newArray.push({ "name": grps[i].name, "order": grps[i].order, "isPinned": grps[i].isPinned, "isTabHidden": grps[i].isTabHidden });
                 }
                 $scope.opOptions.groups = newArray;
 
@@ -345,14 +347,16 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         var hideIfAll = [];
 
                         // init all rules
-                        for (g = 0; g < $scope.opOptions.default.groups.length; g++) {
-                            group = $scope.opOptions.default.groups[g];
-                            if (!!group.rules) {
-                                for (r = 0; r < group.rules.length; r++) {
-                                    if (group.rules[r].logical === "HideIfAll") {
-                                        group.rules[r].name = group.name;
-                                        group.rules[r].show = false;
-                                        hideIfAll.push(group.rules[r]);
+                        if (!!$scope.opOptions.default) {
+                            for (g = 0; g < $scope.opOptions.default.groups.length; g++) {
+                                group = $scope.opOptions.default.groups[g];
+                                if (!!group.rules) {
+                                    for (r = 0; r < group.rules.length; r++) {
+                                        if (group.rules[r].logical === "HideIfAll") {
+                                            group.rules[r].name = group.name;
+                                            group.rules[r].show = false;
+                                            hideIfAll.push(group.rules[r]);
+                                        }
                                     }
                                 }
                             }

@@ -1,13 +1,15 @@
 ﻿    <div class='op-grid-container-wrapper'>
         <div ng-show="isToolbarVisible && !hideToolbar" class='op-grid-header'>
-            <div class="dealTag" ng-if="dealCnt" style="position: absolute; top: 0; right: 0; z-index: 100; font-size: 16px;">
-                {{displayDealTypes()}}
+            <div ng-if="dealCnt">
+                <div class="dealTag" style="position: absolute; top: 0; right: 0; z-index: 100; font-size: 16px;">
+                    {{displayDealTypes()}}
+                </div>
             </div>
             <div id="tabstrip" kendo-tab-strip class="gradTab" k-ng-delay="tabStripDelay" ng-show="tabStripDelay">
 
                 <ul class="fl">
-                    <li ng-repeat="group in opOptions.groups | orderBy:'order'" ng-click="showCols(group.name)" ng-hide="group.isHidden">
-                        <i class="intelicon-pin-outlined" ng-hide="{{ group.name == 'All' || group.name == 'CAP Info' }}" title="Pin tab so it always shows in the grid" ng-click="clickPin($event, group.name)"></i> {{group.name}}
+                    <li ng-repeat="group in opOptions.groups | orderBy:'order'" ng-click="showCols(group.name)" ng-hide="group.isHidden || group.isTabHidden">
+                        <i class="intelicon-pin-outlined" ng-hide="{{ !isPinEnabled || group.name == 'All' || group.name == 'CAP Info' }}" title="Pin tab so it always shows in the grid" ng-click="clickPin($event, group.name)"></i> {{group.name}}
                         <span class="badge error" ng-show="group.numErrors > 0">{{group.numErrors}}</span>
                         <span class="badge warning" ng-show="{{ group.name == 'CAP Info' && numSoftWarn > 0 }}">{{numSoftWarn}}</span>
                         <i class="intelicon-close-solid closeGrp" ng-hide="{{ group.name == 'All' || group.name == 'CAP Info' || !isLayoutConfigurable}}" title="Close tab" ng-click="removeGrp($event, group.name)"></i>
@@ -15,7 +17,7 @@
                 </ul>
             </div>
 
-            <div class="toolbar">
+            <div class="toolbar" ng-hide="isCustomToolbarEnabled">
 
                 <div class="fl">
                     <button class="btn btn-sm ssToolbarBtn" ng-click="saveAndValidateGrid()" ng-show="isEditable" title="Save and Validate Deals">
@@ -31,7 +33,7 @@
                         </table>
                     </button>
 
-                    <button class="btn btn-sm ssToolbarBtn" ng-click="toggleTerms()" title="Show/Hide Additional Discounts and Requirements.">
+                    <button class="btn btn-sm ssToolbarBtn" ng-click="toggleTerms()" ng-show="isVisibleAdditionalDiscounts" title="Show/Hide Additional Discounts and Requirements.">
                         <table>
                             <tr>
                                 <td>

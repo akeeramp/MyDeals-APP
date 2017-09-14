@@ -216,6 +216,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             root.wipOptions = {
                 "isLayoutConfigurable": true,
                 "isPricingTableEnabled": true,
+                "isVisibleAdditionalDiscounts": true,
                 "isEditable": true
             };
             root.wipOptions.columns = wipTemplate.columns;
