@@ -1558,8 +1558,21 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                 }
 
                             } else {
-                                return false;
+                                //TODO: Remove The code when DDL moved and PROC moved to all Envs
+                                $scope.$parent.$parent.setBusy("Validating your data...", "Please wait as we validate your information!");
+                                //$timeout(function () {
+                                $scope.contractDs.sync();
+                                $scope.$parent.$parent.$parent.validateWipDeals();
+                                    //}, 100);
                             }
+                        },
+                        function (response) {
+                            //TODO: Remove The code when DDL moved and PROC moved to all Envs
+                            $scope.$parent.$parent.setBusy("Validating your data...", "Please wait as we validate your information!");
+                            //$timeout(function () {
+                            $scope.contractDs.sync();
+                            $scope.$parent.$parent.$parent.validateWipDeals();
+                                    //}, 100);                            
                         });
 
 
