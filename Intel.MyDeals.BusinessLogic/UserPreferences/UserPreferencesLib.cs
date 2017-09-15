@@ -27,6 +27,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns>list of UserPreferences</returns>
         public List<UserPreferences> GetUserPreferences(string category, string subCategory)
         {
+            // TODO::TJE
             // Commented out until DB gets it's parts in place for this to work.
             //return _userPreferencesDataLib.GetUserPreferences(category, subCategory).ToList();
             return null;
