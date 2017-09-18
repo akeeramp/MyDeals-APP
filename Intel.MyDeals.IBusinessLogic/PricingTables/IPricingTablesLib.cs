@@ -20,9 +20,9 @@ namespace Intel.MyDeals.IBusinessLogic
 
         OpMsgQueue UnGroupPricingTableRowById(ContractToken contractToken, int ptrId);
 
-        List<Overlapping> GetOverlappingDeals(int ID);
+        List<Overlapping> GetOverlappingDeals(int PRICING_TABLES_ID);
 
-        List<Overlapping> UpdateOverlappingDeals(int ID, string FLAG);
+        List<Overlapping> UpdateOverlappingDeals(int PRICING_TABLES_ID, string YCS2_OVERLAP_OVERRIDE);
 
     }
 }

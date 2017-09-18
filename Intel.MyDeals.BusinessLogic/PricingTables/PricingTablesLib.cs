@@ -314,16 +314,16 @@ namespace Intel.MyDeals.BusinessLogic
             return opMsgQueue;
         }
 
-        public List<Overlapping> GetOverlappingDeals(int ID)
+        public List<Overlapping> GetOverlappingDeals(int PRICING_TABLES_ID)
         {
             OpDataCollectorDataLib OD = new OpDataCollectorDataLib();
-            return OD.GetOverlappingDeals(ID);
+            return OD.GetOverlappingDeals(PRICING_TABLES_ID);
         }
 
-        public List<Overlapping> UpdateOverlappingDeals(int ID, string FLAG)
+        public List<Overlapping> UpdateOverlappingDeals(int PRICING_TABLES_ID, string YCS2_OVERLAP_OVERRIDE)
         {
             OpDataCollectorDataLib OD = new OpDataCollectorDataLib();
-            return OD.UpdateOverlappingDeals(ID, FLAG);
+            return OD.UpdateOverlappingDeals(PRICING_TABLES_ID, YCS2_OVERLAP_OVERRIDE);
         }
     }
 

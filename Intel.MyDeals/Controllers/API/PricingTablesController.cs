@@ -148,21 +148,21 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("GetOverlappingDeals/{ID}")]
-        public List<Overlapping> GetOverlappingDeals(int ID)     //Get all Product with Alias from ProductAlias
+        [Route("GetOverlappingDeals/{PRICING_TABLES_ID}")]
+        public List<Overlapping> GetOverlappingDeals(int PRICING_TABLES_ID)     //Get all Product with Alias from ProductAlias
         {
-            return SafeExecutor(() => _pricingTablesLib.GetOverlappingDeals(ID)
-                , $"Unable to get {"Product Alias"}"
+            return SafeExecutor(() => _pricingTablesLib.GetOverlappingDeals(PRICING_TABLES_ID)
+                , $"Unable to get {"Overlapping Data"}"
              );
         }
 
         [HttpPost]
         [Authorize]
-        [Route("UpdateOverlappingDeals/{ID}/{FLAG}")]
-        public List<Overlapping> UpdateOverlappingDeals(int ID, string FLAG)     //Get all Product with Alias from ProductAlias
+        [Route("UpdateOverlappingDeals/{PRICING_TABLES_ID}/{YCS2_OVERLAP_OVERRIDE}")]
+        public List<Overlapping> UpdateOverlappingDeals(int PRICING_TABLES_ID, string YCS2_OVERLAP_OVERRIDE)     //Get all Product with Alias from ProductAlias
         {
-            return SafeExecutor(() => _pricingTablesLib.UpdateOverlappingDeals(ID, FLAG)
-                , $"Unable to get {"Product Alias"}"
+            return SafeExecutor(() => _pricingTablesLib.UpdateOverlappingDeals(PRICING_TABLES_ID, YCS2_OVERLAP_OVERRIDE)
+                , $"Unable to get {"Overlapping Data"}"
              );
         }
     }

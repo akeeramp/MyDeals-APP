@@ -143,12 +143,12 @@ function objsetService($http, dataService, logger, $q) {
     }
 
     // #### Overlapping CRUD operation ####
-    function getOverlappingDeals(ID) {
-        return dataService.get(apiBasePricingTableUrl + 'GetOverlappingDeals/' + ID);
+    function getOverlappingDeals(PRICING_TABLES_ID) {
+        return dataService.get(apiBasePricingTableUrl + 'GetOverlappingDeals/' + PRICING_TABLES_ID);
     }
 
-    function updateOverlappingDeals(ID, flag) {
-        return dataService.post(apiBasePricingTableUrl + 'UpdateOverlappingDeals/' + ID + "/" + flag);
+    function updateOverlappingDeals(PRICING_TABLES_ID, YCS2_OVERLAP_OVERRIDE) {
+        return dataService.post(apiBasePricingTableUrl + 'UpdateOverlappingDeals/' + PRICING_TABLES_ID + "/" + YCS2_OVERLAP_OVERRIDE);
     }   
 
 }

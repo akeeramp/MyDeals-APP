@@ -1026,14 +1026,14 @@ namespace Intel.MyDeals.DataLibrary
             return dt;
         }
         
-        public List<Overlapping> GetOverlappingDeals(int ID)
+        public List<Overlapping> GetOverlappingDeals(int PRICING_TABLES_ID)
         {            
             OpLogPerf.Log("GetOverlappingDeals");
 
             var ret = new List<Overlapping>();
             var cmd = new Procs.dbo.PR_MYDL_UI_GET_OVRLP
             {
-                @ID = ID,
+                @ID = PRICING_TABLES_ID,
                 @MODE = "SELECT",
             };
 
@@ -1108,7 +1108,7 @@ namespace Intel.MyDeals.DataLibrary
             return ret;
         }
 
-        public List<Overlapping> UpdateOverlappingDeals(int ID, string FLAG)
+        public List<Overlapping> UpdateOverlappingDeals(int PRICING_TABLES_ID, string YCS2_OVERLAP_OVERRIDE)
         {
             OpLogPerf.Log("UpdateOverlappingDeals");
 
@@ -1119,10 +1119,10 @@ namespace Intel.MyDeals.DataLibrary
             {
                 using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_MYDL_UI_GET_OVRLP
                 {
-                    @ID = ID,
+                    @ID = PRICING_TABLES_ID,
                     @MODE = "UPDATE",
                     @USR_WWID = OpUserStack.MyOpUserToken.Usr.WWID,
-                    @FLAG = FLAG
+                    @FLAG = YCS2_OVERLAP_OVERRIDE
                 }))
                 {
                     int IDX_PRICING_TABLES = DB.GetReaderOrdinal(rdr, "PRICING_TABLES");
