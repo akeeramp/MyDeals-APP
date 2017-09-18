@@ -20,7 +20,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"];
             $scope.isOverlapping = false;
             $scope.isOvlpAccess = false;            
-            $scope.ovlpErrorCount = [];            
+            $scope.ovlpErrorCount = []; 
+            $scope.ovlpDataRep = [];
             $timeout(function () {
                 $scope.tabStripDelay = true;
                 $timeout(function () {
@@ -1168,6 +1169,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 }, 100);
             }
 
+            // Selecting Overlapping Tab
             $scope.selectOverlappingTab = function () {
                 $timeout(function () {
                     // select the Overlapping column
@@ -1176,12 +1178,13 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 }, 10);
             }
 
-            //Select
+            //Accept Overlapping
             $scope.acceptOvlp = function (data, YCS2_OVERLAP_OVERRIDE) {
                 var tempdata = $scope.ovlpData;
                 var START_DT = '';
                 var END_DT = '';
                 var dcID = 0;
+                
                 for (var i = 0; i < tempdata.length; i++) {
                     if (tempdata[i].WIP_DEAL_OBJ_SID == data && tempdata[i].WF_STG_CD == "Draft" && tempdata[i].OVLP_CD == "SELF_OVLP") {
                         START_DT = tempdata[i].START_DT;
@@ -1190,21 +1193,29 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 }
                 for (var i = 0; i < tempdata.length; i++) {
                     if (tempdata[i].WIP_DEAL_OBJ_SID == data && tempdata[i].WF_STG_CD == "Active" && tempdata[i].OVLP_CD == "FE_HARD_STOP") {
-                        var d = new Date(START_DT);
-                        dcID = tempdata[i].OVLP_DEAL_OBJ_SID;
-                        d.setDate(d.getDate() - 1);
-                        if (d >= new Date(tempdata[i].START_DT)) {
-                            var tempEND_DT = d.getMonth("MM") + 1 + "/" + d.getDate() + "/" + d.getFullYear();
-                            $scope.ovlpData[i].END_DT = "<span style='color:red'> " + tempEND_DT + " - Pending </span>";
+                        if (YCS2_OVERLAP_OVERRIDE == 'Y') {
+                            var d = new Date(START_DT);
+                            dcID = tempdata[i].OVLP_DEAL_OBJ_SID;
+                            d.setDate(d.getDate() - 1);
+                            if (d >= new Date(tempdata[i].START_DT)) {
+                                var tempEND_DT = d.getMonth("MM") + 1 + "/" + d.getDate() + "/" + d.getFullYear();
+                                $scope.ovlpData[i].END_DT = "<span style='color:red'> " + tempEND_DT + " - Pending </span>";
+                            }
+                            else {
+                                var dO = new Date(END_DT);
+                                dO.setDate(dO.getDate() + 1);
+                                var tempSTART_DT = dO.getMonth("MM") + 1 + "/" + dO.getDate() + "/" + dO.getFullYear();
+                                $scope.ovlpData[i].START_DT = "<span style='color:red'> " + tempSTART_DT + " - Pending </span>";
+                            }
                         }
                         else {
-                            var dO = new Date(END_DT);
-                            dO.setDate(dO.getDate() + 1);
-                            var tempSTART_DT = dO.getMonth("MM") + 1 + "/" + dO.getDate() + "/" + dO.getFullYear();
-                            $scope.ovlpData[i].START_DT = "<span style='color:red'> " + tempSTART_DT + " - Pending </span>";
+                            $scope.ovlpData[i].START_DT = $scope.ovlpDataRep[i].START_DT;
+                            $scope.ovlpData[i].END_DT = $scope.ovlpDataRep[i].END_DT;
                         }
+                            
                     }
                 }
+                
                 $scope.ovlpDataSource.read();                            
                 
                 objsetService.updateOverlappingDeals(data, YCS2_OVERLAP_OVERRIDE)
@@ -1257,7 +1268,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
             // Go to Deal Details 
             $scope.gotoDealDetails = function (dataItem) {
-                if (dataItem.OVLP_CD == "SELF_OVLP") {
+                var sid = $scope.$parent.$parent.$parent.$parent.$parent.curPricingTable;
+                if (dataItem.OVLP_CD == "SELF_OVLP" || dataItem.PRICING_TABLES == $scope.$parent.$parent.$parent.$parent.$parent.curPricingTable.DC_ID) {
                     var tabStrip = $("#tabstrip").kendoTabStrip().data("kendoTabStrip");
                     tabStrip.select(0);
                     $scope.showCols($scope.opOptions.groups[0].name);
@@ -1504,14 +1516,14 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         field: "START_DT",
                         title: "Deal Start Date",
                         width: "120px",
-                        template: "<div class='ovlpCell' title='#= START_DT #'> #= kendo.toString(START_DT) # </div>",
+                        template: "<div class='ovlpCell'> #= kendo.toString(START_DT) # </div>",
                         groupable: false
                     },
                     {
                         field: "END_DT",
                         title: "Deal End Date",
                         width: "120px",
-                        template: "<div class='ovlpCell' title='#= END_DT #'> #= kendo.toString(END_DT) # </div>",
+                        template: "<div class='ovlpCell'> #= kendo.toString(END_DT) # </div>",
                         groupable: false
                     },
                     {
@@ -1611,6 +1623,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         .then(function (response) {
                             if (response.data) {
                                 if (response.data.length > 0) {
+                                    
                                     $scope.isOverlapping = true;
 
                                     //Checking TAB already exist or not
@@ -1634,6 +1647,9 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                     }
 
                                     $scope.ovlpDataSource.read();
+
+                                    //Saving data for RedoUndo
+                                    $scope.ovlpDataRep = angular.copy($scope.ovlpData);
 
                                     //Hiding Column Preference and Grid Preferences
                                     $scope.isLayoutConfigurable = false;
