@@ -779,17 +779,19 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             }
 
             $scope.showCols = function (grpName) {
-                $scope.searchFilter = "";
-                $scope.contractDs.filter({});
 
                 if (grpName.toLowerCase() == "overlapping") {
                     $scope.isOverlapping = true;
-                    $scope.isLayoutConfigurable = false;                    
-                    $scope.ovlpDataSource.filter({});                   
+                    $scope.isLayoutConfigurable = false;  
+                    $scope.searchFilter = "";
+                    $scope.contractDs.filter({});           
                 }
                 else {
-                    $scope.isOverlapping = false;
-                    $scope.isLayoutConfigurable = true;                    
+                    $scope.isOverlapping = false;                    
+                    $scope.isLayoutConfigurable = true;
+                    $scope.searchFilter = "";
+                    $scope.ovlpDataSource.filter({});  
+                    
                 }
                 var c;
                 var colNames = [];
@@ -1241,7 +1243,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 kendo.alert("Please <b>edit</b> and <b>re-validate</b> your deal to avoid overlapping with other deals");
                 var tabStrip = $("#tabstrip").kendoTabStrip().data("kendoTabStrip");
                 tabStrip.select(0);
-                $scope.showCols($scope.curGroup);
+                $scope.showCols($scope.opOptions.groups[0].name);
                 $timeout(function () { $scope.searchFilter = OVLP_DEAL_OBJ_SID; }, 1000);
                 $scope.searchFilter = OVLP_DEAL_OBJ_SID;
                 $timeout(function () { $scope.searchFilter = OVLP_DEAL_OBJ_SID; }, 1000);
@@ -1255,19 +1257,22 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
             // Go to Deal Details 
             $scope.gotoDealDetails = function (dataItem) {
-                var tabStrip = $("#tabstrip").kendoTabStrip().data("kendoTabStrip");
-                tabStrip.select(0);
-                $scope.showCols($scope.curGroup);
-                $timeout(function () { $scope.searchFilter = dataItem.OVLP_DEAL_OBJ_SID; }, 1000);
-                $scope.searchFilter = dataItem.OVLP_DEAL_OBJ_SID;
-                $timeout(function () { $scope.searchFilter = dataItem.OVLP_DEAL_OBJ_SID;}, 1000);
-                $scope.searchGrid();
+                if (dataItem.OVLP_CD == "SELF_OVLP") {
+                    var tabStrip = $("#tabstrip").kendoTabStrip().data("kendoTabStrip");
+                    tabStrip.select(0);
+                    $scope.showCols($scope.opOptions.groups[0].name);
+                    $timeout(function () { $scope.searchFilter = dataItem.OVLP_DEAL_OBJ_SID; }, 1000);
+                    $scope.searchFilter = dataItem.OVLP_DEAL_OBJ_SID;
+                    $timeout(function () { $scope.searchFilter = dataItem.OVLP_DEAL_OBJ_SID; }, 1000);
+                    $scope.searchGrid();
+                }
+                else {
+                    var win = window.open("Contract#/manager/" + dataItem.CONTRACT_NBR + "/" + dataItem.PRICE_STRATEGY + "/" + dataItem.PRICING_TABLES + "/wip", '_blank');
+                    win.focus();
+                }
+                
             }
-            //Open contract
-            $scope.openContractNewTaB = function (CONTRACT_NBR, PRICE_STRATEGY, PRICING_TABLES) {
-                var win = window.open("Contract#/manager/" + CONTRACT_NBR + "/" + PRICE_STRATEGY + "/" + PRICING_TABLES + "/wip", '_blank');
-                win.focus();
-            }
+            
             //Overlapping GRID
             $scope.ovlpDataSource = new kendo.data.DataSource({
                 transport: {
@@ -1436,27 +1441,27 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         title: "Deal #",
                         template: "#= OVLP_DEAL_OBJ_SID #",
                         width: "80px",
-                        template: "<div class='ovlpCell'>#if(OVLP_CD == 'SELF_OVLP') {#<a ng-click='gotoDealDetails(dataItem)' class='btnDeal'> #= OVLP_DEAL_OBJ_SID # </a>#} else{##:OVLP_DEAL_OBJ_SID##}#</div>",
+                        template: "<div class='ovlpCell'><a ng-click='gotoDealDetails(dataItem)' class='btnDeal'> #= OVLP_DEAL_OBJ_SID # </a></div>",
                         filterable: { multi: true, search: true }
                     },
                     {
                         field: "CONTRACT_NBR",
                         title: "Contract",
-                        template: "<div class='ovlpCell' title='#= CONTRACT_NM # ( #= CONTRACT_NBR # )'><a ui-sref='contract.manager.strategy.wip({ cid: CONTRACT_NBR, sid: PRICE_STRATEGY, pid: PRICING_TABLES })' ng-click='openContractNewTaB(#=CONTRACT_NBR#,#=PRICE_STRATEGY#,#=PRICING_TABLES#)' style='cursor:pointer'>#= CONTRACT_NM # ( #= CONTRACT_NBR # ) </a></div>",
+                        template: "<div class='ovlpCell' title='#= CONTRACT_NM # ( #= CONTRACT_NBR # )'>#= CONTRACT_NM # ( #= CONTRACT_NBR # )</div>",
                         width: "120px",
                         filterable: { multi: true, search: true }
                     },
                     {
                         field: "PRICE_STRATEGY",
                         title: "Pricing Strategy",
-                        template: "<div class='ovlpCell' title='#= PRICE_STRATEGY_NM # ( #= PRICE_STRATEGY # )'><a ui-sref='contract.manager.strategy.wip({ cid: CONTRACT_NBR, sid: PRICE_STRATEGY, pid: PRICING_TABLES })' ng-click='openContractNewTaB(#=CONTRACT_NBR#,#=PRICE_STRATEGY#,#=PRICING_TABLES#)' style='cursor:pointer'>#= PRICE_STRATEGY_NM # ( #= PRICE_STRATEGY # )</a></div>",
+                        template: "<div class='ovlpCell' title='#= PRICE_STRATEGY_NM # ( #= PRICE_STRATEGY # )'>#= PRICE_STRATEGY_NM # ( #= PRICE_STRATEGY # )</div>",
                         width: "120px",
                         filterable: { multi: true, search: true }
                     },
                     {
                         field: "PRICING_TABLES",
                         title: "Pricing Table",
-                        template: "<div class='ovlpCell' title='#= PRICING_TABLES_NM # ( #= PRICING_TABLES # )'><a ui-sref='contract.manager.strategy.wip({ cid: CONTRACT_NBR, sid: PRICE_STRATEGY, pid: PRICING_TABLES })' ng-click='openContractNewTaB(#=CONTRACT_NBR#,#=PRICE_STRATEGY#,#=PRICING_TABLES#)' style='cursor:pointer'>#= PRICING_TABLES_NM # ( #= PRICING_TABLES # )</a></div>",
+                        template: "<div class='ovlpCell' title='#= PRICING_TABLES_NM # ( #= PRICING_TABLES # )'>#= PRICING_TABLES_NM # ( #= PRICING_TABLES # )</div>",
                         width: "120px",
                         filterable: { multi: true, search: true }
                     },
