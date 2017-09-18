@@ -36,7 +36,7 @@ namespace Intel.MyDeals.Entities
             List<int> dealIds = packet.AllDataElements.Where(d => d.AtrbCdIs(AttributeCodes.WF_STG_CD) && d.AtrbHasValue(WorkFlowStages.Active)).Select(d => d.DcID).ToList();
             if (dealIds.Any())
             {
-                packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.SYNC_DEALS, dealIds, 80)); // Set action - save it.
+                packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.SYNC_DEALS_MAJOR, dealIds, 80)); // Set action - save it.
             }
         }
 
@@ -50,8 +50,8 @@ namespace Intel.MyDeals.Entities
             if (!dealIds.Any()) return;
 
             packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.GEN_TRACKER, dealIds, 60));
-            packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.SYNC_DEALS, dealIds, 80));
-            packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.SNAPSHOT, dealIds, 100));
+            packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.SYNC_DEALS_MAJOR, dealIds, 80));
+            //packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.SNAPSHOT, dealIds, 100));
             packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.GENERATE_QUOTE, dealIds, 90));
         }
 

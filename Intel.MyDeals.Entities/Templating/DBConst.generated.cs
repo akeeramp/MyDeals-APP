@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 9/8/2017 4:02:40 PM
-On: JAJUANG-MOBL3
+File Updated: 9/18/2017 11:16:38 AM
+On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
 using System;
@@ -804,6 +804,24 @@ namespace Intel.MyDeals.Entities {
 		public const string EST_DIE_SIZE = "EST_DIE_SIZE";
 
 		///<summary>
+		/// DIM_SID: 30
+		/// DIM_CD: OVLP
+		/// ATRB_SID: 30006
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.Object
+		///</summary>
+		public const string EXCLD_COST_TST = "EXCLD_COST_TST";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3676
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Boolean
+		///</summary>
+		public const string EXPIRE_FLG = "EXPIRE_FLG";
+
+		///<summary>
 		/// DIM_SID: 3
 		/// DIM_CD: DEAL
 		/// ATRB_SID: 3562
@@ -1135,6 +1153,24 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.String
 		///</summary>
 		public const string IDMS_WRAP_RPRT_READ = "IDMS_WRAP_RPRT_READ";
+
+		///<summary>
+		/// DIM_SID: 30
+		/// DIM_CD: OVLP
+		/// ATRB_SID: 30007
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.Object
+		///</summary>
+		public const string IGNR_COST_TST = "IGNR_COST_TST";
+
+		///<summary>
+		/// DIM_SID: 30
+		/// DIM_CD: OVLP
+		/// ATRB_SID: 30005
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.Object
+		///</summary>
+		public const string INCL_COST_TST = "INCL_COST_TST";
 
 		///<summary>
 		/// DIM_SID: 2
@@ -1679,6 +1715,24 @@ namespace Intel.MyDeals.Entities {
 		///<summary>
 		/// DIM_SID: 3
 		/// DIM_CD: DEAL
+		/// ATRB_SID: 3678
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string QLTR_BID_GEO = "QLTR_BID_GEO";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3568
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string QLTR_PROJECT = "QLTR_PROJECT";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
 		/// ATRB_SID: 56
 		/// TGT_COL_TYPE: MONEY
 		/// DOT_NET_DATA_TYPE: System.Double
@@ -2116,7 +2170,7 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// ACTN_SID: 226
-		/// SRT_ORD: 1500
+		/// SRT_ORD: 30
 		/// Add Message to Timeline
 		///</summary>
 		public const string ADD_TO_TIMELINE = "ADD_TO_TIMELINE";
@@ -2124,7 +2178,7 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// ACTN_SID: 195
-		/// SRT_ORD: 3300
+		/// SRT_ORD: 2000
 		/// DB Returned Action that a given attribute should be deleted
 		///</summary>
 		public const string ATRB_DELETED = "ATRB_DELETED";
@@ -2132,7 +2186,7 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// ACTN_SID: 196
-		/// SRT_ORD: 1600
+		/// SRT_ORD: 70
 		/// Calculate CAP MSP
 		///</summary>
 		public const string CALC_MSP = "CALC_MSP";
@@ -2140,7 +2194,7 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// ACTN_SID: 225
-		/// SRT_ORD: 800
+		/// SRT_ORD: 20
 		/// UI Generated Change Parent Key Request
 		///</summary>
 		public const string CHG_PARENT_KEY = "CHG_PARENT_KEY";
@@ -2148,7 +2202,7 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// ACTN_SID: 210
-		/// SRT_ORD: 1200
+		/// SRT_ORD: 50
 		/// Roll the deal details back to the last valid active tracker state
 		///</summary>
 		public const string DEAL_ROLLBACK_TO_ACTIVE = "DEAL_ROLLBACK_TO_ACTIVE";
@@ -2156,7 +2210,7 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// ACTN_SID: 212
-		/// SRT_ORD: 1400
+		/// SRT_ORD: 60
 		/// Generate a tracker number
 		///</summary>
 		public const string GEN_TRACKER = "GEN_TRACKER";
@@ -2164,7 +2218,7 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// ACTN_SID: 227
-		/// SRT_ORD: 1550
+		/// SRT_ORD: 100
 		/// Generate a Quote Letter
 		///</summary>
 		public const string GENERATE_QUOTE = "GENERATE_QUOTE";
@@ -2172,7 +2226,7 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// ACTN_SID: 213
-		/// SRT_ORD: 3200
+		/// SRT_ORD: 2100
 		/// DB Returned Action to execute object ID change
 		///</summary>
 		public const string ID_CHANGE = "ID_CHANGE";
@@ -2180,7 +2234,7 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// ACTN_SID: 215
-		/// SRT_ORD: 3400
+		/// SRT_ORD: 3000
 		/// DB Returned Action Message
 		///</summary>
 		public const string MESSAGE = "MESSAGE";
@@ -2188,7 +2242,7 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// ACTN_SID: 207
-		/// SRT_ORD: 1000
+		/// SRT_ORD: 40
 		/// UI Generated Action to initiate a delete object action
 		///</summary>
 		public const string OBJ_DELETE = "OBJ_DELETE";
@@ -2196,7 +2250,7 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// ACTN_SID: 208
-		/// SRT_ORD: 1100
+		/// SRT_ORD: 1400
 		/// DB Returned Action that a given OBJECT should be deleted
 		///</summary>
 		public const string OBJ_DELETED = "OBJ_DELETED";
@@ -2204,34 +2258,42 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// ACTN_SID: 218
-		/// SRT_ORD: 2400
+		/// SRT_ORD: 120
 		/// Execute Cost Test calls
 		///</summary>
 		public const string RUN_COST_TEST = "RUN_COST_TEST";
 
 
 		///<summary>
+		/// ACTN_SID: 217
+		/// SRT_ORD: 110
+		/// Execute Meet Comp calls
+		///</summary>
+		public const string RUN_MEET_COMP = "RUN_MEET_COMP";
+
+
+		///<summary>
 		/// ACTN_SID: 221
-		/// SRT_ORD: 600
+		/// SRT_ORD: 10
 		/// UI Generated Action to initiate a save object action
 		///</summary>
 		public const string SAVE = "SAVE";
 
 
 		///<summary>
-		/// ACTN_SID: 223
-		/// SRT_ORD: 2100
-		/// Either push to or pull from snapshot as needed; push to snapshot on deal save
+		/// ACTN_SID: 216
+		/// SRT_ORD: 80
+		/// Sync Deals from WIP Deals Major Changes
 		///</summary>
-		public const string SNAPSHOT = "SNAPSHOT";
+		public const string SYNC_DEALS_MAJOR = "SYNC_DEALS_MAJOR";
 
 
 		///<summary>
-		/// ACTN_SID: 216
-		/// SRT_ORD: 1800
-		/// Sync Deals from WIP Deals
+		/// ACTN_SID: 223
+		/// SRT_ORD: 90
+		/// Sync Deals from WIP Deals Minor Changes
 		///</summary>
-		public const string SYNC_DEALS = "SYNC_DEALS";
+		public const string SYNC_DEALS_MINOR = "SYNC_DEALS_MINOR";
 
 	}
 
@@ -2360,10 +2422,11 @@ namespace Intel.MyDeals.Entities {
 		public const string GEN_TRACKER = "GEN_TRACKER";
 		public const string ID_CHANGE = "ID_CHANGE";
 		public const string MESSAGE = "MESSAGE";
-		public const string SYNC_DEALS = "SYNC_DEALS";
+		public const string SYNC_DEALS_MAJOR = "SYNC_DEALS_MAJOR";
+		public const string RUN_MEET_COMP = "RUN_MEET_COMP";
 		public const string RUN_COST_TEST = "RUN_COST_TEST";
 		public const string SAVE = "SAVE";
-		public const string SNAPSHOT = "SNAPSHOT";
+		public const string SYNC_DEALS_MINOR = "SYNC_DEALS_MINOR";
 		public const string CHG_PARENT_KEY = "CHG_PARENT_KEY";
 		public const string ADD_TO_TIMELINE = "ADD_TO_TIMELINE";
 		public const string GENERATE_QUOTE = "GENERATE_QUOTE";
@@ -2384,6 +2447,7 @@ namespace Intel.MyDeals.Entities {
 		PRC_TBL_ROW = 4,
 		WIP_DEAL = 5,
 		DEAL = 6,
+		MASTER = 7,
 		ALL_OBJ_TYPE = 0
 	}
 
@@ -2398,6 +2462,7 @@ namespace Intel.MyDeals.Entities {
 				new OpDataElementTypeItem {Id = 4, OpDeType = OpDataElementType.PRC_TBL_ROW, Alias = "PRC_TBL_ROW", Description = "PricingTableRow", Order = 40 },
 				new OpDataElementTypeItem {Id = 5, OpDeType = OpDataElementType.WIP_DEAL, Alias = "WIP_DEAL", Description = "WipDeals", Order = 50 },
 				new OpDataElementTypeItem {Id = 6, OpDeType = OpDataElementType.DEAL, Alias = "DEAL", Description = "Deals", Order = 60 },
+				new OpDataElementTypeItem {Id = 7, OpDeType = OpDataElementType.MASTER, Alias = "MASTER", Description = "TenderMaster", Order = 70 },
 			},
 
 			new Dictionary<OpDataElementType, OpDataElementType>
@@ -2444,8 +2509,9 @@ namespace Intel.MyDeals.Entities {
 				[OpDataElementType.PRC_ST] = new List<OpDataElementSetType> { OpDataElementSetType.ALL_TYPES },
 				[OpDataElementType.PRC_TBL] = new List<OpDataElementSetType> { OpDataElementSetType.ECAP,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER,OpDataElementSetType.CAP_BAND,OpDataElementSetType.ALL_TYPES },
 				[OpDataElementType.PRC_TBL_ROW] = new List<OpDataElementSetType> { OpDataElementSetType.ECAP,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER,OpDataElementSetType.CAP_BAND,OpDataElementSetType.ALL_TYPES },
-				[OpDataElementType.WIP_DEAL] = new List<OpDataElementSetType> { OpDataElementSetType.ECAP,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER,OpDataElementSetType.CAP_BAND,OpDataElementSetType.ALL_TYPES },
-				[OpDataElementType.DEAL] = new List<OpDataElementSetType> { OpDataElementSetType.ECAP,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER,OpDataElementSetType.CAP_BAND,OpDataElementSetType.ALL_TYPES },
+				[OpDataElementType.WIP_DEAL] = new List<OpDataElementSetType> { OpDataElementSetType.TENDER,OpDataElementSetType.ECAP,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER,OpDataElementSetType.CAP_BAND,OpDataElementSetType.ALL_TYPES },
+				[OpDataElementType.DEAL] = new List<OpDataElementSetType> { OpDataElementSetType.TENDER,OpDataElementSetType.ECAP,OpDataElementSetType.PROGRAM,OpDataElementSetType.VOL_TIER,OpDataElementSetType.CAP_BAND,OpDataElementSetType.ALL_TYPES },
+				[OpDataElementType.MASTER] = new List<OpDataElementSetType> { OpDataElementSetType.TENDER },
 			}
 		);
 	}
