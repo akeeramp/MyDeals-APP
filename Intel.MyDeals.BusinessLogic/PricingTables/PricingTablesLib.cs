@@ -320,10 +320,10 @@ namespace Intel.MyDeals.BusinessLogic
             return OD.GetOverlappingDeals(ID);
         }
 
-        public List<Overlapping> UpdateOverlappingDeals(int ID)
+        public List<Overlapping> UpdateOverlappingDeals(int ID, string FLAG)
         {
             OpDataCollectorDataLib OD = new OpDataCollectorDataLib();
-            return OD.UpdateOverlappingDeals(ID);
+            return OD.UpdateOverlappingDeals(ID, FLAG);
         }
     }
 

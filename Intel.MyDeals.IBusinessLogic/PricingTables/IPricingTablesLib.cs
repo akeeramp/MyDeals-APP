@@ -22,7 +22,7 @@ namespace Intel.MyDeals.IBusinessLogic
 
         List<Overlapping> GetOverlappingDeals(int ID);
 
-        List<Overlapping> UpdateOverlappingDeals(int ID);
+        List<Overlapping> UpdateOverlappingDeals(int ID, string FLAG);
 
     }
 }

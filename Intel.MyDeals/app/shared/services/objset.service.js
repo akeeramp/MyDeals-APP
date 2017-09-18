@@ -147,8 +147,8 @@ function objsetService($http, dataService, logger, $q) {
         return dataService.get(apiBasePricingTableUrl + 'GetOverlappingDeals/' + ID);
     }
 
-    function updateOverlappingDeals(ID) {
-        return dataService.post(apiBasePricingTableUrl + 'UpdateOverlappingDeals/' + ID);
+    function updateOverlappingDeals(ID, flag) {
+        return dataService.post(apiBasePricingTableUrl + 'UpdateOverlappingDeals/' + ID + "/" + flag);
     }   
 
 }

@@ -1027,13 +1027,7 @@ namespace Intel.MyDeals.DataLibrary
         }
         
         public List<Overlapping> GetOverlappingDeals(int ID)
-        {
-            //List<Overlapping> fake = new List<Overlapping>();
-            //fake.Add(new Overlapping { OVLP_CD = "SELF_OVLP", CONTRACTNUMBER = 464, PROGRAM_PAYMENT = "Frontend", WIP_DEAL_OBJ_SID = 4200, PRICE_STRATEGY = 100, PRICING_TABLES = 1034, WF_STG_CD = "Draft", CUST_ACCNT_DIV = "Test", PRODUCT_NM = "P3700", GEO_COMBINED = "Worldwide", SOLD_TO_ID = "", START_DT = "5/1/2017 12:12:00", END_DT = "5/1/2018 12:01:00", ECAP_PRICE = 1.00m, DEAL_COMB_TYPE = "cOMB tYPE", ECAP_TYPE = "MCP", MRKT_SEG = "M" });
-            //fake.Add(new Overlapping { OVLP_CD = "BE_HARD_STOP", CONTRACTNUMBER = 464, PROGRAM_PAYMENT = "Frontend", WIP_DEAL_OBJ_SID = 4200, PRICE_STRATEGY = 100, PRICING_TABLES = 1034, WF_STG_CD = "Active", CUST_ACCNT_DIV = "Test", PRODUCT_NM = "P3700", GEO_COMBINED = "Worldwide", SOLD_TO_ID = "", START_DT = "2017/01/01 12:12:00", END_DT = "12/31/2017 12:01:00", ECAP_PRICE = 1.00m, DEAL_COMB_TYPE = "cOMB tYPE", ECAP_TYPE = "MCP", MRKT_SEG = "M" });
-            //fake.Add(new Overlapping { OVLP_CD = "BE_HARD_STOP", CONTRACTNUMBER = 464, PROGRAM_PAYMENT = "Frontend", WIP_DEAL_OBJ_SID = 4200, PRICE_STRATEGY = 100, PRICING_TABLES = 1034, WF_STG_CD = "Active", CUST_ACCNT_DIV = "Test", PRODUCT_NM = "P3700", GEO_COMBINED = "Worldwide", SOLD_TO_ID = "", START_DT = "1/1/2018 12:12:00", END_DT = "12/31/2018 12:01:00", ECAP_PRICE = 1.00m, DEAL_COMB_TYPE = "cOMB tYPE", ECAP_TYPE = "MCP", MRKT_SEG = "M" });
-            //return fake;
-
+        {            
             OpLogPerf.Log("GetOverlappingDeals");
 
             var ret = new List<Overlapping>();
@@ -1114,7 +1108,7 @@ namespace Intel.MyDeals.DataLibrary
             return ret;
         }
 
-        public List<Overlapping> UpdateOverlappingDeals(int ID)
+        public List<Overlapping> UpdateOverlappingDeals(int ID, string FLAG)
         {
             OpLogPerf.Log("UpdateOverlappingDeals");
 
@@ -1127,16 +1121,17 @@ namespace Intel.MyDeals.DataLibrary
                 {
                     @ID = ID,
                     @MODE = "UPDATE",
-                    @USR_WWID = OpUserStack.MyOpUserToken.Usr.WWID
+                    @USR_WWID = OpUserStack.MyOpUserToken.Usr.WWID,
+                    @FLAG = FLAG
                 }))
                 {
-                    int IDX_WIP_DEAL_OBJ_SID = DB.GetReaderOrdinal(rdr, "WIP_DEAL_OBJ_SID");
+                    int IDX_PRICING_TABLES = DB.GetReaderOrdinal(rdr, "PRICING_TABLES");
 
                     while (rdr.Read())
                     {
                         ret.Add(new Overlapping
                         {
-                            WIP_DEAL_OBJ_SID = (IDX_WIP_DEAL_OBJ_SID < 0 || rdr.IsDBNull(IDX_WIP_DEAL_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WIP_DEAL_OBJ_SID)
+                            PRICING_TABLES = (IDX_PRICING_TABLES < 0 || rdr.IsDBNull(IDX_PRICING_TABLES)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRICING_TABLES)
                         });
                     } // while
                 }

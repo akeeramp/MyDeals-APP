@@ -158,10 +158,10 @@ namespace Intel.MyDeals.Controllers.API
 
         [HttpPost]
         [Authorize]
-        [Route("UpdateOverlappingDeals/{ID}")]
-        public List<Overlapping> UpdateOverlappingDeals(int ID)     //Get all Product with Alias from ProductAlias
+        [Route("UpdateOverlappingDeals/{ID}/{FLAG}")]
+        public List<Overlapping> UpdateOverlappingDeals(int ID, string FLAG)     //Get all Product with Alias from ProductAlias
         {
-            return SafeExecutor(() => _pricingTablesLib.UpdateOverlappingDeals(ID)
+            return SafeExecutor(() => _pricingTablesLib.UpdateOverlappingDeals(ID, FLAG)
                 , $"Unable to get {"Product Alias"}"
              );
         }
