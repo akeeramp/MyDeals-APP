@@ -1207,7 +1207,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 }
                 $scope.ovlpDataSource.read();                            
                 
-                objsetService.updateOverlappingDeals(PRICING_TABLES_ID, YCS2_OVERLAP_OVERRIDE)
+                objsetService.updateOverlappingDeals(data, YCS2_OVERLAP_OVERRIDE)
                     .then(function (response) {
                         if (response.data.PRICING_TABLES > 0) {
                             // Change in Deal Editor
