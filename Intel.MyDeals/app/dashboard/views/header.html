@@ -11,19 +11,17 @@
             kendo-combo-box
             k-options="selectCustomerOptions"
             k-ng-model="selectedCustomerId"
-            k-change="refreshWidgets"
+            k-change="refreshAllWidgets"
             k-value-primitive="true"
             style="width: 250px;">
     </select>
 
     <div class="fl" style="margin: 5px 5px 0 15px; color: #aaaaaa;">Date Range:</div>
-    <input kendo-date-picker ng-model="startDate" k-change="refreshWidgets" style="width: 110px;" class="opUiContainer md" /> - <input kendo-date-picker ng-model="endDate" k-change="refreshWidgets" style="width: 110px;" class="opUiContainer md" />
+    <input kendo-date-picker ng-model="startDate" k-change="refreshAllWidgets" style="width: 110px;" class="opUiContainer md" /> - <input kendo-date-picker ng-model="endDate" k-change="refreshAllWidgets" style="width: 110px;" class="opUiContainer md" />
 
-    <!--
-    <a class="btn btn-default btn-sm" style="padding: 4px 6px;" ng-click="refreshWidgets()" kendo-tooltip k-content="'Refresh Dashboard'" k-position="'top'" k-width="'70'">
+    <a class="btn btn-default btn-sm" style="padding: 4px 6px;" ng-click="refreshAllWidgets()" kendo-tooltip k-content="'Refresh Dashboard'" k-position="'top'" k-width="'70'">
         <i class="intelicon-refresh"></i>
     </a>
-    -->
 
     <a class="fr btn btn-default btn-sm" style="padding: 4px 6px;" ng-click="defaultLayout()" kendo-tooltip k-content="'Default Layout'" k-position="'top'" k-width="'70'">
         <i class="intelicon-dashboard-solid"></i>

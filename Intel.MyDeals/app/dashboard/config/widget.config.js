@@ -9,7 +9,7 @@ widgetConfig.getAllWidgets = function (objsetService) {
     widgetConfig.configWidgets();
 
     var w = {};
-    angular.forEach(widgetConfig.widgets, function(value, key) {
+    angular.forEach(widgetConfig.widgets, function (value, key) {
         this[key] = widgetConfig.widgets[key];
     }, w);
 
@@ -26,7 +26,8 @@ widgetConfig.configWidgets = function () {
         desc: "Link to add a new contract",
         icon: "intelicon-tools",
         type: 'newContract',
-        hasConfig: true,
+        canChangeSettings: true,
+        canRefresh: false,
         canAdd: true,
         template: 'app/dashboard/widgets/newContract.html',
         widgetConfig: {
@@ -35,6 +36,8 @@ widgetConfig.configWidgets = function () {
             api: {}
         },
         resizeEvent: function (widget) {
+        },
+        refreshEvent: function () {
         }
     };
 
@@ -46,7 +49,8 @@ widgetConfig.configWidgets = function () {
         desc: "Quick view of status board",
         icon: "intelicon-grid",
         type: 'contractStatusBoard',
-        hasConfig: true,
+        canChangeSettings: true,
+        canRefresh: true,
         canAdd: true,
         template: 'app/dashboard/widgets/contractStatusBoard.html',
         widgetConfig: {},
@@ -54,7 +58,7 @@ widgetConfig.configWidgets = function () {
             var grid = $("#gridContractStatus");
             grid.data("kendoGrid").resize();
         },
-        refreshEvent: function (widget) {
+        refreshEvent: function () {
             var grid = $("#gridContractStatus");
             grid.data("kendoGrid").resize();
         }
@@ -68,7 +72,8 @@ widgetConfig.configWidgets = function () {
         desc: "Search for contracts, pricing strategies, or pricing tables by entering a name or id",
         icon: "intelicon-tools",
         type: 'searchContracts',
-        hasConfig: true,
+        canChangeSettings: true,
+        canRefresh: false,
         canAdd: true,
         template: 'app/dashboard/widgets/searchContract.html',
         widgetConfig: {
@@ -76,12 +81,9 @@ widgetConfig.configWidgets = function () {
             data: [],
             api: {}
         },
-        refreshEvent: function (widget) {
-            setTimeout(function () {
-                $("#bynResetSearch").click();
-            }, 1000);
-        },
         resizeEvent: function (widget) {
+        },
+        refreshEvent: function () {
         }
     };
 
@@ -93,7 +95,8 @@ widgetConfig.configWidgets = function () {
         desc: "Quickly Navigate to a contract by entering its Id",
         icon: "intelicon-tools",
         type: 'openContracts',
-        hasConfig: true,
+        canChangeSettings: true,
+        canRefresh: false,
         canAdd: true,
         template: 'app/dashboard/widgets/openContract.html',
         widgetConfig: {
@@ -102,6 +105,8 @@ widgetConfig.configWidgets = function () {
             api: {}
         },
         resizeEvent: function (widget) {
+        },
+        refreshEvent: function () {
         }
     };
 

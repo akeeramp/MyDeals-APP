@@ -6,13 +6,13 @@
     .controller('WidgetSettingsCtrl', WidgetSettingsCtrl)
     .filter('object2Array', object2Array);
 
-DashboardController.$inject = ['$scope', '$uibModal', '$timeout', '$window', '$localStorage', 'objsetService', 'securityService', 'userPreferencesService', 'logger'];
+DashboardController.$inject = ['$rootScope', '$scope', '$uibModal', '$timeout', '$window', '$localStorage', 'objsetService', 'securityService', 'userPreferencesService', 'logger'];
 AddWidgetCtrl.$inject = ['$scope', '$timeout'];
 CustomWidgetCtrl.$inject = ['$scope', '$uibModal'];
 WidgetSettingsCtrl.$inject = ['$scope', '$timeout', '$rootScope', 'widget'];
 object2Array.$inject = [];
 
-function DashboardController($scope, $uibModal, $timeout, $window, $localStorage, objsetService, securityService, userPreferencesService, logger) {
+function DashboardController($rootScope, $scope, $uibModal, $timeout, $window, $localStorage, objsetService, securityService, userPreferencesService, logger) {
     $scope.scope = $scope;
     $scope.$storage = $localStorage;
 
@@ -99,7 +99,7 @@ function DashboardController($scope, $uibModal, $timeout, $window, $localStorage
             // callback fired when item is finished dragging
             stop: function (event, $element, widget) {
                 $scope.saveLayout(); // Persist the current grid settings to the DB.
-            } 
+            }
         },
         resizable: {
             enabled: true,
@@ -183,12 +183,28 @@ function DashboardController($scope, $uibModal, $timeout, $window, $localStorage
         $scope.addWidgetByKey($scope, $scope.selectedDashboardId, true);
     });
 
-    $scope.refreshWidgets = function () {
+    $scope.refreshSingleWidget = function (widget) {
+        // TODO::TJE - By broadcasting like this, widgets other than the one the one that that 'refresh' button was pressed for might get refreshed.
+        this.broadcastRefresh({ "selectedDashboardId": $scope.$storage.selectedDashboardId, "selectedCustomerId": $scope.$storage.selectedCustomerId, "startDate": $scope.$storage.startDate, "endDate": $scope.$storage.endDate });
+
+        // If the widget has a refreshEvent, call it.
+        if (widget.refreshEvent != null)
+            widget.refreshEvent();
+    }
+
+    $scope.refreshAllWidgets = function () {
         if (!this.$angular_scope)
             this.broadcastRefresh(this);
         else
             this.$angular_scope.broadcastRefresh(this.$angular_scope);
+
+        // Loop through all current (visible) widgets and if the widget has a refreshEvent, call it.
+        for (var i = 0; i < $scope.dashboardData.currentWidgets.length; i++) {
+            if ($scope.dashboardData.currentWidgets[i].refreshEvent != null)
+                $scope.dashboardData.currentWidgets[i].refreshEvent();
+        }
     }
+
     $scope.broadcastRefresh = function (scope) {
         $timeout(function () {
             // Save settings to local storage
@@ -197,12 +213,9 @@ function DashboardController($scope, $uibModal, $timeout, $window, $localStorage
             $scope.$storage.endDate = scope.endDate;
             $scope.$storage.selectedCustomerId = scope.selectedCustomerId;
 
-            $scope.$broadcast('refresh', { "custId": scope.selectedCustomerId, "startDate": scope.startDate, "endDate": scope.endDate });
+            // Broadcast 'refresh' event out to subscribers.
+            $rootScope.$broadcast('refresh', { "custId": scope.selectedCustomerId, "startDate": scope.startDate, "endDate": scope.endDate });
         }, 200);
-    }
-    $scope.refresh = function (widget) {
-        $scope.broadcastRefresh($scope);
-        widget.refreshEvent(widget);
     }
 
     $scope.changeDashboard = function (scope, key) {
@@ -314,7 +327,7 @@ function AddWidgetCtrl($scope, $timeout, $rootScope) {
 function CustomWidgetCtrl($scope, $uibModal) {
 
     $scope.remove = function (widget) {
-        $scope.dashboardData.currentWidgets.splice($scope.dashboardData.currentWidgets.indexOf(widget), 1);        
+        $scope.dashboardData.currentWidgets.splice($scope.dashboardData.currentWidgets.indexOf(widget), 1);
         $scope.saveLayout(); // Persist the current grid settings to the DB.
     };
 
