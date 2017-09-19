@@ -661,6 +661,14 @@ namespace Intel.MyDeals.BusinessRules
                 OpDataCollector dcSt = myDealsData[OpDataElementType.PRC_ST].Data[dcTbl.DcParentID];
                 dcSt.SetDataElementValue(AttributeCodes.WF_STG_CD, futureStage);
             }
+
+            // If object is expired, unexpire it
+            string isExpired = r.Dc.GetDataElementValue(AttributeCodes.EXPIRE_FLG);
+            if (!string.IsNullOrEmpty(isExpired) && isExpired == "1") // If there is an expired flag, reset it if it is set
+            {
+                r.Dc.SetDataElementValue(AttributeCodes.EXPIRE_FLG, "0");
+            }
+
         }
 
         public static void ValidateEcapPrice(params object[] args)

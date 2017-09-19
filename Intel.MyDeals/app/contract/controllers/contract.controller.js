@@ -50,8 +50,8 @@
         //var d2 = securityService.chkDealRules('C_ADD_ATTACHMENTS', 'FSE', 'DEAL', null, null);
         //debugger;
 
-        $scope.CAN_VIEW_COST_TEST = securityService.chkDealRules('CAN_VIEW_COST_TEST', window.usrRole, null, null, null) || (window.usrRole === "GA" && window.isSuper);
-        $scope.CAN_EDIT_COST_TEST = securityService.chkDealRules('CAN_EDIT_COST_TEST', window.usrRole, null, null, null);
+        $scope.CAN_VIEW_COST_TEST = securityService.chkDealRules('CAN_VIEW_COST_TEST', window.usrRole, null, null, null) || (window.usrRole === "GA" && window.isSuper); // Can view the pass/fail
+        $scope.CAN_EDIT_COST_TEST = securityService.chkDealRules('CAN_EDIT_COST_TEST', window.usrRole, null, null, null); // Can go to cost test screen and make changes
         $scope.CAN_VIEW_MEET_COMP = securityService.chkDealRules('CAN_VIEW_MEET_COMP', window.usrRole, null, null, null);
         $scope.CAN_EDIT_MEET_COMP = securityService.chkDealRules('CAN_EDIT_MEET_COMP', window.usrRole, null, null, null);
         $scope.C_ADD_PRICING_STRATEGY = securityService.chkDealRules('C_ADD_PRICING_STRATEGY', window.usrRole, null, null, null);
