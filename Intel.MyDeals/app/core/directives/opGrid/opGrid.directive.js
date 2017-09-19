@@ -1530,7 +1530,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         field: "ECAP_PRICE",
                         title: "ECAP Price",
                         width: "120px",
-                        template: "<div class='ovlpCell' title='#= ECAP_PRICE #'> #= ECAP_PRICE # </div>",
+                        template: "<div class='ovlpCell' ng-bind='(dataItem.ECAP_PRICE | currency)' title='#= ECAP_PRICE #'> #= kendo.parseFloat(ECAP_PRICE) # </div>",
                         format: "{0:c}",
                         filterable: { multi: true, search: true }
                     },
