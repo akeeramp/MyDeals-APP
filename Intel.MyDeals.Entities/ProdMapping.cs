@@ -17,5 +17,10 @@
         public string HAS_L1 { get; set; }
         public string HAS_L2 { get; set; }
         public string PRD_CAT_NM { get; set; }
+
+        /// <summary>
+        /// Include or Exclude
+        /// </summary>
+        public string TYPE { get; set; }
     }
 }

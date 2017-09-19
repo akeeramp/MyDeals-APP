@@ -296,9 +296,6 @@
     <Content Include="app\admin\productIncExc\admin.productEntryIncExc.controller.js" />
     <Content Include="app\admin\productIncExc\productEntryIncExc.html" />
     <Content Include="app\admin\productIncExc\productEntryIncExc.service.js" />
-    <Content Include="app\admin\productSelector\admin.ProductSelector.controller.js" />
-    <Content Include="app\admin\productSelector\productSelector.html" />
-    <Content Include="app\admin\productSelector\ProductSelector.service.js" />
     <Content Include="app\admin\products\admin.products.controller.js" />
     <Content Include="app\admin\products\products.html" />
     <Content Include="app\admin\products\products.service.js" />
@@ -431,6 +428,8 @@
     <Content Include="app\core\directives\gridStatusBoard\gridStatusBoard.directive.html" />
     <Content Include="app\core\directives\gridStatusBoard\gridStatusBoard.directive.js" />
     <Content Include="app\core\directives\securityLoader\securityLoader.directive.js" />
+    <Content Include="app\core\directives\trashcan\trashcan.directive.html" />
+    <Content Include="app\shared\services\productSelector.service.js" />
     <Content Include="app\shared\services\userPreferences.service.js" />
     <Content Include="app\shared\services\security.service.js" />
     <Content Include="app\tenderManager\controllers\tenderManager.controller.js" />
@@ -1294,6 +1293,7 @@
     <Content Include="nvd3.license.md" />
     <Content Include="app\core\directives\loadingPanel\loadingPanel.directive.js" />
     <Content Include="app\core\directives\securityLoader\securityLoader.directive.html" />
+    <Content Include="app\core\directives\trashcan\trashcan.directive.js" />
     <None Include="Properties\PublishProfiles\Dev.pubxml" />
     <Content Include="Scripts\Angular\1.5.8\angular.min.js.map" />
     <Content Include="Scripts\d3\LICENSE" />
@@ -1693,6 +1693,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'dev|AnyCPU'">
     <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'itt|AnyCPU'">
     <OutputPath>bin\</OutputPath>

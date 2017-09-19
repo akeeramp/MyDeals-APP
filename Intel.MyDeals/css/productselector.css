@@ -13,7 +13,7 @@
     }
 
 .textProdSelector {
-    font-size: 19px;
+    font-size: 21px;
     color: white;
 }
 
@@ -176,6 +176,11 @@ a.prdAnchor {
             background-color: #01AEEF;
         }
 
+.prodSelected .btn-primary:focus, .btn-primary:hover{
+    color:#fff;
+    background-color:#01AEEF;
+}
+
 .prodSelector .lnavFilter {
     background-color: #e7e7e8;
     height: 100%;
@@ -309,9 +314,31 @@ a.prdAnchor {
     border: 1.5px solid #01AEEF;
 }
 
+
+.drillDown .checkbox-custom:checked + .checkbox-custom-label:before {
+    background: #01AEEF;
+    border: 1.5px solid #797979;
+}
+
+.drillDown .checkbox-custom + .checkbox-custom-label:before {
+    border-radius: 2px;
+}
+
+.drillDown .checkbox-custom:hover + .checkbox-custom-label:before {
+    border: 1.5px solid #797979;
+}
+
+.drillDown .checkbox-custom:checked + .checkbox-custom-label:before {
+    background: #797979;
+}
+
+.prodDrillDownLarge .drillDown {
+    background: initial !important;
+}
+
 .checkbox-custom[disabled]:hover + .checkbox-custom-label[disabled]:before {
     border: 1.5px solid red;
-    cursor:no-drop;
+    cursor: no-drop;
 }
 
 .prodSelector-grid.k-grid td {
@@ -463,12 +490,53 @@ input[type=checkbox].with-font {
         font-weight: bold;
     }
 
- .prodSelectorSearch .input-group-addon {
+.prodSelectorSearch .input-group-addon {
     background-color: #01AEEF;
     border: 1px solid #01AEEF;
 }
 
-  .prodSelectorSearch .input-group-addon input[type=checkbox]{
-    margin-top:2px;
-    width:20px;
+    .prodSelectorSearch .input-group-addon input[type=checkbox] {
+        margin-top: 2px;
+        width: 20px;
+    }
+
+.drillDown .input-group-addon {
+    padding: 0 0 0 10px;
+    font-size: 15px;
+    font-weight: normal;
+    color: #333;
+    text-align: center;
+    border-radius: 2px;
+    background-color: inherit;
+    border: none;
 }
+
+.paddingLeftNone {
+    padding-left: 0px !important;
+}
+
+
+.paddingRightNone {
+    padding-right: 0px !important;
+}
+
+.paddingRight15 {
+    padding-right: 15px !important;
+}
+
+.paddingLeft15 {
+    padding-left: 15px !important;
+}
+
+.arcAnimate {
+    width: 60%;
+    display: inline-block;
+}
+
+    .arcAnimate.animate {
+        transform: rotate(180deg);
+        transition: all .6s;
+        transform-origin: 50% 50%;
+        opacity: 0;
+    }
+

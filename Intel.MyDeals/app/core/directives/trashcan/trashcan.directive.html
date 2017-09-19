@@ -1,0 +1,60 @@
+﻿<span role="button" class="trash">
+    <span></span>
+    <i></i>
+</span>
+<style>
+    /*Animated trashcan*/
+:root {
+    --scale: 0.2;
+}
+
+.trash {
+    background: #01AEEF;
+    width: calc(66px*var(--scale));
+    height: calc(70px*var(--scale));
+    display: inline-block;
+    margin: 10px auto auto auto;
+    position: relative;
+    -webkit-border-bottom-right-radius: calc(6px*var(--scale));
+    -webkit-border-bottom-left-radius: calc(6px*var(--scale));
+    -moz-border-radius-bottomright: calc(6px*var(--scale));
+    -moz-border-radius-bottomleft: calc(6px*var(--scale));
+    border-bottom-right-radius: calc(6px*var(--scale));
+    border-bottom-left-radius: calc(6px*var(--scale));
+}
+
+    .trash span {
+        position: absolute;
+        height: calc(12px*var(--scale));
+        background: #01AEEF;
+        top: calc(-13px*var(--scale));
+        left: calc(-10px*var(--scale));
+        right: calc(-10px*var(--scale));
+        border-top-left-radius: calc(10px*var(--scale));
+        border-top-right-radius: calc(10px*var(--scale));
+        transform: rotate(0deg);
+        transition: transform 250ms;
+        transform-origin: 70% 100%;
+    }
+
+        .trash span:after {
+            content: '';
+            position: absolute;
+            width: calc(27px*var(--scale));
+            height: calc(7px*var(--scale));
+            background: #01AEEF;
+            top: calc(-10px*var(--scale));
+            border-top-left-radius: calc(10px*var(--scale));
+            border-top-right-radius: calc(10px*var(--scale));
+            transform: rotate(0deg);
+            transition: transform 250ms;
+            left: calc(27px*var(--scale));
+            transform-origin: 70% 100%;
+        }
+
+    .trash:hover span {
+        transform: rotate(45deg);
+        transition: transform 250ms;
+    }
+
+</style>

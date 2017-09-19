@@ -2,13 +2,13 @@
     'use strict';
 
     angular
-        .module('app.admin')
-        .factory('ProductSelectorService', ProductSelectorService);
+        .module('app.contract')
+        .factory('productSelectorService', productSelectorService);
 
     // Minification safe dependency injection
-    ProductSelectorService.$inject = ['$http', 'dataService', 'logger', '$q'];
+    productSelectorService.$inject = ['$http', 'dataService', 'logger', '$q'];
 
-    function ProductSelectorService($http, dataService, logger, $q) {
+    function productSelectorService($http, dataService, logger, $q) {
         var apiBaseUrl = "api/Products/";
         var service = {
             GetProdDealType: GetProdDealType,

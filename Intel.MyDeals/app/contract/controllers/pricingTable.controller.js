@@ -4,9 +4,9 @@
 
 // logger :Injected logger service to for loging to remote database or throwing error on the ui
 // dataService :Application level service, to be used for common api calls, eg: user token, department etc
-PricingTableController.$inject = ['$scope', '$state', '$stateParams', '$filter', 'confirmationModal', 'dataService', 'logger', 'pricingTableData', 'ProductSelectorService', 'MrktSegMultiSelectService', '$uibModal', '$timeout', 'opGridTemplate'];
+PricingTableController.$inject = ['$scope', '$state', '$stateParams', '$filter', 'confirmationModal', 'dataService', 'logger', 'pricingTableData', 'productSelectorService', 'MrktSegMultiSelectService', '$uibModal', '$timeout', 'opGridTemplate'];
 
-function PricingTableController($scope, $state, $stateParams, $filter, confirmationModal, dataService, logger, pricingTableData, ProductSelectorService, MrktSegMultiSelectService, $uibModal, $timeout, opGridTemplate) {
+function PricingTableController($scope, $state, $stateParams, $filter, confirmationModal, dataService, logger, pricingTableData, productSelectorService, MrktSegMultiSelectService, $uibModal, $timeout, opGridTemplate) {
     var vm = this;
 
     // HACK: Not sure why this controller gets called twice.  This is to see if it is already started and exit.
@@ -299,12 +299,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             size: 'lg',
             windowClass: 'prdSelector-modal-window',
             resolve: {
-                productSelectionLevels: ['ProductSelectorService', function (ProductSelectorService) {
+                productSelectionLevels: ['productSelectorService', function (productSelectorService) {
                     var dtoDateRange = {
                         startDate: pricingTableRow.START_DT, endDate: pricingTableRow.END_DT
                     };
                     root.setBusy("Please wait...", "");
-                    return ProductSelectorService.GetProductSelectorWrapper(dtoDateRange).then(function (response) {
+                    return productSelectorService.GetProductSelectorWrapper(dtoDateRange).then(function (response) {
                         root.setBusy("", "");
                         return response;
                     }, function (response) {
@@ -318,6 +318,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 },
                 enableSplitProducts: function () {
                     return true;
+                },
+                dealType: function () {
+                    return root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD;
                 }
             }
         });
@@ -338,11 +341,17 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     function updateSpreadSheetFromSelector(productSelectorOutput, sheet, rowStart) {
         var validatedSelectedProducts = productSelectorOutput.validateSelectedProducts;
         if (!productSelectorOutput.splitProducts) {
-            var contractProducts = updateUserInput(validatedSelectedProducts);
+            var usrInput = updateUserInput(validatedSelectedProducts);
+            var contractProducts = usrInput.contractProducts;
             //PTR_SYS_PRD
             sheet.range('B' + (rowStart)).value(JSON.stringify(validatedSelectedProducts));
             systemModifiedProductInclude = true;
             sheet.range(root.colToLetter['PTR_USER_PRD'] + (rowStart)).value(contractProducts);
+
+            if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD === "VOL_TIER") {
+                sheet.range(root.colToLetter['PRD_EXCLDS'] + (rowStart)).value(usrInput.excludeProducts);
+            }
+
             systemModifiedProductInclude = false;
             // can't use colToLetter for PTR_SYS_INVLD_PRD because it is hidden
             sheet.range('C' + (rowStart)).value("");
@@ -471,34 +480,34 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         var myRow = data[(rowIndex - 1)];
                         if (myRow != undefined && myRow.DC_ID != undefined && myRow.DC_ID != null) {
 
-                        	var isEndVolUnlimited = false;
-                        	var numOfTiers = parseInt(root.pricingTableData.PRC_TBL[0].NUM_OF_TIERS);
+                            var isEndVolUnlimited = false;
+                            var numOfTiers = parseInt(root.pricingTableData.PRC_TBL[0].NUM_OF_TIERS);
 
-                        	if (value.value !== null && value.value !== undefined && value.value.toString().toUpperCase() == unlimitedVal.toUpperCase() && colIndex === endVolIndex && myRow.TIER_NBR === numOfTiers) {
-                        		isEndVolUnlimited = true;
-							}
+                            if (value.value !== null && value.value !== undefined && value.value.toString().toUpperCase() == unlimitedVal.toUpperCase() && colIndex === endVolIndex && myRow.TIER_NBR === numOfTiers) {
+                                isEndVolUnlimited = true;
+                            }
 
-                        	// Start vol, end vol, or rate changed
-                        	if (!isEndVolUnlimited) {
+                            // Start vol, end vol, or rate changed
+                            if (!isEndVolUnlimited) {
 
-                        		if (colIndex === endVolIndex || colIndex === strtVolIndex) {
-                        			value.value = parseInt(value.value) || 0; // HACK: To make sure End vol has a numerical value so that validations work and show on these cells
-                        			//value.format = "##,#"; // TODO: fomatting the end vol (a string with number possibilities) does not work. Figure out why.
-                        		}
-                        		else if (colIndex === rateIndex) {
-                        			value.value = parseFloat(value.value) || 0; // HACK: To make sure End vol has a numerical value so that validations work and show on these cells
-                        		}
+                                if (colIndex === endVolIndex || colIndex === strtVolIndex) {
+                                    value.value = parseInt(value.value) || 0; // HACK: To make sure End vol has a numerical value so that validations work and show on these cells
+                                    //value.format = "##,#"; // TODO: fomatting the end vol (a string with number possibilities) does not work. Figure out why.
+                                }
+                                else if (colIndex === rateIndex) {
+                                    value.value = parseFloat(value.value) || 0; // HACK: To make sure End vol has a numerical value so that validations work and show on these cells
+                                }
 
-								// Transform negative numbers into positive
-								if (value.value < 0) {
-									value.value = Math.abs(value.value);
-								}
-							}
+                                // Transform negative numbers into positive
+                                if (value.value < 0) {
+                                    value.value = Math.abs(value.value);
+                                }
+                            }
 
                             // End_Vol Col changed
                             if (colIndex === endVolIndex) {
                                 // If this vol tier isn't the last of its vol tier rows
-                            	if (myRow.TIER_NBR != numOfTiers) {
+                                if (myRow.TIER_NBR != numOfTiers) {
                                     var nextRow = data[(rowIndex)];
                                     // Calculate next start vol using end vol
                                     if (nextRow !== undefined && !isEndVolUnlimited) {
@@ -529,62 +538,62 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         range.forEachCell(
 			function (rowIndex, colIndex, value) {
-				if (value.value !== null && value.value !== undefined && value.value.toString().replace(/\s/g, "").length !== 0) { // Product Col changed
-					hasValueInAtLeastOneCell = true;
-				}
+			    if (value.value !== null && value.value !== undefined && value.value.toString().replace(/\s/g, "").length !== 0) { // Product Col changed
+			        hasValueInAtLeastOneCell = true;
+			    }
 			}
 		);
 
         if (isProductColumnIncludedInChanges && (!hasValueInAtLeastOneCell || isRangeValueEmptyString)) { // Delete row
-        	var rowStart = topLeftRowIndex - 2;
-        	var rowStop = bottomRightRowIndex - 2;
-        	if (root.spreadDs !== undefined) {
-        		var data = root.spreadDs.data();
+            var rowStart = topLeftRowIndex - 2;
+            var rowStop = bottomRightRowIndex - 2;
+            if (root.spreadDs !== undefined) {
+                var data = root.spreadDs.data();
 
-        		if (hasDataOrPurge(data, rowStart, rowStop)) {
-        			stealthOnChangeMode = true; // NOTE: We need this here otherwise 2 pop-ups will show on top on one another when we input spaces to delete.
+                if (hasDataOrPurge(data, rowStart, rowStop)) {
+                    stealthOnChangeMode = true; // NOTE: We need this here otherwise 2 pop-ups will show on top on one another when we input spaces to delete.
 
-        			kendo.confirm("Are you sure you want to delete this product and the matching deal?")
+                    kendo.confirm("Are you sure you want to delete this product and the matching deal?")
 						.then(function () {
-							$timeout(function () {
-								if (root.spreadDs !== undefined) {
-									// look for skipped lines
-									var numToDel = rowStop + 1 - rowStart;
-									data.splice(rowStart, numToDel);
+						    $timeout(function () {
+						        if (root.spreadDs !== undefined) {
+						            // look for skipped lines
+						            var numToDel = rowStop + 1 - rowStart;
+						            data.splice(rowStart, numToDel);
 
-									// now apply array to Datasource... one event triggered
-									root.spreadDs.sync();
+						            // now apply array to Datasource... one event triggered
+						            root.spreadDs.sync();
 
-									$timeout(function () {
-										var n = data.length + 2;
-										disableRange(sheet.range("D" + n + ":D" + (n + numToDel + numToDel)));
-										disableRange(sheet.range("F" + n + ":Z" + (n + numToDel + numToDel)));
-									}, 10);
+						            $timeout(function () {
+						                var n = data.length + 2;
+						                disableRange(sheet.range("D" + n + ":D" + (n + numToDel + numToDel)));
+						                disableRange(sheet.range("F" + n + ":Z" + (n + numToDel + numToDel)));
+						            }, 10);
 
-									clearUndoHistory();
-									root.saveEntireContract(true);
-								}
-							},
+						            clearUndoHistory();
+						            root.saveEntireContract(true);
+						        }
+						    },
 							10);
 						},
 						function () { });
-        			stealthOnChangeMode = false;
-        		} else {
-        			cleanupData(data);
-        			root.spreadDs.sync();
-        			$timeout(function () {
-        				var cnt = 0;
-        				for (var c = 0; c < data.length; c++) {
-        					if (data[c].DC_ID !== null) cnt++;
-        				}
-        				var numToDel = rowStop + 1 - rowStart;
-        				cnt = cnt + 2;
-        				disableRange(sheet.range("D" + cnt + ":D" + (cnt + numToDel - 1)));
-        				disableRange(sheet.range("F" + cnt + ":Z" + (cnt + numToDel - 1)));
-        				clearUndoHistory();
-        			}, 10);
-        		}
-        	}
+                    stealthOnChangeMode = false;
+                } else {
+                    cleanupData(data);
+                    root.spreadDs.sync();
+                    $timeout(function () {
+                        var cnt = 0;
+                        for (var c = 0; c < data.length; c++) {
+                            if (data[c].DC_ID !== null) cnt++;
+                        }
+                        var numToDel = rowStop + 1 - rowStart;
+                        cnt = cnt + 2;
+                        disableRange(sheet.range("D" + cnt + ":D" + (cnt + numToDel - 1)));
+                        disableRange(sheet.range("F" + cnt + ":Z" + (cnt + numToDel - 1)));
+                        clearUndoHistory();
+                    }, 10);
+                }
+            }
         }
         else {
             // Trigger only if the changed range contains the product column
@@ -604,8 +613,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             if (isPtrSysPrdFlushed) {
                 if (!systemModifiedProductInclude) {
                     // TODO we will need to revisit.  There are cases where we CANNOT remove products and reload... active deals for example
-					// NOTE: do not wrap the below in a sheet.batch call! We need it to recall the onChange event to clear out old valid and invalid products when the product column changes
-                	sheet.range("B" + topLeftRowIndex + ":C" + bottomRightRowIndex).value("");
+                    // NOTE: do not wrap the below in a sheet.batch call! We need it to recall the onChange event to clear out old valid and invalid products when the product column changes
+                    sheet.range("B" + topLeftRowIndex + ":C" + bottomRightRowIndex).value("");
 
                     range.forEachCell(
                         function (rowIndex, colIndex, value) {
@@ -613,7 +622,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 // Re-disable specific cells that are readOnly
                                 var rowInfo = root.pricingTableData.PRC_TBL_ROW[(rowIndex - 1)]; // This is -1 to account for the 0th rows in the spreadsheet
                                 if (rowInfo != undefined) { // The row was pre-existing
-                                	disableIndividualReadOnlyCells(sheet, rowInfo, rowIndex, 1);
+                                    disableIndividualReadOnlyCells(sheet, rowInfo, rowIndex, 1);
                                 }
                             }
                         });
@@ -623,7 +632,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             }
 
             if (isProductColumnIncludedInChanges && hasValueInAtLeastOneCell) {
-            	syncSpreadRows(sheet, topLeftRowIndex, bottomRightRowIndex);
+                syncSpreadRows(sheet, topLeftRowIndex, bottomRightRowIndex);
             }
         }
 
@@ -635,7 +644,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     function cleanupData(data) {
         // Remove any lingering blank rows from the data
         for (var n = data.length - 1; n >= 0; n--) {
-        	if (data[n].DC_ID === null && (data[n].PTR_USER_PRD === null || data[n].PTR_USER_PRD.toString().replace(/\s/g, "").length === 0)) {
+            if (data[n].DC_ID === null && (data[n].PTR_USER_PRD === null || data[n].PTR_USER_PRD.toString().replace(/\s/g, "").length === 0)) {
                 data.splice(n, 1);
             } else {
                 if (util.isInvalidDate(data[n].START_DT)) data[n].START_DT = moment(root.contractData["START_DT"]).format("MM/DD/YYYY");
@@ -712,7 +721,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                             if (tierNumVal == parseInt(root.curPricingTable.NUM_OF_TIERS)) {
                                 // default last end vol to "unlimited"
-                            	data[r]["END_VOL"] = unlimitedVal;
+                                data[r]["END_VOL"] = unlimitedVal;
                             } else {
                                 // Default to 0
                                 data[r]["END_VOL"] = 0;
@@ -764,7 +773,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     }
                 }
 
-            	// now apply array to Datasource... one event triggered
+                // now apply array to Datasource... one event triggered
                 root.spreadDs.sync();
 
                 sheet.batch(function () {
@@ -778,7 +787,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         sheet.range("A" + (data.length + 2) + ":" + finalColLetter + (bottomRightRowIndex + numBlanks)).value("");
                         topLeftRowIndex -= numBlanks;
                         if (topLeftRowIndex < 2) { // prevent topLeftRowIndex from becoming negative to prevent out of bounds errors. It is "2" to account for the headers.
-                        	topLeftRowIndex = 2;
+                            topLeftRowIndex = 2;
                         }
                         bottomRightRowIndex -= numBlanks;
                         stealthOnChangeMode = false;
@@ -1061,15 +1070,15 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     }
 
                     if (myFieldModel.field === "ORIG_ECAP_TRKR_NBR") {
-                    	// ecap tracker number
-                    	sheet.range(myColumnName + ":" + myColumnName).editor("ecapAdjTracker");
-                    } 
+                        // ecap tracker number
+                        sheet.range(myColumnName + ":" + myColumnName).editor("ecapAdjTracker");
+                    }
                     else if (myFieldModel.opLookupText === "DROP_DOWN" || myFieldModel.opLookupText === "dropdownName" || (myFieldModel.opLookupText === "CUST_DIV_NM" && isCorpDiv)) {
-						// Add validation dropdowns/multiselects onto the cells
-                    	applyDropDownsData(sheet, myFieldModel, myColumnName, dropdownValuesSheet);
+                        // Add validation dropdowns/multiselects onto the cells
+                        applyDropDownsData(sheet, myFieldModel, myColumnName, dropdownValuesSheet);
 
-						if (myFieldModel.uiType === "RADIOBUTTONGROUP" || myFieldModel.uiType === "DROPDOWN") {
-                    		sheet.range(myColumnName + ":" + myColumnName).editor("dropdownEditor");
+                        if (myFieldModel.uiType === "RADIOBUTTONGROUP" || myFieldModel.uiType === "DROPDOWN") {
+                            sheet.range(myColumnName + ":" + myColumnName).editor("dropdownEditor");
                             //applyDropDowns(sheet, myFieldModel, myColumnName);
                         } else if (myFieldModel.uiType === "EMBEDDEDMULTISELECT" || myFieldModel.uiType === "MULTISELECT") {
                             sheet.range(myColumnName + ":" + myColumnName).editor("multiSelectPopUpEditor");
@@ -1077,19 +1086,19 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         }
                     } else {
                         // Add validations based on column type
-                    	switch (myFieldModel.type) {
-                    		case "date":
-                    			sheet.range(myColumnName + ":" + myColumnName).editor("datePickerEditor");
-                    			//sheet.range(myColumnName + ":" + myColumnName).format("MM/dd/yyyy");   
-                    			vm.requiredStringColumns[key] = true;
-                    			break;
-                    		case "number":	
-                    			// Money Formatting
-								if (myFieldModel.format == "{0:c}") {
-                    				sheet.range(myColumnName + ":" + myColumnName).format("$##,#0.00");
-                    			} else {
-                    				sheet.range(myColumnName + ":" + myColumnName).format("##,#");
-                    			}
+                        switch (myFieldModel.type) {
+                            case "date":
+                                sheet.range(myColumnName + ":" + myColumnName).editor("datePickerEditor");
+                                //sheet.range(myColumnName + ":" + myColumnName).format("MM/dd/yyyy");
+                                vm.requiredStringColumns[key] = true;
+                                break;
+                            case "number":
+                                // Money Formatting
+                                if (myFieldModel.format == "{0:c}") {
+                                    sheet.range(myColumnName + ":" + myColumnName).format("$##,#0.00");
+                                } else {
+                                    sheet.range(myColumnName + ":" + myColumnName).format("##,#");
+                                }
                                 break;
                             case "string":
                                 if (!myFieldModel.nullable) {
@@ -1123,13 +1132,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     }
 
     function applyDropDownsData(sheet, myFieldModel, myColumnName, dropdownValuesSheet) {
-    	// Call API
-    	if (myFieldModel.opLookupText === "CUST_DIV_NM") {
-    		myFieldModel.opLookupUrl = "/api/Customers/GetCustomerDivisionsByCustNmSid/" + root.contractData.CUST_MBR_SID;
-    	}
+        // Call API
+        if (myFieldModel.opLookupText === "CUST_DIV_NM") {
+            myFieldModel.opLookupUrl = "/api/Customers/GetCustomerDivisionsByCustNmSid/" + root.contractData.CUST_MBR_SID;
+        }
 
-    	//// TODO: In the future. Dropdowns do work, but their (red highlighting) validations do not allow us to ignore case-sensitivity.
-    	//// If we can figure out how to ignore case-sesitive, we can put these dropdwons back in
+        //// TODO: In the future. Dropdowns do work, but their (red highlighting) validations do not allow us to ignore case-sensitivity.
+        //// If we can figure out how to ignore case-sesitive, we can put these dropdwons back in
         //dataService.get(myFieldModel.opLookupUrl, null, null, true).then(function (response) {
         //    dropdownValuesSheet.batch(function () {
         //        for (var i = 0; i < response.data.length; i++) {
@@ -1158,8 +1167,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         //});
     }
 
-	//// TODO: In the future. Dropdowns do work, but their (red highlighting) validations do not allow us to ignore case-sensitivity.
-	//// If we can figure out how to ignore case-sesitive, we can put these dropdwons back in
+    //// TODO: In the future. Dropdowns do work, but their (red highlighting) validations do not allow us to ignore case-sensitivity.
+    //// If we can figure out how to ignore case-sesitive, we can put these dropdwons back in
     //function applyDropDowns(sheet, myFieldModel, myColumnName) {
     //    sheet.range(myColumnName + "2:" + myColumnName + $scope.root.ptRowCount).validation({
     //        dataType: "list",
@@ -1411,9 +1420,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                 var i = state.data.length;
                 while (i--) {
-                	if (state.data[i] === undefined) {
-                		state.data.splice(i,1);
-                	}
+                    if (state.data[i] === undefined) {
+                        state.data.splice(i, 1);
+                    }
                 }
 
                 sheet.range(pasteRef).setState(state, clip);
@@ -1540,12 +1549,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     size: 'lg',
                     windowClass: 'prdSelector-modal-window',
                     resolve: {
-                        productSelectionLevels: ['ProductSelectorService', function (ProductSelectorService) {
+                        productSelectionLevels: ['productSelectorService', function (productSelectorService) {
                             var dtoDateRange = {
                                 startDate: pricingTableRow.START_DT, endDate: pricingTableRow.END_DT
                             };
                             root.setBusy("Please wait...", "");
-                            return ProductSelectorService.GetProductSelectorWrapper(dtoDateRange).then(function (response) {
+                            return productSelectorService.GetProductSelectorWrapper(dtoDateRange).then(function (response) {
                                 root.setBusy("", "");
                                 return response;
                             }, function (response) {
@@ -1559,6 +1568,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         },
                         enableSplitProducts: function () {
                             return enableSplitProducts;
+                        },
+                        dealType: function () {
+                            return root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD;
                         }
                     }
                 });
@@ -1653,7 +1665,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
             //Note: When changing the message here, also change the condition in $scope.saveEntireContractBase method in contract.controller.js
             root.setBusy("Validating your data...", "Please wait as we find your products!");
-            ProductSelectorService.TranslateProducts(translationInputToSend, $scope.contractData.CUST_MBR_SID) //Once the database is fixed remove the hard coded geo_mbr_sid
+            productSelectorService.TranslateProducts(translationInputToSend, $scope.contractData.CUST_MBR_SID) //Once the database is fixed remove the hard coded geo_mbr_sid
             .then(function (response) {
                 topbar.hide();
                 if (response.statusText === "OK") {
@@ -1719,9 +1731,15 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             }
 
             if (isAllValidated) {
-                var contractProducts = updateUserInput(transformResults.ValidProducts[key]);
+                var userInput = updateUserInput(transformResults.ValidProducts[key]);
+                var contractProducts = userInput.contractProducts;
                 data[r].PTR_USER_PRD = contractProducts;
                 sourceData[r].PTR_USER_PRD = contractProducts;
+                if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD === "VOL_TIER") {
+                    var excludeProducts = userInput.excludeProducts;
+                    data[r].PRD_EXCLDS = excludeProducts;
+                    sourceData[r].PRD_EXCLDS = excludeProducts;
+                }
             }
         }
         root.spreadDs.sync();
@@ -1886,24 +1904,37 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             return "";
         }
         var contractProducts = "";
+        var excludeProducts = "";
         for (var prd in validProducts) {
             if (validProducts.hasOwnProperty(prd)) {
-                var uniqueUserInput = $filter('unique')(validProducts[prd], 'USR_INPUT');
                 var derivedUserInput = $filter('unique')(validProducts[prd], 'DERIVED_USR_INPUT');
                 var userInput = "";
-                if (validProducts[prd].length === 1) {
-                    if (derivedUserInput[0].DERIVED_USR_INPUT.trim().toLowerCase() == derivedUserInput[0].HIER_NM_HASH.trim().toLowerCase()) {
-                        userInput = derivedUserInput[0].HIER_VAL_NM;
+                var excludeUserInput = "";
+                if (derivedUserInput[0].Type !== undefined && derivedUserInput[0].Type == "E") {
+                    if (validProducts[prd].length === 1 && derivedUserInput[0].DERIVED_USR_INPUT.trim().toLowerCase() == derivedUserInput[0].HIER_NM_HASH.trim().toLowerCase()) {
+                        excludeUserInput = derivedUserInput[0].HIER_VAL_NM
                     } else {
+                        excludeUserInput = derivedUserInput[0].DERIVED_USR_INPUT
+                    }
+                }
+                else {
+                    if (validProducts[prd].length === 1 && derivedUserInput[0].DERIVED_USR_INPUT.trim().toLowerCase() == derivedUserInput[0].HIER_NM_HASH.trim().toLowerCase()) {
+                        userInput = derivedUserInput[0].HIER_VAL_NM;
+                    }
+                    else {
                         userInput = derivedUserInput[0].DERIVED_USR_INPUT;
                     }
-                } else {
-                    userInput = derivedUserInput[0].DERIVED_USR_INPUT;
                 }
             }
-            contractProducts = contractProducts === "" ? userInput : contractProducts + "," + userInput;
+            if (userInput != "") {
+                contractProducts = contractProducts === "" ? userInput : contractProducts + "," + userInput;
+            }
+            if (excludeUserInput != "") {
+                excludeProducts = excludeProducts === "" ? excludeUserInput : excludeProducts + "," + excludeUserInput;
+            }
         }
-        return contractProducts;
+        var input = { 'contractProducts': contractProducts, 'excludeProducts': excludeProducts };
+        return input;
     }
 
     function updateUserInputFromCorrector(validProducts, autoValidatedProducts) {
@@ -1915,7 +1946,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             if (!!autoValidatedProducts && autoValidatedProducts.hasOwnProperty(prd)) {
                 var autoTranslated = {};
                 autoTranslated[prd] = autoValidatedProducts[prd];
-                var autoValidProd = updateUserInput(autoTranslated);
+                var autoValidProd = updateUserInput(autoTranslated).contractProducts;
                 if (autoValidProd !== "") {
                     contractProducts = contractProducts === "" ? autoValidProd : contractProducts + "," + autoValidProd;
                 }
@@ -1941,57 +1972,57 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         ValidateProducts(data, true);
     }
 
-	// NOTE: Thhis is a workaround because the bulit-in kendo spreadsheet datepicker causes major perfromance issues in IE
+    // NOTE: Thhis is a workaround because the bulit-in kendo spreadsheet datepicker causes major perfromance issues in IE
     kendo.spreadsheet.registerEditor("dropdownEditor", function () {
-    	var context;
+        var context;
 
-    	// Further delay the initialization of the UI until the `edit` method is
-    	// actually called, so here just return the object with the required API.
-    	return {
-    		edit: function (options) {
-    			context = options;
-    			open();
-    		},
-    		icon: "fa fa-check ssEditorBtn"
-    	};
+        // Further delay the initialization of the UI until the `edit` method is
+        // actually called, so here just return the object with the required API.
+        return {
+            edit: function (options) {
+                context = options;
+                open();
+            },
+            icon: "fa fa-check ssEditorBtn"
+        };
 
-    	function open() {
-    		// Get selected cell
-    		var currColIndex = context.range._ref.col;
-    		var cellCurrVal = context.range.value();
+        function open() {
+            // Get selected cell
+            var currColIndex = context.range._ref.col;
+            var cellCurrVal = context.range.value();
 
-    		// Get column name out of selected cell
-    		var colName = root.letterToCol[String.fromCharCode(intA + currColIndex)]
+            // Get column name out of selected cell
+            var colName = root.letterToCol[String.fromCharCode(intA + currColIndex)]
 
-    		// Get columnData (urls, name, etc) from column name
+            // Get columnData (urls, name, etc) from column name
             var dealType = $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD;
-    		var colData = $scope.$parent.$parent.templates.ModelTemplates.PRC_TBL_ROW[dealType].model.fields[colName];
+            var colData = $scope.$parent.$parent.templates.ModelTemplates.PRC_TBL_ROW[dealType].model.fields[colName];
 
-    		var modalInstance = $uibModal.open({
-    			//animation: $ctrl.animationsEnabled,
-    			ariaLabelledBy: 'modal-title',
-    			ariaDescribedBy: 'modal-body',
-    			templateUrl: 'dropdownModal',
-    			controller: 'DropdownModalCtrl',
-    			controllerAs: '$ctrl',
-    			size: 'md',
-    			resolve: {
-    				cellCurrValues: function () {
-    					return cellCurrVal;
-    				},
-    				colData: function () {
-    					return colData;
-    				},
-    				colName: function () {
-    					return colName;
-    				}
-    			}
-    		});
+            var modalInstance = $uibModal.open({
+                //animation: $ctrl.animationsEnabled,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: 'dropdownModal',
+                controller: 'DropdownModalCtrl',
+                controllerAs: '$ctrl',
+                size: 'md',
+                resolve: {
+                    cellCurrValues: function () {
+                        return cellCurrVal;
+                    },
+                    colData: function () {
+                        return colData;
+                    },
+                    colName: function () {
+                        return colName;
+                    }
+                }
+            });
 
-    		modalInstance.result.then(function (selectedItem) {
-    			context.callback(selectedItem);
-    		}, function () { });
-    	}
+            modalInstance.result.then(function (selectedItem) {
+                context.callback(selectedItem);
+            }, function () { });
+        }
     });
 
 
@@ -2015,7 +2046,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             // Get column name out of selected cell
             var colName = root.letterToCol[String.fromCharCode(intA + currColIndex)];
 
-        	// Get columnData (urls, name, etc) from column name
+            // Get columnData (urls, name, etc) from column name
             var dealType = $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD;
             var colData = $scope.$parent.$parent.templates.ModelTemplates.PRC_TBL_ROW[dealType].model.fields[colName];
 
@@ -2102,7 +2133,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             // Get column name out of selected cell
             var colName = root.letterToCol[String.fromCharCode(intA + currColIndex)]
 
-        	// Get columnData (urls, name, etc) from column name
+            // Get columnData (urls, name, etc) from column name
             var dealType = $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD;
             var colData = $scope.$parent.$parent.templates.ModelTemplates.PRC_TBL_ROW[dealType].model.fields[colName];
 
@@ -2142,71 +2173,71 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     });
 
 
-	// NOTE: Thhis is a workaround because the bulit-in kendo spreadsheet datepicker causes major perfromance issues in IE
+    // NOTE: Thhis is a workaround because the bulit-in kendo spreadsheet datepicker causes major perfromance issues in IE
     kendo.spreadsheet.registerEditor("ecapAdjTracker", function () {
-    	var context;
+        var context;
 
-    	// Further delay the initialization of the UI until the `edit` method is
-    	// actually called, so here just return the object with the required API.
-    	return {
-    		edit: function (options) {
-    			context = options;
-    			open();
-    		},
-    		icon: "fa fa-check ssEditorBtn"
-    	};
+        // Further delay the initialization of the UI until the `edit` method is
+        // actually called, so here just return the object with the required API.
+        return {
+            edit: function (options) {
+                context = options;
+                open();
+            },
+            icon: "fa fa-check ssEditorBtn"
+        };
 
-    	function open() {
-    		// Get selected cell
-    		var currColIndex = context.range._ref.col;
-    		var cellCurrVal = context.range.value();
+        function open() {
+            // Get selected cell
+            var currColIndex = context.range._ref.col;
+            var cellCurrVal = context.range.value();
 
-    		// Get column name out of selected cell
-    		var colName = root.letterToCol[String.fromCharCode(intA + currColIndex)]
+            // Get column name out of selected cell
+            var colName = root.letterToCol[String.fromCharCode(intA + currColIndex)]
 
-    		// Get columnData (urls, name, etc) from column name
+            // Get columnData (urls, name, etc) from column name
             var dealType = $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD;
-    		var colData = $scope.$parent.$parent.templates.ModelTemplates.PRC_TBL_ROW[dealType].model.fields[colName];
-			
-    		var currRowData = root.pricingTableData.PRC_TBL_ROW[context.range._ref.row - 1]; // minus one to account for index
+            var colData = $scope.$parent.$parent.templates.ModelTemplates.PRC_TBL_ROW[dealType].model.fields[colName];
 
-    		// Get data to filter ECAP numbers against
-    		/////// TODO: exact start date, end date, geo, cust product
-    		var filterData = {
-    			'DEAL_STRT_DT': currRowData.START_DT,
-    			'DEAL_END_DT': currRowData.END_DT,
-    			'GEO_MBR_SID': currRowData.GEO_COMBINED,
-    			'CUST_MBR_SID': currRowData.CUST_MBR_SID,
-    			'PRD_MBR_SID': currRowData.PTR_USER_PRD
-    		};
+            var currRowData = root.pricingTableData.PRC_TBL_ROW[context.range._ref.row - 1]; // minus one to account for index
 
-    		var modalInstance = $uibModal.open({
-    			ariaLabelledBy: 'modal-title',
-    			ariaDescribedBy: 'modal-body',
-    			templateUrl: 'ecapTrackerModal',
-    			controller: 'EcapTrackerModalCtrl',
-    			controllerAs: '$ctrl',
-    			size: 'md',
-    			resolve: {
-    				cellCurrValues: function () {
-    					return cellCurrVal;
-    				},
-    				colData: function () {
-    					return colData;
-    				},
-    				colName: function () {
-    					return colName;
-    				},
-    				filterData: function () {
-    					return filterData;
-    				}
-    			}
-    		});
+            // Get data to filter ECAP numbers against
+            /////// TODO: exact start date, end date, geo, cust product
+            var filterData = {
+                'DEAL_STRT_DT': currRowData.START_DT,
+                'DEAL_END_DT': currRowData.END_DT,
+                'GEO_MBR_SID': currRowData.GEO_COMBINED,
+                'CUST_MBR_SID': currRowData.CUST_MBR_SID,
+                'PRD_MBR_SID': currRowData.PTR_USER_PRD
+            };
 
-    		modalInstance.result.then(function (selectedItem) {
-    			context.callback(selectedItem);
-    		}, function () { });
-    	}
+            var modalInstance = $uibModal.open({
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: 'ecapTrackerModal',
+                controller: 'EcapTrackerModalCtrl',
+                controllerAs: '$ctrl',
+                size: 'md',
+                resolve: {
+                    cellCurrValues: function () {
+                        return cellCurrVal;
+                    },
+                    colData: function () {
+                        return colData;
+                    },
+                    colName: function () {
+                        return colName;
+                    },
+                    filterData: function () {
+                        return filterData;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (selectedItem) {
+                context.callback(selectedItem);
+            }, function () { });
+        }
     });
 
     function getPrductDetails(dataItem, priceCondition) {
@@ -2251,10 +2282,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     }
 
     /*
-	 * -------------------------------------------
-	 * CUSTOM UNDO / REDO
-	 * -------------------------------------------
-	 */
+     * -------------------------------------------
+     * CUSTOM UNDO / REDO
+     * -------------------------------------------
+     */
 
     $scope.undoCounter = 0;
     $scope.redoCounter = 0;

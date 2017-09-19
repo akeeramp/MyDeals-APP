@@ -4,9 +4,9 @@
         .module('app.admin')
         .controller('legalExceptionsController', legalExceptionsController);
 
-    legalExceptionsController.$inject = ['legalExceptionService', 'hasAccess', '$scope', 'logger', 'confirmationModal', 'gridConstants', '$linq', 'ProductSelectorService'];
+    legalExceptionsController.$inject = ['legalExceptionService', 'hasAccess', '$scope', 'logger', 'confirmationModal', 'gridConstants', '$linq', 'productSelectorService'];
 
-    function legalExceptionsController(legalExceptionService, hasAccess, $scope, logger, confirmationModal, gridConstants, $linq, ProductSelectorService) {
+    function legalExceptionsController(legalExceptionService, hasAccess, $scope, logger, confirmationModal, gridConstants, $linq, productSelectorService) {
         var vm = this;
         vm.hasAccess = hasAccess;
         vm.validationMessage = "";
@@ -451,7 +451,7 @@
                                     var dto = {
                                         filter: param
                                     };
-                                    ProductSelectorService.GetLegalExceptionProducts(dto).then(function (response) {
+                                    productSelectorService.GetLegalExceptionProducts(dto).then(function (response) {
                                         e.success(response.data);
                                     }, function (response) {
                                         logger.error("Unable to get product suggestions.", response, response.statusText);

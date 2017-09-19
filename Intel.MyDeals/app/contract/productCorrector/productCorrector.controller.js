@@ -2,9 +2,9 @@
     .module('app.admin')
     .controller('ProductCorrectorModalController', ProductCorrectorModalController);
 
-ProductCorrectorModalController.$inject = ['$filter', '$scope', '$uibModalInstance', 'GetProductCorrectorData', 'ProductSelectorService', 'productCorrectorService', 'contractData', 'RowId', 'ProductRows', '$linq', '$timeout', 'logger', 'gridConstants', '$uibModal', 'CustSid'];
+ProductCorrectorModalController.$inject = ['$filter', '$scope', '$uibModalInstance', 'GetProductCorrectorData', 'productSelectorService', 'productCorrectorService', 'contractData', 'RowId', 'ProductRows', '$linq', '$timeout', 'logger', 'gridConstants', '$uibModal', 'CustSid'];
 
-function ProductCorrectorModalController($filter, $scope, $uibModalInstance, GetProductCorrectorData, ProductSelectorService, productCorrectorService, contractData, RowId, ProductRows, $linq, $timeout, logger, gridConstants, $uibModal, CustSid) {
+function ProductCorrectorModalController($filter, $scope, $uibModalInstance, GetProductCorrectorData, productSelectorService, productCorrectorService, contractData, RowId, ProductRows, $linq, $timeout, logger, gridConstants, $uibModal, CustSid) {
     var vm = this;
     vm.selectedPathParts = [];
     vm.invalidProducts = [];
@@ -77,11 +77,11 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             size: 'lg',
             windowClass: 'prdSelector-modal-window',
             resolve: {
-                productSelectionLevels: ['ProductSelectorService', function (ProductSelectorService) {
+                productSelectionLevels: ['productSelectorService', function (productSelectorService) {
                     var dtoDateRange = {
                         startDate: pricingTableRow.START_DT, endDate: pricingTableRow.END_DT
                     };
-                    return ProductSelectorService.GetProductSelectorWrapper(dtoDateRange).then(function (response) {
+                    return productSelectorService.GetProductSelectorWrapper(dtoDateRange).then(function (response) {
                         return response;
                     });
                 }],
@@ -643,7 +643,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
                 .ToArray();
             
             //Calling WEb APi for the Product details...
-            ProductSelectorService.GetProductAttributes(dataSelected)
+            productSelectorService.GetProductAttributes(dataSelected)
                 .then(function (response) {
                     dataSelected = response.data.length > 0 ? response.data : dataSelected;
 
@@ -1156,7 +1156,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             'endDate': row.END_DT
         }
 
-        ProductSelectorService.GetProductSuggestions(searchStringDTO)
+        productSelectorService.GetProductSuggestions(searchStringDTO)
             .then(function (response) {
                 if (response.data.length > 0) {
                     vm.suggestedProduct = [];
@@ -1208,7 +1208,7 @@ function ProductCorrectorModalController($filter, $scope, $uibModalInstance, Get
             "priceCondition": "",
         }
 
-        ProductSelectorService.GetCAPForProduct(data)
+        productSelectorService.GetCAPForProduct(data)
             .then(function (response) {
                 //Create a new object for selected
                 var selectedObject = {};

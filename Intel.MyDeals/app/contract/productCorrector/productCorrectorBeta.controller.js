@@ -2,9 +2,9 @@
     .module('app.admin')
     .controller('ProductCorrectorBetaModalController', ProductCorrectorBetaModalController);
 
-ProductCorrectorBetaModalController.$inject = ['$compile', '$filter', '$scope', '$uibModalInstance', 'GetProductCorrectorData', 'ProductSelectorService', 'productCorrectorService', 'contractData', 'RowId', 'ProductRows', '$linq', '$timeout', 'logger', 'gridConstants', '$uibModal', 'CustSid'];
+ProductCorrectorBetaModalController.$inject = ['$compile', '$filter', '$scope', '$uibModalInstance', 'GetProductCorrectorData', 'productSelectorService', 'productCorrectorService', 'contractData', 'RowId', 'ProductRows', '$linq', '$timeout', 'logger', 'gridConstants', '$uibModal', 'CustSid'];
 
-function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModalInstance, GetProductCorrectorData, ProductSelectorService, productCorrectorService, contractData, RowId, ProductRows, $linq, $timeout, logger, gridConstants, $uibModal, CustSid) {
+function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModalInstance, GetProductCorrectorData, productSelectorService, productCorrectorService, contractData, RowId, ProductRows, $linq, $timeout, logger, gridConstants, $uibModal, CustSid) {
     var vm = this;
     vm.totRows = 0;
     vm.curRowIndx = 0;
@@ -142,7 +142,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                 }
             }
         }
-        
+
         // Build filters
         for (x = 0; x < vm.curRowProds.length; x++) {
             if (vm.curRowProds[x].status === "Issue") {
@@ -286,7 +286,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
 
         vm.numIssueRows = issueRowIds.length;
         vm.totRows = Object.keys(data.ProdctTransformResults).length;
-    }    
+    }
 
     vm.dataSourceProduct = new kendo.data.DataSource({
         transport: {
@@ -308,7 +308,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                     },
                     "IS_SEL": {
                         type: "boolean"
-                    },                    
+                    },
                     "HIER_VAL_NM": {
                         type: "string"
                     },
@@ -320,7 +320,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                     },
                     "GDM_FMLY_NM": {
                         type: "string"
-                    },  
+                    },
                     "HIER_NM_HASH": {
                         type: "string"
                     },
@@ -401,14 +401,14 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                 headerTemplate: "&nbsp;",
                 template: '<div ng-if="!(dataItem.CAP.indexOf(\'-\') > -1)"><input type=\'checkbox\' ng-click="vm.clickProd(#=data.PRD_MBR_SID#, \'#=data.USR_INPUT#\', \'#=data.HIER_VAL_NM#\',$event)" ng-model="IS_SEL" class=\'check with-font\' id="prdChk#=data.PRD_MBR_SID#" ng-checked="#=IS_SEL#" checked ="#=IS_SEL#"/><label for="prdChk#=data.PRD_MBR_SID#"></label></div>' +
                           '<div ng-if="dataItem.CAP.indexOf(\'-\') > -1"><input type=\'checkbox\' title="CAP price cannot be a range." ng-disabled="true" ng-click="vm.clickProd(#=data.PRD_MBR_SID#, \'#=data.USR_INPUT#\', \'#=data.HIER_VAL_NM#\',$event)" ng-model="IS_SEL" class=\'check with-font\' id="prdChk#=data.PRD_MBR_SID#" ng-checked="#=IS_SEL#" checked ="#=IS_SEL#"/><label title="CAP price cannot be a range." ng-disabled="true" for="prdChk#=data.PRD_MBR_SID#"></label></div>'
-            },  
+            },
             {
                 field: "HIER_VAL_NM",
                 title: "Product",
                 template: '<div ng-class="{\'text-danger\': vm.isValidCapDetails(dataItem)}" title="{{vm.isValidCapDetails(dataItem, true)}}">#= HIER_VAL_NM #</div>',
                 width: "150px",
                 filterable: { multi: true, search: true }
-            },              
+            },
             {
                 field: "PRD_CAT_NM",
                 title: "Product Category",
@@ -421,7 +421,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                 title: "Product Effective Date",
                 template: "#= kendo.toString(new Date(PRD_STRT_DTM), 'M/d/yyyy') + ' - ' + kendo.toString(new Date(PRD_END_DTM), 'M/d/yyyy') #",
                 width: "120px"
-            },                            
+            },
             {
                 field: "CAP",
                 title: "CAP Info",
@@ -439,26 +439,26 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                 title: "YCS2",
                 width: "150px",
                 template: "<op-popover op-options='YCS2' op-data='vm.getPrductDetails(dataItem, \"YCS2\")'>#= YCS2 #</op-popover>"
-            }, 
+            },
             {
                 field: "GDM_FMLY_NM",
                 title: "GDM Family Name",
                 template: "<div kendo-tooltip k-content='dataItem.GDM_FMLY_NM'>{{dataItem.GDM_FMLY_NM}}</div>",
                 width: "150px",
                 filterable: { multi: true, search: true }
-            },        
+            },
             {
                 field: "HIER_NM_HASH",
                 title: "Product Description",
                 template: "<div kendo-tooltip k-content='dataItem.HIER_NM_HASH'>{{dataItem.HIER_NM_HASH}}</div>",
                 hidden: true
-            },  
+            },
             {
                 field: "CPU_PROCESSOR_NUMBER",
                 title: "CPU Processor number",
                 width: "150px",
                 filterable: { multi: true, search: true }
-            },            
+            },
             {
                 field: "MM_CUST_CUSTOMER",
                 title: "MM Customer Name",
@@ -550,12 +550,12 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
             if (!vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][item.name]) return;
 
             var foundItem = util.findInArrayWhere(vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][item.name], "PRD_MBR_SID", id);
-            if (!foundItem) return;            
+            if (!foundItem) return;
 
             if (!vm.ProductCorrectorData.ValidProducts[vm.curRowId]) vm.ProductCorrectorData.ValidProducts[vm.curRowId] = {};
             if (!vm.ProductCorrectorData.ValidProducts[vm.curRowId][item.name]) vm.ProductCorrectorData.ValidProducts[vm.curRowId][item.name] = [];
             vm.ProductCorrectorData.ValidProducts[vm.curRowId][item.name].push(foundItem);
-            
+
             vm.curRowData.forEach(function (item) {
                 if (item.PRD_MBR_SID == foundItem.PRD_MBR_SID) {
                     item.IS_SEL = true;
@@ -593,8 +593,8 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                     item.IS_SEL = false;
                 }
             });
-        }        
-    }   
+        }
+    }
 
     vm.removeAndFilter = function (prdName) {
         // remove
@@ -676,11 +676,11 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
             size: 'lg',
             windowClass: 'prdSelector-modal-window',
             resolve: {
-                productSelectionLevels: ['ProductSelectorService', function (ProductSelectorService) {
+                productSelectionLevels: ['productSelectorService', function (productSelectorService) {
                     var dtoDateRange = {
                         startDate: moment(pricingTableRow.START_DT).format("l"), endDate: moment(pricingTableRow.END_DT).format("l")
                     };
-                    return ProductSelectorService.GetProductSelectorWrapper(dtoDateRange).then(function (response) {
+                    return productSelectorService.GetProductSelectorWrapper(dtoDateRange).then(function (response) {
                         return response;
                     }, function (response) {
                         logger.error("Unable to launch product selector.", response, response.statusText);
@@ -690,7 +690,10 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                 enableSplitProducts: function () {
                     return false;
                 },
-                suggestedProduct: angular.copy(suggestedProduct)
+                suggestedProduct: angular.copy(suggestedProduct),
+                dealType: function () {
+                    return root.PRC_TBL[0].OBJ_SET_TYPE_CD;
+                }
             }
         });
 
@@ -733,7 +736,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
 
             // perform filter
             vm.applyFilterAndGrouping();
-            
+
         } else {
             // remove matched settings
             dataItem.matchName = [];
@@ -747,7 +750,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                 vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][dataItem.name] = GetProductCorrectorData.DuplicateProducts[vm.curRowId][dataItem.name];
 
             vm.selectRow(vm.curRowIndx);
-        }        
+        }
     }
 
     vm.suggestItem = {};
@@ -965,7 +968,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                 }
                 vm.ProductCorrectorData.InValidProducts[key] = invalidCopy;
             }
-        }        
+        }
 
         $uibModalInstance.close(vm.ProductCorrectorData);
     }

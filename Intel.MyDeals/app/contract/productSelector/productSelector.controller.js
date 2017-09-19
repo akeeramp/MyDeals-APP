@@ -4,15 +4,15 @@
        .module('app.admin') //TODO: once we integrate with contract manager change the module to contract
        .controller('ProductSelectorModalController', ProductSelectorModalController);
 
-    ProductSelectorModalController.$inject = ['$filter', '$scope', '$uibModal', '$uibModalInstance', '$linq', 'productSelectionLevels', 'enableSplitProducts', 'ProductSelectorService', 'pricingTableRow', '$timeout', 'logger', 'gridConstants', 'suggestedProduct'];
+    ProductSelectorModalController.$inject = ['$filter', '$scope', '$uibModal', '$uibModalInstance', '$linq', 'productSelectionLevels', 'enableSplitProducts', 'dealType', 'productSelectorService', 'pricingTableRow', '$timeout', 'logger', 'gridConstants', 'suggestedProduct'];
 
-    function ProductSelectorModalController($filter, $scope, $uibModal, $uibModalInstance, $linq, productSelectionLevels, enableSplitProducts, ProductSelectorService, pricingTableRow, $timeout, logger, gridConstants, suggestedProduct) {
+    function ProductSelectorModalController($filter, $scope, $uibModal, $uibModalInstance, $linq, productSelectionLevels, enableSplitProducts, dealType, productSelectorService, pricingTableRow, $timeout, logger, gridConstants, suggestedProduct) {
         var vm = this;
         // Non CPU verticals with drill down level 4
         var verticalsWithDrillDownLevel4 = ["EIA CPU", "EIA MISC"];
         var productTypeToApplyMediaCode = ["EIA CPU", "CPU", "EIA MISC"];
         var verticalsWithNoMMSelection = ["CS", "WC"];
-        var verticalsWithGDMFamlyAsDrillLevel5 = ["CS", "EIA CS", "EIA CPU", 'EIA MISC']
+        var verticalsWithGDMFamlyAsDrillLevel5 = ["CS", "EIA CS", "EIA CPU", 'EIA MISC'];
         vm.productSelectionLevels = productSelectionLevels.data.ProductSelectionLevels;
         vm.productSelectionLevelsAttributes = productSelectionLevels.data.ProductSelectionLevelsAttributes;
 
@@ -25,6 +25,7 @@
         vm.gridData = [];
         vm.selectedProducts = [];
         vm.addedProducts = [];
+        vm.excludedProducts = [];
         vm.userInput = "";
         vm.selectItem = selectItem;
         vm.gridSelectItem = gridSelectItem;
@@ -43,6 +44,13 @@
         vm.isValidCapDetails = isValidCapDetails;
         vm.drillDownPrd = "Select";
         vm.searchWithinFilters = true;
+        vm.selectProduct = selectProduct;
+        vm.dealType = dealType;
+        vm.animateInclude = false;
+        vm.animateExclude = false;
+        vm.manageSelectedProducts = manageSelectedProducts;
+        var enableMultipleSelection = dealType == 'VOL_TIER';
+
         var searchProcessed = false;
         if (pricingTableRow.PROD_INCLDS == undefined || pricingTableRow.PROD_INCLDS == null || pricingTableRow.PROD_INCLDS == "") {
             pricingTableRow.PROD_INCLDS = 'All';
@@ -56,7 +64,11 @@
             for (var key in sysProducts) {
                 if (sysProducts.hasOwnProperty(key)) {
                     angular.forEach(sysProducts[key], function (item) {
-                        vm.addedProducts.push(item);
+                        if (item.Type !== undefined && item.Type === "E") {
+                            vm.excludedProducts.push(item);
+                        } else {
+                            vm.addedProducts.push(item);
+                        }
                     });
                 }
             }
@@ -77,6 +89,16 @@
             return verticals;
         }
 
+        function getVerticalSelection(markLevelName) {
+            var markLevel = vm.selectedPathParts.length == 0 ? 'MRK_LVL1' : 'MRK_LVL2';
+            var verticals = vm.productSelectionLevels.filter(function (x) {
+                return x[markLevel] == markLevelName && x['PRD_CAT_NM'] != null && x['PRD_CAT_NM'] != ""
+            });
+
+            verticals = $filter('unique')(verticals, 'PRD_CAT_NM_SID');
+            return verticals;
+        }
+
         populateValidProducts();
 
         // Get the drilldown items based on the selection level
@@ -94,7 +116,10 @@
                 }).map(function (i) {
                     return {
                         name: i.MRK_LVL1,
+                        allowMultiple: enableMultipleSelection && !(getVerticalSelection(i.MRK_LVL1).length > 1),
+                        parentSelected: false,
                         path: '',
+                        id: getVerticalSelection(i.MRK_LVL1)[0].PRD_MBR_SID
                     }
                 });
                 return;
@@ -109,7 +134,11 @@
                 }).map(function (i) {
                     return {
                         name: i.MRK_LVL2,
-                        path: ''
+                        path: '',
+                        allowMultiple: enableMultipleSelection && !(getVerticalSelection(i.MRK_LVL2).length > 1),
+                        id: getVerticalSelection(i.MRK_LVL2)[0].PRD_MBR_SID,
+                        parentSelected: item.selected,
+                        selected: productExists(item, getVerticalSelection(i.MRK_LVL2)[0].PRD_MBR_SID)
                     }
                 });
                 if (vm.items.length == 1) {
@@ -127,7 +156,11 @@
                 vm.items = markLevel2.map(function (i) {
                     return {
                         name: i.PRD_CAT_NM,
-                        path: i.HIER_NM_HASH // From this level we get hierarchy to get deal products
+                        path: i.HIER_NM_HASH, // From this level we get hierarchy to get deal products
+                        allowMultiple: enableMultipleSelection,
+                        id: i.PRD_MBR_SID,
+                        parentSelected: item.selected,
+                        selected: productExists(item, i.PRD_MBR_SID)
                     }
                 });
                 if (vm.items.length == 1) {
@@ -143,7 +176,11 @@
                 vm.items = brandName.map(function (i) {
                     return {
                         name: i.BRND_NM,
-                        path: i.HIER_NM_HASH
+                        path: i.HIER_NM_HASH,
+                        allowMultiple: enableMultipleSelection,
+                        id: i.PRD_MBR_SID,
+                        parentSelected: item.selected,
+                        selected: productExists(item, i.PRD_MBR_SID)
                     }
                 });
 
@@ -159,7 +196,11 @@
                             return {
                                 name: i.GDM_BRND_NM,
                                 path: item.path,
-                                drillDownFilter4: i.GDM_BRND_NM == "" ? 'Blank_GDM' : i.GDM_BRND_NM
+                                drillDownFilter4: i.GDM_BRND_NM == "" ? 'Blank_GDM' : i.GDM_BRND_NM,
+                                allowMultiple: false,
+                                parentSelected: item.selected,
+                                selected: productExists(item, i.PRD_MBR_SID),
+                                id: i.PRD_MRK_MBR_SID
                             }
                         });
                         if (vm.items.length == 1) {
@@ -180,7 +221,11 @@
                 vm.items = familyName.map(function (i) {
                     return {
                         name: i.FMLY_NM,
-                        path: i.HIER_NM_HASH
+                        path: i.HIER_NM_HASH,
+                        allowMultiple: enableMultipleSelection,
+                        id: i.PRD_MBR_SID,
+                        parentSelected: item.selected,
+                        selected: productExists(item, i.PRD_MBR_SID)
                     }
                 });
 
@@ -202,7 +247,9 @@
                                 name: i.GDM_FMLY_NM, //TODO Chane these values in db
                                 path: vm.items[0].path,
                                 drillDownFilter5: i.GDM_FMLY_NM == "" ? 'Blank' : i.GDM_FMLY_NM,
-                                drillDownFilter4: vm.selectedPathParts[3].drillDownFilter4
+                                drillDownFilter4: vm.selectedPathParts[3].drillDownFilter4,
+                                parentSelected: item.parentSelected,
+                                selected: item.selected
                             }
                         });
                     } else {
@@ -216,7 +263,9 @@
                                 name: i.PRD_FMLY_TXT,
                                 path: vm.items[0].path,
                                 drillDownFilter5: i.PRD_FMLY_TXT == "" ? 'Blank_PRD' : i.PRD_FMLY_TXT,
-                                drillDownFilter4: vm.selectedPathParts[3].drillDownFilter4
+                                drillDownFilter4: vm.selectedPathParts[3].drillDownFilter4,
+                                parentSelected: item.parentSelected,
+                                selected: item.selected
                             }
                         });
                     }
@@ -272,14 +321,21 @@
                 data.drillDownFilter5 = (!!!item.drillDownFilter5 && item.drillDownFilter5 == "") ? null : item.drillDownFilter5
             }
 
-            ProductSelectorService.GetProductSelectionResults(data).then(function (response) {
+            productSelectorService.GetProductSelectionResults(data).then(function (response) {
                 if (response.data.length == 1 && response.data[0].HIER_VAL_NM == 'NA') {
                     //if the processor number is NA, send GDM values to filter out L4 data
+                    response.data[0]['selected'] = productExists(item, response.data[0].PRD_MBR_SID);
+                    response.data[0]['parentSelected'] = item.parentSelected;
                     response.data[0]['drillDownFilter4'] = (!!!item.drillDownFilter4 && item.drillDownFilter4 == "") ? null : item.drillDownFilter4;
                     response.data[0]['drillDownFilter5'] = (!!!item.drillDownFilter5 && item.drillDownFilter5 == "") ? null : item.drillDownFilter5;
                     vm.gridSelectItem(response.data[0]);
                 } else {
                     vm.gridData = response.data;
+                    vm.gridData = vm.gridData.map(function (x) {
+                        x['selected'] = productExists(item, x.PRD_MBR_SID);
+                        x['parentSelected'] = item.selected;
+                        return x;
+                    });
                     toggleColumnsWhenEmpty(vm.gridData, 'prodGrid');
                     dataSourceProduct.read();
                 }
@@ -336,6 +392,8 @@
             item.path = dataItem.HIER_NM_HASH,
             item.drillDownFilter4 = dataItem.drillDownFilter4,
             item.drillDownFilter5 = dataItem.drillDownFilter5,
+            item.selected = dataItem.selected,
+            item.parentSelected = dataItem.selected,
             vm.selectedPathParts.push(item);
             getItems(item);
         }
@@ -399,6 +457,67 @@
             return displayTemplateType;
         }
 
+        function selectProduct(item) {
+            var item = angular.copy(item);
+            if (item.parentSelected && dealType == 'VOL_TIER') {
+                manageSelectedProducts('exclude', item);
+            } else {
+                manageSelectedProducts('include', item);
+            }
+        }
+
+        function productExists(item, id) {
+            var productExists = item.selected;
+            if (!item.selected) {
+                productExists = vm.addedProducts.filter(function (x) {
+                    return x.PRD_MBR_SID == id;
+                }).length > 0;
+            } else if (dealType == 'VOL_TIER') {
+                productExists = vm.excludedProducts.filter(function (x) {
+                    return x.PRD_MBR_SID == id;
+                }).length == 0;
+            }
+            return productExists;
+        }
+
+
+        function manageSelectedProducts(mode, product) {
+            var item = angular.copy(product);
+            if (item.id !== undefined && item.id != "") {
+                var product = vm.productSelectionLevels.filter(function (x) {
+                    return x.PRD_MBR_SID == item.id;
+                })[0];
+                item = $.extend({}, item, product);
+            }
+
+            item['USR_INPUT'] = item.HIER_VAL_NM;
+            item['DERIVED_USR_INPUT'] = item.HIER_VAL_NM;
+
+            if (mode == 'include') {
+                if (item.selected) {
+                    item['Type'] = "I";
+                    vm.addedProducts.push(item);
+                    vm.addedProducts = $filter("unique")(vm.addedProducts, 'PRD_MBR_SID');
+
+                } else {
+                    vm.addedProducts = vm.addedProducts.filter(function (x) {
+                        return x.PRD_MBR_SID != item.PRD_MBR_SID;
+                    });
+                }
+            } else {
+                if (!item.selected) {
+                    item['Type'] = "E";
+                    vm.excludedProducts.push(item);
+                    vm.excludedProducts = $filter("unique")(vm.excludedProducts, 'PRD_MBR_SID');
+
+                } else {
+                    vm.excludedProducts = vm.excludedProducts.filter(function (x) {
+                        return x.PRD_MBR_SID != item.PRD_MBR_SID;
+                    });
+                }
+            }
+        }
+
         function addProducts() {
             // Add them to box, check for duplicate prd_mbr_sid
             var selectedItems = angular.copy(vm.selectedItems);
@@ -412,8 +531,23 @@
         }
 
         // Grid ddiplay helper functions
-        function clearProducts() {
-            vm.addedProducts = [];
+        function clearProducts(type) {
+            if (type != 'E') {
+                if (vm.addedProducts.length == 0) return;
+                // Paper toss animation..
+                vm.animateInclude = true;
+                $timeout(function () {
+                    vm.animateInclude = false;
+                }, 500);
+                vm.addedProducts = [];
+            } else {
+                if (vm.excludedProducts.length == 0) return;
+                vm.animateExclude = true;
+                $timeout(function () {
+                    vm.animateExclude = false;
+                }, 500);
+                vm.excludedProducts = [];
+            }
         }
 
         vm.checkForBlank = function (val) {
@@ -534,7 +668,7 @@
                     template: "<div kendo-tooltip k-content='dataItem.FMLY_NM_MM'>{{dataItem.FMLY_NM_MM}}</div>",
                     width: "150px",
                     filterable: { multi: true, search: true }
-                },                
+                },
                 {
                     field: "EPM_NM",
                     title: "EPM Name",
@@ -671,11 +805,21 @@
                     USR_INPUT: x.USR_INPUT,
                     YCS2: x.YCS2,
                     YCS2_END: x.YCS2_END,
-                    YCS2_START: x.YCS2_START
+                    YCS2_START: x.YCS2_START,
+                    Type: "I"
                 }
             });
             var pricingTableSysProducts = {};
+
             angular.forEach(vm.addedProducts, function (item, key) {
+                if (!pricingTableSysProducts.hasOwnProperty(item.USR_INPUT)) {
+                    pricingTableSysProducts[item.USR_INPUT] = [item];
+                } else {
+                    pricingTableSysProducts[item.USR_INPUT].push(item);
+                }
+            });
+
+            angular.forEach(vm.excludedProducts, function (item, key) {
                 if (!pricingTableSysProducts.hasOwnProperty(item.USR_INPUT)) {
                     pricingTableSysProducts[item.USR_INPUT] = [item];
                 } else {
@@ -720,7 +864,7 @@
                 // Send 1 if EPM_NM
             }];
 
-            ProductSelectorService.GetProductDetails(data, pricingTableRow.CUST_MBR_SID).then(function (response) {
+            productSelectorService.GetProductDetails(data, pricingTableRow.CUST_MBR_SID).then(function (response) {
                 vm.selectPath(0, true);
                 vm.disableSelection = false;
                 if (!!response.data[0] && response.data[0].WITHOUT_FILTER) {
@@ -745,7 +889,7 @@
                         vm.searchProduct();
                     });
                 } else {
-                    ProductSelectorService.IsProductExistsInMydeals(vm.userInput).then(function (response) {
+                    productSelectorService.IsProductExistsInMydeals(vm.userInput).then(function (response) {
                         if (response.data) {
                             setTimeout(function () {
                                 vm.searchProduct();
@@ -770,7 +914,7 @@
                 GEO_COMBINED: pricingTableRow.GEO_COMBINED,
                 PROGRAM_PAYMENT: pricingTableRow.PROGRAM_PAYMENT,
             };
-            ProductSelectorService.GetSuggestions(dto, pricingTableRow.CUST_MBR_SID).then(function (response) {
+            productSelectorService.GetSuggestions(dto, pricingTableRow.CUST_MBR_SID).then(function (response) {
                 vm.suggestedProducts = response.data;
                 vm.disableSelection = (!!response.data[0] && !!response.data[0].WITHOUT_FILTER) ? response.data[0].WITHOUT_FILTER : false;
                 vm.showSuggestions = true;
@@ -815,7 +959,7 @@
                                 endDate: pricingTableRow.END_DT,
                                 getWithFilters: vm.searchWithinFilters
                             };
-                            ProductSelectorService.GetSearchString(dto).then(function (response) {
+                            productSelectorService.GetSearchString(dto).then(function (response) {
                                 e.success(response.data);
                             }, function (response) {
                                 logger.error("Unable to get product suggestions.", response, response.statusText);
@@ -854,7 +998,7 @@
                 "geoSid": pricingTableRow.GEO_COMBINED.toString()
             }
 
-            ProductSelectorService.GetProductSelectionResults(data).then(function (response) {
+            productSelectorService.GetProductSelectionResults(data).then(function (response) {
                 processProducts(response.data);
             }, function (response) {
                 logger.error("Unable to get products.", response, response.statusText);
@@ -927,15 +1071,13 @@
 
                 var markLevel1 = markLevel1s[0].MRK_LVL1;
 
-                vm.selectedPathParts = [{
-                    name: markLevel1
-                },
-                    {
-                        name: item.name
-                    }, { name: item.vertical, path: item.verticalPath }];
+                vm.selectedPathParts = [{ name: markLevel1 },
+                                        { name: item.name },
+                                        { name: item.vertical, path: item.verticalPath }];
 
                 var brandNames = $filter('where')(vm.productSearchValues, { 'PRD_CAT_NM': item.vertical });
                 if (brandNames.length == 1 && brandNames[0].PRD_ATRB_SID == 7003) {
+                    vm.selectedPathParts[vm.selectedPathParts.length - 1]['selected'] = true;
                     vm.selectPath(vm.selectedPathParts.length + 1);
                     return;
                 }
@@ -945,7 +1087,8 @@
                         name: i.BRND_NM,
                         level: "Brand",
                         vertical: item.vertical,
-                        path: i.DEAL_PRD_TYPE + " " + i.PRD_CAT_NM + " " + i.BRND_NM + " "
+                        path: i.DEAL_PRD_TYPE + " " + i.PRD_CAT_NM + " " + i.BRND_NM + " ",
+                        selected: i.PRD_ATRB_SID == 7004
                     }
                 });
                 if (vm.searchItems.length == 1) {
@@ -971,7 +1114,8 @@
                         path: i.DEAL_PRD_TYPE + " " + i.PRD_CAT_NM + " " + i.BRND_NM + " " + i.FMLY_NM + " ",
                         brand: i.BRND_NM,
                         vertical: i.PRD_CAT_NM,
-                        level: 'Family'
+                        level: 'Family',
+                        selected: i.PRD_ATRB_SID == 7005
                     }
                 });
                 if (vm.searchItems.length == 1) {
@@ -980,7 +1124,7 @@
                 return;
             }
             if (item.level == "Family") {
-                vm.selectedPathParts.push({ name: item.name, path: item.path });
+                vm.selectedPathParts.push(item);
                 // Filter the search results based on the hierarchy
                 var products = $filter('where')(vm.productSearchValues,
                    { 'PRD_CAT_NM': item.vertical, 'FMLY_NM': item.name, 'BRND_NM': item.brand });
@@ -993,7 +1137,7 @@
                 if (products.length == 1 && products[0].PRD_ATRB_SID > 7006) {
                     vm.selectedPathParts.push({
                         name: products[0].PCSR_NBR, path: products[0].DEAL_PRD_TYPE + " "
-                            + products[0].PRD_CAT_NM + " " + products[0].BRND_NM + " " + products[0].FMLY_NM + " " + products[0].PCSR_NBR + " "
+                            + products[0].PRD_CAT_NM + " " + products[0].BRND_NM + " " + products[0].FMLY_NM + " " + products[0].PCSR_NBR + " ",
                     });
                 }
 
@@ -1004,6 +1148,8 @@
                             + products[0].PCSR_NBR + " " + products[0].DEAL_PRD_NM + " "
                     });
                 }
+
+                products[0]['selected'] = productExists(vm.selectedPathParts[vm.selectedPathParts.length - 1], products[0].PRD_MBR_SID);
 
                 vm.gridData = products;
                 searchProcessed = true;
@@ -1018,6 +1164,9 @@
 
         // These validation rules are taken from MT CAP Validations. Both the places rules should be in sync
         function isValidCapDetails(productJson, showErrorMesssage) {
+            if (!productJson.CAP) {
+                return !showErrorMesssage ? false : productJson.HIER_NM_HASH;
+            }
             var errorMessage = "";
             var cap = productJson.CAP.toString();
             if (cap.toUpperCase() == "NO CAP") {
@@ -1166,7 +1315,7 @@
                     width: "80px",
                     groupHeaderTemplate: "#= value #",
                     filterable: { multi: true, search: true }
-                },                
+                },
                 {
                     field: "PRD_STRT_DTM",
                     title: "Product Effective Date",

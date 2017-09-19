@@ -10,11 +10,11 @@
             </div>
             <div class="col-md-5 prodSelectorSearch">
                 <!--<div class="input-group">-->
-                    <input id="productSearch" class="prod-autocomplete form-control fl input-sm" ng-model="vm.userInput" ng-keyup="$event.keyCode == 13 ? vm.searchProduct() : null" type="text" kendo-autocomplete k-options="vm.productOptions"
-                           k-data-value-field="'PRD_MBR_SID'" />
-                    <!--<span class="input-group-addon">
-                        <input role="button" type="checkbox" title="Show suggestions within the global filters" ng-model="vm.searchWithinFilters">
-                    </span>-->
+                <input id="productSearch" class="prod-autocomplete form-control fl input-sm" ng-model="vm.userInput" ng-keyup="$event.keyCode == 13 ? vm.searchProduct() : null" type="text" kendo-autocomplete k-options="vm.productOptions"
+                       k-data-value-field="'PRD_MBR_SID'" />
+                <!--<span class="input-group-addon">
+                    <input role="button" type="checkbox" title="Show suggestions within the global filters" ng-model="vm.searchWithinFilters">
+                </span>-->
                 <!--</div>-->
             </div>
             <div class="col-md-2" style="padding-left:0px;padding-top:8px">
@@ -121,13 +121,19 @@
                     <div ng-switch-when="btnGroup" class="row" style="padding-left:10px;padding-right:10px;font-size:16px;">
                         <div class="drillDown btn-group btn-group-justified" role="group" aria-label="...">
                             <div class="btn-group" ng-repeat="p in vm.items | orderBy:'name'" role="group">
-                                <button ng-if="!(vm.selectedPathParts.length < 2)" title="{{p.name}}" type="button" ng-class="{'noborder':$last}" ng-click="vm.selectItem(p)" class="btn btn-default">
-                                    {{::vm.checkForBlank(p.name)}}
-                                </button>
-                                <button ng-if="(vm.selectedPathParts.length < 2)" kendo-tooltip k-content="vm.getVerticalsUnderMarkLevel(p.name)"
-                                        type="button" ng-class="{'noborder':$last}" ng-click="vm.selectItem(p)" class="btn btn-default">
-                                    {{::vm.checkForBlank(p.name)}}
-                                </button>
+                                <div ng-class="{'input-group':p.allowMultiple}">
+                                    <span ng-if="p.allowMultiple" ng-class="{'input-group-addon':p.allowMultiple}">
+                                        <input id="{{p.name}}" ng-click="vm.selectProduct(p)" ng-model="p.selected" class="checkbox-custom" type="checkbox">
+                                        <label for="{{p.name}}" class="checkbox-custom-label"></label>
+                                    </span>
+                                    <button ng-if="!(vm.selectedPathParts.length < 2)" title="{{p.name}}" type="button" ng-class="{'noborder':$last}" ng-click="vm.selectItem(p)" class="btn btn-default">
+                                        {{::vm.checkForBlank(p.name)}}
+                                    </button>
+                                    <button ng-if="(vm.selectedPathParts.length < 2)" kendo-tooltip k-content="vm.getVerticalsUnderMarkLevel(p.name)"
+                                            type="button" ng-class="{'noborder':$last}" ng-click="vm.selectItem(p)" class="btn btn-default">
+                                        {{::vm.checkForBlank(p.name)}}
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -135,7 +141,13 @@
                         <div ng-repeat="p in vm.items | orderBy:'name'">
                             <div class="clearfix" ng-if="$index % 4 == 0"></div>
                             <div class="col-sm-3 prodDrillDownLarge" title="{{::vm.checkForBlank(p.name)}}" ng-class="{'noLeftBorder':$index % 4 == 0}">
-                                <p role="button" ng-click="vm.selectItem(p)">{{::vm.checkForBlank(p.name)}}</p>
+                                <div ng-class="{'input-group':p.allowMultiple}" class="drillDown">
+                                    <span ng-if="p.allowMultiple" ng-class="{'input-group-addon':p.allowMultiple}">
+                                        <input id="{{p.name}}" ng-click="vm.selectProduct(p)" ng-model="p.selected" class="checkbox-custom" type="checkbox">
+                                        <label for="{{p.name}}" class="checkbox-custom-label"></label>
+                                    </span>
+                                    <p role="button" ng-click="vm.selectItem(p)">{{::vm.checkForBlank(p.name)}}</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -159,24 +171,52 @@
         </div>
         <div style="padding:15px;">
             <div class="row">
-                <div class="col-md-6 text-left textProdSelector">
-                    <p>Selected Products<small role="button" ng-click="vm.showHeirarrchyTree()">&nbsp;({{vm.addedProducts.length}})</small></p>
+                <div ng-class="{'col-md-6':vm.dealType=='VOL_TIER', 'paddingRight15':vm.dealType!='VOL_TIER'}">
+                    <span ng-class="{'paddingLeft15':vm.dealType!='VOL_TIER'}">
+                        <span ng-class="{'paddingLeftNone':vm.dealType=='VOL_TIER'}" class="text-left textProdSelector">
+                            Selected Products
+                            <span ng-class="{'animate':vm.animateInclude}" class="arcAnimate">
+                                <small role="button" ng-click="vm.showHeirarrchyTree()">&nbsp;({{vm.addedProducts.length}})</small>
+                            </span>
+                        </span>
+                    </span>
+                    <trashcan  title="Clear products" class="fr" ng-click="vm.clearProducts()"></trashcan>
                 </div>
-                <div class="col-md-6">
-                    <button class="btn btn-primary fr prdBtn" ng-disabled="vm.disableSelection" ng-click="vm.addProducts()" style="margin-left:10px;">Add Product(s)</button>
-                    <button class="btn btn-default fr prdBtn" ng-click="vm.clearProducts()" style="margin-left:2px;">Clear all products</button>
+                <div ng-if="vm.dealType=='VOL_TIER'" class="col-md-6">
+                    <span>
+                        <span class="paddingRightNone text-left textProdSelector">
+                            Excluded Products
+                            <span ng-class="{'animate':vm.animateExclude}" class="arcAnimate">
+                                <small role="button" ng-click="vm.showHeirarrchyTree()">&nbsp;({{vm.excludedProducts.length}})</small>
+                            </span>
+                        </span>
+                    </span>
+                    <trashcan title="Clear excluded products" class="fr" ng-click="vm.clearProducts('E')"></trashcan>
                 </div>
             </div>
             <div class="row" style="padding-left:15px;padding-right:15px;">
-                <ui-select allow-clear="true" onkeypress="return false;" class="prodSelected text-left"
-                           tagging="true" multiple ng-model="vm.addedProducts" theme="bootstrap">
-                    <ui-select-match>
-                        <span ng-class="{'text-danger': vm.isValidCapDetails($item)}" ng-click="vm.showSingleProductHeirarchy($item)"
-                              title="{{vm.isValidCapDetails($item, true)}}">{{$item.HIER_VAL_NM}}</span>
-                    </ui-select-match>
-                    <ui-select-choices repeat="products in vm.selectedProducts">
-                    </ui-select-choices>
-                </ui-select>
+                <div ng-class="{'col-md-6':vm.dealType=='VOL_TIER','paddingLeftNone':vm.dealType=='VOL_TIER'}">
+                    <ui-select allow-clear="true" onkeypress="return false;" class="prodSelected text-left"
+                               tagging="true" multiple ng-model="vm.addedProducts" theme="bootstrap">
+                        <ui-select-match>
+                            <span ng-class="{'text-danger': vm.isValidCapDetails($item)}" ng-click="vm.showSingleProductHeirarchy($item)"
+                                  title="{{vm.isValidCapDetails($item, true)}}">{{$item.HIER_VAL_NM}}</span>
+                        </ui-select-match>
+                        <ui-select-choices repeat="products in vm.selectedProducts">
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <div ng-if="vm.dealType=='VOL_TIER'" class="col-md-6 paddingRightNone">
+                    <ui-select allow-clear="true" onkeypress="return false;" class="prodSelected text-left"
+                               tagging="true" multiple ng-model="vm.excludedProducts" theme="bootstrap">
+                        <ui-select-match>
+                            <span ng-class="{'text-danger': vm.isValidCapDetails($item)}"
+                                  title="{{vm.isValidCapDetails($item, true)}}">{{$item.HIER_VAL_NM}}</span>
+                        </ui-select-match>
+                        <ui-select-choices repeat="products in vm.selectedProducts">
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
             </div>
             <br />
             <div class="form-inline insertAtRowsText">
