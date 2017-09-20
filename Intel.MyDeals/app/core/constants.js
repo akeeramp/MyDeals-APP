@@ -429,6 +429,9 @@
                     "DEAL_COMB_TYPE": {
                         "Groups": ["Deal Info"]
                     },
+                    "ON_ADD_DT": {
+                        "Groups": ["Deal Info"]
+                    },
                     "REBATE_TYPE": {
                         "Groups": ["Deal Info"]
                     },
