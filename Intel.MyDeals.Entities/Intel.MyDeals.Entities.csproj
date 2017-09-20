@@ -141,6 +141,9 @@
     <Compile Include="TableTypeParameters\in_t_prd_IncExc.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="TableTypeParameters\in_t_trkr_atrb.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="TableTypeParameters\in_t_prd_selector.cs">
       <SubType>Component</SubType>
     </Compile>

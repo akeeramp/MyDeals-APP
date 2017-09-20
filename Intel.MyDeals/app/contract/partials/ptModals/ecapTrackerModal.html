@@ -3,7 +3,12 @@
 		<h3 class="modal-title" id="modal-title">Select {{$ctrl.colData.label}}</h3>
 	</div>
 	<div class="modal-body" id="modal-body">
-		<div ng-show="!$ctrl.isDropdownsLoaded">
+		<div ng-show="$ctrl.needsProductValidation">
+			<p>
+				The {{$ctrl.colData.label}} picker cannot find your tracker numbers without first having a validated product. Please validate your products and try again afterwards.
+			</p>
+		</div>
+		<div ng-show="!$ctrl.isDropdownsLoaded && !$ctrl.needsProductValidation">
 			<div class="spinner">
 				<div class="rect1"></div>
 				<div class="rect2"></div>
@@ -13,8 +18,6 @@
 			</div>
 			<p style="text-align:center">Please wait as we fetch your possible tracker numbers.</p>
 		</div>
-
-
 		<div ng-show="$ctrl.isDropdownsLoaded">
 			<p>
 				Select which {{$ctrl.colData.label}} to apply below: <br />

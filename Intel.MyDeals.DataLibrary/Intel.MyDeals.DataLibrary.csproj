@@ -78,6 +78,7 @@
     <Compile Include="CapMsp\CapMspDataLib.cs" />
     <Compile Include="Constants Lookups\ConstantLookupDataLib.cs" />
     <Compile Include="Dashboard\DashboardDataLib.cs" />
+    <Compile Include="EcapTracker\EcapTrackerDataLib.cs" />
     <Compile Include="MeetComp\MeetCompDataLib.cs" />
     <Compile Include="UserPreferences\UserPreferencesDataLib.cs" />
     <Compile Include="RetailPull\RetailPullDataLib.cs" />

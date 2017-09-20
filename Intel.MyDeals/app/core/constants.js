@@ -386,7 +386,7 @@
                         "Groups": ["RPU"]
                     }
                 },
-                "PROGRAM": {
+                "PROGRAM": { 
                     "tools": {
                         "Groups": ["Deal Info", "Consumption", "Cost Test", "Meet Comp", "Backdate", "Overlapping", "RPU"]
                     },
@@ -401,6 +401,18 @@
                     },
                     "PASSED_VALIDATION": {
                         "Groups": ["Deal Info"]
+                    },
+                    "TOTAL_DOLLAR_AMOUNT": {
+                    	"Groups": ["Deal Info"]
+                    },
+                    "ORIG_ECAP_TRKR_NBR": {
+                    	"Groups": ["Deal Info"]
+                    },
+                    "ADJ_ECAP_UNIT": {
+                    	"Groups": ["Deal Info"]
+                    },
+                    "FRCST_VOL": {
+                    	"Groups": ["Deal Info"]
                     },
                     "START_DT": {
                         "Groups": ["Deal Info"]
@@ -444,9 +456,9 @@
                     "TRGT_RGN": {
                         "Groups": ["Deal Info"]
                     },
-                    "PAYOUT_BASED_ON": {
-                        "Groups": ["Deal Info", "Consumption"]
-                    },
+                    //"PAYOUT_BASED_ON": {
+                    //    "Groups": ["Deal Info", "Consumption"]
+                    //},
                     "PROGRAM_PAYMENT": {
                         "Groups": ["Deal Info"]
                     },

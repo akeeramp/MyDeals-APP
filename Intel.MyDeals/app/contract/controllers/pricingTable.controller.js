@@ -707,7 +707,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         return false;
     }
 
-    function syncSpreadRows(sheet, topLeftRowIndex, bottomRightRowIndex) {
+    function syncSpreadRows(sheet, topLeftRowIndex, bottomRightRowIndex, isAddedByTrackerNumber) {
         // Now lets sync all values.
         // This is a performance boost
         // Instead of batch and cell manipulation, we will
@@ -731,10 +731,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                     newItems++;
                     data[r]["DC_ID"] = ((r + 1) % root.child.numTiers === 0) ? $scope.uid-- : $scope.uid;
-                    data[r]["VOLUME"] = null;
-                    data[r]["ECAP_PRICE"] = null;
-                    data[r]["CUST_ACCNT_DIV"] = root.contractData.CUST_ACCNT_DIV;
-                    data[r]["CUST_MBR_SID"] = root.contractData.CUST_MBR_SID;
+                    	data[r]["CUST_ACCNT_DIV"] = root.contractData.CUST_ACCNT_DIV;
+                    	data[r]["CUST_MBR_SID"] = root.contractData.CUST_MBR_SID;
+                    if (!isAddedByTrackerNumber) {
+                    	data[r]["VOLUME"] = null;
+                    	data[r]["ECAP_PRICE"] = null;
+                    }
 
                     if (!root.curPricingTable || !!root.curPricingTable.NUM_OF_TIERS) {
                         if (!data[r]["TIER_NBR"] || data[r]["TIER_NBR"] === "") {
@@ -792,6 +794,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 (root.curPricingTable[key] !== null) &&
                                 (root.colToLetter[key] != undefined) &&
                                 key !== "DC_ID"
+								&& !isAddedByTrackerNumber
                             ) {
                                 data[r][key] = root.curPricingTable[key];
                             }
@@ -1028,11 +1031,20 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         });
     $scope.$on('addRowByTrackerNumber',
         function (event, args) {
-        	var spreadsheet = $("#pricingTableSpreadsheet").data("kendoSpreadsheet");
-        	var sheet = spreadsheet.activeSheet();
-
-        	syncSpreadRows(sheet, 2, 200); // NOTE: 2 accounts for the top row
+        	addRowByTrackerNumber(args);
         });
+	
+    function addRowByTrackerNumber(newRow) {// HACK: This function is needed for the $scope.$on to be able to access the pt $scope
+        var spreadsheet = $("#pricingTableSpreadsheet").data("kendoSpreadsheet");
+
+        var sheet = spreadsheet.activeSheet();
+
+        newRow["PROGRAM_PAYMENT"] = root.curPricingTable["PROGRAM_PAYMENT"];
+        root.spreadDs.insert(newRow);
+
+        syncSpreadRows(sheet, 2, 200, true); // NOTE: 2 accounts for the top row
+        root._dirty = true;
+	}
 
     // TDOO: This needs major perfromance refactoring because it makes things slow for poeple with bad computer specs :<
     // Initiates in a batch call (which may make the spreadsheet load faster

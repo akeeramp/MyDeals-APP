@@ -6,13 +6,18 @@ using System.Threading.Tasks;
 
 namespace Intel.MyDeals.Entities
 {
-	public class EcapTrackerFilter
+	public class EcapTrackerFilterData
 	{
 		public DateTime DEAL_STRT_DT { get; set; }
 		public DateTime DEAL_END_DT { get; set; }
-		public int GEO_MBR_SID { get; set; }
+		public string GEO_COMBINED { get; set; }
 		public int CUST_MBR_SID { get; set; }
 		public int PRD_MBR_SID { get; set; }
+	}
 
+	public class EcapTrackerData : EcapTrackerFilterData
+	{
+		public int ORIG_ECAP_TRKR_NBR { get; set; }
+		public int DC_ID { get; set; }
 	}
 }

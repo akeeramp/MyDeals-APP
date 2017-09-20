@@ -1007,6 +1007,46 @@
         $scope.showEditPricingTableDefaults = function (pt) {
             openAutofillModal(pt);
         }
+        $scope.addByECAPTracker = function () {
+        	if ($scope.spreadDs !== undefined && $scope.curPricingTable.OBJ_SET_TYPE_CD === 'PROGRAM') {
+				
+				// Check if row count is over the number of rows we allow
+        		if ($scope.spreadDs._data.length  >= ($scope.ptRowCount-1)) {
+        			alert("Cannot insert a new row. You already have the maxium number of rows allowed in one Pricing Table. Pleas emake a new Pricing table or delete some existing rows the current pricing table.");
+        			return;
+        		}
+
+        		// TODO: API get new data from tracker number
+				
+        		var newRow = {
+        			"ADJ_ECAP_UNIT": null,
+        			"CUST_ACCNT_DIV": "", // TO GET
+        			"CUST_MBR_SID": "",
+        			"DC_ID": null,
+        			"ECAP_PRICE": null,
+        			"END_DT": "",  // TO GET
+        			"FRCST_VOL": null,
+        			"GEO_COMBINED": "", // TO GET
+        			"MEET_COMP_PRICE_QSTN": "", // TO GET
+        			"MRKT_SEG": null,
+        			"ORIG_ECAP_TRKR_NBR": 11111111, // TO SET
+        			"PAYOUT_BASED_ON": null,
+        			"PROD_INCLDS": "",
+        			"PROGRAM_PAYMENT": null,
+        			"PTR_SYS_INVLD_PRD": "",
+        			"PTR_SYS_PRD": "",  // TO GET
+        			"PTR_USER_PRD": "TODO",  // TO GET
+        			"REBATE_TYPE": "ECAP ADJ",
+        			"START_DT": "", // TO GET
+        			"TERMS": null,
+        			"TOTAL_DOLLAR_AMOUNT": null,
+        			"VOLUME": null,
+        			"dirty": true,
+        			"id": null,
+        		}
+        		$scope.$broadcast('addRowByTrackerNumber', newRow)
+        	}
+        }
         $scope.hideAddPricingTable = function () {
             $scope.isAddPricingTableHidden = true;
             $scope.isAddStrategyHidden = true;
@@ -1522,7 +1562,7 @@
             if (stateName === "contract.manager.strategy") {
                 source = "PRC_TBL";
 
-                if ($scope.spreadDs !== undefined) {
+                if ($scope.spreadDs !== undefined) { 
                     // sync all detail data sources into main grid datasource for a single save
                     var data = cleanupData($scope.spreadDs._data); // Note: this is a workaround for the "Zero dollar appeaing on product selection then save" bug, which introduces a blank row into $scope.spreadDs._data (the culprit of the bug).
                     $scope.spreadDs.data(data);
