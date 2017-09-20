@@ -616,7 +616,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					}
 				}
             }
-			
+
             if (isPtrSysPrdFlushed) {
                 if (!systemModifiedProductInclude) {
                     // TODO we will need to revisit.  There are cases where we CANNOT remove products and reload... active deals for example
@@ -656,7 +656,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             	var data = root.spreadDs.data();
             	data[topLeftRowIndex - 2].ORIG_ECAP_TRKR_NBR = null;
             }
-			
+
             if (isTrackerNumFlushed || (isProductColumnIncludedInChanges && hasValueInAtLeastOneCell)) {
             	syncSpreadRows(sheet, topLeftRowIndex, bottomRightRowIndex);
             }
@@ -1033,7 +1033,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         	syncSpreadRows(sheet, 2, 200); // NOTE: 2 accounts for the top row
         });
-	
+
     // TDOO: This needs major perfromance refactoring because it makes things slow for poeple with bad computer specs :<
     // Initiates in a batch call (which may make the spreadsheet load faster
     function sheetBatchOnRender(sheet, dropdownValuesSheet) {
@@ -1810,7 +1810,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 },
                 ProductRows: function () {
                     return angular.copy(rowData);
-                }
+                },
+                dealType:root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD
             }
         });
         modal.result.then(
@@ -2229,7 +2230,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             // Get columnData (urls, name, etc) from column name
             var dealType = $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD;
     		var colData = $scope.$parent.$parent.templates.ModelTemplates.PRC_TBL_ROW[dealType].model.fields[colName];
-			
+
     		var currRowData = root.pricingTableData.PRC_TBL_ROW[context.range._ref.row - 1]; // minus one to account for index
 
     		// Get data to filter ECAP numbers against

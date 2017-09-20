@@ -46,6 +46,7 @@
         vm.searchWithinFilters = true;
         vm.selectProduct = selectProduct;
         vm.dealType = dealType;
+        vm.suggestionText = "";
         vm.animateInclude = false;
         vm.animateExclude = false;
         vm.manageSelectedProducts = manageSelectedProducts;
@@ -119,7 +120,8 @@
                         allowMultiple: enableMultipleSelection && !(getVerticalSelection(i.MRK_LVL1).length > 1),
                         parentSelected: false,
                         path: '',
-                        id: getVerticalSelection(i.MRK_LVL1)[0].PRD_MBR_SID
+                        id: getVerticalSelection(i.MRK_LVL1)[0].PRD_MBR_SID,
+                        selected: productExists(item, getVerticalSelection(i.MRK_LVL1)[0].PRD_MBR_SID)
                     }
                 });
                 return;
@@ -310,7 +312,8 @@
                 "drillDownFilter4": null,
                 "drillDownFilter5": null,
                 "custSid": pricingTableRow.CUST_MBR_SID,
-                "geoSid": pricingTableRow.GEO_COMBINED.toString()
+                "geoSid": pricingTableRow.GEO_COMBINED.toString(),
+                "dealType": vm.dealType
             }
 
             // We need to send two special attributes for getting the data for non CPU products
@@ -372,8 +375,6 @@
                         && item.field != 'CAP' && item.field != 'YCS2' && (columnValue[0][item.field] == "" || columnValue[0][item.field] == null
                         || columnValue[0][item.field] == 'NA')) {
                         grid.hideColumn(item.field);//hide column
-                    } else {
-                        grid.showColumn(item.field); //show column
                     }
                 });
             }
@@ -467,6 +468,12 @@
         }
 
         function productExists(item, id) {
+            // Mark level 1
+            if (item === undefined) {
+                return productExists = vm.addedProducts.filter(function (x) {
+                    return x.PRD_MBR_SID == id;
+                }).length > 0;
+            }
             var productExists = item.selected;
             if (!item.selected) {
                 productExists = vm.addedProducts.filter(function (x) {
@@ -624,12 +631,6 @@
                     type: "date",
                     template: "#= kendo.toString(new Date(PRD_END_DTM), 'M/d/yyyy') #",
                     width: "150px"
-                },
-                {
-                    field: "CAP_START",
-                    title: "CAP Availability Date",
-                    template: "<div>{{vm.getFormatedDate(dataItem.CAP_START)}}</div>",
-                    width: "150px",
                 },
                 {
                     field: "CAP",
@@ -864,12 +865,19 @@
                 // Send 1 if EPM_NM
             }];
 
-            productSelectorService.GetProductDetails(data, pricingTableRow.CUST_MBR_SID).then(function (response) {
+            productSelectorService.GetProductDetails(data, pricingTableRow.CUST_MBR_SID, vm.dealType).then(function (response) {
                 vm.selectPath(0, true);
-                vm.disableSelection = false;
-                if (!!response.data[0] && response.data[0].WITHOUT_FILTER) {
+                vm.disableSelection = (!!response.data[0] && !!response.data[0].WITHOUT_FILTER) ? response.data[0].WITHOUT_FILTER : false;
+                if (vm.dealType == "VOL_TIER") {
+                    vm.suggestionText = response.data.length === 0 ? "No products found." : "Product(s) found for \"" + vm.userInput + "\"";
                     vm.suggestedProducts = response.data;
-                    vm.disableSelection = true;
+                    vm.showSuggestions = true;
+                    initSuggestionGrid();
+                    return;
+                }
+                if (vm.disableSelection) {
+                    vm.suggestionText = "No product found for \"" + vm.userInput + "\". Search resulted following products:"
+                    vm.suggestedProducts = response.data;
                     vm.showSuggestions = true;
                     initSuggestionGrid();
                 } else {
@@ -914,7 +922,7 @@
                 GEO_COMBINED: pricingTableRow.GEO_COMBINED,
                 PROGRAM_PAYMENT: pricingTableRow.PROGRAM_PAYMENT,
             };
-            productSelectorService.GetSuggestions(dto, pricingTableRow.CUST_MBR_SID).then(function (response) {
+            productSelectorService.GetSuggestions(dto, pricingTableRow.CUST_MBR_SID, vm.dealType).then(function (response) {
                 vm.suggestedProducts = response.data;
                 vm.disableSelection = (!!response.data[0] && !!response.data[0].WITHOUT_FILTER) ? response.data[0].WITHOUT_FILTER : false;
                 vm.showSuggestions = true;
@@ -995,7 +1003,8 @@
                 "drillDownFilter4": null,
                 "drillDownFilter5": null,
                 "custSid": pricingTableRow.CUST_MBR_SID,
-                "geoSid": pricingTableRow.GEO_COMBINED.toString()
+                "geoSid": pricingTableRow.GEO_COMBINED.toString(),
+                "dealType": vm.dealType
             }
 
             productSelectorService.GetProductSelectionResults(data).then(function (response) {
@@ -1164,7 +1173,7 @@
 
         // These validation rules are taken from MT CAP Validations. Both the places rules should be in sync
         function isValidCapDetails(productJson, showErrorMesssage) {
-            if (!productJson.CAP) {
+            if (vm.dealType == 'VOL_TIER') {
                 return !showErrorMesssage ? false : productJson.HIER_NM_HASH;
             }
             var errorMessage = "";
@@ -1339,7 +1348,7 @@
                     field: "YCS2",
                     title: "YCS2",
                     template: "<op-popover op-options='YCS2' op-data='vm.getPrductDetails(dataItem, \"YCS2\")'>#= YCS2 #</op-popover>",
-                    width: "120px"
+                    width: "120px",
                 },
                 {
                     field: "CPU_PROCESSOR_NUMBER",

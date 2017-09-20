@@ -349,11 +349,12 @@ namespace Intel.MyDeals.Controllers.API
         /// <param name="userInput"></param>
         /// <param name="CUST_MBR_SID"></param>
         /// <returns></returns>
-        [Route("SearchProduct/{CUST_MBR_SID}/{getWithoutFilters}")]
+        [Route("SearchProduct/{CUST_MBR_SID}/{dealType}/{getWithoutFilters}")]
         [HttpPost]
-        public List<PRD_LOOKUP_RESULTS> SearchProduct(List<ProductEntryAttribute> userInput, int CUST_MBR_SID, bool getWithoutFilters)
+        public List<PRD_LOOKUP_RESULTS> SearchProduct(List<ProductEntryAttribute> userInput, int CUST_MBR_SID, OpDataElementSetType dealType,
+            bool getWithoutFilters)
         {
-            return SafeExecutor(() => _productsLib.SearchProduct(userInput, CUST_MBR_SID, getWithoutFilters)
+            return SafeExecutor(() => _productsLib.SearchProduct(userInput, CUST_MBR_SID, dealType, getWithoutFilters)
                 , $"Unable to get product {"details"}"
             );
         }
@@ -425,7 +426,7 @@ namespace Intel.MyDeals.Controllers.API
         {
             return SafeExecutor(() => _productsLib.GetProductSelectionResults((string)input.searchHash,
                 (DateTime)input.startDate, (DateTime)input.endDate, (int)input.selectionLevel, (string)input.drillDownFilter4,
-                (string)input.drillDownFilter5, (int)input.custSid, (string)input.geoSid)
+                (string)input.drillDownFilter5, (int)input.custSid, (string)input.geoSid, (OpDataElementSetType)input.dealType)
                 , $"Unable to get product selection levels"
             );
         }
@@ -463,6 +464,7 @@ namespace Intel.MyDeals.Controllers.API
         [Route("GetSearchString")]
         [HttpPost]
         public IList<SearchString> GetSearchString([FromBody]dynamic input)
+
         {
             return SafeExecutor(() => _productsLib.GetSearchString((string)input.filter, (string)input.mediaCode,
                 (DateTime)input.startDate, (DateTime)input.endDate, (bool)input.getWithFilters)
@@ -485,11 +487,11 @@ namespace Intel.MyDeals.Controllers.API
             );
         }
 
-        [Route("GetSuggestions/{custId}")]
+        [Route("GetSuggestions/{custId}/{dealType}")]
         [HttpPost]
-        public IList<PRD_LOOKUP_RESULTS> GetSuggestions(ProductEntryAttribute userInput, int custId)
+        public IList<PRD_LOOKUP_RESULTS> GetSuggestions(ProductEntryAttribute userInput, int custId, OpDataElementSetType dealType)
         {
-            return SafeExecutor(() => _productsLib.GetSuggestions(userInput, custId)
+            return SafeExecutor(() => _productsLib.GetSuggestions(userInput, custId, dealType)
                 , $"Unable to get product {"details"}"
             );
         }

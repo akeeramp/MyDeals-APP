@@ -2,9 +2,9 @@
     .module('app.admin')
     .controller('ProductCorrectorBetaModalController', ProductCorrectorBetaModalController);
 
-ProductCorrectorBetaModalController.$inject = ['$compile', '$filter', '$scope', '$uibModalInstance', 'GetProductCorrectorData', 'productSelectorService', 'productCorrectorService', 'contractData', 'RowId', 'ProductRows', '$linq', '$timeout', 'logger', 'gridConstants', '$uibModal', 'CustSid'];
+ProductCorrectorBetaModalController.$inject = ['$compile', '$filter', '$scope', '$uibModalInstance', 'GetProductCorrectorData', 'productSelectorService', 'productCorrectorService', 'dealType', 'contractData', 'RowId', 'ProductRows', '$linq', '$timeout', 'logger', 'gridConstants', '$uibModal', 'CustSid'];
 
-function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModalInstance, GetProductCorrectorData, productSelectorService, productCorrectorService, contractData, RowId, ProductRows, $linq, $timeout, logger, gridConstants, $uibModal, CustSid) {
+function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModalInstance, GetProductCorrectorData, productSelectorService, productCorrectorService, dealType, contractData, RowId, ProductRows, $linq, $timeout, logger, gridConstants, $uibModal, CustSid) {
     var vm = this;
     vm.totRows = 0;
     vm.curRowIndx = 0;
@@ -692,7 +692,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                 },
                 suggestedProduct: angular.copy(suggestedProduct),
                 dealType: function () {
-                    return root.PRC_TBL[0].OBJ_SET_TYPE_CD;
+                    return dealType;
                 }
             }
         });

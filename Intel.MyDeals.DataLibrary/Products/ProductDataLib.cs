@@ -537,7 +537,7 @@ namespace Intel.MyDeals.DataLibrary
         /// <param name="productsToMatch"></param>
         /// <param name="CUST_MBR_SID"></param>
         /// <returns></returns>
-        public List<PRD_LOOKUP_RESULTS> SearchProduct(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID, bool getWithoutFilters)
+        public List<PRD_LOOKUP_RESULTS> SearchProduct(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID, OpDataElementSetType dealType, bool getWithoutFilters)
         {
             OpLogPerf.Log("FindProductMatch");
             var ret = new List<PRD_LOOKUP_RESULTS>();
@@ -551,6 +551,7 @@ namespace Intel.MyDeals.DataLibrary
                 {
                     CUST_MBR_SID = CUST_MBR_SID,
                     tvt_HIER_VAL_NM = dt,
+                    DEAL_TYPE = dealType.ToString(),
                     OutsideRange = getWithoutFilters
                 };
 
@@ -770,7 +771,7 @@ namespace Intel.MyDeals.DataLibrary
         /// <param name="drillDownFilter"></param>
         /// <returns></returns>
         public List<ProductSelectionResults> GetProductSelectionResults(string searchHash, DateTime startDate, DateTime endDateTime,
-                int selectionLevel, string drillDownFilter4, string drillDownFilter5, int custSid, string geoSid)
+                int selectionLevel, string drillDownFilter4, string drillDownFilter5, int custSid, string geoSid, OpDataElementSetType dealType)
         {
             OpLogPerf.Log("ProductSelectionResults");
             var ret = new List<ProductSelectionResults>();
@@ -785,6 +786,7 @@ namespace Intel.MyDeals.DataLibrary
                     SEL_LVL = selectionLevel,
                     CUST_MBR_SID = custSid,
                     GEO_MBR_SID = geoSid,
+                    DEAL_TYPE = dealType.ToString()
                 };
 
                 if (drillDownFilter4 != null)

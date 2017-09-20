@@ -41,7 +41,7 @@
         <div class="prodSelector modal-body">
             <div ng-if="vm.showSuggestions" class="productSelector subHeaderNavContainer mini-right miniProdNav">
                 <div ng-if="!(vm.errorMessage.length > 0)">
-                    <div ng-if="!vm.disableSelection">No product found for "{{ ::vm.userInput }}". Search resulted following products:</div>
+                    <div ng-if="!vm.disableSelection">{{vm.suggestionText}}</div>
                     <div class="productSelector Issue" ng-if="vm.disableSelection">Product(s) does not match the global filter criteria or is not active within the deal date range.</div>
                     <div style="padding-top:5px;">
                         <table ng-if="vm.suggestedProducts.length !== 0" style="width: 100%; height: 100%;table-layout:fixed">
@@ -92,7 +92,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
                                 </td>
                                 <td>
@@ -101,7 +100,7 @@
                             </tr>
                         </table>
                         <div class="productSelector Warning" ng-if="vm.suggestedProducts.length === 0">
-                            Unable to find any suggestions for "{{::vm.userInput}}."
+                            Unable to find any products for "{{::vm.userInput}}."
                         </div>
                     </div>
                 </div>

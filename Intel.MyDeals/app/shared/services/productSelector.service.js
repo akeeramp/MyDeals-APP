@@ -32,8 +32,8 @@
         }
 
         // This method skips all the translator logic (product split, duplicate and invalid etc etc..) and hits the database
-        function GetProductDetails(products, CUST_CD) {
-            return dataService.post(apiBaseUrl + 'SearchProduct/' + CUST_CD + '/true', products);
+        function GetProductDetails(products, CUST_CD, dealType) {
+            return dataService.post(apiBaseUrl + 'SearchProduct/' + CUST_CD + '/' + dealType + '/true', products);
         }
 
         function GetProdDealType(isForceReGet) {
@@ -70,8 +70,8 @@
             return dataService.post(apiBaseUrl + 'GetLegalExceptionProducts', dto);
         }
 
-        function GetSuggestions(dto, custId) {
-            return dataService.post(apiBaseUrl + 'GetSuggestions/' + custId, dto);
+        function GetSuggestions(dto, custId, dealType) {
+            return dataService.post(apiBaseUrl + 'GetSuggestions/' + custId + '/' + dealType, dto);
         }
 
         function GetProductAttributes(products) {

@@ -14,7 +14,7 @@ namespace Intel.MyDeals.IDataLibrary
 
         List<PRD_TRANSLATION_RESULTS> GetProductDetails(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID);
 
-        List<PRD_LOOKUP_RESULTS> SearchProduct(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID, bool getWithoutFilters);
+        List<PRD_LOOKUP_RESULTS> SearchProduct(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID, OpDataElementSetType dealType, bool getWithoutFilters);
 
         List<ProductIncExcAttribute> SetIncludeExclude(List<ProductIncExcAttribute> data, string opsType);
 
@@ -27,7 +27,7 @@ namespace Intel.MyDeals.IDataLibrary
         ProductSelectorWrapper GetProductSelectorWrapper();
 
         List<ProductSelectionResults> GetProductSelectionResults(string searchHash, DateTime startDate, DateTime endDateTime,
-                int selectionLevel, string drillDownFilter4, string drillDownFilter5, int custSid, string geoSid);
+                int selectionLevel, string drillDownFilter4, string drillDownFilter5, int custSid, string geoSid, OpDataElementSetType dealType);
 
         List<ProductCAPYCS2> GetProductCAPYCS2Data(List<ProductCAPYCS2Calc> productCAPCalc, string getAvailable, string priceCondition);
 

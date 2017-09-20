@@ -52,11 +52,17 @@
 
     function kGridCheckboxController($scope) {
         $scope.vm.toggleSelect = function (ev, dataItem) {
+            if ($scope.vm.disableSelection) {
+                return;
+            }
             dataItem.selected = ev.target.checked;
             $scope.vm.selectProduct(dataItem);
         };
 
         $scope.vm.toggleSelectAll = function (ev) {
+            if ($scope.vm.disableSelection) {
+                return;
+            }
             var grid = $(ev.target).closest("[kendo-grid]").data("kendoGrid");
             var data = grid.dataSource.data();
             var filters = grid.dataSource.filter();
@@ -64,13 +70,12 @@
             var items = query.filter(filters).data;
             items.forEach(function (item) {
                 // When select all clicked do not select the products with CAP range for ECAP deal
-                if (!(item.CAP.indexOf('-') > -1) && $scope.vm.dealType == 'VOL_TIER') {
-                    if (item.selected == ev.target.checked) {
-                        return;
-                    }
-                    item.selected = ev.target.checked;
-                    $scope.vm.selectProduct(item);
+                if ($scope.vm.dealType == 'ECAP' && (item.CAP.indexOf('-') > -1)) {
+                    return;
                 }
+                item.selected = ev.target.checked;
+                $scope.vm.selectProduct(item);
+
             });
         };
     }

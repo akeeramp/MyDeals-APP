@@ -555,7 +555,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <param name="productsToMatch"></param>
         /// <param name="CUST_MBR_SID"></param>
         /// <returns></returns>
-        public List<PRD_LOOKUP_RESULTS> SearchProduct(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID, bool getWithoutFilters)
+        public List<PRD_LOOKUP_RESULTS> SearchProduct(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID, OpDataElementSetType dealType, bool getWithoutFilters)
         {
             var aliasMapping = GetProductsFromAlias();
             var productsSplit = productsToMatch.FirstOrDefault().USR_INPUT.Split(' ');
@@ -575,7 +575,7 @@ namespace Intel.MyDeals.BusinessLogic
             productsToMatch.FirstOrDefault().MOD_USR_INPUT = CheckBogusProduct(productsToMatch.FirstOrDefault().USR_INPUT,
                 productsToMatch.FirstOrDefault().COLUMN_TYPE);
 
-            return _productDataLib.SearchProduct(productsToMatch, CUST_MBR_SID, getWithoutFilters);
+            return _productDataLib.SearchProduct(productsToMatch, CUST_MBR_SID, dealType, getWithoutFilters);
         }
 
         /// <summary>
@@ -873,9 +873,9 @@ namespace Intel.MyDeals.BusinessLogic
         /// <param name="drillDownFilter"></param>
         /// <returns></returns>
         public List<ProductSelectionResults> GetProductSelectionResults(string searchHash,
-            DateTime startDate, DateTime endDate, int selectionLevel, string drillDownFilter4, string drillDownFilter5, int custSid, string geoSid)
+            DateTime startDate, DateTime endDate, int selectionLevel, string drillDownFilter4, string drillDownFilter5, int custSid, string geoSid, OpDataElementSetType dealType)
         {
-            return _productDataLib.GetProductSelectionResults(searchHash, startDate, endDate, selectionLevel, drillDownFilter4, drillDownFilter5, custSid, geoSid);
+            return _productDataLib.GetProductSelectionResults(searchHash, startDate, endDate, selectionLevel, drillDownFilter4, drillDownFilter5, custSid, geoSid, dealType);
         }
 
         /// <summary>
@@ -1143,7 +1143,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <param name="userInputs"></param>
         /// <param name="custId"></param>
         /// <returns></returns>
-        public IList<PRD_LOOKUP_RESULTS> GetSuggestions(ProductEntryAttribute userInput, int custId)
+        public IList<PRD_LOOKUP_RESULTS> GetSuggestions(ProductEntryAttribute userInput, int custId, OpDataElementSetType dealType)
         {
             var suggestions = GetSearchString(userInput.USR_INPUT, userInput.FILTER, DateTime.Parse(userInput.START_DATE),
                 DateTime.Parse(userInput.END_DATE), true).Take(5);
@@ -1185,7 +1185,7 @@ namespace Intel.MyDeals.BusinessLogic
                 });
             }
 
-            return SearchProduct(productsToTranslate, custId, true);
+            return SearchProduct(productsToTranslate, custId, dealType, true);
         }
 
         /// <summary>

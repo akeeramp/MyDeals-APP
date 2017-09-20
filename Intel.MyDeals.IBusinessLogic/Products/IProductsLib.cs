@@ -46,7 +46,7 @@ namespace Intel.MyDeals.IBusinessLogic
 
         ProductLookup TranslateProducts(List<ProductEntryAttribute> products, int CUST_MBR_SID);
 
-        List<PRD_LOOKUP_RESULTS> SearchProduct(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID, bool getWithoutFilters);
+        List<PRD_LOOKUP_RESULTS> SearchProduct(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID, OpDataElementSetType dealType, bool getWithoutFilters);
 
         List<ProductIncExcAttribute> SetIncludeAttibute(List<ProductIncExcAttribute> prodNames);
 
@@ -63,7 +63,7 @@ namespace Intel.MyDeals.IBusinessLogic
         ProductSelectorWrapper GetProductSelectorWrapperByDates(DateTime startDate, DateTime endDate);
 
         List<ProductSelectionResults> GetProductSelectionResults(string searchHash, DateTime startDate, DateTime endDateTime,
-                int selectionLevel, string drillDownFilter4, string drillDownFilter5, int custSid, string geoSid);
+                int selectionLevel, string drillDownFilter4, string drillDownFilter5, int custSid, string geoSid, OpDataElementSetType dealType);
 
         List<ProductCAPYCS2> GetProductCAPYCS2Data(List<ProductCAPYCS2Calc> productCAPCalc, string getAvailable, string priceCondition);
 
@@ -73,7 +73,7 @@ namespace Intel.MyDeals.IBusinessLogic
 
         IList<SearchString> GetSearchString(string searchText, string mediaCode, DateTime startDate, DateTime endDate, bool getWithFilters = true);
 
-        IList<PRD_LOOKUP_RESULTS> GetSuggestions(ProductEntryAttribute userInput, int custId);
+        IList<PRD_LOOKUP_RESULTS> GetSuggestions(ProductEntryAttribute userInput, int custId, OpDataElementSetType dealType);
 
         bool IsProductExistsInMydeals(string filter);
 
