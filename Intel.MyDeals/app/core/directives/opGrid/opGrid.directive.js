@@ -780,7 +780,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             }
 
             $scope.showCols = function (grpName) {
-
+                if ($scope.curGroup == grpName) {
+                    $scope.contractDs.filter({});  
+                    $scope.ovlpDataSource.filter({});
+                }
                 if (grpName.toLowerCase() == "overlapping") {
                     $scope.isOverlapping = true;
                     $scope.isLayoutConfigurable = false;  
@@ -788,6 +791,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     $scope.contractDs.filter({});           
                 }
                 else {
+                    
                     $scope.isOverlapping = false;                    
                     $scope.isLayoutConfigurable = true;
                     $scope.searchFilter = "";
