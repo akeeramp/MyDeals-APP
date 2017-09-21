@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 9/18/2017 11:16:38 AM
+File Updated: 9/21/2017 10:45:15 AM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -1027,6 +1027,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Boolean
 		///</summary>
 		public const string HAS_L2 = "HAS_L2";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3677
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Boolean
+		///</summary>
+		public const string HAS_TRACKER = "HAS_TRACKER";
 
 		///<summary>
 		/// DIM_SID: 7
@@ -2319,6 +2328,9 @@ namespace Intel.MyDeals.Entities {
 		public const string iCOST_PRODUCTS = "iCOST_PRODUCTS";
 		public const string INCL_GDM_PCSR_HIER = "INCL_GDM_PCSR_HIER";
 		public const string LAST_BTCH_RUN = "LAST_BTCH_RUN";
+		public const string LINEUP_COST_TEST_PRD_MODE_1 = "LINEUP_COST_TEST_PRD_MODE_1";
+		public const string LINEUP_COST_TEST_PRD_MODE_2 = "LINEUP_COST_TEST_PRD_MODE_2";
+		public const string LINEUP_COST_TEST_ROLES = "LINEUP_COST_TEST_ROLES";
 		public const string MISC_MM_LIST = "MISC_MM_LIST";
 		public const string PCT_LGL_EXCPT_ROLES = "PCT_LGL_EXCPT_ROLES";
 		public const string PROD_REPLACE_CHARSET = "PROD_REPLACE_CHARSET";
