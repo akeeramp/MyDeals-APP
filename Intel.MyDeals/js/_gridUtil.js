@@ -29,7 +29,6 @@ gridUtils.uiControlWrapper = function (passedData, field, format) {
     tmplt += '     isRequiredCell: dataItem._behaviors.isRequired.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + ', isSavedCell: dataItem._behaviors.isSaved.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + '}">';
     tmplt += '    <div class="ng-binding vert-center" ng-bind="(dataItem.' + field + ' ' + gridUtils.getFormat(field, format) + ')"></div>';
     tmplt += '</div>';
-
     return tmplt;
 }
 gridUtils.uiDimControlWrapper = function (passedData, field, dim, format) {
@@ -40,6 +39,16 @@ gridUtils.uiDimControlWrapper = function (passedData, field, dim, format) {
     tmplt += '    <div class="ng-binding vert-center" ng-bind="(dataItem.' + field + '[\'' + dim + '\'] ' + gridUtils.getFormat(field, format) + ')"></div>';
     tmplt += '</div>';
 
+    return tmplt;
+}
+gridUtils.uiCustomerControlWrapper = function(passedData, field) {
+    var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
+    tmplt += '<div class="uiControlDiv"';
+    tmplt += '     ng-class="{isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ',';
+    tmplt += '     isRequiredCell: dataItem._behaviors.isRequired.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + ', isSavedCell: dataItem._behaviors.isSaved.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + '}">';
+    tmplt += '     <div class="ng-binding vert-center" ng-bind="dataItem.Customer.CUST_NM"></div>';
+//    tmplt += '    <div class="vert-center">' + gridUtils.renderCustNm(passedData) + '</div>';
+    tmplt += '</div>';
     return tmplt;
 }
 gridUtils.uiControlScheduleWrapper = function (passedData) {
@@ -172,6 +181,12 @@ gridUtils.uiMultiselectArrayControlWrapper = function (passedData, field) {
     return tmplt;
 }
 
+gridUtils.uiMasterChildWrapper = function (passedData, field) {
+    var tmplt = '<div class="uiControlDiv" class="isReadOnlyCell">';
+    tmplt += '    <div class="vert-center">' + gridUtils.renderMasterChild(passedData) + '</div>';
+    tmplt += '</div>';
+    return tmplt;
+}
 gridUtils.uiIconWrapper = function (passedData, field, format) {
     // This is nicer, but slower... rendering template on large data is slower
     //var tmplt = '<div class="isDirtyIconGridContainer">';
@@ -192,6 +207,21 @@ gridUtils.uiIconWrapper = function (passedData, field, format) {
 }
 gridUtils.getFormat = function (lType, lFormat) {
     return !lFormat ? "" : "| " + lFormat;
+}
+
+gridUtils.renderCustNm = function (data) {
+    var custs = [];
+    if (!!data.CustomerDivisions) {
+        for (var i = 0; i < data.CustomerDivisions.length; i++) {
+            custs.push(data.CustomerDivisions[i].CUST_NM);
+        }
+    }
+    return custs.join(',');
+}
+gridUtils.renderMasterChild = function(data) {
+    if (data.dc_type === 'PRC_TBL_ROW' || data.dc_type === 'MASTER') return '<b>Master</b>';
+    if (data.dc_type === 'WIP_DEAL') return 'Child';
+    return '';
 }
 
 gridUtils.onDataValueChange = function (e) {

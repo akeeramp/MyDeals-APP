@@ -80,6 +80,7 @@ namespace Intel.MyDeals
                 , "~/app/core/directives/adminBanner/adminBanner.directive.js"
                 , "~/app/core/directives/gridCell/dealDetail.directive.js"
                 , "~/app/core/directives/gridCell/dealTools.directive.js"
+                , "~/app/core/directives/gridCell/dealToolsTender.directive.js"
                 , "~/app/core/directives/gridCell/percentBar.directive.js"
                 , "~/app/core/directives/gridStatusBoard/contractStatusBoard.directive.js"
                 , "~/app/core/directives/gridStatusBoard/gridStatusBoard.directive.js"

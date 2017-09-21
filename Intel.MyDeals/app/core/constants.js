@@ -119,6 +119,9 @@
                     "PASSED_VALIDATION": {
                         "Groups": ["Deal Info"]
                     },
+                    "CUST_MBR_SID": {
+                        "Groups": ["Deal Info"]
+                    },
                     "START_DT": {
                         "Groups": ["Deal Info"]
                     },
@@ -173,6 +176,9 @@
                     "YCS2_END_DT": {
                         "Groups": ["All"]
                     },
+                    "YCS2_OVERLAP_OVERRIDE": {
+                        "Groups": ["All"]
+                    },
                     "VOLUME": {
                         "Groups": ["Deal Info"]
                     },
@@ -206,9 +212,6 @@
                     "TERMS": {
                         "Groups": ["Deal Info"]
                     },
-                    //"YCS2_OVERLAP_OVERRIDE": {
-                    //    "Groups": ["Deal Info"]
-                    //},
                     "REBATE_BILLING_START": {
                         "Groups": ["Consumption"]
                     },
@@ -299,6 +302,9 @@
                         "Groups": ["Deal Info"]
                     },
                     "PASSED_VALIDATION": {
+                        "Groups": ["Deal Info"]
+                    },
+                    "CUST_MBR_SID": {
                         "Groups": ["Deal Info"]
                     },
                     "START_DT": {
@@ -413,6 +419,9 @@
                     },
                     "FRCST_VOL": {
                     	"Groups": ["Deal Info"]
+                    },
+                    "CUST_MBR_SID": {
+                        "Groups": ["Deal Info"]
                     },
                     "START_DT": {
                         "Groups": ["Deal Info"]

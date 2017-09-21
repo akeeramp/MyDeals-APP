@@ -6,7 +6,6 @@ using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque;
 using Intel.Opaque.Data;
-using Intel.MyDeals.DataLibrary;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -57,6 +56,25 @@ namespace Intel.MyDeals.BusinessLogic
 
             return data;
             //return GetPricingTable(id, true).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
+        }
+
+        public OpDataCollectorFlattenedDictList GetWipDealsByPtr(int id)
+        {
+            List<OpDataElementType> opDataElementTypes = new List<OpDataElementType>
+            {
+                OpDataElementType.WIP_DEAL
+            };
+
+            MyDealsData myDealsData = OpDataElementType.PRC_TBL_ROW.GetByIDs(new List<int> { id }, opDataElementTypes).FillInHolesFromAtrbTemplate();
+
+            OpDataCollectorFlattenedDictList data = new OpDataCollectorFlattenedDictList();
+
+            foreach (OpDataElementType opDataElementType in myDealsData.Keys)
+            {
+                data[opDataElementType] = myDealsData.ToOpDataCollectorFlattenedDictList(opDataElementType, ObjSetPivotMode.Nested);
+            }
+
+            return data;
         }
 
         public OpDataCollectorFlattenedList GetPctDetails(int id)

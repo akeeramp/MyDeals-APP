@@ -115,6 +115,16 @@ namespace Intel.MyDeals.Controllers.API
 
 
         [Authorize]
+        [Route("GetWipDealsByPtr/{id}")]
+        public OpDataCollectorFlattenedDictList GetWipDealsByPtr(int id)
+        {
+            return SafeExecutor(() => _pricingTablesLib.GetWipDealsByPtr(id)
+                , $"Unable to get Wip Deals {id}"
+            );
+        }
+
+
+        [Authorize]
         [Route("ActionWipDeal/{custId}/{contractId}/{actn}")]
         [HttpPost]
         public OpMsgQueue ActionWipDeal(int custId, int contractId, string actn, OpDataCollectorFlattenedList wipDeals)

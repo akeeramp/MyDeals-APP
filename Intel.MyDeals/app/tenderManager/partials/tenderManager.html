@@ -1,13 +1,17 @@
 ﻿<loading-panel show="isBusy" header="isBusyMsgTitle" description="isBusyMsgDetail"></loading-panel>
+<div ng-include="'app/contract/partials/ptModals/multiSelectModal.html'"></div>
 
 
 <div id="horizontal-tender">
     <div ng-if="data.length == 0" style="padding: 6px 15px; font-size: 16px;">
         Search for Tender deals or create a new one.
     </div>
-    <div op-grid style="height: 100%;" op-data="data" op-options="options" ng-if="data.length > 0"></div>
+    <div op-grid class="tender-grid" id="tenderOpGrid" op-data="data" op-options="options" ng-if="data.length > 0"></div>
 </div>
 
+<script type="text/x-kendo-template" id="detail-template">
+    <div class="tenderChildGrid"></div>
+</script>
 
 <div id="customToolbar">
     <span class="k-textbox" style="width: 400px; margin-top: -4px;">
@@ -21,10 +25,10 @@
     <button class="btn btn-sm btn-skyblue" type="button" ng-click="create('KIT')" style="margin-top: -3px; margin-right: 10px;">
         <i class="fa fa-plus" aria-hidden="true"></i> Create KIT Tender
     </button>
-    <button class="btn btn-sm btn-skyblue" type="button" ng-click="saveAndValidate()" style="margin-top: -3px; margin-right: 10px;">
+    <button class="btn btn-sm btn-skyblue" type="button" ng-click="saveAndValidate()" ng-if="data.length > 0" style="margin-top: -3px; margin-right: 10px;">
         <i class="fa fa-floppy-o" aria-hidden="true"></i> Save & Validate Deals
     </button>
-    <button class="btn btn-sm btn-skyblue" type="button" ng-click="loadData()" style="margin-top: -3px; margin-right: 10px;">
+    <button class="btn btn-sm btn-skyblue" type="button" ng-click="loadData()" ng-if="data.length <= 0" style="margin-top: -3px; margin-right: 10px;">
         <i class="fa fa-plus" aria-hidden="true"></i> Load Data
     </button>
 </div>
@@ -37,6 +41,7 @@
         border: 0 solid transparent;
         height: 100%;
         font-size: 12px;
+        margin-bottom: 8px;
     }
 
     .dealTag {
@@ -59,96 +64,53 @@
         background-color: red;
     }
 
-            #secContainerWrapper {
-                height: 100%;
-                padding: 100px 0 0 0;
-                -webkit-box-sizing: border-box;
-                -moz-box-sizing: border-box;
-                box-sizing: border-box;
-                font-size: 12px;
-                font-family: "Intel Clear";
-            }
+    .tender-grid {
+        height: 100%;
+    }
+    .tender-grid .op-grid-container {
+        padding: 0;
+    }
+    .tender-grid .k-detail-row > .k-detail-cell > div:first-child {
+        margin: 0;
+    }
+    .tender-grid .k-i-collapse, .tender-grid .k-i-expand {
+        color: #0071C5;
+        font-size: 20px !important;
+    }
 
-            #secHeader {
-                height: 100px;
-                margin-top: -100px;
-                font-size: 14px;
-                padding: 5px 0 3px 0;
-                font-family: "Intel Clear";
-                font-weight: 200;
-                font-style: normal;
-                background-color: #ffffff;
-                border-bottom: 0 solid transparent;
-            }
+    .tenderChildGrid {
+        /*padding-bottom: 10px;*/
+    }
 
-                #secHeader .col-md-11 {
-                    padding-left: 4px;
-                }
+    .tenderChildGrid.k-grid {
+        border: 0 solid transparent;
+    }
+    .tenderChildGrid thead {
+        display: none;
+    }
+    .tenderChildGrid .op-grid-container-wrapper {
+        padding: 0 !important;
+    }
+    
 
-            #secContainer {
-                height: 100%;
-                overflow: auto;
-            }
+    .btn-skyblue {
+        background-color: #00AEEF;
+        border: 1px solid #00AEEF;
+        color: #ffffff;
+        border-radius: 4px;
+    }
 
+    .btn-skyblue:hover {
+        background-color: #0071C5;
+        border: 1px solid #0071C5;
+        color: #ffffff;
+    }
 
-            .btn-skyblue {
-                background-color: #00AEEF;
-                border: 1px solid #00AEEF;
-                color: #ffffff;
-                border-radius: 4px;
-            }
-
-                .btn-skyblue:hover {
-                    background-color: #0071C5;
-                    border: 1px solid #0071C5;
-                    color: #ffffff;
-                }
-
-                .btn-skyblue i {
-                    font-size: 14px;
-                    margin-right: 6px;
-                }
+    .btn-skyblue i {
+        font-size: 14px;
+        margin-right: 6px;
+    }
+    
 
 
-            .tenderTab {
-                border-top: 1px solid #d7d7d7;
-                border-left: 1px solid #d7d7d7;
-                border-right: 1px solid #d7d7d7;
-                margin-right: 5px;
-                margin-bottom: -1px;
-                color: #00AEEF;
-                height: 36px;
-                padding: 6px 15px;
-                background-color: #ffffff;
-                font-size: 14px;
-                font-weight: 200;
-                font-style: normal;
-                font-family: "Intel Clear";
-                cursor: default;
-                position: relative;
-                top: 1px;
-            }
-
-                .tenderTab.inactive {
-                    background: #fdfdfd; /* Old browsers */
-                    background: -moz-linear-gradient(top, #fdfdfd 0%, #d9d9d9 100%); /* FF3.6-15 */
-                    background: -webkit-linear-gradient(top, #fdfdfd 0%,#d9d9d9 100%); /* Chrome10-25,Safari5.1-6 */
-                    background: linear-gradient(to bottom, #fdfdfd 0%,#d9d9d9 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-                    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fdfdfd', endColorstr='#d9d9d9',GradientType=0 ); /* IE6-9 */
-                    color: #003C71;
-                    cursor: pointer;
-                }
-
-                    .tenderTab.inactive:hover {
-                        background: #fdfdfd; /* Old browsers */
-                        background: -moz-linear-gradient(top, #d9d9d9 0%, #fdfdfd 100%); /* FF3.6-15 */
-                        background: -webkit-linear-gradient(top, #d9d9d9 0%,#fdfdfd 100%); /* Chrome10-25,Safari5.1-6 */
-                        background: linear-gradient(to bottom, #d9d9d9 0%,#fdfdfd 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-                        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d9d9d9', endColorstr='#fdfdfd',GradientType=0 ); /* IE6-9 */
-                        color: #00AEEF;
-                    }
-
-            .noborders {
-                border: 0 solid transparent !important;
-            }
     </style>

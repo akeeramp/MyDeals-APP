@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 9/7/2017 4:01:11 PM
-On: JAJUANG-MOBL3
+File Updated: 9/16/2017 12:28:33 AM
+On: PWECKENR-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
 
@@ -25,6 +25,22 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "CheckBox"
+		};
+		public static MyDealsAttribute ADJ_ECAP_UNIT = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "ADJ_ECAP_UNIT",
+			ATRB_DESC = "Program Type/ECAP Adjustment: Adjusted ECAP Units",
+			ATRB_LBL = "Adjusted ECAP Units",
+			ATRB_MAX_LEN = 100,
+			ATRB_SID = 3560,
+			DATA_TYPE_CD = "INT",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Int32",
+			FRMT_MSK = "{0:d}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "INT",
+			UI_TYPE_CD = "TextBox"
 		};
 		public static MyDealsAttribute ALL_BCKT_NM = new MyDealsAttribute()
 		{
@@ -1386,6 +1402,38 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
+		public static MyDealsAttribute EXCLD_COST_TST = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "EXCLD_COST_TST",
+			ATRB_DESC = "Exclude the overlap deal in price cost test and meet comp calculations",
+			ATRB_LBL = "Exclude the deal in cost test calculations",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 30006,
+			DATA_TYPE_CD = "CUSTOM",
+			DIM_CD = "OVLP",
+			DIM_SID = 30,
+			DOT_NET_DATA_TYPE = "System.Object",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute EXPIRE_FLG = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "EXPIRE_FLG",
+			ATRB_DESC = "Deal expiration flag",
+			ATRB_LBL = "Deal expiration flag",
+			ATRB_MAX_LEN = 1,
+			ATRB_SID = 3676,
+			DATA_TYPE_CD = "BIT",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Boolean",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "INT",
+			UI_TYPE_CD = "DataGrid"
+		};
 		public static MyDealsAttribute EXPIRE_YCS2 = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "EXPIRE_YCS2",
@@ -1973,6 +2021,38 @@ namespace Intel.MyDeals.Entities {
 			DIM_CD = "SYS",
 			DIM_SID = 999,
 			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute IGNR_COST_TST = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "IGNR_COST_TST",
+			ATRB_DESC = "Ignore the overlap deal in price cost test and meet comp calculations",
+			ATRB_LBL = "Ignore the deal in cost test calculations",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 30007,
+			DATA_TYPE_CD = "CUSTOM",
+			DIM_CD = "OVLP",
+			DIM_SID = 30,
+			DOT_NET_DATA_TYPE = "System.Object",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute INCL_COST_TST = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "INCL_COST_TST",
+			ATRB_DESC = "Include the overlap deal in price cost test and meet comp calculations",
+			ATRB_LBL = "Include the deal in cost test calculations",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 30005,
+			DATA_TYPE_CD = "CUSTOM",
+			DIM_CD = "OVLP",
+			DIM_SID = 30,
+			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
 			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
@@ -2570,6 +2650,22 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
+		public static MyDealsAttribute ORIG_ECAP_TRKR_NBR = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "ORIG_ECAP_TRKR_NBR",
+			ATRB_DESC = "Program Type/ECAP Adjustment: Original ECAP Tracker Number",
+			ATRB_LBL = "Original ECAP Tracker Number",
+			ATRB_MAX_LEN = 100,
+			ATRB_SID = 3559,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "TrackerSelector"
+		};
 		public static MyDealsAttribute PASSED_VALIDATION = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "PASSED_VALIDATION",
@@ -2913,6 +3009,54 @@ namespace Intel.MyDeals.Entities {
 			ATRB_LBL = "PTR User Product List",
 			ATRB_MAX_LEN = 0,
 			ATRB_SID = 3658,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "TextBox"
+		};
+		public static MyDealsAttribute QLTR_BID_GEO = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "QLTR_BID_GEO",
+			ATRB_DESC = "Tender Bid Geo",
+			ATRB_LBL = "Bid Geo",
+			ATRB_MAX_LEN = 100,
+			ATRB_SID = 3678,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "TextBox"
+		};
+		public static MyDealsAttribute QLTR_OEM = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "QLTR_OEM",
+			ATRB_DESC = "Tender OEM",
+			ATRB_LBL = "OEM",
+			ATRB_MAX_LEN = 100,
+			ATRB_SID = 3677,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "TextBox"
+		};
+		public static MyDealsAttribute QLTR_PROJECT = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "QLTR_PROJECT",
+			ATRB_DESC = "Tender Project",
+			ATRB_LBL = "Project",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3568,
 			DATA_TYPE_CD = "VARCHAR",
 			DIM_CD = "DEAL",
 			DIM_SID = 3,
@@ -3400,6 +3544,22 @@ namespace Intel.MyDeals.Entities {
 			FRMT_MSK = "{0}",
 			MJR_MNR_CHG = "MAJOR",
 			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "TextBox"
+		};
+		public static MyDealsAttribute TOTAL_DOLLAR_AMOUNT = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "TOTAL_DOLLAR_AMOUNT",
+			ATRB_DESC = "Total Dollar Amount",
+			ATRB_LBL = "Total Dollar Amount",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 22,
+			DATA_TYPE_CD = "MONEY",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Double",
+			FRMT_MSK = "{0:c}",
+			MJR_MNR_CHG = "MAJOR",
+			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "TextBox"
 		};
 		public static MyDealsAttribute TRDMRK_NM = new MyDealsAttribute()

@@ -29,6 +29,7 @@ namespace Intel.MyDeals.BusinessLogic
             registerService.RegisterType<IRuleEngineLib, RuleEngineLib>();
             registerService.RegisterType<ISearchLib, SearchLib>();
             registerService.RegisterType<ISecurityAttributesLib, SecurityAttributesLib>();
+            registerService.RegisterType<ITendersLib, TendersLib>();
             registerService.RegisterType<IUiTemplateLib, UiTemplateLib>();
             registerService.RegisterType<IWorkFlowLib, WorkFlowLib>();
             registerService.RegisterType<ITimelineLib, TimelineLib>();

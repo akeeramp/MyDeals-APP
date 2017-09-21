@@ -104,15 +104,23 @@ namespace Intel.MyDeals.Controllers.API
             );
         }
 
-		[Route("GetMyCustomersInfo")]
-		public IEnumerable<MyCustomersInformation> GetMyCustomersInfo()
-		{
+        [Route("GetMyCustomersInfo")]
+        public IEnumerable<MyCustomersInformation> GetMyCustomersInfo()
+        {
             return SafeExecutor(() => AppLib.GetMyCustomersInfo().OrderBy(c => c.CUST_NM)
                 , "Unable to get My Customers Info"
             );
-		}
+        }
 
-		[Authorize]
+        [Route("GetMyCustomersNameInfo")]
+        public IEnumerable<MyCustomersInformation> GetMyCustomersNameInfo()
+        {
+            return SafeExecutor(() => AppLib.GetMyCustomersInfo().Where(c => c.CUST_LVL_SID == 2002).OrderBy(c => c.CUST_NM)
+                , "Unable to get My Customers Info"
+            );
+        }
+
+        [Authorize]
 		[Route("GetMyCustomersSoldTo")]
 		public List<MyCustomersSoldTo> GetMyCustomersSoldTo()
 		{

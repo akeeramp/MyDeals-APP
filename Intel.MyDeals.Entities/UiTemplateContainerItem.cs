@@ -33,6 +33,7 @@ namespace Intel.MyDeals.Entities
         public bool IsEncoded { get; set; }
         public bool IsFilterable { get; set; }
         public bool IsSortable { get; set; }
+        public string MjrMnrChg { get; set; }
         public int Width { get; set; }
         public string Format { get; set; }
         public string LookupUrl { get; set; }

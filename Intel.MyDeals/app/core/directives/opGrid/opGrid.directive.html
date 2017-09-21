@@ -104,6 +104,38 @@
                         </li>
                     </ul>
                 </div>
+                
+                <div class="fl" style="margin-top: 2px; margin-left: 8px;" ng-show="isExportable">
+                    <button class="btn btn-sm ssToolbarBtn" ng-click="exportToExcelCustomColumns()" title="Export to Excel only the columns you currently see in the grid.">
+                        <table>
+                            <tr>
+                                <td>
+                                    <i class="intelicon-ms-excel-outlined skyBlue" aria-hidden="true" style="font-size: 30px"></i>
+                                </td>
+                                <td style="padding-left: 5px; text-align: left; color: #00AEEF;">
+                                    Export to Excel<br/>
+                                    Custom Columns
+                                </td>
+                            </tr>
+                        </table>
+                    </button>
+                </div>
+
+                <div class="fl" style="margin-top: 2px; margin-left: 8px;" ng-show="isExportable">
+                    <button class="btn btn-sm ssToolbarBtn" ng-click="exportToExcel()" title="Export to Excel every column.">
+                        <table>
+                            <tr>
+                                <td>
+                                    <i class="intelicon-ms-excel-outlined skyBlue" aria-hidden="true" style="font-size: 30px"></i>
+                                </td>
+                                <td style="padding-left: 5px; text-align: left; color: #00AEEF;">
+                                    Export to Excel<br />
+                                    ALL Columns
+                                </td>
+                            </tr>
+                        </table>
+                    </button>
+                </div>
 
                 <div class="fr" style="margin-top: 2px;">
                     <span class="k-textbox k-space-left" style="width: 300px; font-size: 16px">
@@ -134,6 +166,9 @@
 
 
 <style>
+    .k-grid-content > table > tbody > tr > td {
+        padding-left: 5px !important;
+    }
     .btnYes {
         background: #a49d00 !important;
         color:black;
@@ -158,6 +193,9 @@
     }
     #overLapping .op-grid.k-grid tr td {
         padding-left: 5px !important;
+    }
+    .detailsDiv {
+        margin: 0; padding: 0;
     }
     .lnk {
         background: #00AEEF;
@@ -403,8 +441,16 @@
     }
     .op-grid.k-grid .k-grid-header .k-header .k-link {
         font-weight: 600;
-    }      
-    .op-grid.k-grid tr td{
+    }
+    .op-grid.k-grid tr td {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        border-right: 1px solid #e6e6e6;
+    }
+    .dealTools{
+        margin-left: -5px !important;
+    } 
+    .op-grid.k-grid tr td:first-child {
         padding-left: 0 !important;
         padding-right: 0 !important;
         border-right: 1px solid #e6e6e6;

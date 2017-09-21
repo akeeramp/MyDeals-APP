@@ -17,7 +17,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
         templateUrl: '/app/core/directives/opGrid/opGrid.directive.html',
         controller: ['$scope', '$http', function ($scope, $http) {
 
+            var depth = 5;
+            var d = 0;
             var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"];
+
             $scope.isOverlapping = false;
             $scope.isOvlpAccess = false;            
             $scope.ovlpErrorCount = []; 
@@ -52,8 +55,18 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.isLayoutConfigurable = $scope.assignVal("isLayoutConfigurable", false);
             $scope.isPricingTableEnabled = $scope.assignVal("isPricingTableEnabled", false);
             $scope.isCustomToolbarEnabled = $scope.assignVal("isCustomToolbarEnabled", false);
+            $scope.isExportable = $scope.assignVal("isExportable", false);
             $scope.isPinEnabled = $scope.assignVal("isPinEnabled", true);
             $scope.isEditable = $scope.assignVal("isEditable", false);
+            $scope.detailTemplateName = $scope.assignVal("detailTemplateName", "");
+            $scope.detailInit = $scope.assignVal("detailInit", undefined);
+            $scope.scrollable = $scope.assignVal("scrollable", true);
+            $scope.resizable = $scope.assignVal("resizable", true);
+            $scope.pageable = $scope.assignVal("pageable", {
+                refresh: true,
+                pageSizes: [25, 50, 100],
+                buttonCount: 5
+            });
             $scope.openCAPBreakOut = openCAPBreakOut;
             $scope.getPrductDetails = getPrductDetails;
             $scope.numSoftWarn = $scope.opOptions.numSoftWarn;
@@ -61,10 +74,16 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.dealCnt = 0;
 
             $scope.root = !!$scope.opOptions.rootScope ? $scope.opOptions.rootScope : $scope.$parent.$parent.$parent;
+            if (!$scope.root || !$scope.root.saveCell) { // possible this directive is called from nested parent hierarchy
+                $scope.root = $scope.$parent;
+                while (d < depth && !$scope.root.saveCell) {
+                    $scope.root = $scope.root.$parent;
+                }
+            }
+
             // change from the below to allow this to work from all scopes applied.  It will need to be tested from all pages that use opGrid
             $scope.parentRoot = $scope.root;
             //$scope.parentRoot = !!$scope.opOptions.rootParentScope ? $scope.opOptions.rootParentScope : $scope.$parent.$parent.$parent.$parent.$parent;
-
 
             $scope.assignColSettings = function () {
                 if ($scope.opOptions.columns === undefined) return [];
@@ -167,7 +186,6 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             if ($scope.opOptions.custom === undefined) {
                 $scope.cloneWithOrder("default");
             }
-
 
             $scope.configureSortableTab = function () {
                 $("#tabstrip ul.k-tabstrip-items").kendoSortable({
@@ -375,16 +393,17 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         }
 
                         for (r = 0; r <= hideIfAll.length; r++) {
-                            for (g = 0; g < $scope.opOptions.groups.length; g++) {
-                                group = $scope.opOptions.groups[g];
-                                if (!!group && hideIfAll[r] && group.name === hideIfAll[r].name) {
-                                    group.isHidden = !hideIfAll[r].show;
-                                    //} else {
-                                    //    group.isHidden = false;
+                            if (!!$scope.opOptions.groups) {
+                                for (g = 0; g < $scope.opOptions.groups.length; g++) {
+                                    group = $scope.opOptions.groups[g];
+                                    if (!!group && hideIfAll[r] && group.name === hideIfAll[r].name) {
+                                        group.isHidden = !hideIfAll[r].show;
+                                        //} else {
+                                        //    group.isHidden = false;
+                                    }
                                 }
                             }
                         }
-                        //                        debugger;
 
                         var childParent = {};
                         for (i = 0; i < data.length; i++) {
@@ -419,11 +438,16 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         }
                     },
                     update: function (e) {
+                        //debugger;
                         var source = $scope.opData;
                         // locate item in original datasource and update it
                         for (var i = 0; i < e.data.models.length; i++) {
                             var item = e.data.models[i];
-                            source[$scope.getIndexById(item.DC_ID, source)] = item;
+                            if ($scope.getIndexById(item.DC_ID, source) === null) {
+                                source.push(item);
+                            } else {
+                                source[$scope.getIndexById(item.DC_ID, source)] = item;
+                            }
                         }
                         // on success
                         e.success();
@@ -452,21 +476,20 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.ds = {
                 dataSource: $scope.contractDs,
                 columns: $scope.opOptions.columns,
-                scrollable: true,
+                scrollable: $scope.scrollable,
                 //scrollable: {
                 //    virtual: true // <--- Test to improve performance, loads slightly faster but messes up scrolling quickly through large data, virtualization can't keep up with out large set
                 //},
+                excel: {
+                    allPages: true
+                },
                 sortable: true,
                 editable: $scope.isEditable,
                 navigatable: true,
                 filterable: true,
-                resizable: true,
+                resizable: $scope.resizable,
                 reorderable: true,
-                pageable: {
-                    refresh: true,
-                    pageSizes: [25, 50, 100],
-                    buttonCount: 5
-                },
+                pageable: $scope.pageable,
                 save: function (e) {
                     var newField = util.getFirstKey(e.values);
 
@@ -476,8 +499,9 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 },
                 edit: function (e) {
                     var grid = this;
-                    var fieldName = grid.columns[e.container.index()].field;
-                    if (e.model._behaviors.isReadOnly[fieldName] || e.model._behaviors.isHidden[fieldName]) {
+                    var isDetailTemplate = !!grid.detailTemplate ? 1 : 0;
+                    var fieldName = grid.columns[e.container.index() - isDetailTemplate].field;
+                    if (e.model._behaviors.isReadOnly[fieldName] === true || e.model._behaviors.isHidden[fieldName] === true) {
                         $scope.grid.closeCell();
                     }
                 },
@@ -486,8 +510,28 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         $scope.selectFirstTab();
                         $scope.validateGrid();
                     }
+
+                    var grid = this;
+                    var majCols = [];
+                    for (var g = 0; g < grid.columns.length; g++) {
+                        if (grid.columns[g].mjrMnrChg !== null && grid.columns[g].mjrMnrChg !== "" && grid.columns[g].mjrMnrChg !== "MINOR") {
+                            majCols.push(grid.columns[g].title);
+                        }
+                    }
+
+                    var colCells = $(".k-grid-header thead tr th");
+                    for (var c = 0; c < colCells.length; c++) {
+                        if (majCols.indexOf(colCells[c].textContent) >= 0) {
+                            $(colCells[c]).css("border-bottom", "3px solid #0071C5");
+                        }
+                    }
                 }
             };
+
+            if ($scope.detailTemplateName !== "" && !!$scope.detailInit) {
+                $scope.ds.detailTemplate = kendo.template($("#detail-template").html());
+                $scope.ds.detailInit = $scope.detailInit;
+            }
 
             $scope.selectFirstTab = function () {
                 $scope.curGroup = $scope.opOptions.groups[0].name;
@@ -502,6 +546,68 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         }
                     }
                 }, 10);
+            }
+
+            $scope.exportToExcelCustomColumns = function () {
+                $scope.grid.saveAsExcel();
+            }
+
+            $scope.exportToExcel = function () {
+
+                var excludeFields = ["CAP_INFO", "CUST_MBR_SID", "DC_PARENT_ID", "PASSED_VALIDATION", "YCS2_INFO", "details", "tools"];
+
+                var widths = [];
+                var titles = [];
+                var fields = [];
+
+
+                var allCols = util.deepClone($scope.opOptions.columns);
+                allCols.sort(function (a, b) {
+                    if (a.title < b.title) return -1;
+                    if (a.title > b.title) return 1;
+                    return 0;
+                });
+
+                for (var t = 0; t < allCols.length; t++) {
+                    if (excludeFields.indexOf(allCols[t].field) <= 0) {
+                        titles.push({ value: allCols[t].title });
+                        widths.push({ autoWidth: true });
+                        fields.push(allCols[t].field);
+                    }
+                }
+                var rows = [{
+                    cells: titles
+                }];
+
+                var data = $scope.contractDs.data();
+
+                for (var i = 0; i < data.length; i++) {
+                    var cells = [];
+                    for (var c = 0; c < allCols.length; c++) {
+                        var col = allCols[c];
+                        if (excludeFields.indexOf(col.field) <= 0) {
+                            cells.push({ value: data[i][col.field] });
+                        }
+                    }
+
+                    //push single row for every record
+                    rows.push({
+                        cells: cells
+                    });
+                }
+                var workbook = new kendo.ooxml.Workbook({
+                    sheets: [
+                      {
+                          //columns: widths,
+                          title: "MyDeals Data",
+                          rows: rows
+                      }
+                    ]
+                });
+
+                //save the file as Excel file with extension xlsx
+                kendo.saveAs({ dataURI: workbook.toDataURL(), fileName: "MyDealsData.xlsx" });
+
             }
 
             $scope.drawDetails = function (data) {
@@ -547,10 +653,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     return;
                 }
 
-                if (col.uiType === "ComboBox" || col.uiType == "DROPDOWN") {
+                if (col.uiType === "ComboBox" || col.uiType === "DROPDOWN") {
 
                     // Note: we shouldnt put atrb specific logic here, but if not here then where? template too generic and this is where we call it...
-                    if (col.field == "RETAIL_CYCLE") {
+                    if (col.field === "RETAIL_CYCLE") {
 
                         var retailPullParams = {
                             PRD_MBR_SID: options.model["PRODUCT_FILTER"],
@@ -583,7 +689,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             .appendTo(container)
                             .kendoComboBox({
                                 autoBind: false,
-                                valuePrimitive: true,
+                                valuePrimitive: col.field !== "Customer",
                                 dataTextField: field.opLookupText,
                                 dataValueField: field.opLookupValue,
                                 dataSource: {
@@ -650,7 +756,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             }
 
             $scope.scheduleEditor = function (container, options) {
-                var numTiers = $scope.parentRoot.curPricingTable.NUM_OF_TIERS;
+                var numTiers = $scope.root.curPricingTable.NUM_OF_TIERS;
 
                 var tmplt = '<table>';
                 var fields = [
@@ -823,9 +929,11 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     } else {
 
                         //hide all columns
-                        for (c = 0; c <= $scope.grid.columns.length; c++) {
-                            if ($scope.grid.columns[c] !== undefined && $scope.grid.columns[c].field !== "")
-                                $scope.grid.hideColumn(c);
+                        if (!!$scope.grid && !!$scope.grid.columns) {
+                            for (c = 0; c <= $scope.grid.columns.length; c++) {
+                                if ($scope.grid.columns[c] !== undefined && $scope.grid.columns[c].field !== "")
+                                    $scope.grid.hideColumn(c);
+                            }
                         }
 
                         //show columns in list
@@ -855,7 +963,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
                 model.dirty = true;
 
-                $scope.parentRoot.saveCell(model, col);
+                $scope.root.saveCell(model, col, $scope, newVal);
 
                 if (model.isLinked !== undefined && model.isLinked) {
                     $scope.syncLinked(col, newVal);
@@ -894,12 +1002,11 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     if (dataItem._behaviors.isHidden === undefined) dataItem._behaviors.isHidden = {};
                     if (dataItem._behaviors.isHidden[newField] === undefined || dataItem._behaviors.isHidden[newField] === false) {
                         dataItem.set(newField, newValue);
-                        $scope.parentRoot.saveCell(dataItem, newField);
+                        $scope.root.saveCell(dataItem, newField, $scope, newValue);
                     }
                 }
             }
-
-
+            
             $scope.$on('refresh', function (event, args) {
             });
 
@@ -970,6 +1077,13 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
             });
 
+            $scope.$on('saveOpGridData', function (event, args) {
+                $timeout(function () {
+                    $scope.contractDs.sync();
+                    $scope.root.saveEntireContract();
+                }, 100);
+            });
+            
             $scope.increaseBadgeCnt = function (key) {
                 if ($scope.opOptions.groupColumns[key] === undefined) return;
                 for (var i = 0; i < $scope.opOptions.groupColumns[key].Groups.length; i++) {
@@ -989,18 +1103,33 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 return null;
             }
 
-            $scope.$on('syncDs', function (event, args) {
-                event.currentScope.contractDs.sync();
-            });
+            $scope.addRow = function(scope, dataItem) {
+                var data = scope.contractDs.data();
+                data.unshift(dataItem);
+                data[0].dirty = true;  // tell datasource something changed
+                scope.contractDs.sync();
+            }
 
-            $scope.$on('removeRow', function (event, ptrId) {
+            $scope.removeRow = function (scope, ptrId) {
                 var row = null;
-                var data = $scope.contractDs.data();
+                var data = scope.contractDs.data();
                 for (var d = 0; d < data.length; d++) {
                     if (data[d].DC_PARENT_ID === ptrId) row = data[d];
                 }
                 if (!!row) data.splice(data.indexOf(row), 1);
+                scope.contractDs.sync();
+            }
+
+            $scope.$on('syncDs', function (event, args) {
                 event.currentScope.contractDs.sync();
+            });
+
+            $scope.$on('addRow', function (event, args) {
+                $scope.addRow(event.currentScope, args);
+            });
+
+            $scope.$on('removeRow', function (event, ptrId) {
+                $scope.removeRow(event.currentScope, ptrId);
             });
 
             $scope.$on('updateGroup', function (event, msgs) {
@@ -1020,8 +1149,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 }
 
             });
-
-
+            
             $scope.cleanFlags = function () {
                 $scope.clearBadges();
 
@@ -1041,7 +1169,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.saveWipDeals = function () {
                 if (!$scope._dirty) return;
 
-                $scope.parentRoot.setBusy("Saving your data..", "Please wait while saving data.");
+                $scope.root.setBusy("Saving your data..", "Please wait while saving data.");
                 $timeout(function () {
                     $scope.contractDs.sync();
                     $scope.root.saveEntireContract();
@@ -1401,7 +1529,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         width: "120px",
                         filterable: { multi: true, search: true },
                         groupHeaderTemplate: function (e) {
-                            if (e.value == "Frontend YCS2") {
+                            if (e.value === "Frontend YCS2") {
                                 return "<span style='font-weight:bold;font-size:13px; color: red;letter-spacing:0.07em '>Front End Overlap</span>";
                             }
                             else {
@@ -1767,7 +1895,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
             function getPrductDetails(dataItem, priceCondition) {
                 return [{
-                    'CUST_MBR_SID': $scope.$parent.$parent.getCustId(),
+                    'CUST_MBR_SID': !!dataItem.CUST_MBR_SID ? dataItem.CST_MBR_SID : $scope.$parent.$parent.getCustId(),
                     'PRD_MBR_SID': dataItem.PRODUCT_FILTER,
                     'GEO_MBR_SID': dataItem.GEO_COMBINED,
                     'DEAL_STRT_DT': moment(dataItem.START_DT).format("l"),
@@ -1779,7 +1907,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
             function openCAPBreakOut(dataItem, priceCondition) {
                 var productData = {
-                    'CUST_MBR_SID': $scope.$parent.$parent.getCustId(),
+                    'CUST_MBR_SID': !!dataItem.CUST_MBR_SID ? dataItem.CST_MBR_SID : $scope.$parent.$parent.getCustId(),
                     'PRD_MBR_SID': dataItem.PRODUCT_FILTER,
                     'GEO_MBR_SID': dataItem.GEO_COMBINED,
                     'DEAL_STRT_DT': moment(dataItem.START_DT).format("l"),
@@ -1831,7 +1959,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         containerDataItem.TRGT_RGN = targetRegions.join();
                         containerDataItem.dirty = true;
 
-                        $scope.parentRoot.saveCell(containerDataItem, "TRGT_RGN");
+                        $scope.root.saveCell(containerDataItem, "TRGT_RGN", $scope);
                         //Note: we do not call the below because we do not want target region to update all linked rows.  If we did, uncomment the below line and comment out the one above
                         //$scope.saveFunctions(containerDataItem, "TRGT_RGN", containerDataItem.TRGT_RGN)
                     },

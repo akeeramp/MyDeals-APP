@@ -11,6 +11,7 @@ function objsetService($http, dataService, logger, $q) {
     var apiBaseContractUrl = "/api/Contracts/v1/";
     var apiBasePricingStrategyUrl = "/api/PricingStrategies/v1/";
     var apiBasePricingTableUrl = "/api/PricingTables/v1/";
+    var apiBaseTenderUrl = "/api/Tenders/v1/";
     var apiBaseWipDealUrl = "/api/PricingTables/v1/";
 
     var service = {
@@ -30,6 +31,9 @@ function objsetService($http, dataService, logger, $q) {
         updatePricingTable: updatePricingTable,
         deletePricingTable: deletePricingTable,
 
+        readTender: readTender,
+        readTenderChildren: readTenderChildren,
+
         validatePricingTableRow: validatePricingTableRow,
         deletePricingTableRow: deletePricingTableRow,
         unGroupPricingTableRow: unGroupPricingTableRow,
@@ -38,6 +42,7 @@ function objsetService($http, dataService, logger, $q) {
         readContractStatus: readContractStatus,
         readWipFromContract: readWipFromContract,
 
+        getWipDealsByPtr: getWipDealsByPtr,
         actionPricingStrategy: actionPricingStrategy,
         actionPricingStrategies: actionPricingStrategies,
         actionWipDeal: actionWipDeal,
@@ -96,6 +101,16 @@ function objsetService($http, dataService, logger, $q) {
         return dataService.post(apiBasePricingTableUrl + 'DeletePricingTable/' + custId + '/' + contractId, [pt]);
     }
 
+    // #### PRICING TABLE CRUD ####
+
+    function readTender(id) {
+        return dataService.get(apiBaseTenderUrl + 'GetMaster/' + id);
+    }
+    function readTenderChildren(id) {
+        return dataService.get(apiBaseTenderUrl + 'GetChildren/' + id);
+    }
+
+    
 	// #### PRICING TABLE ROW ####
     function validatePricingTableRow(data) {
     	return dataService.post(apiBaseContractUrl + 'ValidatePricingTableRows/', data);
@@ -128,6 +143,9 @@ function objsetService($http, dataService, logger, $q) {
     }
 
 
+    function getWipDealsByPtr(id) {
+        return dataService.get(apiBasePricingTableUrl + 'GetWipDealsByPtr/' + id);
+    }
     function actionPricingStrategy(custId, contractId, contractCustAccpt, pt, actn) {
         return dataService.post(apiBasePricingStrategyUrl + 'ActionPricingStrategy/' + custId + '/' + contractId + '/' + contractCustAccpt + '/' + actn, [pt]);
     }

@@ -760,7 +760,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 50,
                 AtrbCd = AttributeCodes.CUST_MBR_SID,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Template = "#=gridUtils.uiControlWrapper(data, 'CUST_MBR_SID')#",
+                Template = "#=gridUtils.uiCustomerControlWrapper(data, 'CUST_MBR_SID')#",
                 Label = "Customer",
                 IsFilterable = true,
                 IsSortable = true,
@@ -906,6 +906,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 20,
                 AtrbCd = AttributeCodes.EXPIRE_YCS2,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
                 Template = "#=gridUtils.uiControlWrapper(data, 'EXPIRE_YCS2')#",
                 IsFilterable = true,
                 IsSortable = true,
@@ -920,7 +921,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 29,
                 AtrbCd = AttributeCodes.ECAP_PRICE,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.TENDER },
                 Width = 130,
                 Template = "#=gridUtils.uiDimControlWrapper(data, 'ECAP_PRICE', '20___0', 'currency')#",
                 DataType = "object",
@@ -936,6 +937,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 29,
                 AtrbCd = "CAP_INFO",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.TENDER },
                 Width = 130,
                 Template = "<op-popover ng-click='openCAPBreakOut(dataItem, \"CAP\")' op-options='CAP' op-label='' op-data='getPrductDetails(dataItem, \"CAP\")'>#=gridUtils.uiMoneyDatesControlWrapper(data, 'CAP', 'CAP_STRT_DT', 'CAP_END_DT', '20___0')#</op-popover>",
                 Label = "CAP Info",
@@ -951,6 +953,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 29,
                 AtrbCd = AttributeCodes.CAP,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.TENDER },
                 Width = 130,
                 Template = "#=gridUtils.uiDimControlWrapper(data, 'CAP', '20___0', 'currency')#",
                 DataType = "object",
@@ -963,6 +966,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 20,
                 AtrbCd = AttributeCodes.CAP_STRT_DT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.TENDER },
                 Template = "#=gridUtils.uiDimControlWrapper(data, 'CAP_STRT_DT', '20___0', \"date:'MM/dd/yyyy'\")#",
                 DataType = "object",
                 IsFilterable = true,
@@ -975,6 +979,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 20,
                 AtrbCd = AttributeCodes.CAP_END_DT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.TENDER },
                 Template = "#=gridUtils.uiDimControlWrapper(data, 'CAP_END_DT', '20___0', \"date:'MM/dd/yyyy'\")#",
                 DataType = "object",
                 IsFilterable = true,
@@ -988,6 +993,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 29,
                 AtrbCd = "YCS2_INFO",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
                 Width = 130,
                 Label = "YCS2 Info",
                 IsFilterable = true,
@@ -1000,6 +1006,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 29,
                 AtrbCd = AttributeCodes.YCS2_PRC_IRBT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
                 Width = 130,
                 Template = "#=gridUtils.uiDimControlWrapper(data, 'YCS2_PRC_IRBT', '20___0', 'currency')#",
                 Label = "YCS2 Price",
@@ -1013,6 +1020,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 20,
                 AtrbCd = AttributeCodes.YCS2_START_DT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
                 Template = "#=gridUtils.uiDimControlWrapper(data, 'YCS2_START_DT', '20___0', \"date:'MM/dd/yyyy'\")#",
                 DataType = "object",
                 IsFilterable = true,
@@ -1025,6 +1033,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 20,
                 AtrbCd = AttributeCodes.YCS2_END_DT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
                 Template = "#=gridUtils.uiDimControlWrapper(data, 'YCS2_END_DT', '20___0', \"date:'MM/dd/yyyy'\")#",
                 DataType = "object",
                 IsFilterable = true,
@@ -1037,6 +1046,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 Id = 29,
                 AtrbCd = AttributeCodes.YCS2_OVERLAP_OVERRIDE,
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 Width = 110,
                 IsFilterable = true,
@@ -1051,7 +1061,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 29,
                 AtrbCd = AttributeCodes.VOLUME,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.TENDER },
                 Width = 100,
                 Format = "{0:d}",
                 IsFilterable = true,
@@ -1114,16 +1124,16 @@ namespace Intel.MyDeals.DataLibrary
             //    Template = "#=gridUtils.uiControlWrapper(data, 'PRD_COST', 'currency')#"
             //});
 
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 29,
-                AtrbCd = AttributeCodes.COST_TYPE_USED,
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Width = 150,
-                IsFilterable = true,
-                IsSortable = true,
-                Template = "#=gridUtils.uiControlWrapper(data, 'COST_TYPE_USED')#"
-            });
+            //items.Add(new UiTemplateContainerItem
+            //{
+            //    Id = 29,
+            //    AtrbCd = AttributeCodes.COST_TYPE_USED,
+            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+            //    Width = 150,
+            //    IsFilterable = true,
+            //    IsSortable = true,
+            //    Template = "#=gridUtils.uiControlWrapper(data, 'COST_TYPE_USED')#"
+            //});
 
             //items.Add(new UiTemplateContainerItem
             //{
@@ -1335,16 +1345,16 @@ namespace Intel.MyDeals.DataLibrary
             //    Template = "#=gridUtils.uiControlWrapper(data, 'RETAIL_PULL_USR_DEF_CMNT')#"
             //});
 
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 29,
-                AtrbCd = AttributeCodes.ECAP_FLR,
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Width = 110,
-                IsFilterable = true,
-                IsSortable = true,
-                Template = "#=gridUtils.uiControlWrapper(data, 'ECAP_FLR')#"
-            });
+            //items.Add(new UiTemplateContainerItem
+            //{
+            //    Id = 29,
+            //    AtrbCd = AttributeCodes.ECAP_FLR,
+            //    ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+            //    Width = 110,
+            //    IsFilterable = true,
+            //    IsSortable = true,
+            //    Template = "#=gridUtils.uiControlWrapper(data, 'ECAP_FLR')#"
+            //});
 
             items.Add(new UiTemplateContainerItem
             {
@@ -1620,7 +1630,301 @@ namespace Intel.MyDeals.DataLibrary
 				IsFilterable = true,
 				IsSortable = true
 			});
-			#endregion WIP DEAL
+            #endregion WIP DEAL
+
+            #region MASTER (Tender)
+
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 1,
+                AtrbCd = AttributeCodes.DC_ID,
+                IsKey = true,
+                ObjType = new List<OpDataElementType> { OpDataElementType.MASTER },
+                IsFilterable = true,
+                IsSortable = true,
+                DataType = "number",
+                Label = "Deal Id",
+                Width = 90,
+                IsReadOnly = true,
+                Template = "<div class='dealLnk' style='padding: 0 4px;'>#=DC_ID#</div>"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
+                AtrbCd = AttributeCodes.DC_PARENT_ID,
+                ObjType = new List<OpDataElementType> { OpDataElementType.MASTER },
+                Width = 90,
+                Label = "Master ID",
+                Template = "#=gridUtils.uiControlWrapper(data, 'DC_PARENT_ID')#",
+                IsReadOnly = true
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
+                AtrbCd = "_dirty",
+                ObjType = new List<OpDataElementType> { OpDataElementType.MASTER },
+                Width = 90,
+                Label = "dirty",
+                IsReadOnly = true
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 16,
+                AtrbCd = "tools",
+                ObjType = new List<OpDataElementType> { OpDataElementType.MASTER },
+                DataType = "object",
+                Label = "Deal Tools",
+                Width = 170,
+                IsSortable = false,
+                IsFilterable = false,
+                IsReadOnly = true,
+                Template = "<deal-tools-tender ng-model='dataItem' is-editable='true'></deal-tools>",
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
+                AtrbCd = AttributeCodes.PASSED_VALIDATION,
+                ObjType = new List<OpDataElementType> { OpDataElementType.MASTER },
+                Width = 50,
+                IsSortable = true,
+                IsFilterable = true,
+                Label = "<i class='intelicon-protection-solid' style='color: #00AEEF; font-size: 20px;'></i>",
+                IsReadOnly = true,
+                DataType = "string",
+                Template = "<i class='valid-icon validf_{{ dataItem.PASSED_VALIDATION }} {{ (dataItem.PASSED_VALIDATION === undefined || dataItem.PASSED_VALIDATION === \"\") ? \"intelicon-protection-solid\" : (dataItem.PASSED_VALIDATION == \"Valid\" || dataItem.PASSED_VALIDATION == \"Finalizing\" || dataItem.PASSED_VALIDATION == \"Complete\") ? \"intelicon-protection-checked-verified-solid\" : \"intelicon-protection-failed-solid\" }}' title='Validation: {{dataItem.PASSED_VALIDATION || \"Not validated yet\"}}' style='margin-left: 14px;'></i>"
+            });
+            
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
+                AtrbCd = AttributeCodes.dc_type,
+                ObjType = new List<OpDataElementType> { OpDataElementType.MASTER },
+                Width = 90,
+                Label = "Master / Child",
+                Template = "#=gridUtils.uiMasterChildWrapper(data, 'dc_type')#",
+                IsReadOnly = true
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 20,
+                AtrbCd = AttributeCodes.PTR_USER_PRD,
+                Label = "Contract Product",
+                ObjType = new List<OpDataElementType> { OpDataElementType.MASTER },
+                Template = "#=gridUtils.uiControlWrapper(data, 'PTR_USER_PRD')#",
+                DataType = "object",
+                IsFilterable = true,
+                IsSortable = true,
+                Width = 150
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 20,
+                AtrbCd = AttributeCodes.TITLE,
+                Label = "MyDeals Product",
+                ObjType = new List<OpDataElementType> { OpDataElementType.MASTER },
+                Template = "#=gridUtils.uiControlWrapper(data, 'TITLE')#",
+                DataType = "object",
+                IsFilterable = true,
+                IsSortable = true,
+                Width = 150
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 20,
+                AtrbCd = AttributeCodes.WF_STG_CD,
+                ObjType = new List<OpDataElementType> { OpDataElementType.MASTER },
+                Template = "#=gridUtils.uiControlWrapper(data, 'WF_STG_CD')#",
+                IsFilterable = true,
+                IsSortable = true,
+                Width = 100
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 20,
+                AtrbCd = AttributeCodes.QLTR_PROJECT,
+                ObjType = new List<OpDataElementType> { OpDataElementType.MASTER },
+                Template = "#=gridUtils.uiControlWrapper(data, 'QLTR_PROJECT')#",
+                IsFilterable = true,
+                IsSortable = true,
+                Width = 140
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 20,
+                AtrbCd = AttributeCodes.END_CUSTOMER_RETAIL,
+                ObjType = new List<OpDataElementType> { OpDataElementType.MASTER },
+                Template = "#=gridUtils.uiControlWrapper(data, 'END_CUSTOMER_RETAIL')#",
+                Label = "End Customer",
+                IsFilterable = true,
+                IsSortable = true,
+                Width = 140
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 50,
+                AtrbCd = "Customer",
+                ObjType = new List<OpDataElementType> { OpDataElementType.MASTER },
+                Template = "#=gridUtils.uiCustomerControlWrapper(data, 'CUST_MBR_SID')#",
+                Label = "OEM",
+                LookupUrl = "/api/Customers/GetMyCustomersNameInfo",
+                LookupText = "CUST_NM",
+                LookupValue = "CUST_SID",
+                UiType = "ComboBox",
+                IsFilterable = true,
+                IsSortable = true,
+                Width = 140
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 20,
+                AtrbCd = AttributeCodes.QLTR_BID_GEO,
+                ObjType = new List<OpDataElementType> { OpDataElementType.MASTER },
+                Template = "#=gridUtils.uiControlWrapper(data, 'QLTR_BID_GEO')#",
+                IsFilterable = true,
+                IsSortable = true,
+                Width = 100
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
+                AtrbCd = AttributeCodes.ECAP_PRICE,
+                ObjType = new List<OpDataElementType> { OpDataElementType.MASTER },
+                Width = 130,
+                Template = "#=gridUtils.uiDimControlWrapper(data, 'ECAP_PRICE', '20___0', 'currency')#",
+                DataType = "object",
+                IsFilterable = true,
+                IsSortable = true,
+                Format = "{0:c}",
+                UiType = "NumericTextBox",
+                Editor = "multiDimEditor"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
+                AtrbCd = "CAP_INFO",
+                ObjType = new List<OpDataElementType> { OpDataElementType.MASTER },
+                Width = 130,
+                Template = "<op-popover ng-click='openCAPBreakOut(dataItem, \"CAP\")' op-options='CAP' op-label='' op-data='getPrductDetails(dataItem, \"CAP\")'>#=gridUtils.uiMoneyDatesControlWrapper(data, 'CAP', 'CAP_STRT_DT', 'CAP_END_DT', '20___0')#</op-popover>",
+                Label = "CAP Info",
+                DataType = "object",
+                IsFilterable = true,
+                IsSortable = true,
+                Format = "{0:c}",
+                UiType = "NumericTextBox",
+                Editor = "multiDimEditor"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 20,
+                AtrbCd = AttributeCodes.OBJ_SET_TYPE_CD,
+                ObjType = new List<OpDataElementType> { OpDataElementType.MASTER },
+                Label = "Deal Type",
+                Template = "#=gridUtils.uiControlWrapper(data, 'OBJ_SET_TYPE_CD')#",
+                IsFilterable = true,
+                IsSortable = true,
+                Width = 100
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 39,
+                AtrbCd = AttributeCodes.GEO_COMBINED,
+                ObjType = new List<OpDataElementType> { OpDataElementType.MASTER },
+                Width = 180,
+                UiType = "MULTISELECT",
+                Template = "#=gridUtils.uiControlWrapper(data, 'GEO_COMBINED')#",
+                Label = "Geo",
+                LookupUrl = "/api/Dropdown/GetGeosDropdowns",
+                LookupText = "dropdownName",
+                LookupValue = "dropdownName",
+                IsFilterable = true,
+                IsSortable = true
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 38,
+                AtrbCd = AttributeCodes.MRKT_SEG,
+                ObjType = new List<OpDataElementType> { OpDataElementType.MASTER },
+                Width = 180,
+                UiType = "EMBEDDEDMULTISELECT",
+                Template = "#=gridUtils.uiControlWrapper(data, 'MRKT_SEG')#",
+                LookupUrl = "/api/Dropdown/GetDropdownHierarchy/MRKT_SEG",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN",
+                IsFilterable = true,
+                IsSortable = true
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
+                AtrbCd = AttributeCodes.VOLUME,
+                ObjType = new List<OpDataElementType> { OpDataElementType.MASTER },
+                Width = 100,
+                Format = "{0:d}",
+                IsFilterable = true,
+                IsSortable = true,
+                Template = "#=gridUtils.uiControlWrapper(data, 'VOLUME')#"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 20,
+                AtrbCd = AttributeCodes.START_DT,
+                ObjType = new List<OpDataElementType> { OpDataElementType.MASTER },
+                Template = "#=gridUtils.uiControlWrapper(data, 'START_DT', \"date:'MM/dd/yyyy'\")#",
+                Label = "Deal Start Date",
+                IsFilterable = true,
+                IsSortable = true,
+                Width = 100,
+                IsRequired = true
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 20,
+                AtrbCd = AttributeCodes.END_DT,
+                ObjType = new List<OpDataElementType> { OpDataElementType.MASTER },
+                Template = "#=gridUtils.uiControlWrapper(data, 'END_DT', \"date:'MM/dd/yyyy'\")#",
+                Label = "Deal End Date",
+                IsFilterable = true,
+                IsSortable = true,
+                Width = 100,
+                IsRequired = true
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
+                AtrbCd = AttributeCodes.BACK_DATE_RSN,
+                ObjType = new List<OpDataElementType> { OpDataElementType.MASTER },
+                Width = 220,
+                IsFilterable = true,
+                IsSortable = true,
+                Template = "#=gridUtils.uiControlWrapper(data, 'BACK_DATE_RSN')#",
+                LookupUrl = "/api/Dropdown/GetDropdowns/BACK_DATE_RSN",
+                LookupText = "DROP_DOWN",
+                LookupValue = "DROP_DOWN"
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
+                AtrbCd = AttributeCodes.COMP_BENCH,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Width = 120,
+                Label = "Comp Bench",
+                IsFilterable = true,
+                IsSortable = true,
+                Template = "#=gridUtils.uiControlWrapper(data, 'COMP_BENCH')#"
+            });
+
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
+                AtrbCd = AttributeCodes.IA_BENCH,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Width = 100,
+                Label = "IA Bench",
+                IsFilterable = true,
+                IsSortable = true,
+                Template = "#=gridUtils.uiControlWrapper(data, 'IA_BENCH')#"
+            });
+            #endregion MASTER
 
             return FillInGapsFromT4(items);
         }
@@ -1644,6 +1948,7 @@ namespace Intel.MyDeals.DataLibrary
                 if (item.MaxLength == 0) item.MaxLength = atrb.ATRB_MAX_LEN == 0 ? 8000 : atrb.ATRB_MAX_LEN;
                 if (string.IsNullOrEmpty(item.Format)) item.Format = atrb.FRMT_MSK;
                 if (string.IsNullOrEmpty(item.UiType)) item.UiType = atrb.UI_TYPE_CD;
+                if (string.IsNullOrEmpty(item.MjrMnrChg)) item.MjrMnrChg = atrb.MJR_MNR_CHG;
             }
 
             return data;

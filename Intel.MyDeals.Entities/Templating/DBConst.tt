@@ -438,6 +438,7 @@
 		ops[drg["OBJ_TYPE"].ToString()].Add("OpDataElementSetType." + drg["OBJ_SET_TYPE"].ToString());
 	}
 
+
 	foreach (var op in ops)
 	{
 		WriteLine("[OpDataElementType." + op.Key + "] = new List<OpDataElementSetType> { " + string.Join(",", op.Value) + " },");

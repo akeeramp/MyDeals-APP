@@ -46,6 +46,7 @@ namespace Intel.MyDeals.BusinessLogic
             return !getCachedResult ? _customerDataLib.GetCustomerDivisions() : _dataCollectionsDataLib.GetCustomerDivisions();
         }
 
+
         /// <summary>
         /// Get specific Customer Divisions
         /// </summary>

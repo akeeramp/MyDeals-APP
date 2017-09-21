@@ -235,6 +235,7 @@
     <Compile Include="Controllers\API\SearchController.cs" />
     <Compile Include="Controllers\API\TemplatesController.cs" />
     <Compile Include="Controllers\API\CustomersController.cs" />
+    <Compile Include="Controllers\API\TendersController.cs" />
     <Compile Include="Controllers\API\UserPreferencesController.cs" />
     <Compile Include="Controllers\API\TimelineController.cs" />
     <Compile Include="Controllers\API\MeetCompController.cs" />
@@ -418,6 +419,8 @@
     <Content Include="app\contract\partials\lnavStrategyTree.html" />
     <Content Include="app\contract\partials\pricingTable.html" />
     <Content Include="app\core\directives\bindToHeight.directive.js" />
+    <Content Include="app\core\directives\gridCell\dealToolsTender.directive.html" />
+    <Content Include="app\core\directives\gridCell\dealToolsTender.directive.js" />
     <Content Include="app\core\directives\gridCell\dealTools.directive.html" />
     <Content Include="app\core\directives\gridCell\dealTools.directive.js" />
     <Content Include="app\core\directives\gridCell\dealDetail.directive.html" />

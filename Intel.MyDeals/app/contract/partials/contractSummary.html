@@ -142,16 +142,20 @@
                                 <div ng-bind="ps.PRC_TBL.length" class="bolder"></div>
                             </td>
                             <td style="width: 80px; text-align: center;" ng-if="CAN_VIEW_COST_TEST">
-                                <i class="intelicon-passed-completed-solid bigIcon" ng-style="getColorStyle(ps.COST_TEST_RESULT)" ng-show="ps.COST_TEST_RESULT === 'PASS'" title="{{ps.COST_TEST_RESULT}}"></i>
-                                <i class="intelicon-alert-solid bigIcon" ng-style="getColorStyle(ps.COST_TEST_RESULT)"  ng-show="ps.COST_TEST_RESULT === 'FAIL'" title="{{ps.COST_TEST_RESULT}}"></i>
-                                <i class="intelicon-information-solid bigIcon" ng-style="getColorStyle(ps.COST_TEST_RESULT)" ng-show="ps.COST_TEST_RESULT === 'NA'" title="{{ps.COST_TEST_RESULT}}"></i>
-                                <i class="intelicon-help-solid bigIcon" ng-style="getColorStyle(ps.COST_TEST_RESULT)"  ng-show="ps.COST_TEST_RESULT !== 'PASS' && ps.COST_TEST_RESULT !== 'FAIL' && ps.COST_TEST_RESULT !== 'NA'" title="{{ps.COST_TEST_RESULT || 'Not run yet'}}"></i>
+                                <a ui-sref="{{ CAN_EDIT_COST_TEST ? 'contract.pct({cid: contractData.DC_ID})': '.'}}" class="lnkIcon" ng-class="{'noPointer': !CAN_EDIT_COST_TEST}">
+                                    <i class="intelicon-passed-completed-solid bigIcon" ng-style="getColorStyle(ps.COST_TEST_RESULT)" ng-show="ps.COST_TEST_RESULT === 'PASS'" title="{{ps.COST_TEST_RESULT}}"></i>
+                                    <i class="intelicon-alert-solid bigIcon" ng-style="getColorStyle(ps.COST_TEST_RESULT)" ng-show="ps.COST_TEST_RESULT === 'FAIL'" title="{{ps.COST_TEST_RESULT}}"></i>
+                                    <i class="intelicon-information-solid bigIcon" ng-style="getColorStyle(ps.COST_TEST_RESULT)" ng-show="ps.COST_TEST_RESULT === 'NA'" title="{{ps.COST_TEST_RESULT}}"></i>
+                                    <i class="intelicon-help-solid bigIcon" ng-style="getColorStyle(ps.COST_TEST_RESULT)" ng-show="ps.COST_TEST_RESULT !== 'PASS' && ps.COST_TEST_RESULT !== 'FAIL' && ps.COST_TEST_RESULT !== 'NA'" title="{{ps.COST_TEST_RESULT || 'Not run yet'}}"></i>
+                                </a>
                             </td>
                             <td style="width: 80px; text-align: center;" ng-if="CAN_VIEW_MEET_COMP">
-                                <i class="intelicon-passed-completed-solid bigIcon" ng-style="getColorStyle(ps.MEETCOMP_TEST_RESULT)" ng-show="ps.MEETCOMP_TEST_RESULT === 'PASS'" title="{{ps.MEETCOMP_TEST_RESULT}}"></i>
-                                <i class="intelicon-alert-solid bigIcon" ng-style="getColorStyle(ps.MEETCOMP_TEST_RESULT)" ng-show="ps.MEETCOMP_TEST_RESULT === 'FAIL'" title="{{ps.MEETCOMP_TEST_RESULT}}"></i>
-                                <i class="intelicon-information-solid bigIcon" ng-style="getColorStyle(ps.MEETCOMP_TEST_RESULT)" ng-show="ps.MEETCOMP_TEST_RESULT === 'NA'" title="{{ps.MEETCOMP_TEST_RESULT}}"></i>
-                                <i class="intelicon-help-solid bigIcon" ng-style="getColorStyle(ps.MEETCOMP_TEST_RESULT)" ng-show="ps.MEETCOMP_TEST_RESULT !== 'PASS' && ps.MEETCOMP_TEST_RESULT !== 'FAIL' && ps.MEETCOMP_TEST_RESULT !== 'NA'" title="{{ps.MEETCOMP_TEST_RESULT || 'Not run yet'}}"></i>
+                                <a ui-sref="{{ CAN_EDIT_MEET_COMP ? 'contract.compliance({cid: contractData.DC_ID})': '.'}}" class="lnkIcon" ng-class="{'noPointer': !CAN_EDIT_MEET_COMP}">
+                                    <i class="intelicon-passed-completed-solid bigIcon" ng-style="getColorStyle(ps.MEETCOMP_TEST_RESULT)" ng-show="ps.MEETCOMP_TEST_RESULT === 'PASS'" title="{{ps.MEETCOMP_TEST_RESULT}}"></i>
+                                    <i class="intelicon-alert-solid bigIcon" ng-style="getColorStyle(ps.MEETCOMP_TEST_RESULT)" ng-show="ps.MEETCOMP_TEST_RESULT === 'FAIL'" title="{{ps.MEETCOMP_TEST_RESULT}}"></i>
+                                    <i class="intelicon-information-solid bigIcon" ng-style="getColorStyle(ps.MEETCOMP_TEST_RESULT)" ng-show="ps.MEETCOMP_TEST_RESULT === 'NA'" title="{{ps.MEETCOMP_TEST_RESULT}}"></i>
+                                    <i class="intelicon-help-solid bigIcon" ng-style="getColorStyle(ps.MEETCOMP_TEST_RESULT)" ng-show="ps.MEETCOMP_TEST_RESULT !== 'PASS' && ps.MEETCOMP_TEST_RESULT !== 'FAIL' && ps.MEETCOMP_TEST_RESULT !== 'NA'" title="{{ps.MEETCOMP_TEST_RESULT || 'Not run yet'}}"></i>
+                                </a>
                             </td>
                         </tr>
                     </table>
@@ -176,16 +180,20 @@
                                 </td>
                                 <td style="width: 80px;"></td>
                                 <td style="width: 80px; text-align: center;" ng-if="CAN_VIEW_COST_TEST">
-                                    <i class="intelicon-passed-completed-solid medIcon" ng-style="getColorStyle(pt.COST_TEST_RESULT)" ng-show="pt.COST_TEST_RESULT === 'PASS'" title="{{pt.COST_TEST_RESULT}}"></i>
-                                    <i class="intelicon-alert-solid medIcon" ng-style="getColorStyle(pt.COST_TEST_RESULT)" ng-show="pt.COST_TEST_RESULT === 'FAIL'" title="{{pt.COST_TEST_RESULT}}"></i>
-                                    <i class="intelicon-information-solid medIcon" ng-style="getColorStyle(pt.COST_TEST_RESULT)" ng-show="pt.COST_TEST_RESULT === 'NA'" title="{{pt.COST_TEST_RESULT}}"></i>
-                                    <i class="intelicon-help-solid medIcon" ng-style="getColorStyle(pt.COST_TEST_RESULT)" ng-show="pt.COST_TEST_RESULT !== 'PASS' && pt.COST_TEST_RESULT !== 'FAIL' && pt.COST_TEST_RESULT !== 'NA'" title="{{pt.COST_TEST_RESULT || 'Not run yet'}}"></i>
+                                    <a ui-sref="{{ CAN_EDIT_COST_TEST ? 'contract.pct({cid: contractData.DC_ID})': '.'}}" class="lnkIcon" ng-class="{'noPointer': !CAN_EDIT_COST_TEST}">
+                                        <i class="intelicon-passed-completed-solid medIcon" ng-style="getColorStyle(pt.COST_TEST_RESULT)" ng-show="pt.COST_TEST_RESULT === 'PASS'" title="{{pt.COST_TEST_RESULT}}"></i>
+                                        <i class="intelicon-alert-solid medIcon" ng-style="getColorStyle(pt.COST_TEST_RESULT)" ng-show="pt.COST_TEST_RESULT === 'FAIL'" title="{{pt.COST_TEST_RESULT}}"></i>
+                                        <i class="intelicon-information-solid medIcon" ng-style="getColorStyle(pt.COST_TEST_RESULT)" ng-show="pt.COST_TEST_RESULT === 'NA'" title="{{pt.COST_TEST_RESULT}}"></i>
+                                        <i class="intelicon-help-solid medIcon" ng-style="getColorStyle(pt.COST_TEST_RESULT)" ng-show="pt.COST_TEST_RESULT !== 'PASS' && pt.COST_TEST_RESULT !== 'FAIL' && pt.COST_TEST_RESULT !== 'NA'" title="{{pt.COST_TEST_RESULT || 'Not run yet'}}"></i>
+                                    </a>
                                 </td>
                                 <td style="width: 80px; text-align: center;" ng-if="CAN_VIEW_MEET_COMP">
-                                    <i class="intelicon-passed-completed-solid medIcon" ng-style="getColorStyle(pt.MEETCOMP_TEST_RESULT)" ng-show="pt.MEETCOMP_TEST_RESULT === 'PASS'" title="{{pt.MEETCOMP_TEST_RESULT}}"></i>
-                                    <i class="intelicon-alert-solid medIcon" ng-style="getColorStyle(pt.MEETCOMP_TEST_RESULT)" ng-show="pt.MEETCOMP_TEST_RESULT === 'FAIL'" title="{{pt.MEETCOMP_TEST_RESULT}}"></i>
-                                    <i class="intelicon-information-solid medIcon" ng-style="getColorStyle(pt.MEETCOMP_TEST_RESULT)" ng-show="pt.MEETCOMP_TEST_RESULT === 'NA'" title="{{pt.MEETCOMP_TEST_RESULT}}"></i>
-                                    <i class="intelicon-help-solid medIcon" ng-style="getColorStyle(pt.MEETCOMP_TEST_RESULT)" ng-show="pt.MEETCOMP_TEST_RESULT !== 'PASS' && pt.MEETCOMP_TEST_RESULT !== 'FAIL' && pt.MEETCOMP_TEST_RESULT !== 'NA'" title="{{pt.MEETCOMP_TEST_RESULT || 'Not run yet'}}"></i>
+                                    <a ui-sref="{{ CAN_EDIT_MEET_COMP ? 'contract.compliance({cid: contractData.DC_ID})': '.'}}" class="lnkIcon" ng-class="{'noPointer': !CAN_EDIT_MEET_COMP}">
+                                        <i class="intelicon-passed-completed-solid medIcon" ng-style="getColorStyle(pt.MEETCOMP_TEST_RESULT)" ng-show="pt.MEETCOMP_TEST_RESULT === 'PASS'" title="{{pt.MEETCOMP_TEST_RESULT}}"></i>
+                                        <i class="intelicon-alert-solid medIcon" ng-style="getColorStyle(pt.MEETCOMP_TEST_RESULT)" ng-show="pt.MEETCOMP_TEST_RESULT === 'FAIL'" title="{{pt.MEETCOMP_TEST_RESULT}}"></i>
+                                        <i class="intelicon-information-solid medIcon" ng-style="getColorStyle(pt.MEETCOMP_TEST_RESULT)" ng-show="pt.MEETCOMP_TEST_RESULT === 'NA'" title="{{pt.MEETCOMP_TEST_RESULT}}"></i>
+                                        <i class="intelicon-help-solid medIcon" ng-style="getColorStyle(pt.MEETCOMP_TEST_RESULT)" ng-show="pt.MEETCOMP_TEST_RESULT !== 'PASS' && pt.MEETCOMP_TEST_RESULT !== 'FAIL' && pt.MEETCOMP_TEST_RESULT !== 'NA'" title="{{pt.MEETCOMP_TEST_RESULT || 'Not run yet'}}"></i>
+                                    </a>
                                 </td>
                             </tr>
                         </table>
@@ -604,6 +612,14 @@
     .toolbar .btn-default.disabled {
         background-color: transparent !important;
         color: #dddddd !important;
+    }
+
+    a.lnkIcon {
+        text-decoration: none;
+    }
+
+    .noPointer {
+        cursor: default;
     }
 
 </style>

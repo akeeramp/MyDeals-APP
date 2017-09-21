@@ -100,7 +100,9 @@ namespace Intel.MyDeals.BusinessRules
             if (!r.IsValid || !r.HasExtraArgs) return;
             OpDataCollectorFlattenedItem objsetItem = r.ExtraArgs[0] as OpDataCollectorFlattenedItem ?? new OpDataCollectorFlattenedItem();
             List<CustomerDivision> custs = r.ExtraArgs[1] as List<CustomerDivision>;
+            MyCustomersInformation cust = r.ExtraArgs[2] as MyCustomersInformation;
 
+            objsetItem["Customer"] = cust;
             objsetItem["CustomerDivisions"] = custs;
         }
 

@@ -30,6 +30,17 @@ namespace Intel.MyDeals.BusinessLogic
             return new CustomerLib().GetCustomerDivisionsByCustNmId(Convert.ToInt32(val));
         }
 
+        public static MyCustomersInformation GetMyCustomer(this OpDataCollector dc)
+        {
+            string val = dc.GetDataElementValue(AttributeCodes.CUST_MBR_SID);
+            if (string.IsNullOrEmpty(val))
+            {
+                // TODO throw an error
+                val = "0";
+            }
+            return new CustomerLib().GetMyCustomerNames().FirstOrDefault(c => c.CUST_SID == Convert.ToInt32(val));
+        }
+
         /// <summary>
         /// Fill in the holes from the attribute template
         /// </summary>
@@ -308,7 +319,7 @@ namespace Intel.MyDeals.BusinessLogic
             Debug.WriteLine("    MapMultiDim [{1}] (ms): {0}", stopwatch.Elapsed.TotalMilliseconds, dc.DcID);
 
             // Apply rules directly to dictionary
-            if (security) dc.ApplyRules(MyRulesTrigger.OnOpCollectorConvert, null, objsetItem, dc.GetCustomerDivisions());
+            if (security) dc.ApplyRules(MyRulesTrigger.OnOpCollectorConvert, null, objsetItem, dc.GetCustomerDivisions(), dc.GetMyCustomer());
             Debug.WriteLine("    ApplyRules [{1}] (ms): {0}", stopwatch.Elapsed.TotalMilliseconds, dc.DcID);
 
             // assign all messages
