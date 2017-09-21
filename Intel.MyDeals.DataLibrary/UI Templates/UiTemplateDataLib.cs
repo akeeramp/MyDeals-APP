@@ -705,7 +705,8 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "Deal Id",
                 Width = 90,
                 IsReadOnly = true,
-                Template = "<div class='dealLnk' style='padding: 0 4px;'>#=DC_ID#</div>"
+                //Template = "<div class='dealLnk' style='padding: 0 4px;'>#=DC_ID#</div>"
+                Template = "#=gridUtils.uiControlWrapper(data, 'DC_ID')#"
             });
             items.Add(new UiTemplateContainerItem
             {
@@ -743,7 +744,7 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "<i class='intelicon-protection-solid' style='color: #00AEEF; font-size: 20px;'></i>",
                 IsReadOnly = true,
                 DataType = "string",
-                Template = "<i class='valid-icon validf_{{ dataItem.PASSED_VALIDATION }} {{ (dataItem.PASSED_VALIDATION === undefined || dataItem.PASSED_VALIDATION === \"\") ? \"intelicon-protection-solid\" : (dataItem.PASSED_VALIDATION == \"Valid\" || dataItem.PASSED_VALIDATION == \"Finalizing\" || dataItem.PASSED_VALIDATION == \"Complete\") ? \"intelicon-protection-checked-verified-solid\" : \"intelicon-protection-failed-solid\" }}' title='Validation: {{dataItem.PASSED_VALIDATION || \"Not validated yet\"}}' style='margin-left: 14px;'></i>"
+                Template = "<div class='uiControlDiv isReadOnlyCell'><i class='valid-icon validf_{{ dataItem.PASSED_VALIDATION }} {{ (dataItem.PASSED_VALIDATION === undefined || dataItem.PASSED_VALIDATION === \"\") ? \"intelicon-protection-solid\" : (dataItem.PASSED_VALIDATION == \"Valid\" || dataItem.PASSED_VALIDATION == \"Finalizing\" || dataItem.PASSED_VALIDATION == \"Complete\") ? \"intelicon-protection-checked-verified-solid\" : \"intelicon-protection-failed-solid\" }}' title='Validation: {{dataItem.PASSED_VALIDATION || \"Not validated yet\"}}' style='margin-left: 14px;'></i></div>"
             });
             items.Add(new UiTemplateContainerItem
             {

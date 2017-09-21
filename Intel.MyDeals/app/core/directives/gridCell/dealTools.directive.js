@@ -14,7 +14,7 @@ function dealTools() {
         templateUrl: '/app/core/directives/gridCell/dealTools.directive.html',
         controller: ['$scope', '$http', function ($scope, $http) {
 
-            if (!$scope.isEditable || $scope.isEditable == "false" || $scope.isEditable == false) {
+            if (!$scope.isEditable || $scope.isEditable == "false" || $scope.isEditable == false || $scope.dataItem.WF_STG_CD_PRNT === "Cancelled") {
                 $scope.editable = (1 === 2);
             }
             else {

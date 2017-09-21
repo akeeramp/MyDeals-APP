@@ -6,18 +6,21 @@
         <input type="checkbox" ng-model="dataItem.isLinked" class="grid-link-checkbox with-font" id="lnkChk_{{dataItem.DC_PARENT_ID}}" /><label for="lnkChk_{{dataItem.DC_PARENT_ID}}" style="margin: 5px 0 0 0;" title="Check to apply changes to all rows checked"></label>
     </div>
 
-    <div class='fl md-icon rotate-270' ng-if="(editable === true) &&(!dataItem._parentCnt || dataItem._parentCnt > 1)">
+    <div class='fl md-icon rotate-270' ng-if="(editable === true) && (!dataItem._parentCnt || dataItem._parentCnt > 1) ">
         <i class="intelicon-org-chart" style="font-size: 20px !important; cursor: pointer; color: #00AEEF; margin-right: 9px;" ng-click="groupDialog.open()"></i>
     </div>
 
-    <div class='fl md-icon' ng-if="!dataItem.NOTES || dataItem.NOTES === ''">
+    <div class='fl md-icon' ng-if="!dataItem.NOTES || dataItem.NOTES === ''  && dataItem.WF_STG_CD_PRNT">
         <i class='intelicon-discussion-solid' style="font-size: 20px !important; cursor: pointer; color: #00AEEF;" title="Add a Comment" ng-click="dialog.open()"></i>
     </div>
-    <div class='fl md-icon' ng-if="!!dataItem.NOTES && dataItem.NOTES !== ''">
+    <div class='fl md-icon' ng-if="!!dataItem.NOTES && dataItem.NOTES !== '' && dataItem.WF_STG_CD_PRNT">
         <i class='intelicon-discussion-solid' style="font-size: 20px !important; cursor: pointer; color: #003C71;" title="{{dataItem.NOTES}}" ng-click="dialog.open()"></i>
     </div>
 
-    <div class='fl md-icon' ng-if="!dataItem.HasFiles">
+    <div class='fl md-icon' ng-if="!dataItem.HasFiles && dataItem.WF_STG_CD_PRNT === 'Cancelled'">
+        <i class='intelicon-attach' style="font-size: 20px !important; color: #e7e7e8;" title="Cancelled, Cannot Add an Attachment"></i>
+    </div>
+    <div class='fl md-icon' ng-if="!dataItem.HasFiles && dataItem.WF_STG_CD_PRNT !== 'Cancelled'">
         <i class='intelicon-attach' style="font-size: 20px !important; color: #00AEEF; cursor: pointer;" title="Click to Add an Attachment"></i>
     </div>
     <div class='fl md-icon' ng-if="!!dataItem.HasFiles && dataItem.HasFiles">
