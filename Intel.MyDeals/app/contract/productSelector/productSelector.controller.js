@@ -65,7 +65,7 @@
             for (var key in sysProducts) {
                 if (sysProducts.hasOwnProperty(key)) {
                     angular.forEach(sysProducts[key], function (item) {
-                        if (item.Type !== undefined && item.Type === "E") {
+                        if (item.EXCLUDE !== undefined && item.EXCLUDE === true) {
                             vm.excludedProducts.push(item);
                         } else {
                             vm.addedProducts.push(item);
@@ -502,7 +502,7 @@
 
             if (mode == 'include') {
                 if (item.selected) {
-                    item['Type'] = "I";
+                    item['EXCLUDE'] = false;
                     vm.addedProducts.push(item);
                     vm.addedProducts = $filter("unique")(vm.addedProducts, 'PRD_MBR_SID');
 
@@ -513,7 +513,7 @@
                 }
             } else {
                 if (!item.selected) {
-                    item['Type'] = "E";
+                    item['EXCLUDE'] = true;
                     vm.excludedProducts.push(item);
                     vm.excludedProducts = $filter("unique")(vm.excludedProducts, 'PRD_MBR_SID');
 
@@ -807,7 +807,7 @@
                     YCS2: x.YCS2,
                     YCS2_END: x.YCS2_END,
                     YCS2_START: x.YCS2_START,
-                    Type: "I"
+                    EXCLUDE: false
                 }
             });
             var pricingTableSysProducts = {};

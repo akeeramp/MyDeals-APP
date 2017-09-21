@@ -429,7 +429,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     var flushSysPrdFields = ["PTR_USER_PRD", "START_DT", "END_DT", "GEO_COMBINED", "PROD_INCLDS", "PROGRAM_PAYMENT"];
     var flushTrackerNumFields = ["START_DT", "END_DT", "GEO_COMBINED"];
 
-	// On Spreadsheet change
+    // On Spreadsheet change
     function onChange(arg) {
         if (stealthOnChangeMode) {
             //stealthOnChangeMode = false;
@@ -608,13 +608,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             // need to see if an item changed that would cause the PTR_SYS_PRD to be cleared out
             var isPtrSysPrdFlushed = false;
             for (var f = 0; f < flushSysPrdFields.length; f++) {
-            	if (root.colToLetter[flushSysPrdFields[f]] !== undefined) {
-					var colIndx = root.colToLetter[flushSysPrdFields[f]].charCodeAt(0) - intA;
-					if (range._ref.topLeft.col <= colIndx && range._ref.bottomRight.col >= colIndx) {
-						isPtrSysPrdFlushed = true;
-						break;
-					}
-				}
+                if (root.colToLetter[flushSysPrdFields[f]] !== undefined) {
+                    var colIndx = root.colToLetter[flushSysPrdFields[f]].charCodeAt(0) - intA;
+                    if (range._ref.topLeft.col <= colIndx && range._ref.bottomRight.col >= colIndx) {
+                        isPtrSysPrdFlushed = true;
+                        break;
+                    }
+                }
             }
 
             if (isPtrSysPrdFlushed) {
@@ -640,25 +640,25 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
 
 
-        	// need to see if an item changed that would cause the ADJ_ECAP_UNIT to be cleared out
+            // need to see if an item changed that would cause the ADJ_ECAP_UNIT to be cleared out
             var isTrackerNumFlushed = false;
             for (var f = 0; f < flushTrackerNumFields.length; f++) {
-            	if (root.colToLetter[flushTrackerNumFields[f]] !== undefined) {
-            		var colIndx = root.colToLetter[flushTrackerNumFields[f]].charCodeAt(0) - intA;
-            		if (range._ref.topLeft.col <= colIndx && range._ref.bottomRight.col >= colIndx) {
-            			isTrackerNumFlushed = true;
-            			break;
-            		}
-            	}
+                if (root.colToLetter[flushTrackerNumFields[f]] !== undefined) {
+                    var colIndx = root.colToLetter[flushTrackerNumFields[f]].charCodeAt(0) - intA;
+                    if (range._ref.topLeft.col <= colIndx && range._ref.bottomRight.col >= colIndx) {
+                        isTrackerNumFlushed = true;
+                        break;
+                    }
+                }
             }
             if (isTrackerNumFlushed) {
-				// Clear out tracker number
-            	var data = root.spreadDs.data();
-            	data[topLeftRowIndex - 2].ORIG_ECAP_TRKR_NBR = null;
+                // Clear out tracker number
+                var data = root.spreadDs.data();
+                data[topLeftRowIndex - 2].ORIG_ECAP_TRKR_NBR = null;
             }
 
             if (isTrackerNumFlushed || (isProductColumnIncludedInChanges && hasValueInAtLeastOneCell)) {
-            	syncSpreadRows(sheet, topLeftRowIndex, bottomRightRowIndex);
+                syncSpreadRows(sheet, topLeftRowIndex, bottomRightRowIndex);
             }
         }
 
@@ -802,7 +802,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     }
                 }
 
-            	// now apply array to Datasource... one event triggered
+                // now apply array to Datasource... one event triggered
                 root.spreadDs.sync();
 
                 sheet.batch(function () {
@@ -979,22 +979,22 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var sheet = spreadsheet.activeSheet();
 
         sheet.batch(function () {
-        	var row = 2;
+            var row = 2;
 
-			// reset row colors
-        	sheet.range("A" + 2 + ":A" + root.ptRowCount).background("#eeeeee").color("#003C71");
+            // reset row colors
+            sheet.range("A" + 2 + ":A" + root.ptRowCount).background("#eeeeee").color("#003C71");
 
             for (var key in data) {
                 if (data.hasOwnProperty(key) && !data[key]._actions) {
-                	if (!!data[key].DC_ID && data[key].DC_ID !== "") {
+                    if (!!data[key].DC_ID && data[key].DC_ID !== "") {
 
-						// Row error colors
-                		if (!!data[key]._behaviors) {
-                			var errors = data[key]._behaviors.isError;
-                			if (errors && Object.keys(errors).length !== 0) {
-                				sheet.range("A" + row + ":A" + row).background("#FC4C02").color("#FFFFFF");
-                			}
-                		}
+                        // Row error colors
+                        if (!!data[key]._behaviors) {
+                            var errors = data[key]._behaviors.isError;
+                            if (errors && Object.keys(errors).length !== 0) {
+                                sheet.range("A" + row + ":A" + row).background("#FC4C02").color("#FFFFFF");
+                            }
+                        }
 
                         // Product Status
                         if (!!data[key].PTR_SYS_INVLD_PRD) { // validated and failed
@@ -1031,9 +1031,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         });
     $scope.$on('addRowByTrackerNumber',
         function (event, args) {
-        	addRowByTrackerNumber(args);
+            addRowByTrackerNumber(args);
         });
-	
+
     function addRowByTrackerNumber(newRow) {// HACK: This function is needed for the $scope.$on to be able to access the pt $scope
         var spreadsheet = $("#pricingTableSpreadsheet").data("kendoSpreadsheet");
 
@@ -1044,7 +1044,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         syncSpreadRows(sheet, 2, 200, true); // NOTE: 2 accounts for the top row
         root._dirty = true;
-	}
+    }
 
     // TDOO: This needs major perfromance refactoring because it makes things slow for poeple with bad computer specs :<
     // Initiates in a batch call (which may make the spreadsheet load faster
@@ -1823,7 +1823,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 ProductRows: function () {
                     return angular.copy(rowData);
                 },
-                dealType:root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD
+                dealType: function () {
+                    angular.copy(root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD);
+                }
             }
         });
         modal.result.then(
@@ -1954,7 +1956,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 var derivedUserInput = $filter('unique')(validProducts[prd], 'DERIVED_USR_INPUT');
                 var userInput = "";
                 var excludeUserInput = "";
-                if (derivedUserInput[0].Type !== undefined && derivedUserInput[0].Type == "E") {
+                if (derivedUserInput[0].EXCLUDE !== undefined && derivedUserInput[0].EXCLUDE == true) {
                     if (validProducts[prd].length === 1 && derivedUserInput[0].DERIVED_USR_INPUT.trim().toLowerCase() == derivedUserInput[0].HIER_NM_HASH.trim().toLowerCase()) {
                         excludeUserInput = derivedUserInput[0].HIER_VAL_NM
                     } else {
@@ -2241,19 +2243,19 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
             // Get columnData (urls, name, etc) from column name
             var dealType = $scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD;
-    		var colData = $scope.$parent.$parent.templates.ModelTemplates.PRC_TBL_ROW[dealType].model.fields[colName];
+            var colData = $scope.$parent.$parent.templates.ModelTemplates.PRC_TBL_ROW[dealType].model.fields[colName];
 
-    		var currRowData = root.pricingTableData.PRC_TBL_ROW[context.range._ref.row - 1]; // minus one to account for index
+            var currRowData = root.pricingTableData.PRC_TBL_ROW[context.range._ref.row - 1]; // minus one to account for index
 
-    		// Get data to filter ECAP numbers against
-    		/////// TODO: exact start date, end date, geo, cust product
-    		var filterData = {
-    			'DEAL_STRT_DT': currRowData.START_DT,
-    			'DEAL_END_DT': currRowData.END_DT,
-    			'GEO_MBR_SID': currRowData.GEO_COMBINED,
-    			'CUST_MBR_SID': currRowData.CUST_MBR_SID,
-    			'PRD_MBR_SID': currRowData.PTR_USER_PRD
-    		};
+            // Get data to filter ECAP numbers against
+            /////// TODO: exact start date, end date, geo, cust product
+            var filterData = {
+                'DEAL_STRT_DT': currRowData.START_DT,
+                'DEAL_END_DT': currRowData.END_DT,
+                'GEO_MBR_SID': currRowData.GEO_COMBINED,
+                'CUST_MBR_SID': currRowData.CUST_MBR_SID,
+                'PRD_MBR_SID': currRowData.PTR_USER_PRD
+            };
 
             var modalInstance = $uibModal.open({
                 ariaLabelledBy: 'modal-title',
@@ -2278,10 +2280,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 }
             });
 
-    		modalInstance.result.then(function (selectedItem) {
-    			context.callback(selectedItem);
-    		}, function () { });
-    	}
+            modalInstance.result.then(function (selectedItem) {
+                context.callback(selectedItem);
+            }, function () { });
+        }
     });
 
     function getPrductDetails(dataItem, priceCondition) {

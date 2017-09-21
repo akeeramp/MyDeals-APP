@@ -21,6 +21,6 @@
         /// <summary>
         /// Include or Exclude
         /// </summary>
-        public string TYPE { get; set; }
+        public bool EXCLUDE { get; set; }
     }
 }
