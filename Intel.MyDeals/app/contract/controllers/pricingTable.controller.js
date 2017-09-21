@@ -1820,11 +1820,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 CustSid: function () {
                     return root.getCustId();
                 },
-                ProductRows: function () {
+                ProductRows: function () {  
                     return angular.copy(rowData);
                 },
                 dealType: function () {
-                    angular.copy(root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD);
+                    return angular.copy(root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD);
                 }
             }
         });
