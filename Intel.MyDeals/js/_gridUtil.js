@@ -51,6 +51,15 @@ gridUtils.uiCustomerControlWrapper = function(passedData, field) {
     tmplt += '</div>';
     return tmplt;
 }
+gridUtils.uiControlEndDateWrapper = function (passedData, field, format) {
+    var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
+    tmplt += '<div class="uiControlDiv"';
+    tmplt += '     ng-class="{isHiddenCell: dataItem._behaviors.isHidden.' + field + ', isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ',';
+    tmplt += '     isRequiredCell: dataItem._behaviors.isRequired.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + ', isSavedCell: dataItem._behaviors.isSaved.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + '}">';
+    tmplt += '    <div class="ng-binding vert-center" ng-bind="(dataItem.' + field + ' ' + gridUtils.getFormat(field, format) + ')" ng-class="{\'redfont\': dataItem.EXPIRE_FLG}"></div>';
+    tmplt += '</div>';
+    return tmplt;
+}
 gridUtils.uiControlScheduleWrapper = function (passedData) {
     //debugger;
     var tmplt = '<table>';

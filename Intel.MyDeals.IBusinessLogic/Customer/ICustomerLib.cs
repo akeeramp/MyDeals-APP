@@ -16,6 +16,6 @@ namespace Intel.MyDeals.IBusinessLogic
         List<MyCustomersInformation> GetMyCustomerNames();
         List<MyCustomersInformation> GetMyCustomerDivsByCustNmSid(int custNmSid);
         List<MyCustomersInformation> GetMyCustomersInfo();
-        List<MyCustomersSoldTo> GetMyCustomersSoldTo();
+        //List<MyCustomersSoldTo> GetMyCustomersSoldTo();
     }
 }

@@ -116,18 +116,17 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns>lists of customer division data contained in wrapper</returns>
         public MyCustomerDetailsWrapper GetMyCustomers()
         {
-            return _customerDataLib.GetMyCustomers();
+            return DataCollections.GetMyCustomers();
         }
-
 
         public List<MyCustomersInformation> GetMyCustomerNames()
         {
-            return _customerDataLib.GetMyCustomers().CustomerInfo.Where(c => c.CUST_LVL_SID == 2002).ToList();
+            return DataCollections.GetMyCustomers().CustomerInfo.Where(c => c.CUST_LVL_SID == 2002).ToList();
         }
 
         public List<MyCustomersInformation> GetMyCustomerDivsByCustNmSid(int custNmSid)
         {
-            return _customerDataLib.GetMyCustomers().CustomerInfo.Where(c => c.CUST_LVL_SID == 2003 && c.CUST_LVL_SID == custNmSid).ToList();
+            return DataCollections.GetMyCustomers().CustomerInfo.Where(c => c.CUST_LVL_SID == 2003 && c.CUST_LVL_SID == custNmSid).ToList();
         }
 
 
@@ -140,14 +139,14 @@ namespace Intel.MyDeals.BusinessLogic
             return GetMyCustomers().CustomerInfo;
         }
 
-        /// <summary>
-        /// Get Customer Sold To data that belongs to requesting user
-        /// </summary>
-        /// <returns>list of customer sold to data</returns>
-        public List<MyCustomersSoldTo> GetMyCustomersSoldTo()
-        {
-            return GetMyCustomers().CustomerSoldTo;
-        }
+        ///// <summary>
+        ///// Get Customer Sold To data that belongs to requesting user
+        ///// </summary>
+        ///// <returns>list of customer sold to data</returns>
+        //public List<MyCustomersSoldTo> GetMyCustomersSoldTo()
+        //{
+        //    return GetMyCustomers().CustomerSoldTo;
+        //}
 
         #endregion MyCustomers
     }

@@ -72,7 +72,7 @@ namespace Intel.MyDeals.DataLibrary
             var ret = new MyCustomerDetailsWrapper();
 
             var retCustInfo = new List<MyCustomersInformation>();
-            var retCustSoldTo = new List<MyCustomersSoldTo>();
+            //var retCustSoldTo = new List<MyCustomersSoldTo>();
 
             var cmd = new Procs.dbo.PR_MYDL_GET_MY_CUST
             {
@@ -118,28 +118,29 @@ namespace Intel.MyDeals.DataLibrary
                     ret.CustomerInfo = retCustInfo;
                     rdr.NextResult();
 
-                    //TABLE 2
-                    int IDX_CUST_DIV_SID2 = DB.GetReaderOrdinal(rdr, "CUST_DIV_SID");
-                    int IDX_CUST_NM2 = DB.GetReaderOrdinal(rdr, "CUST_NM");
-                    int IDX_CUST_SID2 = DB.GetReaderOrdinal(rdr, "CUST_SID");
-                    int IDX_DISP_NM2 = DB.GetReaderOrdinal(rdr, "DISP_NM");
-                    int IDX_GEO_NM = DB.GetReaderOrdinal(rdr, "GEO_NM");
-                    int IDX_SOLD_TO_ID = DB.GetReaderOrdinal(rdr, "SOLD_TO_ID");
+                    // REMOVED FOR NOW... DON'T NEED SOLD TO VALUES HERE
+                    ////TABLE 2
+                    //int IDX_CUST_DIV_SID2 = DB.GetReaderOrdinal(rdr, "CUST_DIV_SID");
+                    //int IDX_CUST_NM2 = DB.GetReaderOrdinal(rdr, "CUST_NM");
+                    //int IDX_CUST_SID2 = DB.GetReaderOrdinal(rdr, "CUST_SID");
+                    //int IDX_DISP_NM2 = DB.GetReaderOrdinal(rdr, "DISP_NM");
+                    //int IDX_GEO_NM = DB.GetReaderOrdinal(rdr, "GEO_NM");
+                    //int IDX_SOLD_TO_ID = DB.GetReaderOrdinal(rdr, "SOLD_TO_ID");
 
-                    while (rdr.Read())
-                    {
-                        retCustSoldTo.Add(new MyCustomersSoldTo
-                        {
-                            CUST_DIV_SID = (IDX_CUST_DIV_SID2 < 0 || rdr.IsDBNull(IDX_CUST_DIV_SID2)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_DIV_SID2),
-                            CUST_NM = (IDX_CUST_NM2 < 0 || rdr.IsDBNull(IDX_CUST_NM2)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_NM2),
-                            CUST_SID = (IDX_CUST_SID2 < 0 || rdr.IsDBNull(IDX_CUST_SID2)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_SID2),
-                            DISP_NM = (IDX_DISP_NM2 < 0 || rdr.IsDBNull(IDX_DISP_NM2)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DISP_NM2),
-                            GEO_NM = (IDX_GEO_NM < 0 || rdr.IsDBNull(IDX_GEO_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_GEO_NM),
-                            SOLD_TO_ID = (IDX_SOLD_TO_ID < 0 || rdr.IsDBNull(IDX_SOLD_TO_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_SOLD_TO_ID)
-                        });
-                    } // while
+                    //while (rdr.Read())
+                    //{
+                    //    retCustSoldTo.Add(new MyCustomersSoldTo
+                    //    {
+                    //        CUST_DIV_SID = (IDX_CUST_DIV_SID2 < 0 || rdr.IsDBNull(IDX_CUST_DIV_SID2)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_DIV_SID2),
+                    //        CUST_NM = (IDX_CUST_NM2 < 0 || rdr.IsDBNull(IDX_CUST_NM2)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_NM2),
+                    //        CUST_SID = (IDX_CUST_SID2 < 0 || rdr.IsDBNull(IDX_CUST_SID2)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_SID2),
+                    //        DISP_NM = (IDX_DISP_NM2 < 0 || rdr.IsDBNull(IDX_DISP_NM2)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DISP_NM2),
+                    //        GEO_NM = (IDX_GEO_NM < 0 || rdr.IsDBNull(IDX_GEO_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_GEO_NM),
+                    //        SOLD_TO_ID = (IDX_SOLD_TO_ID < 0 || rdr.IsDBNull(IDX_SOLD_TO_ID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_SOLD_TO_ID)
+                    //    });
+                    //} // while
 
-                    ret.CustomerSoldTo = retCustSoldTo;
+                    //ret.CustomerSoldTo = retCustSoldTo;
                 }
         }
             catch (Exception ex)

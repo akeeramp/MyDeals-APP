@@ -224,8 +224,8 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
                     {
                         field: "NOTES",
                         title: "Tools",
-                        width: "115px",
-                        template: "<deal-tools ng-model='dataItem'></deal-tools>"
+                        width: "90px",
+                        template: "<deal-tools ng-model='dataItem' is-file-attachment-enabled='false'></deal-tools>"
                     }, {
                         field: "DC_ID",
                         title: "Deal Id",

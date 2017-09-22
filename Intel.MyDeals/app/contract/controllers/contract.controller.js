@@ -721,6 +721,11 @@
             $scope._dirtyContractOnly = false;
         }
         $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+
+            // EXITING RIGHT AWAY... PUPOSELY NOT WARNING USERS IF THE DATA CHANGED.  USERS ARE GETTING FLUSTERED WITH THIS FEATURE.  
+            // LEAVING IT HERE IN CASE WE HAVE TO BRING IT BACK
+            return;
+
             // if Pricing Strategy or Pricing Table was being edited, save it
 
             var saveStates = ["contract.manager.strategy", "contract.manager.strategy.wip", "contract.details"];

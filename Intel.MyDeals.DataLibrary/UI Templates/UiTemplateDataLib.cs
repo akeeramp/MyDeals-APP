@@ -799,12 +799,21 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 20,
                 AtrbCd = AttributeCodes.END_DT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Template = "#=gridUtils.uiControlWrapper(data, 'END_DT', \"date:'MM/dd/yyyy'\")#",
+                Template = "#=gridUtils.uiControlEndDateWrapper(data, 'END_DT', \"date:'MM/dd/yyyy'\")#",
                 Label = "Deal End Date",
                 IsFilterable = true,
                 IsSortable = true,
                 Width = 100,
                 IsRequired = true
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 31,
+                AtrbCd = AttributeCodes.EXPIRE_FLG,
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Label = "Deal Expired?",
+                Width = 90,
+                Template = "#=gridUtils.uiControlWrapper(data, 'EXPIRE_FLG')#"
             });
             items.Add(new UiTemplateContainerItem
             {
@@ -1906,7 +1915,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 Id = 29,
                 AtrbCd = AttributeCodes.COMP_BENCH,
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjType = new List<OpDataElementType> { OpDataElementType.MASTER },
                 Width = 120,
                 Label = "Comp Bench",
                 IsFilterable = true,
@@ -1918,7 +1927,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 Id = 29,
                 AtrbCd = AttributeCodes.IA_BENCH,
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjType = new List<OpDataElementType> { OpDataElementType.MASTER },
                 Width = 100,
                 Label = "IA Bench",
                 IsFilterable = true,

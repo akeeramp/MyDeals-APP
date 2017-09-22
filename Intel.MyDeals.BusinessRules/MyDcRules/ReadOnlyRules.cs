@@ -106,6 +106,7 @@ namespace Intel.MyDeals.BusinessRules
                                 AttributeCodes.ECAP_FLR,
                                 AttributeCodes.DC_ID,
                                 AttributeCodes.DC_PARENT_ID,
+                                AttributeCodes.EXPIRE_FLG,
                                 AttributeCodes.PASSED_VALIDATION,
                                 //AttributeCodes.ECAP_PRICE,
                                 //AttributeCodes.END_DT,

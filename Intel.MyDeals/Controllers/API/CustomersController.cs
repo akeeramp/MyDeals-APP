@@ -120,13 +120,13 @@ namespace Intel.MyDeals.Controllers.API
             );
         }
 
-        [Authorize]
-		[Route("GetMyCustomersSoldTo")]
-		public List<MyCustomersSoldTo> GetMyCustomersSoldTo()
-		{
-            return SafeExecutor(AppLib.GetMyCustomersSoldTo
-                , "Unable to get My Customer Sold Tos"
-            );
-		}
+  //      [Authorize]
+		//[Route("GetMyCustomersSoldTo")]
+		//public List<MyCustomersSoldTo> GetMyCustomersSoldTo()
+		//{
+  //          return SafeExecutor(AppLib.GetMyCustomersSoldTo
+  //              , "Unable to get My Customer Sold Tos"
+  //          );
+		//}
 	}
 }

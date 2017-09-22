@@ -45,7 +45,10 @@ namespace Intel.MyDeals.BusinessLogic
                 Attributes.TITLE.ATRB_SID
             };
 
-            OpDataCollectorFlattenedDictList opDcFlatDictList = OpDataElementType.PRC_TBL.GetByIDs(new List<int> { ptId }, opDataElementTypes, atrbs).AddParentPS(ptId).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
+            var step1 = OpDataElementType.PRC_TBL.GetByIDs(new List<int> {ptId}, opDataElementTypes, atrbs);
+            var step2 = step1.AddParentPS(ptId);
+            OpDataCollectorFlattenedDictList opDcFlatDictList = step2.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
+//            OpDataCollectorFlattenedDictList opDcFlatDictList = OpDataElementType.PRC_TBL.GetByIDs(new List<int> { ptId }, opDataElementTypes, atrbs).AddParentPS(ptId).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
 
             var prntActions = opDcFlatDictList[OpDataElementType.PRC_ST][0]["_actions"];
 

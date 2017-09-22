@@ -218,7 +218,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 "isPricingTableEnabled": true,
                 "isVisibleAdditionalDiscounts": true,
                 "isExportable": true,
-                "isEditable": true
+                "isEditable": true,
+                "exportableExcludeFields": ["CAP_INFO", "CUST_MBR_SID", "DC_PARENT_ID", "PASSED_VALIDATION", "YCS2_INFO", "details", "tools"]
             };
             root.wipOptions.columns = wipTemplate.columns;
             root.wipOptions.model = wipTemplate.model;

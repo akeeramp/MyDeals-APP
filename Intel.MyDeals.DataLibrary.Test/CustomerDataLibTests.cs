@@ -24,7 +24,7 @@ namespace Intel.MyDeals.DataLibrary.Test
         [TestMethod]
         public void CustomersGetMy()
         {
-            MyCustomerDetailsWrapper results = new CustomerDataLib().GetMyCustomers();
+            MyCustomerDetailsWrapper results = DataCollections.GetMyCustomers();
             Assert.IsTrue(results.CustomerInfo.Any());
             Assert.IsTrue(results.CustomerSoldTo.Any());
         }

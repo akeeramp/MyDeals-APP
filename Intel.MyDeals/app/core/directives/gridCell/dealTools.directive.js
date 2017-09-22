@@ -8,7 +8,9 @@ function dealTools($timeout, logger, dataService) {
     return {
         scope: {
             dataItem: '=ngModel',
-            isEditable: '@isEditable'
+            isEditable: '@isEditable',
+            isCommentEnabled: '=?',
+            isFileAttachmentEnabled: '=?'
         },
         restrict: 'AE',
         templateUrl: '/app/core/directives/gridCell/dealTools.directive.html',
@@ -23,6 +25,15 @@ function dealTools($timeout, logger, dataService) {
 
             if (!!$scope.isEditable) $scope.isEditable = false;
 
+            $scope.assignVal = function (field, defval) {
+                var item = $scope[field];
+                return (item === undefined || item === null) ? defval : item;
+            }
+
+            $scope.isCommentEnabled = $scope.assignVal("isCommentEnabled", true);
+            $scope.isFileAttachmentEnabled = $scope.assignVal("isFileAttachmentEnabled", true);
+
+            //var prntRoot = $scope.$parent.$parent.$parent.$parent.$parent.$parent.$parent;
             var rootScope = $scope.$parent;
             if (!$scope.$parent.contractData) {
                 rootScope = $scope.$parent.$parent.$parent.$parent.$parent;

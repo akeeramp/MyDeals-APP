@@ -181,12 +181,12 @@ namespace Intel.MyDeals.App
                 : UserSettings[OpUserStack.MyOpUserToken.Usr.Idsid.ToUpper()].AllMyCustomers.CustomerInfo;
         }
 
-        public static List<MyCustomersSoldTo> GetMyCustomersSoldTo()
-        {
-            return UserSettings[OpUserStack.MyOpUserToken.Usr.Idsid.ToUpper()] == null
-                ? new List<MyCustomersSoldTo>()
-                : UserSettings[OpUserStack.MyOpUserToken.Usr.Idsid.ToUpper()].AllMyCustomers.CustomerSoldTo;
-        }
+        //public static List<MyCustomersSoldTo> GetMyCustomersSoldTo()
+        //{
+        //    return UserSettings[OpUserStack.MyOpUserToken.Usr.Idsid.ToUpper()] == null
+        //        ? new List<MyCustomersSoldTo>()
+        //        : UserSettings[OpUserStack.MyOpUserToken.Usr.Idsid.ToUpper()].AllMyCustomers.CustomerSoldTo;
+        //}
 
         public static void ClearCache()
         {

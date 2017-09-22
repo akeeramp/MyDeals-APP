@@ -131,6 +131,9 @@
                     "WF_STG_CD": {
                         "Groups": ["Deal Info"]
                     },
+                    "EXPIRE_FLG": {
+                        "Groups": ["All"]
+                    },
                     "TRKR_NBR": {
                         "Groups": ["Deal Info"]
                     },
@@ -415,9 +418,6 @@
                     	"Groups": ["Deal Info"]
                     },
                     "ADJ_ECAP_UNIT": {
-                    	"Groups": ["Deal Info"]
-                    },
-                    "FRCST_VOL": {
                     	"Groups": ["Deal Info"]
                     },
                     "CUST_MBR_SID": {

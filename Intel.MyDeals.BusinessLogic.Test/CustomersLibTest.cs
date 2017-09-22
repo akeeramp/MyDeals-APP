@@ -85,12 +85,12 @@ namespace Intel.MyDeals.BusinessLogic.Test
             Assert.IsTrue(results.Any());
         }
 
-        [TestMethod]
-        public void CustomersGetMySoldTo()
-        {
-            IEnumerable<MyCustomersSoldTo> results = new CustomerLib().GetMyCustomersSoldTo();
-            Assert.IsTrue(results.Any());
-        }
+        //[TestMethod]
+        //public void CustomersGetMySoldTo()
+        //{
+        //    IEnumerable<MyCustomersSoldTo> results = new CustomerLib().GetMyCustomersSoldTo();
+        //    Assert.IsTrue(results.Any());
+        //}
 
         #endregion
 

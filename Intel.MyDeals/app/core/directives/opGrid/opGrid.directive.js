@@ -56,6 +56,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.isPricingTableEnabled = $scope.assignVal("isPricingTableEnabled", false);
             $scope.isCustomToolbarEnabled = $scope.assignVal("isCustomToolbarEnabled", false);
             $scope.isExportable = $scope.assignVal("isExportable", false);
+            $scope.exportableExcludeFields = $scope.assignVal("exportableExcludeFields", []);
             $scope.isPinEnabled = $scope.assignVal("isPinEnabled", true);
             $scope.isEditable = $scope.assignVal("isEditable", false);
             $scope.detailTemplateName = $scope.assignVal("detailTemplateName", "");
@@ -554,12 +555,11 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
             $scope.exportToExcel = function () {
 
-                var excludeFields = ["CAP_INFO", "CUST_MBR_SID", "DC_PARENT_ID", "PASSED_VALIDATION", "YCS2_INFO", "details", "tools"];
+                var excludeFields = $scope.exportableExcludeFields;
 
                 var widths = [];
                 var titles = [];
                 var fields = [];
-
 
                 var allCols = util.deepClone($scope.opOptions.columns);
                 allCols.sort(function (a, b) {

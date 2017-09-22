@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using Intel.MyDeals.Entities;
 using Intel.Opaque;
 using Intel.Opaque.Data;
@@ -477,6 +478,24 @@ namespace Intel.MyDeals.DataLibrary
         }
 
         private static List<CustomerDivision> _getCustomerDivisions;
+
+        public static MyCustomerDetailsWrapper GetMyCustomers()
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                if (_getMyCustomers == null || !_getMyCustomers.Any())
+                {
+                    _getMyCustomers = new Dictionary<string, MyCustomerDetailsWrapper>();
+                }
+                string authenticatedName = Thread.CurrentPrincipal.Identity.Name.ToUpper().Replace("AMR\\","");
+                if (!_getMyCustomers.ContainsKey(authenticatedName))
+                {
+                    _getMyCustomers[authenticatedName] = new CustomerDataLib().GetMyCustomers();
+                }
+                return _getMyCustomers[authenticatedName];
+            }
+        }
+        private static Dictionary<string, MyCustomerDetailsWrapper> _getMyCustomers;
 
         public static List<Product> GetProductData()
         {
