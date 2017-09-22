@@ -7,6 +7,6 @@ namespace Intel.MyDeals.IDataLibrary
 	{
 		IEnumerable<string> GetEcapTrackerList(EcapTrackerFilterData filterData);
 
-		IEnumerable<EcapTrackerData> GetDealDetailsBasedOnTrackerNumbers(List<int> trackerNumbers);
+		IEnumerable<EcapTrackerData> GetDealDetailsBasedOnTrackerNumbers(List<string> trackerNumbers);
 	}
 }

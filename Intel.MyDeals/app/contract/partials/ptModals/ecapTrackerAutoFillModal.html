@@ -1,0 +1,80 @@
+﻿<div class="modal-content">
+	<div class="modal-header">
+		<h3 class="modal-title" id="modal-title">Get data by ECAP tracker number </h3>
+	</div>
+	<div class="modal-body" id="modal-body">
+		<div>
+			<p>
+				Type in your ECAP Tracker Number below: <br />
+			</p>
+
+			<input class="k-textbox"
+				   ng-model="$ctrl.unValidatedTrackerNumber" 
+				   ng-change="$ctrl.clearValidatedTrackerinfo()" 
+				   ng-model-options='{ debounce: 250 }'
+				   ng-disabled="$ctrl.isLoading" 
+				   ng-class="{'isReadOnly': $ctrl.isLoading}" />
+			<button type="button"
+					class="btn btn-primary"
+					ng-click="$ctrl.verify($ctrl.unValidatedTrackerNumber)"
+					ng-disabled="$ctrl.isLoading"
+					ng-class="{'disabled': $ctrl.isLoading}">
+				Search
+			</button>
+
+			<div ng-show="$ctrl.isLoading">
+				<div class="spinner">
+					<div class="rect1"></div>
+					<div class="rect2"></div>
+					<div class="rect3"></div>
+					<div class="rect4"></div>
+					<div class="rect5"></div>
+				</div>
+				<p style="text-align:center">Please wait as we fetch the deal related to this tracker number.</p>
+			</div>
+
+			<div ng-show="$ctrl.hasValidTrackerInfo">
+				<br />
+				<b>Deal information found:</b><table class="table table-bordered table-striped table-intel">
+					<thead>
+						<tr>
+							<th scope="col">#</th>
+							<th scope="col">Deal ID</th>
+							<th scope="col">Product</th>
+							<th scope="col">Start Date</th>
+							<th scope="col">End Date</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								TEST:
+							</td>
+							<td>
+								okay
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<br />
+
+		<div class="row">
+			<div class="col-md-12">
+				<div class="fr">
+					<button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
+					<button type="button"
+							class="btn btn-primary"
+							ng-click="$ctrl.submit()"
+							ng-class="{'disabled': !$ctrl.hasValidTrackerInfo}"
+							uib-tooltip="Search for a tracker number to enable this button."
+							tooltip-enable="!$ctrl.hasValidTrackerInfo">
+						Add to grid
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--<div class="modal-footer">	</div>-->

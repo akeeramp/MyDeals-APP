@@ -17,7 +17,7 @@ namespace Intel.MyDeals.Entities
 
 	public class EcapTrackerData : EcapTrackerFilterData
 	{
-		public int ORIG_ECAP_TRKR_NBR { get; set; }
+		public string ORIG_ECAP_TRKR_NBR { get; set; }
 		public int DC_ID { get; set; }
 	}
 }

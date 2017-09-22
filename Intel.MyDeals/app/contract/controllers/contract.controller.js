@@ -1016,35 +1016,29 @@
         			return;
         		}
 
-        		// TODO: API get new data from tracker number
-				
-        		var newRow = {
-        			"ADJ_ECAP_UNIT": null,
-        			"CUST_ACCNT_DIV": "", // TO GET
-        			"CUST_MBR_SID": "",
-        			"DC_ID": null,
-        			"ECAP_PRICE": null,
-        			"END_DT": "",  // TO GET
-        			"FRCST_VOL": null,
-        			"GEO_COMBINED": "", // TO GET
-        			"MEET_COMP_PRICE_QSTN": "", // TO GET
-        			"MRKT_SEG": null,
-        			"ORIG_ECAP_TRKR_NBR": 11111111, // TO SET
-        			"PAYOUT_BASED_ON": null,
-        			"PROD_INCLDS": "",
-        			"PROGRAM_PAYMENT": null,
-        			"PTR_SYS_INVLD_PRD": "",
-        			"PTR_SYS_PRD": "",  // TO GET
-        			"PTR_USER_PRD": "TODO",  // TO GET
-        			"REBATE_TYPE": "ECAP ADJ",
-        			"START_DT": "", // TO GET
-        			"TERMS": null,
-        			"TOTAL_DOLLAR_AMOUNT": null,
-        			"VOLUME": null,
-        			"dirty": true,
-        			"id": null,
-        		}
-        		$scope.$broadcast('addRowByTrackerNumber', newRow)
+        		var modal = $uibModal.open({
+        			backdrop: 'static',
+        			templateUrl: 'app/contract/partials/ptModals/ecapTrackerAutoFillModal.html',
+        			controller: 'EcapTrackerAutoFillModalCtrl',
+        			controllerAs: '$ctrl',
+        			size: 'lg',
+        			resolve: {
+        				colData: null, // TODO
+        			}
+        		});
+
+				// TODO: get the SP information for the new row
+        		modal.result.then(
+                    function (newRow) {
+                    	newRow["CUST_ACCNT_DIV"] = $scope.contractData.CUST_ACCNT_DIV;
+                    	newRow["CUST_MBR_SID"] = $scope.contractData.CUST_MBR_SID;
+
+        				$scope.$broadcast('addRowByTrackerNumber', newRow)
+                    },
+                    function () {
+                    	// Do Nothing on cancel
+                    }
+				);				
         	}
         }
         $scope.hideAddPricingTable = function () {

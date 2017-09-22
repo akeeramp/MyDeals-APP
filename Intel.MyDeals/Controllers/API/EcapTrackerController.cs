@@ -26,11 +26,18 @@ namespace Intel.MyDeals.Controllers.API
 			
 			return result;
 		}
-
-		// TODO
-		public IEnumerable<string> GetDealDataViaTrackerNumber(EcapTrackerFilterData filterData)
+		
+		[HttpGet]
+		[Route("GetDealDataViaTrackerNumber/{trackerNumber}")]
+		public EcapTrackerData GetDealDataViaTrackerNumber(string trackerNumber)
 		{
-			return null;
+			List<string> numbers = new List<string>();
+			numbers.Add(trackerNumber);
+			IEnumerable<EcapTrackerData> result = SafeExecutor(() => _ecapTrackerLib.GetDealDetailsBasedOnTrackerNumbers(numbers)
+				, $"Unable to get ECAP deal data from tracker number"
+			);
+			
+			return (result != null) ? result.FirstOrDefault() : null;
 		}
 	}
 }

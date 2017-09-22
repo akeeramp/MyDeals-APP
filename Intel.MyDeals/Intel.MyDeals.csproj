@@ -319,6 +319,7 @@
     <Content Include="app\blocks\uiControls\partials\horizontalEmbeddedMultiSelect.html" />
     <Content Include="app\blocks\uiControls\partials\verticalEmbeddedMultiSelect.html" />
     <Content Include="app\contract\controllers\dropdownModal.controller.js" />
+    <Content Include="app\contract\controllers\ecapTrackerAutoFillModal.controller.js" />
     <Content Include="app\contract\controllers\ecapTrackerModal.controller.js" />
     <Content Include="app\contract\controllers\managerOverlapping.controller.js" />
     <Content Include="app\contract\controllers\managerPct.controller.js" />
@@ -353,6 +354,7 @@
     <Content Include="app\contract\partials\lnavSummaryMenuMini.html" />
     <Content Include="app\contract\autofillSettings\autofillSettings.controller.js" />
     <Content Include="app\contract\autofillSettings\autofillSettings.html" />
+    <Content Include="app\contract\partials\ptModals\ecapTrackerAutoFillModal.html" />
     <Content Include="app\contract\partials\ptModals\ecapTrackerModal.html" />
     <Content Include="app\contract\productCorrector\productCorrectorBeta.controller.js" />
     <Content Include="app\contract\productCorrector\productCorrectorBeta.html" />

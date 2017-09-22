@@ -56,7 +56,7 @@ namespace Intel.MyDeals.DataLibrary
 		/// Get a list of existing deal details based on ECAP Adjustment Tracker Numbers
 		/// </summary>
 		/// <returns>list of EcapTrackerData</returns>
-		public IEnumerable<EcapTrackerData> GetDealDetailsBasedOnTrackerNumbers(List<int> trackerNumbers)
+		public IEnumerable<EcapTrackerData> GetDealDetailsBasedOnTrackerNumbers(List<string> trackerNumbers)
 		{
 			// TODO: hook up to SP
 			return null;

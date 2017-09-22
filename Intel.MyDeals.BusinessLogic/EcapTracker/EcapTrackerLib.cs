@@ -38,7 +38,7 @@ namespace Intel.MyDeals.BusinessLogic
 		/// Get a list of existing deal details based on ECAP Adjustment Tracker Numbers
 		/// </summary>
 		/// <returns>list of EcapTrackerData</returns>
-		public IEnumerable<EcapTrackerData> GetDealDetailsBasedOnTrackerNumbers(List<int> trackerNumbers)
+		public IEnumerable<EcapTrackerData> GetDealDetailsBasedOnTrackerNumbers(List<string> trackerNumbers)
 		{
 			return _ecapTrackerDataLib.GetDealDetailsBasedOnTrackerNumbers(trackerNumbers);
 		}
