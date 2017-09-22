@@ -31,7 +31,7 @@
             toastr.error(message, title);
             $log.error('Error: ' + message, data);
             if (typeof data !== 'string') {
-                if (data === undefined) {
+                if (!data) {
                     data = 'message: ' + message + ' statusText: NA responseText : NA ErrorStack: NA';
                 } else {
                     if (data['statusText'] !== undefined) {
