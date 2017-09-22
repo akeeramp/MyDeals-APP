@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using Intel.MyDeals.App;
 using Intel.Opaque;
 

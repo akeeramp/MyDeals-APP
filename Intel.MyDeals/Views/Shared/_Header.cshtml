@@ -118,7 +118,10 @@
             <li class="dropdown">
                 <a class="btn btn-primary" id="dLabel" role="button" href="/page.html" data-toggle="dropdown" data-target="#">Admin <i class="intelicon-down"></i></a>
                 <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
-                    <li><a href="/error/ResetAVM">Clear View Model</a></li>
+
+                    @*<li><a href="/error/ResetAVM">Clear View Model</a></li>*@
+                    <li><a id="celarViewModelLink" href="/error/ResetAVM" onclick="clearSessionData(); return false;">Clear View Model</a></li>
+
                     @if (isDeveloper)
                     {
                         <li><a href="Admin#/cache">Cache Manager</a></li>
@@ -249,6 +252,25 @@
 
     function eggSmw() {
         window.open("/egg/mb/menu.html", "_blank", "toolbar=no,scrollbars=no,menubar=no,status=no,titlebar=no,resizable=no,width=642,height=482,top=200,left=200");
+    }
+
+    function clearSessionData() {
+        localStorage.clear(); // clear local storage
+        sessionStorage.clear(); // clear session storage
+
+        // Clear cookies too
+        var cookies = document.cookie;
+
+        if (cookies !== "") {
+            for (var i = 0; i < cookies.split(";").length; ++i) {
+                var myCookie = cookies[i];
+                var pos = myCookie.indexOf("=");
+                var name = pos > -1 ? myCookie.substr(0, pos) : myCookie;
+                document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+            }
+        }
+
+        window.location = "/error/ResetAVM";
     }
 
     window.usrRole = "@usrRole";
