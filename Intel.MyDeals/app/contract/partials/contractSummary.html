@@ -99,25 +99,25 @@
                                 <i class="chevron linkable" ng-class="{'intelicon-down': isCollapsed, 'intelicon-right-next': !isCollapsed}"></i>
                             </td>
                             <td style="width: 60px; text-align: center;" ng-show="canEdit">
-                                <div ng-if="ps._actions['Approve'] !== undefined && ps._actions['Approve'] === true">
+                                <div ng-if="canAction('Approve', ps, true)">
                                     <input type="checkbox" name="radGrp{{ps.DC_ID}}" dcId="{{ps.DC_ID}}"
-                                           ng-class="{'disabled': ps.PASSED_VALIDATION != 'Complete'}"
-                                           ng-disabled="ps.PASSED_VALIDATION != 'Complete'"
+                                           ng-class="{'disabled': !canAction('Approve', ps, false)}"
+                                           ng-disabled="!canAction('Approve', ps, false)"
                                            class="with-font psCheck psCheck-Approve" id="rad_approve_{{ps.DC_ID}}"
                                            ng-click="clkRow($event)" /><label for="rad_approve_{{ps.DC_ID}}"></label>
                                 </div>
                             </td>
                             <td style="width: 50px; text-align: center;" ng-show="canEdit">
-                                <div ng-if="ps._actions['Revise'] !== undefined && ps._actions['Revise'] === true">
+                                <div ng-if="canAction('Revise', ps, true)">
                                     <input type="checkbox" name="radGrp{{ps.DC_ID}}" dcId="{{ps.DC_ID}}"
-                                           ng-class="{'disabled': ps.PASSED_VALIDATION != 'Complete'}"
-                                           ng-disabled="ps.PASSED_VALIDATION != 'Complete'"
+                                           ng-class="{'disabled': !canAction('Revise', ps, false)}"
+                                           ng-disabled="!canAction('Revise', ps, false)"
                                            class="with-font psCheck psCheck-Revise" id="rad_revise_{{ps.DC_ID}}"
                                            ng-click="clkRow($event)" /><label for="rad_revise_{{ps.DC_ID}}"></label>
                                 </div>
                             </td>
                             <td style="width: 50px; text-align: center;" ng-show="canEdit">
-                                <div ng-if="ps._actions['Cancel'] !== undefined && ps._actions['Cancel'] === true">
+                                <div ng-if="canAction('Cancel', ps, true)">
                                     <input type="checkbox" name="radGrp{{ps.DC_ID}}" dcId="{{ps.DC_ID}}"
                                            class="with-font psCheck psCheck-Cancel" id="rad_cancel_{{ps.DC_ID}}"
                                            ng-click="clkRow($event)" /><label for="rad_cancel_{{ps.DC_ID}}"></label>

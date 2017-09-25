@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 9/21/2017 10:45:15 AM
-On: MHTIPPIN-MOBL
+File Updated: 9/23/2017 9:46:50 PM
+On: PWECKENR-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
 using System;
@@ -2314,6 +2314,9 @@ namespace Intel.MyDeals.Entities {
 		public const string BATCH_LOG = "BATCH_LOG";
 		public const string CAP_MSP_CUTOFF_DAYS_BTCH = "CAP_MSP_CUTOFF_DAYS_BTCH";
 		public const string CHNL_CUST_FLTR = "CHNL_CUST_FLTR";
+		public const string COST_TEST_PRD_MODE_1 = "COST_TEST_PRD_MODE_1";
+		public const string COST_TEST_PRD_MODE_2 = "COST_TEST_PRD_MODE_2";
+		public const string COST_TEST_ROLES = "COST_TEST_ROLES";
 		public const string COST_TEST_TYPES = "COST_TEST_TYPES";
 		public const string CSL_WWID_EXCEPTIONS = "CSL_WWID_EXCEPTIONS ";
 		public const string CUTOFF_DATE = "CUTOFF_DATE";
@@ -2328,9 +2331,6 @@ namespace Intel.MyDeals.Entities {
 		public const string iCOST_PRODUCTS = "iCOST_PRODUCTS";
 		public const string INCL_GDM_PCSR_HIER = "INCL_GDM_PCSR_HIER";
 		public const string LAST_BTCH_RUN = "LAST_BTCH_RUN";
-		public const string LINEUP_COST_TEST_PRD_MODE_1 = "LINEUP_COST_TEST_PRD_MODE_1";
-		public const string LINEUP_COST_TEST_PRD_MODE_2 = "LINEUP_COST_TEST_PRD_MODE_2";
-		public const string LINEUP_COST_TEST_ROLES = "LINEUP_COST_TEST_ROLES";
 		public const string MISC_MM_LIST = "MISC_MM_LIST";
 		public const string PCT_LGL_EXCPT_ROLES = "PCT_LGL_EXCPT_ROLES";
 		public const string PROD_REPLACE_CHARSET = "PROD_REPLACE_CHARSET";

@@ -29,13 +29,6 @@ namespace Intel.MyDeals.BusinessRules
                     ActionRule = MyOpDataCollectorFlattenedItemActions.ApplyHasFileAttachments,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnOpCollectorConvert },
                     InObjType = new List<OpDataElementType> { OpDataElementType.CNTRCT, OpDataElementType.PRC_TBL, OpDataElementType.WIP_DEAL, OpDataElementType.DEAL }
-                },
-                new MyOpRule
-                {
-                    Title="Add key/value [HasTracker] for having a tracker number",
-                    ActionRule = MyOpDataCollectorFlattenedItemActions.ApplyHasTracker,
-                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnOpCollectorConvert },
-                    InObjType = new List<OpDataElementType> { OpDataElementType.CNTRCT, OpDataElementType.PRC_TBL, OpDataElementType.WIP_DEAL, OpDataElementType.DEAL }
                 }
 
             };

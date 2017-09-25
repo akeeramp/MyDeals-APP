@@ -36,6 +36,10 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         }
     }
 
+    $scope.canAction = function (actn, dataItem, isExists) {
+        return dataItem._actions[actn] !== undefined && (isExists || dataItem._actions[actn] === true);
+    }
+
     $scope.getStageBgColorStyle = function (c) {
         return { backgroundColor: $scope.getColorStage(c) };
     }

@@ -412,6 +412,21 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void ReadOnlyFrontendWithTracker(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            string deFrontendValue = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT);
+
+            if (deFrontendValue == "Backend" || !r.Dc.HasTracker()) return;
+
+            foreach (OpDataElement de in r.Dc.DataElements.Where(d => d.AtrbCd != AttributeCodes.NOTES && d.AtrbCd != AttributeCodes.COMMENTS))
+            {
+                de.SetReadOnly();
+            }
+        }
+        
         public static void ShowExpireYCS2(params object[] args)
         {
             // DE28754 - Expire YCS2 Should be Editable for Front End Active Deals only.

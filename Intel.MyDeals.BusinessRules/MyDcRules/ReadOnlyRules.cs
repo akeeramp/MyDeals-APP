@@ -18,7 +18,7 @@ namespace Intel.MyDeals.BusinessRules
                     ActionRule = MyDcActions.SyncReadOnlyItems,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate }
                 },
-                new MyOpRule // Set to read only if yuo have a TRACKER NUMBER
+                new MyOpRule // Set to read only if you have a TRACKER NUMBER
                 {
                     Title="Readonly if Tracker Exists",
                     ActionRule = MyDcActions.ExecuteActions,
@@ -38,6 +38,13 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     Title="Server Deal Type Read Only if Product is not SvrWS",
                     ActionRule = MyDcActions.ShowServerDealType,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate }
+                },
+                new MyOpRule
+                {
+                    Title="Readonly for Frontend With Tracker",
+                    ActionRule = MyDcActions.ReadOnlyFrontendWithTracker,
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL, OpDataElementType.PRC_TBL_ROW},
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate }
                 },
                 new MyOpRule
