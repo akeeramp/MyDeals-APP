@@ -334,11 +334,11 @@ namespace Intel.MyDeals.Controllers.API
              );
         }
 
-        [Route("TranslateProducts/{CUST_MBR_SID}")]
+        [Route("TranslateProducts/{CUST_MBR_SID}/{DEAL_TYPE}")]
         [HttpPost]
-        public ProductLookup TranslateProducts(List<ProductEntryAttribute> userInput, int CUST_MBR_SID)
+        public ProductLookup TranslateProducts(List<ProductEntryAttribute> userInput, int CUST_MBR_SID, string DEAL_TYPE)
         {
-            return SafeExecutor(() => _productsLib.TranslateProducts(userInput, CUST_MBR_SID)
+            return SafeExecutor(() => _productsLib.TranslateProducts(userInput, CUST_MBR_SID, DEAL_TYPE)
                 , $"Unable to get product {"details"}"
             );
         }

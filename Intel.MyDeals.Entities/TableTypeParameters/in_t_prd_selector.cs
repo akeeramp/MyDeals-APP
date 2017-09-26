@@ -19,7 +19,7 @@ namespace Intel.MyDeals.Entities
         {
             //// This order must match EXACTLY the order as it appears in the TYPE definition (lame!)            
             this.Columns.Add("USR_INPUT", typeof(string));            
-            this.Columns.Add("EXCLUDE", typeof(string));
+            this.Columns.Add("EXCLUDE", typeof(bool));
             this.Columns.Add("FILTER", typeof(string));
             this.Columns.Add("START_DATE", typeof(string));
             this.Columns.Add("END_DATE", typeof(string));

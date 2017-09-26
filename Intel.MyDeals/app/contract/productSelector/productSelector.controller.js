@@ -121,7 +121,7 @@
                         parentSelected: false,
                         path: '',
                         id: getVerticalSelection(i.MRK_LVL1)[0].PRD_MBR_SID,
-                        selected: productExists(item, getVerticalSelection(i.MRK_LVL1)[0].PRD_MBR_SID)
+                        selected: productExists(item, getVerticalSelection(i.MRK_LVL1).length > 1 ? undefined : getVerticalSelection(i.MRK_LVL1)[0].PRD_MBR_SID)
                     }
                 });
                 return;
@@ -138,9 +138,9 @@
                         name: i.MRK_LVL2,
                         path: '',
                         allowMultiple: enableMultipleSelection && !(getVerticalSelection(i.MRK_LVL2).length > 1),
-                        id: getVerticalSelection(i.MRK_LVL2)[0].PRD_MBR_SID,
+                        id: (getVerticalSelection(i.MRK_LVL2).length > 1) ? i.PRD_MRK_MBR_SID : getVerticalSelection(i.MRK_LVL2)[0].PRD_MBR_SID,
                         parentSelected: item.selected,
-                        selected: productExists(item, getVerticalSelection(i.MRK_LVL2)[0].PRD_MBR_SID)
+                        selected: productExists(item, getVerticalSelection(i.MRK_LVL2).length > 1 ? undefined : getVerticalSelection(i.MRK_LVL2)[0].PRD_MBR_SID)
                     }
                 });
                 if (vm.items.length == 1) {
@@ -375,6 +375,9 @@
                         && item.field != 'CAP' && item.field != 'YCS2' && (columnValue[0][item.field] == "" || columnValue[0][item.field] == null
                         || columnValue[0][item.field] == 'NA')) {
                         grid.hideColumn(item.field);//hide column
+                    }
+                    else {
+                        grid.showColumn(item.field)
                     }
                 });
             }

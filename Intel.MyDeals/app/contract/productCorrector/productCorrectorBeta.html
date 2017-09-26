@@ -36,9 +36,9 @@
                     <div>
                         <ul class="productpath breadcrumb">
                             <li ng-repeat="p in vm.curRowProds | unique:'name'">
-                                <span ng-class="{'strike': p.matchName != ''}" class="btn btn-default btn-xs">
+                                <span ng-class="{'strike': p.matchName != '','btnInclude':vm.showIncludeExcludeLabel && p.exclude == 'I', 'btnExclude':vm.showIncludeExcludeLabel && p.exclude == 'E' }" class="btn btn-default btn-xs">
                                     <span class="prdAnchor {{p.status}}" ng-click="vm.clkPrdUsrNm(p)" title="{{p.reason}}">{{:: p.name }}</span>
-                                    <span title="Remove Product" class="close" ng-click="vm.removeProd(p.name)">&nbsp;×</span>
+                                    <span title="Remove Product" class="close" ng-click="vm.removeProd(p.name, p.exclude)">&nbsp;×</span>
                                 </span>
                                 <div class="newProd">
                                     <span id="selectedProducts" ng-show="p.matchName.length > 0">{{p.matchName.length > 1 ? p.matchName.length + " products" : p.matchName[0]}}</span>
@@ -55,12 +55,12 @@
                         <td style="width:20%;min-width:200px;max-width:200px">
                             <div class="lnavFilter">
                                 <div class="filterTitle">Refine By</div>
-                                <div class="filterGrp">
+                                <div class="filterGrp includeProd" ng-show="vm.isIncludeProd">
                                     <div ng-click="vm.isPrdCollapsed = !vm.isPrdCollapsed" style="cursor: pointer;">
-                                        <i ng-class="{'intelicon-down': vm.isPrdCollapsed, 'intelicon-right-next': !vm.isPrdCollapsed}"></i> Products Entered
+                                        <i ng-class="{'intelicon-down': vm.isPrdCollapsed, 'intelicon-right-next': !vm.isPrdCollapsed}" class="includeCircle"></i> Products Entered
                                     </div>
                                     <div class="filterContainer" uib-collapse="vm.isPrdCollapsed">
-                                        <div ng-repeat="item in vm.curRowIssues | orderBy: 'name'" style="max-height: 20px;">
+                                        <div ng-repeat="item in vm.curRowIssues | filter:{exclude:'I'} | orderBy: 'name'" style="max-height: 20px;">
                                             <div ng-if="item.cnt > 0">
                                                 <input type='checkbox' ng-click="vm.clickFilter()" ng-model="item.selected" class='check ckSm with-font' id="fltrPrdChk{{item.id}}" />
                                                 <label for="fltrPrdChk{{item.id}}">
@@ -78,7 +78,29 @@
                                         </div>
                                     </div>
                                 </div>
-
+                                <div class="filterGrp excludeProd" ng-show="vm.isExcludeProd">
+                                    <div ng-click="vm.isExcludePrdCollapsed = !vm.isExcludePrdCollapsed" style="cursor: pointer;">
+                                        <i ng-class="{'intelicon-down': vm.isExcludePrdCollapsed, 'intelicon-right-next': !vm.isExcludePrdCollapsed}" class="excludeCircle"></i> Products Excluded
+                                    </div>
+                                    <div class="filterContainer" uib-collapse="vm.isExcludePrdCollapsed">
+                                        <div ng-repeat="item in vm.curRowIssues | filter:{exclude: 'E'} | orderBy: 'name'" style="max-height: 20px;">
+                                            <div ng-if="item.cnt > 0">
+                                                <input type='checkbox' ng-click="vm.clickFilter()" ng-model="item.selected" class='check ckSm with-font' id="fltrPrdChk{{item.id}}" />
+                                                <label for="fltrPrdChk{{item.id}}">
+                                                    <span ng-bind-html="item.name"></span>
+                                                    <span class="badge upperBadge" ng-if="item.status == 'Issue'">{{ item.cnt == 0 ? "?" : item.cnt }}</span>
+                                                </label>
+                                            </div>
+                                            <div ng-if="item.cnt <= 0" title="Click to find a possible match">
+                                                <input type='checkbox' ng-click="vm.clickFilter()" ng-model="item.selected" class='check ckSm with-font' id="fltrPrdChk{{item.id}}" />
+                                                <label for="fltrPrdChk{{item.id}}">
+                                                    <span ng-bind-html="item.name"></span>
+                                                    <i class="intelicon-help-outlined ckSm"></i>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="filterGrp" ng-if="vm.curRowLvl.length > 1">
                                     <div ng-click="vm.isLvlCollapsed = !vm.isLvlCollapsed" style="cursor: pointer;">
                                         <i ng-class="{'intelicon-down': vm.isLvlCollapsed, 'intelicon-right-next': !vm.isLvlCollapsed}"></i> Product Level
@@ -152,6 +174,53 @@
 </div>
 
 <style>
+    .btnInclude {
+        border-color: #003C71;
+        border-left: 4px solid #003C71;
+    }
+
+    .btnExclude {
+        border-color: #FC4C02;
+        border-left: 4px solid #FC4C02;
+    }
+
+    .gridStatusMarker {
+        height: 100%;
+        width: 4px;
+        font-size: 14px;
+        font-weight: 600;
+        text-align: center;
+    }
+
+    .false {
+        background-color: #003C71 !important;
+        color: #ffffff !important;
+    }
+
+    .k-grid td:nth-child(2) {
+        padding-left: 0px !important;
+        padding-left: 0px !important;
+    }
+
+    .true {
+        background-color: #FC4C02 !important;
+        color: #ffffff !important;
+    }
+
+    .includeCircle {
+        background: #1a3e6f;
+        border-radius: 50%;
+        padding: 2px;
+        color: #ffffff;
+    }
+
+    .excludeCircle {
+        background: #FC4C02;
+        border-radius: 50%;
+        padding: 2px;
+        color: #ffffff;
+    }
+
     .badge.upperBadge {
         font-size: 10px;
         padding: 2px 4px;

@@ -285,6 +285,7 @@
             }
 
             $scope.updateCorpDivision = function (custId) {
+                debugger;
                 if (custId === "" || custId == null) return;
                 dataService.get("/api/Customers/GetMyCustomerDivsByCustNmSid/" + custId).then(function (response) {
                     // only show if more than 1 result
@@ -312,9 +313,7 @@
 
             // Customer and Customer Div functions
             var initiateCustDivCombobox = function () {
-                if ($scope.contractData.CUST_ACCNT_DIV_UI !== "") {
                     $scope.updateCorpDivision($scope.contractData.CUST_MBR_SID);
-                }
             }
 
             initiateCustDivCombobox();
@@ -1014,7 +1013,7 @@
         }
         $scope.addByECAPTracker = function () {
         	if ($scope.spreadDs !== undefined && $scope.curPricingTable.OBJ_SET_TYPE_CD === 'PROGRAM') {
-				
+
 				// Check if row count is over the number of rows we allow
         		if ($scope.spreadDs._data.length  >= ($scope.ptRowCount-1)) {
         			alert("Cannot insert a new row. You already have the maxium number of rows allowed in one Pricing Table. Pleas emake a new Pricing table or delete some existing rows the current pricing table.");
@@ -1462,7 +1461,7 @@
             });
         }
 
-        
+
         // **** UNGROUP Methods ****
         //
         $scope.unGroupPricingTableRow = function (wip) {
@@ -1561,7 +1560,7 @@
             if (stateName === "contract.manager.strategy") {
                 source = "PRC_TBL";
 
-                if ($scope.spreadDs !== undefined) { 
+                if ($scope.spreadDs !== undefined) {
                     // sync all detail data sources into main grid datasource for a single save
                     var data = cleanupData($scope.spreadDs._data); // Note: this is a workaround for the "Zero dollar appeaing on product selection then save" bug, which introduces a blank row into $scope.spreadDs._data (the culprit of the bug).
                     $scope.spreadDs.data(data);
@@ -1600,6 +1599,7 @@
                         }
                     }
 
+                    var validated_DC_Id = [];
                     for (var s = 0; s < sData.length; s++) {
                         if (sData[s].DC_ID === null || sData[s].DC_ID === 0) sData[s].DC_ID = $scope.uid--;
                         sData[s].DC_PARENT_ID = curPricingTableData[0].DC_ID;
@@ -1654,20 +1654,27 @@
                                 }
                             }
                         }
-
                         if (forceValidation) {
                             // check for rows that need to be translated
-                            if ((!!sData[s].PTR_USER_PRD && sData[s].PTR_USER_PRD !== "") && (!sData[s].PTR_SYS_PRD || sData[s].PTR_SYS_PRD === "")) {
-                                if (!sData[s]._behaviors) sData[s]._behaviors = {};
-                                if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
-                                if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
-                                sData[s]._behaviors.isError["PTR_USER_PRD"] = true;
-                                sData[s]._behaviors.validMsg["PTR_USER_PRD"] = "Product Translator needs to run.";
-                                needPrdVld.push({
-                                    "row": s + 1,
-                                    "DC_ID": sData[s].DC_ID,
-                                    "PTR_USER_PRD": sData[s].PTR_USER_PRD
-                                });
+                            // TODO:  merged cells are not updated with valid JSON, hence the work around to check for the unique DC_ID's
+                            var isValidatedRow = validated_DC_Id.filter(function (x) {
+                                return x == sData[s].DC_ID;
+                            }).length > 0;
+
+                            if (!isValidatedRow) {
+                                validated_DC_Id.push(sData[s].DC_ID);
+                                if ((!!sData[s].PTR_USER_PRD && sData[s].PTR_USER_PRD !== "") && (!sData[s].PTR_SYS_PRD || sData[s].PTR_SYS_PRD === "")) {
+                                    if (!sData[s]._behaviors) sData[s]._behaviors = {};
+                                    if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
+                                    if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
+                                    sData[s]._behaviors.isError["PTR_USER_PRD"] = true;
+                                    sData[s]._behaviors.validMsg["PTR_USER_PRD"] = "Product Translator needs to run.";
+                                    needPrdVld.push({
+                                        "row": s + 1,
+                                        "DC_ID": sData[s].DC_ID,
+                                        "PTR_USER_PRD": sData[s].PTR_USER_PRD
+                                    });
+                                }
                             }
                         }
                     }
@@ -1970,7 +1977,7 @@
                 var sheet = spreadsheet.activeSheet();
                 var rowsCount = sheet._rows._count;
                 var offset = 0;
-				
+
 
             	// Offset detects which data[i] are actions (ID_CHNAGE, etc.) rather than actual data for adding validations to each row
                 for (var i = 0; i < data.length; i++) { // NOTE: We can have multiple offsets because of vol-tier
@@ -1978,7 +1985,7 @@
                 		offset += 1;
                 	}
                 }
-				            	
+
                 var firstUntouchedRowFinder = 0; // when this == 1, then it will add the rest of the dropdown validation back in (in the for loop below) It can also turn into 3, which will do nothing
                 sheet.batch(function () {
                     var ptTemplate = $scope.templates.ModelTemplates.PRC_TBL_ROW[$scope.curPricingTable.OBJ_SET_TYPE_CD];
@@ -2003,8 +2010,8 @@
                     var isError = !!beh.isError && !!beh.isError[value.field];
                     var isRequired = !!beh.isRequired && !!beh.isRequired[value.field];
                     var msg = isError ? beh.validMsg[value.field] : (isRequired) ? "This field is required." : "UNKNOWN";
-					
-    				// TODO: In the future. Dropdowns do work, but their (red highlighting) validations do not allow us to ignore case-sensitivity. 
+
+    				// TODO: In the future. Dropdowns do work, but their (red highlighting) validations do not allow us to ignore case-sensitivity.
     				// If we can figure out how to ignore case-sesitive, we can put these dropdwons back in
                     // re-add dropdwwns back into existing rows (dataItem only contains existing rows) Note that re-adding all the validation to the entire column will show unneccessary red flags
                     //if (value.uiType === "DROPDOWN") {
@@ -2017,7 +2024,7 @@
             } else if (isTheFirstUntouchedRowIfEqualsToOne === 0) {
                 return 1;
             } else if (isTheFirstUntouchedRowIfEqualsToOne === 1) {
-            	//// TODO: In the future. Dropdowns do work, but their (red highlighting) validations do not allow us to ignore case-sensitivity. 
+            	//// TODO: In the future. Dropdowns do work, but their (red highlighting) validations do not allow us to ignore case-sensitivity.
             	//// If we can figure out how to ignore case-sesitive, we can put these dropdwons back in
                 //// HACK: This is so we get the dropdowns back on the untouched rows without red flags!
                 //// re-add dropdowns into untouched rows
@@ -2032,7 +2039,7 @@
             return 0;
         }
 
-    	//// TODO: In the future. Dropdowns do work, but their (red highlighting) validations do not allow us to ignore case-sensitivity. 
+    	//// TODO: In the future. Dropdowns do work, but their (red highlighting) validations do not allow us to ignore case-sensitivity.
     	//// If we can figure out how to ignore case-sesitive, we can put these dropdwons back in
         //function reapplyDropdowns(sheetRange, allowNulls, valueField) {
         //    sheetRange.validation({
@@ -2127,7 +2134,7 @@
                     	for (var i = 0; i < tierAtrbs.length; i++) {
                     		var tieredItem = tierAtrbs[i];
                     		lData[tieredItem] = lData[tieredItem + "_____10___" + t];
-                    		
+
                     		mapTieredWarnings(data[d], lData, tieredItem, tieredItem, t);
                     	}
 						// Disable all Start vols except the first
@@ -2142,7 +2149,7 @@
                     }
                 }
 
-                return newData;     
+                return newData;
             }
             return data;
         }
@@ -2266,7 +2273,7 @@
                     if (data.data[key][i].DC_ID !== undefined &&
                         data.data[key][i].DC_ID === collection.DC_ID &&
                         data.data[key][i].warningMessages.length > 0) {
-                        angular.forEach(data.data[key][i]._behaviors.validMsg,            
+                        angular.forEach(data.data[key][i]._behaviors.validMsg,
                             function (value, key) {
                                 collection._behaviors.validMsg[key] = value;
                                 collection._behaviors.isError[key] = value !== "";

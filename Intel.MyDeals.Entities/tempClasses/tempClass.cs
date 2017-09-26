@@ -2153,6 +2153,8 @@ public partial class DealTemplateDataGram
         [DataMember]
         public System.Boolean EXACT_MATCH { set; get; }
 
+        [DataMember]
+        public System.Boolean EXCLUDE { set; get; }
 
         [DataMember]
         public System.String FMLY_NM { set; get; }

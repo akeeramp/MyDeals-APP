@@ -34,7 +34,6 @@ function objsetService($http, dataService, logger, $q) {
         readTender: readTender,
         readTenderChildren: readTenderChildren,
 
-        validatePricingTableRow: validatePricingTableRow,
         deletePricingTableRow: deletePricingTableRow,
         unGroupPricingTableRow: unGroupPricingTableRow,
 
@@ -60,7 +59,7 @@ function objsetService($http, dataService, logger, $q) {
     }
     function readContract(id) {
     	// NOTE: Don't get angular-cached data b/c it needs latest data for the $state.go to work correctly in the contact.controller.js' createPricingTable()
-        return dataService.get(apiBaseContractUrl + 'GetUpperContract/' + id); 
+        return dataService.get(apiBaseContractUrl + 'GetUpperContract/' + id);
     }
     function updateContract(custId, contractId, ct) {
         return dataService.post(apiBaseContractUrl + 'UpdateContract/' + custId + '/' + contractId, ct);
@@ -112,9 +111,6 @@ function objsetService($http, dataService, logger, $q) {
 
     
 	// #### PRICING TABLE ROW ####
-    function validatePricingTableRow(data) {
-    	return dataService.post(apiBaseContractUrl + 'ValidatePricingTableRows/', data);
-    }
     function deletePricingTableRow(custId, contractId, ptrId) {
         return dataService.get(apiBasePricingTableUrl + 'DeletePricingTableRow/' + custId + '/' + contractId + '/' + ptrId);
     }
@@ -167,6 +163,6 @@ function objsetService($http, dataService, logger, $q) {
 
     function updateOverlappingDeals(PRICING_TABLES_ID, YCS2_OVERLAP_OVERRIDE) {
         return dataService.post(apiBasePricingTableUrl + 'UpdateOverlappingDeals/' + PRICING_TABLES_ID + "/" + YCS2_OVERLAP_OVERRIDE);
-    }   
+    }
 
 }

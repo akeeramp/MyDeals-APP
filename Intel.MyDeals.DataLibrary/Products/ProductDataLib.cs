@@ -404,7 +404,7 @@ namespace Intel.MyDeals.DataLibrary
         /// <param name="productsToMatch"></param>
         /// <param name="CUST_MBR_SID"></param>
         /// <returns></returns>
-        public List<PRD_TRANSLATION_RESULTS> GetProductDetails(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID)
+        public List<PRD_TRANSLATION_RESULTS> GetProductDetails(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID, string DEAL_TYPE)
         {
             OpLogPerf.Log("FindProductMatch");
             var ret = new List<PRD_TRANSLATION_RESULTS>();
@@ -416,7 +416,8 @@ namespace Intel.MyDeals.DataLibrary
 
                 Procs.dbo.PR_MYDL_TRANSLT_PRD_ENTRY cmd = new Procs.dbo.PR_MYDL_TRANSLT_PRD_ENTRY
                 {
-                    CUST_MBR_SID = CUST_MBR_SID,
+                    @CUST_MBR_SID = CUST_MBR_SID,
+                    @DEAL_TYPE = DEAL_TYPE,
                     tvt_HIER_VAL_NM = dt
                 };
 
@@ -468,6 +469,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_YCS2 = DB.GetReaderOrdinal(rdr, "YCS2");
                     int IDX_YCS2_END = DB.GetReaderOrdinal(rdr, "YCS2_END");
                     int IDX_YCS2_START = DB.GetReaderOrdinal(rdr, "YCS2_START");
+                    int IDX_EXCLUDE = DB.GetReaderOrdinal(rdr, "EXCLUDE");
 
                     while (rdr.Read())
                     {
@@ -491,6 +493,7 @@ namespace Intel.MyDeals.DataLibrary
                             DERIVED_USR_INPUT = (IDX_DERIVED_USR_INPUT < 0 || rdr.IsDBNull(IDX_DERIVED_USR_INPUT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DERIVED_USR_INPUT),
                             EPM_NM = (IDX_EPM_NM < 0 || rdr.IsDBNull(IDX_EPM_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_EPM_NM),
                             EXACT_MATCH = (IDX_EXACT_MATCH < 0 || rdr.IsDBNull(IDX_EXACT_MATCH)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_EXACT_MATCH),
+                            EXCLUDE = (IDX_EXCLUDE < 0 || rdr.IsDBNull(IDX_EXCLUDE)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_EXCLUDE),
                             FMLY_NM = (IDX_FMLY_NM < 0 || rdr.IsDBNull(IDX_FMLY_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_FMLY_NM),
                             FMLY_NM_MM = (IDX_FMLY_NM_MM < 0 || rdr.IsDBNull(IDX_FMLY_NM_MM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_FMLY_NM_MM),
                             GDM_BRND_NM = (IDX_GDM_BRND_NM < 0 || rdr.IsDBNull(IDX_GDM_BRND_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_GDM_BRND_NM),

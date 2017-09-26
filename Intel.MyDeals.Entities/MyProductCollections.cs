@@ -37,7 +37,7 @@ namespace Intel.MyDeals.Entities
         public System.String USR_INPUT { set; get; }
 
         [DataMember]
-        public System.String EXCLUDE { set; get; }
+        public System.Boolean EXCLUDE { set; get; }
 
         [DataMember]
         public System.String FILTER { set; get; }

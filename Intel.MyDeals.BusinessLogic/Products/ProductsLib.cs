@@ -231,7 +231,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <param name="products"></param>
         /// <returns></returns>
 
-        public ProductLookup TranslateProducts(List<ProductEntryAttribute> prodNames, int CUST_MBR_SID)
+        public ProductLookup TranslateProducts(List<ProductEntryAttribute> prodNames, int CUST_MBR_SID, string DEAL_TYPE)
         {
             //var prodNames = new List<string>();
             Dictionary<string, string> mediaSubverticalResult = GetVerticalandMedia();
@@ -239,10 +239,10 @@ namespace Intel.MyDeals.BusinessLogic
             var productsTodb = new List<ProductEntryAttribute>();
             var productLookup = new ProductLookup
             {
-                ProdctTransformResults = new Dictionary<string, List<string>>(),
+                ProdctTransformResults = new Dictionary<string, Dictionary<string, List<string>>>(),
                 DuplicateProducts = new Dictionary<string, Dictionary<string, List<PRD_TRANSLATION_RESULTS>>>(),
                 ValidProducts = new Dictionary<string, Dictionary<string, List<PRD_TRANSLATION_RESULTS>>>(),
-                InValidProducts = new Dictionary<string, List<string>>()
+                InValidProducts = new Dictionary<string, Dictionary<string, List<string>>>()
             };
 
             //  Check if any product has alias mapping, this will call cache
@@ -326,12 +326,24 @@ namespace Intel.MyDeals.BusinessLogic
                                       }).Distinct();
 
                 productsTodb.AddRange(productAliases);
-                productLookup.ProdctTransformResults[userProduct.ROW_NUMBER.ToString()] = productAliases.Select(x => x.ROW_NUMBER.ToString()).ToList(); // Adding ROW_NUMBER as a key
-                productLookup.ProdctTransformResults[userProduct.ROW_NUMBER.ToString()] = productAliases.Select(x => x.USR_INPUT).ToList(); // Adding ROW_NUMBER as a key
+
+                if (productLookup.ProdctTransformResults.ContainsKey(userProduct.ROW_NUMBER.ToString()))
+                {
+                    productAliases.ToList().ForEach(d =>
+                    productLookup.ProdctTransformResults[userProduct.ROW_NUMBER.ToString()][d.EXCLUDE ? "E" : "I"].Add(d.USR_INPUT));
+                }
+                else
+                {
+                    var records = new Dictionary<string, List<string>>();
+                    records.Add("E", new List<string>());
+                    records.Add("I", new List<string>());
+                    productAliases.ToList().ForEach(d => records[d.EXCLUDE ? "E" : "I"].Add(d.USR_INPUT));
+                    productLookup.ProdctTransformResults[userProduct.ROW_NUMBER.ToString()] = records;
+                }
             }
 
             //  Product match master list
-            var productMatchResults = GetProductDetails(productsTodb, CUST_MBR_SID);
+            var productMatchResults = GetProductDetails(productsTodb, CUST_MBR_SID, DEAL_TYPE);
 
             // Get duplicate and Valid Products
             ExtractValidandDuplicateProducts(productLookup, productMatchResults);
@@ -437,94 +449,136 @@ namespace Intel.MyDeals.BusinessLogic
         /// <param name="productMatchResults">Master Product match list</param>
         private static void ExtractValidandDuplicateProducts(ProductLookup productLookup, List<PRD_TRANSLATION_RESULTS> productMatchResultsMaster)
         {
-            foreach (var userProduct in productLookup.ProdctTransformResults)
+            foreach (var rowNumber in productLookup.ProdctTransformResults)
             {
-                // Step 1: Get matching products for a particular row from master match list
-                var tranlatedProducts = productLookup.ProdctTransformResults[userProduct.Key];
-
-                var productMatchResults = (from p in productMatchResultsMaster
-                                           where p.ROW_NM.ToString() == userProduct.Key
-                                           select p).ToList();
-
-                //Step 2.1: Checking for Conflict upto Family Name
-                var isConflict = (from p in productMatchResults
-                                  join t in tranlatedProducts
-                                  on p.USR_INPUT.ToLower() equals t.ToLower()
-                                  group p by new
-                                  {
-                                      p.ROW_NM,
-                                      p.USR_INPUT,
-                                      p.DEAL_PRD_TYPE,
-                                      p.PRD_CAT_NM,
-                                      p.BRND_NM,
-                                      p.FMLY_NM
-                                  }
-
-                                     into d
-                                  select d.Key).ToList();
-
-                // Step 2.2: Find duplicate match products
-                var duplicateProds = from p in isConflict
-                                     group p by p.USR_INPUT
-                                     into d
-                                     where d.Count() > 1
-                                     select d.Key;
-
-                // Step 2.3: Get the products which are not matched
-                var productWithoutExactMatch = (from p in productMatchResults
-                                                join t in tranlatedProducts
-                                                on p.USR_INPUT.ToLower() equals t.ToLower()
-                                                where !p.EXACT_MATCH
-                                                select t).Distinct();
-
-                // Get distinct user inputs where user interaction needed from UI, put them in Duplicate product bucket list
-                duplicateProds = duplicateProds.Union(productWithoutExactMatch).Distinct();
-
-                // If any duplicates found extract them
-                if (duplicateProds.Any())
+                foreach (var typeOfProduct in productLookup.ProdctTransformResults[rowNumber.Key])
                 {
-                    var duplicateRecords = productMatchResults.FindAll(p => duplicateProds.Contains(p.USR_INPUT));
+                    // Step 1: Get matching products for a particular row from master match list
+                    var tranlatedProducts = productLookup.ProdctTransformResults[rowNumber.Key][typeOfProduct.Key];
 
-                    var records = new Dictionary<string, List<PRD_TRANSLATION_RESULTS>>();
+                    var productMatchResults = (from p in productMatchResultsMaster
+                                               where p.ROW_NM.ToString() == rowNumber.Key
+                                                     && p.EXCLUDE == (typeOfProduct.Key == "E")
+                                               select p).ToList();
 
-                    duplicateProds.ToList().ForEach(d => records[d] = new List<PRD_TRANSLATION_RESULTS>());
-
-                    duplicateRecords.ForEach(r => records[r.USR_INPUT].Add(r));
-
-                    productLookup.DuplicateProducts[userProduct.Key] = records;
-                }
-
-                // Step 3: Find the Valid products
-
-                //productLookup.ValidProducts[userProduct.Key] = new List<PRD_LOOKUP_RESULTS>();
-
-                var validProducts = productMatchResults.Where(p => !duplicateProds.Contains(p.USR_INPUT)
-                                                            && tranlatedProducts.Any(t => t.Equals(p.USR_INPUT, StringComparison.InvariantCultureIgnoreCase)));
-
-                var isConflictValid = from p in validProducts
-                                      group p by p.USR_INPUT
+                    //Step 2.1: Checking for Conflict upto Family Name
+                    var isConflict = (from p in productMatchResults
+                                      join t in tranlatedProducts
+                                      on p.USR_INPUT.ToLower() equals t.ToLower()
+                                      group p by new
+                                      {
+                                          p.ROW_NM,
+                                          p.USR_INPUT,
+                                          p.DEAL_PRD_TYPE,
+                                          p.PRD_CAT_NM,
+                                          p.BRND_NM,
+                                          p.FMLY_NM
+                                      }
                                         into d
-                                      select d.Key;
-                if (isConflictValid.Any())
-                {
-                    var validProduct = productMatchResults.FindAll(p => isConflictValid.Contains(p.USR_INPUT));
-                    var validRecords = new Dictionary<string, List<PRD_TRANSLATION_RESULTS>>();
-                    isConflictValid.ToList().ForEach(d => validRecords[d] = new List<PRD_TRANSLATION_RESULTS>());
-                    validProduct.ForEach(r => validRecords[r.USR_INPUT].Add(r));
-                    productLookup.ValidProducts[userProduct.Key] = validRecords;
+                                      select d.Key).ToList();
+
+                    // Step 2.2: Find duplicate match products
+                    var duplicateProds = from p in isConflict
+                                         group p by p.USR_INPUT
+                                            into d
+                                         where d.Count() > 1
+                                         select d.Key;
+
+                    // Step 2.3: Get the products which are not matched
+                    var productWithoutExactMatch = (from p in productMatchResults
+                                                    join t in tranlatedProducts
+                                                    on p.USR_INPUT.ToLower() equals t.ToLower()
+                                                    where !p.EXACT_MATCH
+                                                    select t).Distinct();
+
+                    // Get distinct user inputs where user interaction needed from UI, put them in Duplicate product bucket list
+                    duplicateProds = duplicateProds.Union(productWithoutExactMatch).Distinct();
+
+                    // If any duplicates found extract them
+                    if (duplicateProds.Any())
+                    {
+                        var duplicateRecords = productMatchResults.FindAll(p => duplicateProds.Contains(p.USR_INPUT));
+                        if (productLookup.DuplicateProducts.ContainsKey(rowNumber.Key))
+                        {
+                            foreach (var d in duplicateRecords)
+                            {
+                                if (productLookup.DuplicateProducts[rowNumber.Key].ContainsKey(d.USR_INPUT))
+                                {
+                                    productLookup.DuplicateProducts[rowNumber.Key][d.USR_INPUT].Add(d);
+                                }
+                                else
+                                {
+                                    productLookup.DuplicateProducts[rowNumber.Key].Add(d.USR_INPUT, new List<PRD_TRANSLATION_RESULTS>() { d });
+                                }
+                            }
+                        }
+                        else
+                        {
+                            var records = new Dictionary<string, List<PRD_TRANSLATION_RESULTS>>();
+                            duplicateProds.ToList().ForEach(d => records[d] = new List<PRD_TRANSLATION_RESULTS>());
+                            duplicateRecords.ForEach(r => records[r.USR_INPUT].Add(r));
+                            productLookup.DuplicateProducts[rowNumber.Key] = records;
+                        }
+                    }
+
+                    // Step 3: Find the Valid products
+                    var validProducts = productMatchResults.Where(p => !duplicateProds.Contains(p.USR_INPUT)
+                                                                && tranlatedProducts.Any(t => t.Equals(p.USR_INPUT, StringComparison.InvariantCultureIgnoreCase))
+                                                                );
+                    var isConflictValid = from p in validProducts
+                                          group p by p.USR_INPUT
+                                            into d
+                                          select d.Key;
+
+                    if (isConflictValid.Any())
+                    {
+                        var validProduct = productMatchResults.FindAll(p => isConflictValid.Contains(p.USR_INPUT));
+                        if (productLookup.ValidProducts.ContainsKey(rowNumber.Key))
+                        {
+                            foreach (var v in validProduct)
+                            {
+                                if (productLookup.ValidProducts[rowNumber.Key].ContainsKey(v.USR_INPUT))
+                                {
+                                    productLookup.ValidProducts[rowNumber.Key][v.USR_INPUT].Add(v);
+                                }
+                                else
+                                {
+                                    productLookup.ValidProducts[rowNumber.Key].Add(v.USR_INPUT, new List<PRD_TRANSLATION_RESULTS>() { v });
+                                }
+                            }
+                        }
+                        else
+                        {
+                            var validRecords = new Dictionary<string, List<PRD_TRANSLATION_RESULTS>>();
+                            isConflictValid.ToList().ForEach(d => validRecords[d] = new List<PRD_TRANSLATION_RESULTS>());
+                            validProduct.ForEach(r => validRecords[r.USR_INPUT].Add(r));
+                            productLookup.ValidProducts[rowNumber.Key] = validRecords;
+                        }
+                    }
+
+                    // Step 4: Find InValid products, products which are present in master match result and not present in duplicate products and valid products
+                    var invalidProducts = tranlatedProducts.Where(t => !duplicateProds.Contains(t) &&
+                                                                    !validProducts.Any(v => v.USR_INPUT.Equals(t, StringComparison.InvariantCultureIgnoreCase))).ToList();
+
+                    if (productLookup.InValidProducts.ContainsKey(rowNumber.Key))
+                    {
+                        productLookup.InValidProducts[rowNumber.Key][typeOfProduct.Key].AddRange(invalidProducts.ToList());
+                    }
+                    else
+                    {
+                        var records = new Dictionary<string, List<string>>();
+                        records.Add("E", new List<string>());
+                        records.Add("I", new List<string>());
+                        records[typeOfProduct.Key].AddRange(invalidProducts);
+                        productLookup.InValidProducts[rowNumber.Key] = records;
+                    }
                 }
-
-                productLookup.InValidProducts[userProduct.Key] = new List<string>();
-
-                // Step 4: Find InValid products, products which are present in master match result and not present in duplicate products and valid products
-                productLookup.InValidProducts[userProduct.Key] = tranlatedProducts.Where(t => !duplicateProds.Contains(t) &&
-                                                                !validProducts.Any(v => v.USR_INPUT.Equals(t, StringComparison.InvariantCultureIgnoreCase))).ToList();
             }
         }
 
-        public List<PRD_TRANSLATION_RESULTS> GetProductDetails(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID)
+        public List<PRD_TRANSLATION_RESULTS> GetProductDetails(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID, string DEAL_TYPE)
         {
-            return _productDataLib.GetProductDetails(productsToMatch, CUST_MBR_SID);
+            return _productDataLib.GetProductDetails(productsToMatch, CUST_MBR_SID, DEAL_TYPE);
         }
 
         /// <summary>
