@@ -285,7 +285,7 @@
             }
 
             $scope.updateCorpDivision = function (custId) {
-                debugger;
+                //debugger;
                 if (custId === "" || custId == null) return;
                 dataService.get("/api/Customers/GetMyCustomerDivsByCustNmSid/" + custId).then(function (response) {
                     // only show if more than 1 result
