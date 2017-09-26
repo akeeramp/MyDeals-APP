@@ -90,6 +90,32 @@ function dealTools($timeout, logger, dataService) {
                 }
             ];
 
+            $scope.deleteAttachmentActions = [
+                {
+                    text: 'Cancel',
+                    action: function () { }
+                },
+                {
+                    text: 'Yes, Delete',
+                    primary: true,
+                    action: function () {
+                        dataService.post("/api/FileAttachments/Delete/" + deleteAttachmentParams.custMbrSid + "/" + deleteAttachmentParams.objTypeSid + "/" + deleteAttachmentParams.objSid + "/" + deleteAttachmentParams.fileDataSid + "/WIP_DEAL")
+                            .then(function (response) {
+                                logger.success("Successfully deleted the attachment.", null, "Delete successful");
+
+                                // Refresh the Existing Attachments grid to reflect the newly deleted attachment.
+                                $scope.attachmentsGridOptions.dataSource.transport.read($scope.optionCallback);
+                            },
+                            function (response) {
+                                logger.error("Failed to delete the attachment.", null, "Delete failed");
+
+                                // Refresh the Existing Attachments grid.  There should be no changes, but just incase.
+                                $scope.attachmentsGridOptions.dataSource.transport.read($scope.optionCallback);
+                            });
+                    }
+                }
+            ];
+
             $scope.holdActions = [
                 {
                     text: 'Cancel',
@@ -125,7 +151,7 @@ function dealTools($timeout, logger, dataService) {
                 this.$angular_scope.attachmentsDlgShown = true;
             }
 
-            $scope.fileUploadOptions = { saveUrl: '/FileUpload/save', autoUpload: false };
+            $scope.fileUploadOptions = { saveUrl: '/FileAttachments/Save', autoUpload: false };
 
             $scope.filePostAddParams = function (e) {
                 e.data = {
@@ -140,7 +166,7 @@ function dealTools($timeout, logger, dataService) {
             }
 
             $scope.onComplete = function (e) {
-                // Refresh the Existing Attachments grid to reflect the newly uploaded file(s).
+                // Refresh the Existing Attachments grid to reflect the newly uploaded attachments(s).
                 $scope.attachmentsGridOptions.dataSource.transport.read($scope.optionCallback);
             }
 
@@ -159,6 +185,12 @@ function dealTools($timeout, logger, dataService) {
             $scope.onFileRemove = function (e) {
             }
 
+            var deleteAttachmentParams;
+            $scope.deleteAttachment = function (custMbrSid, objTypeSid, objSid, fileDataSid) {
+                deleteAttachmentParams = { custMbrSid: custMbrSid, objTypeSid: objTypeSid, objSid: objSid, fileDataSid: fileDataSid };
+                $scope.deleteAttachmentDialog.open();
+            }
+
             $scope.attachmentCount = 1; // Can't be 0 or initialization won't happen.
             $scope.initComplete = false;
 
@@ -166,7 +198,7 @@ function dealTools($timeout, logger, dataService) {
                 transport: {
                     read: function (e) {
                         $scope.optionCallback = e;
-                        dataService.get("/api/Files/GetFileAttachments/" +
+                        dataService.get("/api/FileAttachments/Get/" +
                             $scope.dataItem.CUST_MBR_SID +
                             "/" +
                             5 + // WIP_DEAL
@@ -180,7 +212,7 @@ function dealTools($timeout, logger, dataService) {
                                 $scope.initComplete = true;
                             },
                             function (response) {
-                                logger.error("Failed to get attachments.", response, response.statusText);
+                                logger.error("Failed to get the attachments.", response, response.statusText);
                                 $scope.attachmentCount = -1; // Causes the 'Failed to retrieve attachments!' message to be displayed.
                                 $scope.initComplete = true;
                             });
@@ -214,11 +246,17 @@ function dealTools($timeout, logger, dataService) {
                 columns: [
                     { field: "ATTCH_SID", title: "ID", hidden: true },
                     {
+                        field: "FILE_DATA_SID",
+                        title: "&nbsp;",
+                        template: "<a class='delete-attach-icon' ng-click='deleteAttachment(#= CUST_MBR_SID #, #= OBJ_TYPE_SID #, #= OBJ_SID #, #= FILE_DATA_SID #)'><i class='intelicon-trash-outlined' title='Click to delete this attachment'></i></a>",
+                        width: "10%"
+                    },
+                    {
                         field: "FILE_NM",
                         title: "File Name",
                         //IE doesn't support download tag on anchor, added target='_blank' as a work around
-                        template: "<a download target='_blank' href='/api/Files/OpenFileAttachment/#: FILE_DATA_SID #/'>#: FILE_NM #</a>",
-                        width: "50%"
+                        template: "<a download target='_blank' href='/api/FileAttachments/Open/#: FILE_DATA_SID #/'>#: FILE_NM #</a>",
+                        width: "40%"
                     },
                     {
                         field: "CHG_EMP_WWID",

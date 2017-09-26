@@ -7,31 +7,26 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Web;
 using System.Web.Http;
 
 namespace Intel.MyDeals.Controllers.API
 {
-    [RoutePrefix("api/Files")]
-    public class FilesController : BaseApiController
+    [RoutePrefix("api/FileAttachments")]
+    public class FileAttachmentsController : BaseApiController
     {
         private readonly IFilesLib _filesLib;
 
-        public FilesController(IFilesLib _filesLib)
+        public FileAttachmentsController(IFilesLib _filesLib)
         {
             this._filesLib = _filesLib;
         }
 
         /// <summary>
-        /// Get file attachment list
+        /// Get the list of file attachments
         /// </summary>
-        /// <param name="custMbrSid"></param>
-        /// <param name="objTypeSid"></param>
-        /// <param name="objSid"></param>
-        /// <param name="includeGroup"></param>
-        /// <returns></returns>
-        [Route("GetFileAttachments/{custMbrSid}/{objTypeSid}/{objSid}/{includeGroup}")]
-        public List<FileAttachment> GetFileAttachments(int custMbrSid, int objTypeSid,
-            int objSid, string includeGroup)
+        [Route("Get/{custMbrSid}/{objTypeSid}/{objSid}/{includeGroup}")]
+        public List<FileAttachment> Get(int custMbrSid, int objTypeSid, int objSid, string includeGroup)
         {
             return SafeExecutor(() => _filesLib.GetFileAttachments(custMbrSid, objTypeSid,
                 objSid, includeGroup)
@@ -40,16 +35,11 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         /// <summary>
-        /// Get file attachment data
+        /// Get the contents of the specified file attachment
         /// </summary>
-        /// <param name="custMbrSid"></param>
-        /// <param name="objTypeSid"></param>
-        /// <param name="objSid"></param>
-        /// <param name="includeGroup"></param>
-        /// <returns></returns>
         [HttpGet]
-        [Route("OpenFileAttachment/{fileId}")]
-        public HttpResponseMessage OpenFileAttachment(int fileId)
+        [Route("Open/{fileId}")]
+        public HttpResponseMessage Open(int fileId)
         {
             byte[] fileBodyFinalBytes = null;
 
@@ -86,6 +76,17 @@ namespace Intel.MyDeals.Controllers.API
             result.Content.Headers.Add("Content-Disposition", String.Format("attachment;filename={0}", fName));
 
             return result;
+        }
+
+        /// <summary>
+        /// Delete the specified file attachment
+        /// </summary>
+        [HttpPost]
+        [Route("Delete/{custMbrSid}/{objTypeSid}/{objSid}/{fileDataSid}/{includeGroup}")]
+        public void Delete(int custMbrSid, int objTypeSid, int objSid, int fileDataSid, string includeGroup)
+        {
+            if (!_filesLib.DeleteFileAttachment(custMbrSid, objTypeSid, objSid, fileDataSid, includeGroup))
+                throw new HttpException(500, "Failed to delete attachment.");
         }
     }
 }

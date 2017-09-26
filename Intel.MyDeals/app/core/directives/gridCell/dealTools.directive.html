@@ -130,6 +130,10 @@
     </table>
 </div>
 
+<div class="promptUserDialog" kendo-dialog="deleteAttachmentDialog" k-visible="false" k-modal="true" k-actions="deleteAttachmentActions" k-width="400" k-height="250">
+    <h4>Delete this file attachment?</h4>
+</div>
+
 <div class="promptUserDialog" kendo-dialog="deleteDialog" k-visible="false" k-modal="true" k-actions="deleteActions" k-width="400" k-height="250">
     <h4>Would you like to delete the deal?</h4>
     <p>
@@ -303,4 +307,14 @@
             font-weight: bold;
             color: #C4D600;
         }
+
+    .delete-attach-icon {
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+        .delete-attach-icon:hover {
+            text-decoration: none;
+        }
+
 </style>

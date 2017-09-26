@@ -220,7 +220,7 @@
     <Compile Include="Controllers\API\DashboardController.cs" />
     <Compile Include="Controllers\API\EcapTrackerController.cs" />
     <Compile Include="Controllers\API\DropdownController.cs" />
-    <Compile Include="Controllers\API\FilesController.cs" />
+    <Compile Include="Controllers\API\FileAttachmentsController.cs" />
     <Compile Include="Controllers\API\ProductCostTestController.cs" />
     <Compile Include="Controllers\API\ProductsCategoriesController.cs" />
     <Compile Include="Controllers\API\RulesController.cs" />
@@ -250,7 +250,7 @@
     <Compile Include="Controllers\DocsController.cs" />
     <Compile Include="Controllers\ContactController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
-    <Compile Include="Controllers\FileUploadController.cs" />
+    <Compile Include="Controllers\FileAttachmentsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OthersController.cs" />
     <Compile Include="Controllers\TestCasesController.cs" />

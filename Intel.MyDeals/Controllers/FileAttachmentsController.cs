@@ -9,26 +9,21 @@ using System.Web.Mvc;
 
 namespace Intel.MyDeals.Controllers
 {
-    public class FileUploadController : Controller
+    public class FileAttachmentsController : Controller
     {
         private const int CompressionFactor = 85;  // 10% - value we must be under to save compressed
-        private const int MaxFileSize = 10485760;
 
         private readonly IFilesLib _filesLib;
 
-        public FileUploadController(IFilesLib _filesLib)
+        public FileAttachmentsController(IFilesLib _filesLib)
         {
             this._filesLib = _filesLib;
         }
 
         /// <summary>
-        /// Save Files
+        /// Save the specified files as attachments
         /// </summary>
-        /// <param name="files"></param>
-        /// <param name="dealId"></param>
-        /// <returns></returns>
-        public ActionResult Save(IEnumerable<HttpPostedFileBase> files,
-            int custMbrSid, int objSid, int objTypeSid)
+        public ActionResult Save(IEnumerable<HttpPostedFileBase> files, int custMbrSid, int objSid, int objTypeSid)
         {
             string response = string.Empty;
             var fileAttachment = new FileAttachment

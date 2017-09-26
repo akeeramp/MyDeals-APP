@@ -550,7 +550,7 @@
         var hasUnSavedFiles = false;
         var hasFiles = false;
 
-        $scope.fileUploadOptions = { saveUrl: '/FileUpload/save', autoUpload: false };
+        $scope.fileUploadOptions = { saveUrl: '/FileAttachments/Save', autoUpload: false };
 
         $scope.filePostAddParams = function (e) {
             e.data = {
@@ -640,7 +640,7 @@
                     if (!$scope.isNewContract) {
                         logger.info("Loading contract attachments...");
                         // TODO: Read only when hasFiles is true
-                        dataService.get("/api/Files/GetFileAttachments/" +
+                        dataService.get("/api/FileAttachments/Get/" +
                                 $scope.contractData.CUST_MBR_SID +
                                 "/" +
                                 1 +
@@ -698,7 +698,7 @@
                     field: "FILE_NM",
                     title: "File Name",
                     template:
-                        "<a download target='_blank' href='/api/Files/OpenFileAttachment/#: FILE_DATA_SID #/'>#: FILE_NM #</a>"
+                        "<a download target='_blank' href='/api/FileAttachments/Open/#: FILE_DATA_SID #/'>#: FILE_NM #</a>"
                 },
                 { field: "CHG_EMP_WWID", title: "Added By", width: "25%" },
                 {

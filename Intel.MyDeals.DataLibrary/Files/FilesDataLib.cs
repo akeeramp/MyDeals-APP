@@ -13,61 +13,45 @@ namespace Intel.MyDeals.DataLibrary
     public class FilesDataLib : IFilesDataLib
     {
         /// <summary>
-        /// Get file Attachment data by file id
+        /// Save the specified files as attachments
         /// </summary>
-        /// <param name="fileId"></param>
-        /// <returns></returns>
-        public FileAttachmentData GetFileAttachmentData(int fileId)
+        public bool SaveFileAttachment(FileAttachment fileAtatchment, byte[] fileData)
         {
-            OpLogPerf.Log("GetFileAttachmentData");
-            var ret = new List<FileAttachmentData>();
+            OpLogPerf.Log("SaveFileAttachment");
+            var ret = false;
             try
             {
-                var cmd = new Procs.dbo.PR_MYDL_GET_ATTCH_DATA
+                var cmd = new Procs.dbo.PR_MYDL_SAVE_ATTCH_DATA
                 {
-                    FILE_DATA_SID = fileId
+                    EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID,
+                    CUST_MBR_SID = fileAtatchment.CUST_MBR_SID,
+                    OBJ_SID = fileAtatchment.OBJ_SID,
+                    OBJ_TYPE_SID = fileAtatchment.OBJ_TYPE_SID,
+                    FILE_NM = fileAtatchment.FILE_NM,
+                    CNTN_TYPE = fileAtatchment.CNTN_TYPE,
+                    SZ_ORIG = fileAtatchment.SZ_ORIG,
+                    SZ_COMPRS = fileAtatchment.SZ_COMPRS,
+                    IS_COMPRS = fileAtatchment.IS_COMPRS,
+                    FILE_DATA = fileData
                 };
 
-                using (var rdr = DataAccess.ExecuteReader(cmd))
-                {
-                    int IDX_CNTN_TYPE = DB.GetReaderOrdinal(rdr, "CNTN_TYPE");
-                    int IDX_FILE_DATA = DB.GetReaderOrdinal(rdr, "FILE_DATA");
-                    int IDX_FILE_NM = DB.GetReaderOrdinal(rdr, "FILE_NM");
-                    int IDX_IS_COMPRS = DB.GetReaderOrdinal(rdr, "IS_COMPRS");
-                    int IDX_SZ_ORIG = DB.GetReaderOrdinal(rdr, "SZ_ORIG");
-
-                    while (rdr.Read())
-                    {
-                        ret.Add(new FileAttachmentData
-                        {
-                            CNTN_TYPE = (IDX_CNTN_TYPE < 0 || rdr.IsDBNull(IDX_CNTN_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CNTN_TYPE),
-                            FILE_DATA = (IDX_FILE_DATA < 0 || rdr.IsDBNull(IDX_FILE_DATA)) ? default(System.Byte[]) : rdr.GetFieldValue<System.Byte[]>(IDX_FILE_DATA),
-                            FILE_NM = (IDX_FILE_NM < 0 || rdr.IsDBNull(IDX_FILE_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_FILE_NM),
-                            IS_COMPRS = (IDX_IS_COMPRS < 0 || rdr.IsDBNull(IDX_IS_COMPRS)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_IS_COMPRS),
-                            SZ_ORIG = (IDX_SZ_ORIG < 0 || rdr.IsDBNull(IDX_SZ_ORIG)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_SZ_ORIG)
-                        });
-                    } // while
-                }
+                DataAccess.ExecuteDataSet(cmd);
+                ret = true;
             }
             catch (Exception ex)
             {
                 OpLogPerf.Log(ex);
                 throw;
             }
-            return ret.FirstOrDefault();
+            return ret;
         }
 
         /// <summary>
-        /// Get file list attached to a obj type, obj type sid and customer
+        /// Get the list of file attachments
         /// </summary>
-        /// <param name="custMbrSid"></param>
-        /// <param name="objTypeSid"></param>
-        /// <param name="objSid"></param>
-        /// <param name="includeGroup"></param>
-        /// <returns></returns>
         public List<FileAttachment> GetFileAttachments(int custMbrSid, int objTypeSid, int objSid, string includeGroup)
         {
-            OpLogPerf.Log("GetFileAttachmentData");
+            OpLogPerf.Log("GetFileAttachments");
             var ret = new List<FileAttachment>();
             try
             {
@@ -127,72 +111,65 @@ namespace Intel.MyDeals.DataLibrary
         }
 
         /// <summary>
-        /// Delete file attachment
+        /// Get the contents of the specified file attachment
         /// </summary>
-        /// <param name="custMbrSid"></param>
-        /// <param name="objTypeSid"></param>
-        /// <param name="objSid"></param>
-        /// <param name="includeGroup"></param>
-        /// <param name="fileId"></param>
-        /// <returns></returns>
-        public bool DeleteFileAttachment(int custMbrSid, int objTypeSid,
-            int objSid, string includeGroup, int fileId)
+        public FileAttachmentData GetFileAttachmentData(int fileId)
         {
-            OpLogPerf.Log("DeleteFileAttachment");
-            var ret = false;
+            OpLogPerf.Log("GetFileAttachmentData");
+            var ret = new List<FileAttachmentData>();
             try
             {
-                // TODO change the proc name after confirmation from Doug
-                var cmd = new Procs.dbo.PR_MYDL_DELETE_ATTCH_DATA
+                var cmd = new Procs.dbo.PR_MYDL_GET_ATTCH_DATA
                 {
-                    CUST_MBR_SID = custMbrSid,
-                    OBJ_TYPE_SID = objTypeSid,
-                    OBJ_SID = objSid,
-                    INCL_GRP = includeGroup,
-                    //FILE_DATA_SID = fileId
+                    FILE_DATA_SID = fileId
                 };
 
-                DataAccess.ExecuteDataSet(cmd);
-                ret = true;
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    int IDX_CNTN_TYPE = DB.GetReaderOrdinal(rdr, "CNTN_TYPE");
+                    int IDX_FILE_DATA = DB.GetReaderOrdinal(rdr, "FILE_DATA");
+                    int IDX_FILE_NM = DB.GetReaderOrdinal(rdr, "FILE_NM");
+                    int IDX_IS_COMPRS = DB.GetReaderOrdinal(rdr, "IS_COMPRS");
+                    int IDX_SZ_ORIG = DB.GetReaderOrdinal(rdr, "SZ_ORIG");
+
+                    while (rdr.Read())
+                    {
+                        ret.Add(new FileAttachmentData
+                        {
+                            CNTN_TYPE = (IDX_CNTN_TYPE < 0 || rdr.IsDBNull(IDX_CNTN_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CNTN_TYPE),
+                            FILE_DATA = (IDX_FILE_DATA < 0 || rdr.IsDBNull(IDX_FILE_DATA)) ? default(System.Byte[]) : rdr.GetFieldValue<System.Byte[]>(IDX_FILE_DATA),
+                            FILE_NM = (IDX_FILE_NM < 0 || rdr.IsDBNull(IDX_FILE_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_FILE_NM),
+                            IS_COMPRS = (IDX_IS_COMPRS < 0 || rdr.IsDBNull(IDX_IS_COMPRS)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_IS_COMPRS),
+                            SZ_ORIG = (IDX_SZ_ORIG < 0 || rdr.IsDBNull(IDX_SZ_ORIG)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_SZ_ORIG)
+                        });
+                    } // while
+                }
             }
             catch (Exception ex)
             {
                 OpLogPerf.Log(ex);
                 throw;
             }
-            return ret;
+            return ret.FirstOrDefault();
         }
 
         /// <summary>
-        /// Save file attachments
+        /// Delete the specified file attachment
         /// </summary>
-        /// <param name="customerMemberSid">Customer Member Sid</param>
-        /// <param name="objSid">Obj Sid</param>
-        /// <param name="objTypeSid">Obj Type Sid</param>
-        /// <param name="contentType">Content type</param>
-        /// <param name="fileName">File name</param>
-        /// <param name="originalSize">Original Size</param>
-        /// <param name="compressedSize">Compressed size</param>
-        /// <param name="isCompressed">Is compressed</param>
-        /// <param name="fileData">File data in byte array</param>
-        public bool SaveFileAttachment(FileAttachment fileAtatchment, byte[] fileData)
+        public bool DeleteFileAttachment(int custMbrSid, int objTypeSid, int objSid, int fileDataSid, string includeGroup)
         {
-            OpLogPerf.Log("SaveFileAttachment");
+            OpLogPerf.Log("DeleteFileAttachment");
             var ret = false;
             try
             {
-                var cmd = new Procs.dbo.PR_MYDL_SAVE_ATTCH_DATA
+                // TODO change the proc name after confirmation from Doug
+                var cmd = new Procs.dbo.PR_MYDL_DELETE_ATTCH_DATA_1
                 {
-                    EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID,
-                    CUST_MBR_SID = fileAtatchment.CUST_MBR_SID,
-                    OBJ_SID = fileAtatchment.OBJ_SID,
-                    OBJ_TYPE_SID = fileAtatchment.OBJ_TYPE_SID,
-                    FILE_NM = fileAtatchment.FILE_NM,
-                    CNTN_TYPE = fileAtatchment.CNTN_TYPE,
-                    SZ_ORIG = fileAtatchment.SZ_ORIG,
-                    SZ_COMPRS = fileAtatchment.SZ_COMPRS,
-                    IS_COMPRS = fileAtatchment.IS_COMPRS,
-                    FILE_DATA = fileData
+                    CUST_MBR_SID = custMbrSid,
+                    OBJ_TYPE_SID = objTypeSid,
+                    OBJ_SID = objSid,
+                    FILE_DATA_SID = fileDataSid,
+                    INCL_GRP = includeGroup
                 };
 
                 DataAccess.ExecuteDataSet(cmd);

@@ -6,37 +6,23 @@ namespace Intel.MyDeals.IBusinessLogic
     public interface IFilesLib
     {
         /// <summary>
-        /// Get file attachment list
+        /// Save the specified files as attachments
         /// </summary>
-        /// <param name="custMbrSid"></param>
-        /// <param name="objTypeSid"></param>
-        /// <param name="objSid"></param>
-        /// <param name="includeGroup"></param>
-        /// <returns></returns>
+        bool SaveFileAttachment(FileAttachment fileAtatchment, byte[] fileData);
+
+        /// <summary>
+        /// Get the list of file attachments
+        /// </summary>
         List<FileAttachment> GetFileAttachments(int custMbrSid, int objTypeSid, int objSid, string includeGroup);
 
         /// <summary>
-        /// Get file list attached to a obj type, obj type sid and customer
+        /// Get the contents of the specified file attachment
         /// </summary>
-        /// <param name="custMbrSid"></param>
-        /// <param name="objTypeSid"></param>
-        /// <param name="objSid"></param>
-        /// <param name="includeGroup"></param>
-        /// <returns></returns>
         FileAttachmentData GetFileAttachmentData(int fileId);
 
         /// <summary>
-        /// Save file attachments
+        /// Delete the specified file attachment
         /// </summary>
-        /// <param name="customerMemberSid">Customer Member Sid</param>
-        /// <param name="objSid">Obj Sid</param>
-        /// <param name="objTypeSid">Obj Type Sid</param>
-        /// <param name="contentType">Content type</param>
-        /// <param name="fileName">File name</param>
-        /// <param name="originalSize">Original Size</param>
-        /// <param name="compressedSize">Compressed size</param>
-        /// <param name="isCompressed">Is compressed</param>
-        /// <param name="fileData">File data in byte array</param>
-        bool SaveFileAttachment(FileAttachment fileAtatchment, byte[] fileData);
+        bool DeleteFileAttachment(int custMbrSid, int objTypeSid, int objSid, int fileDataSid, string includeGroup);    
     }
 }

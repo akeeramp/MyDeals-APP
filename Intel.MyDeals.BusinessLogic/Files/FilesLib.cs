@@ -15,43 +15,35 @@ namespace Intel.MyDeals.BusinessLogic
         }
 
         /// <summary>
-        /// Get file Attachment data by file id
+        /// Save the specified files as attachments
         /// </summary>
-        /// <param name="fileId"></param>
-        /// <returns></returns>
+        public bool SaveFileAttachment(FileAttachment fileAttachment, byte[] fileData)
+        {
+            return _filesDataLib.SaveFileAttachment(fileAttachment, fileData);
+        }
+
+        /// <summary>
+        /// Get the list of file attachments
+        /// </summary>
         public List<FileAttachment> GetFileAttachments(int custMbrSid, int objTypeSid, int objSid, string includeGroup)
         {
             return _filesDataLib.GetFileAttachments(custMbrSid, objTypeSid, objSid, includeGroup);
         }
 
         /// <summary>
-        /// Get file list attached to a obj type, obj type sid and customer
+        /// Get the contents of the specified file attachment
         /// </summary>
-        /// <param name="custMbrSid"></param>
-        /// <param name="objTypeSid"></param>
-        /// <param name="objSid"></param>
-        /// <param name="includeGroup"></param>
-        /// <returns></returns>
         public FileAttachmentData GetFileAttachmentData(int fileId)
         {
             return _filesDataLib.GetFileAttachmentData(fileId);
         }
 
         /// <summary>
-        /// Save file attachments
+        /// Delete the specified file attachment
         /// </summary>
-        /// <param name="customerMemberSid">Customer Member Sid</param>
-        /// <param name="objSid">Obj Sid</param>
-        /// <param name="objTypeSid">Obj Type Sid</param>
-        /// <param name="contentType">Content type</param>
-        /// <param name="fileName">File name</param>
-        /// <param name="originalSize">Original Size</param>
-        /// <param name="compressedSize">Compressed size</param>
-        /// <param name="isCompressed">Is compressed</param>
-        /// <param name="fileData">File data in byte array</param>
-        public bool SaveFileAttachment(FileAttachment fileAttachment, byte[] fileData)
+        public bool DeleteFileAttachment(int custMbrSid, int objTypeSid, int objSid, int fileDataSid, string includeGroup)
         {
-            return _filesDataLib.SaveFileAttachment(fileAttachment, fileData);
+            return _filesDataLib.DeleteFileAttachment(custMbrSid, objTypeSid, objSid, fileDataSid, includeGroup);
         }
     }
 }
