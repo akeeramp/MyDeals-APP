@@ -51,7 +51,7 @@
            title="Unable to take the deal off of hold at this stage"></i>
         <i ng-if="!!dataItem._actionsPS && !!dataItem._actionsPS.Hold && dataItem._actionsPS.Hold && dataItem.WF_STG_CD !== 'Hold'" class='fa fa-hand-paper-o' style="font-size: 20px !important; cursor: pointer;"
            title="Click to place the deal on hold" ng-click="holdDialog.open()"></i>
-        <i ng-if="!!dataItem._actionsPS && !!dataItem._actionsPS.Approve && dataItem._actionsPS.Approve && dataItem.WF_STG_CD === 'Hold'" class='fa fa-hand-paper-o' style="font-size: 20px !important; color: #FC4C02; cursor: pointer;"
+        <i ng-if="!!dataItem._actionsPS && !!dataItem._actionsPS.Approve && dataItem._actionsPS.Approve && dataItem.WF_STG_CD === 'Hold'" class='fa fa-thumbs-o-up' style="font-size: 20px !important; color: #FC4C02; cursor: pointer;"
            title="Click to take the deal off hold" ng-click="unHoldDialog.open()"></i>
     </div>
     <div class='fl md-icon-disabled' ng-if="(!!dataItem._parentCnt && dataItem._parentCnt > 1)">
