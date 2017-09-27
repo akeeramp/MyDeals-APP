@@ -21,13 +21,13 @@
     </div>
 
     <!-- Attachments icon -->
-    <div class='fl md-icon' ng-if="!dataItem.HasFiles && dataItem.WF_STG_CD_PRNT === 'Cancelled'">
+    <div class='fl md-icon' ng-if="isFileAttachmentEnabled && !dataItem.HasFiles && dataItem.WF_STG_CD_PRNT === 'Cancelled'">
         <i class='intelicon-attach' style="font-size: 20px !important; color: #e7e7e8;" title="Cancelled, cannot add an attachment"></i>
     </div>
-    <div class='fl md-icon' ng-if="!dataItem.HasFiles && dataItem.WF_STG_CD_PRNT !== 'Cancelled'">
+    <div class='fl md-icon' ng-if="isFileAttachmentEnabled && !dataItem.HasFiles && dataItem.WF_STG_CD_PRNT !== 'Cancelled'">
         <i class='intelicon-attach' style="font-size: 20px !important; color: #00AEEF; cursor: pointer;" title="Click to add an attachment" ng-click="attachmentsDialog.open()"></i>
     </div>
-    <div class='fl md-icon' ng-if="!!dataItem.HasFiles && dataItem.HasFiles">
+    <div class='fl md-icon' ng-if="isFileAttachmentEnabled && !!dataItem.HasFiles && dataItem.HasFiles">
         <i class='intelicon-attach' style="font-size: 20px !important; color: #003C71; cursor: pointer;" title="Click to view or add attachments" ng-click="attachmentsDialog.open()"></i>
     </div>
 

@@ -10,6 +10,7 @@ namespace Intel.MyDeals.DataLibrary
         public void SetUp(IRegisterService registerService)
         {
             registerService.RegisterType<IConstantLookupDataLib, ConstantLookupDataLib>();
+            registerService.RegisterType<ICostTestDataLib, CostTestDataLib>();
             registerService.RegisterType<ICustomerCalendarDataLib, CustomerCalendarDataLib>();
             registerService.RegisterType<ICustomerDataLib, CustomerDataLib>();
             registerService.RegisterType<IDashboardDataLib, DashboardDataLib>();

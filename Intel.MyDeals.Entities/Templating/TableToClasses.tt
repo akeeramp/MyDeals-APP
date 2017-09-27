@@ -294,6 +294,11 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "UserPreferences";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
+	// Cost Test Details
+	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MYDL_GET_COST_TEST_DTL @in_prc_tbl_obj_sid = 1147");
+	ds.Tables[0].TableName = "CostTestDetailItem";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
 	PopIndent();
 	WriteLine("}"); // End NameSpace
 

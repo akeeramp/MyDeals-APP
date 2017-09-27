@@ -828,14 +828,16 @@ namespace Intel.MyDeals.BusinessRules
 		{
 			IEnumerable<IOpDataElement> atrbs = r.Dc.GetDataElementsWhere(de => de.AtrbCd == myAtrbCd); // NOTE: "10" is the Tier's dim key. In thoery this shouldn't need to change
 			IOpDataElement atrbWithValidation = atrbs.FirstOrDefault(); // We need to pick only one of the tiered attributes to set validation on, else we'd keep overriding the message value per tier
-			
-			int numOfTiers = Int32.Parse(r.Dc.GetDataElement(AttributeCodes.NUM_OF_TIERS).AtrbValue.ToString());
+
+            IOpDataElement deNumTiers = r.Dc.GetDataElement(AttributeCodes.NUM_OF_TIERS);
+		    if (deNumTiers == null) return;
+
+            int numOfTiers = int.Parse(deNumTiers.AtrbValue.ToString());
 
 			// Validate and set validation message if applicable on each tier
 			foreach (IOpDataElement atrb in atrbs)
 			{
-				double safeParse = 0;
-				int tier = atrb.DimKey.FirstOrDefault().AtrbItemId;
+			    int tier = atrb.DimKey.FirstOrDefault().AtrbItemId;
 
 				if (tier <= numOfTiers)
 				{
@@ -851,7 +853,8 @@ namespace Intel.MyDeals.BusinessRules
 						continue;
 					}
 
-					bool isNumber = Double.TryParse(atrb.AtrbValue.ToString(), out safeParse);
+				    double safeParse = 0;
+				    bool isNumber = Double.TryParse(atrb.AtrbValue.ToString(), out safeParse);
 
 					if (!isNumber)
 					{
@@ -894,7 +897,10 @@ namespace Intel.MyDeals.BusinessRules
 
 			IOpDataElement myRebateType = r.Dc.GetDataElement(AttributeCodes.REBATE_TYPE);
 			IOpDataElement totalDollarObj = r.Dc.GetDataElement(AttributeCodes.TOTAL_DOLLAR_AMOUNT);
-			double totalDollarAmount = 0;			
+			double totalDollarAmount = 0;
+
+            if (totalDollarObj == null || myRebateType == null) return;
+
 			Double.TryParse(totalDollarObj.AtrbValue.ToString(), out totalDollarAmount);
 
 			if (myRebateType.AtrbValue.ToString().Equals("DEBIT MEMO", StringComparison.OrdinalIgnoreCase))

@@ -77,11 +77,8 @@ namespace Intel.MyDeals.BusinessRules
                             Action = BusinessLogicDeActions.SetReadOnly,
                             Target = new[]
                             {
-                                AttributeCodes.DEAL_COMB_TYPE,
                                 AttributeCodes.ON_ADD_DT,
                                 AttributeCodes.TRGT_RGN,
-                                //AttributeCodes.CONSUMPTION_REASON,
-                                //AttributeCodes.CONSUMPTION_REASON_CMNT,
                                 AttributeCodes.REBATE_BILLING_START,
                                 AttributeCodes.REBATE_BILLING_END,
                                 AttributeCodes.BACK_DATE_RSN

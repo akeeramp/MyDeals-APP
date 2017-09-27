@@ -78,6 +78,7 @@
     <Compile Include="CapMsp\CapMspLib.cs" />
     <Compile Include="Constants Lookups\ConstantsLookupsLib.cs" />
     <Compile Include="Contracts\ContractsLib.cs" />
+    <Compile Include="CostTest\CostTestLib.cs" />
     <Compile Include="CustomerCalendar\CustomerCalendarLib.cs" />
     <Compile Include="Customer\CustomerLib.cs" />
     <Compile Include="Dashboard\DashboardLib.cs" />

@@ -175,6 +175,16 @@ namespace Intel.MyDeals.Controllers.API
                 , $"Unable to get {"Overlapping Data"}"
              );
         }
+
+        [Authorize]
+        [Route("GetPctDetails/{id}")]
+        public OpDataCollectorFlattenedList GetPctDetails(int id)
+        {
+            return SafeExecutor(() => _pricingTablesLib.GetPctDetails(id)
+                , $"Unable to get PCT Details {id}"
+            );
+        }
+
     }
 
 }

@@ -37,7 +37,9 @@ namespace Intel.MyDeals.BusinessRules
             {
                 if (a.Triggers.Contains(trigger))
                 {
+                    Debug.WriteLine("Running action: " + a);
                     msgQueue.Messages.Add(OpRulesLib<OpDataCollector, IOpDataElement, MyRulesTrigger, OpDataElementType>.RunAction(dc, a, securityActionCache, args));
+                    Debug.WriteLine("Ran action: " + a);
                 }
             }
 

@@ -216,7 +216,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
                                 START_DT: { type: "date" },
                                 END_DT: { type: "date" },
                                 NOTES: { type: "string" },
-                                TRKR_NBR: { type: "string" },
+                                TRKR_NBR: { type: "object" },
                                 TITLE: { type: "string" }
                             }
                         }
@@ -238,7 +238,8 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
                     }, {
                         field: "TRKR_NBR",
                         title: "Tracker Number",
-                        width: "120px"
+                        width: "150px",
+                        template: "#=gridUtils.concatDimElements(data, 'TRKR_NBR')#"
                     }, {
                         field: "OBJ_SET_TYPE_CD",
                         title: "Type",

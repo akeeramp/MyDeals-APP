@@ -72,7 +72,8 @@ gridUtils.uiControlScheduleWrapper = function (passedData) {
 
     tmplt += '<tr style="height: 15px;">';
     for (var t = 0; t < fields.length; t++) {
-        tmplt += '<th style="padding: 0 4px; font-weight: 400; text-transform: uppercase; font-size: 10px; background: #eeeeee; text-align: center;">' + fields[t].title + '</th>';
+        var mjr = fields[t].title === "Tier" ? "" : "border-bottom: 2px solid #0071C5;";
+        tmplt += '<th style="padding: 0 4px; font-weight: 400; text-transform: uppercase; font-size: 10px; background: #eeeeee; text-align: center; ' + mjr + '">' + fields[t].title + '</th>';
     }
     tmplt += '</tr>';
 
@@ -214,6 +215,24 @@ gridUtils.uiIconWrapper = function (passedData, field, format) {
     tmplt += '</div>';
     return tmplt;
 }
+gridUtils.concatDimElements = function (passedData, field) {
+
+    var data = [];
+
+    if (!!passedData[field]) {
+        Object.keys(passedData[field]).forEach(function (key, index) {
+            if (key.indexOf("___") >= 0) {
+                data.push(passedData[field][key]);
+            }
+        });
+    }
+    var displayData = data.join(", ");
+
+    var tmplt = '<span class="ng-binding">' + displayData + '</span>';
+
+    return tmplt;
+}
+
 gridUtils.getFormat = function (lType, lFormat) {
     return !lFormat ? "" : "| " + lFormat;
 }

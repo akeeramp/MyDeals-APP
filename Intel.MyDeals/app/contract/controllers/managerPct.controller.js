@@ -112,54 +112,12 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
                         }
                     },
                     schema: {
-                        model: {
-                            id: "DC_ID",
-                            fields: {
-                                DC_ID: { type: "number" },
-                                OBJ_SET_TYPE_CD: { type: "string" },
-                                PASSED_VALIDATION: { type: "string" },
-                                COST_TEST_RESULT: { type: "string" },
-                                MEETCOMP_TEST_RESULT: { type: "string" },                                
-                                WF_STG_CD: { type: "string" },
-                                START_DT: { type: "date" },
-                                END_DT: { type: "date" },
-                                NOTES: { type: "string" },
-                                TRKR_NBR: { type: "string" },
-                                TITLE: { type: "string" }
-                            }
-                        }
+                        model: $scope.templates.models[pt.OBJ_SET_TYPE_CD]
                     }
                 },
                 sortable: true,
                 height: 250,
-                columns: [
-                    {
-                        field: "COST_TEST_RESULT",
-                        title: "PCT Result",
-                        width: "120px"
-                    }, {
-                        field: "MEETCOMP_TEST_RESULT",
-                        title: "MCT Result",
-                        width: "120px"
-                    }, {
-                        field: "DC_ID",
-                        title: "Deal Id",
-                        width: "100px",
-                        template: "<div class='dealLnk'><i class='intelicon-protection-solid valid-icon validf_{{dataItem.PASSED_VALIDATION}}' title='Validation: {{dataItem.PASSED_VALIDATION || \"Not validated yet\"}}' ng-class='{ \"intelicon-protection-solid\": (dataItem.PASSED_VALIDATION === undefined || dataItem.PASSED_VALIDATION === \"\"), \"intelicon-protection-checked-verified-solid\": (dataItem.PASSED_VALIDATION === \"Valid\" || dataItem.PASSED_VALIDATION === \"Finalizing\" || dataItem.PASSED_VALIDATION === \"Complete\"), \"intelicon-protection-failed-solid\": (dataItem.PASSED_VALIDATION === \"Dirty\") }'></i><a href=''>#=DC_ID#</a></div>"
-                    }, {
-                        field: "OBJ_SET_TYPE_CD",
-                        title: "Type",
-                        width: "100px"
-                    }, {
-                        field: "START_DT",
-                        title: "Deal Start/End",
-                        width: "170px",
-                        template: "#= kendo.toString(new Date(START_DT), 'M/d/yyyy') # - #= kendo.toString(new Date(END_DT), 'M/d/yyyy') #"
-                    }, {
-                        field: "TITLE",
-                        title: "Product"
-                    }
-                ]
+                columns: $scope.templates.columns[pt.OBJ_SET_TYPE_CD]
 
             }
             var html = "<kendo-grid options='sumGridOptions' class='opUiContainer md dashboard'></kendo-grid>";
@@ -174,18 +132,239 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
 
     }
 
+    
 
-    //// loop through data and setup deal types for faster sorting
-    //for (var s = 0; s < root.contractData.PRC_ST.length; s++) {
-    //    var sItem = root.contractData.PRC_ST[s];
-    //    sItem.dealType = [];
-    //    if (sItem.PRC_TBL !== undefined) {
-    //        for (var pt = 0; pt < sItem.PRC_TBL.length; pt++) {
-    //            var ptItem = sItem.PRC_TBL[pt];
-    //            sItem.dealType.push(ptItem.OBJ_SET_TYPE_CD);
-    //        }
-    //    }
-    //}
+    // Global Settings
+    $scope.cellColumns = {
+        "COST_TEST_RESULT": {
+            field: "COST_TEST_RESULT",
+            title: "PCT Result",
+            width: "120px"
+        },
+        "DC_ID": {
+            field: "DC_ID",
+            title: "Deal Id",
+            width: "100px",
+            template:
+                "<div class='dealLnk'><i class='intelicon-protection-solid valid-icon validf_{{dataItem.PASSED_VALIDATION}}' title='Validation: {{dataItem.PASSED_VALIDATION || \"Not validated yet\"}}' ng-class='{ \"intelicon-protection-solid\": (dataItem.PASSED_VALIDATION === undefined || dataItem.PASSED_VALIDATION === \"\"), \"intelicon-protection-checked-verified-solid\": (dataItem.PASSED_VALIDATION === \"Valid\" || dataItem.PASSED_VALIDATION === \"Finalizing\" || dataItem.PASSED_VALIDATION === \"Complete\"), \"intelicon-protection-failed-solid\": (dataItem.PASSED_VALIDATION === \"Dirty\") }'></i><a href=''>#=DC_ID#</a></div>"
+        },
+        "START_DT": {
+            field: "START_DT",
+            title: "Deal Start/End",
+            width: "170px",
+            template:
+                "#= kendo.toString(new Date(START_DT), 'M/d/yyyy') # - #= kendo.toString(new Date(END_DT), 'M/d/yyyy') #"
+        },
+        "TITLE": {
+            field: "TITLE",
+            title: "Product",
+            width: "170px"
+        },
+        "CAP": {
+            field: "CAP",
+            title: "CAP",
+            width: "100px"
+        },
+        "MAX_RPU": {
+            field: "MAX_RPU",
+            title: "Max RPU",
+            width: "100px"
+        },
+        "ECAP_PRICE": {
+            field: "ECAP_PRICE",
+            title: "ECAP Price",
+            width: "100px"
+        },
+        "ECAP_FLR": {
+            field: "ECAP_FLR",
+            title: "ECAP Floor",
+            width: "100px"
+        },
+        "TITLE1": {
+            field: "TITLE",
+            title: "Lowest Net Price",
+            width: "100px"
+        },
+        "TITLE2": {
+            field: "TITLE",
+            title: "Cost",
+            width: "100px"
+        },
+        "TITLE3": {
+            field: "TITLE",
+            title: "Cost Test Analysis Override",
+            width: "140px"
+        },
+        "TITLE4": {
+            field: "TITLE",
+            title: "Cost Test Analysis Override Comments",
+            width: "140px"
+        },
+        "TITLE5": {
+            field: "TITLE",
+            title: "Retail Cycle",
+            width: "140px"
+        },
+        "TITLE6": {
+            field: "TITLE",
+            title: "Retail Pull $",
+            width: "140px"
+        },
+        "MRKT_SEG": {
+            field: "MRKT_SEG",
+            title: "Market Segment",
+            width: "140px"
+        },
+        "GEO_COMBINED": {
+            field: "GEO_COMBINED",
+            title: "GEO",
+            width: "140px"
+        },
+        "TITLE7": {
+            field: "TITLE",
+            title: "Payout Based On",
+            width: "140px"
+        },
+        "TITLE8": {
+            field: "TITLE",
+            title: "Group Deals",
+            width: "140px"
+        },
+        "TITLE9": {
+            field: "TITLE",
+            title: "Time / Date Last Cost Ran",
+            width: "140px"
+        }
+    }
+    $scope.templates = {
+        "models" : {
+            "ECAP": {
+                id: "DC_ID",
+                fields: {
+                    COST_TEST_RESULT: { type: "string" },
+                    DC_ID: { type: "number" },
+                    START_DT: { type: "string" },
+                    TITLE: { type: "string" },
+                    CAP: { type: "number" },
+                    ECAP_PRICE: { type: "number" },
+                    ECAP_FLR: { type: "number" },
+                    TITLE1: { type: "string" },
+                    TITLE2: { type: "string" },
+                    TITLE3: { type: "string" },
+                    TITLE4: { type: "string" },
+                    TITLE5: { type: "string" },
+                    TITLE6: { type: "string" },
+                    MRKT_SEG: { type: "string" },
+                    GEO_COMBINED: { type: "string" },
+                    TITLE7: { type: "string" },
+                    TITLE8: { type: "string" },
+                    TITLE9: { type: "string" }
+                }
+            },
+            "VOL_TIER": {
+                id: "DC_ID",
+                fields: {
+                    COST_TEST_RESULT: { type: "string" },
+                    DC_ID: { type: "number" },
+                    START_DT: { type: "string" },
+                    TITLE: { type: "string" },
+                    MAX_RPU: { type: "number" },
+                    TITLE1: { type: "string" },
+                    TITLE2: { type: "string" },
+                    TITLE3: { type: "string" },
+                    TITLE4: { type: "string" },
+                    TITLE5: { type: "string" },
+                    TITLE6: { type: "string" },
+                    MRKT_SEG: { type: "string" },
+                    GEO_COMBINED: { type: "string" },
+                    TITLE7: { type: "string" },
+                    TITLE8: { type: "string" },
+                    TITLE9: { type: "string" }
+                }
+            },
+            "PROGRAM": {
+                id: "DC_ID",
+                fields: {
+                    COST_TEST_RESULT: { type: "string" },
+                    DC_ID: { type: "number" },
+                    START_DT: { type: "string" },
+                    TITLE: { type: "string" },
+                    MAX_RPU: { type: "number" },
+                    TITLE1: { type: "string" },
+                    TITLE2: { type: "string" },
+                    TITLE3: { type: "string" },
+                    TITLE4: { type: "string" },
+                    TITLE5: { type: "string" },
+                    TITLE6: { type: "string" },
+                    MRKT_SEG: { type: "string" },
+                    GEO_COMBINED: { type: "string" },
+                    TITLE7: { type: "string" },
+                    TITLE8: { type: "string" },
+                    TITLE9: { type: "string" }
+                }
+            }
+        },
+        "columns": {
+            "ECAP": [
+                $scope.cellColumns["COST_TEST_RESULT"],
+                $scope.cellColumns["DC_ID"],
+                $scope.cellColumns["START_DT"],
+                $scope.cellColumns["TITLE"],
+                $scope.cellColumns["CAP"],
+                $scope.cellColumns["ECAP_PRICE"],
+                $scope.cellColumns["ECAP_FLR"],
+                $scope.cellColumns["TITLE1"],
+                $scope.cellColumns["TITLE2"],
+                $scope.cellColumns["TITLE3"],
+                $scope.cellColumns["TITLE4"],
+                $scope.cellColumns["TITLE5"],
+                $scope.cellColumns["TITLE6"],
+                $scope.cellColumns["MRKT_SEG"],
+                $scope.cellColumns["GEO_COMBINED"],
+                $scope.cellColumns["TITLE7"],
+                $scope.cellColumns["TITLE8"],
+                $scope.cellColumns["TITLE9"]
+            ],
+            "VOL_TIER": [
+                $scope.cellColumns["COST_TEST_RESULT"],
+                $scope.cellColumns["DC_ID"],
+                $scope.cellColumns["START_DT"],
+                $scope.cellColumns["TITLE"],
+                $scope.cellColumns["MAX_RPU"],
+                $scope.cellColumns["TITLE1"],
+                $scope.cellColumns["TITLE2"],
+                $scope.cellColumns["TITLE3"],
+                $scope.cellColumns["TITLE4"],
+                $scope.cellColumns["TITLE5"],
+                $scope.cellColumns["TITLE6"],
+                $scope.cellColumns["MRKT_SEG"],
+                $scope.cellColumns["GEO_COMBINED"],
+                $scope.cellColumns["TITLE7"],
+                $scope.cellColumns["TITLE8"],
+                $scope.cellColumns["TITLE9"]
+            ],
+            "PROGRAM": [
+                $scope.cellColumns["COST_TEST_RESULT"],
+                $scope.cellColumns["DC_ID"],
+                $scope.cellColumns["START_DT"],
+                $scope.cellColumns["TITLE"],
+                $scope.cellColumns["MAX_RPU"],
+                $scope.cellColumns["TITLE1"],
+                $scope.cellColumns["TITLE2"],
+                $scope.cellColumns["TITLE3"],
+                $scope.cellColumns["TITLE4"],
+                $scope.cellColumns["TITLE5"],
+                $scope.cellColumns["TITLE6"],
+                $scope.cellColumns["MRKT_SEG"],
+                $scope.cellColumns["GEO_COMBINED"],
+                $scope.cellColumns["TITLE7"],
+                $scope.cellColumns["TITLE8"],
+                $scope.cellColumns["TITLE9"]
+            ]
+        }
+
+    }
+
 
 
 }
