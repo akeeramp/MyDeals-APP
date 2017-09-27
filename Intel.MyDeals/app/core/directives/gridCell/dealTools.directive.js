@@ -101,13 +101,13 @@ function dealTools($timeout, logger, dataService) {
                     action: function () {
                         dataService.post("/api/FileAttachments/Delete/" + deleteAttachmentParams.custMbrSid + "/" + deleteAttachmentParams.objTypeSid + "/" + deleteAttachmentParams.objSid + "/" + deleteAttachmentParams.fileDataSid + "/WIP_DEAL")
                             .then(function (response) {
-                                logger.success("Successfully deleted the attachment.", null, "Delete successful");
+                                logger.success("Successfully deleted attachment.", null, "Delete successful");
 
                                 // Refresh the Existing Attachments grid to reflect the newly deleted attachment.
                                 $scope.attachmentsGridOptions.dataSource.transport.read($scope.optionCallback);
                             },
                             function (response) {
-                                logger.error("Failed to delete the attachment.", null, "Delete failed");
+                                logger.error("Unable to delete attachment.", null, "Delete failed");
 
                                 // Refresh the Existing Attachments grid.  There should be no changes, but just incase.
                                 $scope.attachmentsGridOptions.dataSource.transport.read($scope.optionCallback);
@@ -154,6 +154,8 @@ function dealTools($timeout, logger, dataService) {
             $scope.fileUploadOptions = { saveUrl: '/FileAttachments/Save', autoUpload: false };
 
             $scope.filePostAddParams = function (e) {
+                uploadSuccessCount = 0;
+                uploadErrorCount = 0;
                 e.data = {
                     custMbrSid: $scope.dataItem.CUST_MBR_SID,
                     objSid: $scope.dataItem.DC_ID,
@@ -161,17 +163,28 @@ function dealTools($timeout, logger, dataService) {
                 }
             };
 
+            var uploadSuccessCount = 0;
             $scope.onSuccess = function (e) {
-                logger.success("Successfully uploaded " + String(e.files.length) + " file(s).", null, "Upload successful");
+                uploadSuccessCount++;
+            }
+
+            var uploadErrorCount = 0;
+            $scope.onError = function (e) {
+                uploadErrorCount++;
             }
 
             $scope.onComplete = function (e) {
-                // Refresh the Existing Attachments grid to reflect the newly uploaded attachments(s).
-                $scope.attachmentsGridOptions.dataSource.transport.read($scope.optionCallback);
-            }
+                if (uploadSuccessCount > 0) {
+                    logger.success("Successfully uploaded " + uploadSuccessCount + " attachment(s).", null, "Upload successful");
+                }
+                if (uploadErrorCount > 0) {
+                    logger.error("Unable to upload " + uploadErrorCount + " attachment(s).", null, "Upload failed");
+                }
 
-            $scope.onError = function (e) {
-                logger.error("Failed to upload " + String(e.files.length) + " file(s).", null, "Upload failed");
+                // Refresh the Existing Attachments grid to reflect the newly uploaded attachments(s).
+                if (uploadSuccessCount > 0) {
+                    $scope.attachmentsGridOptions.dataSource.transport.read($scope.optionCallback);
+                }
             }
 
             $scope.onFileSelect = function (e) {
@@ -212,7 +225,7 @@ function dealTools($timeout, logger, dataService) {
                                 $scope.initComplete = true;
                             },
                             function (response) {
-                                logger.error("Failed to get the attachments.", response, response.statusText);
+                                logger.error("Unable to retrieve attachments.", response, response.statusText);
                                 $scope.attachmentCount = -1; // Causes the 'Failed to retrieve attachments!' message to be displayed.
                                 $scope.initComplete = true;
                             });

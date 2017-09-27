@@ -147,7 +147,6 @@
                         </div>
                         <div class="col-md-4">
                             <div class="col-md-11 row"
-
                                  op-control-flat
                                  ng-model="contractData"
                                  op-cd="'END_YR'"
@@ -218,8 +217,9 @@
                                    type="file" name="files"
                                    kendo-upload="files"
                                    k-upload="filePostAddParams"
-                                   k-complete="onComplete"
+                                   k-success="onSuccess"
                                    k-error="onError"
+                                   k-complete="onComplete"
                                    k-select="onFileSelect"
                                    k-remove="onFileRemove"
                                    k-async="fileUploadOptions" />
@@ -228,12 +228,22 @@
                         <div ng-if="contractData.AttachmentError" class="err-Control">* field is required.</div>
                     </div>
                     <div class="col-md-11 row" ng-if="!isNewContract">
-                        <uib-accordion close-others="oneAtATime">
-                            <div uib-accordion-group class="panel-default accordion-panel" heading="File attachment details" is-open="status.isOpen">
-                                <div id="fileAttachmentGrid" kendo-grid k-ng-delay="status.isOpen" style="height:150px;"
+                        <div class="panel panel-default">
+                            <div class="panel-heading" style="font-size:14px; font-weight:bold">File Attachment Details <span ng-if="attachmentCount > 0 && initComplete" class="badge">{{attachmentCount}}</span></div>
+                            <div class="panel-body">
+                                <div ng-hide="attachmentCount <= 0 || !initComplete" id="fileAttachmentGrid" kendo-grid
                                      footer-offset="500" options="fileAttachmentGridOptions"></div>
+                                <div ng-hide="attachmentCount != 0 || !initComplete" style="height:80px;">
+                                    <p style="margin-left:20px;margin-top:10px">This contract has no attachments.</p>
+                                </div>
+                                <div ng-hide="initComplete" style="height:80px;">
+                                    <p style="margin-left:20px;margin-top:10px"><i>Retrieving attachments...</i></p>
+                                </div>
+                                <div ng-hide="attachmentCount >= 0" style="height:80px; color:red">
+                                    <p style="margin-left:20px;margin-top:10px">Unable to retrieve attachments!</p>
+                                </div>
                             </div>
-                        </uib-accordion>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -267,6 +277,11 @@
         <button class="btn btn-primary" style="margin-left:30px;" type="button" ng-click="customContractValidate()">Save Contract</button>
     </div>
 </div>
+
+<div class="promptUserDialog" id="deleteAttachmentDialog" kendo-dialog="deleteAttachmentDialog" k-visible="false" k-modal="true" k-actions="deleteAttachmentActions" k-width="400" k-height="250">
+    <h4>Delete this file attachment?</h4>
+</div>
+
 <style type="text/css">
     #secContainer {
         overflow: auto !important;
@@ -275,6 +290,30 @@
     .padTop30 {
         padding-top: 30px;
     }
+
+    .k-dialog .promptUserDialog {
+        text-align: center;
+        padding: 10px 0 0 0;
+    }
+
+        .k-dialog .promptUserDialog h4 {
+            color: #003C71;
+            font-size: 18px;
+            font-weight: 600;
+            margin-top: 0;
+        }
+
+        .k-dialog .promptUserDialog p {
+            font-size: 12px;
+            padding: 10px 20px;
+        }
+
+    .delete-attach-icon {
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+        .delete-attach-icon:hover {
+            text-decoration: none;
+        }
 </style>
-
-

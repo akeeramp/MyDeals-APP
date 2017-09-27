@@ -64,7 +64,7 @@
         // $scope.C_ADD_PRICING_STRATEGY = true;
 
         $scope.swapUnderscore = function (str) {
-            return str.replace(/_/g,' ');
+            return str.replace(/_/g, ' ');
         }
 
         // determine if the contract is existing or new... if new, look for pre-population attributes from the URL parameters
@@ -313,7 +313,7 @@
 
             // Customer and Customer Div functions
             var initiateCustDivCombobox = function () {
-                    $scope.updateCorpDivision($scope.contractData.CUST_MBR_SID);
+                $scope.updateCorpDivision($scope.contractData.CUST_MBR_SID);
             }
 
             initiateCustDivCombobox();
@@ -362,16 +362,16 @@
                         $scope.contractData._behaviors.isError['START_DT'] = true;
                         $scope.contractData._behaviors
                             .validMsg['START_DT'] = moment(startDate).isBefore($scope.contractData.MinDate)
-                            ? "Start date cannot be less than - " + $scope.contractData.MinDate
-                            : "Start date cannot be greater than End Date";
+                                ? "Start date cannot be less than - " + $scope.contractData.MinDate
+                                : "Start date cannot be greater than End Date";
                     }
                 } else {
                     if (moment(endDate).isBefore(startDate) || moment(endDate).isAfter($scope.contractData.MaxDate)) {
                         $scope.contractData._behaviors.isError['END_DT'] = true;
                         $scope.contractData._behaviors
                             .validMsg['END_DT'] = moment(endDate).isAfter($scope.contractData.MaxDate)
-                            ? "End date cannot be greater than - " + $scope.contractData.MaxDate
-                            : "End date cannot be less than Start Date";
+                                ? "End date cannot be greater than - " + $scope.contractData.MaxDate
+                                : "End date cannot be less than Start Date";
                     }
                 }
             }
@@ -393,9 +393,9 @@
                             unWatchEndDate = true;
                         }
                     },
-                        function (response) {
-                            errInGettingDates(response);
-                        });
+                    function (response) {
+                        errInGettingDates(response);
+                    });
             }
 
             var noEndDateChanged = function (noEndDate, updateEndDate) {
@@ -452,9 +452,9 @@
                         },
                             500);
                     },
-                        function (response) {
-                            errInGettingDates(response);
-                        });
+                    function (response) {
+                        errInGettingDates(response);
+                    });
             }
 
             var getCurrentQuarterDetails = function () {
@@ -494,9 +494,9 @@
                         },
                             500);
                     },
-                        function (response) {
-                            errInGettingDates(response);
-                        });
+                    function (response) {
+                        errInGettingDates(response);
+                    });
             }
 
             var errInGettingDates = function (response) {
@@ -553,6 +553,8 @@
         $scope.fileUploadOptions = { saveUrl: '/FileAttachments/Save', autoUpload: false };
 
         $scope.filePostAddParams = function (e) {
+            uploadSuccessCount = 0;
+            uploadErrorCount = 0;
             e.data = {
                 custMbrSid: $scope.contractData.CUST_MBR_SID,
                 objSid: $scope.contractData.DC_ID, // Contract
@@ -585,7 +587,7 @@
                 });
         }
 
-        $scope.filterDealTypes = function(items) {
+        $scope.filterDealTypes = function (items) {
             var result = {};
             angular.forEach(items, function (value, key) {
                 if (value.name !== 'CAP_BAND' && value.name !== 'ALL_TYPES') {
@@ -618,56 +620,65 @@
             }
         }
 
-        $scope.onComplete = function () {
-            logger.success("Contract attachments uploaded", null, "Upload successful");
+        var uploadSuccessCount = 0;
+        $scope.onSuccess = function (e) {
+            uploadSuccessCount++;
+        }
+
+        var uploadErrorCount = 0;
+        $scope.onError = function (e) {
+            uploadErrorCount++;
+        }
+
+        $scope.onComplete = function (e) {
+            if (uploadSuccessCount > 0) {
+                logger.success("Successfully uploaded " + uploadSuccessCount + " attachment(s).", null, "Upload successful");
+            }
+            if (uploadErrorCount > 0) {
+                logger.error("Unable to upload " + uploadErrorCount + " attachment(s).", null, "Upload failed");
+            }
+
             $timeout(function () {
                 $scope._dirty = false; // don't want to kick of listeners
                 $state.go('contract.manager', { cid: $scope.contractData.DC_ID });
             });
         }
 
-        $scope.onError = function () {
-            logger.error("Files Upload failed, Please try again.");
-        }
-
         $scope.uploadFile = function (e) {
             $(".k-upload-selected").click();
         }
 
-        var dataSource = new kendo.data.DataSource({
+        $scope.attachmentCount = 1; // Can't be 0 or initialization won't happen.
+        $scope.initComplete = false;
+
+        var attachmentsDataSource = new kendo.data.DataSource({
             transport: {
                 read: function (e) {
                     if (!$scope.isNewContract) {
-                        logger.info("Loading contract attachments...");
+                        $scope.optionCallback = e;
                         // TODO: Read only when hasFiles is true
                         dataService.get("/api/FileAttachments/Get/" +
-                                $scope.contractData.CUST_MBR_SID +
-                                "/" +
-                                1 +
-                                "/" +
-                                $scope.contractData.DC_ID +
-                                "/CNTRCT")
+                            $scope.contractData.CUST_MBR_SID +
+                            "/" +
+                            1 +
+                            "/" +
+                            $scope.contractData.DC_ID +
+                            "/CNTRCT")
                             .then(function (response) {
                                 e.success(response.data);
+                                $scope.attachmentCount = response.data.length;
+                                $scope.initComplete = true;
                                 hasFiles = response.data.length > 0;
                                 setCustAcceptanceRules($scope.contractData.CUST_ACCPT);
                             },
-                                function (response) {
-                                    logger.error("Unable to get file attachments.", response, response.statusText);
-                                });
+                            function (response) {
+                                logger.error("Unable to retrieve attachments.", response, response.statusText);
+                                $scope.attachmentCount = -1; // Causes the 'Failed to retrieve attachments!' message to be displayed.
+                                $scope.initComplete = true;
+                                hasFiles = false;
+                            });
                     }
-                },
-                destroy: function (e) {
-                    kendo.confirm("Are you sure you want to delete this attachment?").then(function () {
-                        logger.info("Method Not Implemented");
-                        hasFiles = $('#fileAttachmentGrid').data("kendoGrid")._data.length > 0;
-                        setCustAcceptanceRules($scope.contractData.CUST_ACCPT);
-                    },
-                        function () {
-                            // If grid is hidden on DOM load, scope doesn't contain the grid name($scope.fileAttachmentGrid is undefined), hack use jQuery
-                            $('#fileAttachmentGrid').data("kendoGrid").cancelChanges();
-                        });
-                },
+                }
             },
             pageSize: 25,
             schema: {
@@ -683,8 +694,40 @@
             },
         });
 
+        $scope.deleteAttachmentActions = [
+            {
+                text: 'Cancel',
+                action: function () { }
+            },
+            {
+                text: 'Yes, Delete',
+                primary: true,
+                action: function () {
+                    dataService.post("/api/FileAttachments/Delete/" + deleteAttachmentParams.custMbrSid + "/" + deleteAttachmentParams.objTypeSid + "/" + deleteAttachmentParams.objSid + "/" + deleteAttachmentParams.fileDataSid + "/CNTRCT")
+                        .then(function (response) {
+                            logger.success("Successfully deleted attachment.", null, "Delete successful");
+
+                            // Refresh the Existing Attachments grid to reflect the newly deleted attachment.
+                            $scope.fileAttachmentGridOptions.dataSource.transport.read($scope.optionCallback);
+                        },
+                        function (response) {
+                            logger.error("Unable to delete attachment.", null, "Delete failed");
+
+                            // Refresh the Existing Attachments grid.  There should be no changes, but just incase.
+                            $scope.fileAttachmentGridOptions.dataSource.transport.read($scope.optionCallback);
+                        });
+                }
+            }
+        ];
+
+        var deleteAttachmentParams;
+        $scope.deleteAttachment = function (custMbrSid, objTypeSid, objSid, fileDataSid) {
+            deleteAttachmentParams = { custMbrSid: custMbrSid, objTypeSid: objTypeSid, objSid: objSid, fileDataSid: fileDataSid };
+            $("#deleteAttachmentDialog").data("kendoDialog").open();
+        }
+
         $scope.fileAttachmentGridOptions = {
-            dataSource: dataSource,
+            dataSource: attachmentsDataSource,
             filterable: false,
             sortable: true,
             selectable: true,
@@ -692,21 +735,35 @@
             columnMenu: false,
             editable: { mode: "inline", confirmation: false },
             columns: [
-                { field: "ATTCH_SID", title: "ID", hidden: true },
-                //IE doesn't support download tag on anchor, added target='_blank' as a work around
+                {
+                    field: "ATTCH_SID",
+                    title: "ID",
+                    hidden: true
+                },
+                {
+                    field: "FILE_DATA_SID",
+                    title: "&nbsp;",
+                    template: "<a class='delete-attach-icon' ng-click='deleteAttachment(#= CUST_MBR_SID #, #= OBJ_TYPE_SID #, #= OBJ_SID #, #= FILE_DATA_SID #)'><i class='intelicon-trash-outlined' title='Click to delete this attachment'></i></a>",
+                    width: "10%"
+                },
                 {
                     field: "FILE_NM",
                     title: "File Name",
-                    template:
-                        "<a download target='_blank' href='/api/FileAttachments/Open/#: FILE_DATA_SID #/'>#: FILE_NM #</a>"
+                    //IE doesn't support download tag on anchor, added target='_blank' as a work around
+                    template: "<a download target='_blank' href='/api/FileAttachments/Open/#: FILE_DATA_SID #/'>#: FILE_NM #</a>",
+                    width: "40%"
                 },
-                { field: "CHG_EMP_WWID", title: "Added By", width: "25%" },
+                {
+                    field: "CHG_EMP_WWID",
+                    title: "Added By",
+                    width: "25%"
+                },
                 {
                     field: "CHG_DTM",
                     title: "Date Added",
-                    width: "25%",
                     type: "date",
-                    template: "#= kendo.toString(new Date(CHG_DTM), 'M/d/yyyy') #"
+                    template: "#= kendo.toString(new Date(CHG_DTM), 'M/d/yyyy') #",
+                    width: "25%"
                 }
             ]
         };
@@ -1012,38 +1069,38 @@
             openAutofillModal(pt);
         }
         $scope.addByECAPTracker = function () {
-        	if ($scope.spreadDs !== undefined && $scope.curPricingTable.OBJ_SET_TYPE_CD === 'PROGRAM') {
+            if ($scope.spreadDs !== undefined && $scope.curPricingTable.OBJ_SET_TYPE_CD === 'PROGRAM') {
 
-				// Check if row count is over the number of rows we allow
-        		if ($scope.spreadDs._data.length  >= ($scope.ptRowCount-1)) {
-        			alert("Cannot insert a new row. You already have the maxium number of rows allowed in one Pricing Table. Pleas emake a new Pricing table or delete some existing rows the current pricing table.");
-        			return;
-        		}
+                // Check if row count is over the number of rows we allow
+                if ($scope.spreadDs._data.length >= ($scope.ptRowCount - 1)) {
+                    alert("Cannot insert a new row. You already have the maxium number of rows allowed in one Pricing Table. Pleas emake a new Pricing table or delete some existing rows the current pricing table.");
+                    return;
+                }
 
-        		var modal = $uibModal.open({
-        			backdrop: 'static',
-        			templateUrl: 'app/contract/partials/ptModals/ecapTrackerAutoFillModal.html',
-        			controller: 'EcapTrackerAutoFillModalCtrl',
-        			controllerAs: '$ctrl',
-        			size: 'lg',
-        			resolve: {
-        				colData: null, // TODO
-        			}
-        		});
+                var modal = $uibModal.open({
+                    backdrop: 'static',
+                    templateUrl: 'app/contract/partials/ptModals/ecapTrackerAutoFillModal.html',
+                    controller: 'EcapTrackerAutoFillModalCtrl',
+                    controllerAs: '$ctrl',
+                    size: 'lg',
+                    resolve: {
+                        colData: null, // TODO
+                    }
+                });
 
-				// TODO: get the SP information for the new row
-        		modal.result.then(
+                // TODO: get the SP information for the new row
+                modal.result.then(
                     function (newRow) {
-                    	newRow["CUST_ACCNT_DIV"] = $scope.contractData.CUST_ACCNT_DIV;
-                    	newRow["CUST_MBR_SID"] = $scope.contractData.CUST_MBR_SID;
+                        newRow["CUST_ACCNT_DIV"] = $scope.contractData.CUST_ACCNT_DIV;
+                        newRow["CUST_MBR_SID"] = $scope.contractData.CUST_MBR_SID;
 
-        				$scope.$broadcast('addRowByTrackerNumber', newRow)
+                        $scope.$broadcast('addRowByTrackerNumber', newRow)
                     },
                     function () {
-                    	// Do Nothing on cancel
+                        // Do Nothing on cancel
                     }
-				);
-        	}
+                );
+            }
         }
         $scope.hideAddPricingTable = function () {
             $scope.isAddPricingTableHidden = true;
@@ -1368,11 +1425,11 @@
                                 }, { reload: true });
                             }
                         },
-                    function (result) {
-                        logger.error("Could not delete the Pricing Strategy.", result, result.statusText);
-                        topbar.hide();
-                        $scope.setBusy("", "");
-                    }
+                        function (result) {
+                            logger.error("Could not delete the Pricing Strategy.", result, result.statusText);
+                            topbar.hide();
+                            $scope.setBusy("", "");
+                        }
                     );
                 });
             });
@@ -1419,10 +1476,10 @@
                                 }, { reload: true });
                             }
                         },
-                    function (response) {
-                        logger.error("Could not delete the Pricing Table.", response, response.statusText);
-                        topbar.hide();
-                    }
+                        function (response) {
+                            logger.error("Could not delete the Pricing Table.", response, response.statusText);
+                            topbar.hide();
+                        }
                     );
                 });
             });
@@ -1880,20 +1937,20 @@
                     }
                     if (!!results.data.WIP_DEAL) {
                         if (!$scope.switchingTabs) {
-                        	for (i = 0; i < results.data.WIP_DEAL.length; i++) {
-                        		var dataItem = results.data.WIP_DEAL[i];
-                        		if (dataItem.warningMessages !== undefined && dataItem.warningMessages.length > 0) anyWarnings = true;
+                            for (i = 0; i < results.data.WIP_DEAL.length; i++) {
+                                var dataItem = results.data.WIP_DEAL[i];
+                                if (dataItem.warningMessages !== undefined && dataItem.warningMessages.length > 0) anyWarnings = true;
 
-                        		if (anyWarnings) {
-                        			// map tiered warnings
-                        			for (var t = 1; t <= dataItem.NUM_OF_TIERS; t++) {
-                        				for (var a = 0; a < tierAtrbs.length; a++) {
-                        					mapTieredWarnings(dataItem, dataItem, tierAtrbs[a], (tierAtrbs[a] + "_10___" + t), t); // NOTE: 10___ is the dim defined in _gridUtil.js
-                        				}
-                        			}
-                        		}
-                        	}
-                        $scope.updateResults(results.data.WIP_DEAL, $scope.pricingTableData === undefined ? [] : $scope.pricingTableData.WIP_DEAL);
+                                if (anyWarnings) {
+                                    // map tiered warnings
+                                    for (var t = 1; t <= dataItem.NUM_OF_TIERS; t++) {
+                                        for (var a = 0; a < tierAtrbs.length; a++) {
+                                            mapTieredWarnings(dataItem, dataItem, tierAtrbs[a], (tierAtrbs[a] + "_10___" + t), t); // NOTE: 10___ is the dim defined in _gridUtil.js
+                                        }
+                                    }
+                                }
+                            }
+                            $scope.updateResults(results.data.WIP_DEAL, $scope.pricingTableData === undefined ? [] : $scope.pricingTableData.WIP_DEAL);
                         }
                     }
 
@@ -1905,7 +1962,7 @@
                         $scope.$broadcast('saveComplete', results);
 
                         if (!!toState) {
-                            if ($scope.switchingTabs) toState = toState.replace(/.wip/g,'');
+                            if ($scope.switchingTabs) toState = toState.replace(/.wip/g, '');
                             $state.go(toState, toParams, { reload: true });
                         } else {
                             $timeout(function () {
@@ -1980,11 +2037,11 @@
                 var offset = 0;
 
 
-            	// Offset detects which data[i] are actions (ID_CHNAGE, etc.) rather than actual data for adding validations to each row
+                // Offset detects which data[i] are actions (ID_CHNAGE, etc.) rather than actual data for adding validations to each row
                 for (var i = 0; i < data.length; i++) { // NOTE: We can have multiple offsets because of vol-tier
-                	if (!!data[i] && !!data[i]._actions) {
-                		offset += 1;
-                	}
+                    if (!!data[i] && !!data[i]._actions) {
+                        offset += 1;
+                    }
                 }
 
                 var firstUntouchedRowFinder = 0; // when this == 1, then it will add the rest of the dropdown validation back in (in the for loop below) It can also turn into 3, which will do nothing
@@ -2012,21 +2069,21 @@
                     var isRequired = !!beh.isRequired && !!beh.isRequired[value.field];
                     var msg = isError ? beh.validMsg[value.field] : (isRequired) ? "This field is required." : "UNKNOWN";
 
-    				// TODO: In the future. Dropdowns do work, but their (red highlighting) validations do not allow us to ignore case-sensitivity.
-    				// If we can figure out how to ignore case-sesitive, we can put these dropdwons back in
+                    // TODO: In the future. Dropdowns do work, but their (red highlighting) validations do not allow us to ignore case-sensitivity.
+                    // If we can figure out how to ignore case-sesitive, we can put these dropdwons back in
                     // re-add dropdwwns back into existing rows (dataItem only contains existing rows) Note that re-adding all the validation to the entire column will show unneccessary red flags
                     //if (value.uiType === "DROPDOWN") {
                     //    var myRange = sheet.range(row + 1, c++);
                     //    reapplyDropdowns(myRange, false, value.field);
                     //} else {
-                        sheet.range(row + 1, c++).validation($scope.myDealsValidation(isError, msg, isRequired));
+                    sheet.range(row + 1, c++).validation($scope.myDealsValidation(isError, msg, isRequired));
                     //}
                 });
             } else if (isTheFirstUntouchedRowIfEqualsToOne === 0) {
                 return 1;
             } else if (isTheFirstUntouchedRowIfEqualsToOne === 1) {
-            	//// TODO: In the future. Dropdowns do work, but their (red highlighting) validations do not allow us to ignore case-sensitivity.
-            	//// If we can figure out how to ignore case-sesitive, we can put these dropdwons back in
+                //// TODO: In the future. Dropdowns do work, but their (red highlighting) validations do not allow us to ignore case-sensitivity.
+                //// If we can figure out how to ignore case-sesitive, we can put these dropdwons back in
                 //// HACK: This is so we get the dropdowns back on the untouched rows without red flags!
                 //// re-add dropdowns into untouched rows
                 //angular.forEach(ptTemplate.model.fields, function (value, key) {
@@ -2040,8 +2097,8 @@
             return 0;
         }
 
-    	//// TODO: In the future. Dropdowns do work, but their (red highlighting) validations do not allow us to ignore case-sensitivity.
-    	//// If we can figure out how to ignore case-sesitive, we can put these dropdwons back in
+        //// TODO: In the future. Dropdowns do work, but their (red highlighting) validations do not allow us to ignore case-sensitivity.
+        //// If we can figure out how to ignore case-sesitive, we can put these dropdwons back in
         //function reapplyDropdowns(sheetRange, allowNulls, valueField) {
         //    sheetRange.validation({
         //        dataType: "list",
@@ -2100,51 +2157,51 @@
         }
 
         function mapTieredWarnings(dataItem, dataToTieTo, atrbName, atrbToSetErrorTo, tierNumber) {
-        	// Tie warning message (valid message and red highlight) to its specific tier
-        	// NOTE: this expects that tiered errors come in the form of a Dictionary<tier, message>
-        	if (!!dataItem._behaviors && !!dataItem._behaviors.validMsg && !jQuery.isEmptyObject(dataItem._behaviors.validMsg)) {
-        		if (dataItem._behaviors.validMsg[atrbName] != null) {
-        			// Parse the Dictionary json
-        			var jsonTierMsg = JSON.parse(dataItem._behaviors.validMsg[atrbName]);
+            // Tie warning message (valid message and red highlight) to its specific tier
+            // NOTE: this expects that tiered errors come in the form of a Dictionary<tier, message>
+            if (!!dataItem._behaviors && !!dataItem._behaviors.validMsg && !jQuery.isEmptyObject(dataItem._behaviors.validMsg)) {
+                if (dataItem._behaviors.validMsg[atrbName] != null) {
+                    // Parse the Dictionary json
+                    var jsonTierMsg = JSON.parse(dataItem._behaviors.validMsg[atrbName]);
 
-        			if (jsonTierMsg[tierNumber] != null && jsonTierMsg[tierNumber] != undefined) {
-        				// Set the validation message
-        				dataToTieTo._behaviors.validMsg[atrbToSetErrorTo] = jsonTierMsg[tierNumber];
-        				dataToTieTo._behaviors.isError[atrbToSetErrorTo] = true;
-        			} else {
-        				// Delete the tier-specific validation if it doesn't tie to this specific tier
-        				delete dataToTieTo._behaviors.validMsg[atrbToSetErrorTo];
-        				delete dataToTieTo._behaviors.isError[atrbToSetErrorTo];
-        			}
-        		}
-        	}
-		}
+                    if (jsonTierMsg[tierNumber] != null && jsonTierMsg[tierNumber] != undefined) {
+                        // Set the validation message
+                        dataToTieTo._behaviors.validMsg[atrbToSetErrorTo] = jsonTierMsg[tierNumber];
+                        dataToTieTo._behaviors.isError[atrbToSetErrorTo] = true;
+                    } else {
+                        // Delete the tier-specific validation if it doesn't tie to this specific tier
+                        delete dataToTieTo._behaviors.validMsg[atrbToSetErrorTo];
+                        delete dataToTieTo._behaviors.isError[atrbToSetErrorTo];
+                    }
+                }
+            }
+        }
 
         $scope.pivotData = function (data) {
             if (!!$scope.curPricingTable && !!$scope.curPricingTable.NUM_OF_TIERS) {
                 var numTiers = $scope.curPricingTable.NUM_OF_TIERS;
                 if (numTiers <= 0) {
-                	return data;
+                    return data;
                 }
                 var newData = [];
 
                 for (var d = 0; d < data.length; d++) {
                     for (var t = 1; t <= numTiers; t++) {
-                		var lData = util.deepClone(data[d]);
-                    	// Vol-tier specific cols with tiers
-                    	for (var i = 0; i < tierAtrbs.length; i++) {
-                    		var tieredItem = tierAtrbs[i];
-                    		lData[tieredItem] = lData[tieredItem + "_____10___" + t];
+                        var lData = util.deepClone(data[d]);
+                        // Vol-tier specific cols with tiers
+                        for (var i = 0; i < tierAtrbs.length; i++) {
+                            var tieredItem = tierAtrbs[i];
+                            lData[tieredItem] = lData[tieredItem + "_____10___" + t];
 
-                    		mapTieredWarnings(data[d], lData, tieredItem, tieredItem, t);
-                    	}
-						// Disable all Start vols except the first
-                    	if (t != 1 && !!data[d]._behaviors) {
-                    		if (!data[d]._behaviors.isReadOnly) {
-                    			data[d]._behaviors.isReadOnly = {};
-                    		}
-                    		lData._behaviors.isReadOnly["STRT_VOL"] = true;
-                    	}
+                            mapTieredWarnings(data[d], lData, tieredItem, tieredItem, t);
+                        }
+                        // Disable all Start vols except the first
+                        if (t != 1 && !!data[d]._behaviors) {
+                            if (!data[d]._behaviors.isReadOnly) {
+                                data[d]._behaviors.isReadOnly = {};
+                            }
+                            lData._behaviors.isReadOnly["STRT_VOL"] = true;
+                        }
 
                         newData.push(lData);
                     }
@@ -2169,9 +2226,9 @@
                         for (a = 0; a < tierAtrbs.length; a++)
                             lData[tierAtrbs[a] + tierDimKey + t] = data[d][tierAtrbs[a]];
                         if (t === numTiers) {
-                        	for (a = 0; a < tierAtrbs.length; a++){
-                        	delete lData[tierAtrbs[a]];
-							}
+                            for (a = 0; a < tierAtrbs.length; a++) {
+                                delete lData[tierAtrbs[a]];
+                            }
                             newData.push(lData);
                         }
                         d++;
@@ -2824,12 +2881,12 @@
             var valid = $scope.curPricingStrategy.PASSED_VALIDATION;
             if (!$scope._dirty && (valid === "Complete" || valid === "Finalizing")) {
                 $state.go('contract.manager.strategy.wip',
-                {
-                    cid: $scope.contractData.DC_ID,
-                    sid: $scope.curPricingStrategyId,
-                    pid: $scope.curPricingTableId
-                },
-                { reload: true });
+                    {
+                        cid: $scope.contractData.DC_ID,
+                        sid: $scope.curPricingStrategyId,
+                        pid: $scope.curPricingTableId
+                    },
+                    { reload: true });
             } else {
                 if (!!$scope.child) {
                     $scope.child.validateSavepublishWipDeals();
@@ -2906,7 +2963,7 @@
         function cleanupData(data) {
             // Remove any lingering blank rows from the data
             for (var n = data.length - 1; n >= 0; n--) {
-            	if (data[n].DC_ID === null && (data[n].PTR_USER_PRD === null || data[n].PTR_USER_PRD.toString().replace(/\s/g, "").length === 0)) {
+                if (data[n].DC_ID === null && (data[n].PTR_USER_PRD === null || data[n].PTR_USER_PRD.toString().replace(/\s/g, "").length === 0)) {
                     data.splice(n, 1);
                 } else {
                     if (util.isInvalidDate(data[n].START_DT)) data[n].START_DT = moment($scope.contractData["START_DT"]).format("MM/DD/YYYY");

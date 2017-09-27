@@ -97,9 +97,9 @@
                                        name="files"
                                        kendo-upload="files"
                                        k-upload="filePostAddParams"
-                                       k-complete="onComplete"
                                        k-success="onSuccess"
                                        k-error="onError"
+                                       k-complete="onComplete"
                                        k-select="onFileSelect"
                                        k-remove="onFileRemove"
                                        k-async="fileUploadOptions" />
@@ -114,13 +114,13 @@
                         <div class="panel-body">
                             <div ng-hide="attachmentCount <= 0 || !initComplete" id="attachmentsGrid" kendo-grid k-ng-delay="attachmentsDlgShown" style="height:475px;" options="attachmentsGridOptions"></div>
                             <div ng-hide="attachmentCount != 0 || !initComplete" style="height:475px;">
-                                <p>None.</p>
+                                <p>This deal has no attachments.</p>
                             </div>
                             <div ng-hide="initComplete" style="height:475px;">
-                                <p>Retrieving attachments...</p>
+                                <p><i>Retrieving attachments...</i></p>
                             </div>
                             <div ng-hide="attachmentCount >= 0" style="height:475px; color:red">
-                                <p>Failed to get attachments!</p>
+                                <p>Unable to retrieve attachments!</p>
                             </div>
                         </div>
                     </div>
@@ -316,5 +316,4 @@
         .delete-attach-icon:hover {
             text-decoration: none;
         }
-
 </style>
