@@ -434,14 +434,14 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
         dataBound: gridDataBound,
         enableHorizontalScrollbar: true,
         columns: [
-            {
-                field: "EXCLUDE",
-                title: "",
-                width: "4px",
-                template: '<div class="fl gridStatusMarker #=EXCLUDE#" title="#=EXCLUDE#"></div>',
-                hidden: true,
-                filterable: false
-            },
+             {
+                 field: "EXCLUDE",
+                 title: "",
+                 width: "4px",
+                 template: '<div class="fl gridStatusMarker #=EXCLUDE#" title="#=EXCLUDE#"></div>',
+                 hidden: false,
+                 filterable: false
+             },
             {
                 field: "USR_INPUT",
                 title: "User Entered",
@@ -609,6 +609,11 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
         ]
     }
 
+    function getFullNameOfProduct(item) {
+        if (item.PRD_ATRB_SID > 7005) return item.HIER_VAL_NM;
+        return item.PRD_CAT_NM + " " + (item.BRND_NM === 'NA' ? "" : item.BRND_NM) + " " + (item.FMLY_NM === 'NA' ? "" : item.FMLY_NM);
+    }
+
     vm.clickProd = function (id, lookup, name, event) {
         var item = util.findInArrayWhere(vm.curRowProds, "name", lookup);
         if (!item) return;
@@ -627,6 +632,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
 
             if (!vm.ProductCorrectorData.ValidProducts[vm.curRowId]) vm.ProductCorrectorData.ValidProducts[vm.curRowId] = {};
             if (!vm.ProductCorrectorData.ValidProducts[vm.curRowId][item.name]) vm.ProductCorrectorData.ValidProducts[vm.curRowId][item.name] = [];
+            foundItem.HIER_VAL_NM = getFullNameOfProduct(foundItem);
             vm.ProductCorrectorData.ValidProducts[vm.curRowId][item.name].push(foundItem);
 
             vm.curRowData.forEach(function (item) {
@@ -673,7 +679,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
         // remove
         if (!!vm.ProductCorrectorData.DuplicateProducts[vm.curRowId]) {
             delete vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][prdName];
-            //vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][prdName] = {};
+            vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][prdName] = {};
         }
 
         var isEmpty = true;

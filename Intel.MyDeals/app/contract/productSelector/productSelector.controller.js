@@ -50,6 +50,8 @@
         vm.animateInclude = false;
         vm.animateExclude = false;
         vm.manageSelectedProducts = manageSelectedProducts;
+        vm.excludeMode = !!suggestedProduct.isExcludeProduct ?
+                        suggestedProduct.isExcludeProduct && dealType == 'VOL_TIER' : false;
         var enableMultipleSelection = dealType == 'VOL_TIER';
 
         var searchProcessed = false;
@@ -463,6 +465,10 @@
 
         function selectProduct(item) {
             var item = angular.copy(item);
+            if (vm.excludeMode) {
+                manageSelectedProducts('exclude', item, true);
+                return;
+            }
             if (item.parentSelected && dealType == 'VOL_TIER') {
                 manageSelectedProducts('exclude', item);
             } else {
@@ -471,7 +477,12 @@
         }
 
         function productExists(item, id) {
-            // Mark level 1
+            if (vm.excludeMode) {
+                return productExists = vm.excludedProducts.filter(function (x) {
+                    return x.PRD_MBR_SID == id;
+                }).length > 0;
+            }
+
             if (item === undefined) {
                 return productExists = vm.addedProducts.filter(function (x) {
                     return x.PRD_MBR_SID == id;
@@ -490,8 +501,13 @@
             return productExists;
         }
 
+        function getFullNameOfProduct(item) {
+            if (item.PRD_ATRB_SID > 7005) return item.HIER_VAL_NM;
+            return item.PRD_CAT_NM + " " + (item.BRND_NM === 'NA' ? "" : item.BRND_NM) + " " + (item.FMLY_NM === 'NA' ? "" : item.FMLY_NM);
+        }
 
-        function manageSelectedProducts(mode, product) {
+
+        function manageSelectedProducts(mode, product, onlyExclude) {
             var item = angular.copy(product);
             if (item.id !== undefined && item.id != "") {
                 var product = vm.productSelectionLevels.filter(function (x) {
@@ -500,8 +516,23 @@
                 item = $.extend({}, item, product);
             }
 
+            item.HIER_VAL_NM = getFullNameOfProduct(item);
             item['USR_INPUT'] = item.HIER_VAL_NM;
             item['DERIVED_USR_INPUT'] = item.HIER_VAL_NM;
+
+            if (onlyExclude) {
+                if (item.selected) {
+                    item['EXCLUDE'] = true;
+                    vm.excludedProducts.push(item);
+                    vm.excludedProducts = $filter("unique")(vm.excludedProducts, 'PRD_MBR_SID');
+
+                } else {
+                    vm.excludedProducts = vm.excludedProducts.filter(function (x) {
+                        return x.PRD_MBR_SID != item.PRD_MBR_SID;
+                    });
+                }
+                return;
+            }
 
             if (mode == 'include') {
                 if (item.selected) {
@@ -1289,6 +1320,15 @@
                         },
                         "CAP": {
                             type: "object"
+                        },
+                        "EXCLUDE": {
+                            type: "boolean"
+                        },
+                        "BRND_NM": {
+                            type: "string"
+                        },
+                        "FMLY_NM": {
+                            type: "string"
                         }
                     }
                 }
@@ -1324,6 +1364,20 @@
                 {
                     field: "PRD_CAT_NM",
                     title: "Product Category",
+                    width: "80px",
+                    groupHeaderTemplate: "#= value #",
+                    filterable: { multi: true, search: true }
+                },
+                {
+                    field: "BRND_NM",
+                    title: "Brand Name",
+                    width: "80px",
+                    groupHeaderTemplate: "#= value #",
+                    filterable: { multi: true, search: true }
+                },
+                {
+                    field: "FMLY_NM",
+                    title: "Family Name",
                     width: "80px",
                     groupHeaderTemplate: "#= value #",
                     filterable: { multi: true, search: true }

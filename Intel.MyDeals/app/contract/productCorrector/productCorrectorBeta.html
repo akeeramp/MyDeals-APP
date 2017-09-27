@@ -35,7 +35,7 @@
                     <div>Product(s) not found for Row {{ vm.rowDCId }}</div>
                     <div>
                         <ul class="productpath breadcrumb">
-                            <li ng-repeat="p in vm.curRowProds | unique:'name'">
+                            <li ng-repeat="p in vm.curRowProds | unique:'name' | orderBy: ['-exclude','name']">
                                 <span ng-class="{'strike': p.matchName != '','btnInclude':vm.showIncludeExcludeLabel && p.exclude == 'I', 'btnExclude':vm.showIncludeExcludeLabel && p.exclude == 'E' }" class="btn btn-default btn-xs">
                                     <span class="prdAnchor {{p.status}}" ng-click="vm.clkPrdUsrNm(p)" title="{{p.reason}}">{{:: p.name }}</span>
                                     <span title="Remove Product" class="close" ng-click="vm.removeProd(p.name, p.exclude)">&nbsp;×</span>
@@ -175,12 +175,10 @@
 
 <style>
     .btnInclude {
-        border-color: #003C71;
         border-left: 4px solid #003C71;
     }
 
     .btnExclude {
-        border-color: #FC4C02;
         border-left: 4px solid #FC4C02;
     }
 

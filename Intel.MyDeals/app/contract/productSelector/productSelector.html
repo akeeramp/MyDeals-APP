@@ -169,31 +169,42 @@
             </div>
         </div>
         <div style="padding:15px;">
-            <div class="row">
+            <div ng-if="vm.excludeMode">
+                <span>
+                    <span class="text-left textProdSelector">
+                        Excluded Products
+                        <span ng-class="{'animate':vm.animateExclude}" class="arcAnimate">
+                            <small role="button">&nbsp;({{vm.excludedProducts.length}})</small>
+                        </span>
+                    </span>
+                </span>
+                <trashcan title="Clear excluded products" class="fr" ng-click="vm.clearProducts('E')"></trashcan>
+            </div>
+            <div ng-if="!vm.excludeMode" class="row">
                 <div ng-class="{'col-md-6':vm.dealType=='VOL_TIER', 'paddingRight15':vm.dealType!='VOL_TIER'}">
                     <span ng-class="{'paddingLeft15':vm.dealType!='VOL_TIER'}">
                         <span ng-class="{'paddingLeftNone':vm.dealType=='VOL_TIER'}" class="text-left textProdSelector">
                             Selected Products
                             <span ng-class="{'animate':vm.animateInclude}" class="arcAnimate">
-                                <small role="button" ng-click="vm.showHeirarrchyTree()">&nbsp;({{vm.addedProducts.length}})</small>
+                                <small role="button">&nbsp;({{vm.addedProducts.length}})</small>
                             </span>
                         </span>
                     </span>
-                    <trashcan  title="Clear products" class="fr" ng-click="vm.clearProducts()"></trashcan>
+                    <trashcan title="Clear products" class="fr" ng-click="vm.clearProducts()"></trashcan>
                 </div>
                 <div ng-if="vm.dealType=='VOL_TIER'" class="col-md-6">
                     <span>
                         <span class="paddingRightNone text-left textProdSelector">
                             Excluded Products
                             <span ng-class="{'animate':vm.animateExclude}" class="arcAnimate">
-                                <small role="button" ng-click="vm.showHeirarrchyTree()">&nbsp;({{vm.excludedProducts.length}})</small>
+                                <small role="button">&nbsp;({{vm.excludedProducts.length}})</small>
                             </span>
                         </span>
                     </span>
                     <trashcan title="Clear excluded products" class="fr" ng-click="vm.clearProducts('E')"></trashcan>
                 </div>
             </div>
-            <div class="row" style="padding-left:15px;padding-right:15px;">
+            <div ng-if="!vm.excludeMode" class="row" style="padding-left:15px;padding-right:15px;">
                 <div ng-class="{'col-md-6':vm.dealType=='VOL_TIER','paddingLeftNone':vm.dealType=='VOL_TIER'}">
                     <ui-select allow-clear="true" onkeypress="return false;" class="prodSelected text-left"
                                tagging="true" multiple ng-model="vm.addedProducts" theme="bootstrap">
@@ -217,13 +228,26 @@
                     </ui-select>
                 </div>
             </div>
+            <div ng-if="vm.excludeMode" class="row" style="padding-left:15px;padding-right:15px;">
+                <div>
+                    <ui-select allow-clear="true" onkeypress="return false;" class="prodSelected text-left"
+                               tagging="true" multiple ng-model="vm.excludedProducts" theme="bootstrap">
+                        <ui-select-match>
+                            <span ng-class="{'text-danger': vm.isValidCapDetails($item)}"
+                                  title="{{vm.isValidCapDetails($item, true)}}">{{$item.HIER_VAL_NM}}</span>
+                        </ui-select-match>
+                        <ui-select-choices repeat="products in vm.selectedProducts">
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
             <br />
             <div class="form-inline insertAtRowsText">
                 <span ng-if="vm.enableSplitProducts">
                     <input id="separateProduct" class="checkbox-custom" ng-model="vm.splitProducts" name="separateroducts" type="checkbox">
                     <label for="separateProduct" class="checkbox-custom-label" style="padding-bottom:5px;margin-top:0px;">&nbsp;Separate product in rows</label>
                 </span>
-                <button class="btn btn-primary fr prdBtn" ng-disabled="vm.addedProducts.length == 0" ng-click="vm.save()">Save</button>
+                <button class="btn btn-primary fr prdBtn" ng-disabled="!vm.excludeMode && vm.addedProducts.length == 0" ng-click="vm.save()">Save</button>
                 <button class="btn btn-default fr prdBtn" ng-click="vm.cancel()" style="margin-right:4px;">Cancel</button>
             </div>
         </div>

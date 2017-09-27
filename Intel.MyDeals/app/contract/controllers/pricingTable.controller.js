@@ -1802,7 +1802,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             data[r].PTR_SYS_PRD = !!transformResults.ValidProducts[key] ? JSON.stringify(transformResults.ValidProducts[key]) : "";
             sourceData[r].PTR_SYS_PRD = data[r].PTR_SYS_PRD;
 
-            if ((!!transformResults.InValidProducts[key] && (transformResults.InValidProducts[key]["I"].length > 0 || transformResults.InValidProducts[key]["E"].length > 0 )) || !!transformResults.DuplicateProducts[key]) {
+            if ((!!transformResults.InValidProducts[key] && (transformResults.InValidProducts[key]["I"].length > 0
+                    || transformResults.InValidProducts[key]["E"].length > 0)) || !!transformResults.DuplicateProducts[key]) {
                 root.setBusy("", "");
                 vm.openProdCorrector(currentRow, transformResults, rowData, publishWipDeals);
                 isAllValidated = false;
@@ -1814,6 +1815,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 var contractProducts = userInput.contractProducts;
                 data[r].PTR_USER_PRD = contractProducts;
                 sourceData[r].PTR_USER_PRD = contractProducts;
+
+                // VOL_TIER update exclude products
                 if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD === "VOL_TIER") {
                     var excludeProducts = userInput.excludeProducts;
                     data[r].PRD_EXCLDS = excludeProducts;
@@ -1900,16 +1903,18 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                             // Update user input if all the issues are done
                             if (allIssuesDone) {
-                                var contractProducts = updateUserInputFromCorrector(transformResult.ValidProducts[key], transformResult.AutoValidatedProducts[key], false);
-                                data[r].PTR_USER_PRD = contractProducts;
-                                sourceData[r].PTR_USER_PRD = contractProducts;
-                                if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD == "VOL_TIER") {
-                                    var excludeContractProducts = updateUserInputFromCorrector(transformResult.ValidProducts[key], transformResult.AutoValidatedProducts[key], true);
-                                    data[r].PRD_EXCLDS = excludeContractProducts;
-                                    sourceData[r].PRD_EXCLDS = excludeContractProducts;
+                                var products = updateUserInputFromCorrector(transformResult.ValidProducts[key], transformResult.AutoValidatedProducts[key]);
+                                data[r].PTR_USER_PRD = products.contractProducts;
+                                sourceData[r].PTR_USER_PRD = products.contractProducts;
+
+                                // VOL_TIER update exclude products
+                                if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD === "VOL_TIER") {
+                                    data[r].PRD_EXCLDS = products.excludeProducts;
+                                    sourceData[r].PRD_EXCLDS = products.excludeProducts;
                                 }
-                                data[r].DC_ID = contractProducts === "" ? null : data[r].DC_ID;
-                                sourceData[r].DC_ID = contractProducts === "" ? null : sourceData[r].DC_ID;
+
+                                data[r].DC_ID = products.contractProducts === "" ? null : data[r].DC_ID;
+                                sourceData[r].DC_ID = products.contractProducts === "" ? null : sourceData[r].DC_ID;
                             }
                         }
                     }
@@ -1993,80 +1998,97 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         if (!validProducts) {
             return "";
         }
-        var contractProducts = "";
-        var excludeProducts = "";
+        var input = { 'contractProducts': '', 'excludeProducts': '' };
         for (var prd in validProducts) {
             if (validProducts.hasOwnProperty(prd)) {
-                var derivedUserInput = $filter('unique')(validProducts[prd], 'DERIVED_USR_INPUT');
-                var userInput = "";
-                var excludeUserInput = "";
-                if (derivedUserInput[0].EXCLUDE !== undefined && derivedUserInput[0].EXCLUDE == true) {
-                    if (validProducts[prd].length === 1 && derivedUserInput[0].DERIVED_USR_INPUT.trim().toLowerCase() == derivedUserInput[0].HIER_NM_HASH.trim().toLowerCase()) {
-                        excludeUserInput = derivedUserInput[0].HIER_VAL_NM
+                var contractProducts = "";
+                var excludeProducts = "";
+
+                // Include products
+                var products = validProducts[prd].filter(function (x) {
+                    return x.EXCLUDE == false;
+                });
+                if (products.length !== 0) {
+                    var contDerivedUserInput = $filter('unique')(products, 'HIER_VAL_NM');
+                    if (products.length === 1 && contDerivedUserInput[0].DERIVED_USR_INPUT.trim().toLowerCase() == contDerivedUserInput[0].HIER_NM_HASH.trim().toLowerCase()) {
+                        contractProducts = contDerivedUserInput[0].HIER_VAL_NM;
                     } else {
-                        excludeUserInput = derivedUserInput[0].DERIVED_USR_INPUT
+                        contractProducts = contDerivedUserInput[0].DERIVED_USR_INPUT;
+                    }
+                    if (contractProducts != "") {
+                        input.contractProducts = input.contractProducts === "" ? contractProducts : input.contractProducts + "," + contractProducts;
                     }
                 }
-                else {
-                    if (validProducts[prd].length === 1 && derivedUserInput[0].DERIVED_USR_INPUT.trim().toLowerCase() == derivedUserInput[0].HIER_NM_HASH.trim().toLowerCase()) {
-                        userInput = derivedUserInput[0].HIER_VAL_NM;
+
+                // Exclude Products
+                var products = validProducts[prd].filter(function (x) {
+                    return x.EXCLUDE == true;
+                });
+                if (products.length !== 0) {
+                    var exclDerivedUserInput = $filter('unique')(products, 'HIER_VAL_NM');
+                    if (products.length === 1 && exclDerivedUserInput[0].DERIVED_USR_INPUT.trim().toLowerCase() == exclDerivedUserInput[0].HIER_NM_HASH.trim().toLowerCase()) {
+                        excludeProducts = exclDerivedUserInput[0].HIER_VAL_NM;
+                    } else {
+                        excludeProducts = exclDerivedUserInput[0].DERIVED_USR_INPUT
                     }
-                    else {
-                        userInput = derivedUserInput[0].DERIVED_USR_INPUT;
+                    if (excludeProducts != "") {
+                        input.excludeProducts = input.excludeProducts === "" ? excludeProducts : input.excludeProducts + "," + excludeProducts;
                     }
                 }
-            }
-            if (userInput != "") {
-                contractProducts = contractProducts === "" ? userInput : contractProducts + "," + userInput;
-            }
-            if (excludeUserInput != "") {
-                excludeProducts = excludeProducts === "" ? excludeUserInput : excludeProducts + "," + excludeUserInput;
             }
         }
-        var input = { 'contractProducts': contractProducts, 'excludeProducts': excludeProducts };
         return input;
     }
 
-    function updateUserInputFromCorrector(validProducts, autoValidatedProducts, isExclude) {
+    function updateUserInputFromCorrector(validProducts, autoValidatedProducts) {
         if (!validProducts) {
             return "";
         }
-        var userContractProducts = "";
+        var products = { 'contractProducts': '', 'excludeProducts': '' };
         for (var prd in validProducts) {
             if (!!autoValidatedProducts && autoValidatedProducts.hasOwnProperty(prd)) {
                 var autoTranslated = {};
                 autoTranslated[prd] = autoValidatedProducts[prd];
-                if (autoTranslated[prd]["0"].EXCLUDE == isExclude) { //TODO: updateUserInput changes happen in Selector
-                    var autoValidProd = updateUserInput(autoTranslated);
-                    if (autoValidProd !== "") {
-                        if (isExclude == false) {
-                            userContractProducts = userContractProducts === "" ? autoValidProd.contractProducts : userContractProducts + "," + autoValidProd.contractProducts;
-                        }
-                        else {
-                            userContractProducts = userContractProducts === "" ? autoValidProd.excludeProducts : userContractProducts + "," + autoValidProd.excludeProducts;
-                        }
+                var updatedUserInput = updateUserInput(autoTranslated)
 
-                    }
+                // Include products
+                var autoValidContProd = updatedUserInput.contractProducts;
+                if (autoValidContProd !== "") {
+                    products.contractProducts = products.contractProducts === "" ? autoValidContProd : products.contractProducts + "," + autoValidContProd;
                 }
 
+                // Exclude Products
+                var autoValidExcludeProd = updatedUserInput.excludeProducts;
+                if (autoValidExcludeProd !== "") {
+                    products.excludeProducts = products.excludeProducts === "" ? autoValidExcludeProd : products.excludeProducts + "," + autoValidExcludeProd;
+                }
             }
             else if (validProducts.hasOwnProperty(prd)) {
-                var userInput = $filter('unique')(validProducts[prd], 'HIER_VAL_NM');
-                userInput = userInput.map(function (elem) {
-                    if (elem.EXCLUDE == isExclude) {
-                        return elem.HIER_VAL_NM;
-                    }
-                }).join(",");
-
-                userContractProducts === "" ? userContractProducts = userInput : userContractProducts = userContractProducts + "," + userInput;
+                products.contractProducts = getUserInput(products.contractProducts, validProducts[prd], "I");
+                products.excludeProducts = getUserInput(products.excludeProducts, validProducts[prd], "E");
             }
         }
+        return products;
+    }
 
-        if (userContractProducts.charAt(userContractProducts.length - 1) == ',') {
-            userContractProducts = userContractProducts.substring(0, userContractProducts.length - 1);
+    function getFullNameOfProduct(item) {
+        if (item.PRD_ATRB_SID > 7005) return item.HIER_VAL_NM;
+        return item.PRD_CAT_NM + " " + (item.BRND_NM === 'NA' ? "" : item.BRND_NM) + " " + (item.FMLY_NM === 'NA' ? "" : item.FMLY_NM);
+    }
+
+    function getUserInput(updatedUserInput, products, typeOfProduct) {
+        var userInput = products.filter(function (x) {
+            return x.EXCLUDE == (typeOfProduct == "E");
+        });
+        userInput = $filter('unique')(userInput, 'HIER_VAL_NM');
+        userInput = userInput.map(function (elem) {
+            return elem.HIER_VAL_NM;
+        }).join(",");
+
+        if (userInput !== "") {
+            updatedUserInput = updatedUserInput === "" ? userInput : updatedUserInput + "," + userInput;
         }
-
-        return userContractProducts;
+        return updatedUserInput;
     }
 
     function validatePricingTableProducts() {

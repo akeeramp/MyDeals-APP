@@ -59,7 +59,7 @@
         $scope.C_ADD_ATTACHMENTS = securityService.chkDealRules('C_ADD_ATTACHMENTS', window.usrRole, null, null, null);
         $scope.C_VIEW_ATTACHMENTS = securityService.chkDealRules('C_VIEW_ATTACHMENTS', window.usrRole, null, null, null);
         $scope.C_EDIT_PRODUCT = securityService.chkDealRules('C_EDIT_PRODUCT', window.usrRole, null, null, null);
-        
+
         // Hard code for now until security is put in place
         // $scope.C_ADD_PRICING_STRATEGY = true;
 
@@ -721,7 +721,7 @@
         }
         $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
 
-            // EXITING RIGHT AWAY... PUPOSELY NOT WARNING USERS IF THE DATA CHANGED.  USERS ARE GETTING FLUSTERED WITH THIS FEATURE.  
+            // EXITING RIGHT AWAY... PUPOSELY NOT WARNING USERS IF THE DATA CHANGED.  USERS ARE GETTING FLUSTERED WITH THIS FEATURE.
             // LEAVING IT HERE IN CASE WE HAVE TO BRING IT BACK
             return;
 
@@ -1042,7 +1042,7 @@
                     function () {
                     	// Do Nothing on cancel
                     }
-				);				
+				);
         	}
         }
         $scope.hideAddPricingTable = function () {
@@ -1663,7 +1663,8 @@
 
                             if (!isValidatedRow) {
                                 validated_DC_Id.push(sData[s].DC_ID);
-                                if ((!!sData[s].PTR_USER_PRD && sData[s].PTR_USER_PRD !== "") && (!sData[s].PTR_SYS_PRD || sData[s].PTR_SYS_PRD === "")) {
+                                if ((!!sData[s].PTR_USER_PRD && sData[s].PTR_USER_PRD !== "") && (!sData[s].PTR_SYS_PRD || sData[s].PTR_SYS_PRD === "") ||
+                                    (!(!sData[s].PTR_SYS_INVLD_PRD || sData[s].PTR_SYS_PRD === ""))) {
                                     if (!sData[s]._behaviors) sData[s]._behaviors = {};
                                     if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
                                     if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
