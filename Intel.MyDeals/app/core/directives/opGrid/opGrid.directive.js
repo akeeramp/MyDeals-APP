@@ -1823,22 +1823,13 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         });
 
 
+                } else {  //DE31324: fix for non-ECAP Dealtypes - this is the default behavior for VT/Program deals for now until we do overlapping deal changes (if we do?) for those types as well
+                    $scope.parentRoot.setBusy("Validating your data...", "Please wait as we validate your information!");
+                    $scope.contractDs.sync();
+                    $scope.root.validateWipDeals();
                 }
 
                 return;
-
-                var valid = $scope.validateGrid();
-
-                if (valid) {
-                    $scope.root.validateWipDeals();
-                } else {
-                    $scope.root.setBusy("Validation Failed", "Looks like there are items that need to be fixed.");
-                    op.notifyWarning("Looks like there are items that need to be fixed.", "Validation Results");
-                    $timeout(function () {
-                        $scope.root.setBusy("", "");
-                    }, 4000);
-
-                }
             }
 
             $scope.validateRow = function (row, scope) {
