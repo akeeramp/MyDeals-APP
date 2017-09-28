@@ -83,22 +83,7 @@ namespace Intel.MyDeals.BusinessLogic
         {
             List<CostTestDetailItem> pctData = new CostTestLib().GetCostTestDetails(id);
 
-            OpDataCollectorFlattenedList rtnData = new OpDataCollectorFlattenedList();
-
-            PropertyInfo[] fieldNames = typeof(CostTestDetailItem).GetProperties(BindingFlags.Instance |
-                       BindingFlags.Static |
-                       BindingFlags.NonPublic |
-                       BindingFlags.Public);
-
-            foreach (CostTestDetailItem item in pctData)
-            {
-                OpDataCollectorFlattenedItem newItem = new OpDataCollectorFlattenedItem();
-                foreach (PropertyInfo propertyInfo in fieldNames)
-                {
-                    newItem[propertyInfo.Name] = propertyInfo.GetValue(item);
-                }
-                rtnData.Add(newItem);
-            }
+            OpDataCollectorFlattenedList rtnData = pctData.ToOpDataCollectorFlattenedList();
 
             return rtnData;
         }

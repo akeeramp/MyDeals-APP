@@ -906,12 +906,35 @@ namespace Intel.MyDeals.BusinessLogic
 
                     if (elMapping.TranslationType == OpTranslationType.OneDealPerProduct)
                     {
+                        var ttl = dcWip.GetDataElementValue(AttributeCodes.TITLE);
                         // manage products
-                        if (items.ContainsKey(dcWip.GetDataElementValue(AttributeCodes.TITLE)))
+                        if (items.ContainsKey(ttl))
                         {
                             List<ProdMapping> prdMappings = items[dcWip.GetDataElementValue(AttributeCodes.TITLE)].ToList();
-                            string strPrdMappings = JsonConvert.SerializeObject(new Dictionary<string, List<ProdMapping>> { [prodTitle] = prdMappings });
+                            string strPrdMappings = JsonConvert.SerializeObject(new Dictionary<string, List<ProdMapping>>
+                            {
+                                [prodTitle] = prdMappings
+                            });
                             dcSplit.SetDataElementValue(AttributeCodes.PTR_SYS_PRD, strPrdMappings);
+                        }
+                        else
+                        {
+                            var foundIt = false;
+                            foreach (KeyValuePair<string, IEnumerable<ProdMapping>> kvp in items)
+                            {
+                                List<ProdMapping> pMaps = kvp.Value.ToList();
+                                foreach (ProdMapping item in pMaps)
+                                {
+                                    if (item.HIER_VAL_NM != ttl || foundIt) continue;
+
+                                    string strPrdMappings = JsonConvert.SerializeObject(new Dictionary<string, List<ProdMapping>>
+                                    {
+                                        [prodTitle] = pMaps
+                                    });
+                                    dcSplit.SetDataElementValue(AttributeCodes.PTR_SYS_PRD, strPrdMappings);
+                                    foundIt = true;
+                                }
+                            }
                         }
                     }
 

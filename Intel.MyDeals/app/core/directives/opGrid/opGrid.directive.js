@@ -1148,6 +1148,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     }
                 }
 
+                event.currentScope.contractDs.sync();
             });
             
             $scope.cleanFlags = function () {

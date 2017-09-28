@@ -13,6 +13,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
 
     $scope.pctFilter = "";
     $scope.$parent.isSummaryHidden = false;
+    gridPctUtils.columns = {};
 
     $timeout(function () {
         $("#dealTypeDiv").removeClass("active");
@@ -113,11 +114,56 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
                     },
                     schema: {
                         model: $scope.templates.models[pt.OBJ_SET_TYPE_CD]
+                    },
+                    group: { field: "DEAL_ID" },
+                    requestEnd: function (e) {
+                        var response = e.response;
+                        for (var i = 0; i < response.length; i++) {
+                            var item = response[i];
+                            if (!gridPctUtils.columns[item.DEAL_ID]) {
+                                var cols = $scope.templates.columns[pt.OBJ_SET_TYPE_CD];
+                                var tmplt = "<table style='float: left; margin-top: -23px;'><colgroup><col style='width: 30px;'>";
+                                var tr = "<td></td>";
+                                for (var c = 0; c < cols.length; c++) {
+                                    var val = item[cols[c].field];
+                                    if (!!cols[c].format) {
+                                        val = kendo.toString(val, cols[c].format.replace("{0:", "").replace("}", ""));
+                                    }
+                                    if (!!cols[c].template) {
+                                        var newVal = kendo.template(cols[c].template)(item);
+                                        if (newVal.indexOf("ng-bind") < 0) {
+                                            val = newVal;
+                                        }
+                                    }
+                                    if (cols[c].field === "DEAL_ID") {
+                                        val = "<b>" + val + "</b>";
+                                    }
+                                    tmplt += "<col style='width:" + cols[c].width + "'>";
+
+                                    if (cols[c].field === "PRC_CST_TST_STS") {
+                                        tr += "<td style='padding-left: 0; padding-right: 6px;'>" + (cols[c].parent ? val : "") + "</td>";
+                                    } else {
+                                        tr += "<td style='padding-left: 6px; padding-right: 6px;'>" + (cols[c].parent ? val : "") + "</td>";
+                                    }
+                                }
+                                tmplt += "</colgroup><tbody><tr>" + tr + "</tr></tbody></table>";
+
+                                gridPctUtils.columns[item.DEAL_ID] = tmplt;
+                            }
+                        }
                     }
                 },
-                sortable: true,
+                sortable: false,
                 height: 250,
-                columns: $scope.templates.columns[pt.OBJ_SET_TYPE_CD]
+                columns: $scope.templates.columns[pt.OBJ_SET_TYPE_CD],
+                dataBound: function() {
+                    var grid = this;
+                    if (grid.dataSource.group().length > 0) {
+                        $(".k-grouping-row").each(function () {
+                            grid.collapseGroup(this);
+                        });
+                    }
+                }
 
             }
             var html = "<kendo-grid options='sumGridOptions' class='opUiContainer md dashboard'></kendo-grid>";
@@ -132,238 +178,287 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
 
     }
 
-    
-
     // Global Settings
     $scope.cellColumns = {
-        "COST_TEST_RESULT": {
-            field: "COST_TEST_RESULT",
+        "PRC_CST_TST_STS": {
+            field: "PRC_CST_TST_STS",
             title: "PCT Result",
-            width: "120px"
+            width: "120px",
+            template: "#= gridPctUtils.getResultMapping(PRC_CST_TST_STS) #",
+            parent: true
         },
-        "DC_ID": {
-            field: "DC_ID",
+        "DEAL_ID": {
+            field: "DEAL_ID",
             title: "Deal Id",
             width: "100px",
-            template:
-                "<div class='dealLnk'><i class='intelicon-protection-solid valid-icon validf_{{dataItem.PASSED_VALIDATION}}' title='Validation: {{dataItem.PASSED_VALIDATION || \"Not validated yet\"}}' ng-class='{ \"intelicon-protection-solid\": (dataItem.PASSED_VALIDATION === undefined || dataItem.PASSED_VALIDATION === \"\"), \"intelicon-protection-checked-verified-solid\": (dataItem.PASSED_VALIDATION === \"Valid\" || dataItem.PASSED_VALIDATION === \"Finalizing\" || dataItem.PASSED_VALIDATION === \"Complete\"), \"intelicon-protection-failed-solid\": (dataItem.PASSED_VALIDATION === \"Dirty\") }'></i><a href=''>#=DC_ID#</a></div>"
+            template: "#=DEAL_ID#",
+            groupHeaderTemplate: "#=gridPctUtils.getColumnTemplate(value)#",
+            parent: true
         },
-        "START_DT": {
-            field: "START_DT",
+        "DEAL_STRT_DT": {
+            field: "DEAL_STRT_DT",
             title: "Deal Start/End",
             width: "170px",
-            template:
-                "#= kendo.toString(new Date(START_DT), 'M/d/yyyy') # - #= kendo.toString(new Date(END_DT), 'M/d/yyyy') #"
+            template: "#= kendo.toString(new Date(DEAL_STRT_DT), 'M/d/yyyy') # - #= kendo.toString(new Date(DEAL_END_DT), 'M/d/yyyy') #",
+            parent: true
         },
-        "TITLE": {
-            field: "TITLE",
+        "PRODUCT": {
+            field: "PRODUCT",
             title: "Product",
-            width: "170px"
+            width: "170px",
+            parent: false
         },
         "CAP": {
             field: "CAP",
             title: "CAP",
-            width: "100px"
+            format: "{0:c}",
+            width: "100px",
+            parent: false
         },
         "MAX_RPU": {
             field: "MAX_RPU",
             title: "Max RPU",
-            width: "100px"
+            format: "{0:c}",
+            width: "100px",
+            parent: false
         },
-        "ECAP_PRICE": {
-            field: "ECAP_PRICE",
+        "ECAP_PRC": {
+            field: "ECAP_PRC",
             title: "ECAP Price",
-            width: "100px"
+            format: "{0:c}",
+            width: "100px",
+            parent: false
         },
         "ECAP_FLR": {
             field: "ECAP_FLR",
             title: "ECAP Floor",
-            width: "100px"
+            format: "{0:c}",
+            width: "100px",
+            parent: false
         },
-        "TITLE1": {
-            field: "TITLE",
+        "LOW_NET_PRC": {
+            field: "LOW_NET_PRC",
             title: "Lowest Net Price",
-            width: "100px"
+            format: "{0:c}",
+            width: "140px",
+            parent: false
         },
-        "TITLE2": {
-            field: "TITLE",
+        "PRD_COST": {
+            field: "PRD_COST",
             title: "Cost",
-            width: "100px"
+            format: "{0:c}",
+            width: "100px",
+            parent: false
         },
-        "TITLE3": {
-            field: "TITLE",
-            title: "Cost Test Analysis Override",
-            width: "140px"
+        "COST_TEST_OVRRD_FLG": {
+            field: "COST_TEST_OVRRD_FLG",
+            title: "Cost Test Analysis<br\>Override",
+            width: "140px",
+            parent: false
         },
-        "TITLE4": {
-            field: "TITLE",
-            title: "Cost Test Analysis Override Comments",
-            width: "140px"
+        "COST_TEST_OVRRD_CMT": {
+            field: "COST_TEST_OVRRD_CMT",
+            title: "Cost Test Analysis<br\>Override Comments",
+            width: "140px",
+            parent: false
         },
-        "TITLE5": {
-            field: "TITLE",
+        "RTL_CYC_NM": {
+            field: "RTL_CYC_NM",
             title: "Retail Cycle",
-            width: "140px"
+            width: "140px",
+            parent: false
         },
-        "TITLE6": {
-            field: "TITLE",
+        "RTL_PULL_DLR": {
+            field: "RTL_PULL_DLR",
             title: "Retail Pull $",
-            width: "140px"
+            format: "{0:c}",
+            width: "140px",
+            parent: false
         },
-        "MRKT_SEG": {
-            field: "MRKT_SEG",
+        "MKT_SEG": {
+            field: "MKT_SEG",
             title: "Market Segment",
-            width: "140px"
+            width: "140px",
+            parent: true
         },
-        "GEO_COMBINED": {
-            field: "GEO_COMBINED",
+        "GEO": {
+            field: "GEO",
             title: "GEO",
-            width: "140px"
+            width: "140px",
+            parent: true
         },
-        "TITLE7": {
-            field: "TITLE",
+        "PYOUT_BASE_ON": {
+            field: "PYOUT_BASE_ON",
             title: "Payout Based On",
-            width: "140px"
+            width: "140px",
+            parent: true
         },
-        "TITLE8": {
-            field: "TITLE",
+        "GRP_DEALS": {
+            field: "GRP_DEALS",
             title: "Group Deals",
-            width: "140px"
+            width: "140px",
+            parent: true
         },
-        "TITLE9": {
-            field: "TITLE",
+        "LAST_COST_TEST_RUN": {
+            field: "LAST_COST_TEST_RUN",
             title: "Time / Date Last Cost Ran",
-            width: "140px"
+            width: "160px",
+            template: "#= kendo.toString(new Date(LAST_COST_TEST_RUN), 'M/d/yyyy HH:mm:ss') #",
+            parent: false
+        },
+        "CNSMPTN_RSN": {
+            field: "CNSMPTN_RSN",
+            title: "Consumption Reason",
+            width: "140px",
+            parent: true
+        },
+        "PROG_PMT": {
+            field: "PROG_PMT",
+            title: "Program Payment",
+            width: "140px",
+            parent: true
         }
     }
     $scope.templates = {
         "models" : {
             "ECAP": {
-                id: "DC_ID",
+                id: "DEAL_ID",
                 fields: {
-                    COST_TEST_RESULT: { type: "string" },
-                    DC_ID: { type: "number" },
-                    START_DT: { type: "string" },
-                    TITLE: { type: "string" },
+                    PRC_CST_TST_STS: { type: "string" },
+                    DEAL_ID: { type: "number" },
+                    DEAL_STRT_DT: { type: "string" },
+                    PRODUCT: { type: "string" },
                     CAP: { type: "number" },
-                    ECAP_PRICE: { type: "number" },
+                    ECAP_PRC: { type: "number" },
                     ECAP_FLR: { type: "number" },
-                    TITLE1: { type: "string" },
-                    TITLE2: { type: "string" },
-                    TITLE3: { type: "string" },
-                    TITLE4: { type: "string" },
-                    TITLE5: { type: "string" },
-                    TITLE6: { type: "string" },
-                    MRKT_SEG: { type: "string" },
-                    GEO_COMBINED: { type: "string" },
-                    TITLE7: { type: "string" },
-                    TITLE8: { type: "string" },
-                    TITLE9: { type: "string" }
+                    LOW_NET_PRC: { type: "number" },
+                    PRD_COST: { type: "number" },
+                    COST_TEST_OVRRD_FLG: { type: "string" },
+                    COST_TEST_OVRRD_CMT: { type: "string" },
+                    RTL_CYC_NM: { type: "string" },
+                    RTL_PULL_DLR: { type: "number" },
+                    MKT_SEG: { type: "string" },
+                    GEO: { type: "string" },
+                    PYOUT_BASE_ON: { type: "string" },
+                    CNSMPTN_RSN: { type: "string" },
+                    PROG_PMT: { type: "string" },
+                    GRP_DEALS: { type: "string" },
+                    LAST_COST_TEST_RUN: { type: "string" }
                 }
             },
             "VOL_TIER": {
-                id: "DC_ID",
+                id: "DEAL_ID",
                 fields: {
-                    COST_TEST_RESULT: { type: "string" },
-                    DC_ID: { type: "number" },
-                    START_DT: { type: "string" },
-                    TITLE: { type: "string" },
+                    PRC_CST_TST_STS: { type: "string" },
+                    DEAL_ID: { type: "number" },
+                    DEAL_STRT_DT: { type: "string" },
+                    PRODUCT: { type: "string" },
                     MAX_RPU: { type: "number" },
-                    TITLE1: { type: "string" },
-                    TITLE2: { type: "string" },
-                    TITLE3: { type: "string" },
-                    TITLE4: { type: "string" },
-                    TITLE5: { type: "string" },
-                    TITLE6: { type: "string" },
-                    MRKT_SEG: { type: "string" },
-                    GEO_COMBINED: { type: "string" },
-                    TITLE7: { type: "string" },
-                    TITLE8: { type: "string" },
-                    TITLE9: { type: "string" }
+                    LOW_NET_PRC: { type: "number" },
+                    PRD_COST: { type: "number" },
+                    COST_TEST_OVRRD_FLG: { type: "string" },
+                    COST_TEST_OVRRD_CMT: { type: "string" },
+                    RTL_CYC_NM: { type: "string" },
+                    RTL_PULL_DLR: { type: "number" },
+                    MKT_SEG: { type: "string" },
+                    GEO: { type: "string" },
+                    PYOUT_BASE_ON: { type: "string" },
+                    CNSMPTN_RSN: { type: "string" },
+                    PROG_PMT: { type: "string" },
+                    GRP_DEALS: { type: "string" },
+                    LAST_COST_TEST_RUN: { type: "string" }
                 }
             },
             "PROGRAM": {
-                id: "DC_ID",
+                id: "DEAL_ID",
                 fields: {
-                    COST_TEST_RESULT: { type: "string" },
-                    DC_ID: { type: "number" },
-                    START_DT: { type: "string" },
-                    TITLE: { type: "string" },
+                    PRC_CST_TST_STS: { type: "string" },
+                    DEAL_ID: { type: "number" },
+                    DEAL_STRT_DT: { type: "string" },
+                    PRODUCT: { type: "string" },
                     MAX_RPU: { type: "number" },
-                    TITLE1: { type: "string" },
-                    TITLE2: { type: "string" },
-                    TITLE3: { type: "string" },
-                    TITLE4: { type: "string" },
-                    TITLE5: { type: "string" },
-                    TITLE6: { type: "string" },
-                    MRKT_SEG: { type: "string" },
-                    GEO_COMBINED: { type: "string" },
-                    TITLE7: { type: "string" },
-                    TITLE8: { type: "string" },
-                    TITLE9: { type: "string" }
+                    LOW_NET_PRC: { type: "number" },
+                    PRD_COST: { type: "number" },
+                    COST_TEST_OVRRD_FLG: { type: "string" },
+                    COST_TEST_OVRRD_CMT: { type: "string" },
+                    RTL_CYC_NM: { type: "string" },
+                    RTL_PULL_DLR: { type: "number" },
+                    MKT_SEG: { type: "string" },
+                    GEO: { type: "string" },
+                    PYOUT_BASE_ON: { type: "string" },
+                    CNSMPTN_RSN: { type: "string" },
+                    PROG_PMT: { type: "string" },
+                    GRP_DEALS: { type: "string" },
+                    LAST_COST_TEST_RUN: { type: "string" }
                 }
             }
         },
         "columns": {
             "ECAP": [
-                $scope.cellColumns["COST_TEST_RESULT"],
-                $scope.cellColumns["DC_ID"],
-                $scope.cellColumns["START_DT"],
-                $scope.cellColumns["TITLE"],
+                $scope.cellColumns["PRC_CST_TST_STS"],
+                $scope.cellColumns["DEAL_ID"],
+                $scope.cellColumns["DEAL_STRT_DT"],
+                $scope.cellColumns["PRODUCT"],
                 $scope.cellColumns["CAP"],
-                $scope.cellColumns["ECAP_PRICE"],
+                $scope.cellColumns["ECAP_PRC"],
                 $scope.cellColumns["ECAP_FLR"],
-                $scope.cellColumns["TITLE1"],
-                $scope.cellColumns["TITLE2"],
-                $scope.cellColumns["TITLE3"],
-                $scope.cellColumns["TITLE4"],
-                $scope.cellColumns["TITLE5"],
-                $scope.cellColumns["TITLE6"],
-                $scope.cellColumns["MRKT_SEG"],
-                $scope.cellColumns["GEO_COMBINED"],
-                $scope.cellColumns["TITLE7"],
-                $scope.cellColumns["TITLE8"],
-                $scope.cellColumns["TITLE9"]
+                $scope.cellColumns["LOW_NET_PRC"],
+                $scope.cellColumns["PRD_COST"],
+                $scope.cellColumns["COST_TEST_OVRRD_FLG"],
+                $scope.cellColumns["COST_TEST_OVRRD_CMT"],
+                $scope.cellColumns["RTL_CYC_NM"],
+                $scope.cellColumns["RTL_PULL_DLR"],
+                $scope.cellColumns["MKT_SEG"],
+                $scope.cellColumns["GEO"],
+                $scope.cellColumns["PYOUT_BASE_ON"],
+                $scope.cellColumns["CNSMPTN_RSN"],
+                $scope.cellColumns["PROG_PMT"],
+                $scope.cellColumns["GRP_DEALS"],
+                $scope.cellColumns["LAST_COST_TEST_RUN"]
             ],
             "VOL_TIER": [
-                $scope.cellColumns["COST_TEST_RESULT"],
-                $scope.cellColumns["DC_ID"],
-                $scope.cellColumns["START_DT"],
-                $scope.cellColumns["TITLE"],
+                $scope.cellColumns["PRC_CST_TST_STS"],
+                $scope.cellColumns["DEAL_ID"],
+                $scope.cellColumns["DEAL_STRT_DT"],
+                $scope.cellColumns["PRODUCT"],
                 $scope.cellColumns["MAX_RPU"],
-                $scope.cellColumns["TITLE1"],
-                $scope.cellColumns["TITLE2"],
-                $scope.cellColumns["TITLE3"],
-                $scope.cellColumns["TITLE4"],
-                $scope.cellColumns["TITLE5"],
-                $scope.cellColumns["TITLE6"],
-                $scope.cellColumns["MRKT_SEG"],
-                $scope.cellColumns["GEO_COMBINED"],
-                $scope.cellColumns["TITLE7"],
-                $scope.cellColumns["TITLE8"],
-                $scope.cellColumns["TITLE9"]
+                $scope.cellColumns["LOW_NET_PRC"],
+                $scope.cellColumns["PRD_COST"],
+                $scope.cellColumns["COST_TEST_OVRRD_FLG"],
+                $scope.cellColumns["COST_TEST_OVRRD_CMT"],
+                $scope.cellColumns["RTL_CYC_NM"],
+                $scope.cellColumns["RTL_PULL_DLR"],
+                $scope.cellColumns["MKT_SEG"],
+                $scope.cellColumns["GEO"],
+                $scope.cellColumns["PYOUT_BASE_ON"],
+                $scope.cellColumns["CNSMPTN_RSN"],
+                $scope.cellColumns["PROG_PMT"],
+                $scope.cellColumns["GRP_DEALS"],
+                $scope.cellColumns["LAST_COST_TEST_RUN"]
             ],
             "PROGRAM": [
-                $scope.cellColumns["COST_TEST_RESULT"],
-                $scope.cellColumns["DC_ID"],
-                $scope.cellColumns["START_DT"],
-                $scope.cellColumns["TITLE"],
+                $scope.cellColumns["PRC_CST_TST_STS"],
+                $scope.cellColumns["DEAL_ID"],
+                $scope.cellColumns["DEAL_STRT_DT"],
+                $scope.cellColumns["PRODUCT"],
                 $scope.cellColumns["MAX_RPU"],
-                $scope.cellColumns["TITLE1"],
-                $scope.cellColumns["TITLE2"],
-                $scope.cellColumns["TITLE3"],
-                $scope.cellColumns["TITLE4"],
-                $scope.cellColumns["TITLE5"],
-                $scope.cellColumns["TITLE6"],
-                $scope.cellColumns["MRKT_SEG"],
-                $scope.cellColumns["GEO_COMBINED"],
-                $scope.cellColumns["TITLE7"],
-                $scope.cellColumns["TITLE8"],
-                $scope.cellColumns["TITLE9"]
+                $scope.cellColumns["LOW_NET_PRC"],
+                $scope.cellColumns["PRD_COST"],
+                $scope.cellColumns["COST_TEST_OVRRD_FLG"],
+                $scope.cellColumns["COST_TEST_OVRRD_CMT"],
+                $scope.cellColumns["RTL_CYC_NM"],
+                $scope.cellColumns["RTL_PULL_DLR"],
+                $scope.cellColumns["MKT_SEG"],
+                $scope.cellColumns["GEO"],
+                $scope.cellColumns["PYOUT_BASE_ON"],
+                $scope.cellColumns["CNSMPTN_RSN"],
+                $scope.cellColumns["PROG_PMT"],
+                $scope.cellColumns["GRP_DEALS"],
+                $scope.cellColumns["LAST_COST_TEST_RUN"]
             ]
         }
-
     }
+
 
 
 

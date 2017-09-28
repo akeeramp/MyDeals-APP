@@ -586,3 +586,36 @@ Array.prototype.indexOfField = function (propertyName, value) {
             return i;
     return -1;
 }
+
+
+
+function gridPctUtils() { }
+
+gridPctUtils.columns = {};
+gridPctUtils.resultMappings = {
+    "FAIL": 0,
+    "INCOMPLETE": 1,
+    "PASS": 2,
+    "NA": 3
+};
+gridPctUtils.getColumnTemplate = function (dealId) {
+    return gridPctUtils.columns[dealId];
+}
+gridPctUtils.getResultMapping = function (result) {
+    var rtn = "<div style='text-align: center;'>";
+
+    if (result === "NA") {
+        rtn += '<i class="intelicon-information-solid" style="font-size: 20px !important;" ng-style="getColorStyle(result)" title="NA"></i>';
+    } else if (result === "PASS") {
+        rtn += '<i class="intelicon-passed-completed-solid" style="font-size: 20px !important;" ng-style="getColorStyle(result)" title="PASS"></i>';
+    } else if (result === "INCOMPLETE") {
+        rtn += '<i class="intelicon-help-solid" style="font-size: 20px !important;" ng-style="getColorStyle(result)" title="INCOMPLETE"></i>';
+    } else if (result === "FAIL") {
+        rtn += '<i class="intelicon-alert-solid" style="font-size: 20px !important;" ng-style="getColorStyle(result)" title="FAIL"></i>';
+    } else {
+        rtn += '<i class="intelicon-help-solid" style="font-size: 20px !important;" ng-style="getColorStyle(\'INCOMPLETE\')" title="Not run yet"></i>';
+    }
+    rtn += "</div>";
+    return rtn;
+}
+
