@@ -996,11 +996,13 @@ namespace Intel.MyDeals.BusinessLogic
 
             foreach (KeyValuePair<int, int> kvp in childToParentIdMapping)
             {
-                opMsgQueue.Messages.Add(new OpMsg()
+                string usrPrdTitle = res2[OpDataElementType.WIP_DEAL].AllDataCollectors.Where(c => c.DcID == kvp.Key && c.DcParentID == kvp.Value).Select(c => c.GetDataElementValue(AttributeCodes.PTR_USER_PRD)).FirstOrDefault();
+
+                opMsgQueue.Messages.Add(new OpMsg
                 {
                     Message = $"Parent ID Changed from {childToOrigParentIdMapping[kvp.Key]} to {kvp.Value}",
                     MsgType = OpMsg.MessageType.Info,
-                    ExtraDetails = kvp.Key,
+                    ExtraDetails = usrPrdTitle,
                     KeyIdentifiers = new[] { kvp.Key, kvp.Value, childToOrigParentIdMapping[kvp.Key] }
                 });
             }

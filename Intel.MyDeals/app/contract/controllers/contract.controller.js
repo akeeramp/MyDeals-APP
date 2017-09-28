@@ -1538,23 +1538,25 @@
                             return;
                         }
 
-                        // notify opGrid of the change
-                        $scope.$broadcast('updateGroup', data.data.Messages);
-
                         // update local data with new ids to prevent the need to refresh the screen
                         if (!!data.data.Messages) {
                             for (var m = 0; m < data.data.Messages.length; m++) {
                                 var dcId = data.data.Messages[m].KeyIdentifiers[0];
                                 var dcParentId = data.data.Messages[m].KeyIdentifiers[1];
+                                var dcPrdTitle = data.data.Messages[m].ExtraDetails;
 
                                 for (var d = 0; d < $scope.wipData.length; d++) {
                                     if ($scope.wipData[d].DC_ID === dcId) {
                                         $scope.wipData[d].DC_PARENT_ID = dcParentId;
                                         $scope.wipData[d]._parentCnt = 1;
+                                        $scope.wipData[d].PTR_USER_PRD = dcPrdTitle;
                                     }
                                 }
                             }
                         }
+
+                        // notify opGrid of the change
+                        $scope.$broadcast('updateGroup', data.data.Messages);
 
                         // refresh upper contract
                         if (wip !== undefined) $scope.refreshContractData(wip.DC_ID);
