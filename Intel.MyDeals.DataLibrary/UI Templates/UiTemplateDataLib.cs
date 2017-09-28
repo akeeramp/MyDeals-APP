@@ -744,7 +744,7 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "<i class='intelicon-protection-solid' style='color: #00AEEF; font-size: 20px;'></i>",
                 IsReadOnly = true,
                 DataType = "string",
-                Template = "<div class='uiControlDiv isReadOnlyCell'><i class='valid-icon validf_{{ dataItem.PASSED_VALIDATION }} {{ (dataItem.PASSED_VALIDATION === undefined || dataItem.PASSED_VALIDATION === \"\") ? \"intelicon-protection-solid\" : (dataItem.PASSED_VALIDATION == \"Valid\" || dataItem.PASSED_VALIDATION == \"Finalizing\" || dataItem.PASSED_VALIDATION == \"Complete\") ? \"intelicon-protection-checked-verified-solid\" : \"intelicon-protection-failed-solid\" }}' title='Validation: {{dataItem.PASSED_VALIDATION || \"Not validated yet\"}}' style='margin-left: 14px;'></i></div>"
+                Template = "<div class='uiControlDiv isReadOnlyCell'><div class='vert-center'><i class='valid-icon validf_{{ dataItem.PASSED_VALIDATION }} {{ (dataItem.PASSED_VALIDATION === undefined || dataItem.PASSED_VALIDATION === \"\") ? \"intelicon-protection-solid\" : (dataItem.PASSED_VALIDATION == \"Valid\" || dataItem.PASSED_VALIDATION == \"Finalizing\" || dataItem.PASSED_VALIDATION == \"Complete\") ? \"intelicon-protection-checked-verified-solid\" : \"intelicon-protection-failed-solid\" }}' title='Validation: {{dataItem.PASSED_VALIDATION || \"Not validated yet\"}}'></i></div></div>"
             });
             items.Add(new UiTemplateContainerItem
             {
@@ -851,11 +851,22 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem
             {
                 Id = 20,
+                AtrbCd = AttributeCodes.PRD_EXCLDS,
+                Label = "Exluded Products",
+                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                Template = "#=gridUtils.uiControlWrapper(data, 'PRD_EXCLDS')#",
+                DataType = "object",
+                IsFilterable = true,
+                IsSortable = true,
+                Width = 150
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 20,
                 AtrbCd = AttributeCodes.TITLE,
                 Label = "MyDeals Product",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 Template = "#=gridUtils.uiControlWrapper(data, 'TITLE')#",
-                DataType = "object",
                 IsFilterable = true,
                 IsSortable = true,
                 Width = 150

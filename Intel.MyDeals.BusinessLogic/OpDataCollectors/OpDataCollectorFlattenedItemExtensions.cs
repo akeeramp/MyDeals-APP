@@ -351,7 +351,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                     bool pHasL1 = false;
                     bool pHasL2 = false;
 
-                    foreach (ProdMapping pMap in pMaps)
+                    foreach (ProdMapping pMap in pMaps.Where(p => !p.EXCLUDE))
                     {
                         opFlatItem[AttributeCodes.PRODUCT_FILTER + "_____7___" + pMap.PRD_MBR_SID + "____20___0"] = pMap.PRD_MBR_SID;
                         pTitle.Add(pMap.HIER_VAL_NM);

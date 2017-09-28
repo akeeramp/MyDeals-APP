@@ -331,6 +331,9 @@
                     "TITLE": {
                         "Groups": ["Deal Info", "RPU"]
                     },
+                    "PRD_EXCLDS": {
+                        "Groups": ["Deal Info", "RPU"]
+                    },
                     "SERVER_DEAL_TYPE": {
                         "Groups": ["All"]
                     },
@@ -442,6 +445,9 @@
                         "Groups": ["Deal Info", "RPU"]
                     },
                     "TITLE": {
+                        "Groups": ["Deal Info", "RPU"]
+                    },
+                    "PRD_EXCLDS": {
                         "Groups": ["Deal Info", "RPU"]
                     },
                     "SERVER_DEAL_TYPE": {
