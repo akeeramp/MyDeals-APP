@@ -209,38 +209,48 @@
                              op-ui-mode="'VERTICAL'"></div>
                         <div ng-if="!contractData._behaviors.isHidden['C2A_DATA_C2A_ID']" class="description">{{constants.C2AIdDesc}}</div>
                     </div>
-                    <!--TODO Move these to FileUploaddirective-->
-                    <div class="col-md-11 row">
-                        <div class="f1 opUiLabel opUiLableWidth" ng-class="{isRequired: contractData.IsAttachmentRequired}">Attachment(s):&nbsp;<span kendo-tooltip k-content="constants.helptipMsgAttachment" k-position="'top'" class="opElementHelpIcon intelicon-information-outlined"></span><span class="description">{{constants.uplodaFileHelpText}}</span></div>
-                        <div ng-class="{fileAttachmentRequired: contractData.AttachmentError}">
-                            <input class="fileAttachmentRequired" id="fileUploader"
-                                   type="file" name="files"
-                                   kendo-upload="files"
-                                   k-upload="filePostAddParams"
-                                   k-success="onSuccess"
-                                   k-error="onError"
-                                   k-complete="onComplete"
-                                   k-select="onFileSelect"
-                                   k-remove="onFileRemove"
-                                   k-async="fileUploadOptions" />
-                        </div>
-                        <div ng-if="contractData.CUST_ACCPT != 'Pending'" class="description">{{constants.FileAttachementDesc}}</div>
-                        <div ng-if="contractData.AttachmentError" class="err-Control">* field is required.</div>
-                    </div>
-                    <div class="col-md-11 row" ng-if="!isNewContract">
+                    <div class="col-md-11 row" ng-if="!C_VIEW_ATTACHMENTS">
                         <div class="panel panel-default">
-                            <div class="panel-heading" style="font-size:14px; font-weight:bold">File Attachment Details <span ng-if="attachmentCount > 0 && initComplete" class="badge">{{attachmentCount}}</span></div>
-                            <div class="panel-body">
-                                <div ng-hide="attachmentCount <= 0 || !initComplete" id="fileAttachmentGrid" kendo-grid
-                                     footer-offset="500" options="fileAttachmentGridOptions"></div>
-                                <div ng-hide="attachmentCount != 0 || !initComplete" style="height:80px;">
-                                    <p style="margin-left:20px;margin-top:10px">This contract has no attachments.</p>
-                                </div>
-                                <div ng-hide="initComplete" style="height:80px;">
-                                    <p style="margin-left:20px;margin-top:10px"><i>Retrieving attachments...</i></p>
-                                </div>
-                                <div ng-hide="attachmentCount >= 0" style="height:80px; color:red">
-                                    <p style="margin-left:20px;margin-top:10px">Unable to retrieve attachments!</p>
+                            <div class="panel-heading" style="font-size:14px; font-weight:bold">File Attachment Details</div>
+                            <div class="panel-body" style="height:80px">
+                                <div>You do not have permission to view attachments.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-if="C_VIEW_ATTACHMENTS">
+                        <!--TODO Move these to FileUploaddirective-->
+                        <div class="col-md-11 row" ng-if="C_ADD_ATTACHMENTS">
+                            <div class="f1 opUiLabel opUiLableWidth" ng-class="{isRequired: contractData.IsAttachmentRequired}">Attachment(s):&nbsp;<span kendo-tooltip k-content="constants.helptipMsgAttachment" k-position="'top'" class="opElementHelpIcon intelicon-information-outlined"></span><span class="description">{{constants.uplodaFileHelpText}}</span></div>
+                            <div ng-class="{fileAttachmentRequired: contractData.AttachmentError}">
+                                <input class="fileAttachmentRequired" id="fileUploader"
+                                       type="file" name="files"
+                                       kendo-upload="files"
+                                       k-upload="filePostAddParams"
+                                       k-success="onSuccess"
+                                       k-error="onError"
+                                       k-complete="onComplete"
+                                       k-select="onFileSelect"
+                                       k-remove="onFileRemove"
+                                       k-async="fileUploadOptions" />
+                            </div>
+                            <div ng-if="contractData.CUST_ACCPT != 'Pending'" class="description">{{constants.FileAttachementDesc}}</div>
+                            <div ng-if="contractData.AttachmentError" class="err-Control">* field is required.</div>
+                        </div>
+                        <div class="col-md-11 row" ng-if="!isNewContract">
+                            <div class="panel panel-default">
+                                <div class="panel-heading" style="font-size:14px; font-weight:bold">File Attachment Details <span ng-if="attachmentCount > 0 && initComplete" class="badge">{{attachmentCount}}</span></div>
+                                <div class="panel-body">
+                                    <div ng-hide="attachmentCount <= 0 || !initComplete" id="fileAttachmentGrid" kendo-grid
+                                         footer-offset="500" options="fileAttachmentGridOptions"></div>
+                                    <div ng-hide="attachmentCount != 0 || !initComplete" style="height:80px;">
+                                        <p style="margin-top:5px">This contract has no attachments.</p>
+                                    </div>
+                                    <div ng-hide="initComplete" style="height:80px;">
+                                        <p style="margin-top:5px"><i>Retrieving attachments...</i></p>
+                                    </div>
+                                    <div ng-hide="attachmentCount >= 0" style="height:80px; color:red">
+                                        <p style="margin-top:5px">Unable to retrieve attachments!</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -38,6 +38,7 @@ function dealTools($timeout, logger, dataService) {
             if (!$scope.$parent.contractData) {
                 rootScope = $scope.$parent.$parent.$parent.$parent.$parent;
             }
+            $scope.rootScope = rootScope;
 
             $scope.stgOneChar = function () {
                 return $scope.dataItem.WF_STG_CD === undefined ? "&nbsp;" : $scope.dataItem.WF_STG_CD[0];
@@ -261,7 +262,7 @@ function dealTools($timeout, logger, dataService) {
                     {
                         field: "FILE_DATA_SID",
                         title: "&nbsp;",
-                        template: "<a class='delete-attach-icon' ng-click='deleteAttachment(#= CUST_MBR_SID #, #= OBJ_TYPE_SID #, #= OBJ_SID #, #= FILE_DATA_SID #)'><i class='intelicon-trash-outlined' title='Click to delete this attachment'></i></a>",
+                        template: "<a class='delete-attach-icon' ng-if='rootScope.C_DELETE_ATTACHMENTS' ng-click='deleteAttachment(#= CUST_MBR_SID #, #= OBJ_TYPE_SID #, #= OBJ_SID #, #= FILE_DATA_SID #)'><i class='intelicon-trash-outlined' title='Click to delete this attachment'></i></a>",
                         width: "10%"
                     },
                     {

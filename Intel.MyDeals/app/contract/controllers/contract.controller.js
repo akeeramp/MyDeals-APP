@@ -56,8 +56,9 @@
         $scope.CAN_EDIT_MEET_COMP = securityService.chkDealRules('C_EDIT_MEET_COMP', window.usrRole, null, null, null);
         $scope.C_ADD_PRICING_STRATEGY = securityService.chkDealRules('C_ADD_PRICING_STRATEGY', window.usrRole, null, null, null);
         $scope.C_DEL_PRICING_STRATEGY = securityService.chkDealRules('C_DEL_PRICING_STRATEGY', window.usrRole, null, null, null);
-        $scope.C_ADD_ATTACHMENTS = securityService.chkDealRules('C_ADD_ATTACHMENTS', window.usrRole, null, null, null);
         $scope.C_VIEW_ATTACHMENTS = securityService.chkDealRules('C_VIEW_ATTACHMENTS', window.usrRole, null, null, null);
+        $scope.C_ADD_ATTACHMENTS = securityService.chkDealRules('C_ADD_ATTACHMENTS', window.usrRole, null, null, null);
+        $scope.C_DELETE_ATTACHMENTS = securityService.chkDealRules('C_DELETE_ATTACHMENTS', window.usrRole, null, null, null);
         $scope.C_EDIT_PRODUCT = securityService.chkDealRules('C_EDIT_PRODUCT', window.usrRole, null, null, null);
 
         // Hard code for now until security is put in place
@@ -743,7 +744,7 @@
                 {
                     field: "FILE_DATA_SID",
                     title: "&nbsp;",
-                    template: "<a class='delete-attach-icon' ng-click='deleteAttachment(#= CUST_MBR_SID #, #= OBJ_TYPE_SID #, #= OBJ_SID #, #= FILE_DATA_SID #)'><i class='intelicon-trash-outlined' title='Click to delete this attachment'></i></a>",
+                    template: "<a class='delete-attach-icon' ng-if='C_DELETE_ATTACHMENTS' ng-click='deleteAttachment(#= CUST_MBR_SID #, #= OBJ_TYPE_SID #, #= OBJ_SID #, #= FILE_DATA_SID #)'><i class='intelicon-trash-outlined' title='Click to delete this attachment'></i></a>",
                     width: "10%"
                 },
                 {
