@@ -18,7 +18,7 @@
 	// DEVELOPER: Change this to be the namespace to create the SP classes in
 	const string outputNameSpace = "Intel.MyDeals.DataAccessLib.StoredProcedures";
 	const string targetServer = @"Database={0};Server=EG1RDMDBDEV01\DEALSDEV,3180;integrated security=SSPI;"; // Note the {0} for database name....
-	const string default_database = "MYDEALS";
+	const string default_database = "MyDeals";
 
 	string[] EXCLUDE_PROCS = new string[]
 	{
@@ -27,7 +27,7 @@
 
 	string[] TargetDatabases = new string[]
     {
-		"MYDEALS"
+		"MyDeals"
     };
 
 	bool first_pass = true;
