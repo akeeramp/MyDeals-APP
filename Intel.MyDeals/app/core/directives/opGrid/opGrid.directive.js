@@ -2,9 +2,9 @@
     .module('app.core')
     .directive('opGrid', opGrid);
 
-opGrid.$inject = ['$compile', 'objsetService', '$timeout', 'colorDictionary', '$uibModal', '$filter'];
+opGrid.$inject = ['$compile', 'objsetService', '$timeout', 'colorDictionary', '$uibModal', '$filter', 'logger'];
 
-function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $filter) {
+function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $filter, logger) {
 
     return {
         scope: {
@@ -254,7 +254,16 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.addTab = function () {
                 kendo.prompt("Tab name:", "").then(function (data) {
                     if (data === "") data = "New Tab";
-                    $scope.addToTab(data);
+
+                    // Prevent duplicate tab names.
+                    for (var g = 0; g < $scope.opOptions.groups.length; g++) {
+                        if ($scope.opOptions.groups[g].name.trim().toLowerCase() === data.trim().toLowerCase()) {
+                            logger.error("Tab name already exists.", null, "Add Tab Failed");
+                            return;
+                        }
+                    }
+
+                    $scope.addToTab(data.trim());
                 },
                     function () {
                         // cancel
