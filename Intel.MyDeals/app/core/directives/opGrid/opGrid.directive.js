@@ -251,7 +251,64 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 }
             }
 
-            $scope.restoreLayout = function () {
+            $scope.addTab = function () {
+                kendo.prompt("Tab name:", "").then(function (data) {
+                    if (data === "") data = "New Group";
+                    $scope.addToTab(data);
+                },
+                    function () {
+                        // cancel
+                    });
+            }
+
+            $scope.renameTab = function () {
+                kendo.prompt("Tab name:", $scope.curGroup).then(function (data) {
+                    if (data === "" || data.toLowerCase() == "overlapping") return;
+
+                    for (var g = 0; g < $scope.opOptions.groups.length; g++) {
+                        if ($scope.opOptions.groups[g].name === $scope.curGroup) {
+                            $scope.opOptions.groups[g].name = data;
+                        }
+                    }
+
+                    // change group name in column list
+                    angular.forEach($scope.opOptions.groupColumns, function (value, key) {
+                        var index = value.Groups.indexOf($scope.curGroup);
+                        if (index > -1) {
+                            value.Groups[index] = data;
+                        }
+                    });
+
+                    $scope.curGroup = data;
+                    $scope.alignGroupOrder();
+                    $scope.$apply();
+                    $("#tabstrip").kendoTabStrip().data("kendoTabStrip").reload();
+                    $scope.configureSortableTab();
+                },
+                    function () {
+                        // cancel
+                    });
+            }
+
+            $scope.removeTab = function (e, grpName) {
+                for (var i = 0; i < $scope.opOptions.groups.length; i++) {
+                    if ($scope.opOptions.groups[i].name === grpName) {
+                        $scope.opOptions.groups.splice(i, 1);
+                        break;
+                    }
+                }
+
+                angular.forEach($scope.opOptions.groupColumns, function (value, key) {
+                    var index = value.Groups.indexOf(grpName);
+                    if (index > -1) {
+                        value.Groups.splice(index, 1);
+                    }
+                });
+
+                $scope.selectFirstTab();
+            }
+
+            $scope.defaultLayout = function () {
                 $scope.opOptions.groups = [];
 
                 $timeout(function () {
@@ -291,63 +348,6 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 $scope.opOptions.custom.groupColumns = util.clone($scope.opOptions.groupColumns);
 
                 kendo.alert("This is where the save routine goes.");
-            }
-
-            $scope.addGrp = function () {
-                kendo.prompt("Please, enter your new group name:", "").then(function (data) {
-                    if (data === "") data = "New Group";
-                    $scope.addToTab(data);
-                },
-                    function () {
-                        // cancel
-                    });
-            }
-
-            $scope.renameGrp = function () {
-                kendo.prompt("Please, change the group name:", $scope.curGroup).then(function (data) {
-                    if (data === "" || data.toLowerCase() == "overlapping") return;
-
-                    for (var g = 0; g < $scope.opOptions.groups.length; g++) {
-                        if ($scope.opOptions.groups[g].name === $scope.curGroup) {
-                            $scope.opOptions.groups[g].name = data;
-                        }
-                    }
-
-                    // change group name in column list
-                    angular.forEach($scope.opOptions.groupColumns, function (value, key) {
-                        var index = value.Groups.indexOf($scope.curGroup);
-                        if (index > -1) {
-                            value.Groups[index] = data;
-                        }
-                    });
-
-                    $scope.curGroup = data;
-                    $scope.alignGroupOrder();
-                    $scope.$apply();
-                    $("#tabstrip").kendoTabStrip().data("kendoTabStrip").reload();
-                    $scope.configureSortableTab();
-                },
-                    function () {
-                        // cancel
-                    });
-            }
-
-            $scope.removeGrp = function (e, grpName) {
-                for (var i = 0; i < $scope.opOptions.groups.length; i++) {
-                    if ($scope.opOptions.groups[i].name === grpName) {
-                        $scope.opOptions.groups.splice(i, 1);
-                        break;
-                    }
-                }
-
-                angular.forEach($scope.opOptions.groupColumns, function (value, key) {
-                    var index = value.Groups.indexOf(grpName);
-                    if (index > -1) {
-                        value.Groups.splice(index, 1);
-                    }
-                });
-
-                $scope.selectFirstTab();
             }
 
             $scope.displayDealTypes = function () {

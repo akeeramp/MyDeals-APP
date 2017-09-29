@@ -12,7 +12,7 @@
                         <i class="intelicon-pin-outlined" ng-hide="{{ !isPinEnabled || group.name == 'All' || group.name == 'CAP Info' }}" title="Pin tab so it always shows in the grid" ng-click="clickPin($event, group.name)"></i> {{group.name}}
                         <span class="badge error" ng-show="group.numErrors > 0">{{group.numErrors}}</span>
                         <span class="badge warning" ng-show="{{ group.name == 'CAP Info' && numSoftWarn > 0 }}">{{numSoftWarn}}</span>
-                        <i class="intelicon-close-solid closeGrp" ng-hide="{{ group.name == 'All' || group.name == 'CAP Info' || !isLayoutConfigurable}}" title="Close tab" ng-click="removeGrp($event, group.name)"></i>
+                        <i class="intelicon-close-solid closeGrp" ng-hide="{{ group.name == 'All' || group.name == 'CAP Info' || !isLayoutConfigurable}}" title="Close tab" ng-click="removeTab($event, group.name)"></i>
                     </li>
                 </ul>
             </div>
@@ -85,13 +85,13 @@
                             <span class="fl" style="font-size: 12px; line-height: 1em; padding: 4px;">Grid<br/>Settings</span>
                             <i style="font-size: 40px !important; width: 1px !important;"></i>
                             <ul>
-                                <li ng-click="addGrp()">
-                                    <i class="intelicon-plus-outlined" style="font-size: 18px;"></i> ADD GROUP
+                                <li ng-click="addTab()">
+                                    <i class="intelicon-plus-outlined" style="font-size: 18px;"></i> ADD TAB
                                 </li>
-                                <li ng-click="renameGrp()">
-                                    <i class="intelicon-plus-outlined" style="font-size: 18px;"></i> RENAME GROUP
+                                <li ng-click="renameTab()">
+                                    <i class="intelicon-plus-outlined" style="font-size: 18px;"></i> RENAME TAB
                                 </li>
-                                <li ng-click="restoreLayout()">
+                                <li ng-click="defaultLayout()">
                                     <i class="intelicon-dashboard-solid" style="font-size: 18px;"></i> DEFAULT LAYOUT
                                 </li>
                                 <li ng-click="customLayout()">
