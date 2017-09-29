@@ -4,9 +4,9 @@
        .module('app.admin') //TODO: once we integrate with contract manager change the module to contract
        .controller('ProductSelectorModalController', ProductSelectorModalController);
 
-    ProductSelectorModalController.$inject = ['$filter', '$scope', '$uibModal', '$uibModalInstance', '$linq', 'productSelectionLevels', 'enableSplitProducts', 'dealType', 'productSelectorService', 'pricingTableRow', '$timeout', 'logger', 'gridConstants', 'suggestedProduct'];
+    ProductSelectorModalController.$inject = ['$filter', '$scope', '$uibModal', '$uibModalInstance', '$linq', 'productSelectionLevels', 'enableSplitProducts', 'dealType', 'productSelectorService', 'pricingTableRow', '$timeout', 'logger', 'gridConstants', 'suggestedProduct', 'confirmationModal', 'crossVertical'];
 
-    function ProductSelectorModalController($filter, $scope, $uibModal, $uibModalInstance, $linq, productSelectionLevels, enableSplitProducts, dealType, productSelectorService, pricingTableRow, $timeout, logger, gridConstants, suggestedProduct) {
+    function ProductSelectorModalController($filter, $scope, $uibModal, $uibModalInstance, $linq, productSelectionLevels, enableSplitProducts, dealType, productSelectorService, pricingTableRow, $timeout, logger, gridConstants, suggestedProduct, confirmationModal, crossVertical) {
         var vm = this;
         // Non CPU verticals with drill down level 4
         var verticalsWithDrillDownLevel4 = ["EIA CPU", "EIA MISC"];
@@ -463,8 +463,14 @@
             return displayTemplateType;
         }
 
-        function selectProduct(item) {
-            var item = angular.copy(item);
+        function selectProduct(product) {
+            var item = angular.copy(product);
+            if (item.id !== undefined && item.id != "") {
+                var products = vm.productSelectionLevels.filter(function (x) {
+                    return x.PRD_MBR_SID == item.id;
+                })[0];
+                item = $.extend({}, item, products);
+            }
             if (vm.excludeMode) {
                 manageSelectedProducts('exclude', item, true);
                 return;
@@ -472,8 +478,55 @@
             if (item.parentSelected && dealType == 'VOL_TIER') {
                 manageSelectedProducts('exclude', item);
             } else {
+                if (vm.dealType !== "ECAP") {
+                    // Get unique product types
+                    var existingProdTypes = $filter("unique")(vm.addedProducts, 'PRD_CAT_NM');
+                    existingProdTypes = existingProdTypes.map(function (elem) {
+                        return elem.PRD_CAT_NM;
+                    });
+
+                    // Check if valid combination
+                    if (!isValidProductCombination(existingProdTypes, item.PRD_CAT_NM)) {
+                        var modalOptions = {
+                            closeButtonText: 'Ok',
+                            actionButtonText: '',
+                            hasActionButton: false,
+                            headerText: '',
+                            bodyText: crossVertical.message
+                        };
+                        confirmationModal.showModal({}, modalOptions).then(function (result) {
+                            //
+                        }, function (response) {
+                            //
+                        });
+                        product.selected = false;
+                        return;
+                    }
+                }
                 manageSelectedProducts('include', item);
             }
+        }
+
+
+        function isValidProductCombination(existingProdTypes, newProductType) {
+            var isValid = true;
+            var selfCheck = newProductType == undefined;
+            for (var i = 0; i < existingProdTypes.length; i++) {
+                if (i == existingProdTypes.length - 1 && selfCheck) break;
+                newProductType = selfCheck ? existingProdTypes[i + 1] : newProductType;
+                if (arrayContainsString(crossVertical.productCombination1, existingProdTypes[i])) {
+                    isValid = arrayContainsString(crossVertical.productCombination1, newProductType);
+                    if (!isValid) break;
+                }
+                else if (arrayContainsString(crossVertical.productCombination2, existingProdTypes[i])) {
+                    isValid = arrayContainsString(crossVertical.productCombination2, newProductType);
+                    if (!isValid) break;
+                } else {
+                    isValid = existingProdTypes[i] == newProductType;
+                    if (!isValid) break;
+                }
+            };
+            return isValid
         }
 
         function productExists(item, id) {
@@ -503,19 +556,11 @@
 
         function getFullNameOfProduct(item) {
             if (item.PRD_ATRB_SID > 7005) return item.HIER_VAL_NM;
-            return item.PRD_CAT_NM + " " + (item.BRND_NM === 'NA' ? "" : item.BRND_NM) + " " + (item.FMLY_NM === 'NA' ? "" : item.FMLY_NM);
+            return (item.PRD_CAT_NM + " " + (item.BRND_NM === 'NA' ? "" : item.BRND_NM) + " " + (item.FMLY_NM === 'NA' ? "" : item.FMLY_NM)).trim();
         }
 
 
-        function manageSelectedProducts(mode, product, onlyExclude) {
-            var item = angular.copy(product);
-            if (item.id !== undefined && item.id != "") {
-                var product = vm.productSelectionLevels.filter(function (x) {
-                    return x.PRD_MBR_SID == item.id;
-                })[0];
-                item = $.extend({}, item, product);
-            }
-
+        function manageSelectedProducts(mode, item, onlyExclude) {
             item.HIER_VAL_NM = getFullNameOfProduct(item);
             item['USR_INPUT'] = item.HIER_VAL_NM;
             item['DERIVED_USR_INPUT'] = item.HIER_VAL_NM;
@@ -815,6 +860,30 @@
         }
 
         vm.save = function () {
+            if (vm.dealType !== "ECAP") {
+                // Get unique product types
+                var existingProdTypes = $filter("unique")(vm.addedProducts, 'PRD_CAT_NM');
+                existingProdTypes = existingProdTypes.map(function (elem) {
+                    return elem.PRD_CAT_NM;
+                });
+
+                // Check if valid combination
+                if (!isValidProductCombination(existingProdTypes, undefined)) {
+                    var modalOptions = {
+                        closeButtonText: 'Ok',
+                        actionButtonText: '',
+                        hasActionButton: false,
+                        headerText: '',
+                        bodyText: crossVertical.message
+                    };
+                    confirmationModal.showModal({}, modalOptions).then(function (result) {
+                        //
+                    }, function (response) {
+                        //
+                    });
+                    return;
+                }
+            }
             vm.addedProducts = vm.addedProducts.map(function (x) {
                 return {
                     BRND_NM: x.BRND_NM,

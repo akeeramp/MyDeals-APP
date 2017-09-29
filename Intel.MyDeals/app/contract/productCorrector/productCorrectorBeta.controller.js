@@ -2,9 +2,9 @@
     .module('app.admin')
     .controller('ProductCorrectorBetaModalController', ProductCorrectorBetaModalController);
 
-ProductCorrectorBetaModalController.$inject = ['$compile', '$filter', '$scope', '$uibModalInstance', 'GetProductCorrectorData', 'productSelectorService', 'productCorrectorService', 'contractData', 'RowId', 'ProductRows', '$linq', '$timeout', 'logger', 'gridConstants', '$uibModal', 'CustSid', 'dealType'];
+ProductCorrectorBetaModalController.$inject = ['$compile', '$filter', '$scope', '$uibModalInstance', 'GetProductCorrectorData', 'productSelectorService', 'productCorrectorService', 'contractData', 'RowId', 'ProductRows', '$linq', '$timeout', 'logger', 'gridConstants', '$uibModal', 'CustSid', 'dealType', 'confirmationModal', 'crossVertical'];
 
-function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModalInstance, GetProductCorrectorData, productSelectorService, productCorrectorService, contractData, RowId, ProductRows, $linq, $timeout, logger, gridConstants, $uibModal, CustSid, dealType) {
+function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModalInstance, GetProductCorrectorData, productSelectorService, productCorrectorService, contractData, RowId, ProductRows, $linq, $timeout, logger, gridConstants, $uibModal, CustSid, dealType, confirmationModal, crossVertical) {
     var vm = this;
     vm.totRows = 0;
     vm.curRowIndx = 0;
@@ -611,7 +611,64 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
 
     function getFullNameOfProduct(item) {
         if (item.PRD_ATRB_SID > 7005) return item.HIER_VAL_NM;
-        return item.PRD_CAT_NM + " " + (item.BRND_NM === 'NA' ? "" : item.BRND_NM) + " " + (item.FMLY_NM === 'NA' ? "" : item.FMLY_NM);
+        return (item.PRD_CAT_NM + " " + (item.BRND_NM === 'NA' ? "" : item.BRND_NM) + " " + (item.FMLY_NM === 'NA' ? "" : item.FMLY_NM)).trim();
+    }
+
+    function validCrossVerticals(item) {
+        var existingProductTypes = [];
+        for (var key in vm.ProductCorrectorData.ValidProducts[vm.curRowId]) {
+            angular.forEach(vm.ProductCorrectorData.ValidProducts[vm.curRowId][key], function (product) {
+                existingProductTypes.push(product.PRD_CAT_NM);
+            });
+        }
+
+        existingProdTypes = $filter("unique")(existingProductTypes, 'PRD_CAT_NM');
+
+        var isValid = isValidProductCombination(existingProdTypes, item.PRD_CAT_NM);
+        // Check if valid combination
+        if (!isValid) {
+            var modalOptions = {
+                closeButtonText: 'Ok',
+                actionButtonText: '',
+                hasActionButton: false,
+                headerText: '',
+                bodyText: crossVertical.message
+            };
+            confirmationModal.showModal({}, modalOptions).then(function (result) {
+                //
+            }, function (response) {
+                //
+            });
+        }
+        return isValid;
+    }
+
+    function isValidProductCombination(existingProdTypes, newProductType) {
+        var isValid = true;
+        var selfCheck = newProductType == undefined;
+        for (var i = 0; i < existingProdTypes.length; i++) {
+            if (i == existingProdTypes.length - 1 && selfCheck) break;
+            newProductType = selfCheck ? existingProdTypes[i + 1] : newProductType;
+            if (arrayContainsString(crossVertical.productCombination1, existingProdTypes[i])) {
+                isValid = arrayContainsString(crossVertical.productCombination1, newProductType);
+                if (!isValid) break;
+            }
+            else if (arrayContainsString(crossVertical.productCombination2, existingProdTypes[i])) {
+                isValid = arrayContainsString(crossVertical.productCombination2, newProductType);
+                if (!isValid) break;
+            } else {
+                isValid = existingProdTypes[i] == newProductType;
+                if (!isValid) break;
+            }
+        };
+        return isValid
+    }
+
+    function arrayContainsString(array, string) {
+        var newArr = array.filter(function (el) {
+            return el.toString().trim().toUpperCase() === string.toString().trim().toUpperCase();
+        });
+        return newArr.length > 0;
     }
 
     vm.clickProd = function (id, lookup, name, event) {
@@ -621,6 +678,11 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
         var allMatched = true;
         var isChecked = event.target.checked;
         if (isChecked) {
+            var foundItem = util.findInArrayWhere(vm.ProductCorrectorData.DuplicateProducts[vm.curRowId][item.name], "PRD_MBR_SID", id);
+            if (!validCrossVerticals(foundItem)) {
+                event.target.checked = false;
+                return;
+            }
             //Item added from the selected List
             item.matchName.push(name);
 
@@ -1054,7 +1116,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
             if (!!vm.ProductCorrectorData.InValidProducts[key]) {
                 var exclude = "";
                 for (var m = 0; m <= 1; m++) {
-                    m == 0 ? exclude = "I" : "E";
+                    exclude = (m == 0) ? "I" : "E";
                     if (vm.ProductCorrectorData.InValidProducts[key][exclude]) {
                         var invalidCopy = angular.copy(vm.ProductCorrectorData.InValidProducts[key][exclude]);
                         for (var j = 0; j < vm.ProductCorrectorData.InValidProducts[key][exclude].length; j++) {

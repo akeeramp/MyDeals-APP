@@ -16,8 +16,8 @@ namespace Intel.MyDeals.BusinessRules
     /// This class will let you define MyDeals specific actions that might need to be performed
     /// </summary>
     public static partial class MyDcActions
-	{
-		public static Dictionary<string, bool> SecurityActionCache { get; set; }
+    {
+        public static Dictionary<string, bool> SecurityActionCache { get; set; }
 
         /// <summary>
         /// Execute the appropiate action based on the condition statement
@@ -219,72 +219,130 @@ namespace Intel.MyDeals.BusinessRules
                 BusinessLogicDeActions.AddValidationMessage(dePrdUsr, "Product select has some invalid products.");
                 return;
             }
-
-            foreach (KeyValuePair<string, IEnumerable<ProdMapping>> kvp in items)
+            if (r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD) == OpDataElementSetType.ECAP.ToString())
             {
-                foreach (ProdMapping prodMapping in kvp.Value)
+                foreach (KeyValuePair<string, IEnumerable<ProdMapping>> kvp in items)
                 {
-                    if (string.IsNullOrEmpty(prodMapping.PRD_MBR_SID))
+                    foreach (ProdMapping prodMapping in kvp.Value)
                     {
-                        BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"User entered product ({kvp.Key}) is unable to locate product ({prodMapping.HIER_VAL_NM})");
-                    }
-
-                    if (r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD) == OpDataElementSetType.ECAP.ToString())
-                    {
-                        #region CAP Validations
-
-                        double cap;
-                        if (!double.TryParse(prodMapping.CAP, out cap) && prodMapping.CAP.IndexOf("-") >= 0)
+                        if (string.IsNullOrEmpty(prodMapping.PRD_MBR_SID))
                         {
-                            BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"Product ({prodMapping.HIER_VAL_NM}) CAP price ({prodMapping.CAP}) cannot be a range.");
+                            BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"User entered product ({kvp.Key}) is unable to locate product ({prodMapping.HIER_VAL_NM})");
                         }
 
-                        //double ecap;
-                        //if (!double.TryParse(r.Dc.GetDataElementValue(AttributeCodes.ECAP_PRICE), out ecap)) ecap = 0;
+                        if (r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD) == OpDataElementSetType.ECAP.ToString())
+                        {
+                            #region CAP Validations
 
-                        // When ECAP Price is greater than CAP, UI validation check on deal creation and system should give a soft warning.
-                        // TODO... put this as a soft warning on the grid
-                        //if (ecap > 0 && cap > ecap)
-                        //{
-                        //    BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"CAP price ({cap}) is greater than ECAP Price.");
-                        //}
+                            double cap;
+                            if (!double.TryParse(prodMapping.CAP, out cap) && prodMapping.CAP.IndexOf("-") >= 0)
+                            {
+                                BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"Product ({prodMapping.HIER_VAL_NM}) CAP price ({prodMapping.CAP}) cannot be a range.");
+                            }
 
-                        // IF CAP is not available at all then show as NO CAP.User can not create deals.
-                        // not true anymore... soft warning in grid now
-                        //if (cap <= 0)
-                        //{
-                        //    BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"CAP is not available ({prodMapping.CAP}). You can not create deals with this product.");
-                        //}
+                            //double ecap;
+                            //if (!double.TryParse(r.Dc.GetDataElementValue(AttributeCodes.ECAP_PRICE), out ecap)) ecap = 0;
 
-                        //if (!string.IsNullOrEmpty(prodMapping.PRD_STRT_DTM) && !string.IsNullOrEmpty(prodMapping.CAP_START))
-                        //{
-                        //    DateTime capStart = DateTime.Parse(prodMapping.CAP_START);
-                        //    DateTime capEnd = DateTime.Parse(prodMapping.CAP_END);
-                        //    DateTime prdStart = DateTime.Parse(prodMapping.PRD_STRT_DTM);
+                            // When ECAP Price is greater than CAP, UI validation check on deal creation and system should give a soft warning.
+                            // TODO... put this as a soft warning on the grid
+                            //if (ecap > 0 && cap > ecap)
+                            //{
+                            //    BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"CAP price ({cap}) is greater than ECAP Price.");
+                            //}
 
-                        //    DateTime dealStart;
-                        //    DateTime dealEnd;
-                        //    if (DateTime.TryParse(r.Dc.GetDataElementValue(AttributeCodes.START_DT), out dealStart) && DateTime.TryParse(r.Dc.GetDataElementValue(AttributeCodes.END_DT), out dealEnd))
-                        //    {
-                        //        if (!(capStart < dealEnd && dealStart < capEnd))
-                        //        {
-                        //            BusinessLogicDeActions.AddValidationMessage(dePrdUsr, "Product entered does not have CAP within the Deal's start date and end date");
-                        //        }
+                            // IF CAP is not available at all then show as NO CAP.User can not create deals.
+                            // not true anymore... soft warning in grid now
+                            //if (cap <= 0)
+                            //{
+                            //    BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"CAP is not available ({prodMapping.CAP}). You can not create deals with this product.");
+                            //}
 
-                        //        if (capStart > dealEnd)
-                        //        {
-                        //            BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"The CAP start date ({capStart:mm/dd/yyyy}) and end date ({capEnd:mm/dd/yyyy}) exists in future outside of deal end date. Please change the deal start date to match the CAP start date.");
-                        //        }
-                        //    }
+                            //if (!string.IsNullOrEmpty(prodMapping.PRD_STRT_DTM) && !string.IsNullOrEmpty(prodMapping.CAP_START))
+                            //{
+                            //    DateTime capStart = DateTime.Parse(prodMapping.CAP_START);
+                            //    DateTime capEnd = DateTime.Parse(prodMapping.CAP_END);
+                            //    DateTime prdStart = DateTime.Parse(prodMapping.PRD_STRT_DTM);
 
-                        //    // If the product start date is after the deal start date, then deal start date should match with product start date and back date would not apply.
-                        //    if (prdStart > dealStart)
-                        //    {
-                        //        BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"If the product start date is after the deal start date, then deal start date should match with product start date and back date would not apply.");
-                        //    }
-                        //}
+                            //    DateTime dealStart;
+                            //    DateTime dealEnd;
+                            //    if (DateTime.TryParse(r.Dc.GetDataElementValue(AttributeCodes.START_DT), out dealStart) && DateTime.TryParse(r.Dc.GetDataElementValue(AttributeCodes.END_DT), out dealEnd))
+                            //    {
+                            //        if (!(capStart < dealEnd && dealStart < capEnd))
+                            //        {
+                            //            BusinessLogicDeActions.AddValidationMessage(dePrdUsr, "Product entered does not have CAP within the Deal's start date and end date");
+                            //        }
 
-                        #endregion CAP Validations
+                            //        if (capStart > dealEnd)
+                            //        {
+                            //            BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"The CAP start date ({capStart:mm/dd/yyyy}) and end date ({capEnd:mm/dd/yyyy}) exists in future outside of deal end date. Please change the deal start date to match the CAP start date.");
+                            //        }
+                            //    }
+
+                            //    // If the product start date is after the deal start date, then deal start date should match with product start date and back date would not apply.
+                            //    if (prdStart > dealStart)
+                            //    {
+                            //        BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"If the product start date is after the deal start date, then deal start date should match with product start date and back date would not apply.");
+                            //    }
+                            //}
+
+                            #endregion CAP Validations
+                        }
+                    }
+                }
+            }
+            if (r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD) == OpDataElementSetType.VOL_TIER.ToString())
+            {
+                CheckForCrossVerticalProducts(dePrdUsr, items);
+            }
+        }
+
+        /// <summary>
+        ///  Cross vertical validation allowed combinations
+        ///  1. "DT", "Mb", "SvrWS", "EIA CPU"
+        ///  2. "CS", "EIA CS"
+        /// </summary>
+        /// <param name="dePrdUsr"></param>
+        /// <param name="items"></param>
+        private static void CheckForCrossVerticalProducts(IOpDataElement dePrdUsr, ProdMappings items)
+        {
+            // TODO Move these to constants
+            var productCombination1 = new string[] { "DT", "Mb", "SvrWS", "EIA CPU" }.ToDictionary(x => x);
+            var productCombination2 = new string[] { "CS", "EIA CS" }.ToDictionary(x => x);
+
+            var validContractProducts = new List<string>();
+            foreach (KeyValuePair<string, IEnumerable<ProdMapping>> kvp in items)
+            {
+                // Get unique product categories for Contract products
+                foreach (ProdMapping prodMapping in kvp.Value.Where(x => !x.EXCLUDE))
+                {
+                    if (!validContractProducts.Contains(prodMapping.PRD_CAT_NM))
+                    {
+                        validContractProducts.Add(prodMapping.PRD_CAT_NM);
+                    }
+                }
+            }
+
+            if (validContractProducts.Any())
+            {
+                for (var i = 0; i < validContractProducts.Count; i++)
+                {
+                    if (i == validContractProducts.Count() - 1) break;
+                    var newprodCategory = validContractProducts[i + 1];
+                    if (productCombination1.ContainsKey(validContractProducts[i]))
+                    {
+                        if (!productCombination1.ContainsKey(newprodCategory))
+                        {
+                            BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid.");
+                            break;
+                        }
+                    }
+                    else if (productCombination2.ContainsKey(validContractProducts[i]))
+                    {
+                        if (!productCombination2.ContainsKey(newprodCategory))
+                        {
+                            BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid.");
+                            break;
+                        }
                     }
                 }
             }
@@ -426,7 +484,7 @@ namespace Intel.MyDeals.BusinessRules
                 de.SetReadOnly();
             }
         }
-        
+
         public static void ShowExpireYCS2(params object[] args)
         {
             // DE28754 - Expire YCS2 Should be Editable for Front End Active Deals only.
@@ -590,7 +648,7 @@ namespace Intel.MyDeals.BusinessRules
                     de.AtrbValue = CompressHelpers.DecodeFrom64(val);
                 }
             }
-		}
+        }
 
         public static void ClearValidateForHold(params object[] args)
         {
@@ -607,8 +665,8 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
-	    public static void MajorChangeCheck(params object[] args)
-	    {
+        public static void MajorChangeCheck(params object[] args)
+        {
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
@@ -617,24 +675,24 @@ namespace Intel.MyDeals.BusinessRules
             var futureStage = r.Dc.GetNextStage("Redeal", DataCollections.GetWorkFlowItems(), ptrStage, OpDataElementType.PRC_ST);
 
             // if there isn't a future stage, then it isn't redealable
-	        if (futureStage == null && wipStage != WorkFlowStages.Active) return;
+            if (futureStage == null && wipStage != WorkFlowStages.Active) return;
 
             AttributeCollection atrbMstr = DataCollections.GetAttributeData();
             List<MyDealsAttribute> onChangeItems = atrbMstr.All.Where(a => a.MJR_MNR_CHG == "MAJOR").ToList();
             List<MyDealsAttribute> onChangeIncreaseItems = atrbMstr.All.Where(a => a.MJR_MNR_CHG == "MAJOR_INCREASE").ToList();
 
-	        if (!r.ExtraArgs.Any()) return;
+            if (!r.ExtraArgs.Any()) return;
 
-            var myDealsData = (MyDealsData) r.ExtraArgs[0];
+            var myDealsData = (MyDealsData)r.ExtraArgs[0];
 
             List<IOpDataElement> changedDes = r.Dc.GetDataElementsWhere(d => onChangeItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged).ToList();
             List<IOpDataElement> changedIncreaseDes = r.Dc.GetDataElementsWhere(d => onChangeIncreaseItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged && d.IsValueIncreasedFromOrig(atrbMstr)).ToList();
 
             // if not a major change... exit
-	        if (!changedDes.Any() && !changedIncreaseDes.Any()) return;
+            if (!changedDes.Any() && !changedIncreaseDes.Any()) return;
 
             // Define redeal reason
-	        var reason = "Redeal due to major change: \n";
+            var reason = "Redeal due to major change: \n";
             foreach (IOpDataElement de in changedDes.Union(changedIncreaseDes))
             {
                 MyDealsAttribute atrb = onChangeItems.Union(onChangeIncreaseItems).FirstOrDefault(a => a.ATRB_COL_NM == de.AtrbCd);
@@ -649,7 +707,6 @@ namespace Intel.MyDeals.BusinessRules
             }
 
             myDealsData[OpDataElementType.WIP_DEAL].Actions.Add(new MyDealsDataAction(DealSaveActionCodes.ADD_TO_TIMELINE, reason, 30));
-
 
             // NOTE: We need to set the WIP and the PS stage
             // WIP always is "Draft" and PS depends on the users workflow
@@ -669,8 +726,8 @@ namespace Intel.MyDeals.BusinessRules
             }
 
             // Locate and set Parent PS Attributes
-	        if (futureStage != null)
-	        {
+            if (futureStage != null)
+            {
                 OpDataCollector dcRow = myDealsData[OpDataElementType.PRC_TBL_ROW].Data[r.Dc.DcParentID];
                 OpDataCollector dcTbl = myDealsData[OpDataElementType.PRC_TBL].Data[dcRow.DcParentID];
                 OpDataCollector dcSt = myDealsData[OpDataElementType.PRC_ST].Data[dcTbl.DcParentID];
@@ -683,7 +740,6 @@ namespace Intel.MyDeals.BusinessRules
             {
                 r.Dc.SetDataElementValue(AttributeCodes.EXPIRE_FLG, "0");
             }
-
         }
 
         public static void ValidateEcapPrice(params object[] args)
@@ -738,84 +794,83 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        #region Voltier Validations
 
+        private static bool IsGreaterThanZero(double attrb)
+        {
+            return (attrb > 0);
+        }
 
-		#region Voltier Validations
+        private static bool IsGreaterOrEqualToZero(double attrb)
+        {
+            return (attrb >= 0);
+        }
 
-		private static bool IsGreaterThanZero(double attrb)
-		{
-			return (attrb > 0);
-		}
+        public static void CompareStartEndVol(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
 
-		private static bool IsGreaterOrEqualToZero(double attrb)
-		{
-			return (attrb >= 0);
-		}
+            IEnumerable<IOpDataElement> endVolAtrbs = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.END_VOL); // NOTE: "10" is the Tier's dim key. In thoery this shouldn't need to change
+            IOpDataElement atrbWithValidation = endVolAtrbs.FirstOrDefault(); // We need to pick only one of the tiered attributes to set validation on, else we'd keep overriding the message value per tier
 
-		public static void CompareStartEndVol(params object[] args)
-		{
-			MyOpRuleCore r = new MyOpRuleCore(args);
-			if (!r.IsValid) return;
+            // Make dictionary of <tier, start vol>
+            var startVols = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.STRT_VOL).Select(x => new
+            {
+                Key = x.DimKey.FirstOrDefault().AtrbItemId,
+                Value = x.AtrbValue.ToString()
+            });
+            Dictionary<int, string> startVolDict = startVols.ToDictionary(pair => pair.Key, pair => pair.Value);
 
-			IEnumerable<IOpDataElement> endVolAtrbs = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.END_VOL); // NOTE: "10" is the Tier's dim key. In thoery this shouldn't need to change
-			IOpDataElement atrbWithValidation = endVolAtrbs.FirstOrDefault(); // We need to pick only one of the tiered attributes to set validation on, else we'd keep overriding the message value per tier
+            // Validate and set validation message if applicable on each tier
+            foreach (IOpDataElement atrb in endVolAtrbs)
+            {
+                if (string.IsNullOrWhiteSpace(atrb.AtrbValue.ToString()) || atrb.DimKey.Count() == 0)
+                {
+                    continue;
+                }
+                double startVol = 0;
+                double endVol = 0;
+                int tier = atrb.DimKey.FirstOrDefault().AtrbItemId;
+                string relatedStartVol = "";
 
-			// Make dictionary of <tier, start vol>
-			var startVols = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.STRT_VOL).Select(x => new {
-				Key = x.DimKey.FirstOrDefault().AtrbItemId,
-				Value = x.AtrbValue.ToString()
-			});
-			Dictionary<int, string> startVolDict = startVols.ToDictionary( pair => pair.Key, pair => pair.Value );
+                // Find the related start vol (in the same tier)
+                if (startVolDict.ContainsKey(tier))
+                {
+                    relatedStartVol = startVolDict[tier];
+                }
 
-			// Validate and set validation message if applicable on each tier
-			foreach (IOpDataElement atrb in endVolAtrbs)
-			{
-				if (string.IsNullOrWhiteSpace(atrb.AtrbValue.ToString()) || atrb.DimKey.Count() == 0)
-				{
-					continue;
-				}
-				double startVol = 0;
-				double endVol = 0;
-				int tier = atrb.DimKey.FirstOrDefault().AtrbItemId;
-				string relatedStartVol = "";
+                // Parse the double values
+                bool isEndDateANumber = Double.TryParse(atrb.AtrbValue.ToString(), out endVol);
+                bool isStrtDateANumber = Double.TryParse(relatedStartVol, out startVol);
 
-				// Find the related start vol (in the same tier)
-				if (startVolDict.ContainsKey(tier))
-				{
-					relatedStartVol = startVolDict[tier];
-				}
+                // End Vol is unlimited
+                if (!isEndDateANumber && atrb.AtrbValue.ToString().Equals("UNLIMITED", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    continue;
+                }
 
-				// Parse the double values
-				bool isEndDateANumber = Double.TryParse(atrb.AtrbValue.ToString(), out endVol);
-				bool isStrtDateANumber = Double.TryParse(relatedStartVol, out startVol);
+                // Compare
+                if (startVol >= endVol)
+                {
+                    AddTierValidationMessage(atrbWithValidation, "End volume must be greater than start volume.", tier);
+                }
+            }
+        }
 
-				// End Vol is unlimited
-				if (!isEndDateANumber && atrb.AtrbValue.ToString().Equals("UNLIMITED", StringComparison.InvariantCultureIgnoreCase))
-				{
-					continue;
-				}
-
-				// Compare
-				if (startVol >= endVol)
-				{
-					AddTierValidationMessage(atrbWithValidation, "End volume must be greater than start volume.", tier);
-				}
-			}
-
-		}
-		public static void ValidateTierRate(params object[] args)
-		{
-			MyOpRuleCore r = new MyOpRuleCore(args);
-			if (!r.IsValid) return; 
-			ValidateTieredAttribute(AttributeCodes.RATE.ToString(), "Rate must have a positive value.", IsGreaterOrEqualToZero, r);
-		}
+        public static void ValidateTierRate(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+            ValidateTieredAttribute(AttributeCodes.RATE.ToString(), "Rate must have a positive value.", IsGreaterOrEqualToZero, r);
+        }
 
         public static void ValidateTierStartVol(params object[] args)
-		{
-			MyOpRuleCore r = new MyOpRuleCore(args);
-			if (!r.IsValid) return;
-			ValidateTieredAttribute(AttributeCodes.STRT_VOL.ToString(), "Start Volume must be greater than 0.", IsGreaterThanZero, r);
-		}
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+            ValidateTieredAttribute(AttributeCodes.STRT_VOL.ToString(), "Start Volume must be greater than 0.", IsGreaterThanZero, r);
+        }
 
 		public static void ValidateTierEndVol(params object[] args)
 		{
@@ -839,61 +894,61 @@ namespace Intel.MyDeals.BusinessRules
 			{
 			    int tier = atrb.DimKey.FirstOrDefault().AtrbItemId;
 
-				if (tier <= numOfTiers)
-				{
-					if (string.IsNullOrWhiteSpace(atrb.AtrbValue.ToString()))
-					{
-						AddTierValidationMessage(atrbWithValidation, validationMessage, tier);
-						continue;
-					}
-					
-					// unlimited end vol
-					if (isEndVol && (tier == numOfTiers) && atrb.AtrbValue.ToString().Equals("UNLIMITED", StringComparison.InvariantCultureIgnoreCase))
-					{
-						continue;
-					}
+                if (tier <= numOfTiers)
+                {
+                    if (string.IsNullOrWhiteSpace(atrb.AtrbValue.ToString()))
+                    {
+                        AddTierValidationMessage(atrbWithValidation, validationMessage, tier);
+                        continue;
+                    }
+
+                    // unlimited end vol
+                    if (isEndVol && (tier == numOfTiers) && atrb.AtrbValue.ToString().Equals("UNLIMITED", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        continue;
+                    }
 
 				    double safeParse = 0;
 				    bool isNumber = Double.TryParse(atrb.AtrbValue.ToString(), out safeParse);
 
-					if (!isNumber)
-					{
-						AddTierValidationMessage(atrbWithValidation, "Must be a number.", tier);
-					}
-					else if (!validationCondition(safeParse))
-					{
-						AddTierValidationMessage(atrbWithValidation, validationMessage, tier);
-					}
-				}
-			}
-		}
+                    if (!isNumber)
+                    {
+                        AddTierValidationMessage(atrbWithValidation, "Must be a number.", tier);
+                    }
+                    else if (!validationCondition(safeParse))
+                    {
+                        AddTierValidationMessage(atrbWithValidation, validationMessage, tier);
+                    }
+                }
+            }
+        }
 
-		private static void AddTierValidationMessage(IOpDataElement de, string msg, int tier = 1, params object[] args)
-		{
-			Dictionary<int, string> tieredValidationMsgs = new Dictionary<int, string>();
+        private static void AddTierValidationMessage(IOpDataElement de, string msg, int tier = 1, params object[] args)
+        {
+            Dictionary<int, string> tieredValidationMsgs = new Dictionary<int, string>();
 
-			// Previous tier validations exist, so we need to append them together
-			if (!string.IsNullOrWhiteSpace(de.ValidationMessage))
-			{
-				tieredValidationMsgs = OpSerializeHelper.FromJsonString<Dictionary<int, string>>(de.ValidationMessage);
-			}
+            // Previous tier validations exist, so we need to append them together
+            if (!string.IsNullOrWhiteSpace(de.ValidationMessage))
+            {
+                tieredValidationMsgs = OpSerializeHelper.FromJsonString<Dictionary<int, string>>(de.ValidationMessage);
+            }
 
-			// Turn the new validation into an object
-			tieredValidationMsgs[tier] = msg;
+            // Turn the new validation into an object
+            tieredValidationMsgs[tier] = msg;
 
-			// Format into JSON
-			string jsonMsg = OpSerializeHelper.ToJsonString(tieredValidationMsgs);
+            // Format into JSON
+            string jsonMsg = OpSerializeHelper.ToJsonString(tieredValidationMsgs);
 
-			de.ValidationMessage = jsonMsg;
-			//BusinessLogicDeActions.AddJsonValidationMessage(de, jsonMsg);
-		}
-		#endregion
+            de.ValidationMessage = jsonMsg;
+            //BusinessLogicDeActions.AddJsonValidationMessage(de, jsonMsg);
+        }
 
+        #endregion Voltier Validations
 
-		public static void CheckTotalDollarAmount(params object[] args)
-		{
-			MyOpRuleCore r = new MyOpRuleCore(args);
-			if (!r.IsValid) return;
+        public static void CheckTotalDollarAmount(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
 
 			IOpDataElement myRebateType = r.Dc.GetDataElement(AttributeCodes.REBATE_TYPE);
 			IOpDataElement totalDollarObj = r.Dc.GetDataElement(AttributeCodes.TOTAL_DOLLAR_AMOUNT);
@@ -903,21 +958,20 @@ namespace Intel.MyDeals.BusinessRules
 
 			Double.TryParse(totalDollarObj.AtrbValue.ToString(), out totalDollarAmount);
 
-			if (myRebateType.AtrbValue.ToString().Equals("DEBIT MEMO", StringComparison.OrdinalIgnoreCase))
-			{
-				if (totalDollarAmount >= 0)
-				{
-					BusinessLogicDeActions.AddValidationMessage(totalDollarObj, "Total dollar amount must be negative for debit memos.");
-				}
-			}
-			else
-			{
-				if (totalDollarAmount <= 0)
-				{
-					BusinessLogicDeActions.AddValidationMessage(totalDollarObj, "Total dollar amount must be positive for non-debit memos.");
-				}
-			}
-		}
-
-	}
+            if (myRebateType.AtrbValue.ToString().Equals("DEBIT MEMO", StringComparison.OrdinalIgnoreCase))
+            {
+                if (totalDollarAmount >= 0)
+                {
+                    BusinessLogicDeActions.AddValidationMessage(totalDollarObj, "Total dollar amount must be negative for debit memos.");
+                }
+            }
+            else
+            {
+                if (totalDollarAmount <= 0)
+                {
+                    BusinessLogicDeActions.AddValidationMessage(totalDollarObj, "Total dollar amount must be positive for non-debit memos.");
+                }
+            }
+        }
+    }
 }

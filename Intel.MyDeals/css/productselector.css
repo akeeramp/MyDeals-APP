@@ -451,20 +451,20 @@ input[type=checkbox].with-font {
         font-family: FontAwesome;
         display: inline-block;
         content: "\f096";
-        font-size: 22px;
-        letter-spacing: 5px;
-        color: #00AEEF;
+        font-size: 18px;
+        color: #39c600;
         margin-left: 10px;
         margin-top: 2px;
+        margin-bottom: 0px !important;
         vertical-align: middle;
-    }
-
-    input[type=checkbox].with-font.ckSm + label:before {
-        font-size: 16px;
+        height: 13px;
+        width: 14px;
+        border-radius: 3px;
+        background: #fff;
     }
 
     input[type=checkbox].with-font:hover + label:before {
-        color: #003C71;
+        color: #9bc600;
         cursor: pointer;
     }
 
@@ -475,8 +475,7 @@ input[type=checkbox].with-font {
 
     input[type=checkbox].with-font:checked + label:before {
         content: "\f046";
-        font-size: 22px;
-        letter-spacing: 5px;
+        font-size: 18px;
         margin-left: 10px;
         margin-top: 2px;
         vertical-align: middle;

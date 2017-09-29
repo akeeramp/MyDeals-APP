@@ -26,6 +26,11 @@
                 }
             }
         })
+        .constant('crossVertical', {
+            'productCombination1': ["DT", "Mb", "SvrWS", "EIA CPU"],
+            'productCombination2': ["CS", "EIA CS"],
+            'message': "<div>The product combination is not valid. You can combine (DT, MB, SrvWS, EIA CPU) or (CS, EIA CS) verticals. For NON IA, you can combine as many products within same verticals for PROGRAM and VOLTIER deals.</div>"
+        })
         .constant('pctRulesDrpDownValues', {
             costTestProductType: [{ 'name': 'L1' }, { 'name': 'L2' }],
             conditionCriteria: [{ 'name': 'Include' }, { 'name': 'Exclude' }],
@@ -398,7 +403,7 @@
                         "Groups": ["RPU"]
                     }
                 },
-                "PROGRAM": { 
+                "PROGRAM": {
                     "tools": {
                         "Groups": ["Deal Info", "Consumption", "Cost Test", "Meet Comp", "Backdate", "Overlapping", "RPU"]
                     },

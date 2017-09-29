@@ -373,23 +373,43 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             for (var key in validatedSelectedProducts) {
                 if (validatedSelectedProducts[key].length > 1) {
                     angular.forEach(validatedSelectedProducts[key], function (value, i) {
-                        singleProductJSON[value.HIER_VAL_NM] = value;
+                        if (!value.EXCLUDE) {
+                            singleProductJSON[value.HIER_VAL_NM] = value;
+                        }
                     });
                 } else {
-                    singleProductJSON[validatedSelectedProducts[key][0].HIER_VAL_NM] = validatedSelectedProducts[key];
+                    if (!validatedSelectedProducts[key][0].EXCLUDE) {
+                        singleProductJSON[validatedSelectedProducts[key][0].HIER_VAL_NM] = validatedSelectedProducts[key];
+                    }
                 }
             }
             for (var key in singleProductJSON) {
                 if (singleProductJSON.hasOwnProperty(key)) {
-                    var validJSON = {};
-                    validJSON[key] = singleProductJSON[key];
-                    // can't use colToLetter for PTR_SYS_PRD because it is hidden
-                    sheet.range('B' + (row)).value(JSON.stringify(validJSON));
-                    systemModifiedProductInclude = true;
-                    sheet.range(root.colToLetter['PTR_USER_PRD'] + (row)).value(key);
-                    systemModifiedProductInclude = false;
-                    // can't use colToLetter for PTR_SYS_INVLD_PRD because it is hidden
-                    sheet.range('C' + (row)).value("");
+                    if (!!root.curPricingTable.NUM_OF_TIERS) {
+                        var mergedRows = parseInt(row) + parseInt(root.curPricingTable.NUM_OF_TIERS);
+                        for (var a = row; a < mergedRows ; a++) {
+                            var validJSON = {};
+                            validJSON[key] = singleProductJSON[key];
+                            // can't use colToLetter for PTR_SYS_PRD because it is hidden
+                            sheet.range('B' + (a)).value(JSON.stringify(validJSON));
+                            systemModifiedProductInclude = true;
+                            sheet.range(root.colToLetter['PTR_USER_PRD'] + (a)).value(key);
+                            systemModifiedProductInclude = false;
+                            // can't use colToLetter for PTR_SYS_INVLD_PRD because it is hidden
+                            sheet.range('C' + (a)).value("");
+                        }
+                        row = mergedRows - 1;
+                    } else {
+                        var validJSON = {};
+                        validJSON[key] = singleProductJSON[key];
+                        // can't use colToLetter for PTR_SYS_PRD because it is hidden
+                        sheet.range('B' + (row)).value(JSON.stringify(validJSON));
+                        systemModifiedProductInclude = true;
+                        sheet.range(root.colToLetter['PTR_USER_PRD'] + (row)).value(key);
+                        systemModifiedProductInclude = false;
+                        // can't use colToLetter for PTR_SYS_INVLD_PRD because it is hidden
+                        sheet.range('C' + (row)).value("");
+                    }
                     row++;
                 }
             }
@@ -429,7 +449,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         return cols;
     }
 
-    var flushSysPrdFields = ["PTR_USER_PRD", "START_DT", "END_DT", "GEO_COMBINED", "PROD_INCLDS", "PROGRAM_PAYMENT"];
+    var flushSysPrdFields = ["PTR_USER_PRD", "PRD_EXCLDS", "START_DT", "END_DT", "GEO_COMBINED", "PROD_INCLDS", "PROGRAM_PAYMENT"];
     var flushTrackerNumFields = ["START_DT", "END_DT", "GEO_COMBINED"];
 
     // On Spreadsheet change
@@ -458,7 +478,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var bottomRightRowIndex = (range._ref.bottomRight.row + (range._ref.bottomRight.row % root.child.numTiers) + 1);
 
         var productColIndex = (root.colToLetter["PTR_USER_PRD"].charCodeAt(0) - intA);
+        var excludeProductColIndex = (root.colToLetter["PRD_EXCLDS"].charCodeAt(0) - intA);
+
         var isProductColumnIncludedInChanges = (range._ref.topLeft.col <= productColIndex) && (range._ref.bottomRight.col >= productColIndex);
+        var isExcludeProductColumnIncludedInChanges = (range._ref.topLeft.col <= excludeProductColIndex) && (range._ref.bottomRight.col >= excludeProductColIndex);
 
         // check for selections in te middle of a merge
         //if (range._ref.bottomRight.row % root.child.numTiers > 0) {
@@ -660,7 +683,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 data[topLeftRowIndex - 2].ORIG_ECAP_TRKR_NBR = null;
             }
 
-            if (isTrackerNumFlushed || (isProductColumnIncludedInChanges && hasValueInAtLeastOneCell)) {
+            if (isTrackerNumFlushed || (isProductColumnIncludedInChanges && hasValueInAtLeastOneCell) || (isPtrSysPrdFlushed && isExcludeProductColumnIncludedInChanges)) {
                 syncSpreadRows(sheet, topLeftRowIndex, bottomRightRowIndex);
             }
         }
@@ -1566,6 +1589,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             else { // open the selector
                 var currentPricingTableRowData = context.range._sheet.dataSource._data[currentRow];
                 var enableSplitProducts = context.range._sheet.dataSource._data.length <= context.range._ref.row;
+                if (!!root.curPricingTable.NUM_OF_TIERS) {
+                    enableSplitProducts = context.range._sheet.dataSource._data.length - parseInt(root.curPricingTable.NUM_OF_TIERS) - validat1 <= context.range._ref.row;
+                }
                 if (!!currentPricingTableRowData && currentPricingTableRowData.PROGRAM_PAYMENT !== null
                     && currentPricingTableRowData.PROGRAM_PAYMENT !== "" && currentPricingTableRowData.PROD_INCLDS != null && currentPricingTableRowData.PROD_INCLDS !== ""
                     && currentPricingTableRowData.GEO_COMBINED != null && currentPricingTableRowData.GEO_COMBINED !== "") {
@@ -1913,8 +1939,19 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                     sourceData[r].PRD_EXCLDS = products.excludeProducts;
                                 }
 
-                                data[r].DC_ID = products.contractProducts === "" ? null : data[r].DC_ID;
-                                sourceData[r].DC_ID = products.contractProducts === "" ? null : sourceData[r].DC_ID;
+                                // For VOL_TIER update the merged cells
+                                if (!!root.curPricingTable.NUM_OF_TIERS && (products.contractProducts === "" || !products.contractProducts)) {
+                                    var mergedRowsws = parseInt(r) + parseInt(root.curPricingTable.NUM_OF_TIERS);
+                                    for (var a = r; a < mergedRowsws ; a++) {
+                                        data[a].DC_ID = null;
+                                        sourceData[a].DC_ID = null;
+                                        data[a].PTR_USER_PRD = "";
+                                        sourceData[a].PTR_USER_PRD = "";
+                                    }
+                                } else {
+                                    data[r].DC_ID = (products.contractProducts === "" || !products.contractProducts) ? null : data[r].DC_ID;
+                                    sourceData[r].DC_ID = (products.contractProducts === "" || !products.contractProducts) ? null : sourceData[r].DC_ID;
+                                }
                             }
                         }
                     }
@@ -2073,7 +2110,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
     function getFullNameOfProduct(item) {
         if (item.PRD_ATRB_SID > 7005) return item.HIER_VAL_NM;
-        return item.PRD_CAT_NM + " " + (item.BRND_NM === 'NA' ? "" : item.BRND_NM) + " " + (item.FMLY_NM === 'NA' ? "" : item.FMLY_NM);
+        return (item.PRD_CAT_NM + " " + (item.BRND_NM === 'NA' ? "" : item.BRND_NM) + " " + (item.FMLY_NM === 'NA' ? "" : item.FMLY_NM)).trim();
     }
 
     function getUserInput(updatedUserInput, products, typeOfProduct) {
