@@ -22,8 +22,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             var tierAtrbs = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"];
 
             $scope.isOverlapping = false;
-            $scope.isOvlpAccess = false;            
-            $scope.ovlpErrorCount = []; 
+            $scope.isOvlpAccess = false;
+            $scope.ovlpErrorCount = [];
             $scope.ovlpDataRep = [];
             $timeout(function () {
                 $scope.tabStripDelay = true;
@@ -253,7 +253,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
             $scope.addTab = function () {
                 kendo.prompt("Tab name:", "").then(function (data) {
-                    if (data === "") data = "New Group";
+                    if (data === "") data = "New Tab";
                     $scope.addToTab(data);
                 },
                     function () {
@@ -363,7 +363,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 // Attachments were added/removed for the deal, so update the state of the paper-clip icon accordingly.
                 //$scope.ds.dataSource.transport.read($scope.optionCallback);
             });
-            
+
             $scope.contractDs = new kendo.data.DataSource({
                 transport: {
                     read: function (e) {
@@ -604,11 +604,11 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 }
                 var workbook = new kendo.ooxml.Workbook({
                     sheets: [
-                      {
-                          //columns: widths,
-                          title: "MyDeals Data",
-                          rows: rows
-                      }
+                        {
+                            //columns: widths,
+                            title: "MyDeals Data",
+                            rows: rows
+                        }
                     ]
                 });
 
@@ -894,22 +894,22 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
             $scope.showCols = function (grpName) {
                 if ($scope.curGroup == grpName) {
-                    $scope.contractDs.filter({});  
+                    $scope.contractDs.filter({});
                     $scope.ovlpDataSource.filter({});
                 }
                 if (grpName.toLowerCase() == "overlapping") {
                     $scope.isOverlapping = true;
-                    $scope.isLayoutConfigurable = false;  
+                    $scope.isLayoutConfigurable = false;
                     $scope.searchFilter = "";
-                    $scope.contractDs.filter({});           
+                    $scope.contractDs.filter({});
                 }
                 else {
-                    
-                    $scope.isOverlapping = false;                    
+
+                    $scope.isOverlapping = false;
                     $scope.isLayoutConfigurable = true;
                     $scope.searchFilter = "";
-                    $scope.ovlpDataSource.filter({});  
-                    
+                    $scope.ovlpDataSource.filter({});
+
                 }
                 var c;
                 var colNames = [];
@@ -1013,7 +1013,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     }
                 }
             }
-            
+
             $scope.$on('refresh', function (event, args) {
             });
 
@@ -1090,7 +1090,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     $scope.root.saveEntireContract();
                 }, 100);
             });
-            
+
             $scope.increaseBadgeCnt = function (key) {
                 if ($scope.opOptions.groupColumns[key] === undefined) return;
                 for (var i = 0; i < $scope.opOptions.groupColumns[key].Groups.length; i++) {
@@ -1110,7 +1110,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 return null;
             }
 
-            $scope.addRow = function(scope, dataItem) {
+            $scope.addRow = function (scope, dataItem) {
                 var data = scope.contractDs.data();
                 data.unshift(dataItem);
                 data[0].dirty = true;  // tell datasource something changed
@@ -1159,7 +1159,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
                 event.currentScope.contractDs.sync();
             });
-            
+
             $scope.cleanFlags = function () {
                 $scope.clearBadges();
 
@@ -1221,7 +1221,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             }
 
             $scope.searchGrid = function () {
-                
+
                 var tab = $("#tabstrip").kendoTabStrip().data("kendoTabStrip").select().text();
                 var searchValue = $scope.searchFilter;
 
@@ -1326,7 +1326,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 var START_DT = '';
                 var END_DT = '';
                 var dcID = 0;
-                
+
                 for (var i = 0; i < tempdata.length; i++) {
                     if (tempdata[i].WIP_DEAL_OBJ_SID == data && tempdata[i].WF_STG_CD == "Draft" && tempdata[i].OVLP_CD == "SELF_OVLP") {
                         START_DT = tempdata[i].START_DT;
@@ -1354,21 +1354,21 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             $scope.ovlpData[i].START_DT = $scope.ovlpDataRep[i].START_DT;
                             $scope.ovlpData[i].END_DT = $scope.ovlpDataRep[i].END_DT;
                         }
-                            
+
                     }
                 }
-                
-                $scope.ovlpDataSource.read();                            
-                
+
+                $scope.ovlpDataSource.read();
+
                 objsetService.updateOverlappingDeals(data, YCS2_OVERLAP_OVERRIDE)
                     .then(function (response) {
                         if (response.data[0].PRICING_TABLES > 0) {
                             // Change in Deal Editor
                             var indx = $scope.opData.findIndex(item => item.DC_ID == data);
                             if (indx > -1) {
-                                $scope.opData[indx].YCS2_OVERLAP_OVERRIDE = YCS2_OVERLAP_OVERRIDE == 'Y' ? 'Y' : 'N'; 
+                                $scope.opData[indx].YCS2_OVERLAP_OVERRIDE = YCS2_OVERLAP_OVERRIDE == 'Y' ? 'Y' : 'N';
                                 $scope.contractDs.read();
-                            }   
+                            }
 
                             if (YCS2_OVERLAP_OVERRIDE == 'N') {
                                 $scope.ovlpErrorCount.push(data);
@@ -1424,9 +1424,9 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     var win = window.open("Contract#/manager/" + dataItem.CONTRACT_NBR + "/" + dataItem.PRICE_STRATEGY + "/" + dataItem.PRICING_TABLES + "/wip", '_blank');
                     win.focus();
                 }
-                
+
             }
-            
+
             //Overlapping GRID
             $scope.ovlpDataSource = new kendo.data.DataSource({
                 transport: {
@@ -1696,7 +1696,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         template: "<div class='ovlpCell' title='#= MRKT_SEG #'> #= MRKT_SEG # </div>",
                         width: "150px",
                         filterable: { multi: true, search: true }
-                    }                                
+                    }
                 ]
             };
 
@@ -1765,7 +1765,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         .then(function (response) {
                             if (response.data) {
                                 if (response.data.length > 0) {
-                                    
+
                                     $scope.isOverlapping = true;
 
                                     //Checking TAB already exist or not
