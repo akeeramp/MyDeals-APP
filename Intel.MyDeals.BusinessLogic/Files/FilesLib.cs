@@ -1,4 +1,5 @@
-﻿using Intel.MyDeals.Entities;
+﻿using Intel.MyDeals.DataLibrary;
+using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.MyDeals.IDataLibrary;
 using System.Collections.Generic;
@@ -12,6 +13,11 @@ namespace Intel.MyDeals.BusinessLogic
         public FilesLib(IFilesDataLib _filesDataLib)
         {
             this._filesDataLib = _filesDataLib;
+        }
+
+        public FilesLib()
+        {
+            _filesDataLib = new FilesDataLib();
         }
 
         /// <summary>
@@ -44,6 +50,14 @@ namespace Intel.MyDeals.BusinessLogic
         public bool DeleteFileAttachment(int custMbrSid, int objTypeSid, int objSid, int fileDataSid, string includeGroup)
         {
             return _filesDataLib.DeleteFileAttachment(custMbrSid, objTypeSid, objSid, fileDataSid, includeGroup);
+        }
+
+        /// <summary>
+        /// Get the list of all deals with attachments
+        /// </summary>
+        public List<DealsWithAttachments> GetDealsWithAttachments()
+        {
+            return _filesDataLib.GetDealsWithAttachments();
         }
     }
 }

@@ -358,9 +358,16 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 return modDealTypes.length > 0 ? $scope.dealCnt + " " + modDealTypes.join() + ($scope.dealCnt === 1 ? " Deal" : " Deals") : "";
             }
 
+            $scope.$on('attachments-changed', function (event, args) {
+                // TODO::TJE This code is not working.
+                // Attachments were added/removed for the deal, so update the state of the paper-clip icon accordingly.
+                //$scope.ds.dataSource.transport.read($scope.optionCallback);
+            });
+            
             $scope.contractDs = new kendo.data.DataSource({
                 transport: {
                     read: function (e) {
+                        $scope.optionCallback = e;
                         var i, r, g, group;
                         var data = $scope.opData;
 

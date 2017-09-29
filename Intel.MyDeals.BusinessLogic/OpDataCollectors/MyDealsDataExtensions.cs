@@ -384,19 +384,22 @@ namespace Intel.MyDeals.BusinessLogic
 
         public static List<int> GetDealIdsWithAttachments(this MyDealsData myDealsData)
         {
-            // TODO needs to be revisited... this should be OpDataElementType based
-            //if (!myDealsData.ContainsKey(OpDataElementType.Group)) return new List<int>();
+            if (! myDealsData.ContainsKey(OpDataElementType.WIP_DEAL)) 
+				return new List<int>();
 
-            //DataTable dealAttachmentsTable = new DealDataLib().GetDealAttachmentsByID(null, myDealsData[OpDataElementType.Group].GroupID);
-            //if (dealAttachmentsTable == null || dealAttachmentsTable.Rows.Count == 0) return new List<int>(); // pass back an empty list
+            // Get the list of *all* deals that have attachments.
+            FilesLib filesLib = new FilesLib();
+            var allDealsWithAttachments = filesLib.GetDealsWithAttachments();
 
-            //// walk thru the datatable and load the list.
-            //return (from DataRow row in dealAttachmentsTable.Rows select (int)row["DEAL_MBR_SID"]).ToList();
-            return new List<int>();
+            // Get the list of deals we are displaying.
+            var dealsInQuestion = myDealsData[OpDataElementType.WIP_DEAL].Data.Keys;
+
+            return dealsInQuestion.Where(x => allDealsWithAttachments.Select(y => y.OBJ_SID).ToList().Contains(x)).ToList();
         }
 
         public static void TagWithAttachments(this MyDealsData myDealsData, OpDataPacket<OpDataElementType> opDataPacket)
         {
+
             // TODO needs to be revisited... this should be OpDataElementType based
             List<int> dataCollectorsWithFiles = myDealsData.GetDealIdsWithAttachments();
             foreach (OpDataCollector dc in opDataPacket.AllDataCollectors.Where(dc => dataCollectorsWithFiles.Contains(dc.DcID)))

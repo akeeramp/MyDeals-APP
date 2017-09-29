@@ -24,5 +24,10 @@ namespace Intel.MyDeals.IDataLibrary
         /// Delete the specified file attachment
         /// </summary>
         bool DeleteFileAttachment(int custMbrSid, int objTypeSid, int objSid, int fileDataSid, string includeGroup);
+
+        /// <summary>
+        /// Get the list of all deals with attachments
+        /// </summary>
+        List<DealsWithAttachments> GetDealsWithAttachments();
     }
 }

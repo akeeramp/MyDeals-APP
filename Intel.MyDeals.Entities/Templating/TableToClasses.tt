@@ -299,6 +299,11 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "CostTestDetailItem";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
+	// Deals With Attachments
+	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MYDL_GET_DEALS_WITH_ATTCH");
+	ds.Tables[0].TableName = "DealsWithAttachments";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
 	PopIndent();
 	WriteLine("}"); // End NameSpace
 

@@ -2,9 +2,9 @@
     .module('app.core')
     .directive('dealTools', dealTools);
 
-dealTools.$inject = ['$timeout', 'logger', 'dataService'];
+dealTools.$inject = ['$timeout', 'logger', 'dataService', '$rootScope'];
 
-function dealTools($timeout, logger, dataService) {
+function dealTools($timeout, logger, dataService, $rootScope) {
     return {
         scope: {
             dataItem: '=ngModel',
@@ -106,6 +106,9 @@ function dealTools($timeout, logger, dataService) {
 
                                 // Refresh the Existing Attachments grid to reflect the newly deleted attachment.
                                 $scope.attachmentsGridOptions.dataSource.transport.read($scope.optionCallback);
+
+                                // Notify that attachments were added so that the state of the paper-clip icon can be updated accordingly.
+                                $rootScope.$broadcast('attachments-changed');
                             },
                             function (response) {
                                 logger.error("Unable to delete attachment.", null, "Delete failed");
@@ -185,6 +188,9 @@ function dealTools($timeout, logger, dataService) {
                 // Refresh the Existing Attachments grid to reflect the newly uploaded attachments(s).
                 if (uploadSuccessCount > 0) {
                     $scope.attachmentsGridOptions.dataSource.transport.read($scope.optionCallback);
+
+                    // Notify that attachments were removed so that the state of the paper-clip icon can be updated accordingly.
+                    $rootScope.$broadcast('attachments-changed');
                 }
             }
 
