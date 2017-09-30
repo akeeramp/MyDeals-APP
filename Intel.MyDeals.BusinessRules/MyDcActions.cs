@@ -689,7 +689,7 @@ namespace Intel.MyDeals.BusinessRules
             List<IOpDataElement> changedIncreaseDes = r.Dc.GetDataElementsWhere(d => onChangeIncreaseItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged && d.IsValueIncreasedFromOrig(atrbMstr)).ToList();
 
             // if not a major change... exit
-            if (!changedDes.Any() && !changedIncreaseDes.Any()) return;
+	        if (!changedDes.Any() && !changedIncreaseDes.Any() && r.Dc.DcID > 0) return;
 
             // Define redeal reason
             var reason = "Redeal due to major change: \n";

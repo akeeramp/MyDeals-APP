@@ -178,7 +178,7 @@ namespace Intel.MyDeals.BusinessLogic
                 myDealsData.InjectParentStages();
                 foreach (OpDataCollector dc in myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors)
                 {
-                    dc.ApplyRules(MyRulesTrigger.OnMergeComplete);
+                    dc.ApplyRules(MyRulesTrigger.OnMergeComplete, null, myDealsData);
                 }
             }
 

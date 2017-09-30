@@ -80,9 +80,10 @@ namespace Intel.MyDeals.BusinessRules
 
                 if (opDataElementType != OpDataElementType.PRC_ST) continue;
 
-                if (action == "Approve" || action == "Revise") { }
-                    if ((action == "Approve" || action == "Revise") && passedValidation != "Complete")
+                if ((action == "Approve" || action == "Revise") && passedValidation != "Complete")
+                {
                     objsetActionItem.Actions[action] = false;
+                }
 
                 if (action == "Approve" && objsetActionItem.Actions[action])
                 {

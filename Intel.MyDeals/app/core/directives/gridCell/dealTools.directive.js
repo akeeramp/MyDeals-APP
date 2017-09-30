@@ -194,6 +194,22 @@ function dealTools($timeout, logger, dataService, $rootScope) {
                 }
             }
 
+            $scope.getHoldValue = function (dataItem) {
+                if (dataItem.WF_STG_CD === 'Active') return 'NoHold';
+
+                if (dataItem._actionsPS === undefined) dataItem._actionsPS = {};
+                if (dataItem.WF_STG_CD === 'Hold') {
+                    if (!!dataItem._actionsPS.Hold) return 'TakeOffHold'; // !! = If it exists - If deal is on hold and I can hold from hold stage...
+                    else return 'CantRemoveHold';
+                }
+                else {
+                    if (!!dataItem._actionsPS.Hold && dataItem._actionsPS.Hold === true) return 'CanHold';
+                    else return 'NoHold';
+                }
+
+                return 'SumTingWong';
+            }
+
             $scope.onFileSelect = function (e) {
                 // Hide default kendo clear button.
                 $timeout(function () {
