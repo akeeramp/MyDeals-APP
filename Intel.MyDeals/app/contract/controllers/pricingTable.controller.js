@@ -478,7 +478,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var bottomRightRowIndex = (range._ref.bottomRight.row + (range._ref.bottomRight.row % root.child.numTiers) + 1);
 
         var productColIndex = (root.colToLetter["PTR_USER_PRD"].charCodeAt(0) - intA);
-        var excludeProductColIndex = (root.colToLetter["PRD_EXCLDS"].charCodeAt(0) - intA);
+        var excludeProductColIndex = root.colToLetter["PRD_EXCLDS"] ? (root.colToLetter["PRD_EXCLDS"].charCodeAt(0) - intA) : -1;   
 
         var isProductColumnIncludedInChanges = (range._ref.topLeft.col <= productColIndex) && (range._ref.bottomRight.col >= productColIndex);
         var isExcludeProductColumnIncludedInChanges = (range._ref.topLeft.col <= excludeProductColIndex) && (range._ref.bottomRight.col >= excludeProductColIndex);
