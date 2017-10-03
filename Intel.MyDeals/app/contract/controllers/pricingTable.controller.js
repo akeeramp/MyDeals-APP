@@ -1590,7 +1590,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 var currentPricingTableRowData = context.range._sheet.dataSource._data[currentRow];
                 var enableSplitProducts = context.range._sheet.dataSource._data.length <= context.range._ref.row;
                 if (!!root.curPricingTable.NUM_OF_TIERS) {
-                    enableSplitProducts = context.range._sheet.dataSource._data.length - parseInt(root.curPricingTable.NUM_OF_TIERS) - validat1 <= context.range._ref.row;
+                    enableSplitProducts = context.range._sheet.dataSource._data.length - parseInt(root.curPricingTable.NUM_OF_TIERS) - ValidateProducts <= context.range._ref.row;
                 }
                 if (!!currentPricingTableRowData && currentPricingTableRowData.PROGRAM_PAYMENT !== null
                     && currentPricingTableRowData.PROGRAM_PAYMENT !== "" && currentPricingTableRowData.PROD_INCLDS != null && currentPricingTableRowData.PROD_INCLDS !== ""
