@@ -59,6 +59,15 @@ namespace Intel.MyDeals.Entities
 
         }
 
+        public static void SetModified(this OpDataCollector dc, string atrbCd)
+        {
+            OpDataElementAtrb de = dc.GetAtrb(atrbCd);
+            if (de != null)
+            {
+                de.State = OpDataElementState.Modified;
+            }
+        }
+
         /// <summary>
         /// Get first matching attribute
         /// </summary>

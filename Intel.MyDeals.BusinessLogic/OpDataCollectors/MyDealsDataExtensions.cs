@@ -904,7 +904,7 @@ namespace Intel.MyDeals.BusinessLogic
                     childToOrigParentIdMapping[dcWip.DcID] = dcWip.DcParentID;
 
                     string prodTitle = dcWip.GetDataElementValue(AttributeCodes.TITLE);
-                    dcSplit.SetDataElementValue(AttributeCodes.PTR_USER_PRD, prodTitle);
+                    dcSplit.SetAtrb(AttributeCodes.PTR_USER_PRD, prodTitle);
                     dcSplit.GetDataElement(AttributeCodes.PTR_USER_PRD).State = OpDataElementState.Modified;
 
                     if (elMapping.TranslationType == OpTranslationType.OneDealPerProduct)
@@ -918,7 +918,7 @@ namespace Intel.MyDeals.BusinessLogic
                             {
                                 [prodTitle] = prdMappings
                             });
-                            dcSplit.SetDataElementValue(AttributeCodes.PTR_SYS_PRD, strPrdMappings);
+                            dcSplit.SetAtrb(AttributeCodes.PTR_SYS_PRD, strPrdMappings);
                         }
                         else
                         {
@@ -934,7 +934,7 @@ namespace Intel.MyDeals.BusinessLogic
                                     {
                                         [prodTitle] = pMaps
                                     });
-                                    dcSplit.SetDataElementValue(AttributeCodes.PTR_SYS_PRD, strPrdMappings);
+                                    dcSplit.SetAtrb(AttributeCodes.PTR_SYS_PRD, strPrdMappings);
                                     foundIt = true;
                                 }
                             }
@@ -944,7 +944,8 @@ namespace Intel.MyDeals.BusinessLogic
                     // manage Geos
                     string strGeos = dcWip.GetDataElementValue(AttributeCodes.GEO_COMBINED);
                     if (strGeos.IndexOf(',') >= 0) strGeos = "[" + strGeos + "]";
-                    dcSplit.SetDataElementValue(AttributeCodes.GEO_COMBINED, strGeos);
+                    dcSplit.SetAtrb(AttributeCodes.GEO_COMBINED, strGeos);
+                    dcSplit.SetModified(AttributeCodes.GEO_COMBINED);
 
                     myDealsData[OpDataElementType.PRC_TBL_ROW].Data.Add(dcSplit);
                 }
@@ -978,7 +979,7 @@ namespace Intel.MyDeals.BusinessLogic
 
                     if (elMapping != null && elMapping.TranslationType == OpTranslationType.OneDealPerProduct)
                     {
-                        dcWip.SetDataElementValue(AttributeCodes.PTR_USER_PRD, dcWip.GetDataElementValue(AttributeCodes.TITLE));
+                        dcWip.SetAtrb(AttributeCodes.PTR_USER_PRD, dcWip.GetDataElementValue(AttributeCodes.TITLE));
                     }
                 }
             }
