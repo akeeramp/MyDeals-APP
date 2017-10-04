@@ -85,6 +85,11 @@ namespace Intel.MyDeals.BusinessRules
                     objsetActionItem.Actions[action] = false;
                 }
 
+
+                // TODO when PCT and MCT is ready... remove the following lines
+                pctFailed = false;
+                mctFailed = false;
+
                 if (action == "Approve" && objsetActionItem.Actions[action])
                 {
                     switch (role)
