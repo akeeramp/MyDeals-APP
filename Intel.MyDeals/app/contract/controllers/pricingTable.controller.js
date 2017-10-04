@@ -1141,7 +1141,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         if (key !== "PTR_USER_PRD") {
                             disableRange(sheet.range(myColumnName + numRowsContainingData + ":" + myColumnName));
                         } else {
-                            if (!root.curPricingStrategy._settings || !root.curPricingStrategy._settings.C_EDIT_PRODUCT) {
+                            if (!root.C_EDIT_PRODUCT) {
                                 disableRange(sheet.range(myColumnName + numRowsContainingData + ":" + myColumnName));
                             }
                         }
