@@ -69,7 +69,7 @@
                     <tr>
                         <td style="width:20%;min-width:200px;max-width:200px">
                             <div class="lnavFilter">
-                                <div class="filterTitleUnderline" ng-if="vm.curRowIssues.length > 1">Filter results by product</div>
+                                <div class="filterTitleUnderline" ng-if="vm.curRowIssues.length > 0">Filter by product</div>
                                 <div class="filterGrp includeProd">
                                     <div class="filterContainer" uib-collapse="vm.isPrdCollapsed">
                                         <div ng-repeat="item in vm.curRowIssues | orderBy: 'name'" style="max-height: 23px;" ng-class="{'lblSelected': item.selected, 'lblNotSelected': !item.selected}">
@@ -90,7 +90,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="filterTitleUnderline" ng-if="vm.curRowLvl.length > 1">Filter results by product level</div>
+                                <div class="filterTitleUnderline" ng-if="vm.curRowLvl.length > 1">Filter by product level</div>
                                 <div class="filterGrp" ng-if="vm.curRowLvl.length > 1">
                                     <div class="filterContainer" uib-collapse="vm.isLvlCollapsed">
                                         <div ng-repeat="item in vm.curRowLvl | orderBy: 'name'" style="max-height: 23px;" ng-class="{'lblSelected': item.selected, 'lblNotSelected': !item.selected}">
@@ -101,7 +101,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="filterTitleUnderline" ng-if="vm.curRowCategories.length > 1">Filter results by product category</div>
+                                <div class="filterTitleUnderline" ng-if="vm.curRowCategories.length > 1">Filter by product category</div>
                                 <div class="filterGrp" ng-if="vm.curRowCategories.length > 1">
                                     <div class="filterContainer" uib-collapse="vm.isCatCollapsed">
                                         <div ng-repeat="item in vm.curRowCategories | orderBy: 'name'" style="max-height: 23px;" ng-class="{'lblSelected': item.selected, 'lblNotSelected': !item.selected}">
