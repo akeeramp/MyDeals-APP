@@ -48,7 +48,7 @@
         vm.dealType = dealType;
         vm.suggestionText = "";
         vm.animateInclude = false;
-        vm.animateExclude = false;
+        vm.animateExclude = false;        
         vm.manageSelectedProducts = manageSelectedProducts;
         vm.excludeMode = !!suggestedProduct.isExcludeProduct ?
                         suggestedProduct.isExcludeProduct && dealType == 'VOL_TIER' : false;
@@ -486,19 +486,22 @@
                     });
 
                     // Check if valid combination
-                    if (!isValidProductCombination(existingProdTypes, item.PRD_CAT_NM)) {
-                        var modalOptions = {
-                            closeButtonText: 'Ok',
-                            actionButtonText: '',
-                            hasActionButton: false,
-                            headerText: '',
-                            bodyText: crossVertical.message
-                        };
-                        confirmationModal.showModal({}, modalOptions).then(function (result) {
-                            //
-                        }, function (response) {
-                            //
-                        });
+                    vm.isCrossVerticalError = isValidProductCombination(existingProdTypes, item.PRD_CAT_NM)
+                    if (!vm.isCrossVerticalError) {
+                        logger.error(crossVertical.message);
+                        //var modalOptions = {
+                        //    closeButtonText: 'Ok',
+                        //    actionButtonText: '',
+                        //    hasActionButton: false,
+                        //    headerText: 'Cross Vertical Warning',
+                        //    bodyText: crossVertical.message,
+                        //    appendTo: "div#mainForm"                            
+                        //};
+                        //confirmationModal.showModal({}, modalOptions, { windowClass: 'prdSelector-modal-window'}).then(function (result) {
+                        //    //
+                        //}, function (response) {
+                        //    //
+                        //});                        
                         product.selected = false;
                         return;
                     }
@@ -869,18 +872,19 @@
 
                 // Check if valid combination
                 if (!isValidProductCombination(existingProdTypes, undefined)) {
-                    var modalOptions = {
-                        closeButtonText: 'Ok',
-                        actionButtonText: '',
-                        hasActionButton: false,
-                        headerText: '',
-                        bodyText: crossVertical.message
-                    };
-                    confirmationModal.showModal({}, modalOptions).then(function (result) {
-                        //
-                    }, function (response) {
-                        //
-                    });
+                    logger.error(crossVertical.message);
+                    //var modalOptions = {
+                    //    closeButtonText: 'Ok',
+                    //    actionButtonText: '',
+                    //    hasActionButton: false,
+                    //    headerText: '',
+                    //    bodyText: crossVertical.message
+                    //};
+                    //confirmationModal.showModal({}, modalOptions).then(function (result) {
+                    //    //
+                    //}, function (response) {
+                    //    //
+                    //});
                     return;
                 }
             }

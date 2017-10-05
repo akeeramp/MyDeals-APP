@@ -1,4 +1,4 @@
-﻿<div class="modal-content" moveablemodal style="height:85vh;background-color:#1a3e6f;overflow-y:auto;overflow-x:hidden;border-left:none;border-right:none;">
+﻿<div class="modal-content" moveablemodal style="height:90vh;background-color:#1a3e6f;overflow-y:auto;overflow-x:hidden;border-left:none;border-right:none;">
     <div style="padding-left:10px;padding-right:10px">
         <div class="prodSelector modal-header" style="margin-bottom:15px">
             <div class="row prodCorrectorHeader">
@@ -20,7 +20,7 @@
         </div>
         <div class="prodCorrector modal-body">
             <div class="row subHeaderMsg">
-                Please select option(s) below to move into the valid products box or use the <span class="yellow">Product Selector</span>
+                Please select option(s) below to move into the valid products box or use the <span class="skyblue">Product Selector</span>
             </div>
             <div class="row subHeaderNavContainer">
                 <div class="mini-left miniNav" ng-if="vm.issueRowKeys.length > 1">
@@ -32,9 +32,25 @@
                 </div>
                 <div class="mini-right miniProdNav">
                     <div>Product(s) not found for Row {{ vm.rowDCId }}</div>
+                    <div style="float:left; font-size: 14px; margin-left: 10px;">Contract Product(s):&nbsp;</div>
                     <div>
                         <ul class="productpath breadcrumb">
-                            <li ng-repeat="p in vm.curRowProds | unique:'name' | orderBy: ['-exclude','name']">
+                            <li ng-repeat="p in vm.curRowProds | filter:{exclude: 'I'} | unique:'name'">
+                                <span ng-class="{'strike': p.matchName != '','btnInclude':vm.showIncludeExcludeLabel && p.exclude == 'I', 'btnExclude':vm.showIncludeExcludeLabel && p.exclude == 'E' }" class="btn btn-default btn-xs">
+                                    <span class="prdAnchor {{p.status}}" ng-click="vm.clkPrdUsrNm(p)" title="{{p.reason}}">{{:: p.name }}</span>
+                                    <span title="Remove Product" class="close" ng-click="vm.removeProd(p.name, p.exclude)">&nbsp;×</span>
+                                </span>
+                                <div class="newProd">
+                                    <span id="selectedProducts" ng-show="p.matchName.length > 0">{{p.matchName.length > 1 ? p.matchName.length + " products" : p.matchName[0]}}</span>
+                                    &nbsp;
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div style="float:left; font-size: 14px; margin-left: 10px;">Excluded Product(s): &nbsp;</div>
+                    <div>
+                        <ul class="productpath breadcrumb">
+                            <li ng-repeat="p in vm.curRowProds | filter:{exclude: 'E'} | unique:'name'">
                                 <span ng-class="{'strike': p.matchName != '','btnInclude':vm.showIncludeExcludeLabel && p.exclude == 'I', 'btnExclude':vm.showIncludeExcludeLabel && p.exclude == 'E' }" class="btn btn-default btn-xs">
                                     <span class="prdAnchor {{p.status}}" ng-click="vm.clkPrdUsrNm(p)" title="{{p.reason}}">{{:: p.name }}</span>
                                     <span title="Remove Product" class="close" ng-click="vm.removeProd(p.name, p.exclude)">&nbsp;×</span>
@@ -53,23 +69,20 @@
                     <tr>
                         <td style="width:20%;min-width:200px;max-width:200px">
                             <div class="lnavFilter">
-                                <div class="filterTitle">Refine By</div>
-                                <div class="filterGrp includeProd" ng-show="vm.isIncludeProd">
-                                    <div ng-click="vm.isPrdCollapsed = !vm.isPrdCollapsed" style="cursor: pointer;">
-                                        <i ng-class="{'intelicon-down': vm.isPrdCollapsed, 'intelicon-right-next': !vm.isPrdCollapsed}" class="includeCircle"></i> Products Entered
-                                    </div>
+                                <div class="filterTitleUnderline">Filter results by product</div>
+                                <div class="filterGrp includeProd">
                                     <div class="filterContainer" uib-collapse="vm.isPrdCollapsed">
-                                        <div ng-repeat="item in vm.curRowIssues | filter:{exclude:'I'} | orderBy: 'name'" style="max-height: 20px;">
+                                        <div ng-repeat="item in vm.curRowIssues | orderBy: 'name'" style="max-height: 30px;" ng-class="{'lblSelected': item.selected, 'lblNotSelected': !item.selected}">
                                             <div ng-if="item.cnt > 0">
                                                 <input type='checkbox' ng-click="vm.clickFilter()" ng-model="item.selected" class='check ckSm with-font' id="fltrPrdChk{{item.id}}" />
-                                                <label for="fltrPrdChk{{item.id}}">
+                                                <label for="fltrPrdChk{{item.id}}" class="lblFilterProd">
                                                     <span ng-bind-html="item.name"></span>
                                                     <span class="badge upperBadge" ng-if="item.status == 'Issue'">{{ item.cnt == 0 ? "?" : item.cnt }}</span>
                                                 </label>
                                             </div>
                                             <div ng-if="item.cnt <= 0" title="Click to find a possible match">
                                                 <input type='checkbox' ng-click="vm.clickFilter()" ng-model="item.selected" class='check ckSm with-font' id="fltrPrdChk{{item.id}}" />
-                                                <label for="fltrPrdChk{{item.id}}">
+                                                <label for="fltrPrdChk{{item.id}}" class="lblFilterProd">
                                                     <span ng-bind-html="item.name"></span>
                                                     <i class="intelicon-help-outlined ckSm"></i>
                                                 </label>
@@ -77,52 +90,24 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="filterGrp excludeProd" ng-show="vm.isExcludeProd">
-                                    <div ng-click="vm.isExcludePrdCollapsed = !vm.isExcludePrdCollapsed" style="cursor: pointer;">
-                                        <i ng-class="{'intelicon-down': vm.isExcludePrdCollapsed, 'intelicon-right-next': !vm.isExcludePrdCollapsed}" class="excludeCircle"></i> Products Excluded
-                                    </div>
-                                    <div class="filterContainer" uib-collapse="vm.isExcludePrdCollapsed">
-                                        <div ng-repeat="item in vm.curRowIssues | filter:{exclude: 'E'} | orderBy: 'name'" style="max-height: 20px;">
-                                            <div ng-if="item.cnt > 0">
-                                                <input type='checkbox' ng-click="vm.clickFilter()" ng-model="item.selected" class='check ckSm with-font' id="fltrPrdChk{{item.id}}" />
-                                                <label for="fltrPrdChk{{item.id}}">
-                                                    <span ng-bind-html="item.name"></span>
-                                                    <span class="badge upperBadge" ng-if="item.status == 'Issue'">{{ item.cnt == 0 ? "?" : item.cnt }}</span>
-                                                </label>
-                                            </div>
-                                            <div ng-if="item.cnt <= 0" title="Click to find a possible match">
-                                                <input type='checkbox' ng-click="vm.clickFilter()" ng-model="item.selected" class='check ckSm with-font' id="fltrPrdChk{{item.id}}" />
-                                                <label for="fltrPrdChk{{item.id}}">
-                                                    <span ng-bind-html="item.name"></span>
-                                                    <i class="intelicon-help-outlined ckSm"></i>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <div class="filterTitleUnderline" ng-if="vm.curRowLvl.length > 1">Filter results by product level</div>
                                 <div class="filterGrp" ng-if="vm.curRowLvl.length > 1">
-                                    <div ng-click="vm.isLvlCollapsed = !vm.isLvlCollapsed" style="cursor: pointer;">
-                                        <i ng-class="{'intelicon-down': vm.isLvlCollapsed, 'intelicon-right-next': !vm.isLvlCollapsed}"></i> Product Level
-                                    </div>
                                     <div class="filterContainer" uib-collapse="vm.isLvlCollapsed">
-                                        <div ng-repeat="item in vm.curRowLvl | orderBy: 'name'" style="max-height: 20px;">
+                                        <div ng-repeat="item in vm.curRowLvl | orderBy: 'name'" style="max-height: 30px;" ng-class="{'lblSelected': item.selected, 'lblNotSelected': !item.selected}">
                                             <input type='checkbox' ng-click="vm.clickFilter()" ng-model="item.selected" class='check ckSm with-font' id="fltrLvlChk{{item.id}}" />
-                                            <label for="fltrLvlChk{{item.id}}">
+                                            <label for="fltrLvlChk{{item.id}}" class="lblFilterProd">
                                                 <span ng-bind-html="item.name"></span>
                                             </label>
                                         </div>
                                     </div>
                                 </div>
-
+                                <div class="filterTitleUnderline" ng-if="vm.curRowCategories.length > 1">Filter results by product category</div>
                                 <div class="filterGrp" ng-if="vm.curRowCategories.length > 1">
-                                    <div ng-click="vm.isCatCollapsed = !vm.isCatCollapsed" style="cursor: pointer;">
-                                        <i ng-class="{'intelicon-down': vm.isCatCollapsed, 'intelicon-right-next': !vm.isCatCollapsed}"></i> Product Category
-                                    </div>
                                     <div class="filterContainer" uib-collapse="vm.isCatCollapsed">
-                                        <div ng-repeat="item in vm.curRowCategories | orderBy: 'name'" style="max-height: 20px;">
+                                        <div ng-repeat="item in vm.curRowCategories | orderBy: 'name'" style="max-height: 30px;" ng-class="{'lblSelected': item.selected, 'lblNotSelected': !item.selected}">
                                             <!-- checked='checked' ng-click="onColumnChange(item)" -->
                                             <input type='checkbox' ng-click="vm.clickFilter()" ng-model="item.selected" class='check ckSm with-font' id="fltrCatChk{{item.id}}" />
-                                            <label for="fltrCatChk{{item.id}}">
+                                            <label for="fltrCatChk{{item.id}}" class="lblFilterProd">
                                                 <span ng-bind-html="item.name"></span>
                                             </label>
                                         </div>
@@ -161,18 +146,44 @@
         </div>
 
         <div class="prodSelector modal-footer">
-            <div class="col-md-5" style="margin-left: -15px;">
-                <button class="btn btn-default prdBtn" ng-click="vm.cancel()" style="margin-right:2px;">Cancel</button>
-                <button class="btn btn-primary prdBtn" ng-click="vm.saveProducts()">Save & Close</button>
-            </div>
-            <div class="col-md-1">
+            <div class="col-md-1 col-md-offset-5">
                 <img ng-if="loading" src="/Images/loadingSmall.gif" />
+            </div>
+            <div class="col-md-6 col-md-offset-10" style="margin-right: -15px;">
+                <button class="btn btn-primary prdBtn" ng-click="vm.saveProducts()" style="float:right;margin-right: -15px;">Save & Close</button>
+                <button class="btn btn-default prdBtn" ng-click="vm.cancel()" style="margin-right:2px;float:right">Cancel</button>
+                
             </div>
         </div>
     </div>
 </div>
 
 <style>
+    .productpath>li>span {
+        color: #0071c5;
+        background: transparent !important;
+        border-color: transparent !important;
+    }
+    .lblFilterProd > span {
+        font-size: 14px !important;
+        font-weight: 600 !important;
+        text-transform: uppercase !important;
+        color: #00AEEF !important;
+    }
+
+    .lblSelected {
+        background: rgba(2, 173, 255, 1);
+    }
+
+    .lblNotSelected {
+        background: none;
+    }
+
+    .lblFilterProd:before {
+        color: transparent !important;
+        width: 0px !important;
+    }
+
     .btnInclude {
         border-left: 4px solid #003C71;
     }
@@ -219,13 +230,14 @@
     }
 
     .badge.upperBadge {
-        font-size: 10px;
+        font-size: 12px !important;
         padding: 2px 4px;
         background-color: #fff;
         color: #666;
         vertical-align: text-top;
         font-weight: 200;
         margin-left: 6px;
+        margin-top: -3px !important;
     }
 
     .newProd {
@@ -253,6 +265,14 @@
         margin: 5px;
         font-size: 20px;
         color: #aeaeae;
+    }
+
+    .filterTitleUnderline {
+        margin: 5px;
+        font-size: 15px;
+        color: #1a3e6f;
+        border-bottom: 1px solid;
+        font-weight: bold;
     }
 
     .filterGrp .filterContainer {
@@ -341,7 +361,7 @@
         padding: 4px;
         margin: 0 8px 0 0;
         width: 100%;
-        height: 65px;
+        height: auto;
     }
 
     .miniNav {
@@ -368,7 +388,7 @@
 
     .mini-right {
         overflow: hidden;
-        height: 60px;
+        height: auto;
     }
 
     .mini-left {
@@ -511,7 +531,7 @@
         padding: 4px 0;
         background-color: transparent;
         color: #003C71;
-        line-height: 0.9em;
+        line-height: 0.2em;
     }
 
         .productpath.breadcrumb > li + li:before {
@@ -527,7 +547,7 @@
         .productpath.breadcrumb {
             padding: 0px;
             margin-bottom: 0px;
-            padding-bottom: 10px;
+            /*padding-bottom: 10px;*/ padding-bottom: 0px;
             padding-left: 5px;
         }
 
@@ -642,7 +662,7 @@
     }
 
     #invalidProdGrid, #suggestionProdGrid {
-        height: calc(85vh - 400px) !important;
+        height: calc(87vh - 400px) !important;
         overflow: auto;
     }
 
@@ -674,8 +694,8 @@
     .prodCorrector.modal-body {
         padding-top: 2px;
         padding-bottom: 0;
-        min-height: calc(85vh - 160px);
-        max-height: calc(85vh - 160px);
+        min-height: calc(90vh - 160px);
+        max-height: calc(90vh - 160px);
         overflow-y: auto;
     }
 
@@ -691,7 +711,7 @@
     }
 
     .prodCorrector.kendoGridHeight {
-        height: calc(85vh - 270px);
+        height: calc(87vh - 270px);
     }
 
     .prdCorrector-modal-window, .modal-dialog {
@@ -727,7 +747,7 @@
             content: "\f096";
             font-size: 22px;
             letter-spacing: 5px;
-            color: #00AEEF;
+            color: #39c600;
             margin-left: 10px;
             margin-top: 2px;
             vertical-align: middle;
@@ -738,7 +758,7 @@
         }
 
         input[type=checkbox].with-font:hover + label:before {
-            color: #003C71;
+            color: #9bc600;
             cursor: pointer;
         }
 

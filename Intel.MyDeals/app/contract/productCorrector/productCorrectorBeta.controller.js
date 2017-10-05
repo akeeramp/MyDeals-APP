@@ -627,18 +627,19 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
         var isValid = isValidProductCombination(existingProdTypes, item.PRD_CAT_NM);
         // Check if valid combination
         if (!isValid) {
-            var modalOptions = {
-                closeButtonText: 'Ok',
-                actionButtonText: '',
-                hasActionButton: false,
-                headerText: '',
-                bodyText: crossVertical.message
-            };
-            confirmationModal.showModal({}, modalOptions).then(function (result) {
-                //
-            }, function (response) {
-                //
-            });
+            logger.error(crossVertical.message);
+            //var modalOptions = {
+            //    closeButtonText: 'Ok',
+            //    actionButtonText: '',
+            //    hasActionButton: false,
+            //    headerText: '',
+            //    bodyText: crossVertical.message
+            //};
+            //confirmationModal.showModal({}, modalOptions).then(function (result) {
+            //    //
+            //}, function (response) {
+            //    //
+            //});
         }
         return isValid;
     }
@@ -857,7 +858,10 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                         vm.ProductCorrectorData.ValidProducts[vm.curRowId][vm.invalidProdName] = [];
 
                     angular.forEach(validateSelectedProducts[key], function (product) {
-                        vm.ProductCorrectorData.ValidProducts[vm.curRowId][vm.invalidProdName].push(product);
+                        var isValid = validCrossVerticals(product);
+                        if (isValid) {
+                            vm.ProductCorrectorData.ValidProducts[vm.curRowId][vm.invalidProdName].push(product);
+                        }                        
                     });
                 }
 
