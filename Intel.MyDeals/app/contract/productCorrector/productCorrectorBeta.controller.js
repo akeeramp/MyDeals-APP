@@ -446,7 +446,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                 field: "USR_INPUT",
                 title: "User Entered",
                 width: "150px",
-                groupHeaderTemplate: "<span class=\"grpTitle\">#= value #</span>  <i class='intelicon-arrow-back-left skyblue pl10'></i> <span class='grpDesc'>Can't find what you are looking for?  <span class='or'>Use the</span> </span><span class='lnk' ng-click='vm.launchSelector(\"#=value#\")'>Product Selector</span><span class='or'> OR </span><span class='lnk' ng-click='vm.removeProd(\"#=value#\")'>Remove Product</span>",
+                groupHeaderTemplate: "<span class=\"grpTitle\">#= value #</span><i ng-click='vm.removeProd(\"#=value#\")' title=\"Remove Product\" class='intelicon-close-max skyblue pl10 removeProduct'></i>  <i class='intelicon-arrow-back-left skyblue pl10'></i> <span class='grpDesc'>Can't find what you are looking for?  <span class='or'>Use the</span> </span><span class='lnk' ng-click='vm.launchSelector(\"#=value#\")'>Product Selector</span>",
                 hidden: false,
                 filterable: { multi: true, search: true }
             },
