@@ -39,44 +39,25 @@
             {
                 state: 'advancedSearch',
                 config: {
+                    abstract: false,
+                    template: '<div ui-view></div>',
                     url: '/',
-                    //abstract: true,
-                    templateUrl: '/app/advancedSearch/advancedSearch.html',
-                    controller: 'AdvancedSearchController as vm',
-                    //resolve: {
-                    //    securityLoaded: ['securityService', function (securityService) {
-                    //        return securityService.loadSecurityData();
-                    //    }]
-                    //}
-
-                }
-            },
-                {
-                    state: 'advancedSearch.advancedSearch',
-                    config: {
-                        url: '/advancedSearch',
-                        //abstract: true,
-                        templateUrl: '/app/advancedSearch/advancedSearch.html',
-                        controller: 'AdvancedSearchController as vm'
-                        //resolve: {
-                        //            securityLoaded: ['securityService', function (securityService) {
-                        //                return securityService.loadSecurityData();
-                        //            }]
-                        //        }
-                        //views: {
-                        //    'lnavView': {
-                        //        templateUrl: '/app/dashboard/views/nav.html'
-                        //    },
-                        //    'dashboardHeaderView': {
-                        //        templateUrl: '/app/dashboard/views/header.html'
-                        //    },
-                        //    'dashboardWrapperView': {
-                        //        templateUrl: '/app/dashboard/views/content.html'
-                        //    }
-                        //}
+                    resolve: {
+                        securityLoaded: ['securityService', function (securityService) {
+                            return securityService.loadSecurityData();
+                        }],
                     }
                 }
-            
+            },
+            {
+                state: 'advancedSearch.search',
+                abstract: false,
+                config: {
+                    templateUrl: '/app/advancedSearch/advancedSearch.html',
+                    url: 'search',
+                    controller: 'AdvancedSearchController as vm'
+                }
+            }
         ];
     }
 })();

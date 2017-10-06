@@ -2,13 +2,13 @@
     'use strict';
     angular
         .module('app.advancedSearch')
-        .controller('AdvancedSearchController', AdvancedSearchController)
+        .controller('AdvancedSearchController', AdvancedSearchController);
 
-    AdvancedSearchController.$inject = ['dataService', '$scope', 'logger', 'gridConstants']
+    AdvancedSearchController.$inject = ['dataService', '$scope', 'logger', 'gridConstants'];
 
     function AdvancedSearchController(dataService, $scope, logger, gridConstants) {
         var vm = this;
-        debugger;
+
         //// Functions
         //vm.addItem = addItem;
         //vm.updateItem = updateItem;
@@ -19,7 +19,7 @@
         //vm.selectedItem = null;
         //vm.isButtonDisabled = true;
 
-        function searchAll() {
+        vm.searchAll = function() {
 
             alert("Did you click me?");
             //vm.dataSource = new kendo.data.DataSource({
