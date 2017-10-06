@@ -1,0 +1,112 @@
+﻿<script type="text/ng-template" id="pctOverrideReasonModal">
+    <div class="modal-header modalBlueBody">
+        <h5 class="modal-title" id="modal-title">Select Cost Test Exception</h5>
+    </div>
+    <div class="modal-body modalBlueBody" id="modal-body">
+
+        <table style="width: 100%;">
+            <tr>
+                <td>
+                    <kendo-grid id="gridOverrideReason" options="gridOptions" style="width: 795px;" class="opUiContainer md dashboard" />
+                </td>
+                <td style="width: 57px;">
+                    <div class="vert-button" ng-click="toggleSee()">
+                        <div ng-if="!seeMore" style="position: relative; top: 50%; transform: translateY(-50%);">
+                            <div>Show<br/>more</div>
+                            <i class="intelicon-right-next big-icon"></i>
+                        </div>
+                        <div ng-if="seeMore" style="position: relative; top: 50%; transform: translateY(-50%);">
+                            <div>Show<br />less</div>
+                            <i class="intelicon-left-previous big-icon"></i>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>        
+
+        <br/>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="fr">
+                    <button class="btn btn-warning" type="button" style="margin-right: 8px;" ng-click="cancel()">Cancel</button>
+                    <button class="btn btn-primary" type="button" ng-click="ok()">Save & Close</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</script>
+
+<style>
+    .modalBlueBody {
+        background-color: #003C71;
+        color: #ffffff;
+    }
+    .vert-button {
+        width:100%; 
+        height: 300px; 
+        background-color: #00AEEF; 
+        border-radius: 4px; 
+        color: #ffffff;
+        padding: 6px;
+        text-align: center;
+        font-size: 12px;
+        cursor: pointer;
+    }
+    .vert-button:hover {
+        background-color: #0071C5;
+    }
+    .big-icon {
+        font-size: 30px;
+    }
+    input[type=radio].with-font,
+    input[type=checkbox].with-font {
+        border: 0;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 1px;
+    }
+
+    input[type=radio].with-font + label:before,
+    input[type=checkbox].with-font + label:before {
+        font-family: FontAwesome;
+        display: inline-block;
+        content: "\f096";
+        font-size: 20px;
+        letter-spacing: 10px;
+        color: #00AEEF;
+        margin-left: 10px;
+    }
+
+    input[type=radio].with-font:hover + label:before,
+    input[type=checkbox].with-font:hover + label:before {
+        color: #003C71;
+        cursor: pointer;
+    }
+
+    input[type=radio].with-font.disabled + label:before,
+    input[type=checkbox].with-font.disabled + label:before {
+        color: #cccccc;
+        cursor: default;
+    }
+
+    input[type=radio].with-font:checked + label:before,
+    input[type=checkbox].with-font:checked + label:before {
+        content: "\f046";
+        font-size: 20px;
+        letter-spacing: 5px;
+        color: #C4D600;
+        margin-left: 10px;
+    }
+
+    input[type=radio].with-font:focus + label:before,
+    input[type=checkbox].with-font:focus + label:before {
+        font-weight: bold;
+        color: #C4D600;
+    }
+
+</style>

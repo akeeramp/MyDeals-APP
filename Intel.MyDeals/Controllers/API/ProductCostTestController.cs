@@ -1,6 +1,8 @@
-﻿using Intel.MyDeals.Entities;
+﻿using System;
+using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Web.Http;
 
 namespace Intel.MyDeals.Controllers.API
@@ -143,5 +145,15 @@ namespace Intel.MyDeals.Controllers.API
               , $"Unable to delete Legal Exception"
           );
         }
+
+        [Route("GetLegalExceptionsPct/{endDt}")]
+        public List<PCTLegalException> GetLegalExceptionsPct(string endDt)
+        {
+            DateTime endDate = DateTime.Parse(endDt.Replace("-", "/"));
+            return SafeExecutor(() => _productCostTestLib.GetLegalExceptions(endDate)
+               , $"Unable to get Price Cost Test Rules"
+           );
+        }
+
     }
 }

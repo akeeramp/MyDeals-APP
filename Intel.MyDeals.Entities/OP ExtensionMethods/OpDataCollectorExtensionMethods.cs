@@ -206,8 +206,8 @@ namespace Intel.MyDeals.Entities
 
         public static bool HasTracker(this OpDataCollector dc)
         {
-            var trackers = dc.GetDataElementsWhere(AttributeCodes.TRKR_NBR, d => d.AtrbValue.ToString() != string.Empty);
-            return trackers != null && trackers.Any();
+            string hasTracker = dc.GetDataElementValue(AttributeCodes.HAS_TRACKER);
+            return hasTracker == "1";
         }
 
         public static void ApplySecurityAttributes(this OpDataCollector dc, 

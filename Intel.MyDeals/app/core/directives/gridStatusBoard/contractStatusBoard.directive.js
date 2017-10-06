@@ -134,7 +134,7 @@ function contractStatusBoard($compile, objsetService,colorDictionary) {
                 var ret = [];
 
                 for (var i = 0; i < data.length; i++) {
-                    var results = ["PASS", "FAIL", "INCOMPLETE", "NA"];
+                    var results = ["Pass", "Fail", "Incomplete", "Na"];
                     var next = "";
                     var titleCd = "TITLE";
 
@@ -301,11 +301,17 @@ function contractStatusBoard($compile, objsetService,colorDictionary) {
                     return (d1.id === id);
                 })[0];
                 var sequenceArray = $scope.getAncestors(d);
+
                 var lnk = "/Contract#/manager/" + $scope.contractId;
-                if (sequenceArray.length >= 4) { // WIP
-                    lnk += "/" + sequenceArray[0].id + "/" + sequenceArray[1].id + "/wip";
-                } else if (sequenceArray.length >= 2) { // Pricing Table
-                    lnk += "/" + sequenceArray[0].id + "/" + sequenceArray[1].id;
+
+                if (window.usrRole === "DA") {
+                    lnk = "/Contract#/manager/" + $scope.contractId + "/summary";
+                } else {
+                    if (sequenceArray.length >= 4) { // WIP
+                        lnk += "/" + sequenceArray[0].id + "/" + sequenceArray[1].id + "/wip";
+                    } else if (sequenceArray.length >= 2) { // Pricing Table
+                        lnk += "/" + sequenceArray[0].id + "/" + sequenceArray[1].id;
+                    }
                 }
                 window.open(lnk, '_blank');
             }

@@ -7,9 +7,8 @@
         <div class="lnav-sum-menu-item">
             <a ui-sref="contract.summary" ui-sref-opts="{reload: true}"><div id="approvalDiv">Approval View</div></a>
             <a ui-sref="contract.details" ui-sref-opts="{reload: true}"><div>Contract Details</div></a>
-            <a ui-sref="contract.pct" ui-sref-opts="{reload: true}"><div id="pctDiv">Compliance</div></a>
+            <a ui-sref="contract.pct" ui-sref-opts="{reload: true}" ng-if="CAN_EDIT_COST_TEST"><div id="pctDiv">Price Cost Test</div></a>
             <a ui-sref="contract.overlapping" ui-sref-opts="{reload: true}"><div id="overlappingDiv">Overlapping</div></a>
-            <!--<a ui-sref="contract.timeline" ui-sref-opts="{reload: true}"><div id="timelineDiv">Timeline</div></a>-->
         </div>
 
     </div>
@@ -22,38 +21,38 @@
         margin-right: 15px;
     }
 
-        .lnav-sum-container h4 {
-            font-size: 18px;
-            border-bottom: 2px solid #ffffff;
-            margin-top: 20px;
-        }
+    .lnav-sum-container h4 {
+        font-size: 18px;
+        border-bottom: 2px solid #ffffff;
+        margin-top: 20px;
+    }
 
     .lnav-sum-menu-item {
         color: #ffffff;
     }
 
-        .lnav-sum-menu-item div {
-            color: #ffffff;
-            cursor: pointer;
-            margin: 1px 0 1px 10px;
-            padding: 4px;
-            font-size: 14px;
-        }
+    .lnav-sum-menu-item div {
+        color: #ffffff;
+        cursor: pointer;
+        margin: 1px 0 1px 10px;
+        padding: 4px;
+        font-size: 14px;
+    }
 
-            .lnav-sum-menu-item div:hover {
-                background-color: #00AEEF;
-            }
+    .lnav-sum-menu-item div:hover {
+        background-color: #00AEEF;
+    }
 
-            .lnav-sum-menu-item div.active {
-                background-color: #0071C5;
-                font-weight: 600;
-            }
+    .lnav-sum-menu-item div.active {
+        background-color: #0071C5;
+        font-weight: 600;
+    }
 
-                .lnav-sum-menu-item div.active:hover {
-                    background-color: #0071C5;
-                }
+    .lnav-sum-menu-item div.active:hover {
+        background-color: #0071C5;
+    }
 
-        .lnav-sum-menu-item a:hover {
-            text-decoration: none;
-        }
+    .lnav-sum-menu-item a:hover {
+        text-decoration: none;
+    }
 </style>

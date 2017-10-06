@@ -41,13 +41,13 @@ gridUtils.uiDimControlWrapper = function (passedData, field, dim, format) {
 
     return tmplt;
 }
-gridUtils.uiCustomerControlWrapper = function(passedData, field) {
+gridUtils.uiCustomerControlWrapper = function(passedData, field, altField) {
     var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
-    tmplt += '<div class="uiControlDiv"';
-    tmplt += '     ng-class="{isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ',';
+    tmplt += '<div class="uiControlDiv isReadOnlyCell"';
     tmplt += '     isRequiredCell: dataItem._behaviors.isRequired.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + ', isSavedCell: dataItem._behaviors.isSaved.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + '}">';
-    tmplt += '     <div class="ng-binding vert-center" ng-bind="dataItem.Customer.CUST_NM"></div>';
-//    tmplt += '    <div class="vert-center">' + gridUtils.renderCustNm(passedData) + '</div>';
+    tmplt += '     <div class="ng-binding vert-center" ng-if="dataItem.CUST_ACCNT_DIV === \'\'" ng-bind="dataItem.Customer.CUST_NM"></div>';
+    tmplt += '     <div class="ng-binding vert-center" ng-if="dataItem.CUST_ACCNT_DIV !== \'\'" ng-bind="dataItem.CUST_ACCNT_DIV"></div>';
+    //    tmplt += '    <div class="vert-center">' + gridUtils.renderCustNm(passedData) + '</div>';
     tmplt += '</div>';
     return tmplt;
 }
@@ -593,29 +593,42 @@ function gridPctUtils() { }
 
 gridPctUtils.columns = {};
 gridPctUtils.resultMappings = {
-    "FAIL": 0,
-    "INCOMPLETE": 1,
-    "PASS": 2,
-    "NA": 3
+    "Fail": 0,
+    "Incomplete": 1,
+    "Pass": 2,
+    "Na": 3
 };
 gridPctUtils.getColumnTemplate = function (dealId) {
     return gridPctUtils.columns[dealId];
 }
-gridPctUtils.getResultMapping = function (result) {
+gridPctUtils.getResultMapping = function (result, flg, overrideFlg, className, style) {
     var rtn = "<div style='text-align: center;'>";
 
-    if (result === "NA") {
-        rtn += '<i class="intelicon-information-solid" style="font-size: 20px !important;" ng-style="getColorStyle(result)" title="NA"></i>';
-    } else if (result === "PASS") {
-        rtn += '<i class="intelicon-passed-completed-solid" style="font-size: 20px !important;" ng-style="getColorStyle(result)" title="PASS"></i>';
-    } else if (result === "INCOMPLETE") {
-        rtn += '<i class="intelicon-help-solid" style="font-size: 20px !important;" ng-style="getColorStyle(result)" title="INCOMPLETE"></i>';
-    } else if (result === "FAIL") {
-        rtn += '<i class="intelicon-alert-solid" style="font-size: 20px !important;" ng-style="getColorStyle(result)" title="FAIL"></i>';
+    if (overrideFlg !== "") rtn += '<i ng-if="' + overrideFlg + '" class="intelicon-information-solid ' + className + '" style="' + style + '" style="color: #0071C5;" title="Overidden"></i>';
+
+    if (result === "Na") {
+        rtn += '<i ng-if="' + flg + '" class="intelicon-information-solid" style="' + style + '" ng-style="getColorStyle(\'' + result + '\')" title="Na"></i>';
+    } else if (result === "Pass") {
+        rtn += '<i ng-if="' + flg + '" class="intelicon-passed-completed-solid" style="' + style + '" ng-style="getColorStyle(\'' + result + '\')" title="Pass"></i>';
+    } else if (result === "Incomplete") {
+        rtn += '<i ng-if="' + flg + '" class="intelicon-help-solid" style="' + style + '" ng-style="getColorStyle(\'' + result + '\')" title="Incomplete"></i>';
+    } else if (result === "Fail") {
+        rtn += '<i ng-if="' + flg + '" class="intelicon-alert-solid" style="' + style + '" ng-style="getColorStyle(\'' + result + '\')" title="Fail"></i>';
     } else {
-        rtn += '<i class="intelicon-help-solid" style="font-size: 20px !important;" ng-style="getColorStyle(\'INCOMPLETE\')" title="Not run yet"></i>';
+        rtn += '<i ng-if="' + flg + '" class="intelicon-help-solid" style="' + style + '" ng-style="getColorStyle(\'Incomplete\')" title="Not run yet"></i>';
     }
     rtn += "</div>";
+    return rtn;
+}
+gridPctUtils.getPctFlag = function (flg, results, forceReadOnly, hasNoPermission) {
+    //
+    var rtn = '<div style="text-align: center;">';
+    rtn += '<span ng-if="' + results + ' === \'Pass\' || ' + results + ' === \'Na\' || ' + forceReadOnly + ' === true || ' + hasNoPermission + ' === true" ng-bind="onOff(' + flg + ')" style="vertical-align: -webkit-baseline-middle;"></span>';
+    rtn += '<span ng-if="' + results + ' !== \'Pass\' && ' + results + ' !== \'Na\' && ' + forceReadOnly + ' !== true && ' + hasNoPermission + ' !== true">';
+    rtn += '<toggle size="btn-sm" ng-change="changeReasonFlg(dataItem)" off="No" on="Yes" ng-model="' + flg + '"></toggle>';
+    rtn += '</span>';
+    rtn += '<div class="boxSave" ng-class="{\'showReason\': dataItem.saved, \'hideReason\': !dataItem.saved}">SAVED</div>';
+    rtn += '</div';
     return rtn;
 }
 

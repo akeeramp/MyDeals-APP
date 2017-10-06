@@ -12,6 +12,7 @@ namespace Intel.MyDeals.BusinessLogic
             registerService.RegisterType<ICacheLib, CacheLib>();
             registerService.RegisterType<IContractsLib, ContractsLib>();
             registerService.RegisterType<IConstantsLookupsLib, ConstantsLookupsLib>();
+            registerService.RegisterType<ICostTestLib, CostTestLib>();
             registerService.RegisterType<ICustomerCalendarLib, CustomerCalendarLib>();
             registerService.RegisterType<ICustomerLib, CustomerLib>();
             registerService.RegisterType<IDashboardLib, DashboardLib>();

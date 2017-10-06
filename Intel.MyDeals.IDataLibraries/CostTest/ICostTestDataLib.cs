@@ -5,6 +5,12 @@ namespace Intel.MyDeals.IDataLibrary
 {
     public interface ICostTestDataLib
     {
-        List<CostTestDetailItem> GetCostTestDetails(int prcTblId);
+        CostTestDetail GetCostTestDetails(int prcTblId);
+
+        PctOverrideReason SetPctOverrideReason(PctOverrideReason data);
+
+        void RunPct(int objTypeId, List<int> objSetTypeIds);
+
+        void RollupResults(int contractId);
     }
 }

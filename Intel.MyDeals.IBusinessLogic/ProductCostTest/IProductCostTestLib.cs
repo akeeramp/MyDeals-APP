@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Intel.MyDeals.Entities;
 
 namespace Intel.MyDeals.IBusinessLogic
@@ -24,5 +25,6 @@ namespace Intel.MyDeals.IBusinessLogic
         PCTLegalException CreateLegalException(PCTLegalException input);
 
         List<PCTLegalException> GetLegalExceptions();
+        List<PCTLegalException> GetLegalExceptions(DateTime endDate);
     }
 }

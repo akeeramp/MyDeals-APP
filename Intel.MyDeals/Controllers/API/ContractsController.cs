@@ -2,9 +2,6 @@
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque;
-using System.Net.Http.Formatting;
-using System.Net;
-using System.Net.Http;
 using System.Collections.Generic;
 
 namespace Intel.MyDeals.Controllers.API
@@ -144,11 +141,15 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("DeleteContract/{id}")]
+        [Route("DeleteContract/{custId}/{contractId}")]
         [HttpGet]
-        public OpMsg DeleteContract(int id)
+        public OpMsg DeleteContract(int custId, int contractId)
         {
-            return SafeExecutor(() => _contractsLib.DeleteContract(id)
+            return SafeExecutor(() => _contractsLib.DeleteContract(new ContractToken
+            {
+                CustId = custId,
+                ContractId = contractId
+            })
                 , "Unable to delete the Contract {id}"
             );
         }

@@ -80,6 +80,7 @@ namespace Intel.MyDeals.BusinessLogic
         {
             OpMsgQueue opMsgQueue = new OpMsgQueue();
             List<int> psGoingActive = new List<int>();
+            string role = OpUserStack.MyOpUserToken.Role.RoleTypeCd;
 
             List<OpDataElementType> opDataElementTypes = new List<OpDataElementType>
             {
@@ -144,6 +145,16 @@ namespace Intel.MyDeals.BusinessLogic
                         KeyIdentifiers = new[] { dc.DcID }
                     });
                     continue;
+                }
+
+                // Meet Comp Test / Price Cost Test Check
+                bool needToRunMct = actn == "Approve" && role == RoleTypes.GA && targetStage == WorkFlowStages.Submitted;
+                bool needToRunPct = actn == "Approve" && stageIn == WorkFlowStages.Submitted;
+                if (needToRunMct || needToRunPct)
+                {
+                    new CostTestLib().RunPctPricingStrategy(dc.DcID);
+                    //if (needToRunMct && )
+                    // TODO -> check to make sure it passes
                 }
 
 

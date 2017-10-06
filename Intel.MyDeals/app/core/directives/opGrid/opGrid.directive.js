@@ -1049,6 +1049,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             dataItem["PASSED_VALIDATION"] = args.data.WIP_DEAL[i]["PASSED_VALIDATION"];
                             dataItem["WF_STG_CD"] = args.data.WIP_DEAL[i]["WF_STG_CD"];
                             dataItem["TRKR_NBR"] = args.data.WIP_DEAL[i]["TRKR_NBR"];
+                            dataItem["AVG_RPU"] = args.data.WIP_DEAL[i]["AVG_RPU"];
+                            dataItem["MAX_RPU"] = args.data.WIP_DEAL[i]["MAX_RPU"];
                         }
                     }
                 }

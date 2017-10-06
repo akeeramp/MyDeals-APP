@@ -4,7 +4,7 @@
 <#@ Assembly Name="System.Windows.Forms.dll" #>
 <#@ Assembly Name="System.Data" #>
 <#@ Assembly Name="System.XML" #>
-<#@ Assembly Name="$(SolutionDir)\Intel.MyDeals.DataAccessLib\bin\Debug\Intel.Opaque.Templating.dll" #>
+<#@ Assembly Name="$(SolutionDir)\Shared Libraries\Intel.Opaque.Templating.dll" #>
 <#@ import namespace="Intel.Opaque.Templating" #>
 <#@ import namespace="System" #>
 <#@ import namespace="System.Collections" #>
@@ -298,6 +298,9 @@ using System.Collections.Generic;
 	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MYDL_GET_COST_TEST_DTL @in_prc_tbl_obj_sid = 1147");
 	ds.Tables[0].TableName = "CostTestDetailItem";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
+	ds.Tables[1].TableName = "CostTestGroupDetailItem";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[1], false));
 
 	// Deals With Attachments
 	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MYDL_GET_DEALS_WITH_ATTCH");

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Intel.MyDeals.Entities;
 
 namespace Intel.MyDeals.IDataLibrary
@@ -14,6 +15,7 @@ namespace Intel.MyDeals.IDataLibrary
         List<ProductCostTestRules> SetPCTRules(CrudModes mode, ProductCostTestRules pctRules);
 
         List<PCTLegalException> GetLegalExceptions();
+        
 
         PCTLegalException SetPCTlegalException(CrudModes update, PCTLegalException input);
     }

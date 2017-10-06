@@ -1,14 +1,17 @@
-﻿
+﻿<loading-panel show="isBusy" header="isBusyMsgTitle" description="isBusyMsgDetail"></loading-panel>
+<div ng-include="'app/contract/partials/ptModals/pctOverrideReasonModal.html'"></div>
+<div ng-include="'app/contract/partials/ptModals/pctGroupModal.html'"></div>
+
 <div id="sum-wrapper">
     <div id="sum-header">
         <div ui-view="summaryContentView"></div>
         <div kendo-tab-strip class="gradTab">
             <ul>
                 <li ng-click="selTab('All')" class="k-state-active">All</li>
-                <li ng-click="selTab('FAIL')">Failures</li>
-                <li ng-click="selTab('PASS')">Passes</li>
-                <li ng-click="selTab('INCOMPLETE')">Incompletes</li>
-                <li ng-click="selTab('NA')">NA</li>
+                <li ng-click="selTab('Fail')">Failures</li>
+                <li ng-click="selTab('Pass')">Passes</li>
+                <li ng-click="selTab('Incomplete')">Incompletes</li>
+                <li ng-click="selTab('Na')">NA</li>
             </ul>
             <input ng-model="pctFilter" type="hidden" />
         </div>
@@ -21,7 +24,14 @@
                             <i class="chevron linkable intelicon-fast-forward"></i>
                         </div>
                     </td>
-                    <td style="width: 130px; height: 40px;"></td>
+                    <td style="width: 130px; height: 40px;">
+                        <btn-run-pct-mct btn-type="'pct'" 
+                                         ng-model="root" 
+                                         contract-id="root.contractData.DC_ID" 
+                                         on-complete="root.refreshContractData" 
+                                         btn-class="'ssToolbarBtn'" 
+                                         btn-style="'margin-top: -2px;'"></btn-run-pct-mct>
+                    </td>
                     <td>
                         <span class="k-textbox k-space-left" style="width: 330px; margin-top: -1px; margin-left: 15px;">
                             <input type="text" placeholder="Search for pricing strategies, tables or names" ng-model="titleFilter" />
@@ -29,18 +39,6 @@
                         </span>
                     </td>
                     <td style="text-align: right;">
-                        <button class="btn btn-sm btn-skyblue" type="button" style="margin-top: -2px;" title="Save and Validate">
-                            <table>
-                                <tr>
-                                    <td>
-                                        <i class="fa fa-floppy-o" aria-hidden="true" style="font-size: 30px"></i>
-                                    </td>
-                                    <td style="padding-left: 5px; text-align: left;">
-                                        Save & Validate
-                                    </td>
-                                </tr>
-                            </table>
-                        </button>
                     </td>
                 </tr>
             </table>
@@ -50,7 +48,7 @@
                 <td style="width: 30px;">&nbsp;</td>
                 <td style="width: 150px; text-align: center; line-height: 1em;">Price Cost Test Results</td>
                 <td>Pricing Strategy Name | Pricing Table Name</td>
-                <td style="width: 120px; text-align: center; line-height: 1em;">Deal Type</td>
+                <td style="width: 120px; text-align: center; line-height: 1em;">Stage/Deal Type</td>
             </tr>
         </table>
         <hr />            
@@ -66,15 +64,13 @@
                                 <i class="chevron linkable" ng-class="{'intelicon-down': isCollapsed, 'intelicon-right-next': !isCollapsed}"></i>
                             </td>
                             <td style="width: 150px; text-align: center;">
-                                <i class="intelicon-passed-completed-solid bigIcon" ng-style="getColorStyle(ps.COST_TEST_RESULT)" ng-show="ps.COST_TEST_RESULT === 'PASS'" title="{{ps.COST_TEST_RESULT}}"></i>
-                                <i class="intelicon-alert-solid bigIcon" ng-style="getColorStyle(ps.COST_TEST_RESULT)" ng-show="ps.COST_TEST_RESULT === 'FAIL'" title="{{ps.COST_TEST_RESULT}}"></i>
-                                <i class="intelicon-information-solid bigIcon" ng-style="getColorStyle(ps.COST_TEST_RESULT)" ng-show="ps.COST_TEST_RESULT === 'NA'" title="{{ps.COST_TEST_RESULT}}"></i>
-                                <i class="intelicon-help-solid bigIcon" ng-style="getColorStyle(ps.COST_TEST_RESULT)" ng-show="ps.COST_TEST_RESULT !== 'PASS' && ps.COST_TEST_RESULT !== 'FAIL' && ps.COST_TEST_RESULT !== 'NA'" title="{{ps.COST_TEST_RESULT || 'Not run yet'}}"></i>
+                                <icon-mct-pct ng-model="ps.COST_TEST_RESULT" can-view="root.CAN_VIEW_COST_TEST" icon-class="'bigIcon'"></icon-mct-pct>
                             </td>
                             <td>
                                 <div ng-bind="ps.TITLE" class="bolder linkable" ng-click="gotoContractEditor(ps)" title="Click to open the Pricing Strategy in the Contract Editor"></div>
                             </td>
                             <td style="width: 120px; text-align: center;">
+                                <div ng-bind="swapUnderscore(ps.WF_STG_CD)" class="bolder org"></div>
                                 <!--<div ng-bind="swapUnderscore(ps.OBJ_SET_TYPE_CD)" class="bolder"></div>-->
                             </td>
                         </tr>
@@ -83,14 +79,11 @@
                     <div uib-collapse="!isCollapsed" ng-repeat="pt in ps.PRC_TBL">
                         <table style="width: 100%;">
                             <tr>
-                                <td style="width: 30px; height: 30px;" ng-click="isPtCollapsed = !isPtCollapsed; togglePt(pt)">
+                                <td style="width: 30px; height: 30px;" ng-click="isPtCollapsed = !isPtCollapsed; togglePt(ps, pt)">
                                     <i class="chevron linkable" style="font-size: 20px; padding-left: 6px;" ng-class="{'intelicon-down': isPtCollapsed, 'intelicon-right-next': !isPtCollapsed}"></i>
                                 </td>
                                 <td style="width: 150px; color: #000000; text-align: center;">
-                                    <i class="intelicon-passed-completed-solid medIcon" ng-style="getColorStyle(pt.COST_TEST_RESULT)" ng-show="pt.COST_TEST_RESULT === 'PASS'" title="{{pt.COST_TEST_RESULT}}"></i>
-                                    <i class="intelicon-alert-solid medIcon" ng-style="getColorStyle(pt.COST_TEST_RESULT)" ng-show="pt.COST_TEST_RESULT === 'FAIL'" title="{{pt.COST_TEST_RESULT}}"></i>
-                                    <i class="intelicon-information-solid medIcon" ng-style="getColorStyle(pt.COST_TEST_RESULT)" ng-show="pt.COST_TEST_RESULT === 'NA'" title="{{pt.COST_TEST_RESULT}}"></i>
-                                    <i class="intelicon-help-solid medIcon" ng-style="getColorStyle(pt.COST_TEST_RESULT)" ng-show="pt.COST_TEST_RESULT !== 'PASS' && pt.COST_TEST_RESULT !== 'FAIL' && pt.COST_TEST_RESULT !== 'NA'" title="{{pt.COST_TEST_RESULT || 'Not run yet'}}"></i>
+                                    <icon-mct-pct ng-model="pt.COST_TEST_RESULT" can-view="root.CAN_VIEW_COST_TEST" icon-class="'medIcon'"></icon-mct-pct>
                                 </td>
                                 <td style="width: 30px;"></td>
                                 <td>
@@ -103,8 +96,7 @@
                         </table>
 
                         <div uib-collapse="!isPtCollapsed">
-                            <div ng-show="pt.isLoading === undefined || pt.isLoading">Loading...</div>
-                            <div ng-hide="pt.isLoading === undefined || pt.isLoading" style="margin-left: 30px;">
+                            <div style="margin-left: 30px;">
                                 <div id="sumWipGrid_{{pt.DC_ID}}" class="opUiContainer md dashboard"></div>
                             </div>
                         </div>
@@ -120,6 +112,9 @@
 
 
 <style>
+    .ssToolbarBtn .btnPctMct {
+        color: #00AEEF;
+    }
     #sum-wrapper {
         height: 100%;
         padding: 140px 0 0 0;
@@ -308,9 +303,9 @@
         cursor: pointer;
     }
 
-        .linkable:hover {
-            color: #003C71;
-        }
+    .linkable:hover {
+        color: #003C71;
+    }
 
     .sum-main-body label {
         margin-bottom: 0;
@@ -320,10 +315,10 @@
         text-align: center;
     }
 
-        .sum-main-body .stage div {
-            margin: 0 10px;
-            padding: 4px 4px;
-        }
+    .sum-main-body .stage div {
+        margin: 0 10px;
+        padding: 4px 4px;
+    }
 
     input[type=radio].with-font,
     input[type=checkbox].with-font {
@@ -337,43 +332,43 @@
         width: 1px;
     }
 
-        input[type=radio].with-font + label:before,
-        input[type=checkbox].with-font + label:before {
-            font-family: FontAwesome;
-            display: inline-block;
-            content: "\f096";
-            font-size: 20px;
-            letter-spacing: 10px;
-            color: #00AEEF;
-            margin-left: 10px;
-        }
+    input[type=radio].with-font + label:before,
+    input[type=checkbox].with-font + label:before {
+        font-family: FontAwesome;
+        display: inline-block;
+        content: "\f096";
+        font-size: 20px;
+        letter-spacing: 10px;
+        color: #00AEEF;
+        margin-left: 10px;
+    }
 
-        input[type=radio].with-font:hover + label:before,
-        input[type=checkbox].with-font:hover + label:before {
-            color: #003C71;
-            cursor: pointer;
-        }
+    input[type=radio].with-font:hover + label:before,
+    input[type=checkbox].with-font:hover + label:before {
+        color: #003C71;
+        cursor: pointer;
+    }
 
-        input[type=radio].with-font.disabled + label:before,
-        input[type=checkbox].with-font.disabled + label:before {
-            color: #cccccc;
-            cursor: default;
-        }
+    input[type=radio].with-font.disabled + label:before,
+    input[type=checkbox].with-font.disabled + label:before {
+        color: #cccccc;
+        cursor: default;
+    }
 
-        input[type=radio].with-font:checked + label:before,
-        input[type=checkbox].with-font:checked + label:before {
-            content: "\f046";
-            font-size: 20px;
-            letter-spacing: 5px;
-            color: #C4D600;
-            margin-left: 10px;
-        }
+    input[type=radio].with-font:checked + label:before,
+    input[type=checkbox].with-font:checked + label:before {
+        content: "\f046";
+        font-size: 20px;
+        letter-spacing: 5px;
+        color: #C4D600;
+        margin-left: 10px;
+    }
 
-        input[type=radio].with-font:focus + label:before,
-        input[type=checkbox].with-font:focus + label:before {
-            font-weight: bold;
-            color: #C4D600;
-        }
+    input[type=radio].with-font:focus + label:before,
+    input[type=checkbox].with-font:focus + label:before {
+        font-weight: bold;
+        color: #C4D600;
+    }
 
     .bigIcon {
         font-size: 26px;
@@ -416,16 +411,16 @@
         border-radius: 4px 4px 0 0;
     }
 
-        .gradTab .k-tabstrip-items .k-state-active {
-            background-color: #fff;
-            border-color: #b1babf;
-            border-width: 1px;
-            border-left-width: 1px;
-            border-top-width: 1px;
-            border-right-width: 1px;
-            border-bottom-width: 0;
-            border-radius: 4px 4px 0 0;
-        }
+    .gradTab .k-tabstrip-items .k-state-active {
+        background-color: #fff;
+        border-color: #b1babf;
+        border-width: 1px;
+        border-left-width: 1px;
+        border-top-width: 1px;
+        border-right-width: 1px;
+        border-bottom-width: 0;
+        border-radius: 4px 4px 0 0;
+    }
 
     .gradTab .k-tabstrip-top > .k-tabstrip-items > .k-item {
         border-bottom-width: 0;
@@ -488,10 +483,10 @@
         margin-left: 4px;
     }
 
-        .gradTab i:first-child:hover {
-            color: #FFFFFF;
-            background-color: #00AEEF;
-        }
+    .gradTab i:first-child:hover {
+        color: #FFFFFF;
+        background-color: #00AEEF;
+    }
 
     .gradTab i.active {
         color: #FFFFFF;
@@ -505,9 +500,9 @@
         margin-right: 4px;
     }
 
-        .gradTab i.closeGrp:hover {
-            color: #FC4C02;
-        }
+    .gradTab i.closeGrp:hover {
+        color: #FC4C02;
+    }
 
     .gradTab .badge {
         vertical-align: top;
@@ -546,5 +541,77 @@
         font-size: 20px;
         margin-right: 6px;
     }
+    .btn-skyblue {
+        background-color: #00AEEF;
+        border: 1px solid  #00AEEF;
+        color: #ffffff;
+        border-radius: 4px;
+    }
 
+    .bold.linkable:hover, .bolder.linkable:hover {
+        background-color: #eeeeee;
+        line-height: 1.6em;
+    }
+
+    .pctSelect {
+        width: 100%;
+        border: 1px solid #c4cfd4;
+        border-radius: 4px;
+    }
+    .pctSelect .k-i-arrow-60-down {
+        color: #00AEEF !important;
+        opacity: .9;
+    }
+
+    .lnkBasic {
+        cursor: pointer;
+        text-decoration: underline;
+        color: #00AEEF;
+    }
+    .lnkBasic:hover {
+        color: #0071C5;
+    }
+    .lnkGroup {
+        cursor: pointer;
+        text-decoration: underline;
+        color: #FFA300;
+    }
+    .lnkGroup:hover {
+        color: #0071C5;
+    }
+
+    .k-list-scroller {
+        overflow: hidden;
+    }
+    .boxSave {
+        background-color: #C4D600;
+        font-size: 10px;
+        border-radius: 4px;
+        padding: 0 3px;
+        color: #ffffff;
+        vertical-align: top;
+        float: right;
+        margin: 6px 4px;
+    }
+    .showReason {
+        opacity: 1;
+        transition: visible 0s, opacity 1s linear;
+    }
+    .hideReason {
+        opacity: 0;
+        transition: hidden 0s, opacity 1s linear;
+    }
+    .org {
+        color: #FFA300 !important;
+    }
+    .grn {
+        color: #C4D600;
+    }
+    .cell-warning {
+        background-color: #f9e9a5;
+    }
+    .cell-error {
+        background-color: #f4949d;
+        color: #ffffff !important;
+    }
 </style>

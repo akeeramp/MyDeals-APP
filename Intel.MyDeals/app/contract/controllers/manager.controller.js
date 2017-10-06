@@ -5,11 +5,12 @@ angular
     .module('app.contract')
     .controller('managerController', managerController);
 
-managerController.$inject = ['$scope', '$state', 'objsetService', 'logger', '$timeout', 'dataService', '$compile', 'colorDictionary'];
+managerController.$inject = ['$scope', '$state', 'objsetService', 'logger', '$timeout', 'dataService', '$compile', 'colorDictionary', '$uibModal'];
 
-function managerController($scope, $state, objsetService, logger, $timeout, dataService, $compile, colorDictionary) {
+function managerController($scope, $state, objsetService, logger, $timeout, dataService, $compile, colorDictionary, $uibModal) {
 
     var root = $scope.$parent;	// Access to parent scope
+    $scope.root = root;
     $scope.stageFilter = [];
     $scope.dealTypeFilter = "";
     $scope.canEdit = true;
@@ -61,11 +62,11 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         return $scope.getColor('stage', d);
     }
     $scope.getColorPct = function (d) {
-        if (!d) d = "INCOMPLETE";
+        if (!d) d = "Incomplete";
         return $scope.getColor('pct', d);
     }
     $scope.getColorMct = function (d) {
-        if (!d) d = "INCOMPLETE";
+        if (!d) d = "Incomplete";
         return $scope.getColor('mct', d);
     }
 
@@ -112,6 +113,54 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 
     }
     
+    $scope.deleteContract = function () {
+
+        // TODO need to check if there are any tracker numbers
+
+        kendo.confirm("Are you sure that you want to delete this contract?").then(function () {
+            $scope.$apply(function () {
+
+                kendo.alert("This is where we would delete the Contract");
+
+                return;
+
+                $scope.setBusy("Deleting...", "Deleting the Contract");
+                topbar.show();
+                // Remove from DB first... then remove from screen
+                objsetService.deleteContract($scope.getCustId(), $scope.contractData.DC_ID).then(
+                    function (data) {
+
+                        if (data.data.MsgType !== 1) {
+                            $scope.setBusy("Delete Failed", "Unable to Deleted the Contract");
+                            $timeout(function () {
+                                $scope.setBusy("", "");
+                            }, 4000);
+                            return;
+                        }
+
+                        $scope.setBusy("Delete Successful", "Deleted the Contract");
+                        $timeout(function () {
+                            $scope.setBusy("", "");
+                        }, 2000);
+                        topbar.hide();
+
+                        // redirect if focused PT belongs to deleted PS
+                        debugger; // where do we redirect after a delete?
+                        $state.go('contract.manager', {
+                            cid: $scope.contractData.DC_ID
+                        }, { reload: true });
+                    },
+                    function (result) {
+                        logger.error("Could not delete the Contract.", result, result.statusText);
+                        topbar.hide();
+                        $scope.setBusy("", "");
+                    }
+                );
+            });
+        });
+
+    }
+
 
     $scope.summaryFilter = function (ps) {
         return (
@@ -191,7 +240,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         return false;
     }
 
-    $scope.togglePt = function (pt) {
+    $scope.togglePt = function (ps,pt) {
 
         if (pt.isLoading === undefined || pt.isLoading === true) {
 
@@ -268,22 +317,25 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 
     }
 
-    function getItem(items) {
+    function getItem(items, actn) {
         var allPs = root.contractData.PRC_ST;
         var id = parseInt(items.getAttribute("dcId"));
 
         var result = $.grep(allPs, function (e) { return e.DC_ID === id; });
         var stage = result.length > 0 ? result[0].WF_STG_CD : "";
+        var title = result.length > 0 ? result[0].TITLE : "";
 
-        return { "DC_ID": id, "WF_STG_CD": stage };
+        return { "DC_ID": id, "WF_STG_CD": stage, "TITLE": title, "ACTN": actn };
     }
 
-    function getActionItems(data, actn) {
+    function getActionItems(data, dataItem, actn, actnText) {
         var ids = [];
         var items = $(".psCheck-" + actn);
         for (var i = 0; i < items.length; i++) {
             if (items[i].checked) {
-                ids.push(getItem(items[i]));
+                var item = getItem(items[i], actnText);
+                ids.push(item);
+                dataItem.push(item);
             }
         }
 
@@ -292,18 +344,41 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 
     $scope.actionItems = function () {
         var data = {};
+        var dataItems = [];
 
-        getActionItems(data, "Approve");
-        getActionItems(data, "Revise");
-        getActionItems(data, "Cancel");
-        getActionItems(data, "Hold");
+        getActionItems(data, dataItems, "Approve", "Send for Approval");
+        getActionItems(data, dataItems, "Revise", "Send for Revision");
+        getActionItems(data, dataItems, "Cancel", "Send for Cancelling");
+        getActionItems(data, dataItems, "Hold", "Send for Holding");
 
         if (Object.keys(data).length === 0) {
             kendo.alert("No Pricing Strategies were selected.");
             return;
         }
 
-        root.actionPricingStrategies(data);
+        $scope.context = dataItems;
+
+        var modalInstance = $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: 'actionSummaryModal',
+            controller: 'actionSummaryModalCtrl',
+            controllerAs: '$ctrl',
+            size: 'md',
+            resolve: {
+                dataItems: function () {
+                    return dataItems;
+                },
+                showErrMsg: function() {
+                    return root.needMct();
+                }
+            }
+        });
+
+        modalInstance.result.then(function (result) {
+            root.actionPricingStrategies(data, result);
+        }, function () { });
     }
 
 

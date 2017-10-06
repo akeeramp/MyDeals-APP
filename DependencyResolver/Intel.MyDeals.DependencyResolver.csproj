@@ -105,6 +105,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Intel.Opaque.DBAccess.dll" />
+    <Content Include="Intel.Opaque.DBAccess.pdb" />
+    <Content Include="Microsoft.SqlServer.ConnectionInfo.dll" />
+    <Content Include="Microsoft.SqlServer.ConnectionInfoExtended.dll" />
     <Content Include="Unity.Mvc3.README.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -14,7 +14,7 @@ namespace Intel.MyDeals.IBusinessLogic
 
         MyDealsData SaveContract(OpDataCollectorFlattenedList contracts, OpDataCollectorFlattenedList pricingStrategies, OpDataCollectorFlattenedList pricingTables, OpDataCollectorFlattenedList pricingTableRows, OpDataCollectorFlattenedList wipDeals, ContractToken contractToken, List<int> validateIds, bool forcePublish, string sourceEvent);
 
-        OpMsg DeleteContract(int id);
+        OpMsg DeleteContract(ContractToken contractToken);
 
         OpDataCollectorFlattenedList GetUpperContract(int id);
 

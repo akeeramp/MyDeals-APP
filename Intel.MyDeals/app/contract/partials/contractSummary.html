@@ -1,4 +1,5 @@
 ﻿<loading-panel show="isBusy" header="isBusyMsgTitle" description="isBusyMsgDetail"></loading-panel>
+<div ng-include="'app/contract/partials/ptModals/actionSummaryModal.html'"></div>
 
 <div id="sum-wrapper">
     <div id="sum-header">
@@ -63,10 +64,37 @@
                             <i class="k-icon intelicon-search" style="font-size: 26px; color: #00AEEF; margin-top: -12px;"></i>
                         </span>
                     </td>
-                    <td style="width: 240px; text-align: right; padding-right: 10px;">
-                        <button class="btn btn-sm btn-skyblue" type="button" style="margin-top: -2px;" ng-click="actionItems()" ng-show="canEdit">
-                            <i class="fa fa-paper-plane-o" aria-hidden="true"></i> Submit
+                    <td style="width: 400px; text-align: right; padding-right: 2px;">
+                        <button class="btn btn-sm btn-negative" ng-id="C_DELETE_CONTRACT" ng-click="deleteContract()" title="Delete the current Contract" ng-show="canEdit" style="margin-top: 6px; margin-left: 5px;">
+                            <table>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <i class="intelicon-trash-outlined" aria-hidden="true" style="font-size: 26px"></i>
+                                    </td>
+                                    <td style="padding-left: 5px; text-align: left; color: #ffffff; font-size: 12px; line-height: 1em;">
+                                        Delete<br />Contract
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </button>
+                        <btn-run-pct-mct ng-model="root" contract-id="root.contractData.DC_ID" on-complete="root.refreshContractData" ng-if="CAN_EDIT_COST_TEST" ng-show="canEdit" btn-class="'btn-skyblue'" btn-style="'margin-top: 6px; margin-left: 5px;'"></btn-run-pct-mct>
+                        <button class="btn btn-sm btn-skyblue" ng-click="actionItems()" title="Submit Approval, Revision and Cancel requests" ng-show="canEdit" style="margin-top: 6px; margin-left: 5px;">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <i class="fa fa-paper-plane-o" aria-hidden="true" style="font-size: 26px"></i>
+                                        </td>
+                                        <td style="padding-left: 5px; text-align: left; color: #ffffff; font-size: 12px; line-height: 1em;">
+                                            Submit
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </button>
+
                     </td>
                 </tr>
             </table>
@@ -143,18 +171,12 @@
                             </td>
                             <td style="width: 80px; text-align: center;" ng-if="CAN_VIEW_COST_TEST">
                                 <a ui-sref="{{ CAN_EDIT_COST_TEST ? 'contract.pct({cid: contractData.DC_ID})': '.'}}" class="lnkIcon" ng-class="{'noPointer': !CAN_EDIT_COST_TEST}">
-                                    <i class="intelicon-passed-completed-solid bigIcon" ng-style="getColorStyle(ps.COST_TEST_RESULT)" ng-show="ps.COST_TEST_RESULT === 'PASS'" title="{{ps.COST_TEST_RESULT}}"></i>
-                                    <i class="intelicon-alert-solid bigIcon" ng-style="getColorStyle(ps.COST_TEST_RESULT)" ng-show="ps.COST_TEST_RESULT === 'FAIL'" title="{{ps.COST_TEST_RESULT}}"></i>
-                                    <i class="intelicon-information-solid bigIcon" ng-style="getColorStyle(ps.COST_TEST_RESULT)" ng-show="ps.COST_TEST_RESULT === 'NA'" title="{{ps.COST_TEST_RESULT}}"></i>
-                                    <i class="intelicon-help-solid bigIcon" ng-style="getColorStyle(ps.COST_TEST_RESULT)" ng-show="ps.COST_TEST_RESULT !== 'PASS' && ps.COST_TEST_RESULT !== 'FAIL' && ps.COST_TEST_RESULT !== 'NA'" title="{{ps.COST_TEST_RESULT || 'Not run yet'}}"></i>
+                                    <icon-mct-pct ng-model="ps.COST_TEST_RESULT" icon-class="'bigIcon'"></icon-mct-pct>
                                 </a>
                             </td>
                             <td style="width: 80px; text-align: center;" ng-if="CAN_VIEW_MEET_COMP">
                                 <a ui-sref="{{ CAN_EDIT_MEET_COMP ? 'contract.compliance({cid: contractData.DC_ID})': '.'}}" class="lnkIcon" ng-class="{'noPointer': !CAN_EDIT_MEET_COMP}">
-                                    <i class="intelicon-passed-completed-solid bigIcon" ng-style="getColorStyle(ps.MEETCOMP_TEST_RESULT)" ng-show="ps.MEETCOMP_TEST_RESULT === 'PASS'" title="{{ps.MEETCOMP_TEST_RESULT}}"></i>
-                                    <i class="intelicon-alert-solid bigIcon" ng-style="getColorStyle(ps.MEETCOMP_TEST_RESULT)" ng-show="ps.MEETCOMP_TEST_RESULT === 'FAIL'" title="{{ps.MEETCOMP_TEST_RESULT}}"></i>
-                                    <i class="intelicon-information-solid bigIcon" ng-style="getColorStyle(ps.MEETCOMP_TEST_RESULT)" ng-show="ps.MEETCOMP_TEST_RESULT === 'NA'" title="{{ps.MEETCOMP_TEST_RESULT}}"></i>
-                                    <i class="intelicon-help-solid bigIcon" ng-style="getColorStyle(ps.MEETCOMP_TEST_RESULT)" ng-show="ps.MEETCOMP_TEST_RESULT !== 'PASS' && ps.MEETCOMP_TEST_RESULT !== 'FAIL' && ps.MEETCOMP_TEST_RESULT !== 'NA'" title="{{ps.MEETCOMP_TEST_RESULT || 'Not run yet'}}"></i>
+                                    <icon-mct-pct ng-model="ps.MEETCOMP_TEST_RESULT" icon-class="'bigIcon'"></icon-mct-pct>
                                 </a>
                             </td>
                         </tr>
@@ -164,10 +186,10 @@
                         <table style="width: 100%; ">
                             <tr>
                                 <td style="width: 20px;" ng-show="canEdit"></td>
-                                <td style="width: 220px; height: 30px;" ng-click="isPtCollapsed = !isPtCollapsed; togglePt(pt)" ng-show="canEdit">
+                                <td style="width: 220px; height: 30px;" ng-click="isPtCollapsed = !isPtCollapsed; togglePt(ps, pt)" ng-show="canEdit">
                                     <i class="chevron linkable" style="font-size: 20px; padding-left: 6px;" ng-class="{'intelicon-down': isPtCollapsed, 'intelicon-right-next': !isPtCollapsed}"></i>
                                 </td>
-                                <td style="width: 30px; height: 30px;" ng-click="isPtCollapsed = !isPtCollapsed; togglePt(pt)" ng-hide="canEdit">
+                                <td style="width: 30px; height: 30px;" ng-click="isPtCollapsed = !isPtCollapsed; togglePt(ps, pt)" ng-hide="canEdit">
                                     <i class="chevron linkable" style="font-size: 20px; padding-left: 6px;" ng-class="{'intelicon-down': isPtCollapsed, 'intelicon-right-next': !isPtCollapsed}"></i>
                                 </td>
                                 <td style="width: 100px; padding-left: 40px; color: #000000; text-align: center;">
@@ -181,18 +203,12 @@
                                 <td style="width: 80px;"></td>
                                 <td style="width: 80px; text-align: center;" ng-if="CAN_VIEW_COST_TEST">
                                     <a ui-sref="{{ CAN_EDIT_COST_TEST ? 'contract.pct({cid: contractData.DC_ID})': '.'}}" class="lnkIcon" ng-class="{'noPointer': !CAN_EDIT_COST_TEST}">
-                                        <i class="intelicon-passed-completed-solid medIcon" ng-style="getColorStyle(pt.COST_TEST_RESULT)" ng-show="pt.COST_TEST_RESULT === 'PASS'" title="{{pt.COST_TEST_RESULT}}"></i>
-                                        <i class="intelicon-alert-solid medIcon" ng-style="getColorStyle(pt.COST_TEST_RESULT)" ng-show="pt.COST_TEST_RESULT === 'FAIL'" title="{{pt.COST_TEST_RESULT}}"></i>
-                                        <i class="intelicon-information-solid medIcon" ng-style="getColorStyle(pt.COST_TEST_RESULT)" ng-show="pt.COST_TEST_RESULT === 'NA'" title="{{pt.COST_TEST_RESULT}}"></i>
-                                        <i class="intelicon-help-solid medIcon" ng-style="getColorStyle(pt.COST_TEST_RESULT)" ng-show="pt.COST_TEST_RESULT !== 'PASS' && pt.COST_TEST_RESULT !== 'FAIL' && pt.COST_TEST_RESULT !== 'NA'" title="{{pt.COST_TEST_RESULT || 'Not run yet'}}"></i>
+                                        <icon-mct-pct ng-model="pt.COST_TEST_RESULT" icon-class="'medIcon'"></icon-mct-pct>
                                     </a>
                                 </td>
                                 <td style="width: 80px; text-align: center;" ng-if="CAN_VIEW_MEET_COMP">
                                     <a ui-sref="{{ CAN_EDIT_MEET_COMP ? 'contract.compliance({cid: contractData.DC_ID})': '.'}}" class="lnkIcon" ng-class="{'noPointer': !CAN_EDIT_MEET_COMP}">
-                                        <i class="intelicon-passed-completed-solid medIcon" ng-style="getColorStyle(pt.MEETCOMP_TEST_RESULT)" ng-show="pt.MEETCOMP_TEST_RESULT === 'PASS'" title="{{pt.MEETCOMP_TEST_RESULT}}"></i>
-                                        <i class="intelicon-alert-solid medIcon" ng-style="getColorStyle(pt.MEETCOMP_TEST_RESULT)" ng-show="pt.MEETCOMP_TEST_RESULT === 'FAIL'" title="{{pt.MEETCOMP_TEST_RESULT}}"></i>
-                                        <i class="intelicon-information-solid medIcon" ng-style="getColorStyle(pt.MEETCOMP_TEST_RESULT)" ng-show="pt.MEETCOMP_TEST_RESULT === 'NA'" title="{{pt.MEETCOMP_TEST_RESULT}}"></i>
-                                        <i class="intelicon-help-solid medIcon" ng-style="getColorStyle(pt.MEETCOMP_TEST_RESULT)" ng-show="pt.MEETCOMP_TEST_RESULT !== 'PASS' && pt.MEETCOMP_TEST_RESULT !== 'FAIL' && pt.MEETCOMP_TEST_RESULT !== 'NA'" title="{{pt.MEETCOMP_TEST_RESULT || 'Not run yet'}}"></i>
+                                        <icon-mct-pct ng-model="pt.MEETCOMP_TEST_RESULT" icon-class="'medIcon'"></icon-mct-pct>
                                     </a>
                                 </td>
                             </tr>
@@ -330,6 +346,22 @@
         color: #ffffff;
     }
     .btn-skyblue i {
+        font-size: 20px;
+        margin-right: 6px;
+    }
+
+    .btn-negative {
+        background-color: #FC4C02;
+        border: 1px solid  #FC4C02;
+        color: #ffffff;
+        border-radius: 4px;
+    }
+    .btn-negative:hover {
+        background-color: #FFA300;
+        border: 1px solid  #FFA300;
+        color: #ffffff;
+    }
+    .btn-negative i {
         font-size: 20px;
         margin-right: 6px;
     }

@@ -78,12 +78,10 @@ namespace Intel.MyDeals.DataLibrary
                 }
 #endif
 
-                // Call Proc to update PASSED_VALIDATION
-                Procs.dbo.PR_MYDL_CNTRCT_OBJ_VAL_ROLLUP cmd = new Procs.dbo.PR_MYDL_CNTRCT_OBJ_VAL_ROLLUP
-                {
-                    contractID = contractToken.ContractId
-                };
-                DataAccess.ExecuteDataSet(cmd);
+
+                // POST SAVE AND ACTION Tasks
+                new CostTestDataLib().RollupResults(contractToken.ContractId);
+                //if (contractToken.ContractId > 0) new CostTestDataLib().RunPct(OpDataElementType.CNTRCT.ToId(), new List<int> {contractToken.ContractId});
 
                 return ret;
             }

@@ -713,15 +713,15 @@ namespace Intel.MyDeals.BusinessRules
             // NOTE 2: We do not set the Contract stage.  We will rely on the SP to sync that stage
 
             // set WIP Stages for a redeal
-            r.Dc.SetDataElementValue(AttributeCodes.WF_STG_CD, WorkFlowStages.Draft);
+            r.Dc.SetAtrb(AttributeCodes.WF_STG_CD, WorkFlowStages.Draft);
             if (wipStage == WorkFlowStages.Active) // WIP Object, Set redeal date only if this came from active since it will drive the tracker effective from/to date calc.
             {
-                r.Dc.SetDataElementValue(AttributeCodes.LAST_REDEAL_BY, OpUserStack.MyOpUserToken.Usr.WWID);
-                r.Dc.SetDataElementValue(AttributeCodes.LAST_REDEAL_DT, DateTime.Now.Date);
+                r.Dc.SetAtrb(AttributeCodes.LAST_REDEAL_BY, OpUserStack.MyOpUserToken.Usr.WWID);
+                r.Dc.SetAtrb(AttributeCodes.LAST_REDEAL_DT, DateTime.Now.Date);
                 string tracker = r.Dc.GetDataElementValue(AttributeCodes.TRKR_NBR);
                 if (!string.IsNullOrEmpty(tracker)) // If there is a tracker number, put the WIP version in redeal visual state
                 {
-                    r.Dc.SetDataElementValue(AttributeCodes.TRKR_NBR, tracker + "*");
+                    r.Dc.SetAtrb(AttributeCodes.TRKR_NBR, tracker + "*");
                 }
             }
 
@@ -731,14 +731,14 @@ namespace Intel.MyDeals.BusinessRules
                 OpDataCollector dcRow = myDealsData[OpDataElementType.PRC_TBL_ROW].Data[r.Dc.DcParentID];
                 OpDataCollector dcTbl = myDealsData[OpDataElementType.PRC_TBL].Data[dcRow.DcParentID];
                 OpDataCollector dcSt = myDealsData[OpDataElementType.PRC_ST].Data[dcTbl.DcParentID];
-                dcSt.SetDataElementValue(AttributeCodes.WF_STG_CD, futureStage);
+                dcSt.SetAtrb(AttributeCodes.WF_STG_CD, futureStage);
             }
 
             // If object is expired, unexpire it
             string isExpired = r.Dc.GetDataElementValue(AttributeCodes.EXPIRE_FLG);
             if (!string.IsNullOrEmpty(isExpired) && isExpired == "1") // If there is an expired flag, reset it if it is set
             {
-                r.Dc.SetDataElementValue(AttributeCodes.EXPIRE_FLG, "0");
+                r.Dc.SetAtrb(AttributeCodes.EXPIRE_FLG, "0");
             }
         }
 

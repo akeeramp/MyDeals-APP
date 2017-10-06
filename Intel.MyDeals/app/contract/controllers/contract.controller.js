@@ -51,7 +51,7 @@
         //debugger;
 
         $scope.CAN_VIEW_COST_TEST = securityService.chkDealRules('CAN_VIEW_COST_TEST', window.usrRole, null, null, null) || (window.usrRole === "GA" && window.isSuper); // Can view the pass/fail
-        $scope.CAN_EDIT_COST_TEST = securityService.chkDealRules('C_EDIT_COST_TEST', window.usrRole, null, null, null); // Can go to cost test screen and make changes
+        $scope.CAN_EDIT_COST_TEST = securityService.chkDealRules('C_EDIT_COST_TEST', window.usrRole, null, null, null) || (window.usrRole === "SA" && window.isSuper); // Can go to cost test screen and make changes
         $scope.CAN_VIEW_MEET_COMP = securityService.chkDealRules('CAN_VIEW_MEET_COMP', window.usrRole, null, null, null);
         $scope.CAN_EDIT_MEET_COMP = securityService.chkDealRules('C_EDIT_MEET_COMP', window.usrRole, null, null, null);
         $scope.C_ADD_PRICING_STRATEGY = securityService.chkDealRules('C_ADD_PRICING_STRATEGY', window.usrRole, null, null, null);
@@ -60,9 +60,13 @@
         $scope.C_ADD_ATTACHMENTS = securityService.chkDealRules('C_ADD_ATTACHMENTS', window.usrRole, null, null, null);
         $scope.C_DELETE_ATTACHMENTS = securityService.chkDealRules('C_DELETE_ATTACHMENTS', window.usrRole, null, null, null);
         $scope.C_EDIT_PRODUCT = securityService.chkDealRules('C_EDIT_PRODUCT', window.usrRole, null, null, null);
+        $scope.C_DELETE_CONTRACT = securityService.chkDealRules('C_DELETE_CONTRACT', window.usrRole, null, null, null);
 
         // Hard code for now until security is put in place
-        // $scope.C_ADD_PRICING_STRATEGY = true;
+        if (window.usrRole === "Legal") {
+            $scope.CAN_VIEW_COST_TEST = true;
+            $scope.CAN_EDIT_COST_TEST = false;
+        }
 
         $scope.swapUnderscore = function (str) {
             return str.replace(/_/g, ' ');
@@ -183,6 +187,19 @@
         $scope.ApplyTitlesToChildren();
         $scope.initialEndDateReadOnly = !!$scope.contractData._behaviors && !!$scope.contractData._behaviors.isReadOnly && !!$scope.contractData._behaviors.isReadOnly["END_DT"] && $scope.contractData._behaviors.isReadOnly["END_DT"];
         $scope.initialStartDateReadOnly = !!$scope.contractData._behaviors && !!$scope.contractData._behaviors.isReadOnly && !!$scope.contractData._behaviors.isReadOnly["START_DT"] && $scope.contractData._behaviors.isReadOnly["START_DT"];
+
+
+        $scope.needMct = function () {
+            if (!$scope.contractData.PRC_ST || $scope.contractData.PRC_ST.length === 0) return false;
+
+            for (var m = 0; m < $scope.contractData.PRC_ST.length; m++) {
+                var item = $scope.contractData.PRC_ST[m].MEETCOMP_TEST_RESULT;
+                if (item !== "" && item !== "Incomplete") {
+                    return false;
+                }
+            }
+            return true;
+        }
 
         var updateDisplayTitle = function () {
             $scope.contractData.displayTitle = isNewContract
@@ -1303,6 +1320,40 @@
             }
         }
 
+        $scope.emailData = [];
+        $scope.openEmailMsg = function () {
+
+            function lastWord(words) {
+                var n = words.split(" ");
+                return n[n.length - 1];
+            }
+
+            var msgMapping = {};
+            for (var m = 0; m < $scope.messages.length; m++) {
+                msgMapping[$scope.messages[m].KeyIdentifiers[0]] = lastWord($scope.messages[m].Message);
+            }
+
+            var actns = ["Approve", "Revise", "Cancel", "Hold"];
+            var actnList = [];
+            for (var a = 0; a < actns.length; a++) {
+                var item = $scope.emailData[actns[a]];
+                if (!!item) {
+                    for (var i = 0; i < item.length; i++) {
+                        item[i].NEW_STG = !!msgMapping[item[i].DC_ID] ? msgMapping[item[i].DC_ID] : "";
+                        actnList.push("Strategy '" + item[i].TITLE + "' has been moved into the stage " + item[i].NEW_STG);
+                    }
+                }
+            }
+
+            var msg = encodeURIComponent(actnList.join("\n\n"));
+
+            var email = '';
+            var subject = 'My Deals Submission Notification';
+            var emailBody = msg;
+            document.location = "mailto:" + email + "?subject=" + subject + "&body=" + emailBody;
+            $scope.emailData = [];
+        }
+
         $scope.actionPricingStrategy = function (ps, actn) {
             $scope.setBusy("Updating Pricing Strategy...", "Please wait as we update the Pricing Strategy!");
             objsetService.actionPricingStrategy($scope.getCustId(), $scope.contractData.DC_ID, $scope.contractData.CUST_ACCPT, ps, actn).then(
@@ -1321,8 +1372,10 @@
                 }
             );
         }
-        $scope.actionPricingStrategies = function (data) {
+        $scope.actionPricingStrategies = function (data, emailEnabled) {
             $scope.setBusy("Updating Pricing Strategies...", "Please wait as we update the Pricing Strategy!");
+
+            $scope.emailData = data;
             objsetService.actionPricingStrategies($scope.getCustId(), $scope.contractData.DC_ID, $scope.contractData.CUST_ACCPT, data).then(
                 function (data) {
                     $scope.messages = data.data.Messages;
@@ -1333,6 +1386,8 @@
                         $scope.refreshContractData();
                         $scope.setBusy("", "");
                     }, 50);
+
+                    if (emailEnabled) $scope.openEmailMsg();
                 },
                 function (result) {
                     //debugger;
@@ -2955,7 +3010,7 @@
             $scope.goto('Manage', 'contract.summary');
         }
         $scope.goto = function (mode, state) {
-            if ($scope.flowMode === mode) return;
+            //if ($scope.flowMode === mode) return;
 
             $scope.flowMode = mode;
             $state.go(state, { cid: $scope.contractData.DC_ID });

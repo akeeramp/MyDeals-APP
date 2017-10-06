@@ -216,6 +216,7 @@
     <Compile Include="Controllers\API\AdminConstantsController.cs" />
     <Compile Include="Controllers\API\ApiBaseController.cs" />
     <Compile Include="Controllers\API\CacheController.cs" />
+    <Compile Include="Controllers\API\CostTestController.cs" />
     <Compile Include="Controllers\API\CustomerCalendarController.cs" />
     <Compile Include="Controllers\API\DashboardController.cs" />
     <Compile Include="Controllers\API\EcapTrackerController.cs" />
@@ -329,6 +330,9 @@
     <Content Include="app\contract\controllers\managerTimeline.controller.js" />
     <Content Include="app\contract\controllers\multiSelectModal.controller.js" />
     <Content Include="app\contract\controllers\allDeals.controller.js" />
+    <Content Include="app\contract\controllers\actionSummaryModal.controller.js" />
+    <Content Include="app\contract\controllers\pctGroupModal.controller.js" />
+    <Content Include="app\contract\controllers\pctOverrideReasonModal.controller.js" />
     <Content Include="app\contract\partials\contractCompliance.html" />
     <Content Include="app\contract\partials\contractComplianceHeader.html" />
     <Content Include="app\contract\partials\contractSummaryDeals.html" />
@@ -356,6 +360,9 @@
     <Content Include="app\contract\autofillSettings\autofillSettings.html" />
     <Content Include="app\contract\partials\ptModals\ecapTrackerAutoFillModal.html" />
     <Content Include="app\contract\partials\ptModals\ecapTrackerModal.html" />
+    <Content Include="app\contract\partials\ptModals\actionSummaryModal.html" />
+    <Content Include="app\contract\partials\ptModals\pctGroupModal.html" />
+    <Content Include="app\contract\partials\ptModals\pctOverrideReasonModal.html" />
     <Content Include="app\contract\productCorrector\productCorrectorBeta.controller.js" />
     <Content Include="app\contract\productCorrector\productCorrectorBeta.html" />
     <Content Include="app\contract\targetRegionPicker\targetRegionPicker.controller.js" />
@@ -399,6 +406,8 @@
     <Content Include="app\contract\partials\wipDeals.html" />
     <Content Include="app\admin\iCostProducts\admin.iCostProduct.service.js" />
     <Content Include="app\admin\iCostProducts\admin.iCostProducts.controller.js" />
+    <Content Include="app\core\directives\buttons\btnRunPctMct.directive.html" />
+    <Content Include="app\core\directives\buttons\btnRunPctMct.directive.js" />
     <Content Include="app\core\directives\dirtyTracking.directive.js" />
     <Content Include="app\core\directives\expandKendogrid.directive.js" />
     <Content Include="app\blocks\uiControls\focusOnShow.directive.js" />
@@ -421,6 +430,8 @@
     <Content Include="app\contract\partials\lnavStrategyTree.html" />
     <Content Include="app\contract\partials\pricingTable.html" />
     <Content Include="app\core\directives\bindToHeight.directive.js" />
+    <Content Include="app\core\directives\gridCell\iconMctPct.directive.html" />
+    <Content Include="app\core\directives\gridCell\iconMctPct.directive.js" />
     <Content Include="app\core\directives\gridCell\dealToolsTender.directive.html" />
     <Content Include="app\core\directives\gridCell\dealToolsTender.directive.js" />
     <Content Include="app\core\directives\gridCell\dealTools.directive.html" />

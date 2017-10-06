@@ -5,6 +5,7 @@ using Intel.Opaque;
 using Intel.Opaque.DBAccess;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
 
@@ -371,5 +372,6 @@ namespace Intel.MyDeals.DataLibrary
             }
             return ret.FirstOrDefault();
         }
+
     }
 }

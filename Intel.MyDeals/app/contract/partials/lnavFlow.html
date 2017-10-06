@@ -13,7 +13,10 @@
                 <div class="flowBtn" ng-class="{inactive: flowMode != 'Deal Entry'}" ng-click="gotoDealEntry()">Deal Entry</div>
             </td>
             <td style="width: 34%; padding: 0 4px;">
-                <div class="flowBtn"ng-class="{inactive: flowMode != 'Compliance'}" ng-click="gotoCompliance()">Meet Comp</div>
+                <div class="flowBtn"ng-class="{inactive: flowMode != 'Compliance'}" ng-click="gotoCompliance()">
+                    <i ng-if="needMct()" class="intelicon-information-outlined red font-med" title="Meet Comp needs to be reviewed"></i>
+                    Meet Comp
+                </div>
             </td>
             <td style="width: 33%">
                 <div class="flowBtn"ng-class="{inactive: Manage != 'Compliance'}" ng-click="gotoManage()">Manage</div>
@@ -23,16 +26,31 @@
 </div>
 
 <style>
-    .flowBtn {
-        background-color: #003C71;
-        padding: 2px;
-        font-size: 12px;
-        font-weight: 600;
-        width: 100%;
+    .wht {
         color: #ffffff;
-        text-align: center;
-        cursor: default;
+    }    
+    .red {
+        color: #FC4C02;
+    }    
+    .yel {
+        color: #f3D54E;
     }
+    .orng {
+        color: #FFA300;
+    }
+    .font-med {
+        font-size: 14px;
+    }
+     .flowBtn {
+         background-color: #003C71;
+         padding: 2px;
+         font-size: 12px;
+         font-weight: 600;
+         width: 100%;
+         color: #ffffff;
+         text-align: center;
+         cursor: default;
+     }
     .flowBtn.disabled {
         background-color: #cccccc;
         color: #999999;

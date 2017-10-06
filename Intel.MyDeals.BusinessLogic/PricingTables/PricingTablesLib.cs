@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
@@ -79,14 +78,16 @@ namespace Intel.MyDeals.BusinessLogic
         }
 
 
-        public OpDataCollectorFlattenedList GetPctDetails(int id)
+        public CostTestDetail GetPctDetails(int id)
         {
-            List<CostTestDetailItem> pctData = new CostTestLib().GetCostTestDetails(id);
-
-            OpDataCollectorFlattenedList rtnData = pctData.ToOpDataCollectorFlattenedList();
-
-            return rtnData;
+            return new CostTestLib().GetCostTestDetails(id);
         }
+
+        public PctOverrideReason SetPctOverrideReason(PctOverrideReason data)
+        {
+            return new CostTestLib().SetPctOverrideReason(data);
+        }
+        
 
         public OpDataCollectorFlattenedDictList GetFullPricingTable(int id)
         {
@@ -282,7 +283,7 @@ namespace Intel.MyDeals.BusinessLogic
                     if (futureStage != null)
                     {
                         needRedeal = true;
-                        dc.SetDataElementValue(AttributeCodes.WF_STG_CD, futureStage);
+                        dc.SetAtrb(AttributeCodes.WF_STG_CD, futureStage);
                     }                    
                 }
 

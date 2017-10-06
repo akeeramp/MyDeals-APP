@@ -37,16 +37,16 @@
         })
         .constant('colorDictionary', {
             "pct": {
-                "FAIL": "#FC4C02",
-                "PASS": "#C4D600",
-                "INCOMPLETE": "#f3D54E",
-                "NA": "#cccccc"
+                "Fail": "#FC4C02",
+                "Pass": "#C4D600",
+                "Incomplete": "#f3D54E",
+                "Na": "#cccccc"
             },
             "mct": {
-                "FAIL": "#FC4C02",
-                "PASS": "#C4D600",
-                "INCOMPLETE": "#f3D54E",
-                "NA": "#cccccc"
+                "Fail": "#FC4C02",
+                "Pass": "#C4D600",
+                "Incomplete": "#f3D54E",
+                "Na": "#cccccc"
             },
             "type": {
                 "ALL_TYPES": "#0071C5",

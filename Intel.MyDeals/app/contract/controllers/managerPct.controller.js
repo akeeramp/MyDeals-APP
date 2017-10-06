@@ -5,15 +5,22 @@ angular
     .module('app.contract')
     .controller('managerPctController', managerPctController);
 
-managerPctController.$inject = ['$scope', '$state', 'objsetService', 'logger', '$timeout', 'dataService', '$compile', 'colorDictionary'];
+managerPctController.$inject = ['$scope', '$state', 'objsetService', 'logger', '$timeout', 'dataService', '$compile', 'colorDictionary', '$uibModal', '$linq'];
 
-function managerPctController($scope, $state, objsetService, logger, $timeout, dataService, $compile, colorDictionary) {
+function managerPctController($scope, $state, objsetService, logger, $timeout, dataService, $compile, colorDictionary, $uibModal, $linq) {
 
     var root = $scope.$parent;	// Access to parent scope
-
+    $scope.root = root;
+    
     $scope.pctFilter = "";
     $scope.$parent.isSummaryHidden = false;
+    $scope.CostTestGroupDetails = [];
     gridPctUtils.columns = {};
+    $scope.isAllCollapsed = true;
+    $scope.context = {};
+
+    var hasNoPermission = !$scope.root.CAN_EDIT_COST_TEST;
+//    if (window.usrRole === "Legal") hasNoPermission = true;
 
     $timeout(function () {
         $("#dealTypeDiv").removeClass("active");
@@ -47,15 +54,14 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
         return $scope.getColor('stage', d);
     }
     $scope.getColorPct = function (d) {
-        if (!d) d = "INCOMPLETE";
+        if (!d) d = "Incomplete";
         return $scope.getColor('pct', d);
     }
     $scope.getColorMct = function (d) {
-        if (!d) d = "INCOMPLETE";
+        if (!d) d = "Incomplete";
         return $scope.getColor('mct', d);
     }
 
-    $scope.isAllCollapsed = true;
     $scope.toggleSum = function () {
         var container = angular.element(".sumPsContainer");
         while (container.length !== 0) {
@@ -74,18 +80,55 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
                 });
         }
 
-        $state.go('contract.manager.strategy',
-            {
-                cid: ps.DC_PARENT_ID,
-                sid: ps.DC_ID,
-                pid: pt.DC_ID
-            });
+        if (!!pt) {
+            $state.go('contract.manager.strategy',
+                {
+                    cid: ps.DC_PARENT_ID,
+                    sid: ps.DC_ID,
+                    pid: pt.DC_ID
+                });
+        } else {
+            $state.go('contract.manager.strategy',
+                {
+                    cid: ps.DC_PARENT_ID,
+                    sid: ps.DC_ID
+                });
+        }
     }
 
+    $scope.onOff = function(val) {
+        return val ? "Yes" : "No";
+    }
+
+    $scope.openReason = function (dataItem) {
+        $scope.context = dataItem;
+
+        var modalInstance = $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: 'pctOverrideReasonModal',
+            controller: 'pctOverrideReasonModalCtrl',
+            controllerAs: '$ctrl',
+            size: 'lg',
+            resolve: {
+                dataItem: function () {
+                    return dataItem;
+                }
+            }
+        });
+
+        modalInstance.result.then(function (selectedItems) {
+            $scope.context.saved = true;
+            $timeout(function () {
+                $scope.context.saved = false;
+            }, 3000);
+        }, function () { });
+    }
 
     $scope.customFilter = function (ps) {
         return (
-            ($scope.pctFilter === undefined || $scope.pctFilter === '' || ps.COST_TEST_RESULT === '' || ps.COST_TEST_RESULT === $scope.pctFilter || ps.MEETCOMP_TEST_RESULT === '' || ps.MEETCOMP_TEST_RESULT === $scope.pctFilter) &&
+            ($scope.pctFilter === undefined || $scope.pctFilter === '' || ps.COST_TEST_RESULT === '' || ps.COST_TEST_RESULT === $scope.pctFilter) &&
             ($scope.titleFilter === undefined || $scope.titleFilter === '' || ps.TITLE.search(new RegExp($scope.titleFilter, "i")) >= 0 || $scope.titleInPt(ps))
             );
     }
@@ -98,93 +141,211 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
         return null;
     }
 
-    $scope.togglePt = function (pt) {
+    $scope.togglePt = function (ps,pt) {
 
-        if (pt.isLoading === undefined || pt.isLoading === true) {
+        var html = "<kendo-grid options='sumGridOptions' k-ng-delay='sumGridOptions' id='detailGrid_" + pt.DC_ID + "' class='opUiContainer md dashboard'></kendo-grid>";
+        var template = angular.element(html);
+        var linkFunction = $compile(template);
+        linkFunction($scope);
 
-            $scope.sumGridOptions = {
-                dataSource: {
-                    type: "json",
-                    transport: {
-                        read: {
-                            url: "/api/PricingTables/v1/GetPctDetails/" + pt.DC_ID,
-                            type: "GET",
-                            dataType: "json"
-                        }
-                    },
-                    schema: {
-                        model: $scope.templates.models[pt.OBJ_SET_TYPE_CD]
-                    },
-                    group: { field: "DEAL_ID" },
-                    requestEnd: function (e) {
-                        var response = e.response;
-                        for (var i = 0; i < response.length; i++) {
-                            var item = response[i];
-                            if (!gridPctUtils.columns[item.DEAL_ID]) {
-                                var cols = $scope.templates.columns[pt.OBJ_SET_TYPE_CD];
-                                var tmplt = "<table style='float: left; margin-top: -23px;'><colgroup><col style='width: 30px;'>";
-                                var tr = "<td></td>";
-                                for (var c = 0; c < cols.length; c++) {
-                                    var val = item[cols[c].field];
-                                    if (!!cols[c].format) {
-                                        val = kendo.toString(val, cols[c].format.replace("{0:", "").replace("}", ""));
-                                    }
-                                    if (!!cols[c].template) {
-                                        var newVal = kendo.template(cols[c].template)(item);
-                                        if (newVal.indexOf("ng-bind") < 0) {
-                                            val = newVal;
-                                        }
-                                    }
-                                    if (cols[c].field === "DEAL_ID") {
-                                        val = "<b>" + val + "</b>";
-                                    }
-                                    tmplt += "<col style='width:" + cols[c].width + "'>";
+        $("#sumWipGrid_" + pt.DC_ID).html(template);
 
-                                    if (cols[c].field === "PRC_CST_TST_STS") {
-                                        tr += "<td style='padding-left: 0; padding-right: 6px;'>" + (cols[c].parent ? val : "") + "</td>";
-                                    } else {
-                                        tr += "<td style='padding-left: 6px; padding-right: 6px;'>" + (cols[c].parent ? val : "") + "</td>";
-                                    }
+        objsetService.getPctDetails(pt.DC_ID).then(
+            function (e) {
+
+                $scope.CostTestGroupDetails = e.data["CostTestGroupDetailItems"];
+
+                var response = e.data["CostTestDetailItems"];
+
+                for (var i = 0; i < response.length; i++) {
+                    var item = response[i];
+
+                    if (!gridPctUtils.columns[item.DEAL_ID]) {
+                        var cols = $scope.templates.columns[pt.OBJ_SET_TYPE_CD];
+                        var tmplt = "<table style='float: left; margin-top: -23px;'><colgroup><col style='width: 30px;'>";
+                        var tr = "<td></td>";
+                        for (var c = 0; c < cols.length; c++) {
+                            var val = item[cols[c].field];
+                            if (!!cols[c].format) {
+                                val = kendo.toString(val, cols[c].format.replace("{0:", "").replace("}", ""));
+                            }
+                            if (!!cols[c].template) {
+                                var newVal = kendo.template(cols[c].template)(item);
+                                if (newVal.indexOf("ng-bind") < 0) {
+                                    val = newVal;
                                 }
-                                tmplt += "</colgroup><tbody><tr>" + tr + "</tr></tbody></table>";
+                            }
+                            if (cols[c].field === "DEAL_ID") {
+                                val = "<b>" + val + "</b>";
+                            } else if (cols[c].field === "GRP_DEALS") {
 
-                                gridPctUtils.columns[item.DEAL_ID] = tmplt;
+                                // Need to get exclude data from database
+
+                                var numGroups = item["CostTestGroupDetailItems"] === undefined ? 0 : item["CostTestGroupDetailItems"].length;
+                                if (numGroups <= 0) {
+                                    val = "<div style='text-align: center;'><div class='lnkBasic' ng-click='showGroups(" + item["DEAL_PRD_RNK"] + ")'>View</div></div>";
+                                } else {
+                                    val = "<div style='text-align: center;'><div class='lnkGroup' ng-click='showGroups(" + item["DEAL_PRD_RNK"] + ")'>**View</div></div>";
+                                }
+                            }
+                            tmplt += "<col style='width:" + cols[c].width + "'>";
+
+                            if (cols[c].field === "PRC_CST_TST_STS") {
+                                tr += "<td style='padding-left: 0; padding-right: 6px;'>" + (cols[c].parent ? val : "") + "</td>";
+                            } else {
+                                tr += "<td style='padding-left: 6px; padding-right: 6px;'>" + (cols[c].parent ? val : "") + "</td>";
                             }
                         }
-                    }
-                },
-                sortable: false,
-                height: 250,
-                columns: $scope.templates.columns[pt.OBJ_SET_TYPE_CD],
-                dataBound: function() {
-                    var grid = this;
-                    if (grid.dataSource.group().length > 0) {
-                        $(".k-grouping-row").each(function () {
-                            grid.collapseGroup(this);
-                        });
+                        tmplt += "</colgroup><tbody><tr>" + tr + "</tr></tbody></table>";
+
+                        gridPctUtils.columns[item.DEAL_ID] = tmplt;
                     }
                 }
 
+                $scope.sumGridOptions = {
+                    dataSource: {
+                        data: response,
+                        schema: {
+                            model: $scope.templates.models[pt.OBJ_SET_TYPE_CD]
+                        },
+                        group: { field: "DEAL_ID" }
+                    },
+                    sortable: false,
+                    height: 250,
+                    columns: $scope.templates.columns[pt.OBJ_SET_TYPE_CD],
+                    dataBound: function (e) {
+
+                        // Set background colors
+                        var rows = e.sender.content.find('tr');
+                        var capIndex = e.sender.wrapper.find(".k-grid-header [data-field=" + "CAP" + "]").index();
+                        var ecapIndex = e.sender.wrapper.find(".k-grid-header [data-field=" + "ECAP_PRC" + "]").index();
+                        var netIndex = e.sender.wrapper.find(".k-grid-header [data-field=" + "LOW_NET_PRC" + "]").index();
+                        var costIndex = e.sender.wrapper.find(".k-grid-header [data-field=" + "PRD_COST" + "]").index();
+                        var retailIndex = e.sender.wrapper.find(".k-grid-header [data-field=" + "RTL_CYC_NM" + "]").index();
+
+                        rows.each(function (index, row) {
+                            var dataItem = e.sender.dataItem(row);
+
+                            if (dataItem.COST_TEST_OVRRD_FLG !== "Yes") {                                
+                                if (!dataItem.CAP || dataItem.CAP === "" || dataItem.CAP < 0) {
+                                    $(row).children('td:eq(' + capIndex + ')').addClass('cell-warning');
+                                }
+                                if (!dataItem.ECAP_PRC || dataItem.ECAP_PRC === "" || dataItem.ECAP_PRC < 0) {
+                                    $(row).children('td:eq(' + ecapIndex + ')').addClass('cell-warning');
+                                }
+                                if (!dataItem.PRD_COST || dataItem.PRD_COST === "" || dataItem.PRD_COST < 0) {
+                                    $(row).children('td:eq(' + costIndex + ')').addClass('cell-warning');
+                                }
+                                if (!dataItem.LOW_NET_PRC || dataItem.LOW_NET_PRC === "" || dataItem.LOW_NET_PRC <= 0) {
+                                    $(row).children('td:eq(' + netIndex + ')').addClass('cell-error');
+                                }
+                                if (!dataItem.RTL_CYC_NM || dataItem.RTL_CYC_NM === "") {
+                                    $(row).children('td:eq(' + retailIndex + ')').addClass('cell-warning');
+                                }
+                            }
+                        });
+
+
+                        $timeout(function () {
+                            //debugger;
+                            var grid = $("#detailGrid_" + pt.DC_ID).data("kendoGrid");
+                            if (grid === undefined || grid === null) return;
+                            if (grid.dataSource.group().length > 0) {
+                                $(".k-grouping-row").each(function () {
+                                    grid.collapseGroup(this);
+                                });
+                            }
+
+                            // lame workaround.  checkboxes were not binding properly, so wait for them to load and set them.  True will pickup and check checkboxes
+                            var data = grid.dataSource.data();
+                            for (var d = 0; d < data.length; d++) {
+                                data[d]["COST_TEST_OVRRD_FLG"] = data[d]["COST_TEST_OVRRD_FLG"] === "Yes";
+                                if (data[d]["COST_TEST_OVRRD_FLG"] === "") data[d]["COST_TEST_OVRRD_FLG"] = "No";
+                                if (data[d]["PRC_CST_TST_STS"] === "") data[d]["PRC_CST_TST_STS"] = "Incomplete";
+
+                                data[d]["_readonly"] = ps.WF_STG_CD === "Pending" || ps.WF_STG_CD === "Approved";
+                            }
+
+                        }, 100);
+                    }
+
+                }
+
+            },
+            function (response) {
+                $scope.setBusy("Error", "Could not load data.");
+                logger.error("Could not load data.", response, response.statusText);
+                $timeout(function () {
+                    $scope.setBusy("", "");
+                }, 2000);
             }
-            var html = "<kendo-grid options='sumGridOptions' class='opUiContainer md dashboard'></kendo-grid>";
-            var template = angular.element(html);
-            var linkFunction = $compile(template);
-            linkFunction($scope);
+        );
 
-            $("#sumWipGrid_" + pt.DC_ID).html(template);
-
-            pt.isLoading = false;
-        }
 
     }
 
+    $scope.showGroups = function (dealId) {
+        var data = $scope.CostTestGroupDetails;
+        var dataItem = $linq.Enumerable()
+            .From(data)
+            .Where(function (x) {
+                return x.DEAL_PRD_RNK === dealId;
+            })
+            .ToArray();
+        $scope.context = dataItem;
+
+        var modalInstance = $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: 'pctGroupModal',
+            controller: 'pctGroupModalCtrl',
+            controllerAs: '$ctrl',
+            size: 'lg',
+            resolve: {
+                dataItem: function () {
+                    return dataItem;
+                }
+            }
+        });
+
+        modalInstance.result.then(function (selectedItems) {
+        }, function () { });
+    }
+
+    $scope.changeReasonFlg = function (dataItem) {
+        if (dataItem.COST_TEST_OVRRD_FLG === false) {
+            var newItem = {
+                "CUST_NM_SID": dataItem.CUST_NM_SID,
+                "DEAL_OBJ_TYPE_SID": 5,
+                "DEAL_OBJ_SID": dataItem.DEAL_ID,
+                "PRD_MBR_SIDS": dataItem.PRD_MBR_SIDS,
+                "CST_OVRRD_FLG": 0,
+                "CST_OVRRD_RSN": ""
+            };
+
+            objsetService.setPctOverride(newItem).then(
+                function (data) {
+                    dataItem.saved = true;
+                    $timeout(function () {
+                        dataItem.saved = false;
+                    }, 3000);
+                });
+        }
+    }
+
+    $scope.getResultMapping = function (result, flg, className, style) {
+        return gridPctUtils.getResultMapping(result, flg, '', className, style);
+    }
+
     // Global Settings
+    var pctTemplate = root.CAN_VIEW_COST_TEST ? "#= gridPctUtils.getResultMapping(PRC_CST_TST_STS, '!dataItem.COST_TEST_OVRRD_FLG', 'dataItem.COST_TEST_OVRRD_FLG', '', 'font-size: 20px !important;') #" : "&nbsp;";
     $scope.cellColumns = {
         "PRC_CST_TST_STS": {
             field: "PRC_CST_TST_STS",
             title: "PCT Result",
             width: "120px",
-            template: "#= gridPctUtils.getResultMapping(PRC_CST_TST_STS) #",
+            template: pctTemplate,
             parent: true
         },
         "DEAL_ID": {
@@ -192,7 +353,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
             title: "Deal Id",
             width: "100px",
             template: "#=DEAL_ID#",
-            groupHeaderTemplate: "#=gridPctUtils.getColumnTemplate(value)#",
+            groupHeaderTemplate: "#= gridPctUtils.getColumnTemplate(value) #",
             parent: true
         },
         "DEAL_STRT_DT": {
@@ -201,6 +362,12 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
             width: "170px",
             template: "#= kendo.toString(new Date(DEAL_STRT_DT), 'M/d/yyyy') # - #= kendo.toString(new Date(DEAL_END_DT), 'M/d/yyyy') #",
             parent: true
+        },
+        "DEAL_STG_CD": {
+            field: "DEAL_STG_CD",
+            title: "Deal Stage",
+            width: "80px",
+            parent: false
         },
         "PRODUCT": {
             field: "PRODUCT",
@@ -254,12 +421,14 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
             field: "COST_TEST_OVRRD_FLG",
             title: "Cost Test Analysis<br\>Override",
             width: "140px",
+            template: '#= gridPctUtils.getPctFlag("dataItem.COST_TEST_OVRRD_FLG", "dataItem.PRC_CST_TST_STS", "dataItem._readonly", ' + hasNoPermission + ') #',
             parent: false
         },
         "COST_TEST_OVRRD_CMT": {
             field: "COST_TEST_OVRRD_CMT",
             title: "Cost Test Analysis<br\>Override Comments",
             width: "140px",
+            template: '<button class="btn btn-sm btn-skyblue" ng-if="dataItem.COST_TEST_OVRRD_FLG === \'Yes\' || dataItem.COST_TEST_OVRRD_FLG === true" ng-click="openReason(dataItem)" type="button" style="width: 100px;" title="Save and Validate"><span style="color: \\#FC4C02;">*</span> {{dataItem.COST_TEST_OVRRD_CMT === "" ? "Select" : "View Overrides"}}</button>',
             parent: false
         },
         "RTL_CYC_NM": {
@@ -297,6 +466,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
             field: "GRP_DEALS",
             title: "Group Deals",
             width: "140px",
+            template: "&nbsp;",
             parent: true
         },
         "LAST_COST_TEST_RUN": {
@@ -458,9 +628,6 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
             ]
         }
     }
-
-
-
 
 }
 })();

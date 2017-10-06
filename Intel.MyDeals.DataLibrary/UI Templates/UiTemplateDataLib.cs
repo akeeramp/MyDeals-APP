@@ -852,8 +852,9 @@ namespace Intel.MyDeals.DataLibrary
             {
                 Id = 20,
                 AtrbCd = AttributeCodes.PRD_EXCLDS,
-                Label = "Exluded Products",
+                Label = "Excluded Products",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
                 Template = "#=gridUtils.uiControlWrapper(data, 'PRD_EXCLDS')#",
                 DataType = "object",
                 IsFilterable = true,

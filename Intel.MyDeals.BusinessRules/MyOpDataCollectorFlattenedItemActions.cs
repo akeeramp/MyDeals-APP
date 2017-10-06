@@ -34,8 +34,9 @@ namespace Intel.MyDeals.BusinessRules
             string pct = r.Dc.GetDataElementValue(AttributeCodes.COST_TEST_RESULT);
             string mct = r.Dc.GetDataElementValue(AttributeCodes.MEETCOMP_TEST_RESULT);
             string role = opUserToken.Role.RoleTypeCd;
-            bool pctFailed = pct != "PASS" && pct != "NA";
-            bool mctFailed = mct != "PASS" && mct != "NA";
+            bool pctFailed = pct != "Pass" && pct != "Na";
+            bool mctFailed = mct != "Pass" && mct != "Na";
+            bool mctIncomplete = mct == "Incomplete";
 
             MyDealsActionItem objsetActionItem = new MyDealsActionItem
             {
@@ -89,6 +90,7 @@ namespace Intel.MyDeals.BusinessRules
                 // TODO when PCT and MCT is ready... remove the following lines
                 pctFailed = false;
                 mctFailed = false;
+                mctIncomplete = false;
 
                 if (action == "Approve" && objsetActionItem.Actions[action])
                 {
@@ -100,7 +102,7 @@ namespace Intel.MyDeals.BusinessRules
                                 objsetActionItem.Actions[action] = false;
                             break;
                         case RoleTypes.GA:
-                            if (stage == WorkFlowStages.Requested && (pctFailed || mctFailed))
+                            if (stage == WorkFlowStages.Requested && mctFailed && !mctIncomplete)
                                 objsetActionItem.Actions[action] = false;
                             if ((stage == WorkFlowStages.Submitted || stage == WorkFlowStages.Pending) && (pctFailed || mctFailed))
                                 objsetActionItem.Actions[action] = false;

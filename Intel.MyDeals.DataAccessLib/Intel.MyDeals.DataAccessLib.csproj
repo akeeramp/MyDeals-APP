@@ -45,11 +45,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Shared Libraries\Intel.Opaque.DBAccess.dll</HintPath>
     </Reference>
-    <Reference Include="Intel.Opaque.Templating, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.SqlServer.ConnectionInfo, Version=13.100.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Shared Libraries\Intel.Opaque.Templating.dll</HintPath>
+      <HintPath>..\Shared Libraries\Microsoft.SqlServer.ConnectionInfo.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.SqlServer.ConnectionInfo, Version=13.100.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.SqlServer.ConnectionInfoExtended, Version=13.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Shared Libraries\Microsoft.SqlServer.ConnectionInfoExtended.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.SqlServer.Smo, Version=13.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -106,6 +109,9 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

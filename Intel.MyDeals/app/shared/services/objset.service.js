@@ -11,8 +11,8 @@ function objsetService($http, dataService, logger, $q) {
     var apiBaseContractUrl = "/api/Contracts/v1/";
     var apiBasePricingStrategyUrl = "/api/PricingStrategies/v1/";
     var apiBasePricingTableUrl = "/api/PricingTables/v1/";
+    var apiBaseCostTestUrl = "/api/CostTest/v1/";
     var apiBaseTenderUrl = "/api/Tenders/v1/";
-    var apiBaseWipDealUrl = "/api/PricingTables/v1/";
 
     var service = {
         createContract: createContract,
@@ -46,6 +46,9 @@ function objsetService($http, dataService, logger, $q) {
         actionPricingStrategies: actionPricingStrategies,
         actionWipDeal: actionWipDeal,
         actionWipDeals: actionWipDeals,
+        getPctDetails: getPctDetails,
+        setPctOverride: setPctOverride,
+        runPctContract: runPctContract,
         getOverlappingDeals: getOverlappingDeals,
         updateOverlappingDeals: updateOverlappingDeals
     }
@@ -64,8 +67,8 @@ function objsetService($http, dataService, logger, $q) {
     function updateContract(custId, contractId, ct) {
         return dataService.post(apiBaseContractUrl + 'UpdateContract/' + custId + '/' + contractId, ct);
     }
-    function deleteContract(id) {
-        return dataService.get(apiBaseContractUrl + 'DeleteContract/' + id);
+    function deleteContract(custId, contractId) {
+        return dataService.get(apiBaseContractUrl + 'DeleteContract/' + custId + '/' + contractId);
     }
     function isDuplicateContractTitle(dcId, title) {
         return dataService.get(apiBaseContractUrl + 'IsDuplicateContractTitle/' + dcId + '/' + title);
@@ -154,6 +157,17 @@ function objsetService($http, dataService, logger, $q) {
     }
     function actionWipDeals(custId, contractId, data) {
         return dataService.post(apiBasePricingTableUrl + 'actionWipDeals/' + custId + '/' + contractId, data);
+    }
+
+
+    function getPctDetails(dealId) {
+        return dataService.get(apiBasePricingTableUrl + 'GetPctDetails/' + dealId);
+    }
+    function setPctOverride(data) {
+        return dataService.post(apiBasePricingTableUrl + 'SetPctOverride', data);
+    }
+    function runPctContract(id) {
+        return dataService.get(apiBaseCostTestUrl + 'RunPctContract/' + id);
     }
 
     // #### Overlapping CRUD operation ####

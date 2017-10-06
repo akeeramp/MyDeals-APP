@@ -27,6 +27,7 @@
                 scope.showResults = false;
                 scope.showLoading = false;
                 scope.searchText = scope.value;
+                scope.jumptoSummary = window.usrRole === "DA" ? "/summary" : "";
                 //scope.hideSearch = false;
                 //scope.hideSearch = !!scope.hideSearch;
 

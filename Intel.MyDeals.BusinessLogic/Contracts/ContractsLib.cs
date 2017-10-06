@@ -264,10 +264,11 @@ namespace Intel.MyDeals.BusinessLogic
             // == OpDataElementType.PRC_TBL_ROW ? ObjSetPivotMode.UniqueKey : ObjSetPivotMode.Nested
         }
 
-        public OpMsg DeleteContract(int id)
+        public OpMsg DeleteContract(ContractToken contractToken)
         {
-            // TODO replace with Delete call
-            return new OpMsg();
+            OpDataCollectorFlattenedDictList opDcDict = GetContract(contractToken.ContractId, false).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.UniqueKey);
+            OpDataCollectorFlattenedList contracts = opDcDict[OpDataElementType.CNTRCT];
+            return contracts.DeleteByIds(OpDataElementType.CNTRCT, contractToken, _dataCollectorLib);
         }
 
         public bool IsDuplicateContractTitle(int dcId, string title)

@@ -3,6 +3,7 @@ using Intel.MyDeals.IBusinessLogic;
 using Intel.MyDeals.IDataLibrary;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -91,7 +92,12 @@ namespace Intel.MyDeals.BusinessLogic
 
         public List<PCTLegalException> GetLegalExceptions()
         {
-            return _productCostTestDataLib.GetLegalExceptions();
+            return _productCostTestDataLib.GetLegalExceptions().Where(l => l.ACTV_IND).ToList();
         }
+        public List<PCTLegalException> GetLegalExceptions(DateTime endDate)
+        {
+            return _productCostTestDataLib.GetLegalExceptions().Where(l => l.ACTV_IND && l.PCT_LGL_EXCPT_END_DT >= endDate).ToList();
+        }
+
     }
 }

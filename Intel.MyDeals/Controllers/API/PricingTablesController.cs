@@ -176,9 +176,19 @@ namespace Intel.MyDeals.Controllers.API
              );
         }
 
+        [HttpPost]
+        [Authorize]
+        [Route("SetPctOverride")]
+        public PctOverrideReason SetPctOverride(PctOverrideReason data)
+        {
+            return SafeExecutor(() => _pricingTablesLib.SetPctOverrideReason(data)
+                , $"Unable to set PCT Override Reason"
+            );
+        }
+
         [Authorize]
         [Route("GetPctDetails/{id}")]
-        public OpDataCollectorFlattenedList GetPctDetails(int id)
+        public CostTestDetail GetPctDetails(int id)
         {
             return SafeExecutor(() => _pricingTablesLib.GetPctDetails(id)
                 , $"Unable to get PCT Details {id}"
