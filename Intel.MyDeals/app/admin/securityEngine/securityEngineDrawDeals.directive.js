@@ -58,13 +58,13 @@ function securityEngineDrawDeals($http, lookupsService, $compile, $templateCache
 					var myActnCd = $filter('filter')(vm.dropDownDatasource.actions, { dropdownID: parseInt(atrbId) }, true)[0];
 					actnCd = (myActnCd ? myActnCd.dropdownName : -1);
 					mappingKey = atrbCd;
-					var dummyAttr = $filter('filter')(vm.dropDownDatasource.attributes, { ATRB_CD: dummyAttrName }, true)[0]
-					newAtrbId = dummyAttr.ATRB_SID;
+					var dummyAttr = $filter('filter')(vm.dropDownDatasource.attributes, { ATRB_COL_NM: dummyAttrName }, true)[0] //quickfix: changed to attributes["CNTRCT"], but not sure if that is ok - all the attributes at different levels have the same dummyAttrName ID (90001) so perhaps it is ok?
+				    newAtrbId = dummyAttr.ATRB_SID;
 					newAtrbCd = dummyAttrName;
 				}
 
 				clickableHtml = "<div class='fl' ng-click='$parent.vm.clickBox($event, " + actionId + ", \"" + actnCd + "\", " + newAtrbId + ", \"" + newAtrbCd + "\", " + dealType.Id + ", \"" + dealType.Alias + "\", " + role.dropdownID + ", \"" + role.dropdownName + "\", " + stgId + ", \"" + stgName + "\")'>"
-				buf += drawDealType(vm, mappingKey, newAtrbCd, dealType.Alias, role.dropdownName, stgName, clickableHtml); // TODO: rpelace dealType.dropdownID with dropdownName?
+				buf += drawDealType(vm, mappingKey, newAtrbCd, dealType.Alias, role.dropdownName, stgName, clickableHtml);
 			}
 			buf += divEnd;
 		}
