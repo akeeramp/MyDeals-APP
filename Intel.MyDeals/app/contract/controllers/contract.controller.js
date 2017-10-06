@@ -6,7 +6,7 @@
         .controller('ContractController', ContractController);
 
     ContractController.$inject = ['$scope', '$state', '$filter', '$localStorage', 'contractData', 'isNewContract', 'templateData', 'objsetService', 'securityService', 'templatesService', 'logger', '$uibModal', '$timeout', '$window', '$location', '$rootScope', 'confirmationModal', 'dataService', 'customerCalendarService', 'contractManagerConstants', 'MrktSegMultiSelectService', '$compile'];
-
+    
     function ContractController($scope, $state, $filter, $localStorage, contractData, isNewContract, templateData, objsetService, securityService, templatesService, logger, $uibModal, $timeout, $window, $location, $rootScope, confirmationModal, dataService, customerCalendarService, contractManagerConstants, MrktSegMultiSelectService, $compile) {
         // store template information
         //
@@ -1803,6 +1803,16 @@
             if (stateName === "contract.manager.strategy.wip") {
                 source = "WIP_DEAL";
                 gData = $scope.wipData;
+
+                for (var iterator = 0; iterator < gData.length; iterator++) {
+                    if (gData[iterator].EXPIRE_FLG === true) {
+                        gData[iterator].EXPIRE_FLG = 1;
+
+                    }
+                    else {
+                        gData[iterator].EXPIRE_FLG = 0;
+                    }
+                }
 
                 // Wip Deal
                 if (gData !== undefined && gData !== null) {
