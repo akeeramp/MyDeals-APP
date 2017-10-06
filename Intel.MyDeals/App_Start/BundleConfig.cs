@@ -200,7 +200,10 @@ namespace Intel.MyDeals
                 , "~/app/testCases/uiControls/uiControls.controller.js"
                 , "~/app/testCases/opMessages/opMessages.controller.js"
                 , "~/app/testCases/suggestProduct/suggestProduct.controller.js"
-                , "~/app/testCases/suggestProduct/suggestProduct.service.js"
+                , "~/app/testCases/suggestProduct/suggestProduct.service.js"               
+                , "~/app/advancedSearch/advancedSearch.module.js"
+                , "~/app/advancedSearch/advancedSearch.route.js"
+                , "~/app/advancedSearch/advancedSearch.controller.js"
                 ));
 
             bundles.Add(new ScriptBundle("~/MyDeals/scripts").Include(

@@ -19,6 +19,7 @@
          * Feature areas
          */
         'app.admin',
+        'app.advancedSearch',
         'app.contract',
         'app.costtest',
         'app.dashboard',

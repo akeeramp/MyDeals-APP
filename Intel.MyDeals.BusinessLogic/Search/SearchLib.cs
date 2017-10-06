@@ -4,6 +4,7 @@ using Intel.MyDeals.IBusinessLogic;
 using Intel.MyDeals.IDataLibrary;
 using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
+using System;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -23,6 +24,11 @@ namespace Intel.MyDeals.BusinessLogic
         public SearchLib(ISearchDataLib searchDataLib)
         {
             _searchDataLib = searchDataLib;
+        }
+
+        public List<AdvancedSearchResults> GetAdvancedSearchResults(string searchText, List<int> custIds)
+        {
+            return _searchDataLib.GetAdvancedSearchResults(searchText, custIds).OrderBy(sr => sr.CUST_NM).ToList();
         }
 
         /// <summary>

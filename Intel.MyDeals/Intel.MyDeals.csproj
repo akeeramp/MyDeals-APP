@@ -213,6 +213,7 @@
     <Compile Include="Classes\SimpleKeyPropValue.cs" />
     <Compile Include="Classes\SimpleKeyValue.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\AdvancedSearchController.cs" />
     <Compile Include="Controllers\API\AdminConstantsController.cs" />
     <Compile Include="Controllers\API\ApiBaseController.cs" />
     <Compile Include="Controllers\API\CacheController.cs" />
@@ -315,6 +316,10 @@
     <Content Include="app\admin\workflow\admin.workflow.controller.js" />
     <Content Include="app\admin\workflow\workflow.html" />
     <Content Include="app\admin\workflow\workflow.service.js" />
+    <Content Include="app\advancedSearch\advancedSearch.controller.js" />
+    <Content Include="app\advancedSearch\advancedSearch.html" />
+    <Content Include="app\advancedSearch\advancedSearch.module.js" />
+    <Content Include="app\advancedSearch\advancedSearch.route.js" />
     <Content Include="app\app.module.js" />
     <Content Include="app\blocks\uiControls\partials\horizontalButtonGroup.html" />
     <Content Include="app\blocks\uiControls\partials\horizontalEmbeddedMultiSelect.html" />
@@ -444,6 +449,7 @@
     <Content Include="app\core\directives\gridStatusBoard\contractStatusBoard.directive.js" />
     <Content Include="app\core\directives\gridStatusBoard\gridStatusBoard.directive.html" />
     <Content Include="app\core\directives\gridStatusBoard\gridStatusBoard.directive.js" />
+    <Content Include="app\advancedSearch\advancedSearch.directive.js" />
     <Content Include="app\core\directives\securityLoader\securityLoader.directive.js" />
     <Content Include="app\core\directives\trashcan\trashcan.directive.html" />
     <Content Include="app\shared\services\productSelector.service.js" />
@@ -1651,6 +1657,7 @@
     <Content Include="Views\CodingPractices\UnitTesting.cshtml" />
     <Content Include="Views\Shared\_Footer.cshtml" />
     <Content Include="Views\TenderManager\Index.cshtml" />
+    <Content Include="Views\AdvancedSearch\Index.cshtml" />
     <None Include="Web.cons.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

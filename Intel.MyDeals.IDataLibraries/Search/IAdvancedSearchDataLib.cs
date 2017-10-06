@@ -3,11 +3,8 @@ using Intel.MyDeals.Entities;
 
 namespace Intel.MyDeals.IDataLibrary
 {
-	public interface ISearchDataLib
+	public interface IAdvancedSearchDataLib
 	{
-		List<SearchResults> GetSearchResults(string searchText, List<int> custIds);
-
         List<AdvancedSearchResults> GetAdvancedSearchResults(string searchText, List<int> custIds);
-
     }
 }

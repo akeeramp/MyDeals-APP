@@ -25,5 +25,14 @@ namespace Intel.MyDeals.Controllers.API
                 , $"Unable to get Search Results for {searchText}"
             );
         }
+
+        [Authorize]
+        [Route("GetAdvancedSearchResults/{searchText}")]
+        public List<AdvancedSearchResults> GetAdvancedSearchResults(string searchText)
+        {
+            return SafeExecutor(() => _searchLib.GetAdvancedSearchResults(searchText, AppLib.GetMyCustomersInfo().Select(c => c.CUST_SID).Distinct().ToList())
+                , $"Unable to get Search Results for {searchText}"
+            );
+        }
     }
 }
