@@ -45,6 +45,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Shared Libraries\Intel.Opaque.DBAccess.dll</HintPath>
     </Reference>
+    <Reference Include="Intel.Opaque.Templating">
+      <HintPath>..\Shared Libraries\Intel.Opaque.Templating.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.SqlServer.ConnectionInfo, Version=13.100.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Shared Libraries\Microsoft.SqlServer.ConnectionInfo.dll</HintPath>
