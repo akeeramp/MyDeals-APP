@@ -344,6 +344,14 @@ namespace Intel.MyDeals.BusinessRules
                             break;
                         }
                     }
+                    else
+                    {
+                        if (validContractProducts[i] != newprodCategory)
+                        {
+                            BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid.");
+                            break;
+                        }
+                    }
                 }
             }
         }
@@ -689,7 +697,7 @@ namespace Intel.MyDeals.BusinessRules
             List<IOpDataElement> changedIncreaseDes = r.Dc.GetDataElementsWhere(d => onChangeIncreaseItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged && d.IsValueIncreasedFromOrig(atrbMstr)).ToList();
 
             // if not a major change... exit
-	        if (!changedDes.Any() && !changedIncreaseDes.Any() && r.Dc.DcID > 0) return;
+            if (!changedDes.Any() && !changedIncreaseDes.Any() && r.Dc.DcID > 0) return;
 
             // Define redeal reason
             var reason = "Redeal due to major change: \n";
@@ -872,27 +880,27 @@ namespace Intel.MyDeals.BusinessRules
             ValidateTieredAttribute(AttributeCodes.STRT_VOL.ToString(), "Start Volume must be greater than 0.", IsGreaterThanZero, r);
         }
 
-		public static void ValidateTierEndVol(params object[] args)
-		{
-			MyOpRuleCore r = new MyOpRuleCore(args);
-			if (!r.IsValid) return;
-			ValidateTieredAttribute(AttributeCodes.END_VOL.ToString(), "End Volume must be greater than 0.", IsGreaterThanZero, r, true);
-		}
-		
-		public static void ValidateTieredAttribute(string myAtrbCd, string validationMessage, Func<double, bool> validationCondition, MyOpRuleCore r, bool isEndVol=false)
-		{
-			IEnumerable<IOpDataElement> atrbs = r.Dc.GetDataElementsWhere(de => de.AtrbCd == myAtrbCd); // NOTE: "10" is the Tier's dim key. In thoery this shouldn't need to change
-			IOpDataElement atrbWithValidation = atrbs.FirstOrDefault(); // We need to pick only one of the tiered attributes to set validation on, else we'd keep overriding the message value per tier
+        public static void ValidateTierEndVol(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+            ValidateTieredAttribute(AttributeCodes.END_VOL.ToString(), "End Volume must be greater than 0.", IsGreaterThanZero, r, true);
+        }
+
+        public static void ValidateTieredAttribute(string myAtrbCd, string validationMessage, Func<double, bool> validationCondition, MyOpRuleCore r, bool isEndVol = false)
+        {
+            IEnumerable<IOpDataElement> atrbs = r.Dc.GetDataElementsWhere(de => de.AtrbCd == myAtrbCd); // NOTE: "10" is the Tier's dim key. In thoery this shouldn't need to change
+            IOpDataElement atrbWithValidation = atrbs.FirstOrDefault(); // We need to pick only one of the tiered attributes to set validation on, else we'd keep overriding the message value per tier
 
             IOpDataElement deNumTiers = r.Dc.GetDataElement(AttributeCodes.NUM_OF_TIERS);
-		    if (deNumTiers == null) return;
+            if (deNumTiers == null) return;
 
             int numOfTiers = int.Parse(deNumTiers.AtrbValue.ToString());
 
-			// Validate and set validation message if applicable on each tier
-			foreach (IOpDataElement atrb in atrbs)
-			{
-			    int tier = atrb.DimKey.FirstOrDefault().AtrbItemId;
+            // Validate and set validation message if applicable on each tier
+            foreach (IOpDataElement atrb in atrbs)
+            {
+                int tier = atrb.DimKey.FirstOrDefault().AtrbItemId;
 
                 if (tier <= numOfTiers)
                 {
@@ -908,8 +916,8 @@ namespace Intel.MyDeals.BusinessRules
                         continue;
                     }
 
-				    double safeParse = 0;
-				    bool isNumber = Double.TryParse(atrb.AtrbValue.ToString(), out safeParse);
+                    double safeParse = 0;
+                    bool isNumber = Double.TryParse(atrb.AtrbValue.ToString(), out safeParse);
 
                     if (!isNumber)
                     {
@@ -950,13 +958,13 @@ namespace Intel.MyDeals.BusinessRules
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
-			IOpDataElement myRebateType = r.Dc.GetDataElement(AttributeCodes.REBATE_TYPE);
-			IOpDataElement totalDollarObj = r.Dc.GetDataElement(AttributeCodes.TOTAL_DOLLAR_AMOUNT);
-			double totalDollarAmount = 0;
+            IOpDataElement myRebateType = r.Dc.GetDataElement(AttributeCodes.REBATE_TYPE);
+            IOpDataElement totalDollarObj = r.Dc.GetDataElement(AttributeCodes.TOTAL_DOLLAR_AMOUNT);
+            double totalDollarAmount = 0;
 
             if (totalDollarObj == null || myRebateType == null) return;
 
-			Double.TryParse(totalDollarObj.AtrbValue.ToString(), out totalDollarAmount);
+            Double.TryParse(totalDollarObj.AtrbValue.ToString(), out totalDollarAmount);
 
             if (myRebateType.AtrbValue.ToString().Equals("DEBIT MEMO", StringComparison.OrdinalIgnoreCase))
             {

@@ -861,7 +861,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
                         var isValid = validCrossVerticals(product);
                         if (isValid) {
                             vm.ProductCorrectorData.ValidProducts[vm.curRowId][vm.invalidProdName].push(product);
-                        }                        
+                        }
                     });
                 }
 
@@ -1033,7 +1033,10 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
     vm.getPrductDetails = function (dataItem, priceCondition) {
         var currentPricingTableRow = [];
         if (ProductRows.length > 1) {
-            currentPricingTableRow = ProductRows[vm.issueRowKeys[vm.curRowIndx - 1] - 1];
+            currentPricingTableRow = $linq.Enumerable().From(ProductRows)
+                                                .Where(function (x) {
+                                                    return (x.ROW_NUMBER == vm.issueRowKeys[vm.curRowIndx - 1]);
+                                                }).ToArray()[0];
         }
         else {
             currentPricingTableRow = ProductRows[0];
@@ -1052,7 +1055,10 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
     vm.openCAPBreakOut = function (dataItem, priceCondition) {
         var currentPricingTableRow = [];
         if (ProductRows.length > 1) {
-            currentPricingTableRow = ProductRows[vm.issueRowKeys[vm.curRowIndx - 1] - 1];
+            currentPricingTableRow = $linq.Enumerable().From(ProductRows)
+                                                .Where(function (x) {
+                                                    return (x.ROW_NUMBER == vm.issueRowKeys[vm.curRowIndx - 1]);
+                                                }).ToArray()[0];
         }
         else {
             currentPricingTableRow = ProductRows[0];
