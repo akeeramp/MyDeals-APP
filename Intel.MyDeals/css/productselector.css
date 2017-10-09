@@ -324,10 +324,6 @@ a.prdAnchor {
     border-radius: 2px;
 }
 
-.drillDown .checkbox-custom:hover + .checkbox-custom-label:before {
-    border: 1.5px solid #797979;
-}
-
 .drillDown .checkbox-custom:checked + .checkbox-custom-label:before {
     background: #797979;
 }
@@ -436,7 +432,7 @@ span.productSelector.prdAnchor:hover {
     height: 100%;
 }
 
-input[type=checkbox].with-font {
+input[type=checkbox].with-sm-font {
     border: 0;
     clip: rect(0 0 0 0);
     height: 1px;
@@ -447,7 +443,7 @@ input[type=checkbox].with-font {
     width: 1px;
 }
 
-    input[type=checkbox].with-font + label:before {
+    input[type=checkbox].with-sm-font + label:before {
         font-family: FontAwesome;
         display: inline-block;
         content: "\f096";
@@ -463,17 +459,17 @@ input[type=checkbox].with-font {
         background: #fff;
     }
 
-    input[type=checkbox].with-font:hover + label:before {
+    input[type=checkbox].with-sm-font:hover + label:before {
         color: #9bc600;
         cursor: pointer;
     }
 
-    input[type=checkbox].with-font.disabled + label:before {
+    input[type=checkbox].with-sm-font.disabled + label:before {
         color: #cccccc;
         cursor: default;
     }
 
-    input[type=checkbox].with-font:checked + label:before {
+    input[type=checkbox].with-sm-font:checked + label:before {
         content: "\f046";
         font-size: 18px;
         margin-left: 10px;
@@ -481,11 +477,11 @@ input[type=checkbox].with-font {
         vertical-align: middle;
     }
 
-    input[type=checkbox].with-font.ckSm:checked + label:before {
+    input[type=checkbox].with-sm-font.ckSm:checked + label:before {
         font-size: 16px;
     }
 
-    input[type=checkbox].with-font:focus + label:before {
+    input[type=checkbox].with-sm-font:focus + label:before {
         font-weight: bold;
     }
 

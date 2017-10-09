@@ -56,7 +56,7 @@
                                             <div class="filterContainer" uib-collapse="vm.isPrdCollapsed">
                                                 <div ng-repeat="item in vm.curRowIssues | orderBy: 'name'" style="max-height: 20px;">
                                                     <div ng-if="item.cnt > 0">
-                                                        <input type='checkbox' ng-click="vm.clickFilter()" ng-model="item.selected" class='check ckSm with-font' id="fltrPrdChk{{item.id}}" />
+                                                        <input type='checkbox' ng-click="vm.clickFilter()" ng-model="item.selected" class='check ckSm with-sm-font' id="fltrPrdChk{{item.id}}" />
                                                         <label for="fltrPrdChk{{item.id}}">
                                                             <span ng-bind-html="item.name"></span>
                                                             <span class="badge upperBadge" ng-if="item.status == 'Issue'">{{ item.cnt == 0 ? "?" : item.cnt }}</span>
@@ -71,7 +71,7 @@
                                             </div>
                                             <div class="filterContainer" uib-collapse="vm.isLvlCollapsed">
                                                 <div ng-repeat="item in vm.curRowLvl | orderBy: 'name'" style="max-height: 20px;">
-                                                    <input type='checkbox' ng-click="vm.clickFilter()" ng-model="item.selected" class='check ckSm with-font' id="fltrLvlChk{{item.id}}" />
+                                                    <input type='checkbox' ng-click="vm.clickFilter()" ng-model="item.selected" class='check ckSm with-sm-font' id="fltrLvlChk{{item.id}}" />
                                                     <label for="fltrLvlChk{{item.id}}">
                                                         <span ng-bind-html="item.name"></span>
                                                     </label>
@@ -85,7 +85,7 @@
                                             <div class="filterContainer" uib-collapse="vm.isCatCollapsed">
                                                 <div ng-repeat="item in vm.curRowCategories | orderBy: 'name'" style="max-height: 20px;">
                                                     <!-- checked='checked' ng-click="onColumnChange(item)" -->
-                                                    <input type='checkbox' ng-click="vm.clickFilter()" ng-model="item.selected" class='check ckSm with-font' id="fltrCatChk{{item.id}}" />
+                                                    <input type='checkbox' ng-click="vm.clickFilter()" ng-model="item.selected" class='check ckSm with-sm-font' id="fltrCatChk{{item.id}}" />
                                                     <label for="fltrCatChk{{item.id}}">
                                                         <span ng-bind-html="item.name"></span>
                                                     </label>
@@ -122,7 +122,7 @@
                             <div class="btn-group" ng-repeat="p in vm.items | orderBy:'name'" role="group">
                                 <div ng-class="{'input-group':p.allowMultiple}">
                                     <span ng-if="p.allowMultiple" ng-class="{'input-group-addon':p.allowMultiple}">
-                                        <input id="{{p.name}}" class="check with-font" ng-click="vm.selectProduct(p)" ng-model="p.selected" type="checkbox">
+                                        <input id="{{p.name}}" class="check with-sm-font" ng-click="vm.selectProduct(p)" ng-model="p.selected" type="checkbox">
                                         <label style="margin-bottom:0px;" for="{{p.name}}"></label>
                                     </span>
                                     <button ng-if="!(vm.selectedPathParts.length < 2)" title="{{p.name}}" type="button" ng-class="{'noborder':$last}" ng-click="vm.selectItem(p)" class="btn btn-default">
@@ -142,7 +142,7 @@
                             <div class="col-sm-3 prodDrillDownLarge" title="{{::vm.checkForBlank(p.name)}}" ng-class="{'noLeftBorder':$index % 4 == 0}">
                                 <div ng-class="{'input-group':p.allowMultiple}" class="drillDown">
                                     <span ng-if="p.allowMultiple" ng-class="{'input-group-addon':p.allowMultiple}">
-                                        <input id="{{p.name}}" class="check with-font" ng-click="vm.selectProduct(p)" ng-model="p.selected" type="checkbox">
+                                        <input id="{{p.name}}" class="check with-sm-font" ng-click="vm.selectProduct(p)" ng-model="p.selected" type="checkbox">
                                         <label style="margin-bottom:0px;" for="{{p.name}}"></label>
                                     </span>
                                     <p role="button" ng-click="vm.selectItem(p)">{{::vm.checkForBlank(p.name)}}</p>
