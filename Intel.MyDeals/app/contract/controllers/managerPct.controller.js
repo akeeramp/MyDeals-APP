@@ -664,12 +664,19 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
         $scope.LAST_COST_TEST_RUN = lastrun.format("MM/DD/YY hh:mm:ss") + " - " + ss;
         $scope.LAST_COST_TEST_RUN_DSPLY = "Last Run: " + Math.round(dsplNum) + dsplMsg;
 
-        if ($scope.needToRunPct) {
-            $scope.root.setBusy("Need to Run Cost Test", "Cost Test hasn't run for a while");
-            $timeout(function () {
-                $scope.$broadcast('runPctMct', {});
-            }, 3000);
-        }
+    } else {
+        // never ran
+        $scope.LAST_COST_TEST_RUN_DSPLY = "Last Run: Never";
+        $scope.needToRunPct = true;
+
+    }
+
+    if ($scope.needToRunPct) {
+        $scope.root.setBusy("Need to Run Cost Test", "Cost Test hasn't run for a while");
+        $timeout(function () {
+            $scope.$broadcast('runPctMct', {});
+            $scope.LAST_COST_TEST_RUN_DSPLY = "";
+        }, 3000);
     }
 
 }

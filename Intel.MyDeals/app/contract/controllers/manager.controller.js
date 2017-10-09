@@ -541,7 +541,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 
         var dsplNum = hh;
         var dsplMsg = " hours ago";
-        $scope.needToRunPct = dsplNum > 2 ? true: false;
+        $scope.needToRunPct = dsplNum > 2 ? true : false;
 
         if (dsplNum < 1) {
             dsplNum = mm;
@@ -557,12 +557,17 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         $scope.LAST_COST_TEST_RUN = lastrun.format("MM/DD/YY hh:mm:ss") + " - " + ss;
         $scope.LAST_COST_TEST_RUN_DSPLY = "Last Run: " + Math.round(dsplNum) + dsplMsg;
 
-        if ($scope.needToRunPct) {
-            $scope.root.setBusy("Need to Run Cost Test", "Cost Test hasn't run for a while");
-            $timeout(function () {
-                $scope.$broadcast('runPctMct', {});
-            }, 3000);
-        }
+    } else {
+        // never ran
+        $scope.LAST_COST_TEST_RUN_DSPLY = "Last Run: Never";
+        $scope.needToRunPct = true;
+    }
+
+    if ($scope.needToRunPct) {
+        $scope.root.setBusy("Need to Run Cost Test", "Cost Test hasn't run for a while");
+        $timeout(function () {
+            $scope.$broadcast('runPctMct', {});
+        },3000);
     }
 
 }
