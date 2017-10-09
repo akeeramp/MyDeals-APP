@@ -58,7 +58,7 @@ function securityEngineDrawDeals($http, lookupsService, $compile, $templateCache
 					var myActnCd = $filter('filter')(vm.dropDownDatasource.actions, { dropdownID: parseInt(atrbId) }, true)[0];
 					actnCd = (myActnCd ? myActnCd.dropdownName : -1);
 					mappingKey = atrbCd;
-					var dummyAttr = $filter('filter')(vm.dropDownDatasource.attributes, { ATRB_COL_NM: dummyAttrName }, true)[0] //quickfix: changed to attributes["CNTRCT"], but not sure if that is ok - all the attributes at different levels have the same dummyAttrName ID (90001) so perhaps it is ok?
+					var dummyAttr = $filter('filter')(vm.dropDownDatasource.attributes["CNTRCT"], { ATRB_COL_NM: dummyAttrName }, true)[0] //quickfix: changed to attributes["CNTRCT"], but not sure if that is ok - all the attributes at different levels have the same dummyAttrName ID (90001) so perhaps it is ok?
 				    newAtrbId = dummyAttr.ATRB_SID;
 					newAtrbCd = dummyAttrName;
 				}
