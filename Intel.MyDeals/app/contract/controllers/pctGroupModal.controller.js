@@ -8,9 +8,6 @@ function pctGroupModalCtrl($scope, $uibModalInstance, dataItems) {
 
     $scope.curData = dataItems;
 
-    // TODO remove after 
-    $scope.curData[0].EXCLD_DEAL_FLAG = 1;
-
     for (var d = 0; d < $scope.curData.length; d++) {
         $scope.curData[d].EXCLD_DEAL_FLAG = $scope.curData[d].EXCLD_DEAL_FLAG === 1;
     }
