@@ -1,13 +1,13 @@
 ﻿<div class="col-md-12" style="margin-top: 15px;">
     <input id="searchField" placeholder="Search for contract name or number" style="border-color: #b1babf; width: 80%; padding: 2px; height: 36px;" class="k-textbox" ng-model="searchText">
-    <button id="searchButton" class="btn btn-default" type="button" ng-click="vm.searchAll()" style="padding: 2px 8px 0 8px; border: 1px solid transparent;">
+    <button id="searchButton" class="btn btn-default" type="button" ng-click="googleStyleSearch()" style="padding: 2px 8px 0 8px; border: 1px solid transparent;">
         <i class="intelicon-search-stack-solid" style="font-size: 30px;"></i>
     </button>
     <!--<button ng-click="resetSearch()" style="display: none;">Reset</button>-->      
 </div>
-<!--<div class="col-md-12">
-        <div kendo-grid="customerGrid" class="table" expand-k-grid options="vm.gridOptions"></div>
-</div>-->
+<div class="col-md-12">
+        <div kendo-grid="searchGrid" class="table" expand-k-grid options="gridOptions"></div>
+</div>
 
 <!--<div>
     Hello Val from AdvancedSearch.html
