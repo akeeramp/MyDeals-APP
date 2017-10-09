@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.DataLibrary.OpDataCollectors;
 using Intel.MyDeals.Entities;
-using Intel.Opaque;
 using Intel.Opaque.Data;
 
 namespace Intel.MyDeals.BusinessRules
@@ -22,7 +22,7 @@ namespace Intel.MyDeals.BusinessRules
             if (de == null) return;
             bool result = new OpDataCollectorValidationDataLib().IsDuplicateTitle(de.DcType.IdToOpDataElementTypeString(), de.DcID, de.DcParentID, de.AtrbValue.ToString());
             if (result)
-                BusinessLogicDeActions.AddValidationMessage(de, args[0]);
+                de.AddMessage(args[0]);
         }
 
         public static void CheckInitialWorkFlow(this IOpDataElement de, params object[] args)
@@ -84,7 +84,7 @@ namespace Intel.MyDeals.BusinessRules
                     string posMatch = validGeoValues.Where(g => g.ToUpper() == geo.ToUpper()).Select(g => g).FirstOrDefault();
                     if (string.IsNullOrEmpty(posMatch))
                     {
-                        BusinessLogicDeActions.AddValidationMessage(de, geo + " is not a valid Geo.");
+                        de.AddMessage(geo + " is not a valid Geo.");
                     }
                     else
                     {
@@ -102,7 +102,7 @@ namespace Intel.MyDeals.BusinessRules
 
                 if (isWorldWideInsideBlended)
                 {
-                    BusinessLogicDeActions.AddValidationMessage(de, ww + " cannot be mixed with other geos in a blend geo.");
+                    de.AddMessage(ww + " cannot be mixed with other geos in a blend geo.");
                 }
             }
 
@@ -124,7 +124,7 @@ namespace Intel.MyDeals.BusinessRules
                 geo = t_regions[i].Split('/')[0].Trim();
                 if (geos.Contains(geo))
                 {
-                    BusinessLogicDeActions.AddValidationMessage(de, geo + " can only have one associated target region.");
+                    de.AddMessage(geo + " can only have one associated target region.");
                 }
                 else
                 {
@@ -152,7 +152,7 @@ namespace Intel.MyDeals.BusinessRules
             {
                 BasicDropdown dbSeg = allSegs.FirstOrDefault(m => m.DROP_DOWN.ToUpper() == userMrktSegs[s].ToUpper());
                 if (dbSeg == null)  //no match
-                    BusinessLogicDeActions.AddValidationMessage(de, userMrktSegs[s] + " is not a valid Market Segment.");
+                    de.AddMessage(userMrktSegs[s] + " is not a valid Market Segment.");
                 else
                 {
                     if (dbSeg.DROP_DOWN != null && userMrktSegs[s] != dbSeg.DROP_DOWN) //if we found a match but the user input is spelled punctuated differently (no ToUpper())
@@ -165,7 +165,7 @@ namespace Intel.MyDeals.BusinessRules
             //"ALL" check
             if (userMrktSegs.Count > 1 && userMrktSegs.Contains("All"))
             {
-                BusinessLogicDeActions.AddValidationMessage(de, "Market Segment ALL cannot be blended with any other Market Segment");
+                de.AddMessage("Market Segment ALL cannot be blended with any other Market Segment");
             }
 
             //"Embedded" check
@@ -175,7 +175,7 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     if (validMrktEmbSubseg.FirstOrDefault(mrkt => mrkt.DROP_DOWN == seg) != null)
                     {
-                        BusinessLogicDeActions.AddValidationMessage(de, "Embedded Market Segments cannot be blended with any other market segment.");
+                        de.AddMessage("Embedded Market Segments cannot be blended with any other market segment.");
                     }
                 }
             }
@@ -194,11 +194,28 @@ namespace Intel.MyDeals.BusinessRules
                 //}
 
                 //New requirement: "NON Corp" should not be put into spreadsheet if selected in kendo tree view.  It should only include non corp market segments, not "Non Corp" itself
-                BusinessLogicDeActions.AddValidationMessage(de, "'Non Corp' should not be individually selectable.");
+                de.AddMessage("'Non Corp' should not be individually selectable.");
             }
 
             string newVal = string.Join(", ", userMrktSegs);
             de.AtrbValue = newVal;
+        }
+
+        public static void AddMessage(this IOpDataElement de, params object[] args)
+        {
+            if (de == null || args == null || args.Length != 1) return;
+
+            string cd = de.AtrbCd;
+
+            FieldInfo fieldInfo = typeof(Attributes).GetField(de.AtrbCd);
+            if (fieldInfo != null)
+            {
+                cd = ((MyDealsAttribute)fieldInfo.GetValue(null)).ATRB_LBL;
+            }
+
+            var msg = string.Format(args[0].ToString(), cd);
+            if (de.ValidationMessage.IndexOf(msg, StringComparison.Ordinal) < 0)
+                de.ValidationMessage += msg + "\n";
         }
 
     }

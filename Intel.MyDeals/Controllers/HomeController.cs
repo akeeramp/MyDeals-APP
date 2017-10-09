@@ -1,5 +1,13 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Mail;
+using System.Reflection;
+using System.Web.Mvc;
 using Intel.MyDeals.App;
+using Intel.MyDeals.Entities;
 
 namespace Intel.MyDeals.Controllers
 {

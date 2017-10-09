@@ -55,6 +55,11 @@ function btnRunPctMct(logger, objsetService, $timeout) {
                 );
             }
 
+            $scope.$on('runPctMct', function (event, args) {
+                $scope.executePct();
+            });
+
+
         }],
         link: function (scope, element, attr) {
         }

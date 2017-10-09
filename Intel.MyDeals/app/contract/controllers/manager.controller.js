@@ -16,6 +16,26 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
     $scope.canEdit = true;
     $scope.canFilterDealTypes = false;
     $scope.$parent.isSummaryHidden = false;
+    $scope.hideIfNotPending = root.contractData.CUST_ACCPT !== "Pending";
+    $scope.pendingWarningActions = [];
+    $scope.showPendingInfo = true;
+    $scope.showPendingFile = false;
+    $scope.showPendingC2A = false;
+    $scope.needToRunPct = false;
+
+    $scope.showPending = function (page) {
+        $scope.showPendingInfo = false;
+        $scope.showPendingFile = false;
+        $scope.showPendingC2A = false;
+        if (page === "showPendingInfo") {
+            $scope.showPendingInfo = true;
+        } else if (page === "showPendingFile") {
+            $scope.showPendingFile = true;
+        } else if (page === "showPendingC2A") {
+            $scope.showPendingC2A = true;
+        }
+
+    }
 
     $timeout(function () {
         $("#timelineDiv").removeClass("active");
@@ -26,6 +46,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
     }, 50);
 
     // loop through data and setup deal types for faster sorting
+    var hasPendingStage = false;
     for (var s = 0; s < root.contractData.PRC_ST.length; s++) {
         var sItem = root.contractData.PRC_ST[s];
         sItem.dealType = [];
@@ -34,8 +55,14 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
                 var ptItem = sItem.PRC_TBL[pt];
                 sItem.dealType.push(ptItem.OBJ_SET_TYPE_CD);
             }
+
+            //$scope.hideIfNotPending
+        }
+        if (sItem.WF_STG_CD === "Pending") {
+            hasPendingStage = true;
         }
     }
+    $scope.hideIfNotPending = !hasPendingStage;
 
     $scope.canAction = function (actn, dataItem, isExists) {
         return dataItem._actions[actn] !== undefined && (isExists || dataItem._actions[actn] === true);
@@ -113,6 +140,15 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 
     }
     
+    $scope.isPending = root.contractData.CUST_ACCPT === "Pending";
+    $scope.pendingChange = function() {
+        if ($scope.isPending) {
+            root.contractData.CUST_ACCPT = "Pending";
+        } else {
+            root.contractData.CUST_ACCPT = "Accepted";
+        }
+    }
+
     $scope.deleteContract = function () {
 
         // TODO need to check if there are any tracker numbers
@@ -331,6 +367,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
     function getActionItems(data, dataItem, actn, actnText) {
         var ids = [];
         var items = $(".psCheck-" + actn);
+
         for (var i = 0; i < items.length; i++) {
             if (items[i].checked) {
                 var item = getItem(items[i], actnText);
@@ -343,8 +380,64 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
     }
 
     $scope.actionItems = function () {
+        // look for checked ending
+        var ps = root.contractData.PRC_ST;
+        for (var p = 0; p < ps.length; p++) {
+            if (ps[p].WF_STG_CD === "Pending" && $("#rad_approve_" + ps[p].DC_ID)[0].checked) {
+                $scope.isPending = false;
+                root.contractData.CUST_ACCPT = "Accepted";
+            }
+        }
+
+        if ($scope.isPending === false && root.contractData.CUST_ACCPT !== "Pending" && (root.contractData.C2A_DATA_C2A_ID === "" && !root.contractData.HasFiles)) {
+            $scope.dialogPendingWarning.open();
+        } else {
+            $scope.actionItemsBase();
+        };
+    }
+
+
+
+    $scope.onSuccess = function (e) {
+        root.contractData.HasFiles = true;
+    }
+    $scope.fileUploadOptions = { saveUrl: '/FileAttachments/Save', autoUpload: true };
+    $scope.filePostAddParams = function (e) {
+        e.data = {
+            custMbrSid: root.contractData.CUST_MBR_SID,
+            objSid: root.contractData.DC_ID, // Contract
+            objTypeSid: 1
+        }
+    };
+
+
+
+
+    $scope.closeDialog = function () {
+        $scope.dialogPendingWarning.close();
+    }
+    $scope.continueAction = function (saveContract) {
+        if (!root.contractData.HasFiles && root.contractData.C2A_DATA_C2A_ID.trim() === "") return;
+        $scope.dialogPendingWarning.close();
+
+        if (!!saveContract && saveContract === true) {
+            root.quickSaveContract($scope.actionItemsBase, true);
+        } else {
+            $scope.actionItemsBase(true);
+        }
+    }
+    $scope.actionItemsBase = function (approvePending) {
         var data = {};
         var dataItems = [];
+
+        if (!!approvePending && approvePending === true) {
+            var ps = root.contractData.PRC_ST;
+            for (var p = 0; p < ps.length; p++) {
+                if (ps[p].WF_STG_CD === "Pending") {
+                    $("#rad_approve_" + ps[p].DC_ID)[0].checked = true;
+                }
+            }
+        }
 
         getActionItems(data, dataItems, "Approve", "Send for Approval");
         getActionItems(data, dataItems, "Revise", "Send for Revision");
@@ -427,6 +520,50 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
     });
 
 
+    $scope.refreshContract = function () {
+        root.refreshContractData();
+        $scope.LAST_COST_TEST_RUN_DSPLY = '&nbsp;';
+    }
     $scope.clearFilter();
+
+    if (!!$scope.root.contractData.LAST_COST_TEST_RUN) {
+        moment.tz.add('America/Los_Angeles|PST PDT|80 70|0101|1Lzm0 1zb0 Op0');
+        var now = moment.tz(new Date(), "America/Los_Angeles");
+        var lastrun = moment($scope.root.contractData.LAST_COST_TEST_RUN);
+
+        var t1 = now.format("MM/DD/YY hh:mm:ss");
+        var t2 = lastrun.format("MM/DD/YY hh:mm:ss");
+
+        var timeDiff = moment.duration(moment(t2).diff(moment(t1)));
+        var hh = Math.abs(timeDiff.asHours());
+        var mm = Math.abs(timeDiff.asMinutes());
+        var ss = Math.abs(timeDiff.asSeconds());
+
+        var dsplNum = hh;
+        var dsplMsg = " hours ago";
+        $scope.needToRunPct = dsplNum > 2 ? true: false;
+
+        if (dsplNum < 1) {
+            dsplNum = mm;
+            dsplMsg = " mins ago";
+            $scope.needToRunPct = false;
+        }
+        if (dsplNum < 1) {
+            dsplNum = ss;
+            dsplMsg = " secs ago";
+            $scope.needToRunPct = false;
+        }
+
+        $scope.LAST_COST_TEST_RUN = lastrun.format("MM/DD/YY hh:mm:ss") + " - " + ss;
+        $scope.LAST_COST_TEST_RUN_DSPLY = "Last Run: " + Math.round(dsplNum) + dsplMsg;
+
+        if ($scope.needToRunPct) {
+            $scope.root.setBusy("Need to Run Cost Test", "Cost Test hasn't run for a while");
+            $timeout(function () {
+                $scope.$broadcast('runPctMct', {});
+            }, 3000);
+        }
+    }
+
 }
 })();

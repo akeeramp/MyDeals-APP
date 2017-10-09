@@ -21,7 +21,7 @@ namespace Intel.MyDeals.BusinessLogic
         }
 
 
-        public MyDealsData SavePackets(OpDataCollectorFlattenedDictList data, ContractToken contractToken, List<int> validateIds, bool forcePublish, string sourceEvent,
+        public MyDealsData SavePackets(OpDataCollectorFlattenedDictList data, ContractToken contractToken, List<int> validateIds, bool forcePublish, string sourceEvent, bool resetValidationChild,
             List<int> ids, List<OpDataElementType> opDataElementTypes, OpDataElementType opTypeGrp,
             List<int> secondaryIds, List<OpDataElementType> secondaryOpDataElementTypes, OpDataElementType secondaryOpTypeGrp)
         {
@@ -58,10 +58,10 @@ namespace Intel.MyDeals.BusinessLogic
                 }
             }
 
-            return myDealsData.SavePacketsBase(data, contractToken, validateIds, forcePublish, sourceEvent);
+            return myDealsData.SavePacketsBase(data, contractToken, validateIds, forcePublish, sourceEvent, resetValidationChild);
         }
 
-        public MyDealsData SavePackets(OpDataCollectorFlattenedDictList data, ContractToken contractToken, List<int> validateIds, bool forcePublish, string sourceEvent)
+        public MyDealsData SavePackets(OpDataCollectorFlattenedDictList data, ContractToken contractToken, List<int> validateIds, bool forcePublish, string sourceEvent, bool resetValidationChild)
         {
             List<int> ids;
             List<OpDataElementType> opDataElementTypes;
@@ -73,7 +73,7 @@ namespace Intel.MyDeals.BusinessLogic
             // Get the data from the DB, data is the data passed from the UI, it is then merged together down below.
             MyDealsData myDealsData = opTypeGrp.GetByIDs(ids, opDataElementTypes, data);
 
-            return myDealsData.SavePacketsBase(data, contractToken, validateIds, forcePublish, sourceEvent);
+            return myDealsData.SavePacketsBase(data, contractToken, validateIds, forcePublish, sourceEvent, resetValidationChild);
         }
 
 

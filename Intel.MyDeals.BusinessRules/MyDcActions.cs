@@ -204,19 +204,19 @@ namespace Intel.MyDeals.BusinessRules
             }
             catch (Exception ex)
             {
-                BusinessLogicDeActions.AddValidationMessage(dePrdUsr, "Unable to read the selected products.  Please use the Product Selector to fix the issue.");
+                dePrdUsr.AddMessage("Unable to read the selected products.  Please use the Product Selector to fix the issue.");
                 return;
             }
 
             if (!items.Any())
             {
-                BusinessLogicDeActions.AddValidationMessage(dePrdUsr, "Product select did not result in any products.");
+                dePrdUsr.AddMessage("Product select did not result in any products.");
                 return;
             }
 
             if (!string.IsNullOrEmpty(prdJsonIvalid))
             {
-                BusinessLogicDeActions.AddValidationMessage(dePrdUsr, "Product select has some invalid products.");
+                dePrdUsr.AddMessage("Product select has some invalid products.");
                 return;
             }
             if (r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD) == OpDataElementSetType.ECAP.ToString())
@@ -227,7 +227,7 @@ namespace Intel.MyDeals.BusinessRules
                     {
                         if (string.IsNullOrEmpty(prodMapping.PRD_MBR_SID))
                         {
-                            BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"User entered product ({kvp.Key}) is unable to locate product ({prodMapping.HIER_VAL_NM})");
+                            dePrdUsr.AddMessage($"User entered product ({kvp.Key}) is unable to locate product ({prodMapping.HIER_VAL_NM})");
                         }
 
                         if (r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD) == OpDataElementSetType.ECAP.ToString())
@@ -237,7 +237,7 @@ namespace Intel.MyDeals.BusinessRules
                             double cap;
                             if (!double.TryParse(prodMapping.CAP, out cap) && prodMapping.CAP.IndexOf("-") >= 0)
                             {
-                                BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"Product ({prodMapping.HIER_VAL_NM}) CAP price ({prodMapping.CAP}) cannot be a range.");
+                                dePrdUsr.AddMessage($"Product ({prodMapping.HIER_VAL_NM}) CAP price ({prodMapping.CAP}) cannot be a range.");
                             }
 
                             //double ecap;
@@ -332,7 +332,7 @@ namespace Intel.MyDeals.BusinessRules
                     {
                         if (!productCombination1.ContainsKey(newprodCategory))
                         {
-                            BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid.");
+                            dePrdUsr.AddMessage($"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid.");
                             break;
                         }
                     }
@@ -340,7 +340,7 @@ namespace Intel.MyDeals.BusinessRules
                     {
                         if (!productCombination2.ContainsKey(newprodCategory))
                         {
-                            BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid.");
+                            dePrdUsr.AddMessage($"The product combination ({validContractProducts[i]},{newprodCategory}) is not valid.");
                             break;
                         }
                     }
@@ -399,7 +399,7 @@ namespace Intel.MyDeals.BusinessRules
             }
 
             if (foundMisMatch)
-                BusinessLogicDeActions.AddValidationMessage(deUserCustDivs, "Please enter a valid value.");
+                deUserCustDivs.AddMessage("Please enter a valid value.");
         }
 
         //Mikes New Rule
@@ -533,7 +533,7 @@ namespace Intel.MyDeals.BusinessRules
                 string matchedValue = dropDowns.Where(d => d.ToUpper() == de.AtrbValue.ToString().ToUpper()).Select(d => d).FirstOrDefault();
                 if (string.IsNullOrEmpty(matchedValue))
                 {
-                    BusinessLogicDeActions.AddValidationMessage(de, "Please enter a valid value.");
+                    de.AddMessage("Please enter a valid value.");
                 }
                 else
                 {
@@ -564,11 +564,11 @@ namespace Intel.MyDeals.BusinessRules
 
             if (string.IsNullOrEmpty(deBllgStart.AtrbValue.ToString()) || DateTime.Parse(deBllgStart.AtrbValue.ToString()).Date > dcSt)
             {
-                BusinessLogicDeActions.AddValidationMessage(deBllgStart, "The Billing Start Date must be on or earlier than the Deal Start Date.");
+                deBllgStart.AddMessage("The Billing Start Date must be on or earlier than the Deal Start Date.");
             }
             if (string.IsNullOrEmpty(deBllgEnd.AtrbValue.ToString()) || DateTime.Parse(deBllgEnd.AtrbValue.ToString()).Date > dcEn)
             {
-                BusinessLogicDeActions.AddValidationMessage(deBllgEnd, "The Billing End Date must be on or earlier than the Deal End Date.");
+                deBllgEnd.AddMessage("The Billing End Date must be on or earlier than the Deal End Date.");
             }
         }
 
@@ -584,7 +584,7 @@ namespace Intel.MyDeals.BusinessRules
 
             if (payout != "Billings" && progPayment != "Backend")
             {
-                BusinessLogicDeActions.AddValidationMessage(de, "Frontend Deals cannot be Consumption.");
+                de.AddMessage("Frontend Deals cannot be Consumption.");
             }
         }
 
@@ -599,14 +599,14 @@ namespace Intel.MyDeals.BusinessRules
             if (de == null || de.AtrbValue.ToString() == "") return;
             if (de.AtrbValue.ToString() != "" && progPayment != "Backend")
             {
-                BusinessLogicDeActions.AddValidationMessage(de, "Volume cannot be set for Frontend Deals.");
+                de.AddMessage("Volume cannot be set for Frontend Deals.");
                 return;
             }
 
             int vol;
             if (!int.TryParse(de.AtrbValue.ToString(), out vol))
             {
-                BusinessLogicDeActions.AddValidationMessage(de, "Volume must be a valid non-decimal number.");
+                de.AddMessage("Volume must be a valid non-decimal number.");
             }
         }
 
@@ -623,9 +623,9 @@ namespace Intel.MyDeals.BusinessRules
             DateTime today = DateTime.Now.Date;
 
             // Additional validation-for program payment=Front end, the deal st. date can not be past, it should be >= current date
-            if (progPayment.Contains("rontend") && startDate < today)
+            if (progPayment.Contains("rontend") && startDate < today && !r.Dc.HasTracker())
             {
-                BusinessLogicDeActions.AddValidationMessage(deStart, "The deal start date must be greater or equal to the current date if program payment is Frontend.");
+                deStart.AddMessage("The deal start date must be greater or equal to the current date if program payment is Frontend.");
             }
         }
 
@@ -738,6 +738,13 @@ namespace Intel.MyDeals.BusinessRules
             {
                 OpDataCollector dcRow = myDealsData[OpDataElementType.PRC_TBL_ROW].Data[r.Dc.DcParentID];
                 OpDataCollector dcTbl = myDealsData[OpDataElementType.PRC_TBL].Data[dcRow.DcParentID];
+                if (!myDealsData.ContainsKey(OpDataElementType.PRC_ST))
+                {
+                    myDealsData[OpDataElementType.PRC_ST] = new OpDataCollectorDataLib().GetByIDs(OpDataElementType.PRC_ST, 
+                        new List<int> { dcTbl.DcParentID}, 
+                        new List<OpDataElementType> {OpDataElementType.PRC_ST}, 
+                        new List<int> { Attributes.WF_STG_CD.ATRB_SID })[OpDataElementType.PRC_ST];
+                }
                 OpDataCollector dcSt = myDealsData[OpDataElementType.PRC_ST].Data[dcTbl.DcParentID];
                 dcSt.SetAtrb(AttributeCodes.WF_STG_CD, futureStage);
             }
@@ -761,7 +768,7 @@ namespace Intel.MyDeals.BusinessRules
             double price;
             if (!double.TryParse(deEcapPrice.AtrbValue.ToString(), out price))
             {
-                BusinessLogicDeActions.AddValidationMessage(deEcapPrice, "ECAP Price is not a valid number.");
+                deEcapPrice.AddMessage("ECAP Price is not a valid number.");
                 return;
             }
 
@@ -769,17 +776,17 @@ namespace Intel.MyDeals.BusinessRules
             if (ecapType == null) return;
             if (ecapType.ToString() == string.Empty)
             {
-                BusinessLogicDeActions.AddValidationMessage(ecapType, "Rebate Type must be filled out.");
+                ecapType.AddMessage("Rebate Type must be filled out.");
                 return;
             }
 
             if (ecapType.AtrbValue.ToString() == "SEED" && price < 0)
             {
-                BusinessLogicDeActions.AddValidationMessage(deEcapPrice, "ECAP Price for SEED must not be negative.");
+                deEcapPrice.AddMessage("ECAP Price for SEED must not be negative.");
             }
             else if (ecapType.AtrbValue.ToString() != "SEED" && price <= 0)
             {
-                BusinessLogicDeActions.AddValidationMessage(deEcapPrice, "ECAP Price must be a positive number.");
+                deEcapPrice.AddMessage("ECAP Price must be a positive number.");
             }
         }
 
@@ -800,6 +807,22 @@ namespace Intel.MyDeals.BusinessRules
             {
                 deBackDate.IsRequired = true;
             }
+        }
+
+        public static void UserDefinedRpuRequired(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            string userMaxRpu = r.Dc.GetDataElementValue(AttributeCodes.USER_MAX_RPU);
+            string userAvgRpu = r.Dc.GetDataElementValue(AttributeCodes.USER_AVG_RPU);
+
+            if (string.IsNullOrEmpty(userMaxRpu) && string.IsNullOrEmpty(userAvgRpu)) return;
+
+            IOpDataElement deRpuComment = r.Dc.GetDataElement(AttributeCodes.RPU_OVERRIDE_CMNT);
+            if (deRpuComment == null) return;
+
+            deRpuComment.IsRequired = true;
         }
 
         #region Voltier Validations
@@ -970,14 +993,14 @@ namespace Intel.MyDeals.BusinessRules
             {
                 if (totalDollarAmount >= 0)
                 {
-                    BusinessLogicDeActions.AddValidationMessage(totalDollarObj, "Total dollar amount must be negative for debit memos.");
+                    totalDollarObj.AddMessage("Total dollar amount must be negative for debit memos.");
                 }
             }
             else
             {
                 if (totalDollarAmount <= 0)
                 {
-                    BusinessLogicDeActions.AddValidationMessage(totalDollarObj, "Total dollar amount must be positive for non-debit memos.");
+                    totalDollarObj.AddMessage("Total dollar amount must be positive for non-debit memos.");
                 }
             }
         }

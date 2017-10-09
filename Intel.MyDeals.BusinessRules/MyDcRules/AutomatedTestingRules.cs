@@ -21,7 +21,7 @@ namespace Intel.MyDeals.BusinessRules
                     {
                         new OpRuleAction<IOpDataElement>
                         {
-                            Action = BusinessLogicDeActions.AddValidationMessage,
+                            Action = MyDeActions.AddMessage,
                             Args = new object[] {"{0} must be positive"},
                             Where = de => de.AtrbCdIn(new List<string> {AttributeCodes.NUM_OF_TIERS}) && de.IsNegativeOrZero()
                         }
@@ -36,7 +36,7 @@ namespace Intel.MyDeals.BusinessRules
                     {
                         new OpRuleAction<IOpDataElement>
                         {
-                            Action = BusinessLogicDeActions.AddValidationMessage,
+                            Action = MyDeActions.AddMessage,
                             Args = new object[] {"{0} must be no more than 20 characters."},
                             Where = de => de.AtrbCdIn(new List<string> {AttributeCodes.TITLE}) && de.ExceedsMaxLength(20)
                         }

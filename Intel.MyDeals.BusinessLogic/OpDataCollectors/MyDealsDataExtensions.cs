@@ -360,7 +360,7 @@ namespace Intel.MyDeals.BusinessLogic
                 
                 // TODO make this a rule
                 // Since this is a DB call, we don't want to do this for EVERY data collector individually
-                myDealsData.TagWithAttachments(dpObjSet);
+                myDealsData.TagWithAttachments(dpObjSet, opType);
             }
 
             //Get Products
@@ -382,9 +382,10 @@ namespace Intel.MyDeals.BusinessLogic
 
         #region Attachments
 
-        public static List<int> GetDealIdsWithAttachments(this MyDealsData myDealsData)
+        public static List<int> GetDealIdsWithAttachments(this MyDealsData myDealsData, OpDataElementType opType)
         {
-            if (! myDealsData.ContainsKey(OpDataElementType.WIP_DEAL)) 
+            // TODO make this work with opType... this means changing the SP also.  For mow just look at deal
+            if (!myDealsData.ContainsKey(OpDataElementType.WIP_DEAL)) 
 				return new List<int>();
 
             // Get the list of *all* deals that have attachments.
@@ -397,11 +398,11 @@ namespace Intel.MyDeals.BusinessLogic
             return dealsInQuestion.Where(x => allDealsWithAttachments.Select(y => y.OBJ_SID).ToList().Contains(x)).ToList();
         }
 
-        public static void TagWithAttachments(this MyDealsData myDealsData, OpDataPacket<OpDataElementType> opDataPacket)
+        public static void TagWithAttachments(this MyDealsData myDealsData, OpDataPacket<OpDataElementType> opDataPacket, OpDataElementType opType)
         {
 
             // TODO needs to be revisited... this should be OpDataElementType based
-            List<int> dataCollectorsWithFiles = myDealsData.GetDealIdsWithAttachments();
+            List<int> dataCollectorsWithFiles = myDealsData.GetDealIdsWithAttachments(opType);
             foreach (OpDataCollector dc in opDataPacket.AllDataCollectors.Where(dc => dataCollectorsWithFiles.Contains(dc.DcID)))
             {
                 OpDataElement de = dc.DataElements.FirstOrDefault();
@@ -674,7 +675,7 @@ namespace Intel.MyDeals.BusinessLogic
             }
         }
 
-        public static bool ValidationApplyRules(this MyDealsData myDealsData, List<int> validateIds, bool forcePublish, string sourceEvent, ContractToken contractToken)
+        public static bool ValidationApplyRules(this MyDealsData myDealsData, List<int> validateIds, bool forcePublish, string sourceEvent, ContractToken contractToken, bool resetValidationChild)
         {
             // Apply rules to save packets here.  If validations are hit, append them to the DC and packet message lists.
             bool dataHasValidationErrors = false;
@@ -1019,7 +1020,7 @@ namespace Intel.MyDeals.BusinessLogic
 
 
 
-        public static MyDealsData SavePacketsBase(this MyDealsData myDealsData, OpDataCollectorFlattenedDictList data, ContractToken contractToken, List<int> validateIds, bool forcePublish, string sourceEvent)
+        public static MyDealsData SavePacketsBase(this MyDealsData myDealsData, OpDataCollectorFlattenedDictList data, ContractToken contractToken, List<int> validateIds, bool forcePublish, string sourceEvent, bool resetValidationChild)
         {
             // Save Data Cycle: Point 9
 
@@ -1027,11 +1028,9 @@ namespace Intel.MyDeals.BusinessLogic
             // Step 1 - get all of the related DEs for each object given a set of object levels (OpDataElementType) and IDs
             // Step 2 - For each OpDataElementType, Merge changes, then validate
 
-
-
             // RUN RULES HERE - If there are validation errors... stop... but we need to save the validation status
             MyDealsData myDealsDataWithErrors = null;
-            bool hasErrors = myDealsData.ValidationApplyRules(validateIds, forcePublish, sourceEvent, contractToken);
+            bool hasErrors = myDealsData.ValidationApplyRules(validateIds, forcePublish, sourceEvent, contractToken, resetValidationChild);
             if (hasErrors)
             {
                 // "Clone" to object...

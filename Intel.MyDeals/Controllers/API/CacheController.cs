@@ -9,7 +9,7 @@ using Intel.MyDeals.IBusinessLogic;
 
 namespace Intel.MyDeals.Controllers.API
 {
-    public class CacheController : ApiController
+    public class CacheController : BaseApiController
     {
         private readonly ICacheLib _cacheLib;
 

@@ -1556,7 +1556,8 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL, OpDataElementType.DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
                 Width = 180,
-                Template = "#=gridUtils.uiControlWrapper(data, 'MAX_RPU')#",
+                Format = "{0:c}",
+                Template = "#=gridUtils.uiControlWrapper(data, 'MAX_RPU', 'currency')#",
                 IsFilterable = true,
                 IsSortable = true
             });
@@ -1568,7 +1569,8 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL, OpDataElementType.DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
                 Width = 180,
-                Template = "#=gridUtils.uiControlWrapper(data, 'USER_MAX_RPU')#",
+                Format = "{0:c}",
+                Template = "#=gridUtils.uiControlWrapper(data, 'USER_MAX_RPU', 'currency')#",
                 IsFilterable = true,
                 IsSortable = true
             });
@@ -1580,7 +1582,8 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL, OpDataElementType.DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
                 Width = 180,
-                Template = "#=gridUtils.uiControlWrapper(data, 'AVG_RPU')#",
+                Format = "{0:c}",
+                Template = "#=gridUtils.uiControlWrapper(data, 'AVG_RPU', 'currency')#",
                 IsFilterable = true,
                 IsSortable = true
             });
@@ -1592,7 +1595,8 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL, OpDataElementType.DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
                 Width = 180,
-                Template = "#=gridUtils.uiControlWrapper(data, 'USER_AVG_RPU')#",
+                Format = "{0:c}",
+                Template = "#=gridUtils.uiControlWrapper(data, 'USER_AVG_RPU', 'currency')#",
                 IsFilterable = true,
                 IsSortable = true
             });

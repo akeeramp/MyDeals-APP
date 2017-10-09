@@ -24,6 +24,7 @@ namespace Intel.MyDeals
                 "~/Scripts/kendo/kendo.aspnetmvc.min.js",
                 "~/Scripts/jquery.easypiechart.min.js",
                 "~/Scripts/moment.js",
+                "~/Scripts/moment-timezone.js",
                 "~/Scripts/Opaque/OpaqueUtils.js",
                 "~/Scripts/toastr.min.js",
                 "~/Scripts/topbar.min.js",
@@ -41,7 +42,8 @@ namespace Intel.MyDeals
                 "~/Scripts/nv.d3.min.js",
                 "~/Scripts/angular-confirm.min.js",
                 "~/Scripts/base64-string.js",
-                "~/Scripts/lz-string.min.js"
+                "~/Scripts/lz-string.min.js",
+                "~/Scripts/bootstrap-switch.min.js"
                 ));
 
             bundles.Add(new ScriptBundle("~/bundles/angular").Include(
@@ -224,7 +226,8 @@ namespace Intel.MyDeals
                 "~/css/select.min.css",
                 "~/css/select2.min.css",
                 "~/css/nv.d3.min.css",
-                "~/css/angular-gridster.css"
+                "~/css/angular-gridster.css",
+                "~/css/bootstrap-switch.min.css"
                 ));
 
             //"~/Content/kendo/2016.3.914/kendo.office365.min.css",

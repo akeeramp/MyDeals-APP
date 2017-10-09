@@ -59,38 +59,135 @@
                     </td>
                     <td style="width: 50px; text-align: center;"></td>
                     <td>
-                        <span class="k-textbox k-space-left" style="width: 330px; margin-top: -4px;">
-                            <input type="text" placeholder="Search for pricing strategies, tables or names" ng-model="titleFilter" />
+                        <span class="k-textbox k-space-left" style="width: 280px; margin-top: -4px;">
+                            <input type="text" placeholder="Search for pricing strategies or tables" ng-model="titleFilter" />
                             <i class="k-icon intelicon-search" style="font-size: 26px; color: #00AEEF; margin-top: -12px;"></i>
                         </span>
                     </td>
-                    <td style="width: 400px; text-align: right; padding-right: 2px;">
-                        <button class="btn btn-sm btn-negative" ng-id="C_DELETE_CONTRACT" ng-click="deleteContract()" title="Delete the current Contract" ng-show="canEdit" style="margin-top: 6px; margin-left: 5px;">
-                            <table>
-                                <tbody>
-                                <tr>
-                                    <td>
-                                        <i class="intelicon-trash-outlined" aria-hidden="true" style="font-size: 26px"></i>
-                                    </td>
-                                    <td style="padding-left: 5px; text-align: left; color: #ffffff; font-size: 12px; line-height: 1em;">
-                                        Delete<br />Contract
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </button>
-                        <btn-run-pct-mct ng-model="root" contract-id="root.contractData.DC_ID" on-complete="root.refreshContractData" ng-if="CAN_EDIT_COST_TEST" ng-show="canEdit" btn-class="'btn-skyblue'" btn-style="'margin-top: 6px; margin-left: 5px;'"></btn-run-pct-mct>
-                        <button class="btn btn-sm btn-skyblue" ng-click="actionItems()" title="Submit Approval, Revision and Cancel requests" ng-show="canEdit" style="margin-top: 6px; margin-left: 5px;">
+                    <td style="width: 500px; text-align: right; padding-right: 2px;">
+
+                        <button class="fr btn btn-sm btn-skyblue" ng-click="actionItems()" title="Submit Approval, Revision and Cancel requests" ng-show="canEdit" style="margin-top: 6px; margin-left: 5px;">
                             <table>
                                 <tbody>
                                     <tr>
                                         <td>
                                             <i class="fa fa-paper-plane-o" aria-hidden="true" style="font-size: 26px"></i>
                                         </td>
-                                        <td style="padding-left: 5px; text-align: left; color: #ffffff; font-size: 12px; line-height: 1em;">
+                                        <td style="padding-left: 5px; text-align: left; color: #ffffff; font-size: 12px; line-height: 1em;" class="hidden-xs hidden-sm hidden-md">
                                             Submit
                                         </td>
                                     </tr>
+                                </tbody>
+                            </table>
+                        </button>
+
+                        <div class="fr" style="font-size: 10px; line-height: 1.1em; margin: -5px 0 0 6px; text-align: center;" ng-hide="hideIfNotPending" title="click to change Contract Acceptance Criteria">
+                            <div style="color: #888888;">Contract Acceptance</div>
+                            <toggle class="toggle-accept"
+                                    ng-change="pendingChange()"
+                                    ng-model="isPending"
+                                    on="Pending"
+                                    off="Accepted"
+                                    onstyle="btn-success"
+                                    size="btn-md" 
+                                    style="width: 140px !important"></toggle>
+                            <div kendo-dialog="dialogPendingWarning" class="dialogPending"
+                                 k-width="500" k-height="300" k-closable="false" k-visible="false"
+                                 k-actions="pendingWarningActions" k-modal="true">
+                                <div class="wrn-red"><i class="intelicon-information-solid"></i> Correction Required</div>
+                                <div ng-show="showPendingInfo">
+                                    <div style="padding: 15px 25px; height: 190px;">
+                                        <p>A C2A number, link or attachment is required in order to change your contract from Pending to Accepted.
+                                        <div style="text-align: center; margin-top: 34px;">
+                                            <button class="btn btn-sm btn-skyblue" type="button" ng-click="showPending('showPendingFile')"
+                                                    style="margin: 0 20px -30px 20px; width: 110px; height: 100px;">
+                                                <div style="text-align: center;">
+                                                    <div><i class="intelicon-attach-document-outlined" style="font-size: 60px;"></i></div>
+                                                    Add Attachment
+                                                </div>
+                                            </button>
+                                            <button class="btn btn-sm btn-skyblue" type="button" ng-click="showPending('showPendingC2A')"
+                                                    style="margin: 0 20px -30px 20px; width: 110px; height: 100px;">
+                                                <div style="text-align: center;">
+                                                    <div><i class="intelicon-user-approved-selected-outlined" style="font-size: 60px;"></i></div>
+                                                    Add C2A Number
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <button class="btn btn-sm btn-grey" type="button" ng-click="closeDialog()" style="margin: 0 10px -30px 10px; width: 110px;">
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </div>
+                                <div ng-show="showPendingFile">
+                                    <div style="padding: 15px 25px; height: 190px;">
+                                        <input class="fileAttachmentRequired" id="fileUploader"
+                                               type="file" name="files"
+                                               kendo-upload="files"
+                                               k-upload="filePostAddParams"
+                                               k-success="onSuccess"
+                                               k-async="fileUploadOptions" />
+
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <button class="btn btn-sm btn-grey" type="button" 
+                                                ng-class="{'disabled': root.contractData.HasFiles}"
+                                                ng-click="showPending('showPendingInfo')" style="margin: 0 10px -30px 10px; width: 110px;">
+                                            << Back
+                                        </button>
+                                        <button class="btn btn-sm btn-skyblue" type="button"
+                                                ng-class="{'disabled': !root.contractData.HasFiles}"
+                                                ng-click="continueAction(false)" style="margin: 0 10px -30px 10px; width: 110px;">
+                                            Done
+                                        </button>
+                                    </div>
+                                </div>
+                                <div ng-show="showPendingC2A">
+                                    <div style="padding: 15px 25px; height: 190px;">
+                                        <p>A C2A number, link or attachment is required in order to change your contract from Pending to Accepted.
+                                        <p style="margin-top: 60px;">
+                                            C2A# or link to contract:<br />
+                                            <input type="text" placeholder="enter C2A number or link" class="k-input"
+                                                   ng-model="root.contractData.C2A_DATA_C2A_ID" style="width: 280px; padding: 4px;">
+                                            <button class="btn btn-sm btn-skyblue" type="button"
+                                                    ng-class="{'disabled': root.contractData.C2A_DATA_C2A_ID.trim() === ''}"
+                                                    ng-click="continueAction(true)" style="margin: -2px 10px 0 10px; width: 110px;">
+                                                Use C2A Number
+                                            </button>
+                                        </p>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <button class="btn btn-sm btn-grey" type="button" ng-click="showPending('showPendingInfo')" style="margin: 0 10px -30px 10px; width: 110px;">
+                                            << Back
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        
+                        <div class="fr" style="font-size: 10px; line-height: 1.1em; margin: -5px 0 0 6px; text-align: center;" ng-if="CAN_EDIT_COST_TEST" ng-show="canEdit">
+                            <div style="color: #888888;"><span ng-bind-html="LAST_COST_TEST_RUN_DSPLY"></span>&nbsp;</div>
+                            <btn-run-pct-mct ng-model="root" 
+                                             contract-id="root.contractData.DC_ID" 
+                                             on-complete="refreshContract" 
+                                             btn-class="'btn-skyblue'" 
+                                             btn-style="'margin-left: 5px;'"></btn-run-pct-mct>
+                        </div>
+                        
+                        <button class="fr btn btn-sm btn-negative" ng-id="C_DELETE_CONTRACT" ng-click="deleteContract()" title="Delete the current Contract" ng-show="canEdit" style="margin-top: 6px; margin-left: 5px;">
+                            <table>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <i class="intelicon-trash-outlined" aria-hidden="true" style="font-size: 26px"></i>
+                                    </td>
+                                    <td style="padding-left: 5px; text-align: left; color: #ffffff; font-size: 12px; line-height: 1em;" class="hidden-xs hidden-sm hidden-md">
+                                        Delete<br/>Contract
+                                    </td>
+                                </tr>
                                 </tbody>
                             </table>
                         </button>
@@ -346,6 +443,22 @@
         color: #ffffff;
     }
     .btn-skyblue i {
+        font-size: 20px;
+        margin-right: 6px;
+    }
+
+    .btn-grey {
+        background-color: #e4e9ea;
+        border: 1px solid  #e4e9ea;
+        color: #70706e;
+        border-radius: 4px;
+    }
+    .btn-grey:hover {
+        background-color: #00AEEF;
+        border: 1px solid  #00AEEF;
+        color: #ffffff;
+    }
+    .btn-grey i {
         font-size: 20px;
         margin-right: 6px;
     }
@@ -654,4 +767,46 @@
         cursor: default;
     }
 
+    .toggle-accept .toggle {
+        width: 120px !important;
+        border-radius: 4px;
+        height: 39px !important;
+    }
+    .toggle-accept .toggle .btn-success {
+        background-color: #00AEEF;
+        color: #ffffff;
+        font-size: 14px;
+        line-height: 1.7em;
+    }
+    .toggle-accept .toggle .btn-default {
+        background-color: #C4D600;
+        color: #ffffff;
+        font-size: 14px;
+        line-height: 1.7em;
+    }
+    .toggle-accept .toggle .toggle-handle {
+        background-color: #eeeeee;        
+    }
+    .dialogPending.k-content {
+        padding: 0;
+        background-color: #003C71;
+        color: #ffffff;
+        margin-top: -50px !important;
+        height: 310px !important;    
+    }
+    .dialogPending.k-content p {
+        font-size: 14px;
+    }
+    .wrn-red {
+        background-color: #fc3741;
+        color: #ffffff;
+        padding: 4px 10px;
+    }
+    .k-widget.k-upload.k-header {
+        border: 0 solid transparent;
+    }
+    .k-upload-files {
+        height: 110px;
+        overflow: auto;
+    }
 </style>

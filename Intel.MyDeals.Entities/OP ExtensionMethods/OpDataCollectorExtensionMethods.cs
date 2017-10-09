@@ -206,6 +206,11 @@ namespace Intel.MyDeals.Entities
 
         public static bool HasTracker(this OpDataCollector dc)
         {
+            // cover the levels with TRKR_NBR defined
+            var trackers = dc.GetDataElementsWhere(AttributeCodes.TRKR_NBR, d => d.AtrbValue.ToString() != string.Empty);
+            if (trackers != null && trackers.Any()) return true;
+
+            // cover rollup values
             string hasTracker = dc.GetDataElementValue(AttributeCodes.HAS_TRACKER);
             return hasTracker == "1";
         }

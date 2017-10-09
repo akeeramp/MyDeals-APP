@@ -199,6 +199,7 @@
     <Folder Include="Helper Functions\" />
     <Folder Include="ViewModels\" />
     <Folder Include="Views\Base\" />
+    <Folder Include="Views\Email\" />
     <Folder Include="Views\FileUpload\" />
     <Folder Include="Views\Timeline\" />
   </ItemGroup>
@@ -222,6 +223,7 @@
     <Compile Include="Controllers\API\DashboardController.cs" />
     <Compile Include="Controllers\API\EcapTrackerController.cs" />
     <Compile Include="Controllers\API\DropdownController.cs" />
+    <Compile Include="Controllers\API\EmailController.cs" />
     <Compile Include="Controllers\API\FileAttachmentsController.cs" />
     <Compile Include="Controllers\API\ProductCostTestController.cs" />
     <Compile Include="Controllers\API\ProductsCategoriesController.cs" />
@@ -246,6 +248,7 @@
     <Compile Include="Controllers\CodingPracticesController.cs" />
     <Compile Include="Controllers\API\SecurityAttributesController.cs" />
     <Compile Include="Controllers\ConstantsController.cs" />
+    <Compile Include="Controllers\EmailController.cs" />
     <Compile Include="Controllers\TenderManagerController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\CostTestController.cs" />
@@ -459,6 +462,7 @@
     <Content Include="app\tenderManager\partials\tenderManager.html" />
     <Content Include="app\tenderManager\tenderManager.module.js" />
     <Content Include="app\tenderManager\tenderManager.route.js" />
+    <Content Include="css\bootstrap-switch.min.css" />
     <Content Include="css\_loadingPanel.directive.css" />
     <Content Include="app\core\directives\messageBoard\messageBoard.directive.html" />
     <Content Include="app\core\directives\messageBoard\messageBoard.directive.js" />
@@ -1142,6 +1146,7 @@
     <Content Include="Scripts\Angular\select.min.js" />
     <Content Include="Scripts\Angular\ui-bootstrap-tpls-2.2.0.min.js" />
     <Content Include="Scripts\base64-string.js" />
+    <Content Include="Scripts\bootstrap-switch.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\d3\d3.js" />
@@ -1455,6 +1460,7 @@
     <Content Include="Scripts\kendo\2017.R1\kendo.window.min.js" />
     <Content Include="Scripts\kendo\2017.R1\pako_deflate.min.js" />
     <Content Include="Scripts\lz-string.min.js" />
+    <Content Include="Scripts\moment-timezone.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\nv.d3.js" />
     <Content Include="Scripts\nv.d3.min.js" />

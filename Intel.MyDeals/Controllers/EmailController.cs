@@ -1,0 +1,73 @@
+﻿using System;
+using System.IO;
+using System.Linq;
+using System.Net.Mail;
+using System.Reflection;
+using System.Web.Mvc;
+using Intel.MyDeals.Entities;
+
+namespace Intel.MyDeals.Controllers
+{
+    public class EmailController : Controller
+    {
+        // GET: Email
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+        //[ValidateInput(false)]
+        //string body
+        public ActionResult SubmissionNotification()
+        {
+            var message = new MailMessage
+            {
+                From = new MailAddress(OpUserStack.MyOpUserToken.Usr.Email),
+                Subject = "My Deals Submission Notification",
+                Body = "This is the <b>body</b>",
+                IsBodyHtml = true
+            };
+
+            message.To.Add(OpUserStack.MyOpUserToken.Usr.Email);
+
+            // mark as draft
+            message.Headers.Add("X-Unsent", "1");
+
+            using (var client = new SmtpClient())
+            {
+                var id = Guid.NewGuid();
+
+                var tempFolder = Path.Combine(Path.GetTempPath(), Assembly.GetExecutingAssembly().GetName().Name);
+
+                tempFolder = Path.Combine(tempFolder, "MailMessageToEMLTemp");
+
+                // create a temp folder to hold just this .eml file so that we can find it easily.
+                tempFolder = Path.Combine(tempFolder, id.ToString());
+
+                if (!Directory.Exists(tempFolder))
+                {
+                    Directory.CreateDirectory(tempFolder);
+                }
+
+                client.UseDefaultCredentials = true;
+                client.DeliveryMethod = SmtpDeliveryMethod.SpecifiedPickupDirectory;
+                client.PickupDirectoryLocation = tempFolder;
+                client.Send(message);
+
+                // tempFolder should contain 1 eml file
+
+                var filePath = Directory.GetFiles(tempFolder).Single();
+
+                // stream out the contents - don't need to dispose because File() does it for you
+                var fs = new FileStream(filePath, FileMode.Open);
+
+                //HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
+                //result.Content = new StreamContent(fs);
+                //result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.ms-outlook");
+                //result.Content.Headers.Add("Content-Disposition", $"MyDealsSubmissionNotification.eml");
+                //return result;
+                return File(fs, "application/vnd.ms-outlook", "MyDealsSubmissionNotification.eml");
+            }
+        }
+    }
+}

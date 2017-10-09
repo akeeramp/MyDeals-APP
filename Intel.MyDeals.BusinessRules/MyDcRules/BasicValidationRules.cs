@@ -36,7 +36,7 @@ namespace Intel.MyDeals.BusinessRules
                     {
                         new OpRuleAction<IOpDataElement>
                         {
-                            Action = BusinessLogicDeActions.AddValidationMessage,
+                            Action = MyDeActions.AddMessage,
                             Args = new object[] {"{0} must be positive"},
                             Where = de => de.AtrbCdIn(new List<string> { AttributeCodes.NUM_OF_TIERS }) && de.IsNegativeOrZero()
                         }
@@ -51,7 +51,7 @@ namespace Intel.MyDeals.BusinessRules
                     {
                         new OpRuleAction<IOpDataElement>
                         {
-                            Action = BusinessLogicDeActions.AddValidationMessage,
+                            Action = MyDeActions.AddMessage,
                             Args = new object[] {"{0} is required"},
                             Where = de => de.IsRequired && de.HasNoValue()
                         }
@@ -67,7 +67,7 @@ namespace Intel.MyDeals.BusinessRules
                     {
                         new OpRuleAction<IOpDataElement>
                         {
-                            Action = BusinessLogicDeActions.AddValidationMessage,
+                            Action = MyDeActions.AddMessage,
                             Args = new object[] {"{0} must be positive"},
                             Where = de => de.AtrbCdIn(new List<string> { AttributeCodes.VOLUME }) && de.HasValue() && de.IsNegativeOrZero()
                         }
@@ -83,7 +83,7 @@ namespace Intel.MyDeals.BusinessRules
                     {
                         new OpRuleAction<IOpDataElement>
                         {
-                            Action = BusinessLogicDeActions.AddValidationMessage,
+                            Action = MyDeActions.AddMessage,
                             Args = new object[] {"{0} must be positive or zero"},
                             Where = de => de.AtrbCdIn(new List<string> { AttributeCodes.FRCST_VOL }) && de.HasValue() && de.IsNegative()
                         }
@@ -166,7 +166,7 @@ namespace Intel.MyDeals.BusinessRules
                     {
                         new OpRuleAction<IOpDataElement>
                         {
-                            Action = BusinessLogicDeActions.AddValidationMessage,
+                            Action = MyDeActions.AddMessage,
                             Args = new object[] {"{0} must be no more than 80 characters."},
                             Where = de => de.AtrbCdIn(new List<string> { AttributeCodes.TITLE }) && de.ExceedsMaxLength(80)
                         }
@@ -226,7 +226,7 @@ namespace Intel.MyDeals.BusinessRules
                     {
                         new OpRuleAction<IOpDataElement>
                         {
-                            Action = BusinessLogicDeActions.AddValidationMessage,
+                            Action = MyDeActions.AddMessage,
                             Args = new object[] {"End date must be after the start date."},
                             Where = de => de.AtrbCdIn(new List<string> {AttributeCodes.END_DT})
                         }
@@ -242,7 +242,7 @@ namespace Intel.MyDeals.BusinessRules
                     {
                         new OpRuleAction<IOpDataElement>
                         {
-                            Action = BusinessLogicDeActions.AddValidationMessage,
+                            Action = MyDeActions.AddMessage,
                             Args = new object[] {"End date must be greater than any Credit date."},
                             Where = de => de.AtrbCdIn(new List<string> {AttributeCodes.END_DT})
                         }

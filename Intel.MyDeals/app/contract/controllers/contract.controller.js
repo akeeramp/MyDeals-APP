@@ -291,7 +291,7 @@
 
             // Contract name validation
             var isDuplicateContractTitle = function (title) {
-                if (title == "") return;
+                if (title === "") return;
                 objsetService.isDuplicateContractTitle($scope.contractData.DC_ID, title).then(function (response) {
                     $scope.contractData._behaviors.isError['TITLE'] = response.data;
                     $scope.contractData._behaviors.validMsg['TITLE'] = "";
@@ -938,7 +938,7 @@
             }
 
             if (oldValue["CUST_ACCPT"] !== newValue["CUST_ACCPT"]) {
-                setCustAcceptanceRules(newValue["CUST_ACCPT"]);
+                if (!!setCustAcceptanceRules) setCustAcceptanceRules(newValue["CUST_ACCPT"]);
             }
 
             if (oldValue["C2A_DATA_C2A_ID"] !== newValue["C2A_DATA_C2A_ID"]) {
@@ -1340,17 +1340,20 @@
                 if (!!item) {
                     for (var i = 0; i < item.length; i++) {
                         item[i].NEW_STG = !!msgMapping[item[i].DC_ID] ? msgMapping[item[i].DC_ID] : "";
-                        actnList.push("Strategy '" + item[i].TITLE + "' has been moved into the stage " + item[i].NEW_STG);
+                        actnList.push("Strategy <b>'" + item[i].TITLE + "'</b> has been moved into the stage " + item[i].NEW_STG);
                     }
                 }
             }
 
             var msg = encodeURIComponent(actnList.join("\n\n"));
 
-            var email = '';
-            var subject = 'My Deals Submission Notification';
-            var emailBody = msg;
-            document.location = "mailto:" + email + "?subject=" + subject + "&body=" + emailBody;
+            document.location.href = "/Email/SubmissionNotification";
+            //document.location.href = "/Email/SubmissionNotification?body=" + msg;
+
+            //var email = '';
+            //var subject = 'My Deals Submission Notification';
+            //var emailBody = msg;
+            //document.location = "mailto:" + email + "?subject=" + subject + "&body=" + emailBody;
             $scope.emailData = [];
         }
 
@@ -2533,6 +2536,30 @@
                 },
                     300);
             }
+        }
+
+        $scope.quickSaveContract = function (rtnFunc, param) {
+            topbar.show();
+            $scope.setBusy("Saving Contract", "Saving the Contract Information");
+
+            // Contract Data
+            var ct = $scope.contractData;
+
+            objsetService.createContract($scope.getCustId(), $scope.contractData.DC_ID, ct).then(
+                function (data) {
+                    if (!!rtnFunc) rtnFunc(param);
+                    $scope.updateResults(data.data.CNTRCT, ct);
+                    $scope.setBusy("Save Successful", "Saved the contract");
+                    topbar.hide();
+
+                    $scope.setBusy("", "");
+                },
+                function (result) {
+                    logger.error("Could not create the contract.", result, result.statusText);
+                    $scope.setBusy("", "");
+                    topbar.hide();
+                }
+            );
         }
 
         // **** NEW PRICING STRATEGY Methods ****

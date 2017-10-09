@@ -74,11 +74,17 @@ namespace Intel.MyDeals.BusinessRules
                     InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnRequired }
                 },
-
                 new MyOpRule
                 {
                     Title="Required if Backdate Needed",
                     ActionRule = MyDcActions.BackdateRequired,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL}
+                },
+                new MyOpRule
+                {
+                    Title="Required if User Defined RPU",
+                    ActionRule = MyDcActions.UserDefinedRpuRequired,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnRequired},
                     InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL}
                 },

@@ -7,9 +7,6 @@ using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque;
 using Intel.Opaque.Data;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.Text.RegularExpressions;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -121,7 +118,7 @@ namespace Intel.MyDeals.BusinessLogic
             return _dataCollectorLib.SavePackets(new OpDataCollectorFlattenedDictList
             {
                 [OpDataElementType.CNTRCT] = data
-            }, contractToken, validateIds, forcePublish, sourceEvent).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
+            }, contractToken, validateIds, forcePublish, sourceEvent, false).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
         }
 
         /// <summary>
@@ -146,7 +143,8 @@ namespace Intel.MyDeals.BusinessLogic
             ContractToken contractToken,
             List<int> validateIds,
             bool forcePublish,
-            string sourceEvent)
+            string sourceEvent,
+            bool resetValidationChild)
         {
             OpDataCollectorFlattenedDictList data = new OpDataCollectorFlattenedDictList();
 
@@ -191,7 +189,7 @@ namespace Intel.MyDeals.BusinessLogic
             }
 
             return _dataCollectorLib.SavePackets(
-                data, contractToken, validateIds, forcePublish, sourceEvent,
+                data, contractToken, validateIds, forcePublish, sourceEvent, resetValidationChild,
                 primaryIds, primaryOpDataElementTypes, OpDataElementType.CNTRCT,
                 secondaryIds, secondaryOpDataElementTypes, OpDataElementType.PRC_TBL);
         }
@@ -204,7 +202,7 @@ namespace Intel.MyDeals.BusinessLogic
                 fullContracts.ContainsKey(OpDataElementType.PRC_TBL) ? fullContracts[OpDataElementType.PRC_TBL] : new OpDataCollectorFlattenedList(),
                 fullContracts.ContainsKey(OpDataElementType.PRC_TBL_ROW) ? fullContracts[OpDataElementType.PRC_TBL_ROW] : new OpDataCollectorFlattenedList(),
                 fullContracts.ContainsKey(OpDataElementType.WIP_DEAL) ? fullContracts[OpDataElementType.WIP_DEAL] : new OpDataCollectorFlattenedList(),
-                contractToken, validateIds, forcePublish, sourceEvent).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
+                contractToken, validateIds, forcePublish, sourceEvent, false).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
         }
 
         public OpDataCollectorFlattenedDictList SaveContractAndPricingTable(ContractToken contractToken, ContractTransferPacket contractAndStrategy, bool forceValidation, bool forcePublish)
@@ -215,6 +213,7 @@ namespace Intel.MyDeals.BusinessLogic
             bool isPrcTblSource = contractAndStrategy.EventSource == OpDataElementType.PRC_TBL.ToString();
             bool isWipDealSource = contractAndStrategy.EventSource == OpDataElementType.WIP_DEAL.ToString();
             List<int> validationIds = new List<int>();
+            bool resetValidationChild = false;
 
             if (forceValidation)
             {
@@ -233,6 +232,7 @@ namespace Intel.MyDeals.BusinessLogic
                 if (isPrcTblSource)
                 {
                     translatedFlattenedList = contractAndStrategy.PricingTableRow.TranslateToWip();
+                    resetValidationChild = true;
                 }
                 else if (isWipDealSource)
                 {
@@ -249,7 +249,8 @@ namespace Intel.MyDeals.BusinessLogic
                 contractToken,
                 validationIds,
                 forcePublish,
-                contractAndStrategy.EventSource);
+                contractAndStrategy.EventSource,
+                resetValidationChild);
             //.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Nested);
 
             OpDataCollectorFlattenedDictList data = new OpDataCollectorFlattenedDictList();

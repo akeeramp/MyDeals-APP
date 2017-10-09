@@ -75,6 +75,7 @@
     <Compile Include="AppRoleLookup.cs" />
     <Compile Include="CacheItem.cs" />
     <Compile Include="EcapTrackerFilter.cs" />
+    <Compile Include="EmailMessage.cs" />
     <Compile Include="FuzzySearch.cs" />
     <Compile Include="Helpers\CompressHelpers.cs" />
     <Compile Include="Logging\EmailExLogPerf.cs" />
