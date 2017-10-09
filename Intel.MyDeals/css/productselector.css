@@ -204,6 +204,37 @@ a.prdAnchor {
     font-weight: 600;
 }
 
+.filterTitleUnderline {
+        margin: 5px;
+        font-size: 15px;
+        color: #1a3e6f;
+        border-bottom: 1px solid #D3D3D3;
+        font-weight: bold;
+    }
+
+.lblSelected label span {
+        color: white !important;
+    }
+
+.lblSelected {
+        background: rgba(2, 173, 255, 1);
+    }
+
+.lblNotSelected {
+        background: none;
+    }
+
+.lblFilterProd > span {
+        font-size: 12px !important;
+        font-weight: 600 !important;
+        color: #00AEEF !important;
+    }
+
+.lblFilterProd:before {
+        color: transparent !important;
+        width: 0px !important;
+    }
+
 .prodSelector .filterGrp {
     font-family: arial;
     font-weight: 600;

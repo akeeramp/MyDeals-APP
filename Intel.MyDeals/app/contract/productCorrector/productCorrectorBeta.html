@@ -32,7 +32,7 @@
                 </div>
                 <div class="mini-right miniProdNav">
                     <div>Product(s) <span style="color:red">not found</span> for Row {{ vm.rowDCId }}</div>
-                    <div style="float:left; font-size: 14px; margin-left: 10px;">Contract Product(s):&nbsp;</div>
+                    <div style="float:left; font-size: 14px; margin-left: 10px; color: #000000;">Contract Product(s):&nbsp;</div>
                     <div>
                         <ul class="productpath breadcrumb">
                             <li ng-repeat="p in vm.curRowProds | filter:{exclude: 'I'} | unique:'name'">
@@ -47,7 +47,7 @@
                             </li>
                         </ul>
                     </div>
-                    <div style="float:left; font-size: 14px; margin-left: 10px;" ng-if="(vm.curRowProds | filter:{exclude: 'E'}).length >0">Excluded Product(s): &nbsp;</div>
+                    <div style="float:left; font-size: 14px; margin-left: 10px; color: #000000;" ng-if="(vm.curRowProds | filter:{exclude: 'E'}).length >0">Excluded Product(s): &nbsp;</div>
                     <div>
                         <ul class="productpath breadcrumb">
                             <li ng-repeat="p in vm.curRowProds | filter:{exclude: 'E'} | unique:'name'">
@@ -170,9 +170,8 @@
         border-color: transparent !important;
     }
     .lblFilterProd > span {
-        font-size: 14px !important;
+        font-size: 12px !important;
         font-weight: 600 !important;
-        text-transform: uppercase !important;
         color: #00AEEF !important;
     }
 
@@ -249,6 +248,7 @@
         font-size: 11px;
         color: #0071C5;
         padding-left: 5px;
+        height: 6px;
     }
 
 
@@ -276,7 +276,7 @@
         margin: 5px;
         font-size: 15px;
         color: #1a3e6f;
-        border-bottom: 1px solid;
+        border-bottom: 1px solid #D3D3D3;
         font-weight: bold;
     }
 
@@ -752,7 +752,7 @@
             content: "\f096";
             font-size: 22px;
             letter-spacing: 5px;
-            color: #39c600;
+            color: #00AEEF;
             margin-left: 10px;
             margin-top: 2px;
             vertical-align: middle;
@@ -763,7 +763,7 @@
         }
 
         input[type=checkbox].with-font:hover + label:before {
-            color: #9bc600;
+            color: #003C71;
             cursor: pointer;
         }
 
@@ -796,7 +796,7 @@
 
     .breadcrumb .close {
         float: right;
-        font-size: 18px;
+        font-size: 21px;
     }
 
     .removeProduct {
