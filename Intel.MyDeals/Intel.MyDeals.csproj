@@ -452,7 +452,6 @@
     <Content Include="app\core\directives\gridStatusBoard\contractStatusBoard.directive.js" />
     <Content Include="app\core\directives\gridStatusBoard\gridStatusBoard.directive.html" />
     <Content Include="app\core\directives\gridStatusBoard\gridStatusBoard.directive.js" />
-    <Content Include="app\advancedSearch\advancedSearch.directive.js" />
     <Content Include="app\core\directives\securityLoader\securityLoader.directive.js" />
     <Content Include="app\core\directives\trashcan\trashcan.directive.html" />
     <Content Include="app\shared\services\productSelector.service.js" />
