@@ -46,7 +46,27 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                             $scope.meetCompMasterdata[$scope.curentRow - 1].CUST_NM_SID = 1;
                         }
 
-                        addToUpdateList(options.model, "COMP_SKU");
+                        addToUpdateList($scope.meetCompMasterdata[$scope.curentRow - 1], "COMP_SKU");
+
+                        //Update child
+                        var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
+                            .Where(function (x) {
+                                return (x.GRP_PRD_SID == $scope.meetCompMasterdata[$scope.curentRow - 1].GRP_PRD_SID && x.GRP == "DEAL" && x.MC_NULL == true );
+                            })                            
+                            .ToArray();
+
+
+                        for (var i = 0; i < tempData.length; i++) {                            
+                                $scope.meetCompMasterdata[tempData[i].RW_NM - 1].COMP_SKU = $scope.selectedCustomerText;
+                                addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_SKU");
+                        }
+
+                        //Update Grid
+                        $scope.dataSource.read();
+                        $scope.dataSource.sync();
+                        //Child Data
+                        $scope.detailGridOptions($scope.meetCompMasterdata[$scope.curentRow - 1]);
+                        
                     };
 
                     //Show Hide Column based on Role
@@ -107,7 +127,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     COMP_BNCH: { editable: false, validation: { required: true }, type: "number" },
                                     MC_LAST_RUN: { editable: false, validation: { required: true } },
                                     COMP_PRC: { editable: false, validation: { required: true }, type: "number" },
-                                    COMP_SKU: { editable: false, validation: { required: true } },
+                                    COMP_SKU: { editable: false, validation: { required: true }, type: "string" },
                                     MEET_COMP_UPD_FLG: { editable: false, validation: { required: true } },
                                     OBJ_SET_TYPE: { editable: false, validation: { required: true } },
                                     PRD_CAT_NM: { editable: false, validation: { required: true } },
@@ -195,7 +215,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                 field: "MEET_COMP_STS",
                                 title: "Test Results",
                                 width: 120,
-                                template: "#if(MEET_COMP_STS == 'Pass') {#<i class='intelicon-passed-completed-solid complete'></i>#} else if(MEET_COMP_STS == 'Incomplete') {#<i class='intelicon-help-solid incomplete'></i>#} else{#<i class='intelicon-alert-solid errorIcon'></i>#}#",
+                                template: "#if(MEET_COMP_STS == 'Pass') {#<i class='intelicon-passed-completed-solid complete' style='font-size:20px !important'></i>#} else if(MEET_COMP_STS == 'Incomplete') {#<i class='intelicon-help-solid incomplete' style='font-size:20px !important'></i>#} else{#<i class='intelicon-alert-solid errorIcon' style='font-size:20px !important'></i>#}#",
                                 editable: function() { return false; }
                             },
                             {
@@ -231,7 +251,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                     };
 
                     function editorIABench(container, options) {
-                        if (usrRole == "DA" || usrRole == "SA") {
+                        if (usrRole == "DA" || usrRole == "SA" || options.model.PRD_CAT_NM != "SvrWS") {
                             //DA only view
                         }
                         else {
@@ -250,7 +270,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                     }
 
                     function editorCOMPBench(container, options) {
-                        if (usrRole == "DA" || usrRole == "SA") {
+                        if (usrRole == "DA" || usrRole == "SA" || options.model.PRD_CAT_NM != "SvrWS") {
                             //DA only view
                         }
                         else {
@@ -561,6 +581,9 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     }
                                 },
                                 pageSize: 500,
+                                serverPaging: true,
+                                serverFiltering: true,
+                                serverSorting: false,
                                 schema: {
                                     model: {
                                         id: "RW_NM",
@@ -627,7 +650,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     title: "Test Results",
                                     width: 120,
                                     editable: function() { return false; },
-                                    template: "#if(MEET_COMP_STS == 'Pass') {#<i class='intelicon-passed-completed-solid complete'></i>#} else if(MEET_COMP_STS == 'Incomplete') {#<i class='intelicon-help-solid incomplete'></i>#} else{#<i class='intelicon-alert-solid errorIcon'></i>#}#"
+                                    template: "#if(MEET_COMP_STS == 'Pass') {#<i class='intelicon-passed-completed-solid complete' style='font-size:20px !important'></i>#} else if(MEET_COMP_STS == 'Incomplete') {#<i class='intelicon-help-solid incomplete' style='font-size:20px !important'></i>#} else{#<i class='intelicon-alert-solid errorIcon' style='font-size:20px !important'></i>#}#"
 
                                 },
                                 {

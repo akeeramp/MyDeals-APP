@@ -126,7 +126,9 @@ namespace Intel.MyDeals.DataLibrary
                 using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_MYDL_UI_GET_MEET_COMP
                 {
                     @ID = CNTRCT_OBJ_SID,
-                    @USR_WWID = OpUserStack.MyOpUserToken.Usr.WWID
+                    @USR_WWID = OpUserStack.MyOpUserToken.Usr.WWID,
+                    @Role = OpUserStack.MyOpUserToken.Role.RoleTypeCd
+
                 }))
                 {
                     int IDX_CNTRCT_OBJ_SID = DB.GetReaderOrdinal(rdr, "CNTRCT_OBJ_SID");

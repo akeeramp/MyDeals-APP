@@ -36,8 +36,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_OBJ_DESC = DB.GetReaderOrdinal(rdr, "OBJ_DESC");
                     int IDX_OBJ_SID = DB.GetReaderOrdinal(rdr, "OBJ_SID");
                     int IDX_OBJ_TYPE_SID = DB.GetReaderOrdinal(rdr, "OBJ_TYPE_SID");
-                    int IDX_PARNT_OBJ_SID = DB.GetReaderOrdinal(rdr, "PARNT_OBJ_SID");
-                    int IDX_rownum = DB.GetReaderOrdinal(rdr, "rownum");
+                    int IDX_PARNT_OBJ_SID = DB.GetReaderOrdinal(rdr, "PARNT_OBJ_SID");                    
                     int IDX_USR_ROLES = DB.GetReaderOrdinal(rdr, "USR_ROLES");
 
                     while (rdr.Read())
@@ -56,8 +55,7 @@ namespace Intel.MyDeals.DataLibrary
                             OBJ_DESC = (IDX_OBJ_DESC < 0 || rdr.IsDBNull(IDX_OBJ_DESC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_DESC),
                             OBJ_SID = (IDX_OBJ_SID < 0 || rdr.IsDBNull(IDX_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_SID),
                             OBJ_TYPE_SID = (IDX_OBJ_TYPE_SID < 0 || rdr.IsDBNull(IDX_OBJ_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_TYPE_SID),
-                            PARNT_OBJ_SID = (IDX_PARNT_OBJ_SID < 0 || rdr.IsDBNull(IDX_PARNT_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PARNT_OBJ_SID),
-                            rownum = (IDX_rownum < 0 || rdr.IsDBNull(IDX_rownum)) ? default(System.Int64) : rdr.GetFieldValue<System.Int64>(IDX_rownum),
+                            PARNT_OBJ_SID = (IDX_PARNT_OBJ_SID < 0 || rdr.IsDBNull(IDX_PARNT_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PARNT_OBJ_SID),                            
                             USR_ROLES = (IDX_USR_ROLES < 0 || rdr.IsDBNull(IDX_USR_ROLES)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_USR_ROLES)
                         });
                     } // while
