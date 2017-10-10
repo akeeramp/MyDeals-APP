@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 9/23/2017 9:46:50 PM
-On: PWECKENR-MOBL
+File Updated: 10/10/2017 3:41:29 PM
+On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
 using System;
@@ -139,7 +139,7 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// DIM_SID: 30
-		/// DIM_CD: OVLP
+		/// DIM_CD: CSTST
 		/// ATRB_SID: 30004
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.Object
@@ -590,6 +590,24 @@ namespace Intel.MyDeals.Entities {
 		///<summary>
 		/// DIM_SID: 3
 		/// DIM_CD: DEAL
+		/// ATRB_SID: 90003
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string DEAL_GRP_CMNT = "DEAL_GRP_CMNT";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 90002
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string DEAL_GRP_EXCLDS = "DEAL_GRP_EXCLDS";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
 		/// ATRB_SID: 97
 		/// TGT_COL_TYPE: MONEY
 		/// DOT_NET_DATA_TYPE: System.Double
@@ -805,7 +823,7 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// DIM_SID: 30
-		/// DIM_CD: OVLP
+		/// DIM_CD: CSTST
 		/// ATRB_SID: 30006
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.Object
@@ -832,7 +850,7 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// DIM_SID: 30
-		/// DIM_CD: OVLP
+		/// DIM_CD: CSTST
 		/// ATRB_SID: 30003
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.Object
@@ -976,7 +994,7 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// DIM_SID: 30
-		/// DIM_CD: OVLP
+		/// DIM_CD: CSTST
 		/// ATRB_SID: 30002
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.Object
@@ -1165,7 +1183,7 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// DIM_SID: 30
-		/// DIM_CD: OVLP
+		/// DIM_CD: CSTST
 		/// ATRB_SID: 30007
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.Object
@@ -1174,7 +1192,7 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// DIM_SID: 30
-		/// DIM_CD: OVLP
+		/// DIM_CD: CSTST
 		/// ATRB_SID: 30005
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.Object
@@ -1243,6 +1261,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Object
 		///</summary>
 		public const string KIT_IND = "KIT_IND";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 90004
+		/// TGT_COL_TYPE: DATETIME
+		/// DOT_NET_DATA_TYPE: System.DateTime
+		///</summary>
+		public const string LAST_COST_TEST_RUN = "LAST_COST_TEST_RUN";
 
 		///<summary>
 		/// DIM_SID: 3
@@ -1876,7 +1903,7 @@ namespace Intel.MyDeals.Entities {
 
 		///<summary>
 		/// DIM_SID: 30
-		/// DIM_CD: OVLP
+		/// DIM_CD: CSTST
 		/// ATRB_SID: 30001
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.Object
@@ -2359,13 +2386,13 @@ namespace Intel.MyDeals.Entities {
 		public const string DEV = "DEV";
 		public static Dictionary<string, string> Tiers = new Dictionary<string, string> {
 		["CBA"] = "Tier_2",
-		["DA"] = "Tier_3",
+		["DA"] = "Tier_4",
 		["Finance"] = "Tier_0",
 		["FSE"] = "Tier_1",
 		["GA"] = "Tier_2",
 		["Legal"] = "Tier_0",
 		["RA"] = "Tier_1",
-		["SA"] = "Tier_3",
+		["SA"] = "Tier_4",
 		["DEV"] = "Tier_0",
 		};
 	}
