@@ -20,6 +20,9 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
     $scope.context = {};
     $scope.needToRunPct = false;
 
+    // change negative values in grid from "()" to "-"
+    kendo.culture().numberFormat.currency.pattern[0] = "-$n";
+
     var hasNoPermission = !$scope.root.CAN_EDIT_COST_TEST;
 
     $timeout(function () {
