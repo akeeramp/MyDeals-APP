@@ -21,7 +21,6 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
     $scope.needToRunPct = false;
 
     var hasNoPermission = !$scope.root.CAN_EDIT_COST_TEST;
-//    if (window.usrRole === "Legal") hasNoPermission = true;
 
     $timeout(function () {
         $("#dealTypeDiv").removeClass("active");
@@ -155,6 +154,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
             function (e) {
                 var secureFields = [ "CAP", "MAX_RPU", "ECAP_PRC", "ECAP_FLR", "PRD_COST", "COST_TEST_OVRRD_FLG", "COST_TEST_OVRRD_CMT", "RTL_CYC_NM", "RTL_PULL_DLR" ];
                 $scope.CostTestGroupDetails = e.data["CostTestGroupDetailItems"];
+                $scope.CostTestGroupDealDetails = e.data["CostTestGroupDealDetailItems"];
 
                 var response = e.data["CostTestDetailItems"];
 
@@ -179,15 +179,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
                             if (cols[c].field === "DEAL_ID") {
                                 val = "<b>" + val + "</b>";
                             } else if (cols[c].field === "GRP_DEALS") {
-
-                                // Need to get exclude data from database
-
-                                var numGroups = item["CostTestGroupDetailItems"] === undefined ? 0 : item["CostTestGroupDetailItems"].length;
-                                if (numGroups <= 0) {
-                                    val = "<div style='text-align: center;'><div class='lnkBasic' ng-click='showGroups(" + item["DEAL_PRD_RNK"] + ")'>View</div></div>";
-                                } else {
-                                    val = "<div style='text-align: center;'><div class='lnkGroup' ng-click='showGroups(" + item["DEAL_PRD_RNK"] + ")'>**View</div></div>";
-                                }
+                                val = "<div style='text-align: center;'><div class='lnkBasic' ng-click='showGroups(true, " + item["DEAL_ID"] + ")'>View</div></div>";
                             }
 
                             if (secureFields.indexOf(cols[c].field) < 0 || !hasNoPermission) {
@@ -288,15 +280,21 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
 
     }
 
-    $scope.showGroups = function (dealId) {
-        var data = $scope.CostTestGroupDetails;
-        var dataItem = $linq.Enumerable()
-            .From(data)
-            .Where(function (x) {
-                return x.DEAL_PRD_RNK === dealId;
-            })
-            .ToArray();
-        $scope.context = dataItem;
+    $scope.showGroups = function (isDealMode, dealId) {
+
+        if (isDealMode) {
+            $scope.context = $linq.Enumerable()
+                .From($scope.CostTestGroupDealDetails)
+                .Where(function (x) {
+                    return x.DEAL_ID === dealId;
+                }).ToArray();
+        } else {
+            $scope.context = $linq.Enumerable()
+                .From($scope.CostTestGroupDetails)
+                .Where(function (x) {
+                    return x.DEAL_PRD_RNK === dealId;
+                }).ToArray();            
+        }
 
         var modalInstance = $uibModal.open({
             animation: true,
@@ -308,7 +306,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
             size: 'lg',
             resolve: {
                 dataItem: function () {
-                    return dataItem;
+                    return $scope.context;
                 }
             }
         });
@@ -479,7 +477,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
             field: "GRP_DEALS",
             title: "Group Deals",
             width: "140px",
-            template: "&nbsp;",
+            template: "<div style='text-align: center;'><div class='lnkBasic' ng-click='showGroups(false, #=DEAL_PRD_RNK#)'>View</div></div>",
             parent: true
         },
         "LAST_COST_TEST_RUN": {

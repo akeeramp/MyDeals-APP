@@ -62,7 +62,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
             hasPendingStage = true;
         }
     }
-    $scope.hideIfNotPending = !hasPendingStage;
+    if (!hasPendingStage) $scope.hideIfNotPending = true;
 
     $scope.canAction = function (actn, dataItem, isExists) {
         return dataItem._actions[actn] !== undefined && (isExists || dataItem._actions[actn] === true);
@@ -141,10 +141,12 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
     }
     
     $scope.isPending = root.contractData.CUST_ACCPT === "Pending";
-    $scope.pendingChange = function() {
-        if ($scope.isPending) {
+    $scope.pendingChange = function (e) {
+        if (!$scope.isPending) {
+            $scope.isPending = true;
             root.contractData.CUST_ACCPT = "Pending";
         } else {
+            $scope.isPending = false;
             root.contractData.CUST_ACCPT = "Accepted";
         }
     }
@@ -384,7 +386,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         var ps = root.contractData.PRC_ST;
         for (var p = 0; p < ps.length; p++) {
             if (ps[p].WF_STG_CD === "Pending" && $("#rad_approve_" + ps[p].DC_ID)[0].checked) {
-                $scope.isPending = false;
+                $scope.isPending = true;
                 root.contractData.CUST_ACCPT = "Accepted";
             }
         }

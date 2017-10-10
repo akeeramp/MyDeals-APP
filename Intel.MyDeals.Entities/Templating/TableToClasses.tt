@@ -307,6 +307,9 @@ using System.Collections.Generic;
 	ds.Tables[1].TableName = "CostTestGroupDetailItem";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[1], false));
 
+	ds.Tables[2].TableName = "CostTestGroupDealDetailItem";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[2], false));
+
 	// Deals With Attachments
 	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MYDL_GET_DEALS_WITH_ATTCH");
 	ds.Tables[0].TableName = "DealsWithAttachments";

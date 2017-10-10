@@ -11,5 +11,7 @@ namespace Intel.MyDeals.Entities
         public List<CostTestDetailItem> CostTestDetailItems { get; set; }
         [DataMember]
         public List<CostTestGroupDetailItem> CostTestGroupDetailItems { get; set; }
+        [DataMember]
+        public List<CostTestGroupDealDetailItem> CostTestGroupDealDetailItems { get; set; }
     }
 }
