@@ -96,6 +96,7 @@ namespace Intel.MyDeals
                 , "~/app/core/directives/securityLoader/securityLoader.directive.js"
                 , "~/app/core/directives/trashcan/trashcan.directive.js"
                 , "~/app/core/directives/timeline/timelineDetails.directive.js"
+                , "~/app/core/directives/meetComp/meetComp.directive.js"
                 , "~/app/blocks/util.js"
                 ));
 

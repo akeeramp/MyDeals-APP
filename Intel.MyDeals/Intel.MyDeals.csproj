@@ -309,10 +309,10 @@
     <Content Include="app\admin\rules\admin.rules.controller.js" />
     <Content Include="app\admin\rules\rules.html" />
     <Content Include="app\admin\rules\rules.service.js" />
-    <Content Include="app\admin\securityEngine\securityEngine.controller.js" />
-    <Content Include="app\admin\securityEngine\securityEngine.html" />
-    <Content Include="app\admin\securityEngine\securityEngine.service.js" />
-    <Content Include="app\admin\securityEngine\securityEngineDrawDeals.directive.js" />
+    <Content Include="app\admin\productSelector\securityEngine\securityEngine.controller.js" />
+    <Content Include="app\admin\productSelector\securityEngine\securityEngine.html" />
+    <Content Include="app\admin\productSelector\securityEngine\securityEngine.service.js" />
+    <Content Include="app\admin\productSelector\securityEngine\securityEngineDrawDeals.directive.js" />
     <Content Include="app\admin\workflowStage\admin.workflowStages.controller.js" />
     <Content Include="app\admin\workflowStage\workflowStages.html" />
     <Content Include="app\admin\workflowStage\workflowStages.service.js" />
@@ -377,8 +377,6 @@
     <Content Include="app\contract\targetRegionPicker\targetRegionPicker.html" />
     <Content Include="app\contract\productCAPBreakout\productCAPBreakout.controller.js" />
     <Content Include="app\contract\productCAPBreakout\productCAPBreakout.html" />
-    <Content Include="app\contract\productCorrector\productCorrector.controller.js" />
-    <Content Include="app\contract\productCorrector\productCorrector.html" />
     <Content Include="app\contract\productCorrector\productCorrector.service.js" />
     <Content Include="app\contract\partials\lnavSummary.html" />
     <Content Include="app\contract\partials\lnavSummaryMenu.html" />
@@ -452,6 +450,8 @@
     <Content Include="app\core\directives\gridStatusBoard\contractStatusBoard.directive.js" />
     <Content Include="app\core\directives\gridStatusBoard\gridStatusBoard.directive.html" />
     <Content Include="app\core\directives\gridStatusBoard\gridStatusBoard.directive.js" />
+    <Content Include="app\core\directives\meetComp\meetComp.directive.html" />
+    <Content Include="app\core\directives\meetComp\meetComp.directive.js" />
     <Content Include="app\core\directives\securityLoader\securityLoader.directive.js" />
     <Content Include="app\core\directives\trashcan\trashcan.directive.html" />
     <Content Include="app\shared\services\productSelector.service.js" />
