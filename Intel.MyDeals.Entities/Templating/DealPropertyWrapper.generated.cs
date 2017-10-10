@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 9/16/2017 12:28:33 AM
-On: PWECKENR-MOBL
+File Updated: 10/10/2017 1:22:23 PM
+On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
 
@@ -226,7 +226,7 @@ namespace Intel.MyDeals.Entities {
 			ATRB_MAX_LEN = 0,
 			ATRB_SID = 30004,
 			DATA_TYPE_CD = "CUSTOM",
-			DIM_CD = "OVLP",
+			DIM_CD = "CSTST",
 			DIM_SID = 30,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
@@ -998,7 +998,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "MAJOR",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
@@ -1017,6 +1017,38 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "Label"
+		};
+		public static MyDealsAttribute DEAL_GRP_CMNT = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "DEAL_GRP_CMNT",
+			ATRB_DESC = "Deal Groups Comment",
+			ATRB_LBL = "Deal Groups Comment",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 90003,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "TextArea"
+		};
+		public static MyDealsAttribute DEAL_GRP_EXCLDS = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "DEAL_GRP_EXCLDS",
+			ATRB_DESC = "Excluded Deal Groups",
+			ATRB_LBL = "Excluded Deal Groups",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 90002,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "ComboBox"
 		};
 		public static MyDealsAttribute DEAL_MSP_PRC = new MyDealsAttribute()
 		{
@@ -1350,7 +1382,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.DateTime",
 			FRMT_MSK = "{0:MM/dd/yyyy HH:mm:ss.fff}",
-			MJR_MNR_CHG = "MAJOR",
+			MJR_MNR_CHG = "MAJOR_INCREASE",
 			TGT_COL_TYPE = "DATETIME",
 			UI_TYPE_CD = "DatePicker"
 		};
@@ -1410,7 +1442,7 @@ namespace Intel.MyDeals.Entities {
 			ATRB_MAX_LEN = 0,
 			ATRB_SID = 30006,
 			DATA_TYPE_CD = "CUSTOM",
-			DIM_CD = "OVLP",
+			DIM_CD = "CSTST",
 			DIM_SID = 30,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
@@ -1432,7 +1464,7 @@ namespace Intel.MyDeals.Entities {
 			FRMT_MSK = "{0}",
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "INT",
-			UI_TYPE_CD = "DataGrid"
+			UI_TYPE_CD = "CheckBox"
 		};
 		public static MyDealsAttribute EXPIRE_YCS2 = new MyDealsAttribute()
 		{
@@ -1458,7 +1490,7 @@ namespace Intel.MyDeals.Entities {
 			ATRB_MAX_LEN = 0,
 			ATRB_SID = 30003,
 			DATA_TYPE_CD = "CUSTOM",
-			DIM_CD = "OVLP",
+			DIM_CD = "CSTST",
 			DIM_SID = 30,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
@@ -1714,7 +1746,7 @@ namespace Intel.MyDeals.Entities {
 			ATRB_MAX_LEN = 0,
 			ATRB_SID = 30002,
 			DATA_TYPE_CD = "CUSTOM",
-			DIM_CD = "OVLP",
+			DIM_CD = "CSTST",
 			DIM_SID = 30,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
@@ -1750,7 +1782,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "MAJOR",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "MultiGeoSelector"
 		};
@@ -1793,6 +1825,22 @@ namespace Intel.MyDeals.Entities {
 			ATRB_LBL = "Has L2 Product",
 			ATRB_MAX_LEN = 1,
 			ATRB_SID = 3670,
+			DATA_TYPE_CD = "BIT",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Boolean",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "INT",
+			UI_TYPE_CD = "CheckBox"
+		};
+		public static MyDealsAttribute HAS_TRACKER = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "HAS_TRACKER",
+			ATRB_DESC = "Has Tracker Number Flag",
+			ATRB_LBL = "Has Tracker Number",
+			ATRB_MAX_LEN = 1,
+			ATRB_SID = 3677,
 			DATA_TYPE_CD = "BIT",
 			DIM_CD = "DEAL",
 			DIM_SID = 3,
@@ -2034,7 +2082,7 @@ namespace Intel.MyDeals.Entities {
 			ATRB_MAX_LEN = 0,
 			ATRB_SID = 30007,
 			DATA_TYPE_CD = "CUSTOM",
-			DIM_CD = "OVLP",
+			DIM_CD = "CSTST",
 			DIM_SID = 30,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
@@ -2050,7 +2098,7 @@ namespace Intel.MyDeals.Entities {
 			ATRB_MAX_LEN = 0,
 			ATRB_SID = 30005,
 			DATA_TYPE_CD = "CUSTOM",
-			DIM_CD = "OVLP",
+			DIM_CD = "CSTST",
 			DIM_SID = 30,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
@@ -2169,6 +2217,22 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute LAST_COST_TEST_RUN = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "LAST_COST_TEST_RUN",
+			ATRB_DESC = "Last Cost Test Run",
+			ATRB_LBL = "Deal Groups Comment",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 90004,
+			DATA_TYPE_CD = "DATETIME",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.DateTime",
+			FRMT_MSK = "{0:MM/dd/yyyy HH:mm:ss.fff}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "DATETIME",
+			UI_TYPE_CD = "DatePicker"
 		};
 		public static MyDealsAttribute LAST_REDEAL_BY = new MyDealsAttribute()
 		{
@@ -2374,7 +2438,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "MAJOR",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "MultiMSSelector"
 		};
@@ -2694,7 +2758,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "MAJOR",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
@@ -3034,22 +3098,6 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
-		public static MyDealsAttribute QLTR_OEM = new MyDealsAttribute()
-		{
-			ATRB_COL_NM = "QLTR_OEM",
-			ATRB_DESC = "Tender OEM",
-			ATRB_LBL = "OEM",
-			ATRB_MAX_LEN = 100,
-			ATRB_SID = 3677,
-			DATA_TYPE_CD = "VARCHAR",
-			DIM_CD = "DEAL",
-			DIM_SID = 3,
-			DOT_NET_DATA_TYPE = "System.String",
-			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "MINOR",
-			TGT_COL_TYPE = "VARCHAR",
-			UI_TYPE_CD = "TextBox"
-		};
 		public static MyDealsAttribute QLTR_PROJECT = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "QLTR_PROJECT",
@@ -3314,7 +3362,7 @@ namespace Intel.MyDeals.Entities {
 			ATRB_MAX_LEN = 0,
 			ATRB_SID = 30001,
 			DATA_TYPE_CD = "CUSTOM",
-			DIM_CD = "OVLP",
+			DIM_CD = "CSTST",
 			DIM_SID = 30,
 			DOT_NET_DATA_TYPE = "System.Object",
 			FRMT_MSK = "{0}",
@@ -3430,7 +3478,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.DateTime",
 			FRMT_MSK = "{0:MM/dd/yyyy HH:mm:ss.fff}",
-			MJR_MNR_CHG = "MAJOR",
+			MJR_MNR_CHG = "MAJOR_DECREASE",
 			TGT_COL_TYPE = "DATETIME",
 			UI_TYPE_CD = "DatePicker"
 		};
@@ -3542,7 +3590,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.String",
 			FRMT_MSK = "{0}",
-			MJR_MNR_CHG = "MAJOR",
+			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "TextBox"
 		};
@@ -3558,7 +3606,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.Double",
 			FRMT_MSK = "{0:c}",
-			MJR_MNR_CHG = "MAJOR",
+			MJR_MNR_CHG = "MAJOR_INCREASE",
 			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "TextBox"
 		};
