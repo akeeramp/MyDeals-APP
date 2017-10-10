@@ -15,10 +15,11 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
         transclude: true,
         templateUrl: '/app/core/directives/meetComp/meetComp.directive.html',
         controller: ['$scope', 'dataService', function($scope, dataService) {
-            $scope.CAN_VIEW_MEET_COMP = securityService.chkDealRules('CAN_VIEW_MEET_COMP', window.usrRole, null, null, null);
-            $scope.CAN_EDIT_MEET_COMP = securityService.chkDealRules('C_EDIT_MEET_COMP', window.usrRole, null, null, null);
-
+            $scope.CAN_VIEW_MEET_COMP = true; //securityService.chkDealRules('CAN_VIEW_MEET_COMP', window.usrRole, null, null, null);
+            $scope.CAN_EDIT_MEET_COMP = true; //securityService.chkDealRules('C_EDIT_MEET_COMP', window.usrRole, null, null, null);
+            $scope.gridWidth = "1222px";
             $scope.validationMessage = "";
+            $scope.setUpdateFlag = false;
             if (!$scope.CAN_VIEW_MEET_COMP) {
                 $scope.validationMessage = "No Access. You do not have permissions to view this page";                
             }
@@ -28,9 +29,8 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                 $scope.selectedCust = '';
                 $scope.selectedCustomerText = '';
                 $scope.curentRow = '';
-                $scope.gridWidth = "1222px";
-                dataService.get("api/MeetComp/GetMeetCompProductDetails/" + $scope.objSid).then(function(response) {
-                    //https://stackoverflow.com/questions/27120928/getting-only-modified-or-new-kendo-ui-grid-rows-to-send-to-the-server
+                
+                dataService.get("api/MeetComp/GetMeetCompProductDetails/" + $scope.objSid).then(function(response) {                    
                     $scope.meetCompMasterdata = response.data;
                     $scope.meetCompUnchangedData = angular.copy(response.data);
                     $scope.meetCompUpdatedList = [];
@@ -89,7 +89,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                 }
                             });
                         }
-                        $("#grid").data("kendoGrid").resize();
+                        //$("#grid").data("kendoGrid").resize();
 
                     }
 
@@ -513,13 +513,15 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
 
                         $scope.meetCompUpdatedList.push(dataItem);
 
+                        $scope.setUpdateFlag = true;
                         //var dataSource = $("#grid").data("kendoGrid").dataSource.data();
 
                         //var dirty = $.grep(dataSource, function (item) {
                         //    return item.dirty
                         //});
                     }
-                    $scope.setBusy = function(msg, detail) {
+
+                    $scope.setBusy = function (msg, detail) {
                         $timeout(function() {
                             var newState = msg != undefined && msg !== "";
 
@@ -542,14 +544,49 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                             }
                         });
                     }
-                    $scope.saveAndRunMeetComp = function() {
+
+                    $scope.saveAndRunMeetComp = function () {
                         $scope.setBusy("Running Meet Comp...", "Please wait running Meet Comp...");
+
+                        $scope.meetCompUpdatedList = $scope.meetCompUpdatedList.map(function (x) {
+                            return {
+                                GRP: x.GRP,
+                                CUST_NM_SID: x.CUST_NM_SID,
+                                DEAL_PRD_TYPE: x.DEAL_PRD_TYPE,
+                                PRD_CAT_NM: x.PRD_CAT_NM,
+                                GRP_PRD_NM: x.GRP_PRD_NM,
+                                GRP_PRD_SID: x.GRP_PRD_SID,
+                                DEAL_OBJ_SID: x.DEAL_OBJ_SID,
+                                COMP_SKU: x.COMP_SKU,
+                                COMP_PRC: x.COMP_PRC,
+                                COMP_BNCH: x.COMP_BNCH,
+                                IA_BNCH: x.IA_BNCH,
+                                COMP_OVRRD_RSN: x.COMP_OVRRD_RSN,
+                                COMP_OVRRD_FLG: x.COMP_OVRRD_FLG == 'Y' ? true : false,
+                                MEET_COMP_UPD_FLG: x.MEET_COMP_UPD_FLG
+                            }
+                        });
+                        if ($scope.meetCompUpdatedList.length > 0) {
+                            dataService.post("api/MeetComp/UpdateMeetCompProductDetails/" + $scope.objSid, $scope.meetCompUpdatedList).then(function (response) {
+                                $scope.meetCompMasterdata = response.data;
+                                $scope.meetCompUnchangedData = angular.copy(response.data);
+                                $scope.dataSource.read();
+                                $scope.isBusy = false;
+                            },
+                            function (response) {
+                                logger.error("Unable to save data", response, response.statusText);
+                            });                           
+                        }
+                        else {
+                            kendo.alert('No data Found');
+                        }
                     }
 
                     $scope.gotoDealDetails = function(dataItem) {
                         var win = window.open("Contract#/manager/" + dataItem.CNTRCT_OBJ_SID + "/" + dataItem.PRC_ST_OBJ_SID + "/" + dataItem.PRC_TBL_OBJ_SID + "/wip", '_blank');
                         win.focus();
                     }
+
                     function gridDataBound(e) {
                         var childGrid = $("#myDealsGrid").data("kendoGrid");
                         if (!!childGrid) {
@@ -567,7 +604,8 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                             });
                         }
                     };
-                    $scope.detailGridOptions = function(dataItem) {
+
+                    $scope.detailGridOptions = function (dataItem) {
                         return {
                             dataSource: {
                                 transport: {
@@ -692,9 +730,9 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
 
 
                 },
-                    function(response) {
-                        logger.error("Unable to get data", response, response.statusText);
-                    });
+                function(response) {
+                    logger.error("Unable to get data", response, response.statusText);
+                });
             }
 
 

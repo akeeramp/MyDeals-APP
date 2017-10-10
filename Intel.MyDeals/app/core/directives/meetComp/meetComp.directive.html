@@ -1,4 +1,4 @@
-﻿<loading-panel show="isBusy" header="isBusyMsgTitle" description="isBusyMsgDetail"></loading-panel>
+﻿<loading-panel show="isBusy" header="isBusyMsgTitle" description="isBusyMsgDetail" ng-show="isBusy"></loading-panel>
 <div class="col-md-12">
     <h2>Meet Comp</h2>
 </div>
@@ -7,7 +7,7 @@
         {{validationMessage}}
     </div>
 </div>
-<div ng-if="CAN_VIEW_MEET_COMP" id="meetCompOvrrd" class="col-md-12" style="padding-top: 20px;">
+<div ng-if="CAN_VIEW_MEET_COMP" ng-disabled="!setUpdateFlag" id="meetCompOvrrd" class="col-md-12" style="padding-top: 20px;">
     <button class="btn btn-sm ssToolbarBtn" ng-click="saveAndRunMeetComp()" title="Save and Validate Meet Comp">
         <table>
             <tbody>
@@ -71,19 +71,19 @@
     .complete {
         font-size: 20px !important;
         color: #0071c5;
-        margin-left: 50px;
+        margin-left: 42px;
     }
 
     .incomplete {
         font-size: 20px !important;
         color: #F3D54E;
-        margin-left: 50px;
+        margin-left: 42px;
     }
 
     .errorIcon {
         font-size: 20px !important;
         color: rgb(255, 0, 0);
-        margin-left: 50px;
+        margin-left: 42px;
     }
     .k-grid-content > table > tbody > tr > td {
         padding-left: 5px !important;

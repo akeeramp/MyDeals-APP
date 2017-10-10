@@ -60,9 +60,26 @@ namespace Intel.MyDeals.Controllers.API
         public List<MeetCompResult> GetMeetCompProductDetails(int CNTRCT_OBJ_SID)
         {
             return SafeExecutor(() => _meetCompLib.GetMeetCompProductDetails(CNTRCT_OBJ_SID)
-                , $"Unable to {"Activate Deactivate Meet Comp"}"
+                , $"Unable to {"get Meet Comp"}"
             );
         }
+
+        /// <summary>
+        /// Manage Meet Comp TAB
+        /// </summary>
+        /// <param name="CNTRCT_OBJ_SID"></param>
+        /// <returns></returns>
+        [Authorize]
+        [Route("UpdateMeetCompProductDetails/{CNTRCT_OBJ_SID}")]
+        [HttpPost]
+        public List<MeetCompResult> UpdateMeetCompProductDetails(int CNTRCT_OBJ_SID, List<MeetCompUpdate> mcu)
+        {
+            return SafeExecutor(() => _meetCompLib.UpdateMeetCompProductDetails(CNTRCT_OBJ_SID, mcu)
+                , $"Unable to {"update Meet Comp"}"
+            );
+        }
+
+        
 
     }
 }

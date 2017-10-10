@@ -2267,4 +2267,49 @@ public partial class DealTemplateDataGram
         [DataMember]
         public System.DateTime YCS2_START { set; get; }
     }
+
+    public class MeetCompUpdate
+    {
+        [DataMember]
+        public System.String GRP { set; get; }
+        
+        [DataMember]
+        public System.Int32 CUST_NM_SID { set; get; }
+
+        [DataMember]
+        public System.String DEAL_PRD_TYPE { set; get; }
+
+        [DataMember]
+        public System.String PRD_CAT_NM { set; get; }
+
+        [DataMember]
+        public System.String GRP_PRD_NM { set; get; }
+
+        [DataMember]
+        public System.String GRP_PRD_SID { set; get; }
+
+        [DataMember]
+        public System.Int32 DEAL_OBJ_SID { set; get; }
+
+        [DataMember]
+        public System.String COMP_SKU { set; get; }
+
+        [DataMember]
+        public System.Decimal COMP_PRC { set; get; }
+
+        [DataMember]
+        public System.Decimal COMP_BNCH { set; get; }
+
+        [DataMember]
+        public System.Decimal IA_BNCH { set; get; }
+
+        [DataMember]
+        public System.String COMP_OVRRD_RSN { set; get; }
+
+        [DataMember]
+        public System.Boolean COMP_OVRRD_FLG { set; get; }
+
+        [DataMember]
+        public System.Char MEET_COMP_UPD_FLG { set; get; }
+    }
 }
