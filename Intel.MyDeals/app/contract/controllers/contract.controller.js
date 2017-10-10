@@ -52,6 +52,7 @@
 
         $scope.CAN_VIEW_COST_TEST = securityService.chkDealRules('CAN_VIEW_COST_TEST', window.usrRole, null, null, null) || (window.usrRole === "GA" && window.isSuper); // Can view the pass/fail
         $scope.CAN_EDIT_COST_TEST = securityService.chkDealRules('C_EDIT_COST_TEST', window.usrRole, null, null, null) || (window.usrRole === "SA" && window.isSuper); // Can go to cost test screen and make changes
+        $scope.CAN_RUN_COST_TEST = securityService.chkDealRules('C_EDIT_COST_TEST', window.usrRole, null, null, null) || ((window.usrRole === "GA" || window.usrRole === "SA") && window.isSuper); // Can view the pass/fail
         $scope.CAN_VIEW_MEET_COMP = securityService.chkDealRules('CAN_VIEW_MEET_COMP', window.usrRole, null, null, null);
         $scope.CAN_EDIT_MEET_COMP = securityService.chkDealRules('C_EDIT_MEET_COMP', window.usrRole, null, null, null);
         $scope.C_ADD_PRICING_STRATEGY = securityService.chkDealRules('C_ADD_PRICING_STRATEGY', window.usrRole, null, null, null);
@@ -194,7 +195,7 @@
 
             for (var m = 0; m < $scope.contractData.PRC_ST.length; m++) {
                 var item = $scope.contractData.PRC_ST[m].MEETCOMP_TEST_RESULT;
-                if (item !== "" && item !== "Incomplete") {
+                if (item !== "" && item.toUpperCase() !== "INCOMPLETE") {
                     return false;
                 }
             }

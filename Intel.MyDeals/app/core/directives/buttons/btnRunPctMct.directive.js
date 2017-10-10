@@ -30,7 +30,7 @@ function btnRunPctMct(logger, objsetService, $timeout) {
                 $scope.textMsg = "Meet Comp";
             }
 
-            $scope.executePct = function() {
+            $scope.executePct = function () {
                 $scope.root.setBusy($scope.textMsg, "Running " + $scope.textMsg + ".");
                 $(".iconRunPct").addClass("fa-spin grn");
 

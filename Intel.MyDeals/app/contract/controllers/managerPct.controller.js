@@ -153,7 +153,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
 
         objsetService.getPctDetails(pt.DC_ID).then(
             function (e) {
-
+                var secureFields = [ "CAP", "MAX_RPU", "ECAP_PRC", "ECAP_FLR", "PRD_COST", "COST_TEST_OVRRD_FLG", "COST_TEST_OVRRD_CMT", "RTL_CYC_NM", "RTL_PULL_DLR" ];
                 $scope.CostTestGroupDetails = e.data["CostTestGroupDetailItems"];
 
                 var response = e.data["CostTestDetailItems"];
@@ -163,8 +163,8 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
 
                     if (!gridPctUtils.columns[item.DEAL_ID]) {
                         var cols = $scope.templates.columns[pt.OBJ_SET_TYPE_CD];
-                        var tmplt = "<table style='float: left; margin-top: -23px;'><colgroup><col style='width: 30px;'>";
-                        var tr = "<td></td>";
+                        var tmplt = "<table style='float: left; margin-top: -23px;'>"; // <colgroup><col style='width: 30px;'>
+                        var tr = "<td style='width: 30px;'></td>";
                         for (var c = 0; c < cols.length; c++) {
                             var val = item[cols[c].field];
                             if (!!cols[c].format) {
@@ -189,12 +189,15 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
                                     val = "<div style='text-align: center;'><div class='lnkGroup' ng-click='showGroups(" + item["DEAL_PRD_RNK"] + ")'>**View</div></div>";
                                 }
                             }
-                            tmplt += "<col style='width:" + cols[c].width + "'>";
 
-                            if (cols[c].field === "PRC_CST_TST_STS") {
-                                tr += "<td style='padding-left: 0; padding-right: 6px;'>" + (cols[c].parent ? val : "") + "</td>";
-                            } else {
-                                tr += "<td style='padding-left: 6px; padding-right: 6px;'>" + (cols[c].parent ? val : "") + "</td>";
+                            if (secureFields.indexOf(cols[c].field) < 0 || !hasNoPermission) {
+                                //tmplt += "<col style='width:" + cols[c].width + "'>";
+
+                                if (cols[c].field === "PRC_CST_TST_STS") {
+                                    tr += "<td style='padding-left: 0; padding-right: 6px; width:" + (parseInt(cols[c].width) - 6) + "px'>" + (cols[c].parent ? val : "") + "</td>";
+                                } else {
+                                    tr += "<td style='padding-left: 6px; padding-right: 6px; width:" + (parseInt(cols[c].width) - 12) + "px'>" + (cols[c].parent ? val : "") + "</td>";
+                                }
                             }
                         }
                         tmplt += "</colgroup><tbody><tr>" + tr + "</tr></tbody></table>";
@@ -360,7 +363,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
         "DEAL_STRT_DT": {
             field: "DEAL_STRT_DT",
             title: "Deal Start/End",
-            width: "170px",
+            width: "180px",
             template: "#= kendo.toString(new Date(DEAL_STRT_DT), 'M/d/yyyy') # - #= kendo.toString(new Date(DEAL_END_DT), 'M/d/yyyy') #",
             parent: true
         },
@@ -381,6 +384,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
             title: "CAP",
             format: "{0:c}",
             width: "100px",
+            hidden: hasNoPermission,
             parent: false
         },
         "MAX_RPU": {
@@ -388,6 +392,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
             title: "Max RPU",
             format: "{0:c}",
             width: "100px",
+            hidden: hasNoPermission,
             parent: false
         },
         "ECAP_PRC": {
@@ -395,6 +400,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
             title: "ECAP Price",
             format: "{0:c}",
             width: "100px",
+            hidden: hasNoPermission,
             parent: false
         },
         "ECAP_FLR": {
@@ -402,6 +408,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
             title: "ECAP Floor",
             format: "{0:c}",
             width: "100px",
+            hidden: hasNoPermission,
             parent: false
         },
         "LOW_NET_PRC": {
@@ -416,6 +423,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
             title: "Cost",
             format: "{0:c}",
             width: "100px",
+            hidden: hasNoPermission,
             parent: false
         },
         "COST_TEST_OVRRD_FLG": {
@@ -423,6 +431,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
             title: "Cost Test Analysis<br\>Override",
             width: "140px",
             template: '#= gridPctUtils.getPctFlag("dataItem.COST_TEST_OVRRD_FLG", "dataItem.PRC_CST_TST_STS", "dataItem._readonly", ' + hasNoPermission + ') #',
+            hidden: hasNoPermission,
             parent: false
         },
         "COST_TEST_OVRRD_CMT": {
@@ -430,12 +439,14 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
             title: "Cost Test Analysis<br\>Override Comments",
             width: "140px",
             template: '<button class="btn btn-sm btn-skyblue" ng-if="dataItem.COST_TEST_OVRRD_FLG === \'Yes\' || dataItem.COST_TEST_OVRRD_FLG === true" ng-click="openReason(dataItem)" type="button" style="width: 100px;" title="Save and Validate"><span style="color: \\#FC4C02;">*</span> {{dataItem.COST_TEST_OVRRD_CMT === "" ? "Select" : "View Overrides"}}</button>',
+            hidden: hasNoPermission,
             parent: false
         },
         "RTL_CYC_NM": {
             field: "RTL_CYC_NM",
             title: "Retail Cycle",
             width: "140px",
+            hidden: hasNoPermission,
             parent: false
         },
         "RTL_PULL_DLR": {
@@ -443,6 +454,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
             title: "Retail Pull $",
             format: "{0:c}",
             width: "140px",
+            hidden: hasNoPermission,
             parent: false
         },
         "MKT_SEG": {
@@ -672,7 +684,6 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
     }
 
     if ($scope.needToRunPct) {
-        $scope.root.setBusy("Need to Run Cost Test", "Cost Test hasn't run for a while");
         $timeout(function () {
             $scope.$broadcast('runPctMct', {});
             $scope.LAST_COST_TEST_RUN_DSPLY = "";

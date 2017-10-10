@@ -564,10 +564,10 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
     }
 
     if ($scope.needToRunPct) {
-        $scope.root.setBusy("Need to Run Cost Test", "Cost Test hasn't run for a while");
         $timeout(function () {
             $scope.$broadcast('runPctMct', {});
-        },3000);
+            $scope.LAST_COST_TEST_RUN_DSPLY = "";
+        }, 3000);
     }
 
 }

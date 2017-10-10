@@ -81,15 +81,26 @@
                             </table>
                         </button>
 
-                        <div class="fr" style="font-size: 10px; line-height: 1.1em; margin: -5px 0 0 6px; text-align: center;" ng-hide="hideIfNotPending" title="click to change Contract Acceptance Criteria">
+                        <div class="fr" style="font-size: 10px; line-height: 1.1em; margin: -5px 0 0 6px; text-align: center;" 
+                             title="click to change Contract Acceptance Criteria">
                             <div style="color: #888888;">Contract Acceptance</div>
                             <toggle class="toggle-accept"
                                     ng-change="pendingChange()"
                                     ng-model="isPending"
                                     on="Pending"
                                     off="Accepted"
+                                    ng-if="root.contractData.CUST_ACCPT !== 'Acceptance Not Required'"
+                                    ng-disabled="hideIfNotPending"
                                     onstyle="btn-success"
                                     size="btn-md" 
+                                    style="width: 140px !important"></toggle>
+                            <toggle class="toggle-accept"
+                                    ng-model="isPending"
+                                    off="<div style='line-height: 1.2em; margin-top: -4px;'>Acceptance<br/>Not Required</div>"
+                                    ng-if="root.contractData.CUST_ACCPT === 'Acceptance Not Required'"
+                                    ng-disabled="true"
+                                    onstyle="btn-success"
+                                    size="btn-md"
                                     style="width: 140px !important"></toggle>
                             <div kendo-dialog="dialogPendingWarning" class="dialogPending"
                                  k-width="500" k-height="300" k-closable="false" k-visible="false"
@@ -168,7 +179,7 @@
 
                         </div>
                         
-                        <div class="fr" style="font-size: 10px; line-height: 1.1em; margin: -5px 0 0 1px; text-align: center;" ng-if="CAN_EDIT_COST_TEST" ng-show="canEdit">
+                        <div class="fr" style="font-size: 10px; line-height: 1.1em; margin: -5px 0 0 1px; text-align: center;" ng-if="CAN_RUN_COST_TEST" ng-show="canEdit">
                             <div style="color: #888888;"><span ng-bind-html="LAST_COST_TEST_RUN_DSPLY"></span>&nbsp;</div>
                             <btn-run-pct-mct ng-model="root" 
                                              contract-id="root.contractData.DC_ID" 
@@ -177,7 +188,7 @@
                                              btn-style="'margin-left: 5px;'"></btn-run-pct-mct>
                         </div>
                         
-                        <button class="fr btn btn-sm btn-negative" ng-id="C_DELETE_CONTRACT" ng-click="deleteContract()" title="Delete the current Contract" ng-show="canEdit" style="margin-top: 6px; margin-left: 5px;">
+                        <button class="fr btn btn-sm btn-skyblue" ng-id="C_DELETE_CONTRACT" ng-click="deleteContract()" title="Delete the current Contract" ng-show="canEdit" style="margin-top: 6px; margin-left: 5px;">
                             <table>
                                 <tbody>
                                 <tr>
