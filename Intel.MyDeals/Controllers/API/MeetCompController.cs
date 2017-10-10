@@ -31,7 +31,7 @@ namespace Intel.MyDeals.Controllers.API
         {
             return SafeExecutor(() => _meetCompLib.GetMeetCompData()
                 , $"Unable to get {"Meet Comp data"}"
-            );            
+            );
         }
 
         /// <summary>
@@ -49,6 +49,20 @@ namespace Intel.MyDeals.Controllers.API
                 , $"Unable to {"Activate Deactivate Meet Comp"}"
             );
         }
-        
+
+        /// <summary>
+        /// Manage Meet Comp TAB
+        /// </summary>
+        /// <param name="CNTRCT_OBJ_SID"></param>
+        /// <returns></returns>
+        [Authorize]
+        [Route("GetMeetCompProductDetails/{CNTRCT_OBJ_SID}")]
+        public List<MeetCompResult> GetMeetCompProductDetails(int CNTRCT_OBJ_SID)
+        {
+            return SafeExecutor(() => _meetCompLib.GetMeetCompProductDetails(CNTRCT_OBJ_SID)
+                , $"Unable to {"Activate Deactivate Meet Comp"}"
+            );
+        }
+
     }
 }
