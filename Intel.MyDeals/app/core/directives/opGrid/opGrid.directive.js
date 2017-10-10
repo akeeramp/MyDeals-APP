@@ -151,8 +151,14 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
                 if (col.hidden) {
                     $scope.grid.showColumn(val.field);
+                    $scope.opOptions.groupColumns[val.field].Groups.push($scope.curGroup);
                 } else {
                     $scope.grid.hideColumn(val.field);
+
+                    var index = $scope.opOptions.groupColumns[val.field].Groups.indexOf($scope.curGroup);
+                    if (index > -1) {
+                        $scope.opOptions.groupColumns[val.field].Groups.splice(index,1);
+                    }
                 }
             }
 
