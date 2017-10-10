@@ -37,16 +37,5 @@ namespace Intel.MyDeals.BusinessLogic
             return _meetCompCollectorLib.ActivateDeactivateMeetComp(MEET_COMP_SID, ACTV_IND);
         }
 
-        /// <summary>
-        /// Manage Meet Comp TAB
-        /// </summary>
-        /// <param name="CNTRCT_OBJ_SID"></param>
-        /// <returns></returns>
-        public List<MeetCompResult> GetMeetCompProductDetails(int CNTRCT_OBJ_SID)
-        {
-            // TODO :Later need to decide caching will be apply or not
-            return _meetCompCollectorLib.GetMeetCompProductDetails(CNTRCT_OBJ_SID);
-        }
-
     }
 }
