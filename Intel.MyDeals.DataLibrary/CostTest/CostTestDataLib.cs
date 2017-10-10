@@ -213,7 +213,7 @@ namespace Intel.MyDeals.DataLibrary
         {
             DataAccessLib.StoredProcedures.MyDeals.dbo.PR_MYDL_CNTRCT_OBJ_VAL_ROLLUP cmd = new DataAccessLib.StoredProcedures.MyDeals.dbo.PR_MYDL_CNTRCT_OBJ_VAL_ROLLUP
             {
-                contractID = contractId
+                contractID = contractId.ToString()
             };
             DataAccess.ExecuteDataSet(cmd);
         }
