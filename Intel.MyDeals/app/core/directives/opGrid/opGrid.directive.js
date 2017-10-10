@@ -1060,7 +1060,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 // need to clean out all flags... dirty, error, validMsg
                 $scope.cleanFlags();
 
-                // need to set all flags... dirty, error, validMsg  
+                // need to set all flags... dirty, error, validMsg
                 if (!!args.data.WIP_DEAL) {
                     for (var i = 0; i < args.data.WIP_DEAL.length; i++) {
                         var dataItem = $scope.findDataItemById(args.data.WIP_DEAL[i]["DC_ID"]);
@@ -1402,7 +1402,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     });
             }
 
-            //Reject 
+            //Reject
             $scope.rejectOvlp = function (OVLP_DEAL_OBJ_SID) {
                 kendo.alert("Please <b>edit</b> and <b>re-validate</b> your deal to avoid overlapping with other deals");
                 var tabStrip = $("#tabstrip").kendoTabStrip().data("kendoTabStrip");
@@ -1419,7 +1419,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 return WF_STG_CD === undefined ? "&nbsp;" : WF_STG_CD[0];
             }
 
-            // Go to Deal Details 
+            // Go to Deal Details
             $scope.gotoDealDetails = function (dataItem) {
                 var sid = $scope.$parent.$parent.$parent.$parent.$parent.curPricingTable;
                 if (dataItem.OVLP_CD == "SELF_OVLP" || dataItem.PRICING_TABLES == $scope.$parent.$parent.$parent.$parent.$parent.curPricingTable.DC_ID) {
@@ -1840,7 +1840,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             //$timeout(function () {
                             $scope.contractDs.sync();
                             $scope.$parent.$parent.$parent.validateWipDeals();
-                            //}, 100);                            
+                            //}, 100);
                         });
 
 
@@ -1905,10 +1905,23 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
             $scope.opOptions.columns = $scope.assignColSettings();
 
+            function getProductMbrSid(dimProduct) {
+                var prd_mbr_sid = "";
+                var dimKey = "20___0";
+                for (var p in dimProduct) {
+                    if (dimProduct.hasOwnProperty(p) && p.lastIndexOf(dimKey) > -1) {
+                        prd_mbr_sid = dimProduct[p];
+                        break;
+                    }
+                }
+                return prd_mbr_sid;
+            }
+
+
             function getPrductDetails(dataItem, priceCondition) {
                 return [{
-                    'CUST_MBR_SID': !!dataItem.CUST_MBR_SID ? dataItem.CST_MBR_SID : $scope.$parent.$parent.getCustId(),
-                    'PRD_MBR_SID': dataItem.PRODUCT_FILTER,
+                    'CUST_MBR_SID': !!dataItem.CUST_MBR_SID ? dataItem.CUST_MBR_SID : $scope.$parent.$parent.getCustId(),
+                    'PRD_MBR_SID': getProductMbrSid(dataItem.PRODUCT_FILTER),
                     'GEO_MBR_SID': dataItem.GEO_COMBINED,
                     'DEAL_STRT_DT': moment(dataItem.START_DT).format("l"),
                     'DEAL_END_DT': moment(dataItem.END_DT).format("l"),
@@ -1919,8 +1932,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
             function openCAPBreakOut(dataItem, priceCondition) {
                 var productData = {
-                    'CUST_MBR_SID': !!dataItem.CUST_MBR_SID ? dataItem.CST_MBR_SID : $scope.$parent.$parent.getCustId(),
-                    'PRD_MBR_SID': dataItem.PRODUCT_FILTER,
+                    'CUST_MBR_SID': !!dataItem.CUST_MBR_SID ? dataItem.CUST_MBR_SID : $scope.$parent.$parent.getCustId(),
+                    'PRD_MBR_SID': getProductMbrSid(dataItem.PRODUCT_FILTER),
                     'GEO_MBR_SID': dataItem.GEO_COMBINED,
                     'DEAL_STRT_DT': moment(dataItem.START_DT).format("l"),
                     'DEAL_END_DT': moment(dataItem.END_DT).format("l"),
