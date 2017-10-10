@@ -1317,7 +1317,14 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 $scope.$applyAsync();
 
                 $timeout(function () {
-                    $("#tabstrip").kendoTabStrip().data("kendoTabStrip").reload();
+                    var tabStrip = $("#tabstrip").kendoTabStrip().data("kendoTabStrip");
+                    tabStrip.reload();
+
+                    // Select the tab that was added, and then update which columns are shown.
+                    // TODO:TJE - Need to test name w/ all special charaters to see if any of them break this code.
+                    tabStrip.select("li:contains('" + data + "')");
+                    $scope.showCols(data);
+
                     $scope.configureSortableTab();
                 }, 100);
             }
