@@ -75,7 +75,7 @@ namespace Intel.MyDeals.BusinessRules
                 },
                 new MyOpRule
                 {
-                    Title="Must have a positive or zero value",
+                    Title="Forecast Volume must have a positive or zero value",
                     ActionRule = MyDcActions.ExecuteActions,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
                     InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
@@ -86,6 +86,38 @@ namespace Intel.MyDeals.BusinessRules
                             Action = MyDeActions.AddMessage,
                             Args = new object[] {"{0} must be positive or zero"},
                             Where = de => de.AtrbCdIn(new List<string> { AttributeCodes.FRCST_VOL }) && de.HasValue() && de.IsNegative()
+                        }
+                    }
+                },
+                new MyOpRule
+                {
+                    Title="User Defined AVG RPU cannot be negative",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = MyDeActions.AddMessage,
+                            Args = new object[] {"{0} must be positive or zero"},
+                            Where = de => de.AtrbCdIn(new List<string> { AttributeCodes.USER_AVG_RPU }) && de.HasValue() && de.IsNegative()
+                        }
+                    }
+                },
+                new MyOpRule
+                {
+                    Title="User Defined MAX RPU cannot be negative",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = MyDeActions.AddMessage,
+                            Args = new object[] {"{0} must be positive or zero"},
+                            Where = de => de.AtrbCdIn(new List<string> { AttributeCodes.USER_MAX_RPU }) && de.HasValue() && de.IsNegative()
                         }
                     }
                 },
@@ -357,24 +389,6 @@ namespace Intel.MyDeals.BusinessRules
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
                     InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW}
                 },
-				//new MyOpRule
-				//{
-				//	Title="Forcast Volume must be positive", //REBATE_TYPE
-				//	ActionRule = MyDcActions.ExecuteActions,
-				//	InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
-				//	InObjSetType = new List<string> {OpDataElementSetType.PROGRAM.ToString()},
-				//	Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
-				//	AtrbCondIf = dc => dc.IsNegativeOrZero(AttributeCodes.FRCST_VOL),
-				//	OpRuleActions = new List<OpRuleAction<IOpDataElement>>
-				//	{
-				//		new OpRuleAction<IOpDataElement>
-				//		{
-				//			Action = BusinessLogicDeActions.AddValidationMessage,
-				//			Args = new object[] {"Forcast volume must be positive"},
-				//			Where = de => de.AtrbCdIn(new List<string> { AttributeCodes.FRCST_VOL }) && de.HasValue() && de.IsNegativeOrZero()
-				//		}
-				//	}
-				//},
 				new MyOpRule
 				{
 					Title="Total dollar amount must be positive for non-debit memos but negative for debit memos",
