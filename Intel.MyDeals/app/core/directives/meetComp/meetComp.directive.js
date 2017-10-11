@@ -183,14 +183,14 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                             {
                                 field: "COMP_SKU",
                                 title: "Meet Comp SKU",
-                                width: 200,
+                                width: 170,
                                 filterable: { multi: true, search: true, search: true },
                                 editor: meetCompSKUEditor
                             },
                             {
                                 field: "COMP_PRC",
                                 title: "Meet Comp Price",
-                                width: 120,
+                                width: 150,
                                 format: "{0:c}",
                                 editor: meetCompPriceEditor
                             },
@@ -210,14 +210,14 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                 field: "MEET_COMP_STS",
                                 title: "Test Results",
                                 width: 120,
-                                template: "#if(MEET_COMP_STS == 'Pass') {#<i class='intelicon-passed-completed-solid complete' style='font-size:20px !important'></i>#} else if(MEET_COMP_STS == 'Incomplete') {#<i class='intelicon-help-solid incomplete' style='font-size:20px !important'></i>#} else{#<i class='intelicon-alert-solid errorIcon' style='font-size:20px !important'></i>#}#",
+                                template: "#if(MEET_COMP_STS == 'Pass') {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid complete' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Incomplete') {#<div class='textRunIcon'><i class='intelicon-help-solid incomplete' style='font-size:20px !important'></i></div>#} else{#<div class='textRunIcon'><i class='intelicon-alert-solid errorIcon' style='font-size:20px !important'></i></div>#}#",
                                 editable: function () { return false; },
                                 hidden: $scope.hide_MEET_COMP_STS
                             },
                             {
                                 field: "MC_LAST_RUN",
                                 title: "Last Run",
-                                template: "#= kendo.toString(new Date(MC_LAST_RUN), 'M/d/yyyy') #",
+                                template: "#= kendo.toString(new Date(MC_LAST_RUN), 'M/d/yyyy hh:MM:ss') #",
                                 width: 120,
                                 filterable: {
                                     extra: false,
@@ -378,7 +378,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         if (options.model.GRP == "PRD") {
                                             var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
                                                 .Where(function (x) {
-                                                    return (x.GRP_PRD_SID == options.model.RW_NM.GRP_PRD_SID && x.GRP == "DEAL" && x.MC_NULL == true);
+                                                    return (x.GRP_PRD_SID == options.model.GRP_PRD_SID && x.GRP == "DEAL" && x.MC_NULL == true);
                                                 })
                                                 .ToArray();
 
@@ -387,11 +387,9 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                 addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_PRC");
                                             }
                                         }
-                                        else {
-                                            $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_PRC = options.model.COMP_PRC;
-                                            addToUpdateList(options.model, "COMP_PRC");
-                                        }
-
+                                        $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_PRC = options.model.COMP_PRC;
+                                        addToUpdateList(options.model, "COMP_PRC");
+                                       
                                         $scope.dataSourceParent.read();
                                     }
                                 });
@@ -571,19 +569,19 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                         $scope.ROW_NMB = [];
 
                         $scope.meetCompUpdatedList = $scope.meetCompUpdatedList.map(function (x) {
-                            if (usrRole == "GA" || usrRole == "FSE" || usrRole == "Super GA") {
-                                if (x.COMP_BNCH < 1 && $scope.IS_COMP_BNCH_CHNG) {   
-                                    $scope.isValid = false;                                    
-                                }
-                                if (x.IA_BNCH < 1 && $scope.IS_IA_BNCH_CHNG) {
-                                    $scope.isValid = false;                                    
-                                }
-                                if (!$scope.isValid) {
-                                    $scope.ROW_NMB.push(x.RW_NM);
-                                }
+                            //if (usrRole == "GA" || usrRole == "FSE" || usrRole == "Super GA") {
+                            //    if (x.COMP_BNCH < 1 && $scope.IS_COMP_BNCH_CHNG) {   
+                            //        $scope.isValid = false;                                    
+                            //    }
+                            //    if (x.IA_BNCH < 1 && $scope.IS_IA_BNCH_CHNG) {
+                            //        $scope.isValid = false;                                    
+                            //    }
+                            //    if (!$scope.isValid) {
+                            //        $scope.ROW_NMB.push(x.RW_NM);
+                            //    }
 
-                            }
-                            else {
+                            //}
+                            //else {
                                 return {
                                     GRP: x.GRP,
                                     CUST_NM_SID: x.CUST_NM_SID,
@@ -600,7 +598,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     COMP_OVRRD_FLG: x.COMP_OVRRD_FLG == 'Y' ? true : false,
                                     MEET_COMP_UPD_FLG: x.MEET_COMP_UPD_FLG
                                 }
-                            }
+                           //}
 
                         });
                         if ($scope.meetCompUpdatedList.length > 0) {  
@@ -701,6 +699,13 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                             pageable: false,
                             columns: [
                                 {
+                                    field: "PRD_CAT_NM",
+                                    title: "Vertical",
+                                    width: 80,
+                                    filterable: { multi: true, search: true, search: true },
+                                    editable: function () { return false; }
+                                },
+                                {
                                     field: "OBJ_SET_TYPE",
                                     title: "Deal Type",
                                     width: 120
@@ -710,27 +715,26 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     title: "Deal ID",
                                     width: 120,
                                     filterable: { multi: true, search: true, search: true },
-                                    template: "<div class='ovlpCell'><a ng-click='gotoDealDetails(dataItem)' class='btnDeal'> #= DEAL_OBJ_SID # </a></div>"
+                                    template: "<div class='ovlpCell'><a onclick='gotoDealDetails(#=CNTRCT_OBJ_SID#,#=PRC_ST_OBJ_SID#, #= PRC_TBL_OBJ_SID # )' class='btnDeal'> #= DEAL_OBJ_SID # </a></div>"
                                 },
                                 {
                                     field: "COMP_SKU",
                                     title: "Meet Comp SKU",
-                                    width: 200,
+                                    width: 170,
                                     filterable: { multi: true, search: true, search: true },
                                     editor: meetCompSKUEditor
                                 },
                                 {
                                     field: "COMP_PRC",
                                     title: "Meet Comp Price",
-                                    width: "120px",
+                                    width: "150px",
                                     format: "{0:c}",
                                     editor: meetCompPriceEditor
                                 },
                                 {
                                     field: "IA_BNCH",
                                     title: "IA Bench",
-                                    width: 120,
-                                    template: "<div style='color: {{usrColor}}'> </div>",
+                                    width: 120,                                   
                                     editor: editorIABench
                                 },
                                 {
@@ -745,13 +749,13 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     width: 120,
                                     editable: function () { return false; },
                                     hidden: $scope.hide_MEET_COMP_STS,
-                                    template: "#if(MEET_COMP_STS == 'Pass') {#<i class='intelicon-passed-completed-solid complete' style='font-size:20px !important'></i>#} else if(MEET_COMP_STS == 'Incomplete') {#<i class='intelicon-help-solid incomplete' style='font-size:20px !important'></i>#} else{#<i class='intelicon-alert-solid errorIcon' style='font-size:20px !important'></i>#}#"
+                                    template: "#if(MEET_COMP_STS == 'Pass') {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid complete' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Incomplete') {#<div class='textRunIcon'><i class='intelicon-help-solid incomplete' style='font-size:20px !important'></i></div>#} else{#<div class='textRunIcon'><i class='intelicon-alert-solid errorIcon' style='font-size:20px !important'></i></div>#}#",
 
                                 },
                                 {
                                     field: "MC_LAST_RUN",
                                     title: "Last Run",
-                                    template: "#= kendo.toString(new Date(MC_LAST_RUN), 'M/d/yyyy') #",
+                                    template: "#= kendo.toString(new Date(MC_LAST_RUN), 'M/d/yyyy hh:MM:ss') #",
                                     width: 120,
                                     filterable: {
                                         extra: false,

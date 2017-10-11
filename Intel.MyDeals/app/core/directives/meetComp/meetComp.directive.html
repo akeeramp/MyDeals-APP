@@ -7,7 +7,7 @@
         {{validationMessage}}
     </div>
 </div>
-<div ng-if="CAN_VIEW_MEET_COMP" ng-show="!setUpdateFlag" id="meetCompOvrrd" class="col-md-12" style="padding-top: 20px;">
+<div id="meetCompOvrrd" class="col-md-12" style="padding-top: 20px;">
     <button class="btn btn-sm ssToolbarBtn" ng-click="saveAndRunMeetComp()" title="Save and Validate Meet Comp">
         <table>
             <tbody>
@@ -23,14 +23,17 @@
         </table>
     </button>
     
-    <div ng-if="meetCompMasterdata.length > 0" id="grid" kendo-grid="meetCompGrid" class="opUiContainer md dashboard op-grid" expand-k-grid options="gridOptions">
+    <div id="grid" kendo-grid="meetCompGrid" class="opUiContainer md dashboard op-grid" expand-k-grid options="gridOptions">
         <!--<div style="margin-left:102px !important" class="opUiContainer dashboard md op-grid childGrid" k-detail-template>
             <div class="myDealsGrid" kendo-grid k-scope-field={{dataItem.uniqueGridID}} k-options="detailGridOptions(dataItem)"></div>
         </div>-->
     </div>
 </div>
 <script>
-      
+    function gotoDealDetails(CNTRCT_OBJ_SID,PRC_ST_OBJ_SID, PRC_TBL_OBJ_SID ) {
+        var win = window.open("Contract#/manager/" + CNTRCT_OBJ_SID + "/" + PRC_ST_OBJ_SID + "/" + PRC_TBL_OBJ_SID + "/wip", '_blank');
+        win.focus();
+    }
       function addNewSKUForCustomer() {
           kendo.confirm("Would you like to save your new entry for your customer only or publish for others to use?<br/><input class='cmbCustomerSelection' type='radio' name='custType' value='0' checked>Publish for just this Customer<br><input class='cmbCustomerSelection' type='radio' name='custType' value='1'>Publish for all customers ").then(function () {
               var scope = angular.element(document.getElementById("meetCompOvrrd")).scope();
@@ -50,15 +53,10 @@
     <button class="k-button" onclick="addNewSKUForCustomer()">Add new item</button>
 </script>
 <style>
-    @media screen and (min-width: 1920px) {
-        .childGrid {
-            margin-left:134px !important;
-        }
-
-    }
-
-    .childGrid {
-        margin-left: 100px !important;
+    
+    .textRunIcon{
+        width:100% !important;
+        text-align:center !important;
     } .k-hierarchy-cell {
         border-right: none !important;
     } .anchorSaveAndValidate {
@@ -77,25 +75,25 @@
     }
     .k-detail-row > .k-detail-cell > div:first-child {
         margin: 0px !important;
-        margin-left: 103px !important;
+        margin-left: -6px !important;
         overflow: hidden !important;
     }
     .complete {
         font-size: 20px !important;
         color: #0071c5;
-        margin-left: 62px;
+
     }
 
     .incomplete {
         font-size: 20px !important;
         color: #F3D54E;
-        margin-left: 62px;
+       
     }
 
     .errorIcon {
         font-size: 20px !important;
         color: rgb(255, 0, 0);
-        margin-left: 62px;
+        
     }
     .k-grid-content > table > tbody > tr > td {
         padding-left: 5px !important;
