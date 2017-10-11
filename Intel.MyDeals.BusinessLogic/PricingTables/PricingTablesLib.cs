@@ -117,10 +117,50 @@ namespace Intel.MyDeals.BusinessLogic
 
         public OpDataCollectorFlattenedDictList SavePricingTable(OpDataCollectorFlattenedList data, ContractToken contractToken)
         {
-            return _dataCollectorLib.SavePackets(new OpDataCollectorFlattenedDictList
+            OpDataCollectorFlattenedDictList dataDictList = new OpDataCollectorFlattenedDictList
             {
                 [OpDataElementType.PRC_TBL] = data
-            }, contractToken, new List<int>(), false, "", false).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
+            };
+
+            // if a new PT... check is parent is past Submitted
+            int id = int.Parse(data[0]["DC_ID"].ToString());
+            if (id < 0)
+            {
+                MyDealsData psDealsData = OpDataElementType.PRC_ST.GetByIDs(
+                    new List<int> { int.Parse(data[0]["DC_PARENT_ID"].ToString()) },
+                    new List<OpDataElementType> {OpDataElementType.PRC_ST},
+                    new List<int> {Attributes.WF_STG_CD.ATRB_SID, Attributes.OBJ_SET_TYPE_CD.ATRB_SID});
+
+                OpDataElement deStage = psDealsData[OpDataElementType.PRC_ST].AllDataElements.FirstOrDefault(d => d.AtrbCd == AttributeCodes.WF_STG_CD);
+                if (deStage != null)
+                {
+                    OpDataCollector dc = psDealsData[OpDataElementType.PRC_ST].AllDataCollectors.First();
+                    string stg = deStage.AtrbValue.ToString();
+                    if (stg == WorkFlowStages.Pending || stg == WorkFlowStages.Approved)
+                    {
+                        deStage.AtrbValue = OpUserStack.MyOpUserToken.Role.RoleTypeCd == RoleTypes.GA
+                            ? WorkFlowStages.Requested
+                            : WorkFlowStages.Draft;
+
+                        OpDataCollectorFlattenedList flatList = new OpDataCollectorFlattenedList
+                        {
+                            new OpDataCollectorFlattenedItem
+                            {
+                                [AttributeCodes.WF_STG_CD] = dc.GetAtrbValue(AttributeCodes.WF_STG_CD),
+                                [AttributeCodes.OBJ_SET_TYPE_CD] = dc.GetAtrbValue(AttributeCodes.OBJ_SET_TYPE_CD),
+                                [AttributeCodes.DC_ID] = dc.DcID,
+                                [AttributeCodes.DC_PARENT_ID] = dc.DcParentID,
+                                [AttributeCodes.dc_type] = dc.DcType,
+                                [AttributeCodes.dc_parent_type] = dc.DcParentType
+                            }
+                        };
+
+                        dataDictList[OpDataElementType.PRC_ST] = flatList;
+                    }
+                }
+            }
+            //if (data["DC_ID"])
+            return _dataCollectorLib.SavePackets(dataDictList, contractToken, new List<int>(), false, "", false).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
         }
 
         public OpDataCollectorFlattenedDictList SavePricingTable(OpDataCollectorFlattenedList pricingTables, OpDataCollectorFlattenedList pricingTableRows, OpDataCollectorFlattenedList wipDeals, ContractToken contractToken)

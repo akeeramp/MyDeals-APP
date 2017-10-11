@@ -182,6 +182,13 @@ namespace Intel.MyDeals.BusinessRules
                 },
                 new MyOpRule
                 {
+                    Title="Check for Major Change by adding Pricing Table",
+                    ActionRule = MyDcActions.MajorChangeAddPtCheck,
+                    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL},
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnMergeComplete }
+                },
+                new MyOpRule
+                {
                     Title="Validate ECAP Price",
                     ActionRule = MyDcActions.ValidateEcapPrice,
                     InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},

@@ -192,6 +192,16 @@ namespace Intel.MyDeals.BusinessLogic
                 }
             }
 
+            // if PRC_TBL, check for merge complete rules
+            if (opType == OpDataElementType.PRC_TBL)
+            {
+                myDealsData.InjectParentStages();
+                foreach (OpDataCollector dc in myDealsData[OpDataElementType.PRC_TBL].AllDataCollectors)
+                {
+                    dc.ApplyRules(MyRulesTrigger.OnMergeComplete, null, myDealsData);
+                }
+            }
+
             // look for PTRs to delete
             if (opType == OpDataElementType.PRC_TBL_ROW)
             {

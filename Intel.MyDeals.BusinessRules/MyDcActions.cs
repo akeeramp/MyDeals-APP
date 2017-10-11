@@ -673,6 +673,25 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void MajorChangeAddPtCheck(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+            
+            if (r.Dc.DcID > 0 || !r.ExtraArgs.Any()) return;
+
+            var myDealsData = (MyDealsData)r.ExtraArgs[0];
+
+            IOpDataElement deStage = myDealsData[OpDataElementType.PRC_ST].AllDataCollectors.FirstOrDefault().GetDataElement(AttributeCodes.WF_STG_CD);
+            string curStage = deStage.AtrbValue.ToString();
+            var futureStage = r.Dc.GetNextStage("Redeal", DataCollections.GetWorkFlowItems(), curStage, OpDataElementType.PRC_ST);
+
+            if (!string.IsNullOrEmpty(futureStage) && curStage != futureStage)
+            {
+                deStage.SetAtrbValue(futureStage);
+            }
+        }
+
         public static void MajorChangeCheck(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
