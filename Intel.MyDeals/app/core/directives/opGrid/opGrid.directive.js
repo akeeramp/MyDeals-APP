@@ -2,9 +2,9 @@
     .module('app.core')
     .directive('opGrid', opGrid);
 
-opGrid.$inject = ['$compile', 'objsetService', '$timeout', 'colorDictionary', '$uibModal', '$filter', 'logger'];
+opGrid.$inject = ['$compile', 'objsetService', '$timeout', 'colorDictionary', '$uibModal', '$filter', 'userPreferencesService', 'logger'];
 
-function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $filter, logger) {
+function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $filter, userPreferencesService, logger) {
 
     return {
         scope: {
@@ -338,31 +338,72 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             }
 
             $scope.customLayout = function () {
-                if ($scope.opOptions.custom === undefined) {
-                    kendo.alert("You do not currently have a custom layout saved.");
-                    return;
-                }
-
                 $scope.opOptions.groups = [];
 
-                $timeout(function () {
-                    $scope.cloneWithOrder("custom");
+                // Get the persisted grid settings.
+                userPreferencesService.getActions("DealEditor", "CustomGridSettings")
+                    .then(function (response) {
+                        if (response.data && response.data.length > 0) {
 
-                    $timeout(function () {
-                        $("#tabstrip").kendoTabStrip().data("kendoTabStrip").reload();
-                        $scope.configureSortableTab();
-                        $scope.selectFirstTab();
-                    }, 10);
-                }, 10);
+                            // 'Groups'
+                            var groupsSetting = response.data.filter(function (obj) {
+                                return obj.PRFR_KEY == "Groups";
+                            });
+                            if (groupsSetting && groupsSetting.length > 0) {
+                                $scope.opOptions.groups = JSON.parse(groupsSetting[0].PRFR_VAL);
+                            }
+
+                            // 'GroupColumns'
+                            var groupColumnsSetting = response.data.filter(function (obj) {
+                                return obj.PRFR_KEY == "GroupColumns";
+                            });
+                            if (groupColumnsSetting && groupColumnsSetting.length > 0) {
+                                $scope.opOptions.groupColumns = JSON.parse(groupColumnsSetting[0].PRFR_VAL);
+                            }
+
+                            // Apply the settings.
+                            $timeout(function () {
+                                $scope.cloneWithOrder("custom");
+
+                                $timeout(function () {
+                                    $("#tabstrip").kendoTabStrip().data("kendoTabStrip").reload();
+                                    $scope.configureSortableTab();
+                                    $scope.selectFirstTab();
+                                }, 10);
+                            }, 10);
+                        } else {
+                            kendo.alert("You have not saved a custom layout yet.");
+                            return;
+                        }
+                    }, function (response) {
+                        logger.error("Unable to get Custom Layout.", response, response.statusText);
+                    });
             }
 
             $scope.saveLayout = function () {
                 $scope.alignGroupOrder();
-                $scope.opOptions.custom = {};
-                $scope.opOptions.custom.groups = util.clone($scope.opOptions.groups);
-                $scope.opOptions.custom.groupColumns = util.clone($scope.opOptions.groupColumns);
 
-                kendo.alert("This is where the save routine goes.");
+                // Persist the current 'Groups' settings.
+                userPreferencesService.updateAction(
+                    "DealEditor", // CATEGORY
+                    "CustomGridSettings", // SUBCATEGORY
+                    "Groups", // ID
+                    JSON.stringify($scope.opOptions.groups)) // VALUE
+                    .then(function (response) {
+                    }, function (response) {
+                        logger.error("Unable to save Custom Layout.", response, response.statusText);
+                    });
+
+                // Persist the current 'GroupColumns' settings.
+                userPreferencesService.updateAction(
+                    "DealEditor", // CATEGORY
+                    "CustomGridSettings", // SUBCATEGORY
+                    "GroupColumns", // ID
+                    JSON.stringify($scope.opOptions.groupColumns)) // VALUE
+                    .then(function (response) {
+                    }, function (response) {
+                        logger.error("Unable to save Custom Layout.", response, response.statusText);
+                    });
             }
 
             $scope.displayDealTypes = function () {
