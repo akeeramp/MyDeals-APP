@@ -7,7 +7,7 @@
         {{validationMessage}}
     </div>
 </div>
-<div ng-if="CAN_VIEW_MEET_COMP" ng-disabled="!setUpdateFlag" id="meetCompOvrrd" class="col-md-12" style="padding-top: 20px;">
+<div ng-if="CAN_VIEW_MEET_COMP" ng-show="!setUpdateFlag" id="meetCompOvrrd" class="col-md-12" style="padding-top: 20px;">
     <button class="btn btn-sm ssToolbarBtn" ng-click="saveAndRunMeetComp()" title="Save and Validate Meet Comp">
         <table>
             <tbody>
@@ -23,10 +23,10 @@
         </table>
     </button>
     
-    <div id="grid" kendo-grid="meetCompGrid" style="width: {{gridWidth}};" class="opUiContainer md dashboard op-grid" expand-k-grid options="gridOptions">
-        <div id="childGrid" style="max-width: 1222px;margin-left: 74px !important;" class="opUiContainer dashboard md op-grid" k-detail-template>
-            <div id="myDealsGrid" kendo-grid k-options="detailGridOptions(dataItem)"></div>
-        </div>
+    <div ng-if="meetCompMasterdata.length > 0" id="grid" kendo-grid="meetCompGrid" class="opUiContainer md dashboard op-grid" expand-k-grid options="gridOptions">
+        <!--<div style="margin-left:102px !important" class="opUiContainer dashboard md op-grid childGrid" k-detail-template>
+            <div class="myDealsGrid" kendo-grid k-scope-field={{dataItem.uniqueGridID}} k-options="detailGridOptions(dataItem)"></div>
+        </div>-->
     </div>
 </div>
 <script>
@@ -38,7 +38,7 @@
                   scope.addSKUForCustomer($("input[type='radio'].cmbCustomerSelection:checked").val());
               });              
             }, function () {
-                kendo.alert("You chose to Cancel action.");
+                //kendo.alert("You chose to Cancel action.");
             });
         };
 </script>
@@ -50,7 +50,18 @@
     <button class="k-button" onclick="addNewSKUForCustomer()">Add new item</button>
 </script>
 <style>
-    .anchorSaveAndValidate {
+    @media screen and (min-width: 1920px) {
+        .childGrid {
+            margin-left:134px !important;
+        }
+
+    }
+
+    .childGrid {
+        margin-left: 100px !important;
+    } .k-hierarchy-cell {
+        border-right: none !important;
+    } .anchorSaveAndValidate {
         background: transparent !important;
         box-shadow: none !important;
         border: none !important;
@@ -61,29 +72,30 @@
         font-size: 20px;
         margin-right: 5px;
     }
-    #childGrid .k-grid-content {
+    .childGrid .k-grid-content {
         overflow:hidden !important;
     }
     .k-detail-row > .k-detail-cell > div:first-child {
         margin: 0px !important;
+        margin-left: 103px !important;
         overflow: hidden !important;
     }
     .complete {
         font-size: 20px !important;
         color: #0071c5;
-        margin-left: 42px;
+        margin-left: 62px;
     }
 
     .incomplete {
         font-size: 20px !important;
         color: #F3D54E;
-        margin-left: 42px;
+        margin-left: 62px;
     }
 
     .errorIcon {
         font-size: 20px !important;
         color: rgb(255, 0, 0);
-        margin-left: 42px;
+        margin-left: 62px;
     }
     .k-grid-content > table > tbody > tr > td {
         padding-left: 5px !important;
