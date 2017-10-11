@@ -6311,7 +6311,7 @@ Fore more details, refer below thread
 http://kendoui-feedback.telerik.com/forums/127393-kendo-ui-feedback/suggestions/31617025-kendo-not-support-in-chrome-latest-version-it-get
 */
 .k-overlay {
-    -webkit-backface-visibility: hidden;
+    -webkit-backface-visibility: hidden !important;
 } 
 
 
