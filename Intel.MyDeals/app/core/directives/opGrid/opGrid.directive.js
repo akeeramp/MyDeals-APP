@@ -345,12 +345,14 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     .then(function (response) {
                         if (response.data && response.data.length > 0) {
 
+                            $scope.opOptions.custom = {};
+
                             // 'Groups'
                             var groupsSetting = response.data.filter(function (obj) {
                                 return obj.PRFR_KEY == "Groups";
                             });
                             if (groupsSetting && groupsSetting.length > 0) {
-                                $scope.opOptions.groups = JSON.parse(groupsSetting[0].PRFR_VAL);
+                                $scope.opOptions.custom.groups = JSON.parse(groupsSetting[0].PRFR_VAL);
                             }
 
                             // 'GroupColumns'
@@ -358,7 +360,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                 return obj.PRFR_KEY == "GroupColumns";
                             });
                             if (groupColumnsSetting && groupColumnsSetting.length > 0) {
-                                $scope.opOptions.groupColumns = JSON.parse(groupColumnsSetting[0].PRFR_VAL);
+                                $scope.opOptions.custom.groupColumns = JSON.parse(groupColumnsSetting[0].PRFR_VAL);
                             }
 
                             // Apply the settings.
