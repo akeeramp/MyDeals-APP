@@ -522,8 +522,15 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
 
                     }
 
-                    function addToUpdateList(dataItem, FIELD_NM) {
-                        var indx = $scope.meetCompUpdatedList.findIndex(item => item.RW_NM == dataItem.RW_NM);
+                    function addToUpdateList(dataItem, FIELD_NM) {                       
+                        // findIndex() is not supported in IE11 and hence replacing with 'some()' that is supported in all browsers - VN
+                        var indx = -1;
+                        $scope.meetCompUpdatedList.some(function (e, i) {
+                            if (e.RW_NM == dataItem.RW_NM) {
+                                indx = i;
+                                return true;
+                            }
+                        });
 
                         if (indx > -1) {
                             $scope.meetCompUpdatedList.splice(indx, 1);

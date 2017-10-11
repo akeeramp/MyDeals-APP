@@ -1449,7 +1449,16 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     .then(function (response) {
                         if (response.data[0].PRICING_TABLES > 0) {
                             // Change in Deal Editor
-                            var indx = $scope.opData.findIndex(item => item.DC_ID == data);
+                            
+                            // findIndex() is not supported in IE11 and hence replacing with 'some()' that is supported in all browsers - VN
+                            var indx = -1;
+                            $scope.opData.some(function (e, i) {
+                                if (e.DC_ID == data) {
+                                    indx = i;
+                                    return true;
+                                }
+                            });
+
                             if (indx > -1) {
                                 $scope.opData[indx].YCS2_OVERLAP_OVERRIDE = YCS2_OVERLAP_OVERRIDE == 'Y' ? 'Y' : 'N';
                                 $scope.contractDs.read();
@@ -1465,7 +1474,17 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             }
 
                             var grps = $scope.opOptions.groups;
-                            var indx = grps.findIndex(item => item.name == 'Overlapping');
+                            //var indx = grps.findIndex(item => item.name == 'Overlapping');
+
+                            // findIndex() is not supported in IE11 and hence replacing with 'some()' that is supported in all browsers - VN
+                            var indx = -1;
+                            grps.some(function (e, i) {
+                                if (e.name == 'Overlapping') {
+                                    indx = i;
+                                    return true;
+                                }
+                            });
+
                             grps[indx].numErrors = $scope.ovlpErrorCount.length;
                             $scope.ovlpDataSource.read();
 
@@ -1808,14 +1827,30 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 for (var z = 0; z < rowCount.length; z++) {
                     $scope.ovlpErrorCount.push(rowCount[z].WIP_DEAL_OBJ_SID);
                 }
-                var indx = grps.findIndex(item => item.name == 'Overlapping');
+                
+                // findIndex() is not supported in IE11 and hence replacing with 'some()' that is supported in all browsers - VN
+                var indx = -1;
+                grps.some(function (e, i) {
+                    if (e.name == 'Overlapping') {
+                        indx = i;
+                        return true;
+                    }
+                });
                 grps[indx].numErrors = rowCount.length;
             }
 
             //Remove Overlap TAB
             $scope.removeOverlapTab = function () {
                 var grps = $scope.opOptions.groups;
-                var indx = grps.findIndex(item => item.name == 'Overlapping');
+               
+                // findIndex() is not supported in IE11 and hence replacing with 'some()' that is supported in all browsers - VN
+                var indx = -1;
+                grps.some(function (e, i) {
+                    if (e.name == 'Overlapping') {
+                        indx = i;
+                        return true;
+                    }
+                });
 
                 if (indx > -1) {
                     $scope.opOptions.groups.splice(indx, 1);

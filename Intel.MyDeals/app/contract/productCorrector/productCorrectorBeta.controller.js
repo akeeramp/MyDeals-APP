@@ -807,8 +807,15 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
         var isProductExists = vm.curRowData.filter(function (x) {
             return x.USR_INPUT === dataItem && x.PRD_MBR_SID == 0
         }).length === 0;
-
-        var indx = vm.curRowProds.findIndex(item => item.name == dataItem);
+       
+        // findIndex() is not supported in IE11 and hence replacing with 'some()' that is supported in all browsers - VN
+        var indx = -1;
+        vm.curRowProds.some(function (e, i) {
+            if (e.name == dataItem) {
+                indx = i;
+                return true;
+            }
+        });
         var isExcludeProduct = vm.curRowProds[indx].exclude == "I" ? false : true;
 
         var suggestedProduct = {
