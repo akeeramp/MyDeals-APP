@@ -9,7 +9,7 @@ function pctGroupModalCtrl($scope, $uibModalInstance, dataItems) {
     $scope.curData = dataItems;
 
     for (var d = 0; d < $scope.curData.length; d++) {
-        $scope.curData[d].EXCLD_DEAL_FLAG = $scope.curData[d].EXCLD_DEAL_FLAG === 1;
+        $scope.curData[d].EXCLD_DEAL_FLAG = ($scope.curData[d].EXCLD_DEAL_FLAG === 1 || $scope.curData[d].EXCLD_DEAL_FLAG === true);
     }
 
     $scope.gridOptions = {
