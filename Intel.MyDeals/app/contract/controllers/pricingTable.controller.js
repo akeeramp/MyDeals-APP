@@ -304,7 +304,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             resolve: {
                 productSelectionLevels: ['productSelectorService', function (productSelectorService) {
                     var dtoDateRange = {
-                        startDate: pricingTableRow.START_DT, endDate: pricingTableRow.END_DT
+                        startDate: pricingTableRow.START_DT, endDate: pricingTableRow.END_DT, mediaCode: pricingTableRow.PROD_INCLDS
                     };
                     root.setBusy("Please wait...", "");
                     return productSelectorService.GetProductSelectorWrapper(dtoDateRange).then(function (response) {
@@ -1632,7 +1632,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     resolve: {
                         productSelectionLevels: ['productSelectorService', function (productSelectorService) {
                             var dtoDateRange = {
-                                startDate: pricingTableRow.START_DT, endDate: pricingTableRow.END_DT
+                                startDate: pricingTableRow.START_DT, endDate: pricingTableRow.END_DT, mediaCode: pricingTableRow.PROD_INCLDS
                             };
                             root.setBusy("Please wait...", "");
                             return productSelectorService.GetProductSelectorWrapper(dtoDateRange).then(function (response) {

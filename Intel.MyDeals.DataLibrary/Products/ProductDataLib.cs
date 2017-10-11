@@ -681,6 +681,8 @@ namespace Intel.MyDeals.DataLibrary
             {
                 using (var rdr = DataAccess.ExecuteReader(cmd))
                 {
+                    int IDX_BOX_END_DT = DB.GetReaderOrdinal(rdr, "BOX_END_DT");
+                    int IDX_BOX_STRD_DT = DB.GetReaderOrdinal(rdr, "BOX_STRD_DT");
                     int IDX_BRND_NM = DB.GetReaderOrdinal(rdr, "BRND_NM");
                     int IDX_BRND_NM_SID = DB.GetReaderOrdinal(rdr, "BRND_NM_SID");
                     int IDX_DEAL_PRD_NM = DB.GetReaderOrdinal(rdr, "DEAL_PRD_NM");
@@ -701,11 +703,15 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_PRD_MBR_SID = DB.GetReaderOrdinal(rdr, "PRD_MBR_SID");
                     int IDX_PRD_MRK_MBR_SID = DB.GetReaderOrdinal(rdr, "PRD_MRK_MBR_SID");
                     int IDX_PRD_STRT_DTM = DB.GetReaderOrdinal(rdr, "PRD_STRT_DTM");
+                    int IDX_TRAY_END_DT = DB.GetReaderOrdinal(rdr, "TRAY_END_DT");
+                    int IDX_TRAY_STRT_DT = DB.GetReaderOrdinal(rdr, "TRAY_STRT_DT");
 
                     while (rdr.Read())
                     {
                         ret.ProductSelectionLevels.Add(new ProductSelectionLevels
                         {
+                            BOX_END_DT = (IDX_BOX_END_DT < 0 || rdr.IsDBNull(IDX_BOX_END_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_BOX_END_DT),
+                            BOX_STRD_DT = (IDX_BOX_STRD_DT < 0 || rdr.IsDBNull(IDX_BOX_STRD_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_BOX_STRD_DT),
                             BRND_NM = (IDX_BRND_NM < 0 || rdr.IsDBNull(IDX_BRND_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_BRND_NM),
                             BRND_NM_SID = (IDX_BRND_NM_SID < 0 || rdr.IsDBNull(IDX_BRND_NM_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_BRND_NM_SID),
                             DEAL_PRD_NM = (IDX_DEAL_PRD_NM < 0 || rdr.IsDBNull(IDX_DEAL_PRD_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_PRD_NM),
@@ -725,12 +731,16 @@ namespace Intel.MyDeals.DataLibrary
                             PRD_END_DTM = (IDX_PRD_END_DTM < 0 || rdr.IsDBNull(IDX_PRD_END_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_PRD_END_DTM),
                             PRD_MBR_SID = (IDX_PRD_MBR_SID < 0 || rdr.IsDBNull(IDX_PRD_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRD_MBR_SID),
                             PRD_MRK_MBR_SID = (IDX_PRD_MRK_MBR_SID < 0 || rdr.IsDBNull(IDX_PRD_MRK_MBR_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRD_MRK_MBR_SID),
-                            PRD_STRT_DTM = (IDX_PRD_STRT_DTM < 0 || rdr.IsDBNull(IDX_PRD_STRT_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_PRD_STRT_DTM)
+                            PRD_STRT_DTM = (IDX_PRD_STRT_DTM < 0 || rdr.IsDBNull(IDX_PRD_STRT_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_PRD_STRT_DTM),
+                            TRAY_END_DT = (IDX_TRAY_END_DT < 0 || rdr.IsDBNull(IDX_TRAY_END_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_TRAY_END_DT),
+                            TRAY_STRT_DT = (IDX_TRAY_STRT_DT < 0 || rdr.IsDBNull(IDX_TRAY_STRT_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_TRAY_STRT_DT)
                         });
                     } // while
 
                     rdr.NextResult();
 
+                    int IDX_BOX_END_DT1 = DB.GetReaderOrdinal(rdr, "BOX_END_DT");
+                    int IDX_BOX_STRD_DT1 = DB.GetReaderOrdinal(rdr, "BOX_STRD_DT");
                     int IDX_GDM_BRND_NM = DB.GetReaderOrdinal(rdr, "GDM_BRND_NM");
                     int IDX_GDM_FMLY_NM = DB.GetReaderOrdinal(rdr, "GDM_FMLY_NM");
                     int IDX_NAND_FAMILY = DB.GetReaderOrdinal(rdr, "NAND_FAMILY");
@@ -738,18 +748,24 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_PRD_STRT_DTM_1 = DB.GetReaderOrdinal(rdr, "PRD_STRT_DTM");
                     int IDX_PRD_END_DTM_1 = DB.GetReaderOrdinal(rdr, "PRD_END_DTM");
                     int IDX_PRD_CAT_NM1 = DB.GetReaderOrdinal(rdr, "PRD_CAT_NM");
+                    int IDX_TRAY_END_DT1 = DB.GetReaderOrdinal(rdr, "TRAY_END_DT");
+                    int IDX_TRAY_STRT_DT1 = DB.GetReaderOrdinal(rdr, "TRAY_STRT_DT");
 
                     while (rdr.Read())
                     {
                         ret.ProductSelectionLevelsAttributes.Add(new ProductSelectionLevelsAttributes
                         {
+                            BOX_END_DT = (IDX_BOX_END_DT1 < 0 || rdr.IsDBNull(IDX_BOX_END_DT1)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_BOX_END_DT1),
+                            BOX_STRD_DT = (IDX_BOX_STRD_DT1 < 0 || rdr.IsDBNull(IDX_BOX_STRD_DT1)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_BOX_STRD_DT1),
                             GDM_BRND_NM = (IDX_GDM_BRND_NM < 0 || rdr.IsDBNull(IDX_GDM_BRND_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_GDM_BRND_NM),
                             GDM_FMLY_NM = (IDX_GDM_FMLY_NM < 0 || rdr.IsDBNull(IDX_GDM_FMLY_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_GDM_FMLY_NM),
                             NAND_FAMILY = (IDX_NAND_FAMILY < 0 || rdr.IsDBNull(IDX_NAND_FAMILY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_NAND_FAMILY),
                             PRD_CAT_NM = (IDX_PRD_CAT_NM1 < 0 || rdr.IsDBNull(IDX_PRD_CAT_NM1)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_CAT_NM1),
                             PRD_END_DTM = (IDX_PRD_END_DTM_1 < 0 || rdr.IsDBNull(IDX_PRD_END_DTM_1)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_PRD_END_DTM_1),
                             PRD_FMLY_TXT = (IDX_PRD_FMLY_TXT < 0 || rdr.IsDBNull(IDX_PRD_FMLY_TXT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_FMLY_TXT),
-                            PRD_STRT_DTM = (IDX_PRD_STRT_DTM_1 < 0 || rdr.IsDBNull(IDX_PRD_STRT_DTM_1)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_PRD_STRT_DTM_1)
+                            PRD_STRT_DTM = (IDX_PRD_STRT_DTM_1 < 0 || rdr.IsDBNull(IDX_PRD_STRT_DTM_1)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_PRD_STRT_DTM_1),
+                            TRAY_END_DT = (IDX_TRAY_END_DT1 < 0 || rdr.IsDBNull(IDX_TRAY_END_DT1)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_TRAY_END_DT1),
+                            TRAY_STRT_DT = (IDX_TRAY_STRT_DT1 < 0 || rdr.IsDBNull(IDX_TRAY_STRT_DT1)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_TRAY_STRT_DT1)
                         });
                     } // while
                 }

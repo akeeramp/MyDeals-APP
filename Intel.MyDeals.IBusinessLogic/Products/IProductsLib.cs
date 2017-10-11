@@ -60,7 +60,7 @@ namespace Intel.MyDeals.IBusinessLogic
 
         ProductSelectorWrapper GetProductSelectorWrapper();
 
-        ProductSelectorWrapper GetProductSelectorWrapperByDates(DateTime startDate, DateTime endDate);
+        ProductSelectorWrapper GetProductSelectorWrapperByDates(DateTime startDate, DateTime endDate, string mediaCode);
 
         List<ProductSelectionResults> GetProductSelectionResults(string searchHash, DateTime startDate, DateTime endDateTime,
                 int selectionLevel, string drillDownFilter4, string drillDownFilter5, int custSid, string geoSid, OpDataElementSetType dealType);

@@ -903,13 +903,44 @@ namespace Intel.MyDeals.BusinessLogic
         /// <param name="startDate"></param>
         /// <param name="endDate"></param>
         /// <returns></returns>
-        public ProductSelectorWrapper GetProductSelectorWrapperByDates(DateTime startDate, DateTime endDate)
+        public ProductSelectorWrapper GetProductSelectorWrapperByDates(DateTime startDate, DateTime endDate, string mediaCode)
         {
             var productSelectorWrapper = GetProductSelectorWrapper();
-            var productSelectionLevels = productSelectorWrapper.ProductSelectionLevels.
-                Where(x => x.PRD_STRT_DTM <= endDate && x.PRD_END_DTM >= startDate);
-            var productSelectionLevelsAttributes = productSelectorWrapper.ProductSelectionLevelsAttributes.
-                Where(x => x.PRD_STRT_DTM <= endDate && x.PRD_END_DTM >= startDate);
+            var productSelectionLevels = new List<ProductSelectionLevels>();
+            var productSelectionLevelsAttributes = new List<ProductSelectionLevelsAttributes>();
+
+            var productTypeToApplyMediaCode = new string[] { "EIA CPU", "CPU", "EIA MISC" };
+
+            productSelectionLevels.AddRange(productSelectorWrapper.ProductSelectionLevels.
+                    Where(x => x.PRD_STRT_DTM <= endDate && x.PRD_END_DTM >= startDate && !productTypeToApplyMediaCode.Contains(x.DEAL_PRD_TYPE)));
+
+            productSelectionLevelsAttributes.AddRange(productSelectorWrapper.ProductSelectionLevelsAttributes.
+                    Where(x => x.PRD_STRT_DTM <= endDate && x.PRD_END_DTM >= startDate && !productTypeToApplyMediaCode.Contains(x.PRD_CAT_NM)));
+
+            if (mediaCode.Trim().ToUpper() == "TRAY")
+            {
+                productSelectionLevels.AddRange(productSelectorWrapper.ProductSelectionLevels.
+                    Where(x => productTypeToApplyMediaCode.Contains(x.DEAL_PRD_TYPE) && x.TRAY_STRT_DT <= endDate && x.TRAY_END_DT >= startDate));
+
+                productSelectionLevelsAttributes.AddRange(productSelectorWrapper.ProductSelectionLevelsAttributes.
+                    Where(x => productTypeToApplyMediaCode.Contains(x.PRD_CAT_NM) && x.TRAY_STRT_DT <= endDate && x.TRAY_END_DT >= startDate));
+            }
+            else if (mediaCode.Trim().ToUpper() == "BOX")
+            {
+                productSelectionLevels.AddRange(productSelectorWrapper.ProductSelectionLevels.
+                   Where(x => productTypeToApplyMediaCode.Contains(x.DEAL_PRD_TYPE) && x.BOX_STRD_DT <= endDate && x.BOX_END_DT >= startDate));
+
+                productSelectionLevelsAttributes.AddRange(productSelectorWrapper.ProductSelectionLevelsAttributes.
+                    Where(x => productTypeToApplyMediaCode.Contains(x.PRD_CAT_NM) && x.BOX_STRD_DT <= endDate && x.BOX_END_DT >= startDate));
+            }
+            else
+            {
+                productSelectionLevels.AddRange(productSelectorWrapper.ProductSelectionLevels.
+                    Where(x => productTypeToApplyMediaCode.Contains(x.DEAL_PRD_TYPE) && x.PRD_STRT_DTM <= endDate && x.PRD_END_DTM >= startDate));
+
+                productSelectionLevelsAttributes.AddRange(productSelectorWrapper.ProductSelectionLevelsAttributes.
+                    Where(x => productTypeToApplyMediaCode.Contains(x.PRD_CAT_NM) && x.PRD_STRT_DTM <= endDate && x.PRD_END_DTM >= startDate));
+            }
 
             var result = new ProductSelectorWrapper();
             result.ProductSelectionLevels = productSelectionLevels.ToList();

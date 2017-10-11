@@ -615,6 +615,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
     }
 
     function validCrossVerticals(item) {
+        if (vm.DEAL_TYPE !== 'VOL_TIER') return true;
         var existingProductTypes = [];
         for (var key in vm.ProductCorrectorData.ValidProducts[vm.curRowId]) {
             angular.forEach(vm.ProductCorrectorData.ValidProducts[vm.curRowId][key], function (product) {
@@ -827,7 +828,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
             resolve: {
                 productSelectionLevels: ['productSelectorService', function (productSelectorService) {
                     var dtoDateRange = {
-                        startDate: moment(pricingTableRow.START_DT).format("l"), endDate: moment(pricingTableRow.END_DT).format("l")
+                        startDate: moment(pricingTableRow.START_DT).format("l"), endDate: moment(pricingTableRow.END_DT).format("l"), mediaCode: pricingTableRow.PROD_INCLDS
                     };
                     return productSelectorService.GetProductSelectorWrapper(dtoDateRange).then(function (response) {
                         return response;

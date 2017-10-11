@@ -314,7 +314,7 @@ using System.Collections.Generic;
 	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MYDL_GET_DEALS_WITH_ATTCH");
 	ds.Tables[0].TableName = "DealsWithAttachments";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
-	
+
 	// Overlapping Deal
 	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MYDL_GET_OVLP_DEALS 0");
 	ds.Tables[0].TableName = "OverlappingDeal";
