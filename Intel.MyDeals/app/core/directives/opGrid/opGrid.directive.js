@@ -344,7 +344,6 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 userPreferencesService.getActions("DealEditor", "CustomGridSettings")
                     .then(function (response) {
                         if (response.data && response.data.length > 0) {
-
                             $scope.opOptions.custom = {};
 
                             // 'Groups'
@@ -385,12 +384,18 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.saveLayout = function () {
                 $scope.alignGroupOrder();
 
+                // We don't want to persist the isPinned setting.
+                var groupSettings = util.deepClone($scope.opOptions.groups);
+                for (var i = 0; i < groupSettings.length; i++) {
+                    groupSettings[i].isPinned = false;
+                }
+
                 // Persist the current 'Groups' settings.
                 userPreferencesService.updateAction(
                     "DealEditor", // CATEGORY
                     "CustomGridSettings", // SUBCATEGORY
                     "Groups", // ID
-                    JSON.stringify($scope.opOptions.groups)) // VALUE
+                    JSON.stringify(groupSettings)) // VALUE
                     .then(function (response) {
                     }, function (response) {
                         logger.error("Unable to save Custom Layout.", response, response.statusText);
