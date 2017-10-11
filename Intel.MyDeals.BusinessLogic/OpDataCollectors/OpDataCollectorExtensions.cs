@@ -205,8 +205,11 @@ namespace Intel.MyDeals.BusinessLogic
                     }
                     else
                     {
-                        de.AtrbValue = items[de.AtrbCd];
-                        if (de.AtrbID <= 2) de.State = OpDataElementState.Unchanged;
+                        if (de.AtrbCd != AttributeCodes.BACK_DATE_RSN_TXT) // Prevent backdate reason needed from being flushed out.
+                        {
+                            de.AtrbValue = items[de.AtrbCd];
+                            if (de.AtrbID <= 2) de.State = OpDataElementState.Unchanged;
+                        }
                     }
                 }
                 else if (items.ContainsKey(de.AtrbCd) && items[de.AtrbCd] != null)
@@ -224,7 +227,7 @@ namespace Intel.MyDeals.BusinessLogic
                     }
                     else
                     {
-                        opMsgQueue.Messages.Add(new OpMsg(OpMsg.MessageType.Warning, "Unable to locate attrb ({0}) in deal {1}", dimKey, de.DcID));
+                        opMsgQueue.Messages.Add(new OpMsg(OpMsg.MessageType.Warning, "Unable to locate attrb {0} ({1} : {2}) in deal {3}", de.AtrbCd.ToString(), de.AtrbID, dimKey, de.DcID));
                     }
                 }
                 else if (items.ContainsKey(de.AtrbCd + uniqDimKey) /*&& items[de.AtrbCd + uniqDimKey] != null*/) // NOTE: Commented out because in PT spreadsheet, if a user deletes a cell value of an existing product then the
@@ -255,7 +258,7 @@ namespace Intel.MyDeals.BusinessLogic
                 }
                 else
                 {
-                    opMsgQueue.Messages.Add(new OpMsg(OpMsg.MessageType.Warning, "Unable to locate attrb ({0}) in deal {1}", dimKey, de.DcID));
+                    opMsgQueue.Messages.Add(new OpMsg(OpMsg.MessageType.Warning, "Unable to locate attrb {0} ({1} : {2}) in deal {3}", de.AtrbCd.ToString(), de.AtrbID, dimKey, de.DcID));
                 }
             }
 
