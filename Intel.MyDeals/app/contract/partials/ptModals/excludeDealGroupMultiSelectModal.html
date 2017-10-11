@@ -1,16 +1,22 @@
-﻿<div class="modal-content">
-	<div class="prodSelector modal-header">
-		<h3 class="modal-title" id="modal-title">Exclude deal groups</h3>
-	</div>
-	<div class="prodSelector modal-body" id="modal-body">
-		<div>
-			<p>
-				<b>
-					Select which deals you would like to exclude:
-				</b>
-				<br />
-			</p>
+﻿<link href="css/productselector.css" rel="stylesheet" />
 
+
+
+<div class="modal-content" style="background-color:#1a3e6f;overflow-y:auto;overflow-x:hidden; border: 1px solid #1a3e6f;">
+	<!--<div class="modal-header">
+		<div class="row">
+			<div class="col-md-11">
+				<p class="prodHeader cursorArea">Exclude deal groups</p>
+			</div>
+		</div>
+	</div>-->
+	<div style="height:80%">
+		<div class="modal-body">
+			<div class="fr">
+				<span  style="padding-right:15px; color: #ffffff">
+					<i role="button" title="Close" class="intelicon-close-max" ng-click="vm.cancel()"></i>
+				</span>
+			</div>
 			<div ng-show="vm.isLoading">
 				<div class="spinner">
 					<div class="rect1"></div>
@@ -19,46 +25,42 @@
 					<div class="rect4"></div>
 					<div class="rect5"></div>
 				</div>
-				<p style="text-align:center">Please wait as we fetch a list of deal groups.</p>
+				<p style="text-align:center; color: #ffffff">Please wait as we fetch a list of deal groups.</p>
 			</div>
 
 			<div ng-show="!vm.isLoading">
-				<br />
-
-				<!-- Grid -->
-				<div id="suggestionProdGrid"
-					 kendo-grid="grid"
-					 kendo-grid-check-box
-					 k-grid-checkbox="vm"
-					 checkbox-is-generic="true"
-					 checkbox-attr="OVLP_DEAL_ID"
-					 class="prodCorrector opUiContainer md kendoGridHeight prodCorrector-grid k-grid"
-					 k-on-change="vm.addChange(data, dataItem, columns)"
-					 k-options="vm.gridOptionsSuggested">
+				<div style="color:#ffffff; font-weight:bold; margin-bottom:5px;margin-top:20px;">
+					Select which deals you would like to exclude:
+				</div>
+				<div class="row" style="margin:0px">
+					<!-- Grid -->
+					<div id="suggestionProdGrid"
+						 kendo-grid="grid"
+						 kendo-grid-check-box
+						 k-grid-checkbox="vm"
+						 checkbox-is-generic="true"
+						 checkbox-attr="'OVLP_DEAL_ID'"
+						 class="prodCorrector opUiContainer md kendoGridHeight prodCorrector-grid k-grid"
+						 k-on-change="vm.addChange(data, dataItem, columns)"
+						 k-options="vm.gridOptionsSuggested">
+					</div>
 				</div>
 
 				<div>
-					<br />
-					<p><b>Provide reason for the exclusion(s)</b></p>
+					<div style="color:#ffffff; font-weight:bold; margin-bottom:5px;margin-top:20px;">
+						Provide reason for the exclusion(s):
+					</div>
 					<textarea kendo-editor
-							  k-ng-model="vm.returnVal.DEAL_GRP_CMNT"
-							  k-tools="[]"
-							  style="height: 100%;"></textarea>
+						k-ng-model="vm.returnVal.DEAL_GRP_CMNT"
+						k-tools="[]"
+						style="height: 100%;"></textarea>
 				</div>
 			</div>
 		</div>
-		<br />
-
-		<div class="row">
-			<div class="col-md-12">
-				<div class="fr">
-					<button class="btn btn-warning" type="button" ng-click="vm.cancel()">Cancel</button>
-					<button type="button"
-							class="btn btn-primary"
-							ng-click="vm.ok()">
-						Save and Close
-					</button>
-				</div>
+		<div class="col-md-12" style="padding-bottom:20px;">
+			<div class="fr">
+				<button class="btn btn-warning prdBtn" type="button" ng-click="vm.cancel()">Cancel</button>
+				<button class="btn btn-primary prdBtn" type="button" ng-click="vm.ok()">Save And Close</button>
 			</div>
 		</div>
 	</div>

@@ -6,18 +6,34 @@ ExcludeDealGroupMultiSelectCtrl.$inject = ['$scope', '$uibModalInstance', 'dataS
 
 function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService, logger, dealId, cellCurrValues, cellCommentValue, colInfo) {
 	var vm = this;
-	
+
 	var selectedGridDict = {};
 	vm.returnVal = {};
-	//vm.returnVal.DEAL_GRP_EXCLDS = TODO
+	vm.cellCurrValues = angular.copy(cellCurrValues);
 	vm.returnVal.DEAL_GRP_CMNT = (cellCommentValue === null) ? "" : cellCommentValue;
 	vm.colInfo = colInfo;
+	vm.isLoading = true;
+	vm.gridData = [];
 
 	var dataSourceSuggested = new kendo.data.DataSource({
 		transport: {
-			read: {
-				url: colInfo.lookupUrl + "/" + dealId,
-				dataType: "json" 
+			read: function (e) {
+
+				var currValsArr = vm.cellCurrValues.split(',');
+
+				// put in dictionary for easier lookup
+				for(var i=0; i<currValsArr.length; i++){
+					selectedGridDict[currValsArr[i]] = true;
+				}
+
+				// find all curr passed in values in our list and select them
+				for (var i = 0; i < vm.gridData.length; i++) {
+					if (selectedGridDict.hasOwnProperty(vm.gridData[i].OVLP_DEAL_ID)) {
+						vm.gridData[i].selected = true;
+					}
+				}
+
+				e.success(vm.gridData);
 			}
 		},
 		schema: {
@@ -38,39 +54,46 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 		},
 		serverPaging: true,
 		serverSorting: true
-	});;
-	vm.isLoading = false; //true;
-	vm.dataList = []; // TODO
+	});
 
 	function init() {
 		console.log("initted")
-		
-		// TODO: get previously selected checkboxes
-	}
 
+		return dataService.get(colInfo.lookupUrl + "/" + dealId).then(
+			function (response) {
+				vm.gridData = response.data;
+				dataSourceSuggested.read();
+				vm.isLoading = false;
+			},
+			function (response) {
+				logger.error("Unable to get ECAP tracker dropdown data.", response, response.statusText);
+				vm.isLoading = false;
+			}
+		);
+	}
 
 	vm.gridOptionsSuggested = {
 		dataSource: dataSourceSuggested,
-		filterable: false,
-		sortable: false,
-		selectable: "row",
+		enableHorizontalScrollbar: true,
+		filterable: true,
+		sortable: true,
 		resizable: false,
 		groupable: false,
-		columnMenu: false,
-		scrollable: false,
 		editable: false,
 		pageable: false,
+		scrollable: true,
+		filter: "startsWith",
+		height: 300,
 		noRecords: {
 			template: "<div style='padding:40px;'>No overlapping deal groups were found.<div>"
 		},
 		columns: [
 			{ field: "OVLP_DEAL_ID", title: "Deal #" },
 			{ field: "OVLP_DEAL_TYPE", title: "Deal Type" },
-			{ field: "EXCLD_DEAL_FLAG", template: "<div>Test: #=EXCLD_DEAL_FLAG#</div>" },
 			{ field: "OVLP_CNTRCT_NM", title: "Contract" },
 			{ field: "OVLP_WF_STG_CD", title: "Stage" },
-			{ field: "OVLP_DEAL_END_DT", title: "Deal Start" },
-			{ field: "OVLP_DEAL_STRT_DT", title: "Deal End" },
+			{ field: "OVLP_DEAL_END_DT", title: "Deal Start", template: "#= kendo.toString(kendo.parseDate(OVLP_DEAL_END_DT, 'yyyy-MM-dd'), 'MM/dd/yyyy') #" },
+			{ field: "OVLP_DEAL_STRT_DT", title: "Deal End", template: "#= kendo.toString(kendo.parseDate(OVLP_DEAL_STRT_DT, 'yyyy-MM-dd'), 'MM/dd/yyyy') #" },
 			{ field: "OVLP_ADDITIVE", title: "Additive" },
 			{ field: "OVLP_CNSMPTN_RSN", title: "Comsumption Reason" },
 		]
@@ -90,8 +113,12 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 		// turn dictionary to csv string
 		vm.returnVal.DEAL_GRP_EXCLDS = Object.keys(selectedGridDict).map(function (key) {
 			return key
-		}).join(",");
+		}).join(",").replace(/,\s*$/, "");
 
+		//// Remove comment if no selected exluded deal groups
+		//if (vm.returnVal.DEAL_GRP_EXCLDS === null || vm.returnVal.DEAL_GRP_EXCLDS === "") {
+		//	vm.returnVal.DEAL_GRP_CMNT = "";
+		//}
 		$uibModalInstance.close(vm.returnVal);
 	};
 

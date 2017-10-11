@@ -20,7 +20,7 @@
 
         return directive;
 
-        function linkFunc(scope, element, attrs) {
+        function linkFunc(scope, element, attrs) { 
             var options = scope.$eval(attrs.kOptions);
             scope.vm.selectedItems = [];
             var checkBoxColumnExists = options.columns.filter(function (x) {
@@ -78,7 +78,7 @@
             var items = query.filter(filters).data;
             items.forEach(function (item) {
                 // When select all clicked do not select the products with CAP range for ECAP deal
-                if ($scope.vm.dealType == 'ECAP' && (item.CAP.indexOf('-') > -1)) {
+                if ($scope.vm.dealType == 'ECAP' && (item.CAP !== undefined && item.CAP.indexOf('-') > -1)) { 
                     return;
                 }
                 item.selected = ev.target.checked;
