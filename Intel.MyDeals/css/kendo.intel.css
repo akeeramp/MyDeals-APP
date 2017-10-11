@@ -6303,6 +6303,10 @@ UL.k-multicheck-wrap LI LABEL INPUT, UL.k-menu-group LI SPAN.k-link INPUT {
     right: .3rem;
 }
 
+.k-overlay {
+    -webkit-backface-visibility: hidden;
+} 
+
 
 
 
