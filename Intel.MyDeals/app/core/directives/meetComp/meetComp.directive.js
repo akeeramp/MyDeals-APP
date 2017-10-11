@@ -261,7 +261,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                 .appendTo(container)
                                 .kendoNumericTextBox({
                                     decimals: 0,
-                                    min: 1,
+                                    min: 0,
                                     format: "{0:c}",
                                     change: function (e) {
                                         $scope.meetCompMasterdata[options.model.RW_NM - 1].IA_BNCH = options.model.IA_BNCH;
@@ -283,7 +283,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                 .appendTo(container)
                                 .kendoNumericTextBox({
                                     decimals: 0,
-                                    min: 1,
+                                    min: 0,
                                     format: "{0:c}",
                                     change: function (e) {
                                         $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_BNCH = options.model.COMP_BNCH;
