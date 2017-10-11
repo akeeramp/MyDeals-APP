@@ -146,7 +146,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
 
     $scope.togglePt = function (ps,pt) {
 
-        var html = "<kendo-grid options='sumGridOptions' k-ng-delay='sumGridOptions' id='detailGrid_" + pt.DC_ID + "' class='opUiContainer md dashboard'></kendo-grid>";
+        var html = "<kendo-grid options='sumGridOptions.dc" + pt.DC_ID + "' k-ng-delay='sumGridOptions' id='detailGrid_" + pt.DC_ID + "' class='opUiContainer md dashboard'></kendo-grid>";
         var template = angular.element(html);
         var linkFunction = $compile(template);
         linkFunction($scope);
@@ -155,7 +155,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
 
         objsetService.getPctDetails(pt.DC_ID).then(
             function (e) {
-                var secureFields = [ "CAP", "MAX_RPU", "ECAP_PRC", "ECAP_FLR", "PRD_COST", "COST_TEST_OVRRD_FLG", "COST_TEST_OVRRD_CMT", "RTL_CYC_NM", "RTL_PULL_DLR" ];
+                var secureFields = ["CAP", "MAX_RPU", "ECAP_PRC", "ECAP_FLR", "PRD_COST", "COST_TEST_OVRRD_FLG", "COST_TEST_OVRRD_CMT", "RTL_CYC_NM", "RTL_PULL_DLR"];
                 $scope.CostTestGroupDetails = e.data["CostTestGroupDetailItems"];
                 $scope.CostTestGroupDealDetails = e.data["CostTestGroupDealDetailItems"];
 
@@ -201,7 +201,8 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
                     }
                 }
 
-                $scope.sumGridOptions = {
+                if (!$scope.sumGridOptions) $scope.sumGridOptions = {};
+                $scope.sumGridOptions["dc" + pt.DC_ID] = {
                     dataSource: {
                         data: response,
                         schema: {
