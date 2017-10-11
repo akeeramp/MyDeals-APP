@@ -156,6 +156,7 @@ namespace Intel.MyDeals
                 , "~/app/contract/controllers/dropdownModal.controller.js"
                 , "~/app/contract/controllers/ecapTrackerAutoFillModal.controller.js"
 				, "~/app/contract/controllers/ecapTrackerModal.controller.js"
+				, "~/app/contract/controllers/excludeDealGroupMultiSelect.controller.js"
 				, "~/app/contract/controllers/manager.controller.js"
                 , "~/app/contract/controllers/managerDealType.controller.js"
                 , "~/app/contract/controllers/managerOverlapping.controller.js"

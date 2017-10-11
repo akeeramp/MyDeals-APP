@@ -78,10 +78,10 @@ namespace Intel.MyDeals.BusinessRules
             List<string> validGeoValues = DataCollections.GetGeoData().Where(g => string.IsNullOrEmpty(g.CTRY_NM) && string.IsNullOrEmpty(g.RGN_NM)).Select(g => g.GEO_NM).ToList();
             foreach (string geo in geosList)
             {
-                if (validGeoValues.All(x => (string.IsNullOrEmpty(x) ? ww : x) != geo))
+                if (validGeoValues.All(x => string.Equals((string.IsNullOrEmpty(x) ? ww : x), geo, StringComparison.OrdinalIgnoreCase)))
                 {
                     // now check for duplicates before throwing and error
-                    string posMatch = validGeoValues.Where(g => g.ToUpper() == geo.ToUpper()).Select(g => g).FirstOrDefault();
+                    string posMatch = validGeoValues.Where(g => string.Equals(g, geo, StringComparison.OrdinalIgnoreCase)).Select(g => g).FirstOrDefault();
                     if (string.IsNullOrEmpty(posMatch))
                     {
                         de.AddMessage(geo + " is not a valid Geo.");

@@ -153,7 +153,20 @@ namespace Intel.MyDeals.Controllers.API
 				, $"Unable to get Sold To Ids for the contract's customer"
 			);
 		}
-		
 
+
+		/// <summary>
+		/// Gets a list of deal groups given a dealId
+		/// </summary>
+		/// <param name="id">A dealId</param>
+		/// <returns>a list of deal groups</returns>
+		[Authorize]
+		[Route("GetDealGroupDropdown/{dealId}")]
+		public List<OverlappingDeal> GetDealGroupDropdown(int dealId)
+		{
+			return SafeExecutor(() => _dropdownLib.GetDealGroupDropdown(dealId)
+				, $"Unable to get deal groups"
+			);
+		}
 	}
 }

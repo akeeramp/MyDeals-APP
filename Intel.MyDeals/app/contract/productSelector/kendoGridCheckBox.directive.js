@@ -9,7 +9,11 @@
     function kendoGridCheckBox($filter) {
         var directive = {
             restrict: 'A',
-            scope: { vm: '=kGridCheckbox' },
+            scope: {
+            	vm: '=kGridCheckbox',
+            	checkboxAttr: '=checkboxAttr',
+            	checkboxIsGeneric: '=checkboxIsGeneric'
+            },
             controller: kGridCheckboxController,
             link: linkFunc
         };
@@ -23,15 +27,19 @@
                 return x.field == 'CheckBox'
             });
 
+            var checkboxAttr = angular.copy(scope.checkboxAttr);
+            if (checkboxAttr === null || checkboxAttr === undefined) {
+            	checkboxAttr = "PRD_MBR_SID";
+			}
             var checkBoxtemplate = '';
-            if (scope.vm.dealType == 'VOL_TIER') {
-                checkBoxtemplate = '<div><input id="{{dataItem.PRD_MBR_SID}}" ng-model="dataItem.selected" ng-click="vm.toggleSelect($event, dataItem)" class="checkbox-custom" type="checkbox">' +
-                        '<label for="{{dataItem.PRD_MBR_SID}}" class="checkbox-custom-label"></label></div>';
+            if (scope.vm.dealType == 'VOL_TIER' || scope.checkboxIsGeneric) {
+            	checkBoxtemplate = '<div><input id="{{dataItem.' + checkboxAttr + '}}" ng-model="dataItem.selected" ng-click="vm.toggleSelect($event, dataItem)" class="checkbox-custom" type="checkbox">' +
+                        '<label for="{{dataItem.' + checkboxAttr + '}}" class="checkbox-custom-label"></label></div>';
             } else {
-                checkBoxtemplate = '<div ng-if="dataItem.CAP.indexOf(\'-\') > -1"><input id="{{dataItem.PRD_MBR_SID}}" title="CAP price cannot be a range." ng-disabled="true" ng-model="dataItem.selected" ng-click="vm.toggleSelect($event, dataItem)" class="checkbox-custom" type="checkbox">' +
-                        '<label title="CAP price cannot be a range." ng-disabled="true" for="{{dataItem.PRD_MBR_SID}}" class="checkbox-custom-label"></label></div>' +
+            	checkBoxtemplate = '<div ng-if="dataItem.CAP.indexOf(\'-\') > -1"><input id="{{dataItem.' + checkboxAttr + '}}" title="CAP price cannot be a range." ng-disabled="true" ng-model="dataItem.selected" ng-click="vm.toggleSelect($event, dataItem)" class="checkbox-custom" type="checkbox">' +
+                        '<label title="CAP price cannot be a range." ng-disabled="true" for="{{dataItem.' + checkboxAttr + '}}" class="checkbox-custom-label"></label></div>' +
                         '<div ng-if="!(dataItem.CAP.indexOf(\'-\') > -1)"><input id="{{dataItem.PRD_MBR_SID}}" ng-model="dataItem.selected" ng-click="vm.toggleSelect($event, dataItem)" class="checkbox-custom" type="checkbox">' +
-                        '<label for="{{dataItem.PRD_MBR_SID}}" class="checkbox-custom-label"></label></div>'
+                        '<label for="{{dataItem.' + checkboxAttr + '}}" class="checkbox-custom-label"></label></div>'
             }
 
             if (checkBoxColumnExists.length == 0) {

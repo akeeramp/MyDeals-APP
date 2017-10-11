@@ -38,5 +38,7 @@ namespace Intel.MyDeals.IBusinessLogic
 
 		List<Dropdown> GetSoldToIdDropdown(int custId);
 
+		List<OverlappingDeal> GetDealGroupDropdown(int dealId);
+
 	}
 }

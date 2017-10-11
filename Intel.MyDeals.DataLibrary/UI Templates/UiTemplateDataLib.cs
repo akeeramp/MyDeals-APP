@@ -878,14 +878,39 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.DEAL_COMB_TYPE,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 Template = "#=gridUtils.uiControlWrapper(data, 'DEAL_COMB_TYPE')#",
-                IsFilterable = true,
+				Label = "Deal Comb Type",
+				IsFilterable = true,
                 IsSortable = true,
                 Width = 140,
                 LookupUrl = "/api/Dropdown/GetDropdowns/DEAL_COMB_TYPE",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
             });
-            items.Add(new UiTemplateContainerItem
+			items.Add(new UiTemplateContainerItem
+			{
+				Id = 20,
+				AtrbCd = AttributeCodes.DEAL_GRP_EXCLDS,
+				ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+				DataType = "string",
+				Label = "Exclude Deal Group",
+				LookupUrl = "/api/Dropdown/GetDealGroupDropdown",
+				LookupText = "DROP_DOWN",
+				LookupValue = "DROP_DOWN",
+				UiType = "EMBEDDEDMULTISELECT",
+				Template = "#=gridUtils.uiControlWrapper(data, 'DEAL_GRP_EXCLDS')#",
+				Width = 140
+			});
+			items.Add(new UiTemplateContainerItem
+			{
+				Id = 20,
+				AtrbCd = AttributeCodes.DEAL_GRP_CMNT,
+				ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+				Label = "Deal Group Comment",
+				DataType = "string",
+				Width = 140,
+				IsHidden = true
+			});
+			items.Add(new UiTemplateContainerItem
             {
                 Id = 20,
                 AtrbCd = AttributeCodes.ON_ADD_DT,

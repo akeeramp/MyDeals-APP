@@ -514,9 +514,15 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 reorderable: true,
                 pageable: $scope.pageable,
                 save: function (e) {
-                    var newField = util.getFirstKey(e.values);
+                	var newField = util.getFirstKey(e.values);
 
-                    $scope.saveFunctions(e.model, newField, e.values[newField]);
+                	disableCellsBasedOnAnotherCellValue(e, newField, "DEAL_COMB_TYPE", "DEAL_GRP_EXCLDS", (e.values[newField].toUpperCase() !== "ADDITIVE" && e.values[newField].toUpperCase() !== "NON ADDITIVE")); // TODO: hard coded sadness. 
+
+                	if (newField === "DEAL_COMB_TYPE") {
+                		$scope.root.saveCell(e.model, newField, $scope, e.values[newField]);
+					} else {			
+						$scope.saveFunctions(e.model, newField, e.values[newField]);
+					}
                     gridUtils.onDataValueChange(e);
 
                 },
@@ -550,6 +556,16 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     }
                 }
             };
+
+            var disableCellsBasedOnAnotherCellValue = function (e, newField, changedCell, cellToDisable, isDisabled) {
+            	if (newField == changedCell && !!e.values[newField]) {
+            		if (isDisabled) {
+            			e.model._behaviors.isReadOnly[cellToDisable] = true;
+            		} else {
+            			e.model._behaviors.isReadOnly[cellToDisable] = false;
+            		}
+            	}
+            }
 
             if ($scope.detailTemplateName !== "" && !!$scope.detailInit) {
                 $scope.ds.detailTemplate = kendo.template($("#detail-template").html());
@@ -754,9 +770,11 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     if (options.field.toUpperCase() === "TRGT_RGN") {
                         openTargetRegionModal(container, col)
                     }
-
-                    if (options.field.toUpperCase() === "MRKT_SEG") {
+                    else if (options.field.toUpperCase() === "MRKT_SEG") {
                         openMarketSegmentModal(container, col)
+                    }
+                    else if (options.field.toUpperCase() === "DEAL_GRP_EXCLDS") {
+                    	openDealGroupModal(container, col)
                     }
 
                 } else {
@@ -2059,6 +2077,45 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     function () {
                     });
             }
+
+            function openDealGroupModal(container, col) { 
+            	var containerDataItem = angular.element(container).scope().dataItem;
+
+            	var modal = $uibModal.open({
+                    backdrop: 'static',
+                    templateUrl: 'app/contract/partials/ptModals/excludeDealGroupMultiSelectModal.html',
+                    controller: 'ExcludeDealGroupMultiSelectCtrl',
+                    controllerAs: 'vm',
+                    windowClass: '',
+                    size: 'lg',
+                    resolve: {
+                    	dealId: angular.copy(containerDataItem["DC_ID"]),
+                    	cellCurrValues: function () {
+                    		return angular.copy(containerDataItem["DEAL_GRP_EXCLDS"])
+                    	},
+                    	cellCommentValue: function () {
+                    		return angular.copy(containerDataItem["DEAL_GRP_CMNT"])
+                    	},
+                    	colInfo: function () {
+                    		return col;
+                    	}
+                    }
+            	});
+
+            	modal.result.then(
+                    function (result) { 
+                    	containerDataItem.DEAL_GRP_EXCLDS = result.DEAL_GRP_EXCLDS;
+                    	containerDataItem.DEAL_GRP_CMNT = result.DEAL_GRP_CMNT;
+                    	containerDataItem.dirty = true;
+
+                    	$scope.root.saveCell(containerDataItem, "DEAL_GRP_EXCLDS", containerDataItem.DEAL_GRP_EXCLDS)
+                    	$scope.root.saveCell(containerDataItem, "DEAL_GRP_CMNT", containerDataItem.DEAL_GRP_CMNT)
+                    },
+                    function () {
+                    });
+            }
+
+
         }],
         link: function (scope, element, attr) {
             scope.elGrid = element;
