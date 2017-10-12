@@ -131,16 +131,16 @@ widgetConfig.configLayouts = function () {
         widgets: [
             {
                 id: 6,
-                defaultSize: { x: 5, y: 2 },
-                defaultPosition: { row: 2, col: 0 }
+                defaultSize: { x: 5, y: 3 },
+                defaultPosition: { row: 0, col: 0 }
             }, {
                 id: 7,
                 defaultSize: { x: 13, y: 8 },
                 defaultPosition: { row: 0, col: 5 }
             }, {
                 id: 8,
-                defaultSize: { x: 5, y: 2 },
-                defaultPosition: { row: 0, col: 0 }
+                defaultSize: { x: 5, y: 4 },
+                defaultPosition: { row: 3, col: 0 }
             }
         ]
     };
@@ -155,7 +155,7 @@ widgetConfig.configLayouts = function () {
                 defaultPosition: { row: 0, col: 5 }
             }, {
                 id: 8,
-                defaultSize: { x: 5, y: 2 },
+                defaultSize: { x: 5, y: 4 },
                 defaultPosition: { row: 0, col: 0 }
             }
         ]
@@ -171,7 +171,7 @@ widgetConfig.configLayouts = function () {
                 defaultPosition: { row: 0, col: 5 }
             }, {
                 id: 8,
-                defaultSize: { x: 5, y: 2 },
+                defaultSize: { x: 5, y: 4 },
                 defaultPosition: { row: 0, col: 0 }
             }
         ]
