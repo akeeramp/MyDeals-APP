@@ -17,7 +17,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
         controller: ['$scope', 'dataService', function ($scope, dataService) {
             $scope.CAN_VIEW_MEET_COMP = true; //securityService.chkDealRules('CAN_VIEW_MEET_COMP', window.usrRole, null, null, null);
             $scope.CAN_EDIT_MEET_COMP = true; //securityService.chkDealRules('C_EDIT_MEET_COMP', window.usrRole, null, null, null);
-
+            $scope.errorList = [];
             $scope.validationMessage = "";
             $scope.setUpdateFlag = false;
             if (!$scope.CAN_VIEW_MEET_COMP) {
@@ -29,9 +29,8 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                 $scope.selectedCust = '';
                 $scope.selectedCustomerText = '';
                 $scope.curentRow = '';
-                $scope.IS_COMP_BNCH_CHNG = false;
-                $scope.IS_IA_BNCH_CHNG = false;
-                $scope.usrColor = 'RED';
+
+                //WEB API call
                 dataService.get("api/MeetComp/GetMeetCompProductDetails/" + $scope.objSid).then(function (response) {
                     $scope.meetCompMasterdata = response.data;
                     $scope.meetCompUnchangedData = angular.copy(response.data);
@@ -51,16 +50,18 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                         addToUpdateList($scope.meetCompMasterdata[$scope.curentRow - 1], "COMP_SKU");
 
                         //Update child
-                        var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
-                            .Where(function (x) {
-                                return (x.GRP_PRD_SID == $scope.meetCompMasterdata[$scope.curentRow - 1].GRP_PRD_SID && x.GRP == "DEAL" && x.MC_NULL == true);
-                            })
-                            .ToArray();
+                        if ($scope.meetCompMasterdata[$scope.curentRow - 1].GRP == "PRD") {
+                            var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
+                                .Where(function (x) {
+                                    return (x.GRP_PRD_SID == $scope.meetCompMasterdata[$scope.curentRow - 1].GRP_PRD_SID && x.GRP == "DEAL" && x.MC_NULL == true && x.MEET_COMP_UPD_FLG == "Y");
+                                })
+                                .ToArray();
 
+                            for (var i = 0; i < tempData.length; i++) {
+                                $scope.meetCompMasterdata[tempData[i].RW_NM - 1].COMP_SKU = $scope.selectedCustomerText;
+                                addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_SKU");
+                            }
 
-                        for (var i = 0; i < tempData.length; i++) {
-                            $scope.meetCompMasterdata[tempData[i].RW_NM - 1].COMP_SKU = $scope.selectedCustomerText;
-                            addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_SKU");
                         }
 
                         //Update Grid
@@ -109,7 +110,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     DEAL_OBJ_SID: {
                                         editable: false, nullable: true
                                     },
-                                    RW_NM: { editable: false, validation: { required: true }, type: "string" },
+                                    RW_NM: { validation: { required: true }, type: "string" },
                                     COMP_OVRRD_FLG: { validation: { required: true } },
                                     GRP: { validation: { required: true } },
                                     COMP_OVRRD_RSN: { editable: true, validation: { required: false } },
@@ -146,16 +147,79 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                         navigatable: true,
                         resizable: false,
                         reorderable: true,
-                        columnMenu: true,
+                        columnMenu: false,
                         groupable: false,
                         sort: function (e) { gridUtils.cancelChanges(e); },
                         filter: function (e) { gridUtils.cancelChanges(e); },
                         editable: true,
                         pageable: true,
                         detailInit: detailInit,
-                        dataBound: function () {
-                            this.expandRow(this.tbody.find("tr.k-master-row").first());
-                            //var child = $(e.detailCell).children().data('kendoGrid');
+                        dataBound: function (e) {
+                            if ($scope.errorList.length > 0) {
+                                //// get the index of the UnitsInStock cell
+                                var columns = e.sender.columns;
+                                var columnCOMP_SKU = this.wrapper.find(".k-grid-header [data-field=" + "COMP_SKU" + "]").index();
+                                var columnCOMP_PRC = this.wrapper.find(".k-grid-header [data-field=" + "COMP_PRC" + "]").index();
+                                var columnCOMP_BNCH = this.wrapper.find(".k-grid-header [data-field=" + "COMP_BNCH" + "]").index();
+                                var columnIA_BNCH = this.wrapper.find(".k-grid-header [data-field=" + "IA_BNCH" + "]").index();
+                                var columnCOMP_OVRRD_FLG = this.wrapper.find(".k-grid-header [data-field=" + "COMP_OVRRD_FLG" + "]").index();
+                                var columnCOMP_OVRRD_RSN = this.wrapper.find(".k-grid-header [data-field=" + "COMP_OVRRD_RSN" + "]").index();
+
+                                // iterate the data items and apply row styles where necessary
+                                var dataItems = e.sender.dataSource.view();
+                                for (var j = 0; j < dataItems.length; j++) {
+                                    var TEMP_RW_NM = dataItems[j].get("RW_NM");
+                                    var indx = -1;
+                                    $scope.errorList.some(function (e, i) {
+                                        if (e.RW_NM == TEMP_RW_NM) {
+                                            indx = i;
+                                            return true;
+                                        }
+                                    });
+                                    if (indx > -1) {
+                                        if ($scope.errorList[indx].COMP_SKU) {
+                                            var row = e.sender.tbody.find("[data-uid='" + dataItems[j].uid + "']");
+                                            row.addClass("errorListRow");
+                                            var cell = row.children().eq(columnCOMP_SKU);
+                                            cell.addClass("errorItemList");
+                                        }
+                                        if ($scope.errorList[indx].COMP_PRC) {
+                                            var row = e.sender.tbody.find("[data-uid='" + dataItems[j].uid + "']");
+                                            row.addClass("errorListRow");
+                                            var cell = row.children().eq(columnCOMP_PRC);
+                                            cell.addClass("errorItemList");
+                                        }
+                                        if ($scope.errorList[indx].COMP_BNCH) {
+                                            var row = e.sender.tbody.find("[data-uid='" + dataItems[j].uid + "']");
+                                            row.addClass("errorListRow");
+                                            var cell = row.children().eq(columnCOMP_BNCH);
+                                            cell.addClass("errorItemList");
+                                        }
+                                        if ($scope.errorList[indx].IA_BNCH) {
+                                            var row = e.sender.tbody.find("[data-uid='" + dataItems[j].uid + "']");
+                                            row.addClass("errorListRow");
+                                            var cell = row.children().eq(columnIA_BNCH);
+                                            cell.addClass("errorItemList");
+                                        }
+                                        if ($scope.errorList[indx].COMP_OVRRD_FLG) {
+                                            var row = e.sender.tbody.find("[data-uid='" + dataItems[j].uid + "']");
+                                            row.addClass("errorListRow");
+                                            var cell = row.children().eq(columnCOMP_OVRRD_FLG);
+                                            cell.addClass("errorItemList");
+                                        }
+                                        if ($scope.errorList[indx].COMP_OVRRD_RSN) {
+                                            var row = e.sender.tbody.find("[data-uid='" + dataItems[j].uid + "']");
+                                            row.addClass("errorListRow");
+                                            var cell = row.children().eq(columnCOMP_OVRRD_RSN);
+                                            cell.addClass("errorItemList");
+                                        }
+
+
+                                    }
+
+                                }
+                            }
+
                         },
                         columns: [
                             {
@@ -183,6 +247,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                             {
                                 field: "COMP_SKU",
                                 title: "Meet Comp SKU",
+                                template: "#= COMP_SKU#",
                                 width: 170,
                                 filterable: { multi: true, search: true, search: true },
                                 editor: meetCompSKUEditor
@@ -210,7 +275,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                 field: "MEET_COMP_STS",
                                 title: "Test Results",
                                 width: 120,
-                                template: "#if(MEET_COMP_STS == 'Pass') {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid complete' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Incomplete') {#<div class='textRunIcon'><i class='intelicon-help-solid incomplete' style='font-size:20px !important'></i></div>#} else{#<div class='textRunIcon'><i class='intelicon-alert-solid errorIcon' style='font-size:20px !important'></i></div>#}#",
+                                template: "#if(MEET_COMP_STS == 'Pass' && COMP_OVRRD_FLG.length > 0) {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid complete' title='Passed with Override Status' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Pass' && COMP_OVRRD_FLG.length == 0) {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid completeGreen' title='Passed' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Incomplete') {#<div class='textRunIcon'><i class='intelicon-help-solid incomplete' title='Incomplete' style='font-size:20px !important'></i></div>#} else{#<div class='textRunIcon'><i class='intelicon-alert-solid errorIcon' title='Error/Failed' style='font-size:20px !important'></i></div>#}#",
                                 editable: function () { return false; },
                                 hidden: $scope.hide_MEET_COMP_STS
                             },
@@ -253,42 +318,76 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                     };
 
                     function editorIABench(container, options) {
-                        if (usrRole == "DA" || usrRole == "SA" || options.model.PRD_CAT_NM != "SvrWS") {
+                        if (usrRole == "DA" || usrRole == "SA" || options.model.PRD_CAT_NM != "SvrWS" || options.model.COMP_SKU.length == 0) {
                             //DA only view
                         }
                         else {
                             $('<input id="IA_BNCH' + options.field + '" data-bind="value:' + options.field + '"/>')
                                 .appendTo(container)
                                 .kendoNumericTextBox({
-                                    decimals: 0,
-                                    min: 0,
-                                    format: "{0:c}",
+                                    decimals: 2,
+                                    min: 0.00,
                                     change: function (e) {
-                                        $scope.meetCompMasterdata[options.model.RW_NM - 1].IA_BNCH = options.model.IA_BNCH;
+                                        if (options.model.IA_BNCH > 0) {
+                                            $scope.meetCompMasterdata[options.model.RW_NM - 1].IA_BNCH = options.model.IA_BNCH;
+                                            addToUpdateList($scope.meetCompMasterdata[options.model.RW_NM - 1], "IA_BNCH");
 
-                                        addToUpdateList(options.model, "IA_BNCH");
+                                            if (options.model.GRP == "PRD") {
+                                                var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
+                                                    .Where(function (x) {
+                                                        return (x.GRP_PRD_SID == options.model.GRP_PRD_SID && x.GRP == "DEAL" && x.MEET_COMP_UPD_FLG == "Y" && x.PRD_CAT_NM=="SvrWS");
+                                                    })
+                                                    .ToArray();
 
-                                        $scope.IS_IA_BNCH_CHNG = true;
+                                                for (var i = 0; i < tempData.length; i++) {
+                                                    $scope.meetCompMasterdata[tempData[i].RW_NM - 1].IA_BNCH = options.model.IA_BNCH;
+                                                    addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "IA_BNCH");
+                                                }
+
+                                                $scope.dataSourceParent.read();
+                                            }
+                                        }
+                                        else {
+                                            return false;
+                                        }
                                     }
                                 });
                         }
                     }
 
                     function editorCOMPBench(container, options) {
-                        if (usrRole == "DA" || usrRole == "SA" || options.model.PRD_CAT_NM != "SvrWS") {
+                        if (usrRole == "DA" || usrRole == "SA" || options.model.PRD_CAT_NM != "SvrWS" || options.model.COMP_SKU.length == 0) {
                             //DA only view
                         }
                         else {
                             $('<input id="COMP_BNCH' + options.field + '"  data-bind="value:' + options.field + '"/>')
                                 .appendTo(container)
                                 .kendoNumericTextBox({
-                                    decimals: 0,
-                                    min: 0,
-                                    format: "{0:c}",
+                                    decimals: 2,
+                                    min: 0.00,
                                     change: function (e) {
-                                        $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_BNCH = options.model.COMP_BNCH;
-                                        addToUpdateList(options.model, "COMP_BNCH");
-                                        $scope.IS_COMP_BNCH_CHNG = true;
+                                        if (options.model.COMP_BNCH > 0) {
+                                            $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_BNCH = options.model.COMP_BNCH;
+                                            addToUpdateList($scope.meetCompMasterdata[options.model.RW_NM - 1], "COMP_BNCH");
+
+                                            if (options.model.GRP == "PRD") {
+                                                var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
+                                                    .Where(function (x) {
+                                                        return (x.GRP_PRD_SID == options.model.GRP_PRD_SID && x.GRP == "DEAL" && x.MEET_COMP_UPD_FLG == "Y" && x.PRD_CAT_NM == "SvrWS");
+                                                    })
+                                                    .ToArray();
+
+                                                for (var i = 0; i < tempData.length; i++) {
+                                                    $scope.meetCompMasterdata[tempData[i].RW_NM - 1].COMP_BNCH = options.model.COMP_BNCH;
+                                                    addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_BNCH");
+                                                }
+
+                                                $scope.dataSourceParent.read();
+                                            }
+                                        }
+                                        else {
+                                            return false;
+                                        }
                                     }
                                 });
                         }
@@ -309,6 +408,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                 .Select(function (x) {
                                     return {
                                         'COMP_SKU': x.source[0].COMP_SKU,
+                                        'key': x.source[0].RW_NM,
                                         'RW_NM': x.source[0].RW_NM
                                     };
                                 }).ToArray();
@@ -321,9 +421,8 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     filter: "startsWith",
                                     autoBind: true,
                                     dataTextField: "COMP_SKU",
-                                    dataValueField: "RW_NM",
+                                    dataValueField: "COMP_SKU",
                                     noDataTemplate: $("#noDataTemplate").html(),
-                                    //noDataTemplate: '<div>No data found. Do you want to add new item ?</div><br /><button class="k-button" ng-click="addConfirm()">Add new item</button>',
                                     dataSource: {
                                         data: tempData
                                     },
@@ -335,28 +434,28 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                             $scope.curentRow = options.model.RW_NM;
                                         }
                                         else {
-                                            //TODO: UPDATE COMP_PRC -- UPDATE PRC of CHILD if something is BLANK     
+                                            var selectedValue = e.sender.listView._dataItems["0"].RW_NM;
+                                            options.model.COMP_SKU = this.text();
+                                            options.model.COMP_PRC = parseFloat($scope.meetCompMasterdata[selectedValue - 1].COMP_PRC).toFixed(2);
                                             if (options.model.GRP == "PRD") {
+                                                var tempprcData = $linq.Enumerable().From($scope.meetCompUnchangedData)
+                                                    .Where(function (x) {
+                                                        return (x.GRP_PRD_SID == options.model.GRP_PRD_SID && x.GRP == "DEAL" && x.MC_NULL == true && x.MEET_COMP_UPD_FLG == "Y");
+                                                    })
+                                                    .ToArray();
 
+                                                for (var i = 0; i < tempprcData.length; i++) {
+                                                    $scope.meetCompMasterdata[tempprcData[i].RW_NM - 1].COMP_PRC = options.model.COMP_PRC;
+                                                    addToUpdateList($scope.meetCompMasterdata[tempprcData[i].RW_NM - 1], "COMP_PRC");
+                                                }
                                             }
 
-                                            $scope.dataSourceParent.sync();
-                                            var selectedValue = this.value();
-                                            options.model.COMP_SKU = this.text();
-                                            options.model.COMP_PRC = parseFloat($scope.meetCompUnchangedData[selectedValue - 1].COMP_PRC).toFixed(2);
-                                            if (options.model.GRP == "PRD")
-                                                $("#grid").find("tr[data-uid='" + options.model.uid + "'] td:eq(5)").text("$" + parseFloat($scope.meetCompUnchangedData[selectedValue - 1].COMP_PRC).toFixed(2));
-                                            else
-                                                $("#myDealsGrid").find("tr[data-uid='" + options.model.uid + "'] td:eq(3)").text("$" + parseFloat($scope.meetCompUnchangedData[selectedValue - 1].COMP_PRC).toFixed(2));
-
-
-
                                             $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_SKU = this.text();
-                                            $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_PRC = parseFloat($scope.meetCompUnchangedData[selectedValue - 1].COMP_PRC).toFixed(2);
+                                            $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_PRC = parseFloat($scope.meetCompMasterdata[selectedValue - 1].COMP_PRC).toFixed(2);
+                                            addToUpdateList($scope.meetCompMasterdata[options.model.RW_NM - 1], "COMP_SKU");
+                                            $scope.dataSourceParent.read();
 
-                                            $scope.dataSource.read();
 
-                                            addToUpdateList(options.model, "COMP_SKU");
                                         }
                                     }
                                 });
@@ -364,7 +463,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                     }
 
                     function meetCompPriceEditor(container, options) {
-                        if (usrRole == "DA" || usrRole == "SA") {
+                        if (usrRole == "DA" || usrRole == "SA" || options.model.COMP_SKU.length == 0) {
                             //DA only view
                         }
                         else {
@@ -372,88 +471,39 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                 .appendTo(container)
                                 .kendoNumericTextBox({
                                     decimals: 2,
-                                    min: 0.01,
+                                    min: 0.00,
                                     format: "{0:c}",
                                     change: function (e) {
-                                        if (options.model.GRP == "PRD") {
-                                            var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
-                                                .Where(function (x) {
-                                                    return (x.GRP_PRD_SID == options.model.GRP_PRD_SID && x.GRP == "DEAL" && x.MC_NULL == true);
-                                                })
-                                                .ToArray();
+                                        if (options.model.COMP_PRC > 0) {
+                                            if (options.model.GRP == "PRD") {
+                                                var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
+                                                    .Where(function (x) {
+                                                        return (x.GRP_PRD_SID == options.model.GRP_PRD_SID && x.GRP == "DEAL" && x.MC_NULL == true && x.MEET_COMP_UPD_FLG == "Y");
+                                                    })
+                                                    .ToArray();
 
-                                            for (var i = 0; i < tempData.length; i++) {
-                                                $scope.meetCompMasterdata[tempData[i].RW_NM - 1].COMP_PRC = $scope.selectedCustomerText;
-                                                addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_PRC");
+                                                for (var i = 0; i < tempData.length; i++) {
+                                                    $scope.meetCompMasterdata[tempData[i].RW_NM - 1].COMP_PRC = options.model.COMP_PRC;
+                                                    addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_PRC");
+                                                }
                                             }
+                                            $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_PRC = options.model.COMP_PRC;
+                                            addToUpdateList(options.model, "COMP_PRC");
                                         }
-                                        $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_PRC = options.model.COMP_PRC;
-                                        addToUpdateList(options.model, "COMP_PRC");
-                                       
+                                        else {
+                                            return false;
+                                        }
+
                                         $scope.dataSourceParent.read();
+
                                     }
                                 });
                         }
-                        //    var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
-                        //        .Where(function(x) {
-                        //            return (x.GRP_PRD_SID == options.model.GRP_PRD_SID && x.GRP == options.model.GRP);
-                        //        })
-                        //        .GroupBy(function(x) {
-                        //            return (x.COMP_PRC);
-                        //        })
-                        //        .Select(function(x) {
-                        //            return {
-                        //                'COMP_PRC': parseFloat(x.source[0].COMP_PRC).toFixed(2),
-                        //                'RW_NM': x.source[0].RW_NM
-                        //            };
-                        //        }).ToArray();
-
-                        //    $('<input id="productEditor" validationMessage="* field is required" placeholder="Enter Comp Price.."' +
-                        //        'required name="' + options.field + '" />')
-                        //        .appendTo(container)
-                        //        .kendoComboBox({
-                        //            optionLabel: "Select Comp Prices",
-                        //            filter: "startsWith",
-                        //            autoBind: true,
-                        //            dataTextField: "COMP_PRC",
-                        //            dataValueField: "RW_NM",
-                        //            format: "{0:c}",
-                        //            dataSource: {
-                        //                data: tempData
-                        //            },
-                        //            change: function(e) {
-                        //                var selectedIndx = this.selectedIndex;
-                        //                var selectedValue = this.value();
-                        //                if (selectedIndx == -1) {
-                        //                    options.model.COMP_PRC = parseFloat(this.text()).toFixed(2);
-
-                        //                    $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_PRC = parseFloat(this.text()).toFixed(2);
-
-                        //                }
-                        //                else {
-                        //                    options.model.COMP_PRC = parseFloat($scope.meetCompUnchangedData[selectedValue - 1].COMP_PRC).toFixed(2);
-
-                        //                    $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_PRC = parseFloat($scope.meetCompUnchangedData[selectedValue - 1].COMP_PRC).toFixed(2);
-
-                        //                }
-
-                        //                if (options.model.GRP == "PRD")
-                        //                    $("#grid").find("tr[data-uid='" + options.model.uid + "'] td:eq(5)").text("$" + parseFloat(this.text()).toFixed(2));
-                        //                else
-                        //                    $("#myDealsGrid").find("tr[data-uid='" + options.model.uid + "'] td:eq(5)").text("$" + parseFloat(this.text()).toFixed(2));
-
-                        //                $scope.dataSource.read();
-
-                        //                addToUpdateList(options.model, "COMP_PRC");
-
-                        //            }
-                        //        });
-                        //}
                     }
 
                     function meetCompResultStatusEditor(container, options) {
                         //IF MEET COMP STATUS FAILED THEN Only Override Option will be available.
-                        if (options.model.MEET_COMP_STS != 'Failed' && usrRole == "DA") {
+                        if (options.model.MEET_COMP_STS == 'Fail' && usrRole == "DA") {
                             var tempData = [
                                 {
                                     "COMP_OVRRD_FLG": "Y"
@@ -472,11 +522,25 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     dataValueField: "COMP_OVRRD_FLG",
                                     dataSource: {
                                         data: tempData
-
                                     },
                                     change: function (e) {
                                         $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_OVRRD_FLG = this.text();
-                                        addToUpdateList(options.model, "COMP_OVRRD_FLG");
+                                        addToUpdateList($scope.meetCompMasterdata[options.model.RW_NM - 1], "COMP_OVRRD_FLG");
+
+                                        if (options.model.GRP == "PRD") {
+                                            var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
+                                                .Where(function (x) {
+                                                    return (x.GRP_PRD_SID == options.model.GRP_PRD_SID && x.GRP == "DEAL" && x.MEET_COMP_UPD_FLG == "Y" && x.MEET_COMP_STS != "Pass");
+                                                })
+                                                .ToArray();
+
+                                            for (var i = 0; i < tempData.length; i++) {
+                                                $scope.meetCompMasterdata[tempData[i].RW_NM - 1].COMP_OVRRD_FLG = options.model.COMP_OVRRD_FLG;
+                                                addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_OVRRD_FLG");
+                                            }
+
+                                            $scope.dataSourceParent.read();
+                                        }
                                     }
                                 });
                         }
@@ -503,18 +567,24 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     change: function (e) {
                                         $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_OVRRD_RSN = this.text();
                                         addToUpdateList(options.model, "COMP_OVRRD_RSN");
+
+                                        if (options.model.GRP == "PRD") {
+                                            var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
+                                                .Where(function (x) {
+                                                    return (x.GRP_PRD_SID == options.model.GRP_PRD_SID && x.GRP == "DEAL" && x.MEET_COMP_UPD_FLG == "Y" && x.MEET_COMP_STS != "Pass");
+                                                })
+                                                .ToArray();
+
+                                            for (var i = 0; i < tempData.length; i++) {
+                                                $scope.meetCompMasterdata[tempData[i].RW_NM - 1].COMP_OVRRD_RSN = options.model.COMP_OVRRD_RSN;
+                                                addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_OVRRD_RSN");
+                                            }
+
+                                            $scope.dataSourceParent.read();
+                                        }
+
                                     }
                                 });
-
-                            //$('<textarea data-bind="value: ' + options.field + '"></textarea>')
-                            //    .appendTo(container)
-                            //    .kendoEditor({
-                            //        change: function(e) {
-                            //            alert('UFF');
-                            //        }
-                            //    });
-                            //return options.model.COMP_OVRRD_RSN;
-
                         }
                         else {
                             logger.error("Meet Comp Override Status can not be blank");
@@ -537,13 +607,74 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                         }
 
                         $scope.meetCompUpdatedList.push(dataItem);
-
                         $scope.setUpdateFlag = true;
-                        //var dataSource = $("#grid").data("kendoGrid").dataSource.data();
 
-                        //var dirty = $.grep(dataSource, function (item) {
-                        //    return item.dirty
-                        //});
+                    }
+
+                    function isModelValid() {
+                        $scope.errorList = [];
+                        
+                        for (var i = 0; i < $scope.meetCompUpdatedList.length; i++) {
+                            var isError = false;
+                            var errorObj = {
+                                'COMP_SKU': false,
+                                'COMP_PRC': false,
+                                'COMP_BNCH': false,
+                                'IA_BNCH': false,
+                                'COMP_OVRRD_FLG': false,
+                                'COMP_OVRRD_RSN': false,
+                                'RW_NM': ""
+                            };
+                            //COMP_SKU Checking.....
+                            if ($scope.meetCompUpdatedList[i].COMP_SKU.length == 0 && usrRole == "GA") {
+                                errorObj.COMP_SKU = true;
+                                errorObj.RW_NM = $scope.meetCompUpdatedList[i].RW_NM;
+                                isError = true;
+                            }
+
+                            //COMP_PRC checking.....
+                            if ($scope.meetCompUpdatedList[i].COMP_PRC <= 0) {
+                                errorObj.COMP_PRC = true;
+                                errorObj.RW_NM = $scope.meetCompUpdatedList[i].RW_NM;
+                                isError = true;
+                            }
+
+                            //COMP_BNCH checking....
+                            if ($scope.meetCompUpdatedList[i].COMP_BNCH <= 0 && $scope.meetCompUpdatedList[i].PRD_CAT_NM == "SvrWS") {
+                                errorObj.COMP_BNCH = true;
+                                errorObj.RW_NM = $scope.meetCompUpdatedList[i].RW_NM;
+                                isError = true;
+                            }
+
+                            //IA_BNCH checking....
+                            if ($scope.meetCompUpdatedList[i].IA_BNCH <= 0 && $scope.meetCompUpdatedList[i].PRD_CAT_NM == "SvrWS") {
+                                errorObj.IA_BNCH = true;
+                                errorObj.RW_NM = $scope.meetCompUpdatedList[i].RW_NM;
+                                isError = true;
+                            }
+
+                            //COMP_OVRRD_FLG checking....
+                            if ($scope.meetCompUpdatedList[i].COMP_OVRRD_FLG <= 0 && usrRole == "DA") {
+                                errorObj.COMP_OVRRD_FLG = true;
+                                errorObj.RW_NM = $scope.meetCompUpdatedList[i].RW_NM;
+                                isError = true;
+                            }
+
+                            //COMP_OVRRD_RSN checking....
+                            if ($scope.meetCompUpdatedList[i].COMP_OVRRD_RSN <= 0 && usrRole == "DA") {
+                                errorObj.COMP_OVRRD_RSN = true;
+                                errorObj.RW_NM = $scope.meetCompUpdatedList[i].RW_NM;
+                                isError = true;
+                            }
+
+                            if (isError)
+                                $scope.errorList.push(errorObj);
+                        }
+
+                        if ($scope.errorList.length > 0)
+                            return false;
+                        else
+                            return true;
                     }
 
                     $scope.setBusy = function (msg, detail) {
@@ -571,24 +702,12 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                     }
 
                     $scope.saveAndRunMeetComp = function () {
-                        $scope.setBusy("Running Meet Comp...", "Please wait running Meet Comp...");
                         $scope.isValid = true;
                         $scope.ROW_NMB = [];
-
-                        $scope.meetCompUpdatedList = $scope.meetCompUpdatedList.map(function (x) {
-                            //if (usrRole == "GA" || usrRole == "FSE" || usrRole == "Super GA") {
-                            //    if (x.COMP_BNCH < 1 && $scope.IS_COMP_BNCH_CHNG) {   
-                            //        $scope.isValid = false;                                    
-                            //    }
-                            //    if (x.IA_BNCH < 1 && $scope.IS_IA_BNCH_CHNG) {
-                            //        $scope.isValid = false;                                    
-                            //    }
-                            //    if (!$scope.isValid) {
-                            //        $scope.ROW_NMB.push(x.RW_NM);
-                            //    }
-
-                            //}
-                            //else {
+                        $scope.tempUpdatedList = [];
+                        var isValid = isModelValid();
+                        if (isValid) {
+                            $scope.tempUpdatedList = $scope.meetCompUpdatedList.map(function (x) {
                                 return {
                                     GRP: x.GRP,
                                     CUST_NM_SID: x.CUST_NM_SID,
@@ -605,35 +724,50 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     COMP_OVRRD_FLG: x.COMP_OVRRD_FLG == 'Y' ? true : false,
                                     MEET_COMP_UPD_FLG: x.MEET_COMP_UPD_FLG
                                 }
-                           //}
 
-                        });
-                        if ($scope.meetCompUpdatedList.length > 0) {  
-                            if ($scope.isValid) {
-                                dataService.post("api/MeetComp/UpdateMeetCompProductDetails/" + $scope.objSid, $scope.meetCompUpdatedList).then(function (response) {
+                            });
+
+                            if ($scope.tempUpdatedList.length > 0) {
+                                $scope.setBusy("Running Meet Comp...", "Please wait running Meet Comp...");
+                                dataService.post("api/MeetComp/UpdateMeetCompProductDetails/" + $scope.objSid, $scope.tempUpdatedList).then(function (response) {
                                     $scope.meetCompMasterdata = response.data;
                                     $scope.meetCompUnchangedData = angular.copy(response.data);
                                     $scope.dataSourceParent.read();
                                     $scope.isBusy = false;
+                                    $scope.tempUpdatedList = [];
+                                    $scope.meetCompUpdatedList = [];
                                 },
                                     function (response) {
                                         logger.error("Unable to save data", response, response.statusText);
                                         $scope.isBusy = false;
-                                    }); 
+                                    });
+
                             }
                             else {
-                                kendo.alert("ROW(s): " + $scope.ROW_NMB.toString() + " Error in IA Bench or Comp Bench");
+                                kendo.alert('No data Found');
                             }
-                                                           
                         }
                         else {
-                            kendo.alert('No data Found');
+                            $scope.dataSourceParent.read();
                         }
-                    }
 
-                    $scope.gotoDealDetails = function (dataItem) {
-                        var win = window.open("Contract#/manager/" + dataItem.CNTRCT_OBJ_SID + "/" + dataItem.PRC_ST_OBJ_SID + "/" + dataItem.PRC_TBL_OBJ_SID + "/wip", '_blank');
-                        win.focus();
+                        //Error Checking: COMP_PRC, IA_BNCH, COMP_BNCH
+                        //var C_I_RST = $linq.Enumerable().From($scope.meetCompUpdatedList)
+                        //    .Where(function (x) {
+                        //        return ((x.COMP_BNCH <= 0 && x.IA_BNCH <= 0 && x.PRD_CAT_NM == "SvrWS") || x.COMP_PRC <= 0);
+                        //    }).ToArray();
+
+                        //var U_F_CMT = $linq.Enumerable().From($scope.meetCompUpdatedList)
+                        //    .Where(function (x) {
+                        //        return ((x.COMP_OVRRD_FLG.length == 0 || x.MEET_COMP_UPD_FLG.length == 0) && usrRole == "DA");
+                        //    }).ToArray();
+
+                        //var C_SKU = $linq.Enumerable().From($scope.meetCompUpdatedList)
+                        //    .Where(function (x) {
+                        //        return ((x.COMP_SKU.length == 0) && usrRole == "GA");
+                        //    }).ToArray();
+
+
                     }
 
                     function detailInit(e) {
@@ -642,7 +776,6 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                             dataSource: {
                                 transport: {
                                     read: function (e) {
-                                        //e.success($scope.meetCompMasterdata)
                                         e.success($linq.Enumerable().From($scope.meetCompMasterdata)
                                             .Where(function (x) {
                                                 return (x.GRP_PRD_SID == $scope.TEMP_GRP_PRD_SID && x.GRP == "DEAL" && x.DEFAULT_FLAG == "D");
@@ -655,7 +788,6 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                 serverPaging: true,
                                 serverFiltering: true,
                                 serverSorting: false,
-                                //filter: [{ field: "GRP_PRD_SID", operator: "eq", value: $scope.TEMP_GRP_PRD_SID }, { field: "GRP", operator: "eq", value: "DEAL" }, { field: "DEFAULT_FLAG", operator: "eq", value: "D" }],
                                 schema: {
                                     model: {
                                         id: "RW_NM",
@@ -704,6 +836,74 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                             filter: function (e) { gridUtils.cancelChanges(e); },
                             editable: true,
                             pageable: false,
+                            dataBound: function (e) {
+                                if ($scope.errorList.length > 0) {
+                                    //// get the index of the UnitsInStock cell
+                                    var columns = e.sender.columns;
+                                    var columnCOMP_SKU = this.wrapper.find(".k-grid-header [data-field=" + "COMP_SKU" + "]").index();
+                                    var columnCOMP_PRC = this.wrapper.find(".k-grid-header [data-field=" + "COMP_PRC" + "]").index();
+                                    var columnCOMP_BNCH = this.wrapper.find(".k-grid-header [data-field=" + "COMP_BNCH" + "]").index();
+                                    var columnIA_BNCH = this.wrapper.find(".k-grid-header [data-field=" + "IA_BNCH" + "]").index();
+                                    var columnCOMP_OVRRD_FLG = this.wrapper.find(".k-grid-header [data-field=" + "COMP_OVRRD_FLG" + "]").index();
+                                    var columnCOMP_OVRRD_RSN = this.wrapper.find(".k-grid-header [data-field=" + "COMP_OVRRD_RSN" + "]").index();
+
+                                    // iterate the data items and apply row styles where necessary
+                                    var dataItems = e.sender.dataSource.view();
+                                    for (var j = 0; j < dataItems.length; j++) {
+                                        var TEMP_RW_NM = dataItems[j].get("RW_NM");
+                                        var indx = -1;
+                                        $scope.errorList.some(function (e, i) {
+                                            if (e.RW_NM == TEMP_RW_NM) {
+                                                indx = i;
+                                                return true;
+                                            }
+                                        });
+                                        if (indx > -1) {
+                                            if ($scope.errorList[indx].COMP_SKU) {
+                                                var row = e.sender.tbody.find("[data-uid='" + dataItems[j].uid + "']");
+                                                row.addClass("errorListRow");
+                                                var cell = row.children().eq(columnCOMP_SKU);
+                                                cell.addClass("errorItemList");
+                                            }
+                                            if ($scope.errorList[indx].COMP_PRC) {
+                                                var row = e.sender.tbody.find("[data-uid='" + dataItems[j].uid + "']");
+                                                row.addClass("errorListRow");
+                                                var cell = row.children().eq(columnCOMP_PRC);
+                                                cell.addClass("errorItemList");
+                                            }
+                                            if ($scope.errorList[indx].COMP_BNCH) {
+                                                var row = e.sender.tbody.find("[data-uid='" + dataItems[j].uid + "']");
+                                                row.addClass("errorListRow");
+                                                var cell = row.children().eq(columnCOMP_BNCH);
+                                                cell.addClass("errorItemList");
+                                            }
+                                            if ($scope.errorList[indx].IA_BNCH) {
+                                                var row = e.sender.tbody.find("[data-uid='" + dataItems[j].uid + "']");
+                                                row.addClass("errorListRow");
+                                                var cell = row.children().eq(columnIA_BNCH);
+                                                cell.addClass("errorItemList");
+                                            }
+                                            if ($scope.errorList[indx].COMP_OVRRD_FLG) {
+                                                var row = e.sender.tbody.find("[data-uid='" + dataItems[j].uid + "']");
+                                                row.addClass("errorListRow");
+                                                var cell = row.children().eq(columnCOMP_OVRRD_FLG);
+                                                cell.addClass("errorItemList");
+                                            }
+                                            if ($scope.errorList[indx].COMP_OVRRD_RSN) {
+                                                var row = e.sender.tbody.find("[data-uid='" + dataItems[j].uid + "']");
+                                                row.addClass("errorListRow");
+                                                var cell = row.children().eq(columnCOMP_OVRRD_RSN);
+                                                cell.addClass("errorItemList");
+                                            }
+
+
+                                        }
+
+                                    }
+                                }
+
+                            },
+
                             columns: [
                                 {
                                     field: "PRD_CAT_NM",
@@ -741,7 +941,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                 {
                                     field: "IA_BNCH",
                                     title: "IA Bench",
-                                    width: 120,                                   
+                                    width: 120,
                                     editor: editorIABench
                                 },
                                 {
@@ -756,7 +956,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     width: 120,
                                     editable: function () { return false; },
                                     hidden: $scope.hide_MEET_COMP_STS,
-                                    template: "#if(MEET_COMP_STS == 'Pass') {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid complete' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Incomplete') {#<div class='textRunIcon'><i class='intelicon-help-solid incomplete' style='font-size:20px !important'></i></div>#} else{#<div class='textRunIcon'><i class='intelicon-alert-solid errorIcon' style='font-size:20px !important'></i></div>#}#",
+                                    template: "#if(MEET_COMP_STS == 'Pass' && COMP_OVRRD_FLG.length > 0) {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid complete' title='Passed with Override Status' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Pass' && COMP_OVRRD_FLG.length == 0) {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid completeGreen' title='Passed' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Incomplete') {#<div class='textRunIcon'><i class='intelicon-help-solid incomplete' title='Incomplete' style='font-size:20px !important'></i></div>#} else{#<div class='textRunIcon'><i class='intelicon-alert-solid errorIcon' title='Error/Failed' style='font-size:20px !important'></i></div>#}#",
 
                                 },
                                 {

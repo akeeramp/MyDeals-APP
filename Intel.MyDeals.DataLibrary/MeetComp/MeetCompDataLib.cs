@@ -119,11 +119,11 @@ namespace Intel.MyDeals.DataLibrary
             OpLogPerf.Log("GetMeetCompProductDetails");
 
             var ret = new List<MeetCompResult>();
-            var cmd = new Procs.dbo.PR_MYDL_UI_GET_MEET_COMP { };
+            var cmd = new Procs.dbo.PR_MYDL_GET_MEET_COMP { };
 
             try
             {
-                using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_MYDL_UI_GET_MEET_COMP
+                using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_MYDL_GET_MEET_COMP
                 {
                     @ID = CNTRCT_OBJ_SID,
                     @USR_WWID = OpUserStack.MyOpUserToken.Usr.WWID,

@@ -321,7 +321,7 @@ using System.Collections.Generic;
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
 	// Meet Comp Override
-	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MYDL_UI_GET_MEET_COMP  @ID=492, @USR_WWID=11637989, @Role = 'GA', @MODE = 'A'");
+	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MYDL_GET_MEET_COMP  @ID=492, @USR_WWID=11637989, @Role = 'GA', @MODE = 'A'");
 	ds.Tables[0].TableName = "MeetCompResult";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
