@@ -133,6 +133,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     CNTRCT_OBJ_SID: { editable: false, validation: { required: true } },
                                     PRC_ST_OBJ_SID: { editable: false, validation: { required: true } },
                                     PRC_TBL_OBJ_SID: { editable: false, validation: { required: true } },
+                                    WF_STG_CD: { editable: false, validation: { required: true } },
                                     "_behaviors": { type: "object" }
                                 }
                             }
@@ -503,7 +504,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
 
                     function meetCompResultStatusEditor(container, options) {
                         //IF MEET COMP STATUS FAILED THEN Only Override Option will be available.
-                        if (options.model.MEET_COMP_STS == 'Fail' && usrRole == "DA") {
+                        if (options.model.MEET_COMP_STS == 'Fail' && usrRole == "DA" && options.model.WF_STG_CD == "Draft") {
                             var tempData = [
                                 {
                                     "COMP_OVRRD_FLG": "Y"
@@ -544,11 +545,13 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     }
                                 });
                         }
-
+                        else {
+                            logger.warning("Its not a Draft Deal");
+                        }
                     }
 
                     function editorORReason(container, options) {
-                        if (options.model.COMP_OVRRD_FLG.length > 0 && usrRole == "DA") {
+                        if (options.model.COMP_OVRRD_FLG.length > 0 && usrRole == "DA" && options.model.WF_STG_CD == "Draft" && options.model.MEET_COMP_STS == 'Fail') {
                             var tempReason = [
                                 {
                                     "COMP_OVRRD_RSN": options.model.COMP_OVRRD_RSN
@@ -587,7 +590,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                 });
                         }
                         else {
-                            logger.error("Meet Comp Override Status can not be blank");
+                            logger.warning("Either its not a Draft Deal or Override Status is blank");
                         }
 
                     }
@@ -748,6 +751,11 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                             }
                         }
                         else {
+                            //var errorRows = [];
+                            //for (var j = 0; j < $scope.errorList; j++) {
+                            //    errorRows.push($scope.errorList.RW_NM);
+                            //}
+                            kendo.alert("Meet comp data is missing for some product(s).Please enter the data and save the changes.");
                             $scope.dataSourceParent.read();
                         }
 
@@ -818,6 +826,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                             CNTRCT_OBJ_SID: { editable: false, validation: { required: true } },
                                             PRC_ST_OBJ_SID: { editable: false, validation: { required: true } },
                                             PRC_TBL_OBJ_SID: { editable: false, validation: { required: true } },
+                                            WF_STG_CD: { editable: false, validation: { required: true } },
                                             "_behaviors": { type: "object" }
                                         }
                                     }
