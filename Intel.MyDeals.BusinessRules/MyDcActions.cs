@@ -704,7 +704,7 @@ namespace Intel.MyDeals.BusinessRules
             var futureStage = r.Dc.GetNextStage("Redeal", DataCollections.GetWorkFlowItems(), ptrStage, OpDataElementType.PRC_ST);
 
             // if there isn't a future stage, then it isn't redealable
-            if (futureStage == null && wipStage != WorkFlowStages.Active) return;
+            if (futureStage == null && wipStage != WorkFlowStages.Active && r.Dc.DcID > 0) return;
 
             AttributeCollection atrbMstr = DataCollections.GetAttributeData();
             List<MyDealsAttribute> onChangeItems = atrbMstr.All.Where(a => a.MJR_MNR_CHG == "MAJOR").ToList();
@@ -757,8 +757,14 @@ namespace Intel.MyDeals.BusinessRules
             }
 
             // Locate and set Parent PS Attributes
-            if (futureStage != null)
+            if (futureStage != null || r.Dc.DcID < 0)
             {
+                if (r.Dc.DcID < 0)
+                {
+                    futureStage = OpUserStack.MyOpUserToken.Role.RoleTypeCd == RoleTypes.GA
+                        ? WorkFlowStages.Requested
+                        : WorkFlowStages.Draft;
+                }
                 OpDataCollector dcRow = myDealsData[OpDataElementType.PRC_TBL_ROW].Data[r.Dc.DcParentID];
                 OpDataCollector dcTbl = myDealsData[OpDataElementType.PRC_TBL].Data[dcRow.DcParentID];
                 if (!myDealsData.ContainsKey(OpDataElementType.PRC_ST))

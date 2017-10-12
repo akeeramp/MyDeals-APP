@@ -56,7 +56,7 @@ function btnRunPctMct(logger, objsetService, $timeout) {
                     if (dsplNum < 1) {
                         dsplNum = mm;
                         dsplMsg = " mins ago";
-                        $scope.needToRunPct = true;
+                        $scope.needToRunPct = false;
                     }
                     if (dsplNum < 1) {
                         dsplNum = ss;
