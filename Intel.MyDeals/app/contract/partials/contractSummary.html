@@ -197,7 +197,7 @@
                         <btn-run-pct-mct ng-model="root"
                                          contract-id="root.contractData.DC_ID"
                                          last-run="root.contractData.LAST_COST_TEST_RUN"
-                                         on-complete="root.refreshContract"
+                                         on-complete="root.refreshContractData"
                                          btn-type ="'pct'"
                                          btn-class="'btn-skyblue-sm'"></btn-run-pct-mct>
                     </td>
@@ -205,7 +205,7 @@
                         <btn-run-pct-mct ng-model="root"
                                          contract-id="root.contractData.DC_ID"
                                          last-run="root.contractData.LAST_COST_TEST_RUN"
-                                         on-complete="root.refreshContract"
+                                         on-complete="root.refreshContractData"
                                          btn-type ="'mct'"
                                          btn-class="'btn-skyblue-sm'"></btn-run-pct-mct>
 
@@ -832,7 +832,12 @@
         cursor: pointer;
     }
 
-    .valid_Valid, .valid_Finalizing, .valid_Complete, .valid_, .valid_0, .valid_Dirty {
+    .contract-status-bar.valid_Valid, 
+    .contract-status-bar.valid_Finalizing, 
+    .contract-status-bar.valid_Complete, 
+    .contract-status-bar.valid_, 
+    .contract-status-bar.valid_0, 
+    .contract-status-bar.valid_Dirty {
         background: #ffffff;
     }
 </style>
