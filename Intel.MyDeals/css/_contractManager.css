@@ -1100,10 +1100,10 @@
         height: 16px;
     }
     .contract-title-container {
-        padding: 9px 8px; 
+        padding: 3px 8px; 
         overflow: hidden; 
         text-overflow: ellipsis; 
-        height: 40px; 
+        height: 26px; 
         white-space: nowrap; 
         width: 300px;
     }
