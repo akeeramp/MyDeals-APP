@@ -544,6 +544,14 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 pageSize: 25
             });
 
+
+            var isDisableViaDealGrp = function (comparison) {
+            	if (typeof comparison !== "string") {
+            		return false;
+				}
+            	return comparison.toUpperCase() !== "ADDITIVE" && comparison.toUpperCase() !== "NON ADDITIVE";
+			}
+			
             $scope.ds = {
                 dataSource: $scope.contractDs,
                 columns: $scope.opOptions.columns,
@@ -564,7 +572,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 save: function (e) {
                 	var newField = util.getFirstKey(e.values);
 
-                	disableCellsBasedOnAnotherCellValue(e, newField, "DEAL_COMB_TYPE", "DEAL_GRP_EXCLDS", (e.values[newField].toUpperCase() !== "ADDITIVE" && e.values[newField].toUpperCase() !== "NON ADDITIVE")); // TODO: hard coded sadness. 
+                	disableCellsBasedOnAnotherCellValue(e, newField, "DEAL_COMB_TYPE", "DEAL_GRP_EXCLDS", isDisableViaDealGrp); // TODO: hard coded sadness. 
 
                 	if (newField === "DEAL_COMB_TYPE") {
                 		$scope.root.saveCell(e.model, newField, $scope, e.values[newField]);
@@ -605,9 +613,9 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 }
             };
 
-            var disableCellsBasedOnAnotherCellValue = function (e, newField, changedCell, cellToDisable, isDisabled) {
+            var disableCellsBasedOnAnotherCellValue = function (e, newField, changedCell, cellToDisable, isDisabledFunction) {
             	if (newField == changedCell && !!e.values[newField]) {
-            		if (isDisabled) {
+            		if (isDisabledFunction(e.values[newField])) {
             			e.model._behaviors.isReadOnly[cellToDisable] = true;
             		} else {
             			e.model._behaviors.isReadOnly[cellToDisable] = false;
