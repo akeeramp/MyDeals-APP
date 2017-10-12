@@ -24,15 +24,7 @@
                             <i class="chevron linkable intelicon-fast-forward"></i>
                         </div>
                     </td>
-                    <td style="width: 130px; height: 40px;">
-                        <btn-run-pct-mct btn-type="'pct'" 
-                                         ng-model="root" 
-                                         contract-id="root.contractData.DC_ID" 
-                                         on-complete="root.refreshContractData" 
-                                         btn-class="'ssToolbarBtn'" 
-                                         btn-style="'margin-top: -2px;'"></btn-run-pct-mct>
-                        <div style="color: #888888; line-height: .5em; font-size: 10px;"><span ng-bind-html="LAST_COST_TEST_RUN_DSPLY"></span></div>
-                    </td>
+                    <td style="width: 130px; height: 40px;"></td>
                     <td>
                         <span class="k-textbox k-space-left" style="width: 330px; margin-top: -1px; margin-left: 15px;">
                             <input type="text" placeholder="Search for pricing strategies, tables or names" ng-model="titleFilter" />
@@ -46,8 +38,14 @@
         </div>
         <table style="width: 100%;" class="tbl-header">
             <tr>
-                <td style="width: 30px;">&nbsp;</td>
-                <td style="width: 150px; text-align: center; line-height: 1em;">Price Cost Test Results</td>
+                <td style="width: 170px; text-align: center; padding-left: 6px; line-height: 1em;">
+                    <btn-run-pct-mct ng-model="root"
+                                     contract-id="root.contractData.DC_ID"
+                                     last-run="root.contractData.LAST_COST_TEST_RUN"
+                                     on-complete="root.refreshContract"
+                                     btn-type="'mct'"
+                                     btn-class="'btn-skyblue-sm'"></btn-run-pct-mct>
+                </td>
                 <td>Pricing Strategy Name | Pricing Table Name</td>
                 <td style="width: 120px; text-align: center; line-height: 1em;">Stage/Deal Type</td>
             </tr>
@@ -64,7 +62,7 @@
                             <td style="width: 30px; height: 30px;" ng-click="isCollapsed = !isCollapsed">
                                 <i class="chevron linkable" ng-class="{'intelicon-down': isCollapsed, 'intelicon-right-next': !isCollapsed}"></i>
                             </td>
-                            <td style="width: 150px; text-align: center;">
+                            <td style="width: 140px; text-align: center;">
                                 <icon-mct-pct ng-model="ps.COST_TEST_RESULT" can-view="root.CAN_VIEW_COST_TEST" icon-class="'bigIcon'"></icon-mct-pct>
                             </td>
                             <td>
@@ -83,7 +81,7 @@
                                 <td style="width: 30px; height: 30px;" ng-click="isPtCollapsed = !isPtCollapsed; togglePt(ps, pt)">
                                     <i class="chevron linkable" style="font-size: 20px; padding-left: 6px;" ng-class="{'intelicon-down': isPtCollapsed, 'intelicon-right-next': !isPtCollapsed}"></i>
                                 </td>
-                                <td style="width: 150px; color: #000000; text-align: center;">
+                                <td style="width: 140px; color: #000000; text-align: center;">
                                     <icon-mct-pct ng-model="pt.COST_TEST_RESULT" can-view="root.CAN_VIEW_COST_TEST" icon-class="'medIcon'"></icon-mct-pct>
                                 </td>
                                 <td style="width: 30px;"></td>
@@ -614,5 +612,22 @@
     .cell-error {
         background-color: #f4949d;
         color: #ffffff !important;
+    }
+    .btn-skyblue-sm {
+        background-color: #00AEEF;
+        border: 1px solid  #00AEEF;
+        color: #ffffff;
+        border-radius: 4px;
+        padding: 2px !important;
+    }
+    .btn-skyblue-sm:hover {
+        background-color: #0071C5;
+        border: 1px solid  #0071C5;
+        color: #ffffff;
+    }
+    .btn-skyblue-sm i {
+        font-size: 20px;
+        margin: 0;
+        padding: 0;
     }
 </style>
