@@ -528,49 +528,6 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
     }
     $scope.clearFilter();
 
-    if (!!$scope.root.contractData.LAST_COST_TEST_RUN) {
-        moment.tz.add('America/Los_Angeles|PST PDT|80 70|0101|1Lzm0 1zb0 Op0');
-        var now = moment.tz(new Date(), "America/Los_Angeles");
-        var lastrun = moment($scope.root.contractData.LAST_COST_TEST_RUN);
-
-        var t1 = now.format("MM/DD/YY hh:mm:ss");
-        var t2 = lastrun.format("MM/DD/YY hh:mm:ss");
-
-        var timeDiff = moment.duration(moment(t2).diff(moment(t1)));
-        var hh = Math.abs(timeDiff.asHours());
-        var mm = Math.abs(timeDiff.asMinutes());
-        var ss = Math.abs(timeDiff.asSeconds());
-
-        var dsplNum = hh;
-        var dsplMsg = " hours ago";
-        $scope.needToRunPct = dsplNum > 2 ? true : false;
-
-        if (dsplNum < 1) {
-            dsplNum = mm;
-            dsplMsg = " mins ago";
-            $scope.needToRunPct = false;
-        }
-        if (dsplNum < 1) {
-            dsplNum = ss;
-            dsplMsg = " secs ago";
-            $scope.needToRunPct = false;
-        }
-
-        $scope.LAST_COST_TEST_RUN = lastrun.format("MM/DD/YY hh:mm:ss") + " - " + ss;
-        $scope.LAST_COST_TEST_RUN_DSPLY = "Last Run: " + Math.round(dsplNum) + dsplMsg;
-
-    } else {
-        // never ran
-        $scope.LAST_COST_TEST_RUN_DSPLY = "Last Run: Never";
-        $scope.needToRunPct = true;
-    }
-
-    if ($scope.needToRunPct) {
-        $timeout(function () {
-            $scope.$broadcast('runPctMct', {});
-            $scope.LAST_COST_TEST_RUN_DSPLY = "";
-        }, 3000);
-    }
 
 }
 })();

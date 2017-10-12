@@ -1,17 +1,25 @@
-﻿<button class="btn btn-sm {{btnClass}}" 
-        ng-click="executePct()" 
-        title="Execute Price Cost Test and Meet Comp Test" 
-        style="{{btnStyle}}">
-    <table>
-        <tbody>
-            <tr>
-                <td>
-                    <i class="fa fa-refresh fa-fw iconRunPct" aria-hidden="true" style="font-size: 26px"></i>
-                </td>
-                <td style="padding-left: 5px; text-align: left; color: #ffffff; font-size: 12px; line-height: 1em;" class="hidden-xs hidden-sm hidden-md">
-                    <span ng-bind-html="text" class="btnPctMct"></span>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</button>
+﻿<div>
+    <button class="btn btn-sm {{btnClass}} fl"
+            ng-click="executePct()"
+            title="Execute Price Cost Test and Meet Comp Test"
+            style="{{btnStyle}}">
+        <i class="fa fa-refresh fa-fw iconRunPct" aria-hidden="true" style="font-size: 20px"></i>
+    </button>
+    <div class="fl" style="padding: 0 5px; width: 120px;">
+        <div ng-bind-html="text" class="btnPctMct"></div>
+        <div ng-bind="lastRunDisplay()" class="btnLastRun"></div>
+    </div>
+</div>
+
+<style>
+    .btnPctMct {
+        font-size: 14px;
+        margin-top: 4px;
+        line-height: 0.9em;
+    }
+    .btnLastRun {
+        font-size: 9px;
+        color: #00AEEF;
+        line-height: 1em;
+    }
+</style>

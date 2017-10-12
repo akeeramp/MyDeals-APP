@@ -2975,21 +2975,24 @@
             $scope.setBusy("Loading...", "Loading the Deal Editor");
 
             var valid = $scope.curPricingStrategy.PASSED_VALIDATION;
-            if (!$scope._dirty && (valid === "Complete" || valid === "Finalizing")) {
-                $state.go('contract.manager.strategy.wip',
-                    {
-                        cid: $scope.contractData.DC_ID,
-                        sid: $scope.curPricingStrategyId,
-                        pid: $scope.curPricingTableId
-                    },
-                    { reload: true });
-            } else {
+
+            // *** Removed because it opens a data integrity issue:
+            // If use clicks save... then clicks the tab, it will bypass translation and PTR and WIP will be out of sync
+            //if (!$scope._dirty && (valid === "Complete" || valid === "Finalizing")) {
+            //    $state.go('contract.manager.strategy.wip',
+            //        {
+            //            cid: $scope.contractData.DC_ID,
+            //            sid: $scope.curPricingStrategyId,
+            //            pid: $scope.curPricingTableId
+            //        },
+            //        { reload: true });
+            //} else {
                 if (!!$scope.child) {
                     $scope.child.validateSavepublishWipDeals();
                 } else {
                     $scope.publishWipDealsBase();
                 }
-            }
+            //}
         }
         $scope.publishWipDealsBase = function () {
             $scope.setBusy("Loading...", "Loading the Deal Editor");

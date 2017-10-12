@@ -12,6 +12,7 @@ function btnRunPctMct(logger, objsetService, $timeout) {
             btnClass: '=?btnClass',
             contractId: '=contractId',
             onComplete: '=?onComplete',
+            lastRun: '=?lastRun',
             btnType: '=?btnType'
         },
         restrict: 'AE',
@@ -19,26 +20,74 @@ function btnRunPctMct(logger, objsetService, $timeout) {
         controller: ['$scope', '$http', function ($scope, $http) {
 
             $scope.iconClass = "";
-            $scope.text = "Run Cost Test</br>& Meet Comp";
-            $scope.textMsg = "Cost Test & Meet Comp";
-            if ($scope.btnType === "pct") {
-                $scope.text = "Run</br>Cost Test";
+            $scope.text = "";
+            $scope.textMsg = "";
+            $scope.needToRunPct = false;
+
+            if ($scope.btnType === "mct") {
+                $scope.text = "Meet Comp";
+                $scope.textMsg = "Meet Comp";
+            } else {
+                $scope.text = "Cost Test";
                 $scope.textMsg = "Cost Test";
             }
-            if ($scope.btnType === "mct") {
-                $scope.text = "Run</br>Meet Comp";
-                $scope.textMsg = "Meet Comp";
+
+            $scope.lastRunDisplay = function () {
+                if ($(".iconRunPct").hasClass("fa-spin grn")) {
+                    return "Running " + $scope.text;
+                }
+                if (!!$scope.lastRun) {
+                    moment.tz.add('America/Los_Angeles|PST PDT|80 70|0101|1Lzm0 1zb0 Op0');
+                    var now = moment.tz(new Date(), "America/Los_Angeles");
+                    var lastruntime = moment($scope.lastRun);
+
+                    var t1 = now.format("MM/DD/YY hh:mm:ss");
+                    var t2 = lastruntime.format("MM/DD/YY hh:mm:ss");
+
+                    var timeDiff = moment.duration(moment(t2).diff(moment(t1)));
+                    var hh = Math.abs(timeDiff.asHours());
+                    var mm = Math.abs(timeDiff.asMinutes());
+                    var ss = Math.abs(timeDiff.asSeconds());
+
+                    var dsplNum = hh;
+                    var dsplMsg = " hours ago";
+                    $scope.needToRunPct = dsplNum > 2 ? true : false;
+
+                    if (dsplNum < 1) {
+                        dsplNum = mm;
+                        dsplMsg = " mins ago";
+                        $scope.needToRunPct = true;
+                    }
+                    if (dsplNum < 1) {
+                        dsplNum = ss;
+                        dsplMsg = " secs ago";
+                        $scope.needToRunPct = false;
+                    }
+
+                    return "Last Run: " + Math.round(dsplNum) + dsplMsg;
+
+                } else {
+                    // never ran
+                    $scope.needToRunPct = true;
+                    return "Last Run: Never";
+                }
             }
 
+
+            $timeout(function () {
+                if ($scope.needToRunPct) {
+                    $scope.$broadcast('runPctMct', {});
+                }
+            }, 3000);
+
+
             $scope.executePct = function () {
-                $scope.root.setBusy($scope.textMsg, "Running " + $scope.textMsg + ".");
                 $(".iconRunPct").addClass("fa-spin grn");
 
                 objsetService.runPctContract($scope.contractId).then(
                     function (e) {
                         if (!!$scope.onComplete) $scope.onComplete(e);
 
-                        $scope.root.setBusy($scope.textMsg + " Done", $scope.textMsg + " Ran Successfully.");
                         $timeout(function () {
                             $scope.root.setBusy("", "");
                             $(".iconRunPct").removeClass("fa-spin grn");

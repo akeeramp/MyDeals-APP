@@ -2,18 +2,19 @@
 
 	<div style="position:absolute; left: 5px; z-index: 900;  padding-top: 2px;">
 		<!-- Save Button -->
-		<button class="btn btn-sm ssToolbarBtn" ng-class="{'disabled': !_dirty}" ng-click="saveEntireContract()" title="Save Pricing Table">
-			<table>
-				<tr>
-					<td>
-						<i class="fa fa-floppy-o skyBlue" aria-hidden="true" ng-class="{'fa-disabled': !_dirty}" style="font-size: 29px;"></i>
-					</td>
-					<td style="padding-left: 5px; color: #00AEEF; text-align: left;">
-						Save <br />Pricing Table
-					</td>
-				</tr>
-			</table>
-		</button>
+        <button class="btn btn-sm ssToolbarBtn" ng-class="{'disabled': !_dirty}" ng-click="validatePricingTableProducts()" title="Validate the Pricing Table.  This will also perform a save.">
+            <table>
+                <tr>
+                    <td>
+                        <i class="fa fa-floppy-o skyBlue" aria-hidden="true" style="font-size: 30px"></i>
+                    </td>
+                    <td style="padding-left: 5px; color: #00AEEF;">
+                        Save & Validate<br />
+                        Pricing Table
+                    </td>
+                </tr>
+            </table>
+        </button>
 		<!-- Custom Undo Button -->
 		<button class="btn btn-sm ssToolbarBtn" ng-class="{'disabled': (undoCounter <= 0)}" ng-click="customUndo()" title="Undo" style="padding: 3px 8px;">
 			<table>
@@ -34,20 +35,6 @@
 				</tr>
 			</table>
 		</button>		
-		<!-- Validate Products Button -->
-		<button class="btn btn-sm ssToolbarBtn" ng-class="{'disabled': !_dirty}" ng-click="validatePricingTableProducts()" title="Validate the Pricing Table.  This will also perform a save.">
-			<table>
-				<tr>
-					<td>
-						<i class="intelicon-protection-checked-verified-outlined skyBlue" aria-hidden="true" style="font-size: 30px"></i>
-					</td>
-					<td style="padding-left: 5px; color: #00AEEF;">
-						Save & Validate<br />
-						Pricing Table
-					</td>
-				</tr>
-			</table>
-		</button>
 
 		<!-- Product Selector Button -->
 		<button class="btn btn-sm ssToolbarBtn" ng-show="curPricingStrategy._settings.C_EDIT_PRODUCT" ng-click="openProductSelector()" title="Open Product Selector">

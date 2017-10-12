@@ -682,6 +682,8 @@ namespace Intel.MyDeals.BusinessRules
 
             var myDealsData = (MyDealsData)r.ExtraArgs[0];
 
+            if (!myDealsData.ContainsKey(OpDataElementType.PRC_ST)) return;
+
             IOpDataElement deStage = myDealsData[OpDataElementType.PRC_ST].AllDataCollectors.FirstOrDefault().GetDataElement(AttributeCodes.WF_STG_CD);
             string curStage = deStage.AtrbValue.ToString();
             var futureStage = r.Dc.GetNextStage("Redeal", DataCollections.GetWorkFlowItems(), curStage, OpDataElementType.PRC_ST);
