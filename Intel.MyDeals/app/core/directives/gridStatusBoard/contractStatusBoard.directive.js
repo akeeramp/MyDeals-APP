@@ -134,7 +134,7 @@ function contractStatusBoard($compile, objsetService,colorDictionary) {
                 var ret = [];
 
                 for (var i = 0; i < data.length; i++) {
-                    var results = ["Pass", "Fail", "Incomplete", "Na"];
+                    var results = ["Pass", "Fail", "InComplete", "NA"];
                     var next = "";
                     var titleCd = "TITLE";
 
@@ -187,7 +187,7 @@ function contractStatusBoard($compile, objsetService,colorDictionary) {
 
             $scope.init = function (responseData) {
 
-                var data = $scope.recurCalcData(responseData, "Incomplete")[0];
+                var data = $scope.recurCalcData(responseData, "InComplete")[0];
 
                 $scope.sbData = data;
 

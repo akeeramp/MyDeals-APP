@@ -68,6 +68,14 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         return dataItem._actions[actn] !== undefined && (isExists || dataItem._actions[actn] === true);
     }
 
+    $scope.actionReason = function (actn, dataItem) {
+        var rtn = "";
+        if (!!dataItem._actionReasons && !!dataItem._actionReasons[actn]) {
+            rtn = dataItem._actionReasons[actn];
+        }
+        return rtn;
+    }
+
     $scope.getStageBgColorStyle = function (c) {
         return { backgroundColor: $scope.getColorStage(c) };
     }
@@ -89,11 +97,11 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         return $scope.getColor('stage', d);
     }
     $scope.getColorPct = function (d) {
-        if (!d) d = "Incomplete";
+        if (!d) d = "InComplete";
         return $scope.getColor('pct', d);
     }
     $scope.getColorMct = function (d) {
-        if (!d) d = "Incomplete";
+        if (!d) d = "InComplete";
         return $scope.getColor('mct', d);
     }
 

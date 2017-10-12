@@ -57,11 +57,11 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
         return $scope.getColor('stage', d);
     }
     $scope.getColorPct = function (d) {
-        if (!d) d = "Incomplete";
+        if (!d) d = "InComplete";
         return $scope.getColor('pct', d);
     }
     $scope.getColorMct = function (d) {
-        if (!d) d = "Incomplete";
+        if (!d) d = "InComplete";
         return $scope.getColor('mct', d);
     }
 
@@ -131,7 +131,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
 
     $scope.customFilter = function (ps) {
         return (
-            ($scope.pctFilter === undefined || $scope.pctFilter === '' || ps.COST_TEST_RESULT === '' || ps.COST_TEST_RESULT === $scope.pctFilter) &&
+            ($scope.pctFilter === undefined || $scope.pctFilter === '' || ps.COST_TEST_RESULT === '' || ps.COST_TEST_RESULT.toUpperCase() === $scope.pctFilter.toUpperCase()) &&
             ($scope.titleFilter === undefined || $scope.titleFilter === '' || ps.TITLE.search(new RegExp($scope.titleFilter, "i")) >= 0 || $scope.titleInPt(ps))
             );
     }
@@ -226,7 +226,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
                         rows.each(function (index, row) {
                             var dataItem = e.sender.dataItem(row);
 
-                            if (dataItem.COST_TEST_OVRRD_FLG !== "Yes") {
+                            if (dataItem.COST_TEST_OVRRD_FLG !== "Yes" && dataItem.PRC_CST_TST_STS !== "NA") {
                                 var validCost = false;
                                 var validNet = false;
 
@@ -267,7 +267,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
                             for (var d = 0; d < data.length; d++) {
                                 data[d]["COST_TEST_OVRRD_FLG"] = data[d]["COST_TEST_OVRRD_FLG"] === "Yes";
                                 if (data[d]["COST_TEST_OVRRD_FLG"] === "") data[d]["COST_TEST_OVRRD_FLG"] = "No";
-                                if (data[d]["PRC_CST_TST_STS"] === "") data[d]["PRC_CST_TST_STS"] = "Incomplete";
+                                if (data[d]["PRC_CST_TST_STS"] === "") data[d]["PRC_CST_TST_STS"] = "InComplete";
 
                                 data[d]["_readonly"] = ps.WF_STG_CD === "Pending" || ps.WF_STG_CD === "Approved";
                             }

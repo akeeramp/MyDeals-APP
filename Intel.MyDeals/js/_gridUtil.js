@@ -594,9 +594,9 @@ function gridPctUtils() { }
 gridPctUtils.columns = {};
 gridPctUtils.resultMappings = {
     "Fail": 0,
-    "Incomplete": 1,
+    "InComplete": 1,
     "Pass": 2,
-    "Na": 3
+    "NA": 3
 };
 gridPctUtils.getColumnTemplate = function (dealId) {
     return gridPctUtils.columns[dealId];
@@ -606,16 +606,16 @@ gridPctUtils.getResultMapping = function (result, flg, overrideFlg, className, s
 
     if (overrideFlg !== "") rtn += '<i ng-if="' + overrideFlg + '" class="intelicon-information-solid ' + className + '" style="' + style + '" style="color: #0071C5;" title="Overidden"></i>';
 
-    if (result === "Na") {
-        rtn += '<i ng-if="' + flg + '" class="intelicon-information-solid" style="' + style + '" ng-style="getColorStyle(\'' + result + '\')" title="Na"></i>';
+    if (result === "NA") {
+        rtn += '<i ng-if="' + flg + '" class="intelicon-information-solid" style="' + style + '" ng-style="getColorStyle(\'' + result + '\')" title="NA"></i>';
     } else if (result === "Pass") {
         rtn += '<i ng-if="' + flg + '" class="intelicon-passed-completed-solid" style="' + style + '" ng-style="getColorStyle(\'' + result + '\')" title="Pass"></i>';
-    } else if (result === "Incomplete") {
-        rtn += '<i ng-if="' + flg + '" class="intelicon-help-solid" style="' + style + '" ng-style="getColorStyle(\'' + result + '\')" title="Incomplete"></i>';
+    } else if (result === "InComplete") {
+        rtn += '<i ng-if="' + flg + '" class="intelicon-help-solid" style="' + style + '" ng-style="getColorStyle(\'' + result + '\')" title="InComplete"></i>';
     } else if (result === "Fail") {
         rtn += '<i ng-if="' + flg + '" class="intelicon-alert-solid" style="' + style + '" ng-style="getColorStyle(\'' + result + '\')" title="Fail"></i>';
     } else {
-        rtn += '<i ng-if="' + flg + '" class="intelicon-help-solid" style="' + style + '" ng-style="getColorStyle(\'Incomplete\')" title="Not run yet"></i>';
+        rtn += '<i ng-if="' + flg + '" class="intelicon-help-solid" style="' + style + '" ng-style="getColorStyle(\'InComplete\')" title="Not run yet"></i>';
     }
     rtn += "</div>";
     return rtn;
@@ -623,8 +623,8 @@ gridPctUtils.getResultMapping = function (result, flg, overrideFlg, className, s
 gridPctUtils.getPctFlag = function (flg, results, forceReadOnly, hasNoPermission) {
     //
     var rtn = '<div style="text-align: center;">';
-    rtn += '<span ng-if="' + results + ' === \'Pass\' || ' + results + ' === \'Na\' || ' + forceReadOnly + ' === true || ' + hasNoPermission + ' === true" ng-bind="onOff(' + flg + ')" style="vertical-align: -webkit-baseline-middle;"></span>';
-    rtn += '<span ng-if="' + results + ' !== \'Pass\' && ' + results + ' !== \'Na\' && ' + forceReadOnly + ' !== true && ' + hasNoPermission + ' !== true">';
+    rtn += '<span ng-if="' + results + ' === \'Pass\' || ' + results + ' === \'NA\' || ' + forceReadOnly + ' === true || ' + hasNoPermission + ' === true" ng-bind="onOff(' + flg + ')" style="vertical-align: -webkit-baseline-middle;"></span>';
+    rtn += '<span ng-if="' + results + ' !== \'Pass\' && ' + results + ' !== \'NA\' && ' + forceReadOnly + ' !== true && ' + hasNoPermission + ' !== true">';
     rtn += '<toggle size="btn-sm" ng-change="changeReasonFlg(dataItem)" off="No" on="Yes" ng-model="' + flg + '"></toggle>';
     rtn += '</span>';
     rtn += '<div class="boxSave" ng-class="{\'showReason\': dataItem.saved, \'hideReason\': !dataItem.saved}">SAVED</div>';

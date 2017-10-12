@@ -84,32 +84,53 @@ namespace Intel.MyDeals.BusinessRules
                 if ((action == "Approve" || action == "Revise") && passedValidation != "Complete")
                 {
                     objsetActionItem.Actions[action] = false;
+                    objsetActionItem.ActionReasons[action] = "Pricing Strategy did not pass validation.";
                 }
 
 
                 // TODO when PCT and MCT is ready... remove the following lines
-                pctFailed = false;
-                mctFailed = false;
-                mctIncomplete = false;
+                //pctFailed = false;
+                //mctFailed = false;
+                //mctIncomplete = false;
 
                 if (action == "Approve" && objsetActionItem.Actions[action])
                 {
+                    string reasonPctMct = "Pricing Strategy did not pass " + (pctFailed && mctFailed
+                        ? "Price Cost Test and Meet Comp Test" 
+                        : pctFailed 
+                            ? "Price Cost Test" 
+                            : mctFailed 
+                                ? "Meet Comp Test" 
+                                : "");
+
                     switch (role)
                     {
                         case RoleTypes.SA:
                         case RoleTypes.DA:
                             if ((stage == WorkFlowStages.Submitted || stage == WorkFlowStages.Pending) && (pctFailed || mctFailed))
+                            {
                                 objsetActionItem.Actions[action] = false;
+                                objsetActionItem.ActionReasons[action] = reasonPctMct;
+                            }
                             break;
                         case RoleTypes.GA:
                             if (stage == WorkFlowStages.Requested && mctFailed && !mctIncomplete)
+                            {
                                 objsetActionItem.Actions[action] = false;
+                                objsetActionItem.ActionReasons[action] = reasonPctMct;
+                            }
                             if ((stage == WorkFlowStages.Submitted || stage == WorkFlowStages.Pending) && (pctFailed || mctFailed))
+                            {
                                 objsetActionItem.Actions[action] = false;
+                                objsetActionItem.ActionReasons[action] = reasonPctMct;
+                            }
                             break;
                         case RoleTypes.FSE:
                             if ((stage == WorkFlowStages.Submitted || stage == WorkFlowStages.Pending) && (pctFailed || mctFailed))
+                            {
                                 objsetActionItem.Actions[action] = false;
+                                objsetActionItem.ActionReasons[action] = reasonPctMct;
+                            }
                             break;
                     }
                 }
@@ -118,6 +139,7 @@ namespace Intel.MyDeals.BusinessRules
 
 
             objsetItem["_actions"] = objsetActionItem.Actions;
+            objsetItem["_actionReasons"] = objsetActionItem.ActionReasons;
             objsetItem["_settings"] = objsetActionItem.Settings;
 
         }

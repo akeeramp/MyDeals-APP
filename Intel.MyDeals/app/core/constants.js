@@ -39,14 +39,14 @@
             "pct": {
                 "Fail": "#FC4C02",
                 "Pass": "#C4D600",
-                "Incomplete": "#f3D54E",
-                "Na": "#cccccc"
+                "InComplete": "#f3D54E",
+                "NA": "#cccccc"
             },
             "mct": {
                 "Fail": "#FC4C02",
                 "Pass": "#C4D600",
-                "Incomplete": "#f3D54E",
-                "Na": "#cccccc"
+                "InComplete": "#f3D54E",
+                "NA": "#cccccc"
             },
             "type": {
                 "ALL_TYPES": "#0071C5",
