@@ -274,7 +274,7 @@
 
             // By default set the CUST_ACCPT to pending(99) if new contract
             $scope.contractData.CUST_ACCPT = $scope.contractData.CUST_ACCPT === "" ? 'Pending' : $scope.contractData.CUST_ACCPT;
-            $scope.contractData._behaviors.isHidden["C2A_DATA_C2A_ID"] = ($scope.contractData.CUST_ACCPT === 'Pending');
+            $scope.contractData._behaviors.isHidden["C2A_DATA_C2A_ID"] = false; //US77403 wants it always shown -formerly: ($scope.contractData.CUST_ACCPT === 'Pending');
 
             // TODO: Ideally undefined check should be removed, once we run the DBConst.tt and DealPropertyWrapper.tt we can remove this
             // Not running now I see many new Attributes added for VOL_TIER
@@ -282,7 +282,7 @@
 
             // Set customer acceptance rulesc
             var setCustAcceptanceRules = function (newValue) {
-                $scope.contractData._behaviors.isHidden["C2A_DATA_C2A_ID"] = (newValue === 'Pending');
+                $scope.contractData._behaviors.isHidden["C2A_DATA_C2A_ID"] = false; //US77403 wants it always shown -formerly: (newValue === 'Pending');
                 $scope.contractData._behaviors.isRequired["C2A_DATA_C2A_ID"] = (newValue !== 'Pending') && (!hasUnSavedFiles && !hasFiles);
                 $scope.contractData.C2A_DATA_C2A_ID = (newValue === 'Pending') ? "" : $scope.contractData.C2A_DATA_C2A_ID;
                 $scope.contractData.IsAttachmentRequired = ($scope.contractData.C2A_DATA_C2A_ID === "") && (newValue !== 'Pending');

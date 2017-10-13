@@ -2,18 +2,29 @@
     <div class="fl opUiLabel" ng-class="{isRequired: opIsRequired}">{{opLabel}}</div>
     <div class="clearboth"></div>
     <div ng-repeat="item in values">
-        <div class="radio">
-            <label class="radioControl">
-                <input type="radio" name="{{item[opLookupText]}}" value="{{item[opLookupValue]}}"
-                       ng-model="$parent.value"
-                       ng-value="true"
-                       ng-disabled="opIsReadOnly"
-                       ng-class="{isHidden: opIsHidden, isReadOnly: opIsReadOnly, isError: opIsError, isSaved: opIsSaved, isDirty: opIsDirty}" />
-                {{item[opLookupText]}}
-            </label>
-            <span ng-if="item['ATRB_LKUP_TTIP'] != ''" kendo-tooltip k-content="item['ATRB_LKUP_TTIP']" k-position="'top'" class="opElementHelpIcon intelicon-information-outlined"></span>
+        <div class="radio row">
+            <div>
+                <div class="col-md-12" style="margin-bottom:10px; border-bottom:1px solid #eeeeee" ng-if="!$first"></div>
+                <div class="col-md-4">
+                    <div>
+                        <label class="radioControl">
+                            <input type="radio" name="{{item[opLookupText]}}" value="{{item[opLookupValue]}}"
+                                   ng-model="$parent.value"
+                                   ng-value="true"
+                                   ng-disabled="opIsReadOnly"
+                                   ng-class="{isHidden: opIsHidden, isReadOnly: opIsReadOnly, isError: opIsError, isSaved: opIsSaved, isDirty: opIsDirty}" />
+                            {{item[opLookupText]}}
+                        </label>
+                    </div>
+                    <div>
+                        <span class="lookupDesc" ng-if="$parent.value == item[opLookupValue] && item['ATRB_LKUP_DESC'] != ''">{{item['ATRB_LKUP_DESC']}}</span>
+                    </div>
+                </div>
+            </div>
+            <span ng-if="!opExtra && item['ATRB_LKUP_TTIP'] != ''" kendo-tooltip k-content="item['ATRB_LKUP_TTIP']" k-position="'top'" class="opElementHelpIcon intelicon-information-outlined"></span>
+            <div class="col-md-8" ng-if="opExtra"><span ng-bind-html="item['ATRB_LKUP_TTIP']"></span></div>
         </div>
-        <span class="lookupDesc" ng-if="$parent.value == item[opLookupValue] && item['ATRB_LKUP_DESC'] != ''">{{item['ATRB_LKUP_DESC']}}</span>
+        
     </div>
     <div class="clearboth"></div>
 </div>
