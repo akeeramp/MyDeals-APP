@@ -579,8 +579,7 @@ namespace Intel.MyDeals.BusinessRules
 
             string payout = r.Dc.GetDataElementValue(AttributeCodes.PAYOUT_BASED_ON);
             string progPayment = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT);
-            IOpDataElement deProgPayment = r.Dc.GetDataElement(AttributeCodes.PROGRAM_PAYMENT);
-            IOpDataElement de = r.Dc.GetDataElement(AttributeCodes.DC_ID);
+            IOpDataElement de = r.Dc.GetDataElement(AttributeCodes.PROGRAM_PAYMENT);
 
             if (payout != "Billings" && progPayment != "Backend")
             {
@@ -766,20 +765,20 @@ namespace Intel.MyDeals.BusinessRules
                         : WorkFlowStages.Draft;
                 }
                 OpDataCollector dcRow = myDealsData[OpDataElementType.PRC_TBL_ROW].Data[r.Dc.DcParentID];
-                OpDataCollector dcTbl = myDealsData[OpDataElementType.PRC_TBL].Data[dcRow.DcParentID];
-                if (!myDealsData.ContainsKey(OpDataElementType.PRC_ST))
-                {
-                    myDealsData[OpDataElementType.PRC_ST] = new OpDataCollectorDataLib().GetByIDs(OpDataElementType.PRC_ST, 
-                        new List<int> { dcTbl.DcParentID}, 
-                        new List<OpDataElementType> {OpDataElementType.PRC_ST}, 
-                        new List<int> { Attributes.WF_STG_CD.ATRB_SID })[OpDataElementType.PRC_ST];
-                }
-                OpDataCollector dcSt = myDealsData[OpDataElementType.PRC_ST].Data[dcTbl.DcParentID];
-                dcSt.SetAtrb(AttributeCodes.WF_STG_CD, futureStage);
-            }
+				OpDataCollector dcTbl = myDealsData[OpDataElementType.PRC_TBL].Data[dcRow.DcParentID];
+				if (!myDealsData.ContainsKey(OpDataElementType.PRC_ST))
+				{
+					myDealsData[OpDataElementType.PRC_ST] = new OpDataCollectorDataLib().GetByIDs(OpDataElementType.PRC_ST,
+						new List<int> { dcTbl.DcParentID },
+						new List<OpDataElementType> { OpDataElementType.PRC_ST },
+						new List<int> { Attributes.WF_STG_CD.ATRB_SID })[OpDataElementType.PRC_ST];
+				}
+				OpDataCollector dcSt = myDealsData[OpDataElementType.PRC_ST].Data[dcTbl.DcParentID];
+				dcSt.SetAtrb(AttributeCodes.WF_STG_CD, futureStage);
+			}
 
-            // If object is expired, unexpire it
-            string isExpired = r.Dc.GetDataElementValue(AttributeCodes.EXPIRE_FLG);
+			// If object is expired, unexpire it
+			string isExpired = r.Dc.GetDataElementValue(AttributeCodes.EXPIRE_FLG);
             if (!string.IsNullOrEmpty(isExpired) && isExpired == "1") // If there is an expired flag, reset it if it is set
             {
                 r.Dc.SetAtrb(AttributeCodes.EXPIRE_FLG, "0");
