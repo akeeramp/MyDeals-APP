@@ -126,16 +126,25 @@
 
 <script>
     function closeSplitter() {
-        $("#k-splitter").data("kendoSplitter").collapse(".k-pane:last");
-        $("#k-splitter").data("kendoSplitter").resize();
+        var splitter = $("#k-splitter").data("kendoSplitter");
+        if (!splitter) return;
+
+        splitter.collapse(".k-pane:last");
+        splitter.resize();
     }
     function openSplitter() {
-        $("#k-splitter").data("kendoSplitter").expand(".k-pane:last");
-        $("#k-splitter").data("kendoSplitter").resize();
+        var splitter = $("#k-splitter").data("kendoSplitter");
+        if (!splitter) return;
+
+        splitter.expand(".k-pane:last");
+        splitter.resize();
     }
 
     setTimeout(function () {
-        $("#k-splitter").data("kendoSplitter").resize();
+        var splitter = $("#k-splitter").data("kendoSplitter");
+        if (!splitter) return;
+
+        splitter.resize();
     }, 2000);
 
 
