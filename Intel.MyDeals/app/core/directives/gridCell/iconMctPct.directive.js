@@ -29,10 +29,10 @@ function iconMctPct(colorDictionary) {
 
             $scope.getIconClass = function () {
                 var c = titleCase($scope.dataValue);
-                if (c === "Pass") return "intelicon-passed-completed-solid";
-                if (c === "Fail") return "intelicon-alert-solid";
-                if (c === "NA") return "intelicon-information-solid";
-                if (c === "InComplete") return "intelicon-help-solid";
+                if (c.toUpperCase() === "PASS") return "intelicon-passed-completed-solid";
+                if (c.toUpperCase() === "FAIL") return "intelicon-alert-solid";
+                if (c.toUpperCase() === "NA") return "intelicon-information-solid";
+                if (c.toUpperCase() === "INCOMPLETE") return "intelicon-help-solid";
                 return "intelicon-help-solid";
             }
             $scope.getColor = function (k, c) {
