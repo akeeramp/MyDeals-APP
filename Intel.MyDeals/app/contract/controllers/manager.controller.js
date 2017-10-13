@@ -399,6 +399,10 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
             }
         }
 
+        $scope.actionItemWithPending();
+    }
+
+    $scope.actionItemWithPending = function() {
         if ($scope.isPending === false && root.contractData.CUST_ACCPT !== "Pending" && (root.contractData.C2A_DATA_C2A_ID === "" && !root.contractData.HasFiles)) {
             $scope.dialogPendingWarning.open();
         } else {
@@ -461,6 +465,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 
         $scope.context = dataItems;
 
+
         var modalInstance = $uibModal.open({
             animation: true,
             ariaLabelledBy: 'modal-title',
@@ -473,17 +478,67 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
                 dataItems: function () {
                     return dataItems;
                 },
-                showErrMsg: function() {
+                showErrMsg: function () {
                     return root.needMct();
                 }
             }
         });
 
         modalInstance.result.then(function (result) {
-            root.actionPricingStrategies(data, result);
+            $scope.checkPctMctPriorToActioning(data, result);
         }, function () { });
+
     }
 
+    $scope.checkPctMctPriorToActioning = function (data, result) {
+
+        // check for running MCP or PCT
+        var ids = $scope.getIdsToPctMct(data);
+        if (ids.length > 0) {
+            $(".iconRunPct").addClass("fa-spin grn");
+            $scope.root.setBusy("Running PCT/MCT", "Running Price Cost Test and Meet Comp Test.");
+            objsetService.runPctContract($scope.root.contractData.DC_ID).then(
+                function (e) {
+
+                    //TODO Look at PCT/MCT results and determine if we can proceed
+                    //
+                    var testType = window.usrRole === "GA" ? "MCT" : "PCT";
+
+
+                    $scope.root.setBusy("PCT/MCT Complete", "Price Cost Test and Meet Comp Test Completed.");
+                    $(".iconRunPct").removeClass("fa-spin grn");
+                    root.actionPricingStrategies(data, result);
+                },
+                function (response) {
+                    $scope.root.setBusy("Error", "Could not Run " + $scope.textMsg + ".");
+                    logger.error("Could not run Cost Test.", response, response.statusText);
+                    $timeout(function () {
+                        $scope.root.setBusy("", "");
+                        $(".iconRunPct").removeClass("fa-spin grn");
+                    }, 2000);
+                }
+            );
+        } else {
+            root.actionPricingStrategies(data, result);
+        }
+
+    }
+
+    $scope.getIdsToPctMct = function (data) {
+
+        var rtn = [];
+        var role = window.usrRole;
+        var apprItems = data["Approve"];
+        if (!!apprItems) {
+            for (var a = 0; a < apprItems.length; a++) {
+                var stage = apprItems[a]["WF_STG_CD"];
+                if ((role === "GA" && stage === "Requested") || (role === "DA" && stage === "Submitted")) {
+                    rtn.push(apprItems[a]["DC_ID"]);
+                }
+            }
+        }
+        return rtn;
+    }
 
     $scope.ptDs = new kendo.data.DataSource({});
 

@@ -1142,7 +1142,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             disableRange(sheet.range(myColumnName + numRowsContainingData + ":" + myColumnName));
                         } else {
                             if (!root.curPricingStrategy._settings || !root.curPricingStrategy._settings.C_EDIT_PRODUCT) {
-                                disableRange(sheet.range(myColumnName + numRowsContainingData + ":" + myColumnName));
+                                disableRange(sheet.range(myColumnName + "0:" + myColumnName));
                             }
                         }
                     }
