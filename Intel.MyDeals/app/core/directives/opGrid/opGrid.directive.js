@@ -328,12 +328,12 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
                 $timeout(function () {
                     $scope.cloneWithOrder("default");
+                    $scope.opOptions.columns = $scope.assignColSettings();
+                    $scope.grid.setOptions({ columns: $scope.opOptions.columns });
 
-                    $timeout(function () {
-                        $("#tabstrip").kendoTabStrip().data("kendoTabStrip").reload();
-                        $scope.configureSortableTab();
-                        $scope.selectFirstTab();
-                    }, 10);
+                    $("#tabstrip").kendoTabStrip().data("kendoTabStrip").reload();
+                    $scope.configureSortableTab();
+                    $scope.selectFirstTab();
                 }, 10);
             }
 
@@ -365,12 +365,12 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             // Apply the settings.
                             $timeout(function () {
                                 $scope.cloneWithOrder("custom");
+                                $scope.opOptions.columns = $scope.assignColSettings();
+                                $scope.grid.setOptions({ columns: $scope.opOptions.columns });
 
-                                $timeout(function () {
-                                    $("#tabstrip").kendoTabStrip().data("kendoTabStrip").reload();
-                                    $scope.configureSortableTab();
-                                    $scope.selectFirstTab();
-                                }, 10);
+                                $("#tabstrip").kendoTabStrip().data("kendoTabStrip").reload();
+                                $scope.configureSortableTab();
+                                $scope.selectFirstTab();
                             }, 10);
                         } else {
                             kendo.alert("You have not saved a custom layout yet.");
@@ -569,6 +569,22 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 resizable: $scope.resizable,
                 reorderable: true,
                 pageable: $scope.pageable,
+                columnReorder: function (e) {
+                    setTimeout(function () {
+                        // Make sure that $scope.opOptions.groupColumns reflects the current column order, 
+                        // incase the user later saves the Custom Layout.
+                        var newGroupColumns = {}
+                        angular.forEach($scope.grid.columns, function (c) {
+                            angular.forEach($scope.opOptions.groupColumns, function (v, k) {
+                                if (k == c.field) {
+                                    newGroupColumns[k] = v;
+                                    return;
+                                }
+                            });
+                        });
+                        $scope.opOptions.groupColumns = newGroupColumns;
+                    }, 10);
+                },
                 save: function (e) {
                 	var newField = util.getFirstKey(e.values);
 
