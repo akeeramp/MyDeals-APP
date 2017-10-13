@@ -20,7 +20,7 @@ namespace Intel.MyDeals.BusinessLogic
             return retFlatList;
         }
         
-        public static OpDataCollectorFlattenedList TranslateToPrcTbl(this OpDataCollectorFlattenedList opFlatList)
+        public static OpDataCollectorFlattenedList TranslateToPrcTbl(this OpDataCollectorFlattenedList opFlatList, OpDataCollectorFlattenedItem pricingTable)
         {
             OpDataCollectorFlattenedList retFlatList = new OpDataCollectorFlattenedList();
 
@@ -65,7 +65,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             //retFlatList.AddRange(opFlatList.Select(item => item.TranslateToPrcTbl()));
 
-            retFlatList.AddRange(opFlatList.Select(item => item.TranslateToPrcTbl()));
+            retFlatList.AddRange(opFlatList.Select(item => item.TranslateToPrcTbl(pricingTable)));
 
 
             return retFlatList;

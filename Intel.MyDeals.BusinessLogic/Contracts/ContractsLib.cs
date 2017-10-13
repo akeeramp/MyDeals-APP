@@ -236,7 +236,8 @@ namespace Intel.MyDeals.BusinessLogic
                 }
                 else if (isWipDealSource)
                 {
-                    translatedFlattenedList = contractAndStrategy.WipDeals.TranslateToPrcTbl();
+					OpDataCollectorFlattenedItem pt = (contractAndStrategy.PricingTable != null && contractAndStrategy.PricingTable.Count > 0) ? contractAndStrategy.PricingTable[0] : new OpDataCollectorFlattenedItem();
+					translatedFlattenedList = contractAndStrategy.WipDeals.TranslateToPrcTbl(pt);
                 }
             }
 

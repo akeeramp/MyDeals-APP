@@ -246,7 +246,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                     select m.Value.Replace("[", "").Replace("]", "")).ToList();
         }
 
-        public static OpDataCollectorFlattenedItem TranslateToPrcTbl(this OpDataCollectorFlattenedItem opFlatItem)
+        public static OpDataCollectorFlattenedItem TranslateToPrcTbl(this OpDataCollectorFlattenedItem opFlatItem, OpDataCollectorFlattenedItem pricingTable)
         {
             OpDataCollectorFlattenedItem retItems = new OpDataCollectorFlattenedItem();
 
@@ -298,14 +298,23 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                 }
             }
 
-            retItems[AttributeCodes.DC_ID] = opFlatItem[AttributeCodes.DC_PARENT_ID];
+			// PTR 
+			retItems[AttributeCodes.DC_ID] = opFlatItem[AttributeCodes.DC_PARENT_ID];
             retItems[AttributeCodes.dc_type] = elMapping.ParentOpDataElementType;
             retItems[AttributeCodes.OBJ_SET_TYPE_CD] = elMapping.ParentOpDataElementSetType;
 
-            retItems[AttributeCodes.DC_PARENT_ID] = 0;
-            retItems[AttributeCodes.dc_parent_type] = elMapping.ParentOpDataElementType;
+			if (pricingTable.Count > 0)
+			{
+				retItems[AttributeCodes.DC_PARENT_ID] = pricingTable[AttributeCodes.DC_ID];
+				retItems[AttributeCodes.dc_parent_type] = pricingTable[AttributeCodes.dc_type];
+			}
+			else
+			{
+				retItems[AttributeCodes.DC_PARENT_ID] = 0;
+				retItems[AttributeCodes.dc_parent_type] = elMapping.ParentOpDataElementType;
+			}
 
-            return retItems;
+			return retItems;
         }
 
         public static void CopyMatchingAttributes(this OpDataCollectorFlattenedList retItems, OpDataCollectorFlattenedItem opFlatItemLocal, OpDataElementTypeMapping elMapping,
