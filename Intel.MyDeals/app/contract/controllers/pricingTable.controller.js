@@ -1276,10 +1276,20 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             var x = this._previewFillFrom(srcRange, direction);
 
             // Custom code
-            for (var i = 0; i < x.props.length; i++) { // each col
-                for (var j = 0; j < x.props[i].length; j++) { // each row
-                    var newVal = x.props[i][j].value;
+            var firstDraggedVal = this.value();           
+            var newVal = "";
 
+            for (var i = 0; i < x.props.length; i++) { // each col
+            	for (var j = 0; j < x.props[i].length; j++) { // each row
+
+            		// HACK: this is to prevent dragged cells that have numbers in them from incrementing on drag. 
+            		if (srcRange._ref.bottomRight.row !== srcRange._ref.topLeft.row) {
+            			// The user highighted 2 or more cells before dragging, so just go with the pattern
+                		newVal = x.props[i][j].value;
+            		} else {
+            			// User only highlighted one cell, so use the first cell to set all the other cell's values
+                		newVal = this.value(); 
+                	}
                     // Make a new object with only the value - no validation or editor properties
                     x.props[i][j] = {
                         value: newVal
