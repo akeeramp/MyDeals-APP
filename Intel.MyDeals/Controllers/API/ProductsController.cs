@@ -426,7 +426,7 @@ namespace Intel.MyDeals.Controllers.API
         {
             return SafeExecutor(() => _productsLib.GetProductSelectionResults((string)input.searchHash,
                 (DateTime)input.startDate, (DateTime)input.endDate, (int)input.selectionLevel, (string)input.drillDownFilter4,
-                (string)input.drillDownFilter5, (int)input.custSid, (string)input.geoSid, (OpDataElementSetType)input.dealType)
+                (string)input.drillDownFilter5, (int)input.custSid, (string)input.geoSid, (string)input.mediaCd, (OpDataElementSetType)input.dealType)
                 , $"Unable to get product selection levels"
             );
         }

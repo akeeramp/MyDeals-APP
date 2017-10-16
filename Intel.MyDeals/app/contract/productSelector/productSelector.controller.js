@@ -48,7 +48,7 @@
         vm.dealType = dealType;
         vm.suggestionText = "";
         vm.animateInclude = false;
-        vm.animateExclude = false;        
+        vm.animateExclude = false;
         vm.manageSelectedProducts = manageSelectedProducts;
         vm.excludeMode = !!suggestedProduct.isExcludeProduct ?
                         suggestedProduct.isExcludeProduct && dealType == 'VOL_TIER' : false;
@@ -315,6 +315,7 @@
                 "drillDownFilter5": null,
                 "custSid": pricingTableRow.CUST_MBR_SID,
                 "geoSid": pricingTableRow.GEO_COMBINED.toString(),
+                "mediaCd":pricingTableRow.PROD_INCLDS,
                 "dealType": vm.dealType
             }
 
@@ -495,13 +496,13 @@
                         //    hasActionButton: false,
                         //    headerText: 'Cross Vertical Warning',
                         //    bodyText: crossVertical.message,
-                        //    appendTo: "div#mainForm"                            
+                        //    appendTo: "div#mainForm"
                         //};
                         //confirmationModal.showModal({}, modalOptions, { windowClass: 'prdSelector-modal-window'}).then(function (result) {
                         //    //
                         //}, function (response) {
                         //    //
-                        //});                        
+                        //});
                         product.selected = false;
                         return;
                     }
@@ -1111,6 +1112,7 @@
                 "drillDownFilter5": null,
                 "custSid": pricingTableRow.CUST_MBR_SID,
                 "geoSid": pricingTableRow.GEO_COMBINED.toString(),
+                "mediaCd": pricingTableRow.PROD_INCLDS,
                 "dealType": vm.dealType
             }
 

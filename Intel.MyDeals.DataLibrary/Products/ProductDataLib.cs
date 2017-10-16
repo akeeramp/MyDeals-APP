@@ -790,7 +790,7 @@ namespace Intel.MyDeals.DataLibrary
         /// <param name="drillDownFilter"></param>
         /// <returns></returns>
         public List<ProductSelectionResults> GetProductSelectionResults(string searchHash, DateTime startDate, DateTime endDateTime,
-                int selectionLevel, string drillDownFilter4, string drillDownFilter5, int custSid, string geoSid, OpDataElementSetType dealType)
+                int selectionLevel, string drillDownFilter4, string drillDownFilter5, int custSid, string geoSid, string mediaCd, OpDataElementSetType dealType)
         {
             OpLogPerf.Log("ProductSelectionResults");
             var ret = new List<ProductSelectionResults>();
@@ -805,7 +805,8 @@ namespace Intel.MyDeals.DataLibrary
                     SEL_LVL = selectionLevel,
                     CUST_MBR_SID = custSid,
                     GEO_MBR_SID = geoSid,
-                    DEAL_TYPE = dealType.ToString()
+                    DEAL_TYPE = dealType.ToString(),
+                    MEDIA_CD = mediaCd
                 };
 
                 if (drillDownFilter4 != null)

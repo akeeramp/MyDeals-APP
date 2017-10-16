@@ -958,9 +958,9 @@ namespace Intel.MyDeals.BusinessLogic
         /// <param name="drillDownFilter"></param>
         /// <returns></returns>
         public List<ProductSelectionResults> GetProductSelectionResults(string searchHash,
-            DateTime startDate, DateTime endDate, int selectionLevel, string drillDownFilter4, string drillDownFilter5, int custSid, string geoSid, OpDataElementSetType dealType)
+            DateTime startDate, DateTime endDate, int selectionLevel, string drillDownFilter4, string drillDownFilter5, int custSid, string geoSid, string mediaCd, OpDataElementSetType dealType)
         {
-            return _productDataLib.GetProductSelectionResults(searchHash, startDate, endDate, selectionLevel, drillDownFilter4, drillDownFilter5, custSid, geoSid, dealType);
+            return _productDataLib.GetProductSelectionResults(searchHash, startDate, endDate, selectionLevel, drillDownFilter4, drillDownFilter5, custSid, geoSid, mediaCd, dealType);
         }
 
         /// <summary>
