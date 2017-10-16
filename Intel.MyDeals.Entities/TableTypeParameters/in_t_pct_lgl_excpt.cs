@@ -22,13 +22,13 @@ namespace Intel.MyDeals.Entities
             this.Columns.Add("INTEL_PRD", typeof(string));
             this.Columns.Add("SCPE", typeof(string));
             this.Columns.Add("PRC_RQST", typeof(string));
-            this.Columns.Add("COST", typeof(double));
+            this.Columns.Add("COST", typeof(string));
             this.Columns.Add("PCT_LGL_EXCPT_STRT_DT", typeof(string));
             this.Columns.Add("PCT_LGL_EXCPT_END_DT", typeof(string));
             this.Columns.Add("FRCST_VOL_BYQTR", typeof(string));
             this.Columns.Add("CUST_PRD", typeof(string));
             this.Columns.Add("MEET_COMP_PRD", typeof(string));
-            this.Columns.Add("MEET_COMP_PRC", typeof(double));
+            this.Columns.Add("MEET_COMP_PRC", typeof(string));
             this.Columns.Add("BUSNS_OBJ", typeof(string));
             this.Columns.Add("PTNTL_MKT_IMPCT", typeof(string));
             this.Columns.Add("OTHER", typeof(string));

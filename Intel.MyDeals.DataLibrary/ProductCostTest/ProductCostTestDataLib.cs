@@ -246,7 +246,7 @@ namespace Intel.MyDeals.DataLibrary
                             CHG_DTM = (IDX_CHG_DTM < 0 || rdr.IsDBNull(IDX_CHG_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CHG_DTM),
                             CHG_EMP_NAME = (IDX_CHG_EMP_NAME < 0 || rdr.IsDBNull(IDX_CHG_EMP_NAME)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CHG_EMP_NAME),
                             CHG_EMP_WWID = (IDX_CHG_EMP_WWID < 0 || rdr.IsDBNull(IDX_CHG_EMP_WWID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CHG_EMP_WWID),
-                            COST = (IDX_COST < 0 || rdr.IsDBNull(IDX_COST)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_COST),
+                            COST = (IDX_COST < 0 || rdr.IsDBNull(IDX_COST)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_COST),
                             CRE_DTM = (IDX_CRE_DTM < 0 || rdr.IsDBNull(IDX_CRE_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CRE_DTM),
                             CRE_EMP_WWID = (IDX_CRE_EMP_WWID < 0 || rdr.IsDBNull(IDX_CRE_EMP_WWID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CRE_EMP_WWID),
                             CUST_PRD = (IDX_CUST_PRD < 0 || rdr.IsDBNull(IDX_CUST_PRD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_PRD),
@@ -254,7 +254,7 @@ namespace Intel.MyDeals.DataLibrary
                             FRCST_VOL_BYQTR = (IDX_FRCST_VOL_BYQTR < 0 || rdr.IsDBNull(IDX_FRCST_VOL_BYQTR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_FRCST_VOL_BYQTR),
                             INTEL_PRD = (IDX_INTEL_PRD < 0 || rdr.IsDBNull(IDX_INTEL_PRD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_INTEL_PRD),
                             JSTFN_PCT_EXCPT = (IDX_JSTFN_PCT_EXCPT < 0 || rdr.IsDBNull(IDX_JSTFN_PCT_EXCPT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_JSTFN_PCT_EXCPT),
-                            MEET_COMP_PRC = (IDX_MEET_COMP_PRC < 0 || rdr.IsDBNull(IDX_MEET_COMP_PRC)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_MEET_COMP_PRC),
+                            MEET_COMP_PRC = (IDX_MEET_COMP_PRC < 0 || rdr.IsDBNull(IDX_MEET_COMP_PRC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MEET_COMP_PRC),
                             MEET_COMP_PRD = (IDX_MEET_COMP_PRD < 0 || rdr.IsDBNull(IDX_MEET_COMP_PRD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MEET_COMP_PRD),
                             MYDL_PCT_LGL_EXCPT_SID = (IDX_MYDL_PCT_LGL_EXCPT_SID < 0 || rdr.IsDBNull(IDX_MYDL_PCT_LGL_EXCPT_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_MYDL_PCT_LGL_EXCPT_SID),
                             OTHER = (IDX_OTHER < 0 || rdr.IsDBNull(IDX_OTHER)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OTHER),
@@ -341,7 +341,7 @@ namespace Intel.MyDeals.DataLibrary
                             CHG_DTM = (IDX_CHG_DTM < 0 || rdr.IsDBNull(IDX_CHG_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CHG_DTM),
                             CHG_EMP_NAME = (IDX_CHG_EMP_NAME < 0 || rdr.IsDBNull(IDX_CHG_EMP_NAME)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CHG_EMP_NAME),
                             CHG_EMP_WWID = (IDX_CHG_EMP_WWID < 0 || rdr.IsDBNull(IDX_CHG_EMP_WWID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CHG_EMP_WWID),
-                            COST = (IDX_COST < 0 || rdr.IsDBNull(IDX_COST)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_COST),
+                            COST = (IDX_COST < 0 || rdr.IsDBNull(IDX_COST)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_COST),
                             CRE_DTM = (IDX_CRE_DTM < 0 || rdr.IsDBNull(IDX_CRE_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CRE_DTM),
                             CRE_EMP_WWID = (IDX_CRE_EMP_WWID < 0 || rdr.IsDBNull(IDX_CRE_EMP_WWID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CRE_EMP_WWID),
                             CUST_PRD = (IDX_CUST_PRD < 0 || rdr.IsDBNull(IDX_CUST_PRD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CUST_PRD),
@@ -349,7 +349,7 @@ namespace Intel.MyDeals.DataLibrary
                             FRCST_VOL_BYQTR = (IDX_FRCST_VOL_BYQTR < 0 || rdr.IsDBNull(IDX_FRCST_VOL_BYQTR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_FRCST_VOL_BYQTR),
                             INTEL_PRD = (IDX_INTEL_PRD < 0 || rdr.IsDBNull(IDX_INTEL_PRD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_INTEL_PRD),
                             JSTFN_PCT_EXCPT = (IDX_JSTFN_PCT_EXCPT < 0 || rdr.IsDBNull(IDX_JSTFN_PCT_EXCPT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_JSTFN_PCT_EXCPT),
-                            MEET_COMP_PRC = (IDX_MEET_COMP_PRC < 0 || rdr.IsDBNull(IDX_MEET_COMP_PRC)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_MEET_COMP_PRC),
+                            MEET_COMP_PRC = (IDX_MEET_COMP_PRC < 0 || rdr.IsDBNull(IDX_MEET_COMP_PRC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MEET_COMP_PRC),
                             MEET_COMP_PRD = (IDX_MEET_COMP_PRD < 0 || rdr.IsDBNull(IDX_MEET_COMP_PRD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MEET_COMP_PRD),
                             MYDL_PCT_LGL_EXCPT_SID = (IDX_MYDL_PCT_LGL_EXCPT_SID < 0 || rdr.IsDBNull(IDX_MYDL_PCT_LGL_EXCPT_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_MYDL_PCT_LGL_EXCPT_SID),
                             OTHER = (IDX_OTHER < 0 || rdr.IsDBNull(IDX_OTHER)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OTHER),
@@ -372,6 +372,5 @@ namespace Intel.MyDeals.DataLibrary
             }
             return ret.FirstOrDefault();
         }
-
     }
 }

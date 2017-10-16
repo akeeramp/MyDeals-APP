@@ -99,7 +99,7 @@
 						    }
 						}
                         , COST: {
-                            type: "number", validation: {
+                            type: "string", validation: {
                                 required: { message: "* field is required" }
                             }
                         }
@@ -130,7 +130,7 @@
 						    }
 						}
                         , MEET_COMP_PRC: {
-                            type: "number", validation: {
+                            type: "string", validation: {
                                 required: { message: "* field is required" }
                             }
                         }
@@ -176,6 +176,10 @@
                 },
             },
         });
+
+        function textareaEditor(container, options) {
+            $('<textarea name="' + options.field + '" style="width: ' + container.width() + 'px;height:150px" />').appendTo(container);
+        }
 
         vm.gridOptions = {
             dataSource: vm.dataSource,
@@ -232,6 +236,7 @@
             {
                 field: "INTEL_PRD",
                 headerTemplate: "<div class='isRequired'> Intel Product </div>",
+                editor:textareaEditor,
                 title: "Intel Product",
                 width: 240,
                 filterable: { multi: true, search: true }
@@ -239,12 +244,14 @@
             {
                 field: "SCPE",
                 headerTemplate: "<div class='isRequired'> Scope </div>",
+                editor: textareaEditor,
                 title: "Scope",
                 width: 200,
                 filterable: { multi: true, search: true }
             },
             {
                 field: "PRC_RQST",
+                editor: textareaEditor,
                 title: "Price Request",
                 headerTemplate: "<div class='isRequired'> Price Request </div>",
                 width: 160,
@@ -253,6 +260,7 @@
             {
                 field: "COST",
                 title: "Cost",
+                editor: textareaEditor,
                 headerTemplate: "<div class='isRequired'> Cost </div>",
                 template: '<div class="text-right">$#= COST#<div>',
                 width: 120,
@@ -283,6 +291,7 @@
             {
                 field: "FRCST_VOL_BYQTR",
                 title: "Forecasted Volume By Quarter",
+                editor: textareaEditor,
                 headerTemplate: "<div class='isRequired'> Forecasted Volume By Quarter </div>",
                 width: 190,
                 filterable: { multi: true, search: true }
@@ -290,6 +299,7 @@
             {
                 field: "CUST_PRD",
                 title: "Customer Product",
+                editor: textareaEditor,
                 headerTemplate: "<div class='isRequired'> Customer Product </div>",
                 width: 150,
                 filterable: { multi: true, search: true }
@@ -297,6 +307,7 @@
             {
                 field: "MEET_COMP_PRD",
                 title: "Comp Product",
+                editor: textareaEditor,
                 headerTemplate: "<div class='isRequired'> Comp Product </div>",
                 width: 150,
                 filterable: { multi: true, search: true }
@@ -304,6 +315,7 @@
             {
                 field: "MEET_COMP_PRC",
                 title: "Comp Price",
+                editor: textareaEditor,
                 headerTemplate: "<div class='isRequired'> Comp Price </div>",
                 template: '<div class="text-right">$#= MEET_COMP_PRC#<div>',
                 width: 150,
@@ -312,6 +324,7 @@
             {
                 field: "BUSNS_OBJ",
                 title: "Business Object",
+                editor: textareaEditor,
                 headerTemplate: "<div class='isRequired'> Business Object </div>",
                 width: 150,
                 filterable: { multi: true, search: true }
@@ -319,6 +332,7 @@
             {
                 field: "PTNTL_MKT_IMPCT",
                 title: "Potential Market Impact",
+                editor: textareaEditor,
                 headerTemplate: "<div class='isRequired'> Potential Market Impact </div>",
                 width: 180,
                 filterable: { multi: true, search: true }
@@ -326,6 +340,7 @@
             {
                 field: "OTHER",
                 title: "Other",
+                editor: textareaEditor,
                 headerTemplate: "<div class='isRequired'> Other </div>",
                 width: 120,
                 filterable: { multi: true, search: true }
@@ -333,6 +348,7 @@
             {
                 field: "JSTFN_PCT_EXCPT",
                 title: "Justification for PCT Expiry",
+                editor: textareaEditor,
                 headerTemplate: "<div class='isRequired'> Justification for PCT Expiry </div>",
                 width: 220,
                 filterable: { multi: true, search: true }
