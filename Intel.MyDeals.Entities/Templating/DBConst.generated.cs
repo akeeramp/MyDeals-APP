@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 10/10/2017 3:41:29 PM
+File Updated: 10/16/2017 9:26:32 AM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -1238,6 +1238,15 @@ namespace Intel.MyDeals.Entities {
 		///<summary>
 		/// DIM_SID: 50
 		/// DIM_CD: SECUR
+		/// ATRB_SID: 5045
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Boolean
+		///</summary>
+		public const string IS_FINANCE_ADMIN = "IS_FINANCE_ADMIN";
+
+		///<summary>
+		/// DIM_SID: 50
+		/// DIM_CD: SECUR
 		/// ATRB_SID: 5043
 		/// TGT_COL_TYPE: INT
 		/// DOT_NET_DATA_TYPE: System.Boolean
@@ -2367,7 +2376,6 @@ namespace Intel.MyDeals.Entities {
 		public const string SSPEC_PRD_TYPES = "SSPEC_PRD_TYPES";
 		public const string Test = "Test";
 		public const string Test2 = "Test2";
-		public const string TestCosntant = "TestCosntant";
 		public const string TRKR_GEN_CUTOFF = "TRKR_GEN_CUTOFF";
 	}
 

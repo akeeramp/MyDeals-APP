@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 10/10/2017 1:22:23 PM
+File Updated: 10/16/2017 9:29:33 AM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -2170,6 +2170,22 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "CheckBox"
 		};
+		public static MyDealsAttribute IS_FINANCE_ADMIN = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "IS_FINANCE_ADMIN",
+			ATRB_DESC = "employee is finance administrator user",
+			ATRB_LBL = "Finance Administrator",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 5045,
+			DATA_TYPE_CD = "BIT",
+			DIM_CD = "SECUR",
+			DIM_SID = 50,
+			DOT_NET_DATA_TYPE = "System.Boolean",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "na",
+			TGT_COL_TYPE = "INT",
+			UI_TYPE_CD = "CheckBox"
+		};
 		public static MyDealsAttribute IS_SUPER_USER = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "IS_SUPER_USER",
@@ -2222,7 +2238,7 @@ namespace Intel.MyDeals.Entities {
 		{
 			ATRB_COL_NM = "LAST_COST_TEST_RUN",
 			ATRB_DESC = "Last Cost Test Run",
-			ATRB_LBL = "Deal Groups Comment",
+			ATRB_LBL = "Last Cost Test Run",
 			ATRB_MAX_LEN = 0,
 			ATRB_SID = 90004,
 			DATA_TYPE_CD = "DATETIME",
