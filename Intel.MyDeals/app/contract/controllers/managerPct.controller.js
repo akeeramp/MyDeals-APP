@@ -161,6 +161,24 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
 
                 var response = e.data["CostTestDetailItems"];
 
+                var rollupPctBydeal = {};
+                for (var j = 0; j < response.length; j++) {
+                    var isOverridden = response[j]["COST_TEST_OVRRD_FLG"] === "Yes";
+                    var pct = isOverridden ? "Pass" : response[j]["PRC_CST_TST_STS"];
+                    var pctItem = rollupPctBydeal[response[j]["DEAL_ID"]];
+                    if (!pctItem) {
+                        rollupPctBydeal[response[j]["DEAL_ID"]] = pct;
+                    } else {
+                        if (pct === "Fail") {
+                            rollupPctBydeal[response[j]["DEAL_ID"]] = "Fail";
+                        } else if (pct === "InComplete" && pctItem !== "Fail") {
+                            rollupPctBydeal[response[j]["DEAL_ID"]] = "InComplete";
+                        } else if (pct === "Pass" && pctItem === "NA") {
+                            rollupPctBydeal[response[j]["DEAL_ID"]] = "Pass";
+                        }
+                    }
+                }
+
                 for (var i = 0; i < response.length; i++) {
                     var item = response[i];
 
@@ -182,14 +200,14 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
                             if (cols[c].field === "DEAL_ID") {
                                 val = "<b>" + val + "</b>";
                             } else if (cols[c].field === "GRP_DEALS") {
-                                val = "<div style='text-align: center;'><div class='lnkBasic' ng-click='showGroups(true, " + item["DEAL_ID"] + ")'>View</div></div>";
+                                var grp = item["PRC_CST_TST_STS"] !== "NA" ? "<div class='lnkBasic' ng-click='showGroups(true, " + item["DEAL_ID"] + ")'>View</div>" : "";
+                                val = "<div style='text-align: center;'>" + grp + "</div>";
                             }
 
                             if (secureFields.indexOf(cols[c].field) < 0 || !hasNoPermission) {
-                                //tmplt += "<col style='width:" + cols[c].width + "'>";
-
                                 if (cols[c].field === "PRC_CST_TST_STS") {
-                                    tr += "<td style='padding-left: 0; padding-right: 6px; width:" + (parseInt(cols[c].width) - 6) + "px'>" + (cols[c].parent ? val : "") + "</td>";
+                                    var icon = gridPctUtils.getResultSingleIcon(rollupPctBydeal[response[i]["DEAL_ID"]], "font-size: 20px !important;");
+                                    tr += "<td style='padding-left: 0; padding-right: 6px; width:" + (parseInt(cols[c].width) - 6) + "px'><div style='text-align: center;'>" + (cols[c].parent ? icon : "") + "<div></td>";
                                 } else {
                                     tr += "<td style='padding-left: 6px; padding-right: 6px; width:" + (parseInt(cols[c].width) - 12) + "px'>" + (cols[c].parent ? val : "") + "</td>";
                                 }
@@ -487,14 +505,14 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
             field: "GRP_DEALS",
             title: "Group Deals",
             width: "140px",
-            template: "<div style='text-align: center;'><div class='lnkBasic' ng-click='showGroups(false, #=DEAL_PRD_RNK#)'>View</div></div>",
+            template: "<div style='text-align: center;' ng-if='dataItem.PRC_CST_TST_STS !== \"NA\"'><div class='lnkBasic' ng-click='showGroups(false, #=DEAL_PRD_RNK#)'>View</div></div>",
             parent: true
         },
         "LAST_COST_TEST_RUN": {
             field: "LAST_COST_TEST_RUN",
             title: "Time / Date Last Cost Ran",
             width: "160px",
-            template: "#= kendo.toString(new Date(LAST_COST_TEST_RUN), 'M/d/yyyy HH:mm:ss') #",
+            template: "<span ng-if='dataItem.PRC_CST_TST_STS !== \"NA\"'>#= kendo.toString(new Date(LAST_COST_TEST_RUN), 'M/d/yyyy HH:mm:ss') #</span>",
             parent: false
         },
         "CNSMPTN_RSN": {

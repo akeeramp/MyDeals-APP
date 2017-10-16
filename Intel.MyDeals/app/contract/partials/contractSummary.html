@@ -198,6 +198,7 @@
                                          contract-id="root.contractData.DC_ID"
                                          last-run="root.contractData.LAST_COST_TEST_RUN"
                                          on-complete="root.refreshContractData"
+                                         run-if-stale-by-hours="1"
                                          btn-type ="'pct'"
                                          btn-class="'btn-skyblue-sm'"></btn-run-pct-mct>
                     </td>
@@ -206,6 +207,7 @@
                                          contract-id="root.contractData.DC_ID"
                                          last-run="root.contractData.LAST_COST_TEST_RUN"
                                          on-complete="root.refreshContractData"
+                                         run-if-stale-by-hours="0"
                                          btn-type ="'mct'"
                                          btn-class="'btn-skyblue-sm'"></btn-run-pct-mct>
 

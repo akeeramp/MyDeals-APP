@@ -243,11 +243,11 @@ namespace Intel.MyDeals.DataLibrary
             }
         }
 
-        public void RollupResults(int contractId)
+        public void RollupResults(List<int> contractLst)
         {
             DataAccessLib.StoredProcedures.MyDeals.dbo.PR_MYDL_CNTRCT_OBJ_VAL_ROLLUP cmd = new DataAccessLib.StoredProcedures.MyDeals.dbo.PR_MYDL_CNTRCT_OBJ_VAL_ROLLUP
             {
-                //contractID = contractId.ToString()
+                contractLst = new type_int_list(contractLst.ToArray()),
             };
             DataAccess.ExecuteDataSet(cmd);
         }

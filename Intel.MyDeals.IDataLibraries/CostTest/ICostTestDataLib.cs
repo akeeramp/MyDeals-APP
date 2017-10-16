@@ -11,6 +11,6 @@ namespace Intel.MyDeals.IDataLibrary
 
         void RunPct(int objTypeId, List<int> objSetTypeIds);
 
-        void RollupResults(int contractId);
+        void RollupResults(List<int> contractLst);
     }
 }

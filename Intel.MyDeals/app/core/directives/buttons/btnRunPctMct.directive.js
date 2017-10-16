@@ -13,7 +13,8 @@ function btnRunPctMct(logger, objsetService, $timeout) {
             contractId: '=contractId',
             onComplete: '=?onComplete',
             lastRun: '=?lastRun',
-            btnType: '=?btnType'
+            btnType: '=?btnType',
+            runIfStaleByHours: '=?runIfStaleByHours'
         },
         restrict: 'AE',
         templateUrl: '/app/core/directives/buttons/btnRunPctMct.directive.html',
@@ -31,6 +32,8 @@ function btnRunPctMct(logger, objsetService, $timeout) {
                 $scope.text = "Cost Test";
                 $scope.textMsg = "Cost Test";
             }
+
+            if (!$scope.runIfStaleByHours) $scope.runIfStaleByHours = 0;
 
             $scope.lastRunDisplay = function () {
                 if ($(".iconRunPct").hasClass("fa-spin grn")) {
@@ -51,7 +54,7 @@ function btnRunPctMct(logger, objsetService, $timeout) {
 
                     var dsplNum = hh;
                     var dsplMsg = " hours ago";
-                    $scope.needToRunPct = dsplNum > 2 ? true : false;
+                    $scope.needToRunPct = ($scope.runIfStaleByHours > 0 && dsplNum >= $scope.runIfStaleByHours) ? true : false;
 
                     if (dsplNum < 1) {
                         dsplNum = mm;
@@ -68,7 +71,7 @@ function btnRunPctMct(logger, objsetService, $timeout) {
 
                 } else {
                     // never ran
-                    $scope.needToRunPct = true;
+                    $scope.needToRunPct = $scope.runIfStaleByHours > 0;
                     return "Last Run: Never";
                 }
             }
@@ -78,7 +81,7 @@ function btnRunPctMct(logger, objsetService, $timeout) {
                 if ($scope.needToRunPct) {
                     $scope.$broadcast('runPctMct', {});
                 }
-            }, 3000);
+            }, (3000));
 
 
             $scope.executePct = function () {
