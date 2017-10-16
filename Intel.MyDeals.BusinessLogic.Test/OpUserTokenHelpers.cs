@@ -36,6 +36,11 @@ namespace Intel.MyDeals.BusinessLogic.Test
             Assert.IsFalse(_opUserToken.IsAdmin());
         }
 
+        public void IsFinanceAdmin()
+        {
+            Assert.IsFalse(_opUserToken.IsFinanceAdmin());
+        }
+
         [TestMethod]
         public void IsDeveloper()
         {

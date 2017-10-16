@@ -36,16 +36,23 @@
         }
 
         function userHasAccess() {
-            return constantsService.getConstantsByName('PCT_LGL_EXCPT_ROLES').then(function (response) {
-                var hasAccess = false;
-                if (response.data && !!response.data) {
-                    hasAccess = $linq.Enumerable().From(response.data.CNST_VAL_TXT.split(','))
-                   .Where(function (x) {
-                       return x.trim() == usrWwid;
-                   }).ToArray().length > 0;
-                }
-                return hasAccess;
-            });
+            var hasAccess = false;
+            if (opUserToken.IsFinanceAdmin())
+            {
+                hasAccess = true;
+            }
+            return hasAccess;
+
+            //return constantsService.getConstantsByName('PCT_LGL_EXCPT_ROLES').then(function (response) {
+            //    var hasAccess = false;
+            //    if (response.data && !!response.data) {
+            //        hasAccess = $linq.Enumerable().From(response.data.CNST_VAL_TXT.split(','))
+            //       .Where(function (x) {
+            //           return x.trim() == usrWwid;
+            //       }).ToArray().length > 0;
+            //    }
+            //    return hasAccess;
+            //});
         }
 
         return service;

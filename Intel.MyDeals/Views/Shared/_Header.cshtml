@@ -26,6 +26,7 @@
     bool isTester = opUserToken.IsTester();
     bool isSuper = opUserToken.IsSuper();
     bool isAdmin = opUserToken.IsAdmin();
+    bool isFinanceAdmin = opUserToken.IsFinanceAdmin();
 
     if (isSuper)
     {
@@ -35,6 +36,8 @@
     if (isTester) { extraUserPrivs += "T"; extraUserPrivsDetail.Add("Tester User"); }
     if (isDeveloper) { extraUserPrivs += "D"; extraUserPrivsDetail.Add("Developer User"); }
     if (isAdmin) { extraUserPrivs += "A"; extraUserPrivsDetail.Add("Admin User"); }
+    if (isFinanceAdmin) { extraUserPrivs += "F"; extraUserPrivsDetail.Add("Finance Admin User"); }
+    if (extraUserPrivs == "TDAF") { extraUserPrivs = "DAFT"; } // We practice SAFE CODING on this project
     if (extraUserPrivs == "STD") { extraUserPrivs = "STuD";} // We practice SAFE CODING on this project
     if (extraUserPrivs == "STDA") { extraUserPrivs = "A STuD"; } // Is something special, and much safer.
     if (extraUserPrivs != "") { extraUserPrivs = "- " + extraUserPrivs; }
@@ -149,7 +152,7 @@
                             </ul>
                         </li>
                     }
-                    @if (usrRole == "Legal" || isTester || isDeveloper)
+                    @if (usrRole == "Legal" || isFinanceAdmin || isTester || isDeveloper)
                     {
                         <li class="dropdown-submenu">
                             <a tabindex="-1">Legal Configurations</a>

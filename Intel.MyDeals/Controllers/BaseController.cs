@@ -30,6 +30,7 @@ namespace Intel.MyDeals.Controllers
             ViewBag.IsDeveloper = user.IsDeveloper();
             ViewBag.IsSuper = user.IsSuper();
             ViewBag.IsAdmin = user.IsAdmin();
+            ViewBag.IsFinanceAdmin = user.IsFinanceAdmin();
             ViewBag.IsSuperSa = user.IsSuperSa();
             ViewBag.IsTester = user.IsTester();
         }
