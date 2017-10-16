@@ -1,32 +1,34 @@
 ﻿<loading-panel show="isBusy" header="isBusyMsgTitle" description="isBusyMsgDetail" ng-show="isBusy"></loading-panel>
+<div ng-if="isDataAvaialable">
+    <div ng-if="!CAN_VIEW_MEET_COMP" class="col-md-12" style="padding-top: 10px;">
+        <div class="alert alert-danger">
+            {{validationMessage}}
+        </div>
+    </div>
+    <div id="meetCompOvrrd" class="col-md-12">
+        <button class="btn btn-sm ssToolbarBtn" ng-click="saveAndRunMeetComp()" title="Save and Validate Meet Comp">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>
+                            <i class="fa fa-floppy-o" aria-hidden="true" style="font-size: 30px;color: #00AEEF;"></i>
+                        </td>
+                        <td style="padding-left: 5px; text-align: left; color: #00AEEF;font-size: 12px;">
+                            Save &amp; Validate <br>Deals
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </button>
 
-<div ng-if="!CAN_VIEW_MEET_COMP" class="col-md-12" style="padding-top: 10px;">
-    <div class="alert alert-danger">
-        {{validationMessage}}
+        <div id="grid" kendo-grid="meetCompGrid" class="opUiContainer md dashboard op-grid" expand-k-grid options="gridOptions">
+            <!--<div style="margin-left:102px !important" class="opUiContainer dashboard md op-grid childGrid" k-detail-template>
+                <div class="myDealsGrid" kendo-grid k-scope-field={{dataItem.uniqueGridID}} k-options="detailGridOptions(dataItem)"></div>
+            </div>-->
+        </div>
     </div>
 </div>
-<div id="meetCompOvrrd" class="col-md-12">
-    <button class="btn btn-sm ssToolbarBtn" ng-click="saveAndRunMeetComp()" title="Save and Validate Meet Comp">
-        <table>
-            <tbody>
-                <tr>
-                    <td>
-                        <i class="fa fa-floppy-o" aria-hidden="true" style="font-size: 30px;color: #00AEEF;"></i>
-                    </td>
-                    <td style="padding-left: 5px; text-align: left; color: #00AEEF;font-size: 12px;">
-                        Save &amp; Validate <br>Deals
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </button>
-    
-    <div id="grid" kendo-grid="meetCompGrid" class="opUiContainer md dashboard op-grid" expand-k-grid options="gridOptions">
-        <!--<div style="margin-left:102px !important" class="opUiContainer dashboard md op-grid childGrid" k-detail-template>
-            <div class="myDealsGrid" kendo-grid k-scope-field={{dataItem.uniqueGridID}} k-options="detailGridOptions(dataItem)"></div>
-        </div>-->
-    </div>
-</div>
+
 <script>
     function gotoDealDetails(CNTRCT_OBJ_SID,PRC_ST_OBJ_SID, PRC_TBL_OBJ_SID ) {
         var win = window.open("Contract#/manager/" + CNTRCT_OBJ_SID + "/" + PRC_ST_OBJ_SID + "/" + PRC_TBL_OBJ_SID + "/wip", '_blank');
@@ -103,7 +105,7 @@
     .completeGreen {
         font-size: 20px !important;
         color: #c4d600;
-    } 
+    }
     .inComplete, .incomplete {
         font-size: 20px !important;
         color: #F3D54E;
