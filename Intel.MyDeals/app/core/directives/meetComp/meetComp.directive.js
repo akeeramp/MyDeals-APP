@@ -125,12 +125,13 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     e.success($linq.Enumerable().From($scope.meetCompMasterdata)
                                         .Where(function (x) {
                                             return (x.GRP == "PRD" && x.DEFAULT_FLAG == "Y");
-                                        }).ToArray());
+                                        })
+                                        .OrderBy(function (x) { return x.MEET_COMP_STS }).ToArray());
                                 },
                                 create: function (e) {
                                 }
                             },
-                            pageSize: 8,
+                            pageSize: 10,
                             batch: true,
                             schema: {
                                 model: {
@@ -182,7 +183,11 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                             sort: function (e) { gridUtils.cancelChanges(e); },
                             filter: function (e) { gridUtils.cancelChanges(e); },
                             editable: true,
-                            pageable: true,
+                            pageable: {
+                                refresh: true,
+                                pageSizes: [10, 25, 50, 100],
+                                buttonCount: 5
+                            },
                             detailInit: detailInit,
                             dataBound: function (e) {
                                 if ($scope.errorList.length > 0) {
@@ -307,13 +312,14 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     width: 120,
                                     template: "#if(MEET_COMP_STS == 'Pass' && COMP_OVRRD_FLG.length > 0) {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid complete' title='Passed with Override Status' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Pass' && COMP_OVRRD_FLG.length == 0) {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid completeGreen' title='Passed' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Incomplete') {#<div class='textRunIcon'><i class='intelicon-help-solid incomplete' title='Incomplete' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Fail'){#<div class='textRunIcon'><i class='intelicon-alert-solid errorIcon' title='Error/Failed' style='font-size:20px !important'></i></div>#}#",
                                     editable: function () { return false; },
-                                    hidden: $scope.hide_MEET_COMP_STS
+                                    hidden: $scope.hide_MEET_COMP_STS,
+                                    filterable: { multi: true, search: true, search: true }
                                 },
                                 {
                                     field: "MC_LAST_RUN",
                                     title: "Last Run",
-                                    template: "#= kendo.toString(new Date(MC_LAST_RUN), 'M/d/yyyy hh:MM:ss') #",
-                                    width: 120,
+                                    template: "<div title='#= kendo.toString( new Date(MC_LAST_RUN), 'M/d/yyyy hh:mm:ss tt') #'>#= kendo.toString( new Date(MC_LAST_RUN), 'M/d/yyyy hh:mm:ss tt') #</div>",
+                                    width: 150,
                                     filterable: {
                                         extra: false,
                                         ui: "datepicker"
@@ -771,7 +777,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                             e.success($linq.Enumerable().From($scope.meetCompMasterdata)
                                                 .Where(function (x) {
                                                     return (x.GRP_PRD_SID == $scope.TEMP_GRP_PRD_SID && x.GRP == "DEAL" && x.DEFAULT_FLAG == "D");
-                                                }).ToArray());
+                                                }).OrderBy(function (x) { return x.MEET_COMP_STS }).ToArray());
                                         },
                                         create: function (e) {
                                         }
@@ -949,13 +955,14 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         width: 120,
                                         editable: function () { return false; },
                                         hidden: $scope.hide_MEET_COMP_STS,
-                                        template: "#if(MEET_COMP_STS == 'Pass' && COMP_OVRRD_FLG.length > 0) {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid complete' title='Passed with Override Status' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Pass' && COMP_OVRRD_FLG.length == 0) {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid completeGreen' title='Passed' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Incomplete') {#<div class='textRunIcon'><i class='intelicon-help-solid incomplete' title='Incomplete' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Fail'){#<div class='textRunIcon'><i class='intelicon-alert-solid errorIcon' title='Error/Failed' style='font-size:20px !important'></i></div>#}#"
+                                        template: "#if(MEET_COMP_STS == 'Pass' && COMP_OVRRD_FLG.length > 0) {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid complete' title='Passed with Override Status' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Pass' && COMP_OVRRD_FLG.length == 0) {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid completeGreen' title='Passed' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Incomplete') {#<div class='textRunIcon'><i class='intelicon-help-solid incomplete' title='Incomplete' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Fail'){#<div class='textRunIcon'><i class='intelicon-alert-solid errorIcon' title='Error/Failed' style='font-size:20px !important'></i></div>#}#",
+                                        filterable: { multi: true, search: true, search: true }
                                     },
                                     {
                                         field: "MC_LAST_RUN",
                                         title: "Last Run",
-                                        template: "#= kendo.toString(new Date(MC_LAST_RUN), 'M/d/yyyy hh:MM:ss') #",
-                                        width: 120,
+                                        template: "<div title='#= kendo.toString( new Date(MC_LAST_RUN), 'M/d/yyyy hh:mm:ss tt') #'>#= kendo.toString( new Date(MC_LAST_RUN), 'M/d/yyyy hh:mm:ss tt') #</div>",
+                                        width: 150,
                                         filterable: {
                                             extra: false,
                                             ui: "datepicker"
