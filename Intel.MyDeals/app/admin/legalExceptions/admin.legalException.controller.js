@@ -178,7 +178,9 @@
         });
 
         function textareaEditor(container, options) {
-            $('<textarea name="' + options.field + '" style="width: ' + container.width() + 'px;height:150px" />').appendTo(container);
+            $('<textarea name="' + options.field + '" style="width: ' + container.width() + 'px;height:150px" validationMessage="* field is required" placeholder="Enter Products.."' +
+                'required name="' + options.field + '" />').appendTo(container);
+            $('<span class="k-invalid-msg" data-for="' + options.field + '"></span>').appendTo(container);
         }
 
         vm.gridOptions = {
@@ -262,7 +264,6 @@
                 title: "Cost",
                 editor: textareaEditor,
                 headerTemplate: "<div class='isRequired'> Cost </div>",
-                template: '<div class="text-right">$#= COST#<div>',
                 width: 120,
                 filterable: { multi: true, search: true }
             },
@@ -317,7 +318,6 @@
                 title: "Comp Price",
                 editor: textareaEditor,
                 headerTemplate: "<div class='isRequired'> Comp Price </div>",
-                template: '<div class="text-right">$#= MEET_COMP_PRC#<div>',
                 width: 150,
                 filterable: { multi: true, search: true }
             },
