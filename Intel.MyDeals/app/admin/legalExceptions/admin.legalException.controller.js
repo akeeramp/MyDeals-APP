@@ -4,15 +4,11 @@
         .module('app.admin')
         .controller('legalExceptionsController', legalExceptionsController);
 
-    legalExceptionsController.$inject = ['legalExceptionService', 'hasAccess', '$scope', 'logger', 'confirmationModal', 'gridConstants', '$linq', 'productSelectorService'];
+    legalExceptionsController.$inject = ['legalExceptionService', '$scope', 'logger', 'confirmationModal', 'gridConstants', '$linq', 'productSelectorService'];
 
-    function legalExceptionsController(legalExceptionService, hasAccess, $scope, logger, confirmationModal, gridConstants, $linq, productSelectorService) {
+    function legalExceptionsController(legalExceptionService, $scope, logger, confirmationModal, gridConstants, $linq, productSelectorService) {
         var vm = this;
-        vm.hasAccess = hasAccess;
         vm.validationMessage = "";
-        if (!hasAccess) {
-            vm.validationMessage = "No Access. You do not have permissions to view this page";
-        }
         vm.dataSource = new kendo.data.DataSource({
             transport: {
                 read: function (e) {
@@ -178,7 +174,7 @@
         });
 
         function textareaEditor(container, options) {
-            $('<textarea name="' + options.field + '" style="width: ' + container.width() + 'px;height:150px" validationMessage="* field is required" placeholder="Enter Products.."' +
+            $('<textarea name="' + options.field + '" style="width: ' + container.width() + 'px;height:150px" validationMessage="* field is required" placeholder="Please enter.." ' +
                 'required name="' + options.field + '" />').appendTo(container);
             $('<span class="k-invalid-msg" data-for="' + options.field + '"></span>').appendTo(container);
         }
@@ -238,7 +234,7 @@
             {
                 field: "INTEL_PRD",
                 headerTemplate: "<div class='isRequired'> Intel Product </div>",
-                editor:textareaEditor,
+                editor: textareaEditor,
                 title: "Intel Product",
                 width: 240,
                 filterable: { multi: true, search: true }

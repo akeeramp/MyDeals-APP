@@ -234,11 +234,6 @@
                     templateUrl: 'app/admin/legalExceptions/legalExceptions.html'
                     , url: 'legalexceptions'
 					, controller: 'legalExceptionsController as vm'
-                    , resolve: {
-                        hasAccess: ['legalExceptionService', function (legalExceptionService) {
-                            return legalExceptionService.userHasAccess();
-                        }],
-                    }
                 }
             }
         ];
