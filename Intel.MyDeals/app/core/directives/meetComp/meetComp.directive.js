@@ -153,7 +153,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         COMP_BNCH: { editable: true, validation: { required: true }, type: "number" },
                                         MC_LAST_RUN: { editable: false, validation: { required: true } },
                                         COMP_PRC: { editable: true, validation: { required: true }, type: "number" },
-                                        COMP_SKU: { editable: true, validation: { required: true }, type: "string" },
+                                        COMP_SKU: { editable: true, validation: { required: false }, type: "string" },
                                         MEET_COMP_UPD_FLG: { editable: true, validation: { required: true } },
                                         OBJ_SET_TYPE: { editable: false, validation: { required: true } },
                                         PRD_CAT_NM: { editable: false, validation: { required: true } },
@@ -292,25 +292,28 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     title: "Meet Comp Price",
                                     width: 150,
                                     format: "{0:c}",
+                                    template: "<div>#if(COMP_PRC == 0){## ##} else {#$#:COMP_PRC##}#</div>",
                                     editor: meetCompPriceEditor
                                 },
                                 {
                                     field: "IA_BNCH",
                                     title: "IA Bench",
                                     width: 120,
+                                    template: "<div>#if(IA_BNCH == 0){## ##} else {##:IA_BNCH##}#</div>",
                                     editor: editorIABench
                                 },
                                 {
                                     field: "COMP_BNCH",
                                     title: "Comp Bench",
                                     width: 120,
+                                    template: "<div>#if(COMP_BNCH == 0){## ##} else {##:COMP_BNCH##}#</div>",
                                     editor: editorCOMPBench
                                 },
                                 {
                                     field: "MEET_COMP_STS",
                                     title: "Test Results",
                                     width: 120,
-                                    template: "#if(MEET_COMP_STS == 'Pass' && COMP_OVRRD_FLG.length > 0) {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid complete' title='Passed with Override Status' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Pass' && COMP_OVRRD_FLG.length == 0) {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid completeGreen' title='Passed' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Incomplete') {#<div class='textRunIcon'><i class='intelicon-help-solid incomplete' title='Incomplete' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Fail'){#<div class='textRunIcon'><i class='intelicon-alert-solid errorIcon' title='Error/Failed' style='font-size:20px !important'></i></div>#}#",
+                                    template: "#if(MEET_COMP_STS != 'Pass' && COMP_OVRRD_FLG == 'Y') {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid complete' title='Passed with Override Status' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Pass') {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid completeGreen' title='Passed' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Incomplete') {#<div class='textRunIcon'><i class='intelicon-help-solid incomplete' title='Incomplete' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Fail'){#<div class='textRunIcon'><i class='intelicon-alert-solid errorIcon' title='Error/Failed' style='font-size:20px !important'></i></div>#}#",
                                     editable: function () { return false; },
                                     hidden: $scope.hide_MEET_COMP_STS,
                                     filterable: { multi: true, search: true, search: true }
@@ -332,6 +335,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     title: "Avg. Net Price",
                                     width: 150,
                                     editable: function () { return false; },
+                                    template: "<div>#if(MC_AVG_RPU == 0){## ##} else {##:MC_AVG_RPU##}#</div>",
                                     hidden: $scope.hide_MC_AVG_RPU
                                 },
                                 {
@@ -449,8 +453,8 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         };
                                     }).ToArray();
 
-                                $('<input id="productEditor" validationMessage="* field is required" placeholder="Enter Comp SKU.."' +
-                                    'required name="' + options.field + '" />')
+                                $('<input id="compSKUEditor" validationMessage="* field is required" placeholder="Enter Comp SKU.."' +
+                                    ' name="' + options.field + '" />')
                                     .appendTo(container)
                                     .kendoComboBox({
                                         optionLabel: "Select Comp SKU",
@@ -464,7 +468,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         },
                                         change: function (e) {
                                             var selectedIndx = this.selectedIndex;
-                                            if (selectedIndx == -1) {
+                                            if (selectedIndx == -1 && this.text().length > 0) {
                                                 $scope.selectedCust = options.model.CUST_NM_SID;
                                                 $scope.selectedCustomerText = this.value();
                                                 $scope.curentRow = options.model.RW_NM;
@@ -494,7 +498,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
 
                                             }
                                         }
-                                    });
+                                    });                                
                             }
                         }
 
@@ -539,7 +543,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
 
                         function meetCompResultStatusEditor(container, options) {
                             //IF MEET COMP STATUS FAILED THEN Only Override Option will be available.
-                            if (options.model.MEET_COMP_STS == 'Fail' && usrRole == "DA" && options.model.MEET_COMP_UPD_FLG == "Y") {
+                            if (options.model.MEET_COMP_STS != "Pass" && usrRole == "DA" && options.model.MEET_COMP_UPD_FLG == "Y") {
                                 var tempData = [
                                     {
                                         "COMP_OVRRD_FLG": "Y"
@@ -586,7 +590,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                         }
 
                         function editorORReason(container, options) {
-                            if (options.model.COMP_OVRRD_FLG.length > 0 && usrRole == "DA" && options.model.MEET_COMP_UPD_FLG == "Y" && options.model.MEET_COMP_STS == 'Fail') {
+                            if (options.model.COMP_OVRRD_FLG.length > 0 && usrRole == "DA" && options.model.MEET_COMP_UPD_FLG == "Y" && options.model.MEET_COMP_STS != "Pass") {
                                 var tempReason = [
                                     {
                                         "COMP_OVRRD_RSN": options.model.COMP_OVRRD_RSN
@@ -664,7 +668,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     'RW_NM': ""
                                 };
                                 //COMP_SKU Checking.....
-                                if ($scope.meetCompUpdatedList[i].COMP_SKU.length == 0 && usrRole == "GA") {
+                                if ($scope.meetCompUpdatedList[i].COMP_SKU.length == 0) {
                                     errorObj.COMP_SKU = true;
                                     errorObj.RW_NM = $scope.meetCompUpdatedList[i].RW_NM;
                                     isError = true;
@@ -933,20 +937,23 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     {
                                         field: "COMP_PRC",
                                         title: "Meet Comp Price",
-                                        width: "150px",
+                                        width: 150,
                                         format: "{0:c}",
+                                        template: "<div>#if(COMP_PRC == 0){## ##} else {#$#:COMP_PRC##}#</div>",
                                         editor: meetCompPriceEditor
                                     },
                                     {
                                         field: "IA_BNCH",
                                         title: "IA Bench",
                                         width: 120,
+                                        template: "<div>#if(IA_BNCH == 0){## ##} else {##:IA_BNCH##}#</div>",
                                         editor: editorIABench
                                     },
                                     {
                                         field: "COMP_BNCH",
                                         title: "Comp Bench",
                                         width: 120,
+                                        template: "<div>#if(COMP_BNCH == 0){## ##} else {##:COMP_BNCH##}#</div>",
                                         editor: editorCOMPBench
                                     },
                                     {
@@ -955,7 +962,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         width: 120,
                                         editable: function () { return false; },
                                         hidden: $scope.hide_MEET_COMP_STS,
-                                        template: "#if(MEET_COMP_STS == 'Pass' && COMP_OVRRD_FLG.length > 0) {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid complete' title='Passed with Override Status' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Pass' && COMP_OVRRD_FLG.length == 0) {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid completeGreen' title='Passed' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Incomplete') {#<div class='textRunIcon'><i class='intelicon-help-solid incomplete' title='Incomplete' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Fail'){#<div class='textRunIcon'><i class='intelicon-alert-solid errorIcon' title='Error/Failed' style='font-size:20px !important'></i></div>#}#",
+                                        template: "#if(MEET_COMP_STS != 'Pass' && COMP_OVRRD_FLG == 'Y') {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid complete' title='Passed with Override Status' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Pass') {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid completeGreen' title='Passed' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Incomplete') {#<div class='textRunIcon'><i class='intelicon-help-solid incomplete' title='Incomplete' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Fail'){#<div class='textRunIcon'><i class='intelicon-alert-solid errorIcon' title='Error/Failed' style='font-size:20px !important'></i></div>#}#",
                                         filterable: { multi: true, search: true, search: true }
                                     },
                                     {
@@ -975,6 +982,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         title: "Avg. Net Price",
                                         width: 150,
                                         editable: function () { return false; },
+                                        template: "<div>#if(MC_AVG_RPU == 0){## ##} else {##:MC_AVG_RPU##}#</div>",
                                         hidden: $scope.hide_MC_AVG_RPU
                                     },
                                     {
