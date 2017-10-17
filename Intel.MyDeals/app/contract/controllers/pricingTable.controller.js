@@ -1208,41 +1208,41 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             }
         });
     }
-
+	
     function applyDropDownsData(sheet, myFieldModel, myColumnName, dropdownValuesSheet) {
         // Call API
         if (myFieldModel.opLookupText === "CUST_DIV_NM") {
             myFieldModel.opLookupUrl = "/api/Customers/GetCustomerDivisionsByCustNmSid/" + root.contractData.CUST_MBR_SID;
         }
 
-        //// TODO: In the future. Dropdowns do work, but their (red highlighting) validations do not allow us to ignore case-sensitivity.
-        //// If we can figure out how to ignore case-sesitive, we can put these dropdwons back in
-        //dataService.get(myFieldModel.opLookupUrl, null, null, true).then(function (response) {
-        //    dropdownValuesSheet.batch(function () {
-        //        for (var i = 0; i < response.data.length; i++) {
-        //            var myKey = response.data[i].ATRB_CD;
-        //            if (myKey === null || myKey === undefined) {
-        //                myKey = response.data[i].subAtrbValue;
-        //                // HACK: this is for Product Level's atrb code because it pulls form a different dropdown sp
-        //            }
+    	//// TODO: In the future. Dropdowns do work, but their (red highlighting) validations do not allow us to ignore case-sensitivity.
+    	//// If we can figure out how to ignore case-sesitive, we can put these dropdwons back in
+    	//dataService.get(myFieldModel.opLookupUrl, null, null, true).then(function (response) {
+    	//    dropdownValuesSheet.batch(function () {
+    	//        for (var i = 0; i < response.data.length; i++) {
+    	//            var myKey = response.data[i].ATRB_CD;
+    	//            if (myKey === null || myKey === undefined) {
+    	//                myKey = response.data[i].subAtrbValue;
+    	//                // HACK: this is for Product Level's atrb code because it pulls form a different dropdown sp
+    	//            }
 
-        //            if (response.data[i].ATRB_CD === "REBATE_TYPE") {
-        //                myKey = "REBATE_TYPE";
-        //            }
-        //            // Add values onto the other sheet
-        //            var dropdownValue = response.data[i].DROP_DOWN;
-        //            if (dropdownValue === undefined || dropdownValue === null) {
-        //                dropdownValue = response.data[i].dropdownName;
-        //                // HACK: this is for Product Level's atrb code because it pulls form a different dropdown sp
-        //            }
+    	//            if (response.data[i].ATRB_CD === "REBATE_TYPE") {
+    	//                myKey = "REBATE_TYPE";
+    	//            }
+    	//            // Add values onto the other sheet
+    	//            var dropdownValue = response.data[i].DROP_DOWN;
+    	//            if (dropdownValue === undefined || dropdownValue === null) {
+    	//                dropdownValue = response.data[i].dropdownName;
+    	//                // HACK: this is for Product Level's atrb code because it pulls form a different dropdown sp
+    	//            }
 
-        //            dropdownValuesSheet.range(root.colToLetter[myKey] + (i + 1)).value(dropdownValue);
-        //        }
-        //    });
-        //},
-        //function (error) {
-        //    logger.error("Unable to get dropdown data.", error, error.statusText);
-        //});
+    	//            dropdownValuesSheet.range(root.colToLetter[myKey] + (i + 1)).value(dropdownValue);
+    	//        }
+    	//    });
+    	//},
+    	//function (error) {
+    	//    logger.error("Unable to get dropdown data.", error, error.statusText);
+    	//});
     }
 
     //// TODO: In the future. Dropdowns do work, but their (red highlighting) validations do not allow us to ignore case-sensitivity.
@@ -1778,13 +1778,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         if (translationInputToSend.length > 0) {
             topbar.show();
 
-            //Note: When changing the message here, also change the condition in $scope.saveEntireContractBase method in contract.controller.js
+            // Note: When changing the message here, also change the condition in $scope.saveEntireContractBase method in contract.controller.js
             root.setBusy("Validating your data...", "Please wait as we find your products!");
             productSelectorService.TranslateProducts(translationInputToSend, $scope.contractData.CUST_MBR_SID, dealType) //Once the database is fixed remove the hard coded geo_mbr_sid
                 .then(function (response) {
                     topbar.hide();
                     if (response.statusText === "OK") {
-                        response.data = buildTranslatorOutputObject(invalidProductJSONRows, response.data);
+                    	response.data = buildTranslatorOutputObject(invalidProductJSONRows, response.data);
                         cookProducts(currentRowNumber, response.data, currentPricingTableRowData, publishWipDeals);
                     }
                 }, function (response) {
@@ -1828,6 +1828,14 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var isAllValidated = true;
         for (var key in transformResults.ProdctTransformResults) {
             var r = key - 1;
+			
+        	// Flag dependency column errors - these columns may cause product translator to not find a valid product
+            if (!!transformResults.InvalidDependancyColumns && !!transformResults.InvalidDependancyColumns[key] && transformResults.InvalidDependancyColumns[key].length > 0) {
+            	for (var i = 0; i < transformResults.InvalidDependancyColumns[key].length; i++) {
+            		data[r]._behaviors.isError[transformResults.InvalidDependancyColumns[key][i]] = true;
+            		data[r]._behaviors.validMsg[transformResults.InvalidDependancyColumns[key][i]] = "Value is invalid and may cause the product to validate incorrectly."
+            	}
+            }
 
             //Trimming unwanted Property to make JSON light
             if (!!transformResults.ValidProducts[key]) {
@@ -1837,7 +1845,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             // If no duplicate or invalid add valid JSON
             data[r].PTR_SYS_PRD = !!transformResults.ValidProducts[key] ? JSON.stringify(transformResults.ValidProducts[key]) : "";
             sourceData[r].PTR_SYS_PRD = data[r].PTR_SYS_PRD;
-
+			
             if ((!!transformResults.InValidProducts[key] && (transformResults.InValidProducts[key]["I"].length > 0
                     || transformResults.InValidProducts[key]["E"].length > 0)) || !!transformResults.DuplicateProducts[key]) {
                 root.setBusy("", "");

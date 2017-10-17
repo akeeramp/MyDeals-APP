@@ -23,8 +23,10 @@ namespace Intel.MyDeals.IDataLibrary
         List<CustomerDivision> GetCustomerDivisions();
 
         List<GeoDimension> GetGeoData();
+		
+		Dictionary<string, string> GetProgramPaymentDict();
 
-        UiTemplates GetUiTemplates();
+		UiTemplates GetUiTemplates();
 
         List<Product> GetProductData();
 

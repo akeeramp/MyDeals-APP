@@ -248,14 +248,37 @@ namespace Intel.MyDeals.DataLibrary
         public static List<GeoDimension> GetGeoData()
         {
             lock (LOCK_OBJECT ?? new object())
-            {
-                return _getGeoData ?? (_getGeoData = new GeoDataLib().GetGeoDimensions());
-            }
-        }
+			{
+				return _getGeoData ?? (_getGeoData = new GeoDataLib().GetGeoDimensions());
+			}
+		}
+		private static List<GeoDimension> _getGeoData;
 
-        private static List<GeoDimension> _getGeoData;
+		public static Dictionary<string, string> GetProgramPaymentDict()
+		{
+			lock (LOCK_OBJECT ?? new object())
+			{
+				if (_programPaymentNameDict == null)
+				{
+					_programPaymentNameDict = new Dictionary<string, string>();
+					string atrbCd = AttributeCodes.PROGRAM_PAYMENT.ToString();
+					List<BasicDropdown> dropdownList = GetBasicDropdowns().Where(d => d.ATRB_CD.ToUpper() == atrbCd && d.ACTV_IND).OrderBy(d => d.ORD).ToList<BasicDropdown>();
 
-        public static List<LookupItem> GetLookupData()
+					for (int i = 0; i < dropdownList.Count; i++)
+					{
+						if (!_programPaymentNameDict.ContainsKey(dropdownList[i].DROP_DOWN.ToUpper()))
+						{
+							_programPaymentNameDict[dropdownList[i].DROP_DOWN.ToUpper()] = dropdownList[i].DROP_DOWN;
+						}
+					}
+
+				}
+				return _programPaymentNameDict;
+			}
+		}
+		public static Dictionary<string, string> _programPaymentNameDict;
+		
+		public static List<LookupItem> GetLookupData()
         {
             lock (LOCK_OBJECT ?? new object())
             {

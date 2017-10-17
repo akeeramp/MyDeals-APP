@@ -99,12 +99,17 @@ namespace Intel.MyDeals.DataLibrary
             return DataCollections.GetCustomerDivisions();
         }
 
-        public List<GeoDimension> GetGeoData()
-        {
-            return DataCollections.GetGeoData();
-        }
+		public List<GeoDimension> GetGeoData()
+		{
+			return DataCollections.GetGeoData();
+		}
 
-        public UiTemplates GetUiTemplates()
+		public Dictionary<string, string> GetProgramPaymentDict()
+		{
+			return DataCollections.GetProgramPaymentDict();
+		}
+
+		public UiTemplates GetUiTemplates()
         {
             return DataCollections.GetUiTemplates();
         }

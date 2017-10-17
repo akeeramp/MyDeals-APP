@@ -242,12 +242,13 @@ namespace Intel.MyDeals.BusinessLogic
                 ProdctTransformResults = new Dictionary<string, Dictionary<string, List<string>>>(),
                 DuplicateProducts = new Dictionary<string, Dictionary<string, List<PRD_TRANSLATION_RESULTS>>>(),
                 ValidProducts = new Dictionary<string, Dictionary<string, List<PRD_TRANSLATION_RESULTS>>>(),
-                InValidProducts = new Dictionary<string, Dictionary<string, List<string>>>()
+                InValidProducts = new Dictionary<string, Dictionary<string, List<string>>>(),
+				InvalidDependancyColumns = new Dictionary<string, List<string>>()
             };
 
             //  Check if any product has alias mapping, this will call cache
             var aliasMapping = GetProductsFromAlias();
-
+						
             foreach (var userProduct in prodNames)
             {
                 var products = TransformProducts(userProduct.USR_INPUT);
@@ -336,18 +337,32 @@ namespace Intel.MyDeals.BusinessLogic
                 {
                     var records = new Dictionary<string, List<string>>();
                     records.Add("E", new List<string>());
-                    records.Add("I", new List<string>());
-                    productAliases.ToList().ForEach(d => records[d.EXCLUDE ? "E" : "I"].Add(d.USR_INPUT));
-                    productLookup.ProdctTransformResults[userProduct.ROW_NUMBER.ToString()] = records;
+					records.Add("I", new List<string>());
+					
+					List<string> invalidDependencies = new List<string>();
+					Dictionary<string, string> dict = _dataCollectionsDataLib.GetProgramPaymentDict();
+
+					foreach (ProductEntryAttribute d in productAliases)
+					{
+						records[d.EXCLUDE ? "E" : "I"].Add(d.USR_INPUT);
+					
+						// Check for valid dependency values. The product translator may not find valid products if its dependancy columns are invalid
+						if (userProduct.PROGRAM_PAYMENT == null || !dict.ContainsKey(userProduct.PROGRAM_PAYMENT.ToUpper()))
+						{
+							invalidDependencies.Add(AttributeCodes.PROGRAM_PAYMENT.ToString());
+						}
+					}
+					productLookup.InvalidDependancyColumns[userProduct.ROW_NUMBER.ToString()] = invalidDependencies;
+					productLookup.ProdctTransformResults[userProduct.ROW_NUMBER.ToString()] = records;
                 }
             }
 
             //  Product match master list
             var productMatchResults = GetProductDetails(productsTodb, CUST_MBR_SID, DEAL_TYPE);
-
+			
             // Get duplicate and Valid Products
             ExtractValidandDuplicateProducts(productLookup, productMatchResults);
-
+						
             return productLookup;
         }
 
@@ -460,7 +475,7 @@ namespace Intel.MyDeals.BusinessLogic
                                                where p.ROW_NM.ToString() == rowNumber.Key
                                                      && p.EXCLUDE == (typeOfProduct.Key == "E")
                                                select p).ToList();
-
+					
                     //Step 2.1: Checking for Conflict upto Family Name
                     var isConflict = (from p in productMatchResults
                                       join t in tranlatedProducts
@@ -569,7 +584,7 @@ namespace Intel.MyDeals.BusinessLogic
                         var records = new Dictionary<string, List<string>>();
                         records.Add("E", new List<string>());
                         records.Add("I", new List<string>());
-                        records[typeOfProduct.Key].AddRange(invalidProducts);
+						records[typeOfProduct.Key].AddRange(invalidProducts);
                         productLookup.InValidProducts[rowNumber.Key] = records;
                     }
                 }

@@ -121,7 +121,6 @@ function securityService($http, dataService, cacheService, $rootScope) {
         function initSetSecurityData() {
             return getSecurityData().then(function (data) {
                 if (!!data.data) {
-                    console.log('security-loaded');
                     $rootScope.securityAttributes = data.data.SecurityAttributes;
                     $rootScope.securityMasks = data.data.SecurityMasks;
 
@@ -132,7 +131,7 @@ function securityService($http, dataService, cacheService, $rootScope) {
             });
         }
 
-        // TODDO: We could move this check to API layer
+        // TDDO: We could move this check to API layer
         // Client to send the GUID if the GUID is found valid, send authenticated security details back,
         // else clear out cache for the user and re authenticate user.
         return cacheService.getSessionComparisonHash().then(function (data) {
