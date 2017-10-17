@@ -65,6 +65,10 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                         $scope.isDataAvaialable = true;
                         $scope.isBusy = false;
 
+                        if (usrRole == "GA") {
+                            var isValid = isModelValid($scope.meetCompMasterdata);
+                        }
+
                         //Add New Customer
                         $scope.addSKUForCustomer = function (mode) {
                             $scope.meetCompMasterdata[$scope.curentRow - 1].COMP_SKU = $scope.selectedCustomerText;
@@ -627,10 +631,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
 
                                         }
                                     });
-                            }
-                            else {
-                                logger.warning("Either its not a Draft Deal or Override Status is blank");
-                            }
+                            }                         
 
                         }
 
@@ -653,9 +654,9 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
 
                         }
 
-                        function isModelValid() {
+                        function isModelValid(data) {
                             $scope.errorList = [];
-                            for (var i = 0; i < $scope.meetCompUpdatedList.length; i++) {
+                            for (var i = 0; i < data.length; i++) {
                                 var isError = false;
                                 var errorObj = {
                                     'COMP_SKU': false,
@@ -667,44 +668,44 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     'RW_NM': ""
                                 };
                                 //COMP_SKU Checking.....
-                                if ($scope.meetCompUpdatedList[i].COMP_SKU.length == 0) {
+                                if (data[i].COMP_SKU.length == 0) {
                                     errorObj.COMP_SKU = true;
-                                    errorObj.RW_NM = $scope.meetCompUpdatedList[i].RW_NM;
+                                    errorObj.RW_NM = data[i].RW_NM;
                                     isError = true;
                                 }
 
                                 //COMP_PRC checking.....
-                                if ($scope.meetCompUpdatedList[i].COMP_PRC <= 0) {
+                                if (data[i].COMP_PRC <= 0) {
                                     errorObj.COMP_PRC = true;
-                                    errorObj.RW_NM = $scope.meetCompUpdatedList[i].RW_NM;
+                                    errorObj.RW_NM = data[i].RW_NM;
                                     isError = true;
                                 }
 
                                 //COMP_BNCH checking....
-                                if ($scope.meetCompUpdatedList[i].COMP_BNCH <= 0 && $scope.meetCompUpdatedList[i].PRD_CAT_NM == "SvrWS") {
+                                if (data[i].COMP_BNCH <= 0 && data[i].PRD_CAT_NM == "SvrWS") {
                                     errorObj.COMP_BNCH = true;
-                                    errorObj.RW_NM = $scope.meetCompUpdatedList[i].RW_NM;
+                                    errorObj.RW_NM = data[i].RW_NM;
                                     isError = true;
                                 }
 
                                 //IA_BNCH checking....
-                                if ($scope.meetCompUpdatedList[i].IA_BNCH <= 0 && $scope.meetCompUpdatedList[i].PRD_CAT_NM == "SvrWS") {
+                                if (data[i].IA_BNCH <= 0 && data[i].PRD_CAT_NM == "SvrWS") {
                                     errorObj.IA_BNCH = true;
-                                    errorObj.RW_NM = $scope.meetCompUpdatedList[i].RW_NM;
+                                    errorObj.RW_NM = data[i].RW_NM;
                                     isError = true;
                                 }
 
                                 //COMP_OVRRD_FLG checking....
-                                if ($scope.meetCompUpdatedList[i].COMP_OVRRD_FLG <= 0 && usrRole == "DA") {
+                                if (data[i].COMP_OVRRD_FLG <= 0 && usrRole == "DA") {
                                     errorObj.COMP_OVRRD_FLG = true;
-                                    errorObj.RW_NM = $scope.meetCompUpdatedList[i].RW_NM;
+                                    errorObj.RW_NM = data[i].RW_NM;
                                     isError = true;
                                 }
 
                                 //COMP_OVRRD_RSN checking....
-                                if ($scope.meetCompUpdatedList[i].COMP_OVRRD_RSN <= 0 && usrRole == "DA") {
+                                if (data[i].COMP_OVRRD_RSN <= 0 && usrRole == "DA") {
                                     errorObj.COMP_OVRRD_RSN = true;
-                                    errorObj.RW_NM = $scope.meetCompUpdatedList[i].RW_NM;
+                                    errorObj.RW_NM = data[i].RW_NM;
                                     isError = true;
                                 }
 
@@ -723,7 +724,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                             $scope.isValid = true;
                             $scope.ROW_NMB = [];
                             $scope.tempUpdatedList = [];
-                            var isValid = isModelValid();
+                            var isValid = isModelValid($scope.meetCompUpdatedList);
                             if (isValid) {
                                 $scope.tempUpdatedList = $scope.meetCompUpdatedList.map(function (x) {
                                     return {
