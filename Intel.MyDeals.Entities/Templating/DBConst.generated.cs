@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 10/16/2017 9:26:32 AM
+File Updated: 10/17/2017 10:08:22 AM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -1733,6 +1733,15 @@ namespace Intel.MyDeals.Entities {
 		///<summary>
 		/// DIM_SID: 3
 		/// DIM_CD: DEAL
+		/// ATRB_SID: 3598
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.Guid
+		///</summary>
+		public const string PT_TRANS_GUID = "PT_TRANS_GUID";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
 		/// ATRB_SID: 7093
 		/// TGT_COL_TYPE: VARCHAR
 		/// DOT_NET_DATA_TYPE: System.String
@@ -2170,6 +2179,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.String
 		///</summary>
 		public const string WF_STG_CD = "WF_STG_CD";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3599
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.Guid
+		///</summary>
+		public const string WIP_TRANS_GUID = "WIP_TRANS_GUID";
 
 		///<summary>
 		/// DIM_SID: 3

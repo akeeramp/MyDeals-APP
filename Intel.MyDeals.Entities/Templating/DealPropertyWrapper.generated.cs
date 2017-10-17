@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 10/16/2017 9:29:33 AM
+File Updated: 10/17/2017 10:09:32 AM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -3050,6 +3050,22 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
+		public static MyDealsAttribute PT_TRANS_GUID = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "PT_TRANS_GUID",
+			ATRB_DESC = "Price Table last trasnlated GUID",
+			ATRB_LBL = "PT Translated GUID",
+			ATRB_MAX_LEN = 68,
+			ATRB_SID = 3598,
+			DATA_TYPE_CD = "GUID",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Guid",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "TextBox"
+		};
 		public static MyDealsAttribute PTR_SYS_INVLD_PRD = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "PTR_SYS_INVLD_PRD",
@@ -3833,6 +3849,22 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "WorkFlow"
+		};
+		public static MyDealsAttribute WIP_TRANS_GUID = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "WIP_TRANS_GUID",
+			ATRB_DESC = "WIP Deal last trasnlated GUID",
+			ATRB_LBL = "WIP Translated GUID",
+			ATRB_MAX_LEN = 68,
+			ATRB_SID = 3599,
+			DATA_TYPE_CD = "GUID",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Guid",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "TextBox"
 		};
 		public static MyDealsAttribute YCS2_END_DT = new MyDealsAttribute()
 		{
