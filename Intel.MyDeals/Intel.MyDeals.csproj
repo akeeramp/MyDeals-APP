@@ -1702,6 +1702,10 @@
       <Project>{2F3217AD-E46B-4DAB-82C2-11E007B65A9C}</Project>
       <Name>Intel.MyDeals.BusinessRules</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Intel.MyDeals.DataLibrary\Intel.MyDeals.DataLibrary.csproj">
+      <Project>{B45850DC-1515-40D2-BFA5-15C8DFFC5AF2}</Project>
+      <Name>Intel.MyDeals.DataLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Intel.MyDeals.Entities\Intel.MyDeals.Entities.csproj">
       <Project>{e6218877-d89e-4135-8032-057878799ac4}</Project>
       <Name>Intel.MyDeals.Entities</Name>

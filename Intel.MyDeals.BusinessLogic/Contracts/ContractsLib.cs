@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Intel.MyDeals.BusinessLogic.DataCollectors;
 using Intel.MyDeals.DataLibrary.OpDataCollectors;
@@ -146,6 +147,13 @@ namespace Intel.MyDeals.BusinessLogic
             string sourceEvent,
             bool resetValidationChild, bool isValidateOnly)
         {
+            Stopwatch stopwatch = new Stopwatch();
+            if (EN.GLOBAL.DEBUG >= 1)
+            {
+                stopwatch.Start();
+                Debug.WriteLine("{2:HH:mm:ss:fff}\t{0,10} (ms)\tSaving Contract {1}", DateTime.Now, contractToken.ContractId, DateTime.Now);
+            }
+
             OpDataCollectorFlattenedDictList data = new OpDataCollectorFlattenedDictList();
 
             List<int> primaryIds = new List<int>();
@@ -188,10 +196,15 @@ namespace Intel.MyDeals.BusinessLogic
                 secondaryOpDataElementTypes.Add(OpDataElementType.WIP_DEAL);
             }
 
-            return _dataCollectorLib.SavePackets(
+            MyDealsData rtn = _dataCollectorLib.SavePackets(
                 data, contractToken, validateIds, forcePublish, sourceEvent, resetValidationChild,
                 primaryIds, primaryOpDataElementTypes, OpDataElementType.CNTRCT,
-                secondaryIds, secondaryOpDataElementTypes, OpDataElementType.PRC_TBL, isValidateOnly);
+                secondaryIds, secondaryOpDataElementTypes, OpDataElementType.PRC_TBL);
+
+            if (EN.GLOBAL.DEBUG >= 1)
+                Debug.WriteLine("{2:HH:mm:ss:fff}\t{0,10} (ms)\tSaved Contract {1}", stopwatch.Elapsed.TotalMilliseconds, contractToken.ContractId, DateTime.Now);
+
+            return rtn;
         }
 
         public OpDataCollectorFlattenedDictList SaveFullContract(ContractToken contractToken, OpDataCollectorFlattenedDictList fullContracts, List<int> validateIds, bool forcePublish, string sourceEvent)

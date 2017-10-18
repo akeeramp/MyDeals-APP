@@ -521,12 +521,13 @@ namespace Intel.MyDeals.DataLibrary
             #endregion
 
 #if DEBUG
-            OpLogPerf.Log(
-                String.Format("ReaderToDataCollectors Runtime: {0}ms; DataCollectors: {1}; DataElements: {2};",
-                    (DateTime.Now - start).TotalMilliseconds,
-                    deals,
-                    cells
-                    ));
+            if (EN.GLOBAL.DEBUG >= 2)
+                OpLogPerf.Log(
+                    String.Format("ReaderToDataCollectors Runtime: {0}ms; DataCollectors: {1}; DataElements: {2};",
+                        (DateTime.Now - start).TotalMilliseconds,
+                        deals,
+                        cells
+                        ));
 
 #endif
 

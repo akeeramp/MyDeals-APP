@@ -82,6 +82,7 @@ namespace Intel.MyDeals.Entities.Logging
 
 		public void Log(OpLogPerfMessage msg)
 		{
+		    return; // PE removed for performance testing
 			// Change the OPLogPerfMessage into a DbLogPerfMessage, which essentially renames columns and add new columns that the db expects
 			Log(new DbLogPerfMessage(msg));
 		}

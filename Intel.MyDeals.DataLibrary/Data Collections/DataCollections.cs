@@ -245,6 +245,18 @@ namespace Intel.MyDeals.DataLibrary
 
         private static UiTemplates _getUiTemplates;
 
+
+        public static List<AdminConstant> GetAdminConstants()
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                return _getAdminConstants ?? (_getAdminConstants = new ConstantLookupDataLib().GetAdminConstants());
+            }
+        }
+
+        private static List<AdminConstant> _getAdminConstants;
+
+
         public static List<GeoDimension> GetGeoData()
         {
             lock (LOCK_OBJECT ?? new object())

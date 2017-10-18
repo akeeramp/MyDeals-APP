@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -32,15 +33,23 @@ namespace Intel.MyDeals.BusinessRules
             if (securityActionCache == null) securityActionCache = new Dictionary<string, bool>();
 
             OpMsgQueue msgQueue = new OpMsgQueue();
+            Stopwatch stopwatch = new Stopwatch();
 
             foreach (OpRule<OpDataCollector, IOpDataElement, MyRulesTrigger, OpDataElementType> a in ars)
             {
-                if (a.Triggers.Contains(trigger))
+                if (!a.Triggers.Contains(trigger)) continue;
+
+                if (EN.GLOBAL.DEBUG >= 4)
                 {
-                    Debug.WriteLine("Running action: " + a);
-                    msgQueue.Messages.Add(OpRulesLib<OpDataCollector, IOpDataElement, MyRulesTrigger, OpDataElementType>.RunAction(dc, a, securityActionCache, args));
-                    Debug.WriteLine("Ran action: " + a);
+                    stopwatch.Stop();
+                    stopwatch.Reset();
+                    stopwatch.Start();
                 }
+
+                msgQueue.Messages.Add(OpRulesLib<OpDataCollector, IOpDataElement, MyRulesTrigger, OpDataElementType>.RunAction(dc, a, securityActionCache, args));
+
+                if (EN.GLOBAL.DEBUG >= 4)
+                    Debug.WriteLine("{2:HH:mm:ss:fff}\t{0,10} (ms)\t\t\tRule {3}: [{4} #{1}]", stopwatch.Elapsed.TotalMilliseconds, dc.DcID, DateTime.Now, a, dc.DcType);
             }
 
             return msgQueue;

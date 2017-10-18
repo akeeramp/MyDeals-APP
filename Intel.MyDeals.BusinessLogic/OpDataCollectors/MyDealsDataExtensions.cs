@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Intel.MyDeals.BusinessLogic.DataCollectors;
 using Intel.MyDeals.BusinessRules;
@@ -348,6 +349,10 @@ namespace Intel.MyDeals.BusinessLogic
         /// <returns>OpDataCollectorFlattenedList</returns>
         public static OpDataCollectorFlattenedList ToOpDataCollectorFlattenedDictList(this MyDealsData myDealsData, OpDataElementType opType, ObjSetPivotMode pivotMode, bool security = true)
         {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            if (EN.GLOBAL.DEBUG >= 1) Debug.WriteLine("{1:HH:mm:ss:fff}\t ToOpDataCollectorFlattenedDictList [{0}] - Started", opType, DateTime.Now);
+
             // Construct return variable
             OpDataCollectorFlattenedList data = new OpDataCollectorFlattenedList();
             Dictionary<int, string> prdMaps = new Dictionary<int, string>();
@@ -370,18 +375,20 @@ namespace Intel.MyDeals.BusinessLogic
                 
                 // TODO make this a rule
                 // Since this is a DB call, we don't want to do this for EVERY data collector individually
-                myDealsData.TagWithAttachments(dpObjSet, opType);
+                if (opType == OpDataElementType.CNTRCT || opType == OpDataElementType.WIP_DEAL) myDealsData.TagWithAttachments(dpObjSet, opType);
             }
 
             //Get Products
             // TODO make this a rule
             // This is a call accross the entire OpDataPacket to get products
             // Since this is a DB call, we don't want to do this for EVERY data collector individually
-            if (opType == OpDataElementType.DEAL || opType == OpDataElementType.WIP_DEAL)
-                prdMaps = dpObjSet.GetProductMapping();
+            //if (opType == OpDataElementType.DEAL || opType == OpDataElementType.WIP_DEAL)
+            //    prdMaps = dpObjSet.GetProductMapping();
 
             // loop through deals and flatten each Data Collector
             data.AddRange(dpObjSet.AllDataCollectors.Select(dc => dc.ToOpDataCollectorFlattenedItem(opType, pivotMode, prdMaps, myDealsData, security)));
+
+            if (EN.GLOBAL.DEBUG >= 1) Debug.WriteLine("{2:HH:mm:ss:fff}\t{0,10} (ms)\t ToOpDataCollectorFlattenedDictList [{1}]", stopwatch.Elapsed.TotalMilliseconds, opType, DateTime.Now);
 
             return data;
         }

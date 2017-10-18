@@ -291,46 +291,46 @@ namespace Intel.MyDeals.BusinessLogic
         {
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            Debug.WriteLine("ToOpDataCollectorFlattenedItem [{0}] - Started", dc.DcID);
+            if (EN.GLOBAL.DEBUG >= 2) Debug.WriteLine("{1:HH:mm:ss:fff}\t ToOpDataCollectorFlattenedItem [{2} {0}] - Started", dc.DcID, DateTime.Now, dc.DcType);
 
             // Call all load triggered rules
             if (security)
             {
                 dc.ApplyRules(MyRulesTrigger.OnLoad);
-                Debug.WriteLine("    Rules OnLoad [{1}] (ms): {0}", stopwatch.Elapsed.TotalMilliseconds, dc.DcID);
+                if (EN.GLOBAL.DEBUG >= 3) Debug.WriteLine("{2:HH:mm:ss:fff}\t{0,10} (ms)\t\t Rules OnLoad [{1}]", stopwatch.Elapsed.TotalMilliseconds, dc.DcID, DateTime.Now);
                 if (opType == OpDataElementType.WIP_DEAL)
                 {
                     dc.ApplyRules(MyRulesTrigger.OnValidate);
-                    Debug.WriteLine("    Rules OnValidate [{1}] (ms): {0}", stopwatch.Elapsed.TotalMilliseconds, dc.DcID);
+                    if (EN.GLOBAL.DEBUG >= 3) Debug.WriteLine("{2:HH:mm:ss:fff}\t{0,10} (ms)\t\t Rules OnValidate [{1}]", stopwatch.Elapsed.TotalMilliseconds, dc.DcID, DateTime.Now);
                 }
             }
-            Debug.WriteLine("    Rules [{1}] (ms): {0}", stopwatch.Elapsed.TotalMilliseconds, dc.DcID);
+            if (EN.GLOBAL.DEBUG >= 3) Debug.WriteLine("{2:HH:mm:ss:fff}\t{0,10} (ms)\t\t Rules [{1}]{0}", stopwatch.Elapsed.TotalMilliseconds, dc.DcID, DateTime.Now);
 
             // Create the collection to return
             OpDataCollectorFlattenedItem objsetItem = new OpDataCollectorFlattenedItem();
 
             // Add DataElements to the Dictionary
             dc.DataElements.ForEach(de => objsetItem.ApplySingleAndMultiDim(de, dc, pivotMode));
-            Debug.WriteLine("    ForEach [{1}] (ms): {0}", stopwatch.Elapsed.TotalMilliseconds, dc.DcID);
+            if (EN.GLOBAL.DEBUG >= 3) Debug.WriteLine("{2:HH:mm:ss:fff}\t{0,10} (ms)\t\tForEach [{1}]", stopwatch.Elapsed.TotalMilliseconds, dc.DcID, DateTime.Now);
 
             // After converting to dictionary, need to update the ids
             objsetItem.EnsureBasicIds(dc.DcID, dc.DcType, dc.DcParentID, dc.DcParentType);
-            Debug.WriteLine("    EnsureBasicIds [{1}] (ms): {0}", stopwatch.Elapsed.TotalMilliseconds, dc.DcID);
+            if (EN.GLOBAL.DEBUG >= 3) Debug.WriteLine("{2:HH:mm:ss:fff}\t{0,10} (ms)\t\t EnsureBasicIds [{1}]", stopwatch.Elapsed.TotalMilliseconds, dc.DcID, DateTime.Now);
 
             // Don't forget about multi dimensional items
             objsetItem.MapMultiDim();
-            Debug.WriteLine("    MapMultiDim [{1}] (ms): {0}", stopwatch.Elapsed.TotalMilliseconds, dc.DcID);
+            if (EN.GLOBAL.DEBUG >= 3) Debug.WriteLine("{2:HH:mm:ss:fff}\t{0,10} (ms)\t\t MapMultiDim [{1}]", stopwatch.Elapsed.TotalMilliseconds, dc.DcID, DateTime.Now);
 
             // Apply rules directly to dictionary
             if (security) dc.ApplyRules(MyRulesTrigger.OnOpCollectorConvert, null, objsetItem, dc.GetCustomerDivisions(), dc.GetMyCustomer());
-            Debug.WriteLine("    ApplyRules [{1}] (ms): {0}", stopwatch.Elapsed.TotalMilliseconds, dc.DcID);
+            if (EN.GLOBAL.DEBUG >= 3) Debug.WriteLine("{2:HH:mm:ss:fff}\t{0,10} (ms)\t\t ApplyRules [{1}]", stopwatch.Elapsed.TotalMilliseconds, dc.DcID, DateTime.Now);
 
             // assign all messages
             if (security) objsetItem.ApplyMessages(myDealsData);
-            Debug.WriteLine("    ApplyMessages [{1}] (ms): {0}", stopwatch.Elapsed.TotalMilliseconds, dc.DcID);
+            if (EN.GLOBAL.DEBUG >= 3) Debug.WriteLine("{2:HH:mm:ss:fff}\t{0,10} (ms)\t\t ApplyMessages [{1}]", stopwatch.Elapsed.TotalMilliseconds, dc.DcID, DateTime.Now);
 
             stopwatch.Stop();
-            Debug.WriteLine("ToOpDataCollectorFlattenedItem [{1}] (ms): {0}", stopwatch.Elapsed.TotalMilliseconds, dc.DcID);
+            if (EN.GLOBAL.DEBUG >= 2) Debug.WriteLine("{2:HH:mm:ss:fff}\t{0,10} (ms)\t ToOpDataCollectorFlattenedItem [{3} {1}]", stopwatch.Elapsed.TotalMilliseconds, dc.DcID, DateTime.Now, dc.DcType);
 
             return objsetItem;
         }

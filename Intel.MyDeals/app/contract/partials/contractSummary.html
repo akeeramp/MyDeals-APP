@@ -10,10 +10,10 @@
             on="Pending"
             off="Accepted"
             ng-if="root.contractData.CUST_ACCPT !== 'Acceptance Not Required'"
-            ng-disabled="hideIfNotPending"
             onstyle="btn-success"
             size="btn-xs"
             style="width: 140px !important"></toggle>
+    <!--ng-disabled="hideIfNotPending"-->
     <toggle class="toggle-accept"
             ng-model="isPending"
             off="<div style='font-size: 11px;'>Acceptance Not Required</div>"

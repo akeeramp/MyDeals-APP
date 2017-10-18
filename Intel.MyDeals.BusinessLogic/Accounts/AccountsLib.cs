@@ -7,7 +7,7 @@ namespace Intel.MyDeals.BusinessLogic
     {
         public void SetUserAccessLevel(OpUserToken opUserToken)
         {
-            var toolConstants = new ConstantLookupDataLib().GetAdminConstants();
+            //var toolConstants = DataCollections.GetAdminConstants();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Intel.MyDeals.Entities;
 using Intel.Opaque;
@@ -50,6 +51,9 @@ namespace Intel.MyDeals.BusinessRules
         /// <returns></returns>
         public static OpMsgQueue ApplyRules(this OpDataCollector dc, MyRulesTrigger ruleTriggerPoint, Dictionary<string, bool> securityActionCache = null, params object[] args)
         {
+            Stopwatch stopwatch = new Stopwatch();
+            if (EN.GLOBAL.DEBUG >= 3) stopwatch.Start();
+
             OpDataElementType dcType = (OpDataElementType)Enum.Parse(typeof(OpDataElementType), dc.DcType);
             string objsetType = dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
 
@@ -57,7 +61,12 @@ namespace Intel.MyDeals.BusinessRules
             attrbRules = attrbRules.Where(a => !a.InObjType.Any() || a.InObjType.Contains(dcType));
             attrbRules = attrbRules.Where(a => !a.InObjSetType.Any() || a.InObjSetType.Contains(objsetType));
 
-            return MyOpRulesLib.ApplyRules(dc, ruleTriggerPoint, attrbRules.ToList(), securityActionCache, args);
+            OpMsgQueue msg = MyOpRulesLib.ApplyRules(dc, ruleTriggerPoint, attrbRules.ToList(), securityActionCache, args);
+
+            if (EN.GLOBAL.DEBUG >= 3)
+                Debug.WriteLine("{2:HH:mm:ss:fff}\t{0,10} (ms)\t\tApplyRules {3}: [{4} #{1}]", stopwatch.Elapsed.TotalMilliseconds, dc.DcID, DateTime.Now, ruleTriggerPoint, dc.DcType);
+
+            return msg;
         }
 
 

@@ -35,6 +35,10 @@ namespace Intel.MyDeals.App
                 op.ClearUserCache("MyDeals", GetEnvironment());
             }
 
+#if DEBUG
+            EN.GLOBAL.DEBUG = 0;
+#endif
+
             OpUserToken user = null;
             try
             {

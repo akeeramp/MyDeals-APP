@@ -293,7 +293,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                 else
                 {
 #if DEBUG
-                    System.Diagnostics.Debug.WriteLine($"Attribute NOT MAPPED during TranslateToWip: {key}");
+                    //System.Diagnostics.Debug.WriteLine($"Attribute NOT MAPPED during TranslateToWip: {key}");
 #endif
                 }
             }
@@ -399,7 +399,7 @@ namespace Intel.MyDeals.BusinessLogic.DataCollectors
                 else
                 {
 #if DEBUG
-                    System.Diagnostics.Debug.WriteLine($"Attribute NOT MAPPED during TranslateToWip: {key}");
+                    //System.Diagnostics.Debug.WriteLine($"Attribute NOT MAPPED during TranslateToWip: {key}");
 #endif
                 }
             }

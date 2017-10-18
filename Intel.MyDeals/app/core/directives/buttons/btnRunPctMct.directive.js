@@ -26,11 +26,11 @@ function btnRunPctMct(logger, objsetService, $timeout) {
             $scope.needToRunPct = false;
 
             if ($scope.btnType === "mct") {
-                $scope.text = "Meet Comp";
-                $scope.textMsg = "Meet Comp";
+                $scope.text = "Meet Comp Test";
+                $scope.textMsg = "Meet Comp Test";
             } else {
-                $scope.text = "Cost Test";
-                $scope.textMsg = "Cost Test";
+                $scope.text = "Price Cost Test";
+                $scope.textMsg = "Price Cost Test";
             }
 
             if (!$scope.runIfStaleByHours) $scope.runIfStaleByHours = 0;

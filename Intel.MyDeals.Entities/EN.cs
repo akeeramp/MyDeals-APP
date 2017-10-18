@@ -2,6 +2,11 @@
 {
     public static class EN
     {
+        public static class GLOBAL
+        {
+            public static int DEBUG = 0;
+        }
+
         public static class VARIABLES
         {
             public static int NEW_UNIQ_ID = -1000;

@@ -22,6 +22,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
     $scope.showPendingFile = false;
     $scope.showPendingC2A = false;
     $scope.needToRunPct = false;
+    $scope.canBypassEmptyActions = false;
 
     $scope.showPending = function (page) {
         $scope.showPendingInfo = false;
@@ -157,6 +158,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
             $scope.isPending = false;
             root.contractData.CUST_ACCPT = "Accepted";
         }
+        $scope.actionItems();
     }
 
     $scope.deleteContract = function () {
@@ -206,7 +208,6 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         });
 
     }
-
 
     $scope.summaryFilter = function (ps) {
         return (
@@ -399,12 +400,10 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
             }
         }
 
-        $scope.actionItemWithPending();
-    }
-
-    $scope.actionItemWithPending = function() {
         if ($scope.isPending === false && root.contractData.CUST_ACCPT !== "Pending" && (root.contractData.C2A_DATA_C2A_ID === "" && !root.contractData.HasFiles)) {
             $scope.dialogPendingWarning.open();
+        } else if (($scope.isPending === false && root.contractData.CUST_ACCPT !== "Pending") || ($scope.isPending === true && root.contractData.CUST_ACCPT !== "Accepted")) {
+            $scope.continueAction(true);
         } else {
             $scope.actionItemsBase();
         };
@@ -428,6 +427,16 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 
 
     $scope.closeDialog = function () {
+        $timeout(function () {
+            if ($scope.isPending) {
+                $scope.isPending = false;
+                $scope.root.contractData.CUST_ACCPT = "Accepted";
+            } else {
+                $scope.isPending = true;
+                $scope.root.contractData.CUST_ACCPT = "Pending";
+            }
+            $scope.$apply();
+        }, 500);
         $scope.dialogPendingWarning.close();
     }
     $scope.continueAction = function (saveContract) {
@@ -435,6 +444,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         $scope.dialogPendingWarning.close();
 
         if (!!saveContract && saveContract === true) {
+            $scope.canBypassEmptyActions = saveContract;
             root.quickSaveContract($scope.actionItemsBase, true);
         } else {
             $scope.actionItemsBase(true);
@@ -459,7 +469,10 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         getActionItems(data, dataItems, "Hold", "Send for Holding");
 
         if (Object.keys(data).length === 0) {
-            kendo.alert("No Pricing Strategies were selected.");
+            if (!$scope.canBypassEmptyActions) {
+                kendo.alert("No Pricing Strategies were selected.");
+            }
+            $scope.canBypassEmptyActions = false;
             return;
         }
 
@@ -486,6 +499,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 
         modalInstance.result.then(function (result) {
             $scope.checkPctMctPriorToActioning(data, result);
+            $scope.canBypassEmptyActions = false;
         }, function () { });
 
     }

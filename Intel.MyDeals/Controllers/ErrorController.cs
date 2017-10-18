@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Configuration;
 using System.Web.Mvc;
 using Intel.MyDeals.App;
+using Intel.MyDeals.DataLibrary;
 using Intel.Opaque;
 
 namespace Intel.MyDeals.Controllers
@@ -39,7 +41,9 @@ namespace Intel.MyDeals.Controllers
 
         public ActionResult ResetAVM()
         {
-            OpCore op=  OpAppConfig.Init();
+            new DataCollectionsDataLib().ClearCache();
+
+            OpCore op=OpAppConfig.Init();
             OpUserToken user = AppLib.InitAvm(op, true);
 
             return RedirectToAction("Index", "Home");
