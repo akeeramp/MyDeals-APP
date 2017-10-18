@@ -1933,7 +1933,7 @@
         $scope.saveEntireContractBase = function (stateName, forceValidation, forcePublish, toState, toParams, delPtr) {
         	var deferred = $q.defer();
             if (!$scope._dirty && !forceValidation) {
-                return;
+            	return deferred.promise;
             }
 
             // if save already started saving... exit
