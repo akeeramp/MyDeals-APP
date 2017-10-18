@@ -92,12 +92,12 @@ namespace Intel.MyDeals.BusinessLogic
 
         public List<PCTLegalException> GetLegalExceptions()
         {
-            return _productCostTestDataLib.GetLegalExceptions().Where(l => l.ACTV_IND).ToList();
+            return _productCostTestDataLib.GetLegalExceptions().ToList();
         }
+
         public List<PCTLegalException> GetLegalExceptions(DateTime endDate)
         {
             return _productCostTestDataLib.GetLegalExceptions().Where(l => l.ACTV_IND && l.PCT_LGL_EXCPT_END_DT >= endDate).ToList();
         }
-
     }
 }

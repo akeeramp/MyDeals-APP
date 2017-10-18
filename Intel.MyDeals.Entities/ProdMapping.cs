@@ -18,6 +18,8 @@
         public string HAS_L2 { get; set; }
         public string PRD_CAT_NM { get; set; }
 
+        public string HIER_NM_HASH { get; set; }
+
         /// <summary>
         /// Include or Exclude
         /// </summary>

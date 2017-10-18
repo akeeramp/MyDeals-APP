@@ -219,77 +219,77 @@ namespace Intel.MyDeals.BusinessRules
                 dePrdUsr.AddMessage("Product select has some invalid products.");
                 return;
             }
-            if (r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD) == OpDataElementSetType.ECAP.ToString())
-            {
-                foreach (KeyValuePair<string, IEnumerable<ProdMapping>> kvp in items)
-                {
-                    foreach (ProdMapping prodMapping in kvp.Value)
-                    {
-                        if (string.IsNullOrEmpty(prodMapping.PRD_MBR_SID))
-                        {
-                            dePrdUsr.AddMessage($"User entered product ({kvp.Key}) is unable to locate product ({prodMapping.HIER_VAL_NM})");
-                        }
+            //if (r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD) == OpDataElementSetType.ECAP.ToString())
+            //{
+            //    foreach (KeyValuePair<string, IEnumerable<ProdMapping>> kvp in items)
+            //    {
+            //        foreach (ProdMapping prodMapping in kvp.Value)
+            //        {
+            //            if (string.IsNullOrEmpty(prodMapping.PRD_MBR_SID))
+            //            {
+            //                dePrdUsr.AddMessage($"User entered product ({kvp.Key}) is unable to locate product ({prodMapping.HIER_VAL_NM})");
+            //            }
 
-                        if (r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD) == OpDataElementSetType.ECAP.ToString())
-                        {
-                            #region CAP Validations
+            //            if (r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD) == OpDataElementSetType.ECAP.ToString())
+            //            {
+            //                #region CAP Validations
 
-                            double cap;
-                            if (!double.TryParse(prodMapping.CAP, out cap) && prodMapping.CAP.IndexOf("-") >= 0)
-                            {
-                                dePrdUsr.AddMessage($"Product ({prodMapping.HIER_VAL_NM}) CAP price ({prodMapping.CAP}) cannot be a range.");
-                            }
+            //                double cap;
+            //                if (!double.TryParse(prodMapping.CAP, out cap) && prodMapping.CAP.IndexOf("-") >= 0)
+            //                {
+            //                    dePrdUsr.AddMessage($"Product ({prodMapping.HIER_VAL_NM}) CAP price ({prodMapping.CAP}) cannot be a range.");
+            //                }
 
-                            //double ecap;
-                            //if (!double.TryParse(r.Dc.GetDataElementValue(AttributeCodes.ECAP_PRICE), out ecap)) ecap = 0;
+            //                //double ecap;
+            //                //if (!double.TryParse(r.Dc.GetDataElementValue(AttributeCodes.ECAP_PRICE), out ecap)) ecap = 0;
 
-                            // When ECAP Price is greater than CAP, UI validation check on deal creation and system should give a soft warning.
-                            // TODO... put this as a soft warning on the grid
-                            //if (ecap > 0 && cap > ecap)
-                            //{
-                            //    BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"CAP price ({cap}) is greater than ECAP Price.");
-                            //}
+            //                // When ECAP Price is greater than CAP, UI validation check on deal creation and system should give a soft warning.
+            //                // TODO... put this as a soft warning on the grid
+            //                //if (ecap > 0 && cap > ecap)
+            //                //{
+            //                //    BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"CAP price ({cap}) is greater than ECAP Price.");
+            //                //}
 
-                            // IF CAP is not available at all then show as NO CAP.User can not create deals.
-                            // not true anymore... soft warning in grid now
-                            //if (cap <= 0)
-                            //{
-                            //    BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"CAP is not available ({prodMapping.CAP}). You can not create deals with this product.");
-                            //}
+            //                // IF CAP is not available at all then show as NO CAP.User can not create deals.
+            //                // not true anymore... soft warning in grid now
+            //                //if (cap <= 0)
+            //                //{
+            //                //    BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"CAP is not available ({prodMapping.CAP}). You can not create deals with this product.");
+            //                //}
 
-                            //if (!string.IsNullOrEmpty(prodMapping.PRD_STRT_DTM) && !string.IsNullOrEmpty(prodMapping.CAP_START))
-                            //{
-                            //    DateTime capStart = DateTime.Parse(prodMapping.CAP_START);
-                            //    DateTime capEnd = DateTime.Parse(prodMapping.CAP_END);
-                            //    DateTime prdStart = DateTime.Parse(prodMapping.PRD_STRT_DTM);
+            //                //if (!string.IsNullOrEmpty(prodMapping.PRD_STRT_DTM) && !string.IsNullOrEmpty(prodMapping.CAP_START))
+            //                //{
+            //                //    DateTime capStart = DateTime.Parse(prodMapping.CAP_START);
+            //                //    DateTime capEnd = DateTime.Parse(prodMapping.CAP_END);
+            //                //    DateTime prdStart = DateTime.Parse(prodMapping.PRD_STRT_DTM);
 
-                            //    DateTime dealStart;
-                            //    DateTime dealEnd;
-                            //    if (DateTime.TryParse(r.Dc.GetDataElementValue(AttributeCodes.START_DT), out dealStart) && DateTime.TryParse(r.Dc.GetDataElementValue(AttributeCodes.END_DT), out dealEnd))
-                            //    {
-                            //        if (!(capStart < dealEnd && dealStart < capEnd))
-                            //        {
-                            //            BusinessLogicDeActions.AddValidationMessage(dePrdUsr, "Product entered does not have CAP within the Deal's start date and end date");
-                            //        }
+            //                //    DateTime dealStart;
+            //                //    DateTime dealEnd;
+            //                //    if (DateTime.TryParse(r.Dc.GetDataElementValue(AttributeCodes.START_DT), out dealStart) && DateTime.TryParse(r.Dc.GetDataElementValue(AttributeCodes.END_DT), out dealEnd))
+            //                //    {
+            //                //        if (!(capStart < dealEnd && dealStart < capEnd))
+            //                //        {
+            //                //            BusinessLogicDeActions.AddValidationMessage(dePrdUsr, "Product entered does not have CAP within the Deal's start date and end date");
+            //                //        }
 
-                            //        if (capStart > dealEnd)
-                            //        {
-                            //            BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"The CAP start date ({capStart:mm/dd/yyyy}) and end date ({capEnd:mm/dd/yyyy}) exists in future outside of deal end date. Please change the deal start date to match the CAP start date.");
-                            //        }
-                            //    }
+            //                //        if (capStart > dealEnd)
+            //                //        {
+            //                //            BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"The CAP start date ({capStart:mm/dd/yyyy}) and end date ({capEnd:mm/dd/yyyy}) exists in future outside of deal end date. Please change the deal start date to match the CAP start date.");
+            //                //        }
+            //                //    }
 
-                            //    // If the product start date is after the deal start date, then deal start date should match with product start date and back date would not apply.
-                            //    if (prdStart > dealStart)
-                            //    {
-                            //        BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"If the product start date is after the deal start date, then deal start date should match with product start date and back date would not apply.");
-                            //    }
-                            //}
+            //                //    // If the product start date is after the deal start date, then deal start date should match with product start date and back date would not apply.
+            //                //    if (prdStart > dealStart)
+            //                //    {
+            //                //        BusinessLogicDeActions.AddValidationMessage(dePrdUsr, $"If the product start date is after the deal start date, then deal start date should match with product start date and back date would not apply.");
+            //                //    }
+            //                //}
 
-                            #endregion CAP Validations
-                        }
-                    }
-                }
-            }
+            //                #endregion CAP Validations
+            //            }
+            //        }
+            //    }
+            //}
             if (r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD) == OpDataElementSetType.VOL_TIER.ToString())
             {
                 CheckForCrossVerticalProducts(dePrdUsr, items);
@@ -676,7 +676,7 @@ namespace Intel.MyDeals.BusinessRules
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
-            
+
             if (r.Dc.DcID > 0 || !r.ExtraArgs.Any()) return;
 
             var myDealsData = (MyDealsData)r.ExtraArgs[0];
@@ -765,20 +765,20 @@ namespace Intel.MyDeals.BusinessRules
                         : WorkFlowStages.Draft;
                 }
                 OpDataCollector dcRow = myDealsData[OpDataElementType.PRC_TBL_ROW].Data[r.Dc.DcParentID];
-				OpDataCollector dcTbl = myDealsData[OpDataElementType.PRC_TBL].Data[dcRow.DcParentID];
-				if (!myDealsData.ContainsKey(OpDataElementType.PRC_ST))
-				{
-					myDealsData[OpDataElementType.PRC_ST] = new OpDataCollectorDataLib().GetByIDs(OpDataElementType.PRC_ST,
-						new List<int> { dcTbl.DcParentID },
-						new List<OpDataElementType> { OpDataElementType.PRC_ST },
-						new List<int> { Attributes.WF_STG_CD.ATRB_SID })[OpDataElementType.PRC_ST];
-				}
-				OpDataCollector dcSt = myDealsData[OpDataElementType.PRC_ST].Data[dcTbl.DcParentID];
-				dcSt.SetAtrb(AttributeCodes.WF_STG_CD, futureStage);
-			}
+                OpDataCollector dcTbl = myDealsData[OpDataElementType.PRC_TBL].Data[dcRow.DcParentID];
+                if (!myDealsData.ContainsKey(OpDataElementType.PRC_ST))
+                {
+                    myDealsData[OpDataElementType.PRC_ST] = new OpDataCollectorDataLib().GetByIDs(OpDataElementType.PRC_ST,
+                        new List<int> { dcTbl.DcParentID },
+                        new List<OpDataElementType> { OpDataElementType.PRC_ST },
+                        new List<int> { Attributes.WF_STG_CD.ATRB_SID })[OpDataElementType.PRC_ST];
+                }
+                OpDataCollector dcSt = myDealsData[OpDataElementType.PRC_ST].Data[dcTbl.DcParentID];
+                dcSt.SetAtrb(AttributeCodes.WF_STG_CD, futureStage);
+            }
 
-			// If object is expired, unexpire it
-			string isExpired = r.Dc.GetDataElementValue(AttributeCodes.EXPIRE_FLG);
+            // If object is expired, unexpire it
+            string isExpired = r.Dc.GetDataElementValue(AttributeCodes.EXPIRE_FLG);
             if (!string.IsNullOrEmpty(isExpired) && isExpired == "1") // If there is an expired flag, reset it if it is set
             {
                 r.Dc.SetAtrb(AttributeCodes.EXPIRE_FLG, "0");

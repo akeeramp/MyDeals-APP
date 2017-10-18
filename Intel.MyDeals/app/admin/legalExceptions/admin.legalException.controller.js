@@ -222,7 +222,6 @@
                 headerTemplate: "<div class='isRequired'> Active </div>",
                 template: gridUtils.boolViewer('ACTV_IND'),
                 editor: gridUtils.boolEditor,
-                filterable: { multi: true, search: true },
                 attributes: { style: "text-align: center;" },
             },
             {
