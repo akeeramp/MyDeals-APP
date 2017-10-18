@@ -1931,6 +1931,7 @@
         // **** SAVE CONTRACT Methods ****
         //
         $scope.saveEntireContractBase = function (stateName, forceValidation, forcePublish, toState, toParams, delPtr) {
+        	var deferred = $q.defer();
             if (!$scope._dirty && !forceValidation) {
                 return;
             }
@@ -1941,7 +1942,15 @@
                 if (!!$scope.isBusyMsgTitle && $scope.isBusyMsgTitle !== "") return;
             }
 
-            $scope.saveEntireContractRoot(stateName, forceValidation, forcePublish, toState, toParams, delPtr);
+            $scope.saveEntireContractRoot(stateName, forceValidation, forcePublish, toState, toParams, delPtr).then(
+				function (result) {
+					deferred.resolve(result);
+				}, function (err) {
+					deferred.reject(err)
+				}
+			);
+
+			return deferred.promise;
         }
 
         $scope.saveEntireContractRoot = function (stateName, forceValidation, forcePublish, toState, toParams, delPtr, isProductTranslate) {
