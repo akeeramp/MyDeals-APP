@@ -34,6 +34,10 @@
             return dataService.post(apiBaseUrl + 'DeleteLegalException', dto);
         }
 
+        function userHasAccess() {
+            return true;
+        }
+
         return service;
     }
 })();

@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 10/17/2017 10:08:22 AM
+File Updated: 10/17/2017 3:49:55 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -1733,11 +1733,11 @@ namespace Intel.MyDeals.Entities {
 		///<summary>
 		/// DIM_SID: 3
 		/// DIM_CD: DEAL
-		/// ATRB_SID: 3598
+		/// ATRB_SID: 102
 		/// TGT_COL_TYPE: VARCHAR
-		/// DOT_NET_DATA_TYPE: System.Guid
+		/// DOT_NET_DATA_TYPE: System.String
 		///</summary>
-		public const string PT_TRANS_GUID = "PT_TRANS_GUID";
+		public const string PS_WF_STG_CD = "PS_WF_STG_CD";
 
 		///<summary>
 		/// DIM_SID: 3
@@ -2183,15 +2183,6 @@ namespace Intel.MyDeals.Entities {
 		///<summary>
 		/// DIM_SID: 3
 		/// DIM_CD: DEAL
-		/// ATRB_SID: 3599
-		/// TGT_COL_TYPE: VARCHAR
-		/// DOT_NET_DATA_TYPE: System.Guid
-		///</summary>
-		public const string WIP_TRANS_GUID = "WIP_TRANS_GUID";
-
-		///<summary>
-		/// DIM_SID: 3
-		/// DIM_CD: DEAL
 		/// ATRB_SID: 139
 		/// TGT_COL_TYPE: DATETIME
 		/// DOT_NET_DATA_TYPE: System.DateTime
@@ -2395,6 +2386,7 @@ namespace Intel.MyDeals.Entities {
 		public const string Test = "Test";
 		public const string Test2 = "Test2";
 		public const string TRKR_GEN_CUTOFF = "TRKR_GEN_CUTOFF";
+		public const string WIP_ACTNS_DEBUG = "WIP_ACTNS_DEBUG";
 	}
 
 
