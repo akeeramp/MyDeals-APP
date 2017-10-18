@@ -1784,7 +1784,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 				.then(function (response) {
 					// Validate products
 					// Note: When changing the message here, also change the condition in $scope.saveEntireContractBase method in contract.controller.js
-					root.setBusy("Validating your products...", "Please wait as we find your products!");
+					root.setBusy("Validating your data...", "Please wait as we find your products!");
 					productSelectorService.TranslateProducts(translationInputToSend, $scope.contractData.CUST_MBR_SID, dealType) //Once the database is fixed remove the hard coded geo_mbr_sid
 						.then(function (response) {
 							topbar.hide();
