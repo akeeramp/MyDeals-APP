@@ -14,10 +14,13 @@ namespace Intel.MyDeals.Entities
             return odp != null && odp.AllDataElements.All(de => de.IsValid(attributeCollection));
         }
 
-        public static void AddSaveActions(this OpDataPacket<OpDataElementType> packet)
+        public static void AddSaveActions(this OpDataPacket<OpDataElementType> packet, OpDataPacket<OpDataElementType> fullPacket = null)
         {
-            packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.SAVE, 10)); // Set action - save it.
-            packet.AddSyncActions();
+            if (packet.Data.Count > 0) // if there are not any data elements to save, dno't make actions.
+            {
+                packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.SAVE, 10)); // Set action - save it.
+                packet.AddSyncActions(fullPacket);
+            }
         }
 
         public static void AddParentIdActions(this OpDataPacket<OpDataElementType> packet, Dictionary<int, int> data)
@@ -28,16 +31,30 @@ namespace Intel.MyDeals.Entities
             }
         }
 
-        public static void AddSyncActions(this OpDataPacket<OpDataElementType> packet)
+        public static void AddSyncActions(this OpDataPacket<OpDataElementType> packet, OpDataPacket<OpDataElementType> fullPacket = null)
         {
             // This must happen *after* the major/minor check.  Sync deals must happen only if a deal goes active or is already active.
             if (packet.PacketType != OpDataElementType.WIP_DEAL) return;
 
-            List<int> dealIds = packet.AllDataElements.Where(d => d.AtrbCdIs(AttributeCodes.WF_STG_CD) && d.AtrbHasValue(WorkFlowStages.Active)).Select(d => d.DcID).ToList();
-            if (dealIds.Any())
+            OpDataPacket<OpDataElementType> testPacket = fullPacket == null ? packet : fullPacket;
+            List<int> majorDealIds = testPacket.AllDataElements.Where(d => d.AtrbCdIs(AttributeCodes.WF_STG_CD) && d.AtrbValue.ToString() == WorkFlowStages.Active && d.HasValueChanged).Select(d => d.DcID).ToList();
+            List<int> minorDealIds = testPacket.AllDataElements.Where(d => d.AtrbCdIs(AttributeCodes.WF_STG_CD) && d.AtrbValue.ToString() == WorkFlowStages.Active && !d.HasValueChanged).Select(d => d.DcID).ToList();
+
+            if (majorDealIds.Any()) // 
             {
-                packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.SYNC_DEALS_MAJOR, dealIds, 80)); // Set action - save it.
+                packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.SYNC_DEALS_MAJOR, majorDealIds, 80)); // Set action - save it.
             }
+
+            if (minorDealIds.Any() && packet.Data.Any()) // Tack on Minor Sync calls for any minor changes that happened and there was no stage change to active (was already in active)
+            {
+                List<int> packetIds = packet.Data.Select(p => p.Value.DcID).ToList();
+                minorDealIds = minorDealIds.Where(d => packetIds.Contains(d)).ToList();
+                if (minorDealIds.Any())
+                {
+                    packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.SYNC_DEALS_MINOR, minorDealIds, 90)); // Set action - save it.
+                }
+            }
+
         }
 
         public static void AddDeleteActions(this OpDataPacket<OpDataElementType> packet, List<int> delIds)

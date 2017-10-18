@@ -1073,6 +1073,7 @@ namespace Intel.MyDeals.BusinessLogic
 
         public static void SavePacketByDictionary(this MyDealsData myDealsData, OpDataCollectorFlattenedList data, OpDataElementType opDataElementType, Guid myWbBatchId)
         {
+            // All save packet calls go through here.  This is the one point where we sift for changes.
             // Save Data Cycle: Point 10
             if (!myDealsData.ContainsKey(opDataElementType)) return;
 
@@ -1088,7 +1089,7 @@ namespace Intel.MyDeals.BusinessLogic
             //newPacket.Messages.Messages.RemoveAll(r => true);
 
             // Tack on the save action call now
-            newPacket.AddSaveActions();
+            newPacket.AddSaveActions(myDealsData[opDataElementType]);
             if (data != null) newPacket.AddDeleteActions(data);
 
             myDealsData[opDataElementType] = newPacket;
