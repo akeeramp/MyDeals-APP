@@ -100,7 +100,7 @@ namespace Intel.MyDeals.Controllers.API
                 CustId = custId,
                 ContractId = contractId,
                 DelPtr = delPtr
-            }, contractAndPricingTable, false, false)
+            }, contractAndPricingTable, false, false, false)
                 , "Unable to save the Contract"
             );
 
@@ -108,16 +108,16 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [Route("SaveAndValidateContractAndPricingTable/{custId}/{contractId}/{delPtr}")]
+        [Route("SaveAndValidateContractAndPricingTable/{custId}/{contractId}/{delPtr}/{isProductTranslate}")]
         [HttpPost]
-        public OpDataCollectorFlattenedDictList SaveAndValidateContractAndPricingTable(int custId, int contractId, bool delPtr, ContractTransferPacket contractAndPricingTable)
+        public OpDataCollectorFlattenedDictList SaveAndValidateContractAndPricingTable(int custId, int contractId, bool delPtr, bool isProductTranslate, ContractTransferPacket contractAndPricingTable)
         {
             OpDataCollectorFlattenedDictList result = SafeExecutor(() => _contractsLib.SaveContractAndPricingTable(new ContractToken
             {
                 CustId = custId,
                 ContractId = contractId,
                 DelPtr = delPtr
-            }, contractAndPricingTable, true, false)
+            }, contractAndPricingTable, true, false, isProductTranslate)
                 , "Unable to save the Contract"
             );
 
@@ -133,7 +133,7 @@ namespace Intel.MyDeals.Controllers.API
             {
                 CustId = custId,
                 ContractId = contractId
-            }, contractAndPricingTable, true, true)
+            }, contractAndPricingTable, true, true, false)
                 , "Unable to save the Contract"
             );
 

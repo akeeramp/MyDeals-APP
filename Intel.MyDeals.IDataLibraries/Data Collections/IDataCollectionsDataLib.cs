@@ -24,8 +24,6 @@ namespace Intel.MyDeals.IDataLibrary
 
         List<GeoDimension> GetGeoData();
 		
-		Dictionary<string, string> GetProgramPaymentDict();
-
 		UiTemplates GetUiTemplates();
 
         List<Product> GetProductData();

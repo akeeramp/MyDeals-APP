@@ -1778,22 +1778,34 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         if (translationInputToSend.length > 0) {
             topbar.show();
 
-            // Note: When changing the message here, also change the condition in $scope.saveEntireContractBase method in contract.controller.js
-            root.setBusy("Validating your data...", "Please wait as we find your products!");
-            productSelectorService.TranslateProducts(translationInputToSend, $scope.contractData.CUST_MBR_SID, dealType) //Once the database is fixed remove the hard coded geo_mbr_sid
-                .then(function (response) {
-                    topbar.hide();
-                    if (response.statusText === "OK") {
-                    	response.data = buildTranslatorOutputObject(invalidProductJSONRows, response.data);
-                        cookProducts(currentRowNumber, response.data, currentPricingTableRowData, publishWipDeals);
-                    }
-                }, function (response) {
-                    topbar.hide();
-                    root.setBusy("Validating products...", "Error in translating products");
-                    $timeout(function () {
-                        root.setBusy("", "");
-                    }, 300);
-                });
+            root.setBusy("Validating your data...", "Please wait as we validate columns for your product!");
+
+            root.validatePricingTable(true, true)
+				.then(function (response) {
+					// Validate products
+					// Note: When changing the message here, also change the condition in $scope.saveEntireContractBase method in contract.controller.js
+					root.setBusy("Validating your products...", "Please wait as we find your products!");
+					productSelectorService.TranslateProducts(translationInputToSend, $scope.contractData.CUST_MBR_SID, dealType) //Once the database is fixed remove the hard coded geo_mbr_sid
+						.then(function (response) {
+							topbar.hide();
+							if (response.statusText === "OK") {
+								response.data = buildTranslatorOutputObject(invalidProductJSONRows, response.data);
+								cookProducts(currentRowNumber, response.data, currentPricingTableRowData, publishWipDeals);
+							}
+						}, function (response) {
+							topbar.hide();
+							root.setBusy("Validating products...", "Error in translating products");
+							$timeout(function () {
+								root.setBusy("", "");
+							}, 300);
+						})
+				}, function (response) {
+					topbar.hide();
+					root.setBusy("Warning preventing product validation", "Please fix column validation errors then try again");
+					$timeout(function () {
+						root.setBusy("", "");
+					}, 300);
+				});
         } // Products where client side has invalid and duplicate product information
         else if (invalidProductJSONRows.length > 0) {
             var data = { 'ProdctTransformResults': {}, 'InValidProducts': {}, 'DuplicateProducts': {}, 'ValidProducts': {} };

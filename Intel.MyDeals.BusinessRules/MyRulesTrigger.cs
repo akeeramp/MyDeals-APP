@@ -16,7 +16,8 @@
         OnRequired,
         OnAutomatedTesting,
         OnMerge,
-        OnMergeComplete
+        OnMergeComplete,
+		OnTranslate
     }
 
 }

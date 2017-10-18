@@ -11,8 +11,8 @@ namespace Intel.MyDeals.BusinessRules
     {
         public static List<MyOpRule> GetBasicValidationRules()
         {
-            return new List<MyOpRule>
-            {
+			return new List<MyOpRule>
+			{
                 //new MyOpRule
                 //{
                 //    Title="Compress Product Json",
@@ -126,12 +126,12 @@ namespace Intel.MyDeals.BusinessRules
                     Title="Rate must have a positive value",
 					//ActionRule = MyDcActions.ExecuteActions,
                     ActionRule = MyDcActions.ValidateTierRate,
-                    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
-                    InObjSetType = new List<string> {OpDataElementSetType.VOL_TIER.ToString()},
-                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
-                    AtrbCondIf = dc => dc.IsNegative(AttributeCodes.RATE)
-                },
-                new MyOpRule
+					InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
+					InObjSetType = new List<string> {OpDataElementSetType.VOL_TIER.ToString()},
+					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
+					AtrbCondIf = dc => dc.IsNegative(AttributeCodes.RATE)
+				},
+				new MyOpRule
 				{
 					Title="Must be greater than 0",
 					ActionRule = MyDcActions.ValidateTierStartVol,
@@ -212,14 +212,14 @@ namespace Intel.MyDeals.BusinessRules
                     }
                 },
 
-                new MyOpRule
-                {
+				new MyOpRule
+				{
                     //US 53204 - 8 - On add date-If Market segment is Consumer retail or ALL, then default to current quarter first date, other wise Blank. user can edit.
                     Title="On Ad Validation Set Default",
-                    ActionRule = MyDcActions.ExecuteOnAd,
-                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
-                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate}
-                },
+					ActionRule = MyDcActions.ExecuteOnAd,
+					InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate}
+				},
                 // Removed since it was a dummy test for date in past check.  Will bring back when real rule is needed.
                 //new MyOpRule
                 //{
@@ -320,9 +320,10 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     Title="Frontend can't be consumption",
                     ActionRule = MyDcActions.CheckFrontendConsumption,
+					AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PROGRAM_PAYMENT) && de.HasValue()).Any(),
                     InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate}
-                },
+				},
                 new MyOpRule
                 {
                     Title="Billing Date Validations",
@@ -363,7 +364,7 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     Title="Validate Geos",
                     ActionRule = MyDcActions.ExecuteActions,
-                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate, MyRulesTrigger.OnTranslate},
                     AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.GEO_COMBINED) && de.HasValue()).Any(),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
@@ -399,11 +400,27 @@ namespace Intel.MyDeals.BusinessRules
 				new MyOpRule
 				{
 					Title="Total dollar amount must be positive for non-debit memos but negative for debit memos",
-                    ActionRule = MyDcActions.CheckTotalDollarAmount,
+					ActionRule = MyDcActions.CheckTotalDollarAmount,
 					InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
 					InObjSetType = new List<string> {OpDataElementSetType.PROGRAM.ToString()},
 					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate}
-				}				
+				},
+				new MyOpRule
+				{
+					Title="Product Denedency - valid Program Payment",
+					ActionRule = MyDcActions.ValidateProgramPayment,
+					AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PROGRAM_PAYMENT) && de.HasValue()).Any(),
+					InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW},
+					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnTranslate}
+				},
+				new MyOpRule
+				{
+					Title="Product Denedency - Valid Media",
+					ActionRule = MyDcActions.ValidateMedia,
+					InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW},
+					AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PROD_INCLDS) && de.HasValue()).Any(),
+					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnTranslate}
+				}
 			};
         }
     }

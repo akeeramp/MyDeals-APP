@@ -123,13 +123,13 @@ function objsetService($http, dataService, logger, $q) {
 
     // #### CONTRACT CRUD ####
 
-    function updateContractAndCurPricingTable(custId, contractId, data, forceValidation, forcePublish, delPtr) {
+    function updateContractAndCurPricingTable(custId, contractId, data, forceValidation, forcePublish, delPtr, isProductTranslate) {
         if (!delPtr) delPtr = false;
 
         if (forceValidation && forcePublish) {
             return dataService.post(apiBaseContractUrl + "SaveAndValidateAndPublishContractAndPricingTable/" + custId + '/' + contractId + '/' + delPtr, data);
         } else if (forceValidation) {
-            return dataService.post(apiBaseContractUrl + "SaveAndValidateContractAndPricingTable/" + custId + '/' + contractId + '/' + delPtr, data);
+        	return dataService.post(apiBaseContractUrl + "SaveAndValidateContractAndPricingTable/" + custId + '/' + contractId + '/' + delPtr + '/' + isProductTranslate, data);
         } else {
             return dataService.post(apiBaseContractUrl + "SaveContractAndPricingTable/" + custId + '/' + contractId + '/' + delPtr, data);
         }

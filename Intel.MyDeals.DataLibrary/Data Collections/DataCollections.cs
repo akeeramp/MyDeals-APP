@@ -253,31 +253,7 @@ namespace Intel.MyDeals.DataLibrary
 			}
 		}
 		private static List<GeoDimension> _getGeoData;
-
-		public static Dictionary<string, string> GetProgramPaymentDict()
-		{
-			lock (LOCK_OBJECT ?? new object())
-			{
-				if (_programPaymentNameDict == null)
-				{
-					_programPaymentNameDict = new Dictionary<string, string>();
-					string atrbCd = AttributeCodes.PROGRAM_PAYMENT.ToString();
-					List<BasicDropdown> dropdownList = GetBasicDropdowns().Where(d => d.ATRB_CD.ToUpper() == atrbCd && d.ACTV_IND).OrderBy(d => d.ORD).ToList<BasicDropdown>();
-
-					for (int i = 0; i < dropdownList.Count; i++)
-					{
-						if (!_programPaymentNameDict.ContainsKey(dropdownList[i].DROP_DOWN.ToUpper()))
-						{
-							_programPaymentNameDict[dropdownList[i].DROP_DOWN.ToUpper()] = dropdownList[i].DROP_DOWN;
-						}
-					}
-
-				}
-				return _programPaymentNameDict;
-			}
-		}
-		public static Dictionary<string, string> _programPaymentNameDict;
-		
+				
 		public static List<LookupItem> GetLookupData()
         {
             lock (LOCK_OBJECT ?? new object())
@@ -603,20 +579,52 @@ namespace Intel.MyDeals.DataLibrary
 
         private static List<Dropdown> _getDropdowns;
 
-        #endregion Dropdowns
 
-        //// TODO: Either uncomment the below out or remove it once we re-add Retail Cycle in
-        //public static List<RetailPull> GetRetailPullList()
-        //{
-        //	lock (LOCK_OBJECT ?? new object())
-        //	{
-        //		return _getRetailPullList ?? (_getRetailPullList = new RetailPullDataLib().GetRetailPullFromSDMList());
-        //	}
-        //}
 
-        //private static List<RetailPull> _getRetailPullList;
+		public static Dictionary<string, string> GetBasicDropdownDict(string atrbCd)
+		{
+			lock (LOCK_OBJECT ?? new object())
+			{
+				if (_basicDropdownDict == null)
+				{
+					_basicDropdownDict = new Dictionary<string, Dictionary<string,string>>();
+				}
 
-        public static List<SoldToIds> GetSoldToIdList()
+				if (!_basicDropdownDict.ContainsKey(atrbCd))
+				{
+					List<BasicDropdown> dropdownList = GetBasicDropdowns().Where(d => d.ATRB_CD.ToUpper() == atrbCd && d.ACTV_IND).ToList<BasicDropdown>();
+					Dictionary<string, string> temp = new Dictionary<string, string>();
+
+					for (int i = 0; i < dropdownList.Count; i++)
+					{
+						if (!temp.ContainsKey(dropdownList[i].DROP_DOWN.ToUpper()))
+						{
+							temp[dropdownList[i].DROP_DOWN.ToUpper()] = dropdownList[i].DROP_DOWN;
+						}
+					}
+					_basicDropdownDict[atrbCd] = temp;
+
+				}
+				return _basicDropdownDict[atrbCd];
+			}
+		}
+		public static Dictionary<string, Dictionary<string, string>> _basicDropdownDict;
+		
+
+		#endregion Dropdowns
+
+		//// TODO: Either uncomment the below out or remove it once we re-add Retail Cycle in
+		//public static List<RetailPull> GetRetailPullList()
+		//{
+		//	lock (LOCK_OBJECT ?? new object())
+		//	{
+		//		return _getRetailPullList ?? (_getRetailPullList = new RetailPullDataLib().GetRetailPullFromSDMList());
+		//	}
+		//}
+
+		//private static List<RetailPull> _getRetailPullList;
+
+		public static List<SoldToIds> GetSoldToIdList()
         {
             lock (LOCK_OBJECT ?? new object())
             {

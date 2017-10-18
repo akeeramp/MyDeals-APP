@@ -103,12 +103,7 @@ namespace Intel.MyDeals.DataLibrary
 		{
 			return DataCollections.GetGeoData();
 		}
-
-		public Dictionary<string, string> GetProgramPaymentDict()
-		{
-			return DataCollections.GetProgramPaymentDict();
-		}
-
+		
 		public UiTemplates GetUiTemplates()
         {
             return DataCollections.GetUiTemplates();

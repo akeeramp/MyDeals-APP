@@ -26,10 +26,5 @@ namespace Intel.MyDeals.Entities
         /// </summary>
         public Dictionary<string, Dictionary<string, List<string>>> InValidProducts { get; set; }
 		//public Dictionary<string, List<string>> InValidProducts { get; set; }
-
-		/// <summary>
-		/// InValid columns that the product selector is dependant on
-		/// </summary>
-		public Dictionary<string, List<string>> InvalidDependancyColumns { get; set; }
 	}
 }

@@ -144,7 +144,7 @@ namespace Intel.MyDeals.BusinessLogic
             List<int> validateIds,
             bool forcePublish,
             string sourceEvent,
-            bool resetValidationChild)
+            bool resetValidationChild, bool isValidateOnly)
         {
             OpDataCollectorFlattenedDictList data = new OpDataCollectorFlattenedDictList();
 
@@ -191,7 +191,7 @@ namespace Intel.MyDeals.BusinessLogic
             return _dataCollectorLib.SavePackets(
                 data, contractToken, validateIds, forcePublish, sourceEvent, resetValidationChild,
                 primaryIds, primaryOpDataElementTypes, OpDataElementType.CNTRCT,
-                secondaryIds, secondaryOpDataElementTypes, OpDataElementType.PRC_TBL);
+                secondaryIds, secondaryOpDataElementTypes, OpDataElementType.PRC_TBL, isValidateOnly);
         }
 
         public OpDataCollectorFlattenedDictList SaveFullContract(ContractToken contractToken, OpDataCollectorFlattenedDictList fullContracts, List<int> validateIds, bool forcePublish, string sourceEvent)
@@ -202,10 +202,10 @@ namespace Intel.MyDeals.BusinessLogic
                 fullContracts.ContainsKey(OpDataElementType.PRC_TBL) ? fullContracts[OpDataElementType.PRC_TBL] : new OpDataCollectorFlattenedList(),
                 fullContracts.ContainsKey(OpDataElementType.PRC_TBL_ROW) ? fullContracts[OpDataElementType.PRC_TBL_ROW] : new OpDataCollectorFlattenedList(),
                 fullContracts.ContainsKey(OpDataElementType.WIP_DEAL) ? fullContracts[OpDataElementType.WIP_DEAL] : new OpDataCollectorFlattenedList(),
-                contractToken, validateIds, forcePublish, sourceEvent, false).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
+                contractToken, validateIds, forcePublish, sourceEvent, false, false).ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
         }
 
-        public OpDataCollectorFlattenedDictList SaveContractAndPricingTable(ContractToken contractToken, ContractTransferPacket contractAndStrategy, bool forceValidation, bool forcePublish)
+        public OpDataCollectorFlattenedDictList SaveContractAndPricingTable(ContractToken contractToken, ContractTransferPacket contractAndStrategy, bool forceValidation, bool forcePublish, bool isValidateOnly)
         {
             OpDataCollectorFlattenedList translatedFlattenedList = new OpDataCollectorFlattenedList();
 
@@ -251,16 +251,20 @@ namespace Intel.MyDeals.BusinessLogic
                 validationIds,
                 forcePublish,
                 contractAndStrategy.EventSource,
-                resetValidationChild);
+                resetValidationChild,
+				isValidateOnly);
             //.ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Nested);
 
             OpDataCollectorFlattenedDictList data = new OpDataCollectorFlattenedDictList();
 
-            foreach (OpDataElementType opDataElementType in myDealsData.Keys)
-            {
-                data[opDataElementType] = myDealsData.ToOpDataCollectorFlattenedDictList(opDataElementType,
-                    opDataElementType == OpDataElementType.PRC_TBL_ROW ? ObjSetPivotMode.UniqueKey : ObjSetPivotMode.Nested);
-            }
+			if (myDealsData != null)
+			{
+				foreach (OpDataElementType opDataElementType in myDealsData.Keys)
+				{
+					data[opDataElementType] = myDealsData.ToOpDataCollectorFlattenedDictList(opDataElementType,
+						opDataElementType == OpDataElementType.PRC_TBL_ROW ? ObjSetPivotMode.UniqueKey : ObjSetPivotMode.Nested);
+				}
+			}
 
             return data;
             // == OpDataElementType.PRC_TBL_ROW ? ObjSetPivotMode.UniqueKey : ObjSetPivotMode.Nested

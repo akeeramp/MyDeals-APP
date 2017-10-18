@@ -242,8 +242,7 @@ namespace Intel.MyDeals.BusinessLogic
                 ProdctTransformResults = new Dictionary<string, Dictionary<string, List<string>>>(),
                 DuplicateProducts = new Dictionary<string, Dictionary<string, List<PRD_TRANSLATION_RESULTS>>>(),
                 ValidProducts = new Dictionary<string, Dictionary<string, List<PRD_TRANSLATION_RESULTS>>>(),
-                InValidProducts = new Dictionary<string, Dictionary<string, List<string>>>(),
-				InvalidDependancyColumns = new Dictionary<string, List<string>>()
+                InValidProducts = new Dictionary<string, Dictionary<string, List<string>>>()
             };
 
             //  Check if any product has alias mapping, this will call cache
@@ -338,21 +337,7 @@ namespace Intel.MyDeals.BusinessLogic
                     var records = new Dictionary<string, List<string>>();
                     records.Add("E", new List<string>());
 					records.Add("I", new List<string>());
-					
-					List<string> invalidDependencies = new List<string>();
-					Dictionary<string, string> dict = _dataCollectionsDataLib.GetProgramPaymentDict();
-
-					foreach (ProductEntryAttribute d in productAliases)
-					{
-						records[d.EXCLUDE ? "E" : "I"].Add(d.USR_INPUT);
-					
-						// Check for valid dependency values. The product translator may not find valid products if its dependancy columns are invalid
-						if (userProduct.PROGRAM_PAYMENT == null || !dict.ContainsKey(userProduct.PROGRAM_PAYMENT.ToUpper()))
-						{
-							invalidDependencies.Add(AttributeCodes.PROGRAM_PAYMENT.ToString());
-						}
-					}
-					productLookup.InvalidDependancyColumns[userProduct.ROW_NUMBER.ToString()] = invalidDependencies;
+					productAliases.ToList().ForEach(d => records[d.EXCLUDE ? "E" : "I"].Add(d.USR_INPUT));
 					productLookup.ProdctTransformResults[userProduct.ROW_NUMBER.ToString()] = records;
                 }
             }
