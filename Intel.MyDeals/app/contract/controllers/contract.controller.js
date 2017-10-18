@@ -1981,7 +1981,8 @@
                 if ($scope.curPricingStrategy._behaviors.isError["TITLE"]) msg.push("Pricing Strategy");
 
                 kendo.alert("The " + msg.join(" and ") + " either must have a title or needs a unique name in order to save.");
-                return;
+                deferred.reject();
+                return deferred.promise;
             }
 
             var ignorePrdVld = (isProductTranslate) ? false : true;
@@ -1993,7 +1994,8 @@
                 $scope.syncCellsOnAllRows($scope.pricingTableData["PRC_TBL_ROW"]);
                 $scope.setBusy("", "");
                 topbar.hide();
-                return;
+                deferred.reject();
+                return deferred.promise;
             }
             if (!isProductTranslate) {
             	$scope.setBusy("Saving your data...", "Please wait while saving data.");
@@ -2052,7 +2054,7 @@
                     	deferred.resolve(results);
                     	if (isProductTranslate) {
                     		$scope.setBusy("Validating Products...");
-                    		return;
+                    		return deferred.promise;
                     	}
                         $scope.setBusy("Save Successful", "Saved the contract");
                         $scope.resetDirty();

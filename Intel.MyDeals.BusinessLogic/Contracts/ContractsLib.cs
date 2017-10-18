@@ -145,7 +145,7 @@ namespace Intel.MyDeals.BusinessLogic
             List<int> validateIds,
             bool forcePublish,
             string sourceEvent,
-            bool resetValidationChild, bool isValidateOnly)
+            bool resetValidationChild, bool isProductTranslate)
         {
             Stopwatch stopwatch = new Stopwatch();
             if (EN.GLOBAL.DEBUG >= 1)
@@ -199,7 +199,7 @@ namespace Intel.MyDeals.BusinessLogic
             MyDealsData rtn = _dataCollectorLib.SavePackets(
                 data, contractToken, validateIds, forcePublish, sourceEvent, resetValidationChild,
                 primaryIds, primaryOpDataElementTypes, OpDataElementType.CNTRCT,
-                secondaryIds, secondaryOpDataElementTypes, OpDataElementType.PRC_TBL);
+                secondaryIds, secondaryOpDataElementTypes, OpDataElementType.PRC_TBL, isProductTranslate);
 
             if (EN.GLOBAL.DEBUG >= 1)
                 Debug.WriteLine("{2:HH:mm:ss:fff}\t{0,10} (ms)\tSaved Contract {1}", stopwatch.Elapsed.TotalMilliseconds, contractToken.ContractId, DateTime.Now);
