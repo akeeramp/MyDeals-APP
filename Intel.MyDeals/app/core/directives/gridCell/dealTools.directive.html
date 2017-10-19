@@ -13,10 +13,10 @@
     </div>
 
     <!-- Notes icon -->
-    <div class='fl md-icon' ng-if="!dataItem.NOTES || dataItem.NOTES === '' && dataItem.WF_STG_CD_PRNT">
+    <div class='fl md-icon' ng-if="!dataItem.NOTES || dataItem.NOTES === '' && dataItem.PS_WF_STG_CD">
         <i class='intelicon-discussion-solid' style="font-size: 20px !important; cursor: pointer; color: #00AEEF;" title="Click to add a comment" ng-click="notesDialog.open()"></i>
     </div>
-    <div class='fl md-icon' ng-if="!!dataItem.NOTES && dataItem.NOTES !== '' && dataItem.WF_STG_CD_PRNT">
+    <div class='fl md-icon' ng-if="!!dataItem.NOTES && dataItem.NOTES !== '' && dataItem.PS_WF_STG_CD">
         <i class='intelicon-discussion-solid' style="font-size: 20px !important; cursor: pointer; color: #003C71;" title="{{dataItem.NOTES}}" ng-click="notesDialog.open()"></i>
     </div>
 
@@ -25,10 +25,10 @@
         <i class='intelicon-attach' style="font-size: 20px !important; color: #e7e7e8;" title="You do not have permission to view attachments"></i>
     </div>
     <div ng-if='rootScope.C_VIEW_ATTACHMENTS'>
-        <div class='fl md-icon' ng-if="isFileAttachmentEnabled && !dataItem.HasFiles && dataItem.WF_STG_CD_PRNT === 'Cancelled'">
+        <div class='fl md-icon' ng-if="isFileAttachmentEnabled && !dataItem.HasFiles && dataItem.PS_WF_STG_CD === 'Cancelled'">
             <i class='intelicon-attach' style="font-size: 20px !important; color: #e7e7e8;" title="Cancelled, cannot add an attachment"></i>
         </div>
-        <div class='fl md-icon' ng-if="isFileAttachmentEnabled && !dataItem.HasFiles && dataItem.WF_STG_CD_PRNT !== 'Cancelled'">
+        <div class='fl md-icon' ng-if="isFileAttachmentEnabled && !dataItem.HasFiles && dataItem.PS_WF_STG_CD !== 'Cancelled'">
             <i class='intelicon-attach' style="font-size: 20px !important; color: #00AEEF; cursor: pointer;" title="Click to add an attachment" ng-click="attachmentsDialog.open()"></i>
         </div>
         <div class='fl md-icon' ng-if="isFileAttachmentEnabled && !!dataItem.HasFiles && dataItem.HasFiles">

@@ -699,8 +699,8 @@ namespace Intel.MyDeals.BusinessRules
             if (!r.IsValid) return;
 
             string wipStage = r.Dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
-            string psStage = r.Dc.GetDataElementValue(AttributeCodes.PS_WF_STG_CD);
-            var futureStage = r.Dc.GetNextStage("Redeal", DataCollections.GetWorkFlowItems(), psStage, OpDataElementType.PRC_ST);
+            string ptrStage = r.Dc.GetDataElementValue(AttributeCodes.PS_WF_STG_CD);
+            var futureStage = r.Dc.GetNextStage("Redeal", DataCollections.GetWorkFlowItems(), ptrStage, OpDataElementType.PRC_ST);
 
             // if there isn't a future stage, then it isn't redealable
             // TO DO - WE NEED TO ADD IN PARENT PS STAGE FOR THIS CHECK

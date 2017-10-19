@@ -176,7 +176,7 @@ namespace Intel.MyDeals.BusinessLogic
             // if WIP, check for merge complete rules
             if (opType == OpDataElementType.WIP_DEAL)
             {
-                myDealsData.InjectParentStages();
+                //myDealsData.InjectParentStages();
                 foreach (OpDataCollector dc in myDealsData[OpDataElementType.WIP_DEAL].AllDataCollectors)
                 {
                     dc.ApplyRules(MyRulesTrigger.OnMergeComplete, null, myDealsData);
@@ -196,7 +196,7 @@ namespace Intel.MyDeals.BusinessLogic
             // if PRC_TBL, check for merge complete rules
             if (opType == OpDataElementType.PRC_TBL)
             {
-                myDealsData.InjectParentStages();
+                //myDealsData.InjectParentStages();
                 foreach (OpDataCollector dc in myDealsData[OpDataElementType.PRC_TBL].AllDataCollectors)
                 {
                     dc.ApplyRules(MyRulesTrigger.OnMergeComplete, null, myDealsData);
@@ -363,10 +363,10 @@ namespace Intel.MyDeals.BusinessLogic
             // Get DataPacket
             OpDataPacket<OpDataElementType> dpObjSet = myDealsData[opType];
 
-            if (security || opType == OpDataElementType.WIP_DEAL)
-            {
-                myDealsData.InjectParentStages();
-            }
+            //if (security || opType == OpDataElementType.WIP_DEAL)
+            //{
+            //    myDealsData.InjectParentStages();
+            //}
 
             if (security)
             {
@@ -605,6 +605,7 @@ namespace Intel.MyDeals.BusinessLogic
 
         public static void InjectParentStages(this MyDealsData myDealsData, string sourceEvent = null)
         {
+            return;
             if (!myDealsData.ContainsKey(OpDataElementType.PRC_TBL_ROW)) return;
 
             List<OpDataElementType> ignoreTypes = new List<OpDataElementType>();
@@ -675,7 +676,7 @@ namespace Intel.MyDeals.BusinessLogic
                     if (opDataElementType == OpDataElementType.WIP_DEAL && prcTblRow2PrcTblMapping.ContainsKey(dc.DcParentID))
                     {
                         //!dc.DataElementDict.ContainsKey(AttributeCodes.WF_STG_CD + "_PRNT")
-                        if (dc.DataElements.All(d => d.AtrbCd != AttributeCodes.WF_STG_CD + "_PRNT"))
+                        if (dc.DataElements.All(d => d.AtrbCd != AttributeCodes.PS_WF_STG_CD))
                         {
                             // We can add this because it is NOT part of the template.  It will naturally get stripped off on the save.  Until then, we will use this for security rules
                             dc.DataElements.Add(new OpDataElement
@@ -701,14 +702,14 @@ namespace Intel.MyDeals.BusinessLogic
             if (sourceEvent == OpDataElementType.PRC_TBL.ToString()) ignoreTypes.Add(OpDataElementType.WIP_DEAL);
             if (sourceEvent == OpDataElementType.WIP_DEAL.ToString()) ignoreTypes.Add(OpDataElementType.PRC_TBL);
 
-            if (validateIds.Any() && sourceEvent == OpDataElementType.PRC_TBL.ToString() && myDealsData.ContainsKey(OpDataElementType.PRC_TBL_ROW))
-            {
-                myDealsData.InjectParentStages(sourceEvent);
-            }
-            if (validateIds.Any() && sourceEvent == OpDataElementType.WIP_DEAL.ToString() && myDealsData.ContainsKey(OpDataElementType.PRC_TBL) && myDealsData.ContainsKey(OpDataElementType.WIP_DEAL))
-            {
-                myDealsData.InjectParentStages(sourceEvent);
-            }
+            //if (validateIds.Any() && sourceEvent == OpDataElementType.PRC_TBL.ToString() && myDealsData.ContainsKey(OpDataElementType.PRC_TBL_ROW))
+            //{
+            //    myDealsData.InjectParentStages(sourceEvent);
+            //}
+            //if (validateIds.Any() && sourceEvent == OpDataElementType.WIP_DEAL.ToString() && myDealsData.ContainsKey(OpDataElementType.PRC_TBL) && myDealsData.ContainsKey(OpDataElementType.WIP_DEAL))
+            //{
+            //    myDealsData.InjectParentStages(sourceEvent);
+            //}
 
             if (myDealsData.ContainsKey(OpDataElementType.PRC_TBL_ROW) && myDealsData[OpDataElementType.PRC_TBL_ROW].AllDataElements.Any(d => d.State == OpDataElementState.Modified && d.AtrbCd != AttributeCodes.PASSED_VALIDATION && d.AtrbCd != AttributeCodes.WF_STG_CD))
             {

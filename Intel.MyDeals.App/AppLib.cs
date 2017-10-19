@@ -36,7 +36,7 @@ namespace Intel.MyDeals.App
             }
 
 #if DEBUG
-            EN.GLOBAL.DEBUG = 0;
+            EN.GLOBAL.DEBUG = 1;
 #endif
 
             OpUserToken user = null;

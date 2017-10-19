@@ -16,7 +16,7 @@ function dealTools($timeout, logger, dataService, $rootScope) {
         templateUrl: '/app/core/directives/gridCell/dealTools.directive.html',
         controller: ['$scope', '$http', function ($scope, $http) {
 
-            if (!$scope.isEditable || $scope.isEditable == "false" || $scope.isEditable == false || $scope.dataItem.WF_STG_CD_PRNT === "Cancelled") {
+            if (!$scope.isEditable || $scope.isEditable === "false" || $scope.isEditable === false || $scope.dataItem.PS_WF_STG_CD === "Cancelled") {
                 $scope.editable = (1 === 2);
             }
             else {
