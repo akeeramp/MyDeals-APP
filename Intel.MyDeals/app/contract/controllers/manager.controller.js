@@ -24,6 +24,8 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
     $scope.needToRunPct = false;
     $scope.canBypassEmptyActions = false;
 
+    $scope.$parent.spreadDs = undefined; // clear spreadDs so that we don't have an existing spreadDs when navigating to a spreadsheet
+
     $scope.showPending = function (page) {
         $scope.showPendingInfo = false;
         $scope.showPendingFile = false;
