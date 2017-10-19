@@ -163,62 +163,65 @@ namespace Intel.MyDeals.DataLibrary
                 }
             });
 
-            dsImport.Tables.Add(dtData); // Add the attributes table to the import data set
-            dsImport.Tables.Add(dtAction); // Add the actions table to the import data set
+            if (dtData.Rows.Count != 0 && dtAction.Rows.Count != 0) // If there is nothing to send to the DB, just pre-empt the whole process.
+            {
+                dsImport.Tables.Add(dtData); // Add the attributes table to the import data set
+                dsImport.Tables.Add(dtAction); // Add the actions table to the import data set
 
 #if DEBUG
-            OpLogPerf.Log("DealDataLib.Save:ImportOpDataPackets - Begin BulkImportDataSet.");
-            OpLogPerf.Log("DealDataLib.Save:ImportOpDataPackets - dtData.Rows: {0}.", dtData.Rows.Count);
-            OpLogPerf.Log("DealDataLib.Save:ImportOpDataPackets - dtData.Rows: {0}.", dtAction.Rows.Count);
+                OpLogPerf.Log("DealDataLib.Save:ImportOpDataPackets - Begin BulkImportDataSet.");
+                OpLogPerf.Log("DealDataLib.Save:ImportOpDataPackets - dtData.Rows: {0}.", dtData.Rows.Count);
+                OpLogPerf.Log("DealDataLib.Save:ImportOpDataPackets - dtData.Rows: {0}.", dtAction.Rows.Count);
 #endif
 
-            // Bulk import all the data to DB...  This is the call that pushes all of the actions and attributes into the DB stage tables.
-            new DSOpDataPacketsToDatabase(DataAccess.ConnectionString).BulkImportDataSet(dsImport);
+                // Bulk import all the data to DB...  This is the call that pushes all of the actions and attributes into the DB stage tables.
+                new DSOpDataPacketsToDatabase(DataAccess.ConnectionString).BulkImportDataSet(dsImport);
 
-            OpLogPerf.Log("DealDataLib.Save:ImportOpDataPackets - Begin PR_MYDL_TMP_TO_WIP_ATRB.");
+                OpLogPerf.Log("DealDataLib.Save:ImportOpDataPackets - Begin PR_MYDL_TMP_TO_WIP_ATRB.");
 
-            DataSet dsCheckConstraintErrors = null;
-            try
-            {
-                // Move the data from dbo.MYDL_CL_WIP_ATRB_TMP to dbo.MYDL_CL_WIP_ATRB
-                DataAccess.ExecuteDataSet(new Procs.dbo.PR_MYDL_TMP_TO_WIP_ATRB()
+                DataSet dsCheckConstraintErrors = null;
+                try
                 {
-                    in_emp_wwid = wwid,
-                    in_btch_ids = new type_guid_list(packets.Where(p => p.HasData(false)).Select(p => p.BatchID))
-                }, null, out dsCheckConstraintErrors);
-            }
-            catch (Exception ex)
-            {
-                if (dsCheckConstraintErrors != null && dsCheckConstraintErrors.Tables.Count > 0)
-                {
-                    if (dsCheckConstraintErrors.Tables[0].Rows.Count > 0)
+                    // Move the data from dbo.MYDL_CL_WIP_ATRB_TMP to dbo.MYDL_CL_WIP_ATRB
+                    DataAccess.ExecuteDataSet(new Procs.dbo.PR_MYDL_TMP_TO_WIP_ATRB()
                     {
-                        string data = String.Empty;
-                        try
+                        in_emp_wwid = wwid,
+                        in_btch_ids = new type_guid_list(packets.Where(p => p.HasData(false)).Select(p => p.BatchID))
+                    }, null, out dsCheckConstraintErrors);
+                }
+                catch (Exception ex)
+                {
+                    if (dsCheckConstraintErrors != null && dsCheckConstraintErrors.Tables.Count > 0)
+                    {
+                        if (dsCheckConstraintErrors.Tables[0].Rows.Count > 0)
                         {
-                            data = OpDbUtils.DataTableToString(dsCheckConstraintErrors.Tables[0]);
-                        }
-                        catch (Exception ex1)
-                        {
-                            OpLogPerf.Log(ex1);
-                        }
+                            string data = String.Empty;
+                            try
+                            {
+                                data = OpDbUtils.DataTableToString(dsCheckConstraintErrors.Tables[0]);
+                            }
+                            catch (Exception ex1)
+                            {
+                                OpLogPerf.Log(ex1);
+                            }
 
-                        if (!String.IsNullOrEmpty(data))
-                        {
-                            throw new AggregateException
-                                (
-                                new DataException
+                            if (!String.IsNullOrEmpty(data))
+                            {
+                                throw new AggregateException
                                     (
-                                    "\n\nConflict on merge.  This can be triggered by values being sent of an invalid data type (i.e. an integer passed as \"Hello World\") or no value passed (ATRB_VAL is missing) with an MDX_CD of Modified.\n\n"
-                                    + data
-                                    ),
-                                ex
-                                );
+                                    new DataException
+                                        (
+                                        "\n\nConflict on merge.  This can be triggered by values being sent of an invalid data type (i.e. an integer passed as \"Hello World\") or no value passed (ATRB_VAL is missing) with an MDX_CD of Modified.\n\n"
+                                        + data
+                                        ),
+                                    ex
+                                    );
+                            }
                         }
                     }
-                }
 
-                throw;
+                    throw;
+                }
             }
 
             OpLogPerf.Log("DealDataLib.Save:ImportOpDataPackets - Done: deal.PR_MYDL_TMP_TO_WIP_ATRB.");
