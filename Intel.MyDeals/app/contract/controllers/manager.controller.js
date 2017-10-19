@@ -402,8 +402,10 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 
         if ($scope.isPending === false && root.contractData.CUST_ACCPT !== "Pending" && (root.contractData.C2A_DATA_C2A_ID === "" && !root.contractData.HasFiles)) {
             $scope.dialogPendingWarning.open();
-        } else if (($scope.isPending === false && root.contractData.CUST_ACCPT !== "Pending") || ($scope.isPending === true && root.contractData.CUST_ACCPT !== "Accepted")) {
+        } else if ($scope.isPending === false && root.contractData.CUST_ACCPT !== "Pending") {
             $scope.continueAction(true);
+        } else if ($scope.isPending === true && root.contractData.CUST_ACCPT !== "Accepted") {
+            $scope.continueAction(false);
         } else {
             $scope.actionItemsBase();
         };
@@ -440,7 +442,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         $scope.dialogPendingWarning.close();
     }
     $scope.continueAction = function (saveContract) {
-        //if (!root.contractData.HasFiles && root.contractData.C2A_DATA_C2A_ID.trim() === "") return;
+        if ($scope.isPending === true && root.contractData.CUST_ACCPT === "Accepted" && !root.contractData.HasFiles && root.contractData.C2A_DATA_C2A_ID.trim() === "") return;
         $scope.dialogPendingWarning.close();
 
         if (!!saveContract && saveContract === true) {
