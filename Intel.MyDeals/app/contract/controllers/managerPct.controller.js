@@ -287,7 +287,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
                                 if (data[d]["COST_TEST_OVRRD_FLG"] === "") data[d]["COST_TEST_OVRRD_FLG"] = "No";
                                 if (data[d]["PRC_CST_TST_STS"] === "") data[d]["PRC_CST_TST_STS"] = "InComplete";
 
-                                data[d]["_readonly"] = ps.WF_STG_CD === "Pending" || ps.WF_STG_CD === "Approved";
+                                data[d]["_readonly"] = ps.WF_STG_CD !== "Submitted";
                             }
 
                         }, 100);

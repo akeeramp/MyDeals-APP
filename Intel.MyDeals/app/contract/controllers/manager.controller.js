@@ -440,7 +440,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         $scope.dialogPendingWarning.close();
     }
     $scope.continueAction = function (saveContract) {
-        if (!root.contractData.HasFiles && root.contractData.C2A_DATA_C2A_ID.trim() === "") return;
+        //if ($scope.isPending === true && !root.contractData.HasFiles && root.contractData.C2A_DATA_C2A_ID.trim() === "") return;
         $scope.dialogPendingWarning.close();
 
         if (!!saveContract && saveContract === true) {

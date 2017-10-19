@@ -26,7 +26,7 @@ function pctGroupModalCtrl($scope, $uibModalInstance, dataItems) {
                 field: "EXCLD_DEAL_FLAG",
                 title: "&nbsp;",
                 filterable: false,
-                template: "<div style='padding-left: 6px;'><input type='checkbox' disabled readonly ng-model='dataItem.EXCLD_DEAL_FLAG' id='chkId_#=OVLP_DEAL_ID#' class='with-font'/><label for='chkId_#=OVLP_DEAL_ID#' style='margin-top: 6px; margin-bottom: 0;'>&nbsp;</label></div>",
+                template: "<div style='padding-left: 6px;'><input type='checkbox' ng-model='dataItem.EXCLD_DEAL_FLAG' id='chkId_#=OVLP_DEAL_ID#' class='with-font'/><label for='chkId_#=OVLP_DEAL_ID#' style='margin-top: 6px; margin-bottom: 0;'>&nbsp;</label></div>",
                 width: "60px"
             },
             {

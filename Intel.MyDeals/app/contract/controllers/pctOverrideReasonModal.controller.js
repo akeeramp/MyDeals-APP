@@ -10,6 +10,7 @@ function pctOverrideReasonModalCtrl($scope, $uibModalInstance, dataItem, objsetS
     $scope.dataItem = dataItem;
     $scope.seeMore = false;
     $scope.extendedCols = ["MEET_COMP_PRD", "MEET_COMP_PRC", "BUSNS_OBJ", "PTNTL_MKT_IMPCT", "APRV_ATRNY", "DT_APRV"];
+    $scope.disabled = dataItem._readonly ? "disabled" : "";
 
     $scope.toggleSee = function () {
         var c;
@@ -52,7 +53,7 @@ function pctOverrideReasonModalCtrl($scope, $uibModalInstance, dataItem, objsetS
                 field: "isSelected",
                 title: "&nbsp;",
                 filterable: false,
-                template: "<div style='padding-left: 6px;'><input type='checkbox' ng-model='dataItem.isSelected' id='chkId_#=MYDL_PCT_LGL_EXCPT_SID#' class='with-font'/><label for='chkId_#=MYDL_PCT_LGL_EXCPT_SID#' style='margin-top: 6px; margin-bottom: 0;'>&nbsp;</label></div>",
+                template: "<div style='padding-left: 6px;'><input type='checkbox' " + $scope.disabled + " ng-model='dataItem.isSelected' id='chkId_#=MYDL_PCT_LGL_EXCPT_SID#' class='with-font'/><label for='chkId_#=MYDL_PCT_LGL_EXCPT_SID#' style='margin-top: 6px; margin-bottom: 0;'>&nbsp;</label></div>",
                 width: "60px"
             },
             {

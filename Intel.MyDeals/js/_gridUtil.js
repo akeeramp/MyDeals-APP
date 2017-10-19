@@ -633,7 +633,6 @@ gridPctUtils.getResultMapping = function (result, flg, overrideFlg, className, s
     return rtn;
 }
 gridPctUtils.getPctFlag = function (flg, results, forceReadOnly, hasNoPermission) {
-    //
     var rtn = '<div style="text-align: center;">';
     rtn += '<span ng-if="' + results + ' === \'Pass\' || ' + results + ' === \'NA\' || ' + forceReadOnly + ' === true || ' + hasNoPermission + ' === true" ng-bind="onOff(' + flg + ')" style="vertical-align: -webkit-baseline-middle;"></span>';
     rtn += '<span ng-if="' + results + ' !== \'Pass\' && ' + results + ' !== \'NA\' && ' + forceReadOnly + ' !== true && ' + hasNoPermission + ' !== true">';
