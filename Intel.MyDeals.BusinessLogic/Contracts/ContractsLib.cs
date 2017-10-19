@@ -151,7 +151,7 @@ namespace Intel.MyDeals.BusinessLogic
             if (EN.GLOBAL.DEBUG >= 1)
             {
                 stopwatch.Start();
-                Debug.WriteLine("{2:HH:mm:ss:fff}\t{0,10} (ms)\tSaving Contract {1}", DateTime.Now, contractToken.ContractId, DateTime.Now);
+                Debug.WriteLine("{2:HH:mm:ss:fff}\t{0,10} (ms)\tSaving Contract {1}", stopwatch.Elapsed.TotalMilliseconds, contractToken.ContractId, DateTime.Now);
             }
 
             OpDataCollectorFlattenedDictList data = new OpDataCollectorFlattenedDictList();

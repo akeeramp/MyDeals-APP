@@ -23,12 +23,14 @@ namespace Intel.MyDeals.BusinessLogic
             List<OpDataElementType> opDataElementTypes = inclusive
                 ? new List<OpDataElementType>
                 {
+                    OpDataElementType.PRC_ST,
                     OpDataElementType.PRC_TBL,
                     OpDataElementType.PRC_TBL_ROW,
                     OpDataElementType.WIP_DEAL
                 }
                 : new List<OpDataElementType>
                 {
+                    OpDataElementType.PRC_ST,
                     OpDataElementType.PRC_TBL,
                     OpDataElementType.PRC_TBL_ROW
                 };
@@ -38,7 +40,7 @@ namespace Intel.MyDeals.BusinessLogic
 
         public OpDataCollectorFlattenedDictList GetFullNestedPricingTable(int id)
         {
-            MyDealsData myDealsData = GetPricingTable(id, true).AddParentPS(id).FillInHolesFromAtrbTemplate();
+            MyDealsData myDealsData = GetPricingTable(id, true).FillInHolesFromAtrbTemplate();
 
             OpDataCollectorFlattenedDictList data = new OpDataCollectorFlattenedDictList();
 

@@ -49,6 +49,9 @@ namespace Intel.MyDeals.BusinessLogic
         /// <param name="applyDefaults">When adding the missing apptribute, should we assign the default values?</param>
         public static void FillInHolesFromAtrbTemplate(this OpDataCollector dc, OpDataElementSetType opDataElementSetType, bool applyDefaults = false)
         {
+            Stopwatch stopwatch = new Stopwatch();
+            if (EN.GLOBAL.DEBUG >= 1) stopwatch.Start();
+
             // Load Data Cycle: Point 2
             // Save Data Cycle: Point 7
             OpDataElementType opDataElementType = OpDataElementTypeConverter.FromString(dc.DcType);
@@ -76,6 +79,11 @@ namespace Intel.MyDeals.BusinessLogic
             }
 
             dc.FillInHolesFromAtrbTemplate(template, applyDefaults);
+
+            if (EN.GLOBAL.DEBUG >= 1)
+            {
+                Debug.WriteLine("{1:HH:mm:ss:fff}\t{0,10} (ms)\tFillInHolesFromAtrbTemplate Finished [{2} #{3}]", stopwatch.Elapsed.TotalMilliseconds, DateTime.Now, dc.DcType, dc.DcID);
+            }
         }
 
         /// <summary>

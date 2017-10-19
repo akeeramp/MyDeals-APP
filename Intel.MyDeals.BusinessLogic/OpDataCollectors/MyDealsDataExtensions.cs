@@ -31,10 +31,19 @@ namespace Intel.MyDeals.BusinessLogic
             // Save Data Cycle: Point 6
             if (data == null) return myDealsData;
 
+            Stopwatch stopwatch = new Stopwatch();
+            if (EN.GLOBAL.DEBUG >= 1)
+            {
+                stopwatch.Start();
+                Debug.WriteLine("{1:HH:mm:ss:fff}\t{0,10} (ms)\tMerge Starting", stopwatch.Elapsed.TotalMilliseconds, DateTime.Now);
+            }
+
             foreach (KeyValuePair<OpDataElementType, OpDataCollectorFlattenedList> kvp in data)
             {
                 myDealsData.Merge(kvp.Key, kvp.Value);
             }
+
+            if (EN.GLOBAL.DEBUG >= 1) Debug.WriteLine("{1:HH:mm:ss:fff}\t{0,10} (ms)\tMerge complete", stopwatch.Elapsed.TotalMilliseconds, DateTime.Now);
 
             return myDealsData;
         }
