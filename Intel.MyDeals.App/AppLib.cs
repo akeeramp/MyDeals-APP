@@ -36,6 +36,9 @@ namespace Intel.MyDeals.App
             }
 
 #if DEBUG
+            // REMEMBER TO SET THIS BACK TO 0 - Find output in VS output window
+            // 1 is basic logging
+            // 4 is EXTREME VERSBOITY
             EN.GLOBAL.DEBUG = 1;
 #endif
 

@@ -121,6 +121,7 @@
     <Compile Include="Op Future Items\OpCommonTools.cs" />
     <Compile Include="OpLog.cs" />
     <Compile Include="OpUserStack.cs" />
+    <Compile Include="OpUserTokenParameters.cs" />
     <Compile Include="PassedValidation.cs" />
     <Compile Include="PctOverrideReason.cs" />
     <Compile Include="ProdMapping.cs" />

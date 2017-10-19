@@ -1,7 +1,9 @@
 ﻿using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
+using Intel.MyDeals.BusinessLogic;
 using System.Collections.Generic;
 using System.Web.Http;
+using Intel.Opaque;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -34,5 +36,15 @@ namespace Intel.MyDeals.Controllers.API
             return SafeExecutor(() => _userPreferencesLib.UpdateUserPreferences(category, subCategory, key, (string)bodyParam.value)
                 , $"Unable to update UserPreferences");
         }
+
+        [Authorize]
+        [Route("SetOpUserToken")]
+        [HttpPost]
+        public OpMsg SetOpUserToken(OpUserTokenParameters data)
+        {
+            return SafeExecutor(() => new EmployeesLib().SetOpUserToken(data)
+                , $"Unable to set UserOpToken");
+        }
+
     }
 }

@@ -282,6 +282,9 @@
     <Content Include="app\admin\dropdowns\admin.dropdowns.controller.js" />
     <Content Include="app\admin\dropdowns\dropdowns.html" />
     <Content Include="app\admin\dropdowns\dropdowns.service.js" />
+    <Content Include="app\admin\employee\admin.employee.controller.js" />
+    <Content Include="app\admin\employee\employee.html" />
+    <Content Include="app\admin\employee\employee.service.js" />
     <Content Include="app\admin\geo\admin.geo.controller.js" />
     <Content Include="app\admin\geo\geo.html" />
     <Content Include="app\admin\geo\geo.service.js" />

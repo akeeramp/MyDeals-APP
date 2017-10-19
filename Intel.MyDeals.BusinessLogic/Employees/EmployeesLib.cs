@@ -31,5 +31,11 @@ namespace Intel.MyDeals.BusinessLogic
             return new EmployeeDataLib().GetUserPreference();
         }
 
+        public OpMsg SetOpUserToken(OpUserTokenParameters data)
+        {
+            new EmployeeDataLib().SetOpUserToken(data);
+            return new OpMsg("Role has been set");
+        }
+
     }
 }

@@ -1,0 +1,90 @@
+﻿<div class="empRole">
+
+    <h2>Employee Role Manager</h2>
+    <h5>Select your User Role</h5>
+    <div class="btn-group btn-group-lg">
+        <label class="btn btn-primary" ng-model="roleTypeId" uib-btn-radio="9">SA</label>
+        <label class="btn btn-primary" ng-model="roleTypeId" uib-btn-radio="3">DA</label>
+        <label class="btn btn-primary" ng-model="roleTypeId" uib-btn-radio="6">GA</label>
+        <label class="btn btn-primary" ng-model="roleTypeId" uib-btn-radio="5">FSE</label>
+        <label class="btn btn-primary" ng-model="roleTypeId" uib-btn-radio="4">Finance</label>
+        <label class="btn btn-primary" ng-model="roleTypeId" uib-btn-radio="7">Legal</label>
+        <label class="btn btn-primary" ng-model="roleTypeId" uib-btn-radio="2">CBA</label>
+        <label class="btn btn-primary" ng-model="roleTypeId" uib-btn-radio="8">RA</label>
+    </div>
+
+    <h5>Select any special purpose bits for your role</h5>
+    <div>
+        <div><input type="checkbox" name="empIsDeveloper" class="with-font" id="emp_Is_Developer" ng-model="isDeveloper" /><label for="emp_Is_Developer">Is A Developer</label></div>
+        <div><input type="checkbox" name="empIsTester" class="with-font" id="emp_Is_Tester" ng-model="isTester" /><label for="emp_Is_Tester">Is A Tester</label></div>
+        <div><input type="checkbox" name="empIsSuper" class="with-font" id="emp_Is_Super" ng-model="isSuper" /><label for="emp_Is_Super">Is A Super User</label></div>
+        <div><input type="checkbox" name="empIsAdmin" class="with-font" id="emp_Is_Admin" ng-model="isAdmin" /><label for="emp_Is_Admin">Is An Administrator User</label></div>
+        <div><input type="checkbox" name="empIsFinanceAdmin" class="with-font" id="emp_Is_FinanceAdmin" ng-model="isFinanceAdmin" /><label for="emp_Is_FinanceAdmin">Is A Finance Administrator</label></div>
+    </div>
+
+    <button ng-click="save()" class="btn btn-primary btn-lg">Save This Role</button>
+</div>
+
+<style>
+    .empRole {
+        margin: 40px;
+    }
+    .empRole h5, .empRole button {
+        margin-top: 40px;
+    }
+
+    .empRole input[type=radio].with-font,
+    .empRole input[type=checkbox].with-font {
+        border: 0;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 1px;
+        cursor: default !important;
+    }
+
+    .empRole input[type=radio].with-font + label:before,
+    .empRole input[type=checkbox].with-font + label:before {
+        font-family: FontAwesome;
+        display: inline-block;
+        content: "\f096";
+        font-size: 20px;
+        letter-spacing: 10px;
+        color: #00AEEF;
+        margin-left: 10px;
+        cursor: default !important;
+    }
+
+    .empRole input[type=radio].with-font:hover + label:before,
+    .empRole input[type=checkbox].with-font:hover + label:before {
+        color: #00AEEF;
+        cursor: default !important;
+    }
+
+    .empRole input[type=radio].with-font.disabled + label:before,
+    .empRole input[type=checkbox].with-font.disabled + label:before {
+        color: #cccccc;
+        cursor: default !important;
+    }
+
+    .empRole input[type=radio].with-font:checked + label:before,
+    .empRole input[type=checkbox].with-font:checked + label:before {
+        content: "\f046";
+        font-size: 20px;
+        letter-spacing: 5px;
+        color: #C4D600;
+        margin-left: 10px;
+        cursor: default !important;
+    }
+
+    .empRole input[type=radio].with-font:focus + label:before,
+    .empRole input[type=checkbox].with-font:focus + label:before {
+        font-weight: bold;
+        color: #C4D600;
+        cursor: default !important;
+    }
+
+</style>

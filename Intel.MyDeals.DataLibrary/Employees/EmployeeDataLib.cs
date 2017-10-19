@@ -475,5 +475,31 @@ namespace Intel.MyDeals.DataLibrary
 
             return ret;
         }
+
+        public void SetOpUserToken(OpUserTokenParameters data)
+        {
+            try
+            {
+                // Call Proc
+                DataAccessLib.StoredProcedures.MyDeals.dbo.PR_SET_USR_ROLE cmd = new DataAccessLib.StoredProcedures.MyDeals.dbo.PR_SET_USR_ROLE
+                {
+                    IDSID = OpUserStack.MyOpUserToken.Usr.Idsid,
+                    RoleId = data.roleTypeId,
+                    IsDeveloper = data.isDeveloper,
+                    IsTester = data.isTester,
+                    IsSuper = data.isSuper,
+                    IsAdmin = data.isAdmin,
+                    IsFinanceAdmin = data.isFinanceAdmin
+                };
+
+                var rdr = DataAccess.ExecuteReader(cmd);
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+        }
+
     }
 }

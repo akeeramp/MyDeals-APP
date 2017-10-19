@@ -80,6 +80,15 @@
                 }
             },
             {
+                state: 'admin.employee',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/employee/employee.html',
+                    url: 'employee',
+                    controller: 'EmployeeController',
+                }
+            },
+            {
                 state: 'admin.geo',
                 abstract: false,
                 config: {

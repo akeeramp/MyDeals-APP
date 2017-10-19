@@ -6,11 +6,13 @@
     var usrName = "UNKNOWN";
     var usrWwid = 0;
     var usrRole = "UNKNOWN";
+    var usrRoleId = 0;
     try
     {
         usrName = ViewBag.UserToken.Usr.FirstName + " " + ViewBag.UserToken.Usr.LastName;
         usrWwid = ViewBag.UserToken.Usr.WWID;
         usrRole = ViewBag.UserToken.Role.RoleTypeCd;
+        usrRoleId = ViewBag.UserToken.Role.RoleTypeId;
     }
     catch (Exception ex)
     {
@@ -124,6 +126,7 @@
 
                     @*<li><a href="/error/ResetAVM">Clear View Model</a></li>*@
                     <li><a id="clearViewModelLink" href="/error/ResetAVM" onclick="clearSessionData(); return false;">Clear View Model</a></li>
+                    <li><a href="Admin#/employee">Set Your Role</a></li>
 
                     @if (isDeveloper)
                     {
@@ -285,9 +288,15 @@
     }
 
     window.usrRole = "@usrRole";
+    window.usrRoleId = parseInt("@usrRoleId");
     window.usrName = "@usrName";
     window.usrWwid = "@usrWwid";
     window.isSuper = "@isSuper" === "True";
+
+    window.isDeveloper = "@isDeveloper" === "True";
+    window.isTester = "@isTester" === "True";
+    window.isAdmin = "@isAdmin" === "True";
+    window.isFinanceAdmin = "@isFinanceAdmin" === "True";
 </script>
 
 
