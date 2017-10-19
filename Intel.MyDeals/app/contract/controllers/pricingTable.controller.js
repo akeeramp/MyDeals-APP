@@ -72,6 +72,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     //root.wipOptions;
     var ssTools;
     var stealthOnChangeMode = false;
+    var tieredColIndexesDict = {}; // AKA col indexes with non merged cells
     root.isPtr = $state.current.name === "contract.manager.strategy";
     root.isWip = $state.current.name === "contract.manager.strategy.wip";
 
@@ -135,7 +136,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 var letter = String.fromCharCode(intA + c);
                 if (!ptTemplate.columns[c].isDimKey) {
                     mergedCells.push(letter + rowNum + ":" + letter + (rowNum + numTiers - 1));
-                }
+                } else {
+                	tieredColIndexesDict[c] = true;
+				}
             }
             rowNum += numTiers;
         }
@@ -1439,7 +1442,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 var sheet = clip.workbook.activeSheet();
                 var newData = [];
                 var padNumRows = 0;
-                var nonMergedCols = [10, 11, 12, 13];
 
                 // set paste data to Kendo cell (default Kendo code)
                 var pasteRef = clip.pasteRef();
@@ -1451,11 +1453,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     // Maybe get the clipboard data and modify it (pad by tier num) and allow the paste to continue
                     var numTiers = root.child.numTiers;
                     var colNum = pasteRef.topLeft.col;
-                    if (nonMergedCols.indexOf(colNum) < 0) {
-                        for (row = 0; row < state.data.length; row++) {
-                            for (var t = 0; t < numTiers; t++) {
-                                newData.push(util.deepClone(state.data[row]));
-                            }
+                    if (!tieredColIndexesDict.hasOwnProperty(colNum)) { // Non tiered data (merged cells) only							
+                    	for (row = 0; row < state.data.length; row++) {
+                    		for (var t = 0; t < numTiers; t++) {
+                    			newData.push(util.deepClone(state.data[row]));
+                    		}                    		
                             padNumRows += numTiers - 1;
                         }
                         state.data = newData;
