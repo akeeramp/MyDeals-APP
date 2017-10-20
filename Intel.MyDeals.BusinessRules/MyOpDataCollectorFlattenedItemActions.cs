@@ -137,23 +137,11 @@ namespace Intel.MyDeals.BusinessRules
 
             }
 
-
             objsetItem["_actions"] = objsetActionItem.Actions;
             objsetItem["_actionReasons"] = objsetActionItem.ActionReasons;
             objsetItem["_settings"] = objsetActionItem.Settings;
-
         }
 
-
-
-        //public static void ApplyHasFileAttachments(params object[] args)
-        //{
-        //    MyOpRuleCore r = new MyOpRuleCore(args);
-        //    if (!r.IsValid || !r.HasExtraArgs) return;
-        //    OpDataCollectorFlattenedItem objsetItem = r.ExtraArgs[0] as OpDataCollectorFlattenedItem ?? new OpDataCollectorFlattenedItem();
-
-        //    objsetItem["HasFiles"] = r.Dc.GetDataElementsWhere("HAS_ATTACHED_FILES", d => !string.IsNullOrEmpty(d.AtrbValue.ToString())).Any();
-        //}
 
         public static void ApplyCustomerDivision(params object[] args)
         {

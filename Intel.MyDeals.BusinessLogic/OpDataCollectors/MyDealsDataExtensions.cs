@@ -397,52 +397,6 @@ namespace Intel.MyDeals.BusinessLogic
         }
 
         #endregion
-        
-
-
-        #region Attachments
-
-    //    public static List<int> GetDealIdsWithAttachments(this MyDealsData myDealsData, OpDataElementType opType)
-    //    {
-    //        // TODO make this work with opType... this means changing the SP also.  For mow just look at deal
-    //        if (!myDealsData.ContainsKey(OpDataElementType.WIP_DEAL)) 
-				//return new List<int>();
-
-    //        // Get the list of *all* deals that have attachments.
-    //        FilesLib filesLib = new FilesLib();
-    //        var allDealsWithAttachments = filesLib.GetDealsWithAttachments();
-
-    //        // Get the list of deals we are displaying.
-    //        var dealsInQuestion = myDealsData[OpDataElementType.WIP_DEAL].Data.Keys;
-
-    //        return dealsInQuestion.Where(x => allDealsWithAttachments.Select(y => y.OBJ_SID).ToList().Contains(x)).ToList();
-    //    }
-
-        //public static void TagWithAttachments(this MyDealsData myDealsData, OpDataPacket<OpDataElementType> opDataPacket, OpDataElementType opType)
-        //{
-
-        //    // TODO needs to be revisited... this should be OpDataElementType based
-        //    //List<int> dataCollectorsWithFiles = myDealsData.GetDealIdsWithAttachments(opType);
-        //    //foreach (OpDataCollector dc in opDataPacket.AllDataCollectors.Where(dc => dataCollectorsWithFiles.Contains(dc.DcID)))
-        //    //{
-        //    //    OpDataElement de = dc.DataElements.FirstOrDefault();
-        //    //    if (de == null) continue;
-
-        //    //    // Create FAKE UI ONLY DataElement
-        //    //    //dc.DataElements.Add(new OpDataElement
-        //    //    //{
-        //    //    //    AtrbCd = "HAS_FILE_ATTACHMENTS",
-        //    //    //    AtrbValue = 1,
-        //    //    //    AtrbID = 0,
-        //    //    //    DcParentID = de.DcParentID,
-        //    //    //    DcID = de.DcID,
-        //    //    //    DcType = de.DcType,
-        //    //    //    DcParentType = de.DcParentType
-        //    //    //});
-        //    //}
-        //}
-
-        #endregion
 
 
 

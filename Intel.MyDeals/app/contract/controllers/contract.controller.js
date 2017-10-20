@@ -36,19 +36,6 @@
         if ($state.current.name.indexOf("contract.summary") >= 0) $scope.flowMode = "Manage";
 
         //var s1 = securityService.chkAtrbRules('ATRB_READ_ONLY', 'SA', 'CNTRCT', 'ALL_TYPES', 'InComplete', 'TITLE');
-        //var s2 = securityService.chkAtrbRules('ATRB_READ_ONLY', 'GA', 'CNTRCT', 'ALL_TYPES', 'InComplete', 'TITLE');
-        //var s3 = securityService.chkAtrbRules('ATRB_READ_ONLY', 'SA', 'CNTRCT', 'ECAP', 'InComplete', 'TITLE');
-        //var s4 = securityService.chkAtrbRules('ATRB_READ_ONLY', 'GA', 'CNTRCT', 'ECAP', 'InComplete', 'TITLE');
-        //debugger;
-        //var s1 = securityService.chkAtrbRules('ATRB_READ_ONLY', 'SA', 'WIP_DEAL', 'ECAP', 'Draft', 'BACK_DATE_RSN');
-        //var s2 = securityService.chkAtrbRules('ATRB_READ_ONLY', 'SA', 'WIP_DEAL', 'ECAP', 'Draft', 'ECAP_FLR');
-        //var s3 = securityService.chkAtrbRules('ATRB_READ_ONLY', 'SA', 'DEAL', 'ECAP', 'Draft', 'BACK_DATE_RSN');
-        //var s4 = securityService.chkAtrbRules('ATRB_READ_ONLY', 'SA', 'DEAL', 'ECAP', 'Draft', 'ECAP_FLR');
-        //debugger;
-
-        //var d1 = securityService.chkDealRules('C_ADD_ATTACHMENTS', 'SA', 'DEAL', null, null);
-        //var d2 = securityService.chkDealRules('C_ADD_ATTACHMENTS', 'FSE', 'DEAL', null, null);
-        //debugger;
 
         $scope.CAN_VIEW_COST_TEST = securityService.chkDealRules('CAN_VIEW_COST_TEST', window.usrRole, null, null, null) || (window.usrRole === "GA" && window.isSuper); // Can view the pass/fail
         $scope.CAN_EDIT_COST_TEST = securityService.chkDealRules('C_EDIT_COST_TEST', window.usrRole, null, null, null) || (window.usrRole === "SA" && window.isSuper); // Can go to cost test screen and make changes
