@@ -168,7 +168,17 @@ namespace Intel.MyDeals.DataLibrary
             return DataCollections.GetBasicDropdowns();
         }
 
-        public List<Dropdown> GetDropdowns()
+		public Dictionary<string, string> GetDropdownDict(string lookupText)
+		{
+			return DataCollections.GetDropdownDict(lookupText);
+		}
+
+		public Dictionary<string, string> GetBasicDropdownDict(string atrbcd)
+		{
+			return DataCollections.GetBasicDropdownDict(atrbcd);
+		}
+
+		public List<Dropdown> GetDropdowns()
         {
             return DataCollections.GetDropdowns();
         }

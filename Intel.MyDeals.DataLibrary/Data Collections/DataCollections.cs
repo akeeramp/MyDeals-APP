@@ -591,8 +591,47 @@ namespace Intel.MyDeals.DataLibrary
 
         private static List<Dropdown> _getDropdowns;
 
+		/// <summary>
+		///	Returns the values from GetDropdowns, but in Dictionary form for more efficent lookup
+		/// </summary>
+		/// <returns>
+		///	Dictionary with (Key: Atrb Cd | Value: Another Dictionary with (Key: Uppercased name | Value: Name with capitalization as appears in db))
+		/// </returns>
+		public static Dictionary<string, string> GetDropdownDict(string lookupText)
+		{
+			lock (LOCK_OBJECT ?? new object())
+			{
+				if (_dropdownDict == null)
+				{
+					_dropdownDict = new Dictionary<string, Dictionary<string, string>>();
+				}
 
+				if (!_dropdownDict.ContainsKey(lookupText))
+				{
+					List<Dropdown> dropdownList = GetDropdowns().Where(dd => dd.dropdownCategory == lookupText && dd.active == 1).OrderBy(dd => dd.dropdownName).ToList();
+					Dictionary<string, string> temp = new Dictionary<string, string>();
 
+					for (int i = 0; i < dropdownList.Count; i++)
+					{
+						if (!temp.ContainsKey(dropdownList[i].dropdownName.ToUpper()))
+						{
+							temp[dropdownList[i].dropdownName.ToUpper()] = dropdownList[i].dropdownName;
+						}
+					}
+					_dropdownDict[lookupText] = temp;
+
+				}
+				return _dropdownDict[lookupText];
+			}
+		}
+		public static Dictionary<string, Dictionary<string, string>> _dropdownDict;
+
+		/// <summary>
+		///	Returns the values from GetBasicDropdowns, but in Dictionary form for more efficent lookup
+		/// </summary>
+		/// <returns>
+		///	Dictionary with (Key: Atrb Cd | Value: Another Dictionary with (Key: Uppercased name | Value: Name with capitalization as appears in db))
+		/// </returns>
 		public static Dictionary<string, string> GetBasicDropdownDict(string atrbCd)
 		{
 			lock (LOCK_OBJECT ?? new object())

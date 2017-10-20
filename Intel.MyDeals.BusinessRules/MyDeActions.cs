@@ -75,26 +75,23 @@ namespace Intel.MyDeals.BusinessRules
             List<string> geosList = newGeoString.Split(',').ToList();
 
 			// Check that thse geos are valid
-            List<string> validGeoValues = DataCollections.GetGeoData().Where(g => string.IsNullOrEmpty(g.CTRY_NM) && string.IsNullOrEmpty(g.RGN_NM)).Select(g => g.GEO_NM).ToList();
+			Dictionary<string, string> validGeoValues = DataCollections.GetDropdownDict("Geo");
             foreach (string geo in geosList)
             {
-				if (validGeoValues.All(x => string.Equals((string.IsNullOrEmpty(x) ? ww : x), geo, StringComparison.OrdinalIgnoreCase)))
-				{
+                if (validGeoValues.ContainsKey(geo.ToUpper()))
+                {
 					// set to db's stored value capitalization syntax
-					string posMatch = validGeoValues.Where(g => string.Equals(g, geo, StringComparison.OrdinalIgnoreCase)).Select(g => g).FirstOrDefault();
-                    if (string.IsNullOrEmpty(posMatch))
-                    {
-                        de.AddMessage(geo + " is not a valid Geo.");
-                    }
-                    else
-                    {
-                        geoString = geoString.Replace(geo, posMatch);
-                    }
+					string posMatch = validGeoValues[geo.ToUpper()];
+                    geoString = geoString.Replace(geo, posMatch);
+                }
+                else
+                {
+                    de.AddMessage(geo + " is not a valid Geo.");
                 }
             }
 
-            // Blended GEO, can not mix WW and other Geo
-            if (isBlendedGeo)
+			// Blended GEO, can not mix WW and other Geo
+			if (isBlendedGeo)
             {
                 // Is "WorldWide" inside brackets?
                 string wwRegex = @"\[((.*)" + ww + @"(.*))\]";

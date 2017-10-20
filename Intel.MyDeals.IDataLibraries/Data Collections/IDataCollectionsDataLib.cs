@@ -34,10 +34,14 @@ namespace Intel.MyDeals.IDataLibrary
 
         List<BasicDropdown> GetBasicDropdowns();
 
-        //// TODO: Either uncomment the below out or remove it once we re-add Retail Cycle in
-        //List<RetailPull> GetRetailPullSDMList();
+		Dictionary<string, string> GetDropdownDict(string lookupText);
 
-        List<SoldToIds> GetSoldToIdList();
+		Dictionary<string, string> GetBasicDropdownDict(string atrbCd);
+
+		//// TODO: Either uncomment the below out or remove it once we re-add Retail Cycle in
+		//List<RetailPull> GetRetailPullSDMList();
+
+		List<SoldToIds> GetSoldToIdList();
 
         List<Dropdown> GetDropdowns();
 
