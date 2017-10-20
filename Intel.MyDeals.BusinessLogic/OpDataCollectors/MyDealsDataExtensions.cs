@@ -754,15 +754,15 @@ namespace Intel.MyDeals.BusinessLogic
                     if (validateIds.Any() && !dcHasErrors && opDataElementType == OpDataElementType.WIP_DEAL)
                     {
                         // Before finalize rules... need to make sure the PRC_ST exists
-                        if (!myDealsData.ContainsKey(OpDataElementType.PRC_ST))
-                        {
-                            MyDealsData prcSts = OpDataElementType.CNTRCT.GetByIDs(
-                                new List<int> { contractToken.ContractId }, 
-                                new List<OpDataElementType> { OpDataElementType.PRC_ST },
-                                new List<int> { Attributes.WF_STG_CD.ATRB_SID }
-                                );
-                            myDealsData[OpDataElementType.PRC_ST] = prcSts[OpDataElementType.PRC_ST];
-                        }
+                        //if (!myDealsData.ContainsKey(OpDataElementType.PRC_ST))
+                        //{
+                        //    MyDealsData prcSts = OpDataElementType.CNTRCT.GetByIDs(
+                        //        new List<int> { contractToken.ContractId }, 
+                        //        new List<OpDataElementType> { OpDataElementType.PRC_ST },
+                        //        new List<int> { Attributes.WF_STG_CD.ATRB_SID }
+                        //        );
+                        //    myDealsData[OpDataElementType.PRC_ST] = prcSts[OpDataElementType.PRC_ST];
+                        //}
 
                         // apply finalize save rules (things like major change checks)
                         dc.ApplyRules(MyRulesTrigger.OnFinalizeSave, null, myDealsData);

@@ -1625,7 +1625,7 @@
 
         // **** SAVE CONTRACT Methods ****
         //
-        $scope.createEntireContractBase = function (stateName, dirtyContractOnly, forceValidation, ignorePrdVld) {
+        $scope.createEntireContractBase = function (stateName, dirtyContractOnly, forceValidation, ignorePrdVld, bypassLowerContract) {
 
         	if (ignorePrdVld === undefined || ignorePrdVld === null) ignorePrdVld = true;
 
@@ -1666,7 +1666,7 @@
             if (!!$scope.curPricingTable.DC_ID) curPricingTableData = [$scope.curPricingTable];
 
             // Pricing Table Rows
-            if (stateName === "contract.manager.strategy") {
+            if (stateName === "contract.manager.strategy" && !bypassLowerContract) {
                 source = "PRC_TBL";
 
                 if ($scope.spreadDs !== undefined) {
@@ -1794,7 +1794,7 @@
             }
 
             // WIP Deals
-            if (stateName === "contract.manager.strategy.wip") {
+            if (stateName === "contract.manager.strategy.wip" && !bypassLowerContract) {
                 source = "WIP_DEAL";
                 gData = $scope.wipData;
 
@@ -1940,12 +1940,14 @@
 			return deferred.promise;
         }
 
-        $scope.saveEntireContractRoot = function (stateName, forceValidation, forcePublish, toState, toParams, delPtr, isProductTranslate) {
+        $scope.saveEntireContractRoot = function (stateName, forceValidation, forcePublish, toState, toParams, delPtr, isProductTranslate, bypassLowerContract) {
         	var deferred = $q.defer();			
 
             if (forceValidation === undefined || forceValidation === null) forceValidation = false;
             if (forcePublish === undefined || forcePublish === null) forcePublish = false;
             if (isProductTranslate === undefined || isProductTranslate === null) isProductTranslate = false;
+            if (bypassLowerContract === undefined || bypassLowerContract === null) bypassLowerContract = false;
+            
 
             if (forceValidation) {
                 $scope.setBusy("Validating your data...", "Please wait as we validate your information!");
@@ -1973,7 +1975,7 @@
             }
 
             var ignorePrdVld = (isProductTranslate) ? false : true;
-            var data = $scope.createEntireContractBase(stateName, $scope._dirtyContractOnly, forceValidation, ignorePrdVld);
+            var data = $scope.createEntireContractBase(stateName, $scope._dirtyContractOnly, forceValidation, ignorePrdVld, bypassLowerContract);
 
             // If there are critical errors like bad dates, we need to stop immediately and have the user fix them
             if (!!data.errors && !angular.equals(data.errors, {})) {
@@ -2058,7 +2060,7 @@
                     } else {
                     	deferred.reject(results);
 
-                    	var resultTitle = "Saved with warnings"
+                        var resultTitle = "Saved with warnings";
                     	var resultMsg = "Didn't pass Product Validation";
                     	if (isProductTranslate) {
                     		resultTitle = "Warning preventing product validation";
@@ -2071,8 +2073,9 @@
                         }, 2000);
                     }
 
-                    $scope.refreshContractData($scope.curPricingStrategyId, $scope.curPricingTableId);
-
+                    if (toState === undefined || toState === null || toState === "") {
+                        $scope.refreshContractData($scope.curPricingStrategyId, $scope.curPricingTableId);
+                    }
                     $scope.isAutoSaving = false;
 
                 },
@@ -2442,6 +2445,17 @@
             //
             // TODO: Consolidate all the messages warning and errors show in the Validation summary panel ??
             return isValid;
+        }
+
+        $scope.saveUpperContract = function () {
+            $scope.saveEntireContractRoot($state.current.name,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                true);
         }
 
         $scope.saveContract = function () {
@@ -2983,20 +2997,20 @@
         	var deferred = $q.defer();
 
             if (forceRun === undefined || !forceRun) {
-            	$scope.saveEntireContractBase($state.current.name, true, false, isProductTranslate).then(
+            	$scope.saveEntireContractBase($state.current.name, true, true, isProductTranslate).then(
 					function (result) {
 						deferred.resolve(result);
 					}, function (err) {
-						deferred.reject(err)
-					}
+	                    deferred.reject(err);
+	                }
 				);
             } else {
             	$scope.saveEntireContractRoot($state.current.name, true, false, false, false, false, isProductTranslate).then(
 					function (result) {
 						deferred.resolve(result);
 					}, function (err) {
-						deferred.reject(err)
-					}
+	                    deferred.reject(err);
+	                }
 				);
             }
 
@@ -3020,21 +3034,21 @@
 
             // *** Removed because it opens a data integrity issue:
             // If use clicks save... then clicks the tab, it will bypass translation and PTR and WIP will be out of sync
-            //if (!$scope._dirty && (valid === "Complete" || valid === "Finalizing")) {
-            //    $state.go('contract.manager.strategy.wip',
-            //        {
-            //            cid: $scope.contractData.DC_ID,
-            //            sid: $scope.curPricingStrategyId,
-            //            pid: $scope.curPricingTableId
-            //        },
-            //        { reload: true });
-            //} else {
+            if (!$scope._dirty && (valid === "Complete" || valid === "Finalizing")) {
+                $state.go('contract.manager.strategy.wip',
+                    {
+                        cid: $scope.contractData.DC_ID,
+                        sid: $scope.curPricingStrategyId,
+                        pid: $scope.curPricingTableId
+                    },
+                    { reload: true });
+            } else {
                 if (!!$scope.child) {
                     $scope.child.validateSavepublishWipDeals();
                 } else {
                     $scope.publishWipDealsBase();
                 }
-            //}
+            }
         }
         $scope.publishWipDealsBase = function () {
             $scope.setBusy("Loading...", "Loading the Deal Editor");

@@ -65,7 +65,7 @@ function objsetService($http, dataService, logger, $q) {
         return dataService.get(apiBaseContractUrl + 'GetUpperContract/' + id);
     }
     function updateContract(custId, contractId, ct) {
-        return dataService.post(apiBaseContractUrl + 'UpdateContract/' + custId + '/' + contractId, ct);
+        return dataService.post(apiBaseContractUrl + 'SaveContract/' + custId + '/' + contractId, [ct]);
     }
     function deleteContract(custId, contractId) {
         return dataService.get(apiBaseContractUrl + 'DeleteContract/' + custId + '/' + contractId);
