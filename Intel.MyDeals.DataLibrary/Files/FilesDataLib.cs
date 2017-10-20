@@ -183,38 +183,6 @@ namespace Intel.MyDeals.DataLibrary
             return ret;
         }
 
-        /// <summary>
-        /// Get the list of all deals with attachments
-        /// </summary>
-        public List<DealsWithAttachments> GetDealsWithAttachments()
-        {
-            OpLogPerf.Log("GetFileAttachments");
-            var ret = new List<DealsWithAttachments>();
-            try
-            {
-                var cmd = new Procs.dbo.PR_MYDL_GET_DEALS_WITH_ATTCH
-                {
-                };
 
-                using (var rdr = DataAccess.ExecuteReader(cmd))
-                {
-                    int IDX_OBJ_SID = DB.GetReaderOrdinal(rdr, "OBJ_SID");
-
-                    while (rdr.Read())
-                    {
-                        ret.Add(new DealsWithAttachments
-                        {
-                            OBJ_SID = (IDX_OBJ_SID < 0 || rdr.IsDBNull(IDX_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_SID),
-                        });
-                    } // while
-                }
-            }
-            catch (Exception ex)
-            {
-                OpLogPerf.Log(ex);
-                throw;
-            }
-            return ret;
-        }
     }
 }

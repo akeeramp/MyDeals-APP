@@ -2,7 +2,10 @@
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.MyDeals.IDataLibrary;
+using Intel.Opaque.Data;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -52,12 +55,43 @@ namespace Intel.MyDeals.BusinessLogic
             return _filesDataLib.DeleteFileAttachment(custMbrSid, objTypeSid, objSid, fileDataSid, includeGroup);
         }
 
-        /// <summary>
-        /// Get the list of all deals with attachments
-        /// </summary>
-        public List<DealsWithAttachments> GetDealsWithAttachments()
+        public void UpdateFileAttachmentBit(int objTypeSid, int objSid)
         {
-            return _filesDataLib.GetDealsWithAttachments();
+            OpDataElementType opType = objTypeSid.IdToOpDataElementTypeString();
+            MyDealsData myDealsData = opType.GetByIDs(new List<int> { objSid });
+
+            OpDataCollector dc = myDealsData[opType].AllDataCollectors.FirstOrDefault();
+            IOpDataElement de = dc.GetDataElement(AttributeCodes.HAS_ATTACHED_FILES);
+            IOpDataElement deCust = dc.GetDataElement(AttributeCodes.CUST_MBR_SID);
+
+            ContractToken contractToken = new ContractToken { CustId = int.Parse(deCust.AtrbValue.ToString()), ContractId = objSid };
+
+            if (de == null)
+            {
+                dc.DataElements.Add (new OpDataElement {
+                    DcID = deCust.DcID,
+                    DcType = deCust.DcType,
+                    DcParentType = deCust.DcParentType,
+                    DcParentID = deCust.DcParentID,
+                    AtrbID = 103,
+                    AtrbValue = 1,
+                    AtrbCd = "HAS_ATTACHED_FILES",
+                    State = OpDataElementState.Modified
+                });
+            }
+            else
+            {
+                de.SetAtrbValue(1);
+                de.State = OpDataElementState.Modified;
+            }
+
+            myDealsData[opType].BatchID = Guid.NewGuid();
+            myDealsData[opType].GroupID = -101; // Whatever the real ID of this object is
+            myDealsData[opType].AddSaveActions();
+            myDealsData.EnsureBatchIDs();
+
+            myDealsData.Save(contractToken);
         }
+
     }
 }

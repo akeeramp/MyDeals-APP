@@ -196,10 +196,7 @@ namespace Intel.MyDeals.BusinessLogic
             if (opType == OpDataElementType.WIP_DEAL)
             {
                 List<int> delIds = wipIds.Where(w => !foundIds.Contains(w)).Distinct().ToList();
-                if (delIds.Any())
-                {
-                    myDealsData[OpDataElementType.WIP_DEAL].Actions.Add(new MyDealsDataAction(DealSaveActionCodes.OBJ_DELETE, delIds, 40));
-                }
+                AddDeleteActions(myDealsData[OpDataElementType.WIP_DEAL], delIds);
             }
 
             // if PRC_TBL, check for merge complete rules
@@ -217,10 +214,7 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 List<int> ptrIds = myDealsData[OpDataElementType.PRC_TBL_ROW].AllDataCollectors.Select(p => p.DcID).ToList();
                 List<int> delIds = ptrIds.Where(w => !foundIds.Contains(w) && w > 0).Distinct().ToList();
-                if (delIds.Any())
-                {
-                    myDealsData[OpDataElementType.PRC_TBL_ROW].Actions.Add(new MyDealsDataAction(DealSaveActionCodes.OBJ_DELETE, delIds, 40));
-                }
+                AddDeleteActions(myDealsData[OpDataElementType.PRC_TBL_ROW], delIds);
             }
 
 
@@ -384,7 +378,7 @@ namespace Intel.MyDeals.BusinessLogic
                 
                 // TODO make this a rule
                 // Since this is a DB call, we don't want to do this for EVERY data collector individually
-                if (opType == OpDataElementType.CNTRCT || opType == OpDataElementType.WIP_DEAL) myDealsData.TagWithAttachments(dpObjSet, opType);
+                //if (opType == OpDataElementType.CNTRCT || opType == OpDataElementType.WIP_DEAL) myDealsData.TagWithAttachments(dpObjSet, opType);
             }
 
             //Get Products
@@ -408,45 +402,45 @@ namespace Intel.MyDeals.BusinessLogic
 
         #region Attachments
 
-        public static List<int> GetDealIdsWithAttachments(this MyDealsData myDealsData, OpDataElementType opType)
-        {
-            // TODO make this work with opType... this means changing the SP also.  For mow just look at deal
-            if (!myDealsData.ContainsKey(OpDataElementType.WIP_DEAL)) 
-				return new List<int>();
+    //    public static List<int> GetDealIdsWithAttachments(this MyDealsData myDealsData, OpDataElementType opType)
+    //    {
+    //        // TODO make this work with opType... this means changing the SP also.  For mow just look at deal
+    //        if (!myDealsData.ContainsKey(OpDataElementType.WIP_DEAL)) 
+				//return new List<int>();
 
-            // Get the list of *all* deals that have attachments.
-            FilesLib filesLib = new FilesLib();
-            var allDealsWithAttachments = filesLib.GetDealsWithAttachments();
+    //        // Get the list of *all* deals that have attachments.
+    //        FilesLib filesLib = new FilesLib();
+    //        var allDealsWithAttachments = filesLib.GetDealsWithAttachments();
 
-            // Get the list of deals we are displaying.
-            var dealsInQuestion = myDealsData[OpDataElementType.WIP_DEAL].Data.Keys;
+    //        // Get the list of deals we are displaying.
+    //        var dealsInQuestion = myDealsData[OpDataElementType.WIP_DEAL].Data.Keys;
 
-            return dealsInQuestion.Where(x => allDealsWithAttachments.Select(y => y.OBJ_SID).ToList().Contains(x)).ToList();
-        }
+    //        return dealsInQuestion.Where(x => allDealsWithAttachments.Select(y => y.OBJ_SID).ToList().Contains(x)).ToList();
+    //    }
 
-        public static void TagWithAttachments(this MyDealsData myDealsData, OpDataPacket<OpDataElementType> opDataPacket, OpDataElementType opType)
-        {
+        //public static void TagWithAttachments(this MyDealsData myDealsData, OpDataPacket<OpDataElementType> opDataPacket, OpDataElementType opType)
+        //{
 
-            // TODO needs to be revisited... this should be OpDataElementType based
-            List<int> dataCollectorsWithFiles = myDealsData.GetDealIdsWithAttachments(opType);
-            foreach (OpDataCollector dc in opDataPacket.AllDataCollectors.Where(dc => dataCollectorsWithFiles.Contains(dc.DcID)))
-            {
-                OpDataElement de = dc.DataElements.FirstOrDefault();
-                if (de == null) continue;
+        //    // TODO needs to be revisited... this should be OpDataElementType based
+        //    //List<int> dataCollectorsWithFiles = myDealsData.GetDealIdsWithAttachments(opType);
+        //    //foreach (OpDataCollector dc in opDataPacket.AllDataCollectors.Where(dc => dataCollectorsWithFiles.Contains(dc.DcID)))
+        //    //{
+        //    //    OpDataElement de = dc.DataElements.FirstOrDefault();
+        //    //    if (de == null) continue;
 
-                // Create FAKE UI ONLY DataElement
-                dc.DataElements.Add(new OpDataElement
-                {
-                    AtrbCd = "HAS_FILE_ATTACHMENTS",
-                    AtrbValue = 1,
-                    AtrbID = 0,
-                    DcParentID = de.DcParentID,
-                    DcID = de.DcID,
-                    DcType = de.DcType,
-                    DcParentType = de.DcParentType
-                });
-            }
-        }
+        //    //    // Create FAKE UI ONLY DataElement
+        //    //    //dc.DataElements.Add(new OpDataElement
+        //    //    //{
+        //    //    //    AtrbCd = "HAS_FILE_ATTACHMENTS",
+        //    //    //    AtrbValue = 1,
+        //    //    //    AtrbID = 0,
+        //    //    //    DcParentID = de.DcParentID,
+        //    //    //    DcID = de.DcID,
+        //    //    //    DcType = de.DcType,
+        //    //    //    DcParentType = de.DcParentType
+        //    //    //});
+        //    //}
+        //}
 
         #endregion
 
@@ -1137,7 +1131,22 @@ namespace Intel.MyDeals.BusinessLogic
             return saveResponseSet;
         }
 
+        public static void AddDeleteActions(this OpDataPacket<OpDataElementType> packet, List<int> delIds)
+        {
+            if (!delIds.Any()) return;
 
+            // Ensure that the list of deal IDs is actually correct before adding it on
+            List<int> finalDeleteIds = new List<int>();
+            foreach (int delId in delIds)
+            {
+                if (delId > 0) finalDeleteIds.Add(delId);
+            }
+
+            if (finalDeleteIds.Any())
+            {
+                packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.OBJ_DELETE, finalDeleteIds, 40));
+            }
+        }
 
     }
 }

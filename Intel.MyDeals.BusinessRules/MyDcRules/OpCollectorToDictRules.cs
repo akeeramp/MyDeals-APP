@@ -22,13 +22,6 @@ namespace Intel.MyDeals.BusinessRules
                     ActionRule = MyOpDataCollectorFlattenedItemActions.ApplyActionsAndSettings,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnOpCollectorConvert },
                     InObjType = new List<OpDataElementType> { OpDataElementType.CNTRCT, OpDataElementType.PRC_ST, OpDataElementType.WIP_DEAL, OpDataElementType.DEAL }
-                },
-                new MyOpRule
-                {
-                    Title="Add key/value [HasFiles] for having file attachments",
-                    ActionRule = MyOpDataCollectorFlattenedItemActions.ApplyHasFileAttachments,
-                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnOpCollectorConvert },
-                    InObjType = new List<OpDataElementType> { OpDataElementType.CNTRCT, OpDataElementType.PRC_TBL, OpDataElementType.WIP_DEAL, OpDataElementType.DEAL }
                 }
 
             };

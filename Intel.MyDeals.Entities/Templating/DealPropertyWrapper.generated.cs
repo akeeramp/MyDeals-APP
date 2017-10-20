@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 10/17/2017 3:51:02 PM
+File Updated: 10/19/2017 3:07:30 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -1801,6 +1801,22 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "na",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
+		};
+		public static MyDealsAttribute HAS_ATTACHED_FILES = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "HAS_ATTACHED_FILES",
+			ATRB_DESC = "Files are attached to this",
+			ATRB_LBL = "Has Attachments",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 103,
+			DATA_TYPE_CD = "BIT",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Boolean",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "INT",
+			UI_TYPE_CD = "CheckBox"
 		};
 		public static MyDealsAttribute HAS_L1 = new MyDealsAttribute()
 		{

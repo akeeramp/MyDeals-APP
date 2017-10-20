@@ -16,10 +16,10 @@
         <i class='intelicon-discussion-solid' style="font-size: 20px !important; cursor: pointer; color: #003C71;" title="{{dataItem.NOTES}}" ng-click="dialog.open()"></i>
     </div>
 
-    <div class='fl md-icon' ng-if="!dataItem.HasFiles">
+    <div class='fl md-icon' ng-if="!dataItem.HAS_ATTACHED_FILES">
         <i class='intelicon-attach' style="font-size: 20px !important; color: #00AEEF; cursor: pointer;" title="Click to Add an Attachment"></i>
     </div>
-    <div class='fl md-icon' ng-if="!!dataItem.HasFiles && dataItem.HasFiles">
+    <div class='fl md-icon' ng-if="dataItem.HAS_ATTACHED_FILES === '1'">
         <i class='intelicon-attach' style="font-size: 20px !important; color: #003C71;" title="Click to view or add attachments"></i>
     </div>
 

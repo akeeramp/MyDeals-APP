@@ -402,7 +402,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
             }
         }
 
-        if ($scope.isPending === false && root.contractData.CUST_ACCPT !== "Pending" && (root.contractData.C2A_DATA_C2A_ID === "" && !root.contractData.HasFiles)) {
+        if ($scope.isPending === false && root.contractData.CUST_ACCPT !== "Pending" && (root.contractData.C2A_DATA_C2A_ID === "" && !root.contractData.HAS_ATTACHED_FILES)) {
             $scope.dialogPendingWarning.open();
         } else if ($scope.isPending === false && root.contractData.CUST_ACCPT !== "Pending") {
             $scope.continueAction(true);
@@ -416,7 +416,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 
 
     $scope.onSuccess = function (e) {
-        root.contractData.HasFiles = true;
+        root.contractData.HAS_ATTACHED_FILES = 1;
     }
     $scope.fileUploadOptions = { saveUrl: '/FileAttachments/Save', autoUpload: true };
     $scope.filePostAddParams = function (e) {
@@ -444,7 +444,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         $scope.dialogPendingWarning.close();
     }
     $scope.continueAction = function (saveContract) {
-        if ($scope.isPending === true && root.contractData.CUST_ACCPT === "Accepted" && !root.contractData.HasFiles && root.contractData.C2A_DATA_C2A_ID.trim() === "") return;
+        if ($scope.isPending === true && root.contractData.CUST_ACCPT === "Accepted" && !root.contractData.HAS_ATTACHED_FILES && root.contractData.C2A_DATA_C2A_ID.trim() === "") return;
         $scope.dialogPendingWarning.close();
 
         if (!!saveContract && saveContract === true) {

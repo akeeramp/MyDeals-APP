@@ -1,4 +1,5 @@
-﻿using Intel.MyDeals.Entities;
+﻿using Intel.MyDeals.BusinessLogic;
+using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque;
 using System;
@@ -62,6 +63,10 @@ namespace Intel.MyDeals.Controllers
 
                         var result = _filesLib.SaveFileAttachment(fileAttachment, textBytes);
 
+                        if (result)
+                        {
+                            new FilesLib().UpdateFileAttachmentBit(objTypeSid, objSid);
+                        }
                         response = result ? string.Empty :
                             response += $"File {fileAttachment.FILE_NM} did not save properly. Please try again\n";
                     }

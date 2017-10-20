@@ -59,7 +59,19 @@ namespace Intel.MyDeals.Entities
 
         public static void AddDeleteActions(this OpDataPacket<OpDataElementType> packet, List<int> delIds)
         {
-            packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.OBJ_DELETE, delIds, 40));
+            if (!delIds.Any()) return;
+
+            // Ensure that the list of deal IDs is actually correct before adding it on
+            List<int> finalDeleteIds = new List<int>();
+            foreach (int delId in delIds)
+            {
+                if (delId > 0) finalDeleteIds.Add(delId);
+            }
+
+            if (finalDeleteIds.Any())
+            {
+                packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.OBJ_DELETE, finalDeleteIds, 40));
+            }
         }
 
         public static void AddGoingActiveActions(this OpDataPacket<OpDataElementType> packet, List<int> dealIds)
@@ -67,8 +79,6 @@ namespace Intel.MyDeals.Entities
             if (!dealIds.Any()) return;
 
             packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.GEN_TRACKER, dealIds, 60));
-            packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.SYNC_DEALS_MAJOR, dealIds, 80));
-            //packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.SNAPSHOT, dealIds, 100));
             packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.GENERATE_QUOTE, dealIds, 90));
         }
 
@@ -92,7 +102,7 @@ namespace Intel.MyDeals.Entities
                 if (!fItem.ContainsKey("_deleteTargetIds")) continue;
 
                 List<int> list = (List<int>)fItem["_deleteTargetIds"];
-                packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.OBJ_DELETE, list, 40));
+                AddDeleteActions(packet, list);
             }
         }
 
@@ -115,7 +125,7 @@ namespace Intel.MyDeals.Entities
                 if (!fItem.ContainsKey("_deleteTargetIds")) continue;
 
                 List<int> list = (List<int>)fItem["_deleteTargetIds"];
-                packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.OBJ_DELETE, list, 40));
+                AddDeleteActions(packet, list);
             }
         }
 

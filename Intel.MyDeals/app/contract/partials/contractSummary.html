@@ -66,12 +66,12 @@
             </div>
             <div style="text-align: center;">
                 <button class="btn btn-sm btn-grey" type="button"
-                        ng-class="{'disabled': root.contractData.HasFiles}"
+                        ng-class="{'disabled': root.contractData.HAS_ATTACHED_FILES === '1'}"
                         ng-click="showPending('showPendingInfo')" style="margin: 0 10px -30px 10px; width: 110px;">
                     << Back
                 </button>
                 <button class="btn btn-sm btn-skyblue" type="button"
-                        ng-class="{'disabled': !root.contractData.HasFiles}"
+                        ng-class="{'disabled': !root.contractData.HAS_ATTACHED_FILES}"
                         ng-click="continueAction(false)" style="margin: 0 10px -30px 10px; width: 110px;">
                     Done
                 </button>

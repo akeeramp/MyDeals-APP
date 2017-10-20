@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 10/17/2017 3:49:55 PM
+File Updated: 10/19/2017 3:06:42 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -1027,6 +1027,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Object
 		///</summary>
 		public const string GEO_NM = "GEO_NM";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 103
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Boolean
+		///</summary>
+		public const string HAS_ATTACHED_FILES = "HAS_ATTACHED_FILES";
 
 		///<summary>
 		/// DIM_SID: 3
