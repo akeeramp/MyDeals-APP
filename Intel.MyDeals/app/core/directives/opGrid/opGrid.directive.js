@@ -813,8 +813,11 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 } else if (col.uiType.toUpperCase() === "MULTISELECT") {
 
                     var id = "";
-                    if (col.field === "DEAL_SOLD_TO_ID") { id = options.model["CUST_MBR_SID"] } // TODO:change to dynamic
-
+                    if (col.field === "DEAL_SOLD_TO_ID") {
+                        id = options.model["CUST_MBR_SID"]   // TODO:change to dynamic
+                    }
+                                        
+                    ////Note: this was first approach, had issues with reading back in string format and getting linked rows to sync
                     //$('<select data-bind="value:' + options.field + '" name="' + options.field + '"/>')
                     //	.appendTo(container)
                     //	.kendoMultiSelect({
@@ -833,6 +836,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     //			}
                     //		}
                     //	});
+
+                    ////Note: this was second approach - this appending apprach had trouble marking the correct level _dirty attribute so that the grid actually saves it, also did not get linked rows to sync
                     var multiCompiled = $compile('<div class="myDealsControl" op-control-flat ng-model="dataItem" op-cd="\'' + options.field + '\'" op-type="\'MULTISELECT\'" op-lookup-url="\'' + field.opLookupUrl + '/' + id + '\'" op-lookup-text="\'' + field.opLookupText + '\'" op-lookup-value="\'' + field.opLookupValue + '\'" op-ui-mode="\'VERTICAL\'"></div>')(angular.element(container).scope());
                     $(container).append(multiCompiled);
 
