@@ -336,7 +336,7 @@
                     response.data[0]['drillDownFilter5'] = (!!!item.drillDownFilter5 && item.drillDownFilter5 == "") ? null : item.drillDownFilter5;
                     vm.gridSelectItem(response.data[0]);
                 } else {
-                    vm.gridData = response.data;
+                    vm.gridData = sortBySelectionLevelColumn(response.data);
                     vm.gridData = vm.gridData.map(function (x) {
                         x['selected'] = productExists(item, x.PRD_MBR_SID);
                         x['parentSelected'] = item.selected;
@@ -348,26 +348,41 @@
             });
         }
 
-        function validateMediaCode(data, mediaCode) {
-            if (mediaCode.toUpperCase() == "ALL") return data;
-            var prdIdToremove = [];
-            for (var p = 0; p < data.length; p++) {
-                if (arrayContainsString(productTypeToApplyMediaCode, data[p].DEAL_PRD_TYPE)) {
-                    if (data[p].MM_MEDIA_CD) {
-                        if (!arrayContainsString(data[p].MM_MEDIA_CD.split(','), mediaCode)) {
-                            prdIdToremove.push(data[p].PRD_MBR_SID);
-                        }
-                    } else {
-                        prdIdToremove.push(data[p].PRD_MBR_SID);
-                    }
-                }
+        function sortBySelectionLevelColumn(gridData, selectionLevel) {
+            var column = "";
+            switch(selectionLevel) {
+                case 7007:
+                    column = "DEAL_PRD_NM";
+                    break;
+                case 7008:
+                    column = "MTRL_ID";
+                    break;
+                default:
+                    column = "PCSR_NBR";
             }
-            data = data.filter(function (x) {
-                return !arrayContainsString(prdIdToremove, x.PRD_MBR_SID);
-            });
-
-            return data;
+            return $filter('orderBy')(gridData, selectionLevel);
         }
+
+        //function validateMediaCode(data, mediaCode) {
+        //    if (mediaCode.toUpperCase() == "ALL") return data;
+        //    var prdIdToremove = [];
+        //    for (var p = 0; p < data.length; p++) {
+        //        if (arrayContainsString(productTypeToApplyMediaCode, data[p].DEAL_PRD_TYPE)) {
+        //            if (data[p].MM_MEDIA_CD) {
+        //                if (!arrayContainsString(data[p].MM_MEDIA_CD.split(','), mediaCode)) {
+        //                    prdIdToremove.push(data[p].PRD_MBR_SID);
+        //                }
+        //            } else {
+        //                prdIdToremove.push(data[p].PRD_MBR_SID);
+        //            }
+        //        }
+        //    }
+        //    data = data.filter(function (x) {
+        //        return !arrayContainsString(prdIdToremove, x.PRD_MBR_SID);
+        //    });
+
+        //    return data;
+        //}
 
         function toggleColumnsWhenEmpty(data, prodGrid) {
             var grid = $("#" + prodGrid).data("kendoGrid");
@@ -443,10 +458,6 @@
         var dataSourceProduct = new kendo.data.DataSource({
             transport: {
                 read: function (e) {
-                    // Dont apply media code filter if its coming from searched results, as the filter applied on server side
-                    if (!searchProcessed) {
-                        vm.gridData = validateMediaCode(vm.gridData, pricingTableRow.PROD_INCLDS);
-                    }
                     searchProcessed = false;
                     e.success(vm.gridData);
                 },
