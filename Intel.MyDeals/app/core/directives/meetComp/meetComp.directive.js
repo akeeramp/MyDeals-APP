@@ -193,6 +193,44 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                 buttonCount: 5
                             },
                             detailInit: detailInit,
+                            edit: function (e) {
+                                var input = e.container.find(".k-input");
+                                var value = input.val();
+                                var editedROW = e.model;                                
+                                input.keyup(function () {
+                                    value = input.val();
+                                });
+                                $("[name='COMP_OVRRD_RSN']", e.container).blur(function () {
+                                    var input = $(this);
+                                    //alert(value);
+                                    editedROW.COMP_OVRRD_RSN = value;
+
+                                    $scope.meetCompMasterdata[editedROW.RW_NM - 1].COMP_OVRRD_RSN = value;
+                                    editedROW.COMP_OVRRD_RSN = value;
+                                    addToUpdateList(editedROW, "COMP_OVRRD_RSN");
+
+                                    if (editedROW.GRP == "PRD") {
+                                        var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
+                                            .Where(function (x) {
+                                                return (
+                                                    x.GRP_PRD_SID == editedROW.GRP_PRD_SID &&
+                                                    x.GRP == "DEAL" &&
+                                                    x.MEET_COMP_UPD_FLG == "Y" &&
+                                                    x.MEET_COMP_STS.toLowerCase() != "pass"
+                                                );
+                                            })
+                                            .ToArray();                                        
+
+                                        for (var i = 0; i < tempData.length; i++) {
+                                            $scope.meetCompMasterdata[tempData[i].RW_NM - 1].COMP_OVRRD_RSN = editedROW.COMP_OVRRD_RSN;
+                                            addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_OVRRD_RSN");
+                                        }
+
+                                        $scope.dataSourceParent.read();
+                                    }
+                                });
+                               
+                            },
                             dataBound: function (e) {
                                 if ($scope.errorList.length > 0) {
                                     //// get the index of the UnitsInStock cell
@@ -265,7 +303,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     field: "PRD_CAT_NM",
                                     title: "Vertical",
                                     width: 80,
-                                    filterable: { multi: true, search: true, search: true },
+                                    filterable: { multi: true, search: true },
                                     editable: function () { return false; }
                                 },
                                 {
@@ -273,14 +311,14 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     title: "Product",
                                     width: 120,
                                     template: "<div title='#=GRP_PRD_NM#'>#=GRP_PRD_NM#</div>",
-                                    filterable: { multi: true, search: true, search: true },
+                                    filterable: { multi: true, search: true },
                                     editable: function () { return false; }
                                 },
                                 {
                                     field: "DEAL_OBJ_SID",
                                     title: "Deals",
                                     width: 120,
-                                    filterable: { multi: true, search: true, search: true },
+                                    filterable: { multi: true, search: true },
                                     editable: function () { return false; }
                                 },
                                 {
@@ -288,7 +326,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     title: "Meet Comp SKU",
                                     template: "#= COMP_SKU#",
                                     width: 170,
-                                    filterable: { multi: true, search: true, search: true },
+                                    filterable: { multi: true, search: true },
                                     editor: meetCompSKUEditor
                                 },
                                 {
@@ -297,6 +335,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     width: 150,
                                     format: "{0:c}",
                                     template: "<div>#if(COMP_PRC == 0){## ##} else {#$#:COMP_PRC##}#</div>",
+                                    filterable: { multi: true, search: true },
                                     editor: meetCompPriceEditor
                                 },
                                 {
@@ -304,6 +343,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     title: "IA Bench",
                                     width: 120,
                                     template: "<div>#if(IA_BNCH == 0){## ##} else {##:IA_BNCH##}#</div>",
+                                    filterable: { multi: true, search: true },
                                     editor: editorIABench
                                 },
                                 {
@@ -311,16 +351,17 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     title: "Comp Bench",
                                     width: 120,
                                     template: "<div>#if(COMP_BNCH == 0){## ##} else {##:COMP_BNCH##}#</div>",
+                                    filterable: { multi: true, search: true },
                                     editor: editorCOMPBench
                                 },
                                 {
                                     field: "MEET_COMP_STS",
                                     title: "Test Results",
                                     width: 120,
-                                    template: "#if(MEET_COMP_STS != 'Pass' && COMP_OVRRD_FLG == 'Y') {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid complete' title='Passed with Override Status' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Pass') {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid completeGreen' title='Passed' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Incomplete') {#<div class='textRunIcon'><i class='intelicon-help-solid incomplete' title='Incomplete' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Fail'){#<div class='textRunIcon'><i class='intelicon-alert-solid errorIcon' title='Error/Failed' style='font-size:20px !important'></i></div>#}#",
+                                    template: "#if(MEET_COMP_STS == 'Overriden') {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid complete' title='Passed with Override Status' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Pass') {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid completeGreen' title='Passed' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Incomplete') {#<div class='textRunIcon'><i class='intelicon-help-solid incomplete' title='Incomplete' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Fail'){#<div class='textRunIcon'><i class='intelicon-alert-solid errorIcon' title='Error/Failed' style='font-size:20px !important'></i></div>#}#",
                                     editable: function () { return false; },
                                     hidden: $scope.hide_MEET_COMP_STS,
-                                    filterable: { multi: true, search: true, search: true }
+                                    filterable: { multi: true, search: true }
                                 },
                                 {
                                     field: "MC_LAST_RUN",
@@ -353,8 +394,8 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                 {
                                     field: "COMP_OVRRD_RSN",
                                     title: "Analysis Override Comments",
-                                    width: 150,
-                                    editor: editorORReason,
+                                    width: 220,
+                                    //editor: editorORReason,
                                     filterable: { multi: true, search: true, search: true },
                                     hidden: $scope.hide_COMP_OVRRD_RSN
                                 }
@@ -362,7 +403,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                         };
 
                         function editorIABench(container, options) {
-                            if (usrRole == "DA" || usrRole == "SA" || options.model.PRD_CAT_NM != "SvrWS" || options.model.COMP_SKU.length == 0 || options.model.MEET_COMP_UPD_FLG == "N") {
+                            if (usrRole == "DA" || usrRole == "SA" || options.model.PRD_CAT_NM.toLowerCase() != "svrws" || options.model.COMP_SKU.length == 0 || options.model.MEET_COMP_UPD_FLG == "N") {
                                 //DA only view
                             }
                             else {
@@ -379,7 +420,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                 if (options.model.GRP == "PRD") {
                                                     var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
                                                         .Where(function (x) {
-                                                            return (x.GRP_PRD_SID == options.model.GRP_PRD_SID && x.GRP == "DEAL" && x.MEET_COMP_UPD_FLG == "Y" && x.PRD_CAT_NM == "SvrWS");
+                                                            return (x.GRP_PRD_SID == options.model.GRP_PRD_SID && x.GRP == "DEAL" && x.MEET_COMP_UPD_FLG == "Y" && x.PRD_CAT_NM.toLowerCase() == "svrws");
                                                         })
                                                         .ToArray();
 
@@ -400,7 +441,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                         }
 
                         function editorCOMPBench(container, options) {
-                            if (usrRole == "DA" || usrRole == "SA" || options.model.PRD_CAT_NM != "SvrWS" || options.model.COMP_SKU.length == 0 || options.model.MEET_COMP_UPD_FLG == "N") {
+                            if (usrRole == "DA" || usrRole == "SA" || options.model.PRD_CAT_NM.toLowerCase() != "svrws" || options.model.COMP_SKU.length == 0 || options.model.MEET_COMP_UPD_FLG == "N") {
                                 //DA only view
                             }
                             else {
@@ -417,7 +458,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                 if (options.model.GRP == "PRD") {
                                                     var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
                                                         .Where(function (x) {
-                                                            return (x.GRP_PRD_SID == options.model.GRP_PRD_SID && x.GRP == "DEAL" && x.MEET_COMP_UPD_FLG == "Y" && x.PRD_CAT_NM == "SvrWS");
+                                                            return (x.GRP_PRD_SID == options.model.GRP_PRD_SID && x.GRP == "DEAL" && x.MEET_COMP_UPD_FLG == "Y" && x.PRD_CAT_NM.toLowerCase() == "svrws");
                                                         })
                                                         .ToArray();
 
@@ -476,6 +517,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                 $scope.selectedCust = options.model.CUST_NM_SID;
                                                 $scope.selectedCustomerText = this.value();
                                                 $scope.curentRow = options.model.RW_NM;
+                                                $scope.addSKUForCustomer("0");
                                             }
                                             else {
                                                 var selectedValue = e.sender.listView._dataItems["0"].RW_NM;
@@ -547,13 +589,13 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
 
                         function meetCompResultStatusEditor(container, options) {
                             //IF MEET COMP STATUS FAILED THEN Only Override Option will be available.
-                            if (options.model.MEET_COMP_STS != "Pass" && usrRole == "DA" && options.model.MEET_COMP_UPD_FLG == "Y") {
+                            if (options.model.MEET_COMP_STS.toLowerCase() != "pass" && usrRole == "DA" && options.model.MEET_COMP_UPD_FLG == "Y") {
                                 var tempData = [
                                     {
-                                        "COMP_OVRRD_FLG": "Y"
+                                        "COMP_OVRRD_FLG": "Yes"
                                     },
                                     {
-                                        "COMP_OVRRD_FLG": "N"
+                                        "COMP_OVRRD_FLG": "No"
                                     }
                                 ];
 
@@ -574,7 +616,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                             if (options.model.GRP == "PRD") {
                                                 var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
                                                     .Where(function (x) {
-                                                        return (x.GRP_PRD_SID == options.model.GRP_PRD_SID && x.GRP == "DEAL" && x.MEET_COMP_UPD_FLG == "Y" && x.MEET_COMP_STS != "Pass");
+                                                        return (x.GRP_PRD_SID == options.model.GRP_PRD_SID && x.GRP == "DEAL" && x.MEET_COMP_UPD_FLG == "Y" && x.MEET_COMP_STS.toLowerCase() != "pass");
                                                     })
                                                     .ToArray();
 
@@ -593,50 +635,49 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                             }
                         }
 
-                        function editorORReason(container, options) {
-                            if (options.model.COMP_OVRRD_FLG.length > 0 && usrRole == "DA" && options.model.MEET_COMP_UPD_FLG == "Y" && options.model.MEET_COMP_STS != "Pass") {
-                                var tempReason = [
-                                    {
-                                        "COMP_OVRRD_RSN": options.model.COMP_OVRRD_RSN
-                                    }
-                                ];
-                                $('<input required name="' + options.field + '"/>')
-                                    .appendTo(container)
-                                    .kendoComboBox({
-                                        optionLabel: "type comments",
-                                        autoBind: true,
-                                        dataTextField: "COMP_OVRRD_RSN",
-                                        dataValueField: "RW_ID",
-                                        dataSource: {
-                                            data: tempReason
-                                        },
-                                        change: function (e) {
-                                            $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_OVRRD_RSN = this.text();
-                                            addToUpdateList(options.model, "COMP_OVRRD_RSN");
+                        //function editorORReason(container, options) {
+                        //    if (options.model.COMP_OVRRD_FLG.length > 0 && usrRole == "DA" && options.model.MEET_COMP_UPD_FLG == "Y" && options.model.MEET_COMP_STS.toLowerCase() != "pass") {
+                        //        var tempReason = [
+                        //            {
+                        //                "COMP_OVRRD_RSN": options.model.COMP_OVRRD_RSN
+                        //            }
+                        //        ];
+                        //        $('<input required name="' + options.field + '"/>')
+                        //            .appendTo(container)
+                        //            .kendoComboBox({
+                        //                optionLabel: "type comments",
+                        //                autoBind: true,
+                        //                dataTextField: "COMP_OVRRD_RSN",
+                        //                dataValueField: "RW_ID",
+                        //                dataSource: {
+                        //                    data: tempReason
+                        //                },
+                        //                change: function (e) {
+                        //                    $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_OVRRD_RSN = this.text();
+                        //                    addToUpdateList(options.model, "COMP_OVRRD_RSN");
 
-                                            if (options.model.GRP == "PRD") {
-                                                var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
-                                                    .Where(function (x) {
-                                                        return (x.GRP_PRD_SID == options.model.GRP_PRD_SID && x.GRP == "DEAL" && x.MEET_COMP_UPD_FLG == "Y" && x.MEET_COMP_STS != "Pass");
-                                                    })
-                                                    .ToArray();
+                        //                    if (options.model.GRP == "PRD") {
+                        //                        var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
+                        //                            .Where(function (x) {
+                        //                                return (x.GRP_PRD_SID == options.model.GRP_PRD_SID && x.GRP == "DEAL" && x.MEET_COMP_UPD_FLG == "Y" && x.MEET_COMP_STS.toLowerCase() != "pass");
+                        //                            })
+                        //                            .ToArray();
 
-                                                for (var i = 0; i < tempData.length; i++) {
-                                                    $scope.meetCompMasterdata[tempData[i].RW_NM - 1].COMP_OVRRD_RSN = options.model.COMP_OVRRD_RSN;
-                                                    addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_OVRRD_RSN");
-                                                }
+                        //                        for (var i = 0; i < tempData.length; i++) {
+                        //                            $scope.meetCompMasterdata[tempData[i].RW_NM - 1].COMP_OVRRD_RSN = options.model.COMP_OVRRD_RSN;
+                        //                            addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_OVRRD_RSN");
+                        //                        }
 
-                                                $scope.dataSourceParent.read();
-                                            }
+                        //                        $scope.dataSourceParent.read();
+                        //                    }
 
-                                        }
-                                    });
-                            }                         
+                        //                }
+                        //            });
+                        //    }                         
 
-                        }
+                        //}
 
                         function addToUpdateList(dataItem, FIELD_NM) {
-                            // findIndex() is not supported in IE11 and hence replacing with 'some()' that is supported in all browsers - VN
                             var indx = -1;
                             $scope.meetCompUpdatedList.some(function (e, i) {
                                 if (e.RW_NM == dataItem.RW_NM) {
@@ -668,28 +709,28 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     'RW_NM': ""
                                 };
                                 //COMP_SKU Checking.....
-                                if (data[i].COMP_SKU.length == 0) {
+                                if (data[i].COMP_SKU.length == 0 && usrRole != "DA") {
                                     errorObj.COMP_SKU = true;
                                     errorObj.RW_NM = data[i].RW_NM;
                                     isError = true;
                                 }
 
                                 //COMP_PRC checking.....
-                                if (data[i].COMP_PRC <= 0) {
+                                if (data[i].COMP_PRC <= 0 && usrRole != "DA") {
                                     errorObj.COMP_PRC = true;
                                     errorObj.RW_NM = data[i].RW_NM;
                                     isError = true;
                                 }
 
                                 //COMP_BNCH checking....
-                                if (data[i].COMP_BNCH <= 0 && data[i].PRD_CAT_NM == "SvrWS") {
+                                if (data[i].COMP_BNCH <= 0 && data[i].PRD_CAT_NM.toLowerCase() == "svrws" && usrRole != "DA") {
                                     errorObj.COMP_BNCH = true;
                                     errorObj.RW_NM = data[i].RW_NM;
                                     isError = true;
                                 }
 
                                 //IA_BNCH checking....
-                                if (data[i].IA_BNCH <= 0 && data[i].PRD_CAT_NM == "SvrWS") {
+                                if (data[i].IA_BNCH <= 0 && data[i].PRD_CAT_NM.toLowerCase() == "svrws" && usrRole != "DA") {
                                     errorObj.IA_BNCH = true;
                                     errorObj.RW_NM = data[i].RW_NM;
                                     isError = true;
@@ -740,7 +781,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         COMP_BNCH: x.COMP_BNCH,
                                         IA_BNCH: x.IA_BNCH,
                                         COMP_OVRRD_RSN: x.COMP_OVRRD_RSN,
-                                        COMP_OVRRD_FLG: x.COMP_OVRRD_FLG == 'Y' ? true : false,
+                                        COMP_OVRRD_FLG: x.COMP_OVRRD_FLG == 'Yes' ? true : false,
                                         MEET_COMP_UPD_FLG: x.MEET_COMP_UPD_FLG
                                     }
 
@@ -756,10 +797,10 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         $scope.tempUpdatedList = [];
                                         $scope.meetCompUpdatedList = [];
                                     },
-                                        function (response) {
-                                            logger.error("Unable to save data", response, response.statusText);
-                                            $scope.isBusy = false;
-                                        });
+                                    function (response) {
+                                        logger.error("Unable to save data", response, response.statusText);
+                                        $scope.isBusy = false;
+                                    });
 
                                 }
                                 else {
@@ -767,7 +808,12 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                 }
                             }
                             else {
-                                kendo.alert("Meet comp data is missing for some product(s).Please enter the data and save the changes.");
+                                if (usrRole == "DA") {
+                                    kendo.alert("Analysis Override Status OR Analysis Override Comments can't be Blank.");
+                                }
+                                else {
+                                    kendo.alert("Meet comp data is missing for some product(s).Please enter the data and save the changes.");
+                                }                                
                                 $scope.dataSourceParent.read();
                             }
                         }
@@ -839,6 +885,24 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                 filter: function (e) { gridUtils.cancelChanges(e); },
                                 editable: true,
                                 pageable: false,
+                                edit: function (e) {
+                                    var input = e.container.find(".k-input");
+                                    var value = input.val();
+                                    var editedROW = e.model;
+                                    input.keyup(function () {
+                                        value = input.val();
+                                    });
+                                    $("[name='COMP_OVRRD_RSN']", e.container).blur(function () {
+                                        var input = $(this);
+                                        //alert(value);
+                                        editedROW.COMP_OVRRD_RSN = value;
+
+                                        $scope.meetCompMasterdata[editedROW.RW_NM - 1].COMP_OVRRD_RSN = value;
+                                        editedROW.COMP_OVRRD_RSN = value;
+                                        addToUpdateList(editedROW, "COMP_OVRRD_RSN");                                       
+                                    });
+
+                                },
                                 dataBound: function (e) {
                                     if ($scope.errorList.length > 0) {
                                         //// get the index of the UnitsInStock cell
@@ -912,7 +976,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         field: "PRD_CAT_NM",
                                         title: "Vertical",
                                         width: 80,
-                                        filterable: { multi: true, search: true, search: true },
+                                        filterable: { multi: true, search: true },
                                         editable: function () { return false; }
                                     },
                                     {
@@ -924,14 +988,14 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         field: "DEAL_OBJ_SID",
                                         title: "Deal ID",
                                         width: 120,
-                                        filterable: { multi: true, search: true, search: true },
+                                        filterable: { multi: true, search: true },
                                         template: "<div class='ovlpCell'><a onclick='gotoDealDetails(#=CNTRCT_OBJ_SID#,#=PRC_ST_OBJ_SID#, #= PRC_TBL_OBJ_SID # )' class='btnDeal'> #= DEAL_OBJ_SID # </a></div>"
                                     },
                                     {
                                         field: "COMP_SKU",
                                         title: "Meet Comp SKU",
                                         width: 170,
-                                        filterable: { multi: true, search: true, search: true },
+                                        filterable: { multi: true, search: true },
                                         editor: meetCompSKUEditor
                                     },
                                     {
@@ -940,6 +1004,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         width: 150,
                                         format: "{0:c}",
                                         template: "<div>#if(COMP_PRC == 0){## ##} else {#$#:COMP_PRC##}#</div>",
+                                        filterable: { multi: true, search: true },
                                         editor: meetCompPriceEditor
                                     },
                                     {
@@ -947,6 +1012,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         title: "IA Bench",
                                         width: 120,
                                         template: "<div>#if(IA_BNCH == 0){## ##} else {##:IA_BNCH##}#</div>",
+                                        filterable: { multi: true, search: true },
                                         editor: editorIABench
                                     },
                                     {
@@ -954,6 +1020,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         title: "Comp Bench",
                                         width: 120,
                                         template: "<div>#if(COMP_BNCH == 0){## ##} else {##:COMP_BNCH##}#</div>",
+                                        filterable: { multi: true, search: true },
                                         editor: editorCOMPBench
                                     },
                                     {
@@ -962,7 +1029,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         width: 120,
                                         editable: function () { return false; },
                                         hidden: $scope.hide_MEET_COMP_STS,
-                                        template: "#if(MEET_COMP_STS != 'Pass' && COMP_OVRRD_FLG == 'Y') {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid complete' title='Passed with Override Status' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Pass') {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid completeGreen' title='Passed' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Incomplete') {#<div class='textRunIcon'><i class='intelicon-help-solid incomplete' title='Incomplete' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Fail'){#<div class='textRunIcon'><i class='intelicon-alert-solid errorIcon' title='Error/Failed' style='font-size:20px !important'></i></div>#}#",
+                                        template: "#if(MEET_COMP_STS == 'Overriden') {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid complete' title='Passed with Override Status' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS.toLowerCase() == 'pass') {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid completeGreen' title='Passed' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS.toLowerCase() == 'incomplete') {#<div class='textRunIcon'><i class='intelicon-help-solid incomplete' title='Incomplete' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS.toLowerCase() == 'fail'){#<div class='textRunIcon'><i class='intelicon-alert-solid errorIcon' title='Error/Failed' style='font-size:20px !important'></i></div>#}#",
                                         filterable: { multi: true, search: true, search: true }
                                     },
                                     {
@@ -990,15 +1057,15 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         title: "Analysis Override",
                                         width: 150,
                                         editor: meetCompResultStatusEditor,
-                                        filterable: { multi: true, search: true, search: true },
+                                        filterable: { multi: true, search: true },
                                         hidden: $scope.hide_COMP_OVRRD_FLG
                                     },
                                     {
                                         field: "COMP_OVRRD_RSN",
                                         title: "Analysis Override Comments",
-                                        width: 150,
-                                        editor: editorORReason,
-                                        filterable: { multi: true, search: true, search: true },
+                                        width: 220,
+                                        //editor: editorORReason,
+                                        filterable: { multi: true, search: true },
                                         hidden: $scope.hide_COMP_OVRRD_RSN
                                     }
                                 ]
