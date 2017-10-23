@@ -28,12 +28,12 @@ namespace Intel.MyDeals.Controllers.API
 		}
 		
 		[HttpGet]
-		[Route("GetDealDataViaTrackerNumber/{trackerNumber}")]
-		public EcapTrackerData GetDealDataViaTrackerNumber(string trackerNumber)
+		[Route("GetDealDataViaTrackerNumber/{trackerNumber}/{custId}")]
+		public EcapTrackerData GetDealDataViaTrackerNumber(string trackerNumber, int custId)
 		{
 			List<string> numbers = new List<string>();
 			numbers.Add(trackerNumber);
-			IEnumerable<EcapTrackerData> result = SafeExecutor(() => _ecapTrackerLib.GetDealDetailsBasedOnTrackerNumbers(numbers)
+			IEnumerable<EcapTrackerData> result = SafeExecutor(() => _ecapTrackerLib.GetDealDetailsBasedOnTrackerNumbers(numbers, custId)
 				, $"Unable to get ECAP deal data from tracker number"
 			);
 			

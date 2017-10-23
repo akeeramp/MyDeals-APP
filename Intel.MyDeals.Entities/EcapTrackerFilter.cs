@@ -15,9 +15,19 @@ namespace Intel.MyDeals.Entities
 		public int PRD_MBR_SID { get; set; }
 	}
 
-	public class EcapTrackerData : EcapTrackerFilterData
+	public class EcapTrackerData 
 	{
-		public string ORIG_ECAP_TRKR_NBR { get; set; }
-		public int DC_ID { get; set; }
+		public int OBJ_SID { get; set; }
+		public string TRKR_NBR { get; set; }
+		public string STRT_DT { get; set; }
+		public string END_DT { get; set; }
+		public string PTR_SYS_PRD { get; set; }
+		public string GEO_COMBINED { get; set; }
+		public string MRKT_SEG { get; set; }
+		public string MEET_COMP_PRICE_QSTN { get; set; }
+		public string PAYOUT_BASED_ON { get; set; }
+		public string PROD_INCLDS { get; set; }
+		public string PROGRAM_PAYMENT { get; set; }
+		public string TERMS { get; set; }
 	}
 }

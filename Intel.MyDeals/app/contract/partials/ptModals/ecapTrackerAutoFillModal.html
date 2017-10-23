@@ -1,4 +1,4 @@
-﻿<div class="modal-content" style="display: none;">
+﻿<script type="text/ng-template" id="ecapAutoFillTrackerModal">
 	<div class="modal-header">
 		<h3 class="modal-title" id="modal-title">Get data by ECAP tracker number </h3>
 	</div>
@@ -9,20 +9,20 @@
 			</p>
 
 			<input class="k-textbox"
-				   ng-model="$ctrl.unValidatedTrackerNumber" 
-				   ng-change="$ctrl.clearValidatedTrackerinfo()" 
+				   ng-model="vm.unValidatedTrackerNumber"
+				   ng-change="vm.clearValidatedTrackerinfo()"
 				   ng-model-options='{ debounce: 250 }'
-				   ng-disabled="$ctrl.isLoading" 
-				   ng-class="{'isReadOnly': $ctrl.isLoading}" />
+				   ng-disabled="vm.isLoading"
+				   ng-class="{'isReadOnly': vm.isLoading}" />
 			<button type="button"
 					class="btn btn-primary"
-					ng-click="$ctrl.verify($ctrl.unValidatedTrackerNumber)"
-					ng-disabled="$ctrl.isLoading"
-					ng-class="{'disabled': $ctrl.isLoading}">
+					ng-click="vm.verify(vm.unValidatedTrackerNumber)"
+					ng-disabled="vm.isLoading"
+					ng-class="{'disabled': vm.isLoading}">
 				Search
 			</button>
 
-			<div ng-show="$ctrl.isLoading">
+			<div ng-show="vm.isLoading">
 				<div class="spinner">
 					<div class="rect1"></div>
 					<div class="rect2"></div>
@@ -33,29 +33,19 @@
 				<p style="text-align:center">Please wait as we fetch the deal related to this tracker number.</p>
 			</div>
 
-			<div ng-show="$ctrl.hasValidTrackerInfo">
+			<div ng-show="vm.hasValidTrackerInfo">
 				<br />
-				<b>Deal information found:</b><table class="table table-bordered table-striped table-intel">
-					<thead>
-						<tr>
-							<th scope="col">#</th>
-							<th scope="col">Deal ID</th>
-							<th scope="col">Product</th>
-							<th scope="col">Start Date</th>
-							<th scope="col">End Date</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>
-								TEST:
-							</td>
-							<td>
-								okay
-							</td>
-						</tr>
-					</tbody>
-				</table>
+				<b>Deal information found:</b>
+				<!-- Grid 
+					 kendo-grid-check-box-->
+				<div id="suggestionProdGrid"
+					 kendo-grid="grid"
+					 k-grid-checkbox="vm"
+					 checkbox-is-generic="true"
+					 checkbox-attr="'OBJ_SID'"
+					 class="prodCorrector opUiContainer md kendoGridHeight prodCorrector-grid k-grid"
+					 k-options="vm.gridOptionsSuggested">
+				</div>
 			</div>
 		</div>
 		<br />
@@ -63,18 +53,18 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class="fr">
-					<button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
+					<button class="btn btn-warning" type="button" ng-click="vm.cancel()">Cancel</button>
 					<button type="button"
 							class="btn btn-primary"
-							ng-click="$ctrl.submit()"
-							ng-class="{'disabled': !$ctrl.hasValidTrackerInfo}"
+							ng-click="vm.submit()"
+							ng-class="{'disabled': (vm.dealInfo.length === 0)}"
 							uib-tooltip="Search for a tracker number to enable this button."
-							tooltip-enable="!$ctrl.hasValidTrackerInfo">
+							tooltip-enable="!vm.hasValidTrackerInfo">
 						Add to grid
 					</button>
 				</div>
 			</div>
 		</div>
 	</div>
-</div>
+</script>
 <!--<div class="modal-footer">	</div>-->

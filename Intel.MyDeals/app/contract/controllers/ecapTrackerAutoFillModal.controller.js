@@ -2,86 +2,142 @@
     .module('app.contract')
     .controller('EcapTrackerAutoFillModalCtrl', EcapTrackerAutoFillModalCtrl);
 
-EcapTrackerAutoFillModalCtrl.$inject = ['$scope', 'logger', 'dataService', '$uibModalInstance'];
+EcapTrackerAutoFillModalCtrl.$inject = ['$scope', 'logger', 'dataService', '$uibModalInstance', 'custId'];
 
-function EcapTrackerAutoFillModalCtrl($scope, logger, dataService, $uibModalInstance) {
-	var $ctrl = this;
+function EcapTrackerAutoFillModalCtrl($scope, logger, dataService, $uibModalInstance, custId) {
+	var vm = this;
 
-	$ctrl.popupResult = [];
-	$ctrl.placeholderText = "Click to Select...";
+	vm.custId = custId;
 
-	$ctrl.isLoading = false;
-	$ctrl.hasValidTrackerInfo = false;
-	$ctrl.dealInfo = null;
-		
+	vm.popupResult = [];
+	vm.placeholderText = "Click to Select...";
 
-	$ctrl.verify = function (unValidatedTrackerNumber) {
-		$ctrl.hasValidTrackerInfo = false;
-		$ctrl.dealInfo = null;
+	vm.isLoading = false;
+	vm.hasValidTrackerInfo = false;
+	vm.dealInfo = [];
+
+	var selectedGridDict = {};
+
+	var dataSourceSuggested = new kendo.data.DataSource({
+		transport: {
+			read: function (e) {
+				e.success(vm.dealInfo);
+			}
+		},
+		schema: {
+			model: {
+				fields: {
+					OBJ_SID: {},
+					//TRKR_NBR: {},
+					START_DT: {},
+					END_DT: {},
+					PTR_SYS_PRD: {},
+					GEO_COMBINED: {},
+					MRKT_SEG: {},
+					MEET_COMP_PRICE_QSTN: {},
+					PAYOUT_BASED_ON: {},
+					PROD_INCLDS: {},
+					PROGRAM_PAYMENT: {},
+					//TERMS: {},
+					selected: {}
+				}
+			}
+		},
+		serverPaging: true,
+		serverSorting: true
+	});
+
+
+	vm.selectProduct = function (dataItem) {
+		if (dataItem.selected) {
+			// checked
+			selectedGridDict[dataItem.OVLP_DEAL_ID] = true;
+		} else {
+			// unchecked
+			delete selectedGridDict[dataItem.OVLP_DEAL_ID];
+		}
+	}
+
+
+	vm.gridOptionsSuggested = {
+		dataSource: dataSourceSuggested,
+		enableHorizontalScrollbar: true,
+		filterable: true,
+		sortable: true,
+		resizable: false,
+		groupable: false,
+		editable: false,
+		pageable: false,
+		scrollable: true,
+		filter: "startsWith",
+		height: 300,
+		noRecords: {
+			template: "<div style='padding:40px;'>No overlapping deal groups were found.<div>"
+		},
+		columns: [
+			{ field: "OBJ_SID", title: "Deal Id" },
+			//{ field: "TRKR_NBR", title: "Tracker Number" },
+			{ field: "START_DT", title: "Deal Start" /*, template: "#= kendo.toString(kendo.parseDate(START_DT, 'yyyy-MM-dd'), 'MM/dd/yyyy') #" */},
+			{ field: "END_DT", title: "Deal End"/*, template: "#= kendo.toString(kendo.parseDate(END_DT, 'yyyy-MM-dd'), 'MM/dd/yyyy') #" */},
+			{ field: "PTR_SYS_PRD", title: "Product" },
+			{ field: "GEO_COMBINED", title: "Geo" },
+			{ field: "MRKT_SEG", title: "Market Segment" },
+			{ field: "MEET_COMP_PRICE_QSTN", title: "Meet Comp" },
+			{ field: "PAYOUT_BASED_ON", title: "Payout Based On" },
+			{ field: "PROD_INCLDS", title: "Media" },
+			{ field: "PROGRAM_PAYMENT", title: "Program Payment" },
+			//{ field: "TERMS", title: "Terms" }
+		]
+	};
+	
+	vm.verify = function (unValidatedTrackerNumber) {
+		vm.hasValidTrackerInfo = false;
+		vm.dealInfo = [];
 
 		if (unValidatedTrackerNumber === undefined || unValidatedTrackerNumber === null || unValidatedTrackerNumber.replace(/\s/g, "").length === 0) {
 			return;
 		}
 
-		$ctrl.isLoading = true;
+		vm.isLoading = true;
 
 		// Load dropdown info
-		return dataService.get('/api/EcapTracker/GetDealDataViaTrackerNumber/' + unValidatedTrackerNumber).then( // TODO: change this
+		return dataService.get('/api/EcapTracker/GetDealDataViaTrackerNumber/' + unValidatedTrackerNumber + '/' + vm.custId).then( // TODO: change this
 			function (response) {
-				$ctrl.hasValidTrackerInfo = true;
-				// TODO: get the SP information for the new row
-				$ctrl.dealInfo = response.data; // TODO
-				$ctrl.isLoading = false;
+				vm.hasValidTrackerInfo = true;
+
+				if (response.data == null) {
+					vm.dealInfo = [];
+				} else {
+					vm.dealInfo = response.data;
+				}
+				dataSourceSuggested.read();
+				vm.isLoading = false;
 			},
 			function (response) {
 				logger.error("Unable to get ECAP tracker dropdown data.", response, response.statusText);
-				$ctrl.isLoading = false;
-				$ctrl.hasValidTrackerInfo = false;
-				$ctrl.dealInfo = null;
+				vm.hasValidTrackerInfo = false;
+				vm.dealInfo = [];
+				vm.isLoading = false;
 			}
 		);
 	};
 
-	$ctrl.clearValidatedTrackerinfo = function () {
-		$ctrl.hasValidTrackerInfo = false;
-		$ctrl.dealInfo = null;
+	vm.clearValidatedTrackerinfo = function () {
+		vm.hasValidTrackerInfo = false;
+		vm.dealInfo = null;
 	}
 
-	$ctrl.submit = function () {
-		if (!$ctrl.hasValidTrackerInfo) { return; }
-		
-		// TODO: remove below obj and replace with $ctrl.dealInfo once we get the actual data
-		var tempNewRow = {
-			"ADJ_ECAP_UNIT": null,
-			"CUST_ACCNT_DIV": null,
-			"CUST_MBR_SID": null,
-			"DC_ID": null,
-			"ECAP_PRICE": null,
-			"END_DT": "",  // TO GET
-			"FRCST_VOL": null,
-			"GEO_COMBINED": "", // TO GET
-			"MEET_COMP_PRICE_QSTN": "", // TO GET
-			"MRKT_SEG": null,
-			"ORIG_ECAP_TRKR_NBR": 11111111, // TO SET
-			"PAYOUT_BASED_ON": null,
-			"PROD_INCLDS": null,
-			"PROGRAM_PAYMENT": null,
-			"PTR_SYS_INVLD_PRD": "",
-			"PTR_SYS_PRD": "",  // TO GET
-			"PTR_USER_PRD": "TODO",  // TO GET
-			"REBATE_TYPE": "ECAP ADJ",
-			"START_DT": "", // TO GET
-			"TERMS": null,
-			"TOTAL_DOLLAR_AMOUNT": null,
-			"VOLUME": null,
-			"dirty": true,
-			"id": null,
-		}
+	vm.submit = function () {
+		if (vm.dealInfo.length === 0) { return; }
 
-		$uibModalInstance.close(tempNewRow); //$ctrl.dealInfo
+		vm.dealInfo["ORIG_ECAP_TRKR_NBR"] = vm.dealInfo["TRKR_NBR"]; // TODO: ask db to rename this
+		vm.dealInfo["FRCST_VOL"] = null;
+		vm.dealInfo["TOTAL_DOLLAR_AMOUNT"] = null;
+
+		$uibModalInstance.close(vm.dealInfo);
 	};
 
-	$ctrl.cancel = function () {
+	vm.cancel = function () {
 		$uibModalInstance.dismiss();
 	};
 

@@ -4,9 +4,9 @@
 
 // logger :Injected logger service to for loging to remote database or throwing error on the ui
 // dataService :Application level service, to be used for common api calls, eg: user token, department etc
-PricingTableController.$inject = ['$scope', '$state', '$stateParams', '$filter', 'confirmationModal', 'dataService', 'logger', 'pricingTableData', 'productSelectorService', 'MrktSegMultiSelectService', '$uibModal', '$timeout', 'opGridTemplate'];
+PricingTableController.$inject = ['$scope', '$state', '$stateParams', '$filter', 'confirmationModal', 'dataService', 'logger', 'pricingTableData', 'productSelectorService', 'MrktSegMultiSelectService', '$uibModal', '$timeout', 'opGridTemplate', 'confirmationModal'];
 
-function PricingTableController($scope, $state, $stateParams, $filter, confirmationModal, dataService, logger, pricingTableData, productSelectorService, MrktSegMultiSelectService, $uibModal, $timeout, opGridTemplate) {
+function PricingTableController($scope, $state, $stateParams, $filter, confirmationModal, dataService, logger, pricingTableData, productSelectorService, MrktSegMultiSelectService, $uibModal, $timeout, opGridTemplate, confirmationModal) {
     var vm = this;
 
     // HACK: Not sure why this controller gets called twice.  This is to see if it is already started and exit.
@@ -1076,8 +1076,6 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var spreadsheet = $("#pricingTableSpreadsheet").data("kendoSpreadsheet");
 
         var sheet = spreadsheet.activeSheet();
-
-        newRow["PROGRAM_PAYMENT"] = root.curPricingTable["PROGRAM_PAYMENT"];
         root.spreadDs.insert(newRow);
 
         syncSpreadRows(sheet, 2, 200, true); // NOTE: 2 accounts for the top row
@@ -2399,16 +2397,36 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
             var currRowData = root.pricingTableData.PRC_TBL_ROW[context.range._ref.row - 1]; // minus one to account for index
 
+            if (currRowData.PTR_SYS_PRD === "" || currRowData.PTR_SYS_PRD === null) {
+            	// Confirmation Dialog
+    			var modalOptions = {
+				closeButtonText: 'Close',
+				hasActionButton: false,
+				headerText: 'Product Validator needs to run',
+				bodyText: 'The product validator must run before we can find a list of tracker numbers for this row. Please run the product validator then try again.'
+				};
+				confirmationModal.showModal({}, modalOptions);
+            	return;
+            }
+
+            var prdObj = JSON.parse(currRowData.PTR_SYS_PRD);
+            var prdList = [];
+            for (var key in prdObj) {
+				if (prdObj.hasOwnProperty(key)) {
+					prdList.push(prdObj[key][0].PRD_MBR_SID);
+				}
+			}
+			
             // Get data to filter ECAP numbers against
             /////// TODO: exact start date, end date, geo, cust product
             var filterData = {
                 'DEAL_STRT_DT': currRowData.START_DT,
                 'DEAL_END_DT': currRowData.END_DT,
-                'GEO_MBR_SID': currRowData.GEO_COMBINED,
+                'GEO_COMBINED': currRowData.GEO_COMBINED,
                 'CUST_MBR_SID': currRowData.CUST_MBR_SID,
-                'PRD_MBR_SID': currRowData.PTR_USER_PRD
+                'PRD_MBR_SID': prdList[0]
             };
-
+			
             var modalInstance = $uibModal.open({
                 ariaLabelledBy: 'modal-title',
                 ariaDescribedBy: 'modal-body',

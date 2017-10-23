@@ -1085,12 +1085,14 @@
 
                 var modal = $uibModal.open({
                     backdrop: 'static',
-                    templateUrl: 'app/contract/partials/ptModals/ecapTrackerAutoFillModal.html',
+                    templateUrl: 'ecapAutoFillTrackerModal',
                     controller: 'EcapTrackerAutoFillModalCtrl',
-                    controllerAs: '$ctrl',
+                    controllerAs: 'vm',
                     size: 'lg',
                     resolve: {
-                        colData: null, // TODO
+                    	custId:	function () {
+							return $scope.contractData.CUST_MBR_SID;
+						}							
                     }
                 });
 
@@ -1682,12 +1684,12 @@
 
                 // Remove any lingering blank rows from the data
                 if (!!sData) {
-                    for (var n = sData.length - 1; n >= 0; n--) {
-                        debugger;
-                        if (!sData[n].PS_WF_STG_CD)
-                        {
-                            sData[n].PS_WF_STG_CD = $scope.curPricingStrategy.WF_STG_CD;
-                        }
+                	for (var n = sData.length - 1; n >= 0; n--) {
+                		debugger;
+                		if (!sData[n].PS_WF_STG_CD)
+                		{
+                			sData[n].PS_WF_STG_CD = $scope.curPricingStrategy.WF_STG_CD;
+                		}
                         if (sData[n].DC_ID === null && sData[n].PTR_USER_PRD === "") {
                             sData.splice(n, 1);
                         }
