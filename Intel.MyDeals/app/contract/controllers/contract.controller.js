@@ -2635,7 +2635,6 @@
                     if ($scope.contractData.PRC_ST === undefined) $scope.contractData.PRC_ST = [];
                     $scope.contractData.PRC_ST.push(ps);
                     $scope.showAddPricingTable(ps);
-                    $scope.addStrategyDisabled = false;
                     topbar.hide();
                     $scope.setBusy("Save Successful", "Added Pricing Strategy");
                     $timeout(function () {
@@ -2644,6 +2643,7 @@
                     $scope.newStrategy.TITLE = "";
                     $scope.curPricingStrategy = ps;
                     $scope.curPricingStrategyId = ps.DC_ID;
+                    $scope.addStrategyDisabled = false;
                     $scope.refreshContractData($scope.curPricingStrategyId);
                 },
                 function (result) {
@@ -2766,7 +2766,7 @@
                     $scope.updateResults(data.data.PRC_TBL, pt);
                     $scope.setBusy("Saved", "Redirecting you to the Contract Editor");
                     $scope._dirty = false;
-                    $scope.addTableDisabled = false;
+                    //$scope.addTableDisabled = false;  //commented out, as we are routing we away anyways we do not need to re-enable this, leaving this in also allows users to potentially add the same table twice, creating duplicates
                     // load the screen
                     $state.go('contract.manager.strategy', {
                         cid: $scope.contractData.DC_ID,
