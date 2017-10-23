@@ -10,7 +10,6 @@
         var vm = this;
         // Non CPU verticals with drill down level 4
         var verticalsWithDrillDownLevel4 = ["EIA CPU", "EIA MISC"];
-        var productTypeToApplyMediaCode = ["EIA CPU", "CPU", "EIA MISC"];
         var verticalsWithNoMMSelection = ["CS", "WC"];
         var verticalsWithGDMFamlyAsDrillLevel5 = ["CS", "EIA CS", "EIA CPU", 'EIA MISC'];
         vm.productSelectionLevels = productSelectionLevels.data.ProductSelectionLevels;
@@ -336,12 +335,12 @@
                     response.data[0]['drillDownFilter5'] = (!!!item.drillDownFilter5 && item.drillDownFilter5 == "") ? null : item.drillDownFilter5;
                     vm.gridSelectItem(response.data[0]);
                 } else {
-                    vm.gridData = sortBySelectionLevelColumn(response.data);
                     vm.gridData = vm.gridData.map(function (x) {
                         x['selected'] = productExists(item, x.PRD_MBR_SID);
                         x['parentSelected'] = item.selected;
                         return x;
                     });
+                    vm.gridData = sortBySelectionLevelColumn(response.data, selectionLevel);
                     toggleColumnsWhenEmpty(vm.gridData, 'prodGrid');
                     dataSourceProduct.read();
                 }
@@ -360,29 +359,8 @@
                 default:
                     column = "PCSR_NBR";
             }
-            return $filter('orderBy')(gridData, selectionLevel);
+            return $filter('orderBy')(gridData, column);
         }
-
-        //function validateMediaCode(data, mediaCode) {
-        //    if (mediaCode.toUpperCase() == "ALL") return data;
-        //    var prdIdToremove = [];
-        //    for (var p = 0; p < data.length; p++) {
-        //        if (arrayContainsString(productTypeToApplyMediaCode, data[p].DEAL_PRD_TYPE)) {
-        //            if (data[p].MM_MEDIA_CD) {
-        //                if (!arrayContainsString(data[p].MM_MEDIA_CD.split(','), mediaCode)) {
-        //                    prdIdToremove.push(data[p].PRD_MBR_SID);
-        //                }
-        //            } else {
-        //                prdIdToremove.push(data[p].PRD_MBR_SID);
-        //            }
-        //        }
-        //    }
-        //    data = data.filter(function (x) {
-        //        return !arrayContainsString(prdIdToremove, x.PRD_MBR_SID);
-        //    });
-
-        //    return data;
-        //}
 
         function toggleColumnsWhenEmpty(data, prodGrid) {
             var grid = $("#" + prodGrid).data("kendoGrid");
