@@ -1,0 +1,47 @@
+﻿<table style="width:100%; table-layout:fixed">
+    <tbody>
+        <tr>
+            <td style="width:48%; vertical-align:top" ng-if="rootScope.C_ADD_ATTACHMENTS">
+                <div class="panel panel-default ">
+                    <div class="panel-heading">
+                        Add Attachments
+                        <span kendo-tooltip k-content="'Allowed File Types: doc, xls, txt, bmp, jpg, pdf, ppt, zip, xlsx, docx, pptx, odt, ods, ott, sxw, sxc, png, 7z, xps.'" k-position="'top'" class="opElementHelpIcon intelicon-information-outlined"></span>
+                    </div>
+                    <div class="panel-body">
+                        <div>
+                            <input id="fileUploader"
+                                   type="file"
+                                   name="files"
+                                   kendo-upload="files"
+                                   k-upload="filePostAddParams"
+                                   k-success="onSuccess"
+                                   k-error="onError"
+                                   k-complete="onComplete"
+                                   k-select="onFileSelect"
+                                   k-remove="onFileRemove"
+                                   k-async="fileUploadOptions" />
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <td style="width:4%" />
+            <td style="width:48%; vertical-align:top">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Attachments <span ng-if="attachmentCount > 0 && initComplete" class="badge">{{attachmentCount}}</span></div>
+                    <div class="panel-body">
+                        <div ng-hide="attachmentCount <= 0 || !initComplete" id="attachmentsGrid" kendo-grid k-ng-delay="attachmentsDlgShown" style="height:375px;" options="attachmentsGridOptions"></div>
+                        <div ng-hide="attachmentCount != 0 || !initComplete" style="height:375px;">
+                            <p>This deal has no attachments.</p>
+                        </div>
+                        <div ng-hide="initComplete" style="height:375px;">
+                            <p><i>Retrieving attachments...</i></p>
+                        </div>
+                        <div ng-hide="attachmentCount >= 0" style="height:375px; color:red">
+                            <p>Unable to retrieve attachments!</p>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>

@@ -53,8 +53,11 @@ namespace Intel.MyDeals.Entities
             OpDataElementAtrb de = dc.GetAtrb(atrbCd);
             if (de != null && (de.AtrbValue == null || val == null || de.AtrbValue.ToString() != val.ToString()))
             {
-                de.AtrbValue = val;
-                de.State = OpDataElementState.Modified;
+                if (de.AtrbValue != val)
+                {
+                    de.AtrbValue = val;
+                    de.State = OpDataElementState.Modified;
+                }
             }
 
         }

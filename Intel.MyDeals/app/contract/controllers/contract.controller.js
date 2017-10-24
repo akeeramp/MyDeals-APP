@@ -1925,26 +1925,27 @@
         // **** SAVE CONTRACT Methods ****
         //
         $scope.saveEntireContractBase = function (stateName, forceValidation, forcePublish, toState, toParams, delPtr) {
-        	var deferred = $q.defer();
+
+            var deferred = $q.defer();
             if (!$scope._dirty && !forceValidation) {
             	return deferred.promise;
             }
 
             // if save already started saving... exit
             // if validate triggers from product translation continue..validating data
-            if ($scope.isBusyMsgTitle !== "Validating your data..." && $scope.isBusyMsgTitle !== "Saving your data..") {
+            if ($scope.isBusyMsgTitle !== "Validating your data..." && $scope.isBusyMsgTitle !== "Saving your data.." && $scope.isBusyMsgTitle !== "Overlapping Deals...") {
                 if (!!$scope.isBusyMsgTitle && $scope.isBusyMsgTitle !== "") return;
             }
 
             $scope.saveEntireContractRoot(stateName, forceValidation, forcePublish, toState, toParams, delPtr).then(
 				function (result) {
-					deferred.resolve(result);
+				    deferred.resolve(result);
 				}, function (err) {
-					deferred.reject(err)
-				}
+				    deferred.reject(err);
+                }
 			);
 
-			return deferred.promise;
+            return deferred.promise;
         }
 
         $scope.saveEntireContractRoot = function (stateName, forceValidation, forcePublish, toState, toParams, delPtr, isProductTranslate, bypassLowerContract) {
@@ -1999,9 +2000,12 @@
 
             var copyData = util.deepClone(data);
             $scope.compressJson(copyData);
+            $scope.removeCleanItems(copyData);
 
+            util.console("updateContractAndCurPricingTable Started");
             objsetService.updateContractAndCurPricingTable($scope.getCustId(), $scope.contractData.DC_ID, copyData, forceValidation, forcePublish, delPtr, isProductTranslate).then(
                 function (results) {
+                    util.console("updateContractAndCurPricingTable Returned");
 
                 	var i;
                 	if (!isProductTranslate) {
@@ -2084,6 +2088,8 @@
                         $scope.refreshContractData($scope.curPricingStrategyId, $scope.curPricingTableId);
                     }
                     $scope.isAutoSaving = false;
+
+                    util.console("updateContractAndCurPricingTable Complete");
 
                 },
                 function (response) {
@@ -2237,6 +2243,16 @@
                     }
                 }
             });
+        }
+
+        $scope.removeCleanItems = function(data) {
+
+            //if (!!data.WipDeals) {
+            //    data.WipDeals = data.WipDeals.filter(function (a) { return a._dirty });
+            //}
+
+            //debugger;
+
         }
 
         $scope.compressJson = function (data) {

@@ -15,7 +15,7 @@ namespace Intel.MyDeals.DataLibrary
     {
         public CostTestDetail GetCostTestDetails(int prcTblId)
         {
-            OpLogPerf.Log("GetCostTestDetails");
+            OpLog.Log("GetCostTestDetails");
 
             var ret = new List<CostTestDetailItem>();
             var ret2 = new List<CostTestGroupDetailItem>();
@@ -223,7 +223,7 @@ namespace Intel.MyDeals.DataLibrary
 
         public void RunPct(int objTypeId, List<int> objSetTypeIds)
         {
-            OpLogPerf.Log("RunPct");
+            OpLog.Log("RunPct");
 
             try
             {

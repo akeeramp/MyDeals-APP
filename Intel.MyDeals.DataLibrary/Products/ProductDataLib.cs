@@ -17,7 +17,7 @@ namespace Intel.MyDeals.DataLibrary
         /// <returns>list of product data</returns>
         public List<Product> GetProducts()
         {
-            OpLogPerf.Log("GetProducts");
+            OpLog.Log("GetProducts");
 
             var ret = new List<Product>();
             var cmd = new Procs.dbo.PR_MYDL_GET_PRD_DTL { };
@@ -142,7 +142,7 @@ namespace Intel.MyDeals.DataLibrary
         /// <returns></returns>
         public List<ProductIncExcAttribute> SetIncludeExclude(List<ProductIncExcAttribute> data, string opsType)
         {
-            OpLogPerf.Log("ProductIncExcAttribute");
+            OpLog.Log("ProductIncExcAttribute");
             var ret = new List<ProductIncExcAttribute>();
             try
             {
@@ -186,7 +186,7 @@ namespace Intel.MyDeals.DataLibrary
         /// <returns type="ProductIncExcAttributeSelector">List of inclide, exclude and master attribute</returns>
         public ProductIncExcAttributeSelector GetProductIncludeExcludeAttribute()
         {
-            OpLogPerf.Log("GetProductIncludeExcludeAttribute");
+            OpLog.Log("GetProductIncludeExcludeAttribute");
 
             var ret = new ProductIncExcAttributeSelector();
             var retProdIncExcAttribute = new List<IncExcAttributeMaster>();
@@ -242,7 +242,7 @@ namespace Intel.MyDeals.DataLibrary
         public List<PrdDealType> GetProdDealType()
         {
             var ret = new List<PrdDealType>();
-            OpLogPerf.Log("GetProdDealType");
+            OpLog.Log("GetProdDealType");
 
             var cmd = new Procs.dbo.PR_MYDL_GET_DEAL_TYPES { };
 
@@ -274,7 +274,7 @@ namespace Intel.MyDeals.DataLibrary
         public List<PrdSelLevel> GetProdSelectionLevel(int OBJ_SET_TYPE_SID = 3)
         {
             var ret = new List<PrdSelLevel>();
-            OpLogPerf.Log("GetProdSelectionLevel");
+            OpLog.Log("GetProdSelectionLevel");
             try
             {
                 Procs.dbo.PR_MYDL_LD_PRD_SEL_LVL cmd = new Procs.dbo.PR_MYDL_LD_PRD_SEL_LVL
@@ -313,7 +313,7 @@ namespace Intel.MyDeals.DataLibrary
         public List<ProductAlias> SetProductAlias(CrudModes mode, ProductAlias data)
         {
             var ret = new List<ProductAlias>();
-            OpLogPerf.Log("SetProductAlias");
+            OpLog.Log("SetProductAlias");
             try
             {
                 using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_MYDL_UPD_PRD_ALIAS()
@@ -406,7 +406,7 @@ namespace Intel.MyDeals.DataLibrary
         /// <returns></returns>
         public List<PRD_TRANSLATION_RESULTS> GetProductDetails(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID, string DEAL_TYPE)
         {
-            OpLogPerf.Log("FindProductMatch");
+            OpLog.Log("FindProductMatch");
             var ret = new List<PRD_TRANSLATION_RESULTS>();
             try
             {
@@ -542,7 +542,7 @@ namespace Intel.MyDeals.DataLibrary
         /// <returns></returns>
         public List<PRD_LOOKUP_RESULTS> SearchProduct(List<ProductEntryAttribute> productsToMatch, int CUST_MBR_SID, OpDataElementSetType dealType, bool getWithoutFilters)
         {
-            OpLogPerf.Log("FindProductMatch");
+            OpLog.Log("FindProductMatch");
             var ret = new List<PRD_LOOKUP_RESULTS>();
             try
             {
@@ -674,7 +674,7 @@ namespace Intel.MyDeals.DataLibrary
         /// <returns></returns>
         public ProductSelectorWrapper GetProductSelectorWrapper()
         {
-            OpLogPerf.Log("GetProductSelectionLevels");
+            OpLog.Log("GetProductSelectionLevels");
             var ret = new ProductSelectorWrapper();
             var cmd = new Procs.dbo.PR_MYDL_SEARCH_PRD_DTL();
             try
@@ -792,7 +792,7 @@ namespace Intel.MyDeals.DataLibrary
         public List<ProductSelectionResults> GetProductSelectionResults(string searchHash, DateTime startDate, DateTime endDateTime,
                 int selectionLevel, string drillDownFilter4, string drillDownFilter5, int custSid, string geoSid, string mediaCd, OpDataElementSetType dealType)
         {
-            OpLogPerf.Log("ProductSelectionResults");
+            OpLog.Log("ProductSelectionResults");
             var ret = new List<ProductSelectionResults>();
 
             try
@@ -927,7 +927,7 @@ namespace Intel.MyDeals.DataLibrary
         /// <returns></returns>
         public List<ProductCAPYCS2> GetProductCAPYCS2Data(List<ProductCAPYCS2Calc> productCAPCalc, string getAvailable, string priceCondition)
         {
-            OpLogPerf.Log("GetProductCAPYCS2Data");
+            OpLog.Log("GetProductCAPYCS2Data");
             var ret = new List<ProductCAPYCS2>();
             try
             {
@@ -989,7 +989,7 @@ namespace Intel.MyDeals.DataLibrary
 
         public List<ProductCAPYCS2> GetCAPForProduct(List<ProductCAPYCS2Calc> product, string getAvailable, string priceCondition)
         {
-            OpLogPerf.Log("GetProductCAPYCS2Data");
+            OpLog.Log("GetProductCAPYCS2Data");
             var ret = new List<ProductCAPYCS2>();
             try
             {

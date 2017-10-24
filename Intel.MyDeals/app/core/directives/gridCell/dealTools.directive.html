@@ -9,31 +9,20 @@
 
     <!-- Split group icon -->
     <div class='fl md-icon rotate-270' ng-if="(editable === true) &&(!dataItem._parentCnt || dataItem._parentCnt > 1)">
-        <i class="intelicon-org-chart" style="font-size: 20px !important; cursor: pointer; color: #00AEEF; margin-right: 9px;" ng-click="splitGroupDialog.open()"></i>
+        <i class="intelicon-org-chart" style="font-size: 20px !important; cursor: pointer; color: #00AEEF; margin-right: 9px;" ng-click="openSplit()"></i>
     </div>
 
     <!-- Notes icon -->
     <div class='fl md-icon' ng-if="!dataItem.NOTES || dataItem.NOTES === '' && dataItem.PS_WF_STG_CD">
-        <i class='intelicon-discussion-solid' style="font-size: 20px !important; cursor: pointer; color: #00AEEF;" title="Click to add a comment" ng-click="notesDialog.open()"></i>
+        <i class='intelicon-discussion-solid' style="font-size: 20px !important; cursor: pointer; color: #00AEEF;" title="Click to add a comment" ng-click="openNotes()"></i>
     </div>
     <div class='fl md-icon' ng-if="!!dataItem.NOTES && dataItem.NOTES !== '' && dataItem.PS_WF_STG_CD">
-        <i class='intelicon-discussion-solid' style="font-size: 20px !important; cursor: pointer; color: #003C71;" title="{{dataItem.NOTES}}" ng-click="notesDialog.open()"></i>
+        <i class='intelicon-discussion-solid' style="font-size: 20px !important; cursor: pointer; color: #003C71;" title="{{dataItem.NOTES}}" ng-click="openNotes()"></i>
     </div>
 
     <!-- Attachments icon -->
-    <div class='fl md-icon' ng-if='!rootScope.C_VIEW_ATTACHMENTS'>
-        <i class='intelicon-attach' style="font-size: 20px !important; color: #e7e7e8;" title="You do not have permission to view attachments"></i>
-    </div>
-    <div ng-if='rootScope.C_VIEW_ATTACHMENTS'>
-        <div class='fl md-icon' ng-if="isFileAttachmentEnabled && !dataItem.HAS_ATTACHED_FILES && dataItem.PS_WF_STG_CD === 'Cancelled'">
-            <i class='intelicon-attach' style="font-size: 20px !important; color: #e7e7e8;" title="Cancelled, cannot add an attachment"></i>
-        </div>
-        <div class='fl md-icon' ng-if="isFileAttachmentEnabled && !dataItem.HAS_ATTACHED_FILES && dataItem.PS_WF_STG_CD !== 'Cancelled'">
-            <i class='intelicon-attach' style="font-size: 20px !important; color: #00AEEF; cursor: pointer;" title="Click to add an attachment" ng-click="attachmentsDialog.open()"></i>
-        </div>
-        <div class='fl md-icon' ng-if="isFileAttachmentEnabled && dataItem.HAS_ATTACHED_FILES === '1'">
-            <i class='intelicon-attach' style="font-size: 20px !important; color: #003C71; cursor: pointer;" title="Click to view or add attachments" ng-click="attachmentsDialog.open()"></i>
-        </div>
+    <div class='fl md-icon'>
+        <i ng-class="getFileIcon(dataItem)" ng-style="getFileStyle(dataItem)" ng-attr-title="{{getFileTitle(dataItem)}}" style="font-size: 20px !important;" ng-click="clkFileIcon(dataItem)"></i>
     </div>
 
     <!-- Delete icon -->
@@ -41,7 +30,7 @@
         <i ng-if="(!dataItem._actionsPS || !dataItem._actionsPS.Cancel) && dataItem.WF_STG_CD !== 'Cancelled'" class='intelicon-trash-solid' style="font-size: 20px !important; color: #e7e7e8;"
            title="Unable to delete the deal at this stage"></i>
         <i ng-if="!!dataItem._actionsPS && !!dataItem._actionsPS.Cancel && dataItem._actionsPS.Cancel && dataItem.WF_STG_CD !== 'Cancelled'" class='intelicon-trash-solid' style="font-size: 20px !important; cursor: pointer;"
-           title="Click to delete the deal" ng-click="deleteDialog.open()"></i>
+           title="Click to delete the deal" ng-click="openDeleteDialog()"></i>
     </div>
     <div class='fl md-icon-disabled' ng-if="editable === true && (!!dataItem._parentCnt && dataItem._parentCnt > 1)">
         <i class='intelicon-trash-solid' style="font-size: 20px !important; color: #e7e7e8;"
@@ -50,14 +39,7 @@
 
     <!-- Hold icon -->
     <div class='fl md-icon' ng-if="(dataItem._parentCnt === undefined || dataItem._parentCnt <= 1)">
-        <i ng-if="getHoldValue(dataItem) === 'NoHold'" class='fa fa-hand-paper-o' style="font-size: 20px !important; color: #e7e7e8;"
-           title="Unable to place a hold on the deal at this stage"></i>
-        <i ng-if="getHoldValue(dataItem) === 'CantRemoveHold'" class='fa fa-thumbs-o-up' style="font-size: 20px !important; color: #e7e7e8;"
-           title="Unable to take the deal off of hold at this stage"></i>
-        <i ng-if="getHoldValue(dataItem) === 'CanHold'" class='fa fa-hand-paper-o' style="font-size: 20px !important; cursor: pointer;"
-           title="Click to place the deal on hold" ng-click="holdDialog.open()"></i>
-        <i ng-if="getHoldValue(dataItem) === 'TakeOffHold'" class='fa fa-thumbs-o-up' style="font-size: 20px !important; color: #FC4C02; cursor: pointer;"
-           title="Click to take the deal off hold" ng-click="unHoldDialog.open()"></i>
+        <i ng-class='getHoldIcon(dataItem)' ng-style="getHoldStyle(dataItem)" ng-attr-title="{{getHoldTitle(dataItem)}}" style="font-size: 20px !important;" ng-click="clkHoldIcon(dataItem)"></i>
     </div>
     <div class='fl md-icon-disabled' ng-if="(!!dataItem._parentCnt && dataItem._parentCnt > 1)">
         <i class='fa fa-hand-paper-o' style="font-size: 20px !important; color: #e7e7e8;"
@@ -67,258 +49,5 @@
     <div class='clearboth'></div>
 </div>
 
-<div class="promptUserDialog" kendo-dialog="splitGroupDialog" k-visible="false" k-modal="true" k-actions="groupActions" k-width="400" k-height="250">
-    <h4>Would you like to split the group?</h4>
-    <p>
-        This will allow you to make changes in the Deal Editor.<br />Please note a new Row ID will be assigned for your reference.
-    </p>
-</div>
-
-<div class="notesDialog" kendo-dialog="notesDialog" k-title="'Notes'" k-show="notesDialogShow" k-visible="false" k-modal="true" k-actions="notesActions" k-width="500" k-height="400">
-    <div class="myDealsControl"
-         op-control-flat
-         ng-model="dataItem"
-         op-cd="'NOTES'"
-         op-type="'TEXTAREA'"
-         op-label="''"
-         op-is-form="true"
-         op-ui-mode="'VERTICAL'"></div>
-</div>
-
-<div kendo-dialog="attachmentsDialog" k-title="'Deal {{dataItem.DC_ID}} Attachments'" k-show="attachmentsDialogShow" k-visible="false" k-modal="true" k-actions="attachmentsActions" k-width="900" k-height="725">
-    <table style="width:100%; table-layout:fixed">
-        <tbody>
-            <tr>
-                <td style="width:48%; vertical-align:top" ng-if="rootScope.C_ADD_ATTACHMENTS">
-                    <div class="panel panel-default ">
-                        <div class="panel-heading">
-                            Add Attachments
-                            <span kendo-tooltip k-content="'Allowed File Types: doc, xls, txt, bmp, jpg, pdf, ppt, zip, xlsx, docx, pptx, odt, ods, ott, sxw, sxc, png, 7z, xps.'" k-position="'top'" class="opElementHelpIcon intelicon-information-outlined"></span>
-                        </div>
-                        <div class="panel-body">
-                            <div>
-                                <input id="fileUploader"
-                                       type="file"
-                                       name="files"
-                                       kendo-upload="files"
-                                       k-upload="filePostAddParams"
-                                       k-success="onSuccess"
-                                       k-error="onError"
-                                       k-complete="onComplete"
-                                       k-select="onFileSelect"
-                                       k-remove="onFileRemove"
-                                       k-async="fileUploadOptions" />
-                            </div>
-                        </div>
-                    </div>
-                </td>
-                <td style="width:4%" />
-                <td style="width:48%; vertical-align:top">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">Attachments <span ng-if="attachmentCount > 0 && initComplete" class="badge">{{attachmentCount}}</span></div>
-                        <div class="panel-body">
-                            <div ng-hide="attachmentCount <= 0 || !initComplete" id="attachmentsGrid" kendo-grid k-ng-delay="attachmentsDlgShown" style="height:475px;" options="attachmentsGridOptions"></div>
-                            <div ng-hide="attachmentCount != 0 || !initComplete" style="height:475px;">
-                                <p>This deal has no attachments.</p>
-                            </div>
-                            <div ng-hide="initComplete" style="height:475px;">
-                                <p><i>Retrieving attachments...</i></p>
-                            </div>
-                            <div ng-hide="attachmentCount >= 0" style="height:475px; color:red">
-                                <p>Unable to retrieve attachments!</p>
-                            </div>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-
-<div class="promptUserDialog" kendo-dialog="deleteAttachmentDialog" k-visible="false" k-modal="true" k-actions="deleteAttachmentActions" k-width="400" k-height="250">
-    <h4>Delete this file attachment?</h4>
-</div>
-
-<div class="promptUserDialog" kendo-dialog="deleteDialog" k-visible="false" k-modal="true" k-actions="deleteActions" k-width="400" k-height="250">
-    <h4>Would you like to delete the deal?</h4>
-    <p>
-        This will remove the deal from the Pricing Editor also.
-    </p>
-</div>
-
-<div class="promptUserDialog" kendo-dialog="holdDialog" k-visible="false" k-modal="true" k-actions="holdActions" k-width="400" k-height="250">
-    <h4>Would you like to place the deal on hold?</h4>
-    <p>
-        This will keep the deal in the Pricing Table, but it will not get promoted to active or get a tracker number for payment.
-    </p>
-</div>
-
-<div class="promptUserDialog" kendo-dialog="unHoldDialog" k-visible="false" k-modal="true" k-actions="unHoldActions" k-width="400" k-height="250">
-    <h4>Would you like to take the deal off hold?</h4>
-    <p>
-        This will enable the deal in the Pricing Table and will enable it to get approved.
-    </p>
-</div>
-
-<style>
-    .k-dialog .notesDialog.k-content textarea {
-        width: 450px;
-        height: 250px;
-    }
-
-    .k-dialog .notesDialog.k-content .opUiContainer {
-        margin-top: -30px;
-    }
-
-    .k-dialog .promptUserDialog {
-        text-align: center;
-        padding: 10px 0 0 0;
-    }
-
-        .k-dialog .promptUserDialog h4 {
-            color: #003C71;
-            font-size: 18px;
-            font-weight: 600;
-            margin-top: 0;
-        }
-
-        .k-dialog .promptUserDialog p {
-            font-size: 12px;
-            padding: 10px 20px;
-        }
-
-    .rotate90 {
-        -ms-transform: rotate(90deg);
-        -webkit-transform: rotate(90deg);
-        transform: rotate(90deg);
-    }
-
-    .dealTools {
-        line-height: 1.8em;
-        height: 100% !important;
-        width: 100%;
-    }
-
-        .dealTools .gridStatusMarker {
-            font-family: arial;
-        }
-
-        .dealTools a {
-            text-decoration: none;
-        }
-
-        .dealTools i:hover {
-            color: #003C71;
-        }
-
-    .gridStatusMarker {
-        height: 100%;
-        width: 16px;
-        color: #000000;
-        background-color: #cccccc;
-        font-size: 14px;
-        font-weight: 600;
-        padding: 6px 2px 6px 7px;
-        text-align: center;
-    }
-
-        .gridStatusMarker.Working {
-            color: #000000;
-            background-color: #FFA300;
-        }
-
-        .gridStatusMarker.Active {
-            color: #000000;
-            background-color: #C4D600;
-        }
-
-        .gridStatusMarker.Cancelled {
-            color: #000000;
-            background-color: #cccccc;
-        }
-
-    .md-icon {
-        padding: 4px 2px 0 5px;
-    }
-
-        .md-icon i {
-            color: #00AEEF;
-        }
-
-            .md-icon i:hover {
-                color: #003C71 !important;
-            }
-
-    .md-icon-disabled {
-        padding: 4px 2px 0 5px;
-    }
-
-        .md-icon-disabled i {
-            color: #00AEEF;
-        }
-
-    .dealTools input[type=radio].with-font,
-    .dealTools input[type=checkbox].with-font {
-        border: 0;
-        clip: rect(0 0 0 0);
-        height: 1px;
-        margin: -1px;
-        overflow: hidden;
-        padding: 0;
-        position: absolute;
-        width: 1px;
-    }
-
-        .dealTools input[type=radio].with-font + label:before,
-        .dealTools input[type=checkbox].with-font + label:before {
-            font-family: FontAwesome;
-            display: inline-block;
-            content: "\f096";
-            font-size: 20px;
-            letter-spacing: 10px;
-            color: #00AEEF;
-            margin-left: 10px;
-        }
-
-        .dealTools input[type=radio].with-font:hover + label:before,
-        .dealTools input[type=checkbox].with-font:hover + label:before {
-            color: #003C71;
-            cursor: pointer;
-        }
-
-        .dealTools input[type=radio].with-font.disabled + label:before,
-        .dealTools input[type=checkbox].with-font.disabled + label:before {
-            color: #cccccc;
-            cursor: default;
-        }
-
-        .dealTools input[type=radio].with-font:checked + label:before,
-        .dealTools input[type=checkbox].with-font:checked + label:before {
-            content: "\f046";
-            font-size: 20px;
-            letter-spacing: 5px;
-            color: #C4D600;
-            margin-left: 10px;
-        }
-
-        .dealTools input[type=radio].with-font:focus + label:before,
-        .dealTools input[type=checkbox].with-font:focus + label:before {
-            font-weight: bold;
-            color: #00AEEF;
-        }
-
-        .dealTools input[type=radio].with-font:checked:focus + label:before,
-        .dealTools input[type=checkbox].with-font:checked:focus + label:before {
-            font-weight: bold;
-            color: #C4D600;
-        }
-
-    .delete-attach-icon {
-        font-size: 16px;
-        cursor: pointer;
-    }
-
-        .delete-attach-icon:hover {
-            text-decoration: none;
-        }
-</style>
+<div id="notesDialog"></div>
+<div id="fileDialog"></div>

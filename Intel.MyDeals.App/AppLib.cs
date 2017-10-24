@@ -60,7 +60,7 @@ namespace Intel.MyDeals.App
                 return user;
             }
 
-            OpLogPerf.Log("Initializing AVM");
+            OpLog.Log("Initializing AVM");
 
             AVM = new ApplicationViewModel
             {
@@ -74,7 +74,7 @@ namespace Intel.MyDeals.App
             SetEnvName();
             SetVersion();
 
-            OpLogPerf.Log("Found User" + user.Usr.FullName);
+            OpLog.Log("Found User" + user.Usr.FullName);
             return user;
         }
 

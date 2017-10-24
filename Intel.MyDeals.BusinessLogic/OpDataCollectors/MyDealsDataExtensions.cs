@@ -406,10 +406,14 @@ namespace Intel.MyDeals.BusinessLogic
         /// Save MyDealsData to the Database
         /// </summary>
         /// <param name="myDealsData">MyDealsData</param>
+        /// <param name="contractToken"></param>
         /// <returns></returns>
         public static MyDealsData Save(this MyDealsData myDealsData, ContractToken contractToken)
         {
-            return Save(myDealsData, contractToken, true);
+            OpLog.Log("MyDealsData.Save - Start.");
+            MyDealsData newMyDealsData = myDealsData.Save(contractToken, true);
+            OpLog.Log("MyDealsData.Save - complete.");
+            return newMyDealsData;
         }
 
         /// <summary>
@@ -994,6 +998,8 @@ namespace Intel.MyDeals.BusinessLogic
 
 		public static MyDealsData SavePacketsBase(this MyDealsData myDealsData, OpDataCollectorFlattenedDictList data, ContractToken contractToken, List<int> validateIds, bool forcePublish, string sourceEvent, bool resetValidationChild, bool isProductTranslate)
         {
+            OpLog.Log("SavePacketsBase - Start.");
+
             // Save Data Cycle: Point 9
 
             // How this should work:
@@ -1020,6 +1026,8 @@ namespace Intel.MyDeals.BusinessLogic
             MyDealsData myDealsDataResults = myDealsData.PerformTasks(OpActionType.Save, contractToken);  // execute all save perform task items now
 
             if (hasErrors) TransferActions(myDealsDataResults, myDealsDataWithErrors);
+
+            OpLog.Log("SavePacketsBase - Complete.");
             return hasErrors ? myDealsDataWithErrors : myDealsDataResults;
         }
 
@@ -1046,6 +1054,8 @@ namespace Intel.MyDeals.BusinessLogic
             newPacket.GroupID = -101; // Whatever the real ID of this object is
             newPacket.PacketType = opDataElementType; // Why wasn't this set in constructor??
 
+            if (!(newPacket.Data.Any() || newPacket.Actions.Any())) return;
+
             // Back to normal operations, clear out the messages and all.
             //newPacket.Actions.RemoveAll(r => r.ActionDirection == OpActionDirection.Inbound);
             //newPacket.Messages.Messages.RemoveAll(r => true);
@@ -1061,6 +1071,7 @@ namespace Intel.MyDeals.BusinessLogic
 
         private static MyDealsData PerformTasks(this MyDealsData myDealsData, OpActionType? actionToRun, ContractToken contractToken)
         {
+            OpLog.Log("PerformTasks - Start.");
             // Save Data Cycle: Point 14
 
             //return new MyDealsData();
@@ -1082,6 +1093,8 @@ namespace Intel.MyDeals.BusinessLogic
                     ////        saveResponseSet = new DealDataLib().SaveDeals(myDealsData, opUserToken);
                     break;
             }
+
+            OpLog.Log("PerformTasks - Complete.");
             return saveResponseSet;
         }
 

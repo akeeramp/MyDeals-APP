@@ -20,7 +20,7 @@ namespace Intel.MyDeals.DataLibrary
             // Save Data Cycle: Point 15
             try
             {
-                OpLogPerf.Log("DealDataLib.Save:SaveMyDealsData - Start.");
+                OpLog.Log("DealDataLib.Save:SaveMyDealsData - Start.");
 
                 if (packets == null)
                 {
@@ -62,12 +62,12 @@ namespace Intel.MyDeals.DataLibrary
                 // Write them to dbo.MYDL_CL_WIP_ATRB
                 ImportOpDataPackets(orderedPackets, OpUserStack.MyOpUserToken.Usr.WWID, contractToken.CustId);
 
-                OpLogPerf.Log("DcsDealLib.SaveMyDealsData - Exit ImportOpDataPackets.");
+                OpLog.Log("DcsDealLib.SaveMyDealsData - Exit ImportOpDataPackets.");
 
                 // Get all the actions and process them in order
                 MyDealsData ret = batchMode ? ActionDealsBatch(orderedPackets, OpUserStack.MyOpUserToken.Usr.WWID) : ActionDeals(orderedPackets);
 
-                OpLogPerf.Log("DcsDealLib.SaveMyDealsData - Exit ActionDeals.");
+                OpLog.Log("DcsDealLib.SaveMyDealsData - Exit ActionDeals.");
 
 #if DEBUG
                 // Dump random debugging log messsage into the first returned packet.
@@ -107,7 +107,7 @@ namespace Intel.MyDeals.DataLibrary
 
             if (packets == null) { return; }
 
-            OpLogPerf.Log("DealDataLib.Save:ImportOpDataPackets - Start.");
+            OpLog.Log("DealDataLib.Save:ImportOpDataPackets - Start.");
 
             Guid groupBatchId = Guid.Empty;
 
@@ -133,7 +133,7 @@ namespace Intel.MyDeals.DataLibrary
                 groupBatchId = Guid.NewGuid();
             }
 
-            OpLogPerf.Log("DealDataLib.Save:ImportOpDataPackets - Begin DataTable Transformation.");
+            OpLog.Log("DealDataLib.Save:ImportOpDataPackets - Begin DataTable Transformation.");
 
             // Convert each set of packets to data tables so we can bulk upload them.
             OpParallelWait.ForEach<OpDataPacket<OpDataElementType>>(packets, odp =>
@@ -169,15 +169,15 @@ namespace Intel.MyDeals.DataLibrary
                 dsImport.Tables.Add(dtAction); // Add the actions table to the import data set
 
 #if DEBUG
-                OpLogPerf.Log("DealDataLib.Save:ImportOpDataPackets - Begin BulkImportDataSet.");
-                OpLogPerf.Log("DealDataLib.Save:ImportOpDataPackets - dtData.Rows: {0}.", dtData.Rows.Count);
-                OpLogPerf.Log("DealDataLib.Save:ImportOpDataPackets - dtData.Rows: {0}.", dtAction.Rows.Count);
+                OpLog.Log("DealDataLib.Save:ImportOpDataPackets - Begin BulkImportDataSet.");
+                OpLog.Log("DealDataLib.Save:ImportOpDataPackets - dtData.Rows: {0}.", dtData.Rows.Count);
+                OpLog.Log("DealDataLib.Save:ImportOpDataPackets - dtData.Rows: {0}.", dtAction.Rows.Count);
 #endif
 
                 // Bulk import all the data to DB...  This is the call that pushes all of the actions and attributes into the DB stage tables.
                 new DSOpDataPacketsToDatabase(DataAccess.ConnectionString).BulkImportDataSet(dsImport);
 
-                OpLogPerf.Log("DealDataLib.Save:ImportOpDataPackets - Begin PR_MYDL_TMP_TO_WIP_ATRB.");
+                OpLog.Log("DealDataLib.Save:ImportOpDataPackets - Begin PR_MYDL_TMP_TO_WIP_ATRB.");
 
                 DataSet dsCheckConstraintErrors = null;
                 try
@@ -224,22 +224,27 @@ namespace Intel.MyDeals.DataLibrary
                 }
             }
 
-            OpLogPerf.Log("DealDataLib.Save:ImportOpDataPackets - Done: deal.PR_MYDL_TMP_TO_WIP_ATRB.");
+            OpLog.Log("DealDataLib.Save:ImportOpDataPackets - Done: deal.PR_MYDL_TMP_TO_WIP_ATRB.");
         }
 
         private MyDealsData ActionDealsBatch(IEnumerable<OpDataPacket<OpDataElementType>> packets, int wwid)
         {
             // Save Data Cycle: Point 20
+            int packetCnt = packets.Count();
+            int deCnt = packets.Select(p => p.AllDataElements.Count()).Sum();
+            int actionCnt = packets.Select(p => p.Actions.Count()).Sum();
+            var ret = new MyDealsData();
+
+            if (actionCnt == 0) return ret;
 #if DEBUG
             OpLogPerf.Log("DealDataLib.Save:ActionDealsBatch - Start: {0} Packets, {1} Elements, {2} Actions.",
-                packets.Count(),
-                packets.Select(p => p.AllDataElements.Count()).Sum(),
-                packets.Select(p => p.Actions.Count()).Sum()
+                packetCnt,
+                deCnt,
+                actionCnt
                 );
 #endif
 
             var guidList = new type_guid_list(packets.Select(p => p.BatchID));
-            var ret = new MyDealsData();
 
             if (guidList.Rows.Count == 0)
             {
@@ -252,7 +257,7 @@ namespace Intel.MyDeals.DataLibrary
                 in_btch_ids = guidList
             }))
             {
-                OpLogPerf.Log("DealDataLib.Save:ActionDealsBatch - SP Complete, begin post processing.");
+                OpLog.Log("DealDataLib.Save:ActionDealsBatch - SP Complete, begin post processing.");
 
                 ret = ReaderToDataCollectors(rdr, false);
 

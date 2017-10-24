@@ -124,7 +124,7 @@ namespace Intel.MyDeals.DataLibrary
 
         public AdminConstant SetAdminConstants(CrudModes mode, AdminConstant adminValues)
         {
-            OpLogPerf.Log("SetAdminConstants");
+            OpLog.Log("SetAdminConstants");
             var ret = new List<AdminConstant>();
 
             try

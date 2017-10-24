@@ -527,7 +527,7 @@ namespace Intel.MyDeals.DataLibrary
 
 #if DEBUG
             if (EN.GLOBAL.DEBUG >= 2)
-                OpLogPerf.Log(
+                OpLog.Log(
                     String.Format("ReaderToDataCollectors Runtime: {0}ms; DataCollectors: {1}; DataElements: {2};",
                         (DateTime.Now - start).TotalMilliseconds,
                         deals,
@@ -1033,8 +1033,8 @@ namespace Intel.MyDeals.DataLibrary
         }
         
         public List<Overlapping> GetOverlappingDeals(int PRICING_TABLES_ID)
-        {            
-            OpLogPerf.Log("GetOverlappingDeals");
+        {
+            OpLog.Log("GetOverlappingDeals - Started");
 
             var ret = new List<Overlapping>();
             var cmd = new Procs.dbo.PR_MYDL_UI_GET_OVRLP
@@ -1111,12 +1111,13 @@ namespace Intel.MyDeals.DataLibrary
                 OpLogPerf.Log(ex);
                 throw;
             }
+            OpLog.Log("GetOverlappingDeals - Completed");
             return ret;
         }
 
         public List<Overlapping> UpdateOverlappingDeals(int PRICING_TABLES_ID, string YCS2_OVERLAP_OVERRIDE)
         {
-            OpLogPerf.Log("UpdateOverlappingDeals");
+            OpLog.Log("UpdateOverlappingDeals");
 
             var ret = new List<Overlapping>();
             var cmd = new Procs.dbo.PR_MYDL_UI_GET_OVRLP { };

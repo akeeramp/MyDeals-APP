@@ -17,7 +17,7 @@ namespace Intel.MyDeals.DataLibrary
         /// <returns>list of geo dimension data</returns>
         public List<GeoDimension> GetGeoDimensions()
         {
-            OpLogPerf.Log("GetGeoDimensions");
+            OpLog.Log("GetGeoDimensions");
 
             var ret = new List<GeoDimension>();
             var cmd = new Procs.dbo.PR_MYDL_GET_GEO_DIM { };

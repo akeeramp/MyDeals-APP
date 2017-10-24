@@ -16,7 +16,7 @@ namespace Intel.MyDeals.DataLibrary
         /// <returns></returns>
         public Dictionary<string, string> PingDbDetails()
         {
-            OpLogPerf.Log("PingDbDetails");
+            OpLog.Log("PingDbDetails");
 
             var res = new Dictionary<string, string>();
             const string dtFmtMsk = "{0:M/d/yy h:mm tt}";
@@ -166,7 +166,7 @@ namespace Intel.MyDeals.DataLibrary
 
         public string ExampleSQLException()
         {
-            OpLogPerf.Log("ExampleSQLException");
+            OpLog.Log("ExampleSQLException");
 
             try
             {

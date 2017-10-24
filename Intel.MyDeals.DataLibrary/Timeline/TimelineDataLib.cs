@@ -13,7 +13,7 @@ namespace Intel.MyDeals.DataLibrary
     {
         public List<Timeline> GetTimelineDetails(int id)
         {
-            OpLogPerf.Log("Timeline");
+            OpLog.Log("Timeline");
             List<Timeline> ret = new List<Timeline>();
             try
             {

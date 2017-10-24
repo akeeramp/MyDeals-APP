@@ -443,6 +443,7 @@
     <Content Include="app\contract\partials\lnavStrategyTree.html" />
     <Content Include="app\contract\partials\pricingTable.html" />
     <Content Include="app\core\directives\bindToHeight.directive.js" />
+    <Content Include="app\core\directives\gridCell\dealToolsHelper.html" />
     <Content Include="app\core\directives\gridCell\iconMctPct.directive.html" />
     <Content Include="app\core\directives\gridCell\iconMctPct.directive.js" />
     <Content Include="app\core\directives\gridCell\dealToolsTender.directive.html" />
@@ -453,6 +454,9 @@
     <Content Include="app\core\directives\gridCell\dealDetail.directive.js" />
     <Content Include="app\core\directives\gridCell\percentBar.directive.html" />
     <Content Include="app\core\directives\gridCell\percentBar.directive.js" />
+    <Content Include="app\core\directives\gridCell\_partials\files.html" />
+    <Content Include="app\core\directives\gridCell\_partials\notes.html" />
+    <Content Include="app\core\directives\gridCell\_partials\split.html" />
     <Content Include="app\core\directives\gridStatusBoard\contractStatusBoard.directive.html" />
     <Content Include="app\core\directives\gridStatusBoard\contractStatusBoard.directive.js" />
     <Content Include="app\core\directives\gridStatusBoard\gridStatusBoard.directive.html" />

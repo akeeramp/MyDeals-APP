@@ -430,6 +430,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.contractDs = new kendo.data.DataSource({
                 transport: {
                     read: function (e) {
+                        util.console("contractDs read Started");
                         $scope.optionCallback = e;
                         var i, r, g, group;
                         var data = $scope.opData;
@@ -494,6 +495,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         var source = data;
 
                         // on success
+                        util.console("contractDs read Ended");
                         e.success(source);
                     },
                     create: function (e) {
@@ -509,6 +511,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         }
                     },
                     update: function (e) {
+                        util.console("contractDs update Started");
                         //debugger;
                         var source = $scope.opData;
                         // locate item in original datasource and update it
@@ -521,6 +524,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                             }
                         }
                         // on success
+                        util.console("contractDs update Ended");
                         e.success();
                     },
                     destroy: function (e) {
@@ -1198,7 +1202,9 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
             $scope.$on('saveOpGridData', function (event, args) {
                 $timeout(function () {
+                    util.console("contractDs.sync Started");
                     $scope.contractDs.sync();
+                    util.console("contractDs.sync Ended");
                     $scope.root.saveEntireContract();
                 }, 100);
             });
@@ -1293,7 +1299,9 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
                 $scope.root.setBusy("Saving your data..", "Please wait while saving data.");
                 $timeout(function () {
+                    util.console("contractDs.sync Started");
                     $scope.contractDs.sync();
+                    util.console("contractDs.sync Ended");
                     $scope.root.saveEntireContract();
                 }, 100);
             }
@@ -1880,7 +1888,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 // findIndex() is not supported in IE11 and hence replacing with 'some()' that is supported in all browsers - VN
                 var indx = -1;
                 grps.some(function (e, i) {
-                    if (e.name == 'Overlapping') {
+                    if (e.name === 'Overlapping') {
                         indx = i;
                         return true;
                     }
@@ -1906,9 +1914,12 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
             $scope.saveAndValidateGrid = function () {
 
+
                 var dealType = $scope.dealTypes[0];
-                if (dealType.toUpperCase() == "ECAP") {
-                    if (usrRole == "GA" || usrRole == "FSE") {
+                if (dealType.toUpperCase() === "ECAP") {
+                    util.console("Overlapping Deals Started");
+                    $scope.$parent.$parent.setBusy("Overlapping Deals...", "Looking for Overlapping Deals!");
+                    if (usrRole === "GA" || usrRole === "FSE") {
                         $scope.isOvlpAccess = true;
                     }
                     //Fetch Overlapping Data
@@ -1917,6 +1928,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     //Calling WEBAPI
                     objsetService.getOverlappingDeals(pricingTableID)
                         .then(function (response) {
+                            util.console("Overlapping Deals Returned");
+                                //debugger;
                             if (response.data) {
                                 if (response.data.length > 0) {
 
@@ -1952,48 +1965,43 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                 }
                                 else {
                                     //Remove overlapping tab
+                                    util.console("Remove overlapping tab");
                                     $scope.removeOverlapTab();
                                     var tabStrip = $("#tabstrip").kendoTabStrip().data("kendoTabStrip");
-                                    if (!!tabStrip) {
+                                    if (!!tabStrip && $scope.curGroup === "Overlapping") {
                                         tabStrip.select(0);
                                         if ($scope.opOptions.groups !== undefined) {
                                             $scope.showCols($scope.opOptions.groupColumns.tools.Groups[0]);
                                         }
                                     }
 
-                                    $scope.$parent.$parent.setBusy("Validating your data...", "Please wait as we validate your information!");
-                                    //$timeout(function () {
-                                    $scope.contractDs.sync();
-                                    $scope.$parent.$parent.$parent.validateWipDeals();
-                                    //}, 100);
+                                    util.console("Remove overlapping tab DONE");
+                                    $scope.syncAndValidateWipDeals();
                                 }
 
                             } else {
-                                //TODO: Remove The code when DDL moved and PROC moved to all Envs
-                                $scope.$parent.$parent.setBusy("Validating your data...", "Please wait as we validate your information!");
-                                //$timeout(function () {
-                                $scope.contractDs.sync();
-                                $scope.$parent.$parent.$parent.validateWipDeals();
-                                //}, 100);
+                                $scope.syncAndValidateWipDeals();
                             }
                         },
                         function (response) {
-                            //TODO: Remove The code when DDL moved and PROC moved to all Envs
-                            $scope.$parent.$parent.setBusy("Validating your data...", "Please wait as we validate your information!");
-                            //$timeout(function () {
-                            $scope.contractDs.sync();
-                            $scope.$parent.$parent.$parent.validateWipDeals();
-                            //}, 100);
+                            $scope.syncAndValidateWipDeals();
                         });
 
 
                 } else {  //DE31324: fix for non-ECAP Dealtypes - this is the default behavior for VT/Program deals for now until we do overlapping deal changes (if we do?) for those types as well
-                    $scope.parentRoot.setBusy("Validating your data...", "Please wait as we validate your information!");
-                    $scope.contractDs.sync();
-                    $scope.root.validateWipDeals();
+                    $scope.syncAndValidateWipDeals();
                 }
 
                 return;
+            }
+
+            $scope.syncAndValidateWipDeals = function() {
+                util.console("syncAndValidateWipDeals");
+                $scope.parentRoot.setBusy("Validating your data...", "Please wait as we validate your information!");
+                util.console("contractDs.sync Started");
+                $scope.contractDs.sync();
+                util.console("contractDs.sync Ended");
+                $scope.root.validateWipDeals();
             }
 
             $scope.validateRow = function (row, scope) {

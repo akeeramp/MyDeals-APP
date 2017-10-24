@@ -2,9 +2,9 @@
     .module('app.core')
     .directive('dealTools', dealTools);
 
-dealTools.$inject = ['$timeout', 'logger', 'dataService', '$rootScope'];
+dealTools.$inject = ['$timeout', 'logger', 'dataService', '$rootScope', '$compile', '$templateRequest'];
 
-function dealTools($timeout, logger, dataService, $rootScope) {
+function dealTools($timeout, logger, dataService, $rootScope, $compile, $templateRequest) {
     return {
         scope: {
             dataItem: '=ngModel',
@@ -44,109 +44,9 @@ function dealTools($timeout, logger, dataService, $rootScope) {
                 return $scope.dataItem.WF_STG_CD === undefined ? "&nbsp;" : $scope.dataItem.WF_STG_CD[0];
             }
 
-            $scope.notesActions = [
-                {
-                    text: 'OK',
-                    action: function () {
-                        if ($scope.dataItem._dirty) {
-                            $scope._dirty = true;
-                            rootScope.saveCell($scope.dataItem, "NOTES");
-                        }
-                    }
-                }
-            ];
 
-            $scope.attachmentsActions = [
-                {
-                    text: 'Close',
-                    action: function () { }
-                }
-            ];
 
-            $scope.groupActions = [
-                {
-                    text: 'Cancel',
-                    action: function () { }
-                },
-                {
-                    text: 'Yes, Split',
-                    primary: true,
-                    action: function () {
-                        rootScope.unGroupPricingTableRow($scope.dataItem);
-                    }
-                }
-            ];
 
-            $scope.deleteActions = [
-                {
-                    text: 'Cancel',
-                    action: function () { }
-                },
-                {
-                    text: 'Yes, Delete',
-                    primary: true,
-                    action: function () {
-                        rootScope.deletePricingTableRow($scope.dataItem);
-                    }
-                }
-            ];
-
-            $scope.deleteAttachmentActions = [
-                {
-                    text: 'Cancel',
-                    action: function () { }
-                },
-                {
-                    text: 'Yes, Delete',
-                    primary: true,
-                    action: function () {
-                        dataService.post("/api/FileAttachments/Delete/" + deleteAttachmentParams.custMbrSid + "/" + deleteAttachmentParams.objTypeSid + "/" + deleteAttachmentParams.objSid + "/" + deleteAttachmentParams.fileDataSid + "/WIP_DEAL")
-                            .then(function (response) {
-                                logger.success("Successfully deleted attachment.", null, "Delete successful");
-
-                                // Refresh the Existing Attachments grid to reflect the newly deleted attachment.
-                                $scope.attachmentsGridOptions.dataSource.transport.read($scope.optionCallback);
-
-                                // Notify that attachments were added so that the state of the paper-clip icon can be updated accordingly.
-                                $rootScope.$broadcast('attachments-changed');
-                            },
-                            function (response) {
-                                logger.error("Unable to delete attachment.", null, "Delete failed");
-
-                                // Refresh the Existing Attachments grid.  There should be no changes, but just incase.
-                                $scope.attachmentsGridOptions.dataSource.transport.read($scope.optionCallback);
-                            });
-                    }
-                }
-            ];
-
-            $scope.holdActions = [
-                {
-                    text: 'Cancel',
-                    action: function () { }
-                },
-                {
-                    text: 'Yes, Hold',
-                    primary: true,
-                    action: function () {
-                        rootScope.actionWipDeal($scope.dataItem, 'Hold');
-                    }
-                }
-            ];
-
-            $scope.unHoldActions = [
-                {
-                    text: 'Cancel',
-                    action: function () { }
-                },
-                {
-                    text: 'Yes, Take off Hold',
-                    primary: true,
-                    action: function () {
-                        rootScope.actionWipDeal($scope.dataItem, 'Approve');
-                    }
-                }
-            ];
 
             $scope.notesDialogShow = function () {
             }
@@ -187,13 +87,16 @@ function dealTools($timeout, logger, dataService, $rootScope) {
 
                 // Refresh the Existing Attachments grid to reflect the newly uploaded attachments(s).
                 if (uploadSuccessCount > 0) {
-                    $scope.attachmentsGridOptions.dataSource.transport.read($scope.optionCallback);
+                    $scope.attachmentsDataSource.read();
+                    //$scope.attachmentsGridOptions.dataSource.transport.read($scope.optionCallback);
 
                     // Notify that attachments were removed so that the state of the paper-clip icon can be updated accordingly.
                     $rootScope.$broadcast('attachments-changed');
                 }
             }
 
+
+            // HOLD Items
             $scope.getHoldValue = function (dataItem) {
                 if (dataItem.WF_STG_CD === 'Active') return 'NoHold';
 
@@ -206,9 +109,98 @@ function dealTools($timeout, logger, dataService, $rootScope) {
                     if (!!dataItem._actionsPS.Hold && dataItem._actionsPS.Hold === true) return 'CanHold';
                     else return 'NoHold';
                 }
-
-                return 'SumTingWong';
             }
+            $scope.holdItems = {
+                "NoHold": {
+                    "icon": "fa fa-hand-paper-o",
+                    "title": "Unable to place a hold on the deal at this stage",
+                    "style": { color: "#e7e7e8" }
+                },
+                "TakeOffHold": {
+                    "icon": "fa fa-thumbs-o-up",
+                    "title": "Click to take the deal off hold",
+                    "style": { color: "#FC4C02", cursor: "pointer" }
+                },
+                "CantRemoveHold": {
+                    "icon": "fa fa-thumbs-o-up",
+                    "title": "Unable to take the deal off of hold at this stage",
+                    "style": { color: "#e7e7e8" }
+                },
+                "CanHold": {
+                    "icon": "fa fa-hand-paper-o",
+                    "title": "Click to place the deal on hold",
+                    "style": { cursor: "pointer" }
+                }
+            }
+            $scope.getHoldIcon = function (dataItem) {
+                return $scope.holdItems[$scope.getHoldValue(dataItem)].icon;
+            };
+            $scope.getHoldTitle = function (dataItem) {
+                return $scope.holdItems[$scope.getHoldValue(dataItem)].title;
+            };
+            $scope.getHoldStyle = function (dataItem) {
+                return $scope.holdItems[$scope.getHoldValue(dataItem)].style;
+            };
+            $scope.clkHoldIcon = function (dataItem) {
+                var hVal = $scope.getHoldValue(dataItem);
+                if (hVal === "CanHold") $scope.openHoldDialog();
+                if (hVal === "TakeOffHold") $scope.openUnHoldDialog();
+            }
+
+
+
+            // FILES Items
+            $scope.getFileValue = function (dataItem) {
+                if (!rootScope.C_VIEW_ATTACHMENTS) return "NoPerm";
+                if ($scope.isFileAttachmentEnabled) {
+                    if (!dataItem.HAS_ATTACHED_FILES) {
+                        if (dataItem.PS_WF_STG_CD === 'Cancelled') return "CantAdd";
+                        if (dataItem.PS_WF_STG_CD !== 'Cancelled') return "AddFile";
+                    }
+                    if (dataItem.HAS_ATTACHED_FILES === '1') return "HasFile";
+                }
+
+                return "NoPerm";
+            }
+            $scope.fileItems = {
+                "NoPerm": {
+                    "icon": "intelicon-attach",
+                    "title": "You do not have permission to view attachments",
+                    "style": { color: "#e7e7e8" }
+                },
+                "CantAdd": {
+                    "icon": "intelicon-attach",
+                    "title": "Cancelled, cannot add an attachment",
+                    "style": { color: "#e7e7e8" }
+                },
+                "AddFile": {
+                    "icon": "intelicon-attach",
+                    "title": "Click to add an attachment",
+                    "style": { color: "#00AEEF", cursor: "pointer" },
+                    "onClick": $scope.openAttachments
+                },
+                "HasFile": {
+                    "icon": "intelicon-attach",
+                    "title": "Click to view or add attachments",
+                    "style": { color: "#003C71", cursor: "pointer" },
+                    "onClick": $scope.openAttachments
+                }
+            }
+            $scope.getFileIcon = function (dataItem) {
+                return $scope.fileItems[$scope.getFileValue(dataItem)].icon;
+            };
+            $scope.getFileTitle = function (dataItem) {
+                return $scope.fileItems[$scope.getFileValue(dataItem)].title;
+            };
+            $scope.getFileStyle = function (dataItem) {
+                return $scope.fileItems[$scope.getFileValue(dataItem)].style;
+            };
+            $scope.clkFileIcon = function (dataItem) {
+                var fVal = $scope.getFileValue(dataItem);
+                if (fVal === "HasFile" || fVal === "AddFile") $scope.openAttachments();
+            }
+
+
 
             $scope.onFileSelect = function (e) {
                 // Hide default kendo clear button.
@@ -224,38 +216,51 @@ function dealTools($timeout, logger, dataService, $rootScope) {
             var deleteAttachmentParams;
             $scope.deleteAttachment = function (custMbrSid, objTypeSid, objSid, fileDataSid) {
                 deleteAttachmentParams = { custMbrSid: custMbrSid, objTypeSid: objTypeSid, objSid: objSid, fileDataSid: fileDataSid };
-                $scope.deleteAttachmentDialog.open();
+                kendo.confirm("Are you sure that you want to Delete this file attachment?").then(function () {
+                    dataService.post("/api/FileAttachments/Delete/" + deleteAttachmentParams.custMbrSid + "/" + deleteAttachmentParams.objTypeSid + "/" + deleteAttachmentParams.objSid + "/" + deleteAttachmentParams.fileDataSid + "/WIP_DEAL")
+                        .then(function (response) {
+                            logger.success("Successfully deleted attachment.", null, "Delete successful");
+
+                            // Refresh the Existing Attachments grid to reflect the newly deleted attachment.
+                            $scope.attachmentsDataSource.read();
+
+                            // Notify that attachments were added so that the state of the paper-clip icon can be updated accordingly.
+                            $rootScope.$broadcast('attachments-changed');
+                        },
+                        function (response) {
+                            logger.error("Unable to delete attachment.", null, "Delete failed");
+
+                            // Refresh the Existing Attachments grid.  There should be no changes, but just incase.
+                            $scope.attachmentsDataSource.read();
+                        });
+                });
             }
 
             $scope.attachmentCount = 1; // Can't be 0 or initialization won't happen.
             $scope.initComplete = false;
 
-            var attachmentsDataSource = new kendo.data.DataSource({
+            $scope.attachmentsDataSource = new kendo.data.DataSource({
                 transport: {
-                    read: function (e) {
-                        $scope.optionCallback = e;
-                        dataService.get("/api/FileAttachments/Get/" +
-                            $scope.dataItem.CUST_MBR_SID +
-                            "/" +
-                            5 + // WIP_DEAL
-                            "/" +
-                            $scope.dataItem.DC_ID +
-                            "/" +
-                            $scope.dataItem.dc_type)
-                            .then(function (response) {
-                                e.success(response.data);
-                                $scope.attachmentCount = response.data.length;
-                                $scope.initComplete = true;
-                            },
-                            function (response) {
-                                logger.error("Unable to retrieve attachments.", response, response.statusText);
-                                $scope.attachmentCount = -1; // Causes the 'Failed to retrieve attachments!' message to be displayed.
-                                $scope.initComplete = true;
-                            });
-                    },
-                    destroy: function (e) {
-                        // If we want to support deleting attachments, the logic would go here.
-                    },
+                    read: {
+                        url: function() {
+                            return "/api/FileAttachments/Get/" + $scope.dataItem.CUST_MBR_SID + "/" + 5 + // WIP_DEAL
+                                "/" + $scope.dataItem.DC_ID + "/" + $scope.dataItem.dc_type;
+                        },
+                        dataType: "json"
+                    }
+                },
+                requestStart: function () {
+                    kendo.ui.progress($("#attachmentsGrid"), true);
+                },
+                requestEnd: function (response) {
+                    $scope.attachmentCount = response.response.length;
+                    console.log($scope.attachmentCount);
+
+                    $scope.dataItem.HAS_ATTACHED_FILES = $scope.attachmentCount > 0 ? "1" : "0";
+                    rootScope.saveCell($scope.dataItem, "HAS_ATTACHED_FILES");
+
+                    $scope.initComplete = true;
+                    kendo.ui.progress($("#attachmentsGrid"), false);
                 },
                 pageSize: 25,
                 schema: {
@@ -268,11 +273,11 @@ function dealTools($timeout, logger, dataService, $rootScope) {
                             CHG_DTM: { validation: { required: false }, editable: false },
                         }
                     }
-                },
+                }
             });
 
             $scope.attachmentsGridOptions = {
-                dataSource: attachmentsDataSource,
+                dataSource: $scope.attachmentsDataSource,
                 filterable: false,
                 sortable: true,
                 selectable: true,
@@ -308,8 +313,100 @@ function dealTools($timeout, logger, dataService, $rootScope) {
                     }
                 ]
             };
+
+            $scope.dialog = $("#notesDialog");
+
+            $scope.openNotes = function () {
+
+                var scope = $scope;
+                $scope.dialog = $("#notesDialog");
+
+                $scope.dialog.kendoDialog({
+                    width: "500px",
+                    height: "350px",
+                    title: "Notes",
+                    closable: false,
+                    modal: true,
+                    actions: [
+                        {
+                            text: 'OK',
+                            primary: true,
+                            action: function () {
+                                if ($scope.dataItem._dirty) {
+                                    $scope._dirty = true;
+                                    rootScope.saveCell($scope.dataItem, "NOTES");
+                                }
+                            }
+                        }
+                    ]
+                });
+
+
+                $templateRequest("/app/core/directives/gridCell/_partials/notes.html").then(function (html) {
+                    var template = angular.element(html);
+                    $compile(template)(scope);
+                    $scope.dialog.data("kendoDialog").content(template);
+                });
+
+            }
+
+            $scope.openSplit = function () {
+                kendo.confirm("<h4>Would you like to split the group?</h4><p>This will allow you to make changes in the Deal Editor.<br />Please note a new Row ID will be assigned for your reference.").then(function () {
+                    rootScope.unGroupPricingTableRow($scope.dataItem);
+                });
+            }
+
+            $scope.openAttachments = function () {
+
+                var scope = $scope;
+                $scope.dialog = $("#fileDialog");
+
+                $scope.dialog.kendoDialog({
+                    width: "900px",
+                    height: "620px",
+                    title: "Deal " + $scope.dataItem.DC_ID + " Attachments",
+                    closable: false,
+                    modal: true,
+                    actions: [
+                        {
+                            text: 'Close',
+                            primary: true
+                        }
+                    ]
+                });
+
+
+                $templateRequest("/app/core/directives/gridCell/_partials/files.html").then(function (html) {
+                    var template = angular.element(html);
+                    $compile(template)(scope);
+                    $scope.dialog.data("kendoDialog").content(template);
+                    //$scope.attachmentsDataSource.read();
+                    $scope.attachmentsDlgShown = true;
+                });
+
+            }
+
+            $scope.openDeleteDialog = function () {
+                kendo.confirm("<h4>Would you like to delete the deal?</h4><p>This will remove the deal from the Pricing Editor also.</p>").then(function () {
+                    rootScope.deletePricingTableRow($scope.dataItem);
+                });
+            }
+
+            $scope.openHoldDialog = function () {
+                kendo.confirm("<h4>Would you like to place the deal on hold?</h4><p>This will keep the deal in the Pricing Table, but it will not get<br/>promoted to active or get a tracker number for payment.</p>").then(function () {
+                    rootScope.actionWipDeal($scope.dataItem, 'Hold');
+                });
+            }
+
+            $scope.openUnHoldDialog = function () {
+                kendo.confirm("<h4>Would you like to take the deal off hold?</h4><p>This will enable the deal in the Pricing Table and will<br/>enable it to get approved.</p>").then(function () {
+                    rootScope.actionWipDeal($scope.dataItem, 'Approve');
+                });
+            }
+
         }],
         link: function (scope, element, attr) {
+            scope.el = element;
         }
     };
 }

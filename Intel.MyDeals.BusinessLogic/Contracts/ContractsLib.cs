@@ -147,6 +147,7 @@ namespace Intel.MyDeals.BusinessLogic
             string sourceEvent,
             bool resetValidationChild, bool isProductTranslate)
         {
+            OpLog.Log("contractsLib.SaveContract - Start.");
             Stopwatch stopwatch = new Stopwatch();
             if (EN.GLOBAL.DEBUG >= 1)
             {
@@ -204,6 +205,7 @@ namespace Intel.MyDeals.BusinessLogic
             if (EN.GLOBAL.DEBUG >= 1)
                 Debug.WriteLine("{2:HH:mm:ss:fff}\t{0,10} (ms)\tSaved Contract {1}", stopwatch.Elapsed.TotalMilliseconds, contractToken.ContractId, DateTime.Now);
 
+            OpLog.Log("contractsLib.SaveContract - Complete.");
             return rtn;
         }
 

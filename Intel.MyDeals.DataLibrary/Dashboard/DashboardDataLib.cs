@@ -19,7 +19,7 @@ namespace Intel.MyDeals.DataLibrary
         /// <returns></returns>
         public List<DashboardContractSummary> GetDashboardContractSummary(List<int> custIds, DateTime startDate, DateTime endDate)
         {
-            OpLogPerf.Log("GetDashboardContractSummary");
+            OpLog.Log("GetDashboardContractSummary");
 
             var ret = new List<DashboardContractSummary>();
 

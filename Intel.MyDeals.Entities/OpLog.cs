@@ -14,5 +14,13 @@ namespace Intel.MyDeals.Entities
 			return OpAppToken?.OpEnvironment?.EnvLoc == null ? "UNKNOWN" : OpAppToken.OpEnvironment.EnvLoc.Location;
 		}
 
+        public static void Log(string msg)
+        {
+            if (EN.GLOBAL.DEBUG >= 1) OpLogPerf.Log(msg);
+        }
+        public static void Log(string msg, int cnt)
+        {
+            if (EN.GLOBAL.DEBUG >= 1) OpLogPerf.Log(msg, cnt);
+        }
     }
 }

@@ -49,7 +49,14 @@ namespace Intel.MyDeals.DataLibrary
 		public bool UploadDbLogPerfLogs(IEnumerable<DbLogPerfMessage> messages)
 		{
 			if (messages == null || !messages.Any()) { return false; }
-			
+
+
+            // FOR NOW... TURNING OF PERF LOGGING
+		    return false;
+
+
+
+
             t_db_log dt = new t_db_log(3000);
 
 			dt.AddRows(messages, messages.Count());

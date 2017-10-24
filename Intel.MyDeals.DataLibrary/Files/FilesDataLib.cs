@@ -17,7 +17,7 @@ namespace Intel.MyDeals.DataLibrary
         /// </summary>
         public bool SaveFileAttachment(FileAttachment fileAtatchment, byte[] fileData)
         {
-            OpLogPerf.Log("SaveFileAttachment");
+            OpLog.Log("SaveFileAttachment");
             var ret = false;
             try
             {
@@ -51,7 +51,7 @@ namespace Intel.MyDeals.DataLibrary
         /// </summary>
         public List<FileAttachment> GetFileAttachments(int custMbrSid, int objTypeSid, int objSid, string includeGroup)
         {
-            OpLogPerf.Log("GetFileAttachments");
+            OpLog.Log("GetFileAttachments");
             var ret = new List<FileAttachment>();
             try
             {
@@ -115,7 +115,7 @@ namespace Intel.MyDeals.DataLibrary
         /// </summary>
         public FileAttachmentData GetFileAttachmentData(int fileId)
         {
-            OpLogPerf.Log("GetFileAttachmentData");
+            OpLog.Log("GetFileAttachmentData");
             var ret = new List<FileAttachmentData>();
             try
             {
@@ -158,7 +158,7 @@ namespace Intel.MyDeals.DataLibrary
         /// </summary>
         public bool DeleteFileAttachment(int custMbrSid, int objTypeSid, int objSid, int fileDataSid, string includeGroup)
         {
-            OpLogPerf.Log("DeleteFileAttachment");
+            OpLog.Log("DeleteFileAttachment");
             var ret = false;
             try
             {

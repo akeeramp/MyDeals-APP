@@ -13,7 +13,7 @@ namespace Intel.MyDeals.DataLibrary
     {
         public List<MeetComp> GetMeetCompData()
         {
-            OpLogPerf.Log("GetMeetComp");
+            OpLog.Log("GetMeetComp");
 
             var ret = new List<MeetComp>();
             var cmd = new Procs.dbo.PR_MYDL_UPD_MEET_COMP { };
@@ -78,7 +78,7 @@ namespace Intel.MyDeals.DataLibrary
 
         public List<MeetComp> ActivateDeactivateMeetComp(int MEET_COMP_SID, bool ACTV_IND)
         {
-            OpLogPerf.Log("UpdateMeetComp");
+            OpLog.Log("UpdateMeetComp");
 
             var ret = new List<MeetComp>();
             var cmd = new Procs.dbo.PR_MYDL_UPD_MEET_COMP { };
@@ -116,7 +116,7 @@ namespace Intel.MyDeals.DataLibrary
 
         public List<MeetCompResult> GetMeetCompProductDetails(int CNTRCT_OBJ_SID)
         {
-            OpLogPerf.Log("GetMeetCompProductDetails");
+            OpLog.Log("GetMeetCompProductDetails");
 
             var ret = new List<MeetCompResult>();
             var cmd = new Procs.dbo.PR_MYDL_GET_MEET_COMP { };
@@ -203,7 +203,7 @@ namespace Intel.MyDeals.DataLibrary
 
         public List<MeetCompResult> UpdateMeetCompProductDetails(int CNTRCT_OBJ_SID, List<MeetCompUpdate> mcu)
         {
-            OpLogPerf.Log("GetMeetCompProductDetails");
+            OpLog.Log("GetMeetCompProductDetails");
 
             var ret = new List<MeetCompResult>();            
 

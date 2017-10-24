@@ -705,7 +705,6 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "Deal Id",
                 Width = 90,
                 IsReadOnly = true,
-                //Template = "<div class='dealLnk' style='padding: 0 4px;'>#=DC_ID#</div>"
                 Template = "#=gridUtils.uiControlWrapper(data, 'DC_ID')#"
             });
             items.Add(new UiTemplateContainerItem

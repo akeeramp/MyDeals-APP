@@ -69,6 +69,10 @@ util.findInArray = function (input, id) {
     return null;
 }
 
+util.console = function(val) {
+    console.log(moment().format("HH:mm:ss:SSS") + ": " + val);
+}
+
 util.stripObject = function (obj) {
     var newObj = {};
     for (var key in obj) {

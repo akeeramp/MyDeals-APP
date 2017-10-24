@@ -17,7 +17,7 @@ namespace Intel.MyDeals.DataLibrary
         /// <returns>list of customer division data</returns>
         public List<CustomerDivision> GetCustomerDivisions()
         {
-            OpLogPerf.Log("GetCustomerDivision");
+            OpLog.Log("GetCustomerDivision");
 
             var ret = new List<CustomerDivision>();
             var cmd = new Procs.dbo.PR_MYDL_GET_CUST_DIV { };
@@ -67,7 +67,7 @@ namespace Intel.MyDeals.DataLibrary
         /// <returns>lists of customer data</returns>
         public MyCustomerDetailsWrapper GetMyCustomers(bool fullAccess = false, bool allCustomers = false)
         {
-            OpLogPerf.Log("GetMyCustomers");
+            OpLog.Log("GetMyCustomers");
 
             var ret = new MyCustomerDetailsWrapper();
 
