@@ -114,7 +114,7 @@ namespace Intel.MyDeals.DataLibrary
             return ret;
         }
 
-        public List<MeetCompResult> GetMeetCompProductDetails(int CNTRCT_OBJ_SID)
+        public List<MeetCompResult> GetMeetCompProductDetails(string CNTRCT_OBJ_SID)
         {
             OpLogPerf.Log("GetMeetCompProductDetails");
 
