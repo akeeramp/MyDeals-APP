@@ -69,6 +69,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                             var isValid = isModelValid($scope.meetCompMasterdata);
                         }
 
+                        
                         //Add New Customer
                         $scope.addSKUForCustomer = function (mode) {
                             $scope.meetCompMasterdata[$scope.curentRow - 1].COMP_SKU = $scope.selectedCustomerText;
@@ -196,40 +197,48 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                             edit: function (e) {
                                 var input = e.container.find(".k-input");
                                 var value = input.val();
-                                var editedROW = e.model;                                
-                                input.keyup(function () {
-                                    value = input.val();
-                                });
-                                $("[name='COMP_OVRRD_RSN']", e.container).blur(function () {
-                                    var input = $(this);
-                                    //alert(value);
-                                    editedROW.COMP_OVRRD_RSN = value;
+                                var editedROW = e.model;
+                                var isEdited = true;
+                                if (usrRole == "DA" && editedROW.MEET_COMP_UPD_FLG == "Y" && editedROW.MEET_COMP_STS.toLowerCase() == "pass" || editedROW.MEET_COMP_STS.toLowerCase() == "overridden") {
+                                    $('input[name=COMP_OVRRD_RSN]').parent().html(e.model.COMP_OVRRD_RSN);
+                                    logger.warning("Cannot Override Meet Comp since the deals could be in Active Stage or the Meet Comp Result is Passed.");
+                                }
+                                else {
+                                    input.keyup(function () {
+                                        value = input.val();
+                                    });
 
-                                    $scope.meetCompMasterdata[editedROW.RW_NM - 1].COMP_OVRRD_RSN = value;
-                                    editedROW.COMP_OVRRD_RSN = value;
-                                    addToUpdateList(editedROW, "COMP_OVRRD_RSN");
+                                    $("[name='COMP_OVRRD_RSN']", e.container).blur(function () {
+                                        var input = $(this);
+                                        //alert(value);
+                                        editedROW.COMP_OVRRD_RSN = value;
 
-                                    if (editedROW.GRP == "PRD") {
-                                        var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
-                                            .Where(function (x) {
-                                                return (
-                                                    x.GRP_PRD_SID == editedROW.GRP_PRD_SID &&
-                                                    x.GRP == "DEAL" &&
-                                                    x.MEET_COMP_UPD_FLG == "Y" &&
-                                                    x.MEET_COMP_STS.toLowerCase() != "pass"
-                                                );
-                                            })
-                                            .ToArray();                                        
+                                        $scope.meetCompMasterdata[editedROW.RW_NM - 1].COMP_OVRRD_RSN = value;
+                                        editedROW.COMP_OVRRD_RSN = value;
+                                        addToUpdateList(editedROW, "COMP_OVRRD_RSN");
 
-                                        for (var i = 0; i < tempData.length; i++) {
-                                            $scope.meetCompMasterdata[tempData[i].RW_NM - 1].COMP_OVRRD_RSN = editedROW.COMP_OVRRD_RSN;
-                                            addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_OVRRD_RSN");
+                                        if (editedROW.GRP == "PRD") {
+                                            var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
+                                                .Where(function (x) {
+                                                    return (
+                                                        x.GRP_PRD_SID == editedROW.GRP_PRD_SID &&
+                                                        x.GRP == "DEAL" &&
+                                                        x.MEET_COMP_UPD_FLG == "Y" &&
+                                                        x.MEET_COMP_STS.toLowerCase() != "pass"
+                                                    );
+                                                })
+                                                .ToArray();
+
+                                            for (var i = 0; i < tempData.length; i++) {
+                                                $scope.meetCompMasterdata[tempData[i].RW_NM - 1].COMP_OVRRD_RSN = editedROW.COMP_OVRRD_RSN;
+                                                addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_OVRRD_RSN");
+                                            }
+
+                                            $scope.dataSourceParent.read();
                                         }
+                                    });
+                                }                             
 
-                                        $scope.dataSourceParent.read();
-                                    }
-                                });
-                               
                             },
                             dataBound: function (e) {
                                 if ($scope.errorList.length > 0) {
@@ -358,7 +367,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     field: "MEET_COMP_STS",
                                     title: "Test Results",
                                     width: 120,
-                                    template: "#if(MEET_COMP_STS == 'Overriden') {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid complete' title='Passed with Override Status' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Pass') {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid completeGreen' title='Passed' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Incomplete') {#<div class='textRunIcon'><i class='intelicon-help-solid incomplete' title='Incomplete' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Fail'){#<div class='textRunIcon'><i class='intelicon-alert-solid errorIcon' title='Error/Failed' style='font-size:20px !important'></i></div>#}#",
+                                    template: "#if(MEET_COMP_STS == 'Overridden') {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid complete' title='Passed with Override Status' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Pass') {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid completeGreen' title='Passed' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Incomplete') {#<div class='textRunIcon'><i class='intelicon-help-solid incomplete' title='Incomplete' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Fail'){#<div class='textRunIcon'><i class='intelicon-alert-solid errorIcon' title='Error/Failed' style='font-size:20px !important'></i></div>#}#",
                                     editable: function () { return false; },
                                     hidden: $scope.hide_MEET_COMP_STS,
                                     filterable: { multi: true, search: true }
@@ -380,6 +389,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     title: "Avg. Net Price",
                                     width: 150,
                                     editable: function () { return false; },
+                                    filterable: { multi: true, search: true },
                                     template: "<div>#if(MC_AVG_RPU == 0){## ##} else {##:MC_AVG_RPU##}#</div>",
                                     hidden: $scope.hide_MC_AVG_RPU
                                 },
@@ -395,7 +405,6 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     field: "COMP_OVRRD_RSN",
                                     title: "Analysis Override Comments",
                                     width: 220,
-                                    //editor: editorORReason,
                                     filterable: { multi: true, search: true, search: true },
                                     hidden: $scope.hide_COMP_OVRRD_RSN
                                 }
@@ -631,7 +640,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     });
                             }
                             else {
-                                logger.warning("Only Draft deal can be edited.");
+                                logger.warning("Cannot Override Meet Comp since the deals could be in Active Stage or the Meet Comp Result is Passed.");
                             }
                         }
 
@@ -644,7 +653,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                         //        ];
                         //        $('<input required name="' + options.field + '"/>')
                         //            .appendTo(container)
-                        //            .kendoComboBox({
+                        //            .kendoAutoComplete({
                         //                optionLabel: "type comments",
                         //                autoBind: true,
                         //                dataTextField: "COMP_OVRRD_RSN",
@@ -797,10 +806,10 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         $scope.tempUpdatedList = [];
                                         $scope.meetCompUpdatedList = [];
                                     },
-                                    function (response) {
-                                        logger.error("Unable to save data", response, response.statusText);
-                                        $scope.isBusy = false;
-                                    });
+                                        function (response) {
+                                            logger.error("Unable to save data", response, response.statusText);
+                                            $scope.isBusy = false;
+                                        });
 
                                 }
                                 else {
@@ -813,11 +822,11 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                 }
                                 else {
                                     kendo.alert("Meet comp data is missing for some product(s).Please enter the data and save the changes.");
-                                }                                
+                                }
                                 $scope.dataSourceParent.read();
                             }
                         }
-
+                        
                         function detailInit(e) {
                             $scope.TEMP_GRP_PRD_SID = e.data.GRP_PRD_SID;
                             $("<div class='childGrid'/>").appendTo(e.detailCell).kendoGrid({
@@ -889,20 +898,28 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     var input = e.container.find(".k-input");
                                     var value = input.val();
                                     var editedROW = e.model;
-                                    input.keyup(function () {
-                                        value = input.val();
-                                    });
-                                    $("[name='COMP_OVRRD_RSN']", e.container).blur(function () {
-                                        var input = $(this);
-                                        //alert(value);
-                                        editedROW.COMP_OVRRD_RSN = value;
+                                    var isEdited = true;
+                                    if (usrRole == "DA" && editedROW.MEET_COMP_UPD_FLG == "Y" && editedROW.MEET_COMP_STS.toLowerCase() == "pass" || editedROW.MEET_COMP_STS.toLowerCase() == "overridden") {
+                                        $('input[name=COMP_OVRRD_RSN]').parent().html(e.model.COMP_OVRRD_RSN);
+                                        logger.warning("Cannot Override Meet Comp since the deals could be in Active Stage or the Meet Comp Result is Passed.");
+                                    }
+                                    else {
+                                        input.keyup(function () {
+                                            value = input.val();
+                                        });
 
-                                        $scope.meetCompMasterdata[editedROW.RW_NM - 1].COMP_OVRRD_RSN = value;
-                                        editedROW.COMP_OVRRD_RSN = value;
-                                        addToUpdateList(editedROW, "COMP_OVRRD_RSN");                                       
-                                    });
+                                        $("[name='COMP_OVRRD_RSN']", e.container).blur(function () {
+                                            var input = $(this);
+                                            //alert(value);
+                                            editedROW.COMP_OVRRD_RSN = value;
 
-                                },
+                                            $scope.meetCompMasterdata[editedROW.RW_NM - 1].COMP_OVRRD_RSN = value;
+                                            editedROW.COMP_OVRRD_RSN = value;
+                                            addToUpdateList(editedROW, "COMP_OVRRD_RSN");
+                                        });
+                                    }
+
+                                },                                
                                 dataBound: function (e) {
                                     if ($scope.errorList.length > 0) {
                                         //// get the index of the UnitsInStock cell
@@ -1029,7 +1046,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         width: 120,
                                         editable: function () { return false; },
                                         hidden: $scope.hide_MEET_COMP_STS,
-                                        template: "#if(MEET_COMP_STS == 'Overriden') {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid complete' title='Passed with Override Status' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS.toLowerCase() == 'pass') {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid completeGreen' title='Passed' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS.toLowerCase() == 'incomplete') {#<div class='textRunIcon'><i class='intelicon-help-solid incomplete' title='Incomplete' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS.toLowerCase() == 'fail'){#<div class='textRunIcon'><i class='intelicon-alert-solid errorIcon' title='Error/Failed' style='font-size:20px !important'></i></div>#}#",
+                                        template: "#if(MEET_COMP_STS == 'Overridden') {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid complete' title='Passed with Override Status' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS.toLowerCase() == 'pass') {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid completeGreen' title='Passed' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS.toLowerCase() == 'incomplete') {#<div class='textRunIcon'><i class='intelicon-help-solid incomplete' title='Incomplete' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS.toLowerCase() == 'fail'){#<div class='textRunIcon'><i class='intelicon-alert-solid errorIcon' title='Error/Failed' style='font-size:20px !important'></i></div>#}#",
                                         filterable: { multi: true, search: true, search: true }
                                     },
                                     {
@@ -1049,6 +1066,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         title: "Avg. Net Price",
                                         width: 150,
                                         editable: function () { return false; },
+                                        filterable: { multi: true, search: true },
                                         template: "<div>#if(MC_AVG_RPU == 0){## ##} else {##:MC_AVG_RPU##}#</div>",
                                         hidden: $scope.hide_MC_AVG_RPU
                                     },
@@ -1064,8 +1082,9 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         field: "COMP_OVRRD_RSN",
                                         title: "Analysis Override Comments",
                                         width: 220,
-                                        //editor: editorORReason,
                                         filterable: { multi: true, search: true },
+                                        //template: "<div ng-class=\"'text-danger': #=MEET_COMP_STS# == Overridden }\">#= COMP_OVRRD_RSN #</div>",
+                                        //template: "<div ng-class={'strike': #=MEET_COMP_STS# == 'Overridden'}>#=COMP_OVRRD_RSN#</div>",
                                         hidden: $scope.hide_COMP_OVRRD_RSN
                                     }
                                 ]

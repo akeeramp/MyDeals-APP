@@ -10,7 +10,7 @@ namespace Intel.MyDeals.IDataLibrary
 
         List<MeetComp> ActivateDeactivateMeetComp(int MEET_COMP_SID, bool ACTV_IND);
 
-        List<MeetCompResult> GetMeetCompProductDetails(string CNTRCT_OBJ_SID);
+        List<MeetCompResult> GetMeetCompProductDetails(int CNTRCT_OBJ_SID);
 
         List<MeetCompResult> UpdateMeetCompProductDetails(int CNTRCT_OBJ_SID, List<MeetCompUpdate> mcu);
     }

@@ -114,7 +114,7 @@ namespace Intel.MyDeals.DataLibrary
             return ret;
         }
 
-        public List<MeetCompResult> GetMeetCompProductDetails(string CNTRCT_OBJ_SID)
+        public List<MeetCompResult> GetMeetCompProductDetails(int CNTRCT_OBJ_SID)
         {
             OpLogPerf.Log("GetMeetCompProductDetails");
 
@@ -123,9 +123,12 @@ namespace Intel.MyDeals.DataLibrary
 
             try
             {
+                in_t_meet_comp_ids dt = new in_t_meet_comp_ids();
+                dt.AddRow(CNTRCT_OBJ_SID);
+
                 using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_MYDL_GET_MEET_COMP
                 {
-                    @ID = CNTRCT_OBJ_SID,
+                    @obj_sids = dt,
                     @USR_WWID = OpUserStack.MyOpUserToken.Usr.WWID,
                     @Role = OpUserStack.MyOpUserToken.Role.RoleTypeCd
 

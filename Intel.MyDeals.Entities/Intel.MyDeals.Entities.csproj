@@ -138,6 +138,9 @@
     <Compile Include="TableTypeParameters\in_deal_ovrrd.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="TableTypeParameters\in_t_meet_comp_ids.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="TableTypeParameters\in_t_pct_lgl_excpt.cs">
       <SubType>Component</SubType>
     </Compile>

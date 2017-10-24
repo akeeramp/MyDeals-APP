@@ -42,7 +42,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// </summary>
         /// <param name="CNTRCT_OBJ_SID"></param>
         /// <returns></returns>
-        public List<MeetCompResult> GetMeetCompProductDetails(string CNTRCT_OBJ_SID)
+        public List<MeetCompResult> GetMeetCompProductDetails(int CNTRCT_OBJ_SID)
         {
             // TODO :Later need to decide caching will be apply or not
             return _meetCompCollectorLib.GetMeetCompProductDetails(CNTRCT_OBJ_SID);
