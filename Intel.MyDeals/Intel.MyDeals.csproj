@@ -1106,6 +1106,7 @@
     <Content Include="Images\docs\webapi.png" />
     <Content Include="Images\edit.png" />
     <Content Include="Images\Error.png" />
+    <Content Include="Images\ChromeIcon.png" />
     <Content Include="Images\intel-logo-blue-100.png" />
     <Content Include="Images\intel-logo-white-100.png" />
     <Content Include="Images\intel-logo-white-500.png" />

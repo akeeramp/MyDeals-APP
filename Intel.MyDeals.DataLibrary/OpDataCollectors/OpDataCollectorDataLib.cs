@@ -360,10 +360,9 @@ namespace Intel.MyDeals.DataLibrary
 
                 var valueMax = rdr.GetTypedValue<string>(IDX_ATRB_VAL_MAX);
                 var value = valueMax ?? rdr.GetTypedValue<string>(IDX_ATRB_VAL);     
-
                 string dndt = rdr.GetTypedValue<string>(IDX_DOT_NET_DATA_TYPE);
 
-                var ode = OpDataElement.Create
+               var ode = OpDataElement.Create
                     (
                         rdr.GetTypedValue<int>(IDX_ATRB_SID), // element id - need to be unique???
                         rdr.GetTypedValue<int>(IDX_ATRB_SID),
@@ -378,6 +377,12 @@ namespace Intel.MyDeals.DataLibrary
                         dndt, // DotNetType
                         false // Raise Events flag
                     );
+
+                //This attribute is registered as a system.boolean for its Dot_Net_Data_Type column, but returns a string containing 1/0. 
+                //The DB is returning true/false strings sometimes, 0/1 others. The UI wants a true/false string. So we're converting it on the fly.                                       
+                if(ode.AtrbID == 3676){
+                    ode.AtrbValue = ode.AtrbValue.ToString() == 1.ToString() ? true.ToString() : false.ToString();
+                }
 
                 odc.DataElements.Add(ode);
             }
