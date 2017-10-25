@@ -1962,6 +1962,9 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
                                     //Hiding Column Preference and Grid Preferences
                                     $scope.isLayoutConfigurable = false;
+
+                                    $scope.syncAndValidateWipDeals();
+
                                 }
                                 else {
                                     //Remove overlapping tab

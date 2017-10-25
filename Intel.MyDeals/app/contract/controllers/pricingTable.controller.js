@@ -452,7 +452,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         return cols;
     }
 
-    var flushSysPrdFields = ["PTR_USER_PRD", "PRD_EXCLDS", "START_DT", "END_DT", "GEO_COMBINED", "PROD_INCLDS", "PROGRAM_PAYMENT"];
+    // Performance and UX... removed this.  We will need to handle these in the MT rules
+    // var flushSysPrdFields = ["PTR_USER_PRD", "PRD_EXCLDS", "START_DT", "END_DT", "GEO_COMBINED", "PROD_INCLDS", "PROGRAM_PAYMENT"];
+    var flushSysPrdFields = ["PTR_USER_PRD", "PRD_EXCLDS"];
     var flushTrackerNumFields = ["START_DT", "END_DT", "GEO_COMBINED"];
 
     // On Spreadsheet change
@@ -699,7 +701,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     function cleanupData(data) {
         // Remove any lingering blank rows from the data
         for (var n = data.length - 1; n >= 0; n--) {
-            if (data[n].DC_ID === null && (data[n].PTR_USER_PRD === null || data[n].PTR_USER_PRD.toString().replace(/\s/g, "").length === 0)) {
+            if (data[n].DC_ID === null && (data[n].PTR_USER_PRD === null || data[n].PTR_USER_PRD === undefined || data[n].PTR_USER_PRD.toString().replace(/\s/g, "").length === 0)) {
                 data.splice(n, 1);
             } else {
                 if (util.isInvalidDate(data[n].START_DT)) data[n].START_DT = moment(root.contractData["START_DT"]).format("MM/DD/YYYY");

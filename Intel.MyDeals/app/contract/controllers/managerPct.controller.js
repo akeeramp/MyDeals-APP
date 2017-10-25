@@ -24,6 +24,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
     kendo.culture().numberFormat.currency.pattern[0] = "-$n";
 
     var hasNoPermission = !$scope.root.CAN_EDIT_COST_TEST;
+    var hasNoPermissionOvr = !$scope.root.CAN_EDIT_COST_TEST && window.usrRole !== "Legal";
 
     $timeout(function () {
         $("#dealTypeDiv").removeClass("active");
@@ -229,6 +230,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
                         group: { field: "DEAL_ID" }
                     },
                     sortable: false,
+                    scrollable: true,
                     height: 250,
                     columns: $scope.templates.columns[pt.OBJ_SET_TYPE_CD],
                     dataBound: function (e) {
@@ -457,7 +459,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
             title: "Cost Test Analysis<br\>Override",
             width: "140px",
             template: '#= gridPctUtils.getPctFlag("dataItem.COST_TEST_OVRRD_FLG", "dataItem.PRC_CST_TST_STS", "dataItem._readonly", ' + hasNoPermission + ') #',
-            hidden: hasNoPermission,
+            hidden: hasNoPermissionOvr,
             parent: false
         },
         "COST_TEST_OVRRD_CMT": {
@@ -465,7 +467,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
             title: "Cost Test Analysis<br\>Override Comments",
             width: "140px",
             template: '<button class="btn btn-sm btn-skyblue" ng-if="dataItem.COST_TEST_OVRRD_FLG === \'Yes\' || dataItem.COST_TEST_OVRRD_FLG === true" ng-click="openReason(dataItem)" type="button" style="width: 100px;" title="Save and Validate"><span style="color: \\#FC4C02;">*</span> {{dataItem.COST_TEST_OVRRD_CMT === "" ? "Select" : "View Overrides"}}</button>',
-            hidden: hasNoPermission,
+            hidden: hasNoPermissionOvr,
             parent: false
         },
         "RTL_CYC_NM": {

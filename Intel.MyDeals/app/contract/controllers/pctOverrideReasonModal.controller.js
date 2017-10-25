@@ -10,8 +10,8 @@ function pctOverrideReasonModalCtrl($scope, $uibModalInstance, dataItem, objsetS
     $scope.dataItem = dataItem;
     $scope.seeMore = false;
     $scope.extendedCols = ["MEET_COMP_PRD", "MEET_COMP_PRC", "BUSNS_OBJ", "PTNTL_MKT_IMPCT", "APRV_ATRNY", "DT_APRV"];
-    $scope.disabled = dataItem._readonly ? "disabled" : "";
-
+    $scope.disabled = dataItem._readonly || window.usrRole === "Legal" ? "disabled" : "";
+    
     $scope.toggleSee = function () {
         var c;
         var grid = $("#gridOverrideReason").data("kendoGrid");
