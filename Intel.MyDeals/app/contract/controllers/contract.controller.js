@@ -1999,7 +1999,13 @@
 
             var copyData = util.deepClone(data);
             $scope.compressJson(copyData);
-            $scope.removeCleanItems(copyData);
+            if ($scope.removeCleanItems(copyData)) {
+                $scope.setBusy("");
+                topbar.hide();
+                $scope.isAutoSaving = false;
+                kendo.alert("Nothing to save.");
+                return deferred.promise;
+            }
 
             util.console("updateContractAndCurPricingTable Started");
             objsetService.updateContractAndCurPricingTable($scope.getCustId(), $scope.contractData.DC_ID, copyData, forceValidation, forcePublish, delPtr, isProductTranslate).then(
@@ -2244,14 +2250,27 @@
             });
         }
 
-        $scope.removeCleanItems = function(data) {
+        $scope.removeCleanItems = function (data) {
 
-            //if (!!data.WipDeals) {
-            //    data.WipDeals = data.WipDeals.filter(function (a) { return a._dirty });
-            //}
+            if (data.Contract === undefined) data.Contract = [];
+            if (data.PricingStrategy === undefined) data.PricingStrategy = [];
+            if (data.PricingTable === undefined) data.PricingTable = [];
+            if (data.PricingTableRow === undefined) data.PricingTableRow = [];
+            if (data.WipDeals === undefined) data.WipDeals = [];
 
-            //debugger;
+            if (!!data.WipDeals) {
+                data.WipDeals = data.WipDeals.filter(function (a) { return a._dirty });
+            }
 
+            if (!!data.EventSource && data.EventSource === "WIP_DEAL") {
+                return (
+                    data.Contract.length === 0 &&
+                    data.PricingStrategy.length === 0 &&
+                    data.PricingTableRow.length === 0 &&
+                    data.WipDeals.length === 0);
+            }
+
+            return false;
         }
 
         $scope.compressJson = function (data) {

@@ -231,6 +231,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             root.wipOptions.default.groups = opGridTemplate.groups[root.curPricingTable.OBJ_SET_TYPE_CD];
             root.wipOptions.default.groupColumns = opGridTemplate.templates[root.curPricingTable.OBJ_SET_TYPE_CD];
 
+            root.wipOptions.isOverlapNeeded = (root.curPricingStrategy !== undefined && (root.curPricingStrategy.WF_STG_CD === "Draft" || root.curPricingStrategy.WF_STG_CD === "Requested"));
+
             //root.wipOptions.default.groups = [
             //    { "name": "Deal Info", "order": 0 },
             //    { "name": "Consumption", "order": 1 },

@@ -52,7 +52,7 @@ namespace Intel.MyDeals.DataLibrary
 
 
             // FOR NOW... TURNING OF PERF LOGGING
-		    return false;
+		    // return false;
 
 
 

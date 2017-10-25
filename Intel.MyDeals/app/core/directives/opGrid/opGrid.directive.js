@@ -55,6 +55,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.isLayoutConfigurable = $scope.assignVal("isLayoutConfigurable", false);
             $scope.isPricingTableEnabled = $scope.assignVal("isPricingTableEnabled", false);
             $scope.isCustomToolbarEnabled = $scope.assignVal("isCustomToolbarEnabled", false);
+            $scope.isOverlapNeeded = $scope.assignVal("isOverlapNeeded", false);
             $scope.isExportable = $scope.assignVal("isExportable", false);
             $scope.exportableExcludeFields = $scope.assignVal("exportableExcludeFields", []);
             $scope.isPinEnabled = $scope.assignVal("isPinEnabled", true);
@@ -1916,7 +1917,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
 
                 var dealType = $scope.dealTypes[0];
-                if (dealType.toUpperCase() === "ECAP") {
+                if (dealType.toUpperCase() === "ECAP" && $scope.isOverlapNeeded) {
                     util.console("Overlapping Deals Started");
                     $scope.$parent.$parent.setBusy("Overlapping Deals...", "Looking for Overlapping Deals!");
                     if (usrRole === "GA" || usrRole === "FSE") {
@@ -1999,12 +2000,14 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             }
 
             $scope.syncAndValidateWipDeals = function() {
-                util.console("syncAndValidateWipDeals");
                 $scope.parentRoot.setBusy("Validating your data...", "Please wait as we validate your information!");
-                util.console("contractDs.sync Started");
-                $scope.contractDs.sync();
-                util.console("contractDs.sync Ended");
-                $scope.root.validateWipDeals();
+                $timeout(function () {
+                    util.console("syncAndValidateWipDeals");
+                    util.console("contractDs.sync Started");
+                    $scope.contractDs.sync();
+                    util.console("contractDs.sync Ended");
+                    $scope.root.validateWipDeals();
+                }, 100);
             }
 
             $scope.validateRow = function (row, scope) {
