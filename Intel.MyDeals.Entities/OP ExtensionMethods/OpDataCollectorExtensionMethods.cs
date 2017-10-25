@@ -229,7 +229,7 @@ namespace Intel.MyDeals.Entities
 
             OpDataElementSetType objSetType = (OpDataElementSetType)Enum.Parse(typeof(OpDataElementSetType), dc.GetDataElementValue("OBJ_SET_TYPE_CD"));
 			string stg = dc.GetDataElementValue(AttributeCodes.WF_STG_CD);
-            if (dcType == OpDataElementType.WIP_DEAL) stg = dc.GetDataElementValue(AttributeCodes.PS_WF_STG_CD);
+            if (dcType == OpDataElementType.WIP_DEAL || dcType == OpDataElementType.PRC_TBL_ROW) stg = dc.GetDataElementValue(AttributeCodes.PS_WF_STG_CD);
             if (excludeList == null) excludeList = new string[] { };
 
             var prop = "IsReadOnly";

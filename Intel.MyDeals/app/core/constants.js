@@ -160,6 +160,9 @@
                     "DEAL_GRP_EXCLDS": {
                     	"Groups": ["Deal Info"]
                     },
+                    "DEAL_GRP_CMNT": {
+                        "Groups": ["Deal Info"]
+                    },
                     "ECAP_PRICE": {
                         "Groups": ["Deal Info", "CAP Info"]
                     },
@@ -351,6 +354,9 @@
                     "DEAL_GRP_EXCLDS": {
                     	"Groups": ["Deal Info"]
                     },
+                    "DEAL_GRP_CMNT": {
+                        "Groups": ["Deal Info"]
+                    },
                     "TIER_NBR": {
                         "Groups": ["Deal Info"]
                     },
@@ -469,6 +475,9 @@
                     },
                     "DEAL_GRP_EXCLDS": {
                     	"Groups": ["Deal Info"]
+                    },
+                    "DEAL_GRP_CMNT": {
+                        "Groups": ["Deal Info"]
                     },
                     "ON_ADD_DT": {
                         "Groups": ["Deal Info"]

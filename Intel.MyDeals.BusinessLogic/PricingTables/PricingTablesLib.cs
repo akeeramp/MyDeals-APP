@@ -47,7 +47,7 @@ namespace Intel.MyDeals.BusinessLogic
             foreach (OpDataElementType opDataElementType in myDealsData.Keys)
             {
                 data[opDataElementType] = myDealsData.ToOpDataCollectorFlattenedDictList(opDataElementType, 
-                    opDataElementType == OpDataElementType.PRC_TBL_ROW ? ObjSetPivotMode.UniqueKey : ObjSetPivotMode.Nested);
+                    opDataElementType == OpDataElementType.PRC_TBL_ROW ? ObjSetPivotMode.UniqueKey : ObjSetPivotMode.Nested, true);
             }
 
             var prntActions = data[OpDataElementType.PRC_ST][0]["_actions"];

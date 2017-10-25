@@ -19,39 +19,87 @@ namespace Intel.MyDeals.BusinessRules
 					ActionRule = MyDcActions.SyncReadOnlyItems,
 					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate }
 				},
+
+                // HAS TRACKER RULES
 				new MyOpRule // Set to read only if you have a TRACKER NUMBER
                 {
 					Title="Readonly if Tracker Exists",
 					ActionRule = MyDcActions.ExecuteActions,
-					InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL, OpDataElementType.DEAL},
+					InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL, OpDataElementType.DEAL},
 					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnReadonly},
-					AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.TRKR_NBR) && de.HasValue()).Any(),
+					AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.HAS_TRACKER) && de.HasValue("1")).Any(),
 					OpRuleActions = new List<OpRuleAction<IOpDataElement>>
 					{
 						new OpRuleAction<IOpDataElement>
 						{
 							Action = BusinessLogicDeActions.SetReadOnly,
-							Target = new[] {AttributeCodes.TRGT_RGN, AttributeCodes.GEO_COMBINED, AttributeCodes.DEAL_SOLD_TO_ID }
+							Target = new[] {
+                                AttributeCodes.CUST_ACCNT_DIV,
+                                AttributeCodes.PRD_LEVEL,
+                                AttributeCodes.REBATE_TYPE,
+                                AttributeCodes.TRGT_RGN,
+                                AttributeCodes.GEO_COMBINED,
+                                AttributeCodes.DEAL_SOLD_TO_ID,
+                                AttributeCodes.PROGRAM_PAYMENT,
+                                AttributeCodes.MRKT_SEG,
+                                AttributeCodes.MEET_COMP_PRICE_QSTN,
+                                AttributeCodes.PAYOUT_BASED_ON }
 						}
 					}
 				},
-				new MyOpRule
-				{
-					Title="Server Deal Type Read Only if Product is not SvrWS",
-					ActionRule = MyDcActions.ShowServerDealType,
-					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate }
-				},
-				new MyOpRule
+                new MyOpRule // Set to read only if you have a TRACKER NUMBER (ECAP ONLY)
+                {
+                    Title="Readonly if Tracker Exists",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW},
+                    InObjSetType = new List<string> {OpDataElementSetType.ECAP.ToString()},
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnReadonly},
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.HAS_TRACKER) && de.HasValue("1")).Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetReadOnly,
+                            Target = new[] {
+                                AttributeCodes.PROD_INCLDS,
+                                AttributeCodes.PTR_USER_PRD }
+                        }
+                    }
+                },
+                new MyOpRule
 				{
 					Title="Readonly for Frontend With Tracker",
 					ActionRule = MyDcActions.ReadOnlyFrontendWithTracker,
 					InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL, OpDataElementType.PRC_TBL_ROW},
 					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate }
 				},
-				new MyOpRule
+                new MyOpRule
+                {
+                    Title="Readonly if Not Backend and has tracker",
+                    ActionRule = MyDcActions.ExecuteActions,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnReadonly},
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PROGRAM_PAYMENT) && de.AtrbValue != null && String.Equals(de.AtrbValue.ToString(),"Backend", StringComparison.OrdinalIgnoreCase) && dc.DcID > 0).Any(),
+                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
+                    {
+                        new OpRuleAction<IOpDataElement>
+                        {
+                            Action = BusinessLogicDeActions.SetReadOnly,
+                            Target = new[] {AttributeCodes.EXPIRE_YCS2 }
+                        }
+                    }
+                },
+
+                new MyOpRule
+                {
+                    Title="Server Deal Type Read Only if Product is not SvrWS",
+                    ActionRule = MyDcActions.ShowServerDealType,
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate }
+                },
+                new MyOpRule
 				{
                     // US52971 -  If Program Payment = Front end then user need to enter the sold to ID-not mandatory (sold to ID should be pulled by system for that customer div and Geo and multi select)-if left blank then it means all 
-                    Title="Hidden if Backend Deal",
+                    Title="Readonly if Backend Deal",
 					ActionRule = MyDcActions.ExecuteActions,
 					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnReadonly},
 					InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
@@ -67,7 +115,7 @@ namespace Intel.MyDeals.BusinessRules
 				},
 				new MyOpRule // Set to read only if Frontend
                 {
-					Title="Readonly if Frontend",
+					Title="Readonly if Frontend Deal",
 					ActionRule = MyDcActions.ExecuteActions,
 					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnReadonly},
 					AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PROGRAM_PAYMENT) && de.HasValue() && !String.Equals(de.AtrbValue.ToString(), "Backend", StringComparison.OrdinalIgnoreCase)).Any(),
@@ -109,6 +157,7 @@ namespace Intel.MyDeals.BusinessRules
 								AttributeCodes.CUST_DIV_NM,
 								AttributeCodes.CREDIT_VOLUME,
 								AttributeCodes.DEBIT_VOLUME,
+                                //AttributeCodes.DEAL_GRP_EXCLDS,
 								AttributeCodes.ECAP_FLR,
 								AttributeCodes.DC_ID,
 								AttributeCodes.DC_PARENT_ID,
@@ -210,22 +259,6 @@ namespace Intel.MyDeals.BusinessRules
 				},
 				new MyOpRule
 				{
-					Title="Readonly if Not Backend and has tracker",
-					ActionRule = MyDcActions.ExecuteActions,
-					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnReadonly},
-					InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
-					AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PROGRAM_PAYMENT) && de.AtrbValue != null && String.Equals(de.AtrbValue.ToString(),"Backend", StringComparison.OrdinalIgnoreCase) && dc.DcID > 0).Any(),
-					OpRuleActions = new List<OpRuleAction<IOpDataElement>>
-					{
-						new OpRuleAction<IOpDataElement>
-						{
-							Action = BusinessLogicDeActions.SetReadOnly,
-							Target = new[] {AttributeCodes.EXPIRE_YCS2 }
-						}
-					}
-				},
-				new MyOpRule
-				{
 					Title="Readonly if geo is WW",
 					ActionRule = MyDcActions.ExecuteActions,
 					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnReadonly},
@@ -272,7 +305,10 @@ namespace Intel.MyDeals.BusinessRules
 							Target = new[] {AttributeCodes.DEAL_GRP_EXCLDS }
 						}
 					}
-				},
+				}
+
+
+
 			};
         }
 

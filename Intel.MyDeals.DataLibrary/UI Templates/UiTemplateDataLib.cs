@@ -907,7 +907,8 @@ namespace Intel.MyDeals.DataLibrary
 				Label = "Deal Group Comment",
 				DataType = "string",
 				Width = 140,
-				IsHidden = true
+                Template = "#=gridUtils.uiControlWrapper(data, 'DEAL_GRP_CMNT')#",
+                IsHidden = true
 			});
 			items.Add(new UiTemplateContainerItem
             {
