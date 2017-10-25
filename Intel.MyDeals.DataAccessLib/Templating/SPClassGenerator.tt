@@ -44,6 +44,7 @@
 			WriteLine(dbobjects.BoilerPlateDetails);
 			WriteLine(@"
 using System;
+using System.Data;
 using Intel.Opaque.DBAccess;
 using System.Data.SqlClient;
 ");
