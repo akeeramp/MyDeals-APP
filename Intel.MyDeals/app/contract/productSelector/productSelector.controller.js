@@ -335,12 +335,12 @@
                     response.data[0]['drillDownFilter5'] = (!!!item.drillDownFilter5 && item.drillDownFilter5 == "") ? null : item.drillDownFilter5;
                     vm.gridSelectItem(response.data[0]);
                 } else {
-                    vm.gridData = vm.gridData.map(function (x) {
+                    vm.gridData = response.data.map(function (x) {
                         x['selected'] = productExists(item, x.PRD_MBR_SID);
                         x['parentSelected'] = item.selected;
                         return x;
                     });
-                    vm.gridData = sortBySelectionLevelColumn(response.data, selectionLevel);
+                    vm.gridData = sortBySelectionLevelColumn(vm.gridData, selectionLevel);
                     toggleColumnsWhenEmpty(vm.gridData, 'prodGrid');
                     dataSourceProduct.read();
                 }
