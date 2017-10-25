@@ -1685,7 +1685,6 @@
                 // Remove any lingering blank rows from the data
                 if (!!sData) {
                 	for (var n = sData.length - 1; n >= 0; n--) {
-                		debugger;
                 		if (!sData[n].PS_WF_STG_CD)
                 		{
                 			sData[n].PS_WF_STG_CD = $scope.curPricingStrategy.WF_STG_CD;

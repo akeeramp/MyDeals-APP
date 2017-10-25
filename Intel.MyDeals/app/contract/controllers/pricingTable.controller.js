@@ -1798,7 +1798,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 							$timeout(function () {
 								root.setBusy("", "");
 							}, 300);
-						})
+						});
 				}, function (response) {
 					topbar.hide();
 					root.setBusy("Warning preventing product validation", "Please fix column validation errors then try again");
