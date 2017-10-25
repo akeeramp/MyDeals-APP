@@ -199,7 +199,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                 var value = input.val();
                                 var editedROW = e.model;
                                 var isEdited = true;
-                                if (usrRole == "DA" && editedROW.MEET_COMP_UPD_FLG == "Y" && editedROW.MEET_COMP_STS.toLowerCase() == "pass" || editedROW.MEET_COMP_STS.toLowerCase() == "overridden") {
+                                if (usrRole == "DA" && editedROW.MEET_COMP_UPD_FLG == "Y" && ( editedROW.MEET_COMP_STS.toLowerCase() == "pass" || editedROW.MEET_COMP_STS.toLowerCase() == "overridden" )) {
                                     $('input[name=COMP_OVRRD_RSN]').parent().html(e.model.COMP_OVRRD_RSN);
                                     logger.warning("Cannot Override Meet Comp since the deals could be in Active Stage or the Meet Comp Result is Passed.");
                                 }
@@ -367,7 +367,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     field: "MEET_COMP_STS",
                                     title: "Test Results",
                                     width: 120,
-                                    template: "#if(MEET_COMP_STS == 'Overridden') {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid complete' title='Passed with Override Status' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Pass') {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid completeGreen' title='Passed' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Incomplete') {#<div class='textRunIcon'><i class='intelicon-help-solid incomplete' title='Incomplete' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS == 'Fail'){#<div class='textRunIcon'><i class='intelicon-alert-solid errorIcon' title='Error/Failed' style='font-size:20px !important'></i></div>#}#",
+                                    template: "#if(MEET_COMP_STS.toLowerCase() == 'overridden') {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid complete' title='Passed with Override Status' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS.toLowerCase() == 'pass') {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid completeGreen' title='Passed' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS.toLowerCase() == 'incomplete') {#<div class='textRunIcon'><i class='intelicon-help-solid incomplete' title='Incomplete' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS.toLowerCase() == 'fail'){#<div class='textRunIcon'><i class='intelicon-alert-solid errorIcon' title='Error/Failed' style='font-size:20px !important'></i></div>#}#",
                                     editable: function () { return false; },
                                     hidden: $scope.hide_MEET_COMP_STS,
                                     filterable: { multi: true, search: true }
@@ -489,7 +489,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
 
                         function meetCompSKUEditor(container, options) {
                             if (usrRole == "DA" || usrRole == "SA" || options.model.MEET_COMP_UPD_FLG == "N") {
-                                //DA only view
+                                logger.warning("Cannot edit the Comp SKU since the Deal could be Active OR Pricing Strategy could be in Pending/Approved/Hold Status");
                             }
                             else {
                                 var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
@@ -640,7 +640,13 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     });
                             }
                             else {
-                                logger.warning("Cannot Override Meet Comp since the deals could be in Active Stage or the Meet Comp Result is Passed.");
+                                if (usrRole == "DA") {
+                                    logger.warning("Cannot Override Meet Comp since the deals could be in Active Stage or the Meet Comp Result is Passed.");
+                                }
+                                else {
+                                    logger.warning("Cannot edit the Comp SKU since the Deal could be Active OR Pricing Strategy could be in Pending/Approved/Hold Status");
+                                }
+                                
                             }
                         }
 
@@ -899,7 +905,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     var value = input.val();
                                     var editedROW = e.model;
                                     var isEdited = true;
-                                    if (usrRole == "DA" && editedROW.MEET_COMP_UPD_FLG == "Y" && editedROW.MEET_COMP_STS.toLowerCase() == "pass" || editedROW.MEET_COMP_STS.toLowerCase() == "overridden") {
+                                    if (usrRole == "DA" && editedROW.MEET_COMP_UPD_FLG == "Y" && ( editedROW.MEET_COMP_STS.toLowerCase() == "pass" || editedROW.MEET_COMP_STS.toLowerCase() == "overridden")) {
                                         $('input[name=COMP_OVRRD_RSN]').parent().html(e.model.COMP_OVRRD_RSN);
                                         logger.warning("Cannot Override Meet Comp since the deals could be in Active Stage or the Meet Comp Result is Passed.");
                                     }
@@ -1046,7 +1052,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         width: 120,
                                         editable: function () { return false; },
                                         hidden: $scope.hide_MEET_COMP_STS,
-                                        template: "#if(MEET_COMP_STS == 'Overridden') {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid complete' title='Passed with Override Status' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS.toLowerCase() == 'pass') {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid completeGreen' title='Passed' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS.toLowerCase() == 'incomplete') {#<div class='textRunIcon'><i class='intelicon-help-solid incomplete' title='Incomplete' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS.toLowerCase() == 'fail'){#<div class='textRunIcon'><i class='intelicon-alert-solid errorIcon' title='Error/Failed' style='font-size:20px !important'></i></div>#}#",
+                                        template: "#if(MEET_COMP_STS.toLowerCase() == 'overridden') {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid complete' title='Passed with Override Status' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS.toLowerCase() == 'pass') {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid completeGreen' title='Passed' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS.toLowerCase() == 'incomplete') {#<div class='textRunIcon'><i class='intelicon-help-solid incomplete' title='Incomplete' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS.toLowerCase() == 'fail'){#<div class='textRunIcon'><i class='intelicon-alert-solid errorIcon' title='Error/Failed' style='font-size:20px !important'></i></div>#}#",
                                         filterable: { multi: true, search: true, search: true }
                                     },
                                     {
@@ -1083,7 +1089,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         title: "Analysis Override Comments",
                                         width: 220,
                                         filterable: { multi: true, search: true },
-                                        //template: "<div ng-class=\"'text-danger': #=MEET_COMP_STS# == Overridden }\">#= COMP_OVRRD_RSN #</div>",
+                                        //template: "<div class='#if(MEET_COMP_STS == Pass){##strike ##} else {##normal##}#'>#= COMP_OVRRD_RSN #</div>",
                                         //template: "<div ng-class={'strike': #=MEET_COMP_STS# == 'Overridden'}>#=COMP_OVRRD_RSN#</div>",
                                         hidden: $scope.hide_COMP_OVRRD_RSN
                                     }
