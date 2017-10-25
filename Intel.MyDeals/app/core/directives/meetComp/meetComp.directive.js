@@ -201,7 +201,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                 var isEdited = true;
                                 if (usrRole == "DA" && editedROW.MEET_COMP_UPD_FLG == "Y" && ( editedROW.MEET_COMP_STS.toLowerCase() == "pass" || editedROW.MEET_COMP_STS.toLowerCase() == "overridden" )) {
                                     $('input[name=COMP_OVRRD_RSN]').parent().html(e.model.COMP_OVRRD_RSN);
-                                    logger.warning("Cannot Override Meet Comp since the deals could be in Active Stage or the Meet Comp Result is Passed.");
+                                    //logger.warning("Cannot Override Meet Comp since the deals could be in Active Stage or the Meet Comp Result is Passed.");
                                 }
                                 else {
                                     input.keyup(function () {
@@ -312,6 +312,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     field: "PRD_CAT_NM",
                                     title: "Vertical",
                                     width: 80,
+                                    template: "<div class='readOnlyCell' title='#=PRD_CAT_NM#'>#=PRD_CAT_NM#</div>",
                                     filterable: { multi: true, search: true },
                                     editable: function () { return false; }
                                 },
@@ -319,13 +320,14 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     field: "GRP_PRD_NM",
                                     title: "Product",
                                     width: 120,
-                                    template: "<div title='#=GRP_PRD_NM#'>#=GRP_PRD_NM#</div>",
+                                    template: "<div class='readOnlyCell' title='#=GRP_PRD_NM#'>#=GRP_PRD_NM#</div>",
                                     filterable: { multi: true, search: true },
                                     editable: function () { return false; }
                                 },
                                 {
                                     field: "DEAL_OBJ_SID",
                                     title: "Deals",
+                                    template: "<div class='readOnlyCell' title='#=DEAL_OBJ_SID#'>#=DEAL_OBJ_SID#</div>",
                                     width: 120,
                                     filterable: { multi: true, search: true },
                                     editable: function () { return false; }
@@ -335,6 +337,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     title: "Meet Comp SKU",
                                     template: "#= COMP_SKU#",
                                     width: 170,
+                                    template: "<div class='#if(usrRole == 'DA'){#readOnlyCell#} else {## ##}#'>#=COMP_SKU#</div>",
                                     filterable: { multi: true, search: true },
                                     editor: meetCompSKUEditor
                                 },
@@ -343,7 +346,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     title: "Meet Comp Price",
                                     width: 150,
                                     format: "{0:c}",
-                                    template: "<div>#if(COMP_PRC == 0){## ##} else {#$#:COMP_PRC##}#</div>",
+                                    template: "<div class='#if(usrRole == 'DA'){#readOnlyCell#} else {## ##}#'>#if(COMP_PRC == 0){## ##} else {#$#:COMP_PRC##}#</div>",
                                     filterable: { multi: true, search: true },
                                     editor: meetCompPriceEditor
                                 },
@@ -351,7 +354,8 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     field: "IA_BNCH",
                                     title: "IA Bench",
                                     width: 120,
-                                    template: "<div>#if(IA_BNCH == 0){## ##} else {##:IA_BNCH##}#</div>",
+                                    template: "<div class='#if(PRD_CAT_NM.toLowerCase() != 'svrws' || usrRole == 'DA'){#readOnlyCell#} else {## ##}#'>#if(IA_BNCH == 0){## ##} else {##:IA_BNCH##}#</div>",
+                                    //template: "<div>#if(IA_BNCH == 0){## ##} else {##:IA_BNCH##}#</div>",
                                     filterable: { multi: true, search: true },
                                     editor: editorIABench
                                 },
@@ -359,7 +363,8 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     field: "COMP_BNCH",
                                     title: "Comp Bench",
                                     width: 120,
-                                    template: "<div>#if(COMP_BNCH == 0){## ##} else {##:COMP_BNCH##}#</div>",
+                                    //template: "<div>#if(COMP_BNCH == 0){## ##} else {##:COMP_BNCH##}#</div>",
+                                    template: "<div class='#if(PRD_CAT_NM.toLowerCase() != 'svrws' || usrRole == 'DA'){#readOnlyCell#} else {## ##}#'>#if(COMP_BNCH == 0){## ##} else {##:COMP_BNCH##}#</div>",
                                     filterable: { multi: true, search: true },
                                     editor: editorCOMPBench
                                 },
@@ -367,7 +372,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     field: "MEET_COMP_STS",
                                     title: "Test Results",
                                     width: 120,
-                                    template: "#if(MEET_COMP_STS.toLowerCase() == 'overridden') {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid complete' title='Passed with Override Status' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS.toLowerCase() == 'pass') {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid completeGreen' title='Passed' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS.toLowerCase() == 'incomplete') {#<div class='textRunIcon'><i class='intelicon-help-solid incomplete' title='Incomplete' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS.toLowerCase() == 'fail'){#<div class='textRunIcon'><i class='intelicon-alert-solid errorIcon' title='Error/Failed' style='font-size:20px !important'></i></div>#}#",
+                                    template: "#if(MEET_COMP_STS.toLowerCase() == 'overridden') {#<div class='textRunIcon readOnlyCell'><i class='intelicon-passed-completed-solid complete' title='Passed with Override Status' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS.toLowerCase() == 'pass') {#<div class='textRunIcon readOnlyCell'><i class='intelicon-passed-completed-solid completeGreen' title='Passed' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS.toLowerCase() == 'incomplete') {#<div class='textRunIcon readOnlyCell'><i class='intelicon-help-solid incomplete' title='Incomplete' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS.toLowerCase() == 'fail'){#<div class='textRunIcon readOnlyCell'><i class='intelicon-alert-solid errorIcon' title='Error/Failed' style='font-size:20px !important'></i></div>#}#",
                                     editable: function () { return false; },
                                     hidden: $scope.hide_MEET_COMP_STS,
                                     filterable: { multi: true, search: true }
@@ -375,7 +380,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                 {
                                     field: "MC_LAST_RUN",
                                     title: "Last Run",
-                                    template: "<div title='#= kendo.toString( new Date(MC_LAST_RUN), 'M/d/yyyy hh:mm:ss tt') #'>#= kendo.toString( new Date(MC_LAST_RUN), 'M/d/yyyy hh:mm:ss tt') #</div>",
+                                    template: "<div class='readOnlyCell' title='#= kendo.toString( new Date(MC_LAST_RUN), 'M/d/yyyy hh:mm:ss tt') #'>#= kendo.toString( new Date(MC_LAST_RUN), 'M/d/yyyy hh:mm:ss tt') #</div>",
                                     width: 150,
                                     filterable: {
                                         extra: false,
@@ -390,7 +395,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     width: 150,
                                     editable: function () { return false; },
                                     filterable: { multi: true, search: true },
-                                    template: "<div>#if(MC_AVG_RPU == 0){## ##} else {##:MC_AVG_RPU##}#</div>",
+                                    template: "<div class='readOnlyCell'>#if(MC_AVG_RPU == 0){## ##} else {##:MC_AVG_RPU##}#</div>",
                                     hidden: $scope.hide_MC_AVG_RPU
                                 },
                                 {
@@ -398,6 +403,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     title: "Analysis Override",
                                     width: 150,
                                     editor: meetCompResultStatusEditor,
+                                    template: "<div class='#if(MEET_COMP_STS.toLowerCase() == 'pass' || ( MEET_COMP_STS.toLowerCase() == 'overridden' && COMP_OVRRD_FLG.toLowerCase() == 'yes')){#readOnlyCell#} else {## ##}#'>#=COMP_OVRRD_FLG#</div>",
                                     filterable: { multi: true, search: true, search: true },
                                     hidden: $scope.hide_COMP_OVRRD_FLG
                                 },
@@ -406,6 +412,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     title: "Analysis Override Comments",
                                     width: 220,
                                     filterable: { multi: true, search: true, search: true },
+                                    template: "<div class='#if(MEET_COMP_STS.toLowerCase() == 'pass' || ( MEET_COMP_STS.toLowerCase() == 'overridden' && COMP_OVRRD_FLG.toLowerCase() == 'yes')){#readOnlyCell#} else {## ##}#'>#=COMP_OVRRD_RSN#</div>",
                                     hidden: $scope.hide_COMP_OVRRD_RSN
                                 }
                             ]
@@ -489,7 +496,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
 
                         function meetCompSKUEditor(container, options) {
                             if (usrRole == "DA" || usrRole == "SA" || options.model.MEET_COMP_UPD_FLG == "N") {
-                                logger.warning("Cannot edit the Comp SKU since the Deal could be Active OR Pricing Strategy could be in Pending/Approved/Hold Status");
+                                //
                             }
                             else {
                                 var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
@@ -598,7 +605,10 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
 
                         function meetCompResultStatusEditor(container, options) {
                             //IF MEET COMP STATUS FAILED THEN Only Override Option will be available.
-                            if (options.model.MEET_COMP_STS.toLowerCase() != "pass" && usrRole == "DA" && options.model.MEET_COMP_UPD_FLG == "Y") {
+                            if (options.model.MEET_COMP_STS.toLowerCase() == "pass" || (options.model.MEET_COMP_STS.toLowerCase() == "overridden" && options.model.COMP_OVRRD_FLG.toLowerCase() == "yes")){
+                
+                            }
+                            else if (usrRole == "DA" && options.model.MEET_COMP_UPD_FLG == "Y") {
                                 var tempData = [
                                     {
                                         "COMP_OVRRD_FLG": "Yes"
@@ -723,29 +733,30 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     'COMP_OVRRD_RSN': false,
                                     'RW_NM': ""
                                 };
+
                                 //COMP_SKU Checking.....
-                                if (data[i].COMP_SKU.length == 0 && usrRole != "DA") {
+                                if (data[i].COMP_SKU.length == 0 && usrRole != "DA" && (data[i].MEET_COMP_STS.toLowerCase() != "pass" || data[i].MEET_COMP_STS.toLowerCase() != "overridden" )) {
                                     errorObj.COMP_SKU = true;
                                     errorObj.RW_NM = data[i].RW_NM;
                                     isError = true;
                                 }
 
                                 //COMP_PRC checking.....
-                                if (data[i].COMP_PRC <= 0 && usrRole != "DA") {
+                                if (data[i].COMP_PRC <= 0 && usrRole != "DA" && (data[i].MEET_COMP_STS.toLowerCase() != "pass" || data[i].MEET_COMP_STS.toLowerCase() != "overridden")) {
                                     errorObj.COMP_PRC = true;
                                     errorObj.RW_NM = data[i].RW_NM;
                                     isError = true;
                                 }
 
                                 //COMP_BNCH checking....
-                                if (data[i].COMP_BNCH <= 0 && data[i].PRD_CAT_NM.toLowerCase() == "svrws" && usrRole != "DA") {
+                                if (data[i].COMP_BNCH <= 0 && data[i].PRD_CAT_NM.toLowerCase() == "svrws" && usrRole != "DA" && (data[i].MEET_COMP_STS.toLowerCase() != "pass" || data[i].MEET_COMP_STS.toLowerCase() != "overridden")) {
                                     errorObj.COMP_BNCH = true;
                                     errorObj.RW_NM = data[i].RW_NM;
                                     isError = true;
                                 }
 
                                 //IA_BNCH checking....
-                                if (data[i].IA_BNCH <= 0 && data[i].PRD_CAT_NM.toLowerCase() == "svrws" && usrRole != "DA") {
+                                if (data[i].IA_BNCH <= 0 && data[i].PRD_CAT_NM.toLowerCase() == "svrws" && usrRole != "DA" && (data[i].MEET_COMP_STS.toLowerCase() != "pass" || data[i].MEET_COMP_STS.toLowerCase() != "overridden")) {
                                     errorObj.IA_BNCH = true;
                                     errorObj.RW_NM = data[i].RW_NM;
                                     isError = true;
@@ -835,7 +846,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                         
                         function detailInit(e) {
                             $scope.TEMP_GRP_PRD_SID = e.data.GRP_PRD_SID;
-                            $("<div class='childGrid'/>").appendTo(e.detailCell).kendoGrid({
+                            $("<div class='childGrid' style=' margin-bottom: 5px !important;'/>").appendTo(e.detailCell).kendoGrid({
                                 dataSource: {
                                     transport: {
                                         read: function (e) {
@@ -999,12 +1010,14 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         field: "PRD_CAT_NM",
                                         title: "Vertical",
                                         width: 80,
+                                        template: "<div class='readOnlyCell' title='#=PRD_CAT_NM#'>#=PRD_CAT_NM#</div>",
                                         filterable: { multi: true, search: true },
                                         editable: function () { return false; }
                                     },
                                     {
                                         field: "OBJ_SET_TYPE",
                                         title: "Deal Type",
+                                        template: "<div class='readOnlyCell' title='#=OBJ_SET_TYPE#'>#=OBJ_SET_TYPE#</div>",
                                         width: 120
                                     },
                                     {
@@ -1012,12 +1025,13 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         title: "Deal ID",
                                         width: 120,
                                         filterable: { multi: true, search: true },
-                                        template: "<div class='ovlpCell'><a onclick='gotoDealDetails(#=CNTRCT_OBJ_SID#,#=PRC_ST_OBJ_SID#, #= PRC_TBL_OBJ_SID # )' class='btnDeal'> #= DEAL_OBJ_SID # </a></div>"
+                                        template: "<div class='ovlpCell readOnlyCell'><a onclick='gotoDealDetails(#=CNTRCT_OBJ_SID#,#=PRC_ST_OBJ_SID#, #= PRC_TBL_OBJ_SID # )' class='btnDeal'> #= DEAL_OBJ_SID # </a></div>"
                                     },
                                     {
                                         field: "COMP_SKU",
                                         title: "Meet Comp SKU",
                                         width: 170,
+                                        template: "<div class='#if(usrRole == 'DA'){#readOnlyCell#} else {## ##}#'>#=COMP_SKU#</div>",
                                         filterable: { multi: true, search: true },
                                         editor: meetCompSKUEditor
                                     },
@@ -1026,7 +1040,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         title: "Meet Comp Price",
                                         width: 150,
                                         format: "{0:c}",
-                                        template: "<div>#if(COMP_PRC == 0){## ##} else {#$#:COMP_PRC##}#</div>",
+                                        template: "<div class='#if(usrRole == 'DA'){#readOnlyCell#} else {## ##}#'>#if(COMP_PRC == 0){## ##} else {#$#:COMP_PRC##}#</div>",
                                         filterable: { multi: true, search: true },
                                         editor: meetCompPriceEditor
                                     },
@@ -1034,7 +1048,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         field: "IA_BNCH",
                                         title: "IA Bench",
                                         width: 120,
-                                        template: "<div>#if(IA_BNCH == 0){## ##} else {##:IA_BNCH##}#</div>",
+                                        template: "<div class='#if(PRD_CAT_NM.toLowerCase() != 'svrws' || usrRole == 'DA'){#readOnlyCell#} else {## ##}#'>#if(IA_BNCH == 0){## ##} else {##:IA_BNCH##}#</div>",
                                         filterable: { multi: true, search: true },
                                         editor: editorIABench
                                     },
@@ -1042,7 +1056,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         field: "COMP_BNCH",
                                         title: "Comp Bench",
                                         width: 120,
-                                        template: "<div>#if(COMP_BNCH == 0){## ##} else {##:COMP_BNCH##}#</div>",
+                                        template: "<div class='#if(PRD_CAT_NM.toLowerCase() != 'svrws' || usrRole == 'DA'){#readOnlyCell#} else {## ##}#'>#if(COMP_BNCH == 0){## ##} else {##:COMP_BNCH##}#</div>",
                                         filterable: { multi: true, search: true },
                                         editor: editorCOMPBench
                                     },
@@ -1052,13 +1066,13 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         width: 120,
                                         editable: function () { return false; },
                                         hidden: $scope.hide_MEET_COMP_STS,
-                                        template: "#if(MEET_COMP_STS.toLowerCase() == 'overridden') {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid complete' title='Passed with Override Status' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS.toLowerCase() == 'pass') {#<div class='textRunIcon'><i class='intelicon-passed-completed-solid completeGreen' title='Passed' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS.toLowerCase() == 'incomplete') {#<div class='textRunIcon'><i class='intelicon-help-solid incomplete' title='Incomplete' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS.toLowerCase() == 'fail'){#<div class='textRunIcon'><i class='intelicon-alert-solid errorIcon' title='Error/Failed' style='font-size:20px !important'></i></div>#}#",
+                                        template: "#if(MEET_COMP_STS.toLowerCase() == 'overridden') {#<div class='textRunIcon readOnlyCell'><i class='intelicon-passed-completed-solid complete' title='Passed with Override Status' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS.toLowerCase() == 'pass') {#<div class='textRunIcon readOnlyCell'><i class='intelicon-passed-completed-solid completeGreen' title='Passed' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS.toLowerCase() == 'incomplete') {#<div class='textRunIcon readOnlyCell'><i class='intelicon-help-solid incomplete' title='Incomplete' style='font-size:20px !important'></i></div>#} else if(MEET_COMP_STS.toLowerCase() == 'fail'){#<div class='textRunIcon readOnlyCell'><i class='intelicon-alert-solid errorIcon' title='Error/Failed' style='font-size:20px !important'></i></div>#}#",
                                         filterable: { multi: true, search: true, search: true }
                                     },
                                     {
                                         field: "MC_LAST_RUN",
                                         title: "Last Run",
-                                        template: "<div title='#= kendo.toString( new Date(MC_LAST_RUN), 'M/d/yyyy hh:mm:ss tt') #'>#= kendo.toString( new Date(MC_LAST_RUN), 'M/d/yyyy hh:mm:ss tt') #</div>",
+                                        template: "<div class='readOnlyCell' title='#= kendo.toString( new Date(MC_LAST_RUN), 'M/d/yyyy hh:mm:ss tt') #'>#= kendo.toString( new Date(MC_LAST_RUN), 'M/d/yyyy hh:mm:ss tt') #</div>",
                                         width: 150,
                                         filterable: {
                                             extra: false,
@@ -1073,7 +1087,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         width: 150,
                                         editable: function () { return false; },
                                         filterable: { multi: true, search: true },
-                                        template: "<div>#if(MC_AVG_RPU == 0){## ##} else {##:MC_AVG_RPU##}#</div>",
+                                        template: "<div class='readOnlyCell'>#if(MC_AVG_RPU == 0){## ##} else {##:MC_AVG_RPU##}#</div>",
                                         hidden: $scope.hide_MC_AVG_RPU
                                     },
                                     {
@@ -1082,6 +1096,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         width: 150,
                                         editor: meetCompResultStatusEditor,
                                         filterable: { multi: true, search: true },
+                                        template: "<div class='#if(MEET_COMP_STS.toLowerCase() == 'pass' || ( MEET_COMP_STS.toLowerCase() == 'overridden' && COMP_OVRRD_FLG.toLowerCase() == 'yes')){#readOnlyCell#} else {## ##}#'>#=COMP_OVRRD_FLG#</div>",
                                         hidden: $scope.hide_COMP_OVRRD_FLG
                                     },
                                     {
@@ -1089,8 +1104,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         title: "Analysis Override Comments",
                                         width: 220,
                                         filterable: { multi: true, search: true },
-                                        //template: "<div class='#if(MEET_COMP_STS == Pass){##strike ##} else {##normal##}#'>#= COMP_OVRRD_RSN #</div>",
-                                        //template: "<div ng-class={'strike': #=MEET_COMP_STS# == 'Overridden'}>#=COMP_OVRRD_RSN#</div>",
+                                        template: "<div class='#if(MEET_COMP_STS.toLowerCase() == 'pass' || ( MEET_COMP_STS.toLowerCase() == 'overridden' && COMP_OVRRD_FLG.toLowerCase() == 'yes' )){#readOnlyCell#} else {## ##}#'>#=COMP_OVRRD_RSN#</div>",                                        
                                         hidden: $scope.hide_COMP_OVRRD_RSN
                                     }
                                 ]
