@@ -21,7 +21,7 @@
     </div>
 
     <!-- Attachments icon -->
-    <div class='fl md-icon'>
+    <div class='fl md-icon' ng-if="isFileAttachmentEnabled">
         <i ng-class="getFileIcon(dataItem)" ng-style="getFileStyle(dataItem)" ng-attr-title="{{getFileTitle(dataItem)}}" style="font-size: 20px !important;" ng-click="clkFileIcon(dataItem)"></i>
     </div>
 

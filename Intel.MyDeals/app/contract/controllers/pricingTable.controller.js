@@ -1930,6 +1930,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 $timeout(function () {
                     var data = root.spreadDs.data();
                     var sourceData = root.pricingTableData.PRC_TBL_ROW;
+
+                    if (Object.keys(transformResult.DuplicateProducts).length > 0 || Object.keys(transformResult.InValidProducts).length > 0) {
+                        publishWipDeals = false;
+                    }
+
                     if (!!transformResult && !!transformResult.ProdctTransformResults) {
                         for (var key in transformResult.ProdctTransformResults) {
                             var r = key - 1;
