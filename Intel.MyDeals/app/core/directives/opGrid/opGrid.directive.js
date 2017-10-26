@@ -191,9 +191,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 //debugger;
             }
 
-            if ($scope.opOptions.custom === undefined) {
-                $scope.cloneWithOrder("default");
-            }
+            // Apply the default layout.  Later, we'll apply the custom layout if there is one.
+            $scope.cloneWithOrder("default");
 
             $scope.configureSortableTab = function () {
                 $("#tabstrip ul.k-tabstrip-items").kendoSortable({
@@ -338,13 +337,12 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 }, 10);
             }
 
-            $scope.customLayout = function () {
-                $scope.opOptions.groups = [];
-
+            $scope.customLayout = function (reportError = true) {
                 // Get the persisted grid settings.
                 userPreferencesService.getActions("DealEditor", "CustomGridSettings")
                     .then(function (response) {
                         if (response.data && response.data.length > 0) {
+                            $scope.opOptions.groups = [];
                             $scope.opOptions.custom = {};
 
                             // 'Groups'
@@ -374,8 +372,9 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                 $scope.selectFirstTab();
                             }, 10);
                         } else {
-                            kendo.alert("You have not saved a custom layout yet.");
-                            return;
+                            if (reportError) {
+                                kendo.alert("You have not saved a custom layout yet.");
+                            }
                         }
                     }, function (response) {
                         logger.error("Unable to get Custom Layout.", response, response.statusText);
@@ -556,7 +555,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 				}
             	return comparison.toUpperCase() !== "ADDITIVE" && comparison.toUpperCase() !== "NON ADDITIVE";
 			}
-			
+
+            var triedToApplyCustomLayout = false;
             $scope.ds = {
                 dataSource: $scope.contractDs,
                 columns: $scope.opOptions.columns,
@@ -630,6 +630,15 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         if (majCols.indexOf(colCells[c].textContent) >= 0) {
                             $(colCells[c]).css("border-bottom", "3px solid #0071C5");
                         }
+                    }
+
+                    // If the user has previously saved a custom layout, apply it.
+                    if (!triedToApplyCustomLayout) {
+                        triedToApplyCustomLayout = true;
+
+                        $timeout(function () {
+                            $scope.customLayout(false);
+                        }, 10);
                     }
                 }
             };

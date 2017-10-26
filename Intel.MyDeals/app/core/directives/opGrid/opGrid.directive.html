@@ -94,7 +94,7 @@
                             <li ng-click="defaultLayout()">
                                 <i class="intelicon-dashboard-solid" style="font-size: 18px;"></i> DEFAULT LAYOUT
                             </li>
-                            <li ng-click="customLayout()">
+                            <li ng-click="customLayout()" ng-class="{'li-disabled': opOptions.custom === undefined}">
                                 <i class="intelicon-dashboard-outlined" style="font-size: 18px;"></i> CUSTOM LAYOUT
                             </li>
                             <li ng-click="saveLayout()">
@@ -231,6 +231,15 @@
         .k-menu .k-item > .k-link:hover {
             color: #FFFFFF;
         }
+
+    .k-menu .li-disabled > .k-link {
+        color: gray;
+    }
+
+    .li-disabled {
+        pointer-events: none;
+        opacity: 0.3;
+    }
 
     .gradTab.k-tabstrip {
         background: #fdfdfd; /* Old browsers */
