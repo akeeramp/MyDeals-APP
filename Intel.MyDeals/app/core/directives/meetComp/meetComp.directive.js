@@ -1111,6 +1111,11 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                             });
                         };
                     }
+                    else {                      
+                        kendo.alert("No Meet Comp data");
+                        $scope.isBusy = false;
+                        return;
+                    }
                 },
                     function (response) {
                         logger.error("Unable to get data", response, response.statusText);
