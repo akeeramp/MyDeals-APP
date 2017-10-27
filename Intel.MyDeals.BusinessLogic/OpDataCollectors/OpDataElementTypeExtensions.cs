@@ -70,7 +70,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <param name="includeSecondaryTypes"></param>
         /// <param name="flattenedDictList"></param>
         /// <returns></returns>
-        public static MyDealsData GetByIDs(this OpDataElementType opDataElementType, IEnumerable<int> ids, List<OpDataElementType> includeTypes, OpDataCollectorFlattenedDictList flattenedDictList)
+        public static MyDealsData GetByIDs(this OpDataElementType opDataElementType, IEnumerable<int> ids, List<OpDataElementType> includeTypes, OpDataCollectorFlattenedDictList flattenedDictList, bool needToCheckForDelete = true)
         {
             OpDataElementSetType opDataElementSetType = flattenedDictList == null
                 ? OpDataElementSetType.Unknown
@@ -79,7 +79,7 @@ namespace Intel.MyDeals.BusinessLogic
             MyDealsData myDealsData = GetByIDs(opDataElementType, ids, includeTypes, new List<int>())
                 .FillInHolesFromAtrbTemplate(includeTypes, opDataElementSetType);
 
-            if (flattenedDictList != null) myDealsData.Merge(flattenedDictList);
+            if (flattenedDictList != null) myDealsData.Merge(flattenedDictList, needToCheckForDelete);
             return myDealsData;
         }
 

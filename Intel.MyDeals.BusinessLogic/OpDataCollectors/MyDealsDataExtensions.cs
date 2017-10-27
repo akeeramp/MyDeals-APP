@@ -26,7 +26,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <param name="myDealsData">The unflattened deals collection to pass up to DB.</param>
         /// <param name="data">The flattened UI data format.</param>
         /// <returns></returns>
-        public static MyDealsData Merge(this MyDealsData myDealsData, OpDataCollectorFlattenedDictList data)
+        public static MyDealsData Merge(this MyDealsData myDealsData, OpDataCollectorFlattenedDictList data, bool needToCheckForDelete = true)
         {
             // Save Data Cycle: Point 6
             if (data == null) return myDealsData;
@@ -40,7 +40,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             foreach (KeyValuePair<OpDataElementType, OpDataCollectorFlattenedList> kvp in data)
             {
-                myDealsData.Merge(kvp.Key, kvp.Value);
+                myDealsData.Merge(kvp.Key, kvp.Value, needToCheckForDelete);
             }
 
             if (EN.GLOBAL.DEBUG >= 1) Debug.WriteLine("{1:HH:mm:ss:fff}\t{0,10} (ms)\tMerge complete", stopwatch.Elapsed.TotalMilliseconds, DateTime.Now);
@@ -56,7 +56,7 @@ namespace Intel.MyDeals.BusinessLogic
         /// <param name="opType">Which collector type to process.</param>
         /// <param name="data">The flattened UI data format.</param>
         /// <returns></returns>
-        public static MyDealsData Merge(this MyDealsData myDealsData, OpDataElementType opType, OpDataCollectorFlattenedList data)
+        public static MyDealsData Merge(this MyDealsData myDealsData, OpDataElementType opType, OpDataCollectorFlattenedList data, bool needToCheckForDelete = true)
         {
             // Save Data Cycle: Point 5
             // Save Data Cycle: Point 13
@@ -193,11 +193,11 @@ namespace Intel.MyDeals.BusinessLogic
             }
 
             // look for WIP deals to delete
-            if (opType == OpDataElementType.WIP_DEAL)
-            {
-                List<int> delIds = wipIds.Where(w => !foundIds.Contains(w)).Distinct().ToList();
-                AddDeleteActions(myDealsData[OpDataElementType.WIP_DEAL], delIds);
-            }
+            //if (opType == OpDataElementType.WIP_DEAL)
+            //{
+            //    List<int> delIds = wipIds.Where(w => !foundIds.Contains(w)).Distinct().ToList();
+            //    AddDeleteActions(myDealsData[OpDataElementType.WIP_DEAL], delIds);
+            //}
 
             // if PRC_TBL, check for merge complete rules
             if (opType == OpDataElementType.PRC_TBL)
@@ -210,7 +210,7 @@ namespace Intel.MyDeals.BusinessLogic
             }
 
             // look for PTRs to delete
-            if (opType == OpDataElementType.PRC_TBL_ROW)
+            if (opType == OpDataElementType.PRC_TBL_ROW && needToCheckForDelete)
             {
                 List<int> ptrIds = myDealsData[OpDataElementType.PRC_TBL_ROW].AllDataCollectors.Select(p => p.DcID).ToList();
                 List<int> delIds = ptrIds.Where(w => !foundIds.Contains(w) && w > 0).Distinct().ToList();

@@ -2253,7 +2253,7 @@
         $scope.removeCleanItems = function (data) {
 
             // for now... performance changes are breaking delete and translate
-            return false;
+            //return false;
 
             if (data.Contract === undefined) data.Contract = [];
             if (data.PricingStrategy === undefined) data.PricingStrategy = [];

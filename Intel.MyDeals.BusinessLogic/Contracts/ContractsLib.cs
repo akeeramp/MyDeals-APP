@@ -230,6 +230,8 @@ namespace Intel.MyDeals.BusinessLogic
             List<int> validationIds = new List<int>();
             bool resetValidationChild = false;
 
+            contractToken.NeedToCheckForDelete = isPrcTblSource;
+
             if (forceValidation)
             {
                 if (isPrcTblSource)
