@@ -14,11 +14,13 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
     
     $scope.pctFilter = "";
     $scope.$parent.isSummaryHidden = false;
-    $scope.CostTestGroupDetails = [];
     gridPctUtils.columns = {};
     $scope.isAllCollapsed = true;
     $scope.context = {};
     $scope.needToRunPct = false;
+    $scope.dealPtIdDict = {};
+    $scope.CostTestGroupDetails = {};
+    $scope.CostTestGroupDealDetails = {};
 
     // change negative values in grid from "()" to "-"
     kendo.culture().numberFormat.currency.pattern[0] = "-$n";
@@ -157,13 +159,14 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
         objsetService.getPctDetails(pt.DC_ID).then(
             function (e) {
                 var secureFields = ["CAP", "MAX_RPU", "ECAP_PRC", "ECAP_FLR", "PRD_COST", "COST_TEST_OVRRD_FLG", "COST_TEST_OVRRD_CMT", "RTL_CYC_NM", "RTL_PULL_DLR"];
-                $scope.CostTestGroupDetails = e.data["CostTestGroupDetailItems"];
-                $scope.CostTestGroupDealDetails = e.data["CostTestGroupDealDetailItems"];
+                $scope.CostTestGroupDetails[pt.DC_ID] = e.data["CostTestGroupDetailItems"];
+                $scope.CostTestGroupDealDetails[pt.DC_ID] = e.data["CostTestGroupDealDetailItems"];
 
                 var response = e.data["CostTestDetailItems"];
 
                 var rollupPctBydeal = {};
                 for (var j = 0; j < response.length; j++) {
+                    $scope.dealPtIdDict[response[j]["DEAL_ID"]] = pt.DC_ID;
                     var isOverridden = response[j]["COST_TEST_OVRRD_FLG"] === "Yes";
                     var pct = isOverridden ? "Pass" : response[j]["PRC_CST_TST_STS"];
                     var pctItem = rollupPctBydeal[response[j]["DEAL_ID"]];
@@ -312,15 +315,16 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
 
     $scope.showGroups = function (isDealMode, dealId) {
 
+        var ptId = $scope.dealPtIdDict[dealId];
         if (isDealMode) {
             $scope.context = $linq.Enumerable()
-                .From($scope.CostTestGroupDealDetails)
+                .From($scope.CostTestGroupDealDetails[ptId])
                 .Where(function (x) {
                     return x.DEAL_ID === dealId;
                 }).ToArray();
         } else {
             $scope.context = $linq.Enumerable()
-                .From($scope.CostTestGroupDetails)
+                .From($scope.CostTestGroupDetails[ptId])
                 .Where(function (x) {
                     return x.DEAL_PRD_RNK === dealId;
                 }).ToArray();            
@@ -507,7 +511,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
             field: "GRP_DEALS",
             title: "Group Deals",
             width: "140px",
-            template: "<div style='text-align: center;' ng-if='dataItem.PRC_CST_TST_STS !== \"NA\"'><div class='lnkBasic' ng-click='showGroups(false, #=DEAL_PRD_RNK#)'>View</div></div>",
+            template: "<div style='text-align: center;' ng-if='dataItem.PRC_CST_TST_STS !== \"NA\"'><div class='lnkBasic' ng-click='showGroups(false, #=DEAL_PRD_RNK#, dataItem)'>View</div></div>",
             parent: true
         },
         "LAST_COST_TEST_RUN": {

@@ -2252,6 +2252,9 @@
 
         $scope.removeCleanItems = function (data) {
 
+            // for now... performance changes are breaking delete and translate
+            return false;
+
             if (data.Contract === undefined) data.Contract = [];
             if (data.PricingStrategy === undefined) data.PricingStrategy = [];
             if (data.PricingTable === undefined) data.PricingTable = [];
@@ -3157,6 +3160,7 @@
         topbar.hide();
 
         function cleanupData(data) {
+
             // Remove any lingering blank rows from the data
             for (var n = data.length - 1; n >= 0; n--) {
                 if (data[n].DC_ID === null && (data[n].PTR_USER_PRD === null || data[n].PTR_USER_PRD.toString().replace(/\s/g, "").length === 0)) {
