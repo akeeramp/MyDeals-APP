@@ -337,7 +337,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 }, 10);
             }
 
-            $scope.customLayout = function (reportError = true) {
+            $scope.customLayout = function (reportError) {
+                reportError = typeof reportError === 'undefined' ? true : reportError;
                 // Get the persisted grid settings.
                 userPreferencesService.getActions("DealEditor", "CustomGridSettings")
                     .then(function (response) {
@@ -576,7 +577,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 pageable: $scope.pageable,
                 columnReorder: function (e) {
                     setTimeout(function () {
-                        // Make sure that $scope.opOptions.groupColumns reflects the current column order, 
+                        // Make sure that $scope.opOptions.groupColumns reflects the current column order,
                         // incase the user later saves the Custom Layout.
                         var newGroupColumns = {}
                         angular.forEach($scope.grid.columns, function (c) {
@@ -593,11 +594,11 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 save: function (e) {
                 	var newField = util.getFirstKey(e.values);
 
-                	disableCellsBasedOnAnotherCellValue(e, newField, "DEAL_COMB_TYPE", "DEAL_GRP_EXCLDS", isDisableViaDealGrp); // TODO: hard coded sadness. 
+                	disableCellsBasedOnAnotherCellValue(e, newField, "DEAL_COMB_TYPE", "DEAL_GRP_EXCLDS", isDisableViaDealGrp); // TODO: hard coded sadness.
 
                 	if (newField === "DEAL_COMB_TYPE") {
                 		$scope.root.saveCell(e.model, newField, $scope, e.values[newField]);
-					} else {			
+					} else {
 						$scope.saveFunctions(e.model, newField, e.values[newField]);
 					}
                     gridUtils.onDataValueChange(e);
@@ -830,7 +831,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     if (col.field === "DEAL_SOLD_TO_ID") {
                         id = options.model["CUST_MBR_SID"]   // TODO:change to dynamic
                     }
-                                        
+
                     ////Note: this was first approach, had issues with reading back in string format and getting linked rows to sync
                     //$('<select data-bind="value:' + options.field + '" name="' + options.field + '"/>')
                     //	.appendTo(container)
@@ -1501,7 +1502,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     .then(function (response) {
                         if (response.data[0].PRICING_TABLES > 0) {
                             // Change in Deal Editor
-                            
+
                             // findIndex() is not supported in IE11 and hence replacing with 'some()' that is supported in all browsers - VN
                             var indx = -1;
                             $scope.opData.some(function (e, i) {
@@ -1879,7 +1880,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 for (var z = 0; z < rowCount.length; z++) {
                     $scope.ovlpErrorCount.push(rowCount[z].WIP_DEAL_OBJ_SID);
                 }
-                
+
                 // findIndex() is not supported in IE11 and hence replacing with 'some()' that is supported in all browsers - VN
                 var indx = -1;
                 grps.some(function (e, i) {
@@ -1894,7 +1895,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             //Remove Overlap TAB
             $scope.removeOverlapTab = function () {
                 var grps = $scope.opOptions.groups;
-               
+
                 // findIndex() is not supported in IE11 and hence replacing with 'some()' that is supported in all browsers - VN
                 var indx = -1;
                 grps.some(function (e, i) {
@@ -2213,7 +2214,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     });
             }
 
-            function openDealGroupModal(container, col) { 
+            function openDealGroupModal(container, col) {
             	var containerDataItem = angular.element(container).scope().dataItem;
 
             	var modal = $uibModal.open({
@@ -2238,7 +2239,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             	});
 
             	modal.result.then(
-                    function (result) { 
+                    function (result) {
                     	containerDataItem.DEAL_GRP_EXCLDS = result.DEAL_GRP_EXCLDS;
                     	containerDataItem.DEAL_GRP_CMNT = result.DEAL_GRP_CMNT;
                     	containerDataItem.dirty = true;
