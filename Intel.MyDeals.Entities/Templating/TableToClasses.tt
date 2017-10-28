@@ -310,6 +310,10 @@ using System.Collections.Generic;
 	ds.Tables[2].TableName = "CostTestGroupDealDetailItem";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[2], false));
 
+	ds = dbobjects.ExecuteDataSet("DECLARE @IDS [dbo].[type_int_list]; INSERT INTO @IDS(ITEM) VALUES (586); EXEC [DBO].[PR_MYDL_GET_MEET_COMP] @IDS , 10505693, 'GA', 'M', 1");
+	ds.Tables[0].TableName = "PctMctResult";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
 	// Deals With Attachments
 	ds = dbobjects.ExecuteDataSet("exec dbo.PR_MYDL_GET_DEALS_WITH_ATTCH");
 	ds.Tables[0].TableName = "DealsWithAttachments";

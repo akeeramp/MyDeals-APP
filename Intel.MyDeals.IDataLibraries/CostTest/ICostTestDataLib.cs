@@ -9,7 +9,7 @@ namespace Intel.MyDeals.IDataLibrary
 
         PctOverrideReason SetPctOverrideReason(PctOverrideReason data);
 
-        void RunPct(int objTypeId, List<int> objSetTypeIds);
+        List<PctMctResult> RunPct(int objTypeId, List<int> objSetTypeIds);
 
         void RollupResults(List<int> contractLst);
     }

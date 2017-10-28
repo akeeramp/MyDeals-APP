@@ -152,9 +152,24 @@ namespace Intel.MyDeals.BusinessLogic
                 bool needToRunPct = actn == "Approve" && stageIn == WorkFlowStages.Submitted;
                 if (needToRunMct || needToRunPct)
                 {
-                    new CostTestLib().RunPctPricingStrategy(dc.DcID);
-                    //if (needToRunMct && )
-                    // TODO -> check to make sure it passes
+                    bool passMct, passPct;
+                    bool passed = new CostTestLib().ExecutePctMct(OpDataElementType.PRC_ST.ToId(), new List<int> { dc.DcID }, out passMct, out passPct);
+                    if (!passed)
+                    {
+                        string passMsg = !passMct && !passPct
+                            ? "Meet Comp and Cost Test"
+                            : !passMct ? "Meet Comp" : "Cost Test";
+
+                        opMsgQueue.Messages.Add(new OpMsg
+                        {
+                            Message = $"Pricing Strategy did not pass {passMsg}.",
+                            MsgType = OpMsg.MessageType.Warning,
+                            ExtraDetails = dc.DcType,
+                            KeyIdentifiers = new[] { dc.DcID }
+                        });
+                        continue;
+
+                    }
                 }
 
 

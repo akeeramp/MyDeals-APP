@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
@@ -58,12 +59,32 @@ namespace Intel.MyDeals.BusinessLogic
 
         private OpMsg RunPct(int objTypeId, List<int> objSetTypeIds)
         {
-            _costTestDataLib.RunPct(objTypeId, objSetTypeIds);
+            bool passMct, passPct;
+            if (ExecutePctMct(objTypeId, objSetTypeIds, out passMct, out passPct))
+            {
+                return new OpMsg
+                {
+                    Message = "Cost Test and/or Meet Comp Didn't Pass",
+                    MsgType = OpMsg.MessageType.Warning
+                };
+            }
+
             return new OpMsg
             {
                 Message = "Cost Test and Meet Comp Executed Successfully",
                 MsgType = OpMsg.MessageType.Info
             };
+
+        }
+
+        public bool ExecutePctMct(int objTypeId, List<int> objSetTypeIds, out bool passMct, out bool passPct)
+        {
+            List<PctMctResult> results = _costTestDataLib.RunPct(objTypeId, objSetTypeIds);
+            List<string> failures = new List<string> { "Fail", "InComplete", "NOT RUN YET", "" };
+            passMct = !results.Any(r => failures.Contains(r.MEETCOMP_TEST_RESULT));
+            passPct = !results.Any(r => failures.Contains(r.PRC_CST_TST_STS));
+
+            return passMct && passPct;
         }
     }
 }

@@ -89,9 +89,9 @@ namespace Intel.MyDeals.BusinessRules
 
 
                 // TODO when PCT and MCT is ready... remove the following lines
-                pctFailed = false;
-                mctFailed = false;
-                mctIncomplete = false;
+                //pctFailed = false;
+                //mctFailed = false;
+                //mctIncomplete = false;
 
                 if (action == "Approve" && objsetActionItem.Actions[action])
                 {
