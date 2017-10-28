@@ -74,10 +74,10 @@ namespace Intel.MyDeals.BusinessRules
             }
 
             // Consumption Reason
-            //if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.CONSUMPTION_REASON)))
-            //{
-            //    item[AttributeCodes.CONSUMPTION_REASON] = "None";
-            //}
+            if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.CONSUMPTION_REASON)) && payoutBasedOn == "Consumption")
+            {
+                item[AttributeCodes.CONSUMPTION_REASON] = "None";
+            }
 
             // Additive
             if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.DEAL_COMB_TYPE)))
