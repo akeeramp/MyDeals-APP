@@ -428,6 +428,10 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 //$scope.ds.dataSource.transport.read($scope.optionCallback);
             });
 
+            $scope.$on('data-item-changed', function (event, fieldName, dataItem) {
+                $scope.saveFunctions(dataItem, fieldName, dataItem[fieldName]);
+            });
+
             $scope.contractDs = new kendo.data.DataSource({
                 transport: {
                     read: function (e) {
@@ -558,6 +562,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 			}
 
             var triedToApplyCustomLayout = false;
+            var disableCellsBasedOnAnotherCellValue;
             $scope.ds = {
                 dataSource: $scope.contractDs,
                 columns: $scope.opOptions.columns,
@@ -582,7 +587,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         var newGroupColumns = {}
                         angular.forEach($scope.grid.columns, function (c) {
                             angular.forEach($scope.opOptions.groupColumns, function (v, k) {
-                                if (k == c.field) {
+                                if (k === c.field) {
                                     newGroupColumns[k] = v;
                                     return;
                                 }
@@ -594,13 +599,8 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 save: function (e) {
                 	var newField = util.getFirstKey(e.values);
 
-                	disableCellsBasedOnAnotherCellValue(e, newField, "DEAL_COMB_TYPE", "DEAL_GRP_EXCLDS", isDisableViaDealGrp); // TODO: hard coded sadness.
-
-                	if (newField === "DEAL_COMB_TYPE") {
-                		$scope.root.saveCell(e.model, newField, $scope, e.values[newField]);
-					} else {
-						$scope.saveFunctions(e.model, newField, e.values[newField]);
-					}
+                	disableCellsBasedOnAnotherCellValue(e.model, newField, e.values[newField], "DEAL_COMB_TYPE", "DEAL_GRP_EXCLDS", isDisableViaDealGrp); // TODO: hard coded sadness.
+					$scope.saveFunctions(e.model, newField, e.values[newField]);
                     gridUtils.onDataValueChange(e);
 
                 },
@@ -643,17 +643,11 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     }
                 }
             };
-
-            var disableCellsBasedOnAnotherCellValue = function (e, newField, changedCell, cellToDisable, isDisabledFunction) {
-            	if (newField == changedCell && !!e.values[newField]) {
-            		if (isDisabledFunction(e.values[newField])) {
-            			e.model._behaviors.isReadOnly[cellToDisable] = true;
-            		} else {
-            			e.model._behaviors.isReadOnly[cellToDisable] = false;
-            		}
-            	}
-            }
-
+            disableCellsBasedOnAnotherCellValue = function (model, newField, fieldName, changedCell, cellToDisable, isDisabledFunction) {
+                if (newField === changedCell && !!fieldName) {
+                    model._behaviors.isReadOnly[cellToDisable] = isDisabledFunction(fieldName);
+                }
+            };
             if ($scope.detailTemplateName !== "" && !!$scope.detailInit) {
                 $scope.ds.detailTemplate = kendo.template($("#detail-template").html());
                 $scope.ds.detailInit = $scope.detailInit;
@@ -1137,6 +1131,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                         $scope.root.saveCell(dataItem, newField, $scope, newValue);
                     }
                 }
+                disableCellsBasedOnAnotherCellValue(dataItem, newField, newValue, "DEAL_COMB_TYPE", "DEAL_GRP_EXCLDS", isDisableViaDealGrp); // TODO: hard coded sadness.
             }
 
             $scope.$on('refresh', function (event, args) {

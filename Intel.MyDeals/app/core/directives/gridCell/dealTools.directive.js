@@ -335,6 +335,7 @@ function dealTools($timeout, logger, dataService, $rootScope, $compile, $templat
                                 if ($scope.dataItem._dirty) {
                                     $scope._dirty = true;
                                     rootScope.saveCell($scope.dataItem, "NOTES");
+                                    $rootScope.$broadcast('data-item-changed', 'NOTES', $scope.dataItem);
                                 }
                             }
                         }
