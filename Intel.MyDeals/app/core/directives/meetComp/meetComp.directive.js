@@ -69,9 +69,10 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                             var isValid = isModelValid($scope.meetCompMasterdata);
                         }
 
-                        
+
                         //Add New Customer
                         $scope.addSKUForCustomer = function (mode) {
+
                             $scope.meetCompMasterdata[$scope.curentRow - 1].COMP_SKU = $scope.selectedCustomerText;
 
                             if (mode == "0" || mode == 0) {
@@ -96,10 +97,26 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_SKU");
                                 }
 
+                                if (tempData.length > 0) {
+                                    var grid = $("#grid").data("kendoGrid");
+                                    //grid.expandRow(0);
+                                    var expanded = $.map(grid.tbody.children(":has(> .k-hierarchy-cell .k-i-collapse)"), function (row) {
+                                        return $(row).data("uid");
+                                    });
+
+                                    grid.one("dataBound", function () {
+                                        grid.expandRow(grid.tbody.children().filter(function (idx, row) {
+                                            return $.inArray($(row).data("uid"), expanded) >= 0;
+                                        }));
+                                    });
+                                    grid.refresh();
+                                }
+
                             }
 
                             //Update Grid
-                            $scope.dataSourceParent.read();
+                            //$scope.dataSourceParent.read();
+                            
                         };
 
                         //Column Level Security Implementation
@@ -199,7 +216,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                 var value = input.val();
                                 var editedROW = e.model;
                                 var isEdited = true;
-                                if (usrRole == "DA" && editedROW.MEET_COMP_UPD_FLG == "Y" && ( editedROW.MEET_COMP_STS.toLowerCase() == "pass" || editedROW.MEET_COMP_STS.toLowerCase() == "overridden" )) {
+                                if (usrRole == "DA" && editedROW.MEET_COMP_UPD_FLG == "Y" && (editedROW.MEET_COMP_STS.toLowerCase() == "pass" || editedROW.MEET_COMP_STS.toLowerCase() == "overridden")) {
                                     $('input[name=COMP_OVRRD_RSN]').parent().html(e.model.COMP_OVRRD_RSN);
                                     //logger.warning("Cannot Override Meet Comp since the deals could be in Active Stage or the Meet Comp Result is Passed.");
                                 }
@@ -234,10 +251,25 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                 addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_OVRRD_RSN");
                                             }
 
-                                            $scope.dataSourceParent.read();
+                                            //$scope.dataSourceParent.read();
+                                            //Retaining the same expand
+                                            if (tempData.length > 0) {
+                                                var grid = $("#grid").data("kendoGrid");
+                                                //grid.expandRow(0);
+                                                var expanded = $.map(grid.tbody.children(":has(> .k-hierarchy-cell .k-i-collapse)"), function (row) {
+                                                    return $(row).data("uid");
+                                                });
+
+                                                grid.one("dataBound", function () {
+                                                    grid.expandRow(grid.tbody.children().filter(function (idx, row) {
+                                                        return $.inArray($(row).data("uid"), expanded) >= 0;
+                                                    }));
+                                                });
+                                                grid.refresh();
+                                            }
                                         }
                                     });
-                                }                             
+                                }
 
                             },
                             dataBound: function (e) {
@@ -445,7 +477,23 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                         addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "IA_BNCH");
                                                     }
 
-                                                    $scope.dataSourceParent.read();
+                                                    //$scope.dataSourceParent.read();
+
+                                                    //Retaining the same expand
+                                                    if (tempData.length > 0) {
+                                                        var grid = $("#grid").data("kendoGrid");
+                                                        //grid.expandRow(0);
+                                                        var expanded = $.map(grid.tbody.children(":has(> .k-hierarchy-cell .k-i-collapse)"), function (row) {
+                                                            return $(row).data("uid");
+                                                        });
+
+                                                        grid.one("dataBound", function () {
+                                                            grid.expandRow(grid.tbody.children().filter(function (idx, row) {
+                                                                return $.inArray($(row).data("uid"), expanded) >= 0;
+                                                            }));
+                                                        });
+                                                        grid.refresh();
+                                                    }
                                                 }
                                             }
                                             else {
@@ -483,7 +531,24 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                         addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_BNCH");
                                                     }
 
-                                                    $scope.dataSourceParent.read();
+                                                    //$scope.dataSourceParent.read();
+
+                                                    //Retaining the same expand
+                                                    if (tempData.length > 0) {
+                                                        var grid = $("#grid").data("kendoGrid");
+                                                        //grid.expandRow(0);
+                                                        var expanded = $.map(grid.tbody.children(":has(> .k-hierarchy-cell .k-i-collapse)"), function (row) {
+                                                            return $(row).data("uid");
+                                                        });
+
+                                                        grid.one("dataBound", function () {
+                                                            grid.expandRow(grid.tbody.children().filter(function (idx, row) {
+                                                                return $.inArray($(row).data("uid"), expanded) >= 0;
+                                                            }));
+                                                        });
+                                                        grid.refresh();
+                                                    }
+
                                                 }
                                             }
                                             else {
@@ -529,18 +594,20 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         },
                                         change: function (e) {
                                             var selectedIndx = this.selectedIndex;
-                                            if (selectedIndx == -1 && this.text().length > 0) {
+                                            if (selectedIndx == -1 && this.text().trim().length > 0) {
                                                 $scope.selectedCust = options.model.CUST_NM_SID;
                                                 $scope.selectedCustomerText = this.value();
                                                 $scope.curentRow = options.model.RW_NM;
                                                 $scope.addSKUForCustomer("0");
                                             }
-                                            else {
+                                            else if (selectedIndx > -1 && this.text().trim().length > 0) {
                                                 var selectedValue = e.sender.listView._dataItems["0"].RW_NM;
                                                 options.model.COMP_SKU = this.text();
+
+                                                var tempprcData = [];
                                                 options.model.COMP_PRC = parseFloat($scope.meetCompMasterdata[selectedValue - 1].COMP_PRC).toFixed(2);
                                                 if (options.model.GRP == "PRD") {
-                                                    var tempprcData = $linq.Enumerable().From($scope.meetCompUnchangedData)
+                                                    tempprcData = $linq.Enumerable().From($scope.meetCompUnchangedData)
                                                         .Where(function (x) {
                                                             return (x.GRP_PRD_SID == options.model.GRP_PRD_SID && x.GRP == "DEAL" && x.MC_NULL == true && x.MEET_COMP_UPD_FLG == "Y");
                                                         })
@@ -553,10 +620,26 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                 }
 
                                                 $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_SKU = this.text();
+                                                // Setting COMP PRC based on Comp SKU if available
                                                 $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_PRC = parseFloat($scope.meetCompMasterdata[selectedValue - 1].COMP_PRC).toFixed(2);
                                                 addToUpdateList($scope.meetCompMasterdata[options.model.RW_NM - 1], "COMP_SKU");
-                                                $scope.dataSourceParent.read();
+                                                //$scope.dataSourceParent.read();
 
+                                                //Retaining the same expand
+                                                if (tempData.length > 0) {
+                                                    var grid = $("#grid").data("kendoGrid");
+                                                    //grid.expandRow(0);
+                                                    var expanded = $.map(grid.tbody.children(":has(> .k-hierarchy-cell .k-i-collapse)"), function (row) {
+                                                        return $(row).data("uid");
+                                                    });
+
+                                                    grid.one("dataBound", function () {
+                                                        grid.expandRow(grid.tbody.children().filter(function (idx, row) {
+                                                            return $.inArray($(row).data("uid"), expanded) >= 0;
+                                                        }));
+                                                    });
+                                                    grid.refresh();
+                                                }
 
                                             }
                                         }
@@ -569,16 +652,39 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                 //DA only view
                             }
                             else {
+
+                                var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
+                                    .Where(function (x) {
+                                        return (x.GRP_PRD_SID == options.model.GRP_PRD_SID &&
+                                            x.GRP == options.model.GRP);
+                                    })
+                                    .GroupBy(function (x) {
+                                        return (x.COMP_SKU);
+                                    })
+                                    .Select(function (x) {
+                                        return {
+                                            'COMP_PRC': x.source[0].COMP_PRC,
+                                            'key': x.source[0].RW_NM,
+                                            'RW_NM': x.source[0].RW_NM
+                                        };
+                                    }).ToArray();
+
                                 $('<input id="COMP_PRC' + options.field + '"  data-bind="value:' + options.field + '"/>')
                                     .appendTo(container)
-                                    .kendoNumericTextBox({
-                                        decimals: 2,
-                                        min: 0.00,
-                                        format: "{0:c}",
+                                    .kendoComboBox({
+                                        optionLabel: "Select Comp PRC",
+                                        filter: "eq",
+                                        autoBind: true,
+                                        dataTextField: "COMP_PRC",
+                                        dataValueField: "COMP_PRC",
+                                        dataSource: {
+                                            data: tempData
+                                        },
                                         change: function (e) {
                                             if (options.model.COMP_PRC > 0) {
+                                                var tempData = [];
                                                 if (options.model.GRP == "PRD") {
-                                                    var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
+                                                    tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
                                                         .Where(function (x) {
                                                             return (x.GRP_PRD_SID == options.model.GRP_PRD_SID && x.GRP == "DEAL" && x.MC_NULL == true && x.MEET_COMP_UPD_FLG == "Y");
                                                         })
@@ -591,12 +697,28 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                 }
                                                 $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_PRC = options.model.COMP_PRC;
                                                 addToUpdateList(options.model, "COMP_PRC");
+
+                                                //Retaining the same expand
+                                                if (tempData.length > 0) {
+                                                    var grid = $("#grid").data("kendoGrid");
+                                                    //grid.expandRow(0);
+                                                    var expanded = $.map(grid.tbody.children(":has(> .k-hierarchy-cell .k-i-collapse)"), function (row) {
+                                                        return $(row).data("uid");
+                                                    });
+
+                                                    grid.one("dataBound", function () {
+                                                        grid.expandRow(grid.tbody.children().filter(function (idx, row) {
+                                                            return $.inArray($(row).data("uid"), expanded) >= 0;
+                                                        }));
+                                                    });
+                                                    grid.refresh();
+                                                }
                                             }
                                             else {
                                                 return false;
                                             }
 
-                                            $scope.dataSourceParent.read();
+                                            //$scope.dataSourceParent.read();                                            
 
                                         }
                                     });
@@ -605,8 +727,8 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
 
                         function meetCompResultStatusEditor(container, options) {
                             //IF MEET COMP STATUS FAILED THEN Only Override Option will be available.
-                            if (options.model.MEET_COMP_STS.toLowerCase() == "pass" || (options.model.MEET_COMP_STS.toLowerCase() == "overridden" && options.model.COMP_OVRRD_FLG.toLowerCase() == "yes")){
-                
+                            if (options.model.MEET_COMP_STS.toLowerCase() == "pass" || (options.model.MEET_COMP_STS.toLowerCase() == "overridden" && options.model.COMP_OVRRD_FLG.toLowerCase() == "yes")) {
+
                             }
                             else if (usrRole == "DA" && options.model.MEET_COMP_UPD_FLG == "Y") {
                                 var tempData = [
@@ -644,7 +766,22 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                     addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_OVRRD_FLG");
                                                 }
 
-                                                $scope.dataSourceParent.read();
+                                                //$scope.dataSourceParent.read();
+                                                //Retaining the same expand
+                                                if (tempData.length > 0) {
+                                                    var grid = $("#grid").data("kendoGrid");
+                                                    //grid.expandRow(0);
+                                                    var expanded = $.map(grid.tbody.children(":has(> .k-hierarchy-cell .k-i-collapse)"), function (row) {
+                                                        return $(row).data("uid");
+                                                    });
+
+                                                    grid.one("dataBound", function () {
+                                                        grid.expandRow(grid.tbody.children().filter(function (idx, row) {
+                                                            return $.inArray($(row).data("uid"), expanded) >= 0;
+                                                        }));
+                                                    });
+                                                    grid.refresh();
+                                                }
                                             }
                                         }
                                     });
@@ -656,7 +793,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                 else {
                                     logger.warning("Cannot edit the Comp SKU since the Deal could be Active OR Pricing Strategy could be in Pending/Approved/Hold Status");
                                 }
-                                
+
                             }
                         }
 
@@ -735,7 +872,14 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                 };
 
                                 //COMP_SKU Checking.....
-                                if (data[i].COMP_SKU.length == 0 && usrRole != "DA" && (data[i].MEET_COMP_STS.toLowerCase() == "fail" || data[i].MEET_COMP_STS.toLowerCase() == "incomplete" )) {
+                                var isCompSkuZero = false;
+                                if (!isNaN(Math.abs(data[i].COMP_SKU))) {
+                                    //Its a Number only
+                                    if (Math.abs(data[i].COMP_SKU) == 0) {
+                                        isCompSkuZero = true
+                                    }
+                                }
+                                if ((data[i].COMP_SKU.trim().length == 0 || isCompSkuZero ) && usrRole != "DA" && (data[i].MEET_COMP_STS.toLowerCase() == "fail" || data[i].MEET_COMP_STS.toLowerCase() == "incomplete")) {
                                     errorObj.COMP_SKU = true;
                                     errorObj.RW_NM = data[i].RW_NM;
                                     isError = true;
@@ -830,7 +974,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
 
                                 }
                                 else {
-                                    kendo.alert('Please update Meet Comp data');
+                                    kendo.alert('No new Meet Comp Changes detected to be saved.');
                                 }
                             }
                             else {
@@ -843,7 +987,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                 $scope.dataSourceParent.read();
                             }
                         }
-                        
+
                         function detailInit(e) {
                             $scope.TEMP_GRP_PRD_SID = e.data.GRP_PRD_SID;
                             $("<div class='childGrid' style=' margin-bottom: 5px !important;'/>").appendTo(e.detailCell).kendoGrid({
@@ -916,7 +1060,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     var value = input.val();
                                     var editedROW = e.model;
                                     var isEdited = true;
-                                    if (usrRole == "DA" && editedROW.MEET_COMP_UPD_FLG == "Y" && ( editedROW.MEET_COMP_STS.toLowerCase() == "pass" || editedROW.MEET_COMP_STS.toLowerCase() == "overridden")) {
+                                    if (usrRole == "DA" && editedROW.MEET_COMP_UPD_FLG == "Y" && (editedROW.MEET_COMP_STS.toLowerCase() == "pass" || editedROW.MEET_COMP_STS.toLowerCase() == "overridden")) {
                                         $('input[name=COMP_OVRRD_RSN]').parent().html(e.model.COMP_OVRRD_RSN);
                                         logger.warning("Cannot Override Meet Comp since the deals could be in Active Stage or the Meet Comp Result is Passed.");
                                     }
@@ -936,7 +1080,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         });
                                     }
 
-                                },                                
+                                },
                                 dataBound: function (e) {
                                     if ($scope.errorList.length > 0) {
                                         //// get the index of the UnitsInStock cell
@@ -1104,15 +1248,15 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         title: "Analysis Override Comments",
                                         width: 220,
                                         filterable: { multi: true, search: true },
-                                        template: "<div class='#if(MEET_COMP_STS.toLowerCase() == 'pass' || ( MEET_COMP_STS.toLowerCase() == 'overridden' && COMP_OVRRD_FLG.toLowerCase() == 'yes' )){#readOnlyCell#} else {## ##}#'>#=COMP_OVRRD_RSN#</div>",                                        
+                                        template: "<div class='#if(MEET_COMP_STS.toLowerCase() == 'pass' || ( MEET_COMP_STS.toLowerCase() == 'overridden' && COMP_OVRRD_FLG.toLowerCase() == 'yes' )){#readOnlyCell#} else {## ##}#'>#=COMP_OVRRD_RSN#</div>",
                                         hidden: $scope.hide_COMP_OVRRD_RSN
                                     }
                                 ]
                             });
                         };
                     }
-                    else {                      
-                        kendo.alert("No Meet Comp data");
+                    else {
+                        kendo.alert("No Meet Comp data available for product(s) in this Contract");
                         $scope.isBusy = false;
                         return;
                     }
