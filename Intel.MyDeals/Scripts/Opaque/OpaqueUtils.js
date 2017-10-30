@@ -231,6 +231,10 @@ kendo.ui.Grid.prototype._positionColumnResizeHandle = function () {
             return;
         }
 
+        function cursor(context, value) {
+            $('th, th .k-grid-filter, th .k-link', context).add(document.body).css('cursor', value);
+        }
+
         function getPageZoomStyle() {
             var docZoom = parseFloat($(document.documentElement).css("zoom"));
             if (isNaN(docZoom)) {
