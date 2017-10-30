@@ -6,7 +6,7 @@
         .controller('ContractController', ContractController);
 
     ContractController.$inject = ['$scope', '$state', '$filter', '$localStorage', 'contractData', 'isNewContract', 'templateData', 'objsetService', 'securityService', 'templatesService', 'logger', '$uibModal', '$timeout', '$window', '$location', '$rootScope', 'confirmationModal', 'dataService', 'customerCalendarService', 'contractManagerConstants', 'MrktSegMultiSelectService', '$compile', '$q'];
-    
+
     function ContractController($scope, $state, $filter, $localStorage, contractData, isNewContract, templateData, objsetService, securityService, templatesService, logger, $uibModal, $timeout, $window, $location, $rootScope, confirmationModal, dataService, customerCalendarService, contractManagerConstants, MrktSegMultiSelectService, $compile, $q) {
         // store template information
         //
@@ -1092,7 +1092,7 @@
                     resolve: {
                     	custId:	function () {
 							return $scope.contractData.CUST_MBR_SID;
-						}							
+						}
                     }
                 });
 
@@ -1948,13 +1948,13 @@
         }
 
         $scope.saveEntireContractRoot = function (stateName, forceValidation, forcePublish, toState, toParams, delPtr, isProductTranslate, bypassLowerContract) {
-        	var deferred = $q.defer();			
+        	var deferred = $q.defer();
 
             if (forceValidation === undefined || forceValidation === null) forceValidation = false;
             if (forcePublish === undefined || forcePublish === null) forcePublish = false;
             if (isProductTranslate === undefined || isProductTranslate === null) isProductTranslate = false;
             if (bypassLowerContract === undefined || bypassLowerContract === null) bypassLowerContract = false;
-            
+
 
             if (forceValidation) {
                 $scope.setBusy("Validating your data...", "Please wait as we validate your information!");
@@ -2706,7 +2706,7 @@
                 function (value, key) {
                     if (key[0] !== '_' &&
                         !Array.isArray(value) &&
-                        (value === undefined || value === null || (isNaN(value) && value.trim() === "")) &&
+                        (value === undefined || value === null || (typeof (value) === "string" && value.trim() === "")) &&
                         $scope.newStrategy._behaviors.isRequired[key] === true) {
                         $scope.newStrategy._behaviors.validMsg[key] = "* field is required";
                         $scope.newStrategy._behaviors.isError[key] = true;
@@ -2878,7 +2878,7 @@
             // Check required
             angular.forEach($scope.newPricingTable,
                 function (value, key) {
-                    if (key[0] !== '_' && !Array.isArray(value) && (value === undefined || value === null || (isNaN(value) && value.trim() === "")) && $scope.newPricingTable._behaviors.isRequired[key] === true) {
+                    if (key[0] !== '_' && !Array.isArray(value) && (value === undefined || value === null || (typeof (value) === "string" && value.trim() === "")) && $scope.newPricingTable._behaviors.isRequired[key] === true) {
                         $scope.newPricingTable._behaviors.validMsg[key] = "* field is required";
                         $scope.newPricingTable._behaviors.isError[key] = true;
                         isValid = false;
@@ -2921,7 +2921,7 @@
                 function (value, key) {
                     if (key[0] !== '_' &&
                         !Array.isArray(value) &&
-                        (!isNaN(value) || value === undefined || value === null || (isNaN(value) && value.trim() === "")) &&
+                        (!isNaN(value) || value === undefined || value === null || (typeof (value) === "string" && value.trim() === "")) &&
                         $scope.newPricingTable._behaviors.isRequired[key] === true) {
                         $scope.newPricingTable._behaviors.validMsg[key] = "* field is required";
                         $scope.newPricingTable._behaviors.isError[key] = true;
