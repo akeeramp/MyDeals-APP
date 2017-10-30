@@ -36,7 +36,7 @@ namespace Intel.MyDeals.BusinessRules
             string role = opUserToken.Role.RoleTypeCd;
             bool pctFailed = pct != "Pass" && pct != "Na";
             bool mctFailed = mct != "Pass" && mct != "Na";
-            bool mctIncomplete = mct == "Incomplete";
+            bool mctIncomplete = mct == "InComplete";
 
             MyDealsActionItem objsetActionItem = new MyDealsActionItem
             {
@@ -81,7 +81,7 @@ namespace Intel.MyDeals.BusinessRules
 
                 if (opDataElementType != OpDataElementType.PRC_ST) continue;
 
-                if ((action == "Approve" || action == "Revise") && passedValidation != "Complete")
+                if ((action == "Approve" || action == "Revise") && passedValidation != PassedValidation.Complete.ToString())
                 {
                     objsetActionItem.Actions[action] = false;
                     objsetActionItem.ActionReasons[action] = "Pricing Strategy did not pass validation.";

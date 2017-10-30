@@ -585,7 +585,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             if (root.spreadDs !== undefined) {
                 var data = root.spreadDs.data();
 
-                if (hasDataOrPurge(data, rowStart, rowStop)) {
+                var delIds = hasDataOrPurge(data, rowStart, rowStop);
+                if (delIds.length > 0) {
                     stealthOnChangeMode = true; // NOTE: We need this here otherwise 2 pop-ups will show on top on one another when we input spaces to delete.
 
                     kendo.confirm("Are you sure you want to delete this product and the matching deal?")
@@ -606,7 +607,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                     }, 10);
 
                                     clearUndoHistory();
-                                    root.saveEntireContract(true);
+                                    root.delPtrs(delIds);
+                                    //root.saveEntireContract(true, true, true);
                                 }
                             },
                                 10);
@@ -727,17 +729,18 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     }
 
     function hasDataOrPurge(data, rowStart, rowStop) {
-        if (data.length === 0) return false;
+        var ids = [];
+        if (data.length === 0) return ids;
         for (var n = rowStop; n >= rowStart; n--) {
             if (!!data[n]) {
                 if (data[n].DC_ID !== null && data[n].DC_ID > 0) {
-                    return true;
+                    if (ids.indexOf(data[n].DC_ID) < 0) ids.push(data[n].DC_ID);
                 } else if (data[n].DC_ID !== null && data[n].DC_ID < 0) {
                     data.splice(n, 1);
                 }
             }
         }
-        return false;
+        return ids;
     }
 
     function syncSpreadRows(sheet, topLeftRowIndex, bottomRightRowIndex, isAddedByTrackerNumber) {

@@ -1527,6 +1527,7 @@
                         },
                         function (response) {
                             logger.error("Could not delete the Pricing Table.", response, response.statusText);
+                            $scope.setBusy("", "");
                             topbar.hide();
                         }
                     );
@@ -1561,6 +1562,7 @@
                     },
                     function (response) {
                         logger.error("Could not delete the Pricing Table.", response, response.statusText);
+                        $scope.setBusy("", "");
                         topbar.hide();
                     }
                 );
@@ -1954,8 +1956,7 @@
             if (forcePublish === undefined || forcePublish === null) forcePublish = false;
             if (isProductTranslate === undefined || isProductTranslate === null) isProductTranslate = false;
             if (bypassLowerContract === undefined || bypassLowerContract === null) bypassLowerContract = false;
-
-
+            
             if (forceValidation) {
                 $scope.setBusy("Validating your data...", "Please wait as we validate your information!");
             } else {
@@ -1999,7 +2000,7 @@
 
             var copyData = util.deepClone(data);
             $scope.compressJson(copyData);
-            if ($scope.removeCleanItems(copyData)) {
+            if ($scope.removeCleanItems(copyData, delPtr)) {
                 $scope.setBusy("");
                 topbar.hide();
                 $scope.isAutoSaving = false;
@@ -2008,7 +2009,8 @@
             }
 
             util.console("updateContractAndCurPricingTable Started");
-            objsetService.updateContractAndCurPricingTable($scope.getCustId(), $scope.contractData.DC_ID, copyData, forceValidation, forcePublish, delPtr, isProductTranslate).then(
+            var isDelPtr = !!delPtr && delPtr.length > 0;
+            objsetService.updateContractAndCurPricingTable($scope.getCustId(), $scope.contractData.DC_ID, copyData, forceValidation, forcePublish, isDelPtr, isProductTranslate).then(
                 function (results) {
                     util.console("updateContractAndCurPricingTable Returned");
 
@@ -2250,10 +2252,7 @@
             });
         }
 
-        $scope.removeCleanItems = function (data) {
-
-            // for now... performance changes are breaking delete and translate
-            //return false;
+        $scope.removeCleanItems = function (data, delPtr) {
 
             if (data.Contract === undefined) data.Contract = [];
             if (data.PricingStrategy === undefined) data.PricingStrategy = [];
@@ -2261,9 +2260,16 @@
             if (data.PricingTableRow === undefined) data.PricingTableRow = [];
             if (data.WipDeals === undefined) data.WipDeals = [];
 
-            if (!!data.WipDeals) {
-                data.WipDeals = data.WipDeals.filter(function (a) { return a._dirty });
+            //if (!!data.WipDeals) {
+            //    data.WipDeals = data.WipDeals.filter(function (a) { return a._dirty });
+            //}
+
+            if (!!data.PricingTableRow && !!delPtr && delPtr.length > 0) {
+                data.PricingTableRow = data.PricingTableRow.filter(function (a) { return delPtr.indexOf(a.DC_ID) });
             }
+
+            // for now... performance changes are breaking delete and translate
+            return false;
 
             if (!!data.EventSource && data.EventSource === "WIP_DEAL") {
                 return (
@@ -2462,8 +2468,12 @@
             }
         }
 
-        $scope.saveEntireContract = function (deletePtr) {
-            $scope.saveEntireContractBase($state.current.name, null, null, null, null, deletePtr);
+        $scope.delPtrs = function(delIds) {
+            $scope.saveEntireContractBase($state.current.name, false, false, null, null, delIds);
+        }
+
+        $scope.saveEntireContract = function (deletePtr, forceValidation, forcePublish) {
+            $scope.saveEntireContractBase($state.current.name, forceValidation, forcePublish, null, null, deletePtr);
         }
         $scope.getCustId = function () {
             return $scope.contractData['CUST_MBR_SID'];
@@ -3078,7 +3088,8 @@
 
             // *** Removed because it opens a data integrity issue:
             // If use clicks save... then clicks the tab, it will bypass translation and PTR and WIP will be out of sync
-            if (!$scope._dirty && (valid === "Complete" || valid === "Finalizing")) {
+            //!$scope._dirty && 
+            if ((valid === "Complete" || valid === "Finalizing")) {
                 $state.go('contract.manager.strategy.wip',
                     {
                         cid: $scope.contractData.DC_ID,

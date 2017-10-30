@@ -147,14 +147,21 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
         return null;
     }
 
-    $scope.togglePt = function (ps,pt) {
+    $scope.togglePt = function (ps, pt) {
 
-        var html = "<kendo-grid options='sumGridOptions.dc" + pt.DC_ID + "' k-ng-delay='sumGridOptions' id='detailGrid_" + pt.DC_ID + "' class='opUiContainer md dashboard'></kendo-grid>";
-        var template = angular.element(html);
-        var linkFunction = $compile(template);
-        linkFunction($scope);
+        if (!!!pt.isPtCollapsed) {
+            return;
+        }
 
-        $("#sumWipGrid_" + pt.DC_ID).html(template);
+        if ($("#detailGrid_" + pt.DC_ID).length === 0) {
+            var html = "<kendo-grid options='sumGridOptions.dc" + pt.DC_ID + "' k-ng-delay='sumGridOptions' id='detailGrid_" + pt.DC_ID + "' class='opUiContainer md dashboard'></kendo-grid>";
+            var template = angular.element(html);
+            var linkFunction = $compile(template);
+            linkFunction($scope);
+
+            $("#sumWipGrid_" + pt.DC_ID).html(template);
+        }
+
 
         objsetService.getPctDetails(pt.DC_ID).then(
             function (e) {

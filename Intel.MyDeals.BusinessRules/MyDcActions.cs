@@ -93,7 +93,8 @@ namespace Intel.MyDeals.BusinessRules
                 string dcPrevSt = string.IsNullOrEmpty(deStr.AtrbValue.ToString()) ? "" : DateTime.Parse(deStr.AtrbValue.ToString()).ToString("MM/dd/yyyy");
                 if (string.IsNullOrEmpty(deStr.AtrbValue.ToString())) deStr.AtrbValue = dcSt;
                 IOpDataElement deContractRsn = r.Dc.GetDataElement(AttributeCodes.BACK_DATE_RSN);
-                if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.BACK_DATE_RSN)) && dcItemStDt < DateTime.Now.Date && dcPrevSt != dcItemSt)
+                // && dcPrevSt != dcItemSt  -- removed bacuse it was causing validation issues.
+                if (string.IsNullOrEmpty(r.Dc.GetDataElementValue(AttributeCodes.BACK_DATE_RSN)) && dcItemStDt < DateTime.Now.Date)
                 {
                     IOpDataElement deContractRsnTxt = r.Dc.GetDataElement(AttributeCodes.BACK_DATE_RSN_TXT);
                     string strContractRsn = item.ContainsKey(AttributeCodes.BACK_DATE_RSN_TXT) ? item[AttributeCodes.BACK_DATE_RSN_TXT].ToString() : "";

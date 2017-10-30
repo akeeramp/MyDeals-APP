@@ -16,7 +16,6 @@ function AllDealsController($scope, $state, $stateParams, $filter, objsetService
     root.wipData = [];
 
     gridUtils.onDataValueChange = function (e) {
-        debugger;
         root._dirty = true;
     }
 
@@ -176,7 +175,7 @@ function AllDealsController($scope, $state, $stateParams, $filter, objsetService
         if (response.data) {
             initGrid(response.data.WIP_DEAL);
         } else {
-            debugger;
+            //debugger;
         }
     });
 

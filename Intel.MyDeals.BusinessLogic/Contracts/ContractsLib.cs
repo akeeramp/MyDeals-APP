@@ -232,6 +232,9 @@ namespace Intel.MyDeals.BusinessLogic
 
             contractToken.NeedToCheckForDelete = isPrcTblSource;
 
+            // if we are deleting a PTR... only the PTR is being passed.  We don't want to issue deleted for the rest of the PTRs not passed
+            //if (contractToken.DelPtr) contractToken.NeedToCheckForDelete = false;
+
             if (forceValidation)
             {
                 if (isPrcTblSource)

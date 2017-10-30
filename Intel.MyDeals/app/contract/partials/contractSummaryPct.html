@@ -79,8 +79,8 @@
                     <div uib-collapse="!isCollapsed" ng-repeat="pt in ps.PRC_TBL">
                         <table style="width: 100%;">
                             <tr>
-                                <td style="width: 30px; height: 30px;" ng-click="isPtCollapsed = !isPtCollapsed; togglePt(ps, pt)">
-                                    <i class="chevron linkable" style="font-size: 20px; padding-left: 6px;" ng-class="{'intelicon-down': isPtCollapsed, 'intelicon-right-next': !isPtCollapsed}"></i>
+                                <td style="width: 30px; height: 30px;" ng-click="pt.isPtCollapsed = !pt.isPtCollapsed; togglePt(ps, pt)">
+                                    <i class="chevron linkable" style="font-size: 20px; padding-left: 6px;" ng-class="{'intelicon-down': pt.isPtCollapsed, 'intelicon-right-next': !pt.isPtCollapsed}"></i>
                                 </td>
                                 <td style="width: 140px; color: #000000; text-align: center;">
                                     <icon-mct-pct ng-model="pt.COST_TEST_RESULT" can-view="root.CAN_VIEW_COST_TEST" icon-class="'medIcon'"></icon-mct-pct>
@@ -95,7 +95,7 @@
                             </tr>
                         </table>
 
-                        <div uib-collapse="!isPtCollapsed">
+                        <div uib-collapse="!pt.isPtCollapsed">
                             <div style="margin-left: 30px;">
                                 <div id="sumWipGrid_{{pt.DC_ID}}" class="opUiContainer md dashboard"></div>
                             </div>

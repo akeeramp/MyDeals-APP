@@ -41,6 +41,16 @@ namespace Intel.MyDeals.BusinessLogic
             foreach (KeyValuePair<OpDataElementType, OpDataCollectorFlattenedList> kvp in data)
             {
                 myDealsData.Merge(kvp.Key, kvp.Value, needToCheckForDelete);
+
+                // Clear Passed Validation for PTR and WIP
+                if (myDealsData.ContainsKey(OpDataElementType.PRC_TBL_ROW) && myDealsData.ContainsKey(OpDataElementType.WIP_DEAL))
+                {
+                    var passedAtrbs = myDealsData[kvp.Key].AllDataElements.Where(d => d.AtrbCd == AttributeCodes.PASSED_VALIDATION);
+                    foreach (OpDataElement de in passedAtrbs)
+                    {
+                        de.AtrbValue = PassedValidation.Dirty;
+                    }
+                }
             }
 
             if (EN.GLOBAL.DEBUG >= 1) Debug.WriteLine("{1:HH:mm:ss:fff}\t{0,10} (ms)\tMerge complete", stopwatch.Elapsed.TotalMilliseconds, DateTime.Now);
@@ -687,7 +697,7 @@ namespace Intel.MyDeals.BusinessLogic
                     var dcHasErrors = false;
 
 					OpMsgQueue opMsgQueue = dc.ApplyRules(MyRulesTrigger.OnSave);
-                    if (validateIds.Any() && !ignoreTypes.Contains(opDataElementType))
+                    if (validateIds.Any())
                     {
 						if (opDataElementType == OpDataElementType.WIP_DEAL || opDataElementType == OpDataElementType.PRC_TBL_ROW) {
                             if (validateIds.Contains(dc.DcID))
@@ -701,29 +711,33 @@ namespace Intel.MyDeals.BusinessLogic
                         }
                     }
 
-                    foreach (IOpDataElement de in dc.GetDataElementsWithValidationIssues())
+                    if (!ignoreTypes.Contains(opDataElementType))
                     {
-                        dataHasValidationErrors = true;
-                        dcHasErrors = true;
-
-                        dc.Message.Messages.Add(new OpMsg
+                        foreach (IOpDataElement de in dc.GetDataElementsWithValidationIssues())
                         {
-                            DebugMessage = OpMsg.MessageType.Warning.ToString(),
-                            KeyIdentifier = de.DcID,
-                            Message = de.ValidationMessage,
-                            MsgType = OpMsg.MessageType.Warning
-                        });
+                            dataHasValidationErrors = true;
+                            dcHasErrors = true;
 
-                        myDealsData[opDataElementType].Messages.Messages.Add(new OpMsg
-                        {
-                            DebugMessage = OpMsg.MessageType.Warning.ToString(),
-                            KeyIdentifier = de.DcID,
-                            Message = $"{dc.DcType} ({dc.DcID}) : {de.ValidationMessage}",
-                            MsgType = OpMsg.MessageType.Warning
-                        });
-                        //dc.Message.WriteMessage(OpMsg.MessageType.Warning, de.ValidationMessage);
-                        //myDealsData[opDataElementType].Messages.WriteMessage(OpMsg.MessageType.Warning, $"{dc.DcType} - {dc.DcID} : {de.ValidationMessage}");
+                            dc.Message.Messages.Add(new OpMsg
+                            {
+                                DebugMessage = OpMsg.MessageType.Warning.ToString(),
+                                KeyIdentifier = de.DcID,
+                                Message = de.ValidationMessage,
+                                MsgType = OpMsg.MessageType.Warning
+                            });
+
+                            myDealsData[opDataElementType].Messages.Messages.Add(new OpMsg
+                            {
+                                DebugMessage = OpMsg.MessageType.Warning.ToString(),
+                                KeyIdentifier = de.DcID,
+                                Message = $"{dc.DcType} ({dc.DcID}) : {de.ValidationMessage}",
+                                MsgType = OpMsg.MessageType.Warning
+                            });
+                            //dc.Message.WriteMessage(OpMsg.MessageType.Warning, de.ValidationMessage);
+                            //myDealsData[opDataElementType].Messages.WriteMessage(OpMsg.MessageType.Warning, $"{dc.DcType} - {dc.DcID} : {de.ValidationMessage}");
+                        }
                     }
+
 
                     if (validateIds.Any() && !dcHasErrors && (opDataElementType == OpDataElementType.PRC_TBL_ROW || opDataElementType == OpDataElementType.WIP_DEAL))
                     {
@@ -757,17 +771,6 @@ namespace Intel.MyDeals.BusinessLogic
 
                     if (validateIds.Any() && !dcHasErrors && opDataElementType == OpDataElementType.WIP_DEAL)
                     {
-                        // Before finalize rules... need to make sure the PRC_ST exists
-                        //if (!myDealsData.ContainsKey(OpDataElementType.PRC_ST))
-                        //{
-                        //    MyDealsData prcSts = OpDataElementType.CNTRCT.GetByIDs(
-                        //        new List<int> { contractToken.ContractId }, 
-                        //        new List<OpDataElementType> { OpDataElementType.PRC_ST },
-                        //        new List<int> { Attributes.WF_STG_CD.ATRB_SID }
-                        //        );
-                        //    myDealsData[OpDataElementType.PRC_ST] = prcSts[OpDataElementType.PRC_ST];
-                        //}
-
                         // apply finalize save rules (things like major change checks)
                         dc.ApplyRules(MyRulesTrigger.OnFinalizeSave, null, myDealsData);
                     }
@@ -1054,6 +1057,8 @@ namespace Intel.MyDeals.BusinessLogic
             newPacket.GroupID = -101; // Whatever the real ID of this object is
             newPacket.PacketType = opDataElementType; // Why wasn't this set in constructor??
 
+            if (data != null) newPacket.AddDeleteActions(data);
+
             if (!(newPacket.Data.Any() || newPacket.Actions.Any())) return;
 
             // Back to normal operations, clear out the messages and all.
@@ -1062,7 +1067,6 @@ namespace Intel.MyDeals.BusinessLogic
 
             // Tack on the save action call now
             newPacket.AddSaveActions(myDealsData[opDataElementType]);
-            if (data != null) newPacket.AddDeleteActions(data);
 
             myDealsData[opDataElementType] = newPacket;
         }

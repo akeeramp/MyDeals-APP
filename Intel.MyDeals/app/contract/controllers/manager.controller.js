@@ -156,11 +156,12 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         if (!$scope.isPending) {
             $scope.isPending = true;
             root.contractData.CUST_ACCPT = "Pending";
+            $scope.actionItems(true, false);
         } else {
             $scope.isPending = false;
             root.contractData.CUST_ACCPT = "Accepted";
+            $scope.actionItems(true, true);
         }
-        $scope.actionItems();
     }
 
     $scope.deleteContract = function () {
@@ -354,12 +355,15 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
                 ]
 
             }
-            var html = "<kendo-grid options='sumGridOptions' class='opUiContainer md dashboard'></kendo-grid>";
-            var template = angular.element(html);
-            var linkFunction = $compile(template);
-            linkFunction($scope);
 
-            $("#sumWipGrid_" + pt.DC_ID).html(template);
+            if ($("#detailGrid_" + pt.DC_ID).length === 0) {
+                var html = "<kendo-grid options='sumGridOptions' id='detailGrid_" + pt.DC_ID + "' class='opUiContainer md dashboard'></kendo-grid>";
+                var template = angular.element(html);
+                var linkFunction = $compile(template);
+                linkFunction($scope);
+
+                $("#sumWipGrid_" + pt.DC_ID).html(template);
+            }
 
             pt.isLoading = false;
         }
@@ -392,22 +396,26 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         if (ids.length > 0) data[actn] = ids;
     }
 
-    $scope.actionItems = function () {
+    $scope.actionItems = function (fromToggle, checkForRequirements) {
+        if (fromToggle === undefined || fromToggle === null) fromToggle = false;
+        if (checkForRequirements === undefined || checkForRequirements === null) checkForRequirements = false;
+
         // look for checked ending
         var ps = root.contractData.PRC_ST;
         for (var p = 0; p < ps.length; p++) {
             if (ps[p].WF_STG_CD === "Pending" && $("#rad_approve_" + ps[p].DC_ID)[0].checked) {
                 $scope.isPending = true;
                 root.contractData.CUST_ACCPT = "Accepted";
+                checkForRequirements = true;
             }
         }
 
-        if ($scope.isPending === false && root.contractData.CUST_ACCPT !== "Pending" && (root.contractData.C2A_DATA_C2A_ID === "" && !root.contractData.HAS_ATTACHED_FILES)) {
+        if ($scope.isPending === false && root.contractData.CUST_ACCPT !== "Pending" && (root.contractData.C2A_DATA_C2A_ID === "" && root.contractData.HAS_ATTACHED_FILES === "0")) {
             $scope.dialogPendingWarning.open();
         } else if ($scope.isPending === false && root.contractData.CUST_ACCPT !== "Pending") {
-            $scope.continueAction(true);
+            $scope.continueAction(fromToggle, false);
         } else if ($scope.isPending === true && root.contractData.CUST_ACCPT !== "Accepted") {
-            $scope.continueAction(false);
+            $scope.continueAction(fromToggle, checkForRequirements);
         } else {
             $scope.actionItemsBase();
         };
@@ -416,7 +424,7 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 
 
     $scope.onSuccess = function (e) {
-        root.contractData.HAS_ATTACHED_FILES = 1;
+        root.contractData.HAS_ATTACHED_FILES = "1";
     }
     $scope.fileUploadOptions = { saveUrl: '/FileAttachments/Save', autoUpload: true };
     $scope.filePostAddParams = function (e) {
@@ -443,12 +451,12 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         }, 500);
         $scope.dialogPendingWarning.close();
     }
-    $scope.continueAction = function (saveContract) {
-        if ($scope.isPending === true && root.contractData.CUST_ACCPT === "Accepted" && !root.contractData.HAS_ATTACHED_FILES && root.contractData.C2A_DATA_C2A_ID.trim() === "") return;
+    $scope.continueAction = function (fromToggle, checkForRequirements) {
+        if ($scope.isPending === true && root.contractData.CUST_ACCPT === "Accepted" && root.contractData.HAS_ATTACHED_FILES === "0" && root.contractData.C2A_DATA_C2A_ID.trim() === "") return;
         $scope.dialogPendingWarning.close();
 
-        if (!!saveContract && saveContract === true) {
-            $scope.canBypassEmptyActions = saveContract;
+        if (!checkForRequirements) {
+            $scope.canBypassEmptyActions = fromToggle;
             root.quickSaveContract($scope.actionItemsBase, true);
         } else {
             $scope.actionItemsBase(true);

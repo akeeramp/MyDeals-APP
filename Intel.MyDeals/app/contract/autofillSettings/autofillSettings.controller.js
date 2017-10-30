@@ -27,7 +27,6 @@
         }
 
         $scope.$watch('vm.autofillData.DEFAULT', function (newValue, oldValue, el) {
-            debugger;
             if (oldValue === newValue) return;
 
             if (oldValue === undefined || newValue === undefined) return;
