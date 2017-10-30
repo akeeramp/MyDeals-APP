@@ -209,9 +209,50 @@ op.handleError = function (data, simpleError) {
         if (typeof data !== 'string') {
             data = data['statusText'] + ': ' + data['responseText'];
         }
-        op.notifyError(simpleError, 'Something went wrong!');   
+        op.notifyError(simpleError, 'Something went wrong!');
         op.error(null, data);
         //TODO: log to our own db as well (not only opaque)?
     }
-        
+
 }
+
+// This is a workaround added for Kendo grid column resize bug. Why in opaque ? This runs just after the kendo grid js files load.
+// TODO: Remove this when fix is available in next service pack
+// https://www.telerik.com/forums/column-resize-in-chrome-(61)
+kendo.ui.Grid.prototype._positionColumnResizeHandle = function () {
+    var that = this,
+        indicatorWidth = that.options.columnResizeHandleWidth,
+        lockedHead = that.lockedHeader ? that.lockedHeader.find("thead:first") : $();
+
+    that.thead.add(lockedHead).on("mousemove" + ".kendoGrid", "th", function (e) {
+        var th = $(this);
+
+        if (th.hasClass("k-group-cell") || th.hasClass("k-hierarchy-cell")) {
+            return;
+        }
+
+        function getPageZoomStyle() {
+            var docZoom = parseFloat($(document.documentElement).css("zoom"));
+            if (isNaN(docZoom)) {
+                docZoom = 1;
+            }
+            var bodyZoom = parseFloat($(document.body).css("zoom"));
+            if (isNaN(bodyZoom)) {
+                bodyZoom = 1;
+            }
+            return 1;
+        }
+
+        var clientX = e.clientX / getPageZoomStyle(),
+            winScrollLeft = $(window).scrollLeft(),
+            position = th.offset().left + (!kendo.support.isRtl(this.element) ? this.offsetWidth : 0);
+
+        if (clientX + winScrollLeft > position - indicatorWidth && clientX + winScrollLeft < position + indicatorWidth) {
+            that._createResizeHandle(th.closest("div"), th);
+        } else if (that.resizeHandle) {
+            that.resizeHandle.hide();
+        } else {
+            cursor(that.wrapper, "");
+        }
+    });
+};
