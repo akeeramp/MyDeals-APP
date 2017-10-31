@@ -99,7 +99,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
 
                                     if (tempData.length > 0) {
                                         var grid = $("#grid").data("kendoGrid");
-                                        
+
                                         var expanded = $.map(grid.tbody.children(":has(> .k-hierarchy-cell .k-i-collapse)"), function (row) {
                                             return $(row).data("uid");
                                         });
@@ -114,9 +114,9 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
 
                                 }
 
-                            //Update Grid
-                            //$scope.dataSourceParent.read();
-                            } 
+                                //Update Grid
+                                //$scope.dataSourceParent.read();
+                            }
                         };
 
                         //Column Level Security Implementation
@@ -874,10 +874,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                 //COMP_SKU Checking.....
                                 var isCompSkuZero = false;
                                 if (!isNaN(Math.abs(data[i].COMP_SKU))) {
-                                    //Its a Number only
-                                    if (Math.abs(data[i].COMP_SKU) == 0) {
-                                        isCompSkuZero = true
-                                    }
+                                    isCompSkuZero = true;
                                 }
 
                                 if (isCompSkuZero && usrRole != "DA") {
