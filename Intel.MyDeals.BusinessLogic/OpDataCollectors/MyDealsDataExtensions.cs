@@ -17,7 +17,6 @@ namespace Intel.MyDeals.BusinessLogic
 {
     public static class MyDealsDataExtensions
     {
-
         #region Merge
 
         /// <summary>
@@ -57,7 +56,6 @@ namespace Intel.MyDeals.BusinessLogic
 
             return myDealsData;
         }
-
 
         /// <summary>
         /// Merge flattened data back into OpData Deals collections for a specific collector type
@@ -162,9 +160,7 @@ namespace Intel.MyDeals.BusinessLogic
                         foundIds.Add(id);
                         //wipIds.Add(odc.DcID);
                     }
-
                 }
-
 
                 // Handle multi dim items
                 if (items.ContainsKey(EN.OBJDIM._MULTIDIM))
@@ -227,12 +223,10 @@ namespace Intel.MyDeals.BusinessLogic
                 AddDeleteActions(myDealsData[OpDataElementType.PRC_TBL_ROW], delIds);
             }
 
-
             return myDealsData;
         }
 
-        #endregion
-
+        #endregion Merge
 
         public static MyDealsData AddParentPS(this MyDealsData myDealsData, int id)
         {
@@ -265,7 +259,6 @@ namespace Intel.MyDeals.BusinessLogic
             });
         }
 
-
         #region FillInHolesFromAtrbAtrbTemplate
 
         /// <summary>
@@ -278,7 +271,6 @@ namespace Intel.MyDeals.BusinessLogic
         {
             return myDealsData.FillInHolesFromAtrbTemplate(myDealsData.Keys.ToList(), opDataElementSetType);
         }
-
 
         /// <summary>
         /// Fill in missing data slots based upon existance in the object template
@@ -328,9 +320,8 @@ namespace Intel.MyDeals.BusinessLogic
 
             return myDealsData;
         }
-        #endregion
 
-
+        #endregion FillInHolesFromAtrbAtrbTemplate
 
         #region ToOpDataCollectorFlattenedDictList
 
@@ -385,7 +376,7 @@ namespace Intel.MyDeals.BusinessLogic
             {
                 if (dpObjSet.Actions.Any())
                     data.Add(new OpDataCollectorFlattenedItem { ["_actions"] = dpObjSet.Actions });
-                
+
                 // TODO make this a rule
                 // Since this is a DB call, we don't want to do this for EVERY data collector individually
                 //if (opType == OpDataElementType.CNTRCT || opType == OpDataElementType.WIP_DEAL) myDealsData.TagWithAttachments(dpObjSet, opType);
@@ -406,9 +397,7 @@ namespace Intel.MyDeals.BusinessLogic
             return data;
         }
 
-        #endregion
-
-
+        #endregion ToOpDataCollectorFlattenedDictList
 
         #region Save
 
@@ -438,9 +427,7 @@ namespace Intel.MyDeals.BusinessLogic
             return new OpDataCollectorDataLib().SaveMyDealsData(myDealsData, contractToken, batchMode);
         }
 
-        #endregion
-
-
+        #endregion Save
 
         #region ToOpDataCollector
 
@@ -494,9 +481,7 @@ namespace Intel.MyDeals.BusinessLogic
             return dc;
         }
 
-        #endregion
-
-
+        #endregion ToOpDataCollector
 
         #region Rules
 
@@ -514,8 +499,7 @@ namespace Intel.MyDeals.BusinessLogic
             return myDealsData;
         }
 
-        #endregion
-
+        #endregion Rules
 
         #region Validation
 
@@ -540,7 +524,7 @@ namespace Intel.MyDeals.BusinessLogic
                     if (pendingDeletes.Contains(dc.DcID)) continue;
 
                     // if there are not any modifications to this deal, skip validation
-                    if (!dc.ModifiedDataElements.Any()) continue; 
+                    if (!dc.ModifiedDataElements.Any()) continue;
 
                     dc.EnsureDcType(attrCollection, opDataElementType);
                 }
@@ -688,7 +672,7 @@ namespace Intel.MyDeals.BusinessLogic
             }
 
             List<int> dirtyPtrs = new List<int>();
-			MyRulesTrigger trigger = (isProductTranslate) ? MyRulesTrigger.OnTranslate : MyRulesTrigger.OnValidate;
+            MyRulesTrigger trigger = (isProductTranslate) ? MyRulesTrigger.OnTranslate : MyRulesTrigger.OnValidate;
             foreach (OpDataElementType opDataElementType in Enum.GetValues(typeof(OpDataElementType)))
             {
                 if (!myDealsData.ContainsKey(opDataElementType)) continue;
@@ -696,10 +680,11 @@ namespace Intel.MyDeals.BusinessLogic
                 {
                     var dcHasErrors = false;
 
-					OpMsgQueue opMsgQueue = dc.ApplyRules(MyRulesTrigger.OnSave);
+                    OpMsgQueue opMsgQueue = dc.ApplyRules(MyRulesTrigger.OnSave);
                     if (validateIds.Any())
                     {
-						if (opDataElementType == OpDataElementType.WIP_DEAL || opDataElementType == OpDataElementType.PRC_TBL_ROW) {
+                        if (opDataElementType == OpDataElementType.WIP_DEAL || opDataElementType == OpDataElementType.PRC_TBL_ROW)
+                        {
                             if (validateIds.Contains(dc.DcID))
                             {
                                 dc.ApplyRules(trigger, null, contractToken.CustId);
@@ -738,12 +723,11 @@ namespace Intel.MyDeals.BusinessLogic
                         }
                     }
 
-
                     if (validateIds.Any() && !dcHasErrors && (opDataElementType == OpDataElementType.PRC_TBL_ROW || opDataElementType == OpDataElementType.WIP_DEAL))
                     {
                         // only force publish to PTR
-                        PassedValidation passedValidation = opDataElementType == OpDataElementType.WIP_DEAL 
-                            ? PassedValidation.Complete 
+                        PassedValidation passedValidation = opDataElementType == OpDataElementType.WIP_DEAL
+                            ? PassedValidation.Complete
                             : forcePublish ? PassedValidation.Finalizing : PassedValidation.Valid;
 
                         if (opDataElementType == OpDataElementType.PRC_TBL_ROW && passedValidation != PassedValidation.Finalizing)
@@ -761,7 +745,6 @@ namespace Intel.MyDeals.BusinessLogic
                         {
                             dc.SetAtrb(AttributeCodes.PASSED_VALIDATION, passedValidation.ToString());
                         }
-
                     }
                     else if (dc.IsModified || !dc.IsModified && dcHasErrors && dc.GetDataElementValue(AttributeCodes.PASSED_VALIDATION) != PassedValidation.Dirty.ToString())
                     {
@@ -780,9 +763,7 @@ namespace Intel.MyDeals.BusinessLogic
             return dataHasValidationErrors;
         }
 
-        #endregion
-
-
+        #endregion Validation
 
         #region Ensure
 
@@ -793,7 +774,7 @@ namespace Intel.MyDeals.BusinessLogic
                 packet.BatchID = Guid.NewGuid();
             }
         }
-        
+
         private static void EnsureOpTypeExists(this MyDealsData myDealsData, OpDataElementType opType)
         {
             // If opType doesn't already exist in myDealsData, add it
@@ -816,12 +797,10 @@ namespace Intel.MyDeals.BusinessLogic
 
             foreach (OpDataCollector dc in myDealsData[OpDataElementType.PRC_TBL_ROW].AllDataCollectors)
             {
-                    
             }
         }
 
-        #endregion
-
+        #endregion Ensure
 
         public static OpMsgQueue UpGroupPricingTableRow(this MyDealsData myDealsData, ContractToken contractToken, IOpDataCollectorLib dataCollectorLib)
         {
@@ -876,8 +855,6 @@ namespace Intel.MyDeals.BusinessLogic
                         continue;
                     }
                 }
-                
-
 
                 // find all children wip deals and start splitting PTR
                 foreach (OpDataCollector dcWip in allWips.Where(w => w.DcParentID == ptrId))
@@ -967,7 +944,6 @@ namespace Intel.MyDeals.BusinessLogic
                 }
             }
 
-
             //myDealsData.Remove(OpDataElementType.PRC_TBL_ROW);
             myDealsData[OpDataElementType.WIP_DEAL].BatchID = Guid.NewGuid();
             myDealsData[OpDataElementType.WIP_DEAL].GroupID = -101; // Whatever the real ID of this object is
@@ -996,10 +972,8 @@ namespace Intel.MyDeals.BusinessLogic
 
             return opMsgQueue;
         }
-				
-		
 
-		public static MyDealsData SavePacketsBase(this MyDealsData myDealsData, OpDataCollectorFlattenedDictList data, ContractToken contractToken, List<int> validateIds, bool forcePublish, string sourceEvent, bool resetValidationChild, bool isProductTranslate)
+        public static MyDealsData SavePacketsBase(this MyDealsData myDealsData, OpDataCollectorFlattenedDictList data, ContractToken contractToken, List<int> validateIds, bool forcePublish, string sourceEvent, bool resetValidationChild, bool isProductTranslate)
         {
             OpLog.Log("SavePacketsBase - Start.");
 
@@ -1017,6 +991,12 @@ namespace Intel.MyDeals.BusinessLogic
                 // "Clone" to object...
                 string json = JsonConvert.SerializeObject(myDealsData);
                 myDealsDataWithErrors = JsonConvert.DeserializeObject<MyDealsData>(json);
+            }
+
+            if (isProductTranslate)
+            {
+                if (hasErrors) TransferActions(myDealsData, myDealsDataWithErrors);
+                return hasErrors ? myDealsDataWithErrors : myDealsData;
             }
 
             // Note to self..  This does take order values into account.
@@ -1071,8 +1051,6 @@ namespace Intel.MyDeals.BusinessLogic
             myDealsData[opDataElementType] = newPacket;
         }
 
-
-
         private static MyDealsData PerformTasks(this MyDealsData myDealsData, OpActionType? actionToRun, ContractToken contractToken)
         {
             OpLog.Log("PerformTasks - Start.");
@@ -1088,10 +1066,12 @@ namespace Intel.MyDeals.BusinessLogic
                     saveResponseSet = myDealsData.Save(contractToken);
                     // Save Data Cycle: Point 21 (END)
                     break;
+
                 case OpActionType.SyncDeal:
                     ////        LimitRecords(myDealsData, new List<string> { "PREP2DEAL" }); // SYNCDEAL
                     ////        saveResponseSet = new DealDataLib().SaveDeals(myDealsData, OpUserStack.MyOpUserToken);
                     break;
+
                 case OpActionType.Action:
                     ////        LimitRecords(myDealsData, new List<string> { "PREP2DEAL", "CALC_MSP", "GEN_TRACKER", "DEAL_ROLLBACK_TO_ACTIVE", "SNAPSHOT" }); // SYNCDEAL - DEAL_DELETE is not here, remove those elements since they might cause ghost deals
                     ////        saveResponseSet = new DealDataLib().SaveDeals(myDealsData, opUserToken);
@@ -1118,6 +1098,5 @@ namespace Intel.MyDeals.BusinessLogic
                 packet.Actions.Add(new MyDealsDataAction(DealSaveActionCodes.OBJ_DELETE, finalDeleteIds, 40));
             }
         }
-
     }
 }

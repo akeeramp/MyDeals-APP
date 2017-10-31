@@ -1865,10 +1865,10 @@
             //	//http://dojo.telerik.com/iCola
             //}
 
-            if (Object.getOwnPropertyNames(errs).length > 0 || (needPrdVld.length > 0 && ignorePrdVld)) return {
-                "errors": errs,
-                "needPrdVld": needPrdVld
-            };
+            //if (Object.getOwnPropertyNames(errs).length > 0 || (needPrdVld.length > 0 && ignorePrdVld)) return {
+            //    "errors": errs,
+            //    "needPrdVld": needPrdVld
+            //};
 
             return {
                 "Contract": modCt,
@@ -1968,7 +1968,7 @@
             if (forcePublish === undefined || forcePublish === null) forcePublish = false;
             if (isProductTranslate === undefined || isProductTranslate === null) isProductTranslate = false;
             if (bypassLowerContract === undefined || bypassLowerContract === null) bypassLowerContract = false;
-            
+
             if (forceValidation) {
                 $scope.setBusy("Validating your data...", "Please wait as we validate your information!");
             } else {
@@ -3100,7 +3100,7 @@
 
             // *** Removed because it opens a data integrity issue:
             // If use clicks save... then clicks the tab, it will bypass translation and PTR and WIP will be out of sync
-            //!$scope._dirty && 
+            //!$scope._dirty &&
             if ((valid === "Complete" || valid === "Finalizing") && !$scope._dirty) {
                 $state.go('contract.manager.strategy.wip',
                     {
