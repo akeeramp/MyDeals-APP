@@ -283,7 +283,7 @@
             var setCustAcceptanceRules = function (newValue) {
                 $scope.contractData._behaviors.isHidden["C2A_DATA_C2A_ID"] = false; //US77403 wants it always shown -formerly: (newValue === 'Pending');
                 $scope.contractData._behaviors.isRequired["C2A_DATA_C2A_ID"] = (newValue !== 'Pending') && (!hasUnSavedFiles && !hasFiles);
-                $scope.contractData.C2A_DATA_C2A_ID = (newValue === 'Pending') ? "" : $scope.contractData.C2A_DATA_C2A_ID;
+                if ($scope.contractData.DC_ID < 0) $scope.contractData.C2A_DATA_C2A_ID = (newValue === 'Pending') ? "" : $scope.contractData.C2A_DATA_C2A_ID;
                 $scope.contractData.IsAttachmentRequired = ($scope.contractData.C2A_DATA_C2A_ID === "") && (newValue !== 'Pending');
                 $scope.contractData.AttachmentError = $scope.contractData.AttachmentError &&
                     $scope.contractData.IsAttachmentRequired;
@@ -625,7 +625,7 @@
 
             $scope.contractData._behaviors.isRequired["C2A_DATA_C2A_ID"] = $scope.contractData._behaviors
                 .isError["C2A_DATA_C2A_ID"] = false;
-            $scope.contractData._behaviors.validMsg["C2A_DATA_C2A_ID"] = "";
+            if ($scope.contractData.DC_ID < 0) $scope.contractData._behaviors.validMsg["C2A_DATA_C2A_ID"] = "";
             hasUnSavedFiles = true;
             $scope.contractData.AttachmentError = false;
         }
@@ -963,8 +963,9 @@
             function purgeBehaviors(lData) {
                 var remItems = [
                     "IsAttachmentRequired", "MinYear", "MaxYear", "END_QTR", "END_YR", "START_QTR", "START_YR",
-                    "C2A_DATA_C2A_ID", "AttachmentError", "displayTitle", "CUST_ACCNT_DIV_UI", "PASSED_VALIDATION"
+                    "AttachmentError", "displayTitle", "CUST_ACCNT_DIV_UI", "PASSED_VALIDATION"
                 ];
+                var remItemsIfNoId = ["C2A_DATA_C2A_ID"];
 
                 lData._behaviors = {};
                 lData._actions = {};
@@ -975,6 +976,11 @@
 
                 for (var d = 0; d < remItems.length; d++) {
                     lData[remItems[d]] = "";
+                }
+                if ($scope.contractData.DC_ID < 0) {
+                    for (var d = 0; d < remItemsIfNoId.length; d++) {
+                        lData[remItemsIfNoId[d]] = "";
+                    }
                 }
 
                 if (!!lData.PRC_ST) {
