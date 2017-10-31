@@ -11,7 +11,7 @@ namespace Intel.MyDeals.IBusinessLogic
             bool forcePublish, string sourceEvent, bool resetValidationChild,
             List<int> ids, List<OpDataElementType> opDataElementTypes, OpDataElementType opTypeGrp,
             List<int> secondaryIds, List<OpDataElementType> secondaryOpDataElementTypes,
-            OpDataElementType secondaryOpTypeGrp, bool isProductTranslate);
+            OpDataElementType secondaryOpTypeGrp);
 		
 	}
 }

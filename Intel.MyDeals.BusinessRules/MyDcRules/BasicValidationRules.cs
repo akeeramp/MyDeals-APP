@@ -364,7 +364,7 @@ namespace Intel.MyDeals.BusinessRules
                 {
                     Title="Validate Geos",
                     ActionRule = MyDcActions.ExecuteActions,
-                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate, MyRulesTrigger.OnTranslate},
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate},
                     AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.GEO_COMBINED) && de.HasValue()).Any(),
                     OpRuleActions = new List<OpRuleAction<IOpDataElement>>
                     {
@@ -407,20 +407,11 @@ namespace Intel.MyDeals.BusinessRules
 				},
 				new MyOpRule
 				{
-					Title="Product Denedency - valid Program Payment",
-					ActionRule = MyDcActions.ValidateProgramPayment,
-					AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PROGRAM_PAYMENT) && de.HasValue()).Any(),
+					Title="Meet Comp Analysis - Price Performance is applicable only to Server (SvrWS) products",
+					ActionRule = MyDcActions.CheckMeetComp,
 					InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW},
-					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnTranslate}
+					Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave, MyRulesTrigger.OnValidate}
 				},
-				new MyOpRule
-				{
-					Title="Product Denedency - Valid Media",
-					ActionRule = MyDcActions.ValidateMedia,
-					InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW},
-					AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.PROD_INCLDS) && de.HasValue()).Any(),
-					Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnTranslate}
-				}
 			};
         }
     }

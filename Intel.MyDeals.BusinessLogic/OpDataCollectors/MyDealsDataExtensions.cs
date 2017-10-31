@@ -648,7 +648,7 @@ namespace Intel.MyDeals.BusinessLogic
             }
         }
 
-        public static bool ValidationApplyRules(this MyDealsData myDealsData, List<int> validateIds, bool forcePublish, string sourceEvent, ContractToken contractToken, bool resetValidationChild, bool isProductTranslate = false)
+        public static bool ValidationApplyRules(this MyDealsData myDealsData, List<int> validateIds, bool forcePublish, string sourceEvent, ContractToken contractToken, bool resetValidationChild)
         {
             // Apply rules to save packets here.  If validations are hit, append them to the DC and packet message lists.
             bool dataHasValidationErrors = false;
@@ -672,7 +672,6 @@ namespace Intel.MyDeals.BusinessLogic
             }
 
             List<int> dirtyPtrs = new List<int>();
-            MyRulesTrigger trigger = (isProductTranslate) ? MyRulesTrigger.OnTranslate : MyRulesTrigger.OnValidate;
             foreach (OpDataElementType opDataElementType in Enum.GetValues(typeof(OpDataElementType)))
             {
                 if (!myDealsData.ContainsKey(opDataElementType)) continue;
@@ -687,12 +686,12 @@ namespace Intel.MyDeals.BusinessLogic
                         {
                             if (validateIds.Contains(dc.DcID))
                             {
-                                dc.ApplyRules(trigger, null, contractToken.CustId);
+                                dc.ApplyRules(MyRulesTrigger.OnValidate, null, contractToken.CustId);
                             }
                         }
                         else
                         {
-                            dc.ApplyRules(trigger, null, contractToken.CustId);
+                            dc.ApplyRules(MyRulesTrigger.OnValidate, null, contractToken.CustId);
                         }
                     }
 
@@ -973,7 +972,7 @@ namespace Intel.MyDeals.BusinessLogic
             return opMsgQueue;
         }
 
-        public static MyDealsData SavePacketsBase(this MyDealsData myDealsData, OpDataCollectorFlattenedDictList data, ContractToken contractToken, List<int> validateIds, bool forcePublish, string sourceEvent, bool resetValidationChild, bool isProductTranslate)
+        public static MyDealsData SavePacketsBase(this MyDealsData myDealsData, OpDataCollectorFlattenedDictList data, ContractToken contractToken, List<int> validateIds, bool forcePublish, string sourceEvent, bool resetValidationChild)
         {
             OpLog.Log("SavePacketsBase - Start.");
 
@@ -985,18 +984,12 @@ namespace Intel.MyDeals.BusinessLogic
 
             // RUN RULES HERE - If there are validation errors... stop... but we need to save the validation status
             MyDealsData myDealsDataWithErrors = null;
-            bool hasErrors = myDealsData.ValidationApplyRules(validateIds, forcePublish, sourceEvent, contractToken, resetValidationChild, isProductTranslate);
+            bool hasErrors = myDealsData.ValidationApplyRules(validateIds, forcePublish, sourceEvent, contractToken, resetValidationChild);
             if (hasErrors)
             {
                 // "Clone" to object...
                 string json = JsonConvert.SerializeObject(myDealsData);
                 myDealsDataWithErrors = JsonConvert.DeserializeObject<MyDealsData>(json);
-            }
-
-            if (isProductTranslate)
-            {
-                if (hasErrors) TransferActions(myDealsData, myDealsDataWithErrors);
-                return hasErrors ? myDealsDataWithErrors : myDealsData;
             }
 
             // Note to self..  This does take order values into account.

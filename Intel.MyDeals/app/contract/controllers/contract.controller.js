@@ -5,9 +5,9 @@
         .module('app.contract')
         .controller('ContractController', ContractController);
 
-    ContractController.$inject = ['$scope', '$state', '$filter', '$localStorage', 'contractData', 'isNewContract', 'templateData', 'objsetService', 'securityService', 'templatesService', 'logger', '$uibModal', '$timeout', '$window', '$location', '$rootScope', 'confirmationModal', 'dataService', 'customerCalendarService', 'contractManagerConstants', 'MrktSegMultiSelectService', '$compile', '$q'];
+    ContractController.$inject = ['$scope', '$state', '$filter', '$localStorage', 'contractData', 'isNewContract', 'templateData', 'objsetService', 'securityService', 'templatesService', 'logger', '$uibModal', '$timeout', '$window', '$location', '$rootScope', 'confirmationModal', 'dataService', 'customerCalendarService', 'contractManagerConstants', 'MrktSegMultiSelectService', '$compile'];
 
-    function ContractController($scope, $state, $filter, $localStorage, contractData, isNewContract, templateData, objsetService, securityService, templatesService, logger, $uibModal, $timeout, $window, $location, $rootScope, confirmationModal, dataService, customerCalendarService, contractManagerConstants, MrktSegMultiSelectService, $compile, $q) {
+    function ContractController($scope, $state, $filter, $localStorage, contractData, isNewContract, templateData, objsetService, securityService, templatesService, logger, $uibModal, $timeout, $window, $location, $rootScope, confirmationModal, dataService, customerCalendarService, contractManagerConstants, MrktSegMultiSelectService, $compile) {
         // store template information
         //
         $scope.templates = $scope.templates || templateData.data;
@@ -811,7 +811,7 @@
                     // async save data
                     $scope.setBusy("Saving your data...", "Please wait as we save your information!");
 
-                    $scope.saveEntireContractRoot(fromState.name, false, false, toState.name, toParams, null, true);
+                    $scope.saveEntireContractRoot(fromState.name, false, false, toState.name, toParams);
                 }
 
                 //var modalOptions = {
@@ -1647,10 +1647,8 @@
 
         // **** SAVE CONTRACT Methods ****
         //
-        $scope.createEntireContractBase = function (stateName, dirtyContractOnly, forceValidation, ignorePrdVld, bypassLowerContract) {
-
-        	if (ignorePrdVld === undefined || ignorePrdVld === null) ignorePrdVld = true;
-
+        $scope.createEntireContractBase = function (stateName, dirtyContractOnly, forceValidation, bypassLowerContract) {
+			
             var source = "";
             var modCt = [];
             var modPs = [];
@@ -1871,7 +1869,7 @@
             //	//http://dojo.telerik.com/iCola
             //}
 
-            //if (Object.getOwnPropertyNames(errs).length > 0 || (needPrdVld.length > 0 && ignorePrdVld)) return {
+            //if (Object.getOwnPropertyNames(errs).length > 0 || (needPrdVld.length > 0)) return {
             //    "errors": errs,
             //    "needPrdVld": needPrdVld
             //};
@@ -1944,10 +1942,8 @@
         // **** SAVE CONTRACT Methods ****
         //
         $scope.saveEntireContractBase = function (stateName, forceValidation, forcePublish, toState, toParams, delPtr) {
-
-            var deferred = $q.defer();
             if (!$scope._dirty && !forceValidation) {
-            	return deferred.promise;
+            	return;
             }
 
             // if save already started saving... exit
@@ -1956,23 +1952,14 @@
                 if (!!$scope.isBusyMsgTitle && $scope.isBusyMsgTitle !== "") return;
             }
 
-            $scope.saveEntireContractRoot(stateName, forceValidation, forcePublish, toState, toParams, delPtr).then(
-				function (result) {
-				    deferred.resolve(result);
-				}, function (err) {
-				    deferred.reject(err);
-                }
-			);
+            $scope.saveEntireContractRoot(stateName, forceValidation, forcePublish, toState, toParams, delPtr);
 
-            return deferred.promise;
+            return;
         }
 
-        $scope.saveEntireContractRoot = function (stateName, forceValidation, forcePublish, toState, toParams, delPtr, isProductTranslate, bypassLowerContract) {
-        	var deferred = $q.defer();
-
+        $scope.saveEntireContractRoot = function (stateName, forceValidation, forcePublish, toState, toParams, delPtr, bypassLowerContract) {
             if (forceValidation === undefined || forceValidation === null) forceValidation = false;
             if (forcePublish === undefined || forcePublish === null) forcePublish = false;
-            if (isProductTranslate === undefined || isProductTranslate === null) isProductTranslate = false;
             if (bypassLowerContract === undefined || bypassLowerContract === null) bypassLowerContract = false;
 
             if (forceValidation) {
@@ -2000,8 +1987,7 @@
                 return deferred.promise;
             }
 
-            var ignorePrdVld = (isProductTranslate) ? false : true;
-            var data = $scope.createEntireContractBase(stateName, $scope._dirtyContractOnly, forceValidation, ignorePrdVld, bypassLowerContract);
+            var data = $scope.createEntireContractBase(stateName, $scope._dirtyContractOnly, forceValidation, bypassLowerContract);
 
             // If there are critical errors like bad dates, we need to stop immediately and have the user fix them
             if (!!data.errors && !angular.equals(data.errors, {})) {
@@ -2011,9 +1997,6 @@
                 topbar.hide();
                 deferred.reject();
                 return deferred.promise;
-            }
-            if (!isProductTranslate) {
-            	$scope.setBusy("Saving your data...", "Please wait while saving data.");
             }
 
             var copyData = util.deepClone(data);
@@ -2028,14 +2011,12 @@
 
             util.console("updateContractAndCurPricingTable Started");
             var isDelPtr = !!delPtr && delPtr.length > 0;
-            objsetService.updateContractAndCurPricingTable($scope.getCustId(), $scope.contractData.DC_ID, copyData, forceValidation, forcePublish, isDelPtr, isProductTranslate).then(
+            objsetService.updateContractAndCurPricingTable($scope.getCustId(), $scope.contractData.DC_ID, copyData, forceValidation, forcePublish, isDelPtr).then(
                 function (results) {
                     util.console("updateContractAndCurPricingTable Returned");
 
                 	var i;
-                	if (!isProductTranslate) {
-                		$scope.setBusy("Saving your data...Done", "Processing results now!");
-                	}
+                	$scope.setBusy("Saving your data...Done", "Processing results now!");
 
                     var anyWarnings = false;
 
@@ -2076,11 +2057,6 @@
                     topbar.hide();
 
                     if (!anyWarnings || !forceValidation) {
-                    	deferred.resolve(results);
-                    	if (isProductTranslate) {
-                    		$scope.setBusy("Validating Products...");
-                    		return deferred.promise;
-                    	}
                         $scope.setBusy("Save Successful", "Saved the contract");
                         $scope.resetDirty();
                         $scope.$broadcast('saveComplete', results);
@@ -2094,15 +2070,7 @@
                             }, 1000);
                         }
                     } else {
-                    	deferred.reject(results);
-
-                        var resultTitle = "Saved with warnings";
-                    	var resultMsg = "Didn't pass Product Validation";
-                    	if (isProductTranslate) {
-                    		resultTitle = "Warning preventing product validation";
-                    		resultMsg = "Please fix column validation errors then try again";
-                    	}
-                    	$scope.setBusy(resultTitle, resultMsg);
+                    	$scope.setBusy("Saved with warnings", "Didn't pass Validation");
                         $scope.$broadcast('saveWithWarnings', results);
                         $timeout(function () {
                             $scope.setBusy("", "");
@@ -2118,7 +2086,6 @@
 
                 },
                 function (response) {
-                	deferred.reject();
                     $scope.setBusy("Error", "Could not save the contract.");
                     logger.error("Could not save the contract.", response, response.statusText);
                     topbar.hide();
@@ -2128,9 +2095,6 @@
                     $scope.isAutoSaving = false;
                 }
             );
-
-
-            return deferred.promise;
         }
 
         $scope.saveCell = function (dataItem, newField) {
@@ -3065,28 +3029,12 @@
         // **** VALIDATE PRICING TABLE Methods ****
         //
 
-        $scope.validatePricingTable = function (forceRun, isProductTranslate) {
-        	var deferred = $q.defer();
-
+        $scope.validatePricingTable = function (forceRun) {
             if (forceRun === undefined || !forceRun) {
-            	$scope.saveEntireContractBase($state.current.name, true, true, isProductTranslate).then(
-					function (result) {
-						deferred.resolve(result);
-					}, function (err) {
-	                    deferred.reject(err);
-	                }
-				);
+            	$scope.saveEntireContractBase($state.current.name, true, true);
             } else {
-            	$scope.saveEntireContractRoot($state.current.name, true, false, false, false, false, isProductTranslate).then(
-					function (result) {
-						deferred.resolve(result);
-					}, function (err) {
-	                    deferred.reject(err);
-	                }
-				);
+            	$scope.saveEntireContractRoot($state.current.name, true, false);
             }
-
-        	return deferred.promise;
         }
 
         $scope.publishWipDeals = function () {

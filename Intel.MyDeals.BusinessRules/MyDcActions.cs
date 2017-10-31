@@ -1039,43 +1039,10 @@ namespace Intel.MyDeals.BusinessRules
                 }
             }
         }
-		
-		public static void ValidateProgramPayment(params object[] args)
+
+		public static void CheckMeetComp(params object[] args)
 		{
-			MyOpRuleCore r = new MyOpRuleCore(args);
-			if (!r.IsValid) return;
-
-			Dictionary<string, string> dict = DataCollections.GetBasicDropdownDict(AttributeCodes.PROGRAM_PAYMENT.ToString());
-
-			IOpDataElement de = r.Dc.GetDataElement(AttributeCodes.PROGRAM_PAYMENT);
-			if (de == null || de.AtrbValue.ToString() == "") return;
-			string progPayment = de.AtrbValue.ToString();
-
-			// Check for valid dependency values. The product translator may not find valid products if its dependancy columns are invalid
-			if (!dict.ContainsKey(progPayment.ToUpper()))
-			{
-				de.AddMessage(progPayment + " is not a valid value.");
-				return;
-			}
-		}
-
-		public static void ValidateMedia(params object[] args)
-		{
-			MyOpRuleCore r = new MyOpRuleCore(args);
-			if (!r.IsValid) return;
-
-			Dictionary<string, string> dict = DataCollections.GetBasicDropdownDict(AttributeCodes.PROD_INCLDS);
-
-			IOpDataElement de = r.Dc.GetDataElement(AttributeCodes.PROD_INCLDS);
-			if (de == null || de.AtrbValue.ToString() == "") return;
-			string media = de.AtrbValue.ToString();
-
-			// Check for valid dependency values. The product translator may not find valid products if its dependancy columns are invalid
-			if (!dict.ContainsKey(media.ToUpper()))
-			{
-				de.AddMessage(media + " is not a valid value.");
-				return;
-			}
+			// TODO
 		}
 	}
 }
