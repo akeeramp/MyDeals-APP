@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 10/19/2017 3:06:42 PM
+File Updated: 10/31/2017 3:58:50 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -1659,6 +1659,15 @@ namespace Intel.MyDeals.Entities {
 		public const string PRD_EXCLDS = "PRD_EXCLDS";
 
 		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3679
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string PRD_EXCLDS_IDS = "PRD_EXCLDS_IDS";
+
+		///<summary>
 		/// DIM_SID: 7
 		/// DIM_CD: PRD
 		/// ATRB_SID: 7083
@@ -2365,6 +2374,7 @@ namespace Intel.MyDeals.Entities {
 
 	public static class ToolConstantName {
 		public const string ADMIN_MESSAGE = "ADMIN_MESSAGE";
+		public const string BATCH_IGNR_DEALS = "BATCH_IGNR_DEALS";
 		public const string BATCH_LOG = "BATCH_LOG";
 		public const string CAP_MSP_CUTOFF_DAYS_BTCH = "CAP_MSP_CUTOFF_DAYS_BTCH";
 		public const string CHNL_CUST_FLTR = "CHNL_CUST_FLTR";

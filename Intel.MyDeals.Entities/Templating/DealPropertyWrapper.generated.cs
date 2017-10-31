@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 10/31/2017 12:00:31 AM
+File Updated: 10/31/2017 3:59:50 PM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -2913,6 +2913,22 @@ namespace Intel.MyDeals.Entities {
 			ATRB_LBL = "Excluded Products",
 			ATRB_MAX_LEN = 0,
 			ATRB_SID = 3663,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "TextBox"
+		};
+		public static MyDealsAttribute PRD_EXCLDS_IDS = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "PRD_EXCLDS_IDS",
+			ATRB_DESC = "Excluded Products IDs list",
+			ATRB_LBL = "Excluded Products IDs",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3679,
 			DATA_TYPE_CD = "VARCHAR",
 			DIM_CD = "DEAL",
 			DIM_SID = 3,
