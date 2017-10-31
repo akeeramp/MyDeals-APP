@@ -34,8 +34,8 @@ namespace Intel.MyDeals.BusinessRules
             string pct = r.Dc.GetDataElementValue(AttributeCodes.COST_TEST_RESULT);
             string mct = r.Dc.GetDataElementValue(AttributeCodes.MEETCOMP_TEST_RESULT);
             string role = opUserToken.Role.RoleTypeCd;
-            bool pctFailed = pct != "Pass" && pct != "Na";
-            bool mctFailed = mct != "Pass" && mct != "Na";
+            bool pctFailed = pct != "Pass" && pct != "NA";
+            bool mctFailed = mct != "Pass" && mct != "NA";
             bool mctIncomplete = mct == "InComplete";
             bool mctNotRun = mct == "Not Run Yet" || mct == "";
 

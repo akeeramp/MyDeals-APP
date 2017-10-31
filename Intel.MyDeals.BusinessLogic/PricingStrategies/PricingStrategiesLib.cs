@@ -154,7 +154,7 @@ namespace Intel.MyDeals.BusinessLogic
                 {
                     bool passMct, passPct;
                     bool passed = new CostTestLib().ExecutePctMct(OpDataElementType.PRC_ST.ToId(), new List<int> { dc.DcID }, out passMct, out passPct);
-                    if (!passed)
+                    if (!passed && (role == RoleTypes.DA)) // Don't throw a warning for FSE/GA to run Meet Comp/Cost Test
                     {
                         string passMsg = !passMct && !passPct
                             ? "Meet Comp and Cost Test"

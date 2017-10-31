@@ -37,8 +37,8 @@ function iconMctPct(colorDictionary) {
             }
             $scope.getColor = function (k, c) {
                 c = titleCase(c);
-                if (c === "Incomplete") c = "InComplete";
-                if (c === "Na") c = "NA";
+                if (c === "Incomplete") c = "InComplete"; // It should all be upper case now, but, just in case...
+                if (c === "Na") c = "NA"; // It should all be upper case now, but, just in case...
                 if (colorDictionary[k] !== undefined && colorDictionary[k][c] !== undefined) {
                     return colorDictionary[k][c];
                 }
