@@ -144,28 +144,40 @@
         }
         $scope.removeDimKeyFromWipTemplates();
 
-        $scope.setBusy = function (msg, detail) {
-            $timeout(function () {
-                var newState = msg != undefined && msg !== "";
+        $scope.setBusy = function (msg, detail, isInstant) {
+        	if (isInstant == null) {
+        		isInstant = false;
+        	}
 
-                // if no change in state, simple update the text
-                if ($scope.isBusy === newState) {
-                    $scope.isBusyMsgTitle = msg;
-                    $scope.isBusyMsgDetail = !detail ? "" : detail;
-                    return;
-                }
+        	if (isInstant) {
+        		$scope.setBusyBase(msg, detail);
+        	} else {
+        		$timeout(function () {
+        			$scope.setBusyBase(msg, detail);
+        		});
+        	}
+        }
 
-                $scope.isBusy = newState;
-                if ($scope.isBusy) {
-                    $scope.isBusyMsgTitle = msg;
-                    $scope.isBusyMsgDetail = !detail ? "" : detail;
-                } else {
-                    $timeout(function () {
-                        $scope.isBusyMsgTitle = msg;
-                        $scope.isBusyMsgDetail = !detail ? "" : detail;
-                    }, 500);
-                }
-            });
+        $scope.setBusyBase = function (msg, detail) {
+        	var newState = msg != undefined && msg !== "";
+
+        	// if no change in state, simple update the text
+        	if ($scope.isBusy === newState) {
+        		$scope.isBusyMsgTitle = msg;
+        		$scope.isBusyMsgDetail = !detail ? "" : detail;
+        		return;
+        	}
+
+        	$scope.isBusy = newState;
+        	if ($scope.isBusy) {
+        		$scope.isBusyMsgTitle = msg;
+        		$scope.isBusyMsgDetail = !detail ? "" : detail;
+        	} else {
+        		$timeout(function () {
+        			$scope.isBusyMsgTitle = msg;
+        			$scope.isBusyMsgDetail = !detail ? "" : detail;
+        		}, 500);
+        	}
         }
         // populate the contract data upon entry... If multiple controller instances are called, reference the initial instance
         //
@@ -3101,7 +3113,7 @@
                 if (!!$scope.child) {
                     $scope.child.validateSavepublishWipDeals();
                 } else {
-                    $scope.publishWipDealsBase();
+                	$scope.publishWipDealsBase();
                 }
             }
         }

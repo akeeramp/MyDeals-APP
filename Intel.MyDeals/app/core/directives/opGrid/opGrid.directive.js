@@ -660,10 +660,11 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     // select the first column
                     var tabStrip = $("#tabstrip").kendoTabStrip().data("kendoTabStrip");
                     if (!!tabStrip) {
-                        tabStrip.select(0);
-                        if ($scope.opOptions.groups !== undefined) {
-                            $scope.showCols($scope.curGroup);
-                        }
+                    	tabStrip.select(0);
+                    	if ($scope.opOptions.groups !== undefined) {
+                    		$scope.showCols($scope.curGroup);
+                    		$scope.root.setBusy("", "");
+                    	}
                     }
                 }, 10);
             }

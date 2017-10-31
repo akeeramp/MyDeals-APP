@@ -216,59 +216,55 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         gTools = new gridTools(wipTemplate.model, wipTemplate.columns);
         gTools.assignColSettings();
 
-        $timeout(function () {
-            root.wipOptions = {
-                "isLayoutConfigurable": true,
-                "isPricingTableEnabled": true,
-                "isVisibleAdditionalDiscounts": true,
-                "isExportable": true,
-                "isEditable": true,
-                "exportableExcludeFields": ["CAP_INFO", "CUST_MBR_SID", "DC_PARENT_ID", "PASSED_VALIDATION", "YCS2_INFO", "details", "tools"]
-            };
-            root.wipOptions.columns = wipTemplate.columns;
-            root.wipOptions.model = wipTemplate.model;
-            root.wipOptions.default = {};
-            root.wipOptions.default.groups = opGridTemplate.groups[root.curPricingTable.OBJ_SET_TYPE_CD];
-            root.wipOptions.default.groupColumns = opGridTemplate.templates[root.curPricingTable.OBJ_SET_TYPE_CD];
 
-            root.wipOptions.isOverlapNeeded = (root.curPricingStrategy !== undefined && (root.curPricingStrategy.WF_STG_CD === "Draft" || root.curPricingStrategy.WF_STG_CD === "Requested"));
+        root.wipOptions = {
+        	"isLayoutConfigurable": true,
+        	"isPricingTableEnabled": true,
+        	"isVisibleAdditionalDiscounts": true,
+        	"isExportable": true,
+        	"isEditable": true,
+        	"exportableExcludeFields": ["CAP_INFO", "CUST_MBR_SID", "DC_PARENT_ID", "PASSED_VALIDATION", "YCS2_INFO", "details", "tools"]
+        };
+        root.wipOptions.columns = wipTemplate.columns;
+        root.wipOptions.model = wipTemplate.model;
+        root.wipOptions.default = {};
+        root.wipOptions.default.groups = opGridTemplate.groups[root.curPricingTable.OBJ_SET_TYPE_CD];
+        root.wipOptions.default.groupColumns = opGridTemplate.templates[root.curPricingTable.OBJ_SET_TYPE_CD];
 
-            //root.wipOptions.default.groups = [
-            //    { "name": "Deal Info", "order": 0 },
-            //    { "name": "Consumption", "order": 1 },
-            //    { "name": "Meet Comp", "order": 2 },
-            //    { "name": "Backdate", "order": 4 },
-            //    { "name": "Overlapping", "order": 5 },
-            //    { "name": "Cost Test", "order": 6 },
-            //    { "name": "All", "order": 99 }
-            //];
+        root.wipOptions.isOverlapNeeded = (root.curPricingStrategy !== undefined && (root.curPricingStrategy.WF_STG_CD === "Draft" || root.curPricingStrategy.WF_STG_CD === "Requested"));
 
-            // check for soft warnings
-            var numWarn = 0;
-            for (var w = 0; w < root.pricingTableData.WIP_DEAL.length; w++) {
-                if (!!root.pricingTableData.WIP_DEAL[w]["CAP"]) {
-                    if (root.pricingTableData.WIP_DEAL[w]["CAP"] === "No CAP") {
-                        numWarn++;
-                    }
-                    var cap = parseFloat(root.pricingTableData.WIP_DEAL[w]["CAP"]);
-                    var ecap = parseFloat(root.pricingTableData.WIP_DEAL[w]["ECAP_PRICE"]);
-                    if (ecap > cap) {
-                        numWarn++;
-                    }
-                }
-            }
+    	//root.wipOptions.default.groups = [
+    	//    { "name": "Deal Info", "order": 0 },
+    	//    { "name": "Consumption", "order": 1 },
+    	//    { "name": "Meet Comp", "order": 2 },
+    	//    { "name": "Backdate", "order": 4 },
+    	//    { "name": "Overlapping", "order": 5 },
+    	//    { "name": "Cost Test", "order": 6 },
+    	//    { "name": "All", "order": 99 }
+    	//];
 
-            root.wipOptions.numSoftWarn = numWarn;
+    	// check for soft warnings
+        var numWarn = 0;
+        for (var w = 0; w < root.pricingTableData.WIP_DEAL.length; w++) {
+        	if (!!root.pricingTableData.WIP_DEAL[w]["CAP"]) {
+        		if (root.pricingTableData.WIP_DEAL[w]["CAP"] === "No CAP") {
+        			numWarn++;
+        		}
+        		var cap = parseFloat(root.pricingTableData.WIP_DEAL[w]["CAP"]);
+        		var ecap = parseFloat(root.pricingTableData.WIP_DEAL[w]["ECAP_PRICE"]);
+        		if (ecap > cap) {
+        			numWarn++;
+        		}
+        	}
+        }
 
-            root.wipData = root.pricingTableData.WIP_DEAL;
+        root.wipOptions.numSoftWarn = numWarn;
 
-            root.setBusy("Drawing Grid", "Applying security to the grid.");
-            $timeout(function () {
-                root.setBusy("", "");
-            }, 1500);
-        }, 10);
+        root.wipData = root.pricingTableData.WIP_DEAL;
+
+        root.setBusy("Drawing Grid", "Applying security to the grid.", true);
     }
-
+	
     function getFormatedGeos(geos) {
         if (geos == null) { return null; }
         var isBlendedGeo = (geos.indexOf('[') > -1) ? true : false;
