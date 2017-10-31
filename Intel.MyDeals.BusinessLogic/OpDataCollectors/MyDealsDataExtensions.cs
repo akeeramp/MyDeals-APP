@@ -199,11 +199,11 @@ namespace Intel.MyDeals.BusinessLogic
             }
 
             // look for WIP deals to delete
-            //if (opType == OpDataElementType.WIP_DEAL)
-            //{
-            //    List<int> delIds = wipIds.Where(w => !foundIds.Contains(w)).Distinct().ToList();
-            //    AddDeleteActions(myDealsData[OpDataElementType.WIP_DEAL], delIds);
-            //}
+            if (opType == OpDataElementType.WIP_DEAL)
+            {
+                List<int> delIds = wipIds.Where(w => !foundIds.Contains(w)).Distinct().ToList();
+                AddDeleteActions(myDealsData[OpDataElementType.WIP_DEAL], delIds);
+            }
 
             // if PRC_TBL, check for merge complete rules
             if (opType == OpDataElementType.PRC_TBL)
