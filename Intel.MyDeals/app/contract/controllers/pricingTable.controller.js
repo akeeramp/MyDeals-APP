@@ -264,7 +264,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         root.setBusy("Drawing Grid", "Applying security to the grid.", true);
     }
-	
+
     function getFormatedGeos(geos) {
         if (geos == null) { return null; }
         var isBlendedGeo = (geos.indexOf('[') > -1) ? true : false;
@@ -451,8 +451,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     }
 
     // Performance and UX... removed this.  We will need to handle these in the MT rules
-    // var flushSysPrdFields = ["PTR_USER_PRD", "PRD_EXCLDS", "START_DT", "END_DT", "GEO_COMBINED", "PROD_INCLDS", "PROGRAM_PAYMENT"];
-    var flushSysPrdFields = ["PTR_USER_PRD", "PRD_EXCLDS"];
+    var flushSysPrdFields = ["PTR_USER_PRD", "PRD_EXCLDS", "START_DT", "END_DT", "GEO_COMBINED", "PROD_INCLDS", "PROGRAM_PAYMENT"];
     var flushTrackerNumFields = ["START_DT", "END_DT", "GEO_COMBINED"];
 
     // On Spreadsheet change
@@ -1212,7 +1211,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             }
         });
     }
-	
+
     function applyDropDownsData(sheet, myFieldModel, myColumnName, dropdownValuesSheet) {
         // Call API
         if (myFieldModel.opLookupText === "CUST_DIV_NM") {
@@ -1280,19 +1279,19 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             var x = this._previewFillFrom(srcRange, direction);
 
             // Custom code
-            var firstDraggedVal = this.value();           
+            var firstDraggedVal = this.value();
             var newVal = "";
 
             for (var i = 0; i < x.props.length; i++) { // each col
             	for (var j = 0; j < x.props[i].length; j++) { // each row
 
-            		// HACK: this is to prevent dragged cells that have numbers in them from incrementing on drag. 
+            		// HACK: this is to prevent dragged cells that have numbers in them from incrementing on drag.
             		if (srcRange._ref.bottomRight.row !== srcRange._ref.topLeft.row) {
             			// The user highighted 2 or more cells before dragging, so just go with the pattern
                 		newVal = x.props[i][j].value;
             		} else {
             			// User only highlighted one cell, so use the first cell to set all the other cell's values
-                		newVal = this.value(); 
+                		newVal = this.value();
                 	}
                     // Make a new object with only the value - no validation or editor properties
                     x.props[i][j] = {
@@ -1454,11 +1453,11 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     // Maybe get the clipboard data and modify it (pad by tier num) and allow the paste to continue
                     var numTiers = root.child.numTiers;
                     var colNum = pasteRef.topLeft.col;
-                    if (!tieredColIndexesDict.hasOwnProperty(colNum)) { // Non tiered data (merged cells) only							
+                    if (!tieredColIndexesDict.hasOwnProperty(colNum)) { // Non tiered data (merged cells) only
                     	for (row = 0; row < state.data.length; row++) {
                     		for (var t = 0; t < numTiers; t++) {
                     			newData.push(util.deepClone(state.data[row]));
-                    		}                    		
+                    		}
                             padNumRows += numTiers - 1;
                         }
                         state.data = newData;
@@ -1843,7 +1842,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         var isAllValidated = true;
         for (var key in transformResults.ProdctTransformResults) {
             var r = key - 1;
-			
+
         	// Flag dependency column errors - these columns may cause product translator to not find a valid product
             if (!!transformResults.InvalidDependancyColumns && !!transformResults.InvalidDependancyColumns[key] && transformResults.InvalidDependancyColumns[key].length > 0) {
             	for (var i = 0; i < transformResults.InvalidDependancyColumns[key].length; i++) {
@@ -1860,7 +1859,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             // If no duplicate or invalid add valid JSON
             data[r].PTR_SYS_PRD = !!transformResults.ValidProducts[key] ? JSON.stringify(transformResults.ValidProducts[key]) : "";
             sourceData[r].PTR_SYS_PRD = data[r].PTR_SYS_PRD;
-			
+
             if ((!!transformResults.InValidProducts[key] && (transformResults.InValidProducts[key]["I"].length > 0
                     || transformResults.InValidProducts[key]["E"].length > 0)) || !!transformResults.DuplicateProducts[key]) {
                 root.setBusy("", "");
@@ -2424,7 +2423,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 					prdList.push(prdObj[key][0].PRD_MBR_SID);
 				}
 			}
-			
+
             // Get data to filter ECAP numbers against
             /////// TODO: exact start date, end date, geo, cust product
             var filterData = {
@@ -2434,7 +2433,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 'CUST_MBR_SID': currRowData.CUST_MBR_SID,
                 'PRD_MBR_SID': prdList[0]
             };
-			
+
             var modalInstance = $uibModal.open({
                 ariaLabelledBy: 'modal-title',
                 ariaDescribedBy: 'modal-body',
