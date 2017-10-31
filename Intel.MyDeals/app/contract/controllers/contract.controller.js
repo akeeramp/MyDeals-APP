@@ -3101,7 +3101,7 @@
             // *** Removed because it opens a data integrity issue:
             // If use clicks save... then clicks the tab, it will bypass translation and PTR and WIP will be out of sync
             //!$scope._dirty && 
-            if ((valid === "Complete" || valid === "Finalizing")) {
+            if ((valid === "Complete" || valid === "Finalizing") && !$scope._dirty) {
                 $state.go('contract.manager.strategy.wip',
                     {
                         cid: $scope.contractData.DC_ID,

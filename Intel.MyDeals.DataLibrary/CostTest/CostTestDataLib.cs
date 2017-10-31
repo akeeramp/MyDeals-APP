@@ -240,19 +240,19 @@ namespace Intel.MyDeals.DataLibrary
             {
                 using (var rdr = DataAccess.ExecuteReader(cmd))
                 {
+                    int IDX_COST_TEST_RESULT = DB.GetReaderOrdinal(rdr, "COST_TEST_RESULT");
                     int IDX_MEETCOMP_TEST_RESULT = DB.GetReaderOrdinal(rdr, "MEETCOMP_TEST_RESULT");
                     int IDX_OBJ_SID = DB.GetReaderOrdinal(rdr, "OBJ_SID");
                     int IDX_OBJ_TYPE_SID = DB.GetReaderOrdinal(rdr, "OBJ_TYPE_SID");
-                    int IDX_PRC_CST_TST_STS = DB.GetReaderOrdinal(rdr, "PRC_CST_TST_STS");
 
                     while (rdr.Read())
                     {
                         ret.Add(new PctMctResult
                         {
+                            COST_TEST_RESULT = (IDX_COST_TEST_RESULT < 0 || rdr.IsDBNull(IDX_COST_TEST_RESULT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_COST_TEST_RESULT),
                             MEETCOMP_TEST_RESULT = (IDX_MEETCOMP_TEST_RESULT < 0 || rdr.IsDBNull(IDX_MEETCOMP_TEST_RESULT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MEETCOMP_TEST_RESULT),
                             OBJ_SID = (IDX_OBJ_SID < 0 || rdr.IsDBNull(IDX_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_SID),
-                            OBJ_TYPE_SID = (IDX_OBJ_TYPE_SID < 0 || rdr.IsDBNull(IDX_OBJ_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_TYPE_SID),
-                            PRC_CST_TST_STS = (IDX_PRC_CST_TST_STS < 0 || rdr.IsDBNull(IDX_PRC_CST_TST_STS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRC_CST_TST_STS)
+                            OBJ_TYPE_SID = (IDX_OBJ_TYPE_SID < 0 || rdr.IsDBNull(IDX_OBJ_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_TYPE_SID)
                         });
                     }
 

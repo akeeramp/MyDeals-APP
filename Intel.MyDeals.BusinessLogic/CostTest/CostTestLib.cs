@@ -82,7 +82,7 @@ namespace Intel.MyDeals.BusinessLogic
             List<PctMctResult> results = _costTestDataLib.RunPct(objTypeId, objSetTypeIds);
             List<string> failures = new List<string> { "Fail", "InComplete", "NOT RUN YET", "" };
             passMct = !results.Any(r => failures.Contains(r.MEETCOMP_TEST_RESULT));
-            passPct = !results.Any(r => failures.Contains(r.PRC_CST_TST_STS));
+            passPct = !results.Any(r => failures.Contains(r.COST_TEST_RESULT));
 
             return passMct && passPct;
         }

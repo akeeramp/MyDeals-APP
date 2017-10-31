@@ -117,7 +117,7 @@ namespace Intel.MyDeals.Controllers.API
                 CustId = custId,
                 ContractId = contractId,
                 DelPtr = delPtr
-            }, contractAndPricingTable, true, false, isProductTranslate)
+            }, contractAndPricingTable, true, true, isProductTranslate)
                 , "Unable to save the Contract"
             );
 
