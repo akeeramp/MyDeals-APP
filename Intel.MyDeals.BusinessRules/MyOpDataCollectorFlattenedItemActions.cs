@@ -37,6 +37,7 @@ namespace Intel.MyDeals.BusinessRules
             bool pctFailed = pct != "Pass" && pct != "Na";
             bool mctFailed = mct != "Pass" && mct != "Na";
             bool mctIncomplete = mct == "InComplete";
+            bool mctNotRun = mct == "Not Run Yet" || mct == "";
 
             MyDealsActionItem objsetActionItem = new MyDealsActionItem
             {
@@ -114,7 +115,8 @@ namespace Intel.MyDeals.BusinessRules
                             }
                             break;
                         case RoleTypes.GA:
-                            if (stage == WorkFlowStages.Requested && mctFailed && !mctIncomplete)
+                            // Per Meera and Vas... Allow GA to approve deals even if failing MCT by incomplete or fail... only stop for Not Run Yet
+                            if (stage == WorkFlowStages.Requested && mctFailed && !mctNotRun)
                             {
                                 objsetActionItem.Actions[action] = false;
                                 objsetActionItem.ActionReasons[action] = reasonPctMct;
