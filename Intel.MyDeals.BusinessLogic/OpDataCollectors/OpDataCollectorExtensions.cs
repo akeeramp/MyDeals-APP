@@ -159,7 +159,7 @@ namespace Intel.MyDeals.BusinessLogic
                         int prdId = 0;
                         if (int.TryParse(kvp.Value.ToString(), out prdId))
                         {
-                            OpDataElement deBaseProd = dc.DataElements.FirstOrDefault(d => d.AtrbCd == AttributeCodes.PRODUCT_FILTER && d.DimKey[7].ToString() == "7:" + deProds.First().AtrbValue);
+                            OpDataElement deBaseProd = dc.DataElements.FirstOrDefault(d => d.AtrbCd == AttributeCodes.PRODUCT_FILTER && (d.DimKey[7].ToString() == "7:1" || d.DimKey[7].ToString() == "7:" + deProds.First().AtrbValue));
                             if (deBaseProd != null)
                             {
                                 OpDataElement newDe = deBaseProd.Clone();
