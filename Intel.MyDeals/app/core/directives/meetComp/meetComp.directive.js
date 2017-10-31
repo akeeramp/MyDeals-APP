@@ -72,51 +72,51 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
 
                         //Add New Customer
                         $scope.addSKUForCustomer = function (mode) {
+                            if ($scope.selectedCustomerText.trim().length > 0) {
+                                $scope.meetCompMasterdata[$scope.curentRow - 1].COMP_SKU = $scope.selectedCustomerText;
 
-                            $scope.meetCompMasterdata[$scope.curentRow - 1].COMP_SKU = $scope.selectedCustomerText;
-
-                            if (mode == "0" || mode == 0) {
-                                $scope.meetCompMasterdata[$scope.curentRow - 1].CUST_NM_SID = $scope.selectedCust;
-                            }
-                            else {
-                                $scope.meetCompMasterdata[$scope.curentRow - 1].CUST_NM_SID = 1;
-                            }
-
-                            addToUpdateList($scope.meetCompMasterdata[$scope.curentRow - 1], "COMP_SKU");
-
-                            //Update child
-                            if ($scope.meetCompMasterdata[$scope.curentRow - 1].GRP == "PRD") {
-                                var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
-                                    .Where(function (x) {
-                                        return (x.GRP_PRD_SID == $scope.meetCompMasterdata[$scope.curentRow - 1].GRP_PRD_SID && x.GRP == "DEAL" && x.MC_NULL == true && x.MEET_COMP_UPD_FLG == "Y");
-                                    })
-                                    .ToArray();
-
-                                for (var i = 0; i < tempData.length; i++) {
-                                    $scope.meetCompMasterdata[tempData[i].RW_NM - 1].COMP_SKU = $scope.selectedCustomerText;
-                                    addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_SKU");
+                                if (mode == "0" || mode == 0) {
+                                    $scope.meetCompMasterdata[$scope.curentRow - 1].CUST_NM_SID = $scope.selectedCust;
+                                }
+                                else {
+                                    $scope.meetCompMasterdata[$scope.curentRow - 1].CUST_NM_SID = 1;
                                 }
 
-                                if (tempData.length > 0) {
-                                    var grid = $("#grid").data("kendoGrid");
-                                    //grid.expandRow(0);
-                                    var expanded = $.map(grid.tbody.children(":has(> .k-hierarchy-cell .k-i-collapse)"), function (row) {
-                                        return $(row).data("uid");
-                                    });
+                                addToUpdateList($scope.meetCompMasterdata[$scope.curentRow - 1], "COMP_SKU");
 
-                                    grid.one("dataBound", function () {
-                                        grid.expandRow(grid.tbody.children().filter(function (idx, row) {
-                                            return $.inArray($(row).data("uid"), expanded) >= 0;
-                                        }));
-                                    });
-                                    grid.refresh();
+                                //Update child
+                                if ($scope.meetCompMasterdata[$scope.curentRow - 1].GRP == "PRD") {
+                                    var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
+                                        .Where(function (x) {
+                                            return (x.GRP_PRD_SID == $scope.meetCompMasterdata[$scope.curentRow - 1].GRP_PRD_SID && x.GRP == "DEAL" && x.MC_NULL == true && x.MEET_COMP_UPD_FLG == "Y");
+                                        })
+                                        .ToArray();
+
+                                    for (var i = 0; i < tempData.length; i++) {
+                                        $scope.meetCompMasterdata[tempData[i].RW_NM - 1].COMP_SKU = $scope.selectedCustomerText;
+                                        addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_SKU");
+                                    }
+
+                                    if (tempData.length > 0) {
+                                        var grid = $("#grid").data("kendoGrid");
+                                        
+                                        var expanded = $.map(grid.tbody.children(":has(> .k-hierarchy-cell .k-i-collapse)"), function (row) {
+                                            return $(row).data("uid");
+                                        });
+
+                                        grid.one("dataBound", function () {
+                                            grid.expandRow(grid.tbody.children().filter(function (idx, row) {
+                                                return $.inArray($(row).data("uid"), expanded) >= 0;
+                                            }));
+                                        });
+                                        grid.refresh();
+                                    }
+
                                 }
-
-                            }
 
                             //Update Grid
                             //$scope.dataSourceParent.read();
-                            
+                            } 
                         };
 
                         //Column Level Security Implementation
@@ -879,7 +879,14 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         isCompSkuZero = true
                                     }
                                 }
-                                if ((data[i].COMP_SKU.trim().length == 0 || isCompSkuZero ) && usrRole != "DA" && (data[i].MEET_COMP_STS.toLowerCase() == "fail" || data[i].MEET_COMP_STS.toLowerCase() == "incomplete")) {
+
+                                if (isCompSkuZero && usrRole != "DA") {
+                                    errorObj.COMP_SKU = true;
+                                    errorObj.RW_NM = data[i].RW_NM;
+                                    isError = true;
+                                }
+
+                                if (data[i].COMP_SKU.trim().length == 0 && usrRole != "DA" && (data[i].MEET_COMP_STS.toLowerCase() == "fail" || data[i].MEET_COMP_STS.toLowerCase() == "incomplete")) {
                                     errorObj.COMP_SKU = true;
                                     errorObj.RW_NM = data[i].RW_NM;
                                     isError = true;
