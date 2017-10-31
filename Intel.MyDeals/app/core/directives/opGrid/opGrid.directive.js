@@ -340,7 +340,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
             $scope.customLayout = function (reportError) {
                 reportError = typeof reportError === 'undefined' ? true : reportError;
                 // Get the persisted grid settings.
-                userPreferencesService.getActions("DealEditor", "CustomGridSettings")
+                userPreferencesService.getActions("DealEditor", "CustomLayoutFor" + $scope.dealTypes[0])
                     .then(function (response) {
                         if (response.data && response.data.length > 0) {
                             $scope.opOptions.groups = [];
@@ -394,7 +394,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 // Persist the current 'Groups' settings.
                 userPreferencesService.updateAction(
                     "DealEditor", // CATEGORY
-                    "CustomGridSettings", // SUBCATEGORY
+                    "CustomLayoutFor" + $scope.dealTypes[0], // SUBCATEGORY
                     "Groups", // ID
                     JSON.stringify(groupSettings)) // VALUE
                     .then(function (response) {
@@ -405,7 +405,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 // Persist the current 'GroupColumns' settings.
                 userPreferencesService.updateAction(
                     "DealEditor", // CATEGORY
-                    "CustomGridSettings", // SUBCATEGORY
+                    "CustomLayoutFor" + $scope.dealTypes[0], // SUBCATEGORY
                     "GroupColumns", // ID
                     JSON.stringify($scope.opOptions.groupColumns)) // VALUE
                     .then(function (response) {
