@@ -27,7 +27,8 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
 
     var hasNoPermission = !$scope.root.CAN_EDIT_COST_TEST;
     var hasNoPermissionOvr = !$scope.root.CAN_EDIT_COST_TEST && window.usrRole !== "Legal";
-
+    var hasPermissionPrice = window.usrRole === "DA" || (window.usrRole === "GA" && window.isSuper);
+    
     $timeout(function () {
         $("#dealTypeDiv").removeClass("active");
         $("#approvalDiv").removeClass("active");
@@ -422,7 +423,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
             title: "CAP",
             format: "{0:c}",
             width: "100px",
-            hidden: hasNoPermission,
+            hidden: !hasPermissionPrice,
             parent: false
         },
         "MAX_RPU": {
@@ -438,7 +439,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
             title: "ECAP Price",
             format: "{0:c}",
             width: "100px",
-            hidden: hasNoPermission,
+            hidden: !hasPermissionPrice,
             parent: false
         },
         "ECAP_FLR": {
