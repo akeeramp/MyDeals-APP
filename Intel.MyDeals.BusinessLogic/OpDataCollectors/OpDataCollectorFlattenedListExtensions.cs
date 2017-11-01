@@ -99,15 +99,18 @@ namespace Intel.MyDeals.BusinessLogic
                 .SavePackets(data, contractToken, new List<int>(), false, "", false)
                 .ToOpDataCollectorFlattenedDictList(ObjSetPivotMode.Pivoted);
 
-            foreach (OpDataCollectorFlattenedItem item in opFlatDictList[opDataElementType])
+            if (opFlatDictList.ContainsKey(opDataElementType))
             {
-                foreach (OpDataAction opDataAction in (List<OpDataAction>)item["_actions"])
+                foreach (OpDataCollectorFlattenedItem item in opFlatDictList[opDataElementType])
                 {
-                    int id = opDataAction.DcID ?? 0;
-                    if (opDataAction.Action != "OBJ_DELETED" || !deleteIds.Contains(id)) continue;
+                    foreach (OpDataAction opDataAction in (List<OpDataAction>) item["_actions"])
+                    {
+                        int id = opDataAction.DcID ?? 0;
+                        if (opDataAction.Action != "OBJ_DELETED" || !deleteIds.Contains(id)) continue;
 
-                    deleteIds.Remove(id);
-                    deletedIds.Add(id);
+                        deleteIds.Remove(id);
+                        deletedIds.Add(id);
+                    }
                 }
             }
 

@@ -249,6 +249,8 @@
                             <td style="width: 50px; text-align: center;" ng-show="canEdit">
                                 <div ng-if="canAction('Cancel', ps, true)" ng-attr-title="{{actionReason('Cancel', ps)}}">
                                     <input type="checkbox" name="radGrp{{ps.DC_ID}}" dcId="{{ps.DC_ID}}"
+                                           ng-class="{'disabled': !canAction('Cancel', ps, false)}"
+                                           ng-disabled="!canAction('Cancel', ps, false)"
                                            class="with-font psCheck psCheck-Cancel" id="rad_cancel_{{ps.DC_ID}}"
                                            ng-click="clkRow($event)" /><label for="rad_cancel_{{ps.DC_ID}}"></label>
                                 </div>
