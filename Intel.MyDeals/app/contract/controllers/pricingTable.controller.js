@@ -168,7 +168,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         if (!root.contractData.CustomerDivisions || root.contractData.CustomerDivisions.length <= 1) {
             // hide Cust Div
-            ptTemplate.columns[4].hidden = true;
+        	//ptTemplate.columns[root.colToLetter['PTR_USER_PRD']].hidden = true; 
         }
 
         if (!!root.curPricingTable.NUM_OF_TIERS) {
