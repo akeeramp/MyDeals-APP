@@ -168,7 +168,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         if (!root.contractData.CustomerDivisions || root.contractData.CustomerDivisions.length <= 1) {
             // hide Cust Div
-            ptTemplate.columns[3].hidden = true;
+            ptTemplate.columns[4].hidden = true;
         }
 
         if (!!root.curPricingTable.NUM_OF_TIERS) {
@@ -354,7 +354,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
             if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD === "VOL_TIER") {
                 sheet.range(root.colToLetter['PRD_EXCLDS'] + (rowStart)).value(usrInput.excludeProducts);
-                //sheet.range(root.colToLetter['PRD_EXCLDS_IDS'] + (rowStart)).value(usrInput.excludeProductIds);
+                sheet.range('D' + (rowStart)).value(usrInput.excludeProductIds);
             }
 
             systemModifiedProductInclude = false;
@@ -598,8 +598,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                                     $timeout(function () {
                                         var n = data.length + 2;
-                                        disableRange(sheet.range("D" + n + ":D" + (n + numToDel + numToDel)));
-                                        disableRange(sheet.range("F" + n + ":Z" + (n + numToDel + numToDel)));
+                                        disableRange(sheet.range("E" + n + ":E" + (n + numToDel + numToDel)));
+                                        disableRange(sheet.range("G" + n + ":Z" + (n + numToDel + numToDel)));
                                     }, 10);
 
                                     clearUndoHistory();
@@ -652,7 +652,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 if (!systemModifiedProductInclude) {
                     // TODO we will need to revisit.  There are cases where we CANNOT remove products and reload... active deals for example
                     // NOTE: do not wrap the below in a sheet.batch call! We need it to recall the onChange event to clear out old valid and invalid products when the product column changes
-                    sheet.range("B" + topLeftRowIndex + ":C" + bottomRightRowIndex).value("");
+                    sheet.range("B" + topLeftRowIndex + ":D" + bottomRightRowIndex).value("");
 
                     range.forEachCell(
                         function (rowIndex, colIndex, value) {
@@ -875,7 +875,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         var startVolIndex = (root.colToLetter["STRT_VOL"]).charCodeAt(0);
 
                         // Enable cols except voltier
-                        range = sheet.range("D" + topLeftRowIndex + ":" + letterBeforeTierCol + bottomRightRowIndex);
+                        range = sheet.range("E" + topLeftRowIndex + ":" + letterBeforeTierCol + bottomRightRowIndex);
                         range.enable(true);
                         range.background(null);
                         range = sheet.range(letterAfterTierCol + topLeftRowIndex + ":" + finalColLetter + bottomRightRowIndex);
@@ -900,7 +900,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                             }
                         );
                     } else {
-                        range = sheet.range("D" + topLeftRowIndex + ":" + finalColLetter + bottomRightRowIndex);
+                        range = sheet.range("E" + topLeftRowIndex + ":" + finalColLetter + bottomRightRowIndex);
                         range.enable(true);
                         range.background(null);
                     }
@@ -1030,22 +1030,22 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
                         // Product Status
                         if (!!data[key].PTR_SYS_INVLD_PRD) { // validated and failed
-                            sheet.range("E" + row + ":E" + row).color("#FC4C02").bold(true);
-                            //sheet.range("E" + row + ":E" + row).borderLeft({ size: 6, color: "#FC4C02" });
+                            sheet.range("F" + row + ":F" + row).color("#FC4C02").bold(true);
+                            //sheet.range("F" + row + ":F" + row).borderLeft({ size: 6, color: "#FC4C02" });
                             if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD == "VOL_TIER") { // validated and passed
-                                sheet.range("F" + row + ":F" + row).color("#FC4C02").bold(true);
+                                sheet.range("G" + row + ":G" + row).color("#FC4C02").bold(true);
                             }
                         } else if (!!data[key].PTR_SYS_PRD) { // validated and passed
-                            sheet.range("E" + row + ":E" + row).color("#9bc600").bold(true);
+                            sheet.range("F" + row + ":F" + row).color("#9bc600").bold(true);
                             //vol tier
                             if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD == "VOL_TIER") { // validated and passed
-                                sheet.range("F" + row + ":F" + row).color("#9bc600").bold(true);
+                                sheet.range("G" + row + ":G" + row).color("#9bc600").bold(true);
                             }
                         } else { // not validated
-                            sheet.range("E" + row + ":E" + row).color("#000000").bold(false);
-                            //sheet.range("E" + row + ":E" + row).borderLeft({ size: 6, color: "transparent" });
+                            sheet.range("F" + row + ":F" + row).color("#000000").bold(false);
+                            //sheet.range("F" + row + ":F" + row).borderLeft({ size: 6, color: "transparent" });
                             if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD == "VOL_TIER") { // validated and passed
-                                sheet.range("F" + row + ":F" + row).color("#000000").bold(false);
+                                sheet.range("G" + row).color("#000000").bold(false);
                             }
                         }
                     } else {
@@ -2061,8 +2061,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             var cnt = data.length;
             var numToDel = dataCountBeforeDelete - cnt;
             cnt = cnt + 2;
-            disableRange(sheet.range("D" + cnt + ":D" + (cnt + numToDel)));
-            disableRange(sheet.range("F" + cnt + ":Z" + (cnt + numToDel)));
+            disableRange(sheet.range("E" + cnt + ":E" + (cnt + numToDel)));
+            disableRange(sheet.range("G" + cnt + ":Z" + (cnt + numToDel)));
         }
     }
 

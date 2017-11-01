@@ -303,9 +303,6 @@ namespace Intel.MyDeals.DataLibrary
                 IsReadOnly = false, // need to set to true after product selector is in place
                 IsHidden = true,
                 Width = 220
-                //// This is how it should be set once the product selector is in place:
-                //IsReadOnly = true,
-                //IsHidden = true,
             });
             items.Add(new UiTemplateContainerItem
             {
@@ -319,6 +316,17 @@ namespace Intel.MyDeals.DataLibrary
                 //// This is how it should be set once the product selector is in place:
                 //IsReadOnly = true,
                 //IsHidden = true,
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
+                AtrbCd = AttributeCodes.PRD_EXCLDS_IDS,
+                Label = "Exclude Product Ids",
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
+                Width = 220,
+                IsReadOnly = false,
+                IsHidden = true
             });
             items.Add(new UiTemplateContainerItem
             {
@@ -349,17 +357,6 @@ namespace Intel.MyDeals.DataLibrary
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
                 Width = 220,
                 IsReadOnly = false
-            });
-            items.Add(new UiTemplateContainerItem
-            {
-                Id = 29,
-                AtrbCd = AttributeCodes.PRD_EXCLDS_IDS,
-                Label = "Exclude Product Ids",
-                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
-                Width = 220,
-                IsReadOnly = false,
-                IsHidden = true
             });
             items.Add(new UiTemplateContainerItem
             {
