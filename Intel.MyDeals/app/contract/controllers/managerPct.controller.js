@@ -320,18 +320,17 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
 
     }
 
-    $scope.showGroups = function (isDealMode, dealId) {
+    $scope.showGroups = function (isDealMode, dealId, dataItem) {
 
-        var ptId = $scope.dealPtIdDict[dealId];
         if (isDealMode) {
             $scope.context = $linq.Enumerable()
-                .From($scope.CostTestGroupDealDetails[ptId])
+                .From($scope.CostTestGroupDealDetails[$scope.dealPtIdDict[dealId]])
                 .Where(function (x) {
                     return x.DEAL_ID === dealId;
                 }).ToArray();
         } else {
             $scope.context = $linq.Enumerable()
-                .From($scope.CostTestGroupDetails[ptId])
+                .From($scope.CostTestGroupDetails[$scope.dealPtIdDict[dataItem.DEAL_ID]])
                 .Where(function (x) {
                     return x.DEAL_PRD_RNK === dealId;
                 }).ToArray();            
