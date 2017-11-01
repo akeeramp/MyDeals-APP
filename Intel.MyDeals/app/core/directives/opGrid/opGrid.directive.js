@@ -37,6 +37,15 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 return (item === undefined || item === null) ? defval : item;
             }
 
+            $scope.displayFrontEndDateMessage = function (dataItem) {
+                var today = new Date();
+                var isFrontendDeal = (dataItem.PROGRAM_PAYMENT.indexOf('Frontend') !== -1);
+                //var earlyDateRequested = (dataItem.START_DT < today);
+                var wipDealDraftStage = (dataItem.WF_STG_CD.indexOf('Draft') !== -1);
+
+                return (isFrontendDeal  && wipDealDraftStage);    
+            }
+
             $scope.ovlpData = [];
             $scope.stages = [];
             $scope.initDsLoaded = false;

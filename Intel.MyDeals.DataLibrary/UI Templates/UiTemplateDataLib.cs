@@ -786,7 +786,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 20,
                 AtrbCd = AttributeCodes.START_DT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                Template = "#=gridUtils.uiControlWrapper(data, 'START_DT', \"date:'MM/dd/yyyy'\")#",
+                Template = "#=gridUtils.uiStartDateWrapper(data, 'START_DT', \"date:'MM/dd/yyyy'\")#",
                 Label = "Deal Start Date",
                 IsFilterable = true,
                 IsSortable = true,

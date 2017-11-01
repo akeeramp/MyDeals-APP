@@ -308,14 +308,7 @@ namespace Intel.MyDeals.BusinessRules
                     ActionRule = MyDcActions.CheckVolume,
                     InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate}
-                },
-                new MyOpRule
-                {
-                    Title="Frontend Start Date Validation",
-                    ActionRule = MyDcActions.CheckFrontendDates,
-                    InObjType = new List<OpDataElementType> {OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL},
-                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnValidate}
-                },
+                },               
                 new MyOpRule
                 {
                     Title="Frontend can't be consumption",

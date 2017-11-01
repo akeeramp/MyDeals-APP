@@ -603,26 +603,7 @@ namespace Intel.MyDeals.BusinessRules
                 de.AddMessage("Volume must be a valid non-decimal number.");
             }
         }
-
-        public static void CheckFrontendDates(params object[] args)
-        {
-            MyOpRuleCore r = new MyOpRuleCore(args);
-            if (!r.IsValid) return;
-
-            IOpDataElement deStart = r.Dc.GetDataElement(AttributeCodes.START_DT);
-            string progPayment = r.Dc.GetDataElementValue(AttributeCodes.PROGRAM_PAYMENT);
-            if (string.IsNullOrEmpty(progPayment) || string.IsNullOrEmpty(deStart?.AtrbValue.ToString())) return;
-
-            DateTime startDate = DateTime.Parse(deStart.AtrbValue.ToString());
-            DateTime today = DateTime.Now.Date;
-
-            // Additional validation-for program payment=Front end, the deal st. date can not be past, it should be >= current date
-            if (progPayment.Contains("rontend") && startDate < today && !r.Dc.HasTracker())
-            {
-                deStart.AddMessage("The deal start date must be greater or equal to the current date if program payment is Frontend.");
-            }
-        }
-
+       
         public static void CompressJson(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
