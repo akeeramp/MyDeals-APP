@@ -27,6 +27,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
 
     var hasNoPermission = !$scope.root.CAN_EDIT_COST_TEST;
     var hasNoPermissionOvr = !$scope.root.CAN_EDIT_COST_TEST && window.usrRole !== "Legal";
+    var hasNoPermissionNotLegal = hasNoPermission || window.usrRole !== "Legal";
     var hasPermissionPrice = window.usrRole === "DA" || (window.usrRole === "GA" && window.isSuper);
     
     $timeout(function () {
@@ -216,7 +217,8 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
                                 val = "<div style='text-align: center;'>" + grp + "</div>";
                             }
 
-                            if (secureFields.indexOf(cols[c].field) < 0 || !hasNoPermission) {
+                            //if (secureFields.indexOf(cols[c].field) < 0 || !hasNoPermission || !hasNoPermissionOvr) {
+                            if (!cols[c].hidden) {
                                 if (cols[c].field === "PRC_CST_TST_STS") {
                                     var icon = gridPctUtils.getResultSingleIcon(rollupPctBydeal[response[i]["DEAL_ID"]], "font-size: 20px !important;");
                                     tr += "<td style='padding-left: 0; padding-right: 6px; width:" + (parseInt(cols[c].width) - 6) + "px'><div style='text-align: center;'>" + (cols[c].parent ? icon : "") + "<div></td>";
@@ -431,7 +433,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
             title: "Max RPU",
             format: "{0:c}",
             width: "100px",
-            hidden: hasNoPermission,
+            hidden: hasNoPermissionNotLegal,
             parent: false
         },
         "ECAP_PRC": {
@@ -493,7 +495,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
             title: "Retail Pull $",
             format: "{0:c}",
             width: "140px",
-            hidden: hasNoPermission,
+            hidden: hasNoPermissionNotLegal,
             parent: false
         },
         "MKT_SEG": {

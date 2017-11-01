@@ -353,6 +353,17 @@ namespace Intel.MyDeals.DataLibrary
             items.Add(new UiTemplateContainerItem
             {
                 Id = 29,
+                AtrbCd = AttributeCodes.PRD_EXCLDS_IDS,
+                Label = "Exclude Product Ids",
+                ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
+                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
+                Width = 220,
+                IsReadOnly = false,
+                IsHidden = true
+            });
+            items.Add(new UiTemplateContainerItem
+            {
+                Id = 29,
                 AtrbCd = AttributeCodes.ECAP_PRICE,
                 ObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },

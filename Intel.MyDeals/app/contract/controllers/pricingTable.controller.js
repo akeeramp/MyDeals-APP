@@ -354,6 +354,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
             if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD === "VOL_TIER") {
                 sheet.range(root.colToLetter['PRD_EXCLDS'] + (rowStart)).value(usrInput.excludeProducts);
+                //sheet.range(root.colToLetter['PRD_EXCLDS_IDS'] + (rowStart)).value(usrInput.excludeProductIds);
             }
 
             systemModifiedProductInclude = false;
@@ -451,7 +452,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     }
 
     // Performance and UX... removed this.  We will need to handle these in the MT rules
-    var flushSysPrdFields = ["PTR_USER_PRD", "PRD_EXCLDS", "START_DT", "END_DT", "GEO_COMBINED", "PROD_INCLDS", "PROGRAM_PAYMENT"];
+    var flushSysPrdFields = ["PTR_USER_PRD", "PRD_EXCLDS", "PRD_EXCLDS_IDS", "START_DT", "END_DT", "GEO_COMBINED", "PROD_INCLDS", "PROGRAM_PAYMENT"];
     var flushTrackerNumFields = ["START_DT", "END_DT", "GEO_COMBINED"];
 
     // On Spreadsheet change
@@ -1750,6 +1751,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     var object = {
                         "ROW_NUMBER": obj.ROW_NUMBER,
                         "USR_INPUT": obj.PRD_EXCLDS,
+                        "PRD_EXCLDS_IDS": obj.PRD_EXCLDS_IDS,
                         "EXCLUDE": true,
                         "FILTER": obj.PROD_INCLDS,
                         "START_DATE": moment(obj.START_DT).format("l"),
@@ -1869,6 +1871,10 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     var excludeProducts = userInput.excludeProducts;
                     data[r].PRD_EXCLDS = excludeProducts;
                     sourceData[r].PRD_EXCLDS = excludeProducts;
+
+                    var excludeProductIds = userInput.excludeProductIds;
+                    data[r].PRD_EXCLDS_IDS = excludeProductIds;
+                    sourceData[r].PRD_EXCLDS_IDS = excludeProductIds;
                 }
             }
         }
@@ -1964,6 +1970,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD === "VOL_TIER") {
                                     data[r].PRD_EXCLDS = products.excludeProducts;
                                     sourceData[r].PRD_EXCLDS = products.excludeProducts;
+                                    data[r].PRD_EXCLDS_IDS = products.excludeProductIds;
+                                    sourceData[r].PRD_EXCLDS_IDS = products.excludeProductIds;
                                 }
 
                                 // For VOL_TIER update the merged cells
@@ -2062,15 +2070,16 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         if (!validProducts) {
             return "";
         }
-        var input = { 'contractProducts': '', 'excludeProducts': '' };
+        var input = { 'contractProducts': '', 'excludeProducts': '', 'excludeProductIds': '' };
         for (var prd in validProducts) {
             if (validProducts.hasOwnProperty(prd)) {
                 var contractProducts = "";
                 var excludeProducts = "";
+                var excludeProductIds = "";
 
                 // Include products
                 var products = validProducts[prd].filter(function (x) {
-                    return x.EXCLUDE == false;
+                    return x.EXCLUDE === false;
                 });
                 if (products.length !== 0) {
                     var contDerivedUserInput = $filter('unique')(products, 'HIER_VAL_NM');
@@ -2079,24 +2088,26 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     } else {
                         contractProducts = contDerivedUserInput[0].DERIVED_USR_INPUT;
                     }
-                    if (contractProducts != "") {
+                    if (contractProducts !== "") {
                         input.contractProducts = input.contractProducts === "" ? contractProducts : input.contractProducts + "," + contractProducts;
                     }
                 }
 
                 // Exclude Products
                 var products = validProducts[prd].filter(function (x) {
-                    return x.EXCLUDE == true;
+                    return x.EXCLUDE === true;
                 });
                 if (products.length !== 0) {
                     var exclDerivedUserInput = $filter('unique')(products, 'HIER_VAL_NM');
-                    if (products.length === 1 && exclDerivedUserInput[0].DERIVED_USR_INPUT.trim().toLowerCase() == exclDerivedUserInput[0].HIER_NM_HASH.trim().toLowerCase()) {
+                    if (products.length === 1 && exclDerivedUserInput[0].DERIVED_USR_INPUT.trim().toLowerCase() === exclDerivedUserInput[0].HIER_NM_HASH.trim().toLowerCase()) {
                         excludeProducts = exclDerivedUserInput[0].HIER_VAL_NM;
                     } else {
-                        excludeProducts = exclDerivedUserInput[0].DERIVED_USR_INPUT
+                        excludeProducts = exclDerivedUserInput[0].DERIVED_USR_INPUT;
                     }
-                    if (excludeProducts != "") {
+                    excludeProductIds = exclDerivedUserInput[0].PRD_MBR_SID;
+                    if (excludeProducts !== "") {
                         input.excludeProducts = input.excludeProducts === "" ? excludeProducts : input.excludeProducts + "," + excludeProducts;
+                        input.excludeProductIds = input.excludeProductIds === "" ? excludeProductIds : input.excludeProductIds + "," + excludeProductIds;
                     }
                 }
             }
