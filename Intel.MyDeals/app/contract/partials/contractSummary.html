@@ -229,7 +229,7 @@
                                 <i class="chevron linkable" ng-class="{'intelicon-down': isCollapsed, 'intelicon-right-next': !isCollapsed}"></i>
                             </td>
                             <td style="width: 60px; text-align: center;" ng-show="canEdit">
-                                <div ng-if="canAction('Approve', ps, true)" ng-attr-title="{{actionReason('Approve', ps)}}">
+                                <div ng-if="canAction('Approve', ps, true)" ng-attr-title="{{actionReason('Approve', ps)}}" ng-show="ps.WF_STG_CD !== 'Pending'">
                                     <input type="checkbox" name="radGrp{{ps.DC_ID}}" dcId="{{ps.DC_ID}}"
                                            ng-class="{'disabled': !canAction('Approve', ps, false)}"
                                            ng-disabled="!canAction('Approve', ps, false)"

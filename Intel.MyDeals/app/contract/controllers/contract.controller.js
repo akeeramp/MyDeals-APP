@@ -313,15 +313,14 @@
                     if (response.data.length <= 1) {
                         $scope.contractData._behaviors.isRequired["CUST_ACCNT_DIV_UI"] = false;
                         $scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV_UI"] = true;
-                        $scope.contractData.CUST_ACCNT_DIV_UI = response.data[0].CUST_DIV_NM.toString();
+                        if ($scope.contractData.CUST_ACCNT_DIV_UI !== undefined) $scope.contractData.CUST_ACCNT_DIV_UI = response.data[0].CUST_DIV_NM.toString();
                     } else {
                         $scope.contractData._behaviors.isHidden["CUST_ACCNT_DIV_UI"] = false;
                         $scope.contractData._behaviors.isRequired["CUST_ACCNT_DIV_UI"] = false; // never required... blank now mean ALL
                     }
                     if (!!$("#CUST_ACCNT_DIV_UI").data("kendoMultiSelect")) {
                         $("#CUST_ACCNT_DIV_UI").data("kendoMultiSelect").dataSource.data(response.data);
-                        $("#CUST_ACCNT_DIV_UI").data("kendoMultiSelect")
-                            .value($scope.contractData.CUST_ACCNT_DIV_UI);
+                        $("#CUST_ACCNT_DIV_UI").data("kendoMultiSelect").value($scope.contractData.CUST_ACCNT_DIV_UI);
                     }
                 },
                     function (response) {
