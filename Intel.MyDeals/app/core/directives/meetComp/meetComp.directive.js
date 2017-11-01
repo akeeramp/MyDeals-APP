@@ -970,12 +970,12 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         $scope.isBusy = false;
                                         $scope.tempUpdatedList = [];
                                         $scope.meetCompUpdatedList = [];
+                                        $scope.$root.$broadcast('refreshContractData');
                                     },
-                                        function (response) {
-                                            logger.error("Unable to save data", response, response.statusText);
-                                            $scope.isBusy = false;
-                                        });
-
+                                    function (response) {
+                                        logger.error("Unable to save data", response, response.statusText);
+                                        $scope.isBusy = false;
+                                    });
                                 }
                                 else {
                                     kendo.alert('No new Meet Comp Changes detected to be saved.');

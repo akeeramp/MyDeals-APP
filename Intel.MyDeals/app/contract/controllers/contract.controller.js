@@ -2745,6 +2745,12 @@
             return true;
         }
 
+
+        $scope.$on('refreshContractData', function (event, args) {
+            $scope.refreshContractData();
+        });
+
+
         // **** NEW/EDIT PRICING TABLE Methods ****
         //
         $scope.newPricingTable = util.clone($scope.templates.ObjectTemplates.PRC_TBL.ECAP);
