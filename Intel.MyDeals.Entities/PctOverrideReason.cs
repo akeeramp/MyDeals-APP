@@ -18,7 +18,7 @@ namespace Intel.MyDeals.Entities
 
 
         [DataMember]
-        public System.Int32 PRD_MBR_SIDS { set; get; }
+        public string PRD_MBR_SIDS { set; get; }
 
 
         [DataMember]
