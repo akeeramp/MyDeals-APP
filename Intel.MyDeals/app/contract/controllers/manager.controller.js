@@ -233,11 +233,13 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 
     $scope.stageInPs = function (ps) {
         var stg = [];
-        for (var c = 0; c < root.contractData.PRC_ST.length; c++) {
-            if (root.contractData.PRC_ST[c].filtered)
-                stg.push(root.contractData.PRC_ST[c].WF_STG_CD);
+        if (root.contractData.PRC_ST !== undefined) {
+            for (var c = 0; c < root.contractData.PRC_ST.length; c++) {
+                if (root.contractData.PRC_ST[c].filtered)
+                    stg.push(root.contractData.PRC_ST[c].WF_STG_CD);
+            }
+            if (stg.length === 0 || stg.indexOf(ps.WF_STG_CD) >= 0) return ps;
         }
-        if (stg.length === 0 || stg.indexOf(ps.WF_STG_CD) >= 0) return ps;
         return null;
     }
 
@@ -409,11 +411,13 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 
         // look for checked ending
         var ps = root.contractData.PRC_ST;
-        for (var p = 0; p < ps.length; p++) {
-            if (ps[p].WF_STG_CD === "Pending" && $("#rad_approve_" + ps[p].DC_ID)[0].checked) {
-                $scope.isPending = true;
-                root.contractData.CUST_ACCPT = "Accepted";
-                checkForRequirements = true;
+        if (ps !== undefined) {
+            for (var p = 0; p < ps.length; p++) {
+                if (ps[p].WF_STG_CD === "Pending" && $("#rad_approve_" + ps[p].DC_ID)[0].checked) {
+                    $scope.isPending = true;
+                    root.contractData.CUST_ACCPT = "Accepted";
+                    checkForRequirements = true;
+                }
             }
         }
 
@@ -475,9 +479,11 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 
         if (!!approvePending && approvePending === true) {
             var ps = root.contractData.PRC_ST;
-            for (var p = 0; p < ps.length; p++) {
-                if (ps[p].WF_STG_CD === "Pending") {
-                    $("#rad_approve_" + ps[p].DC_ID)[0].checked = true;
+            if (ps !== undefined) {
+                for (var p = 0; p < ps.length; p++) {
+                    if (ps[p].WF_STG_CD === "Pending") {
+                        $("#rad_approve_" + ps[p].DC_ID)[0].checked = true;
+                    }
                 }
             }
         }
