@@ -195,9 +195,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     }
                 }
                 $scope.opOptions.groupColumns = newObj;
-                //debugger;
                 //util.clone($scope.opOptions[source].groupColumns);
-                //debugger;
             }
 
             // Apply the default layout.  Later, we'll apply the custom layout if there is one.
@@ -526,7 +524,6 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     },
                     update: function (e) {
                         util.console("contractDs update Started");
-                        //debugger;
                         var source = $scope.opData;
                         // locate item in original datasource and update it
                         for (var i = 0; i < e.data.models.length; i++) {
@@ -1500,14 +1497,12 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
                     }
                 }
-
                 $scope.ovlpDataSource.read();
 
                 objsetService.updateOverlappingDeals(data, YCS2_OVERLAP_OVERRIDE)
                     .then(function (response) {
                         if (response.data[0].PRICING_TABLES > 0) {
                             // Change in Deal Editor
-
                             // findIndex() is not supported in IE11 and hence replacing with 'some()' that is supported in all browsers - VN
                             var indx = -1;
                             $scope.opData.some(function (e, i) {
@@ -1928,9 +1923,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 }
             }
 
-            $scope.saveAndValidateGrid = function () {
-
-
+            $scope.overlappingDealsSetup = function () {
                 var dealType = $scope.dealTypes[0];
                 if (dealType.toUpperCase() === "ECAP" && $scope.isOverlapNeeded) {
                     util.console("Overlapping Deals Started");
@@ -1945,7 +1938,6 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     objsetService.getOverlappingDeals(pricingTableID)
                         .then(function (response) {
                             util.console("Overlapping Deals Returned");
-                                //debugger;
                             if (response.data) {
                                 if (response.data.length > 0) {
 
@@ -1978,9 +1970,6 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
                                     //Hiding Column Preference and Grid Preferences
                                     $scope.isLayoutConfigurable = false;
-
-                                    $scope.syncAndValidateWipDeals();
-
                                 }
                                 else {
                                     //Remove overlapping tab
@@ -1995,34 +1984,32 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                                     }
 
                                     util.console("Remove overlapping tab DONE");
-                                    $scope.syncAndValidateWipDeals();
                                 }
-
-                            } else {
-                                $scope.syncAndValidateWipDeals();
                             }
                         },
                         function (response) {
-                            $scope.syncAndValidateWipDeals();
+                            //empty after moving sync and validate to happen before the getOverlappingDeals call is made
                         });
-
-
-                } else {  //DE31324: fix for non-ECAP Dealtypes - this is the default behavior for VT/Program deals for now until we do overlapping deal changes (if we do?) for those types as well
-                    $scope.syncAndValidateWipDeals();
                 }
+            }
+
+            $scope.saveAndValidateGrid = function () {
+
+                //procedures within sync and validate wip deals must complete before overlapping deals setup is run to ensure user changes are accounted for, thus we pass in overlappingDealsSetup as a callback function
+                $scope.syncAndValidateWipDeals($scope.overlappingDealsSetup)
 
                 return;
             }
 
-            $scope.syncAndValidateWipDeals = function() {
+            $scope.syncAndValidateWipDeals = function(callback) {
                 $scope.parentRoot.setBusy("Validating your data...", "Please wait as we validate your information!");
                 $timeout(function () {
                     util.console("syncAndValidateWipDeals");
                     util.console("contractDs.sync Started");
                     $scope.contractDs.sync();
                     util.console("contractDs.sync Ended");
-                    $scope.root.validateWipDeals();
-                }, 100);
+                    $scope.root.validateWipDeals(callback);
+                }, 100)
             }
 
             $scope.validateRow = function (row, scope) {
@@ -2057,7 +2044,6 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                 //}, scope);
 
                 // check for errors
-                //debugger;
                 angular.forEach(beh.isError, function (value, key) {
                     if (!!$scope.opOptions.model.fields[key] && beh.isError[key] && (beh.isReadOnly[key] === undefined || !beh.isReadOnly[key]) && (beh.isHidden[key] === undefined || !beh.isHidden[key])) {
                         $scope.increaseBadgeCnt(key);

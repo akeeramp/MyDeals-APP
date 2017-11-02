@@ -1940,7 +1940,7 @@
 
         // **** SAVE CONTRACT Methods ****
         //
-        $scope.saveEntireContractBase = function (stateName, forceValidation, forcePublish, toState, toParams, delPtr) {
+        $scope.saveEntireContractBase = function (stateName, forceValidation, forcePublish, toState, toParams, delPtr, callback) {
             if (!$scope._dirty && !forceValidation) {
             	return;
             }
@@ -1951,12 +1951,12 @@
                 if (!!$scope.isBusyMsgTitle && $scope.isBusyMsgTitle !== "") return;
             }
 
-            $scope.saveEntireContractRoot(stateName, forceValidation, forcePublish, toState, toParams, delPtr);
+            $scope.saveEntireContractRoot(stateName, forceValidation, forcePublish, toState, toParams, delPtr, null, callback);
 
             return;
         }
 
-        $scope.saveEntireContractRoot = function (stateName, forceValidation, forcePublish, toState, toParams, delPtr, bypassLowerContract) {
+        $scope.saveEntireContractRoot = function (stateName, forceValidation, forcePublish, toState, toParams, delPtr, bypassLowerContract, callback) {
             if (forceValidation === undefined || forceValidation === null) forceValidation = false;
             if (forcePublish === undefined || forcePublish === null) forcePublish = false;
             if (bypassLowerContract === undefined || bypassLowerContract === null) bypassLowerContract = false;
@@ -2082,7 +2082,11 @@
                     $scope.isAutoSaving = false;
 
                     util.console("updateContractAndCurPricingTable Complete");
-
+                    
+                    //if a callback function is provided, invoke it now once everything else is completed
+                    if (!!callback) {
+                        callback();
+                    }
                 },
                 function (response) {
                     $scope.setBusy("Error", "Could not save the contract.");
@@ -3109,8 +3113,8 @@
             }
         }
 
-        $scope.validateWipDeals = function () {
-            $scope.saveEntireContractBase($state.current.name, true, true);
+        $scope.validateWipDeals = function (callback) {
+            $scope.saveEntireContractBase($state.current.name, true, true, null, null, null, callback);
         }
 
         $scope.toggleTerms = function () {
