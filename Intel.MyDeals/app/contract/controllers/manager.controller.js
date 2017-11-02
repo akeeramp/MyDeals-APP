@@ -50,19 +50,22 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 
     // loop through data and setup deal types for faster sorting
     var hasPendingStage = false;
-    for (var s = 0; s < root.contractData.PRC_ST.length; s++) {
-        var sItem = root.contractData.PRC_ST[s];
-        sItem.dealType = [];
-        if (sItem.PRC_TBL !== undefined) {
-            for (var pt = 0; pt < sItem.PRC_TBL.length; pt++) {
-                var ptItem = sItem.PRC_TBL[pt];
-                sItem.dealType.push(ptItem.OBJ_SET_TYPE_CD);
-            }
+    debugger;
+    if (root.contractData.PRC_ST !== undefined) {
+        for (var s = 0; s < root.contractData.PRC_ST.length; s++) {
+            var sItem = root.contractData.PRC_ST[s];
+            sItem.dealType = [];
+            if (sItem.PRC_TBL !== undefined) {
+                for (var pt = 0; pt < sItem.PRC_TBL.length; pt++) {
+                    var ptItem = sItem.PRC_TBL[pt];
+                    sItem.dealType.push(ptItem.OBJ_SET_TYPE_CD);
+                }
 
-            //$scope.hideIfNotPending
-        }
-        if (sItem.WF_STG_CD === "Pending") {
-            hasPendingStage = true;
+                //$scope.hideIfNotPending
+            }
+            if (sItem.WF_STG_CD === "Pending") {
+                hasPendingStage = true;
+            }
         }
     }
     if (!hasPendingStage) $scope.hideIfNotPending = true;
@@ -274,18 +277,22 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
         $scope.isAllCollapsed = !$scope.isAllCollapsed;
     }
 
-    $scope.clearFilter = function() {
-        for (var c = 0; c < root.contractData.PRC_ST.length; c++) {
-            root.contractData.PRC_ST[c].filtered = false;
+    $scope.clearFilter = function () {
+        if (root.contractData.PRC_ST !== undefined) {
+            for (var c = 0; c < root.contractData.PRC_ST.length; c++) {
+                root.contractData.PRC_ST[c].filtered = false;
+            }
+            $timeout(function () {
+                $scope.$apply();
+            }, 500);
         }
-        $timeout(function () {
-            $scope.$apply();
-        }, 500);
     }
 
     $scope.hasFilter = function () {
-        for (var c = 0; c < root.contractData.PRC_ST.length; c++) {
-            if (root.contractData.PRC_ST[c].filtered) return true;
+        if (root.contractData.PRC_ST !== undefined) {
+            for (var c = 0; c < root.contractData.PRC_ST.length; c++) {
+                if (root.contractData.PRC_ST[c].filtered) return true;
+            }
         }
         return false;
     }
