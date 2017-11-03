@@ -2085,6 +2085,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     }
 
     function updateUserInput(validProducts) {
+
         if (!validProducts) {
             return "";
         }
@@ -2137,12 +2138,13 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         if (!validProducts) {
             return "";
         }
-        var products = { 'contractProducts': '', 'excludeProducts': '' };
+        var products = { 'contractProducts': '', 'excludeProducts': '', 'excludeProductIds': '' };
         for (var prd in validProducts) {
             if (!!autoValidatedProducts && autoValidatedProducts.hasOwnProperty(prd)) {
                 var autoTranslated = {};
                 autoTranslated[prd] = autoValidatedProducts[prd];
-                var updatedUserInput = updateUserInput(autoTranslated)
+
+                var updatedUserInput = updateUserInput(autoTranslated);
 
                 // Include products
                 var autoValidContProd = updatedUserInput.contractProducts;
@@ -2157,8 +2159,9 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 }
             }
             else if (validProducts.hasOwnProperty(prd)) {
-                products.contractProducts = getUserInput(products.contractProducts, validProducts[prd], "I");
-                products.excludeProducts = getUserInput(products.excludeProducts, validProducts[prd], "E");
+                products.contractProducts = getUserInput(products.contractProducts, validProducts[prd], "I", 'HIER_VAL_NM');
+                products.excludeProducts = getUserInput(products.excludeProducts, validProducts[prd], "E", 'HIER_VAL_NM');
+                products.excludeProductIds = getUserInput(products.excludeProducts, validProducts[prd], "E", 'PRD_MBR_SID');
             }
         }
         return products;
@@ -2169,17 +2172,19 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         return (item.PRD_CAT_NM + " " + (item.BRND_NM === 'NA' ? "" : item.BRND_NM) + " " + (item.FMLY_NM === 'NA' ? "" : item.FMLY_NM)).trim();
     }
 
-    function getUserInput(updatedUserInput, products, typeOfProduct) {
+    function getUserInput(updatedUserInput, products, typeOfProduct, fieldNm) {
+
         var userInput = products.filter(function (x) {
-            return x.EXCLUDE == (typeOfProduct == "E");
+            return x.EXCLUDE === (typeOfProduct === "E");
         });
-        userInput = $filter('unique')(userInput, 'HIER_VAL_NM');
+        userInput = $filter('unique')(userInput, fieldNm);
+
         userInput = userInput.map(function (elem) {
-            return elem.HIER_VAL_NM;
+            return elem[fieldNm];
         }).join(",");
 
         if (userInput !== "") {
-            updatedUserInput = updatedUserInput === "" ? userInput : updatedUserInput + "," + userInput;
+            updatedUserInput = updatedUserInput === "" || fieldNm !== 'HIER_VAL_NM' ? userInput : updatedUserInput + "," + userInput;
         }
         return updatedUserInput;
     }
