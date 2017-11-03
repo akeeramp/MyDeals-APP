@@ -593,16 +593,18 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                             data: tempData
                                         },
                                         change: function (e) {
-                                            var selectedIndx = this.selectedIndex;
+                                            var selectedIndx = this.selectedIndex;                                            
                                             $scope.selectedCustomerText = this.value().trim();
+                                            this.value($scope.selectedCustomerText);
                                             $scope.selectedCust = options.model.CUST_NM_SID;
                                             $scope.curentRow = options.model.RW_NM;
-                                            if (selectedIndx == -1 && this.text().trim().length > 0) {                                                
+                                            if (selectedIndx == -1 && $scope.selectedCustomerText.trim().length > 0) {                                                
                                                 $scope.addSKUForCustomer("0");
+                                                options.model.COMP_SKU = $scope.selectedCustomerText.trim();
                                             }
-                                            else if (selectedIndx > -1 && this.text().trim().length > 0) {
+                                            else if (selectedIndx > -1 && $scope.selectedCustomerText.trim().length > 0) {
                                                 var selectedValue = e.sender.listView._dataItems["0"].RW_NM;
-                                                options.model.COMP_SKU = this.text().trim();
+                                                options.model.COMP_SKU = $scope.selectedCustomerText.trim();
 
                                                 var tempprcData = [];
                                                 options.model.COMP_PRC = parseFloat($scope.meetCompMasterdata[selectedValue - 1].COMP_PRC).toFixed(2);
