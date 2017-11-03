@@ -2104,7 +2104,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     if (products.length === 1 && contDerivedUserInput[0].DERIVED_USR_INPUT.trim().toLowerCase() == contDerivedUserInput[0].HIER_NM_HASH.trim().toLowerCase()) {
                         contractProducts = contDerivedUserInput[0].HIER_VAL_NM;
                     } else {
-                        contractProducts = contDerivedUserInput[0].DERIVED_USR_INPUT;
+                        contractProducts = contDerivedUserInput.length == 1 ? getFullNameOfProduct(contDerivedUserInput[0], contDerivedUserInput[0].DERIVED_USR_INPUT) : contDerivedUserInput[0].DERIVED_USR_INPUT;
                     }
                     if (contractProducts !== "") {
                         input.contractProducts = input.contractProducts === "" ? contractProducts : input.contractProducts + "," + contractProducts;
@@ -2120,7 +2120,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     if (products.length === 1 && exclDerivedUserInput[0].DERIVED_USR_INPUT.trim().toLowerCase() === exclDerivedUserInput[0].HIER_NM_HASH.trim().toLowerCase()) {
                         excludeProducts = exclDerivedUserInput[0].HIER_VAL_NM;
                     } else {
-                        excludeProducts = exclDerivedUserInput[0].DERIVED_USR_INPUT;
+                        excludeProducts = exclDerivedUserInput.length == 1 ? getFullNameOfProduct(exclDerivedUserInput[0], exclDerivedUserInput[0].DERIVED_USR_INPUT) : exclDerivedUserInput[0].DERIVED_USR_INPUT;
                     }
                     excludeProductIds = exclDerivedUserInput[0].PRD_MBR_SID;
                     if (excludeProducts !== "") {
@@ -2164,8 +2164,8 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         return products;
     }
 
-    function getFullNameOfProduct(item) {
-        if (item.PRD_ATRB_SID > 7005) return item.HIER_VAL_NM;
+    function getFullNameOfProduct(item, prodName) {
+        if (item.PRD_ATRB_SID > 7005) return prodName;
         return (item.PRD_CAT_NM + " " + (item.BRND_NM === 'NA' ? "" : item.BRND_NM) + " " + (item.FMLY_NM === 'NA' ? "" : item.FMLY_NM)).trim();
     }
 
