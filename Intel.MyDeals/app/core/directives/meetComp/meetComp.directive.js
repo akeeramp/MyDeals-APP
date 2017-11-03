@@ -15,8 +15,8 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
         transclude: true,
         templateUrl: '/app/core/directives/meetComp/meetComp.directive.html',
         controller: ['$scope', 'dataService', function ($scope, dataService) {
-            $scope.CAN_VIEW_MEET_COMP = securityService.chkDealRules('CAN_VIEW_MEET_COMP', window.usrRole, null, null, null);
-            $scope.CAN_EDIT_MEET_COMP = securityService.chkDealRules('C_EDIT_MEET_COMP', window.usrRole, null, null, null);
+            $scope.CAN_VIEW_MEET_COMP = true; //securityService.chkDealRules('CAN_VIEW_MEET_COMP', window.usrRole, null, null, null);
+            $scope.CAN_EDIT_MEET_COMP = true; //securityService.chkDealRules('C_EDIT_MEET_COMP', window.usrRole, null, null, null);
             $scope.isDataAvaialable = false;
             $scope.errorList = [];
             $scope.validationMessage = "";
