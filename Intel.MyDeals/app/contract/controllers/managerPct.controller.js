@@ -28,7 +28,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
     var hasNoPermission = !$scope.root.CAN_EDIT_COST_TEST;
     var hasNoPermissionOvr = !$scope.root.CAN_EDIT_COST_TEST && window.usrRole !== "Legal";
     var hasNoPermissionNotLegal = hasNoPermission || window.usrRole !== "Legal";
-    var hasPermissionPrice = window.usrRole === "DA" || (window.usrRole === "GA" && window.isSuper);
+    var hasPermissionPrice = window.usrRole === "DA" || window.usrRole === "Legal" || ((window.usrRole === "GA" || window.usrRole === "SA") && window.isSuper);
     
     $timeout(function () {
         $("#dealTypeDiv").removeClass("active");
@@ -191,7 +191,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
                         }
                     }
                 }
-
+                
                 for (var i = 0; i < response.length; i++) {
                     var item = response[i];
 
@@ -449,7 +449,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
             title: "ECAP Floor",
             format: "{0:c}",
             width: "100px",
-            hidden: hasNoPermission,
+            hidden: !hasPermissionPrice,
             parent: false
         },
         "LOW_NET_PRC": {
@@ -464,7 +464,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
             title: "Cost",
             format: "{0:c}",
             width: "100px",
-            hidden: hasNoPermission,
+            hidden: !hasPermissionPrice,
             parent: false
         },
         "COST_TEST_OVRRD_FLG": {
@@ -495,7 +495,7 @@ function managerPctController($scope, $state, objsetService, logger, $timeout, d
             title: "Retail Pull $",
             format: "{0:c}",
             width: "140px",
-            hidden: hasNoPermissionNotLegal,
+            hidden: !hasPermissionPrice,
             parent: false
         },
         "MKT_SEG": {
