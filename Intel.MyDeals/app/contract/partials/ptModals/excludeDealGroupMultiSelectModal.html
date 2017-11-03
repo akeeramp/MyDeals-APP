@@ -1,7 +1,5 @@
 ﻿<link href="css/productselector.css" rel="stylesheet" />
 
-
-
 <div class="modal-content" style="background-color:#1a3e6f;overflow-y:auto;overflow-x:hidden; border: 1px solid #1a3e6f;">
 	<!--<div class="modal-header">
 		<div class="row">
@@ -34,15 +32,17 @@
 				</div>
 				<div class="row" style="margin:0px">
 					<!-- Grid -->
-					<div id="suggestionProdGrid"
-						 kendo-grid="grid"
-						 kendo-grid-check-box 
-						 k-grid-checkbox="vm"
-						 checkbox-is-generic="true"
-						 checkbox-attr="'OVLP_DEAL_ID'"
-						 class="prodCorrector opUiContainer md kendoGridHeight prodCorrector-grid k-grid"
-						 k-on-change="vm.addChange(data, dataItem, columns)"
-						 k-options="vm.gridOptionsSuggested">
+					<div style="height: 250px; overflow: scroll;"> <!--  -->
+						<div id="suggestionProdGrid"
+							 kendo-grid="grid"
+							 kendo-grid-check-box
+							 k-grid-checkbox="vm"
+							 checkbox-is-generic="true"
+							 checkbox-attr="'OVLP_DEAL_ID'"
+							 class="opUiContainer kendoGridHeight md k-grid"
+							 k-on-change="vm.addChange(data, dataItem, columns)"
+							 k-options="vm.gridOptionsSuggested">
+						</div>
 					</div>
 				</div>
 

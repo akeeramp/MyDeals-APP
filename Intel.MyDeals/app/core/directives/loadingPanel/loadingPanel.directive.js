@@ -1,5 +1,5 @@
 ﻿// SUMMARY:		Loading panel that fills the enitre parent's height and width. 
-// EXAMPLE USAGE:	 <loading-panel show="true" header="'TEST'" description="'hello'"></loading-panel>
+// EXAMPLE USAGE:	 <loading-panel show="true" header="'TEST'" description="'hello'" msg-type="'Info'"></loading-panel>
 
 angular
     .module('app.core')
@@ -12,7 +12,8 @@ function loadingPanel() {
 		scope: {
 			show: '=',
 			header: '=',
-			description: '='
+			description: '=',
+			msgType: '='
 		},
 		restrict: 'E',
 		transclude: 'true',

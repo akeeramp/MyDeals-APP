@@ -84,6 +84,12 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
     root.isPtr = $state.current.name === "contract.manager.strategy";
     root.isWip = $state.current.name === "contract.manager.strategy.wip";
 
+    var productValidationDependencies = [
+		"GEO_COMBINED",
+		"PROGRAM_PAYMENT",
+		"PROD_INCLDS"
+    ]
+	
     function init() {
         // force a resize event to format page
         //$scope.resizeEvent();
@@ -280,7 +286,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         root.wipData = root.pricingTableData.WIP_DEAL;
 
-        root.setBusy("Drawing Grid", "Applying security to the grid.", true);
+        root.setBusy("Drawing Grid", "Applying security to the grid.", "Info", true);
     }
 
     function getFormatedGeos(geos) {
@@ -1739,6 +1745,50 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 return x.ROW_NUMBER == currentRowNumber;
             });
         }
+ 
+
+        var hasProductDependencyErr = false;
+
+    	// Validate columns that product is dependent on
+        for (var i=0; i<currentPricingTableRowData.length; i++) {			
+        	for (var d = 0; d < productValidationDependencies.length; d++) {
+        		if (currentPricingTableRowData[i][productValidationDependencies[d]] === null || currentPricingTableRowData[i][productValidationDependencies[d]] === "") {
+
+        			if (currentPricingTableRowData[i]._behaviors === undefined) { currentPricingTableRowData[i]._behaviors = {} }
+        			if (currentPricingTableRowData[i]._behaviors.isError === undefined) { currentPricingTableRowData[i]._behaviors.isError = {} }
+        			if (currentPricingTableRowData[i]._behaviors.validMsg === undefined) { currentPricingTableRowData[i]._behaviors.validMsg = {} }
+        			if (currentPricingTableRowData[i]._behaviors.isRequired === undefined) { currentPricingTableRowData[i]._behaviors.isRequired = {} }
+
+        			currentPricingTableRowData[i]._behaviors.isError[productValidationDependencies[d]] = true;
+        			currentPricingTableRowData[i]._behaviors.validMsg[productValidationDependencies[d]] = "This field is required.";
+        			currentPricingTableRowData[i]._behaviors.isRequired[productValidationDependencies[d]] = true;
+        			hasProductDependencyErr = true;
+        		}
+        		else {
+        			if (currentPricingTableRowData[i]._behaviors !== undefined 
+        				&& currentPricingTableRowData[i]._behaviors.isError !== undefined
+						&& currentPricingTableRowData[i]._behaviors.validMsg !== undefined
+						&& currentPricingTableRowData[i]._behaviors.isRequired !== undefined)
+        			{
+        				delete currentPricingTableRowData[i]._behaviors.isError[productValidationDependencies[d]];
+        				delete currentPricingTableRowData[i]._behaviors.validMsg[productValidationDependencies[d]];
+        				delete currentPricingTableRowData[i]._behaviors.isRequired[productValidationDependencies[d]];
+        			}
+        		}
+        	}
+        }
+
+        if (hasProductDependencyErr) {
+			// Sync to show errors
+        	root.syncCellsOnAllRows(currentPricingTableRowData);
+
+			// Tell user to fix errors
+        	root.setBusy("Not saved. Please fix errors.", "Please fix the errors so we can properly validate your products", "Error");
+        	$timeout(function () {
+        		root.setBusy("", "");
+        	}, 1300);
+        	return;
+		}
 
         // Pricing table rows products to be translated
         var pricingTableRowData = currentPricingTableRowData.filter(function (x) {
@@ -2011,7 +2061,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     deleteRowFromCorrector(data);
                     root.spreadDs.sync();
                     if (root.spreadDs.data().length === 0) {
-                        root.setBusy("No Products Found", "Please add products.");
+                    	root.setBusy("No Products Found", "Please add products.", "Warning");
                         $timeout(function () {
                             root.setBusy("", "");
                         }, 2000);

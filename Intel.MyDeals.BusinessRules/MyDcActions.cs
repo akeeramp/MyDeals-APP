@@ -1023,7 +1023,23 @@ namespace Intel.MyDeals.BusinessRules
 
 		public static void CheckMeetComp(params object[] args)
 		{
-			// TODO
+			MyOpRuleCore r = new MyOpRuleCore(args);
+			if (!r.IsValid) return;
+
+			IOpDataElement sysPrd = r.Dc.GetDataElement(AttributeCodes.PTR_SYS_PRD);
+			IOpDataElement usrPrd = r.Dc.GetDataElement(AttributeCodes.PTR_USER_PRD);
+			IOpDataElement meetComp = r.Dc.GetDataElement(AttributeCodes.MEET_COMP_PRICE_QSTN);
+			if (meetComp == null || sysPrd == null) return;
+
+			Dictionary<string, List<ProdMapping>> prodDict = JsonConvert.DeserializeObject<Dictionary<string, List<ProdMapping>>>(sysPrd.AtrbValue.ToString());
+
+			foreach (KeyValuePair<string, List<ProdMapping>> entry in prodDict)
+			{
+				if (!String.Equals(entry.Value[0].PRD_CAT_NM.ToString().ToUpper(), "SvrWS", StringComparison.OrdinalIgnoreCase) && String.Equals(meetComp.AtrbValue.ToString(), "Price / Performance", StringComparison.OrdinalIgnoreCase))
+				{
+					meetComp.AddMessage("Price Performance is applicable only to Server (SvrWS) products.");
+				}
+			}			
 		}
 	}
 }

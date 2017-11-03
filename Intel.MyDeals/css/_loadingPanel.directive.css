@@ -1,4 +1,10 @@
-﻿
+﻿.sky-blue {
+    color: #00AEEF;
+}
+.red {
+    color: #ED1C24;
+}
+
 .ss-loading-overlay {
 	background: rgba(255,255,255, 0.5);
 	height: 100%;
@@ -23,9 +29,24 @@
 	font-size: 20px !important;
 	margin-top: 0;
 }
+.ss-loading-panel.ss-Info{	
+	border: 2px #0071C5 solid;
+}
+.ss-loading-panel.ss-Success {	
+	border: 2px #0071C5 solid; /* C4D600 */
+}
+.ss-loading-panel.ss-Warning {
+	border: 2px #FFA300 solid;
+}
+.ss-loading-panel.ss-Error{
+	border: 2px #ED1C24 solid;
+}
 
-
-
+.ss-icon-lg {
+	font-size: 4em;
+  -webkit-animation: sk-zoom 0.3s 1 ease-in;
+  animation: sk-zoom 0.3s 1 ease-in;
+}
 
 .spinner {
   margin: 10px auto;
@@ -77,6 +98,20 @@
   }  20% { 
     transform: scaleY(1.0);
     -webkit-transform: scaleY(1.0);
+  }
+}
+
+@-webkit-keyframes sk-zoom {
+  0% { -webkit-transform: scale(0.2) }  
+  100% { -webkit-transform: scale(1.0) }
+}
+@keyframes sk-zoom {
+  0% { 
+    transform: scale(0.2);
+    -webkit-transform: scale(0.2);
+  }  100% { 
+    transform: scale(1.0);
+    -webkit-transform: scale(1.0);
   }
 }
 

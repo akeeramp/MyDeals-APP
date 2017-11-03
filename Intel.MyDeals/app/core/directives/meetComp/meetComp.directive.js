@@ -26,14 +26,15 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
             }
             $scope.meetCompMasterdata = [];
 
-            $scope.setBusy = function (msg, detail) {
+            $scope.setBusy = function (msg, detail, msgType) {
                 $timeout(function () {
                     var newState = msg != undefined && msg !== "";
 
                     // if no change in state, simple update the text
                     if ($scope.isBusy === newState) {
-                        $scope.isBusyMsgTitle = msg;
-                        $scope.isBusyMsgDetail = !detail ? "" : detail;
+                    	$scope.isBusyMsgTitle = msg;
+                    	$scope.isBusyMsgDetail = !detail ? "" : detail;
+                    	$scope.isBusyType = msgType;
                         return;
                     }
 
@@ -41,10 +42,12 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                     if ($scope.isBusy) {
                         $scope.isBusyMsgTitle = msg;
                         $scope.isBusyMsgDetail = !detail ? "" : detail;
+                        $scope.isBusyType = msgType;
                     } else {
                         $timeout(function () {
                             $scope.isBusyMsgTitle = msg;
                             $scope.isBusyMsgDetail = !detail ? "" : detail;
+                            $scope.isBusyType = msgType;
                         }, 500);
                     }
                 });

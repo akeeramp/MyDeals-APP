@@ -1,12 +1,18 @@
 ﻿
 <div ng-show="show" class="ss-loading-overlay">
-	<div class="ss-loading-panel" style="text-align: center;">
-		<div class="spinner">
+	<div class="ss-loading-panel ss-{{msgType}}" style="text-align: center;">
+		<div ng-if="msgType != 'Success' && msgType != 'Error'" class="spinner">
 			<div class="rect1"></div>
 			<div class="rect2"></div>
 			<div class="rect3"></div>
 			<div class="rect4"></div>
 			<div class="rect5"></div>
+		</div>
+		<div class="ss-icon-lg" ng-if="msgType == 'Success'">
+			<i class="intelicon-passed-completed-solid sky-blue"></i>
+		</div>
+		<div class="ss-icon-lg" ng-if="msgType == 'Error'">
+			<i class="intelicon-alert-solid red"></i>
 		</div>
 		
 		<h2 ng-bind="header"></h2>

@@ -50,7 +50,12 @@ function managerController($scope, $state, objsetService, logger, $timeout, data
 
     // loop through data and setup deal types for faster sorting
     var hasPendingStage = false;
-    debugger;
+
+    if (root.contractData.PRC_ST === null || root.contractData.PRC_ST === undefined) {
+		// TODO: put error here maybe?
+    	return;
+    }
+
     if (root.contractData.PRC_ST !== undefined) {
         for (var s = 0; s < root.contractData.PRC_ST.length; s++) {
             var sItem = root.contractData.PRC_ST[s];

@@ -83,7 +83,7 @@ function ExcludeDealGroupMultiSelectCtrl($scope, $uibModalInstance, dataService,
 		pageable: false,
 		scrollable: true,
 		filter: "startsWith",
-		height: 300,
+		//height: 300, // this isn't working for some reason
 		noRecords: {
 			template: "<div style='padding:40px;'>No overlapping deal groups were found.<div>"
 		},

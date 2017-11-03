@@ -16,6 +16,7 @@
         $scope.isBusy = false;
         $scope.isBusyMsgTitle = "";
         $scope.isBusyMsgDetail = "";
+        $scope.isBusyType = "";
         $scope.stealthMode = false;
         $scope.messages = [];
         $scope.colToLetter = {};
@@ -147,27 +148,28 @@
         }
         $scope.removeDimKeyFromWipTemplates();
 
-        $scope.setBusy = function (msg, detail, isInstant) {
+        $scope.setBusy = function (msg, detail, msgType, isInstant) { // msgType can be Success, Error, Warning, and Info
         	if (isInstant == null) {
         		isInstant = false;
         	}
 
         	if (isInstant) {
-        		$scope.setBusyBase(msg, detail);
+        		$scope.setBusyBase(msg, detail, msgType);
         	} else {
         		$timeout(function () {
-        			$scope.setBusyBase(msg, detail);
+        			$scope.setBusyBase(msg, detail, msgType);
         		});
         	}
         }
 
-        $scope.setBusyBase = function (msg, detail) {
+        $scope.setBusyBase = function (msg, detail, msgType) {
         	var newState = msg != undefined && msg !== "";
 
         	// if no change in state, simple update the text
         	if ($scope.isBusy === newState) {
         		$scope.isBusyMsgTitle = msg;
         		$scope.isBusyMsgDetail = !detail ? "" : detail;
+        		$scope.isBusyType = msgType;
         		return;
         	}
 
@@ -175,10 +177,12 @@
         	if ($scope.isBusy) {
         		$scope.isBusyMsgTitle = msg;
         		$scope.isBusyMsgDetail = !detail ? "" : detail;
+        		$scope.isBusyType = msgType;
         	} else {
         		$timeout(function () {
         			$scope.isBusyMsgTitle = msg;
         			$scope.isBusyMsgDetail = !detail ? "" : detail;
+        			$scope.isBusyType = msgType;
         		}, 500);
         	}
         }
@@ -1519,7 +1523,7 @@
                     objsetService.deletePricingStrategy($scope.getCustId(), $scope.contractData.DC_ID, ps).then(
                         function (data) {
                             if (data.data.MsgType !== 1) {
-                                $scope.setBusy("Delete Failed", "Unable to Deleted the Pricing Strategy");
+                                $scope.setBusy("Delete Failed", "Unable to Deleted the Pricing Strategy", "Error");
                                 $timeout(function () {
                                     $scope.setBusy("", "");
                                 }, 4000);
@@ -1538,7 +1542,7 @@
                             // delete item
                             $scope.contractData.PRC_ST.splice($scope.contractData.PRC_ST.indexOf(ps), 1);
 
-                            $scope.setBusy("Delete Successful", "Deleted the Pricing Strategy");
+                            $scope.setBusy("Delete Successful", "Deleted the Pricing Strategy", "Success");
                             $timeout(function () {
                                 $scope.setBusy("", "");
                             }, 2000);
@@ -1552,7 +1556,7 @@
                             }
                         },
                         function (result) {
-                            logger.error("Could not delete the Pricing Strategy.", result, result.statusText);
+                        	logger.error("Could not delete the Pricing Strategy.", result, result.statusText, "Error");
                             topbar.hide();
                             $scope.setBusy("", "");
                         }
@@ -1571,7 +1575,7 @@
                     objsetService.deletePricingTable($scope.getCustId(), $scope.contractData.DC_ID, pt).then(
                         function (data) {
                             if (data.data.MsgType !== 1) {
-                                $scope.setBusy("Delete Failed", "Unable to Deleted the Pricing Table");
+                            	$scope.setBusy("Delete Failed", "Unable to Delete the Pricing Table", "Error");
                                 $timeout(function () {
                                     $scope.setBusy("", "");
                                 }, 4000);
@@ -1589,7 +1593,7 @@
                             // delete item
                             ps.PRC_TBL.splice(ps.PRC_TBL.indexOf(pt), 1);
 
-                            $scope.setBusy("Delete Successful", "Deleted the Pricing Table");
+                            $scope.setBusy("Delete Successful", "Deleted the Pricing Table", "Success");
                             $timeout(function () {
                                 $scope.setBusy("", "");
                             }, 4000);
@@ -1603,7 +1607,7 @@
                             }
                         },
                         function (response) {
-                            logger.error("Could not delete the Pricing Table.", response, response.statusText);
+                        	logger.error("Could not delete the Pricing Table.", response, response.statusText, "Error");
                             $scope.setBusy("", "");
                             topbar.hide();
                         }
@@ -1621,7 +1625,7 @@
                 objsetService.deletePricingTableRow(wip.CUST_MBR_SID, $scope.contractData.DC_ID, wip.DC_PARENT_ID).then(
                     function (data) {
                         if (data.data.MsgType !== 1) {
-                            $scope.setBusy("Delete Failed", "Unable to Deleted the Pricing Table");
+                        	$scope.setBusy("Delete Failed", "Unable to Deleted the Pricing Table", "Error");
                             $timeout(function () {
                                 $scope.setBusy("", "");
                             }, 4000);
@@ -1630,7 +1634,7 @@
 
                         $scope.$broadcast('removeRow', wip.DC_PARENT_ID);
 
-                        $scope.setBusy("Delete Successful", "Deleted the Pricing Table Row and Deal");
+                        $scope.setBusy("Delete Successful", "Deleted the Pricing Table Row and Deal", "Success");
                         $timeout(function () {
                             $scope.setBusy("", "");
                         }, 4000);
@@ -1689,7 +1693,7 @@
                         // refresh upper contract
                         if (wip !== undefined) $scope.refreshContractData(wip.DC_ID);
 
-                        $scope.setBusy("Split Successful", "Split the Pricing Table Row into single Deals");
+                        $scope.setBusy("Split Successful", "Split the Pricing Table Row into single Deals", "Success");
                         $timeout(function () {
                             $scope.setBusy("", "");
                         }, 4000);
@@ -2042,20 +2046,18 @@
                 if ($scope.curPricingStrategy._behaviors.isError["TITLE"]) msg.push("Pricing Strategy");
 
                 kendo.alert("The " + msg.join(" and ") + " either must have a title or needs a unique name in order to save.");
-                deferred.reject();
-                return deferred.promise;
+                return;
             }
 
             var data = $scope.createEntireContractBase(stateName, $scope._dirtyContractOnly, forceValidation, bypassLowerContract);
 
-            // If there are critical errors like bad dates, we need to stop immediately and have the user fix them
+			// If there are critical errors like bad dates, we need to stop immediately and have the user fix them
             if (!!data.errors && !angular.equals(data.errors, {})) {
                 logger.warning("Please fix validation errors before proceeding", $scope.contractData, "");
                 $scope.syncCellsOnAllRows($scope.pricingTableData["PRC_TBL_ROW"]);
                 $scope.setBusy("", "");
                 topbar.hide();
-                deferred.reject();
-                return deferred.promise;
+                return;
             }
 
             var copyData = util.deepClone(data);
@@ -2065,10 +2067,10 @@
                 topbar.hide();
                 $scope.isAutoSaving = false;
                 kendo.alert("Nothing to save.");
-                return deferred.promise;
+                return;
             }
 
-            util.console("updateContractAndCurPricingTable Started");
+			util.console("updateContractAndCurPricingTable Started");
             var isDelPtr = !!delPtr && delPtr.length > 0;
             objsetService.updateContractAndCurPricingTable($scope.getCustId(), $scope.contractData.DC_ID, copyData, forceValidation, forcePublish, isDelPtr).then(
                 function (results) {
@@ -2116,7 +2118,7 @@
                     topbar.hide();
 
                     if (!anyWarnings || !forceValidation) {
-                        $scope.setBusy("Save Successful", "Saved the contract");
+                    	$scope.setBusy("Save Successful", "Saved the contract", "Success");
                         $scope.resetDirty();
                         $scope.$broadcast('saveComplete', results);
 
@@ -2129,7 +2131,7 @@
                             }, 1000);
                         }
                     } else {
-                    	$scope.setBusy("Saved with warnings", "Didn't pass Validation");
+                    	$scope.setBusy("Saved with warnings", "Didn't pass Validation", "Warning");
                         $scope.$broadcast('saveWithWarnings', results);
                         $timeout(function () {
                             $scope.setBusy("", "");
@@ -2149,7 +2151,7 @@
                     }
                 },
                 function (response) {
-                    $scope.setBusy("Error", "Could not save the contract.");
+                	$scope.setBusy("Error", "Could not save the contract.", "Error");
                     logger.error("Could not save the contract.", response, response.statusText);
                     topbar.hide();
                     $timeout(function () {
@@ -2575,14 +2577,14 @@
                     //Check for errors
                     if (!$scope.checkForMessages(ct, "CNTRCT", data)) {
                         topbar.hide();
-                        $scope.setBusy("Save unsuccessful", "Could not create the contract");
+                        $scope.setBusy("Save unsuccessful", "Could not create the contract", "Error");
                         $timeout(function () {
                             $scope.setBusy("", "");
                         }, 4000);
                         return;
                     };
 
-                    $scope.setBusy("Save Successful", "Saved the contract");
+                    $scope.setBusy("Save Successful", "Saved the contract", "Success");
                     topbar.hide();
 
                     if (hasUnSavedFiles) {
@@ -2689,7 +2691,7 @@
                 function (data) {
                     if (!!rtnFunc) rtnFunc(param);
                     $scope.updateResults(data.data.CNTRCT, ct);
-                    $scope.setBusy("Save Successful", "Saved the contract");
+                    $scope.setBusy("Save Successful", "Saved the contract", "Success");
                     topbar.hide();
 
                     $scope.setBusy("", "");
@@ -2728,7 +2730,7 @@
                     $scope.contractData.PRC_ST.push(ps);
                     $scope.showAddPricingTable(ps);
                     topbar.hide();
-                    $scope.setBusy("Save Successful", "Added Pricing Strategy");
+                    $scope.setBusy("Save Successful", "Added Pricing Strategy", "Success");
                     $timeout(function () {
                         $scope.setBusy("", "");
                     }, 1000);
@@ -3099,6 +3101,7 @@
         //
 
         $scope.validatePricingTable = function (forceRun) {
+			
             if (forceRun === undefined || !forceRun) {
             	$scope.saveEntireContractBase($state.current.name, true, true);
             } else {
@@ -3110,7 +3113,7 @@
             if ($scope.isWip) return;
 
             if ($scope.spreadDs.data().length === 0) {
-                $scope.setBusy("No Products Found", "Please add products.");
+            	$scope.setBusy("No Products Found", "Please add products.", "Warning");
                 $timeout(function () {
                     $scope.setBusy("", "");
                 }, 2000);

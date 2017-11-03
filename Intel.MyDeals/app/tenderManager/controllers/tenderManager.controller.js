@@ -18,9 +18,10 @@
         $scope.isBusy = false;
         $scope.isBusyMsgTitle = "";
         $scope.isBusyMsgDetail = "";
+        $scope.isBusyType = "";
         $scope.newDealId = -100;
 
-        $scope.setBusy = function (msg, detail) {
+        $scope.setBusy = function (msg, detail, msgType) {
             $timeout(function () {
                 var newState = msg != undefined && msg !== "";
 
@@ -28,6 +29,7 @@
                 if ($scope.isBusy === newState) {
                     $scope.isBusyMsgTitle = msg;
                     $scope.isBusyMsgDetail = !detail ? "" : detail;
+                    $scope.isBusyType = msgType;
                     return;
                 }
 
@@ -35,10 +37,12 @@
                 if ($scope.isBusy) {
                     $scope.isBusyMsgTitle = msg;
                     $scope.isBusyMsgDetail = !detail ? "" : detail;
+                    $scope.isBusyType = msgType;
                 } else {
                     $timeout(function () {
                         $scope.isBusyMsgTitle = msg;
                         $scope.isBusyMsgDetail = !detail ? "" : detail;
+                        $scope.isBusyType = msgType;
                     }, 500);
                 }
             });
