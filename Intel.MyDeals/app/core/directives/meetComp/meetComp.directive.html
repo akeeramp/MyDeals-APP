@@ -36,10 +36,16 @@
     }
       function addNewSKUForCustomer() {
           kendo.confirm("Would you like to save your new entry for your customer only or publish for others to use?<br/><input class='cmbCustomerSelection' type='radio' name='custType' value='0' checked>Publish for just this Customer<br><input class='cmbCustomerSelection' type='radio' name='custType' value='1'>Publish for all customers ").then(function () {
-              var scope = angular.element(document.getElementById("meetCompOvrrd")).scope();
-              scope.$apply(function () {
-                  scope.addSKUForCustomer($("input[type='radio'].cmbCustomerSelection:checked").val());
-              });              
+              var scope = angular.element(document.getElementById("meetCompOvrrd")).scope();              
+              if (scope.selectedCustomerText.trim().length > 0){
+                  scope.$apply(function () {
+                      scope.addSKUForCustomer($("input[type='radio'].cmbCustomerSelection:checked").val());
+                  });  
+              }
+              else {
+                  kendo.alert("Please enter valid Comp SKU");
+              }
+                          
             }, function () {
                 //kendo.alert("You chose to Cancel action.");
             });

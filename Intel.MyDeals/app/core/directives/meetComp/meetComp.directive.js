@@ -15,8 +15,8 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
         transclude: true,
         templateUrl: '/app/core/directives/meetComp/meetComp.directive.html',
         controller: ['$scope', 'dataService', function ($scope, dataService) {
-            $scope.CAN_VIEW_MEET_COMP = true; //securityService.chkDealRules('CAN_VIEW_MEET_COMP', window.usrRole, null, null, null);
-            $scope.CAN_EDIT_MEET_COMP = true; //securityService.chkDealRules('C_EDIT_MEET_COMP', window.usrRole, null, null, null);
+            $scope.CAN_VIEW_MEET_COMP = securityService.chkDealRules('CAN_VIEW_MEET_COMP', window.usrRole, null, null, null);
+            $scope.CAN_EDIT_MEET_COMP = securityService.chkDealRules('C_EDIT_MEET_COMP', window.usrRole, null, null, null);
             $scope.isDataAvaialable = false;
             $scope.errorList = [];
             $scope.validationMessage = "";
@@ -64,11 +64,11 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                         $scope.meetCompUpdatedList = [];
                         $scope.isDataAvaialable = true;
                         $scope.isBusy = false;
+                        //var LAST_MEET_COMP_RUN = $scope.$parent.contractData.LAST_MEET_COMP_RUN;
 
                         if (usrRole == "GA") {
                             var isValid = isModelValid($scope.meetCompMasterdata);
                         }
-
 
                         //Add New Customer
                         $scope.addSKUForCustomer = function (mode) {
@@ -230,8 +230,8 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         //alert(value);
                                         editedROW.COMP_OVRRD_RSN = value;
 
-                                        $scope.meetCompMasterdata[editedROW.RW_NM - 1].COMP_OVRRD_RSN = value;
-                                        editedROW.COMP_OVRRD_RSN = value;
+                                        $scope.meetCompMasterdata[editedROW.RW_NM - 1].COMP_OVRRD_RSN = value.trim();
+                                        editedROW.COMP_OVRRD_RSN = value.trim();
                                         addToUpdateList(editedROW, "COMP_OVRRD_RSN");
 
                                         if (editedROW.GRP == "PRD") {
@@ -427,7 +427,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                     width: 150,
                                     editable: function () { return false; },
                                     filterable: { multi: true, search: true },
-                                    template: "<div class='readOnlyCell'>#if(MC_AVG_RPU == 0){## ##} else {##:MC_AVG_RPU##}#</div>",
+                                    template: "<div class='readOnlyCell'>#=MC_AVG_RPU#</div>",
                                     hidden: $scope.hide_MC_AVG_RPU
                                 },
                                 {
@@ -566,7 +566,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                             else {
                                 var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
                                     .Where(function (x) {
-                                        return (x.GRP_PRD_SID == options.model.GRP_PRD_SID && x.GRP == options.model.GRP);
+                                        return (x.GRP_PRD_SID == options.model.GRP_PRD_SID);
                                     })
                                     .GroupBy(function (x) {
                                         return (x.COMP_SKU);
@@ -594,15 +594,15 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         },
                                         change: function (e) {
                                             var selectedIndx = this.selectedIndex;
-                                            if (selectedIndx == -1 && this.text().trim().length > 0) {
-                                                $scope.selectedCust = options.model.CUST_NM_SID;
-                                                $scope.selectedCustomerText = this.value();
-                                                $scope.curentRow = options.model.RW_NM;
+                                            $scope.selectedCustomerText = this.value().trim();
+                                            $scope.selectedCust = options.model.CUST_NM_SID;
+                                            $scope.curentRow = options.model.RW_NM;
+                                            if (selectedIndx == -1 && this.text().trim().length > 0) {                                                
                                                 $scope.addSKUForCustomer("0");
                                             }
                                             else if (selectedIndx > -1 && this.text().trim().length > 0) {
                                                 var selectedValue = e.sender.listView._dataItems["0"].RW_NM;
-                                                options.model.COMP_SKU = this.text();
+                                                options.model.COMP_SKU = this.text().trim();
 
                                                 var tempprcData = [];
                                                 options.model.COMP_PRC = parseFloat($scope.meetCompMasterdata[selectedValue - 1].COMP_PRC).toFixed(2);
@@ -619,7 +619,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                                     }
                                                 }
 
-                                                $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_SKU = this.text();
+                                                $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_SKU = this.text().trim();
                                                 // Setting COMP PRC based on Comp SKU if available
                                                 $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_PRC = parseFloat($scope.meetCompMasterdata[selectedValue - 1].COMP_PRC).toFixed(2);
                                                 addToUpdateList($scope.meetCompMasterdata[options.model.RW_NM - 1], "COMP_SKU");
@@ -655,11 +655,10 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
 
                                 var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
                                     .Where(function (x) {
-                                        return (x.GRP_PRD_SID == options.model.GRP_PRD_SID &&
-                                            x.GRP == options.model.GRP);
+                                        return (x.GRP_PRD_SID == options.model.GRP_PRD_SID);
                                     })
                                     .GroupBy(function (x) {
-                                        return (x.COMP_SKU);
+                                        return (x.COMP_PRC);
                                     })
                                     .Select(function (x) {
                                         return {
@@ -681,6 +680,9 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                             data: tempData
                                         },
                                         change: function (e) {
+                                            if (isNaN(options.model.COMP_PRC) || options.model.COMP_PRC == null) {
+                                                options.model.COMP_PRC = 0;
+                                            }
                                             if (options.model.COMP_PRC > 0) {
                                                 var tempData = [];
                                                 if (options.model.GRP == "PRD") {
@@ -751,7 +753,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                             data: tempData
                                         },
                                         change: function (e) {
-                                            $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_OVRRD_FLG = this.text();
+                                            $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_OVRRD_FLG = this.text().trim();
                                             addToUpdateList($scope.meetCompMasterdata[options.model.RW_NM - 1], "COMP_OVRRD_FLG");
 
                                             if (options.model.GRP == "PRD") {
@@ -797,48 +799,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                             }
                         }
 
-                        //function editorORReason(container, options) {
-                        //    if (options.model.COMP_OVRRD_FLG.length > 0 && usrRole == "DA" && options.model.MEET_COMP_UPD_FLG == "Y" && options.model.MEET_COMP_STS.toLowerCase() != "pass") {
-                        //        var tempReason = [
-                        //            {
-                        //                "COMP_OVRRD_RSN": options.model.COMP_OVRRD_RSN
-                        //            }
-                        //        ];
-                        //        $('<input required name="' + options.field + '"/>')
-                        //            .appendTo(container)
-                        //            .kendoAutoComplete({
-                        //                optionLabel: "type comments",
-                        //                autoBind: true,
-                        //                dataTextField: "COMP_OVRRD_RSN",
-                        //                dataValueField: "RW_ID",
-                        //                dataSource: {
-                        //                    data: tempReason
-                        //                },
-                        //                change: function (e) {
-                        //                    $scope.meetCompMasterdata[options.model.RW_NM - 1].COMP_OVRRD_RSN = this.text();
-                        //                    addToUpdateList(options.model, "COMP_OVRRD_RSN");
-
-                        //                    if (options.model.GRP == "PRD") {
-                        //                        var tempData = $linq.Enumerable().From($scope.meetCompUnchangedData)
-                        //                            .Where(function (x) {
-                        //                                return (x.GRP_PRD_SID == options.model.GRP_PRD_SID && x.GRP == "DEAL" && x.MEET_COMP_UPD_FLG == "Y" && x.MEET_COMP_STS.toLowerCase() != "pass");
-                        //                            })
-                        //                            .ToArray();
-
-                        //                        for (var i = 0; i < tempData.length; i++) {
-                        //                            $scope.meetCompMasterdata[tempData[i].RW_NM - 1].COMP_OVRRD_RSN = options.model.COMP_OVRRD_RSN;
-                        //                            addToUpdateList($scope.meetCompMasterdata[tempData[i].RW_NM - 1], "COMP_OVRRD_RSN");
-                        //                        }
-
-                        //                        $scope.dataSourceParent.read();
-                        //                    }
-
-                        //                }
-                        //            });
-                        //    }                         
-
-                        //}
-
+                        
                         function addToUpdateList(dataItem, FIELD_NM) {
                             var indx = -1;
                             $scope.meetCompUpdatedList.some(function (e, i) {
@@ -1074,12 +1035,9 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         });
 
                                         $("[name='COMP_OVRRD_RSN']", e.container).blur(function () {
-                                            var input = $(this);
-                                            //alert(value);
-                                            editedROW.COMP_OVRRD_RSN = value;
-
-                                            $scope.meetCompMasterdata[editedROW.RW_NM - 1].COMP_OVRRD_RSN = value;
-                                            editedROW.COMP_OVRRD_RSN = value;
+                                            var input = $(this);    
+                                            $scope.meetCompMasterdata[editedROW.RW_NM - 1].COMP_OVRRD_RSN = value.trim();
+                                            editedROW.COMP_OVRRD_RSN = value.trim();
                                             addToUpdateList(editedROW, "COMP_OVRRD_RSN");
                                         });
                                     }
@@ -1235,7 +1193,7 @@ function meetComp($compile, $filter, dataService, securityService, $timeout, log
                                         width: 150,
                                         editable: function () { return false; },
                                         filterable: { multi: true, search: true },
-                                        template: "<div class='readOnlyCell'>#if(MC_AVG_RPU == 0){## ##} else {##:MC_AVG_RPU##}#</div>",
+                                        template: "<div class='readOnlyCell'>#=MC_AVG_RPU#</div>",
                                         hidden: $scope.hide_MC_AVG_RPU
                                     },
                                     {
