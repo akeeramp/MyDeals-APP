@@ -45,11 +45,14 @@
         $scope.C_ADD_PRICING_STRATEGY = securityService.chkDealRules('C_ADD_PRICING_STRATEGY', window.usrRole, null, null, null);
         $scope.C_DEL_PRICING_STRATEGY = securityService.chkDealRules('C_DEL_PRICING_STRATEGY', window.usrRole, null, null, null);
         $scope.C_VIEW_ATTACHMENTS = securityService.chkDealRules('C_VIEW_ATTACHMENTS', window.usrRole, null, null, null);
-        $scope.C_ADD_ATTACHMENTS = securityService.chkDealRules('C_ADD_ATTACHMENTS', window.usrRole, null, null, null);
-        $scope.C_DELETE_ATTACHMENTS = securityService.chkDealRules('C_DELETE_ATTACHMENTS', window.usrRole, null, null, null);
+        $scope.C_ADD_ATTACHMENTS = securityService.chkDealRules('C_ADD_ATTACHMENTS', window.usrRole, null, null, null);     
         $scope.C_EDIT_PRODUCT = securityService.chkDealRules('C_EDIT_PRODUCT', window.usrRole, null, null, null);
         $scope.C_DELETE_CONTRACT = securityService.chkDealRules('C_DELETE_CONTRACT', window.usrRole, null, null, null);
 
+        $scope.canDeleteAttachment = function (wfStage) {
+            return securityService.chkDealRules('C_DELETE_ATTACHMENTS', window.usrRole, null, null, wfStage);
+
+        }
         // Hard code for now until security is put in place
         if (window.usrRole === "Legal") {
             $scope.CAN_VIEW_COST_TEST = true;
@@ -1361,6 +1364,41 @@
             //var subject = 'My Deals Submission Notification';
             //var emailBody = msg;
             //document.location = "mailto:" + email + "?subject=" + subject + "&body=" + emailBody;
+
+            //var mailHTML = "<h1> Sample Email </h1>";
+            //var emailTo = "Valliappan.narayanan@intel.com";
+            //var emailSubject = "Javascript Email";
+            //var emailContent = 'To: ' + emailTo + '\n';
+            //emailContent += 'Subject: ' + emailSubject + '\n';
+            //emailContent += 'X-Unsent:1 ' + '\n';
+            //emailContent += 'Content-Type:text/html' + '\n';
+            //emailContent += '' + '\n';
+            //emailContent += "<html><head>/<head><body>" + mailHTML + "</body></html>";
+            //var textFile = null;
+            //var data = new Blob([emailContent], { type: 'text/plain' });
+
+            //textFile = window.URL.createObjectURL(data);
+            //var link = document.createElement('a');
+            //link.href = textFile;
+            //link.download = emailSubject + ".txt.eml";
+
+            //link.click();
+
+
+
+            //var email = 'sample@gmail.com';
+            //var subject = 'Test';
+            //var emailTo = "Valliappan.narayanan@intel.com";
+            //var emailSubject = "Javascript Email";
+            //var emailBody = "<html><head>/<head><body>" + mailHTML + "</body></html>";
+            ////var attach = 'path';
+            //document.location = "mailto:" + emailTo + "?subject=" + emailSubject + "&body=" + emailBody;             
+
+           
+
+            //document.location.href = textFile; 
+
+          
             $scope.emailData = [];
         }
 
@@ -1382,27 +1420,49 @@
                 }
             );
         }
+
+        $scope.$on('FireEmailNotification',
+            function (event, args) {
+                //$scope.setRowIdStyle(args.data.PRC_TBL_ROW);
+                //$scope.root.switchingTabs = false;
+                $scope.openEmailMsg();
+                    
+            });
+
         $scope.actionPricingStrategies = function (data, emailEnabled) {
             $scope.setBusy("Updating Pricing Strategies...", "Please wait as we update the Pricing Strategy!");
 
             $scope.emailData = data;
+            $scope.pricingStrategyStatusUpdated = false;
+           // $scope.openEmailMsg(); // TBD - VN - Testing
             objsetService.actionPricingStrategies($scope.getCustId(), $scope.contractData.DC_ID, $scope.contractData.CUST_ACCPT, data).then(
                 function (data) {
                     $scope.messages = data.data.Messages;
+
+                   
 
                     $timeout(function () {
                         $scope.$broadcast('refresh');
                         $("#wincontractMessages").data("kendoWindow").open();
                         $scope.refreshContractData();
                         $scope.setBusy("", "");
+                        //if (emailEnabled)
+                        //    $scope.openEmailMsg();
                     }, 50);
 
-                    if (emailEnabled) $scope.openEmailMsg();
+                    //if (emailEnabled)
+                    //    $scope.$broadcast('FireEmailNotification', null); 
+
+                    $scope.pricingStrategyStatusUpdated = true;                    
                 },
                 function (result) {
-                    //debugger;
+                   
                 }
             );
+
+            if (emailEnabled)
+                $scope.openEmailMsg();
+           
         }
         $scope.actionWipDeal = function (wip, actn) {
             $scope.setBusy("Updating Wip Deal...", "Please wait as we update the Wip Deal!");

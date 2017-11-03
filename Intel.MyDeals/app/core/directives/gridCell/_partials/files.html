@@ -29,7 +29,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">Attachments <span ng-if="attachmentCount > 0 && initComplete" class="badge">{{attachmentCount}}</span></div>
                     <div class="panel-body">
-                        <div ng-hide="attachmentCount <= 0 || !initComplete" id="attachmentsGrid" kendo-grid k-ng-delay="attachmentsDlgShown" style="height:375px;" options="attachmentsGridOptions"></div>
+                        <div ng-hide="attachmentCount <= 0 || !initComplete" id="attachmentsGrid" kendo-grid k-ng-delay="attachmentsDlgShown" style="height:375px;" k-options="attachmentsGridOptions"></div>
                         <div ng-hide="attachmentCount != 0 || !initComplete" style="height:375px;">
                             <p>This deal has no attachments.</p>
                         </div>

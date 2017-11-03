@@ -40,6 +40,9 @@ function dealTools($timeout, logger, dataService, $rootScope, $compile, $templat
             }
             $scope.rootScope = rootScope;
 
+            $scope.C_DELETE_ATTACHMENTS = ($scope.dataItem.HAS_TRACKER === "1") ? false: rootScope.canDeleteAttachment($scope.dataItem.PS_WF_STG_CD);
+          
+
             $scope.stgOneChar = function () {
                 return $scope.dataItem.WF_STG_CD === undefined ? "&nbsp;" : $scope.dataItem.WF_STG_CD[0];
             }
@@ -196,11 +199,24 @@ function dealTools($timeout, logger, dataService, $rootScope, $compile, $templat
                 return $scope.fileItems[$scope.getFileValue(dataItem)].style;
             };
             $scope.clkFileIcon = function (dataItem) {
+
                 var fVal = $scope.getFileValue(dataItem);
+
+                //Forces datasource web API call 
+                $scope.attachmentsDataSource.read().then(function () {
+                    var view = $scope.attachmentsDataSource.view();
+
+                    $scope.attachmentCount = (view === null || view === undefined) ? 0 : view.length;
+                    console.log($scope.attachmentCount);
+
+                    $scope.dataItem.HAS_ATTACHED_FILES = $scope.attachmentCount > 0 ? "1" : "0";
+                    rootScope.saveCell($scope.dataItem, "HAS_ATTACHED_FILES");
+
+                    $scope.initComplete = true;
+                    kendo.ui.progress($("#attachmentsGrid"), false);
+                });
                 if (fVal === "HasFile" || fVal === "AddFile") $scope.openAttachments();
             }
-
-
 
             $scope.onFileSelect = function (e) {
                 // Hide default kendo clear button.
@@ -239,29 +255,22 @@ function dealTools($timeout, logger, dataService, $rootScope, $compile, $templat
             $scope.attachmentCount = 1; // Can't be 0 or initialization won't happen.
             $scope.initComplete = false;
 
+            $scope.getAttachmentDatasourceURL = function () {
+                return "/api/FileAttachments/Get/" + $scope.dataItem.CUST_MBR_SID + "/" + 5 + // WIP_DEAL
+                                "/" + $scope.dataItem.DC_ID + "/" + $scope.dataItem.dc_type;
+
+            }
+
             $scope.attachmentsDataSource = new kendo.data.DataSource({
                 transport: {
                     read: {
-                        url: function() {
-                            return "/api/FileAttachments/Get/" + $scope.dataItem.CUST_MBR_SID + "/" + 5 + // WIP_DEAL
-                                "/" + $scope.dataItem.DC_ID + "/" + $scope.dataItem.dc_type;
-                        },
-                        dataType: "json"
+                        url: $scope.getAttachmentDatasourceURL(),
+                        dataType: "json"                        
                     }
                 },
                 requestStart: function () {
                     kendo.ui.progress($("#attachmentsGrid"), true);
-                },
-                requestEnd: function (response) {
-                    $scope.attachmentCount = response.response.length;
-                    console.log($scope.attachmentCount);
-
-                    $scope.dataItem.HAS_ATTACHED_FILES = $scope.attachmentCount > 0 ? "1" : "0";
-                    rootScope.saveCell($scope.dataItem, "HAS_ATTACHED_FILES");
-
-                    $scope.initComplete = true;
-                    kendo.ui.progress($("#attachmentsGrid"), false);
-                },
+                },               
                 pageSize: 25,
                 schema: {
                     model: {
@@ -289,7 +298,7 @@ function dealTools($timeout, logger, dataService, $rootScope, $compile, $templat
                     {
                         field: "FILE_DATA_SID",
                         title: "&nbsp;",
-                        template: "<a class='delete-attach-icon' ng-if='rootScope.C_DELETE_ATTACHMENTS' ng-click='deleteAttachment(#= CUST_MBR_SID #, #= OBJ_TYPE_SID #, #= OBJ_SID #, #= FILE_DATA_SID #)'><i class='intelicon-trash-outlined' title='Click to delete this attachment'></i></a>",
+                        template: "<a class='delete-attach-icon' ng-if='C_DELETE_ATTACHMENTS' ng-click='deleteAttachment(#= CUST_MBR_SID #, #= OBJ_TYPE_SID #, #= OBJ_SID #, #= FILE_DATA_SID #)'><i class='intelicon-trash-outlined' title='Click to delete this attachment'></i></a>",
                         width: "10%"
                     },
                     {
@@ -356,9 +365,8 @@ function dealTools($timeout, logger, dataService, $rootScope, $compile, $templat
                     rootScope.unGroupPricingTableRow($scope.dataItem);
                 });
             }
-
-            $scope.openAttachments = function () {
-
+         
+            $scope.openAttachments = function () {                
                 var scope = $scope;
                 $scope.dialog = $("#fileDialog");
 
@@ -376,12 +384,11 @@ function dealTools($timeout, logger, dataService, $rootScope, $compile, $templat
                     ]
                 });
 
-
+                $scope.dialog.data("kendoDialog").open();
                 $templateRequest("/app/core/directives/gridCell/_partials/files.html").then(function (html) {
                     var template = angular.element(html);
                     $compile(template)(scope);
                     $scope.dialog.data("kendoDialog").content(template);
-                    //$scope.attachmentsDataSource.read();
                     $scope.attachmentsDlgShown = true;
                 });
 
