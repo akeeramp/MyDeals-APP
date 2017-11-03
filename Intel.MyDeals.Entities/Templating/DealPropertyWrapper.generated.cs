@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 10/31/2017 3:59:50 PM
+File Updated: 11/3/2017 11:41:59 AM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -1017,6 +1017,22 @@ namespace Intel.MyDeals.Entities {
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "Label"
+		};
+		public static MyDealsAttribute DEAL_DESC = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "DEAL_DESC",
+			ATRB_DESC = "Deal Description",
+			ATRB_LBL = "Deal Description",
+			ATRB_MAX_LEN = 500,
+			ATRB_SID = 3680,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "TextBox"
 		};
 		public static MyDealsAttribute DEAL_GRP_CMNT = new MyDealsAttribute()
 		{
