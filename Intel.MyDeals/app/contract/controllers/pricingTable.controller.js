@@ -376,7 +376,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             systemModifiedProductInclude = true;
             sheet.range(root.colToLetter['PTR_USER_PRD'] + (rowStart)).value(contractProducts);
 
-            if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD === "VOL_TIER") {
+            if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD !== "ECAP") {
                 sheet.range(root.colToLetter['PRD_EXCLDS'] + (rowStart)).value(usrInput.excludeProducts);
                 sheet.range(LTR_PRD_EXCLDS_IDS + (rowStart)).value(usrInput.excludeProductIds);
             }
@@ -516,7 +516,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         //}
 
         // VOL-TIER
-        if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD == "VOL_TIER") {
+        if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD !== "ECAP") {
             var endVolIndex = (root.colToLetter["END_VOL"].charCodeAt(0) - intA);
             var strtVolIndex = (root.colToLetter["STRT_VOL"].charCodeAt(0) - intA);
             var rateIndex = (root.colToLetter["RATE"].charCodeAt(0) - intA);
@@ -1056,19 +1056,19 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                         if (!!data[key].PTR_SYS_INVLD_PRD) { // validated and failed
                             sheet.range(LTR_PRD_EXCLDS + row + ":" + LTR_PRD_EXCLDS + row).color("#FC4C02").bold(true);
                             //sheet.range(LTR_PRD_EXCLDS + row + ":" + LTR_PRD_EXCLDS + row).borderLeft({ size: 6, color: "#FC4C02" });
-                            if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD == "VOL_TIER") { // validated and passed
+                            if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD !== "ECAP") { // validated and passed
                                 sheet.range(LTR_FIRST_DEAL_ATRB + row + ":" + LTR_FIRST_DEAL_ATRB + row).color("#FC4C02").bold(true);
                             }
                         } else if (!!data[key].PTR_SYS_PRD) { // validated and passed
                             sheet.range(LTR_PRD_EXCLDS + row + ":" + LTR_PRD_EXCLDS + row).color("#9bc600").bold(true);
                             //vol tier
-                            if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD == "VOL_TIER") { // validated and passed
+                            if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD !== "ECAP") { // validated and passed
                                 sheet.range(LTR_FIRST_DEAL_ATRB + row + ":" + LTR_FIRST_DEAL_ATRB + row).color("#9bc600").bold(true);
                             }
                         } else { // not validated
                             sheet.range(LTR_PRD_EXCLDS + row + ":" + LTR_PRD_EXCLDS + row).color("#000000").bold(false);
                             //sheet.range(LTR_PRD_EXCLDS + row + ":" + LTR_PRD_EXCLDS + row).borderLeft({ size: 6, color: "transparent" });
-                            if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD == "VOL_TIER") { // validated and passed
+                            if ($scope.$parent.$parent.curPricingTable.OBJ_SET_TYPE_CD !== "ECAP") { // validated and passed
                                 sheet.range(LTR_FIRST_DEAL_ATRB + row).color("#000000").bold(false);
                             }
                         }
@@ -1813,7 +1813,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
             }
         });
         //adding Exclude
-        if (dealType == "VOL_TIER") {
+        if (dealType !== "ECAP") {
             angular.forEach(pricingTableRowData, function (obj) {
                 if (!!obj.PRD_EXCLDS && obj.PRD_EXCLDS.length > 0) {
                     var object = {
@@ -1935,7 +1935,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 sourceData[r].PTR_USER_PRD = contractProducts;
 
                 // VOL_TIER update exclude products
-                if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD === "VOL_TIER") {
+                if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD !== "ECAP") {
                     var excludeProducts = userInput.excludeProducts;
                     data[r].PRD_EXCLDS = excludeProducts;
                     sourceData[r].PRD_EXCLDS = excludeProducts;
@@ -2035,7 +2035,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 sourceData[r].PTR_USER_PRD = products.contractProducts;
 
                                 // VOL_TIER update exclude products
-                                if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD === "VOL_TIER") {
+                                if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD !== "ECAP") {
                                     data[r].PRD_EXCLDS = products.excludeProducts;
                                     sourceData[r].PRD_EXCLDS = products.excludeProducts;
                                     data[r].PRD_EXCLDS_IDS = products.excludeProductIds;

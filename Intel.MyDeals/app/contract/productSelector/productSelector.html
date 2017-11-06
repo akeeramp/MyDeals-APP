@@ -174,9 +174,9 @@
                 <trashcan title="Clear excluded products" class="fr" ng-click="vm.clearProducts('E')"></trashcan>
             </div>
             <div ng-if="!vm.excludeMode" class="row">
-                <div ng-class="{'col-md-6':vm.dealType=='VOL_TIER', 'paddingRight15':vm.dealType!='VOL_TIER'}">
+                <div ng-class="{'col-md-6':vm.enableMultipleSelection, 'paddingRight15':vm.dealType!='VOL_TIER'}">
                     <span ng-class="{'paddingLeft15':vm.dealType!='VOL_TIER'}">
-                        <span ng-class="{'paddingLeftNone':vm.dealType=='VOL_TIER'}" class="text-left textProdSelector">
+                        <span ng-class="{'paddingLeftNone':vm.enableMultipleSelection}" class="text-left textProdSelector">
                             Selected Products
                             <span ng-class="{'animate':vm.animateInclude}" class="arcAnimate">
                                 <small role="button">&nbsp;({{vm.addedProducts.length}})</small>
@@ -185,7 +185,7 @@
                     </span>
                     <trashcan title="Clear products" class="fr" ng-click="vm.clearProducts()"></trashcan>
                 </div>
-                <div ng-if="vm.dealType=='VOL_TIER'" class="col-md-6">
+                <div ng-if="vm.enableMultipleSelection" class="col-md-6">
                     <span>
                         <span class="paddingRightNone text-left textProdSelector">
                             Excluded Products
@@ -198,7 +198,7 @@
                 </div>
             </div>
             <div ng-if="!vm.excludeMode" class="row" style="padding-left:15px;padding-right:15px;">
-                <div ng-class="{'col-md-6':vm.dealType=='VOL_TIER','paddingLeftNone':vm.dealType=='VOL_TIER'}">
+                <div ng-class="{'col-md-6':vm.enableMultipleSelection,'paddingLeftNone':vm.enableMultipleSelection}">
                     <ui-select allow-clear="true" onkeypress="return false;" class="prodSelected text-left"
                                tagging="true" multiple ng-model="vm.addedProducts" theme="bootstrap">
                         <ui-select-match>
@@ -209,7 +209,7 @@
                         </ui-select-choices>
                     </ui-select>
                 </div>
-                <div ng-if="vm.dealType=='VOL_TIER'" class="col-md-6 paddingRightNone">
+                <div ng-if="vm.enableMultipleSelection" class="col-md-6 paddingRightNone">
                     <ui-select allow-clear="true" onkeypress="return false;" class="prodSelected text-left"
                                tagging="true" multiple ng-model="vm.excludedProducts" theme="bootstrap">
                         <ui-select-match>

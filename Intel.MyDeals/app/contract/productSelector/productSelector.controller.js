@@ -51,7 +51,7 @@
         vm.manageSelectedProducts = manageSelectedProducts;
         vm.excludeMode = !!suggestedProduct.isExcludeProduct ?
                         suggestedProduct.isExcludeProduct && dealType == 'VOL_TIER' : false;
-        var enableMultipleSelection = dealType == 'VOL_TIER';
+        vm.enableMultipleSelection = dealType == 'VOL_TIER' || dealType == 'PROGRAM';
 
         var searchProcessed = false;
         if (pricingTableRow.PROD_INCLDS == undefined || pricingTableRow.PROD_INCLDS == null || pricingTableRow.PROD_INCLDS == "") {
@@ -118,7 +118,7 @@
                 }).map(function (i) {
                     return {
                         name: i.MRK_LVL1,
-                        allowMultiple: enableMultipleSelection && !(getVerticalSelection(i.MRK_LVL1).length > 1),
+                        allowMultiple: vm.enableMultipleSelection && !(getVerticalSelection(i.MRK_LVL1).length > 1),
                         parentSelected: false,
                         path: '',
                         id: getVerticalSelection(i.MRK_LVL1)[0].PRD_MBR_SID,
@@ -138,7 +138,7 @@
                     return {
                         name: i.MRK_LVL2,
                         path: '',
-                        allowMultiple: enableMultipleSelection && !(getVerticalSelection(i.MRK_LVL2).length > 1),
+                        allowMultiple: vm.enableMultipleSelection && !(getVerticalSelection(i.MRK_LVL2).length > 1),
                         id: (getVerticalSelection(i.MRK_LVL2).length > 1) ? i.PRD_MRK_MBR_SID : getVerticalSelection(i.MRK_LVL2)[0].PRD_MBR_SID,
                         parentSelected: item.selected,
                         selected: productExists(item, getVerticalSelection(i.MRK_LVL2).length > 1 ? undefined : getVerticalSelection(i.MRK_LVL2)[0].PRD_MBR_SID)
@@ -160,7 +160,7 @@
                     return {
                         name: i.PRD_CAT_NM,
                         path: i.HIER_NM_HASH, // From this level we get hierarchy to get deal products
-                        allowMultiple: enableMultipleSelection,
+                        allowMultiple: vm.enableMultipleSelection,
                         id: i.PRD_MBR_SID,
                         parentSelected: item.selected,
                         selected: productExists(item, i.PRD_MBR_SID)
@@ -180,7 +180,7 @@
                     return {
                         name: i.BRND_NM,
                         path: i.HIER_NM_HASH,
-                        allowMultiple: enableMultipleSelection,
+                        allowMultiple: vm.enableMultipleSelection,
                         id: i.PRD_MBR_SID,
                         parentSelected: item.selected,
                         selected: productExists(item, i.PRD_MBR_SID)
@@ -225,7 +225,7 @@
                     return {
                         name: i.FMLY_NM,
                         path: i.HIER_NM_HASH,
-                        allowMultiple: enableMultipleSelection,
+                        allowMultiple: vm.enableMultipleSelection,
                         id: i.PRD_MBR_SID,
                         parentSelected: item.selected,
                         selected: productExists(item, i.PRD_MBR_SID)
@@ -465,7 +465,7 @@
                 manageSelectedProducts('exclude', item, true);
                 return;
             }
-            if (item.parentSelected && dealType == 'VOL_TIER') {
+            if (item.parentSelected && vm.enableMultipleSelection) {
                 manageSelectedProducts('exclude', item);
             } else {
                 if (vm.dealType !== "ECAP") {
@@ -479,19 +479,6 @@
                     vm.isCrossVerticalError = isValidProductCombination(existingProdTypes, item.PRD_CAT_NM)
                     if (!vm.isCrossVerticalError) {
                         logger.error(crossVertical.message);
-                        //var modalOptions = {
-                        //    closeButtonText: 'Ok',
-                        //    actionButtonText: '',
-                        //    hasActionButton: false,
-                        //    headerText: 'Cross Vertical Warning',
-                        //    bodyText: crossVertical.message,
-                        //    appendTo: "div#mainForm"
-                        //};
-                        //confirmationModal.showModal({}, modalOptions, { windowClass: 'prdSelector-modal-window'}).then(function (result) {
-                        //    //
-                        //}, function (response) {
-                        //    //
-                        //});
                         product.selected = false;
                         return;
                     }
@@ -539,7 +526,7 @@
                 productExists = vm.addedProducts.filter(function (x) {
                     return x.PRD_MBR_SID == id;
                 }).length > 0;
-            } else if (dealType == 'VOL_TIER') {
+            } else if (vm.enableMultipleSelection) {
                 productExists = vm.excludedProducts.filter(function (x) {
                     return x.PRD_MBR_SID == id;
                 }).length == 0;
@@ -965,7 +952,7 @@
             productSelectorService.GetProductDetails(data, pricingTableRow.CUST_MBR_SID, vm.dealType).then(function (response) {
                 vm.selectPath(0, true);
                 vm.disableSelection = (!!response.data[0] && !!response.data[0].WITHOUT_FILTER) ? response.data[0].WITHOUT_FILTER : false;
-                if (vm.dealType == "VOL_TIER") {
+                if (vm.enableMultipleSelection) {
                     vm.suggestionText = response.data.length === 0 ? "No products found." : "Product(s) found for \"" + vm.userInput + "\"";
                     vm.suggestedProducts = response.data;
                     vm.showSuggestions = true;
@@ -1271,7 +1258,7 @@
 
         // These validation rules are taken from MT CAP Validations. Both the places rules should be in sync
         function isValidCapDetails(productJson, showErrorMesssage) {
-            if (vm.dealType == 'VOL_TIER') {
+            if (vm.enableMultipleSelection) {
                 return !showErrorMesssage ? false : productJson.HIER_NM_HASH;
             }
             var errorMessage = "";

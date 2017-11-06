@@ -32,7 +32,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
     vm.showIncludeExcludeLabel = false;
 
     //Deal type checking: make it false if you don't want to show the label in Product(s) not found area.
-    if (vm.DEAL_TYPE == "VOL_TIER") {
+    if (vm.DEAL_TYPE == "VOL_TIER" || vm.DEAL_TYPE == "PROGRAM") {
         vm.showIncludeExcludeLabel = true;
     }
 
@@ -615,7 +615,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
     }
 
     function validCrossVerticals(item) {
-        if (vm.DEAL_TYPE !== 'VOL_TIER') return true;
+        if (vm.DEAL_TYPE === 'ECAP') return true;
         var existingProductTypes = [];
         for (var key in vm.ProductCorrectorData.ValidProducts[vm.curRowId]) {
             angular.forEach(vm.ProductCorrectorData.ValidProducts[vm.curRowId][key], function (product) {
@@ -1166,7 +1166,7 @@ function ProductCorrectorBetaModalController($compile, $filter, $scope, $uibModa
     }
 
     function isValidCapDetails(productJson, showErrorMesssage) {
-        if (vm.DEAL_TYPE == 'VOL_TIER') {
+        if (vm.DEAL_TYPE !== 'ECAP') {
             return !showErrorMesssage ? false : productJson.HIER_NM_HASH;
         }
         var errorMessage = "";
