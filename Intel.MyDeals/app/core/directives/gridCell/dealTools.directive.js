@@ -351,7 +351,7 @@ function dealTools($timeout, logger, dataService, $rootScope, $compile, $templat
                     ]
                 });
 
-
+                $scope.dialog.data("kendoDialog").open();
                 $templateRequest("/app/core/directives/gridCell/_partials/notes.html").then(function (html) {
                     var template = angular.element(html);
                     $compile(template)(scope);
