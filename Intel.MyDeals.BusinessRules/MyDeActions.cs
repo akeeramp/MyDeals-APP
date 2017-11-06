@@ -58,6 +58,27 @@ namespace Intel.MyDeals.BusinessRules
             de.AtrbValue = newStage;
         }
 
+        public static void CheckConsumptionReason(this IOpDataElement de, params object[] args)
+        {
+            if (de == null) return;
+
+            string userConsumtionReason = de.AtrbValue.ToString();
+
+            List<BasicDropdown> validConsumptionReasons = DataCollections.GetBasicDropdowns().Where(d => d.ATRB_CD == AttributeCodes.CONSUMPTION_REASON).ToList();
+
+            BasicDropdown match = validConsumptionReasons.FirstOrDefault(m => m.DROP_DOWN.ToUpper() == userConsumtionReason.ToUpper());
+
+            if (match == null)  //no match
+                de.AddMessage(userConsumtionReason + " is not a valid Consumption Reason.");
+            else
+            {
+                if (match.DROP_DOWN != null && userConsumtionReason != match.DROP_DOWN) //if we found a match but the user input is spelled punctuated differently (no ToUpper())
+                {
+                    de.AtrbValue = match.DROP_DOWN; //set user input to how we have consumption reason defined in system
+                }
+            }
+        }
+
         public static void CheckGeos(this IOpDataElement de, params object[] args)
         {
             if (de == null) return;
