@@ -23,7 +23,7 @@ linkUtil.toggleLink = function (obj, uid) {
     if (uid === undefined || uid === null) return;
 
     var tt = obj.dataset;
-    debugger;
+    //debugger;
     return;
     if (linkUtil.vals[uid] === undefined) linkUtil.vals[uid] = 0;
     linkUtil.vals[uid] = (linkUtil.vals[uid] == 0) ? 1 : 0;

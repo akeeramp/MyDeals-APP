@@ -258,7 +258,7 @@ dealUtil.renderGridByDealIds = function (dealIds) {
             }, 50);
         }, 50);
     }, function (xhr) {
-        debugger;
+        //debugger;
         op.notifyError(xhr.statusText, "Unable to retrieve Deals");
         window.setTimeout(function () {
             if (!(dealUtil.errorOnDataLoadFunc === null || dealUtil.errorOnDataLoadFunc === undefined))  dealUtil.errorOnDataLoadFunc();
@@ -389,7 +389,7 @@ dealUtil.displayValidationResults = function() {
 
     $("#dealUtilValidationMsg").html(msg);
 
-    //    debugger;
+    //debugger;
     window.setTimeout(function () {
 
         $("#dealUtilValidationGrid").kendoGrid({
@@ -472,12 +472,12 @@ dealUtil.saveFullContract = function (fullContracts) {
     }, 50);
 
     op.ajaxPostAsync(dealUtil.saveFullContractUrl, fullContracts, function (data) {
-        debugger;
+        //debugger;
         window.setTimeout(function () {
             if (!(dealUtil.savedDataFunc === null || dealUtil.savedDataFunc === undefined)) dealUtil.savedDataFunc(data);
         }, 50);
     }, function (xhr) {
-        debugger;
+        //debugger;
         op.notifyError(xhr.statusText, "Unable to save Contract");
         window.setTimeout(function () {
             if (!(dealUtil.errorOnDataSaveFunc === null || dealUtil.errorOnDataSaveFunc === undefined)) dealUtil.errorOnDataSaveFunc();
@@ -599,7 +599,7 @@ dealUtil.generateViewModel = function (data) {
 }
 
 dealUtil.catchError = function (e) {
-    debugger;
+    //debugger;
     return dealUtil.errorCell;
 }
 

@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 11/3/2017 11:41:59 AM
+File Updated: 11/6/2017 10:42:22 AM
 On: MHTIPPIN-MOBL
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
@@ -2669,8 +2669,8 @@ namespace Intel.MyDeals.Entities {
 		public static MyDealsAttribute NUM_OF_TIERS = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "NUM_OF_TIERS",
-			ATRB_DESC = "NUM OF TIERS",
-			ATRB_LBL = "Select no of Bands",
+			ATRB_DESC = "Number of Tiers",
+			ATRB_LBL = "Select no of Tiers",
 			ATRB_MAX_LEN = 0,
 			ATRB_SID = 3490,
 			DATA_TYPE_CD = "INT",
