@@ -84,8 +84,8 @@ namespace Intel.MyDeals.BusinessRules
                         new OpRuleAction<IOpDataElement>
                         {
                             Action = MyDeActions.AddMessage,
-                            Args = new object[] {"{0} must be positive or zero"},
-                            Where = de => de.AtrbCdIn(new List<string> { AttributeCodes.FRCST_VOL }) && de.HasValue() && de.IsNegative()
+                            Args = new object[] {"{0} must be positive"},
+                            Where = de => de.AtrbCdIn(new List<string> { AttributeCodes.FRCST_VOL }) && de.HasValue() && de.IsNegativeOrZero()
                         }
                     }
                 },

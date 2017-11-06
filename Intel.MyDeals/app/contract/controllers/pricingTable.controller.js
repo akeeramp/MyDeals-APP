@@ -516,7 +516,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         //}
 
         // VOL-TIER
-        if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD !== "ECAP") {
+        if (root.pricingTableData.PRC_TBL[0].OBJ_SET_TYPE_CD === "VOL_TIER") {
             var endVolIndex = (root.colToLetter["END_VOL"].charCodeAt(0) - intA);
             var strtVolIndex = (root.colToLetter["STRT_VOL"].charCodeAt(0) - intA);
             var rateIndex = (root.colToLetter["RATE"].charCodeAt(0) - intA);
@@ -781,7 +781,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                 var newItems = 0;
 
                 cleanupData(data);
-
+				
                 for (var r = 0; r < data.length; r++) {
                     if (data[r]["DC_ID"] !== null && data[r]["DC_ID"] !== undefined) continue;
 
@@ -831,7 +831,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     }
 
                     for (var key in ptTemplate.model.fields) {
-                        if (ptTemplate.model.fields.hasOwnProperty(key)) {
+                    	if (ptTemplate.model.fields.hasOwnProperty(key)) {
                             // Autofill default values from Contract level
                             if ((root.contractData[key] !== undefined) &&
                                 (root.contractData[key] !== null) &&
@@ -923,10 +923,20 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                                 }
                             }
                         );
-                    } else {
+                    }
+                    else {
                         range = sheet.range(LTR_PTR_USER_PRD + topLeftRowIndex + ":" + finalColLetter + bottomRightRowIndex);
                         range.enable(true);
                         range.background(null);
+                    }
+
+					// Re-disable cols that are disabled by template
+                    for (var key in ptTemplate.model.fields) {
+                    	if (ptTemplate.model.fields.hasOwnProperty(key) && !ptTemplate.model.fields[key].editable) {
+							var myColLetter = root.colToLetter[key];
+							range = sheet.range(myColLetter + topLeftRowIndex + ":" + myColLetter + bottomRightRowIndex);
+							disableRange(range);
+						}
                     }
 
                     // Re-add dropdowns on new product add to work around save-then-dropdwons-not-showing bug

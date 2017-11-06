@@ -1471,7 +1471,8 @@ namespace Intel.MyDeals.DataLibrary
             {
                 Id = 29,
                 AtrbCd = AttributeCodes.PROGRAM_PAYMENT,
-                ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+				ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+				ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.VOL_TIER, OpDataElementSetType.PROGRAM },
                 Width = 110,
                 IsFilterable = true,
                 IsSortable = true,
@@ -1480,8 +1481,7 @@ namespace Intel.MyDeals.DataLibrary
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
             });
-
-            items.Add(new UiTemplateContainerItem
+			items.Add(new UiTemplateContainerItem
             {
                 Id = 38,
                 AtrbCd = AttributeCodes.MRKT_SEG,
