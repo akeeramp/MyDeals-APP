@@ -6,20 +6,15 @@
         </div>
     </div>
     <div id="meetCompOvrrd" class="col-md-12">
-        <button class="btn btn-sm ssToolbarBtn" ng-click="saveAndRunMeetComp()" title="Save and Validate Meet Comp">
-            <table>
-                <tbody>
-                    <tr>
-                        <td>
-                            <i class="fa fa-floppy-o" aria-hidden="true" style="font-size: 30px;color: #00AEEF;"></i>
-                        </td>
-                        <td style="padding-left: 5px; text-align: left; color: #00AEEF;font-size: 12px;">
-                            Save &amp; Validate <br>Deals
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </button>
+        <div style="margin-bottom:4px">
+            <button class="btn btn-sm btn-skyblue-sm fl"
+                    ng-click="saveAndRunMeetComp()"
+                    title="Save and Validate Meet Comp" >
+                <i class="fa fa-refresh fa-fw iconRunPct" style="font-size: 20px"></i>
+            </button>
+            <div class="fl skyblue-text">Save &amp; Validate <br>Meet Comp</div>
+            <div class="clearboth"></div>
+        </div>
 
         <div id="grid" kendo-grid="meetCompGrid" class="opUiContainer md dashboard op-grid" expand-k-grid options="gridOptions">
             <!--<div style="margin-left:102px !important" class="opUiContainer dashboard md op-grid childGrid" k-detail-template>
@@ -59,6 +54,39 @@
     <button class="k-button" onclick="addNewSKUForCustomer()">Add new item</button>
 </script>
 <style>
+    .btnPctMct {
+        font-size: 14px;
+        margin-top: 4px;
+        line-height: 1.0em;
+    }
+    .btnLastRun {
+        font-size: 9px;
+        color: #00AEEF;
+        line-height: 1.1em;
+    }
+    .btn-skyblue-sm {
+        background-color: #00AEEF;
+        border: 1px solid  #00AEEF;
+        color: #ffffff;
+        border-radius: 4px;
+        padding: 2px !important;
+    }
+    .skyblue-text {
+        color: #00AEEF;
+        line-height: 1em;
+        padding: 2px 6px !important;
+    }
+    .btn-skyblue-sm:hover {
+        background-color: #0071C5;
+        border: 1px solid  #0071C5;
+        color: #ffffff;
+    }
+    .btn-skyblue-sm i {
+        font-size: 20px;
+        margin: 0;
+        padding: 0;
+    }
+
     .readOnlyCell {
         color: #000 !important;
         background-color: rgba(0,0,0,.05) !important;
