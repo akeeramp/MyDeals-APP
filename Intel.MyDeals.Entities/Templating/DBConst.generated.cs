@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 11/6/2017 10:42:37 AM
-On: MHTIPPIN-MOBL
+File Updated: 11/7/2017 3:45:18 PM
+On: JJYEH-MOBL1
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
 using System;
@@ -617,6 +617,15 @@ namespace Intel.MyDeals.Entities {
 		///<summary>
 		/// DIM_SID: 3
 		/// DIM_CD: DEAL
+		/// ATRB_SID: 3201
+		/// TGT_COL_TYPE: VARCHAR
+		/// DOT_NET_DATA_TYPE: System.String
+		///</summary>
+		public const string DEAL_GRP_NM = "DEAL_GRP_NM";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
 		/// ATRB_SID: 97
 		/// TGT_COL_TYPE: MONEY
 		/// DOT_NET_DATA_TYPE: System.Double
@@ -739,6 +748,15 @@ namespace Intel.MyDeals.Entities {
 		/// DOT_NET_DATA_TYPE: System.Int32
 		///</summary>
 		public const string DRAWING_ORD = "DRAWING_ORD";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 3681
+		/// TGT_COL_TYPE: MONEY
+		/// DOT_NET_DATA_TYPE: System.Double
+		///</summary>
+		public const string DSCNT_PER_LN = "DSCNT_PER_LN";
 
 		///<summary>
 		/// DIM_SID: 3
@@ -1814,6 +1832,15 @@ namespace Intel.MyDeals.Entities {
 		///<summary>
 		/// DIM_SID: 3
 		/// DIM_CD: DEAL
+		/// ATRB_SID: 3682
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Int32
+		///</summary>
+		public const string QTY = "QTY";
+
+		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
 		/// ATRB_SID: 56
 		/// TGT_COL_TYPE: MONEY
 		/// DOT_NET_DATA_TYPE: System.Double
@@ -2569,6 +2596,7 @@ namespace Intel.MyDeals.Entities {
 		ECAP = 3,
 		PROGRAM = 4,
 		VOL_TIER = 5,
+		KIT = 6,
 		CAP_BAND = 7,
 		ALL_TYPES = 9,
 		Unknown = 0
@@ -2583,6 +2611,7 @@ namespace Intel.MyDeals.Entities {
 				new OpDataElementSetTypeItem {Id = 3, OpDeSetType = OpDataElementSetType.ECAP, Alias = "ECAP", Description = "ECAP Deal Type", TemplateDealNumber = -1, TrackerDtLetter = "E", Order = 3 },
 				new OpDataElementSetTypeItem {Id = 4, OpDeSetType = OpDataElementSetType.PROGRAM, Alias = "PROGRAM", Description = "PROGRAM Deal Type", TemplateDealNumber = -3, TrackerDtLetter = "P", Order = 4 },
 				new OpDataElementSetTypeItem {Id = 5, OpDeSetType = OpDataElementSetType.VOL_TIER, Alias = "VOL_TIER", Description = "VOL TIER Deal Type", TemplateDealNumber = -2, TrackerDtLetter = "V", Order = 5 },
+				new OpDataElementSetTypeItem {Id = 6, OpDeSetType = OpDataElementSetType.KIT, Alias = "KIT", Description = "KIT Deal Type", TemplateDealNumber = -5, TrackerDtLetter = "K", Order = 6 },
 				new OpDataElementSetTypeItem {Id = 7, OpDeSetType = OpDataElementSetType.CAP_BAND, Alias = "CAP_BAND", Description = "CAP BAND Deal Type", TemplateDealNumber = -4, TrackerDtLetter = "C", Order = 7 },
 				new OpDataElementSetTypeItem {Id = 9, OpDeSetType = OpDataElementSetType.ALL_TYPES, Alias = "ALL_TYPES", Description = "ALL Object set types", TemplateDealNumber = 0, TrackerDtLetter = "", Order = 9 },
 			},

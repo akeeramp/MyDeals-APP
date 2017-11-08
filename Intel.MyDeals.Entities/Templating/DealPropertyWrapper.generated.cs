@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 11/6/2017 10:42:22 AM
-On: MHTIPPIN-MOBL
+File Updated: 11/7/2017 4:43:18 PM
+On: JJYEH-MOBL1
 From: EG1RDMDBDEV01\DEALSDEV,3180, MYDEALS
 */
 
@@ -1066,6 +1066,22 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = "ComboBox"
 		};
+		public static MyDealsAttribute DEAL_GRP_NM = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "DEAL_GRP_NM",
+			ATRB_DESC = "Deal Group Name for KIT",
+			ATRB_LBL = "Deal Group Name",
+			ATRB_MAX_LEN = 100,
+			ATRB_SID = 3201,
+			DATA_TYPE_CD = "VARCHAR",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.String",
+			FRMT_MSK = "{0}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "TextBox"
+		};
 		public static MyDealsAttribute DEAL_MSP_PRC = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "DEAL_MSP_PRC",
@@ -1288,6 +1304,22 @@ namespace Intel.MyDeals.Entities {
 			FRMT_MSK = "{0:d}",
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "INT",
+			UI_TYPE_CD = "TextBox"
+		};
+		public static MyDealsAttribute DSCNT_PER_LN = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "DSCNT_PER_LN",
+			ATRB_DESC = "Discount per line",
+			ATRB_LBL = "Discount per line",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3681,
+			DATA_TYPE_CD = "MONEY",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Double",
+			FRMT_MSK = "{0:c}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "MONEY",
 			UI_TYPE_CD = "TextBox"
 		};
 		public static MyDealsAttribute ECAP_FLR = new MyDealsAttribute()
@@ -3192,6 +3224,22 @@ namespace Intel.MyDeals.Entities {
 			FRMT_MSK = "{0}",
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
+			UI_TYPE_CD = "TextBox"
+		};
+		public static MyDealsAttribute QTY = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "QTY",
+			ATRB_DESC = "Component Quantity",
+			ATRB_LBL = "Quantity",
+			ATRB_MAX_LEN = 0,
+			ATRB_SID = 3682,
+			DATA_TYPE_CD = "INT",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Int32",
+			FRMT_MSK = "{0:d}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "INT",
 			UI_TYPE_CD = "TextBox"
 		};
 		public static MyDealsAttribute RATE = new MyDealsAttribute()
