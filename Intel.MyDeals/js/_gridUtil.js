@@ -619,7 +619,7 @@ gridPctUtils.getResultMappingIconClass = function (result) {
 }
 gridPctUtils.getResultSingleIcon = function (result, style) {
     var iconNm = gridPctUtils.getResultMappingIconClass(result);
-    var iconTitle = iconNm === "intelicon-help-solid" ? "Not run yet" : result;
+    var iconTitle = iconNm === "intelicon-help-outlined" ? "Not run yet" : result;
 
     return '<i class="' + iconNm + '" style="' + style + '" ng-style="getColorStyle(\'' + result + '\')" title="' + iconTitle + '"></i>';
 }
